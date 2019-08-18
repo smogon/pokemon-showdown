@@ -402,7 +402,7 @@ const roles = {
 	coroner_cracking_idea: `coronercrackingidea`,
 	coronercrackingidea: {
 		name: `Coroner (Cracking Idea)`,
-		id: `coronerci`,
+		id: `coronercrackingidea`,
 		memo: [`Coroner: Each night you can PM the host the name of another (dead) player. You learn the role(s) of the player who killed them, but not who this role belongs to. This also works when your target dies the night you used it.`],
 	},
 	corrupt_queen: {
@@ -557,7 +557,7 @@ const roles = {
 	grey_goo_cracking_idea: `greygoocrackingidea`,
 	greygoocrackingidea: {
 		name: `Grey Goo (Cracking Idea)`,
-		id: `greygooci`,
+		id: `greygoocrackingidea`,
 		alignment: `goo`,
 		memo: [`Grey Goo: Anyone who targets you will join the Cult. You will die after Night 2. There is no way to stop this death.`],
 	},
@@ -873,7 +873,7 @@ const roles = {
 	red_goo_cracking_idea: `redgoocrackingidea`,
 	redgoocrackingidea: {
 		name: `Red Goo (Cracking Idea)`,
-		id: `redgooci`,
+		id: `redgoocrackingidea`,
 		alignment: `goo`,
 		memo: [`Red Goo: Once a game, you may PM the host the name of another player at night. This player will unstoppably die. It is announced that a Red Goo performed this kill.`],
 	},
@@ -953,10 +953,10 @@ const roles = {
 	},
 	silencer_gi: `silencergreateridea`,
 	silencergi: `silencergreateridea`,
-	silencer_cracking_idea: `silencergreateridea`,
+	silencer_greater_idea: `silencergreateridea`,
 	silencergreateridea: {
 		name: `Silencer (Greater Idea)`,
-		id: `silencergi`,
+		id: `silencergreateridea`,
 		memo: [`Silencer: During the Night, you may PM the host the name of another player. This player will not be able to lynch during the next day.`],
 	},
 	solar_god: {
@@ -1103,10 +1103,12 @@ const roles = {
 		id: `wildcard`,
 		memo: [`Wild Card: During the Night, you may PM the host the name of another player. All actions used on the Wild Card, except kills, are redirected to the target.`],
 	},
-	wild_card_greater_idea: `wild_card_gi`,
-	wild_card_gi: {
+	wild_card_gi: `wildcardgreateridea`,
+	wildcardgi: `wildcardgreateridea`,
+	wild_card_greater_idea: `wildcardgreateridea`,
+	wildcardgreateridea: {
 		name: `Wild Card (Greater Idea)`,
-		id: `wildcardgi`,
+		id: `wildcardgreateridea`,
 		alignment: `solo`,
 		memo: [`Wild Card: You get a different randomised role.`],
 	},
