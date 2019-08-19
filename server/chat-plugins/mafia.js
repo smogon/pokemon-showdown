@@ -231,6 +231,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.hasPlurality = null;
 		/** @type {boolean} */
 		this.enableNL = true;
+		this.forcelynch = false;
 
 		/** @type {MafiaRole[]} */
 		this.originalRoles = [];
@@ -575,8 +576,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.timer) this.setDeadline(0);
 		if (extension === null) {
 			this.hammerCount = Math.floor(Object.keys(this.playerTable).length / 2) + 1;
-			this.lynches = Object.create(null);
-			this.hasPlurality = null;
 			this.clearLynches();
 		}
 		this.phase = 'day';
@@ -669,6 +668,10 @@ class MafiaTracker extends Rooms.RoomGame {
 	unlynch(userid, force = false) {
 		if (this.phase !== 'day' && !force) return this.sendUser(userid, `|error|You can only lynch during the day.`);
 		let player = this.playerTable[userid];
+
+		// autoselflynch blocking doesn't apply to restless spirits
+		if (player && this.forcelynch && !force) return this.sendUser(userid, `|error|You can only shift your lynch, not unlynch.`);
+
 		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
 		if (!player || !player.lynching) return this.sendUser(userid, `|error|You are not lynching anyone.`);
 		if (player.lastLynch + 2000 >= Date.now() && !force) return this.sendUser(userid, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '1 second'} before you can change your lynch.`);
@@ -811,8 +814,6 @@ class MafiaTracker extends Rooms.RoomGame {
 	setHammer(count) {
 		this.hammerCount = count;
 		this.sendRoom(`The hammer count has been set at ${this.hammerCount}, and lynches have been reset.`, {declare: true});
-		this.lynches = Object.create(null);
-		this.hasPlurality = null;
 		this.clearLynches();
 	}
 
@@ -1461,8 +1462,18 @@ class MafiaTracker extends Rooms.RoomGame {
 	 */
 	clearLynches(target = '') {
 		if (target) delete this.lynches[target];
+
+		if (!target) this.lynches = Object.create(null);
+
 		for (const player of Object.values(this.playerTable)) {
-			if (!target || (player.lynching === target)) player.lynching = '';
+			if (this.forcelynch) {
+				if (!target || (player.lynching === target)) {
+					player.lynching = player.userid;
+					this.lynches[player.userid] = {count: 1, trueCount: this.getLynchValue(player.userid), lastLynch: Date.now(), dir: 'up', lynchers: [player.userid]};
+				}
+			} else {
+				if (!target || (player.lynching === target)) player.lynching = '';
+			}
 		}
 		for (const player of Object.values(this.dead)) {
 			if (player.restless && (!target || player.lynching === target)) player.lynching = '';
@@ -2513,6 +2524,26 @@ const commands = {
 		},
 		enablenlhelp: [`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # & ~`],
 
+		forcelynch(target, room, user) {
+			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			const game = /** @type {MafiaTracker} */ (room.game);
+			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
+			target = toID(target);
+			if (this.meansYes(target)) {
+				if (game.forcelynch) return this.errorReply(`Forcelynching is already enabled.`);
+				game.forcelynch = true;
+				if (game.started) game.resetHammer();
+				game.sendRoom(`Forcelynching has been enabled. Your lynch will start on yourself, and you cannot unlynch!`, {declare: true});
+			} else if (this.meansNo(target)) {
+				if (!game.forcelynch) return this.errorReply(`Forcelynching is already disabled.`);
+				game.forcelynch = false;
+				game.sendRoom(`Forcelynching has been disabled. You can lynch normally now!`, {declare: true});
+			} else {
+				this.parse('/help forcelynch');
+			}
+		},
+		forcelynchhelp: [`/mafia forcelynch [yes/no] - Forces player's lynches onto themselves, and prevents unlynching. Requires host % @ # & ~`],
+
 		lynches(target, room, user) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
@@ -3126,6 +3157,7 @@ const commands = {
 			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # & ~`,
 			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ # & ~`,
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # & ~`,
+			`/mafia forcelynch [yes/no] - Forces player's lynches onto themselves, and prevents unlynching. Requires host % @ # & ~`,
 			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # & ~`,
 			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # & ~`,
 			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ # & ~`,
