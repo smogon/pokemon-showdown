@@ -575,7 +575,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'night' && !initial) return;
 		if (this.timer) this.setDeadline(0);
 		if (extension === null) {
-			this.hammerCount = Math.floor(Object.keys(this.playerTable).length / 2) + 1;
+			if (!isNaN(this.hammerCount)) this.hammerCount = Math.floor(Object.keys(this.playerTable).length / 2) + 1;
 			this.clearLynches();
 		}
 		this.phase = 'day';
@@ -585,7 +585,11 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else {
 			this.dayNum++;
 		}
-		this.sendRoom(`Day ${this.dayNum}. The hammer count is set at ${this.hammerCount}`, {declare: true});
+		if (isNaN(this.hammerCount)) {
+			this.sendRoom(`Day ${this.dayNum}. Hammering is disabled.`, {declare: true});
+		} else {
+			this.sendRoom(`Day ${this.dayNum}. The hammer count is set at ${this.hammerCount}`, {declare: true});
+		}
 		this.sendPlayerList();
 		this.updatePlayers();
 	}
@@ -607,7 +611,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		const hasPlurality = this.getPlurality();
 		if (!early && hasPlurality) this.sendRoom(`Plurality is on ${this.playerTable[hasPlurality] ? this.playerTable[hasPlurality].name : 'No Lynch'}`);
 		if (!early && !initial) this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
-		if (initial) this.hammerCount = Math.floor(Object.keys(this.playerTable).length / 2) + 1;
+		if (initial && !isNaN(this.hammerCount)) this.hammerCount = Math.floor(Object.keys(this.playerTable).length / 2) + 1;
 		this.updatePlayers();
 	}
 
@@ -699,7 +703,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 */
 	lynchBox() {
 		if (!this.started) return `<strong>The game has not started yet.</strong>`;
-		let buf = `<strong>Lynches (Hammer: ${this.hammerCount})</strong><br />`;
+		let buf = `<strong>Lynches (Hammer: ${this.hammerCount || "Disabled"})</strong><br />`;
 		const plur = this.getPlurality();
 		const list = Object.keys(this.lynches).sort((a, b) => {
 			if (a === plur) return -1;
@@ -813,7 +817,11 @@ class MafiaTracker extends Rooms.RoomGame {
 	 */
 	setHammer(count) {
 		this.hammerCount = count;
-		this.sendRoom(`The hammer count has been set at ${this.hammerCount}, and lynches have been reset.`, {declare: true});
+		if (isNaN(count)) {
+			this.sendRoom(`Hammering has been disabled, and lynches have been reset.`, {declare: true});
+		} else {
+			this.sendRoom(`The hammer count has been set at ${this.hammerCount}, and lynches have been reset.`, {declare: true});
+		}
 		this.clearLynches();
 	}
 
@@ -823,7 +831,11 @@ class MafiaTracker extends Rooms.RoomGame {
 	 */
 	shiftHammer(count) {
 		this.hammerCount = count;
-		this.sendRoom(`The hammer count has been shifted to ${this.hammerCount}. Lynches have not been reset.`, {declare: true});
+		if (isNaN(count)) {
+			this.sendRoom(`Hammering has been disabled. Lynches have not been reset.`, {declare: true});
+		} else {
+			this.sendRoom(`The hammer count has been shifted to ${this.hammerCount}. Lynches have not been reset.`, {declare: true});
+		}
 		let hammered = [];
 		for (const lynch in this.lynches) {
 			if (this.lynches[lynch].trueCount >= this.getHammerValue(lynch)) hammered.push(lynch === 'nolynch' ? 'Nobody' : lynch);
@@ -1681,7 +1693,7 @@ const pages = {
 			}
 		}
 		if (game.phase === "day") {
-			buf += `<h3>Lynches (Hammer: ${game.hammerCount}) <button class="button" name="send" value="/join view-mafia-${room.id}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
+			buf += `<h3>Lynches (Hammer: ${game.hammerCount || 'Disabled'}) <button class="button" name="send" value="/join view-mafia-${room.id}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
 			let plur = game.getPlurality();
 			for (const key of Object.keys(game.playerTable).concat((game.enableNL ? ['nolynch'] : []))) {
 				if (game.lynches[key]) {
@@ -2486,7 +2498,7 @@ const commands = {
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
 			const hammer = parseInt(target);
-			if ((isNaN(hammer) || hammer < 1) && cmd.toLowerCase() !== `resethammer`) return this.errorReply(`${target} is not a valid hammer count.`);
+			if (toID(cmd) !== `resethammer` && ((isNaN(hammer) && !this.meansNo(target)) || hammer < 1)) return this.errorReply(`${target} is not a valid hammer count.`);
 			switch (cmd.toLowerCase()) {
 			case 'shifthammer':
 				game.shiftHammer(hammer);
@@ -2501,6 +2513,7 @@ const commands = {
 		},
 		hammerhelp: [
 			`/mafia hammer [hammer] - sets the hammer count to [hammer] and resets lynches`,
+			`/mafia hammer off - disables hammering`,
 			`/mafia shifthammer [hammer] - sets the hammer count to [hammer] without resetting lynches`,
 			`/mafia resethammer - sets the hammer to the default, resetting lynches`,
 		],
@@ -3183,6 +3196,7 @@ const commands = {
 			`/mafia [mayor|voteless] [player] - Makes [player]'s' lynch worth 2 votes (mayor) or makes [player]'s lynch worth 0 votes (voteless). Requires host % @ # & ~`,
 			`/mafia [unmayor|unvoteless] [player] - Removes mayor or voteless status from [player]. Requires host % @ # & ~`,
 			`/mafia hammer [hammer] - sets the hammer count to [hammer] and resets lynches`,
+			`/mafia hammer off - disables hammering`,
 			`/mafia shifthammer [hammer] - sets the hammer count to [hammer] without resetting lynches`,
 			`/mafia resethammer - sets the hammer to the default, resetting lynches`,
 			`/mafia playerroles - View all the player's roles in chat. Requires host`,
