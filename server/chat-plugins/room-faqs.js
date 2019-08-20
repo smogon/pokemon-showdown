@@ -102,7 +102,7 @@ const commands = {
 
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(Chat.formatText(roomFaqs[room.id][topic], true));
-		if (!this.broadcasting && user.can('declare', null, room)) {
+		if (!this.broadcasting && user.can('ban', null, room)) {
 			const src = Chat.escapeHTML(roomFaqs[room.id][topic]).replace(/\n/g, `<br />`);
 			let extra = `<code>/addfaq ${topic}, ${src}</code>`;
 			const aliases = Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic);
