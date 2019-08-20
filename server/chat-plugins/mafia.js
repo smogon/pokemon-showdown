@@ -2552,7 +2552,7 @@ const commands = {
 				game.forcelynch = false;
 				game.sendRoom(`Forcelynching has been disabled. You can lynch normally now!`, {declare: true});
 			} else {
-				this.parse('/help forcelynch');
+				this.parse('/help mafia forcelynch');
 			}
 		},
 		forcelynchhelp: [`/mafia forcelynch [yes/no] - Forces player's lynches onto themselves, and prevents unlynching. Requires host % @ # & ~`],
