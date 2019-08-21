@@ -1535,7 +1535,7 @@ const Punishments = new (class {
 	 * options.checkIps will also check the IP of the user for IP-based punishments.
 	 *
 	 * @param {User | string} user
-	 * @param {Object?} options
+	 * @param {{publicOnly?: boolean, checkIps?: boolean}} [options]
 	 * @return {Array}
 	 */
 	getRoomPunishments(user, options) {
