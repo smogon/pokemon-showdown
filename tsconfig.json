@@ -16,13 +16,13 @@
         "./server/chat-commands.js"
     ],
     "include": [
-        "./server/tournaments/lib/treenode.d.ts",
         "./config/formats.js",
         "./data/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",
         "./lib/*",
         "./server/*",
+        "./server/tournaments/*",
         "./server/chat-plugins/chat-monitor.js",
         "./server/chat-plugins/daily-spotlight.js",
         "./server/chat-plugins/hangman.js",
@@ -36,7 +36,6 @@
         "./server/chat-plugins/thing-of-the-day.js",
         "./server/chat-plugins/uno.js",
         "./server/chat-plugins/wifi.js",
-        "./server/tournaments/*.js",
         "./sim/**/*"
     ]
 }

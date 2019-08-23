@@ -1,23 +1,28 @@
-'use strict';
+interface Match {
+	state: string;
+	score?: number[];
+	result?: string;
+}
 
-/** @typedef {import('./index').TournamentPlayer} TournamentPlayer */
+type TournamentPlayer = import('./index').TournamentPlayer;
 
-/** @typedef {{state: string, score?: number[], result?: string}} Match */
-
-class RoundRobin {
-	/**
-	 * @param {string} isDoubles
-	 */
-	constructor(isDoubles) {
-		/** @type {string} */
+export class RoundRobin {
+	name: string;
+	isDrawingSupported: boolean;
+	isBracketFrozen: boolean;
+	players: TournamentPlayer[];
+	isDoubles: boolean;
+	matches: (Match | null)[][];
+	totalPendingMatches: number;
+	perPlayerPendingMatches: number;
+	matchesPerPlayer?: number;
+	constructor(isDoubles: string) {
 		this.name = "Round Robin";
 		this.isDrawingSupported = true;
 		this.isBracketFrozen = false;
-		/** @type {TournamentPlayer[]} */
 		this.players = [];
 
 		this.isDoubles = !!isDoubles;
-		/** @type {Match?[][]} */
 		this.matches = [];
 		this.totalPendingMatches = -1;
 		this.perPlayerPendingMatches = -1;
@@ -25,10 +30,7 @@ class RoundRobin {
 		if (isDoubles) this.name = "Double " + this.name;
 	}
 
-	/**
-	 * @param {TournamentPlayer[]} players
-	 */
-	getPendingBracketData(players) {
+	getPendingBracketData(players: TournamentPlayer[]) {
 		return {
 			type: 'table',
 			tableHeaders: {
@@ -60,11 +62,10 @@ class RoundRobin {
 				players.map((p2, col) => {
 					if (!this.isDoubles && col >= row) return null;
 					if (p1 === p2) return null;
-					let match = this.matches[row][col];
+					const match = this.matches[row][col];
 					if (!match) return null;
 
-					/** @type {any} */
-					let cell = {
+					const cell: any = {
 						state: match.state,
 					};
 					if (match.state === 'finished' && match.score) {
@@ -77,10 +78,7 @@ class RoundRobin {
 			scores: players.map(player => player.score),
 		};
 	}
-	/**
-	 * @param {TournamentPlayer[]} players
-	 */
-	freezeBracket(players) {
+	freezeBracket(players: TournamentPlayer[]) {
 		this.players = players;
 		this.isBracketFrozen = true;
 
@@ -102,13 +100,10 @@ class RoundRobin {
 		}
 	}
 
-	/**
-	 * @param {TournamentPlayer} user
-	 */
-	disqualifyUser(user) {
+	disqualifyUser(user: TournamentPlayer) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		let playerIndex = this.players.indexOf(user);
+		const playerIndex = this.players.indexOf(user);
 
 		for (const [col, match] of this.matches[playerIndex].entries()) {
 			if (!match || match.state !== 'available') continue;
@@ -122,7 +117,7 @@ class RoundRobin {
 		}
 
 		for (const [row, challenges] of this.matches.entries()) {
-			let match = challenges[playerIndex];
+			const match = challenges[playerIndex];
 			if (!match || match.state !== 'available') continue;
 			const p1 = this.players[row];
 			match.state = 'finished';
@@ -139,8 +134,7 @@ class RoundRobin {
 	getAvailableMatches() {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		/** @type {[TournamentPlayer, TournamentPlayer][]} */
-		let matches = [];
+		const matches: [TournamentPlayer, TournamentPlayer][] = [];
 		for (const [row, challenges] of this.matches.entries()) {
 			const p1 = this.players[row];
 			for (const [col, match] of challenges.entries()) {
@@ -153,21 +147,16 @@ class RoundRobin {
 		}
 		return matches;
 	}
-	/**
-	 * @param {[TournamentPlayer, TournamentPlayer]} players
-	 * @param {string} result
-	 * @param {number[]} score
-	 */
-	setMatchResult([p1, p2], result, score) {
+	setMatchResult([p1, p2]: [TournamentPlayer, TournamentPlayer], result: string, score: number[]) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		if (!['win', 'loss', 'draw'].includes(result)) return 'InvalidMatchResult';
 
-		let row = this.players.indexOf(p1);
-		let col = this.players.indexOf(p2);
+		const row = this.players.indexOf(p1);
+		const col = this.players.indexOf(p2);
 		if (row < 0 || col < 0) return 'UserNotAdded';
 
-		let match = this.matches[row][col];
+		const match = this.matches[row][col];
 		if (!match || match.state !== 'available') return 'InvalidMatch';
 
 		match.state = 'finished';
@@ -183,15 +172,13 @@ class RoundRobin {
 	getResults() {
 		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
 
-		let sortedScores = this.players.sort(
+		const sortedScores = this.players.sort(
 			(p1, p2) => p2.score - p1.score
 		);
 
-		/** @type {TournamentPlayer[][]} */
-		let results = [];
+		const results: TournamentPlayer[][] = [];
 		let currentScore = sortedScores[0].score;
-		/** @type {TournamentPlayer[]} */
-		let currentRank = [];
+		let currentRank: TournamentPlayer[] = [];
 		results.push(currentRank);
 		for (const player of sortedScores) {
 			if (player.score < currentScore) {
@@ -204,5 +191,3 @@ class RoundRobin {
 		return results;
 	}
 }
-
-module.exports = RoundRobin;

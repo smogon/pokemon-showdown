@@ -109,7 +109,7 @@ global.Rooms = require('../.server-dist/rooms').Rooms;
 global.Verifier = require('../.server-dist/verifier');
 Verifier.PM.spawn();
 
-global.Tournaments = require('./tournaments');
+global.Tournaments = require('../.server-dist/tournaments').Tournaments;
 
 global.IPTools = require('../.server-dist/ip-tools').IPTools;
 IPTools.loadDatacenters();

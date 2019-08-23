@@ -53,6 +53,7 @@ interface BattleRoomTable {
 
 export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').PollType;
+type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
 	id: string;
@@ -1023,7 +1024,7 @@ export class BasicChatRoom extends BasicRoom {
 	reportJoinsInterval: NodeJS.Timer | null;
 	game: RoomGame | null;
 	battle: RoomBattle | null;
-	tour: any;
+	tour: Tournament | null;
 	constructor(roomid: string, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
 
@@ -1317,7 +1318,7 @@ export class BasicChatRoom extends BasicRoom {
 
 		if (this.battle && this.tour) {
 			// resolve state of the tournament;
-			if (!this.battle.ended) this.tour.onBattleWin(this, '');
+			if (!this.battle.ended) this.tour.onBattleWin(this as any as GameRoom, '');
 			this.tour = null;
 		}
 
@@ -1607,7 +1608,7 @@ export const Rooms = Object.assign(getRoom, {
 				room.isPrivate = false;
 				room.modjoin = null;
 				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name prefixed by '${prefix}'.</div>`);
-			} else if (!options.tour || room.tour.modjoin) {
+			} else if (!options.tour || (room.tour && room.tour.modjoin)) {
 				room.modjoin = '%';
 				room.isPrivate = 'hidden';
 				room.privacySetter = new Set(inviteOnly);
