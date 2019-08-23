@@ -435,7 +435,7 @@ if (cluster.isMaster) {
 	 */
 	const roomChannels = new Map();
 
-	/** @type {WriteStream} */
+	/** @type {Streams.WriteStream} */
 	const logger = FS(`logs/sockets-${process.pid}`).createAppendStream();
 
 	// Deal with phantom connections.

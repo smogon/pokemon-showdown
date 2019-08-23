@@ -10,7 +10,7 @@
  *
  * Matchmaking is currently still implemented in rooms.js.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';

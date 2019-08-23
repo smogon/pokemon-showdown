@@ -5,12 +5,8 @@
  * This keeps track of challenges to battle made between users, setting up
  * matches between users looking for a battle, and starting new battles.
  *
- * @License MIT License
+ * @license MIT
  */
-
-type Connection = import('./users').Connection;
-type User = import('./users').User;
-type RoomBattle = import('./room-battle').RoomBattle;
 
 const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.remoteladder
 	? require('./ladders-remote')

@@ -4,13 +4,10 @@
  *
  * This handles data storage for rooms.
  *
- * @license MIT license
+ * @license MIT
  */
 
 import {FS} from '../lib/fs';
-
-type BasicChatRoom = import('./rooms').BasicChatRoom;
-type WriteStream = import('../lib/streams').WriteStream;
 
 /**
  * Most rooms have three logs:
@@ -55,12 +52,12 @@ export class Roomlog {
 	 * undefined = uninitialized,
 	 * null = disabled
 	 */
-	modlogStream?: WriteStream | null;
+	modlogStream?: Streams.WriteStream | null;
 	/**
 	 * undefined = uninitialized,
 	 * null = disabled
 	 */
-	roomlogStream?: WriteStream | null;
+	roomlogStream?: Streams.WriteStream | null;
 	sharedModlog: boolean;
 	roomlogFilename: string;
 	constructor(room: BasicChatRoom, options: {isMultichannel?: any, autoTruncate?: any, logTimes?: any} = {}) {
@@ -262,7 +259,7 @@ export class Roomlog {
 	}
 }
 
-const sharedModlogs = new Map<string, WriteStream>();
+const sharedModlogs = new Map<string, Streams.WriteStream>();
 
 const roomlogs = new Map<string, Roomlog>();
 

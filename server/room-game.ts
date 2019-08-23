@@ -12,14 +12,8 @@
  * The player system is optional: Some games, like Hangman, don't designate
  * players and just allow any user in the room to play.
  *
- * @license MIT license
+ * @license MIT
  */
-
-import {User} from "./users";
-
-type Connection = import('./users').Connection;
-type GameRoom = import('./rooms').GameRoom;
-type ChatRoom = import('./rooms').ChatRoom;
 
 // globally Rooms.RoomGamePlayer
 export class RoomGamePlayer {

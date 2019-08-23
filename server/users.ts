@@ -20,7 +20,7 @@
  * Get a user by username with Users.get
  * (scroll down to its definition for details)
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
