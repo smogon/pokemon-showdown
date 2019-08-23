@@ -4,7 +4,7 @@
  *
  * Parses formate.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';

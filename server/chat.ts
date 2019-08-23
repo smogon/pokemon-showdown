@@ -12,7 +12,7 @@
  *
  * The command API is (mostly) documented in chat-plugins/COMMANDS.md
  *
- * @license MIT license
+ * @license MIT
  */
 
 /*
@@ -24,14 +24,6 @@ To reload chat commands:
 */
 
 'use strict';
-
-type Room = import('./rooms').Room;
-type ChatRoom = import('./rooms').ChatRoom;
-type GameRoom = import('./rooms').GameRoom;
-type BasicChatRoom = import('./rooms').BasicChatRoom;
-
-type User = import('./users').User;
-type Connection = import('./users').Connection;
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 	=> Promise<string | null | void> | string | null | void;
@@ -402,7 +394,7 @@ class MessageContext {
 	}
 }
 
-class PageContext extends MessageContext {
+export class PageContext extends MessageContext {
 	connection: Connection;
 	room: Room;
 	pageid: string;
@@ -480,7 +472,7 @@ class PageContext extends MessageContext {
 	}
 }
 
-class CommandContext extends MessageContext {
+export class CommandContext extends MessageContext {
 
 	message: string;
 	pmTarget: User | undefined;

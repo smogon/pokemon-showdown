@@ -6,7 +6,7 @@
  * rooms.js. There's also a global room which every user is in, and
  * handles miscellaneous things like welcoming the user.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
@@ -52,9 +52,6 @@ interface BattleRoomTable {
 }
 
 export type Room = GlobalRoom | GameRoom | ChatRoom;
-type User = import('./users').User;
-type Connection = import('./users').Connection;
-type Roomlog = import('./roomlogs').Roomlog;
 type Poll = import('./chat-plugins/poll').PollType;
 
 export abstract class BasicRoom {
@@ -1638,7 +1635,6 @@ export const Rooms = Object.assign(getRoom, {
 	GlobalRoom,
 	GameRoom,
 	ChatRoom: BasicChatRoom,
-	ChatRoomTypeForTS: ChatRoom,
 
 	RoomGame,
 	RoomGamePlayer,

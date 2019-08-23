@@ -4,15 +4,13 @@
  *
  * Various utility functions to make sure PS is running healthily.
  *
- * @license MIT license
+ * @license MIT
  */
 'use strict';
 
 import {exec, ExecException, ExecOptions} from 'child_process';
 import {crashlogger} from "../lib/crashlogger";
 import {FS} from "../lib/fs";
-
-type Connection = import('./users').Connection;
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
 
