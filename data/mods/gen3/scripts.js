@@ -119,7 +119,7 @@ let BattleScripts = {
 				const hitResult = this.tryMoveHit(source, pokemon, move);
 				if (hitResult || hitResult === 0 || hitResult === undefined) {
 					moveResult = true;
-					hitSlots.push(source.toString().substr(0, 3));
+					hitSlots.push(source.getSlot());
 				}
 				if (damage) {
 					damage += hitResult || 0;
