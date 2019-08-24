@@ -170,7 +170,7 @@ class Blackjack extends Rooms.RoomGame {
 			}
 		}
 		for (let spectator of Object.keys(this.spectators)) {
-			spectator = Users(this.spectators[spectator]);
+			spectator = Users.get(this.spectators[spectator]);
 			if (spectator) spectator.sendTo(this.id, `${message}${this.lastMessage + text}</div>`);
 		}
 	}

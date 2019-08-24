@@ -758,7 +758,7 @@ export class GlobalRoom extends BasicRoom {
 			}
 		});
 		if (Config.reportbattles) {
-			const reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
+			const reportRoom = Rooms.get(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
 			if (reportRoom) {
 				const reportPlayers = players.map(p => p.getIdentity()).join('|');
 				reportRoom
@@ -774,7 +774,7 @@ export class GlobalRoom extends BasicRoom {
 
 	deregisterChatRoom(id: string) {
 		id = toID(id);
-		const room = Rooms(id);
+		const room = Rooms.get(id);
 		if (!room) return false; // room doesn't exist
 		if (!room.chatRoomData) return false; // room isn't registered
 		// deregister from global chatRoomData
@@ -803,7 +803,7 @@ export class GlobalRoom extends BasicRoom {
 	}
 	removeChatRoom(id: string) {
 		id = toID(id);
-		const room = Rooms(id);
+		const room = Rooms.get(id);
 		if (!room) return false; // room doesn't exist
 		room.destroy();
 		return true;
@@ -821,7 +821,7 @@ export class GlobalRoom extends BasicRoom {
 	checkAutojoin(user: User, connection?: Connection) {
 		if (!user.named) return;
 		for (let [i, staffAutojoin] of this.staffAutojoinList.entries()) {
-			const room = Rooms(staffAutojoin) as ChatRoom | GameRoom;
+			const room = Rooms.get(staffAutojoin) as ChatRoom | GameRoom;
 			if (!room) {
 				this.staffAutojoinList.splice(i, 1);
 				i--;
@@ -878,7 +878,7 @@ export class GlobalRoom extends BasicRoom {
 	}
 	startLockdown(err: Error | null = null, slow = false) {
 		if (this.lockdown && err) return;
-		const devRoom = Rooms('development');
+		const devRoom = Rooms.get('development');
 		// @ts-ignore
 		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
@@ -953,7 +953,7 @@ export class GlobalRoom extends BasicRoom {
 	notifyRooms(rooms: ID[], message: string) {
 		if (!rooms || !message) return;
 		for (const roomid of rooms) {
-			const curRoom = Rooms(roomid);
+			const curRoom = Rooms.get(roomid);
 			if (curRoom) curRoom.add(message).update();
 		}
 	}
@@ -985,12 +985,12 @@ export class GlobalRoom extends BasicRoom {
 		}
 		const stack = stackLines.slice(0, 2).join(`<br />`);
 		const crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
-		const devRoom = Rooms('development');
+		const devRoom = Rooms.get('development');
 		if (devRoom) {
 			devRoom.add(crashMessage).update();
 		} else {
 			if (Rooms.lobby) Rooms.lobby.add(crashMessage).update();
-			const staffRoom = Rooms('staff');
+			const staffRoom = Rooms.get('staff');
 			if (staffRoom) staffRoom.add(crashMessage).update();
 		}
 	}
@@ -1063,7 +1063,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
 		this.parent = null;
 		if (options.parentid) {
-			const parent = Rooms(options.parentid);
+			const parent = Rooms.get(options.parentid);
 
 			if (parent) {
 				if (!parent.subRooms) parent.subRooms = new Map();
@@ -1503,11 +1503,11 @@ function getRoom(roomid?: string | Room): Room {
 	return Rooms.rooms.get(roomid);
 }
 
-export const Rooms = Object.assign(getRoom, {
+export const Rooms = {
 	/**
 	 * The main roomid:Room table. Please do not hold a reference to a
 	 * room long-term; just store the roomid and grab it from here (with
-	 * the Rooms(roomid) accessor) when necessary.
+	 * the Rooms.get(roomid) accessor) when necessary.
 	 */
 	rooms: new Map<string, Room>(),
 	aliases: new Map<string, string>(),
@@ -1648,7 +1648,7 @@ export const Rooms = Object.assign(getRoom, {
 	RoomBattlePlayer,
 	RoomBattleTimer,
 	PM: RoomBattlePM,
-});
+};
 
 // initialize
 

@@ -239,7 +239,7 @@ const commands = {
 		}
 		let userid = toID(target);
 		if (!userid) return this.errorReply("Please enter a valid username.");
-		let targetUser = Users(userid);
+		let targetUser = Users.get(userid);
 		let buf = Chat.html`<strong class="username">${target}</strong>`;
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
@@ -336,7 +336,7 @@ const commands = {
 		if (!this.can('rangeban')) return;
 
 		let [ip, roomid] = this.splitOne(target);
-		let targetRoom = roomid ? Rooms(roomid) : null;
+		let targetRoom = roomid ? Rooms.get(roomid) : null;
 		if (!targetRoom && targetRoom !== null) return this.errorReply(`The room "${roomid}" does not exist.`);
 		let results = /** @type {string[]} */ ([]);
 		let isAll = (cmd === 'ipsearchall');

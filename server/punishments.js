@@ -754,7 +754,7 @@ const Punishments = new (class {
 	 * @return {User[]}
 	 */
 	lock(userOrUsername, expireTime, id, ...reason) {
-		let user = (typeof userOrUsername === 'string' ? Users(userOrUsername) : userOrUsername);
+		let user = (typeof userOrUsername === 'string' ? Users.get(userOrUsername) : userOrUsername);
 		if (!id) id = user ? user.getLastId() : toID(userOrUsername);
 
 		if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
@@ -810,7 +810,7 @@ const Punishments = new (class {
 	 * @param {string} name
 	 */
 	unlock(name) {
-		let user = Users(name);
+		let user = Users.get(name);
 		let id = /** @type {string} */(toID(name));
 		/** @type {string[]} */
 		let success = [];
@@ -867,7 +867,7 @@ const Punishments = new (class {
 	 * @param {string} name
 	 */
 	unnamelock(name) {
-		let user = Users(name);
+		let user = Users.get(name);
 		let id = /** @type {string} */(toID(name));
 		/** @type {string[]} */
 		let success = [];
@@ -914,7 +914,7 @@ const Punishments = new (class {
 
 		// Handle tournaments the user was in before being battle banned
 		for (let games of user.games.keys()) {
-			const gameRoom = Rooms(games).game;
+			const gameRoom = Rooms.get(games).game;
 			if (!gameRoom) continue; // this should never happen
 			// @ts-ignore
 			if (gameRoom.isTournament) {
@@ -936,7 +936,7 @@ const Punishments = new (class {
 	 * @param {string} userid
 	 */
 	unbattleban(userid) {
-		const user = Users(userid);
+		const user = Users.get(userid);
 		if (user) {
 			let punishment = Punishments.isBattleBanned(user);
 			if (punishment) userid = punishment[1];
@@ -1030,7 +1030,7 @@ const Punishments = new (class {
 	 */
 	roomBlacklist(room, user, expireTime, userId, ...reason) {
 		if (!userId && user) userId = user.getLastId();
-		if (!user) user = Users(userId);
+		if (!user) user = Users.get(userId);
 
 		if (!expireTime) expireTime = Date.now() + BLACKLIST_DURATION;
 		let punishment = /** @type {Punishment} */ (['BLACKLIST', userId, expireTime, ...reason]);
@@ -1072,7 +1072,7 @@ const Punishments = new (class {
 	 * @param {string} userid
 	 */
 	roomUnban(room, userid) {
-		const user = Users(userid);
+		const user = Users.get(userid);
 		if (user) {
 			let punishment = Punishments.isRoomBanned(user, room.id);
 			if (punishment) userid = punishment[1];
@@ -1086,7 +1086,7 @@ const Punishments = new (class {
 	 * @param {boolean} ignoreWrite Flag to skip persistent storage.
 	 */
 	roomUnblacklist(room, userid, ignoreWrite) {
-		const user = Users(userid);
+		const user = Users.get(userid);
 		if (user) {
 			let punishment = Punishments.isRoomBanned(user, room.id);
 			if (punishment) userid = punishment[1];
@@ -1434,7 +1434,7 @@ const Punishments = new (class {
 		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) {
 			return true;
 		}
-		const room = Rooms(roomid);
+		const room = Rooms.get(roomid);
 		if (room.parent) {
 			return Punishments.checkNameInRoom(user, room.parent.id);
 		}
@@ -1451,14 +1451,14 @@ const Punishments = new (class {
 		/** @type {Punishment?} */
 		let punishment = Punishments.roomUserids.nestedGet(roomid, userid) || null;
 		if (!punishment) {
-			const room = Rooms(roomid);
+			const room = Rooms.get(roomid);
 			if (room.parent) {
 				punishment = Punishments.checkNewNameInRoom(user, userid, room.parent.id);
 			}
 		}
 		if (punishment) {
 			if (punishment[0] !== 'ROOMBAN' && punishment[0] !== 'BLACKLIST') return null;
-			const room = Rooms(roomid);
+			const room = Rooms.get(roomid);
 			if (room.game && room.game.removeBannedUser) {
 				room.game.removeBannedUser(user);
 			}
@@ -1477,7 +1477,7 @@ const Punishments = new (class {
 		const punishment = Punishments.userids.get(userid);
 
 		if (punishment) {
-			let user = Users(userid);
+			let user = Users.get(userid);
 			if (user && user.permalocked) return ` (never expires; you are permalocked)`;
 			let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 			let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
@@ -1522,7 +1522,7 @@ const Punishments = new (class {
 			}
 		}
 
-		const room = Rooms(roomid);
+		const room = Rooms.get(roomid);
 		if (!room) throw new Error(`Trying to ban a user from a nonexistent room: ${roomid}`);
 
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.id);
@@ -1626,7 +1626,7 @@ const Punishments = new (class {
 			if (userid !== id) entry.userids.push(userid);
 		});
 		if (roomid && ignoreMutes !== false) {
-			const room = Rooms(roomid);
+			const room = Rooms.get(roomid);
 			if (room && room.muteQueue) {
 				for (const mute of room.muteQueue) {
 					punishmentTable.set(mute.userid, {

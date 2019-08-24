@@ -73,22 +73,22 @@ export const Monitor = {
 
 	log(text: string) {
 		this.notice(text);
-		if (Rooms('staff')) {
-			Rooms('staff').add(`|c|~|${text}`).update();
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add(`|c|~|${text}`).update();
 		}
 	},
 
 	adminlog(text: string) {
 		this.notice(text);
-		if (Rooms('upperstaff')) {
-			Rooms('upperstaff').add(`|c|~|${text}`).update();
+		if (Rooms.get('upperstaff')) {
+			Rooms.get('upperstaff').add(`|c|~|${text}`).update();
 		}
 	},
 
 	logHTML(text: string) {
 		this.notice(text);
-		if (Rooms('staff')) {
-			Rooms('staff').add(`|html|${text}`).update();
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add(`|html|${text}`).update();
 		}
 	},
 

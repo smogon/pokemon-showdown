@@ -247,7 +247,7 @@ let namefilter = function (name, user) {
 			}
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
+					Punishments.autolock(user, Rooms.get('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
 				}
 				line[3]++;
 				saveFilters();
@@ -289,7 +289,7 @@ let nicknamefilter = function (name, user) {
 			}
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true);
+					Punishments.autolock(user, Rooms.get('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true);
 				}
 				line[3]++;
 				saveFilters();
@@ -325,7 +325,7 @@ let statusfilter = function (status, user) {
 			}
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
+					Punishments.autolock(user, Rooms.get('staff'), `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
 				}
 				line[3]++;
 				saveFilters();
@@ -475,8 +475,8 @@ let commands = {
 		Chat.namefilterwhitelist.set(target, user.name);
 
 		const msg = `${target} was allowed as a username by ${user.name}.`;
-		const staffRoom = Rooms('staff');
-		const upperStaffRoom = Rooms('upperstaff');
+		const staffRoom = Rooms.get('staff');
+		const upperStaffRoom = Rooms.get('upperstaff');
 		if (staffRoom) staffRoom.add(msg).update();
 		if (upperStaffRoom) upperStaffRoom.add(msg).update();
 	},

@@ -232,7 +232,7 @@ class HelpTicket extends Rooms.RoomGame {
 		this.room.pokeExpireTimer();
 		for (const ticketGameUser of Object.values(this.playerTable)) {
 			this.removePlayer(ticketGameUser);
-			const user = Users(ticketGameUser.userid);
+			const user = Users.get(ticketGameUser.userid);
 			if (user) user.updateSearch();
 		}
 	}
@@ -262,7 +262,7 @@ let timerEnds = {upperstaff: 0, staff: 0};
  * @param {boolean} hasAssistRequest
  */
 function pokeUnclaimedTicketTimer(upper, hasUnclaimed, hasAssistRequest) {
-	const room = Rooms(upper ? 'upperstaff' : 'staff');
+	const room = Rooms.get(upper ? 'upperstaff' : 'staff');
 	if (!room) return;
 	if (hasUnclaimed && !unclaimedTicketTimer[room.id]) {
 		unclaimedTicketTimer[room.id] = setTimeout(() => notifyUnclaimedTicket(upper, hasAssistRequest), hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT);
@@ -285,7 +285,7 @@ function pokeUnclaimedTicketTimer(upper, hasUnclaimed, hasAssistRequest) {
  * @param {boolean} hasAssistRequest
  */
 function notifyUnclaimedTicket(upper, hasAssistRequest) {
-	const room = /** @type {BasicChatRoom} */ (Rooms(upper ? 'upperstaff' : 'staff'));
+	const room = /** @type {BasicChatRoom} */ (Rooms.get(upper ? 'upperstaff' : 'staff'));
 	if (!room) return;
 	// @ts-ignore
 	clearTimeout(unclaimedTicketTimer[room.id]);
@@ -301,7 +301,7 @@ function notifyUnclaimedTicket(upper, hasAssistRequest) {
  * @param {boolean} upper
  */
 function notifyStaff(upper = false) {
-	const room = /** @type {BasicChatRoom} */ (Rooms(upper ? 'upperstaff' : 'staff'));
+	const room = /** @type {BasicChatRoom} */ (Rooms.get(upper ? 'upperstaff' : 'staff'));
 	if (!room) return;
 	let buf = ``;
 	let keys = Object.keys(tickets).sort((aKey, bKey) => {
@@ -343,7 +343,7 @@ function notifyStaff(upper = false) {
 		const escalator = ticket.escalator ? Chat.html` (escalated by ${ticket.escalator}).` : ``;
 		const creator = ticket.claimed ? Chat.html`${ticket.creator}` : Chat.html`<strong>${ticket.creator}</strong>`;
 		const notifying = ticket.claimed ? `` : ` notifying`;
-		const ticketRoom = Rooms(`help-${ticket.userid}`);
+		const ticketRoom = Rooms.get(`help-${ticket.userid}`);
 		const ticketGame = /** @type {HelpTicket} */ (ticketRoom.game);
 		if (!ticket.claimed) {
 			hasUnclaimed = true;
@@ -479,7 +479,7 @@ const pages = {
 			let ipTicket = checkIp(user.latestIp);
 			if ((ticket && ticket.open) || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
-				let helpRoom = Rooms(`help-${ticket.userid}`);
+				let helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
 					// Should never happen
 					tickets[ticket.userid].open = false;
@@ -711,7 +711,7 @@ const pages = {
 				if (Config.modloglink) {
 					logUrl = Config.modloglink(new Date(ticket.created), roomid);
 				}
-				let room = Rooms(roomid);
+				let room = Rooms.get(roomid);
 				if (room) {
 					const ticketGame = /** @type {HelpTicket} */ (room.game);
 					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${!ticket.claimed && ticket.open ? 'Claim' : 'View'}</button></a> `;
@@ -817,7 +817,7 @@ let commands = {
 			let ipTicket = checkIp(user.latestIp);
 			if ((ticket && ticket.open) || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
-				let helpRoom = Rooms(`help-${ticket.userid}`);
+				let helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
 					// Should never happen
 					tickets[ticket.userid].open = false;
@@ -861,7 +861,7 @@ let commands = {
 			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
 			const staffMessage = `<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <details><summary class="button">More Options</summary><button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button> <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></details></p>`;
 			const staffHint = staffContexts[target] || '';
-			let helpRoom = /** @type {ChatRoom?} */ (Rooms(`help-${user.userid}`));
+			let helpRoom = /** @type {ChatRoom?} */ (Rooms.get(`help-${user.userid}`));
 			if (!helpRoom) {
 				helpRoom = Rooms.createChatRoom(`help-${user.userid}`, `[H] ${user.name}`, {
 					isPersonal: true,
@@ -908,7 +908,7 @@ let commands = {
 			if (!ticket || !ticket.open) return this.errorReply(`${this.targetUsername} does not have an open ticket.`);
 			if (ticket.escalated && !user.can('declare')) return this.errorReply(`/helpticket escalate - Access denied for escalating upper staff tickets.`);
 			if (target === 'upperstaff' && ticket.escalated) return this.errorReply(`${ticket.creator}'s ticket is already escalated.`);
-			let helpRoom = Rooms('help-' + ticket.userid);
+			let helpRoom = Rooms.get('help-' + ticket.userid);
 			if (!helpRoom) return this.errorReply(`${ticket.creator}'s help room is expired and cannot be escalated.`);
 			const ticketGame = /** @type {HelpTicket} */ (helpRoom.game);
 			ticketGame.escalate((toID(target) === 'upperstaff'), user);
@@ -929,7 +929,7 @@ let commands = {
 			let ticket = tickets[toID(target)];
 			if (!ticket || !ticket.open || (ticket.userid !== user.userid && !user.can('lock'))) return this.errorReply(`${target} does not have an open ticket.`);
 			if (ticket.escalated && ticket.userid !== user.userid && !user.can('declare')) return this.errorReply(`/helpticket close - Access denied for closing upper staff tickets.`);
-			const helpRoom = /** @type {ChatRoom?} */ (Rooms(`help-${ticket.userid}`));
+			const helpRoom = /** @type {ChatRoom?} */ (Rooms.get(`help-${ticket.userid}`));
 			if (helpRoom) {
 				const ticketGame = /** @type {HelpTicket} */ (helpRoom.game);
 				ticketGame.close(user);
@@ -1021,7 +1021,7 @@ let commands = {
 				let userid = (typeof user !== 'string' ? user.getLastId() : toID(user));
 				let targetTicket = tickets[userid];
 				if (targetTicket && targetTicket.open) targetTicket.open = false;
-				if (Rooms(`help-${userid}`)) Rooms(`help-${userid}`).destroy();
+				if (Rooms.get(`help-${userid}`)) Rooms.get(`help-${userid}`).destroy();
 				ticketBans[userid] = punishment;
 			}
 			writeTickets();
@@ -1087,7 +1087,7 @@ let commands = {
 			if (!target) return this.parse(`/help helpticket delete`);
 			let ticket = tickets[toID(target)];
 			if (!ticket) return this.errorReply(`${target} does not have a ticket.`);
-			let targetRoom = /** @type {ChatRoom} */ (Rooms(`help-${ticket.userid}`));
+			let targetRoom = /** @type {ChatRoom} */ (Rooms.get(`help-${ticket.userid}`));
 			if (targetRoom) {
 				// @ts-ignore
 				targetRoom.game.deleteTicket(user);
