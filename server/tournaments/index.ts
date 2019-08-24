@@ -9,11 +9,6 @@ type TourCommand = (
 	this: CommandContext, tournament: Tournament, user: User, params: string[], cmd: string, connection: Connection
 ) => void;
 type Generator = RoundRobin | Elimination;
-type GameRoom = import('../rooms').GameRoom;
-type ChatRoom = import('../rooms').ChatRoom;
-type CommandContext = import('../chat').CommandContext;
-type Connection = import('../users').Connection;
-type User = import('../users').User;
 
 const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
 const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
