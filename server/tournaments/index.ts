@@ -21,6 +21,7 @@ const ALLOW_ALTS = false;
 Punishments.roomPunishmentTypes.set('TOURBAN', 'banned from tournaments');
 
 const TournamentGenerators = {
+	__proto__: null,
 	roundrobin: RoundRobin,
 	elimination: Elimination,
 };
@@ -29,7 +30,7 @@ function usersToNames(users: TournamentPlayer[]) {
 	return users.map(user => user.name);
 }
 
-const tournaments: {[k: string]: Tournament} = {};
+const tournaments: {[k: string]: Tournament} = Object.create(null);
 
 export class TournamentPlayer extends Rooms.RoomGamePlayer {
 	isBusy: boolean;
