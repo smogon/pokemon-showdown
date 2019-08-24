@@ -1090,7 +1090,7 @@ export class CommandContext extends MessageContext {
 				if (!domain || !host) return false;
 				return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
 			});
-			if (!allLinksWhitelisted && !(targetUser && targetUser.can('lock'))) {
+			if (!allLinksWhitelisted && !(targetUser && targetUser.can('lock') || (room && room.isHelp))) {
 				this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
 				return false;
 			}
