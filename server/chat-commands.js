@@ -2795,6 +2795,8 @@ const commands = {
 	hidealttext: 'hidetext',
 	hidealtstext: 'hidetext',
 	htext: 'hidetext',
+	forcehidetext: 'hidetext',
+	forcehtext: 'hidetext',
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 
@@ -2803,9 +2805,20 @@ const commands = {
 		let name = this.targetUsername;
 		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
 		let userid = toID(this.inputUsername);
-		if (!this.can('mute', null, room)) return;
 
-		if (targetUser && (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext')) {
+		if (!this.can('mute', null, room)) return;
+		if (targetUser && targetUser.trusted && targetUser !== user) {
+			if (!cmd.includes('force')) {
+				return this.errorReply(`${target} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
+			}
+			// Notify staff when a trusted user gets their messages hidden
+			if (!room.isPrivate) {
+				const staffRoom = Rooms('staff');
+				if (staffRoom) staffRoom.addByUser(user, `<<${room.id}>> ${user.name} hid trusted user ${targetUser.name}'s messages.`);
+			}
+		}
+
+		if (targetUser && cmd.includes('alt')) {
 			room.send(`|c|~|${name}'s alts messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
 			room.hideText([
