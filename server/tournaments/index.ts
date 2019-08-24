@@ -1,4 +1,14 @@
-'use strict';
+import {Elimination} from './generator-elimination';
+import {RoundRobin} from './generator-round-robin';
+
+interface TourCommands {
+	[k: string]: string | TourCommand;
+}
+
+type TourCommand = (
+	this: CommandContext, tournament: Tournament, user: User, params: string[], cmd: string, connection: Connection
+) => void;
+type Generator = RoundRobin | Elimination;
 
 const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
 const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
@@ -7,42 +17,39 @@ const MAX_REASON_LENGTH = 300;
 const MAX_CUSTOM_NAME_LENGTH = 100;
 const TOURBAN_DURATION = 14 * 24 * 60 * 60 * 1000;
 const ALLOW_ALTS = false;
+
 Punishments.roomPunishmentTypes.set('TOURBAN', 'banned from tournaments');
 
-/** @type {{[k: string]: Object}} */
-let TournamentGenerators = Object.create(null);
-/** @type {{roundrobin: string, elimination: string}} */
-const generatorFiles = {
-	'roundrobin': 'generator-round-robin',
-	'elimination': 'generator-elimination',
+const TournamentGenerators = {
+	__proto__: null,
+	roundrobin: RoundRobin,
+	elimination: Elimination,
 };
-for (const type in generatorFiles) {
-	// @ts-ignore
-	TournamentGenerators[type] = require('./' + generatorFiles[type]);
-}
 
-/** @type {{[k: string]: Tournament}} */
-exports.tournaments = {};
-
-/** @param {TournamentPlayer[]} users */
-function usersToNames(users) {
+function usersToNames(users: TournamentPlayer[]) {
 	return users.map(user => user.name);
 }
 
-class TournamentPlayer extends Rooms.RoomGamePlayer {
-	/**
-	 * @param {User | string | null} user
-	 * @param {Tournament} game
-	 * @param {number} num
-	 */
-	constructor(user, game, num) {
+const tournaments: {[k: string]: Tournament} = Object.create(null);
+
+export class TournamentPlayer extends Rooms.RoomGamePlayer {
+	isBusy: boolean;
+	availableMatches: Set<TournamentPlayer>;
+	inProgressMatch: {to: TournamentPlayer, room: GameRoom} | null;
+	pendingChallenge: {from?: TournamentPlayer, to?: TournamentPlayer, team: string} | null;
+	isDisqualified: boolean;
+	isEliminated: boolean;
+	autoDisqualifyWarned: boolean;
+	lastActionTime: number;
+	wins: number;
+	losses: number;
+	games: number;
+	score: number;
+	constructor(user: User | string | null, game: Tournament, num: number) {
 		super(user, game, num);
 		this.isBusy = false;
-		/** @type {Set<TournamentPlayer>} */
 		this.availableMatches = new Set();
-		/** @type {{to: TournamentPlayer, room: GameRoom} | null} */
 		this.inProgressMatch = null;
-		/** @type {{from?: TournamentPlayer, to?: TournamentPlayer, team: string} | null} */
 		this.pendingChallenge = null;
 		this.isDisqualified = false;
 		this.isEliminated = false;
@@ -56,24 +63,50 @@ class TournamentPlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-class Tournament extends Rooms.RoomGame {
+export class Tournament extends Rooms.RoomGame {
+	playerTable: {[userid: string]: TournamentPlayer};
+	players: TournamentPlayer[];
+	isTournament: true;
+	name: string;
+	/** Format ID not including custom rules */
+	baseFormat: ID;
 	/**
-	 * @param {ChatRoom} room
-	 * @param {Format} format
-	 * @param {Object} generator TODO: type this properly
-	 * @param {string | undefined} playerCap
-	 * @param {boolean} isRated
-	 * @param {string | undefined} name
+	 * Full format specifier, including custom rules (such as 'gen7challengecup1v1@@@speciesclause')
 	 */
-	constructor(room, format, generator, playerCap, isRated, name) {
+	fullFormat: string;
+	customRules: string[];
+	generator: Generator;
+	isRated: boolean;
+	scouting: boolean;
+	modjoin: boolean;
+	forceTimer: boolean;
+	autostartcap: boolean;
+	isTournamentStarted: boolean;
+	isBracketInvalidated: boolean;
+	lastBracketUpdate: number;
+	bracketUpdateTimer: NodeJS.Timeout | null;
+	bracketCache: AnyObject | null;
+	completedMatches: Set<string>;
+	isAvailableMatchesInvalidated: boolean;
+	availableMatchesCache: {
+		challenges: Map<TournamentPlayer, TournamentPlayer[]>, challengeBys: Map<TournamentPlayer, TournamentPlayer[]>,
+	};
+	autoDisqualifyTimeout: number;
+	autoDisqualifyTimer: NodeJS.Timeout | null;
+	autoStartTimeout: number;
+	autoStartTimer: NodeJS.Timeout | null;
+
+	isEnded: boolean;
+	constructor(
+		room: ChatRoom, format: Format, generator: Generator,
+		playerCap: string | undefined, isRated: boolean, name: string | undefined
+	) {
 		super(room);
 		const formatId = toID(format);
 
 		// TypeScript bug: no `T extends RoomGamePlayer`
-		/** @type {{[userid: string]: TournamentPlayer}} */
 		this.playerTable = Object.create(null);
 		// TypeScript bug: no `T extends RoomGamePlayer`
-		/** @type {TournamentPlayer[]} */
 		this.players = [];
 
 		this.id = room.id;
@@ -81,20 +114,12 @@ class Tournament extends Rooms.RoomGame {
 		this.title = format.name + ' tournament';
 		this.isTournament = true;
 		this.allowRenames = false;
-		/** @type {number} */
 		this.playerCap = (playerCap ? parseInt(playerCap) : Config.tourdefaultplayercap) || 0;
 
-		/** @type {string} */
 		// This will sometimes be sent alone in updates as "format", if the tour doesn't have a custom name
 		this.name = name || formatId;
-		/** Format ID not including custom rules */
 		this.baseFormat = formatId;
-		/**
-		 * Full format specifier, including custom rules (such as 'gen7challengecup1v1@@@speciesclause')
-		 * @type {string}
-		 */
 		this.fullFormat = formatId;
-		/** @type {string[]} */
 		this.customRules = [];
 		this.generator = generator;
 		this.isRated = isRated;
@@ -113,7 +138,6 @@ class Tournament extends Rooms.RoomGame {
 		this.bracketUpdateTimer = null;
 		this.bracketCache = null;
 
-		/** @type {Set<string>} */
 		this.completedMatches = new Set();
 		this.isAvailableMatchesInvalidated = true;
 		this.availableMatchesCache = {challenges: new Map(), challengeBys: new Map()};
@@ -126,8 +150,10 @@ class Tournament extends Rooms.RoomGame {
 		this.isEnded = false;
 
 		room.add(`|tournament|create|${this.name}|${generator.name}|${this.playerCap}`);
-		/** @type {{format: string, teambuilderFormat?: string, generator: string, playerCap: number, isStarted: boolean, isJoined: boolean}} */
-		const update = {
+		const update: {
+			format: string, teambuilderFormat?: string, generator: string,
+			playerCap: number, isStarted: boolean, isJoined: boolean,
+		} = {
 			format: this.name,
 			generator: generator.name,
 			playerCap: this.playerCap,
@@ -146,11 +172,7 @@ class Tournament extends Rooms.RoomGame {
 		return this.players.filter(player => !player.isDisqualified && !player.isEliminated);
 	}
 
-	/**
-	 * @param {Object} generator
-	 * @param {CommandContext} output
-	 */
-	setGenerator(generator, output) {
+	setGenerator(generator: Generator, output: CommandContext) {
 		if (this.isTournamentStarted) {
 			output.sendReply('|tournament|error|BracketFrozen');
 			return;
@@ -163,11 +185,7 @@ class Tournament extends Rooms.RoomGame {
 		return true;
 	}
 
-	/**
-	 * @param {string[]} rules
-	 * @param {CommandContext} output
-	 */
-	setCustomRules(rules, output) {
+	setCustomRules(rules: string[], output: CommandContext) {
 		try {
 			this.fullFormat = Dex.validateFormat(`${this.baseFormat}@@@${rules}`);
 		} catch (e) {
@@ -195,7 +213,7 @@ class Tournament extends Rooms.RoomGame {
 		const addedRules = [];
 		const removedRules = [];
 		for (const ban of this.customRules) {
-			let charAt0 = ban.charAt(0);
+			const charAt0 = ban.charAt(0);
 			if (charAt0 === '+') {
 				unbans.push(ban.substr(1));
 			} else if (charAt0 === '-') {
@@ -229,9 +247,7 @@ class Tournament extends Rooms.RoomGame {
 			clearTimeout(this.autoStartTimer);
 		}
 		for (const roomid of this.completedMatches) {
-			/** @type {GameRoom} */
-			// @ts-ignore
-			const room = Rooms(roomid);
+			const room = Rooms(roomid) as GameRoom;
 			if (room) room.tour = null;
 		}
 		for (const player of this.players) {
@@ -241,15 +257,12 @@ class Tournament extends Rooms.RoomGame {
 		this.isEnded = true;
 	}
 
-	/**
-	 * @param {User} targetUser
-	 * @param {Connection | User} [connection]
-	 */
-	updateFor(targetUser, connection) {
+	updateFor(targetUser: User, connection?: Connection | User) {
 		if (!connection) connection = targetUser;
 		if (this.isEnded) return;
 
-		if ((!this.bracketUpdateTimer && this.isBracketInvalidated) || (this.isTournamentStarted && this.isAvailableMatchesInvalidated)) {
+		if ((!this.bracketUpdateTimer && this.isBracketInvalidated) ||
+			(this.isTournamentStarted && this.isAvailableMatchesInvalidated)) {
 			this.room.add(
 				"Error: update() called with a target user when data invalidated: " +
 				(!this.bracketUpdateTimer && this.isBracketInvalidated) + ", " +
@@ -259,20 +272,22 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 		const isJoined = targetUser.userid in this.playerTable;
-		/** @type {{format: string, teambuilderFormat?: string, generator: string, isStarted: boolean, isJoined: boolean, bracketData: AnyObject}} */
-		const update = {
+		const update: {
+			format: string, teambuilderFormat?: string, generator: string,
+			isStarted: boolean, isJoined: boolean, bracketData: AnyObject,
+		} = {
 			format: this.name,
 			generator: this.generator.name,
 			isStarted: this.isTournamentStarted,
-			isJoined: isJoined,
-			bracketData: this.bracketCache,
+			isJoined,
+			bracketData: this.bracketCache!,
 		};
 		if (this.name !== this.baseFormat) update.teambuilderFormat = this.baseFormat;
 		connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update)}`);
 		if (this.isTournamentStarted && isJoined) {
 			const update2 = {
-				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.playerTable[targetUser.userid])),
-				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.playerTable[targetUser.userid])),
+				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.playerTable[targetUser.userid])!),
+				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.playerTable[targetUser.userid])!),
 			};
 			connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update2)}`);
 
@@ -320,17 +335,11 @@ class Tournament extends Rooms.RoomGame {
 		this.room.send('|tournament|updateEnd');
 	}
 
-	/**
-	 * @param {User | string} user
-	 */
-	checkBanned(user) {
+	checkBanned(user: User | string) {
 		return Punishments.getRoomPunishType(this.room, toID(user)) === 'TOURBAN';
 	}
 
-	/**
-	 * @param {string | User} userid
-	 */
-	removeBannedUser(userid) {
+	removeBannedUser(userid: User | ID) {
 		userid = toID(userid);
 		if (!(userid in this.playerTable)) return;
 		if (this.isTournamentStarted) {
@@ -344,11 +353,7 @@ class Tournament extends Rooms.RoomGame {
 		this.room.update();
 	}
 
-	/**
-	 * @param {User} user
-	 * @param {CommandContext} output
-	 */
-	addUser(user, output) {
+	addUser(user: User, output: CommandContext) {
 		if (!user.named) {
 			output.sendReply('|tournament|error|UserNotNamed');
 			return;
@@ -369,14 +374,14 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		let gameCount = user.games.size;
+		const gameCount = user.games.size;
 		if (gameCount > 4) {
 			output.errorReply("Due to high load, you are limited to 4 games at the same time.");
 			return;
 		}
 
 		if (!ALLOW_ALTS) {
-			for (let otherPlayer of this.players) {
+			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users(otherPlayer.userid);
 				if (otherUser && otherUser.latestIp === user.latestIp) {
@@ -391,7 +396,7 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 		// TypeScript bug: no `T extends RoomGamePlayer`
-		let player = /** @type {TournamentPlayer} */ (this.addPlayer(user));
+		const player = this.addPlayer(user) as TournamentPlayer;
 		if (!player) throw new Error("Failed to add player.");
 
 		this.playerTable[user.userid] = player;
@@ -408,25 +413,18 @@ class Tournament extends Rooms.RoomGame {
 		}
 	}
 
-	/**
-	 * @param {User | string | null} user
-	 */
-	makePlayer(user) {
+	makePlayer(user: User | string | null) {
 		const num = this.players.length ? this.players[this.players.length - 1].num : 1;
 		return new TournamentPlayer(user, this, num);
 	}
 
-	/**
-	 * @param {string} userid
-	 * @param {CommandContext} [output]
-	 */
-	removeUser(userid, output) {
+	removeUser(userid: ID, output?: CommandContext) {
 		if (!(userid in this.playerTable)) {
 			if (output) output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
-		for (let player of this.players) {
+		for (const player of this.players) {
 			if (player.userid === userid) {
 				this.players.splice(this.players.indexOf(player), 1);
 				break;
@@ -441,12 +439,7 @@ class Tournament extends Rooms.RoomGame {
 		this.isBracketInvalidated = true;
 		this.update();
 	}
-	/**
-	 * @param {User} user
-	 * @param {User} replacementUser
-	 * @param {CommandContext} output
-	 */
-	replaceUser(user, replacementUser, output) {
+	replaceUser(user: User, replacementUser: User, output: CommandContext) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -468,7 +461,7 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 		if (!ALLOW_ALTS) {
-			for (let otherPlayer of this.players) {
+			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users(otherPlayer.userid);
 				if (otherUser && otherUser.latestIp === replacementUser.latestIp) {
@@ -510,7 +503,8 @@ class Tournament extends Rooms.RoomGame {
 		this.update();
 		this.updateFor(user);
 		this.updateFor(replacementUser);
-		const challengePlayer = newPlayer.pendingChallenge && (newPlayer.pendingChallenge.from || newPlayer.pendingChallenge.to);
+		const challengePlayer = newPlayer.pendingChallenge &&
+			(newPlayer.pendingChallenge.from || newPlayer.pendingChallenge.to);
 		if (challengePlayer) {
 			const challengeUser = Users.getExact(challengePlayer.userid);
 			if (challengeUser) this.updateFor(challengeUser);
@@ -521,7 +515,7 @@ class Tournament extends Rooms.RoomGame {
 	}
 
 	getBracketData() {
-		let data;
+		let data: any;
 		if (!this.isTournamentStarted) {
 			data = this.generator.getPendingBracketData(this.players);
 		} else {
@@ -532,17 +526,17 @@ class Tournament extends Rooms.RoomGame {
 				data.users = usersToNames(this.players.sort());
 				return data;
 			}
-			let queue = [data.rootNode];
+			const queue = [data.rootNode];
 			while (queue.length > 0) {
-				let node = queue.shift();
+				const node = queue.shift();
 
 				if (node.state === 'available') {
-					let pendingChallenge = node.children[0].team.pendingChallenge;
+					const pendingChallenge = node.children[0].team.pendingChallenge;
 					if (pendingChallenge && node.children[1].team === pendingChallenge.to) {
 						node.state = 'challenging';
 					}
 
-					let inProgressMatch = node.children[0].team.inProgressMatch;
+					const inProgressMatch = node.children[0].team.inProgressMatch;
 					if (inProgressMatch && node.children[1].team === inProgressMatch.to) {
 						node.state = 'inprogress';
 						node.room = inProgressMatch.room.id;
@@ -562,8 +556,8 @@ class Tournament extends Rooms.RoomGame {
 		} else if (data.type === 'table') {
 			if (this.isTournamentStarted) {
 				for (const [r, row] of data.tableContents.entries()) {
-					let pendingChallenge = data.tableHeaders.rows[r].pendingChallenge;
-					let inProgressMatch = data.tableHeaders.rows[r].inProgressMatch;
+					const pendingChallenge = data.tableHeaders.rows[r].pendingChallenge;
+					const inProgressMatch = data.tableHeaders.rows[r].inProgressMatch;
 					if (pendingChallenge || inProgressMatch) {
 						for (const [c, cell] of row.entries()) {
 							if (!cell) continue;
@@ -586,10 +580,7 @@ class Tournament extends Rooms.RoomGame {
 		return data;
 	}
 
-	/**
-	 * @param {CommandContext} output
-	 */
-	startTournament(output) {
+	startTournament(output: CommandContext) {
 		if (this.isTournamentStarted) {
 			output.sendReply('|tournament|error|AlreadyStarted');
 			return false;
@@ -619,23 +610,19 @@ class Tournament extends Rooms.RoomGame {
 		return true;
 	}
 	getAvailableMatches() {
-		/** @type {[TournamentPlayer, TournamentPlayer][]} */
-		const matches = this.generator.getAvailableMatches();
+		const matches = this.generator.getAvailableMatches() as [TournamentPlayer, TournamentPlayer][];
 		if (typeof matches === 'string') throw new Error(`Error from getAvailableMatches(): ${matches}`);
 
-		/** @type {Map<TournamentPlayer, TournamentPlayer[]>} */
-		const challenges = new Map();
-		/** @type {Map<TournamentPlayer, TournamentPlayer[]>} */
-		const challengeBys = new Map();
-		/** @type {Map<TournamentPlayer, boolean>} */
-		const oldAvailableMatches = new Map();
+		const challenges = new Map<TournamentPlayer, TournamentPlayer[]>();
+		const challengeBys = new Map<TournamentPlayer, TournamentPlayer[]>();
+		const oldAvailableMatches = new Map<TournamentPlayer, boolean>();
 
 		for (const user of this.players) {
 			challenges.set(user, []);
 			challengeBys.set(user, []);
 
 			let oldAvailableMatch = false;
-			let availableMatches = user.availableMatches;
+			const availableMatches = user.availableMatches;
 			if (availableMatches.size) {
 				oldAvailableMatch = true;
 				availableMatches.clear();
@@ -644,10 +631,8 @@ class Tournament extends Rooms.RoomGame {
 		}
 
 		for (const match of matches) {
-			// @ts-ignore
-			challenges.get(match[0]).push(match[1]);
-			// @ts-ignore
-			challengeBys.get(match[1]).push(match[0]);
+			challenges.get(match[0])!.push(match[1]);
+			challengeBys.get(match[1])!.push(match[0]);
 
 			match[0].availableMatches.add(match[1]);
 		}
@@ -660,21 +645,14 @@ class Tournament extends Rooms.RoomGame {
 		}
 
 		return {
-			challenges: challenges,
-			challengeBys: challengeBys,
+			challenges,
+			challengeBys,
 		};
 	}
 
-	/**
-	 * @param {string} userid
-	 * @param {CommandContext?} output
-	 * @param {string?} reason
-	 * @param {boolean} isSelfDQ
-	 */
-	disqualifyUser(userid, output = null, reason = null, isSelfDQ = false) {
+	disqualifyUser(userid: ID, output: CommandContext | null = null, reason: string | null = null, isSelfDQ = false) {
 		const user = Users.get(userid);
-		/** @type {(msg: string) => void} */
-		let sendReply;
+		let sendReply: (msg: string) => void;
 		if (output) {
 			sendReply = msg => output.sendReply(msg);
 		} else if (user) {
@@ -708,7 +686,7 @@ class Tournament extends Rooms.RoomGame {
 
 		player.isBusy = false;
 
-		let challenge = player.pendingChallenge;
+		const challenge = player.pendingChallenge;
 		if (challenge) {
 			player.pendingChallenge = null;
 			if (challenge.to) {
@@ -722,7 +700,7 @@ class Tournament extends Rooms.RoomGame {
 			}
 		}
 
-		let matchFrom = player.inProgressMatch;
+		const matchFrom = player.inProgressMatch;
 		if (matchFrom) {
 			matchFrom.to.isBusy = false;
 			player.inProgressMatch = null;
@@ -738,8 +716,7 @@ class Tournament extends Rooms.RoomGame {
 		}
 		if (matchTo) {
 			matchTo.isBusy = false;
-			// @ts-ignore
-			let matchRoom = matchTo.inProgressMatch.room;
+			const matchRoom = matchTo.inProgressMatch!.room;
 			matchRoom.parent = null;
 			this.completedMatches.add(matchRoom.id);
 			if (matchRoom.battle) matchRoom.battle.forfeit(player.userid);
@@ -767,12 +744,7 @@ class Tournament extends Rooms.RoomGame {
 		return true;
 	}
 
-	/**
-	 *
-	 * @param {number} timeout
-	 * @param {CommandContext} output
-	 */
-	setAutoStartTimeout(timeout, output) {
+	setAutoStartTimeout(timeout: number, output: CommandContext) {
 		if (this.isTournamentStarted) {
 			output.sendReply('|tournament|error|AlreadyStarted');
 			return false;
@@ -794,11 +766,7 @@ class Tournament extends Rooms.RoomGame {
 		return true;
 	}
 
-	/**
-	 * @param {number} timeout
-	 * @param {CommandContext} output
-	 */
-	setAutoDisqualifyTimeout(timeout, output) {
+	setAutoDisqualifyTimeout(timeout: number, output: CommandContext) {
 		if (timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT || isNaN(timeout)) {
 			output.sendReply('|tournament|error|InvalidAutoDisqualifyTimeout');
 			return false;
@@ -816,10 +784,7 @@ class Tournament extends Rooms.RoomGame {
 
 		return true;
 	}
-	/**
-	 * @param {CommandContext} [output]
-	 */
-	runAutoDisqualify(output) {
+	runAutoDisqualify(output?: CommandContext) {
 		if (!this.isTournamentStarted) {
 			if (output) output.sendReply('|tournament|error|NotStarted');
 			return false;
@@ -865,12 +830,7 @@ class Tournament extends Rooms.RoomGame {
 		if (!this.isEnded) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
 	}
 
-	/**
-	 * @param {User} user
-	 * @param {string} targetUserid
-	 * @param {CommandContext} output
-	 */
-	async challenge(user, targetUserid, output) {
+	async challenge(user: User, targetUserid: ID, output: CommandContext) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -916,19 +876,15 @@ class Tournament extends Rooms.RoomGame {
 		}
 
 		to.lastActionTime = Date.now();
-		from.pendingChallenge = {to: to, team: ready.team};
-		to.pendingChallenge = {from: from, team: ready.team};
+		from.pendingChallenge = {to, team: ready.team};
+		to.pendingChallenge = {from, team: ready.team};
 		from.sendRoom(`|tournament|update|${JSON.stringify({challenging: to.name})}`);
 		to.sendRoom(`|tournament|update|${JSON.stringify({challenged: from.name})}`);
 
 		this.isBracketInvalidated = true;
 		this.update();
 	}
-	/**
-	 * @param {User} user
-	 * @param {CommandContext} output
-	 */
-	cancelChallenge(user, output) {
+	cancelChallenge(user: User, output: CommandContext) {
 		if (!this.isTournamentStarted) {
 			if (output) output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -954,11 +910,7 @@ class Tournament extends Rooms.RoomGame {
 		this.isAvailableMatchesInvalidated = true;
 		this.update();
 	}
-	/**
-	 * @param {User} user
-	 * @param {CommandContext} output
-	 */
-	async acceptChallenge(user, output) {
+	async acceptChallenge(user: User, output: CommandContext) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -1000,7 +952,7 @@ class Tournament extends Rooms.RoomGame {
 		from.sendTo(this.room, '|tournament|update|{"challenging":null}');
 		user.sendTo(this.room, '|tournament|update|{"challenged":null}');
 
-		challenge.from.inProgressMatch = {to: player, room: room};
+		challenge.from.inProgressMatch = {to: player, room};
 		this.room.add(`|tournament|battlestart|${from.name}|${user.name}|${room.id}`).update();
 
 		this.isBracketInvalidated = true;
@@ -1012,31 +964,16 @@ class Tournament extends Rooms.RoomGame {
 	getDefaultCustomName() {
 		return Dex.getFormat(this.fullFormat).name + " (with custom rules)";
 	}
-	/**
-	 * @param {User} user
-	 */
-	forfeit(user) {
+	forfeit(user: User) {
 		return this.disqualifyUser(user.userid, null, "You left the tournament", true);
 	}
-	/**
-	 * @param {User} user
-	 * @param {Connection} connection
-	 */
-	onConnect(user, connection) {
+	onConnect(user: User, connection: Connection) {
 		this.updateFor(user, connection);
 	}
-	/**
-	 * @param {User} user
-	 * @param {Connection} connection
-	 */
-	onUpdateConnection(user, connection) {
+	onUpdateConnection(user: User, connection: Connection) {
 		this.updateFor(user, connection);
 	}
-	/**
-	 * @param {User} user
-	 * @param {string} oldUserid
-	 */
-	onRename(user, oldUserid) {
+	onRename(user: User, oldUserid: ID) {
 		if (oldUserid in this.playerTable) {
 			if (user.userid === oldUserid) {
 				this.playerTable[user.userid].name = user.name;
@@ -1050,11 +987,7 @@ class Tournament extends Rooms.RoomGame {
 
 		this.updateFor(user);
 	}
-	/**
-	 * @param {GameRoom} room
-	 * @param {User} user
-	 */
-	onBattleJoin(room, user) {
+	onBattleJoin(room: GameRoom, user: User) {
 		if (!room.p1 || !room.p2) return;
 		if (this.scouting || this.isEnded || user.latestIp === room.p1.latestIp || user.latestIp === room.p2.latestIp) return;
 		if (user.can('makeroom')) return;
@@ -1065,11 +998,7 @@ class Tournament extends Rooms.RoomGame {
 			}
 		}
 	}
-	/**
-	 * @param {GameRoom} room
-	 * @param {string} winnerid
-	 */
-	onBattleWin(room, winnerid) {
+	onBattleWin(room: GameRoom, winnerid: ID) {
 		if (this.completedMatches.has(room.id)) return;
 		this.completedMatches.add(room.id);
 		room.parent = null;
@@ -1080,7 +1009,7 @@ class Tournament extends Rooms.RoomGame {
 		const winner = this.playerTable[winnerid];
 		const score = room.battle.score || [0, 0];
 
-		let result = 'draw';
+		let result: 'win' | 'loss' | 'draw' = 'draw';
 		if (p1 === winner) {
 			p1.score += 1;
 			p1.wins += 1;
@@ -1115,7 +1044,7 @@ class Tournament extends Rooms.RoomGame {
 		p2.games += 1;
 		if (!(p1.isDisqualified || p2.isDisqualified)) {
 			// If a player was disqualified, handle the results there
-			const error = this.generator.setMatchResult([p1, p2], result, score);
+			const error = this.generator.setMatchResult([p1, p2], result as 'win' | 'loss', score);
 			if (error) {
 				// Should never happen
 				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.userid}, ${room.p2.userid}], ${result}, ${score}) in onBattleWin(${room.id}, ${winnerid}). Please report this to an admin.`).update();
@@ -1139,7 +1068,7 @@ class Tournament extends Rooms.RoomGame {
 	}
 	onTournamentEnd() {
 		const update = {
-			results: this.generator.getResults().map(usersToNames),
+			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
 			format: this.name,
 			generator: this.generator.name,
 			bracketData: this.getBracketData(),
@@ -1147,12 +1076,10 @@ class Tournament extends Rooms.RoomGame {
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		this.isEnded = true;
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-		delete exports.tournaments[this.room.id];
+		delete Tournaments.tournaments[this.room.id];
 		this.room.game = null;
 		for (const roomid of this.completedMatches) {
-			/** @type {GameRoom} */
-			// @ts-ignore
-			const room = Rooms(roomid);
+			const room = Rooms(roomid) as GameRoom;
 			if (room) room.tour = null;
 		}
 		for (const player of this.players) {
@@ -1161,45 +1088,31 @@ class Tournament extends Rooms.RoomGame {
 	}
 }
 
-/**
- * @param {string | undefined} generator
- */
-function getGenerator(generator) {
+function getGenerator(generator: string | undefined) {
 	generator = toID(generator);
 	switch (generator) {
 	case 'elim': generator = 'elimination'; break;
 	case 'rr': generator = 'roundrobin'; break;
 	}
-	return TournamentGenerators[generator];
+	return TournamentGenerators[generator as 'elimination' | 'roundrobin'];
 }
-/**
- * @param {string | undefined} generator
- * @param {string | undefined} modifier
- * @param {CommandContext} output
- */
-function createTournamentGenerator(generator, modifier, output) {
-	let Generator = getGenerator(generator);
-	if (!Generator) {
-		output.errorReply(`${generator} is not a valid type.`);
-		const generators = Object.keys(TournamentGenerators).join(', ');
-		output.errorReply(`Valid types: ${generators}`);
+
+function createTournamentGenerator(
+	generatorName: string | undefined, modifier: string | undefined, output: CommandContext
+) {
+	const generator = getGenerator(generatorName);
+	if (!generator) {
+		output.errorReply(`${generatorName} is not a valid type.`);
+		const generatorNames = Object.keys(TournamentGenerators).join(', ');
+		output.errorReply(`Valid types: ${generatorNames}`);
 		return;
 	}
-	return new Generator(modifier);
+	return new generator(modifier || '');
 }
-/**
- *
- * @param {ChatRoom | GameRoom} room
- * @param {string | undefined} formatId
- * @param {string | undefined} generator
- * @param {string | undefined} playerCap
- * @param {boolean} isRated
- * @param {string | undefined} generatorMod
- * @param {string | undefined} name
- * @param {CommandContext} output
- * @returns {Tournament | undefined}
- */
-function createTournament(room, formatId, generator, playerCap, isRated, generatorMod, name, output) {
+function createTournament(
+	room: ChatRoom | GameRoom, formatId: string | undefined, generator: string | undefined, playerCap: string | undefined,
+	isRated: boolean, generatorMod: string | undefined, name: string | undefined, output: CommandContext
+) {
 	if (room.type !== 'chat') {
 		output.errorReply("Tournaments can only be created in chat rooms.");
 		return;
@@ -1215,7 +1128,7 @@ function createTournament(room, formatId, generator, playerCap, isRated, generat
 	const format = Dex.getFormat(formatId);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(`${format.id} is not a valid tournament format.`);
-		const formats = Object.values(Dex.formats).filter(f => f.tournamentShow).map(format => format.name).join(', ');
+		const formats = Object.values(Dex.formats).filter(f => f.tournamentShow).map(f => f.name).join(', ');
 		output.errorReply(`Valid formats: ${formats}`);
 		return;
 	}
@@ -1229,39 +1142,30 @@ function createTournament(room, formatId, generator, playerCap, isRated, generat
 		output.errorReply("You cannot have a player cap that is less than 2.");
 		return;
 	}
-	const tour = room.game = exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, generatorMod, output), playerCap, isRated, name);
+	const tour = room.game = tournaments[room.id] = new Tournament(
+		room, format, createTournamentGenerator(generator, generatorMod, output)!, playerCap, isRated, name
+	);
 	return tour;
 }
-/**
- *
- * @param {string} id
- * @param {CommandContext} output
- */
-function deleteTournament(id, output) {
-	const tournament = exports.tournaments[id];
+function deleteTournament(id: string, output: CommandContext) {
+	const tournament = tournaments[id];
 	if (!tournament) {
 		output.errorReply(`${id} doesn't exist.`);
 		return false;
 	}
 	tournament.forceEnd();
-	delete exports.tournaments[id];
+	delete tournaments[id];
 	const room = Rooms(id);
 	if (room) delete room.game;
 	return true;
 }
-/**
- * @param {string} id
- */
-function getTournament(id) {
-	if (exports.tournaments[id]) {
-		return exports.tournaments[id];
+function getTournament(id: string) {
+	if (tournaments[id]) {
+		return tournaments[id];
 	}
 }
 
-/** @typedef {(this: CommandContext, tournament: Tournament, user: User, params: string[], cmd: string, connection: Connection) => void} TourCommand */
-/** @typedef {{[k: string]: string | TourCommand}} TourCommands */
-/** @type {{basic: TourCommands, creation: TourCommands, moderation: TourCommands}} */
-const commands = {
+const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCommands} = {
 	basic: {
 		j: 'join',
 		in: 'join',
@@ -1283,7 +1187,7 @@ const commands = {
 		},
 		getusers(tournament) {
 			if (!this.runBroadcast()) return;
-			let users = usersToNames(tournament.getRemainingPlayers().sort());
+			const users = usersToNames(tournament.getRemainingPlayers().sort());
 			this.sendReplyBox(`<strong>${users.length}/${tournament.players.length} users remain in this tournament:</strong><br />${Chat.escapeHTML(users.join(', '))}`);
 		},
 		getupdate(tournament, user) {
@@ -1294,18 +1198,21 @@ const commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
+			// tslint:disable-next-line: no-floating-promises
 			tournament.challenge(user, toID(params[0]), this);
 		},
 		cancelchallenge(tournament, user) {
 			tournament.cancelChallenge(user, this);
 		},
 		acceptchallenge(tournament, user) {
+			// tslint:disable-next-line: no-floating-promises
 			tournament.acceptChallenge(user, this);
 		},
 		vtm(tournament, user, params, cmd, connection) {
 			if (Monitor.countPrepBattle(connection.ip, connection)) {
 				return;
 			}
+			// tslint:disable-next-line: no-floating-promises
 			TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.team).then(result => {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");
@@ -1367,7 +1274,7 @@ const commands = {
 				return this.errorReply("The player cap cannot be changed once the tournament has started.");
 			}
 			const option = params[0].toLowerCase();
-			if (option === '0' || option === 'infinity' || option === 'off' || option === 'false' || option === 'stop' || option === 'remove') {
+			if (['0', 'infinity', 'off', 'false', 'stop', 'remove'].includes(option)) {
 				if (!tournament.playerCap) return this.errorReply("The tournament does not have a player cap.");
 				params[0] = '0';
 			}
@@ -1378,8 +1285,12 @@ const commands = {
 				this.modlog('TOUR PLAYERCAP', null, 'removed');
 				this.sendReply("Tournament cap removed.");
 			} else {
-				if (isNaN(playerCap) || playerCap < 2) return this.errorReply("The tournament cannot have a player cap less than 2.");
-				if (playerCap === tournament.playerCap) return this.errorReply(`The tournament's player cap is already ${playerCap}.`);
+				if (isNaN(playerCap) || playerCap < 2) {
+					return this.errorReply("The tournament cannot have a player cap less than 2.");
+				}
+				if (playerCap === tournament.playerCap) {
+					return this.errorReply(`The tournament's player cap is already ${playerCap}.`);
+				}
 				tournament.playerCap = playerCap;
 				if (Config.tourdefaultplayercap && tournament.playerCap > Config.tourdefaultplayercap) {
 					Monitor.log(`[TourMonitor] Room ${tournament.room.id} starting a tour over default cap (${tournament.playerCap})`);
@@ -1505,7 +1416,7 @@ const commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <on|minutes|off>`);
 			}
-			let option = params[0].toLowerCase();
+			const option = params[0].toLowerCase();
 			if (this.meansYes(option) || option === 'start') {
 				if (tournament.isTournamentStarted) {
 					return this.errorReply("The tournament has already started.");
@@ -1631,8 +1542,7 @@ const commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>, <reason>`);
 			}
-			/** @type {string | User | null} */
-			let targetUser = Users.get(params[0]);
+			let targetUser: User | string | null = Users.get(params[0]);
 			const online = !!targetUser;
 			if (!online) targetUser = params[0];
 			if (!targetUser) return false;
@@ -1646,12 +1556,12 @@ const commands = {
 
 			if (tournament.checkBanned(targetUser)) return this.errorReply("This user is already banned from tournaments.");
 
-			/** @type {[string, string, number, string]} */
-			const punishment = ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
+			const punishment: [string, string, number, string] =
+				['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
 			if (online) {
-				Punishments.roomPunish(this.room, /** @type {User} */(targetUser), punishment);
+				Punishments.roomPunish(this.room, targetUser as User, punishment);
 			} else {
-				Punishments.roomPunishName(this.room, /** @type {string} */(targetUser), punishment);
+				Punishments.roomPunishName(this.room, targetUser as string, punishment);
 			}
 			tournament.removeBannedUser(targetUserid);
 			this.modlog('TOUR BAN', targetUser, reason);
@@ -1662,7 +1572,7 @@ const commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
-			let targetUser = Users.get(params[0]) || params[0];
+			const targetUser = Users.get(params[0]) || params[0];
 			const targetUserid = toID(targetUser);
 
 			if (!tournament.checkBanned(targetUserid)) return this.errorReply("This user isn't banned from tournaments.");
@@ -1676,8 +1586,7 @@ const commands = {
 };
 
 Chat.loadPlugins();
-/** @type {ChatCommands} */
-const chatCommands = {
+const chatCommands: ChatCommands = {
 	tour: 'tournament',
 	tours: 'tournament',
 	tournaments: 'tournament',
@@ -1691,19 +1600,22 @@ const chatCommands = {
 
 		if (cmd === '') {
 			if (!this.runBroadcast()) return;
-			const update = Object.keys(exports.tournaments).filter(roomid => {
-				const tournament = exports.tournaments[roomid];
+			const update = Object.keys(tournaments).filter(roomid => {
+				const tournament = tournaments[roomid];
 				return !tournament.room.isPrivate && !tournament.room.isPersonal && !tournament.room.staffRoom;
 			}).map(roomid => {
-				const tournament = exports.tournaments[roomid];
-				return {room: tournament.room.id, title: tournament.room.title, format: tournament.name, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
+				const tournament = tournaments[roomid];
+				return {
+					room: tournament.room.id, title: tournament.room.title, format: tournament.name,
+					generator: tournament.generator.name, isStarted: tournament.isTournamentStarted,
+				};
 			});
 			this.sendReply(`|tournaments|info|${JSON.stringify(update)}`);
 		} else if (cmd === 'help') {
 			return this.parse('/help tournament');
 		} else if (this.meansYes(cmd)) {
 			if (!this.can('gamemanagement', null, room)) return;
-			let rank = params[0];
+			const rank = params[0];
 			if (rank === '@') {
 				if (room.toursEnabled === true) return this.errorReply("Tournaments are already enabled for @ and above in this room.");
 				room.toursEnabled = true;
@@ -1747,7 +1659,7 @@ const chatCommands = {
 				}
 			}
 
-			let option = params[0].toLowerCase();
+			const option = params[0].toLowerCase();
 			if (this.meansYes(option)) {
 				if (room.tourAnnouncements) return this.errorReply("Tournament announcements are already enabled.");
 				room.tourAnnouncements = true;
@@ -1780,18 +1692,19 @@ const chatCommands = {
 				return this.sendReply(`Usage: ${cmd} <format>, <type> [, <comma-separated arguments>]`);
 			}
 
-			/** @type {Tournament | undefined} */
-			let tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.ratedtours, params.shift(), params.shift(), this);
+			const tour: Tournament | undefined = createTournament(
+				room, params.shift(), params.shift(), params.shift(), Config.ratedtours, params.shift(), params.shift(), this
+			);
 			if (tour) {
 				this.privateModAction(`(${user.name} created a tournament in ${tour.baseFormat} format.)`);
 				this.modlog('TOUR CREATE', null, tour.baseFormat);
 				if (room.tourAnnouncements) {
-					let tourRoom = Rooms.search(Config.tourroom || 'tournaments');
+					const tourRoom = Rooms.search(Config.tourroom || 'tournaments');
 					if (tourRoom && tourRoom !== room) tourRoom.addRaw(`<div class="infobox"><a href="/${room.id}" class="ilink"><strong>${Chat.escapeHTML(Dex.getFormat(tour.name).name)}</strong> tournament created in <strong>${Chat.escapeHTML(room.title)}</strong>.</a></div>`).update();
 				}
 			}
 		} else {
-			let tournament = getTournament(room.id);
+			const tournament = getTournament(room.id);
 			if (!tournament) {
 				return this.sendReply("There is currently no tournament running in this room.");
 			}
@@ -1859,12 +1772,13 @@ const chatCommands = {
 };
 Object.assign(Chat.commands, chatCommands);
 
-exports.Tournament = Tournament;
-exports.TournamentPlayer = TournamentPlayer;
-exports.TournamentGenerators = TournamentGenerators;
-
-exports.createTournament = createTournament;
-exports.deleteTournament = deleteTournament;
-exports.get = getTournament;
-
-exports.commands = commands;
+export const Tournaments = {
+	TournamentGenerators,
+	tournaments,
+	TournamentPlayer,
+	Tournament,
+	createTournament,
+	deleteTournament,
+	getTournament,
+	commands,
+};

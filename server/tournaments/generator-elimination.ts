@@ -1,4 +1,10 @@
-'use strict';
+interface ElimTree {
+	root: ElimNode;
+	currentLayerLeafNodes: ElimNode[];
+	nextLayerLeafNodes: ElimNode[];
+}
+
+type TournamentPlayer = import('./index').TournamentPlayer;
 
 /**
  * There are two types of elim nodes, player nodes
@@ -9,55 +15,56 @@
  * Match nodes are non-leaf nodes, and will always have two children.
  */
 class ElimNode {
-	constructor(/** @type {Partial<ElimNode>} */ options) {
-		/** @type {[ElimNode, ElimNode]?} */
+	children: [ElimNode, ElimNode] | null;
+	/**
+	 * In a player node, the player (null if it's an unfilled loser's bracket node).
+	 *
+	 * In a match node, the winner if it exists, otherwise null.
+	 */
+	user: TournamentPlayer | null;
+	/**
+	 * Only relevant to match nodes. (Player nodes are always '')
+	 *
+	 * 'available' = ready for battles - will have two children, both with users; this.user is null
+	 *
+	 * 'finished' = battle already over - will have two children, both with users; this.user is winner
+	 *
+	 * '' = unavailable
+	 */
+	state: 'available' | 'finished' | '';
+	result: 'win' | 'loss' | '';
+	score: number[] | null;
+	/**
+	 * Only relevant to match nodes in double+ elimination.
+	 *
+	 * The loser of this battle will be put in target player node.
+	 */
+	losersBracketNode: ElimNode | null;
+	/**
+	 * 0 = winner's bracket
+	 * 1 = loser's bracket
+	 * 2 = second loser's bracket
+	 * etc
+	 * (always 0 in single elimination)
+	 */
+	losersBracketIndex: number;
+	parent: ElimNode | null;
+	/**
+	 * Only used while building the tree
+	 */
+	fromNode: ElimNode | null;
+	constructor(options: Partial<ElimNode>) {
 		this.children = null;
-		/**
-		 * In a player node, the player (null if it's an unfilled loser's bracket node).
-		 *
-		 * In a match node, the winner if it exists, otherwise null.
-		 * @type {TournamentPlayer?} */
 		this.user = options.user || null;
-		/**
-		 * Only relevant to match nodes. (Player nodes are always '')
-		 *
-		 * 'available' = ready for battles - will have two children, both with users; this.user is null
-		 *
-		 * 'finished' = battle already over - will have two children, both with users; this.user is winner
-		 *
-		 * '' = unavailable
-		 * @type {'available' | 'finished' | ''}
-		 */
 		this.state = options.state || '';
-		/** @type {'win' | 'loss' | ''} */
 		this.result = options.result || '';
-		/** @type {number[] | null} */
 		this.score = options.score || null;
-		/**
-		 * Only relevant to match nodes in double+ elimination.
-		 *
-		 * The loser of this battle will be put in target player node.
-		 * @type {ElimNode?}
-		 */
 		this.losersBracketNode = options.losersBracketNode || null;
-		/**
-		 * 0 = winner's bracket
-		 * 1 = loser's bracket
-		 * 2 = second loser's bracket
-		 * etc
-		 * (always 0 in single elimination)
-		 * @type {number}
-		 */
 		this.losersBracketIndex = options.losersBracketIndex || 0;
-		/** @type {ElimNode?} */
 		this.parent = options.parent || null;
-		/**
-		 * Only used while building the tree
-		 * @type {ElimNode?}
-		 */
 		this.fromNode = options.fromNode || null;
 	}
-	setChildren(/** @type {[ElimNode, ElimNode]?} */ children) {
+	setChildren(children: [ElimNode, ElimNode] | null) {
 		if (this.children) {
 			for (const child of this.children) child.parent = null;
 		}
@@ -66,21 +73,19 @@ class ElimNode {
 		}
 		this.children = children;
 	}
-	traverse(/** @type {(node: ElimNode) => void} */ callback) {
-		/** @type {ElimNode[]} */
-		const queue = [this];
+	traverse(callback: (node: ElimNode) => void) {
+		const queue: ElimNode[] = [this];
 		let node;
+		// tslint:disable-next-line: no-conditional-assignment
 		while ((node = queue.shift())) {
-			// eslint-disable-next-line callback-return
 			callback(node);
 			if (node.children) queue.push(...node.children);
 		}
 	}
-	/** @template T */
-	find(/** @type {(node: ElimNode) => (T | void)} */ callback) {
-		/** @type {ElimNode[]} */
-		const queue = [this];
+	find<T>(callback: (node: ElimNode) => (T | void)) {
+		const queue: ElimNode[] = [this];
 		let node;
+		// tslint:disable-next-line: no-conditional-assignment
 		while ((node = queue.shift())) {
 			// eslint-disable-next-line callback-return
 			const value = callback(node);
@@ -91,18 +96,15 @@ class ElimNode {
 		}
 		return undefined;
 	}
-	[Symbol.iterator]() { // eslint-disable-line no-restricted-globals
-		/** @type {ElimNode[]} */
-		let results = [this];
-		for (let i = 0; i < results.length; i++) {
-			// @ts-ignore
-			if (results[i].children) results.push(...results[i].children);
+	[Symbol.iterator]() {
+		const results: ElimNode[] = [this];
+		for (const result of results) {
+			if (result.children) results.push(...result.children);
 		}
-		return results[Symbol.iterator](); // eslint-disable-line no-restricted-globals
+		return results[Symbol.iterator]();
 	}
 	toJSON() {
-		/** @type {any} */
-		let node = {};
+		const node: any = {};
 
 		if (!this.children) {
 			node.team = this.user || (
@@ -122,8 +124,6 @@ class ElimNode {
 	}
 }
 
-/** @typedef {import('./index').TournamentPlayer} TournamentPlayer */
-
 const nameMap = [
 	"",
 	"Single",
@@ -135,16 +135,17 @@ const nameMap = [
 	// Feel free to add more
 ];
 
-class Elimination {
-	/**
-	 * @param {number | string} maxSubtrees
-	 */
-	constructor(maxSubtrees) {
-		/** @type {string} */
+export class Elimination {
+	name: string;
+	isDrawingSupported: boolean;
+	isBracketFrozen: boolean;
+	players: TournamentPlayer[];
+	maxSubtrees: number;
+	treeRoot: ElimNode;
+	constructor(maxSubtrees: number | string) {
 		this.name = "Elimination";
 		this.isDrawingSupported = false;
 		this.isBracketFrozen = false;
-		/** @type {TournamentPlayer[]} */
 		this.players = [];
 
 		maxSubtrees = maxSubtrees || 1;
@@ -155,10 +156,8 @@ class Elimination {
 		}
 		if (!maxSubtrees || maxSubtrees < 1) maxSubtrees = 1;
 
-		/** @type {number} */
 		this.maxSubtrees = maxSubtrees;
-		/** @type {ElimNode} */
-		this.treeRoot = /** @type {any} */ (null);
+		this.treeRoot = null!;
 
 		if (nameMap[maxSubtrees]) {
 			this.name = `${nameMap[maxSubtrees]} ${this.name}`;
@@ -169,10 +168,7 @@ class Elimination {
 		}
 	}
 
-	/**
-	 * @param {TournamentPlayer[]} players
-	 */
-	getPendingBracketData(players) {
+	getPendingBracketData(players: TournamentPlayer[]) {
 		return {
 			type: 'tree',
 			rootNode: null,
@@ -184,38 +180,32 @@ class Elimination {
 			rootNode: this.treeRoot.toJSON(),
 		};
 	}
-	/**
-	 * @param {TournamentPlayer[]} players
-	 */
-	freezeBracket(players) {
+	freezeBracket(players: TournamentPlayer[]) {
 		if (!players.length) throw new Error(`No players in tournament`);
 
 		this.players = players;
 		this.isBracketFrozen = true;
 
-		/** @typedef {{root: ElimNode, currentLayerLeafNodes: ElimNode[], nextLayerLeafNodes: ElimNode[]}} ElimTree */
-
 		// build the winner's bracket
-
-		let tree = /** @type {ElimTree} */ (/** @type {never} */ (null));
+		let tree: ElimTree = null!;
 
 		for (const user of Dex.shuffle(players)) {
 			if (!tree) {
 				tree = {
-					root: new ElimNode({user: user}),
+					root: new ElimNode({user}),
 					currentLayerLeafNodes: [],
 					nextLayerLeafNodes: [],
 				};
 				tree.currentLayerLeafNodes.push(tree.root);
 				continue;
 			}
-			let targetNode = tree.currentLayerLeafNodes.shift();
+			const targetNode = tree.currentLayerLeafNodes.shift();
 			if (!targetNode) throw new Error(`TypeScript bug: no ! in checkJs`);
 
-			let newLeftChild = new ElimNode({user: targetNode.user});
+			const newLeftChild = new ElimNode({user: targetNode.user});
 			tree.nextLayerLeafNodes.push(newLeftChild);
 
-			let newRightChild = new ElimNode({user: user});
+			const newRightChild = new ElimNode({user});
 			tree.nextLayerLeafNodes.push(newRightChild);
 			targetNode.setChildren([newLeftChild, newRightChild]);
 
@@ -231,10 +221,10 @@ class Elimination {
 
 		this.maxSubtrees = Math.min(this.maxSubtrees, players.length - 1);
 		for (let losersBracketIndex = 1; losersBracketIndex < this.maxSubtrees; losersBracketIndex++) {
-			/** @type {{[depth: number]: ElimNode[]}} */
-			let matchesByDepth = {};
-			let queue = [{node: tree.root, depth: 0}];
+			const matchesByDepth: {[depth: number]: ElimNode[]} = {};
+			const queue = [{node: tree.root, depth: 0}];
 			let frame;
+			// tslint:disable-next-line: no-conditional-assignment
 			while ((frame = queue.shift())) {
 				if (!frame.node.children || frame.node.losersBracketNode) continue;
 
@@ -245,15 +235,14 @@ class Elimination {
 				queue.push({node: frame.node.children[1], depth: frame.depth + 1});
 			}
 
-			/** @type {ElimTree} */
-			let newTree = {
+			const newTree: ElimTree = {
 				root: new ElimNode({losersBracketIndex, fromNode: matchesByDepth[0][0]}),
 				currentLayerLeafNodes: [],
 				nextLayerLeafNodes: [],
 			};
 			newTree.currentLayerLeafNodes.push(newTree.root);
 
-			for (let depth in matchesByDepth) {
+			for (const depth in matchesByDepth) {
 				if (depth === '0') continue;
 				const matchesThisDepth = matchesByDepth[depth];
 				let n = 0;
@@ -264,19 +253,18 @@ class Elimination {
 					//              +--+
 					//   new leaf --+
 
-					let oldLeaf = newTree.currentLayerLeafNodes.shift();
+					const oldLeaf = newTree.currentLayerLeafNodes.shift();
 					if (!oldLeaf) throw new Error(`TypeScript bug: no ! in checkJs`);
 					const oldLeafFromNode = oldLeaf.fromNode;
 					oldLeaf.fromNode = null;
 
-					/** @type {ElimNode} */
-					let newBranch = new ElimNode({losersBracketIndex});
+					const newBranch = new ElimNode({losersBracketIndex});
 					oldLeaf.setChildren([new ElimNode({losersBracketIndex, fromNode: oldLeafFromNode}), newBranch]);
 
-					let newLeftChild = new ElimNode({losersBracketIndex, fromNode: matchesThisDepth[n]});
+					const newLeftChild = new ElimNode({losersBracketIndex, fromNode: matchesThisDepth[n]});
 					newTree.nextLayerLeafNodes.push(newLeftChild);
 
-					let newRightChild = new ElimNode({losersBracketIndex, fromNode: matchesThisDepth[n + 1]});
+					const newRightChild = new ElimNode({losersBracketIndex, fromNode: matchesThisDepth[n + 1]});
 					newTree.nextLayerLeafNodes.push(newRightChild);
 					newBranch.setChildren([newLeftChild, newRightChild]);
 				}
@@ -286,12 +274,11 @@ class Elimination {
 					//              +-->
 					//   new leaf --+
 
-					let oldLeaf = newTree.currentLayerLeafNodes.shift();
-					if (!oldLeaf) throw new Error(`TypeScript bug: no ! in checkJs`);
+					const oldLeaf = newTree.currentLayerLeafNodes.shift()!;
 					const oldLeafFromNode = oldLeaf.fromNode;
 					oldLeaf.fromNode = null;
 
-					let newLeaf = new ElimNode({fromNode: matchesThisDepth[n]});
+					const newLeaf = new ElimNode({fromNode: matchesThisDepth[n]});
 					newTree.nextLayerLeafNodes.push(newLeaf);
 					oldLeaf.setChildren([new ElimNode({fromNode: oldLeafFromNode}), newLeaf]);
 				}
@@ -307,8 +294,7 @@ class Elimination {
 				}
 			});
 
-			/** @type {ElimNode} */
-			let newRoot = new ElimNode({});
+			const newRoot = new ElimNode({});
 			newRoot.setChildren([tree.root, newTree.root]);
 			tree.root = newRoot;
 		}
@@ -322,10 +308,7 @@ class Elimination {
 		this.treeRoot = tree.root;
 	}
 
-	/**
-	 * @param {TournamentPlayer} user
-	 */
-	disqualifyUser(user) {
+	disqualifyUser(user: TournamentPlayer) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		/**
@@ -352,7 +335,7 @@ class Elimination {
 		});
 		if (found) {
 			// @ts-ignore
-			let error = this.setMatchResult(found.match, found.result, found.score);
+			const error = this.setMatchResult(found.match, found.result, found.score);
 			if (error) {
 				throw new Error(`Unexpected ${error} from setMatchResult([${found.match.join(', ')}], ${found.result})`);
 			}
@@ -364,37 +347,27 @@ class Elimination {
 	getAvailableMatches() {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		/** @type {[TournamentPlayer, TournamentPlayer][]} */
-		let matches = [];
+		const matches: [TournamentPlayer, TournamentPlayer][] = [];
 		this.treeRoot.traverse(node => {
 			if (node.state !== 'available') return;
-			// @ts-ignore
-			let p1 = /** @type {TournamentPlayer} */ (node.children[0].user);
-			// @ts-ignore
-			let p2 = /** @type {TournamentPlayer} */ (node.children[1].user);
+			const p1 = node.children![0].user!;
+			const p2 = node.children![1].user!;
 			if (!p1.isBusy && !p2.isBusy) {
 				matches.push([p1, p2]);
 			}
 		});
 		return matches;
 	}
-	/**
-	 *
-	 * @param {[TournamentPlayer, TournamentPlayer]} players
-	 * @param {'win' | 'loss'} result
-	 * @param {number[]} score
-	 */
-	setMatchResult([p1, p2], result, score) {
+	setMatchResult([p1, p2]: [TournamentPlayer, TournamentPlayer], result: 'win' | 'loss', score: number[]) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		if (!['win', 'loss'].includes(result)) return 'InvalidMatchResult';
 
 		if (!this.players.includes(p1) || !this.players.includes(p2)) return 'UserNotAdded';
 
-		let targetNode = this.treeRoot.find(node => {
+		const targetNode = this.treeRoot.find(node => {
 			if (node.state === 'available' && (
-				// @ts-ignore
-				node.children[0].user === p1 && node.children[1].user === p2
+				node.children![0].user === p1 && node.children![1].user === p2
 			)) {
 				return node;
 			}
@@ -407,8 +380,8 @@ class Elimination {
 		targetNode.result = result;
 		targetNode.score = score.slice();
 
-		let winner = targetNode.children[result === 'win' ? 0 : 1].user;
-		let loser = targetNode.children[result === 'loss' ? 0 : 1].user;
+		const winner = targetNode.children[result === 'win' ? 0 : 1].user;
+		const loser = targetNode.children[result === 'loss' ? 0 : 1].user;
 		targetNode.user = winner;
 		if (!winner || !loser) throw new Error(`invalid available state`);
 
@@ -418,15 +391,12 @@ class Elimination {
 		}
 
 		if (targetNode.parent) {
-			// @ts-ignore
-			let userA = targetNode.parent.children[0].user;
-			// @ts-ignore
-			let userB = targetNode.parent.children[1].user;
+			const userA = targetNode.parent.children![0].user;
+			const userB = targetNode.parent.children![1].user;
 			if (userA && userB) {
 				targetNode.parent.state = 'available';
 
-				/** @type {string | undefined} */
-				let error = '';
+				let error: string | undefined = '';
 				if (userA.isDisqualified) {
 					error = this.setMatchResult([userA, userB], 'loss', [0, 1]);
 				} else if (userB.isDisqualified) {
@@ -438,32 +408,27 @@ class Elimination {
 				}
 			}
 		} else if (loser.losses < this.maxSubtrees && !loser.isDisqualified) {
-			/** @type {ElimNode} */
-			let newRoot = new ElimNode({state: 'available'});
+			const newRoot = new ElimNode({state: 'available'});
 			newRoot.setChildren([targetNode, new ElimNode({user: loser})]);
 			this.treeRoot = newRoot;
 		}
 
 		if (targetNode.losersBracketNode) {
 			targetNode.losersBracketNode.user = loser;
-			// @ts-ignore
-			let p1 = targetNode.losersBracketNode.parent.children[0].user;
-			// @ts-ignore
-			let p2 = targetNode.losersBracketNode.parent.children[1].user;
-			if (p1 && p2) {
-				// @ts-ignore
-				targetNode.losersBracketNode.parent.state = 'available';
+			const userA = targetNode.losersBracketNode.parent!.children![0].user;
+			const userB = targetNode.losersBracketNode.parent!.children![1].user;
+			if (userA && userB) {
+				targetNode.losersBracketNode.parent!.state = 'available';
 
-				/** @type {string | undefined} */
-				let error = '';
-				if (p1.isDisqualified) {
-					error = this.setMatchResult([p1, p2], 'loss', [0, 1]);
-				} else if (p2.isDisqualified) {
-					error = this.setMatchResult([p1, p2], 'win', [1, 0]);
+				let error: string | undefined = '';
+				if (userA.isDisqualified) {
+					error = this.setMatchResult([userA, userB], 'loss', [0, 1]);
+				} else if (userB.isDisqualified) {
+					error = this.setMatchResult([userA, userB], 'win', [1, 0]);
 				}
 
 				if (error) {
-					throw new Error(`Unexpected ${error} from setMatchResult([${p1}, ${p2}], ...)`);
+					throw new Error(`Unexpected ${error} from setMatchResult([${userA}, ${userB}], ...)`);
 				}
 			}
 		}
@@ -476,7 +441,7 @@ class Elimination {
 	getResults() {
 		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
 
-		let results = [];
+		const results = [];
 		let currentNode = this.treeRoot;
 		for (let n = 0; n < this.maxSubtrees; ++n) {
 			results.push([currentNode.user]);
@@ -493,5 +458,3 @@ class Elimination {
 		return results;
 	}
 }
-
-module.exports = Elimination;

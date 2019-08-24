@@ -1331,7 +1331,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 		if ((room as GameRoom).tour) {
-			const errorMessage = (room as GameRoom).tour.onBattleJoin(room, this);
+			const errorMessage = (room as GameRoom).tour!.onBattleJoin(room as GameRoom, this);
 			if (errorMessage) {
 				connection.sendTo(roomid, `|noinit|joinfailed|${errorMessage}`);
 				return false;
