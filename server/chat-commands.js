@@ -2812,7 +2812,7 @@ const commands = {
 				if (!cmd.includes('force')) {
 					return this.errorReply(`${target} is a higher rank than you, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
 				}
-				// Notify staff when someone's abusing hidetext in a public room
+				// Notify staff when someone's hiding text outside of their jurisdiction
 				if (!room.isPrivate) {
 					const staffRoom = Rooms('staff');
 					if (staffRoom) staffRoom.addByUser(user, `<<${room.id}>> ${user.getIdentity(room)} hid ${targetUser ? targetUser.getIdentity(room) : target}'s messages`);
