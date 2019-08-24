@@ -2818,7 +2818,7 @@ const commands = {
 			}
 		}
 
-		if (targetUser && (cmd.includes('alt'))) {
+		if (targetUser && cmd.includes('alt')) {
 			room.send(`|c|~|${name}'s alts messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
 			room.hideText([
