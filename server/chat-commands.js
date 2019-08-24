@@ -3213,8 +3213,8 @@ const commands = {
 				global.Chat = require('../.server-dist/chat').Chat;
 
 				let runningTournaments = Tournaments.tournaments;
-				Chat.uncacheDir('./server/tournaments');
-				global.Tournaments = require('./tournaments');
+				Chat.uncacheDir('./.server-dist/tournaments');
+				global.Tournaments = require('../.server-dist/tournaments').Tournaments;
 				Tournaments.tournaments = runningTournaments;
 				this.sendReply("Chat commands have been hot-patched.");
 			} else if (target === 'tournaments') {
@@ -3222,8 +3222,8 @@ const commands = {
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				let runningTournaments = Tournaments.tournaments;
-				Chat.uncacheDir('./server/tournaments');
-				global.Tournaments = require('./tournaments');
+				Chat.uncacheDir('./.server-dist/tournaments');
+				global.Tournaments = require('../.server-dist/tournaments').Tournaments;
 				Tournaments.tournaments = runningTournaments;
 				this.sendReply("Tournaments have been hot-patched.");
 			} else if (target === 'formats' || target === 'battles') {
