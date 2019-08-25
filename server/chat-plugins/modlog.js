@@ -510,7 +510,7 @@ exports.commands = {
 	punishlog: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
-		if (!room) room = Rooms('global');
+		if (!room) room = Rooms.get('global');
 		let roomid = (room.id === 'staff' ? 'global' : room.id);
 
 		if (target.includes(',')) {

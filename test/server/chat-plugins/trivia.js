@@ -41,7 +41,7 @@ describe('Trivia', function () {
 		NumberModeTrivia = trivia.NumberModeTrivia;
 
 		Rooms.global.addChatRoom('Trivia');
-		this.room = Rooms('trivia');
+		this.room = Rooms.get('trivia');
 	});
 
 	beforeEach(function () {

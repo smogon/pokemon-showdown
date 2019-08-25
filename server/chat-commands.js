@@ -396,7 +396,7 @@ const commands = {
 		let userList = [];
 
 		for (let i in room.users) {
-			let curUser = Users(room.users[i]);
+			let curUser = Users.get(room.users[i]);
 			if (!curUser || !curUser.named) continue;
 			userList.push(Chat.escapeHTML(curUser.getIdentity(room.id)));
 		}
@@ -939,8 +939,8 @@ const commands = {
 		if (!targetRoom) return this.errorReply(`The room '${target}' doesn't exist.`);
 		target = targetRoom.title || targetRoom.id;
 		const isPrivate = targetRoom.isPrivate;
-		const staffRoom = Rooms('staff');
-		const upperStaffRoom = Rooms('upperstaff');
+		const staffRoom = Rooms.get('staff');
+		const upperStaffRoom = Rooms.get('upperstaff');
 		if (Rooms.global.deregisterChatRoom(id)) {
 			this.sendReply(`The room '${target}' was deregistered.`);
 			this.sendReply("It will be deleted as of the next server restart.");
@@ -1398,7 +1398,7 @@ const commands = {
 
 		let alias = toID(target);
 		if (!alias.length) return this.errorReply("Only alphanumeric characters are valid in an alias.");
-		if (Rooms(alias) || Rooms.aliases.has(alias)) return this.errorReply("You cannot set an alias to an existing room or alias.");
+		if (Rooms.get(alias) || Rooms.aliases.has(alias)) return this.errorReply("You cannot set an alias to an existing room or alias.");
 		if (room.isPersonal) return this.errorReply("Personal rooms can't have aliases.");
 
 		Rooms.aliases.set(alias, room.id);
@@ -1611,7 +1611,7 @@ const commands = {
 		).map(r => {
 			let roomRankList = rankLists[r].sort();
 			roomRankList = roomRankList.map(s => {
-				const u = Users(s);
+				const u = Users.get(s);
 				const isAway = u && u.statusType !== 'online';
 				return s in targetRoom.users && !isAway ? `**${s}**` : s;
 			});
@@ -2061,8 +2061,8 @@ const commands = {
 		let lockMessage = `${name} was locked from talking${weekMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
 		this.addModAction(lockMessage);
 		// Notify staff room when a user is locked outside of it.
-		if (room.id !== 'staff' && Rooms('staff')) {
-			Rooms('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
+		if (room.id !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
 		}
 
 		room.hideText([userid, toID(this.inputUsername)]);
@@ -2138,8 +2138,8 @@ const commands = {
 			const unlockMessage = `${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}.${reason}`;
 			this.addModAction(unlockMessage);
 			// Notify staff room when a user is unlocked outside of it.
-			if (!reason && room.id !== 'staff' && Rooms('staff')) {
-				Rooms('staff').addByUser(user, `<<${room.id}>> ${unlockMessage}`);
+			if (!reason && room.id !== 'staff' && Rooms.get('staff')) {
+				Rooms.get('staff').addByUser(user, `<<${room.id}>> ${unlockMessage}`);
 			}
 			if (!reason) this.globalModlog("UNLOCK", toID(target), ` by ${user.userid}`);
 			if (targetUser) targetUser.popup(`${user.name} has unlocked you.`);
@@ -2171,8 +2171,8 @@ const commands = {
 		const unlockMessage = `The name '${target}' was unlocked by ${user.name}.`;
 
 		this.addModAction(unlockMessage);
-		if (room.id !== 'staff' && Rooms('staff')) {
-			Rooms('staff').addByUser(user, `<<${room.id}>> ${unlockMessage}`);
+		if (room.id !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${unlockMessage}`);
 		}
 	},
 	unlockip(target, room, user) {
@@ -2199,7 +2199,7 @@ const commands = {
 		}
 		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target, ` by ${user.name}`);
 
-		const broadcastRoom = Rooms('staff') || room;
+		const broadcastRoom = Rooms.get('staff') || room;
 		broadcastRoom.addByUser(user, `${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
 	},
 	unlockiphelp: [`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ & ~`],
@@ -2265,8 +2265,8 @@ const commands = {
 		this.addModAction(banMessage);
 
 		// Notify staff room when a user is banned outside of it.
-		if (room.id !== 'staff' && Rooms('staff')) {
-			Rooms('staff').addByUser(user, `<<${room.id}>> ${banMessage}`);
+		if (room.id !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${banMessage}`);
 		}
 
 		let affected = Punishments.ban(targetUser, null, null, userReason);
@@ -2309,8 +2309,8 @@ const commands = {
 		if (name) {
 			this.addModAction(unbanMessage);
 			// Notify staff room when a user is unbanned outside of it.
-			if (room.id !== 'staff' && Rooms('staff')) {
-				Rooms('staff').addByUser(user, `<<${room.id}>> ${unbanMessage}`);
+			if (room.id !== 'staff' && Rooms.get('staff')) {
+				Rooms.get('staff').addByUser(user, `<<${room.id}>> ${unbanMessage}`);
 			}
 			this.globalModlog("UNBAN", name, ` by ${user.userid}`);
 		} else {
@@ -2604,7 +2604,7 @@ const commands = {
 		if (target.length > 2000) return this.errorReply("Declares should not exceed 2000 characters.");
 
 		for (let u in room.users) {
-			if (Users(u).connected) Users(u).sendTo(room, `|notify|${room.title} announcement!|${target}`);
+			if (Users.get(u).connected) Users.get(u).sendTo(room, `|notify|${room.title} announcement!|${target}`);
 		}
 		this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
 		this.modlog('DECLARE', null, target);
@@ -2619,7 +2619,7 @@ const commands = {
 		if (!target) return;
 
 		for (let u in room.users) {
-			if (Users(u).connected) Users(u).sendTo(room, `|notify|${room.title} announcement!|${Chat.stripHTML(target)}`);
+			if (Users.get(u).connected) Users.get(u).sendTo(room, `|notify|${room.title} announcement!|${Chat.stripHTML(target)}`);
 		}
 		this.add(`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
 		this.modlog(`HTMLDECLARE`, null, target);
@@ -2758,8 +2758,8 @@ const commands = {
 		this.privateModAction(`(${lockMessage})`);
 
 		// Notify staff room when a user is locked outside of it.
-		if (room.id !== 'staff' && Rooms('staff')) {
-			Rooms('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
+		if (room.id !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
 		}
 
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.userid}${reasonText}`);
@@ -2945,8 +2945,8 @@ const commands = {
 		this.privateModAction(`(${battlebanMessage})`);
 
 		// Notify staff room when a user is banned from battling outside of it.
-		if (room.id !== 'staff' && Rooms('staff')) {
-			Rooms('staff').addByUser(user, `<<${room.id}>> ${battlebanMessage}`);
+		if (room.id !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${battlebanMessage}`);
 		}
 		if (targetUser.trusted) {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from battling by ${user.name}, and should probably be demoted.`);
@@ -3145,7 +3145,7 @@ const commands = {
 		this.globalModlog('SHAREDIP', ip, ` by ${user.name}${note}`);
 
 		const message = `The IP '${ip}' was marked as shared by ${user.name}.${note}`;
-		const staffRoom = Rooms('staff');
+		const staffRoom = Rooms.get('staff');
 		if (staffRoom) return staffRoom.addByUser(user, message);
 
 		return this.addModAction(message);
@@ -3514,7 +3514,7 @@ const commands = {
 
 		Rooms.global.startLockdown();
 
-		const logRoom = Rooms('staff') || room;
+		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /lockdown`);
 	},
 	lockdownhelp: [`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~`],
@@ -3528,13 +3528,13 @@ const commands = {
 			if (Config.autolockdown) return this.errorReply("The server is already set to automatically kill itself upon the final battle finishing.");
 			Config.autolockdown = true;
 			this.sendReply("The server is now set to automatically kill itself upon the final battle finishing.");
-			const logRoom = Rooms('staff') || room;
+			const logRoom = Rooms.get('staff') || room;
 			logRoom.roomlog(`${user.name} used /autolockdownkill on`);
 		} else if (this.meansNo(target)) {
 			if (!Config.autolockdown) return this.errorReply("The server is already set to not automatically kill itself upon the final battle finishing.");
 			Config.autolockdown = false;
 			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
-			const logRoom = Rooms('staff') || room;
+			const logRoom = Rooms.get('staff') || room;
 			logRoom.roomlog(`${user.name} used /autolockdownkill off`);
 		} else {
 			return this.parse('/help autolockdownkill');
@@ -3549,7 +3549,7 @@ const commands = {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.lockdown = 'pre';
 		this.sendReply("Tournaments have been disabled in preparation for the server restart.");
-		const logRoom = Rooms('staff') || room;
+		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /prelockdown`);
 	},
 
@@ -3558,7 +3558,7 @@ const commands = {
 
 		Rooms.global.startLockdown(undefined, true);
 
-		const logRoom = Rooms('staff') || room;
+		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /slowlockdown`);
 	},
 
@@ -3586,7 +3586,7 @@ const commands = {
 		}
 		Rooms.global.lockdown = false;
 
-		const logRoom = Rooms('staff') || room;
+		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /endlockdown`);
 	},
 	endlockdownhelp: [
@@ -3605,7 +3605,7 @@ const commands = {
 			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
 		}
 
-		const logRoom = Rooms('staff') || room;
+		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /emergency.`);
 	},
 
@@ -3620,7 +3620,7 @@ const commands = {
 			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
 		}
 
-		const logRoom = Rooms('staff') || room;
+		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /endemergency.`);
 	},
 
@@ -3643,7 +3643,7 @@ const commands = {
 			process.exit();
 			return;
 		}
-		const logRoom = Rooms('staff') || room;
+		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /kill`);
 		room.destroyLog(() => {
 			process.exit();
@@ -3671,7 +3671,7 @@ const commands = {
 	refreshpage(target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		Rooms.global.send('|refresh|');
-		const logRoom = Rooms('staff') || room;
+		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /refreshpage`);
 	},
 
@@ -3686,7 +3686,7 @@ const commands = {
 
 		Monitor.updateServerLock = true;
 
-		const logRoom = Rooms('staff') || room;
+		const logRoom = Rooms.get('staff') || room;
 
 		/** @return {Promise<[number, string, string]>} */
 		function exec(/** @type {string} */ command) {
