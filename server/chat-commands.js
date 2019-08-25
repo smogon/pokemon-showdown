@@ -1652,7 +1652,9 @@ const commands = {
 		let innerBuffer = [];
 		let group = Users.usergroups[targetId];
 		if (group) {
-			buffer.push(`Global auth: ${group.charAt(0)}`);
+			group = group.charAt(0);
+			if (group === ' ') group = 'trusted';
+			buffer.push(`Global auth: ${group}`);
 		}
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.auth || curRoom.isPrivate) continue;
