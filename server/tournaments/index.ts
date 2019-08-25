@@ -730,7 +730,9 @@ export class Tournament extends Rooms.RoomGame {
 		}
 		if (user) {
 			user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
-			if (reason) user.popup(`|modal|You have been disqualified from the tournament in ${this.room.title + (reason ? ':\n\n' + reason : '.')}`);
+			if (reason) {
+				user.popup(`|modal|You have been disqualified from the tournament in ${this.room.title + (reason ? ':\n\n' + reason : '.')}`);
+			}
 		}
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
@@ -1360,7 +1362,9 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			let name = this.canTalk(params[0].trim());
 			if (!name || typeof name !== 'string') return;
 			name = Chat.escapeHTML(name);
-			if (name.length > MAX_CUSTOM_NAME_LENGTH) return this.errorReply(`The tournament's name cannot exceed ${MAX_CUSTOM_NAME_LENGTH} characters.`);
+			if (name.length > MAX_CUSTOM_NAME_LENGTH) {
+				return this.errorReply(`The tournament's name cannot exceed ${MAX_CUSTOM_NAME_LENGTH} characters.`);
+			}
 			if (name.includes('|')) return this.errorReply("The tournament's name cannot include the | symbol.");
 			tournament.name = name;
 			this.room.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
@@ -1395,7 +1399,9 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			let reason = '';
 			if (params[1]) {
 				reason = params[1].trim();
-				if (reason.length > MAX_REASON_LENGTH) return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+				if (reason.length > MAX_REASON_LENGTH) {
+					return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+				}
 			}
 			if (tournament.disqualifyUser(targetUserid, this, reason)) {
 				this.privateModAction(`(${(targetUser ? targetUser.name : targetUserid)} was disqualified from the tournament by ${user.name} ${(reason ? ' (' + reason + ')' : '')})`);
@@ -1423,7 +1429,9 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 				} else if (!tournament.playerCap) {
 					return this.errorReply("The tournament does not have a player cap set.");
 				} else {
-					if (tournament.autostartcap) return this.errorReply("The tournament is already set to autostart when the player cap is reached.");
+					if (tournament.autostartcap) {
+						return this.errorReply("The tournament is already set to autostart when the player cap is reached.");
+					}
 					tournament.autostartcap = true;
 					this.room.add(`The tournament will start once ${tournament.playerCap} players have joined.`);
 					this.privateModAction(`(The tournament was set to autostart when the player cap is reached by ${user.name})`);
@@ -1431,7 +1439,9 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 				}
 			} else {
 				if (option === '0' || option === 'infinity' || this.meansNo(option) || option === 'stop' || option === 'remove') {
-					if (!tournament.autostartcap && tournament.autoStartTimeout === Infinity) return this.errorReply("The automatic tournament start timer is already off.");
+					if (!tournament.autostartcap && tournament.autoStartTimeout === Infinity) {
+						return this.errorReply("The automatic tournament start timer is already off.");
+					}
 					params[0] = 'off';
 					tournament.autostartcap = false;
 				}
@@ -1453,14 +1463,18 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			}
 			if (params[0].toLowerCase() === 'infinity' || params[0] === '0') params[0] = 'off';
 			const timeout = params[0].toLowerCase() === 'off' ? Infinity : Number(params[0]) * 60 * 1000;
-			if (timeout === tournament.autoDisqualifyTimeout) return this.errorReply(`The automatic tournament disqualify timer is already set to ${params[0]} minute(s).`);
+			if (timeout === tournament.autoDisqualifyTimeout) {
+				return this.errorReply(`The automatic tournament disqualify timer is already set to ${params[0]} minute(s).`);
+			}
 			if (tournament.setAutoDisqualifyTimeout(timeout, this)) {
 				this.privateModAction(`(The tournament auto disqualify timer was set to ${params[0]} by ${user.name})`);
 				this.modlog('TOUR AUTODQ', null, timeout === Infinity ? 'off' : params[0]);
 			}
 		},
 		runautodq(tournament, user) {
-			if (tournament.autoDisqualifyTimeout === Infinity) return this.errorReply("The automatic tournament disqualify timer is not set.");
+			if (tournament.autoDisqualifyTimeout === Infinity) {
+				return this.errorReply("The automatic tournament disqualify timer is not set.");
+			}
 			tournament.runAutoDisqualify(this);
 			this.roomlog(`${user.name} used /tour runautodq`);
 		},
@@ -1551,7 +1565,9 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			let reason = '';
 			if (params[1]) {
 				reason = params[1].trim();
-				if (reason.length > MAX_REASON_LENGTH) return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+				if (reason.length > MAX_REASON_LENGTH) {
+					return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+				}
 			}
 
 			if (tournament.checkBanned(targetUser)) return this.errorReply("This user is already banned from tournaments.");
@@ -1617,7 +1633,9 @@ const chatCommands: ChatCommands = {
 			if (!this.can('gamemanagement', null, room)) return;
 			const rank = params[0];
 			if (rank === '@') {
-				if (room.toursEnabled === true) return this.errorReply("Tournaments are already enabled for @ and above in this room.");
+				if (room.toursEnabled === true) {
+					return this.errorReply("Tournaments are already enabled for @ and above in this room.");
+				}
 				room.toursEnabled = true;
 				if (room.chatRoomData) {
 					room.chatRoomData.toursEnabled = true;
@@ -1625,7 +1643,9 @@ const chatCommands: ChatCommands = {
 				}
 				return this.sendReply("Tournaments are now enabled for @ and up.");
 			} else if (rank === '%') {
-				if (room.toursEnabled === rank) return this.errorReply("Tournaments are already enabled for % and above in this room.");
+				if (room.toursEnabled === rank) {
+					return this.errorReply("Tournaments are already enabled for % and above in this room.");
+				}
 				room.toursEnabled = rank;
 				if (room.chatRoomData) {
 					room.chatRoomData.toursEnabled = rank;
@@ -1700,7 +1720,9 @@ const chatCommands: ChatCommands = {
 				this.modlog('TOUR CREATE', null, tour.baseFormat);
 				if (room.tourAnnouncements) {
 					const tourRoom = Rooms.search(Config.tourroom || 'tournaments');
-					if (tourRoom && tourRoom !== room) tourRoom.addRaw(`<div class="infobox"><a href="/${room.id}" class="ilink"><strong>${Chat.escapeHTML(Dex.getFormat(tour.name).name)}</strong> tournament created in <strong>${Chat.escapeHTML(room.title)}</strong>.</a></div>`).update();
+					if (tourRoom && tourRoom !== room) {
+						tourRoom.addRaw(`<div class="infobox"><a href="/${room.id}" class="ilink"><strong>${Chat.escapeHTML(Dex.getFormat(tour.name).name)}</strong> tournament created in <strong>${Chat.escapeHTML(room.title)}</strong>.</a></div>`).update();
+					}
 				}
 			}
 		} else {
