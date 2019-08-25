@@ -1220,9 +1220,9 @@ export const Chat = new class {
 	/*********************************************************
 	 * Translations
 	 *********************************************************/
-	// language id -> language name
+	/** language id -> language name */
 	languages = new Map<string, string>();
-	// language id -> (english string -> translated string)
+	/** language id -> (english string -> translated string) */
 	translations = new Map<string, Map<string, [string, string[], string[]]>>();
 
 	loadTranslations() {
