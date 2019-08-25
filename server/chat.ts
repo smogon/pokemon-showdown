@@ -1088,7 +1088,7 @@ export class CommandContext extends MessageContext {
 	}
 }
 
-export const Chat = new (class {
+export const Chat = new class {
 	constructor() {
 		this.multiLinePattern = new PatternTester();
 		this.baseCommands = undefined!;
@@ -1844,7 +1844,7 @@ export const Chat = new (class {
 	resolvePage(pageid: string, user: User, connection: Connection) {
 		return (new PageContext({pageid, user, connection})).resolve();
 	}
-});
+};
 
 /**
  * Used by ChatMonitor.
