@@ -41,7 +41,7 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
 type Punishment = [string, ID, number, string];
 interface PunishmentEntry {
 	ips: string[];
-	userids: string[];
+	userids: ID[];
 	punishType: string;
 	expireTime: number;
 	reason: string;
@@ -290,7 +290,7 @@ export const Punishments = new (class {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
 			if (id !== entryId) return;
 			if (entry) {
-				entry.userids.push(ip);
+				entry.ips.push(ip);
 				return;
 			}
 
@@ -318,7 +318,7 @@ export const Punishments = new (class {
 				};
 			}
 
-			if (userid !== id) entry.ips.push(userid);
+			if (userid !== id) entry.userids.push(toID(userid));
 		});
 
 		return entry;
@@ -392,7 +392,7 @@ export const Punishments = new (class {
 	punish(user: User | ID, punishment: Punishment) {
 		if (typeof user === 'string') return Punishments.punishName(user, punishment);
 
-		const userids = new Set<string>();
+		const userids = new Set<ID>();
 		const ips = new Set<string>();
 		// TODO - why isn't this type being narrowed?
 		const affected = (user as User).getAltUsers(PUNISH_TRUSTED, true);
@@ -1396,7 +1396,7 @@ export const Punishments = new (class {
 				punishmentTable.set(id, entry);
 			}
 
-			if (userid !== id) entry.userids.push(userid);
+			if (userid !== id) entry.userids.push(toID(userid)); // should already be an ID
 		});
 		if (roomid && ignoreMutes !== false) {
 			const room = Rooms.get(roomid);
