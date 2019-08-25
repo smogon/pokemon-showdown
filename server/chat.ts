@@ -1090,48 +1090,24 @@ export class CommandContext extends MessageContext {
 
 export const Chat = new class {
 	constructor() {
-		this.multiLinePattern = new PatternTester();
-		this.baseCommands = undefined!;
-		this.commands = undefined!;
-		this.basePages = undefined!;
-		this.pages = undefined!;
-		this.destroyHandlers = [];
-		this.filters = [];
-		this.namefilters = [];
-		this.hostfilters = [];
-		this.loginfilters = [];
-		this.nicknamefilters = [];
-		this.statusfilters = [];
-		this.languages = new Map();
-		this.translations = new Map();
+		// tslint:disable-next-line: no-floating-promises
 		this.loadTranslations();
-		this.MessageContext = MessageContext;
-		this.CommandContext = CommandContext;
-		this.PageContext = PageContext;
-		this.packageData = {};
-		this.formatText = formatText;
-		this.linkRegex = linkRegex;
-		this.stripFormatting = stripFormatting;
-		this.filterWords = {};
-		this.monitors = {};
-		this.namefilterwhitelist = new Map();
-		this.forceRenames = new Map();
 	}
-	multiLinePattern: PatternTester;
+	multiLinePattern = new PatternTester();
 
 	/*********************************************************
 	 * Load command files
 	 *********************************************************/
-	baseCommands: ChatCommands;
-	commands: ChatCommands;
-	basePages: PageTable;
-	pages: PageTable;
-	destroyHandlers: (() => void)[];
+	baseCommands: ChatCommands = undefined!;
+	commands: ChatCommands = undefined!;
+	basePages: PageTable = undefined!;
+	pages: PageTable = undefined!;
+	destroyHandlers: (() => void)[] = [];
 
 	/*********************************************************
 	 * Load chat filters
 	 *********************************************************/
-	filters: ChatFilter[];
+	filters: ChatFilter[] = [];
 	filter(
 		context: CommandContext,
 		message: string,
@@ -1154,7 +1130,7 @@ export const Chat = new class {
 		return message;
 	}
 
-	namefilters: NameFilter[];
+	namefilters: NameFilter[] = [];
 	namefilter(name: string, user: User) {
 		if (!Config.disablebasicnamefilter) {
 			// whitelist
@@ -1209,21 +1185,21 @@ export const Chat = new class {
 		return name;
 	}
 
-	hostfilters: HostFilter[];
+	hostfilters: HostFilter[] = [];
 	hostfilter(host: string, user: User, connection: Connection, hostType: string) {
 		for (const curFilter of Chat.hostfilters) {
 			curFilter(host, user, connection, hostType);
 		}
 	}
 
-	loginfilters: LoginFilter[];
+	loginfilters: LoginFilter[] = [];
 	loginfilter(user: User, oldUser: User | null, usertype: string) {
 		for (const curFilter of Chat.loginfilters) {
 			curFilter(user, oldUser, usertype);
 		}
 	}
 
-	nicknamefilters: NameFilter[];
+	nicknamefilters: NameFilter[] = [];
 	nicknamefilter(nickname: string, user: User) {
 		for (const curFilter of Chat.nicknamefilters) {
 			nickname = curFilter(nickname, user);
@@ -1232,7 +1208,7 @@ export const Chat = new class {
 		return nickname;
 	}
 
-	statusfilters: StatusFilter[];
+	statusfilters: StatusFilter[] = [];
 	statusfilter(status: string, user: User) {
 		status = status.replace(/\|/g, '');
 		for (const curFilter of Chat.statusfilters) {
@@ -1245,13 +1221,12 @@ export const Chat = new class {
 	 * Translations
 	 *********************************************************/
 	// language id -> language name
-	languages: Map<string, string>;
+	languages = new Map<string, string>();
 	// language id -> (english string -> translated string)
-	translations: Map<string, Map<string, [string, string[], string[]]>>;
+	translations = new Map<string, Map<string, [string, string[], string[]]>>();
 
 	loadTranslations() {
-		// tslint:disable-next-line: no-floating-promises
-		FS(TRANSLATION_DIRECTORY).readdir().then(files => {
+		return FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 			for (const fname of files) {
 				if (!fname.endsWith('.json')) continue;
 
@@ -1322,9 +1297,9 @@ export const Chat = new class {
 		return translated;
 	}
 
-	MessageContext: typeof MessageContext;
-	CommandContext: typeof CommandContext;
-	PageContext: typeof PageContext;
+	MessageContext = MessageContext;
+	CommandContext = CommandContext;
+	PageContext = PageContext;
 	/**
 	 * Command parser
 	 *
@@ -1366,8 +1341,8 @@ export const Chat = new class {
 		pmTarget.lastPM = user.userid;
 		user.lastPM = pmTarget.userid;
 	}
-	// TODO
-	packageData: object;
+
+	packageData = {};
 
 	uncacheTree(root: string) {
 		let toUncache = [require.resolve('../' + root)];
@@ -1824,17 +1799,17 @@ export const Chat = new class {
 			}
 		}
 	}
-	formatText: typeof formatText;
-	linkRegex: typeof linkRegex;
-	stripFormatting: typeof stripFormatting;
+	formatText = formatText;
+	linkRegex = linkRegex;
+	stripFormatting = stripFormatting;
 
-	filterWords: {[k: string]: FilterWord[]};
-	monitors: {[k: string]: Monitor};
-	namefilterwhitelist: Map<string, string>;
+	filterWords: {[k: string]: FilterWord[]} = {};
+	monitors: {[k: string]: Monitor} = {};
+	namefilterwhitelist = new Map<string, string>();
 	/**
 	 * Inappropriate userid : forcerenaming staff member's userid
 	 */
-	forceRenames: Map<ID, string>;
+	forceRenames = new Map<ID, string>();
 
 	registerMonitor(id: string, entry: Monitor) {
 		if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
