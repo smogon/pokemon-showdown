@@ -409,7 +409,7 @@ class JumpStart extends ScavGame {
 			// set the (recursive) timer to give out hints.
 			let duration = this.jumpStartTimes.shift() * 1000;
 			this.timer = setTimeout(() => {
-				let targetUser = Users(targetUserId);
+				let targetUser = Users.get(targetUserId);
 				if (targetUser) {
 					this.announce('sending hint to ' + targetUser.name + " " + new Date());
 					targetUser.sendTo(this.room, `|raw|<strong>The first hint to the next hunt is:</strong> ${Chat.formatText(this.hunts[1][4][0])}`);

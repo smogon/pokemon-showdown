@@ -247,7 +247,7 @@ export class Tournament extends Rooms.RoomGame {
 			clearTimeout(this.autoStartTimer);
 		}
 		for (const roomid of this.completedMatches) {
-			const room = Rooms(roomid) as GameRoom;
+			const room = Rooms.get(roomid) as GameRoom;
 			if (room) room.tour = null;
 		}
 		for (const player of this.players) {
@@ -383,7 +383,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (!ALLOW_ALTS) {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
-				const otherUser = Users(otherPlayer.userid);
+				const otherUser = Users.get(otherPlayer.userid);
 				if (otherUser && otherUser.latestIp === user.latestIp) {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
@@ -433,7 +433,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.playerTable[userid].destroy();
 		delete this.playerTable[userid];
 		this.playerCount--;
-		const user = Users(userid);
+		const user = Users.get(userid);
 		this.room.add(`|tournament|leave|${user ? user.name : userid}`);
 		if (user) user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
 		this.isBracketInvalidated = true;
@@ -463,7 +463,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (!ALLOW_ALTS) {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
-				const otherUser = Users(otherPlayer.userid);
+				const otherUser = Users.get(otherPlayer.userid);
 				if (otherUser && otherUser.latestIp === replacementUser.latestIp) {
 					output.errorReply(`${replacementUser.name} already has an alt in the tournament.`);
 					return;
@@ -1081,7 +1081,7 @@ export class Tournament extends Rooms.RoomGame {
 		delete Tournaments.tournaments[this.room.id];
 		this.room.game = null;
 		for (const roomid of this.completedMatches) {
-			const room = Rooms(roomid) as GameRoom;
+			const room = Rooms.get(roomid) as GameRoom;
 			if (room) room.tour = null;
 		}
 		for (const player of this.players) {
@@ -1157,7 +1157,7 @@ function deleteTournament(id: string, output: CommandContext) {
 	}
 	tournament.forceEnd();
 	delete tournaments[id];
-	const room = Rooms(id);
+	const room = Rooms.get(id);
 	if (room) delete room.game;
 	return true;
 }
@@ -1410,8 +1410,8 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 		},
 		sub: 'replace',
 		replace(tournament, user, params, cmd) {
-			const oldUser = Users(params[0]);
-			const newUser = Users(params[1]);
+			const oldUser = Users.get(params[0]);
+			const newUser = Users.get(params[1]);
 			if (!oldUser) return this.errorReply(`User ${params[0]} not found.`);
 			if (!newUser) return this.errorReply(`User ${params[1]} not found.`);
 

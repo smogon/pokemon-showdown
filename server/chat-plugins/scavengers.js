@@ -38,7 +38,7 @@ const databaseContentsJSON = FS(DATABASE_FILE).readIfExistsSync();
 const scavengersData = databaseContentsJSON ? JSON.parse(databaseContentsJSON) : {recycledHunts: []};
 
 // convert points stored in the old format
-const scavsRoom = Rooms('scavengers');
+const scavsRoom = Rooms.get('scavengers');
 if (scavsRoom && Array.isArray(scavsRoom.winPoints)) {
 	scavsRoom.winPoints = {official: scavsRoom.winPoints.slice()};
 	scavsRoom.blitzPoints = {official: scavsRoom.blitzPoints};
@@ -584,7 +584,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		// prepare the next queue'd game
 		if (this.room.scavQueue && this.room.scavQueue.length) {
 			setTimeout(() => {
-				let room = Rooms(roomid);
+				let room = Rooms.get(roomid);
 				if (!room || room.game || !room.scavQueue.length) return;
 
 				let next = room.scavQueue.shift();
@@ -641,7 +641,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			player.infracted = true;
 		}
 
-		let uniqueConnections = this.getUniqueConnections(Users(player.userid));
+		let uniqueConnections = this.getUniqueConnections(Users.get(player.userid));
 		if (uniqueConnections > 1 && this.room.scavmod && this.room.scavmod.ipcheck) {
 			// multiple users on one alt
 			player.sendRoom("You have been caught for attempting a hunt with multiple connections on your account.  Staff has been notified.");

@@ -78,7 +78,7 @@ exports.commands = {
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			if (room.events[target].started) return this.errorReply(`The event ${room.events[target].eventName} has already started.`);
 			for (const u in room.users) {
-				if (Users(u).connected) Users(u).sendTo(room, Chat.html`|notify|A new roomevent in ${room.title} has started!|The "${room.events[target].eventName}" roomevent has started!`);
+				if (Users.get(u).connected) Users.get(u).sendTo(room, Chat.html`|notify|A new roomevent in ${room.title} has started!|The "${room.events[target].eventName}" roomevent has started!`);
 			}
 			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>The "${room.events[target].eventName}" roomevent has started!</b></div>`);
 			this.modlog('ROOMEVENT', null, `started "${target}"`);

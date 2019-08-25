@@ -481,7 +481,7 @@ class LotteryGiveaway extends Giveaway {
 		}
 
 		while (this.winners.length < this.maxwinners) {
-			let winner = Users(userlist.splice(Math.floor(Math.random() * userlist.length), 1)[0]);
+			let winner = Users.get(userlist.splice(Math.floor(Math.random() * userlist.length), 1)[0]);
 			if (!winner) continue;
 			this.winners.push(winner);
 		}
@@ -664,7 +664,7 @@ let commands = {
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		fc = toID(fc);
 		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
-		let targetUser = Users(giver);
+		let targetUser = Users.get(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
 		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) return this.errorReply("/qg - Access denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
@@ -727,7 +727,7 @@ let commands = {
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		fc = toID(fc);
 		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
-		let targetUser = Users(giver);
+		let targetUser = Users.get(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
 		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) return this.errorReply("/lg - Access denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
@@ -783,7 +783,7 @@ let commands = {
 			if (!(giver && amountStr && summary && deposit && lookfor)) return this.errorReply("Invalid arguments specified - /gts start giver | amount | summary | deposit | lookfor");
 			let amount = parseInt(amountStr);
 			if (!amount || amount < 20 || amount > 100) return this.errorReply("Please enter a valid amount. For a GTS giveaway, you need to give away at least 20 mons, and no more than 100.");
-			let targetUser = Users(giver);
+			let targetUser = Users.get(giver);
 			if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
 			if (!this.can('warn', null, room)) return this.errorReply("Permission denied.");
 			if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to host a giveaway.`);

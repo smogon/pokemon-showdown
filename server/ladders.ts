@@ -176,10 +176,10 @@ class Ladder extends LadderStore {
 					otherUserid = chall.from;
 				}
 				Ladder.removeChallenge(chall, true);
-				const otherUser = Users(otherUserid);
+				const otherUser = Users.get(otherUserid);
 				if (otherUser) Ladder.updateChallenges(otherUser);
 			}
-			const user = Users(userid);
+			const user = Users.get(userid);
 			if (user) Ladder.updateChallenges(user);
 			return true;
 		}
@@ -258,9 +258,9 @@ class Ladder extends LadderStore {
 		challs1.push(challenge);
 		challs2.push(challenge);
 		if (!skipUpdate) {
-			const fromUser = Users(challenge.from);
+			const fromUser = Users.get(challenge.from);
 			if (fromUser) Ladder.updateChallenges(fromUser);
-			const toUser = Users(challenge.to);
+			const toUser = Users.get(challenge.to);
 			if (toUser) Ladder.updateChallenges(toUser);
 		}
 	}
@@ -276,9 +276,9 @@ class Ladder extends LadderStore {
 		toChalls.splice(toChalls.indexOf(challenge), 1);
 		if (!toChalls.length) Ladders.challenges.delete(challenge.to);
 		if (!skipUpdate) {
-			const fromUser = Users(challenge.from);
+			const fromUser = Users.get(challenge.from);
 			if (fromUser) Ladder.updateChallenges(fromUser);
-			const toUser = Users(challenge.to);
+			const toUser = Users.get(challenge.to);
 			if (toUser) Ladder.updateChallenges(toUser);
 		}
 		return true;
@@ -358,7 +358,7 @@ class Ladder extends LadderStore {
 		let games: {[k: string]: string} | null = {};
 		let atLeastOne = false;
 		for (const roomid of user.games) {
-			const room = Rooms(roomid);
+			const room = Rooms.get(roomid);
 			if (!room) {
 				Monitor.warn(`while searching, room ${roomid} expired for user ${user.userid} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
 				user.games.delete(roomid);
@@ -427,7 +427,7 @@ class Ladder extends LadderStore {
 	needsToMove(user: User) {
 		let out;
 		for (const roomid of user.games) {
-			const room = Rooms(roomid);
+			const room = Rooms.get(roomid);
 			if (!room || !room.battle || !room.battle.playerTable[user.userid]) continue;
 			const battle: RoomBattle = room.battle;
 			if (battle.requestCount <= 16) {
@@ -554,8 +554,8 @@ class Ladder extends LadderStore {
 
 	static match(ready1: BattleReady, ready2: BattleReady) {
 		if (ready1.formatid !== ready2.formatid) throw new Error(`Format IDs don't match`);
-		const user1 = Users(ready1.userid);
-		const user2 = Users(ready2.userid);
+		const user1 = Users.get(ready1.userid);
+		const user2 = Users.get(ready2.userid);
 		if (!user1) {
 			if (!user2) return false;
 			user2.popup(`Sorry, your opponent ${ready1.userid} went offline before your battle could start.`);

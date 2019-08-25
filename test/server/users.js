@@ -12,10 +12,6 @@ describe('Users features', function () {
 			it('should be a function', function () {
 				assert.strictEqual(typeof Users.get, 'function');
 			});
-
-			it('should be equal to `Users`', function () {
-				assert.strictEqual(Users.get, Users);
-			});
 		});
 		describe('connections', function () {
 			it('should be a Map', function () {

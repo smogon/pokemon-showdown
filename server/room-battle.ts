@@ -118,7 +118,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		}
 	}
 	getUser() {
-		return (this.userid && Users(this.userid)) || null;
+		return (this.userid && Users.get(this.userid)) || null;
 	}
 	unlinkUser() {
 		const user = this.getUser();
