@@ -20,6 +20,80 @@
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Het bovenstaande en ze kunnen gebruikers muten en waarschuwen",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Het bovenstaande en ze kunnen gebruikers uit de room bannen",
 		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Bot</strong> - Hetzelfde als een moderator maar dit symbool maakt duidelijk dat deze gebruiker een bot is",
-		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "# <strong>Room Owner</strong> - Zij zijn de leiders van de room en hebben bijna de gehele controle erover"
+		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "# <strong>Room Owner</strong> - Zij zijn de leiders van de room en hebben bijna de gehele controle erover",
+
+		"/help OR /h OR /? - Gives you help.": "/help OF /h OF /? - Geeft je hulp",
+		"For an overview of room commands, use /roomhelp": "Voor een lijst met roomcommando's, gebruik /roomhelp",
+		"For details of a specific command, use something like: /help data": "Voor details over een specifiek commando, gebruik iets als: /help data",
+
+		"COMMANDS": "COMMANDO'S",
+		"BATTLE ROOM COMMANDS": "COMMANDO'S VOOR GEVECHTEN",
+		"OPTION COMMANDS": "OPTIE COMMANDO'S",
+		"INFORMATIONAL/RESOURCE COMMANDS": "INFORMATIE/NASLAG COMMANDO'S",
+		"DATA COMMANDS": "DATA COMMANDO'S",
+		"DRIVER COMMANDS": "DRIVER COMMANDO'S",
+		"MODERATOR COMMANDS": "MODERATOR COMMANDO'S",
+		"LEADER COMMANDS": "LEADER COMMANDO'S",
+
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)": "(vervang / door ! om uit te zenden. Uitzenden verreist: + % @ # & ~)",
+
+		"<strong>Room punishments</strong>:": "<strong>Room straffen</strong>:",
+		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>waarschuwing</strong> - Laat een popup zien met de regels.",
+		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - Mutet een gebruiker (maakt het onmogelijk te praten) voor 7 minuten.",
+		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - Mutet een gebruiker voor 60 minuten.",
+		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - Verbant een gebruiker (ze kunnen de room niet in) voor 2 dagen.",
+		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - Verbant een gebruiker voor een jaar.",
+
+		"<strong>Global punishments</strong>:": "<strong>Globale straffen</strong>:",
+		"<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.": "<strong>lock</strong> - Lockt een gebruiker (ze kunnen niet meer praten in rooms en geen priv&eacute;berichten naar niet-staf sturen) voor 2 dagen.",
+		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - Lockt een gebruiker voor een week.",
+		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Lockt een gebruiker en laat ze geen naam kiezen voor 2 dagen.",
+		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Verbant een gebruiker globaal (ze kunnen niet meer verbinden met de website) voor een week.",
+
+		"<strong>Room drivers (%)</strong> can use:": "<strong>Room drivers (%)</strong> kunnen:",
+		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn OF /k <em>gebruikersnaam</em>: Waarschuw een gebruiker en laat ze de Pok&eacute;mon Showdown regels zien",
+		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute OF /m <em>gebruikersnaam</em>: Mutet een gebruiker voor 7 minuten",
+		"- /hourmute OR /hm <em>username</em>: 60 minute mute": "- /mute OF /m <em>gebruikersnaam</em>: Leg een gebruiker voor 60 minuten het zwijgen op",
+		"- /unmute <em>username</em>: unmute": "- /unmute <em>gebruikersnaam</em>: Be&euml;indig een mute",
+		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce OF /wall <em>bericht</em>: Maak een mededeling",
+		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>gebruikersnaam</em>: Doorzoek de moderatiegeschiedenis van een room",
+		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>notitie</em>: Voeg een notitie toe die later kan worden gelezen in modlog",
+
+		"<strong>Room moderators (@)</strong> can also use:": "<strong>Room moderators (@)</strong> kunnen ook:",
+		"- /roomban OR /rb <em>username</em>: ban user from the room": "- /roomban OF /rb <em>gebruikersnaam</em>: Verban gebruiker uit de room",
+		"- /roomunban <em>username</em>: unban user from the room": "- /roomunban <em>gebruikersnaam</em>: Maak een roomban ongedaan",
+		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>gebruikersnaam</em>: Promoveer tot room voice",
+		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>gebruikersnaam</em>: Neem een room voice weg",
+		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>intro</em>: Zet een staf introductie die wordt getoond aan alle staf die de room binnenkomt",
+		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings: Verander allerlei instellingen voor de room, met name modchat",
+
+		"<strong>Room owners (#)</strong> can also use:": "<strong>Room owners (#)</strong> kunnen ook nog:",
+		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>intro</em>: Zet een room introductie die wordt getoond aan iedereen die de room binnenkomt",
+		"- /rules <em>rules link</em>: set the room rules link seen when using /rules": "- /rules <em>link naar regels</em>: Zet de room regels die worden weergegeven als je /rules gebruikt",
+		"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver": "- /roommod, /roomdriver <em>gebruikersnaam</em>: Promoveer een room moderator/driver",
+		"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver": "- /roomdemod, /roomdedriver <em>gebruikersnaam</em>: Degradeer een room moderator/driver",
+		"- /roomdeauth <em>username</em>: remove all room auth from a user": "- /roomdeauth <em>gebruikersnaam</em>: Verwijder alle authoriteit van een gebruiker in de room",
+		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>bericht</em>: Stuur een grote blauwe declaratie naar de room.",
+		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>HTML code</em>: Stuur een box met HTML code naar de room",
+		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [breedte], [hoogte]</em>: Laat een afbeelding aan de room zien",
+		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: Verander allerlei instellingen voor de room, zoals modchat, capsfilter, etc",
+
+		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "Meer gedetailleerde hulp kan je vinden in de <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth gids</a>",
+
+		"Tournament Help:": "Toernooi Hulp",
+		"- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.": "- /tour create <em>format</em>, elimination: Maak een nieuw 'single elimination' toernooi in de huidige room",
+		"- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.": "- /tour create <em>format</em>, roundrobin: Maak een nieuw 'round robin' toernooi in de huidige room.",
+		"- /tour end: forcibly end the tournament in the current room": "- /tour end: Be&euml;indig geforceerd het toernooi in de huidige room",
+		"- /tour start: start the tournament in the current room": "- /tour start: Start het toernooi in de huidige room",
+		"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)": "- /tour banlist [pokemon], [talent], [...]: Verban aanvallen, abilities, Pok&eacute;mon of items uit een toernooi (het toernooi moet wel eerst gemaakt worden)",
+
+		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "Meer gedetailleerde hulp kan je vinden in de <a href=\"https://www.smogon.com/forums/posts/6777489/\">toernooigids</a>",
+
+		"Your status cannot be updated while you are locked or semilocked.": "Je kunt je status niet veranderen als je gelockt of gesemi-lockt bent.",
+		"Your status is too long; it must be under ${maxLength} characters.": "Je status is te lang; het kan maximaal ${maxLength} karakters bevatten.",
+		"Your status contains a banned word.": "Er zit een verboden woord in je status.",
+		"Your status has been set to: ${target}.": "Je status is nu: ${target}.",
+		"You are now marked as busy.": "Je staat nu als bezig aangegeven.",
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "Je staat nu als afwezig aangegeven. Stuur een bericht of gebruik /back om te laten zien dat je terug bent."
 	}
 }
