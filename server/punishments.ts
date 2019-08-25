@@ -15,7 +15,7 @@
 
 import {FS} from '../lib/fs';
 
-type TournamentType = import('./tournaments').Tournament;
+type Tournament = import('./tournaments').Tournament;
 
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
@@ -270,7 +270,7 @@ export const Punishments = new (class {
 
 	saveRoomPunishments() {
 		FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
-			const saveTable: Map<string, PunishmentEntry> = new Map();
+			const saveTable = new Map<string, PunishmentEntry>();
 			for (const roomid of Punishments.roomIps.keys()) {
 				for (const [userid, punishment] of Punishments.getPunishments(roomid, true)) {
 					saveTable.set(`${roomid}:${userid}`, punishment);
@@ -346,6 +346,8 @@ export const Punishments = new (class {
 			if (ip.includes('/')) {
 				rangebans.push(ip);
 			} else if (!Punishments.ips.has(ip)) {
+				// All of the relevant code either checks for this or doesn't need an ID
+				// It's far easier and less complex to just assert it here
 				Punishments.ips.set(ip, ['BAN', '#ipban' as ID, Infinity, '']);
 			}
 		}
@@ -390,8 +392,8 @@ export const Punishments = new (class {
 	punish(user: User | ID, punishment: Punishment) {
 		if (typeof user === 'string') return Punishments.punishName(user, punishment);
 
-		const userids: Set<string> = new Set();
-		const ips: Set<string> = new Set();
+		const userids = new Set<string>();
+		const ips = new Set<string>();
 		// TODO - why isn't this type being narrowed?
 		const affected = (user as User).getAltUsers(PUNISH_TRUSTED, true);
 		for (const alt of affected) {
@@ -450,8 +452,8 @@ export const Punishments = new (class {
 
 	punishName(userid: ID, punishment: Punishment) {
 		const foundKeys = Punishments.search(userid).map(([key]) => key);
-		const userids: Set<ID> = new Set([userid]);
-		const ips: Set<string> = new Set();
+		const userids = new Set<ID>([userid]);
+		const ips = new Set<string>();
 		for (const key of foundKeys) {
 			if (key.includes('.')) {
 				ips.add(key);
@@ -510,8 +512,8 @@ export const Punishments = new (class {
 
 	roomPunish(room: Room | string, user: User, punishment: Punishment) {
 		const roomid = typeof room === 'string' ? room : room.id;
-		const userids: Set<ID> = new Set();
-		const ips: Set<string> = new Set();
+		const userids = new Set<ID>();
+		const ips = new Set<string>();
 		const affected = user.getAltUsers(PUNISH_TRUSTED, true);
 		for (const curUser of affected) {
 			this.roomPunishInner(roomid, curUser, punishment, userids, ips);
@@ -555,8 +557,8 @@ export const Punishments = new (class {
 
 	roomPunishName(room: Room, userid: ID, punishment: Punishment) {
 		const foundKeys = Punishments.search(userid).map(([key]) => key);
-		const userids: Set<ID> = new Set([userid]);
-		const ips: Set<string> = new Set();
+		const userids = new Set<ID>([userid]);
+		const ips = new Set<string>();
 		for (const key of foundKeys) {
 			if (key.includes('.')) {
 				ips.add(key);
@@ -668,13 +670,13 @@ export const Punishments = new (class {
 		return affected;
 	}
 	autolock(
-			user: User | ID,
-			room: Room | string,
-			source: string,
-			reason: string,
-			message: string | null,
-			week = false,
-			namelock?: string
+		user: User | ID,
+		room: Room | string,
+		source: string,
+		reason: string,
+		message: string | null,
+		week = false,
+		namelock?: string
 	) {
 		if (!message) message = reason;
 
@@ -785,11 +787,11 @@ export const Punishments = new (class {
 		for (const games of user.games.keys()) {
 			const game = Rooms.get(games).game;
 			if (!game) continue; // this should never happen
-			if ((game as TournamentType).isTournament) {
-				if ((game as TournamentType).isTournamentStarted) {
-					(game as TournamentType).disqualifyUser(id, null, null);
-				} else if (!(game as TournamentType).isTournamentStarted) {
-					(game as TournamentType).removeUser(user.userid);
+			if ((game as Tournament).isTournament) {
+				if ((game as Tournament).isTournamentStarted) {
+					(game as Tournament).disqualifyUser(id, null, null);
+				} else if (!(game as Tournament).isTournamentStarted) {
+					(game as Tournament).removeUser(user.userid);
 				}
 			}
 		}
@@ -1079,8 +1081,8 @@ export const Punishments = new (class {
 		}
 
 		const ticket = Chat.pages.help
-		? `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>`
-		: '';
+			? `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>`
+			: '';
 
 		if (battleban) {
 			if (battleban[1] !== user.userid && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
@@ -1353,7 +1355,7 @@ export const Punishments = new (class {
 		return punishments;
 	}
 	getPunishments(roomid?: string, ignoreMutes?: boolean) {
-		const punishmentTable: Map<string, PunishmentEntry> = new Map();
+		const punishmentTable = new Map<string, PunishmentEntry>();
 		if (roomid && (!Punishments.roomIps.has(roomid) || !Punishments.roomUserids.has(roomid))) return punishmentTable;
 		// `Punishments.roomIps.get(roomid)` guaranteed to exist above
 		(roomid ? Punishments.roomIps.get(roomid)! : Punishments.ips).forEach((punishment, ip) => {
