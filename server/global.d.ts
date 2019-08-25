@@ -6,7 +6,7 @@ import * as RoomGameType from './room-game';
 import * as RoomBattleType from './room-battle';
 import {LadderStore as LadderStoreType} from './ladders-remote';
 import {Ladders as LaddersType} from './ladders';
-import PunishmentsType = require('./punishments');
+import {Punishments as PunishmentsType} from './punishments';
 
 import * as StreamsType from './../lib/streams';
 import * as UsersType from './users';

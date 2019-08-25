@@ -102,7 +102,7 @@ global.Chat = require('../.server-dist/chat').Chat;
 
 global.Users = require('../.server-dist/users').Users;
 
-global.Punishments = require('./punishments');
+global.Punishments = require('../.server-dist/punishments').Punishments;
 
 global.Rooms = require('../.server-dist/rooms').Rooms;
 

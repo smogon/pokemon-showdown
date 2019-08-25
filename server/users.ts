@@ -1605,6 +1605,7 @@ function socketConnect(worker: Worker, workerid: number, socketid: string, ip: s
 
 	const user = new User(connection);
 	connection.user = user;
+	// tslint:disable-next-line: no-floating-promises
 	Punishments.checkIp(user, connection);
 	// Generate 1024-bit challenge string.
 	require('crypto').randomBytes(128, (err: Error | null, buffer: Buffer) => {
