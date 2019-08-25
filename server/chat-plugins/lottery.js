@@ -23,7 +23,7 @@ function createLottery(roomid, maxWinners, name, markup) {
 }
 function writeLotteries() {
 	for (const roomid of Object.keys(lotteries)) {
-		if (!Rooms(roomid)) {
+		if (!Rooms.get(roomid)) {
 			delete lotteries[roomid];
 		}
 	}
