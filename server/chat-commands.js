@@ -3267,7 +3267,7 @@ const commands = {
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				Chat.uncache('./.server-dist/punishments');
-				global.Punishments = require('./punishments').Punishments;
+				global.Punishments = require('../.server-dist/punishments').Punishments;
 				this.sendReply("Punishments have been hot-patched.");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
 				patch = 'dnsbl';
