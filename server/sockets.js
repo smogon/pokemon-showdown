@@ -592,7 +592,7 @@ if (cluster.isMaster) {
 	// Clean up any remaining connections on disconnect. If this isn't done,
 	// the process will not exit until any remaining connections have been destroyed.
 	// Afterwards, the worker process will die on its own.
-	process.once('disconnect', () => {
+	const cleanup = () => {
 		for (const socket of sockets.values()) {
 			try {
 				socket.destroy();
@@ -607,7 +607,10 @@ if (cluster.isMaster) {
 
 		// Let the server(s) finish closing.
 		setImmediate(() => process.exit(0));
-	});
+	};
+
+	process.once('disconnect', cleanup);
+	process.once('exit', cleanup);
 
 	// this is global so it can be hotpatched if necessary
 	let isTrustedProxyIp = IPTools.checker(Config.proxyip);
