@@ -1022,6 +1022,53 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 	},
+	// Catalystic
+	birbtotherescue: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Resets the stat stages of all active Pokemon to 0, then lowers opponents evasion by 1 and removes hazards.",
+		shortDesc: "Eliminates all stat changes; lowers target's evasion by 1; removes hazards.",
+		id: "birbtotherescue",
+		name: "Birb to the Rescue",
+		pp: 15,
+		priority: 1,
+		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
+		onHit(target, source, move) {
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+			}
+			let success = false;
+			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
+			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			for (const targetCondition of removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll.includes(targetCondition)) continue;
+					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			for (const sideCondition of removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			return success;
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Haze", target);
+			this.add('-anim', source, "Defog", target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+	},
 	// Ceteris
 	bringerofdarkness: {
 		accuracy: true,

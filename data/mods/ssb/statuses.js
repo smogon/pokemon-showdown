@@ -332,6 +332,18 @@ let BattleStatuses = {
 			this.add(`c|@cant say|bg haxor :(`);
 		},
 	},
+	catalystic: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Catalystic|The Birb is here!`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Catalystic|The Birb will be back!`);
+		},
+		onFaint() {
+			this.add(`c|+Catalystic|The Birb is never lucky.`);
+		},
+	},
 	ceteris: {
 		noCopy: true,
 		onStart() {

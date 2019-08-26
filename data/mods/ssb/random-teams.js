@@ -186,6 +186,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'a e s t h e t i s l a s h',
 				evs: {hp: 32, atk: 252, spd: 4, spe: 220}, nature: 'Jolly',
 			},
+			'Catalystic': {
+				species: 'Ho-oh', ability: 'Magic Guard', item: ['Toxic Orb'], gender: 'M',
+				moves: ['Sacred Fire', 'Brave Bird', 'Strength Sap'],
+				signatureMove: 'Birb to the Rescue',
+				evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant',
+			},
 			'Ceteris': {
 				species: 'Greninja', ability: 'Protean', item: 'Expert Belt', gender: 'M',
 				moves: ['Dark Pulse', 'Origin Pulse', 'Gunk Shot', 'Shadow Sneak'],
