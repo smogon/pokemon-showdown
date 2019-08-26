@@ -614,6 +614,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Geomagnetic Storm',
 				evs: {def: 252, spa: 4, spe: 252}, nature: 'Bold',
 			},
+			'Seraphus': {
+				species: 'Tangela', ability: 'Seraphic Regeneration', item: 'Eviolite', gender: 'M',
+				moves: [['Knock Off', 'Power Whip'], ['Sludge Bomb', 'Toxic'], ['Synthesis', 'Protect']],
+				signatureMove: 'Leech Swap',
+				evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
+			},
 			'Shiba': {
 				species: 'Fletchinder', ability: 'Gale Wings v1', item: 'Eviolite', gender: 'F',
 				moves: ['Dragon Ascent', 'Sacred Fire', 'Roost'],

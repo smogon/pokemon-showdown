@@ -963,6 +963,25 @@ let BattleAbilities = {
 			return false;
 		},
 	},
+	// Seraphus
+	seraphicregeneration: {
+		shortDesc: "When this Pokemon switches out, it regains 33% of its HP, then its replacement recovers 33% of its health.",
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.maxhp / 3);
+			pokemon.side.addSlotCondition(pokemon, 'seraphicregeneration');
+		},
+		id: "seraphicregeneration",
+		name: "Seraphic Regeneration",
+		isNonstandard: "Custom",
+		effect: {
+			duration: 1,
+			onSwitchInPriority: -1,
+			onSwitchIn(pokemon) {
+				pokemon.heal(pokemon.maxhp / 3);
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			},
+		},
+	},
 	// Schiavetto
 	rvs: {
 		desc: "This Pokemon has two random stats raised by 1 stages and another stat lowered by 1 stage at the end of each turn.",

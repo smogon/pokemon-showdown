@@ -1293,6 +1293,18 @@ let BattleStatuses = {
 			this.add(`c|@Scotteh|█████████████████████▀▀`);
 		},
 	},
+	seraphus: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Seraphus|The angel of stall descends upon the battlefield.`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Seraphus|The angel of stall has decided upon a tactical retreat.`);
+		},
+		onFaint() {
+			this.add(`c|+Seraphus|Regenerator is a perfectly balanced ability.`);
+		},
+	},
 	shiba: {
 		noCopy: true,
 		onStart() {

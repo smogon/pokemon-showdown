@@ -3748,6 +3748,37 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		type: "Electric",
 	},
+	// Seraphus
+	leechswap: {
+		accuracy: 85,
+		basePower: 0,
+		category: "Status",
+		desc: "Seeds the opponent then switches out",
+		shortDesc: "Seeds the opponent then switches out",
+		id: "leechswap",
+		name: "Leech Swap",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, reflectable: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Leech Seed", target);
+		},
+		onHit(target) {
+			if (!target.hasType('Grass') && !target.volatiles['leechseed']) {
+				target.addVolatile('leechseed');
+			} else {
+				return false;
+			}
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+	},
 	// Shiba
 	goinda: {
 		accuracy: true,
