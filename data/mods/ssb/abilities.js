@@ -1018,26 +1018,6 @@ let BattleAbilities = {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
 	},
-	// SunGodVolcarona
-	solarflare: {
-		desc: "This Pokemon is immune to Rock-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Rock-type move.",
-		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Rock moves; Rock immunity.",
-		id: "solarflare",
-		name: "Solar Flare",
-		isNonstandard: "Custom",
-		onStart(pokemon) {
-			this.add('-ability', pokemon, 'Solar Flare');
-			this.add('-message', `The light of the sun shields ${pokemon.name} from Rock-type moves!`);
-		},
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Rock') {
-				if (!this.heal(target.maxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Solar Flare');
-				}
-				return null;
-			}
-		},
-	},
 	// Teremiare
 	notprankster: {
 		desc: "This Pokemon's status moves have their priority raised by 1.",

@@ -1371,18 +1371,6 @@ let BattleStatuses = {
 			this.add(`c|%SparksBlade|i don't even play this game`);
 		},
 	},
-	sungodvolcarona: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+SunGodVolcarona|Praise the Sun and live a happy life.`);
-		},
-		onSwitchOut() {
-			this.add(`c|+SunGodVolcarona|You dare switch out a god?`);
-		},
-		onFaint() {
-			this.add(`c|+SunGodVolcarona|All Suns have to set at one point.`);
-		},
-	},
 	sunny: {
 		noCopy: true,
 		onStart() {
