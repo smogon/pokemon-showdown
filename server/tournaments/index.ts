@@ -1144,26 +1144,26 @@ function createTournament(
 		output.errorReply("You cannot have a player cap that is less than 2.");
 		return;
 	}
-	const tour = room.game = tournaments[room.id] = new Tournament(
+	const tour = room.game = Tournaments.tournaments[room.id] = new Tournament(
 		room, format, createTournamentGenerator(generator, generatorMod, output)!, playerCap, isRated, name
 	);
 	return tour;
 }
 function deleteTournament(id: string, output: CommandContext) {
-	const tournament = tournaments[id];
+	const tournament = Tournaments.tournaments[id];
 	if (!tournament) {
 		output.errorReply(`${id} doesn't exist.`);
 		return false;
 	}
 	tournament.forceEnd();
-	delete tournaments[id];
+	delete Tournaments.tournaments[id];
 	const room = Rooms.get(id);
 	if (room) delete room.game;
 	return true;
 }
 function getTournament(id: string) {
-	if (tournaments[id]) {
-		return tournaments[id];
+	if (Tournaments.tournaments[id]) {
+		return Tournaments.tournaments[id];
 	}
 }
 
@@ -1616,11 +1616,11 @@ const chatCommands: ChatCommands = {
 
 		if (cmd === '') {
 			if (!this.runBroadcast()) return;
-			const update = Object.keys(tournaments).filter(roomid => {
-				const tournament = tournaments[roomid];
+			const update = Object.keys(Tournaments.tournaments).filter(roomid => {
+				const tournament = Tournaments.tournaments[roomid];
 				return !tournament.room.isPrivate && !tournament.room.isPersonal && !tournament.room.staffRoom;
 			}).map(roomid => {
-				const tournament = tournaments[roomid];
+				const tournament = Tournaments.tournaments[roomid];
 				return {
 					room: tournament.room.id, title: tournament.room.title, format: tournament.name,
 					generator: tournament.generator.name, isStarted: tournament.isTournamentStarted,
