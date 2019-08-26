@@ -232,7 +232,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Gengar', ability: 'Bad Dreams', item: 'Gengarite', gender: 'M',
 				moves: [['Hex', 'Shadow Ball'], 'Sludge Wave', 'Focus Blast'],
 				signatureMove: 'Lucid Dreams',
-				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {hp: 20, atk: 0, def: 15, spa: 0, spd: 15, spe: 20}, nature: 'Modest',
 			},
 			'DragonWhale': {
 				species: 'Garchomp', ability: 'Hustle', item: 'Groundium Z', gender: 'M',
