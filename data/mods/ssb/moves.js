@@ -2553,7 +2553,7 @@ let BattleMovedex = {
 		id: "llamacide",
 		name: "Llamacide",
 		pp: 10,
-		flags: {},
+		flags: {protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
