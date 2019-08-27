@@ -228,8 +228,8 @@ exports.commands = {
 	lotteryhelp: [
 		`/lottery - opens the current lottery, if it exists.`,
 		`/lottery create maxWinners, name, html - creates a new lottery with [name] as the header and [html] as body. Max winners is the amount of people that will win the lottery. Requires # & ~`,
-		`/lottery delete - deletes the current lottery without delcaring a winner. Requires # & ~`,
-		`/lottery end - ends the current delcaring a random participant as the winner. Requires # & ~`,
+		`/lottery delete - deletes the current lottery without declaring a winner. Requires # & ~`,
+		`/lottery end - ends the current declaring a random participant as the winner. Requires # & ~`,
 		`/lottery join - joins the current lottery, if it exists, you need to be not currently punished in any public room, not locked and be autoconfirmed.`,
 		`/lottery leave - leaves the current lottery, if it exists.`,
 		`/lottery participants - shows the current participants in the lottery. Requires: # & ~`,
