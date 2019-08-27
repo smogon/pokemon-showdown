@@ -150,9 +150,9 @@ Owner
 
 Staff
 
-- Bär Halberkamp [bumbadadabum] - Development
+- Astrid Halberkamp [bumbadadabum] - Development
 - Chris Monsanto [chaos] - Sysadmin
-- Kirk Scheibelhut [pre] - Development
+- Kirk Scheibelhut [pre] - Development, Sysadmin
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - [The Immortal] - Development
 
