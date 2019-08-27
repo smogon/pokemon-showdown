@@ -114,31 +114,31 @@ class NestedPunishmentMap extends Map<string, Map<string, Punishment>> {
  * Persistence
  *********************************************************/
 
-export const Punishments = new (class {
+export const Punishments = new class {
 	/**
 	 * ips is an ip:punishment Map
 	 */
-	ips: PunishmentMap;
+	ips = new PunishmentMap();
 	/**
 	 * userids is a userid:punishment Map
 	 */
-	userids: PunishmentMap;
+	userids = new PunishmentMap();
 	/**
 	 * roomUserids is a roomid:userid:punishment nested Map
 	 */
-	roomUserids: NestedPunishmentMap;
+	roomUserids = new NestedPunishmentMap();
 	/**
 	 * roomIps is a roomid:ip:punishment Map
 	 */
-	roomIps: NestedPunishmentMap;
+	roomIps = new NestedPunishmentMap();
 	/**
 	 * sharedIps is an ip:note Map
 	 */
-	sharedIps: Map<string, string>;
+	sharedIps = new Map<string, string>();
 	/**
 	 * Connection flood table. Separate table from IP bans.
 	 */
-	cfloods: Set<string>;
+	cfloods = new Set<string>();
 	/**
 	 * punishType is an allcaps string, for global punishments they can be
 	 * anything in the punishmentTypes map.
@@ -149,7 +149,11 @@ export const Punishments = new (class {
 	 * they should be displayed in /alt
 	 *
 	 */
-	punishmentTypes: Map<string, string>;
+	punishmentTypes = new Map<string, string>([
+		['LOCK', 'locked'],
+		['BAN', 'globally banned'],
+		['NAMELOCK', 'namelocked'],
+	]);
 	/**
 	 * For room punishments, they can be anything in the roomPunishmentTypes map.
 	 *
@@ -164,33 +168,13 @@ export const Punishments = new (class {
 	 * - 'MUTE' (used by getRoomPunishments)
 	 *
 	 */
-	roomPunishmentTypes: Map<string, string>;
+	roomPunishmentTypes = new Map<string, string>([
+		['ROOMBAN', 'banned'],
+		['BLACKLIST', 'blacklisted'],
+		['BATTLEBAN', 'battlebanned'],
+		['MUTE', 'muted'],
+	]);
 	constructor() {
-		this.ips = new PunishmentMap();
-
-		this.userids = new PunishmentMap();
-
-		this.roomUserids = new NestedPunishmentMap();
-
-		this.roomIps = new NestedPunishmentMap();
-
-		this.sharedIps = new Map();
-
-		this.cfloods = new Set();
-
-		this.punishmentTypes = new Map([
-			['LOCK', 'locked'],
-			['BAN', 'globally banned'],
-			['NAMELOCK', 'namelocked'],
-		]);
-
-		this.roomPunishmentTypes = new Map([
-			['ROOMBAN', 'banned'],
-			['BLACKLIST', 'blacklisted'],
-			['BATTLEBAN', 'battlebanned'],
-			['MUTE', 'muted'],
-		]);
-
 		setImmediate(() => {
 			// tslint:disable-next-line: no-floating-promises
 			Punishments.loadPunishments();
@@ -394,7 +378,6 @@ export const Punishments = new (class {
 
 		const userids = new Set<ID>();
 		const ips = new Set<string>();
-		// TODO - why isn't this type being narrowed?
 		const affected = (user as User).getAltUsers(PUNISH_TRUSTED, true);
 		for (const alt of affected) {
 			this.punishInner(alt, punishment, userids, ips);
@@ -492,14 +475,14 @@ export const Punishments = new (class {
 		// in case of inconsistent state, we'll try anyway
 
 		let success: false | string = false;
-		Punishments.ips.forEach((curPunishment, key) => {
-			if (curPunishment[1] === id && curPunishment[0] === punishType) {
+		Punishments.ips.forEach(([curPunishmentType, curId], key) => {
+			if (curId === id && curPunishmentType === punishType) {
 				Punishments.ips.delete(key);
 				success = id;
 			}
 		});
-		Punishments.userids.forEach((curPunishment, key) => {
-			if (curPunishment[1] === id && curPunishment[0] === punishType) {
+		Punishments.userids.forEach(([curPunishmentType, curId], key) => {
+			if (curId === id && curPunishmentType === punishType) {
 				Punishments.userids.delete(key);
 				success = id;
 			}
@@ -604,8 +587,8 @@ export const Punishments = new (class {
 		let success;
 		const ipSubMap = Punishments.roomIps.get(roomid);
 		if (ipSubMap) {
-			for (const [key, curPunishment] of ipSubMap) {
-				if (curPunishment[1] === id && curPunishment[0] === punishType) {
+			for (const [key, [curPunishmentType, curId]] of ipSubMap) {
+				if (curId === id && curPunishmentType === punishType) {
 					ipSubMap.delete(key);
 					success = id;
 				}
@@ -613,8 +596,8 @@ export const Punishments = new (class {
 		}
 		const useridSubMap = Punishments.roomUserids.get(roomid);
 		if (useridSubMap) {
-			for (const [key, curPunishment] of useridSubMap) {
-				if (curPunishment[1] === id && curPunishment[0] === punishType) {
+			for (const [key, [curPunishmentType, curId]] of useridSubMap) {
+				if (curId === id && curPunishmentType === punishType) {
 					useridSubMap.delete(key);
 					success = id;
 				}
@@ -688,7 +671,6 @@ export const Punishments = new (class {
 		}
 
 		const userid = toID(user);
-		// TODO - why isn't this type being narrowed?
 		const name = typeof user === 'string' ? user : (user as User).name;
 		if (namelock) {
 			punishment = `NAMELOCKED`;
@@ -928,8 +910,8 @@ export const Punishments = new (class {
 
 		const unblacklisted: string[] = [];
 
-		roombans.forEach((punishment, userid) => {
-			if (punishment[0] === 'BLACKLIST') {
+		roombans.forEach(([punishType], userid) => {
+			if (punishType === 'BLACKLIST') {
 				Punishments.roomUnblacklist(room, userid, true);
 				unblacklisted.push(userid);
 			}
@@ -1481,4 +1463,4 @@ export const Punishments = new (class {
 			}
 		}
 	}
-})();
+}();
