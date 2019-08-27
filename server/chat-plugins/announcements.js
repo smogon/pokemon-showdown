@@ -5,7 +5,13 @@
 
 'use strict';
 
+/** @typedef {Announcement} AnnouncementType */
+
 class Announcement {
+	/**
+	 * @param {ChatRoom | GameRoom} room
+	 * @param {{source: string, supportHTML: boolean}} announcement
+	 */
 	constructor(room, announcement) {
 		this.announcementNumber = ++room.gameNumber;
 		this.room = room;
