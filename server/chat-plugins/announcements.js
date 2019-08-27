@@ -42,7 +42,7 @@ class Announcement {
 	}
 
 	display() {
-		let announcement = this.generateAnnouncement();
+		const announcement = this.generateAnnouncement();
 		for (let i in this.room.users) {
 			let thisUser = this.room.users[i];
 			thisUser.sendTo(this.room, `|uhtml|announcement${this.announcementNumber}|${announcement}`);
