@@ -110,7 +110,7 @@ const commands = {
 					room.announcement.timeoutMins = 0;
 					return this.add("The announcement timer was turned off.");
 				}
-				 timeout = parseFloat(target);
+				const timeout = parseFloat(target);
 				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply("Invalid time given.");
 				if (room.announcement.timeout) clearTimeout(room.announcement.timeout);
 				room.announcement.timeoutMins = timeout;
