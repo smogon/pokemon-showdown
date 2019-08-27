@@ -74,7 +74,7 @@ const commands = {
 			target = target.trim();
 			if (room.battle) return this.errorReply("Battles do not support announcements.");
 
-			let text = Chat.filter(this, target, user, room, connection);
+			const text = Chat.filter(this, target, user, room, connection);
 			if (target !== text) return this.errorReply("You are not allowed to use filtered words in announcements.");
 
 			const supportHTML = cmd === 'htmlcreate';
