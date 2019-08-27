@@ -127,7 +127,7 @@ exports.commands = {
 			}
 			createLottery(room.id, maxWinnersNum, name, markup);
 			this.sendReply('The lottery was successfully created.');
-			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the "${name}" lottery!</b></div>`);
+			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the "<a href="/view-lottery-${room.id}">${name}</a>" lottery!</b></div>`);
 			this.modlog(`LOTTERY CREATE ${name}`);
 		},
 		delete(target, room, user) {
@@ -157,7 +157,7 @@ exports.commands = {
 				return this.errorReply('There have been not enough participants for you to be able to end this. If you wish to end it anyway use /lottery delete.');
 			}
 			const winners = /** @type {string[]} */ (getWinnersInLottery(room.id));
-			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${Chat.toListString(winners)} won the "${lottery.name}" lottery!</b></div>`);
+			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${Chat.toListString(winners)} won the "<a href="/view-lottery-${room.id}">${lottery.name}</a>" lottery!</b></div>`);
 			this.modlog(`LOTTERY END ${lottery.name}`);
 			destroyLottery(room.id);
 		},
