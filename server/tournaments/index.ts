@@ -30,8 +30,6 @@ function usersToNames(users: TournamentPlayer[]) {
 	return users.map(user => user.name);
 }
 
-const tournaments: {[k: string]: Tournament} = Object.create(null);
-
 export class TournamentPlayer extends Rooms.RoomGamePlayer {
 	isBusy: boolean;
 	availableMatches: Set<TournamentPlayer>;
@@ -1796,7 +1794,7 @@ Object.assign(Chat.commands, chatCommands);
 
 export const Tournaments = {
 	TournamentGenerators,
-	tournaments,
+	tournaments: Object.create(null) as {[k: string]: Tournament},
 	TournamentPlayer,
 	Tournament,
 	createTournament,
