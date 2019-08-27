@@ -24,10 +24,22 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: "Shell Shocker"},
 	},
-	// Bhris Brown
-	swampertmega: {
+	// Birdy
+	oricorio: {
 		inherit: true,
-		abilities: {0: "Stimulated Pride"},
+		abilities: {0: "Arabesque"},
+	},
+	oricoriopau: {
+		inherit: true,
+		abilities: {0: "Arabesque"},
+	},
+	oricoriopompom: {
+		inherit: true,
+		abilities: {0: "Arabesque"},
+	},
+	oricoriosensu: {
+		inherit: true,
+		abilities: {0: "Arabesque"},
 	},
 	// deg
 	gengarmega: {

@@ -238,31 +238,19 @@ let BattleAbilities = {
 			}
 		},
 	},
-	// Bhris Brown
-	stimulatedpride: {
-		id: "stimulatedpride",
-		name: "Stimulated Pride",
-		desc: "On switch-in, this Pokemon lowers the Attack of adjacent foes not behind a Substitute by one stage. If the weather is rain, this Pokemon's Speed is doubled.",
-		shortDesc: "On switch-in, adjacent foes' Atk is lowered by by 1. Speed is doubled in rain.",
+	// Birdy~!
+	arabesque: {
+		id: "arabesque",
+		name: "Arabesque",
+		desc: "On switch-in, this Pokemon switches to a different oricorio form.",
+		shortDesc: "On switch-in, this Pokemon switches to a different oricorio form.",
 		isNonstandard: "Custom",
-		onStart(pokemon) {
-			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
-				if (!activated) {
-					this.add('-ability', pokemon, 'Stimulated Pride', 'boost');
-					activated = true;
-				}
-				if (target.volatiles['substitute']) {
-					this.add('-immune', target);
-				} else {
-					this.boost({atk: -1}, target, pokemon, this.getAbility('intimidate'));
-				}
-			}
-		},
-		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['raindance', 'primordialsea'])) {
-				return this.chainModify(2);
+		onStart(source) {
+			let formes = ['oricorio', 'oricoriosensu', 'oricoriopompom', 'oricoriopau'];
+			if (formes.includes(toID(source.template.species))) {
+				formes.splice(formes.indexOf(toID(source.template.species)), 1);
+				this.add('-activate', source, 'ability: Arabesque');
+				source.formeChange(formes[this.random(formes.length)], this.getAbility('arabesque'), true);
 			}
 		},
 	},

@@ -156,6 +156,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Food Rush',
 				evs: {hp: 4, atk: 252, spd: 252}, nature: 'Adamant',
 			},
+			'Birdy~!': {
+				species: 'Oricorio', ability: 'Arabesque', item: 'Wiki Berry', gender: 'F',
+				moves: ['Floaty Fall', 'Hurricane', 'Revelation Dance'],
+				signatureMove: 'Just Dance',
+				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Hasty', shiny: true,
+			},
 			'bobochan': {
 				species: 'Emolga', ability: 'Huge Power', item: 'Choice Band', gender: 'M',
 				moves: ['Brave Bird', 'Knock Off', 'U-turn'],

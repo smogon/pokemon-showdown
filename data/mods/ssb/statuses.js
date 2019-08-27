@@ -257,6 +257,18 @@ let BattleStatuses = {
 			this.add(`c|@biggie|It was all a dream`);
 		},
 	},
+	birdy: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Birdy~!|And I oop- uh, I mean, hi!`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Birdy~!|Be like that, then. Don't blame ME if you lose.`);
+		},
+		onFaint() {
+			this.add(`c|%Birdy~!|My last words will always be that I don't spam.`);
+		},
+	},
 	bobochan: {
 		noCopy: true,
 		onStart() {
