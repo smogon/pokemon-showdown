@@ -138,6 +138,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Come on you Gunners',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {hp: 20, def: 20, spd: 20}, nature: 'Naive',
 			},
+			'Asheviere': {
+				species: 'Slowbro', ability: 'Regenerator', item: 'Leftovers', gender: 'M',
+				moves: ['Scald', 'Slack Off', 'Psyshock'],
+				signatureMove: 'Wonder Trade',
+				evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
+			},
 			'Averardo': {
 				species: 'Tyrantrum', ability: 'Rock Head', item: 'Choice Scarf', gender: '', // ask Gender
 				moves: ['Head Smash', 'Flare Blitz', 'Photon Geyser'],
@@ -173,12 +179,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Seed Flare', ['Earth Power', 'Moonblast', 'Psychic'], ['Oblivion Wing', 'Strength Sap']],
 				signatureMove: 'Blustery Winds',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
-			},
-			'bumbadadabum': {
-				species: 'Slowbro', ability: 'Regenerator', item: 'Leftovers', gender: 'M',
-				moves: ['Scald', 'Slack Off', 'Psyshock'],
-				signatureMove: 'Wonder Trade',
-				evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
 			},
 			'Cake': {
 				species: 'Dunsparce', ability: 'Serene Grace', item: 'Leftovers', gender: 'M',

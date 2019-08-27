@@ -1,6 +1,6 @@
 'use strict';
 
-// Used for bumbadadabum and Snaquaza's move
+// Used for Asheviere and Snaquaza's move
 const RandomStaffBrosTeams = require('./random-teams');
 /** @type {typeof import('../../../sim/pokemon').Pokemon} */
 const Pokemon = require(/** @type {any} */ ('../../../.sim-dist/pokemon')).Pokemon;
@@ -503,6 +503,7 @@ let BattleMovedex = {
 			this.effect = effect;
 
 			target.side.pokemon[0].canMegaEvo = this.canMegaEvo(pokemon);
+			target.side.pokemon[0].ability = toID(set.ability);
 			// @ts-ignore Read only property needs to be written to for this to work
 			target.side.active[0].species = pokemon.species;
 			target.side.active[0].canMegaEvo = this.canMegaEvo(target.side.active[0]);
@@ -733,6 +734,86 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 	},
+	// Asheviere
+	wondertrade: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Replaces every non-fainted member of the user's team with a Super Staff Bros. Brawl set that is randomly selected from all sets, except those with the move Wonder Trade. Remaining HP and PP percentages, as well as status conditions, are transferred onto the replacement sets This move fails if it's used by a Pokemon that does not originally know this move. This move fails if the user is not Asheviere.",
+		shortDesc: "Replaces user's team with random StaffBros. sets.",
+		id: "wondertrade",
+		name: "Wonder Trade",
+		isNonstandard: "Custom",
+		pp: 2,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Amnesia', source);
+			this.add('-anim', source, 'Double Team', source);
+		},
+		onTryHit(target, source) {
+			if (source.name !== 'Asheviere') {
+				this.add('-fail', source);
+				this.hint("Only Asheviere can use Wonder Trade.");
+				return null;
+			}
+		},
+		onHit(target, source) {
+			// Store percent of HP left, percent of PP left, and status for each pokemon on the user's team
+			let carryOver = [];
+			let currentTeam = source.side.pokemon;
+			for (let pokemon of currentTeam) {
+				carryOver.push({
+					hp: pokemon.hp / pokemon.maxhp,
+					status: pokemon.status,
+					statusData: pokemon.statusData,
+					pp: pokemon.moveSlots.slice().map(m => {
+						return m.pp / m.maxpp;
+					}),
+				});
+				// Handle pokemon with less than 4 moves
+				while (carryOver[carryOver.length - 1].pp.length < 4) {
+					carryOver[carryOver.length - 1].pp.push(1);
+				}
+			}
+			// Generate a new team
+			let team = this.teamGenerator.getTeam({name: source.side.name, inBattle: true});
+			// Overwrite un-fainted pokemon other than the user
+			for (let i = 0; i < currentTeam.length; i++) {
+				if (currentTeam[i].fainted || !currentTeam[i].hp || currentTeam[i].position === source.position) continue;
+				let set = team.shift();
+				let oldSet = carryOver[i];
+				// @ts-ignore
+				if (set.name === 'Asheviere') {
+					// No way am I allowing 2 of this mon on one team
+					set = team.shift();
+				}
+
+				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
+				let effect = this.effect;
+				this.effect = /** @type {Effect} */ ({id: ''});
+				// @ts-ignore
+				let pokemon = new Pokemon(set, source.side);
+				this.effect = effect;
+
+				pokemon.hp = Math.floor(pokemon.maxhp * oldSet.hp) || 1;
+				pokemon.status = oldSet.status;
+				if (oldSet.statusData) pokemon.statusData = oldSet.statusData;
+				for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
+					moveSlot.pp = Math.floor(moveSlot.maxpp * oldSet.pp[j]);
+				}
+				pokemon.position = currentTeam[i].position;
+				currentTeam[i] = pokemon;
+			}
+			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
+		},
+		target: "self",
+		type: "Psychic",
+	},
 	// Averardo
 	dragonsmash: {
 		accuracy: 100,
@@ -916,86 +997,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
-	},
-	// bumbadadabum
-	wondertrade: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Replaces every non-fainted member of the user's team with a Super Staff Bros. Brawl set that is randomly selected from all sets, except those with the move Wonder Trade. Remaining HP and PP percentages, as well as status conditions, are transferred onto the replacement sets This move fails if it's used by a Pokemon that does not originally know this move. This move fails if the user is not bumbadadabum.",
-		shortDesc: "Replaces user's team with random StaffBros. sets.",
-		id: "wondertrade",
-		name: "Wonder Trade",
-		isNonstandard: "Custom",
-		pp: 2,
-		noPPBoosts: true,
-		priority: 0,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Amnesia', source);
-			this.add('-anim', source, 'Double Team', source);
-		},
-		onTryHit(target, source) {
-			if (source.name !== 'bumbadadabum') {
-				this.add('-fail', source);
-				this.hint("Only bumbadadabum can use Wonder Trade.");
-				return null;
-			}
-		},
-		onHit(target, source) {
-			// Store percent of HP left, percent of PP left, and status for each pokemon on the user's team
-			let carryOver = [];
-			let currentTeam = source.side.pokemon;
-			for (let pokemon of currentTeam) {
-				carryOver.push({
-					hp: pokemon.hp / pokemon.maxhp,
-					status: pokemon.status,
-					statusData: pokemon.statusData,
-					pp: pokemon.moveSlots.slice().map(m => {
-						return m.pp / m.maxpp;
-					}),
-				});
-				// Handle pokemon with less than 4 moves
-				while (carryOver[carryOver.length - 1].pp.length < 4) {
-					carryOver[carryOver.length - 1].pp.push(1);
-				}
-			}
-			// Generate a new team
-			let team = this.teamGenerator.getTeam({name: source.side.name, inBattle: true});
-			// Overwrite un-fainted pokemon other than the user
-			for (let i = 0; i < currentTeam.length; i++) {
-				if (currentTeam[i].fainted || !currentTeam[i].hp || currentTeam[i].position === source.position) continue;
-				let set = team.shift();
-				let oldSet = carryOver[i];
-				// @ts-ignore
-				if (set.name === 'bumbadadabum') {
-					// No way am I allowing 2 of this mon on one team
-					set = team.shift();
-				}
-
-				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
-				let effect = this.effect;
-				this.effect = /** @type {Effect} */ ({id: ''});
-				// @ts-ignore
-				let pokemon = new Pokemon(set, source.side);
-				this.effect = effect;
-
-				pokemon.hp = Math.floor(pokemon.maxhp * oldSet.hp) || 1;
-				pokemon.status = oldSet.status;
-				if (oldSet.statusData) pokemon.statusData = oldSet.statusData;
-				for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
-					moveSlot.pp = Math.floor(moveSlot.maxpp * oldSet.pp[j]);
-				}
-				pokemon.position = currentTeam[i].position;
-				currentTeam[i] = pokemon;
-			}
-			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
-		},
-		target: "self",
-		type: "Psychic",
 	},
 	// Cake
 	sparcedance: {

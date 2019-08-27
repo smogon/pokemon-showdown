@@ -221,6 +221,18 @@ let BattleStatuses = {
 			this.add(`c|+Arsenal|Wenger Out`);
 		},
 	},
+	asheviere: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|~Asheviere|The Light shall bring victory!`);
+		},
+		onSwitchOut() {
+			this.add(`c|~Asheviere|Regenerator is very fair and balanced`);
+		},
+		onFaint() {
+			this.add(`c|~Asheviere|Who will lead my kingdom now?`);
+		},
+	},
 	averardo: {
 		noCopy: true,
 		onStart() {
@@ -291,18 +303,6 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|%Brandon|I need a nap`);
-		},
-	},
-	bumbadadabum: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|~bumbadadabum|The Light shall bring victory!`);
-		},
-		onSwitchOut() {
-			this.add(`c|~bumbadadabum|Regenerator is very fair and balanced`);
-		},
-		onFaint() {
-			this.add(`c|~bumbadadabum|Who will lead my kingdom now?`);
 		},
 	},
 	cake: {
