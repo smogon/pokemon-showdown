@@ -87,6 +87,7 @@ const commands = {
 
 			// @ts-ignore In the case that any of these are null, the function is terminated, and the result never used.
 			if (supportHTML) target = this.canHTML(target);
+			if (!target) return;
 
 			room.announcement = new Announcement(room, {source: target, supportHTML: supportHTML});
 			room.announcement.display();
@@ -109,7 +110,7 @@ const commands = {
 					room.announcement.timeoutMins = 0;
 					return this.add("The announcement timer was turned off.");
 				}
-				let timeout = parseFloat(target);
+				 timeout = parseFloat(target);
 				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply("Invalid time given.");
 				if (room.announcement.timeout) clearTimeout(room.announcement.timeout);
 				room.announcement.timeoutMins = timeout;
@@ -117,13 +118,13 @@ const commands = {
 					if (room.announcement) room.announcement.end();
 					room.announcement = null;
 				}, (timeout * 60000));
-				room.add(`The announcement timer was turned on: the announcement will end in ${timeout} minute(s).`);
+				room.add(`The announcement timer was turned on: the announcement will end in ${timeout} minute${Chat.plural(timeout)}.`);
 				this.modlog('announcement TIMER', null, `${timeout} minutes`);
-				return this.privateModAction(`(The announcement timer was set to ${timeout} minute(s) by ${user.name}.)`);
+				return this.privateModAction(`(The announcement timer was set to ${timeout} minute${Chat.plural(timeout)} by ${user.name}.)`);
 			} else {
 				if (!this.runBroadcast()) return;
 				if (room.announcement.timeout) {
-					return this.sendReply(`The announcement timer is on and will end in ${room.announcement.timeoutMins} minute(s).`);
+					return this.sendReply(`The announcement timer is on and will end in ${room.announcement.timeoutMins} minute${Chat.plural(room.announcement.timeoutMins)}.`);
 				} else {
 					return this.sendReply("The announcement timer is off.");
 				}
