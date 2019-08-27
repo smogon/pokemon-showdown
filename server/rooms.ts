@@ -53,6 +53,7 @@ interface BattleRoomTable {
 
 export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').PollType;
+type Announcement = import('./chat-plugins/announcement').AnnouncementType;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
@@ -999,6 +1000,7 @@ export class GlobalRoom extends BasicRoom {
 export class BasicChatRoom extends BasicRoom {
 	log: Roomlog;
 	poll: Poll | null;
+	announcement: Announcement | null;
 	desc: string;
 	modchat: string | null;
 	filterStretching: boolean;
