@@ -28,7 +28,7 @@ class Announcement {
 	}
 
 	generateAnnouncement() {
-		let output = `<div class="broadcast-blue"><p style="margin: 2px 0 5px 0"><strong style="font-size:11pt">${this.getAnnouncementMarkup()}</strong></p></div>`;
+		const output = `<div class="broadcast-blue"><p style="margin: 2px 0 5px 0"><strong style="font-size:11pt">${this.getAnnouncementMarkup()}</strong></p></div>`;
 		return output;
 	}
 
