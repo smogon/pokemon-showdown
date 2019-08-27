@@ -1202,34 +1202,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 	},
-	// Cleo
-	lovingembrace: {
-		accuracy: 100,
-		basePower: 80,
-		category: "Special",
-		desc: "This move has a 30% chance to infatuate the target regardless of gender.",
-		shortDesc: "This move has a 30% chance to infatuate the target.",
-		id: "lovingembrace",
-		name: "Loving Embrace",
-		isNonstandard: "Custom",
-		pp: 25,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Wrap", target);
-			this.add('-anim', source, "Liquidation", target);
-			this.add('-anim', source, "Surf", target);
-		},
-		secondary: {
-			chance: 30,
-			volatileStatus: 'fullattract',
-		},
-		target: "normal",
-		type: "Water",
-	},
 	// DaWoblefet
 	superegoinflation: {
 		accuracy: true,

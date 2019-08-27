@@ -273,39 +273,6 @@ let BattleAbilities = {
 			pokemon.formeChange('Shaymin', this.effect);
 		},
 	},
-	// Cleo
-	adrenalinerush: {
-		desc: "As this Pokemon switches in, its Special Attack and Speed are doubled for 5 turns. After five turns have passed, these effects are removed.",
-		shortDesc: "On switch-in, this Pokemon's Special Attack and Speed are doubled for 5 turns.",
-		id: "adrenalinerush",
-		name: "Adrenaline Rush",
-		isNonstandard: "Custom",
-		onStart(pokemon) {
-			pokemon.addVolatile('adrenalinerush');
-		},
-		onEnd(pokemon) {
-			delete pokemon.volatiles['adrenalinerush'];
-			this.add('-end', pokemon, 'Adrenaline Rush', '[silent]');
-		},
-		effect: {
-			duration: 5,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'Adrenaline Rush', '[silent]');
-				this.add('-message', `${pokemon.name}'s Adrenaline Rush has begun.`);
-			},
-			onModifySpAPriority: 5,
-			onModifySpA(spa, pokemon) {
-				return this.chainModify(2);
-			},
-			onModifySpe(spe, pokemon) {
-				return this.chainModify(2);
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Adrenaline Rush', '[silent]');
-				this.add('-message', `${pokemon.name}'s Adrenaline Rush has ended.`);
-			},
-		},
-	},
 	// DaWoblefet
 	shadowartifice: {
 		desc: "Prevents adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or also have this Ability or Shadow Tag. If this Pokemon is knocked out with a move, that move's user loses HP equal to the amount of damage inflicted on this Pokemon.",

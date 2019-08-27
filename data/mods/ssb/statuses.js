@@ -384,18 +384,6 @@ let BattleStatuses = {
 			this.add(`c|@Chloe|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`);
 		},
 	},
-	cleo: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|%Cleo|Cleo! Cleo! Your friendly neighborhood Sea Leo!`);
-		},
-		onSwitchOut() {
-			this.add(`c|%Cleo|/raw QUICK! Distract the foe with pictures of my cat. <a href="https://imgur.com/a/IT2IHgm" target="_blank">SHE’S SO BEAUTIFUL</a>`);
-		},
-		onFaint() {
-			this.add(`c|%Cleo|Love your hair. Hope you win.`);
-		},
-	},
 	dawoblefet: {
 		noCopy: true,
 		onStart() {
@@ -1709,28 +1697,6 @@ let BattleStatuses = {
 		onResidualOrder: 10,
 		onResidual(pokemon) {
 			this.damage(pokemon.maxhp / 4);
-		},
-	},
-	// Custom effect for Cleo
-	fullattract: {
-		noCopy: true,
-		onStart(pokemon, source) {
-			if (!this.runEvent('Attract', pokemon, source)) {
-				this.debug('Attract event failed');
-				return false;
-			}
-			this.add('-start', pokemon, 'Attract', '[from] move: Cutie Trap', '[of] ' + source);
-		},
-		onBeforeMovePriority: 2,
-		onBeforeMove(pokemon) {
-			this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectData.source);
-			if (this.randomChance(1, 2)) {
-				this.add('cant', pokemon, 'Attract');
-				return false;
-			}
-		},
-		onEnd(pokemon) {
-			this.add('-end', pokemon, 'Attract', '[silent]');
 		},
 	},
 	// Custom Acid Rain weather for Pirate Princess

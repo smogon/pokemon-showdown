@@ -189,7 +189,7 @@ let BattlePokedex = {
 	// Zalm
 	weedle: {
 		inherit: true,
-		baseStats: {hp: 105, atk: 130, def: 90, spa: 20, spd: 90, spe: 90},
+		baseStats: {hp: 85, atk: 100, def: 90, spa: 20, spd: 90, spe: 90},
 	},
 };
 
