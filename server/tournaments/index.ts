@@ -163,8 +163,10 @@ export class Tournament extends Rooms.RoomGame {
 		room.send(`|tournament|update|${JSON.stringify(update)}`);
 		this.update();
 	}
-	destroy(ended = false) {
-		if (!ended) this.forceEnd();
+	destroy() {
+		this.forceEnd();
+	}
+	remove() {
 		if (this.autoStartTimer) clearTimeout(this.autoStartTimer);
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		for (const roomid of this.completedMatches) {
@@ -177,7 +179,6 @@ export class Tournament extends Rooms.RoomGame {
 		this.isEnded = true;
 		this.room.game = null;
 	}
-
 	getRemainingPlayers() {
 		return this.players.filter(player => !player.isDisqualified && !player.isEliminated);
 	}
@@ -255,7 +256,7 @@ export class Tournament extends Rooms.RoomGame {
 			}
 		}
 		this.room.add('|tournament|forceend');
-		this.destroy(true);
+		this.remove();
 	}
 
 	updateFor(targetUser: User, connection?: Connection | User) {
@@ -1077,7 +1078,7 @@ export class Tournament extends Rooms.RoomGame {
 			bracketData: this.getBracketData(),
 		};
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
-		this.destroy(true);
+		this.remove();
 	}
 }
 
