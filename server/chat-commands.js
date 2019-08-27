@@ -2815,7 +2815,7 @@ const commands = {
 			}
 			// Notify staff when a trusted user gets their messages hidden
 			if (!room.isPrivate) {
-				const staffRoom = Rooms('staff');
+				const staffRoom = Rooms.get('staff');
 				if (staffRoom) staffRoom.addByUser(user, `<<${room.id}>> ${user.name} hid trusted user ${targetUser.name}'s messages.`);
 			}
 		}
