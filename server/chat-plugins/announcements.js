@@ -114,8 +114,8 @@ const commands = {
 				if (room.announcement.timeout) clearTimeout(room.announcement.timeout);
 				room.announcement.timeoutMins = timeout;
 				room.announcement.timeout = setTimeout(() => {
-					room.announcement.end();
-					delete room.announcement;
+					if (room.announcement) room.announcement.end();
+					room.announcement = null;
 				}, (timeout * 60000));
 				room.add(`The announcement timer was turned on: the announcement will end in ${timeout} minute(s).`);
 				this.modlog('announcement TIMER', null, `${timeout} minutes`);
