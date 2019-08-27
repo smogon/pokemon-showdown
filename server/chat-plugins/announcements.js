@@ -17,6 +17,7 @@ class Announcement {
 		this.room = room;
 		this.announcement = announcement.source;
 		this.supportHTML = announcement.supportHTML;
+		/** @type {NodeJS.Timer?} */
 		this.timeout = null;
 		this.timeoutMins = 0;
 	}
@@ -31,6 +32,10 @@ class Announcement {
 		return output;
 	}
 
+	/**
+	 * @param {User} user
+	 * @param {Connection?} [connection]
+	 */
 	displayTo(user, connection = null) {
 		const recipient = connection || user;
 		recipient.sendTo(this.room, `|uhtml|announcement${this.announcementNumber}|${this.generateAnnouncement()}`);
@@ -44,6 +49,10 @@ class Announcement {
 		}
 	}
 
+	/**
+	 * @param {User} user
+	 * @param {Connection?} [connection]
+	 */
 	onConnect(user, connection = null) {
 		this.displayTo(user, connection);
 	}
