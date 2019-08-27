@@ -1119,25 +1119,13 @@ let BattleStatuses = {
 	pokemondeadchannel: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+PokemonDeadChannel|づ∧＿∧づﾀﾞﾗﾗﾗ`);
-			this.add(`c|+PokemonDeadChannel|づ｀･ω･)づ∴“`);
-			this.add(`c|+PokemonDeadChannel|づづづづづ∴≒`);
-			this.add(`c|+PokemonDeadChannel|づづづづづづ∵`);
-			this.add(`c|+PokemonDeadChannel|(_／⌒ヽ_)∴`);
-			this.add(`c|+PokemonDeadChannel|ORA ORA ORA ORA ORA !!!`);
+			this.add(`c|+pokemondeadchannel|${["Lucario•1582 is cute", "Swagn check Z room"][this.random(2)]}`);
 		},
 		onSwitchOut() {
-			this.add(`c|+PokemonDeadChannel|Bye Losers`);
-			this.add(`c|+PokemonDeadChannel|　＜⌒／ヽ-､_＿_`); // eslint-disable-line no-irregular-whitespace
-			this.add(`c|+PokemonDeadChannel|／＜_/＿＿＿＿／`);
-			this.add(`c|+PokemonDeadChannel|￣￣￣￣￣￣￣`);
+			this.add(`c|+pokemondeadchannel|Hey Noctrine i REQUIRE ASSISSTANCE!!!!`);
 		},
 		onFaint() {
-			this.add(`c|+PokemonDeadChannel|∧,,,∧`);
-			this.add(`c|+PokemonDeadChannel|( ⁻ω⁻)`);
-			this.add(`c|+PokemonDeadChannel|( つとﾉ  旦`);
-			this.add(`c|+PokemonDeadChannel|￣￣￣￣￣`);
-			this.add(`c|+PokemonDeadChannel|I hate you all`);
+			this.add(`c|+pokemondeadchannel|I ${["listen to way too much rap music", "change names way too often"][this.random(2)]} ;_;`);
 		},
 	},
 	pohjis: {

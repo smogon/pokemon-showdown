@@ -733,6 +733,18 @@ let BattleAbilities = {
 		id: "acidrain",
 		name: "Acid Rain",
 	},
+	// PokemonDeadChannel
+	numbnumbjuice: {
+		desc: "This Pokemon is immune to volatile statuses.",
+		shortDesc: "This Pokemon is immune to volatile statuses.",
+		onTryAddVolatile(status, target) {
+			if (toID(target.name).includes(status.id)) return;
+			this.add('-immune', target, '[from] ability: Numb Numb Juice');
+			return null;
+		},
+		id: "numbnumbjuice",
+		name: "Numb Numb Juice",
+	},
 	// pre
 	optimize: {
 		desc: "This Pokemon changes forme and sets depending on which attack it uses, before the attack takes place. If this Pokemon uses Psycho Boost, it first changes to Deoxys-Attack. If this Pokemon uses Recover, it first changes to Deoxys-Defense. If this Pokemon uses Extreme Speed, it first changes to Deoxys-Speed. If this Pokemon uses Refactor, it first changes to Deoxys.",

@@ -3261,45 +3261,45 @@ let BattleMovedex = {
 		type: "Ground",
 	},
 	// PokemonDeadChannel
-	plugwalk: {
-		accuracy: 99,
-		basePower: 80,
-		category: "Special",
+	expressyourself: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
 		isNonstandard: "Custom",
-		desc: "This attack is super effective if the foe has any attacks that are super effective against the user. This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. If this attack is not successful, the user loses all of its HP as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage.",
-		shortDesc: "SE if foe has SE moves. Physical if Atk > SpA.",
-		id: "plugwalk",
-		name: "Plug Walk",
+		desc: "The user is healed 50% of its HP. The pokemon with the lowest HP in its party is also heal 50% of its HP as well.",
+		shortDesc: "User + Pokemon with lowest health recover 50% HP.",
+		id: "expressyourself",
+		name: "Express Yourself",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {snatch: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Fusion Flare', target);
+			this.add('-anim', source, 'Tail Glow', source);
+			this.add('-anim', source, 'Discharge', source);
 		},
-		hasCustomRecoil: true,
-		onMoveFail(target, source, move) {
-			this.damage(source.maxhp, source, source, this.getEffect('High Jump Kick'));
-		},
-		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
-		},
-		onEffectiveness(typeMod, target, type) {
-			if (!target) return;
-			let source = target.side.foe.active[0];
-			for (const moveSlot of target.moveSlots) {
-				const move = this.getMove(moveSlot.move);
-				const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
-				if (move.category !== 'Status' && (this.getImmunity(moveType, source) && this.getEffectiveness(moveType, source) > 0)) {
-					return 1;
+		onHit(target, source) {
+			this.heal(source.maxhp / 2, source);
+			if (!this.canSwitch(source.side)) return;
+			let lowestmon;
+			for (const ally of source.side.pokemon) {
+				if (ally === source) continue;
+				if (ally.fainted || !ally.hp) continue;
+				if (!lowestmon) {
+					lowestmon = ally;
+				} else {
+					if ((lowestmon.hp / lowestmon.maxhp) > (ally.hp / ally.maxhp)) lowestmon = ally;
 				}
 			}
+			if (!lowestmon) return;
+			lowestmon.heal(lowestmon.maxhp / 2, lowestmon);
+			this.add('-message', `${source.name} restored a teammate's HP.`);
 		},
 		secondary: null,
-		target: "normal",
-		type: "Fire",
+		target: "self",
+		type: "Fairy",
 	},
 	// pre
 	"refactor": {
