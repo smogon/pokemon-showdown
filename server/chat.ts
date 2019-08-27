@@ -83,6 +83,7 @@ const BROADCAST_TOKEN = '!';
 const TRANSLATION_DIRECTORY = 'translations/';
 
 import { FS } from '../lib/fs';
+import { formatText, linkRegex, stripFormatting } from './chat-formatter';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
@@ -145,217 +146,11 @@ class PatternTester {
 	}
 }
 
-const multiLinePattern = new PatternTester();
-
-/*********************************************************
- * Load command files
- *********************************************************/
-
-const baseCommands: ChatCommands = undefined!;
-const commands: ChatCommands = undefined!;
-const basePages: PageTable = undefined!;
-const pages: PageTable = undefined!;
-const destroyHandlers: (() => void)[] = [];
-
-/*********************************************************
- * Load chat filters
- *********************************************************/
-const filters: ChatFilter[] = [];
-function filter(
-	context: CommandContext,
-	message: string,
-	user: User,
-	room: GameRoom | ChatRoom | null,
-	connection: Connection,
-	targetUser: User | null = null
-) {
-	// Chat filters can choose to:
-	// 1. return false OR null - to not send a user's message
-	// 2. return an altered string - to alter a user's message
-	// 3. return undefined to send the original message through
-	const originalMessage = message;
-	for (const curFilter of Chat.filters) {
-		const output = curFilter.call(context, message, user, room, connection, targetUser, originalMessage);
-		if (!output && output !== undefined) return output;
-		if (output !== undefined) message = output;
-	}
-
-	return message;
-}
-
-const namefilters: NameFilter[] = [];
-function namefilter(name: string, user: User) {
-	if (!Config.disablebasicnamefilter) {
-		// whitelist
-		// \u00A1-\u00BF\u00D7\u00F7  Latin punctuation/symbols
-		// \u02B9-\u0362              basic combining accents
-		// \u2012-\u2027\u2030-\u205E Latin punctuation/symbols extended
-		// \u2050-\u205F              fractions extended
-		// \u2190-\u23FA\u2500-\u2BD1 misc symbols
-		// \u2E80-\u32FF              CJK symbols
-		// \u3400-\u9FFF              CJK
-		// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
-		// tslint:disable-next-line: max-line-length
-		name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
-
-		// blacklist
-		// \u00a1 upside-down exclamation mark (i)
-		// \u2580-\u2590 black bars
-		// \u25A0\u25Ac\u25AE\u25B0 black bars
-		// \u534d\u5350 swastika
-		// \u2a0d crossed integral (f)
-		name = name.replace(/[\u00a1\u2580-\u2590\u25A0\u25Ac\u25AE\u25B0\u2a0d\u534d\u5350]/g, '');
-
-		// e-mail address
-		if (name.includes('@') && name.includes('.')) return '';
-
-		// url
-		// tslint:disable-next-line: max-line-length
-		if (/[a-z0-9]\.(com|net|org|us|uk|co|gg|tk|ml|gq|ga|xxx|download|stream|)\b/.test(name)) name = name.replace(/\./g, '');
-
-		// Limit the amount of symbols allowed in usernames to 4 maximum, and disallow (R) and (C) from being used in the middle of names.
-		// tslint:disable-next-line: max-line-length
-		const nameSymbols = name.replace(/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g, '');
-		// \u00ae\u00a9 (R) (C)
-		// tslint:disable-next-line: max-line-length
-		if (nameSymbols.length > 4 || /[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)) name = name.replace(/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g, '').replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
-	}
-	name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
-	name = name.replace(/@/g, ""); // Remove @ as this is used to indicate status messages
-
-	// cut name length down to 18 chars
-	if (/[A-Za-z0-9]/.test(name.slice(18))) {
-		name = name.replace(/[^A-Za-z0-9]+/g, "");
-	} else {
-		name = name.slice(0, 18);
-	}
-
-	name = Dex.getName(name);
-	for (const curFilter of Chat.namefilters) {
-		name = curFilter(name, user);
-		if (!name) return '';
-	}
-	return name;
-}
-
-const hostfilters: HostFilter[] = [];
-function hostfilter(host: string, user: User, connection: Connection, hostType: string) {
-	for (const curFilter of Chat.hostfilters) {
-		curFilter(host, user, connection, hostType);
-	}
-}
-
-const loginfilters: LoginFilter[] = [];
-function loginfilter(user: User, oldUser: User | null, usertype: string) {
-	for (const curFilter of Chat.loginfilters) {
-		curFilter(user, oldUser, usertype);
-	}
-}
-
-const nicknamefilters: NameFilter[] = [];
-function nicknamefilter(nickname: string, user: User) {
-	for (const curFilter of Chat.nicknamefilters) {
-		nickname = curFilter(nickname, user);
-		if (!nickname) return '';
-	}
-	return nickname;
-}
-
-const statusfilters: StatusFilter[] = [];
-function statusfilter(status: string, user: User) {
-	status = status.replace(/\|/g, '');
-	for (const curFilter of Chat.statusfilters) {
-		status = curFilter(status, user);
-		if (!status) return '';
-	}
-	return status;
-}
-
-/*********************************************************
- * Translations
- *********************************************************/
-
-// language id -> language name
-const languages = new Map<string, string>();
-// language id -> (english string -> translated string)
-const translations = new Map<string, Map<string, [string, string[], string[]]>>();
-
-// tslint:disable-next-line: no-floating-promises
-FS(TRANSLATION_DIRECTORY).readdir().then(files => {
-	for (const fname of files) {
-		if (!fname.endsWith('.json')) continue;
-
-		interface TRStrings {
-			[k: string]: string;
-		}
-		const content: {name: string, strings: TRStrings} = require(`../${TRANSLATION_DIRECTORY}${fname}`);
-		const id = fname.slice(0, -5);
-
-		Chat.languages.set(id, content.name || "Unknown Language");
-		Chat.translations.set(id, new Map());
-
-		if (content.strings) {
-			for (const key in content.strings) {
-				const keyLabels: string[] = [];
-				const valLabels: string[] = [];
-				const newKey = key.replace(/\${.+?}/g, str => {
-					keyLabels.push(str);
-					return '${}';
-				}).replace(/\[TN: ?.+?\]/g, '');
-				const val = content.strings[key].replace(/\${.+?}/g, (str: string) => {
-					valLabels.push(str);
-					return '${}';
-				}).replace(/\[TN: ?.+?\]/g, '');
-				Chat.translations.get(id)!.set(newKey, [val, keyLabels, valLabels]);
-			}
-		}
-	}
-});
-
-function tr(language: string | null, strings: TemplateStringsArray | string, ...keys: any[]) {
-	if (!language) language = 'english';
-	language = toID(language);
-	if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
-	if (!strings.length) {
-		return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => {
-			Chat.tr(language, fStrings, ...fKeys);
-		});
-	}
-
-	// If strings is an array (normally the case), combine before translating.
-	const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
-
-	const entry = Chat.translations.get(language)!.get(trString);
-	let [translated, keyLabels, valLabels] = entry || ["", [], []];
-	if (!translated) translated = trString;
-
-	// Replace the gaps in the template string
-	if (keys.length) {
-		let reconstructed = '';
-
-		const left: (string | null)[] = keyLabels.slice();
-		for (const [i, str] of translated.split('${}').entries()) {
-			reconstructed += str;
-			if (keys[i]) {
-				let index = left.indexOf(valLabels[i]);
-				if (index < 0) {
-					index = left.findIndex(val => !!val);
-				}
-				if (index < 0) index = i;
-				reconstructed += keys[index];
-				left[index] = null;
-			}
-		}
-
-		translated = reconstructed;
-	}
-	return translated;
-}
-
 /*********************************************************
  * Parser
  *********************************************************/
 
+// These classes need to be declared here because they aren't hoisted
 class MessageContext {
 	recursionDepth: number;
 	user: User;
@@ -1293,509 +1088,738 @@ export class CommandContext extends MessageContext {
 	}
 }
 
-/**
- * Command parser
- *
- * Usage:
- *   Chat.parse(message, room, user, connection)
- *
- * Parses the message. If it's a command, the command is executed, if
- * not, it's displayed directly in the room.
- *
- * Examples:
- *   Chat.parse("/join lobby", room, user, connection)
- *     will make the user join the lobby.
- *
- *   Chat.parse("Hi, guys!", room, user, connection)
- *     will return "Hi, guys!" if the user isn't muted, or
- *     if he's muted, will warn him that he's muted.
- *
- * The return value is the return value of the command handler, if any,
- * or the message, if there wasn't a command. This value could be a success
- * or failure (few commands report these) or a Promise for when the command
- * is done executing, if it's not currently done.
- *
- * @param message - the message the user is trying to say
- * @param room - the room the user is trying to say it in
- * @param user - the user that sent the message
- * @param connection - the connection the user sent the message from
- */
-function parse(message: string, room: Room, user: User, connection: Connection) {
-	Chat.loadPlugins();
-	const context = new CommandContext({message, room, user, connection});
+export const Chat = new class {
+	constructor() {
+		// tslint:disable-next-line: no-floating-promises
+		this.loadTranslations();
+	}
+	multiLinePattern = new PatternTester();
 
-	return context.parse();
-}
-function sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
-	const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
-	if (onlyRecipient) return onlyRecipient.send(buf);
-	user.send(buf);
-	if (pmTarget !== user) pmTarget.send(buf);
-	pmTarget.lastPM = user.userid;
-	user.lastPM = pmTarget.userid;
-}
+	/*********************************************************
+	 * Load command files
+	 *********************************************************/
+	baseCommands: ChatCommands = undefined!;
+	commands: ChatCommands = undefined!;
+	basePages: PageTable = undefined!;
+	pages: PageTable = undefined!;
+	destroyHandlers: (() => void)[] = [];
 
-// tslint:disable-next-line: prefer-const exported
-let packageData = {};
+	/*********************************************************
+	 * Load chat filters
+	 *********************************************************/
+	filters: ChatFilter[] = [];
+	filter(
+		context: CommandContext,
+		message: string,
+		user: User,
+		room: GameRoom | ChatRoom | null,
+		connection: Connection,
+		targetUser: User | null = null
+	) {
+		// Chat filters can choose to:
+		// 1. return false OR null - to not send a user's message
+		// 2. return an altered string - to alter a user's message
+		// 3. return undefined to send the original message through
+		const originalMessage = message;
+		for (const curFilter of Chat.filters) {
+			const output = curFilter.call(context, message, user, room, connection, targetUser, originalMessage);
+			if (!output && output !== undefined) return output;
+			if (output !== undefined) message = output;
+		}
 
-function uncacheTree(root: string) {
-	let toUncache = [require.resolve('../' + root)];
-	do {
-		const newuncache: string[] = [];
-		for (const target of toUncache) {
-			if (require.cache[target]) {
-				// cachedModule
-				const children: {id: string}[] = require.cache[target].children;
-				newuncache.push(
-					...(children
-						.filter(cachedModule => !cachedModule.id.endsWith('.node'))
-						.map(cachedModule => cachedModule.id))
-				);
-				delete require.cache[target];
+		return message;
+	}
+
+	namefilters: NameFilter[] = [];
+	namefilter(name: string, user: User) {
+		if (!Config.disablebasicnamefilter) {
+			// whitelist
+			// \u00A1-\u00BF\u00D7\u00F7  Latin punctuation/symbols
+			// \u02B9-\u0362              basic combining accents
+			// \u2012-\u2027\u2030-\u205E Latin punctuation/symbols extended
+			// \u2050-\u205F              fractions extended
+			// \u2190-\u23FA\u2500-\u2BD1 misc symbols
+			// \u2E80-\u32FF              CJK symbols
+			// \u3400-\u9FFF              CJK
+			// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
+			// tslint:disable-next-line: max-line-length
+			name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
+
+			// blacklist
+			// \u00a1 upside-down exclamation mark (i)
+			// \u2580-\u2590 black bars
+			// \u25A0\u25Ac\u25AE\u25B0 black bars
+			// \u534d\u5350 swastika
+			// \u2a0d crossed integral (f)
+			name = name.replace(/[\u00a1\u2580-\u2590\u25A0\u25Ac\u25AE\u25B0\u2a0d\u534d\u5350]/g, '');
+
+			// e-mail address
+			if (name.includes('@') && name.includes('.')) return '';
+
+			// url
+			// tslint:disable-next-line: max-line-length
+			if (/[a-z0-9]\.(com|net|org|us|uk|co|gg|tk|ml|gq|ga|xxx|download|stream|)\b/.test(name)) name = name.replace(/\./g, '');
+
+			// Limit the amount of symbols allowed in usernames to 4 maximum, and disallow (R) and (C) from being used in the middle of names.
+			// tslint:disable-next-line: max-line-length
+			const nameSymbols = name.replace(/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g, '');
+			// \u00ae\u00a9 (R) (C)
+			// tslint:disable-next-line: max-line-length
+			if (nameSymbols.length > 4 || /[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)) name = name.replace(/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g, '').replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
+		}
+		name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
+		name = name.replace(/@/g, ""); // Remove @ as this is used to indicate status messages
+
+		// cut name length down to 18 chars
+		if (/[A-Za-z0-9]/.test(name.slice(18))) {
+			name = name.replace(/[^A-Za-z0-9]+/g, "");
+		} else {
+			name = name.slice(0, 18);
+		}
+
+		name = Dex.getName(name);
+		for (const curFilter of Chat.namefilters) {
+			name = curFilter(name, user);
+			if (!name) return '';
+		}
+		return name;
+	}
+
+	hostfilters: HostFilter[] = [];
+	hostfilter(host: string, user: User, connection: Connection, hostType: string) {
+		for (const curFilter of Chat.hostfilters) {
+			curFilter(host, user, connection, hostType);
+		}
+	}
+
+	loginfilters: LoginFilter[] = [];
+	loginfilter(user: User, oldUser: User | null, usertype: string) {
+		for (const curFilter of Chat.loginfilters) {
+			curFilter(user, oldUser, usertype);
+		}
+	}
+
+	nicknamefilters: NameFilter[] = [];
+	nicknamefilter(nickname: string, user: User) {
+		for (const curFilter of Chat.nicknamefilters) {
+			nickname = curFilter(nickname, user);
+			if (!nickname) return '';
+		}
+		return nickname;
+	}
+
+	statusfilters: StatusFilter[] = [];
+	statusfilter(status: string, user: User) {
+		status = status.replace(/\|/g, '');
+		for (const curFilter of Chat.statusfilters) {
+			status = curFilter(status, user);
+			if (!status) return '';
+		}
+		return status;
+	}
+	/*********************************************************
+	 * Translations
+	 *********************************************************/
+	/** language id -> language name */
+	languages = new Map<string, string>();
+	/** language id -> (english string -> translated string) */
+	translations = new Map<string, Map<string, [string, string[], string[]]>>();
+
+	loadTranslations() {
+		return FS(TRANSLATION_DIRECTORY).readdir().then(files => {
+			for (const fname of files) {
+				if (!fname.endsWith('.json')) continue;
+
+				interface TRStrings {
+					[k: string]: string;
+				}
+				const content: {name: string, strings: TRStrings} = require(`../${TRANSLATION_DIRECTORY}${fname}`);
+				const id = fname.slice(0, -5);
+
+				Chat.languages.set(id, content.name || "Unknown Language");
+				Chat.translations.set(id, new Map());
+
+				if (content.strings) {
+					for (const key in content.strings) {
+						const keyLabels: string[] = [];
+						const valLabels: string[] = [];
+						const newKey = key.replace(/\${.+?}/g, str => {
+							keyLabels.push(str);
+							return '${}';
+						}).replace(/\[TN: ?.+?\]/g, '');
+						const val = content.strings[key].replace(/\${.+?}/g, (str: string) => {
+							valLabels.push(str);
+							return '${}';
+						}).replace(/\[TN: ?.+?\]/g, '');
+						Chat.translations.get(id)!.set(newKey, [val, keyLabels, valLabels]);
+					}
+				}
+			}
+		});
+	}
+	tr(language: string | null, strings: TemplateStringsArray | string, ...keys: any[]) {
+		if (!language) language = 'english';
+		language = toID(language);
+		if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+		if (!strings.length) {
+			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => {
+				Chat.tr(language, fStrings, ...fKeys);
+			});
+		}
+
+		// If strings is an array (normally the case), combine before translating.
+		const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
+
+		const entry = Chat.translations.get(language)!.get(trString);
+		let [translated, keyLabels, valLabels] = entry || ["", [], []];
+		if (!translated) translated = trString;
+
+		// Replace the gaps in the template string
+		if (keys.length) {
+			let reconstructed = '';
+
+			const left: (string | null)[] = keyLabels.slice();
+			for (const [i, str] of translated.split('${}').entries()) {
+				reconstructed += str;
+				if (keys[i]) {
+					let index = left.indexOf(valLabels[i]);
+					if (index < 0) {
+						index = left.findIndex(val => !!val);
+					}
+					if (index < 0) index = i;
+					reconstructed += keys[index];
+					left[index] = null;
+				}
+			}
+
+			translated = reconstructed;
+		}
+		return translated;
+	}
+
+	MessageContext = MessageContext;
+	CommandContext = CommandContext;
+	PageContext = PageContext;
+	/**
+	 * Command parser
+	 *
+	 * Usage:
+	 *   Chat.parse(message, room, user, connection)
+	 *
+	 * Parses the message. If it's a command, the command is executed, if
+	 * not, it's displayed directly in the room.
+	 *
+	 * Examples:
+	 *   Chat.parse("/join lobby", room, user, connection)
+	 *     will make the user join the lobby.
+	 *
+	 *   Chat.parse("Hi, guys!", room, user, connection)
+	 *     will return "Hi, guys!" if the user isn't muted, or
+	 *     if he's muted, will warn him that he's muted.
+	 *
+	 * The return value is the return value of the command handler, if any,
+	 * or the message, if there wasn't a command. This value could be a success
+	 * or failure (few commands report these) or a Promise for when the command
+	 * is done executing, if it's not currently done.
+	 *
+	 * @param message - the message the user is trying to say
+	 * @param room - the room the user is trying to say it in
+	 * @param user - the user that sent the message
+	 * @param connection - the connection the user sent the message from
+	 */
+	parse(message: string, room: Room, user: User, connection: Connection) {
+		Chat.loadPlugins();
+		const context = new CommandContext({message, room, user, connection});
+
+		return context.parse();
+	}
+	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
+		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
+		if (onlyRecipient) return onlyRecipient.send(buf);
+		user.send(buf);
+		if (pmTarget !== user) pmTarget.send(buf);
+		pmTarget.lastPM = user.userid;
+		user.lastPM = pmTarget.userid;
+	}
+
+	packageData = {};
+
+	uncacheTree(root: string) {
+		let toUncache = [require.resolve('../' + root)];
+		do {
+			const newuncache: string[] = [];
+			for (const target of toUncache) {
+				if (require.cache[target]) {
+					// cachedModule
+					const children: {id: string}[] = require.cache[target].children;
+					newuncache.push(
+						...(children
+							.filter(cachedModule => !cachedModule.id.endsWith('.node'))
+							.map(cachedModule => cachedModule.id))
+					);
+					delete require.cache[target];
+				}
+			}
+			toUncache = newuncache;
+		} while (toUncache.length > 0);
+	}
+
+	uncacheDir(root: string) {
+		const absoluteRoot = FS(root).path;
+		for (const key in require.cache) {
+			if (key.startsWith(absoluteRoot)) {
+				delete require.cache[key];
 			}
 		}
-		toUncache = newuncache;
-	} while (toUncache.length > 0);
-}
+	}
 
-function uncacheDir(root: string) {
-	const absoluteRoot = FS(root).path;
-	for (const key in require.cache) {
-		if (key.startsWith(absoluteRoot)) {
-			delete require.cache[key];
+	uncache(path: string) {
+		const absolutePath = require.resolve('../' + path);
+		delete require.cache[absolutePath];
+	}
+
+	loadPlugins() {
+		if (Chat.commands) return;
+
+		// tslint:disable-next-line: no-floating-promises
+		FS('package.json').readIfExists().then(data => {
+			if (data) Chat.packageData = JSON.parse(data);
+		});
+
+		// prevent TypeScript from resolving
+		const commandsFile = '../server/chat-commands';
+		Chat.baseCommands = require(commandsFile).commands;
+		Chat.basePages = require(commandsFile).pages;
+		Chat.commands = Object.assign({}, Chat.baseCommands);
+		Chat.pages = Object.assign({}, Chat.basePages);
+
+		if (Config.chatfilter) Chat.filters.push(Config.chatfilter);
+		if (Config.namefilter) Chat.namefilters.push(Config.namefilter);
+		if (Config.hostfilter) Chat.hostfilters.push(Config.hostfilter);
+		if (Config.loginfilter) Chat.loginfilters.push(Config.loginfilter);
+		if (Config.nicknamefilter) Chat.nicknamefilters.push(Config.nicknamefilter);
+		if (Config.statusfilter) Chat.statusfilters.push(Config.statusfilter);
+
+		// Install plug-in commands and chat filters
+
+		// info always goes first so other plugins can shadow it
+		let files = FS('server/chat-plugins/').readdirSync();
+		files = files.filter(file => file !== 'info.js');
+		files.unshift('info.js');
+
+		for (const file of files) {
+			if (file.substr(-3) !== '.js') continue;
+			const plugin = require(`../server/chat-plugins/${file}`);
+
+			Object.assign(Chat.commands, plugin.commands);
+			Object.assign(Chat.pages, plugin.pages);
+
+			if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
+
+			if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
+			if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
+			if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
+			if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
+			if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
+			if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 		}
 	}
-}
-
-function uncache(path: string) {
-	const absolutePath = require.resolve('../' + path);
-	delete require.cache[absolutePath];
-}
-
-function loadPlugins() {
-	if (Chat.commands) return;
-
-	// tslint:disable-next-line: no-floating-promises
-	FS('package.json').readIfExists().then(data => {
-		if (data) Chat.packageData = JSON.parse(data);
-	});
-
-	// prevent TypeScript from resolving
-	const commandsFile = '../server/chat-commands';
-	Chat.baseCommands = require(commandsFile).commands;
-	Chat.basePages = require(commandsFile).pages;
-	Chat.commands = Object.assign({}, Chat.baseCommands);
-	Chat.pages = Object.assign({}, Chat.basePages);
-
-	if (Config.chatfilter) filters.push(Config.chatfilter);
-	if (Config.namefilter) namefilters.push(Config.namefilter);
-	if (Config.hostfilter) hostfilters.push(Config.hostfilter);
-	if (Config.loginfilter) loginfilters.push(Config.loginfilter);
-	if (Config.nicknamefilter) nicknamefilters.push(Config.nicknamefilter);
-	if (Config.statusfilter) statusfilters.push(Config.statusfilter);
-
-	// Install plug-in commands and chat filters
-
-	// info always goes first so other plugins can shadow it
-	let files = FS('server/chat-plugins/').readdirSync();
-	files = files.filter(file => file !== 'info.js');
-	files.unshift('info.js');
-
-	for (const file of files) {
-		if (file.substr(-3) !== '.js') continue;
-		const plugin = require(`../server/chat-plugins/${file}`);
-
-		Object.assign(Chat.commands, plugin.commands);
-		Object.assign(Chat.pages, plugin.pages);
-
-		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
-
-		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
-		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
-		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
-		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
-		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
-		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
-	}
-}
-
-function destroy() {
-	for (const handler of Chat.destroyHandlers) {
-		handler();
-	}
-}
-
-/**
- * Escapes HTML in a string.
- */
-function escapeHTML(str: string) {
-	if (!str) return '';
-	return ('' + str)
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&apos;')
-		.replace(/\//g, '&#x2f;');
-}
-
-/**
- * Strips HTML from a string.
- */
-function stripHTML(htmlContent: string) {
-	if (!htmlContent) return '';
-	return htmlContent.replace(/<[^>]*>/g, '');
-}
-
-/**
- * Template string tag function for escaping HTML
- */
-function html(strings: TemplateStringsArray, ...args: any) {
-	let buf = strings[0];
-	let i = 0;
-	while (i < args.length) {
-		buf += escapeHTML(args[i]);
-		buf += strings[++i];
-	}
-	return buf;
-}
-
-/**
- * Returns singular (defaulting to '') if num is 1, or plural
- * (defaulting to 's') otherwise. Helper function for pluralizing
- * words.
- */
-function plural(num: any, pluralSuffix = 's', singular = '') {
-	if (num && typeof num.length === 'number') {
-		num = num.length;
-	} else if (num && typeof num.size === 'number') {
-		num = num.size;
-	} else {
-		num = Number(num);
-	}
-	return (num !== 1 ? pluralSuffix : singular);
-}
-
-/**
- * Counts the thing passed.
- *
- *     Chat.count(2, "days") === "2 days"
- *     Chat.count(1, "days") === "1 day"
- *     Chat.count(["foo"], "things are") === "1 thing is"
- *
- */
-function count(num: any, pluralSuffix: string, singular = "") {
-	if (num && typeof num.length === 'number') {
-		num = num.length;
-	} else if (num && typeof num.size === 'number') {
-		num = num.size;
-	} else {
-		num = Number(num);
-	}
-	if (!singular) {
-		if (pluralSuffix.endsWith("s")) {
-			singular = pluralSuffix.slice(0, -1);
-		} else if (pluralSuffix.endsWith("s have")) {
-			singular = pluralSuffix.slice(0, -6) + " has";
-		} else if (pluralSuffix.endsWith("s were")) {
-			singular = pluralSuffix.slice(0, -6) + " was";
+	destroy() {
+		for (const handler of Chat.destroyHandlers) {
+			handler();
 		}
 	}
-	const space = singular.startsWith('<') ? '' : ' ';
-	return `${num}${space}${num > 1 ? pluralSuffix : singular}`;
-}
 
-/**
- * Like string.split(delimiter), but only recognizes the first `limit`
- * delimiters (default 1).
- *
- * `"1 2 3 4".split(" ", 2) => ["1", "2"]`
- *
- * `Chat.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
- *
- * Returns an array of length exactly limit + 1.
- *
- */
-function splitFirst(str: string, delimiter: string, limit = 1) {
-	const splitStr: string[] = [];
-	while (splitStr.length < limit) {
-		const delimiterIndex = str.indexOf(delimiter);
-		if (delimiterIndex >= 0) {
-			splitStr.push(str.slice(0, delimiterIndex));
-			str = str.slice(delimiterIndex + delimiter.length);
+	/**
+	 * Escapes HTML in a string.
+	 */
+	escapeHTML(str: string) {
+		if (!str) return '';
+		return ('' + str)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&apos;')
+			.replace(/\//g, '&#x2f;');
+	}
+
+	/**
+	 * Strips HTML from a string.
+	 */
+	stripHTML(htmlContent: string) {
+		if (!htmlContent) return '';
+		return htmlContent.replace(/<[^>]*>/g, '');
+	}
+
+	/**
+	 * Template string tag function for escaping HTML
+	 */
+	html(strings: TemplateStringsArray, ...args: any) {
+		let buf = strings[0];
+		let i = 0;
+		while (i < args.length) {
+			buf += this.escapeHTML(args[i]);
+			buf += strings[++i];
+		}
+		return buf;
+	}
+
+	/**
+	 * Returns singular (defaulting to '') if num is 1, or plural
+	 * (defaulting to 's') otherwise. Helper function for pluralizing
+	 * words.
+	 */
+	plural(num: any, pluralSuffix = 's', singular = '') {
+		if (num && typeof num.length === 'number') {
+			num = num.length;
+		} else if (num && typeof num.size === 'number') {
+			num = num.size;
 		} else {
-			splitStr.push(str);
-			str = '';
+			num = Number(num);
 		}
+		return (num !== 1 ? pluralSuffix : singular);
 	}
-	splitStr.push(str);
-	return splitStr;
-}
 
-/**
- * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
- *
- * options.human = true will reports hours human-readable
- */
-function toTimestamp(date: Date, options: {human?: any} = {}) {
-	const human = options.human;
-	let parts: any[] = [
-		date.getFullYear(),	date.getMonth() + 1, date.getDate(),
-		date.getHours(), date.getMinutes(),	date.getSeconds(),
-	];
-	if (human) {
-		parts.push(parts[3] >= 12 ? 'pm' : 'am');
-		parts[3] = parts[3] % 12 || 12;
-	}
-	parts = parts.map(val => val < 10 ? '0' + val : '' + val);
-	return parts.slice(0, 3).join("-") + " " + parts.slice(3, human ? 5 : 6).join(":") + (human ? "" + parts[6] : "");
-}
-
-/**
- * Takes a number of milliseconds, and reports the duration in English: hours, minutes, etc.
- *
- * options.hhmmss = true will instead report the duration in 00:00:00 format
- *
- */
-function toDurationString(val: number, options: {hhmmss?: any, precision?: number} = {}) {
-	// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
-	// https://github.com/tc39/ecma402/issues/47
-	const date = new Date(+val);
-	const parts = [
-		date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1,
-		date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(),
-	];
-	const roundingBoundaries = [6, 15, 12, 30, 30];
-	const unitNames = ["second", "minute", "hour", "day", "month", "year"];
-	const positiveIndex = parts.findIndex(elem => elem > 0);
-	const precision = (options && options.precision ? options.precision : parts.length);
-	if (options && options.hhmmss) {
-		const str = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
-		return str.length === 2 ? "00:" + str : str;
-	}
-	// round least significant displayed unit
-	if (positiveIndex + precision < parts.length && precision > 0 && positiveIndex >= 0) {
-		if (parts[positiveIndex + precision] >= roundingBoundaries[positiveIndex + precision - 1]) {
-			parts[positiveIndex + precision - 1]++;
+	/**
+	 * Counts the thing passed.
+	 *
+	 *     Chat.count(2, "days") === "2 days"
+	 *     Chat.count(1, "days") === "1 day"
+	 *     Chat.count(["foo"], "things are") === "1 thing is"
+	 *
+	 */
+	count(num: any, pluralSuffix: string, singular = "") {
+		if (num && typeof num.length === 'number') {
+			num = num.length;
+		} else if (num && typeof num.size === 'number') {
+			num = num.size;
+		} else {
+			num = Number(num);
 		}
-	}
-	return parts
-		.slice(positiveIndex)
-		.reverse()
-		.map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "")
-		.reverse()
-		.slice(0, precision)
-		.join(" ")
-		.trim();
-}
-
-/**
- * Takes an array and turns it into a sentence string by adding commas and the word 'and' at the end
- */
-function toListString(arr: string[]) {
-	if (!arr.length) return '';
-	if (arr.length === 1) return arr[0];
-	return `${arr.slice(0, -1).join(", ")} and ${arr.slice(-1)}`;
-}
-
-function collapseLineBreaksHTML(htmlContent: string) {
-	htmlContent = htmlContent.replace(/<[^>]*>/g, tag => tag.replace(/\n/g, ' '));
-	htmlContent = htmlContent.replace(/\n/g, '&#10;');
-	return htmlContent;
-}
-
-function getDataPokemonHTML(template: Template, gen = 7, tier = '') {
-	if (typeof template === 'string') template = Object.assign({}, Dex.getTemplate(template));
-	let buf = '<li class="result">';
-	buf += '<span class="col numcol">' + (tier || template.tier) + '</span> ';
-	buf += `<span class="col iconcol"><psicon pokemon="${template.id}"/></span> `;
-	buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${template.id}" target="_blank">${template.species}</a></span> `;
-	buf += '<span class="col typecol">';
-	if (template.types) {
-		for (const type of template.types) {
-			buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
+		if (!singular) {
+			if (pluralSuffix.endsWith("s")) {
+				singular = pluralSuffix.slice(0, -1);
+			} else if (pluralSuffix.endsWith("s have")) {
+				singular = pluralSuffix.slice(0, -6) + " has";
+			} else if (pluralSuffix.endsWith("s were")) {
+				singular = pluralSuffix.slice(0, -6) + " was";
+			}
 		}
+		const space = singular.startsWith('<') ? '' : ' ';
+		return `${num}${space}${num > 1 ? pluralSuffix : singular}`;
 	}
-	buf += '</span> ';
-	if (gen >= 3) {
+
+	/**
+	 * Like string.split(delimiter), but only recognizes the first `limit`
+	 * delimiters (default 1).
+	 *
+	 * `"1 2 3 4".split(" ", 2) => ["1", "2"]`
+	 *
+	 * `Chat.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
+	 *
+	 * Returns an array of length exactly limit + 1.
+	 *
+	 */
+	splitFirst(str: string, delimiter: string, limit = 1) {
+		const splitStr: string[] = [];
+		while (splitStr.length < limit) {
+			const delimiterIndex = str.indexOf(delimiter);
+			if (delimiterIndex >= 0) {
+				splitStr.push(str.slice(0, delimiterIndex));
+				str = str.slice(delimiterIndex + delimiter.length);
+			} else {
+				splitStr.push(str);
+				str = '';
+			}
+		}
+		splitStr.push(str);
+		return splitStr;
+	}
+
+	/**
+	 * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
+	 *
+	 * options.human = true will reports hours human-readable
+	 */
+	toTimestamp(date: Date, options: {human?: any} = {}) {
+		const human = options.human;
+		let parts: any[] = [
+			date.getFullYear(),	date.getMonth() + 1, date.getDate(),
+			date.getHours(), date.getMinutes(),	date.getSeconds(),
+		];
+		if (human) {
+			parts.push(parts[3] >= 12 ? 'pm' : 'am');
+			parts[3] = parts[3] % 12 || 12;
+		}
+		parts = parts.map(val => val < 10 ? '0' + val : '' + val);
+		return parts.slice(0, 3).join("-") + " " + parts.slice(3, human ? 5 : 6).join(":") + (human ? "" + parts[6] : "");
+	}
+
+	/**
+	 * Takes a number of milliseconds, and reports the duration in English: hours, minutes, etc.
+	 *
+	 * options.hhmmss = true will instead report the duration in 00:00:00 format
+	 *
+	 */
+	toDurationString(val: number, options: {hhmmss?: any, precision?: number} = {}) {
+		// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
+		// https://github.com/tc39/ecma402/issues/47
+		const date = new Date(+val);
+		const parts = [
+			date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1,
+			date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(),
+		];
+		const roundingBoundaries = [6, 15, 12, 30, 30];
+		const unitNames = ["second", "minute", "hour", "day", "month", "year"];
+		const positiveIndex = parts.findIndex(elem => elem > 0);
+		const precision = (options && options.precision ? options.precision : parts.length);
+		if (options && options.hhmmss) {
+			const str = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
+			return str.length === 2 ? "00:" + str : str;
+		}
+		// round least significant displayed unit
+		if (positiveIndex + precision < parts.length && precision > 0 && positiveIndex >= 0) {
+			if (parts[positiveIndex + precision] >= roundingBoundaries[positiveIndex + precision - 1]) {
+				parts[positiveIndex + precision - 1]++;
+			}
+		}
+		return parts
+			.slice(positiveIndex)
+			.reverse()
+			.map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "")
+			.reverse()
+			.slice(0, precision)
+			.join(" ")
+			.trim();
+	}
+
+	/**
+	 * Takes an array and turns it into a sentence string by adding commas and the word 'and' at the end
+	 */
+	toListString(arr: string[]) {
+		if (!arr.length) return '';
+		if (arr.length === 1) return arr[0];
+		return `${arr.slice(0, -1).join(", ")} and ${arr.slice(-1)}`;
+	}
+
+	collapseLineBreaksHTML(htmlContent: string) {
+		htmlContent = htmlContent.replace(/<[^>]*>/g, tag => tag.replace(/\n/g, ' '));
+		htmlContent = htmlContent.replace(/\n/g, '&#10;');
+		return htmlContent;
+	}
+
+	getDataPokemonHTML(template: Template, gen = 7, tier = '') {
+		if (typeof template === 'string') template = Object.assign({}, Dex.getTemplate(template));
+		let buf = '<li class="result">';
+		buf += '<span class="col numcol">' + (tier || template.tier) + '</span> ';
+		buf += `<span class="col iconcol"><psicon pokemon="${template.id}"/></span> `;
+		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${template.id}" target="_blank">${template.species}</a></span> `;
+		buf += '<span class="col typecol">';
+		if (template.types) {
+			for (const type of template.types) {
+				buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
+			}
+		}
+		buf += '</span> ';
+		if (gen >= 3) {
+			buf += '<span style="float:left;min-height:26px">';
+			if (template.abilities['1'] && (gen >= 4 || Dex.getAbility(template.abilities['1']).gen === 3)) {
+				buf += '<span class="col twoabilitycol">' + template.abilities['0'] + '<br />' + template.abilities['1'] + '</span>';
+			} else {
+				buf += '<span class="col abilitycol">' + template.abilities['0'] + '</span>';
+			}
+			if (template.abilities['H'] && template.abilities['S']) {
+				buf += '<span class="col twoabilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '<br />(' + template.abilities['S'] + ')</em></span>';
+			} else if (template.abilities['H']) {
+				buf += '<span class="col abilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '</em></span>';
+			} else if (template.abilities['S']) {
+				// special case for Zygarde
+				buf += '<span class="col abilitycol"><em>(' + template.abilities['S'] + ')</em></span>';
+			} else {
+				buf += '<span class="col abilitycol"></span>';
+			}
+			buf += '</span>';
+		}
+		let bst = 0;
+		for (const baseStat of Object.values(template.baseStats)) {
+			bst += baseStat;
+		}
 		buf += '<span style="float:left;min-height:26px">';
-		if (template.abilities['1'] && (gen >= 4 || Dex.getAbility(template.abilities['1']).gen === 3)) {
-			buf += '<span class="col twoabilitycol">' + template.abilities['0'] + '<br />' + template.abilities['1'] + '</span>';
+		buf += '<span class="col statcol"><em>HP</em><br />' + template.baseStats.hp + '</span> ';
+		buf += '<span class="col statcol"><em>Atk</em><br />' + template.baseStats.atk + '</span> ';
+		buf += '<span class="col statcol"><em>Def</em><br />' + template.baseStats.def + '</span> ';
+		if (gen <= 1) {
+			bst -= template.baseStats.spd;
+			buf += '<span class="col statcol"><em>Spc</em><br />' + template.baseStats.spa + '</span> ';
 		} else {
-			buf += '<span class="col abilitycol">' + template.abilities['0'] + '</span>';
+			buf += '<span class="col statcol"><em>SpA</em><br />' + template.baseStats.spa + '</span> ';
+			buf += '<span class="col statcol"><em>SpD</em><br />' + template.baseStats.spd + '</span> ';
 		}
-		if (template.abilities['H'] && template.abilities['S']) {
-			buf += '<span class="col twoabilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '<br />(' + template.abilities['S'] + ')</em></span>';
-		} else if (template.abilities['H']) {
-			buf += '<span class="col abilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '</em></span>';
-		} else if (template.abilities['S']) {
-			// special case for Zygarde
-			buf += '<span class="col abilitycol"><em>(' + template.abilities['S'] + ')</em></span>';
-		} else {
-			buf += '<span class="col abilitycol"></span>';
-		}
+		buf += '<span class="col statcol"><em>Spe</em><br />' + template.baseStats.spe + '</span> ';
+		buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
 		buf += '</span>';
+		buf += '</li>';
+		return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 	}
-	let bst = 0;
-	for (const baseStat of Object.values(template.baseStats)) {
-		bst += baseStat;
+	getDataMoveHTML(move: Move) {
+		if (typeof move === 'string') move = Object.assign({}, Dex.getMove(move));
+		let buf = `<ul class="utilichart"><li class="result">`;
+		buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${move.name}</a></span> `;
+		// encoding is important for the ??? type icon
+		const encodedMoveType = encodeURIComponent(move.type);
+		buf += `<span class="col typecol"><img src="//${Config.routes.client}/sprites/types/${encodedMoveType}.png" alt="${move.type}" width="32" height="14">`;
+		buf += `<img src="//${Config.routes.client}/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
+		// tslint:disable-next-line: max-line-length
+		if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
+		buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
+		const basePP = move.pp || 1;
+		const pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);
+		buf += `<span class="col pplabelcol"><em>PP</em><br>${pp}</span> `;
+		buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
+		buf += `</li><li style="clear:both"></li></ul>`;
+		return buf;
 	}
-	buf += '<span style="float:left;min-height:26px">';
-	buf += '<span class="col statcol"><em>HP</em><br />' + template.baseStats.hp + '</span> ';
-	buf += '<span class="col statcol"><em>Atk</em><br />' + template.baseStats.atk + '</span> ';
-	buf += '<span class="col statcol"><em>Def</em><br />' + template.baseStats.def + '</span> ';
-	if (gen <= 1) {
-		bst -= template.baseStats.spd;
-		buf += '<span class="col statcol"><em>Spc</em><br />' + template.baseStats.spa + '</span> ';
-	} else {
-		buf += '<span class="col statcol"><em>SpA</em><br />' + template.baseStats.spa + '</span> ';
-		buf += '<span class="col statcol"><em>SpD</em><br />' + template.baseStats.spd + '</span> ';
+	getDataAbilityHTML(ability: Ability) {
+		if (typeof ability === 'string') ability = Object.assign({}, Dex.getAbility(ability));
+		let buf = `<ul class="utilichart"><li class="result">`;
+		buf += `<span class="col namecol"><a href="https://${Config.routes.dex}/abilities/${ability.id}">${ability.name}</a></span> `;
+		buf += `<span class="col abilitydesccol">${ability.shortDesc || ability.desc}</span> `;
+		buf += `</li><li style="clear:both"></li></ul>`;
+		return buf;
 	}
-	buf += '<span class="col statcol"><em>Spe</em><br />' + template.baseStats.spe + '</span> ';
-	buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
-	buf += '</span>';
-	buf += '</li>';
-	return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
-}
-function getDataMoveHTML(move: Move) {
-	if (typeof move === 'string') move = Object.assign({}, Dex.getMove(move));
-	let buf = `<ul class="utilichart"><li class="result">`;
-	buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${move.name}</a></span> `;
-	// encoding is important for the ??? type icon
-	const encodedMoveType = encodeURIComponent(move.type);
-	buf += `<span class="col typecol"><img src="//${Config.routes.client}/sprites/types/${encodedMoveType}.png" alt="${move.type}" width="32" height="14">`;
-	buf += `<img src="//${Config.routes.client}/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
-	// tslint:disable-next-line: max-line-length
-	if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
-	buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
-	const basePP = move.pp || 1;
-	const pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);
-	buf += `<span class="col pplabelcol"><em>PP</em><br>${pp}</span> `;
-	buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
-	buf += `</li><li style="clear:both"></li></ul>`;
-	return buf;
-}
-function getDataAbilityHTML(ability: Ability) {
-	if (typeof ability === 'string') ability = Object.assign({}, Dex.getAbility(ability));
-	let buf = `<ul class="utilichart"><li class="result">`;
-	buf += `<span class="col namecol"><a href="https://${Config.routes.dex}/abilities/${ability.id}">${ability.name}</a></span> `;
-	buf += `<span class="col abilitydesccol">${ability.shortDesc || ability.desc}</span> `;
-	buf += `</li><li style="clear:both"></li></ul>`;
-	return buf;
-}
-function getDataItemHTML(item: string | Item) {
-	if (typeof item === 'string') item = Object.assign({}, Dex.getItem(item));
-	let buf = `<ul class="utilichart"><li class="result">`;
-	buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://${Config.routes.dex}/items/${item.id}">${item.name}</a></span> `;
-	buf += `<span class="col itemdesccol">${item.shortDesc || item.desc}</span> `;
-	buf += `</li><li style="clear:both"></li></ul>`;
-	return buf;
-}
+	getDataItemHTML(item: string | Item) {
+		if (typeof item === 'string') item = Object.assign({}, Dex.getItem(item));
+		let buf = `<ul class="utilichart"><li class="result">`;
+		buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://${Config.routes.dex}/items/${item.id}">${item.name}</a></span> `;
+		buf += `<span class="col itemdesccol">${item.shortDesc || item.desc}</span> `;
+		buf += `</li><li style="clear:both"></li></ul>`;
+		return buf;
+	}
 
-/**
- * Visualizes eval output in a slightly more readable form
- */
-function stringify(value: any, depth = 0): string {
-	if (value === undefined) return `undefined`;
-	if (value === null) return `null`;
-	if (typeof value === 'number' || typeof value === 'boolean') {
-		return `${value}`;
-	}
-	if (typeof value === 'string') {
-		return `"${value}"`; // NOT ESCAPED
-	}
-	if (typeof value === 'symbol') {
-		return value.toString();
-	}
-	if (Array.isArray(value)) {
-		if (depth > 10) return `[array]`;
-		return `[` + value.map(elem => Chat.stringify(elem, depth + 1)).join(`, `) + `]`;
-	}
-	if (value instanceof RegExp || value instanceof Date || value instanceof Function) {
-		if (depth && value instanceof Function) return `Function`;
-		return `${value}`;
-	}
-	let constructor = '';
-	if (value.constructor && value.constructor.name && typeof value.constructor.name === 'string') {
-		constructor = value.constructor.name;
-		if (constructor === 'Object') constructor = '';
-	} else {
-		constructor = 'null';
-	}
-	if (value.toString) {
-		try {
-			const stringValue = value.toString();
-			if (typeof stringValue === 'string' &&
-					stringValue !== '[object Object]' &&
-					stringValue !== `[object ${constructor}]`) {
-				return `${constructor}(${stringValue})`;
+	/**
+	 * Visualizes eval output in a slightly more readable form
+	 */
+	stringify(value: any, depth = 0): string {
+		if (value === undefined) return `undefined`;
+		if (value === null) return `null`;
+		if (typeof value === 'number' || typeof value === 'boolean') {
+			return `${value}`;
+		}
+		if (typeof value === 'string') {
+			return `"${value}"`; // NOT ESCAPED
+		}
+		if (typeof value === 'symbol') {
+			return value.toString();
+		}
+		if (Array.isArray(value)) {
+			if (depth > 10) return `[array]`;
+			return `[` + value.map(elem => Chat.stringify(elem, depth + 1)).join(`, `) + `]`;
+		}
+		if (value instanceof RegExp || value instanceof Date || value instanceof Function) {
+			if (depth && value instanceof Function) return `Function`;
+			return `${value}`;
+		}
+		let constructor = '';
+		if (value.constructor && value.constructor.name && typeof value.constructor.name === 'string') {
+			constructor = value.constructor.name;
+			if (constructor === 'Object') constructor = '';
+		} else {
+			constructor = 'null';
+		}
+		if (value.toString) {
+			try {
+				const stringValue = value.toString();
+				if (typeof stringValue === 'string' &&
+						stringValue !== '[object Object]' &&
+						stringValue !== `[object ${constructor}]`) {
+					return `${constructor}(${stringValue})`;
+				}
+			} catch (e) {}
+		}
+		let buf = '';
+		for (const key in value) {
+			if (!Object.prototype.hasOwnProperty.call(value, key)) continue;
+			if (depth > 2 || (depth && constructor)) {
+				buf = '...';
+				break;
 			}
-		} catch (e) {}
-	}
-	let buf = '';
-	for (const key in value) {
-		if (!Object.prototype.hasOwnProperty.call(value, key)) continue;
-		if (depth > 2 || (depth && constructor)) {
-			buf = '...';
-			break;
+			if (buf) buf += `, `;
+			let displayedKey = key;
+			if (!/^[A-Za-z0-9_$]+$/.test(key)) displayedKey = JSON.stringify(key);
+			buf += `${displayedKey}: ` + Chat.stringify(value[key], depth + 1);
 		}
-		if (buf) buf += `, `;
-		let displayedKey = key;
-		if (!/^[A-Za-z0-9_$]+$/.test(key)) displayedKey = JSON.stringify(key);
-		buf += `${displayedKey}: ` + Chat.stringify(value[key], depth + 1);
-	}
-	if (constructor && !buf && constructor !== 'null') return constructor;
-	return `${constructor}{${buf}}`;
-}
-
-import { formatText, linkRegex, stripFormatting } from './chat-formatter';
-
-/**
- * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
- */
-function getImageDimensions(url: string): Promise<{height: number, width: number, err?: Error}> {
-	return new Promise(resolve => {
-		probe(url).then(dimensions => resolve(dimensions), (err: Error) => resolve({height: 0, width: 0, err}));
-	});
-}
-
-/**
- * Generates dimensions to fit an image at url into a maximum size of maxWidth x maxHeight,
- * preserving aspect ratio.
- */
-async function fitImage(url: string, maxHeight = 300, maxWidth = 300) {
-	const {height, width} = await Chat.getImageDimensions(url);
-
-	if (width <= maxWidth && height <= maxHeight) return [width, height];
-
-	let ratio;
-	if (height * (maxWidth / maxHeight) > width) {
-		ratio = maxHeight / height;
-	} else {
-		ratio = maxWidth / width;
+		if (constructor && !buf && constructor !== 'null') return constructor;
+		return `${constructor}{${buf}}`;
 	}
 
-	return [Math.round(width * ratio), Math.round(height * ratio)];
-}
+	/**
+	 * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
+	 */
+	getImageDimensions(url: string): Promise<{height: number, width: number, err?: Error}> {
+		return new Promise(resolve => {
+			probe(url).then(dimensions => resolve(dimensions), (err: Error) => resolve({height: 0, width: 0, err}));
+		});
+	}
 
-/**
- * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
- */
-function maybeNotifyBlocked(blocked: 'pm' | 'challenge', targetUser: User, user: User) {
-	const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
-	const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
-	if (blocked === 'pm') {
-		if (!targetUser.blockPMsNotified) {
-			targetUser.send(`${prefix}The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
-			targetUser.blockPMsNotified = true;
+	/**
+	 * Generates dimensions to fit an image at url into a maximum size of maxWidth x maxHeight,
+	 * preserving aspect ratio.
+	 */
+	async fitImage(url: string, maxHeight = 300, maxWidth = 300) {
+		const {height, width} = await Chat.getImageDimensions(url);
+
+		if (width <= maxWidth && height <= maxHeight) return [width, height];
+
+		let ratio;
+		if (height * (maxWidth / maxHeight) > width) {
+			ratio = maxHeight / height;
+		} else {
+			ratio = maxWidth / width;
 		}
-	} else if (blocked === 'challenge') {
-		if (!targetUser.blockChallengesNotified) {
-			targetUser.send(`${prefix}The user '${user.name}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
-			targetUser.blockChallengesNotified = true;
+
+		return [Math.round(width * ratio), Math.round(height * ratio)];
+	}
+
+	/**
+	 * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
+	 */
+	maybeNotifyBlocked(blocked: 'pm' | 'challenge', targetUser: User, user: User) {
+		const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
+		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
+		if (blocked === 'pm') {
+			if (!targetUser.blockPMsNotified) {
+				targetUser.send(`${prefix}The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
+				targetUser.blockPMsNotified = true;
+			}
+		} else if (blocked === 'challenge') {
+			if (!targetUser.blockChallengesNotified) {
+				targetUser.send(`${prefix}The user '${user.name}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
+				targetUser.blockChallengesNotified = true;
+			}
 		}
 	}
-}
+	formatText = formatText;
+	linkRegex = linkRegex;
+	stripFormatting = stripFormatting;
+
+	filterWords: {[k: string]: FilterWord[]} = {};
+	monitors: {[k: string]: Monitor} = {};
+	namefilterwhitelist = new Map<string, string>();
+	/**
+	 * Inappropriate userid : forcerenaming staff member's userid
+	 */
+	forceRenames = new Map<ID, string>();
+
+	registerMonitor(id: string, entry: Monitor) {
+		if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
+		Chat.monitors[id] = entry;
+	}
+
+	resolvePage(pageid: string, user: User, connection: Connection) {
+		return (new PageContext({pageid, user, connection})).resolve();
+	}
+};
 
 /**
  * Used by ChatMonitor.
@@ -1818,89 +1842,3 @@ export interface Monitor {
 	condition?: string;
 	monitor?: MonitorHandler;
 }
-
-const filterWords: {[k: string]: FilterWord[]} = {};
-const monitors: {[k: string]: Monitor} = {};
-const namefilterwhitelist = new Map<string, string>();
-/**
- * Inappropriate userid : forcerenaming staff member's userid
- */
-const forceRenames = new Map<ID, string> ();
-
-function registerMonitor(id: string, entry: Monitor) {
-	if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
-	Chat.monitors[id] = entry;
-}
-
-function resolvePage(pageid: string, user: User, connection: Connection) {
-	return (new PageContext({pageid, user, connection})).resolve();
-}
-
-export const Chat = {
-	multiLinePattern,
-	baseCommands,
-	commands,
-	basePages,
-	pages,
-	destroyHandlers,
-	filters,
-	filter,
-	namefilters,
-	namefilter,
-	hostfilters,
-	hostfilter,
-	loginfilters,
-	loginfilter,
-	nicknamefilters,
-	nicknamefilter,
-	statusfilters,
-	statusfilter,
-
-	languages,
-	translations,
-	tr,
-
-	MessageContext,
-	PageContext,
-	CommandContext,
-	parse,
-	sendPM,
-
-	packageData,
-	uncacheTree,
-	uncacheDir,
-	uncache,
-
-	loadPlugins,
-	destroy,
-
-	escapeHTML,
-	stripHTML,
-	html,
-	plural,
-	count,
-	splitFirst,
-	toTimestamp,
-	toDurationString,
-	toListString,
-	collapseLineBreaksHTML,
-	getDataPokemonHTML,
-	getDataMoveHTML,
-	getDataAbilityHTML,
-	getDataItemHTML,
-	stringify,
-	getImageDimensions,
-	fitImage,
-	maybeNotifyBlocked,
-
-	filterWords,
-	monitors,
-	namefilterwhitelist,
-	forceRenames,
-	registerMonitor,
-	resolvePage,
-
-	formatText,
-	linkRegex,
-	stripFormatting,
-};
