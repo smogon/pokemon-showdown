@@ -42,9 +42,12 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
 
 /**
  * @typedef {object} PunishmentEntry
- * @property {string[]} keys
+ * @property {string[]} ips
+ * @property {string[]} userids
  * @property {string} punishType
- * @property {[number, string]} rest
+ * @property {number} expireTime
+ * @property {string} reason
+ * @property {any[]} rest
  */
 
 /**
@@ -227,20 +230,20 @@ const Punishments = new (class {
 	}
 
 	// punishments.tsv is in the format:
-	// punishType, userid, ips/usernames, expiration time
+	// punishType, userid, ips/usernames, expiration time, reason
 	// room-punishments.tsv is in the format:
-	// punishType, roomid:userid, ips/usernames, expiration time
+	// punishType, roomid:userid, ips/usernames, expiration time, reason
 	async loadPunishments() {
 		const data = await FS(PUNISHMENT_FILE).readIfExists();
 		if (!data) return;
 		for (const row of data.split("\n")) {
 			if (!row || row === '\r') continue;
-			const [punishType, id, altKeys, expireTimeStr, ...rest] = row.trim().split("\t");
+			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
 			const expireTime = Number(expireTimeStr);
 			if (punishType === "Punishment") continue;
 			const keys = altKeys.split(',').concat(id);
 
-			const punishment = /** @type {Punishment} */ ([punishType, id, expireTime, ...rest]);
+			const punishment = /** @type {Punishment} */ ([punishType, id, expireTime, ...reason]);
 			if (Date.now() >= expireTime) {
 				continue;
 			}
@@ -259,14 +262,14 @@ const Punishments = new (class {
 		if (!data) return;
 		for (const row of data.split("\n")) {
 			if (!row || row === '\r') continue;
-			const [punishType, id, altKeys, expireTimeStr, ...rest] = row.trim().split("\t");
+			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
 			const expireTime = Number(expireTimeStr);
 			if (punishType === "Punishment") continue;
 			const [roomid, userid] = id.split(':');
 			if (!userid) continue; // invalid format
 			const keys = altKeys.split(',').concat(userid);
 
-			const punishment = /** @type {Punishment} */ ([punishType, userid, expireTime, ...rest]);
+			const punishment = /** @type {Punishment} */ ([punishType, userid, expireTime, ...reason]);
 			if (Date.now() >= expireTime) {
 				continue;
 			}
@@ -282,43 +285,8 @@ const Punishments = new (class {
 
 	savePunishments() {
 		FS(PUNISHMENT_FILE).writeUpdate(() => {
-			/** @type {Map<string, PunishmentEntry>} */
-			const saveTable = new Map();
-			Punishments.ips.forEach((punishment, ip) => {
-				const [punishType, id, ...rest] = punishment;
-				if (id.charAt(0) === '#') return;
-				let entry = saveTable.get(id);
-
-				if (entry) {
-					entry.keys.push(ip);
-					return;
-				}
-
-				entry = {
-					keys: [ip],
-					punishType: punishType,
-					rest: rest,
-				};
-				saveTable.set(id, entry);
-			});
-			Punishments.userids.forEach((punishment, userid) => {
-				const [punishType, id, ...rest] = punishment;
-				if (id.charAt(0) === '#') return;
-				let entry = saveTable.get(id);
-
-				if (!entry) {
-					entry = {
-						keys: [],
-						punishType: punishType,
-						rest: rest,
-					};
-					saveTable.set(id, entry);
-				}
-
-				if (userid !== id) entry.keys.push(userid);
-			});
-
-			let buf = 'Punishment\tUser ID\tIPs and alts\tExpires\r\n';
+			const saveTable = Punishments.getPunishments();
+			let buf = 'Punishment\tUser ID\tIPs and alts\tExpires\tReason\r\n';
 			for (const [id, entry] of saveTable) {
 				buf += Punishments.renderEntry(entry, id);
 			}
@@ -330,42 +298,12 @@ const Punishments = new (class {
 		FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
 			/** @type {Map<string, PunishmentEntry>} */
 			const saveTable = new Map();
-			Punishments.roomIps.nestedForEach((punishment, roomid, ip) => {
-				const [punishType, punishUserid, ...rest] = punishment;
-				const id = roomid + ':' + punishUserid;
-				if (id.charAt(0) === '#') return;
-				let entry = saveTable.get(id);
-
-				if (entry) {
-					entry.keys.push(ip);
-					return;
+			for (const roomid of Punishments.roomIps.keys()) {
+				for (const [userid, punishment] of Punishments.getPunishments(roomid, true)) {
+					saveTable.set(`${roomid}:${userid}`, punishment);
 				}
-
-				entry = {
-					keys: [ip],
-					punishType: punishType,
-					rest: rest,
-				};
-				saveTable.set(id, entry);
-			});
-			Punishments.roomUserids.nestedForEach((punishment, roomid, userid) => {
-				const [punishType, punishUserid, ...rest] = punishment;
-				const id = roomid + ':' + punishUserid;
-				let entry = saveTable.get(id);
-
-				if (!entry) {
-					entry = {
-						keys: [],
-						punishType: punishType,
-						rest: rest,
-					};
-					saveTable.set(id, entry);
-				}
-
-				if (userid !== punishUserid) entry.keys.push(userid);
-			});
-
-			let buf = 'Punishment\tRoom ID:User ID\tIPs and alts\tExpires\r\n';
+			}
+			let buf = 'Punishment\tRoom ID:User ID\tIPs and alts\tExpires\tReason\r\n';
 			for (const [id, entry] of saveTable) {
 				buf += Punishments.renderEntry(entry, id);
 			}
@@ -380,32 +318,38 @@ const Punishments = new (class {
 		/** @type {PunishmentEntry | null} */
 		let entry = null;
 		Punishments.ips.forEach((punishment, ip) => {
-			const [punishType, id, ...rest] = punishment;
+			const [punishType, id, expireTime, reason, ...rest] = punishment;
 			if (id !== entryId) return;
 			if (entry) {
-				entry.keys.push(ip);
+				entry.userids.push(ip);
 				return;
 			}
 
 			entry = {
-				keys: [ip],
+				userids: [],
+				ips: [ip],
 				punishType: punishType,
+				expireTime: expireTime,
+				reason: reason,
 				rest: rest,
 			};
 		});
 		Punishments.userids.forEach((punishment, userid) => {
-			const [punishType, id, ...rest] = punishment;
+			const [punishType, id, expireTime, reason, ...rest] = punishment;
 			if (id !== entryId) return;
 
 			if (!entry) {
 				entry = {
-					keys: [],
+					userids: [],
+					ips: [],
 					punishType: punishType,
+					expireTime: expireTime,
+					reason: reason,
 					rest: rest,
 				};
 			}
 
-			if (userid !== id) entry.keys.push(userid);
+			if (userid !== id) entry.ips.push(userid);
 		});
 
 		return entry;
@@ -428,7 +372,8 @@ const Punishments = new (class {
 	 * @return {string}
 	 */
 	renderEntry(entry, id) {
-		let row = [entry.punishType, id, entry.keys.join(','), ...entry.rest];
+		const keys = entry.ips.concat(entry.userids).join(',');
+		const row = [entry.punishType, id, keys, entry.expireTime, entry.reason, ...entry.rest];
 		return row.join('\t') + '\r\n';
 	}
 
@@ -482,7 +427,6 @@ const Punishments = new (class {
 		FS(SHAREDIPS_FILE).write(buf);
 	}
 
-
 	/*********************************************************
 	 * Adding and removing
 	 *********************************************************/
@@ -496,17 +440,22 @@ const Punishments = new (class {
 		if (typeof user === 'string') return Punishments.punishName(user, punishment);
 
 		/** @type {Set<string>} */
-		const keys = new Set();
+		const userids = new Set();
+		/** @type {Set<string>} */
+		const ips = new Set();
 		const affected = user.getAltUsers(PUNISH_TRUSTED, true);
 		for (const alt of affected) {
-			this.punishInner(alt, punishment, keys);
+			this.punishInner(alt, punishment, userids, ips);
 		}
 
-		const [punishType, id, ...rest] = punishment;
-		keys.delete(id);
+		const [punishType, id, expireTime, reason, ...rest] = punishment;
+		userids.delete(id);
 		Punishments.appendPunishment({
-			keys: [...keys],
+			userids: [...userids],
+			ips: [...ips],
 			punishType: punishType,
+			expireTime: expireTime,
+			reason: reason,
 			rest: rest,
 		}, id, PUNISHMENT_FILE);
 		return affected;
@@ -515,10 +464,11 @@ const Punishments = new (class {
 	/**
 	 * @param {User} user
 	 * @param {Punishment} punishment
-	 * @param {Set<string>} keys
+	 * @param {Set<string>} userids
+	 * @param {Set<string>} ips
 	 */
-	punishInner(user, punishment, keys) {
-		let existingPunishment = Punishments.userids.get(toID(user.name));
+	punishInner(user, punishment, userids, ips) {
+		let existingPunishment = Punishments.userids.get(user.locked || toID(user.name));
 		if (existingPunishment) {
 			// don't reduce the duration of an existing punishment
 			if (existingPunishment[2] > punishment[2]) {
@@ -534,19 +484,23 @@ const Punishments = new (class {
 
 		for (let ip in user.ips) {
 			Punishments.ips.set(ip, punishment);
-			keys.add(ip);
+			ips.add(ip);
 		}
 		let lastUserId = user.getLastId();
 		if (!lastUserId.startsWith('guest')) {
 			Punishments.userids.set(lastUserId, punishment);
 		}
+		if (user.locked && user.locked.charAt(0) !== '#') {
+			Punishments.userids.set(user.locked, punishment);
+			userids.add(user.locked);
+		}
 		if (user.autoconfirmed) {
 			Punishments.userids.set(user.autoconfirmed, punishment);
-			keys.add(user.autoconfirmed);
+			userids.add(user.autoconfirmed);
 		}
 		if (user.trusted) {
 			Punishments.userids.set(user.trusted, punishment);
-			keys.add(user.trusted);
+			userids.add(user.trusted);
 		}
 	}
 
@@ -572,12 +526,15 @@ const Punishments = new (class {
 		for (const ip of ips) {
 			Punishments.ips.set(ip, punishment);
 		}
-		const [punishType, id, ...rest] = punishment;
-		let affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
+		const [punishType, id, expireTime, reason, ...rest] = punishment;
+		let affected = Users.findUsers(/** @type {ID[]} */([...userids]), [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id);
 		Punishments.appendPunishment({
-			keys: [...userids, ...ips],
+			userids: [...userids],
+			ips: [...ips],
 			punishType: punishType,
+			expireTime: expireTime,
+			reason: reason,
 			rest: rest,
 		}, id, PUNISHMENT_FILE);
 
@@ -626,18 +583,23 @@ const Punishments = new (class {
 	roomPunish(room, user, punishment) {
 		let roomid = typeof room === 'string' ? room : room.id;
 		/** @type {Set<string>} */
-		let keys = new Set();
+		let userids = new Set();
+		/** @type {Set<string>} */
+		let ips = new Set();
 		/** @type {User[]} */
 		let affected = user.getAltUsers(PUNISH_TRUSTED, true);
 		for (let curUser of affected) {
-			this.roomPunishInner(roomid, curUser, punishment, keys);
+			this.roomPunishInner(roomid, curUser, punishment, userids, ips);
 		}
 
-		const [punishType, id, ...rest] = punishment;
-		keys.delete(id);
+		const [punishType, id, expireTime, reason, ...rest] = punishment;
+		userids.delete(id);
 		Punishments.appendPunishment({
-			keys: [...keys],
+			userids: [...userids],
+			ips: [...ips],
 			punishType: punishType,
+			expireTime: expireTime,
+			reason: reason,
 			rest: rest,
 		}, roomid + ':' + id, ROOM_PUNISHMENT_FILE);
 
@@ -652,23 +614,24 @@ const Punishments = new (class {
 	 * @param {string} roomid
 	 * @param {User} user
 	 * @param {Punishment} punishment
-	 * @param {Set<string>} keys
+	 * @param {Set<string>} userids
+	 * @param {Set<string>} ips
 	 */
-	roomPunishInner(roomid, user, punishment, keys) {
+	roomPunishInner(roomid, user, punishment, userids, ips) {
 		for (let ip in user.ips) {
 			Punishments.roomIps.nestedSet(roomid, ip, punishment);
-			keys.add(ip);
+			ips.add(ip);
 		}
 		if (!user.userid.startsWith('guest')) {
 			Punishments.roomUserids.nestedSet(roomid, user.userid, punishment);
 		}
 		if (user.autoconfirmed) {
 			Punishments.roomUserids.nestedSet(roomid, user.autoconfirmed, punishment);
-			keys.add(user.autoconfirmed);
+			userids.add(user.autoconfirmed);
 		}
 		if (user.trusted) {
 			Punishments.roomUserids.nestedSet(roomid, user.trusted, punishment);
-			keys.add(user.trusted);
+			userids.add(user.trusted);
 		}
 	}
 
@@ -695,12 +658,15 @@ const Punishments = new (class {
 		for (const ip of ips) {
 			Punishments.roomIps.nestedSet(room.id, ip, punishment);
 		}
-		const [punishType, id, ...rest] = punishment;
-		let affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
+		const [punishType, id, expireTime, reason, ...rest] = punishment;
+		let affected = Users.findUsers(/** @type {ID[]} */([...userids]), [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id);
 		Punishments.appendPunishment({
-			keys: [...userids, ...ips],
+			userids: [...userids],
+			ips: [...ips],
 			punishType: punishType,
+			expireTime: expireTime,
+			reason: reason,
 			rest: rest,
 		}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
 
@@ -788,7 +754,7 @@ const Punishments = new (class {
 	 * @return {User[]}
 	 */
 	lock(userOrUsername, expireTime, id, ...reason) {
-		let user = (typeof userOrUsername === 'string' ? Users(userOrUsername) : userOrUsername);
+		let user = (typeof userOrUsername === 'string' ? Users.get(userOrUsername) : userOrUsername);
 		if (!id) id = user ? user.getLastId() : toID(userOrUsername);
 
 		if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
@@ -844,7 +810,7 @@ const Punishments = new (class {
 	 * @param {string} name
 	 */
 	unlock(name) {
-		let user = Users(name);
+		let user = Users.get(name);
 		let id = /** @type {string} */(toID(name));
 		/** @type {string[]} */
 		let success = [];
@@ -891,7 +857,7 @@ const Punishments = new (class {
 		for (let curUser of affected) {
 			curUser.locked = id;
 			curUser.namelocked = id;
-			curUser.resetName();
+			curUser.resetName(true);
 			curUser.updateIdentity();
 		}
 
@@ -901,7 +867,7 @@ const Punishments = new (class {
 	 * @param {string} name
 	 */
 	unnamelock(name) {
-		let user = Users(name);
+		let user = Users.get(name);
 		let id = /** @type {string} */(toID(name));
 		/** @type {string[]} */
 		let success = [];
@@ -948,7 +914,7 @@ const Punishments = new (class {
 
 		// Handle tournaments the user was in before being battle banned
 		for (let games of user.games.keys()) {
-			const gameRoom = Rooms(games).game;
+			const gameRoom = Rooms.get(games).game;
 			if (!gameRoom) continue; // this should never happen
 			// @ts-ignore
 			if (gameRoom.isTournament) {
@@ -970,7 +936,7 @@ const Punishments = new (class {
 	 * @param {string} userid
 	 */
 	unbattleban(userid) {
-		const user = Users(userid);
+		const user = Users.get(userid);
 		if (user) {
 			let punishment = Punishments.isBattleBanned(user);
 			if (punishment) userid = punishment[1];
@@ -1064,7 +1030,7 @@ const Punishments = new (class {
 	 */
 	roomBlacklist(room, user, expireTime, userId, ...reason) {
 		if (!userId && user) userId = user.getLastId();
-		if (!user) user = Users(userId);
+		if (!user) user = Users.get(userId);
 
 		if (!expireTime) expireTime = Date.now() + BLACKLIST_DURATION;
 		let punishment = /** @type {Punishment} */ (['BLACKLIST', userId, expireTime, ...reason]);
@@ -1106,7 +1072,7 @@ const Punishments = new (class {
 	 * @param {string} userid
 	 */
 	roomUnban(room, userid) {
-		const user = Users(userid);
+		const user = Users.get(userid);
 		if (user) {
 			let punishment = Punishments.isRoomBanned(user, room.id);
 			if (punishment) userid = punishment[1];
@@ -1120,7 +1086,7 @@ const Punishments = new (class {
 	 * @param {boolean} ignoreWrite Flag to skip persistent storage.
 	 */
 	roomUnblacklist(room, userid, ignoreWrite) {
-		const user = Users(userid);
+		const user = Users.get(userid);
 		if (user) {
 			let punishment = Punishments.isRoomBanned(user, room.id);
 			if (punishment) userid = punishment[1];
@@ -1273,6 +1239,7 @@ const Punishments = new (class {
 	}
 
 	/**
+	 * @deprecated
 	 * @param {string} host
 	 * @return {string}
 	 */
@@ -1400,33 +1367,21 @@ const Punishments = new (class {
 			}
 		}
 
-		IPTools.getHost(ip).catch(err => {
-			// If connection.user is reassigned before async tasks can run, user
-			// may no longer be equal to it.
+		IPTools.lookup(ip).then(({dnsbl, host, hostType}) => {
 			user = connection.user || user;
-			if (err.code === 'EINVAL') {
-				if (!user.locked && !user.autoconfirmed) {
-					user.semilocked = '#dnsbl';
-				}
-				return null;
-			}
-			throw err;
-		}).then(host => {
-			user = connection.user || user;
-			if (host) user.latestHost = host;
-			Chat.hostfilter(host || '', user, connection);
-		});
+			if (user.locked === '#hostfilter') user.locked = null;
 
-		if (Config.dnsbl) {
-			IPTools.queryDnsbl(connection.ip).then(isBlocked => {
-				user = connection.user || user;
-				if (isBlocked) {
-					if (!user.locked && !user.autoconfirmed) {
-						user.semilocked = '#dnsbl';
-					}
-				}
-			});
-		}
+			if (hostType === 'proxy' && !user.trusted && !user.locked) {
+				user.locked = '#hostfilter';
+			} else if (dnsbl && !user.autoconfirmed) {
+				user.semilocked = '#dnsbl';
+			}
+			if (host) {
+				user.latestHost = host;
+				user.latestHostType = hostType;
+			}
+			Chat.hostfilter(host || '', user, connection, hostType);
+		});
 	}
 
 	/**
@@ -1479,8 +1434,9 @@ const Punishments = new (class {
 		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) {
 			return true;
 		}
-		if (Rooms(roomid).parent) {
-			return Punishments.checkNameInRoom(user, Rooms(roomid).parent);
+		const room = Rooms.get(roomid);
+		if (room.parent) {
+			return Punishments.checkNameInRoom(user, room.parent.id);
 		}
 		return false;
 	}
@@ -1494,12 +1450,15 @@ const Punishments = new (class {
 	checkNewNameInRoom(user, userid, roomid) {
 		/** @type {Punishment?} */
 		let punishment = Punishments.roomUserids.nestedGet(roomid, userid) || null;
-		if (!punishment && Rooms(roomid).parent) {
-			punishment = Punishments.checkNewNameInRoom(user, userid, Rooms(roomid).parent);
+		if (!punishment) {
+			const room = Rooms.get(roomid);
+			if (room.parent) {
+				punishment = Punishments.checkNewNameInRoom(user, userid, room.parent.id);
+			}
 		}
 		if (punishment) {
 			if (punishment[0] !== 'ROOMBAN' && punishment[0] !== 'BLACKLIST') return null;
-			const room = Rooms(roomid);
+			const room = Rooms.get(roomid);
 			if (room.game && room.game.removeBannedUser) {
 				room.game.removeBannedUser(user);
 			}
@@ -1518,7 +1477,7 @@ const Punishments = new (class {
 		const punishment = Punishments.userids.get(userid);
 
 		if (punishment) {
-			let user = Users(userid);
+			let user = Users.get(userid);
 			if (user && user.permalocked) return ` (never expires; you are permalocked)`;
 			let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 			let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
@@ -1563,7 +1522,7 @@ const Punishments = new (class {
 			}
 		}
 
-		const room = Rooms(roomid);
+		const room = Rooms.get(roomid);
 		if (!room) throw new Error(`Trying to ban a user from a nonexistent room: ${roomid}`);
 
 		if (room.parent) return Punishments.isRoomBanned(user, room.parent.id);
@@ -1576,7 +1535,7 @@ const Punishments = new (class {
 	 * options.checkIps will also check the IP of the user for IP-based punishments.
 	 *
 	 * @param {User | string} user
-	 * @param {Object?} options
+	 * @param {{publicOnly?: boolean, checkIps?: boolean}} [options]
 	 * @return {Array}
 	 */
 	getRoomPunishments(user, options) {
@@ -1617,48 +1576,99 @@ const Punishments = new (class {
 
 		return punishments;
 	}
+	/**
+	 * @param {string} [roomid]
+	 * @param {boolean} [ignoreMutes]
+	 */
+	getPunishments(roomid, ignoreMutes) {
+		/** @type {Map<string, PunishmentEntry>} */
+		const punishmentTable = new Map();
+		if (roomid && (!Punishments.roomIps.has(roomid) || !Punishments.roomUserids.has(roomid))) return punishmentTable;
+		// @ts-ignore - `Punishments.roomIps.get(roomid)` is definitely a real value as per the above if condition
+		(roomid ? Punishments.roomIps.get(roomid) : Punishments.ips).forEach((punishment, ip) => {
+			const [punishType, id, expireTime, reason, ...rest] = punishment;
+			if (id.charAt(0) === '#') return;
+			let entry = punishmentTable.get(id);
 
-	/** @param {Room} room */
-	getPunishmentsOfRoom(room) {
-		let output = [];
-		/** @type {Map<Punishment, [Set<string>, Set<string>]>} */
-		const store = new Map();
+			if (entry) {
+				entry.ips.push(ip);
+				return;
+			}
 
-		let map = Punishments.roomUserids.get(room.id);
-		if (map) {
-			for (let [key, value] of map) {
-				if (!store.has(value)) store.set(value, [new Set([]), new Set()]);
-				// @ts-ignore
-				store.get(value)[0].add(key);
+			entry = {
+				userids: [],
+				ips: [ip],
+				punishType: punishType,
+				expireTime: expireTime,
+				reason: reason,
+				rest: rest,
+			};
+			punishmentTable.set(id, entry);
+		});
+		// @ts-ignore - `Punishments.roomUserids.get(roomid)` is definitely a real value as per the above if condition
+		(roomid ? Punishments.roomUserids.get(roomid) : Punishments.userids).forEach((punishment, userid) => {
+			const [punishType, id, expireTime, reason, ...rest] = punishment;
+			if (id.charAt(0) === '#') return;
+			let entry = punishmentTable.get(id);
+
+			if (!entry) {
+				entry = {
+					userids: [],
+					ips: [],
+					punishType: punishType,
+					expireTime: expireTime,
+					reason: reason,
+					rest: rest,
+				};
+				punishmentTable.set(id, entry);
+			}
+
+			if (userid !== id) entry.userids.push(userid);
+		});
+		if (roomid && ignoreMutes !== false) {
+			const room = Rooms.get(roomid);
+			if (room && room.muteQueue) {
+				for (const mute of room.muteQueue) {
+					punishmentTable.set(mute.userid, {
+						userids: [], ips: [], punishType: "MUTE", expireTime: mute.time, reason: "", rest: [],
+					});
+				}
 			}
 		}
-
-		map = Punishments.roomIps.get(room.id);
-		if (map) {
-			for (let [key, value] of map) {
-				if (!store.has(value)) store.set(value, [new Set([]), new Set()]);
-				// @ts-ignore
-				store.get(value)[1].add(key);
-			}
-		}
-
-		for (const [punishment, data] of store) {
-			let [punishType, id, expireTime, reason] = punishment;
-			let expiresIn = new Date(expireTime).getTime() - Date.now();
+		return punishmentTable;
+	}
+	/**
+	 * @param {Map<string, PunishmentEntry>} punishments
+	 * @param {User} user
+	 */
+	visualizePunishments(punishments, user) {
+		let buf = "";
+		buf += `<div class="ladder pad"><h2>List of active punishments:</h2>`;
+		buf += `<table">`;
+		buf += `<tr>`;
+		buf += `<th>Username</th>`;
+		buf += `<th>Punishment type</th>`;
+		buf += `<th>Expire time</th>`;
+		buf += `<th>Reason</th>`;
+		buf += `<th>Alts</th>`;
+		if (user.can('ban')) buf += `<th>IPs</th>`;
+		buf += `</tr>`;
+		for (const [userid, punishment] of punishments) {
+			const expiresIn = new Date(punishment.expireTime).getTime() - Date.now();
 			if (expiresIn < 1000) continue;
-			let alts = [...data[0]].filter(user => user !== id);
-			let ips = [...data[1]];
-			output.push({"punishType": punishType, "id": id, "expiresIn": expiresIn, "reason": reason, "alts": alts, "ips": ips});
+			const expireString = Chat.toDurationString(expiresIn, {precision: 1});
+			buf += `<tr>`;
+			buf += `<td>${userid}</td>`;
+			buf += `<td>${punishment.punishType}</td>`;
+			buf += `<td>${expireString}</td>`;
+			buf += `<td>${punishment.reason || ' - '}</td>`;
+			buf += `<td>${punishment.userids.join(", ") || ' - '}</td>`;
+			if (user.can('ban')) buf += `<td>${punishment.ips.join(", ") || ' - '}</td>`;
+			buf += `</tr>`;
 		}
-
-		if (room.muteQueue) {
-			for (const entry of room.muteQueue) {
-				let expiresIn = new Date(entry.time).getTime() - Date.now();
-				if (expiresIn < 1000) continue;
-				output.push({"punishType": 'MUTE', "id": entry.userid, "expiresIn": expiresIn, "reason": '', "alts": [], "ips": []});
-			}
-		}
-		return output;
+		buf += `</table>`;
+		buf += `</div>`;
+		return buf;
 	}
 	/**
 	 * Notifies staff if a user has three or more room punishments.

@@ -7,6 +7,7 @@
 
 /** @typedef {{source: string, supportHTML: boolean}} QuestionData */
 /** @typedef {{name: string, votes: number}} Option */
+/** @typedef {Poll} PollType */
 
 class Poll {
 	/**
@@ -258,12 +259,16 @@ const commands = {
 				return this.errorReply("Too many options for poll (maximum is 8).");
 			}
 
+			if (new Set(options).size !== options.length) {
+				return this.errorReply("There are duplicate options in the poll.");
+			}
+
 			room.poll = new Poll(room, {source: params[0], supportHTML: supportHTML}, options);
 			room.poll.display();
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('POLL');
-			return this.privateModAction(`(A poll was started by ${user.name}.)`);
+			return this.addModAction(`A poll was started by ${user.name}.`);
 		},
 		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`],
 
@@ -302,9 +307,9 @@ const commands = {
 				if (room.poll.timeout) clearTimeout(room.poll.timeout);
 				room.poll.timeoutMins = timeout;
 				room.poll.timeout = setTimeout(() => {
-					room.poll.end();
-					delete room.poll;
-				}, (timeout * 60000));
+					if (room.poll) room.poll.end();
+					room.poll = null;
+				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
 				this.modlog('POLL TIMER', null, `${timeout} minutes`);
 				return this.privateModAction(`(The poll timer was set to ${timeout} minute(s) by ${user.name}.)`);

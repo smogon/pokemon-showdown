@@ -4,7 +4,7 @@
  *
  * @license MIT
  */
-import Dex = require('./dex');
+import {Dex} from './dex';
 global.toID = Dex.getId;
 import * as Data from './dex-data';
 import {Field} from './field';
@@ -189,7 +189,12 @@ export class Battle extends Dex.ModdedDex {
 		};
 		if (this.rated) inputOptions.rated = this.rated;
 		if (global.__version) {
-			this.inputLog.push(`>version ${global.__version}`);
+			if (global.__version.head) {
+				this.inputLog.push(`>version ${global.__version.head}`);
+			}
+			if (global.__version.origin) {
+				this.inputLog.push(`>version-origin ${global.__version.origin}`);
+			}
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
@@ -1456,6 +1461,7 @@ export class Battle extends Dex.ModdedDex {
 			}
 			const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
 			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} turns (on turn 1000).`);
+			if (Config.allowrequestingties) this.hint("If you want to tie earlier, consider using `/offertie`.");
 		}
 
 		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
@@ -1627,7 +1633,7 @@ export class Battle extends Dex.ModdedDex {
 	) {
 		if (!targetArray) return [0];
 		let retVals: (number | false | undefined)[] = [];
-		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
+		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
 		for (const [i, curDamage] of damage.entries()) {
 			const target = targetArray[i];
 			let targetDamage = curDamage;
@@ -1693,7 +1699,7 @@ export class Battle extends Dex.ModdedDex {
 				break;
 			}
 
-			if (targetDamage) {
+			if (targetDamage && effect.effectType === 'Move') {
 				if (this.gen <= 1 && effect.recoil && source) {
 					const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
 					this.damage(amount, source, target, 'recoil');
@@ -1751,7 +1757,7 @@ export class Battle extends Dex.ModdedDex {
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 
-		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
+		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
 		if (this.gen <= 1 && this.currentMod !== 'stadium' &&
@@ -2342,7 +2348,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			} else if (action.choice === 'switch' || action.choice === 'instaswitch') {
 				if (typeof action.pokemon.switchFlag === 'string') {
-					action.sourceEffect = this.getEffect(action.pokemon.switchFlag);
+					action.sourceEffect = this.getMove(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
 				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
@@ -2999,7 +3005,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
-		this.add('player', side.id, side.name, side.avatar);
+		this.add('player', side.id, side.name, side.avatar, options.rating || '');
 		this.start();
 	}
 

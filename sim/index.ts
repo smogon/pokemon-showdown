@@ -7,23 +7,13 @@
  * The most important part of the simulation happens in runEvent -
  * see that function's definition for details.
  *
- * @license MIT license
+ * @license MIT
  */
-import {Battle} from './battle';
-import {BattleStream} from './battle-stream';
-import Dex = require('./dex');
-import {Pokemon} from './pokemon';
-import {PRNG} from './prng';
-import {Side} from './side';
-import {TeamValidator} from './team-validator';
 
-export {
-	Pokemon,
-	Side,
-	Battle,
-	PRNG,
-	Dex,
-	TeamValidator,
-
-	BattleStream,
-};
+export {Battle} from './battle';
+export {BattleStream} from './battle-stream';
+export {Dex} from './dex';
+export {Pokemon} from './pokemon';
+export {PRNG} from './prng';
+export {Side} from './side';
+export {TeamValidator} from './team-validator';

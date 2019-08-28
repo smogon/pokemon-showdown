@@ -55,9 +55,9 @@ exports.commands = {
 
 	dexsearchhelp: [
 		`/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria`,
-		`Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat, weight, height, egg group.`,
+		`Search categories are: type, tier, color, moves, ability, gen, resists, recovery, zrecovery, priority, stat, weight, height, egg group.`,
 		`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.`,
-		`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC/LC Uber/CAP/CAP NFE/CAP LC.`,
+		`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.`,
 		`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.`,
 		`Types can be searched for by either having the type precede 'type' or just using the type itself as a parameter, e.g., both 'fire type' and 'fire' show all Fire types; however, using 'psychic' as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.`,
 		`'resists' followed by a type will show Pok\u00e9mon that resist that typing, e.g., 'resists normal'.`,
@@ -65,7 +65,7 @@ exports.commands = {
 		`'asc' or 'desc' following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively, e.g., 'speed asc'.`,
 		`Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.`,
 		`Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.`,
-		`The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.`,
+		`The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon that are not in another tier.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.`,
 		`You can search for info in a specific generation by appending the generation to ds, e.g. '/ds1 normal' searches for all Pok\u00e9mon that were normal type in Generation I.`,
 		`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix 'group' onto the egg group parameter, e.g., seaching for 'grass, grass group' will show all Grass types in the Grass egg group.`,
@@ -187,15 +187,15 @@ exports.commands = {
 	},
 	movesearchhelp: [
 		`/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.`,
-		`Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.`,
-		`Types must be followed by ' type', e.g., 'dragon type'.`,
+		`Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, priority, and accuracy.`,
+		`Types can be followed by ' type' for clarity, e.g., 'dragon type'.`,
 		`Stat boosts must be preceded with 'boosts ', and stat-lowering moves with 'lowers ', e.g., 'boosts attack' searches for moves that boost the Attack stat of either Pok\u00e9mon.`,
 		`Z-stat boosts must be preceded with 'zboosts ', e.g., 'zboosts accuracy' searches for all Status moves with Z-Effects that boost the user's accuracy.`,
 		`Moves that have a Z-Effect of fully restoring the user's health can be searched for with 'zrecovery'.`,
 		`Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.`,
 		`Parameters can be excluded through the use of '!', e.g., !water type' excludes all Water-type moves.`,
 		`'asc' or 'desc' following a move property will arrange the names in ascending or descending order of that property respectively, e.g., basepower asc will arrange moves in ascending order of their basepowers.`,
-		`Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, protect, pulse, punch, secondary, snatch, and sound.`,
+		`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, and zmove.`,
 		`A search that includes '!protect' will show all moves that bypass protection.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
 		`If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.`,
@@ -227,7 +227,7 @@ exports.commands = {
 		});
 	},
 	itemsearchhelp: [
-		`/itemsearch [move description] - finds items that match the given key words.`,
+		`/itemsearch [item description] - finds items that match the given key words.`,
 		`Command accepts natural language. (tip: fewer words tend to work better)`,
 		`Searches with "fling" in them will find items with the specified Fling behavior.`,
 		`Searches with "natural gift" in them will find items with the specified Natural Gift behavior.`,
@@ -723,7 +723,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			for (let move in alts.moves) {
 				if (!lsetData[mon]) lsetData[mon] = {fastCheck: true, sources: [], sourcesBefore: maxGen};
-				if (!TeamValidator(`gen${maxGen}ou`).checkLearnset(move, mon, lsetData[mon]) === alts.moves[move]) {
+				if (!TeamValidator.get(`gen${maxGen}ou`).checkLearnset(move, mon, lsetData[mon]) === alts.moves[move]) {
 					matched = true;
 					break;
 				}
@@ -779,7 +779,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`).join(", ");
+		resultsStr += results.map(result => `<a href="//${Config.routes.dex}/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
@@ -796,7 +796,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let allCategories = ['physical', 'special', 'status'];
 	let allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	let allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
-	let allFlags = ['authentic', 'bite', 'bullet', 'contact', 'dance', 'defrost', 'powder', 'protect', 'pulse', 'punch', 'secondary', 'snatch', 'sound'];
+	let allFlags = ['authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary', 'snatch', 'sound', 'zmove'];
 	let allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	let allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	let allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
@@ -806,7 +806,6 @@ function runMovesearch(target, cmd, canAll, message) {
 	}
 	let showAll = false;
 	let sort = null;
-	let lsetData = {};
 	let targetMons = [];
 	let randomOutput = 0;
 	for (const arg of target.split(',')) {
@@ -848,6 +847,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			}
 
 			if (target === 'bypassessubstitute') target = 'authentic';
+			if (target === 'z') target = 'zmove';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
 				orGroup.flags[target] = !isNotSearch;
@@ -925,19 +925,10 @@ function runMovesearch(target, cmd, canAll, message) {
 
 			let template = Dex.getTemplate(target);
 			if (template.exists) {
-				if (targetMons.includes(template.name)) return {reply: "A search cannot include the same Pok\u00e9mon twice."};
 				if (parameters.length > 1) return {reply: "A Pok\u00e9mon learnset cannot have alternative parameters."};
-				if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
-				lsetData[template.name] = Object.assign({}, template.learnset);
-				targetMons.push(template.name);
-
-				let originalTemplateName = template.name;
-				while (template.prevo) {
-					template = Dex.getTemplate(template.prevo);
-					for (let move in template.learnset) {
-						if (!lsetData[originalTemplateName][move]) lsetData[originalTemplateName][move] = template.learnset[move];
-					}
-				}
+				if (targetMons.some(mon => mon.name === template.name && isNotSearch !== mon.shouldBeExcluded)) return {reply: "A search cannot both exclude and include the same Pok\u00e9mon."};
+				if (targetMons.some(mon => mon.name === template.name)) return {reply: "A search should not include a Pok\u00e9mon twice."};
+				targetMons.push({name: template.name, shouldBeExcluded: isNotSearch});
 				orGroup.skip = true;
 				continue;
 			}
@@ -1091,36 +1082,55 @@ function runMovesearch(target, cmd, canAll, message) {
 		return {reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command."};
 	}
 
-	let dex = {};
-	if (targetMons.length) {
-		let intersectionOfLearnsets = [];
-		for (let mon in lsetData) {
-			if (intersectionOfLearnsets.length) {
-				intersectionOfLearnsets = intersectionOfLearnsets.filter(move => {
-					return lsetData[mon][move] !== undefined;
-				});
-			} else {
-				intersectionOfLearnsets = Object.keys(lsetData[mon]);
+	const getFullLearnsetOfPokemon = (template) => {
+		if (!template.learnset) {
+			template = Dex.getTemplate(template.baseSpecies);
+			template.learnset = template.learnset || {};
+		}
+		const lsetData = new Set(Object.keys(template.learnset));
+
+		while (template.prevo) {
+			template = Dex.getTemplate(template.prevo);
+			for (const move in template.learnset) {
+				lsetData.add(move);
 			}
 		}
 
-		let finalizedLearnset = {};
-		for (let move of intersectionOfLearnsets) {
-			finalizedLearnset[move] = Object.values(lsetData)[0][move];
-		}
+		return lsetData;
+	};
 
-		for (let move in finalizedLearnset) {
-			dex[move] = Dex.getMove(move);
+	// Since we assume we have no target mons at first
+	// then the valid moveset we can search is the set of all moves.
+	const validMoves = new Set(Object.keys(Dex.data.Movedex));
+	validMoves.delete('magikarpsrevenge');
+	for (const mon of targetMons) {
+		const template = Dex.getTemplate(mon.name);
+		const lsetData = getFullLearnsetOfPokemon(template);
+		// This pokemon's learnset needs to be excluded, so we perform a difference operation on the valid moveset and this pokemon's moveset.
+		if (mon.shouldBeExcluded) {
+			for (const move of lsetData) {
+				validMoves.delete(move);
+			}
+		} else {
+			// This pokemon's learnset needs to be included, so we perform an intersection operation on the valid moveset and this pokemon's moveset.
+			for (const move of validMoves) {
+				if (!lsetData.has(move)) {
+					validMoves.delete(move);
+				}
+			}
 		}
-	} else {
-		for (let move in Dex.data.Movedex) {
-			dex[move] = Dex.getMove(move);
-		}
-		delete dex.magikarpsrevenge;
 	}
+
+	// At this point, we've trimmed down the valid moveset to be
+	// the moves that are appropriate considering the requested pokemon.
+	let dex = {};
+	for (const move of validMoves) {
+		dex[move] = Dex.getMove(move);
+	}
+
 	for (const alts of searches) {
 		if (alts.skip) continue;
-		for (let move in dex) {
+		for (const move in dex) {
 			let matched = false;
 			if (Object.keys(alts.types).length) {
 				if (alts.types[dex[move].type]) continue;
@@ -1138,14 +1148,24 @@ function runMovesearch(target, cmd, canAll, message) {
 			}
 
 			for (let flag in alts.flags) {
-				if (flag !== 'secondary') {
-					if ((flag in dex[move].flags) === alts.flags[flag]) {
-						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(dex[move].target)) continue;
+				if (flag === 'secondary') {
+					if ((!dex[move].secondary && !dex[move].secondaries) === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'zmove') {
+					if (!dex[move].isZ === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'ohko') {
+					if (!dex[move].ohko === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else {
-					if ((!dex[move].secondary && !dex[move].secondaries) === !alts.flags[flag]) {
+					if ((flag in dex[move].flags) === alts.flags[flag]) {
+						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(dex[move].target)) continue;
 						matched = true;
 						break;
 					}
@@ -1264,7 +1284,7 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	let resultsStr = "";
 	if (targetMons.length) {
-		resultsStr += `<span style="color:#999999;">Matching moves found in learnset(s) for</span> ${targetMons.join(', ')}:<br />`;
+		resultsStr += `<span style="color:#999999;">Matching moves found in learnset(s) for</span> ${targetMons.map(mon => `${mon.shouldBeExcluded ? "!" : ""}${mon.name}`).join(', ')}:<br />`;
 	} else {
 		resultsStr += (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	}
@@ -1291,7 +1311,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
 		resultsStr += results.map(result =>
-			`<a href="//dex.pokemonshowdown.com/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
+			`<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
 			(sort ? ' (' + (dex[toID(result)][sort.slice(0, -1)] === true ? '-' : dex[toID(result)][sort.slice(0, -1)]) + ')' : '')
 		).join(", ");
 		if (notShown) {
@@ -1503,7 +1523,7 @@ function runItemsearch(target, cmd, canAll, message) {
 			notShown = foundItems.length - RESULTS_MAX_LENGTH;
 			foundItems = foundItems.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += foundItems.map(result => `<a href="//dex.pokemonshowdown.com/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`).join(", ");
+		resultsStr += foundItems.map(result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
@@ -1555,7 +1575,7 @@ function runLearn(target, cmd) {
 	}
 	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
 
-	const validator = TeamValidator(format);
+	const validator = TeamValidator.get(format);
 	let template = validator.dex.getTemplate(targets.shift());
 	let move = {};
 	let all = (cmd === 'learnall');
@@ -1682,7 +1702,7 @@ const PM = new QueryProcessManager(module, async query => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = require('../../config/config');
+	global.Config = require('../../.server-dist/config-loader').Config;
 	// @ts-ignore ???
 	global.Monitor = {
 		/**
@@ -1702,7 +1722,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = require('../../.sim-dist/dex');
+	global.Dex = require('../../.sim-dist/dex').Dex;
 	global.toID = Dex.getId;
 	Dex.includeData();
 	global.TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;

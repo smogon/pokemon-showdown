@@ -20,7 +20,7 @@ let BattleScripts = {
 		let target = this.getTarget(pokemon, zMove || moveOrMoveName, targetLoc);
 		let baseMove = this.getActiveMove(moveOrMoveName);
 		const pranksterBoosted = baseMove.pranksterBoosted;
-		if (!sourceEffect && baseMove.id !== 'struggle' && !zMove) {
+		if (baseMove.id !== 'struggle' && !zMove && !externalMove) {
 			let changedMove = this.runEvent('OverrideAction', pokemon, target, baseMove);
 			if (changedMove && changedMove !== true) {
 				baseMove = this.getActiveMove(changedMove);
@@ -114,7 +114,10 @@ let BattleScripts = {
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
-				this.runMove(move.id, dancer, 0, this.getAbility('dancer'), undefined, true);
+				// @ts-ignore - the Dancer ability can't trigger on a move where target is null because it does not copy failed moves.
+				const dancersTarget = target.side !== dancer.side && pokemon.side === dancer.side ? target : pokemon;
+				// @ts-ignore
+				this.runMove(move.id, dancer, this.getTargetLoc(dancersTarget, dancer), this.getAbility('dancer'), undefined, true);
 				// Using a Dancer move is enough to spoil Fake Out etc.
 				dancer.activeTurns++;
 			}
@@ -150,7 +153,7 @@ let BattleScripts = {
 			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 			if (move.type !== 'Normal') sourceEffect = move;
 		}
-		if (zMove || (move.category !== 'Status' && sourceEffect && sourceEffect.isZ)) {
+		if (zMove || (move.category !== 'Status' && sourceEffect && /** @type {ActiveMove} */(sourceEffect).isZ)) {
 			move = this.getActiveZMove(move, pokemon);
 		}
 
@@ -349,7 +352,8 @@ let BattleScripts = {
 
 		const moveResult = !!targets.length;
 		if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
-		if (move.spreadHit) this.attrLastMove('[spread] ' + targets.join(','));
+		const hitSlot = targets.map(pokemon => `${pokemon}`.slice(0, 3));
+		if (move.spreadHit) this.attrLastMove('[spread] ' + hitSlot.join(','));
 		return moveResult;
 	},
 	hitStepTryImmunityEvent(targets, pokemon, move) {
@@ -609,7 +613,7 @@ let BattleScripts = {
 		let hit;
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
-			if (pokemon.status === 'slp' && !isSleepUsable) break;
+			if (hit > 1 && pokemon.status === 'slp' && !isSleepUsable) break;
 			if (targets.some(target => target && !target.hp)) break;
 			move.hit = hit;
 			targetsCopy = targets.slice(0);
@@ -695,7 +699,7 @@ let BattleScripts = {
 			}
 		}
 
-		if (move.ohko) this.add('-ohko');
+		if (move.ohko && !targets[0].hp) this.add('-ohko');
 
 		if (!damage.some(val => !!val || val === 0)) return damage;
 
@@ -962,7 +966,7 @@ let BattleScripts = {
 			}
 			this.debug('move failed because it did nothing');
 		} else if (move.selfSwitch && pokemon.hp) {
-			pokemon.switchFlag = move.fullname;
+			pokemon.switchFlag = move.id;
 		}
 
 		return damage;

@@ -1,10 +1,10 @@
 type Battle = import('./battle').Battle
 type Field = import('./field').Field
-type ModdedDex = typeof import('./dex')
+type ModdedDex = import('./dex').ModdedDex
 type Pokemon = import('./pokemon').Pokemon
 type PRNGSeed = import('./prng').PRNGSeed;
 type Side = import('./side').Side
-type Validator = import('./team-validator').Validator
+type TeamValidator = import('./team-validator').TeamValidator
 
 type ID = '' | string & {__isID: true};
 interface AnyObject {[k: string]: any}
@@ -720,7 +720,6 @@ interface BasicEffect extends EffectData {
 	status?: ID
 	effectType: EffectType
 	exists: boolean
-	flags: AnyObject
 	fullname: string
 	gen: number
 	sourceEffect: string
@@ -765,6 +764,7 @@ interface ItemData extends EffectData, ItemEventMethods, EventMethods {
 	isBerry?: boolean
 	isChoice?: boolean
 	isGem?: boolean
+	isPokeball?: boolean
 	megaStone?: string
 	megaEvolves?: string
 	naturalGift?: {basePower: number, type: string}
@@ -887,7 +887,7 @@ interface ActiveMove extends BasicEffect, MoveData {
 	allies?: Pokemon[]
 	auraBooster?: Pokemon
 	causedCrashDamage?: boolean
-	forceStatus?: string
+	forceStatus?: ID
 	galvanizeBoosted?: boolean
 	hasAuraBreak?: boolean
 	hasBounced?: boolean
@@ -901,11 +901,13 @@ interface ActiveMove extends BasicEffect, MoveData {
 	pranksterBoosted?: boolean
 	refrigerateBoosted?: boolean
 	selfDropped?: boolean
+	selfSwitch?: ID | boolean
 	spreadHit?: boolean
 	stab?: number
 	statusRoll?: string
 	totalDamage?: number | false
 	willChangeForme?: boolean
+	infiltrates?: boolean
 	/**
 	 * Has this move been boosted by a Z-crystal? Usually the same as
 	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
@@ -951,19 +953,19 @@ interface ModdedTemplateData extends Partial<TemplateData> {
 
 interface TemplateFormatsData {
 	battleOnly?: boolean
-	comboMoves?: string[]
+	comboMoves?: readonly string[]
 	doublesTier?: string
 	encounters?: EventInfo[]
 	essentialMove?: string
 	eventOnly?: boolean
 	eventPokemon?: EventInfo[]
-	exclusiveMoves?: string[]
+	exclusiveMoves?: readonly string[]
 	gen?: number
 	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean
 	maleOnlyHidden?: boolean
-	randomBattleMoves?: string[]
-	randomDoubleBattleMoves?: string[]
+	randomBattleMoves?: readonly string[]
+	randomDoubleBattleMoves?: readonly string[]
 	requiredAbility?: string
 	requiredItem?: string
 	requiredItems?: string[]
@@ -981,27 +983,7 @@ interface ModdedTemplateFormatsData extends Partial<TemplateFormatsData> {
 	randomSet5?: RandomTeamsTypes.TemplateRandomSet
 }
 
-interface Template extends Readonly<BasicEffect & TemplateData & TemplateFormatsData> {
-	readonly effectType: 'Pokemon'
-	readonly baseSpecies: string
-	readonly doublesTier: string
-	readonly eventOnly: boolean
-	readonly evos: string[]
-	readonly forme: string
-	readonly formeLetter: string
-	readonly gender: GenderName
-	readonly genderRatio: {M: number, F: number}
-	readonly maleOnlyHidden: boolean
-	readonly nfe: boolean
-	readonly prevo: string
-	readonly speciesid: ID
-	readonly spriteid: string
-	readonly tier: string
-	readonly addedType?: string
-	readonly isMega?: boolean
-	readonly isPrimal?: boolean
-	readonly learnset?: {[k: string]: MoveSource[]}
-}
+type Template = import('./dex-data').Template;
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'free-for-all'
 type SideID = 'p1' | 'p2' | 'p3' | 'p4'
@@ -1023,7 +1005,6 @@ interface FormatsData extends EventMethods {
 	banlist?: string[]
 	battle?: ModdedBattleScriptsData
 	cannotMega?: string[]
-	canUseRandomTeam?: boolean
 	challengeShow?: boolean
 	debug?: boolean
 	defaultLevel?: number
@@ -1054,17 +1035,17 @@ interface FormatsData extends EventMethods {
 	timer?: Partial<GameTimerSettings>
 	tournamentShow?: boolean
 	unbanlist?: string[]
-	checkLearnset?: (this: Validator, move: Move, template: Template, lsetData: PokemonSources, set: PokemonSet) => {type: string, [any: string]: any} | null
+	checkLearnset?: (this: TeamValidator, move: Move, template: Template, lsetData: PokemonSources, set: PokemonSet) => {type: string, [any: string]: any} | null
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void
 	onBegin?: (this: Battle) => void
 	onChangeSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject) => string[] | void
-	onModifyTemplate?: (this: Battle, template: Template, target: Pokemon, source: Pokemon, effect: Effect) => Template | void
+	onModifyTemplate?: (this: Battle, template: Template, target?: Pokemon, source?: Pokemon, effect?: Effect) => Template | void
 	onStart?: (this: Battle) => void
 	onTeamPreview?: (this: Battle) => void
 	onValidateSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject) => string[] | void
 	onValidateTeam?: (this: ModdedDex, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void
-	validateSet?: (this: Validator, set: PokemonSet, teamHas: AnyObject) => string[] | null
-	validateTeam?: (this: Validator, team: PokemonSet[], removeNicknames: boolean) => string[] | void,
+	validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null
+	validateTeam?: (this: TeamValidator, team: PokemonSet[], removeNicknames: boolean) => string[] | void,
 	trunc?: (n: number) => number;
 	section?: string,
 	column?: number
@@ -1072,14 +1053,6 @@ interface FormatsData extends EventMethods {
 
 interface ModdedFormatsData extends Partial<FormatsData> {
 	inherit?: boolean
-}
-
-interface RuleTable extends Map<string, string> {
-	checkLearnset: [Function, string] | null
-	complexBans: [string, string, number, string[]][]
-	complexTeamBans: [string, string, number, string[]][]
-	check: (thing: string, setHas: {[k: string]: true}) => string
-	getReason: (key: string) => string
 }
 
 interface Format extends Readonly<BasicEffect & FormatsData> {
@@ -1092,7 +1065,7 @@ interface Format extends Readonly<BasicEffect & FormatsData> {
 	readonly noLog: boolean
 	readonly ruleset: string[]
 	readonly unbanlist: string[]
-	ruleTable: RuleTable | null
+	ruleTable: import('./dex-data').RuleTable | null
 }
 
 type SpreadMoveTargets = (Pokemon | false | null)[]
@@ -1209,6 +1182,7 @@ interface TypeInfo extends Readonly<TypeData> {
 interface PlayerOptions {
 	name?: string;
 	avatar?: string;
+	rating?: number;
 	team?: PokemonSet[] | string | null;
 	seed?: PRNGSeed;
 }

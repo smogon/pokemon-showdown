@@ -4,7 +4,7 @@
  *
  * Parses formate.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
@@ -56,6 +56,7 @@ class TextFormatter {
 	buffers: string[];
 	stack: FormatSpan[];
 	isTrusted: boolean;
+	/** offset of str that's been parsed so far */
 	offset: number;
 
 	constructor(str: string, isTrusted: boolean = false) {
@@ -94,7 +95,6 @@ class TextFormatter {
 		this.buffers = [];
 		this.stack = [];
 		this.isTrusted = isTrusted;
-		/** offset of str that's been parsed so far */
 		this.offset = 0;
 	}
 	// debugAt(i=0, j=i+1) { console.log(this.slice(0, i) + '[' + this.slice(i, j) + ']' + this.slice(j, this.str.length)); }
@@ -443,4 +443,15 @@ class TextFormatter {
  */
 export function formatText(str: string, isTrusted = false) {
 	return new TextFormatter(str, isTrusted).get();
+}
+
+/**
+ * Takes a string and strips all standard chat formatting except greentext from it, the text of a link is kept.
+ */
+export function stripFormatting(str: string) {
+	// Doesn't match > meme arrows because the angle bracket appears in the chat still.
+	str = str.replace(/\*\*([^\s\*]+)\*\*|__([^\s_]+)__|~~([^\s~]+)~~|``([^\s`]+)``|\^\^([^\s\^]+)\^\^|\\([^\s\\]+)\\/g,
+		(match, $1, $2, $3, $4, $5, $6) => $1 || $2 || $3 || $4 || $5 || $6);
+	// Remove all of the link expect for the text in [[text<url>]]
+	return str.replace(/\[\[(?:([^<]*)\s*<[^>]+>|([^\]]+))\]\]/g, (match, $1, $2) => $1 || $2 || '');
 }

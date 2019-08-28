@@ -9,12 +9,12 @@
  *
  * Matchmaking is currently still implemented in rooms.js.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
 
-class LadderStore {
+export class LadderStore {
 	formatid: string;
 	static formatsListPrefix = '';
 
@@ -27,7 +27,7 @@ class LadderStore {
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
 	 */
-	async getTop(): Promise<[string, string] | null> {
+	async getTop(prefix?: string): Promise<[string, string] | null> {
 		return null;
 	}
 
@@ -142,5 +142,3 @@ class LadderStore {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}
 }
-
-export = LadderStore;

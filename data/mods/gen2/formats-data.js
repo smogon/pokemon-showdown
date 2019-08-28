@@ -914,7 +914,7 @@ let BattleFormatsData = {
 			baseMove1: "earthquake", baseMove2: "rockslide", baseMove3: "explosion",
 			fillerMoves1: ["curse", "hiddenpowerbug", "fireblast", "rapidspin", "roar"],
 		},
-		tier: "UUBL",
+		tier: "OU",
 	},
 	ponyta: {
 		eventPokemon: [
@@ -1785,7 +1785,7 @@ let BattleFormatsData = {
 			baseMove1: "meanlook", baseMove2: "perishsong", baseMove3: "protect",
 			fillerMoves1: ["icebeam", "icebeam", "substitute"],
 		},
-		tier: "UUBL",
+		tier: "OU",
 	},
 	elekid: {
 		eventPokemon: [
@@ -2040,7 +2040,7 @@ let BattleFormatsData = {
 			item: ["leftovers", "miracleberry"],
 			baseMove1: "growth", baseMove2: "thunderbolt", baseMove3: "agility", baseMove4: "batonpass",
 		},
-		tier: "OU",
+		tier: "UUBL",
 	},
 	flareon: {
 		randomSet1: { // Mixed Attacker
@@ -2152,7 +2152,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["return", "return", "doubleedge"],
 			fillerMoves2: ["thunderbolt", "thunderbolt", "thunder", "thunderwave", "thunderwave"],
 		},
-		tier: "OU",
+		tier: "UUBL",
 	},
 	omanyte: {
 		eventPokemon: [

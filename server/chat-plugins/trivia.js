@@ -293,7 +293,7 @@ class Trivia extends Rooms.RoomGame {
 	 */
 	constructor(room, mode, category, length, questions) {
 		super(room);
-		this.gameid = 'trivia';
+		this.gameid = /** @type {ID} */ ('trivia');
 		this.title = 'Trivia';
 		this.allowRenames = true;
 		this.playerCap = Number.MAX_SAFE_INTEGER;

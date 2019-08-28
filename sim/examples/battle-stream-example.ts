@@ -10,7 +10,7 @@
  */
 
 import {BattleStream, getPlayerStreams} from '../battle-stream';
-import Dex = require('../dex');
+import {Dex} from '../dex';
 import {RandomPlayerAI} from '../tools/random-player-ai';
 
 /*********************************************************************

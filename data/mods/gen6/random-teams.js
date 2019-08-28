@@ -280,11 +280,8 @@ class RandomGen6Teams extends RandomTeams {
 				case 'chargebeam':
 					if (hasMove['thunderbolt'] && counter.Special < 3) rejected = true;
 					break;
-				case 'thunder':
-					if (hasMove['thunderbolt'] && !hasMove['raindance']) rejected = true;
-					break;
 				case 'thunderbolt':
-					if (hasMove['discharge'] || (hasMove['raindance'] && hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
+					if (hasMove['discharge'] || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
 					break;
 				case 'dazzlinggleam':
 					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
@@ -317,7 +314,7 @@ class RandomGen6Teams extends RandomTeams {
 					break;
 				case 'fierydance': case 'firefang': case 'flamethrower':
 					if (hasMove['blazekick'] || hasMove['overheat']) rejected = true;
-					if (hasMove['fireblast'] && counter.setupType !== 'Physical') rejected = true;
+					if ((hasMove['fireblast'] || hasMove['lavaplume']) && counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'fireblast':
 					if (hasMove['flareblitz'] && counter.setupType !== 'Special') rejected = true;
@@ -412,10 +409,8 @@ class RandomGen6Teams extends RandomTeams {
 					if ((hasMove['psychic'] || hasMove['psyshock']) && counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'psyshock':
-					if (movePool.length > 1) {
-						let psychic = movePool.indexOf('psychic');
-						if (psychic >= 0) this.fastPop(movePool, psychic);
-					}
+					let psychic = movePool.indexOf('psychic');
+					if (psychic >= 0) this.fastPop(movePool, psychic);
 					break;
 				case 'headsmash':
 					if (hasMove['stoneedge']) rejected = true;
@@ -454,7 +449,7 @@ class RandomGen6Teams extends RandomTeams {
 					break;
 				case 'raindance':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					if (!hasType['Water'] && !hasMove['thunder']) rejected = true;
+					if (!hasType['Water'] && !counter['Water']) rejected = true;
 					break;
 				case 'sunnyday':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -570,6 +565,9 @@ class RandomGen6Teams extends RandomTeams {
 		// Moveset modifications
 		if (hasMove['autotomize'] && hasMove['heavyslam']) {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
+		}
+		if (hasMove['raindance'] && hasMove['thunderbolt']) {
+			moves[moves.indexOf('thunderbolt')] = 'thunder';
 		}
 
 		// If Hidden Power has been removed, reset the IVs
@@ -809,8 +807,6 @@ class RandomGen6Teams extends RandomTeams {
 			item = template.baseStats.spa >= 100 && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (((counter.Physical >= 3 && hasMove['defog']) || (counter.Special >= 3 && hasMove['uturn'])) && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && !hasMove['foulplay'] && this.randomChance(2, 3)) {
 			item = 'Choice Scarf';
-		} else if (ability === 'Defeatist' || hasMove['eruption'] || hasMove['waterspout']) {
-			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
 		} else if ((hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']) && ability !== 'Sturdy') {
 			item = 'Focus Sash';
 		} else if (hasMove['outrage'] && (counter.setupType || ability === 'Multiscale')) {

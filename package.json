@@ -9,10 +9,10 @@
     "sucrase": "^3.10.1"
   },
   "optionalDependencies": {
-    "cloud-env": "^0.2.2",
-    "node-oom-heapdump": "^1.0.10",
-    "node-static": "^0.7.10",
-    "nodemailer": "^6.0.0",
+    "cloud-env": "^0.2.3",
+    "node-oom-heapdump": "^1.1.4",
+    "node-static": "^0.7.11",
+    "nodemailer": "^6.2.1",
     "permessage-deflate": "^0.1.6"
   },
   "engines": {
@@ -60,14 +60,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/cloud-env": "^0.2.0",
-    "@types/node": "^11.13.2",
+    "@types/node": "^12.0.2",
     "@types/node-static": "^0.7.3",
-    "@types/nodemailer": "^4.6.7",
+    "@types/nodemailer": "^6.1.0",
     "@types/sockjs": "^0.3.31",
     "eslint": "^5.16.0",
-    "husky": "^1.1.2",
-    "mocha": "^6.1.2",
-    "tslint": "^5.15.0",
-    "typescript": "^3.4.2"
+    "husky": "^2.3.0",
+    "mocha": "^6.1.4",
+    "tslint": "^5.16.0",
+    "typescript": "^3.5.0"
   }
 }

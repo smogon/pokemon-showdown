@@ -1,8 +1,8 @@
 import {Battle as BattleType} from './battle';
 import * as BattleStreamType from './battle-stream';
 import * as DataType from './dex-data';
-import DexType = require('./dex');
-import SimType = require('./index');
+import {Dex as DexType} from './dex';
+import * as SimType from './index';
 import {Field as FieldType} from './field';
 import {Pokemon as PokemonType} from './pokemon';
 import {PRNG as PRNGType} from './prng';
@@ -15,7 +15,7 @@ declare global {
 			Dex: any
 			toID(input: any): string
 			TeamValidator: any
-			__version: string
+			__version: {head: string, origin?: string, tree?: string}
 		}
 	}
 	const Battle: BattleType
@@ -28,7 +28,6 @@ declare global {
 	const Side: SideType
 	const Sim: typeof SimType
 	const TeamValidator: typeof TeamValidatorType
-	const Validator: typeof TeamValidatorType.Validator
 
 	const Ability: DataType.Ability
 	const BasicEffect: DataType.BasicEffect

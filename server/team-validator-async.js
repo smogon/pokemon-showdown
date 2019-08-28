@@ -9,7 +9,10 @@
 
 'use strict';
 
-class ValidatorAsync {
+/** @type {typeof import('../lib/crashlogger').crashlogger} */
+let crashlogger = require(/** @type {any} */('../.lib-dist/crashlogger')).crashlogger;
+
+class TeamValidatorAsync {
 	/**
 	 * @param {string} format
 	 */
@@ -25,6 +28,13 @@ class ValidatorAsync {
 		let formatid = this.format.id;
 		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
 		return PM.query({formatid, removeNicknames, team});
+	}
+
+	/**
+	 * @param {string} format
+	 */
+	static get(format) {
+		return new TeamValidatorAsync(format);
 	}
 }
 
@@ -43,9 +53,9 @@ const PM = new QueryProcessManager(module, async message => {
 
 	let problems;
 	try {
-		problems = TeamValidator(formatid).validateTeam(parsedTeam, removeNicknames);
+		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, removeNicknames);
 	} catch (err) {
-		require(/** @type {any} */('../.lib-dist/crashlogger'))(err, 'A team validation', {
+		crashlogger(err, 'A team validation', {
 			formatid: formatid,
 			team: team,
 		});
@@ -63,8 +73,7 @@ const PM = new QueryProcessManager(module, async message => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
-	global.Config = require('../config/config');
+	global.Config = require(/** @type {any} */('../.server-dist/config-loader')).Config;
 
 	global.TeamValidator = require(/** @type {any} */ ('../.sim-dist/team-validator')).TeamValidator;
 	// @ts-ignore ???
@@ -92,9 +101,9 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = require(/** @type {any} */ ('../.sim-dist/dex')).includeData();
+	global.Dex = require(/** @type {any} */ ('../.sim-dist/dex')).Dex.includeData();
 	global.toID = Dex.getId;
-	global.Chat = require('./chat');
+	global.Chat = require(/** @type {any} */('../.server-dist/chat')).Chat;
 
 	/** @type {typeof import('../lib/repl').Repl} */
 	const Repl = require(/** @type {any} */('../.lib-dist/repl')).Repl;
@@ -107,13 +116,4 @@ if (!PM.isParentProcess) {
  * Exports
  *********************************************************/
 
-function getAsyncValidator(/** @type {string} */ format) {
-	return new ValidatorAsync(format);
-}
-
-let TeamValidatorAsync = Object.assign(getAsyncValidator, {
-	ValidatorAsync,
-	PM,
-});
-
-module.exports = TeamValidatorAsync;
+module.exports = {get: TeamValidatorAsync.get, TeamValidatorAsync, PM};

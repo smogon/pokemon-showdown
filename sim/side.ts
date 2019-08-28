@@ -182,7 +182,13 @@ export class Side {
 				},
 				moves: pokemon.moves.map(move => {
 					if (move === 'hiddenpower') {
-						return move + toID(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
+						return move + toID(pokemon.hpType) + (this.battle.gen < 6 ? '' : pokemon.hpPower);
+					}
+					if (move === 'frustration' || move === 'return') {
+						const m = this.battle.getMove(move)!;
+						// @ts-ignore - Frustration and Return only require the source Pokemon
+						const basePower = m.basePowerCallback(pokemon);
+						return `${move}${basePower}`;
 					}
 					return move;
 				}),
@@ -203,7 +209,7 @@ export class Side {
 	}
 
 	addSideCondition(
-		status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+		status: string | PureEffect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
 	): boolean {
 		if (this.n >= 2 && this.battle.gameType === 'multi') {
 			return this.battle.sides[this.n % 2].addSideCondition(status, source, sourceEffect);
@@ -212,7 +218,7 @@ export class Side {
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
 
-		status = this.battle.getEffect(status) as Effect;
+		status = this.battle.getEffect(status);
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
@@ -264,7 +270,7 @@ export class Side {
 	}
 
 	addSlotCondition(
-		target: Pokemon | number, status: string | Effect, source: Pokemon | 'debug' | null = null,
+		target: Pokemon | number, status: string | PureEffect, source: Pokemon | 'debug' | null = null,
 		sourceEffect: Effect | null = null
 	) {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -272,7 +278,7 @@ export class Side {
 		if (target instanceof Pokemon) target = target.position;
 		if (!source) throw new Error(`setting sidecond without a source`);
 
-		status = this.battle.getEffect(status) as Effect;
+		status = this.battle.getEffect(status);
 		if (this.slotConditions[target][status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);

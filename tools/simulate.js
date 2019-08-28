@@ -41,7 +41,7 @@ const path = require('path');
 const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: path.resolve(__dirname, '..')});
 shell('node build');
 
-const Dex = require('../.sim-dist/dex');
+const Dex = require('../.sim-dist/dex').Dex;
 Dex.includeModData();
 
 const {ExhaustiveRunner} = require('../.sim-dist/tools/exhaustive-runner');

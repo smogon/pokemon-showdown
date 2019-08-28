@@ -4,6 +4,7 @@
 const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 
 const MINUTE = 60 * 1000;
+const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
 const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling'];
 
 /** @type {{[k: string]: ChatRoom}} */
@@ -70,6 +71,8 @@ class OtdHandler {
 		this.keys = keys;
 		this.keyLabels = keyLabels;
 		this.timeLabel = week ? 'Week' : 'Day';
+
+		this.lastPrenom = 0;
 
 		/** @type {AnyObject[]} */
 		this.winners = [];
@@ -156,7 +159,15 @@ class OtdHandler {
 
 		user.sendTo(this.room, `Your nomination for ${nomination} was successfully submitted.`);
 
-		if (this.voting) this.display();
+		let updateOnly = !this.voting;
+		if (updateOnly) {
+			const now = Date.now();
+			if (now - this.lastPrenom > PRENOM_BUMP_TIME) {
+				updateOnly = false;
+				this.lastPrenom = now;
+			}
+		}
+		this.display(updateOnly);
 	}
 
 	generateNomWindow() {
@@ -166,7 +177,7 @@ class OtdHandler {
 			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the ${this.timeLabel} are in progress! Use <code>/${this.id} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}!</p>`;
 			if (this.nominations.size) buffer += `<span style="font-weight:bold;">Nominations:</span>`;
 		} else {
-			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Pre-noms for ${this.name} of the ${this.timeLabel}:</p>`;
+			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Pre-noms for ${this.name} of the ${this.timeLabel}. Use <code>/${this.id} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}:</p>`;
 		}
 
 		/** @type {string[]} */
@@ -187,8 +198,8 @@ class OtdHandler {
 		return buffer;
 	}
 
-	display() {
-		this.room.add(`|uhtml|otd|${this.generateNomWindow()}`);
+	display(update = false) {
+		this.room.add(`|uhtml${update ? 'change' : ''}|otd|${this.generateNomWindow()}`);
 	}
 
 	/**
@@ -464,7 +475,7 @@ let commands = {
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
-		if (!toNominationId(target).length || target.length > 50) return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
+		if (!toNominationId(target).length || target.length > 75) return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
 
 		handler.addNomination(user, target);
 	},

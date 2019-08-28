@@ -415,6 +415,23 @@ let BattleFormats = {
 			}
 		},
 	},
+	blitz: {
+		effectType: 'Rule',
+		name: 'Blitz',
+		// THIS 100% INTENTIONALLY SAYS TEN SECONDS PER TURN
+		// IGNORE maxPerTurn. addPerTurn IS 5, TRANSLATING TO AN INCREMENT OF 10.
+		desc: "Super-fast 'Blitz' timer giving 30 second Team Preview and 10 seconds per turn.",
+		onBegin() {
+			this.add('rule', 'Blitz: Super-fast timer');
+		},
+		timer: {starting: 15, addPerTurn: 5, maxPerTurn: 15, maxFirstTurn: 30, grace: 30},
+	},
+	vgctimer: {
+		effectType: 'Rule',
+		name: 'VGC Timer',
+		desc: "VGC's timer: 90 second Team Preview, 7 minutes Your Time, 1 minute per turn",
+		timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90, grace: 90, timeoutAutoChoose: true, dcTimerBank: false},
+	},
 	speciesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Species Clause',
@@ -640,6 +657,15 @@ let BattleFormats = {
 			if (speedBoosted !== nonSpeedBoosted && typeof speedBoosted === 'string' && typeof nonSpeedBoosted === 'string') return;
 
 			return [(set.name || set.species) + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
+		},
+	},
+	"3batonpassclause": {
+		effectType: 'ValidatorRule',
+		name: '3 Baton Pass Clause',
+		desc: "Stops teams from having more than three Pok&eacute;mon with Baton Pass",
+		banlist: ["Baton Pass > 3"],
+		onBegin() {
+			this.add('rule', '3 Baton Pass Clause: Limit three Baton Passers');
 		},
 	},
 	cfzclause: {

@@ -12,6 +12,7 @@ import * as fs from 'fs';
 import * as net from 'net';
 import * as path from 'path';
 import * as repl from 'repl';
+import {crashlogger} from './crashlogger';
 
 export const Repl = new class {
 	/**
@@ -101,12 +102,12 @@ export const Repl = new class {
 				// tslint:disable-next-line:variable-name
 				fs.unlink(pathname, _err => {
 					if (_err && _err.code !== "ENOENT") {
-						require('./crashlogger')(_err, `REPL: ${filename}`);
+						crashlogger(_err, `REPL: ${filename}`);
 					}
 					server.close();
 				});
 			} else {
-				require('./crashlogger')(err, `REPL: ${filename}`);
+				crashlogger(err, `REPL: ${filename}`);
 				server.close();
 			}
 		});

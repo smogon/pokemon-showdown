@@ -126,7 +126,8 @@ represented by a space), and the rest of the string being their username.
 `|users|USERLIST`
 
 > `USERLIST` is a comma-separated list of `USER`s, sent from chat rooms when
-> they're joined.
+> they're joined. Optionally, a `USER` can end in `@` followed by a user status message.
+> A `STATUS` starting in `!` indicates the user is away.
 
 ### Room messages
 
@@ -149,17 +150,20 @@ represented by a space), and the rest of the string being their username.
 
 > Changes the HTML display of the `|uhtml|` message named (NAME).
 
-`|join|USER` or `|j|USER`
+`|join|USER`, |j|USER`, or `|J|USER`
 
-> `USER` joined the room.
+> `USER` joined the room. Optionally, `USER` may be appended with `@!` to
+> indicate that the user is away or busy.
 
-`|leave|USER` or `|l|USER`
+`|leave|USER`, `|l|USER`, or `|L|USER`
 
 > `USER` left the room.
 
-`|name|USER|OLDID` or `|n|USER|OLDID`
+`|name|USER|OLDID`, `|n|USER|OLDID`, or `|N|USER|OLDID`
 
 > A user changed name to `USER`, and their previous userid was `OLDID`.
+> Optionally, `USER` may be appended with `@!` to indicate that the user is
+> away or busy.
 
 `|chat|USER|MESSAGE` or `|c|USER|MESSAGE`
 
@@ -227,12 +231,13 @@ represented by a space), and the rest of the string being their username.
 > Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
 > where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
 
-`|updateuser|USERNAME|NAMED|AVATAR|SETTINGS`
+`|updateuser|USER|NAMED|AVATAR|SETTINGS`
 
-> Your name, avatar or settings were successfully changed. Your username is
-> now `USERNAME`. `NAMED` will be `0` if you are a guest or `1` otherwise. Your
-> avatar is now `AVATAR`. `SETTINGS` is a JSON object representing the current
-> state of various user settings.
+> Your name, avatar or settings were successfully changed. Your rank and
+> username are now `USER`. Optionally, `USER` may be appended with `@!` to
+> indicate that you are away or busy.`NAMED` will be `0` if you are a guest
+> or `1` otherwise. Your avatar is now `AVATAR`. `SETTINGS` is a JSON object
+> representing the current state of various user settings.
 
 `|formats|FORMATSLIST`
 
@@ -313,9 +318,13 @@ represented by a space), and the rest of the string being their username.
 
 > `USER` left the tournament.
 
-`|tournament|start`
+`|tournament|replace|OLD|NEW`
 
-> The tournament started.
+> The player `OLD` has been replaced with `NEW`
+
+`|tournament|start|NUMPLAYERS`
+
+> The tournament started with `NUMPLAYERS` participants.
 
 `|tournament|replace|USER1|USER2`
 
