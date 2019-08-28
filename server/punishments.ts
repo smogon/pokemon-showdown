@@ -38,7 +38,9 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
 /**
  * A punishment is an array: [punishType, userid, expireTime, reason]
  */
-type Punishment = [string, ID, number, string];
+type PunishmentG<T> = [string, T, number, string];
+type Punishment = PunishmentG<ID>;
+
 interface PunishmentEntry {
 	ips: string[];
 	userids: ID[];
@@ -48,7 +50,7 @@ interface PunishmentEntry {
 	rest: any[];
 }
 
-class PunishmentMap extends Map<string, Punishment> {
+class PunishmentMap<T> extends Map<string, PunishmentG<T>> {
 	get(k: string) {
 		const punishment = super.get(k);
 		if (punishment) {
@@ -60,7 +62,7 @@ class PunishmentMap extends Map<string, Punishment> {
 	has(k: string) {
 		return !!this.get(k);
 	}
-	forEach(callback: (punishment: Punishment, id: string, map: PunishmentMap) => void) {
+	forEach(callback: (punishment: PunishmentG<T>, id: string, map: PunishmentMap<T>) => void) {
 		for (const [k, punishment] of super.entries()) {
 			if (Date.now() < punishment[2]) {
 				callback(punishment, k, this);
@@ -71,8 +73,8 @@ class PunishmentMap extends Map<string, Punishment> {
 	}
 }
 
-class NestedPunishmentMap extends Map<string, Map<string, Punishment>> {
-	nestedSet(k1: string, k2: string, value: Punishment) {
+class NestedPunishmentMap<T> extends Map<string, Map<string, PunishmentG<T>>> {
+	nestedSet(k1: string, k2: string, value: PunishmentG<T>) {
 		if (!this.get(k1)) {
 			this.set(k1, new Map());
 		}
@@ -98,7 +100,7 @@ class NestedPunishmentMap extends Map<string, Map<string, Punishment>> {
 		subMap.delete(k2);
 		if (!subMap.size) this.delete(k1);
 	}
-	nestedForEach(callback: (punishment: Punishment, roomid: string, userid: string) => void) {
+	nestedForEach(callback: (punishment: PunishmentG<T>, roomid: string, userid: string) => void) {
 		for (const [k1, subMap] of this.entries()) {
 			for (const [k2, punishment] of subMap.entries()) {
 				if (Date.now() < punishment[2]) {
@@ -118,19 +120,19 @@ export const Punishments = new class {
 	/**
 	 * ips is an ip:punishment Map
 	 */
-	ips = new PunishmentMap();
+	ips = new PunishmentMap<string>();
 	/**
 	 * userids is a userid:punishment Map
 	 */
-	userids = new PunishmentMap();
+	userids = new PunishmentMap<ID>();
 	/**
 	 * roomUserids is a roomid:userid:punishment nested Map
 	 */
-	roomUserids = new NestedPunishmentMap();
+	roomUserids = new NestedPunishmentMap<ID>();
 	/**
 	 * roomIps is a roomid:ip:punishment Map
 	 */
-	roomIps = new NestedPunishmentMap();
+	roomIps = new NestedPunishmentMap<ID>();
 	/**
 	 * sharedIps is an ip:note Map
 	 */
@@ -330,9 +332,7 @@ export const Punishments = new class {
 			if (ip.includes('/')) {
 				rangebans.push(ip);
 			} else if (!Punishments.ips.has(ip)) {
-				// All of the relevant code either checks for this or doesn't need an ID
-				// It's far easier and less complex to just assert it here
-				Punishments.ips.set(ip, ['BAN', '#ipban' as ID, Infinity, '']);
+				Punishments.ips.set(ip, ['BAN', '#ipban', Infinity, '']);
 			}
 		}
 		Punishments.checkRangeBanned = IPTools.checker(rangebans);
@@ -956,7 +956,7 @@ export const Punishments = new class {
 	 */
 	search(searchId: string) {
 		/** [key, roomid, punishment][] */
-		const results: [string, string, Punishment][] = [];
+		const results: [string, string, PunishmentG<string | ID>][] = [];
 		Punishments.ips.forEach((punishment, ip) => {
 			const [, id] = punishment;
 
@@ -990,7 +990,7 @@ export const Punishments = new class {
 	}
 
 	getPunishType(name: string) {
-		let punishment = Punishments.userids.get(toID(name));
+		let punishment: PunishmentG<string | ID> | undefined = Punishments.userids.get(toID(name));
 		if (punishment) return punishment[0];
 		const user = Users.get(name);
 		if (!user) return;
