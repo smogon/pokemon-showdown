@@ -23,7 +23,7 @@ import {FS} from '../lib/fs';
 
 export const IPTools = new class {
 	dnsblCache = new Map<string, string | null>([
-		['127.0.0.01', null],
+		['127.0.0.1', null],
 	]);
 
 	proxyHosts = new Set([
