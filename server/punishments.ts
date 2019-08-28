@@ -120,7 +120,7 @@ export const Punishments = new class {
 	/**
 	 * ips is an ip:punishment Map
 	 */
-	ips = new PunishmentMap<string>();
+	ips = new PunishmentMap<'#ipban' | ID>();
 	/**
 	 * userids is a userid:punishment Map
 	 */
@@ -956,7 +956,7 @@ export const Punishments = new class {
 	 */
 	search(searchId: string) {
 		/** [key, roomid, punishment][] */
-		const results: [string, string, PunishmentG<string | ID>][] = [];
+		const results: [string, string, PunishmentG<'#ipban' | ID>][] = [];
 		Punishments.ips.forEach((punishment, ip) => {
 			const [, id] = punishment;
 
@@ -990,7 +990,7 @@ export const Punishments = new class {
 	}
 
 	getPunishType(name: string) {
-		let punishment: PunishmentG<string | ID> | undefined = Punishments.userids.get(toID(name));
+		let punishment: PunishmentG<'#ipban' | ID> | undefined = Punishments.userids.get(toID(name));
 		if (punishment) return punishment[0];
 		const user = Users.get(name);
 		if (!user) return;
