@@ -256,21 +256,38 @@ let BattleAbilities = {
 	},
 	// Brandon
 	gracideamastery: {
-		desc: "If this Pokemon is a Shaymin, it will transform into Shaymin-S before using a physical or special attack. After using the attack, if this Pokemon was originally in its base forme, it will transform back into Shaymin.",
-		shortDesc: "Transforms into Shaymin-Sky before attacking, then reverts to Shaymin-Land.",
+		desc: "If this Pokemon is a Shaymin-Sky, it will transform into Shaymin before using a status move or upon being attacked. After using the move, if this Pokemon was originally in its base forme, it will transform back into Shaymin-Sky.",
+		shortDesc: "Transforms into Shaymin when using status moves/being attacked.",
 		id: "gracideamastery",
 		name: "Gracidea Mastery",
 		isNonstandard: "Custom",
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'shayminsky' && !target.transformed) {
+				target.formeChange('Shaymin', this.effect);
+				return damage;
+			}
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target) return;
+			if (target.template.baseSpecies !== 'Shaymin' || target.transformed) return;
+			return this.getEffectiveness(move.type, 'Grass');
+		},
+		onAfterDamage(damage, target, source, effect) {
+			if (source === target) return;
+			if (target && target.template.speciesid === 'shaymin') {
+				target.formeChange('Shaymin-Sky', this.effect);
+			}
+		},
 		onPrepareHit(source, target, move) {
 			if (!target || !move) return;
 			if (source.template.baseSpecies !== 'Shaymin' || source.transformed) return;
-			if (target !== source && move.category !== 'Status') {
-				source.formeChange('Shaymin-Sky', this.effect);
-			}
+			if (move.category !== 'Status') return;
+			source.formeChange('Shaymin', this.effect);
 		},
-		onAfterMove(pokemon, move) {
+		onAfterMove(pokemon) {
 			if (pokemon.template.baseSpecies !== 'Shaymin' || pokemon.transformed) return;
-			pokemon.formeChange('Shaymin', this.effect);
+			pokemon.formeChange('Shaymin-Sky', this.effect);
 		},
 	},
 	// DaWoblefet
