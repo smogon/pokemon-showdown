@@ -38,8 +38,8 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
 /**
  * A punishment is an array: [punishType, userid, expireTime, reason]
  */
-type PunishmentG<T> = [string, T, number, string];
-type Punishment = PunishmentG<ID>;
+type PunishmentGeneric<T> = [string, T, number, string];
+type Punishment = PunishmentGeneric<ID>;
 
 interface PunishmentEntry {
 	ips: string[];
@@ -50,7 +50,7 @@ interface PunishmentEntry {
 	rest: any[];
 }
 
-class PunishmentMap<T> extends Map<string, PunishmentG<T>> {
+class PunishmentMap<T> extends Map<string, PunishmentGeneric<T>> {
 	get(k: string) {
 		const punishment = super.get(k);
 		if (punishment) {
@@ -62,7 +62,7 @@ class PunishmentMap<T> extends Map<string, PunishmentG<T>> {
 	has(k: string) {
 		return !!this.get(k);
 	}
-	forEach(callback: (punishment: PunishmentG<T>, id: string, map: PunishmentMap<T>) => void) {
+	forEach(callback: (punishment: PunishmentGeneric<T>, id: string, map: PunishmentMap<T>) => void) {
 		for (const [k, punishment] of super.entries()) {
 			if (Date.now() < punishment[2]) {
 				callback(punishment, k, this);
@@ -73,8 +73,8 @@ class PunishmentMap<T> extends Map<string, PunishmentG<T>> {
 	}
 }
 
-class NestedPunishmentMap<T> extends Map<string, Map<string, PunishmentG<T>>> {
-	nestedSet(k1: string, k2: string, value: PunishmentG<T>) {
+class NestedPunishmentMap<T> extends Map<string, Map<string, PunishmentGeneric<T>>> {
+	nestedSet(k1: string, k2: string, value: PunishmentGeneric<T>) {
 		if (!this.get(k1)) {
 			this.set(k1, new Map());
 		}
@@ -100,7 +100,7 @@ class NestedPunishmentMap<T> extends Map<string, Map<string, PunishmentG<T>>> {
 		subMap.delete(k2);
 		if (!subMap.size) this.delete(k1);
 	}
-	nestedForEach(callback: (punishment: PunishmentG<T>, roomid: string, userid: string) => void) {
+	nestedForEach(callback: (punishment: PunishmentGeneric<T>, roomid: string, userid: string) => void) {
 		for (const [k1, subMap] of this.entries()) {
 			for (const [k2, punishment] of subMap.entries()) {
 				if (Date.now() < punishment[2]) {
@@ -956,7 +956,7 @@ export const Punishments = new class {
 	 */
 	search(searchId: string) {
 		/** [key, roomid, punishment][] */
-		const results: [string, string, PunishmentG<'#ipban' | ID>][] = [];
+		const results: [string, string, PunishmentGeneric<'#ipban' | ID>][] = [];
 		Punishments.ips.forEach((punishment, ip) => {
 			const [, id] = punishment;
 
@@ -990,7 +990,7 @@ export const Punishments = new class {
 	}
 
 	getPunishType(name: string) {
-		let punishment: PunishmentG<'#ipban' | ID> | undefined = Punishments.userids.get(toID(name));
+		let punishment: PunishmentGeneric<'#ipban' | ID> | undefined = Punishments.userids.get(toID(name));
 		if (punishment) return punishment[0];
 		const user = Users.get(name);
 		if (!user) return;
