@@ -1395,16 +1395,16 @@ let BattleStatuses = {
 			this.add(`c|%SparksBlade|i don't even play this game`);
 		},
 	},
-	sunny: {
+	sundar: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Sunny|Now, we are really going to have a bad time. >:)`);
+			this.add(`c|+Sundar|Now, we are really going to have a bad time. >:)`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Sunny|I'll spare you for now.`);
+			this.add(`c|+Sundar|I'll spare you for now.`);
 		},
 		onFaint() {
-			this.add(`c|+Sunny|..that's it, huh? Don't say I didn't warn you.`);
+			this.add(`c|+Sundar|..that's it, huh? Don't say I didn't warn you.`);
 		},
 	},
 	teclis: {

@@ -4064,7 +4064,7 @@ let BattleMovedex = {
 		target: "Normal",
 		type: "Fire",
 	},
-	// Sunny
+	// Sundar
 	leafblaster: {
 		accuracy: 100,
 		basePower: 90,

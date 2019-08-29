@@ -655,7 +655,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Kratosmana',
 				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Naive', shiny: true,
 			},
-			'Sunny': {
+			'Sundar': {
 				species: 'Sceptile', ability: 'Overgrow', item: 'Sceptilite', gender: 'M',
 				moves: ['Sludge Wave', 'Draco Meteor', 'Focus Blast'],
 				signatureMove: 'Leaf Blaster',
