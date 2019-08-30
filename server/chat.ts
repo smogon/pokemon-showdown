@@ -1409,9 +1409,9 @@ export const Chat = new class {
 
 		for (const file of files) {
 			let plugin;
-			if (file.substr(-3) === '.ts') {
+			if (file.endsWith('.ts')) {
 				plugin = require(`./chat-plugins/${file.slice(0, -3)}`);
-			} else if (file.substr(-3) === '.js') {
+			} else if (file.endsWith('.js')) {
 				plugin = require(`../server/chat-plugins/${file}`);
 			} else {
 				continue;
