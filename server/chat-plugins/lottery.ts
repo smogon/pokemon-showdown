@@ -1,21 +1,21 @@
-'use strict';
 
 const LOTTERY_FILE = 'config/chat-plugins/lottery.json';
 
-/** @type {typeof import('../../lib/fs').FS} */
-const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
+import {FS} from '../../lib/fs';
 
 const lotteriesContents = FS(LOTTERY_FILE).readIfExistsSync();
-/** @type {{[roomid: string]: {maxWinners: number, name: string, markup: string, participants: {[ip: string]: string}, winners: string[], running: boolean}}} */
-const lotteries = lotteriesContents ? Object.assign(Object.create(null), JSON.parse(lotteriesContents)) : Object.create(null);
+const lotteries: {
+	[roomid: string]: {
+		maxWinners: number,
+		name: string,
+		markup: string,
+		participants: {[ip: string]: string},
+		winners: string[],
+		running: boolean,
+	},
+} = lotteriesContents ? Object.assign(Object.create(null), JSON.parse(lotteriesContents)) : Object.create(null);
 
-/**
- * @param {string} roomid
- * @param {number} maxWinners
- * @param {string} name
- * @param {string} markup
-*/
-function createLottery(roomid, maxWinners, name, markup) {
+function createLottery(roomid: string, maxWinners: number, name: string, markup: string) {
 	if (!lotteries[roomid]) {
 		lotteries[roomid] = {maxWinners, name, markup, participants: Object.create(null), winners: [], running: true};
 		writeLotteries();
@@ -29,18 +29,11 @@ function writeLotteries() {
 	}
 	FS(LOTTERY_FILE).writeUpdate(() => JSON.stringify(lotteries));
 }
-/**
- * @param {string} roomid
- */
-function destroyLottery(roomid) {
+function destroyLottery(roomid: string) {
 	delete lotteries[roomid];
 	writeLotteries();
 }
-/**
- * @param {string} roomid
- * @param {string[]} winners
- */
-function endLottery(roomid, winners) {
+function endLottery(roomid: string, winners: string[]) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	lottery.winners = winners;
@@ -48,15 +41,11 @@ function endLottery(roomid, winners) {
 	Object.freeze(lottery);
 	writeLotteries();
 }
-/**
- * @param {string} roomid
- * @param {User} user
- */
-function addUserToLottery(roomid, user) {
+function addUserToLottery(roomid: string, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
-	const userSignedup = participants[user.latestIp] || Object.values(participants).map(username => toID(username)).includes(user.userid);
+	const userSignedup = participants[user.latestIp] || Object.values(participants).map(toID).includes(user.userid);
 	if (!userSignedup) {
 		participants[user.latestIp] = user.name;
 		writeLotteries();
@@ -64,11 +53,7 @@ function addUserToLottery(roomid, user) {
 	}
 	return false;
 }
-/**
- * @param {string} roomid
- * @param {User} user
- */
-function removeUserFromLottery(roomid, user) {
+function removeUserFromLottery(roomid: string, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
@@ -81,10 +66,7 @@ function removeUserFromLottery(roomid, user) {
 	}
 	return false;
 }
-/**
- * @param {string} roomid
- */
-function getWinnersInLottery(roomid) {
+function getWinnersInLottery(roomid: string) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const winners = [];
@@ -98,8 +80,7 @@ function getWinnersInLottery(roomid) {
 	return winners;
 }
 
-/** @type {ChatCommands} */
-exports.commands = {
+export const commands: ChatCommands = {
 	lottery: {
 		''(target, room) {
 			const lottery = lotteries[room.id];
@@ -134,6 +115,7 @@ exports.commands = {
 			}
 			createLottery(room.id, maxWinnersNum, name, markup);
 			this.sendReply('The lottery was successfully created.');
+			// tslint:disable-next-line: max-line-length
 			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the "<a href="/view-lottery-${room.id}">${name}</a>" lottery!</b></div>`);
 			this.modlog(`LOTTERY CREATE ${name}`);
 		},
@@ -160,7 +142,9 @@ exports.commands = {
 			if (lottery.maxWinners >= Object.keys(lottery.participants).length) {
 				return this.errorReply('There have been not enough participants for you to be able to end this. If you wish to end it anyway use /lottery delete.');
 			}
-			const winners = /** @type {string[]} */ (getWinnersInLottery(room.id));
+			const winners = getWinnersInLottery(room.id);
+			if (!winners) return this.errorReply(`An error occured while getting the winners.`);
+			// tslint:disable-next-line: max-line-length
 			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${Chat.toListString(winners)} won the "<a href="/view-lottery-${room.id}">${lottery.name}</a>" lottery!</b></div>`);
 			this.modlog(`LOTTERY END ${lottery.name}`);
 			endLottery(room.id, winners);
@@ -243,8 +227,7 @@ exports.commands = {
 	],
 };
 
-/** @type {PageTable} */
-exports.pages = {
+export const pages: PageTable = {
 	lottery(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.extractRoom();
@@ -257,7 +240,8 @@ exports.pages = {
 		}
 		buf += `<h2>${lottery.name}</h2>${lottery.markup}<br />`;
 		if (lottery.running) {
-			const userSignedUp = lottery.participants[user.latestIp] || Object.values(lottery.participants).map(username => toID(username)).includes(user.userid);
+			const userSignedUp = lottery.participants[user.latestIp]
+				|| Object.values(lottery.participants).map(toID).includes(user.userid);
 			buf += `<button class="button" name="send" style="margin: 3px" value="/lottery ${userSignedUp ? 'leave' : 'join'} ${this.room.id}">${userSignedUp ? "Leave the " : "Sign up for the"} lottery</button>`;
 		} else {
 			buf += `<p><b>This lottery has already ended. The winners are: ${Chat.toListString(lottery.winners)}</b></p>`;
