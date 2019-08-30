@@ -461,6 +461,21 @@ let BattleAbilities = {
 			if (move && pokemon.activeTurns === 1) return priority + 1;
 		},
 	},
+	// GMars
+	mysteryshell: {
+		desc: "If this pokemon is Minior-Meteor, it cannot be afflicted by a status condition. This pokemon cannot be hit with a critical hit.",
+		shortDesc: "Status immunity while in metor forme, crit immunity.",
+		id: "mysteryshell",
+		name: "Mystery Shell",
+		isNonstandard: "Custom",
+		onCriticalHit: false,
+		onSetStatus(status, target, source, effect) {
+			if (target.template.speciesid !== 'miniormeteor' || target.transformed) return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[from] ability: Mystery Shell');
+			return false;
+		},
+	},
 	// guishark
 	gzguishark: {
 		desc: "Boosts Attack by 1 stage upon switch-in/Mega Evolution.",

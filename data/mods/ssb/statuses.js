@@ -611,6 +611,20 @@ let BattleStatuses = {
 			this.add(`c|+Gallant Spear|UNIVAAAAAAAAAAAAAAASE!!`);
 		},
 	},
+	gmars: {
+		noCopy: true,
+		onStart(target) {
+			this.add(`c|+GMars|It's ya boy GEEEEEEEEMARS`);
+			if (target.illusion || !target.m.miniorColor) return;
+			this.add('-formechange', target, `Minior${target.m.miniorColor}`);
+		},
+		onSwitchOut() {
+			this.add(`c|+GMars|I like 'em crisp`);
+		},
+		onFaint() {
+			this.add(`c|+GMars|Don't forget to check out my bandcamp`);
+		},
+	},
 	grimauxiliatrix: {
 		noCopy: true,
 		onStart() {

@@ -1731,6 +1731,72 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// GMars
+	tastetherainbow: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Increases this pokemon's Atk, Spa, and Spe by 2 stages while also decreating this pokemons Def and Spd by 1 stage. If this pokemon is a Minior-Meteor, it will permanentally transform into one of the minior colors and have a special effect based on that color. Red burns, orange confuses, yellow paralyzes, blue gives the user aqua ring status, indigo poisons, and violet badly poisions.",
+		shortDesc: "+2 Atk, Spa, Spe. -1 Def, Spd. Meteor -> Core.",
+		id: "tastetherainbow",
+		name: "Taste the Rainbow",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Evoboost', source);
+		},
+		onHit(target, source, move) {
+			this.boost({atk: 2, def: -1, spa: 2, spd: -1, spe: 2}, source);
+			if (source.template.speciesid !== 'miniormeteor' || source.transformed) return;
+
+			let rainbow = ['', '-Orange', '-Yellow', '-Green', '-Blue', '-Indigo', '-Violet'];
+			let color = rainbow[this.random(rainbow.length)];
+			source.formeChange(`Minior${color}`, move, true);
+			// Display correct color on client
+			if (color) {
+				this.add('-formechange', source, `Minior${color}`);
+				source.m.miniorColor = color;
+			}
+
+			switch (color) {
+			case '':
+				if (!target.setStatus('brn', source)) this.add('-fail', target);
+				break;
+			case '-Orange':
+				if (!target.addVolatile('confusion', source)) this.add('-fail', target);
+				break;
+			case '-Yellow':
+				if (!target.setStatus('par', source)) this.add('-fail', target);
+				break;
+			case '-Green':
+				if (!target.hasType('Grass')) {
+					this.add('-anim', source, 'Leech Seed', target);
+					target.addVolatile('leechseed');
+				} else {
+					this.add('-immune', target);
+				}
+				break;
+			case '-Blue':
+				if (!source.addVolatile('aquaring', source)) this.add('-fail', source);
+				break;
+			case '-Indigo':
+				if (!target.setStatus('psn', source)) this.add('-fail', target);
+				break;
+			case '-Violet':
+				if (!target.setStatus('tox', source)) this.add('-fail', target);
+				break;
+			default:
+				throw new Error(`Invalid color for Taste the Rainbow selected: ${color}`);
+			}
+		},
+		target: "normal",
+		type: "Normal",
+	},
 	// grimAuxiliatrix
 	paintrain: {
 		accuracy: 100,

@@ -312,6 +312,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Storm Assault OGs',
 				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 			},
+			'GMars': {
+				species: 'Minior-Meteor', ability: 'Mystery Shell', item: 'White Herb', gender: 'N',
+				moves: ['Acrobatics', 'Earthquake', 'Stone Edge'],
+				signatureMove: 'Taste the Rainbow',
+				evs: {hp: 68, atk: 252, spe: 188}, nature: 'Adament',
+			},
 			'grimAuxiliatrix': {
 				species: 'Aggron', ability: 'Sturdy', item: 'Aggronite', gender: '',
 				moves: [['Toxic', 'Stealth Rock'], ['Stone Edge', 'Heat Crash'], 'Earthquake'],

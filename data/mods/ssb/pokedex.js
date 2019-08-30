@@ -68,6 +68,15 @@ let BattlePokedex = {
 		inherit: true,
 		types: ['Fairy', 'Steel'],
 	},
+	// GMars
+	minior: {
+		inherit: true,
+		abilities: {0: 'mysteryshell'},
+	},
+	miniormeteor: {
+		inherit: true,
+		abilities: {0: 'mysteryshell'},
+	},
 	// grimAuxiliatrix
 	aggronmega: {
 		inherit: true,
