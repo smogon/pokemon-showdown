@@ -1408,9 +1408,14 @@ export const Chat = new class {
 		files.unshift('info.js');
 
 		for (const file of files) {
-			if (file.substr(-3) !== '.js') continue;
-			const plugin = require(`../server/chat-plugins/${file}`);
-
+			let plugin;
+			if (file.endsWith('.ts')) {
+				plugin = require(`./chat-plugins/${file.slice(0, -3)}`);
+			} else if (file.endsWith('.js')) {
+				plugin = require(`../server/chat-plugins/${file}`);
+			} else {
+				continue;
+			}
 			Object.assign(Chat.commands, plugin.commands);
 			Object.assign(Chat.pages, plugin.pages);
 
