@@ -12,6 +12,8 @@ import * as StreamsType from './../lib/streams';
 import * as UsersType from './users';
 import * as ChatType from './chat'
 
+import * as LotteryType from './chat-plugins/lottery';
+
 declare global {
 	namespace NodeJS {
 		interface Global {
