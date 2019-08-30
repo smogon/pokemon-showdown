@@ -3266,8 +3266,8 @@ const commands = {
 				if (lock['punishments']) return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				Chat.uncache('./server/punishments');
-				global.Punishments = require('./punishments');
+				Chat.uncache('./.server-dist/punishments');
+				global.Punishments = require('../.server-dist/punishments').Punishments;
 				this.sendReply("Punishments have been hot-patched.");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
 				patch = 'dnsbl';
