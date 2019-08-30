@@ -36,11 +36,9 @@ const PUNISHMENT_POINT_VALUES: {[k: string]: number} = {MUTE: 2, BLACKLIST: 3, B
 const AUTOLOCK_POINT_THRESHOLD = 8;
 
 /**
- * A punishment is an array: [punishType, userid, expireTime, reason]
+ * A punishment is an array: [punishType, userid | #punishmenttype, expireTime, reason]
  */
-type PunishmentGeneric<T> = [string, T, number, string];
-type Punishment = PunishmentGeneric<ID>;
-
+type Punishment = [string, string, number, string];
 interface PunishmentEntry {
 	ips: string[];
 	userids: ID[];
@@ -50,7 +48,7 @@ interface PunishmentEntry {
 	rest: any[];
 }
 
-class PunishmentMap<T> extends Map<string, PunishmentGeneric<T>> {
+class PunishmentMap extends Map<string, Punishment> {
 	get(k: string) {
 		const punishment = super.get(k);
 		if (punishment) {
@@ -62,7 +60,7 @@ class PunishmentMap<T> extends Map<string, PunishmentGeneric<T>> {
 	has(k: string) {
 		return !!this.get(k);
 	}
-	forEach(callback: (punishment: PunishmentGeneric<T>, id: string, map: PunishmentMap<T>) => void) {
+	forEach(callback: (punishment: Punishment, id: string, map: PunishmentMap) => void) {
 		for (const [k, punishment] of super.entries()) {
 			if (Date.now() < punishment[2]) {
 				callback(punishment, k, this);
@@ -73,8 +71,8 @@ class PunishmentMap<T> extends Map<string, PunishmentGeneric<T>> {
 	}
 }
 
-class NestedPunishmentMap<T> extends Map<string, Map<string, PunishmentGeneric<T>>> {
-	nestedSet(k1: string, k2: string, value: PunishmentGeneric<T>) {
+class NestedPunishmentMap extends Map<string, Map<string, Punishment>> {
+	nestedSet(k1: string, k2: string, value: Punishment) {
 		if (!this.get(k1)) {
 			this.set(k1, new Map());
 		}
@@ -100,7 +98,7 @@ class NestedPunishmentMap<T> extends Map<string, Map<string, PunishmentGeneric<T
 		subMap.delete(k2);
 		if (!subMap.size) this.delete(k1);
 	}
-	nestedForEach(callback: (punishment: PunishmentGeneric<T>, roomid: string, userid: string) => void) {
+	nestedForEach(callback: (punishment: Punishment, roomid: string, userid: string) => void) {
 		for (const [k1, subMap] of this.entries()) {
 			for (const [k2, punishment] of subMap.entries()) {
 				if (Date.now() < punishment[2]) {
@@ -120,19 +118,19 @@ export const Punishments = new class {
 	/**
 	 * ips is an ip:punishment Map
 	 */
-	ips = new PunishmentMap<'#ipban' | ID>();
+	ips = new PunishmentMap();
 	/**
 	 * userids is a userid:punishment Map
 	 */
-	userids = new PunishmentMap<ID>();
+	userids = new PunishmentMap();
 	/**
 	 * roomUserids is a roomid:userid:punishment nested Map
 	 */
-	roomUserids = new NestedPunishmentMap<ID>();
+	roomUserids = new NestedPunishmentMap();
 	/**
 	 * roomIps is a roomid:ip:punishment Map
 	 */
-	roomIps = new NestedPunishmentMap<ID>();
+	roomIps = new NestedPunishmentMap();
 	/**
 	 * sharedIps is an ip:note Map
 	 */
@@ -384,7 +382,7 @@ export const Punishments = new class {
 		}
 
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
-		userids.delete(id);
+		userids.delete(id as ID);
 		Punishments.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
@@ -396,7 +394,7 @@ export const Punishments = new class {
 		return affected;
 	}
 
-	punishInner(user: User, punishment: Punishment, userids: Set<string>, ips: Set<string>) {
+	punishInner(user: User, punishment: Punishment, userids: Set<ID>, ips: Set<string>) {
 		const existingPunishment = Punishments.userids.get(user.locked || toID(user.name));
 		if (existingPunishment) {
 			// don't reduce the duration of an existing punishment
@@ -421,7 +419,7 @@ export const Punishments = new class {
 		}
 		if (user.locked && user.locked.charAt(0) !== '#') {
 			Punishments.userids.set(user.locked, punishment);
-			userids.add(user.locked);
+			userids.add(user.locked as ID);
 		}
 		if (user.autoconfirmed) {
 			Punishments.userids.set(user.autoconfirmed, punishment);
@@ -452,7 +450,7 @@ export const Punishments = new class {
 		}
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		const affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
-		userids.delete(id);
+		userids.delete(id as ID);
 		Punishments.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
@@ -503,7 +501,7 @@ export const Punishments = new class {
 		}
 
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
-		userids.delete(id);
+		userids.delete(id as ID);
 		Punishments.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
@@ -557,7 +555,7 @@ export const Punishments = new class {
 		}
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		const affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
-		userids.delete(id);
+		userids.delete(id as ID);
 		Punishments.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
@@ -956,7 +954,7 @@ export const Punishments = new class {
 	 */
 	search(searchId: string) {
 		/** [key, roomid, punishment][] */
-		const results: [string, string, PunishmentGeneric<'#ipban' | ID>][] = [];
+		const results: [string, string, Punishment][] = [];
 		Punishments.ips.forEach((punishment, ip) => {
 			const [, id] = punishment;
 
@@ -990,7 +988,7 @@ export const Punishments = new class {
 	}
 
 	getPunishType(name: string) {
-		let punishment: PunishmentGeneric<'#ipban' | ID> | undefined = Punishments.userids.get(toID(name));
+		let punishment = Punishments.userids.get(toID(name));
 		if (punishment) return punishment[0];
 		const user = Users.get(name);
 		if (!user) return;
@@ -1055,11 +1053,11 @@ export const Punishments = new class {
 		const battleban = Punishments.isBattleBanned(user);
 		if (!punishment && user.namelocked) {
 			punishment = Punishments.userids.get(user.namelocked);
-			if (!punishment) punishment = ['NAMELOCK', toID(user.namelocked), 0, ''];
+			if (!punishment) punishment = ['NAMELOCK', user.namelocked, 0, ''];
 		}
 		if (!punishment && user.locked) {
 			punishment = Punishments.userids.get(user.locked);
-			if (!punishment) punishment = ['LOCK', toID(user.locked), 0, ''];
+			if (!punishment) punishment = ['LOCK', user.locked, 0, ''];
 		}
 
 		const ticket = Chat.pages.help
@@ -1378,7 +1376,7 @@ export const Punishments = new class {
 				punishmentTable.set(id, entry);
 			}
 
-			if (userid !== id) entry.userids.push(toID(userid)); // should already be an ID
+			if (userid !== id) entry.userids.push(userid as ID); // guaranteed as per above check
 		});
 		if (roomid && ignoreMutes !== false) {
 			const room = Rooms.get(roomid);
