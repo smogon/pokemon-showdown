@@ -437,12 +437,12 @@ class Trivia extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} user
-	 * @return {boolean}
+	 * @param {ID} oldUserid
 	 */
-	onLeave(user) {
+	onLeave(user, oldUserid) {
 		// The user cannot participate, but their score should be kept
 		// regardless in cases of disconnects.
-		let player = this.playerTable[user.userid];
+		const player = this.playerTable[oldUserid || user.userid];
 		if (!player || player.isAbsent) return false;
 
 		player.toggleAbsence();
