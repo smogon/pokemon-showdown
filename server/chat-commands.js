@@ -1849,8 +1849,8 @@ const commands = {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(target ? ` (${target})` : ``)}`);
-			this.modlog('WARN', targetUser, target, {noalts: 1});
-			this.globalModlog('WARN', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
+			this.modlog('WARN OFFLINE', targetUser, target, {noalts: 1});
+			this.globalModlog('WARN OFFLINE', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
 			return;
 		}
 		if (!(targetUser in room.users) && !globalWarn) {
@@ -2725,13 +2725,26 @@ const commands = {
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
-		this.privateModAction(`(${targetUser.name} was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)})`);
-		this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
-		this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
-		Chat.forceRenames.set(targetUser.userid, user.userid);
-		Ladders.cancelSearches(targetUser);
+		let forceRenameMessage;
+		if (targetUser.connected) {
+			forceRenameMessage = `${targetUser.name} was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
+			this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
+			this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
+			Chat.forceRenames.set(targetUser.userid, (Chat.forceRenames.get(targetUser.userid) || 0) + 1);
+			Ladders.cancelSearches(targetUser);
+			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
+		} else {
+			forceRenameMessage = `${targetUser.name} would be forced to choose a new name by ${user.name} but is offline${(reason ? `: ${reason}` : ``)}`;
+			this.globalModlog('FORCERENAME OFFLINE', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
+			this.modlog('FORCERENAME OFFLINE', targetUser, reason, {noip: 1, noalts: 1});
+			if (!Chat.forceRenames.has(targetUser.userid)) Chat.forceRenames.set(targetUser.userid, 0);
+		}
 		targetUser.resetName(true);
-		targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
+		this.privateModAction(`(${forceRenameMessage})`);
+
+		if (room.id !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${forceRenameMessage}`);
+		}
 		return true;
 	},
 	forcerenamehelp: [

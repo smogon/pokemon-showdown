@@ -261,13 +261,16 @@ let namefilter = function (name, user) {
 let loginfilter = function (user) {
 	if (user.namelocked) return;
 
-	const forceRenamed = Chat.forceRenames.has(user.userid);
+	const forceRenamed = Chat.forceRenames.get(user.userid);
 	if (user.trackRename) {
 		Monitor.log(`[NameMonitor] Username used: ${user.name} (${forceRenamed ? 'automatically ' : ''}forcerenamed from ${user.trackRename})`);
 		user.trackRename = '';
 	}
 	if (Chat.namefilterwhitelist.has(user.userid)) return;
-	if (forceRenamed) Monitor.log(`[NameMonitor] Forcerenamed name being reused: ${user.name}`);
+	if (typeof forceRenamed === 'number') {
+		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
+		Monitor.log(`[NameMonitor] Forcerenamed name being reused${count}: ${user.name}`);
+	}
 };
 /** @type {NameFilter} */
 let nicknamefilter = function (name, user) {
@@ -479,6 +482,7 @@ let commands = {
 		const upperStaffRoom = Rooms.get('upperstaff');
 		if (staffRoom) staffRoom.add(msg).update();
 		if (upperStaffRoom) upperStaffRoom.add(msg).update();
+		this.globalModlog(`ALLOWNAME`, null, `${target} by ${user.name}`);
 	},
 };
 
