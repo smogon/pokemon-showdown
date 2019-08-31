@@ -16,8 +16,6 @@ class Poll {
 	 * @param {string[]} options
 	 */
 	constructor(room, questionData, options) {
-		/** @type {string} */
-		this.type = "poll";
 		this.pollNumber = ++room.gameNumber;
 		this.room = room;
 		this.question = questionData.source;
@@ -275,7 +273,7 @@ const commands = {
 		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`],
 
 		vote(target, room, user) {
-			if (!(room.pollOrAnnouncement && room.pollOrAnnouncement.type === 'poll')) return this.errorReply("There is no poll running in this room.");
+			if (!room.pollOrAnnouncement || !(typeof room.pollOrAnnouncement === Poll)) return this.errorReply("There is no poll running in this room.");
 			if (!target) return this.parse('/help poll vote');
 
 			if (target === 'blank') {
@@ -293,7 +291,7 @@ const commands = {
 		votehelp: [`/poll vote [number] - Votes for option [number].`],
 
 		timer(target, room, user) {
-			if (!(room.pollOrAnnouncement && room.pollOrAnnouncement.type === 'poll')) return this.errorReply("There is no poll running in this room.");
+			if (!room.pollOrAnnouncement || !(typeof room.pollOrAnnouncement === Poll)) return this.errorReply("There is no poll running in this room.");
 
 			if (target) {
 				if (!this.can('minigame', null, room)) return false;
@@ -330,7 +328,7 @@ const commands = {
 		],
 
 		results(target, room, user) {
-			if (!(room.pollOrAnnouncement && room.pollOrAnnouncement.type === 'poll')) return this.errorReply("There is no poll running in this room.");
+			if (!room.pollOrAnnouncement || !(typeof room.pollOrAnnouncement === Poll)) return this.errorReply("There is no poll running in this room.");
 
 			return room.pollOrAnnouncement.blankvote(user);
 		},
@@ -341,7 +339,7 @@ const commands = {
 		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (!(room.pollOrAnnouncement && room.pollOrAnnouncement.type === 'poll')) return this.errorReply("There is no poll running in this room.");
+			if (!room.pollOrAnnouncement || !(typeof room.pollOrAnnouncement === Poll)) return this.errorReply("There is no poll running in this room.");
 			if (room.pollOrAnnouncement.timeout) clearTimeout(room.pollOrAnnouncement.timeout);
 
 			room.pollOrAnnouncement.end();
@@ -353,7 +351,7 @@ const commands = {
 
 		show: 'display',
 		display(target, room, user, connection) {
-			if (!(room.pollOrAnnouncement && room.pollOrAnnouncement.type === 'poll')) return this.errorReply("There is no poll running in this room.");
+			if (!room.pollOrAnnouncement || !(typeof room.pollOrAnnouncement === Poll)) return this.errorReply("There is no poll running in this room.");
 			if (!this.runBroadcast()) return;
 			room.update();
 
