@@ -154,15 +154,6 @@ let BattlePokedex = {
 		inherit: true,
 		baseStats: {hp: 70, atk: 43, def: 53, spa: 86, spd: 53, spe: 40},
 	},
-	// PokemonDeadChannel
-	charizardmegax: {
-		inherit: true,
-		abilities: {0: 'Moxie'},
-	},
-	charizardmegay: {
-		inherit: true,
-		abilities: {0: 'Soul Heart'},
-	},
 	// pre
 	deoxys: {
 		inherit: true,
