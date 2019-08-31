@@ -13,8 +13,6 @@ class Announcement {
 	 * @param {{source: string, supportHTML: boolean}} announcement
 	 */
 	constructor(room, announcement) {
-		/** @type {string} */
-		this.type = "announcement";
 		this.announcementNumber = ++room.gameNumber;
 		this.room = room;
 		this.announcement = announcement.source;
@@ -100,7 +98,7 @@ const commands = {
 		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # & ~`],
 
 		timer(target, room, user) {
-			if (!room.pollOrAnnouncement || !(typeof room.pollOrAnnouncement === Announcement)) return this.errorReply("There is no announcement running in this room.");
+			if (!room.pollOrAnnouncement || !(room.pollOrAnnouncement instanceof Announcement)) return this.errorReply("There is no announcement running in this room.");
 
 			if (target) {
 				if (!this.can('minigame', null, room)) return false;
@@ -141,7 +139,7 @@ const commands = {
 		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (!room.pollOrAnnouncement || !(typeof room.pollOrAnnouncement === Announcement)) return this.errorReply("There is no announcement running in this room.");
+			if (!room.pollOrAnnouncement || !(room.pollOrAnnouncement instanceof Announcement)) return this.errorReply("There is no announcement running in this room.");
 			if (room.pollOrAnnouncement.timeout) clearTimeout(room.pollOrAnnouncement.timeout);
 
 			room.pollOrAnnouncement.end();
@@ -153,7 +151,7 @@ const commands = {
 
 		show: 'display',
 		display(target, room, user, connection) {
-			if (!room.pollOrAnnouncement || !(typeof room.pollOrAnnouncement === Announcement)) return this.errorReply("There is no announcement running in this room.");
+			if (!room.pollOrAnnouncement || !(room.pollOrAnnouncement instanceof Announcement)) return this.errorReply("There is no announcement running in this room.");
 			if (!this.runBroadcast()) return;
 			room.update();
 
