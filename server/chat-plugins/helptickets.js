@@ -108,10 +108,12 @@ class HelpTicket extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} user
+	 * @param {ID} oldUserid
 	 */
-	onLeave(user) {
-		if (user.userid in this.playerTable) {
-			this.removePlayer(user);
+	onLeave(user, oldUserid) {
+		const player = this.playerTable[oldUserid || user.userid];
+		if (player) {
+			this.removePlayer(player);
 			return;
 		}
 		if (!this.ticket.open) return;

@@ -1540,10 +1540,11 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} user
-	 * @return {void}
+	 * @param {ID} oldUserid
 	 */
-	onLeave(user) {
-		if (this.subs.includes(user.userid)) this.subs.splice(this.subs.indexOf(user.userid), 1);
+	onLeave(user, oldUserid) {
+		const userid = oldUserid || user.userid;
+		if (this.subs.includes(userid)) this.subs.splice(this.subs.indexOf(userid), 1);
 	}
 
 	/**
