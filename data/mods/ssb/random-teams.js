@@ -83,6 +83,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Cataclysm',
 				evs: {hp: 252, atk: 252, spe: 4}, ivs: {spa: 0}, nature: 'Adamant',
 			},
+			'Akasianse': {
+				species: 'Durant', ability: 'Hustle', item: 'Choice Band', gender: 'M',
+				moves: ['Iron Head', ['Megahorn', 'Leech Life'], ['Wild Charge', 'Superpower']],
+				signatureMove: 'Quick Reload',
+				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
+			},
 			'Akiamara': {
 				species: 'Croagunk', ability: 'Toxic Swap', item: ['Life Orb', 'Black Sludge'], gender: '',
 				moves: [['Gunk Shot', 'Sludge Wave'], 'Taunt', 'Photon Geyser'],
@@ -714,12 +720,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Inferno', 'Zap Cannon', ['Roost', 'Grass Whistle']],
 				signatureMove: 'Mini Singularity',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
-			},
-			'UnleashOurPassion': {
-				species: 'Durant', ability: 'Hustle', item: 'Choice Band', gender: 'M',
-				moves: ['Iron Head', ['Megahorn', 'Leech Life'], ['Wild Charge', 'Superpower']],
-				signatureMove: 'Quick Reload',
-				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
 			},
 			'vivalospride': {
 				species: 'Araquanid', ability: 'TRASH VIV WEBS', item: 'Wave Incense', gender: 'M',

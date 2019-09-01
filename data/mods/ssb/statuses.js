@@ -81,6 +81,18 @@ let BattleStatuses = {
 			this.add(`c|@Aethernum| Has been fun! But i'm too lazy to keep fighting ^_^'`);
 		},
 	},
+	akasianse: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Akasianse|Hi I'm here to participate in a totally serious conversation`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Akasianse|Okay that's enough shitposting for now`);
+		},
+		onFaint() {
+			this.add(`c|%Akasianse|Fine I'll go back to work...`);
+		},
+	},
 	akiamara: {
 		noCopy: true,
 		onStart() {
@@ -568,8 +580,8 @@ let BattleStatuses = {
 		onFaint(pokemon) {
 			let activeMon;
 			activeMon = toID(pokemon.side.foe.active[0].illusion ? pokemon.side.foe.active[0].illusion.name : activeMon = pokemon.side.foe.active[0].template.name);
-			if (activeMon === 'unleashourpassion') {
-				this.add(`c|%fart|UOP I'm deleting your mon`);
+			if (activeMon === 'akasianse') {
+				this.add(`c|%fart|Akasianse I'm deleting your mon`);
 			} else {
 				this.add(`c|%fart|the things I do for love...`);
 			}
@@ -1535,18 +1547,6 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|@Trickster|(✖﹏✖✿)`);
-		},
-	},
-	unleashourpassion: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|%UnleashOurPassion|Hi I'm here to participate in a totally serious conversation`);
-		},
-		onSwitchOut() {
-			this.add(`c|%UnleashOurPassion|Okay that's enough shitposting for now`);
-		},
-		onFaint() {
-			this.add(`c|%UnleashOurPassion|Fine I'll go back to work...`);
 		},
 	},
 	vivalospride: {
