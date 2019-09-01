@@ -316,7 +316,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Beartic', ability: 'Russian Rush', item: 'Life Orb', gender: 'M',
 				moves: ['Icicle Crash', 'Earthquake', 'Close Combat'],
 				signatureMove: 'Slav Squat',
-				evs: {atk: 252, def: 4, spa: 0, spe: 252}, nature: 'Jolly',
+				evs: {atk: 252, def: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 			},
 			'GMars': {
 				species: 'Minior-Meteor', ability: 'Mystery Shell', item: 'White Herb', gender: 'N',
