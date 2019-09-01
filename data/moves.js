@@ -13516,7 +13516,11 @@ let BattleMovedex = {
 		flags: {snatch: 1, heal: 1},
 		onTryMove(pokemon) {
 			if (pokemon.hp < pokemon.maxhp && pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return;
-			this.add('-fail', pokemon);
+			if (pokemon.hp === pokemon.maxhp && pokemon.status) {
+				this.add('-message', pokemon.name + "'s HP is full!");
+			} else {
+				this.add('-fail', pokemon);
+			}
 			return null;
 		},
 		onHit(target, source, move) {
