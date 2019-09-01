@@ -25,6 +25,7 @@ exports.BattleScripts = {
 			do {
 				let learnset = learnsets[target].learnset;
 				for (let move in learnset) {
+					if (move === 'shellsmash') continue;
 					let source = learnset[move][0].charAt(0) + 'L0';
 					if (!(move in learnsets[pokemon].learnset)) this.modData('Learnsets', pokemon).learnset[move] = [source];
 				}

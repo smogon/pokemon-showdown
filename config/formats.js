@@ -823,7 +823,7 @@ let Formats = [
 
 		mod: 'mergemons',
 		ruleset: ['[Gen 7] OU'],
-		banlist: [],
+		banlist: ['Serperior'],
 	},
 	{
 		section: "Other Metagames",
