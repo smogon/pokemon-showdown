@@ -238,7 +238,7 @@ export const pages: PageTable = {
 			buf += `<h2>There is no lottery running in ${this.room.title}</h2></div>`;
 			return buf;
 		}
-		buf += `<h2 style="text-align: center">${lottery.name}</h2>${lottery.markup}<br /><br />`;
+		buf += `<h2 style="text-align: center">${lottery.name}</h2>${lottery.markup}<br />`;
 		if (lottery.running) {
 			const userSignedUp = lottery.participants[user.latestIp]
 				|| Object.values(lottery.participants).map(toID).includes(user.userid);
