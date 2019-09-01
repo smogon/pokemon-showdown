@@ -1042,7 +1042,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Black Hole Eclipse', target);
 		},
 		onModifyMove(move, pokemon, target) {
-			if (target.getStat('def', false, true) > target.getStat('spd', false, true)) move.category = 'Physical';
+			if (target.getStat('def', false, true) < target.getStat('spd', false, true)) move.category = 'Physical';
 		},
 		onBasePower(basePower, source, target, move) {
 			if (move.category === 'Physical') {
