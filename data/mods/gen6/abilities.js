@@ -9,6 +9,7 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.aerilateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
+		rating: 4.5,
 	},
 	"aftermath": {
 		inherit: true,
@@ -33,7 +34,7 @@ let BattleAbilities = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
-		rating: 4.5,
+		rating: 4,
 	},
 	"infiltrator": {
 		inherit: true,
@@ -87,6 +88,7 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.5);
 		},
+		rating: 5,
 	},
 	"pixilate": {
 		inherit: true,
@@ -95,11 +97,11 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.pixilateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
+		rating: 4.5,
 	},
 	"prankster": {
 		inherit: true,
 		shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1.",
-		rating: 4.5,
 	},
 	"refrigerate": {
 		inherit: true,
@@ -108,6 +110,7 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.refrigerateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
+		rating: 4.5,
 	},
 	"roughskin": {
 		inherit: true,
