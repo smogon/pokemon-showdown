@@ -853,7 +853,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			if (name === 'Arsenal' && this.getItem(set.item).onPlate) {
 				set.species = 'Arceus-' + this.getItem(set.item).onPlate;
 			}
-			if (name === 'Gallant Spear' && set.item === 'Choice Band') set.moves[2] = 'Aqua Tail';
+			if (name === 'Gallant Spear' && set.item === 'Choice Band') set.moves[set.moves.indexOf('Recover')] = 'Aqua Tail';
 			if (name === 'The Immortal' && set.item === 'Choice Scarf') set.moves[3] = 'Superpower';
 			if (name === 'irritated' && !set.moves.includes('Double Iron Bash')) set.moves[this.random(3)] = 'Double Iron Bash';
 			team.push(set);
