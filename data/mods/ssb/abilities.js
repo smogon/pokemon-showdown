@@ -1004,7 +1004,7 @@ let BattleAbilities = {
 	},
 	// Schiavetto
 	rvs: {
-		desc: "This Pokemon has two random stats raised by 1 stages and another stat lowered by 1 stage at the end of each turn.",
+		desc: "This Pokemon has two random stats except accurancy and evasion raised by 1 stages and another stat other than accurancy and evasion lowered by 1 stage at the end of each turn.",
 		shortDesc: "Raises a 2 random stats by 1 and lowers another stat by 1 at the end the turn.",
 		id: "rvs",
 		name: "RVS",
