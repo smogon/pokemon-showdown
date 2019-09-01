@@ -623,6 +623,7 @@ let BattleAbilities = {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ice') {
 				this.add('-immune', target, '[from] ability: Minnesnowta');
+				return null;
 			}
 		},
 		onBasePowerPriority: 8,
@@ -1014,6 +1015,7 @@ let BattleAbilities = {
 			let stats = [];
 			let boost = {};
 			for (let statPlus in pokemon.boosts) {
+				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
 				// @ts-ignore
 				if (pokemon.boosts[statPlus] < 6) {
 					stats.push(statPlus);
@@ -1033,6 +1035,7 @@ let BattleAbilities = {
 
 			stats = [];
 			for (let statMinus in pokemon.boosts) {
+				if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
 				// @ts-ignore
 				if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
 					stats.push(statMinus);
