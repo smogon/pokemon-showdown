@@ -192,7 +192,7 @@ const commands = {
 		for (const room of Rooms.rooms.values()) {
 			if (!room.game) continue;
 			if ((targetUser.userid in room.game.playerTable && !targetUser.inRooms.has(room.id)) ||
-				room.auth[targetUser.userid] === Users.PLAYER_SYMBOL) {
+				(room.auth && room.auth[targetUser.userid] === Users.PLAYER_SYMBOL)) {
 				if (room.isPrivate && !canViewAlts) {
 					continue;
 				}
