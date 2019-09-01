@@ -1566,7 +1566,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		// This is the "REALLY can't think of a good item" cutoff
 		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['superfang'] && !hasMove['uturn']) {
-			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
+			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275 || template.baseStats.spe > 40 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
 			item = 'Custap Berry';
 		} else if (ability === 'Super Luck') {
