@@ -2,37 +2,33 @@
 
 Ratings and how they work:
 
--2: Extremely detrimental
-	  The sort of ability that relegates Pokemon with Uber-level BSTs into NU.
-	ex. Slow Start, Truant
-
 -1: Detrimental
-	  An ability that does more harm than good.
-	ex. Defeatist, Normalize
+	  An ability that severely harms the user.
+	ex. Defeatist, Slow Start
 
  0: Useless
-	  An ability with no net effect during a singles battle.
-	ex. Healer, Illuminate
+	  An ability with no overall benefit in a singles battle.
+	ex. Color Change, Plus
 
  1: Ineffective
-	  An ability that has a minimal effect. Should not be chosen over any other ability.
-	ex. Damp, Shell Armor
+	  An ability that has minimal effect or is only useful in niche situations.
+	ex. Inner Focus, Suction Cups
 
- 2: Situationally useful
-	  An ability that can be useful in certain situations.
-	ex. Clear Body, Static
+ 2: Useful
+	  An ability that can be generally useful.
+	ex. Flame Body, Overcoat
 
- 3: Useful
-	  An ability that is generally useful.
-	ex. Infiltrator, Sturdy
+ 3: Effective
+	  An ability with a strong effect on the user or foe.
+	ex. Chlorophyll, Natural Cure
 
  4: Very useful
-	  One of the most popular abilities. The difference between 3 and 4 can be ambiguous.
-	ex. Protean, Regenerator
+	  One of the more popular abilities. It requires minimal support to be effective.
+	ex. Adaptability, Magic Bounce
 
  5: Essential
 	  The sort of ability that defines metagames.
-	ex. Desolate Land, Shadow Tag
+	ex. Moody, Shadow Tag
 
 */
 
@@ -59,20 +55,6 @@ let BattleAbilities = {
 		rating: 4,
 		num: 91,
 	},
-	"aftermath": {
-		desc: "If this Pokemon is knocked out with a contact move, that move's user loses 1/4 of its maximum HP, rounded down. If any active Pokemon has the Damp Ability, this effect is prevented.",
-		shortDesc: "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
-		id: "aftermath",
-		name: "Aftermath",
-		onAfterDamageOrder: 1,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
-				this.damage(source.maxhp / 4, source, target);
-			}
-		},
-		rating: 2.5,
-		num: 106,
-	},
 	"aerilate": {
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.2x power.",
@@ -92,6 +74,20 @@ let BattleAbilities = {
 		rating: 4,
 		num: 185,
 	},
+	"aftermath": {
+		desc: "If this Pokemon is knocked out with a contact move, that move's user loses 1/4 of its maximum HP, rounded down. If any active Pokemon has the Damp Ability, this effect is prevented.",
+		shortDesc: "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
+		id: "aftermath",
+		name: "Aftermath",
+		onAfterDamageOrder: 1,
+		onAfterDamage(damage, target, source, move) {
+			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
+				this.damage(source.maxhp / 4, source, target);
+			}
+		},
+		rating: 2.5,
+		num: 106,
+	},
 	"airlock": {
 		shortDesc: "While this Pokemon is active, the effects of weather conditions are disabled.",
 		onStart(pokemon) {
@@ -100,7 +96,7 @@ let BattleAbilities = {
 		suppressWeather: true,
 		id: "airlock",
 		name: "Air Lock",
-		rating: 2.5,
+		rating: 2,
 		num: 76,
 	},
 	"analytic": {
@@ -138,7 +134,7 @@ let BattleAbilities = {
 		},
 		id: "angerpoint",
 		name: "Anger Point",
-		rating: 2,
+		rating: 1.5,
 		num: 83,
 	},
 	"anticipation": {
@@ -159,7 +155,7 @@ let BattleAbilities = {
 		},
 		id: "anticipation",
 		name: "Anticipation",
-		rating: 1,
+		rating: 0.5,
 		num: 107,
 	},
 	"arenatrap": {
@@ -180,7 +176,7 @@ let BattleAbilities = {
 		},
 		id: "arenatrap",
 		name: "Arena Trap",
-		rating: 4.5,
+		rating: 5,
 		num: 71,
 	},
 	"aromaveil": {
@@ -196,7 +192,7 @@ let BattleAbilities = {
 		},
 		id: "aromaveil",
 		name: "Aroma Veil",
-		rating: 1.5,
+		rating: 2,
 		num: 165,
 	},
 	"aurabreak": {
@@ -211,7 +207,7 @@ let BattleAbilities = {
 		},
 		id: "aurabreak",
 		name: "Aura Break",
-		rating: 1.5,
+		rating: 1,
 		num: 188,
 	},
 	"baddreams": {
@@ -230,7 +226,7 @@ let BattleAbilities = {
 		},
 		id: "baddreams",
 		name: "Bad Dreams",
-		rating: 2,
+		rating: 1.5,
 		num: 123,
 	},
 	"battery": {
@@ -272,7 +268,7 @@ let BattleAbilities = {
 		},
 		id: "battlebond",
 		name: "Battle Bond",
-		rating: 3,
+		rating: 4,
 		num: 210,
 	},
 	"beastboost": {
@@ -350,7 +346,7 @@ let BattleAbilities = {
 		},
 		id: "blaze",
 		name: "Blaze",
-		rating: 2.5,
+		rating: 2,
 		num: 66,
 	},
 	"bulletproof": {
@@ -364,7 +360,7 @@ let BattleAbilities = {
 		},
 		id: "bulletproof",
 		name: "Bulletproof",
-		rating: 3.5,
+		rating: 3,
 		num: 171,
 	},
 	"cheekpouch": {
@@ -375,7 +371,7 @@ let BattleAbilities = {
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
-		rating: 2,
+		rating: 1.5,
 		num: 167,
 	},
 	"chlorophyll": {
@@ -420,7 +416,7 @@ let BattleAbilities = {
 		suppressWeather: true,
 		id: "cloudnine",
 		name: "Cloud Nine",
-		rating: 2.5,
+		rating: 2,
 		num: 13,
 	},
 	"colorchange": {
@@ -444,7 +440,7 @@ let BattleAbilities = {
 		},
 		id: "colorchange",
 		name: "Color Change",
-		rating: 1,
+		rating: 0,
 		num: 16,
 	},
 	"comatose": {
@@ -462,7 +458,7 @@ let BattleAbilities = {
 		isUnbreakable: true,
 		id: "comatose",
 		name: "Comatose",
-		rating: 3,
+		rating: 3.5,
 		num: 213,
 	},
 	"competitive": {
@@ -497,7 +493,7 @@ let BattleAbilities = {
 		},
 		id: "compoundeyes",
 		name: "Compound Eyes",
-		rating: 3.5,
+		rating: 3,
 		num: 14,
 	},
 	"contrary": {
@@ -511,7 +507,7 @@ let BattleAbilities = {
 		},
 		id: "contrary",
 		name: "Contrary",
-		rating: 4,
+		rating: 4.5,
 		num: 126,
 	},
 	"corrosion": {
@@ -519,7 +515,7 @@ let BattleAbilities = {
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
 		id: "corrosion",
 		name: "Corrosion",
-		rating: 2.5,
+		rating: 2,
 		num: 212,
 	},
 	"cursedbody": {
@@ -550,7 +546,7 @@ let BattleAbilities = {
 		},
 		id: "cutecharm",
 		name: "Cute Charm",
-		rating: 1,
+		rating: 0.5,
 		num: 56,
 	},
 	"damp": {
@@ -579,7 +575,7 @@ let BattleAbilities = {
 		id: "dancer",
 		name: "Dancer",
 		// implemented in runMove in scripts.js
-		rating: 2.5,
+		rating: 1.5,
 		num: 216,
 	},
 	"darkaura": {
@@ -597,7 +593,7 @@ let BattleAbilities = {
 		isUnbreakable: true,
 		id: "darkaura",
 		name: "Dark Aura",
-		rating: 3,
+		rating: 3.5,
 		num: 186,
 	},
 	"dazzling": {
@@ -612,7 +608,7 @@ let BattleAbilities = {
 		},
 		id: "dazzling",
 		name: "Dazzling",
-		rating: 2.5,
+		rating: 2,
 		num: 219,
 	},
 	"defeatist": {
@@ -680,7 +676,7 @@ let BattleAbilities = {
 		},
 		id: "deltastream",
 		name: "Delta Stream",
-		rating: 5,
+		rating: 4,
 		num: 191,
 	},
 	"desolateland": {
@@ -821,7 +817,7 @@ let BattleAbilities = {
 		id: "earlybird",
 		name: "Early Bird",
 		// Implemented in statuses.js
-		rating: 2,
+		rating: 1.5,
 		num: 48,
 	},
 	"effectspore": {
@@ -879,7 +875,7 @@ let BattleAbilities = {
 		},
 		id: "emergencyexit",
 		name: "Emergency Exit",
-		rating: 1.5,
+		rating: 1,
 		num: 194,
 	},
 	"fairyaura": {
@@ -897,7 +893,7 @@ let BattleAbilities = {
 		isUnbreakable: true,
 		id: "fairyaura",
 		name: "Fairy Aura",
-		rating: 3,
+		rating: 3.5,
 		num: 187,
 	},
 	"filter": {
@@ -938,7 +934,7 @@ let BattleAbilities = {
 		},
 		id: "flareboost",
 		name: "Flare Boost",
-		rating: 2.5,
+		rating: 2,
 		num: 138,
 	},
 	"flashfire": {
@@ -981,7 +977,7 @@ let BattleAbilities = {
 		},
 		id: "flashfire",
 		name: "Flash Fire",
-		rating: 3,
+		rating: 3.5,
 		num: 18,
 	},
 	"flowergift": {
@@ -1018,7 +1014,7 @@ let BattleAbilities = {
 		},
 		id: "flowergift",
 		name: "Flower Gift",
-		rating: 2,
+		rating: 1,
 		num: 122,
 	},
 	"flowerveil": {
@@ -1071,7 +1067,7 @@ let BattleAbilities = {
 		},
 		id: "fluffy",
 		name: "Fluffy",
-		rating: 2.5,
+		rating: 3,
 		num: 218,
 	},
 	"forecast": {
@@ -1102,7 +1098,7 @@ let BattleAbilities = {
 		},
 		id: "forecast",
 		name: "Forecast",
-		rating: 3,
+		rating: 2,
 		num: 59,
 	},
 	"forewarn": {
@@ -1135,7 +1131,7 @@ let BattleAbilities = {
 		},
 		id: "forewarn",
 		name: "Forewarn",
-		rating: 1,
+		rating: 0.5,
 		num: 108,
 	},
 	"friendguard": {
@@ -1198,7 +1194,7 @@ let BattleAbilities = {
 		},
 		id: "furcoat",
 		name: "Fur Coat",
-		rating: 3.5,
+		rating: 4,
 		num: 169,
 	},
 	"galewings": {
@@ -1247,7 +1243,7 @@ let BattleAbilities = {
 		},
 		id: "gooey",
 		name: "Gooey",
-		rating: 2.5,
+		rating: 2,
 		num: 183,
 	},
 	"grasspelt": {
@@ -1258,7 +1254,7 @@ let BattleAbilities = {
 		},
 		id: "grasspelt",
 		name: "Grass Pelt",
-		rating: 1,
+		rating: 0.5,
 		num: 179,
 	},
 	"grassysurge": {
@@ -1341,7 +1337,7 @@ let BattleAbilities = {
 		},
 		id: "heatproof",
 		name: "Heatproof",
-		rating: 2.5,
+		rating: 2,
 		num: 85,
 	},
 	"heavymetal": {
@@ -1351,7 +1347,7 @@ let BattleAbilities = {
 		},
 		id: "heavymetal",
 		name: "Heavy Metal",
-		rating: -1,
+		rating: 0,
 		num: 134,
 	},
 	"honeygather": {
@@ -1405,7 +1401,7 @@ let BattleAbilities = {
 		},
 		id: "hydration",
 		name: "Hydration",
-		rating: 2,
+		rating: 1.5,
 		num: 93,
 	},
 	"hypercutter": {
@@ -1437,7 +1433,7 @@ let BattleAbilities = {
 		},
 		id: "icebody",
 		name: "Ice Body",
-		rating: 1.5,
+		rating: 1,
 		num: 115,
 	},
 	"illuminate": {
@@ -1481,7 +1477,7 @@ let BattleAbilities = {
 		isUnbreakable: true,
 		id: "illusion",
 		name: "Illusion",
-		rating: 4,
+		rating: 4.5,
 		num: 149,
 	},
 	"immunity": {
@@ -1515,7 +1511,7 @@ let BattleAbilities = {
 		},
 		id: "imposter",
 		name: "Imposter",
-		rating: 4.5,
+		rating: 5,
 		num: 150,
 	},
 	"infiltrator": {
@@ -1526,7 +1522,7 @@ let BattleAbilities = {
 		},
 		id: "infiltrator",
 		name: "Infiltrator",
-		rating: 3,
+		rating: 2.5,
 		num: 151,
 	},
 	"innardsout": {
@@ -1540,7 +1536,7 @@ let BattleAbilities = {
 				this.damage(damage, source, target);
 			}
 		},
-		rating: 2.5,
+		rating: 3.5,
 		num: 215,
 	},
 	"innerfocus": {
@@ -1590,7 +1586,7 @@ let BattleAbilities = {
 		},
 		id: "intimidate",
 		name: "Intimidate",
-		rating: 3.5,
+		rating: 4,
 		num: 22,
 	},
 	"ironbarbs": {
@@ -1604,7 +1600,7 @@ let BattleAbilities = {
 		},
 		id: "ironbarbs",
 		name: "Iron Barbs",
-		rating: 3,
+		rating: 2.5,
 		num: 160,
 	},
 	"ironfist": {
@@ -1631,7 +1627,7 @@ let BattleAbilities = {
 		},
 		id: "justified",
 		name: "Justified",
-		rating: 2,
+		rating: 2.5,
 		num: 154,
 	},
 	"keeneye": {
@@ -1680,7 +1676,7 @@ let BattleAbilities = {
 		},
 		id: "leafguard",
 		name: "Leaf Guard",
-		rating: 1,
+		rating: 0.5,
 		num: 102,
 	},
 	"levitate": {
@@ -1724,7 +1720,7 @@ let BattleAbilities = {
 		},
 		id: "lightningrod",
 		name: "Lightning Rod",
-		rating: 3.5,
+		rating: 3,
 		num: 32,
 	},
 	"limber": {
@@ -1743,7 +1739,7 @@ let BattleAbilities = {
 		},
 		id: "limber",
 		name: "Limber",
-		rating: 1.5,
+		rating: 2,
 		num: 7,
 	},
 	"liquidooze": {
@@ -1773,7 +1769,7 @@ let BattleAbilities = {
 		},
 		id: "liquidvoice",
 		name: "Liquid Voice",
-		rating: 2.5,
+		rating: 1.5,
 		num: 204,
 	},
 	"longreach": {
@@ -1815,7 +1811,7 @@ let BattleAbilities = {
 		effect: {
 			duration: 1,
 		},
-		rating: 4.5,
+		rating: 4,
 		num: 156,
 	},
 	"magicguard": {
@@ -1828,7 +1824,7 @@ let BattleAbilities = {
 		},
 		id: "magicguard",
 		name: "Magic Guard",
-		rating: 4.5,
+		rating: 4,
 		num: 98,
 	},
 	"magician": {
@@ -1865,7 +1861,7 @@ let BattleAbilities = {
 		},
 		id: "magmaarmor",
 		name: "Magma Armor",
-		rating: 0.5,
+		rating: 1,
 		num: 40,
 	},
 	"magnetpull": {
@@ -1913,7 +1909,7 @@ let BattleAbilities = {
 		},
 		id: "megalauncher",
 		name: "Mega Launcher",
-		rating: 3.5,
+		rating: 3,
 		num: 178,
 	},
 	"merciless": {
@@ -2043,7 +2039,7 @@ let BattleAbilities = {
 		},
 		id: "multiscale",
 		name: "Multiscale",
-		rating: 4,
+		rating: 3.5,
 		num: 136,
 	},
 	"multitype": {
@@ -2154,7 +2150,7 @@ let BattleAbilities = {
 		},
 		id: "naturalcure",
 		name: "Natural Cure",
-		rating: 3.5,
+		rating: 3,
 		num: 30,
 	},
 	"neuroforce": {
@@ -2166,7 +2162,7 @@ let BattleAbilities = {
 		},
 		id: "neuroforce",
 		name: "Neuroforce",
-		rating: 3,
+		rating: 2.5,
 		num: 233,
 	},
 	"noguard": {
@@ -2198,7 +2194,7 @@ let BattleAbilities = {
 		},
 		id: "normalize",
 		name: "Normalize",
-		rating: -1,
+		rating: 0,
 		num: 96,
 	},
 	"oblivious": {
@@ -2227,7 +2223,7 @@ let BattleAbilities = {
 		},
 		id: "oblivious",
 		name: "Oblivious",
-		rating: 1,
+		rating: 1.5,
 		num: 12,
 	},
 	"overcoat": {
@@ -2244,7 +2240,7 @@ let BattleAbilities = {
 		},
 		id: "overcoat",
 		name: "Overcoat",
-		rating: 2.5,
+		rating: 2,
 		num: 142,
 	},
 	"overgrow": {
@@ -2266,7 +2262,7 @@ let BattleAbilities = {
 		},
 		id: "overgrow",
 		name: "Overgrow",
-		rating: 2.5,
+		rating: 2,
 		num: 65,
 	},
 	"owntempo": {
@@ -2312,8 +2308,33 @@ let BattleAbilities = {
 		},
 		id: "parentalbond",
 		name: "Parental Bond",
-		rating: 5,
+		rating: 4.5,
 		num: 184,
+	},
+	"pickpocket": {
+		desc: "If this Pokemon has no item, it steals the item off a Pokemon that makes contact with it. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect.",
+		shortDesc: "If this Pokemon has no item, it steals the item off a Pokemon making contact with it.",
+		onAfterMoveSecondary(target, source, move) {
+			if (source && source !== target && move && move.flags['contact']) {
+				if (target.item) {
+					return;
+				}
+				let yourItem = source.takeItem(target);
+				if (!yourItem) {
+					return;
+				}
+				if (!target.setItem(yourItem)) {
+					source.item = yourItem.id;
+					return;
+				}
+				this.add('-enditem', source, yourItem, '[silent]', '[from] ability: Pickpocket', '[of] ' + source);
+				this.add('-item', target, yourItem, '[from] ability: Pickpocket', '[of] ' + source);
+			}
+		},
+		id: "pickpocket",
+		name: "Pickpocket",
+		rating: 1,
+		num: 124,
 	},
 	"pickup": {
 		shortDesc: "If this Pokemon has no item, it finds one used by an adjacent Pokemon this turn.",
@@ -2338,31 +2359,6 @@ let BattleAbilities = {
 		name: "Pickup",
 		rating: 0.5,
 		num: 53,
-	},
-	"pickpocket": {
-		desc: "If this Pokemon has no item, it steals the item off a Pokemon that makes contact with it. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect.",
-		shortDesc: "If this Pokemon has no item, it steals the item off a Pokemon making contact with it.",
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
-				if (target.item) {
-					return;
-				}
-				let yourItem = source.takeItem(target);
-				if (!yourItem) {
-					return;
-				}
-				if (!target.setItem(yourItem)) {
-					source.item = yourItem.id;
-					return;
-				}
-				this.add('-enditem', source, yourItem, '[silent]', '[from] ability: Pickpocket', '[of] ' + source);
-				this.add('-item', target, yourItem, '[from] ability: Pickpocket', '[of] ' + source);
-			}
-		},
-		id: "pickpocket",
-		name: "Pickpocket",
-		rating: 1.5,
-		num: 124,
 	},
 	"pixilate": {
 		desc: "This Pokemon's Normal-type moves become Fairy-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
@@ -2428,7 +2424,7 @@ let BattleAbilities = {
 		},
 		id: "poisonpoint",
 		name: "Poison Point",
-		rating: 2,
+		rating: 1.5,
 		num: 38,
 	},
 	"poisontouch": {
@@ -2535,7 +2531,7 @@ let BattleAbilities = {
 		},
 		id: "primordialsea",
 		name: "Primordial Sea",
-		rating: 5,
+		rating: 4.5,
 		num: 189,
 	},
 	"prismarmor": {
@@ -2566,7 +2562,7 @@ let BattleAbilities = {
 		},
 		id: "protean",
 		name: "Protean",
-		rating: 4,
+		rating: 4.5,
 		num: 168,
 	},
 	"psychicsurge": {
@@ -2576,7 +2572,7 @@ let BattleAbilities = {
 		},
 		id: "psychicsurge",
 		name: "Psychic Surge",
-		rating: 4,
+		rating: 4.5,
 		num: 227,
 	},
 	"purepower": {
@@ -2602,7 +2598,7 @@ let BattleAbilities = {
 		},
 		id: "queenlymajesty",
 		name: "Queenly Majesty",
-		rating: 3,
+		rating: 2,
 		num: 214,
 	},
 	"quickfeet": {
@@ -2701,7 +2697,7 @@ let BattleAbilities = {
 		},
 		id: "regenerator",
 		name: "Regenerator",
-		rating: 4,
+		rating: 4.5,
 		num: 144,
 	},
 	"rivalry": {
@@ -2721,7 +2717,7 @@ let BattleAbilities = {
 		},
 		id: "rivalry",
 		name: "Rivalry",
-		rating: 0.5,
+		rating: 0,
 		num: 79,
 	},
 	"rkssystem": {
@@ -2743,7 +2739,7 @@ let BattleAbilities = {
 		},
 		id: "rockhead",
 		name: "Rock Head",
-		rating: 2.5,
+		rating: 3,
 		num: 69,
 	},
 	"roughskin": {
@@ -2757,7 +2753,7 @@ let BattleAbilities = {
 		},
 		id: "roughskin",
 		name: "Rough Skin",
-		rating: 3,
+		rating: 2.5,
 		num: 24,
 	},
 	"runaway": {
@@ -2810,7 +2806,7 @@ let BattleAbilities = {
 		},
 		id: "sandstream",
 		name: "Sand Stream",
-		rating: 4.5,
+		rating: 4,
 		num: 45,
 	},
 	"sandveil": {
@@ -2851,7 +2847,7 @@ let BattleAbilities = {
 		},
 		id: "sapsipper",
 		name: "Sap Sipper",
-		rating: 3.5,
+		rating: 3,
 		num: 157,
 	},
 	"schooling": {
@@ -2884,7 +2880,7 @@ let BattleAbilities = {
 		},
 		id: "schooling",
 		name: "Schooling",
-		rating: 3,
+		rating: 2.5,
 		num: 208,
 	},
 	"scrappy": {
@@ -2915,7 +2911,7 @@ let BattleAbilities = {
 		},
 		id: "serenegrace",
 		name: "Serene Grace",
-		rating: 4,
+		rating: 3.5,
 		num: 32,
 	},
 	"shadowshield": {
@@ -2967,7 +2963,7 @@ let BattleAbilities = {
 		},
 		id: "shedskin",
 		name: "Shed Skin",
-		rating: 3.5,
+		rating: 3,
 		num: 61,
 	},
 	"sheerforce": {
@@ -2988,7 +2984,7 @@ let BattleAbilities = {
 		},
 		id: "sheerforce",
 		name: "Sheer Force",
-		rating: 4,
+		rating: 3.5,
 		num: 125,
 	},
 	"shellarmor": {
@@ -3007,7 +3003,7 @@ let BattleAbilities = {
 		},
 		id: "shielddust",
 		name: "Shield Dust",
-		rating: 2.5,
+		rating: 2,
 		num: 19,
 	},
 	"shieldsdown": {
@@ -3053,7 +3049,7 @@ let BattleAbilities = {
 		isUnbreakable: true,
 		id: "shieldsdown",
 		name: "Shields Down",
-		rating: 3,
+		rating: 3.5,
 		num: 197,
 	},
 	"simple": {
@@ -3067,7 +3063,7 @@ let BattleAbilities = {
 		},
 		id: "simple",
 		name: "Simple",
-		rating: 4,
+		rating: 4.5,
 		num: 86,
 	},
 	"skilllink": {
@@ -3082,7 +3078,7 @@ let BattleAbilities = {
 		},
 		id: "skilllink",
 		name: "Skill Link",
-		rating: 3.5,
+		rating: 3,
 		num: 92,
 	},
 	"slowstart": {
@@ -3112,7 +3108,7 @@ let BattleAbilities = {
 		},
 		id: "slowstart",
 		name: "Slow Start",
-		rating: -2,
+		rating: -1,
 		num: 112,
 	},
 	"slushrush": {
@@ -3137,7 +3133,7 @@ let BattleAbilities = {
 		},
 		id: "sniper",
 		name: "Sniper",
-		rating: 1.5,
+		rating: 2,
 		num: 97,
 	},
 	"snowcloak": {
@@ -3184,7 +3180,7 @@ let BattleAbilities = {
 		},
 		id: "solarpower",
 		name: "Solar Power",
-		rating: 1.5,
+		rating: 2,
 		num: 94,
 	},
 	"solidrock": {
@@ -3227,7 +3223,7 @@ let BattleAbilities = {
 		},
 		id: "soundproof",
 		name: "Soundproof",
-		rating: 2,
+		rating: 1.5,
 		num: 43,
 	},
 	"speedboost": {
@@ -3263,7 +3259,7 @@ let BattleAbilities = {
 		},
 		id: "stakeout",
 		name: "Stakeout",
-		rating: 3,
+		rating: 4.5,
 		num: 198,
 	},
 	"stall": {
@@ -3285,7 +3281,7 @@ let BattleAbilities = {
 		},
 		id: "stamina",
 		name: "Stamina",
-		rating: 3,
+		rating: 3.5,
 		num: 192,
 	},
 	"stancechange": {
@@ -3300,7 +3296,7 @@ let BattleAbilities = {
 		},
 		id: "stancechange",
 		name: "Stance Change",
-		rating: 5,
+		rating: 4.5,
 		num: 176,
 	},
 	"static": {
@@ -3345,7 +3341,7 @@ let BattleAbilities = {
 		},
 		id: "steelworker",
 		name: "Steelworker",
-		rating: 3,
+		rating: 3.5,
 		num: 200,
 	},
 	"stench": {
@@ -3406,7 +3402,7 @@ let BattleAbilities = {
 		},
 		id: "stormdrain",
 		name: "Storm Drain",
-		rating: 3.5,
+		rating: 3,
 		num: 114,
 	},
 	"strongjaw": {
@@ -3475,7 +3471,7 @@ let BattleAbilities = {
 		},
 		id: "surgesurfer",
 		name: "Surge Surfer",
-		rating: 2,
+		rating: 2.5,
 		num: 207,
 	},
 	"swarm": {
@@ -3497,7 +3493,7 @@ let BattleAbilities = {
 		},
 		id: "swarm",
 		name: "Swarm",
-		rating: 2.5,
+		rating: 2,
 		num: 68,
 	},
 	"sweetveil": {
@@ -3594,7 +3590,7 @@ let BattleAbilities = {
 		},
 		id: "tanglinghair",
 		name: "Tangling Hair",
-		rating: 2.5,
+		rating: 2,
 		num: 221,
 	},
 	"technician": {
@@ -3609,7 +3605,7 @@ let BattleAbilities = {
 		},
 		id: "technician",
 		name: "Technician",
-		rating: 4,
+		rating: 3.5,
 		num: 101,
 	},
 	"telepathy": {
@@ -3670,7 +3666,7 @@ let BattleAbilities = {
 		},
 		id: "tintedlens",
 		name: "Tinted Lens",
-		rating: 3.5,
+		rating: 4,
 		num: 110,
 	},
 	"torrent": {
@@ -3692,22 +3688,8 @@ let BattleAbilities = {
 		},
 		id: "torrent",
 		name: "Torrent",
-		rating: 2.5,
+		rating: 2,
 		num: 67,
-	},
-	"toxicboost": {
-		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5.",
-		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power.",
-		onBasePowerPriority: 8,
-		onBasePower(basePower, attacker, defender, move) {
-			if ((attacker.status === 'psn' || attacker.status === 'tox') && move.category === 'Physical') {
-				return this.chainModify(1.5);
-			}
-		},
-		id: "toxicboost",
-		name: "Toxic Boost",
-		rating: 3,
-		num: 137,
 	},
 	"toughclaws": {
 		shortDesc: "This Pokemon's contact moves have their power multiplied by 1.3.",
@@ -3721,6 +3703,20 @@ let BattleAbilities = {
 		name: "Tough Claws",
 		rating: 3.5,
 		num: 181,
+	},
+	"toxicboost": {
+		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5.",
+		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power.",
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if ((attacker.status === 'psn' || attacker.status === 'tox') && move.category === 'Physical') {
+				return this.chainModify(1.5);
+			}
+		},
+		id: "toxicboost",
+		name: "Toxic Boost",
+		rating: 2.5,
+		num: 137,
 	},
 	"trace": {
 		desc: "On switch-in, or when this Pokemon acquires this ability, this Pokemon copies a random adjacent opposing Pokemon's Ability. However, if one or more adjacent Pokemon has the Ability \"No Ability\", Trace won't copy anything even if there is another valid Ability it could normally copy. Otherwise, if there is no Ability that can be copied at that time, this Ability will activate as soon as an Ability can be copied. Abilities that cannot be copied are the previously mentioned \"No Ability\", as well as Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Schooling, Stance Change, Trace, and Zen Mode.",
@@ -3750,7 +3746,7 @@ let BattleAbilities = {
 		},
 		id: "trace",
 		name: "Trace",
-		rating: 3,
+		rating: 2.5,
 		num: 36,
 	},
 	"triage": {
@@ -3782,7 +3778,7 @@ let BattleAbilities = {
 		effect: {},
 		id: "truant",
 		name: "Truant",
-		rating: -2,
+		rating: -1,
 		num: 54,
 	},
 	"turboblaze": {
@@ -3817,7 +3813,7 @@ let BattleAbilities = {
 				boosts['accuracy'] = 0;
 			}
 		},
-		rating: 3,
+		rating: 3.5,
 		num: 109,
 	},
 	"unburden": {
@@ -3866,7 +3862,7 @@ let BattleAbilities = {
 		},
 		id: "victorystar",
 		name: "Victory Star",
-		rating: 3,
+		rating: 2.5,
 		num: 162,
 	},
 	"vitalspirit": {
@@ -3959,7 +3955,7 @@ let BattleAbilities = {
 		},
 		id: "waterbubble",
 		name: "Water Bubble",
-		rating: 4,
+		rating: 4.5,
 		num: 199,
 	},
 	"watercompaction": {
@@ -3971,7 +3967,7 @@ let BattleAbilities = {
 		},
 		id: "watercompaction",
 		name: "Water Compaction",
-		rating: 2,
+		rating: 1.5,
 		num: 195,
 	},
 	"waterveil": {
@@ -4053,7 +4049,7 @@ let BattleAbilities = {
 		},
 		id: "wimpout",
 		name: "Wimp Out",
-		rating: 1.5,
+		rating: 1,
 		num: 193,
 	},
 	"wonderguard": {
@@ -4117,7 +4113,7 @@ let BattleAbilities = {
 		},
 		id: "zenmode",
 		name: "Zen Mode",
-		rating: -1,
+		rating: 0,
 		num: 161,
 	},
 
@@ -4138,7 +4134,7 @@ let BattleAbilities = {
 		id: "mountaineer",
 		isNonstandard: "CAP",
 		name: "Mountaineer",
-		rating: 3.5,
+		rating: 3,
 		num: -2,
 	},
 	"rebound": {
@@ -4173,7 +4169,7 @@ let BattleAbilities = {
 		effect: {
 			duration: 1,
 		},
-		rating: 3.5,
+		rating: 3,
 		num: -3,
 	},
 	"persistent": {
@@ -4183,7 +4179,7 @@ let BattleAbilities = {
 		isNonstandard: "CAP",
 		name: "Persistent",
 		// implemented in the corresponding move
-		rating: 3.5,
+		rating: 3,
 		num: -4,
 	},
 };
