@@ -461,6 +461,26 @@ let BattleAbilities = {
 			if (move && pokemon.activeTurns === 1) return priority + 1;
 		},
 	},
+	// Gimm1ck
+	"russianrush": {
+		desc: "If Hail is active, this Pokemon's Speed and Accuracy is doubled.",
+		shortDesc: "If Hail is active, this Pokemon's Speed and Accuracy is doubled.",
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather('hail')) {
+				return this.chainModify(2);
+			}
+		},
+		onSourceModifyAccuracy(accuracy) {
+			if (this.field.isWeather('hail')) {
+				if (typeof accuracy !== 'number') return;
+				this.debug('russianrush - enhancing accuracy');
+				return accuracy * 2;
+			}
+		},
+		id: "russianrush",
+		name: "Russian Rush",
+		isNonstandard: "Custom",
+	},
 	// GMars
 	mysteryshell: {
 		desc: "If this pokemon is Minior-Meteor, it cannot be afflicted by a status condition. This pokemon cannot be hit with a critical hit.",

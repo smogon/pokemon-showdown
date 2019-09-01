@@ -312,6 +312,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Storm Assault OGs',
 				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 			},
+			'Gimm1ck': {
+				species: 'Beartic', ability: 'Russian Rush', item: 'Life Orb', gender: 'M',
+				moves: ['Icicle Crash', 'Earthquake', 'Close Combat'],
+				signatureMove: 'Slav Squat',
+				evs: {atk: 252, def: 4, spa: 0, spe: 252}, nature: 'Jolly',
+			},
 			'GMars': {
 				species: 'Minior-Meteor', ability: 'Mystery Shell', item: 'White Herb', gender: 'N',
 				moves: ['Acrobatics', 'Earthquake', 'Stone Edge'],

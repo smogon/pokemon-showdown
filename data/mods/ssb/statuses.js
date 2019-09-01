@@ -611,6 +611,18 @@ let BattleStatuses = {
 			this.add(`c|+Gallant Spear|UNIVAAAAAAAAAAAAAAASE!!`);
 		},
 	},
+	gimm1ck: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Gimm1ck|Давай!`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Gimm1ck|Must get more semechki`);
+		},
+		onFaint() {
+			this.add(`c|+Gimm1ck|Ran out of vodka`);
+		},
+	},
 	gmars: {
 		noCopy: true,
 		onStart(target) {

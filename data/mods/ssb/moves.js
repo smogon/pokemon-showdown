@@ -1731,6 +1731,37 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// Gimm1ck
+	"slavsquat": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Attack, Defense and Special Defense by 1 stage. Weather becomes Hail.",
+		shortDesc: "Raises the user's Atk, Def and Sp. Def by 1; weather becomes Hail.",
+		id: "slavsquat",
+		name: "Slav Squat",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Automotize', source);
+			this.add('-anim', source, 'Hail', source);
+			this.add('-anim', source, 'Gravity', source);
+		},
+		boosts: {
+			atk: 1,
+			def: 1,
+			spd: 1,
+		},
+		weather: 'hail',
+		secondary: null,
+		target: "self",
+		type: "Ice",
+	},
 	// GMars
 	tastetherainbow: {
 		accuracy: true,
