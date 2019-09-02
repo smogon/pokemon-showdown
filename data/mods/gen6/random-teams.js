@@ -202,7 +202,7 @@ class RandomGen6Teams extends RandomTeams {
 				// Bad after setup
 				case 'circlethrow': case 'dragontail':
 					if (counter.setupType && ((!hasMove['rest'] && !hasMove['sleeptalk']) || hasMove['stormthrow'])) rejected = true;
-					if (!!counter['speedsetup'] || hasMove['encore'] || hasMove['raindance'] || hasMove['roar'] || hasMove['whirlwind']) rejected = true;
+					if (!!counter['speedsetup'] || hasMove['encore'] || hasMove['raindance'] || hasMove['roar'] || hasMove['trickroom'] || hasMove['whirlwind']) rejected = true;
 					break;
 				case 'defog':
 					if (counter.setupType || hasMove['spikes'] || hasMove['stealthrock'] || (hasMove['rest'] && hasMove['sleeptalk']) || teamDetails.hazardClear) rejected = true;
@@ -503,7 +503,7 @@ class RandomGen6Teams extends RandomTeams {
 					if (!SetupException.includes(moveid) && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
 				}
 				// @ts-ignore
-				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && !move.heal && moveid !== 'sleeptalk' && !hasType['Dark'] && !hasMove['darkpulse']) {
+				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'sleeptalk' && !hasType['Dark'] && !hasMove['darkpulse']) {
 					// Mono-attacking with setup and RestTalk is allowed
 					// Reject Status moves only if there is nothing else to reject
 					// @ts-ignore
@@ -546,7 +546,7 @@ class RandomGen6Teams extends RandomTeams {
 					(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
 					(template.requiredMove && movePool.includes(toID(template.requiredMove)))))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && !move.damage && !move.heal && moveid !== 'judgment' && moveid !== 'sleeptalk') {
+					if (!isSetup && !move.weather && !move.damage && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'judgment' && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
 					}
 				}
@@ -853,7 +853,7 @@ class RandomGen6Teams extends RandomTeams {
 
 		// This is the "REALLY can't think of a good item" cutoff
 		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['superfang'] && !hasMove['uturn']) {
-			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275 || template.baseStats.spe > 40 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
+			item = (!!counter['speedsetup'] || hasMove['trickroom'] || template.baseStats.spe > 40 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) ? 'Life Orb' : 'Leftovers';
 		} else if (ability === 'Gale Wings' && hasMove['bravebird']) {
 			item = 'Sharp Beak';
 		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
