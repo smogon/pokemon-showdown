@@ -445,7 +445,7 @@ class RandomTeams extends Dex.ModdedDex {
 	queryMoves(moves, hasType = {}, hasAbility = {}, movePool = []) {
 		// This is primarily a helper function for random setbuilder functions.
 		let counter = {
-			Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0, stab: 0, inaccurate: 0, priority: 0, recoil: 0, drain: 0,
+			Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0, stab: 0, inaccurate: 0, priority: 0, recoil: 0, drain: 0, sound: 0,
 			adaptability: 0, bite: 0, contrary: 0, hustle: 0, ironfist: 0, serenegrace: 0, sheerforce: 0, skilllink: 0, technician: 0,
 			physicalsetup: 0, specialsetup: 0, mixedsetup: 0, speedsetup: 0, physicalpool: 0, specialpool: 0,
 			/**@type {Move[]} */
@@ -537,6 +537,7 @@ class RandomTeams extends Dex.ModdedDex {
 				if (move.category === 'Physical') counter['hustle']++;
 				if (move.flags['bite']) counter['bite']++;
 				if (move.flags['punch']) counter['ironfist']++;
+				if (move.flags['sound']) counter['sound']++;
 				counter.damagingMoves.push(move);
 				counter.damagingMoveIndex[moveid] = k;
 			}
@@ -1271,6 +1272,8 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = template.types.includes('Ground');
 				} else if (ability === 'Limber') {
 					rejectAbility = template.types.includes('Electric');
+				} else if (ability === 'Liquid Voice') {
+					rejectAbility = !counter['sound'];
 				} else if (ability === 'Magnet Pull') {
 					rejectAbility = !hasType['Electric'] && !hasMove['earthpower'];
 				} else if (ability === 'Mold Breaker') {
