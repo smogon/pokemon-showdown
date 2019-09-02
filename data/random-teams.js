@@ -165,7 +165,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		for (let i = 0; i < 6; i++) {
 			let species = random6[i];
-			let template = this.getTemplate(species);
+			let template = Dex.mod('gen' + this.gen).getTemplate(species);
 
 			// Random legal item
 			let item = '';
@@ -177,7 +177,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 			// Make sure forme is legal
 			if (template.battleOnly || template.requiredItems && !template.requiredItems.some(req => toID(req) === item)) {
-				template = this.getTemplate(template.baseSpecies);
+				template = Dex.mod('gen' + this.gen).getTemplate(template.baseSpecies);
 				species = template.name;
 			}
 
@@ -191,10 +191,9 @@ class RandomTeams extends Dex.ModdedDex {
 			}
 
 			// Random legal ability
-			let abilities = Object.values(template.abilities).filter(a => this.getAbility(a).gen <= this.gen);
 			/**@type {string} */
 			// @ts-ignore
-			let ability = this.gen <= 2 ? 'None' : this.sample(abilities);
+			let ability = this.gen <= 2 ? 'None' : this.sample(Object.values(template.abilities));
 
 			// Four random unique moves from the movepool
 			let moves;
@@ -202,14 +201,14 @@ class RandomTeams extends Dex.ModdedDex {
 			if (species === 'Smeargle') {
 				pool = Object.keys(this.data.Movedex).filter(moveid => !(['chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge'].includes(moveid) || this.data.Movedex[moveid].isZ));
 			} else if (template.learnset) {
-				pool = Object.keys(template.learnset);
+				pool = Object.keys(template.learnset).filter(moveid => template.learnset[moveid].find(learned => learned.includes(this.gen)));
 				if (template.species.substr(0, 6) === 'Rotom-') {
 					const learnset = this.getTemplate(template.baseSpecies).learnset;
 					if (learnset) pool = [...new Set(pool.concat(Object.keys(learnset)))];
 				}
 			} else {
 				const learnset = this.getTemplate(template.baseSpecies).learnset;
-				if (learnset) pool = Object.keys(learnset);
+				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.includes(this.gen)));
 			}
 			if (pool.length <= 4) {
 				moves = pool;
