@@ -1281,7 +1281,9 @@ export class BasicChatRoom extends BasicRoom {
 		} else {
 			this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + oldid, user);
 		}
-		if (this.pollOrAnnouncement instanceof Poll && user.userid in this.pollOrAnnouncement.voters) this.pollOrAnnouncement.updateFor(user);
+		if (this.pollOrAnnouncement && 'voters' in this.pollOrAnnouncement) {
+			if (user.userid in this.pollOrAnnouncement.voters) this.pollOrAnnouncement.updateFor(user);
+		}
 		return true;
 	}
 	/**
