@@ -1923,6 +1923,18 @@ let Formats = [
 		unbanlist: ['Sand Veil'],
 	},
 	{
+		name: "[Gen 4] NU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3583742/">DPP NU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/3512254/">DPP NU Viability Ranking</a>`,
+		],
+
+		mod: 'gen4',
+		searchShow: false,
+		ruleset: ['[Gen 4] UU'],
+		banlist: ['UU', 'NUBL'],
+	},
+	{
 		name: "[Gen 4] LC",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/dp/articles/little_cup_guide">DPP LC Guide</a>`,
