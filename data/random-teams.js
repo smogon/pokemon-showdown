@@ -191,9 +191,10 @@ class RandomTeams extends Dex.ModdedDex {
 			}
 
 			// Random legal ability
+			let abilities = Object.values(template.abilities).filter(a => this.getAbility(a).gen <= this.gen);
 			/**@type {string} */
 			// @ts-ignore
-			let ability = this.gen <= 2 ? 'None' : this.sample(Object.values(template.abilities));
+			let ability = this.gen <= 2 ? 'None' : this.sample(abilities);
 
 			// Four random unique moves from the movepool
 			let moves;
@@ -201,6 +202,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (species === 'Smeargle') {
 				pool = Object.keys(this.data.Movedex).filter(moveid => !(['chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge'].includes(moveid) || this.data.Movedex[moveid].isZ));
 			} else if (template.learnset) {
+				// @ts-ignore
 				pool = Object.keys(template.learnset).filter(moveid => template.learnset[moveid].find(learned => learned.includes(this.gen)));
 				if (template.species.substr(0, 6) === 'Rotom-') {
 					const learnset = this.getTemplate(template.baseSpecies).learnset;
@@ -208,6 +210,7 @@ class RandomTeams extends Dex.ModdedDex {
 				}
 			} else {
 				const learnset = this.getTemplate(template.baseSpecies).learnset;
+				// @ts-ignore
 				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.includes(this.gen)));
 			}
 			if (pool.length <= 4) {
