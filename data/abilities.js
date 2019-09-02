@@ -1819,6 +1819,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon can only be damaged by direct attacks.",
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
 			}
 		},
