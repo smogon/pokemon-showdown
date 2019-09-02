@@ -1,4 +1,3 @@
-
 const LOTTERY_FILE = 'config/chat-plugins/lottery.json';
 
 import {FS} from '../../lib/fs';
@@ -110,6 +109,9 @@ export const commands: ChatCommands = {
 			if (maxWinnersNum < 1) {
 				return this.errorReply('The maximum winners should be at least 1.');
 			}
+			if (maxWinnersNum > Number.MAX_SAFE_INTEGER) {
+				return this.errorReply('The maximum winners number is too large, please pick a smaller number.');
+			}
 			if (name.length > 50) {
 				return this.errorReply('Name needs to be under 50 characters.');
 			}
@@ -149,6 +151,23 @@ export const commands: ChatCommands = {
 			this.modlog(`LOTTERY END ${lottery.name}`);
 			endLottery(room.id, winners);
 		},
+		editmarkup(target, room, user) {
+			if (!this.can('declare', null, room)) return;
+			const lottery = lotteries[room.id];
+			if (!lottery) {
+				return this.errorReply('This room does not have a lottery running.');
+			}
+			if (!lottery.running) {
+				return this.errorReply(`The "${lottery.name}" lottery already ended.`);
+			}
+			if (!target) {
+				return this.errorReply(`No markup was provided.`);
+			}
+			if (!this.canHTML(target)) return;
+			lottery.markup = target;
+			this.privateModAction(`(${user.name} edited the lottery markup)`);
+			this.modlog(`LOTTERY MARKUP EDIT ${lottery.name}`);
+		},
 		'!join': true,
 		join(target, room, user) {
 			// This hack is used for the HTML room to be able to
@@ -163,6 +182,9 @@ export const commands: ChatCommands = {
 			}
 			if (!lottery.running) {
 				return this.errorReply(`The "${lottery.name}" lottery already ended.`);
+			}
+			if (!user.named) {
+				return this.popupReply('You must be logged into an account to participate.');
 			}
 			if (!user.autoconfirmed) {
 				return this.popupReply('You must be autoconfirmed to join lotteries.');
@@ -200,7 +222,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		participants(target, room, user) {
-			if (!this.can('declare', null, room)) return;
+			if (!this.can('mute', null, room)) return;
 			const lottery = lotteries[room.id];
 			if (!lottery) {
 				return this.errorReply('This room does not have a lottery running.');
@@ -209,7 +231,12 @@ export const commands: ChatCommands = {
 			const participants = Object.entries(lottery.participants).map(([ip, participant]) => {
 				return `${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
 			});
-			const buf = `<b>List of participants (${participants.length}):</b><p>${participants.join(', ')}</p>`;
+			let buf = '';
+			if (user.can('declare', null, room)) {
+				buf += `<b>List of participants (${participants.length}):</b><p>${participants.join(', ')}</p>`;
+			} else {
+				buf += `${participants.length} participant(s) joined this lottery.`;
+			}
 			this.sendReplyBox(buf);
 		},
 		help() {
@@ -221,6 +248,7 @@ export const commands: ChatCommands = {
 		`/lottery create maxWinners, name, html - creates a new lottery with [name] as the header and [html] as body. Max winners is the amount of people that will win the lottery. Requires # & ~`,
 		`/lottery delete - deletes the current lottery without declaring a winner. Requires # & ~`,
 		`/lottery end - ends the current declaring a random participant as the winner. Requires # & ~`,
+		`/lottery editmarkup html - edits the lottery markup with the provided HTML. Requires # & ~`,
 		`/lottery join - joins the current lottery, if it exists, you need to be not currently punished in any public room, not locked and be autoconfirmed.`,
 		`/lottery leave - leaves the current lottery, if it exists.`,
 		`/lottery participants - shows the current participants in the lottery. Requires: # & ~`,
@@ -229,7 +257,6 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	lottery(query, user) {
-		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.extractRoom();
 		this.title = 'Lottery';
 		let buf = '<div class="pad">';
