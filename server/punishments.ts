@@ -228,7 +228,6 @@ const PunishmentsStorageTsv = new class {
 	 * IP, type (in this case always SHARED), note
 	 */
 	async loadSharedIps() {
-		console.log('TSV SHAREDIPS');
 		const data = await FS(SHAREDIPS_FILE).readIfExists();
 		if (!data) return;
 		for (const row of data.split("\n")) {
