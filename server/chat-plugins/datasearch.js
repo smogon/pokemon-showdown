@@ -689,6 +689,8 @@ function runDexsearch(target, cmd, canAll, message) {
 				let monStat = 0;
 				if (stat === 'bst') {
 					for (let monStats in dex[mon].baseStats) {
+						// account for merged Special stat in gen 1, don't count it twice
+						if (maxGen === 1 && monStats === 'spd') continue;
 						monStat += dex[mon].baseStats[monStats];
 					}
 				} else if (stat === 'weight') {
