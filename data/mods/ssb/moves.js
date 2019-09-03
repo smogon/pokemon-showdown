@@ -503,6 +503,7 @@ let BattleMovedex = {
 
 			pokemon.hp = Math.floor(pokemon.maxhp * (target.hp / target.maxhp)) || 1;
 			pokemon.status = target.status;
+			delete target.volatiles[target.name];
 			if (target.statusData) pokemon.statusData = target.statusData;
 			for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
 				moveSlot.pp = Math.floor(moveSlot.maxpp * (target.moveSlots[j] ? (target.moveSlots[j].pp / target.moveSlots[j].maxpp) : 1));
@@ -526,9 +527,13 @@ let BattleMovedex = {
 			// @ts-ignore Read only property needs to be written to for this to work (Prevent pokemon other than Level 51 from being above level 100)
 			target.level = 100;
 			target.set.level = 100;
+			target.ability = pokemon.ability;
 			// @ts-ignore Read only property needs to be written to for this to work (Prevent pokemon other than Level 51 from being above level 100)
 			target.side.active[0].level = 100;
 			target.side.active[0].set.level = 100;
+			target.set.evs = set.evs;
+			target.set.ivs = set.ivs;
+			target.set.nature = set.nature;
 			this.add('replace', target, pokemon.getDetails, target.hp / target.maxhp); // name change
 
 			const format = this.getFormat();
