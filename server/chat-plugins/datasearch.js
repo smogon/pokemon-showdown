@@ -655,8 +655,8 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			for (let type in alts.resists) {
 				let effectiveness = 0;
-				let notImmune = Dex.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = Dex.getEffectiveness(type, dex[mon]);
+				let notImmune = mod.getImmunity(type, dex[mon]);
+				if (notImmune) effectiveness = mod.getEffectiveness(type, dex[mon]);
 				if (!alts.resists[type]) {
 					if (notImmune && effectiveness >= 0) matched = true;
 				} else {
@@ -667,8 +667,8 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			for (let type in alts.weak) {
 				let effectiveness = 0;
-				let notImmune = Dex.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = Dex.getEffectiveness(type, dex[mon]);
+				let notImmune = mod.getImmunity(type, dex[mon]);
+				if (notImmune) effectiveness = mod.getEffectiveness(type, dex[mon]);
 				if (alts.weak[type]) {
 					if (notImmune && effectiveness >= 1) matched = true;
 				} else {
