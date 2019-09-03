@@ -1727,7 +1727,7 @@ let BattleStatuses = {
 	},
 	// Custom Acid Rain weather for Pirate Princess
 	acidrain: {
-		name: 'AcidRain',
+		name: 'Acid Rain',
 		id: 'acidrain',
 		num: 0,
 		effectType: 'Weather',
