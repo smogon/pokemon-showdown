@@ -1722,7 +1722,7 @@ let BattleStatuses = {
 		},
 		onResidualOrder: 10,
 		onResidual(pokemon) {
-			this.damage(pokemon.maxhp / 4);
+			this.damage(pokemon.maxhp / 6);
 		},
 	},
 	// Custom Acid Rain weather for Pirate Princess
