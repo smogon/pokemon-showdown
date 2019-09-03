@@ -61,7 +61,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'5gen': {
 				species: 'Sawsbuck', ability: 'Season\'s Gift', item: 'Heat Rock', gender: 'M',
-				moves: ['Double Edge', 'Knock Off', 'High Jump Kick'],
+				moves: ['Return', 'Knock Off', 'High Jump Kick'],
 				signatureMove: 'Too Much Saws',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
