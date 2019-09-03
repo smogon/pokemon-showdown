@@ -2,7 +2,7 @@
  * Random Simulation harness for testing and benchmarking purposes.
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Refer to `SIMULATE.md` for detailed usage instructions.
+ * Refer to `README.md` for detailed usage instructions.
  *
  * @license MIT
  */
@@ -38,14 +38,14 @@ if (process.argv[2]) {
 
 const child_process = require('child_process');
 const path = require('path');
-const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: path.resolve(__dirname, '..')});
+const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: path.resolve(__dirname, '../..')});
 shell('node build');
 
-const Dex = require('../.sim-dist/dex').Dex;
+const Dex = require('../../.sim-dist/dex').Dex;
 Dex.includeModData();
 
-const {ExhaustiveRunner} = require('../.sim-dist/tools/exhaustive-runner');
-const {MultiRandomRunner} = require('../.sim-dist/tools/multi-random-runner');
+const {ExhaustiveRunner} = require('../../.sim-dist/tools/exhaustive-runner');
+const {MultiRandomRunner} = require('../../.sim-dist/tools/multi-random-runner');
 
 // Tracks whether some promises threw errors that weren't caught so we can log
 // and exit with a non-zero status to fail any tests. This "shouldn't happen"
