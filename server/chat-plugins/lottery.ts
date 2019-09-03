@@ -119,7 +119,7 @@ export const commands: ChatCommands = {
 			this.sendReply('The lottery was successfully created.');
 			// tslint:disable-next-line: max-line-length
 			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the "<a href="/view-lottery-${room.id}">${name}</a>" lottery!</b></div>`);
-			this.modlog(`LOTTERY CREATE ${name}`);
+			this.modlog(`LOTTERY CREATE ${name}`, null, `${maxWinnersNum} max winners`);
 		},
 		delete(target, room, user) {
 			if (!this.can('declare', null, room)) return;
