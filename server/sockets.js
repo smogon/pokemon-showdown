@@ -392,7 +392,7 @@ if (cluster.isMaster) {
 
 	const sockjs = require('sockjs');
 	const options = {
-		sockjs_url: `//${Config.routes.client}/js/lib/sockjs-1.1.1-nwjsfix.min.js`,
+		sockjs_url: `//${Config.routes.client}/js/lib/sockjs-1.4.0.min.js`,
 		prefix: '/showdown',
 		/**
 		 * @param {string} severity
