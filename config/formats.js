@@ -302,7 +302,7 @@ let Formats = [
 		banlist: ['Sonic Boom', 'Dragon Rage'],
 		onValidateSet(set) {
 			let allowedNonLittleCupMons = [
-				'Accelgor', 'Aerodacyl', 'Alomomola', 'Arcanine', 'Aromatisse', 'Audino', 'Basculin', 'Bouffalant', 'Bruxish', 'Carbink',
+				'Accelgor', 'Aerodactyl', 'Alomomola', 'Arcanine', 'Aromatisse', 'Audino', 'Basculin', 'Bouffalant', 'Bruxish', 'Carbink',
 				'Carnivine', 'Castform', 'Chansey', 'Chatot', 'Cinccino', 'Cloyster', 'Comfey', 'Corsola', 'Cryogonal', 'Dedenne', 'Delcatty',
 				'Delibird', 'Dhelmise', 'Drampa', 'Druddigon', 'Dunsparce', 'Durant', 'Emolga', 'Escavalier', 'Exeggutor', 'Farfetch\'d',
 				'Flareon', 'Froslass', 'Furfrou', 'Girafarig', 'Gorebyss', 'Gourgeist', 'Gyarados', 'Hawlucha', 'Heatmor', 'Heliolisk',
