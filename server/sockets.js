@@ -392,7 +392,7 @@ if (cluster.isMaster) {
 
 	const sockjs = require('sockjs');
 	const options = {
-		sockjs_url: `//${Config.routes.client}/js/lib/sockjs-1.1.1-nwjsfix.min.js`,
+		sockjs_url: `//${Config.routes.client}/js/lib/sockjs-1.4.0.min.js`,
 		prefix: '/showdown',
 		/**
 		 * @param {string} severity
@@ -403,7 +403,7 @@ if (cluster.isMaster) {
 		},
 	};
 
-	if (Config.wsdeflate) {
+	if (Config.wsdeflate !== null) {
 		try {
 			// @ts-ignore
 			const deflate = require('permessage-deflate').configure(Config.wsdeflate);
@@ -644,23 +644,6 @@ if (cluster.isMaster) {
 					break;
 				}
 			}
-		}
-
-		// xhr-streamming connections sometimes end up becoming ghost
-		// connections. Since it already has keepalive set, we set a timeout
-		// instead and close the connection if it has been inactive for the
-		// configured SockJS heartbeat interval plus an extra second to account
-		// for any delay in receiving the SockJS heartbeat packet.
-		if (socket.protocol === 'xhr-streaming') {
-			// @ts-ignore
-			socket._session.recv.thingy.setTimeout(
-				// @ts-ignore
-				socket._session.recv.options.heartbeat_delay + 1000,
-				() => {
-					// @ts-ignore
-					if (socket._session.recv) socket._session.recv.didClose();
-				}
-			);
 		}
 
 		// @ts-ignore
