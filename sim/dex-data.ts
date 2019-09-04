@@ -655,7 +655,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.battleOnly = !!data.battleOnly || !!this.isMega || undefined;
 
 		if (!this.gen && this.num >= 1) {
-			if (this.num >= 722 || this.forme.startsWith('Alola')) {
+			if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;
 			} else if (this.forme === 'Primal') {
 				this.gen = 6;
