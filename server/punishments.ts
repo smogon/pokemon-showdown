@@ -678,7 +678,8 @@ export const Punishments = new class {
 		}
 		Monitor.log(`[${source}] ${punishment}: ${message}`);
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
-		Rooms.global.modlog(`(${toID(room)}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
+		const roomid = (room as Room).id ? (room as Room).id : room;
+		Rooms.global.modlog(`(${roomid}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
 	}
 	unlock(name: string) {
 		const user = Users.get(name);
