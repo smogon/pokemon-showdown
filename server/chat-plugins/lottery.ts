@@ -15,6 +15,9 @@ const lotteries: {
 } = lotteriesContents ? Object.assign(Object.create(null), JSON.parse(lotteriesContents)) : Object.create(null);
 
 function createLottery(roomid: string, maxWinners: number, name: string, markup: string) {
+	if (lotteries[roomid] && !lotteries[roomid].running) {
+		delete lotteries[roomid];
+	}
 	if (!lotteries[roomid]) {
 		lotteries[roomid] = {maxWinners, name, markup, participants: Object.create(null), winners: [], running: true};
 		writeLotteries();
@@ -140,6 +143,14 @@ export const commands: ChatCommands = {
 			}
 			if (!lottery.running) {
 				return this.errorReply(`The "${lottery.name}" lottery already ended.`);
+			}
+			for (const [ip, participant] of Object.entries(lottery.participants)) {
+				const userid = toID(participant);
+				const pUser = Users.get(userid);
+				if (Punishments.userids.get(userid)
+					|| Punishments.getRoomPunishments(pUser || userid, {publicOnly: true, checkIps: true}).length) {
+					delete lottery.participants[ip];
+				}
 			}
 			if (lottery.maxWinners >= Object.keys(lottery.participants).length) {
 				return this.errorReply('There have been not enough participants for you to be able to end this. If you wish to end it anyway use /lottery delete.');
