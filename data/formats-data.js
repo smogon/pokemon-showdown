@@ -1739,7 +1739,7 @@ let BattleFormatsData = {
 		doublesTier: "LC Uber",
 	},
 	tangrowth: {
-		randomBattleMoves: ["gigadrain", "leafstorm", "knockoff", "earthquake", "hiddenpowerfire", "rockslide", "sleeppowder", "leechseed", "synthesis"],
+		randomBattleMoves: ["gigadrain", "leafstorm", "knockoff", "earthquake", "hiddenpowerfire", "rockslide", "sleeppowder", "synthesis"],
 		randomDoubleBattleMoves: ["gigadrain", "sleeppowder", "hiddenpowerice", "leechseed", "knockoff", "ragepowder", "focusblast", "protect", "powerwhip", "earthquake"],
 		eventPokemon: [
 			{"generation": 4, "level": 50, "gender": "M", "nature": "Brave", "moves": ["sunnyday", "morningsun", "ancientpower", "naturalgift"], "pokeball": "cherishball"},
@@ -3491,7 +3491,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	dustox: {
-		randomBattleMoves: ["roost", "defog", "bugbuzz", "sludgebomb", "quiverdance", "uturn", "shadowball"],
+		randomBattleMoves: ["roost", "defog", "bugbuzz", "sludgebomb", "quiverdance", "uturn"],
 		randomDoubleBattleMoves: ["tailwind", "stringshot", "strugglebug", "bugbuzz", "protect", "sludgebomb", "quiverdance", "shadowball"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -3577,7 +3577,7 @@ let BattleFormatsData = {
 		tier: "LC Uber",
 	},
 	pelipper: {
-		randomBattleMoves: ["scald", "uturn", "hurricane", "toxic", "roost", "defog", "knockoff"],
+		randomBattleMoves: ["scald", "hurricane", "hydropump", "uturn", "roost", "defog", "knockoff"],
 		randomDoubleBattleMoves: ["scald", "surf", "hurricane", "wideguard", "protect", "tailwind", "knockoff"],
 		encounters: [
 			{"generation": 4, "level": 15},
@@ -6088,7 +6088,7 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	sigilyph: {
-		randomBattleMoves: ["cosmicpower", "roost", "storedpower", "psychoshift"],
+		randomBattleMoves: ["calmmind", "psychic", "psyshock", "heatwave", "roost", "defog"],
 		randomDoubleBattleMoves: ["psyshock", "heatwave", "icebeam", "airslash", "energyball", "shadowball", "tailwind", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
@@ -6194,7 +6194,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	gothitelle: {
-		randomBattleMoves: ["psychic", "thunderbolt", "shadowball", "hiddenpowerfire", "hiddenpowerfighting", "substitute", "calmmind", "trick", "psyshock"],
+		randomBattleMoves: ["confide", "charm", "taunt", "rest"],
 		randomDoubleBattleMoves: ["psychic", "thunderbolt", "shadowball", "hiddenpowerfighting", "reflect", "lightscreen", "psyshock", "energyball", "trickroom", "taunt", "healpulse", "protect"],
 		encounters: [
 			{"generation": 5, "level": 34, "isHidden": false},
@@ -8200,7 +8200,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	necrozma: {
-		randomBattleMoves: ["calmmind", "photongeyser", "darkpulse", "moonlight", "stealthrock", "storedpower"],
+		randomBattleMoves: ["calmmind", "photongeyser", "heatwave", "moonlight", "stealthrock"],
 		randomDoubleBattleMoves: ["calmmind", "trickroom", "moonlight", "storedpower", "psyshock", "darkpulse"],
 		eventPokemon: [
 			{"generation": 7, "level": 75, "moves": ["stealthrock", "irondefense", "wringout", "prismaticlaser"]},
