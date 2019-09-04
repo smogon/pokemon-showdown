@@ -302,11 +302,11 @@ let Formats = [
 		banlist: ['Sonic Boom', 'Dragon Rage'],
 		onValidateSet(set) {
 			let allowedNonLittleCupMons = [
-				'Accelgor', 'Aerodacyl', 'Alomomola', 'Arcanine', 'Aromatisse', 'Audino', 'Basculin', 'Bouffalant', 'Bruxish', 'Carbink',
+				'Accelgor', 'Aerodactyl', 'Alomomola', 'Arcanine', 'Aromatisse', 'Audino', 'Basculin', 'Bouffalant', 'Bruxish', 'Carbink',
 				'Carnivine', 'Castform', 'Chansey', 'Chatot', 'Cinccino', 'Cloyster', 'Comfey', 'Corsola', 'Cryogonal', 'Dedenne', 'Delcatty',
 				'Delibird', 'Dhelmise', 'Drampa', 'Druddigon', 'Dunsparce', 'Durant', 'Emolga', 'Escavalier', 'Exeggutor', 'Farfetch\'d',
 				'Flareon', 'Froslass', 'Furfrou', 'Girafarig', 'Gorebyss', 'Gourgeist', 'Gyarados', 'Hawlucha', 'Heatmor', 'Heliolisk',
-				'Heracross', 'Honchkrow', 'Huntail', 'Illumise', 'Jolteon', 'Kangaskhan', 'Kecleon', 'Klefki', 'Komala', 'Lapras', 'Liligant',
+				'Heracross', 'Honchkrow', 'Huntail', 'Illumise', 'Jolteon', 'Kangaskhan', 'Kecleon', 'Klefki', 'Komala', 'Lapras', 'Lilligant',
 				'Lunatone', 'Luvdisc', 'Mantine', 'Maractus', 'Marill', 'Mawile', 'Milotic', 'Miltank', 'Mimikyu', 'Minior', 'Minun', 'Mismagius',
 				'Mr. Mime', 'Musharna', 'Ninetales', 'Oranguru', 'Oricorio', 'Pachirisu', 'Passimian', 'Pinsir', 'Plusle', 'Porygon-Z', 'Porygon2',
 				'Pyukumuku', 'Qwilfish', 'Regigigas', 'Relicanth', 'Roselia', 'Roserade', 'Rotom', 'Sableye', 'Sawk', 'Scizor', 'Seviper', 'Shuckle',
