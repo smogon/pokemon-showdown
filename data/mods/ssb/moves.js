@@ -1779,7 +1779,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Increases this pokemon's Atk, Spa, and Spe by 2 stages while also decreating this pokemons Def and Spd by 1 stage. If this pokemon is a Minior-Meteor, it will permanentally transform into one of the minior colors and have a special effect based on that color. Red burns, orange confuses, yellow paralyzes, blue gives the user aqua ring status, indigo poisons, and violet badly poisions.",
+		desc: "Increases this pokemon's Atk, Spa, and Spe by 2 stages while also decreasing this pokemons Def and Spd by 1 stage. If this pokemon is a Minior-Meteor, it will permanently transform into one of the minior colors and have a special effect based on that color. Red burns, orange confuses, yellow paralyzes, blue gives the user aqua ring status, indigo poisons, and violet badly poisions.",
 		shortDesc: "+2 Atk, Spa, Spe. -1 Def, Spd. Meteor -> Core.",
 		id: "tastetherainbow",
 		name: "Taste the Rainbow",

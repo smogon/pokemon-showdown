@@ -328,7 +328,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Minior-Meteor', ability: 'Mystery Shell', item: 'White Herb', gender: 'N',
 				moves: ['Acrobatics', 'Earthquake', 'Stone Edge'],
 				signatureMove: 'Taste the Rainbow',
-				evs: {hp: 68, atk: 252, spe: 188}, nature: 'Adament',
+				evs: {hp: 68, atk: 252, spe: 188}, nature: 'Adamant',
 			},
 			'grimAuxiliatrix': {
 				species: 'Aggron', ability: 'Sturdy', item: 'Aggronite', gender: '',
