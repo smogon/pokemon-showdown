@@ -19,7 +19,7 @@ function saveRoomFaqs() {
 }
 
 /**
- * @param {string} roomid
+ * @param {RoomID} roomid
  * @param {string} key
  *
  * Aliases are implemented as a "regular" FAQ entry starting with a >. EX: {a: "text", b: ">a"}

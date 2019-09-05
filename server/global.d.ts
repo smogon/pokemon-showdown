@@ -49,6 +49,7 @@ declare global {
 	const Roomlogs: typeof RoomlogsType.Roomlogs
 	type Roomlog = RoomlogsType.Roomlog
 	type Room = RoomsType.Room
+	type RoomID = string & {__isRoomID: true};
 	namespace Rooms {
 		export type GlobalRoom = RoomsType.GlobalRoom
 		export type ChatRoom = RoomsType.ChatRoom
