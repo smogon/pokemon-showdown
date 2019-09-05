@@ -360,7 +360,7 @@ export class Connection {
 		this.lastActiveTime = Date.now();
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
+		if (roomid && roomid instanceof Rooms.BasicRoom) roomid = roomid.id;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
@@ -562,7 +562,7 @@ export class User extends Chat.MessageContext {
 	}
 
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
+		if (roomid && roomid instanceof Rooms.BasicRoom) roomid = roomid.id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
@@ -1309,7 +1309,7 @@ export class User extends Chat.MessageContext {
 		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid) as ID;
 	}
 	async tryJoinRoom(roomid: RoomID | Room, connection: Connection) {
-		roomid = roomid && (roomid as Room).id ? (roomid as Room).id : roomid as RoomID;
+		roomid = roomid && roomid instanceof Rooms.BasicRoom ? roomid.id : roomid;
 		const room = Rooms.search(roomid);
 		if (!room && roomid.startsWith('view-')) {
 			return Chat.resolvePage(roomid, this, connection);
