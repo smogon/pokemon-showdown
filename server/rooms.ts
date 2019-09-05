@@ -480,7 +480,11 @@ export class GlobalRoom extends BasicRoom {
 				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
 				continue;
 			}
-			const id = Rooms.toRoomID(chatRoomData.title);
+			// We're okay with assinging type `ID` to `RoomID` here
+			// because the hyphens in chatrooms don't have any special
+			// meaning, unlike in helptickets, groupchats, battles etc
+			// where they are used for shared modlogs and the like
+			const id = toID(chatRoomData.title) as RoomID;
 			Monitor.notice("NEW CHATROOM: " + id);
 			const room = Rooms.createChatRoom(id, chatRoomData.title, chatRoomData);
 			if (room.aliases) {
@@ -721,7 +725,7 @@ export class GlobalRoom extends BasicRoom {
 		return this;
 	}
 	addChatRoom(title: string) {
-		const id = Rooms.toRoomID(title);
+		const id = toID(title) as RoomID;
 		if (['battles', 'rooms', 'ladder', 'teambuilder', 'home', 'all', 'public'].includes(id)) {
 			return false;
 		}
@@ -792,7 +796,7 @@ export class GlobalRoom extends BasicRoom {
 		return true;
 	}
 	delistChatRoom(id: RoomID) {
-		id = Rooms.toRoomID(id);
+		id = toID(id) as RoomID;
 		if (!Rooms.rooms.has(id)) return false; // room doesn't exist
 		for (let i = this.chatRooms.length - 1; i >= 0; i--) {
 			if (id === this.chatRooms[i].id) {
@@ -1515,10 +1519,6 @@ export const Rooms = {
 	get: getRoom,
 	search(name: string): Room | undefined {
 		return getRoom(name) || getRoom(toID(name)) || getRoom(Rooms.aliases.get(toID(name)));
-	},
-
-	toRoomID(roomname: string) {
-		return roomname.toLowerCase().replace(/[^a-z0-9-]+/g, '') as RoomID;
 	},
 
 	createGameRoom(roomid: RoomID, title: string, options: AnyObject) {
