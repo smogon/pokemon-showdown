@@ -510,46 +510,15 @@ let BattleMovedex = {
 			}
 			this.add('faint', target);
 			pokemon.position = target.position;
-
+			pokemon.isActive = true;
+			target = pokemon;
 			target.side.pokemon[0] = pokemon;
-			target.moveSlots = pokemon.moveSlots;
-			// @ts-ignore Read only property needs to be written to for this to work
-			target.baseMoveSlots = pokemon.baseMoveSlots;
-			target.set.name = pokemon.name;
-			// @ts-ignore Read only property needs to be written to for this to work
-			target.name = pokemon.name;
-			// @ts-ignore Read only property needs to be written to for this to work
-			target.item = pokemon.item;
-			// @ts-ignore Read only property needs to be written to for this to work
-			target.id = pokemon.side.id + ": " + pokemon.name;
-			// @ts-ignore Read only property needs to be written to for this to work
-			target.fullname = pokemon.side.id + ": " + pokemon.name;
-			// @ts-ignore Read only property needs to be written to for this to work (Prevent pokemon other than Level 51 from being above level 100)
-			target.level = 100;
-			target.set.level = 100;
-			target.ability = pokemon.ability;
-			// @ts-ignore Read only property needs to be written to for this to work (Prevent pokemon other than Level 51 from being above level 100)
-			target.side.active[0].level = 100;
-			target.side.active[0].set.level = 100;
-			target.set.evs = set.evs;
-			target.set.ivs = set.ivs;
-			target.set.nature = set.nature;
+			target.side.active[0] = pokemon;
+
 			this.add('replace', target, pokemon.getDetails, target.hp / target.maxhp); // name change
+			target.setAbility(set.ability);
 
 			const format = this.getFormat();
-			effect = this.effect;
-			target.setAbility(set.ability, target);
-			// Temporarly override effect so that the ability end message is not displayed
-			this.effect = /** @type {Effect} */ ({id: ''});
-			target.formeChange(pokemon.template, this.getAbility(set.ability), true);
-			this.effect = effect;
-
-			target.side.pokemon[0].canMegaEvo = this.canMegaEvo(pokemon);
-			target.side.pokemon[0].ability = toID(set.ability);
-			// @ts-ignore Read only property needs to be written to for this to work
-			target.side.active[0].species = pokemon.species;
-			target.side.active[0].canMegaEvo = this.canMegaEvo(target.side.active[0]);
-
 			if (format && format.onSwitchIn) format.onSwitchIn.call(this, target);
 			this.add('-message', `${oldName} was sent to the distortion world and replaced with somebody else!`);
 			for (let stat of Object.keys(target.boosts)) {
