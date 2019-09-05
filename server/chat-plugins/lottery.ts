@@ -18,10 +18,12 @@ function createLottery(roomid: string, maxWinners: number, name: string, markup:
 	if (lotteries[roomid] && !lotteries[roomid].running) {
 		delete lotteries[roomid];
 	}
-	if (!lotteries[roomid]) {
-		lotteries[roomid] = {maxWinners, name, markup, participants: Object.create(null), winners: [], running: true};
-		writeLotteries();
-	}
+	const lottery = lotteries[roomid];
+	lotteries[roomid] = {
+		maxWinners, name, markup, participants: (lottery && lottery.participants) || Object.create(null),
+		winners: (lottery && lottery.winners) || [], running: true,
+	};
+	writeLotteries();
 }
 function writeLotteries() {
 	for (const roomid of Object.keys(lotteries)) {
@@ -91,14 +93,16 @@ export const commands: ChatCommands = {
 			}
 			return this.parse(`/join view-lottery-${room.id}`);
 		},
-		create(target, room, user) {
+		edit: 'create',
+		create(target, room, user, connection, cmd) {
 			if (!this.can('declare', null, room)) return;
 			if (room.battle || !room.chatRoomData) {
 				return this.errorReply('This room does not support the creation of lotteries.');
 			}
 			const lottery = lotteries[room.id];
-			if (lottery && lottery.running) {
-				return this.errorReply(`There is already a lottery running in this room.`);
+			const edited = lottery && lottery.running;
+			if (cmd === 'edit' && !target && lottery) {
+				return this.sendReplyBox(`<strong>Max winners: </strong>${lottery.maxWinners}<br /><strong>Name: </strong>${lottery.name}<br /><strong>Markup: </strong>${Chat.html`${lottery.markup}`}`);
 			}
 			const [maxWinners, name, markup] = Chat.splitFirst(target, ',', 2).map(val => val.trim());
 			if (!(maxWinners && name && markup.length)) {
@@ -119,10 +123,11 @@ export const commands: ChatCommands = {
 				return this.errorReply('Name needs to be under 50 characters.');
 			}
 			createLottery(room.id, maxWinnersNum, name, markup);
-			this.sendReply('The lottery was successfully created.');
-			// tslint:disable-next-line: max-line-length
-			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the "<a href="/view-lottery-${room.id}">${name}</a>" lottery!</b></div>`);
-			this.modlog(`LOTTERY CREATE ${name}`, null, `${maxWinnersNum} max winners`);
+			this.sendReply(`The lottery was successfully ${edited ? 'edited' : 'created'}.`);
+			if (!edited) {
+				this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the "<a href="/view-lottery-${room.id}">${name}</a>" lottery!</b></div>`);
+			}
+			this.modlog(`LOTTERY ${edited ? 'EDIT' : 'CREATE'} ${name}`, null, `${maxWinnersNum} max winners`);
 		},
 		delete(target, room, user) {
 			if (!this.can('declare', null, room)) return;
@@ -161,23 +166,6 @@ export const commands: ChatCommands = {
 			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${Chat.toListString(winners)} won the "<a href="/view-lottery-${room.id}">${lottery.name}</a>" lottery!</b></div>`);
 			this.modlog(`LOTTERY END ${lottery.name}`);
 			endLottery(room.id, winners);
-		},
-		editmarkup(target, room, user) {
-			if (!this.can('declare', null, room)) return;
-			const lottery = lotteries[room.id];
-			if (!lottery) {
-				return this.errorReply('This room does not have a lottery running.');
-			}
-			if (!lottery.running) {
-				return this.errorReply(`The "${lottery.name}" lottery already ended.`);
-			}
-			if (!target) {
-				return this.errorReply(`No markup was provided.`);
-			}
-			if (!this.canHTML(target)) return;
-			lottery.markup = target;
-			this.privateModAction(`(${user.name} edited the lottery markup)`);
-			this.modlog(`LOTTERY MARKUP EDIT ${lottery.name}`);
 		},
 		'!join': true,
 		join(target, room, user) {
