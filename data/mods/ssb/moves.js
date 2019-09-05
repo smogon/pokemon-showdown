@@ -212,8 +212,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "Removes Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both sides. The user switches out after damaging the target.",
-		shortDesc: "Clears all entry hazards, then switches.",
+		desc: "Removes Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both sides. The target's evasion is lowered by one stage. The user switches out after damaging the target.",
+		shortDesc: "Clears all entry hazards, foe evasion -1, switches.",
 		id: "quickreload",
 		name: "Quick Reload",
 		isNonstandard: "Custom",
@@ -239,6 +239,7 @@ let BattleMovedex = {
 				}
 			}
 		},
+		boosts: {evasion: -1},
 		selfSwitch: true,
 		secondary: null,
 		target: "normal",
