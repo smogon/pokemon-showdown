@@ -146,9 +146,9 @@ let Formats = [
 		ruleset: ['[Gen 7] LC'],
 		banlist: [
 			// LC
-			'Abra', 'Anorith', 'Bunnelby', 'Carvanha', 'Chinchou', 'Clamperl', 'Corphish', 'Croagunk', 'Dewpider', 'Diglett-Base', 'Doduo',
-			'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Foongus', 'Gastly', 'Grimer-Alola', 'Magnemite', 'Mareanie', 'Meowth-Base',
-			'Mienfoo', 'Mudbray', 'Munchlax', 'Omanyte', 'Onix', 'Pawniard', 'Pikipek', 'Ponyta', 'Pumpkaboo-Super', 'Scraggy', 'Shellder',
+			'Abra', 'Anorith', 'Bunnelby', 'Carvanha', 'Chinchou', 'Clamperl', 'Corphish', 'Croagunk', 'Dewpider', 'Diglett-Base',
+			'Doduo', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Foongus', 'Gastly', 'Grimer-Alola', 'Magnemite', 'Mareanie',
+			'Meowth-Base', 'Mienfoo', 'Mudbray', 'Onix', 'Pawniard', 'Pikipek', 'Ponyta', 'Pumpkaboo-Super', 'Scraggy', 'Shellder',
 			'Snivy', 'Snubbull', 'Spritzee', 'Staryu', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby', 'Vulpix-Alola', 'Zigzagoon',
 			// LC UUBL
 			'Magby', 'Rufflet', 'Wynaut', 'Deep Sea Tooth',
