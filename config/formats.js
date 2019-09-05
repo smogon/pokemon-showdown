@@ -316,7 +316,7 @@ let Formats = [
 			];
 			let template = this.getTemplate(set.species || set.name);
 			let futureGenEvo = template.evos && this.getTemplate(template.evos[0]).gen > this.gen;
-			if ((template.prevo && this.getTemplate(template.prevo).gen <= this.gen || (!template.nfe || futureGenEvo)) && !allowedNonLittleCupMons.includes(template.baseSpecies)) {
+			if ((template.prevo && this.getTemplate(template.prevo).gen <= this.gen || (!template.nfe || futureGenEvo)) && !allowedNonLittleCupMons.includes(template.baseSpecies) && template.speciesid !== 'sandslashalola') {
 				return [set.species + " isn't obtainable at Level 1."];
 			}
 		},
