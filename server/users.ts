@@ -579,7 +579,7 @@ export class User extends Chat.MessageContext {
 	popup(message: string) {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
-	getIdentity(roomid: RoomID = '' as RoomID) {
+	getIdentity(roomid = '' as RoomID) {
 		if (this.locked || this.namelocked) {
 			const lockedSymbol = (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol
 				: '\u203d');
@@ -602,7 +602,7 @@ export class User extends Chat.MessageContext {
 		}
 		return this.group + this.name;
 	}
-	getIdentityWithStatus(roomid: RoomID = '' as RoomID) {
+	getIdentityWithStatus(roomid = '' as RoomID) {
 		const identity = this.getIdentity(roomid);
 		const status = this.statusType === 'online' ? '' : '@!';
 		return `${identity}${status}`;
