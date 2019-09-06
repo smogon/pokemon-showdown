@@ -170,6 +170,8 @@
 27.100.37.0,27.100.37.255,Host US,http://hostus.us/
 27.100.38.0,27.100.38.255,Host US,http://hostus.us/
 27.100.39.0,27.100.39.255,Host US,http://hostus.us/
+27.122.12.0,27.122.12.255,Pacswitch,https://www.pacswitch.com/
+27.122.14.0,27.122.14.255,Pacswitch,https://www.pacswitch.com/
 27.131.64.0,27.131.127.254,Micron21,http://www.micron21.com/
 27.255.64.0,27.255.95.255,Ehost Data Center,http://cc.ehostidc.co.kr/
 31.3.104.0,31.3.111.255,tuxis.nl,http://tuxis.nl/
