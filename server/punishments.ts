@@ -1,5 +1,3 @@
-'use strict';
-/** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
 /**
  * Punishments
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -14,7 +12,6 @@
  */
 
 import {FS} from '../lib/fs';
-import {BasicRoom} from './rooms';
 
 type Tournament = import('./tournaments').Tournament;
 
@@ -512,7 +509,8 @@ export const Punishments = new class {
 			rest,
 		}, roomid + ':' + id, ROOM_PUNISHMENT_FILE);
 
-		if (room instanceof BasicRoom && !(room.isPrivate === true || room.isPersonal || room.battle)) {
+		if (typeof room !== 'string' && !((room as BasicRoom).isPrivate === true || 
+			(room as BasicRoom).isPersonal || (room as BasicRoom).battle)) {
 			Punishments.monitorRoomPunishments(user);
 		}
 
