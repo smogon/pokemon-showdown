@@ -692,7 +692,7 @@ let BattleAbilities = {
 				const sets = {
 					'Castform-Sunny': ['Fire Blast', 'Solar Beam', 'Synthesis', 'Weather Forecast'],
 					'Castform-Rainy': ['Hydro Pump', 'Hurricane', 'Thunder', 'Weather Forecast'],
-					'Castform-Snowy': ['Blizzard', 'Thunder', 'Quiver Dance', 'Weather Forecast'],
+					'Castform-Snowy': ['Blizzard', 'Thunder', 'Earth Power', 'Weather Forecast'],
 					'Castform': ['Rain Dance', 'Sunny Day', 'Hail', 'Weather Forecast'],
 				};
 				// Store percentage of PP left for each moveSlot

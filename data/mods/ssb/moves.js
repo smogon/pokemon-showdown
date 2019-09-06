@@ -2810,8 +2810,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user heals 1/3 of their HP rounded down, is protected from most attacks made by other Pokemon during this turn, and changes the weather. The selected weather depends on the current weather. Rain: Hail, Sun: Rain, Hail: Sun, Other: Randomly pick one of Rain, Sun, and Hail. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protect + Heal 1/3 + Change Weather.",
+		desc: "The user heals 1/4 of their HP rounded down, is protected from most attacks made by other Pokemon during this turn, and changes the weather. The selected weather depends on the current weather. Rain: Hail, Sun: Rain, Hail: Sun, Other: Randomly pick one of Rain, Sun, and Hail. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protect + Heal 1/4 + Change Weather.",
 		id: "weatherforecast",
 		name: "Weather Forecast",
 		isNonstandard: "Custom",
@@ -2842,7 +2842,7 @@ let BattleMovedex = {
 			default:
 				if (this.field.setWeather(['raindance', 'sunnyday', 'hail'][this.random(3)], source)) didSomething = true;
 			}
-			if (this.heal(source.maxhp / 3, source)) didSomething = true;
+			if (this.heal(source.maxhp / 4, source)) didSomething = true;
 			if (source.addVolatile('stall')) didSomething = true;
 			if (source.addVolatile('protect')) didSomething = true;
 			return didSomething;
