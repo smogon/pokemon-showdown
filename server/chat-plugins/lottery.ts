@@ -102,7 +102,7 @@ export const commands: ChatCommands = {
 			const lottery = lotteries[room.id];
 			const edited = lottery && lottery.running;
 			if (cmd === 'edit' && !target && lottery) {
-				return this.sendReplyBox(`<strong>Max winners: </strong>${lottery.maxWinners}<br /><strong>Name: </strong>${lottery.name}<br /><strong>Markup: </strong>${Chat.html`${lottery.markup}`}`);
+				return this.sendReplyBox(`<strong>Max winners: </strong>${lottery.maxWinners}<br /><strong>Name: </strong>${lottery.name}<br /><strong>Markup: </strong><code style="white-space: pre-wrap">${Chat.html`${lottery.markup}`}</code>`);
 			}
 			const [maxWinners, name, markup] = Chat.splitFirst(target, ',', 2).map(val => val.trim());
 			if (!(maxWinners && name && markup.length)) {
