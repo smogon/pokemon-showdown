@@ -14,6 +14,7 @@
  */
 
 import {FS} from '../lib/fs';
+import {BasicRoom} from './rooms';
 
 type Tournament = import('./tournaments').Tournament;
 
@@ -492,7 +493,7 @@ export const Punishments = new class {
 	}
 
 	roomPunish(room: Room | RoomID, user: User, punishment: Punishment) {
-		const roomid = room instanceof Rooms.BasicRoom ? room.id : room;
+		const roomid = typeof room !== 'string' ? (room as Room).id : room;
 		const userids = new Set<ID>();
 		const ips = new Set<string>();
 		const affected = user.getAltUsers(PUNISH_TRUSTED, true);
@@ -511,7 +512,7 @@ export const Punishments = new class {
 			rest,
 		}, roomid + ':' + id, ROOM_PUNISHMENT_FILE);
 
-		if (room instanceof Rooms.BasicRoom && !(room.isPrivate === true || room.isPersonal || room.battle)) {
+		if (room instanceof BasicRoom && !(room.isPrivate === true || room.isPersonal || room.battle)) {
 			Punishments.monitorRoomPunishments(user);
 		}
 
@@ -573,7 +574,7 @@ export const Punishments = new class {
 	 * @param ignoreWrite skip persistent storage
 	 */
 	roomUnpunish(room: Room | RoomID, id: string, punishType: string, ignoreWrite = false) {
-		const roomid = room instanceof Rooms.BasicRoom ? room.id : room;
+		const roomid = typeof room !== 'string' ? (room as Room).id : room;
 		id = toID(id);
 		const punishment = Punishments.roomUserids.nestedGet(roomid, id);
 		if (punishment) {
@@ -678,7 +679,7 @@ export const Punishments = new class {
 		}
 		Monitor.log(`[${source}] ${punishment}: ${message}`);
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
-		const roomid = room instanceof Rooms.BasicRoom ? room.id : room;
+		const roomid = typeof room !== 'string' ? (room as Room).id : room;
 		Rooms.global.modlog(`(${roomid}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
 	}
 	unlock(name: string) {
