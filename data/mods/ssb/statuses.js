@@ -292,6 +292,19 @@ let BattleStatuses = {
 		onFaint() {
 			this.add(`c|%Birdy~!|My last words will always be that I don't spam.`);
 		},
+		// Feather Tuft Innate
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			if (!pokemon.transformed && !pokemon.illusion) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			if (!pokemon.transformed && !pokemon.illusion) {
+				return this.chainModify(1.5);
+			}
+		},
 	},
 	bobochan: {
 		noCopy: true,
