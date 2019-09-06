@@ -543,7 +543,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Pirate Princess': {
 				species: 'Gulpin', ability: 'Acid Rain', item: 'Eviolite', gender: 'F',
-				moves: ['Toxic', 'Venoshock', 'Sleep Talk'],
+				moves: ["Nature's Madness", 'Venoshock', 'Rest'],
 				signatureMove: 'Tea Break',
 				evs: {hp: 252, def: 236, spd: 20}, nature: 'Bold', shiny: true,
 			},
