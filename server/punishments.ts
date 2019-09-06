@@ -509,7 +509,7 @@ export const Punishments = new class {
 			rest,
 		}, roomid + ':' + id, ROOM_PUNISHMENT_FILE);
 
-		if (typeof room !== 'string' && !((room as BasicRoom).isPrivate === true || 
+		if (typeof room !== 'string' && !((room as BasicRoom).isPrivate === true ||
 			(room as BasicRoom).isPersonal || (room as BasicRoom).battle)) {
 			Punishments.monitorRoomPunishments(user);
 		}
