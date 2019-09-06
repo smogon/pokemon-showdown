@@ -532,7 +532,7 @@
 59.151.128.0,59.151.191.255,Akamai,http://akamai.com/
 60.254.128.0,60.254.191.255,Akamai,http://akamai.com/
 61.97.240.0,61.97.255.255,eHostIDC,http://www.ehostidc.co.kr
-62.12.114.0,62.12.115.255,Angani, http://angani.co/
+62.12.114.0,62.12.115.255,Angani,http://angani.co/
 62.41.56.128,62.41.56.255,Akamai,http://akamai.com/
 62.41.58.0,62.41.58.255,Akamai,http://akamai.com/
 62.75.128.0,62.75.255.255,plusserver.de,http://plusserver.de/
@@ -1423,6 +1423,7 @@
 92.48.64.0,92.48.127.255,BlueConnex,http://www.simplytransit.net/
 92.51.128.0,92.51.191.255,Host Europe,http://www.hosteurope.de/
 92.52.64.0,92.52.127.255,Rackspace,http://www.rackspace.com/
+92.53.97.0,92.53.97.255,TimeWeb,https://timeweb.com/
 92.60.96.0,92.60.111.255,host-it.co.uk,http://www.host-it.co.uk/
 92.60.112.0,92.60.127.255,Webfusion,http://www.webfusion.com/
 92.61.32.0,92.61.47.255,hostex.lt,http://hostex.lt/
@@ -2753,6 +2754,10 @@
 195.200.82.0,195.200.83.255,Totalin,https://www.totalin.com/
 195.200.96.0,195.200.127.255,ecritel.net,http://www.ecritel.net/
 195.200.211.0,195.200.211.255,crosspointcolo.co.uk,http://crosspointcolo.co.uk/
+195.206.104.0,195.206.104.255,M247,https://www.m247.com/
+195.206.105.0,195.206.105.255,M247,https://www.m247.com/
+195.206.106.0,195.206.106.255,M247,https://www.m247.com/
+195.206.107.0,195.206.107.255,M247,https://www.m247.com/
 195.206.252.0,195.206.253.255,ix-host.ru,http://www.ix-host.ru/
 195.211.108.0,195.211.111.255,Tangram Ukraine,http://tangram.ua/eng/index.html
 195.216.233.0,195.216.233.255,hostex.lt,http://hostex.lt/
