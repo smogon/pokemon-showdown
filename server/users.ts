@@ -324,7 +324,7 @@ export class Connection {
 	id: string;
 	socketid: string;
 	worker: Worker;
-	inRooms: Set<string>;
+	inRooms: Set<RoomID>;
 	/**
 	 * This can be null during initialization and after disconnecting,
 	 * but we're asserting it non-null for ease of use. The main risk
@@ -359,8 +359,8 @@ export class Connection {
 		this.autojoins = '';
 		this.lastActiveTime = Date.now();
 	}
-	sendTo(roomid: string | BasicRoom | null, data: string) {
-		if (roomid && (roomid as BasicRoom).id) roomid = (roomid as BasicRoom).id;
+	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
+		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
@@ -404,7 +404,7 @@ export class Connection {
 	}
 }
 
-type ChatQueueEntry = [string, string, Connection];
+type ChatQueueEntry = [string, RoomID, Connection];
 
 const SETTINGS = [
 	'isSysop', 'isStaff', 'blockChallenges', 'blockPMs',
@@ -436,11 +436,11 @@ export class User extends Chat.MessageContext {
 	permalocked: string | ID | null;
 	prevNames: {[id: /** ID */ string]: string};
 
-	inRooms: Set<string>;
+	inRooms: Set<RoomID>;
 	/**
 	 * Set of room IDs
 	 */
-	games: Set<string>;
+	games: Set<RoomID>;
 	/** Millisecond timestamp for last battle decision */
 	lastDecision: number;
 	lastChallenge: number;
@@ -561,8 +561,8 @@ export class User extends Chat.MessageContext {
 		Users.add(this);
 	}
 
-	sendTo(roomid: string | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = roomid.id;
+	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
+		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
@@ -579,7 +579,7 @@ export class User extends Chat.MessageContext {
 	popup(message: string) {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
-	getIdentity(roomid: string = '') {
+	getIdentity(roomid = '' as RoomID) {
 		if (this.locked || this.namelocked) {
 			const lockedSymbol = (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol
 				: '\u203d');
@@ -602,7 +602,7 @@ export class User extends Chat.MessageContext {
 		}
 		return this.group + this.name;
 	}
-	getIdentityWithStatus(roomid: string = '') {
+	getIdentityWithStatus(roomid = '' as RoomID) {
 		const identity = this.getIdentity(roomid);
 		const status = this.statusType === 'online' ? '' : '@!';
 		return `${identity}${status}`;
@@ -731,7 +731,7 @@ export class User extends Chat.MessageContext {
 	resetName(isForceRenamed = false) {
 		return this.forceRename('Guest ' + this.guestNum, false, isForceRenamed);
 	}
-	updateIdentity(roomid: string | null = null) {
+	updateIdentity(roomid: RoomID | null = null) {
 		if (roomid) {
 			return Rooms.get(roomid).onUpdateIdentity(this);
 		}
@@ -1308,8 +1308,8 @@ export class User extends Chat.MessageContext {
 		const prevNames = Object.keys(this.prevNames);
 		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid) as ID;
 	}
-	async tryJoinRoom(roomid: string | Room, connection: Connection) {
-		roomid = roomid && (roomid as Room).id ? (roomid as Room).id : roomid as string;
+	async tryJoinRoom(roomid: RoomID | Room, connection: Connection) {
+		roomid = roomid && (roomid as Room).id ? (roomid as Room).id : roomid as RoomID;
 		const room = Rooms.search(roomid);
 		if (!room && roomid.startsWith('view-')) {
 			return Chat.resolvePage(roomid, this, connection);
@@ -1347,7 +1347,7 @@ export class User extends Chat.MessageContext {
 		this.joinRoom(room, connection);
 		return true;
 	}
-	joinRoom(roomid: string | Room, connection: Connection | null = null) {
+	joinRoom(roomid: RoomID | Room, connection: Connection | null = null) {
 		const room = Rooms.get(roomid);
 		if (!room) throw new Error(`Room not found: ${roomid}`);
 		if (!connection) {
@@ -1355,7 +1355,7 @@ export class User extends Chat.MessageContext {
 				// only join full clients, not pop-out single-room
 				// clients
 				// (...no, pop-out rooms haven't been implemented yet)
-				if (curConnection.inRooms.has('global')) {
+				if (curConnection.inRooms.has('global' as RoomID)) {
 					this.joinRoom(room, curConnection);
 				}
 			}
@@ -1624,7 +1624,7 @@ function socketConnect(worker: Worker, workerid: number, socketid: string, ip: s
 		}
 	});
 
-	user.joinRoom('global', connection);
+	user.joinRoom('global' as RoomID, connection);
 }
 function socketDisconnect(worker: Worker, workerid: number, socketid: string) {
 	const id = '' + workerid + '-' + socketid;
