@@ -3889,6 +3889,9 @@ let BattleMovedex = {
 			this.add('-anim', source, "First Impression", target);
 			this.add('-anim', target, "Infestation", target);
 		},
+		onHit(target, source) {
+			source.addVolatile('batonpasshelper');
+		},
 		secondaries: [
 			{
 				volatileStatus: "taunt",

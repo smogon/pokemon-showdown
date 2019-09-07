@@ -1835,6 +1835,19 @@ let BattleStatuses = {
 			}
 		},
 	},
+	// Special volatile that is applied to pokemon using a custom move with the effects of baton pass so that boosts/volatiles are shown on client.
+	batonpasshelper: {
+		duration: 1,
+		onEnd(target) {
+			for (let boost in target.boosts) {
+				// @ts-ignore Element implictly has type any due to lack of index signature
+				if (target.boosts[boost]) this.add('-boost', target, boost, target.boosts[boost], '[silent]');
+			}
+			for (let v in target.volatiles) {
+				if (v !== toID(target.name) && v !== 'batonpasshelper') this.add('-start', target, target.volatiles[v].id);
+			}
+		},
+	},
 };
 
 exports.BattleStatuses = BattleStatuses;
