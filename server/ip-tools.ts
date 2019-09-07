@@ -521,7 +521,7 @@ export const IPTools = new class {
 	testConnection(ip: string, callback: (result: boolean) => void) {
 		const cachedValue = this.connectionTestCache.get(ip);
 		if (cachedValue !== undefined) {
-			return cachedValue;
+			return callback(cachedValue);
 		}
 
 		// Node.js's documentation does not make this easy to write. I discovered
