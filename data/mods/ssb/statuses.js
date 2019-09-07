@@ -576,7 +576,7 @@ let BattleStatuses = {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
 			let activeMon;
 			activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : activeMon = source.side.foe.active[0].template.name);
-			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sunny', 'jolteonite'];
+			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'jolteonite'];
 			if (activeMon === 'hoeenhero' || activeMon === 'pokemondeadchannel') {
 				 this.add(`c|%fart|what song should I sing?`);
 			} else if (activeMon === 'lifeisdank' || activeMon === 'nui' || activeMon === 'grimauxiliatrix') {
