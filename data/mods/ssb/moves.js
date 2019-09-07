@@ -3642,7 +3642,7 @@ let BattleMovedex = {
 	// Rach
 	stunner: {
 		accuracy: 85,
-		basePower: 110,
+		basePower: 100,
 		category: "Physical",
 		desc: "Has a 70% chance to raise the user's Attack by 1 stage. 30% chance to flinch or paralyze the opponent.",
 		shortDesc: "70% raise the user's Atk by 1. 30% flinch or par foe.",
@@ -3665,7 +3665,7 @@ let BattleMovedex = {
 					boosts: {atk: 1},
 				},
 			}, {
-				chance: 30,
+				chance: 20,
 				onHit(target, source) {
 					let result = this.random(2);
 					if (result === 0) {
