@@ -492,7 +492,7 @@ const pages = {
 					}
 					if (!helpRoom.auth[user.userid]) helpRoom.auth[user.userid] = '+';
 					connection.popup(`You already have a Help ticket.`);
-					user.joinRoom(`help-${ticket.userid}`);
+					user.joinRoom(/** @type {RoomID} */ (`help-${ticket.userid}`));
 					return this.close();
 				}
 			}
@@ -865,7 +865,7 @@ let commands = {
 			const staffHint = staffContexts[target] || '';
 			let helpRoom = /** @type {ChatRoom?} */ (Rooms.get(`help-${user.userid}`));
 			if (!helpRoom) {
-				helpRoom = Rooms.createChatRoom(`help-${user.userid}`, `[H] ${user.name}`, {
+				helpRoom = Rooms.createChatRoom(/** @type {RoomID} */ (`help-${user.userid}`), `[H] ${user.name}`, {
 					isPersonal: true,
 					isHelp: 'open',
 					isPrivate: 'hidden',

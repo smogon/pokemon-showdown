@@ -84,7 +84,7 @@ export class Tournament extends Rooms.RoomGame {
 	lastBracketUpdate: number;
 	bracketUpdateTimer: NodeJS.Timeout | null;
 	bracketCache: AnyObject | null;
-	completedMatches: Set<string>;
+	completedMatches: Set<RoomID>;
 	isAvailableMatchesInvalidated: boolean;
 	availableMatchesCache: {
 		challenges: Map<TournamentPlayer, TournamentPlayer[]>, challengeBys: Map<TournamentPlayer, TournamentPlayer[]>,

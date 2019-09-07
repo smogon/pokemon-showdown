@@ -76,7 +76,7 @@ export class RoomGamePlayer {
  * globally Rooms.RoomGame
  */
 export class RoomGame {
-	id: string;
+	id: RoomID;
 	room: ChatRoom | GameRoom;
 	gameid: ID;
 	title: string;

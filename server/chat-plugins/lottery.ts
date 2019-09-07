@@ -14,7 +14,7 @@ const lotteries: {
 	},
 } = lotteriesContents ? Object.assign(Object.create(null), JSON.parse(lotteriesContents)) : Object.create(null);
 
-function createLottery(roomid: string, maxWinners: number, name: string, markup: string) {
+function createLottery(roomid: RoomID, maxWinners: number, name: string, markup: string) {
 	if (lotteries[roomid] && !lotteries[roomid].running) {
 		delete lotteries[roomid];
 	}
@@ -33,11 +33,11 @@ function writeLotteries() {
 	}
 	FS(LOTTERY_FILE).writeUpdate(() => JSON.stringify(lotteries));
 }
-function destroyLottery(roomid: string) {
+function destroyLottery(roomid: RoomID) {
 	delete lotteries[roomid];
 	writeLotteries();
 }
-function endLottery(roomid: string, winners: string[]) {
+function endLottery(roomid: RoomID, winners: string[]) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	lottery.winners = winners;
@@ -45,7 +45,7 @@ function endLottery(roomid: string, winners: string[]) {
 	Object.freeze(lottery);
 	writeLotteries();
 }
-function addUserToLottery(roomid: string, user: User) {
+function addUserToLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
@@ -57,7 +57,7 @@ function addUserToLottery(roomid: string, user: User) {
 	}
 	return false;
 }
-function removeUserFromLottery(roomid: string, user: User) {
+function removeUserFromLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
@@ -70,7 +70,7 @@ function removeUserFromLottery(roomid: string, user: User) {
 	}
 	return false;
 }
-function getWinnersInLottery(roomid: string) {
+function getWinnersInLottery(roomid: RoomID) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const winners = [];
@@ -193,7 +193,7 @@ export const commands: ChatCommands = {
 			if (user.locked || Punishments.getRoomPunishments(user, {publicOnly: true, checkIps: true}).length) {
 				return this.popupReply('Punished users cannot join lotteries.');
 			}
-			const success = addUserToLottery(roomid, user);
+			const success = addUserToLottery(roomid as RoomID, user);
 			if (success) {
 				this.popupReply('You have successfully joined the lottery.');
 			} else {
@@ -215,7 +215,7 @@ export const commands: ChatCommands = {
 			if (!lottery.running) {
 				return this.errorReply(`The "${lottery.name}" lottery already ended.`);
 			}
-			const success = removeUserFromLottery(roomid, user);
+			const success = removeUserFromLottery(roomid as RoomID, user);
 			if (success) {
 				this.popupReply('You have successfully left the lottery.');
 			} else {

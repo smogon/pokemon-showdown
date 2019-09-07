@@ -194,7 +194,7 @@ if (cluster.isMaster) {
 	};
 
 	/**
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} message
 	 */
 	exports.roomBroadcast = function (roomid, message) {
@@ -205,7 +205,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} socketid
 	 */
 	exports.roomAdd = function (worker, roomid, socketid) {
@@ -214,7 +214,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} socketid
 	 */
 	exports.roomRemove = function (worker, roomid, socketid) {
@@ -222,7 +222,7 @@ if (cluster.isMaster) {
 	};
 
 	/**
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} message
 	 */
 	exports.channelBroadcast = function (roomid, message) {
@@ -233,7 +233,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {ChannelID} channelid
 	 * @param {string} socketid
 	 */
@@ -422,12 +422,12 @@ if (cluster.isMaster) {
 	const sockets = new Map();
 	/**
 	 * roomid:socketid:Connection
-	 * @type {Map<string, Map<string, import('sockjs').Connection>>}
+	 * @type {Map<RoomID, Map<string, import('sockjs').Connection>>}
 	 */
 	const rooms = new Map();
 	/**
 	 * roomid:socketid:channelid
-	 * @type {Map<string, Map<string, ChannelID>>}
+	 * @type {Map<RoomID, Map<string, ChannelID>>}
 	 */
 	const roomChannels = new Map();
 
@@ -461,7 +461,8 @@ if (cluster.isMaster) {
 		let socketid = '';
 		/** @type {Map<string, import('sockjs').Connection> | undefined?} */
 		let room = null;
-		let roomid = '';
+		/** @type {RoomID} */
+		let roomid = /** @type {RoomID} */('');
 		/** @type {Map<string, ChannelID> | undefined?} */
 		let roomChannel = null;
 		/** @type {ChannelID} */
