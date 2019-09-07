@@ -328,8 +328,8 @@ let BattleAbilities = {
 	},
 	// deetah
 	radioactive: {
-		desc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon heals 1/8 of its max HP when poisoned. This Pokemon is immune to Ground-type moves.",
-		shortDesc: "1.5x Atk if statused. Heals 1/8 if poisoned. Ground immune.",
+		desc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon heals 1/8 of its max HP when poisoned.",
+		shortDesc: "1.5x Atk if statused. Heals 1/8 if poisoned.",
 		id: "radioactive",
 		name: "Radioactive",
 		isNonstandard: "Custom",
@@ -985,7 +985,8 @@ let BattleAbilities = {
 	},
 	// Seraphus
 	seraphicregeneration: {
-		shortDesc: "When this Pokemon switches out, it regains 33% of its HP, then its replacement recovers 33% of its health.",
+		desc: "When this Pokemon switches out, it regains 33% of its HP, then its replacement recovers 33% of its health.",
+		shortDesc: "Upon switching out, this Pokemon and its replacement regain 33% of their HP.",
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.maxhp / 3);
 			pokemon.side.addSlotCondition(pokemon, 'seraphicregeneration');
