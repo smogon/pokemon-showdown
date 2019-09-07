@@ -1038,7 +1038,7 @@ let BattleAbilities = {
 			for (let statMinus in pokemon.boosts) {
 				if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
 				// @ts-ignore
-				if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
+				if (pokemon.boosts[statMinus] > -6 && !(statMinus in boost)) {
 					stats.push(statMinus);
 				}
 			}
