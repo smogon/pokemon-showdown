@@ -2031,7 +2031,7 @@ let Formats = [
 		mod: 'gen3',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Smeargle + Ingrain', 'Wobbuffet + Leftovers'],
+		banlist: ['Wobbuffet + Leftovers'],
 	},
 	{
 		name: "[Gen 3] UU",
