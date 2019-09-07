@@ -3700,7 +3700,11 @@ let BattleMovedex = {
 		},
 		onHit(target, source) {
 			source.addVolatile('rage', source);
-			source.addVolatile('endure', source);
+			if (this.willAct() && this.runEvent('StallMove', source)) {
+				this.debug('Rageeeee endure');
+				source.addVolatile('endure', source);
+				source.addVolatile('stall');
+			}
 			target.addVolatile('enrageeeeed', source);
 		},
 		secondary: null,
