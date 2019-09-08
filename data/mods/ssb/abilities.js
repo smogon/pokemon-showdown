@@ -484,7 +484,7 @@ let BattleAbilities = {
 	// GMars
 	mysteryshell: {
 		desc: "If this pokemon is Minior-Meteor, it cannot be afflicted by a status condition. This pokemon cannot be hit with a critical hit.",
-		shortDesc: "Status immunity while in metor forme, crit immunity.",
+		shortDesc: "Status immunity while in Metor forme, crit immunity.",
 		id: "mysteryshell",
 		name: "Mystery Shell",
 		isNonstandard: "Custom",

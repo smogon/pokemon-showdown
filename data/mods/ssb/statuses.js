@@ -1732,10 +1732,12 @@ let BattleStatuses = {
 	gooey: {
 		onStart(pokemon, source) {
 			this.add('-start', pokemon, 'Gooey', '[of] ' + source);
+			this.add('-message', `${pokemon.name} was covered in corrosive goo!`);
 		},
 		onResidualOrder: 10,
 		onResidual(pokemon) {
 			this.damage(pokemon.maxhp / 6);
+			this.add('-message', `${pokemon.name} was damaged by the corrosive goo!`);
 		},
 	},
 	// Custom Acid Rain weather for Pirate Princess
@@ -1758,6 +1760,7 @@ let BattleStatuses = {
 			} else {
 				this.add('-weather', 'AcidRain');
 			}
+			this.add('-message', 'Acid Rain began to fall.');
 		},
 		onResidualOrder: 1,
 		onResidual() {
@@ -1777,6 +1780,7 @@ let BattleStatuses = {
 		},
 		onEnd() {
 			this.add('-weather', 'none');
+			this.add('-message', 'The Acid Rain subsided.');
 		},
 	},
 	// Custom effect for Rage's multihit

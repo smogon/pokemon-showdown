@@ -390,6 +390,7 @@ let BattleMovedex = {
 				this.add('-anim', target, "Scary Face", source);
 				this.add('-anim', target, "Roar", source);
 				source.forceSwitchFlag = true;
+				this.add('-message', `${source.name} was scared off!`);
 				return null;
 			},
 			onHit(target, source, move) {
@@ -397,6 +398,7 @@ let BattleMovedex = {
 					this.add('-anim', target, "Scary Face", source);
 					this.add('-anim', target, "Roar", source);
 					source.forceSwitchFlag = true;
+					this.add('-message', `${source.name} was scared off!`);
 				}
 			},
 		},
@@ -446,6 +448,7 @@ let BattleMovedex = {
 				} else {
 					this.add('-fieldstart', 'move: Lava Terrain');
 				}
+				this.add('-message', 'The battlefield was covered in Lava!');
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
@@ -455,12 +458,15 @@ let BattleMovedex = {
 			onTerrain(pokemon) {
 				if (pokemon.hasType('Fire')) {
 					this.heal(pokemon.maxhp / 16);
+					this.add('-message', `${pokemon.name} was healed by the Lava Terrain!`);
 				} else {
 					this.damage(pokemon.maxhp / 16);
+					this.add('-message', `${pokemon.name} was hurt by Lava Terrain!`);
 				}
 			},
 			onEnd() {
 				this.add('-fieldend', 'move: Lava Terrain');
+				this.add('-message', 'The battlefield is no longer covered in Lava.');
 			},
 		},
 		secondary: null,
@@ -538,7 +544,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Sets Scripted Terrain for 5 turns. The power of Ghost type moves is boosted by 1.5, and all pokemon on the field have an effective speed of 0. This terrain affects floating Pokemon.",
+		desc: "Sets Distortion World for 5 turns. The power of Ghost type moves is boosted by 1.5, and all pokemon on the field have an effective speed of 0. This terrain affects floating Pokemon.",
 		shortDesc: "5 turns: Ghost power+, All pokemon speed tie.",
 		id: "distortionworld",
 		name: "Distortion World",
@@ -578,6 +584,7 @@ let BattleMovedex = {
 			},
 			onEnd() {
 				this.add('-fieldend', 'move: Distortion World');
+				this.add('-message', 'Speeds have returned to normal.');
 			},
 		},
 		target: "self",
@@ -2014,6 +2021,7 @@ let BattleMovedex = {
 				} else {
 					this.add('-fieldstart', 'move: Scripted Terrain');
 				}
+				this.add('-message', 'The battlefield got Technical!');
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
@@ -2060,6 +2068,7 @@ let BattleMovedex = {
 			},
 			onEnd() {
 				this.add('-fieldend', 'move: Scripted Terrain');
+				this.add('-message', 'The battlefield is no longer Technical.');
 			},
 		},
 		secondary: null,
@@ -2469,6 +2478,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fighting",
 	},
+	// Kipkluif
 	"salutethecolonel": {
 		accuracy: true,
 		basePower: 0,
@@ -3114,6 +3124,7 @@ let BattleMovedex = {
 				} else {
 					this.add('-fieldstart', 'move: Prismatic Terrain');
 				}
+				this.add('-message', 'The battlefield suddenly got a refractive high poly count!');
 				let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 				let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 				for (const sideCondition of removeAll) {
@@ -3129,6 +3140,7 @@ let BattleMovedex = {
 			onResidualSubOrder: 2,
 			onEnd() {
 				this.add('-fieldend', 'move: Prismatic Terrain');
+				this.add('-message', 'The battlefield no longer has a refractive high poly count!');
 			},
 		},
 		secondary: null,
