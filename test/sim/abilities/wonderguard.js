@@ -46,9 +46,9 @@ describe('Wonder Guard', function () {
 
 	it('should allow first turn of Sky Drop but not the second', function () {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'wonderguard', moves: ['sleeptalk']}]});
+		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'wonderguard', moves: ['howl']}]});
 		battle.setPlayer('p2', {team: [{species: "Aerodactyl", ability: 'owntempo', moves: ['skydrop']}]});
-		battle.makeChoices('move sleeptalk', 'move skydrop');
-		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices('move sleeptalk', 'move skydrop'));
+		battle.makeChoices('move howl', 'move skydrop');
+		assert.fullHP(battle.p1.active[0]);
 	});
 });
