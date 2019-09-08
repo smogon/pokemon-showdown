@@ -84,7 +84,7 @@ let BattleAbilities = {
 	},
 	// Aethernum
 	awakening: {
-		desc: "On switch in, Atk and Speed are lowered by -3, while Def and Spdef are increased by 3. At the end of each turn, Atk and Spe get +1 while Def and Spdef get -1.",
+		desc: "On switch-in, Attack and Speed are lowered by three stages, while Defense and Special Defense are increased by three stages. At the end of each turn, Attack and Speed are increased by one stage while Defense and Special Defense are decreased by one stage.",
 		shortDesc: "Atk & spe -3; def & spd +3; end turn: Atk & Spe +1; Def & Spd -1",
 		id: "awakening",
 		name: "Awakening",
@@ -100,8 +100,8 @@ let BattleAbilities = {
 	},
 	// Akiamara
 	toxicswap: {
-		desc: "On switch-in, this Pokemon swaps all stat changes with the opponent. Ignores abilities.",
-		shortDesc: "On switch-in, swaps all stat changes with opponent. Ignores abilities.",
+		desc: "On switch-in, this Pokemon swaps all stat changes with the foe. Ignores abilities.",
+		shortDesc: "On switch-in, swaps all stat changes with foe. Ignores abilities.",
 		isNonstandard: "Custom",
 		id: "toxicswap",
 		name: "Toxic Swap",
@@ -167,7 +167,7 @@ let BattleAbilities = {
 	},
 	// Anubis
 	distortionworld: {
-		desc: "For 5 turns, speed becomes the same for all pokemon. The power of Ghott-type attacks made by Pokemon is multiplied by 1.5.",
+		desc: "For 5 turns, Speed becomes the same for all Pokemon. The power of Ghost-type attacks made by Pokemon is multiplied by 1.5.",
 		shortDesc: "5 turns. Speed Ties. +Ghost Power",
 		id: "distortionworld",
 		name: "Distortion World",
@@ -242,7 +242,7 @@ let BattleAbilities = {
 	arabesque: {
 		id: "arabesque",
 		name: "Arabesque",
-		desc: "On switch-in, this Pokemon switches to a different oricorio form.",
+		desc: "On switch-in, this Pokemon switches to a different Oricorio forme.",
 		shortDesc: "On switch-in, this Pokemon switches to a different oricorio form.",
 		isNonstandard: "Custom",
 		onStart(source) {
@@ -256,7 +256,7 @@ let BattleAbilities = {
 	},
 	// Brandon
 	gracideamastery: {
-		desc: "If this Pokemon is a Shaymin-Sky, it will transform into Shaymin before using a status move or upon being attacked. After using the move, if this Pokemon was originally in its base forme, it will transform back into Shaymin-Sky.",
+		desc: "If this Pokemon is Shaymin-Sky, it will transform into Shaymin before using a status move or upon being attacked. After using the move or taking attack damage, if this Pokemon was originally in its base forme, it will transform back into Shaymin-Sky.",
 		shortDesc: "Transforms into Shaymin when using status moves/being attacked.",
 		id: "gracideamastery",
 		name: "Gracidea Mastery",
@@ -292,7 +292,7 @@ let BattleAbilities = {
 	},
 	// DaWoblefet
 	shadowartifice: {
-		desc: "Prevents adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or also have this Ability or Shadow Tag. If this Pokemon is knocked out with a move, that move's user loses HP equal to the amount of damage inflicted on this Pokemon.",
+		desc: "Prevents adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or also have this Ability or Shadow Tag. If this Pokemon is knocked out with an attack, that attack's user loses HP equal to the amount of damage inflicted on this Pokemon.",
 		shortDesc: "Prevents adjacent foes from switching. If KOed, that move's user loses equal HP.",
 		id: "shadowartifice",
 		name: "Shadow Artifice",
@@ -364,7 +364,7 @@ let BattleAbilities = {
 	},
 	// Elgino
 	giblovepls: {
-		desc: "This Pokemon's Defense is raised 1 stage and heals 20% after it is damaged by a contact move.",
+		desc: "After being damaged by a contact move, this Pokemon is healed by 20% of its max HP and has its Defense raised by one stage.",
 		shortDesc: "Defense +1 and heal 20% after hit by contact move.",
 		onAfterDamage(damage, target, source, effect) {
 			if (effect && effect.flags['contact']) {
@@ -394,7 +394,7 @@ let BattleAbilities = {
 	},
 	// Flare
 	superillusion: {
-		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes supereffective direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",
+		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes super effective direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",
 		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes a supereffective hit.",
 		id: "superillusion",
 		name: "Super Illusion",
@@ -444,7 +444,7 @@ let BattleAbilities = {
 	},
 	// Gallant Spear
 	trombe: {
-		desc: "On switch in, this Pokemon summons Light Screen or Reflect and is guaranteed to move first.",
+		desc: "On switch in, this Pokemon summons Light Screen or Reflect and is guaranteed to move first for one turn.",
 		shortDesc: "On switch, 1 screen + priority.",
 		id: "trombe",
 		name: "Trombe!",
@@ -463,7 +463,7 @@ let BattleAbilities = {
 	},
 	// Gimm1ck
 	"russianrush": {
-		desc: "If Hail is active, this Pokemon's Speed and Accuracy is doubled.",
+		desc: "If Hail is active, this Pokemon's Speed and Accuracy are doubled.",
 		shortDesc: "If Hail is active, this Pokemon's Speed and Accuracy is doubled.",
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather('hail')) {
@@ -484,7 +484,7 @@ let BattleAbilities = {
 	// GMars
 	mysteryshell: {
 		desc: "If this pokemon is Minior-Meteor, it cannot be afflicted by a status condition. This pokemon cannot be hit with a critical hit.",
-		shortDesc: "Status immunity while in Metor forme, crit immunity.",
+		shortDesc: "Status immunity while in Meteor forme, crit immunity.",
 		id: "mysteryshell",
 		name: "Mystery Shell",
 		isNonstandard: "Custom",
@@ -498,7 +498,7 @@ let BattleAbilities = {
 	},
 	// guishark
 	gzguishark: {
-		desc: "Boosts Attack by 1 stage upon switch-in/Mega Evolution.",
+		desc: "Boosts Attack by one stage upon switch-in or Mega Evolution.",
 		shortDesc: "Boosts Attack by 1 stage upon switch-in/Mega Evolution.",
 		id: "gzguishark",
 		name: "gz guishark",
@@ -531,7 +531,7 @@ let BattleAbilities = {
 	},
 	// inactive
 	souleater: {
-		desc: "Attacking moves heal the user 33% of damage dealt.",
+		desc: "Attacking moves heal the user by 33% of damage dealt.",
 		shortDesc: "Attacking moves heal the user 33% of damage dealt.",
 		id: "souleater",
 		name: "Soul Eater",
@@ -598,7 +598,7 @@ let BattleAbilities = {
 	},
 	// KingSwordYT
 	kungfupanda: {
-		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by 1 stage after it is damaged by a contact move.",
+		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by one stage after it is damaged by a contact move.",
 		shortDesc: "This Pokemon's punch-based moves have 1.2x power. +1 Spe when a foe makes contact.",
 		id: "kungfupanda",
 		name: "Kung Fu Panda",
@@ -638,7 +638,7 @@ let BattleAbilities = {
 	},
 	// Marshmallon
 	sightseeing: {
-		desc: "If this Pokemon is a Castform, its type and moves changes to the current weather condition's type, except Sandstorm. The user's Defense, Special Attack, Special Defense, Speed, and Accuracy are all boosted 1.5x during weather.",
+		desc: "If this Pokemon is a Castform, its type and moveset change to the current weather condition's type and moveset, except Sandstorm and Acid Rain. The user's Defense, Special Attack, Special Defense, Speed, and Accuracy are all boosted 1.5x during weather.",
 		shortDesc: "Castform's type & moves changes to the current weather condition's type, except Sandstorm.",
 		id: "sightseeing",
 		name: "Sightseeing",
@@ -725,8 +725,8 @@ let BattleAbilities = {
 	},
 	// Megazard
 	standuptall: {
-		desc: "This Pokemon's Attack, Defense, and Special Defense is raised by 1 stage at the end of each full turn it is on the field.",
-		shortDesc: "Raises Atk, Def, and Spd by 1, after each full turn on the field.",
+		desc: "This Pokemon's Attack, Defense, and Special Defense are raised by one stage at the end of each full turn it is on the field.",
+		shortDesc: "Raises Atk, Def, and SpD by 1, after each full turn on the field.",
 		id: "standuptall",
 		name: "Stand Up Tall",
 		isNonstandard: "Custom",
@@ -880,7 +880,7 @@ let BattleAbilities = {
 	},
 	// Raid
 	tempest: {
-		desc: "This pokemon's Flying type moves have 1.3x base power and will always hit.",
+		desc: "This pokemon's Flying-type moves have 1.3x Base Power and will always hit.",
 		shortDesc: "Flying type moves have 1.3x power and always hit.",
 		id: "tempest",
 		name: "Tempest",
@@ -985,7 +985,7 @@ let BattleAbilities = {
 	},
 	// Seraphus
 	seraphicregeneration: {
-		desc: "When this Pokemon switches out, it regains 33% of its HP, then its replacement recovers 33% of its health.",
+		desc: "When this Pokemon switches out, it regains 33% of its HP, then its replacement recovers 33% of its HP.",
 		shortDesc: "Upon switching out, this Pokemon and its replacement regain 33% of their HP.",
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.maxhp / 3);
@@ -1005,7 +1005,7 @@ let BattleAbilities = {
 	},
 	// Schiavetto
 	rvs: {
-		desc: "This Pokemon has two random stats except accurancy and evasion raised by 1 stages and another stat other than accurancy and evasion lowered by 1 stage at the end of each turn.",
+		desc: "This Pokemon has two random stats except accurancy and evasion raised by one stage and another stat other than accurancy and evasion lowered by one stage at the end of each turn.",
 		shortDesc: "Raises a 2 random stats by 1 and lowers another stat by 1 at the end the turn.",
 		id: "rvs",
 		name: "RVS",
@@ -1075,7 +1075,7 @@ let BattleAbilities = {
 	},
 	// The Immortal
 	beastboost2: {
-		desc: "This Pokemon's two highest stats are raised by 1 if it attacks and KOes another Pokemon.",
+		desc: "This Pokemon's two highest stats are raised by one stage if it attacks and KOes another Pokemon.",
 		shortDesc: "This Pokemon's 2 highest stats are raised by 1 if it attacks and KOes another Pokemon.",
 		id: "beastboost2",
 		name: "Beast Boost 2",
@@ -1121,7 +1121,7 @@ let BattleAbilities = {
 	},
 	// vivalospride
 	trashvivwebs: {
-		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it. Sets Sticky Web on switching in.",
+		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it. Sets Sticky Web the first tiem it switches in.",
 		shortDesc: "User's Water power is 2x; can't be burned; Fire power is halved. Sets web.",
 		onStart(pokemon) {
 			if (!pokemon.m.stickyweb) {
@@ -1168,6 +1168,7 @@ let BattleAbilities = {
 	},
 	// xJoelituh
 	clubexpertise: {
+		desc: "This Pokemon's bone moves have their Base Power multiplied by 1.3.",
 		shortDesc: "This Pokemon's bone moves have their power multiplied by 1.3.",
 		id: "clubexpertise",
 		name: "Club Expertise",
