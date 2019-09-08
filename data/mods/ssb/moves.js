@@ -1802,7 +1802,9 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Extreme Evoboost', source);
 		},
 		onHit(target, source, move) {
-			this.boost({atk: 2, def: -1, spa: 2, spd: -1, spe: 2}, source);
+			// Set target to the foe, this is a self targeting move so it works even if the foe has a subsitute
+			target = source.side.foe.active[0];
+			this.boost({atk: 2, spa: 2, spe: 2, def: -1, spd: -1}, source);
 			if (source.template.speciesid !== 'miniormeteor' || source.transformed) return;
 
 			let rainbow = ['', '-Orange', '-Yellow', '-Green', '-Blue', '-Indigo', '-Violet'];
@@ -1814,6 +1816,10 @@ let BattleMovedex = {
 				source.m.miniorColor = color;
 			}
 
+			if (target.volatiles['substitute'] && color !== '-Blue') {
+				this.add('-fail', source);
+				return;
+			}
 			switch (color) {
 			case '':
 				if (!target.setStatus('brn', source)) this.add('-fail', target);
@@ -1845,7 +1851,7 @@ let BattleMovedex = {
 				throw new Error(`Invalid color for Taste the Rainbow selected: ${color}`);
 			}
 		},
-		target: "normal",
+		target: "self",
 		type: "Normal",
 	},
 	// grimAuxiliatrix

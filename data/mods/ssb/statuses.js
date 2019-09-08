@@ -140,13 +140,13 @@ let BattleStatuses = {
 	andrew: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Andrew|Hah! You better have BURN HEAL!`);
+			this.add(`c|%Andrew|Hah! You better have BURN HEAL!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Andrew|brb kuncing`);
+			this.add(`c|%Andrew|brb kuncing`);
 		},
 		onFaint() {
-			this.add(`c|+Andrew|avenge me c.kilgannon!`);
+			this.add(`c|%Andrew|avenge me c.kilgannon!`);
 		},
 	},
 	anubis: {
