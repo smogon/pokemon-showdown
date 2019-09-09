@@ -4548,7 +4548,6 @@ const commands = {
 				away: targetUser.away,
 				rooms: roomList,
 			};
-			if (targetUser.userid !== target) userdetails.name = targetUser.name;
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;
