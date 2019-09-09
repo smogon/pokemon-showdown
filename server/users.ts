@@ -337,13 +337,15 @@ export class Connection {
 	challenge: string;
 	autojoins: string;
 	lastActiveTime: number;
+	connectedAt: number;
 	constructor(
 		id: string,
 		worker: Worker,
 		socketid: string,
 		user: User | null,
 		ip: string | null,
-		protocol: string | null
+		protocol: string | null,
+		connectedAt: number = Date.now()
 	) {
 		this.id = id;
 		this.socketid = socketid;
@@ -357,7 +359,8 @@ export class Connection {
 
 		this.challenge = '';
 		this.autojoins = '';
-		this.lastActiveTime = Date.now();
+		this.lastActiveTime = connectedAt;
+		this.connectedAt = connectedAt;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
 		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
@@ -454,7 +457,10 @@ export class User extends Chat.MessageContext {
 	blockChallenges: boolean;
 	blockPMs: boolean | string;
 	ignoreTickets: boolean;
+	/** When the user last disconnected. */
 	lastConnected: number;
+	/** When the user last connected. */
+	lastConnectedAt: number;
 	inviteOnlyNextBattle: boolean;
 
 	chatQueue: ChatQueueEntry[] | null;
@@ -529,6 +535,7 @@ export class User extends Chat.MessageContext {
 		this.blockPMs = false;
 		this.ignoreTickets = false;
 		this.lastConnected = 0;
+		this.lastConnectedAt = connection.connectedAt;
 		this.inviteOnlyNextBattle = false;
 
 		// chat queue
@@ -1085,7 +1092,11 @@ export class User extends Chat.MessageContext {
 		// the connection has changed name to this user's username, and so is
 		// being merged into this account
 		this.connected = true;
+		if (connection.connectedAt > this.lastConnectedAt) {
+			this.lastConnectedAt = connection.connectedAt;
+		}
 		this.connections.push(connection);
+
 		// console.log('' + this.name + ' merging: connection ' + connection.socket.id);
 		connection.send(this.getUpdateuserText());
 		connection.user = this;
@@ -1588,9 +1599,16 @@ function pruneInactive(threshold: number) {
  * Routing
  *********************************************************/
 
-function socketConnect(worker: Worker, workerid: number, socketid: string, ip: string, protocol: string) {
+function socketConnect(
+	worker: Worker,
+	workerid: number,
+	socketid: string,
+	ip: string,
+	protocol: string,
+	connectedAt: number
+) {
 	const id = '' + workerid + '-' + socketid;
-	const connection = new Connection(id, worker, socketid, null, ip, protocol);
+	const connection = new Connection(id, worker, socketid, null, ip, protocol, connectedAt);
 	connections.set(id, connection);
 
 	const banned = Punishments.checkIpBanned(connection);

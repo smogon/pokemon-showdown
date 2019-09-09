@@ -41,26 +41,28 @@ if (cluster.isMaster) {
 			// console.log('master received: ' + data);
 			switch (data.charAt(0)) {
 			case '*': {
-				// *socketid, ip, protocol
+				// *socketid, ip, protocol, connectedAt
 				// connect
-				let nlPos = data.indexOf('\n');
-				let nlPos2 = data.indexOf('\n', nlPos + 1);
-				Users.socketConnect(worker, id, data.slice(1, nlPos), data.slice(nlPos + 1, nlPos2), data.slice(nlPos2 + 1));
+				const [socketid, ip, protocol, connectedAt] = data.substr(1).split('\n');
+				Users.socketConnect(worker, id, socketid, ip, protocol, +connectedAt);
 				break;
 			}
 
 			case '!': {
 				// !socketid
 				// disconnect
-				Users.socketDisconnect(worker, id, data.substr(1));
+				const socketid = data.substr(1);
+				Users.socketDisconnect(worker, id, socketid);
 				break;
 			}
 
 			case '<': {
 				// <socketid, message
 				// message
-				let nlPos = data.indexOf('\n');
-				Users.socketReceive(worker, id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
+				const idx = data.indexOf('\n');
+				const socketid = data.substr(1, idx - 1);
+				const message = data.substr(idx + 1);
+				Users.socketReceive(worker, id, socketid, message);
 				break;
 			}
 
@@ -617,6 +619,8 @@ if (cluster.isMaster) {
 	let isTrustedProxyIp = IPTools.checker(Config.proxyip);
 	let socketCounter = 0;
 	server.on('connection', socket => {
+		const connectedAt = Date.now();
+
 		// For reasons that are not entirely clear, SockJS sometimes triggers
 		// this event with a null `socket` argument.
 		if (!socket) return;
@@ -630,7 +634,7 @@ if (cluster.isMaster) {
 			return;
 		}
 
-		let socketid = '' + (++socketCounter);
+		const socketid = '' + (++socketCounter);
 		sockets.set(socketid, socket);
 
 		let socketip = socket.remoteAddress;
@@ -648,7 +652,7 @@ if (cluster.isMaster) {
 		}
 
 		// @ts-ignore
-		process.send(`*${socketid}\n${socketip}\n${socket.protocol}`);
+		process.send(`*${socketid}\n${socketip}\n${socket.protocol}\n${connectedAt}`);
 
 		socket.on('data', message => {
 			// drop empty messages (DDoS?)
