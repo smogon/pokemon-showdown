@@ -1460,7 +1460,7 @@ export class Battle extends Dex.ModdedDex {
 				return true;
 			}
 			const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
-			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} turns (on turn 1000).`);
+			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).`);
 			if (Config.allowrequestingties) this.hint("If you want to tie earlier, consider using `/offertie`.");
 		}
 
