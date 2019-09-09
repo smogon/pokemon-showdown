@@ -4502,7 +4502,7 @@ const commands = {
 		}
 		if (cmd === 'userdetails') {
 			if (target.length > 18) {
-				connection.send('|queryrespone|userdetails|null');
+				connection.send('|queryresponse|userdetails|null');
 				return false;
 			}
 
