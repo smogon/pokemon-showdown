@@ -1595,6 +1595,24 @@ function pruneInactive(threshold: number) {
 	}
 }
 
+function logGhostConnections(threshold: number): Promise<unknown> {
+	const buffer = [];
+	for (const connection of connections.values()) {
+		// If the connection's been around for at least a week and it doesn't
+		// use raw WebSockets (which doesn't have any kind of keepalive or
+		// timeouts on it), log it.
+		if (connection.protocol !== 'websocket-raw' && connection.connectedAt <= Date.now() - threshold) {
+			const timestamp = Chat.toTimestamp(new Date(connection.connectedAt));
+			const now = Chat.toTimestamp(new Date());
+			const log = `Connection ${connection.id} from ${connection.ip} with protocol "${connection.protocol}" has been around since ${timestamp} (currently ${now}).`;
+			buffer.push(log);
+		}
+	}
+	return buffer.length
+		? FS(`logs/ghosts-${process.pid}.log`).append(buffer.join('\r\n') + '\r\n')
+		: Promise.resolve();
+}
+
 /*********************************************************
  * Routing
  *********************************************************/
@@ -1740,5 +1758,9 @@ export const Users = {
 	pruneInactiveTimer: setInterval(() => {
 		pruneInactive(Config.inactiveuserthreshold || 60 * MINUTES);
 	}, 30 * MINUTES),
+	logGhostConnections,
+	logGhostConnectionsTimer: setInterval(async () => {
+		await logGhostConnections(7 * 24 * 60 * MINUTES);
+	}, 7 * 24 * 60 * MINUTES),
 	socketConnect,
 };
