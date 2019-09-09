@@ -4506,6 +4506,7 @@ const commands = {
 				connection.send('|queryresponse|userdetails|' + JSON.stringify({
 					id: target,
 					userid: toID(target),
+					name: target,
 					rooms: false,
 				}));
 				return false;
@@ -4534,6 +4535,7 @@ const commands = {
 			let userdetails = {
 				id: target,
 				userid: targetUser.userid,
+				name: targetUser.name,
 				avatar: targetUser.avatar,
 				group: targetUser.group,
 				autoconfirmed: !!targetUser.autoconfirmed,
