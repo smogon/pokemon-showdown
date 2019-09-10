@@ -1078,6 +1078,10 @@ export class Tournament extends Rooms.RoomGame {
 			bracketData: this.getBracketData(),
 		};
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
+		if (update.bracketData.type === 'tree') {
+			this.room.lastTournament = { ...update.bracketData };
+			this.room.lastTournament.playersLength = this.players.length;
+		}
 		this.remove();
 	}
 }

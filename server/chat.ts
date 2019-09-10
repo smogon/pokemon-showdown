@@ -1086,6 +1086,17 @@ export class CommandContext extends MessageContext {
 		this.targetUsername = this.targetUser ? this.targetUser.name : this.inputUsername;
 		return rest;
 	}
+
+	moreRound(target: any) {
+		if (target && target.length) {
+			for (var i = 0; i < target.length; i++) {
+				if (target[i].children) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
 
 export const Chat = new class {

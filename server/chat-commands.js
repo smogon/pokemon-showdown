@@ -609,6 +609,41 @@ const commands = {
 		`(in a PM) /invite [roomname] - Invites the player you're PMing to join the room [roomname].`,
 	],
 
+	tourexport: 'tournamentexport',
+	export: 'tournamentexport',
+	tournamentexport(target, room) {
+		if (room.lastTournament && room.lastTournament.type === 'tree') {
+		  var tourString = '';
+		  var tourData = [];
+		  var tourWinner = room.lastTournament.rootNode.team;
+		  var roundCounter = Math.ceil(Math.log(2, room.lastTournament.playersLength)) + 1;
+
+		  tourData.push(room.lastTournament.rootNode);
+		  while (this.moreRound(tourData)) {
+			var tourDataCopy = tourData;
+			tourData = [];
+			
+			for (var i = 0; i < tourDataCopy.length; i++) {
+				if (tourDataCopy[i].children) {
+					for (var j = 0; j < tourDataCopy[i].children.length; j++) {
+						if (tourDataCopy[i].children) {
+							tourData.push(tourDataCopy[i].children[j]);
+						}
+					}
+					var winner = (tourDataCopy[i].team === tourDataCopy[i].children[0].team);
+					tourString = '<span' + (winner ? ' style="font-weight:bold;"' : '') + `>${tourDataCopy[i].children[0].team}</span> vs <span` + (!winner ? ' style="font-weight:bold;"' : '') + `>${tourDataCopy[i].children[1].team}</span><br>` + tourString;
+				}
+			}
+			tourString = `<br><strong>Round ${roundCounter}</strong><br>` + tourString;
+			roundCounter -= 1;
+		  }
+		  tourString = `<p> Tournament winner: <strong>${tourWinner}</strong></p>` + tourString;
+		  return this.sendReplyBox(`<div style="max-height: 250px; overflow-y: auto"><p style="font-weight:bold;">${Chat.escapeHTML(room.title)} elimination tournament paste</p>` + tourString + '</div>');
+		} else {
+		  return this.errorReply("You can only use the tournamentexport command after an elimination tour in this room has ended");
+		}
+	},	
+
 	pminfobox(target, room, user, connection) {
 		if (!this.canTalk()) return;
 		if (!this.can('addhtml', null, room)) return false;

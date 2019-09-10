@@ -1385,12 +1385,14 @@ export class ChatRoom extends BasicChatRoom {
 	// TypeScript happy
 	battle: null;
 	active: false;
+	lastTournament: AnyObject;
 	type: 'chat';
 	constructor() {
 		super('' as RoomID);
 		this.battle = null;
 		this.active = false;
 		this.type = 'chat';
+		this.lastTournament = {};
 	}
 }
 
@@ -1400,6 +1402,7 @@ export class GameRoom extends BasicChatRoom {
 	active: boolean;
 	format: string;
 	auth: {[userid: string]: string};
+	lastTournament: AnyObject;
 	p1: AnyObject | null;
 	p2: AnyObject | null;
 	p3: AnyObject | null;
@@ -1429,6 +1432,7 @@ export class GameRoom extends BasicChatRoom {
 		this.auth = Object.create(null);
 		// console.log("NEW BATTLE");
 
+		this.lastTournament = {};
 		this.tour = options.tour || null;
 		this.parent = options.parent || (this.tour && this.tour.room) || null;
 
