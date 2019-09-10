@@ -1341,43 +1341,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Electric",
 	},
-	// deg
-	luciddreams: {
-		accuracy: 75,
-		basePower: 0,
-		category: "Status",
-		desc: "The foe falls asleep and is inflicted with the effects of Nightmare and Leech Seed. The user loses 1/2 of their maximum HP unless this move had no effect.",
-		shortDesc: "Loses 1/2 HP. Foe: sleep, Nightmare, Leech Seed.",
-		id: "luciddreams",
-		name: "Lucid Dreams",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: 0,
-		flags: {mirror: 1, reflectable: 1, protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Dark Void', target);
-			this.add('-anim', source, 'Night Shade', target);
-		},
-		onHit(target, source, move) {
-			let hadEffect = false;
-			if (target.trySetStatus('slp')) hadEffect = true;
-			if (target.addVolatile('nightmare')) hadEffect = true;
-			if (!target.hasType('Grass')) {
-				if (target.addVolatile('leechseed')) hadEffect = true;
-			}
-			if (!hadEffect) {
-				this.add('-fail', target);
-			} else {
-				this.damage(source.maxhp / 2, source, source, 'recoil');
-			}
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-	},
 	// DragonWhale
 	earthsblessing: {
 		accuracy: true,

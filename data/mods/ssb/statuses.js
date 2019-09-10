@@ -457,18 +457,6 @@ let BattleStatuses = {
 			this.add(`c|+deetah|I have 8 lives left, you can't get rid of me that easily.`);
 		},
 	},
-	deg: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+deg|rof`);
-		},
-		onSwitchOut() {
-			this.add(`c|+deg|rof`);
-		},
-		onFaint() {
-			this.add(`c|+deg|Dream Eater Gengar is an unset.`);
-		},
-	},
 	dragonwhale: {
 		noCopy: true,
 		onStart() {

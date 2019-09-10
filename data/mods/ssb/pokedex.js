@@ -41,11 +41,6 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: "Arabesque"},
 	},
-	// deg
-	gengarmega: {
-		inherit: true,
-		abilities: {0: "Bad Dreams"},
-	},
 	// E4 Flint
 	steelixmega: {
 		inherit: true,
