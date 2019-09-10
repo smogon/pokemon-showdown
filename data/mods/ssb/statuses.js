@@ -816,15 +816,15 @@ let BattleStatuses = {
 	kaori: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c|%kaori|(~￣³￣)~`);
+			this.add(`c|+kaori|(~￣³￣)~`);
 			if (pokemon.illusion) return;
 			this.boost({spd: 2}, pokemon);
 		},
 		onSwitchOut() {
-			this.add(`c|%kaori|ಠ_ಠ`);
+			this.add(`c|+kaori|ಠ_ಠ`);
 		},
 		onFaint() {
-			this.add(`c|%kaori|(◕ ᥥ ◕✿)`);
+			this.add(`c|+kaori|(◕ ᥥ ◕✿)`);
 		},
 	},
 	kay: {
@@ -930,15 +930,15 @@ let BattleStatuses = {
 	lifeisdank: {
 		noCopy: true,
 		onStart(target) {
-			this.add(`c|@LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
+			this.add(`c|&LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
 			if (target.illusion) return;
 			this.boost({spe: 2}, target);
 		},
 		onSwitchOut() {
-			this.add(`c|@LifeisDANK|!(•⌔• ) Peent Peent.`);
+			this.add(`c|&LifeisDANK|!(•⌔• ) Peent Peent.`);
 		},
 		onFaint() {
-			this.add(`c|@LifeisDANK|(•⌔•. ) Peent.`);
+			this.add(`c|&LifeisDANK|(•⌔•. ) Peent.`);
 		},
 		// Mountaineer innate
 		onDamage(damage, target, source, effect) {
@@ -1218,13 +1218,13 @@ let BattleStatuses = {
 	ptoad: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+ptoad⚬|Make it rain!`);
+			this.add(`c|%ptoad⚬|Make it rain!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
+			this.add(`c|%ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
 		},
 		onFaint() {
-			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
+			this.add(`c|%ptoad⚬|Wow. Way to rain on my parade.`);
 		},
 	},
 	psynergy: {
@@ -1422,16 +1422,16 @@ let BattleStatuses = {
 	spacebass: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@SpaceBass|ಠ_ಠﾉ(_̅_̅_̅_̅_̲̅м̲̅a̲̅я̲̅i̲̅j̲̅u̲̅a̲̅n̲̅a̲̅_̅_̅_̅()ڪے~ `);
+			this.add(`c|+SpaceBass|ಠ_ಠﾉ(_̅_̅_̅_̅_̲̅м̲̅a̲̅я̲̅i̲̅j̲̅u̲̅a̲̅n̲̅a̲̅_̅_̅_̅()ڪے~ `);
 		},
 		onSwitchOut(pokemon) {
-			this.add(`c|@SpaceBass|**ಠ_ಠ** `);
+			this.add(`c|+SpaceBass|**ಠ_ಠ** `);
 			if (pokemon.illusion) return;
 			// Innate - heals 40% on switch out
 			pokemon.heal(pokemon.maxhp * 0.4);
 		},
 		onFaint() {
-			this.add(`c|@SpaceBass|bg`);
+			this.add(`c|+SpaceBass|bg`);
 		},
 	},
 	sparksblade: {
