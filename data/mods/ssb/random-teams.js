@@ -661,12 +661,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Brave Bird',
 				nature: 'Serious',
 			},
-			'SpaceBass': {
-				species: 'Foongus', ability: 'Prankster', item: 'Eviolite', gender: 'M',
-				moves: ['Ingrain', 'Substitute', 'Baton Pass'],
-				signatureMove: 'Army of Mushrooms',
-				evs: {hp: 252, def: 128, spd: 128}, ivs: {atk: 0, spe: 0}, nature: 'Sassy',
-			},
 			'SparksBlade': {
 				species: 'Blacephalon', ability: 'Magic Guard', item: 'Life Orb', gender: 'N',
 				moves: ['Mind Blown', 'Shadow Ball', 'Explosion'],

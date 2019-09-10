@@ -1217,16 +1217,6 @@ let BattleAbilities = {
 			}
 		},
 	},
-	// Modified Prankster to not boost Army of Mushrooms
-	prankster: {
-		inherit: true,
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move && move.category === 'Status' && move.id !== 'armyofmushrooms') {
-				move.pranksterBoosted = true;
-				return priority + 1;
-			}
-		},
-	},
 	// Modified Primordial Sea to not end if a pokemon with Maelstrom is out
 	primordialsea: {
 		inherit: true,

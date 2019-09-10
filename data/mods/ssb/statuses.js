@@ -1419,21 +1419,6 @@ let BattleStatuses = {
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 	},
-	spacebass: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+SpaceBass|ಠ_ಠﾉ(_̅_̅_̅_̅_̲̅м̲̅a̲̅я̲̅i̲̅j̲̅u̲̅a̲̅n̲̅a̲̅_̅_̅_̅()ڪے~ `);
-		},
-		onSwitchOut(pokemon) {
-			this.add(`c|+SpaceBass|**ಠ_ಠ** `);
-			if (pokemon.illusion) return;
-			// Innate - heals 40% on switch out
-			pokemon.heal(pokemon.maxhp * 0.4);
-		},
-		onFaint() {
-			this.add(`c|+SpaceBass|bg`);
-		},
-	},
 	sparksblade: {
 		noCopy: true,
 		onStart() {

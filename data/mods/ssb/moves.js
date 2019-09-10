@@ -4142,35 +4142,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 	},
-	// SpaceBass
-	armyofmushrooms: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Before the turn starts, this Pokemon boosts its Defense and Special Defense by one stage and uses Powder on the target. When this move hits, this Pokemon uses Sleep Powder and Leech Seed. This move's priority is -1 and cannot be boosted by Prankster.",
-		shortDesc: "+1 Def/SpD, Powder, Leech Seed, Sleep Powder.",
-		id: "armyofmushrooms",
-		name: "Army of Mushrooms",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: -1,
-		flags: {snatch: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		beforeTurnCallback(pokemon) {
-			if (pokemon.status === 'slp' || pokemon.status === 'frz') return;
-			this.boost({def: 1, spd: 1}, pokemon, pokemon, this.getEffect('mushroom army'));
-			this.useMove("powder", pokemon);
-		},
-		onHit(pokemon) {
-			this.useMove("sleeppowder", pokemon);
-			this.useMove("leechseed", pokemon);
-		},
-		secondary: null,
-		target: "self",
-		type: "Grass",
-	},
 	// SparksBlade
 	kratosmana: {
 		accuracy: 100,
