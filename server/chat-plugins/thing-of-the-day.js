@@ -5,7 +5,7 @@ const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
-const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling'];
+const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling', 'animeandmanga'];
 
 /** @type {{[k: string]: ChatRoom}} */
 const rooms = {};
@@ -20,6 +20,7 @@ const SOTDS_FILE = 'config/chat-plugins/tvbf-shows.tsv';
 const COTDS_FILE = 'config/chat-plugins/youtube-channels.tsv';
 const BOTWS_FILE = 'config/chat-plugins/thelibrary.tsv';
 const MOTWS_FILE = 'config/chat-plugins/prowrestling-matches.tsv';
+const ANOTDS_FILE = 'config/chat-plugins/animeandmanga-shows.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
 /** @type {{[k: string]: [string, AnyObject][]}} */
@@ -403,12 +404,13 @@ const sotd = new OtdHandler('sotd', 'Show', rooms.jubilifetvfilms, SOTDS_FILE, [
 const cotd = new OtdHandler('cotd', 'Channel', rooms.youtube, COTDS_FILE, ['channel', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
 const botw = new OtdHandler('botw', 'Book', rooms.thelibrary, BOTWS_FILE, ['book', 'nominator', 'link', 'quote', 'author', 'image', 'time'], ['Book', 'Nominator', 'Link', 'Quote', 'Author', 'Image', 'Timestamp'], true);
 const motw = new OtdHandler('motw', 'Match', rooms.prowrestling, MOTWS_FILE, ['match', 'nominator', 'link', 'tagline', 'event', 'image', 'time'], ['Match', 'Nominator', 'Link', 'Tagline', 'Event', 'Image', 'Timestamp'], true);
+const anotd = new OtdHandler('anotd', 'Anime', rooms.animeandmanga, ANOTDS_FILE, ['show', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
 
 /**
  * @param {string} message
  */
 function selectHandler(message) {
-	let id = toID(message.substring(1, 5));
+	let id = toID(message.substring(1).split(' ')[0]);
 	switch (id) {
 	case 'aotd':
 		return aotd;
@@ -422,6 +424,8 @@ function selectHandler(message) {
 		return botw;
 	case 'motw':
 		return motw;
+	case 'anotd':
+		return anotd;
 	default:
 		throw new Error("Invalid type for otd handler.");
 	}
@@ -671,7 +675,7 @@ const pages = {
 exports.pages = pages;
 
 const help = [
-	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw):`,
+	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
 	`- /-otd - View the current Thing of the Day.`,
 	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`,
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
@@ -690,6 +694,7 @@ exports.commands = {
 	cotd: commands,
 	botw: commands,
 	motw: commands,
+	anotd: commands,
 	aotdhelp: help,
 	otdhelp: help,
 };
