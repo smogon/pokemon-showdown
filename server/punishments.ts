@@ -226,7 +226,6 @@ const PunishmentsTsvStorage = new class {
 	 * punishType, roomid:userid, ips/usernames, expiration time, reason
 	 */
 	async loadRoomPunishments() {
-		console.log('LMAO!');
 		const data = await FS(ROOM_PUNISHMENT_FILE).readIfExists();
 		if (!data) return;
 		for (const row of data.split("\n")) {
