@@ -222,18 +222,20 @@ export class TeamValidator {
 		}
 		templateOverride = templateOverride || ruleTable.has('+basepokemon:' + toID(template.baseSpecies));
 		let postMegaTemplate = template;
-		if (item.megaEvolves === template.species) {
-			if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
-			postMegaTemplate = dex.getTemplate(item.megaStone);
-		}
-		if (['Mega', 'Mega-X', 'Mega-Y'].includes(postMegaTemplate.forme)) {
-			templateOverride = ruleTable.has('+pokemon:' + postMegaTemplate.id);
-			banReason = ruleTable.check('pokemon:' + postMegaTemplate.id, setHas);
-			if (banReason) {
-				problems.push(`${postMegaTemplate.species} is ${banReason}.`);
-			} else if (!templateOverride) {
-				banReason = ruleTable.check('pokemontag:mega', setHas);
-				if (banReason) problems.push(`Mega evolutions are ${banReason}.`);
+		if (dex.gen >= 6) {
+			if (item.megaEvolves === template.species) {
+				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
+				postMegaTemplate = dex.getTemplate(item.megaStone);
+			}
+			if (['Mega', 'Mega-X', 'Mega-Y'].includes(postMegaTemplate.forme)) {
+				templateOverride = ruleTable.has('+pokemon:' + postMegaTemplate.id);
+				banReason = ruleTable.check('pokemon:' + postMegaTemplate.id, setHas);
+				if (banReason) {
+					problems.push(`${postMegaTemplate.species} is ${banReason}.`);
+				} else if (!templateOverride) {
+					banReason = ruleTable.check('pokemontag:mega', setHas);
+					if (banReason) problems.push(`Mega evolutions are ${banReason}.`);
+				}
 			}
 		}
 		if (!templateOverride) {
