@@ -4785,6 +4785,33 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		type: "Psychic",
 	},
+	// Zyg
+	thelifeofzyg: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Both the user and target are Badly Poisoned.",
+		shortDesc: "Badly Poisons the user and target.",
+		id: "thelifeofzyg",
+		name: "The Life of Zyg",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onTryHit(target, source) {
+			this.add('-anim', source, "Toxic", source);
+			this.add('-anim', source, "Toxic", target);
+		},
+		onHit(target, source) {
+			source.setStatus('tox');
+			target.setStatus('tox');
+		},
+		target: "normal",
+		type: "Poison",
+	},
 };
 
 exports.BattleMovedex = BattleMovedex;

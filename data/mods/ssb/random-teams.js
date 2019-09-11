@@ -763,6 +763,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Relic Song Dance',
 				evs: {hp: 4, atk: 252, spa: 252}, nature: 'Quiet',
 			},
+			'Zyg': {
+				species: 'Zygarde', ability: 'Poison Heal', item: 'Leftovers', gender: 'M',
+				moves: ['Thousand Arrows', 'Stone Edge', 'Coil'],
+				signatureMove: 'The Life of Zyg',
+				evs: {hp: 188, atk: 68, def: 252}, nature: 'Adamant',
+			},
 		};
 		let pool = Object.keys(sets);
 		/** @type {{[type: string]: number}} */

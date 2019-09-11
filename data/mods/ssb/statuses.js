@@ -1649,6 +1649,18 @@ let BattleStatuses = {
 			this.add('message', 'Zarel used your mom!');
 		},
 	},
+	zyguser: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Zyg|/me sighs`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Zyg|/me sighs`);
+		},
+		onFaint() {
+			this.add(`c|+Zyg|Brexit means Brexit`);
+		},
+	},
 	// boostreplacement condition for nui's zmove
 	boostreplacement: {
 		// this is a side condition
