@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * @typedef {Object} Storage
+ * @property {'sqlite' | 'tsv' | 'memory'} punishments
+ */
+
+/**
  * The server port - the port to run Pokemon Showdown under
  */
 exports.port = 8000;
@@ -175,8 +180,7 @@ exports.crashguardemail = null;
 /**
  * Databases.
  * This is a map of section in codebase -> database engine.
- * Use `memory` as the database engine if this is a test server.
- * @type {{[key: string]: string}}
+ * @type {Storage}
  */
 exports.storage = {punishments: 'sqlite'};
 
