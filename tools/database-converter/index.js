@@ -53,8 +53,6 @@ if (!DATABASES[database].includes(from) || !DATABASES[database].includes(to)) {
 
 switch (database) {
 case 'punishments':
-	new PunishmentsConverter(from, to).convert().catch(err => {
-		throw err;
-	});
+	new PunishmentsConverter(from, to).convert();
 	break;
 }

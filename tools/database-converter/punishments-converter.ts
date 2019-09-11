@@ -32,13 +32,10 @@ export class PunishmentsConverter {
 			database.exec(`DELETE FROM punishments; DELETE FROM room_punishments; DELETE FROM shared_ips; DELETE FROM ip_banlist`).then(async () => {
 				// tslint:disable-next-line: no-floating-promises
 				PunishmentsConverterSqlite.convert();
-			}).catch(err => {
-				throw err;
 			});
 		} else if (this.to === 'tsv') {
-			PunishmentsConverterTsv.convert().catch(err => {
-				throw err;
-			});
+			// tslint:disable-next-line: no-floating-promises
+			PunishmentsConverterTsv.convert();
 		}
 	}
 }
