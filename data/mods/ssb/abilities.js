@@ -16,7 +16,7 @@ let BattleAbilities = {
 	// Please keep abilites organized alphabetically based on staff member name!
 	// 5gen
 	seasonsgift: {
-		desc: "If Sunny Day is active, this Pokemon's Attack is 1.5x, and its Speed is doubled.",
+		desc: "If Sunny Day is active, this Pokemon's Attack is 1.5x and its Speed is doubled.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Attack is 1.5x and its Speed is doubled.",
 		id: "seasonsgift",
 		name: "Season's Gift",
@@ -85,7 +85,7 @@ let BattleAbilities = {
 	// Aethernum
 	awakening: {
 		desc: "On switch-in, Attack and Speed are lowered by three stages, while Defense and Special Defense are increased by three stages. At the end of each turn, Attack and Speed are increased by one stage while Defense and Special Defense are decreased by one stage.",
-		shortDesc: "Atk & spe -3; def & spd +3; end turn: Atk & Spe +1; Def & Spd -1",
+		shortDesc: "Atk & Spe -3; Def & SpD +3; each turn: Atk & Spe +1; Def & SpD -1",
 		id: "awakening",
 		name: "Awakening",
 		isNonstandard: "Custom",
@@ -168,7 +168,7 @@ let BattleAbilities = {
 	// Anubis
 	distortionworld: {
 		desc: "For 5 turns, Speed becomes the same for all Pokemon. The power of Ghost-type attacks made by Pokemon is multiplied by 1.5.",
-		shortDesc: "5 turns. Speed Ties. +Ghost Power",
+		shortDesc: "5 turns. Speed ties. +Ghost power",
 		id: "distortionworld",
 		name: "Distortion World",
 		isNonstandard: "Custom",
@@ -243,7 +243,7 @@ let BattleAbilities = {
 		id: "arabesque",
 		name: "Arabesque",
 		desc: "On switch-in, this Pokemon switches to a different Oricorio forme.",
-		shortDesc: "On switch-in, this Pokemon switches to a different oricorio form.",
+		shortDesc: "On switch-in, this Pokemon switches to a different Oricorio forme.",
 		isNonstandard: "Custom",
 		onStart(source) {
 			let formes = ['oricorio', 'oricoriosensu', 'oricoriopompom', 'oricoriopau'];
@@ -317,8 +317,8 @@ let BattleAbilities = {
 	},
 	// Decem
 	miraclescale: {
-		desc: "This Pokemon's Dragon type moves have their priority increased by 1.",
-		shortDesc: "+1 Priority to Dragon type moves.",
+		desc: "This Pokemon's Dragon-type moves have their priority increased by 1.",
+		shortDesc: "+1 Priority to Dragon-type moves.",
 		id: "miraclescale",
 		name: "Miracle Scale",
 		isNonstandard: "Custom",
@@ -444,7 +444,7 @@ let BattleAbilities = {
 	},
 	// Gallant Spear
 	trombe: {
-		desc: "On switch in, this Pokemon summons Light Screen or Reflect and is guaranteed to move first for one turn.",
+		desc: "On switch-in, this Pokemon summons Light Screen or Reflect and is guaranteed to move first for one turn.",
 		shortDesc: "On switch, 1 screen + priority.",
 		id: "trombe",
 		name: "Trombe!",
@@ -464,7 +464,7 @@ let BattleAbilities = {
 	// Gimm1ck
 	"russianrush": {
 		desc: "If Hail is active, this Pokemon's Speed and Accuracy are doubled.",
-		shortDesc: "If Hail is active, this Pokemon's Speed and Accuracy is doubled.",
+		shortDesc: "If Hail is active, this Pokemon's Speed and Accuracy are doubled.",
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather('hail')) {
 				return this.chainModify(2);
@@ -483,7 +483,7 @@ let BattleAbilities = {
 	},
 	// GMars
 	mysteryshell: {
-		desc: "If this pokemon is Minior-Meteor, it cannot be afflicted by a status condition. This pokemon cannot be hit with a critical hit.",
+		desc: "If this Pokemon is Minior-Meteor, it cannot be afflicted by a status condition. This Pokemon cannot be hit with a critical hit.",
 		shortDesc: "Status immunity while in Meteor forme, crit immunity.",
 		id: "mysteryshell",
 		name: "Mystery Shell",
@@ -512,7 +512,7 @@ let BattleAbilities = {
 	},
 	// HoeenHero
 	scripter: {
-		desc: "If Scripted Terrain is active, this Pokemon's Speed is doubled, and its moves have 1.5x power.",
+		desc: "If Scripted Terrain is active, this Pokemon's Speed is doubled and its moves have 1.5x power.",
 		shortDesc: "If Scripted Terrain is active, this Pokemon's Speed doubles and attack power is 1.5x.",
 		id: "scripter",
 		name: "Scripter",
@@ -619,7 +619,7 @@ let BattleAbilities = {
 	// Mad Monty ¾°
 	minnesnowta: {
 		desc: "This Pokemon is immune to Ice-type moves. Its Ice and Electric type attacks have their power multiplied by 1.2x.",
-		shortDesc: "This Pokemon's Ice and Electric attacks  have their power multiplied by 1.2; Ice immunity.",
+		shortDesc: "This Pokemon's Ice and Electric attacks have their power multiplied by 1.2; Ice immunity.",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ice') {
 				this.add('-immune', target, '[from] ability: Minnesnowta');
@@ -638,7 +638,7 @@ let BattleAbilities = {
 	},
 	// Marshmallon
 	sightseeing: {
-		desc: "If this Pokemon is a Castform, its type and moveset change to the current weather condition's type and moveset, except Sandstorm and Acid Rain. The user's Defense, Special Attack, Special Defense, Speed, and Accuracy are all boosted 1.5x during weather.",
+		desc: "If this Pokemon is a Castform, its type and moveset change to the current weather condition's type and moveset, except Sandstorm and Acid Rain. The user's Defense, Special Attack, Special Defense, Speed, and accuracy are all boosted 1.5x during weather.",
 		shortDesc: "Castform's type & moves changes to the current weather condition's type, except Sandstorm.",
 		id: "sightseeing",
 		name: "Sightseeing",
@@ -1005,7 +1005,7 @@ let BattleAbilities = {
 	},
 	// Schiavetto
 	rvs: {
-		desc: "This Pokemon has two random stats except accurancy and evasion raised by one stage and another stat other than accurancy and evasion lowered by one stage at the end of each turn.",
+		desc: "This Pokemon has two random stats except accuracy and evasion raised by one stage and another stat other than accuracy and evasion lowered by one stage at the end of each turn.",
 		shortDesc: "Raises a 2 random stats by 1 and lowers another stat by 1 at the end the turn.",
 		id: "rvs",
 		name: "RVS",
@@ -1063,7 +1063,7 @@ let BattleAbilities = {
 	// Teremiare
 	notprankster: {
 		desc: "This Pokemon's status moves have their priority raised by 1.",
-		shortDesc: "This Pokemon's Status moves have priority raised by 1.",
+		shortDesc: "This Pokemon's status moves have priority raised by 1.",
 		id: "notprankster",
 		name: "Not Prankster",
 		isNonstandard: "Custom",
@@ -1121,7 +1121,7 @@ let BattleAbilities = {
 	},
 	// vivalospride
 	trashvivwebs: {
-		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it. Sets Sticky Web the first tiem it switches in.",
+		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it. Sets Sticky Web the first time it switches in.",
 		shortDesc: "User's Water power is 2x; can't be burned; Fire power is halved. Sets web.",
 		onStart(pokemon) {
 			if (!pokemon.m.stickyweb) {
