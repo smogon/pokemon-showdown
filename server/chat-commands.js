@@ -714,7 +714,7 @@ const commands = {
 		if (target) this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 
 		user.setStatusType('busy');
-		this.parse('/blockpms');
+		this.parse('/blockpms +');
 		this.parse('/blockchallenges');
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
