@@ -521,7 +521,7 @@ export const IPTools = new class {
 	testConnection(ip: string, callback: (result: boolean) => void) {
 		const cachedValue = this.connectionTestCache.get(ip);
 		if (cachedValue !== undefined) {
-			return cachedValue;
+			return callback(cachedValue);
 		}
 
 		// Node.js's documentation does not make this easy to write. I discovered
@@ -619,7 +619,8 @@ export const IPTools = new class {
 			'40.71.227.101', '119.42.118.73', '202.40.183.234', '113.11.136.28', '222.72.38.46', '185.141.10.67',
 			'24.52.170.119', '62.140.252.72', '94.236.198.160', '182.52.51.41', '187.38.170.94', '109.185.143.169',
 			'84.41.29.225', '101.255.64.194', '210.16.84.182', '203.192.208.72', '201.182.146.14', '189.45.42.149',
-			'89.135.51.39', '82.117.234.189', '109.105.195.250', '61.9.48.99', '91.103.31.45',
+			'89.135.51.39', '82.117.234.189', '109.105.195.250', '61.9.48.99', '91.103.31.45', '213.5.194.3',
+			'185.121.202.51', '175.195.33.102', '59.120.229.102', '79.106.165.238', '217.210.157.135',
 		].includes(ip)) {
 			// single-IP open proxies
 			return 'proxy';

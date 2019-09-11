@@ -9,9 +9,11 @@ npm-debug.log
 .eslintcache
 package-lock.json
 database/sqlite.db
+/tools/set-import/sets
 
 # Typescript build artifacts
 .*-dist/
+tools/set-import/importer.js
 
 # visual studio live share
 .vs

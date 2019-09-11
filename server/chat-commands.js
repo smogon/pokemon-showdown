@@ -714,7 +714,7 @@ const commands = {
 		if (target) this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 
 		user.setStatusType('busy');
-		this.parse('/blockpms');
+		this.parse('/blockpms +');
 		this.parse('/blockchallenges');
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
@@ -4499,11 +4499,17 @@ const commands = {
 			target = '';
 		}
 		if (cmd === 'userdetails') {
+			if (target.length > 18) {
+				connection.send('|queryresponse|userdetails|null');
+				return false;
+			}
+
 			let targetUser = Users.get(target);
 			if (!trustable || !targetUser) {
 				connection.send('|queryresponse|userdetails|' + JSON.stringify({
 					id: target,
 					userid: toID(target),
+					name: target,
 					rooms: false,
 				}));
 				return false;
@@ -4532,6 +4538,7 @@ const commands = {
 			let userdetails = {
 				id: target,
 				userid: targetUser.userid,
+				name: targetUser.name,
 				avatar: targetUser.avatar,
 				group: targetUser.group,
 				autoconfirmed: !!targetUser.autoconfirmed,
@@ -4539,7 +4546,6 @@ const commands = {
 				away: targetUser.away,
 				rooms: roomList,
 			};
-			if (targetUser.userid !== target) userdetails.name = targetUser.name;
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;
@@ -4559,6 +4565,11 @@ const commands = {
 			});
 		} else if (cmd === 'roominfo') {
 			if (!trustable) return false;
+
+			if (target.length > 225) {
+				connection.end('|queryresponse|roominfo|null');
+				return false;
+			}
 
 			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom === Rooms.global || (

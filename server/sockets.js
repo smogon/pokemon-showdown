@@ -194,7 +194,7 @@ if (cluster.isMaster) {
 	};
 
 	/**
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} message
 	 */
 	exports.roomBroadcast = function (roomid, message) {
@@ -205,7 +205,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} socketid
 	 */
 	exports.roomAdd = function (worker, roomid, socketid) {
@@ -214,7 +214,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} socketid
 	 */
 	exports.roomRemove = function (worker, roomid, socketid) {
@@ -222,7 +222,7 @@ if (cluster.isMaster) {
 	};
 
 	/**
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {string} message
 	 */
 	exports.channelBroadcast = function (roomid, message) {
@@ -233,7 +233,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} roomid
+	 * @param {RoomID} roomid
 	 * @param {ChannelID} channelid
 	 * @param {string} socketid
 	 */
@@ -392,7 +392,7 @@ if (cluster.isMaster) {
 
 	const sockjs = require('sockjs');
 	const options = {
-		sockjs_url: `//${Config.routes.client}/js/lib/sockjs-1.1.1-nwjsfix.min.js`,
+		sockjs_url: `//${Config.routes.client}/js/lib/sockjs-1.4.0-nwjsfix.min.js`,
 		prefix: '/showdown',
 		/**
 		 * @param {string} severity
@@ -403,7 +403,7 @@ if (cluster.isMaster) {
 		},
 	};
 
-	if (Config.wsdeflate) {
+	if (Config.wsdeflate !== null) {
 		try {
 			// @ts-ignore
 			const deflate = require('permessage-deflate').configure(Config.wsdeflate);
@@ -422,12 +422,12 @@ if (cluster.isMaster) {
 	const sockets = new Map();
 	/**
 	 * roomid:socketid:Connection
-	 * @type {Map<string, Map<string, import('sockjs').Connection>>}
+	 * @type {Map<RoomID, Map<string, import('sockjs').Connection>>}
 	 */
 	const rooms = new Map();
 	/**
 	 * roomid:socketid:channelid
-	 * @type {Map<string, Map<string, ChannelID>>}
+	 * @type {Map<RoomID, Map<string, ChannelID>>}
 	 */
 	const roomChannels = new Map();
 
@@ -461,7 +461,8 @@ if (cluster.isMaster) {
 		let socketid = '';
 		/** @type {Map<string, import('sockjs').Connection> | undefined?} */
 		let room = null;
-		let roomid = '';
+		/** @type {RoomID} */
+		let roomid = /** @type {RoomID} */('');
 		/** @type {Map<string, ChannelID> | undefined?} */
 		let roomChannel = null;
 		/** @type {ChannelID} */
@@ -644,23 +645,6 @@ if (cluster.isMaster) {
 					break;
 				}
 			}
-		}
-
-		// xhr-streamming connections sometimes end up becoming ghost
-		// connections. Since it already has keepalive set, we set a timeout
-		// instead and close the connection if it has been inactive for the
-		// configured SockJS heartbeat interval plus an extra second to account
-		// for any delay in receiving the SockJS heartbeat packet.
-		if (socket.protocol === 'xhr-streaming') {
-			// @ts-ignore
-			socket._session.recv.thingy.setTimeout(
-				// @ts-ignore
-				socket._session.recv.options.heartbeat_delay + 1000,
-				() => {
-					// @ts-ignore
-					if (socket._session.recv) socket._session.recv.didClose();
-				}
-			);
 		}
 
 		// @ts-ignore

@@ -570,11 +570,11 @@ exports.commands = {
 		end(target, room, user, connection, cmd) {
 			if (!this.can('minigame', null, room)) return;
 			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
-			const force = cmd === 'forceend';
+			const force = cmd === 'forceend' ? 'forcibly ' : '';
 
 			const end = room.game.end(user, cmd);
 			if (end) {
-				this.privateModAction(`(The game of blackjack was ${force ? 'forcibly' : ''}ended by ${user.name}.)`);
+				this.privateModAction(`(The game of blackjack was ${force}ended by ${user.name}.)`);
 				this.modlog(`BLACKJACK END`);
 			}
 		},
