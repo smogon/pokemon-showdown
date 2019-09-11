@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 'use strict';
 
 // Needed for FS
@@ -52,31 +51,6 @@ if (!VALID_DATABASES[database]) {
 
 if (!VALID_DATABASES[database].includes(from) || !VALID_DATABASES[database].includes(to)) {
 	return console.error(`Invalid database engine specified.\nValid database engines: ${VALID_DATABASES[database].join(', ')}.`);
-}
-
-class PunishmentsConverter {
-	constructor(from, to) {
-		this.from = from;
-		this.to = to;
-	}
-	async convert() {
-		if (this.to === 'sqlite') {
-			const database = await PunishmentsConverterSqlite.databasePromise;
-			database.exec(`DELETE FROM punishments; DELETE FROM room_punishments; DELETE FROM shared_ips; DELETE FROM ip_banlist`).then(async () => {
-				PunishmentsConverterSqlite.convert();
-			}).catch((err) => {
-				throw err;
-			});
-		} else if (this.to === 'tsv') {
-			PunishmentsConverterTsv.convert();
-		}
-	}
-}
-
-switch (database) {
-case 'punishments':
-	new PunishmentsConverter(from, to).convert();
-	break;
 }
 
 const PunishmentsConverterSqlite = new class {
@@ -267,3 +241,28 @@ const PunishmentsConverterTsv = new class {
 		FS(IPBANLIST_FILE).writeUpdate(() => buf);
 	}
 }();
+
+class PunishmentsConverter {
+	constructor(from, to) {
+		this.from = from;
+		this.to = to;
+	}
+	async convert() {
+		if (this.to === 'sqlite') {
+			const database = await PunishmentsConverterSqlite.databasePromise;
+			database.exec(`DELETE FROM punishments; DELETE FROM room_punishments; DELETE FROM shared_ips; DELETE FROM ip_banlist`).then(async () => {
+				PunishmentsConverterSqlite.convert();
+			}).catch((err) => {
+				throw err;
+			});
+		} else if (this.to === 'tsv') {
+			PunishmentsConverterTsv.convert();
+		}
+	}
+}
+
+switch (database) {
+case 'punishments':
+	new PunishmentsConverter(from, to).convert();
+	break;
+}

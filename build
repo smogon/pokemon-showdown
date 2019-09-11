@@ -66,10 +66,13 @@ replace(path.join(__dirname, '.server-dist'), [
 	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.$2-dist$3`},
 ]);
 
+var databaseExisted = true;
+
 try {
 	require.resolve('./database/sqlite.db');
 } catch (err) {
 	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+	databaseExisted = false;
 	console.log('Database does not exist. Creating one...');
 	fs.writeFileSync(path.resolve(__dirname, 'database/sqlite.db'), '');
 }
@@ -78,7 +81,11 @@ var sqlite = require('sqlite');
 
 if (fs.readdirSync('./database/migrations/').length) {
 	sqlite.open('./database/sqlite.db').then(function (database) {
-		database.migrate({force: 'last', migrationsPath: './database/migrations/'});
+		database.migrate({force: 'last', migrationsPath: './database/migrations/'}).then(function (database) {
+			if (!databaseExisted) {
+				child_process.execSync('node tools/database-converter --database punishments --from tsv --to sqlite');
+			}
+		});
 	});
 }
 

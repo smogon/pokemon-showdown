@@ -11,6 +11,7 @@
  * @license MIT license
  */
 
+import {exec} from 'child_process';
 import SQL from 'sql-template-strings';
 import * as sqlite from 'sqlite';
 import {FS} from '../lib/fs';
@@ -160,14 +161,39 @@ const PunishmentsStorageMemory = new class {
 
 const PunishmentsStorageTsv = new class {
 	load() {
+		const loadFiles = () => {
+			// tslint:disable-next-line: no-floating-promises
+			PunishmentsStorageTsv.loadPunishments();
+			// tslint:disable-next-line: no-floating-promises
+			PunishmentsStorageTsv.loadRoomPunishments();
+			// tslint:disable-next-line: no-floating-promises
+			PunishmentsStorageTsv.loadSharedIps();
+			// tslint:disable-next-line: no-floating-promises
+			PunishmentsStorageTsv.loadBanlist();
+		};
 		// tslint:disable-next-line: no-floating-promises
-		PunishmentsStorageTsv.loadPunishments();
-		// tslint:disable-next-line: no-floating-promises
-		PunishmentsStorageTsv.loadRoomPunishments();
-		// tslint:disable-next-line: no-floating-promises
-		PunishmentsStorageTsv.loadSharedIps();
-		// tslint:disable-next-line: no-floating-promises
-		PunishmentsStorageTsv.loadBanlist();
+		// Run database conversion if no TSV database exists and
+		// the SQLite database exists
+		Promise.all([
+			FS(PUNISHMENT_FILE).checkIfExists(),
+			FS(ROOM_PUNISHMENT_FILE).checkIfExists(),
+			FS(SHAREDIPS_FILE).checkIfExists(),
+			FS(IPBANLIST_FILE).checkIfExists(),
+		]).then(filesExists => {
+			if (filesExists.every(fileExists => !fileExists)) {
+				// tslint:disable-next-line: no-floating-promises
+				FS('database/sqlite.db').checkIfExists().then(fileExists => {
+					if (fileExists) {
+						exec('node tools/database-converter --database punishments --from sqlite --to tsv', (err, stdout, stderr) => {
+							if (!err && !stderr) {
+								return loadFiles();
+							}
+						});
+					}
+				});
+			}
+		});
+		return loadFiles();
 	}
 	/**
 	 * punishments.tsv is in the format:
@@ -200,12 +226,13 @@ const PunishmentsStorageTsv = new class {
 	 * punishType, roomid:userid, ips/usernames, expiration time, reason
 	 */
 	async loadRoomPunishments() {
+		console.log('LMAO!');
 		const data = await FS(ROOM_PUNISHMENT_FILE).readIfExists();
 		if (!data) return;
 		for (const row of data.split("\n")) {
 			if (!row || row === '\r') continue;
 			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
-			const expireTime = Number(expireTimeStr);
+			const expireTime = Number(expireTimeStr) + (ROOMBAN_DURATION * 10);
 			if (punishType === "Punishment") continue;
 			const [roomid, userid] = id.split(':');
 			if (!userid) continue; // invalid format
