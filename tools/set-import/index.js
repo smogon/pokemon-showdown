@@ -12,7 +12,7 @@
  * bumped (with 'major' or 'breaking' as the version argument). The exact
  * version string (eg. '1.2.3') can also be provided. After creating the set
  * import, provided there are no serious errors, the package can be released
- * by running `npm publish --access publish` in the `sets/` directory.
+ * by running `npm publish --access public` in the `sets/` directory.
  *
  * @license MIT
  */
@@ -63,7 +63,7 @@ const SETS = path.resolve(__dirname, 'sets');
 (async () => {
 	const imports = [];
 	for (let [i, generationData] of (await importer.importAll()).entries()) {
-		fs.writeFileSync(path.resolve(SETS, `gen${i + 1}.jsonls`), JSON.stringify(generationData));
+		fs.writeFileSync(path.resolve(SETS, `gen${i + 1}.json`), JSON.stringify(generationData));
 		imports.push(`gen${i + 1}`);
 		for (let format in generationData) {
 			fs.writeFileSync(path.resolve(SETS, `${format}.json`), JSON.stringify(generationData[format]));
