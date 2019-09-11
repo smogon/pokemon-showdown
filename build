@@ -59,6 +59,7 @@ sucrase('./sim', './.sim-dist');
 sucrase('./lib', './.lib-dist');
 sucrase('./server', './.server-dist');
 sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets');
+sucrase('./tools/database-converter', './tools/database-converter');
 // NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
 replace(path.join(__dirname, '.sim-dist'), [
 	{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`, 'g'), replace: `$1.lib-dist$3`},
@@ -68,6 +69,9 @@ replace(path.join(__dirname, '.server-dist'), [
 ]);
 replace(path.join(__dirname, './tools/set-import'), [
 	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.$2-dist$3`},
+]);
+replace(path.join(__dirname, './tools/database-converter'), [
+	{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`, 'g'), replace: `$1.lib-dist$3`},
 ]);
 
 var databaseExisted = true;

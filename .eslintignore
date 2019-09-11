@@ -5,3 +5,4 @@ node_modules/
 .*-dist/
 tools/set-import/importer.js
 tools/set-import/sets
+tools/database-converter/*-converter.js

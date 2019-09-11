@@ -14,6 +14,7 @@ database/sqlite.db
 # Typescript build artifacts
 .*-dist/
 tools/set-import/importer.js
+tools/database-converter/*-converter.js
 
 # visual studio live share
 .vs

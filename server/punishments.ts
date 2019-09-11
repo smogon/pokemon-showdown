@@ -42,7 +42,7 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
  * A punishment is an array: [punishType, userid | #punishmenttype, expireTime, reason]
  */
 type Punishment = [string, string, number, string];
-interface PunishmentEntry {
+export interface PunishmentEntry {
 	ips: string[];
 	userids: ID[];
 	punishType: string;
@@ -51,16 +51,16 @@ interface PunishmentEntry {
 	rest: any[];
 }
 
-type PunishmentsDatabaseResponse = {
+export type PunishmentsDatabaseResponse = {
 	punishType: string, userid: ID, ips: string, userids: string, expireTime: number, reason: string, rest: any,
 }[];
-type RoomPunishmentsDatabaseResponse = {
+export type RoomPunishmentsDatabaseResponse = {
 	punishType: string, id: string, ips: string, userids: string, expireTime: number, reason: string, rest: any,
 }[];
-type SharedIpsDatabaseResponse = {
+export type SharedIpsDatabaseResponse = {
 	ip: string, type: 'SHARED', note: string,
 }[];
-type IpBanlistDatabaseResponse = {
+export type IpBanlistDatabaseResponse = {
 	ip: string,
 }[];
 
@@ -402,9 +402,9 @@ const PunishmentsStorageSqlite = new class {
 			const punishment = [punishType, userid, expireTime, reason] as Punishment;
 			for (const key of keys) {
 				if (!USERID_REGEX.test(key)) {
-					Punishments.roomIps.nestedSet(roomid, key, punishment);
+					Punishments.roomIps.nestedSet(roomid as RoomID, key, punishment);
 				} else {
-					Punishments.roomUserids.nestedSet(roomid, key, punishment);
+					Punishments.roomUserids.nestedSet(roomid as RoomID, key, punishment);
 				}
 			}
 		}
