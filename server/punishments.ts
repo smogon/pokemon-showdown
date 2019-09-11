@@ -51,16 +51,16 @@ export interface PunishmentEntry {
 	rest: any[];
 }
 
-export type PunishmentsDatabaseResponse = {
+export type PunishmentsTable = {
 	punishType: string, userid: ID, ips: string, userids: string, expireTime: number, reason: string, rest: any,
 }[];
-export type RoomPunishmentsDatabaseResponse = {
+export type RoomPunishmentsTable = {
 	punishType: string, id: string, ips: string, userids: string, expireTime: number, reason: string, rest: any,
 }[];
-export type SharedIpsDatabaseResponse = {
+export type SharedIpsTable = {
 	ip: string, type: 'SHARED', note: string,
 }[];
-export type IpBanlistDatabaseResponse = {
+export type IpBanlistTable = {
 	ip: string,
 }[];
 
@@ -370,7 +370,7 @@ const PunishmentsSqliteStorage = new class {
 	async loadPunishments() {
 		const sqlStatement = SQL`SELECT punishType, userid, ips, userids, expireTime, reason FROM punishments`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
-		const response = await database.all(sqlStatement) as PunishmentsDatabaseResponse;
+		const response = await database.all(sqlStatement) as PunishmentsTable;
 		for (const row of response) {
 			const {punishType, userid, ips, userids, expireTime, reason} = row;
 			if (Date.now() >= expireTime) {
@@ -391,7 +391,7 @@ const PunishmentsSqliteStorage = new class {
 	async loadRoomPunishments() {
 		const sqlStatement = SQL`SELECT punishType, id, ips, userids, expireTime, reason FROM room_punishments`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
-		const response = await database.all(sqlStatement) as RoomPunishmentsDatabaseResponse;
+		const response = await database.all(sqlStatement) as RoomPunishmentsTable;
 		for (const row of response) {
 			const {punishType, id, ips, userids, expireTime, reason} = row;
 			if (Date.now() >= expireTime) {
@@ -412,7 +412,7 @@ const PunishmentsSqliteStorage = new class {
 	async loadSharedIps() {
 		const sqlStatement = SQL`SELECT ip, type, note FROM shared_ips`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
-		const response = await database.all(sqlStatement) as SharedIpsDatabaseResponse;
+		const response = await database.all(sqlStatement) as SharedIpsTable;
 		for (const row of response) {
 			const {ip, type, note} = row;
 			if (!ip.includes('.')) continue;
@@ -423,7 +423,7 @@ const PunishmentsSqliteStorage = new class {
 	async loadBanlist() {
 		const sqlStatement = SQL`SELECT ip FROM ip_banlist`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
-		const response = await database.all(sqlStatement) as IpBanlistDatabaseResponse;
+		const response = await database.all(sqlStatement) as IpBanlistTable;
 		const rangebans = [];
 		for (const row of response) {
 			const {ip} = row;

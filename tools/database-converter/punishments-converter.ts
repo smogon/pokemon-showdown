@@ -7,10 +7,10 @@ import {FS} from '../../lib/fs';
 
 type SQLStatement = import('sql-template-strings').SQLStatement;
 type PunishmentEntry = import('../../server/punishments').PunishmentEntry;
-type PunishmentsDatabaseResponse = import('../../server/punishments').PunishmentsDatabaseResponse;
-type RoomPunishmentsDatabaseResponse = import('../../server/punishments').RoomPunishmentsDatabaseResponse;
-type SharedIpsDatabaseResponse = import('../../server/punishments').SharedIpsDatabaseResponse;
-type IpBanlistDatabaseResponse = import('../../server/punishments').IpBanlistDatabaseResponse;
+type PunishmentsTable = import('../../server/punishments').PunishmentsTable;
+type RoomPunishmentsTable = import('../../server/punishments').RoomPunishmentsTable;
+type SharedIpsTable = import('../../server/punishments').SharedIpsTable;
+type IpBanlistTable = import('../../server/punishments').IpBanlistTable;
 
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
@@ -176,7 +176,7 @@ const PunishmentsTsvConverter = new class {
 	async convertPunishments() {
 		const sqlStatement = SQL`SELECT punishType, userid, ips, userids, expireTime, reason FROM punishments`;
 		const database = await PunishmentsSqliteConverter.databasePromise;
-		const response: PunishmentsDatabaseResponse = await database.all(sqlStatement);
+		const response: PunishmentsTable = await database.all(sqlStatement);
 		let buf = '';
 		for (const row of response) {
 			const {punishType, userid, ips, userids, expireTime, reason, rest} = row;
@@ -195,7 +195,7 @@ const PunishmentsTsvConverter = new class {
 	async convertRoomPunishments() {
 		const sqlStatement = SQL`SELECT punishType, id, ips, userids, expireTime, reason FROM room_punishments`;
 		const database = await PunishmentsSqliteConverter.databasePromise;
-		const response: RoomPunishmentsDatabaseResponse = await database.all(sqlStatement);
+		const response: RoomPunishmentsTable = await database.all(sqlStatement);
 		let buf = '';
 		for (const row of response) {
 			const {punishType, id, ips, userids, expireTime, reason, rest} = row;
@@ -214,7 +214,7 @@ const PunishmentsTsvConverter = new class {
 	async convertSharedIps() {
 		const sqlStatement = SQL`SELECT ip, type, note FROM shared_ips`;
 		const database = await PunishmentsSqliteConverter.databasePromise;
-		const response: SharedIpsDatabaseResponse = await database.all(sqlStatement);
+		const response: SharedIpsTable = await database.all(sqlStatement);
 		let buf = '';
 		for (const row of response) {
 			const {ip, type, note} = row;
@@ -227,7 +227,7 @@ const PunishmentsTsvConverter = new class {
 	async convertIpBanlist() {
 		const sqlStatement = SQL`SELECT ip FROM ip_banlist`;
 		const database = await PunishmentsSqliteConverter.databasePromise;
-		const response: IpBanlistDatabaseResponse = await database.all(sqlStatement);
+		const response: IpBanlistTable = await database.all(sqlStatement);
 		let buf = '';
 		for (const row of response) {
 			const {ip} = row;
