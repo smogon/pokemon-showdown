@@ -404,7 +404,7 @@ const sotd = new OtdHandler('sotd', 'Show', rooms.jubilifetvfilms, SOTDS_FILE, [
 const cotd = new OtdHandler('cotd', 'Channel', rooms.youtube, COTDS_FILE, ['channel', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
 const botw = new OtdHandler('botw', 'Book', rooms.thelibrary, BOTWS_FILE, ['book', 'nominator', 'link', 'quote', 'author', 'image', 'time'], ['Book', 'Nominator', 'Link', 'Quote', 'Author', 'Image', 'Timestamp'], true);
 const motw = new OtdHandler('motw', 'Match', rooms.prowrestling, MOTWS_FILE, ['match', 'nominator', 'link', 'tagline', 'event', 'image', 'time'], ['Match', 'Nominator', 'Link', 'Tagline', 'Event', 'Image', 'Timestamp'], true);
-const anotd = new OtdHandler('anotd', 'Anime', rooms.animeandmanga, ANOTDS_FILE, ['show', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
+const anotd = new OtdHandler('anotd', 'Animanga', rooms.animeandmanga, ANOTDS_FILE, ['show', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
 
 /**
  * @param {string} message
