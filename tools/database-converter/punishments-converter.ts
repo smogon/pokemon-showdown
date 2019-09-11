@@ -28,19 +28,19 @@ export class PunishmentsConverter {
 	}
 	async convert() {
 		if (this.to === 'sqlite') {
-			const database = await PunishmentsConverterSqlite.databasePromise;
+			const database = await PunishmentsSqliteConverter.databasePromise;
 			database.exec(`DELETE FROM punishments; DELETE FROM room_punishments; DELETE FROM shared_ips; DELETE FROM ip_banlist`).then(async () => {
 				// tslint:disable-next-line: no-floating-promises
-				PunishmentsConverterSqlite.convert();
+				PunishmentsSqliteConverter.convert();
 			});
 		} else if (this.to === 'tsv') {
 			// tslint:disable-next-line: no-floating-promises
-			PunishmentsConverterTsv.convert();
+			PunishmentsTsvConverter.convert();
 		}
 	}
 }
 
-const PunishmentsConverterSqlite = new class {
+const PunishmentsSqliteConverter = new class {
 	databasePromise: Promise<sqlite.Database>;
 	constructor() {
 		this.databasePromise = sqlite.open('./database/sqlite.db');
@@ -162,7 +162,7 @@ const PunishmentsConverterSqlite = new class {
 	}
 }();
 
-const PunishmentsConverterTsv = new class {
+const PunishmentsTsvConverter = new class {
 	renderEntry(entry: PunishmentEntry, id: string) {
 		const keys = entry.ips.concat(entry.userids).join(',');
 		const row = [entry.punishType, id, keys, entry.expireTime, entry.reason, ...(entry.rest || '')];
@@ -175,7 +175,7 @@ const PunishmentsConverterTsv = new class {
 	}
 	async convertPunishments() {
 		const sqlStatement = SQL`SELECT punishType, userid, ips, userids, expireTime, reason FROM punishments`;
-		const database = await PunishmentsConverterSqlite.databasePromise;
+		const database = await PunishmentsSqliteConverter.databasePromise;
 		const response: PunishmentsDatabaseResponse = await database.all(sqlStatement);
 		let buf = '';
 		for (const row of response) {
@@ -194,7 +194,7 @@ const PunishmentsConverterTsv = new class {
 	}
 	async convertRoomPunishments() {
 		const sqlStatement = SQL`SELECT punishType, id, ips, userids, expireTime, reason FROM room_punishments`;
-		const database = await PunishmentsConverterSqlite.databasePromise;
+		const database = await PunishmentsSqliteConverter.databasePromise;
 		const response: RoomPunishmentsDatabaseResponse = await database.all(sqlStatement);
 		let buf = '';
 		for (const row of response) {
@@ -213,7 +213,7 @@ const PunishmentsConverterTsv = new class {
 	}
 	async convertSharedIps() {
 		const sqlStatement = SQL`SELECT ip, type, note FROM shared_ips`;
-		const database = await PunishmentsConverterSqlite.databasePromise;
+		const database = await PunishmentsSqliteConverter.databasePromise;
 		const response: SharedIpsDatabaseResponse = await database.all(sqlStatement);
 		let buf = '';
 		for (const row of response) {
@@ -226,7 +226,7 @@ const PunishmentsConverterTsv = new class {
 	}
 	async convertIpBanlist() {
 		const sqlStatement = SQL`SELECT ip FROM ip_banlist`;
-		const database = await PunishmentsConverterSqlite.databasePromise;
+		const database = await PunishmentsSqliteConverter.databasePromise;
 		const response: IpBanlistDatabaseResponse = await database.all(sqlStatement);
 		let buf = '';
 		for (const row of response) {
