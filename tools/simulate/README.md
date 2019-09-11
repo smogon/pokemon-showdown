@@ -1,7 +1,7 @@
 # Simulate
 
-`simulate.js` allows for running multiple random simulations of Pokemon battles
-for testing or benchmarking purposes. Without any arguments, `simulate.js` will
+`index.js` allows for running multiple random simulations of Pokemon battles
+for testing or benchmarking purposes. Without any arguments, `index.js` will
 run 100 random battles and report any errors that occur.
 
 Using any flag will trigger [minimist](https://github.com/substack/minimist) to

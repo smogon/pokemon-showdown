@@ -15,8 +15,8 @@ function shell(cmd) {
 	child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
 }
 
-function sucrase(src, out) {
-	shell(`npx sucrase -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
+function sucrase(src, out, opts) {
+	shell(`npx sucrase ${opts || ''} -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
 }
 
 function replace(file, replacements) {
@@ -58,11 +58,15 @@ try {
 sucrase('./sim', './.sim-dist');
 sucrase('./lib', './.lib-dist');
 sucrase('./server', './.server-dist');
+sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets');
 // NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
 replace(path.join(__dirname, '.sim-dist'), [
 	{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`, 'g'), replace: `$1.lib-dist$3`},
 ]);
 replace(path.join(__dirname, '.server-dist'), [
+	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.$2-dist$3`},
+]);
+replace(path.join(__dirname, './tools/set-import'), [
 	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.$2-dist$3`},
 ]);
 
