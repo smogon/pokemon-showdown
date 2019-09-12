@@ -496,8 +496,9 @@ const PunishmentsSqliteStorage = new class {
 		const query = SQL`DELETE FROM punishments WHERE punishType = ${punishType}`;
 		if (USERID_REGEX.test(key)) {
 			query.append(`AND userid = ${key}`);
+		} else {
+			query.append(`AND ips LIKE ${key}`);
 		}
-		query.append(`AND ips LIKE ${key}`);
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
 		database.run(query);
