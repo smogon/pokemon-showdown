@@ -17,7 +17,6 @@ import * as sqlite from 'sqlite';
 import {FS} from '../lib/fs';
 
 type Tournament = import('./tournaments').Tournament;
-type SQLStatement = import('sql-template-strings').SQLStatement;
 
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
@@ -148,15 +147,80 @@ class PunishmentsStorage {
 
 const PunishmentsMemoryStorage = new class {
 	load() {}
-	appendPunishment(entry: PunishmentEntry, id: string, filename: string) {}
-	appendSharedIp(ip: string, note: string) {}
-	async deleteRoomPunishment(roomid: string, key: string, punishType: string) {}
-	async deletePunishmentTypeFromRoom(roomid: string, punishType: string) {}
-	async deleteAllPunishmentsOfRoom(roomid: string) {}
-	async deletePunishment(key: string, punishType: string) {}
-	async deleteAllPunishments() {}
-	async deleteSharedIp(ip: string) {}
-	async deleteAllSharedIps() {}
+	appendPunishment(entry: PunishmentEntry, id: string) {
+		const punishment: Punishment = [entry.punishType, id, entry.expireTime, entry.reason];
+		for (const userid of entry.userids) {
+			Punishments.userids.set(userid, punishment);
+		}
+		for (const ip of entry.ips) {
+			Punishments.ips.set(ip, punishment);
+		}
+	}
+	appendRoomPunishment(entry: PunishmentEntry, id: string) {
+		const [roomid, userid] = id.split(':');
+		const punishment: Punishment = [entry.punishType, userid, entry.expireTime, entry.reason];
+		for (const uid of entry.userids.concat(userid as ID)) {
+			Punishments.roomUserids.nestedSet(roomid as RoomID, uid, punishment);
+		}
+		for (const ip of entry.ips) {
+			Punishments.roomIps.nestedSet(roomid as RoomID, ip, punishment);
+		}
+	}
+	appendSharedIp(ip: string, note: string) {
+		Punishments.sharedIps.set(ip, note);
+	}
+	deleteRoomPunishment(roomid: RoomID, key: string) {
+		if (USERID_REGEX.test(key)) {
+			Punishments.roomUserids.nestedDelete(roomid, key);
+		} else {
+			Punishments.roomIps.nestedDelete(roomid, key);
+		}
+	}
+	deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {
+		const roomUseridPunishments = Punishments.roomUserids.get(roomid);
+		if (roomUseridPunishments) {
+			for (const [userid, [curPunishType]] of roomUseridPunishments) {
+				if (curPunishType === punishType) {
+					Punishments.roomUserids.nestedDelete(roomid, userid);
+				}
+			}
+		}
+		const roomIpsPunishments = Punishments.roomIps.get(roomid);
+		if (roomIpsPunishments) {
+			for (const [ip, [curPunishType]] of roomIpsPunishments) {
+				if (curPunishType === punishType) {
+					Punishments.roomIps.nestedDelete(roomid, ip);
+				}
+			}
+		}
+	}
+	deleteAllPunishmentsOfRoom(roomid: RoomID) {
+		const roomUseridPunishments = Punishments.roomUserids.get(roomid);
+		if (roomUseridPunishments) {
+			roomUseridPunishments.clear();
+		}
+		const roomIpsPunishments = Punishments.roomIps.get(roomid);
+		if (roomIpsPunishments) {
+			roomIpsPunishments.clear();
+		}
+	}
+	deletePunishment(key: string) {
+		if (USERID_REGEX.test(key)) {
+			Punishments.userids.delete(key);
+		} else {
+			Punishments.ips.delete(key);
+		}
+	}
+	deleteAllPunishments() {
+		Punishments.userids.clear();
+		Punishments.ips.clear();
+	}
+	deleteSharedIp(ip: string) {
+		Punishments.sharedIps.delete(ip);
+	}
+	deleteAllSharedIps() {
+		Punishments.sharedIps.clear();
+	}
 }();
 
 const PunishmentsTsvStorage = new class {
@@ -204,21 +268,23 @@ const PunishmentsTsvStorage = new class {
 		if (!data) return;
 		for (const row of data.split("\n")) {
 			if (!row || row === '\r') continue;
-			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
+			const [punishType, id, altKeys, expireTimeStr, reason] = row.trim().split("\t");
+			if (punishType === 'Punishment') continue;
 			const expireTime = Number(expireTimeStr);
-			if (punishType === "Punishment") continue;
-			const keys = altKeys.split(',').concat(id);
-			const punishment = [punishType, id, expireTime, ...reason] as Punishment;
 			if (Date.now() >= expireTime) {
 				continue;
 			}
-			for (const key of keys) {
-				if (!USERID_REGEX.test(key)) {
-					Punishments.ips.set(key, punishment);
-				} else {
-					Punishments.userids.set(key, punishment);
-				}
-			}
+			const keys = altKeys.split(',');
+			const userids = keys.filter(key => USERID_REGEX.test(key));
+			const ips = keys.filter(key => !userids.includes(key));
+			Punishments.storage.appendPunishment({
+				ips,
+				userids: userids as ID[],
+				punishType,
+				expireTime,
+				reason,
+				rest: [],
+			}, id);
 		}
 	}
 	/**
@@ -230,23 +296,25 @@ const PunishmentsTsvStorage = new class {
 		if (!data) return;
 		for (const row of data.split("\n")) {
 			if (!row || row === '\r') continue;
-			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
-			const expireTime = Number(expireTimeStr) + (ROOMBAN_DURATION * 10);
+			const [punishType, id, altKeys, expireTimeStr, reason] = row.trim().split("\t");
 			if (punishType === "Punishment") continue;
-			const [roomid, userid] = id.split(':');
-			if (!userid) continue; // invalid format
-			const keys = altKeys.split(',').concat(userid);
-			const punishment = [punishType, userid, expireTime, ...reason] as Punishment;
+			const expireTime = Number(expireTimeStr);
 			if (Date.now() >= expireTime) {
 				continue;
 			}
-			for (const key of keys) {
-				if (!USERID_REGEX.test(key)) {
-					Punishments.roomIps.nestedSet(roomid as RoomID, key, punishment);
-				} else {
-					Punishments.roomUserids.nestedSet(roomid as RoomID, key, punishment);
-				}
-			}
+			const userid = id.split(':')[1];
+			if (!userid) continue; // invalid format
+			const keys = altKeys.split(',');
+			const userids = keys.filter(key => USERID_REGEX.test(key));
+			const ips = keys.filter(key => !userids.includes(key));
+			PunishmentsMemoryStorage.appendRoomPunishment({
+				ips,
+				userids: userids as ID[],
+				punishType,
+				expireTime,
+				reason,
+				rest: [],
+			}, id);
 		}
 	}
 	/**
@@ -261,7 +329,7 @@ const PunishmentsTsvStorage = new class {
 			const [ip, type, note] = row.trim().split("\t");
 			if (!ip.includes('.')) continue;
 			if (type !== 'SHARED') continue;
-			Punishments.sharedIps.set(ip, note);
+			PunishmentsMemoryStorage.appendSharedIp(ip, note);
 		}
 	}
 	async loadBanlist() {
@@ -274,7 +342,14 @@ const PunishmentsTsvStorage = new class {
 			if (ip.includes('/')) {
 				rangebans.push(ip);
 			} else if (!Punishments.ips.has(ip)) {
-				Punishments.ips.set(ip, ['BAN', '#ipban', Infinity, '']);
+				PunishmentsMemoryStorage.appendPunishment({
+					ips: [ip],
+					userids: [],
+					punishType: '#ipban',
+					expireTime: Infinity,
+					reason: '',
+					rest: [],
+				}, '#ipban');
 			}
 		}
 		Punishments.checkRangeBanned = IPTools.checker(rangebans);
@@ -309,7 +384,6 @@ const PunishmentsTsvStorage = new class {
 		Punishments.sharedIps.forEach((note, ip) => {
 			buf += `${ip}\tSHARED\t${note}\r\n`;
 		});
-
 		return FS(SHAREDIPS_FILE).write(buf);
 	}
 	renderEntry(entry: PunishmentEntry, id: string) {
@@ -317,35 +391,50 @@ const PunishmentsTsvStorage = new class {
 		const row = [entry.punishType, id, keys, entry.expireTime, entry.reason, ...entry.rest];
 		return row.join('\t') + '\r\n';
 	}
-	appendPunishment(entry: PunishmentEntry, id: string, filename: string) {
+	appendPunishment(entry: PunishmentEntry, id: string) {
+		PunishmentsMemoryStorage.appendPunishment(entry, id);
 		if (id.charAt(0) === '#') return;
 		const buf = PunishmentsTsvStorage.renderEntry(entry, id);
-		return FS(filename).append(buf);
+		return FS(PUNISHMENT_FILE).append(buf);
+	}
+	appendRoomPunishment(entry: PunishmentEntry, id: string) {
+		PunishmentsMemoryStorage.appendRoomPunishment(entry, id);
+		if (id.charAt(0) === '#') return;
+		const buf = PunishmentsTsvStorage.renderEntry(entry, id);
+		return FS(ROOM_PUNISHMENT_FILE).append(buf);
 	}
 	appendSharedIp(ip: string, note: string) {
+		PunishmentsMemoryStorage.appendSharedIp(ip, note);
 		const buf = `${ip}\tSHARED\t${note}\r\n`;
 		return FS(SHAREDIPS_FILE).append(buf);
 	}
-	async deleteRoomPunishment(roomid: string, key: string, punishType: string) {
+	async deleteRoomPunishment(roomid: RoomID, key: string) {
+		PunishmentsMemoryStorage.deleteRoomPunishment(roomid, key);
 		PunishmentsTsvStorage.saveRoomPunishments();
 	}
-	async deletePunishmentTypeFromRoom(roomid: string, punishType: string) {
+	async deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {
+		PunishmentsMemoryStorage.deletePunishmentTypeFromRoom(roomid, punishType);
 		PunishmentsTsvStorage.saveRoomPunishments();
 	}
-	async deleteAllPunishmentsOfRoom(roomid: string) {
+	async deleteAllPunishmentsOfRoom(roomid: RoomID) {
+		PunishmentsMemoryStorage.deleteAllPunishmentsOfRoom(roomid);
 		PunishmentsTsvStorage.saveRoomPunishments();
 	}
-	async deletePunishment(key: string, punishType: string) {
+	async deletePunishment(key: string) {
+		PunishmentsMemoryStorage.deletePunishment(key);
 		PunishmentsTsvStorage.saveRoomPunishments();
 	}
 	async deleteAllPunishments() {
+		PunishmentsMemoryStorage.deleteAllPunishments();
 		PunishmentsTsvStorage.saveRoomPunishments();
 	}
 	async deleteSharedIp(ip: string) {
+		PunishmentsMemoryStorage.deleteSharedIp(ip);
 		// tslint:disable-next-line: no-floating-promises
 		PunishmentsTsvStorage.saveSharedIps();
 	}
 	async deleteAllSharedIps() {
+		PunishmentsMemoryStorage.deleteAllSharedIps();
 		// tslint:disable-next-line: no-floating-promises
 		PunishmentsTsvStorage.saveSharedIps();
 	}
@@ -375,16 +464,14 @@ const PunishmentsSqliteStorage = new class {
 			if (Date.now() >= expireTime) {
 				continue;
 			}
-			const keys = ips.split(',').concat(userids.split(',')).concat(userid).filter(el => el);
-
-			const punishment = [punishType, userid, expireTime, reason] as Punishment;
-			for (const key of keys) {
-				if (!USERID_REGEX.test(key)) {
-					Punishments.ips.set(key, punishment);
-				} else {
-					Punishments.userids.set(key, punishment);
-				}
-			}
+			PunishmentsMemoryStorage.appendPunishment({
+				ips: ips.split(','),
+				userids: userids.split(',') as ID[],
+				punishType,
+				expireTime,
+				reason,
+				rest: [],
+			}, userid);
 		}
 	}
 	async loadRoomPunishments() {
@@ -396,16 +483,14 @@ const PunishmentsSqliteStorage = new class {
 			if (Date.now() >= expireTime) {
 				continue;
 			}
-			const [roomid, userid] = id.split(':');
-			const keys = ips.split(',').concat(userids.split(',')).concat(userid).filter(el => el);
-			const punishment = [punishType, userid, expireTime, reason] as Punishment;
-			for (const key of keys) {
-				if (!USERID_REGEX.test(key)) {
-					Punishments.roomIps.nestedSet(roomid as RoomID, key, punishment);
-				} else {
-					Punishments.roomUserids.nestedSet(roomid as RoomID, key, punishment);
-				}
-			}
+			PunishmentsMemoryStorage.appendRoomPunishment({
+				ips: ips.split(','),
+				userids: userids.split(',') as ID[],
+				punishType,
+				expireTime,
+				reason,
+				rest: [],
+			}, id);
 		}
 	}
 	async loadSharedIps() {
@@ -416,7 +501,7 @@ const PunishmentsSqliteStorage = new class {
 			const {ip, type, note} = row;
 			if (!ip.includes('.')) continue;
 			if (type !== 'SHARED') continue;
-			Punishments.sharedIps.set(ip, note);
+			PunishmentsMemoryStorage.appendSharedIp(ip, note);
 		}
 	}
 	async loadBanlist() {
@@ -429,37 +514,46 @@ const PunishmentsSqliteStorage = new class {
 			if (ip.includes('/')) {
 				rangebans.push(ip);
 			} else if (!Punishments.ips.has(ip)) {
-				Punishments.ips.set(ip, ['BAN', '#ipban', Infinity, '']);
+				PunishmentsMemoryStorage.appendPunishment({
+					ips: [ip],
+					userids: [],
+					punishType: '#ipban',
+					expireTime: Infinity,
+					reason: '',
+					rest: [],
+				}, '#ipban');
 			}
 		}
 		Punishments.checkRangeBanned = IPTools.checker(rangebans);
 	}
-	async appendPunishment(entry: PunishmentEntry, id: string, table: 'punishments' | 'room_punishments') {
+	async appendPunishment(entry: PunishmentEntry, id: string) {
+		PunishmentsMemoryStorage.appendPunishment(entry, id);
 		if (id.charAt(0) === '#') return;
-		let query: SQLStatement;
-		if (table === 'punishments') {
-			query = SQL`
-				INSERT INTO punishments(punishType, userid, ips, userids, expireTime, reason, rest)
-				VALUES(
-					${entry.punishType}, ${id}, ${entry.ips.join(',')}, ${entry.userids.join(',')},
-					${entry.expireTime}, ${entry.reason}, ${entry.rest}
-				)
-			`;
-		} else if (table === 'room_punishments') {
-			query = SQL`
-				INSERT INTO room_punishments(punishType, id, ips, userids, expireTime, reason, rest)
-				VALUES(
-					${entry.punishType}, ${id}, ${entry.ips.join(',')}, ${entry.userids.join(',')},
-					${entry.expireTime}, ${entry.reason}, ${entry.rest}
-				)
-			`;
-		}
+		const query = SQL`
+			INSERT INTO punishments(punishType, userid, ips, userids, expireTime, reason, rest)
+			VALUES(
+				${entry.punishType}, ${id}, ${entry.ips.join(',')}, ${entry.userids.join(',')},
+				${entry.expireTime}, ${entry.reason}, ${entry.rest}
+			)`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(query!);
+		database.run(query);
 	}
-
+	async appendRoomPunishment(entry: PunishmentEntry, id: string) {
+		PunishmentsMemoryStorage.appendRoomPunishment(entry, id);
+		if (id.charAt(0) === '#') return;
+		const query = SQL`
+			INSERT INTO room_punishments(punishType, id, ips, userids, expireTime, reason, rest)
+			VALUES(
+				${entry.punishType}, ${id}, ${entry.ips.join(',')}, ${entry.userids.join(',')},
+				${entry.expireTime}, ${entry.reason}, ${entry.rest}
+			)`;
+		const database = await PunishmentsSqliteStorage.databasePromise;
+		// tslint:disable-next-line: no-floating-promises
+		database.run(query);
+	}
 	async appendSharedIp(ip: string, note: string) {
+		PunishmentsMemoryStorage.appendSharedIp(ip, note);
 		const query = SQL`
 			INSERT INTO shared_ips(ip, type, note)
 			VALUES(${ip}, 'SHARED', ${note})
@@ -468,54 +562,61 @@ const PunishmentsSqliteStorage = new class {
 		// tslint:disable-next-line: no-floating-promises
 		database.run(query);
 	}
-	async deleteRoomPunishment(roomid: string, key: string, punishType: string) {
-		const query = SQL`DELETE FROM room_punishments WHERE punishType = ${punishType}`;
+	async deleteRoomPunishment(roomid: RoomID, key: string) {
+		PunishmentsMemoryStorage.deleteRoomPunishment(roomid, key);
+		const query = SQL`DELETE FROM room_punishments`;
 		if (USERID_REGEX.test(key)) {
 			const id = `${roomid}:${key}`;
-			query.append(` AND id = ${id}`);
+			query.append(SQL` WHERE id = ${id}`);
 		} else {
-			query.append(` AND ips LIKE ${key}`);
+			query.append(SQL` WHERE ips LIKE ${key}`);
 		}
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
 		database.run(query);
 	}
-	async deletePunishmentTypeFromRoom(roomid: string, punishType: string) {
+	async deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {
+		PunishmentsMemoryStorage.deletePunishmentTypeFromRoom(roomid, punishType);
 		const query = SQL`DELETE FROM room_punishments WHERE id LIKE ${roomid}:% AND punishType = ${punishType}`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
 		database.run(query);
 	}
-	async deleteAllPunishmentsOfRoom(roomid: string) {
+	async deleteAllPunishmentsOfRoom(roomid: RoomID) {
+		PunishmentsMemoryStorage.deleteAllPunishmentsOfRoom(roomid);
 		const query = SQL`DELETE FROM room_punishments WHERE id LIKE ${roomid}:%`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
 		database.run(query);
 	}
-	async deletePunishment(key: string, punishType: string) {
-		const query = SQL`DELETE FROM punishments WHERE punishType = ${punishType}`;
+	async deletePunishment(key: string) {
+		PunishmentsMemoryStorage.deletePunishment(key);
+		const query = SQL`DELETE FROM punishments`;
 		if (USERID_REGEX.test(key)) {
-			query.append(` AND userid = ${key}`);
+			query.append(SQL` WHERE userid = ${key}`);
 		} else {
-			query.append(` AND ips LIKE ${key}`);
+			query.append(SQL` WHERE ips LIKE ${key}`);
 		}
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
 		database.run(query);
 	}
 	async deleteAllPunishments() {
+		PunishmentsMemoryStorage.deleteAllPunishments();
 		const query = SQL`DELETE FROM punishments`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
 		database.run(query);
 	}
 	async deleteSharedIp(ip: string) {
+		PunishmentsMemoryStorage.deleteSharedIp(ip);
 		const query = SQL`DELETE FROM shared_ips WHERE ip = ${ip}`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
 		database.run(query);
 	}
 	async deleteAllSharedIps() {
+		PunishmentsMemoryStorage.deleteAllSharedIps();
 		const query = SQL`DELETE FROM shared_ips`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
@@ -644,7 +745,6 @@ export const Punishments = new class {
 
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		userids.delete(id as ID);
-		// tslint:disable-next-line: no-floating-promises
 		Punishments.storage.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
@@ -652,7 +752,7 @@ export const Punishments = new class {
 			expireTime,
 			reason,
 			rest,
-		}, id, 'punishments');
+		}, id);
 		return affected;
 	}
 
@@ -672,7 +772,6 @@ export const Punishments = new class {
 		}
 
 		for (const ip in user.ips) {
-			Punishments.ips.set(ip, punishment);
 			ips.add(ip);
 		}
 		const lastUserId = user.getLastId();
@@ -680,15 +779,12 @@ export const Punishments = new class {
 			Punishments.userids.set(lastUserId, punishment);
 		}
 		if (user.locked && user.locked.charAt(0) !== '#') {
-			Punishments.userids.set(user.locked, punishment);
 			userids.add(user.locked as ID);
 		}
 		if (user.autoconfirmed) {
-			Punishments.userids.set(user.autoconfirmed, punishment);
 			userids.add(user.autoconfirmed);
 		}
 		if (user.trusted) {
-			Punishments.userids.set(user.trusted, punishment);
 			userids.add(user.trusted);
 		}
 	}
@@ -704,12 +800,6 @@ export const Punishments = new class {
 				userids.add(key as ID);
 			}
 		}
-		for (const id of userids) {
-			Punishments.userids.set(id, punishment);
-		}
-		for (const ip of ips) {
-			Punishments.ips.set(ip, punishment);
-		}
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		const affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id as ID);
@@ -721,7 +811,7 @@ export const Punishments = new class {
 			expireTime,
 			reason,
 			rest,
-		}, id, 'punishments');
+		}, id);
 
 		return affected;
 	}
@@ -732,26 +822,26 @@ export const Punishments = new class {
 		if (punishment) {
 			id = punishment[1];
 		}
+		const write = (key: string) => {
+			// tslint:disable-next-line: no-floating-promises
+			Punishments.storage.deletePunishment(key);
+		};
 		// in theory we can stop here if punishment doesn't exist, but
 		// in case of inconsistent state, we'll try anyway
 
 		let success: false | string = false;
 		Punishments.ips.forEach(([curPunishmentType, curId], key) => {
 			if (curId === id && curPunishmentType === punishType) {
-				Punishments.ips.delete(key);
+				write(id);
 				success = id;
 			}
 		});
 		Punishments.userids.forEach(([curPunishmentType, curId], key) => {
 			if (curId === id && curPunishmentType === punishType) {
-				Punishments.userids.delete(key);
+				write(id);
 				success = id;
 			}
 		});
-		if (success) {
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.storage.deletePunishment(id, punishType);
-		}
 		return success;
 	}
 
@@ -767,14 +857,14 @@ export const Punishments = new class {
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		userids.delete(id as ID);
 		// tslint:disable-next-line: no-floating-promises
-		Punishments.storage.appendPunishment({
+		Punishments.storage.appendRoomPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
 			expireTime,
 			reason,
 			rest,
-		}, roomid + ':' + id, 'room_punishments');
+		}, roomid + ':' + id);
 
 		if (typeof room !== 'string' && !((room as BasicRoom).isPrivate === true ||
 			(room as BasicRoom).isPersonal || (room as BasicRoom).battle)) {
@@ -786,18 +876,15 @@ export const Punishments = new class {
 
 	roomPunishInner(roomid: RoomID, user: User, punishment: Punishment, userids: Set<string>, ips: Set<string>) {
 		for (const ip in user.ips) {
-			Punishments.roomIps.nestedSet(roomid, ip, punishment);
 			ips.add(ip);
 		}
 		if (!user.userid.startsWith('guest')) {
 			Punishments.roomUserids.nestedSet(roomid, user.userid, punishment);
 		}
 		if (user.autoconfirmed) {
-			Punishments.roomUserids.nestedSet(roomid, user.autoconfirmed, punishment);
 			userids.add(user.autoconfirmed);
 		}
 		if (user.trusted) {
-			Punishments.roomUserids.nestedSet(roomid, user.trusted, punishment);
 			userids.add(user.trusted);
 		}
 	}
@@ -813,24 +900,18 @@ export const Punishments = new class {
 				userids.add(key as ID);
 			}
 		}
-		for (const id of userids) {
-			Punishments.roomUserids.nestedSet(room.id, id, punishment);
-		}
-		for (const ip of ips) {
-			Punishments.roomIps.nestedSet(room.id, ip, punishment);
-		}
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		const affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id as ID);
 		// tslint:disable-next-line: no-floating-promises
-		Punishments.storage.appendPunishment({
+		Punishments.storage.appendRoomPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
 			expireTime,
 			reason,
 			rest,
-		}, room.id + ':' + id, 'room_punishments');
+		}, room.id + ':' + id);
 
 		if (!(room.isPrivate === true || room.isPersonal || room.battle)) Punishments.monitorRoomPunishments(userid);
 		return affected;
@@ -843,6 +924,11 @@ export const Punishments = new class {
 		const roomid = typeof room !== 'string' ? (room as Room).id : room;
 		id = toID(id);
 		const punishment = Punishments.roomUserids.nestedGet(roomid, id);
+		const write = (key: string) => {
+			if (ignoreWrite && Config.storage.punishments !== 'memory') return;
+			// tslint:disable-next-line: no-floating-promises
+			Punishments.storage.deleteRoomPunishment(roomid, key);
+		};
 		if (punishment) {
 			id = punishment[1];
 		}
@@ -854,6 +940,7 @@ export const Punishments = new class {
 		if (ipSubMap) {
 			for (const [key, [curPunishmentType, curId]] of ipSubMap) {
 				if (curId === id && curPunishmentType === punishType) {
+					write(id);
 					ipSubMap.delete(key);
 					success = id;
 				}
@@ -863,14 +950,11 @@ export const Punishments = new class {
 		if (useridSubMap) {
 			for (const [key, [curPunishmentType, curId]] of useridSubMap) {
 				if (curId === id && curPunishmentType === punishType) {
+					write(id);
 					useridSubMap.delete(key);
 					success = id;
 				}
 			}
-		}
-		if (success && !ignoreWrite) {
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.storage.deleteRoomPunishment(roomid, id, punishType);
 		}
 		return success;
 	}
@@ -1076,12 +1160,24 @@ export const Punishments = new class {
 	}
 
 	lockRange(range: string, reason: string) {
-		const punishment = ['LOCK', '#rangelock', Date.now() + RANGELOCK_DURATION, reason] as Punishment;
-		Punishments.ips.set(range, punishment);
+		PunishmentsMemoryStorage.appendPunishment({
+			ips: [range],
+			userids: [],
+			punishType: '#rangelock',
+			expireTime: Date.now() + RANGELOCK_DURATION,
+			reason,
+			rest: [],
+		}, '#rangelock');
 	}
 	banRange(range: string, reason: string) {
-		const punishment = ['BAN', '#rangelock', Date.now() + RANGELOCK_DURATION, reason] as Punishment;
-		Punishments.ips.set(range, punishment);
+		PunishmentsMemoryStorage.appendPunishment({
+			ips: [range],
+			userids: [],
+			punishType: '#rangeban',
+			expireTime: Date.now() + RANGELOCK_DURATION,
+			reason,
+			rest: [],
+		}, '#rangeban');
 	}
 
 	roomBan(room: Room, user: User, expireTime: number, userId: string, ...reason: string[]) {
@@ -1190,7 +1286,6 @@ export const Punishments = new class {
 	}
 
 	addSharedIp(ip: string, note: string) {
-		Punishments.sharedIps.set(ip, note);
 		// tslint:disable-next-line: no-floating-promises
 		Punishments.storage.appendSharedIp(ip, note);
 
@@ -1208,7 +1303,6 @@ export const Punishments = new class {
 	}
 
 	removeSharedIp(ip: string) {
-		Punishments.sharedIps.delete(ip);
 		// tslint:disable-next-line: no-floating-promises
 		Punishments.storage.deleteSharedIp(ip);
 	}

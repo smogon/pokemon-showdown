@@ -7,9 +7,17 @@ try {
 	process.exit(1);
 }
 
+try {
+	require.resolve('sucrase');
+} catch (e) {
+	console.log('Installing dependencies...');
+	shell('npm install --production');
+}
+
 var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
+var sqlite = require('sqlite');
 
 function shell(cmd) {
 	child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
@@ -48,12 +56,6 @@ function replace(file, replacements) {
 	});
 }
 
-try {
-	require.resolve('sucrase');
-} catch (e) {
-	console.log('Installing dependencies...');
-	shell('npm install --production');
-}
 
 sucrase('./sim', './.sim-dist');
 sucrase('./lib', './.lib-dist');
@@ -85,11 +87,9 @@ try {
 	fs.writeFileSync(path.resolve(__dirname, 'database/sqlite.db'), '');
 }
 
-var sqlite = require('sqlite');
-
 if (fs.readdirSync('./database/migrations/').length) {
 	sqlite.open('./database/sqlite.db').then(function (database) {
-		database.migrate({force: 'last', migrationsPath: './database/migrations/'}).then(function (database) {
+		database.migrate({migrationsPath: './database/migrations/'}).then(function () {
 			if (!databaseExisted) {
 				child_process.execSync('node tools/database-converter --database punishments --from tsv --to sqlite');
 			}
