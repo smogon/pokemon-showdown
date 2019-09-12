@@ -150,10 +150,10 @@ const PunishmentsMemoryStorage = new class {
 	load() {}
 	appendPunishment(entry: PunishmentEntry, id: string, filename: string) {}
 	appendSharedIp(ip: string, note: string) {}
-	async deleteRoomPunishment(roomid: string, userid: ID, punishType: string) {}
+	async deleteRoomPunishment(roomid: string, key: string, punishType: string) {}
 	async deletePunishmentTypeFromRoom(roomid: string, punishType: string) {}
 	async deleteAllPunishmentsOfRoom(roomid: string) {}
-	async deletePunishment(userid: ID, punishType: string) {}
+	async deletePunishment(key: string, punishType: string) {}
 	async deleteAllPunishments() {}
 	async deleteSharedIp(ip: string) {}
 	async deleteAllSharedIps() {}
@@ -326,7 +326,7 @@ const PunishmentsTsvStorage = new class {
 		const buf = `${ip}\tSHARED\t${note}\r\n`;
 		return FS(SHAREDIPS_FILE).append(buf);
 	}
-	async deleteRoomPunishment(roomid: string, userid: ID, punishType: string) {
+	async deleteRoomPunishment(roomid: string, key: string, punishType: string) {
 		PunishmentsTsvStorage.saveRoomPunishments();
 	}
 	async deletePunishmentTypeFromRoom(roomid: string, punishType: string) {
@@ -335,7 +335,7 @@ const PunishmentsTsvStorage = new class {
 	async deleteAllPunishmentsOfRoom(roomid: string) {
 		PunishmentsTsvStorage.saveRoomPunishments();
 	}
-	async deletePunishment(userid: ID, punishType: string) {
+	async deletePunishment(key: string, punishType: string) {
 		PunishmentsTsvStorage.saveRoomPunishments();
 	}
 	async deleteAllPunishments() {
@@ -468,9 +468,14 @@ const PunishmentsSqliteStorage = new class {
 		// tslint:disable-next-line: no-floating-promises
 		database.run(sqlStatement);
 	}
-	async deleteRoomPunishment(roomid: string, userid: ID, punishType: string) {
-		const id = roomid + ':' + userid;
-		const sqlStatement = SQL`DELETE FROM room_punishments WHERE id = ${id} AND punishType = ${punishType}`;
+	async deleteRoomPunishment(roomid: string, key: string, punishType: string) {
+		const sqlStatement = SQL`DELETE FROM room_punishments WHERE punishType = ${punishType}`;
+		if (USERID_REGEX.test(key)) {
+			const id = `${roomid}:${key}`;
+			sqlStatement.append(`AND id = ${id}`);
+		} else {
+			sqlStatement.append(`AND ips LIKE ${key}`);
+		}
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
 		database.run(sqlStatement);
@@ -487,8 +492,12 @@ const PunishmentsSqliteStorage = new class {
 		// tslint:disable-next-line: no-floating-promises
 		database.run(sqlStatement);
 	}
-	async deletePunishment(id: string, punishType: string) {
-		const sqlStatement = SQL`DELETE FROM punishments WHERE userid = ${id} AND punishType = ${punishType}`;
+	async deletePunishment(key: string, punishType: string) {
+		const sqlStatement = SQL`DELETE FROM punishments WHERE punishType = ${punishType}`;
+		if (USERID_REGEX.test(key)) {
+			sqlStatement.append(`AND userid = ${key}`);
+		}
+		sqlStatement.append(`AND ips LIKE ${key}`);
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
 		database.run(sqlStatement);
@@ -740,7 +749,7 @@ export const Punishments = new class {
 		});
 		if (success) {
 			// tslint:disable-next-line: no-floating-promises
-			Punishments.storage.deletePunishment(id as ID, punishType);
+			Punishments.storage.deletePunishment(id, punishType);
 		}
 		return success;
 	}
@@ -860,7 +869,7 @@ export const Punishments = new class {
 		}
 		if (success && !ignoreWrite) {
 			// tslint:disable-next-line: no-floating-promises
-			Punishments.storage.deleteRoomPunishment(roomid, id as ID, punishType);
+			Punishments.storage.deleteRoomPunishment(roomid, id, punishType);
 		}
 		return success;
 	}
