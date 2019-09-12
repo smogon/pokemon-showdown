@@ -1785,13 +1785,13 @@ let BattleMovedex = {
 			}
 			switch (color) {
 			case '':
-				if (!target.setStatus('brn', source)) this.add('-fail', target);
+				if (!target.trySetStatus('brn', source)) this.add('-fail', target);
 				break;
 			case '-Orange':
 				if (!target.addVolatile('confusion', source)) this.add('-fail', target);
 				break;
 			case '-Yellow':
-				if (!target.setStatus('par', source)) this.add('-fail', target);
+				if (!target.trySetStatus('par', source)) this.add('-fail', target);
 				break;
 			case '-Green':
 				if (!target.hasType('Grass')) {
@@ -1805,10 +1805,10 @@ let BattleMovedex = {
 				if (!source.addVolatile('aquaring', source)) this.add('-fail', source);
 				break;
 			case '-Indigo':
-				if (!target.setStatus('psn', source)) this.add('-fail', target);
+				if (!target.trySetStatus('psn', source)) this.add('-fail', target);
 				break;
 			case '-Violet':
-				if (!target.setStatus('tox', source)) this.add('-fail', target);
+				if (!target.trySetStatus('tox', source)) this.add('-fail', target);
 				break;
 			default:
 				throw new Error(`Invalid color for Taste the Rainbow selected: ${color}`);
@@ -2208,7 +2208,7 @@ let BattleMovedex = {
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.cureStatus()) success = true;
 			}
-			if (pokemon.setStatus('psn', pokemon)) success = true;
+			if (pokemon.trySetStatus('psn', pokemon)) success = true;
 			return success;
 		},
 		secondary: null,
@@ -2691,7 +2691,7 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			let napWeather = this.field.pseudoWeather['naptime'];
 			// Trigger sleep clause if not the original user
-			if (!target.setStatus('slp', napWeather.source, move)) return false;
+			if (!target.trySetStatus('slp', napWeather.source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
 			this.heal(target.maxhp / 2); // Aesthetic only as the healing happens after you fall asleep in-game
@@ -4844,8 +4844,8 @@ let BattleMovedex = {
 			this.add('-anim', source, "Toxic", target);
 		},
 		onHit(target, source) {
-			source.setStatus('tox');
-			target.setStatus('tox');
+			source.trySetStatus('tox');
+			target.trySetStatus('tox');
 		},
 		secondary: null,
 		target: "normal",
