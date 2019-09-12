@@ -1511,6 +1511,19 @@ let BattleStatuses = {
 			this.add(`c|+The Leprechaun|This ain't it chief`);
 		},
 	},
+	tony: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|@Tony|Greed!`);
+		},
+		onSwitchOut() {
+			this.add(`c|@Tony|Greed!`);
+		},
+		onFaint() {
+			this.add(`c|@Tony|Greed..`);
+		},
+		// Innate levitate implemented in data/mods/ssb/scripts.js#pokemon#isGrounded
+	},
 	torkool: {
 		noCopy: true,
 		onStart() {

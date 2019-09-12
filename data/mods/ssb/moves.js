@@ -4363,6 +4363,42 @@ let BattleMovedex = {
 		zMovePower: 160,
 		contestType: "Cool",
 	},
+	// Tony
+	greed: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "If there are not stealth rocks on the foe's side of the field, stealth rocks and one layer of spikes. Otherwise it sets two layers of spikes.",
+		shortDesc: "Sets stealth rocks if ther are none and spikes.",
+		id: "greed",
+		name: "Greed",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {reflectable: 1, nosky: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			if (!target.side.sideConditions['stealthrock']) {
+				this.add('-anim', source, "Stealth Rock", target);
+			} else {
+				this.add('-anim', source, "Spikes", target);
+			}
+			this.add('-anim', source, "Spikes", target);
+		},
+		onHitSide(target, source) {
+			if (!target.sideConditions['stealthrock']) {
+				target.addSideCondition('stealthrock', source);
+			} else {
+				target.addSideCondition('spikes', source);
+			}
+			target.addSideCondition('spikes', source);
+		},
+		secondary: null,
+		target: "foeSide",
+		type: "Ground",
+	},
 	// torkool
 	smokebomb: {
 		accuracy: true,
@@ -4695,6 +4731,7 @@ let BattleMovedex = {
 				}
 			},
 		},
+		secondary: null,
 		selfSwitch: true,
 		target: "normal",
 		type: "Fairy",
@@ -4782,6 +4819,7 @@ let BattleMovedex = {
 				pokemon.removeVolatile('relicsong');
 			},
 		},
+		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Psychic",
 	},
@@ -4809,6 +4847,7 @@ let BattleMovedex = {
 			source.setStatus('tox');
 			target.setStatus('tox');
 		},
+		secondary: null,
 		target: "normal",
 		type: "Poison",
 	},

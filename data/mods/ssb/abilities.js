@@ -58,7 +58,7 @@ let BattleAbilities = {
 			let newMove = this.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.useMove(newMove, target, source);
+			this.useMove(newMove, target, source, this.getAbility('magicbounce'));
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -68,7 +68,7 @@ let BattleAbilities = {
 			let newMove = this.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.useMove(newMove, this.effectData.target, source);
+			this.useMove(newMove, this.effectData.target, source, this.getAbility('magicbounce'));
 			return null;
 		},
 		onDamagePriority: -100,

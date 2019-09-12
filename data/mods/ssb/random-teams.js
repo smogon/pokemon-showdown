@@ -145,13 +145,13 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {hp: 20, def: 20, spd: 20}, nature: 'Naive',
 			},
 			'Asheviere': {
-				species: 'Slowbro', ability: 'Regenerator', item: 'Leftovers', gender: 'M',
+				species: 'Slowbro', ability: 'Regenerator', item: 'Leftovers', gender: 'F',
 				moves: ['Scald', 'Slack Off', 'Psyshock'],
 				signatureMove: 'Wonder Trade',
 				evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
 			},
 			'Averardo': {
-				species: 'Tyrantrum', ability: 'Rock Head', item: 'Choice Scarf', gender: '', // ask Gender
+				species: 'Tyrantrum', ability: 'Rock Head', item: 'Choice Scarf', gender: 'M',
 				moves: ['Head Smash', 'Flare Blitz', 'Photon Geyser'],
 				signatureMove: 'Dragon Smash',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', shiny: true,
@@ -696,6 +696,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Photon Geyser', 'Precipice Blades', 'Diamond Storm'],
 				signatureMove: 'Gyro Ballin\'',
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave', shiny: true,
+			},
+			'Tony': {
+				species: 'Flygon', ability: 'Magic Bounce', item: 'Leftovers', gender: 'M',
+				moves: ['Thousand Arrows', 'Dragon Tail', 'Roost'],
+				signatureMove: 'Greed',
+				evs: {hp: 252, def: 40, spe: 216}, nature: 'Jolly', shiny: true,
 			},
 			'torkool': {
 				species: 'Torkoal', ability: 'Deflective Shell', item: 'Leftovers', gender: 'M',
