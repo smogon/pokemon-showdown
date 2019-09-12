@@ -174,7 +174,7 @@ const commands = {
 					}
 					status.push(sharedStr);
 				}
-				return ip + (status.length ? ` (${status.join('; ')})` : '');
+				return ip + (status.length ? ` (${status.join('; ')})` : '') + `<small>[<a href="https://whatismyipaddress.com/ip/${ip}">info</a>]</small>`;
 			});
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
 			if (user.group !== ' ' && targetUser.latestHost) {
