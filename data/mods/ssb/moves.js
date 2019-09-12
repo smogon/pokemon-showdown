@@ -527,7 +527,7 @@ let BattleMovedex = {
 
 			const format = this.getFormat();
 			if (format && format.onSwitchIn) format.onSwitchIn.call(this, target);
-			this.add('-message', `${oldName} was sent to the distortion world and replaced with somebody else!`);
+			this.add('-message', `${oldName} was sent to the Distortion World and replaced with somebody else!`);
 			for (let stat of Object.keys(target.boosts)) {
 				// @ts-ignore Iterate through stat changes to update client
 				if (target.boosts[stat] !== 0) {
@@ -2002,7 +2002,7 @@ let BattleMovedex = {
 				if (pokemon.fainted || !pokemon.hp) return;
 				if (this.random(20) === 1) {
 					this.debug('Scripted terrain corrupt');
-					this.add('message', `${pokemon.name} was corrupted by a bug in the scripted terrain!`);
+					this.add('message', `${pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
 					// generate a movepool
 					let moves = [];
 					let pool = this.shuffle(Object.keys(this.data.Movedex));
@@ -2389,7 +2389,7 @@ let BattleMovedex = {
 		basePower: 70,
 		category: "Physical",
 		desc: "Before attacking, the user's Attack is increased by one stage. After attacking, one of the user's stats other than accuracy and evasion is boosted by one stage.",
-		shortDesc: "Before attack: +1 atk, after attack: +1 random stat.",
+		shortDesc: "Before attack: +1 Atk, after attack: +1 random stat.",
 		id: "chaotic",
 		name: "Chaotic",
 		isNonstandard: "Custom",
@@ -2836,7 +2836,7 @@ let BattleMovedex = {
 		basePower: 75,
 		category: "Special",
 		desc: "Has a 50% chance to raise the user's Special Attack by one stage.",
-		shortDesc: "50% chance to raise the user's Sp. Atk by 1.",
+		shortDesc: "50% chance to raise the user's SpA by 1.",
 		id: "crystalboost",
 		name: "Crystal Boost",
 		isNonstandard: "Custom",
@@ -2995,7 +2995,7 @@ let BattleMovedex = {
 		basePower: 110,
 		category: "Special",
 		desc: "Lowers the user's Special Attack, Special Defense, and Speed by one stage.",
-		shortDesc: "Lowers the user's Sp. Atk, Sp. Def. and Spe by 1.",
+		shortDesc: "Lowers the user's SpA, SpD, and Spe by 1.",
 		id: "pythonivy",
 		name: "Python Ivy",
 		isNonstandard: "Custom",
@@ -4829,7 +4829,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Both the user and target are Badly Poisoned.",
-		shortDesc: "Badly Poisons the user and target.",
+		shortDesc: "Badly poisons the user and target.",
 		id: "thelifeofzyg",
 		name: "The Life of Zyg",
 		isNonstandard: "Custom",

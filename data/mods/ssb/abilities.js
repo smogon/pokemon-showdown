@@ -898,7 +898,7 @@ let BattleAbilities = {
 	// Ransei
 	superguarda: {
 		desc: "This user's Attack is doubled until it is hit by a super effective attack. If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon can only be damaged by direct attacks.",
-		shortDesc: "Atk 2x until hit by SE move. 1.5x Atk if statused. Immune to indirect dmg.",
+		shortDesc: "Atk 2x until hit by SE move. 1.5x Atk if statused. Immune to indirect damage.",
 		id: "superguarda",
 		name: "Superguarda",
 		isNonstandard: "Custom",
