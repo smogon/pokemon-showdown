@@ -472,9 +472,9 @@ const PunishmentsSqliteStorage = new class {
 		const query = SQL`DELETE FROM room_punishments WHERE punishType = ${punishType}`;
 		if (USERID_REGEX.test(key)) {
 			const id = `${roomid}:${key}`;
-			query.append(`AND id = ${id}`);
+			query.append(` AND id = ${id}`);
 		} else {
-			query.append(`AND ips LIKE ${key}`);
+			query.append(` AND ips LIKE ${key}`);
 		}
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
@@ -495,9 +495,9 @@ const PunishmentsSqliteStorage = new class {
 	async deletePunishment(key: string, punishType: string) {
 		const query = SQL`DELETE FROM punishments WHERE punishType = ${punishType}`;
 		if (USERID_REGEX.test(key)) {
-			query.append(`AND userid = ${key}`);
+			query.append(` AND userid = ${key}`);
 		} else {
-			query.append(`AND ips LIKE ${key}`);
+			query.append(` AND ips LIKE ${key}`);
 		}
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
