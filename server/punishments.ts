@@ -367,9 +367,9 @@ const PunishmentsSqliteStorage = new class {
 		PunishmentsSqliteStorage.loadBanlist();
 	}
 	async loadPunishments() {
-		const sqlStatement = SQL`SELECT punishType, userid, ips, userids, expireTime, reason FROM punishments`;
+		const query = SQL`SELECT punishType, userid, ips, userids, expireTime, reason FROM punishments`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
-		const response = await database.all(sqlStatement) as PunishmentsTable;
+		const response = await database.all(query) as PunishmentsTable;
 		for (const row of response) {
 			const {punishType, userid, ips, userids, expireTime, reason} = row;
 			if (Date.now() >= expireTime) {
@@ -388,9 +388,9 @@ const PunishmentsSqliteStorage = new class {
 		}
 	}
 	async loadRoomPunishments() {
-		const sqlStatement = SQL`SELECT punishType, id, ips, userids, expireTime, reason FROM room_punishments`;
+		const query = SQL`SELECT punishType, id, ips, userids, expireTime, reason FROM room_punishments`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
-		const response = await database.all(sqlStatement) as RoomPunishmentsTable;
+		const response = await database.all(query) as RoomPunishmentsTable;
 		for (const row of response) {
 			const {punishType, id, ips, userids, expireTime, reason} = row;
 			if (Date.now() >= expireTime) {
@@ -409,9 +409,9 @@ const PunishmentsSqliteStorage = new class {
 		}
 	}
 	async loadSharedIps() {
-		const sqlStatement = SQL`SELECT ip, type, note FROM shared_ips`;
+		const query = SQL`SELECT ip, type, note FROM shared_ips`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
-		const response = await database.all(sqlStatement) as SharedIpsTable;
+		const response = await database.all(query) as SharedIpsTable;
 		for (const row of response) {
 			const {ip, type, note} = row;
 			if (!ip.includes('.')) continue;
@@ -420,9 +420,9 @@ const PunishmentsSqliteStorage = new class {
 		}
 	}
 	async loadBanlist() {
-		const sqlStatement = SQL`SELECT ip FROM ip_banlist`;
+		const query = SQL`SELECT ip FROM ip_banlist`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
-		const response = await database.all(sqlStatement) as IpBanlistTable;
+		const response = await database.all(query) as IpBanlistTable;
 		const rangebans = [];
 		for (const row of response) {
 			const {ip} = row;
@@ -436,9 +436,9 @@ const PunishmentsSqliteStorage = new class {
 	}
 	async appendPunishment(entry: PunishmentEntry, id: string, table: 'punishments' | 'room_punishments') {
 		if (id.charAt(0) === '#') return;
-		let sqlStatement: SQLStatement;
+		let query: SQLStatement;
 		if (table === 'punishments') {
-			sqlStatement = SQL`
+			query = SQL`
 				INSERT INTO punishments(punishType, userid, ips, userids, expireTime, reason, rest)
 				VALUES(
 					${entry.punishType}, ${id}, ${entry.ips.join(',')}, ${entry.userids.join(',')},
@@ -446,7 +446,7 @@ const PunishmentsSqliteStorage = new class {
 				)
 			`;
 		} else if (table === 'room_punishments') {
-			sqlStatement = SQL`
+			query = SQL`
 				INSERT INTO room_punishments(punishType, id, ips, userids, expireTime, reason, rest)
 				VALUES(
 					${entry.punishType}, ${id}, ${entry.ips.join(',')}, ${entry.userids.join(',')},
@@ -456,69 +456,69 @@ const PunishmentsSqliteStorage = new class {
 		}
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(sqlStatement!);
+		database.run(query!);
 	}
 
 	async appendSharedIp(ip: string, note: string) {
-		const sqlStatement = SQL`
+		const query = SQL`
 			INSERT INTO shared_ips(ip, type, note)
 			VALUES(${ip}, 'SHARED', ${note})
 		`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(sqlStatement);
+		database.run(query);
 	}
 	async deleteRoomPunishment(roomid: string, key: string, punishType: string) {
-		const sqlStatement = SQL`DELETE FROM room_punishments WHERE punishType = ${punishType}`;
+		const query = SQL`DELETE FROM room_punishments WHERE punishType = ${punishType}`;
 		if (USERID_REGEX.test(key)) {
 			const id = `${roomid}:${key}`;
-			sqlStatement.append(`AND id = ${id}`);
+			query.append(`AND id = ${id}`);
 		} else {
-			sqlStatement.append(`AND ips LIKE ${key}`);
+			query.append(`AND ips LIKE ${key}`);
 		}
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(sqlStatement);
+		database.run(query);
 	}
 	async deletePunishmentTypeFromRoom(roomid: string, punishType: string) {
-		const sqlStatement = SQL`DELETE FROM room_punishments WHERE id LIKE ${roomid}:% AND punishType = ${punishType}`;
+		const query = SQL`DELETE FROM room_punishments WHERE id LIKE ${roomid}:% AND punishType = ${punishType}`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(sqlStatement);
+		database.run(query);
 	}
 	async deleteAllPunishmentsOfRoom(roomid: string) {
-		const sqlStatement = SQL`DELETE FROM room_punishments WHERE id LIKE ${roomid}:%`;
+		const query = SQL`DELETE FROM room_punishments WHERE id LIKE ${roomid}:%`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(sqlStatement);
+		database.run(query);
 	}
 	async deletePunishment(key: string, punishType: string) {
-		const sqlStatement = SQL`DELETE FROM punishments WHERE punishType = ${punishType}`;
+		const query = SQL`DELETE FROM punishments WHERE punishType = ${punishType}`;
 		if (USERID_REGEX.test(key)) {
-			sqlStatement.append(`AND userid = ${key}`);
+			query.append(`AND userid = ${key}`);
 		}
-		sqlStatement.append(`AND ips LIKE ${key}`);
+		query.append(`AND ips LIKE ${key}`);
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(sqlStatement);
+		database.run(query);
 	}
 	async deleteAllPunishments() {
-		const sqlStatement = SQL`DELETE FROM punishments`;
+		const query = SQL`DELETE FROM punishments`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(sqlStatement);
+		database.run(query);
 	}
 	async deleteSharedIp(ip: string) {
-		const sqlStatement = SQL`DELETE FROM shared_ips WHERE ip = ${ip}`;
+		const query = SQL`DELETE FROM shared_ips WHERE ip = ${ip}`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(sqlStatement);
+		database.run(query);
 	}
 	async deleteAllSharedIps() {
-		const sqlStatement = SQL`DELETE FROM shared_ips`;
+		const query = SQL`DELETE FROM shared_ips`;
 		const database = await PunishmentsSqliteStorage.databasePromise;
 		// tslint:disable-next-line: no-floating-promises
-		database.run(sqlStatement);
+		database.run(query);
 	}
 }();
 
