@@ -3892,15 +3892,15 @@ const commands = {
 			break;
 		case 'fieldcondition': case 'pseudoweather':
 		case 'fc':
-			room.battle.stream.write(`>eval battle.addPseudoWeather('${toID(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.field.addPseudoWeather('${toID(targets[0])}', 'debug')`);
 			break;
 		case 'weather':
 		case 'w':
-			room.battle.stream.write(`>eval battle.setWeather('${toID(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.field.setWeather('${toID(targets[0])}', 'debug')`);
 			break;
 		case 'terrain':
 		case 't':
-			room.battle.stream.write(`>eval battle.setTerrain('${toID(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.field.setTerrain('${toID(targets[0])}', 'debug')`);
 			break;
 		default:
 			this.errorReply(`Unknown editbattle command: ${cmd}`);
