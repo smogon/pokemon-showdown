@@ -710,8 +710,8 @@ export class CommandContext extends MessageContext {
 		if (this.room) this.room.update();
 	}
 	filter(message: string, targetUser: User | null = null) {
-		if (!this.room || this.room instanceof Rooms.GlobalRoom) return null;
-		return Chat.filter(this, message, this.user, this.room, this.connection, targetUser);
+		if (!this.room || this.room.id === 'global') return null;
+		return Chat.filter(this, message, this.user, this.room as GameRoom | ChatRoom, this.connection, targetUser);
 	}
 	statusfilter(status: string) {
 		return Chat.statusfilter(status, this.user);
