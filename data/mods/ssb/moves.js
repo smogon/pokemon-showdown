@@ -3626,7 +3626,7 @@ let BattleMovedex = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a 70% chance to raise the user's Attack by one stage. 30% chance to paralyze the foe or cause them to flinch.",
-		shortDesc: "70% user's Atk +1. 30% flinch or paralyze foe.",
+		shortDesc: "70% user's Atk +1. 20% flinch or paralyze foe.",
 		id: "stunner",
 		name: "Stunner",
 		pp: 10,
