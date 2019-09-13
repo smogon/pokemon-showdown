@@ -501,7 +501,7 @@ const pages = {
 			// room / user being reported
 			let meta = '';
 			if (!query.length) query = [''];
-			const targetTypeIndex = query.findIndex(value => value === 'user' || value === 'room');
+			const targetTypeIndex = Math.max(query.indexOf('user'), query.indexOf('room'));
 			if (targetTypeIndex >= 0) meta = '-' + query.splice(targetTypeIndex).join('-');
 			/** @type {{[k: string]: string}} */
 			const pages = {
