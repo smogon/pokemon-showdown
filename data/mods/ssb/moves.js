@@ -835,7 +835,7 @@ let BattleMovedex = {
 	},
 	// Averardo
 	dragonsmash: {
-		accuracy: 100,
+		accuracy: 90,
 		basePower: 150,
 		category: "Physical",
 		desc: "This Pokemon takes 50% of the damage it deals as recoil.",
@@ -2218,14 +2218,14 @@ let BattleMovedex = {
 	// Jolteonite
 	hyperforcestrike: {
 		accuracy: 100,
-		basePower: 75,
+		basePower: 90,
 		category: "Physical",
 		desc: "Damages the target and restores user's HP by 25% of its total health.",
 		shortDesc: "Damages the target and heals 25% total HP.",
 		id: "hyperforcestrike",
 		name: "Hyperforce Strike",
 		isNonstandard: "Custom",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
 		onTryMove() {
@@ -2233,11 +2233,9 @@ let BattleMovedex = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Draco Meteor", target);
-			this.add('-anim', source, "Outrage", target);
-			this.add('-anim', source, "Supersonic Skystrike", target);
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			this.heal(pokemon.maxhp / 4, pokemon, pokemon, move);
+			this.heal(pokemon.maxhp * 0.15, pokemon, pokemon, move); // 15% health recovered
 		},
 		secondary: null,
 		target: "normal",
@@ -3459,7 +3457,7 @@ let BattleMovedex = {
 		name: "Refactor",
 		isNonstandard: "Custom",
 		pp: 10,
-		priority: 1,
+		priority: 0,
 		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1, snatch: 1, nonsky: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
