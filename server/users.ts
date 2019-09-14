@@ -1315,6 +1315,10 @@ export class User extends Chat.MessageContext {
 			return Chat.resolvePage(roomid, this, connection);
 		}
 		if (!room || !room.checkModjoin(this)) {
+			if (room && room.battle) {
+				connection.sendTo(roomid, `|noinit|joinfailed|You do not have permission to join the battle "${roomid}"`);
+				return false;
+			}
 			if (!this.named) {
 				return Rooms.RETRY_AFTER_LOGIN;
 			} else {
