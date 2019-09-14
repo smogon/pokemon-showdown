@@ -555,7 +555,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'pokemondeadchannel': {
 				species: 'Magearna-Original', ability: 'Numb Numb Juice', item: 'Leftovers', gender: 'N',
-				moves: ['Sparkly Swirl', ['Charm', 'Eerie Impulse'], ['Toxic', 'Thunder Wave']],
+				moves: ['Sparkly Swirl', 'Defog', ['Toxic', 'Thunder Wave']],
 				signatureMove: 'Express Yourself',
 				evs: {hp: 252, def: 164, spd: 92}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
 			},
