@@ -242,7 +242,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'deetah': {
 				species: 'Luxray', ability: 'Radioactive', item: 'Toxic Orb', gender: '',
-				moves: ['Zippy Zap', 'Icicle Crash', 'Thousand Arrows'],
+				moves: ['Extreme Speed', 'Icicle Crash', 'Thousand Arrows'],
 				signatureMove: 'Galvanized Strike',
 				evs: {hp: 28, atk: 244, def: 188, spe: 48}, nature: 'Adamant', shiny: true,
 			},
@@ -633,7 +633,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Seraphus': {
 				species: 'Tangela', ability: 'Seraphic Regeneration', item: 'Eviolite', gender: 'M',
-				moves: [['Knock Off', 'Power Whip'], ['Sludge Bomb', 'Toxic'], ['Synthesis', 'Protect']],
+				moves: [['Knock Off', 'Power Whip'], ['Sludge Bomb', 'Toxic'], ['Recover', 'Protect']],
 				signatureMove: 'Leech Swap',
 				evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 			},
@@ -653,7 +653,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Honchkrow', ability: 'Illusion', item: 'Fakeclaimium Z', gender: 'M',
 				moves: ['Superpower', 'Sucker Punch', ['Flamethrower', 'Ice Beam', 'Thunderbolt']],
 				signatureMove: 'Brave Bird',
-				nature: 'Serious',
+				evs: {atk: 128, spa: 128, spe: 252}, nature: 'Naive',
 			},
 			'SparksBlade': {
 				species: 'Blacephalon', ability: 'Magic Guard', item: 'Life Orb', gender: 'N',
