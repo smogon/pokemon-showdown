@@ -671,6 +671,9 @@ const pages = {
 	motw() {
 		return motw.generateWinnerList(this);
 	},
+	anotd() {
+		return anotd.generateWinnerList(this);
+	},
 };
 exports.pages = pages;
 
