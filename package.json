@@ -6,7 +6,6 @@
   "dependencies": {
     "probe-image-size": "^5.0.0",
     "sockjs": "0.3.19",
-    "sqlite": "^3.0.3",
     "sucrase": "^3.10.1"
   },
   "optionalDependencies": {

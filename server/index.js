@@ -60,6 +60,7 @@ try {
 	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
 
+const child_process = require('child_process');
 const FS = require('../.lib-dist/fs').FS;
 
 /*********************************************************
@@ -85,6 +86,14 @@ if (Config.watchconfig) {
 			Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
 		}
 	});
+}
+
+/*********************************************************
+ * Run database migrations and conversions
+ *********************************************************/
+
+if (Object.values(Config.storage || {}).includes('sqlite')) {
+	child_process.execSync('node database/migrate');
 }
 
 /*********************************************************
