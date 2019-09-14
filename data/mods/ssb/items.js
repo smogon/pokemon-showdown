@@ -155,7 +155,7 @@ let BattleItems = {
 		zMove: "Bleh Flame",
 		zMoveFrom: "Blue Flare",
 		zMoveUser: ["Reshiram"],
-		desc: "Holder's Fire-type attacks have 1.2x power. If held by a Reshiram with Blue Flare, it can use Bleh Flame.",
+		desc: "Fire-type attacks have 1.2x power. Reshiram with Blue Flare can use Bleh Flame.",
 	},
 };
 

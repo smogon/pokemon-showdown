@@ -35,7 +35,7 @@ let BattleAbilities = {
 	// Aeonic
 	dummythicc: {
 		desc: "This ability gives the effects of the abilities Fur Coat, Magic Bounce, Infiltrator, and Sturdy.",
-		shortDesc: "Fur Coat + Magic Bounce + Infiltrator + Sturdy",
+		shortDesc: "Fur Coat + Magic Bounce + Infiltrator + Sturdy.",
 		id: "dummythicc",
 		name: "Dummy Thicc",
 		isNonstandard: "Custom",
@@ -85,7 +85,7 @@ let BattleAbilities = {
 	// Aethernum
 	awakening: {
 		desc: "On switch-in, Attack and Speed are lowered by three stages, while Defense and Special Defense are increased by three stages. At the end of each turn, Attack and Speed are increased by one stage while Defense and Special Defense are decreased by one stage.",
-		shortDesc: "Atk & Spe -3; Def & SpD +3; each turn: Atk & Spe +1; Def & SpD -1",
+		shortDesc: "Atk & Spe -3; Def & SpD +3; each turn: Atk & Spe +1; Def & SpD -1.",
 		id: "awakening",
 		name: "Awakening",
 		isNonstandard: "Custom",
@@ -143,8 +143,8 @@ let BattleAbilities = {
 	},
 	// Alpha
 	osolemio: {
-		desc: "If Sun is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
-		shortDesc: "If Sun is active, this Pokemon heals 1/16 of its max HP each turn.",
+		desc: "If Sunny Day is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
+		shortDesc: "If Sunny Day is active, this Pokemon heals 1/16 of its max HP each turn.",
 		id: "osolemio",
 		name: "O SOLE MIO",
 		isNonstandard: "Custom",
@@ -168,7 +168,7 @@ let BattleAbilities = {
 	// Anubis
 	distortionworld: {
 		desc: "For 5 turns, Speed becomes the same for all Pokemon. The power of Ghost-type attacks made by Pokemon is multiplied by 1.5.",
-		shortDesc: "5 turns. Speed ties. +Ghost power",
+		shortDesc: "5 turns. Speed ties. +Ghost power.",
 		id: "distortionworld",
 		name: "Distortion World",
 		isNonstandard: "Custom",
@@ -348,8 +348,8 @@ let BattleAbilities = {
 	},
 	// E4 Flint
 	starkmountain: {
-		desc: "The user summons Sunny Day when it switches in. In addition, Water-type attacks do halved damage against this Pokemon.",
-		shortDesc: "On switch-in, summons Sunny Day. Water power against this Pokemon is halved.",
+		desc: "The user summons Sunny Day when it switches in. In addition, the Base Power of Water-type attacks is multiplied by 0.5 against this Pokemon.",
+		shortDesc: "Summons Sunny Day on switch-in. Base Power of foe's Water moves is halved.",
 		id: "starkmountain",
 		name: "Stark Mountain",
 		isNonstandard: "Custom",
@@ -377,8 +377,8 @@ let BattleAbilities = {
 	},
 	// fart
 	risefromthegases: {
-		desc: "The power of Fire- and Ground-type attacks against this Pokemon is halved.",
-		shortDesc: "The power of Fire- and Ground-type attacks is halved.",
+		desc: "The power of Fire-type and Ground-type attacks against this Pokemon is halved.",
+		shortDesc: "The power of Fire-type and Ground-type attacks is halved against this Pokemon.",
 		id: "risefromthegases",
 		name: "Rise from the Gases",
 		isNonstandard: "Custom",
@@ -395,7 +395,7 @@ let BattleAbilities = {
 	// Flare
 	superillusion: {
 		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes super effective direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",
-		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes a supereffective hit.",
+		shortDesc: "Appears as the last Pokemon in the party until it takes a supereffective hit.",
 		id: "superillusion",
 		name: "Super Illusion",
 		isNonstandard: "Custom",
@@ -463,8 +463,8 @@ let BattleAbilities = {
 	},
 	// Gimm1ck
 	"russianrush": {
-		desc: "If Hail is active, this Pokemon's Speed and Accuracy are doubled.",
-		shortDesc: "If Hail is active, this Pokemon's Speed and Accuracy are doubled.",
+		desc: "If Hail is active, this Pokemon's Speed and accuracy are doubled.",
+		shortDesc: "If Hail is active, this Pokemon's Speed and accuracy are doubled.",
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather('hail')) {
 				return this.chainModify(2);
@@ -512,8 +512,8 @@ let BattleAbilities = {
 	},
 	// HoeenHero
 	scripter: {
-		desc: "If Scripted Terrain is active, this Pokemon's Speed is doubled and its moves have 1.5x power.",
-		shortDesc: "If Scripted Terrain is active, this Pokemon's Speed doubles and attack power is 1.5x.",
+		desc: "If Scripted Terrain is active, this Pokemon's Speed is doubled and its moves deal 1.5x damage.",
+		shortDesc: "If Scripted Terrain is active, this Pokemon's Speed doubles and it deals 1.5x damage.",
 		id: "scripter",
 		name: "Scripter",
 		isNonstandard: "Custom",
@@ -599,7 +599,7 @@ let BattleAbilities = {
 	// KingSwordYT
 	kungfupanda: {
 		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by one stage after it is damaged by a contact move.",
-		shortDesc: "This Pokemon's punch-based moves have 1.2x power. +1 Spe when a foe makes contact.",
+		shortDesc: "Punch-based moves have 1.2x power. +1 Spe when a foe makes contact.",
 		id: "kungfupanda",
 		name: "Kung Fu Panda",
 		isNonstandard: "Custom",
@@ -619,7 +619,7 @@ let BattleAbilities = {
 	// Mad Monty ¾°
 	minnesnowta: {
 		desc: "This Pokemon is immune to Ice-type moves. Its Ice and Electric type attacks have their power multiplied by 1.2x.",
-		shortDesc: "This Pokemon's Ice and Electric attacks have their power multiplied by 1.2; Ice immunity.",
+		shortDesc: "This Pokemon's Ice and Electric attacks have 1.2x power; Ice immunity.",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ice') {
 				this.add('-immune', target, '[from] ability: Minnesnowta');
@@ -639,7 +639,7 @@ let BattleAbilities = {
 	// Marshmallon
 	sightseeing: {
 		desc: "If this Pokemon is a Castform, its type and moveset change to the current weather condition's type and moveset, except Sandstorm and Acid Rain. The user's Defense, Special Attack, Special Defense, Speed, and accuracy are all boosted 1.5x during weather.",
-		shortDesc: "Castform's type & moves changes to the current weather condition's type, except Sandstorm.",
+		shortDesc: "Castform adapts to current weather; in weather, Def, SpA, SpD, Spe, accuracy 1.5x.",
 		id: "sightseeing",
 		name: "Sightseeing",
 		isNonstandard: "Custom",
@@ -726,7 +726,7 @@ let BattleAbilities = {
 	// Megazard
 	standuptall: {
 		desc: "This Pokemon's Attack, Defense, and Special Defense are raised by one stage at the end of each full turn it is on the field.",
-		shortDesc: "Raises Atk, Def, and SpD by 1, after each full turn on the field.",
+		shortDesc: "Raises Atk, Def, and SpD by 1 at the end of each full turn on the field.",
 		id: "standuptall",
 		name: "Stand Up Tall",
 		isNonstandard: "Custom",
@@ -1076,7 +1076,7 @@ let BattleAbilities = {
 	// The Immortal
 	beastboost2: {
 		desc: "This Pokemon's two highest stats are raised by one stage if it attacks and KOes another Pokemon.",
-		shortDesc: "This Pokemon's 2 highest stats are raised by 1 if it attacks and KOes another Pokemon.",
+		shortDesc: "The user's 2 highest stats are raised by 1 if it attacks and KOes another Pokemon.",
 		id: "beastboost2",
 		name: "Beast Boost 2",
 		isNonstandard: "Custom",
@@ -1122,7 +1122,7 @@ let BattleAbilities = {
 	// vivalospride
 	trashvivwebs: {
 		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it. Sets Sticky Web the first time it switches in.",
-		shortDesc: "User's Water power is 2x; can't be burned; Fire power is halved. Sets web.",
+		shortDesc: "Attack stat using Water 2x; burn immunity; foe's attack using Fire 0.5x; Sticky Web.",
 		onStart(pokemon) {
 			if (!pokemon.m.stickyweb) {
 				this.useMove("stickyweb", pokemon);
