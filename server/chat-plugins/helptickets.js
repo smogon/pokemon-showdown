@@ -498,7 +498,11 @@ const pages = {
 			}
 
 			const isStaff = user.can('lock');
+			// room / user being reported
+			let meta = '';
 			if (!query.length) query = [''];
+			const targetTypeIndex = Math.max(query.indexOf('user'), query.indexOf('room'));
+			if (targetTypeIndex >= 0) meta = '-' + query.splice(targetTypeIndex).join('-');
 			/** @type {{[k: string]: string}} */
 			const pages = {
 				report: `I want to report someone`,
@@ -652,14 +656,14 @@ const pages = {
 				default:
 					if (!page.startsWith('confirm')) break;
 					buf += `<p><b>Are you sure you want to submit a${ticketTitles[page.slice(7)].charAt(0) === 'A' ? 'n' : ''} ${ticketTitles[page.slice(7)]} report?</b></p>`;
-					buf += `<p><button class="button notifying" name="send" value="/helpticket submit ${ticketTitles[page.slice(7)]}">Yes, Contact global staff</button> <a href="/view-help-request-${query.slice(0, i).join('-')}" target="replace"><button class="button">No, cancel</button></a></p>`;
+					buf += `<p><button class="button notifying" name="send" value="/helpticket submit ${ticketTitles[page.slice(7)]} ${meta}">Yes, Contact global staff</button> <a href="/view-help-request-${query.slice(0, i).join('-')}" target="replace"><button class="button">No, cancel</button></a></p>`;
 					break;
 				}
 			}
 			buf += '</div>';
 			const curPageLink = query.length ? '-' + query.join('-') : '';
 			buf = buf.replace(/<Button>([a-z]+)<\/Button>/g, (match, id) =>
-				`<a class="button" href="/view-help-request${curPageLink}-${id}" target="replace">${pages[id]}</a>`
+				`<a class="button" href="/view-help-request${curPageLink}-${id}${meta}" target="replace">${pages[id]}</a>`
 			);
 			return buf;
 		},
@@ -773,23 +777,25 @@ let commands = {
 	'!report': true,
 	report(target, room, user) {
 		if (!this.runBroadcast()) return;
+		const meta = this.pmTarget ? `-user-${this.pmTarget.userid}` : this.room ? `-room-${this.room.id}` : '';
 		if (this.broadcasting) {
 			if (room && room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
-			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--report" class="button"><strong>Report someone</strong></button>');
+			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--report${meta}" class="button"><strong>Report someone</strong></button>`);
 		}
 
-		return this.parse('/join view-help-request--report');
+		return this.parse(`/join view-help-request--report${meta}`);
 	},
 
 	'!appeal': true,
 	appeal(target, room, user) {
 		if (!this.runBroadcast()) return;
+		const meta = this.pmTarget ? `-user-${this.pmTarget.userid}` : this.room ? `-room-${this.room.id}` : '';
 		if (this.broadcasting) {
 			if (room && room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
-			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--appeal" class="button"><strong>Appeal a punishment</strong></button>');
+			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--appeal${meta}" class="button"><strong>Appeal a punishment</strong></button>`);
 		}
 
-		return this.parse('/join view-help-request--appeal');
+		return this.parse(`/join view-help-request--appeal${meta}`);
 	},
 
 	requesthelp: 'helpticket',
@@ -800,12 +806,13 @@ let commands = {
 		'': 'create',
 		create(target, room, user) {
 			if (!this.runBroadcast()) return;
+			const meta = this.pmTarget ? `-user-${this.pmTarget.userid}` : this.room ? `-room-${this.room.id}` : '';
 			if (this.broadcasting) {
-				return this.sendReplyBox('<button name="joinRoom" value="view-help-request" class="button"><strong>Request help</strong></button>');
+				return this.sendReplyBox(`<button name="joinRoom" value="view-help-request${meta}" class="button"><strong>Request help</strong></button>`);
 			}
 			if (user.can('lock')) return this.parse('/join view-help-request'); // Globals automatically get the form for reference.
 			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);
-			return this.parse('/join view-help-request');
+			return this.parse(`/join view-help-request${meta}`);
 		},
 		createhelp: [`/helpticket create - Creates a new ticket requesting help from global staff.`],
 
@@ -834,13 +841,15 @@ let commands = {
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
-			if (!Object.values(ticketTitles).includes(target)) return this.parse('/helpticket');
+			let [ticketType, reportTargetType, reportTarget] = Chat.splitFirst(target, '-', 2).map(s => s.trim());
+			reportTarget = Chat.escapeHTML(reportTarget);
+			if (!Object.values(ticketTitles).includes(ticketType)) return this.parse('/helpticket');
 			ticket = {
 				creator: user.name,
 				userid: user.userid,
 				open: true,
 				active: false,
-				type: target,
+				type: ticketType,
 				created: Date.now(),
 				claimed: null,
 				escalated: false,
@@ -862,7 +871,10 @@ let commands = {
 			};
 			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
 			const staffMessage = `<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <details><summary class="button">More Options</summary><button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button> <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></details></p>`;
-			const staffHint = staffContexts[target] || '';
+			const staffHint = staffContexts[ticketType] || '';
+			const reportTargetInfo =
+				reportTargetType === 'room' ? `Reported in room: <a href="/${reportTarget}">${reportTarget}</a>` :
+					reportTargetType === 'user' ? `Reported user: <strong class="username">${reportTarget}</strong>` : '';
 			let helpRoom = /** @type {ChatRoom?} */ (Rooms.get(`help-${user.userid}`));
 			if (!helpRoom) {
 				helpRoom = Rooms.createChatRoom(/** @type {RoomID} */ (`help-${user.userid}`), `[H] ${user.name}`, {
@@ -872,7 +884,7 @@ let commands = {
 					modjoin: '%',
 					auth: {[user.userid]: '+'},
 					introMessage: introMessage,
-					staffMessage: staffMessage + staffHint,
+					staffMessage: staffMessage + staffHint + reportTargetInfo,
 				});
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			} else {
