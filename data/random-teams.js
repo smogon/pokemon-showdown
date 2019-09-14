@@ -200,7 +200,7 @@ class RandomTeams extends Dex.ModdedDex {
 			let moves;
 			let pool = ['struggle'];
 			if (species === 'Smeargle') {
-				pool = Object.keys(this.data.Movedex).filter(moveid => !(['chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge'].includes(moveid) || this.data.Movedex[moveid].isZ));
+				pool = Object.keys(this.data.Movedex).filter(moveid => !(['chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge'].includes(moveid) || this.data.Movedex[moveid].isZ || this.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
 			} else if (template.learnset) {
 				// @ts-ignore
 				pool = Object.keys(template.learnset).filter(moveid => template.learnset[moveid].find(learned => learned.includes(this.gen)));
