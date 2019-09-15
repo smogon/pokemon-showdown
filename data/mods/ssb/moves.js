@@ -3300,28 +3300,22 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Fails if the user is not asleep. Raises the user's Defense and Special Defense by 1 stage. Badly poisons the target.",
-		shortDesc: "User asleep: badly poison target, Def & SpD +1.",
+		desc: "The user of this move will use Toxic, followed by Venoshock, then Rest if its HP isn't full, and finally Sleep Talk if the user is asleep.",
+		shortDesc: "Toxic -> Venoshock -> Rest -> Sleep Talk.",
 		id: "teabreak",
 		name: "Tea Break",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {protect: 1},
 		sleepUsable: true,
-		status: 'tox',
 		onTryMove(pokemon) {
 			this.attrLastMove('[still]');
-			if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return false;
 		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Toxic", target);
-			this.add('-anim', source, "Calm Mind", source);
-		},
-		self: {
-			boosts: {
-				def: 1,
-				spd: 1,
-			},
+		onHit(target, source) {
+			this.useMove('Toxic', source, target);
+			this.useMove('Venoshock', source, target);
+			if (source.hp !== source.maxhp) this.useMove('Rest', source, source);
+			if (source.status === 'slp' || source.hasAbility('comatose')) this.useMove('Sleep Talk', source, target);
 		},
 		secondary: null,
 		target: "normal",
@@ -4865,6 +4859,29 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
+	},
+	// Modded Sleep Talk for pirate princess
+	sleeptalk: {
+		inherit: true,
+		onHit(pokemon) {
+			let moves = [];
+			for (const moveSlot of pokemon.moveSlots) {
+				const move = moveSlot.id;
+				const noSleepTalk = [
+					'assist', 'beakblast', 'belch', 'bide', 'celebrate', 'chatter', 'copycat', 'focuspunch', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'shelltrap', 'sketch', 'sleeptalk', 'uproar',
+					'teabreak', 'glitzerpopping', // Modded banlist
+				];
+				if (move && !(noSleepTalk.includes(move) || this.getMove(move).flags['charge'] || (this.getMove(move).isZ && this.getMove(move).basePower !== 1))) {
+					moves.push(move);
+				}
+			}
+			let randomMove = '';
+			if (moves.length) randomMove = this.sample(moves);
+			if (!randomMove) {
+				return false;
+			}
+			this.useMove(randomMove, pokemon);
+		},
 	},
 };
 
