@@ -1173,7 +1173,7 @@ const commands = {
 
 		if (!main) return this.errorReply(`The room '${target}' does not exist.`);
 		if (main.parent) return this.errorReply(`Subrooms cannot have subrooms.`);
-		if (main.isPrivate === true) return this.errorReply(`Only public and hidden rooms cannot have subrooms.`);
+		if (main.isPrivate === true) return this.errorReply(`Only public and hidden rooms can have subrooms.`);
 		if (main.isPrivate && !room.isPrivate) return this.errorReply(`Private rooms cannot have public subrooms.`);
 		if (!main.chatRoomData) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
 		if (room === main) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
