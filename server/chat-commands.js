@@ -704,7 +704,7 @@ const commands = {
 
 		const maxLength = 32;
 		if (target.length > maxLength) return this.errorReply(this.tr `Your status is too long; it must be under ${maxLength} characters.`);
-		target = Chat.statusfilter(target, user);
+		target = this.statusfilter(target);
 		if (!target) return this.errorReply(this.tr("Your status contains a banned word."));
 
 		user.setUserMessage(target);
@@ -1502,7 +1502,7 @@ const commands = {
 		target = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
 		let userid = toID(this.targetUsername);
-		let name = targetUser ? targetUser.name : Chat.filter(this, this.targetUsername, user, room, connection);
+		let name = targetUser ? targetUser.name : this.filter(this.targetUsername);
 		if (!name) return;
 		name = name.slice(0, 18);
 
@@ -2564,7 +2564,7 @@ const commands = {
 		// warning: never document this command in /help
 		if (!this.can('forcepromote')) return false;
 		target = this.splitTarget(target, true);
-		let name = Chat.filter(this, this.targetUsername, user, room, connection);
+		let name = this.filter(this.targetUsername);
 		if (!name) return;
 		name = name.slice(0, 18);
 		let nextGroup = target;

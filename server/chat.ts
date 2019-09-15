@@ -709,6 +709,13 @@ export class CommandContext extends MessageContext {
 	update() {
 		if (this.room) this.room.update();
 	}
+	filter(message: string, targetUser: User | null = null) {
+		if (!this.room || this.room.id === 'global') return null;
+		return Chat.filter(this, message, this.user, this.room as GameRoom | ChatRoom, this.connection, targetUser);
+	}
+	statusfilter(status: string) {
+		return Chat.statusfilter(status, this.user);
+	}
 	can(permission: string, target: string | User | null = null, room: BasicChatRoom | null = null) {
 		if (!this.user.can(permission, target, room)) {
 			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
