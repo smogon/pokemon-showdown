@@ -449,7 +449,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		let current = player.getCurrentQuestion();
 
-		player.sendRoom(`|raw|You are on ${(current.number === this.questions.length ? "final " : "")}hint #${current.number}: ${Chat.formatText(current.question.hint)}${showHints && current.question.spoilers ? `<details><summary>Extra Hints:</summary>${current.question.spoilers.map(p => `- ${p}`).join('<br />')}</details>` : ''}`);
+		player.sendRoom(`|raw|You are on ${(current.number === this.questions.length ? "final " : "")}hint #${current.number}: ${Chat.formatText(current.question.hint)}${showHints && current.question.spoilers.length ? `<details><summary>Extra Hints:</summary>${current.question.spoilers.map(p => `- ${p}`).join('<br />')}</details>` : ''}`);
 		return true;
 	}
 
@@ -1143,11 +1143,13 @@ let commands = {
 
 		let [question, ...hint] = target.split(',');
 		question = parseInt(question) - 1;
+		hint = hint.join(',');
 
 		if (!game.questions[question]) return this.errorReply(`Invalid question number.`);
-		game.questions[question].spoilers.push(hint.join(','));
+		if (!hint) return this.errorReply('The hint cannot be left empty.');
+		game.questions[question].spoilers.push(hint);
 
-		room.addByUser(user, `Question #${question + 1} hint - spoiler: ${hint.join(',')}`);
+		room.addByUser(user, `Question #${question + 1} hint - spoiler: ${hint}`);
 	},
 
 
