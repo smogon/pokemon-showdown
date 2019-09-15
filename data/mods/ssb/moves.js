@@ -1584,9 +1584,9 @@ let BattleMovedex = {
 		onHit(target, source) {
 			this.add('-anim', source, 'Spectral Thief', target);
 			if (Math.round(this.random())) {
-				this.add(`c|+fart|I hl on soup`);
+				this.add(`c|%fart|I hl on soup`);
 			} else {
-				this.add(`c|+fart|did someone say soup?`);
+				this.add(`c|%fart|did someone say soup?`);
 			}
 		},
 		secondary: null,
