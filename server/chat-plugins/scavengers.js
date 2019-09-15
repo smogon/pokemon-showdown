@@ -369,7 +369,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			let hint = q[i];
 			let answer = q[i + 1];
 
-			this.questions.push({hint: hint, answer: answer});
+			this.questions.push({hint: hint, answer: answer, spoilers: []});
 		}
 
 		this.announce(`A new ${this.gameType} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.userid === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.formatText(this.questions[0].hint)}`);
@@ -426,6 +426,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (player.completed) return false;
 
 		this.validatePlayer(player);
+		player.lastGuess = Date.now();
 
 		if (player.verifyAnswer(value)) {
 			player.sendRoom("Congratulations! You have gotten the correct answer.");
@@ -440,7 +441,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		}
 	}
 
-	onSendQuestion(user) {
+	onSendQuestion(user, showHints) {
 		if (!(user.userid in this.playerTable) || this.hosts.some(h => h.userid === user.userid)) return false;
 
 		let player = this.playerTable[user.userid];
@@ -448,7 +449,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		let current = player.getCurrentQuestion();
 
-		player.sendRoom(`|raw|You are on ${(current.number === this.questions.length ? "final " : "")}hint #${current.number}: ${Chat.formatText(current.question.hint)}`);
+		player.sendRoom(`|raw|You are on ${(current.number === this.questions.length ? "final " : "")}hint #${current.number}: ${Chat.formatText(current.question.hint)}${showHints && current.question.spoilers.length ? `<details><summary>Extra Hints:</summary>${current.question.spoilers.map(p => `- ${p}`).join('<br />')}</details>` : ''}`);
 		return true;
 	}
 
@@ -461,7 +462,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			qLimit = player.currentQuestion + 1;
 		}
 
-		user.sendTo(this.room, `|raw|<div class="ladder"><table style="width: 100%"><tr><th style="width: 10%;">#</th><th>Hint</th><th>Answer</th></tr>${this.questions.slice(0, qLimit).map((q, i) => `<tr><td>${(i + 1)}</td><td>${Chat.formatText(q.hint)}</td>${i + 1 >= qLimit ? '' : `<td>${Chat.escapeHTML(q.answer.join(' / '))}</td>`}</tr>`).join("")}</table><div>`);
+		user.sendTo(this.room, `|raw|<div class="ladder"><table style="width: 100%"><tr><th style="width: 10%;">#</th><th>Hint</th><th>Answer</th></tr>${this.questions.slice(0, qLimit).map((q, i) => `<tr><td>${(i + 1)}</td><td>${Chat.formatText(q.hint)}${q.spoilers.length ? `<details><summary>Extra Hints:</summary>${q.spoilers.map(s => `- ${s}`).join('<br />')}</details>` : ''}</td>${i + 1 >= qLimit ? '' : `<td>${Chat.escapeHTML(q.answer.join(' / '))}</td>`}</tr>`).join("")}</table><div>`);
 	}
 
 	onComplete(player) {
@@ -741,6 +742,7 @@ class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 
 		this.currentQuestion = 0;
 		this.completed = false;
+		this.lastGuess = 0;
 	}
 
 	getCurrentQuestion() {
@@ -1032,7 +1034,7 @@ let commands = {
 				if (!players.length) {
 					str += `<tr><td>${questionNum}</td><td>None</td>`;
 				} else {
-					str += Chat.html`<tr><td>${questionNum}</td><td>${players.map(pl => pl.name).join(", ")}`;
+					str += `<tr><td>${questionNum}</td><td>${players.map(pl => pl.lastGuess > Date.now() - 1000 * 300 ? `<strong>${Chat.escapeHTML(pl.name)}</strong>` : Chat.escapeHTML(pl.name)).join(", ")}`;
 				}
 			}
 			let completed = game.preCompleted ? game.preCompleted : game.completed;
@@ -1044,7 +1046,7 @@ let commands = {
 
 	hint(target, room, user) {
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
-		if (!room.game.onSendQuestion(user)) this.errorReply("You are not currently participating in the hunt.");
+		if (!room.game.onSendQuestion(user, true)) this.errorReply("You are not currently participating in the hunt.");
 	},
 
 	timer(target, room, user) {
@@ -1129,6 +1131,27 @@ let commands = {
 			return this.sendReply("/scavengers edithunt [question number], [hint | answer], [value] - edits the current scavenger hunt.");
 		}
 	},
+
+	addhint: 'spoiler',
+	spoiler(target, room, user) {
+		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
+		let game = room.game.childGame || room.game;
+		if ((!game.hosts.some(h => h.userid === user.userid) || !user.can('broadcast', null, room)) && game.staffHostId !== user.userid) return this.errorReply("You cannot add more hints if you are not the host.");
+
+		let elapsedTime = Date.now() - game.startTime;
+		if (elapsedTime < 600000 /* 10 minutes */) return this.errorReply("You can only use this command 10 minutes after the hunt starts.");
+
+		let [question, ...hint] = target.split(',');
+		question = parseInt(question) - 1;
+		hint = hint.join(',');
+
+		if (!game.questions[question]) return this.errorReply(`Invalid question number.`);
+		if (!hint) return this.errorReply('The hint cannot be left empty.');
+		game.questions[question].spoilers.push(hint);
+
+		room.addByUser(user, `Question #${question + 1} hint - spoiler: ${hint}`);
+	},
+
 
 	kick(target, room, user) {
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
