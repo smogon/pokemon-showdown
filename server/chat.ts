@@ -1812,9 +1812,9 @@ export const Chat = new class {
 	monitors: {[k: string]: Monitor} = {};
 	namefilterwhitelist = new Map<string, string>();
 	/**
-	 * Inappropriate userid : forcerenaming staff member's userid
+	 * Inappropriate userid : number of times the name has been forcerenamed
 	 */
-	forceRenames = new Map<ID, string>();
+	forceRenames = new Map<ID, number>();
 
 	registerMonitor(id: string, entry: Monitor) {
 		if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
