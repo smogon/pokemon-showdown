@@ -222,7 +222,7 @@ const commands = {
 	hangman: {
 		create: 'new',
 		new(target, room, user, connection) {
-			let text = Chat.filter(this, target, user, room, connection);
+			let text = this.filter(target);
 			if (target !== text) return this.errorReply("You are not allowed to use filtered words in hangmans.");
 			let params = text.split(',');
 

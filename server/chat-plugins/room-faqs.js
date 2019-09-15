@@ -40,7 +40,7 @@ const commands = {
 		if (!target) return this.parse('/help roomfaq');
 
 		target = target.trim();
-		let input = Chat.filter(this, target, user, room, connection);
+		let input = this.filter(target);
 		if (target !== input) return this.errorReply("You are not allowed to use fitered words in roomfaq entries.");
 		let [topic, ...rest] = input.split(',');
 
