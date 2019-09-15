@@ -2727,24 +2727,25 @@ const commands = {
 
 		let forceRenameMessage;
 		if (targetUser.connected) {
-			forceRenameMessage = `${targetUser.name} was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
+			forceRenameMessage = `was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
 			this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
 			this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
 			Chat.forceRenames.set(targetUser.userid, (Chat.forceRenames.get(targetUser.userid) || 0) + 1);
 			Ladders.cancelSearches(targetUser);
 			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
 		} else {
-			forceRenameMessage = `${targetUser.name} would be forced to choose a new name by ${user.name} but is offline${(reason ? `: ${reason}` : ``)}`;
+			forceRenameMessage = `would be forced to choose a new name by ${user.name} but is offline${(reason ? `: ${reason}` : ``)}`;
 			this.globalModlog('FORCERENAME OFFLINE', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
 			this.modlog('FORCERENAME OFFLINE', targetUser, reason, {noip: 1, noalts: 1});
 			if (!Chat.forceRenames.has(targetUser.userid)) Chat.forceRenames.set(targetUser.userid, 0);
 		}
-		targetUser.resetName(true);
-		this.privateModAction(`(${forceRenameMessage})`);
 
-		if (room.id !== 'staff' && Rooms.get('staff')) {
-			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${forceRenameMessage}`);
-		}
+		if (room.id !== 'staff') this.privateModAction(`(${targetUser.name} ${forceRenameMessage})`);
+		const roomMessage = room.id !== 'staff' ? `«<a href="/${room.id}" target="_blank">${room.id}</a>» ` : '';
+		const rankMessage = targetUser.getPseudorankString();
+		Rooms.global.notifyRooms(['staff'], `|html|${roomMessage}` + Chat.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`);
+
+		targetUser.resetName(true);
 		return true;
 	},
 	forcerenamehelp: [

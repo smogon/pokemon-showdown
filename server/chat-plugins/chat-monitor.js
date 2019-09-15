@@ -263,13 +263,13 @@ let loginfilter = function (user) {
 
 	const forceRenamed = Chat.forceRenames.get(user.userid);
 	if (user.trackRename) {
-		Monitor.log(`[NameMonitor] Username used: ${user.name} (${forceRenamed ? 'automatically ' : ''}forcerenamed from ${user.trackRename})`);
+		Rooms.global.notifyRooms([/** @type {ID} */('staff')], `|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getPseudorankString()} (${forceRenamed ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`);
 		user.trackRename = '';
 	}
 	if (Chat.namefilterwhitelist.has(user.userid)) return;
 	if (typeof forceRenamed === 'number') {
 		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
-		Monitor.log(`[NameMonitor] Forcerenamed name being reused${count}: ${user.name}`);
+		Rooms.global.notifyRooms([/** @type {ID} */('staff')], Chat.html`|html|[NameMonitor] Forcerenamed name being reused${count}: <span class="username">${user.name}</span> ${user.getPseudorankString()}`);
 	}
 };
 /** @type {NameFilter} */
