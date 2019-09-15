@@ -1061,6 +1061,9 @@ const commands = {
 			if (!room.isPrivate) {
 				return this.errorReply(`This room is already public.`);
 			}
+			if (room.parent && room.parent.isPrivate) {
+				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
+			}
 			if (room.isPersonal) return this.errorReply(`This room can't be made public.`);
 			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
 				if (!room.privacySetter.has(user.userid)) {
@@ -1083,7 +1086,12 @@ const commands = {
 			}
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
-			if (room.subRooms) return this.errorReply("Private rooms cannot have subrooms.");
+			if (room.subRooms) {
+				if (settingName === 'secret') return this.errorReply("Secret rooms cannot have subrooms.");
+				for (const subRoom of room.subRooms.values()) {
+					if (!subRoom.isPrivate) return this.errorReply(`Subroom ${subRoom.title} must be private to make this room private.`);
+				}
+			}
 			if (room.isPrivate === setting) {
 				if (room.privacySetter && !room.privacySetter.has(user.userid)) {
 					room.privacySetter.add(user.userid);
@@ -1164,7 +1172,10 @@ const commands = {
 		const main = Rooms.search(target);
 
 		if (!main) return this.errorReply(`The room '${target}' does not exist.`);
-		if (main.isPrivate || !main.chatRoomData) return this.errorReply(`Only public rooms can have subrooms.`);
+		if (main.parent) return this.errorReply(`Subrooms cannot have subrooms.`);
+		if (main.isPrivate === true) return this.errorReply(`Only public and hidden rooms cannot have subrooms.`);
+		if (main.isPrivate && !room.isPrivate) return this.errorReply(`Private rooms cannot have public subrooms.`);
+		if (!main.chatRoomData) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
 		if (room === main) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
 
 		room.parent = main;
