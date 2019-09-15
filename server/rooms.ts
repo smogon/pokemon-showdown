@@ -998,6 +998,25 @@ export class GlobalRoom extends BasicRoom {
 			if (staffRoom) staffRoom.add(crashMessage).update();
 		}
 	}
+	/**
+	 * Destroys personal rooms of a (punished) user
+	 * Returns a list of the user's remaining public auth
+	 */
+	destroyPersonalRooms(userid: ID) {
+		const roomauth = [];
+		for (const [id, curRoom] of Rooms.rooms) {
+			if (id === 'global' || !curRoom.auth) continue;
+			if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
+				curRoom.destroy();
+			} else {
+				if (curRoom.isPrivate || curRoom.battle || !curRoom.auth) continue;
+
+				const group = curRoom.auth[userid];
+				if (group) roomauth.push(`${group}${id}`);
+			}
+		}
+		return roomauth;
+	}
 }
 
 export class BasicChatRoom extends BasicRoom {

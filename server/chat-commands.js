@@ -2094,21 +2094,7 @@ const commands = {
 			message += `\n\nYour lock will expire in a few days.`;
 			targetUser.send(message);
 
-			let roomauth = [];
-			for (const [id, curRoom] of Rooms.rooms) {
-				if (id === 'global' || !curRoom.auth) continue;
-				// Destroy personal rooms of the locked user.
-				if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
-					curRoom.destroy();
-				} else {
-					if (curRoom.isPrivate || curRoom.battle) continue;
-
-					let group = curRoom.auth[userid];
-
-					if (group) roomauth.push(`${group}${id}`);
-				}
-			}
-
+			const roomauth = Rooms.global.destroyPersonalRooms(userid);
 			if (roomauth.length) Monitor.log(`[CrisisMonitor] Locked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		}
 
@@ -2243,14 +2229,8 @@ const commands = {
 			return this.errorReply(`Use /globalban; ${name} is not a trusted user.`);
 		}
 
-		// Destroy personal rooms of the banned user.
-		for (const roomid of targetUser.inRooms) {
-			if (roomid === 'global') continue;
-			let targetRoom = Rooms.get(roomid);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] === Users.HOST_SYMBOL) {
-				targetRoom.destroy();
-			}
-		}
+		const roomauth = Rooms.global.destroyPersonalRooms(userid);
+		if (roomauth.length) Monitor.log(`[CrisisMonitor] Globally banned user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 
 		let proof = '';
 		let userReason = target;
@@ -2779,10 +2759,16 @@ const commands = {
 			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
 		}
 
+		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.userid);
+		if (roomauth.length) Monitor.log(`[CrisisMonitor] Namelocked user ${targetUser.name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.userid}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
 		Punishments.namelock(targetUser, null, null, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
+		// Automatically upload replays as evidence/reference to the punishment
+		if (room.battle) this.parse('/savereplay forpunishment');
+
 		return true;
 	},
 	namelockhelp: [`/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. Requires: % @ & ~`],
