@@ -676,6 +676,10 @@ export const Punishments = new class {
 			Punishments.lock(user, expires, toID(user), `Autolock: ${name}: ${reason}`);
 		}
 		Monitor.log(`[${source}] ${punishment}: ${message}`);
+		const roomauth = Rooms.global.destroyPersonalRooms(userid);
+		// tslint:disable-next-line: max-line-length
+		if (roomauth.length) Monitor.log(`[CrisisMonitor] Autolocked ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
 		const roomid = typeof room !== 'string' ? (room as Room).id : room;
 		Rooms.global.modlog(`(${roomid}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
