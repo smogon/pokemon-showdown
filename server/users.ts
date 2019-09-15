@@ -1535,7 +1535,7 @@ export class User extends Chat.MessageContext {
 		this.userMessage = '';
 		this.updateIdentity();
 	}
-	getPseudorankString() {
+	getAccountStatusString() {
 		return this.trusted === this.userid ? `[trusted]`
 			: this.autoconfirmed === this.userid ? `[ac]`
 			: this.registered ? `[registered]`

@@ -2742,7 +2742,7 @@ const commands = {
 
 		if (room.id !== 'staff') this.privateModAction(`(${targetUser.name} ${forceRenameMessage})`);
 		const roomMessage = room.id !== 'staff' ? `«<a href="/${room.id}" target="_blank">${room.id}</a>» ` : '';
-		const rankMessage = targetUser.getPseudorankString();
+		const rankMessage = targetUser.getAccountStatusString();
 		Rooms.global.notifyRooms(['staff'], `|html|${roomMessage}` + Chat.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`);
 
 		targetUser.resetName(true);
