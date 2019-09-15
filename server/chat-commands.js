@@ -4160,7 +4160,7 @@ const commands = {
 			p2: battle.p2.name,
 			format: format.id,
 			rating: rating,
-			hidden: forPunishment ? '2' : room.isPrivate || room.hideReplay ? '1' : '',
+			hidden: forPunishment || room.unlistReplay ? '2' : room.isPrivate || room.hideReplay ? '1' : '',
 			inputlog: battle.inputLog ? battle.inputLog.join('\n') : null,
 		});
 		if (success) battle.replaySaved = true;
@@ -4178,6 +4178,7 @@ const commands = {
 		if (!room || !room.battle || !this.can('joinbattle', null, room)) return;
 		if (room.hideReplay) return this.errorReply(`The replay for this battle is already set to hidden.`);
 		room.hideReplay = true;
+		// If a replay has already been saved, /savereplay again to update the uploaded replay's hidden status
 		if (room.battle.replaySaved) this.parse('/savereplay');
 		this.addModAction(`${user.name} hid the replay of this battle.`);
 	},
