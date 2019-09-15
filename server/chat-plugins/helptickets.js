@@ -500,9 +500,9 @@ const pages = {
 			const isStaff = user.can('lock');
 			// room / user being reported
 			let meta = '';
-			if (!query.length) query = [''];
 			const targetTypeIndex = Math.max(query.indexOf('user'), query.indexOf('room'));
 			if (targetTypeIndex >= 0) meta = '-' + query.splice(targetTypeIndex).join('-');
+			if (!query.length) query = [''];
 			/** @type {{[k: string]: string}} */
 			const pages = {
 				report: `I want to report someone`,
