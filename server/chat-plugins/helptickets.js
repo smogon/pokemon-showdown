@@ -540,7 +540,7 @@ const pages = {
 				if (page && page in pages && !page.startsWith('confirm')) {
 					let prevPageLink = query.slice(0, i).join('-');
 					if (prevPageLink) prevPageLink = `-${prevPageLink}`;
-					buf += `<p><a href="/view-help-request${prevPageLink}" target="replace"><button class="button">Back</button></a> <button class="button disabled" disabled>${pages[page]}</button></p>`;
+					buf += `<p><a href="/view-help-request${prevPageLink}${meta}" target="replace"><button class="button">Back</button></a> <button class="button disabled" disabled>${pages[page]}</button></p>`;
 				}
 				switch (page) {
 				case '':
@@ -656,7 +656,7 @@ const pages = {
 				default:
 					if (!page.startsWith('confirm')) break;
 					buf += `<p><b>Are you sure you want to submit a${ticketTitles[page.slice(7)].charAt(0) === 'A' ? 'n' : ''} ${ticketTitles[page.slice(7)]} report?</b></p>`;
-					buf += `<p><button class="button notifying" name="send" value="/helpticket submit ${ticketTitles[page.slice(7)]} ${meta}">Yes, Contact global staff</button> <a href="/view-help-request-${query.slice(0, i).join('-')}" target="replace"><button class="button">No, cancel</button></a></p>`;
+					buf += `<p><button class="button notifying" name="send" value="/helpticket submit ${ticketTitles[page.slice(7)]} ${meta}">Yes, Contact global staff</button> <a href="/view-help-request-${query.slice(0, i).join('-')}${meta}" target="replace"><button class="button">No, cancel</button></a></p>`;
 					break;
 				}
 			}
