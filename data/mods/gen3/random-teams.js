@@ -159,7 +159,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 				case 'sunnyday':
 					if (!hasMove['solarbeam']) rejected = true;
 					break;
-				case 'solarbeam:
+				case 'solarbeam':
 					if (counter.Status >= 3) rejected = true;
 					break;
 
