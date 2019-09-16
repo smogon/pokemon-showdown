@@ -448,7 +448,7 @@ for (const room of Rooms.rooms.values()) {
 }
 
 /** @type {{[k: string]: string}} */
-const ticketTitles = {
+const ticketTitles = Object.assign(Object.create(null), {
 	pmharassment: `PM Harassment`,
 	battleharassment: `Battle Harassment`,
 	inapname: `Inappropriate Username/Status Message`,
@@ -458,7 +458,39 @@ const ticketTitles = {
 	appealsemi: `ISP-Appeal`,
 	roomhelp: `Public Room Assistance Request`,
 	other: `Other`,
-};
+});
+/** @type {{[k: string]: string}} */
+const ticketPages = Object.assign(Object.create(null), {
+	report: `I want to report someone`,
+	harassment: `Someone is harassing me`,
+	inap: `Someone is using an offensive username, status message, or pokemon nickname`,
+	staff: `I want to report a staff member`,
+
+	appeal: `I want to appeal a punishment`,
+	permalock: `I want to appeal my permalock`,
+	lock: `I want to appeal my lock`,
+	ip: `I'm locked because I have the same IP as someone I don't recognize`,
+	semilock: `I can't talk in chat because of my ISP`,
+	hostfilter: `I'm locked because of #hostfilter`,
+	hasautoconfirmed: `Yes, I have an autoconfirmed account`,
+	lacksautoconfirmed: `No, I don't have an autoconfirmed account`,
+	appealother: `I want to appeal a mute/roomban/blacklist`,
+
+	misc: `Something else`,
+	password: `I lost my password`,
+	roomhelp: `I need global staff to help watch a public room`,
+	other: `Other`,
+
+	confirmpmharassment: `Report harassment in a private message (PM)`,
+	confirmbattleharassment: `Report harassment in a battle`,
+	confirminapname: `Report an inappropriate username or status message`,
+	confirminappokemon: `Report inappropriate Pok&eacute;mon nicknames`,
+	confirmappeal: `Appeal your lock`,
+	confirmipappeal: `Appeal IP lock`,
+	confirmappealsemi: `Appeal ISP lock`,
+	confirmroomhelp: `Call a Global Staff member to help`,
+	confirmother: `Call a Global Staff member`,
+});
 
 /** @type {PageTable} */
 const pages = {
@@ -503,44 +535,13 @@ const pages = {
 			const targetTypeIndex = Math.max(query.indexOf('user'), query.indexOf('room'));
 			if (targetTypeIndex >= 0) meta = '-' + query.splice(targetTypeIndex).join('-');
 			if (!query.length) query = [''];
-			/** @type {{[k: string]: string}} */
-			const pages = {
-				report: `I want to report someone`,
-				harassment: `Someone is harassing me`,
-				inap: `Someone is using an offensive username, status message, or pokemon nickname`,
-				staff: `I want to report a staff member`,
-
-				appeal: `I want to appeal a punishment`,
-				permalock: `I want to appeal my permalock`,
-				lock: `I want to appeal my lock`,
-				ip: `I'm locked because I have the same IP as someone I don't recognize`,
-				semilock: `I can't talk in chat because of my ISP`,
-				hostfilter: `I'm locked because of #hostfilter`,
-				hasautoconfirmed: `Yes, I have an autoconfirmed account`,
-				lacksautoconfirmed: `No, I don't have an autoconfirmed account`,
-				appealother: `I want to appeal a mute/roomban/blacklist`,
-
-				misc: `Something else`,
-				password: `I lost my password`,
-				roomhelp: `I need global staff to help watch a public room`,
-				other: `Other`,
-
-				confirmpmharassment: `Report harassment in a private message (PM)`,
-				confirmbattleharassment: `Report harassment in a battle`,
-				confirminapname: `Report an inappropriate username or status message`,
-				confirminappokemon: `Report inappropriate Pok&eacute;mon nicknames`,
-				confirmappeal: `Appeal your lock`,
-				confirmipappeal: `Appeal IP lock`,
-				confirmappealsemi: `Appeal ISP lock`,
-				confirmroomhelp: `Call a Global Staff member to help`,
-				confirmother: `Call a Global Staff member`,
-			};
 			for (const [i, page] of query.entries()) {
 				const isLast = (i === query.length - 1);
-				if (page && page in pages && !page.startsWith('confirm')) {
+				const isFirst = i === 1;
+				if (page && page in ticketPages && !page.startsWith('confirm')) {
 					let prevPageLink = query.slice(0, i).join('-');
 					if (prevPageLink) prevPageLink = `-${prevPageLink}`;
-					buf += `<p><a href="/view-help-request${prevPageLink}${meta}" target="replace"><button class="button">Back</button></a> <button class="button disabled" disabled>${pages[page]}</button></p>`;
+					buf += `<p><a href="/view-help-request${prevPageLink}${!isFirst ? meta : ''}" target="replace"><button class="button">Back</button></a> <button class="button disabled" disabled>${ticketPages[page]}</button></p>`;
 				}
 				switch (page) {
 				case '':
@@ -654,7 +655,11 @@ const pages = {
 					buf += `<p><Button>confirmother</Button></p>`;
 					break;
 				default:
-					if (!page.startsWith('confirm')) break;
+					if (!page.startsWith('confirm') || !ticketTitles[page.slice(7)]) {
+						buf += `<p>Malformed help request.</p>`;
+						buf += `<a href="/view-help-request" target="replace"><button class="button">Back</button></a>`;
+						break;
+					}
 					buf += `<p><b>Are you sure you want to submit a${ticketTitles[page.slice(7)].charAt(0) === 'A' ? 'n' : ''} ${ticketTitles[page.slice(7)]} report?</b></p>`;
 					buf += `<p><button class="button notifying" name="send" value="/helpticket submit ${ticketTitles[page.slice(7)]} ${meta}">Yes, Contact global staff</button> <a href="/view-help-request-${query.slice(0, i).join('-')}${meta}" target="replace"><button class="button">No, cancel</button></a></p>`;
 					break;
@@ -663,7 +668,7 @@ const pages = {
 			buf += '</div>';
 			const curPageLink = query.length ? '-' + query.join('-') : '';
 			buf = buf.replace(/<Button>([a-z]+)<\/Button>/g, (match, id) =>
-				`<a class="button" href="/view-help-request${curPageLink}-${id}${meta}" target="replace">${pages[id]}</a>`
+				`<a class="button" href="/view-help-request${curPageLink}-${id}${meta}" target="replace">${ticketPages[id]}</a>`
 			);
 			return buf;
 		},
