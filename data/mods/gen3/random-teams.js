@@ -159,9 +159,6 @@ class RandomGen3Teams extends RandomGen4Teams {
 				case 'sunnyday':
 					if (!hasMove['solarbeam']) rejected = true;
 					break;
-				case 'solarbeam':
-					if (counter.Status >= 3) rejected = true;
-					break;
 
 				// Set up once and only if we have the moves for it
 				case 'bellydrum': case 'bulkup': case 'curse': case 'dragondance': case 'swordsdance':
@@ -255,7 +252,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 					if (hasMove['solarbeam'] && hasMove['sunnyday']) rejected = true;
 					break;
 				case 'solarbeam':
-					if (counter.setupType === 'Physical' || !hasMove['sunnyday']) rejected = true;
+					if (counter.setupType === 'Physical' || !hasMove['sunnyday'] || counter.Status === 3) rejected = true;
 					break;
 				case 'brickbreak': case 'crosschop': case 'hiddenpowerfighting': case 'highjumpkick': case 'skyuppercut':
 					if (hasMove['reversal'] || hasMove['endure'] && movePool.includes('reversal') || hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
