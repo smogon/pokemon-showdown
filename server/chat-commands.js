@@ -623,7 +623,7 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+		if (targetUser.blockPMs && (targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
 		}
@@ -652,7 +652,7 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+		if (targetUser.blockPMs && (targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
 		}
@@ -673,15 +673,21 @@ const commands = {
 	ignorepms: 'blockpms',
 	ignorepm: 'blockpms',
 	blockpms(target, room, user) {
+		if (toID(target) === 'ac') target = 'autoconfirmed';
 		if (user.blockPMs === (target || true)) return this.errorReply("You are already blocking private messages! To unblock, use /unblockpms");
-		user.blockPMs = true;
+
 		if (target in Config.groups) {
 			user.blockPMs = target;
-			user.update('blockPMs');
-			return this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
+			this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
+		} else if (target === 'autoconfirmed' || target === 'trusted') {
+			user.blockPMs = target;
+			this.sendReply(`You are now blocking private messages, except from staff and ${target} users.`);
+		} else {
+			user.blockPMs = true;
+			this.sendReply("You are now blocking private messages, except from staff.");
 		}
 		user.update('blockPMs');
-		return this.sendReply("You are now blocking private messages, except from staff.");
+		return true;
 	},
 	blockpmshelp: [`/blockpms - Blocks private messages. Unblock them with /unblockpms.`],
 
