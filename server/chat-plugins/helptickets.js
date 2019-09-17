@@ -764,7 +764,7 @@ const pages = {
 			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			this.title = 'Ticket List';
 			if (!this.can('lock')) return;
-			let buf = `<div class="pad ladder"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> Refresh</button><br /><br />`;
+			let buf = `<div class="pad ladder"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> Refresh</button> <button class="button" name="send" value="/helpticket stats" style="float: right"><i class="fa fa-th-list"></i> Help Ticket Stats</button><br /><br />`;
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">Help tickets</h1></th></tr>`;
 			buf += `<tr><th>Status</th><th>Creator</th><th>Ticket Type</th><th>Claimed by</th><th>Action</th></tr>`;
 
@@ -1117,18 +1117,18 @@ let commands = {
 			case 'Appeal':
 			case 'IP-Appeal':
 			case 'ISP-Appeal':
-				closeButtons = `<button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket as Appeal Granted</button> <button class="button" name="send" value="/helpticket close ${user.userid}, false">Close Ticket as Appeal Denied</button>`;
+				closeButtons = `<button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.userid}">Close Ticket as Appeal Granted</button> <button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.userid}, false">Close Ticket as Appeal Denied</button>`;
 				break;
 			case 'PM Harassment':
 			case 'Battle Harassment':
 			case 'Inappropriate Pokemon Nicknames':
 			case 'Inappropriate Username / Status Message':
-				closeButtons = `<button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket as Valid Report</button> <button class="button" name="send" value="/helpticket close ${user.userid}, false">Close Ticket as Invalid Report</button>`;
+				closeButtons = `<button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.userid}">Close Ticket as Valid Report</button> <button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.userid}, false">Close Ticket as Invalid Report</button>`;
 				break;
 			case 'Public Room Assistance Request':
 			case 'Other':
 			default:
-				closeButtons = `<button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket as Assisted</button> <button class="button" name="send" value="/helpticket close ${user.userid}, false">Close Ticket as Unable to Assist</button>`;
+				closeButtons = `<button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.userid}">Close Ticket as Assisted</button> <button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.userid}, false">Close Ticket as Unable to Assist</button>`;
 			}
 			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
 			const staffMessage = `<p>${closeButtons} <details><summary class="button">More Options</summary><button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button> <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></details></p>`;
