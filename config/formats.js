@@ -946,6 +946,9 @@ let Formats = [
 				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
 			}
 		},
+		onBegin() {
+			if (this.rated && this.format === 'gen7almostanyability') this.add('html', `<div class="broadcast-red"><strong>AAA is currently suspecting Victini! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3654462/">suspect thread</a>.</strong></div>`);
+		},
 	},
 	{
 		name: "[Gen 7] Camomons",
