@@ -964,10 +964,10 @@ let Formats = [
 			return Object.assign({}, template, {types: types});
 		},
 		onSwitchIn(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
 		},
 		onAfterMega(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
 		},
 	},
 	{
