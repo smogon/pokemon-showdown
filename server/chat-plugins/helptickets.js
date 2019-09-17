@@ -1189,7 +1189,7 @@ let commands = {
 			if (!this.can('lock')) return;
 			target = toID(this.splitTarget(target, true));
 			if (!this.targetUsername) return this.parse(`/help helpticket escalate`);
-			let ticket = tickets[toID(this.targetUsername)];
+			let ticket = tickets[toID(this.inputUsername)];
 			if (!ticket || !ticket.open) return this.errorReply(`${this.targetUsername} does not have an open ticket.`);
 			if (ticket.escalated && !user.can('declare')) return this.errorReply(`/helpticket escalate - Access denied for escalating upper staff tickets.`);
 			if (target === 'upperstaff' && ticket.escalated) return this.errorReply(`${ticket.creator}'s ticket is already escalated.`);
@@ -1219,7 +1219,7 @@ let commands = {
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');
-			let ticket = tickets[toID(this.targetUsername)];
+			let ticket = tickets[toID(this.inputUsername)];
 			if (!ticket || !ticket.open || (ticket.userid !== user.userid && !user.can('lock'))) return this.errorReply(`${target} does not have an open ticket.`);
 			if (ticket.escalated && ticket.userid !== user.userid && !user.can('declare')) return this.errorReply(`/helpticket close - Access denied for closing upper staff tickets.`);
 			const helpRoom = /** @type {ChatRoom?} */ (Rooms.get(`help-${ticket.userid}`));
@@ -1245,8 +1245,8 @@ let commands = {
 			let targetUser = this.targetUser;
 			if (!this.can('lock', targetUser)) return;
 
-			let ticket = tickets[toID(this.targetUsername)];
-			let ticketBan = ticketBans[toID(this.targetUsername)];
+			let ticket = tickets[toID(this.inputUsername)];
+			let ticketBan = ticketBans[toID(this.inputUsername)];
 			if (!targetUser && !Punishments.search(toID(this.targetUsername)).length && !ticket && !ticketBan) {
 				return this.errorReply(`User '${this.targetUsername}' not found.`);
 			}
