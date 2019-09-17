@@ -23,13 +23,8 @@ const fs = require('fs');
 const path = require('path');
 const sqlite = require('sqlite');
 
-if (!fs.existsSync(path.resolve(__dirname, './sqlite.db'))) {
-	console.log('No SQLite database found. Creating one...');
-	fs.writeFileSync(path.resolve(__dirname, './sqlite.db'), '');
-}
-
 if (fs.readdirSync(path.resolve(__dirname, './migrations/')).length) {
 	sqlite.open(path.resolve(__dirname, './sqlite.db')).then(function (database) {
-		database.migrate({migrationsPath: path.resolve(__dirname, './migrations')});
+		database.migrate({migrationsPath: path.resolve(__dirname, './migrations/')});
 	});
 }
