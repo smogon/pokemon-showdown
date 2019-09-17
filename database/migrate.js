@@ -24,7 +24,7 @@ const path = require('path');
 const sqlite = require('sqlite');
 
 if (fs.readdirSync(path.resolve(__dirname, './migrations/')).length) {
-	sqlite.open(path.resolve(__dirname, './sqlite.db')).then(function (database) {
+	sqlite.open(path.resolve(__dirname, './sqlite.db')).then(database => {
 		database.migrate({migrationsPath: path.resolve(__dirname, './migrations/')});
 	});
 }
