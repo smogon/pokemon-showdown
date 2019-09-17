@@ -404,8 +404,15 @@ export class ModdedDex {
 			}
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.doublesTier) template.doublesTier = template.tier;
+			if (template.gen > this.gen) {
+				template.tier = 'Illegal';
+				template.doublesTier = 'Illegal';
+				template.isNonstandard = 'Future';
+			}
 		} else {
-			template = new Data.Template({id, name, exists: false});
+			template = new Data.Template({
+				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
+			});
 		}
 		if (template.exists) this.templateCache.set(id, template);
 		return template;
@@ -436,6 +443,9 @@ export class ModdedDex {
 		}
 		if (id && this.data.Movedex.hasOwnProperty(id)) {
 			move = new Data.Move({name}, this.data.Movedex[id]);
+			if (move.gen > this.gen) {
+				(move as any).isNonstandard = 'Future';
+			}
 		} else {
 			move = new Data.Move({id, name, exists: false});
 		}
@@ -595,6 +605,9 @@ export class ModdedDex {
 		}
 		if (id && this.data.Items.hasOwnProperty(id)) {
 			item = new Data.Item({name}, this.data.Items[id]);
+			if (item.gen > this.gen) {
+				(item as any).isNonstandard = 'Future';
+			}
 		} else {
 			item = new Data.Item({id, name, exists: false});
 		}
@@ -618,6 +631,9 @@ export class ModdedDex {
 		}
 		if (id && this.data.Abilities.hasOwnProperty(id)) {
 			ability = new Data.Ability({name}, this.data.Abilities[id]);
+			if (ability.gen > this.gen) {
+				(ability as any).isNonstandard = 'Future';
+			}
 		} else {
 			ability = new Data.Ability({id, name, exists: false});
 		}
@@ -742,7 +758,7 @@ export class ModdedDex {
 		}
 	}
 
-	getRuleTable(format: Format, depth: number = 0): RuleTable {
+	getRuleTable(format: Format, depth: number = 0): Data.RuleTable {
 		if (format.ruleTable) return format.ruleTable;
 		const ruleTable = new Data.RuleTable();
 
@@ -764,6 +780,9 @@ export class ModdedDex {
 		}
 		if (format.checkLearnset) {
 			ruleTable.checkLearnset = [format.checkLearnset, format.name];
+		}
+		if (format.timer) {
+			ruleTable.timer = [format.timer, format.name];
 		}
 
 		for (const rule of ruleset) {
@@ -813,6 +832,14 @@ export class ModdedDex {
 						`"${ruleTable.checkLearnset[1]}" and "${subRuleTable.checkLearnset[1]}"`);
 				}
 				ruleTable.checkLearnset = subRuleTable.checkLearnset;
+			}
+			if (subRuleTable.timer) {
+				if (ruleTable.timer) {
+					throw new Error(
+						`"${format.name}" has conflicting timer validation rules from ` +
+						`"${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`);
+				}
+				ruleTable.timer = subRuleTable.timer;
 			}
 		}
 
@@ -1070,29 +1097,14 @@ export class ModdedDex {
 			buf += (set.name || set.species);
 
 			// species
-			let id = toID(set.species || set.name);
+			const id = toID(set.species || set.name);
 			buf += '|' + (toID(set.name || set.species) === id ? '' : id);
 
 			// item
 			buf += '|' + toID(set.item);
 
 			// ability
-			const template = dexes['base'].getTemplate(set.species || set.name);
-			const abilities = template.abilities;
-			id = toID(set.ability);
-			if (abilities) {
-				if (id === toID(abilities['0'])) {
-					buf += '|';
-				} else if (id === toID(abilities['1'])) {
-					buf += '|1';
-				} else if (id === toID(abilities['H'])) {
-					buf += '|H';
-				} else {
-					buf += '|' + id;
-				}
-			} else {
-				buf += '|' + id;
-			}
+			buf += '|' + toID(set.ability);
 
 			// moves
 			buf += '|' + set.moves.map(toID).join(',');
@@ -1112,7 +1124,7 @@ export class ModdedDex {
 			}
 
 			// gender
-			if (set.gender && set.gender !== template.gender) {
+			if (set.gender) {
 				buf += '|' + set.gender;
 			} else {
 				buf += '|';

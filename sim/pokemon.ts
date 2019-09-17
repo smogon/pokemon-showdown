@@ -113,10 +113,10 @@ export class Pokemon {
 
 	/**
 	 * If the switch is called by an effect with a special switch
-	 * message, like U-turn or Baton Pass, this will be the fullname of
+	 * message, like U-turn or Baton Pass, this will be the ID of
 	 * the calling effect.
 	 */
-	switchFlag: boolean | string;
+	switchFlag: ID | boolean;
 	forceSwitchFlag: boolean;
 	switchCopyFlag: boolean;
 	draggedIn: number | null;
@@ -926,7 +926,7 @@ export class Pokemon {
 		} else {
 			this.battle.add('-transform', this, pokemon);
 		}
-		this.setAbility(pokemon.ability, this, true);
+		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true);
 
 		// Change formes based on held items (for Transform)
 		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
@@ -1200,7 +1200,7 @@ export class Pokemon {
 		return d;
 	}
 
-	trySetStatus(status: string | Effect, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
+	trySetStatus(status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
 		return this.setStatus(this.status || status, source, sourceEffect);
 	}
 
@@ -1216,13 +1216,13 @@ export class Pokemon {
 	}
 
 	setStatus(
-		status: string | Effect,
+		status: string | PureEffect,
 		source: Pokemon | null = null,
 		sourceEffect: Effect | null = null,
 		ignoreImmunities: boolean = false
 	) {
 		if (!this.hp) return false;
-		status = this.battle.getEffect(status) as Effect;
+		status = this.battle.getEffect(status);
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
 			if (!sourceEffect) sourceEffect = this.battle.effect;

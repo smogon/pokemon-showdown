@@ -15,7 +15,7 @@ describe('Endless Battle Clause (slow)', () => {
 		const [victim, memeSlowbro] = [battle.p1.active[0], battle.p2.active[0]];
 		for (let i = 0; i < 100; i++) {
 			if (battle.ended) {
-				assert(battle.winner, 'p1');
+				assert(battle.winner === 'Player 1');
 				return;
 			}
 			let move;
@@ -41,9 +41,12 @@ describe('Endless Battle Clause (slow)', () => {
 		assert.false(battle.ended);
 	});
 
-	it('should only cause the battle to end if neither side can switch to a non-stale Pokemon and at least one staleness is externally inflicted', () => {
+	it('should only cause the battle to end if either side cannot switch to a non-stale Pokemon and at least one staleness is externally inflicted', () => {
 		battle = common.createBattle({endlessBattleClause: true});
-		battle.setPlayer('p1', {team: [{species: "Blissey", level: 1, item: 'leppaberry', moves: ['recycle', 'extremespeed', 'floralhealing', 'block']}]});
+		battle.setPlayer('p1', {team: [
+			{species: "Blissey", level: 1, item: 'leppaberry', moves: ['recycle', 'extremespeed', 'floralhealing', 'block']},
+			{species: "Magikarp", moves: ['splash']},
+		]});
 		battle.setPlayer('p2', {team: [
 			{species: "Magikarp", moves: ['splash']},
 			{species: "Sunkern", item: 'leppaberry', moves: ['synthesis']},
@@ -67,6 +70,6 @@ describe('Endless Battle Clause (slow)', () => {
 		battle.makeChoices('move block', 'move splash');
 		// Now that Magikarp is trapped, the termination condition should occur.
 		assert(battle.ended);
-		assert(battle.winner, 'p2');
+		assert(battle.winner === 'Player 2');
 	});
 });

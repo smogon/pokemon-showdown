@@ -1,11 +1,6 @@
-type PageTable = import('./chat').PageTable
-type ChatCommands = import('./chat').ChatCommands
-type ChatFilter = import('./chat').ChatFilter
-type NameFilter = import('./chat').NameFilter
-
 declare let Config: {[k: string]: any};
 
-declare let Monitor: typeof import('./monitor');
+declare let Monitor: typeof import('./monitor').Monitor;
 
 declare let LoginServer: typeof import('./loginserver').LoginServer;
 

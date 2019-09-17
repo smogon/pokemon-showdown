@@ -252,7 +252,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 					if (hasMove['solarbeam'] && hasMove['sunnyday']) rejected = true;
 					break;
 				case 'solarbeam':
-					if (counter.setupType === 'Physical' || !hasMove['sunnyday']) rejected = true;
+					if (counter.setupType === 'Physical' || !hasMove['sunnyday'] || counter.Status === 3) rejected = true;
 					break;
 				case 'brickbreak': case 'crosschop': case 'hiddenpowerfighting': case 'highjumpkick': case 'skyuppercut':
 					if (hasMove['reversal'] || hasMove['endure'] && movePool.includes('reversal') || hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
@@ -297,6 +297,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				case 'thunderwave': case 'stunspore':
 					if (!!counter['speedsetup'] || hasMove['dragondance'] || hasMove['toxic'] || hasMove['willowisp'] || movePool.includes('sleeppowder') || hasMove['bodyslam'] && hasAbility['Serene Grace']) rejected = true;
+					break;
+				case 'encore':
+					if (hasMove['sleeppowder'] || hasMove ['spore'] || hasMove ['lovelykiss']) rejected = true;
 					break;
 				}
 
@@ -610,7 +613,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (template.gen > 3 || template.isNonstandard || !template.randomBattleMoves) continue;
+			if (template.isNonstandard || !template.randomBattleMoves) continue;
 			if (template.evos && !allowedNFE.includes(template.species)) {
 				let invalid = false;
 				for (const evo of template.evos) {

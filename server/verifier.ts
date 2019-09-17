@@ -32,8 +32,7 @@ export function verify(data: string, signature: string): Promise<boolean> {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
-	global.Config = require('../config/config'); // tslint:disable-line: no-var-requires
+	global.Config = require('./config-loader').Config; // tslint:disable-line: no-var-requires
 
 	const Repl = require('../lib/repl').Repl; // tslint:disable-line: no-var-requires
 	// tslint:disable-next-line: no-eval

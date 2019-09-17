@@ -293,7 +293,7 @@ class Trivia extends Rooms.RoomGame {
 	 */
 	constructor(room, mode, category, length, questions) {
 		super(room);
-		this.gameid = 'trivia';
+		this.gameid = /** @type {ID} */ ('trivia');
 		this.title = 'Trivia';
 		this.allowRenames = true;
 		this.playerCap = Number.MAX_SAFE_INTEGER;
@@ -437,12 +437,12 @@ class Trivia extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} user
-	 * @return {boolean}
+	 * @param {ID} oldUserid
 	 */
-	onLeave(user) {
+	onLeave(user, oldUserid) {
 		// The user cannot participate, but their score should be kept
 		// regardless in cases of disconnects.
-		let player = this.playerTable[user.userid];
+		const player = this.playerTable[oldUserid || user.userid];
 		if (!player || player.isAbsent) return false;
 
 		player.toggleAbsence();

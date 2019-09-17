@@ -104,7 +104,7 @@ let BattleFormatsData = {
 		tier: "NU",
 	},
 	raichu: {
-		randomBattleMoves: ["hiddenpowerice", "thunderbolt", "focuspunch", "substitute", "encore", "surf"],
+		randomBattleMoves: ["hiddenpowerice", "thunderbolt", "focuspunch", "substitute", "encore", "surf", "volttackle"],
 		tier: "UU",
 	},
 	sandshrew: {
@@ -654,7 +654,7 @@ let BattleFormatsData = {
 	moltres: {
 		inherit: true,
 		randomBattleMoves: ["fireblast", "flamethrower", "hiddenpowergrass", "doubleedge", "morningsun", "toxic", "agility", "willowisp", "substitute"],
-		tier: "UUBL",
+		tier: "OU",
 	},
 	dratini: {
 		tier: "LC",
@@ -831,7 +831,7 @@ let BattleFormatsData = {
 	},
 	misdreavus: {
 		inherit: true,
-		randomBattleMoves: ["calmmind", "thunderbolt", "hiddenpowerice", "psychic", "meanlook", "perishsong", "substitute", "protect", "taunt", "thunderwave"],
+		randomBattleMoves: ["calmmind", "thunderbolt", "hiddenpowerice", "meanlook", "perishsong", "substitute", "protect"],
 		tier: "UU",
 	},
 	unown: {
@@ -977,7 +977,7 @@ let BattleFormatsData = {
 	raikou: {
 		inherit: true,
 		randomBattleMoves: ["thunderbolt", "hiddenpowerice", "calmmind", "hiddenpowergrass", "crunch", "substitute", "roar", "rest", "sleeptalk"],
-		tier: "OU",
+		tier: "UUBL",
 	},
 	entei: {
 		inherit: true,
@@ -1137,7 +1137,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	masquerain: {
-		randomBattleMoves: ["doubleedge", "hydropump", "icebeam", "gigadrain", "stunspore", "toxic", "substitute"],
+		randomBattleMoves: ["doubleedge", "hydropump", "icebeam", "stunspore", "toxic", "substitute"],
 		tier: "NU",
 	},
 	shroomish: {
@@ -1384,7 +1384,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	claydol: {
-		randomBattleMoves: ["earthquake", "icebeam", "psychic", "explosion", "rapidspin", "toxic", "lightscreen"],
+		randomBattleMoves: ["earthquake", "icebeam", "psychic", "explosion", "rapidspin", "toxic"],
 		tier: "OU",
 	},
 	lileep: {
@@ -1458,7 +1458,7 @@ let BattleFormatsData = {
 	},
 	absol: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "shadowball", "hiddenpowerfighting", "aerialace", "substitute", "batonpass"],
+		randomBattleMoves: ["swordsdance", "shadowball", "hiddenpowerfighting", "aerialace", "batonpass"],
 		tier: "UU",
 	},
 	snorunt: {
@@ -1569,17 +1569,17 @@ let BattleFormatsData = {
 	},
 	deoxys: {
 		inherit: true,
-		randomBattleMoves: ["superpower", "shadowball", "psychoboost", "extremespeed", "firepunch", "thunderbolt", "icebeam"],
+		randomBattleMoves: ["superpower", "shadowball", "psychoboost", "extremespeed", "firepunch", "thunderbolt", "icebeam", "spikes"],
 		tier: "Uber",
 	},
 	deoxysattack: {
 		inherit: true,
-		randomBattleMoves: ["superpower", "shadowball", "psychoboost", "extremespeed", "firepunch", "thunderbolt", "icebeam"],
+		randomBattleMoves: ["superpower", "shadowball", "extremespeed", "firepunch"],
 		tier: "Uber",
 	},
 	deoxysdefense: {
 		inherit: true,
-		randomBattleMoves: ["recover", "spikes", "taunt", "toxic", "nightshade", "counter", "mirrorcoat", "lightscreen", "knockoff"],
+		randomBattleMoves: ["recover", "spikes", "taunt", "toxic", "nightshade", "magiccoat", "knockoff"],
 		tier: "Uber",
 	},
 	deoxysspeed: {

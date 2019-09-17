@@ -66,16 +66,19 @@ const FS = require('../.lib-dist/fs').FS;
  * Load configuration
  *********************************************************/
 
-global.Config = require('../config/config');
+const ConfigLoader = require('../.server-dist/config-loader');
+global.Config = ConfigLoader.Config;
 
-global.Monitor = require('./monitor');
+global.Monitor = require('../.server-dist/monitor').Monitor;
+global.__version = {head: ''};
+Monitor.version().then(function (hash) {
+	global.__version.tree = hash;
+});
 
 if (Config.watchconfig) {
-	let configPath = require.resolve('../config/config');
-	FS(configPath).onModify(() => {
+	FS(require.resolve('../config/config')).onModify(() => {
 		try {
-			delete require.cache[configPath];
-			global.Config = require('../config/config');
+			global.Config = ConfigLoader.load(true);
 			if (global.Users) Users.cacheGroupData();
 			Monitor.notice('Reloaded ../config/config.js');
 		} catch (e) {
@@ -93,20 +96,20 @@ global.toID = Dex.getId;
 
 global.LoginServer = require('../.server-dist/loginserver').LoginServer;
 
-global.Ladders = require('./ladders');
+global.Ladders = require('../.server-dist/ladders').Ladders;
 
-global.Chat = require('./chat');
+global.Chat = require('../.server-dist/chat').Chat;
 
-global.Users = require('./users');
+global.Users = require('../.server-dist/users').Users;
 
-global.Punishments = require('./punishments');
+global.Punishments = require('../.server-dist/punishments').Punishments;
 
-global.Rooms = require('./rooms');
+global.Rooms = require('../.server-dist/rooms').Rooms;
 
 global.Verifier = require('../.server-dist/verifier');
 Verifier.PM.spawn();
 
-global.Tournaments = require('./tournaments');
+global.Tournaments = require('../.server-dist/tournaments').Tournaments;
 
 global.IPTools = require('../.server-dist/ip-tools').IPTools;
 IPTools.loadDatacenters();

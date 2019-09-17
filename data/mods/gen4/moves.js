@@ -820,7 +820,7 @@ let BattleMovedex = {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-					target.side.removeSideCondition('healingwish');
+					target.side.removeSlotCondition(target, 'healingwish');
 					target.lastMove = this.lastMove;
 				} else {
 					target.switchFlag = true;
@@ -961,7 +961,7 @@ let BattleMovedex = {
 						moveSlot.pp = moveSlot.maxpp;
 					}
 					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
-					target.side.removeSideCondition('lunardance');
+					target.side.removeSlotCondition(target, 'lunardance');
 					target.lastMove = this.lastMove;
 				} else {
 					target.switchFlag = true;

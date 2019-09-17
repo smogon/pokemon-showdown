@@ -4,7 +4,7 @@
  *
  * This file handles communicating with the login server.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';

@@ -189,7 +189,12 @@ export class Battle extends Dex.ModdedDex {
 		};
 		if (this.rated) inputOptions.rated = this.rated;
 		if (global.__version) {
-			this.inputLog.push(`>version ${global.__version}`);
+			if (global.__version.head) {
+				this.inputLog.push(`>version ${global.__version.head}`);
+			}
+			if (global.__version.origin) {
+				this.inputLog.push(`>version-origin ${global.__version.origin}`);
+			}
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
@@ -1455,21 +1460,28 @@ export class Battle extends Dex.ModdedDex {
 				return true;
 			}
 			const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
-			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} turns (on turn 1000).`);
+			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).`);
+			if (Config.allowrequestingties) this.hint("If you want to tie earlier, consider using `/offertie`.");
 		}
 
 		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
 		if (!stalenessBySide.every(s => !!s) || !stalenessBySide.some(s => s === 'external')) return;
 
-		// Can any of the sides switch to a non-stale Pokemon?
+		// Can both sides switch to a non-stale Pokemon?
+		const canSwitch = [];
 		for (const [i, trapped] of trappedBySide.entries()) {
-			if (trapped) break; // If all of a side's Pokemon are trapped we know they can't switch.
+			canSwitch[i] = false;
+			if (trapped) break;
 			const side = this.sides[i];
+
 			for (const pokemon of side.pokemon) {
-				// Found a Pokemon that one side can switch to, no need to end the game.
-				if (!pokemon.fainted && !pokemon.staleness) return;
+				if (!pokemon.fainted && !pokemon.staleness) {
+					canSwitch[i] = true;
+					break;
+				}
 			}
 		}
+		if (canSwitch.every(s => s)) return;
 
 		// Endless Battle Clause activates - we determine the winner by looking at each side's sets.
 		const losers: Side[] = [];
@@ -1627,7 +1639,7 @@ export class Battle extends Dex.ModdedDex {
 	) {
 		if (!targetArray) return [0];
 		let retVals: (number | false | undefined)[] = [];
-		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
+		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
 		for (const [i, curDamage] of damage.entries()) {
 			const target = targetArray[i];
 			let targetDamage = curDamage;
@@ -1693,7 +1705,7 @@ export class Battle extends Dex.ModdedDex {
 				break;
 			}
 
-			if (targetDamage) {
+			if (targetDamage && effect.effectType === 'Move') {
 				if (this.gen <= 1 && effect.recoil && source) {
 					const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
 					this.damage(amount, source, target, 'recoil');
@@ -1751,7 +1763,7 @@ export class Battle extends Dex.ModdedDex {
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 
-		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
+		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
 		if (this.gen <= 1 && this.currentMod !== 'stadium' &&
@@ -2342,7 +2354,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			} else if (action.choice === 'switch' || action.choice === 'instaswitch') {
 				if (typeof action.pokemon.switchFlag === 'string') {
-					action.sourceEffect = this.getEffect(action.pokemon.switchFlag);
+					action.sourceEffect = this.getMove(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
 				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
@@ -2999,7 +3011,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
-		this.add('player', side.id, side.name, side.avatar);
+		this.add('player', side.id, side.name, side.avatar, options.rating || '');
 		this.start();
 	}
 

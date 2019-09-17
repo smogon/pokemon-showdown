@@ -3507,9 +3507,14 @@ let BattleFormatsData = {
 	},
 	meloetta: {
 		inherit: true,
-		randomBattleMoves: ["relicsong", "closecombat", "calmmind", "psychic", "thunderbolt", "hypervoice", "uturn"],
+		randomBattleMoves: ["calmmind", "psychic", "psyshock", "focusblast", "shadowball", "hypervoice"],
 		tier: "UU",
 		doublesTier: "DUU",
+	},
+	meloettapirouette: {
+		randomBattleMoves: ["relicsong", "closecombat", "psychic", "thunderbolt"],
+		requiredMove: "Relic Song",
+		battleOnly: true,
 	},
 	genesect: {
 		inherit: true,

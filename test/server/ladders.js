@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-global.Ladders = require('../../server/ladders');
+global.Ladders = require('../../.server-dist/ladders').Ladders;
 const {Connection, User} = require('../users-utils');
 
 describe('Matchmaker', function () {
@@ -90,7 +90,7 @@ describe('Matchmaker', function () {
 		addSearch(this.p2);
 		assert.strictEqual(this.p1.games.size, 1);
 		for (const roomid of this.p1.games) {
-			assert.ok(Rooms(roomid).battle);
+			assert.ok(Rooms.get(roomid).battle);
 		}
 	});
 

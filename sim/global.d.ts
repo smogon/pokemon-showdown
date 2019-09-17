@@ -15,7 +15,7 @@ declare global {
 			Dex: any
 			toID(input: any): string
 			TeamValidator: any
-			__version: string
+			__version: {head: string, origin?: string, tree?: string}
 		}
 	}
 	const Battle: BattleType
@@ -28,7 +28,6 @@ declare global {
 	const Side: SideType
 	const Sim: typeof SimType
 	const TeamValidator: typeof TeamValidatorType
-	const Validator: typeof TeamValidatorType.Validator
 
 	const Ability: DataType.Ability
 	const BasicEffect: DataType.BasicEffect

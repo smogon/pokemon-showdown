@@ -130,7 +130,7 @@ const commands = {
 			if (ret.err) return this.errorReply(`Invalid image url: ${image}`);
 		}
 		description = rest.join(',');
-		if (description.length > 500) return this.errorReply("Descriptions can be at most 500 characters long.");
+		if (Chat.stripFormatting(description).length > 500) return this.errorReply("Descriptions can be at most 500 characters long.");
 		const obj = {image: image || null, description: description};
 		if (!spotlights[room.id]) spotlights[room.id] = {};
 		if (!spotlights[room.id][key]) spotlights[room.id][key] = [];

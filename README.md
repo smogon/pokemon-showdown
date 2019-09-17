@@ -150,8 +150,9 @@ Owner
 
 Staff
 
-- Bär Halberkamp [bumbadadabum] - Development
+- Astrid Halberkamp [bumbadadabum] - Development
 - Chris Monsanto [chaos] - Sysadmin
+- Kirk Scheibelhut [pre] - Development, Sysadmin
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - [The Immortal] - Development
 
@@ -166,12 +167,15 @@ Retired Staff
 Major Contributors
 
 - Andrew Werner [HoeenHero] - Development
+- Austin Couturier [Austin] - Development (damage calculator)
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
-- Kirk Scheibelhut [pre, scheibo] - Development
 - Konrad Borowski [xfix] - Development
+- Leonard Craft III [DaWoblefet] - Research (game mechanics)
 - Neil Rashbrook [urkerab] - Development
+- [peach] - Development
 - Quinton Lee [sirDonovan] - Development
 - [Ridaz] - Art (battle animations)
+- Robin Vandenbrande [Quinella] - Development
 - Tobias Mann [asgdf] - Development
 - William [MacChaeger] - Development
 
@@ -179,21 +183,19 @@ Contributors
 
 - Alexander B. [mathfreak231] - Development
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
-- Austin Couturier [Austin] - Development (damage calculator)
 - Avery Zimmer [Lyren, SolarisFox] - Development
-- Ben Davies [Morfent, Kaiepi] - Development
+- Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
-- [Honko] - Development
+- [Honko] - Development (damage calculator)
 - Ian Clail [Layell] - Art (battle graphics, sprites)
+- Jacob McLemore [McLemore] - Development
 - Jeremy Piemonte [panpawn] - Development
-- [jumbowhales] - Development
 - Kris Johnson [Kris] - Development
-- Leonard Craft III [DaWoblefet] - Research (game mechanics)
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
-- Robin Vandenbrande [Quinella] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
-- Spandan Punwatkar - Development
+- Spandan Punwatkar [spandan]- Development
+- Waleed Hassan [jetou] - Development
 
 Special thanks
 

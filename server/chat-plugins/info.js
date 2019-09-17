@@ -4,13 +4,14 @@
  *
  * These are informational commands. For instance, you can define the command
  * 'whois' here, then use it by typing /whois into Pokemon Showdown.
- *
  * For the API, see chat-plugins/COMMANDS.md
  *
  * @license MIT license
  */
 
 'use strict';
+
+const net = require('net');
 
 /** @type {ChatCommands} */
 const commands = {
@@ -36,7 +37,11 @@ const commands = {
 
 		let buf = Chat.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
 		const ac = targetUser.autoconfirmed;
-		if (ac && showAll) buf += ` <small style="color:gray">(ac${targetUser.userid === ac ? `` : `: ${ac}`})</small>`;
+		if (ac && showAll) buf += ` <small style="color:gray">(ac${targetUser.userid === ac ? `` : `: <span class="username">${ac}</span>`})</small>`;
+		const trusted = targetUser.trusted;
+		if (trusted && showAll) {
+			buf += ` <small style="color:gray">(trusted${targetUser.userid === trusted ? `` : `: <span class="username">${trusted}</span>`})</small>`;
+		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
 		if (room.auth && targetUser.userid in room.auth) roomauth = room.auth[targetUser.userid];
@@ -171,11 +176,11 @@ const commands = {
 					}
 					status.push(sharedStr);
 				}
-				return ip + (status.length ? ` (${status.join('; ')})` : '');
+				return `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>` + (status.length ? ` (${status.join('; ')})` : '');
 			});
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
 			if (user.group !== ' ' && targetUser.latestHost) {
-				buf += Chat.html`<br />Host: ${targetUser.latestHost}`;
+				buf += Chat.html`<br />Host: ${targetUser.latestHost} [${targetUser.latestHostType}]`;
 			}
 		}
 		if (canViewAlts && hiddenrooms) {
@@ -189,7 +194,7 @@ const commands = {
 		for (const room of Rooms.rooms.values()) {
 			if (!room.game) continue;
 			if ((targetUser.userid in room.game.playerTable && !targetUser.inRooms.has(room.id)) ||
-				room.auth[targetUser.userid] === Users.PLAYER_SYMBOL) {
+				(room.auth && room.auth[targetUser.userid] === Users.PLAYER_SYMBOL)) {
 				if (room.isPrivate && !canViewAlts) {
 					continue;
 				}
@@ -238,7 +243,7 @@ const commands = {
 		}
 		let userid = toID(target);
 		if (!userid) return this.errorReply("Please enter a valid username.");
-		let targetUser = Users(userid);
+		let targetUser = Users.get(userid);
 		let buf = Chat.html`<strong class="username">${target}</strong>`;
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
@@ -306,14 +311,22 @@ const commands = {
 	},
 	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # & ~`],
 
+	sgp: 'showglobalpunishments',
+	showglobalpunishments(target, room, user) {
+		if (!this.can('lock')) return;
+		return this.parse(`/join view-globalpunishments`);
+	},
+	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # & ~`],
+
 	'!host': true,
 	host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
 		if (!this.can('rangeban')) return;
 		target = target.trim();
-		if (!/^[0-9.]+$/.test(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
-		IPTools.getHost(target).then(host => {
-			this.sendReply('IP ' + target + ': ' + (host || "ERROR"));
+		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
+		IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
+			const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
+			this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 		});
 	},
 	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: & ~`],
@@ -327,7 +340,7 @@ const commands = {
 		if (!this.can('rangeban')) return;
 
 		let [ip, roomid] = this.splitOne(target);
-		let targetRoom = roomid ? Rooms(roomid) : null;
+		let targetRoom = roomid ? Rooms.get(roomid) : null;
 		if (!targetRoom && targetRoom !== null) return this.errorReply(`The room "${roomid}" does not exist.`);
 		let results = /** @type {string[]} */ ([]);
 		let isAll = (cmd === 'ipsearchall');
@@ -607,6 +620,8 @@ const commands = {
 					if (move.flags['punch']) details["&#10003; Punch"] = "";
 					if (move.flags['powder']) details["&#10003; Powder"] = "";
 					if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
+					if (move.flags['charge']) details["&#10003; Two-turn move"] = "";
+					if (move.flags['recharge']) details["&#10003; Has recharge turn"] = "";
 					if (move.flags['gravity'] && mod.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
 					if (move.flags['dance'] && mod.gen >= 7) details["&#10003; Dance move"] = "";
 
@@ -657,10 +672,10 @@ const commands = {
 					}[move.target] || "Unknown";
 
 					if (move.id === 'snatch' && mod.gen >= 3) {
-						details['<a href="https://pokemonshowdown.com/dex/moves/snatch">Snatchable Moves</a>'] = '';
+						details[`<a href="https://${Config.routes.dex}/moves/snatch">Snatchable Moves</a>`] = '';
 					}
 					if (move.id === 'mirrormove') {
-						details['<a href="https://pokemonshowdown.com/dex/moves/mirrormove">Mirrorable Moves</a>'] = '';
+						details[`<a href="https://${Config.routes.dex}/moves/mirrormove">Mirrorable Moves</a>`] = '';
 					}
 					if (move.isUnreleased) {
 						details["Unreleased in Gen " + mod.gen] = "";
@@ -983,7 +998,7 @@ const commands = {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			let icon = {};
 			for (let type in mod.data.TypeChart) {
-				icon[type] = '<img src="https://play.pokemonshowdown.com/sprites/types/' + type + '.png" width="32" height="14">';
+				icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
 				// row of icons at top
 				buffer += '<th>' + icon[type] + '</th>';
 			}
@@ -1320,7 +1335,6 @@ const commands = {
 
 	'!uptime': true,
 	uptime(target, room, user) {
-		if (!this.can('broadcast')) return false;
 		if (!this.runBroadcast()) return;
 		let uptime = process.uptime();
 		let uptimeText;
@@ -1382,19 +1396,30 @@ const commands = {
 	'!punishments': true,
 	punishments(target, room, user) {
 		if (!this.runBroadcast()) return;
+		const showRoom = (target !== 'global');
+		const showGlobal = (target !== 'room' && target !== 'rooms');
+
+		const roomPunishments = [
+			`<strong>Room punishments</strong>:`,
+			`<strong>warn</strong> - Displays a popup with the rules.`,
+			`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.`,
+			`<strong>hourmute</strong> - Mutes a user for 60 minutes.`,
+			`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
+			`<strong>blacklist</strong> - Bans a user for a year.`,
+		];
+
+		const globalPunishments = [
+			`<strong>Global punishments</strong>:`,
+			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
+			`<strong>weeklock</strong> - Locks a user for a week.`,
+			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
+			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
+		];
+
 		this.sendReplyBox(
-			`<strong>Room punishments</strong>:<br />` +
-			`<strong>warn</strong> - Displays a popup with the rules.<br />` +
-			`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.<br />` +
-			`<strong>hourmute</strong> - Mutes a user for 60 minutes.<br />` +
-			`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.<br />` +
-			`<strong>blacklist</strong> - Bans a user for a year.<br />` +
-			`<br />` +
-			`<strong>Global punishments</strong>:<br />` +
-			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.<br />` +
-			`<strong>weeklock</strong> - Locks a user for a week.<br />` +
-			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.<br />` +
-			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`
+			(showRoom ? roomPunishments.map(str => this.tr(str)).join('<br />') : ``) +
+			(showRoom && showGlobal ? `<br /><br />` : ``) +
+			(showGlobal ? globalPunishments.map(str => this.tr(str)).join('<br />') : ``)
 		);
 	},
 	punishmentshelp: [
@@ -1441,14 +1466,14 @@ const commands = {
 			`- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.<br />` +
 			`- We log IPs to enforce bans and mutes.<br />` +
 			`- We use cookies to save your login info and teams, and for Google Analytics and AdSense.<br />` +
-			`- For more information, you can read our <a href="https://pokemonshowdown.com/privacy">full privacy policy.</a>`
+			`- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>`
 		);
 	},
 
 	'!suggestions': true,
 	suggestions(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="https://www.smogon.com/forums/threads/3534365/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
 
 	'!bugs': true,
@@ -1499,8 +1524,9 @@ const commands = {
 			`New to competitive Pok&eacute;mon?<br />` +
 			`- <a href="https://www.smogon.com/forums/threads/3496279/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
 			`- <a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />` +
-			`- <a href="https://www.smogon.com/bw/articles/bw_tiers">What do 'OU', 'UU', etc mean?</a><br />` +
-			`- <a href="https://www.smogon.com/xyhub/tiers">What are the rules for each format? What is 'Sleep Clause'?</a>`
+			`- <a href="https://www.smogon.com/sm/articles/sm_tiers">What do 'OU', 'UU', etc mean?</a><br />` +
+			`- <a href="https://www.smogon.com/dex/sm/formats/">What are the rules for each format?</a><br />` +
+			`- <a href="https://www.smogon.com/sm/articles/clauses">What is 'Sleep Clause' and other clauses?</a>`
 		);
 	},
 	introhelp: [
@@ -1521,30 +1547,47 @@ const commands = {
 	},
 
 	'!calc': true,
+	bsscalc: 'calc',
 	calculator: 'calc',
+	cantsaycalc: 'calc',
 	damagecalculator: 'calc',
 	damagecalc: 'calc',
+	honkalculator: 'calc',
+	honkocalc: 'calc',
 	randomscalc: 'calc',
 	randbatscalc: 'calc',
 	rcalc: 'calc',
 	calc(target, room, user, connection, cmd) {
 		if (cmd === 'calc' && target) return this.parse(`/math ${target}`);
 		if (!this.runBroadcast()) return;
-		let isRandomBattle = (room && room.battle && room.battle.format === 'gen7randombattle');
-		if (['randomscalc', 'randbatscalc', 'rcalc'].includes(cmd) || isRandomBattle) {
+		const DEFAULT_CALC_COMMANDS = ['honkalculator', 'honkocalc'];
+		const RANDOMS_CALC_COMMANDS = ['randomscalc', 'randbatscalc', 'rcalc'];
+		const BATTLESPOT_CALC_COMMANDS = ['bsscalc', 'cantsaycalc'];
+		const SUPPORTED_RANDOM_FORMATS = ['gen7randombattle', 'gen7unratedrandombattle'];
+		const SUPPORTED_BATTLESPOT_FORMATS = ['gen5gbusingles', 'gen5gbudoubles', 'gen6battlespotsingles', 'gen6battlespotdoubles', 'gen6battlespottriples', 'gen7battlespotsingles', 'gen7battlespotdoubles', 'gen7bssfactory'];
+		const isRandomBattle = (room && room.battle && SUPPORTED_RANDOM_FORMATS.includes(room.battle.format));
+		const isBattleSpotBattle = (room && room.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) || room.battle.format.includes("battlespotspecial")));
+		if (RANDOMS_CALC_COMMANDS.includes(cmd) || (isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
-				`Random Battles damage calculator. (Courtesy of LegoFigure11 &amp; Smoochyena)<br />` +
-				`- <a href="https://randbatscalc.github.io/">Random Battles Damage Calcuator</a>`
+				`Random Battles damage calculator. (Courtesy of LegoFigure11 &amp; Wiggleetuff)<br />` +
+				`- <a href="https://randbatscalc.github.io/">Random Battles Damage Calculator</a>`
+			);
+		}
+		if (BATTLESPOT_CALC_COMMANDS.includes(cmd) || (isBattleSpotBattle && !DEFAULT_CALC_COMMANDS.includes(cmd))) {
+			return this.sendReplyBox(
+				`Battle Spot damage calculator. (Courtesy of cant say &amp; LegoFigure11)<br />` +
+				`- <a href="https://cantsay.github.io/">Battle Spot Damage Calculator</a>`
 			);
 		}
 		this.sendReplyBox(
-			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />` +
-			`- <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a>`
+			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko &amp; Austin)<br />` +
+			`- <a href="https://${Config.routes.root}/damagecalc/">Damage Calculator</a>`
 		);
 	},
 	calchelp: [
 		`/calc - Provides a link to a damage calculator`,
 		`/rcalc - Provides a link to the random battles damage calculator`,
+		`/bsscalc - Provides a link to the Battle Spot damage calculator`,
 		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ # & ~`,
 	],
 
@@ -1693,46 +1736,58 @@ const commands = {
 		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
 
 		if (!this.runBroadcast(false, '!htmlbox')) return;
+
+		const strings = [
+			[
+				`<strong>Room drivers (%)</strong> can use:`,
+				`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules`,
+				`- /mute OR /m <em>username</em>: 7 minute mute`,
+				`- /hourmute OR /hm <em>username</em>: 60 minute mute`,
+				`- /unmute <em>username</em>: unmute`,
+				`- /hidetext <em>username</em>: hide a user's messages from the room`,
+				`- /announce OR /wall <em>message</em>: make an announcement`,
+				`- /modlog <em>username</em>: search the moderator log of the room`,
+				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
+			],
+			[
+				`<strong>Room moderators (@)</strong> can also use:`,
+				`- /roomban OR /rb <em>username</em>: ban user from the room`,
+				`- /roomunban <em>username</em>: unban user from the room`,
+				`- /roomvoice <em>username</em>: appoint a room voice`,
+				`- /roomdevoice <em>username</em>: remove a room voice`,
+				`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
+				`- /roomsettings: change a variety of room settings, namely modchat`,
+			],
+			[
+				`<strong>Room owners (#)</strong> can also use:`,
+				`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room`,
+				`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
+				`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
+				`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
+				`- /roomdeauth <em>username</em>: remove all room auth from a user`,
+				`- /declare <em>message</em>: make a large blue declaration to the room`,
+				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
+				`- !showimage <em>[url], [width], [height]</em>: show an image to the room`,
+				`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
+			],
+			[
+				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a>`,
+			],
+			[
+				`Tournament Help:`,
+				`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.`,
+				`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.`,
+				`- /tour end: forcibly end the tournament in the current room`,
+				`- /tour start: start the tournament in the current room`,
+				`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)`,
+			],
+			[
+				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a>`,
+			],
+		];
+
 		this.sendReplyBox(
-			`<strong>Room drivers (%)</strong> can use:<br />` +
-			`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules<br />` +
-			`- /mute OR /m <em>username</em>: 7 minute mute<br />` +
-			`- /hourmute OR /hm <em>username</em>: 60 minute mute<br />` +
-			`- /unmute <em>username</em>: unmute<br />` +
-			`- /announce OR /wall <em>message</em>: make an announcement<br />` +
-			`- /modlog <em>username</em>: search the moderator log of the room<br />` +
-			`- /modnote <em>note</em>: add a moderator note that can be read through modlog<br />` +
-			`<br />` +
-			`<strong>Room moderators (@)</strong> can also use:<br />` +
-			`- /roomban OR /rb <em>username</em>: ban user from the room<br />` +
-			`- /roomunban <em>username</em>: unban user from the room<br />` +
-			`- /roomvoice <em>username</em>: appoint a room voice<br />` +
-			`- /roomdevoice <em>username</em>: remove a room voice<br />` +
-			`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room<br />` +
-			`- /roomsettings: change a variety of room settings, namely modchat<br />` +
-			`<br />` +
-			`<strong>Room owners (#)</strong> can also use:<br />` +
-			`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room<br />` +
-			`- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />` +
-			`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />` +
-			`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />` +
-			`- /roomdeauth <em>username</em>: remove all room auth from a user<br />` +
-			`- /declare <em>message</em>: make a large blue declaration to the room<br />` +
-			`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room<br />` +
-			`- !showimage <em>[url], [width], [height]</em>: show an image to the room<br />` +
-			`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc<br />` +
-			`<br />` +
-			`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a><br />` +
-			`<br />` +
-			`Tournament Help:<br />` +
-			`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.<br />` +
-			`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.<br />` +
-			`- /tour end: forcibly end the tournament in the current room<br />` +
-			`- /tour start: start the tournament in the current room<br />` +
-			`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)<br />` +
-			`<br />` +
-			`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a><br />` +
-			`</div>`
+			strings.map(par => par.map(string => this.tr(string)).join('<br />')).join('<br /><br />')
 		);
 	},
 
@@ -1779,7 +1834,7 @@ const commands = {
 			this.sendReplyBox(
 				`${room ? this.tr("Please follow the rules:") + '<br />' : ``}` +
 				(room && room.rulesLink ? Chat.html`- <a href="${room.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``) +
-				`- <a href="${this.tr('https://pokemonshowdown.com/rules')}">${this.tr("Global Rules")}</a>`
+				`- <a href="https://${Config.routes.root}${this.tr('/rules')}">${this.tr("Global Rules")}</a>`
 			);
 			return;
 		}
@@ -1836,7 +1891,7 @@ const commands = {
 			buffer.push(`<a href="https://www.smogon.com/forums/threads/3508013/">What is COIL?</a>`);
 		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
-			buffer.push(`<a href="https://pokemonshowdown.com/pages/ladderhelp">How the ladder works</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/pages/ladderhelp">How the ladder works</a>`);
 		}
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
 			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">Tiering FAQ</a>`);
@@ -1845,7 +1900,7 @@ const commands = {
 			buffer.push(`<a href="https://www.smogon.com/badge_faq">Badge FAQ</a>`);
 		}
 		if (showAll || target === 'rng') {
-			buffer.push(`<a href="https://pokemonshowdown.com/pages/rng">How Pokémon Showdown's RNG works</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/pages/rng">How Pokémon Showdown's RNG works</a>`);
 		}
 		if (showAll || !buffer.length) {
 			buffer.unshift(`<a href="https://www.smogon.com/forums/posts/6774128/">Frequently Asked Questions</a>`);
@@ -2438,44 +2493,26 @@ const commands = {
 
 /** @type {PageTable} */
 const pages = {
-	punishments(query, user, connection) {
+	punishments(query, user) {
 		this.title = 'Punishments';
 		let buf = "";
 		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!this.room.chatRoomData) return;
 		if (!this.can('mute', null, this.room)) return;
-		const sortedPunishments = Punishments.getPunishmentsOfRoom(this.room).sort((a, b) =>
-			// Ascending order
-			a.expiresIn - b.expiresIn
-		);
-		if (sortedPunishments.length) {
-			buf += `<div class="pad"><h2>List of active punishments:</h2>`;
-			buf += `<table style="border: 1px solid black; border-collapse:collapse; width:100%;">`;
-			buf += `<tr>`;
-			buf += `<th style="border: 1px solid black;">Username</th>`;
-			buf += `<th style="border: 1px solid black;">Punishment type</th>`;
-			buf += `<th style="border: 1px solid black;">Expire time</th>`;
-			buf += `<th style="border: 1px solid black;">Reason</th>`;
-			buf += `<th style="border: 1px solid black;">Alts</th>`;
-			if (user.can('ban')) buf += `<th style="border: 1px solid black;">IPs</th>`;
-			buf += `</tr>`;
-			for (const punishment of sortedPunishments) {
-				let expireString = Chat.toDurationString(punishment.expiresIn, {precision: 1});
-				buf += `<tr>`;
-				buf += `<td style="border: 1px solid black;">${punishment.id}</td>`;
-				buf += `<td style="border: 1px solid black;">${punishment.punishType.toLowerCase()}</td>`;
-				buf += `<td style="border: 1px solid black;">${expireString}</td>`;
-				buf += (punishment.reason) ? `<td style="border: 1px solid black;">${punishment.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
-				buf += (punishment.alts.length) ? `<td style="border: 1px solid black;">${punishment.alts.join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
-				buf += (user.can('ban') && punishment.ips.length) ? `<td style="border: 1px solid black;">${punishment.ips.join(", ")}</td>` : (user.can('ban') && !punishment.ips.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
-				buf += `</tr>`;
-			}
-			buf += `</table>`;
-			buf += `</div>`;
-		} else {
-			buf += `<h2>No user in ${this.room} is currently punished.</h2>`;
-		}
+		// Ascending order
+		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.id)).sort((a, b) => a[1].expireTime - b[1].expireTime);
+		buf += Punishments.visualizePunishments(sortedPunishments, user);
+		return buf;
+	},
+	globalpunishments(query, user) {
+		this.title = 'Global Punishments';
+		let buf = "";
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		if (!this.can('lock')) return;
+		// Ascending order
+		const sortedPunishments = Array.from(Punishments.getPunishments()).sort((a, b) => a[1].expireTime - b[1].expireTime);
+		buf += Punishments.visualizePunishments(sortedPunishments, user);
 		return buf;
 	},
 };

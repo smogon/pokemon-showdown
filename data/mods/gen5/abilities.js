@@ -32,6 +32,7 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon's moves ignore the opposing side's Reflect, Light Screen, Safeguard, and Mist.",
 		shortDesc: "This Pokemon's moves ignore the foe's Reflect, Light Screen, Safeguard, and Mist.",
+		rating: 1.5,
 	},
 	"keeneye": {
 		inherit: true,
@@ -61,6 +62,7 @@ let BattleAbilities = {
 		inherit: true,
 		shortDesc: "This Pokemon is immune to damage from Sandstorm or Hail.",
 		onTryHit() {},
+		rating: 0.5,
 	},
 	"sapsipper": {
 		inherit: true,
