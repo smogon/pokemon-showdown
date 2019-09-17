@@ -102,6 +102,7 @@ class HelpTicket extends Rooms.RoomGame {
 		this.involvedStaff = new Set();
 		this.createTime = Date.now();
 		this.activationTime = (ticket.active ? this.createTime : 0);
+		this.emptyRoom = false;
 		this.firstClaimTime = 0;
 		this.unclaimedTime = 0;
 		this.lastUnclaimedStart = (ticket.active ? this.createTime : 0);
@@ -119,13 +120,22 @@ class HelpTicket extends Rooms.RoomGame {
 	onJoin(user, connection) {
 		if (!this.ticket.open) return false;
 		if (!user.isStaff || user.userid === this.ticket.userid) {
+			if (this.emptyRoom) this.emptyRoom = false;
 			this.addPlayer(user);
 			return false;
 		}
 		if (this.ticket.escalated && !user.can('declare')) return false;
 		if (!this.ticket.claimed) {
 			this.ticket.claimed = user.name;
-			if (!this.firstClaimTime) this.firstClaimTime = Date.now();
+			if (!this.firstClaimTime) {
+				this.firstClaimTime = Date.now();
+				// I'd use the player list for this, but it dosen't track DCs so were checking the userlist
+				// Non-staff users in the room currently (+ the ticket creator even if they are staff)
+				let users = Object.entries(this.room.users).filter(u => {
+					return !((u[1].isStaff && u[1].userid !== this.ticket.userid) || !u[1].named);
+				});
+				if (!users.length) this.emptyRoom = true;
+			}
 			if (!this.ticket.active) {
 				this.ticket.active = true;
 				this.activationTime = Date.now();
@@ -299,7 +309,7 @@ class HelpTicket extends Rooms.RoomGame {
 		if (this.lastUnclaimedStart) this.unclaimedTime += this.closeTime - this.lastUnclaimedStart;
 		if (!this.ticket.active) {
 			this.resolution = "dead";
-		} else if (!this.firstClaimTime) {
+		} else if (!this.firstClaimTime || this.emptyRoom) {
 			this.resolution = "unresolved";
 		} else {
 			this.resolution = "resolved";
