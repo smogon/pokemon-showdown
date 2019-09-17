@@ -307,7 +307,7 @@ class HelpTicket extends Rooms.RoomGame {
 				break;
 			case 'PM Harassment':
 			case 'Battle Harassment':
-			case 'Inappropriate Username':
+			case 'Inappropriate Username / Status Message':
 			case 'Inappropriate Pokemon Nicknames':
 				this.result = (result ? 'valid' : 'invalid');
 				break;
@@ -1116,6 +1116,7 @@ let commands = {
 			case 'PM Harassment':
 			case 'Battle Harassment':
 			case 'Inappropriate Pokemon Nicknames':
+			case 'Inappropriate Username / Status Message':
 				closeButtons = `<button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket as Valid Report</button> <button class="button" name="send" value="/helpticket close ${user.userid}, false">Close Ticket as Invalid Report</button>`;
 				break;
 			case 'Public Room Assistance Request':
