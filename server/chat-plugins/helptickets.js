@@ -126,8 +126,13 @@ class HelpTicket extends Rooms.RoomGame {
 		if (!this.ticket.claimed) {
 			this.ticket.claimed = user.name;
 			if (!this.firstClaimTime) this.firstClaimTime = Date.now();
-			this.unclaimedTime += Date.now() - this.lastUnclaimedStart;
-			this.lastUnclaimedStart = 0; // Set back to 0 so we know that it was active when closed
+			if (!this.ticket.active) {
+				this.ticket.active = true;
+				this.activationTime = Date.now();
+			} else {
+				this.unclaimedTime += Date.now() - this.lastUnclaimedStart;
+				this.lastUnclaimedStart = 0; // Set back to 0 so we know that it was active when closed
+			}
 			tickets[this.ticket.userid] = this.ticket;
 			writeTickets();
 			this.modnote(user, `${user.name} claimed this ticket.`);
@@ -212,6 +217,7 @@ class HelpTicket extends Rooms.RoomGame {
 	escalate(sendUp, staff) {
 		this.ticket.claimed = null;
 		this.claimQueue = [];
+		this.lastUnclaimedStart = Date.now();
 		if (sendUp) {
 			this.ticket.escalated = true;
 			tickets[this.ticket.userid] = this.ticket;
