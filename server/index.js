@@ -93,7 +93,7 @@ if (Config.watchconfig) {
  *********************************************************/
 
 if (Object.values(Config.storage || {}).includes('sqlite')) {
-	child_process.execSync('node database/migrate');
+	child_process.execSync('node ../database/migrate', {stdio: 'inherit', cwd: __dirname});
 }
 
 /*********************************************************

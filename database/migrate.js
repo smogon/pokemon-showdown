@@ -20,15 +20,16 @@ if (missing('sqlite')) {
 
 const child_process = require('child_process');
 const fs = require('fs');
+const path = require('path');
 const sqlite = require('sqlite');
 
-if (missing('./database/sqlite.db')) {
+if (!fs.existsSync(path.resolve(__dirname, './sqlite.db'))) {
 	console.log('No SQLite database found. Creating one...');
-	fs.writeFileSync('./database/sqlite.db', '');
+	fs.writeFileSync(path.resolve(__dirname, './sqlite.db'), '');
 }
 
-if (fs.readdirSync('./database/migrations/').length) {
-	sqlite.open('./sqlite.db').then(function (database) {
-		database.migrate({migrationsPath: './database/migrations'});
+if (fs.readdirSync(path.resolve(__dirname, './migrations/')).length) {
+	sqlite.open(path.resolve(__dirname, './sqlite.db')).then(function (database) {
+		database.migrate({migrationsPath: path.resolve(__dirname, './migrations')});
 	});
 }
