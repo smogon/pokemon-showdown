@@ -843,7 +843,10 @@ export class CommandContext extends MessageContext {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					return this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
-				if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+				if (targetUser.blockPMs &&
+					(targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) &&
+					!user.can('lock')) {
+
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						return this.errorReply(`This user is blocking private messages right now.`);
@@ -852,7 +855,7 @@ export class CommandContext extends MessageContext {
 						return this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
 					}
 				}
-				if (user.blockPMs && user.blockPMs !== targetUser.group && !targetUser.can('lock')) {
+				if (user.blockPMs && (user.blockPMs === true || targetUser.authAtLeast(user.blockPMs)) && !targetUser.can('lock')) {
 					return this.errorReply(`You are blocking private messages right now.`);
 				}
 			}
