@@ -43,8 +43,8 @@ if (cluster.isMaster) {
 			case '*': {
 				// *socketid, ip, protocol, connectedAt
 				// connect
-				const [socketid, ip, protocol, connectedAt] = data.substr(1).split('\n');
-				Users.socketConnect(worker, id, socketid, ip, protocol, +connectedAt);
+				const [socketid, ip, protocol] = data.substr(1).split('\n');
+				Users.socketConnect(worker, id, socketid, ip, protocol);
 				break;
 			}
 
@@ -619,8 +619,6 @@ if (cluster.isMaster) {
 	let isTrustedProxyIp = IPTools.checker(Config.proxyip);
 	let socketCounter = 0;
 	server.on('connection', socket => {
-		const connectedAt = Date.now();
-
 		// For reasons that are not entirely clear, SockJS sometimes triggers
 		// this event with a null `socket` argument.
 		if (!socket) return;
@@ -652,7 +650,7 @@ if (cluster.isMaster) {
 		}
 
 		// @ts-ignore
-		process.send(`*${socketid}\n${socketip}\n${socket.protocol}\n${connectedAt}`);
+		process.send(`*${socketid}\n${socketip}\n${socket.protocol}`);
 
 		socket.on('data', message => {
 			// drop empty messages (DDoS?)

@@ -344,9 +344,10 @@ export class Connection {
 		socketid: string,
 		user: User | null,
 		ip: string | null,
-		protocol: string | null,
-		connectedAt: number = Date.now()
+		protocol: string | null
 	) {
+		const now = Date.now();
+
 		this.id = id;
 		this.socketid = socketid;
 		this.worker = worker;
@@ -359,8 +360,8 @@ export class Connection {
 
 		this.challenge = '';
 		this.autojoins = '';
-		this.lastActiveTime = connectedAt;
-		this.connectedAt = connectedAt;
+		this.lastActiveTime = now;
+		this.connectedAt = now;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
 		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
@@ -1622,11 +1623,10 @@ function socketConnect(
 	workerid: number,
 	socketid: string,
 	ip: string,
-	protocol: string,
-	connectedAt: number
+	protocol: string
 ) {
 	const id = '' + workerid + '-' + socketid;
-	const connection = new Connection(id, worker, socketid, null, ip, protocol, connectedAt);
+	const connection = new Connection(id, worker, socketid, null, ip, protocol);
 	connections.set(id, connection);
 
 	const banned = Punishments.checkIpBanned(connection);
