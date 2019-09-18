@@ -1329,7 +1329,11 @@ export class User extends Chat.MessageContext {
 			if (!this.named) {
 				return Rooms.RETRY_AFTER_LOGIN;
 			} else {
-				connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
+				if (room) {
+					connection.sendTo(roomid, `|noinit|joinfailed|The room "${roomid}" is invite-only, and you haven't been invited.`);
+				} else {
+					connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
+				}
 				return false;
 			}
 		}
