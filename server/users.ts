@@ -337,6 +337,7 @@ export class Connection {
 	challenge: string;
 	autojoins: string;
 	lastActiveTime: number;
+	connectedAt: number;
 	constructor(
 		id: string,
 		worker: Worker,
@@ -345,6 +346,8 @@ export class Connection {
 		ip: string | null,
 		protocol: string | null
 	) {
+		const now = Date.now();
+
 		this.id = id;
 		this.socketid = socketid;
 		this.worker = worker;
@@ -357,7 +360,8 @@ export class Connection {
 
 		this.challenge = '';
 		this.autojoins = '';
-		this.lastActiveTime = Date.now();
+		this.lastActiveTime = now;
+		this.connectedAt = now;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
 		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
@@ -408,7 +412,8 @@ type ChatQueueEntry = [string, RoomID, Connection];
 
 const SETTINGS = [
 	'isSysop', 'isStaff', 'blockChallenges', 'blockPMs',
-	'ignoreTickets', 'lastConnected', 'inviteOnlyNextBattle',
+	'ignoreTickets', 'lastConnected', 'lastDisconnected',
+	'inviteOnlyNextBattle',
 ];
 
 // User
@@ -454,6 +459,7 @@ export class User extends Chat.MessageContext {
 	blockChallenges: boolean;
 	blockPMs: boolean | string;
 	ignoreTickets: boolean;
+	lastDisconnected: number;
 	lastConnected: number;
 	inviteOnlyNextBattle: boolean;
 
@@ -528,7 +534,8 @@ export class User extends Chat.MessageContext {
 		this.blockChallenges = false;
 		this.blockPMs = false;
 		this.ignoreTickets = false;
-		this.lastConnected = 0;
+		this.lastDisconnected = 0;
+		this.lastConnected = connection.connectedAt;
 		this.inviteOnlyNextBattle = false;
 
 		// chat queue
@@ -1085,7 +1092,11 @@ export class User extends Chat.MessageContext {
 		// the connection has changed name to this user's username, and so is
 		// being merged into this account
 		this.connected = true;
+		if (connection.connectedAt > this.lastConnected) {
+			this.lastConnected = connection.connectedAt;
+		}
 		this.connections.push(connection);
+
 		// console.log('' + this.name + ' merging: connection ' + connection.socket.id);
 		connection.send(this.getUpdateuserText());
 		connection.user = this;
@@ -1219,7 +1230,7 @@ export class User extends Chat.MessageContext {
 	}
 	markDisconnected() {
 		this.connected = false;
-		this.lastConnected = Date.now();
+		this.lastDisconnected = Date.now();
 		if (!this.registered) {
 			// for "safety"
 			this.group = Config.groupsranking[0];
@@ -1584,17 +1595,41 @@ function pruneInactive(threshold: number) {
 			user.setStatusType('idle');
 		}
 		if (user.connected) continue;
-		if ((now - user.lastConnected) > threshold) {
+		if ((now - user.lastDisconnected) > threshold) {
 			user.destroy();
 		}
 	}
+}
+
+function logGhostConnections(threshold: number): Promise<unknown> {
+	const buffer = [];
+	for (const connection of connections.values()) {
+		// If the connection's been around for at least a week and it doesn't
+		// use raw WebSockets (which doesn't have any kind of keepalive or
+		// timeouts on it), log it.
+		if (connection.protocol !== 'websocket-raw' && connection.connectedAt <= Date.now() - threshold) {
+			const timestamp = Chat.toTimestamp(new Date(connection.connectedAt));
+			const now = Chat.toTimestamp(new Date());
+			const log = `Connection ${connection.id} from ${connection.ip} with protocol "${connection.protocol}" has been around since ${timestamp} (currently ${now}).`;
+			buffer.push(log);
+		}
+	}
+	return buffer.length
+		? FS(`logs/ghosts-${process.pid}.log`).append(buffer.join('\r\n') + '\r\n')
+		: Promise.resolve();
 }
 
 /*********************************************************
  * Routing
  *********************************************************/
 
-function socketConnect(worker: Worker, workerid: number, socketid: string, ip: string, protocol: string) {
+function socketConnect(
+	worker: Worker,
+	workerid: number,
+	socketid: string,
+	ip: string,
+	protocol: string
+) {
 	const id = '' + workerid + '-' + socketid;
 	const connection = new Connection(id, worker, socketid, null, ip, protocol);
 	connections.set(id, connection);
@@ -1728,5 +1763,9 @@ export const Users = {
 	pruneInactiveTimer: setInterval(() => {
 		pruneInactive(Config.inactiveuserthreshold || 60 * MINUTES);
 	}, 30 * MINUTES),
+	logGhostConnections,
+	logGhostConnectionsTimer: setInterval(async () => {
+		await logGhostConnections(7 * 24 * 60 * MINUTES);
+	}, 7 * 24 * 60 * MINUTES),
 	socketConnect,
 };
