@@ -562,8 +562,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
-			let activeMon;
-			activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : activeMon = source.side.foe.active[0].template.name);
+			let activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
 			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'jolteonite'];
 			if (activeMon === 'hoeenhero' || activeMon === 'pokemondeadchannel') {
 				 this.add(`c|%fart|what song should I sing?`);
@@ -579,8 +578,7 @@ let BattleStatuses = {
 			this.add(`c|%fart|this boy is not correct. he is **flawed.**`);
 		},
 		onFaint(pokemon) {
-			let activeMon;
-			activeMon = toID(pokemon.side.foe.active[0].illusion ? pokemon.side.foe.active[0].illusion.name : activeMon = pokemon.side.foe.active[0].template.name);
+			let activeMon = toID(pokemon.side.foe.active[0].illusion ? pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name);
 			if (activeMon === 'akasianse') {
 				this.add(`c|%fart|Akasianse I'm deleting your mon`);
 			} else {
