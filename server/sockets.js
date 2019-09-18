@@ -41,7 +41,7 @@ if (cluster.isMaster) {
 			// console.log('master received: ' + data);
 			switch (data.charAt(0)) {
 			case '*': {
-				// *socketid, ip, protocol, connectedAt
+				// *socketid, ip, protocol
 				// connect
 				const [socketid, ip, protocol] = data.substr(1).split('\n');
 				Users.socketConnect(worker, id, socketid, ip, protocol);
