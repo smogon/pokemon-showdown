@@ -412,7 +412,8 @@ type ChatQueueEntry = [string, RoomID, Connection];
 
 const SETTINGS = [
 	'isSysop', 'isStaff', 'blockChallenges', 'blockPMs',
-	'ignoreTickets', 'lastConnected', 'inviteOnlyNextBattle',
+	'ignoreTickets', 'lastConnected', 'lastDisconnected',
+	'inviteOnlyNextBattle',
 ];
 
 // User
@@ -458,10 +459,8 @@ export class User extends Chat.MessageContext {
 	blockChallenges: boolean;
 	blockPMs: boolean | string;
 	ignoreTickets: boolean;
-	/** When the user last disconnected. */
+	lastDisconnected: number;
 	lastConnected: number;
-	/** When the user last connected. */
-	lastConnectedAt: number;
 	inviteOnlyNextBattle: boolean;
 
 	chatQueue: ChatQueueEntry[] | null;
@@ -535,8 +534,8 @@ export class User extends Chat.MessageContext {
 		this.blockChallenges = false;
 		this.blockPMs = false;
 		this.ignoreTickets = false;
-		this.lastConnected = 0;
-		this.lastConnectedAt = connection.connectedAt;
+		this.lastDisconnected = 0;
+		this.lastConnected = connection.connectedAt;
 		this.inviteOnlyNextBattle = false;
 
 		// chat queue
@@ -1093,8 +1092,8 @@ export class User extends Chat.MessageContext {
 		// the connection has changed name to this user's username, and so is
 		// being merged into this account
 		this.connected = true;
-		if (connection.connectedAt > this.lastConnectedAt) {
-			this.lastConnectedAt = connection.connectedAt;
+		if (connection.connectedAt > this.lastConnected) {
+			this.lastConnected = connection.connectedAt;
 		}
 		this.connections.push(connection);
 
@@ -1231,7 +1230,7 @@ export class User extends Chat.MessageContext {
 	}
 	markDisconnected() {
 		this.connected = false;
-		this.lastConnected = Date.now();
+		this.lastDisconnected = Date.now();
 		if (!this.registered) {
 			// for "safety"
 			this.group = Config.groupsranking[0];
@@ -1590,7 +1589,7 @@ function pruneInactive(threshold: number) {
 			user.setStatusType('idle');
 		}
 		if (user.connected) continue;
-		if ((now - user.lastConnected) > threshold) {
+		if ((now - user.lastDisconnected) > threshold) {
 			user.destroy();
 		}
 	}
