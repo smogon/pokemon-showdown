@@ -800,7 +800,7 @@ class RandomGen6Teams extends RandomTeams {
 				}
 			}
 		} else if (hasMove['raindance']) {
-			item = item = (ability === 'Forecast') ? 'Damp Rock' : 'Life Orb';
+			item = (ability === 'Forecast') ? 'Damp Rock' : 'Life Orb';
 		} else if (hasMove['sunnyday']) {
 			item = (ability !== 'Chlorophyll' || counter.Status > 1) ? 'Heat Rock' : 'Life Orb';
 		} else if (hasMove['lightscreen'] && hasMove['reflect']) {
