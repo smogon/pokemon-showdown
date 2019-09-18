@@ -26,7 +26,7 @@
     "pretest": "npm run lint && npm run build",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "fulltest": "npm run pretest && mocha -g \".*\" && npm run posttest"
+    "fulltest": "npm run pretest && npm run tsc && mocha -g \".*\""
   },
   "husky": {
     "hooks": {
@@ -67,6 +67,7 @@
     "eslint": "^5.16.0",
     "husky": "^2.3.0",
     "mocha": "^6.1.4",
+    "smogon": "0.0.3",
     "tslint": "^5.16.0",
     "typescript": "^3.5.0"
   }

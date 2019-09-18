@@ -41,9 +41,12 @@ describe('Endless Battle Clause (slow)', () => {
 		assert.false(battle.ended);
 	});
 
-	it('should only cause the battle to end if neither side can switch to a non-stale Pokemon and at least one staleness is externally inflicted', () => {
+	it('should only cause the battle to end if either side cannot switch to a non-stale Pokemon and at least one staleness is externally inflicted', () => {
 		battle = common.createBattle({endlessBattleClause: true});
-		battle.setPlayer('p1', {team: [{species: "Blissey", level: 1, item: 'leppaberry', moves: ['recycle', 'extremespeed', 'floralhealing', 'block']}]});
+		battle.setPlayer('p1', {team: [
+			{species: "Blissey", level: 1, item: 'leppaberry', moves: ['recycle', 'extremespeed', 'floralhealing', 'block']},
+			{species: "Magikarp", moves: ['splash']},
+		]});
 		battle.setPlayer('p2', {team: [
 			{species: "Magikarp", moves: ['splash']},
 			{species: "Sunkern", item: 'leppaberry', moves: ['synthesis']},

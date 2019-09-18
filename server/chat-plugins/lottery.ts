@@ -1,25 +1,29 @@
-'use strict';
-
 const LOTTERY_FILE = 'config/chat-plugins/lottery.json';
 
-/** @type {typeof import('../../lib/fs').FS} */
-const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
+import {FS} from '../../lib/fs';
 
 const lotteriesContents = FS(LOTTERY_FILE).readIfExistsSync();
-/** @type {{[roomid: string]: {maxWinners: number, name: string, markup: string, participants: {[ip: string]: string}}}} */
-const lotteries = lotteriesContents ? Object.assign(Object.create(null), JSON.parse(lotteriesContents)) : Object.create(null);
+const lotteries: {
+	[roomid: string]: {
+		maxWinners: number,
+		name: string,
+		markup: string,
+		participants: {[ip: string]: string},
+		winners: string[],
+		running: boolean,
+	},
+} = lotteriesContents ? Object.assign(Object.create(null), JSON.parse(lotteriesContents)) : Object.create(null);
 
-/**
- * @param {string} roomid
- * @param {number} maxWinners
- * @param {string} name
- * @param {string} markup
-*/
-function createLottery(roomid, maxWinners, name, markup) {
-	if (!lotteries[roomid]) {
-		lotteries[roomid] = {maxWinners, name, markup, participants: Object.create(null)};
-		writeLotteries();
+function createLottery(roomid: RoomID, maxWinners: number, name: string, markup: string) {
+	if (lotteries[roomid] && !lotteries[roomid].running) {
+		delete lotteries[roomid];
 	}
+	const lottery = lotteries[roomid];
+	lotteries[roomid] = {
+		maxWinners, name, markup, participants: (lottery && lottery.participants) || Object.create(null),
+		winners: (lottery && lottery.winners) || [], running: true,
+	};
+	writeLotteries();
 }
 function writeLotteries() {
 	for (const roomid of Object.keys(lotteries)) {
@@ -29,22 +33,23 @@ function writeLotteries() {
 	}
 	FS(LOTTERY_FILE).writeUpdate(() => JSON.stringify(lotteries));
 }
-/**
- * @param {string} roomid
- */
-function destroyLottery(roomid) {
+function destroyLottery(roomid: RoomID) {
 	delete lotteries[roomid];
 	writeLotteries();
 }
-/**
- * @param {string} roomid
- * @param {User} user
- */
-function addUserToLottery(roomid, user) {
+function endLottery(roomid: RoomID, winners: string[]) {
+	const lottery = lotteries[roomid];
+	if (!lottery) return;
+	lottery.winners = winners;
+	lottery.running = false;
+	Object.freeze(lottery);
+	writeLotteries();
+}
+function addUserToLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
-	const userSignedup = participants[user.latestIp] || Object.values(participants).map(username => toID(username)).includes(user.userid);
+	const userSignedup = participants[user.latestIp] || Object.values(participants).map(toID).includes(user.userid);
 	if (!userSignedup) {
 		participants[user.latestIp] = user.name;
 		writeLotteries();
@@ -52,11 +57,7 @@ function addUserToLottery(roomid, user) {
 	}
 	return false;
 }
-/**
- * @param {string} roomid
- * @param {User} user
- */
-function removeUserFromLottery(roomid, user) {
+function removeUserFromLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
@@ -69,10 +70,7 @@ function removeUserFromLottery(roomid, user) {
 	}
 	return false;
 }
-/**
- * @param {string} roomid
- */
-function getWinnersInLottery(roomid) {
+function getWinnersInLottery(roomid: RoomID) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const winners = [];
@@ -86,29 +84,27 @@ function getWinnersInLottery(roomid) {
 	return winners;
 }
 
-/** @type {ChatCommands} */
-exports.commands = {
+export const commands: ChatCommands = {
 	lottery: {
 		''(target, room) {
-			if (!room) {
-				return this.errorReply("This can only be used in rooms.");
-			}
 			const lottery = lotteries[room.id];
 			if (!lottery) {
 				return this.errorReply("This room doesn't have a lottery running.");
 			}
 			return this.parse(`/join view-lottery-${room.id}`);
 		},
-		create(target, room, user) {
+		edit: 'create',
+		create(target, room, user, connection, cmd) {
 			if (!this.can('declare', null, room)) return;
-			if (!room) {
-				return this.errorReply("This can only be used in rooms.");
-			}
 			if (room.battle || !room.chatRoomData) {
 				return this.errorReply('This room does not support the creation of lotteries.');
 			}
-			if (lotteries[room.id]) {
-				return this.errorReply(`There is already a lottery running in this room.`);
+			const lottery = lotteries[room.id];
+			const edited = lottery && lottery.running;
+			if (cmd === 'edit' && !target && lottery) {
+				this.sendReply('Source:');
+				const markup = Chat.html`${lottery.markup}`.replace(/\n/g, '<br />');
+				return this.sendReplyBox(`<code style="white-space: pre-wrap">/lottery edit ${lottery.maxWinners}, ${lottery.name}, ${markup}</code>`);
 			}
 			const [maxWinners, name, markup] = Chat.splitFirst(target, ',', 2).map(val => val.trim());
 			if (!(maxWinners && name && markup.length)) {
@@ -122,19 +118,21 @@ exports.commands = {
 			if (maxWinnersNum < 1) {
 				return this.errorReply('The maximum winners should be at least 1.');
 			}
+			if (maxWinnersNum > Number.MAX_SAFE_INTEGER) {
+				return this.errorReply('The maximum winners number is too large, please pick a smaller number.');
+			}
 			if (name.length > 50) {
 				return this.errorReply('Name needs to be under 50 characters.');
 			}
 			createLottery(room.id, maxWinnersNum, name, markup);
-			this.sendReply('The lottery was successfully created.');
-			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the "${name}" lottery!</b></div>`);
-			this.modlog(`LOTTERY CREATE ${name}`);
+			this.sendReply(`The lottery was successfully ${edited ? 'edited' : 'created'}.`);
+			if (!edited) {
+				this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the "<a href="/view-lottery-${room.id}">${name}</a>" lottery!</b></div>`);
+			}
+			this.modlog(`LOTTERY ${edited ? 'EDIT' : 'CREATE'} ${name}`, null, `${maxWinnersNum} max winners`);
 		},
 		delete(target, room, user) {
 			if (!this.can('declare', null, room)) return;
-			if (!room) {
-				return this.errorReply('This can only be used in rooms.');
-			}
 			const lottery = lotteries[room.id];
 			if (!lottery) {
 				return this.errorReply('This room does not have a lottery running.');
@@ -146,20 +144,30 @@ exports.commands = {
 		},
 		end(target, room) {
 			if (!this.can('declare', null, room)) return;
-			if (!room) {
-				return this.errorReply('This can only be used in rooms.');
-			}
 			const lottery = lotteries[room.id];
 			if (!lottery) {
 				return this.errorReply('This room does not have a lottery running.');
 			}
+			if (!lottery.running) {
+				return this.errorReply(`The "${lottery.name}" lottery already ended.`);
+			}
+			for (const [ip, participant] of Object.entries(lottery.participants)) {
+				const userid = toID(participant);
+				const pUser = Users.get(userid);
+				if (Punishments.userids.get(userid)
+					|| Punishments.getRoomPunishments(pUser || userid, {publicOnly: true, checkIps: true}).length) {
+					delete lottery.participants[ip];
+				}
+			}
 			if (lottery.maxWinners >= Object.keys(lottery.participants).length) {
 				return this.errorReply('There have been not enough participants for you to be able to end this. If you wish to end it anyway use /lottery delete.');
 			}
-			const winners = /** @type {string[]} */ (getWinnersInLottery(room.id));
-			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${Chat.toListString(winners)} won the "${lottery.name}" lottery!</b></div>`);
+			const winners = getWinnersInLottery(room.id);
+			if (!winners) return this.errorReply(`An error occured while getting the winners.`);
+			// tslint:disable-next-line: max-line-length
+			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${Chat.toListString(winners)} won the "<a href="/view-lottery-${room.id}">${lottery.name}</a>" lottery!</b></div>`);
 			this.modlog(`LOTTERY END ${lottery.name}`);
-			destroyLottery(room.id);
+			endLottery(room.id, winners);
 		},
 		'!join': true,
 		join(target, room, user) {
@@ -173,13 +181,19 @@ exports.commands = {
 			if (!lottery) {
 				return this.errorReply(`${roomid} does not have a lottery running.`);
 			}
+			if (!lottery.running) {
+				return this.errorReply(`The "${lottery.name}" lottery already ended.`);
+			}
+			if (!user.named) {
+				return this.popupReply('You must be logged into an account to participate.');
+			}
 			if (!user.autoconfirmed) {
 				return this.popupReply('You must be autoconfirmed to join lotteries.');
 			}
 			if (user.locked || Punishments.getRoomPunishments(user, {publicOnly: true, checkIps: true}).length) {
 				return this.popupReply('Punished users cannot join lotteries.');
 			}
-			const success = addUserToLottery(roomid, user);
+			const success = addUserToLottery(roomid as RoomID, user);
 			if (success) {
 				this.popupReply('You have successfully joined the lottery.');
 			} else {
@@ -198,7 +212,10 @@ exports.commands = {
 			if (!lottery) {
 				return this.errorReply(`${roomid} does not have a lottery running.`);
 			}
-			const success = removeUserFromLottery(roomid, user);
+			if (!lottery.running) {
+				return this.errorReply(`The "${lottery.name}" lottery already ended.`);
+			}
+			const success = removeUserFromLottery(roomid as RoomID, user);
 			if (success) {
 				this.popupReply('You have successfully left the lottery.');
 			} else {
@@ -206,10 +223,6 @@ exports.commands = {
 			}
 		},
 		participants(target, room, user) {
-			if (!this.can('declare', null, room)) return;
-			if (!room) {
-				return this.errorReply('This can only be used in rooms.');
-			}
 			const lottery = lotteries[room.id];
 			if (!lottery) {
 				return this.errorReply('This room does not have a lottery running.');
@@ -218,7 +231,12 @@ exports.commands = {
 			const participants = Object.entries(lottery.participants).map(([ip, participant]) => {
 				return `${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
 			});
-			const buf = `<b>List of participants (${participants.length}):</b><p>${participants.join(', ')}</p>`;
+			let buf = '';
+			if (user.can('declare', null, room)) {
+				buf += `<b>List of participants (${participants.length}):</b><p>${participants.join(', ')}</p>`;
+			} else {
+				buf += `${participants.length} participant(s) joined this lottery.`;
+			}
 			this.sendReplyBox(buf);
 		},
 		help() {
@@ -227,19 +245,18 @@ exports.commands = {
 	},
 	lotteryhelp: [
 		`/lottery - opens the current lottery, if it exists.`,
-		`/lottery create maxWinners, name, html - creates a new lottery with [name] as the header and [html] as body. Max winners is the amount of people that will win the lottery. Requires # & ~`,
-		`/lottery delete - deletes the current lottery without delcaring a winner. Requires # & ~`,
-		`/lottery end - ends the current delcaring a random participant as the winner. Requires # & ~`,
+		`/lottery create max winners, name, html - creates a new lottery with [name] as the header and [html] as body. Max winners is the amount of people that will win the lottery. Requires # & ~`,
+		`/lottery delete - deletes the current lottery without declaring a winner. Requires # & ~`,
+		`/lottery end - ends the current lottery, declaring a random participant as the winner. Requires # & ~`,
+		`/lottery editmarkup html - edits the lottery markup with the provided HTML. Requires # & ~`,
 		`/lottery join - joins the current lottery, if it exists, you need to be not currently punished in any public room, not locked and be autoconfirmed.`,
 		`/lottery leave - leaves the current lottery, if it exists.`,
-		`/lottery participants - shows the current participants in the lottery. Requires: # & ~`,
+		`/lottery participants - shows the current participants in the lottery.`,
 	],
 };
 
-/** @type {PageTable} */
-exports.pages = {
+export const pages: PageTable = {
 	lottery(query, user) {
-		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.extractRoom();
 		this.title = 'Lottery';
 		let buf = '<div class="pad">';
@@ -248,9 +265,19 @@ exports.pages = {
 			buf += `<h2>There is no lottery running in ${this.room.title}</h2></div>`;
 			return buf;
 		}
-		const userSignedUp = lottery.participants[user.latestIp] || Object.values(lottery.participants).map(username => toID(username)).includes(user.userid);
-		const buttonMarkup = `<button class="button" name="send" style="margin: 3px" value="/lottery ${userSignedUp ? 'leave' : 'join'} ${this.room.id}">${userSignedUp ? "Leave the " : "Sign up for the"} lottery</button>`;
-		buf += `<h2>${lottery.name}</h2>${lottery.markup}<br />${buttonMarkup}</div>`;
+		buf += `<h2 style="text-align: center">${lottery.name}</h2>${lottery.markup}<br />`;
+		if (lottery.running) {
+			const userSignedUp = lottery.participants[user.latestIp]
+				|| Object.values(lottery.participants).map(toID).includes(user.userid);
+			buf += `<button class="button" name="send" style=" display: block; margin: 0 auto" value="/lottery ${userSignedUp ? 'leave' : 'join'} ${this.room.id}">${userSignedUp ? "Leave the " : "Sign up for the"} lottery</button>`;
+		} else {
+			buf += '<p style="text-align: center"><b>This lottery has already ended. The winners are:</b></p>';
+			buf += '<ul style="display: table; margin: 0px auto">';
+			for (const winner of lottery.winners) {
+				buf += `<li>${winner}</li>`;
+			}
+			buf += '</ul>';
+		}
 		return buf;
 	},
 };

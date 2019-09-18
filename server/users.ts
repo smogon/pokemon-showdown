@@ -324,7 +324,7 @@ export class Connection {
 	id: string;
 	socketid: string;
 	worker: Worker;
-	inRooms: Set<string>;
+	inRooms: Set<RoomID>;
 	/**
 	 * This can be null during initialization and after disconnecting,
 	 * but we're asserting it non-null for ease of use. The main risk
@@ -337,6 +337,7 @@ export class Connection {
 	challenge: string;
 	autojoins: string;
 	lastActiveTime: number;
+	connectedAt: number;
 	constructor(
 		id: string,
 		worker: Worker,
@@ -345,6 +346,8 @@ export class Connection {
 		ip: string | null,
 		protocol: string | null
 	) {
+		const now = Date.now();
+
 		this.id = id;
 		this.socketid = socketid;
 		this.worker = worker;
@@ -357,10 +360,11 @@ export class Connection {
 
 		this.challenge = '';
 		this.autojoins = '';
-		this.lastActiveTime = Date.now();
+		this.lastActiveTime = now;
+		this.connectedAt = now;
 	}
-	sendTo(roomid: string | BasicRoom | null, data: string) {
-		if (roomid && (roomid as BasicRoom).id) roomid = (roomid as BasicRoom).id;
+	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
+		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
@@ -404,11 +408,12 @@ export class Connection {
 	}
 }
 
-type ChatQueueEntry = [string, string, Connection];
+type ChatQueueEntry = [string, RoomID, Connection];
 
 const SETTINGS = [
 	'isSysop', 'isStaff', 'blockChallenges', 'blockPMs',
-	'ignoreTickets', 'lastConnected', 'inviteOnlyNextBattle',
+	'ignoreTickets', 'lastConnected', 'lastDisconnected',
+	'inviteOnlyNextBattle',
 ];
 
 // User
@@ -436,11 +441,11 @@ export class User extends Chat.MessageContext {
 	permalocked: string | ID | null;
 	prevNames: {[id: /** ID */ string]: string};
 
-	inRooms: Set<string>;
+	inRooms: Set<RoomID>;
 	/**
 	 * Set of room IDs
 	 */
-	games: Set<string>;
+	games: Set<RoomID>;
 	/** Millisecond timestamp for last battle decision */
 	lastDecision: number;
 	lastChallenge: number;
@@ -454,6 +459,7 @@ export class User extends Chat.MessageContext {
 	blockChallenges: boolean;
 	blockPMs: boolean | string;
 	ignoreTickets: boolean;
+	lastDisconnected: number;
 	lastConnected: number;
 	inviteOnlyNextBattle: boolean;
 
@@ -528,7 +534,8 @@ export class User extends Chat.MessageContext {
 		this.blockChallenges = false;
 		this.blockPMs = false;
 		this.ignoreTickets = false;
-		this.lastConnected = 0;
+		this.lastDisconnected = 0;
+		this.lastConnected = connection.connectedAt;
 		this.inviteOnlyNextBattle = false;
 
 		// chat queue
@@ -561,8 +568,8 @@ export class User extends Chat.MessageContext {
 		Users.add(this);
 	}
 
-	sendTo(roomid: string | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = roomid.id;
+	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
+		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
@@ -579,7 +586,7 @@ export class User extends Chat.MessageContext {
 	popup(message: string) {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
-	getIdentity(roomid: string = '') {
+	getIdentity(roomid = '' as RoomID) {
 		if (this.locked || this.namelocked) {
 			const lockedSymbol = (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol
 				: '\u203d');
@@ -602,7 +609,7 @@ export class User extends Chat.MessageContext {
 		}
 		return this.group + this.name;
 	}
-	getIdentityWithStatus(roomid: string = '') {
+	getIdentityWithStatus(roomid = '' as RoomID) {
 		const identity = this.getIdentity(roomid);
 		const status = this.statusType === 'online' ? '' : '@!';
 		return `${identity}${status}`;
@@ -731,7 +738,7 @@ export class User extends Chat.MessageContext {
 	resetName(isForceRenamed = false) {
 		return this.forceRename('Guest ' + this.guestNum, false, isForceRenamed);
 	}
-	updateIdentity(roomid: string | null = null) {
+	updateIdentity(roomid: RoomID | null = null) {
 		if (roomid) {
 			return Rooms.get(roomid).onUpdateIdentity(this);
 		}
@@ -1085,7 +1092,11 @@ export class User extends Chat.MessageContext {
 		// the connection has changed name to this user's username, and so is
 		// being merged into this account
 		this.connected = true;
+		if (connection.connectedAt > this.lastConnected) {
+			this.lastConnected = connection.connectedAt;
+		}
 		this.connections.push(connection);
+
 		// console.log('' + this.name + ' merging: connection ' + connection.socket.id);
 		connection.send(this.getUpdateuserText());
 		connection.user = this;
@@ -1219,7 +1230,7 @@ export class User extends Chat.MessageContext {
 	}
 	markDisconnected() {
 		this.connected = false;
-		this.lastConnected = Date.now();
+		this.lastDisconnected = Date.now();
 		if (!this.registered) {
 			// for "safety"
 			this.group = Config.groupsranking[0];
@@ -1308,8 +1319,8 @@ export class User extends Chat.MessageContext {
 		const prevNames = Object.keys(this.prevNames);
 		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid) as ID;
 	}
-	async tryJoinRoom(roomid: string | Room, connection: Connection) {
-		roomid = roomid && (roomid as Room).id ? (roomid as Room).id : roomid as string;
+	async tryJoinRoom(roomid: RoomID | Room, connection: Connection) {
+		roomid = roomid && (roomid as Room).id ? (roomid as Room).id : roomid as RoomID;
 		const room = Rooms.search(roomid);
 		if (!room && roomid.startsWith('view-')) {
 			return Chat.resolvePage(roomid, this, connection);
@@ -1318,7 +1329,11 @@ export class User extends Chat.MessageContext {
 			if (!this.named) {
 				return Rooms.RETRY_AFTER_LOGIN;
 			} else {
-				connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
+				if (room) {
+					connection.sendTo(roomid, `|noinit|joinfailed|The room "${roomid}" is invite-only, and you haven't been invited.`);
+				} else {
+					connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
+				}
 				return false;
 			}
 		}
@@ -1347,7 +1362,7 @@ export class User extends Chat.MessageContext {
 		this.joinRoom(room, connection);
 		return true;
 	}
-	joinRoom(roomid: string | Room, connection: Connection | null = null) {
+	joinRoom(roomid: RoomID | Room, connection: Connection | null = null) {
 		const room = Rooms.get(roomid);
 		if (!room) throw new Error(`Room not found: ${roomid}`);
 		if (!connection) {
@@ -1355,7 +1370,7 @@ export class User extends Chat.MessageContext {
 				// only join full clients, not pop-out single-room
 				// clients
 				// (...no, pop-out rooms haven't been implemented yet)
-				if (curConnection.inRooms.has('global')) {
+				if (curConnection.inRooms.has('global' as RoomID)) {
 					this.joinRoom(room, curConnection);
 				}
 			}
@@ -1535,6 +1550,12 @@ export class User extends Chat.MessageContext {
 		this.userMessage = '';
 		this.updateIdentity();
 	}
+	getAccountStatusString() {
+		return this.trusted === this.userid ? `[trusted]`
+			: this.autoconfirmed === this.userid ? `[ac]`
+			: this.registered ? `[registered]`
+			: `[unregistered]`;
+	}
 	destroy() {
 		// deallocate user
 		for (const roomid of this.games) {
@@ -1578,17 +1599,41 @@ function pruneInactive(threshold: number) {
 			user.setStatusType('idle');
 		}
 		if (user.connected) continue;
-		if ((now - user.lastConnected) > threshold) {
+		if ((now - user.lastDisconnected) > threshold) {
 			user.destroy();
 		}
 	}
+}
+
+function logGhostConnections(threshold: number): Promise<unknown> {
+	const buffer = [];
+	for (const connection of connections.values()) {
+		// If the connection's been around for at least a week and it doesn't
+		// use raw WebSockets (which doesn't have any kind of keepalive or
+		// timeouts on it), log it.
+		if (connection.protocol !== 'websocket-raw' && connection.connectedAt <= Date.now() - threshold) {
+			const timestamp = Chat.toTimestamp(new Date(connection.connectedAt));
+			const now = Chat.toTimestamp(new Date());
+			const log = `Connection ${connection.id} from ${connection.ip} with protocol "${connection.protocol}" has been around since ${timestamp} (currently ${now}).`;
+			buffer.push(log);
+		}
+	}
+	return buffer.length
+		? FS(`logs/ghosts-${process.pid}.log`).append(buffer.join('\r\n') + '\r\n')
+		: Promise.resolve();
 }
 
 /*********************************************************
  * Routing
  *********************************************************/
 
-function socketConnect(worker: Worker, workerid: number, socketid: string, ip: string, protocol: string) {
+function socketConnect(
+	worker: Worker,
+	workerid: number,
+	socketid: string,
+	ip: string,
+	protocol: string
+) {
 	const id = '' + workerid + '-' + socketid;
 	const connection = new Connection(id, worker, socketid, null, ip, protocol);
 	connections.set(id, connection);
@@ -1605,6 +1650,7 @@ function socketConnect(worker: Worker, workerid: number, socketid: string, ip: s
 
 	const user = new User(connection);
 	connection.user = user;
+	// tslint:disable-next-line: no-floating-promises
 	Punishments.checkIp(user, connection);
 	// Generate 1024-bit challenge string.
 	require('crypto').randomBytes(128, (err: Error | null, buffer: Buffer) => {
@@ -1623,7 +1669,7 @@ function socketConnect(worker: Worker, workerid: number, socketid: string, ip: s
 		}
 	});
 
-	user.joinRoom('global', connection);
+	user.joinRoom('global' as RoomID, connection);
 }
 function socketDisconnect(worker: Worker, workerid: number, socketid: string) {
 	const id = '' + workerid + '-' + socketid;
@@ -1721,5 +1767,9 @@ export const Users = {
 	pruneInactiveTimer: setInterval(() => {
 		pruneInactive(Config.inactiveuserthreshold || 60 * MINUTES);
 	}, 30 * MINUTES),
+	logGhostConnections,
+	logGhostConnectionsTimer: setInterval(async () => {
+		await logGhostConnections(7 * 24 * 60 * MINUTES);
+	}, 7 * 24 * 60 * MINUTES),
 	socketConnect,
 };

@@ -1281,8 +1281,9 @@ namespace RandomTeamsTypes {
 		stealthRock?: number;
 		spikes?: number;
 		toxicSpikes?: number;
-		hazardClear?: number;
+		stickyWeb?: number;
 		rapidSpin?: number;
+		hazardClear?: number;
 		illusion?: number;
 	}
 	export interface FactoryTeamDetails {

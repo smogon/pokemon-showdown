@@ -76,7 +76,7 @@ export class RoomGamePlayer {
  * globally Rooms.RoomGame
  */
 export class RoomGame {
-	id: string;
+	id: RoomID;
 	room: ChatRoom | GameRoom;
 	gameid: ID;
 	title: string;
@@ -254,6 +254,9 @@ export class RoomGame {
 			return;
 		}
 		if (!(oldUserid in this.playerTable)) return;
+		if (!user.named) {
+			return this.onLeave(user, oldUserid);
+		}
 		this.renamePlayer(user, oldUserid);
 	}
 
@@ -261,7 +264,7 @@ export class RoomGame {
 	 * Called when a user leaves the room. (i.e. when the user's last
 	 * connection leaves)
 	 */
-	onLeave(user: User) {}
+	onLeave(user: User, oldUserid?: ID) {}
 
 	/**
 	 * Called each time a connection joins a room (after onJoin if

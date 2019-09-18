@@ -882,7 +882,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	onUpdateConnection(user: User, connection: Connection | null = null) {
 		this.onConnect(user, connection);
 	}
-	onRename(user: User, oldUserid: string, isJoining: boolean, isForceRenamed: boolean) {
+	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (user.userid === oldUserid) return;
 		if (!this.playerTable) {
 			// !! should never happen but somehow still does
@@ -908,6 +908,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 			}
 			return;
 		}
+		if (!user.named) {
+			this.onLeave(user, oldUserid);
+			return;
+		}
 		if (user.userid in this.playerTable) return;
 		const player = this.playerTable[oldUserid];
 		if (player) {
@@ -927,8 +931,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
 		}
 	}
-	onLeave(user: User) {
-		const player = this.playerTable[user.userid];
+	onLeave(user: User, oldUserid?: ID) {
+		const player = this.playerTable[oldUserid || user.userid];
 		if (player && player.active) {
 			player.sendRoom(`|request|null`);
 			player.active = false;

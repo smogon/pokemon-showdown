@@ -6,7 +6,7 @@
 'use strict';
 
 /** @typedef {{source: string, supportHTML: boolean}} QuestionData */
-/** @typedef {{name: string, votes: number}} Option */
+/** @typedef {{name: string, votes: number, correct?: boolean}} Option */
 /** @typedef {Poll} PollType */
 
 class Poll {
@@ -28,11 +28,20 @@ class Poll {
 		/** @type {NodeJS.Timer?} */
 		this.timeout = null;
 		this.timeoutMins = 0;
+		/** @type {boolean} */
+		this.isQuiz = false;
 
 		/** @type {Map<number, Option>} */
 		this.options = new Map();
 		for (const [i, option] of options.entries()) {
-			this.options.set(i + 1, {name: option, votes: 0});
+			/** @type {Option} */
+			const info = {name: option, votes: 0};
+			if (option.startsWith('+')) {
+				this.isQuiz = true;
+				info.correct = true;
+				info.name = info.name.slice(1);
+			}
+			this.options.set(i + 1, info);
 		}
 	}
 
@@ -73,7 +82,8 @@ class Poll {
 	}
 
 	generateVotes() {
-		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> Poll</span> <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
+		const iconText = this.isQuiz ? '<i class="fa fa-question"></i> Quiz' : '<i class="fa fa-bar-chart"></i> Poll';
+		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px">${iconText}</span> <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
 		for (const [number, option] of this.options) {
 			output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${number}" name="send" title="Vote for ${number}. ${Chat.escapeHTML(option.name)}">${number}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
 		}
@@ -88,7 +98,8 @@ class Poll {
 	 * @param {number?} [option]
 	 */
 	generateResults(ended = false, option = 0) {
-		let icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> ${ended ? "Poll ended" : "Poll"}</span>`;
+		const iconText = this.isQuiz ? '<i class="fa fa-question"></i> Quiz' : '<i class="fa fa-bar-chart"></i> Poll';
+		const icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px">${iconText}${ended ? " ended" : ""}</span>`;
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
 		let iter = this.options.entries();
 
@@ -97,7 +108,8 @@ class Poll {
 		let colors = ['#79A', '#8A8', '#88B'];
 		while (!i.done) {
 			let percentage = Math.round((i.value[1].votes * 100) / (this.totalVotes || 1));
-			output += `<div style="margin-top: 3px">${i.value[0]}. <strong>${i.value[0] === option ? '<em>' : ''}${this.getOptionMarkup(i.value[1])}${i.value[0] === option ? '</em>' : ''}</strong> <small>(${i.value[1].votes} vote${i.value[1].votes === 1 ? '' : 's'})</small><br /><span style="font-size:7pt;background:${colors[c % 3]};padding-right:${percentage * 3}px"></span><small>&nbsp;${percentage}%</small></div>`;
+			const answerMarkup = this.isQuiz ? `<span style="color:${i.value[1].correct ? 'green' : 'red'};">${i.value[1].correct ? '' : '<s>'}${this.getOptionMarkup(i.value[1])}${i.value[1].correct ? '' : '</s>'}</span>` : this.getOptionMarkup(i.value[1]);
+			output += `<div style="margin-top: 3px">${i.value[0]}. <strong>${i.value[0] === option ? '<em>' : ''}${answerMarkup}${i.value[0] === option ? '</em>' : ''}</strong> <small>(${i.value[1].votes} vote${i.value[1].votes === 1 ? '' : 's'})</small><br /><span style="font-size:7pt;background:${colors[c % 3]};padding-right:${percentage * 3}px"></span><small>&nbsp;${percentage}%</small></div>`;
 			i = iter.next();
 			c++;
 		}
@@ -227,7 +239,7 @@ const commands = {
 			if (target.length > 1024) return this.errorReply("Poll too long.");
 			if (room.battle) return this.errorReply("Battles do not support polls.");
 
-			let text = Chat.filter(this, target, user, room, connection);
+			let text = this.filter(target);
 			if (target !== text) return this.errorReply("You are not allowed to use filtered words in polls.");
 
 			const supportHTML = cmd === 'htmlcreate';
@@ -270,7 +282,10 @@ const commands = {
 			this.modlog('POLL');
 			return this.addModAction(`A poll was started by ${user.name}.`);
 		},
-		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`],
+		newhelp: [
+			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
+			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
+		],
 
 		vote(target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
@@ -369,6 +384,7 @@ const commands = {
 	},
 	pollhelp: [
 		`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.`,
+		`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		`Accepts the following commands:`,
 		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
 		`/poll htmlcreate [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~`,

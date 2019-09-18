@@ -84,7 +84,7 @@ export class Tournament extends Rooms.RoomGame {
 	lastBracketUpdate: number;
 	bracketUpdateTimer: NodeJS.Timeout | null;
 	bracketCache: AnyObject | null;
-	completedMatches: Set<string>;
+	completedMatches: Set<RoomID>;
 	isAvailableMatchesInvalidated: boolean;
 	availableMatchesCache: {
 		challenges: Map<TournamentPlayer, TournamentPlayer[]>, challengeBys: Map<TournamentPlayer, TournamentPlayer[]>,
@@ -1546,12 +1546,12 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 
 			if (tournament.checkBanned(targetUser)) return this.errorReply("This user is already banned from tournaments.");
 
-			const punishment: [string, string, number, string] =
+			const punishment: [string, ID, number, string] =
 				['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
 			if (online) {
 				Punishments.roomPunish(this.room, targetUser as User, punishment);
 			} else {
-				Punishments.roomPunishName(this.room, targetUser as string, punishment);
+				Punishments.roomPunishName(this.room, targetUserid, punishment);
 			}
 			tournament.removeBannedUser(targetUserid);
 			this.modlog('TOUR BAN', targetUser, reason);

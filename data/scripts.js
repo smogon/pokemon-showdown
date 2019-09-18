@@ -352,7 +352,7 @@ let BattleScripts = {
 
 		const moveResult = !!targets.length;
 		if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
-		const hitSlot = targets.map(pokemon => `${pokemon}`.slice(0, 3));
+		const hitSlot = targets.map(pokemon => pokemon.getSlot());
 		if (move.spreadHit) this.attrLastMove('[spread] ' + hitSlot.join(','));
 		return moveResult;
 	},
