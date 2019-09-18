@@ -4285,11 +4285,14 @@ let BattleMovedex = {
 			onStart(source) {
 				this.add('-message', `${source.active[0].name}'s replacement is going to switch out next turn!`);
 			},
-			onModifyMove(move) {
-				move.selfSwitch = true;
+			onBeforeTurn(pokemon) {
+				this.insertQueue({choice: 'event', event: 'SSBRotate', pokemon: pokemon, priority: -69});
 			},
-			onBeforeMove(source, move) {
-				this.add('-message', `${source.name} is preparing to switch out!`);
+			// @ts-ignore unsupported custom event
+			onSSBRotate(/** @type {Pokemon} */ pokemon) {
+				// @ts-ignore Unsupported custom event, this is refering to a battle
+				this.add('-message', `${pokemon.name} is preparing to switch out!`);
+				pokemon.switchFlag = true;
 			},
 		},
 		selfSwitch: true,
