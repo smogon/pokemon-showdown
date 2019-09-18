@@ -759,6 +759,7 @@ const pages = {
 						break;
 					}
 					buf += `<p><b>Are you sure you want to submit a${ticketTitles[page.slice(7)].charAt(0) === 'A' ? 'n' : ''} ${ticketTitles[page.slice(7)]} report?</b></p>`;
+					meta = Chat.splitFirst(meta, '-', 2).join('|'); // change the delimiter as some ticket titles include -
 					buf += `<p><button class="button notifying" name="send" value="/helpticket submit ${ticketTitles[page.slice(7)]} ${meta}">Yes, Contact global staff</button> <a href="/view-help-request-${query.slice(0, i).join('-')}${meta}" target="replace"><button class="button">No, cancel</button></a></p>`;
 					break;
 				}
@@ -1094,7 +1095,7 @@ let commands = {
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
-			let [ticketType, reportTargetType, reportTarget] = Chat.splitFirst(target, '-', 2).map(s => s.trim());
+			let [ticketType, reportTargetType, reportTarget] = Chat.splitFirst(target, '|', 2).map(s => s.trim());
 			reportTarget = Chat.escapeHTML(reportTarget);
 			if (!Object.values(ticketTitles).includes(ticketType)) return this.parse('/helpticket');
 			ticket = {
