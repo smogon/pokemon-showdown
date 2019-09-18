@@ -1319,7 +1319,7 @@ export class User extends Chat.MessageContext {
 				return Rooms.RETRY_AFTER_LOGIN;
 			} else {
 				if (room) {
-					connection.sendTo(roomid, `|noinit|joinfailed|You must be invited to join room "${roomid}"`);
+					connection.sendTo(roomid, `|noinit|joinfailed|The room "${roomid}" is invite-only, and you haven't been invited.`);
 				} else {
 					connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
 				}
