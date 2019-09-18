@@ -228,6 +228,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'beskyttelsesnet',
 				evs: {hp: 248, def: 252, spa: 8}, ivs: {atk: 0}, nature: 'Bold',
 			},
+			'Darth': {
+				species: 'Tangela', ability: 'Seraphic Regeneration', item: 'Eviolite', gender: 'M',
+				moves: [['Knock Off', 'Power Whip'], ['Sludge Bomb', 'Toxic'], ['Recover', 'Protect']],
+				signatureMove: 'Leech Swap',
+				evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
+			},
 			'DaWoblefet': {
 				species: 'Wobbuffet', ability: 'Shadow Artifice', item: 'Iapapa Berry', gender: 'M',
 				moves: ['Counter', 'Mirror Coat', 'Encore'],
@@ -630,12 +636,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Nasty Plot', 'Ice Beam', 'Scald', 'Recover'],
 				signatureMove: 'Geomagnetic Storm',
 				evs: {def: 252, spa: 4, spe: 252}, nature: 'Bold',
-			},
-			'Seraphus': {
-				species: 'Tangela', ability: 'Seraphic Regeneration', item: 'Eviolite', gender: 'M',
-				moves: [['Knock Off', 'Power Whip'], ['Sludge Bomb', 'Toxic'], ['Recover', 'Protect']],
-				signatureMove: 'Leech Swap',
-				evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 			},
 			'Shiba': {
 				species: 'Fletchinder', ability: 'Gale Wings v1', item: 'Eviolite', gender: 'F',

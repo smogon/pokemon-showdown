@@ -290,6 +290,26 @@ let BattleAbilities = {
 			pokemon.formeChange('Shaymin-Sky', this.effect);
 		},
 	},
+	// Darth
+	seraphicregeneration: {
+		desc: "When this Pokemon switches out, it regains 33% of its HP, then its replacement recovers 33% of its HP.",
+		shortDesc: "Upon switching out, this Pokemon and its replacement regain 33% of their HP.",
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.maxhp / 3);
+			pokemon.side.addSlotCondition(pokemon, 'seraphicregeneration');
+		},
+		id: "seraphicregeneration",
+		name: "Seraphic Regeneration",
+		isNonstandard: "Custom",
+		effect: {
+			duration: 1,
+			onSwitchInPriority: -1,
+			onSwitchIn(pokemon) {
+				pokemon.heal(pokemon.maxhp / 3);
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			},
+		},
+	},
 	// DaWoblefet
 	shadowartifice: {
 		desc: "Prevents adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or also have this Ability or Shadow Tag. If this Pokemon is knocked out with an attack, that attack's user loses HP equal to the amount of damage inflicted on this Pokemon.",
@@ -981,26 +1001,6 @@ let BattleAbilities = {
 			if (!effect || !effect.status) return false;
 			this.add('-immune', target, '[from] ability: Thiccer Fat');
 			return false;
-		},
-	},
-	// Seraphus
-	seraphicregeneration: {
-		desc: "When this Pokemon switches out, it regains 33% of its HP, then its replacement recovers 33% of its HP.",
-		shortDesc: "Upon switching out, this Pokemon and its replacement regain 33% of their HP.",
-		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.maxhp / 3);
-			pokemon.side.addSlotCondition(pokemon, 'seraphicregeneration');
-		},
-		id: "seraphicregeneration",
-		name: "Seraphic Regeneration",
-		isNonstandard: "Custom",
-		effect: {
-			duration: 1,
-			onSwitchInPriority: -1,
-			onSwitchIn(pokemon) {
-				pokemon.heal(pokemon.maxhp / 3);
-				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-			},
 		},
 	},
 	// Schiavetto

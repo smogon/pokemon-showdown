@@ -421,6 +421,18 @@ let BattleStatuses = {
 			this.add(`c|@Chloe|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`);
 		},
 	},
+	darth: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Darth|The angel of stall descends upon the battlefield.`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Darth|The angel of stall has decided upon a tactical retreat.`);
+		},
+		onFaint() {
+			this.add(`c|+Darth|Regenerator is a perfectly balanced ability.`);
+		},
+	},
 	dawoblefet: {
 		noCopy: true,
 		onStart() {
@@ -1340,18 +1352,6 @@ let BattleStatuses = {
 		onFaint() {
 			this.add(`c|@Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
 			this.add(`c|@Scotteh|█████████████████████▀▀`);
-		},
-	},
-	seraphus: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Seraphus|The angel of stall descends upon the battlefield.`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Seraphus|The angel of stall has decided upon a tactical retreat.`);
-		},
-		onFaint() {
-			this.add(`c|+Seraphus|Regenerator is a perfectly balanced ability.`);
 		},
 	},
 	shiba: {

@@ -1253,6 +1253,38 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 	},
+	// Darth
+	leechswap: {
+		accuracy: 85,
+		basePower: 0,
+		category: "Status",
+		desc: "Applies Leech Seed to the foe, then switches out",
+		shortDesc: "Leech Seeds foe, then switches out.",
+		id: "leechswap",
+		name: "Leech Swap",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, reflectable: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Leech Seed", target);
+		},
+		onHit(target, source) {
+			if (target.hasType('Grass') || target.volatiles['leechseed']) {
+				this.add('-fail', source);
+				return null;
+			} else {
+				target.addVolatile('leechseed');
+			}
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+	},
 	// DaWoblefet
 	superegoinflation: {
 		accuracy: true,
@@ -3927,37 +3959,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Electric",
-	},
-	// Seraphus
-	leechswap: {
-		accuracy: 85,
-		basePower: 0,
-		category: "Status",
-		desc: "Applies Leech Seed to the foe, then switches out",
-		shortDesc: "Leech Seeds foe, then switches out.",
-		id: "leechswap",
-		name: "Leech Swap",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, reflectable: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Leech Seed", target);
-		},
-		onHit(target) {
-			if (!target.hasType('Grass') && !target.volatiles['leechseed']) {
-				target.addVolatile('leechseed');
-			} else {
-				return false;
-			}
-		},
-		selfSwitch: true,
-		secondary: null,
-		target: "normal",
-		type: "Grass",
 	},
 	// Shiba
 	goinda: {
