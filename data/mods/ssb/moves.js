@@ -470,7 +470,7 @@ let BattleMovedex = {
 			},
 		},
 		secondary: null,
-		target: "self",
+		target: "all",
 		type: "Fire",
 	},
 	// Anubis
@@ -587,7 +587,7 @@ let BattleMovedex = {
 				this.add('-message', 'Speeds have returned to normal.');
 			},
 		},
-		target: "self",
+		target: "all",
 		type: "Ghost",
 	},
 	// A Quag to The Past
@@ -2041,7 +2041,7 @@ let BattleMovedex = {
 			},
 		},
 		secondary: null,
-		target: "self",
+		target: "all",
 		type: "Psychic",
 	},
 	// Used by HoeenHero's terrain
@@ -3072,13 +3072,6 @@ let BattleMovedex = {
 				}
 				return 5;
 			},
-			onTryMove(target, source, move) {
-				let hazardMoves = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'hazardpass', 'beskyttelsesnet', 'nekoveil', 'bringerofdarkness', 'greed', 'smokebomb', 'extrathicc'];
-				if (hazardMoves.includes(move.id)) {
-					this.add('-message', `Prismatic Terrain prevented ${move.name} from completing!`);
-					return false;
-				}
-			},
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Ice') {
 					this.debug('prismatic terrain weaken');
@@ -3093,13 +3086,12 @@ let BattleMovedex = {
 				}
 				this.add('-message', 'The battlefield suddenly got a refractive high poly count!');
 				let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-				let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 				for (const sideCondition of removeAll) {
 					if (source.side.foe.removeSideCondition(sideCondition)) {
-						if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side.foe, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+						this.add('-sideend', source.side.foe, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
 					}
 					if (source.side.removeSideCondition(sideCondition)) {
-						if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+						this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
 					}
 				}
 			},
@@ -3111,7 +3103,7 @@ let BattleMovedex = {
 			},
 		},
 		secondary: null,
-		target: "self",
+		target: "all",
 		type: "Fairy",
 	},
 	// nui

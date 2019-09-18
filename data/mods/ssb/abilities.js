@@ -451,7 +451,7 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onSwitchIn(pokemon) {
 			this.add('-activate', pokemon, 'ability: Trombe!');
-			if (Math.round(this.random())) {
+			if (this.random(2)) {
 				pokemon.side.addSideCondition('lightscreen');
 			} else {
 				pokemon.side.addSideCondition('reflect');
@@ -503,7 +503,7 @@ let BattleAbilities = {
 		id: "gzguishark",
 		name: "gz guishark",
 		isNonstandard: "Custom",
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			this.boost({atk: 1}, pokemon);
 		},
 		onAfterMega(pokemon) {

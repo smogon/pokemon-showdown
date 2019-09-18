@@ -1851,6 +1851,97 @@ let BattleStatuses = {
 			}
 		},
 	},
+	// Modded hazard moves to fail when Prismatic terrain is active
+	auroraveil: {
+		inherit: true,
+		onStart(side) {
+			if (this.field.isTerrain('prismaticterrain')) {
+				this.add('-message', `Prismatic Terrain prevented Aurora Veil from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Aurora Veil');
+		},
+	},
+	lightscreen: {
+		inherit: true,
+		onStart(side) {
+			if (this.field.isTerrain('prismaticterrain')) {
+				this.add('-message', `Prismatic Terrain prevented Light Screen from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Light Screen');
+		},
+	},
+	mist: {
+		inherit: true,
+		onStart(side) {
+			if (this.field.isTerrain('prismaticterrain')) {
+				this.add('-message', `Prismatic Terrain prevented Mist from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Mist');
+		},
+	},
+	reflect: {
+		inherit: true,
+		onStart(side) {
+			if (this.field.isTerrain('prismaticterrain')) {
+				this.add('-message', `Prismatic Terrain prevented Reflect from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'Reflect');
+		},
+	},
+	safeguard: {
+		inherit: true,
+		onStart(side) {
+			if (this.field.isTerrain('prismaticterrain')) {
+				this.add('-message', `Prismatic Terrain prevented Safeguard from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Safeguard');
+		},
+	},
+	spikes: {
+		inherit: true,
+		onStart(side) {
+			if (this.field.isTerrain('prismaticterrain')) {
+				this.add('-message', `Prismatic Terrain prevented Spikes from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Spikes');
+		},
+	},
+	stealthrock: {
+		inherit: true,
+		onStart(side) {
+			if (this.field.isTerrain('prismaticterrain')) {
+				this.add('-message', `Prismatic Terrain prevented Stealth Rock from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Stealth Rock');
+		},
+	},
+	stickyweb: {
+		inherit: true,
+		onStart(side) {
+			if (this.field.isTerrain('prismaticterrain')) {
+				this.add('-message', `Prismatic Terrain prevented Sticky Web from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Sticky Web');
+		},
+	},
+	toxicspikes: {
+		inherit: true,
+		onStart(side) {
+			if (this.field.isTerrain('prismaticterrain')) {
+				this.add('-message', `Prismatic Terrain prevented Toxic Spikes from starting!`);
+				return null;
+			}
+			this.add('-sidestart', side, 'move: Toxic Spikes');
+		},
+	},
 };
 
 exports.BattleStatuses = BattleStatuses;
