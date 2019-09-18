@@ -37,6 +37,10 @@ declare global {
 
 	type ChildProcess = child_process.ChildProcess
 
+	// sockets
+	type SocketID = string & {__isSocketID: true};
+	type ChannelID = -1 | 0 | 1 | 2 | 3 | 4;
+
 	// rooms
 	type GlobalRoom = RoomsType.GlobalRoom
 	type ChatRoom = RoomsType.ChatRoom

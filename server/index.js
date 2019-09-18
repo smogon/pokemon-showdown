@@ -69,6 +69,33 @@ const FS = require('../.lib-dist/fs').FS;
 const ConfigLoader = require('../.server-dist/config-loader');
 global.Config = ConfigLoader.Config;
 
+/**
+ * @param {string} moduleName
+ * @param {string} key
+ * @param {boolean} expected
+ */
+function tryRequire(moduleName, key, expected) {
+	try {
+		if (expected ? Config[key] : !Config[key]) {
+			require.resolve(moduleName);
+		}
+	} catch (e) {
+		if (e.code === 'MODULE_NOT_FOUND') {
+			throw new Error(
+				`${moduleName} is not installed, but it is a required dependency if Config.${key} is ${expected ? 'enabled' : 'disabled'}!` +
+				`Run \`npm install ${moduleName}\` and restart the server.`
+			);
+		} else {
+			// This should never happen.
+			throw e;
+		}
+	}
+}
+
+tryRequire('node-oom-heapdump', 'ofe', true);
+tryRequire('node-static', 'disablenodestatic', false);
+tryRequire('permessage-deflate', 'wsdeflate', true);
+
 global.Monitor = require('../.server-dist/monitor').Monitor;
 global.__version = {head: ''};
 Monitor.version().then(function (hash) {
@@ -128,7 +155,7 @@ if (Config.crashguard) {
  * Start networking processes to be connected to
  *********************************************************/
 
-global.Sockets = require('./sockets');
+global.Sockets = require('../.server-dist/sockets');
 
 exports.listen = function (port, bindAddress, workerCount) {
 	Sockets.listen(port, bindAddress, workerCount);

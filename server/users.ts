@@ -322,7 +322,7 @@ const connections = new Map();
 
 export class Connection {
 	id: string;
-	socketid: string;
+	socketid: SocketID;
 	worker: Worker;
 	inRooms: Set<RoomID>;
 	/**
@@ -341,7 +341,7 @@ export class Connection {
 	constructor(
 		id: string,
 		worker: Worker,
-		socketid: string,
+		socketid: SocketID,
 		user: User | null,
 		ip: string | null,
 		protocol: string | null
@@ -1626,7 +1626,7 @@ function logGhostConnections(threshold: number): Promise<unknown> {
 function socketConnect(
 	worker: Worker,
 	workerid: number,
-	socketid: string,
+	socketid: SocketID,
 	ip: string,
 	protocol: string
 ) {
@@ -1667,14 +1667,14 @@ function socketConnect(
 
 	user.joinRoom('global' as RoomID, connection);
 }
-function socketDisconnect(worker: Worker, workerid: number, socketid: string) {
+function socketDisconnect(worker: Worker, workerid: number, socketid: SocketID) {
 	const id = '' + workerid + '-' + socketid;
 
 	const connection = connections.get(id);
 	if (!connection) return;
 	connection.onDisconnect();
 }
-function socketReceive(worker: Worker, workerid: number, socketid: string, message: string) {
+function socketReceive(worker: Worker, workerid: number, socketid: SocketID, message: string) {
 	const id = `${workerid}-${socketid}`;
 
 	const connection = connections.get(id);

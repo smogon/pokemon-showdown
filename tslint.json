@@ -65,7 +65,8 @@
             }
         ],
         "semicolon": [true, "always", "strict-bound-class-methods"],
-        "space-before-function-paren": [true, {"anonymous": "always", "named": "never", "asyncArrow": "always"}]
+        "space-before-function-paren": [true, {"anonymous": "always", "named": "never", "asyncArrow": "always"}],
+        "no-implicit-dependencies": [true, "optional"]
     },
     "jsEnable": false,
     "rulesDirectory": [],

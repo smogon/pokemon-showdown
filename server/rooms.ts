@@ -1465,7 +1465,7 @@ export class GameRoom extends BasicChatRoom {
 	 * - logNum = 1, 2, 3, 4 : player log (exact HP for that player)
 	 * - logNum = -1         : debug log (exact HP for all players)
 	 */
-	getLog(channel: -1 | 0 | 1 | 2 | 3 | 4 = 0) {
+	getLog(channel: ChannelID = 0) {
 		return this.log.getScrollback(channel);
 	}
 	getLogForUser(user: User) {
