@@ -1318,8 +1318,8 @@ export class User extends Chat.MessageContext {
 			if (!this.named) {
 				return Rooms.RETRY_AFTER_LOGIN;
 			} else {
-				if (room && room.battle) {
-					connection.sendTo(roomid, `|noinit|joinfailed|You do not have permission to join the battle "${roomid}"`);
+				if (room) {
+					connection.sendTo(roomid, `|noinit|joinfailed|You must be invited to join room "${roomid}"`);
 				} else {
 					connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
 				}
