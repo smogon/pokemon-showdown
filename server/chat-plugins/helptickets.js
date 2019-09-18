@@ -1098,17 +1098,6 @@ let commands = {
 			let [ticketType, reportTargetType, reportTarget] = Chat.splitFirst(target, '|', 2).map(s => s.trim());
 			reportTarget = Chat.escapeHTML(reportTarget);
 			if (!Object.values(ticketTitles).includes(ticketType)) return this.parse('/helpticket');
-			ticket = {
-				creator: user.name,
-				userid: user.userid,
-				open: true,
-				active: false,
-				type: ticketType,
-				created: Date.now(),
-				claimed: null,
-				escalated: false,
-				ip: user.latestIp,
-			};
 			/** @type {{[k: string]: string}} */
 			const contexts = {
 				'PM Harassment': `Hi! Who was harassing you in private messages?`,
@@ -1122,6 +1111,17 @@ let commands = {
 			/** @type {{[k: string]: string}} */
 			const staffContexts = {
 				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${Object.keys(user.ips).map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
+			};
+			ticket = {
+				creator: user.name,
+				userid: user.userid,
+				open: true,
+				active: !contexts[ticketType],
+				type: ticketType,
+				created: Date.now(),
+				claimed: null,
+				escalated: false,
+				ip: user.latestIp,
 			};
 			let closeButtons = ``;
 			switch (ticket.type) {
@@ -1177,8 +1177,6 @@ let commands = {
 			if (contexts[ticket.type]) {
 				helpRoom.add(`|c|~Staff|${contexts[ticket.type]}`);
 				helpRoom.update();
-			} else {
-				ticket.active = true;
 			}
 			tickets[user.userid] = ticket;
 			writeTickets();
