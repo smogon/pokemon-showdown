@@ -322,6 +322,19 @@ let Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] Ultra Final",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3654575/">Ultra Final Discussion</a>`],
+
+		mod: 'gen7',
+		forcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Pokemon', 'Nickname Clause', 'Team Preview', 'Cancel Mod'],
+		banlist: ['Unreleased', 'Illegal'],
+	},
+	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
