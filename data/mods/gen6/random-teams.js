@@ -87,7 +87,7 @@ class RandomGen6Teams extends RandomTeams {
 		}
 
 		// These moves can be used even if we aren't setting up to use them:
-		let SetupException = ['closecombat', 'diamondstorm', 'extremespeed', 'suckerpunch', 'superpower', 'dracometeor', 'leafstorm', 'overheat'];
+		let SetupException = ['closecombat', 'diamondstorm', 'extremespeed', 'suckerpunch', 'superpower', 'dracometeor'];
 
 		let counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Skill Link'];
 		let ateAbilities = ['Aerilate', 'Pixilate', 'Refrigerate'];
@@ -755,11 +755,10 @@ class RandomGen6Teams extends RandomTeams {
 			item = 'Sitrus Berry';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
-		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
-			// To perma-taunt a Pokemon by giving it Assault Vest
-			item = 'Assault Vest';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
-			if (template.baseStats.spe >= 60 && template.baseStats.spe <= 108) {
+			if (ability === 'Klutz') {
+				item = 'Assault Vest';
+			} else if (template.baseStats.spe >= 60 && template.baseStats.spe <= 108) {
 				item = 'Choice Scarf';
 			} else {
 				item = (counter.Physical > counter.Special) ? 'Choice Band' : 'Choice Specs';
@@ -778,7 +777,7 @@ class RandomGen6Teams extends RandomTeams {
 			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
 		} else if ((ability === 'Magic Guard' && counter.damagingMoves.length > 1) || (ability === 'Sheer Force' && !!counter['sheerforce'])) {
 			item = 'Life Orb';
-		} else if (ability === 'Poison Heal' || ability === 'Toxic Boost') {
+		} else if (ability === 'Poison Heal') {
 			item = 'Toxic Orb';
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
