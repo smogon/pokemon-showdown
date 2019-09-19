@@ -855,7 +855,7 @@ export class CommandContext extends MessageContext {
 						return this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
 					}
 				}
-				if (user.blockPMs && (user.blockPMs === true || targetUser.authAtLeast(user.blockPMs)) && !targetUser.can('lock')) {
+				if (user.blockPMs && (user.blockPMs === true || !targetUser.authAtLeast(user.blockPMs)) && !targetUser.can('lock')) {
 					return this.errorReply(`You are blocking private messages right now.`);
 				}
 			}
