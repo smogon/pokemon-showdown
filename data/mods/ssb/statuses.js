@@ -1851,7 +1851,26 @@ let BattleStatuses = {
 	},
 	// Modded hazard moves to fail when Prismatic terrain is active
 	auroraveil: {
-		inherit: true,
+		duration: 5,
+		durationCallback(target, source, effect) {
+			if (source && source.hasItem('lightclay')) {
+				return 8;
+			}
+			return 5;
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			if (target !== source && target.side === this.effectData.target) {
+				if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
+						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
+					return;
+				}
+				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+					this.debug('Aurora Veil weaken');
+					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					return this.chainModify(0.5);
+				}
+			}
+		},
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Aurora Veil from starting!`);
@@ -1859,9 +1878,29 @@ let BattleStatuses = {
 			}
 			this.add('-sidestart', side, 'move: Aurora Veil');
 		},
+		onResidualOrder: 21,
+		onResidualSubOrder: 1,
+		onEnd(side) {
+			this.add('-sideend', side, 'move: Aurora Veil');
+		},
 	},
 	lightscreen: {
-		inherit: true,
+		duration: 5,
+		durationCallback(target, source, effect) {
+			if (source && source.hasItem('lightclay')) {
+				return 8;
+			}
+			return 5;
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
+				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+					this.debug('Light Screen weaken');
+					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					return this.chainModify(0.5);
+				}
+			}
+		},
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Light Screen from starting!`);
@@ -1869,9 +1908,31 @@ let BattleStatuses = {
 			}
 			this.add('-sidestart', side, 'move: Light Screen');
 		},
+		onResidualOrder: 21,
+		onResidualSubOrder: 1,
+		onEnd(side) {
+			this.add('-sideend', side, 'move: Light Screen');
+		},
 	},
 	mist: {
-		inherit: true,
+		duration: 5,
+		onBoost(boost, target, source, effect) {
+			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+			if (source && target !== source) {
+				let showMsg = false;
+				for (let i in boost) {
+					// @ts-ignore
+					if (boost[i] < 0) {
+						// @ts-ignore
+						delete boost[i];
+						showMsg = true;
+					}
+				}
+				if (showMsg && !(/** @type {ActiveMove} */(effect)).secondaries) {
+					this.add('-activate', target, 'move: Mist');
+				}
+			}
+		},
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Mist from starting!`);
@@ -1879,9 +1940,29 @@ let BattleStatuses = {
 			}
 			this.add('-sidestart', side, 'move: Mist');
 		},
+		onResidualOrder: 21,
+		onResidualSubOrder: 3,
+		onEnd(side) {
+			this.add('-sideend', side, 'Mist');
+		},
 	},
 	reflect: {
-		inherit: true,
+		duration: 5,
+		durationCallback(target, source, effect) {
+			if (source && source.hasItem('lightclay')) {
+				return 8;
+			}
+			return 5;
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
+				if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+					this.debug('Reflect weaken');
+					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					return this.chainModify(0.5);
+				}
+			}
+		},
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Reflect from starting!`);
@@ -1889,9 +1970,39 @@ let BattleStatuses = {
 			}
 			this.add('-sidestart', side, 'Reflect');
 		},
+		onResidualOrder: 21,
+		onEnd(side) {
+			this.add('-sideend', side, 'Reflect');
+		},
 	},
 	safeguard: {
-		inherit: true,
+		duration: 5,
+		durationCallback(target, source, effect) {
+			if (source && source.hasAbility('persistent')) {
+				this.add('-activate', source, 'ability: Persistent', effect);
+				return 7;
+			}
+			return 5;
+		},
+		onSetStatus(status, target, source, effect) {
+			if (!effect || !source) return;
+			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+			if (target !== source) {
+				this.debug('interrupting setStatus');
+				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+					this.add('-activate', target, 'move: Safeguard');
+				}
+				return null;
+			}
+		},
+		onTryAddVolatile(status, target, source, effect) {
+			if (!effect || !source) return;
+			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+			if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
+				if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+				return null;
+			}
+		},
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Safeguard from starting!`);
@@ -1899,9 +2010,13 @@ let BattleStatuses = {
 			}
 			this.add('-sidestart', side, 'move: Safeguard');
 		},
+		onResidualOrder: 21,
+		onResidualSubOrder: 2,
+		onEnd(side) {
+			this.add('-sideend', side, 'Safeguard');
+		},
 	},
 	spikes: {
-		inherit: true,
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Spikes from starting!`);
@@ -1909,9 +2024,18 @@ let BattleStatuses = {
 			}
 			this.add('-sidestart', side, 'move: Spikes');
 		},
+		onRestart(side) {
+			if (this.effectData.layers >= 3) return false;
+			this.add('-sidestart', side, 'Spikes');
+			this.effectData.layers++;
+		},
+		onSwitchIn(pokemon) {
+			if (!pokemon.isGrounded()) return;
+			let damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
+			this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
+		},
 	},
 	stealthrock: {
-		inherit: true,
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Stealth Rock from starting!`);
@@ -1919,9 +2043,12 @@ let BattleStatuses = {
 			}
 			this.add('-sidestart', side, 'move: Stealth Rock');
 		},
+		onSwitchIn(pokemon) {
+			let typeMod = this.clampIntRange(pokemon.runEffectiveness(this.getActiveMove('stealthrock')), -6, 6);
+			this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+		},
 	},
 	stickyweb: {
-		inherit: true,
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Sticky Web from starting!`);
@@ -1929,15 +2056,37 @@ let BattleStatuses = {
 			}
 			this.add('-sidestart', side, 'move: Sticky Web');
 		},
+		onSwitchIn(pokemon) {
+			if (!pokemon.isGrounded()) return;
+			this.add('-activate', pokemon, 'move: Sticky Web');
+			this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getActiveMove('stickyweb'));
+		},
 	},
 	toxicspikes: {
-		inherit: true,
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Toxic Spikes from starting!`);
 				return null;
 			}
 			this.add('-sidestart', side, 'move: Toxic Spikes');
+		},
+		onRestart(side) {
+			if (this.effectData.layers >= 2) return false;
+			this.add('-sidestart', side, 'move: Toxic Spikes');
+			this.effectData.layers++;
+		},
+		onSwitchIn(pokemon) {
+			if (!pokemon.isGrounded()) return;
+			if (pokemon.hasType('Poison')) {
+				this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
+				pokemon.side.removeSideCondition('toxicspikes');
+			} else if (pokemon.hasType('Steel')) {
+				return;
+			} else if (this.effectData.layers >= 2) {
+				pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
+			} else {
+				pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
+			}
 		},
 	},
 };
