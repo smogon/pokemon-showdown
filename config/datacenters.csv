@@ -176,7 +176,7 @@
 27.100.39.0,27.100.39.255,Host US,http://hostus.us/
 27.122.12.0,27.122.12.255,Pacswitch,https://www.pacswitch.com/
 27.122.14.0,27.122.14.255,Pacswitch,https://www.pacswitch.com/
-27.131.64.0,27.131.127.254,Micron21,http://www.micron21.com/
+27.131.64.0,27.131.127.255,Micron21,http://www.micron21.com/
 27.255.64.0,27.255.95.255,Ehost Data Center,http://cc.ehostidc.co.kr/
 31.3.104.0,31.3.111.255,tuxis.nl,http://tuxis.nl/
 31.3.152.0,31.3.159.255,AltusHost,http://www.altushost.com/
@@ -227,7 +227,7 @@
 31.214.129.0,31.214.129.255,MUV Informatics,https://www.muv.com.tr/
 31.214.130.0,31.214.131.255,Nitrado,https://server.nitrado.net/
 31.214.134.0,31.214.136.255,Nitrado,https://server.nitrado.net/
-31.214.141.0,31.214.141.254,Zap Hosting,https://zap-hosting.com/
+31.214.141.0,31.214.141.255,active-servers,https://active-servers.com/
 31.214.142.0,31.214.143.255,Nitrado,https://server.nitrado.net/
 31.214.144.0,31.214.144.255,IP-Projects,https://www.ip-projects.de/
 31.214.148.0,31.214.148.128,Nitrado,https://server.nitrado.net/
@@ -1070,7 +1070,7 @@
 77.67.50.224,77.67.50.255,Surfeasy,https://www.surfeasy.com/
 77.68.0.0,77.68.127.255,Fasthosts Internet Ltd,http://www.fasthosts.co.uk/
 77.73.0.0,77.73.7.255,Memset Ltd,http://www.memset.com/
-77.73.64.0,77.73.71.254,Veesp Dedicated Servers,https://veesp.com/
+77.73.64.0,77.73.71.255,Veesp Dedicated Servers,https://veesp.com/
 77.74.192.0,77.74.199.255,UK Dedicated Servers LTD,http://ukservers.com/
 77.75.32.0,77.75.39.255,Radore Hosting,http://as42926.net/
 77.75.120.0,77.75.127.255,UK Dedicated Servers LTD,http://ukservers.com/
@@ -1630,7 +1630,7 @@
 103.11.152.0,103.11.155.255,Web Werks,http://www.web-werks.com/
 103.11.244.0,103.11.247.255,easyhost.com.hk,http://easyhost.com.hk/
 103.21.58.0,103.21.59.255,Confluence Networks Inc,http://confluence-networks.com/
-103.22.128.0,103.22.131.254,Voxel,http://www.voxel.net/
+103.22.128.0,103.22.131.255,Internap Network Services,https://www.inap.com/
 103.23.20.0,103.23.23.255,Infinys,http://isi.co.id/
 103.23.152.0,103.23.155.255,ozhosting.com,http://ozhosting.com/
 103.25.56.0,103.25.59.255,Ransom IT,https://www.ransomit.com.au/
@@ -1807,7 +1807,7 @@
 111.221.64.0,111.221.67.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 111.221.69.0,111.221.69.127,Microsoft Azure,http://www.windowsazure.com/en-us/
 111.221.80.0,111.221.111.255,Microsoft Azure,http://www.windowsazure.com/en-us/
-111.223.224.0,111.223.239.254,Micron21,http://www.micron21.com/
+111.223.224.0,111.223.239.255,Micron21,http://www.micron21.com/
 112.121.160.0,112.121.191.255,simcentric,http://simcentric.com/
 112.140.184.0,112.140.187.255,Sparkstation,http://sparkstation.net/
 113.53.228.0,113.53.228.255,TOT Internet Data Center,https://www.totidc.net/
