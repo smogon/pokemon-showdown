@@ -1098,7 +1098,7 @@
 78.110.160.0,78.110.175.255,UK Dedicated Servers LTD,http://ukservers.com/
 78.129.128.0,78.129.255.255,iomart Hosting Ltd,http://www.rapidswitch.com/
 78.136.0.0,78.136.63.255,Rackspace,http://www.rackspace.com/
-78.136.64.0,78.136.127.255,ServiHosting Networks S.L.,http://servihosting.es
+78.136.80.0,78.136.81.255,ServiHosting Networks S.L.,http://servihosting.es
 78.138.64.0,78.138.127.255,MESH,http://www.mesh.eu/
 78.143.0.0,78.143.63.255,LINK11 Gmbh,http://www.link11.de/
 78.157.192.0,78.157.223.255,UK Dedicated Servers LTD,http://ukservers.com/
@@ -1475,7 +1475,6 @@
 94.23.0.0,94.23.255.255,OVH,http://www.ovh.co.uk/
 94.24.0.0,94.24.127.255,xservers.ro,http://www.xservers.ro/
 94.75.192.0,94.75.255.255,Leaseweb,http://www.leaseweb.com/
-94.76.128.0,94.76.191.255,ServiHosting Networks S.L.,http://servihosting.es
 94.76.192.0,94.76.255.255,BlueConnex,http://www.simplytransit.net/
 94.100.16.0,94.100.31.255,Swiftway,http://swiftway.net/
 94.101.80.0,94.101.95.255,Radore Hosting,http://as42926.net/
@@ -2220,7 +2219,7 @@
 178.128.224.0,178.128.239.255,DigitalOcean Canada,https://www.digitalocean.com/
 178.128.240.0,178.128.255.255,DigitalOcean Netherlands,https://www.digitalocean.com/
 178.128.144.0,178.128.159.255,DigitalOcean USA,https://www.digitalocean.com/
-178.156.0.0,178.156.127.255,ServiHosting Networks S.L.,http://servihosting.es
+178.156.80.0,178.156.80.255,ServiHosting Networks S.L.,http://servihosting.es
 178.162.128.0,178.162.255.255,Leaseweb,http://www.leaseweb.com/
 178.174.0.0,178.174.127.255,Unbelievable Machine,http://www.unbelievable-machine.com/
 178.175.128.0,178.175.191.255,Trabia Network,https://www.trabia.com/
