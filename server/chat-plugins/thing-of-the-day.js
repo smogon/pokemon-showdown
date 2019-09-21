@@ -5,7 +5,7 @@ const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
-const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling'];
+const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling', 'animeandmanga', 'sports'];
 
 /** @type {{[k: string]: ChatRoom}} */
 const rooms = {};
@@ -20,6 +20,8 @@ const SOTDS_FILE = 'config/chat-plugins/tvbf-shows.tsv';
 const COTDS_FILE = 'config/chat-plugins/youtube-channels.tsv';
 const BOTWS_FILE = 'config/chat-plugins/thelibrary.tsv';
 const MOTWS_FILE = 'config/chat-plugins/prowrestling-matches.tsv';
+const ANOTDS_FILE = 'config/chat-plugins/animeandmanga-shows.tsv';
+const ATLOTDS_FILE = 'config/chat-plugins/sports-athletes.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
 /** @type {{[k: string]: [string, AnyObject][]}} */
@@ -331,6 +333,19 @@ class OtdHandler {
 		} else if (winner.link) {
 			output += Chat.html `<b>Link:</b> <a href="${winner.link}">${winner.link}</a><br/>`;
 		}
+
+		// Batch these together on 2 lines. Order intentional.
+		const athleteDetails = [];
+		if (winner.sport) athleteDetails.push(Chat.html `<b>Sport:</b> ${winner.sport}`);
+		if (winner.team) athleteDetails.push(Chat.html `<b>Team:</b> ${winner.team}`);
+		if (winner.age) athleteDetails.push(Chat.html `<b>Age:</b> ${winner.age}`);
+		if (winner.country) athleteDetails.push(Chat.html `<b>Nationality:</b> ${winner.country}`);
+
+		if (athleteDetails.length) {
+			output += athleteDetails.slice(0, 2).join(' | ') + '<br/>';
+			if (athleteDetails.length > 2) output += athleteDetails.slice(2).join(' | ') + '<br/>';
+		}
+
 		output += Chat.html `Nominated by ${winner.nominator}.`;
 		output += `</td></tr></table></div>`;
 
@@ -350,7 +365,7 @@ class OtdHandler {
 		const labels = [];
 
 		for (let i = 0; i < this.keys.length; i++) {
-			if (i === 0 || ['song', 'event', 'time', 'link', 'tagline'].includes(this.keys[i]) && !(this.keys[i] === 'link' && this.keys.includes('song'))) {
+			if (i === 0 || ['song', 'event', 'time', 'link', 'tagline', 'sport', 'country'].includes(this.keys[i]) && !(this.keys[i] === 'link' && this.keys.includes('song'))) {
 				columns.push(this.keys[i]);
 				labels.push(this.keyLabels[i]);
 			}
@@ -403,12 +418,14 @@ const sotd = new OtdHandler('sotd', 'Show', rooms.jubilifetvfilms, SOTDS_FILE, [
 const cotd = new OtdHandler('cotd', 'Channel', rooms.youtube, COTDS_FILE, ['channel', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
 const botw = new OtdHandler('botw', 'Book', rooms.thelibrary, BOTWS_FILE, ['book', 'nominator', 'link', 'quote', 'author', 'image', 'time'], ['Book', 'Nominator', 'Link', 'Quote', 'Author', 'Image', 'Timestamp'], true);
 const motw = new OtdHandler('motw', 'Match', rooms.prowrestling, MOTWS_FILE, ['match', 'nominator', 'link', 'tagline', 'event', 'image', 'time'], ['Match', 'Nominator', 'Link', 'Tagline', 'Event', 'Image', 'Timestamp'], true);
+const anotd = new OtdHandler('anotd', 'Animanga', rooms.animeandmanga, ANOTDS_FILE, ['show', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
+const atlotd = new OtdHandler('atlotd', 'Athlete', rooms.sports, ATLOTDS_FILE, ['athlete', 'nominator', 'image', 'sport', 'team', 'country', 'age', 'quote', 'time'], ['Athlete', 'Nominator', 'Image', 'Sport', 'Team', 'Country', 'Age', 'Quote', 'Timestamp']);
 
 /**
  * @param {string} message
  */
 function selectHandler(message) {
-	let id = toID(message.substring(1, 5));
+	let id = toID(message.substring(1).split(' ')[0]);
 	switch (id) {
 	case 'aotd':
 		return aotd;
@@ -422,6 +439,10 @@ function selectHandler(message) {
 		return botw;
 	case 'motw':
 		return motw;
+	case 'anotd':
+		return anotd;
+	case 'atlotd':
+		return atlotd;
 	default:
 		throw new Error("Invalid type for otd handler.");
 	}
@@ -585,6 +606,7 @@ let commands = {
 			case 'channel':
 			case 'book':
 			case 'author':
+			case 'athlete':
 				if (!toNominationId(value) || value.length > 50) return this.errorReply(`Please enter a valid ${key} name.`);
 				break;
 			case 'quote':
@@ -593,13 +615,22 @@ let commands = {
 			case 'event':
 				if (!value.length || value.length > 150) return this.errorReply(`Please enter a valid ${key}.`);
 				break;
+			case 'sport':
+			case 'team':
 			case 'song':
-				if (!value.length || value.length > 50) return this.errorReply("Please enter a valid song name.");
+			case 'country':
+				if (!value.length || value.length > 50) return this.errorReply(`Please enter a valid ${key} name.`);
 				break;
 			case 'link':
 			case 'image':
 				if (!/https?:\/\//.test(value)) return this.errorReply(`Please enter a valid URL for the ${key} (starting with http:// or https://)`);
 				if (value.length > 200) return this.errorReply("URL too long.");
+				break;
+			case 'age':
+				const num = parseInt(value);
+				// let's assume someone isn't over 100 years old? Maybe we should for the memes
+				// but i doubt there's any legit athlete over 100.
+				if (isNaN(num) || num < 1 || num > 100) return this.errorReply('Please enter a valid number as an age');
 				break;
 			default:
 				return this.errorReply(`Invalid value for property: ${key}`);
@@ -667,11 +698,17 @@ const pages = {
 	motw() {
 		return motw.generateWinnerList(this);
 	},
+	anotd() {
+		return anotd.generateWinnerList(this);
+	},
+	atlotd() {
+		return atlotd.generateWinnerList(this);
+	},
 };
 exports.pages = pages;
 
 const help = [
-	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw):`,
+	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
 	`- /-otd - View the current Thing of the Day.`,
 	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`,
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
@@ -690,6 +727,8 @@ exports.commands = {
 	cotd: commands,
 	botw: commands,
 	motw: commands,
+	anotd: commands,
+	atlotd: commands,
 	aotdhelp: help,
 	otdhelp: help,
 };

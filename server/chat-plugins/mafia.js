@@ -345,6 +345,7 @@ class MafiaTracker extends Rooms.RoomGame {
 					memo: [`To learn more about your role, PM the host (${this.host}).`],
 				};
 			});
+			this.originalRoles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
 			this.roles = this.originalRoles.slice();
 			this.originalRoleString = this.originalRoles.slice().map(r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`).join(', ');
 			this.roleString = this.originalRoleString;
@@ -381,6 +382,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.IDEA.data = null;
 
 		this.originalRoles = newRoles;
+		this.originalRoles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
 		this.roles = this.originalRoles.slice();
 		this.originalRoleString = this.originalRoles.slice().map(r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`).join(', ');
 		this.roleString = this.originalRoleString;
@@ -977,6 +979,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				};
 				this.roles.push(deadPlayer.role);
 			}
+			this.roles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
 			delete this.dead[deadPlayer.userid];
 		} else {
 			const targetUser = Users.get(toRevive);
@@ -1632,7 +1635,19 @@ const pages = {
 		let buf = `<div class="pad broadcast-blue">`;
 		buf += `<button class="button" name="send" value="/join view-mafia-${room.id}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<br/><br/><h1 style="text-align:center;">${game.title}</h1><h3>Host: ${game.host}</h3>`;
-		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.keys(game.playerTable).sort().map(p => game.playerTable[p].safeName).join(', ')}</p><hr/>`;
+		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.keys(game.playerTable).sort().map(p => game.playerTable[p].safeName).join(', ')}</p>`;
+		if (!isHost && game.started && Object.keys(game.dead).length > 0) {
+			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Dead Players</summary>`;
+			for (let d in game.dead) {
+				let dead = game.dead[d];
+				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.role && !game.noReveal ? '(' + dead.getRole() + ')' : ''}`;
+				if (dead.treestump) buf += ` (is a Treestump)`;
+				if (dead.restless) buf += ` (is a Restless Spirit)`;
+				buf += `</p>`;
+			}
+			buf += `</details></p>`;
+		}
+		buf += `<hr/>`;
 		if (isPlayer && game.phase === 'IDEApicking') {
 			buf += `<p><b>IDEA information:</b><br />`;
 			const IDEA = game.playerTable[user.userid].IDEA;

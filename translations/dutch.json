@@ -52,9 +52,10 @@
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Room drivers (%)</strong> kunnen:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn OF /k <em>gebruikersnaam</em>: Waarschuw een gebruiker en laat ze de Pok&eacute;mon Showdown regels zien",
-		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute OF /m <em>gebruikersnaam</em>: Mutet een gebruiker voor 7 minuten",
+		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute OF /m <em>gebruikersnaam</em>: Mute een gebruiker voor 7 minuten",
 		"- /hourmute OR /hm <em>username</em>: 60 minute mute": "- /mute OF /m <em>gebruikersnaam</em>: Leg een gebruiker voor 60 minuten het zwijgen op",
 		"- /unmute <em>username</em>: unmute": "- /unmute <em>gebruikersnaam</em>: Be&euml;indig een mute",
+		"- /hidetext <em>username</em>: hide a user's messages from the room": "- /hidetext <em>gebruikersnaam</em>: Verberg een gebruiker's chatberichten",
 		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce OF /wall <em>bericht</em>: Maak een mededeling",
 		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>gebruikersnaam</em>: Doorzoek de moderatiegeschiedenis van een room",
 		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>notitie</em>: Voeg een notitie toe die later kan worden gelezen in modlog",

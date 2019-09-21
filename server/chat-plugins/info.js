@@ -37,9 +37,11 @@ const commands = {
 
 		let buf = Chat.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
 		const ac = targetUser.autoconfirmed;
-		if (ac && showAll) buf += ` <small style="color:gray">(ac${targetUser.userid === ac ? `` : `: ${ac}`})</small>`;
+		if (ac && showAll) buf += ` <small style="color:gray">(ac${targetUser.userid === ac ? `` : `: <span class="username">${ac}</span>`})</small>`;
 		const trusted = targetUser.trusted;
-		if (trusted && showAll) buf += ` <small style="color:gray">(trusted${targetUser.userid === trusted ? `` : `: ${trusted}`})</small>`;
+		if (trusted && showAll) {
+			buf += ` <small style="color:gray">(trusted${targetUser.userid === trusted ? `` : `: <span class="username">${trusted}</span>`})</small>`;
+		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
 		if (room.auth && targetUser.userid in room.auth) roomauth = room.auth[targetUser.userid];
@@ -174,7 +176,7 @@ const commands = {
 					}
 					status.push(sharedStr);
 				}
-				return ip + (status.length ? ` (${status.join('; ')})` : '');
+				return `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>` + (status.length ? ` (${status.join('; ')})` : '');
 			});
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
 			if (user.group !== ' ' && targetUser.latestHost) {

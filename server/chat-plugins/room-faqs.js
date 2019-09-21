@@ -4,6 +4,7 @@
 const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 
 const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
+const MAX_ROOMFAQ_LENGTH = 8192;
 
 /** @type {{[k: string]: {[k: string]: string}}} */
 let roomFaqs = {};
@@ -40,7 +41,7 @@ const commands = {
 		if (!target) return this.parse('/help roomfaq');
 
 		target = target.trim();
-		let input = Chat.filter(this, target, user, room, connection);
+		let input = this.filter(target);
 		if (target !== input) return this.errorReply("You are not allowed to use fitered words in roomfaq entries.");
 		let [topic, ...rest] = input.split(',');
 
@@ -48,7 +49,7 @@ const commands = {
 		if (!(topic && rest.length)) return this.parse('/help roomfaq');
 		let text = rest.join(',').trim();
 		if (topic.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
-		if (Chat.stripFormatting(text).length > 500) return this.errorReply("FAQ entries should not exceed 500 characters.");
+		if (Chat.stripFormatting(text).length > MAX_ROOMFAQ_LENGTH) return this.errorReply(`FAQ entries should not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
 
 		text = text.replace(/^>/, '&gt;');
 

@@ -322,7 +322,7 @@ let BattleScripts = {
 		if (accuracy !== true && !this.randomChance(accuracy, 256)) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
-			if (accuracy === 255) this.hint("In Gen 1, moves with 100% accurracy can still miss 1/256 of the time.");
+			if (accuracy === 255) this.hint("In Gen 1, moves with 100% accuracy can still miss 1/256 of the time.");
 			damage = false;
 		}
 

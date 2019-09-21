@@ -141,7 +141,7 @@ const avatarTable = new Set([
 	'gambler-gen1', 'gambler-gen1rb', 'gambler',
 	'gamer-gen3',
 	'gardenia',
-	'gentleman-gen1', 'gentleman-gen1rb', 'gentleman-gen3', 'gentleman-gen3rs', 'gentleman-gen4dp', 'gentleman-gen4', 'gentleman',
+	'gentleman-gen1', 'gentleman-gen1rb', 'gentleman-gen2', 'gentleman-gen3', 'gentleman-gen3rs', 'gentleman-gen4dp', 'gentleman-gen4', 'gentleman',
 	'ghetsis-gen5bw', 'ghetsis',
 	'giovanni-gen1', 'giovanni-gen1rb', 'giovanni-gen3', 'giovanni',
 	'glacia-gen3',
@@ -150,7 +150,7 @@ const avatarTable = new Set([
 	'guitarist-gen3', 'guitarist-gen4', 'guitarist',
 	'harlequin',
 	'hexmaniac-gen3jp', 'hexmaniac-gen3',
-	'hiker-gen1', 'hiker-gen1rb', 'hiker-gen3', 'hiker-gen3rs', 'hiker-gen4', 'hiker',
+	'hiker-gen1', 'hiker-gen1rb', 'hiker-gen2', 'hiker-gen3', 'hiker-gen3rs', 'hiker-gen4', 'hiker',
 	'hilbert-dueldisk', 'hilbert',
 	'hilda-dueldisk', 'hilda',
 	'hooligans',
@@ -174,9 +174,9 @@ const avatarTable = new Set([
 	'juggler-gen1', 'juggler-gen1rb', 'juggler-gen2', 'juggler-gen3', 'juggler',
 	'jupiter',
 	'karen-gen2', 'karen',
-	'kimonogirl',
+	'kimonogirl-gen2', 'kimonogirl',
 	'kindler-gen3',
-	'koga-gen1', 'koga-gen1rb', 'koga-gen3', 'koga',
+	'koga-gen1', 'koga-gen2', 'koga-gen1rb', 'koga-gen3', 'koga',
 	'kris-gen2',
 	'lady-gen3', 'lady-gen3rs', 'lady-gen4', 'lady',
 	'lance-gen1', 'lance-gen1rb', 'lance-gen2', 'lance-gen3', 'lance',
@@ -204,7 +204,7 @@ const avatarTable = new Set([
 	'maylene',
 	'medium-gen2jp', 'medium',
 	'mira',
-	'misty-gen1', 'misty-gen1rb', 'misty-gen3', 'misty',
+	'misty-gen1', 'misty-gen2', 'misty-gen1rb', 'misty-gen3', 'misty',
 	'morty-gen2', 'morty',
 	'mrfuji-gen3',
 	'musician',
@@ -215,7 +215,8 @@ const avatarTable = new Set([
 	'n',
 	'nurse',
 	'nurseryaide',
-	'oak-gen1', 'oak-gen1rb', 'oak-gen3',
+	'oak-gen1', 'oak-gen1rb', 'oak-gen2', 'oak-gen3',
+	'officer-gen2',
 	'oldcouple-gen3',
 	'painter-gen3',
 	'palmer',
@@ -227,7 +228,7 @@ const avatarTable = new Set([
 	'plasmagruntf-gen5bw', 'plasmagruntf',
 	'plasmagrunt-gen5bw', 'plasmagrunt',
 	'pokefanf-gen2', 'pokefanf-gen3', 'pokefanf-gen4', 'pokefanf',
-	'pokefan-gen3', 'pokefan-gen4', 'pokefan',
+	'pokefan-gen2', 'pokefan-gen3', 'pokefan-gen4', 'pokefan',
 	'pokekid',
 	'pokemaniac-gen1', 'pokemaniac-gen1rb', 'pokemaniac-gen3', 'pokemaniac-gen3rs', 'pokemaniac',
 	'pokemonbreederf-gen3', 'pokemonbreederf-gen3frlg', 'pokemonbreederf-gen4', 'pokemonbreederf',
@@ -238,11 +239,11 @@ const avatarTable = new Set([
 	'preschoolerf',
 	'preschooler',
 	'proton',
-	'pryce',
+	'pryce-gen2', 'pryce',
 	'psychicf-gen3', 'psychicf-gen3rs', 'psychicf-gen4', 'psychicfjp-gen3', 'psychicf',
-	'psychic-gen1', 'psychic-gen1rb', 'psychic-gen3', 'psychic-gen3rs', 'psychic-gen4', 'psychic',
+	'psychic-gen1', 'psychic-gen1rb', 'psychic-gen2', 'psychic-gen3', 'psychic-gen3rs', 'psychic-gen4', 'psychic',
 	'rancher',
-	'red-gen1main', 'red-gen1', 'red-gen1rb', 'red-gen1title', 'red-gen3', 'red',
+	'red-gen1main', 'red-gen1', 'red-gen1rb', 'red-gen1title', 'red-gen2', 'red-gen3', 'red',
 	'reporter',
 	'richboy-gen3', 'richboy-gen4', 'richboy',
 	'riley',
@@ -251,6 +252,8 @@ const avatarTable = new Set([
 	'rocket-gen1', 'rocket-gen1rb',
 	'rocketgruntf-gen2', 'rocketgruntf',
 	'rocketgrunt-gen2', 'rocketgrunt',
+	'rocketexecutivef-gen2',
+	'rocketexecutive-gen2',
 	'rood',
 	'rosa-dueldisk', 'rosa',
 	'roughneck-gen4', 'roughneck',
@@ -620,7 +623,7 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+		if (targetUser.blockPMs && (targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
 		}
@@ -649,7 +652,7 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+		if (targetUser.blockPMs && (targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
 		}
@@ -670,15 +673,21 @@ const commands = {
 	ignorepms: 'blockpms',
 	ignorepm: 'blockpms',
 	blockpms(target, room, user) {
+		if (toID(target) === 'ac') target = 'autoconfirmed';
 		if (user.blockPMs === (target || true)) return this.errorReply("You are already blocking private messages! To unblock, use /unblockpms");
-		user.blockPMs = true;
+
 		if (target in Config.groups) {
 			user.blockPMs = target;
-			user.update('blockPMs');
-			return this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
+			this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
+		} else if (target === 'autoconfirmed' || target === 'trusted') {
+			user.blockPMs = target;
+			this.sendReply(`You are now blocking private messages, except from staff and ${target} users.`);
+		} else {
+			user.blockPMs = true;
+			this.sendReply("You are now blocking private messages, except from staff.");
 		}
 		user.update('blockPMs');
-		return this.sendReply("You are now blocking private messages, except from staff.");
+		return true;
 	},
 	blockpmshelp: [`/blockpms - Blocks private messages. Unblock them with /unblockpms.`],
 
@@ -701,7 +710,7 @@ const commands = {
 
 		const maxLength = 32;
 		if (target.length > maxLength) return this.errorReply(this.tr `Your status is too long; it must be under ${maxLength} characters.`);
-		target = Chat.statusfilter(target, user);
+		target = this.statusfilter(target);
 		if (!target) return this.errorReply(this.tr("Your status contains a banned word."));
 
 		user.setUserMessage(target);
@@ -714,7 +723,7 @@ const commands = {
 		if (target) this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 
 		user.setStatusType('busy');
-		this.parse('/blockpms');
+		this.parse('/blockpms +');
 		this.parse('/blockchallenges');
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
@@ -743,7 +752,7 @@ const commands = {
 			if (!this.can('forcerename', targetUser)) return false;
 
 			this.privateModAction(`(${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${reason ? `: ${reason}` : ``})`);
-			this.globalModlog('CLEARSTATUS', targetUser, `from ${targetUser.userMessage} by ${user.name}${reason ? `: ${reason}` : ``}`);
+			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}" by ${user.name}${reason ? `: ${reason}` : ``}`);
 			targetUser.clearStatus();
 			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
 			return;
@@ -1058,6 +1067,9 @@ const commands = {
 			if (!room.isPrivate) {
 				return this.errorReply(`This room is already public.`);
 			}
+			if (room.parent && room.parent.isPrivate) {
+				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
+			}
 			if (room.isPersonal) return this.errorReply(`This room can't be made public.`);
 			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
 				if (!room.privacySetter.has(user.userid)) {
@@ -1080,7 +1092,12 @@ const commands = {
 			}
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
-			if (room.subRooms) return this.errorReply("Private rooms cannot have subrooms.");
+			if (room.subRooms) {
+				if (settingName === 'secret') return this.errorReply("Secret rooms cannot have subrooms.");
+				for (const subRoom of room.subRooms.values()) {
+					if (!subRoom.isPrivate) return this.errorReply(`Subroom ${subRoom.title} must be private to make this room private.`);
+				}
+			}
 			if (room.isPrivate === setting) {
 				if (room.privacySetter && !room.privacySetter.has(user.userid)) {
 					room.privacySetter.add(user.userid);
@@ -1161,7 +1178,10 @@ const commands = {
 		const main = Rooms.search(target);
 
 		if (!main) return this.errorReply(`The room '${target}' does not exist.`);
-		if (main.isPrivate || !main.chatRoomData) return this.errorReply(`Only public rooms can have subrooms.`);
+		if (main.parent) return this.errorReply(`Subrooms cannot have subrooms.`);
+		if (main.isPrivate === true) return this.errorReply(`Only public and hidden rooms can have subrooms.`);
+		if (main.isPrivate && !room.isPrivate) return this.errorReply(`Private rooms cannot have public subrooms.`);
+		if (!main.chatRoomData) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
 		if (room === main) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
 
 		room.parent = main;
@@ -1499,7 +1519,7 @@ const commands = {
 		target = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
 		let userid = toID(this.targetUsername);
-		let name = targetUser ? targetUser.name : Chat.filter(this, this.targetUsername, user, room, connection);
+		let name = targetUser ? targetUser.name : this.filter(this.targetUsername);
 		if (!name) return;
 		name = name.slice(0, 18);
 
@@ -1846,8 +1866,8 @@ const commands = {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(target ? ` (${target})` : ``)}`);
-			this.modlog('WARN', targetUser, target, {noalts: 1});
-			this.globalModlog('WARN', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
+			this.modlog('WARN OFFLINE', targetUser, target, {noalts: 1});
+			this.globalModlog('WARN OFFLINE', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
 			return;
 		}
 		if (!(targetUser in room.users) && !globalWarn) {
@@ -2091,21 +2111,7 @@ const commands = {
 			message += `\n\nYour lock will expire in a few days.`;
 			targetUser.send(message);
 
-			let roomauth = [];
-			for (const [id, curRoom] of Rooms.rooms) {
-				if (id === 'global' || !curRoom.auth) continue;
-				// Destroy personal rooms of the locked user.
-				if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
-					curRoom.destroy();
-				} else {
-					if (curRoom.isPrivate || curRoom.battle) continue;
-
-					let group = curRoom.auth[userid];
-
-					if (group) roomauth.push(`${group}${id}`);
-				}
-			}
-
+			const roomauth = Rooms.global.destroyPersonalRooms(userid);
 			if (roomauth.length) Monitor.log(`[CrisisMonitor] Locked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		}
 
@@ -2240,14 +2246,8 @@ const commands = {
 			return this.errorReply(`Use /globalban; ${name} is not a trusted user.`);
 		}
 
-		// Destroy personal rooms of the banned user.
-		for (const roomid of targetUser.inRooms) {
-			if (roomid === 'global') continue;
-			let targetRoom = Rooms.get(roomid);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] === Users.HOST_SYMBOL) {
-				targetRoom.destroy();
-			}
-		}
+		const roomauth = Rooms.global.destroyPersonalRooms(userid);
+		if (roomauth.length) Monitor.log(`[CrisisMonitor] Globally banned user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 
 		let proof = '';
 		let userReason = target;
@@ -2561,7 +2561,7 @@ const commands = {
 		// warning: never document this command in /help
 		if (!this.can('forcepromote')) return false;
 		target = this.splitTarget(target, true);
-		let name = Chat.filter(this, this.targetUsername, user, room, connection);
+		let name = this.filter(this.targetUsername);
 		if (!name) return;
 		name = name.slice(0, 18);
 		let nextGroup = target;
@@ -2722,13 +2722,27 @@ const commands = {
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
-		this.privateModAction(`(${targetUser.name} was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)})`);
-		this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
-		this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
-		Chat.forceRenames.set(targetUser.userid, user.userid);
-		Ladders.cancelSearches(targetUser);
+		let forceRenameMessage;
+		if (targetUser.connected) {
+			forceRenameMessage = `was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
+			this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
+			this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
+			Chat.forceRenames.set(targetUser.userid, (Chat.forceRenames.get(targetUser.userid) || 0) + 1);
+			Ladders.cancelSearches(targetUser);
+			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
+		} else {
+			forceRenameMessage = `would be forced to choose a new name by ${user.name} but is offline${(reason ? `: ${reason}` : ``)}`;
+			this.globalModlog('FORCERENAME OFFLINE', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
+			this.modlog('FORCERENAME OFFLINE', targetUser, reason, {noip: 1, noalts: 1});
+			if (!Chat.forceRenames.has(targetUser.userid)) Chat.forceRenames.set(targetUser.userid, 0);
+		}
+
+		if (room.id !== 'staff') this.privateModAction(`(${targetUser.name} ${forceRenameMessage})`);
+		const roomMessage = room.id !== 'staff' ? `«<a href="/${room.id}" target="_blank">${room.id}</a>» ` : '';
+		const rankMessage = targetUser.getAccountStatusString();
+		Rooms.global.notifyRooms(['staff'], `|html|${roomMessage}` + Chat.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`);
+
 		targetUser.resetName(true);
-		targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
 		return true;
 	},
 	forcerenamehelp: [
@@ -2762,10 +2776,16 @@ const commands = {
 			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
 		}
 
+		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.userid);
+		if (roomauth.length) Monitor.log(`[CrisisMonitor] Namelocked user ${targetUser.name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.userid}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
 		Punishments.namelock(targetUser, null, null, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
+		// Automatically upload replays as evidence/reference to the punishment
+		if (room.battle) this.parse('/savereplay forpunishment');
+
 		return true;
 	},
 	namelockhelp: [`/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. Requires: % @ & ~`],
@@ -3889,15 +3909,15 @@ const commands = {
 			break;
 		case 'fieldcondition': case 'pseudoweather':
 		case 'fc':
-			room.battle.stream.write(`>eval battle.addPseudoWeather('${toID(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.field.addPseudoWeather('${toID(targets[0])}', 'debug')`);
 			break;
 		case 'weather':
 		case 'w':
-			room.battle.stream.write(`>eval battle.setWeather('${toID(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.field.setWeather('${toID(targets[0])}', 'debug')`);
 			break;
 		case 'terrain':
 		case 't':
-			room.battle.stream.write(`>eval battle.setTerrain('${toID(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.field.setTerrain('${toID(targets[0])}', 'debug')`);
 			break;
 		default:
 			this.errorReply(`Unknown editbattle command: ${cmd}`);
@@ -4157,7 +4177,7 @@ const commands = {
 			p2: battle.p2.name,
 			format: format.id,
 			rating: rating,
-			hidden: forPunishment ? '2' : room.isPrivate || room.hideReplay ? '1' : '',
+			hidden: forPunishment || room.unlistReplay ? '2' : room.isPrivate || room.hideReplay ? '1' : '',
 			inputlog: battle.inputLog ? battle.inputLog.join('\n') : null,
 		});
 		if (success) battle.replaySaved = true;
@@ -4175,6 +4195,7 @@ const commands = {
 		if (!room || !room.battle || !this.can('joinbattle', null, room)) return;
 		if (room.hideReplay) return this.errorReply(`The replay for this battle is already set to hidden.`);
 		room.hideReplay = true;
+		// If a replay has already been saved, /savereplay again to update the uploaded replay's hidden status
 		if (room.battle.replaySaved) this.parse('/savereplay');
 		this.addModAction(`${user.name} hid the replay of this battle.`);
 	},

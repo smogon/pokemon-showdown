@@ -239,6 +239,8 @@ export class TeamValidator {
 		if (!templateOverride) {
 			if (ruleTable.has('-unreleased') && postMegaTemplate.isUnreleased) {
 				problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
+			} else if (ruleTable.has('-illegal') && postMegaTemplate.tier === 'Illegal') {
+				problems.push(`${name} (${postMegaTemplate.species}) is not obtainable in this game.`);
 			} else if (postMegaTemplate.tier) {
 				let tag = postMegaTemplate.tier === '(PU)' ? 'ZU' : postMegaTemplate.tier;
 				banReason = ruleTable.check('pokemontag:' + toID(tag), setHas);
