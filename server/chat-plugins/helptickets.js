@@ -1328,7 +1328,7 @@ let commands = {
 			notifyStaff();
 			notifyStaff(true);
 
-			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${target}`);
+			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${(target ? `: ${target}` : ``)}`);
 			return true;
 		},
 		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ & ~`],
