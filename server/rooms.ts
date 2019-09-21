@@ -437,6 +437,7 @@ export class GlobalRoom extends BasicRoom {
 	maxUsersDate: number;
 	reportUserStatsInterval: NodeJS.Timeout;
 	modlogStream: WriteStream;
+	lastTournament: any;
 	formatList: string;
 	constructor(roomid: RoomID) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
@@ -446,7 +447,7 @@ export class GlobalRoom extends BasicRoom {
 		this.active = false;
 		this.chatRoomData = null;
 		this.lockdown = false;
-
+		this.lastTournament = {};
 		this.battleCount = 0;
 		this.lastReportedCrash = 0;
 

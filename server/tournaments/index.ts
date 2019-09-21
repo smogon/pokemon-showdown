@@ -1146,6 +1146,17 @@ function createTournament(
 	return tour;
 }
 
+function moreRound(target: any) {
+	if (target && target.length) {
+		for (var i = 0; i < target.length; i++) {
+			if (target[i].children) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCommands} = {
 	basic: {
 		j: 'join',
@@ -1215,6 +1226,38 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			}
 			this.sendReply(`|html|<div class='infobox infobox-limited'>This tournament includes:<br />${tournament.getCustomRules()}</div>`);
 		},
+		export(tournament) {
+			if (this.room.lastTournament && this.room.lastTournament.type === 'tree') {
+				var tourString = '';
+				var tourData = [];
+				var tourWinner = this.room.lastTournament.rootNode.team;
+				var roundCounter = Math.ceil(Math.log(this.room.lastTournament.playersLength)/Math.log(2));
+				tourData.push(this.room.lastTournament.rootNode);
+				while (moreRound(tourData)) {
+					var tourDataCopy = tourData;
+					tourData = [];
+		
+					for (var i = 0; i < tourDataCopy.length; i++) {
+						if (tourDataCopy[i].children) {
+							for (var j = 0; j < tourDataCopy[i].children.length; j++) {
+								if (tourDataCopy[i].children) {
+									tourData.push(tourDataCopy[i].children[j]);
+								}
+							}
+							var winner = (tourDataCopy[i].team === tourDataCopy[i].children[0].team);
+							tourString = '<span' + (winner ? ' style="font-weight:bold;"' : '') + `>${tourDataCopy[i].children[0].team}</span> vs <span` + (!winner ? ' style="font-weight:bold;"' : '') + `>${tourDataCopy[i].children[1].team}</span><br>` + tourString;
+						}
+					}
+					tourString = `<br><strong>Round ${roundCounter}</strong><br>` + tourString;
+					roundCounter -= 1;
+				}
+				tourString = `<p> Tournament winner: <strong>${tourWinner}</strong></p>` + tourString;
+				return this.sendReplyBox(`<div style="max-height: 250px; overflow-y: auto"><p style="font-weight:bold;">${Chat.escapeHTML(this.room.title)} elimination tournament paste</p>` + tourString + '</div>');
+			} else {
+				return this.errorReply("You can only use the tournamentexport command after an elimination tour in this room has ended");
+			}
+		},	
+
 	},
 	creation: {
 		settype(tournament, user, params, cmd) {
@@ -1705,7 +1748,7 @@ const chatCommands: ChatCommands = {
 			}
 		} else {
 			const tournament = (room.game && room.game.gameid === 'tournament') ? room.game as Tournament : null;
-			if (!tournament) {
+			if (!tournament && cmd !== 'export') {
 				return this.sendReply("There is currently no tournament running in this room.");
 			}
 
