@@ -2992,7 +2992,7 @@ const commands = {
 
 		if (unbanned) {
 			this.addModAction(`${unbanned} was allowed to battle again by ${user.name}.`);
-			this.globalModlog("UNBATTLEBAN", toID(target), `by ${user.name}`);
+			this.globalModlog("UNBATTLEBAN", toID(target), ` by ${user.name}`);
 			if (targetUser) targetUser.popup(`${user.name} has allowed you to battle again.`);
 		} else {
 			this.errorReply(`User ${target} is not banned from battling.`);
