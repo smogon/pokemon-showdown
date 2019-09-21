@@ -216,7 +216,6 @@ exports.commands = {
 			const modchatSetting = (room.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
 		}
-		if (!this.canTalk()) return;
 		if (!this.can('modchat', null, room)) return false;
 
 		// 'modchat' lets you set up to 1 (ac/trusted also allowed)
