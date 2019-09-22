@@ -26,6 +26,7 @@ import {WriteStream} from '../lib/streams';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
+type TournamentData = import('./tournaments').TournamentData;
 
 /*********************************************************
  * the Room object.
@@ -49,28 +50,6 @@ interface BattleRoomTable {
 	p1?: string;
 	p2?: string;
 	minElo?: 'tour' | number;
-}
-
-interface TournamentData {
-	type: string;
-	rootNode: TournamentDataNode;
-}
-
-export type TournamentDataNode = TournamentDataBattle | TournamentDataTeam;
-
-interface TournamentDataBattle {
-	children: TournamentDataNode[];
-	state: string;
-	/** actually the username of the winner */
-	team: string;
-	result: string;
-	score: number[];
-}
-
-interface TournamentDataTeam {
-	/** actually the username of the player moving on */
-	team: string;
-	children: null;
 }
 
 export type Room = GlobalRoom | GameRoom | ChatRoom;

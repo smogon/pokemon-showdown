@@ -1,6 +1,5 @@
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
-type TournamentDataNode = import('../rooms').TournamentDataNode;
 
 interface TourCommands {
 	[k: string]: string | TourCommand;
@@ -29,6 +28,28 @@ const TournamentGenerators = {
 
 function usersToNames(users: TournamentPlayer[]) {
 	return users.map(user => user.name);
+}
+
+export interface TournamentData {
+	type: string;
+	rootNode: TournamentDataNode;
+}
+
+type TournamentDataNode = TournamentDataBattle | TournamentDataTeam;
+
+interface TournamentDataBattle {
+	children: TournamentDataNode[];
+	state: string;
+	/** actually the username of the winner */
+	team: string;
+	result: string;
+	score: number[];
+}
+
+interface TournamentDataTeam {
+	/** actually the username of the player moving on */
+	team: string;
+	children: null;
 }
 
 export class TournamentPlayer extends Rooms.RoomGamePlayer {
