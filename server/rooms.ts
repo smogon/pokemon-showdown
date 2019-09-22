@@ -1070,6 +1070,7 @@ export class BasicChatRoom extends BasicRoom {
 	game: RoomGame | null;
 	battle: RoomBattle | null;
 	tour: Tournament | null;
+	lastTournamentData: LastTournamentData | null;
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
 
@@ -1103,6 +1104,7 @@ export class BasicChatRoom extends BasicRoom {
 		// Only available in groupchats
 		this.uptime = null;
 
+		this.lastTournamentData = null;
 		this.chatRoomData = (options.isPersonal ? null : options);
 		Object.assign(this, options);
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
