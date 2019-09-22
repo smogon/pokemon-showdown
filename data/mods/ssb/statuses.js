@@ -892,7 +892,7 @@ let BattleStatuses = {
 	kris: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c|+Kris|glhf`);
+			this.add(`c|+Kris|wjat poppin ;)))))`);
 			if (pokemon.illusion) return;
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
@@ -907,10 +907,10 @@ let BattleStatuses = {
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|+Kris|lol bye`);
+			this.add(`c|+Kris|vbye`);
 		},
 		onFaint() {
-			this.add(`c|+Kris|While you were playing Pokemon, I was studying the blade.`);
+			this.add(`c|+Kris|thats weird but ok`);
 		},
 	},
 	level51: {
