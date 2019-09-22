@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS room_punishments (
 	userids TEXT NOT NULL,
 	expireTime INTEGER NOT NULL,
 	reason TEXT NOT NULL,
-	PRIMARY KEY (punishType, id)
+	PRIMARY KEY (punishType, roomid, userid)
 );
 
 CREATE TABLE IF NOT EXISTS shared_ips (
