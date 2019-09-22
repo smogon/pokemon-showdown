@@ -1226,34 +1226,6 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			}
 			this.sendReply(`|html|<div class='infobox infobox-limited'>This tournament includes:<br />${tournament.getCustomRules()}</div>`);
 		},
-		export(tournament) {
-			if (this.room.lastTournament && this.room.lastTournament.type === 'tree') {
-				let tourString = '';
-				let tourData = [];
-				const tourWinner = this.room.lastTournament.rootNode.team;
-				let roundCounter = Math.ceil(Math.log(this.room.lastTournament.playersLength) / Math.log(2));
-				tourData.push(this.room.lastTournament.rootNode);
-				while (moreRound(tourData)) {
-					let tourDataCopy = tourData;
-					tourData = [];
-					for (let i = 0; i < tourDataCopy.length; i++) {
-						if (tourDataCopy[i].children) {
-							for (const child of tourDataCopy[i].children) {
-								tourData.push(child);
-							}
-							const winner = (tourDataCopy[i].team === tourDataCopy[i].children[0].team);
-							tourString = '<span' + (winner ? ' style="font-weight:bold;"' : '') + `>${tourDataCopy[i].children[0].team}</span> vs <span` + (!winner ? ' style="font-weight:bold;"' : '') + `>${tourDataCopy[i].children[1].team}</span><br>` + tourString;
-						}
-					}
-					tourString = `<br><strong>Round ${roundCounter}</strong><br>` + tourString;
-					roundCounter -= 1;
-				}
-				tourString = `<p> Tournament winner: <strong>${tourWinner}</strong></p>` + tourString;
-				return this.sendReplyBox(`<div style="max-height: 250px; overflow-y: auto"><p style="font-weight:bold;">${Chat.escapeHTML(this.room.title)} elimination tournament paste</p>` + tourString + '</div>');
-			} else {
-				return this.errorReply("You can only use the tournamentexport command after an elimination tour in this room has ended");
-			}
-		},
 	},
 	creation: {
 		settype(tournament, user, params, cmd) {
@@ -1743,18 +1715,32 @@ const chatCommands: ChatCommands = {
 				}
 			}
 		} else if (cmd === 'export') {
-			const tournament = {} as Tournament;
-
-			let commandHandler = commands.basic[cmd];
-			if (typeof commandHandler === 'string') commandHandler = commands.basic[commandHandler];
-
-			if (typeof commandHandler === 'string') throw new Error(`Invalid tour command alis ${cmd}`);
-			if (!commandHandler) {
-				this.errorReply(`${cmd} is not a tournament command.`);
+			if (room.lastTournament && room.lastTournament.type === 'tree') {
+				let tourString = '';
+				let tourData = [];
+				const tourWinner = room.lastTournament.rootNode.team;
+				let roundCounter = Math.ceil(Math.log(room.lastTournament.playersLength) / Math.log(2));
+				tourData.push(room.lastTournament.rootNode);
+				while (moreRound(tourData)) {
+					const tourDataCopy = tourData;
+					tourData = [];
+					for (const copyChild of tourDataCopy) {
+						if (copyChild.children) {
+							for (const child of copyChild.children) {
+								tourData.push(child);
+							}
+							const winner = (copyChild.team === copyChild.children[0].team);
+							tourString = '<span' + (winner ? ' style="font-weight:bold;"' : '') + `>${copyChild.children[0].team}</span> vs <span` + (!winner ? ' style="font-weight:bold;"' : '') + `>${copyChild.children[1].team}</span><br>` + tourString;
+						}
+					}
+					tourString = `<br><strong>Round ${roundCounter}</strong><br>` + tourString;
+					roundCounter -= 1;
+				}
+				tourString = `<p> Tournament winner: <strong>${tourWinner}</strong></p>` + tourString;
+				return this.sendReplyBox(`<div style="max-height: 250px; overflow-y: auto"><p style="font-weight:bold;">${Chat.escapeHTML(this.room.title)} elimination tournament paste</p>` + tourString + '</div>');
 			} else {
-				commandHandler.call(this, tournament, user, params, cmd, connection);
+				return this.errorReply("You can only use the tournamentexport command after an elimination tour in this room has ended");
 			}
-
 		} else {
 			const tournament = (room.game && room.game.gameid === 'tournament') ? room.game as Tournament : null;
 			if (!tournament) {
