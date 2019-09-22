@@ -1,5 +1,6 @@
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
+import {LastTournamentDataNode} from '../rooms';
 
 interface TourCommands {
 	[k: string]: string | TourCommand;
@@ -1080,7 +1081,9 @@ export class Tournament extends Rooms.RoomGame {
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		if (update.bracketData.type === 'tree') {
 			this.room.lastTournament = { ...update.bracketData };
-			this.room.lastTournament.playersLength = this.players.length;
+			if (this.room.lastTournament) {
+				this.room.lastTournament.playersLength = this.players.length;
+			}
 		}
 		this.remove();
 	}
@@ -1722,7 +1725,7 @@ const chatCommands: ChatCommands = {
 				let roundCounter = Math.ceil(Math.log(room.lastTournament.playersLength) / Math.log(2));
 				tourData.push(room.lastTournament.rootNode);
 				while (moreRound(tourData)) {
-					const tourDataCopy = tourData;
+					const tourDataCopy: LastTournamentDataNode[] = tourData;
 					tourData = [];
 					for (const copyChild of tourDataCopy) {
 						if (copyChild.children) {

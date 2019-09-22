@@ -51,6 +51,29 @@ interface BattleRoomTable {
 	minElo?: 'tour' | number;
 }
 
+interface LastTournamentData {
+	type: string;
+	rootNode: LastTournamentDataNode;
+	playersLength: number;
+}
+
+export type LastTournamentDataNode = LastTournamentDataBattle | LastTournamentDataTeam;
+
+interface LastTournamentDataBattle {
+	children: LastTournamentDataNode[];
+	state: string;
+	team: string;
+	result: string;
+	score: number[];
+}
+
+interface LastTournamentDataTeam {
+	team: string;
+	children: null;
+
+
+}
+
 export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').PollType;
 type Tournament = import('./tournaments/index').Tournament;
@@ -437,7 +460,7 @@ export class GlobalRoom extends BasicRoom {
 	maxUsersDate: number;
 	reportUserStatsInterval: NodeJS.Timeout;
 	modlogStream: WriteStream;
-	lastTournament: any;
+	lastTournament: LastTournamentData | null;
 	formatList: string;
 	constructor(roomid: RoomID) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
@@ -447,7 +470,7 @@ export class GlobalRoom extends BasicRoom {
 		this.active = false;
 		this.chatRoomData = null;
 		this.lockdown = false;
-		this.lastTournament = {};
+		this.lastTournament = null;
 		this.battleCount = 0;
 		this.lastReportedCrash = 0;
 
@@ -1405,14 +1428,14 @@ export class ChatRoom extends BasicChatRoom {
 	// TypeScript happy
 	battle: null;
 	active: false;
-	lastTournament: AnyObject;
+	lastTournament: LastTournamentData | null;
 	type: 'chat';
 	constructor() {
 		super('' as RoomID);
 		this.battle = null;
 		this.active = false;
 		this.type = 'chat';
-		this.lastTournament = {};
+		this.lastTournament = null;
 	}
 }
 
@@ -1422,7 +1445,7 @@ export class GameRoom extends BasicChatRoom {
 	active: boolean;
 	format: string;
 	auth: {[userid: string]: string};
-	lastTournament: AnyObject;
+	lastTournament: LastTournamentData | null;
 	p1: AnyObject | null;
 	p2: AnyObject | null;
 	p3: AnyObject | null;
@@ -1452,7 +1475,7 @@ export class GameRoom extends BasicChatRoom {
 		this.auth = Object.create(null);
 		// console.log("NEW BATTLE");
 
-		this.lastTournament = {};
+		this.lastTournament = null;
 		this.tour = options.tour || null;
 		this.parent = options.parent || (this.tour && this.tour.room) || null;
 
