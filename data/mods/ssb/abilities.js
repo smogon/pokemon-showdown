@@ -90,12 +90,12 @@ let BattleAbilities = {
 		name: "Awakening",
 		isNonstandard: "Custom",
 		onStart(pokemon) {
-			this.boost({atk: -3, def: 3, spd: 3, spe: -3});
+			this.boost({atk: -3, spe: -3, def: 3, spd: 3});
 		},
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			this.boost({atk: 1, def: -1, spd: -1, spe: 1});
+			this.boost({atk: 1, spe: 1, def: -1, spd: -1});
 		},
 	},
 	// Akiamara
@@ -178,7 +178,7 @@ let BattleAbilities = {
 	},
 	// A Quag To The Past
 	careless: {
-		desc: "This Pokemon blocks certain status moves and instead uses the move against the original user. This Pokemon also ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
+		desc: "This Pokemon blocks certain status moves and instead uses them against the original user. This Pokemon also ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
 		shortDesc: "Bounces certain status moves and ignores other Pokemon's stat changes.",
 		id: "careless",
 		name: "Careless",
@@ -312,7 +312,7 @@ let BattleAbilities = {
 	},
 	// DaWoblefet
 	shadowartifice: {
-		desc: "Prevents adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or also have this Ability or Shadow Tag. If this Pokemon is knocked out with an attack, that attack's user loses HP equal to the amount of damage inflicted on this Pokemon.",
+		desc: "Prevents adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or also have this ability or Shadow Tag. If this Pokemon is knocked out with an attack, that attack's user loses HP equal to the amount of damage inflicted on this Pokemon.",
 		shortDesc: "Prevents adjacent foes from switching. If KOed, that move's user loses equal HP.",
 		id: "shadowartifice",
 		name: "Shadow Artifice",
@@ -348,7 +348,7 @@ let BattleAbilities = {
 	},
 	// deetah
 	radioactive: {
-		desc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon heals 1/8 of its max HP when poisoned.",
+		desc: "If this Pokemon has a major status condition, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon heals 1/8 of its max HP when poisoned.",
 		shortDesc: "1.5x Atk if statused. Heals 1/8 if poisoned.",
 		id: "radioactive",
 		name: "Radioactive",
@@ -384,7 +384,7 @@ let BattleAbilities = {
 	},
 	// Elgino
 	giblovepls: {
-		desc: "After being damaged by a contact move, this Pokemon is healed by 20% of its max HP and has its Defense raised by one stage.",
+		desc: "After being damaged by a contact move, this Pokemon is healed by 20% of its maximum HP and has its Defense raised by one stage.",
 		shortDesc: "Defense +1 and heal 20% after hit by contact move.",
 		onAfterDamage(damage, target, source, effect) {
 			if (effect && effect.flags['contact']) {
@@ -503,7 +503,7 @@ let BattleAbilities = {
 	},
 	// GMars
 	mysteryshell: {
-		desc: "If this Pokemon is Minior-Meteor, it cannot be afflicted by a status condition. This Pokemon cannot be hit with a critical hit.",
+		desc: "If this Pokemon is a Minior in its Meteor forme, it cannot be afflicted by a status condition. This Pokemon cannot be hit with a critical hit.",
 		shortDesc: "Status immunity while in Meteor forme, crit immunity.",
 		id: "mysteryshell",
 		name: "Mystery Shell",
@@ -638,7 +638,7 @@ let BattleAbilities = {
 	},
 	// Mad Monty ¾°
 	minnesnowta: {
-		desc: "This Pokemon is immune to Ice-type moves. Its Ice and Electric type attacks have their power multiplied by 1.2x.",
+		desc: "This Pokemon is immune to Ice-type moves. Its Ice- and Electric-type attacks have their power multiplied by 1.2x.",
 		shortDesc: "This Pokemon's Ice and Electric attacks have 1.2x power; Ice immunity.",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ice') {
@@ -658,7 +658,7 @@ let BattleAbilities = {
 	},
 	// Marshmallon
 	sightseeing: {
-		desc: "If this Pokemon is a Castform, its type and moveset change to the current weather condition's type and moveset, except Sandstorm and Acid Rain. The user's Defense, Special Attack, Special Defense, Speed, and accuracy are all boosted 1.5x during weather.",
+		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, and its moveset changes to the one associated with the current weather, except during Sandstorm and Acid Rain. The user's Defense, Special Attack, Special Defense, Speed, and accuracy are all boosted 1.5x during weather.",
 		shortDesc: "Castform adapts to current weather; in weather, Def, SpA, SpD, Spe, accuracy 1.5x.",
 		id: "sightseeing",
 		name: "Sightseeing",
@@ -820,7 +820,7 @@ let BattleAbilities = {
 	},
 	// pre
 	optimize: {
-		desc: "This Pokemon changes forme and sets depending on which attack it uses, before the attack takes place. If this Pokemon uses Psycho Boost, it first changes to Deoxys-Attack. If this Pokemon uses Recover, it first changes to Deoxys-Defense. If this Pokemon uses Extreme Speed, it first changes to Deoxys-Speed. If this Pokemon uses Refactor, it first changes to Deoxys.",
+		desc: "This Pokemon changes forme and sets depending on which attack it uses, before the attack takes place. If this Pokemon uses Psycho Boost, it first changes to its Attack forme. If this Pokemon uses Recover, it first changes to its Defense forme. If this Pokemon uses Extreme Speed, it first changes to its Speed forme. If this Pokemon uses Refactor, it first changes to its Base forme.",
 		shortDesc: "This Pokemon changes forme and set depending on which attack it uses.",
 		id: "optimize",
 		name: "Optimize",
@@ -900,7 +900,7 @@ let BattleAbilities = {
 	},
 	// Raid
 	tempest: {
-		desc: "This pokemon's Flying-type moves have 1.3x Base Power and will always hit.",
+		desc: "This Pokemon's Flying-type moves have 1.3x Base Power and will always hit.",
 		shortDesc: "Flying type moves have 1.3x power and always hit.",
 		id: "tempest",
 		name: "Tempest",
@@ -917,7 +917,7 @@ let BattleAbilities = {
 	},
 	// Ransei
 	superguarda: {
-		desc: "This user's Attack is doubled until it is hit by a super effective attack. If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon can only be damaged by direct attacks.",
+		desc: "This user's Attack is doubled until it is hit by a super effective attack. If this Pokemon has a major status condition, its Attack is 1.5x; burn halving physical damage is ignored. This Pokemon can only be damaged by direct attacks.",
 		shortDesc: "Atk 2x until hit by SE move. 1.5x Atk if statused. Immune to indirect damage.",
 		id: "superguarda",
 		name: "Superguarda",
@@ -1121,7 +1121,7 @@ let BattleAbilities = {
 	},
 	// vivalospride
 	trashvivwebs: {
-		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it. Sets Sticky Web the first time it switches in.",
+		desc: "This Pokemon's attacking stat is doubled while it uses a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it. Sets Sticky Web the first time it switches in.",
 		shortDesc: "Attack stat using Water 2x; burn immunity; foe's attack using Fire 0.5x; Sticky Web.",
 		onStart(pokemon) {
 			if (!pokemon.m.stickyweb) {
@@ -1182,8 +1182,8 @@ let BattleAbilities = {
 	},
 	// Yuki
 	snowstorm: {
-		desc: "As it switches in, this Pokemon summons hail that remains in effect until replaced by another weather or suppressed by the effects of Cloud Nine, Air Lock, or Delta Stream.",
-		shortDesc: "On switch-in, this Pokemon summons hail which remains active until replaced.",
+		desc: "As it switches in, this Pokemon summons Hail that remains in effect until replaced by another weather or suppressed by the effects of Cloud Nine, Air Lock, or Delta Stream.",
+		shortDesc: "On switch-in, this Pokemon summons Hail which remains active until replaced.",
 		id: "snowstorm",
 		name: "Snow Storm",
 		isNonstandard: "Custom",

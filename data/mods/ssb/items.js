@@ -110,7 +110,7 @@ let BattleItems = {
 		zMoveFrom: "Poison Jab",
 		zMoveUser: ["Scolipede"],
 		gen: 7,
-		desc: "If helb by a Scolipede with Poison Jab, it can use Plurshift.",
+		desc: "If held by a Scolipede with Poison Jab, it can use Plurshift.",
 	},
 	// Snaquaza
 	fakeclaimiumz: {
