@@ -3,22 +3,22 @@
 --------------------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS punishments (
-	punishType TEXT NOT NULL,
-	userid TEXT NOT NULL,
+	punish_type TEXT NOT NULL,
+	user_id TEXT NOT NULL,
 	ips TEXT NOT NULL,
-	userids TEXT NOT NULL,
-	expireTime INTEGER NOT NULL,
+	user_ids TEXT NOT NULL,
+	expire_time INTEGER NOT NULL,
 	reason TEXT NOT NULL,
 	PRIMARY KEY (punishType, userid)
 );
 
 CREATE TABLE IF NOT EXISTS room_punishments (
-	punishType TEXT NOT NULL,
-	roomid TEXT NOT NULL,
-	userid TEXT NOT NULL,
+	punish_type TEXT NOT NULL,
+	room_id TEXT NOT NULL,
+	user_id TEXT NOT NULL,
 	ips TEXT NOT NULL,
-	userids TEXT NOT NULL,
-	expireTime INTEGER NOT NULL,
+	user_ids TEXT NOT NULL,
+	expire_time INTEGER NOT NULL,
 	reason TEXT NOT NULL,
 	PRIMARY KEY (punishType, roomid, userid)
 );
