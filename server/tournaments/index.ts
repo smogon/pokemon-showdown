@@ -1,6 +1,6 @@
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
-type LastTournamentDataNode = import('../rooms').LastTournamentDataNode;
+type TournamentDataNode = import('../rooms').TournamentDataNode;
 
 interface TourCommands {
 	[k: string]: string | TourCommand;
@@ -1725,7 +1725,7 @@ const chatCommands: ChatCommands = {
 				let roundCounter = Math.ceil(Math.log(room.lastTournamentData.playersLength) / Math.log(2));
 				tourData.push(room.lastTournamentData.rootNode);
 				while (moreRound(tourData)) {
-					const tourDataCopy: LastTournamentDataNode[] = tourData;
+					const tourDataCopy: TournamentDataNode[] = tourData;
 					tourData = [];
 					for (const copyChild of tourDataCopy) {
 						if (copyChild.children) {

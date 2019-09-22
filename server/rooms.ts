@@ -51,23 +51,25 @@ interface BattleRoomTable {
 	minElo?: 'tour' | number;
 }
 
-interface LastTournamentData {
+interface TournamentData {
 	type: string;
-	rootNode: LastTournamentDataNode;
+	rootNode: TournamentDataNode;
 	playersLength: number;
 }
 
-export type LastTournamentDataNode = LastTournamentDataBattle | LastTournamentDataTeam;
+export type TournamentDataNode = TournamentDataBattle | TournamentDataTeam;
 
-interface LastTournamentDataBattle {
-	children: LastTournamentDataNode[];
+interface TournamentDataBattle {
+	children: TournamentDataNode[];
 	state: string;
+	// "team" is name of winning player of battle
 	team: string;
 	result: string;
 	score: number[];
 }
 
-interface LastTournamentDataTeam {
+interface TournamentDataTeam {
+	// "team" is name of player moving on
 	team: string;
 	children: null;
 }
@@ -458,7 +460,7 @@ export class GlobalRoom extends BasicRoom {
 	maxUsersDate: number;
 	reportUserStatsInterval: NodeJS.Timeout;
 	modlogStream: WriteStream;
-	lastTournamentData: LastTournamentData | null;
+	lastTournamentData: TournamentData | null;
 	formatList: string;
 	constructor(roomid: RoomID) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
@@ -1070,7 +1072,7 @@ export class BasicChatRoom extends BasicRoom {
 	game: RoomGame | null;
 	battle: RoomBattle | null;
 	tour: Tournament | null;
-	lastTournamentData: LastTournamentData | null;
+	lastTournamentData: TournamentData | null;
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
 
@@ -1428,7 +1430,7 @@ export class ChatRoom extends BasicChatRoom {
 	// TypeScript happy
 	battle: null;
 	active: false;
-	lastTournamentData: LastTournamentData | null;
+	lastTournamentData: TournamentData | null;
 	type: 'chat';
 	constructor() {
 		super('' as RoomID);
@@ -1445,7 +1447,7 @@ export class GameRoom extends BasicChatRoom {
 	active: boolean;
 	format: string;
 	auth: {[userid: string]: string};
-	lastTournamentData: LastTournamentData | null;
+	lastTournamentData: TournamentData | null;
 	p1: AnyObject | null;
 	p2: AnyObject | null;
 	p3: AnyObject | null;
