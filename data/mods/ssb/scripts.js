@@ -16,8 +16,6 @@ let BattleScripts = {
 		}
 		let move = zMove ? this.getActiveZMove(baseMove, pokemon) : baseMove;
 
-		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
-
 		move.isExternal = externalMove;
 
 		this.setActiveMove(move, pokemon, target);
@@ -93,15 +91,34 @@ let BattleScripts = {
 				}
 			}
 			// Dancer activates in order of lowest speed stat to highest
+			// Note that the speed stat used is after any volatile replacements like Speed Swap,
+			// but before any multipliers like Agility or Choice Scarf
 			// Ties go to whichever Pokemon has had the ability for the least amount of time
-			dancers.sort(function (a, b) { return -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder; });
+			dancers.sort((a, b) =>
+				-(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder
+			);
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
 				this.runMove(move.id, dancer, 0, this.getAbility('dancer'), undefined, true);
+				// Using a Dancer move is enough to spoil Fake Out etc.
+				dancer.activeTurns++;
 			}
 		}
 		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
+	},
+	// Modded to allow arrays as Mega Stone options
+	canMegaEvo(pokemon) {
+		let altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
+		let item = pokemon.getItem();
+		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.species;
+		if (item.megaEvolves !== pokemon.baseTemplate.species || (Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) || (typeof item.megaStone === 'string' && item.megaStone === pokemon.species)) {
+			return null;
+		}
+		if (Array.isArray(item.megaStone)) {
+			return item.megaStone[this.random(item.megaStone.length)];
+		}
+		return item.megaStone;
 	},
 	// Modded to allow unlimited mega evos
 	runMegaEvo(pokemon) {
@@ -125,6 +142,8 @@ let BattleScripts = {
 
 		// E4 flint gains fire type when mega evolving
 		if (pokemon.name === 'E4 Flint' && !pokemon.illusion) this.add('-start', pokemon, 'typeadd', 'Fire');
+		// Overneat gains the fairy type when mega evolving
+		if (pokemon.name === 'Overneat' && !pokemon.illusion) this.add('-start', pokemon, 'typeadd', 'Fairy');
 
 		return true;
 	},
@@ -286,13 +305,171 @@ let BattleScripts = {
 		this.runEvent('TerrainStart', source, source, status);
 		return true;
 	},
+	// Modded to account for guts clones
+	modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
+		const tr = this.trunc;
+		if (!move.type) move.type = '???';
+		const type = move.type;
+
+		baseDamage += 2;
+
+		// multi-target modifier (doubles only)
+		if (move.spreadHit) {
+			const spreadModifier = move.spreadModifier || (this.gameType === 'free-for-all' ? 0.5 : 0.75);
+			this.debug('Spread modifier: ' + spreadModifier);
+			baseDamage = this.modify(baseDamage, spreadModifier);
+		}
+
+		// weather modifier
+		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+
+		// crit - not a modifier
+		const isCrit = target.getMoveHitData(move).crit;
+		if (isCrit) {
+			baseDamage = tr(baseDamage * (move.critModifier || (this.gen >= 6 ? 1.5 : 2)));
+		}
+
+		// random factor - also not a modifier
+		baseDamage = this.randomizer(baseDamage);
+
+		// STAB
+		if (move.forceSTAB || (type !== '???' && pokemon.hasType(type))) {
+			// The "???" type never gets STAB
+			// Not even if you Roost in Gen 4 and somehow manage to use
+			// Struggle in the same turn.
+			// (On second thought, it might be easier to get a Missingno.)
+			baseDamage = this.modify(baseDamage, move.stab || 1.5);
+		}
+		// types
+		let typeMod = target.runEffectiveness(move);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
+		target.getMoveHitData(move).typeMod = typeMod;
+		if (typeMod > 0) {
+			if (!suppressMessages) this.add('-supereffective', target);
+
+			for (let i = 0; i < typeMod; i++) {
+				baseDamage *= 2;
+			}
+		}
+		if (typeMod < 0) {
+			if (!suppressMessages) this.add('-resisted', target);
+
+			for (let i = 0; i > typeMod; i--) {
+				baseDamage = tr(baseDamage / 2);
+			}
+		}
+
+		if (isCrit && !suppressMessages) this.add('-crit', target);
+
+		if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts') && !pokemon.hasAbility('superguarda') && !pokemon.hasAbility('radioactive')) {
+			if (this.gen < 6 || move.id !== 'facade') {
+				baseDamage = this.modify(baseDamage, 0.5);
+			}
+		}
+
+		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers
+		if (this.gen === 5 && !baseDamage) baseDamage = 1;
+
+		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
+		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+
+		if (move.isZPowered && target.getMoveHitData(move).zBrokeProtect) {
+			baseDamage = this.modify(baseDamage, 0.25);
+			this.add('-zbroken', target);
+		}
+
+		// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
+		if (this.gen !== 5 && !baseDamage) return 1;
+
+		// ...but 16-bit truncation happens even later, and can truncate to 0
+		return tr(baseDamage, 16);
+	},
 	pokemon: {
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);
 			if (this.battle.field.getPseudoWeather('trickroom') || this.battle.field.getPseudoWeather('alienwave')) {
 				speed = 0x2710 - speed;
 			}
+			if (this.battle.field.isTerrain('distortionworld')) {
+				speed = 0; // Anything times 0 is still 0
+			}
 			return this.battle.trunc(speed, 13);
+		},
+		isGrounded(negateImmunity = false) {
+			if ('gravity' in this.battle.field.pseudoWeather) return true;
+			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
+			if ('smackdown' in this.volatiles) return true;
+			const item = (this.ignoringItem() ? '' : this.item);
+			if (item === 'ironball') return true;
+			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+			if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
+			if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
+			// Innate levitate
+			if ((('tony' in this.volatiles) && !this.illusion) && !this.battle.suppressingAttackEvents()) return null;
+			if ('magnetrise' in this.volatiles) return false;
+			if ('telekinesis' in this.volatiles) return false;
+			return item !== 'airballoon';
+		},
+		setStatus(status, source = null, sourceEffect = null, ignoreImmunities = false) {
+			if (!this.hp) return false;
+			status = this.battle.getEffect(status);
+			if (this.battle.event) {
+				if (!source) source = this.battle.event.source;
+				if (!sourceEffect) sourceEffect = this.battle.effect;
+			}
+			if (!source) source = this;
+
+			if (this.status === status.id) {
+				if (sourceEffect && sourceEffect.status === this.status) {
+					this.battle.add('-fail', this, this.status);
+				} else if (sourceEffect && sourceEffect.status) {
+					this.battle.add('-fail', source);
+					this.battle.attrLastMove('[still]');
+				}
+				return false;
+			}
+
+			if (!ignoreImmunities && status.id &&
+					!(source && source.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id)) &&
+					// Acid Rain allows poison types to be posioned
+					!(this.battle.field.isWeather('acidrain') && ['tox', 'psn'].includes(status.id) && this.hasType('Poison'))) {
+				// the game currently never ignores immunities
+				if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
+					this.battle.debug('immune to status');
+					if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this);
+					return false;
+				}
+			}
+			const prevStatus = this.status;
+			const prevStatusData = this.statusData;
+			if (status.id) {
+				/** @type {boolean} */
+				const result = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+				if (!result) {
+					this.battle.debug('set status [' + status.id + '] interrupted');
+					return result;
+				}
+			}
+
+			this.status = status.id;
+			this.statusData = {id: status.id, target: this};
+			if (source) this.statusData.source = source;
+			if (status.duration) this.statusData.duration = status.duration;
+			if (status.durationCallback) {
+				this.statusData.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
+			}
+
+			if (status.id && !this.battle.singleEvent('Start', status, this.statusData, this, source, sourceEffect)) {
+				this.battle.debug('status start [' + status.id + '] interrupted');
+				// cancel the setstatus
+				this.status = prevStatus;
+				this.statusData = prevStatusData;
+				return false;
+			}
+			if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
+				return false;
+			}
+			return true;
 		},
 	},
 };
