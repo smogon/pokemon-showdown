@@ -1203,8 +1203,15 @@ let BattleStatuses = {
 	},
 	pre: {
 		noCopy: true,
-		onStart() {
+		onStart(source) {
 			this.add(`c|~pre|let's go, in and out, 20 minute adventure`);
+			// Easter Egg
+			let activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
+			if (activeMon === 'anubis') {
+				this.add(`c|&Anubis|ohey it's pre`);
+				this.add(`c|&Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
+				this.add(`raw|<img src="https://pokemonshowdown.com/images/ssbkitten.jpg" style="width: 300px; height: 400px" />`);
+			}
 		},
 		onSwitchOut() {
 			this.add(`c|~pre|sometimes science is more art than science`);
