@@ -526,9 +526,6 @@ let BattleAbilities = {
 		onStart(pokemon) {
 			this.boost({atk: 1}, pokemon);
 		},
-		onAfterMega(pokemon) {
-			this.boost({atk: 1}, pokemon);
-		},
 	},
 	// HoeenHero
 	scripter: {
