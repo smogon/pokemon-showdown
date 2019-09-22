@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS punishments (
 
 CREATE TABLE IF NOT EXISTS room_punishments (
 	punishType TEXT NOT NULL,
-	-- roomid:userid
-	id TEXT NOT NULL,
+	roomid TEXT NOT NULL,
+	userid TEXT NOT NULL,
 	ips TEXT NOT NULL,
 	userids TEXT NOT NULL,
 	expireTime INTEGER NOT NULL,
