@@ -1148,8 +1148,8 @@ function createTournament(
 
 function moreRound(target: any) {
 	if (target && target.length) {
-		for (var i = 0; i < target.length; i++) {
-			if (target[i].children) {
+		for (const child of target) {
+			if (child.children) {
 				return true;
 			}
 		}
@@ -1228,23 +1228,20 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 		},
 		export(tournament) {
 			if (this.room.lastTournament && this.room.lastTournament.type === 'tree') {
-				var tourString = '';
-				var tourData = [];
-				var tourWinner = this.room.lastTournament.rootNode.team;
-				var roundCounter = Math.ceil(Math.log(this.room.lastTournament.playersLength)/Math.log(2));
+				let tourString = '';
+				let tourData = [];
+				const tourWinner = this.room.lastTournament.rootNode.team;
+				let roundCounter = Math.ceil(Math.log(this.room.lastTournament.playersLength) / Math.log(2));
 				tourData.push(this.room.lastTournament.rootNode);
 				while (moreRound(tourData)) {
-					var tourDataCopy = tourData;
+					let tourDataCopy = tourData;
 					tourData = [];
-		
-					for (var i = 0; i < tourDataCopy.length; i++) {
+					for (let i = 0; i < tourDataCopy.length; i++) {
 						if (tourDataCopy[i].children) {
-							for (var j = 0; j < tourDataCopy[i].children.length; j++) {
-								if (tourDataCopy[i].children) {
-									tourData.push(tourDataCopy[i].children[j]);
-								}
+							for (const child of tourDataCopy[i].children) {
+								tourData.push(child);
 							}
-							var winner = (tourDataCopy[i].team === tourDataCopy[i].children[0].team);
+							const winner = (tourDataCopy[i].team === tourDataCopy[i].children[0].team);
 							tourString = '<span' + (winner ? ' style="font-weight:bold;"' : '') + `>${tourDataCopy[i].children[0].team}</span> vs <span` + (!winner ? ' style="font-weight:bold;"' : '') + `>${tourDataCopy[i].children[1].team}</span><br>` + tourString;
 						}
 					}
@@ -1256,8 +1253,7 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			} else {
 				return this.errorReply("You can only use the tournamentexport command after an elimination tour in this room has ended");
 			}
-		},	
-
+		},
 	},
 	creation: {
 		settype(tournament, user, params, cmd) {
@@ -1746,9 +1742,22 @@ const chatCommands: ChatCommands = {
 					}
 				}
 			}
+		} else if (cmd === 'export') {
+			const tournament = {} as Tournament;
+
+			let commandHandler = commands.basic[cmd];
+			if (typeof commandHandler === 'string') commandHandler = commands.basic[commandHandler];
+
+			if (typeof commandHandler === 'string') throw new Error(`Invalid tour command alis ${cmd}`);
+			if (!commandHandler) {
+				this.errorReply(`${cmd} is not a tournament command.`);
+			} else {
+				commandHandler.call(this, tournament, user, params, cmd, connection);
+			}
+
 		} else {
 			const tournament = (room.game && room.game.gameid === 'tournament') ? room.game as Tournament : null;
-			if (!tournament && cmd !== 'export') {
+			if (!tournament) {
 				return this.sendReply("There is currently no tournament running in this room.");
 			}
 
