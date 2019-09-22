@@ -2029,6 +2029,7 @@ let BattleStatuses = {
 				this.add('-message', `Prismatic Terrain prevented Spikes from starting!`);
 				return null;
 			}
+			this.effectData.layers = 1;
 			this.add('-sidestart', side, 'move: Spikes');
 		},
 		onRestart(side) {
