@@ -25,8 +25,6 @@ CREATE TABLE IF NOT EXISTS room_punishments (
 
 CREATE TABLE IF NOT EXISTS shared_ips (
 	ip TEXT NOT NULL,
-	-- type is always "SHARED", but we will store it anyway in case there are more types in the future
-	type TEXT NOT NULL,
 	note TEXT NOT NULL,
 	PRIMARY KEY (ip)
 );
