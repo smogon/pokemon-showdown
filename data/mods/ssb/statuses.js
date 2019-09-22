@@ -613,13 +613,13 @@ let BattleStatuses = {
 	fomg: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%FOMG|You got this, my friend!`);
+			this.add(`c|@FOMG|You got this, my friend!`);
 		},
 		onSwitchOut() {
-			this.add(`c|%FOMG|/me rolls out`);
+			this.add(`c|@FOMG|/me rolls out`);
 		},
 		onFaint() {
-			this.add(`c|%FOMG|Rock in peace...`);
+			this.add(`c|@FOMG|Rock in peace...`);
 		},
 	},
 	gallantspear: {
