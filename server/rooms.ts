@@ -54,7 +54,6 @@ interface BattleRoomTable {
 interface TournamentData {
 	type: string;
 	rootNode: TournamentDataNode;
-	playersLength: number;
 }
 
 export type TournamentDataNode = TournamentDataBattle | TournamentDataTeam;
@@ -460,7 +459,7 @@ export class GlobalRoom extends BasicRoom {
 	maxUsersDate: number;
 	reportUserStatsInterval: NodeJS.Timeout;
 	modlogStream: WriteStream;
-	lastTournamentData: TournamentData | null;
+	lastTournamentData: TournamentData & { playersLength: number } | null;
 	formatList: string;
 	constructor(roomid: RoomID) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
@@ -1072,7 +1071,7 @@ export class BasicChatRoom extends BasicRoom {
 	game: RoomGame | null;
 	battle: RoomBattle | null;
 	tour: Tournament | null;
-	lastTournamentData: TournamentData | null;
+	lastTournamentData: TournamentData & { playersLength: number } | null;
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
 
@@ -1430,7 +1429,7 @@ export class ChatRoom extends BasicChatRoom {
 	// TypeScript happy
 	battle: null;
 	active: false;
-	lastTournamentData: TournamentData | null;
+	lastTournamentData: TournamentData & { playersLength: number } | null;
 	type: 'chat';
 	constructor() {
 		super('' as RoomID);
@@ -1447,7 +1446,7 @@ export class GameRoom extends BasicChatRoom {
 	active: boolean;
 	format: string;
 	auth: {[userid: string]: string};
-	lastTournamentData: TournamentData | null;
+	lastTournamentData: TournamentData & { playersLength: number } | null;
 	p1: AnyObject | null;
 	p2: AnyObject | null;
 	p3: AnyObject | null;
