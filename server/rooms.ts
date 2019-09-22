@@ -62,14 +62,14 @@ export type TournamentDataNode = TournamentDataBattle | TournamentDataTeam;
 interface TournamentDataBattle {
 	children: TournamentDataNode[];
 	state: string;
-	// "team" is name of winning player of battle
+	/** actually the username of the winner */
 	team: string;
 	result: string;
 	score: number[];
 }
 
 interface TournamentDataTeam {
-	// "team" is name of player moving on
+	/** actually the username of the player moving on */
 	team: string;
 	children: null;
 }
