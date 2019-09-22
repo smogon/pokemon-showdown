@@ -70,8 +70,6 @@ interface LastTournamentDataBattle {
 interface LastTournamentDataTeam {
 	team: string;
 	children: null;
-
-
 }
 
 export type Room = GlobalRoom | GameRoom | ChatRoom;
@@ -460,7 +458,7 @@ export class GlobalRoom extends BasicRoom {
 	maxUsersDate: number;
 	reportUserStatsInterval: NodeJS.Timeout;
 	modlogStream: WriteStream;
-	lastTournament: LastTournamentData | null;
+	lastTournamentData: LastTournamentData | null;
 	formatList: string;
 	constructor(roomid: RoomID) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
@@ -470,7 +468,7 @@ export class GlobalRoom extends BasicRoom {
 		this.active = false;
 		this.chatRoomData = null;
 		this.lockdown = false;
-		this.lastTournament = null;
+		this.lastTournamentData = null;
 		this.battleCount = 0;
 		this.lastReportedCrash = 0;
 
@@ -1428,14 +1426,14 @@ export class ChatRoom extends BasicChatRoom {
 	// TypeScript happy
 	battle: null;
 	active: false;
-	lastTournament: LastTournamentData | null;
+	lastTournamentData: LastTournamentData | null;
 	type: 'chat';
 	constructor() {
 		super('' as RoomID);
 		this.battle = null;
 		this.active = false;
 		this.type = 'chat';
-		this.lastTournament = null;
+		this.lastTournamentData = null;
 	}
 }
 
@@ -1445,7 +1443,7 @@ export class GameRoom extends BasicChatRoom {
 	active: boolean;
 	format: string;
 	auth: {[userid: string]: string};
-	lastTournament: LastTournamentData | null;
+	lastTournamentData: LastTournamentData | null;
 	p1: AnyObject | null;
 	p2: AnyObject | null;
 	p3: AnyObject | null;
@@ -1475,7 +1473,7 @@ export class GameRoom extends BasicChatRoom {
 		this.auth = Object.create(null);
 		// console.log("NEW BATTLE");
 
-		this.lastTournament = null;
+		this.lastTournamentData = null;
 		this.tour = options.tour || null;
 		this.parent = options.parent || (this.tour && this.tour.room) || null;
 

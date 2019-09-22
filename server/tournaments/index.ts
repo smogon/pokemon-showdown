@@ -1,6 +1,6 @@
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
-import {LastTournamentDataNode} from '../rooms';
+type LastTournamentDataNode = import('../rooms').LastTournamentDataNode;
 
 interface TourCommands {
 	[k: string]: string | TourCommand;
@@ -1080,9 +1080,9 @@ export class Tournament extends Rooms.RoomGame {
 		};
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		if (update.bracketData.type === 'tree') {
-			this.room.lastTournament = { ...update.bracketData };
-			if (this.room.lastTournament) {
-				this.room.lastTournament.playersLength = this.players.length;
+			this.room.lastTournamentData = { ...update.bracketData };
+			if (this.room.lastTournamentData) {
+				this.room.lastTournamentData.playersLength = this.players.length;
 			}
 		}
 		this.remove();
@@ -1718,12 +1718,12 @@ const chatCommands: ChatCommands = {
 				}
 			}
 		} else if (cmd === 'export') {
-			if (room.lastTournament && room.lastTournament.type === 'tree') {
+			if (room.lastTournamentData && room.lastTournamentData.type === 'tree') {
 				let tourString = '';
 				let tourData = [];
-				const tourWinner = room.lastTournament.rootNode.team;
-				let roundCounter = Math.ceil(Math.log(room.lastTournament.playersLength) / Math.log(2));
-				tourData.push(room.lastTournament.rootNode);
+				const tourWinner = room.lastTournamentData.rootNode.team;
+				let roundCounter = Math.ceil(Math.log(room.lastTournamentData.playersLength) / Math.log(2));
+				tourData.push(room.lastTournamentData.rootNode);
 				while (moreRound(tourData)) {
 					const tourDataCopy: LastTournamentDataNode[] = tourData;
 					tourData = [];
