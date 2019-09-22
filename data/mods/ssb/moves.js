@@ -916,7 +916,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Uses a random dance move other then Lunar Dance twice in a row and then restores 1/3 of its max HP.",
+		desc: "Uses a random dance move other than Lunar Dance twice in a row and then restores 1/3 of its max HP.",
 		shortDesc: "Uses random dance move twice; heals 1/3 HP.",
 		id: 'justdance',
 		name: "Just Dance",
