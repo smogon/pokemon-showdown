@@ -2,6 +2,18 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
+	// Aeonic
+	noseiumz: {
+		id: "noseiumz",
+		name: "Noseium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Shitpost",
+		zMoveFrom: "Fissure",
+		zMoveUser: ["Nosepass"],
+		gen: 7,
+		desc: "If held by a Nosepass with Fissure, it can use Shitpost.",
+	},
 	// E4 Flint
 	magmarizer: {
 		inherit: true,
@@ -26,6 +38,32 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Golem with Rock Slide, it can use Rickrollout.",
 	},
+	// inactive
+	dusknoiriumz: {
+		id: "dusknoiriumz",
+		name: "Dusknoirium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Petrifying Gaze",
+		zMoveFrom: "Mean Look",
+		zMoveUser: ["Dusknoir"],
+		gen: 7,
+		desc: "If held by a Dusknoir with Mean Look, it can use Petrifying Gaze.",
+	},
+	// Kris
+	thunderstone: {
+		inherit: true,
+		// @ts-ignore
+		megaStone: ["Rotom-Wash", "Rotom-Mow", "Rotom-Heat", "Rotom-Frost", "Rotom-Fan"],
+		megaEvolves: "Rotom",
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		fling: undefined, // Cannot be flung now since its a mega stone
+		desc: "If held by a Rotom, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Rotom, this item allows it to Mega Evolve in battle.",
+	},
 	// MajorBowman
 	victiniumz: {
 		id: "victiniumz",
@@ -38,6 +76,18 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Victini with V-create, it can use Blaze of Glory.",
 	},
+	// Pohjis
+	marowakiumz: {
+		id: "marowakiumz",
+		name: "Marowakium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Great Eqake",
+		zMoveFrom: "Earthquake",
+		zMoveUser: ["Marowak"],
+		gen: 7,
+		desc: "If held by a Marowak with Earthquake, it can use Great Eqake.",
+	},
 	// SamJo
 	thicciniumz: {
 		id: "thicciniumz",
@@ -49,6 +99,18 @@ let BattleItems = {
 		zMoveUser: ["Mamoswine"],
 		gen: 7,
 		desc: "If held by a Mamoswine with Thicc, it can use Extra T h i c c.",
+	},
+	// Schiavetto
+	mariahcariumz: {
+		id: "mariahcariumz",
+		name: "Mariahcarium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Plurshift",
+		zMoveFrom: "Poison Jab",
+		zMoveUser: ["Scolipede"],
+		gen: 7,
+		desc: "If held by a Scolipede with Poison Jab, it can use Plurshift.",
 	},
 	// Snaquaza
 	fakeclaimiumz: {
@@ -63,18 +125,6 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Honchkrow, it can use Fake Claim.",
 	},
-	// SunGodVolcarona
-	volcaroniumz: {
-		id: "volcaroniumz",
-		name: "Volcaronium Z",
-		isNonstandard: "Custom",
-		onTakeItem: false,
-		zMove: "Scorching Global Vortex",
-		zMoveFrom: "Fiery Dance",
-		zMoveUser: ["Volcarona"],
-		gen: 7,
-		desc: "If held by a Volcarona with Fiery Dance, it can use Scorching Global Vortex.",
-	},
 	// The Immortal
 	buzzniumz: {
 		id: "buzzniumz",
@@ -87,29 +137,25 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Buzzwole with Drain Punch, it can use Ultra Succ.",
 	},
-	// Tiksi
-	tiksiumz: {
-		id: "tiksiumz",
-		name: "Tiksium Z",
+	// Teclis
+	darkrainiumz: {
+		id: "darkrainiumz",
+		name: "Darkrainium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
-		zMove: "Devolution Wave",
-		zMoveFrom: "Rock Slide",
-		zMoveUser: ["Cradily"],
+		zMove: "Absolute Configuration",
+		zMoveFrom: "Dark Void",
+		zMoveUser: ["Darkrai"],
 		gen: 7,
-		desc: "If held by a Cradily with Rock Slide, it can use Devolution Wave.",
+		desc: "If held by a Darkrai with Dark Void, it can use Absolute Configuration.",
 	},
-	// Uselesscrab
-	nichiumz: {
-		id: "nichiumz",
-		name: "Nichium Z",
-		isNonstandard: "Custom",
-		onTakeItem: false,
-		zMove: "Revamped Suspect Philosophy",
-		zMoveFrom: "Icicle Crash",
-		zMoveUser: ["Kyurem-Black"],
-		gen: 7,
-		desc: "If held by a Kyurem-Black with Icicle Crash, it can use Revamped Suspect Philosophy.",
+	// XpRienzo
+	"charcoal": {
+		inherit: true,
+		zMove: "Bleh Flame",
+		zMoveFrom: "Blue Flare",
+		zMoveUser: ["Reshiram"],
+		desc: "Fire-type attacks have 1.2x power. Reshiram with Blue Flare can use Bleh Flame.",
 	},
 };
 
