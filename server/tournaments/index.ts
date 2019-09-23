@@ -538,7 +538,7 @@ export class Tournament extends Rooms.RoomGame {
 		return true;
 	}
 
-	getBracketData() {
+	getBracketData(): TournamentData {
 		let data: any;
 		if (!this.isTournamentStarted) {
 			data = this.generator.getPendingBracketData(this.players);
