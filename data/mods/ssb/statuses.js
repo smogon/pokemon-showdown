@@ -1211,6 +1211,7 @@ let BattleStatuses = {
 				this.add(`c|&Anubis|ohey it's pre`);
 				this.add(`c|&Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
 				this.add(`raw|<img src="https://pokemonshowdown.com/images/ssbkitten.jpg" style="width: 300px; height: 400px" />`);
+				this.add(`c|~pre|<3`);
 			}
 		},
 		onSwitchOut() {
