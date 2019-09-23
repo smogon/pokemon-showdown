@@ -2077,6 +2077,7 @@ let BattleStatuses = {
 				return null;
 			}
 			this.add('-sidestart', side, 'move: Toxic Spikes');
+			this.effectData.layers = 1;
 		},
 		onRestart(side) {
 			if (this.effectData.layers >= 2) return false;
