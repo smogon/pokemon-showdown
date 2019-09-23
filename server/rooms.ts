@@ -999,7 +999,7 @@ export class GlobalRoom extends BasicRoom {
 
 export class BasicChatRoom extends BasicRoom {
 	log: Roomlog;
-	pollOrAnnouncement: Poll | Announcement | null;
+	minorActivity: Poll | Announcement | null;
 	desc: string;
 	modchat: string | null;
 	filterStretching: boolean;
@@ -1039,7 +1039,7 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.log = Roomlogs.create(this, options);
 
-		this.pollOrAnnouncement = null;
+		this.minorActivity = null;
 
 		// room settings
 		this.desc = '';
@@ -1239,7 +1239,7 @@ export class BasicChatRoom extends BasicRoom {
 			connection,
 			'|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.log.getScrollback() + this.getIntroMessage(user)
 		);
-		if (this.pollOrAnnouncement) this.pollOrAnnouncement.onConnect(user, connection);
+		if (this.minorActivity) this.minorActivity.onConnect(user, connection);
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
 	onJoin(user: User, connection: Connection) {
@@ -1253,7 +1253,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.users[user.userid] = user;
 		this.userCount++;
 
-		if (this.pollOrAnnouncement) this.pollOrAnnouncement.onConnect(user, connection);
+		if (this.minorActivity) this.minorActivity.onConnect(user, connection);
 		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
 		return true;
 	}
@@ -1281,8 +1281,8 @@ export class BasicChatRoom extends BasicRoom {
 		} else {
 			this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + oldid, user);
 		}
-		if (this.pollOrAnnouncement && 'voters' in this.pollOrAnnouncement) {
-			if (user.userid in this.pollOrAnnouncement.voters) this.pollOrAnnouncement.updateFor(user);
+		if (this.minorActivity && 'voters' in this.minorActivity) {
+			if (user.userid in this.minorActivity.voters) this.minorActivity.updateFor(user);
 		}
 		return true;
 	}
