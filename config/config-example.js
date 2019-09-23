@@ -1,6 +1,11 @@
 'use strict';
 
 /**
+ * @typedef {Object} Storage
+ * @property {'memory' | 'tsv'} punishments
+ */
+
+/**
  * The server port - the port to run Pokemon Showdown under
  */
 exports.port = 8000;
@@ -172,6 +177,13 @@ exports.crashguardemail = null;
 	to: 'admin@example.com',
 	subject: 'Pokemon Showdown has crashed!'
 }; */
+
+/**
+ * Databases.
+ * This is a map of section in codebase -> database adapter.
+ * @type {Storage}
+ */
+exports.storage = {punishments: 'tsv'};
 
 /**
  * basic name filter - removes characters used for impersonation

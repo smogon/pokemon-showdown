@@ -727,10 +727,15 @@ export const commands: ChatCommands = {
 		if (!this.can('hotpatch')) return false;
 
 		connection.sendTo(room, "Loading ipbans.txt...");
-		Punishments.loadBanlist().then(
-			() => connection.sendTo(room, "ipbans.txt has been reloaded."),
-			error => connection.sendTo(room, `Something went wrong while loading ipbans.txt: ${error}`)
-		);
+		if (Punishments.storage.loadIpBanlist) {
+			connection.sendTo(room, "Loading ipbans...");
+			Punishments.storage.loadBanlist().then(
+				() => connection.sendTo(room, "ipbans has been reloaded."),
+				error => connection.sendTo(room, `Something went wrong while loading ipbans: ${error}`)
+			);
+		} else {
+			connection.sendTo(room, "Loading ipbans is not supported in this current configuration.");
+		}
 	},
 	loadbanlisthelp: [`/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~`],
 

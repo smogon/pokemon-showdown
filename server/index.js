@@ -102,9 +102,9 @@ global.Chat = require('../.server-dist/chat').Chat;
 
 global.Users = require('../.server-dist/users').Users;
 
-global.Punishments = require('../.server-dist/punishments').Punishments;
-
 global.Rooms = require('../.server-dist/rooms').Rooms;
+
+global.Punishments = require('../.server-dist/punishments').Punishments;
 
 global.Verifier = require('../.server-dist/verifier');
 Verifier.PM.spawn();
