@@ -1101,10 +1101,10 @@ export class Tournament extends Rooms.RoomGame {
 		};
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		if (update.bracketData.type === 'tree') {
-			this.room.lastTournamentData = { ...update.bracketData };
-			if (this.room.lastTournamentData) {
-				this.room.lastTournamentData.playersLength = this.players.length;
-			}
+			this.room.lastTournamentData = {
+				...update.bracketData,
+				playersLength: this.players.length,
+			};
 		}
 		this.remove();
 	}
@@ -1168,17 +1168,6 @@ function createTournament(
 		room, format, createTournamentGenerator(generator, generatorMod, output)!, playerCap, isRated, name
 	);
 	return tour;
-}
-
-function moreRound(target: any) {
-	if (target && target.length) {
-		for (const child of target) {
-			if (child.children) {
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCommands} = {
@@ -1745,7 +1734,7 @@ const chatCommands: ChatCommands = {
 				const tourWinner = room.lastTournamentData.rootNode.team;
 				let roundCounter = Math.ceil(Math.log(room.lastTournamentData.playersLength) / Math.log(2));
 				tourData.push(room.lastTournamentData.rootNode);
-				while (moreRound(tourData)) {
+				while (tourData.some(node => node.children)) {
 					const tourDataCopy: TournamentDataNode[] = tourData;
 					tourData = [];
 					for (const copyChild of tourDataCopy) {
