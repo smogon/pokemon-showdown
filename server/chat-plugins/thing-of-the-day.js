@@ -21,7 +21,7 @@ const COTDS_FILE = 'config/chat-plugins/youtube-channels.tsv';
 const BOTWS_FILE = 'config/chat-plugins/thelibrary.tsv';
 const MOTWS_FILE = 'config/chat-plugins/prowrestling-matches.tsv';
 const ANOTDS_FILE = 'config/chat-plugins/animeandmanga-shows.tsv';
-const ATLOTDS_FILE = 'config/chat-plugins/sports-athletes.tsv';
+const athotdS_FILE = 'config/chat-plugins/sports-athletes.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
 /** @type {{[k: string]: [string, AnyObject][]}} */
@@ -419,7 +419,7 @@ const cotd = new OtdHandler('cotd', 'Channel', rooms.youtube, COTDS_FILE, ['chan
 const botw = new OtdHandler('botw', 'Book', rooms.thelibrary, BOTWS_FILE, ['book', 'nominator', 'link', 'quote', 'author', 'image', 'time'], ['Book', 'Nominator', 'Link', 'Quote', 'Author', 'Image', 'Timestamp'], true);
 const motw = new OtdHandler('motw', 'Match', rooms.prowrestling, MOTWS_FILE, ['match', 'nominator', 'link', 'tagline', 'event', 'image', 'time'], ['Match', 'Nominator', 'Link', 'Tagline', 'Event', 'Image', 'Timestamp'], true);
 const anotd = new OtdHandler('anotd', 'Animanga', rooms.animeandmanga, ANOTDS_FILE, ['show', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
-const atlotd = new OtdHandler('atlotd', 'Athlete', rooms.sports, ATLOTDS_FILE, ['athlete', 'nominator', 'image', 'sport', 'team', 'country', 'age', 'quote', 'time'], ['Athlete', 'Nominator', 'Image', 'Sport', 'Team', 'Country', 'Age', 'Quote', 'Timestamp']);
+const athotd = new OtdHandler('athotd', 'Athlete', rooms.sports, athotdS_FILE, ['athlete', 'nominator', 'image', 'sport', 'team', 'country', 'age', 'quote', 'time'], ['Athlete', 'Nominator', 'Image', 'Sport', 'Team', 'Country', 'Age', 'Quote', 'Timestamp']);
 
 /**
  * @param {string} message
@@ -441,8 +441,8 @@ function selectHandler(message) {
 		return motw;
 	case 'anotd':
 		return anotd;
-	case 'atlotd':
-		return atlotd;
+	case 'athotd':
+		return athotd;
 	default:
 		throw new Error("Invalid type for otd handler.");
 	}
@@ -701,8 +701,8 @@ const pages = {
 	anotd() {
 		return anotd.generateWinnerList(this);
 	},
-	atlotd() {
-		return atlotd.generateWinnerList(this);
+	athotd() {
+		return athotd.generateWinnerList(this);
 	},
 };
 exports.pages = pages;
@@ -728,7 +728,7 @@ exports.commands = {
 	botw: commands,
 	motw: commands,
 	anotd: commands,
-	atlotd: commands,
+	athotd: commands,
 	aotdhelp: help,
 	otdhelp: help,
 };
