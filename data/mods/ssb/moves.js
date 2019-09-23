@@ -2540,7 +2540,7 @@ let BattleMovedex = {
 		name: "Ectoplasm",
 		pp: 15,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
