@@ -84,7 +84,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, atk: 252, spe: 4}, ivs: {spa: 0}, nature: 'Adamant',
 			},
 			'Akasianse': {
-				species: 'Durant', ability: 'Hustle', item: 'Choice Band', gender: 'M',
+				species: 'Durant', ability: 'Hustle', item: 'Choice Band', gender: 'F',
 				moves: ['Iron Head', ['Megahorn', 'Leech Life'], ['Wild Charge', 'Superpower']],
 				signatureMove: 'Quick Reload',
 				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
