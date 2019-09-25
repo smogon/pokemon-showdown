@@ -2,6 +2,9 @@
 	"name": "English",
 
 	"strings": {
+		"namelocked": "",
+		"locked": "",
+
 		"Please follow the rules:": "",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "",
 		"Global Rules": "",
@@ -95,6 +98,24 @@
 		"Your status contains a banned word.": "",
 		"Your status has been set to: ${target}.": "",
 		"You are now marked as busy.": "",
-		"You are now marked as away. Send a message or use /back to indicate you are back.": ""
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "",
+
+		"You must choose a name before you can talk.": "",
+		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "",
+		"Get help with [TN: your lock]this": "",
+		"You are muted and cannot talk in this room.": "",
+		"Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.": "",
+		"Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.": "",
+		"Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.": "",
+		"Your message can't be blank.": "",
+		"Your message is too long: ": "",
+		"Your message contains banned characters.": "",
+		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "",
+		"Your username contains a phrase banned by this room.": "",
+		"Your status message contains a phrase banned by this room.": "",
+
+		"Your message contained banned words in this room.": "",
+		"You can't send the same message again so soon.": "",
+		"Due to this room being a high traffic room, your message must contain at least two letters.": ""
 	}
 }
