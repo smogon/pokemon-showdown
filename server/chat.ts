@@ -1269,9 +1269,9 @@ export const Chat = new class {
 			}
 		});
 	}
-    tr(language: string | null): (...arg: any) => string;
-    tr(language: string | null, strings: TemplateStringsArray | string, ...keys: any[]): string;
-    tr(language: string | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
+	tr(language: string | null): (...arg: any) => string;
+	tr(language: string | null, strings: TemplateStringsArray | string, ...keys: any[]): string;
+	tr(language: string | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
 		if (!language) language = 'english';
 		language = toID(language);
 		if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
