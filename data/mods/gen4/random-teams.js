@@ -5,12 +5,11 @@ const RandomGen5Teams = require('../../mods/gen5/random-teams');
 class RandomGen4Teams extends RandomGen5Teams {
 	/**
 	 * @param {string | Template} template
-	 * @param {number} [slot]
 	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
+	 * @param {boolean} [isLead]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, slot, teamDetails = {}) {
-		if (slot === undefined) slot = 1;
+	randomSet(template, teamDetails = {}, isLead = false) {
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
 
@@ -220,7 +219,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					if (hasMove['bodyslam'] || hasMove['facade'] || hasMove['return']) rejected = true;
 					break;
 				case 'endeavor':
-					if (slot > 0) rejected = true;
+					if (!isLead) rejected = true;
 					break;
 				case 'headbutt':
 					if (!hasMove['bodyslam'] && !hasMove['thunderwave']) rejected = true;
@@ -592,7 +591,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 		} else if (ability === 'Unburden') {
 			item = 'Sitrus Berry';
 		} else if (template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 150) {
-			item = slot === 0 ? 'Focus Sash' : 'Life Orb';
+			item = isLead ? 'Focus Sash' : 'Life Orb';
 
 		// Medium priority
 		} else if (counter.Physical >= 4 && !(hasMove['bodyslam'] && ability === 'Serene Grace') && !hasMove['fakeout'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']) {
@@ -615,7 +614,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Lustrous Orb';
 		} else if (ability === 'Guts') {
 			item = 'Toxic Orb';
-		} else if (slot === 0 && !counter['recoil'] && !moves.some(id => !!recoveryMoves.includes(id)) && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 235) {
+		} else if (isLead && !counter['recoil'] && !moves.some(id => !!recoveryMoves.includes(id)) && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 235) {
 			item = 'Focus Sash';
 		} else if (counter.damagingMoves.length >= 4) {
 			item = (!!counter['Normal'] || counter['Dragon'] > 1 || hasMove['chargebeam'] || hasMove['suckerpunch']) ? 'Life Orb' : 'Expert Belt';

@@ -86,7 +86,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			if (skip && pokemonPool.length + 1 > pokemonLeft) continue;
 
 			// The set passes the randomTeam limitations.
-			let set = this.randomSet(template, pokemon.length, restrictMoves);
+			let set = this.randomSet(template, restrictMoves, pokemon.length);
 			// @ts-ignore
 			if (set.other.discard && pokemonPool.length + 1 > pokemonLeft) continue;
 
@@ -140,11 +140,11 @@ class RandomGen2Teams extends RandomGen3Teams {
 
 	/**
 	 * @param {string | Template} template
-	 * @param {number} [slot]
 	 * @param {{[k: string]: number}} restrictMoves
+	 * @param {number} [slot]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, slot, restrictMoves) {
+	randomSet(template, restrictMoves, slot) {
 		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('unown');
