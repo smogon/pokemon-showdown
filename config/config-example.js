@@ -2,7 +2,7 @@
 
 /**
  * @typedef {Object} Storage
- * @property {'memory' | 'tsv'} punishments
+ * @property {'tsv'} punishments
  */
 
 /**
