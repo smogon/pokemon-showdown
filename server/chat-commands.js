@@ -2171,7 +2171,8 @@ const commands = {
 		if (!punishment) return this.errorReply("This name isn't locked.");
 		if (punishment[1] === userid) return this.errorReply(`"${userid}" was specifically locked by a staff member (check the global modlog). Use /unlock if you really want to unlock this name.`);
 
-		Punishments.storage.deletePunishment(userid, 'NAMELOCK');
+		Punishments.userids.delete(userid);
+		Punishments.savePunishments();
 
 		for (const curUser of Users.findUsers([userid], [])) {
 			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
@@ -2200,7 +2201,10 @@ const commands = {
 
 		const punishment = Punishments.ips.get(target);
 		if (!punishment) return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
-		Punishments.storage.deletePunishment(target);
+
+		Punishments.ips.delete(target);
+		Punishments.savePunishments();
+
 		for (const curUser of Users.findUsers([], [target])) {
 			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
 				curUser.locked = false;
@@ -2336,7 +2340,9 @@ const commands = {
 			return this.parse('/help unbanall');
 		}
 		user.lastCommand = '';
-		Punishments.storage.deleteAllPunishments();
+		Punishments.userids.clear();
+		Punishments.ips.clear();
+		Punishments.savePunishments();
 		this.addModAction(`All bans and locks have been lifted by ${user.name}.`);
 		this.modlog('UNBANALL');
 	},
@@ -2403,7 +2409,7 @@ const commands = {
 		if (!Punishments.ips.has(target)) {
 			return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
 		}
-		Punishments.storage.deletePunishment(target);
+		Punishments.ips.delete(target);
 		this.addModAction(`${user.name} unbanned the ${(target.charAt(target.length - 1) === '*' ? "IP range" : "IP")}: ${target}`);
 		this.modlog('UNRANGEBAN', null, target);
 	},
