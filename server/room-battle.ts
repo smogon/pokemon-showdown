@@ -477,7 +477,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	 * If the battle is ended: an array of the number of Pokemon left for each side.
 	 */
 	score: number[] | null;
-	inputLog: string | null;
+	inputLog: string[] | null;
 	turn: number;
 	rqid: number;
 	requestCount: number;
@@ -805,10 +805,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 		// reupload when the battle is over to overwrite the partial data (and potentially
 		// reflect any changes that may have been made to the replay's hidden status).
 		if (this.replaySaved || Config.autosavereplays) {
-			const uploader = Users.get(winnerid || p1id);
-			if (uploader && uploader.connections[0]) {
-				Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
-			}
+			// tslint:disable-next-line: no-floating-promises
+			this.room.saveReplay();
 		}
 		const parentGame = this.room.parent && this.room.parent.game;
 		// @ts-ignore - Tournaments aren't TS'd yet

@@ -679,6 +679,8 @@ export const Punishments = new class {
 		const roomauth = Rooms.global.destroyPersonalRooms(userid);
 		// tslint:disable-next-line: max-line-length
 		if (roomauth.length) Monitor.log(`[CrisisMonitor] Autolocked ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+		// tslint:disable-next-line: no-floating-promises
+		if ((room as GameRoom).battle) (room as GameRoom).saveReplay(true);
 
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
 		const roomid = typeof room !== 'string' ? (room as Room).id : room;

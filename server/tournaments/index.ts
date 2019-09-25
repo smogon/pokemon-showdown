@@ -1058,10 +1058,8 @@ export class Tournament extends Rooms.RoomGame {
 
 		if (this.generator.isTournamentEnded()) {
 			if (!this.room.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
-				const uploader = Users.get(winnerid);
-				if (uploader && uploader.connections[0]) {
-					Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
-				}
+				// tslint:disable-next-line: no-floating-promises
+				if (this.room.battle) this.room.saveReplay();
 			}
 			this.onTournamentEnd();
 		} else {

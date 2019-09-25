@@ -17,7 +17,6 @@
 
 /* eslint no-else-return: "error" */
 
-const crypto = require('crypto');
 const FS = require('../.lib-dist/fs').FS;
 
 const MAX_REASON_LENGTH = 300;
@@ -1889,6 +1888,7 @@ const commands = {
 		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(target ? ` (${target})` : ``)}`);
 		this.modlog('WARN', targetUser, target, {noalts: 1});
 		if (globalWarn) this.globalModlog('WARN', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
+		if (room.battle) room.saveReplay(true);
 		targetUser.send(`|c|~|/warn ${target}`);
 
 		const userid = targetUser.getLastId();
@@ -2116,7 +2116,7 @@ const commands = {
 		}
 
 		// Automatically upload replays as evidence/reference to the punishment
-		if (room.battle) this.parse('/savereplay forpunishment');
+		if (room.battle) room.saveReplay(true);
 		return true;
 	},
 	lockhelp: [
@@ -2784,7 +2784,7 @@ const commands = {
 		Punishments.namelock(targetUser, null, null, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		// Automatically upload replays as evidence/reference to the punishment
-		if (room.battle) this.parse('/savereplay forpunishment');
+		if (room.battle) room.saveReplay(true);
 
 		return true;
 	},
@@ -2978,7 +2978,7 @@ const commands = {
 		targetUser.popup(`|modal|${user.name} has prevented you from starting new battles for 2 days${reasonText}`);
 
 		// Automatically upload replays as evidence/reference to the punishment
-		if (room.battle) this.parse('/savereplay forpunishment');
+		if (room.battle) room.saveReplay(true);
 		return true;
 	},
 	battlebanhelp: [`/battleban [username], [reason] - [DEPRECATED] Prevents the user from starting new battles for 2 days and shows them the [reason]. Requires: & ~`],
@@ -4156,39 +4156,9 @@ const commands = {
 		const forPunishment = target === 'forpunishment';
 		if (forPunishment && !this.can('lock')) return false;
 
-		const battle = room.battle;
-		// retrieve spectator log (0) if there are privacy concerns
-		const format = Dex.getFormat(room.format, true);
-
-		// custom games always show full details
-		// random-team battles show full details if the battle is ended
-		// otherwise, don't show full details
-		let hideDetails = !format.id.includes('customgame');
-		if (format.team && battle.ended) hideDetails = false;
-
-		const data = room.getLog(hideDetails ? 0 : -1);
-		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
-		let rating = 0;
-		if (battle.ended && room.rated) rating = room.rated;
-		const [success] = await LoginServer.request('prepreplay', {
-			id: room.id.substr(7),
-			loghash: datahash,
-			p1: battle.p1.name,
-			p2: battle.p2.name,
-			format: format.id,
-			rating: rating,
-			hidden: forPunishment || room.unlistReplay ? '2' : room.isPrivate || room.hideReplay ? '1' : '',
-			inputlog: battle.inputLog ? battle.inputLog.join('\n') : null,
-		});
-		if (success) battle.replaySaved = true;
-		if (success && success.errorip) {
-			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
-			return;
-		}
-		connection.send('|queryresponse|savereplay|' + JSON.stringify({
-			log: data,
-			id: room.id.substr(7),
-		}));
+		const result = await room.saveReplay(forPunishment);
+		if (result.error) return this.popupReply(result.error);
+		connection.send('|queryresponse|savereplay|' + JSON.stringify(result));
 	},
 
 	hidereplay(target, room, user, connection) {

@@ -21,6 +21,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
 
+import * as crypto from 'crypto';
 import {FS} from '../lib/fs';
 import {WriteStream} from '../lib/streams';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
@@ -1516,6 +1517,42 @@ export class GameRoom extends BasicChatRoom {
 	onConnect(user: User, connection: Connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
+	}
+	async saveReplay(forceUnlisted = false) {
+		const battle = this.battle;
+		if (!battle) throw new Error(`Trying to upload replay with no battle: ${this.id}.`);
+		// retrieve spectator log (0) if there are privacy concerns
+		const format = Dex.getFormat(this.format, true);
+
+		// custom games always show full details
+		// random-team battles show full details if the battle is ended
+		// otherwise, don't show full details
+		let hideDetails = !format.id.includes('customgame');
+		if (format.team && battle.ended) hideDetails = false;
+
+		const data = this.getLog(hideDetails ? 0 : -1);
+		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
+		let rating = 0;
+		if (battle.ended && this.rated) rating = this.rated;
+		const [success] = await LoginServer.request('prepreplay', {
+			id: this.id.slice(7),
+			loghash: datahash,
+			p1: battle.p1.name,
+			p2: battle.p2.name,
+			format: format.id,
+			rating,
+			// @ts-ignore smogtours private code
+			hidden: forceUnlisted || battle.unlistReplay ? '2' : this.isPrivate || this.hideReplay ? '1' : '',
+			inputlog: battle.inputLog ? battle.inputLog.join('\n') : null,
+		});
+		if (success && success.errorip) {
+			return {error: `This server's request IP ${success.errorip} is not a registered server.`};
+		}
+		battle.replaySaved = true;
+		return {
+			log: data,
+			id: this.id.substr(7),
+		};
 	}
 }
 
