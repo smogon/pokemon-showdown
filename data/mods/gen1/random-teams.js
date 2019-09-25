@@ -201,7 +201,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			if (skip) continue;
 
 			// The set passes the limitations.
-			let set = this.randomSet(template, pokemon.length);
+			let set = this.randomSet(template);
 			pokemon.push(set);
 
 			// Now let's increase the counters. First, the Pokémon left.
@@ -238,10 +238,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 	/**
 	 * Random set generation for Gen 1 Random Battles.
 	 * @param {string | Template} template
-	 * @param {number} [slot]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, slot) {
+	randomSet(template) {
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1.
 

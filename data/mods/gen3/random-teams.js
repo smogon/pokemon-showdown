@@ -5,11 +5,10 @@ const RandomGen4Teams = require('../../mods/gen4/random-teams');
 class RandomGen3Teams extends RandomGen4Teams {
 	/**
 	 * @param {string | Template} template
-	 * @param {number} [slot]
 	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, slot, teamDetails = {}) {
+	randomSet(template, teamDetails = {}) {
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
 
@@ -672,7 +671,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 			}
 			if (skip) continue;
 
-			let set = this.randomSet(template, pokemon.length, teamDetails);
+			let set = this.randomSet(template, teamDetails);
 
 			// Limit 1 of any type combination
 			let typeCombo = template.types.slice().sort().join();

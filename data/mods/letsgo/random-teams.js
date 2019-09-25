@@ -5,11 +5,10 @@ const RandomTeams = require('../../random-teams');
 class RandomLetsGoTeams extends RandomTeams {
 	/**
 	 * @param {string | Template} template
-	 * @param {number} [slot]
 	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, slot = 1, teamDetails = {}) {
+	randomSet(template, teamDetails = {}) {
 		template = this.getTemplate(template);
 		let species = template.species;
 
@@ -94,11 +93,11 @@ class RandomLetsGoTeams extends RandomTeams {
 				case 'haze': case 'leechseed': case 'roar': case 'whirlwind':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['dragontail']) rejected = true;
 					break;
-				case 'nightshade': case 'seismictoss': case 'superfang':
-					if (counter.damagingMoves.length > 1 || counter.setupType) rejected = true;
-					break;
 				case 'protect':
 					if (counter.setupType || hasMove['rest'] || hasMove['lightscreen'] || hasMove['reflect']) rejected = true;
+					break;
+				case 'seismictoss':
+					if (counter.damagingMoves.length > 1 || counter.setupType) rejected = true;
 					break;
 				case 'stealthrock':
 					if (counter.setupType || !!counter['speedsetup'] || teamDetails.stealthRock) rejected = true;
@@ -173,10 +172,9 @@ class RandomLetsGoTeams extends RandomTeams {
 					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Ice'] && !counter['Ice']) ||
-					(hasType['Water'] && (!counter['Water'] || !counter.stab)) ||
-					(template.requiredMove && movePool.includes(toID(template.requiredMove))))) {
+					(hasType['Water'] && (!counter['Water'] || !counter.stab)))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather) {
+					if (!isSetup && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
 					}
 				}
@@ -256,7 +254,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			}
 			if (skip) continue;
 
-			let set = this.randomSet(template, pokemon.length, teamDetails);
+			let set = this.randomSet(template, teamDetails);
 
 			// Limit 1 of any type combination
 			let typeCombo = types.slice().sort().join();
