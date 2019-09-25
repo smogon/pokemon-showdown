@@ -1269,7 +1269,7 @@ export const Chat = new class {
 			}
 		});
 	}
-	tr(language: string | null): (...arg: any) => string;
+	tr(language: string | null): (fStrings: TemplateStringsArray | string, ...fKeys: any) => string;
 	tr(language: string | null, strings: TemplateStringsArray | string, ...keys: any[]): string;
 	tr(language: string | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
 		if (!language) language = 'english';
