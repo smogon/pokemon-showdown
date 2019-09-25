@@ -108,6 +108,214 @@ class NestedPunishmentMap extends Map<RoomID, Map<string, Punishment>> {
 		}
 	}
 }
+
+/*********************************************************
+ * Storage
+ *********************************************************/
+
+class PunishmentsStorage {
+	static connect(type: string) {
+		let storage;
+		if (type === 'tsv') {
+			storage = PunishmentsTsvStorage;
+		} else {
+			storage = PunishmentsNoopStorage;
+		}
+		storage.load();
+		return storage;
+	}
+}
+
+const PunishmentsNoopStorage = new class {
+	load() {}
+	appendPunishment(entry: PunishmentEntry, id: string) {}
+	appendRoomPunishment(entry: PunishmentEntry, id: string) {}
+	appendSharedIp(ip: string, note: string) {}
+	deleteRoomPunishment(roomid: RoomID, key: string) {}
+	deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {}
+	deleteAllPunishmentsOfRoom(roomid: RoomID) {}
+	deletePunishment(key: string) {}
+	deleteAllPunishments() {}
+	deleteSharedIp(ip: string) {}
+	deleteAllSharedIps() {}
+}();
+
+const PunishmentsTsvStorage = new class {
+	load() {
+		void this.loadPunishments();
+		void this.loadRoomPunishments();
+		void this.loadSharedIps();
+		void this.loadIpBanlist();
+	}
+	/**
+	 * punishments.tsv is in the format:
+	 * punishType, userid, ips/usernames, expiration time, reason
+	 * room-punishments.tsv is in the format:
+	 * punishType, roomid:userid, ips/usernames, expiration time, reason
+	 */
+	async loadPunishments() {
+		const data = await FS(PUNISHMENT_FILE).readIfExists();
+		if (!data) return;
+		for (const row of data.split("\n")) {
+			if (!row || row === '\r') continue;
+			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
+			const expireTime = Number(expireTimeStr);
+			if (punishType === "Punishment") continue;
+			const keys = altKeys.split(',').concat(id);
+
+			const punishment = [punishType, id, expireTime, ...reason] as Punishment;
+			if (Date.now() >= expireTime) {
+				continue;
+			}
+			for (const key of keys) {
+				if (!USERID_REGEX.test(key)) {
+					Punishments.ips.set(key, punishment);
+				} else {
+					Punishments.userids.set(key, punishment);
+				}
+			}
+		}
+	}
+	/**
+	 * room-punishments.tsv is in the format:
+	 * punishType, roomid:userid, ips/usernames, expiration time, reason
+	 */
+	async loadRoomPunishments() {
+		const data = await FS(ROOM_PUNISHMENT_FILE).readIfExists();
+		if (!data) return;
+		for (const row of data.split("\n")) {
+			if (!row || row === '\r') continue;
+			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
+			const expireTime = Number(expireTimeStr);
+			if (punishType === "Punishment") continue;
+			const [roomid, userid] = id.split(':');
+			if (!userid) continue; // invalid format
+			const keys = altKeys.split(',').concat(userid);
+
+			const punishment = [punishType, userid, expireTime, ...reason] as Punishment;
+			if (Date.now() >= expireTime) {
+				continue;
+			}
+			for (const key of keys) {
+				if (!USERID_REGEX.test(key)) {
+					Punishments.roomIps.nestedSet(roomid as RoomID, key, punishment);
+				} else {
+					Punishments.roomUserids.nestedSet(roomid as RoomID, key, punishment);
+				}
+			}
+		}
+	}
+	/**
+	 * sharedips.tsv is in the format:
+	 * IP, type (in this case always SHARED), note
+	 */
+	async loadSharedIps() {
+		const data = await FS(SHAREDIPS_FILE).readIfExists();
+		if (!data) return;
+		for (const row of data.split("\n")) {
+			if (!row || row === '\r') continue;
+			const [ip, type, note] = row.trim().split("\t");
+			if (!ip.includes('.')) continue;
+			if (type !== 'SHARED') continue;
+
+			Punishments.sharedIps.set(ip, note);
+		}
+	}
+	async loadIpBanlist() {
+		const data = await FS('config/ipbans.txt').readIfExists();
+		if (!data) return;
+		const rangebans = [];
+		for (const row of data.split("\n")) {
+			const ip = row.split('#')[0].trim();
+			if (!ip) continue;
+			if (ip.includes('/')) {
+				rangebans.push(ip);
+			} else if (!Punishments.ips.has(ip)) {
+				Punishments.ips.set(ip, ['BAN', '#ipban', Infinity, '']);
+			}
+		}
+		Punishments.checkRangeBanned = IPTools.checker(rangebans);
+	}
+
+	savePunishments() {
+		FS(PUNISHMENT_FILE).writeUpdate(() => {
+			const saveTable = Punishments.getPunishments();
+			let buf = 'Punishment\tUser ID\tIPs and alts\tExpires\tReason\r\n';
+			for (const [id, entry] of saveTable) {
+				buf += PunishmentsTsvStorage.renderEntry(entry, id);
+			}
+			return buf;
+		});
+	}
+	saveRoomPunishments() {
+		FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
+			const saveTable = new Map<string, PunishmentEntry>();
+			for (const roomid of Punishments.roomIps.keys()) {
+				for (const [userid, punishment] of Punishments.getPunishments(roomid, true)) {
+					saveTable.set(`${roomid}:${userid}`, punishment);
+				}
+			}
+			let buf = 'Punishment\tRoom ID:User ID\tIPs and alts\tExpires\tReason\r\n';
+			for (const [id, entry] of saveTable) {
+				buf += PunishmentsTsvStorage.renderEntry(entry, id);
+			}
+			return buf;
+		});
+	}
+	saveSharedIps() {
+		FS(SHAREDIPS_FILE).writeUpdate(() => {
+			let buf = 'IP\tType\tNote\r\n';
+			Punishments.sharedIps.forEach((note, ip) => {
+				buf += `${ip}\tSHARED\t${note}\r\n`;
+			});
+			return buf;
+		});
+	}
+
+	appendPunishment(entry: PunishmentEntry, id: string) {
+		if (id.charAt(0) === '#') return;
+		const buf = PunishmentsTsvStorage.renderEntry(entry, id);
+		return FS(PUNISHMENT_FILE).append(buf);
+	}
+	appendRoomPunishment(entry: PunishmentEntry, id: string) {
+		if (id.charAt(0) === '#') return;
+		const buf = PunishmentsTsvStorage.renderEntry(entry, id);
+		return FS(ROOM_PUNISHMENT_FILE).append(buf);
+	}
+	appendSharedIp(ip: string, note: string) {
+		const buf = `${ip}\tSHARED\t${note}\r\n`;
+		return FS(SHAREDIPS_FILE).append(buf);
+	}
+
+	renderEntry(entry: PunishmentEntry, id: string) {
+		const keys = entry.ips.concat(entry.userids).join(',');
+		const row = [entry.punishType, id, keys, entry.expireTime, entry.reason, ...entry.rest];
+		return row.join('\t') + '\r\n';
+	}
+
+	deleteRoomPunishment(roomid: RoomID, key: string) {
+		PunishmentsTsvStorage.saveRoomPunishments();
+	}
+	deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {
+		PunishmentsTsvStorage.saveRoomPunishments();
+	}
+	deleteAllPunishmentsOfRoom(roomid: RoomID) {
+		PunishmentsTsvStorage.saveRoomPunishments();
+	}
+	deletePunishment(key: string) {
+		PunishmentsTsvStorage.saveRoomPunishments();
+	}
+	deleteAllPunishments() {
+		PunishmentsTsvStorage.saveRoomPunishments();
+	}
+	deleteSharedIp(ip: string) {
+		PunishmentsTsvStorage.saveSharedIps();
+	}
+	deleteAllSharedIps() {
+		PunishmentsTsvStorage.saveSharedIps();
+	}
+}();
+
 /*********************************************************
  * Persistence
  *********************************************************/
@@ -172,99 +380,7 @@ export const Punishments = new class {
 		['BATTLEBAN', 'battlebanned'],
 		['MUTE', 'muted'],
 	]);
-	constructor() {
-		setImmediate(() => {
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.loadPunishments();
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.loadRoomPunishments();
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.loadBanlist();
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.loadSharedIps();
-		});
-	}
-
-	// punishments.tsv is in the format:
-	// punishType, userid, ips/usernames, expiration time, reason
-	// room-punishments.tsv is in the format:
-	// punishType, roomid:userid, ips/usernames, expiration time, reason
-	async loadPunishments() {
-		const data = await FS(PUNISHMENT_FILE).readIfExists();
-		if (!data) return;
-		for (const row of data.split("\n")) {
-			if (!row || row === '\r') continue;
-			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
-			const expireTime = Number(expireTimeStr);
-			if (punishType === "Punishment") continue;
-			const keys = altKeys.split(',').concat(id);
-
-			const punishment = [punishType, id, expireTime, ...reason] as Punishment;
-			if (Date.now() >= expireTime) {
-				continue;
-			}
-			for (const key of keys) {
-				if (!USERID_REGEX.test(key)) {
-					Punishments.ips.set(key, punishment);
-				} else {
-					Punishments.userids.set(key, punishment);
-				}
-			}
-		}
-	}
-
-	async loadRoomPunishments() {
-		const data = await FS(ROOM_PUNISHMENT_FILE).readIfExists();
-		if (!data) return;
-		for (const row of data.split("\n")) {
-			if (!row || row === '\r') continue;
-			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
-			const expireTime = Number(expireTimeStr);
-			if (punishType === "Punishment") continue;
-			const [roomid, userid] = id.split(':');
-			if (!userid) continue; // invalid format
-			const keys = altKeys.split(',').concat(userid);
-
-			const punishment = [punishType, userid, expireTime, ...reason] as Punishment;
-			if (Date.now() >= expireTime) {
-				continue;
-			}
-			for (const key of keys) {
-				if (!USERID_REGEX.test(key)) {
-					Punishments.roomIps.nestedSet(roomid as RoomID, key, punishment);
-				} else {
-					Punishments.roomUserids.nestedSet(roomid as RoomID, key, punishment);
-				}
-			}
-		}
-	}
-
-	savePunishments() {
-		FS(PUNISHMENT_FILE).writeUpdate(() => {
-			const saveTable = Punishments.getPunishments();
-			let buf = 'Punishment\tUser ID\tIPs and alts\tExpires\tReason\r\n';
-			for (const [id, entry] of saveTable) {
-				buf += Punishments.renderEntry(entry, id);
-			}
-			return buf;
-		});
-	}
-
-	saveRoomPunishments() {
-		FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
-			const saveTable = new Map<string, PunishmentEntry>();
-			for (const roomid of Punishments.roomIps.keys()) {
-				for (const [userid, punishment] of Punishments.getPunishments(roomid, true)) {
-					saveTable.set(`${roomid}:${userid}`, punishment);
-				}
-			}
-			let buf = 'Punishment\tRoom ID:User ID\tIPs and alts\tExpires\tReason\r\n';
-			for (const [id, entry] of saveTable) {
-				buf += Punishments.renderEntry(entry, id);
-			}
-			return buf;
-		});
-	}
+	storage = PunishmentsStorage.connect(Config.storage.punishments);
 
 	getEntry(entryId: string) {
 		let entry: PunishmentEntry | null = null;
@@ -306,65 +422,6 @@ export const Punishments = new class {
 		return entry;
 	}
 
-	appendPunishment(entry: PunishmentEntry, id: string, filename: string) {
-		if (id.charAt(0) === '#') return;
-		const buf = Punishments.renderEntry(entry, id);
-		return FS(filename).append(buf);
-	}
-
-	renderEntry(entry: PunishmentEntry, id: string) {
-		const keys = entry.ips.concat(entry.userids).join(',');
-		const row = [entry.punishType, id, keys, entry.expireTime, entry.reason, ...entry.rest];
-		return row.join('\t') + '\r\n';
-	}
-
-	async loadBanlist() {
-		const data = await FS('config/ipbans.txt').readIfExists();
-		if (!data) return;
-		const rangebans = [];
-		for (const row of data.split("\n")) {
-			const ip = row.split('#')[0].trim();
-			if (!ip) continue;
-			if (ip.includes('/')) {
-				rangebans.push(ip);
-			} else if (!Punishments.ips.has(ip)) {
-				Punishments.ips.set(ip, ['BAN', '#ipban', Infinity, '']);
-			}
-		}
-		Punishments.checkRangeBanned = IPTools.checker(rangebans);
-	}
-
-	/**
-	 * sharedips.tsv is in the format:
-	 * IP, type (in this case always SHARED), note
-	 */
-	async loadSharedIps() {
-		const data = await FS(SHAREDIPS_FILE).readIfExists();
-		if (!data) return;
-		for (const row of data.split("\n")) {
-			if (!row || row === '\r') continue;
-			const [ip, type, note] = row.trim().split("\t");
-			if (!ip.includes('.')) continue;
-			if (type !== 'SHARED') continue;
-
-			Punishments.sharedIps.set(ip, note);
-		}
-	}
-
-	appendSharedIp(ip: string, note: string) {
-		const buf = `${ip}\tSHARED\t${note}\r\n`;
-		return FS(SHAREDIPS_FILE).append(buf);
-	}
-
-	saveSharedIps() {
-		let buf = 'IP\tType\tNote\r\n';
-		Punishments.sharedIps.forEach((note, ip) => {
-			buf += `${ip}\tSHARED\t${note}\r\n`;
-		});
-
-		return FS(SHAREDIPS_FILE).write(buf);
-	}
-
 	/*********************************************************
 	 * Adding and removing
 	 *********************************************************/
@@ -381,14 +438,14 @@ export const Punishments = new class {
 
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		userids.delete(id as ID);
-		Punishments.appendPunishment({
+		Punishments.storage.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
 			expireTime,
 			reason,
 			rest,
-		}, id, PUNISHMENT_FILE);
+		}, id);
 		return affected;
 	}
 
@@ -449,14 +506,14 @@ export const Punishments = new class {
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		const affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id as ID);
-		Punishments.appendPunishment({
+		Punishments.storage.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
 			expireTime,
 			reason,
 			rest,
-		}, id, PUNISHMENT_FILE);
+		}, id);
 
 		return affected;
 	}
@@ -469,23 +526,23 @@ export const Punishments = new class {
 		}
 		// in theory we can stop here if punishment doesn't exist, but
 		// in case of inconsistent state, we'll try anyway
-
+		const write = (key: string) => {
+			// tslint:disable-next-line: no-floating-promises
+			Punishments.storage.deletePunishment(key);
+		};
 		let success: false | string = false;
 		Punishments.ips.forEach(([curPunishmentType, curId], key) => {
 			if (curId === id && curPunishmentType === punishType) {
-				Punishments.ips.delete(key);
+				write(id);
 				success = id;
 			}
 		});
 		Punishments.userids.forEach(([curPunishmentType, curId], key) => {
 			if (curId === id && curPunishmentType === punishType) {
-				Punishments.userids.delete(key);
+				write(id);
 				success = id;
 			}
 		});
-		if (success) {
-			Punishments.savePunishments();
-		}
 		return success;
 	}
 
@@ -500,14 +557,14 @@ export const Punishments = new class {
 
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		userids.delete(id as ID);
-		Punishments.appendPunishment({
+		Punishments.storage.appendRoomPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
 			expireTime,
 			reason,
 			rest,
-		}, roomid + ':' + id, ROOM_PUNISHMENT_FILE);
+		}, roomid + ':' + id);
 
 		if (typeof room !== 'string' && !((room as BasicRoom).isPrivate === true ||
 			(room as BasicRoom).isPersonal || (room as BasicRoom).battle)) {
@@ -555,14 +612,14 @@ export const Punishments = new class {
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		const affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id as ID);
-		Punishments.appendPunishment({
+		Punishments.storage.appendRoomPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
 			expireTime,
 			reason,
 			rest,
-		}, room.roomid + ':' + id, ROOM_PUNISHMENT_FILE);
+		}, room.roomid + ':' + id);
 
 		if (!(room.isPrivate === true || room.isPersonal || room.battle)) Punishments.monitorRoomPunishments(userid);
 		return affected;
@@ -575,6 +632,11 @@ export const Punishments = new class {
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		id = toID(id);
 		const punishment = Punishments.roomUserids.nestedGet(roomid, id);
+		const write = (key: string) => {
+			if (ignoreWrite) return;
+			// tslint:disable-next-line: no-floating-promises
+			Punishments.storage.deleteRoomPunishment(roomid, key);
+		};
 		if (punishment) {
 			id = punishment[1];
 		}
@@ -586,6 +648,7 @@ export const Punishments = new class {
 		if (ipSubMap) {
 			for (const [key, [curPunishmentType, curId]] of ipSubMap) {
 				if (curId === id && curPunishmentType === punishType) {
+					write(id);
 					ipSubMap.delete(key);
 					success = id;
 				}
@@ -595,13 +658,11 @@ export const Punishments = new class {
 		if (useridSubMap) {
 			for (const [key, [curPunishmentType, curId]] of useridSubMap) {
 				if (curId === id && curPunishmentType === punishType) {
+					write(id);
 					useridSubMap.delete(key);
 					success = id;
 				}
 			}
-		}
-		if (success && !ignoreWrite) {
-			Punishments.saveRoomPunishments();
 		}
 		return success;
 	}
@@ -925,13 +986,12 @@ export const Punishments = new class {
 			}
 		});
 		if (unblacklisted.length === 0) return false;
-		Punishments.saveRoomPunishments();
 		return unblacklisted;
 	}
 
 	addSharedIp(ip: string, note: string) {
 		Punishments.sharedIps.set(ip, note);
-		void Punishments.appendSharedIp(ip, note);
+		void Punishments.storage.appendSharedIp(ip, note);
 
 		for (const user of Users.users.values()) {
 			if (user.locked && user.locked !== user.id && ip in user.ips) {
@@ -948,7 +1008,7 @@ export const Punishments = new class {
 
 	removeSharedIp(ip: string) {
 		Punishments.sharedIps.delete(ip);
-		void Punishments.saveSharedIps();
+		void Punishments.storage.deleteSharedIp(ip);
 	}
 
 	/*********************************************************

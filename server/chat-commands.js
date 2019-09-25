@@ -2172,7 +2172,7 @@ const commands = {
 		if (punishment[1] === userid) return this.errorReply(`"${userid}" was specifically locked by a staff member (check the global modlog). Use /unlock if you really want to unlock this name.`);
 
 		Punishments.userids.delete(userid);
-		Punishments.savePunishments();
+		Punishments.storage.deletePunishment(userid, 'NAMELOCK');
 
 		for (const curUser of Users.findUsers([userid], [])) {
 			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
@@ -2203,7 +2203,7 @@ const commands = {
 		if (!punishment) return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
 
 		Punishments.ips.delete(target);
-		Punishments.savePunishments();
+		Punishments.storage.deletePunishment(target);
 
 		for (const curUser of Users.findUsers([], [target])) {
 			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
@@ -2342,7 +2342,7 @@ const commands = {
 		user.lastCommand = '';
 		Punishments.userids.clear();
 		Punishments.ips.clear();
-		Punishments.savePunishments();
+		Punishments.storage.deleteAllPunishments();
 		this.addModAction(`All bans and locks have been lifted by ${user.name}.`);
 		this.modlog('UNBANALL');
 	},
@@ -2410,6 +2410,7 @@ const commands = {
 			return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
 		}
 		Punishments.ips.delete(target);
+		Punishments.storage.deletePunishment(target);
 		this.addModAction(`${user.name} unbanned the ${(target.charAt(target.length - 1) === '*' ? "IP range" : "IP")}: ${target}`);
 		this.modlog('UNRANGEBAN', null, target);
 	},
