@@ -1104,8 +1104,8 @@ let BattleStatuses = {
 	om: {
 		noCopy: true,
 		onStart(target, source) {
-			source.types = ["Fire", "Fairy"];
 			this.add(`c|@OM|use shift gear`);
+			if (source.illusion) return;
 			this.add('-start', source, 'typeadd', 'Fairy');
 		},
 		onSwitchOut() {
