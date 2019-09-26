@@ -286,7 +286,7 @@ let BattleAbilities = {
 			source.formeChange('Shaymin', this.effect);
 		},
 		onAfterMove(pokemon) {
-			if (pokemon.template.baseSpecies !== 'Shaymin' || pokemon.transformed) return;
+			if (pokemon.template.speciesid !== 'shaymin' || pokemon.transformed) return;
 			pokemon.formeChange('Shaymin-Sky', this.effect);
 		},
 	},
