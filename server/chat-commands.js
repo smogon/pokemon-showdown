@@ -4158,7 +4158,7 @@ const commands = {
 
 		const result = await room.saveReplay(forPunishment);
 		if (result.error) return this.popupReply(result.error);
-		connection.send('|queryresponse|savereplay|' + JSON.stringify(result));
+		connection.send(`|queryresponse|savereplay|${JSON.stringify(result)}`);
 	},
 
 	hidereplay(target, room, user, connection) {
