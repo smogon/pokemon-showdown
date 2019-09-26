@@ -458,10 +458,10 @@ let BattleMovedex = {
 			onTerrain(pokemon) {
 				if (pokemon.hasType('Fire')) {
 					this.heal(pokemon.maxhp / 16);
-					this.add('-message', `${pokemon.name} was healed by the Lava Terrain!`);
+					this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was healed by the Lava Terrain!`);
 				} else {
 					this.damage(pokemon.maxhp / 16);
-					this.add('-message', `${pokemon.name} was hurt by Lava Terrain!`);
+					this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was hurt by Lava Terrain!`);
 				}
 			},
 			onEnd() {
