@@ -326,7 +326,7 @@ let Formats = [
 		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3654575/">Ultra Final Discussion</a>`],
 
 		mod: 'gen7',
-		forcedLevel: 50,
+		forcedLevel: 100,
 		teamLength: {
 			validate: [3, 6],
 			battle: 3,
