@@ -430,9 +430,7 @@ let BattleScripts = {
 			}
 
 			if (!ignoreImmunities && status.id &&
-					!(source && source.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id)) &&
-					// Acid Rain allows poison types to be posioned
-					!(this.battle.field.isWeather('acidrain') && ['tox', 'psn'].includes(status.id) && this.hasType('Poison'))) {
+					!(source && source.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))) {
 				// the game currently never ignores immunities
 				if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 					this.battle.debug('immune to status');
