@@ -401,8 +401,13 @@
 40.127.64.0,40.127.111.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 40.127.128.0,40.127.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 42.1.60.0,42.1.63.255,Exa Bytes Network Sdn Bhd,http://exabytes.com/
+43.245.160.0,43.245.163.255,Intergrid,https://intergrid.com.au/
 43.245.164.0,43.245.164.255,Virtual Data Centre,http://www.virtual-dc.com.au/
 43.249.38.0,43.249.39.255,Leaseweb,https://www.leaseweb.com/
+45.9.248.0,45.9.248.255,M247,http://www.m247.com/
+45.9.249.0,45.9.249.255,M247,http://www.m247.com/
+45.9.250.0,45.9.250.255,M247,http://www.m247.com/
+45.9.251.0,45.9.251.255,M247,http://www.m247.com/
 45.32.0.0,45.32.255.255,Choopa,https://www.choopa.com/
 45.33.0.0,45.33.127.255,Linode,http://www.linode.com/
 45.34.0.0,45.35.255.255,Psychz Networks,http://psychz.net/
@@ -1172,6 +1177,7 @@
 80.190.0.0,80.190.255.255,IP Exchange GmbH,http://www.ip-exchange.de/
 80.237.128.0,80.237.255.255,Host Europe,http://www.hosteurope.de/
 80.243.176.0,80.243.191.255,Redstation Limited,http://redstation.com/
+80.246.28.0,80.246.28.255,HostRoyale,https://hostroyale.com/
 80.246.52.0,80.246.52.127,Host Europe,http://www.hosteurope.de/
 80.246.54.0,80.246.57.255,Host Europe,http://www.hosteurope.de/
 80.246.59.0,80.246.59.255,alfahosting.de,http://alfahosting.de/
@@ -1453,6 +1459,7 @@
 91.250.80.0,91.250.87.255,Host Europe,http://www.hosteurope.de/
 91.250.96.0,91.250.103.255,Host Europe,http://www.hosteurope.de/
 91.250.112.0,91.250.119.255,Host Europe,http://www.hosteurope.de/
+92.38.148.0,92.38.149.255,G-Core Labs,https://gcorelabs.com/
 92.38.192.0,92.38.224.255,Digital Network JSC,http://www.di-net.ru/
 92.38.228.0,92.38.228.255,Digital Network JSC,http://www.di-net.ru/
 92.38.230.0,92.38.230.255,Digital Network JSC,http://www.di-net.ru/
@@ -1874,6 +1881,7 @@
 137.135.0.0,137.135.143.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 137.135.160.0,137.135.192.143,Microsoft Azure,http://www.windowsazure.com/en-us/
 137.135.192.160,137.135.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
+138.59.16.0,138.59.19.255,Rack Nation,https://www.racknation.cr/
 138.68.0.0,138.68.255.255,DigitalOcean USA,https://www.digitalocean.com/
 138.91.0.0,138.91.96.207,Microsoft Azure,http://www.windowsazure.com/en-us/
 138.91.112.0,138.91.129.79,Microsoft Azure,http://www.windowsazure.com/en-us/
@@ -1958,6 +1966,7 @@
 157.56.28.0,157.56.31.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 157.56.160.0,157.56.167.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 157.56.176.0,157.56.183.255,Microsoft Azure,http://www.windowsazure.com/en-us/
+157.157.87.0,157.157.87.255,EstNOC,https://www.estnoc.ee/
 157.230.0.0,157.230.255.255,DigitalOcean USA,https://www.digitalocean.com/
 157.245.0.0,157.245.255.255,DigitalOcean USA,https://www.digitalocean.com/
 165.73.240.0,165.73.240.255,Psychz Networks,https://www.psychz.net/
@@ -2279,7 +2288,7 @@
 178.255.192.0,178.255.199.255,qweb,http://www.qweb.nl/
 179.61.207.0,179.61.207.255,Host1Plus Brazil,http://www.host1plus.com/
 179.43.147.0,179.43.147.127,Private Layer INC,http://privatelayer.com/
-179.48.248.0,179.48.251.255,RackNation,https://www.racknation.cr/
+179.48.248.0,179.48.251.255,Rack Nation,https://www.racknation.cr/
 179.61.205.0,179.61.205.255,Digital Energy Technologies Limited,digitalenergytech.net
 179.61.206.0,179.61.206.255,Digital Energy Technologies Limited,digitalenergytech.net
 179.61.207.0,179.61.207.255,Digital Energy Technologies Limited,digitalenergytech.net
@@ -2312,6 +2321,7 @@
 181.41.222.0,181.41.223.255,Digital Energy Technologies Limited,digitalenergytech.net
 181.191.255.0,181.191.255.255,panamaserver.com,http://panamaserver.com/
 181.214.0.0,181.214.255.255,Host1Plus,http://www.host1plus.com/
+181.214.46.16,181.214.46.23,Digital Energy Technologies Limited,https://det.global/
 181.215.96.0,181.215.127.255,Host1Plus,http://www.host1plus.com/
 182.16.0.0,182.16.127.255,simcentric,http://simcentric.com/
 182.18.128.0,182.18.191.255,CtrlS,http://www.ctrls.in/
@@ -2407,6 +2417,7 @@
 185.104.185.0,185.104.185.255,M247,https://www.m247.com/
 185.104.186.0,185.104.186.255,M247,https://www.m247.com/
 185.104.187.0,185.104.187.255,M247,https://www.m247.com/
+185.106.102.0,185.106.102.255,CloudLayer8,https://cl8.com/
 185.108.84.0,185.108.85.255,Ardis Russia,https://ardis.ru/
 185.108.128.0,185.108.128.255,Web World Ireland,https://www.webworld.ie/
 185.108.129.0,185.108.129.255,OneProvider,http://oneprovider.com/
@@ -2517,6 +2528,7 @@
 190.4.88.0,190.4.91.255,Hosta Rica,http://hostarica.com/
 190.93.240.0,190.93.255.255,CloudFlare Inc,https://www.cloudflare.com/
 190.105.235.0,190.105.235.255,Latin Cloud,https://latincloud.com/
+190.112.220.0,190.112.223.255,Rack Nation,https://www.racknation.cr/
 190.114.252.0,190.114.255.255,BlueHosting.cl,http://www.bluehosting.cl/
 190.115.0.0,190.115.1.255,corponetsa.net,http://www.corponetsa.net/
 190.120.224.0,190.120.239.255,ServerPronto,http://www.serverpronto.com/
@@ -3542,7 +3554,7 @@
 217.21.176.0,217.21.191.255,Combell,http://www.combell.com/
 217.22.48.0,217.22.63.255,easyhost.be,http://easyhost.be/
 217.23.0.0,217.23.15.255,WorldStream,http://www.worldstream.nl/
-217.64.113.0,217.64.113.255,M247,http://www.m247.com/
+217.64.112.0,217.64.127.255,M247,http://www.m247.com/
 217.64.192.0,217.64.207.255,seeweb.it,http://seeweb.it/
 217.67.224.0,217.67.255.255,datahouse.nl,http://datahouse.nl/
 217.70.176.0,217.70.183.255,Gandi.net,http://www.gandi.net/
