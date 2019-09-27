@@ -838,7 +838,7 @@ let BattleStatuses = {
 		},
 		// Simple Innate
 		onBoost(boost, target, source, effect) {
-			if (source.illusion) return;
+			if (target && target.illusion) return;
 			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
 				// @ts-ignore
