@@ -101,6 +101,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'validate-team':
 		{
 			var Dex = require('./.sim-dist/dex').Dex;
+			global.toID = Dex.getId;
 			var TeamValidator = require('./.sim-dist/team-validator').TeamValidator;
 			var validator = TeamValidator.get(process.argv[3]);
 			var Streams = require('./.lib-dist/streams');
