@@ -312,7 +312,7 @@ let Formats = [
 				'Pyukumuku', 'Qwilfish', 'Regigigas', 'Relicanth', 'Roselia', 'Roserade', 'Rotom', 'Sableye', 'Sawk', 'Scizor', 'Seviper', 'Shuckle',
 				'Sigilyph', 'Simipour', 'Simisage', 'Simisear', 'Skarmory', 'Slowking', 'Slurpuff', 'Smeargle', 'Snorlax', 'Solrock', 'Spinda',
 				'Spiritomb', 'Stantler', 'Starmie', 'Steelix', 'Stunfisk', 'Sudowoodo', 'Sunflora', 'Tauros', 'Throh', 'Togedemaru', 'Torkoal',
-				'Trevenant', 'Tropius', 'Turtonator', 'Vaporeon', 'Volbeat', 'Whimsicott', 'Wigglytuff', 'Wobbuffet', 'Zangoose',
+				'Trevenant', 'Tropius', 'Turtonator', 'Vaporeon', 'Volbeat', 'Whimsicott', 'Wishiwashi', 'Wobbuffet', 'Zangoose',
 			];
 			let template = this.getTemplate(set.species || set.name);
 			let futureGenEvo = template.evos && this.getTemplate(template.evos[0]).gen > this.gen;
