@@ -3341,7 +3341,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, the weather becomes Acid Rain.  Pokemon that are not Poison-type take damage every turn.  Special Defense of Poison-type pokemon is multiplied by 1.5.",
+		desc: "For 5 turns, the weather becomes Acid Rain. Pokemon that are not Poison-type take damage every turn. Special Defense of Poison-type pokemon is multiplied by 1.5.",
 		shortDesc: "5 turns: +Poison SpD, corrosive damage.",
 		id: "acidrain",
 		name: "Acid Rain",
