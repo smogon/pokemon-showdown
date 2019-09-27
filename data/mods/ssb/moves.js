@@ -3326,7 +3326,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "The user of this move will use will use Toxic followed by Venoshock and then attempt to use Rest and Sleep Talk.",
+		desc: "The user attempts to use Toxic followed by Venoshock, then Rest and Sleep Talk.",
 		shortDesc: "Toxic -> Venoshock -> Rest -> Sleep Talk.",
 		id: "teabreak",
 		name: "Tea Break",
