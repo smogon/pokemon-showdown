@@ -247,6 +247,16 @@ describe('Team Validator', function () {
 	/*********************************************************
  	* Custom rules
  	*********************************************************/
+	it('should support legality tags', function () {
+		let team = [
+			{species: 'kitsunoh', ability: 'frisk', moves: ['shadowstrike'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+		illegal = TeamValidator.get('gen7anythinggoes@@@+cap').validateTeam(team);
+		assert.strictEqual(illegal, null);
+	});
+
 	it('should allow Pokemon to be banned', function () {
 		let team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},

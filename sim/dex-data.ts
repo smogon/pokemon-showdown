@@ -158,8 +158,10 @@ export type ComplexTeamBan = ComplexBan;
  * - '-[thing]' or '-[category]:[thing]' ban a thing
  * - '+[thing]' or '+[category]:[thing]' allow a thing (override a ban)
  * [category] is one of: item, move, ability, species, basespecies
+ *
+ * The value is the name of the parent rule (blank for the active format).
  */
-export class RuleTable extends Map {
+export class RuleTable extends Map<string, string> {
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
 	// tslint:disable-next-line:ban-types
@@ -174,14 +176,23 @@ export class RuleTable extends Map {
 		this.timer = null;
 	}
 
-	check(thing: string, setHas: {[id: string]: true} | null = null): string {
+	isBanned(thing: string) {
+		if (this.has(`+${thing}`)) return false;
+		return this.has(`-${thing}`);
+	}
+
+	check(thing: string, setHas: {[id: string]: true} | null = null) {
+		if (this.has(`+${thing}`)) return '';
 		if (setHas) setHas[thing] = true;
 		return this.getReason(`-${thing}`);
 	}
 
-	getReason(key: string): string {
+	getReason(key: string): string | null {
 		const source = this.get(key);
-		if (source === undefined) return '';
+		if (source === undefined) return null;
+		if (key === '-nonexistent' || key.startsWith('validate')) {
+			return 'not obtainable';
+		}
 		return source ? `banned by ${source}` : `banned`;
 	}
 

@@ -50,17 +50,26 @@ export class TeamValidator {
 		// A limit is imposed here to prevent too much engine strain or
 		// too much layout deformation - to be exact, this is the limit
 		// allowed in Custom Game.
-		// The usual limit of 6 pokemon is handled elsewhere - currently
-		// in the cartridge-compliant set validator: rulesets.js:pokemon
 		if (team.length > 24) {
 			problems.push(`Your team has more than than 24 Pok\u00E9mon, which the simulator can't handle.`);
 			return problems;
 		}
+		if (ruleTable.isBanned('nonexistent') && team.length > 6) {
+			problems.push(`Your team has more than than 6 Pok\u00E9mon.`);
+			return problems;
+		}
 
 		const teamHas: {[k: string]: number} = {};
+		let lgpeStarterCount = 0;
 		for (const set of team) {
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 			const setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
+			if (set.species === 'Pikachu-Starter' || set.species === 'Eevee-Starter') {
+				lgpeStarterCount++;
+				if (lgpeStarterCount === 2 && ruleTable.isBanned('nonexistent')) {
+					problems.push(`You can only have one of Pikachu-Starter or Eevee-Starter on a team.`);
+				}
+			}
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
@@ -107,6 +116,7 @@ export class TeamValidator {
 	validateSet(set: PokemonSet, teamHas: AnyObject): string[] | null {
 		const format = this.format;
 		const dex = this.dex;
+		const ruleTable = this.ruleTable;
 
 		let problems: string[] = [];
 		if (!set) {
@@ -141,6 +151,9 @@ export class TeamValidator {
 			// Just remember to set the level back to forcedLevel at the end of the file.
 			set.level = maxLevel;
 		}
+		if ((set.level > 100 || set.level < 1) && ruleTable.isBanned('nonexistent')) {
+			problems.push((set.name || set.species) + ' is higher than level 100.');
+		}
 
 		const nameTemplate = dex.getTemplate(set.name);
 		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
@@ -149,12 +162,22 @@ export class TeamValidator {
 		}
 		set.name = set.name || template.baseSpecies;
 		let name = set.species;
-		if (set.species !== set.name && template.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
+		if (set.species !== set.name && template.baseSpecies !== set.name) {
+			name = `${set.name} (${set.species})`;
+		}
 		let isHidden = false;
 		const lsetData: PokemonSources = {sources: [], sourcesBefore: dex.gen};
 
 		const setHas: {[k: string]: true} = {};
-		const ruleTable = this.ruleTable;
+
+		const allowEVs = dex.currentMod !== 'letsgo';
+		const capEVs = dex.gen > 2 && (ruleTable.has('validatemisc') || dex.gen === 6);
+		if (!set.evs) set.evs = TeamValidator.fillStats(null, allowEVs && !capEVs ? 252 : 0);
+		if (!set.ivs) set.ivs = TeamValidator.fillStats(null, 31);
+
+		if (ruleTable.has('validateformes')) {
+			problems.push(...this.validateForme(set));
+		}
 
 		for (const [rule] of ruleTable) {
 			const subformat = dex.getFormat(rule);
@@ -171,7 +194,7 @@ export class TeamValidator {
 		item = dex.getItem(set.item);
 		ability = dex.getAbility(set.ability);
 
-		if (ability.id === 'battlebond' && template.id === 'greninja' && !ruleTable.has('ignoreillegalabilities')) {
+		if (ability.id === 'battlebond' && template.id === 'greninja' && ruleTable.has('validateabilities')) {
 			template = dex.getTemplate('greninjaash');
 			if (set.gender && set.gender !== 'M') {
 				problems.push(`Battle Bond Greninja must be male.`);
@@ -206,79 +229,45 @@ export class TeamValidator {
 			}
 		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
-			problems.push(`${name} has an invalid happiness.`);
+			problems.push(`${name} has an invalid happiness value.`);
 		}
 		if (set.hpType && (!dex.getType(set.hpType).exists || ['normal', 'fairy'].includes(toID(set.hpType)))) {
 			problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
 		}
 
-		let banReason = ruleTable.check('pokemon:' + template.id, setHas);
-		let templateOverride = ruleTable.has('+pokemon:' + template.id);
-		if (!templateOverride) {
-			banReason = banReason || ruleTable.check('basepokemon:' + toID(template.baseSpecies), setHas);
-		}
-		if (banReason) {
-			return [`${set.species} is ${banReason}.`];
-		}
-		templateOverride = templateOverride || ruleTable.has('+basepokemon:' + toID(template.baseSpecies));
 		let postMegaTemplate = template;
 		if (item.megaEvolves === template.species) {
 			if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
 			postMegaTemplate = dex.getTemplate(item.megaStone);
 		}
-		if (['Mega', 'Mega-X', 'Mega-Y'].includes(postMegaTemplate.forme)) {
-			templateOverride = ruleTable.has('+pokemon:' + postMegaTemplate.id);
-			banReason = ruleTable.check('pokemon:' + postMegaTemplate.id, setHas);
-			if (banReason) {
-				problems.push(`${postMegaTemplate.species} is ${banReason}.`);
-			} else if (!templateOverride) {
-				banReason = ruleTable.check('pokemontag:mega', setHas);
-				if (banReason) problems.push(`Mega evolutions are ${banReason}.`);
-			}
-		}
-		if (!templateOverride) {
-			if (ruleTable.has('-unreleased') && postMegaTemplate.isUnreleased) {
-				problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
-			} else if (ruleTable.has('-illegal') && postMegaTemplate.tier === 'Illegal') {
-				problems.push(`${name} (${postMegaTemplate.species}) is not obtainable in this game.`);
-			} else if (postMegaTemplate.tier) {
-				let tag = postMegaTemplate.tier === '(PU)' ? 'ZU' : postMegaTemplate.tier;
-				banReason = ruleTable.check('pokemontag:' + toID(tag), setHas);
-				if (banReason) {
-					problems.push(`${postMegaTemplate.species} is in ${tag}, which is ${banReason}.`);
-				} else if (postMegaTemplate.doublesTier) {
-					tag = postMegaTemplate.doublesTier === '(DUU)' ? 'DNU' : postMegaTemplate.doublesTier;
-					banReason = ruleTable.check('pokemontag:' + toID(tag), setHas);
-					if (banReason) {
-						problems.push(`${postMegaTemplate.species} is in ${tag}, which is ${banReason}.`);
-					}
+
+		let problem = this.checkSpecies(set, template, postMegaTemplate, setHas);
+		if (problem) problems.push(problem);
+
+		problem = this.checkItem(set, item, setHas);
+		if (problem) problems.push(problem);
+		if (ruleTable.has('validatemisc')) {
+			if (dex.gen <= 1 || ruleTable.has('allowavs')) {
+				if (item.id) {
+					// no items allowed
+					set.item = '';
 				}
 			}
 		}
 
-		banReason = ruleTable.check('ability:' + toID(set.ability), setHas);
-		if (banReason) {
-			problems.push(`${name}'s ability ${set.ability} is ${banReason}.`);
-		}
-		banReason = ruleTable.check('item:' + toID(set.item), setHas);
-		if (banReason) {
-			problems.push(`${name}'s item ${set.item} is ${banReason}.`);
-		}
-		if (ruleTable.has('-unreleased') && item.isUnreleased && !ruleTable.has('+item:' + item.id)) {
-			problems.push(`${name}'s item ${set.item} is unreleased.`);
-		}
-
 		if (!set.ability) set.ability = 'No Ability';
-		setHas[toID(set.ability)] = true;
-		if (ruleTable.has('-illegal')) {
-			// Don't check abilities for metagames with All Abilities
-			if (dex.gen <= 2) {
+		if (ruleTable.has('validateabilities')) {
+			if (dex.gen <= 2 || ruleTable.has('allowavs')) {
 				set.ability = 'No Ability';
-			} else if (!ruleTable.has('ignoreillegalabilities')) {
-				if (!ability.name) {
+			} else {
+				if (!ability.name || ability.name === 'No Ability') {
 					problems.push(`${name} needs to have an ability.`);
 				} else if (!Object.values(template.abilities).includes(ability.name)) {
-					problems.push(`${name} can't have ${set.ability}.`);
+					if (postMegaTemplate.abilities[0] === ability.name) {
+						set.ability = template.abilities[0];
+					} else {
+						problems.push(`${name} can't have ${set.ability}.`);
+					}
 				}
 				if (ability.name === template.abilities['H']) {
 					isHidden = true;
@@ -292,7 +281,7 @@ export class TeamValidator {
 						(set.species.endsWith('Orange') || set.species.endsWith('White'))) {
 						problems.push(`${name}'s Hidden Ability is unreleased for the Orange and White forms.`);
 					} else if (dex.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
-						problems.push(`${name} must be at least level 10 with its Hidden Ability.`);
+						problems.push(`${name} must be at least level 10 to have a Hidden Ability.`);
 					}
 					if (template.maleOnlyHidden) {
 						set.gender = 'M';
@@ -301,6 +290,11 @@ export class TeamValidator {
 				}
 			}
 		}
+
+		ability = dex.getAbility(set.ability);
+		problem = this.checkAbility(set, ability, setHas);
+		if (problem) problems.push(problem);
+
 		if (set.moves && Array.isArray(set.moves)) {
 			set.moves = set.moves.filter(val => val);
 		}
@@ -311,40 +305,29 @@ export class TeamValidator {
 		// A limit is imposed here to prevent too much engine strain or
 		// too much layout deformation - to be exact, this is the limit
 		// allowed in Custom Game.
-		// The usual limit of 4 moves is handled elsewhere - currently
-		// in the cartridge-compliant set validator: rulesets.js:pokemon
 		if (set.moves.length > 24) {
 			problems.push(`${name} has more than 24 moves, which the simulator can't handle.`);
 			return problems;
 		}
+		if (ruleTable.isBanned('nonexistent') && set.moves.length > 4) {
+			problems.push(`${name} has more than 4 moves.`);
+			return problems;
+		}
 
-		set.ivs = TeamValidator.fillStats(set.ivs, 31);
-		let ivs: StatsTable = set.ivs;
-		const maxedIVs = Object.values(ivs).every(stat => stat === 31);
+		if (ruleTable.isBanned('nonexistent')) {
+			problems.push(...this.validateStats(set, template));
+		}
 
 		let lsetProblem = null;
 		for (const moveName of set.moves) {
 			if (!moveName) continue;
 			const move = dex.getMove(Dex.getString(moveName));
 			if (!move.exists) return [`"${move.name}" is an invalid move.`];
-			banReason = ruleTable.check('move:' + move.id, setHas);
-			if (banReason) {
-				problems.push(`${name}'s move ${move.name} is ${banReason}.`);
-			}
 
-			// Note that we don't error out on multiple Hidden Power types
-			// That is checked in rulesets.js rule Pokemon
-			if (move.id === 'hiddenpower' && move.type !== 'Normal' && !set.hpType) {
-				set.hpType = move.type;
-			}
+			problem = this.checkMove(set, move, setHas);
+			if (problem) problems.push(problem);
 
-			if (ruleTable.has('-unreleased')) {
-				if (move.isUnreleased && !ruleTable.has('+move:' + move.id)) {
-					problems.push(`${name}'s move ${move.name} is unreleased.`);
-				}
-			}
-
-			if (ruleTable.has('-illegal')) {
+			if (ruleTable.has('validatemoves')) {
 				const checkLearnset = (ruleTable.checkLearnset && ruleTable.checkLearnset[0] || this.checkLearnset);
 				lsetProblem = checkLearnset.call(this, move, template, lsetData, set);
 				if (lsetProblem) {
@@ -352,86 +335,6 @@ export class TeamValidator {
 					break;
 				}
 			}
-		}
-
-		const canBottleCap = (dex.gen >= 7 && set.level === 100);
-		if (set.hpType && maxedIVs && ruleTable.has('pokemon')) {
-			if (dex.gen <= 2) {
-				const HPdvs = dex.getType(set.hpType).HPdvs;
-				ivs = set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
-				let statName: StatName;
-				for (statName in HPdvs) {
-					ivs[statName] = HPdvs[statName]! * 2;
-				}
-				ivs.hp = -1;
-			} else if (!canBottleCap) {
-				ivs = set.ivs = TeamValidator.fillStats(dex.getType(set.hpType).HPivs, 31);
-			}
-		}
-		if (set.hpType === 'Fighting' && ruleTable.has('pokemon')) {
-			if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe &&
-				(template.baseSpecies !== 'Diancie' || !set.shiny)) {
-				// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
-				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
-			}
-		}
-		const ivHpType = dex.getHiddenPower(set.ivs).type;
-		if (!canBottleCap && ruleTable.has('pokemon') && set.hpType && set.hpType !== ivHpType) {
-			problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs are for Hidden Power ${ivHpType}.`);
-		}
-		if (dex.gen <= 2) {
-			// validate DVs
-			const atkDV = Math.floor(ivs.atk / 2);
-			const defDV = Math.floor(ivs.def / 2);
-			const speDV = Math.floor(ivs.spe / 2);
-			const spcDV = Math.floor(ivs.spa / 2);
-			const expectedHpDV = (atkDV % 2) * 8 + (defDV % 2) * 4 + (speDV % 2) * 2 + (spcDV % 2);
-			if (ivs.hp === -1) ivs.hp = expectedHpDV * 2;
-			const hpDV = Math.floor(ivs.hp / 2);
-			if (expectedHpDV !== hpDV) {
-				problems.push(`${name} has an HP DV of ${hpDV}, but its Atk, Def, Spe, and Spc DVs give it an HP DV of ${expectedHpDV}.`);
-			}
-			if (ivs.spa !== ivs.spd) {
-				if (dex.gen === 2) {
-					problems.push(`${name} has different SpA and SpD DVs, which is not possible in Gen 2.`);
-				} else {
-					ivs.spd = ivs.spa;
-				}
-			}
-			if (dex.gen > 1 && !template.gender) {
-				// Gen 2 gender is calculated from the Atk DV.
-				// High Atk DV <-> M. The meaning of "high" depends on the gender ratio.
-				let genderThreshold = template.genderRatio.F * 16;
-				if (genderThreshold === 4) genderThreshold = 5;
-				if (genderThreshold === 8) genderThreshold = 7;
-
-				const expectedGender = (atkDV >= genderThreshold ? 'M' : 'F');
-				if (set.gender && set.gender !== expectedGender) {
-					problems.push(`${name} is ${set.gender}, but it has an Atk DV of ${atkDV}, which makes its gender ${expectedGender}.`);
-				} else {
-					set.gender = expectedGender;
-				}
-			}
-			if (dex.gen > 1) {
-				const expectedShiny = !!(defDV === 10 && speDV === 10 && spcDV === 10 && atkDV % 4 >= 2);
-				if (expectedShiny && !set.shiny) {
-					problems.push(`${name} is not shiny, which does not match its DVs.`);
-				} else if (!expectedShiny && set.shiny) {
-					problems.push(`${name} is shiny, which does not match its DVs (its DVs must all be 10, except Atk which must be 2, 3, 6, 7, 10, 11, 14, or 15).`);
-				}
-			}
-		}
-		if (dex.gen <= 2 || dex.gen !== 6 && (format.id.endsWith('hackmons') || format.name.includes('BH'))) {
-			if (!set.evs) set.evs = TeamValidator.fillStats(null, 252);
-			const evTotal = (set.evs.hp || 0) + (set.evs.atk || 0) + (set.evs.def || 0) +
-				(set.evs.spa || 0) + (set.evs.spd || 0) + (set.evs.spe || 0);
-			if (evTotal === 508 || evTotal === 510) {
-				problems.push(`${name} has exactly 510 EVs, but this format does not restrict you to 510 EVs: you can max out every EV (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
-			}
-		}
-		const noEVs = (!set.evs || !Object.values(set.evs).some(value => value > 0));
-		if (noEVs && !format.debug && !format.id.includes('letsgo')) {
-			problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 		}
 
 		lsetData.isHidden = isHidden;
@@ -455,10 +358,9 @@ export class TeamValidator {
 				const eventProblems = this.validateSource(
 					set, lsetData.sources[0], template, ` because it has a move only available`
 				);
-				// @ts-ignore validateEvent must have returned an array because it was passed a because param
 				if (eventProblems) problems.push(...eventProblems);
 			}
-		} else if (ruleTable.has('-illegal') && template.eventOnly) {
+		} else if (ruleTable.has('validatemisc') && template.eventOnly) {
 			const eventTemplate = !template.learnset && template.baseSpecies !== template.species &&
 				template.id !== 'zygarde10' ? dex.getTemplate(template.baseSpecies) : template;
 			const eventPokemon = eventTemplate.eventPokemon;
@@ -494,11 +396,11 @@ export class TeamValidator {
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		}
-		if (ruleTable.has('-illegal') && set.level < (template.evoLevel || 0)) {
+		if (ruleTable.has('validatemisc') && set.level < (template.evoLevel || 0)) {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
 		}
-		if (ruleTable.has('-illegal') && template.id === 'keldeo' && set.moves.includes('secretsword') &&
+		if (ruleTable.has('validatemoves') && template.id === 'keldeo' && set.moves.includes('secretsword') &&
 			(format.requirePlus || format.requirePentagon)) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
@@ -533,10 +435,8 @@ export class TeamValidator {
 				problems.push(`${name} is limited to ${limit} of ${rule}${clause}.`);
 			} else if (!limit && count >= bans.length) {
 				const clause = source ? ` by ${source}` : ``;
-				if (source === 'Pokemon') {
-					if (ruleTable.has('-illegal')) {
-						problems.push(`${name} has the combination of ${rule}, which is impossible to obtain legitimately.`);
-					}
+				if (source === 'Obtainable Moves') {
+					problems.push(`${name} has the combination of ${rule}, which is impossible to obtain legitimately.`);
 				} else {
 					problems.push(`${name} has the combination of ${rule}, which is banned${clause}.`);
 				}
@@ -562,6 +462,178 @@ export class TeamValidator {
 		return problems;
 	}
 
+	validateStats(set: PokemonSet, template: Template) {
+		const ruleTable = this.ruleTable;
+		const dex = this.dex;
+
+		const allowEVs = dex.currentMod !== 'letsgo';
+		const allowAVs = ruleTable.has('allowavs');
+		const capEVs = dex.gen > 2 && (ruleTable.has('validatemisc') || dex.gen === 6);
+		const canBottleCap = dex.gen >= 7 && (set.level === 100 || !ruleTable.has('validatemisc'));
+
+		if (!set.evs) set.evs = TeamValidator.fillStats(null, allowEVs && !capEVs ? 252 : 0);
+		if (!set.ivs) set.ivs = TeamValidator.fillStats(null, 31);
+
+		const problems = [];
+		const name = set.name || set.species;
+		const statTable = {
+			hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed',
+		};
+
+		const maxedIVs = Object.values(set.ivs).every(stat => stat === 31);
+		for (const moveName of set.moves) {
+			const move = dex.getMove(moveName);
+			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
+				if (!set.hpType) {
+					set.hpType = move.type;
+				} else if (set.hpType !== move.type && ruleTable.has('validatemisc')) {
+					problems.push(`${name}'s Hidden Power type ${set.hpType} is incompatible with Hidden Power ${move.type}`);
+				}
+			}
+		}
+		if (set.hpType && maxedIVs && ruleTable.has('validatemisc')) {
+			if (dex.gen <= 2) {
+				const HPdvs = dex.getType(set.hpType).HPdvs;
+				set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+				let statName: StatName;
+				for (statName in HPdvs) {
+					set.ivs[statName] = HPdvs[statName]! * 2;
+				}
+				set.ivs.hp = -1;
+			} else if (!canBottleCap) {
+				set.ivs = TeamValidator.fillStats(dex.getType(set.hpType).HPivs, 31);
+			}
+		}
+
+		const cantBreedNorEvolve = (template.eggGroups[0] === 'Undiscovered' && !template.prevo && !template.nfe);
+		const isLegendary = (cantBreedNorEvolve && ![
+			'Unown', 'Pikachu',
+		].includes(template.baseSpecies)) || [
+			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Manaphy', 'Meltan', 'Melmetal',
+		].includes(template.baseSpecies);
+		const diancieException = template.species === 'Diancie' && set.shiny;
+		const has3PerfectIVs = (
+			dex.gen >= 6 && (template.gen >= 6 || this.format.requirePentagon) &&
+			isLegendary && !diancieException
+		);
+
+		if (set.hpType === 'Fighting' && ruleTable.has('validatemisc')) {
+			if (has3PerfectIVs) {
+				// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
+				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
+			}
+		}
+
+		if (has3PerfectIVs) {
+			let perfectIVs = 0;
+			for (const stat in set.ivs) {
+				if (set.ivs[stat as 'hp'] >= 31) perfectIVs++;
+			}
+			if (perfectIVs < 3) {
+				const reason = (this.format.requirePentagon ? ` and this format requires gen ${dex.gen} Pokémon` : ` in gen 6`);
+				problems.push(`${name} must have at least three perfect IVs because it's a legendary${reason}.`);
+			}
+		}
+
+		const ivHpType = dex.getHiddenPower(set.ivs).type;
+		if (!canBottleCap && set.hpType && set.hpType !== ivHpType) {
+			problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs are for Hidden Power ${ivHpType}.`);
+		}
+
+		if (dex.gen <= 2) {
+			// validate DVs
+			const ivs = set.ivs;
+			const atkDV = Math.floor(ivs.atk / 2);
+			const defDV = Math.floor(ivs.def / 2);
+			const speDV = Math.floor(ivs.spe / 2);
+			const spcDV = Math.floor(ivs.spa / 2);
+			const expectedHpDV = (atkDV % 2) * 8 + (defDV % 2) * 4 + (speDV % 2) * 2 + (spcDV % 2);
+			if (ivs.hp === -1) ivs.hp = expectedHpDV * 2;
+			const hpDV = Math.floor(ivs.hp / 2);
+			if (expectedHpDV !== hpDV) {
+				problems.push(`${name} has an HP DV of ${hpDV}, but its Atk, Def, Spe, and Spc DVs give it an HP DV of ${expectedHpDV}.`);
+			}
+			if (ivs.spa !== ivs.spd) {
+				if (dex.gen === 2) {
+					problems.push(`${name} has different SpA and SpD DVs, which is not possible in Gen 2.`);
+				} else {
+					ivs.spd = ivs.spa;
+				}
+			}
+			if (dex.gen > 1 && !template.gender) {
+				// Gen 2 gender is calculated from the Atk DV.
+				// High Atk DV <-> M. The meaning of "high" depends on the gender ratio.
+				let genderThreshold = template.genderRatio.F * 16;
+				if (genderThreshold === 4) genderThreshold = 5;
+				if (genderThreshold === 8) genderThreshold = 7;
+
+				const expectedGender = (atkDV >= genderThreshold ? 'M' : 'F');
+				if (set.gender && set.gender !== expectedGender) {
+					problems.push(`${name} is ${set.gender}, but it has an Atk DV of ${atkDV}, which makes its gender ${expectedGender}.`);
+				} else {
+					set.gender = expectedGender;
+				}
+			}
+			if (
+				set.species === 'Marowak' && toID(set.item) === 'thickclub' &&
+				set.moves.map(toID).includes('swordsdance' as ID) && set.level === 100
+			) {
+				// Marowak hack
+				set.ivs.atk = Math.floor(set.ivs.atk / 2) * 2;
+				while (set.evs.atk > 0 && 2 * 80 + set.ivs.atk + Math.floor(set.evs.atk / 4) + 5 > 255) {
+					set.evs.atk -= 4;
+				}
+			}
+			if (dex.gen > 1) {
+				const expectedShiny = !!(defDV === 10 && speDV === 10 && spcDV === 10 && atkDV % 4 >= 2);
+				if (expectedShiny && !set.shiny) {
+					problems.push(`${name} is not shiny, which does not match its DVs.`);
+				} else if (!expectedShiny && set.shiny) {
+					problems.push(`${name} is shiny, which does not match its DVs (its DVs must all be 10, except Atk which must be 2, 3, 6, 7, 10, 11, 14, or 15).`);
+				}
+			}
+			set.nature = 'Serious';
+		}
+
+		if (dex.currentMod === 'letsgo') { // AVs
+			for (const stat in set.evs) {
+				if (set.evs[stat as 'hp'] > 0 && !allowAVs) {
+					problems.push(`${name} has Awakening Values but this format doesn't allow them.`);
+					break;
+				} else if (set.evs[stat as 'hp'] > 200) {
+					problems.push(`${name} has more than 200 Awakening Values in ${statTable[stat as 'hp']}.`);
+				}
+			}
+		} else { // EVs
+			for (const stat in set.evs) {
+				if (set.evs[stat as 'hp'] > 255) {
+					problems.push(`${name} has more than 255 EVs in ${statTable[stat as 'hp']}.`);
+				}
+			}
+		}
+
+		let totalEV = 0;
+		for (const stat in set.evs) totalEV += set.evs[stat as 'hp'];
+
+		if (!this.format.debug) {
+			if ((allowEVs || allowAVs) && totalEV === 0) {
+				problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+			} else if (allowEVs && !capEVs && [508, 510].includes(totalEV)) {
+				problems.push(`${name} has exactly 510 EVs, but this format does not restrict you to 510 EVs: you can max out every EV (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+			}
+		}
+
+		if (allowEVs && capEVs && totalEV > 510) {
+			problems.push(`${name} has more than 510 total EVs.`);
+		}
+
+		return problems;
+	}
+
+	validateSource(
+		set: PokemonSet, source: PokemonSource, template: Template, because: string, from?: string
+	): string[] | undefined;
+	validateSource(set: PokemonSet, source: PokemonSource, template: Template): true | undefined;
 	/**
 	 * Returns array of error messages if invalid, undefined if valid
 	 *
@@ -599,9 +671,287 @@ export class TeamValidator {
 			throw new Error(`Unidentified source ${source} passed to validateSource`);
 		}
 
+		// @ts-ignore complicated fancy return signature
 		return this.validateEvent(set, eventData, eventTemplate, because, from);
 	}
 
+	validateForme(set: PokemonSet) {
+		const dex = this.dex;
+		const name = set.name || set.species;
+
+		const problems = [];
+		const item = dex.getItem(set.item);
+		const template = dex.getTemplate(set.species);
+		const battleForme = template.battleOnly && template.species;
+
+		if (battleForme) {
+			if (template.requiredAbility && set.ability !== template.requiredAbility) {
+				// Darmanitan-Zen, Zygarde-Complete
+				problems.push(`${template.species} transforms in-battle with ${template.requiredAbility}.`);
+			}
+			if (template.requiredItems) {
+				if (template.species === 'Necrozma-Ultra') {
+					// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
+					problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dawn-Wings or Necrozma-Dusk-Mane holding Ultranecrozium Z.`);
+				} else if (!template.requiredItems.includes(item.name)) {
+					// Mega or Primal
+					problems.push(`${template.species} transforms in-battle with ${Chat.toOrList(template.requiredItems)}.`);
+				}
+			}
+			if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
+				// Meloetta-Pirouette, Rayquaza-Mega
+				problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`);
+			}
+			set.species = template.baseSpecies; // Fix battle-only forme
+		} else {
+			if (template.requiredAbility) {
+				// Impossible!
+				throw new Error(`Species ${template.name} has a required ability despite not being a battle-only forme; it should just be in its abilities table.`);
+			}
+			if (template.requiredItems && !template.requiredItems.includes(item.name)) {
+				// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
+				problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
+			}
+			if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
+				// Keldeo-Resolute
+				problems.push(`${name} needs to have the move ${template.requiredMove}.`);
+			}
+
+			// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
+			// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally).
+			if (item.forcedForme && template.species === dex.getTemplate(item.forcedForme).baseSpecies) {
+				set.species = item.forcedForme;
+			}
+		}
+
+		if (template.species === 'Pikachu-Cosplay') {
+			const cosplay: {[k: string]: string} = {
+				meteormash: 'Pikachu-Rock-Star', iciclecrash: 'Pikachu-Belle', drainingkiss: 'Pikachu-Pop-Star',
+				electricterrain: 'Pikachu-PhD', flyingpress: 'Pikachu-Libre',
+			};
+			for (const moveid of set.moves) {
+				if (moveid in cosplay) {
+					set.species = cosplay[moveid];
+					break;
+				}
+			}
+		}
+		return problems;
+	}
+
+	checkSpecies(set: PokemonSet, template: Template, postMegaTemplate: Template, setHas: {[k: string]: true}) {
+		const dex = this.dex;
+		const ruleTable = this.ruleTable;
+
+		setHas['pokemon:' + template.id] = true;
+		setHas['basepokemon:' + toID(template.baseSpecies)] = true;
+
+		let isMega = false;
+		if (postMegaTemplate !== template) {
+			setHas['pokemon:' + postMegaTemplate.id] = true;
+			setHas['pokemontag:mega'] = true;
+			isMega = true;
+		}
+
+		const tier = postMegaTemplate.tier === '(PU)' ? 'ZU' : postMegaTemplate.tier;
+		const tierTag = 'pokemontag:' + toID(tier);
+		setHas[tierTag] = true;
+
+		const doublesTier = postMegaTemplate.doublesTier === '(DUU)' ? 'DNU' : postMegaTemplate.doublesTier;
+		const doublesTierTag = 'pokemontag:' + toID(doublesTier);
+		setHas[doublesTierTag] = true;
+
+		let banReason = ruleTable.check('pokemon:' + template.id);
+		if (banReason) {
+			return `${template.species} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		if (isMega) {
+			banReason = ruleTable.check('pokemon:' + postMegaTemplate.id);
+			if (banReason) {
+				return `${postMegaTemplate.species} is ${banReason}.`;
+			}
+			if (banReason === '') return null;
+
+			banReason = ruleTable.check('pokemontag:mega', setHas);
+			if (banReason) {
+				return `Mega evolutions are ${banReason}.`;
+			}
+		}
+
+		banReason = ruleTable.check('basepokemon:' + toID(template.baseSpecies));
+		if (banReason) {
+			return `${template.species} is ${banReason}.`;
+		}
+		if (banReason === '') {
+			// don't allow nonstandard templates when whitelisting standard base species
+			// i.e. unbanning Pichu doesn't mean allowing Pichu-Spiky-Eared outside of Gen 4
+			const baseTemplate = dex.getTemplate(template.baseSpecies);
+			if (baseTemplate.isNonstandard === template.isNonstandard) {
+				return null;
+			}
+		}
+
+		banReason = ruleTable.check(tierTag);
+		if (banReason) {
+			return `${postMegaTemplate.species} is in ${tier}, which is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		banReason = ruleTable.check(doublesTierTag);
+		if (banReason) {
+			return `${postMegaTemplate.species} is in ${doublesTier}, which is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		// obtainability
+		if (postMegaTemplate.isNonstandard) {
+			banReason = ruleTable.check('pokemontag:' + toID(postMegaTemplate.isNonstandard));
+			if (banReason) {
+				return `${postMegaTemplate.species} is tagged ${postMegaTemplate.isNonstandard}, which is ${banReason}.`;
+			}
+			if (banReason === '') return null;
+		}
+
+		if (
+			postMegaTemplate.isNonstandard === 'Pokestar' && dex.gen === 5 ||
+			postMegaTemplate.isNonstandard === 'Glitch' && dex.gen === 1
+		) {
+			banReason = ruleTable.check('pokemontag:hackmons', setHas);
+			if (banReason) {
+				return `${postMegaTemplate.species} is not obtainable without hacking.`;
+			}
+			if (banReason === '') return null;
+		} else if (postMegaTemplate.isNonstandard) {
+			banReason = ruleTable.check('nonexistent', setHas);
+			if (banReason) {
+				if (['Past', 'Future'].includes(postMegaTemplate.isNonstandard)) {
+					return `${postMegaTemplate.species} does not exist in Gen ${dex.gen}.`;
+				}
+				return `${postMegaTemplate.species} does not exist in this game.`;
+			}
+			if (banReason === '') return null;
+		} else if (postMegaTemplate.isUnreleased) {
+			banReason = ruleTable.check('unreleased', setHas);
+			if (banReason) {
+				return `${postMegaTemplate.species} is unreleased.`;
+			}
+			if (banReason === '') return null;
+		}
+
+		return null;
+	}
+
+	checkItem(set: PokemonSet, item: Item, setHas: {[k: string]: true}) {
+		const dex = this.dex;
+		const ruleTable = this.ruleTable;
+
+		setHas['move:' + item.id] = true;
+
+		let banReason = ruleTable.check('item:' + item.id);
+		if (banReason) {
+			return `${set.name}'s item ${item.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		// obtainability
+		if (item.isNonstandard) {
+			banReason = ruleTable.check('pokemontag:' + toID(item.isNonstandard));
+			if (banReason) {
+				return `${set.name}'s item ${item.name} is tagged ${item.isNonstandard}, which is ${banReason}.`;
+			}
+			if (banReason === '') return null;
+
+			banReason = ruleTable.check('nonexistent', setHas);
+			if (banReason) {
+				if (['Past', 'Future'].includes(item.isNonstandard)) {
+					return `${set.name}'s item ${item.name} does not exist in Gen ${dex.gen}.`;
+				}
+				return `${set.name}'s item ${item.name} does not exist in this game.`;
+			}
+			if (banReason === '') return null;
+		} else if (item.isUnreleased) {
+			banReason = ruleTable.check('unreleased', setHas);
+			if (banReason) {
+				return `${set.name}'s item ${item.name} is unreleased.`;
+			}
+			if (banReason === '') return null;
+		}
+
+		return null;
+	}
+
+	checkMove(set: PokemonSet, move: Move, setHas: {[k: string]: true}) {
+		const dex = this.dex;
+		const ruleTable = this.ruleTable;
+
+		setHas['move:' + move.id] = true;
+
+		let banReason = ruleTable.check('move:' + move.id);
+		if (banReason) {
+			return `${set.name}'s move ${move.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		// obtainability
+		if (move.isNonstandard) {
+			banReason = ruleTable.check('pokemontag:' + toID(move.isNonstandard));
+			if (banReason) {
+				return `${set.name}'s move ${move.name} is tagged ${move.isNonstandard}, which is ${banReason}.`;
+			}
+			if (banReason === '') return null;
+
+			banReason = ruleTable.check('nonexistent', setHas);
+			if (banReason) {
+				if (['Past', 'Future'].includes(move.isNonstandard)) {
+					return `${set.name}'s move ${move.name} does not exist in Gen ${dex.gen}.`;
+				}
+				return `${set.name}'s move ${move.name} does not exist in this game.`;
+			}
+			if (banReason === '') return null;
+		}
+
+		return null;
+	}
+
+	checkAbility(set: PokemonSet, ability: Ability, setHas: {[k: string]: true}) {
+		const dex = this.dex;
+		const ruleTable = this.ruleTable;
+
+		setHas['ability:' + ability.id] = true;
+
+		let banReason = ruleTable.check('ability:' + ability.id);
+		if (banReason) {
+			return `${set.name}'s ability ${ability.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		// obtainability
+		if (ability.isNonstandard) {
+			banReason = ruleTable.check('pokemontag:' + toID(ability.isNonstandard));
+			if (banReason) {
+				return `${set.name}'s ability ${ability.name} is tagged ${ability.isNonstandard}, which is ${banReason}.`;
+			}
+			if (banReason === '') return null;
+
+			banReason = ruleTable.check('nonexistent', setHas);
+			if (banReason) {
+				if (['Past', 'Future'].includes(ability.isNonstandard)) {
+					return `${set.name}'s ability ${ability.name} does not exist in Gen ${dex.gen}.`;
+				}
+				return `${set.name}'s ability ${ability.name} does not exist in this game.`;
+			}
+			if (banReason === '') return null;
+		}
+
+		return null;
+	}
+
+	validateEvent(set: PokemonSet, eventData: EventInfo, eventTemplate: Template): true | undefined;
+	validateEvent(
+		set: PokemonSet, eventData: EventInfo, eventTemplate: Template, because: string, from?: string
+	): string[] | undefined;
 	/**
 	 * Returns array of error messages if invalid, undefined if valid
 	 *
@@ -715,7 +1065,7 @@ export class TeamValidator {
 		}
 		// Event-related ability restrictions only matter if we care about illegal abilities
 		const ruleTable = this.ruleTable;
-		if (!ruleTable.has('ignoreillegalabilities')) {
+		if (ruleTable.has('validateabilities')) {
 			if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
 				if (template.species === eventTemplate.species) {
 					// has not evolved, abilities must match

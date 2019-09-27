@@ -1015,8 +1015,6 @@ interface FormatsData extends EventMethods {
 	maxForcedLevel?: number
 	maxLevel?: number
 	mod?: string
-	noChangeAbility?: boolean
-	noChangeForme?: boolean
 	onBasePowerPriority?: number
 	onModifyMovePriority?: number
 	onSwitchInPriority?: number

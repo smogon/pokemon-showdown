@@ -1399,7 +1399,7 @@ export class Battle extends Dex.ModdedDex {
 								continue;
 							}
 							const ruleTable = this.getRuleTable(this.getFormat());
-							if (!ruleTable.has('-illegal') && !this.getFormat().team) {
+							if ((ruleTable.has('+hackmons') || !ruleTable.has('validateabilities')) && !this.getFormat().team) {
 								// hackmons format
 								continue;
 							} else if (abilitySlot === 'H' && template.unreleasedHidden) {
