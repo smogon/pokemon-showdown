@@ -3304,18 +3304,7 @@ let BattleMovedex = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Toxic", target);
 		},
-		onTryHit(target, source, move) {
-			// hacky way of forcing toxic to effect poison / steel types without corrosion usage
-			if (target.volatiles['substitute'] && !move.infiltrates) return;
-			if (target.hasType('Steel') || target.hasType('Poison')) {
-				if (target.status) return;
-				let status = this.getEffect(move.status);
-				target.status = status.id;
-				target.statusData = {id: status.id, target: target, source: source, stage: 0};
-				this.add('-status', target, target.status);
-				move.status = undefined;
-			}
-		},
+		// Innate corrosive implemented in BattleScripts#setStatus
 		status: 'tox',
 		secondary: null,
 		target: "normal",
