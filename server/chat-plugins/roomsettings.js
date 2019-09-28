@@ -44,7 +44,7 @@ class RoomSettings {
 				modchatOutput.push(this.button(rank, true));
 			} else if (rank) {
 				let rankIndex = RANKS.indexOf(rank);
-				let roomAuth = (this.room.auth && this.room.auth[this.user.userid] ? this.room.auth[this.user.userid] : false);
+				let roomAuth = (this.room.auth && this.room.auth[this.user.id] ? this.room.auth[this.user.id] : false);
 				let roomAuthIndex = (roomAuth ? RANKS.indexOf(roomAuth) : false);
 				if (rankIndex > 1 && !this.user.can('modchatall', null, this.room)) continue;
 				if (roomAuth && !this.user.can('bypassall')) {

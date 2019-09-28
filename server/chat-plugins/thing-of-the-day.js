@@ -149,7 +149,7 @@ class OtdHandler {
 
 		/** @type {{[k: string]: string}} */
 		let obj = {};
-		obj[user.userid] = user.name;
+		obj[user.id] = user.name;
 
 		let nomObj = {nomination: nomination, name: user.name, userids: Object.assign(obj, user.prevNames), ips: Object.assign({}, user.ips)};
 

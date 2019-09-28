@@ -482,7 +482,7 @@ export class CommandContext extends MessageContext {
 		const requireGlobalCommand = (
 			this.pmTarget ||
 			this.room === Rooms.global ||
-			(this.room && !(this.user.userid in this.room.users))
+			(this.room && !(this.user.id in this.room.users))
 		);
 
 		if (typeof commandHandler === 'function' && requireGlobalCommand) {
@@ -688,7 +688,7 @@ export class CommandContext extends MessageContext {
 				if (!options.noip) buf += ` [${user.latestIp}]`;
 			}
 		}
-		buf += ` by ${this.user.userid}`;
+		buf += ` by ${this.user.id}`;
 		if (note) buf += `: ${note.replace(/\n/gm, ' ')}`;
 
 		this.room.modlog(buf);
@@ -824,7 +824,7 @@ export class CommandContext extends MessageContext {
 					this.errorReply(this.tr `Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`);
 					return false;
 				}
-				if (!(user.userid in room.users)) {
+				if (!(user.id in room.users)) {
 					connection.popup(`You can't send a message to this room without being in it.`);
 					return false;
 				}
@@ -1355,8 +1355,8 @@ export const Chat = new class {
 		if (onlyRecipient) return onlyRecipient.send(buf);
 		user.send(buf);
 		if (pmTarget !== user) pmTarget.send(buf);
-		pmTarget.lastPM = user.userid;
-		user.lastPM = pmTarget.userid;
+		pmTarget.lastPM = user.id;
+		user.lastPM = pmTarget.id;
 	}
 
 	packageData = {};

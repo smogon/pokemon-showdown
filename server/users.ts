@@ -53,21 +53,21 @@ type Worker = import('cluster').Worker;
 // Keeping them all here makes it easy to ensure they stay consistent
 
 function move(user: User, newUserid: ID) {
-	if (user.userid === newUserid) return true;
+	if (user.id === newUserid) return true;
 	if (!user) return false;
 
 	// doing it this way mathematically ensures no cycles
 	prevUsers.delete(newUserid);
-	prevUsers.set(user.userid, newUserid);
+	prevUsers.set(user.id, newUserid);
 
-	users.delete(user.userid);
-	user.userid = newUserid;
+	users.delete(user.id);
+	user.id = newUserid;
 	users.set(newUserid, user);
 
 	user.forcedPublic = null;
 	if (Config.forcedpublicprefixes) {
 		for (const prefix of Config.forcedpublicprefixes) {
-			if (user.userid.startsWith(toID(prefix))) {
+			if (user.id.startsWith(toID(prefix))) {
 				user.forcedPublic = prefix;
 				break;
 			}
@@ -77,23 +77,23 @@ function move(user: User, newUserid: ID) {
 	return true;
 }
 function add(user: User) {
-	if (user.userid) throw new Error(`Adding a user that already exists`);
+	if (user.id) throw new Error(`Adding a user that already exists`);
 
 	numUsers++;
 	user.guestNum = numUsers;
 	user.name = `Guest ${numUsers}`;
-	user.userid = toID(user.name);
+	user.id = toID(user.name);
 
-	if (users.has(user.userid)) throw new Error(`userid taken: ${user.userid}`);
-	users.set(user.userid, user);
+	if (users.has(user.id)) throw new Error(`userid taken: ${user.id}`);
+	users.set(user.id, user);
 }
 function deleteUser(user: User) {
 	prevUsers.delete('guest' + user.guestNum as ID);
-	users.delete(user.userid);
+	users.delete(user.id);
 }
 function merge(toRemain: User, toDestroy: User) {
-	prevUsers.delete(toRemain.userid);
-	prevUsers.set(toDestroy.userid, toRemain.userid);
+	prevUsers.delete(toRemain.id);
+	prevUsers.set(toDestroy.id, toRemain.id);
 }
 
 /**
@@ -113,7 +113,7 @@ function merge(toRemain: User, toDestroy: User) {
  */
 function getUser(name: string | User | null, exactName = false) {
 	if (!name || name === '!') return null;
-	if ((name as User).userid) return name as User;
+	if ((name as User).id) return name as User;
 	let userid = toID(name);
 	let i = 0;
 	if (!exactName) {
@@ -153,7 +153,7 @@ function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boole
 	for (const user of users.values()) {
 		if (!options.forPunishment && !user.named && !user.connected) continue;
 		if (!options.includeTrusted && user.trusted) continue;
-		if (userids.includes(user.userid)) {
+		if (userids.includes(user.id)) {
 			matches.push(user);
 			continue;
 		}
@@ -401,7 +401,7 @@ export class Connection {
 		}
 	}
 	toString() {
-		let buf = this.user ? `${this.user.userid}[${this.user.connections.indexOf(this)}]` : `[disconnected]`;
+		let buf = this.user ? `${this.user.id}[${this.user.connections.indexOf(this)}]` : `[disconnected]`;
 		buf += `:${this.ip}`;
 		if (this.protocol !== 'websocket') buf += `:${this.protocol}`;
 		return buf;
@@ -424,7 +424,7 @@ export class User extends Chat.MessageContext {
 	name: string;
 	named: boolean;
 	registered: boolean;
-	userid: ID;
+	id: ID;
 	group: string;
 	avatar: string | number;
 	language: string | null;
@@ -493,7 +493,7 @@ export class User extends Chat.MessageContext {
 		this.name = "";
 		this.named = false;
 		this.registered = false;
-		this.userid = '';
+		this.id = '';
 		this.group = Config.groupsranking[0];
 		this.language = null;
 
@@ -727,7 +727,7 @@ export class User extends Chat.MessageContext {
 
 		const whitelist = Config.consoleips || ['127.0.0.1'];
 		// on the IP whitelist OR the userid whitelist
-		return whitelist.includes(connection.ip) || whitelist.includes(this.userid);
+		return whitelist.includes(connection.ip) || whitelist.includes(this.id);
 	}
 	/**
 	 * Special permission check for promoting and demoting
@@ -756,12 +756,12 @@ export class User extends Chat.MessageContext {
 	 */
 	async rename(name: string, token: string, newlyRegistered: boolean, connection: Connection) {
 		let userid = toID(name);
-		if (userid !== this.userid) {
+		if (userid !== this.id) {
 			for (const roomid of this.games) {
 				const room = Rooms.get(roomid);
 				if (!room || !room.game || room.game.ended) {
 					this.games.delete(roomid);
-					console.log(`desynced roomgame ${roomid} renaming ${this.userid} -> ${userid}`);
+					console.log(`desynced roomgame ${roomid} renaming ${this.id} -> ${userid}`);
 					continue;
 				}
 				if (room.game.allowRenames || !this.named) continue;
@@ -806,7 +806,7 @@ export class User extends Chat.MessageContext {
 			this.send(`|nametaken||Your name contains a banned word.`);
 			return false;
 		} else {
-			if (userid === this.userid && !newlyRegistered) {
+			if (userid === this.id && !newlyRegistered) {
 				return this.forceRename(name, this.registered);
 			}
 		}
@@ -934,7 +934,7 @@ export class User extends Chat.MessageContext {
 					user.prevNames[i] = this.prevNames[i];
 				}
 			}
-			if (this.named) user.prevNames[this.userid] = this.name;
+			if (this.named) user.prevNames[this.id] = this.name;
 			this.destroy();
 
 			Punishments.checkName(user, userid, registered);
@@ -964,8 +964,8 @@ export class User extends Chat.MessageContext {
 		}
 
 		const oldname = this.name;
-		const oldid = this.userid;
-		if (userid !== this.userid) {
+		const oldid = this.id;
+		if (userid !== this.id) {
 			this.cancelReady();
 
 			if (!Users.move(this, userid)) {
@@ -995,12 +995,12 @@ export class User extends Chat.MessageContext {
 		for (const roomid of this.games) {
 			const room = Rooms.get(roomid);
 			if (!room) {
-				Monitor.warn(`while renaming, room ${roomid} expired for user ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				Monitor.warn(`while renaming, room ${roomid} expired for user ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
 				this.games.delete(roomid);
 				continue;
 			}
 			if (!room.game) {
-				Monitor.warn(`game desync for user ${this.userid} in room ${room.roomid}`);
+				Monitor.warn(`game desync for user ${this.id} in room ${room.roomid}`);
 				this.games.delete(roomid);
 				continue;
 			}
@@ -1122,7 +1122,7 @@ export class User extends Chat.MessageContext {
 		this.updateReady(connection);
 	}
 	debugData() {
-		let str = `${this.group}${this.name} (${this.userid})`;
+		let str = `${this.group}${this.name} (${this.id})`;
 		for (const [i, connection] of this.connections.entries()) {
 			str += ` socket${i}[`;
 			str += [...connection.inRooms].join(`, `);
@@ -1146,24 +1146,24 @@ export class User extends Chat.MessageContext {
 			return;
 		}
 		this.registered = true;
-		if (this.userid in usergroups) {
-			this.group = usergroups[this.userid].charAt(0);
+		if (this.id in usergroups) {
+			this.group = usergroups[this.id].charAt(0);
 		} else {
 			this.group = Config.groupsranking[0];
 		}
 
-		if (Config.customavatars && Config.customavatars[this.userid]) {
-			this.avatar = Config.customavatars[this.userid];
+		if (Config.customavatars && Config.customavatars[this.id]) {
+			this.avatar = Config.customavatars[this.id];
 		}
 
 		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!(staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
+			this.isStaff = !!(staffRoom && staffRoom.auth && staffRoom.auth[this.id]);
 		}
 		if (this.trusted) {
 			if (this.locked && this.permalocked) {
-				Monitor.log(`[CrisisMonitor] Trusted user '${this.userid}' is ${this.permalocked !== this.userid ? `an alt of permalocked user '${this.permalocked}'` : `a permalocked user`}, and was automatically demoted from ${this.distrust()}.`);
+				Monitor.log(`[CrisisMonitor] Trusted user '${this.id}' is ${this.permalocked !== this.id ? `an alt of permalocked user '${this.permalocked}'` : `a permalocked user`}, and was automatically demoted from ${this.distrust()}.`);
 				return;
 			}
 			this.locked = null;
@@ -1190,17 +1190,17 @@ export class User extends Chat.MessageContext {
 		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!(staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
+			this.isStaff = !!(staffRoom && staffRoom.auth && staffRoom.auth[this.id]);
 		}
 		if (wasStaff !== this.isStaff) this.update('isStaff');
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
 			if (forceTrusted || this.group !== Config.groupsranking[0]) {
-				usergroups[this.userid] = this.group + this.name;
-				this.trusted = this.userid;
-				this.autoconfirmed = this.userid;
+				usergroups[this.id] = this.group + this.name;
+				this.trusted = this.id;
+				this.autoconfirmed = this.id;
 			} else {
-				delete usergroups[this.userid];
+				delete usergroups[this.id];
 				this.trusted = '';
 			}
 			// tslint:disable-next-line:no-floating-promises
@@ -1246,7 +1246,7 @@ export class User extends Chat.MessageContext {
 	onDisconnect(connection: Connection) {
 		for (const [i, connected] of this.connections.entries()) {
 			if (connected === connection) {
-				// console.log('DISCONNECT: ' + this.userid);
+				// console.log('DISCONNECT: ' + this.id);
 				if (this.connections.length <= 1) {
 					this.markDisconnected();
 				}
@@ -1282,7 +1282,7 @@ export class User extends Chat.MessageContext {
 		let connection = null;
 		this.markDisconnected();
 		for (let i = this.connections.length - 1; i >= 0; i--) {
-			// console.log('DESTROY: ' + this.userid);
+			// console.log('DESTROY: ' + this.id);
 			connection = this.connections[i];
 			for (const roomid of connection.inRooms) {
 				this.leaveRoom(Rooms.get(roomid), connection, true);
@@ -1291,11 +1291,11 @@ export class User extends Chat.MessageContext {
 		}
 		if (this.connections.length) {
 			// should never happen
-			throw new Error(`Failed to drop all connections for ${this.userid}`);
+			throw new Error(`Failed to drop all connections for ${this.id}`);
 		}
 		for (const roomid of this.inRooms) {
 			// should never happen.
-			throw new Error(`Room miscount: ${roomid} not left for ${this.userid}`);
+			throw new Error(`Room miscount: ${roomid} not left for ${this.id}`);
 		}
 		this.inRooms.clear();
 	}
@@ -1315,9 +1315,9 @@ export class User extends Chat.MessageContext {
 		return "[" + (prevNames.length ? prevNames[prevNames.length - 1] : this.name) + "]";
 	}
 	getLastId() {
-		if (this.named) return this.userid;
+		if (this.named) return this.id;
 		const prevNames = Object.keys(this.prevNames);
-		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid) as ID;
+		return (prevNames.length ? prevNames[prevNames.length - 1] : this.id) as ID;
 	}
 	async tryJoinRoom(roomid: RoomID | Room, connection: Connection) {
 		roomid = roomid && (roomid as Room).roomid ? (roomid as Room).roomid : roomid as RoomID;
@@ -1422,7 +1422,7 @@ export class User extends Chat.MessageContext {
 	cancelReady() {
 		// setting variables because this can't be short-circuited
 		const searchesCancelled = Ladders.cancelSearches(this);
-		const challengesCancelled = Ladders.clearChallenges(this.userid);
+		const challengesCancelled = Ladders.clearChallenges(this.id);
 		if (searchesCancelled || challengesCancelled) {
 			this.popup(`Your searches and challenges have been cancelled because you changed your username.`);
 		}
@@ -1551,8 +1551,8 @@ export class User extends Chat.MessageContext {
 		this.updateIdentity();
 	}
 	getAccountStatusString() {
-		return this.trusted === this.userid ? `[trusted]`
-			: this.autoconfirmed === this.userid ? `[ac]`
+		return this.trusted === this.id ? `[trusted]`
+			: this.autoconfirmed === this.id ? `[ac]`
 			: this.registered ? `[registered]`
 			: `[unregistered]`;
 	}
@@ -1561,13 +1561,13 @@ export class User extends Chat.MessageContext {
 		for (const roomid of this.games) {
 			const room = Rooms.get(roomid);
 			if (!room) {
-				Monitor.warn(`while deallocating, room ${roomid} did not exist for ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				Monitor.warn(`while deallocating, room ${roomid} did not exist for ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
 				this.games.delete(roomid);
 				continue;
 			}
 			const game = room.game;
 			if (!game) {
-				Monitor.warn(`while deallocating, room ${roomid} did not have a game for ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				Monitor.warn(`while deallocating, room ${roomid} did not have a game for ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
 				this.games.delete(roomid);
 				continue;
 			}
@@ -1579,7 +1579,7 @@ export class User extends Chat.MessageContext {
 		Users.delete(this);
 	}
 	toString() {
-		return this.userid;
+		return this.id;
 	}
 }
 
@@ -1715,7 +1715,7 @@ function socketReceive(worker: Worker, workerid: number, socketid: string, messa
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
 	if (lines.length > (user.isStaff ||
-		(room.auth && room.auth[user.userid] && room.auth[user.userid] !== '+') ? THROTTLE_MULTILINE_WARN_STAFF
+		(room.auth && room.auth[user.id] && room.auth[user.id] !== '+') ? THROTTLE_MULTILINE_WARN_STAFF
 			: THROTTLE_MULTILINE_WARN)) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;

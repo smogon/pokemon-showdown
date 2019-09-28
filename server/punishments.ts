@@ -522,8 +522,8 @@ export const Punishments = new class {
 			Punishments.roomIps.nestedSet(roomid, ip, punishment);
 			ips.add(ip);
 		}
-		if (!user.userid.startsWith('guest')) {
-			Punishments.roomUserids.nestedSet(roomid, user.userid, punishment);
+		if (!user.id.startsWith('guest')) {
+			Punishments.roomUserids.nestedSet(roomid, user.id, punishment);
 		}
 		if (user.autoconfirmed) {
 			Punishments.roomUserids.nestedSet(roomid, user.autoconfirmed, punishment);
@@ -775,7 +775,7 @@ export const Punishments = new class {
 				if ((game as Tournament).isTournamentStarted) {
 					(game as Tournament).disqualifyUser(id, null, null);
 				} else if (!(game as Tournament).isTournamentStarted) {
-					(game as Tournament).removeUser(user.userid);
+					(game as Tournament).removeUser(user.id);
 				}
 			}
 		}
@@ -793,7 +793,7 @@ export const Punishments = new class {
 	isBattleBanned(user: User) {
 		if (!user) throw new Error(`Trying to check if a non-existent user is battlebanned.`);
 
-		let punishment = Punishments.roomUserids.nestedGet("battle" as RoomID, user.userid);
+		let punishment = Punishments.roomUserids.nestedGet("battle" as RoomID, user.id);
 		if (punishment && punishment[0] === 'BATTLEBAN') return punishment;
 
 		if (user.autoconfirmed) {
@@ -856,7 +856,7 @@ export const Punishments = new class {
 
 		let affected: User[] = [];
 
-		if (!user || userId && userId !== user.userid) {
+		if (!user || userId && userId !== user.id) {
 			affected = Punishments.roomPunishName(room, userId, punishment);
 		}
 
@@ -929,7 +929,7 @@ export const Punishments = new class {
 		Punishments.appendSharedIp(ip, note);
 
 		for (const user of Users.users.values()) {
-			if (user.locked && user.locked !== user.userid && ip in user.ips) {
+			if (user.locked && user.locked !== user.id && ip in user.ips) {
 				if (!user.autoconfirmed) {
 					user.semilocked = `#sharedip ${user.locked}`;
 				}
@@ -1069,7 +1069,7 @@ export const Punishments = new class {
 			: '';
 
 		if (battleban) {
-			if (battleban[1] !== user.userid && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
+			if (battleban[1] !== user.id && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
 				Punishments.roomUnpunish("battle" as RoomID, userid, 'BATTLEBAN');
 			} else {
 				Punishments.roomPunish("battle" as RoomID, user, battleban);
@@ -1200,7 +1200,7 @@ export const Punishments = new class {
 	}
 
 	checkNameInRoom(user: User, roomid: RoomID): boolean {
-		let punishment = Punishments.roomUserids.nestedGet(roomid, user.userid);
+		let punishment = Punishments.roomUserids.nestedGet(roomid, user.id);
 		if (!punishment && user.autoconfirmed) {
 			punishment = Punishments.roomUserids.nestedGet(roomid, user.autoconfirmed);
 		}
@@ -1264,7 +1264,7 @@ export const Punishments = new class {
 	isRoomBanned(user: User, roomid: RoomID): Punishment | undefined {
 		if (!user) throw new Error(`Trying to check if a non-existent user is room banned.`);
 
-		let punishment = Punishments.roomUserids.nestedGet(roomid, user.userid);
+		let punishment = Punishments.roomUserids.nestedGet(roomid, user.id);
 		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment;
 
 		if (user.autoconfirmed) {

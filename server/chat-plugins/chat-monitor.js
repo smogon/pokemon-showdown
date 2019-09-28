@@ -261,12 +261,12 @@ let namefilter = function (name, user) {
 let loginfilter = function (user) {
 	if (user.namelocked) return;
 
-	const forceRenamed = Chat.forceRenames.get(user.userid);
+	const forceRenamed = Chat.forceRenames.get(user.id);
 	if (user.trackRename) {
 		Rooms.global.notifyRooms([/** @type {RoomID} */('staff')], `|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${forceRenamed ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`);
 		user.trackRename = '';
 	}
-	if (Chat.namefilterwhitelist.has(user.userid)) return;
+	if (Chat.namefilterwhitelist.has(user.id)) return;
 	if (typeof forceRenamed === 'number') {
 		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
 		Rooms.global.notifyRooms([/** @type {RoomID} */('staff')], Chat.html`|html|[NameMonitor] Forcerenamed name being reused${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`);

@@ -51,7 +51,7 @@ class Poll {
 	 */
 	vote(user, option) {
 		let ip = user.latestIp;
-		let userid = user.userid;
+		let userid = user.id;
 
 		if (userid in this.voters || ip in this.voterIps) {
 			return user.sendTo(this.room, `You have already voted for this poll.`);
@@ -71,7 +71,7 @@ class Poll {
 	 */
 	blankvote(user) {
 		let ip = user.latestIp;
-		let userid = user.userid;
+		let userid = user.id;
 
 		if (!(userid in this.voters) || !(ip in this.voterIps)) {
 			this.voters[userid] = 0;
@@ -142,8 +142,8 @@ class Poll {
 		// Update the poll results for everyone that has voted
 		for (let i in this.room.users) {
 			let user = this.room.users[i];
-			if (user.userid in this.voters) {
-				user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${results[this.voters[user.userid]]}`);
+			if (user.id in this.voters) {
+				user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${results[this.voters[user.id]]}`);
 			} else if (user.latestIp in this.voterIps) {
 				user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${results[this.voterIps[user.latestIp]]}`);
 			}
@@ -156,8 +156,8 @@ class Poll {
 	 */
 	updateTo(user, connection = null) {
 		const recipient = connection || user;
-		if (user.userid in this.voters) {
-			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
+		if (user.id in this.voters) {
+			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
 		} else if (user.latestIp in this.voterIps) {
 			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
 		} else {
@@ -169,8 +169,8 @@ class Poll {
 	 * @param {User} user
 	 */
 	updateFor(user) {
-		if (user.userid in this.voters) {
-			user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
+		if (user.id in this.voters) {
+			user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
 		}
 	}
 
@@ -185,8 +185,8 @@ class Poll {
 
 		for (let i in this.room.users) {
 			let thisUser = this.room.users[i];
-			if (thisUser.userid in this.voters) {
-				thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${results[this.voters[thisUser.userid]]}`);
+			if (thisUser.id in this.voters) {
+				thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${results[this.voters[thisUser.id]]}`);
 			} else if (thisUser.latestIp in this.voterIps) {
 				thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${results[this.voterIps[thisUser.latestIp]]}`);
 			} else {
@@ -201,8 +201,8 @@ class Poll {
 	 */
 	displayTo(user, connection = null) {
 		const recipient = connection || user;
-		if (user.userid in this.voters) {
-			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
+		if (user.id in this.voters) {
+			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
 		} else if (user.latestIp in this.voterIps) {
 			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
 		} else {

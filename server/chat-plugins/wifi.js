@@ -292,12 +292,12 @@ class QuestionGiveaway extends Giveaway {
 	guessAnswer(user, guess) {
 		if (this.phase !== 'started') return user.sendTo(this.room, "The giveaway has not started yet.");
 
-		if (this.checkJoined(user) && Object.values(this.joined).indexOf(user.userid) < 0) return user.sendTo(this.room, "You have already joined the giveaway.");
+		if (this.checkJoined(user) && Object.values(this.joined).indexOf(user.id) < 0) return user.sendTo(this.room, "You have already joined the giveaway.");
 		if (Giveaway.checkBanned(this.room, user)) return user.sendTo(this.room, "You are banned from entering giveaways.");
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
-		if (!this.answered[user.userid]) this.answered[user.userid] = 0;
-		if (this.answered[user.userid] >= 3) return user.sendTo(this.room, "You have already guessed three times. You cannot guess anymore in this giveaway.");
+		if (!this.answered[user.id]) this.answered[user.id] = 0;
+		if (this.answered[user.id] >= 3) return user.sendTo(this.room, "You have already guessed three times. You cannot guess anymore in this giveaway.");
 
 		let sanitized = toID(guess);
 
@@ -309,9 +309,9 @@ class QuestionGiveaway extends Giveaway {
 			}
 		}
 
-		this.joined[user.latestIp] = user.userid;
-		this.answered[user.userid]++;
-		if (this.answered[user.userid] >= 3) {
+		this.joined[user.latestIp] = user.id;
+		this.answered[user.id]++;
+		if (this.answered[user.id] >= 3) {
 			user.sendTo(this.room, `Your guess '${guess}' is wrong. You have used up all of your guesses. Better luck next time!`);
 		} else {
 			user.sendTo(this.room, `Your guess '${guess}' is wrong. Try again!`);
@@ -324,7 +324,7 @@ class QuestionGiveaway extends Giveaway {
 	 * @param {User} user
 	 */
 	change(key, value, user) {
-		if (user.userid !== this.host.userid) return user.sendTo(this.room, "Only the host can edit the giveaway.");
+		if (user.id !== this.host.id) return user.sendTo(this.room, "Only the host can edit the giveaway.");
 		if (this.phase !== 'pending') return user.sendTo(this.room, "You cannot change the question or answer once the giveaway has started.");
 		if (key === 'question') {
 			this.question = value;
@@ -449,7 +449,7 @@ class LotteryGiveaway extends Giveaway {
 		if (Giveaway.checkBanned(this.room, user)) return user.sendTo(this.room, "You are banned from entering giveaways.");
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
-		this.joined[user.latestIp] = user.userid;
+		this.joined[user.latestIp] = user.id;
 		user.sendTo(this.room, `|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(true)}</div>`);
 		user.sendTo(this.room, "You have successfully joined the lottery giveaway.");
 	}
@@ -461,7 +461,7 @@ class LotteryGiveaway extends Giveaway {
 		if (this.phase !== 'pending') return user.sendTo(this.room, "The join phase of the lottery giveaway has ended.");
 		if (!this.checkJoined(user)) return user.sendTo(this.room, "You have not joined the lottery giveaway.");
 		for (let ip in this.joined) {
-			if (ip === user.latestIp || this.joined[ip] === user.userid) {
+			if (ip === user.latestIp || this.joined[ip] === user.id) {
 				delete this.joined[ip];
 			}
 		}
@@ -696,7 +696,7 @@ let commands = {
 		let giveaway = room.giveaway;
 		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
-		if (user.userid !== giveaway.host.userid && user.userid !== giveaway.giver.userid) return;
+		if (user.id !== giveaway.host.id && user.id !== giveaway.giver.id) return;
 
 		this.sendReply(`The giveaway question is ${giveaway.question}.\n` +
 			`The answer${Chat.plural(giveaway.answers, 's are', ' is')} ${giveaway.answers.join(', ')}.`);
@@ -900,7 +900,7 @@ let commands = {
 		// @ts-ignore
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		// @ts-ignore
-		if (!this.can('warn', null, room) && user.userid !== room.giveaway.host.userid) return false;
+		if (!this.can('warn', null, room) && user.id !== room.giveaway.host.id) return false;
 
 		if (target && target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");

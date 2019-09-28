@@ -49,7 +49,7 @@ function addUserToLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
-	const userSignedup = participants[user.latestIp] || Object.values(participants).map(toID).includes(user.userid);
+	const userSignedup = participants[user.latestIp] || Object.values(participants).map(toID).includes(user.id);
 	if (!userSignedup) {
 		participants[user.latestIp] = user.name;
 		writeLotteries();
@@ -62,7 +62,7 @@ function removeUserFromLottery(roomid: RoomID, user: User) {
 	if (!lottery) return;
 	const participants = lottery.participants;
 	for (const [ip, participant] of Object.entries(participants)) {
-		if (toID(participant) === user.userid || ip === user.latestIp) {
+		if (toID(participant) === user.id || ip === user.latestIp) {
 			delete participants[ip];
 			writeLotteries();
 			return true;
@@ -268,7 +268,7 @@ export const pages: PageTable = {
 		buf += `<h2 style="text-align: center">${lottery.name}</h2>${lottery.markup}<br />`;
 		if (lottery.running) {
 			const userSignedUp = lottery.participants[user.latestIp]
-				|| Object.values(lottery.participants).map(toID).includes(user.userid);
+				|| Object.values(lottery.participants).map(toID).includes(user.id);
 			buf += `<button class="button" name="send" style=" display: block; margin: 0 auto" value="/lottery ${userSignedUp ? 'leave' : 'join'} ${this.room.roomid}">${userSignedUp ? "Leave the " : "Sign up for the"} lottery</button>`;
 		} else {
 			buf += '<p style="text-align: center"><b>This lottery has already ended. The winners are:</b></p>';

@@ -273,7 +273,7 @@ export class Tournament extends Rooms.RoomGame {
 			);
 			return;
 		}
-		const isJoined = targetUser.userid in this.playerTable;
+		const isJoined = targetUser.id in this.playerTable;
 		const update: {
 			format: string, teambuilderFormat?: string, generator: string,
 			isStarted: boolean, isJoined: boolean, bracketData: AnyObject,
@@ -288,12 +288,12 @@ export class Tournament extends Rooms.RoomGame {
 		connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update)}`);
 		if (this.isTournamentStarted && isJoined) {
 			const update2 = {
-				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.playerTable[targetUser.userid])!),
-				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.playerTable[targetUser.userid])!),
+				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.playerTable[targetUser.id])!),
+				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.playerTable[targetUser.id])!),
 			};
 			connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update2)}`);
 
-			const pendingChallenge = this.playerTable[targetUser.userid].pendingChallenge;
+			const pendingChallenge = this.playerTable[targetUser.id].pendingChallenge;
 			if (pendingChallenge) {
 				if (pendingChallenge.to) {
 					connection.sendTo(this.room, `|tournament|update|${JSON.stringify({challenging: pendingChallenge.to.name})}`);
@@ -361,7 +361,7 @@ export class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (user.userid in this.playerTable) {
+		if (user.id in this.playerTable) {
 			output.sendReply('|tournament|error|UserAlreadyAdded');
 			return;
 		}
@@ -385,7 +385,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (!ALLOW_ALTS) {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
-				const otherUser = Users.get(otherPlayer.userid);
+				const otherUser = Users.get(otherPlayer.id);
 				if (otherUser && otherUser.latestIp === user.latestIp) {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
@@ -401,7 +401,7 @@ export class Tournament extends Rooms.RoomGame {
 		const player = this.addPlayer(user) as TournamentPlayer;
 		if (!player) throw new Error("Failed to add player.");
 
-		this.playerTable[user.userid] = player;
+		this.playerTable[user.id] = player;
 		this.room.add(`|tournament|join|${user.name}`);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
 		this.isBracketInvalidated = true;
@@ -427,7 +427,7 @@ export class Tournament extends Rooms.RoomGame {
 		}
 
 		for (const player of this.players) {
-			if (player.userid === userid) {
+			if (player.id === userid) {
 				this.players.splice(this.players.indexOf(player), 1);
 				break;
 			}
@@ -446,7 +446,7 @@ export class Tournament extends Rooms.RoomGame {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
 		}
-		if (!(user.userid in this.playerTable)) {
+		if (!(user.id in this.playerTable)) {
 			output.errorReply(`${user.name} isn't in the tournament.`);
 			return;
 		}
@@ -454,7 +454,7 @@ export class Tournament extends Rooms.RoomGame {
 			output.errorReply(`${replacementUser.name} must be named to join the tournament.`);
 			return;
 		}
-		if (replacementUser.userid in this.playerTable) {
+		if (replacementUser.id in this.playerTable) {
 			output.errorReply(`${replacementUser.name} is already in the tournament.`);
 			return;
 		}
@@ -465,7 +465,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (!ALLOW_ALTS) {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
-				const otherUser = Users.get(otherPlayer.userid);
+				const otherUser = Users.get(otherPlayer.id);
 				if (otherUser && otherUser.latestIp === replacementUser.latestIp) {
 					output.errorReply(`${replacementUser.name} already has an alt in the tournament.`);
 					return;
@@ -474,8 +474,8 @@ export class Tournament extends Rooms.RoomGame {
 		}
 
 		// Replace the player
-		this.renamePlayer(replacementUser, user.userid);
-		const newPlayer = this.playerTable[replacementUser.userid];
+		this.renamePlayer(replacementUser, user.id);
+		const newPlayer = this.playerTable[replacementUser.id];
 
 		// Reset and invalidate any in progress battles
 		let matchPlayer = null;
@@ -508,7 +508,7 @@ export class Tournament extends Rooms.RoomGame {
 		const challengePlayer = newPlayer.pendingChallenge &&
 			(newPlayer.pendingChallenge.from || newPlayer.pendingChallenge.to);
 		if (challengePlayer) {
-			const challengeUser = Users.getExact(challengePlayer.userid);
+			const challengeUser = Users.getExact(challengePlayer.id);
 			if (challengeUser) this.updateFor(challengeUser);
 		}
 
@@ -721,7 +721,7 @@ export class Tournament extends Rooms.RoomGame {
 			const matchRoom = matchTo.inProgressMatch!.room;
 			matchRoom.parent = null;
 			this.completedMatches.add(matchRoom.roomid);
-			if (matchRoom.battle) matchRoom.battle.forfeit(player.userid);
+			if (matchRoom.battle) matchRoom.battle.forfeit(player.id);
 			matchTo.inProgressMatch = null;
 		}
 
@@ -815,7 +815,7 @@ export class Tournament extends Rooms.RoomGame {
 				} else {
 					reason = "You failed to challenge your opponent in time.";
 				}
-				this.disqualifyUser(player.userid, output, reason);
+				this.disqualifyUser(player.id, output, reason);
 				this.room.update();
 			} else if (now > time + this.autoDisqualifyTimeout - AUTO_DISQUALIFY_WARNING_TIMEOUT) {
 				if (player.autoDisqualifyWarned) continue;
@@ -840,7 +840,7 @@ export class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (!(user.userid in this.playerTable)) {
+		if (!(user.id in this.playerTable)) {
 			output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
@@ -850,7 +850,7 @@ export class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		const from = this.playerTable[user.userid];
+		const from = this.playerTable[user.id];
 		const to = this.playerTable[targetUserid];
 		const availableMatches = from.availableMatches;
 		if (!availableMatches || !availableMatches.has(to)) {
@@ -894,12 +894,12 @@ export class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (!(user.userid in this.playerTable)) {
+		if (!(user.id in this.playerTable)) {
 			if (output) output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
-		const player = this.playerTable[user.userid];
+		const player = this.playerTable[user.id];
 		const challenge = player.pendingChallenge;
 		if (!challenge || !challenge.to) return;
 
@@ -920,12 +920,12 @@ export class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (!(user.userid in this.playerTable)) {
+		if (!(user.id in this.playerTable)) {
 			output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
-		const player = this.playerTable[user.userid];
+		const player = this.playerTable[user.id];
 		const challenge = player.pendingChallenge;
 		if (!challenge || !challenge.from) return;
 
@@ -933,7 +933,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (!ready) return;
 
 		// Prevent battles between offline users from starting
-		const from = Users.get(challenge.from.userid);
+		const from = Users.get(challenge.from.id);
 		if (!from || !from.connected || !user.connected) return;
 
 		// Prevent double accepts and users that have been disqualified while between these two functions
@@ -969,7 +969,7 @@ export class Tournament extends Rooms.RoomGame {
 		return Dex.getFormat(this.fullFormat).name + " (with custom rules)";
 	}
 	forfeit(user: User) {
-		return this.disqualifyUser(user.userid, null, "You left the tournament", true);
+		return this.disqualifyUser(user.id, null, "You left the tournament", true);
 	}
 	onConnect(user: User, connection: Connection) {
 		this.updateFor(user, connection);
@@ -979,12 +979,12 @@ export class Tournament extends Rooms.RoomGame {
 	}
 	onRename(user: User, oldUserid: ID) {
 		if (oldUserid in this.playerTable) {
-			if (user.userid === oldUserid) {
-				this.playerTable[user.userid].name = user.name;
+			if (user.id === oldUserid) {
+				this.playerTable[user.id].name = user.name;
 			} else {
-				this.playerTable[user.userid] = this.playerTable[oldUserid];
-				this.playerTable[user.userid].userid = user.userid;
-				this.playerTable[user.userid].name = user.name;
+				this.playerTable[user.id] = this.playerTable[oldUserid];
+				this.playerTable[user.id].id = user.id;
+				this.playerTable[user.id].name = user.name;
 				delete this.playerTable[oldUserid];
 			}
 		}
@@ -996,7 +996,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (this.scouting || this.isEnded || user.latestIp === room.p1.latestIp || user.latestIp === room.p2.latestIp) return;
 		if (user.can('makeroom')) return;
 		for (const otherPlayer of this.getRemainingPlayers()) {
-			const otherUser = Users.get(otherPlayer.userid);
+			const otherUser = Users.get(otherPlayer.id);
 			if (otherUser && otherUser.latestIp === user.latestIp) {
 				return "Scouting is banned: tournament players can't watch other tournament battles.";
 			}
@@ -1008,8 +1008,8 @@ export class Tournament extends Rooms.RoomGame {
 		room.parent = null;
 		if (!room.battle) throw new Error("onBattleWin called without a battle");
 		if (!room.p1 || !room.p2) throw new Error("onBattleWin called with missing players");
-		const p1 = this.playerTable[room.p1.userid];
-		const p2 = this.playerTable[room.p2.userid];
+		const p1 = this.playerTable[room.p1.id];
+		const p2 = this.playerTable[room.p2.id];
 		const winner = this.playerTable[winnerid];
 		const score = room.battle.score || [0, 0];
 
@@ -1051,7 +1051,7 @@ export class Tournament extends Rooms.RoomGame {
 			const error = this.generator.setMatchResult([p1, p2], result as 'win' | 'loss', score);
 			if (error) {
 				// Should never happen
-				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.userid}, ${room.p2.userid}], ${result}, ${score}) in onBattleWin(${room.roomid}, ${winnerid}). Please report this to an admin.`).update();
+				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.id}, ${room.p2.id}], ${result}, ${score}) in onBattleWin(${room.roomid}, ${winnerid}). Please report this to an admin.`).update();
 			}
 		}
 		this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|success|${room.roomid}`);
@@ -1153,13 +1153,13 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 		out: 'leave',
 		leave(tournament, user) {
 			if (tournament.isTournamentStarted) {
-				if (tournament.getRemainingPlayers().some(player => player.userid === user.userid)) {
-					tournament.disqualifyUser(user.userid, this, null, true);
+				if (tournament.getRemainingPlayers().some(player => player.id === user.id)) {
+					tournament.disqualifyUser(user.id, this, null, true);
 				} else {
 					this.errorReply("You have already been eliminated from this tournament.");
 				}
 			} else {
-				tournament.removeUser(user.userid, this);
+				tournament.removeUser(user.id, this);
 			}
 		},
 		getusers(tournament) {
