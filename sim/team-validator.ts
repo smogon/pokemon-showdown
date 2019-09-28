@@ -9,6 +9,130 @@
 
 import {Dex} from './dex';
 
+/**
+ * Describes a possible way to get a pokemon. Is not exhaustive!
+ * sourcesBefore covers all sources that do not have exclusive
+ * moves (like catching wild pokemon).
+ *
+ * First character is a generation number, 1-7.
+ * Second character is a source ID, one of:
+ *
+ * - E = egg, 3rd char+ is the father in gen 2-5, empty in gen 6-7
+ *   because egg moves aren't restricted to fathers anymore
+ * - S = event, 3rd char+ is the index in .eventPokemon
+ * - D = Dream World, only 5D is valid
+ * - V = Virtual Console transfer, only 7V is valid
+ *
+ * Designed to match MoveSource where possible.
+ */
+export type PokemonSource = string;
+
+/**
+ * Represents a set of possible ways to get a Pokémon with a given
+ * set.
+ *
+ * `new PokemonSources()` creates an empty set;
+ * `new PokemonSources(dex.gen)` allows all Pokemon.
+ */
+export class PokemonSources {
+	/**
+	 * A list of specific possible PokemonSources
+	 */
+	sources: PokemonSource[];
+	/**
+	 * if nonzero: the set also contains all possible sources from
+	 * this gen and earlier.
+	 */
+	sourcesBefore: number;
+	/**
+	 * the set requires sources from this gen or later
+	 * this should be unchanged from the format's minimum past gen
+	 * (3 in modern games, 6 if pentagon is required, etc)
+	 */
+	sourcesAfter: number;
+	babyOnly?: string;
+	sketchMove?: string;
+	hm?: string;
+	restrictiveMoves?: string[];
+	/**
+	 * `limitedEgg` tracks moves that can only be obtained from an egg with
+	 * another father in gen 2-5. If there are multiple such moves,
+	 * potential fathers need to be checked to see if they can actually
+	 * learn the move combination in question.
+	 */
+	limitedEgg?: (string | 'self')[];
+	isHidden: boolean | null;
+
+	constructor(sourcesBefore = 0, sourcesAfter = 0) {
+		this.sources = [];
+		this.sourcesBefore = sourcesBefore;
+		this.sourcesAfter = sourcesAfter;
+		this.isHidden = null;
+	}
+	size() {
+		if (this.sourcesBefore) return Infinity;
+		return this.sources.length;
+	}
+	add(source: PokemonSource) {
+		if (this.sources[this.sources.length - 1] !== source) this.sources.push(source);
+	}
+	addGen(sourceGen: number) {
+		this.sourcesBefore = Math.max(this.sourcesBefore, sourceGen);
+	}
+	minSourceGen() {
+		if (this.sourcesBefore) return this.sourcesAfter || 1;
+		let min = 10;
+		for (const source of this.sources) {
+			const sourceGen = parseInt(source.charAt(0));
+			if (sourceGen < min) min = sourceGen;
+		}
+		if (min === 10) return 0;
+		return min;
+	}
+	maxSourceGen() {
+		let max = this.sourcesBefore;
+		for (const source of this.sources) {
+			const sourceGen = parseInt(source.charAt(0));
+			if (sourceGen > max) max = sourceGen;
+		}
+		return max;
+	}
+	intersectWith(other: PokemonSources) {
+		if (other.sourcesBefore || this.sourcesBefore) {
+			// having sourcesBefore is the equivalent of having everything before that gen
+			// in sources, so we fill the other array in preparation for intersection
+			if (other.sourcesBefore > this.sourcesBefore) {
+				for (const source of this.sources) {
+					const sourceGen = parseInt(source.charAt(0), 10);
+					if (sourceGen <= other.sourcesBefore) {
+						other.sources.push(source);
+					}
+				}
+			} else if (this.sourcesBefore > other.sourcesBefore) {
+				for (const source of other.sources) {
+					const sourceGen = parseInt(source.charAt(0), 10);
+					if (sourceGen <= this.sourcesBefore) {
+						this.sources.push(source);
+					}
+				}
+			}
+			this.sourcesBefore = Math.min(other.sourcesBefore, this.sourcesBefore);
+		}
+		if (this.sources.length) {
+			if (other.sources.length) {
+				const sourcesSet = new Set(other.sources);
+				const intersectSources = this.sources.filter(source => sourcesSet.has(source));
+				this.sources = intersectSources;
+			} else {
+				this.sources = [];
+			}
+		}
+
+		if (other.sourcesAfter > this.sourcesAfter) this.sourcesAfter = other.sourcesAfter;
+		if (other.isHidden) this.isHidden = true;
+	}
+}
+
 export class TeamValidator {
 	readonly format: Format;
 	readonly dex: ModdedDex;
@@ -165,8 +289,7 @@ export class TeamValidator {
 		if (set.species !== set.name && template.baseSpecies !== set.name) {
 			name = `${set.name} (${set.species})`;
 		}
-		let isHidden = false;
-		const lsetData: PokemonSources = {sources: [], sourcesBefore: dex.gen};
+		const setSources = this.allSources(template);
 
 		const setHas: {[k: string]: true} = {};
 
@@ -270,7 +393,7 @@ export class TeamValidator {
 					}
 				}
 				if (ability.name === template.abilities['H']) {
-					isHidden = true;
+					setSources.isHidden = true;
 
 					if (template.unreleasedHidden && ruleTable.has('-unreleased')) {
 						problems.push(`${name}'s Hidden Ability is unreleased.`);
@@ -284,9 +407,14 @@ export class TeamValidator {
 						problems.push(`${name} must be at least level 10 to have a Hidden Ability.`);
 					}
 					if (template.maleOnlyHidden) {
+						if (set.gender && set.gender !== 'M') {
+							problems.push(`${name} must be male to have a Hidden Ability.`);
+						}
 						set.gender = 'M';
-						lsetData.sources = ['5D'];
+						setSources.sources = ['5D'];
 					}
+				} else {
+					setSources.isHidden = false;
 				}
 			}
 		}
@@ -315,7 +443,7 @@ export class TeamValidator {
 		}
 
 		if (ruleTable.isBanned('nonexistent')) {
-			problems.push(...this.validateStats(set, template));
+			problems.push(...this.validateStats(set, template, setSources));
 		}
 
 		let lsetProblem = null;
@@ -329,7 +457,7 @@ export class TeamValidator {
 
 			if (ruleTable.has('validatemoves')) {
 				const checkLearnset = (ruleTable.checkLearnset && ruleTable.checkLearnset[0] || this.checkLearnset);
-				lsetProblem = checkLearnset.call(this, move, template, lsetData, set);
+				lsetProblem = checkLearnset.call(this, move, template, setSources, set);
 				if (lsetProblem) {
 					lsetProblem.moveName = move.name;
 					break;
@@ -337,26 +465,25 @@ export class TeamValidator {
 			}
 		}
 
-		lsetData.isHidden = isHidden;
-		const lsetProblems = this.reconcileLearnset(template, lsetData, lsetProblem, name);
+		const lsetProblems = this.reconcileLearnset(template, setSources, lsetProblem, name);
 		if (lsetProblems) problems.push(...lsetProblems);
 
-		if (!lsetData.sourcesBefore && lsetData.sources.length &&
-				lsetData.sources.every(source => 'SVD'.includes(source.charAt(1)))) {
+		if (!setSources.sourcesBefore && setSources.sources.length &&
+				setSources.sources.every(source => 'SVD'.includes(source.charAt(1)))) {
 			// Every source is restricted
 			let legal = false;
-			for (const source of lsetData.sources) {
+			for (const source of setSources.sources) {
 				if (this.validateSource(set, source, template)) continue;
 				legal = true;
 				break;
 			}
 
 			if (!legal) {
-				if (lsetData.sources.length > 1) {
+				if (setSources.sources.length > 1) {
 					problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
 				}
 				const eventProblems = this.validateSource(
-					set, lsetData.sources[0], template, ` because it has a move only available`
+					set, setSources.sources[0], template, ` because it has a move only available`
 				);
 				if (eventProblems) problems.push(...eventProblems);
 			}
@@ -404,13 +531,13 @@ export class TeamValidator {
 			(format.requirePlus || format.requirePentagon)) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
-		const hasGen3moves = !lsetData.sources && lsetData.sourcesBefore <= 3;
-		if (hasGen3moves && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
+		const requiresGen3Source = setSources.maxSourceGen() <= 3;
+		if (requiresGen3Source && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
 			problems.push(`${name} has a gen 4 ability and isn't evolved - it can't use moves from gen 3.`);
 		}
-		if (!lsetData.sources && lsetData.sourcesBefore < 6 && lsetData.sourcesBefore >= 3 &&
-			(isHidden || dex.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
-			const oldAbilities = dex.mod('gen' + lsetData.sourcesBefore).getTemplate(set.species).abilities;
+		if (!setSources.sources && setSources.sourcesBefore < 6 && setSources.sourcesBefore >= 3 &&
+			(setSources.isHidden || dex.gen <= 5) && template.gen <= setSources.sourcesBefore) {
+			const oldAbilities = dex.mod('gen' + setSources.sourcesBefore).getTemplate(set.species).abilities;
 			if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
 				problems.push(`${name} has moves incompatible with its ability.`);
 			}
@@ -462,7 +589,7 @@ export class TeamValidator {
 		return problems;
 	}
 
-	validateStats(set: PokemonSet, template: Template) {
+	validateStats(set: PokemonSet, template: Template, setSources: PokemonSources) {
 		const ruleTable = this.ruleTable;
 		const dex = this.dex;
 
@@ -512,10 +639,7 @@ export class TeamValidator {
 			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Manaphy', 'Meltan', 'Melmetal',
 		].includes(template.baseSpecies);
 		const diancieException = template.species === 'Diancie' && set.shiny;
-		const has3PerfectIVs = (
-			dex.gen >= 6 && (template.gen >= 6 || this.format.requirePentagon) &&
-			isLegendary && !diancieException
-		);
+		const has3PerfectIVs = setSources.minSourceGen() >= 6 && isLegendary && !diancieException;
 
 		if (set.hpType === 'Fighting' && ruleTable.has('validatemisc')) {
 			if (has3PerfectIVs) {
@@ -1103,8 +1227,18 @@ export class TeamValidator {
 		if (eventData.gender) set.gender = eventData.gender;
 	}
 
+	allSources(template?: Template) {
+		let minPastGen = (
+			this.format.requirePlus ? 7 :
+			this.format.requirePentagon ? 6 :
+			this.dex.gen >= 3 ? 3 : 1
+		);
+		if (template) minPastGen = Math.max(minPastGen, template.gen);
+		return new PokemonSources(this.dex.gen, minPastGen);
+	}
+
 	reconcileLearnset(
-		species: Template, lsetData: PokemonSources, problem: {type: string, moveName: string, [key: string]: any} | null,
+		species: Template, setSources: PokemonSources, problem: {type: string, moveName: string, [key: string]: any} | null,
 		name: string = species.species
 	) {
 		const dex = this.dex;
@@ -1115,7 +1249,7 @@ export class TeamValidator {
 			if (problem.type === 'incompatibleAbility') {
 				problemString += ` can only be learned in past gens without Hidden Abilities.`;
 			} else if (problem.type === 'incompatible') {
-				problemString = `${name}'s moves ${(lsetData.restrictiveMoves || []).join(', ')} are incompatible.`;
+				problemString = `${name}'s moves ${(setSources.restrictiveMoves || []).join(', ')} are incompatible.`;
 			} else if (problem.type === 'oversketched') {
 				const plural = (parseInt(problem.maxSketches, 10) === 1 ? '' : 's');
 				problemString += ` can't be Sketched because it can only Sketch ${problem.maxSketches} move${plural}.`;
@@ -1131,24 +1265,24 @@ export class TeamValidator {
 
 		if (problems.length) return problems;
 
-		if (lsetData.isHidden) {
-			lsetData.sources = lsetData.sources.filter(source =>
+		if (setSources.isHidden) {
+			setSources.sources = setSources.sources.filter(source =>
 				parseInt(source.charAt(0), 10) >= 5
 			);
-			if (lsetData.sourcesBefore < 5) lsetData.sourcesBefore = 0;
-			if (!lsetData.sourcesBefore && !lsetData.sources.length) {
+			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
+			if (!setSources.sourcesBefore && !setSources.sources.length) {
 				problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
 				return problems;
 			}
 		}
 
-		if (lsetData.limitedEgg && lsetData.limitedEgg.length > 1 && !lsetData.sourcesBefore && lsetData.sources) {
-			// console.log("limitedEgg 1: " + lsetData.limitedEgg);
+		if (setSources.limitedEgg && setSources.limitedEgg.length > 1 && !setSources.sourcesBefore && setSources.sources) {
+			// console.log("limitedEgg 1: " + setSources.limitedEgg);
 			// Multiple gen 2-5 egg moves
 			// This code hasn't been closely audited for multi-gen interaction, but
 			// since egg moves don't get removed between gens, it's unlikely to have
 			// any serious problems.
-			const limitedEgg = [...new Set(lsetData.limitedEgg)];
+			const limitedEgg = [...new Set(setSources.limitedEgg)];
 			if (limitedEgg.length <= 1) {
 				// Only one source, can't conflict with anything else
 			} else if (limitedEgg.includes('self')) {
@@ -1160,7 +1294,7 @@ export class TeamValidator {
 				// They're probably incompatible if all potential fathers learn more than
 				// one limitedEgg move from another egg.
 				let validFatherExists = false;
-				for (const source of lsetData.sources) {
+				for (const source of setSources.sources) {
 					if (source.charAt(1) === 'S' || source.charAt(1) === 'D') continue;
 					let eggGen = parseInt(source.charAt(0), 10);
 					if (source.charAt(1) !== 'E' || eggGen === 6) {
@@ -1230,12 +1364,12 @@ export class TeamValidator {
 					// TODO: hardcode false positives for our heuristic
 					// in theory, this heuristic doesn't have false negatives
 					const newSources = [];
-					for (const source of lsetData.sources) {
+					for (const source of setSources.sources) {
 						if (source.charAt(1) === 'S') {
 							newSources.push(source);
 						}
 					}
-					lsetData.sources = newSources;
+					setSources.sources = newSources;
 					if (!newSources.length) {
 						const moveNames = limitedEgg.map(id => dex.getMove(id).name);
 						problems.push(`${name}'s past gen egg moves ${moveNames.join(', ')} do not have a valid father. (Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)`);
@@ -1244,9 +1378,9 @@ export class TeamValidator {
 			}
 		}
 
-		if (lsetData.babyOnly && lsetData.sources.length) {
-			const babyid = lsetData.babyOnly;
-			lsetData.sources = lsetData.sources.filter(source => {
+		if (setSources.babyOnly && setSources.sources.length) {
+			const babyid = setSources.babyOnly;
+			setSources.sources = setSources.sources.filter(source => {
 				if (source.charAt(1) === 'S') {
 					const sourceSpeciesid = source.split(' ')[1];
 					if (sourceSpeciesid !== babyid) return false;
@@ -1256,7 +1390,7 @@ export class TeamValidator {
 				}
 				return true;
 			});
-			if (!lsetData.sources.length && !lsetData.sourcesBefore) {
+			if (!setSources.sources.length && !setSources.sourcesBefore) {
 				const babySpecies = dex.getTemplate(babyid).species;
 				problems.push(`${name}'s event/egg moves are from an evolution, and are incompatible with its moves from ${babySpecies}.`);
 			}
@@ -1268,13 +1402,18 @@ export class TeamValidator {
 	checkLearnset(
 		move: Move,
 		species: Template,
-		lsetData: PokemonSources = {sources: [], sourcesBefore: this.dex.gen},
-		set: AnyObject = {}
+		setSources = this.allSources(species),
+		set: AnyObject | true = {}
 	): {type: string, [key: string]: any} | null {
 		const dex = this.dex;
+		let fastCheck = false;
+		if (set === true) {
+			fastCheck = true;
+			set = {};
+		}
+		if (!setSources.size()) throw new Error(`Bad sources passed to checkLearnset`);
 
 		const moveid = toID(move);
-		if (moveid === 'constructor') return {type: 'invalid'};
 		move = dex.getMove(moveid);
 		let template: Template | null = dex.getTemplate(species);
 
@@ -1284,8 +1423,6 @@ export class TeamValidator {
 		const level = set.level || 100;
 
 		let incompatibleAbility = false;
-		let isHidden = false;
-		if (set.ability && dex.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
 
 		let limit1 = true;
 		let sketch = false;
@@ -1309,10 +1446,8 @@ export class TeamValidator {
 		// we keep track of a maximum gen variable, intended to mean "any
 		// source at or before this gen is possible."
 
-		// set of possible sources of a pokemon with this move, represented as an array
-		const sources: PokemonSource[] = [];
-		// the equivalent of adding "every source at or before this gen" to sources
-		let sourcesBefore = 0;
+		// set of possible sources of a pokemon with this move
+		const moveSources = new PokemonSources();
 
 		/**
 		 * The minimum past gen the format allows
@@ -1350,8 +1485,8 @@ export class TeamValidator {
 				break;
 			}
 			const checkingPrevo = template.baseSpecies !== species.baseSpecies;
-			if (checkingPrevo && !sources.length && !sourcesBefore) {
-				if (!lsetData.babyOnly || !template.prevo) {
+			if (checkingPrevo && !moveSources.size()) {
+				if (!setSources.babyOnly || !template.prevo) {
 					babyOnly = template.speciesid;
 				}
 			}
@@ -1375,10 +1510,10 @@ export class TeamValidator {
 					//   means we can learn it with no restrictions
 					//   (there's a way to just teach any pokemon of this species
 					//   the move in the current gen, like a TM.)
-					// `sources.push(source)`
+					// `moveSources.add(source)`
 					//   means we can learn it only if obtained that exact way described
 					//   in source
-					// `sourcesBefore = Math.max(sourcesBefore, learnedGen)`
+					// `moveSources.addGen(learnedGen)`
 					//   means we can learn it only if obtained at or before learnedGen
 					//   (i.e. get the pokemon however you want, transfer to that gen,
 					//   teach it, and transfer it to the current gen.)
@@ -1388,9 +1523,12 @@ export class TeamValidator {
 					if (noFutureGen && learnedGen > dex.gen) continue;
 
 					// redundant
-					if (learnedGen <= sourcesBefore) continue;
+					if (learnedGen <= moveSources.sourcesBefore) continue;
 
-					if (learnedGen < 7 && isHidden && !dex.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']) {
+					if (
+						learnedGen < 7 && setSources.isHidden &&
+						!dex.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']
+					) {
 						// check if the Pokemon's hidden ability was available
 						incompatibleAbility = true;
 						continue;
@@ -1428,21 +1566,21 @@ export class TeamValidator {
 						if (learnedGen === dex.gen) {
 							// current-gen level-up, TM or tutor moves:
 							//   always available
-							if (babyOnly) lsetData.babyOnly = babyOnly;
+							if (babyOnly) setSources.babyOnly = babyOnly;
 							return null;
 						}
 						// past-gen level-up, TM, or tutor moves:
 						//   available as long as the source gen was or was before this gen
 						limit1 = false;
-						sourcesBefore = Math.max(sourcesBefore, learnedGen);
+						moveSources.addGen(learnedGen);
 						limitedEgg = false;
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						if ((learnedGen >= 6 && !noPastGenBreeding) || lsetData.fastCheck) {
+						if ((learnedGen >= 6 && !noPastGenBreeding) || fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
-							sources.push(learned);
+							moveSources.add(learned);
 							limitedEgg = false;
 							continue;
 						}
@@ -1492,15 +1630,15 @@ export class TeamValidator {
 							atLeastOne = true;
 							if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 								// can tradeback
-								sources.push('1ET' + father.id);
+								moveSources.add('1ET' + father.id);
 							}
-							sources.push(learned + father.id);
+							moveSources.add(learned + father.id);
 							if (limitedEgg !== false) limitedEgg = true;
 						}
 						if (atLeastOne && noPastGenBreeding) {
 							// gen 6+ doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
-							sources.push(learned);
+							moveSources.add(learned);
 							limitedEgg = false;
 							continue;
 						}
@@ -1508,7 +1646,7 @@ export class TeamValidator {
 						// e.g. ExtremeSpeed Dragonite
 						if (!atLeastOne) {
 							if (noPastGenBreeding) continue;
-							sources.push(learned + template.id);
+							moveSources.add(learned + template.id);
 							limitedEgg = 'self';
 						}
 					} else if (learned.charAt(1) === 'S') {
@@ -1518,17 +1656,17 @@ export class TeamValidator {
 						// 	Available as long as the past gen can get the Pokémon and then trade it back.
 						if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 							// can tradeback
-							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
+							moveSources.add('1ST' + learned.slice(2) + ' ' + template.id);
 						}
-						sources.push(learned + ' ' + template.id);
+						moveSources.add(learned + ' ' + template.id);
 					} else if (learned.charAt(1) === 'D') {
 						// DW moves:
 						//   only if that was the source
-						sources.push(learned);
+						moveSources.add(learned);
 					} else if (learned.charAt(1) === 'V') {
 						// Virtual Console moves:
 						//   only if that was the source
-						if (sources[sources.length - 1] !== learned) sources.push(learned);
+						moveSources.add(learned);
 					}
 				}
 			}
@@ -1545,7 +1683,7 @@ export class TeamValidator {
 					}
 				}
 				if (getGlitch) {
-					sourcesBefore = Math.max(sourcesBefore, 4);
+					moveSources.addGen(4);
 					if (move.gen < 5) {
 						limit1 = false;
 					}
@@ -1558,7 +1696,7 @@ export class TeamValidator {
 			} else if (template.prevo) {
 				template = dex.getTemplate(template.prevo);
 				if (template.gen > Math.max(2, dex.gen)) template = null;
-				if (template && !template.abilities['H']) isHidden = false;
+				if (template && !template.abilities['H'] && setSources.isHidden) template = null;
 			} else if (template.baseSpecies !== template.species && template.baseSpecies === 'Rotom') {
 				// only Rotom inherit learnsets from base
 				template = dex.getTemplate(template.baseSpecies);
@@ -1569,71 +1707,43 @@ export class TeamValidator {
 
 		if (limit1 && sketch) {
 			// limit 1 sketch move
-			if (lsetData.sketchMove) {
+			if (setSources.sketchMove) {
 				return {type: 'oversketched', maxSketches: 1};
 			}
-			lsetData.sketchMove = moveid;
+			setSources.sketchMove = moveid;
 		}
 
 		if (blockedHM) {
 			// Limit one of Defog/Whirlpool to be transferred
-			if (lsetData.hm) return {type: 'incompatible'};
-			lsetData.hm = moveid;
+			if (setSources.hm) return {type: 'incompatible'};
+			setSources.hm = moveid;
 		}
 
-		if (!lsetData.restrictiveMoves) {
-			lsetData.restrictiveMoves = [];
+		if (!setSources.restrictiveMoves) {
+			setSources.restrictiveMoves = [];
 		}
-		lsetData.restrictiveMoves.push(move.name);
+		setSources.restrictiveMoves.push(move.name);
 
 		// Now that we have our list of possible sources, intersect it with the current list
-		if (!sourcesBefore && !sources.length) {
+		if (!moveSources.size()) {
 			if (minPastGen > 1 && sometimesPossible) return {type: 'pastgen', gen: minPastGen};
 			if (incompatibleAbility) return {type: 'incompatibleAbility'};
 			return {type: 'invalid'};
 		}
-		if (sourcesBefore || lsetData.sourcesBefore) {
-			// having sourcesBefore is the equivalent of having everything before that gen
-			// in sources, so we fill the other array in preparation for intersection
-			if (sourcesBefore > lsetData.sourcesBefore) {
-				for (const oldSource of lsetData.sources) {
-					const oldSourceGen = parseInt(oldSource.charAt(0), 10);
-					if (oldSourceGen <= sourcesBefore) {
-						sources.push(oldSource);
-					}
-				}
-			} else if (lsetData.sourcesBefore > sourcesBefore) {
-				for (const source of sources) {
-					const sourceGen = parseInt(source.charAt(0), 10);
-					if (sourceGen <= lsetData.sourcesBefore) {
-						lsetData.sources.push(source);
-					}
-				}
-			}
-			lsetData.sourcesBefore = sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore);
-		}
-		if (lsetData.sources.length) {
-			if (sources.length) {
-				const sourcesSet = new Set(sources);
-				const intersectSources = lsetData.sources.filter(source => sourcesSet.has(source));
-				lsetData.sources = intersectSources;
-			} else {
-				lsetData.sources = [];
-			}
-		}
-		if (!lsetData.sources.length && !sourcesBefore) {
+		setSources.intersectWith(moveSources);
+		if (!setSources.size()) {
 			return {type: 'incompatible'};
 		}
 
 		if (limitedEgg) {
-			// lsetData.limitedEgg = [moveid] of egg moves with potential breeding incompatibilities
+			// pokemonSources.limitedEgg = [moveid] of egg moves with potential breeding incompatibilities
 			// 'self' is a possible entry (namely, ExtremeSpeed on Dragonite) meaning it's always
 			// incompatible with any other egg move
-			if (!lsetData.limitedEgg) lsetData.limitedEgg = [];
-			lsetData.limitedEgg.push(limitedEgg === true ? moveid : limitedEgg);
+			if (!setSources.limitedEgg) setSources.limitedEgg = [];
+			setSources.limitedEgg.push(limitedEgg === true ? moveid : limitedEgg);
 		}
 
-		if (babyOnly) lsetData.babyOnly = babyOnly;
+		if (babyOnly) setSources.babyOnly = babyOnly;
 		return null;
 	}
 

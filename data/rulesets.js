@@ -698,7 +698,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'STABmons Move Legality',
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
-		checkLearnset(move, template, lsetData, set) {
+		checkLearnset(move, template, setSources, set) {
 			const restrictedMoves = this.format.restrictedMoves || [];
 			if (!move.isZ && !restrictedMoves.includes(move.name)) {
 				let dex = this.dex;
@@ -717,7 +717,7 @@ let BattleFormats = {
 				}
 				if (types.includes(move.type)) return null;
 			}
-			return this.checkLearnset(move, template, lsetData, set);
+			return this.checkLearnset(move, template, setSources, set);
 		},
 		unbanlist: ['Shiftry + Leaf Blade + Sucker Punch'],
 	},
