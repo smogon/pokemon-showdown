@@ -275,36 +275,6 @@ let BattleScripts = {
 			}
 		}
 	},
-	setTerrain(status, source = null, sourceEffect = null) {
-		status = this.getEffect(status);
-		if (!sourceEffect && this.effect) sourceEffect = this.effect;
-		if (!source && this.event && this.event.target) source = this.event.target;
-		if (source === 'debug') source = this.sides[0].active[0];
-		if (!source) throw new Error(`setting terrain without a source`);
-
-		if (this.field.terrain === status.id) return false;
-		let prevTerrain = this.field.terrain;
-		let prevTerrainData = this.field.terrainData;
-		this.field.terrain = status.id;
-		this.field.terrainData = {
-			id: status.id,
-			source,
-			sourcePosition: source.position,
-			duration: status.duration,
-		};
-		if (status.durationCallback) {
-			this.field.terrainData.duration = status.durationCallback.call(this, source, source, sourceEffect);
-		}
-		if (!this.singleEvent('Start', status, this.field.terrainData, this, source, sourceEffect)) {
-			this.field.terrain = prevTerrain;
-			this.field.terrainData = prevTerrainData;
-			return false;
-		}
-		// Always run a terrain end event to prevent a visual glitch with custom terrains
-		if (prevTerrain) this.singleEvent('End', this.getEffect(prevTerrain), prevTerrainData, this);
-		this.runEvent('TerrainStart', source, source, status);
-		return true;
-	},
 	// Modded to account for guts clones
 	modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
 		const tr = this.trunc;

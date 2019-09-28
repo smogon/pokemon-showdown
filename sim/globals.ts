@@ -1145,7 +1145,6 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	init?: (this: Battle) => void
 	modifyDamage?: (this: Battle, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages?: boolean) => void
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable
-	setTerrain?: (this: Battle, status: string | Effect, source: Pokemon | null | 'debug', sourceEffect: Effect | null) => boolean
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable
 	suppressingWeather?: (this: Battle) => boolean
 
