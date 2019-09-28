@@ -108,11 +108,11 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.connected = true;
 
 		if (user) {
-			user.games.add(this.game.id);
+			user.games.add(this.game.roomid);
 			user.updateSearch();
 			for (const connection of user.connections) {
-				if (connection.inRooms.has(game.id)) {
-					Sockets.channelMove(connection.worker, this.game.id, this.channelIndex, connection.socketid);
+				if (connection.inRooms.has(game.roomid)) {
+					Sockets.channelMove(connection.worker, this.game.roomid, this.channelIndex, connection.socketid);
 				}
 			}
 		}
@@ -124,9 +124,9 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		const user = this.getUser();
 		if (user) {
 			for (const connection of user.connections) {
-				Sockets.channelMove(connection.worker, this.game.id, 0, connection.socketid);
+				Sockets.channelMove(connection.worker, this.game.roomid, 0, connection.socketid);
 			}
-			user.games.delete(this.game.id);
+			user.games.delete(this.game.roomid);
 			user.updateSearch();
 		}
 		this.connected = false;
@@ -135,11 +135,11 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 	updateChannel(user: User | Connection) {
 		if (user instanceof Users.Connection) {
 			// "user" is actually a connection
-			Sockets.channelMove(user.worker, this.game.id, this.channelIndex, user.socketid);
+			Sockets.channelMove(user.worker, this.game.roomid, this.channelIndex, user.socketid);
 			return;
 		}
 		for (const connection of user.connections) {
-			Sockets.channelMove(connection.worker, this.game.id, this.channelIndex, connection.socketid);
+			Sockets.channelMove(connection.worker, this.game.roomid, this.channelIndex, connection.socketid);
 		}
 	}
 
@@ -152,7 +152,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 	}
 	sendRoom(data: string) {
 		const user = this.getUser();
-		if (user) user.sendTo(this.game.id, data);
+		if (user) user.sendTo(this.game.roomid, data);
 	}
 }
 
@@ -541,7 +541,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		const battleOptions = {
 			formatid: this.format,
-			id: this.id,
+			roomid: this.roomid,
 			rated: ratedMessage,
 			seed: options.seed,
 		};
@@ -662,13 +662,13 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
 			const users = this.players.map(player => {
 				const u = player.getUser();
-				if (!u) throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
+				if (!u) throw new Error(`User ${player.name} not found on ${this.roomid} battle creation`);
 				return u;
 			});
 			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
 			this.missingBattleStartMessage = false;
 		}
-		if (user.inRooms.has(this.id)) this.onConnect(user);
+		if (user.inRooms.has(this.roomid)) this.onConnect(user);
 		this.room.update();
 		return true;
 	}
@@ -853,7 +853,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (!p1rating) logData.ladderError = true;
 		const date = new Date();
 		logData.timestamp = '' + date;
-		logData.id = this.room.id;
+		logData.roomid = this.room.roomid;
 		logData.format = this.room.format;
 
 		const logsubfolder = Chat.toTimestamp(date).split(' ')[0];
@@ -861,7 +861,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const tier = this.room.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
 		const logpath = `logs/${logfolder}/${tier}/${logsubfolder}/`;
 		await FS(logpath).mkdirp();
-		await FS(logpath + this.room.id + '.log.json').write(JSON.stringify(logData));
+		await FS(logpath + this.room.roomid + '.log.json').write(JSON.stringify(logData));
 		// console.log(JSON.stringify(logData));
 	}
 	onConnect(user: User, connection: Connection | null = null) {
@@ -875,7 +875,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (request) {
 			let data = `|request|${request.request}`;
 			if (request.choice) data += `\n|sentchoice|${request.choice}`;
-			(connection || user).sendTo(this.id, data);
+			(connection || user).sendTo(this.roomid, data);
 		}
 		if (!player.active) this.onJoin(user);
 	}
@@ -886,7 +886,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (user.userid === oldUserid) return;
 		if (!this.playerTable) {
 			// !! should never happen but somehow still does
-			user.games.delete(this.id);
+			user.games.delete(this.roomid);
 			return;
 		}
 		if (!(oldUserid in this.playerTable)) {
@@ -904,7 +904,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 				this.forfeitPlayer(player, message);
 			}
 			if (!(user.userid in this.playerTable)) {
-				user.games.delete(this.id);
+				user.games.delete(this.roomid);
 			}
 			return;
 		}
@@ -997,7 +997,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 
 		if (user) this.room.auth[user.userid] = Users.PLAYER_SYMBOL;
-		if (user && user.inRooms.has(this.id)) this.onConnect(user);
+		if (user && user.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
 	}
 
@@ -1042,7 +1042,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		const users = this.players.map(player => {
 			const user = player.getUser();
 			if (!user && !this.missingBattleStartMessage) {
-				throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
+				throw new Error(`User ${player.name} not found on ${this.roomid} battle creation`);
 			}
 			return user;
 		});

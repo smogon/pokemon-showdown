@@ -248,7 +248,7 @@ class HelpTicket extends Rooms.RoomGame {
 	 */
 	modnote(user, text) {
 		this.room.addByUser(user, text);
-		this.room.modlog(`(${this.room.id}) ${text}`);
+		this.room.modlog(`(${this.room.roomid}) ${text}`);
 	}
 
 	/**
@@ -371,20 +371,20 @@ let timerEnds = {upperstaff: 0, staff: 0};
 function pokeUnclaimedTicketTimer(upper, hasUnclaimed, hasAssistRequest) {
 	const room = Rooms.get(upper ? 'upperstaff' : 'staff');
 	if (!room) return;
-	if (hasUnclaimed && !unclaimedTicketTimer[room.id]) {
-		unclaimedTicketTimer[room.id] = setTimeout(() => notifyUnclaimedTicket(upper, hasAssistRequest), hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT);
-		timerEnds[room.id] = Date.now() + (hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT);
-	} else if (hasAssistRequest && (timerEnds[room.id] - NOTIFY_ASSIST_TIMEOUT) > NOTIFY_ASSIST_TIMEOUT && unclaimedTicketTimer[room.id]) {
+	if (hasUnclaimed && !unclaimedTicketTimer[room.roomid]) {
+		unclaimedTicketTimer[room.roomid] = setTimeout(() => notifyUnclaimedTicket(upper, hasAssistRequest), hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT);
+		timerEnds[room.roomid] = Date.now() + (hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT);
+	} else if (hasAssistRequest && (timerEnds[room.roomid] - NOTIFY_ASSIST_TIMEOUT) > NOTIFY_ASSIST_TIMEOUT && unclaimedTicketTimer[room.roomid]) {
 		// Shorten timer
 		// @ts-ignore TS dosen't see the above null check
-		clearTimeout(unclaimedTicketTimer[room.id]);
-		unclaimedTicketTimer[room.id] = setTimeout(() => notifyUnclaimedTicket(upper, hasAssistRequest), NOTIFY_ASSIST_TIMEOUT);
-		timerEnds[room.id] = Date.now() + NOTIFY_ASSIST_TIMEOUT;
-	} else if (!hasUnclaimed && unclaimedTicketTimer[room.id]) {
+		clearTimeout(unclaimedTicketTimer[room.roomid]);
+		unclaimedTicketTimer[room.roomid] = setTimeout(() => notifyUnclaimedTicket(upper, hasAssistRequest), NOTIFY_ASSIST_TIMEOUT);
+		timerEnds[room.roomid] = Date.now() + NOTIFY_ASSIST_TIMEOUT;
+	} else if (!hasUnclaimed && unclaimedTicketTimer[room.roomid]) {
 		// @ts-ignore
-		clearTimeout(unclaimedTicketTimer[room.id]);
-		unclaimedTicketTimer[room.id] = null;
-		timerEnds[room.id] = 0;
+		clearTimeout(unclaimedTicketTimer[room.roomid]);
+		unclaimedTicketTimer[room.roomid] = null;
+		timerEnds[room.roomid] = 0;
 	}
 }
 /**
@@ -395,9 +395,9 @@ function notifyUnclaimedTicket(upper, hasAssistRequest) {
 	const room = /** @type {BasicChatRoom} */ (Rooms.get(upper ? 'upperstaff' : 'staff'));
 	if (!room) return;
 	// @ts-ignore
-	clearTimeout(unclaimedTicketTimer[room.id]);
-	unclaimedTicketTimer[room.id] = null;
-	timerEnds[room.id] = 0;
+	clearTimeout(unclaimedTicketTimer[room.roomid]);
+	unclaimedTicketTimer[room.roomid] = null;
+	timerEnds[room.roomid] = 0;
 	for (let i in room.users) {
 		let user = room.users[i];
 		if (user.can('mute', null, room) && !user.ignoreTickets) user.sendTo(room, `|tempnotify|helptickets|Unclaimed help tickets!|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`);
@@ -472,7 +472,7 @@ function notifyStaff(upper = false) {
 	} else {
 		buf = `|tempnotifyoff|helptickets`;
 	}
-	if (room.userCount) Sockets.roomBroadcast(room.id, `>view-help-tickets\n${buf}`);
+	if (room.userCount) Sockets.roomBroadcast(room.roomid, `>view-help-tickets\n${buf}`);
 	if (hasUnclaimed) {
 		// only notify for people highlighting
 		buf = `${buf}|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`;
@@ -1031,7 +1031,7 @@ let commands = {
 	'!report': true,
 	report(target, room, user) {
 		if (!this.runBroadcast()) return;
-		const meta = this.pmTarget ? `-user-${this.pmTarget.userid}` : this.room ? `-room-${this.room.id}` : '';
+		const meta = this.pmTarget ? `-user-${this.pmTarget.userid}` : this.room ? `-room-${this.room.roomid}` : '';
 		if (this.broadcasting) {
 			if (room && room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--report${meta}" class="button"><strong>Report someone</strong></button>`);
@@ -1043,7 +1043,7 @@ let commands = {
 	'!appeal': true,
 	appeal(target, room, user) {
 		if (!this.runBroadcast()) return;
-		const meta = this.pmTarget ? `-user-${this.pmTarget.userid}` : this.room ? `-room-${this.room.id}` : '';
+		const meta = this.pmTarget ? `-user-${this.pmTarget.userid}` : this.room ? `-room-${this.room.roomid}` : '';
 		if (this.broadcasting) {
 			if (room && room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--appeal${meta}" class="button"><strong>Appeal a punishment</strong></button>`);
@@ -1060,7 +1060,7 @@ let commands = {
 		'': 'create',
 		create(target, room, user) {
 			if (!this.runBroadcast()) return;
-			const meta = this.pmTarget ? `-user-${this.pmTarget.userid}` : this.room ? `-room-${this.room.id}` : '';
+			const meta = this.pmTarget ? `-user-${this.pmTarget.userid}` : this.room ? `-room-${this.room.roomid}` : '';
 			if (this.broadcasting) {
 				return this.sendReplyBox(`<button name="joinRoom" value="view-help-request${meta}" class="button"><strong>Request help</strong></button>`);
 			}

@@ -56,7 +56,7 @@ type Poll = import('./chat-plugins/poll').PollType;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
-	id: RoomID;
+	roomid: RoomID;
 	title: string;
 	parent: Room | null;
 	aliases: string[] | null;
@@ -106,7 +106,7 @@ export abstract class BasicRoom {
 	gameNumber: number;
 	highTraffic: boolean;
 	constructor(roomid: RoomID, title?: string) {
-		this.id = roomid;
+		this.roomid = roomid;
 		this.title = (title || roomid);
 		this.parent = null;
 		this.aliases = null;
@@ -167,8 +167,8 @@ export abstract class BasicRoom {
 	 * in the scrollback log.
 	 */
 	send(message: string) {
-		if (this.id !== 'lobby') message = '>' + this.id + '\n' + message;
-		if (this.userCount) Sockets.roomBroadcast(this.id, message);
+		if (this.roomid !== 'lobby') message = '>' + this.roomid + '\n' + message;
+		if (this.userCount) Sockets.roomBroadcast(this.roomid, message);
 	}
 	sendAuth() { throw new Error(`Obsolete command; use room.sendMods`); }
 	sendModCommand() { throw new Error(`Obsolete command; use room.sendMods`); }
@@ -178,7 +178,7 @@ export abstract class BasicRoom {
 	}
 	sendRankedUsers(data: string, minRank = '+') {
 		if (this.staffRoom) {
-			if (!this.log) throw new Error(`Staff room ${this.id} has no log`);
+			if (!this.log) throw new Error(`Staff room ${this.roomid} has no log`);
 			this.log.add(data);
 			return;
 		}
@@ -220,24 +220,24 @@ export abstract class BasicRoom {
 	 * highlight the user.
 	 */
 	addByUser(user: User, text: string) {
-		return this.add('|c|' + user.getIdentity(this.id) + '|/log ' + text).update();
+		return this.add('|c|' + user.getIdentity(this.roomid) + '|/log ' + text).update();
 	}
 	/**
 	 * Like addByUser, but without logging
 	 */
 	sendByUser(user: User, text: string) {
-		return this.send('|c|' + user.getIdentity(this.id) + '|/log ' + text);
+		return this.send('|c|' + user.getIdentity(this.roomid) + '|/log ' + text);
 	}
 	/**
 	 * Like addByUser, but sends to mods only.
 	 */
 	sendModsByUser(user: User, text: string) {
-		return this.sendMods('|c|' + user.getIdentity(this.id) + '|/log ' + text);
+		return this.sendMods('|c|' + user.getIdentity(this.roomid) + '|/log ' + text);
 	}
 	update() {}
 
 	toString() {
-		return this.id;
+		return this.roomid;
 	}
 
 	getUserList() {
@@ -248,7 +248,7 @@ export abstract class BasicRoom {
 				continue;
 			}
 			counter++;
-			buffer += ',' + this.users[i].getIdentityWithStatus(this.id);
+			buffer += ',' + this.users[i].getIdentityWithStatus(this.roomid);
 		}
 		const msg = `|users|${counter}${buffer}`;
 		return msg;
@@ -336,7 +336,7 @@ export abstract class BasicRoom {
 			modjoinGroup = Config.groupsranking[1];
 		}
 		if (!(userGroup in Config.groups)) return false;
-		if (!(modjoinGroup in Config.groups)) throw new Error(`Invalid modjoin setting in ${this.id}: ${modjoinGroup}`);
+		if (!(modjoinGroup in Config.groups)) throw new Error(`Invalid modjoin setting in ${this.roomid}: ${modjoinGroup}`);
 		return Config.groups[userGroup].rank >= Config.groups[modjoinGroup].rank;
 	}
 	mute(user: User, setTime?: number) {
@@ -370,7 +370,7 @@ export abstract class BasicRoom {
 		}
 		this.runMuteTimer();
 
-		user.updateIdentity(this.id);
+		user.updateIdentity(this.roomid);
 
 		if (!(this.isPrivate === true || this.isPersonal || this.battle)) Punishments.monitorRoomPunishments(user);
 
@@ -401,7 +401,7 @@ export abstract class BasicRoom {
 		}
 
 		if (user && successUserid && userid in this.users) {
-			user.updateIdentity(this.id);
+			user.updateIdentity(this.roomid);
 			if (notifyText) user.popup(notifyText);
 		}
 		return successUserid;
@@ -674,7 +674,7 @@ export class GlobalRoom extends BasicRoom {
 				if (room.rated) roomData.minElo = Math.floor(room.rated);
 			}
 			if (!roomData.p1 || !roomData.p2) continue;
-			roomTable[room.id] = roomData;
+			roomTable[room.roomid] = roomData;
 		}
 		return roomTable;
 	}
@@ -718,7 +718,7 @@ export class GlobalRoom extends BasicRoom {
 		return null;
 	}
 	send(message: string) {
-		Sockets.roomBroadcast(this.id, message);
+		Sockets.roomBroadcast(this.roomid, message);
 	}
 	add(message: string) {
 		// TODO: make sure this never happens
@@ -766,7 +766,7 @@ export class GlobalRoom extends BasicRoom {
 			if (reportRoom) {
 				const reportPlayers = players.map(p => p.getIdentity()).join('|');
 				reportRoom
-					.add(`|b|${room.id}|${reportPlayers}`)
+					.add(`|b|${room.roomid}|${reportPlayers}`)
 					.update();
 			}
 		}
@@ -799,7 +799,7 @@ export class GlobalRoom extends BasicRoom {
 		id = toID(id) as RoomID;
 		if (!Rooms.rooms.has(id)) return false; // room doesn't exist
 		for (let i = this.chatRooms.length - 1; i >= 0; i--) {
-			if (id === this.chatRooms[i].id) {
+			if (id === this.chatRooms[i].roomid) {
 				this.chatRooms.splice(i, 1);
 				break;
 			}
@@ -837,7 +837,7 @@ export class GlobalRoom extends BasicRoom {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
 				// if staffAutojoin is anything truthy: autojoin if user has any roomauth
-				user.joinRoom(room.id, connection);
+				user.joinRoom(room.roomid, connection);
 			}
 		}
 		for (const conn of user.connections) {
@@ -1090,7 +1090,7 @@ export class BasicChatRoom extends BasicRoom {
 
 			if (parent) {
 				if (!parent.subRooms) parent.subRooms = new Map();
-				parent.subRooms.set(this.id, this as ChatRoom);
+				parent.subRooms.set(this.roomid, this as ChatRoom);
 				this.parent = parent;
 			}
 		}
@@ -1104,7 +1104,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.logUserStatsInterval = null;
 		this.expireTimer = null;
 		if (Config.logchat) {
-			this.roomlog('NEW CHATROOM: ' + this.id);
+			this.roomlog('NEW CHATROOM: ' + this.roomid);
 			if (Config.loguserstats) {
 				this.logUserStatsInterval = setInterval(() => this.logUserStats(), Config.loguserstats);
 			}
@@ -1269,7 +1269,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.users[user.userid]) return false;
 
 		if (user.named) {
-			this.reportJoin('j', user.getIdentityWithStatus(this.id), user);
+			this.reportJoin('j', user.getIdentityWithStatus(this.roomid), user);
 		}
 
 		this.users[user.userid] = user;
@@ -1284,15 +1284,15 @@ export class BasicChatRoom extends BasicRoom {
 			return this.onUpdateIdentity(user);
 		}
 		if (!this.users[oldid]) {
-			Monitor.crashlog(new Error(`user ${oldid} not in room ${this.id}`));
+			Monitor.crashlog(new Error(`user ${oldid} not in room ${this.roomid}`));
 		}
 		if (this.users[user.userid]) {
-			Monitor.crashlog(new Error(`user ${user.userid} already in room ${this.id}`));
+			Monitor.crashlog(new Error(`user ${user.userid} already in room ${this.roomid}`));
 		}
 		delete this.users[oldid];
 		this.users[user.userid] = user;
 		if (joining) {
-			this.reportJoin('j', user.getIdentityWithStatus(this.id), user);
+			this.reportJoin('j', user.getIdentityWithStatus(this.roomid), user);
 			if (this.staffMessage && user.can('mute', null, this)) {
 				this.sendUser(
 					user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage.replace(/\n/g, '') + '</div></div>'
@@ -1301,7 +1301,7 @@ export class BasicChatRoom extends BasicRoom {
 		} else if (!user.named) {
 			this.reportJoin('l', oldid, user);
 		} else {
-			this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + oldid, user);
+			this.reportJoin('n', user.getIdentityWithStatus(this.roomid) + '|' + oldid, user);
 		}
 		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
 		return true;
@@ -1313,7 +1313,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (user && user.connected) {
 			if (!this.users[user.userid]) return false;
 			if (user.named) {
-				this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + user.userid, user);
+				this.reportJoin('n', user.getIdentityWithStatus(this.roomid) + '|' + user.userid, user);
 			} else {
 				this.reportJoin('l', user.userid, user);
 			}
@@ -1331,7 +1331,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.userCount--;
 
 		if (user.named) {
-			this.reportJoin('l', user.getIdentity(this.id), user);
+			this.reportJoin('l', user.getIdentity(this.roomid), user);
 		}
 		if (this.game && this.game.onLeave) this.game.onLeave(user);
 		return true;
@@ -1353,12 +1353,12 @@ export class BasicChatRoom extends BasicRoom {
 		}
 
 		if (this.parent && this.parent.subRooms) {
-			this.parent.subRooms.delete(this.id);
+			this.parent.subRooms.delete(this.roomid);
 			if (!this.parent.subRooms.size) this.parent.subRooms = null;
 		}
 
-		Rooms.global.deregisterChatRoom(this.id);
-		Rooms.global.delistChatRoom(this.id);
+		Rooms.global.deregisterChatRoom(this.roomid);
+		Rooms.global.delistChatRoom(this.roomid);
 
 		if (this.aliases) {
 			for (const alias of this.aliases) {
@@ -1395,7 +1395,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.log.destroy();
 
 		// get rid of some possibly-circular references
-		Rooms.rooms.delete(this.id);
+		Rooms.rooms.delete(this.roomid);
 	}
 }
 
@@ -1477,7 +1477,7 @@ export class GameRoom extends BasicChatRoom {
 		if (!this.log.broadcastBuffer) return;
 
 		if (this.userCount) {
-			Sockets.channelBroadcast(this.id, '>' + this.id + '\n\n' + this.log.broadcastBuffer);
+			Sockets.channelBroadcast(this.roomid, '>' + this.roomid + '\n\n' + this.log.broadcastBuffer);
 		}
 		this.log.broadcastBuffer = '';
 
@@ -1521,7 +1521,7 @@ export class GameRoom extends BasicChatRoom {
 
 function getRoom(roomid?: string | Room): Room {
 	// @ts-ignore
-	if (roomid && roomid.id) return roomid;
+	if (roomid && roomid.roomid) return roomid;
 	// @ts-ignore
 	return Rooms.rooms.get(roomid);
 }

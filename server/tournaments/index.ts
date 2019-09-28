@@ -108,7 +108,7 @@ export class Tournament extends Rooms.RoomGame {
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		this.players = [];
 
-		this.id = room.id;
+		this.roomid = room.roomid;
 		this.room = room;
 		this.title = format.name + ' tournament';
 		this.isTournament = true;
@@ -127,7 +127,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.forceTimer = false;
 		this.autostartcap = false;
 		if (Config.tourdefaultplayercap && this.playerCap > Config.tourdefaultplayercap) {
-			Monitor.log(`[TourMonitor] Room ${room.id} starting a tour over default cap (${this.playerCap})`);
+			Monitor.log(`[TourMonitor] Room ${room.roomid} starting a tour over default cap (${this.playerCap})`);
 		}
 
 		this.isTournamentStarted = false;
@@ -495,7 +495,7 @@ export class Tournament extends Rooms.RoomGame {
 
 			matchPlayer.inProgressMatch.room.addRaw(`<div class="broadcast-red"><b>${Chat.escapeHTML(user.name)} is no longer in the tournament.<br />You can finish playing, but this battle is no longer considered a tournament battle.</div>`).update();
 			matchPlayer.inProgressMatch.room.parent = null;
-			this.completedMatches.add(matchPlayer.inProgressMatch.room.id);
+			this.completedMatches.add(matchPlayer.inProgressMatch.room.roomid);
 			matchPlayer.inProgressMatch = null;
 		}
 
@@ -541,7 +541,7 @@ export class Tournament extends Rooms.RoomGame {
 					const inProgressMatch = node.children[0].team.inProgressMatch;
 					if (inProgressMatch && node.children[1].team === inProgressMatch.to) {
 						node.state = 'inprogress';
-						node.room = inProgressMatch.room.id;
+						node.room = inProgressMatch.room.roomid;
 					}
 				}
 
@@ -570,7 +570,7 @@ export class Tournament extends Rooms.RoomGame {
 
 							if (inProgressMatch && data.tableHeaders.cols[c] === inProgressMatch.to) {
 								cell.state = 'inprogress';
-								cell.room = inProgressMatch.room.id;
+								cell.room = inProgressMatch.room.roomid;
 							}
 						}
 					}
@@ -658,7 +658,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (output) {
 			sendReply = msg => output.sendReply(msg);
 		} else if (user) {
-			sendReply = msg => user.sendTo(this.id, msg);
+			sendReply = msg => user.sendTo(this.roomid, msg);
 		} else {
 			sendReply = () => {};
 		}
@@ -707,7 +707,7 @@ export class Tournament extends Rooms.RoomGame {
 			matchFrom.to.isBusy = false;
 			player.inProgressMatch = null;
 			matchFrom.room.parent = null;
-			this.completedMatches.add(matchFrom.room.id);
+			this.completedMatches.add(matchFrom.room.roomid);
 			if (matchFrom.room.battle) matchFrom.room.battle.forfeit(player.name);
 		}
 
@@ -720,7 +720,7 @@ export class Tournament extends Rooms.RoomGame {
 			matchTo.isBusy = false;
 			const matchRoom = matchTo.inProgressMatch!.room;
 			matchRoom.parent = null;
-			this.completedMatches.add(matchRoom.id);
+			this.completedMatches.add(matchRoom.roomid);
 			if (matchRoom.battle) matchRoom.battle.forfeit(player.userid);
 			matchTo.inProgressMatch = null;
 		}
@@ -957,7 +957,7 @@ export class Tournament extends Rooms.RoomGame {
 		user.sendTo(this.room, '|tournament|update|{"challenged":null}');
 
 		challenge.from.inProgressMatch = {to: player, room};
-		this.room.add(`|tournament|battlestart|${from.name}|${user.name}|${room.id}`).update();
+		this.room.add(`|tournament|battlestart|${from.name}|${user.name}|${room.roomid}`).update();
 
 		this.isBracketInvalidated = true;
 		if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify();
@@ -1003,8 +1003,8 @@ export class Tournament extends Rooms.RoomGame {
 		}
 	}
 	onBattleWin(room: GameRoom, winnerid: ID) {
-		if (this.completedMatches.has(room.id)) return;
-		this.completedMatches.add(room.id);
+		if (this.completedMatches.has(room.roomid)) return;
+		this.completedMatches.add(room.roomid);
 		room.parent = null;
 		if (!room.battle) throw new Error("onBattleWin called without a battle");
 		if (!room.p1 || !room.p2) throw new Error("onBattleWin called with missing players");
@@ -1034,7 +1034,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.isAvailableMatchesInvalidated = true;
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
-			this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|fail|${room.id}`);
+			this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|fail|${room.roomid}`);
 
 			if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify();
 			this.update();
@@ -1051,10 +1051,10 @@ export class Tournament extends Rooms.RoomGame {
 			const error = this.generator.setMatchResult([p1, p2], result as 'win' | 'loss', score);
 			if (error) {
 				// Should never happen
-				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.userid}, ${room.p2.userid}], ${result}, ${score}) in onBattleWin(${room.id}, ${winnerid}). Please report this to an admin.`).update();
+				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.userid}, ${room.p2.userid}], ${result}, ${score}) in onBattleWin(${room.roomid}, ${winnerid}). Please report this to an admin.`).update();
 			}
 		}
-		this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|success|${room.id}`);
+		this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|success|${room.roomid}`);
 
 		if (this.generator.isTournamentEnded()) {
 			if (!this.room.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
@@ -1223,7 +1223,7 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 				if (playerCap && playerCap >= 2) {
 					tournament.playerCap = playerCap;
 					if (Config.tourdefaultplayercap && tournament.playerCap > Config.tourdefaultplayercap) {
-						Monitor.log(`[TourMonitor] Room ${tournament.room.id} starting a tour over default cap (${tournament.playerCap})`);
+						Monitor.log(`[TourMonitor] Room ${tournament.room.roomid} starting a tour over default cap (${tournament.playerCap})`);
 					}
 					this.room.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
 				} else if (tournament.playerCap && !playerCap) {
@@ -1270,7 +1270,7 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 				}
 				tournament.playerCap = playerCap;
 				if (Config.tourdefaultplayercap && tournament.playerCap > Config.tourdefaultplayercap) {
-					Monitor.log(`[TourMonitor] Room ${tournament.room.id} starting a tour over default cap (${tournament.playerCap})`);
+					Monitor.log(`[TourMonitor] Room ${tournament.room.roomid} starting a tour over default cap (${tournament.playerCap})`);
 				}
 				this.privateModAction(`(${user.name} set the tournament's player cap to ${tournament.playerCap}.)`);
 				this.modlog('TOUR PLAYERCAP', null, tournament.playerCap.toString());
@@ -1596,7 +1596,7 @@ const chatCommands: ChatCommands = {
 				if (tourRoom.isPrivate || tourRoom.isPersonal || tourRoom.staffRoom) continue;
 				const tournament = tourRoom.game as Tournament;
 				update.push({
-					room: tourRoom.id, title: room.title, format: tournament.name,
+					room: tourRoom.roomid, title: room.title, format: tournament.name,
 					generator: tournament.generator.name, isStarted: tournament.isTournamentStarted,
 				});
 			}
@@ -1642,7 +1642,7 @@ const chatCommands: ChatCommands = {
 			return this.sendReply("Tournaments are now disabled.");
 		} else if (cmd === 'announce' || cmd === 'announcements') {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (!Config.tourannouncements.includes(room.id)) {
+			if (!Config.tourannouncements.includes(room.roomid)) {
 				return this.errorReply("Tournaments in this room cannot be announced.");
 			}
 			if (params.length < 1) {
@@ -1679,7 +1679,7 @@ const chatCommands: ChatCommands = {
 				if (!this.can('gamemoderation', null, room)) return;
 			} else {
 				if (!user.can('gamemanagement', null, room)) {
-					return this.errorReply(`Tournaments are disabled in this room (${room.id}).`);
+					return this.errorReply(`Tournaments are disabled in this room (${room.roomid}).`);
 				}
 			}
 			if (params.length < 2) {
@@ -1695,7 +1695,7 @@ const chatCommands: ChatCommands = {
 				if (room.tourAnnouncements) {
 					const tourRoom = Rooms.search(Config.tourroom || 'tournaments');
 					if (tourRoom && tourRoom !== room) {
-						tourRoom.addRaw(`<div class="infobox"><a href="/${room.id}" class="ilink"><strong>${Chat.escapeHTML(Dex.getFormat(tour.name).name)}</strong> tournament created in <strong>${Chat.escapeHTML(room.title)}</strong>.</a></div>`).update();
+						tourRoom.addRaw(`<div class="infobox"><a href="/${room.roomid}" class="ilink"><strong>${Chat.escapeHTML(Dex.getFormat(tour.name).name)}</strong> tournament created in <strong>${Chat.escapeHTML(room.title)}</strong>.</a></div>`).update();
 					}
 				}
 			}
@@ -1715,7 +1715,7 @@ const chatCommands: ChatCommands = {
 					if (!this.can('gamemoderation', null, room)) return;
 				} else {
 					if (!user.can('gamemanagement', null, room)) {
-						return this.errorReply(`Tournaments are disabled in this room (${room.id}).`);
+						return this.errorReply(`Tournaments are disabled in this room (${room.roomid}).`);
 					}
 				}
 				commandHandler = commands.creation[cmd];

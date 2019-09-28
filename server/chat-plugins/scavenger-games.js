@@ -117,7 +117,7 @@ class ScavGame extends Rooms.RoomGame {
 	onRename(user, oldUserid, isJoining, isForceRenamed) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
 			if (!(user.userid in this.playerTable)) {
-				user.games.delete(this.id);
+				user.games.delete(this.roomid);
 				user.updateSearch();
 			}
 			return;

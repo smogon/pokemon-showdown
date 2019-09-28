@@ -53,8 +53,8 @@ const commands = {
 
 		text = text.replace(/^>/, '&gt;');
 
-		if (!roomFaqs[room.id]) roomFaqs[room.id] = {};
-		roomFaqs[room.id][topic] = text;
+		if (!roomFaqs[room.roomid]) roomFaqs[room.roomid] = {};
+		roomFaqs[room.roomid][topic] = text;
 		saveRoomFaqs();
 		this.sendReplyBox(Chat.formatText(text, true));
 		this.privateModAction(`(${user.name} added a FAQ for '${topic}')`);
@@ -67,10 +67,10 @@ const commands = {
 		let topic = toID(target);
 		if (!topic) return this.parse('/help roomfaq');
 
-		if (!(roomFaqs[room.id] && roomFaqs[room.id][topic])) return this.errorReply("Invalid topic.");
-		delete roomFaqs[room.id][topic];
-		Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic).map(val => delete roomFaqs[room.id][val]);
-		if (!Object.keys(roomFaqs[room.id]).length) delete roomFaqs[room.id];
+		if (!(roomFaqs[room.roomid] && roomFaqs[room.roomid][topic])) return this.errorReply("Invalid topic.");
+		delete roomFaqs[room.roomid][topic];
+		Object.keys(roomFaqs[room.roomid]).filter(val => getAlias(room.roomid, val) === topic).map(val => delete roomFaqs[room.roomid][val]);
+		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
 		this.privateModAction(`(${user.name} removed the FAQ for '${topic}')`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
@@ -84,29 +84,29 @@ const commands = {
 		if (!(alias && topic)) return this.parse('/help roomfaq');
 		if (alias.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
 
-		if (!(roomFaqs[room.id] && topic in roomFaqs[room.id])) return this.errorReply(`The topic ${topic} was not found in this room's faq list.`);
-		if (getAlias(room.id, topic)) return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.id, topic)} instead.`);
-		roomFaqs[room.id][alias] = `>${topic}`;
+		if (!(roomFaqs[room.roomid] && topic in roomFaqs[room.roomid])) return this.errorReply(`The topic ${topic} was not found in this room's faq list.`);
+		if (getAlias(room.roomid, topic)) return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
+		roomFaqs[room.roomid][alias] = `>${topic}`;
 		saveRoomFaqs();
 		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
 		this.modlog('ROOMFAQ', null, `alias for '${topic}' - ${alias}`);
 	},
 	rfaq: 'roomfaq',
 	roomfaq(target, room, user) {
-		if (!roomFaqs[room.id]) return this.errorReply("This room has no FAQ topics.");
+		if (!roomFaqs[room.roomid]) return this.errorReply("This room has no FAQ topics.");
 		/** @type {string} */
 		let topic = toID(target);
 		if (topic === 'constructor') return false;
-		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.id]).filter(val => !getAlias(room.id, val)).sort((a, b) => a.localeCompare(b)).map(rfaq => `<button class="button" name="send" value="/roomfaq ${rfaq}">${rfaq}</button>`).join(', ')}`);
-		if (!roomFaqs[room.id][topic]) return this.errorReply("Invalid topic.");
-		topic = getAlias(room.id, topic) || topic;
+		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.roomid]).filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b)).map(rfaq => `<button class="button" name="send" value="/roomfaq ${rfaq}">${rfaq}</button>`).join(', ')}`);
+		if (!roomFaqs[room.roomid][topic]) return this.errorReply("Invalid topic.");
+		topic = getAlias(room.roomid, topic) || topic;
 
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(Chat.formatText(roomFaqs[room.id][topic], true));
+		this.sendReplyBox(Chat.formatText(roomFaqs[room.roomid][topic], true));
 		if (!this.broadcasting && user.can('ban', null, room)) {
-			const src = Chat.escapeHTML(roomFaqs[room.id][topic]).replace(/\n/g, `<br />`);
+			const src = Chat.escapeHTML(roomFaqs[room.roomid][topic]).replace(/\n/g, `<br />`);
 			let extra = `<code>/addfaq ${topic}, ${src}</code>`;
-			const aliases = Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic);
+			const aliases = Object.keys(roomFaqs[room.roomid]).filter(val => getAlias(room.roomid, val) === topic);
 			if (aliases.length) {
 				extra += `<br /><br />Aliases: ${aliases.join(', ')}`;
 			}

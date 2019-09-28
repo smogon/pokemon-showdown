@@ -647,7 +647,7 @@ exports.commands = {
 
 			if (!room.banwords) return this.sendReply("This room has no banned phrases.");
 
-			return this.sendReply(`Banned phrases in room ${room.id}: ${room.banwords.join(', ')}`);
+			return this.sendReply(`Banned phrases in room ${room.roomid}: ${room.banwords.join(', ')}`);
 		},
 
 		""(target, room, user) {

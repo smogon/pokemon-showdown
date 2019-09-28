@@ -318,7 +318,7 @@ function isTrusted(name: string | User) {
  * User and Connection classes
  *********************************************************/
 
-const connections = new Map();
+const connections = new Map<string, Connection>();
 
 export class Connection {
 	id: string;
@@ -364,7 +364,7 @@ export class Connection {
 		this.connectedAt = now;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
+		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
@@ -390,14 +390,14 @@ export class Connection {
 	}
 
 	joinRoom(room: Room) {
-		if (this.inRooms.has(room.id)) return;
-		this.inRooms.add(room.id);
-		Sockets.roomAdd(this.worker, room.id, this.socketid);
+		if (this.inRooms.has(room.roomid)) return;
+		this.inRooms.add(room.roomid);
+		Sockets.roomAdd(this.worker, room.roomid, this.socketid);
 	}
 	leaveRoom(room: Room) {
-		if (this.inRooms.has(room.id)) {
-			this.inRooms.delete(room.id);
-			Sockets.roomRemove(this.worker, room.id, this.socketid);
+		if (this.inRooms.has(room.roomid)) {
+			this.inRooms.delete(room.roomid);
+			Sockets.roomRemove(this.worker, room.roomid, this.socketid);
 		}
 	}
 	toString() {
@@ -569,7 +569,7 @@ export class User extends Chat.MessageContext {
 	}
 
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
-		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).id;
+		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
@@ -1000,7 +1000,7 @@ export class User extends Chat.MessageContext {
 				continue;
 			}
 			if (!room.game) {
-				Monitor.warn(`game desync for user ${this.userid} in room ${room.id}`);
+				Monitor.warn(`game desync for user ${this.userid} in room ${room.roomid}`);
 				this.games.delete(roomid);
 				continue;
 			}
@@ -1103,9 +1103,9 @@ export class User extends Chat.MessageContext {
 		for (const roomid of connection.inRooms) {
 			const room = Rooms.get(roomid);
 			if (!this.inRooms.has(roomid)) {
-				if (Punishments.checkNameInRoom(this, room.id)) {
+				if (Punishments.checkNameInRoom(this, room.roomid)) {
 					// the connection was in a room that this user is banned from
-					connection.sendTo(room.id, `|deinit`);
+					connection.sendTo(room.roomid, `|deinit`);
 					connection.leaveRoom(room);
 					continue;
 				}
@@ -1220,7 +1220,7 @@ export class User extends Chat.MessageContext {
 		}
 		for (const room of Rooms.global.chatRooms) {
 			if (!room.isPrivate && room.auth && userid in room.auth && room.auth[userid] !== '+') {
-				removed.push(room.auth[userid] + room.id);
+				removed.push(room.auth[userid] + room.roomid);
 				room.auth[userid] = '+';
 			}
 		}
@@ -1320,7 +1320,7 @@ export class User extends Chat.MessageContext {
 		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid) as ID;
 	}
 	async tryJoinRoom(roomid: RoomID | Room, connection: Connection) {
-		roomid = roomid && (roomid as Room).id ? (roomid as Room).id : roomid as RoomID;
+		roomid = roomid && (roomid as Room).roomid ? (roomid as Room).roomid : roomid as RoomID;
 		const room = Rooms.search(roomid);
 		if (!room && roomid.startsWith('view-')) {
 			return Chat.resolvePage(roomid, this, connection);
@@ -1350,12 +1350,12 @@ export class User extends Chat.MessageContext {
 			}
 		}
 
-		if (!this.can('bypassall') && Punishments.isRoomBanned(this, room.id)) {
+		if (!this.can('bypassall') && Punishments.isRoomBanned(this, room.roomid)) {
 			connection.sendTo(roomid, `|noinit|joinfailed|You are banned from the room "${roomid}".`);
 			return false;
 		}
 
-		if (Rooms.aliases.get(roomid) === room.id) {
+		if (Rooms.aliases.get(roomid) === room.roomid) {
 			connection.send(`>${roomid}\n|deinit`);
 		}
 
@@ -1376,9 +1376,9 @@ export class User extends Chat.MessageContext {
 			}
 			return;
 		}
-		if (!connection.inRooms.has(room.id)) {
-			if (!this.inRooms.has(room.id)) {
-				this.inRooms.add(room.id);
+		if (!connection.inRooms.has(room.roomid)) {
+			if (!this.inRooms.has(room.roomid)) {
+				this.inRooms.add(room.roomid);
 				room.onJoin(this, connection);
 			}
 			connection.joinRoom(room);
@@ -1391,18 +1391,18 @@ export class User extends Chat.MessageContext {
 		force: boolean = false
 	) {
 		room = Rooms.get(room);
-		if (room.id === 'global') {
+		if (room.roomid === 'global') {
 			// you can't leave the global room except while disconnecting
 			if (!force) return false;
 			this.cancelReady();
 		}
-		if (!this.inRooms.has(room.id)) {
+		if (!this.inRooms.has(room.roomid)) {
 			return false;
 		}
 		for (const curConnection of this.connections) {
 			if (connection && curConnection !== connection) continue;
-			if (curConnection.inRooms.has(room.id)) {
-				curConnection.sendTo(room.id, `|deinit`);
+			if (curConnection.inRooms.has(room.roomid)) {
+				curConnection.sendTo(room.roomid, `|deinit`);
 				curConnection.leaveRoom(room);
 			}
 			if (connection) break;
@@ -1411,11 +1411,11 @@ export class User extends Chat.MessageContext {
 		let stillInRoom = false;
 		if (connection) {
 			// @ts-ignore TypeScript inferring wrong type for room
-			stillInRoom = this.connections.some(conn => conn.inRooms.has(room.id));
+			stillInRoom = this.connections.some(conn => conn.inRooms.has(room.roomid));
 		}
 		if (!stillInRoom) {
 			room.onLeave(this);
-			this.inRooms.delete(room.id);
+			this.inRooms.delete(room.roomid);
 		}
 	}
 
@@ -1468,10 +1468,10 @@ export class User extends Chat.MessageContext {
 				);
 				return false;
 			} else {
-				this.chatQueue.push([message, room.id, connection]);
+				this.chatQueue.push([message, room.roomid, connection]);
 			}
 		} else if (now < this.lastChatMessage + throttleDelay) {
-			this.chatQueue = [[message, room.id, connection]];
+			this.chatQueue = [[message, room.roomid, connection]];
 			this.startChatQueue(throttleDelay - (now - this.lastChatMessage));
 		} else {
 			this.lastChatMessage = now;
@@ -1701,7 +1701,7 @@ function socketReceive(worker: Worker, workerid: number, socketid: string, messa
 	if (!user) return;
 
 	// The client obviates the room id when sending messages to Lobby by default
-	const roomId = message.substr(0, pipeIndex) || (Rooms.lobby || Rooms.global).id;
+	const roomId = message.substr(0, pipeIndex) || (Rooms.lobby || Rooms.global).roomid;
 	message = message.slice(pipeIndex + 1);
 
 	const room = Rooms.get(roomId);

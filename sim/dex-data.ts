@@ -40,8 +40,8 @@ export class Tools {
 	static getId(text: any): ID {
 		if (text && text.id) {
 			text = text.id;
-		} else if (text && text.userid) {
-			text = text.userid;
+		} else if (text && text.roomid) {
+			text = text.roomid;
 		}
 		if (typeof text !== 'string' && typeof text !== 'number') return '';
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;

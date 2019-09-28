@@ -38,7 +38,7 @@ class Blackjack extends Rooms.RoomGame {
 		};
 		this.deck = new BlackjackDeck().shuffle();
 
-		this.id = this.room.id;
+		this.roomid = this.room.roomid;
 		this.title = `Blackjack (${room.title})`;
 		this.blackjack = true;
 		this.state = 'signups';
@@ -118,12 +118,12 @@ class Blackjack extends Rooms.RoomGame {
 		if (this.spectators[user]) return this.errorMessage(user, `You are already spectating this game.`);
 		if (this.playerTable[user]) return this.errorMessage(user, `You don't need to spectate the game; you're playing the game.`);
 		this.spectators[user.userid] = user.userid;
-		user.sendTo(this.id, `You are now spectating this game.`);
+		user.sendTo(this.roomid, `You are now spectating this game.`);
 	}
 	unspectate(user) {
 		if (!this.spectators[user.userid]) return this.errorMessage(user, `You are already not spectating this game.`);
 		delete this.spectators[user.userid];
-		user.sendTo(this.id, `You are no longer spectating this game.`);
+		user.sendTo(this.roomid, `You are no longer spectating this game.`);
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Blackjack extends Rooms.RoomGame {
 		}
 		for (let spectator of Object.keys(this.spectators)) {
 			spectator = Users.get(this.spectators[spectator]);
-			if (spectator) spectator.sendTo(this.id, `${message}${this.lastMessage + text}</div>`);
+			if (spectator) spectator.sendTo(this.roomid, `${message}${this.lastMessage + text}</div>`);
 		}
 	}
 	clear() {
@@ -194,7 +194,7 @@ class Blackjack extends Rooms.RoomGame {
 		}
 	}
 	slide(user) {
-		user.sendTo(this.id, `|uhtml|blackjack-${this.room.gameNumber}|`);
+		user.sendTo(this.roomid, `|uhtml|blackjack-${this.room.gameNumber}|`);
 		this.display('', null, user.name);
 	}
 	onConnect(user) {
@@ -212,7 +212,7 @@ class Blackjack extends Rooms.RoomGame {
 				player.sendRoom(`${message}${player.gameLog}`);
 				return;
 			} else if (spectator) { // spectator; send gamelog
-				user.sendTo(this.id, `${message}${this.lastMessage}`);
+				user.sendTo(this.roomid, `${message}${this.lastMessage}`);
 				return;
 			}
 		}

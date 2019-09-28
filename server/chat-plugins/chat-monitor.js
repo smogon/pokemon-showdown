@@ -59,7 +59,7 @@ Chat.registerMonitor('autolock', {
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
-				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${word}`, `<${room.id}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
+				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
 			} else {
 				this.errorReply(`Please do not say '${word.replace(/\\b/g, '')}'.`);
 			}
@@ -189,7 +189,7 @@ let chatfilter = function (message, user, room) {
 	let lcMessage = message.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
-	const isStaffRoom = room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'));
+	const isStaffRoom = room && ((room.chatRoomData && room.roomid.endsWith('staff')) || room.roomid.startsWith('help-'));
 	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
 
 	for (const list in Chat.monitors) {

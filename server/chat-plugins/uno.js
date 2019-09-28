@@ -233,7 +233,7 @@ class UnoGame extends Rooms.RoomGame {
 	onRename(user, oldUserid, isJoining, isForceRenamed) {
 		if (!(oldUserid in this.playerTable) || user.userid === oldUserid) return false;
 		if (!user.named && !isForceRenamed) {
-			user.games.delete(this.id);
+			user.games.delete(this.roomid);
 			user.updateSearch();
 			return; // dont set users to their guest accounts.
 		}
@@ -303,7 +303,7 @@ class UnoGame extends Rooms.RoomGame {
 			for (let i in this.spectators) {
 				if (i in this.playerTable) continue; // don't double send to users already in the game.
 				let user = Users.getExact(i);
-				if (user) user.sendTo(this.id, msg);
+				if (user) user.sendTo(this.roomid, msg);
 			}
 		}
 	}
@@ -738,7 +738,7 @@ const commands = {
 			if (room.unoDisabled) return this.errorReply("UNO is currently disabled for this room.");
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
-			let suppressMessages = cmd.includes('private') || !(cmd.includes('public') || room.id === 'gamecorner');
+			let suppressMessages = cmd.includes('private') || !(cmd.includes('public') || room.roomid === 'gamecorner');
 
 			let cap = parseInt(target);
 			if (isNaN(cap)) cap = 6;

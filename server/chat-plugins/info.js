@@ -23,7 +23,7 @@ const commands = {
 	alts: 'whois',
 	whoare: 'whois',
 	whois(target, room, user, connection, cmd) {
-		if (room && room.id === 'staff' && !this.runBroadcast()) return;
+		if (room && room.roomid === 'staff' && !this.runBroadcast()) return;
 		if (!room) room = Rooms.global;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
@@ -193,12 +193,12 @@ const commands = {
 		let gameRooms = [];
 		for (const room of Rooms.rooms.values()) {
 			if (!room.game) continue;
-			if ((targetUser.userid in room.game.playerTable && !targetUser.inRooms.has(room.id)) ||
+			if ((targetUser.userid in room.game.playerTable && !targetUser.inRooms.has(room.roomid)) ||
 				(room.auth && room.auth[targetUser.userid] === Users.PLAYER_SYMBOL)) {
 				if (room.isPrivate && !canViewAlts) {
 					continue;
 				}
-				gameRooms.push(room.id);
+				gameRooms.push(room.roomid);
 			}
 		}
 		if (gameRooms.length) {
@@ -273,7 +273,7 @@ const commands = {
 		}
 
 		if (!user.can('alts') && !atLeastOne) {
-			let hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.id, userid);
+			let hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.roomid, userid);
 			if (!hasJurisdiction) {
 				return this.errorReply("/checkpunishment - User not found.");
 			}
@@ -306,7 +306,7 @@ const commands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!room.chatRoomData || room.id.includes('-')) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.chatRoomData || room.roomid.includes('-')) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-punishments-${room}`);
 	},
 	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # & ~`],
@@ -351,7 +351,7 @@ const commands = {
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 			if (results.length > 100 && !isAll) {
@@ -364,7 +364,7 @@ const commands = {
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestIp.startsWith(ip)) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 			if (results.length > 100 && !isAll) {
@@ -374,7 +374,7 @@ const commands = {
 			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
 				if (curUser.latestIp !== ip) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 		}
@@ -508,7 +508,7 @@ const commands = {
 					pokemon = format.onModifyTemplate.call(Dex, pokemon) || pokemon;
 				}
 				let tier = pokemon.tier;
-				if (room && (room.id === 'smogondoubles' ||
+				if (room && (room.roomid === 'smogondoubles' ||
 					['gen7doublesou', 'gen7doublesubers', 'gen7doublesuu'].includes(room.battle && room.battle.format))) {
 					tier = pokemon.doublesTier;
 				}
@@ -2501,7 +2501,7 @@ const pages = {
 		if (!this.room.chatRoomData) return;
 		if (!this.can('mute', null, this.room)) return;
 		// Ascending order
-		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.id)).sort((a, b) => a[1].expireTime - b[1].expireTime);
+		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.roomid)).sort((a, b) => a[1].expireTime - b[1].expireTime);
 		buf += Punishments.visualizePunishments(sortedPunishments, user);
 		return buf;
 	},

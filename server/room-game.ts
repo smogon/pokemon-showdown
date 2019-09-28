@@ -42,7 +42,7 @@ export class RoomGamePlayer {
 		this.userid = user ? user.userid : '';
 		this.game = game;
 		if (user) {
-			user.games.add(this.game.id);
+			user.games.add(this.game.roomid);
 			user.updateSearch();
 		}
 	}
@@ -50,7 +50,7 @@ export class RoomGamePlayer {
 		if (!this.userid) return;
 		const user = Users.getExact(this.userid);
 		if (user) {
-			user.games.delete(this.game.id);
+			user.games.delete(this.game.roomid);
 			user.updateSearch();
 		}
 		this.userid = '';
@@ -68,7 +68,7 @@ export class RoomGamePlayer {
 	}
 	sendRoom(data: string) {
 		const user = Users.getExact(this.userid);
-		if (user) user.sendTo(this.game.id, data);
+		if (user) user.sendTo(this.game.roomid, data);
 	}
 }
 
@@ -76,7 +76,7 @@ export class RoomGamePlayer {
  * globally Rooms.RoomGame
  */
 export class RoomGame {
-	id: RoomID;
+	roomid: RoomID;
 	room: ChatRoom | GameRoom;
 	gameid: ID;
 	title: string;
@@ -92,7 +92,7 @@ export class RoomGame {
 	playerCap: number;
 	ended: boolean;
 	constructor(room: ChatRoom | GameRoom) {
-		this.id = room.id;
+		this.roomid = room.roomid;
 		this.room = room;
 		this.gameid = 'game' as ID;
 		this.title = 'Game';
@@ -248,7 +248,7 @@ export class RoomGame {
 	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
 			if (!(user.userid in this.playerTable)) {
-				user.games.delete(this.id);
+				user.games.delete(this.roomid);
 				user.updateSearch();
 			}
 			return;
