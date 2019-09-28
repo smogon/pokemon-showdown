@@ -597,7 +597,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 150,
 		category: "Physical",
-		desc: "Fails unless the user is hit by a damaging move from an opponent this turn before it can execute the move. The foe's move has its secondary effects suppressed and damage halved. If the user was hit and has not fainted, it attacks and the effect ends. This move can affect Flying-type Pokemon.",
+		desc: "Fails unless the user is hit by a physical move from an opponent this turn before it can execute the move. The foe's move has its secondary effects suppressed and damage halved. If the user was hit and has not fainted, it attacks and the effect ends. This move can affect Flying-type Pokemon.",
 		shortDesc: "Prepares for foe's attack, then retaliates.",
 		id: "murkyambush",
 		name: "Murky Ambush",
@@ -634,9 +634,11 @@ let BattleMovedex = {
 				this.add('-singleturn', pokemon, 'move: Murky Ambush');
 			},
 			onSourceBasePowerPriority: 7,
-			onSourceBasePower() {
+			onSourceBasePower(basePower, attacker, defender, move) {
 				this.debug('Murky Ambush weaken');
-				return this.chainModify(0.5);
+				if (move.category === 'Physical') {
+					return this.chainModify(0.5);
+				}
 			},
 			onFoeTryMove(target, source, move) {
 				if (move.secondaries && move.category !== 'Status') {
@@ -645,7 +647,7 @@ let BattleMovedex = {
 				}
 			},
 			onHit(pokemon, source, move) {
-				if (pokemon.side !== source.side && move.category !== 'Status') {
+				if (pokemon.side !== source.side && move.category === 'Physical') {
 					pokemon.volatiles['murkyambush'].gotHit = true;
 				}
 			},
