@@ -1726,7 +1726,7 @@ let BattleStatuses = {
 	weightdoubler: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add('-message', pokemon.name + '\'s weight has doubled.');
+			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name}'s weight has doubled.`);
 		},
 		onModifyWeight(weight) {
 			return weight * 2;
@@ -1736,12 +1736,12 @@ let BattleStatuses = {
 	gooey: {
 		onStart(pokemon, source) {
 			this.add('-start', pokemon, 'Gooey', '[of] ' + source);
-			this.add('-message', `${pokemon.name} was covered in corrosive goo!`);
+			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was covered in corrosive goo!`);
 		},
 		onResidualOrder: 10,
 		onResidual(pokemon) {
 			this.damage(pokemon.maxhp / 6);
-			this.add('-message', `${pokemon.name} was damaged by the corrosive goo!`);
+			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was damaged by the corrosive goo!`);
 		},
 	},
 	// Custom Acid Rain weather for Pirate Princess
@@ -1790,7 +1790,7 @@ let BattleStatuses = {
 	// Custom effect for Rage's multihit
 	enrageeeeed: {
 		onStart(pokemon, source) {
-			this.add('-message', `${pokemon.name}'s next attack will hit multiple times!`);
+			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name}'s next attack will hit multiple times!`);
 		},
 		onPrepareHit(source, target, move) {
 			if (move.category !== 'Status') {
@@ -1813,7 +1813,7 @@ let BattleStatuses = {
 				return false;
 			}
 			this.add('-start', pokemon, 'Attract', '[from] move: Cutie Trap', '[of] ' + source);
-			this.add('-message', `${pokemon.name} was trapped by love!`);
+			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was trapped by love!`);
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
@@ -1828,7 +1828,7 @@ let BattleStatuses = {
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Attract', '[silent]');
-			this.add('-message', `${pokemon.name} is no longer trapped by love.`);
+			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} is no longer trapped by love.`);
 		},
 	},
 	// Modified hail for Yuki
