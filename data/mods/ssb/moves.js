@@ -458,10 +458,10 @@ let BattleMovedex = {
 			onTerrain(pokemon) {
 				if (pokemon.hasType('Fire')) {
 					this.heal(pokemon.maxhp / 16);
-					this.add('-message', `${pokemon.name} was healed by the Lava Terrain!`);
+					this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was healed by the Lava Terrain!`);
 				} else {
 					this.damage(pokemon.maxhp / 16);
-					this.add('-message', `${pokemon.name} was hurt by Lava Terrain!`);
+					this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was hurt by Lava Terrain!`);
 				}
 			},
 			onEnd() {
@@ -1651,7 +1651,7 @@ let BattleMovedex = {
 		effect: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Distortion Blast');
-				this.add('-message', `${pokemon.name || pokemon.species} was distorted!`);
+				this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was distorted!`);
 			},
 			onModifyMove(move, pokemon) {
 				if (move.status) {
@@ -2013,7 +2013,7 @@ let BattleMovedex = {
 			onTryHit(target, source, effect) {
 				if (!effect || effect.id === 'glitchout' || source.volatiles['glitchout']) return;
 				if (this.random(20) === 1) {
-					this.add('message', `${source.name}'s move was glitched by the Scripted Terrain!`);
+					this.add('message', `${source.illusion ? source.illusion.name : source.name}'s move was glitched by the Scripted Terrain!`);
 					this.useMove('Glitch Out', source, source.side.foe.active[0]);
 					return null;
 				}
@@ -2036,7 +2036,7 @@ let BattleMovedex = {
 				if (pokemon.fainted || !pokemon.hp) return;
 				if (this.random(20) === 1) {
 					this.debug('Scripted terrain corrupt');
-					this.add('message', `${pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
+					this.add('message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
 					// generate a movepool
 					let moves = [];
 					let pool = this.shuffle(Object.keys(this.data.Movedex));
@@ -4293,7 +4293,7 @@ let BattleMovedex = {
 			// @ts-ignore unsupported custom event
 			onSSBRotate(/** @type {Pokemon} */ pokemon) {
 				// @ts-ignore Unsupported custom event, this is refering to a battle
-				this.add('-message', `${pokemon.name} is preparing to switch out!`);
+				this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} is preparing to switch out!`);
 				pokemon.switchFlag = true;
 			},
 		},
