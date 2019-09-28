@@ -522,7 +522,15 @@ exports.commands = {
 		let targetRoom = Rooms.search(roomid);
 		// if a room alias was used, replace alias with actual id
 		if (targetRoom) roomid = targetRoom.id;
-		if (roomid.includes('-')) return this.errorReply(`Battles and groupchats (and other rooms with - in their ID) don't have individual modlogs.`);
+
+		if (roomid.includes('-')) {
+			if (user.can('modlog')) {
+				// default to global modlog for staff convenience
+				roomid = 'global';
+			} else {
+				return this.errorReply(`Access to global modlog denied. Battles and groupchats (and other rooms with - in their ID) don't have individual modlogs.`);
+			}
+		}
 
 		let lines;
 		if (target.includes(LINES_SEPARATOR)) { // undocumented line specification
