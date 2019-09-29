@@ -551,7 +551,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.stream.write(`>start ` + JSON.stringify(battleOptions));
 		}
 
-		this.listen();
+		void this.listen();
 
 		this.addPlayer(options.p1, options.p1team || '', options.p1rating);
 		this.addPlayer(options.p2, options.p2team || '', options.p2rating);
@@ -754,7 +754,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.started = true;
 			if (!this.ended) {
 				this.ended = true;
-				this.onEnd(this.logData!.winner);
+				void this.onEnd(this.logData!.winner);
 				this.clearPlayers();
 			}
 			this.checkActive();
@@ -786,14 +786,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 				this.room.sendUser(winner, '|askreg|' + winner.userid);
 			}
 			const [score, p1rating, p2rating] = await Ladders(this.format).updateRating(p1name, p2name, p1score, this.room);
-			this.logBattle(score, p1rating, p2rating);
+			void this.logBattle(score, p1rating, p2rating);
 		} else if (Config.logchallenges) {
 			if (winnerid === p1id) {
 				p1score = 1;
 			} else if (winnerid === p2id) {
 				p1score = 0;
 			}
-			this.logBattle(p1score);
+			void this.logBattle(p1score);
 		} else {
 			this.logData = null;
 		}
@@ -1080,7 +1080,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.p4 = null;
 
 		this.ended = true;
-		this.stream.destroy();
+		void this.stream.destroy();
 		if (this.active) {
 			Rooms.global.battleCount += -1;
 			this.active = false;

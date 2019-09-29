@@ -174,10 +174,10 @@ export const Punishments = new class {
 	]);
 	constructor() {
 		setImmediate(() => {
-			Punishments.loadPunishments();
-			Punishments.loadRoomPunishments();
-			Punishments.loadBanlist();
-			Punishments.loadSharedIps();
+			void Punishments.loadPunishments();
+			void Punishments.loadRoomPunishments();
+			void Punishments.loadBanlist();
+			void Punishments.loadSharedIps();
 		});
 	}
 
@@ -921,7 +921,7 @@ export const Punishments = new class {
 
 	addSharedIp(ip: string, note: string) {
 		Punishments.sharedIps.set(ip, note);
-		Punishments.appendSharedIp(ip, note);
+		void Punishments.appendSharedIp(ip, note);
 
 		for (const user of Users.users.values()) {
 			if (user.locked && user.locked !== user.userid && ip in user.ips) {
@@ -938,7 +938,7 @@ export const Punishments = new class {
 
 	removeSharedIp(ip: string) {
 		Punishments.sharedIps.delete(ip);
-		Punishments.saveSharedIps();
+		void Punishments.saveSharedIps();
 	}
 
 	/*********************************************************

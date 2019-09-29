@@ -178,7 +178,7 @@ class FSPath {
 			throttleTimer: null,
 		};
 		pendingUpdates.set(this.path, update);
-		this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
+		void this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
 	}
 	checkNextUpdate() {
 		const pendingUpdate = pendingUpdates.get(this.path);

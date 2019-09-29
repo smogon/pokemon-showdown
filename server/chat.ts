@@ -1102,7 +1102,7 @@ export class CommandContext extends MessageContext {
 
 export const Chat = new class {
 	constructor() {
-		this.loadTranslations();
+		void this.loadTranslations();
 	}
 	multiLinePattern = new PatternTester();
 
@@ -1394,7 +1394,7 @@ export const Chat = new class {
 	loadPlugins() {
 		if (Chat.commands) return;
 
-		FS('package.json').readIfExists().then(data => {
+		void FS('package.json').readIfExists().then(data => {
 			if (data) Chat.packageData = JSON.parse(data);
 		});
 

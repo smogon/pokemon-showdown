@@ -78,7 +78,7 @@ export class Roomlog {
 		this.roomlogFilename = '';
 
 		this.setupModlogStream();
-		this.setupRoomlogStream(true);
+		void this.setupRoomlogStream(true);
 	}
 	getScrollback(channel = 0) {
 		let log = this.log;
@@ -141,7 +141,7 @@ export class Roomlog {
 			if (this.roomlogStream === null) return;
 		}
 		this.roomlogFilename = relpath;
-		if (this.roomlogStream) this.roomlogStream.end();
+		if (this.roomlogStream) void this.roomlogStream.end();
 		this.roomlogStream = FS(basepath + relpath).createAppendStream();
 		// Create a symlink to today's lobby log.
 		// These operations need to be synchronous, but it's okay
@@ -152,7 +152,7 @@ export class Roomlog {
 			FS(link0).symlinkToSync(relpath); // intentionally a relative link
 			FS(link0).renameSync(basepath + 'today.txt');
 		} catch (e) {} // OS might not support symlinks or atomic rename
-		if (!Roomlogs.rollLogTimer) Roomlogs.rollLogs();
+		if (!Roomlogs.rollLogTimer) void Roomlogs.rollLogs();
 	}
 	add(message: string) {
 		if (message.startsWith('|uhtmlchange|')) return this.uhtmlchange(message);

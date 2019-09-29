@@ -33,7 +33,7 @@
                 "ignore-pattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`/]"
             }
         },
-        "no-floating-promises": false,
+        "no-floating-promises": true,
         "interface-name": false,
         "no-for-in-array": true,
         "forin": false,
