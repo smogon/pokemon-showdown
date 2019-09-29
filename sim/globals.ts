@@ -47,6 +47,7 @@ type PokemonSet = {
  * - L = start or level-up, 3rd char+ is the level
  * - M = TM/HM
  * - T = tutor
+ * - R = restricted (special moves like Rotom moves)
  * - E = egg
  * - S = event, 3rd char+ is the index in .eventPokemon
  * - D = Dream World, only 5D is valid

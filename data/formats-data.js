@@ -3471,12 +3471,6 @@ let BattleFormatsData = {
 		randomDoubleBattleMoves: ["swordsdance", "willowisp", "xscissor", "shadowsneak", "shadowclaw", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 50, "moves": ["spite", "confuseray", "shadowball", "grudge"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 20, "shiny": 1, "moves": ["doubleteam", "furycutter", "screech"]},
-			{"generation": 3, "level": 25, "shiny": 1, "moves": ["swordsdance"]},
-			{"generation": 3, "level": 31, "shiny": 1, "moves": ["slash"]},
-			{"generation": 3, "level": 38, "shiny": 1, "moves": ["agility"]},
-			{"generation": 3, "level": 45, "shiny": 1, "moves": ["batonpass"]},
-			{"generation": 4, "level": 52, "shiny": 1, "moves": ["xscissor"]},
 		],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -7804,18 +7798,12 @@ let BattleFormatsData = {
 	necrozmaduskmane: {
 		randomBattleMoves: ["swordsdance", "sunsteelstrike", "photongeyser", "earthquake", "knockoff", "autotomize"],
 		randomDoubleBattleMoves: ["swordsdance", "sunsteelstrike", "photongeyser", "earthquake", "knockoff", "rockslide"],
-		eventPokemon: [
-			{"generation": 7, "level": 65, "moves": ["sunsteelstrike"]},
-		],
 		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
 	necrozmadawnwings: {
 		randomBattleMoves: ["calmmind", "moongeistbeam", "photongeyser", "heatwave", "powergem", "trickroom"],
-		eventPokemon: [
-			{"generation": 7, "level": 65, "moves": ["moongeistbeam"]},
-		],
 		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUber",

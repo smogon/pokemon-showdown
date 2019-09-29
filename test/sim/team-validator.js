@@ -107,6 +107,44 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should handle weird things', function () {
+		// Necrozma-DW should use Necrozma's events, plus Moongeist Beam
+		let team = [
+			{species: 'necrozmadawnwings', ability: 'prismarmor', shiny: true, moves: ['moongeistbeam', 'metalclaw'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
+		// Shedinja should be able to take one level-up move from ninjask in gen 3-4
+
+		team = [
+			{species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'swordsdance'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen4ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
+		team = [
+			{species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'batonpass'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen3ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
+		team = [
+			{species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'swordsdance', 'batonpass'], evs: {hp: 1}},
+			{species: 'charmander', ability: 'blaze', moves: ['flareblitz', 'dragondance'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen4ou').validateTeam(team);
+		assert(illegal);
+
+		// Chansey can't have Chansey-only egg moves as well as Happiny-only level-up moves
+
+		team = [
+			{species: 'chansey', ability: 'naturalcure', moves: ['charm', 'seismictoss'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ou').validateTeam(team);
+		assert(illegal);
+	});
+
 	it('should reject illegal egg move combinations', function () {
 		let team = [
 			{species: 'azumarill', ability: 'hugepower', moves: ['bellydrum', 'aquajet'], evs: {hp: 1}},
@@ -149,6 +187,12 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen3ou').validateTeam(team);
 		assert(illegal);
+
+		team = [
+			{species: 'hitmontop', ability: 'intimidate', moves: ["highjumpkick", 'machpunch'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen3ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
 
 		team = [
 			{species: 'snorlax', ability: 'immunity', moves: ['curse', 'pursuit'], evs: {hp: 1}},
