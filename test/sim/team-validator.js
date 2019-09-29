@@ -143,6 +143,14 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen7ou').validateTeam(team);
 		assert(illegal);
+
+		// male-only hidden abilities are incompatible with egg moves in Gen 5
+
+		team = [
+			{species: 'combusken', ability: 'speedboost', moves: ['batonpass'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should reject illegal egg move combinations', function () {

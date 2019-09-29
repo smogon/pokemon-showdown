@@ -558,14 +558,16 @@ export class TeamValidator {
 		}
 		const requiresGen3Source = setSources.maxSourceGen() <= 3;
 		if (requiresGen3Source && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
-			problems.push(`${name} has a gen 4 ability and isn't evolved - it can't use moves from gen 3.`);
+			problems.push(`${name} has a Gen 4 ability and isn't evolved - it can't use moves from Gen 3.`);
 		}
-		if (!setSources.sources && setSources.sourcesBefore < 6 && setSources.sourcesBefore >= 3 &&
-			(setSources.isHidden || dex.gen <= 5) && template.gen <= setSources.sourcesBefore) {
-			const oldAbilities = dex.mod('gen' + setSources.sourcesBefore).getTemplate(set.species).abilities;
-			if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
-				problems.push(`${name} has moves incompatible with its ability.`);
-			}
+		if (setSources.maxSourceGen() < 5 && setSources.isHidden) {
+			problems.push(`${name} has a Hidden Ability - it can't use moves from before Gen 5.`);
+		}
+		if (
+			template.maleOnlyHidden && setSources.sourcesBefore < 5 &&
+			setSources.sources.every(source => source.charAt(1) === 'E')
+		) {
+			problems.push(`${name} has an unbreedable Hidden Ability - it can't use egg moves.`);
 		}
 
 		if (teamHas) {
