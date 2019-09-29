@@ -659,9 +659,15 @@ export class TeamValidator {
 			}
 		}
 
-		const ivHpType = dex.getHiddenPower(set.ivs).type;
-		if (!canBottleCap && set.hpType && set.hpType !== ivHpType) {
-			problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs are for Hidden Power ${ivHpType}.`);
+		if (set.hpType && !canBottleCap) {
+			const ivHpType = dex.getHiddenPower(set.ivs).type;
+			if (set.hpType !== ivHpType) {
+				problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs are for Hidden Power ${ivHpType}.`);
+			}
+		} else if (set.hpType) {
+			if (!this.possibleBottleCapHpType(set.hpType, set.ivs)) {
+				problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs don't allow this even with (Bottle Cap) Hyper Training.`);
+			}
 		}
 
 		if (dex.gen <= 2) {
@@ -752,6 +758,31 @@ export class TeamValidator {
 		}
 
 		return problems;
+	}
+
+	/**
+	 * Not exhaustive, just checks Atk and Spe, which are the only competitively
+	 * relevant IVs outside of extremely obscure situations.
+	 */
+	possibleBottleCapHpType(type: string, ivs: StatsTable) {
+		if (!type) return true;
+		if (['Dark', 'Dragon', 'Grass', 'Ghost', 'Poison'].includes(type)) {
+			// Spe must be odd
+			if (ivs.spe % 2 === 0) return false;
+		}
+		if (['Psychic', 'Fire', 'Rock', 'Fighting'].includes(type)) {
+			// Spe must be even
+			if (ivs.spe !== 31 && ivs.spe % 2 === 1) return false;
+		}
+		if (type === 'Dark') {
+			// Atk must be odd
+			if (ivs.atk % 2 === 0) return false;
+		}
+		if (['Ice', 'Water'].includes(type)) {
+			// Spe or Atk must be odd
+			if (ivs.spe % 2 === 0 && ivs.atk % 2 === 0) return false;
+		}
+		return true;
 	}
 
 	validateSource(
