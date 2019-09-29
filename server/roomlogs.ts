@@ -78,7 +78,6 @@ export class Roomlog {
 		this.roomlogFilename = '';
 
 		this.setupModlogStream();
-		// tslint:disable-next-line: no-floating-promises
 		this.setupRoomlogStream(true);
 	}
 	getScrollback(channel = 0) {
@@ -142,7 +141,6 @@ export class Roomlog {
 			if (this.roomlogStream === null) return;
 		}
 		this.roomlogFilename = relpath;
-		// tslint:disable-next-line: no-floating-promises
 		if (this.roomlogStream) this.roomlogStream.end();
 		this.roomlogStream = FS(basepath + relpath).createAppendStream();
 		// Create a symlink to today's lobby log.
@@ -154,7 +152,6 @@ export class Roomlog {
 			FS(link0).symlinkToSync(relpath); // intentionally a relative link
 			FS(link0).renameSync(basepath + 'today.txt');
 		} catch (e) {} // OS might not support symlinks or atomic rename
-		// tslint:disable-next-line: no-floating-promises
 		if (!Roomlogs.rollLogTimer) Roomlogs.rollLogs();
 	}
 	add(message: string) {

@@ -1102,7 +1102,6 @@ export class CommandContext extends MessageContext {
 
 export const Chat = new class {
 	constructor() {
-		// tslint:disable-next-line: no-floating-promises
 		this.loadTranslations();
 	}
 	multiLinePattern = new PatternTester();
@@ -1395,7 +1394,6 @@ export const Chat = new class {
 	loadPlugins() {
 		if (Chat.commands) return;
 
-		// tslint:disable-next-line: no-floating-promises
 		FS('package.json').readIfExists().then(data => {
 			if (data) Chat.packageData = JSON.parse(data);
 		});

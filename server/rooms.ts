@@ -559,14 +559,12 @@ export class GlobalRoom extends BasicRoom {
 
 	reportUserStats() {
 		if (this.maxUsersDate) {
-			// tslint:disable-next-line: no-floating-promises
 			LoginServer.request('updateuserstats', {
 				date: this.maxUsersDate,
 				users: this.maxUsers,
 			});
 			this.maxUsersDate = 0;
 		}
-		// tslint:disable-next-line: no-floating-promises
 		LoginServer.request('updateuserstats', {
 			date: Date.now(),
 			users: this.userCount,
@@ -844,7 +842,6 @@ export class GlobalRoom extends BasicRoom {
 			if (conn.autojoins) {
 				const autojoins = conn.autojoins.split(',') as RoomID[];
 				for (const roomName of autojoins) {
-					// tslint:disable-next-line: no-floating-promises
 					user.tryJoinRoom(roomName, conn);
 				}
 				conn.autojoins = '';
@@ -1391,7 +1388,6 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.logUserStatsInterval = null;
 
-		// tslint:disable-next-line: no-floating-promises
 		this.log.destroy();
 
 		// get rid of some possibly-circular references

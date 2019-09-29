@@ -1175,21 +1175,18 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
-			// tslint:disable-next-line: no-floating-promises
 			tournament.challenge(user, toID(params[0]), this);
 		},
 		cancelchallenge(tournament, user) {
 			tournament.cancelChallenge(user, this);
 		},
 		acceptchallenge(tournament, user) {
-			// tslint:disable-next-line: no-floating-promises
 			tournament.acceptChallenge(user, this);
 		},
 		vtm(tournament, user, params, cmd, connection) {
 			if (Monitor.countPrepBattle(connection.ip, connection)) {
 				return;
 			}
-			// tslint:disable-next-line: no-floating-promises
 			TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.team).then(result => {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");

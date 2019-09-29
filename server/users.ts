@@ -287,7 +287,6 @@ function setOfflineGroup(name: string, group: string, forceTrusted: boolean) {
 		name = usergroup ? usergroup.substr(1) : name;
 		usergroups[userid] = group + name;
 	}
-	// tslint:disable-next-line:no-floating-promises
 	exportUsergroups();
 	return true;
 }
@@ -1203,7 +1202,6 @@ export class User extends Chat.MessageContext {
 				delete usergroups[this.userid];
 				this.trusted = '';
 			}
-			// tslint:disable-next-line:no-floating-promises
 			exportUsergroups();
 		}
 	}
@@ -1644,13 +1642,11 @@ function socketConnect(
 	}
 	// Emergency mode connections logging
 	if (Config.emergency) {
-		// tslint:disable-next-line:no-floating-promises
 		FS('logs/cons.emergency.log').append('[' + ip + ']\n');
 	}
 
 	const user = new User(connection);
 	connection.user = user;
-	// tslint:disable-next-line: no-floating-promises
 	Punishments.checkIp(user, connection);
 	// Generate 1024-bit challenge string.
 	require('crypto').randomBytes(128, (err: Error | null, buffer: Buffer) => {
@@ -1722,7 +1718,6 @@ function socketReceive(worker: Worker, workerid: number, socketid: string, messa
 	}
 	// Emergency logging
 	if (Config.emergency) {
-		// tslint:disable-next-line:no-floating-promises
 		FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`);
 	}
 

@@ -229,7 +229,6 @@ export const Monitor = {
 		for (const i in this.networkUse) {
 			buf += `${this.networkUse[i]}\t${this.networkCount[i]}\t${i}\n`;
 		}
-		// tslint:disable-next-line: no-floating-promises
 		FS('logs/networkuse.tsv').write(buf);
 	},
 

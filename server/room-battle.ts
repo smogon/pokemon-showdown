@@ -551,7 +551,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.stream.write(`>start ` + JSON.stringify(battleOptions));
 		}
 
-		// tslint:disable-next-line: no-floating-promises
 		this.listen();
 
 		this.addPlayer(options.p1, options.p1team || '', options.p1rating);
@@ -755,7 +754,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.started = true;
 			if (!this.ended) {
 				this.ended = true;
-				// tslint:disable-next-line: no-floating-promises
 				this.onEnd(this.logData!.winner);
 				this.clearPlayers();
 			}
@@ -788,7 +786,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 				this.room.sendUser(winner, '|askreg|' + winner.userid);
 			}
 			const [score, p1rating, p2rating] = await Ladders(this.format).updateRating(p1name, p2name, p1score, this.room);
-			// tslint:disable-next-line: no-floating-promises
 			this.logBattle(score, p1rating, p2rating);
 		} else if (Config.logchallenges) {
 			if (winnerid === p1id) {
@@ -796,7 +793,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 			} else if (winnerid === p2id) {
 				p1score = 0;
 			}
-			// tslint:disable-next-line: no-floating-promises
 			this.logBattle(p1score);
 		} else {
 			this.logData = null;
@@ -1084,7 +1080,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.p4 = null;
 
 		this.ended = true;
-		// tslint:disable-next-line: no-floating-promises
 		this.stream.destroy();
 		if (this.active) {
 			Rooms.global.battleCount += -1;
