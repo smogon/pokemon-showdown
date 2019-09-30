@@ -191,20 +191,20 @@ class Ladder extends LadderStore {
 			connection.popup(`You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.`);
 			return false;
 		}
-		if (Ladder.getChallenging(user.userid)) {
-			connection.popup(`You are already challenging someone. Cancel that challenge before challenging someone else.`);
-			return false;
-		}
+		// if (Ladder.getChallenging(user.userid)) {
+		// 	connection.popup(`You are already challenging someone. Cancel that challenge before challenging someone else.`);
+		// 	return false;
+		// }
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return false;
 		}
-		if (Date.now() < user.lastChallenge + 10 * SECONDS) {
-			// 10 seconds ago, probable misclick
-			connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
-			return false;
-		}
+		// if (Date.now() < user.lastChallenge + 10 * SECONDS) {
+		// 	// 10 seconds ago, probable misclick
+		// 	connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
+		// 	return false;
+		// }
 		const ready = await this.prepBattle(connection);
 		if (!ready) return false;
 		// If our target is already challenging us in the same format,
