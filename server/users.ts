@@ -28,7 +28,7 @@ type StatusType = 'online' | 'busy' | 'idle';
 const PLAYER_SYMBOL = '\u2606';
 const HOST_SYMBOL = '\u2605';
 
-const THROTTLE_DELAY = 600;
+const THROTTLE_DELAY = 0;
 const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 3;
 const THROTTLE_MULTILINE_WARN_STAFF = 6;
