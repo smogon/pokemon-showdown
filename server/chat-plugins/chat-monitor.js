@@ -269,7 +269,7 @@ let loginfilter = function (user) {
 	if (Chat.namefilterwhitelist.has(user.userid)) return;
 	if (typeof forceRenamed === 'number') {
 		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
-		Rooms.global.notifyRooms([/** @type {RoomID} */('staff')], Chat.html`|html|[NameMonitor] Forcerenamed name being reused${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`);
+		Rooms.global.notifyRooms([/** @type {RoomID} */('staff')], Chat.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`);
 	}
 };
 /** @type {NameFilter} */
