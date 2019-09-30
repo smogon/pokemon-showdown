@@ -250,7 +250,7 @@ let BattleStatuses = {
 		onStart() {
 			this.add(`c|+Averardo|ECCOMI`);
 		},
-		onSwitchIn() {
+		onSwitchOut() {
 			this.add(`c|+Averardo|Scillato (PA)`);
 		},
 		onFaint() {
