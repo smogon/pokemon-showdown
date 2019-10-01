@@ -1793,7 +1793,8 @@ let BattleStatuses = {
 			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name}'s next attack will hit multiple times!`);
 		},
 		onPrepareHit(source, target, move) {
-			if (move.category !== 'Status') {
+			// beat up relies on its multihit being the number of valid allies
+			if (move.category !== 'Status' && move.id !== 'beatup') {
 				move.multihit = [2, 5];
 				move.basePower = 25;
 				this.effectData.usedup = true;
