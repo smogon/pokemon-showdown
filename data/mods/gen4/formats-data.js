@@ -56,7 +56,7 @@ let BattleFormatsData = {
 	},
 	beedrill: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "xscissor", "brickbreak", "batonpass", "poisonjab", "uturn", "toxicspikes"],
+		randomBattleMoves: ["swordsdance", "xscissor", "brickbreak", "poisonjab", "uturn", "toxicspikes"],
 		tier: "NU",
 	},
 	pidgey: {
@@ -354,7 +354,7 @@ let BattleFormatsData = {
 	},
 	farfetchd: {
 		inherit: true,
-		randomBattleMoves: ["return", "swordsdance", "slash", "leafblade", "nightslash", "batonpass", "uturn"],
+		randomBattleMoves: ["return", "swordsdance", "slash", "leafblade", "nightslash", "uturn"],
 		tier: "NU",
 	},
 	doduo: {
@@ -413,7 +413,7 @@ let BattleFormatsData = {
 	},
 	hypno: {
 		inherit: true,
-		randomBattleMoves: ["wish", "protect", "psychic", "seismictoss", "thunderwave", "toxic", "batonpass", "calmmind"],
+		randomBattleMoves: ["wish", "protect", "seismictoss", "thunderwave", "toxic"],
 		tier: "NU",
 	},
 	krabby: {
@@ -541,7 +541,7 @@ let BattleFormatsData = {
 	},
 	starmie: {
 		inherit: true,
-		randomBattleMoves: ["surf", "hydropump", "thunderbolt", "icebeam", "rapidspin", "recover", "trick"],
+		randomBattleMoves: ["surf", "hydropump", "thunderbolt", "icebeam", "rapidspin", "recover"],
 		tier: "OU",
 	},
 	mimejr: {
@@ -554,7 +554,7 @@ let BattleFormatsData = {
 	},
 	scyther: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "roost", "bugbite", "quickattack", "brickbreak", "aerialace", "batonpass", "uturn", "pursuit"],
+		randomBattleMoves: ["swordsdance", "roost", "bugbite", "quickattack", "brickbreak", "aerialace", "uturn", "pursuit"],
 		tier: "UU",
 	},
 	scizor: {
@@ -614,7 +614,7 @@ let BattleFormatsData = {
 	},
 	lapras: {
 		inherit: true,
-		randomBattleMoves: ["surf", "hydropump", "icebeam", "thunderbolt", "healbell", "toxic", "dragondance", "substitute", "waterfall", "return", "zenheadbutt"],
+		randomBattleMoves: ["surf", "hydropump", "icebeam", "thunderbolt", "healbell", "toxic"],
 		tier: "NU",
 	},
 	ditto: {
@@ -630,7 +630,7 @@ let BattleFormatsData = {
 		tier: "OU",
 	},
 	jolteon: {
-		randomBattleMoves: ["thunderbolt", "hiddenpowergrass", "hiddenpowerice", "chargebeam", "batonpass", "substitute", "shadowball"],
+		randomBattleMoves: ["thunderbolt", "hiddenpowergrass", "hiddenpowerice", "yawn", "batonpass", "substitute"],
 		tier: "OU",
 	},
 	flareon: {
@@ -721,7 +721,7 @@ let BattleFormatsData = {
 	},
 	mewtwo: {
 		inherit: true,
-		randomBattleMoves: ["psychic", "aurasphere", "fireblast", "icebeam", "calmmind", "trick", "recover", "willowisp", "taunt", "substitute", "selfdestruct"],
+		randomBattleMoves: ["psychic", "aurasphere", "fireblast", "icebeam", "calmmind", "recover", "willowisp", "taunt", "substitute", "selfdestruct"],
 		tier: "Uber",
 	},
 	mew: {
@@ -791,7 +791,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	ariados: {
-		randomBattleMoves: ["protect", "bugbite", "toxicspikes", "poisonjab", "shadowsneak", "suckerpunch"],
+		randomBattleMoves: ["bugbite", "toxicspikes", "poisonjab", "shadowsneak", "suckerpunch"],
 		tier: "NU",
 	},
 	chinchou: {
@@ -817,7 +817,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	xatu: {
-		randomBattleMoves: ["wish", "uturn", "calmmind", "psychic", "heatwave", "grassknot", "hiddenpowerfighting", "batonpass", "trick", "roost"],
+		randomBattleMoves: ["wish", "uturn", "calmmind", "psychic", "heatwave", "grassknot", "hiddenpowerfighting", "trick", "roost"],
 		tier: "NU",
 	},
 	mareep: {
@@ -957,7 +957,7 @@ let BattleFormatsData = {
 	},
 	shuckle: {
 		inherit: true,
-		randomBattleMoves: ["toxic", "encore", "knockoff", "rest", "protect", "stealthrock"],
+		randomBattleMoves: ["toxic", "encore", "knockoff", "rest", "stealthrock"],
 		tier: "NU",
 	},
 	heracross: {
@@ -1015,7 +1015,7 @@ let BattleFormatsData = {
 	},
 	delibird: {
 		inherit: true,
-		randomBattleMoves: ["rapidspin", "iceshard", "icepunch", "aerialace"],
+		randomBattleMoves: ["rapidspin", "iceshard", "icepunch", "aerialace", "seedbomb", "brickbreak"],
 		tier: "NU",
 	},
 	mantyke: {
@@ -1098,7 +1098,7 @@ let BattleFormatsData = {
 	},
 	celebi: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "thunderwave", "leafstorm", "hiddenpowerfire", "psychic", "uturn", "recover", "nastyplot", "energyball", "earthpower", "substitute", "leechseed", "batonpass"],
+		randomBattleMoves: ["stealthrock", "thunderwave", "leafstorm", "hiddenpowerfire", "psychic", "uturn", "recover", "nastyplot", "energyball", "earthpower", "substitute", "leechseed"],
 		tier: "OU",
 	},
 	treecko: {
@@ -1361,7 +1361,7 @@ let BattleFormatsData = {
 		tier: "NU",
 	},
 	roserade: {
-		randomBattleMoves: ["sludgebomb", "hiddenpowerice", "sleeppowder", "leafstorm", "energyball", "spikes", "toxicspikes", "rest", "leechseed", "hiddenpowerfire"],
+		randomBattleMoves: ["leafstorm", "energyball", "sludgebomb", "hiddenpowerice", "hiddenpowerfire", "sleeppowder", "spikes", "toxicspikes", "rest"],
 		tier: "OU",
 	},
 	gulpin: {
@@ -1421,7 +1421,7 @@ let BattleFormatsData = {
 	},
 	flygon: {
 		inherit: true,
-		randomBattleMoves: ["earthquake", "outrage", "dragonclaw", "uturn", "roost", "toxic", "stoneedge", "fireblast", "firepunch"],
+		randomBattleMoves: ["earthquake", "outrage", "dragonclaw", "uturn", "roost", "stoneedge", "fireblast", "firepunch"],
 		tier: "OU",
 	},
 	cacnea: {
@@ -1454,12 +1454,12 @@ let BattleFormatsData = {
 	},
 	lunatone: {
 		inherit: true,
-		randomBattleMoves: ["psychic", "earthpower", "rockpolish", "batonpass", "calmmind", "shadowball", "substitute"],
+		randomBattleMoves: ["psychic", "earthpower", "batonpass", "calmmind", "shadowball", "substitute"],
 		tier: "NU",
 	},
 	solrock: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "explosion", "stoneedge", "zenheadbutt", "earthquake", "batonpass", "rockpolish"],
+		randomBattleMoves: ["stealthrock", "explosion", "stoneedge", "zenheadbutt", "earthquake", "rockpolish"],
 		tier: "NU",
 	},
 	barboach: {
@@ -1643,7 +1643,7 @@ let BattleFormatsData = {
 	},
 	registeel: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "ironhead", "curse", "rest", "sleeptalk", "thunderwave", "toxic", "protect"],
+		randomBattleMoves: ["stealthrock", "ironhead", "curse", "rest", "sleeptalk", "thunderwave", "toxic"],
 		tier: "UU",
 	},
 	latias: {
@@ -1663,7 +1663,7 @@ let BattleFormatsData = {
 	},
 	groudon: {
 		inherit: true,
-		randomBattleMoves: ["earthquake", "stealthrock", "stoneedge", "swordsdance", "rockpolish", "toxic", "overheat"],
+		randomBattleMoves: ["earthquake", "stealthrock", "stoneedge", "swordsdance", "rockpolish", "toxic", "firepunch"],
 		tier: "Uber",
 	},
 	rayquaza: {
@@ -1673,7 +1673,7 @@ let BattleFormatsData = {
 	},
 	jirachi: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "ironhead", "firepunch", "substitute", "bodyslam", "wish", "uturn", "trick", "calmmind", "psychic", "thunderbolt", "icepunch", "flashcannon"],
+		randomBattleMoves: ["stealthrock", "ironhead", "firepunch", "substitute", "bodyslam", "wish", "uturn", "calmmind", "psychic", "thunderbolt", "icepunch", "flashcannon"],
 		tier: "OU",
 	},
 	deoxys: {
@@ -1836,7 +1836,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	drifblim: {
-		randomBattleMoves: ["shadowball", "substitute", "calmmind", "hypnosis", "hiddenpowerfighting", "thunderbolt", "rest", "batonpass"],
+		randomBattleMoves: ["shadowball", "substitute", "calmmind", "hiddenpowerfighting", "thunderbolt", "rest"],
 		tier: "NU",
 	},
 	buneary: {
@@ -2040,7 +2040,7 @@ let BattleFormatsData = {
 		tier: "Uber",
 	},
 	arceusbug: {
-		randomBattleMoves: ["swordsdance", "xscissor", "stoneedge", "earthquake", "recover"],
+		randomBattleMoves: ["calmmind", "judgment", "earthpower", "icebeam", "recover"],
 		eventOnly: true,
 		requiredItem: "Insect Plate",
 	},
@@ -2050,7 +2050,7 @@ let BattleFormatsData = {
 		requiredItem: "Dread Plate",
 	},
 	arceusdragon: {
-		randomBattleMoves: ["swordsdance", "dragonclaw", "earthquake", "recover", "overheat"],
+		randomBattleMoves: ["calmmind", "judgment", "flamethrower", "willowisp", "refresh", "recover"],
 		eventOnly: true,
 		requiredItem: "Draco Plate",
 	},
@@ -2075,7 +2075,7 @@ let BattleFormatsData = {
 		requiredItem: "Sky Plate",
 	},
 	arceusghost: {
-		randomBattleMoves: ["calmmind", "recover", "focusblast", "judgment", "flamethrower", "willowisp", "roar"],
+		randomBattleMoves: ["calmmind", "judgment", "focusblast", "willowisp", "recover"],
 		eventOnly: true,
 		requiredItem: "Spooky Plate",
 	},
@@ -2095,7 +2095,7 @@ let BattleFormatsData = {
 		requiredItem: "Icicle Plate",
 	},
 	arceuspoison: {
-		randomBattleMoves: ["calmmind", "judgment", "earthpower", "recover", "willowisp", "roar"],
+		randomBattleMoves: ["calmmind", "judgment", "earthpower", "willowisp", "recover"],
 		eventOnly: true,
 		requiredItem: "Toxic Plate",
 	},
@@ -2105,12 +2105,12 @@ let BattleFormatsData = {
 		requiredItem: "Mind Plate",
 	},
 	arceusrock: {
-		randomBattleMoves: ["calmmind", "judgment", "earthpower", "willowisp", "recover"],
+		randomBattleMoves: ["calmmind", "judgment", "earthpower", "willowisp", "refresh", "recover"],
 		eventOnly: true,
 		requiredItem: "Stone Plate",
 	},
 	arceussteel: {
-		randomBattleMoves: ["swordsdance", "ironhead", "earthquake", "recover"],
+		randomBattleMoves: ["calmmind", "judgment", "earthpower", "willowisp", "recover"],
 		eventOnly: true,
 		requiredItem: "Iron Plate",
 	},
