@@ -730,7 +730,7 @@ let BattleStatuses = {
 			this.add(`c|+inactive|I'll keep an eye out for you next time...`);
 		},
 		onFaint() {
-			this.add(`c|+inactive|/me turns to stone`);
+			this.add(`c|+inactive|/me turns to stone and crumbles`);
 		},
 	},
 	irritated: {
