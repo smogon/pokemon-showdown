@@ -592,11 +592,11 @@ exports.commands = {
 			if (words.length > 1) {
 				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were added by ${user.name}.)`);
 				this.modlog('BANWORD', null, words.map(w => `'${w}'`).join(', '));
-				this.sendReply(`Banned phrases succesfully added.`);
+				this.sendReply(`Banned phrases successfully added.`);
 			} else {
 				this.privateModAction(`(The banword '${words[0]}' was added by ${user.name}.)`);
 				this.modlog('BANWORD', null, words[0]);
-				this.sendReply(`Banned phrase succesfully added.`);
+				this.sendReply(`Banned phrase successfully added.`);
 			}
 			this.sendReply(`The list is currently: ${room.banwords.join(', ')}`);
 
@@ -627,11 +627,11 @@ exports.commands = {
 			if (words.length > 1) {
 				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.)`);
 				this.modlog('UNBANWORD', null, words.map(w => `'${w}'`).join(', '));
-				this.sendReply(`Banned phrases succesfully deleted.`);
+				this.sendReply(`Banned phrases successfully deleted.`);
 			} else {
 				this.privateModAction(`(The banword '${words[0]}' was removed by ${user.name}.)`);
 				this.modlog('UNBANWORD', null, words[0]);
-				this.sendReply(`Banned phrase succesfully deleted.`);
+				this.sendReply(`Banned phrase successfully deleted.`);
 			}
 			this.sendReply(room.banwords ? `The list is currently: ${room.banwords.join(', ')}` : `The list is now empty.`);
 
