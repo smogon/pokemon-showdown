@@ -2038,7 +2038,7 @@ let BattleMovedex = {
 				if (pokemon.fainted || !pokemon.hp) return;
 				if (this.random(20) === 1) {
 					this.debug('Scripted terrain corrupt');
-					this.add('message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
+					this.add('message', `${pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
 					// generate a movepool
 					let moves = [];
 					let pool = this.shuffle(Object.keys(this.data.Movedex));
@@ -2053,6 +2053,7 @@ let BattleMovedex = {
 						if (moves.length >= 3) break;
 					}
 					moves.push('glitchout');
+					if (toID(pokemon.ability).includes('illusion') && pokemon.illusion) this.singleEvent('End', this.getAbility('Illusion'), pokemon.abilityData, pokemon, pokemon);
 					pokemon.formeChange('missingno');
 					pokemon.moveSlots = [];
 					for (let moveid of moves) {
