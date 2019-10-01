@@ -46,7 +46,7 @@
  * @typedef {Object} MafiaIDEAplayerData
  * @property {string[]} choices
  * @property {string[]} originalChoices
- * @property {Object} picks
+ * @property {{[key: string]: string?}} picks
  */
 
 /** @type {typeof import('../../lib/fs').FS} */
@@ -198,7 +198,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.allowRenames = false;
 		this.started = false;
 		this.ended = false;
-		/** @type {Object?} */
+		/** @type {{[key: string]: string}?} */
 		this.theme = null;
 
 		this.hostid = host.userid;
@@ -1259,10 +1259,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else {
 			selection[1] = '';
 		}
-
-		if (player.IDEA.picks[selection[0]]) {
-			buf += `You have deselected ${player.IDEA.picks[selection[0]]}. `;
-			player.IDEA.choices.push(player.IDEA.picks[selection[0]]);
+		const selected = player.IDEA.picks[selection[0]];
+		if (selected) {
+			buf += `You have deselected ${selected}. `;
+			player.IDEA.choices.push(selected);
 		}
 
 		if (player.IDEA.picks[selection[0]] && !selection[1]) {
@@ -1293,8 +1293,13 @@ class MafiaTracker extends Rooms.RoomGame {
 			for (const choice of this.IDEA.data.picks) {
 				if (!player.IDEA.picks[choice]) {
 					randPicked = true;
-					player.IDEA.picks[choice] = player.IDEA.choices.shift();
-					this.sendUser(player.userid, `You were randomly assigned ${choice}: ${player.IDEA.picks[choice]}`);
+					let randomChoice = player.IDEA.choices.shift();
+					if (randomChoice) {
+						player.IDEA.picks[choice] = randomChoice;
+					} else {
+						throw new Error(`No roles left to randomly assign from IDEA module choices.`);
+					}
+					this.sendUser(player.userid, `You were randomly assigned ${choice}: ${randomChoice}`);
 				}
 				role.push(`${choice}: ${player.IDEA.picks[choice]}`);
 			}
@@ -1302,7 +1307,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			// if there's only one option, it's their role, parse it properly
 			let roleName = '';
 			if (this.IDEA.data.picks.length === 1) {
-				const role = MafiaTracker.parseRole(player.IDEA.picks[this.IDEA.data.picks[0]]);
+				let pick = player.IDEA.picks[this.IDEA.data.picks[0]];
+				if (!pick) throw new Error('Pick not found when parsing role selected in IDEA module.');
+				const role = MafiaTracker.parseRole(pick);
 				player.role = role.role;
 				if (role.problems.length && !this.IDEA.data.untrusted) this.sendRoom(`Problems found when parsing IDEA role ${player.IDEA.picks[this.IDEA.data.picks[0]]}. Please report this to a mod.`);
 			} else {
@@ -1652,20 +1659,21 @@ const pages = {
 			buf += `<p><b>IDEA information:</b><br />`;
 			const IDEA = game.playerTable[user.userid].IDEA;
 			if (!IDEA) return game.sendRoom(`IDEA picking phase but no IDEA object for user: ${user.userid}. Please report this to a mod.`);
-			for (const pick of Object.keys(IDEA.picks)) {
-				buf += `<b>${pick}:</b> `;
-				if (!IDEA.picks[pick]) {
+			for (const key in IDEA.picks) {
+				const pick = IDEA.picks[key];
+				buf += `<b>${key}:</b> `;
+				if (!pick) {
 					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">clear</button>`;
 				} else {
-					buf += `<button class="button" name="send" value="/mafia ideapick ${roomid}, ${pick},">clear</button>`;
+					buf += `<button class="button" name="send" value="/mafia ideakey ${roomid}, ${key},">clear</button>`;
 				}
-				const selectedIndex = IDEA.picks[pick] ? IDEA.originalChoices.indexOf(IDEA.picks[pick]) : -1;
+				const selectedIndex = pick ? IDEA.originalChoices.indexOf(pick) : -1;
 				for (let i = 0; i < IDEA.originalChoices.length; i++) {
 					const choice = IDEA.originalChoices[i];
 					if (i === selectedIndex) {
 						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">${choice}</button>`;
 					} else {
-						buf += `<button class="button" name="send" value="/mafia ideapick ${roomid}, ${pick}, ${toID(choice)}">${choice}</button>`;
+						buf += `<button class="button" name="send" value="/mafia ideapick ${roomid}, ${key}, ${toID(choice)}">${choice}</button>`;
 					}
 				}
 				buf += `<br />`;

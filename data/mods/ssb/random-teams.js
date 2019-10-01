@@ -29,7 +29,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 	}
 
 	/**
-	 * @param {Object} options
+	 * @param {{inBattle?: boolean}} options
 	 */
 	randomStaffBrosTeam(options = {}) {
 		/** @type {PokemonSet[]} */
