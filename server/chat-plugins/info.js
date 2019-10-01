@@ -672,10 +672,10 @@ const commands = {
 					}[move.target] || "Unknown";
 
 					if (move.id === 'snatch' && mod.gen >= 3) {
-						details[`<a href="https://${Config.routes.dex}/moves/snatch">Snatchable Moves</a>`] = '';
+						details[`<a href="https://${Config.routes.dex}/tags/nonsnatchable">Non-Snatchable Moves</a>`] = '';
 					}
 					if (move.id === 'mirrormove') {
-						details[`<a href="https://${Config.routes.dex}/moves/mirrormove">Mirrorable Moves</a>`] = '';
+						details[`<a href="https://${Config.routes.dex}/tags/nonmirror">Non-Mirrorable Moves</a>`] = '';
 					}
 					if (move.isUnreleased) {
 						details["Unreleased in Gen " + mod.gen] = "";
