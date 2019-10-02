@@ -182,7 +182,8 @@ export const IPTools = new class {
 			IPTools.queryDnsbl(ip),
 			IPTools.getHost(ip),
 		]);
-		const shortHost = this.shortenHost(host);
+		// Typescript 3.7.0-beta thinks host can be null because of the use of Promise.all
+		const shortHost = this.shortenHost((host as string));
 		const hostType = this.getHostType(shortHost, ip);
 		return {dnsbl, host, shortHost, hostType};
 	}
@@ -507,8 +508,9 @@ export const IPTools = new class {
 							}
 						});
 					}
+				} else {
+					resolve(hosts[0]);
 				}
-				resolve(hosts[0]);
 			});
 		});
 	}
