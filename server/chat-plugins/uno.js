@@ -322,7 +322,7 @@ class UnoGame extends Rooms.RoomGame {
 	}
 
 	/**
-	 * @return {Promise}
+	 * @return {Promise<void>}
 	 */
 	onAwaitUno() {
 		return new Promise((resolve, reject) => {

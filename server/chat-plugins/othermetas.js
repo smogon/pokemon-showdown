@@ -3,7 +3,7 @@
 
 /**
  * @param {string} stone
- * @return {Object}
+ * @return {Item | false}
  */
 function getMegaStone(stone) {
 	let item = Dex.getItem(stone);
@@ -13,15 +13,21 @@ function getMegaStone(stone) {
 			return {
 				id: move.id,
 				name: move.name,
+				fullname: move.name,
 				megaEvolves: 'Rayquaza',
 				megaStone: 'Rayquaza-Mega',
 				exists: true,
+				// Adding extra values to appease typescript
+				gen: 6,
+				num: -1,
+				effectType: 'Item',
+				sourceEffect: '',
 			};
 		} else {
-			return {exists: false};
+			return false;
 		}
 	}
-	if (!item.megaStone && !item.onPrimal) return {exists: false};
+	if (!item.megaStone && !item.onPrimal) return false;
 	return item;
 }
 
@@ -72,7 +78,7 @@ const commands = {
 		let sep = target.split('@');
 		let stone = getMegaStone(sep[1]);
 		let template = Dex.getTemplate(sep[0]);
-		if (!stone.exists) return this.errorReply(`Error: Mega Stone not found.`);
+		if (!stone) return this.errorReply(`Error: Mega Stone not found.`);
 		if (!template.exists) return this.errorReply(`Error: Pokemon not found.`);
 		if (template.isMega || template.name === 'Necrozma-Ultra') { // Mega Pokemon and Ultra Necrozma cannot be mega evolved
 			this.errorReply(`Warning: You cannot mega evolve Mega Pokemon and Ultra Necrozma in Mix and Mega.`);
@@ -181,7 +187,7 @@ const commands = {
 		let targetid = toID(target);
 		if (!targetid) return this.parse('/help stone');
 		let stone = getMegaStone(targetid);
-		if (!stone.exists) return this.errorReply(`Error: Mega Stone not found.`);
+		if (!stone) return this.errorReply(`Error: Mega Stone not found.`);
 		let banlist = Dex.getFormat('gen7mixandmega').banlist;
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);

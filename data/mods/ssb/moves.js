@@ -1720,8 +1720,8 @@ let BattleMovedex = {
 		basePower: 25,
 		multihit: 3,
 		category: "Physical",
-		desc: "Hits three times. Each hit has a 10% chance to drop the target's Special Defense and a 10% chance to burn. Each hit is always a critical hit. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits.",
-		shortDesc: "Hits thrice; 10% SpD -1; 10% burn; always crits.",
+		desc: "Hits three times. Each hit has a 10% chance to drop the target's Defense and a 10% chance to burn. Each hit is always a critical hit. If one of the hits breaks the target's Substitute, it will take damage for the remaining hits.",
+		shortDesc: "Hits thrice; 10% Def -1; 10% burn; always crits.",
 		id: "stormassaultogs",
 		isNonstandard: "Custom",
 		name: "Storm Assault OGs",
@@ -2038,7 +2038,7 @@ let BattleMovedex = {
 				if (pokemon.fainted || !pokemon.hp) return;
 				if (this.random(20) === 1) {
 					this.debug('Scripted terrain corrupt');
-					this.add('message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
+					this.add('message', `${pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
 					// generate a movepool
 					let moves = [];
 					let pool = this.shuffle(Object.keys(this.data.Movedex));
@@ -2053,6 +2053,7 @@ let BattleMovedex = {
 						if (moves.length >= 3) break;
 					}
 					moves.push('glitchout');
+					if (toID(pokemon.ability).includes('illusion') && pokemon.illusion) this.singleEvent('End', this.getAbility('Illusion'), pokemon.abilityData, pokemon, pokemon);
 					pokemon.formeChange('missingno');
 					pokemon.moveSlots = [];
 					for (let moveid of moves) {
@@ -3306,18 +3307,7 @@ let BattleMovedex = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Toxic", target);
 		},
-		onTryHit(target, source, move) {
-			// hacky way of forcing toxic to effect poison / steel types without corrosion usage
-			if (target.volatiles['substitute'] && !move.infiltrates) return;
-			if (target.hasType('Steel') || target.hasType('Poison')) {
-				if (target.status) return;
-				let status = this.getEffect(move.status);
-				target.status = status.id;
-				target.statusData = {id: status.id, target: target, source: source, stage: 0};
-				this.add('-status', target, target.status);
-				move.status = undefined;
-			}
-		},
+		// Innate corrosive implemented in BattleScripts#setStatus
 		status: 'tox',
 		secondary: null,
 		target: "normal",
@@ -3328,7 +3318,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "The user of this move will use will use Toxic followed by Venoshock and then attempt to use Rest and Sleep Talk.",
+		desc: "The user attempts to use Toxic followed by Venoshock, then Rest and Sleep Talk.",
 		shortDesc: "Toxic -> Venoshock -> Rest -> Sleep Talk.",
 		id: "teabreak",
 		name: "Tea Break",
@@ -3354,7 +3344,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, the weather becomes Acid Rain.  Pokemon that are not Poison-type take damage every turn.  Special Defense of Poison-type pokemon is multiplied by 1.5.  Poison moves ignore Steel immunity and Poison-type Pokemon can be poisoned.",
+		desc: "For 5 turns, the weather becomes Acid Rain. Pokemon that are not Poison-type take damage every turn. Special Defense of Poison-type pokemon is multiplied by 1.5.",
 		shortDesc: "5 turns: +Poison SpD, corrosive damage.",
 		id: "acidrain",
 		name: "Acid Rain",

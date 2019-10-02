@@ -1554,7 +1554,7 @@ export class User extends Chat.MessageContext {
 		return this.trusted === this.id ? `[trusted]`
 			: this.autoconfirmed === this.id ? `[ac]`
 			: this.registered ? `[registered]`
-			: `[unregistered]`;
+			: ``;
 	}
 	destroy() {
 		// deallocate user

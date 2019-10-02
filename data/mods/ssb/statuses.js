@@ -250,7 +250,7 @@ let BattleStatuses = {
 		onStart() {
 			this.add(`c|+Averardo|ECCOMI`);
 		},
-		onSwitchIn() {
+		onSwitchOut() {
 			this.add(`c|+Averardo|Scillato (PA)`);
 		},
 		onFaint() {
@@ -730,7 +730,7 @@ let BattleStatuses = {
 			this.add(`c|+inactive|I'll keep an eye out for you next time...`);
 		},
 		onFaint() {
-			this.add(`c|+inactive|/me turns to stone`);
+			this.add(`c|+inactive|/me turns to stone and crumbles`);
 		},
 	},
 	irritated: {
@@ -1793,7 +1793,8 @@ let BattleStatuses = {
 			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name}'s next attack will hit multiple times!`);
 		},
 		onPrepareHit(source, target, move) {
-			if (move.category !== 'Status') {
+			// beat up relies on its multihit being the number of valid allies
+			if (move.category !== 'Status' && move.id !== 'beatup') {
 				move.multihit = [2, 5];
 				move.basePower = 25;
 				this.effectData.usedup = true;
