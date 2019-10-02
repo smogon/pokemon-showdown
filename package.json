@@ -69,6 +69,6 @@
     "mocha": "^6.1.4",
     "smogon": "0.0.3",
     "tslint": "^5.16.0",
-    "typescript": "^3.5.0"
+    "typescript": "^3.7.0-beta"
   }
 }
