@@ -2726,7 +2726,12 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			let napWeather = this.field.pseudoWeather['naptime'];
 			// Trigger sleep clause if not the original user
-			if (!target.trySetStatus('slp', napWeather.source, move)) return false;
+			if (!(target === napWeather.source)) {
+				for (const ally of target.side.pokemon) {
+					if (ally.status === 'slp') return false;
+				}
+			}
+			if (!target.setStatus('slp', napWeather.source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
 			this.heal(target.maxhp / 2); // Aesthetic only as the healing happens after you fall asleep in-game
