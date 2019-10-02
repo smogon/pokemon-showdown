@@ -1458,8 +1458,7 @@ export class User extends Chat.MessageContext {
 			return false; // but end the loop here
 		}
 
-		let throttleDelay = THROTTLE_DELAY;
-		if (this.group !== ' ') throttleDelay /= 2;
+		const throttleDelay = this.trusted ? THROTTLE_DELAY_TRUSTED : THROTTLE_DELAY;
 
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
@@ -1525,8 +1524,7 @@ export class User extends Chat.MessageContext {
 			// room is expired, do nothing
 		}
 
-		let throttleDelay = THROTTLE_DELAY;
-		if (this.group !== ' ') throttleDelay /= 2;
+		const throttleDelay = this.trusted ? THROTTLE_DELAY_TRUSTED : THROTTLE_DELAY;
 
 		if (this.chatQueue.length) {
 			this.chatQueueTimeout = setTimeout(
