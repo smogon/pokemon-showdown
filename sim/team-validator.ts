@@ -76,7 +76,7 @@ export class PokemonSources {
 	 * which can only be bred from an event Dragonite, making it
 	 * automatically incompatible with every other Dragonite egg move.
 	 */
-	limitedEgg?: (string | 'self')[];
+	limitedEgg?: (ID | 'self')[] | null;
 	isHidden: boolean | null;
 
 	constructor(sourcesBefore = 0, sourcesAfter = 0) {
@@ -84,16 +84,21 @@ export class PokemonSources {
 		this.sourcesBefore = sourcesBefore;
 		this.sourcesAfter = sourcesAfter;
 		this.isHidden = null;
+		this.limitedEgg = undefined;
 	}
 	size() {
 		if (this.sourcesBefore) return Infinity;
 		return this.sources.length;
 	}
-	add(source: PokemonSource) {
+	add(source: PokemonSource, limitedEgg?: ID | 'self') {
 		if (this.sources[this.sources.length - 1] !== source) this.sources.push(source);
+		if (limitedEgg && this.limitedEgg !== null) {
+			this.limitedEgg = [limitedEgg];
+		}
 	}
 	addGen(sourceGen: number) {
 		this.sourcesBefore = Math.max(this.sourcesBefore, sourceGen);
+		this.limitedEgg = null;
 	}
 	minSourceGen() {
 		if (this.sourcesBefore) return this.sourcesAfter || 1;
@@ -151,6 +156,13 @@ export class PokemonSources {
 				this.sourcesBefore = 0;
 			} else {
 				this.restrictedMove = other.restrictedMove;
+			}
+		}
+		if (other.limitedEgg) {
+			if (!this.limitedEgg) {
+				this.limitedEgg = other.limitedEgg;
+			} else {
+				this.limitedEgg.push(...other.limitedEgg);
 			}
 		}
 		if (other.sourcesAfter > this.sourcesAfter) this.sourcesAfter = other.sourcesAfter;
@@ -1515,11 +1527,6 @@ export class TeamValidator {
 		 * (This is everything except in Gen 1 Tradeback)
 		 */
 		const noFutureGen = !ruleTable.has('allowtradeback');
-		/**
-		 * If a move can only be learned from a gen 2-5 egg, we have to check chainbreeding validity
-		 * limitedEgg is false if there are any legal non-egg sources for the move, and true otherwise
-		 */
-		let limitedEgg = null;
 
 		let tradebackEligible = false;
 		while (template && template.species && !alreadyChecked[template.speciesid]) {
@@ -1606,7 +1613,7 @@ export class TeamValidator {
 						} else if ((!template.gender || template.gender === 'F') && learnedGen >= 2) {
 							// available as egg move
 							learned = learnedGen + 'Eany';
-							limitedEgg = false;
+							moveSources.limitedEgg = null;
 							// falls through to E check below
 						} else {
 							// this move is unavailable, skip it
@@ -1626,7 +1633,6 @@ export class TeamValidator {
 						if (learned.charAt(1) === 'R') moveSources.restrictedMove = moveid;
 						limit1 = false;
 						moveSources.addGen(learnedGen);
-						limitedEgg = false;
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
@@ -1634,7 +1640,6 @@ export class TeamValidator {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							moveSources.add(learned);
-							limitedEgg = false;
 							continue;
 						}
 						// it's a past gen; egg moves can only be inherited from the father
@@ -1644,7 +1649,7 @@ export class TeamValidator {
 						if (eggGroups[0] === 'Undiscovered') eggGroups = dex.getTemplate(template.evos[0]).eggGroups;
 						if (eggGroups[0] === 'Undiscovered' || !eggGroups.length) continue;
 						let atLeastOne = false;
-						const fromSelf = (learned.substr(1) === 'Eany');
+						const levelUpEgg = (learned.substr(1) === 'Eany');
 						const eggGroupsSet = new Set(eggGroups);
 						learned = learned.substr(0, 2);
 						// loop through pokemon for possible fathers to inherit the egg move from
@@ -1660,11 +1665,11 @@ export class TeamValidator {
 							if (!father.learnset) continue;
 							// unless it's supposed to be self-breedable, can't inherit from self, prevos, evos, etc
 							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
-							if (!fromSelf && alreadyChecked[father.speciesid]) continue;
-							if (!fromSelf && father.prevo === template.id && template.evos.length === 1) continue;
+							if (!levelUpEgg && alreadyChecked[father.speciesid]) continue;
+							if (!levelUpEgg && father.prevo === template.id && template.evos.length === 1) continue;
 							// father must be able to learn the move
 							const fatherSources = father.learnset[moveid] || father.learnset['sketch'];
-							if (!fromSelf && !fatherSources) continue;
+							if (!levelUpEgg && !fatherSources) continue;
 
 							// must be able to breed with father
 							if (!father.eggGroups.some(eggGroup => eggGroupsSet.has(eggGroup))) continue;
@@ -1683,24 +1688,21 @@ export class TeamValidator {
 							atLeastOne = true;
 							if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 								// can tradeback
-								moveSources.add('1ET' + father.id);
+								moveSources.add('1ET' + father.id, moveid);
 							}
-							moveSources.add(learned + father.id);
-							if (limitedEgg !== false) limitedEgg = true;
+							moveSources.add(learned + father.id, moveid);
 						}
 						if (atLeastOne && noPastGenBreeding) {
 							// gen 6+ doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							moveSources.add(learned);
-							limitedEgg = false;
 							continue;
 						}
 						// chainbreeding with itself
 						// e.g. ExtremeSpeed Dragonite
 						if (!atLeastOne) {
 							if (noPastGenBreeding) continue;
-							moveSources.add(learned + template.id);
-							limitedEgg = 'self';
+							moveSources.add(learned + template.id, 'self');
 						}
 					} else if (learned.charAt(1) === 'S') {
 						// event moves:
@@ -1786,14 +1788,6 @@ export class TeamValidator {
 		setSources.intersectWith(moveSources);
 		if (!setSources.size()) {
 			return {type: 'incompatible'};
-		}
-
-		if (limitedEgg) {
-			// pokemonSources.limitedEgg = [moveid] of egg moves with potential breeding incompatibilities
-			// 'self' is a possible entry (namely, ExtremeSpeed on Dragonite) meaning it's always
-			// incompatible with any other egg move
-			if (!setSources.limitedEgg) setSources.limitedEgg = [];
-			setSources.limitedEgg.push(limitedEgg === true ? moveid : limitedEgg);
 		}
 
 		if (babyOnly) setSources.babyOnly = babyOnly;
