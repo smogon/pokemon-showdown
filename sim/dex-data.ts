@@ -40,6 +40,8 @@ export class Tools {
 	static getId(text: any): ID {
 		if (text && text.id) {
 			text = text.id;
+		} else if (text && text.userid) {
+			text = text.userid;
 		} else if (text && text.roomid) {
 			text = text.roomid;
 		}
