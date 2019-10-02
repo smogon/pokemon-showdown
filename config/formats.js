@@ -220,8 +220,8 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] PU'],
 		banlist: [
-			'PU', 'Carracosta', 'Crabominable', 'Gorebyss', 'Jynx', 'Musharna', 'Raticate-Alola',
-			'Raticate-Alola-Totem', 'Throh', 'Turtonator', 'Type: Null', 'Ursaring', 'Victreebel', 'Zangoose',
+			'PU', 'Carracosta', 'Crabominable', 'Gorebyss', 'Jynx', 'Raticate-Alola',
+			'Raticate-Alola-Totem', 'Throh', 'Turtonator', 'Type: Null', 'Ursaring', 'Victreebel',
 		],
 	},
 	{
