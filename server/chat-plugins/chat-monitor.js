@@ -160,26 +160,6 @@ Chat.registerMonitor('warn', {
 	},
 });
 
-Chat.registerMonitor('wordfilter', {
-	location: 'EVERYWHERE',
-	punishment: 'FILTERTO',
-	label: 'Filtered to a different phrase',
-	condition: 'notStaff',
-	monitor(line, room, user, message, lcMessage, isStaff) {
-		const [regex] = line;
-		if (typeof regex === 'string') throw new Error(`wordfilter filters should not have strings`);
-		let match = regex.exec(message);
-		while (match) {
-			let filtered = line[2] || '';
-			if (match[0] === match[0].toUpperCase()) filtered = filtered.toUpperCase();
-			if (match[0][0] === match[0][0].toUpperCase()) filtered = `${filtered ? filtered[0].toUpperCase() : ''}${filtered.slice(1)}`;
-			message = message.replace(match[0], filtered);
-			match = regex.exec(message);
-		}
-		return message;
-	},
-});
-
 Chat.registerMonitor('evasion', {
 	location: 'EVERYWHERE',
 	punishment: 'EVASION',
@@ -204,6 +184,26 @@ Chat.registerMonitor('evasion', {
 			}
 			return false;
 		}
+	},
+});
+
+Chat.registerMonitor('wordfilter', {
+	location: 'EVERYWHERE',
+	punishment: 'FILTERTO',
+	label: 'Filtered to a different phrase',
+	condition: 'notStaff',
+	monitor(line, room, user, message, lcMessage, isStaff) {
+		const [regex] = line;
+		if (typeof regex === 'string') throw new Error(`wordfilter filters should not have strings`);
+		let match = regex.exec(message);
+		while (match) {
+			let filtered = line[2] || '';
+			if (match[0] === match[0].toUpperCase()) filtered = filtered.toUpperCase();
+			if (match[0][0] === match[0][0].toUpperCase()) filtered = `${filtered ? filtered[0].toUpperCase() : ''}${filtered.slice(1)}`;
+			message = message.replace(match[0], filtered);
+			match = regex.exec(message);
+		}
+		return message;
 	},
 });
 
