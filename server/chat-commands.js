@@ -492,10 +492,10 @@ const commands = {
 				avatarIsValid = true;
 			}
 			const avatarsManual = Config.allowedavatars || {};
-			if (avatarsManual.hasOwnProperty('#' + avatar)) {
+			if (Object.hasOwnProperty.call(avatarsManual, '#' + avatar)) {
 				avatar = '#' + avatar;
 			}
-			if (avatarsManual.hasOwnProperty(avatar)) {
+			if (Object.hasOwnProperty.call(avatarsManual. avatar)) {
 				if (avatarsManual[avatar].includes(user.id)) {
 					avatarIsValid = true;
 				}

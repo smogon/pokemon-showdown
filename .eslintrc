@@ -24,6 +24,7 @@
 		"no-control-regex": "off",
 		"no-empty": ["error", {"allowEmptyCatch": true}],
 		"no-inner-declarations": ["error", "functions"],
+		"require-atomic-updates": "off",
 		"valid-jsdoc": "off",
 
 		"eol-last": ["error", "always"],

@@ -520,7 +520,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			// only regular hunts give host points
 			let hostPoints;
 			if (this.gameType === 'regular') {
-				hostPoints = this.room.hasOwnProperty('hostPoints') ? this.room.hostPoints : DEFAULT_HOST_POINTS;
+				hostPoints = Object.hasOwnProperty.call(this.room, 'hostPoints') ? this.room.hostPoints : DEFAULT_HOST_POINTS;
 			}
 
 			let didSomething = false;
@@ -1434,7 +1434,7 @@ let commands = {
 	sethostpoints(target, room, user) {
 		if (room.roomid !== 'scavengers' && !(room.parent && room.parent.roomid === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false; // perms for viewing only
-		if (!target) return this.sendReply(`The points rewarded for hosting a regular hunt are ${room.hasOwnProperty('hostPoints') ? room.hostPoints : DEFAULT_HOST_POINTS}`);
+		if (!target) return this.sendReply(`The points rewarded for hosting a regular hunt are ${Object.hasOwnProperty.call(room, 'hostPoints') ? room.hostPoints : DEFAULT_HOST_POINTS}`);
 
 		if (!this.can('declare', null, room)) return false; // perms for editting
 		const points = parseInt(target);
