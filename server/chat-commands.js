@@ -2069,9 +2069,10 @@ const commands = {
 		let affected = [];
 
 		if (targetUser) {
-			affected = Punishments.lock(targetUser, duration, targetUser.locked, userReason);
+			const ignoreAlts = Punishments.sharedIps.has(targetUser.latestIP);
+			affected = Punishments.lock(targetUser, duration, targetUser.locked, ignoreAlts, userReason);
 		} else {
-			affected = Punishments.lock(null, duration, userid, userReason);
+			affected = Punishments.lock(null, duration, userid, false, userReason);
 		}
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
@@ -2269,7 +2270,7 @@ const commands = {
 			Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${banMessage}`);
 		}
 
-		let affected = Punishments.ban(targetUser, null, null, userReason);
+		let affected = Punishments.ban(targetUser, null, null, false, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
 		if (affected.length > 1) {
@@ -2781,7 +2782,7 @@ const commands = {
 
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.id}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
-		Punishments.namelock(targetUser, null, null, reason);
+		Punishments.namelock(targetUser, null, null, false, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room.battle) this.parse('/savereplay forpunishment');
