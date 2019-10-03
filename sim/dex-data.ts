@@ -550,8 +550,10 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly baseStats: StatsTable;
 	/** Max HP. Overrides usual HP calculations (for Shedinja). */
 	readonly maxHP?: number;
-	/** Weight (in kg). */
+	/** Weight (in kg). Not valid for OMs; use weighthg / 10 instead. */
 	readonly weightkg: number;
+	/** Weight (in integer multiples of 0.1kg). */
+	readonly weighthg: number;
 	/** Height (in m). */
 	readonly heightm: number;
 	/** Color. */
@@ -643,6 +645,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.requiredItems = this.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
 		this.baseStats = data.baseStats!;
 		this.weightkg = data.weightkg!;
+		this.weighthg = this.weightkg * 10;
 		this.heightm = data.heightm!;
 		this.color = data.color || '';
 		this.unreleasedHidden = !!data.unreleasedHidden;

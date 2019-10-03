@@ -65,6 +65,35 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 90,
 	},
+	autotomize: {
+		inherit: true,
+		volatileStatus: 'autotomize',
+		onHit(pokemon) {
+		},
+		effect: {
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(pokemon) {
+				if (pokemon.template.weighthg > 1) {
+					this.effectData.multiplier = 1;
+					this.add('-start', pokemon, 'Autotomize');
+				}
+			},
+			onRestart(pokemon) {
+				if (pokemon.template.weighthg - (this.effectData.multiplier * 1000) > 1) {
+					this.effectData.multiplier++;
+					this.add('-start', pokemon, 'Autotomize');
+				}
+			},
+			onModifyWeightPriority: 2,
+			onModifyWeight(weighthg, pokemon) {
+				if (this.effectData.multiplier) {
+					weighthg -= this.effectData.multiplier * 1000;
+					if (weighthg < 1) weighthg = 1;
+					return weighthg;
+				}
+			},
+		},
+	},
 	barrier: {
 		inherit: true,
 		pp: 30,

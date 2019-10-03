@@ -1884,8 +1884,8 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onModifyWeight(weight) {
-			return weight / 2;
+		onModifyWeight(weighthg) {
+			return this.trunc(weighthg / 2);
 		},
 		num: 539,
 		gen: 5,

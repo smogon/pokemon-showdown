@@ -515,22 +515,22 @@ const commands = {
 				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, mod.gen, tier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
-					if (pokemon.weightkg >= 200) {
+					if (pokemon.weighthg >= 2000) {
 						weighthit = 120;
-					} else if (pokemon.weightkg >= 100) {
+					} else if (pokemon.weighthg >= 1000) {
 						weighthit = 100;
-					} else if (pokemon.weightkg >= 50) {
+					} else if (pokemon.weighthg >= 500) {
 						weighthit = 80;
-					} else if (pokemon.weightkg >= 25) {
+					} else if (pokemon.weighthg >= 250) {
 						weighthit = 60;
-					} else if (pokemon.weightkg >= 10) {
+					} else if (pokemon.weighthg >= 100) {
 						weighthit = 40;
 					}
 					details = {
 						"Dex#": pokemon.num,
 						"Gen": pokemon.gen || 'CAP',
 						"Height": pokemon.heightm + " m",
-						"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+						"Weight": pokemon.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 					};
 					if (pokemon.color && mod.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && mod.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");

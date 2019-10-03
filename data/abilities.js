@@ -1342,8 +1342,9 @@ let BattleAbilities = {
 	},
 	"heavymetal": {
 		shortDesc: "This Pokemon's weight is doubled.",
-		onModifyWeight(weight) {
-			return weight * 2;
+		onModifyWeightPriority: 1,
+		onModifyWeight(weighthg) {
+			return weighthg * 2;
 		},
 		id: "heavymetal",
 		name: "Heavy Metal",
@@ -1690,8 +1691,8 @@ let BattleAbilities = {
 	},
 	"lightmetal": {
 		shortDesc: "This Pokemon's weight is halved.",
-		onModifyWeight(weight) {
-			return weight / 2;
+		onModifyWeight(weighthg) {
+			return this.trunc(weighthg / 2);
 		},
 		id: "lightmetal",
 		name: "Light Metal",

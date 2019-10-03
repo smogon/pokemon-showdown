@@ -192,6 +192,7 @@ export class Pokemon {
 	isStarted: boolean;
 	duringMove: boolean;
 
+	weighthg: number;
 	speed: number;
 	abilityOrder: number;
 
@@ -356,6 +357,7 @@ export class Pokemon {
 		this.isStarted = false;
 		this.duringMove = false;
 
+		this.weighthg = 1;
 		this.speed = 0;
 		this.abilityOrder = 0;
 
@@ -516,8 +518,8 @@ export class Pokemon {
 	*/
 
 	getWeight() {
-		const weight = this.battle.runEvent('ModifyWeight', this, null, null, this.template.weightkg);
-		return (weight < 0.1) ? 0.1 : weight;
+		const weighthg = this.battle.runEvent('ModifyWeight', this, null, null, this.weighthg);
+		return Math.max(1, weighthg);
 	}
 
 	getMoveData(move: string | Move) {
@@ -966,7 +968,7 @@ export class Pokemon {
 		this.apparentType = rawTemplate.types.join('/');
 		this.addedType = template.addedType || '';
 		this.knownType = true;
-		if (this.battle.gen >= 7) this.removeVolatile('autotomize');
+		this.weighthg = template.weighthg;
 
 		const stats = this.battle.spreadModify(this.template.baseStats, this.set);
 		if (!this.baseStoredStats) this.baseStoredStats = stats;

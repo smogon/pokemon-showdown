@@ -694,7 +694,7 @@ function runDexsearch(target, cmd, canAll, message) {
 						monStat += dex[mon].baseStats[monStats];
 					}
 				} else if (stat === 'weight') {
-					monStat = dex[mon].weightkg;
+					monStat = dex[mon].weighthg / 10;
 				} else if (stat === 'height') {
 					monStat = dex[mon].heightm;
 				} else if (stat === 'gen') {
@@ -761,8 +761,8 @@ function runDexsearch(target, cmd, canAll, message) {
 						monStat2 += mon2.baseStats[monStats];
 					}
 				} else if (stat === 'weight') {
-					monStat1 = mon1.weightkg;
-					monStat2 = mon2.weightkg;
+					monStat1 = mon1.weighthg;
+					monStat2 = mon2.weighthg;
 				} else if (stat === 'height') {
 					monStat1 = mon1.heightm;
 					monStat2 = mon2.heightm;

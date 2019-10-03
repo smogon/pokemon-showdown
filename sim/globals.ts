@@ -257,7 +257,7 @@ interface EventMethods {
 	onModifySpA?: CommonHandlers['ModifierSourceMove']
 	onModifySpD?: CommonHandlers['ModifierMove']
 	onModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onMoveAborted?: CommonHandlers['VoidMove']
 	onNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
@@ -340,7 +340,7 @@ interface EventMethods {
 	onAllyModifySpA?: CommonHandlers['ModifierSourceMove']
 	onAllyModifySpD?: CommonHandlers['ModifierMove']
 	onAllyModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onAllyModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onAllyModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onAllyMoveAborted?: CommonHandlers['VoidMove']
 	onAllyNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onAllyOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
@@ -423,7 +423,7 @@ interface EventMethods {
 	onFoeModifySpA?: CommonHandlers['ModifierSourceMove']
 	onFoeModifySpD?: CommonHandlers['ModifierMove']
 	onFoeModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onFoeModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onFoeModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onFoeMoveAborted?: CommonHandlers['VoidMove']
 	onFoeNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onFoeOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
@@ -506,7 +506,7 @@ interface EventMethods {
 	onSourceModifySpA?: CommonHandlers['ModifierSourceMove']
 	onSourceModifySpD?: CommonHandlers['ModifierMove']
 	onSourceModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onSourceModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onSourceModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onSourceMoveAborted?: CommonHandlers['VoidMove']
 	onSourceNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onSourceOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
@@ -589,7 +589,7 @@ interface EventMethods {
 	onAnyModifySpA?: CommonHandlers['ModifierSourceMove']
 	onAnyModifySpD?: CommonHandlers['ModifierMove']
 	onAnyModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onAnyModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onAnyModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onAnyMoveAborted?: CommonHandlers['VoidMove']
 	onAnyNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onAnyOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void

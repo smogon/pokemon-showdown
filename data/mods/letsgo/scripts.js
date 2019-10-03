@@ -56,11 +56,10 @@ let BattleScripts = {
 
 	pokemon: {
 		getWeight() {
-			let weight = this.template.weightkg;
-			weight = this.battle.runEvent('ModifyWeight', this, null, null, weight);
-			if (weight < 0.1) weight = 0.1;
+			let weighthg = this.battle.runEvent('ModifyWeight', this, null, null, this.weighthg);
+			if (weighthg < 1) weighthg = 1;
 			let weightModifierFinal = 20 * Math.random() * 0.01;
-			return weight + (weight * (this.battle.random(2) === 1 ? 1 : -1) * weightModifierFinal);
+			return weighthg + (weighthg * (this.battle.random(2) === 1 ? 1 : -1) * weightModifierFinal);
 		},
 	},
 };

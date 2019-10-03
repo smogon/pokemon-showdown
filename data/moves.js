@@ -896,29 +896,11 @@ let BattleMovedex = {
 		boosts: {
 			spe: 2,
 		},
-		volatileStatus: 'autotomize',
-		effect: {
-			noCopy: true, // doesn't get copied by Baton Pass
-			onStart(pokemon) {
-				if (pokemon.template.weightkg > 0.1) {
-					this.effectData.multiplier = 1;
-					this.add('-start', pokemon, 'Autotomize');
-				}
-			},
-			onRestart(pokemon) {
-				if (pokemon.template.weightkg - (this.effectData.multiplier * 100) > 0.1) {
-					this.effectData.multiplier++;
-					this.add('-start', pokemon, 'Autotomize');
-				}
-			},
-			onModifyWeightPriority: 1,
-			onModifyWeight(weight, pokemon) {
-				if (this.effectData.multiplier) {
-					weight -= this.effectData.multiplier * 100;
-					if (weight < 0.1) weight = 0.1;
-					return weight;
-				}
-			},
+		onHit(pokemon) {
+			if (pokemon.weighthg > 1) {
+				pokemon.weighthg = Math.max(1, pokemon.weighthg - 1000);
+				this.add('-start', pokemon, 'Autotomize');
+			}
 		},
 		secondary: null,
 		target: "self",
@@ -6539,23 +6521,23 @@ let BattleMovedex = {
 		basePower: 0,
 		basePowerCallback(pokemon, target) {
 			let targetWeight = target.getWeight();
-			if (targetWeight >= 200) {
+			if (targetWeight >= 2000) {
 				this.debug('120 bp');
 				return 120;
 			}
-			if (targetWeight >= 100) {
+			if (targetWeight >= 1000) {
 				this.debug('100 bp');
 				return 100;
 			}
-			if (targetWeight >= 50) {
+			if (targetWeight >= 500) {
 				this.debug('80 bp');
 				return 80;
 			}
-			if (targetWeight >= 25) {
+			if (targetWeight >= 250) {
 				this.debug('60 bp');
 				return 60;
 			}
-			if (targetWeight >= 10) {
+			if (targetWeight >= 100) {
 				this.debug('40 bp');
 				return 40;
 			}
@@ -9521,19 +9503,19 @@ let BattleMovedex = {
 		basePower: 0,
 		basePowerCallback(pokemon, target) {
 			let targetWeight = target.getWeight();
-			if (targetWeight >= 200) {
+			if (targetWeight >= 2000) {
 				return 120;
 			}
-			if (targetWeight >= 100) {
+			if (targetWeight >= 1000) {
 				return 100;
 			}
-			if (targetWeight >= 50) {
+			if (targetWeight >= 500) {
 				return 80;
 			}
-			if (targetWeight >= 25) {
+			if (targetWeight >= 250) {
 				return 60;
 			}
-			if (targetWeight >= 10) {
+			if (targetWeight >= 100) {
 				return 40;
 			}
 			return 20;
@@ -15248,7 +15230,7 @@ let BattleMovedex = {
 				if (target.volatiles['substitute'] || target.side === source.side) {
 					return false;
 				}
-				if (target.getWeight() >= 200) {
+				if (target.getWeight() >= 2000) {
 					this.add('-fail', target, 'move: Sky Drop', '[heavy]');
 					return null;
 				}
