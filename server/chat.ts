@@ -227,12 +227,12 @@ export class PageContext extends MessageContext {
 		}
 
 		this.room = room;
-		return room.id;
+		return room.roomid;
 	}
 
 	send(content: string) {
 		if (!content.startsWith('|deinit')) {
-			const roomid = this.room !== Rooms.global ? `[${this.room.id}] ` : '';
+			const roomid = this.room !== Rooms.global ? `[${this.room.roomid}] ` : '';
 			if (!this.initialized) {
 				content = `|init|html\n|title|${roomid}${this.title}\n|pagehtml|${content}`;
 				this.initialized = true;
@@ -338,7 +338,7 @@ export class CommandContext extends MessageContext {
 				if (this.room === Rooms.global) {
 					return this.popupReply(`You tried use "${message}" as a global command, but it is not a global command.`);
 				} else if (this.room) {
-					return this.popupReply(`You tried to send "${message}" to the room "${this.room.id}" but it failed because you were not in that room.`);
+					return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
 				}
 				return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" is unavailable in private messages. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
 			}
@@ -368,7 +368,7 @@ export class CommandContext extends MessageContext {
 			if (this.pmTarget) {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
-				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
+				this.room.add(`|c|${this.user.getIdentity(this.room.roomid)}|${message}`);
 				if (this.room && this.room.game && this.room.game.onLogMessage) {
 					this.room.game.onLogMessage(message, this.user);
 				}
@@ -482,7 +482,7 @@ export class CommandContext extends MessageContext {
 		const requireGlobalCommand = (
 			this.pmTarget ||
 			this.room === Rooms.global ||
-			(this.room && !(this.user.userid in this.room.users))
+			(this.room && !(this.user.id in this.room.users))
 		);
 
 		if (typeof commandHandler === 'function' && requireGlobalCommand) {
@@ -504,7 +504,7 @@ export class CommandContext extends MessageContext {
 		} catch (err) {
 			Monitor.crashlog(err, 'A chat command', {
 				user: this.user.name,
-				room: this.room && this.room.id,
+				room: this.room && this.room.roomid,
 				pmTarget: this.pmTarget && this.pmTarget.name,
 				message: this.message,
 			});
@@ -649,7 +649,7 @@ export class CommandContext extends MessageContext {
 		this.roomlog(msg);
 	}
 	globalModlog(action: string, user: string | User | null, note: string) {
-		let buf = `(${this.room.id}) ${action}: `;
+		let buf = `(${this.room.roomid}) ${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
 				buf += `[${user}]`;
@@ -673,7 +673,7 @@ export class CommandContext extends MessageContext {
 		note: string | null = null,
 		options: Partial<{noalts: any, noip: any}> = {}
 	) {
-		let buf = `(${this.room.id}) ${action}: `;
+		let buf = `(${this.room.roomid}) ${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
 				buf += `[${toID(user)}]`;
@@ -688,7 +688,7 @@ export class CommandContext extends MessageContext {
 				if (!options.noip) buf += ` [${user.latestIp}]`;
 			}
 		}
-		buf += ` by ${this.user.userid}`;
+		buf += ` by ${this.user.id}`;
 		if (note) buf += `: ${note.replace(/\n/gm, ' ')}`;
 
 		this.room.modlog(buf);
@@ -710,7 +710,7 @@ export class CommandContext extends MessageContext {
 		if (this.room) this.room.update();
 	}
 	filter(message: string, targetUser: User | null = null) {
-		if (!this.room || this.room.id === 'global') return null;
+		if (!this.room || this.room.roomid === 'global') return null;
 		return Chat.filter(this, message, this.user, this.room as GameRoom | ChatRoom, this.connection, targetUser);
 	}
 	statusfilter(status: string) {
@@ -768,7 +768,7 @@ export class CommandContext extends MessageContext {
 		if (this.pmTarget) {
 			this.sendReply('|c~|' + (suppressMessage || this.message));
 		} else {
-			this.sendReply('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
+			this.sendReply('|c|' + this.user.getIdentity(this.room.roomid) + '|' + (suppressMessage || this.message));
 		}
 		if (!ignoreCooldown && !this.pmTarget) {
 			this.room.lastBroadcast = this.broadcastMessage;
@@ -784,7 +784,7 @@ export class CommandContext extends MessageContext {
 		if (targetUser) {
 			room = null;
 		} else if (!room) {
-			if (this.room.id === 'global') {
+			if (this.room.roomid === 'global') {
 				this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
 				return false;
 			}
@@ -824,7 +824,7 @@ export class CommandContext extends MessageContext {
 					this.errorReply(this.tr `Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`);
 					return false;
 				}
-				if (!(user.userid in room.users)) {
+				if (!(user.id in room.users)) {
 					connection.popup(`You can't send a message to this room without being in it.`);
 					return false;
 				}
@@ -857,7 +857,8 @@ export class CommandContext extends MessageContext {
 						return this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
 					}
 				}
-				if (user.blockPMs && (user.blockPMs === true || !targetUser.authAtLeast(user.blockPMs)) && !targetUser.can('lock')) {
+				if (user.blockPMs && (user.blockPMs === true
+					|| !targetUser.authAtLeast(user.blockPMs)) && !targetUser.can('lock')) {
 					return this.errorReply(`You are blocking private messages right now.`);
 				}
 			}
@@ -934,7 +935,7 @@ export class CommandContext extends MessageContext {
 
 		if (room) {
 			const normalized = message.trim();
-			if (!user.can('bypassall') && (room.id === 'lobby' || room.id === 'help') && (normalized === user.lastMessage) &&
+			if (!user.can('bypassall') && (['help', 'lobby'].includes(room.roomid)) && (normalized === user.lastMessage) &&
 					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
 				this.errorReply(this.tr("You can't send the same message again so soon."));
 				return false;
@@ -946,7 +947,9 @@ export class CommandContext extends MessageContext {
 		if (room && room.highTraffic &&
 			toID(message).replace(/[^a-z]+/, '').length < 2
 			&& !user.can('broadcast', null, room)) {
-			this.errorReply(this.tr('Due to this room being a high traffic room, your message must contain at least two letters.'));
+			this.errorReply(
+				this.tr('Due to this room being a high traffic room, your message must contain at least two letters.')
+			);
 			return false;
 		}
 
@@ -1352,8 +1355,8 @@ export const Chat = new class {
 		if (onlyRecipient) return onlyRecipient.send(buf);
 		user.send(buf);
 		if (pmTarget !== user) pmTarget.send(buf);
-		pmTarget.lastPM = user.userid;
-		user.lastPM = pmTarget.userid;
+		pmTarget.lastPM = user.id;
+		user.lastPM = pmTarget.id;
 	}
 
 	packageData = {};

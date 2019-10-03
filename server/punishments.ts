@@ -490,7 +490,7 @@ export const Punishments = new class {
 	}
 
 	roomPunish(room: Room | RoomID, user: User, punishment: Punishment) {
-		const roomid = typeof room !== 'string' ? (room as Room).id : room;
+		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		const userids = new Set<ID>();
 		const ips = new Set<string>();
 		const affected = user.getAltUsers(PUNISH_TRUSTED, true);
@@ -522,8 +522,8 @@ export const Punishments = new class {
 			Punishments.roomIps.nestedSet(roomid, ip, punishment);
 			ips.add(ip);
 		}
-		if (!user.userid.startsWith('guest')) {
-			Punishments.roomUserids.nestedSet(roomid, user.userid, punishment);
+		if (!user.id.startsWith('guest')) {
+			Punishments.roomUserids.nestedSet(roomid, user.id, punishment);
 		}
 		if (user.autoconfirmed) {
 			Punishments.roomUserids.nestedSet(roomid, user.autoconfirmed, punishment);
@@ -547,10 +547,10 @@ export const Punishments = new class {
 			}
 		}
 		for (const id of userids) {
-			Punishments.roomUserids.nestedSet(room.id, id, punishment);
+			Punishments.roomUserids.nestedSet(room.roomid, id, punishment);
 		}
 		for (const ip of ips) {
-			Punishments.roomIps.nestedSet(room.id, ip, punishment);
+			Punishments.roomIps.nestedSet(room.roomid, ip, punishment);
 		}
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		const affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
@@ -562,7 +562,7 @@ export const Punishments = new class {
 			expireTime,
 			reason,
 			rest,
-		}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
+		}, room.roomid + ':' + id, ROOM_PUNISHMENT_FILE);
 
 		if (!(room.isPrivate === true || room.isPersonal || room.battle)) Punishments.monitorRoomPunishments(userid);
 		return affected;
@@ -572,7 +572,7 @@ export const Punishments = new class {
 	 * @param ignoreWrite skip persistent storage
 	 */
 	roomUnpunish(room: Room | RoomID, id: string, punishType: string, ignoreWrite = false) {
-		const roomid = typeof room !== 'string' ? (room as Room).id : room;
+		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		id = toID(id);
 		const punishment = Punishments.roomUserids.nestedGet(roomid, id);
 		if (punishment) {
@@ -681,7 +681,7 @@ export const Punishments = new class {
 		if (roomauth.length) Monitor.log(`[CrisisMonitor] Autolocked ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
-		const roomid = typeof room !== 'string' ? (room as Room).id : room;
+		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		Rooms.global.modlog(`(${roomid}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
 	}
 	unlock(name: string) {
@@ -775,7 +775,7 @@ export const Punishments = new class {
 				if ((game as Tournament).isTournamentStarted) {
 					(game as Tournament).disqualifyUser(id, null, null);
 				} else if (!(game as Tournament).isTournamentStarted) {
-					(game as Tournament).removeUser(user.userid);
+					(game as Tournament).removeUser(user.id);
 				}
 			}
 		}
@@ -793,7 +793,7 @@ export const Punishments = new class {
 	isBattleBanned(user: User) {
 		if (!user) throw new Error(`Trying to check if a non-existent user is battlebanned.`);
 
-		let punishment = Punishments.roomUserids.nestedGet("battle" as RoomID, user.userid);
+		let punishment = Punishments.roomUserids.nestedGet("battle" as RoomID, user.id);
 		if (punishment && punishment[0] === 'BATTLEBAN') return punishment;
 
 		if (user.autoconfirmed) {
@@ -830,7 +830,7 @@ export const Punishments = new class {
 			if (room.game && room.game.removeBannedUser) {
 				room.game.removeBannedUser(curUser);
 			}
-			curUser.leaveRoom(room.id);
+			curUser.leaveRoom(room.roomid);
 		}
 
 		if (room.subRooms) {
@@ -839,7 +839,7 @@ export const Punishments = new class {
 					if (subRoom.game && subRoom.game.removeBannedUser) {
 						subRoom.game.removeBannedUser(curUser);
 					}
-					curUser.leaveRoom(subRoom.id);
+					curUser.leaveRoom(subRoom.roomid);
 				}
 			}
 		}
@@ -856,7 +856,7 @@ export const Punishments = new class {
 
 		let affected: User[] = [];
 
-		if (!user || userId && userId !== user.userid) {
+		if (!user || userId && userId !== user.id) {
 			affected = Punishments.roomPunishName(room, userId, punishment);
 		}
 
@@ -868,7 +868,7 @@ export const Punishments = new class {
 			if (room.game && room.game.removeBannedUser) {
 				room.game.removeBannedUser(curUser);
 			}
-			curUser.leaveRoom(room.id);
+			curUser.leaveRoom(room.roomid);
 		}
 
 		if (room.subRooms) {
@@ -877,7 +877,7 @@ export const Punishments = new class {
 					if (subRoom.game && subRoom.game.removeBannedUser) {
 						subRoom.game.removeBannedUser(curUser);
 					}
-					curUser.leaveRoom(subRoom.id);
+					curUser.leaveRoom(subRoom.roomid);
 				}
 			}
 		}
@@ -888,7 +888,7 @@ export const Punishments = new class {
 	roomUnban(room: Room, userid: string) {
 		const user = Users.get(userid);
 		if (user) {
-			const punishment = Punishments.isRoomBanned(user, room.id);
+			const punishment = Punishments.isRoomBanned(user, room.roomid);
 			if (punishment) userid = punishment[1];
 		}
 		return Punishments.roomUnpunish(room, userid, 'ROOMBAN');
@@ -900,14 +900,14 @@ export const Punishments = new class {
 	roomUnblacklist(room: Room, userid: string, ignoreWrite: boolean) {
 		const user = Users.get(userid);
 		if (user) {
-			const punishment = Punishments.isRoomBanned(user, room.id);
+			const punishment = Punishments.isRoomBanned(user, room.roomid);
 			if (punishment) userid = punishment[1];
 		}
 		return Punishments.roomUnpunish(room, userid, 'BLACKLIST', ignoreWrite);
 	}
 
 	roomUnblacklistAll(room: Room) {
-		const roombans = Punishments.roomUserids.get(room.id);
+		const roombans = Punishments.roomUserids.get(room.roomid);
 		if (!roombans) return false;
 
 		const unblacklisted: string[] = [];
@@ -929,7 +929,7 @@ export const Punishments = new class {
 		Punishments.appendSharedIp(ip, note);
 
 		for (const user of Users.users.values()) {
-			if (user.locked && user.locked !== user.userid && ip in user.ips) {
+			if (user.locked && user.locked !== user.id && ip in user.ips) {
 				if (!user.autoconfirmed) {
 					user.semilocked = `#sharedip ${user.locked}`;
 				}
@@ -1002,11 +1002,11 @@ export const Punishments = new class {
 	}
 
 	getRoomPunishType(room: Room, name: string) {
-		let punishment = Punishments.roomUserids.nestedGet(room.id, toID(name));
+		let punishment = Punishments.roomUserids.nestedGet(room.roomid, toID(name));
 		if (punishment) return punishment[0];
 		const user = Users.get(name);
 		if (!user) return;
-		punishment = Punishments.roomIps.nestedGet(room.id, user.latestIp);
+		punishment = Punishments.roomIps.nestedGet(room.roomid, user.latestIp);
 		if (punishment) return punishment[0];
 		return '';
 	}
@@ -1069,7 +1069,7 @@ export const Punishments = new class {
 			: '';
 
 		if (battleban) {
-			if (battleban[1] !== user.userid && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
+			if (battleban[1] !== user.id && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
 				Punishments.roomUnpunish("battle" as RoomID, userid, 'BATTLEBAN');
 			} else {
 				Punishments.roomPunish("battle" as RoomID, user, battleban);
@@ -1200,7 +1200,7 @@ export const Punishments = new class {
 	}
 
 	checkNameInRoom(user: User, roomid: RoomID): boolean {
-		let punishment = Punishments.roomUserids.nestedGet(roomid, user.userid);
+		let punishment = Punishments.roomUserids.nestedGet(roomid, user.id);
 		if (!punishment && user.autoconfirmed) {
 			punishment = Punishments.roomUserids.nestedGet(roomid, user.autoconfirmed);
 		}
@@ -1209,7 +1209,7 @@ export const Punishments = new class {
 		}
 		const room = Rooms.get(roomid);
 		if (room.parent) {
-			return Punishments.checkNameInRoom(user, room.parent.id);
+			return Punishments.checkNameInRoom(user, room.parent.roomid);
 		}
 		return false;
 	}
@@ -1222,7 +1222,7 @@ export const Punishments = new class {
 		if (!punishment) {
 			const room = Rooms.get(roomid);
 			if (room.parent) {
-				punishment = Punishments.checkNewNameInRoom(user, userid, room.parent.id);
+				punishment = Punishments.checkNewNameInRoom(user, userid, room.parent.roomid);
 			}
 		}
 		if (punishment) {
@@ -1231,7 +1231,7 @@ export const Punishments = new class {
 			if (room.game && room.game.removeBannedUser) {
 				room.game.removeBannedUser(user);
 			}
-			user.leaveRoom(room.id);
+			user.leaveRoom(room.roomid);
 			return punishment;
 		}
 		return null;
@@ -1264,7 +1264,7 @@ export const Punishments = new class {
 	isRoomBanned(user: User, roomid: RoomID): Punishment | undefined {
 		if (!user) throw new Error(`Trying to check if a non-existent user is room banned.`);
 
-		let punishment = Punishments.roomUserids.nestedGet(roomid, user.userid);
+		let punishment = Punishments.roomUserids.nestedGet(roomid, user.id);
 		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment;
 
 		if (user.autoconfirmed) {
@@ -1288,7 +1288,7 @@ export const Punishments = new class {
 		const room = Rooms.get(roomid);
 		if (!room) throw new Error(`Trying to ban a user from a nonexistent room: ${roomid}`);
 
-		if (room.parent) return Punishments.isRoomBanned(user, room.parent.id);
+		if (room.parent) return Punishments.isRoomBanned(user, room.parent.roomid);
 	}
 
 	/**
@@ -1309,14 +1309,14 @@ export const Punishments = new class {
 				|| curRoom.isPrivate === true
 				|| (options.publicOnly
 					&& (curRoom.isPersonal || curRoom.battle))) continue;
-			let punishment = Punishments.roomUserids.nestedGet(curRoom.id, userid);
+			let punishment = Punishments.roomUserids.nestedGet(curRoom.roomid, userid);
 			if (punishment) {
 				punishments.push([curRoom, punishment]);
 				continue;
 			} else if (options && options.checkIps) {
 				if (typeof user !== 'string') {
 					for (const ip in user.ips) {
-						punishment = Punishments.roomIps.nestedGet(curRoom.id, ip);
+						punishment = Punishments.roomIps.nestedGet(curRoom.roomid, ip);
 						if (punishment) {
 							punishments.push([curRoom, punishment]);
 							continue;

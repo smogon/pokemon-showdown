@@ -44,7 +44,7 @@ class RoomSettings {
 				modchatOutput.push(this.button(rank, true));
 			} else if (rank) {
 				let rankIndex = RANKS.indexOf(rank);
-				let roomAuth = (this.room.auth && this.room.auth[this.user.userid] ? this.room.auth[this.user.userid] : false);
+				let roomAuth = (this.room.auth && this.room.auth[this.user.id] ? this.room.auth[this.user.id] : false);
 				let roomAuthIndex = (roomAuth ? RANKS.indexOf(roomAuth) : false);
 				if (rankIndex > 1 && !this.user.can('modchatall', null, this.room)) continue;
 				if (roomAuth && !this.user.can('bypassall')) {
@@ -647,7 +647,7 @@ exports.commands = {
 
 			if (!room.banwords) return this.sendReply("This room has no banned phrases.");
 
-			return this.sendReply(`Banned phrases in room ${room.id}: ${room.banwords.join(', ')}`);
+			return this.sendReply(`Banned phrases in room ${room.roomid}: ${room.banwords.join(', ')}`);
 		},
 
 		""(target, room, user) {

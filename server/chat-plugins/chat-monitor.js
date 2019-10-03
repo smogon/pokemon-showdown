@@ -59,7 +59,7 @@ Chat.registerMonitor('autolock', {
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
-				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${word}`, `<${room.id}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
+				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
 			} else {
 				this.errorReply(`Please do not say '${word.replace(/\\b/g, '')}'.`);
 			}
@@ -189,7 +189,7 @@ let chatfilter = function (message, user, room) {
 	let lcMessage = message.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
-	const isStaffRoom = room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'));
+	const isStaffRoom = room && ((room.chatRoomData && room.roomid.endsWith('staff')) || room.roomid.startsWith('help-'));
 	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
 
 	for (const list in Chat.monitors) {
@@ -261,12 +261,12 @@ let namefilter = function (name, user) {
 let loginfilter = function (user) {
 	if (user.namelocked) return;
 
-	const forceRenamed = Chat.forceRenames.get(user.userid);
+	const forceRenamed = Chat.forceRenames.get(user.id);
 	if (user.trackRename) {
 		Rooms.global.notifyRooms([/** @type {RoomID} */('staff')], `|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${forceRenamed ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`);
 		user.trackRename = '';
 	}
-	if (Chat.namefilterwhitelist.has(user.userid)) return;
+	if (Chat.namefilterwhitelist.has(user.id)) return;
 	if (typeof forceRenamed === 'number') {
 		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
 		Rooms.global.notifyRooms([/** @type {RoomID} */('staff')], Chat.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`);

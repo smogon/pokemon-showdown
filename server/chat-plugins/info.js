@@ -23,7 +23,7 @@ const commands = {
 	alts: 'whois',
 	whoare: 'whois',
 	whois(target, room, user, connection, cmd) {
-		if (room && room.id === 'staff' && !this.runBroadcast()) return;
+		if (room && room.roomid === 'staff' && !this.runBroadcast()) return;
 		if (!room) room = Rooms.global;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
@@ -37,14 +37,14 @@ const commands = {
 
 		let buf = Chat.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
 		const ac = targetUser.autoconfirmed;
-		if (ac && showAll) buf += ` <small style="color:gray">(ac${targetUser.userid === ac ? `` : `: <span class="username">${ac}</span>`})</small>`;
+		if (ac && showAll) buf += ` <small style="color:gray">(ac${targetUser.id === ac ? `` : `: <span class="username">${ac}</span>`})</small>`;
 		const trusted = targetUser.trusted;
 		if (trusted && showAll) {
-			buf += ` <small style="color:gray">(trusted${targetUser.userid === trusted ? `` : `: <span class="username">${trusted}</span>`})</small>`;
+			buf += ` <small style="color:gray">(trusted${targetUser.id === trusted ? `` : `: <span class="username">${trusted}</span>`})</small>`;
 		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
-		if (room.auth && targetUser.userid in room.auth) roomauth = room.auth[targetUser.userid];
+		if (room.auth && targetUser.id in room.auth) roomauth = room.auth[targetUser.id];
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
@@ -64,7 +64,7 @@ const commands = {
 			if (roomid === 'global') continue;
 			let targetRoom = Rooms.get(roomid);
 
-			let authSymbol = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '');
+			let authSymbol = (targetRoom.auth && targetRoom.auth[targetUser.id] ? targetRoom.auth[targetUser.id] : '');
 			let battleTitle = (roomid.battle ? ` title="${roomid.title}"` : '');
 			let output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.isPrivate === true) {
@@ -85,14 +85,14 @@ const commands = {
 			return this.sendReplyBox(buf);
 		}
 		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
-		const canViewPunishments = canViewAlts || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users);
+		const canViewPunishments = canViewAlts || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.id in room.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
 		buf += '<br />';
 
 		if (canViewAlts) {
 			let prevNames = Object.keys(targetUser.prevNames).map(userid => {
 				const punishment = Punishments.userids.get(userid);
-				return userid + (punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetUser.userid ? ` as ${punishment[1]}` : ''})` : '');
+				return userid + (punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetUser.id ? ` as ${punishment[1]}` : ''})` : '');
 			}).join(", ");
 			if (prevNames) buf += Chat.html`<br />Previous names: ${prevNames}`;
 
@@ -100,13 +100,13 @@ const commands = {
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
-				const punishment = Punishments.userids.get(targetAlt.userid);
-				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetAlt.userid ? ` as ${punishment[1]}` : ''})` : '';
+				const punishment = Punishments.userids.get(targetAlt.id);
+				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetAlt.id ? ` as ${punishment[1]}` : ''})` : '';
 				buf += Chat.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = Object.keys(targetAlt.prevNames).map(userid => {
 					const punishment = Punishments.userids.get(userid);
-					return userid + (punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetAlt.userid ? ` as ${punishment[1]}` : ''})` : '');
+					return userid + (punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetAlt.id ? ` as ${punishment[1]}` : ''})` : '');
 				}).join(", ");
 				if (prevNames) buf += `<br />Previous names: ${prevNames}`;
 			}
@@ -166,7 +166,7 @@ const commands = {
 				if (user.can('ip') && punishment) {
 					let [punishType, userid] = punishment;
 					let punishMsg = Punishments.punishmentTypes.get(punishType) || 'punished';
-					if (userid !== targetUser.userid) punishMsg += ` as ${userid}`;
+					if (userid !== targetUser.id) punishMsg += ` as ${userid}`;
 					status.push(punishMsg);
 				}
 				if (Punishments.sharedIps.has(ip)) {
@@ -193,12 +193,12 @@ const commands = {
 		let gameRooms = [];
 		for (const room of Rooms.rooms.values()) {
 			if (!room.game) continue;
-			if ((targetUser.userid in room.game.playerTable && !targetUser.inRooms.has(room.id)) ||
-				(room.auth && room.auth[targetUser.userid] === Users.PLAYER_SYMBOL)) {
+			if ((targetUser.id in room.game.playerTable && !targetUser.inRooms.has(room.roomid)) ||
+				(room.auth && room.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
 				if (room.isPrivate && !canViewAlts) {
 					continue;
 				}
-				gameRooms.push(room.id);
+				gameRooms.push(room.roomid);
 			}
 		}
 		if (gameRooms.length) {
@@ -218,7 +218,7 @@ const commands = {
 					const [punishType, punishUserid, expireTime, reason] = punishment;
 					let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
 					if (!punishDesc) punishDesc = `punished`;
-					if (punishUserid !== targetUser.userid) punishDesc += ` as ${punishUserid}`;
+					if (punishUserid !== targetUser.id) punishDesc += ` as ${punishUserid}`;
 					let expiresIn = new Date(expireTime).getTime() - Date.now();
 					let expireString = Chat.toDurationString(expiresIn, {precision: 1});
 					punishDesc += ` for ${expireString}`;
@@ -273,7 +273,7 @@ const commands = {
 		}
 
 		if (!user.can('alts') && !atLeastOne) {
-			let hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.id, userid);
+			let hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.roomid, userid);
 			if (!hasJurisdiction) {
 				return this.errorReply("/checkpunishment - User not found.");
 			}
@@ -306,7 +306,7 @@ const commands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!room.chatRoomData || room.id.includes('-')) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.chatRoomData || room.roomid.includes('-')) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-punishments-${room}`);
 	},
 	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # & ~`],
@@ -351,7 +351,7 @@ const commands = {
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 			if (results.length > 100 && !isAll) {
@@ -364,7 +364,7 @@ const commands = {
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestIp.startsWith(ip)) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 			if (results.length > 100 && !isAll) {
@@ -374,7 +374,7 @@ const commands = {
 			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
 				if (curUser.latestIp !== ip) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 		}
@@ -401,19 +401,19 @@ const commands = {
 			return this.errorReply(`Both users must be in this room.`);
 		}
 		let challenges = [];
-		const user1Challs = Ladders.challenges.get(user1.userid);
+		const user1Challs = Ladders.challenges.get(user1.id);
 		if (user1Challs) {
 			for (const chall of user1Challs) {
-				if (chall.from === user1.userid && Users.get(chall.to) === user2) {
+				if (chall.from === user1.id && Users.get(chall.to) === user2) {
 					challenges.push(Chat.html`${user1.name} is challenging ${user2.name} in ${Dex.getFormat(chall.formatid).name}.`);
 					break;
 				}
 			}
 		}
-		const user2Challs = Ladders.challenges.get(user2.userid);
+		const user2Challs = Ladders.challenges.get(user2.id);
 		if (user2Challs) {
 			for (const chall of user2Challs) {
-				if (chall.from === user2.userid && Users.get(chall.to) === user1) {
+				if (chall.from === user2.id && Users.get(chall.to) === user1) {
 					challenges.push(Chat.html`${user2.name} is challenging ${user1.name} in ${Dex.getFormat(chall.formatid).name}.`);
 					break;
 				}
@@ -508,7 +508,7 @@ const commands = {
 					pokemon = format.onModifyTemplate.call(Dex, pokemon) || pokemon;
 				}
 				let tier = pokemon.tier;
-				if (room && (room.id === 'smogondoubles' ||
+				if (room && (room.roomid === 'smogondoubles' ||
 					['gen7doublesou', 'gen7doublesubers', 'gen7doublesuu'].includes(room.battle && room.battle.format))) {
 					tier = pokemon.doublesTier;
 				}
@@ -2501,7 +2501,7 @@ const pages = {
 		if (!this.room.chatRoomData) return;
 		if (!this.can('mute', null, this.room)) return;
 		// Ascending order
-		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.id)).sort((a, b) => a[1].expireTime - b[1].expireTime);
+		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.roomid)).sort((a, b) => a[1].expireTime - b[1].expireTime);
 		buf += Punishments.visualizePunishments(sortedPunishments, user);
 		return buf;
 	},
