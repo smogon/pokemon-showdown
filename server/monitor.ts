@@ -186,9 +186,10 @@ export const Monitor = {
 	 * Counts concurrent battles. Returns true if too many.
 	 */
 	countConcurrentBattle(count: number, connection: Connection) {
-		if (count <= 5) return false;
-		connection.popup(`Due to high load, you are limited to 5 games at the same time.`);
-		return true;
+		// if (count <= 5) return false;
+		// connection.popup(`Due to high load, you are limited to 5 games at the same time.`);
+		// return true;
+		return false;
 	},
 	/**
 	 * Counts group chat creation. Returns true if too much.
@@ -202,12 +203,13 @@ export const Monitor = {
 	 * Counts ticket creation. Returns true if too much.
 	 */
 	countTickets(ip: string) {
-		const count = this.tickets.increment(ip, 60 * 60 * 1000)[0];
-		if (Punishments.sharedIps.has(ip)) {
-			return count >= 20;
-		} else {
-			return count >= 5;
-		}
+		// const count = this.tickets.increment(ip, 60 * 60 * 1000)[0];
+		// if (Punishments.sharedIps.has(ip)) {
+		// 	return count >= 20;
+		// } else {
+		// 	return count >= 5;
+		// }
+		return false;
 	},
 
 	/**
