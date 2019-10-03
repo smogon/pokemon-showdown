@@ -2,6 +2,9 @@
 	"name": "Spanish",
 
 	"strings": {
+		"namelocked": "namelocked",
+		"locked": "locked",
+
 		"Please follow the rules:": "Por favor sigue las reglas:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-es",
 		"Global Rules": "Reglas Globales",
@@ -95,6 +98,24 @@
 		"Your status contains a banned word.": "Tu estado contiene una palabra prohibida.",
 		"Your status has been set to: ${target}.": "Tu estado ha sido cambiado a: ${target}.",
 		"You are now marked as busy.": "Ahora estás marcado como busy (ocupado).",
-		"You are now marked as away. Send a message or use /back to indicate you are back.": "Ahora estás marcado como away (ausente). Envía un mensaje o usa /back para indicar que has vuelto."
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "Ahora estás marcado como away (ausente). Envía un mensaje o usa /back para indicar que has vuelto.",
+
+		"You must choose a name before you can talk.": "Tienes que escoger un nombre antes de poder hablar.",
+		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "Has sido ${lockType} y no podrás hablar en el chat. ${lockExpiration}",
+		"Get help with [TN: your lock]this": "Consigue ayuda con aquí.",
+		"You are muted and cannot talk in this room.": "Has sido silenciado y no puedes hablar en esta sala.",
+		"Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.": "Como el chat moderado está activado, tu cuenta debe estar registrada por una semana y tienes que haber ganado un mínimo de una partida",
+		"Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.": "Como el chat moderado está activado, tu cuenta debe ser staff en una sala pública o debe tener rango global para hablar en esta sala.",
+		"Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.": "Como el chat moderado está activado, tienes que ser del rango ${groupName} o superior para hablar en esta sala.",
+		"Your message can't be blank.": "Tu mensaje no puede estar en blanco.",
+		"Your message is too long: ": "Tu mensaje es demasiado largo.",
+		"Your message contains banned characters.": "Tu mensaje contiene carácteres prohíbidos.",
+		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "Esta sala tiene el slow-chat activado. Solo puedes hablar cada ${time} segundos.",
+		"Your username contains a phrase banned by this room.": "Tu nombre de usuario contiene una frase prohíbida en esta sala.",
+		"Your status message contains a phrase banned by this room.": "Tu status contiene una frase prohíbida en esta sala.",
+
+		"Your message contained banned words in this room.": "Tu mensaje contiene palabras prohíbidas en esta sala.",
+		"You can't send the same message again so soon.": "No puedes mandar el mismo mensaje tan pronto.",
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "Debido a que esta sala es de mucho tráfico de mensajes, tu mensaje tiene que contener al menos dos letras."
 	}
 }

@@ -5,11 +5,11 @@ const RandomGen6Teams = require('../../mods/gen6/random-teams');
 class RandomGen5Teams extends RandomGen6Teams {
 	/**
 	 * @param {string | Template} template
-	 * @param {number} [slot]
 	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
+	 * @param {boolean} [isLead]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, slot = 1, teamDetails = {}) {
+	randomSet(template, teamDetails = {}, isLead = false) {
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
 
@@ -261,7 +261,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 					if (hasMove['blizzard']) rejected = true;
 					break;
 				case 'endeavor':
-					if (slot > 0) rejected = true;
+					if (!isLead) rejected = true;
 					break;
 				case 'judgment':
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
@@ -509,7 +509,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		} else if (template.species === 'Marowak') {
 			item = 'Thick Club';
 		} else if (template.species === 'Deoxys-Attack') {
-			item = (slot === 0 && hasMove['stealthrock']) ? 'Focus Sash' : 'Life Orb';
+			item = (isLead && hasMove['stealthrock']) ? 'Focus Sash' : 'Life Orb';
 		} else if (template.species === 'Farfetch\'d') {
 			item = 'Stick';
 		} else if (template.species === 'Pikachu') {
@@ -595,7 +595,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = hasMove['outrage'] ? 'Lum Berry' : 'Life Orb';
 		} else if (counter.Physical + counter.Special >= 4) {
 			item = counter['Normal'] ? 'Life Orb' : 'Expert Belt';
-		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) {
+		} else if (isLead && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) {
 			item = 'Focus Sash';
 
 		// This is the "REALLY can't think of a good item" cutoff
@@ -656,6 +656,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 	}
 
 	randomTeam() {
+		const seed = this.prng.seed;
 		let pokemon = [];
 
 		const allowedNFE = ['Porygon2', 'Scyther'];
@@ -726,7 +727,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			}
 			if (skip) continue;
 
-			let set = this.randomSet(template, pokemon.length, teamDetails);
+			let set = this.randomSet(template, teamDetails, pokemon.length === 0);
 
 			// Illusion shouldn't be the last Pokemon of the team
 			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
@@ -780,6 +781,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 			// For setting Zoroark's level
 			if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
 		}
+		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+
 		return pokemon;
 	}
 }

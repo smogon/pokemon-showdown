@@ -68,11 +68,11 @@ let BattleScripts = {
 	},
 	getMegaDeltas(megaTemplate) {
 		let baseTemplate = this.getTemplate(megaTemplate.baseSpecies);
-		/**@type {{ability: string, baseStats: {[k: string]: number}, weightkg: number, originalMega: string, requiredItem: string | undefined, type?: string, isMega?: boolean, isPrimal?: boolean}} */
+		/**@type {{ability: string, baseStats: {[k: string]: number}, weighthg: number, originalMega: string, requiredItem: string | undefined, type?: string, isMega?: boolean, isPrimal?: boolean}} */
 		let deltas = {
 			ability: megaTemplate.abilities['0'],
 			baseStats: {},
-			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
+			weighthg: megaTemplate.weighthg - baseTemplate.weighthg,
 			originalMega: megaTemplate.species,
 			requiredItem: megaTemplate.requiredItem,
 		};
@@ -104,7 +104,7 @@ let BattleScripts = {
 		for (let statName in baseStats) {
 			baseStats[statName] = this.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
+		template.weighthg = Math.max(1, template.weighthg + deltas.weighthg);
 		template.originalMega = deltas.originalMega;
 		template.requiredItem = deltas.requiredItem;
 		if (deltas.isMega) template.isMega = true;

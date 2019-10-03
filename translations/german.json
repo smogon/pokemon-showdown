@@ -25,7 +25,7 @@
 		"/help OR /h OR /? - Gives you help.": "/help O /h O /? - Gibt dir eine Hilfestellung.",
 		"For an overview of room commands, use /roomhelp": "Für einen Überblick über raumspezifische Befehle, nutze /roomhelp",
 		"For details of a specific command, use something like: /help data": "Für Details zu einem spezifischen Befehl, nutze so etwas wie /help data",
- 
+
 		"COMMANDS": "BEFEHLE",
 		"BATTLE ROOM COMMANDS": "BEFEHLE FÜR DEN KAMPFRAUM",
 		"OPTION COMMANDS": "BEFEHLE FÜR DIE EINSTELLUNGEN",
@@ -34,22 +34,22 @@
 		"DRIVER COMMANDS": "BEFEHLE FÜR DRIVER",
 		"MODERATOR COMMANDS": "BEFEHLE FÜR MODERATOREN",
 		"LEADER COMMANDS": "BEFEHLE FÜR LEADER",
- 
+
 		"(replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)": "(ersetze / mit ! , um einen Befehl für alle Nutzer im Chat sichtbar zu machen. Dies setzt + % @ # & oder ~ voraus)",
- 
+
 		"<strong>Room punishments</strong>:": "<strong>Raumstrafen</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - &Ouml;ffnet ein Fenster mit den Regeln.",
 		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - Schaltet einen Nutzer f&uuml;r 7 Minuten stumm.",
 		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - Schaltet einen Nutzer f&uuml;r 60 Minuten stumm.",
 		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - Verbannt einen Nutzer f&uuml;r 2 Tage aus dem Raum (er kann ihn w&auml;hrend dieser Zeit nicht betreten).",
 		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - Verbannt einen Nutzer f&uuml;r ein Jahr aus dem Raum.",
- 
+
 		"<strong>Global punishments</strong>:": "<strong>Globale Strafen</strong>:",
 		"<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.": "<strong>lock</strong> - Sperrt einen Nutzer (er kann w&auml;hrend dieser Zeit in keinem Raum und an keinen Nutzer Nachrichten senden, welcher nicht zum globalen Staff geh&ouml;rt.",
 		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - Sperrt einen Nutzer f&uuml;r eine Woche.",
 		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Sperrt einen Nutzer f&uuml;r 2 Tage und hindert ihn daran, einen Nutzernamen zu haben.",
 		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Verbannt einen Nutzer f&uuml;r eine Woche vom Server (verbietet es ihm, sich zu verbinden und zu k&auml;mpfen).",
- 
+
 		"<strong>Room drivers (%)</strong> can use:": "<strong>Raumdriver (%)</strong> k&ouml;nnen nutzen:",
 		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn oder /k <em>Nutzernamen</em>: Verwarnt einen Nutzer und zeigt ihm die Regeln von Pok&eacute;mon Showdown",
 		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute oder /m <em>Nutzername</em>: Stummschalten f&uuml;r 7 Minuten",
@@ -59,7 +59,7 @@
 		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce oder /wall <em>Nachricht</em>: Macht eine Ansage",
 		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>Nutzername</em>: Ruft das Modlog des Nutzers f&uuml;r den Raum auf",
 		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>Notiz</em>: F&uuml;gt eine Notiz hinzu, die &uuml;ber den Modlog gelesen werden kann",
- 
+
 		"<strong>Room moderators (@)</strong> can also use:": "<strong>Raummoderatoren (@)</strong> k&ouml;nnen au&szlig;erdem nutzen:",
 		"- /roomban OR /rb <em>username</em>: ban user from the room": "- /roomban oder /rb <em>Nutzername</em>: Verbannt einen Nutzer vom Raum",
 		"- /roomunban <em>username</em>: unban user from the room": "- /roomunban <em>Nutzername</em>: Erlaubt es einem gebannten Nutzer wieder, den Raum zu betreten",
@@ -67,7 +67,7 @@
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>Nutzername</em>: Degradiert einen Nutzer von Raum-Voice",
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>Intro</em>: Richtet eine Einf&uuml;hrung ein, die allen Staff-Mitgliedern beim Betreten des Raumes angezeigt wird.",
 		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings: Ver&auml;ndere eine Reihe von Raumeinstellungen, besonders hervorzuheben ist hier der Modchat",
- 
+
 		"<strong>Room owners (#)</strong> can also use:": "<strong>Room owners (#)</strong> k&ouml;nnen au&szlig;erdem nutzen:",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>Intro</em>: Richtet eine Einf&uuml;hrung ein, die allen Nutzern beim Betreten des Raumes angezeigt wird.",
 		"- /rules <em>rules link</em>: set the room rules link seen when using /rules": "- /rules <em>Verkn&uuml;pfung zu Regeln</em>: Erstellt eine Verkn&uuml;pfung zu den Regeln, wenn /rules benutzt wird",
@@ -78,18 +78,18 @@
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>c&oacute;digo HTML</em>: Stellt im Raum ein Feld mit HTML-Code dar",
 		"- !showimage <em>, [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [Breite], [H&ouml;he]</em>: zeigt ein Bild im Raum",
 		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: Ver&auml;ndere eine Reihe von Raumeinstellungen, wie etwa Modchat, Caps-Filter, etc",
-		
+
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "Eine detailliertere Hilfestellung findet sich im <a href=\"https://www.smogon.com/forums/posts/6774654/\">Leitfaden f&uuml;r Raum-Auths</a>",
-		
+
 		"Tournament Help:": "Turnier-Hilfe:",
 		"- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.": "- /tour create <em>Format</em>, elimination: Erstellt ein neues Turnier im KO-Format im aktuellen Raum.",
 		"- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.": "- /tour create <em>Format</em>, roundrobin: Erstellt ein neues Turnier im Round-Robin-Format im aktuellen Raum.",
 		"- /tour end: forcibly end the tournament in the current room": "- /tour end: Beendet das aktuelle Turnier im Raum.",
 		"- /tour start: start the tournament in the current room": "- /tour start: Startet das aktuelle Turnier im Raum.",
 		"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pok&eacute;mon or items from being used in a tournament (it must be created first)": "- /tour banlist [Pok&eacute;mon], [F&auml;higkeit], [...]: Verbietet die Benutzung von F&auml;higkeiten, Pok&eacute;mon oder von Items in einem Turnier (dieses muss zuvor erstellt worden sein)",
-		
+
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "Eine detailliertere Hilfestellung findet sich im <a href=\"https://www.smogon.com/forums/posts/6777489/\">Leitfaden f&uuml;r Turniere</a>",
-		
+
 		"Your status cannot be updated while you are locked or semilocked.": "Dein Status kann nicht geändert werden, solange du \"locked\" (gesperrt) oder semilocked (semi-gesperrt) bist.",
 		"Your status is too long; it must be under ${maxLength} characters.": "Dein Status ist zu lang; er muss kürzer als ${maxLength} Zeichen sein.",
 		"Your status contains a banned word.": "Dein Status beinhaltet ein verbotenes Wort.",

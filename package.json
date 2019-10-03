@@ -13,7 +13,9 @@
     "node-oom-heapdump": "^1.1.4",
     "node-static": "^0.7.11",
     "nodemailer": "^6.2.1",
-    "permessage-deflate": "^0.1.6"
+    "permessage-deflate": "^0.1.6",
+    "sql-template-strings": "^2.2.2",
+    "sqlite": "^3.0.3"
   },
   "engines": {
     "node": ">=7.7.0"
@@ -26,7 +28,7 @@
     "pretest": "npm run lint && npm run build",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "fulltest": "npm run pretest && mocha -g \".*\" && npm run posttest"
+    "fulltest": "npm run pretest && npm run tsc && mocha -g \".*\""
   },
   "husky": {
     "hooks": {
@@ -67,7 +69,8 @@
     "eslint": "^5.16.0",
     "husky": "^2.3.0",
     "mocha": "^6.1.4",
+    "smogon": "0.0.3",
     "tslint": "^5.16.0",
-    "typescript": "^3.5.0"
+    "typescript": "^3.7.0-beta"
   }
 }

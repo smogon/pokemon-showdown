@@ -2,6 +2,9 @@
 	"name": "Italian",
 
 	"strings": {
+		"namelocked": "namelockato",
+		"locked": "lockato",
+
 		"Please follow the rules:": "Per favore, rispetta le seguenti regole:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-it",
 		"Global Rules": "Regole Globali",
@@ -16,7 +19,7 @@
 		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "~ <strong>Global Administrator</strong> - Possono fare di tutto, anche cambiare il contenuto di questo messaggio",
 
 		"<strong>Room ranks</strong>": "<strong>Ruoli della Room</strong>",
-		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Possono utilizzare i comandi con !, come !groups",		
+		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Possono utilizzare i comandi con !, come !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Come i Voice, e possono mutare gli utenti",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Come i Driver, e possono bannare gli utenti dalla room",
 		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Bot</strong> - Come i Moderator, ma il simbolo specifica che l'utente è un bot",
@@ -95,6 +98,24 @@
 		"Your status is too long; it must be under ${maxLength} characters.": "Il tuo stato è troppo lungo; deve avere una lunghezza inferiore a ${maxLength} caratteri.",
 		"Your status contains a banned word.": "Il tuo stato contiene una parola proibita.",
 		"Your status has been set to: ${target}.": "Il tuo stato è stato cambiato in: ${target}.", "You are now marked as busy.": "Sei ora indicato come busy (occupato).",
-		"You are now marked as away. Send a message or use /back to indicate you are back.": "Sei ora indicato come away (assente). Invia un messaggio o usa il comando /back per indicare che sei nuovamente presente."
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "Sei ora indicato come away (assente). Invia un messaggio o usa il comando /back per indicare che sei nuovamente presente.",
+
+		"You must choose a name before you can talk.": "Devi scegliere un nome prima che di poter parlare.",
+		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "Sei ${lockType} e non puoi parlare in chat. ${lockExpiration}",
+		"Get help with [TN: your lock]this": "Richiedi aiuto con questo",
+		"You are muted and cannot talk in this room.": "Sei mutato e non puoi parlare in questa room.",
+		"Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.": "Poiché la chat moderata è attiva, devi essere registrato da almeno una settimana e aver vinto una battaglia in ladder.",
+		"Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.": "Poiché la chat moderata è attiva, il tuo account deve essere staff in una room pubblica o avere un rank globale per parlare in questa room.",
+		"Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.": "Poiché la chat moderata è attiva, devi avere il rank di ${groupName} o superiore per parlare in questa room.",
+		"Your message can't be blank.": "Il tuo messaggio non può essere vuoto.",
+		"Your message is too long.": "Il tuo messaggio è troppo lungo:",
+		"Your message contains banned characters.": "Il tuo messaggio contiene parole o caratteri non permessi.",
+		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "Questa room ha la slow-chat attivata. Puoi inviare un nuovo messaggio ogni ${time} secondi.",
+		"Your username contains a phrase banned by this room.": "Il tuo username contiene una frase non permessa in questa room.",
+		"Your status message contains a phrase banned by this room.": "Il tuo status contiene una frase non permessa in questa room.",
+
+		"Your message contained banned words in this room.": "Il tuo messaggio conteneva una o più parole non permesse in questa room.",
+		"You can't send the same message again so soon.": "Non puoi inviare lo stesso messaggio di nuovo dopo così poco tempo",
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "Poiché questa è una room molto affollata, il tuo messaggio deve contenere almeno due lettere."
 	}
 }

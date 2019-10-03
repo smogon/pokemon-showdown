@@ -1460,22 +1460,28 @@ export class Battle extends Dex.ModdedDex {
 				return true;
 			}
 			const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
-			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} turns (on turn 1000).`);
+			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).`);
 			if (Config.allowrequestingties) this.hint("If you want to tie earlier, consider using `/offertie`.");
 		}
 
 		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
 		if (!stalenessBySide.every(s => !!s) || !stalenessBySide.some(s => s === 'external')) return;
 
-		// Can any of the sides switch to a non-stale Pokemon?
+		// Can both sides switch to a non-stale Pokemon?
+		const canSwitch = [];
 		for (const [i, trapped] of trappedBySide.entries()) {
-			if (trapped) break; // If all of a side's Pokemon are trapped we know they can't switch.
+			canSwitch[i] = false;
+			if (trapped) break;
 			const side = this.sides[i];
+
 			for (const pokemon of side.pokemon) {
-				// Found a Pokemon that one side can switch to, no need to end the game.
-				if (!pokemon.fainted && !pokemon.staleness) return;
+				if (!pokemon.fainted && !pokemon.staleness) {
+					canSwitch[i] = true;
+					break;
+				}
 			}
 		}
+		if (canSwitch.every(s => s)) return;
 
 		// Endless Battle Clause activates - we determine the winner by looking at each side's sets.
 		const losers: Side[] = [];

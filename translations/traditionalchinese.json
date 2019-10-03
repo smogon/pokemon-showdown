@@ -2,6 +2,9 @@
 	"name": "Traditional Chinese",
 
 	"strings": {
+		"namelocked": "用戶名封鎖",
+		"locked": "用戶封鎖",
+
 		"Please follow the rules:": "請遵守規則:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-tw",
 		"Global Rules": "全站規則",
@@ -90,11 +93,28 @@
 		
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "需要更多幫助可以閱讀 <a href=\"https://www.smogon.com/forums/posts/6777489/\">比賽指導</a>",
 		
-		
 		"Your status cannot be updated while you are locked or semilocked.": "鎖定或半鎖定時無法更新您的狀態.",
 		"Your status is too long; it must be under ${maxLength} characters.": "您的狀態太長了;它必須低於${maxLength}個字符.",
 		"Your status contains a banned word.": "您的狀態裡包含禁止使用的詞.",
 		"Your status has been set to: ${target}.": "您的狀態已設置為: ${target}.", "You are now marked as busy.": "您現在被標記為忙碌.",
-		"You are now marked as away. Send a message or use /back to indicate you are back.": "您現在被標記為離開。發送消息或使用/back回到原來的狀態."
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "您現在被標記為離開。發送消息或使用/back回到原來的狀態.",
+
+		"You must choose a name before you can talk.": "發言之前請登錄用戶",
+		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "您被${lockType}封鎖，因此不能發言。${lockExpiration}",
+		"Get help with [TN: your lock]this": "關於被封鎖提問，請求幫助",
+		"You are muted and cannot talk in this room.": "您被暫時禁言，因此不能發言",
+		"Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.": "房間管控，天梯贏了一局並且注冊超過一個星期的用戶才能發言",
+		"Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.": "房間管控，見習管理或全服信任用戶以上的用戶才能發言",
+		"Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.": "房間管控，${groupName}權限以上的用戶才能發言",
+		"Your message can't be blank.": "發言時不能留空白",
+		"Your message is too long: ": "您的句子太長了",
+		"Your message contains banned characters.": "發言內容包含了禁止詞匯",
+		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "限速聊天，每${time}秒鐘才能發言",
+		"Your username contains a phrase banned by this room.": "用戶名包含了禁止詞匯",
+		"Your status message contains a phrase banned by this room.": "狀態內容包含了禁止詞匯",
+ 
+		"Your message contained banned words in this room.": "發言內容包含了房間內禁止詞匯",
+		"You can't send the same message again so soon.": "同樣的句子不能及時發出",
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "由於此房間流量較大，因此您的消息必須至少包含兩個字母"
 	}
 }

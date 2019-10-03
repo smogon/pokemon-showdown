@@ -257,7 +257,7 @@ interface EventMethods {
 	onModifySpA?: CommonHandlers['ModifierSourceMove']
 	onModifySpD?: CommonHandlers['ModifierMove']
 	onModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onMoveAborted?: CommonHandlers['VoidMove']
 	onNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
@@ -340,7 +340,7 @@ interface EventMethods {
 	onAllyModifySpA?: CommonHandlers['ModifierSourceMove']
 	onAllyModifySpD?: CommonHandlers['ModifierMove']
 	onAllyModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onAllyModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onAllyModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onAllyMoveAborted?: CommonHandlers['VoidMove']
 	onAllyNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onAllyOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
@@ -423,7 +423,7 @@ interface EventMethods {
 	onFoeModifySpA?: CommonHandlers['ModifierSourceMove']
 	onFoeModifySpD?: CommonHandlers['ModifierMove']
 	onFoeModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onFoeModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onFoeModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onFoeMoveAborted?: CommonHandlers['VoidMove']
 	onFoeNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onFoeOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
@@ -506,7 +506,7 @@ interface EventMethods {
 	onSourceModifySpA?: CommonHandlers['ModifierSourceMove']
 	onSourceModifySpD?: CommonHandlers['ModifierMove']
 	onSourceModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onSourceModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onSourceModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onSourceMoveAborted?: CommonHandlers['VoidMove']
 	onSourceNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onSourceOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
@@ -589,7 +589,7 @@ interface EventMethods {
 	onAnyModifySpA?: CommonHandlers['ModifierSourceMove']
 	onAnyModifySpD?: CommonHandlers['ModifierMove']
 	onAnyModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
-	onAnyModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onAnyModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void
 	onAnyMoveAborted?: CommonHandlers['VoidMove']
 	onAnyNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onAnyOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
@@ -741,7 +741,9 @@ interface AbilityData extends EffectData, AbilityEventMethods, EventMethods {
 	suppressWeather?: boolean
 }
 
-interface ModdedAbilityData extends Partial<AbilityData>, ModdedEffectData {}
+interface ModdedAbilityData extends Partial<AbilityData>, ModdedEffectData {
+	onAfterMega?: (this: Battle, pokemon: Pokemon) => void
+}
 
 interface Ability extends Readonly<BasicEffect & AbilityData> {
 	readonly effectType: 'Ability'
@@ -1128,6 +1130,7 @@ interface ModdedBattlePokemon {
 	recalculateStats?: (this: Pokemon) => void
 	setAbility?: (this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean) => string | false
 	transformInto?: (this: Pokemon, pokemon: Pokemon, effect: Effect | null) => boolean
+	setStatus?: (this: Pokemon, status: string | PureEffect, source: Pokemon | null, sourceEffect: Effect | null, ignoreImmunities: boolean) => boolean
 }
 
 interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
@@ -1142,7 +1145,6 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	init?: (this: Battle) => void
 	modifyDamage?: (this: Battle, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages?: boolean) => void
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable
-	setTerrain?: (this: Battle, status: string | Effect, source: Pokemon | null | 'debug', sourceEffect: Effect | null) => boolean
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable
 	suppressingWeather?: (this: Battle) => boolean
 
@@ -1278,8 +1280,9 @@ namespace RandomTeamsTypes {
 		stealthRock?: number;
 		spikes?: number;
 		toxicSpikes?: number;
-		hazardClear?: number;
+		stickyWeb?: number;
 		rapidSpin?: number;
+		hazardClear?: number;
 		illusion?: number;
 	}
 	export interface FactoryTeamDetails {

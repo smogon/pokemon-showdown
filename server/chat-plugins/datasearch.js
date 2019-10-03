@@ -655,8 +655,8 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			for (let type in alts.resists) {
 				let effectiveness = 0;
-				let notImmune = Dex.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = Dex.getEffectiveness(type, dex[mon]);
+				let notImmune = mod.getImmunity(type, dex[mon]);
+				if (notImmune) effectiveness = mod.getEffectiveness(type, dex[mon]);
 				if (!alts.resists[type]) {
 					if (notImmune && effectiveness >= 0) matched = true;
 				} else {
@@ -667,8 +667,8 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			for (let type in alts.weak) {
 				let effectiveness = 0;
-				let notImmune = Dex.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = Dex.getEffectiveness(type, dex[mon]);
+				let notImmune = mod.getImmunity(type, dex[mon]);
+				if (notImmune) effectiveness = mod.getEffectiveness(type, dex[mon]);
 				if (alts.weak[type]) {
 					if (notImmune && effectiveness >= 1) matched = true;
 				} else {
@@ -689,10 +689,12 @@ function runDexsearch(target, cmd, canAll, message) {
 				let monStat = 0;
 				if (stat === 'bst') {
 					for (let monStats in dex[mon].baseStats) {
+						// account for merged Special stat in gen 1, don't count it twice
+						if (maxGen === 1 && monStats === 'spd') continue;
 						monStat += dex[mon].baseStats[monStats];
 					}
 				} else if (stat === 'weight') {
-					monStat = dex[mon].weightkg;
+					monStat = dex[mon].weighthg / 10;
 				} else if (stat === 'height') {
 					monStat = dex[mon].heightm;
 				} else if (stat === 'gen') {
@@ -759,8 +761,8 @@ function runDexsearch(target, cmd, canAll, message) {
 						monStat2 += mon2.baseStats[monStats];
 					}
 				} else if (stat === 'weight') {
-					monStat1 = mon1.weightkg;
-					monStat2 = mon2.weightkg;
+					monStat1 = mon1.weighthg;
+					monStat2 = mon2.weighthg;
 				} else if (stat === 'height') {
 					monStat1 = mon1.heightm;
 					monStat2 = mon2.heightm;

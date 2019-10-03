@@ -141,7 +141,7 @@ const avatarTable = new Set([
 	'gambler-gen1', 'gambler-gen1rb', 'gambler',
 	'gamer-gen3',
 	'gardenia',
-	'gentleman-gen1', 'gentleman-gen1rb', 'gentleman-gen3', 'gentleman-gen3rs', 'gentleman-gen4dp', 'gentleman-gen4', 'gentleman',
+	'gentleman-gen1', 'gentleman-gen1rb', 'gentleman-gen2', 'gentleman-gen3', 'gentleman-gen3rs', 'gentleman-gen4dp', 'gentleman-gen4', 'gentleman',
 	'ghetsis-gen5bw', 'ghetsis',
 	'giovanni-gen1', 'giovanni-gen1rb', 'giovanni-gen3', 'giovanni',
 	'glacia-gen3',
@@ -150,7 +150,7 @@ const avatarTable = new Set([
 	'guitarist-gen3', 'guitarist-gen4', 'guitarist',
 	'harlequin',
 	'hexmaniac-gen3jp', 'hexmaniac-gen3',
-	'hiker-gen1', 'hiker-gen1rb', 'hiker-gen3', 'hiker-gen3rs', 'hiker-gen4', 'hiker',
+	'hiker-gen1', 'hiker-gen1rb', 'hiker-gen2', 'hiker-gen3', 'hiker-gen3rs', 'hiker-gen4', 'hiker',
 	'hilbert-dueldisk', 'hilbert',
 	'hilda-dueldisk', 'hilda',
 	'hooligans',
@@ -174,9 +174,9 @@ const avatarTable = new Set([
 	'juggler-gen1', 'juggler-gen1rb', 'juggler-gen2', 'juggler-gen3', 'juggler',
 	'jupiter',
 	'karen-gen2', 'karen',
-	'kimonogirl',
+	'kimonogirl-gen2', 'kimonogirl',
 	'kindler-gen3',
-	'koga-gen1', 'koga-gen1rb', 'koga-gen3', 'koga',
+	'koga-gen1', 'koga-gen2', 'koga-gen1rb', 'koga-gen3', 'koga',
 	'kris-gen2',
 	'lady-gen3', 'lady-gen3rs', 'lady-gen4', 'lady',
 	'lance-gen1', 'lance-gen1rb', 'lance-gen2', 'lance-gen3', 'lance',
@@ -204,7 +204,7 @@ const avatarTable = new Set([
 	'maylene',
 	'medium-gen2jp', 'medium',
 	'mira',
-	'misty-gen1', 'misty-gen1rb', 'misty-gen3', 'misty',
+	'misty-gen1', 'misty-gen2', 'misty-gen1rb', 'misty-gen3', 'misty',
 	'morty-gen2', 'morty',
 	'mrfuji-gen3',
 	'musician',
@@ -215,7 +215,8 @@ const avatarTable = new Set([
 	'n',
 	'nurse',
 	'nurseryaide',
-	'oak-gen1', 'oak-gen1rb', 'oak-gen3',
+	'oak-gen1', 'oak-gen1rb', 'oak-gen2', 'oak-gen3',
+	'officer-gen2',
 	'oldcouple-gen3',
 	'painter-gen3',
 	'palmer',
@@ -227,7 +228,7 @@ const avatarTable = new Set([
 	'plasmagruntf-gen5bw', 'plasmagruntf',
 	'plasmagrunt-gen5bw', 'plasmagrunt',
 	'pokefanf-gen2', 'pokefanf-gen3', 'pokefanf-gen4', 'pokefanf',
-	'pokefan-gen3', 'pokefan-gen4', 'pokefan',
+	'pokefan-gen2', 'pokefan-gen3', 'pokefan-gen4', 'pokefan',
 	'pokekid',
 	'pokemaniac-gen1', 'pokemaniac-gen1rb', 'pokemaniac-gen3', 'pokemaniac-gen3rs', 'pokemaniac',
 	'pokemonbreederf-gen3', 'pokemonbreederf-gen3frlg', 'pokemonbreederf-gen4', 'pokemonbreederf',
@@ -238,11 +239,11 @@ const avatarTable = new Set([
 	'preschoolerf',
 	'preschooler',
 	'proton',
-	'pryce',
+	'pryce-gen2', 'pryce',
 	'psychicf-gen3', 'psychicf-gen3rs', 'psychicf-gen4', 'psychicfjp-gen3', 'psychicf',
-	'psychic-gen1', 'psychic-gen1rb', 'psychic-gen3', 'psychic-gen3rs', 'psychic-gen4', 'psychic',
+	'psychic-gen1', 'psychic-gen1rb', 'psychic-gen2', 'psychic-gen3', 'psychic-gen3rs', 'psychic-gen4', 'psychic',
 	'rancher',
-	'red-gen1main', 'red-gen1', 'red-gen1rb', 'red-gen1title', 'red-gen3', 'red',
+	'red-gen1main', 'red-gen1', 'red-gen1rb', 'red-gen1title', 'red-gen2', 'red-gen3', 'red',
 	'reporter',
 	'richboy-gen3', 'richboy-gen4', 'richboy',
 	'riley',
@@ -251,6 +252,8 @@ const avatarTable = new Set([
 	'rocket-gen1', 'rocket-gen1rb',
 	'rocketgruntf-gen2', 'rocketgruntf',
 	'rocketgrunt-gen2', 'rocketgrunt',
+	'rocketexecutivef-gen2',
+	'rocketexecutive-gen2',
 	'rood',
 	'rosa-dueldisk', 'rosa',
 	'roughneck-gen4', 'roughneck',
@@ -398,7 +401,7 @@ const commands = {
 		for (let i in room.users) {
 			let curUser = Users.get(room.users[i]);
 			if (!curUser || !curUser.named) continue;
-			userList.push(Chat.escapeHTML(curUser.getIdentity(room.id)));
+			userList.push(Chat.escapeHTML(curUser.getIdentity(room.roomid)));
 		}
 
 		let output = `There ${Chat.plural(userList, "are", "is")} <strong style="color:#24678d">${Chat.count(userList, "</strong> users")} in this room:<br />`;
@@ -481,10 +484,10 @@ const commands = {
 
 		if (!avatarIsValid) {
 			const avatarsAuto = Config.customavatars || {};
-			if (avatarsAuto[user.userid] === avatar) {
+			if (avatarsAuto[user.id] === avatar) {
 				avatarIsValid = true;
 			}
-			if (avatarsAuto[user.userid] === '#' + avatar) {
+			if (avatarsAuto[user.id] === '#' + avatar) {
 				avatar = '#' + avatar;
 				avatarIsValid = true;
 			}
@@ -493,7 +496,7 @@ const commands = {
 				avatar = '#' + avatar;
 			}
 			if (avatarsManual.hasOwnProperty(avatar)) {
-				if (avatarsManual[avatar].includes(user.userid)) {
+				if (avatarsManual[avatar].includes(user.id)) {
 					avatarIsValid = true;
 				}
 			}
@@ -574,7 +577,7 @@ const commands = {
 	invite(target, room, user) {
 		if (!target) return this.parse('/help invite');
 		if (!this.canTalk()) return;
-		if (room) target = this.splitTarget(target) || room.id;
+		if (room) target = this.splitTarget(target) || room.roomid;
 		let targetRoom = Rooms.search(target);
 		if (targetRoom && !targetRoom.checkModjoin(user)) {
 			targetRoom = undefined;
@@ -584,13 +587,13 @@ const commands = {
 			if (!this.targetUser) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 			if (!targetRoom) return this.errorReply(`The room "${target}" was not found.`);
 
-			return this.parse(`/pm ${this.targetUsername}, /invite ${targetRoom.id}`);
+			return this.parse(`/pm ${this.targetUsername}, /invite ${targetRoom.roomid}`);
 		}
 
 		let targetUser = this.pmTarget;
 
 		if (!targetRoom || targetRoom === Rooms.global) return this.errorReply(`The room "${target}" was not found.`);
-		if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply(`User "${targetUser.name}" requires global auth to join room "${targetRoom.id}".`);
+		if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply(`User "${targetUser.name}" requires global auth to join room "${targetRoom.roomid}".`);
 		if (!targetUser) return this.errorReply(`The user "${targetUser.name}" was not found.`);
 
 		if (!targetRoom.checkModjoin(targetUser)) {
@@ -602,7 +605,7 @@ const commands = {
 		}
 		if (targetUser in targetRoom.users) return this.errorReply(`This user is already in "${targetRoom.title}".`);
 
-		return `/invite ${targetRoom.id}`;
+		return `/invite ${targetRoom.roomid}`;
 	},
 	invitehelp: [
 		`/invite [username] - Invites the player [username] to join the room you sent the command to.`,
@@ -620,7 +623,7 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+		if (targetUser.blockPMs && (targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
 		}
@@ -632,8 +635,8 @@ const commands = {
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
-		targetUser.lastPM = user.userid;
-		user.lastPM = targetUser.userid;
+		targetUser.lastPM = user.id;
+		user.lastPM = targetUser.id;
 	},
 	pminfoboxhelp: [`/pminfobox [user], [html]- PMs an [html] infobox to [user]. Requires * ~`],
 
@@ -649,7 +652,7 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+		if (targetUser.blockPMs && (targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
 		}
@@ -659,8 +662,8 @@ const commands = {
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
-		targetUser.lastPM = user.userid;
-		user.lastPM = targetUser.userid;
+		targetUser.lastPM = user.id;
+		user.lastPM = targetUser.id;
 	},
 	pmuhtmlhelp: [`/pmuhtml [user], [name], [html] - PMs [html] that can change to [user]. Requires * ~`],
 	pmuhtmlchangehelp: [`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * ~`],
@@ -670,15 +673,21 @@ const commands = {
 	ignorepms: 'blockpms',
 	ignorepm: 'blockpms',
 	blockpms(target, room, user) {
+		if (toID(target) === 'ac') target = 'autoconfirmed';
 		if (user.blockPMs === (target || true)) return this.errorReply("You are already blocking private messages! To unblock, use /unblockpms");
-		user.blockPMs = true;
+
 		if (target in Config.groups) {
 			user.blockPMs = target;
-			user.update('blockPMs');
-			return this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
+			this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
+		} else if (target === 'autoconfirmed' || target === 'trusted') {
+			user.blockPMs = target;
+			this.sendReply(`You are now blocking private messages, except from staff and ${target} users.`);
+		} else {
+			user.blockPMs = true;
+			this.sendReply("You are now blocking private messages, except from staff.");
 		}
 		user.update('blockPMs');
-		return this.sendReply("You are now blocking private messages, except from staff.");
+		return true;
 	},
 	blockpmshelp: [`/blockpms - Blocks private messages. Unblock them with /unblockpms.`],
 
@@ -701,7 +710,7 @@ const commands = {
 
 		const maxLength = 32;
 		if (target.length > maxLength) return this.errorReply(this.tr `Your status is too long; it must be under ${maxLength} characters.`);
-		target = Chat.statusfilter(target, user);
+		target = this.statusfilter(target);
 		if (!target) return this.errorReply(this.tr("Your status contains a banned word."));
 
 		user.setUserMessage(target);
@@ -714,7 +723,7 @@ const commands = {
 		if (target) this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 
 		user.setStatusType('busy');
-		this.parse('/blockpms');
+		this.parse('/blockpms +');
 		this.parse('/blockchallenges');
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
@@ -743,7 +752,7 @@ const commands = {
 			if (!this.can('forcerename', targetUser)) return false;
 
 			this.privateModAction(`(${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${reason ? `: ${reason}` : ``})`);
-			this.globalModlog('CLEARSTATUS', targetUser, `from ${targetUser.userMessage} by ${user.name}${reason ? `: ${reason}` : ``}`);
+			this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}" by ${user.name}${reason ? `: ${reason}` : ``}`);
 			targetUser.clearStatus();
 			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
 			return;
@@ -851,7 +860,7 @@ const commands = {
 			if (room.battle) return this.errorReply("You cannot create a subroom of a battle.");
 			if (room.isPersonal) return this.errorReply("You cannot create a subroom of a groupchat.");
 		}
-		let parent = cmd === 'subroomgroupchat' ? room.id : null;
+		let parent = cmd === 'subroomgroupchat' ? room.roomid : null;
 		// if (!this.can('makegroupchat')) return false;
 
 		// Title defaults to a random 8-digit number.
@@ -883,7 +892,7 @@ const commands = {
 		if (!titleid) {
 			titleid = `${Math.floor(Math.random() * 100000000)}`;
 		}
-		let roomid = `groupchat-${parent || user.userid}-${titleid}`;
+		let roomid = `groupchat-${parent || user.id}-${titleid}`;
 		// Titles must be unique.
 		if (Rooms.search(roomid)) return this.errorReply(`A group chat named '${title}' already exists.`);
 		// Tab title is prefixed with '[G]' to distinguish groupchats from
@@ -907,9 +916,9 @@ const commands = {
 		});
 		if (targetRoom) {
 			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
-			targetRoom.auth[user.userid] = parent ? '#' : Users.HOST_SYMBOL;
+			targetRoom.auth[user.id] = parent ? '#' : Users.HOST_SYMBOL;
 			// Join after creating room. No other response is given.
-			user.joinRoom(targetRoom.id);
+			user.joinRoom(targetRoom.roomid);
 			user.popup(`You've just made a groupchat; it is now your responsibility, regardless of whether or not you actively partake in the room. For more info, read your groupchat's staff intro.`);
 			if (parent) this.modlog('SUBROOMGROUPCHAT', null, title);
 			return;
@@ -937,7 +946,7 @@ const commands = {
 		if (!id) return this.parse('/help deregisterchatroom');
 		let targetRoom = Rooms.search(id);
 		if (!targetRoom) return this.errorReply(`The room '${target}' doesn't exist.`);
-		target = targetRoom.title || targetRoom.id;
+		target = targetRoom.title || targetRoom.roomid;
 		const isPrivate = targetRoom.isPrivate;
 		const staffRoom = Rooms.get('staff');
 		const upperStaffRoom = Rooms.get('upperstaff');
@@ -946,10 +955,10 @@ const commands = {
 			this.sendReply("It will be deleted as of the next server restart.");
 			target = Chat.escapeHTML(target);
 			if (isPrivate) {
-				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Private chat room deregistered by ${user.userid}: <b>${target}</b></div>`).update();
+				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Private chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
 			} else {
 				if (staffRoom) staffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered: <b>${target}</b></div>`).update();
-				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered by ${user.userid}: <b>${target}</b></div>`).update();
+				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
 			}
 			return;
 		}
@@ -979,23 +988,23 @@ const commands = {
 			if (!this.can('makeroom')) return;
 		}
 
-		const title = room.title || room.id;
+		const title = room.title || room.roomid;
 
-		if (room.id === 'global') {
+		if (room.roomid === 'global') {
 			return this.errorReply(`This room can't be deleted.`);
 		}
 
 		if (room.chatRoomData) {
 			if (room.isPrivate) {
 				if (Rooms.get('upperstaff')) {
-					Rooms.get('upperstaff').add(Chat.html`|raw|<div class="broadcast-red">Private chat room deleted by ${user.userid}: <b>${title}</b></div>`).update();
+					Rooms.get('upperstaff').add(Chat.html`|raw|<div class="broadcast-red">Private chat room deleted by ${user.id}: <b>${title}</b></div>`).update();
 				}
 			} else {
 				if (Rooms.get('staff')) {
 					Rooms.get('staff').add(Chat.html`|raw|<div class="broadcast-red">Public chat room deleted: <b>${title}</b></div>`).update();
 				}
 				if (Rooms.get('upperstaff')) {
-					Rooms.get('upperstaff').add(Chat.html`|raw|<div class="broadcast-red">Public chat room deleted by ${user.userid}: <b>${title}</b></div>`).update();
+					Rooms.get('upperstaff').add(Chat.html`|raw|<div class="broadcast-red">Public chat room deleted by ${user.id}: <b>${title}</b></div>`).update();
 				}
 			}
 		}
@@ -1058,13 +1067,16 @@ const commands = {
 			if (!room.isPrivate) {
 				return this.errorReply(`This room is already public.`);
 			}
+			if (room.parent && room.parent.isPrivate) {
+				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
+			}
 			if (room.isPersonal) return this.errorReply(`This room can't be made public.`);
 			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
-				if (!room.privacySetter.has(user.userid)) {
+				if (!room.privacySetter.has(user.id)) {
 					const privacySetters = [...room.privacySetter].join(', ');
 					return this.errorReply(`You can't make the room public since you didn't make it private - only ${privacySetters} can.`);
 				}
-				room.privacySetter.delete(user.userid);
+				room.privacySetter.delete(user.id);
 				if (room.privacySetter.size) {
 					const privacySetters = [...room.privacySetter].join(', ');
 					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Chat.plural(room.privacySetter, "", "s")} to use /publicroom to make the room public.`);
@@ -1080,10 +1092,15 @@ const commands = {
 			}
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
-			if (room.subRooms) return this.errorReply("Private rooms cannot have subrooms.");
+			if (room.subRooms) {
+				if (settingName === 'secret') return this.errorReply("Secret rooms cannot have subrooms.");
+				for (const subRoom of room.subRooms.values()) {
+					if (!subRoom.isPrivate) return this.errorReply(`Subroom ${subRoom.title} must be private to make this room private.`);
+				}
+			}
 			if (room.isPrivate === setting) {
-				if (room.privacySetter && !room.privacySetter.has(user.userid)) {
-					room.privacySetter.add(user.userid);
+				if (room.privacySetter && !room.privacySetter.has(user.id)) {
+					room.privacySetter.add(user.id);
 					return this.sendReply(`This room is already ${settingName}, but is now forced to stay that way until you use /publicroom.`);
 				}
 				return this.errorReply(`This room is already ${settingName}.`);
@@ -1095,7 +1112,7 @@ const commands = {
 				room.chatRoomData.isPrivate = setting;
 				Rooms.global.writeChatRoomData();
 			}
-			room.privacySetter = new Set([user.userid]);
+			room.privacySetter = new Set([user.id]);
 		}
 	},
 	privateroomhelp: [
@@ -1161,12 +1178,15 @@ const commands = {
 		const main = Rooms.search(target);
 
 		if (!main) return this.errorReply(`The room '${target}' does not exist.`);
-		if (main.isPrivate || !main.chatRoomData) return this.errorReply(`Only public rooms can have subrooms.`);
+		if (main.parent) return this.errorReply(`Subrooms cannot have subrooms.`);
+		if (main.isPrivate === true) return this.errorReply(`Only public and hidden rooms can have subrooms.`);
+		if (main.isPrivate && !room.isPrivate) return this.errorReply(`Private rooms cannot have public subrooms.`);
+		if (!main.chatRoomData) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
 		if (room === main) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
 
 		room.parent = main;
 		if (!main.subRooms) main.subRooms = new Map();
-		main.subRooms.set(room.id, room);
+		main.subRooms.set(room.roomid, room);
 
 		const mainIdx = Rooms.global.chatRoomDataList.findIndex(r => r.title === main.title);
 		const subIdx = Rooms.global.chatRoomDataList.findIndex(r => r.title === room.title);
@@ -1178,11 +1198,11 @@ const commands = {
 			Rooms.global.chatRoomDataList[subIdx] = tmp;
 		}
 
-		room.chatRoomData.parentid = main.id;
+		room.chatRoomData.parentid = main.roomid;
 		Rooms.global.writeChatRoomData();
 
 		for (let userid in room.users) {
-			room.users[userid].updateIdentity(room.id);
+			room.users[userid].updateIdentity(room.roomid);
 		}
 
 		this.modlog('SUBROOM', null, `of ${main.title}`);
@@ -1197,7 +1217,7 @@ const commands = {
 
 		const parent = room.parent;
 		if (parent && parent.subRooms) {
-			parent.subRooms.delete(room.id);
+			parent.subRooms.delete(room.roomid);
 			if (!parent.subRooms.size) parent.subRooms = null;
 		}
 
@@ -1207,7 +1227,7 @@ const commands = {
 		Rooms.global.writeChatRoomData();
 
 		for (let userid in room.users) {
-			room.users[userid].updateIdentity(room.id);
+			room.users[userid].updateIdentity(room.roomid);
 		}
 
 		this.modlog('UNSUBROOM');
@@ -1230,7 +1250,7 @@ const commands = {
 
 		if (!subRooms.length) return this.sendReply(`This room doesn't have any subrooms.`);
 
-		const subRoomText = subRooms.map(room => Chat.html`<a href="/${room.id}">${room.title}</a><br/><small>${room.desc}</small>`);
+		const subRoomText = subRooms.map(room => Chat.html`<a href="/${room.roomid}">${room.title}</a><br/><small>${room.desc}</small>`);
 
 		return this.sendReplyBox(`<p style="font-weight:bold;">${Chat.escapeHTML(room.title)}'s subroom${Chat.plural(subRooms)}:</p><ul><li>${subRoomText.join('</li><br/><li>')}</li></ul></strong>`);
 	},
@@ -1401,7 +1421,7 @@ const commands = {
 		if (Rooms.get(alias) || Rooms.aliases.has(alias)) return this.errorReply("You cannot set an alias to an existing room or alias.");
 		if (room.isPersonal) return this.errorReply("Personal rooms can't have aliases.");
 
-		Rooms.aliases.set(alias, room.id);
+		Rooms.aliases.set(alias, room.roomid);
 		this.privateModAction(`(${user.name} added the room alias '${alias}'.)`);
 		this.modlog('ROOMALIAS', null, alias);
 
@@ -1431,7 +1451,7 @@ const commands = {
 
 		let alias = toID(target);
 		if (!alias || !Rooms.aliases.has(alias)) return this.errorReply("Please specify an existing alias.");
-		if (Rooms.aliases.get(alias) !== room.id) return this.errorReply("You may only remove an alias from the current room.");
+		if (Rooms.aliases.get(alias) !== room.roomid) return this.errorReply("You may only remove an alias from the current room.");
 
 		this.privateModAction(`(${user.name} removed the room alias '${alias}'.)`);
 		this.modlog('REMOVEALIAS', null, alias);
@@ -1468,7 +1488,7 @@ const commands = {
 		this.addModAction(`${name} was appointed Room Owner by ${user.name}.`);
 		this.modlog('ROOMOWNER', userid);
 		if (targetUser) {
-			targetUser.popup(`You were appointed Room Owner by ${user.name} in ${room.id}.`);
+			targetUser.popup(`You were appointed Room Owner by ${user.name} in ${room.roomid}.`);
 			room.onUpdateIdentity(targetUser);
 			if (room.subRooms) {
 				for (const subRoom of room.subRooms.values()) {
@@ -1499,7 +1519,7 @@ const commands = {
 		target = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
 		let userid = toID(this.targetUsername);
-		let name = targetUser ? targetUser.name : Chat.filter(this, this.targetUsername, user, room, connection);
+		let name = targetUser ? targetUser.name : this.filter(this.targetUsername);
 		if (!name) return;
 		name = name.slice(0, 18);
 
@@ -1549,35 +1569,35 @@ const commands = {
 		}
 
 		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
-		let needsPopup = targetUser && room.users[targetUser.userid] && !room.isPrivate && !room.isPersonal && !room.battle;
+		let needsPopup = targetUser && room.users[targetUser.id] && !room.isPrivate && !room.isPersonal && !room.battle;
 
 		if (this.pmTarget && targetUser) {
 			const text = `${targetUser.name} was invited (and promoted to Room ${groupName}) by ${user.name}.`;
 			room.add(`|c|${user.getIdentity(room)}|/log ${text}`).update();
 			this.modlog('INVITE', targetUser, null, {noip: 1, noalts: 1});
 		} else if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
-			if (targetUser && room.users[targetUser.userid] && !Config.groups[nextGroup].modlog) {
+			if (targetUser && room.users[targetUser.id] && !Config.groups[nextGroup].modlog) {
 				// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
-				targetUser.send(`>${room.id}\n(You were demoted to Room ${groupName} by ${user.name}.)`);
+				targetUser.send(`>${room.roomid}\n(You were demoted to Room ${groupName} by ${user.name}.)`);
 			}
 			this.privateModAction(`(${name} was demoted to Room ${groupName} by ${user.name}.)`);
 			this.modlog(`ROOM${groupName.toUpperCase()}`, userid, '(demote)');
-			if (needsPopup) targetUser.popup(`You were demoted to Room ${groupName} by ${user.name} in ${room.id}.`);
+			if (needsPopup) targetUser.popup(`You were demoted to Room ${groupName} by ${user.name} in ${room.roomid}.`);
 		} else if (nextGroup === '#') {
 			this.addModAction(`${'' + name} was promoted to ${groupName} by ${user.name}.`);
 			this.modlog('ROOM OWNER', userid);
-			if (needsPopup) targetUser.popup(`You were promoted to ${groupName} by ${user.name} in ${room.id}.`);
+			if (needsPopup) targetUser.popup(`You were promoted to ${groupName} by ${user.name} in ${room.roomid}.`);
 		} else {
 			this.addModAction(`${'' + name} was promoted to Room ${groupName} by ${user.name}.`);
 			this.modlog(`ROOM${groupName.toUpperCase()}`, userid);
-			if (needsPopup) targetUser.popup(`You were promoted to Room ${groupName} by ${user.name} in ${room.id}.`);
+			if (needsPopup) targetUser.popup(`You were promoted to Room ${groupName} by ${user.name} in ${room.roomid}.`);
 		}
 
 		if (targetUser) {
-			targetUser.updateIdentity(room.id);
+			targetUser.updateIdentity(room.roomid);
 			if (room.subRooms) {
 				for (const subRoom of room.subRooms.values()) {
-					targetUser.updateIdentity(subRoom.id);
+					targetUser.updateIdentity(subRoom.roomid);
 				}
 			}
 		}
@@ -1597,7 +1617,7 @@ const commands = {
 		if (cmd === 'roomauth1') userLookup = `\n\nTo look up auth for a user, use /userauth ${target}`;
 		let targetRoom = room;
 		if (target) targetRoom = Rooms.search(target);
-		if (!targetRoom || targetRoom.id === 'global' || !targetRoom.checkModjoin(user)) return this.errorReply(`The room "${target}" does not exist.`);
+		if (!targetRoom || targetRoom.roomid === 'global' || !targetRoom.checkModjoin(user)) return this.errorReply(`The room "${target}" does not exist.`);
 		if (!targetRoom.auth) return this.sendReply(`/roomauth - The room '${targetRoom.title || target}' isn't designed for per-room moderation and therefore has no auth list.${userLookup}`);
 
 		let rankLists = {};
@@ -1644,7 +1664,7 @@ const commands = {
 
 	'!userauth': true,
 	userauth(target, room, user, connection) {
-		let targetId = toID(target) || user.userid;
+		let targetId = toID(target) || user.id;
 		let targetUser = Users.getExact(targetId);
 		let targetUsername = (targetUser ? targetUser.name : target);
 
@@ -1660,32 +1680,32 @@ const commands = {
 			if (!curRoom.auth || curRoom.isPrivate) continue;
 			group = curRoom.auth[targetId];
 			if (!group) continue;
-			innerBuffer.push(group + curRoom.id);
+			innerBuffer.push(group + curRoom.roomid);
 		}
 		if (innerBuffer.length) {
 			buffer.push(`Room auth: ${innerBuffer.join(', ')}`);
 		}
-		if (targetId === user.userid || user.can('lock')) {
+		if (targetId === user.id || user.can('lock')) {
 			innerBuffer = [];
 			for (const curRoom of Rooms.rooms.values()) {
 				if (!curRoom.auth || !curRoom.isPrivate) continue;
 				if (curRoom.isPrivate === true) continue;
 				let auth = curRoom.auth[targetId];
 				if (!auth) continue;
-				innerBuffer.push(auth + curRoom.id);
+				innerBuffer.push(auth + curRoom.roomid);
 			}
 			if (innerBuffer.length) {
 				buffer.push(`Hidden room auth: ${innerBuffer.join(', ')}`);
 			}
 		}
-		if (targetId === user.userid || user.can('makeroom')) {
+		if (targetId === user.id || user.can('makeroom')) {
 			innerBuffer = [];
 			for (const chatRoom of Rooms.global.chatRooms) {
 				if (!chatRoom.auth || !chatRoom.isPrivate) continue;
 				if (chatRoom.isPrivate !== true) continue;
 				let auth = chatRoom.auth[targetId];
 				if (!auth) continue;
-				innerBuffer.push(auth + chatRoom.id);
+				innerBuffer.push(auth + chatRoom.roomid);
 			}
 			if (innerBuffer.length) {
 				buffer.push(`Private room auth: ${innerBuffer.join(', ')}`);
@@ -1714,22 +1734,22 @@ const commands = {
 		}
 		if (!this.can('ban', targetUser, room)) return false;
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to ban upper staff members.");
-		if (Punishments.getRoomPunishType(room, this.targetUsername) === 'BLACKLIST') return this.errorReply(`This user is already blacklisted from ${room.id}.`);
+		if (Punishments.getRoomPunishType(room, this.targetUsername) === 'BLACKLIST') return this.errorReply(`This user is already blacklisted from ${room.roomid}.`);
 		let name = targetUser.getLastName();
 		let userid = targetUser.getLastId();
 
-		if (Punishments.isRoomBanned(targetUser, room.id) && !target) {
+		if (Punishments.isRoomBanned(targetUser, room.roomid) && !target) {
 			let problem = " but was already banned";
 			return this.privateModAction(`(${name} would be banned by ${user.name} ${problem}.)`);
 		}
 
 		if (targetUser.trusted && room.isPrivate !== true && !room.isPersonal) {
-			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} ${(targetUser.trusted !== targetUser.userid ? ` (${targetUser.trusted})` : ``)} was roombanned from ${room.id} by ${user.name}, and should probably be demoted.`);
+			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} ${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was roombanned from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 		}
 
 		if (targetUser in room.users || user.can('lock')) {
 			targetUser.popup(
-				`|modal||html|<p>${Chat.escapeHTML(user.name)} has banned you from the room ${room.id} ${(room.subRooms ? ` and its subrooms` : ``)}.</p>${(target ? `<p>Reason: ${Chat.escapeHTML(target)}</p>` : ``)}<p>To appeal the ban, PM the staff member that banned you${(!room.battle && room.auth ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.id}">List Room Staff</button></p>` : `.</p>`)}`
+				`|modal||html|<p>${Chat.escapeHTML(user.name)} has banned you from the room ${room.roomid} ${(room.subRooms ? ` and its subrooms` : ``)}.</p>${(target ? `<p>Reason: ${Chat.escapeHTML(target)}</p>` : ``)}<p>To appeal the ban, PM the staff member that banned you${(!room.battle && room.auth ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`)}`
 			);
 		}
 
@@ -1752,9 +1772,9 @@ const commands = {
 		room.hideText([userid, toID(this.inputUsername)]);
 
 		if (room.isPrivate !== true && room.chatRoomData) {
-			this.globalModlog("ROOMBAN", targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
+			this.globalModlog("ROOMBAN", targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 		} else {
-			this.modlog("ROOMBAN", targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
+			this.modlog("ROOMBAN", targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 		}
 		return true;
 	},
@@ -1771,7 +1791,7 @@ const commands = {
 		if (name) {
 			this.addModAction(`${name} was unbanned from ${room.title} by ${user.name}.`);
 			if (room.isPrivate !== true && room.chatRoomData) {
-				this.globalModlog("UNROOMBAN", name, ` by ${user.userid}`);
+				this.globalModlog("UNROOMBAN", name, ` by ${user.id}`);
 			}
 		} else {
 			this.errorReply(`User '${target}' is not banned from this room.`);
@@ -1838,7 +1858,7 @@ const commands = {
 		if (!this.canTalk()) return;
 		if (room.isPersonal && !user.can('warn')) return this.errorReply("Warning is unavailable in group chats.");
 		// If used in staff, help tickets or battles, log the warn to the global modlog.
-		const globalWarn = room.id === 'staff' || room.id.startsWith('help-') || (room.battle && !room.parent);
+		const globalWarn = room.roomid === 'staff' || room.roomid.startsWith('help-') || (room.battle && !room.parent);
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
@@ -1846,12 +1866,12 @@ const commands = {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(target ? ` (${target})` : ``)}`);
-			this.modlog('WARN', targetUser, target, {noalts: 1});
-			this.globalModlog('WARN', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
+			this.modlog('WARN OFFLINE', targetUser, target, {noalts: 1});
+			this.globalModlog('WARN OFFLINE', targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 			return;
 		}
 		if (!(targetUser in room.users) && !globalWarn) {
-			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.id}.`);
+			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.roomid}.`);
 		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
@@ -1868,7 +1888,7 @@ const commands = {
 
 		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(target ? ` (${target})` : ``)}`);
 		this.modlog('WARN', targetUser, target, {noalts: 1});
-		if (globalWarn) this.globalModlog('WARN', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
+		if (globalWarn) this.globalModlog('WARN', targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 		targetUser.send(`|c|~|/warn ${target}`);
 
 		const userid = targetUser.getLastId();
@@ -1900,18 +1920,18 @@ const commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.errorReply(`User ${this.targetUsername} not found.`);
 		}
-		if (targetRoom.id === "global") return this.errorReply(`Users cannot be redirected to the global room.`);
+		if (targetRoom.roomid === "global") return this.errorReply(`Users cannot be redirected to the global room.`);
 		if (targetRoom.isPrivate || targetRoom.isPersonal) {
 			return this.errorReply(`The room "${target}" is not public.`);
 		}
-		if (targetUser.inRooms.has(targetRoom.id)) {
+		if (targetUser.inRooms.has(targetRoom.roomid)) {
 			return this.errorReply(`User ${targetUser.name} is already in the room ${targetRoom.title}!`);
 		}
-		if (!targetUser.inRooms.has(room.id)) {
-			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.id}.`);
+		if (!targetUser.inRooms.has(room.roomid)) {
+			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.roomid}.`);
 		}
-		targetUser.leaveRoom(room.id);
-		targetUser.popup(`You are in the wrong room; please go to <<${targetRoom.id}>> instead`);
+		targetUser.leaveRoom(room.roomid);
+		targetUser.popup(`You are in the wrong room; please go to <<${targetRoom.roomid}>> instead`);
 		this.addModAction(`${targetUser.name} was redirected to room ${targetRoom.title} by ${user.name}.`);
 		this.modlog('REDIRECT', targetUser, `to ${targetRoom.title}`, {noip: 1, noalts: 1});
 		targetUser.leaveRoom(room);
@@ -1934,7 +1954,7 @@ const commands = {
 		if (!this.can('mute', targetUser, room)) return false;
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to mute upper staff members.");
 		let canBeMutedFurther = ((room.getMuteTime(targetUser) || 0) <= (muteDuration * 5 / 6));
-		if (targetUser.locked || (room.isMuted(targetUser) && !canBeMutedFurther) || Punishments.isRoomBanned(targetUser, room.id)) {
+		if (targetUser.locked || (room.isMuted(targetUser) && !canBeMutedFurther) || Punishments.isRoomBanned(targetUser, room.roomid)) {
 			let problem = ` but was already ${(targetUser.locked ? "locked" : room.isMuted(targetUser) ? "muted" : "room banned")}`;
 			if (!target) {
 				return this.privateModAction(`(${targetUser.name} would be muted by ${user.name} ${problem}.)`);
@@ -1942,10 +1962,10 @@ const commands = {
 			return this.addModAction(`${targetUser.name} would be muted by ${user.name} ${problem}. (${target})`);
 		}
 
-		if (targetUser in room.users) targetUser.popup(`|modal|${user.name} has muted you in ${room.id} for ${Chat.toDurationString(muteDuration)}. ${target}`);
+		if (targetUser in room.users) targetUser.popup(`|modal|${user.name} has muted you in ${room.roomid} for ${Chat.toDurationString(muteDuration)}. ${target}`);
 		this.addModAction(`${targetUser.name} was muted by ${user.name} for ${Chat.toDurationString(muteDuration)}.${(target ? ` (${target})` : ``)}`);
 		this.modlog(`${cmd.includes('h') ? 'HOUR' : ''}MUTE`, targetUser, target);
-		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) {
+		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.id) {
 			let displayMessage = `(${targetUser.name}'s ac account: ${targetUser.autoconfirmed})`;
 			this.privateModAction(displayMessage);
 		}
@@ -1973,7 +1993,7 @@ const commands = {
 		if (!this.can('mute', null, room)) return false;
 
 		let targetUser = this.targetUser;
-		let successfullyUnmuted = room.unmute(targetUser ? targetUser.userid : toID(this.targetUsername), `Your mute in '${room.title}' has been lifted.`);
+		let successfullyUnmuted = room.unmute(targetUser ? targetUser.id : toID(this.targetUsername), `Your mute in '${room.title}' has been lifted.`);
 
 		if (successfullyUnmuted) {
 			this.addModAction(`${(targetUser ? targetUser.name : successfullyUnmuted)} was unmuted by ${user.name}.`);
@@ -2049,20 +2069,21 @@ const commands = {
 		let affected = [];
 
 		if (targetUser) {
-			affected = Punishments.lock(targetUser, duration, targetUser.locked, userReason);
+			const ignoreAlts = Punishments.sharedIps.has(targetUser.latestIP);
+			affected = Punishments.lock(targetUser, duration, targetUser.locked, ignoreAlts, userReason);
 		} else {
-			affected = Punishments.lock(null, duration, userid, userReason);
+			affected = Punishments.lock(null, duration, userid, false, userReason);
 		}
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
-		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.userid}${globalReason}`);
+		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.id}${globalReason}`);
 
 		let weekMsg = week ? ' for a week' : '';
 		let lockMessage = `${name} was locked from talking${weekMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
 		this.addModAction(lockMessage);
 		// Notify staff room when a user is locked outside of it.
-		if (room.id !== 'staff' && Rooms.get('staff')) {
-			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
+		if (room.roomid !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${lockMessage}`);
 		}
 
 		room.hideText([userid, toID(this.inputUsername)]);
@@ -2091,21 +2112,7 @@ const commands = {
 			message += `\n\nYour lock will expire in a few days.`;
 			targetUser.send(message);
 
-			let roomauth = [];
-			for (const [id, curRoom] of Rooms.rooms) {
-				if (id === 'global' || !curRoom.auth) continue;
-				// Destroy personal rooms of the locked user.
-				if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
-					curRoom.destroy();
-				} else {
-					if (curRoom.isPrivate || curRoom.battle) continue;
-
-					let group = curRoom.auth[userid];
-
-					if (group) roomauth.push(`${group}${id}`);
-				}
-			}
-
+			const roomauth = Rooms.global.destroyPersonalRooms(userid);
 			if (roomauth.length) Monitor.log(`[CrisisMonitor] Locked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		}
 
@@ -2138,10 +2145,10 @@ const commands = {
 			const unlockMessage = `${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}.${reason}`;
 			this.addModAction(unlockMessage);
 			// Notify staff room when a user is unlocked outside of it.
-			if (!reason && room.id !== 'staff' && Rooms.get('staff')) {
-				Rooms.get('staff').addByUser(user, `<<${room.id}>> ${unlockMessage}`);
+			if (!reason && room.roomid !== 'staff' && Rooms.get('staff')) {
+				Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${unlockMessage}`);
 			}
-			if (!reason) this.globalModlog("UNLOCK", toID(target), ` by ${user.userid}`);
+			if (!reason) this.globalModlog("UNLOCK", toID(target), ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has unlocked you.`);
 		} else {
 			this.errorReply(`User '${target}' is not locked.`);
@@ -2160,7 +2167,7 @@ const commands = {
 		Punishments.savePunishments();
 
 		for (const curUser of Users.findUsers([userid], [])) {
-			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.userid)) {
+			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
 				curUser.locked = false;
 				curUser.namelocked = false;
 				curUser.updateIdentity();
@@ -2171,8 +2178,8 @@ const commands = {
 		const unlockMessage = `The name '${target}' was unlocked by ${user.name}.`;
 
 		this.addModAction(unlockMessage);
-		if (room.id !== 'staff' && Rooms.get('staff')) {
-			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${unlockMessage}`);
+		if (room.roomid !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${unlockMessage}`);
 		}
 	},
 	unlockip(target, room, user) {
@@ -2191,7 +2198,7 @@ const commands = {
 		Punishments.savePunishments();
 
 		for (const curUser of Users.findUsers([], [target])) {
-			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.userid)) {
+			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.id)) {
 				curUser.locked = false;
 				curUser.namelocked = false;
 				curUser.updateIdentity();
@@ -2240,14 +2247,8 @@ const commands = {
 			return this.errorReply(`Use /globalban; ${name} is not a trusted user.`);
 		}
 
-		// Destroy personal rooms of the banned user.
-		for (const roomid of targetUser.inRooms) {
-			if (roomid === 'global') continue;
-			let targetRoom = Rooms.get(roomid);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] === Users.HOST_SYMBOL) {
-				targetRoom.destroy();
-			}
-		}
+		const roomauth = Rooms.global.destroyPersonalRooms(userid);
+		if (roomauth.length) Monitor.log(`[CrisisMonitor] Globally banned user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 
 		let proof = '';
 		let userReason = target;
@@ -2265,11 +2266,11 @@ const commands = {
 		this.addModAction(banMessage);
 
 		// Notify staff room when a user is banned outside of it.
-		if (room.id !== 'staff' && Rooms.get('staff')) {
-			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${banMessage}`);
+		if (room.roomid !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${banMessage}`);
 		}
 
-		let affected = Punishments.ban(targetUser, null, null, userReason);
+		let affected = Punishments.ban(targetUser, null, null, false, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
 		if (affected.length > 1) {
@@ -2289,7 +2290,7 @@ const commands = {
 		room.hideText([userid, toID(this.inputUsername)]);
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
-		this.globalModlog("BAN", targetUser, ` by ${user.userid}${globalReason}`);
+		this.globalModlog("BAN", targetUser, ` by ${user.id}${globalReason}`);
 		return true;
 	},
 	globalbanhelp: [
@@ -2309,10 +2310,10 @@ const commands = {
 		if (name) {
 			this.addModAction(unbanMessage);
 			// Notify staff room when a user is unbanned outside of it.
-			if (room.id !== 'staff' && Rooms.get('staff')) {
-				Rooms.get('staff').addByUser(user, `<<${room.id}>> ${unbanMessage}`);
+			if (room.roomid !== 'staff' && Rooms.get('staff')) {
+				Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${unbanMessage}`);
 			}
-			this.globalModlog("UNBAN", name, ` by ${user.userid}`);
+			this.globalModlog("UNBAN", name, ` by ${user.id}`);
 		} else {
 			this.errorReply(`User '${target}' is not globally banned.`);
 		}
@@ -2356,7 +2357,7 @@ const commands = {
 		for (let userid in room.auth) {
 			if (room.auth[userid] === '+') {
 				delete room.auth[userid];
-				if (userid in room.users) room.users[userid].updateIdentity(room.id);
+				if (userid in room.users) room.users[userid].updateIdentity(room.roomid);
 				count++;
 			}
 		}
@@ -2445,7 +2446,7 @@ const commands = {
 		if (!this.can('receiveauthmessages', null, room)) return false;
 		target = target.replace(/\n/g, "; ");
 		this.modlog('NOTE', null, target);
-		if (room.id === 'staff' || room.id === 'upperstaff') this.globalModlog('NOTE', null, ` by ${user.userid}: ${target}`);
+		if (room.roomid === 'staff' || room.roomid === 'upperstaff') this.globalModlog('NOTE', null, ` by ${user.id}: ${target}`);
 		return this.privateModAction(`(${user.name} notes: ${target})`);
 	},
 	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ # & ~`],
@@ -2471,7 +2472,7 @@ const commands = {
 			return this.errorReply(`Group '${nextGroup}' does not exist.`);
 		}
 		if (!cmd.startsWith('global')) {
-			let groupid = Config.groups[nextGroup].id;
+			let groupid = Config.groups[nextGroup].roomid;
 			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth';
 			if (Config.groups[nextGroup].globalonly) return this.errorReply(`Did you mean "/global${groupid}"?`);
 			if (Config.groups[nextGroup].roomonly) return this.errorReply(`Did you mean "/room${groupid}"?`);
@@ -2561,7 +2562,7 @@ const commands = {
 		// warning: never document this command in /help
 		if (!this.can('forcepromote')) return false;
 		target = this.splitTarget(target, true);
-		let name = Chat.filter(this, this.targetUsername, user, room, connection);
+		let name = this.filter(this.targetUsername);
 		if (!name) return;
 		name = name.slice(0, 18);
 		let nextGroup = target;
@@ -2648,7 +2649,7 @@ const commands = {
 		if (!target) return;
 
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.id !== 'global' && curRoom.type !== 'battle') {
+			if (curRoom.roomid !== 'global' && curRoom.type !== 'battle') {
 				curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 			}
 		}
@@ -2678,7 +2679,7 @@ const commands = {
 		let [rank, titleNotification] = this.splitOne(target);
 		if (rank === 'all') rank = ` `;
 		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		const id = `${room.id}-rank-${(Config.groups[rank].id || `all`)}`;
+		const id = `${room.roomid}-rank-${(Config.groups[rank].roomid || `all`)}`;
 		if (cmd === 'notifyoffrank') {
 			if (rank === ' ') {
 				room.send(`|tempnotifyoff|${id}`);
@@ -2722,13 +2723,27 @@ const commands = {
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
-		this.privateModAction(`(${targetUser.name} was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)})`);
-		this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
-		this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
-		Chat.forceRenames.set(targetUser.userid, user.userid);
-		Ladders.cancelSearches(targetUser);
+		let forceRenameMessage;
+		if (targetUser.connected) {
+			forceRenameMessage = `was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
+			this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
+			this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
+			Chat.forceRenames.set(targetUser.id, (Chat.forceRenames.get(targetUser.id) || 0) + 1);
+			Ladders.cancelSearches(targetUser);
+			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
+		} else {
+			forceRenameMessage = `would be forced to choose a new name by ${user.name} but is offline${(reason ? `: ${reason}` : ``)}`;
+			this.globalModlog('FORCERENAME OFFLINE', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
+			this.modlog('FORCERENAME OFFLINE', targetUser, reason, {noip: 1, noalts: 1});
+			if (!Chat.forceRenames.has(targetUser.id)) Chat.forceRenames.set(targetUser.id, 0);
+		}
+
+		if (room.roomid !== 'staff') this.privateModAction(`(${targetUser.name} ${forceRenameMessage})`);
+		const roomMessage = room.roomid !== 'staff' ? `«<a href="/${room.roomid}" target="_blank">${room.roomid}</a>» ` : '';
+		const rankMessage = targetUser.getAccountStatusString();
+		Rooms.global.notifyRooms(['staff'], `|html|${roomMessage}` + Chat.html`<span class="username">${targetUser.name}</span> ${rankMessage} ${forceRenameMessage}`);
+
 		targetUser.resetName(true);
-		targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
 		return true;
 	},
 	forcerenamehelp: [
@@ -2747,7 +2762,7 @@ const commands = {
 		if (!targetUser) {
 			return this.errorReply(`User '${this.targetUsername}' not found.`);
 		}
-		if (targetUser.userid !== toID(this.inputUsername) && cmd !== 'forcenamelock') {
+		if (targetUser.id !== toID(this.inputUsername) && cmd !== 'forcenamelock') {
 			return this.errorReply(`${this.inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /forcenamelock.`);
 		}
 		if (!this.can('forcerename', targetUser)) return false;
@@ -2758,14 +2773,20 @@ const commands = {
 		this.privateModAction(`(${lockMessage})`);
 
 		// Notify staff room when a user is locked outside of it.
-		if (room.id !== 'staff' && Rooms.get('staff')) {
-			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
+		if (room.roomid !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${lockMessage}`);
 		}
 
-		this.globalModlog("NAMELOCK", targetUser, ` by ${user.userid}${reasonText}`);
+		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.id);
+		if (roomauth.length) Monitor.log(`[CrisisMonitor] Namelocked user ${targetUser.name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+
+		this.globalModlog("NAMELOCK", targetUser, ` by ${user.id}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
-		Punishments.namelock(targetUser, null, null, reason);
+		Punishments.namelock(targetUser, null, null, false, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
+		// Automatically upload replays as evidence/reference to the punishment
+		if (room.battle) this.parse('/savereplay forpunishment');
+
 		return true;
 	},
 	namelockhelp: [`/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. Requires: % @ & ~`],
@@ -2785,7 +2806,7 @@ const commands = {
 
 		if (unlocked) {
 			this.addModAction(`${unlocked} was unnamelocked by ${user.name}.${reason}`);
-			if (!reason) this.globalModlog("UNNAMELOCK", toID(target), ` by ${user.userid}`);
+			if (!reason) this.globalModlog("UNNAMELOCK", toID(target), ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has unnamelocked you.`);
 		} else {
 			this.errorReply(`User '${target}' is not namelocked.`);
@@ -2815,8 +2836,8 @@ const commands = {
 			}
 			// Notify staff when a trusted user gets their messages hidden
 			if (!room.isPrivate) {
-				const staffRoom = Rooms('staff');
-				if (staffRoom) staffRoom.addByUser(user, `<<${room.id}>> ${user.name} hid trusted user ${targetUser.name}'s messages.`);
+				const staffRoom = Rooms.get('staff');
+				if (staffRoom) staffRoom.addByUser(user, `<<${room.roomid}>> ${user.name} hid trusted user ${targetUser.name}'s messages.`);
 			}
 		}
 
@@ -2855,7 +2876,7 @@ const commands = {
 		if (!room.chatRoomData) {
 			return this.errorReply(`This room is not going to last long enough for a blacklist to matter - just ban the user`);
 		}
-		let punishment = Punishments.isRoomBanned(targetUser, room.id);
+		let punishment = Punishments.isRoomBanned(targetUser, room.roomid);
 		if (punishment && punishment[0] === 'BLACKLIST') {
 			return this.errorReply(`This user is already blacklisted from this room.`);
 		}
@@ -2870,13 +2891,13 @@ const commands = {
 		const userid = targetUser.getLastId();
 
 		if (targetUser.trusted && room.isPrivate !== true) {
-			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.userid ? ` (${targetUser.trusted})` : '')} was blacklisted from ${room.id} by ${user.name}, and should probably be demoted.`);
+			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : '')} was blacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 		}
 
 		if (targetUser in room.users || user.can('lock')) {
 			targetUser.popup(
-				`|modal||html|<p>${Chat.escapeHTML(user.name)} has blacklisted you from the room ${room.id}${(room.subRooms ? ` and its subrooms` : '')}. Reason: ${Chat.escapeHTML(target)}</p>` +
-				`<p>To appeal the ban, PM the staff member that blacklisted you${(!room.battle && room.auth ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.id}">List Room Staff</button></p>` : `.</p>`)}`
+				`|modal||html|<p>${Chat.escapeHTML(user.name)} has blacklisted you from the room ${room.roomid}${(room.subRooms ? ` and its subrooms` : '')}. Reason: ${Chat.escapeHTML(target)}</p>` +
+				`<p>To appeal the ban, PM the staff member that blacklisted you${(!room.battle && room.auth ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`)}`
 			);
 		}
 
@@ -2897,10 +2918,10 @@ const commands = {
 		}
 
 		if (!room.isPrivate && room.chatRoomData) {
-			this.globalModlog("BLACKLIST", targetUser, ` by ${user.userid}${(target ? `: ${target}` : '')}`);
+			this.globalModlog("BLACKLIST", targetUser, ` by ${user.id}${(target ? `: ${target}` : '')}`);
 		} else {
 			// Room modlog only
-			this.modlog("BLACKLIST", targetUser, ` by ${user.userid}${(target ? `: ${target}` : '')}`);
+			this.modlog("BLACKLIST", targetUser, ` by ${user.id}${(target ? `: ${target}` : '')}`);
 		}
 		return true;
 	},
@@ -2945,14 +2966,14 @@ const commands = {
 		this.privateModAction(`(${battlebanMessage})`);
 
 		// Notify staff room when a user is banned from battling outside of it.
-		if (room.id !== 'staff' && Rooms.get('staff')) {
-			Rooms.get('staff').addByUser(user, `<<${room.id}>> ${battlebanMessage}`);
+		if (room.roomid !== 'staff' && Rooms.get('staff')) {
+			Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${battlebanMessage}`);
 		}
 		if (targetUser.trusted) {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from battling by ${user.name}, and should probably be demoted.`);
 		}
 
-		this.globalModlog("BATTLEBAN", targetUser, ` by ${user.userid}${reasonText}`);
+		this.globalModlog("BATTLEBAN", targetUser, ` by ${user.id}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
 		Punishments.battleban(targetUser, null, null, reason);
 		targetUser.popup(`|modal|${user.name} has prevented you from starting new battles for 2 days${reasonText}`);
@@ -2972,7 +2993,7 @@ const commands = {
 
 		if (unbanned) {
 			this.addModAction(`${unbanned} was allowed to battle again by ${user.name}.`);
-			this.globalModlog("UNBATTLEBAN", toID(target), `by ${user.name}`);
+			this.globalModlog("UNBATTLEBAN", toID(target), ` by ${user.name}`);
 			if (targetUser) targetUser.popup(`${user.name} has allowed you to battle again.`);
 		} else {
 			this.errorReply(`User ${target} is not banned from battling.`);
@@ -2997,7 +3018,7 @@ const commands = {
 		let targets = targetStr.split(',').map(s => toID(s));
 
 		let duplicates = targets.filter(userid => {
-			let punishment = Punishments.roomUserids.nestedGet(room.id, userid);
+			let punishment = Punishments.roomUserids.nestedGet(room.roomid, userid);
 			return punishment && punishment[0] === 'BLACKLIST';
 		});
 		if (duplicates.length) {
@@ -3014,10 +3035,10 @@ const commands = {
 
 			const trusted = Users.isTrusted(userid);
 			if (trusted && room.isPrivate !== true) {
-				Monitor.log(`[CrisisMonitor] Trusted user ${userid}${(trusted !== userid ? ` (${trusted})` : ``)} was nameblacklisted from ${room.id} by ${user.name}, and should probably be demoted.`);
+				Monitor.log(`[CrisisMonitor] Trusted user ${userid}${(trusted !== userid ? ` (${trusted})` : ``)} was nameblacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 			}
 			if (!room.isPrivate && room.chatRoomData) {
-				this.globalModlog("NAMEBLACKLIST", userid, ` by ${user.userid}${(reason ? `: ${reason}` : '')}`);
+				this.globalModlog("NAMEBLACKLIST", userid, ` by ${user.id}${(reason ? `: ${reason}` : '')}`);
 			}
 		}
 
@@ -3036,7 +3057,7 @@ const commands = {
 		if (name) {
 			this.privateModAction(`(${name} was unblacklisted by ${user.name}.)`);
 			if (!room.isPrivate && room.chatRoomData) {
-				this.globalModlog("UNBLACKLIST", name, ` by ${user.userid}`);
+				this.globalModlog("UNBLACKLIST", name, ` by ${user.id}`);
 			}
 		} else {
 			this.errorReply(`User '${target}' is not blacklisted.`);
@@ -3077,7 +3098,7 @@ const commands = {
 
 		if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
 
-		const subMap = Punishments.roomUserids.get(room.id);
+		const subMap = Punishments.roomUserids.get(room.roomid);
 		if (!subMap || subMap.size === 0) {
 			return this.sendReply("This room has no blacklisted users.");
 		}
@@ -3093,7 +3114,7 @@ const commands = {
 		}
 
 		if (user.can('ban')) {
-			const subMap = Punishments.roomIps.get(room.id);
+			const subMap = Punishments.roomIps.get(room.roomid);
 
 			if (subMap) {
 				ips = '/ips';
@@ -3211,6 +3232,7 @@ const commands = {
 				Chat.uncache('./.server-dist/chat');
 				Chat.uncache('./server/chat-commands');
 				Chat.uncacheDir('./server/chat-plugins');
+				Chat.uncacheDir('./.server-dist/chat-plugins');
 				Chat.uncacheDir('./translations');
 				global.Chat = require('../.server-dist/chat').Chat;
 
@@ -3266,8 +3288,8 @@ const commands = {
 				if (lock['punishments']) return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				Chat.uncache('./server/punishments');
-				global.Punishments = require('./punishments');
+				Chat.uncache('./.server-dist/punishments');
+				global.Punishments = require('../.server-dist/punishments').Punishments;
 				this.sendReply("Punishments have been hot-patched.");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
 				patch = 'dnsbl';
@@ -3475,7 +3497,7 @@ const commands = {
 
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.type === 'battle') curRoom.rated = false;
-			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
+			if (curRoom.roomid !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
 		}
 		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
@@ -3498,7 +3520,7 @@ const commands = {
 		);
 
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
+			if (curRoom.roomid !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
 		}
 		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
@@ -3572,7 +3594,7 @@ const commands = {
 		let message = cmd === 'crashfixed' ? `<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b></div>` : `<div class="broadcast-green"><b>The server restart was canceled.</b></div>`;
 		if (Rooms.global.lockdown === true) {
 			for (const curRoom of Rooms.rooms.values()) {
-				if (curRoom.id !== 'global') curRoom.addRaw(message).update();
+				if (curRoom.roomid !== 'global') curRoom.addRaw(message).update();
 			}
 			for (const user of Users.users.values()) {
 				user.send(`|pm|~|${user.group}${user.name}|/raw ${message}`);
@@ -3598,7 +3620,7 @@ const commands = {
 		}
 		Config.emergency = true;
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
+			if (curRoom.roomid !== 'global') curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
 		}
 
 		const logRoom = Rooms.get('staff') || room;
@@ -3613,7 +3635,7 @@ const commands = {
 		}
 		Config.emergency = false;
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
+			if (curRoom.roomid !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
 		}
 
 		const logRoom = Rooms.get('staff') || room;
@@ -3888,15 +3910,15 @@ const commands = {
 			break;
 		case 'fieldcondition': case 'pseudoweather':
 		case 'fc':
-			room.battle.stream.write(`>eval battle.addPseudoWeather('${toID(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.field.addPseudoWeather('${toID(targets[0])}', 'debug')`);
 			break;
 		case 'weather':
 		case 'w':
-			room.battle.stream.write(`>eval battle.setWeather('${toID(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.field.setWeather('${toID(targets[0])}', 'debug')`);
 			break;
 		case 'terrain':
 		case 't':
-			room.battle.stream.write(`>eval battle.setTerrain('${toID(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.field.setTerrain('${toID(targets[0])}', 'debug')`);
 			break;
 		default:
 			this.errorReply(`Unknown editbattle command: ${cmd}`);
@@ -3926,18 +3948,18 @@ const commands = {
 		if (!targetUser) {
 			return this.errorReply(`User ${target} not found.`);
 		}
-		if (!battle.playerTable[user.userid]) {
+		if (!battle.playerTable[user.id]) {
 			return this.errorReply("Must be a player in this battle.");
 		}
-		if (!battle.allowExtraction[targetUser.userid]) {
+		if (!battle.allowExtraction[targetUser.id]) {
 			return this.errorReply(`${targetUser.name} has not requested extraction.`);
 		}
-		if (battle.allowExtraction[targetUser.userid].has(user.userid)) {
+		if (battle.allowExtraction[targetUser.id].has(user.id)) {
 			return this.errorReply(`You have already consented to extraction with ${targetUser.name}.`);
 		}
-		battle.allowExtraction[targetUser.userid].add(user.userid);
+		battle.allowExtraction[targetUser.id].add(user.id);
 		this.addModAction(`${user.name} consents to sharing battle team and choices with ${targetUser.name}.`);
-		if (Object.keys(battle.playerTable).length === battle.allowExtraction[targetUser.userid].size) {
+		if (Object.keys(battle.playerTable).length === battle.allowExtraction[targetUser.id].size) {
 			this.addModAction(`${targetUser.name} has extracted the battle input log.`);
 			const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
 			targetUser.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`);
@@ -3956,15 +3978,15 @@ const commands = {
 			return;
 		}
 		if (!this.can('exportinputlog', null, room)) return;
-		if (!battle.allowExtraction[user.userid]) {
-			battle.allowExtraction[user.userid] = new Set();
+		if (!battle.allowExtraction[user.id]) {
+			battle.allowExtraction[user.id] = new Set();
 			for (const player of battle.players) {
 				const playerUser = player.getUser();
 				if (!playerUser) continue;
-				if (playerUser.userid === user.userid) {
-					battle.allowExtraction[user.userid].add(user.userid);
+				if (playerUser.id === user.id) {
+					battle.allowExtraction[user.id].add(user.id);
 				} else {
-					playerUser.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
+					playerUser.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`);
 				}
 			}
 			return this.addModAction(`${user.name} wants to extract the battle input log.`);
@@ -3996,8 +4018,8 @@ const commands = {
 			battle.p2.name = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
 		}
 
-		battleRoom.auth[user.userid] = Users.HOST_SYMBOL;
-		this.parse(`/join ${battleRoom.id}`);
+		battleRoom.auth[user.id] = Users.HOST_SYMBOL;
+		this.parse(`/join ${battleRoom.roomid}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
 			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
@@ -4025,7 +4047,7 @@ const commands = {
 		if (cmd === 'accepttie' && !battle.players.some(player => player.wantsTie)) {
 			return this.errorReply("No other player is requesting a tie right now. It was probably canceled.");
 		}
-		const player = battle.playerTable[user.userid];
+		const player = battle.playerTable[user.id];
 		if (!battle.players.some(player => player.wantsTie)) {
 			this.add(`${user.name} is offering a tie.`);
 			room.update();
@@ -4061,7 +4083,7 @@ const commands = {
 	rejecttie(target, room, user) {
 		const battle = room.battle;
 		if (!battle) return this.errorReply("Must be in a battle room.");
-		const player = battle.playerTable[user.userid];
+		const player = battle.playerTable[user.id];
 		if (!player) {
 			return this.errorReply("Must be a player to reject ties.");
 		}
@@ -4150,13 +4172,13 @@ const commands = {
 		let rating = 0;
 		if (battle.ended && room.rated) rating = room.rated;
 		const [success] = await LoginServer.request('prepreplay', {
-			id: room.id.substr(7),
+			id: room.roomid.substr(7),
 			loghash: datahash,
 			p1: battle.p1.name,
 			p2: battle.p2.name,
 			format: format.id,
 			rating: rating,
-			hidden: forPunishment ? '2' : room.isPrivate || room.hideReplay ? '1' : '',
+			hidden: forPunishment || room.unlistReplay ? '2' : room.isPrivate || room.hideReplay ? '1' : '',
 			inputlog: battle.inputLog ? battle.inputLog.join('\n') : null,
 		});
 		if (success) battle.replaySaved = true;
@@ -4166,7 +4188,7 @@ const commands = {
 		}
 		connection.send('|queryresponse|savereplay|' + JSON.stringify({
 			log: data,
-			id: room.id.substr(7),
+			id: room.roomid.substr(7),
 		}));
 	},
 
@@ -4174,6 +4196,7 @@ const commands = {
 		if (!room || !room.battle || !this.can('joinbattle', null, room)) return;
 		if (room.hideReplay) return this.errorReply(`The replay for this battle is already set to hidden.`);
 		room.hideReplay = true;
+		// If a replay has already been saved, /savereplay again to update the uploaded replay's hidden status
 		if (room.battle.replaySaved) this.parse('/savereplay');
 		this.addModAction(`${user.name} hid the replay of this battle.`);
 	},
@@ -4193,19 +4216,19 @@ const commands = {
 		let name = this.targetUsername;
 
 		if (!targetUser) return this.errorReply(`User ${name} not found.`);
-		if (!targetUser.inRooms.has(room.id)) {
+		if (!targetUser.inRooms.has(room.roomid)) {
 			return this.errorReply(`User ${name} must be in the battle room already.`);
 		}
 		if (!this.can('joinbattle', null, room)) return;
-		if (room.battle[target].userid) {
+		if (room.battle[target].id) {
 			return this.errorReply(`This room already has a player in slot ${target}.`);
 		}
-		if (targetUser.userid in room.battle.playerTable) return this.errorReply(`${targetUser.name} is already a player in this battle.`);
+		if (targetUser.id in room.battle.playerTable) return this.errorReply(`${targetUser.name} is already a player in this battle.`);
 
-		room.auth[targetUser.userid] = Users.PLAYER_SYMBOL;
+		room.auth[targetUser.id] = Users.PLAYER_SYMBOL;
 		let success = room.battle.joinGame(targetUser, target);
 		if (!success) {
-			delete room.auth[targetUser.userid];
+			delete room.auth[targetUser.id];
 			return;
 		}
 		this.addModAction(`${name} was added to the battle as Player ${target.slice(1)} by ${user.name}.`);
@@ -4221,11 +4244,11 @@ const commands = {
 		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
 
 		let didSomething = false;
-		if (!room.battle.p1.userid && room.battle.p1.name !== 'Player 1') {
+		if (!room.battle.p1.id && room.battle.p1.name !== 'Player 1') {
 			this.parse(`/addplayer ${room.battle.p1.name}, p1`);
 			didSomething = true;
 		}
-		if (!room.battle.p2.userid && room.battle.p2.name !== 'Player 2') {
+		if (!room.battle.p2.id && room.battle.p2.name !== 'Player 2') {
 			this.parse(`/addplayer ${room.battle.p2.name}, p2`);
 			didSomething = true;
 		}
@@ -4344,7 +4367,7 @@ const commands = {
 		if (!targetUser) return this.errorReply(`User '${target}' not found.`);
 
 		room.battle.win(targetUser);
-		this.modlog('FORCEWIN', targetUser.userid);
+		this.modlog('FORCEWIN', targetUser.id);
 	},
 	forcewinhelp: [
 		`/forcetie - Forces the current match to end in a tie. Requires: & ~`,
@@ -4449,7 +4472,7 @@ const commands = {
 	'!reject': true,
 	reject(target, room, user) {
 		target = toID(target);
-		if (!target && this.pmTarget) target = this.pmTarget.userid;
+		if (!target && this.pmTarget) target = this.pmTarget.id;
 		Ladders.rejectChallenge(user, target);
 	},
 
@@ -4500,11 +4523,17 @@ const commands = {
 			target = '';
 		}
 		if (cmd === 'userdetails') {
+			if (target.length > 18) {
+				connection.send('|queryresponse|userdetails|null');
+				return false;
+			}
+
 			let targetUser = Users.get(target);
 			if (!trustable || !targetUser) {
 				connection.send('|queryresponse|userdetails|' + JSON.stringify({
 					id: target,
 					userid: toID(target),
+					name: target,
 					rooms: false,
 				}));
 				return false;
@@ -4524,15 +4553,16 @@ const commands = {
 					roomData.p1 = battle.p1 ? ' ' + battle.p1.name : '';
 					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
 				}
-				if (targetRoom.auth && targetUser.userid in targetRoom.auth) {
-					roomid = targetRoom.auth[targetUser.userid] + roomid;
+				if (targetRoom.auth && targetUser.id in targetRoom.auth) {
+					roomid = targetRoom.auth[targetUser.id] + roomid;
 				}
 				roomList[roomid] = roomData;
 			}
 			if (!targetUser.connected) roomList = false;
 			let userdetails = {
 				id: target,
-				userid: targetUser.userid,
+				userid: targetUser.id,
+				name: targetUser.name,
 				avatar: targetUser.avatar,
 				group: targetUser.group,
 				autoconfirmed: !!targetUser.autoconfirmed,
@@ -4540,7 +4570,6 @@ const commands = {
 				away: targetUser.away,
 				rooms: roomList,
 			};
-			if (targetUser.userid !== target) userdetails.name = targetUser.name;
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;
@@ -4561,9 +4590,14 @@ const commands = {
 		} else if (cmd === 'roominfo') {
 			if (!trustable) return false;
 
+			if (target.length > 225) {
+				connection.end('|queryresponse|roominfo|null');
+				return false;
+			}
+
 			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom === Rooms.global || (
-				targetRoom.isPrivate && !user.inRooms.has(targetRoom.id) && !user.games.has(targetRoom.id)
+				targetRoom.isPrivate && !user.inRooms.has(targetRoom.roomid) && !user.games.has(targetRoom.roomid)
 			)) {
 				const roominfo = {id: target, error: 'not found or access denied'};
 				connection.send(`|queryresponse|roominfo|${JSON.stringify(roominfo)}`);
@@ -4579,7 +4613,7 @@ const commands = {
 
 			let roominfo = {
 				id: target,
-				roomid: targetRoom.id,
+				roomid: targetRoom.roomid,
 				title: targetRoom.title,
 				type: targetRoom.type,
 				visibility: visibility,
@@ -4599,7 +4633,7 @@ const commands = {
 
 			for (let userid in targetRoom.users) {
 				let user = targetRoom.users[userid];
-				let userinfo = user.getIdentity(targetRoom.id);
+				let userinfo = user.getIdentity(targetRoom.roomid);
 				roominfo.users.push(userinfo);
 			}
 
