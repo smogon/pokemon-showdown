@@ -57,7 +57,7 @@ exports.commands = {
 	ygo: 'yugioh',
 	yugioh(target, room, user) {
 		if (!this.canBroadcast()) return;
-		if (room.id !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
+		if (room.roomid !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
 		let subdomain = 'yugioh';
 		let query = target.trim();
 		if (!query) return this.parse('/help yugioh');

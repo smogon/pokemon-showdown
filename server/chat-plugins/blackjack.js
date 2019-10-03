@@ -38,7 +38,7 @@ class Blackjack extends Rooms.RoomGame {
 		};
 		this.deck = new BlackjackDeck().shuffle();
 
-		this.id = this.room.id;
+		this.roomid = this.room.roomid;
 		this.title = `Blackjack (${room.title})`;
 		this.blackjack = true;
 		this.state = 'signups';
@@ -110,20 +110,20 @@ class Blackjack extends Rooms.RoomGame {
 	}
 	leaveGame(user) {
 		if (this.state === 'started') return this.errorMessage(user, `You cannot leave this game; it has already started.`);
-		if (!this.playerTable[user.userid]) return this.errorMessage(user, "You are not in this game to leave.");
+		if (!this.playerTable[user.id]) return this.errorMessage(user, "You are not in this game to leave.");
 		this.removePlayer(user);
 		this.sendInvite();
 	}
 	spectate(user) {
 		if (this.spectators[user]) return this.errorMessage(user, `You are already spectating this game.`);
 		if (this.playerTable[user]) return this.errorMessage(user, `You don't need to spectate the game; you're playing the game.`);
-		this.spectators[user.userid] = user.userid;
-		user.sendTo(this.id, `You are now spectating this game.`);
+		this.spectators[user.id] = user.id;
+		user.sendTo(this.roomid, `You are now spectating this game.`);
 	}
 	unspectate(user) {
-		if (!this.spectators[user.userid]) return this.errorMessage(user, `You are already not spectating this game.`);
-		delete this.spectators[user.userid];
-		user.sendTo(this.id, `You are no longer spectating this game.`);
+		if (!this.spectators[user.id]) return this.errorMessage(user, `You are already not spectating this game.`);
+		delete this.spectators[user.id];
+		user.sendTo(this.roomid, `You are no longer spectating this game.`);
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Blackjack extends Rooms.RoomGame {
 		}
 		for (let spectator of Object.keys(this.spectators)) {
 			spectator = Users.get(this.spectators[spectator]);
-			if (spectator) spectator.sendTo(this.id, `${message}${this.lastMessage + text}</div>`);
+			if (spectator) spectator.sendTo(this.roomid, `${message}${this.lastMessage + text}</div>`);
 		}
 	}
 	clear() {
@@ -194,7 +194,7 @@ class Blackjack extends Rooms.RoomGame {
 		}
 	}
 	slide(user) {
-		user.sendTo(this.id, `|uhtml|blackjack-${this.room.gameNumber}|`);
+		user.sendTo(this.roomid, `|uhtml|blackjack-${this.room.gameNumber}|`);
 		this.display('', null, user.name);
 	}
 	onConnect(user) {
@@ -204,7 +204,7 @@ class Blackjack extends Rooms.RoomGame {
 		} else if (this.state === 'started') {
 			const player = this.playerTable[user];
 			const spectator = this.spectators[user];
-			if (player && user.userid === toID(this.curUser)) { // their turn; send gamelog and game screen
+			if (player && user.id === toID(this.curUser)) { // their turn; send gamelog and game screen
 				player.sendRoom(`${message}${player.gameLog}`);
 				player.sendRoom(player.playScreen.replace('|uhtmlchange|', '|uhtml|'));
 				return;
@@ -212,7 +212,7 @@ class Blackjack extends Rooms.RoomGame {
 				player.sendRoom(`${message}${player.gameLog}`);
 				return;
 			} else if (spectator) { // spectator; send gamelog
-				user.sendTo(this.id, `${message}${this.lastMessage}`);
+				user.sendTo(this.roomid, `${message}${this.lastMessage}`);
 				return;
 			}
 		}
@@ -363,7 +363,7 @@ class Blackjack extends Rooms.RoomGame {
 	hit(user) {
 		if (this.state !== 'started') return this.errorMessage(user, `Blackjack hasn't started yet.`);
 		if (!this.playerTable[user]) return this.errorMessage(user, `You aren't a player in this game.`);
-		if (this.curUser !== user.userid) return this.errorMessage(user, `It's not your turn.`);
+		if (this.curUser !== user.id) return this.errorMessage(user, `It's not your turn.`);
 		this.playerTable[user].selfUhtml = 'change';
 		this.playerTable[user].resetTimerTicks();
 
@@ -373,7 +373,7 @@ class Blackjack extends Rooms.RoomGame {
 		const player = this.playerTable[user];
 		if (this.state !== 'started') return this.errorMessage(user, `Blackjack hasn't started yet.`);
 		if (!player) return this.errorMessage(user, `You aren't a player in this game.`);
-		if (this.curUser !== user.userid) return this.errorMessage(user, `It's not your turn.`);
+		if (this.curUser !== user.id) return this.errorMessage(user, `It's not your turn.`);
 		player.status = 'stand';
 		let cards = '';
 		for (let card of player.cards) cards += `[${card}] `;

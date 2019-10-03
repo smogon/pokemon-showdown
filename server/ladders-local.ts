@@ -162,7 +162,7 @@ export class LadderStore {
 		if (index >= 0) {
 			rating = ladder[index][1];
 		}
-		if (user && user.userid === userid) {
+		if (user && user.id === userid) {
 			user.mmrCache[formatid] = rating;
 		}
 		return rating;

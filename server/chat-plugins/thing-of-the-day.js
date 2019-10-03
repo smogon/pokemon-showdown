@@ -57,7 +57,7 @@ class OtdHandler {
 	 * @param {boolean} week
 	 */
 	constructor(id, name, room, filename, keys, keyLabels, week = false) {
-		this.id = id;
+		this.roomid = id;
 		this.name = name;
 		this.room = room;
 
@@ -108,7 +108,7 @@ class OtdHandler {
 		this.voting = false;
 		this.nominations = new Map();
 		this.removedNominations = new Map();
-		delete prenoms[this.id];
+		delete prenoms[this.roomid];
 		savePrenoms();
 		if (this.timer) clearTimeout(this.timer);
 	}
@@ -120,7 +120,7 @@ class OtdHandler {
 	addNomination(user, nomination) {
 		const id = toNominationId(nomination);
 
-		if (this.winners.slice(this.room === rooms.jubilifetvfilms ? -15 : -30).some(entry => toNominationId(entry[this.keys[0]]) === id)) return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been ${this.id} in the past month.`);
+		if (this.winners.slice(this.room === rooms.jubilifetvfilms ? -15 : -30).some(entry => toNominationId(entry[this.keys[0]]) === id)) return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been ${this.roomid} in the past month.`);
 
 		for (const value of this.removedNominations.values()) {
 			if (toID(user) in value.userids || user.latestIp in value.ips) return user.sendTo(this.room, `Since your nomination has been removed by staff, you cannot submit another ${this.name.toLowerCase()} until the next round.`);
@@ -137,10 +137,10 @@ class OtdHandler {
 			if (toID(user) in value.userids || user.latestIp in value.ips) {
 				user.sendTo(this.room, `Your previous vote for ${value.nomination} will be removed.`);
 				this.nominations.delete(key);
-				if (prenoms[this.id]) {
-					let idx = prenoms[this.id].findIndex(val => val[0] === key);
+				if (prenoms[this.roomid]) {
+					let idx = prenoms[this.roomid].findIndex(val => val[0] === key);
 					if (idx > -1) {
-						prenoms[this.id].splice(idx, 1);
+						prenoms[this.roomid].splice(idx, 1);
 						savePrenoms();
 					}
 				}
@@ -149,14 +149,14 @@ class OtdHandler {
 
 		/** @type {{[k: string]: string}} */
 		let obj = {};
-		obj[user.userid] = user.name;
+		obj[user.id] = user.name;
 
 		let nomObj = {nomination: nomination, name: user.name, userids: Object.assign(obj, user.prevNames), ips: Object.assign({}, user.ips)};
 
 		this.nominations.set(id, nomObj);
 
-		if (!prenoms[this.id]) prenoms[this.id] = [];
-		prenoms[this.id].push([id, nomObj]);
+		if (!prenoms[this.roomid]) prenoms[this.roomid] = [];
+		prenoms[this.roomid].push([id, nomObj]);
 		savePrenoms();
 
 		user.sendTo(this.room, `Your nomination for ${nomination} was successfully submitted.`);
@@ -176,10 +176,10 @@ class OtdHandler {
 		let buffer = '';
 
 		if (this.voting) {
-			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the ${this.timeLabel} are in progress! Use <code>/${this.id} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}!</p>`;
+			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the ${this.timeLabel} are in progress! Use <code>/${this.roomid} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}!</p>`;
 			if (this.nominations.size) buffer += `<span style="font-weight:bold;">Nominations:</span>`;
 		} else {
-			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Pre-noms for ${this.name} of the ${this.timeLabel}. Use <code>/${this.id} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}:</p>`;
+			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Pre-noms for ${this.name} of the ${this.timeLabel}. Use <code>/${this.roomid} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}:</p>`;
 		}
 
 		/** @type {string[]} */
@@ -246,10 +246,10 @@ class OtdHandler {
 			if (name in value.userids) {
 				this.removedNominations.set(key, value);
 				this.nominations.delete(key);
-				if (prenoms[this.id]) {
-					let idx = prenoms[this.id].findIndex(val => val[0] === key);
+				if (prenoms[this.roomid]) {
+					let idx = prenoms[this.roomid].findIndex(val => val[0] === key);
 					if (idx > -1) {
-						prenoms[this.id].splice(idx, 1);
+						prenoms[this.roomid].splice(idx, 1);
 						savePrenoms();
 					}
 				}
@@ -356,7 +356,7 @@ class OtdHandler {
 	 * @param {PageContext} context
 	 */
 	generateWinnerList(context) {
-		context.title = `${this.id.toUpperCase()} Winners`;
+		context.title = `${this.roomid.toUpperCase()} Winners`;
 		let buf = `<div class="pad ladder"><h2>${this.name} of the ${this.timeLabel} Winners</h2>`;
 
 		// Only use specific fields for displaying in winners list.
@@ -403,7 +403,7 @@ class OtdHandler {
 			content += `<tr>${entry.map(val => `<td style="max-width:${600 / columns.length}px;word-wrap:break-word;">${val}</td>`).join('')}</tr>`;
 		}
 		if (!content) {
-			buf += `<p>There have been no ${this.id} winners.</p>`;
+			buf += `<p>There have been no ${this.roomid} winners.</p>`;
 		} else {
 			buf += `<table>${content}</table>`;
 		}
@@ -463,7 +463,7 @@ let commands = {
 		handler.startVote();
 
 		this.privateModAction(`(${user.name} has started nominations for the ${handler.name} of the ${handler.timeLabel}.)`);
-		this.modlog(`${handler.id.toUpperCase()} START`, null);
+		this.modlog(`${handler.roomid.toUpperCase()} START`, null);
 	},
 	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`],
 
@@ -483,7 +483,7 @@ let commands = {
 		handler.rollWinner();
 
 		this.privateModAction(`(${user.name} has ended nominations for the ${handler.name} of the ${handler.timeLabel}.)`);
-		this.modlog(`${handler.id.toUpperCase()} END`, null);
+		this.modlog(`${handler.roomid.toUpperCase()} END`, null);
 	},
 	endhelp: [`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`],
 
@@ -533,7 +533,7 @@ let commands = {
 
 		if (handler.removeNomination(userid)) {
 			this.privateModAction(`(${user.name} removed ${target}'s nomination for the ${handler.name} of the ${handler.timeLabel}.)`);
-			this.modlog(`${handler.id.toUpperCase()} REMOVENOM`, userid);
+			this.modlog(`${handler.roomid.toUpperCase()} REMOVENOM`, userid);
 		} else {
 			this.sendReply(`User '${target}' has no nomination for the ${handler.name} of the ${handler.timeLabel}.`);
 		}
@@ -554,7 +554,7 @@ let commands = {
 
 		handler.forceWinner(target, user.name);
 		this.privateModAction(`(${user.name} forcibly set the ${handler.name} of the ${handler.timeLabel} to ${target}.)`);
-		this.modlog(`${handler.id.toUpperCase()} FORCE`, user.name, target);
+		this.modlog(`${handler.roomid.toUpperCase()} FORCE`, user.name, target);
 		room.add(`The ${handler.name} of the ${handler.timeLabel} was forcibly set to '${target}'`);
 	},
 	forcehelp: [`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`],
@@ -643,7 +643,7 @@ let commands = {
 
 		if (keys.length) {
 			handler.setWinnerProperty(changelist);
-			this.modlog(handler.id.toUpperCase(), null, `changed ${keys.join(', ')}`);
+			this.modlog(handler.roomid.toUpperCase(), null, `changed ${keys.join(', ')}`);
 			return this.privateModAction(`(${user.name} changed the following propert${Chat.plural(keys, 'ies', 'y')} of the ${handler.name} of the ${handler.timeLabel}: ${keys.join(', ')})`);
 		}
 	},
@@ -657,7 +657,7 @@ let commands = {
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
-		return this.parse(`/join view-${handler.id}`);
+		return this.parse(`/join view-${handler.roomid}`);
 	},
 	winnershelp: [`/-otd winners - Displays a list of previous things of the day.`],
 

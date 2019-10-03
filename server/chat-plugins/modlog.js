@@ -291,8 +291,8 @@ async function getModlog(connection, roomid = 'global', searchString = '', maxLi
 	let roomidList;
 	// handle this here so the child process doesn't have to load rooms data
 	if (roomid === 'public') {
-		const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
-		roomidList = [...Rooms.rooms.values()].filter(isPublicRoom).map(room => room.id);
+		const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.roomid === 'global'));
+		roomidList = [...Rooms.rooms.values()].filter(isPublicRoom).map(room => room.roomid);
 	} else {
 		roomidList = [roomid];
 	}
@@ -511,17 +511,17 @@ exports.commands = {
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
 		if (!room) room = Rooms.get('global');
-		let roomid = (room.id === 'staff' ? 'global' : room.id);
+		let roomid = (room.roomid === 'staff' ? 'global' : room.roomid);
 
 		if (target.includes(',')) {
 			let targets = target.split(',');
 			target = targets[1].trim();
-			roomid = toID(targets[0]) || room.id;
+			roomid = toID(targets[0]) || room.roomid;
 		}
 
 		let targetRoom = Rooms.search(roomid);
 		// if a room alias was used, replace alias with actual id
-		if (targetRoom) roomid = targetRoom.id;
+		if (targetRoom) roomid = targetRoom.roomid;
 
 		if (roomid.includes('-')) {
 			if (user.can('modlog')) {

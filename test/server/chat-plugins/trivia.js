@@ -15,7 +15,7 @@ function makeUser(name, connection) {
 	let user = new User(connection);
 	user.forceRename(name, true);
 	user.connected = true;
-	Users.users.set(user.userid, user);
+	Users.users.set(user.id, user);
 	user.joinRoom('global', connection);
 	user.joinRoom('trivia', connection);
 	return user;
@@ -90,7 +90,7 @@ describe('Trivia', function () {
 	});
 
 	it('should not add a player if another player had their username previously', function () {
-		let userid = this.user.userid;
+		let userid = this.user.id;
 		let name = this.user.name;
 		this.game.addPlayer(this.user);
 		this.user.forceRename('Not Morfent', true);
@@ -104,7 +104,7 @@ describe('Trivia', function () {
 	});
 
 	it('should not add a player if they were kicked from the game', function () {
-		this.game.kickedUsers.add(this.tarUser.userid);
+		this.game.kickedUsers.add(this.tarUser.id);
 		this.game.addPlayer(this.tarUser);
 		assert.strictEqual(this.game.playerCount, 0);
 	});
@@ -126,7 +126,7 @@ describe('Trivia', function () {
 		this.game.addPlayer(this.tarUser);
 		this.game.kick(this.tarUser, this.user);
 
-		let userid = this.tarUser.userid;
+		let userid = this.tarUser.id;
 		let name = this.tarUser.name;
 		this.tarUser.forceRename('Not Morfent', true);
 		this.tarUser.prevNames[userid] = name;
@@ -154,7 +154,7 @@ describe('Trivia', function () {
 
 	it('should make players leave the game', function () {
 		this.game.leave(this.user);
-		assert.strictEqual(this.game.playerTable[this.user.userid], undefined);
+		assert.strictEqual(this.game.playerTable[this.user.id], undefined);
 	});
 
 	it('should not make users who are not players leave the game', function () {
@@ -196,7 +196,7 @@ describe('Trivia', function () {
 			game.phaseTimeout = null;
 
 			this.game = this.room.game = game;
-			this.player = this.room.game.playerTable[this.user.userid];
+			this.player = this.room.game.playerTable[this.user.id];
 		});
 
 		afterEach(function () {
@@ -242,7 +242,7 @@ describe('Trivia', function () {
 			game.askQuestion();
 
 			this.game = this.room.game = game;
-			this.player = game.playerTable[this.user.userid];
+			this.player = game.playerTable[this.user.id];
 		});
 
 		afterEach(function () {
@@ -306,7 +306,7 @@ describe('Trivia', function () {
 			game.askQuestion();
 
 			this.game = this.room.game = game;
-			this.player = game.playerTable[this.user.userid];
+			this.player = game.playerTable[this.user.id];
 		});
 
 		afterEach(function () {
@@ -351,7 +351,7 @@ describe('Trivia', function () {
 
 				const hrtimeToNanoseconds = hrtime => hrtime[0] * 1e9 + hrtime[1];
 				let playerNs = hrtimeToNanoseconds(this.player.answeredAt);
-				let player2Ns = hrtimeToNanoseconds(this.game.playerTable[this.user2.userid].answeredAt);
+				let player2Ns = hrtimeToNanoseconds(this.game.playerTable[this.user2.id].answeredAt);
 				assert.ok(playerNs <= player2Ns);
 
 				done();
@@ -381,7 +381,7 @@ describe('Trivia', function () {
 			game.askQuestion();
 
 			this.game = this.room.game = game;
-			this.player = game.playerTable[this.user.userid];
+			this.player = game.playerTable[this.user.id];
 		});
 
 		afterEach(function () {

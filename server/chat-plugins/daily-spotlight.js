@@ -61,12 +61,12 @@ const pages = {
 		this.title = 'Daily Spotlights';
 		this.extractRoom();
 		let buf = `<div class="pad ladder"><h2>Daily Spotlights</h2>`;
-		if (!spotlights[this.room.id]) {
+		if (!spotlights[this.room.roomid]) {
 			buf += `<p>This room has no daily spotlights.</p></div>`;
 		} else {
-			for (let key in spotlights[this.room.id]) {
+			for (let key in spotlights[this.room.roomid]) {
 				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
-				for (const [i, spotlight] of spotlights[this.room.id][key].entries()) {
+				for (const [i, spotlight] of spotlights[this.room.roomid][key].entries()) {
 					const html = await renderSpotlight(spotlight.image, spotlight.description);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
 					// @ts-ignore room is definitely a proper room here.
@@ -87,24 +87,24 @@ const commands = {
 		let [key, rest] = target.split(',');
 		key = toID(key);
 		if (!key) return this.parse('/help daily');
-		if (!spotlights[room.id][key]) return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
+		if (!spotlights[room.roomid][key]) return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
 
 		if (!this.can('announce', null, room)) return false;
 		if (rest) {
 			const queueNumber = parseInt(rest);
 			if (isNaN(queueNumber) || queueNumber < 1) return this.errorReply("Invalid queue number");
-			if (queueNumber >= spotlights[room.id][key].length) {
-				return this.errorReply(`Queue number needs to be between 1 and ${spotlights[room.id][key].length - 1}`);
+			if (queueNumber >= spotlights[room.roomid][key].length) {
+				return this.errorReply(`Queue number needs to be between 1 and ${spotlights[room.roomid][key].length - 1}`);
 			}
-			spotlights[room.id][key].splice(queueNumber, 1);
+			spotlights[room.roomid][key].splice(queueNumber, 1);
 			saveSpotlights();
 
 			this.modlog(`DAILY REMOVE`, `${key}[${queueNumber}]`);
 			this.sendReply(`Removed the ${queueNumber}th entry from the queue of the daily spotlight named '${key}'.`);
 		} else {
-			spotlights[room.id][key].shift();
-			if (!spotlights[room.id][key].length) {
-				delete spotlights[room.id][key];
+			spotlights[room.roomid][key].shift();
+			if (!spotlights[room.roomid][key].length) {
+				delete spotlights[room.roomid][key];
 			}
 			saveSpotlights();
 			this.modlog(`DAILY REMOVE`, key);
@@ -132,16 +132,16 @@ const commands = {
 		description = rest.join(',');
 		if (Chat.stripFormatting(description).length > 500) return this.errorReply("Descriptions can be at most 500 characters long.");
 		const obj = {image: image || null, description: description};
-		if (!spotlights[room.id]) spotlights[room.id] = {};
-		if (!spotlights[room.id][key]) spotlights[room.id][key] = [];
+		if (!spotlights[room.roomid]) spotlights[room.roomid] = {};
+		if (!spotlights[room.roomid][key]) spotlights[room.roomid][key] = [];
 		if (cmd === 'setdaily') {
-			spotlights[room.id][key].shift();
-			spotlights[room.id][key].unshift(obj);
+			spotlights[room.roomid][key].shift();
+			spotlights[room.roomid][key].unshift(obj);
 
 			this.modlog('SETDAILY', key, `${image ? `${image}, ` : ''}${description}`);
 			this.privateModAction(`${user.name} set the daily ${key}.`);
 		} else {
-			spotlights[room.id][key].push(obj);
+			spotlights[room.roomid][key].push(obj);
 			this.modlog('QUEUEDAILY', key, `${image ? `${image}, ` : ''}${description}`);
 			this.privateModAction(`${user.name} queued a daily ${key}.`);
 		}
@@ -153,13 +153,13 @@ const commands = {
 		let key = toID(target);
 		if (!key) return this.parse('/help daily');
 
-		if (!spotlights[room.id] || !spotlights[room.id][key]) {
+		if (!spotlights[room.roomid] || !spotlights[room.roomid][key]) {
 			return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
 		}
 
 		if (!this.runBroadcast()) return;
 
-		const {image, description} = spotlights[room.id][key][0];
+		const {image, description} = spotlights[room.roomid][key][0];
 		const html = await renderSpotlight(image, description);
 
 		this.sendReplyBox(html);
@@ -167,7 +167,7 @@ const commands = {
 	},
 	viewspotlights(target, room, user) {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-		return this.parse(`/join view-spotlights-${room.id}`);
+		return this.parse(`/join view-spotlights-${room.roomid}`);
 	},
 
 	dailyhelp: [
