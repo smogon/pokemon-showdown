@@ -174,14 +174,10 @@ export const Punishments = new class {
 	]);
 	constructor() {
 		setImmediate(() => {
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.loadPunishments();
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.loadRoomPunishments();
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.loadBanlist();
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.loadSharedIps();
+			void Punishments.loadPunishments();
+			void Punishments.loadRoomPunishments();
+			void Punishments.loadBanlist();
+			void Punishments.loadSharedIps();
 		});
 	}
 
@@ -925,8 +921,7 @@ export const Punishments = new class {
 
 	addSharedIp(ip: string, note: string) {
 		Punishments.sharedIps.set(ip, note);
-		// tslint:disable-next-line: no-floating-promises
-		Punishments.appendSharedIp(ip, note);
+		void Punishments.appendSharedIp(ip, note);
 
 		for (const user of Users.users.values()) {
 			if (user.locked && user.locked !== user.id && ip in user.ips) {
@@ -943,8 +938,7 @@ export const Punishments = new class {
 
 	removeSharedIp(ip: string) {
 		Punishments.sharedIps.delete(ip);
-		// tslint:disable-next-line: no-floating-promises
-		Punishments.saveSharedIps();
+		void Punishments.saveSharedIps();
 	}
 
 	/*********************************************************

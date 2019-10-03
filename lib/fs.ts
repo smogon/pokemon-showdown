@@ -164,7 +164,6 @@ class FSPath {
 			return;
 		}
 
-		// tslint:disable-next-line:no-floating-promises
 		this.writeUpdateNow(dataFetcher, options);
 	}
 
@@ -179,8 +178,7 @@ class FSPath {
 			throttleTimer: null,
 		};
 		pendingUpdates.set(this.path, update);
-		// tslint:disable-next-line:no-floating-promises
-		this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
+		void this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
 	}
 	checkNextUpdate() {
 		const pendingUpdate = pendingUpdates.get(this.path);
@@ -194,7 +192,6 @@ class FSPath {
 			return;
 		}
 
-		// tslint:disable-next-line:no-floating-promises
 		this.writeUpdateNow(dataFetcher, options);
 	}
 	finishUpdate() {
