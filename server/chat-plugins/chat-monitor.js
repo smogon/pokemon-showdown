@@ -40,7 +40,7 @@ const EVASION_DETECTION_SUBSTITUTIONS = {
 /** @type {{[k: string]: string}} */
 const EVASION_DETECTION_SUB_STRINGS = {};
 
-for (const letter in EVASION_DETECTION_SUBSTITUTIONS)  {
+for (const letter in EVASION_DETECTION_SUBSTITUTIONS) {
 	EVASION_DETECTION_SUB_STRINGS[letter] = `[${EVASION_DETECTION_SUBSTITUTIONS[letter].join('')}]`;
 }
 
@@ -179,6 +179,9 @@ Chat.registerMonitor('evasion', {
 			regex = constructEvasionRegex(word);
 			evasionFilterCache.set(word, regex);
 		}
+		// Remove spaces and obvious false positives
+		lcMessage = lcMessage.replace(/\bniger\b/g, '').replace(/\bnigeria/g, '');
+		lcMessage = lcMessage.replace(/[\s-_]/g, '');
 		const match = lcMessage.replace(/[\s-_]/g, '').match(regex);
 		if (match && (match[0] !== word || !regex.test(message))) {
 			if (isStaff) return `${message} __[would be locked for filter evading: ${match[0]} (${word})]__`;
