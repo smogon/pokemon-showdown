@@ -178,12 +178,13 @@ export const IPTools = new class {
 	connectionTestCache = new Map<string, boolean>();
 
 	async lookup(ip: string) {
-		const [dnsbl, host] = await Promise.all([
+		// known TypeScript bug
+		// https://github.com/microsoft/TypeScript/issues/33752
+		const [dnsbl, host] = await Promise.all<string | null, string>([
 			IPTools.queryDnsbl(ip),
 			IPTools.getHost(ip),
 		]);
-		// Typescript 3.7.0-beta thinks host can be null because of the use of Promise.all
-		const shortHost = this.shortenHost((host as string));
+		const shortHost = this.shortenHost(host);
 		const hostType = this.getHostType(shortHost, ip);
 		return {dnsbl, host, shortHost, hostType};
 	}
@@ -219,9 +220,9 @@ export const IPTools = new class {
 	 * Return value matches isBlocked when treated as a boolean.
 	 */
 	queryDnsbl(ip: string) {
-		if (!Config.dnsbl) return null;
+		if (!Config.dnsbl) return Promise.resolve(null);
 		if (IPTools.dnsblCache.has(ip)) {
-			return Promise.resolve<string | null>(IPTools.dnsblCache.get(ip) || null);
+			return Promise.resolve(IPTools.dnsblCache.get(ip) || null);
 		}
 		const reversedIpDot = ip.split('.').reverse().join('.') + '.';
 		return new Promise<string | null>((resolve, reject) => {
