@@ -198,7 +198,7 @@ Chat.registerMonitor('evasion', {
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
-				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${word}`, `<${room.id}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
+				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
 			} else {
 				this.errorReply(`Please do not say '${word}'.`);
 			}
@@ -233,7 +233,7 @@ Chat.registerMonitor('battlefilter', {
 			if (room) {
 				room.mute(user);
 				this.errorReply(`You have been muted for using a banned phrase. Please do not say '${word}'.`);
-				Monitor.log(`[BattleMonitor] <${room.id}> MUTED: ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`);
+				Monitor.log(`[BattleMonitor] <${room.roomid}> MUTED: ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`);
 			}
 			return false;
 		}
