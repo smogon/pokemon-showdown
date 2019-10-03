@@ -1727,9 +1727,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart(pokemon) {
 			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name}'s weight has doubled.`);
-		},
-		onModifyWeight(weight) {
-			return weight * 2;
+			pokemon.weighthg *= 2;
 		},
 	},
 	// Gooey volatile for Decem's move
