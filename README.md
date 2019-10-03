@@ -1,3 +1,5 @@
+This fork slightly modifies the server to remove constraints and facilitate the training of RL agents.
+
 Pokémon Showdown
 ========================================================================
 
