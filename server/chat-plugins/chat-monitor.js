@@ -37,6 +37,13 @@ const EVASION_DETECTION_SUBSTITUTIONS = {
 	"z": ["z", "ᘔ", "Z", "ⓩ", "Ⓩ", "Ⱬ", "ẓ", "Ẓ", "ፚ", "Ꮓ", "ʐ", "ｚ", "Ｚ", "ᴢ", "🅩", "𝐳", "𝐙", "𝘻", "𝘡", "𝙯", "𝙕", "𝓏", "𝔃", "𝓩", "𝕫", "𝕋", "𝔷", "𝔙", "𝖟", "𝖅", "🅉", "🆉", "𝒵", "ȥ", "𝚣", "𝚉", "☡", "z"],
 };
 
+/** @type {{[k: string]: string}} */
+const EVASION_DETECTION_SUB_STRINGS = {};
+
+for (const letter in EVASION_DETECTION_SUBSTITUTIONS)  {
+	EVASION_DETECTION_SUB_STRINGS[letter] = `[${EVASION_DETECTION_SUBSTITUTIONS[letter].join('')}]`;
+}
+
 /** @type {{[k: string]: [(string | RegExp), string, string?, number][]}} */
 let filterWords = Chat.filterWords;
 
@@ -52,8 +59,8 @@ function constructEvasionRegex(str) {
 
 	// substitutions
 	for (let letter of str) {
-		if (!(letter in EVASION_DETECTION_SUBSTITUTIONS)) continue;
-		str = str.replace(letter, `[${EVASION_DETECTION_SUBSTITUTIONS[letter].join('')}]`);
+		if (!(letter in EVASION_DETECTION_SUB_STRINGS)) continue;
+		str = str.replace(letter, EVASION_DETECTION_SUB_STRINGS[letter]);
 	}
 
 	return new RegExp(str, 'ig');
