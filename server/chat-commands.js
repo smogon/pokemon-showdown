@@ -1531,7 +1531,7 @@ const commands = {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
 
-		let currentGroup = room.getAuth({userid, group: (Users.usergroups[userid] || ' ').charAt(0)});
+		let currentGroup = room.getAuth({id: userid, group: (Users.usergroups[userid] || ' ').charAt(0)});
 		let nextGroup = target;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {
@@ -2472,7 +2472,7 @@ const commands = {
 			return this.errorReply(`Group '${nextGroup}' does not exist.`);
 		}
 		if (!cmd.startsWith('global')) {
-			let groupid = Config.groups[nextGroup].roomid;
+			let groupid = Config.groups[nextGroup].id;
 			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth';
 			if (Config.groups[nextGroup].globalonly) return this.errorReply(`Did you mean "/global${groupid}"?`);
 			if (Config.groups[nextGroup].roomonly) return this.errorReply(`Did you mean "/room${groupid}"?`);
@@ -2679,7 +2679,7 @@ const commands = {
 		let [rank, titleNotification] = this.splitOne(target);
 		if (rank === 'all') rank = ` `;
 		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		const id = `${room.roomid}-rank-${(Config.groups[rank].roomid || `all`)}`;
+		const id = `${room.roomid}-rank-${(Config.groups[rank].id || `all`)}`;
 		if (cmd === 'notifyoffrank') {
 			if (rank === ' ') {
 				room.send(`|tempnotifyoff|${id}`);
