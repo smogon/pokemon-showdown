@@ -3,7 +3,7 @@
 
 /**
  * @param {string} stone
- * @return {Item | false}
+ * @return {Item | null}
  */
 function getMegaStone(stone) {
 	let item = Dex.getItem(stone);
@@ -24,10 +24,10 @@ function getMegaStone(stone) {
 				sourceEffect: '',
 			};
 		} else {
-			return false;
+			return null;
 		}
 	}
-	if (!item.megaStone && !item.onPrimal) return false;
+	if (!item.megaStone && !item.onPrimal) return null;
 	return item;
 }
 
