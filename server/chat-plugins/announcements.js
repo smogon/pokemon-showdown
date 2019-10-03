@@ -13,6 +13,7 @@ class Announcement {
 	 * @param {{source: string, supportHTML: boolean}} announcement
 	 */
 	constructor(room, announcement) {
+		this.activityId = 'announcement';
 		this.announcementNumber = ++room.gameNumber;
 		this.room = room;
 		this.announcement = announcement.source;
@@ -98,23 +99,24 @@ const commands = {
 		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # & ~`],
 
 		timer(target, room, user) {
-			if (!room.minorActivity || !(room.minorActivity instanceof Announcement)) return this.errorReply("There is no announcement running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') return this.errorReply("There is no announcement running in this room.");
+			const announcement = /** @type {Announcement} */(room.minorActivity);
 
 			if (target) {
 				if (!this.can('minigame', null, room)) return false;
 				if (target === 'clear') {
-					if (!room.minorActivity.timeout) return this.errorReply("There is no timer to clear.");
-					clearTimeout(room.minorActivity.timeout);
-					room.minorActivity.timeout = null;
-					room.minorActivity.timeoutMins = 0;
+					if (!announcement.timeout) return this.errorReply("There is no timer to clear.");
+					clearTimeout(announcement.timeout);
+					announcement.timeout = null;
+					announcement.timeoutMins = 0;
 					return this.add("The announcement timer was turned off.");
 				}
 				const timeout = parseFloat(target);
 				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply("Invalid time given.");
-				if (room.minorActivity.timeout) clearTimeout(room.minorActivity.timeout);
-				room.minorActivity.timeoutMins = timeout;
-				room.minorActivity.timeout = setTimeout(() => {
-					if (room.minorActivity) room.minorActivity.end();
+				if (announcement.timeout) clearTimeout(announcement.timeout);
+				announcement.timeoutMins = timeout;
+				announcement.timeout = setTimeout(() => {
+					if (announcement) announcement.end();
 					room.minorActivity = null;
 				}, (timeout * 60000));
 				room.add(`The announcement timer was turned on: the announcement will end in ${timeout} minute${Chat.plural(timeout)}.`);
@@ -122,8 +124,8 @@ const commands = {
 				return this.privateModAction(`(The announcement timer was set to ${timeout} minute${Chat.plural(timeout)} by ${user.name}.)`);
 			} else {
 				if (!this.runBroadcast()) return;
-				if (room.minorActivity.timeout) {
-					return this.sendReply(`The announcement timer is on and will end in ${room.minorActivity.timeoutMins} minute${Chat.plural(room.minorActivity.timeoutMins)}.`);
+				if (announcement.timeout) {
+					return this.sendReply(`The announcement timer is on and will end in ${announcement.timeoutMins} minute${Chat.plural(announcement.timeoutMins)}.`);
 				} else {
 					return this.sendReply("The announcement timer is off.");
 				}
@@ -139,11 +141,12 @@ const commands = {
 		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (!room.minorActivity || !(room.minorActivity instanceof Announcement)) return this.errorReply("There is no announcement running in this room.");
-			if (room.minorActivity.timeout) clearTimeout(room.minorActivity.timeout);
+			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') return this.errorReply("There is no announcement running in this room.");
+			const announcement = /** @type {Announcement} */(room.minorActivity);
+			if (announcement.timeout) clearTimeout(announcement.timeout);
 
-			room.minorActivity.end();
-			delete room.minorActivity;
+			announcement.end();
+			room.minorActivity = null;
 			this.modlog('ANNOUNCEMENT END');
 			return this.privateModAction(`(The announcement was ended by ${user.name}.)`);
 		},
@@ -151,14 +154,15 @@ const commands = {
 
 		show: 'display',
 		display(target, room, user, connection) {
-			if (!room.minorActivity || !(room.minorActivity instanceof Announcement)) return this.errorReply("There is no announcement running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') return this.errorReply("There is no announcement running in this room.");
+			const announcement = /** @type {Announcement} */(room.minorActivity);
 			if (!this.runBroadcast()) return;
 			room.update();
 
 			if (this.broadcasting) {
-				room.minorActivity.display();
+				announcement.display();
 			} else {
-				room.minorActivity.displayTo(user, connection);
+				announcement.displayTo(user, connection);
 			}
 		},
 		displayhelp: [`/announcement display - Displays the announcement`],
