@@ -16,6 +16,7 @@ class Poll {
 	 * @param {string[]} options
 	 */
 	constructor(room, questionData, options) {
+		this.activityId = 'poll';
 		this.pollNumber = ++room.gameNumber;
 		this.room = room;
 		this.question = questionData.source;
@@ -288,41 +289,42 @@ const commands = {
 		],
 
 		vote(target, room, user) {
-			if (!room.minorActivity || !(room.minorActivity instanceof Poll)) return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
 			if (!target) return this.parse('/help poll vote');
-
+			const poll = /** @type {Poll} */(room.minorActivity);
 			if (target === 'blank') {
-				room.minorActivity.blankvote(user);
+				poll.blankvote(user);
 				return;
 			}
 
 			let parsed = parseInt(target);
 			if (isNaN(parsed)) return this.errorReply("To vote, specify the number of the option.");
 
-			if (!room.minorActivity.options.has(parsed)) return this.sendReply("Option not in poll.");
+			if (!poll.options.has(parsed)) return this.sendReply("Option not in poll.");
 
-			room.minorActivity.vote(user, parsed);
+			poll.vote(user, parsed);
 		},
 		votehelp: [`/poll vote [number] - Votes for option [number].`],
 
 		timer(target, room, user) {
-			if (!room.minorActivity || !(room.minorActivity instanceof Poll)) return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			const poll = /** @type {Poll} */(room.minorActivity);
 
 			if (target) {
 				if (!this.can('minigame', null, room)) return false;
 				if (target === 'clear') {
-					if (!room.minorActivity.timeout) return this.errorReply("There is no timer to clear.");
-					clearTimeout(room.minorActivity.timeout);
-					room.minorActivity.timeout = null;
-					room.minorActivity.timeoutMins = 0;
+					if (!poll.timeout) return this.errorReply("There is no timer to clear.");
+					clearTimeout(poll.timeout);
+					poll.timeout = null;
+					poll.timeoutMins = 0;
 					return this.add("The poll timer was turned off.");
 				}
 				let timeout = parseFloat(target);
 				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply("Invalid time given.");
-				if (room.minorActivity.timeout) clearTimeout(room.minorActivity.timeout);
-				room.minorActivity.timeoutMins = timeout;
-				room.minorActivity.timeout = setTimeout(() => {
-					if (room.minorActivity) room.minorActivity.end();
+				if (poll.timeout) clearTimeout(poll.timeout);
+				poll.timeoutMins = timeout;
+				poll.timeout = setTimeout(() => {
+					if (poll) poll.end();
 					room.minorActivity = null;
 				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
@@ -330,8 +332,8 @@ const commands = {
 				return this.privateModAction(`(The poll timer was set to ${timeout} minute(s) by ${user.name}.)`);
 			} else {
 				if (!this.runBroadcast()) return;
-				if (room.minorActivity.timeout) {
-					return this.sendReply(`The poll timer is on and will end in ${room.minorActivity.timeoutMins} minute(s).`);
+				if (poll.timeout) {
+					return this.sendReply(`The poll timer is on and will end in ${poll.timeoutMins} minute(s).`);
 				} else {
 					return this.sendReply("The poll timer is off.");
 				}
@@ -343,9 +345,10 @@ const commands = {
 		],
 
 		results(target, room, user) {
-			if (!room.minorActivity || !(room.minorActivity instanceof Poll)) return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			const poll = /** @type {Poll} */(room.minorActivity);
 
-			return room.minorActivity.blankvote(user);
+			return poll.blankvote(user);
 		},
 		resultshelp: [`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`],
 
@@ -354,11 +357,12 @@ const commands = {
 		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (!room.minorActivity || !(room.minorActivity instanceof Poll)) return this.errorReply("There is no poll running in this room.");
-			if (room.minorActivity.timeout) clearTimeout(room.minorActivity.timeout);
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			const poll = /** @type {Poll} */(room.minorActivity);
+			if (poll.timeout) clearTimeout(poll.timeout);
 
-			room.minorActivity.end();
-			delete room.minorActivity;
+			poll.end();
+			room.minorActivity = null;
 			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
 		},
@@ -366,14 +370,15 @@ const commands = {
 
 		show: 'display',
 		display(target, room, user, connection) {
-			if (!room.minorActivity || !(room.minorActivity instanceof Poll)) return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			const poll = /** @type {Poll} */(room.minorActivity);
 			if (!this.runBroadcast()) return;
 			room.update();
 
 			if (this.broadcasting) {
-				room.minorActivity.display();
+				poll.display();
 			} else {
-				room.minorActivity.displayTo(user, connection);
+				poll.displayTo(user, connection);
 			}
 		},
 		displayhelp: [`/poll display - Displays the poll`],
