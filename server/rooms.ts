@@ -53,6 +53,7 @@ interface BattleRoomTable {
 
 export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').PollType;
+type Announcement = import('./chat-plugins/announcements').AnnouncementType;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
@@ -1018,7 +1019,7 @@ export class GlobalRoom extends BasicRoom {
 
 export class BasicChatRoom extends BasicRoom {
 	log: Roomlog;
-	poll: Poll | null;
+	minorActivity: Poll | Announcement | null;
 	desc: string;
 	modchat: string | null;
 	filterStretching: boolean;
@@ -1058,7 +1059,7 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.log = Roomlogs.create(this, options);
 
-		this.poll = null;
+		this.minorActivity = null;
 
 		// room settings
 		this.desc = '';
@@ -1258,7 +1259,7 @@ export class BasicChatRoom extends BasicRoom {
 			connection,
 			'|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.log.getScrollback() + this.getIntroMessage(user)
 		);
-		if (this.poll) this.poll.onConnect(user, connection);
+		if (this.minorActivity) this.minorActivity.onConnect(user, connection);
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
 	onJoin(user: User, connection: Connection) {
@@ -1272,7 +1273,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.users[user.id] = user;
 		this.userCount++;
 
-		if (this.poll) this.poll.onConnect(user, connection);
+		if (this.minorActivity) this.minorActivity.onConnect(user, connection);
 		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
 		return true;
 	}
@@ -1300,7 +1301,9 @@ export class BasicChatRoom extends BasicRoom {
 		} else {
 			this.reportJoin('n', user.getIdentityWithStatus(this.roomid) + '|' + oldid, user);
 		}
-		if (this.poll && user.id in this.poll.voters) this.poll.updateFor(user);
+		if (this.minorActivity && 'voters' in this.minorActivity) {
+			if (user.id in this.minorActivity.voters) this.minorActivity.updateFor(user);
+		}
 		return true;
 	}
 	/**
