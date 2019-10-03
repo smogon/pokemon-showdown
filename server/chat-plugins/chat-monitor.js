@@ -192,7 +192,7 @@ Chat.registerMonitor('evasion', {
 			regex = constructEvasionRegex(word);
 			evasionFilterCache.set(word, regex);
 		}
-		const match = lcMessage.match(regex);
+		const match = lcMessage.replace(/[\s-_]/g, '').match(regex);
 		if (match && (match[0] !== word || !regex.test(message))) {
 			if (isStaff) return `${message} __[would be locked for filter evading: ${match[0]} (${word})]__`;
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
