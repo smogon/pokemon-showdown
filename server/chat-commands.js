@@ -495,7 +495,7 @@ const commands = {
 			if (Object.hasOwnProperty.call(avatarsManual, '#' + avatar)) {
 				avatar = '#' + avatar;
 			}
-			if (Object.hasOwnProperty.call(avatarsManual. avatar)) {
+			if (Object.hasOwnProperty.call(avatarsManual, avatar)) {
 				if (avatarsManual[avatar].includes(user.id)) {
 					avatarIsValid = true;
 				}
