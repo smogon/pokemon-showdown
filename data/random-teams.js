@@ -203,7 +203,7 @@ class RandomTeams extends Dex.ModdedDex {
 				pool = Object.keys(this.data.Movedex).filter(moveid => !(['chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge'].includes(moveid) || this.data.Movedex[moveid].isZ || this.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
 			} else if (template.learnset) {
 				// @ts-ignore
-				pool = Object.keys(template.learnset).filter(moveid => template.learnset[moveid].find(learned => learned.includes(this.gen)));
+				pool = Object.keys(template.learnset).filter(moveid => template.learnset[moveid].find(learned => learned.startsWith(this.gen)));
 				if (template.species.substr(0, 6) === 'Rotom-') {
 					const learnset = this.getTemplate(template.baseSpecies).learnset;
 					if (learnset) pool = [...new Set(pool.concat(Object.keys(learnset)))];
@@ -211,7 +211,7 @@ class RandomTeams extends Dex.ModdedDex {
 			} else {
 				const learnset = this.getTemplate(template.baseSpecies).learnset;
 				// @ts-ignore
-				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.includes(this.gen)));
+				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
 			}
 			if (pool.length <= 4) {
 				moves = pool;
