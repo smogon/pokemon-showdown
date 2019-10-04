@@ -158,7 +158,7 @@ const commands = {
 				buf += `<br />Semilocked: ${targetUser.semilocked}`;
 			}
 		}
-		if ((user.can('ip', targetUser) || user === targetUser)) {
+		if (user.can('ip', targetUser)) {
 			let ips = Object.keys(targetUser.ips);
 			ips = ips.map(ip => {
 				let status = [];
