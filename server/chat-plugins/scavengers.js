@@ -590,7 +590,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 				let next = room.scavQueue.shift();
 				let duration = room.defaultScavTimer || DEFAULT_TIMER_DURATION;
-				room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, next.gameType, next.questions);
+				room.game = new ScavengerHunt(room, {id: next.staffHostId, name: next.staffHostName}, next.hosts, next.gameType, next.questions);
 				room.game.setTimer(duration); // auto timer for queue'd games.
 
 				room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`).update(); // highlight the users with "hunt by"
@@ -706,9 +706,9 @@ class ScavengerHunt extends Rooms.RoomGame {
 			let user = Users.getExact(id);
 			if (!allowOffline && (!user || !user.connected || !(user.id in room.users))) return null;
 
-			if (!user) return {name: id, userid: id, noUpdate: true}; // simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
+			if (!user) return {name: id, id: id, noUpdate: true}; // simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
 
-			return {userid: '' + user.id, name: '' + user.name};
+			return {id: '' + user.id, name: '' + user.name};
 		});
 		if (!hosts.every(host => host)) return null;
 		return hosts;
@@ -1263,7 +1263,7 @@ let commands = {
 		if (!room.scavQueue[target]) return false; // no need for an error reply - this is done via UI anyways
 
 		let next = room.scavQueue.splice(target, 1)[0]; // returns [ hunt ]
-		room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, next.gameType, next.questions);
+		room.game = new ScavengerHunt(room, {id: next.staffHostId, name: next.staffHostName}, next.hosts, next.gameType, next.questions);
 
 		if (target) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.id)}`);
