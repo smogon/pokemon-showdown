@@ -490,10 +490,10 @@ let BattleStatuses = {
 	eien: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Eien|umu!`);
+			this.add(`c|&Eien|umu!`);
 		},
 		onFaint() {
-			this.add(`c|@Eien|This game is Bad Civilization...`);
+			this.add(`c|&Eien|This game is Bad Civilization...`);
 		},
 	},
 	elgino: {
