@@ -172,6 +172,7 @@ describe('Users features', function () {
 				});
 				it(`should not allow users to demote themselves`, function () {
 					const room = Rooms.lobby;
+					if (!room.auth) room.auth = {};
 					const user = new User();
 					user.forceRename("User", true);
 					user.joinRoom(room);
