@@ -33,7 +33,7 @@ describe('Shield Dust', function () {
 			[{species: 'Talonflame', ability: 'flamebody', item: 'kingsrock', moves: ['flamecharge']}],
 			[{species: 'Clefable', ability: 'shielddust', moves: ['cottonguard']}],
 		]);
-		battle.onEvent('ModifyMove', battle.getFormat(), function (move) {
+		battle.onEvent('ModifyMove', battle.format, function (move) {
 			if (move.secondaries) {
 				for (const secondary of move.secondaries) {
 					secondary.chance = 100;

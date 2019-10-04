@@ -62,14 +62,14 @@ describe('Comatose', function () {
 		battle.setPlayer('p2', {team: [{species: "Smeargle", ability: 'technician', moves: ['hex', 'wakeupslap']}]});
 
 		let bp = 0;
-		battle.onEvent('BasePower', battle.getFormat(), function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
 			bp = basePower;
 		});
 
 		battle.makeChoices('move endure', 'move hex');
-		assert.strictEqual(bp, battle.getMove('hex').basePower * 2);
+		assert.strictEqual(bp, battle.dex.getMove('hex').basePower * 2);
 
 		battle.makeChoices('move endure', 'move wakeupslap');
-		assert.strictEqual(bp, battle.getMove('wakeupslap').basePower * 2);
+		assert.strictEqual(bp, battle.dex.getMove('wakeupslap').basePower * 2);
 	});
 });

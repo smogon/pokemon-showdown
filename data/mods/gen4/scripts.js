@@ -62,7 +62,7 @@ let BattleScripts = {
 		}
 		// types
 		let typeMod = target.runEffectiveness(move);
-		typeMod = this.clampIntRange(typeMod, -6, 6);
+		typeMod = this.dex.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
@@ -104,7 +104,7 @@ let BattleScripts = {
 
 	calcRecoilDamage(damageDealt, move) {
 		// @ts-ignore
-		return this.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+		return this.dex.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},
 };
 

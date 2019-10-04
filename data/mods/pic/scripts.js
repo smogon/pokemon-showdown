@@ -7,19 +7,19 @@ exports.BattleScripts = {
 			return name;
 		}
 		let id = toID(name);
-		if (id.startsWith('ability') && !['abilitypowerofalchemy', 'abilityreceiver', 'abilitytrace'].includes(id)) return Object.assign(Object.create(this.getAbility(id.slice(7))), {id});
+		if (id.startsWith('ability') && !['abilitypowerofalchemy', 'abilityreceiver', 'abilitytrace'].includes(id)) return Object.assign(Object.create(this.dex.getAbility(id.slice(7))), {id});
 		return Object.getPrototypeOf(this).getEffect.call(this, name);
 	},
 	pokemon: {
 		setAbility(ability, source, isFromFormechange) {
 			if (!this.hp) return false;
-			ability = this.battle.getAbility(ability);
+			ability = this.battle.dex.getAbility(ability);
 			let oldAbility = this.ability;
 			if (!isFromFormechange) {
 				if (['illusion', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(ability.id)) return false;
 				if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(oldAbility)) return false;
 			}
-			this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source);
+			this.battle.singleEvent('End', this.battle.dex.getAbility(oldAbility), this.abilityData, this, source);
 			let ally = this.side.active.find(ally => ally && ally !== this && !ally.fainted);
 			if (ally && ally.m.innate) {
 				ally.removeVolatile(ally.m.innate);

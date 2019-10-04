@@ -45,7 +45,7 @@ let BattleAbilities = {
 				let weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.getAbility('forecast'));
+					this.field.setWeather(weather, source, this.dex.getAbility('forecast'));
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
@@ -176,7 +176,7 @@ let BattleAbilities = {
 				let weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.field.setWeather(weather, source, this.getAbility('flowergift'));
+					this.field.setWeather(weather, source, this.dex.getAbility('flowergift'));
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
@@ -199,7 +199,7 @@ let BattleAbilities = {
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				if (!target.fainted) {
-					this.boost({spd: 1}, target, target, this.getAbility('flowergift'));
+					this.boost({spd: 1}, target, target, this.dex.getAbility('flowergift'));
 				}
 				target.side.removeSideCondition('flowergift');
 			},
@@ -508,7 +508,7 @@ let BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
+			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.dex.getItem(pokemon.lastItem).isBerry) {
 				pokemon.m.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
 				pokemon.lastItem = '';

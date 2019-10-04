@@ -178,7 +178,7 @@ let BattleAbilities = {
 			if (!pokemon.isStarted) return;
 			let target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
-			let ability = this.getAbility(target.ability);
+			let ability = this.dex.getAbility(target.ability);
 			let bannedAbilities = ['forecast', 'multitype', 'trace'];
 			if (bannedAbilities.includes(target.ability)) {
 				return;

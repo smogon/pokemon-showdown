@@ -789,7 +789,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 
 			if (!this.allXfix) {
 				// Enforce typing limits
-				let types = this.getTemplate(ssbSet.species).types;
+				let types = this.dex.getTemplate(ssbSet.species).types;
 				let rejected = false;
 				for (let type of types) {
 					if (typePool[type] === undefined) typePool[type] = 0;
@@ -842,8 +842,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 				set.moves.push(move);
 			}
 			set.moves.push(ssbSet.signatureMove);
-			if (name === 'Arsenal' && this.getItem(set.item).onPlate) {
-				set.species = 'Arceus-' + this.getItem(set.item).onPlate;
+			if (name === 'Arsenal' && this.dex.getItem(set.item).onPlate) {
+				set.species = 'Arceus-' + this.dex.getItem(set.item).onPlate;
 			}
 			if (name === 'Gallant Spear' && set.item === 'Choice Band') set.moves[set.moves.indexOf('Recover')] = 'Aqua Tail';
 			if (name === 'The Immortal' && set.item === 'Choice Scarf') set.moves[3] = 'Superpower';

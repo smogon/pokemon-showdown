@@ -9,9 +9,9 @@ class RandomGen2Teams extends RandomGen3Teams {
 		let pokemon = [];
 
 		let pokemonPool = [];
-		for (let id in this.data.FormatsData) {
-			let template = this.getTemplate(id);
-			if (!template.isNonstandard && this.data.FormatsData[id].randomSet1) {
+		for (let id in this.dex.data.FormatsData) {
+			let template = this.dex.getTemplate(id);
+			if (!template.isNonstandard && this.dex.data.FormatsData[id].randomSet1) {
 				pokemonPool.push(id);
 			}
 		}
@@ -38,7 +38,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 		};
 
 		while (pokemonPool.length && pokemonLeft > 0) {
-			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 			let skip = false;
 
@@ -69,7 +69,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			// but ensure no more than 3 pokemon weak to the same regardless.
 			let weaknesses = [];
 			for (let type in weaknessCount) {
-				let weak = this.getImmunity(type, template) && this.getEffectiveness(type, template) > 0;
+				let weak = this.dex.getImmunity(type, template) && this.dex.getEffectiveness(type, template) > 0;
 				if (!weak) continue;
 				if (weaknessCount[type] > 2 || weaknessCount[type] - resistanceCount[type] > 1) {
 					skip = true;
@@ -78,7 +78,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			}
 			let resistances = [];
 			for (let type in resistanceCount) {
-				let resist = !this.getImmunity(type, template) || this.getEffectiveness(type, template) < 0;
+				let resist = !this.dex.getImmunity(type, template) || this.dex.getEffectiveness(type, template) < 0;
 				if (resist) resistances.push(type);
 			}
 
@@ -146,8 +146,8 @@ class RandomGen2Teams extends RandomGen3Teams {
 	 */
 	randomSet(template, restrictMoves, slot) {
 		if (slot === undefined) slot = 1;
-		template = this.getTemplate(template);
-		if (!template.exists) template = this.getTemplate('unown');
+		template = this.dex.getTemplate(template);
+		if (!template.exists) template = this.dex.getTemplate('unown');
 
 		let randomSetNumber = 0;
 		/**@type {RandomTeamsTypes.RandomSet} */
