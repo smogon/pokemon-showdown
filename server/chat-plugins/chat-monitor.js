@@ -55,15 +55,17 @@ let evasionFilterCache = new Map();
  */
 function constructEvasionRegex(str) {
 	// Handle duplicate letters
-	str = str.replace(/(\w)\1*/g, '$1+');
+	str = str.replace(/(.)\1+/g, '$1');
 
+	let buf = '';
 	// substitutions
-	for (let letter of str) {
-		if (!(letter in EVASION_DETECTION_SUB_STRINGS)) continue;
-		str = str.replace(letter, EVASION_DETECTION_SUB_STRINGS[letter]);
+	for (const letter of str) {
+		buf += EVASION_DETECTION_SUB_STRINGS[letter] || letter;
+		// Check any number of repeating letters
+		buf += '+';
 	}
 
-	return new RegExp(str, 'ig');
+	return new RegExp(buf, 'ig');
 }
 
 /**
