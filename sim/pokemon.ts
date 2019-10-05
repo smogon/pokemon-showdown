@@ -1308,17 +1308,13 @@ export class Pokemon {
 			this.battle.runEvent('EatItem', this, null, null, item);
 
 			if (item.id === 'leppaberry') {
-				if (sourceEffect && ['fling', 'pluck', 'bugbite'].includes(sourceEffect.id)) {
-					this.staleness = 'external';
-				} else {
-					switch (this.pendingStaleness) {
-					case 'internal':
-							if (this.staleness !== 'external') this.staleness = 'internal';
-							break;
-					case 'external':
-							this.staleness = 'external';
-							break;
-					}
+				switch (this.pendingStaleness) {
+				case 'internal':
+						if (this.staleness !== 'external') this.staleness = 'internal';
+						break;
+				case 'external':
+						this.staleness = 'external';
+						break;
 				}
 				this.pendingStaleness = undefined;
 			}
