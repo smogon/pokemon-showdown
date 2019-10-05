@@ -1367,10 +1367,10 @@ export class TeamValidator {
 				for (const source of setSources.sources) {
 					if (source.charAt(1) === 'S' || source.charAt(1) === 'D') continue;
 					let eggGen = parseInt(source.charAt(0), 10);
-					if (source.charAt(1) !== 'E' || eggGen === 6) {
+					if (source.charAt(1) !== 'E' || eggGen >= 6) {
 						// (There is a way to obtain this pokemon without past-gen breeding.)
-						// In theory, limitedEgg should not exist in this case.
-						throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
+						validFatherExists = true;
+						break;
 					}
 					if (eggGen === 1) {
 						// tradebacks are supported in Gen 2
@@ -1381,7 +1381,7 @@ export class TeamValidator {
 						validFatherExists = true;
 						break;
 					}
-					if (!potentialFather.learnset) throw new Error(`${potentialFather.species} has no learnset`);
+					if (!potentialFather.learnset) throw new Error(`${potentialFather.species} has no learnset ${source}`);
 					/**
 					 * '' = no sources to worry about
 					 * [source string] = one restricted move
