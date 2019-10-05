@@ -339,6 +339,7 @@ export class TeamValidator {
 
 		if (ruleTable.has('obtainableformes')) {
 			problems.push(...this.validateForme(set));
+			template = dex.getTemplate(set.species);
 		}
 
 		for (const [rule] of ruleTable) {
