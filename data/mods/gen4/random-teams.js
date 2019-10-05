@@ -10,11 +10,11 @@ class RandomGen4Teams extends RandomGen5Teams {
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, teamDetails = {}, isLead = false) {
-		let baseTemplate = (template = this.getTemplate(template));
+		let baseTemplate = (template = this.dex.getTemplate(template));
 		let species = template.species;
 
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
-			template = this.getTemplate('unown');
+			template = this.dex.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The gen 4 randbat set generator');
@@ -110,7 +110,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				let move = this.getMove(setMoveid);
+				let move = this.dex.getMove(setMoveid);
 				let moveid = move.id;
 				let rejected = false;
 				let isSetup = false;
@@ -485,9 +485,9 @@ class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		let abilities = Object.values(baseTemplate.abilities);
-		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
-		let ability0 = this.getAbility(abilities[0]);
-		let ability1 = this.getAbility(abilities[1]);
+		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
+		let ability0 = this.dex.getAbility(abilities[0]);
+		let ability1 = this.dex.getAbility(abilities[1]);
 		if (abilities[1]) {
 			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
 				[ability0, ability1] = [ability1, ability0];
@@ -638,7 +638,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 		// This is the "REALLY can't think of a good item" cutoff
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
-		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['roar']) {
+		} else if (this.dex.getEffectiveness('Rock', template) >= 1 || hasMove['roar']) {
 			item = 'Leftovers';
 		} else if (counter.Status <= 1 && !hasMove['metalburst'] && !hasMove['rapidspin'] && !hasMove['superfang']) {
 			item = 'Life Orb';
@@ -686,7 +686,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			if (hp % 4 === 0) evs.hp -= 4;
 		} else {
 			// Maximize number of Stealth Rock switch-ins
-			let srWeakness = this.getEffectiveness('Rock', template);
+			let srWeakness = this.dex.getEffectiveness('Rock', template);
 			if (srWeakness > 0 && hp % (4 / srWeakness) === 0) evs.hp -= 4;
 		}
 

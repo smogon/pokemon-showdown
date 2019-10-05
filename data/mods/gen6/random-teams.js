@@ -21,12 +21,12 @@ class RandomGen6Teams extends RandomTeams {
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, teamDetails = {}, isLead = false) {
-		let baseTemplate = (template = this.getTemplate(template));
+		let baseTemplate = (template = this.dex.getTemplate(template));
 		let species = template.species;
 
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
-			template = this.getTemplate('unown');
+			template = this.dex.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The gen 6 randbat set generator');
@@ -38,7 +38,7 @@ class RandomGen6Teams extends RandomTeams {
 		}
 		let battleForme = this.checkBattleForme(template);
 		if (battleForme && battleForme.randomBattleMoves && template.otherFormes && (battleForme.isMega ? !teamDetails.megaStone : this.random(2))) {
-			template = this.getTemplate(template.otherFormes.length >= 2 ? this.sample(template.otherFormes) : template.otherFormes[0]);
+			template = this.dex.getTemplate(template.otherFormes.length >= 2 ? this.sample(template.otherFormes) : template.otherFormes[0]);
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
@@ -128,7 +128,7 @@ class RandomGen6Teams extends RandomTeams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				let move = this.getMove(setMoveid);
+				let move = this.dex.getMove(setMoveid);
 				let moveid = move.id;
 				let rejected = false;
 				let isSetup = false;
@@ -568,7 +568,7 @@ class RandomGen6Teams extends RandomTeams {
 
 				// Handle Hidden Power IVs
 				if (moveid === 'hiddenpower') {
-					let HPivs = this.getType(move.type).HPivs;
+					let HPivs = this.dex.getType(move.type).HPivs;
 					for (let iv in HPivs) {
 						// @ts-ignore
 						ivs[iv] = HPivs[iv];
@@ -591,10 +591,10 @@ class RandomGen6Teams extends RandomTeams {
 		}
 
 		let abilities = Object.values(baseTemplate.abilities);
-		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
-		let ability0 = this.getAbility(abilities[0]);
-		let ability1 = this.getAbility(abilities[1]);
-		let ability2 = this.getAbility(abilities[2]);
+		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
+		let ability0 = this.dex.getAbility(abilities[0]);
+		let ability1 = this.dex.getAbility(abilities[1]);
+		let ability2 = this.dex.getAbility(abilities[2]);
 		if (abilities[1]) {
 			if (abilities[2] && ability1.rating <= ability2.rating && this.randomChance(1, 2)) {
 				[ability1, ability2] = [ability2, ability1];
@@ -787,7 +787,7 @@ class RandomGen6Teams extends RandomTeams {
 			} else {
 				item = 'Red Card';
 				for (let m in moves) {
-					let move = this.getMove(moves[m]);
+					let move = this.dex.getMove(moves[m]);
 					if (hasType[move.type] && move.basePower >= 90) {
 						item = move.type + ' Gem';
 						break;
@@ -822,7 +822,7 @@ class RandomGen6Teams extends RandomTeams {
 			item = 'Lum Berry';
 		} else if (hasMove['substitute']) {
 			item = counter.damagingMoves.length > 2 && !!counter['drain'] ? 'Life Orb' : 'Leftovers';
-		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+		} else if (this.dex.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if ((ability === 'Iron Barbs' || ability === 'Rough Skin') && this.randomChance(1, 2)) {
 			item = 'Rocky Helmet';
@@ -884,7 +884,7 @@ class RandomGen6Teams extends RandomTeams {
 		if (customScale[species]) level = customScale[species];
 
 		// Prepare optimal HP
-		let srWeakness = this.getEffectiveness('Rock', template);
+		let srWeakness = this.dex.getEffectiveness('Rock', template);
 		while (evs.hp > 1) {
 			let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			if (hasMove['substitute'] && hasMove['reversal']) {
@@ -962,11 +962,11 @@ class RandomGen6Teams extends RandomTeams {
 		let effectivePool = [];
 		let priorityPool = [];
 		for (const curSet of setList) {
-			let itemData = this.getItem(curSet.item);
+			let itemData = this.dex.getItem(curSet.item);
 			if (teamData.megaCount > 0 && itemData.megaStone) continue; // reject 2+ mega stones
 			if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
 
-			let abilityData = this.getAbility(curSet.ability);
+			let abilityData = this.dex.getAbility(curSet.ability);
 			if (weatherAbilitiesRequire[abilityData.id] && teamData.weather !== weatherAbilitiesRequire[abilityData.id]) continue;
 			if (teamData.weather && weatherAbilities.includes(abilityData.id)) continue; // reject 2+ weather setters
 
@@ -1055,7 +1055,7 @@ class RandomGen6Teams extends RandomTeams {
 		};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
 			let speciesFlags = this.randomFactorySets[chosenTier][template.speciesid].flags;
@@ -1103,7 +1103,7 @@ class RandomGen6Teams extends RandomTeams {
 
 			teamData.baseFormes[template.baseSpecies] = 1;
 
-			let itemData = this.getItem(set.item);
+			let itemData = this.dex.getItem(set.item);
 			if (itemData.megaStone) teamData.megaCount++;
 			if (itemData.id in teamData.has) {
 				teamData.has[itemData.id]++;
@@ -1111,7 +1111,7 @@ class RandomGen6Teams extends RandomTeams {
 				teamData.has[itemData.id] = 1;
 			}
 
-			let abilityData = this.getAbility(set.ability);
+			let abilityData = this.dex.getAbility(set.ability);
 			if (abilityData.id in weatherAbilitiesSet) {
 				teamData.weather = weatherAbilitiesSet[abilityData.id];
 			}
@@ -1128,16 +1128,16 @@ class RandomGen6Teams extends RandomTeams {
 				}
 			}
 
-			for (let typeName in this.data.TypeChart) {
+			for (let typeName in this.dex.data.TypeChart) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
-				if (resistanceAbilities[abilityData.id] && resistanceAbilities[abilityData.id].includes(typeName) || !this.getImmunity(typeName, types)) {
+				if (resistanceAbilities[abilityData.id] && resistanceAbilities[abilityData.id].includes(typeName) || !this.dex.getImmunity(typeName, types)) {
 					// Heuristic: assume that Pokemon with these abilities don't have (too) negative typing.
 					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
 					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;
 					continue;
 				}
-				let typeMod = this.getEffectiveness(typeName, types);
+				let typeMod = this.dex.getEffectiveness(typeName, types);
 				if (typeMod < 0) {
 					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
 					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;

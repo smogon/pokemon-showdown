@@ -19,7 +19,7 @@ describe('Thick Fat', function () {
 		// should not crit
 		battle.makeChoices('move splash', 'move incinerate');
 		assert.bounded(target.maxhp - target.hp, [29, 35]);
-		battle.heal(target.maxhp, target, target, battle.getFormat());
+		battle.heal(target.maxhp, target, target, battle.format);
 		battle.resetRNG();
 		// should not crit
 		battle.makeChoices('move splash', 'move icebeam');
@@ -35,7 +35,7 @@ describe('Thick Fat', function () {
 		// should not crit
 		battle.makeChoices('move splash', 'move incinerate');
 		assert.bounded(target.maxhp - target.hp, [57, 68]);
-		battle.heal(target.maxhp, target, target, battle.getFormat());
+		battle.heal(target.maxhp, target, target, battle.format);
 		battle.resetRNG();
 		// should not crit
 		battle.makeChoices('move splash', 'move icebeam');

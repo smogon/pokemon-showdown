@@ -5,8 +5,8 @@ exports.BattleMovedex = {
 	"skillswap": {
 		inherit: true,
 		onHit(target, source, move) {
-			let targetAbility = this.getAbility(target.ability);
-			let sourceAbility = this.getAbility(source.ability);
+			let targetAbility = this.dex.getAbility(target.ability);
+			let sourceAbility = this.dex.getAbility(source.ability);
 			if (target.side === source.side) {
 				this.add('-activate', source, 'move: Skill Swap', '', '', '[of] ' + target);
 			} else {

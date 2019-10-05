@@ -214,7 +214,7 @@ export class ModdedDex {
 		return dexes;
 	}
 
-	mod(mod: string): ModdedDex {
+	mod(mod: string | undefined): ModdedDex {
 		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
 		return dexes[mod || 'base'];
 	}

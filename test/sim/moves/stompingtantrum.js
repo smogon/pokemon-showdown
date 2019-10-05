@@ -16,7 +16,7 @@ describe('Stomping Tantrum', function () {
 			[{species: 'Manaphy', ability: 'hydration', moves: ['rest']}],
 		]);
 
-		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
+		battle.onEvent('BasePower', battle.format, function (basePower) {
 			assert.strictEqual(basePower, 150);
 		});
 
@@ -32,7 +32,7 @@ describe('Stomping Tantrum', function () {
 			[{species: 'Manaphy', ability: 'hydration', moves: ['protect', 'tailglow']}],
 		]);
 
-		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
+		battle.onEvent('BasePower', battle.format, function (basePower) {
 			assert.strictEqual(basePower, 75);
 		});
 
@@ -51,7 +51,7 @@ describe('Stomping Tantrum', function () {
 			{species: 'Ho-Oh', ability: 'pressure', moves: ['recover']},
 		]});
 
-		battle.onEvent('BasePower', battle.getFormat(), function (basePower, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (basePower, attacker, defender, move) {
 			if (move.id === 'stompingtantrum') assert.strictEqual(basePower, 150);
 		});
 
@@ -65,7 +65,7 @@ describe('Stomping Tantrum', function () {
 			[{species: 'Manaphy', ability: 'hydration', moves: ['rest']}],
 		]);
 
-		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
+		battle.onEvent('BasePower', battle.format, function (basePower) {
 			assert.strictEqual(basePower, 75);
 		});
 
@@ -79,7 +79,7 @@ describe('Stomping Tantrum', function () {
 			[{species: 'Lycanroc-Midnight', ability: 'noguard', moves: ['sleeptalk']}],
 		]);
 
-		battle.onEvent('BasePower', battle.getFormat(), function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
 			if (move.id === 'stompingtantrum') assert.strictEqual(basePower, 75);
 		});
 

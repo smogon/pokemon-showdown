@@ -22,7 +22,7 @@ describe('Counter', function () {
 		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'sturdy', moves: ['doublekick']}]});
 		battle.setPlayer('p2', {team: [{species: 'Throh', ability: 'guts', moves: ['counter']}]});
 		let lastDamage = 0;
-		battle.onEvent('Damage', battle.getFormat(), function (damage, attacker, defender, move) {
+		battle.onEvent('Damage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'doublekick') {
 				lastDamage = damage;
 			}
@@ -90,7 +90,7 @@ describe('Mirror Coat', function () {
 		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['watershuriken']}]});
 		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
 		let lastDamage = 0;
-		battle.onEvent('Damage', battle.getFormat(), function (damage, attacker, defender, move) {
+		battle.onEvent('Damage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'watershuriken') {
 				lastDamage = damage;
 			}

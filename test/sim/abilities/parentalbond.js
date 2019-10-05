@@ -14,7 +14,7 @@ describe('Parental Bond', function () {
 		]);
 
 		basePowers = [];
-		battle.onEvent('BasePower', battle.getFormat(), -9, function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, -9, function (bp, attacker, defender, move) {
 			basePowers.push(this.modify(bp, this.event.modifier));
 		});
 	});
@@ -47,7 +47,7 @@ describe('Parental Bond [Gen 6]', function () {
 		]);
 
 		basePowers = [];
-		battle.onEvent('BasePower', battle.getFormat(), -9, function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, -9, function (bp, attacker, defender, move) {
 			basePowers.push(this.modify(bp, this.event.modifier));
 		});
 	});

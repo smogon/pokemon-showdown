@@ -10,12 +10,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, teamDetails = {}, isLead = false) {
-		let baseTemplate = (template = this.getTemplate(template));
+		let baseTemplate = (template = this.dex.getTemplate(template));
 		let species = template.species;
 
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
-			template = this.getTemplate('unown');
+			template = this.dex.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The gen 5 randbat set generator');
@@ -106,7 +106,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				let move = this.getMove(setMoveid);
+				let move = this.dex.getMove(setMoveid);
 				let moveid = move.id;
 				let rejected = false;
 				let isSetup = false;
@@ -385,7 +385,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 				// Handle Hidden Power IVs
 				if (moveid === 'hiddenpower') {
-					let HPivs = this.getType(move.type).HPivs;
+					let HPivs = this.dex.getType(move.type).HPivs;
 					for (let iv in HPivs) {
 						// @ts-ignore
 						ivs[iv] = HPivs[iv];
@@ -400,10 +400,10 @@ class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		let abilities = Object.values(baseTemplate.abilities);
-		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
-		let ability0 = this.getAbility(abilities[0]);
-		let ability1 = this.getAbility(abilities[1]);
-		let ability2 = this.getAbility(abilities[2]);
+		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
+		let ability0 = this.dex.getAbility(abilities[0]);
+		let ability1 = this.dex.getAbility(abilities[1]);
+		let ability2 = this.dex.getAbility(abilities[2]);
 		if (abilities[1]) {
 			if (abilities[2] && ability1.rating <= ability2.rating && this.randomChance(1, 2)) {
 				[ability1, ability2] = [ability2, ability1];
@@ -556,7 +556,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			// Give Unburden mons a random Gem of the type of one of their damaging moves
 			let eligibleTypes = [];
 			for (const setMoveid of moves) {
-				let move = this.getMove(setMoveid);
+				let move = this.dex.getMove(setMoveid);
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
@@ -571,12 +571,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Life Orb';
 		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 			item = 'Choice Scarf';
-		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+		} else if (this.dex.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if (hasMove['substitute'] && hasMove['reversal']) {
 			let eligibleTypes = [];
 			for (const setMoveid of moves) {
-				let move = this.getMove(setMoveid);
+				let move = this.dex.getMove(setMoveid);
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
@@ -601,7 +601,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		// This is the "REALLY can't think of a good item" cutoff
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
-		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
+		} else if (this.dex.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
 			item = 'Leftovers';
 		} else if (counter.Status <= 1 && ability !== 'Sturdy' && !hasMove['rapidspin']) {
 			item = 'Life Orb';
@@ -662,8 +662,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 		const allowedNFE = ['Porygon2', 'Scyther'];
 
 		let pokemonPool = [];
-		for (let id in this.data.FormatsData) {
-			let template = this.getTemplate(id);
+		for (let id in this.dex.data.FormatsData) {
+			let template = this.dex.getTemplate(id);
 			if ((!template.nfe || allowedNFE.includes(template.species)) && !template.isNonstandard && template.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
@@ -681,7 +681,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)

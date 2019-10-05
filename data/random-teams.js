@@ -27,14 +27,15 @@ const randomFactorySets = require('./factory-sets.json');
  * @property {number} [eeveeLimCount]
  */
 
-class RandomTeams extends Dex.ModdedDex {
+class RandomTeams {
 	/**
 	 * @param {Format | string} format
 	 * @param {?PRNG | [number, number, number, number]} [prng]
 	 */
 	constructor(format, prng) {
 		format = Dex.getFormat(format);
-		super(format.mod);
+		this.dex = Dex.forFormat(format);
+		this.gen = this.dex.gen;
 		this.randomBSSFactorySets = randomBSSFactorySets;
 		this.randomFactorySets = randomFactorySets;
 
@@ -125,7 +126,7 @@ class RandomTeams extends Dex.ModdedDex {
 		// No randomization, no choice. We are just checking its existence.
 		// Returns a Pokémon template for further details.
 		if (!template.otherFormes) return null;
-		let firstForme = this.getTemplate(template.otherFormes[0]);
+		let firstForme = this.dex.getTemplate(template.otherFormes[0]);
 		if (firstForme.isMega || firstForme.isPrimal) return firstForme;
 		return null;
 	}
@@ -149,7 +150,7 @@ class RandomTeams extends Dex.ModdedDex {
 	// }
 	// hasMegaEvo(template) {
 	// 	if (!template.otherFormes) return false;
-	// 	let firstForme = this.getTemplate(template.otherFormes[0]);
+	// 	let firstForme = this.dex.getTemplate(template.otherFormes[0]);
 	// 	return !!firstForme.isMega;
 	// }
 	/**
@@ -158,8 +159,8 @@ class RandomTeams extends Dex.ModdedDex {
 	randomCCTeam() {
 		let team = [];
 
-		let natures = Object.keys(this.data.Natures);
-		let items = Object.keys(this.data.Items);
+		let natures = Object.keys(this.dex.data.Natures);
+		let items = Object.keys(this.dex.data.Items);
 
 		let random6 = this.random6Pokemon();
 
@@ -172,7 +173,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (this.gen >= 2) {
 				do {
 					item = this.sample(items);
-				} while (this.getItem(item).gen > this.gen || this.data.Items[item].isNonstandard);
+				} while (this.dex.getItem(item).gen > this.gen || this.dex.data.Items[item].isNonstandard);
 			}
 
 			// Make sure forme is legal
@@ -182,16 +183,16 @@ class RandomTeams extends Dex.ModdedDex {
 			}
 
 			// Make sure that a base forme does not hold any forme-modifier items.
-			let itemData = this.getItem(item);
-			if (itemData.forcedForme && species === this.getTemplate(itemData.forcedForme).baseSpecies) {
+			let itemData = this.dex.getItem(item);
+			if (itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseSpecies) {
 				do {
 					item = this.sample(items);
-					itemData = this.getItem(item);
-				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.getTemplate(itemData.forcedForme).baseSpecies);
+					itemData = this.dex.getItem(item);
+				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseSpecies);
 			}
 
 			// Random legal ability
-			let abilities = Object.values(template.abilities).filter(a => this.getAbility(a).gen <= this.gen);
+			let abilities = Object.values(template.abilities).filter(a => this.dex.getAbility(a).gen <= this.gen);
 			/**@type {string} */
 			// @ts-ignore
 			let ability = this.gen <= 2 ? 'None' : this.sample(abilities);
@@ -200,16 +201,16 @@ class RandomTeams extends Dex.ModdedDex {
 			let moves;
 			let pool = ['struggle'];
 			if (species === 'Smeargle') {
-				pool = Object.keys(this.data.Movedex).filter(moveid => !(['chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge'].includes(moveid) || this.data.Movedex[moveid].isZ || this.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
+				pool = Object.keys(this.dex.data.Movedex).filter(moveid => !(['chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge'].includes(moveid) || this.dex.data.Movedex[moveid].isZ || this.dex.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
 			} else if (template.learnset) {
 				// @ts-ignore
 				pool = Object.keys(template.learnset).filter(moveid => template.learnset[moveid].find(learned => learned.startsWith(this.gen)));
 				if (template.species.substr(0, 6) === 'Rotom-') {
-					const learnset = this.getTemplate(template.baseSpecies).learnset;
+					const learnset = this.dex.getTemplate(template.baseSpecies).learnset;
 					if (learnset) pool = [...new Set(pool.concat(Object.keys(learnset)))];
 				}
 			} else {
-				const learnset = this.getTemplate(template.baseSpecies).learnset;
+				const learnset = this.dex.getTemplate(template.baseSpecies).learnset;
 				// @ts-ignore
 				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
 			}
@@ -309,9 +310,9 @@ class RandomTeams extends Dex.ModdedDex {
 
 		/**@type {string[][]} */
 		let formes = [[], [], [], [], [], []];
-		for (let id in this.data.Pokedex) {
-			if (!(this.data.Pokedex[id].num in hasDexNumber)) continue;
-			let template = this.getTemplate(id);
+		for (let id in this.dex.data.Pokedex) {
+			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
+			let template = this.dex.getTemplate(id);
 			if (template.gen <= this.gen && template.species !== 'Pichu-Spiky-eared' && template.species.substr(0, 8) !== 'Pikachu-') {
 				formes[hasDexNumber[template.num]].push(template.species);
 			}
@@ -330,23 +331,23 @@ class RandomTeams extends Dex.ModdedDex {
 	randomHCTeam() {
 		let team = [];
 
-		let itemPool = Object.keys(this.data.Items);
-		let abilityPool = Object.keys(this.data.Abilities);
-		let movePool = Object.keys(this.data.Movedex);
-		let naturePool = Object.keys(this.data.Natures);
+		let itemPool = Object.keys(this.dex.data.Items);
+		let abilityPool = Object.keys(this.dex.data.Abilities);
+		let movePool = Object.keys(this.dex.data.Movedex);
+		let naturePool = Object.keys(this.dex.data.Natures);
 
 		let random6 = this.random6Pokemon();
 
 		for (let i = 0; i < 6; i++) {
 			// Choose forme
-			let template = this.getTemplate(random6[i]);
+			let template = this.dex.getTemplate(random6[i]);
 
 			// Random unique item
 			let item = '';
 			if (this.gen >= 2) {
 				do {
 					item = this.sampleNoReplace(itemPool);
-				} while (this.getItem(item).gen > this.gen || this.data.Items[item].isNonstandard);
+				} while (this.dex.getItem(item).gen > this.gen || this.dex.data.Items[item].isNonstandard);
 			}
 
 			// Random unique ability
@@ -354,14 +355,14 @@ class RandomTeams extends Dex.ModdedDex {
 			if (this.gen >= 3) {
 				do {
 					ability = this.sampleNoReplace(abilityPool);
-				} while (this.getAbility(ability).gen > this.gen || this.data.Abilities[ability].isNonstandard);
+				} while (this.dex.getAbility(ability).gen > this.gen || this.dex.data.Abilities[ability].isNonstandard);
 			}
 
 			// Random unique moves
 			let m = [];
 			do {
 				let moveid = this.sampleNoReplace(movePool);
-				if (this.getMove(moveid).gen <= this.gen && !this.data.Movedex[moveid].isNonstandard && (moveid === 'hiddenpower' || moveid.substr(0, 11) !== 'hiddenpower')) {
+				if (this.dex.getMove(moveid).gen <= this.gen && !this.dex.data.Movedex[moveid].isNonstandard && (moveid === 'hiddenpower' || moveid.substr(0, 11) !== 'hiddenpower')) {
 					m.push(moveid);
 				}
 			} while (m.length < 4);
@@ -499,7 +500,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
 		for (const [k, moveId] of moves.entries()) {
-			let move = this.getMove(moveId);
+			let move = this.dex.getMove(moveId);
 			let moveid = move.id;
 			let movetype = move.type;
 			if (['judgment', 'multiattack', 'revelationdance'].includes(moveid)) movetype = Object.keys(hasType)[0];
@@ -571,7 +572,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		// Keep track of the available moves
 		for (const moveid of movePool) {
-			let move = this.getMove(moveid);
+			let move = this.dex.getMove(moveid);
 			if (move.damageCallback) continue;
 			if (move.category === 'Physical') counter['physicalpool']++;
 			if (move.category === 'Special') counter['specialpool']++;
@@ -611,13 +612,13 @@ class RandomTeams extends Dex.ModdedDex {
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, teamDetails = {}, isLead = false, isDoubles = false) {
-		template = this.getTemplate(template);
+		template = this.dex.getTemplate(template);
 		let baseTemplate = template;
 		let species = template.species;
 
 		if (!template.exists || ((!isDoubles || !template.randomDoubleBattleMoves) && !template.randomBattleMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
-			template = this.getTemplate('unown');
+			template = this.dex.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The randbat set generator');
@@ -629,7 +630,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 		let battleForme = this.checkBattleForme(template);
 		if (battleForme && battleForme.randomBattleMoves && template.otherFormes && (battleForme.isMega ? !teamDetails.megaStone : this.random(2))) {
-			template = this.getTemplate(template.otherFormes.length >= 2 ? this.sample(template.otherFormes) : template.otherFormes[0]);
+			template = this.dex.getTemplate(template.otherFormes.length >= 2 ? this.sample(template.otherFormes) : template.otherFormes[0]);
 		}
 
 		const randMoves = !isDoubles ? template.randomBattleMoves : template.randomDoubleBattleMoves || template.randomBattleMoves;
@@ -720,7 +721,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [k, moveId] of moves.entries()) {
-				let move = this.getMove(moveId);
+				let move = this.dex.getMove(moveId);
 				let moveid = move.id;
 				let rejected = false;
 				let isSetup = false;
@@ -1214,10 +1215,10 @@ class RandomTeams extends Dex.ModdedDex {
 		/**@type {[string, string | undefined, string | undefined]} */
 		// @ts-ignore
 		let abilities = Object.values(baseTemplate.abilities);
-		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
-		let ability0 = this.getAbility(abilities[0]);
-		let ability1 = this.getAbility(abilities[1]);
-		let ability2 = this.getAbility(abilities[2]);
+		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
+		let ability0 = this.dex.getAbility(abilities[0]);
+		let ability1 = this.dex.getAbility(abilities[1]);
+		let ability2 = this.dex.getAbility(abilities[2]);
 		if (abilities[1]) {
 			if (abilities[2] && ability1.rating <= ability2.rating && this.randomChance(1, 2)) {
 				[ability1, ability2] = [ability2, ability1];
@@ -1399,7 +1400,7 @@ class RandomTeams extends Dex.ModdedDex {
 				item = 'Ultranecrozium Z';
 				if (!hasMove['photongeyser']) {
 					for (const moveid of moves) {
-						let move = this.getMove(moveid);
+						let move = this.dex.getMove(moveid);
 						if (move.category === 'Status' || hasType[move.type]) continue;
 						moves[moves.indexOf(moveid)] = 'photongeyser';
 						break;
@@ -1528,17 +1529,17 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Lum Berry';
 		} else if (isDoubles && counter.damagingMoves.length >= 4 && template.baseStats.spe >= 60 && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['suckerpunch'] && ability !== 'Multiscale' && ability !== 'Sturdy') {
 			item = 'Life Orb';
-		} else if (isDoubles && this.getEffectiveness('Ice', template) >= 2) {
+		} else if (isDoubles && this.dex.getEffectiveness('Ice', template) >= 2) {
 			item = 'Yache Berry';
-		} else if (isDoubles && this.getEffectiveness('Rock', template) >= 2) {
+		} else if (isDoubles && this.dex.getEffectiveness('Rock', template) >= 2) {
 			item = 'Charti Berry';
-		} else if (isDoubles && this.getEffectiveness('Fire', template) >= 2) {
+		} else if (isDoubles && this.dex.getEffectiveness('Fire', template) >= 2) {
 			item = 'Occa Berry';
-		} else if (isDoubles && this.getImmunity('Fighting', template) && this.getEffectiveness('Fighting', template) >= 2) {
+		} else if (isDoubles && this.dex.getImmunity('Fighting', template) && this.dex.getEffectiveness('Fighting', template) >= 2) {
 			item = 'Chople Berry';
 		} else if (hasMove['substitute']) {
 			item = counter.damagingMoves.length > 2 && !!counter['drain'] ? 'Life Orb' : 'Leftovers';
-		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+		} else if (this.dex.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if ((ability === 'Iron Barbs' || ability === 'Rough Skin') && this.randomChance(1, 2)) {
 			item = 'Rocky Helmet';
@@ -1609,7 +1610,7 @@ class RandomTeams extends Dex.ModdedDex {
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
 			let baseStats = template.baseStats;
 			// If Wishiwashi, use the school-forme's much higher stats
-			if (template.baseSpecies === 'Wishiwashi') baseStats = this.getTemplate('wishiwashischool').baseStats;
+			if (template.baseSpecies === 'Wishiwashi') baseStats = this.dex.getTemplate('wishiwashischool').baseStats;
 
 			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
 			// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite
@@ -1633,7 +1634,7 @@ class RandomTeams extends Dex.ModdedDex {
 			} else if (item === 'Light Ball') {
 				bst += baseStats.atk + baseStats.spa;
 			}
-			level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.34));
+			level = 70 + Math.floor(((600 - this.dex.clampIntRange(bst, 300, 600)) / 10.34));
 		}
 
 		if (template.species === 'Stunfisk') {
@@ -1644,7 +1645,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		// Prepare optimal HP
-		let srWeakness = this.getEffectiveness('Rock', template);
+		let srWeakness = this.dex.getEffectiveness('Rock', template);
 		while (evs.hp > 1) {
 			let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			if (hasMove['substitute'] && hasMove['reversal']) {
@@ -1703,12 +1704,12 @@ class RandomTeams extends Dex.ModdedDex {
 		const allowedNFE = ['Chansey', 'Doublade', 'Gligar', 'Pikachu', 'Porygon2', 'Scyther', 'Type: Null'];
 		const exclude = pokemon.map(p => toID(p.species));
 		const pokemonPool = [];
-		for (let id in this.data.FormatsData) {
-			let template = this.getTemplate(id);
+		for (let id in this.dex.data.FormatsData) {
+			let template = this.dex.getTemplate(id);
 			if (exclude.includes(template.id)) continue;
 			if (isMonotype) {
 				let types = template.types;
-				if (template.battleOnly) types = this.getTemplate(template.baseSpecies).types;
+				if (template.battleOnly) types = this.dex.getTemplate(template.baseSpecies).types;
 				if (types.indexOf(type) < 0) continue;
 			}
 			if (template.gen <= this.gen && (!template.nfe || allowedNFE.includes(template.species)) && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
@@ -1724,13 +1725,13 @@ class RandomTeams extends Dex.ModdedDex {
 
 		// For Monotype
 		let isMonotype = this.format.id === 'gen7monotyperandombattle';
-		let typePool = Object.keys(this.data.TypeChart);
+		let typePool = Object.keys(this.dex.data.TypeChart);
 		let type = this.sample(typePool);
 
 		// PotD stuff
 		let potd;
-		if (global.Config && Config.potd && this.getRuleTable(this.getFormat()).has('potd')) {
-			potd = this.getTemplate(Config.potd);
+		if (global.Config && Config.potd && this.dex.getRuleTable(this.format).has('potd')) {
+			potd = this.dex.getTemplate(Config.potd);
 		}
 
 		/**@type {{[k: string]: number}} */
@@ -1750,7 +1751,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (pokemon.length >= 6) break;
 			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 			while (pokemonPool.length && pokemon.length < 6) {
-				let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+				let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 				if (!template.exists) continue;
 
 				// Limit to one of each species (Species Clause)
@@ -1820,7 +1821,7 @@ class RandomTeams extends Dex.ModdedDex {
 					}
 				}
 
-				let item = this.getItem(set.item);
+				let item = this.dex.getItem(set.item);
 
 				// Limit 1 Z-Move per team
 				if (item.zMove && teamDetails['zMove']) continue;
@@ -1904,12 +1905,12 @@ class RandomTeams extends Dex.ModdedDex {
 		let effectivePool = [];
 		let priorityPool = [];
 		for (const curSet of setList) {
-			let item = this.getItem(curSet.item);
+			let item = this.dex.getItem(curSet.item);
 			if (teamData.megaCount > 0 && item.megaStone) continue; // reject 2+ mega stones
 			if (teamData.zCount && teamData.zCount > 0 && item.zMove) continue; // reject 2+ Z stones
 			if (itemsMax[item.id] && teamData.has[item.id] >= itemsMax[item.id]) continue;
 
-			let ability = this.getAbility(curSet.ability);
+			let ability = this.dex.getAbility(curSet.ability);
 			// @ts-ignore
 			if (weatherAbilitiesRequire[ability.id] && teamData.weather !== weatherAbilitiesRequire[ability.id]) continue;
 			if (teamData.weather && weatherAbilities.includes(ability.id)) continue; // reject 2+ weather setters
@@ -1996,7 +1997,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let pokemon = [];
 		let pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
-		let typePool = Object.keys(this.data.TypeChart);
+		let typePool = Object.keys(this.dex.data.TypeChart);
 		const type = this.sample(typePool);
 
 		/**@type {TeamData} */
@@ -2017,7 +2018,7 @@ class RandomTeams extends Dex.ModdedDex {
 		};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
 			// Lessen the need of deleting sets of Pokemon after tier shifts
@@ -2034,7 +2035,7 @@ class RandomTeams extends Dex.ModdedDex {
 			let set = this.randomFactorySet(template, pokemon.length, teamData, chosenTier);
 			if (!set) continue;
 
-			let itemData = this.getItem(set.item);
+			let itemData = this.dex.getItem(set.item);
 
 			// Actually limit the number of Megas to one
 			if (teamData.megaCount >= 1 && itemData.megaStone) continue;
@@ -2048,7 +2049,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (chosenTier === 'Mono') {
 				// Prevents Mega Evolutions from breaking the type limits
 				if (itemData.megaStone) {
-					let megaTemplate = this.getTemplate(itemData.megaStone);
+					let megaTemplate = this.dex.getTemplate(itemData.megaStone);
 					if (types.length > megaTemplate.types.length) types = [template.types[0]];
 					// Only check the second type because a Mega Evolution should always share the first type with its base forme.
 					if (megaTemplate.types[1] && types[1] && megaTemplate.types[1] !== types[1]) {
@@ -2099,7 +2100,7 @@ class RandomTeams extends Dex.ModdedDex {
 				teamData.has[itemData.id] = 1;
 			}
 
-			let abilityData = this.getAbility(set.ability);
+			let abilityData = this.dex.getAbility(set.ability);
 			if (abilityData.id in weatherAbilitiesSet) {
 				teamData.weather = weatherAbilitiesSet[abilityData.id];
 			}
@@ -2116,16 +2117,16 @@ class RandomTeams extends Dex.ModdedDex {
 				}
 			}
 
-			for (let typeName in this.data.TypeChart) {
+			for (let typeName in this.dex.data.TypeChart) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
-				if (resistanceAbilities[abilityData.id] && resistanceAbilities[abilityData.id].includes(typeName) || !this.getImmunity(typeName, types)) {
+				if (resistanceAbilities[abilityData.id] && resistanceAbilities[abilityData.id].includes(typeName) || !this.dex.getImmunity(typeName, types)) {
 					// Heuristic: assume that Pokémon with these abilities don't have (too) negative typing.
 					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
 					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;
 					continue;
 				}
-				let typeMod = this.getEffectiveness(typeName, types);
+				let typeMod = this.dex.getEffectiveness(typeName, types);
 				if (typeMod < 0) {
 					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
 					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;
@@ -2177,12 +2178,12 @@ class RandomTeams extends Dex.ModdedDex {
 		let effectivePool = [];
 		let priorityPool = [];
 		for (const curSet of setList) {
-			let item = this.getItem(curSet.item);
+			let item = this.dex.getItem(curSet.item);
 			if (teamData.megaCount > 1 && item.megaStone) continue; // reject 3+ mega stones
 			if (teamData.zCount && teamData.zCount > 1 && item.zMove) continue; // reject 3+ Z stones
 			if (teamData.has[item.id]) continue; // Item clause
 
-			let ability = this.getAbility(curSet.ability);
+			let ability = this.dex.getAbility(curSet.ability);
 			if (weatherAbilitiesRequire[ability.id] && teamData.weather !== weatherAbilitiesRequire[ability.id]) continue;
 			if (teamData.weather && weatherAbilities.includes(ability.id)) continue; // reject 2+ weather setters
 
@@ -2268,7 +2269,7 @@ class RandomTeams extends Dex.ModdedDex {
 		};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
 			let speciesFlags = this.randomBSSFactorySets[template.speciesid].flags;
@@ -2321,12 +2322,12 @@ class RandomTeams extends Dex.ModdedDex {
 			teamData.baseFormes[template.baseSpecies] = 1;
 
 			// Limit Mega and Z-move
-			let itemData = this.getItem(set.item);
+			let itemData = this.dex.getItem(set.item);
 			if (itemData.megaStone) teamData.megaCount++;
 			if (itemData.zMove) teamData.zCount++;
 			teamData.has[itemData.id] = 1;
 
-			let abilityData = this.getAbility(set.ability);
+			let abilityData = this.dex.getAbility(set.ability);
 			if (abilityData.id in weatherAbilitiesSet) {
 				teamData.weather = weatherAbilitiesSet[abilityData.id];
 			}
@@ -2343,16 +2344,16 @@ class RandomTeams extends Dex.ModdedDex {
 				}
 			}
 
-			for (let typeName in this.data.TypeChart) {
+			for (let typeName in this.dex.data.TypeChart) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
-				if (resistanceAbilities[abilityData.id] && resistanceAbilities[abilityData.id].includes(typeName) || !this.getImmunity(typeName, types)) {
+				if (resistanceAbilities[abilityData.id] && resistanceAbilities[abilityData.id].includes(typeName) || !this.dex.getImmunity(typeName, types)) {
 					// Heuristic: assume that Pokémon with these abilities don't have (too) negative typing.
 					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
 					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;
 					continue;
 				}
-				let typeMod = this.getEffectiveness(typeName, types);
+				let typeMod = this.dex.getEffectiveness(typeName, types);
 				if (typeMod < 0) {
 					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
 					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;

@@ -22,9 +22,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 		}
 
 		let formeCounter = 0;
-		for (let id in this.data.Pokedex) {
-			if (!(this.data.Pokedex[id].num in hasDexNumber)) continue;
-			let template = this.getTemplate(id);
+		for (let id in this.dex.data.Pokedex) {
+			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
+			let template = this.dex.getTemplate(id);
 			if (!template.learnset || template.forme) continue;
 			formes[hasDexNumber[template.num]].push(template.species);
 			if (++formeCounter >= 6) {
@@ -36,7 +36,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 		for (let i = 0; i < 6; i++) {
 			// Choose forme.
 			let poke = this.sample(formes[i]);
-			let template = this.getTemplate(poke);
+			let template = this.dex.getTemplate(poke);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
 			let mbstmin = 1307;
@@ -90,7 +90,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			let pool = [];
 			if (template.learnset) {
 				for (let move in template.learnset) {
-					if (this.getMove(move).gen !== 1) continue;
+					if (this.dex.getMove(move).gen !== 1) continue;
 					if (template.learnset[move].some(learned => learned[0] === '1')) {
 						pool.push(move);
 					}
@@ -132,8 +132,8 @@ class RandomGen1Teams extends RandomGen2Teams {
 		let uuTiers = ['NFE', 'UU', 'UUBL', 'NU'];
 
 		let pokemonPool = [];
-		for (let id in this.data.FormatsData) {
-			let template = this.getTemplate(id);
+		for (let id in this.dex.data.FormatsData) {
+			let template = this.dex.getTemplate(id);
 			if (!template.isNonstandard && template.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
@@ -149,7 +149,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 		let hasShitmon = false;
 
 		while (pokemonPool.length && pokemonLeft < 6) {
-			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
@@ -189,7 +189,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard, Earthquake.
 			let pokemonWeaknesses = [];
 			for (let type in weaknessCount) {
-				let increaseCount = this.getImmunity(type, template) && this.getEffectiveness(type, template) > 0;
+				let increaseCount = this.dex.getImmunity(type, template) && this.dex.getEffectiveness(type, template) > 0;
 				if (!increaseCount) continue;
 				if (weaknessCount[type] >= 2) {
 					skip = true;
@@ -241,8 +241,8 @@ class RandomGen1Teams extends RandomGen2Teams {
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template) {
-		template = this.getTemplate(template);
-		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1.
+		template = this.dex.getTemplate(template);
+		if (!template.exists) template = this.dex.getTemplate('pikachu'); // Because Gen 1.
 
 		let movePool = template.randomBattleMoves ? template.randomBattleMoves.slice() : [];
 		/**@type {string[]} */
@@ -292,7 +292,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 				hasMove = {};
 				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
 				for (const setMoveid of moves) {
-					let move = this.getMove(setMoveid);
+					let move = this.dex.getMove(setMoveid);
 					let moveid = move.id;
 					hasMove[moveid] = true;
 					if (!move.damage && !move.damageCallback) {
@@ -314,7 +314,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 				for (const [i, moveid] of moves.entries()) {
 					if (moveid === template.essentialMove) continue;
-					let move = this.getMove(moveid);
+					let move = this.dex.getMove(moveid);
 					let rejected = false;
 					if (!template.essentialMove || moveid !== template.essentialMove) {
 						switch (moveid) {

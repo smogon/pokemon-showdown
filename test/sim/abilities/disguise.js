@@ -80,7 +80,7 @@ describe('Disguise', function () {
 		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['counter']}]});
 		battle.setPlayer('p2', {team: [{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']}]});
 		let successfulEvent = false;
-		battle.onEvent('Damage', battle.getFormat(), function (damage, attacker, defender, move) {
+		battle.onEvent('Damage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
 				assert.ok(!defender.getMoveHitData(move).crit);

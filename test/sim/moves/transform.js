@@ -65,7 +65,7 @@ describe('Transform', function () {
 		for (let i = 0; i < p1poke.moves.length; i++) {
 			let move = p1poke.moves[i];
 			assert.strictEqual(move, p2poke.moves[i]);
-			move = battle.getMove(move);
+			move = battle.dex.getMove(move);
 			let movepp = p1poke.getMoveData(move);
 			assert.strictEqual(movepp.pp, 5);
 		}

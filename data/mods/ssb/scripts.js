@@ -4,12 +4,12 @@
 let BattleScripts = {
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
 		let target = this.getTarget(pokemon, zMove || moveOrMoveName, targetLoc);
-		let baseMove = this.getActiveMove(moveOrMoveName);
+		let baseMove = this.dex.getActiveMove(moveOrMoveName);
 		const pranksterBoosted = baseMove.pranksterBoosted;
 		if (!sourceEffect && baseMove.id !== 'struggle' && !zMove) {
 			let changedMove = this.runEvent('OverrideAction', pokemon, target, baseMove);
 			if (changedMove && changedMove !== true) {
-				baseMove = this.getActiveMove(changedMove);
+				baseMove = this.dex.getActiveMove(changedMove);
 				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
 				target = this.resolveTarget(pokemon, baseMove);
 			}
@@ -60,7 +60,7 @@ let BattleScripts = {
 					return;
 				}
 			} else {
-				sourceEffect = this.getEffect('lockedmove');
+				sourceEffect = this.dex.getEffect('lockedmove');
 			}
 			pokemon.moveUsed(move, targetLoc);
 		}
@@ -71,7 +71,7 @@ let BattleScripts = {
 
 		if (zMove) {
 			if (pokemon.illusion) {
-				this.singleEvent('End', this.getAbility('Illusion'), pokemon.abilityData, pokemon);
+				this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon);
 			}
 			this.add('-zpower', pokemon);
 			pokemon.m.zMoveUsed = true;
@@ -100,7 +100,7 @@ let BattleScripts = {
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
-				this.runMove(move.id, dancer, 0, this.getAbility('dancer'), undefined, true);
+				this.runMove(move.id, dancer, 0, this.dex.getAbility('dancer'), undefined, true);
 				// Using a Dancer move is enough to spoil Fake Out etc.
 				dancer.activeTurns++;
 			}
@@ -109,7 +109,7 @@ let BattleScripts = {
 	},
 	// Modded to allow arrays as Mega Stone options
 	canMegaEvo(pokemon) {
-		let altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
+		let altForme = pokemon.baseTemplate.otherFormes && this.dex.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		let item = pokemon.getItem();
 		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.species;
 		if (item.megaEvolves !== pokemon.baseTemplate.species || (Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) || (typeof item.megaStone === 'string' && item.megaStone === pokemon.species)) {
@@ -178,7 +178,7 @@ let BattleScripts = {
 			let item = pokemon.getItem();
 			if (item.zMoveFrom && Array.isArray(item.zMoveFrom) ? item.zMoveFrom.includes(move.name) : item.zMoveFrom === move.name) {
 				// @ts-ignore
-				zMove = this.getActiveMove(item.zMove);
+				zMove = this.dex.getActiveMove(item.zMove);
 				// @ts-ignore Hack for Snaquaza's Z move
 				zMove.baseMove = move;
 				zMove.isZPowered = true;
@@ -187,12 +187,12 @@ let BattleScripts = {
 		}
 
 		if (move.category === 'Status') {
-			zMove = this.getActiveMove(move);
+			zMove = this.dex.getActiveMove(move);
 			zMove.isZ = true;
 			zMove.isZPowered = true;
 			return zMove;
 		}
-		zMove = this.getActiveMove(this.zMoveTable[move.type]);
+		zMove = this.dex.getActiveMove(this.zMoveTable[move.type]);
 		// @ts-ignore
 		zMove.basePower = move.zMovePower;
 		zMove.category = move.category;
@@ -213,10 +213,10 @@ let BattleScripts = {
 				zMoves.push(null);
 				continue;
 			}
-			let move = this.getMove(moveSlot.move);
+			let move = this.dex.getMove(moveSlot.move);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
 			if (zMoveName) {
-				let zMove = this.getMove(zMoveName);
+				let zMove = this.dex.getMove(zMoveName);
 				if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
 				zMoves.push({move: zMoveName, target: zMove.target});
 			} else {
@@ -227,7 +227,7 @@ let BattleScripts = {
 		if (atLeastOne) return zMoves;
 	},
 	runZPower(move, pokemon) {
-		const zPower = this.getEffect('zpower');
+		const zPower = this.dex.getEffect('zpower');
 		if (move.category !== 'Status') {
 			this.attrLastMove('[zeffect]');
 		} else if (move.zMoveBoost) {
@@ -312,7 +312,7 @@ let BattleScripts = {
 		}
 		// types
 		let typeMod = target.runEffectiveness(move);
-		typeMod = this.clampIntRange(typeMod, -6, 6);
+		typeMod = this.dex.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
@@ -383,7 +383,7 @@ let BattleScripts = {
 		},
 		setStatus(status, source = null, sourceEffect = null, ignoreImmunities = false) {
 			if (!this.hp) return false;
-			status = this.battle.getEffect(status);
+			status = this.battle.dex.getEffect(status);
 			if (this.battle.event) {
 				if (!source) source = this.battle.event.source;
 				if (!sourceEffect) sourceEffect = this.battle.effect;

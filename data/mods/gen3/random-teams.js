@@ -9,11 +9,11 @@ class RandomGen3Teams extends RandomGen4Teams {
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, teamDetails = {}) {
-		let baseTemplate = (template = this.getTemplate(template));
+		let baseTemplate = (template = this.dex.getTemplate(template));
 		let species = template.species;
 
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
-			template = this.getTemplate('unown');
+			template = this.dex.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The gen 3 randbat set generator');
@@ -115,7 +115,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				let move = this.getMove(setMoveid);
+				let move = this.dex.getMove(setMoveid);
 				let moveid = move.id;
 				let rejected = false;
 				let isSetup = false;
@@ -365,7 +365,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 				if (reqMove) {
 					// reject a move
 					for (let [i, move] of moves.entries()) {
-						if (move === 'weatherball' || this.getMove(move).type in hasType) continue;
+						if (move === 'weatherball' || this.dex.getMove(move).type in hasType) continue;
 						moves[i] = reqMove;
 						let reqMoveIndex = movePool.indexOf(reqMove);
 						if (reqMoveIndex !== -1) this.fastPop(movePool, reqMoveIndex);
@@ -437,10 +437,10 @@ class RandomGen3Teams extends RandomGen4Teams {
 			ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 
-		let abilities = Object.values(baseTemplate.abilities).filter(a => this.getAbility(a).gen === 3);
-		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
-		let ability0 = this.getAbility(abilities[0]);
-		let ability1 = this.getAbility(abilities[1]);
+		let abilities = Object.values(baseTemplate.abilities).filter(a => this.dex.getAbility(a).gen === 3);
+		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
+		let ability0 = this.dex.getAbility(abilities[0]);
+		let ability1 = this.dex.getAbility(abilities[1]);
 		if (abilities[1]) {
 			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
 				[ability0, ability1] = [ability1, ability0];
@@ -610,13 +610,13 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let allowedNFE = ['Scyther', 'Vigoroth'];
 
 		let pokemonPool = [];
-		for (let id in this.data.FormatsData) {
-			let template = this.getTemplate(id);
+		for (let id in this.dex.data.FormatsData) {
+			let template = this.dex.getTemplate(id);
 			if (template.isNonstandard || !template.randomBattleMoves) continue;
 			if (template.evos && !allowedNFE.includes(template.species)) {
 				let invalid = false;
 				for (const evo of template.evos) {
-					if (this.getTemplate(evo).gen <= 3) {
+					if (this.dex.getTemplate(evo).gen <= 3) {
 						invalid = true;
 						break;
 					}
@@ -638,7 +638,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)

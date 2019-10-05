@@ -175,7 +175,7 @@ let BattleMovedex = {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
 				if (move.recoil) {
-					this.damage(this.clampIntRange(Math.round(damage * move.recoil[0] / move.recoil[1]), 1), source, target, 'recoil');
+					this.damage(this.dex.clampIntRange(Math.round(damage * move.recoil[0] / move.recoil[1]), 1), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
@@ -1318,7 +1318,7 @@ let BattleMovedex = {
 			let sideConditions = ['spikes', 'toxicspikes', 'stealthrock'];
 			for (let condition in sideConditions) {
 				if (user.side.removeSideCondition(condition)) {
-					this.add('-sideend', user.side, this.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + user);
+					this.add('-sideend', user.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + user);
 					doubled = true;
 				}
 			}
@@ -2022,9 +2022,9 @@ let BattleMovedex = {
 		accuracy: 100,
 		onModifyMove(move, user) {
 			if (user.illusion) {
-				let illusionMoves = user.illusion.moves.filter(move => this.getMove(move).category !== 'Status');
+				let illusionMoves = user.illusion.moves.filter(move => this.dex.getMove(move).category !== 'Status');
 				if (!illusionMoves.length) return;
-				move.name = this.getMove(this.sample(illusionMoves)).name;
+				move.name = this.dex.getMove(this.sample(illusionMoves)).name;
 			}
 		},
 		desc: "Has a 40% chance to lower the target's accuracy by 1 stage. If Illusion is active, displays as a random non-Status move in the copied Pokémon's moveset.",

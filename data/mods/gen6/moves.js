@@ -312,7 +312,7 @@ let BattleMovedex = {
 			onTryMove(pokemon, target, move) {
 				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'move: Powder');
-					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
+					this.damage(this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
 					return false;
 				}
 			},

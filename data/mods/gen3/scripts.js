@@ -23,7 +23,7 @@ let BattleScripts = {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
 
-		let move = this.getActiveMove(moveOrMoveName);
+		let move = this.dex.getActiveMove(moveOrMoveName);
 
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;
@@ -61,7 +61,7 @@ let BattleScripts = {
 
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
-		if (sourceEffect) attrs += `|[from]${this.getEffect(sourceEffect)}`;
+		if (sourceEffect) attrs += `|[from]${this.dex.getEffect(sourceEffect)}`;
 		this.addMove('move', pokemon, movename, target + attrs);
 
 		if (!target) {
@@ -221,7 +221,7 @@ let BattleScripts = {
 		if (accuracy !== true) {
 			if (!move.ignoreAccuracy) {
 				boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
-				boost = this.clampIntRange(boosts['accuracy'], -6, 6);
+				boost = this.dex.clampIntRange(boosts['accuracy'], -6, 6);
 				if (boost > 0) {
 					accuracy *= boostTable[boost];
 				} else {
@@ -230,7 +230,7 @@ let BattleScripts = {
 			}
 			if (!move.ignoreEvasion) {
 				boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
-				boost = this.clampIntRange(boosts['evasion'], -6, 6);
+				boost = this.dex.clampIntRange(boosts['evasion'], -6, 6);
 				if (boost > 0) {
 					accuracy /= boostTable[boost];
 				} else if (boost < 0) {
@@ -301,7 +301,7 @@ let BattleScripts = {
 			/** @type {number | undefined | false} */
 			let moveDamage;
 			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
-			let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
+			let isSleepUsable = move.sleepUsable || this.dex.getMove(move.sourceEffect).sleepUsable;
 			let i;
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
@@ -312,7 +312,7 @@ let BattleScripts = {
 					if (accuracy !== true) {
 						if (!move.ignoreAccuracy) {
 							boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
-							boost = this.clampIntRange(boosts['accuracy'], -6, 6);
+							boost = this.dex.clampIntRange(boosts['accuracy'], -6, 6);
 							if (boost > 0) {
 								accuracy *= boostTable[boost];
 							} else {
@@ -321,7 +321,7 @@ let BattleScripts = {
 						}
 						if (!move.ignoreEvasion) {
 							boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
-							boost = this.clampIntRange(boosts['evasion'], -6, 6);
+							boost = this.dex.clampIntRange(boosts['evasion'], -6, 6);
 							if (boost > 0) {
 								accuracy /= boostTable[boost];
 							} else if (boost < 0) {
@@ -375,7 +375,7 @@ let BattleScripts = {
 
 	calcRecoilDamage(damageDealt, move) {
 		// @ts-ignore
-		return this.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+		return this.dex.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},
 };
 

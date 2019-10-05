@@ -43,7 +43,7 @@ let BattleItems = {
 				pokemon.baseTemplate = template;
 				this.add('-start', pokemon, 'Red Orb', '[silent]');
 				let apparentSpecies = pokemon.illusion ? pokemon.illusion.template.species : pokemon.m.originalSpecies;
-				let oTemplate = this.getTemplate(apparentSpecies);
+				let oTemplate = this.dex.getTemplate(apparentSpecies);
 				if (pokemon.illusion) {
 					let types = oTemplate.types;
 					if (types.length > 1 || types[types.length - 1] !== 'Fire') {
