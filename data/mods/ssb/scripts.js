@@ -357,7 +357,8 @@ let BattleScripts = {
 	pokemon: {
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);
-			if (this.battle.field.getPseudoWeather('trickroom') || this.battle.field.getPseudoWeather('alienwave')) {
+			if ((this.battle.field.getPseudoWeather('trickroom') || this.battle.field.getPseudoWeather('alienwave')) &&
+				 !(this.battle.field.getPseudoWeather('trickroom') && this.battle.field.getPseudoWeather('alienwave'))) {
 				speed = 0x2710 - speed;
 			}
 			if (this.battle.field.isTerrain('distortionworld')) {
