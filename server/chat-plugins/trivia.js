@@ -728,7 +728,7 @@ class Trivia extends Rooms.RoomGame {
 			const user = Users.get(userid);
 			const player = this.playerTable[userid];
 			if ((requirePoints && !player.points) || !user) continue;
-			ranks.push({userid, player, name: user.name});
+			ranks.push({id: userid, player, name: user.name});
 		}
 		ranks.sort((a, b) => {
 			return b.player.points - a.player.points ||
