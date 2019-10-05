@@ -5,6 +5,7 @@ type Pokemon = import('./pokemon').Pokemon
 type PRNGSeed = import('./prng').PRNGSeed;
 type Side = import('./side').Side
 type TeamValidator = import('./team-validator').TeamValidator
+type PokemonSources = import('./team-validator').PokemonSources
 
 type ID = '' | string & {__isID: true};
 interface AnyObject {[k: string]: any}
@@ -46,6 +47,7 @@ type PokemonSet = {
  * - L = start or level-up, 3rd char+ is the level
  * - M = TM/HM
  * - T = tutor
+ * - R = restricted (special moves like Rotom moves)
  * - E = egg
  * - S = event, 3rd char+ is the index in .eventPokemon
  * - D = Dream World, only 5D is valid
@@ -59,48 +61,6 @@ type PokemonSet = {
  * check prevos for compatibility).
  */
 type MoveSource = string;
-
-/**
- * Describes a possible way to get a pokemon. Is not exhaustive!
- * sourcesBefore covers all sources that do not have exclusive
- * moves (like catching wild pokemon).
- *
- * First character is a generation number, 1-7.
- * Second character is a source ID, one of:
- *
- * - E = egg, 3rd char+ is the father in gen 2-5, empty in gen 6-7
- *   because egg moves aren't restricted to fathers anymore
- * - S = event, 3rd char+ is the index in .eventPokemon
- * - D = Dream World, only 5D is valid
- * - V = Virtual Console transfer, only 7V is valid
- *
- * Designed to match MoveSource where possible.
- */
-type PokemonSource = string;
-
-/**
- * Keeps track of how a pokemon with a given set might be obtained.
- *
- * `sources` is a list of possible PokemonSources, and a nonzero
- * sourcesBefore means the Pokemon is compatible with all possible
- * PokemonSources from that gen or earlier.
- *
- * `limitedEgg` tracks moves that can only be obtained from an egg with
- * another father in gen 2-5. If there are multiple such moves,
- * potential fathers need to be checked to see if they can actually
- * learn the move combination in question.
- */
-type PokemonSources = {
-	sources: PokemonSource[]
-	sourcesBefore: number
-	babyOnly?: string
-	sketchMove?: string
-	hm?: string
-	restrictiveMoves?: string[]
-	limitedEgg?: (string | 'self')[]
-	isHidden?: boolean
-	fastCheck?: true
-}
 
 type EventInfo = {
 	generation: number,
@@ -1015,8 +975,6 @@ interface FormatsData extends EventMethods {
 	maxForcedLevel?: number
 	maxLevel?: number
 	mod?: string
-	noChangeAbility?: boolean
-	noChangeForme?: boolean
 	onBasePowerPriority?: number
 	onModifyMovePriority?: number
 	onSwitchInPriority?: number
@@ -1035,7 +993,7 @@ interface FormatsData extends EventMethods {
 	timer?: Partial<GameTimerSettings>
 	tournamentShow?: boolean
 	unbanlist?: string[]
-	checkLearnset?: (this: TeamValidator, move: Move, template: Template, lsetData: PokemonSources, set: PokemonSet) => {type: string, [any: string]: any} | null
+	checkLearnset?: (this: TeamValidator, move: Move, template: Template, setSources: PokemonSources, set: PokemonSet) => {type: string, [any: string]: any} | null
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void
 	onBegin?: (this: Battle) => void
 	onChangeSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject) => string[] | void
