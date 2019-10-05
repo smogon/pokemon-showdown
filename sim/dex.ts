@@ -409,6 +409,13 @@ export class ModdedDex {
 				template.doublesTier = 'Illegal';
 				template.isNonstandard = 'Future';
 			}
+			if (this.currentMod === 'letsgo' && !template.isNonstandard) {
+				const isLetsGo = (
+					(template.num <= 151 || ['Meltan', 'Melmetal'].includes(template.name)) &&
+					(!template.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y'].includes(template.forme))
+				);
+				if (!isLetsGo) template.isNonstandard = 'Past';
+			}
 		} else {
 			template = new Data.Template({
 				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
@@ -608,6 +615,10 @@ export class ModdedDex {
 			if (item.gen > this.gen) {
 				(item as any).isNonstandard = 'Future';
 			}
+			// hack for allowing mega evolution in LGPE
+			if (this.currentMod === 'letsgo' && !item.isNonstandard && !item.megaStone) {
+				(item as any).isNonstandard = 'Past';
+			}
 		} else {
 			item = new Data.Item({id, name, exists: false});
 		}
@@ -633,6 +644,12 @@ export class ModdedDex {
 			ability = new Data.Ability({name}, this.data.Abilities[id]);
 			if (ability.gen > this.gen) {
 				(ability as any).isNonstandard = 'Future';
+			}
+			if (this.currentMod === 'letsgo' && ability.id !== 'noability') {
+				(ability as any).isNonstandard = 'Past';
+			}
+			if ((this.currentMod === 'letsgo' || this.gen <= 2) && ability.id === 'noability') {
+				(ability as any).isNonstandard = null;
 			}
 		} else {
 			ability = new Data.Ability({id, name, exists: false});
@@ -888,7 +905,7 @@ export class ModdedDex {
 	validateBanRule(rule: string) {
 		let id = toID(rule);
 		if (id === 'unreleased') return 'unreleased';
-		if (id === 'illegal') return 'illegal';
+		if (id === 'nonexistent') return 'nonexistent';
 		const matches = [];
 		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'pokemontag'];
 		for (const matchType of matchTypes) {
@@ -916,6 +933,8 @@ export class ModdedDex {
 					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags
 					'mega',
+					// illegal/nonstandard reasons
+					'glitch', 'past', 'future', 'lgpe', 'pokestar', 'custom',
 				];
 				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
 				continue;

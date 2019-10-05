@@ -80,8 +80,8 @@ class TestTools {
 		if (!format.ruleset) format.ruleset = [];
 		if (!format.banlist) format.banlist = [];
 
-		if (options.pokemon) format.ruleset.push('Pokemon');
-		if (options.legality) format.banlist.push('Illegal', 'Unreleased');
+		if (options.pokemon) format.ruleset.push('-Nonexistent');
+		if (options.legality) format.ruleset.push('Obtainable');
 		if (options.preview) format.ruleset.push('Team Preview');
 		if (options.sleepClause) format.ruleset.push('Sleep Clause Mod');
 		if (options.cancel) format.ruleset.push('Cancel Mod');
