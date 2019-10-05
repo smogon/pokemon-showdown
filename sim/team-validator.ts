@@ -399,6 +399,12 @@ export class TeamValidator {
 		if (item.megaEvolves === template.species) {
 			if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
 			postMegaTemplate = dex.getTemplate(item.megaStone);
+		} else if (item.id === 'redorb' && template.id === 'groudon') {
+			postMegaTemplate = dex.getTemplate('Groudon-Primal');
+		} else if (item.id === 'blueorb' && template.id === 'kyogre') {
+			postMegaTemplate = dex.getTemplate('Kyogre-Primal');
+		} else if (template.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
+			postMegaTemplate = dex.getTemplate('Rayquaza-Mega');
 		}
 
 		let problem = this.checkSpecies(set, template, postMegaTemplate, setHas);
