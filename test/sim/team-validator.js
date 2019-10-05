@@ -276,6 +276,8 @@ describe('Team Validator', function () {
 		// base forme ability
 		let team = [
 			{species: 'gyaradosmega', item: 'gyaradosite', ability: 'intimidate', moves: ['dragondance', 'crunch', 'waterfall', 'icefang'], evs: {hp: 1}},
+			{species: 'kyogreprimal', item: 'blueorb', ability: 'drizzle', moves: ['originpulse'], evs: {hp: 1}},
+			{species: 'rayquazamega', item: 'leftovers', ability: 'airlock', moves: ['dragonascent'], evs: {hp: 1}},
 		];
 		let illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
 		assert.strictEqual(illegal, null);
@@ -283,6 +285,8 @@ describe('Team Validator', function () {
 		// mega forme ability
 		team = [
 			{species: 'gyaradosmega', item: 'gyaradosite', ability: 'moldbreaker', moves: ['dragondance', 'crunch', 'waterfall', 'icefang'], evs: {hp: 1}},
+			{species: 'kyogreprimal', item: 'blueorb', ability: 'primordialsea', moves: ['originpulse'], evs: {hp: 1}},
+			{species: 'rayquazamega', item: 'leftovers', ability: 'deltastream', moves: ['dragonascent'], evs: {hp: 1}},
 		];
 		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
 		assert.strictEqual(illegal, null);
