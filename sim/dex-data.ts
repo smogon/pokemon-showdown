@@ -192,7 +192,7 @@ export class RuleTable extends Map<string, string> {
 	getReason(key: string): string | null {
 		const source = this.get(key);
 		if (source === undefined) return null;
-		if (key === '-nonexistent' || key.startsWith('validate')) {
+		if (key === '-nonexistent' || key.startsWith('obtainable')) {
 			return 'not obtainable';
 		}
 		return source ? `banned by ${source}` : `banned`;

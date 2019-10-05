@@ -331,11 +331,11 @@ export class TeamValidator {
 		const setHas: {[k: string]: true} = {};
 
 		const allowEVs = dex.currentMod !== 'letsgo';
-		const capEVs = dex.gen > 2 && (ruleTable.has('validatemisc') || dex.gen === 6);
+		const capEVs = dex.gen > 2 && (ruleTable.has('obtainablemisc') || dex.gen === 6);
 		if (!set.evs) set.evs = TeamValidator.fillStats(null, allowEVs && !capEVs ? 252 : 0);
 		if (!set.ivs) set.ivs = TeamValidator.fillStats(null, 31);
 
-		if (ruleTable.has('validateformes')) {
+		if (ruleTable.has('obtainableformes')) {
 			problems.push(...this.validateForme(set));
 		}
 
@@ -354,7 +354,7 @@ export class TeamValidator {
 		item = dex.getItem(set.item);
 		ability = dex.getAbility(set.ability);
 
-		if (ability.id === 'battlebond' && template.id === 'greninja' && ruleTable.has('validateabilities')) {
+		if (ability.id === 'battlebond' && template.id === 'greninja' && ruleTable.has('obtainableabilities')) {
 			template = dex.getTemplate('greninjaash');
 			if (set.gender && set.gender !== 'M') {
 				problems.push(`Battle Bond Greninja must be male.`);
@@ -406,7 +406,7 @@ export class TeamValidator {
 
 		problem = this.checkItem(set, item, setHas);
 		if (problem) problems.push(problem);
-		if (ruleTable.has('validatemisc')) {
+		if (ruleTable.has('obtainablemisc')) {
 			if (dex.gen <= 1 || ruleTable.has('allowavs')) {
 				if (item.id) {
 					// no items allowed
@@ -416,7 +416,7 @@ export class TeamValidator {
 		}
 
 		if (!set.ability) set.ability = 'No Ability';
-		if (ruleTable.has('validateabilities')) {
+		if (ruleTable.has('obtainableabilities')) {
 			if (dex.gen <= 2 || ruleTable.has('allowavs')) {
 				set.ability = 'No Ability';
 			} else {
@@ -492,7 +492,7 @@ export class TeamValidator {
 			problem = this.checkMove(set, move, setHas);
 			if (problem) problems.push(problem);
 
-			if (ruleTable.has('validatemoves')) {
+			if (ruleTable.has('obtainablemoves')) {
 				const checkLearnset = (ruleTable.checkLearnset && ruleTable.checkLearnset[0] || this.checkLearnset);
 				lsetProblem = checkLearnset.call(this, move, template, setSources, set);
 				if (lsetProblem) {
@@ -524,7 +524,7 @@ export class TeamValidator {
 				);
 				if (eventProblems) problems.push(...eventProblems);
 			}
-		} else if (ruleTable.has('validatemisc') && template.eventOnly) {
+		} else if (ruleTable.has('obtainablemisc') && template.eventOnly) {
 			const eventTemplate = !template.eventPokemon && template.baseSpecies !== template.species ?
 				 dex.getTemplate(template.baseSpecies) : template;
 			const eventPokemon = eventTemplate.eventPokemon;
@@ -560,11 +560,11 @@ export class TeamValidator {
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		}
-		if (ruleTable.has('validatemisc') && set.level < (template.evoLevel || 0)) {
+		if (ruleTable.has('obtainablemisc') && set.level < (template.evoLevel || 0)) {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
 		}
-		if (ruleTable.has('validatemoves') && template.id === 'keldeo' && set.moves.includes('secretsword') &&
+		if (ruleTable.has('obtainablemoves') && template.id === 'keldeo' && set.moves.includes('secretsword') &&
 			(format.requirePlus || format.requirePentagon)) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
@@ -634,8 +634,8 @@ export class TeamValidator {
 
 		const allowEVs = dex.currentMod !== 'letsgo';
 		const allowAVs = ruleTable.has('allowavs');
-		const capEVs = dex.gen > 2 && (ruleTable.has('validatemisc') || dex.gen === 6);
-		const canBottleCap = dex.gen >= 7 && (set.level === 100 || !ruleTable.has('validatemisc'));
+		const capEVs = dex.gen > 2 && (ruleTable.has('obtainablemisc') || dex.gen === 6);
+		const canBottleCap = dex.gen >= 7 && (set.level === 100 || !ruleTable.has('obtainablemisc'));
 
 		if (!set.evs) set.evs = TeamValidator.fillStats(null, allowEVs && !capEVs ? 252 : 0);
 		if (!set.ivs) set.ivs = TeamValidator.fillStats(null, 31);
@@ -652,12 +652,12 @@ export class TeamValidator {
 			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
 				if (!set.hpType) {
 					set.hpType = move.type;
-				} else if (set.hpType !== move.type && ruleTable.has('validatemisc')) {
+				} else if (set.hpType !== move.type && ruleTable.has('obtainablemisc')) {
 					problems.push(`${name}'s Hidden Power type ${set.hpType} is incompatible with Hidden Power ${move.type}`);
 				}
 			}
 		}
-		if (set.hpType && maxedIVs && ruleTable.has('validatemisc')) {
+		if (set.hpType && maxedIVs && ruleTable.has('obtainablemisc')) {
 			if (dex.gen <= 2) {
 				const HPdvs = dex.getType(set.hpType).HPdvs;
 				set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
@@ -680,7 +680,7 @@ export class TeamValidator {
 		const diancieException = template.species === 'Diancie' && set.shiny;
 		const has3PerfectIVs = setSources.minSourceGen() >= 6 && isLegendary && !diancieException;
 
-		if (set.hpType === 'Fighting' && ruleTable.has('validatemisc')) {
+		if (set.hpType === 'Fighting' && ruleTable.has('obtainablemisc')) {
 			if (has3PerfectIVs) {
 				// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
 				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
@@ -1259,7 +1259,7 @@ export class TeamValidator {
 		}
 		// Event-related ability restrictions only matter if we care about illegal abilities
 		const ruleTable = this.ruleTable;
-		if (ruleTable.has('validateabilities')) {
+		if (ruleTable.has('obtainableabilities')) {
 			if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
 				if (template.species === eventTemplate.species) {
 					// has not evolved, abilities must match
