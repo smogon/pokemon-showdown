@@ -2,7 +2,7 @@
 
 /**@type {{[k: string]: ModdedFormatsData}} */
 let BattleFormats = {
-	validatemoves: {
+	obtainablemoves: {
 		inherit: true,
 		banlist: [
 			// https://www.smogon.com/forums/threads/implementing-all-old-gens-in-ps-testers-required.3483261/post-5420130

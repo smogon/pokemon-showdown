@@ -74,14 +74,14 @@ let BattleFormats = {
 		desc: "The standard ruleset for all official Smogon doubles tiers",
 		ruleset: ['Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
-	validate: {
+	obtainable: {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable',
 		desc: "Makes sure the team is possible to obtain in-game.",
 		ruleset: ['Obtainable Moves', 'Obtainable Abilities', 'Obtainable Formes', 'Obtainable Misc'],
 		banlist: ['Unreleased', 'Nonexistent'],
 	},
-	validatemoves: {
+	obtainablemoves: {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable Moves',
 		desc: "Makes sure moves are learnable by the species.",
@@ -92,13 +92,13 @@ let BattleFormats = {
 		],
 		// Mostly hardcoded in team-validator.ts
 	},
-	validateabilities: {
+	obtainableabilities: {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable Abilities',
 		desc: "Makes sure abilities match the species.",
 		// Hardcoded in team-validator.ts
 	},
-	validateformes: {
+	obtainableformes: {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable Formes',
 		desc: "Makes sure in-battle formes only appear in-battle.",
@@ -130,7 +130,7 @@ let BattleFormats = {
 			return [];
 		},
 	},
-	validatemisc: {
+	obtainablemisc: {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable Misc',
 		desc: "Validate all obtainability things that aren't moves/abilities (Hidden Power type, gender, stats, etc).",
