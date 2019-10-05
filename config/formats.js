@@ -239,7 +239,7 @@ let Formats = [
 			'Drought', 'Aurora Veil',
 		],
 		onValidateSet(set) {
-			let template = this.getTemplate(set.species || set.name);
+			let template = this.dex.getTemplate(set.species || set.name);
 			if (!template.nfe) {
 				return [set.species + " cannot evolve."];
 			}
@@ -313,9 +313,9 @@ let Formats = [
 				'Spiritomb', 'Stantler', 'Starmie', 'Steelix', 'Stunfisk', 'Sudowoodo', 'Sunflora', 'Tauros', 'Throh', 'Togedemaru', 'Torkoal',
 				'Trevenant', 'Tropius', 'Turtonator', 'Vaporeon', 'Volbeat', 'Whimsicott', 'Wishiwashi', 'Wobbuffet', 'Zangoose',
 			];
-			let template = this.getTemplate(set.species || set.name);
-			let futureGenEvo = template.evos && this.getTemplate(template.evos[0]).gen > this.gen;
-			if ((template.prevo && this.getTemplate(template.prevo).gen <= this.gen || (!template.nfe || futureGenEvo)) && !allowedNonLittleCupMons.includes(template.baseSpecies) && template.speciesid !== 'sandslashalola') {
+			let template = this.dex.getTemplate(set.species || set.name);
+			let futureGenEvo = template.evos && this.dex.getTemplate(template.evos[0]).gen > this.gen;
+			if ((template.prevo && this.dex.getTemplate(template.prevo).gen <= this.gen || (!template.nfe || futureGenEvo)) && !allowedNonLittleCupMons.includes(template.baseSpecies) && template.speciesid !== 'sandslashalola') {
 				return [set.species + " isn't obtainable at Level 1."];
 			}
 		},
@@ -414,12 +414,12 @@ let Formats = [
 			let n = 0;
 			let problems = [];
 			for (const set of team) {
-				const baseSpecies = this.getTemplate(set.species).baseSpecies;
+				const baseSpecies = this.dex.getTemplate(set.species).baseSpecies;
 				if (legends.includes(baseSpecies)) {
 					n++;
 					if (n === 3) problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
 				}
-				const item = this.getItem(set.item);
+				const item = this.dex.getItem(set.item);
 				if (item.zMove || item.megaStone || ['redorb', 'blueorb'].includes(item.id)) problems.push(`${set.name || set.species}'s item ${item.name} is banned.`);
 			}
 			return problems;
@@ -444,12 +444,12 @@ let Formats = [
 			let n = 0;
 			let problems = [];
 			for (const set of team) {
-				const baseSpecies = this.getTemplate(set.species).baseSpecies;
+				const baseSpecies = this.dex.getTemplate(set.species).baseSpecies;
 				if (legends.includes(baseSpecies)) {
 					n++;
 					if (n === 3) problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
 				}
-				const item = this.getItem(set.item);
+				const item = this.dex.getItem(set.item);
 				if (item.megaStone || ['redorb', 'blueorb', 'ultranecroziumz'].includes(item.id)) problems.push(`${set.name || set.species}'s item ${item.name} is banned.`);
 			}
 			return problems;
@@ -476,7 +476,7 @@ let Formats = [
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
 			let n = 0;
 			for (const set of team) {
-				const baseSpecies = this.getTemplate(set.species).baseSpecies;
+				const baseSpecies = this.dex.getTemplate(set.species).baseSpecies;
 				if (legends.includes(baseSpecies)) n++;
 				if (n > 2) return [`You can only use up to two legendary Pok\u00E9mon.`];
 			}
@@ -590,7 +590,7 @@ let Formats = [
 			'Sitrus Berry', 'Wiki Berry', 'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Shedinja + Sturdy',
 		],
 		onValidateSet(set) {
-			let template = this.getTemplate(set.species);
+			let template = this.dex.getTemplate(set.species);
 			if (template.types.includes('Steel')) return [`${template.species} is a Steel-type, which is banned from Metronome Battle.`];
 			let bst = 0;
 			for (let stat in template.baseStats) {
@@ -598,17 +598,17 @@ let Formats = [
 				bst += template.baseStats[stat];
 			}
 			if (bst > 625) return [`${template.species} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
-			let item = this.getItem(set.item);
+			let item = this.dex.getItem(set.item);
 			if (set.item && item.megaStone) {
 				let bstMega = 0;
-				let megaTemplate = this.getTemplate(item.megaStone);
+				let megaTemplate = this.dex.getTemplate(item.megaStone);
 				for (let stat in megaTemplate.baseStats) {
 					// @ts-ignore
 					bstMega += megaTemplate.baseStats[stat];
 				}
 				if (template.baseSpecies === item.megaEvolves && bstMega > 625) return [`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
 			}
-			if (set.moves.length !== 1 || this.getMove(set.moves[0]).id !== 'metronome') return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
+			if (set.moves.length !== 1 || this.dex.getMove(set.moves[0]).id !== 'metronome') return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
 		},
 	},
 	{
@@ -743,7 +743,7 @@ let Formats = [
 				let [familyId] = evoFamilies;
 				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
 				requiredFamilies[familyId]++;
-				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each evolution family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
+				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each evolution family by the Donor Clause.`, `(You inherit more than twice from ${this.dex.getTemplate(familyId).species}).`];
 			}
 		},
 		onBegin() {
@@ -762,7 +762,7 @@ let Formats = [
 			// @ts-ignore
 			if (!pokemon.donor) return;
 			// @ts-ignore
-			let donorTemplate = this.getTemplate(pokemon.donor);
+			let donorTemplate = this.dex.getTemplate(pokemon.donor);
 			if (!donorTemplate.exists) return;
 			// Place volatiles on the Pokémon to show the donor details.
 			this.add('-start', pokemon, donorTemplate.species, '[silent]');
@@ -829,16 +829,16 @@ let Formats = [
 			/**@type {{[k: string]: true}} */
 			let itemTable = {};
 			for (const set of team) {
-				let item = this.getItem(set.item);
+				let item = this.dex.getItem(set.item);
 				if (!item) continue;
-				if (itemTable[item.id] && item.megaStone) return ["You are limited to one of each Mega Stone.", "(You have more than one " + this.getItem(item).name + ")"];
-				if (itemTable[item.id] && ['blueorb', 'redorb'].includes(item.id)) return ["You are limited to one of each Primal Orb.", "(You have more than one " + this.getItem(item).name + ")"];
+				if (itemTable[item.id] && item.megaStone) return ["You are limited to one of each Mega Stone.", "(You have more than one " + this.dex.getItem(item).name + ")"];
+				if (itemTable[item.id] && ['blueorb', 'redorb'].includes(item.id)) return ["You are limited to one of each Primal Orb.", "(You have more than one " + this.dex.getItem(item).name + ")"];
 				itemTable[item.id] = true;
 			}
 		},
 		onValidateSet(set, format) {
-			let template = this.getTemplate(set.species || set.name);
-			let item = this.getItem(set.item);
+			let template = this.dex.getTemplate(set.species || set.name);
+			let item = this.dex.getItem(set.item);
 			if (!item.megaEvolves && !['blueorb', 'redorb', 'ultranecroziumz'].includes(item.id)) return;
 			if (template.baseSpecies === item.megaEvolves || (template.baseSpecies === 'Groudon' && item.id === 'redorb') || (template.baseSpecies === 'Kyogre' && item.id === 'blueorb') || (template.species.substr(0, 9) === 'Necrozma-' && item.id === 'ultranecroziumz')) return;
 			let uberStones = format.restrictedStones || [];
@@ -852,11 +852,11 @@ let Formats = [
 		},
 		onSwitchIn(pokemon) {
 			// @ts-ignore
-			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
+			let oMegaTemplate = this.dex.getTemplate(pokemon.template.originalMega);
 			if (oMegaTemplate.exists && pokemon.m.originalSpecies !== oMegaTemplate.baseSpecies) {
 				// Place volatiles on the Pokémon to show its mega-evolved condition and details
 				this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
-				let oTemplate = this.getTemplate(pokemon.m.originalSpecies);
+				let oTemplate = this.dex.getTemplate(pokemon.m.originalSpecies);
 				if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
 					this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 				}
@@ -864,7 +864,7 @@ let Formats = [
 		},
 		onSwitchOut(pokemon) {
 			// @ts-ignore
-			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
+			let oMegaTemplate = this.dex.getTemplate(pokemon.template.originalMega);
 			if (oMegaTemplate.exists && pokemon.m.originalSpecies !== oMegaTemplate.baseSpecies) {
 				this.add('-end', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
 			}
@@ -889,7 +889,7 @@ let Formats = [
 		onValidateSet(set, format) {
 			let restrictedAbilities = format.restrictedAbilities || [];
 			if (restrictedAbilities.includes(set.ability)) {
-				let template = this.getTemplate(set.species || set.name);
+				let template = this.dex.getTemplate(set.species || set.name);
 				let legalAbility = false;
 				for (let i in template.abilities) {
 					// @ts-ignore
@@ -912,7 +912,7 @@ let Formats = [
 		onModifyTemplate(template, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
-			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
+			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.getMove(move.id).type))];
 			return Object.assign({}, template, {types: types});
 		},
 		onSwitchIn(pokemon) {
@@ -964,20 +964,20 @@ let Formats = [
 			if (target && target.set.ability === 'Drizzle') return;
 			let tier = template.tier;
 			if (target && target.set.item) {
-				let item = this.getItem(target.set.item);
+				let item = this.dex.getItem(target.set.item);
 				if (item.name === 'Kommonium Z' || item.name === 'Mewnium Z') return;
-				if (item.megaEvolves === template.species) tier = this.getTemplate(item.megaStone).tier;
+				if (item.megaEvolves === template.species) tier = this.dex.getTemplate(item.megaStone).tier;
 			}
 			if (target && target.set.moves.includes('auroraveil')) tier = 'UU';
 			if (target && target.set.ability === 'Drought') tier = 'RU';
 
 			if (tier[0] === '(') tier = tier.slice(1, -1);
 			if (!(tier in boosts)) return;
-			let pokemon = this.deepClone(template);
+			let pokemon = this.dex.deepClone(template);
 			let boost = boosts[tier];
 			for (let statName in pokemon.baseStats) {
 				if (statName === 'hp') continue;
-				pokemon.baseStats[statName] = this.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
+				pokemon.baseStats[statName] = this.dex.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
 			}
 			return pokemon;
 		},
@@ -1191,7 +1191,7 @@ let Formats = [
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			let name = toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
-			if (this.getTemplate(name).exists || name === 'rage') {
+			if (this.dex.getTemplate(name).exists || name === 'rage') {
 				// Certain pokemon have volatiles named after their speciesid
 				// To prevent overwriting those, and to prevent accidentaly leaking
 				// that a pokemon is on a team through the onStart even triggering
@@ -1200,7 +1200,7 @@ let Formats = [
 				name = /** @type {ID} */(name + 'user');
 			}
 			// Add the mon's status effect to it as a volatile.
-			let status = this.getEffect(name);
+			let status = this.dex.getEffect(name);
 			if (status && status.exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
@@ -1632,7 +1632,7 @@ let Formats = [
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde'];
 			let n = 0;
 			for (const set of team) {
-				let baseSpecies = this.getTemplate(set.species).baseSpecies;
+				let baseSpecies = this.dex.getTemplate(set.species).baseSpecies;
 				if (legends.includes(baseSpecies)) n++;
 				if (n > 2) return ["You can only use up to two legendary Pok\u00E9mon."];
 			}

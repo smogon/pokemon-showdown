@@ -39,7 +39,7 @@ let BattleMovedex = {
 				return false;
 			}
 			if (target.hp <= target.maxhp / 2) {
-				this.boost({atk: 2}, null, null, this.getEffect('bellydrum2'));
+				this.boost({atk: 2}, null, null, this.dex.getEffect('bellydrum2'));
 				return false;
 			}
 			this.directDamage(target.maxhp / 2);
@@ -97,7 +97,7 @@ let BattleMovedex = {
 						return false;
 					}
 					if (!target.isActive) {
-						const possibleTarget = this.resolveTarget(pokemon, this.getMove('pound'));
+						const possibleTarget = this.resolveTarget(pokemon, this.dex.getMove('pound'));
 						if (!possibleTarget) {
 							this.add('-miss', pokemon);
 							return false;
@@ -148,7 +148,7 @@ let BattleMovedex = {
 		desc: "Deals damage to the opposing Pokemon equal to twice the HP lost by the user from a physical attack this turn. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user moves first, if the user was not hit by a physical attack this turn, or if the user did not lose HP from the attack. If the opposing Pokemon used Fissure or Horn Drill and missed, this move deals 65535 damage.",
 		damageCallback(pokemon, target) {
 			let lastAttackedBy = pokemon.getLastAttackedBy();
-			if (lastAttackedBy && lastAttackedBy.move && lastAttackedBy.thisTurn && (this.getCategory(lastAttackedBy.move) === 'Physical' || this.getMove(lastAttackedBy.move).id === 'hiddenpower') && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
+			if (lastAttackedBy && lastAttackedBy.move && lastAttackedBy.thisTurn && (this.getCategory(lastAttackedBy.move) === 'Physical' || this.dex.getMove(lastAttackedBy.move).id === 'hiddenpower') && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
 				return 2 * lastAttackedBy.damage;
 			}
 			return false;
@@ -387,7 +387,7 @@ let BattleMovedex = {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get High Jump Kick recoil");
-				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
+				this.damage(this.dex.clampIntRange(damage / 8, 1), source, source, move);
 			}
 		},
 	},
@@ -407,7 +407,7 @@ let BattleMovedex = {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get Jump Kick recoil");
-				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
+				this.damage(this.dex.clampIntRange(damage / 8, 1), source, source, move);
 			}
 		},
 	},
@@ -429,7 +429,7 @@ let BattleMovedex = {
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					return;
 				}
-				let toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
+				let toLeech = this.dex.clampIntRange(pokemon.maxhp / 8, 1);
 				let damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) {
 					this.heal(damage, leecher, pokemon);
@@ -501,7 +501,7 @@ let BattleMovedex = {
 		desc: "Deals damage to the opposing Pokemon equal to twice the HP lost by the user from a special attack this turn. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user moves first, if the user was not hit by a special attack this turn, or if the user did not lose HP from the attack.",
 		damageCallback(pokemon, target) {
 			let lastAttackedBy = pokemon.getLastAttackedBy();
-			if (lastAttackedBy && lastAttackedBy.move && lastAttackedBy.thisTurn && this.getCategory(lastAttackedBy.move) === 'Special' && this.getMove(lastAttackedBy.move).id !== 'hiddenpower' && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
+			if (lastAttackedBy && lastAttackedBy.move && lastAttackedBy.thisTurn && this.getCategory(lastAttackedBy.move) === 'Special' && this.dex.getMove(lastAttackedBy.move).id !== 'hiddenpower' && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
 				return 2 * lastAttackedBy.damage;
 			}
 			return false;
@@ -769,7 +769,7 @@ let BattleMovedex = {
 			let moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
 				let move = moveSlot.id;
-				if (move && !NoSleepTalk.includes(move) && !this.getMove(move).flags['charge']) {
+				if (move && !NoSleepTalk.includes(move) && !this.dex.getMove(move).flags['charge']) {
 					moves.push(move);
 				}
 			}

@@ -996,12 +996,12 @@ interface FormatsData extends EventMethods {
 	checkLearnset?: (this: TeamValidator, move: Move, template: Template, setSources: PokemonSources, set: PokemonSet) => {type: string, [any: string]: any} | null
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void
 	onBegin?: (this: Battle) => void
-	onChangeSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject) => string[] | void
+	onChangeSet?: (this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject) => string[] | void
 	onModifyTemplate?: (this: Battle, template: Template, target?: Pokemon, source?: Pokemon, effect?: Effect) => Template | void
 	onStart?: (this: Battle) => void
 	onTeamPreview?: (this: Battle) => void
-	onValidateSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject) => string[] | void
-	onValidateTeam?: (this: ModdedDex, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void
+	onValidateSet?: (this: TeamValidator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject) => string[] | void
+	onValidateTeam?: (this: TeamValidator, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void
 	validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null
 	validateTeam?: (this: TeamValidator, team: PokemonSet[], removeNicknames: boolean) => string[] | void,
 	trunc?: (n: number) => number;
@@ -1100,7 +1100,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	debug?: (this: Battle, activity: string) => void
 	getDamage?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages: boolean) => number | undefined | null | false
 	getEffect?: (this: Battle, name: string | Effect | null) => Effect
-	init?: (this: Battle) => void
+	init?: (this: ModdedDex) => void
 	modifyDamage?: (this: Battle, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages?: boolean) => void
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable

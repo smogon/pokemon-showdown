@@ -173,11 +173,13 @@ export class PokemonSources {
 export class TeamValidator {
 	readonly format: Format;
 	readonly dex: ModdedDex;
+	readonly gen: number;
 	readonly ruleTable: import('./dex-data').RuleTable;
 
 	constructor(format: string | Format) {
 		this.format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(this.format);
+		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.getRuleTable(this.format);
 	}
 
@@ -263,11 +265,11 @@ export class TeamValidator {
 		for (const rule of ruleTable.keys()) {
 			const subformat = dex.getFormat(rule);
 			if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
-				problems = problems.concat(subformat.onValidateTeam.call(dex, team, format, teamHas) || []);
+				problems = problems.concat(subformat.onValidateTeam.call(this, team, format, teamHas) || []);
 			}
 		}
 		if (format.onValidateTeam) {
-			problems = problems.concat(format.onValidateTeam.call(dex, team, format, teamHas) || []);
+			problems = problems.concat(format.onValidateTeam.call(this, team, format, teamHas) || []);
 		}
 
 		if (!problems.length) return null;
@@ -342,11 +344,11 @@ export class TeamValidator {
 		for (const [rule] of ruleTable) {
 			const subformat = dex.getFormat(rule);
 			if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
-				problems = problems.concat(subformat.onChangeSet.call(dex, set, format, setHas, teamHas) || []);
+				problems = problems.concat(subformat.onChangeSet.call(this, set, format, setHas, teamHas) || []);
 			}
 		}
 		if (format.onChangeSet) {
-			problems = problems.concat(format.onChangeSet.call(dex, set, format, setHas, teamHas) || []);
+			problems = problems.concat(format.onChangeSet.call(this, set, format, setHas, teamHas) || []);
 		}
 
 		// onChangeSet can modify set.species, set.item, set.ability
@@ -619,11 +621,11 @@ export class TeamValidator {
 			if (rule.startsWith('!')) continue;
 			const subformat = dex.getFormat(rule);
 			if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
-				problems = problems.concat(subformat.onValidateSet.call(dex, set, format, setHas, teamHas) || []);
+				problems = problems.concat(subformat.onValidateSet.call(this, set, format, setHas, teamHas) || []);
 			}
 		}
 		if (format.onValidateSet) {
-			problems = problems.concat(format.onValidateSet.call(dex, set, format, setHas, teamHas) || []);
+			problems = problems.concat(format.onValidateSet.call(this, set, format, setHas, teamHas) || []);
 		}
 
 		if (!problems.length) {

@@ -166,7 +166,7 @@ let BattleItems = {
 			duration: 1,
 			onAfterMoveSecondarySelf(source, target, move) {
 				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
-					this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
+					this.damage(source.maxhp / 10, source, source, this.dex.getItem('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
 			},

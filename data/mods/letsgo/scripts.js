@@ -27,7 +27,7 @@ let BattleScripts = {
 			let stat = baseStats['hp'];
 			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + 100) * set.level / 100 + 10);
 		}
-		return this.natureModify(modStats, set);
+		return this.dex.natureModify(modStats, set);
 	},
 
 	/**
@@ -36,7 +36,7 @@ let BattleScripts = {
 	 * @return {StatsTable}
 	 */
 	natureModify(stats, set) {
-		let nature = this.getNature(set.nature);
+		let nature = this.dex.getNature(set.nature);
 		// @ts-ignore
 		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
 		// @ts-ignore

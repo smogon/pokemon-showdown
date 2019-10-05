@@ -9,11 +9,11 @@ class RandomLetsGoTeams extends RandomTeams {
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, teamDetails = {}) {
-		template = this.getTemplate(template);
+		template = this.dex.getTemplate(template);
 		let species = template.species;
 
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
-			template = this.getTemplate('bulbasaur');
+			template = this.dex.getTemplate('bulbasaur');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The Let\'s Go randbat set generator');
@@ -56,7 +56,7 @@ class RandomLetsGoTeams extends RandomTeams {
 
 			// Iterate through the moves again, this time to cull them:
 			for (const [i, setMoveid] of moves.entries()) {
-				let move = this.getMove(setMoveid);
+				let move = this.dex.getMove(setMoveid);
 				let moveid = move.id;
 				let rejected = false;
 				let isSetup = false;
@@ -220,8 +220,8 @@ class RandomLetsGoTeams extends RandomTeams {
 		let pokemon = [];
 
 		let pokemonPool = [];
-		for (let id in this.data.FormatsData) {
-			let template = this.getTemplate(id);
+		for (let id in this.dex.data.FormatsData) {
+			let template = this.dex.getTemplate(id);
 			if (template.num < 1 || (template.num > 151 && ![808, 809].includes(template.num)) || template.nfe || !template.randomBattleMoves || !template.randomBattleMoves.length) continue;
 			pokemonPool.push(id);
 		}
@@ -236,7 +236,7 @@ class RandomLetsGoTeams extends RandomTeams {
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)

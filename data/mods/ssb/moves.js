@@ -59,7 +59,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Boomburst', source);
 		},
 		onHit(target, source, move) {
-			this.boost({atk: 2}, source, source, this.getActiveMove('Noble Howl'));
+			this.boost({atk: 2}, source, source, this.dex.getActiveMove('Noble Howl'));
 			if (!(['', 'slp', 'frz'].includes(source.status))) {
 				source.cureStatus();
 			}
@@ -68,12 +68,12 @@ let BattleMovedex = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Noble Howl', '[of] ' + target);
+					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Noble Howl', '[of] ' + target);
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Noble Howl', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Noble Howl', '[of] ' + source);
 				}
 			}
 		},
@@ -201,7 +201,7 @@ let BattleMovedex = {
 		onAfterMoveSecondarySelf(pokemon) {
 			pokemon.clearBoosts();
 			this.add('-clearboost', pokemon);
-			this.boost({atk: -1, def: -1, spe: -1}, pokemon, pokemon, this.getActiveMove('Cataclysm'));
+			this.boost({atk: -1, def: -1, spe: -1}, pokemon, pokemon, this.dex.getActiveMove('Cataclysm'));
 		},
 		secondary: null,
 		target: "normal",
@@ -232,10 +232,10 @@ let BattleMovedex = {
 			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.getEffect(sideCondition).name, '[from] move: Quick Reload', '[of] ' + source);
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Quick Reload', '[of] ' + source);
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Quick Reload', '[of] ' + source);
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Quick Reload', '[of] ' + source);
 				}
 			}
 		},
@@ -526,7 +526,7 @@ let BattleMovedex = {
 			this.add('replace', target, pokemon.getDetails, target.hp / target.maxhp); // name change
 			target.setAbility(set.ability);
 
-			const format = this.getFormat();
+			const format = this.format;
 			if (format && format.onSwitchIn) format.onSwitchIn.call(this, target);
 			this.add('-message', `${oldName} was sent to the Distortion World and replaced with somebody else!`);
 			for (let stat of Object.keys(target.boosts)) {
@@ -1009,10 +1009,10 @@ let BattleMovedex = {
 			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
 				}
 			}
 			this.field.clearWeather();
@@ -1131,13 +1131,13 @@ let BattleMovedex = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
 				}
 			}
@@ -1310,9 +1310,9 @@ let BattleMovedex = {
 			this.add('-anim', target, 'Nasty Plot', target);
 		},
 		onHit(target, source, move) {
-			this.heal(source.maxhp / 4, source, source, this.getActiveMove('Super Ego Inflation'));
-			this.boost({atk: 2, spa: 2}, target, source, this.getActiveMove('Super Ego Inflation'));
-			target.addVolatile('taunt', source, this.getActiveMove('Super Ego Inflation'));
+			this.heal(source.maxhp / 4, source, source, this.dex.getActiveMove('Super Ego Inflation'));
+			this.boost({atk: 2, spa: 2}, target, source, this.dex.getActiveMove('Super Ego Inflation'));
+			target.addVolatile('taunt', source, this.dex.getActiveMove('Super Ego Inflation'));
 		},
 		secondary: null,
 		target: "normal",
@@ -1398,7 +1398,7 @@ let BattleMovedex = {
 		},
 		onHit(pokemon, move) {
 			if (this.field.pseudoWeather.gravity) return false;
-			this.boost({atk: 2}, pokemon, pokemon, this.getActiveMove('EarthsBlessing'));
+			this.boost({atk: 2}, pokemon, pokemon, this.dex.getActiveMove('EarthsBlessing'));
 			this.field.addPseudoWeather('gravity');
 			if (['', 'slp', 'frz'].includes(pokemon.status)) return;
 			pokemon.cureStatus();
@@ -1470,12 +1470,12 @@ let BattleMovedex = {
 				victini: ['V-create', 'Blue Flare'],
 			};
 			let forme = Object.keys(formes)[this.random(5)];
-			source.formeChange(forme, this.getAbility('psychicsurge'), true);
+			source.formeChange(forme, this.dex.getAbility('psychicsurge'), true);
 			this.boost({atk: 1, spa: 1}, source, source, move);
 			this.useMove(formes[forme][0], source, target);
 			this.useMove(formes[forme][1], source, target);
 			this.boost({atk: -1, spa: -1}, source, source, move);
-			source.formeChange(baseForme, this.getAbility('psychicsurge'), true);
+			source.formeChange(baseForme, this.dex.getAbility('psychicsurge'), true);
 		},
 		secondary: null,
 		target: "normal",
@@ -1957,7 +1957,7 @@ let BattleMovedex = {
 			// Pick a random hazard, and set it
 			let hazard1 = this.sample(hazardTypes);
 			// Theoretically, this should always work
-			this.add('-anim', source, this.getMove(hazard1).name, target);
+			this.add('-anim', source, this.dex.getMove(hazard1).name, target);
 			target.addSideCondition(hazard1, source, this.effect);
 			// If that was the last possible layer of that hazard, remove it from our list of possible hazards
 			if (hazards[hazard1] === 1) {
@@ -1967,7 +1967,7 @@ let BattleMovedex = {
 			}
 			// Set the last hazard and animate the switch
 			let hazard2 = this.sample(hazardTypes);
-			this.add('-anim', source, this.getMove(hazard2).name, target);
+			this.add('-anim', source, this.dex.getMove(hazard2).name, target);
 			target.addSideCondition(hazard2, source, this.effect);
 			this.add('-anim', source, "Baton Pass", target);
 		},
@@ -2042,23 +2042,23 @@ let BattleMovedex = {
 					this.add('message', `${pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
 					// generate a movepool
 					let moves = [];
-					let pool = this.shuffle(Object.keys(this.data.Movedex));
-					let metronome = this.getMove('metronome');
+					let pool = this.dex.shuffle(Object.keys(this.dex.data.Movedex));
+					let metronome = this.dex.getMove('metronome');
 					for (let i of pool) {
-						let move = this.getMove(i);
+						let move = this.dex.getMove(i);
 						if (i !== move.id) continue;
 						if (move.isZ || move.isNonstandard) continue;
 						if (metronome.noMetronome && metronome.noMetronome.includes(move.id)) continue;
-						if (this.getMove(i).gen > this.gen) continue;
+						if (this.dex.getMove(i).gen > this.gen) continue;
 						moves.push(move);
 						if (moves.length >= 3) break;
 					}
 					moves.push('glitchout');
-					if (toID(pokemon.ability).includes('illusion') && pokemon.illusion) this.singleEvent('End', this.getAbility('Illusion'), pokemon.abilityData, pokemon, pokemon);
+					if (toID(pokemon.ability).includes('illusion') && pokemon.illusion) this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon, pokemon);
 					pokemon.formeChange('missingno');
 					pokemon.moveSlots = [];
 					for (let moveid of moves) {
-						let move = this.getMove(moveid);
+						let move = this.dex.getMove(moveid);
 						if (!move.id) continue;
 						pokemon.moveSlots.push({
 							move: move.name,
@@ -2106,12 +2106,12 @@ let BattleMovedex = {
 		},
 		onHit(target, source, effect) {
 			let moves = [];
-			for (let i in this.data.Movedex) {
-				let move = this.data.Movedex[i];
+			for (let i in this.dex.data.Movedex) {
+				let move = this.dex.data.Movedex[i];
 				if (i !== move.id) continue;
 				if (move.isZ || move.isNonstandard) continue;
 				if (effect.noMetronome && effect.noMetronome.includes(move.id)) continue;
-				if (this.getMove(i).gen > this.gen) continue;
+				if (this.dex.getMove(i).gen > this.gen) continue;
 				moves.push(move);
 			}
 			let randomMove = '';
@@ -2811,7 +2811,7 @@ let BattleMovedex = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Recover", source);
-			this.heal(source.maxhp, source, source, this.getActiveMove('Blaze of Glory'));
+			this.heal(source.maxhp, source, source, this.dex.getActiveMove('Blaze of Glory'));
 			this.add('-anim', source, "Final Gambit", target);
 		},
 		selfdestruct: "ifHit",
@@ -2926,9 +2926,9 @@ let BattleMovedex = {
 				}
 			}
 			let weaknesses = [];
-			for (let type in this.data.TypeChart) {
-				let typeMod = this.getEffectiveness(type, targetTypes);
-				if (typeMod > 0 && this.getImmunity(type, target)) weaknesses.push(type);
+			for (let type in this.dex.data.TypeChart) {
+				let typeMod = this.dex.getEffectiveness(type, targetTypes);
+				if (typeMod > 0 && this.dex.getImmunity(type, target)) weaknesses.push(type);
 			}
 			if (!weaknesses.length) {
 				return false;
@@ -2936,9 +2936,9 @@ let BattleMovedex = {
 			let randomType = this.sample(weaknesses);
 			source.setItem(randomType + 'memory');
 			this.add('-item', source, source.getItem(), '[from] move: Type Analysis');
-			let template = this.getTemplate('Silvally-' + randomType);
-			source.formeChange(template, this.getAbility('rkssystem'), true);
-			let move = this.getActiveMove('multiattack');
+			let template = this.dex.getTemplate('Silvally-' + randomType);
+			source.formeChange(template, this.dex.getAbility('rkssystem'), true);
+			let move = this.dex.getActiveMove('multiattack');
 			move.basePower = 80;
 			this.useMove(move, source, target);
 		},
@@ -2968,7 +2968,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Miracle Eye", target);
 		},
 		onHit(target, source) {
-			this.boost({atk: -2, spa: -2}, source, source, this.getActiveMove('/scavenges u'));
+			this.boost({atk: -2, spa: -2}, source, source, this.dex.getActiveMove('/scavenges u'));
 			let targetBoosts = {};
 			let sourceBoosts = {};
 
@@ -3126,10 +3126,10 @@ let BattleMovedex = {
 				let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 				for (const sideCondition of removeAll) {
 					if (source.side.foe.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side.foe, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+						this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
 					}
 					if (source.side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
 					}
 				}
 			},
@@ -3175,7 +3175,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			onSwitchIn(pokemon) {
-				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getActiveMove('pyramidingsong'));
+				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('pyramidingsong'));
 			},
 		},
 		forceSwitch: true,
@@ -4050,7 +4050,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source, move) {
-			let zmove = this.getMove(this.zMoveTable[move.type]);
+			let zmove = this.dex.getMove(this.zMoveTable[move.type]);
 			this.add('-anim', source, zmove.name, target);
 			this.add('-anim', source, "Transform", source);
 		},
@@ -4077,7 +4077,7 @@ let BattleMovedex = {
 			// Tranform into it
 			pokemon.formeChange(set.species);
 			for (let newMove of set.moves) {
-				let moveTemplate = this.getMove(newMove);
+				let moveTemplate = this.dex.getMove(newMove);
 				if (pokemon.moves.includes(moveTemplate.id)) continue;
 				pokemon.moveSlots.push({
 					move: moveTemplate.name,
@@ -4424,7 +4424,7 @@ let BattleMovedex = {
 			for (let i in sideConditions) {
 				let layers = source.side.sideConditions[i] ? (source.side.sideConditions[i].layers || 1) : 1;
 				if (source.side.removeSideCondition(i)) {
-					this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Smoke Bomb', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.getEffect(i).name, '[from] move: Smoke Bomb', '[of] ' + source);
 					for (layers; layers > 0; layers--) target.side.addSideCondition(i, source);
 				}
 			}
@@ -4862,7 +4862,7 @@ let BattleMovedex = {
 					'assist', 'beakblast', 'belch', 'bide', 'celebrate', 'chatter', 'copycat', 'focuspunch', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'shelltrap', 'sketch', 'sleeptalk', 'uproar',
 					'teabreak', 'glitzerpopping', // Modded banlist
 				];
-				if (move && !(noSleepTalk.includes(move) || this.getMove(move).flags['charge'] || (this.getMove(move).isZ && this.getMove(move).basePower !== 1))) {
+				if (move && !(noSleepTalk.includes(move) || this.dex.getMove(move).flags['charge'] || (this.dex.getMove(move).isZ && this.dex.getMove(move).basePower !== 1))) {
 					moves.push(move);
 				}
 			}

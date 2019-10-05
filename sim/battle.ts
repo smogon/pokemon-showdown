@@ -47,18 +47,20 @@ type Part = string | number | boolean | AnyObject | null | undefined;
 // An individual Side's request state is encapsulated in its `activeRequest` field.
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 
-export class Battle extends Dex.ModdedDex {
+export class Battle {
 	readonly id: ID;
 	readonly debugMode: boolean;
 	readonly deserialized: boolean;
 	readonly strictChoices: boolean;
-	readonly format: string;
+	readonly format: Format;
 	readonly formatData: AnyObject;
-	readonly cachedFormat: Format;
 	readonly gameType: GameType;
 	readonly field: Field;
 	readonly sides: [Side, Side] | [Side, Side, Side, Side];
 	readonly prngSeed: PRNGSeed;
+	dex: ModdedDex;
+	gen: number;
+	ruleTable: Data.RuleTable;
 	prng: PRNG;
 	rated: boolean | string;
 	reportExactHP: boolean;
@@ -110,21 +112,24 @@ export class Battle extends Dex.ModdedDex {
 
 	readonly send: (type: string, data: string | string[]) => void;
 
+	trunc: (num: number, bits?: number) => number;
+
 	constructor(options: BattleOptions) {
 		const format = Dex.getFormat(options.formatid, true);
-		super(format.mod);
+		this.format = format;
+		this.dex = Dex.forFormat(format);
+		this.gen = this.dex.gen;
+		this.ruleTable = this.dex.getRuleTable(format);
 
 		this.zMoveTable = {};
-		Object.assign(this, this.data.Scripts);
+		Object.assign(this, this.dex.data.Scripts);
 		if (format.battle) Object.assign(this, format.battle);
 
 		this.id = '';
 		this.debugMode = format.debug || !!options.debug;
 		this.deserialized = !!options.deserialized;
 		this.strictChoices = !!options.strictChoices;
-		this.format = format.id;
 		this.formatData = {id: format.id};
-		this.cachedFormat = format;
 		this.gameType = (format.gameType || 'singles');
 		this.field = new Field(this);
 		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'free-for-all';
@@ -179,6 +184,7 @@ export class Battle extends Dex.ModdedDex {
 		this.SILENT_FAIL = null;
 
 		this.send = options.send || (() => {});
+		this.trunc = this.dex.trunc;
 
 		// bound function for faster speedSort
 		// (so speedSort doesn't need to bind before use)
@@ -198,9 +204,9 @@ export class Battle extends Dex.ModdedDex {
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
-		for (const rule of this.getRuleTable(format).keys()) {
+		for (const rule of this.ruleTable.keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
-			const subFormat = this.getFormat(rule);
+			const subFormat = this.dex.getFormat(rule);
 			if (subFormat.exists) {
 				const hasEventHandler = Object.keys(subFormat).some(val =>
 					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
@@ -250,10 +256,6 @@ export class Battle extends Dex.ModdedDex {
 
 	resetRNG() {
 		this.prng = new PRNG(this.prng.startingSeed);
-	}
-
-	getFormat(format?: string) {
-		return format ? super.getFormat(format, true) : this.cachedFormat;
 	}
 
 	suppressingAttackEvents() {
@@ -862,7 +864,7 @@ export class Battle extends Dex.ModdedDex {
 		const handlers: AnyObject[] = [];
 
 		let callback;
-		const format = this.getFormat();
+		const format = this.format;
 		// @ts-ignore - dynamic lookup
 		callback = format[callbackName];
 		// @ts-ignore - dynamic lookup
@@ -1061,7 +1063,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	getMaxTeamSize() {
-		const teamLengthData = this.getFormat().teamLength;
+		const teamLengthData = this.format.teamLength;
 		return (teamLengthData && teamLengthData.battle) || 6;
 	}
 
@@ -1272,7 +1274,7 @@ export class Battle extends Dex.ModdedDex {
 			}
 			this.runEvent('SwitchOut', oldActive);
 			oldActive.illusion = null;
-			this.singleEvent('End', this.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
+			this.singleEvent('End', this.dex.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.usedItemThisTurn = false;
@@ -1381,7 +1383,7 @@ export class Battle extends Dex.ModdedDex {
 
 				pokemon.trapped = pokemon.maybeTrapped = false;
 				this.runEvent('TrapPokemon', pokemon);
-				if (!pokemon.knownType || this.getImmunity('trapped', pokemon)) {
+				if (!pokemon.knownType || this.dex.getImmunity('trapped', pokemon)) {
 					this.runEvent('MaybeTrapPokemon', pokemon);
 				}
 				// canceling switches would leak information
@@ -1398,17 +1400,17 @@ export class Battle extends Dex.ModdedDex {
 								// to run it again.
 								continue;
 							}
-							const ruleTable = this.getRuleTable(this.getFormat());
-							if ((ruleTable.has('+hackmons') || !ruleTable.has('obtainableabilities')) && !this.getFormat().team) {
+							const ruleTable = this.ruleTable;
+							if ((ruleTable.has('+hackmons') || !ruleTable.has('obtainableabilities')) && !this.format.team) {
 								// hackmons format
 								continue;
 							} else if (abilitySlot === 'H' && template.unreleasedHidden) {
 								// unreleased hidden ability
 								continue;
 							}
-							const ability = this.getAbility(abilityName);
+							const ability = this.dex.getAbility(abilityName);
 							if (ruleTable.has('-ability:' + ability.id)) continue;
-							if (pokemon.knownType && !this.getImmunity('trapped', pokemon)) continue;
+							if (pokemon.knownType && !this.dex.getImmunity('trapped', pokemon)) continue;
 							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, source);
 						}
 					}
@@ -1448,7 +1450,7 @@ export class Battle extends Dex.ModdedDex {
 	private maybeTriggerEndlessBattleClause(
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
-		if (!this.getRuleTable(this.getFormat()).has('endlessbattleclause')) return;
+		if (!this.ruleTable.has('endlessbattleclause')) return;
 
 		if ((this.turn >= 500 && this.turn % 100 === 0) ||
 			(this.turn >= 900 && this.turn % 10 === 0) ||
@@ -1530,7 +1532,7 @@ export class Battle extends Dex.ModdedDex {
 		this.add('gametype', this.gameType);
 		this.add('gen', this.gen);
 
-		const format = this.getFormat();
+		const format = this.format;
 
 		this.add('tier', format.name);
 		if (this.rated) {
@@ -1540,9 +1542,9 @@ export class Battle extends Dex.ModdedDex {
 
 		if (format.onBegin) format.onBegin.call(this);
 		if (format.trunc) this.trunc = format.trunc;
-		for (const rule of this.getRuleTable(format).keys()) {
+		for (const rule of this.ruleTable.keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
-			const subFormat = this.getFormat(rule);
+			const subFormat = this.dex.getFormat(rule);
 			if (subFormat.exists) {
 				if (subFormat.onBegin) subFormat.onBegin.call(this);
 			}
@@ -1562,8 +1564,7 @@ export class Battle extends Dex.ModdedDex {
 	restart(send?: (type: string, data: string | string[]) => void) {
 		if (!this.deserialized) throw new Error('Attempt to restart a battle which has not been deserialized');
 
-		const format = this.getFormat();
-		if (format.trunc) this.trunc = format.trunc;
+		if (this.format.trunc) this.trunc = this.format.trunc;
 
 		// @ts-ignore - readonly
 		this.send = send;
@@ -1639,7 +1640,7 @@ export class Battle extends Dex.ModdedDex {
 	) {
 		if (!targetArray) return [0];
 		let retVals: (number | false | undefined)[] = [];
-		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
+		if (typeof effect === 'string' || !effect) effect = this.dex.getEffectByID((effect || '') as ID);
 		for (const [i, curDamage] of damage.entries()) {
 			const target = targetArray[i];
 			let targetDamage = curDamage;
@@ -1655,7 +1656,7 @@ export class Battle extends Dex.ModdedDex {
 				retVals[i] = false;
 				continue;
 			}
-			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
+			if (targetDamage !== 0) targetDamage = this.dex.clampIntRange(targetDamage, 1);
 
 			if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 				if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
@@ -1670,10 +1671,10 @@ export class Battle extends Dex.ModdedDex {
 					continue;
 				}
 			}
-			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
+			if (targetDamage !== 0) targetDamage = this.dex.clampIntRange(targetDamage, 1);
 
 			if (this.gen <= 1) {
-				if (this.currentMod === 'stadium' ||
+				if (this.dex.currentMod === 'stadium' ||
 					!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
 					this.lastDamage = targetDamage;
 				}
@@ -1707,11 +1708,11 @@ export class Battle extends Dex.ModdedDex {
 
 			if (targetDamage && effect.effectType === 'Move') {
 				if (this.gen <= 1 && effect.recoil && source) {
-					const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
+					const amount = this.dex.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
 					this.damage(amount, source, target, 'recoil');
 				}
 				if (this.gen <= 4 && effect.drain && source) {
-					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
+					const amount = this.dex.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
 					this.heal(amount, source, target, 'drain');
 				}
 				if (this.gen > 4 && effect.drain && source) {
@@ -1761,12 +1762,12 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (!target || !target.hp) return 0;
 		if (!damage) return 0;
-		damage = this.clampIntRange(damage, 1);
+		damage = this.dex.clampIntRange(damage, 1);
 
-		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
+		if (typeof effect === 'string' || !effect) effect = this.dex.getEffectByID((effect || '') as ID);
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
-		if (this.gen <= 1 && this.currentMod !== 'stadium' &&
+		if (this.gen <= 1 && this.dex.currentMod !== 'stadium' &&
 			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
 
 			const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
@@ -1808,7 +1809,7 @@ export class Battle extends Dex.ModdedDex {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (effect === 'drain') effect = this.getEffectByID(effect as ID);
+		if (effect === 'drain') effect = this.dex.getEffectByID(effect as ID);
 		if (damage && damage <= 1) damage = 1;
 		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
@@ -1894,7 +1895,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	getCategory(move: string | Move) {
-		return this.getMove(move).category || 'Physical';
+		return this.dex.getMove(move).category || 'Physical';
 	}
 
 	/**
@@ -1907,7 +1908,7 @@ export class Battle extends Dex.ModdedDex {
 		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
 		suppressMessages: boolean = false
 	): number | undefined | null | false {
-		if (typeof move === 'string') move = this.getActiveMove(move);
+		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 
 		if (typeof move === 'number') {
 			const basePower = move;
@@ -1942,15 +1943,15 @@ export class Battle extends Dex.ModdedDex {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
 		}
 		if (!basePower) return basePower === 0 ? undefined : basePower;
-		basePower = this.clampIntRange(basePower, 1);
+		basePower = this.dex.clampIntRange(basePower, 1);
 
 		let critMult;
 		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
 		if (this.gen <= 5) {
-			critRatio = this.clampIntRange(critRatio, 0, 5);
+			critRatio = this.dex.clampIntRange(critRatio, 0, 5);
 			critMult = [0, 16, 8, 4, 3, 2];
 		} else {
-			critRatio = this.clampIntRange(critRatio, 0, 4);
+			critRatio = this.dex.clampIntRange(critRatio, 0, 4);
 			if (this.gen === 6) {
 				critMult = [0, 16, 8, 2, 1];
 			} else {
@@ -1974,7 +1975,7 @@ export class Battle extends Dex.ModdedDex {
 		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 
 		if (!basePower) return 0;
-		basePower = this.clampIntRange(basePower, 1);
+		basePower = this.dex.clampIntRange(basePower, 1);
 
 		const level = pokemon.level;
 
@@ -2071,7 +2072,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		// types
 		let typeMod = target.runEffectiveness(move);
-		typeMod = this.clampIntRange(typeMod, -6, 6);
+		typeMod = this.dex.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
@@ -2162,7 +2163,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	getTarget(pokemon: Pokemon, move: string | Move, targetLoc: number) {
-		move = this.getMove(move);
+		move = this.dex.getMove(move);
 		let target;
 		// Fails if the target is the user and the move can't target its own position
 		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1) &&
@@ -2198,7 +2199,7 @@ export class Battle extends Dex.ModdedDex {
 		// moves that can target either allies or foes will only target foes
 		// when used without an explicit target.
 
-		move = this.getMove(move);
+		move = this.dex.getMove(move);
 		if (move.target === 'adjacentAlly') {
 			const allyActives = pokemon.side.active;
 			let adjacentAllies = [allyActives[pokemon.position - 1], allyActives[pokemon.position + 1]];
@@ -2251,7 +2252,7 @@ export class Battle extends Dex.ModdedDex {
 				this.add('faint', faintData.target);
 				faintData.target.side.pokemonLeft--;
 				this.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
-				this.singleEvent('End', this.getAbility(faintData.target.ability), faintData.target.abilityData, faintData.target);
+				this.singleEvent('End', this.dex.getAbility(faintData.target.ability), faintData.target.abilityData, faintData.target);
 				faintData.target.clearVolatile(false);
 				faintData.target.fainted = true;
 				faintData.target.isActive = false;
@@ -2316,7 +2317,7 @@ export class Battle extends Dex.ModdedDex {
 		if (!action) throw new Error(`Action not passed to resolveAction`);
 
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
-		if (!action.move && action.moveid) action.move = this.getActiveMove(action.moveid);
+		if (!action.move && action.moveid) action.move = this.dex.getActiveMove(action.moveid);
 		if (!action.choice && action.move) action.choice = 'move';
 		if (!action.priority && action.priority !== 0) {
 			const priorities = {
@@ -2354,7 +2355,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			} else if (action.choice === 'switch' || action.choice === 'instaswitch') {
 				if (typeof action.pokemon.switchFlag === 'string') {
-					action.sourceEffect = this.getMove(action.pokemon.switchFlag as ID) as any;
+					action.sourceEffect = this.dex.getMove(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
 				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
@@ -2364,7 +2365,7 @@ export class Battle extends Dex.ModdedDex {
 		const deferPriority = this.gen >= 7 && action.mega && action.mega !== 'done';
 		if (action.move) {
 			let target = null;
-			action.move = this.getActiveMove(action.move);
+			action.move = this.dex.getActiveMove(action.move);
 
 			if (!action.targetLoc) {
 				target = this.resolveTarget(action.pokemon, action.move);
@@ -2377,7 +2378,7 @@ export class Battle extends Dex.ModdedDex {
 				if (action.zmove) {
 					const zMoveName = this.getZMove(action.move, action.pokemon, true);
 					if (zMoveName) {
-						const zMove = this.getActiveMove(zMoveName);
+						const zMove = this.dex.getActiveMove(zMoveName);
 						if (zMove.exists && zMove.isZ) {
 							move = zMove;
 						}
@@ -2509,7 +2510,7 @@ export class Battle extends Dex.ModdedDex {
 		switch (action.choice) {
 		case 'start': {
 			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
-			const format = this.getFormat();
+			const format = this.format;
 
 			// Remove Pokémon duplicates remaining after `team` decisions.
 			for (const side of this.sides) {
@@ -2531,7 +2532,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.getEffectByID(pokemon.speciesid), pokemon.speciesData, pokemon);
+				this.singleEvent('Start', this.dex.getEffectByID(pokemon.speciesid), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -2571,8 +2572,8 @@ export class Battle extends Dex.ModdedDex {
 			return;
 		case 'instaswitch':
 		case 'switch':
-			if (action.choice === 'switch' && action.pokemon.status && this.data.Abilities.naturalcure) {
-				this.singleEvent('CheckShow', this.getAbility('naturalcure'), null, action.pokemon);
+			if (action.choice === 'switch' && action.pokemon.status && this.dex.data.Abilities.naturalcure) {
+				this.singleEvent('CheckShow', this.dex.getAbility('naturalcure'), null, action.pokemon);
 			}
 			if (action.pokemon.hp) {
 				action.pokemon.beingCalledBack = true;
@@ -2596,7 +2597,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			}
 			action.pokemon.illusion = null;
-			this.singleEvent('End', this.getAbility(action.pokemon.ability), action.pokemon.abilityData, action.pokemon);
+			this.singleEvent('End', this.dex.getAbility(action.pokemon.ability), action.pokemon.abilityData, action.pokemon);
 			if (!action.pokemon.hp && !action.pokemon.fainted) {
 				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
@@ -2963,17 +2964,16 @@ export class Battle extends Dex.ModdedDex {
 	// players
 
 	getTeam(options: PlayerOptions): PokemonSet[] {
-		const format = this.getFormat();
 		let team = options.team;
 		if (typeof team === 'string') team = Dex.fastUnpackTeam(team);
-		if ((!format.team || this.deserialized) && team) return team;
+		if ((!this.format.team || this.deserialized) && team) return team;
 
 		if (!options.seed) {
 			options.seed = PRNG.generateSeed();
 		}
 
 		if (!this.teamGenerator) {
-			this.teamGenerator = this.getTeamGenerator(format, options.seed);
+			this.teamGenerator = this.dex.getTeamGenerator(this.format, options.seed);
 		} else {
 			this.teamGenerator.setSeed(options.seed);
 		}
@@ -3007,7 +3007,7 @@ export class Battle extends Dex.ModdedDex {
 			if (options.team) throw new Error(`Player ${slot} already has a team!`);
 		}
 		if (options.team && typeof options.team !== 'string') {
-			options.team = this.packTeam(options.team);
+			options.team = this.dex.packTeam(options.team);
 		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
