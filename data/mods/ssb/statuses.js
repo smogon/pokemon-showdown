@@ -1390,7 +1390,10 @@ let BattleStatuses = {
 		},
 		onSwitchOut(pokemon) {
 			this.add(`c|@Snaquaza|Lynch Hoeen while I'm away...`);
-			if (pokemon.m.claimHP) pokemon.m.claimHP = null;
+			if (pokemon.m.claimHP) {
+				pokemon.hp = pokemon.m.claimHP;
+				pokemon.m.claimHP = null;
+			}
 		},
 		onFaint() {
 			this.add(`c|@Snaquaza|How did you know I was scum?`);
