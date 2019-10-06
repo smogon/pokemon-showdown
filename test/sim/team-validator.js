@@ -105,6 +105,18 @@ describe('Team Validator', function () {
 		];
 		let illegal = TeamValidator.get('gen71v1').validateTeam(team);
 		assert(illegal);
+
+		team = [
+			{species: 'rayquazamega', ability: 'deltastream', moves: ['dragonascent'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ou').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'mimikyutotem', ability: 'disguise', moves: ['shadowsneak'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ou@@@-mimikyu').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should handle weird things', function () {
@@ -206,6 +218,14 @@ describe('Team Validator', function () {
 			{species: 'snorlax', ability: 'immunity', moves: ['curse', 'pursuit'], evs: {hp: 1}},
 		];
 		illegal = TeamValidator.get('gen4ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
+		team = [
+			{species: 'charizard', ability: 'blaze', moves: ['dragondance'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen4ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
+		illegal = TeamValidator.get('gen5ou').validateTeam(team);
 		assert.strictEqual(illegal, null);
 	});
 
@@ -311,6 +331,20 @@ describe('Team Validator', function () {
 		assert(illegal);
 		illegal = TeamValidator.get('gen7anythinggoes@@@+cap').validateTeam(team);
 		assert.strictEqual(illegal, null);
+
+		team = [
+			{species: 'pikachu', ability: 'airlock', moves: ['thunderbolt'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+		illegal = TeamValidator.get('gen7ou@@@!obtainableabilities').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
+		team = [
+			{species: 'pikachu', ability: 'airlock', moves: ['dragondance'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ou@@@!obtainableabilities').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should allow Pokemon to be banned', function () {

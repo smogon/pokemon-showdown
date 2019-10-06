@@ -594,7 +594,6 @@ function runDexsearch(target, cmd, canAll, message) {
 	const accumulateKeyCount = (count, searchData) => count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
 	searches.sort((a, b) => Object.values(a).reduce(accumulateKeyCount, 0) - Object.values(b).reduce(accumulateKeyCount, 0));
 
-	let pokemonSources = {};
 	for (const alts of searches) {
 		if (alts.skip) continue;
 		for (let mon in dex) {
@@ -724,12 +723,13 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (matched) continue;
 
 			const validator = TeamValidator.get(`gen${maxGen}ou`);
+			let pokemonSource = validator.allSources();
 			for (let move in alts.moves) {
-				if (!pokemonSources[mon]) pokemonSources[mon] = validator.allSources();
-				if (!validator.checkLearnset(move, mon, pokemonSources[mon], true) === alts.moves[move]) {
+				if (!validator.checkLearnset(move, mon, pokemonSource, true) === alts.moves[move]) {
 					matched = true;
 					break;
 				}
+				if (!pokemonSource.size()) break;
 			}
 			if (matched) continue;
 

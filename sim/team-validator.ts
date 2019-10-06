@@ -426,7 +426,7 @@ export class TeamValidator {
 
 		if (!set.ability) set.ability = 'No Ability';
 		if (ruleTable.has('obtainableabilities')) {
-			if (dex.gen <= 2 || ruleTable.has('allowavs')) {
+			if (dex.gen <= 2 || dex.currentMod === 'letsgo') {
 				set.ability = 'No Ability';
 			} else {
 				if (!ability.name || ability.name === 'No Ability') {
@@ -585,7 +585,7 @@ export class TeamValidator {
 			problems.push(`${name} has a Hidden Ability - it can't use moves from before Gen 5.`);
 		}
 		if (
-			template.maleOnlyHidden && setSources.sourcesBefore < 5 &&
+			template.maleOnlyHidden && setSources.isHidden && setSources.sourcesBefore < 5 &&
 			setSources.sources.every(source => source.charAt(1) === 'E')
 		) {
 			problems.push(`${name} has an unbreedable Hidden Ability - it can't use egg moves.`);
@@ -996,7 +996,7 @@ export class TeamValidator {
 			}
 		}
 
-		banReason = ruleTable.check(tierTag);
+		banReason = ruleTable.check(tierTag) || (tier === 'AG' ? ruleTable.check('pokemontag:uber') : null);
 		if (banReason) {
 			return `${postMegaTemplate.species} is in ${tier}, which is ${banReason}.`;
 		}
