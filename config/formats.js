@@ -678,8 +678,9 @@ let Formats = [
 				this.format.abilityMap = abilityMap;
 			}
 
-			/** @type {string[]} */
-			let problems = [];
+			// First validate that the pokemon is a valid forme
+			let problems = this.validateForme(set);
+			if (problems.length) return problems;
 
 			let template = Dex.getTemplate(set.species);
 			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
