@@ -412,7 +412,7 @@ export class ModdedDex {
 			if (this.currentMod === 'letsgo' && !template.isNonstandard) {
 				const isLetsGo = (
 					(template.num <= 151 || ['Meltan', 'Melmetal'].includes(template.name)) &&
-					(!template.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y'].includes(template.forme))
+					(!template.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme))
 				);
 				if (!isLetsGo) template.isNonstandard = 'Past';
 			}
