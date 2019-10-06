@@ -644,7 +644,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['[Gen 7] OU', '!Obtainable Formes', '!Obtainable Abilities', '!Obtainable Moves'],
+		ruleset: ['[Gen 7] OU', '!Obtainable Abilities', '!Obtainable Moves'],
 		banlist: [
 			'Blacephalon', 'Chansey', 'Cresselia', 'Hoopa-Unbound', 'Kartana', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Gyaradosite',
 			'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Speed Boost', 'Water Bubble', 'Assist', 'Chatter', 'Shell Smash',
