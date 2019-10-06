@@ -821,9 +821,8 @@ export class ModdedDex {
 				continue;
 			}
 			if ("!+-".includes(ruleSpec.charAt(0))) {
-				if (ruleSpec.charAt(0) === '+' && ruleTable.has('-' + ruleSpec.slice(1))) {
-					ruleTable.delete('-' + ruleSpec.slice(1));
-				}
+				if (ruleSpec.startsWith('+')) ruleTable.delete('-' + ruleSpec.slice(1));
+				if (ruleSpec.startsWith('-')) ruleTable.delete('+' + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
