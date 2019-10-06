@@ -6,8 +6,67 @@ const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
 
+// Substitution dictionary taken from https://github.com/ThreeLetters/NoSwearingPlease/blob/master/index.js, licensed under MIT.
+/** @type {{[k: string]: string[]}} */
+const EVASION_DETECTION_SUBSTITUTIONS = {
+	"a": ["a", "4", "@", "á", "â", "ã", "à", "ᗩ", "A", "ⓐ", "Ⓐ", "α", "͏", "₳", "ä", "Ä", "Ꮧ", "λ", "Δ", "Ḁ", "Ꭺ", "ǟ", "̾", "ａ", "Ａ", "ᴀ", "ɐ", "🅐", "𝐚", "𝐀", "𝘢", "𝘈", "𝙖", "𝘼", "𝒶", "𝓪", "𝓐", "𝕒", "𝔸", "𝔞", "𝔄", "𝖆", "𝕬", "🄰", "🅰", "𝒜", "𝚊", "𝙰", "ꍏ", "а"],
+	"b": ["b", "8", "ᗷ", "B", "ⓑ", "Ⓑ", "в", "฿", "ḅ", "Ḅ", "Ᏸ", "ϐ", "Ɓ", "ḃ", "Ḃ", "ɮ", "ｂ", "Ｂ", "ʙ", "🅑", "𝐛", "𝐁", "𝘣", "𝘉", "𝙗", "𝘽", "𝒷", "𝓫", "𝓑", "𝕓", "𝔹", "𝔟", "𝔅", "𝖇", "𝕭", "🄱", "🅱", "𝐵", "Ⴆ", "𝚋", "𝙱", "♭", "b"],
+	"c": ["c", "ç", "ᑕ", "C", "ⓒ", "Ⓒ", "¢", "͏", "₵", "ċ", "Ċ", "ፈ", "ς", "ḉ", "Ḉ", "Ꮯ", "ƈ", "̾", "ｃ", "Ｃ", "ᴄ", "ɔ", "🅒", "𝐜", "𝐂", "𝘤", "𝘊", "𝙘", "𝘾", "𝒸", "𝓬", "𝓒", "𝕔", "ℂ", "𝔠", "ℭ", "𝖈", "𝕮", "🄲", "🅲", "𝒞", "𝚌", "𝙲", "☾", "с"],
+	"d": ["d", "ᗪ", "D", "ⓓ", "Ⓓ", "∂", "Đ", "ď", "Ď", "Ꮄ", "Ḋ", "Ꭰ", "ɖ", "ｄ", "Ｄ", "ᴅ", "🅓", "𝐝", "𝐃", "𝘥", "𝘋", "𝙙", "𝘿", "𝒹", "𝓭", "𝓓", "𝕕", "​", "𝔡", "𝖉", "𝕯", "🄳", "🅳", "𝒟", "ԃ", "𝚍", "𝙳", "◗", "ⅾ"],
+	"e": ["e", "3", "é", "ê", "E", "ⓔ", "Ⓔ", "є", "͏", "Ɇ", "ệ", "Ệ", "Ꮛ", "ε", "Σ", "ḕ", "Ḕ", "Ꭼ", "ɛ", "̾", "ｅ", "Ｅ", "ᴇ", "ǝ", "🅔", "𝐞", "𝐄", "𝘦", "𝘌", "𝙚", "𝙀", "ℯ", "𝓮", "𝓔", "𝕖", "𝔻", "𝔢", "𝔇", "𝖊", "𝕰", "🄴", "🅴", "𝑒", "𝐸", "ҽ", "𝚎", "𝙴", "€", "е"],
+	"f": ["f", "ᖴ", "F", "ⓕ", "Ⓕ", "₣", "ḟ", "Ḟ", "Ꭶ", "ғ", "ʄ", "ｆ", "Ｆ", "ɟ", "🅕", "𝐟", "𝐅", "𝘧", "𝘍", "𝙛", "𝙁", "𝒻", "𝓯", "𝓕", "𝕗", "𝔼", "𝔣", "𝔈", "𝖋", "𝕱", "🄵", "🅵", "𝐹", "ϝ", "𝚏", "𝙵", "Ϝ", "f"],
+	"g": ["g", "G", "ⓖ", "Ⓖ", "͏", "₲", "ġ", "Ġ", "Ꮆ", "ϑ", "Ḡ", "ɢ", "̾", "ｇ", "Ｇ", "ƃ", "🅖", "𝐠", "𝐆", "𝘨", "𝘎", "𝙜", "𝙂", "ℊ", "𝓰", "𝓖", "𝕘", "𝔽", "𝔤", "𝔉", "𝖌", "𝕲", "🄶", "🅶", "𝑔", "𝒢", "ɠ", "𝚐", "𝙶", "❡", "ց"],
+	"h": ["h", "ᕼ", "H", "ⓗ", "Ⓗ", "н", "Ⱨ", "ḧ", "Ḧ", "Ꮒ", "ɦ", "ｈ", "Ｈ", "ʜ", "ɥ", "🅗", "𝐡", "𝐇", "𝘩", "𝘏", "𝙝", "𝙃", "𝒽", "𝓱", "𝓗", "𝕙", "𝔾", "𝔥", "𝔊", "𝖍", "𝕳", "🄷", "🅷", "𝐻", "ԋ", "𝚑", "𝙷", "♄", "h"],
+	"i": ["i", "l", "1", "í", "I", "ⓘ", "Ⓘ", "ι", "͏", "ł", "ï", "Ï", "Ꭵ", "ḭ", "Ḭ", "ɨ", "̾", "ｉ", "Ｉ", "ɪ", "ı", "🅘", "𝐢", "𝐈", "𝘪", "𝘐", "𝙞", "𝙄", "𝒾", "𝓲", "𝓘", "𝕚", "ℍ", "𝔦", "ℌ", "𝖎", "𝕴", "🄸", "🅸", "𝐼", "𝚒", "𝙸", "♗", "і"],
+	"j": ["j", "ᒍ", "J", "ⓙ", "Ⓙ", "נ", "Ꮰ", "ϳ", "ʝ", "ｊ", "Ｊ", "ᴊ", "ɾ", "🅙", "𝐣", "𝐉", "𝘫", "𝘑", "𝙟", "𝙅", "𝒿", "𝓳", "𝓙", "𝕛", "​", "𝔧", "𝖏", "𝕵", "🄹", "🅹", "𝒥", "𝚓", "𝙹", "♪", "ј"],
+	"k": ["k", "K", "ⓚ", "Ⓚ", "к", "͏", "₭", "ḳ", "Ḳ", "Ꮶ", "κ", "Ƙ", "ӄ", "̾", "ｋ", "Ｋ", "ᴋ", "ʞ", "🅚", "𝐤", "𝐊", "𝘬", "𝘒", "𝙠", "𝙆", "𝓀", "𝓴", "𝓚", "𝕜", "𝕀", "𝔨", "ℑ", "𝖐", "𝕶", "🄺", "🅺", "𝒦", "ƙ", "𝚔", "𝙺", "ϰ", "k"],
+	"l": ["l", "i", "1", "/", "|", "ᒪ", "L", "ⓛ", "Ⓛ", "ℓ", "Ⱡ", "ŀ", "Ŀ", "Ꮭ", "Ḷ", "Ꮮ", "ʟ", "ｌ", "Ｌ", "🅛", "𝐥", "𝐋", "𝘭", "𝘓", "𝙡", "𝙇", "𝓁", "𝓵", "𝓛", "𝕝", "𝕁", "𝔩", "​", "𝖑", "𝕷", "🄻", "🅻", "𝐿", "ʅ", "𝚕", "𝙻", "↳", "ⅼ"],
+	"m": ["m", "ᗰ", "M", "ⓜ", "Ⓜ", "м", "͏", "₥", "ṃ", "Ṃ", "Ꮇ", "ϻ", "Μ", "ṁ", "Ṁ", "ʍ", "̾", "ｍ", "Ｍ", "ᴍ", "ɯ", "🅜", "𝐦", "𝐌", "𝘮", "𝘔", "𝙢", "𝙈", "𝓂", "𝓶", "𝓜", "𝕞", "𝕂", "𝔪", "𝔍", "𝖒", "𝕸", "🄼", "🅼", "𝑀", "ɱ", "𝚖", "𝙼", "♔", "ⅿ"],
+	"n": ["n", "ñ", "ᑎ", "N", "ⓝ", "Ⓝ", "и", "₦", "ń", "Ń", "Ꮑ", "π", "∏", "Ṇ", "ռ", "ｎ", "Ｎ", "ɴ", "🅝", "𝐧", "𝐍", "𝘯", "𝘕", "𝙣", "𝙉", "𝓃", "𝓷", "𝓝", "𝕟", "𝕃", "𝔫", "𝔎", "𝖓", "𝕹", "🄽", "🅽", "𝒩", "ɳ", "𝚗", "𝙽", "♫", "ո"],
+	"o": ["o", "0", "ó", "ô", "õ", "ú", "O", "ⓞ", "Ⓞ", "σ", "͏", "Ø", "ö", "Ö", "Ꭷ", "Θ", "ṏ", "Ṏ", "Ꮎ", "օ", "̾", "ｏ", "Ｏ", "ᴏ", "🅞", "𝐨", "𝐎", "𝘰", "𝘖", "𝙤", "𝙊", "ℴ", "𝓸", "𝓞", "𝕠", "𝕄", "𝔬", "𝔏", "𝖔", "𝕺", "🄾", "🅾", "𝑜", "𝒪", "𝚘", "𝙾", "⊙", "ο"],
+	"p": ["p", "ᑭ", "P", "ⓟ", "Ⓟ", "ρ", "₱", "ṗ", "Ṗ", "Ꭾ", "Ƥ", "Ꮲ", "ք", "ｐ", "Ｐ", "ᴘ", "🅟", "𝐩", "𝐏", "𝘱", "𝘗", "𝙥", "𝙋", "𝓅", "𝓹", "𝓟", "𝕡", "ℕ", "𝔭", "𝔐", "𝖕", "𝕻", "🄿", "🅿", "𝒫", "𝚙", "𝙿", "р"],
+	"q": ["q", "ᑫ", "Q", "ⓠ", "Ⓠ", "͏", "Ꭴ", "φ", "Ⴓ", "զ", "̾", "ｑ", "Ｑ", "ϙ", "ǫ", "🅠", "𝐪", "𝐐", "𝘲", "𝘘", "𝙦", "𝙌", "𝓆", "𝓺", "𝓠", "𝕢", "​", "𝔮", "𝔑", "𝖖", "𝕼", "🅀", "🆀", "𝒬", "𝚚", "𝚀", "☭", "ԛ"],
+	"r": ["r", "ᖇ", "R", "ⓡ", "Ⓡ", "я", "Ɽ", "ŕ", "Ŕ", "Ꮢ", "г", "Γ", "ṙ", "Ṙ", "ʀ", "ｒ", "Ｒ", "ɹ", "🅡", "𝐫", "𝐑", "𝘳", "𝘙", "𝙧", "𝙍", "𝓇", "𝓻", "𝓡", "𝕣", "𝕆", "𝔯", "𝔒", "𝖗", "𝕽", "🅁", "🆁", "𝑅", "ɾ", "𝚛", "𝚁", "☈", "r"],
+	"s": ["s", "5", "ᔕ", "S", "ⓢ", "Ⓢ", "ѕ", "͏", "₴", "ṩ", "Ṩ", "Ꮥ", "Ѕ", "Ṡ", "ֆ", "̾", "ｓ", "Ｓ", "ꜱ", "🅢", "𝐬", "𝐒", "𝘴", "𝘚", "𝙨", "𝙎", "𝓈", "𝓼", "𝓢", "𝕤", "ℙ", "𝔰", "𝔓", "𝖘", "𝕾", "🅂", "🆂", "𝒮", "ʂ", "𝚜", "𝚂", "ѕ"],
+	"t": ["t", "+", "T", "ⓣ", "Ⓣ", "т", "₮", "ẗ", "Ṯ", "Ꮦ", "τ", "Ƭ", "Ꮖ", "ȶ", "ｔ", "Ｔ", "ᴛ", "ʇ", "🅣", "𝐭", "𝐓", "𝘵", "𝘛", "𝙩", "𝙏", "𝓉", "𝓽", "𝓣", "𝕥", "​", "𝔱", "𝔔", "𝖙", "𝕿", "🅃", "🆃", "𝒯", "ƚ", "𝚝", "𝚃", "☂", "t"],
+	"u": ["u", "ú", "ü", "ᑌ", "U", "ⓤ", "Ⓤ", "υ", "͏", "Ʉ", "Ü", "Ꮼ", "Ʊ", "ṳ", "Ṳ", "ʊ", "̾", "ｕ", "Ｕ", "ᴜ", "🅤", "𝐮", "𝐔", "𝘶", "𝘜", "𝙪", "𝙐", "𝓊", "𝓾", "𝓤", "𝕦", "ℚ", "𝔲", "ℜ", "𝖚", "𝖀", "🅄", "🆄", "𝒰", "𝚞", "𝚄", "☋", "ս"],
+	"v": ["v", "ᐯ", "V", "ⓥ", "Ⓥ", "ν", "ṿ", "Ṿ", "Ꮙ", "Ʋ", "Ṽ", "ʋ", "ｖ", "Ｖ", "ᴠ", "ʌ", "🅥", "𝐯", "𝐕", "𝘷", "𝘝", "𝙫", "𝙑", "𝓋", "𝓿", "𝓥", "𝕧", "​", "𝔳", "𝖛", "𝖁", "🅅", "🆅", "𝒱", "𝚟", "𝚅", "✓", "ⅴ"],
+	"w": ["w", "ᗯ", "W", "ⓦ", "Ⓦ", "ω", "͏", "₩", "ẅ", "Ẅ", "Ꮗ", "ш", "Ш", "ẇ", "Ẇ", "Ꮃ", "ա", "̾", "ｗ", "Ｗ", "ᴡ", "ʍ", "🅦", "𝐰", "𝐖", "𝘸", "𝘞", "𝙬", "𝙒", "𝓌", "𝔀", "𝓦", "𝕨", "ℝ", "𝔴", "𝔖", "𝖜", "𝖂", "🅆", "🆆", "𝒲", "ɯ", "𝚠", "𝚆", "ԝ"],
+	"x": ["x", "᙭", "X", "ⓧ", "Ⓧ", "χ", "Ӿ", "ẍ", "Ẍ", "ጀ", "ϰ", "Ж", "х", "Ӽ", "ｘ", "Ｘ", "🅧", "𝐱", "𝐗", "𝘹", "𝘟", "𝙭", "𝙓", "𝓍", "𝔁", "𝓧", "𝕩", "​", "𝔵", "𝔗", "𝖝", "𝖃", "🅇", "🆇", "𝒳", "𝚡", "𝚇", "⌘", "х"],
+	"y": ["y", "Y", "ⓨ", "Ⓨ", "у", "͏", "Ɏ", "ÿ", "Ÿ", "Ꭹ", "ψ", "Ψ", "ẏ", "Ẏ", "Ꮍ", "ч", "ʏ", "̾", "ｙ", "Ｙ", "ʎ", "🅨", "𝐲", "𝐘", "𝘺", "𝘠", "𝙮", "𝙔", "𝓎", "𝔂", "𝓨", "𝕪", "𝕊", "𝔶", "𝔘", "𝖞", "𝖄", "🅈", "🆈", "𝒴", "ყ", "𝚢", "𝚈", "☿", "у"],
+	"z": ["z", "ᘔ", "Z", "ⓩ", "Ⓩ", "Ⱬ", "ẓ", "Ẓ", "ፚ", "Ꮓ", "ʐ", "ｚ", "Ｚ", "ᴢ", "🅩", "𝐳", "𝐙", "𝘻", "𝘡", "𝙯", "𝙕", "𝓏", "𝔃", "𝓩", "𝕫", "𝕋", "𝔷", "𝔙", "𝖟", "𝖅", "🅉", "🆉", "𝒵", "ȥ", "𝚣", "𝚉", "☡", "z"],
+};
+
+/** @type {{[k: string]: string}} */
+const EVASION_DETECTION_SUB_STRINGS = {};
+
+for (const letter in EVASION_DETECTION_SUBSTITUTIONS) {
+	EVASION_DETECTION_SUB_STRINGS[letter] = `[${EVASION_DETECTION_SUBSTITUTIONS[letter].join('')}]`;
+}
+
 /** @type {{[k: string]: [(string | RegExp), string, string?, number][]}} */
 let filterWords = Chat.filterWords;
+
+/** @type {Map<string, RegExp>} */
+let evasionFilterCache = new Map();
+
+/**
+ * @param {string} str
+ */
+function constructEvasionRegex(str) {
+	// Handle duplicate letters
+	str = str.replace(/(.)\1+/g, '$1');
+
+	let buf = '';
+	// substitutions
+	for (const letter of str) {
+		buf += EVASION_DETECTION_SUB_STRINGS[letter] || letter;
+		// Check any number of repeating letters
+		buf += '+';
+	}
+
+	return new RegExp(buf, 'ig');
+}
 
 /**
  * @param {string} location
@@ -110,6 +169,43 @@ Chat.registerMonitor('warn', {
 	},
 });
 
+Chat.registerMonitor('evasion', {
+	location: 'EVERYWHERE',
+	punishment: 'EVASION',
+	label: 'Filter Evasion Detection',
+	monitor(line, room, user, message, lcMessage, isStaff) {
+		let [word, reason] = line;
+		if (typeof word !== 'string') throw new Error(`evader monitor filters should only have strings`);
+		let regex = evasionFilterCache.get(word);
+		if (!regex) {
+			regex = constructEvasionRegex(word);
+			evasionFilterCache.set(word, regex);
+		}
+		// Remove spaces and obvious false positives
+		lcMessage = lcMessage.replace(/\bniger\b/g, '').replace(/\bnigeria/g, '');
+		lcMessage = lcMessage.replace(/[\s-_]/g, '');
+		const match = lcMessage.match(regex);
+		if (match) {
+			// Don't lock someone iff the word itself is used, and whitespace wasn't used to evade the filter,
+			// in which case message (which doesn't have whitespace stripped) should also match the regex.
+			if (match[0] === word && regex.test(message)) {
+				if (isStaff) return `${message} __[would be filtered: ${word}${reason ? ` (${reason})` : ''}]__`;
+				this.errorReply(`Do not say '${word}'.`);
+				return false;
+			}
+			if (isStaff) return `${message} __[would be locked for filter evading: ${match[0]} (${word})]__`;
+			message = message.replace(/(https?):\/\//g, '$1__:__//');
+			message = message.replace(/\./g, '__.__');
+			if (room) {
+				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
+			} else {
+				this.errorReply(`Please do not say '${word}'.`);
+			}
+			return false;
+		}
+	},
+});
+
 Chat.registerMonitor('wordfilter', {
 	location: 'EVERYWHERE',
 	punishment: 'FILTERTO',
@@ -136,6 +232,33 @@ Chat.registerMonitor('namefilter', {
 	label: 'Filtered in names',
 });
 
+Chat.registerMonitor('battlefilter', {
+	location: 'BATTLES',
+	punishment: 'MUTE',
+	label: 'Filtered in battles',
+	monitor(line, room, user, message, lcMessage, isStaff) {
+		let [word, reason] = line;
+		let matched = false;
+		if (typeof word !== 'string') throw new Error(`battle filters should only have strings`);
+		if (word.startsWith('\\b') || word.endsWith('\\b')) {
+			matched = new RegExp(word).test(lcMessage);
+		} else {
+			matched = lcMessage.includes(word);
+		}
+		if (matched) {
+			if (isStaff) return `${message} __[would be filtered: ${word}${reason ? ` (${reason})` : ''}]__`;
+			message = message.replace(/(https?):\/\//g, '$1__:__//');
+			message = message.replace(/\./g, '__.__');
+			if (room) {
+				room.mute(user);
+				this.errorReply(`You have been muted for using a banned phrase. Please do not say '${word}'.`);
+				Monitor.log(`[BattleMonitor] <${room.roomid}> MUTED: ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`);
+			}
+			return false;
+		}
+	},
+});
+
 Chat.registerMonitor('shorteners', {
 	location: 'EVERYWHERE',
 	punishment: 'SHORTENER',
@@ -155,8 +278,8 @@ Chat.registerMonitor('shorteners', {
 /*
  * Columns Location and Punishment use keywords. Possible values:
  *
- * Location: EVERYWHERE, PUBLIC, NAMES
- * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER
+ * Location: EVERYWHERE, PUBLIC, NAMES, BATTLES
+ * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER, MUTE, EVASION
  */
 FS(MONITOR_FILE).readIfExists().then(data => {
 	const lines = data.split('\n');
@@ -195,6 +318,7 @@ let chatfilter = function (message, user, room) {
 	for (const list in Chat.monitors) {
 		const {location, condition, monitor} = Chat.monitors[list];
 		if (!monitor) continue;
+		if (location === 'BATTLES' && !(room && room.battle)) continue;
 		if (location === 'PUBLIC' && room && room.isPrivate === true) continue;
 
 		switch (condition) {
@@ -242,11 +366,18 @@ let namefilter = function (name, user) {
 				matched = word.test(lcName);
 			} else if (word.startsWith('\\b') || word.endsWith('\\b')) {
 				matched = new RegExp(word).test(lcName);
+			} else if (Chat.monitors[list].punishment === 'EVASION') {
+				let regex = evasionFilterCache.get(word);
+				if (!regex) {
+					regex = constructEvasionRegex(word);
+					evasionFilterCache.set(word, regex);
+				}
+				matched = regex.test(lcName);
 			} else {
 				matched = lcName.includes(word);
 			}
 			if (matched) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK' || Chat.monitors[list].punishment === 'EVASION') {
 					Punishments.autolock(user, Rooms.get('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
 				}
 				line[3]++;
@@ -287,11 +418,18 @@ let nicknamefilter = function (name, user) {
 				matched = word.test(lcName);
 			} else if (word.startsWith('\\b') || word.endsWith('\\b')) {
 				matched = new RegExp(word).test(lcName);
+			} else if (Chat.monitors[list].punishment === 'EVASION') {
+				let regex = evasionFilterCache.get(word);
+				if (!regex) {
+					regex = constructEvasionRegex(word);
+					evasionFilterCache.set(word, regex);
+				}
+				matched = regex.test(lcName);
 			} else {
 				matched = lcName.includes(word);
 			}
 			if (matched) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK' || Chat.monitors[list].punishment === 'EVASION') {
 					Punishments.autolock(user, Rooms.get('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true);
 				}
 				line[3]++;
@@ -323,11 +461,18 @@ let statusfilter = function (status, user) {
 				matched = word.test(lcStatus);
 			} else if (word.startsWith('\\b') || word.endsWith('\\b')) {
 				matched = new RegExp(word).test(lcStatus);
+			} else if (Chat.monitors[list].punishment === 'EVASION') {
+				let regex = evasionFilterCache.get(word);
+				if (!regex) {
+					regex = constructEvasionRegex(word);
+					evasionFilterCache.set(word, regex);
+				}
+				matched = regex.test(lcStatus);
 			} else {
 				matched = lcStatus.includes(word);
 			}
 			if (matched) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK' || Chat.monitors[list].punishment === 'EVASION') {
 					Punishments.autolock(user, Rooms.get('staff'), `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
 				}
 				line[3]++;
