@@ -117,6 +117,15 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen7ou@@@-mimikyu').validateTeam(team);
 		assert(illegal);
+
+		// bans should override past unbans
+		team = [
+			{species: 'torkoal', ability: 'drought', moves: ['bodyslam'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ou@@@-drought,+drought').validateTeam(team);
+		assert.strictEqual(illegal, null);
+		illegal = TeamValidator.get('gen7ou@@@-drought,+drought,-drought').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should handle weird things', function () {
