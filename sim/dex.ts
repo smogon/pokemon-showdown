@@ -787,13 +787,7 @@ export class ModdedDex {
 			ruleset.push('+' + ban);
 		}
 		if (format.customRules) {
-			for (const rule of format.customRules) {
-				if (rule.startsWith('!')) {
-					ruleset.unshift(rule);
-				} else {
-					ruleset.push(rule);
-				}
-			}
+			ruleset.push(...format.customRules);
 		}
 		if (format.checkLearnset) {
 			ruleTable.checkLearnset = [format.checkLearnset, format.name];
@@ -802,7 +796,17 @@ export class ModdedDex {
 			ruleTable.timer = [format.timer, format.name];
 		}
 
+		// apply rule repeals before other rules
 		for (const rule of ruleset) {
+			if (rule.startsWith('!')) {
+				const ruleSpec = this.validateRule(rule, format) as string;
+				ruleTable.set(ruleSpec, '');
+			}
+		}
+
+		for (const rule of ruleset) {
+			if (rule.startsWith('!')) continue;
+
 			const ruleSpec = this.validateRule(rule, format);
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
@@ -928,7 +932,7 @@ export class ModdedDex {
 				// valid pokemontags
 				const validTags = [
 					// singles tiers
-					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
+					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe', 'ag',
 					// doubles tiers
 					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags
