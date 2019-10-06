@@ -184,8 +184,15 @@ Chat.registerMonitor('evasion', {
 		// Remove spaces and obvious false positives
 		lcMessage = lcMessage.replace(/\bniger\b/g, '').replace(/\bnigeria/g, '');
 		lcMessage = lcMessage.replace(/[\s-_]/g, '');
-		const match = lcMessage.replace(/[\s-_]/g, '').match(regex);
-		if (match && (match[0] !== word || !regex.test(message))) {
+		const match = lcMessage.match(regex);
+		if (match) {
+			// Don't lock someone iff the word itself is used, and whitespace wasn't used to evade the filter,
+			// in which case message (which doesn't have whitespace stripped) should also match the regex.
+			if (match[0] === word && regex.test(message)) {
+				if (isStaff) return `${message} __[would be filtered: ${word}${reason ? ` (${reason})` : ''}]__`;
+				this.errorReply(`Do not say '${word}'.`);
+				return false;
+			}
 			if (isStaff) return `${message} __[would be locked for filter evading: ${match[0]} (${word})]__`;
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
