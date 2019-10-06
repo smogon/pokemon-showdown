@@ -1224,6 +1224,16 @@ function runMovesearch(target, cmd, canAll, message) {
 						matched = true;
 						break;
 					}
+				} else if (dex[move].self && dex[move].self.boosts) {
+					if ((dex[move].self.boosts[boost] > 0) === alts.boost[boost]) {
+						matched = true;
+						break;
+					}
+				} else if (dex[move].secondary && dex[move].secondary.boosts) {
+					if ((dex[move].secondary.boosts[boost] > 0) === alts.boost[boost]) {
+						matched = true;
+						break;
+					}
 				} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
 					if ((dex[move].secondary.self.boosts[boost] > 0) === alts.boost[boost]) {
 						matched = true;
@@ -1238,8 +1248,18 @@ function runMovesearch(target, cmd, canAll, message) {
 						matched = true;
 						break;
 					}
+				} else if (dex[move].self && dex[move].self.boosts) {
+					if ((dex[move].self.boosts[lower] < 0) === alts.lower[lower]) {
+						matched = true;
+						break;
+					}
+				} else if (dex[move].secondary && dex[move].secondary.boosts) {
+					if ((dex[move].secondary.boosts[lower] < 0) === alts.lower[lower]) {
+						matched = true;
+						break;
+					}
 				} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
-					if ((dex[move].secondary.self.boosts[lower] < 0) === alts.boost[lower]) {
+					if ((dex[move].secondary.self.boosts[lower] < 0) === alts.lower[lower]) {
 						matched = true;
 						break;
 					}
