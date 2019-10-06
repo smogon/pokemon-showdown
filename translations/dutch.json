@@ -2,6 +2,9 @@
 	"name": "Dutch",
 
 	"strings": {
+		"namelocked": "genaamlockt",
+		"locked": "gelockt",
+
 		"Please follow the rules:": "Volg de regels:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-nl",
 		"Global Rules": "Globale Regels",
@@ -95,6 +98,24 @@
 		"Your status contains a banned word.": "Er zit een verboden woord in je status.",
 		"Your status has been set to: ${target}.": "Je status is nu: ${target}.",
 		"You are now marked as busy.": "Je staat nu als bezig aangegeven.",
-		"You are now marked as away. Send a message or use /back to indicate you are back.": "Je staat nu als afwezig aangegeven. Stuur een bericht of gebruik /back om te laten zien dat je terug bent."
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "Je staat nu als afwezig aangegeven. Stuur een bericht of gebruik /back om te laten zien dat je terug bent.",
+
+		"You must choose a name before you can talk.": "Je moet eerst een naam kiezen voordat je kunt praten.",
+		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "je bent ${lockType} en kunt niet in de chat praten. ${lockExpiration}",
+		"Get help with [TN: your lock]this": "Zoek hier hulp bij",
+		"You are muted and cannot talk in this room.": "Je bent gemute en kunt niet praten in deze room.",
+		"Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.": "Omdat modchat aangezet is moet je account in ieder geval een week oud zijn en moet je een laddergevecht winnen in deze room te kunnen praten.",
+		"Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.": "Omdat modchat aangezet is moet je account staf hebben in een openbare room of een globale rang hebben om in deze room te kunnen praten.",
+		"Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.": "Omdat modchat aangezet is moet je in ieder geval rang ${groupName} of hoger zijn om in deze room te kunnen praten.",
+		"Your message can't be blank.": "Je bericht kan niet blanco zijn.",
+		"Your message is too long: ": "Je bericht is te lang: ",
+		"Your message contains banned characters.": "Je bericht bevat verbannen karakters.",
+		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "Deze room heeft slow-chat aangezet. Je kunt niet meer dan één keer elke ${time} seconden praten.",
+		"Your username contains a phrase banned by this room.": "Je gebruikersnaam bevat een verbannen woord uit deze room.",
+		"Your status message contains a phrase banned by this room.": "Je statusbericht bevat een verbannen woord uit deze room.",
+
+		"Your message contained banned words in this room.": "Je bericht bevat uit de room verbannen woorden.",
+		"You can't send the same message again so soon.": "Je kunt hetzelfde bericht niet zo snel nogmaals versturen.",
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "Aangezien deze room een room is met veel verkeer, moet je bericht in ieder geval twee letters bevatten."
 	}
 }
