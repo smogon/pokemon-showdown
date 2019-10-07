@@ -942,7 +942,7 @@ export class TeamValidator {
 			if (!father.learnset) continue;
 			// something is clearly wrong if its only possible father is itself
 			// (unless it's ExtremeSpeed Dragonite, which is breedable from event Dragonite)
-			if (template.speciesid === fatherid && fatherid !== 'dragonite' as ID) continue;
+			if (template.speciesid === fatherid && !['dragonite', 'snorlax'].includes(fatherid)) continue;
 			// don't check NFE Pokémon - their evolutions will know all their moves and more
 			// exception: Combee/Salandit, because their evos can't be fathers
 			if (father.evos.length) {
@@ -1485,20 +1485,20 @@ export class TeamValidator {
 		}
 
 		if (setSources.babyOnly && setSources.sources.length) {
-			const babyid = setSources.babyOnly;
+			const baby = dex.getTemplate(setSources.babyOnly);
+			const babyEvo = toID(baby.evos[0]);
 			setSources.sources = setSources.sources.filter(source => {
 				if (source.charAt(1) === 'S') {
 					const sourceSpeciesid = source.split(' ')[1];
-					if (sourceSpeciesid !== babyid) return false;
+					if (sourceSpeciesid !== baby.id) return false;
 				}
-				if (source.startsWith('7E') || source.startsWith('6E')) {
-					if (source.length > 2 && source.slice(2) !== babyid) return false;
+				if (source.charAt(1) === 'E') {
+					if (babyEvo && source.slice(2) === babyEvo) return false;
 				}
 				return true;
 			});
 			if (!setSources.sources.length && !setSources.sourcesBefore) {
-				const babySpecies = dex.getTemplate(babyid).species;
-				problems.push(`${name}'s event/egg moves are from an evolution, and are incompatible with its moves from ${babySpecies}.`);
+				problems.push(`${name}'s event/egg moves are from an evolution, and are incompatible with its moves from ${baby.species}.`);
 			}
 		}
 		if (setSources.babyOnly && setSources.size()) {

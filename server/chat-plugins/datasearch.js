@@ -1628,6 +1628,9 @@ function runLearn(target, cmd) {
 		problems.push(`${template.name} doesn't have a valid father for its egg moves (${setSources.limitedEggMoves.join(', ')})`);
 	}
 	let buffer = `In ${formatName}, `;
+	if (setSources.isHidden) {
+		buffer += `${template.abilities['H'] || 'HA'} `;
+	}
 	buffer += `${template.name}` + (problems ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + Chat.toListString(moveNames);
 	if (!problems) {
 		let sourceNames = {
