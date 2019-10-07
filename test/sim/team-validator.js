@@ -160,7 +160,7 @@ describe('Team Validator', function () {
 		// Chansey can't have Chansey-only egg moves as well as Happiny-only level-up moves
 
 		team = [
-			{species: 'chansey', ability: 'naturalcure', moves: ['charm', 'seismictoss'], evs: {hp: 1}},
+			{species: 'blissey', ability: 'naturalcure', moves: ['charm', 'seismictoss'], evs: {hp: 1}},
 		];
 		illegal = TeamValidator.get('gen7ou').validateTeam(team);
 		assert(illegal);

@@ -1501,6 +1501,18 @@ export class TeamValidator {
 				problems.push(`${name}'s event/egg moves are from an evolution, and are incompatible with its moves from ${babySpecies}.`);
 			}
 		}
+		if (setSources.babyOnly && setSources.size()) {
+			const baby = dex.getTemplate(setSources.babyOnly);
+			setSources.sources = setSources.sources.filter(source => {
+				if (baby.gen > parseInt(source.charAt(0))) return false;
+				if (baby.gen > 2 && source === '7V') return false;
+				return true;
+			});
+			if (setSources.sourcesBefore < baby.gen) setSources.sourcesBefore = 0;
+			if (!setSources.sources.length && !setSources.sourcesBefore) {
+				problems.push(`${name} has moves from before Gen ${baby.gen}, which are incompatible with its moves from ${baby.species}.`);
+			}
+		}
 
 		return problems.length ? problems : null;
 	}
