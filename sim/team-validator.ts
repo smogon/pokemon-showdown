@@ -914,9 +914,12 @@ export class TeamValidator {
 		if (!getAll && eggGen >= 6) return true;
 
 		const eggMoves = setSources.limitedEggMoves;
-		if (!eggMoves && getAll) return ['*'];
-		if (!eggMoves) throw new Error(`expected egg moves`);
 		// must have 2 or more egg moves to have egg move incompatibilities
+		if (!eggMoves) {
+			// happens often in gen 1-6 LC if your only egg moves are level-up moves,
+			// which aren't limited and so aren't in `limitedEggMoves`
+			return getAll ? ['*'] : true;
+		}
 		if (!getAll && eggMoves.length <= 1) return true;
 
 		// gen 1 eggs come from gen 2 breeding
