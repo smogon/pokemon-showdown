@@ -948,6 +948,8 @@ let Formats = [
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Damp Rock', 'Deep Sea Tooth', 'Eviolite'],
 		onModifyTemplate(template, target, source, effect) {
+			// This method is used in command context and battle context so we need to use the correct location for dex
+			const dex = this.dex ? this.dex : Dex;
 			if (!template.abilities) return false;
 			/** @type {{[tier: string]: number}} */
 			let boosts = {
@@ -965,20 +967,20 @@ let Formats = [
 			if (target && target.set.ability === 'Drizzle') return;
 			let tier = template.tier;
 			if (target && target.set.item) {
-				let item = this.dex.getItem(target.set.item);
+				let item = dex.getItem(target.set.item);
 				if (item.name === 'Kommonium Z' || item.name === 'Mewnium Z') return;
-				if (item.megaEvolves === template.species) tier = this.dex.getTemplate(item.megaStone).tier;
+				if (item.megaEvolves === template.species) tier = dex.getTemplate(item.megaStone).tier;
 			}
 			if (target && target.set.moves.includes('auroraveil')) tier = 'UU';
 			if (target && target.set.ability === 'Drought') tier = 'RU';
 
 			if (tier[0] === '(') tier = tier.slice(1, -1);
 			if (!(tier in boosts)) return;
-			let pokemon = this.dex.deepClone(template);
+			let pokemon = dex.deepClone(template);
 			let boost = boosts[tier];
 			for (let statName in pokemon.baseStats) {
 				if (statName === 'hp') continue;
-				pokemon.baseStats[statName] = this.dex.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
+				pokemon.baseStats[statName] = dex.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
 			}
 			return pokemon;
 		},
