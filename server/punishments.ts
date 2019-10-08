@@ -116,28 +116,96 @@ class NestedPunishmentMap extends Map<RoomID, Map<string, Punishment>> {
 class PunishmentsStorage {
 	static connect(type: string) {
 		let storage;
-		if (type === 'tsv') {
+		if (type === 'memory') {
+			storage = PunishmentsMemoryStorage;
+		} else if (type === 'tsv') {
 			storage = PunishmentsTsvStorage;
 		} else {
-			storage = PunishmentsNoopStorage;
+			Monitor.log(`Unrecongized punishments database type: ${type}, defaulting to memory storage.`);
+			storage = PunishmentsMemoryStorage;
 		}
-		storage.load();
 		return storage;
 	}
 }
 
-const PunishmentsNoopStorage = new class {
+const PunishmentsMemoryStorage = new class extends PunishmentsStorage {
 	load() {}
-	appendPunishment(entry: PunishmentEntry, id: string) {}
-	appendRoomPunishment(entry: PunishmentEntry, id: string) {}
-	appendSharedIp(ip: string, note: string) {}
-	deleteRoomPunishment(roomid: RoomID, key: string) {}
-	deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {}
-	deleteAllPunishmentsOfRoom(roomid: RoomID) {}
-	deletePunishment(key: string) {}
-	deleteAllPunishments() {}
-	deleteSharedIp(ip: string) {}
-	deleteAllSharedIps() {}
+
+	appendPunishment(entry: PunishmentEntry, id: string) {
+		const punishment: Punishment = [entry.punishType, id, entry.expireTime, entry.reason];
+		for (const userid of entry.userids) {
+			Punishments.userids.set(userid, punishment);
+		}
+		for (const ip of entry.ips) {
+			Punishments.ips.set(ip, punishment);
+		}
+	}
+	appendRoomPunishment(entry: PunishmentEntry, id: string) {
+		const [roomid, userid] = id.split(':');
+		const punishment: Punishment = [entry.punishType, userid, entry.expireTime, entry.reason];
+		for (const uid of entry.userids.concat(userid as ID)) {
+			Punishments.roomUserids.nestedSet(roomid as RoomID, uid, punishment);
+		}
+		for (const ip of entry.ips) {
+			Punishments.roomIps.nestedSet(roomid as RoomID, ip, punishment);
+		}
+	}
+	appendSharedIp(ip: string, note: string) {
+		Punishments.sharedIps.set(ip, note);
+	}
+
+	deleteRoomPunishment(roomid: RoomID, key: string) {
+		if (USERID_REGEX.test(key)) {
+			Punishments.roomUserids.nestedDelete(roomid, key);
+		} else {
+			Punishments.roomIps.nestedDelete(roomid, key);
+		}
+	}
+	deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {
+		const roomUseridPunishments = Punishments.roomUserids.get(roomid);
+		if (roomUseridPunishments) {
+			for (const [userid, [curPunishType]] of roomUseridPunishments) {
+				if (curPunishType === punishType) {
+					Punishments.roomUserids.nestedDelete(roomid, userid);
+				}
+			}
+		}
+		const roomIpsPunishments = Punishments.roomIps.get(roomid);
+		if (roomIpsPunishments) {
+			for (const [ip, [curPunishType]] of roomIpsPunishments) {
+				if (curPunishType === punishType) {
+					Punishments.roomIps.nestedDelete(roomid, ip);
+				}
+			}
+		}
+	}
+	deleteAllPunishmentsOfRoom(roomid: RoomID) {
+		const roomUseridPunishments = Punishments.roomUserids.get(roomid);
+		if (roomUseridPunishments) {
+			roomUseridPunishments.clear();
+		}
+		const roomIpsPunishments = Punishments.roomIps.get(roomid);
+		if (roomIpsPunishments) {
+			roomIpsPunishments.clear();
+		}
+	}
+	deletePunishment(key: string) {
+		if (USERID_REGEX.test(key)) {
+			Punishments.userids.delete(key);
+		} else {
+			Punishments.ips.delete(key);
+		}
+	}
+	deleteAllPunishments() {
+		Punishments.userids.clear();
+		Punishments.ips.clear();
+	}
+	deleteSharedIp(ip: string) {
+		Punishments.sharedIps.delete(ip);
+	}
+	deleteAllSharedIps() {
+		Punishments.sharedIps.clear();
+	}
 }();
 
 const PunishmentsTsvStorage = new class {
@@ -527,8 +595,7 @@ export const Punishments = new class {
 		// in theory we can stop here if punishment doesn't exist, but
 		// in case of inconsistent state, we'll try anyway
 		const write = (key: string) => {
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.storage.deletePunishment(key);
+			void Punishments.storage.deletePunishment(key);
 		};
 		let success: false | string = false;
 		Punishments.ips.forEach(([curPunishmentType, curId], key) => {
@@ -633,9 +700,8 @@ export const Punishments = new class {
 		id = toID(id);
 		const punishment = Punishments.roomUserids.nestedGet(roomid, id);
 		const write = (key: string) => {
-			if (ignoreWrite) return;
-			// tslint:disable-next-line: no-floating-promises
-			Punishments.storage.deleteRoomPunishment(roomid, key);
+			if (ignoreWrite && Config.storage.punishments !== 'memory') return;
+			void Punishments.storage.deleteRoomPunishment(roomid, key);
 		};
 		if (punishment) {
 			id = punishment[1];
@@ -981,17 +1047,16 @@ export const Punishments = new class {
 
 		roombans.forEach(([punishType], userid) => {
 			if (punishType === 'BLACKLIST') {
-				Punishments.roomUnblacklist(room, userid, true);
 				unblacklisted.push(userid);
 			}
 		});
-		if (unblacklisted.length === 0) return false;
+		if (!unblacklisted.length) return false;
+		void Punishments.storage.deletePunishmentTypeFromRoom(room.roomid, 'BLACKLIST');
 		return unblacklisted;
 	}
 
 	addSharedIp(ip: string, note: string) {
-		Punishments.sharedIps.set(ip, note);
-		void Punishments.storage.appendSharedIp(ip, note);
+		Punishments.storage.appendSharedIp(ip, note);
 
 		for (const user of Users.users.values()) {
 			if (user.locked && user.locked !== user.id && ip in user.ips) {
@@ -1007,8 +1072,7 @@ export const Punishments = new class {
 	}
 
 	removeSharedIp(ip: string) {
-		Punishments.sharedIps.delete(ip);
-		void Punishments.storage.deleteSharedIp(ip);
+		Punishments.storage.deleteSharedIp(ip);
 	}
 
 	/*********************************************************
