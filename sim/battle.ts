@@ -2220,6 +2220,7 @@ export class Battle {
 				adjacentFoes = adjacentFoes.filter(active => active && !active.fainted);
 				if (adjacentFoes.length) return this.sample(adjacentFoes);
 				// no valid target at all, return a foe for any possible redirection
+				return foeActives[frontPosition];
 			}
 		}
 		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
