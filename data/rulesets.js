@@ -86,8 +86,8 @@ let BattleFormats = {
 		name: 'Obtainable Moves',
 		desc: "Makes sure moves are learnable by the species.",
 		banlist: [
-			'Chansey + Charm + Seismic Toss', 'Chansey + Charm + Psywave',
-			'Blissey + Charm + Seismic Toss', 'Blissey + Charm + Psywave',
+			// Leaf Blade: Gen 6+ Nuzleaf level-up
+			// Sucker Punch: Gen 4 Shiftry tutor
 			'Shiftry + Leaf Blade + Sucker Punch',
 		],
 		// Mostly hardcoded in team-validator.ts

@@ -160,7 +160,15 @@ describe('Team Validator', function () {
 		// Chansey can't have Chansey-only egg moves as well as Happiny-only level-up moves
 
 		team = [
-			{species: 'chansey', ability: 'naturalcure', moves: ['charm', 'seismictoss'], evs: {hp: 1}},
+			{species: 'blissey', ability: 'naturalcure', moves: ['charm', 'seismictoss'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ou').validateTeam(team);
+		assert(illegal);
+
+		// Slam comes from Azurill, Future Sight comes from a variety of Marill-only egg moves
+
+		team = [
+			{species: 'azumarill', ability: 'thickfat', moves: ['futuresight', 'slam'], evs: {hp: 1}},
 		];
 		illegal = TeamValidator.get('gen7ou').validateTeam(team);
 		assert(illegal);
@@ -187,17 +195,39 @@ describe('Team Validator', function () {
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert(illegal);
 
+		// chainbreed smeargle to snubbull to chansey
 		team = [
 			{species: 'blissey', moves: ['present', 'healbell']},
 		];
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert.strictEqual(illegal, null);
 
+		// the weirdest chainbreed I've ever seen:
+		// breed male Curse Snorlax in Gen 3, transfer to XD, teach Self-destruct
+		// by tutor, breed with female Gluttony Snorlax
+		team = [
+			{species: 'snorlax', ability: 'gluttony', moves: ['curse', 'selfdestruct'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
+		// tradeback: egg moves Swords Dance, Rock Slide; trade back to gen 1, and learn Body Slam
 		team = [
 			{species: 'marowak', moves: ['swordsdance', 'rockslide', 'bodyslam']},
 		];
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert.strictEqual(illegal, null);
+		illegal = TeamValidator.get('gen1outradeback').validateTeam(team);
+		assert.strictEqual(illegal, null);
+		illegal = TeamValidator.get('gen1ou').validateTeam(team);
+		assert(illegal);
+
+		// can't tradeback: gen 2 egg move
+		team = [
+			{species: 'marowak', moves: ['swordsdance', 'ancientpower', 'bodyslam']},
+		];
+		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert(illegal);
 
 		team = [
 			{species: 'skarmory', ability: 'keeneye', moves: ['curse', 'drillpeck'], evs: {hp: 1}},
@@ -236,6 +266,18 @@ describe('Team Validator', function () {
 		assert.strictEqual(illegal, null);
 		illegal = TeamValidator.get('gen5ou').validateTeam(team);
 		assert.strictEqual(illegal, null);
+
+		team = [
+			{species: 'dragonite', ability: 'multiscale', moves: ['extremespeed'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
+		team = [
+			{species: 'dragonite', ability: 'multiscale', moves: ['extremespeed', 'aquajet'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should accept VC moves only with Hidden ability and correct IVs', function () {
