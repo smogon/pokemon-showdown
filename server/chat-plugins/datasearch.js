@@ -725,7 +725,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			const validator = TeamValidator.get(`gen${maxGen}ou`);
 			let pokemonSource = validator.allSources();
 			for (let move in alts.moves) {
-				if (!validator.checkLearnset(move, mon, pokemonSource, true) === alts.moves[move]) {
+				if (!validator.checkLearnset(move, mon, pokemonSource) === alts.moves[move]) {
 					matched = true;
 					break;
 				}
@@ -1617,15 +1617,30 @@ function runLearn(target, cmd) {
 		}
 	}
 	let problems = validator.reconcileLearnset(template, setSources, lsetProblem);
+	let sources = setSources.sources.map(source => {
+		if (source.charAt(1) !== 'E') return source;
+		const fathers = validator.findEggMoveFathers(source, template, setSources, true);
+		if (!fathers) return null;
+		return source + ':' + fathers.join(',');
+	}).filter(Boolean);
+	if (setSources.sources.length && !sources.length) {
+		if (!problems) problems = [];
+		problems.push(`${template.name} doesn't have a valid father for its egg moves (${setSources.limitedEggMoves.join(', ')})`);
+	}
 	let buffer = `In ${formatName}, `;
+	if (setSources.isHidden) {
+		buffer += `${template.abilities['H'] || 'HA'} `;
+	}
 	buffer += `${template.name}` + (problems ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + Chat.toListString(moveNames);
 	if (!problems) {
-		let sourceNames = {E: "egg", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "egg, traded back", Y: "event, traded back"};
+		let sourceNames = {
+			E: "", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "traded-back ", Y: "traded-back event",
+		};
 		let sourcesBefore = setSources.sourcesBefore;
-		if (setSources.sources || sourcesBefore < gen) buffer += " only when obtained";
+		if (sources.length || sourcesBefore < gen) buffer += " only when obtained";
 		buffer += " from:<ul class=\"message-learn-list\">";
-		if (setSources.sources) {
-			let sources = setSources.sources.map(source => {
+		if (sources.length) {
+			sources = sources.map(source => {
 				if (source.slice(0, 3) === '1ET') {
 					return '2X' + source.slice(3);
 				}
@@ -1634,27 +1649,28 @@ function runLearn(target, cmd) {
 				}
 				return source;
 			}).sort();
-			let prevSourceType;
-			let prevSourceCount = 0;
-			for (const source of sources) {
-				let hatchAs = ['6E', '7E'].includes(source.substr(0, 2)) ? 'hatched as ' : '';
-				if (source.substr(0, 2) === prevSourceType) {
-					if (!hatchAs && source.length <= 2) continue;
-					if (prevSourceCount < 0) {
-						buffer += `: ${hatchAs + source.substr(2)}`;
-					} else if (all || prevSourceCount < 3) {
-						buffer += `, ${hatchAs + source.substr(2)}`;
-					} else if (prevSourceCount === 3) {
-						buffer += ", ...";
-					}
-					++prevSourceCount;
-					continue;
-				}
-				prevSourceType = source.substr(0, 2);
-				prevSourceCount = source.substr(2) ? 0 : -1;
+			for (let source of sources) {
 				buffer += `<li>Gen ${source.charAt(0)} ${sourceNames[source.charAt(1)]}`;
-				if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
-				if (source.substr(2)) buffer += `: ${hatchAs + source.substr(2)}`;
+
+				if (source.charAt(1) === 'E') {
+					let fathers;
+					[source, fathers] = source.split(':');
+					fathers = fathers.split(',');
+					if (fathers.length > 4 && !all) fathers = fathers.slice(-4).concat('...');
+					if (source.length > 2) {
+						buffer += `${source.slice(2)} `;
+					}
+					buffer += `egg`;
+					if (!fathers[0]) {
+						buffer += `: chainbreed`;
+					} else {
+						buffer += `: breed ${fathers.join(', ')}`;
+					}
+				}
+
+				if (source.slice(0, 2) === '5E' && template.maleOnlyHidden) {
+					buffer += " (no hidden ability)";
+				}
 			}
 		}
 		if (sourcesBefore) {
