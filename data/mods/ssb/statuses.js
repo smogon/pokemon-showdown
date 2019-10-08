@@ -154,7 +154,7 @@ let BattleStatuses = {
 		onStart() {
 			this.add(`c|&Anubis|hi ur qt`);
 			// In loving memory of the SSB programming team's sanity.
-			if (this.random(300) === 272) this.add(`c|&HoeenHero|Anubis's set is OP against programmer sanity.`);
+			if (this.random(300) === 272) this.add(`c|~HoeenHero|Anubis's set is OP against programmer sanity.`);
 		},
 		onSwitchOut() {
 			this.add(`c|&Anubis|brb making coffee`);
@@ -686,27 +686,27 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart() {
 			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
-			this.add(`c|&HoeenHero|No, its not a bug Hippopotas, stop telling people to PM staff, its annoying.`);
+			this.add(`c|~HoeenHero|No, its not a bug Hippopotas, stop telling people to PM staff, its annoying.`);
 		},
 		onSwitchOut() {
 			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
-			this.add(`c|&HoeenHero|There's still no bug!`);
+			this.add(`c|~HoeenHero|There's still no bug!`);
 		},
 		onFaint() {
 			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
-			this.add(`c|&HoeenHero|My PMs are flooded with bug reports :(`);
+			this.add(`c|~HoeenHero|My PMs are flooded with bug reports :(`);
 		},
 	},
 	hoeenhero: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&HoeenHero|My scripts will lead me to victory!`);
+			this.add(`c|~HoeenHero|My scripts will lead me to victory!`);
 		},
 		onSwitchOut() {
-			this.add(`c|&HoeenHero|I need to look something up, hold on...`);
+			this.add(`c|~HoeenHero|I need to look something up, hold on...`);
 		},
 		onFaint() {
-			this.add(`c|&HoeenHero|There must have been a bug in my script ;-;`);
+			this.add(`c|~HoeenHero|There must have been a bug in my script ;-;`);
 		},
 	},
 	hubriz: {

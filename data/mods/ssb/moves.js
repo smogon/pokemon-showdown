@@ -3384,7 +3384,7 @@ let BattleMovedex = {
 		onHit(target, source) {
 			if (target.name === 'HoeenHero') {
 				this.add(`c|@pluviometer|HoennHero*`);
-				this.add(`c|&HoeenHero|I can speel`);
+				this.add(`c|~HoeenHero|I can speel`);
 			}
 		},
 		secondary: {
