@@ -2015,7 +2015,7 @@ let Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		debug: true,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 2] Ubers",
