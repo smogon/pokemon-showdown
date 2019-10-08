@@ -644,7 +644,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['[Gen 7] OU', '!Obtainable Abilities', '!Obtainable Moves'],
+		ruleset: ['[Gen 7] OU'],
 		banlist: [
 			'Blacephalon', 'Chansey', 'Cresselia', 'Hoopa-Unbound', 'Kartana', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Gyaradosite',
 			'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Speed Boost', 'Water Bubble', 'Assist', 'Chatter', 'Shell Smash',
@@ -678,10 +678,6 @@ let Formats = [
 				this.format.abilityMap = abilityMap;
 			}
 
-			// First validate that the pokemon is a valid forme
-			let problems = this.validateForme(set);
-			if (problems.length) return problems;
-
 			let template = Dex.getTemplate(set.species);
 			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
 			if (template.tier === 'Uber' || megaTemplate.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${megaTemplate.tier === 'Uber' ? megaTemplate.species : template.species} is banned.`];
@@ -691,9 +687,14 @@ let Formats = [
 			let pokemonWithAbility = this.format.abilityMap[ability.id];
 			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pok\u00e9mon.`];
 
+			let name = set.name;
+			// @ts-ignore
+			this.format.debug = true;
+
 			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
 			// @ts-ignore
 			let validSources = set.abilitySources = []; // Evolution families
+
 			for (const donor of pokemonWithAbility) {
 				let donorTemplate = Dex.getTemplate(donor);
 				// @ts-ignore
@@ -701,9 +702,8 @@ let Formats = [
 
 				if (validSources.includes(evoFamily)) continue;
 
-				if (set.name === set.species) delete set.name;
 				set.species = donorTemplate.species;
-				problems = this.validateSet(set, teamHas) || [];
+				const problems = this.validateSet(set, teamHas) || [];
 
 				if (!problems.length) {
 					canonicalSource = donorTemplate.species;
@@ -715,15 +715,15 @@ let Formats = [
 				}
 			}
 
+			set.name = name;
 			set.species = template.species;
 			if (!validSources.length) {
-				if (pokemonWithAbility.length > 1) return [`${template.species}'s set is illegal.`];
-				problems.unshift(`${template.species} has an illegal set with an ability from ${Dex.getTemplate(pokemonWithAbility[0]).name}.`);
-				return problems;
+				if (pokemonWithAbility.length > 1) return [`${name}'s set is illegal.`];
+				return [`${name} has an illegal set with an ability from ${Dex.getTemplate(pokemonWithAbility[0]).name}.`];
 			}
 
 			// Protocol: Include the data of the donor species in the `ability` data slot.
-			// Afterwards, we are going to reset the name to what the user intended. :]
+			// Afterwards, we are going to reset it to what the user intended. :]
 			set.ability = `${set.ability}0${canonicalSource}`;
 		},
 		onValidateTeam(team, format) {
