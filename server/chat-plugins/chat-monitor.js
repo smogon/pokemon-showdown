@@ -105,7 +105,7 @@ Chat.registerMonitor('autolock', {
 			if (room) {
 				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
 			} else {
-				this.errorReply(`Please do not say '${word}}'.`);
+				this.errorReply(`Please do not say '${word}'.`);
 			}
 			return false;
 		}
