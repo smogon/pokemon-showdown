@@ -2830,15 +2830,8 @@ const commands = {
 		let userid = toID(this.inputUsername);
 
 		if (!this.can('mute', null, room)) return;
-		if (targetUser && targetUser.trusted && targetUser !== user) {
-			if (!cmd.includes('force')) {
-				return this.errorReply(`${target} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
-			}
-			// Notify staff when a trusted user gets their messages hidden
-			if (!room.isPrivate) {
-				const staffRoom = Rooms.get('staff');
-				if (staffRoom) staffRoom.addByUser(user, `<<${room.roomid}>> ${user.name} hid trusted user ${targetUser.name}'s messages.`);
-			}
+		if (targetUser && targetUser.trusted && targetUser !== user && !cmd.includes('force')) {
+			return this.errorReply(`${target} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
 		}
 
 		if (targetUser && cmd.includes('alt')) {
