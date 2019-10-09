@@ -717,6 +717,8 @@ let Formats = [
 					break;
 				}
 			}
+			// @ts-ignore
+			this.format.debug = false;
 
 			set.name = name;
 			set.species = template.species;
