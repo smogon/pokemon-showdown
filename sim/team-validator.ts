@@ -60,12 +60,7 @@ export class PokemonSources {
 	 * (3 in modern games, 6 if pentagon is required, etc)
 	 */
 	sourcesAfter: number;
-	babyOnly?: string;
-	sketchMove?: string;
-	hm?: string;
-	restrictiveMoves?: string[];
-	/** Obscure learn methods */
-	restrictedMove?: ID;
+	isHidden: boolean | null;
 	/**
 	 * `limitedEggMoves` is a list of moves that can only be obtained from an
 	 * egg with another father in gen 2-5. If there are multiple such moves,
@@ -77,7 +72,21 @@ export class PokemonSources {
 	 * `undefined` = the current move may or may not be a limited egg move
 	 */
 	limitedEggMoves?: ID[] | null;
-	isHidden: boolean | null;
+	/**
+	 * Some Pokemon evolve by having a move in their learnset (like Piloswine
+	 * with Ancient Power). These can only carry three other moves from their
+	 * prevo, because the fourth move must be the evo move. This restriction
+	 * doesn't apply to gen 6+ eggs, which can get around the restriction with
+	 * the relearner.
+	 */
+	moveEvoCarryCount: number;
+
+	babyOnly?: string;
+	sketchMove?: string;
+	hm?: string;
+	restrictiveMoves?: string[];
+	/** Obscure learn methods */
+	restrictedMove?: ID;
 
 	constructor(sourcesBefore = 0, sourcesAfter = 0) {
 		this.sources = [];
@@ -85,6 +94,7 @@ export class PokemonSources {
 		this.sourcesAfter = sourcesAfter;
 		this.isHidden = null;
 		this.limitedEggMoves = undefined;
+		this.moveEvoCarryCount = 0;
 	}
 	size() {
 		if (this.sourcesBefore) return Infinity;
@@ -167,6 +177,7 @@ export class PokemonSources {
 				this.limitedEggMoves.push(...other.limitedEggMoves);
 			}
 		}
+		this.moveEvoCarryCount += other.moveEvoCarryCount;
 		if (other.sourcesAfter > this.sourcesAfter) this.sourcesAfter = other.sourcesAfter;
 		if (other.isHidden) this.isHidden = true;
 	}
@@ -594,6 +605,7 @@ export class TeamValidator {
 		}
 		const requiresGen3Source = setSources.maxSourceGen() <= 3;
 		if (requiresGen3Source && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
+			// Ability Capsule allows this in Gen 6+
 			problems.push(`${name} has a Gen 4 ability and isn't evolved - it can't use moves from Gen 3.`);
 		}
 		if (setSources.maxSourceGen() < 5 && setSources.isHidden) {
@@ -946,7 +958,7 @@ export class TeamValidator {
 			// can't inherit from dex entries with no learnsets
 			if (!father.learnset) continue;
 			// something is clearly wrong if its only possible father is itself
-			// (unless it's ExtremeSpeed Dragonite, which is breedable from event Dragonite)
+			// (exceptions: ExtremeSpeed Dragonite, Self-destruct Snorlax)
 			if (template.speciesid === fatherid && !['dragonite', 'snorlax'].includes(fatherid)) continue;
 			// don't check NFE Pokémon - their evolutions will know all their moves and more
 			// exception: Combee/Salandit, because their evos can't be fathers
@@ -1476,6 +1488,16 @@ export class TeamValidator {
 			problems.push(problemString);
 		}
 
+		if (setSources.size() && setSources.moveEvoCarryCount > 3) {
+			if (setSources.sourcesBefore < 6) setSources.sourcesBefore = 0;
+			setSources.sources = setSources.sources.filter(source =>
+				source.charAt(1) === 'E' && parseInt(source.charAt(0)) >= 6
+			);
+			if (!setSources.size()) {
+				problems.push(`${name} needs to know ${species.evoMove || 'a Fairy-type move'} to evolve, so it can only know 3 other moves from ${dex.getTemplate(species.prevo).name}.`);
+			}
+		}
+
 		if (problems.length) return problems;
 
 		if (setSources.isHidden) {
@@ -1629,7 +1651,7 @@ export class TeamValidator {
 
 					if (
 						learnedGen < 7 && setSources.isHidden &&
-						!dex.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']
+						!dex.mod('gen' + learnedGen).getTemplate(baseTemplate.species).abilities['H']
 					) {
 						// check if the Pokemon's hidden ability was available
 						incompatibleAbility = true;
@@ -1668,7 +1690,7 @@ export class TeamValidator {
 							// current-gen level-up, TM or tutor moves:
 							//   always available
 							if (babyOnly) setSources.babyOnly = babyOnly;
-							return null;
+							if (!moveSources.moveEvoCarryCount) return null;
 						}
 						// past-gen level-up, TM, or tutor moves:
 						//   available as long as the source gen was or was before this gen
@@ -1731,8 +1753,17 @@ export class TeamValidator {
 				}
 			}
 
+			if (!moveSources.size()) {
+				if (
+					(template.evoType === 'levelMove' && template.evoMove !== move.name) ||
+					(template.id === 'sylveon' && move.type !== 'Fairy')
+				) {
+					moveSources.moveEvoCarryCount = 1;
+				}
+			}
+
 			// also check to see if the mon's prevo or freely switchable formes can learn this move
-			template = this.learnsetParent(template, setSources);
+			template = this.learnsetParent(template);
 		}
 
 		if (limit1 && sketch) {
@@ -1769,13 +1800,14 @@ export class TeamValidator {
 		return null;
 	}
 
-	learnsetParent(template: Template, setSources?: PokemonSources) {
+	learnsetParent(template: Template) {
 		if (template.species === 'Lycanroc-Dusk') {
 			return this.dex.getTemplate('Rockruff-Dusk');
 		} else if (template.prevo) {
+			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
+			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
 			template = this.dex.getTemplate(template.prevo);
 			if (template.gen > Math.max(2, this.dex.gen)) return null;
-			if (setSources && !template.abilities['H'] && setSources.isHidden) return null;
 			return template;
 		} else if (template.baseSpecies !== template.species && ['Rotom', 'Necrozma'].includes(template.baseSpecies)) {
 			// only Rotom and Necrozma inherit learnsets from base
