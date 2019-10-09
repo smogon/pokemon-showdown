@@ -682,15 +682,20 @@ let Formats = [
 			if (problem.length) return problem;
 
 			let template = Dex.getTemplate(set.species);
+			if (!template.exists) return [`The Pok\u00e9mon "${set.species}" does not exist.`];
+			if (template.isUnreleased) return [`${template.species} is unreleased.`];
+
 			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
 			if (template.tier === 'Uber' || megaTemplate.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${megaTemplate.tier === 'Uber' ? megaTemplate.species : template.species} is banned.`];
 
+			let name = set.name;
+
 			let ability = Dex.getAbility(set.ability);
+			if (!ability.exists || ability.isNonstandard) return [`${name} needs to have a valid ability.`];
 			// @ts-ignore
 			let pokemonWithAbility = this.format.abilityMap[ability.id];
 			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pok\u00e9mon.`];
 
-			let name = set.name;
 			// @ts-ignore
 			this.format.debug = true;
 
