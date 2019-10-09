@@ -199,7 +199,7 @@ export class PageContext extends MessageContext {
 		super(options.user, options.language);
 
 		this.connection = options.connection;
-		this.room = Rooms.get('global');
+		this.room = Rooms.get('global')!;
 		this.pageid = options.pageid;
 
 		this.initialized = false;
