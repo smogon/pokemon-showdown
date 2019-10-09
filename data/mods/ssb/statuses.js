@@ -1578,7 +1578,7 @@ let BattleStatuses = {
 			this.add(`c|+Volco|I've decided to spare you, lucky you.`);
 		},
 		onFaint() {
-			this.add(`c|+Volco|Well, seems I was got taken down instead.`);
+			this.add(`c|+Volco|Well, seems I was taken down instead.`);
 		},
 	},
 	xayah: {
