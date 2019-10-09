@@ -450,7 +450,8 @@ function notifyStaff(upper = false) {
 		const escalator = ticket.escalator ? Chat.html` (escalated by ${ticket.escalator}).` : ``;
 		const creator = ticket.claimed ? Chat.html`${ticket.creator}` : Chat.html`<strong>${ticket.creator}</strong>`;
 		const notifying = ticket.claimed ? `` : ` notifying`;
-		const ticketRoom = Rooms.get(`help-${ticket.userid}`);
+		// should always exist
+		const ticketRoom = /** @type {Room} */ (Rooms.get(`help-${ticket.userid}`));
 		const ticketGame = /** @type {HelpTicket} */ (ticketRoom.game);
 		if (!ticket.claimed) {
 			hasUnclaimed = true;

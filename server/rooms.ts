@@ -1518,11 +1518,9 @@ export class GameRoom extends BasicChatRoom {
 	}
 }
 
-function getRoom(roomid?: string | Room): Room {
-	// @ts-ignore
-	if (roomid && roomid.roomid) return roomid;
-	// @ts-ignore
-	return Rooms.rooms.get(roomid);
+function getRoom(roomid?: string | Room) {
+	if (roomid && (roomid as Room).roomid) return roomid as Room;
+	return Rooms.rooms.get(roomid as RoomID);
 }
 
 export const Rooms = {

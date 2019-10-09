@@ -765,7 +765,7 @@ export const Punishments = new class {
 
 		// Handle tournaments the user was in before being battle banned
 		for (const games of user.games.keys()) {
-			const game = Rooms.get(games).game;
+			const game = Rooms.get(games)!.game;
 			if (!game) continue; // this should never happen
 			if ((game as Tournament).isTournament) {
 				if ((game as Tournament).isTournamentStarted) {
@@ -1201,7 +1201,7 @@ export const Punishments = new class {
 		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) {
 			return true;
 		}
-		const room = Rooms.get(roomid);
+		const room = Rooms.get(roomid)!;
 		if (room.parent) {
 			return Punishments.checkNameInRoom(user, room.parent.roomid);
 		}
@@ -1214,14 +1214,14 @@ export const Punishments = new class {
 	checkNewNameInRoom(user: User, userid: string, roomid: RoomID): Punishment | null {
 		let punishment: Punishment | null = Punishments.roomUserids.nestedGet(roomid, userid) || null;
 		if (!punishment) {
-			const room = Rooms.get(roomid);
+			const room = Rooms.get(roomid)!;
 			if (room.parent) {
 				punishment = Punishments.checkNewNameInRoom(user, userid, room.parent.roomid);
 			}
 		}
 		if (punishment) {
 			if (punishment[0] !== 'ROOMBAN' && punishment[0] !== 'BLACKLIST') return null;
-			const room = Rooms.get(roomid);
+			const room = Rooms.get(roomid)!;
 			if (room.game && room.game.removeBannedUser) {
 				room.game.removeBannedUser(user);
 			}
