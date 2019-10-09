@@ -678,6 +678,9 @@ let Formats = [
 				this.format.abilityMap = abilityMap;
 			}
 
+			let problem = this.validateForme(set);
+			if (problem.length) return problem;
+
 			let template = Dex.getTemplate(set.species);
 			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
 			if (template.tier === 'Uber' || megaTemplate.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${megaTemplate.tier === 'Uber' ? megaTemplate.species : template.species} is banned.`];
