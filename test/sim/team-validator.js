@@ -165,6 +165,14 @@ describe('Team Validator', function () {
 		illegal = TeamValidator.get('gen7ou').validateTeam(team);
 		assert(illegal);
 
+		team = [
+			{species: 'mamoswine', ability: 'oblivious', moves: ['tackle', 'iceshard', 'amnesia', 'furyattack'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert(illegal);
+		illegal = TeamValidator.get('gen7ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
 		// Slam comes from Azurill, Future Sight comes from a variety of Marill-only egg moves
 
 		team = [
@@ -240,6 +248,14 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen3ou').validateTeam(team);
 		assert(illegal);
+
+		// Pupitar can evolve into HA Tyranitar despite having no hidden ability
+		team = [
+			{species: 'tyranitar', ability: 'unnerve', moves: ['dragondance'], evs: {hp: 1}},
+			{species: 'staraptor', ability: 'reckless', moves: ['pursuit'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
 
 		team = [
 			{species: 'armaldo', ability: 'battlearmor', moves: ['knockoff', 'rapidspin'], evs: {hp: 1}},

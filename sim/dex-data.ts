@@ -543,9 +543,11 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/** Added type (used in OMs). */
 	readonly addedType?: string;
 	/** Pre-evolution. '' if nothing evolves into this Pokemon. */
-	readonly prevo: string;
+	readonly prevo: ID;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
-	readonly evos: string[];
+	readonly evos: ID[];
+	readonly evoType?: 'trade' | 'stone' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold';
+	readonly evoMove?: string;
 	/** Evolution level. falsy if doesn't evolve. */
 	readonly evoLevel?: number;
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
@@ -646,6 +648,8 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.tier = data.tier || '';
 		this.doublesTier = data.doublesTier || '';
 		this.evos = data.evos || [];
+		this.evoType = data.evoType || undefined;
+		this.evoMove = data.evoMove || undefined;
 		this.evoLevel = data.evoLevel || undefined;
 		this.nfe = !!this.evos.length;
 		this.eggGroups = data.eggGroups || [];
