@@ -162,7 +162,7 @@ class RandomGen6Teams extends RandomTeams {
 					}
 					break;
 				case 'storedpower':
-					if (!counter.setupType && !hasMove['cosmicpower']) rejected = true;
+					if (!counter.setupType) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
 					if (counter.Physical + counter.Special < 3 || hasMove['suckerpunch']) rejected = true;
@@ -275,7 +275,7 @@ class RandomGen6Teams extends RandomTeams {
 					break;
 				case 'suckerpunch':
 					if (counter.damagingMoves.length < 2 || hasMove['glare'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					if (counter.setupType === 'Special' || counter['Dark'] > 1 && !hasType['Dark']) rejected = true;
+					if (counter['Dark'] > 1 && !hasType['Dark']) rejected = true;
 					break;
 				case 'dragonclaw':
 					if (hasMove['dragontail'] || hasMove['outrage']) rejected = true;
@@ -334,7 +334,7 @@ class RandomGen6Teams extends RandomTeams {
 					if (hasMove['firepunch'] || hasMove['fireblast'] && (counter.setupType || !!counter['speedsetup'])) rejected = true;
 					break;
 				case 'airslash': case 'hurricane':
-					if (hasMove['acrobatics'] || hasMove['bravebird']) rejected = true;
+					if (hasMove['bravebird']) rejected = true;
 					break;
 				case 'shadowball':
 					if (hasMove['darkpulse'] || hasMove['hex'] && hasMove['willowisp']) rejected = true;
@@ -409,7 +409,7 @@ class RandomGen6Teams extends RandomTeams {
 					if (hasMove['poisonjab'] || hasMove['sludgebomb']) rejected = true;
 					break;
 				case 'psychic':
-					if (hasMove['psyshock'] || hasMove['storedpower']) rejected = true;
+					if (hasMove['psyshock']) rejected = true;
 					break;
 				case 'psychocut': case 'zenheadbutt':
 					if ((hasMove['psychic'] || hasMove['psyshock']) && counter.setupType !== 'Physical') rejected = true;
@@ -492,7 +492,9 @@ class RandomGen6Teams extends RandomTeams {
 				// This move doesn't satisfy our setup requirements:
 				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
 					// Reject STABs last in case the setup type changes later on
-					if (!SetupException.includes(moveid) && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
+					// @ts-ignore
+					let stabs = counter[template.types[0]] + (counter[template.types[1]] || 0);
+					if (!SetupException.includes(moveid) && (!hasType[move.type] || stabs > 1 || counter[move.category] < 2)) rejected = true;
 				}
 				// @ts-ignore
 				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'sleeptalk' && !hasType['Dark'] && !hasMove['darkpulse']) {
@@ -517,14 +519,14 @@ class RandomGen6Teams extends RandomTeams {
 					(hasType['Fairy'] && !counter['Fairy'] && !hasAbility['Pixilate'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fighting'] && !counter['Fighting'] && (template.baseStats.atk >= 110 || hasAbility['Justified'] || hasAbility['Unburden'] || counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
-					(hasType['Flying'] && !counter['Flying'] && (hasAbility['Gale Wings'] || hasAbility['Guts'] || hasAbility['Reckless'] || hasAbility['Serene Grace'])) ||
+					(hasType['Flying'] && !counter['Flying'] && (hasAbility['Gale Wings'] || hasAbility['Serene Grace'] || hasType['Normal'] && movePool.includes('bravebird'))) ||
 					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
 					(hasType['Grass'] && !counter['Grass'] && !hasType['Fairy'] && !hasType['Poison'] && !hasType['Steel']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
 					(hasType['Normal'] && (movePool.includes('boomburst') || hasAbility['Guts'] && movePool.includes('facade'))) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && counter.stab < template.types.length) ||
-					(hasType['Rock'] && !counter['Rock'] && (hasAbility['Rock Head'] || counter.setupType === 'Physical')) ||
+					(hasType['Rock'] && !counter['Rock'] && !hasType['Fairy'] && (hasAbility['Rock Head'] || counter.setupType === 'Physical')) ||
 					(hasType['Steel'] && !counter['Steel'] && hasAbility['Technician']) ||
 					(hasType['Water'] && (!counter['Water'] || !counter.stab) && !hasAbility['Protean']) ||
 					// @ts-ignore
@@ -534,7 +536,7 @@ class RandomGen6Teams extends RandomTeams {
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
-					(!counter.recovery && (movePool.includes('softboiled') || (((hasAbility['Multiscale'] && hasMove['substitute']) || (template.nfe && !!counter['Status'])) && (movePool.includes('recover') || movePool.includes('roost'))))) ||
+					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')) && (counter.Status > 1 || (template.nfe && !!counter['Status']))) ||
 					(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
 					(template.requiredMove && movePool.includes(toID(template.requiredMove)))))) {
 					// Reject Status or non-STAB
@@ -840,6 +842,8 @@ class RandomGen6Teams extends RandomTeams {
 		// This is the "REALLY can't think of a good item" cutoff
 		} else if (ability === 'Gale Wings' && hasMove['bravebird']) {
 			item = 'Sharp Beak';
+		} else if (hasMove['stickyweb'] && ability === 'Sturdy') {
+			item = 'Mental Herb';
 		} else if (ability === 'Serene Grace' && hasMove['airslash'] && template.baseStats.spe > 100) {
 			item = 'Metronome';
 		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
