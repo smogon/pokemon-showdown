@@ -466,30 +466,30 @@ const commands = {
 				}
 			}
 		}
-		let mod = Dex;
+		let dex = Dex;
 		/** @type {Format?} */
 		let format = null;
 		if (sep[1] && toID(sep[1]) in Dex.dexes) {
-			mod = Dex.mod(toID(sep[1]));
+			dex = Dex.mod(toID(sep[1]));
 		} else if (sep[1]) {
 			format = Dex.getFormat(sep[1]);
 			if (!format.exists) {
 				return this.errorReply(`Unrecognized format or mod "${format.name}"`);
 			}
-			mod = Dex.mod(format.mod);
+			dex = Dex.mod(format.mod);
 		} else if (room && room.battle) {
 			format = Dex.getFormat(room.battle.format);
-			mod = Dex.mod(format.mod);
+			dex = Dex.mod(format.mod);
 		}
-		let newTargets = mod.dataSearch(target);
+		let newTargets = dex.dataSearch(target);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (!newTargets || !newTargets.length) {
-			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. (Check your spelling?)`);
+			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
 
 		for (const [i, newTarget] of newTargets.entries()) {
 			if (newTarget.isInexact && !i) {
-				buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
+				buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 			}
 			/** @type {AnyObject} */
 			let details = null;
@@ -505,16 +505,16 @@ const commands = {
 				}
 				return this.sendReply(buffer);
 			case 'pokemon':
-				let pokemon = mod.getTemplate(newTarget.name);
+				let pokemon = dex.getTemplate(newTarget.name);
 				if (format && format.onModifyTemplate) {
-					pokemon = format.onModifyTemplate.call(Dex, pokemon) || pokemon;
+					pokemon = format.onModifyTemplate.call({dex}, pokemon) || pokemon;
 				}
 				let tier = pokemon.tier;
 				if (room && (room.roomid === 'smogondoubles' ||
 					['gen7doublesou', 'gen7doublesubers', 'gen7doublesuu'].includes(room.battle && room.battle.format))) {
 					tier = pokemon.doublesTier;
 				}
-				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, mod.gen, tier)}\n`;
+				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, dex.gen, tier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
 					if (pokemon.weighthg >= 2000) {
@@ -534,12 +534,12 @@ const commands = {
 						"Height": pokemon.heightm + " m",
 						"Weight": pokemon.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 					};
-					if (pokemon.color && mod.gen >= 5) details["Dex Colour"] = pokemon.color;
-					if (pokemon.eggGroups && mod.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
+					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
+					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					let evos = /** @type {string[]} */ ([]);
 					for (const evoName of pokemon.evos) {
-						const evo = mod.getTemplate(evoName);
-						if (evo.gen <= mod.gen) {
+						const evo = dex.getTemplate(evoName);
+						if (evo.gen <= dex.gen) {
 							let condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 							switch (evo.evoType) {
 							case 'levelExtra':
@@ -573,14 +573,14 @@ const commands = {
 				}
 				break;
 			case 'item':
-				let item = mod.getItem(newTarget.name);
+				let item = dex.getItem(newTarget.name);
 				buffer += `|raw|${Chat.getDataItemHTML(item)}\n`;
 				if (showDetails) {
 					details = {
 						"Gen": item.gen,
 					};
 
-					if (mod.gen >= 4) {
+					if (dex.gen >= 4) {
 						if (item.fling) {
 							details["Fling Base Power"] = item.fling.basePower;
 							if (item.fling.status) details["Fling Effect"] = item.fling.status;
@@ -592,17 +592,17 @@ const commands = {
 							details["Fling"] = "This item cannot be used with Fling.";
 						}
 					}
-					if (item.naturalGift && mod.gen >= 3) {
+					if (item.naturalGift && dex.gen >= 3) {
 						details["Natural Gift Type"] = item.naturalGift.type;
 						details["Natural Gift Base Power"] = item.naturalGift.basePower;
 					}
 					if (item.isUnreleased) {
-						details["Unreleased in Gen " + mod.gen] = "";
+						details["Unreleased in Gen " + dex.gen] = "";
 					}
 				}
 				break;
 			case 'move':
-				let move = mod.getMove(newTarget.name);
+				let move = dex.getMove(newTarget.name);
 				buffer += `|raw|${Chat.getDataMoveHTML(move)}\n`;
 				if (showDetails) {
 					details = {
@@ -624,10 +624,10 @@ const commands = {
 					if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
 					if (move.flags['charge']) details["&#10003; Two-turn move"] = "";
 					if (move.flags['recharge']) details["&#10003; Has recharge turn"] = "";
-					if (move.flags['gravity'] && mod.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
-					if (move.flags['dance'] && mod.gen >= 7) details["&#10003; Dance move"] = "";
+					if (move.flags['gravity'] && dex.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
+					if (move.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
 
-					if (mod.gen >= 7) {
+					if (dex.gen >= 7) {
 						if (move.zMovePower) {
 							details["Z-Power"] = move.zMovePower;
 						} else if (move.zMoveEffect) {
@@ -648,10 +648,10 @@ const commands = {
 							}
 						} else if (move.isZ) {
 							details["&#10003; Z-Move"] = "";
-							details["Z-Crystal"] = mod.getItem(move.isZ).name;
+							details["Z-Crystal"] = dex.getItem(move.isZ).name;
 							if (move.basePower !== 1) {
-								details["User"] = mod.getItem(move.isZ).zMoveUser.join(", ");
-								details["Required Move"] = mod.getItem(move.isZ).zMoveFrom;
+								details["User"] = dex.getItem(move.isZ).zMoveUser.join(", ");
+								details["Required Move"] = dex.getItem(move.isZ).zMoveFrom;
 							}
 						} else {
 							details["Z-Effect"] = "None";
@@ -673,19 +673,19 @@ const commands = {
 						'all': "All Pok\u00e9mon",
 					}[move.target] || "Unknown";
 
-					if (move.id === 'snatch' && mod.gen >= 3) {
+					if (move.id === 'snatch' && dex.gen >= 3) {
 						details[`<a href="https://${Config.routes.dex}/tags/nonsnatchable">Non-Snatchable Moves</a>`] = '';
 					}
 					if (move.id === 'mirrormove') {
 						details[`<a href="https://${Config.routes.dex}/tags/nonmirror">Non-Mirrorable Moves</a>`] = '';
 					}
 					if (move.isUnreleased) {
-						details["Unreleased in Gen " + mod.gen] = "";
+						details["Unreleased in Gen " + dex.gen] = "";
 					}
 				}
 				break;
 			case 'ability':
-				let ability = mod.getAbility(newTarget.name);
+				let ability = dex.getAbility(newTarget.name);
 				buffer += `|raw|${Chat.getDataAbilityHTML(ability)}\n`;
 				break;
 			default:
@@ -860,7 +860,7 @@ const commands = {
 			if (source.effectType !== 'Move' || source.category !== 'Status' && (source.basePower || source.basePowerCallback)) {
 				for (const type of defender.types) {
 					let baseMod = Dex.getEffectiveness(source, type);
-					let moveMod = source.onEffectiveness && source.onEffectiveness.call(Dex, baseMod, null, type, source);
+					let moveMod = source.onEffectiveness && source.onEffectiveness.call({dex: Dex}, baseMod, null, type, source);
 					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 			}
@@ -885,19 +885,19 @@ const commands = {
 
 		let targets = target.split(/[,+]/);
 		let sources = [];
-		let mod = Dex;
+		let dex = Dex;
 		if (room && room.battle) {
 			let format = Dex.getFormat(room.battle.format);
-			mod = Dex.mod(format.mod);
+			dex = Dex.mod(format.mod);
 		}
 		if (targets[targets.length - 1] && toID(targets[targets.length - 1]) in Dex.dexes) {
-			mod = Dex.mod(toID(targets[targets.length - 1]));
+			dex = Dex.mod(toID(targets[targets.length - 1]));
 		}
 		let dispTable = false;
 		let bestCoverage = {};
 		let hasThousandArrows = false;
 
-		for (let type in mod.data.TypeChart) {
+		for (let type in dex.data.TypeChart) {
 			// This command uses -5 to designate immunity
 			bestCoverage[type] = -5;
 		}
@@ -906,7 +906,7 @@ const commands = {
 			arg = toID(arg);
 
 			// arg is the gen?
-			if (arg === mod.currentMod) continue;
+			if (arg === dex.currentMod) continue;
 
 			// arg is 'table' or 'all'?
 			if (arg === 'table' || arg === 'all') {
@@ -918,22 +918,22 @@ const commands = {
 			// arg is a type?
 			let argType = arg.charAt(0).toUpperCase() + arg.slice(1);
 			let eff;
-			if (argType in mod.data.TypeChart) {
+			if (argType in dex.data.TypeChart) {
 				sources.push(argType);
 				for (let type in bestCoverage) {
-					if (!mod.getImmunity(argType, type)) continue;
-					eff = mod.getEffectiveness(argType, type);
+					if (!dex.getImmunity(argType, type)) continue;
+					eff = dex.getEffectiveness(argType, type);
 					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
 				}
 				continue;
 			}
 
 			// arg is a move?
-			let move = mod.getMove(arg);
+			let move = dex.getMove(arg);
 			if (!move.exists) {
 				return this.errorReply(`Type or move '${arg}' not found.`);
-			} else if (move.gen > mod.gen) {
-				return this.errorReply(`Move '${arg}' is not available in Gen ${mod.gen}.`);
+			} else if (move.gen > dex.gen) {
+				return this.errorReply(`Move '${arg}' is not available in Gen ${dex.gen}.`);
 			}
 
 			if (!move.basePower && !move.basePowerCallback) continue;
@@ -943,9 +943,9 @@ const commands = {
 				if (move.id === "struggle") {
 					eff = 0;
 				} else {
-					if (!mod.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
-					let baseMod = mod.getEffectiveness(move, type);
-					let moveMod = move.onEffectiveness && move.onEffectiveness.call(mod, baseMod, null, type, move);
+					if (!dex.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
+					let baseMod = dex.getEffectiveness(move, type);
+					let moveMod = move.onEffectiveness && move.onEffectiveness.call({dex}, baseMod, null, type, move);
 					eff = typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 				if (eff > bestCoverage[type]) bestCoverage[type] = eff;
@@ -999,16 +999,16 @@ const commands = {
 		} else {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			let icon = {};
-			for (let type in mod.data.TypeChart) {
+			for (let type in dex.data.TypeChart) {
 				icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
 				// row of icons at top
 				buffer += '<th>' + icon[type] + '</th>';
 			}
 			buffer += '</tr>';
-			for (let type1 in mod.data.TypeChart) {
+			for (let type1 in dex.data.TypeChart) {
 				// assembles the rest of the rows
 				buffer += '<tr><th>' + icon[type1] + '</th>';
-				for (let type2 in mod.data.TypeChart) {
+				for (let type2 in dex.data.TypeChart) {
 					let typing;
 					let cell = '<th ';
 					let bestEff = -5;
@@ -1020,11 +1020,11 @@ const commands = {
 						typing = type1 + "/" + type2;
 						for (const move of sources) {
 							let curEff = 0;
-							if ((!mod.getImmunity((move.type || move), type1) || !mod.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
-							let baseMod = mod.getEffectiveness(move, type1);
+							if ((!dex.getImmunity((move.type || move), type1) || !dex.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
+							let baseMod = dex.getEffectiveness(move, type1);
 							let moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, null, type1, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
-							baseMod = mod.getEffectiveness(move, type2);
+							baseMod = dex.getEffectiveness(move, type2);
 							moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, null, type2, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
 
