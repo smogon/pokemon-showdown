@@ -4182,6 +4182,7 @@ const commands = {
 		connection.send('|queryresponse|savereplay|' + JSON.stringify({
 			log: data,
 			id: room.roomid.substr(7),
+			silent: forPunishment || target === 'silent',
 		}));
 	},
 
