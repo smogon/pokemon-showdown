@@ -1417,8 +1417,24 @@ export const Chat = new class {
 
 		// Install plug-in commands and chat filters
 
+		// All resulting filenames will be relative to basePath
+		const getFiles = (basePath: string, path: string): string[] => {
+			const filesInThisDir = FS(basePath + '/' + path).readdirSync();
+			let allFiles: string[] = [];
+			for (const file of filesInThisDir) {
+				const fileWithPath = path + (path ? '/' : '') + file;
+				if (FS(basePath + '/' + fileWithPath).isDirSync()) {
+					if (file.startsWith('.')) continue;
+					allFiles = allFiles.concat(getFiles(basePath, fileWithPath));
+				} else {
+					allFiles.push(fileWithPath);
+				}
+			}
+			return allFiles;
+		};
+		let files = getFiles('server/chat-plugins', '');
+
 		// info always goes first so other plugins can shadow it
-		let files = FS('server/chat-plugins/').readdirSync();
 		files = files.filter(file => file !== 'info.js');
 		files.unshift('info.js');
 
@@ -1427,6 +1443,7 @@ export const Chat = new class {
 			if (file.endsWith('.ts')) {
 				plugin = require(`./chat-plugins/${file.slice(0, -3)}`);
 			} else if (file.endsWith('.js')) {
+				// Switch to server/ because we'll be in .server-dist/ after this file is compiled
 				plugin = require(`../server/chat-plugins/${file}`);
 			} else {
 				continue;

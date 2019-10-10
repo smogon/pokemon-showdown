@@ -387,6 +387,30 @@ class FSPath {
 	unwatch() {
 		fs.unwatchFile(this.path);
 	}
+
+	async isFile(): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			fs.stat(this.path, (err, stats) => {
+				err ? reject(err) : resolve(stats.isFile());
+			});
+		});
+	}
+
+	isFileSync(): boolean {
+		return fs.statSync(this.path).isFile();
+	}
+
+	async isDir(): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			fs.stat(this.path, (err, stats) => {
+				err ? reject(err) : resolve(stats.isDirectory());
+			});
+		});
+	}
+
+	isDirSync(): boolean {
+		return fs.statSync(this.path).isDirectory();
+	}
 }
 
 class FileReadStream extends ReadStream {
