@@ -408,7 +408,7 @@ export class CommandContext extends MessageContext {
 		const messageSpaceIndex = message.indexOf(' ');
 		if (messageSpaceIndex > 0) {
 			cmd = message.slice(1, messageSpaceIndex).toLowerCase();
-			target = message.slice(messageSpaceIndex + 1);
+			target = message.slice(messageSpaceIndex + 1).trim();
 		} else {
 			cmd = message.slice(1).toLowerCase();
 			target = '';
