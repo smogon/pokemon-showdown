@@ -2525,6 +2525,6 @@ exports.commands = commands;
 process.nextTick(() => {
 	Dex.includeData();
 	Chat.multiLinePattern.register(
-		'/htmlbox', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduthml', '/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
+		'/htmlbox', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml', '/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
 	);
 });
