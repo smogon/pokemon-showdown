@@ -607,7 +607,7 @@ export class Tournament extends Rooms.RoomGame {
 		}
 		this.isBracketInvalidated = true;
 		this.room.add(`|tournament|start|${this.players.length}`);
-		this.modlog('TOUR START', null, `The tournament has started with ${this.players.length} users.`);
+		output.modlog('TOUR START', null, `The tournament has started with ${this.players.length} users.`);
 		this.room.send('|tournament|update|{"isStarted":true}');
 		this.update();
 		return true;
