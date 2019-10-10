@@ -27,7 +27,7 @@
 
 		"/help OR /h OR /? - Gives you help.": "Vous donne de l'aide.",
 		"For an overview of room commands, use /roomhelp": "Pour un aperçu des commandes des chatrooms, utilisez /roomhelp",
-		"For details of a specific command, use something like: /help data": "Pour les d&eacute;tails d'une commande spécifique, utilisez quelque chose comme : /help data",
+		"For details of a specific command, use something like: /help data": "Pour les détails d'une commande spécifique, utilisez quelque chose comme : /help data",
 
 		"COMMANDS": "COMMANDES",
 		"BATTLE ROOM COMMANDS": "COMMANDES DES COMBATS",
@@ -58,7 +58,8 @@
 		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute OU /m <em>pseudo</em> : Mute pendant 7 minutes",
 		"- /hourmute OR /hm <em>username</em>: 60 minute mute": "- /hourmute OU /hm <em>pseudo</em> : Mute pendant 60 minutes",
 		"- /unmute <em>username</em>: unmute": "- /unmute <em>pseudo</em> : Enl&egrave;ve un mute",
-		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce OU /well <em>message</em> : Fait une annonce",
+    "- /hidetext <em>username</em>: hide a user's messages from the room": "- /hidetext <em>pseudo</em>: Cache les messages de l'utilisateur",
+		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce OU /wall <em>message</em> : Fait une annonce",
 		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>pseudo</em> : Affiche l'historique de mod&eacute;ration d'un utilisateur dans la room ",
 		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>note</em> : Ajoute une note de mod&eacute;ration qui peut &ecirc;tre lue dans le modlog",
 
@@ -67,7 +68,7 @@
 		"- /roomunban <em>username</em>: unban user from the room": "- /roomunban <em>pseudo</em> : Retire le bannissement d'un utilisateur de la room",
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>pseudo</em> : Nomme un room voice",
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>pseudo</em> : Retire un room voice",
-		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- / staffintro <em>introduction</em> : Param&egrave;tre l'introduction du staff qui sera affich&eacute;e &agrave; tous les membres du staff rejoignant la room",
+		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>introduction</em> : Param&egrave;tre l'introduction du staff qui sera affich&eacute;e &agrave; tous les membres du staff rejoignant la room",
 		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings : Permet de changer plusieurs param&egrave;tres de la room, notamment le modchat",
 
 		"<strong>Room owners (#)</strong> can also use:": "<strong>Les propri&eacute;taires de la room (Room Owners) (#)</strong> peuvent &eacute;galement utiliser :",
@@ -85,7 +86,7 @@
 
 		"Tournament Help:": "Aide pour les tournois",
 		"- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.": "- /tour create <em>format</em>, elimination : cr&eacute;e un nouveau tournoi simple en &eacute;limination directe dans la room actuelle",
-		"- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.": "- /tour create <em>foramt</em>, roundrobin : cr&eacute;e un nouveau tournoi en roundrobin dans la room actuelle",
+		"- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.": "- /tour create <em>format</em>, roundrobin : cr&eacute;e un nouveau tournoi en roundrobin dans la room actuelle",
 		"- /tour end: forcibly end the tournament in the current room": "- /tour end : Force la fin d'un tournoi dans la room actuelle",
 		"- /tour start: start the tournament in the current room": "- /tour start : D&eacute;marre le tournoi dans la room actuelle",
 		"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)": "- /tour banlist [pokemon], [talent], [...] : Bannit des attaques, talents, Pok&eacute;mon ou objets d'un tournoi (cette liste doit &ecirc;tre cr&eacute;&eacute;e au pr&eacute;alable)",
@@ -97,7 +98,7 @@
 		"Your status contains a banned word.": "Votre statut contient un mot bannit.",
 		"Your status has been set to: ${target}.": "Votre statut a été fixé comme ${target}.",
 		"You are now marked as busy.": "Vous êtes maintenant marqué comme occupé.",
-		"You are now marked as away. Send a message or use /back to indicate you are back.": "Vous êtes maintenant indiqu&eacute; comme absent. Envoyez un message ou utilisez /back pour indiquer que vous êtes de retour.",
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "Vous êtes maintenant indiqué comme absent. Envoyez un message ou utilisez /back pour indiquer que vous êtes de retour.",
 
 		"You must choose a name before you can talk.": "Tu dois choisir un pseudo avant de pouvoir parler.",
 		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "Tu es ${lockType} et ne peux pas parler dans le chat. ${lockExpiration}",
