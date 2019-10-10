@@ -607,6 +607,7 @@ export class Tournament extends Rooms.RoomGame {
 		}
 		this.isBracketInvalidated = true;
 		this.room.add(`|tournament|start|${this.players.length}`);
+		this.privateModAction(`(The ${tour.baseFormat} tournament by ${user.name} has started and has a current total of ${this.players.length} users.)`);
 		this.modlog('TOUR START', null, `${tour.baseFormat} with ${this.players.length} users.`);	// Modnote format and number of players when tour starts
 		this.room.send('|tournament|update|{"isStarted":true}');
 		this.update();
