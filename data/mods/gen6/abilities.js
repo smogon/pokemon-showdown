@@ -25,14 +25,7 @@ let BattleAbilities = {
 	},
 	"contrary": {
 		inherit: true,
-		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
-		onBoost(boost, target, source, effect) {
-			for (let i in boost) {
-				// @ts-ignore
-				boost[i] *= -1;
-			}
-		},
-		rating: 4.5,
+		desc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
 	},
 	"damp": {
 		inherit: true,
@@ -133,14 +126,7 @@ let BattleAbilities = {
 	},
 	"simple": {
 		inherit: true,
-		shortDesc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
-		onBoost(boost, target, source, effect) {
-			for (let i in boost) {
-				// @ts-ignore
-				boost[i] *= 2;
-			}
-		},
-		rating: 4.5,
+		desc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 	},
 	"stancechange": {
 		inherit: true,
