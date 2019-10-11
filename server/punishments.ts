@@ -37,6 +37,7 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
  * A punishment is an array: [punishType, userid | #punishmenttype, expireTime, reason]
  */
 type Punishment = [string, string, number, string];
+
 interface PunishmentEntry {
 	ips: string[];
 	userids: ID[];
@@ -45,6 +46,24 @@ interface PunishmentEntry {
 	reason: string;
 	rest: any[];
 }
+
+interface IPunishmentsStorage {
+	load(): void;
+	appendPunishment(entry: PunishmentEntry, id: string): void;
+	appendRoomPunishment(entry: PunishmentEntry, id: string): void;
+	appendSharedIp(ip: string, note: string): void;
+	deleteRoomPunishment(roomid: RoomID, key: string): void;
+	deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string): void;
+	deleteAllPunishmentsOfRoom(roomid: RoomID): void;
+	deletePunishment(key: string): void;
+	deleteAllPunishments(): void;
+	deleteSharedIp(ip: string): void;
+	deleteAllSharedIps(): void;
+}
+
+/*********************************************************
+ * Data types
+ *********************************************************/
 
 class PunishmentMap extends Map<string, Punishment> {
 	get(k: string) {
@@ -114,21 +133,22 @@ class NestedPunishmentMap extends Map<RoomID, Map<string, Punishment>> {
  *********************************************************/
 
 class PunishmentsStorage {
-	static connect(type: string) {
+	static connect(type: string): IPunishmentsStorage {
 		let storage;
 		if (type === 'memory') {
 			storage = PunishmentsMemoryStorage;
 		} else if (type === 'tsv') {
-			storage = PunishmentsTsvStorage;
+			storage = new CachingPunishmentsStorage(PunishmentsTsvStorage);
 		} else {
 			Monitor.log(`Unrecongized punishments database type: ${type}, defaulting to memory storage.`);
 			storage = PunishmentsMemoryStorage;
 		}
+		storage.load();
 		return storage;
 	}
 }
 
-const PunishmentsMemoryStorage = new class extends PunishmentsStorage {
+const PunishmentsMemoryStorage = new class implements IPunishmentsStorage {
 	load() {}
 
 	appendPunishment(entry: PunishmentEntry, id: string) {
@@ -208,7 +228,7 @@ const PunishmentsMemoryStorage = new class extends PunishmentsStorage {
 	}
 }();
 
-const PunishmentsTsvStorage = new class {
+const PunishmentsTsvStorage = new class implements IPunishmentsStorage {
 	load() {
 		void this.loadPunishments();
 		void this.loadRoomPunishments();
@@ -355,12 +375,6 @@ const PunishmentsTsvStorage = new class {
 		return FS(SHAREDIPS_FILE).append(buf);
 	}
 
-	renderEntry(entry: PunishmentEntry, id: string) {
-		const keys = entry.ips.concat(entry.userids).join(',');
-		const row = [entry.punishType, id, keys, entry.expireTime, entry.reason, ...entry.rest];
-		return row.join('\t') + '\r\n';
-	}
-
 	deleteRoomPunishment(roomid: RoomID, key: string) {
 		PunishmentsTsvStorage.saveRoomPunishments();
 	}
@@ -382,7 +396,63 @@ const PunishmentsTsvStorage = new class {
 	deleteAllSharedIps() {
 		PunishmentsTsvStorage.saveSharedIps();
 	}
+
+	renderEntry(entry: PunishmentEntry, id: string) {
+		const keys = entry.ips.concat(entry.userids).join(',');
+		const row = [entry.punishType, id, keys, entry.expireTime, entry.reason, ...entry.rest];
+		return row.join('\t') + '\r\n';
+	}
 }();
+
+class CachingPunishmentsStorage implements IPunishmentsStorage {
+	storage: IPunishmentsStorage;
+	constructor(storage: IPunishmentsStorage) {
+		this.storage = storage;
+	}
+	load() {
+		this.storage.load();
+	}
+	appendPunishment(entry: PunishmentEntry, id: string) {
+		PunishmentsMemoryStorage.appendPunishment(entry, id);
+		this.storage.appendPunishment(entry, id);
+	}
+	appendRoomPunishment(entry: PunishmentEntry, id: string) {
+		PunishmentsMemoryStorage.appendRoomPunishment(entry, id);
+		this.storage.appendRoomPunishment(entry, id);
+	}
+	appendSharedIp(ip: string, note: string) {
+		PunishmentsMemoryStorage.appendSharedIp(ip, note);
+		this.storage.appendSharedIp(ip, note);
+	}
+	deleteRoomPunishment(roomid: RoomID, key: string) {
+		PunishmentsMemoryStorage.deleteRoomPunishment(roomid, key);
+		this.storage.deleteRoomPunishment(roomid, key);
+	}
+	deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {
+		PunishmentsMemoryStorage.deletePunishmentTypeFromRoom(roomid, punishType);
+		this.storage.deletePunishmentTypeFromRoom(roomid, punishType);
+	}
+	deleteAllPunishmentsOfRoom(roomid: RoomID) {
+		PunishmentsMemoryStorage.deleteAllPunishmentsOfRoom(roomid);
+		this.storage.deleteAllPunishmentsOfRoom(roomid);
+	}
+	deletePunishment(key: string) {
+		PunishmentsMemoryStorage.deletePunishment(key);
+		this.storage.deletePunishment(key);
+	}
+	deleteAllPunishments() {
+		PunishmentsMemoryStorage.deleteAllPunishments();
+		this.storage.deleteAllPunishments();
+	}
+	deleteSharedIp(ip: string) {
+		PunishmentsMemoryStorage.deleteSharedIp(ip);
+		this.storage.deleteSharedIp(ip);
+	}
+	deleteAllSharedIps() {
+		PunishmentsMemoryStorage.deleteAllSharedIps();
+		this.storage.deleteAllSharedIps();
+	}
+}
 
 /*********************************************************
  * Persistence
