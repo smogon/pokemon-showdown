@@ -497,7 +497,7 @@ let BattleAbilities = {
 		num: 14,
 	},
 	"contrary": {
-		desc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa. Stat stage increases caused by the Z-Power effects of status Z-Moves are not inverted by Contrary. However, the stat stage increases by Extreme Evoboost are inverted.",
+		desc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa. Stat stage increases caused by the Z-Power effects of status Z-Moves are not inverted by Contrary, except for Extreme Evoboost.",
 		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
 		onBoost(boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
