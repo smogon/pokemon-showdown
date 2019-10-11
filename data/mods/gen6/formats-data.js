@@ -270,7 +270,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	wigglytuff: {
-		randomBattleMoves: ["reflect", "lightscreen", "healbell", "stealthrock", "memento", "dazzlinggleam"],
+		randomBattleMoves: ["reflect", "lightscreen", "healbell", "stealthrock", "fireblast", "dazzlinggleam"],
 		randomDoubleBattleMoves: ["thunderwave", "reflect", "lightscreen", "protect", "knockoff", "dazzlinggleam", "fireblast", "icebeam", "hypervoice"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
