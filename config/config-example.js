@@ -2,11 +2,7 @@
 
 /**
  * @typedef {Object} Storage
-<<<<<<< HEAD
- * @property {'tsv'} punishments
-=======
  * @property {'memory' | 'tsv'} punishments
->>>>>>> parent of 6f933ea2c... Revert "Punishments: Abstract file and memory storage"
  */
 
 /**
