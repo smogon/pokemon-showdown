@@ -1394,6 +1394,29 @@ export const Chat = new class {
 		delete require.cache[absolutePath];
 	}
 
+	loadPlugin(file: string) {
+		let plugin;
+		if (file.endsWith('.ts')) {
+			plugin = require(`./chat-plugins/${file.slice(0, -3)}`);
+		} else if (file.endsWith('.js')) {
+			// Switch to server/ because we'll be in .server-dist/ after this file is compiled
+			plugin = require(`../server/chat-plugins/${file}`);
+		} else {
+			return;
+		}
+		Object.assign(Chat.commands, plugin.commands);
+		Object.assign(Chat.pages, plugin.pages);
+
+		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
+
+		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
+		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
+		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
+		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
+		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
+		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
+	}
+
 	loadPlugins() {
 		if (Chat.commands) return;
 
@@ -1419,11 +1442,11 @@ export const Chat = new class {
 
 		// All resulting filenames will be relative to basePath
 		const getFiles = (basePath: string, path: string): string[] => {
-			const filesInThisDir = FS(basePath + '/' + path).readdirSync();
+			const filesInThisDir = FS(`${basePath}/${path}`).readdirSync();
 			let allFiles: string[] = [];
 			for (const file of filesInThisDir) {
 				const fileWithPath = path + (path ? '/' : '') + file;
-				if (FS(basePath + '/' + fileWithPath).isDirSync()) {
+				if (FS(`${basePath}/${fileWithPath}`).isDirectorySync()) {
 					if (file.startsWith('.')) continue;
 					allFiles = allFiles.concat(getFiles(basePath, fileWithPath));
 				} else {
@@ -1432,33 +1455,20 @@ export const Chat = new class {
 			}
 			return allFiles;
 		};
-		let files = getFiles('server/chat-plugins', '');
-
-		// info always goes first so other plugins can shadow it
-		files = files.filter(file => file !== 'info.js');
+		let files = FS('server/chat-plugins').readdirSync();
+		// info always goes first so other plugins can shadow it, and private plugins are loaded separately
+		files = files.filter(file => file !== 'info.js' && file !== 'private');
 		files.unshift('info.js');
+		try {
+			if (FS('server/chat-plugins/private').isDirectorySync()) {
+				files = files.concat(getFiles('server/chat-plugins', 'private'));
+			}
+		} catch (err) {
+			if (err.code !== 'ENOENT') throw err;
+		}
 
 		for (const file of files) {
-			let plugin;
-			if (file.endsWith('.ts')) {
-				plugin = require(`./chat-plugins/${file.slice(0, -3)}`);
-			} else if (file.endsWith('.js')) {
-				// Switch to server/ because we'll be in .server-dist/ after this file is compiled
-				plugin = require(`../server/chat-plugins/${file}`);
-			} else {
-				continue;
-			}
-			Object.assign(Chat.commands, plugin.commands);
-			Object.assign(Chat.pages, plugin.pages);
-
-			if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
-
-			if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
-			if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
-			if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
-			if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
-			if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
-			if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
+			this.loadPlugin(file);
 		}
 	}
 	destroy() {

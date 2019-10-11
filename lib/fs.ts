@@ -400,7 +400,7 @@ class FSPath {
 		return fs.statSync(this.path).isFile();
 	}
 
-	async isDir(): Promise<boolean> {
+	async isDirectory(): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			fs.stat(this.path, (err, stats) => {
 				err ? reject(err) : resolve(stats.isDirectory());
@@ -408,7 +408,7 @@ class FSPath {
 		});
 	}
 
-	isDirSync(): boolean {
+	isDirectorySync(): boolean {
 		return fs.statSync(this.path).isDirectory();
 	}
 }
