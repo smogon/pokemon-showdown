@@ -1316,10 +1316,10 @@ let BattleStatuses = {
 			this.boost({atk: 1}, pokemon);
 		},
 		onSwitchOut() {
-			this.add(`c|+Rory Mercury|brb`);
+			this.add(`c|+Rory Mercury|brb running low on battery`);
 		},
 		onFaint() {
-			this.add(`c|+Rory Mercury|/me shook af`);
+			this.add(`c|+Rory Mercury|pressing charges for battery`);
 		},
 	},
 	samjo: {
