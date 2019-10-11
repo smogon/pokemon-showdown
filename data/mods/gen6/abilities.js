@@ -23,6 +23,17 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective against this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, Hidden Power counts as its determined type, and Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
 	},
+	"contrary": {
+		inherit: true,
+		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
+		onBoost(boost, target, source, effect) {
+			for (let i in boost) {
+				// @ts-ignore
+				boost[i] *= -1;
+			}
+		},
+		rating: 4.5,
+	},
 	"damp": {
 		inherit: true,
 		desc: "While this Pokemon is active, Explosion, Self-Destruct, and the Aftermath Ability are prevented from having an effect.",
@@ -119,6 +130,17 @@ let BattleAbilities = {
 				this.damage(source.maxhp / 8, source, target, null, true);
 			}
 		},
+	},
+	"simple": {
+		inherit: true,
+		shortDesc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
+		onBoost(boost, target, source, effect) {
+			for (let i in boost) {
+				// @ts-ignore
+				boost[i] *= 2;
+			}
+		},
+		rating: 4.5,
 	},
 	"stancechange": {
 		inherit: true,
