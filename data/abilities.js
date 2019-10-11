@@ -497,7 +497,7 @@ let BattleAbilities = {
 		num: 14,
 	},
 	"contrary": {
-		desc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa. This Ability does not affect the stat stages received from Z-Power effects.",
+		desc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa. This Ability does not affect the stat stages received from Z-Power effects (note that boosting Z-moves like Extreme Evoboost are not Z-power effects).",
 		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
 		onBoost(boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
@@ -3056,7 +3056,7 @@ let BattleAbilities = {
 		num: 197,
 	},
 	"simple": {
-		desc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead. This Ability does not affect the stat stages received from Z-Power effects.",
+		desc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead. This Ability does not affect the stat stages received from Z-Power effects (note that boosting Z-moves like Extreme Evoboost are not Z-power effects).",
 		shortDesc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 		onBoost(boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
