@@ -173,7 +173,7 @@ let BattleAbilities = {
 		name: "Distortion World",
 		isNonstandard: "Custom",
 		onStart() {
-			this.field.setTerrain('distortionworld');
+			this.field.addPseudoWeather('distortionworld');
 		},
 	},
 	// A Quag To The Past

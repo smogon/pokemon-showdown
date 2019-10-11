@@ -561,15 +561,9 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Dark Void', source);
 			this.add('-anim', target, 'Dark Void', target);
 		},
-		terrain: 'distortionworld',
+		pseudoWeather: 'distortionworld',
 		effect: {
 			duration: 5,
-			durationCallback(source, effect) {
-				if (source && source.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Ghost') {
 					this.debug('distortion world boost');
