@@ -375,8 +375,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Iyarito': {
 				species: 'Vaporeon', ability: 'Poison Heal', item: 'Leftovers', gender: 'F',
-				moves: ['Scald', 'Wish', 'Toxic'],
-				signatureMove: 'Víbora',
+				moves: ['Scald', 'Recover', 'Toxic'],
+				signatureMove: 'Rosa Rosa',
 				evs: {hp: 252, def: 220, spd: 36}, nature: 'Bold', shiny: true,
 			},
 			'Jolteonite': {

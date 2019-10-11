@@ -2223,14 +2223,14 @@ let BattleMovedex = {
 		type: "Psychic",
 	},
 	// Iyarito
-	vbora: {
+	rosarosa: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "Cures the user's party of all status conditions, then poisons the user.",
 		shortDesc: "Cures party's statuses, then poisons self.",
-		id: "vbora",
-		name: "Víbora",
+		id: "rosarosa",
+		name: "Rosa Rosa",
 		isNonstandard: "Custom",
 		pp: 5,
 		flags: {mirror: 1, snatch: 1},
