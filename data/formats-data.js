@@ -665,7 +665,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	wigglytuff: {
-		randomBattleMoves: ["reflect", "lightscreen", "healbell", "stealthrock", "memento", "dazzlinggleam"],
+		randomBattleMoves: ["reflect", "lightscreen", "healbell", "stealthrock", "fireblast", "dazzlinggleam"],
 		randomDoubleBattleMoves: ["thunderwave", "reflect", "lightscreen", "protect", "dazzlinggleam", "fireblast", "icebeam", "hypervoice"],
 		encounters: [
 			{"generation": 1, "level": 22},
