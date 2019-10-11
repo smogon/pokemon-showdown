@@ -2999,7 +2999,7 @@ let BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Base Power rises by 20 for each of the user's positive stat stage changes. The user loses any defensive boosts not from Stockpile.",
-		shortDesc: "+20 BP per boost. Resets non-Stockpile boosts.",
+		shortDesc: "+20 BP per boost. Lose non-Stockpile +Def/SpD.",
 		id: "tippingover",
 		name: "Tipping Over",
 		isNonstandard: "Custom",
