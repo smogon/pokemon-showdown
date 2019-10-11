@@ -875,7 +875,7 @@ let BattleAbilities = {
 		},
 		onModifyDef(def, pokemon) {
 			if (this.field.isWeather(['raindance', 'primordialsea'])) {
-				return this.chainModify(1.5);
+				return this.chainModify(2);
 			}
 		},
 	},
