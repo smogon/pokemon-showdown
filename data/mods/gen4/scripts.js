@@ -90,8 +90,8 @@ let BattleScripts = {
 
 		return Math.floor(baseDamage);
 	},
-	hitStepTryImmunityEvent(targets, pokemon, move) {
-		const hitResults = this.runEvent('TryImmunity', targets, pokemon, move);
+	hitStepTryInvulnerabilityEvent(targets, pokemon, move) {
+		const hitResults = this.runEvent('TryInvulnerability', targets, pokemon, move);
 		for (const [i, target] of targets.entries()) {
 			if (!hitResults[i]) {
 				this.attrLastMove('[miss]');
