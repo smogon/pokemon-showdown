@@ -1866,7 +1866,6 @@ const commands = {
 			if (!targetUser || !globalWarn) return this.errorReply(`User '${this.targetUsername}' not found.`);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(target ? ` (${target})` : ``)}`);
-			this.modlog('WARN OFFLINE', targetUser, target, {noalts: 1});
 			this.globalModlog('WARN OFFLINE', targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 			return;
 		}
@@ -1887,8 +1886,11 @@ const commands = {
 		}
 
 		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(target ? ` (${target})` : ``)}`);
-		this.modlog('WARN', targetUser, target, {noalts: 1});
-		if (globalWarn) this.globalModlog('WARN', targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+		if (globalWarn) {
+			this.globalModlog('WARN', targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
+		} else {
+			this.modlog('WARN', targetUser, target, {noalts: 1});
+		}
 		targetUser.send(`|c|~|/warn ${target}`);
 
 		const userid = targetUser.getLastId();
@@ -2445,8 +2447,12 @@ const commands = {
 		}
 		if (!this.can('receiveauthmessages', null, room)) return false;
 		target = target.replace(/\n/g, "; ");
-		this.modlog('NOTE', null, target);
-		if (room.roomid === 'staff' || room.roomid === 'upperstaff') this.globalModlog('NOTE', null, ` by ${user.id}: ${target}`);
+		if (room.roomid === 'staff' || room.roomid === 'upperstaff') {
+			this.globalModlog('NOTE', null, ` by ${user.id}: ${target}`);
+		} else {
+			this.modlog('NOTE', null, target);
+		}
+
 		return this.privateModAction(`(${user.name} notes: ${target})`);
 	},
 	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ # & ~`],
@@ -2727,14 +2733,12 @@ const commands = {
 		if (targetUser.connected) {
 			forceRenameMessage = `was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
 			this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
-			this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
 			Chat.forceRenames.set(targetUser.id, (Chat.forceRenames.get(targetUser.id) || 0) + 1);
 			Ladders.cancelSearches(targetUser);
 			targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
 		} else {
 			forceRenameMessage = `would be forced to choose a new name by ${user.name} but is offline${(reason ? `: ${reason}` : ``)}`;
 			this.globalModlog('FORCERENAME OFFLINE', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
-			this.modlog('FORCERENAME OFFLINE', targetUser, reason, {noip: 1, noalts: 1});
 			if (!Chat.forceRenames.has(targetUser.id)) Chat.forceRenames.set(targetUser.id, 0);
 		}
 
