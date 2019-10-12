@@ -683,7 +683,7 @@ export const Punishments = new class {
 		const roomObject = Rooms.get(room);
 		const userObject = Users.get(user);
 		if (roomObject && roomObject.battle && userObject && userObject.connections[0]) {
-			Chat.parse('/savereplay', roomObject, userObject, userObject.connections[0]);
+			Chat.parse('/savereplay forpunishment', roomObject, userObject, userObject.connections[0]);
 		}
 	}
 	unlock(name: string) {

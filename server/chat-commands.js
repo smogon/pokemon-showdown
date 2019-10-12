@@ -4151,7 +4151,6 @@ const commands = {
 		}
 
 		const forPunishment = target === 'forpunishment';
-		if (forPunishment && !this.can('lock')) return false;
 
 		const battle = room.battle;
 		// retrieve spectator log (0) if there are privacy concerns
