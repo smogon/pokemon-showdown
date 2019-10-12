@@ -508,6 +508,7 @@ exports.commands = {
 	'!modlog': true,
 	ml: 'modlog',
 	punishlog: 'modlog',
+	pl: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
 		if (!room) room = Rooms.get('global');
@@ -550,7 +551,7 @@ exports.commands = {
 		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
 		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
 
-		getModlog(connection, roomid, target, lines, cmd === 'punishlog', cmd === 'timedmodlog');
+		getModlog(connection, roomid, target, lines, (cmd === 'punishlog' || cmd === 'pl'), cmd === 'timedmodlog');
 	},
 	modloghelp: [
 		`/modlog OR /ml [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
