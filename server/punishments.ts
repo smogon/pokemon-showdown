@@ -679,6 +679,12 @@ export const Punishments = new class {
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		Rooms.global.modlog(`(${roomid}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
+
+		const roomObject = Rooms.get(room);
+		const userObject = Users.get(user);
+		if (roomObject && roomObject.battle && userObject && userObject.connections[0]) {
+			Chat.parse('/savereplay forpunishment', roomObject, userObject, userObject.connections[0]);
+		}
 	}
 	unlock(name: string) {
 		const user = Users.get(name);
