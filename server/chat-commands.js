@@ -1898,6 +1898,9 @@ const commands = {
 		if (userid !== toID(this.inputUsername)) this.add(`|unlink|${toID(this.inputUsername)}`);
 
 		targetUser.lastWarnedAt = now;
+
+		// Automatically upload replays as evidence/reference to the punishment
+		if (globalWarn && room.battle) this.parse('/savereplay forpunishment');
 	},
 	warnhelp: [`/warn OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. Requires: % @ # & ~`],
 
@@ -4152,7 +4155,6 @@ const commands = {
 		}
 
 		const forPunishment = target === 'forpunishment';
-		if (forPunishment && !this.can('lock')) return false;
 
 		const battle = room.battle;
 		// retrieve spectator log (0) if there are privacy concerns
