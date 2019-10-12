@@ -388,27 +388,27 @@ class FSPath {
 		fs.unwatchFile(this.path);
 	}
 
-	async isFile(): Promise<boolean> {
-		return new Promise((resolve, reject) => {
+	async isFile() {
+		return new Promise<boolean>((resolve, reject) => {
 			fs.stat(this.path, (err, stats) => {
 				err ? reject(err) : resolve(stats.isFile());
 			});
 		});
 	}
 
-	isFileSync(): boolean {
+	isFileSync() {
 		return fs.statSync(this.path).isFile();
 	}
 
-	async isDirectory(): Promise<boolean> {
-		return new Promise((resolve, reject) => {
+	async isDirectory() {
+		return new Promise<boolean>((resolve, reject) => {
 			fs.stat(this.path, (err, stats) => {
 				err ? reject(err) : resolve(stats.isDirectory());
 			});
 		});
 	}
 
-	isDirectorySync(): boolean {
+	isDirectorySync() {
 		return fs.statSync(this.path).isDirectory();
 	}
 }
