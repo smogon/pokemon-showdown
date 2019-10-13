@@ -23,12 +23,12 @@
   "scripts": {
     "start": "node pokemon-showdown start",
     "build": "node build",
-    "tsc": "tsc",
-    "lint": "eslint --cache . && tslint --project .",
+    "tsc": "npx tsc",
+    "lint": "npx eslint --cache . && npx tslint --project .",
     "pretest": "npm run lint && npm run build",
-    "test": "mocha",
+    "test": "npx mocha",
     "posttest": "npm run tsc",
-    "fulltest": "npm run pretest && npm run tsc && mocha -g \".*\""
+    "fulltest": "npm run pretest && npm run tsc && npx mocha -g \".*\""
   },
   "husky": {
     "hooks": {
