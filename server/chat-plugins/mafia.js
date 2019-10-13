@@ -3073,7 +3073,7 @@ const commands = {
 		},
 		leaderboardhelp: [
 			`/mafia [leaderboard|mvpladder] - View the leaderboard or MVP ladder for the current or last month.`,
-			`/mafia [hostlost|playlogs|leaverlogs] - View the host, play, or leaver logs for the current or last month. Requires % @ # & ~`,
+			`/mafia [hostlogs|playlogs|leaverlogs] - View the host, play, or leaver logs for the current or last month. Requires % @ # & ~`,
 		],
 
 		unhostban: 'hostban',
@@ -3250,7 +3250,7 @@ const commands = {
 			`/mafia mvp [user1], [user2], ... - Gives a MVP point and 10 leaderboard points to the users specified.`,
 			`/mafia unmvp [user1], [user2], ... - Takes away a MVP point and 10 leaderboard points from the users specified.`,
 			`/mafia [leaderboard|mvpladder] - View the leaderboard or MVP ladder for the current or last month.`,
-			`/mafia [hostlost|playlogs] - View the host logs or play logs for the current or last month. Requires % @ # & ~`,
+			`/mafia [hostlogs|playlogs] - View the host logs or play logs for the current or last month. Requires % @ # & ~`,
 			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # & ~`,
 			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ # & ~`,
 			`/mafia hostbans - Checks current hostbans. Requires % @ # & ~`,
