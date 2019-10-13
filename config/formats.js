@@ -682,7 +682,7 @@ let Formats = [
 			if (problem.length) return problem;
 
 			let template = Dex.getTemplate(set.species);
-			if (!template.exists) return [`The Pok\u00e9mon "${set.species}" does not exist.`];
+			if (!template.exists || template.isNonstandard) return [`The Pok\u00e9mon "${set.species}" does not exist.`];
 			if (template.isUnreleased) return [`${template.species} is unreleased.`];
 
 			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
