@@ -1195,7 +1195,7 @@ export class TeamValidator {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
-		setHas['move:' + item.id] = true;
+		setHas['item:' + item.id] = true;
 
 		let banReason = ruleTable.check('item:' + item.id);
 		if (banReason) {
