@@ -436,6 +436,7 @@
 45.127.92.0,45.127.95.255,Host US,http://hostus.us/
 45.127.94.0,45.127.95.255,Host US,http://hostus.us/
 45.162.228.0,45.162.231.255,Qnax Data Center,https://qnax.com.br/
+45.228.208.0,45.228.211.255,Zglobalhost Datacenter,https://www.zgh.cl/
 45.248.76.0,45.248.78.255,Host Universal,https://internet-thinking.com.au/
 46.4.0.0,46.4.255.255,Hetzner Online AG,http://www.hetzner.de/
 46.16.184.0,46.16.191.255,SoftLayer,http://www.softlayer.com/
@@ -1361,6 +1362,7 @@
 89.184.160.0,89.184.191.255,Red Hosting,http://redhosting.nl/
 89.185.224.0,89.185.255.255,Master Internet S.R.O.,http://www.master.cz/
 89.187.160.0,89.187.161.255,DataCamp Limited,https://www.datacamp.co.uk/
+89.187.162.0,89.187.163.255,CDN77,https://www.cdn77.com/
 89.187.166.0,89.187.167.255,DataCamp Limited,https://www.datacamp.co.uk/
 89.187.175.0,89.187.175.255,DataCamp Limited,https://www.datacamp.co.uk/
 89.200.136.0,89.200.143.255,Memset Ltd,http://www.memset.com/
@@ -1487,6 +1489,10 @@
 92.114.94.0,92.114.95.255,mxhost,http://www.mxhost.ro/
 92.114.96.0,92.114.97.255,simpliq.com,http://www.simpliq.com/
 92.114.98.0,92.114.98.255,Elvsoft,http://www.elvsoft.com/
+92.119.176.0,92.119.176.255,M247,https://m247.com/
+92.119.177.0,92.119.177.255,M247,https://m247.com/
+92.119.178.0,92.119.178.255,M247,https://m247.com/
+92.119.179.0,92.119.179.255,M247,https://m247.com/
 92.122.0.0,92.123.255.255,Akamai,http://akamai.com/
 92.222.0.0,92.222.255.255,OVH,http://www.ovh.co.uk/
 92.241.160.0,92.241.191.255,Webalta,http://www.wahome.ru/
@@ -2487,6 +2493,7 @@
 185.201.42.0,185.201.42.255,FXTrading,http://fxtrading.net/
 185.205.207.0,185.205.207.255,FXTrading,http://fxtrading.net/
 185.208.154.0,185.208.154.255,FXTrading,http://fxtrading.net/
+185.209.176.0,185.209.179.255,Maxihost,https://www.maxihost.com/
 185.212.168.0,185.212.171.255,M247 Dedicated Servers,https://m247.com/
 185.212.226.0,185.212.226.255,SHPV,https://www.shpv.fr/
 185.217.68.0,185.217.68.255,M247,https://www.m247.com/
@@ -2502,6 +2509,7 @@
 185.230.125.0,185.230.125.255,M247,https://www.m247.com/
 185.230.126.0,185.230.126.255,M247,https://www.m247.com/
 185.230.127.0,185.230.127.255,M247,https://www.m247.com/
+186.233.184.0,186.233.187.255,Maxihost,https://www.maxihost.com/
 185.236.200.0,185.236.200.255,M247 Dedicated Servers,https://m247.com/
 185.242.4.0,185.242.4.255,M247,https://www.m247.com/
 185.242.5.0,185.242.5.255,M247,https://www.m247.com/
@@ -2722,8 +2730,6 @@
 193.28.228.0,193.28.228.255,T-N Media Network,http://t-n-media.de/
 193.31.40.0,193.31.43.255,Digital Energy Technologies,https://det.global/
 193.34.88.0,193.34.91.255,easyhost.be,http://easyhost.be/
-193.34.128.0,193.34.131.255,Hostroyale Technologies Pvt Ltd,https://hostroyale.com/
-193.34.132.0,193.34.135.255,Creanova Hosting Solutions Ltd,https://creanova.org/
 193.34.144.0,193.34.145.255,Giga-Hosting GmbH,http://giga-hosting.biz/
 193.34.166.0,193.34.167.255,Snel Internet Services B.V.,https://www.snelserver.com/
 193.37.152.0,193.37.152.255,Giga-Hosting GmbH,http://giga-hosting.biz/
@@ -2789,6 +2795,8 @@
 194.28.132.0,194.28.135.255,vds64.com,http://vds64.com/
 194.30.168.0,194.30.168.255,smart-hosting.ro,http://smart-hosting.ro/
 194.30.189.0,194.30.189.255,NetBenefit,http://www.netbenefit.com/
+194.34.128.0,194.34.131.255,CoreIP Solutions,http://www.coreipsolutions.com/
+194.34.132.0,193.34.135.255,Creanova Hosting Solutions Ltd,https://creanova.org/
 194.54.88.0,194.54.91.255,hosting.ua,http://hosting.ua/
 194.59.249.0,194.59.251.255,M247,https://m247.com/
 194.63.140.0,194.63.143.255,nthost.ru,http://nthost.ru/
@@ -3063,6 +3071,7 @@
 199.231.184.0,199.231.191.255,InterServer.net,http://www.interserver.net/
 199.231.224.0,199.231.227.255,ionity,http://ionity.com/
 199.233.180.0,199.233.180.255,XMission,http://xmission.com/
+199.241.125.0,199.241.125.255,Micfo,https://www.micfo.com/
 199.241.136.0,199.241.143.255,fiberhub.com,http://www.fiberhub.com/
 199.241.144.0,199.241.147.255,hugeserver,http://www.hugeserver.com/
 199.244.112.0,199.244.119.255,hugeserver,http://www.hugeserver.com/
