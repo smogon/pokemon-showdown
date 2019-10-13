@@ -3028,7 +3028,7 @@ const commands = {
 		const userRank = Config.groupsranking.indexOf(room.getAuth(user));
 		for (const userid of targets) {
 			if (!userid) return this.errorReply(`User '${userid}' is not a valid userid.`);
-			const targetRank = Config.groupsranking.indexOf(room.getAuth({userid}));
+			const targetRank = Config.groupsranking.indexOf(room.getAuth({id: userid}));
 			if (targetRank >= userRank) return this.errorReply(`/blacklistname - Access denied: ${userid} is of equal or higher authority than you.`);
 
 			Punishments.roomBlacklist(room, null, null, userid, reason);
