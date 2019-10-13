@@ -2730,8 +2730,6 @@
 193.28.228.0,193.28.228.255,T-N Media Network,http://t-n-media.de/
 193.31.40.0,193.31.43.255,Digital Energy Technologies,https://det.global/
 193.34.88.0,193.34.91.255,easyhost.be,http://easyhost.be/
-193.34.128.0,193.34.131.255,Hostroyale Technologies Pvt Ltd,https://hostroyale.com/
-193.34.132.0,193.34.135.255,Creanova Hosting Solutions Ltd,https://creanova.org/
 193.34.144.0,193.34.145.255,Giga-Hosting GmbH,http://giga-hosting.biz/
 193.34.166.0,193.34.167.255,Snel Internet Services B.V.,https://www.snelserver.com/
 193.37.152.0,193.37.152.255,Giga-Hosting GmbH,http://giga-hosting.biz/
@@ -2797,6 +2795,8 @@
 194.28.132.0,194.28.135.255,vds64.com,http://vds64.com/
 194.30.168.0,194.30.168.255,smart-hosting.ro,http://smart-hosting.ro/
 194.30.189.0,194.30.189.255,NetBenefit,http://www.netbenefit.com/
+194.34.128.0,194.34.131.255,CoreIP Solutions,http://www.coreipsolutions.com/
+193.34.132.0,193.34.135.255,Creanova Hosting Solutions Ltd,https://creanova.org/
 194.54.88.0,194.54.91.255,hosting.ua,http://hosting.ua/
 194.59.249.0,194.59.251.255,M247,https://m247.com/
 194.63.140.0,194.63.143.255,nthost.ru,http://nthost.ru/
