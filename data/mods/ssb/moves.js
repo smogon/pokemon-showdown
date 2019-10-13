@@ -2728,7 +2728,9 @@ let BattleMovedex = {
 			// Trigger sleep clause if not the original user
 			if (!(target === napWeather.source)) {
 				for (const ally of target.side.pokemon) {
-					if (ally.status === 'slp') return false;
+					if (ally.status === 'slp') {
+						if (!(ally.statusData.source && ally.statusData.source.side === ally.side)) return false;
+					}
 				}
 			}
 			if (!target.setStatus('slp', napWeather.source, move)) return false;
