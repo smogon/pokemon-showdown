@@ -1518,7 +1518,7 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 				tournament.forceTimer = false;
 				this.room.add('Forcetimer is now off for the tournament.');
 				this.privateModAction(`(The timer was turned off for the tournament by ${user.name})`);
-				this.modlog('TOUR FORCETIMER', null, 'ON');
+				this.modlog('TOUR FORCETIMER', null, 'OFF');
 			} else {
 				return this.sendReply(`Usage: ${cmd} <on|off>`);
 			}
