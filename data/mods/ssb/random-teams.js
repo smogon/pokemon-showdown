@@ -655,7 +655,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Brave Bird',
 				evs: {atk: 128, spa: 128, spe: 252}, nature: 'Naive',
 			},
-			'SparksBlade': {
+			'sparksblade': {
 				species: 'Blacephalon', ability: 'Magic Guard', item: 'Life Orb', gender: 'N',
 				moves: ['Mind Blown', 'Shadow Ball', 'Explosion'],
 				signatureMove: 'Kratosmana',
