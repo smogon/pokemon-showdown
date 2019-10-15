@@ -61,6 +61,20 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should validate Gen 7 IVs', function () {
+		let team = [
+			{species: 'yveltal', ability: 'darkaura', moves: ['hiddenpowerfighting'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen7ubers').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'latiasmega', ability: 'levitate', item: 'latiasite', moves: ['hiddenpowerfighting'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ubers').validateTeam(team);
+		assert.strictEqual(illegal, null);
+	});
+
 	it('should reject non-existent natures', function () {
 		let team = [
 			{species: 'pikachu', ability: 'static', moves: ['thunderbolt'], nature: 'nonexistentNature', evs: {hp: 1}},

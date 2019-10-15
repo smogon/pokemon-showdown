@@ -868,7 +868,8 @@ let BattleScripts = {
 						didAnything = this.combineResults(didAnything, null);
 						continue;
 					}
-					let d = target.heal((this.gen < 5 ? Math.floor : Math.round)(target.maxhp * moveData.heal[0] / moveData.heal[1]));
+					let amount = target.maxhp * moveData.heal[0] / moveData.heal[1];
+					let d = target.heal((this.gen < 5 ? Math.floor : Math.round)(amount));
 					if (!d && d !== 0) {
 						this.add('-fail', pokemon);
 						this.attrLastMove('[still]');

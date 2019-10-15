@@ -216,12 +216,12 @@ export class TeamValidator {
 			return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 		}
 
-		let lengthRange = format.teamLength && format.teamLength.validate;
-		if (!lengthRange) lengthRange = [1, 6];
-		if (format.gameType === 'doubles' && lengthRange[0] < 2) lengthRange[0] = 2;
-		if ((format.gameType === 'triples' || format.gameType === 'rotation') && lengthRange[0] < 3) lengthRange[0] = 3;
-		if (team.length < lengthRange[0]) problems.push(`You must bring at least ${lengthRange[0]} Pok\u00E9mon.`);
-		if (team.length > lengthRange[1]) return [`You may only bring up to ${lengthRange[1]} Pok\u00E9mon.`];
+		let [minSize, maxSize] = format.teamLength && format.teamLength.validate || [1, 6];
+		if (format.gameType === 'doubles' && minSize < 2) minSize = 2;
+		if (['triples', 'rotation'].includes(format.gameType as 'triples') && minSize < 3) minSize = 3;
+
+		if (team.length < minSize) problems.push(`You must bring at least ${minSize} Pok\u00E9mon.`);
+		if (team.length > maxSize) return [`You may only bring up to ${maxSize} Pok\u00E9mon.`];
 
 		// A limit is imposed here to prevent too much engine strain or
 		// too much layout deformation - to be exact, this is the limit
@@ -341,7 +341,6 @@ export class TeamValidator {
 		if (set.species !== set.name && template.baseSpecies !== set.name) {
 			name = `${set.name} (${set.species})`;
 		}
-		const setSources = this.allSources(template);
 
 		const setHas: {[k: string]: true} = {};
 
@@ -354,6 +353,7 @@ export class TeamValidator {
 			problems.push(...this.validateForme(set));
 			template = dex.getTemplate(set.species);
 		}
+		const setSources = this.allSources(template);
 
 		for (const [rule] of ruleTable) {
 			const subformat = dex.getFormat(rule);
