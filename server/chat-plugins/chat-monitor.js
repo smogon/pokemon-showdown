@@ -47,9 +47,6 @@ for (const letter in EVASION_DETECTION_SUBSTITUTIONS) {
 /** @type {{[k: string]: [RegExp, string, string, string?, number][]}} */
 let filterWords = Chat.filterWords;
 
-/** @type {Map<string, RegExp>} */
-let evasionFilterCache = new Map();
-
 /**
  * @param {string} str
  */
@@ -145,12 +142,7 @@ Chat.registerMonitor('evasion', {
 	punishment: 'EVASION',
 	label: 'Filter Evasion Detection',
 	monitor(line, room, user, message, lcMessage, isStaff) {
-		let [, word, reason] = line;
-		let regex = evasionFilterCache.get(word);
-		if (!regex) {
-			regex = constructEvasionRegex(word);
-			evasionFilterCache.set(word, regex);
-		}
+		let [regex, word, reason] = line;
 		// Remove spaces and obvious false positives
 		lcMessage = lcMessage.replace(/\bniger\b/g, '').replace(/\bnigeria/g, '');
 		lcMessage = lcMessage.replace(/[\s-_]/g, '');
@@ -253,7 +245,13 @@ FS(MONITOR_FILE).readIfExists().then(data => {
 		for (const key in Chat.monitors) {
 			if (Chat.monitors[key].location === location && Chat.monitors[key].punishment === punishment) {
 				const filterTo = rest[0];
-				filterWords[key].push([new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, filterTo ? 'ig' : 'i'), word, reason, filterTo, parseInt(times) || 0]);
+				let regex;
+				if (punishment === 'EVASION') {
+					regex = constructEvasionRegex(word);
+				} else {
+					regex = new RegExp(punishment === 'SHORTENER' ? `\\b${word}` : word, filterTo ? 'ig' : 'i');
+				}
+				filterWords[key].push([regex, word, reason, filterTo, parseInt(times) || 0]);
 
 				continue loop;
 			}
@@ -314,17 +312,7 @@ let namefilter = function (name, user) {
 
 	for (const list in filterWords) {
 		for (let line of filterWords[list]) {
-			let [regex, word] = line;
-
-			if (Chat.monitors[list].punishment === 'EVASION') {
-				let _regex = evasionFilterCache.get(word);
-				if (!_regex) {
-					regex = constructEvasionRegex(word);
-					evasionFilterCache.set(word, regex);
-				} else {
-					regex = _regex;
-				}
-			}
+			let [regex] = line;
 
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK' || Chat.monitors[list].punishment === 'EVASION') {
@@ -361,17 +349,7 @@ let nicknamefilter = function (name, user) {
 
 	for (const list in filterWords) {
 		for (let line of filterWords[list]) {
-			let [regex, word] = line;
-
-			if (Chat.monitors[list].punishment === 'EVASION') {
-				let _regex = evasionFilterCache.get(word);
-				if (!_regex) {
-					regex = constructEvasionRegex(word);
-					evasionFilterCache.set(word, regex);
-				} else {
-					regex = _regex;
-				}
-			}
+			let [regex] = line;
 
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK' || Chat.monitors[list].punishment === 'EVASION') {
@@ -399,17 +377,7 @@ let statusfilter = function (status, user) {
 
 	for (const list in filterWords) {
 		for (let line of filterWords[list]) {
-			let [regex, word] = line;
-
-			if (Chat.monitors[list].punishment === 'EVASION') {
-				let _regex = evasionFilterCache.get(word);
-				if (!_regex) {
-					regex = constructEvasionRegex(word);
-					evasionFilterCache.set(word, regex);
-				} else {
-					regex = _regex;
-				}
-			}
+			let [regex] = line;
 
 			if (regex.test(lcStatus)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK' || Chat.monitors[list].punishment === 'EVASION') {
@@ -491,7 +459,11 @@ let commands = {
 			/** @type {RegExp} */
 			let regex;
 			try {
-				regex = new RegExp(Chat.monitors[list].punishment === 'SHORTENER' ? `\\b${word}` : word, filterTo ? 'ig' : 'i'); // eslint-disable-line no-unused-vars
+				if (Chat.monitors[list].punishment === 'EVASION') {
+					regex = constructEvasionRegex(word);
+				} else {
+					regex = new RegExp(Chat.monitors[list].punishment === 'SHORTENER' ? `\\b${word}` : word, filterTo ? 'ig' : 'i'); // eslint-disable-line no-unused-vars
+				}
 			} catch (e) {
 				return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
 			}
