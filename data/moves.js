@@ -13500,9 +13500,14 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onTryMove(pokemon) {
-			if (pokemon.hp < pokemon.maxhp && pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return;
-			this.add('-fail', pokemon);
-			return null;
+			if (pokemon.hp === pokemon.maxhp) {
+				this.add('-fail', pokemon, 'heal');
+				return null;
+			}
+			if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
+				this.add('-fail', pokemon);
+				return null;
+			}
 		},
 		onHit(target, source, move) {
 			if (!target.setStatus('slp', source, move)) return false;
