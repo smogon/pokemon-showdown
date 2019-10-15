@@ -281,7 +281,7 @@ const commands = {
 			}
 		}
 
-		let punishments = Punishments.getRoomPunishments(targetUser || {userid});
+		let punishments = Punishments.getRoomPunishments(targetUser || {id: userid});
 
 		if (punishments && punishments.length) {
 			buf += `<br />Room punishments: `;
