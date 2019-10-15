@@ -861,6 +861,13 @@ let BattleScripts = {
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
 				if (moveData.heal && !target.fainted) {
+					if (target.hp >= target.maxhp) {
+						this.add('-fail', pokemon, 'heal');
+						this.attrLastMove('[still]');
+						damage[i] = this.combineResults(damage[i], false);
+						didAnything = this.combineResults(didAnything, null);
+						continue;
+					}
 					let d = target.heal((this.gen < 5 ? Math.floor : Math.round)(target.maxhp * moveData.heal[0] / moveData.heal[1]));
 					if (!d && d !== 0) {
 						this.add('-fail', pokemon);
