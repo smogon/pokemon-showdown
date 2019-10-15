@@ -37,10 +37,11 @@ describe('Users features', function () {
 
 				it('should destroy any user on the connection as well', function () {
 					let user = new User(this.connection);
-					let {userid} = user;
+					let userid = user.id;
+					assert.strictEqual(Users.users.has(userid), true, 'before disconnecting');
 					user.disconnectAll();
 					user.destroy();
-					assert.strictEqual(Users.users.has(userid), false);
+					assert.strictEqual(Users.users.has(userid), false, 'after disconnecting');
 				});
 			});
 
