@@ -205,7 +205,7 @@ class RandomTeams {
 			} else if (template.learnset) {
 				// @ts-ignore
 				pool = Object.keys(template.learnset).filter(moveid => template.learnset[moveid].find(learned => learned.startsWith(this.gen)));
-				if (template.species.substr(0, 6) === 'Rotom-') {
+				if (template.species.substr(0, 9) === 'Necrozma-' || template.species.substr(0, 6) === 'Rotom-') {
 					const learnset = this.dex.getTemplate(template.baseSpecies).learnset;
 					if (learnset) pool = [...new Set(pool.concat(Object.keys(learnset)))];
 				}
