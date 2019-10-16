@@ -997,23 +997,27 @@ export class TeamValidator {
 		const noEggIncompatibility = template.eggGroups.includes('Field');
 		for (const move of moves) {
 			let curTemplate: Template | null = template;
-			while (curTemplate && !curTemplate.learnset![move]) {
-				curTemplate = this.learnsetParent(curTemplate);
-			}
-			if (!curTemplate) return false;
 			/** 1 = can learn from egg, 2 = can learn unrestricted */
 			let canLearn: 0 | 1 | 2 = 0;
-			for (const moveSource of curTemplate.learnset![move]) {
-				if (parseInt(moveSource.charAt(0)) > eggGen) continue;
-				if (!'ESDV'.includes(moveSource.charAt(1)) || (
-					moveSource.charAt(1) === 'E' && noEggIncompatibility
-				)) {
-					canLearn = 2;
-					break;
-				} else {
-					canLearn = 1;
+
+			while (curTemplate) {
+				if (curTemplate.learnset && curTemplate.learnset[move]) {
+					for (const moveSource of curTemplate.learnset[move]) {
+						if (parseInt(moveSource.charAt(0)) > eggGen) continue;
+						if (!'ESDV'.includes(moveSource.charAt(1)) || (
+							moveSource.charAt(1) === 'E' && noEggIncompatibility
+						)) {
+							canLearn = 2;
+							break;
+						} else {
+							canLearn = 1;
+						}
+					}
 				}
+				if (canLearn === 2) break;
+				curTemplate = this.learnsetParent(curTemplate);
 			}
+
 			if (!canLearn) return false;
 			if (canLearn === 1) {
 				eggMoveCount++;

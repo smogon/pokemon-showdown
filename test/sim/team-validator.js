@@ -217,6 +217,12 @@ describe('Team Validator', function () {
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert(illegal);
 
+		team = [
+			{species: 'weezing', ability: 'levitate', moves: ['painsplit', 'willowisp'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen3ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
 		// chainbreed smeargle to snubbull to chansey
 		team = [
 			{species: 'blissey', moves: ['present', 'healbell']},
