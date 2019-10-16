@@ -591,7 +591,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Rach': {
 				species: 'Pikachu-Libre', ability: 'Huge Power', item: 'Fightinium Z', gender: 'F',
-				moves: ['Flying Press', 'Icicle Crash', 'Thousand Arrows'],
+				moves: ['Flying Press', 'Throat Chop', 'Thousand Arrows'],
 				signatureMove: 'Stunner',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
