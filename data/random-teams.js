@@ -1471,7 +1471,7 @@ class RandomTeams {
 			item = '';
 		} else if (((hasMove['darkpulse'] && ability === 'Fur Coat' && counter.setupType) || (hasMove['suckerpunch'] && ability === 'Moxie' && counter['Dark'] < 2)) && !teamDetails.zMove) {
 			item = 'Darkinium Z';
-		} else if (hasMove['outrage'] && counter.setupType && !teamDetails.zMove) {
+		} else if (hasMove['outrage'] && counter.setupType && !hasMove['fly'] && !teamDetails.zMove) {
 			item = 'Dragonium Z';
 		} else if (hasMove['electricterrain'] || ability === 'Electric Surge' && hasMove['thunderbolt']) {
 			item = 'Electrium Z';
