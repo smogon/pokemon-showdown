@@ -665,7 +665,7 @@ export class CommandContext extends MessageContext {
 		buf += note.replace(/\n/gm, ' ');
 
 		Rooms.global.modlog(buf);
-		this.room.modlog(buf);
+		if (this.room !== Rooms.global) this.room.modlog(buf);
 	}
 	modlog(
 		action: string,
