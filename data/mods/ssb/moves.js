@@ -210,37 +210,25 @@ let BattleMovedex = {
 	// Akasianse
 	quickreload: {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 0,
 		category: "Physical",
-		desc: "Removes Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both of the field sides. The target's evasion is lowered by one stage. The user switches out after damaging the target.",
-		shortDesc: "Clears screens/hazards, foe evasion -1, switches.",
+		desc: "Uses Defog and then attempts to use U-Turn.",
+		shortDesc: "Uses Defog, then U-Turn.",
 		id: "quickreload",
 		name: "Quick Reload",
 		isNonstandard: "Custom",
 		pp: 15,
 		priority: 0,
-		flags: {mirror: 1, protect: 1},
+		flags: {mirror: 1, protect: 1, authentic: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Defog", target);
-			this.add('-anim', source, "U-Turn", target);
+		onHit(target, source) {
+			this.useMove('Defog', source, target);
+			let move = this.dex.getActiveMove('uturn');
+			move.basePower = 90;
+			this.useMove(move, source, target);
 		},
-		onHit(target, source, move) {
-			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
-			for (const sideCondition of removeAll) {
-				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Quick Reload', '[of] ' + source);
-				}
-				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Quick Reload', '[of] ' + source);
-				}
-			}
-		},
-		boosts: {evasion: -1},
-		selfSwitch: true,
 		secondary: null,
 		target: "normal",
 		type: "Bug",
