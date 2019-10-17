@@ -123,7 +123,7 @@ let BattleMovedex = {
 	bounce: {
 		inherit: true,
 		effect: {
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
@@ -242,7 +242,7 @@ let BattleMovedex = {
 	dig: {
 		inherit: true,
 		effect: {
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (['earthquake', 'magnitude', 'helpinghand'].includes(move.id)) {
 					return;
 				}
@@ -257,7 +257,7 @@ let BattleMovedex = {
 	dive: {
 		inherit: true,
 		effect: {
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (['surf', 'whirlpool', 'helpinghand'].includes(move.id)) {
 					return;
 				}
@@ -352,7 +352,7 @@ let BattleMovedex = {
 	fly: {
 		inherit: true,
 		effect: {
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
@@ -940,7 +940,7 @@ let BattleMovedex = {
 	shadowforce: {
 		inherit: true,
 		effect: {
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (move.id === 'helpinghand') {
 					return;
 				}
@@ -1004,7 +1004,7 @@ let BattleMovedex = {
 			}
 		},
 		effect: {
-			onAnyTryImmunity(target, source, move) {
+			onAnyInvulnerability(target, source, move) {
 				if (target !== this.effectData.target && target !== this.effectData.source) {
 					return;
 				}

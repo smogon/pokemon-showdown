@@ -276,7 +276,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onLockMove: 'dig',
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
 				return null;
@@ -413,7 +413,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onLockMove: 'fly',
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
 				return null;

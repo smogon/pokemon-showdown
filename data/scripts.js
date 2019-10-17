@@ -280,7 +280,7 @@ let BattleScripts = {
 		/** @type {((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (number | boolean | "" | undefined)[] | undefined)[]} */
 		let moveSteps = [
 			// 0. check for semi invulnerability
-			this.hitStepTryImmunityEvent,
+			this.hitStepInvulnerabilityEvent,
 
 			// 1. run the 'TryHit' event (Protect, Magic Bounce, Volt Absorb, etc.) (this is step 2 in gens 5 & 6, and step 5 in gen 4)
 			this.hitStepTryHitEvent,
@@ -356,8 +356,8 @@ let BattleScripts = {
 		if (move.spreadHit) this.attrLastMove('[spread] ' + hitSlot.join(','));
 		return moveResult;
 	},
-	hitStepTryImmunityEvent(targets, pokemon, move) {
-		const hitResults = this.runEvent('TryImmunity', targets, pokemon, move);
+	hitStepInvulnerabilityEvent(targets, pokemon, move) {
+		const hitResults = this.runEvent('Invulnerability', targets, pokemon, move);
 		for (const [i, target] of targets.entries()) {
 			if (hitResults[i] === false) {
 				if (!move.spreadHit) this.attrLastMove('[miss]');

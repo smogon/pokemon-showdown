@@ -244,7 +244,7 @@ interface EventMethods {
 	onTryHit?: MoveEventMethods['onTryHit']
 	onTryHitField?: MoveEventMethods['onTryHitField']
 	onTryHitSide?: CommonHandlers['ResultMove']
-	onTryImmunity?: CommonHandlers['ResultMove']
+	onInvulnerability?: CommonHandlers['ResultMove']
 	onTryMove?: MoveEventMethods['onTryMove']
 	onTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
 	onType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
@@ -327,7 +327,7 @@ interface EventMethods {
 	onAllyTryHit?: MoveEventMethods['onTryHit']
 	onAllyTryHitField?: MoveEventMethods['onTryHitField']
 	onAllyTryHitSide?: CommonHandlers['ResultMove']
-	onAllyTryImmunity?: CommonHandlers['ResultMove']
+	onAllyInvulnerability?: CommonHandlers['ResultMove']
 	onAllyTryMove?: MoveEventMethods['onTryMove']
 	onAllyTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
 	onAllyType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
@@ -410,7 +410,7 @@ interface EventMethods {
 	onFoeTryHit?: MoveEventMethods['onTryHit']
 	onFoeTryHitField?: MoveEventMethods['onTryHitField']
 	onFoeTryHitSide?: CommonHandlers['ResultMove']
-	onFoeTryImmunity?: CommonHandlers['ResultMove']
+	onFoeInvulnerability?: CommonHandlers['ResultMove']
 	onFoeTryMove?: MoveEventMethods['onTryMove']
 	onFoeTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
 	onFoeType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
@@ -493,7 +493,7 @@ interface EventMethods {
 	onSourceTryHit?: MoveEventMethods['onTryHit']
 	onSourceTryHitField?: MoveEventMethods['onTryHitField']
 	onSourceTryHitSide?: CommonHandlers['ResultMove']
-	onSourceTryImmunity?: CommonHandlers['ResultMove']
+	onSourceInvulnerability?: CommonHandlers['ResultMove']
 	onSourceTryMove?: MoveEventMethods['onTryMove']
 	onSourceTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
 	onSourceType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
@@ -576,7 +576,7 @@ interface EventMethods {
 	onAnyTryHit?: MoveEventMethods['onTryHit']
 	onAnyTryHitField?: MoveEventMethods['onTryHitField']
 	onAnyTryHitSide?: CommonHandlers['ResultMove']
-	onAnyTryImmunity?: CommonHandlers['ResultMove']
+	onAnyInvulnerability?: CommonHandlers['ResultMove']
 	onAnyTryMove?: MoveEventMethods['onTryMove']
 	onAnyTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
 	onAnyType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
@@ -1048,7 +1048,7 @@ interface BattleScriptsData {
 	hitStepPranksterImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	hitStepStealBoosts?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined
 	hitStepTryHitEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (boolean | '')[]
-	hitStepTryImmunityEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
+	hitStepInvulnerabilityEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	hitStepTypeImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	isAdjacent?: (this: Battle, pokemon1: Pokemon, pokemon2: Pokemon) => boolean
 	moveHit?: (this: Battle, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => number | undefined | false

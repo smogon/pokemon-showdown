@@ -202,7 +202,7 @@ let BattleMovedex = {
 			onImmunity(type, pokemon) {
 				if (type === 'sandstorm') return false;
 			},
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'fissure') {
 					return;
 				}
@@ -313,7 +313,7 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister' || move.id === 'thunder' || move.id === 'whirlwind') {
 					return;
 				}
