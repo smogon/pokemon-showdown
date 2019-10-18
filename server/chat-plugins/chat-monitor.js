@@ -318,10 +318,10 @@ let namefilter = function (name, user) {
 
 	for (const list in filterWords) {
 		for (let line of filterWords[list]) {
-			let [regex, word] = line;
+			let [regex] = line;
 
 			if (regex.test(lcName)) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK' || (Chat.monitors[list].punishment === 'EVASION' && !lcName.includes(word))) {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					Punishments.autolock(user, /** @type {RoomID} */ ('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
 				}
 				line[4]++;
@@ -355,10 +355,10 @@ let nicknamefilter = function (name, user) {
 
 	for (const list in filterWords) {
 		for (let line of filterWords[list]) {
-			let [regex, word] = line;
+			let [regex] = line;
 
 			if (regex.test(lcName)) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK' || (Chat.monitors[list].punishment === 'EVASION' && !lcName.includes(word))) {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					Punishments.autolock(user, /** @type {RoomID} */ ('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true);
 				}
 				line[4]++;
@@ -383,10 +383,10 @@ let statusfilter = function (status, user) {
 
 	for (const list in filterWords) {
 		for (let line of filterWords[list]) {
-			let [regex, word] = line;
+			let [regex] = line;
 
 			if (regex.test(lcStatus)) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK' || (Chat.monitors[list].punishment === 'EVASION' && !lcStatus.includes(word))) {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					Punishments.autolock(user, /** @type {RoomID} */ ('staff'), `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
 				}
 				line[4]++;
