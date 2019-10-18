@@ -144,7 +144,7 @@ Chat.registerMonitor('evasion', {
 	monitor(line, room, user, message, lcMessage, isStaff) {
 		let [regex, word, reason] = line;
 		// Remove spaces and obvious false positives
-		lcMessage = lcMessage.replace(/niger/g, '');
+		lcMessage = lcMessage.replace(/niger/g, '').replace(/fagot/g, '');
 		lcMessage = lcMessage.replace(/[\s-_]/g, '');
 		const match = lcMessage.match(regex);
 		if (match) {
