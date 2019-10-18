@@ -159,7 +159,7 @@ Chat.registerMonitor('evasion', {
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
-				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
+				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`);
 			} else {
 				this.errorReply(`Please do not say '${word}'.`);
 			}
@@ -318,10 +318,10 @@ let namefilter = function (name, user) {
 
 	for (const list in filterWords) {
 		for (let line of filterWords[list]) {
-			let [regex] = line;
+			let [regex, word] = line;
 
 			if (regex.test(lcName)) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK' || Chat.monitors[list].punishment === 'EVASION') {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK' || (Chat.monitors[list].punishment === 'EVASION' && !lcName.includes(word))) {
 					Punishments.autolock(user, /** @type {RoomID} */ ('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
 				}
 				line[4]++;
@@ -355,10 +355,10 @@ let nicknamefilter = function (name, user) {
 
 	for (const list in filterWords) {
 		for (let line of filterWords[list]) {
-			let [regex] = line;
+			let [regex, word] = line;
 
 			if (regex.test(lcName)) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK' || Chat.monitors[list].punishment === 'EVASION') {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK' || (Chat.monitors[list].punishment === 'EVASION' && !lcName.includes(word))) {
 					Punishments.autolock(user, /** @type {RoomID} */ ('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true);
 				}
 				line[4]++;
@@ -383,10 +383,10 @@ let statusfilter = function (status, user) {
 
 	for (const list in filterWords) {
 		for (let line of filterWords[list]) {
-			let [regex] = line;
+			let [regex, word] = line;
 
 			if (regex.test(lcStatus)) {
-				if (Chat.monitors[list].punishment === 'AUTOLOCK' || Chat.monitors[list].punishment === 'EVASION') {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK' || (Chat.monitors[list].punishment === 'EVASION' && !lcStatus.includes(word))) {
 					Punishments.autolock(user, /** @type {RoomID} */ ('staff'), `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
 				}
 				line[4]++;
