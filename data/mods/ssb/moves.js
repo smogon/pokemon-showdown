@@ -3319,7 +3319,7 @@ let BattleMovedex = {
 		name: "Tea Break",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, authentic: 1},
 		sleepUsable: true,
 		onTryMove(pokemon) {
 			this.attrLastMove('[still]');
