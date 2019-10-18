@@ -3788,6 +3788,34 @@ const commands = {
 		Monitor.updateServerLock = false;
 	},
 
+	async rebuild(target, room, user, connection) {
+		const logRoom = Rooms.get('staff') || room;
+
+		/** @return {Promise<[number, string, string]>} */
+		function exec(/** @type {string} */ command) {
+			logRoom.roomlog(`$ ${command}`);
+			return new Promise((resolve, reject) => {
+				require('child_process').exec(command, {
+					cwd: __dirname,
+				}, (error, stdout, stderr) => {
+					let log = `[o] ${stdout}[e] ${stderr}`;
+					if (error) log = `[c] ${error.code}\n${log}`;
+					logRoom.roomlog(log);
+					resolve([error && error.code || 0, stdout, stderr]);
+				});
+			});
+		}
+
+		if (!user.can('hotpatch')) {
+			return this.errorReply(`/updateserver - Access denied.`);
+		}
+		const [, , stderr] = await exec('../build');
+		if (stderr) {
+			return this.errorReply(`Crash while rebuilding: ${stderr}`);
+		}
+		this.sendReply(`Rebuilt.`);
+	},
+
 	memusage: 'memoryusage',
 	memoryusage(target) {
 		if (!this.can('hotpatch')) return false;
