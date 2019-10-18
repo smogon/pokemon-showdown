@@ -461,6 +461,12 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The next accuracy check against the target succeeds. The target will still avoid Earthquake, Fissure, and Magnitude if it is using Fly. If the target leaves the field using Baton Pass, the replacement remains under this effect. This effect ends when the target leaves the field or an accuracy check is done against it.",
 		shortDesc: "The next move will not miss the target.",
+		effect: {
+			duration: 2,
+			onSourceAccuracy(accuracy, target, source, move) {
+				if (move && source === this.effectData.target && target === this.effectData.source) return true;
+			},
+		},
 	},
 	lowkick: {
 		inherit: true,

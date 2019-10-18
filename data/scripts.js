@@ -362,8 +362,6 @@ let BattleScripts = {
 			if (hitResults[i] === false) {
 				if (!move.spreadHit) this.attrLastMove('[miss]');
 				this.add('-miss', pokemon, target);
-			} else {
-				hitResults[i] = hitResults[i] || false;
 			}
 		}
 		return hitResults;

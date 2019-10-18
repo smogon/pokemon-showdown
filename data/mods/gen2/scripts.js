@@ -168,7 +168,7 @@ let BattleScripts = {
 		}
 
 		hitResult = this.runEvent('Invulnerability', target, pokemon, move);
-		if (!hitResult) {
+		if (hitResult === false) {
 			if (!move.spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			return false;
