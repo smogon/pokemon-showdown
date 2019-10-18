@@ -93,11 +93,10 @@ let BattleScripts = {
 	hitStepInvulnerabilityEvent(targets, pokemon, move) {
 		const hitResults = this.runEvent('Invulnerability', targets, pokemon, move);
 		for (const [i, target] of targets.entries()) {
-			if (!hitResults[i]) {
+			if (hitResults[i] === false) {
 				this.attrLastMove('[miss]');
 				this.add('-miss', pokemon, target);
 			}
-			hitResults[i] = hitResults[i] || false;
 		}
 		return hitResults;
 	},

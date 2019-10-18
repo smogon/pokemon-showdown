@@ -1652,10 +1652,6 @@ let BattleMovedex = {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
-					return;
-				}
-				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
@@ -3402,10 +3398,6 @@ let BattleMovedex = {
 				if (['earthquake', 'magnitude', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
-					return;
-				}
-				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
@@ -3568,10 +3560,6 @@ let BattleMovedex = {
 				if (['surf', 'whirlpool', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
-					return;
-				}
-				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
@@ -5661,10 +5649,6 @@ let BattleMovedex = {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
-					return;
-				}
-				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
@@ -9470,6 +9454,10 @@ let BattleMovedex = {
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			duration: 2,
+			onSourceInvulnerabilityPriority: 1,
+			onSourceInvulnerability(target, source, move) {
+				if (move && source === this.effectData.target && target === this.effectData.source) return 0;
+			},
 			onSourceAccuracy(accuracy, target, source, move) {
 				if (move && source === this.effectData.target && target === this.effectData.source) return true;
 			},
@@ -11860,10 +11848,6 @@ let BattleMovedex = {
 				if (move.id === 'helpinghand') {
 					return;
 				}
-				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
-					return;
-				}
-				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
@@ -14649,10 +14633,6 @@ let BattleMovedex = {
 				if (move.id === 'helpinghand') {
 					return;
 				}
-				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
-					return;
-				}
-				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
@@ -15285,10 +15265,6 @@ let BattleMovedex = {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
-					return;
-				}
-				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
