@@ -655,7 +655,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Brave Bird',
 				evs: {atk: 128, spa: 128, spe: 252}, nature: 'Naive',
 			},
-			'SparksBlade': {
+			'sparksblade': {
 				species: 'Blacephalon', ability: 'Magic Guard', item: 'Life Orb', gender: 'N',
 				moves: ['Mind Blown', 'Shadow Ball', 'Explosion'],
 				signatureMove: 'Kratosmana',
@@ -663,9 +663,9 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Sundar': {
 				species: 'Sceptile', ability: 'Overgrow', item: 'Sceptilite', gender: 'M',
-				moves: ['Sludge Wave', 'Draco Meteor', 'Focus Blast'],
+				moves: ['Sludge Wave', 'Draco Meteor', 'Hidden Power Fighting'],
 				signatureMove: 'Leaf Blaster',
-				evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
+				evs: {def: 4, spa: 252, spe: 252}, nature: 'Serious', shiny: true,
 			},
 			'Teclis': {
 				species: 'Darkrai', ability: 'Dark Aura', item: 'Darkrainium Z', gender: 'N',

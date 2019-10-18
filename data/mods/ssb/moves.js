@@ -4096,7 +4096,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 	},
-	// SparksBlade
+	// sparksblade
 	kratosmana: {
 		accuracy: 100,
 		basePower: 250,

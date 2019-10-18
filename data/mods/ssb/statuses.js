@@ -1419,13 +1419,13 @@ let BattleStatuses = {
 	sparksblade: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%SparksBlade|this team looks marsh weak`);
+			this.add(`c|%sparksblade|this team looks marsh weak`);
 		},
 		onSwitchOut() {
-			this.add(`c|%SparksBlade|we lose`);
+			this.add(`c|%sparksblade|we lose`);
 		},
 		onFaint() {
-			this.add(`c|%SparksBlade|i don't even play this game`);
+			this.add(`c|%sparksblade|i don't even play this game`);
 		},
 	},
 	sundar: {
