@@ -370,15 +370,17 @@ export class TeamValidator {
 		item = dex.getItem(set.item);
 		ability = dex.getAbility(set.ability);
 
-		if (ability.id === 'battlebond' && template.id === 'greninja' && ruleTable.has('obtainableabilities')) {
-			template = dex.getTemplate('greninjaash');
+		let learnsetTemplate = template;
+		let tierTemplate = template;
+		if (ability.id === 'battlebond' && template.id === 'greninja' && ruleTable.has('obtainableformes')) {
+			tierTemplate = learnsetTemplate = dex.getTemplate('greninjaash');
 			if (set.gender && set.gender !== 'M') {
 				problems.push(`Battle Bond Greninja must be male.`);
 			}
 			set.gender = 'M';
 		}
 		if (ability.id === 'owntempo' && template.id === 'rockruff') {
-			template = dex.getTemplate('rockruffdusk');
+			tierTemplate = learnsetTemplate = dex.getTemplate('rockruffdusk');
 		}
 		if (!template.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
@@ -411,21 +413,20 @@ export class TeamValidator {
 			problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
 		}
 
-		let postMegaTemplate = template;
 		if (ruleTable.has('obtainableformes')) {
 			if (item.megaEvolves === template.species) {
 				if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
-				postMegaTemplate = dex.getTemplate(item.megaStone);
+				tierTemplate = dex.getTemplate(item.megaStone);
 			} else if (item.id === 'redorb' && template.id === 'groudon') {
-				postMegaTemplate = dex.getTemplate('Groudon-Primal');
+				tierTemplate = dex.getTemplate('Groudon-Primal');
 			} else if (item.id === 'blueorb' && template.id === 'kyogre') {
-				postMegaTemplate = dex.getTemplate('Kyogre-Primal');
+				tierTemplate = dex.getTemplate('Kyogre-Primal');
 			} else if (template.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID)) {
-				postMegaTemplate = dex.getTemplate('Rayquaza-Mega');
+				tierTemplate = dex.getTemplate('Rayquaza-Mega');
 			}
 		}
 
-		let problem = this.checkSpecies(set, template, postMegaTemplate, setHas);
+		let problem = this.checkSpecies(set, template, tierTemplate, setHas);
 		if (problem) problems.push(problem);
 
 		problem = this.checkItem(set, item, setHas);
@@ -447,7 +448,7 @@ export class TeamValidator {
 				if (!ability.name || ability.name === 'No Ability') {
 					problems.push(`${name} needs to have an ability.`);
 				} else if (!Object.values(template.abilities).includes(ability.name)) {
-					if (postMegaTemplate.abilities[0] === ability.name) {
+					if (tierTemplate.abilities[0] === ability.name) {
 						set.ability = template.abilities[0];
 					} else {
 						problems.push(`${name} can't have ${set.ability}.`);
@@ -518,7 +519,7 @@ export class TeamValidator {
 
 			if (ruleTable.has('obtainablemoves')) {
 				const checkLearnset = (ruleTable.checkLearnset && ruleTable.checkLearnset[0] || this.checkLearnset);
-				lsetProblem = checkLearnset.call(this, move, template, setSources, set);
+				lsetProblem = checkLearnset.call(this, move, learnsetTemplate, setSources, set);
 				if (lsetProblem) {
 					lsetProblem.moveName = move.name;
 					break;
@@ -526,13 +527,13 @@ export class TeamValidator {
 			}
 		}
 
-		const lsetProblems = this.reconcileLearnset(template, setSources, lsetProblem, name);
+		const lsetProblems = this.reconcileLearnset(learnsetTemplate, setSources, lsetProblem, name);
 		if (lsetProblems) problems.push(...lsetProblems);
 
 		if (!setSources.sourcesBefore && setSources.sources.length) {
 			let legal = false;
 			for (const source of setSources.sources) {
-				if (this.validateSource(set, source, setSources, template)) continue;
+				if (this.validateSource(set, source, setSources, learnsetTemplate)) continue;
 				legal = true;
 				break;
 			}
@@ -554,14 +555,14 @@ export class TeamValidator {
 						problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
 					}
 					const eventProblems = this.validateSource(
-						set, nonEggSource, setSources, template, ` because it has a move only available`
+						set, nonEggSource, setSources, learnsetTemplate, ` because it has a move only available`
 					);
 					if (eventProblems) problems.push(...eventProblems);
 				}
 			}
-		} else if (ruleTable.has('obtainablemisc') && template.eventOnly) {
-			const eventTemplate = !template.eventPokemon && template.baseSpecies !== template.species ?
-				 dex.getTemplate(template.baseSpecies) : template;
+		} else if (ruleTable.has('obtainablemisc') && learnsetTemplate.eventOnly) {
+			const eventTemplate = !learnsetTemplate.eventPokemon && learnsetTemplate.baseSpecies !== learnsetTemplate.species ?
+				 dex.getTemplate(learnsetTemplate.baseSpecies) : learnsetTemplate;
 			const eventPokemon = eventTemplate.eventPokemon;
 			if (!eventPokemon) throw new Error(`Event-only template ${template.species} has no eventPokemon table`);
 			let legal = false;
@@ -1091,7 +1092,7 @@ export class TeamValidator {
 		return problems;
 	}
 
-	checkSpecies(set: PokemonSet, template: Template, postMegaTemplate: Template, setHas: {[k: string]: true}) {
+	checkSpecies(set: PokemonSet, template: Template, tierTemplate: Template, setHas: {[k: string]: true}) {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
@@ -1099,17 +1100,19 @@ export class TeamValidator {
 		setHas['basepokemon:' + toID(template.baseSpecies)] = true;
 
 		let isMega = false;
-		if (postMegaTemplate !== template) {
-			setHas['pokemon:' + postMegaTemplate.id] = true;
-			setHas['pokemontag:mega'] = true;
-			isMega = true;
+		if (tierTemplate !== template) {
+			setHas['pokemon:' + tierTemplate.id] = true;
+			if (tierTemplate.isMega || tierTemplate.isPrimal) {
+				setHas['pokemontag:mega'] = true;
+				isMega = true;
+			}
 		}
 
-		const tier = postMegaTemplate.tier === '(PU)' ? 'ZU' : postMegaTemplate.tier;
+		const tier = tierTemplate.tier === '(PU)' ? 'ZU' : tierTemplate.tier;
 		const tierTag = 'pokemontag:' + toID(tier);
 		setHas[tierTag] = true;
 
-		const doublesTier = postMegaTemplate.doublesTier === '(DUU)' ? 'DNU' : postMegaTemplate.doublesTier;
+		const doublesTier = tierTemplate.doublesTier === '(DUU)' ? 'DNU' : tierTemplate.doublesTier;
 		const doublesTierTag = 'pokemontag:' + toID(doublesTier);
 		setHas[doublesTierTag] = true;
 
@@ -1119,13 +1122,15 @@ export class TeamValidator {
 		}
 		if (banReason === '') return null;
 
-		if (isMega) {
-			banReason = ruleTable.check('pokemon:' + postMegaTemplate.id);
+		if (tierTemplate !== template) {
+			banReason = ruleTable.check('pokemon:' + tierTemplate.id);
 			if (banReason) {
-				return `${postMegaTemplate.species} is ${banReason}.`;
+				return `${tierTemplate.species} is ${banReason}.`;
 			}
 			if (banReason === '') return null;
+		}
 
+		if (isMega) {
 			banReason = ruleTable.check('pokemontag:mega', setHas);
 			if (banReason) {
 				return `Mega evolutions are ${banReason}.`;
@@ -1147,47 +1152,47 @@ export class TeamValidator {
 
 		banReason = ruleTable.check(tierTag) || (tier === 'AG' ? ruleTable.check('pokemontag:uber') : null);
 		if (banReason) {
-			return `${postMegaTemplate.species} is in ${tier}, which is ${banReason}.`;
+			return `${tierTemplate.species} is in ${tier}, which is ${banReason}.`;
 		}
 		if (banReason === '') return null;
 
 		banReason = ruleTable.check(doublesTierTag);
 		if (banReason) {
-			return `${postMegaTemplate.species} is in ${doublesTier}, which is ${banReason}.`;
+			return `${tierTemplate.species} is in ${doublesTier}, which is ${banReason}.`;
 		}
 		if (banReason === '') return null;
 
 		// obtainability
-		if (postMegaTemplate.isNonstandard) {
-			banReason = ruleTable.check('pokemontag:' + toID(postMegaTemplate.isNonstandard));
+		if (tierTemplate.isNonstandard) {
+			banReason = ruleTable.check('pokemontag:' + toID(tierTemplate.isNonstandard));
 			if (banReason) {
-				return `${postMegaTemplate.species} is tagged ${postMegaTemplate.isNonstandard}, which is ${banReason}.`;
+				return `${tierTemplate.species} is tagged ${tierTemplate.isNonstandard}, which is ${banReason}.`;
 			}
 			if (banReason === '') return null;
 		}
 
 		if (
-			postMegaTemplate.isNonstandard === 'Pokestar' && dex.gen === 5 ||
-			postMegaTemplate.isNonstandard === 'Glitch' && dex.gen === 1
+			tierTemplate.isNonstandard === 'Pokestar' && dex.gen === 5 ||
+			tierTemplate.isNonstandard === 'Glitch' && dex.gen === 1
 		) {
 			banReason = ruleTable.check('pokemontag:hackmons', setHas);
 			if (banReason) {
-				return `${postMegaTemplate.species} is not obtainable without hacking.`;
+				return `${tierTemplate.species} is not obtainable without hacking.`;
 			}
 			if (banReason === '') return null;
-		} else if (postMegaTemplate.isNonstandard) {
+		} else if (tierTemplate.isNonstandard) {
 			banReason = ruleTable.check('nonexistent', setHas);
 			if (banReason) {
-				if (['Past', 'Future'].includes(postMegaTemplate.isNonstandard)) {
-					return `${postMegaTemplate.species} does not exist in Gen ${dex.gen}.`;
+				if (['Past', 'Future'].includes(tierTemplate.isNonstandard)) {
+					return `${tierTemplate.species} does not exist in Gen ${dex.gen}.`;
 				}
-				return `${postMegaTemplate.species} does not exist in this game.`;
+				return `${tierTemplate.species} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
-		} else if (postMegaTemplate.isUnreleased) {
+		} else if (tierTemplate.isUnreleased) {
 			banReason = ruleTable.check('unreleased', setHas);
 			if (banReason) {
-				return `${postMegaTemplate.species} is unreleased.`;
+				return `${tierTemplate.species} is unreleased.`;
 			}
 			if (banReason === '') return null;
 		}

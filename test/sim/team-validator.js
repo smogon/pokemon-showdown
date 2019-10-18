@@ -440,6 +440,18 @@ describe('Team Validator', function () {
 		];
 		let illegal = TeamValidator.get('gen7anythinggoes@@@-Pikachu').validateTeam(team);
 		assert(illegal);
+
+		team = [
+			{species: 'greninja', ability: 'battlebond', moves: ['surf'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes@@@-Greninja-Ash').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'greninja', ability: 'battlebond', moves: ['surf'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7anythinggoes@@@!Obtainable Formes,-Greninja-Ash').validateTeam(team);
+		assert.strictEqual(illegal, null);
 	});
 
 	it('should allow Pokemon to be unbanned', function () {
