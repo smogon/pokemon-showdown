@@ -1882,7 +1882,7 @@ export const Chat = new class {
 /**
  * Used by ChatMonitor.
  */
-export type FilterWord = [string | RegExp, string, string | null, number];
+export type FilterWord = [RegExp, string, string, string | null, number];
 
 export type MonitorHandler = (
 	this: CommandContext,
