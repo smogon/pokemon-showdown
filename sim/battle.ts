@@ -1583,7 +1583,7 @@ export class Battle {
 		if (this.gen > 5 && !target.side.foe.pokemonLeft) return false;
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let success = null;
-		let boosted = false;
+		let boosted = isSecondary;
 		let boostName: BoostName;
 		for (boostName in boost) {
 			const currentBoost: SparseBoostsTable = {};
@@ -1603,9 +1603,6 @@ export class Battle {
 				case 'bellydrum2':
 					this.add(msg, target, boostName, boostBy, '[silent]');
 					this.hint("In Gen 2, Belly Drum boosts by 2 when it fails.");
-					break;
-				case 'intimidate': case 'gooey': case 'tanglinghair':
-					this.add(msg, target, boostName, boostBy);
 					break;
 				case 'zpower':
 					this.add(msg, target, boostName, boostBy, '[zeffect]');
