@@ -3645,7 +3645,7 @@ let BattleMovedex = {
 	// Rach
 	stunner: {
 		accuracy: 85,
-		basePower: 100,
+		basePower: 95,
 		category: "Physical",
 		desc: "Has a 70% chance to raise the user's Attack by one stage and a 20% chance to paralyze the foe or cause them to flinch.",
 		shortDesc: "70% user's Atk +1. 20% flinch or paralyze foe.",
@@ -3663,7 +3663,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		secondaries: [
 			{
-				chance: 70,
+				chance: 50,
 				self: {
 					boosts: {atk: 1},
 				},
