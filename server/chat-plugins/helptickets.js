@@ -1122,7 +1122,7 @@ let commands = {
 			default:
 				closeButtons = `<button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}">Close Ticket as Assisted</button> <button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}, false">Close Ticket as Unable to Assist</button>`;
 			}
-			const pmLogButton = Config.pmLogButton && ticket.type === 'PM Harassment' && reportTarget ? Config.pmLogButton(user.id, toID(reportTarget)) : '';
+			const pmLogButton = Config.pmLogButton && ticket.type === 'PM Harassment' && reportTargetType === 'user' && reportTarget ? Config.pmLogButton(user.id, toID(reportTarget)) : '';
 			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
 			const staffMessage = `<p>${closeButtons} <details><summary class="button">More Options</summary> ${pmLogButton}<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`;
 			const staffHint = staffContexts[ticketType] || '';
