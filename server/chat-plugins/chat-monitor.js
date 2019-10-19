@@ -444,7 +444,7 @@ let commands = {
 	filters: 'filter',
 	filter: {
 		add(target, room, user) {
-			if (!this.can('updateserver')) return false;
+			if (!this.can('rangeban')) return false;
 
 			let [list, ...rest] = target.split(',');
 			list = toID(list);
@@ -486,7 +486,7 @@ let commands = {
 			return this.sendReply(`'${word}' was added to the ${list} list.`);
 		},
 		remove(target, room, user) {
-			if (!this.can('updateserver')) return false;
+			if (!this.can('rangeban')) return false;
 
 			let [list, ...words] = target.split(',').map(param => param.trim());
 			list = toID(list);
@@ -513,8 +513,8 @@ let commands = {
 		},
 	},
 	filterhelp: [
-		`- /filter add list, word, reason - Adds a word to the given filter list. Requires: ~`,
-		`- /filter remove list, words - Removes words from the given filter list. Requires: ~`,
+		`- /filter add list, word, reason - Adds a word to the given filter list. Requires: & ~`,
+		`- /filter remove list, words - Removes words from the given filter list. Requires: & ~`,
 		`- /filter view - Opens the list of filtered words. Requires: % @ & ~`,
 	],
 	allowname(target, room, user) {
