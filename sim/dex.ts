@@ -832,12 +832,12 @@ export class ModdedDex {
 					const vals = ruleValue.split('-');
 					const onValidate = parseInt(vals[1]);
 					const onBattle = parseInt(vals[0]);
-					format.teamLength = {
+					ruleTable.teamLength = {
 						validate: [onBattle, onValidate],
 						battle: onBattle,
 					};
 				} else if (ruleName === 'level') {
-					format.maxLevel = parseInt(ruleValue);
+					ruleTable.maxLevel = parseInt(ruleValue);
 				}
 				continue;
 			}

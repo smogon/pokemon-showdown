@@ -2515,10 +2515,11 @@ export class Battle {
 				side.pokemon = side.pokemon.slice(0, side.pokemonLeft);
 			}
 
-			if (format.teamLength && format.teamLength.battle) {
+			const teamLength = this.ruleTable.teamLength || format.teamLength 
+			if (teamLength && teamLength.battle) {
 				// Trim the team: not all of the Pokémon brought to Preview will battle.
 				for (const side of this.sides) {
-					side.pokemon = side.pokemon.slice(0, format.teamLength.battle);
+					side.pokemon = side.pokemon.slice(0, teamLength.battle);
 					side.pokemonLeft = side.pokemon.length;
 				}
 			}

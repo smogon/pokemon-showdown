@@ -216,7 +216,7 @@ export class TeamValidator {
 			return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 		}
 
-		let [minSize, maxSize] = format.teamLength && format.teamLength.validate || [1, 6];
+		let [minSize, maxSize] = this.ruleTable.teamLength && this.ruleTable.teamLength.validate || format.teamLength && format.teamLength.validate || [1, 6];
 		if (format.gameType === 'doubles' && minSize < 2) minSize = 2;
 		if (['triples', 'rotation'].includes(format.gameType as 'triples') && minSize < 3) minSize = 3;
 
@@ -309,8 +309,8 @@ export class TeamValidator {
 		set.nature = dex.getNature(Dex.getString(set.nature)).name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
-		const maxLevel = format.maxLevel || 100;
-		const maxForcedLevel = format.maxForcedLevel || maxLevel;
+		const maxLevel = this.ruleTable.maxLevel || format.maxLevel || 100;
+		const maxForcedLevel = this.ruleTable.maxForcedLevel || format.maxForcedLevel || maxLevel;
 		let forcedLevel: number | null = null;
 		if (!set.level) {
 			set.level = (format.defaultLevel || maxLevel);
