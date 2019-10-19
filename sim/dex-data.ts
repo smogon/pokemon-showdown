@@ -169,13 +169,19 @@ export class RuleTable extends Map<string, string> {
 	// tslint:disable-next-line:ban-types
 	checkLearnset: [Function, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
-
+	teamLength: {battle: number, validate: [number, number]} | null;
+	maxLevel: number | null;
+	maxForcedLevel: number | null;
+	
 	constructor() {
 		super();
 		this.complexBans = [];
 		this.complexTeamBans = [];
 		this.checkLearnset = null;
 		this.timer = null;
+		this.teamLength = null;
+		this.maxLevel = null;
+		this.maxForcedLevel = null;
 	}
 
 	isBanned(thing: string) {
