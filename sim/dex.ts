@@ -916,7 +916,7 @@ export class ModdedDex {
 			if (parts.length > 1) {
 				const type = toID(parts[0]);
 				if (type === "teamlength" || type === "teamcap") {
-					let onValidate = parts[1].split('-');
+					let options = parts[1].split('-');
 					const onValidate = parseInt(options[0]);
 					let onBattle = parseInt(options[1]);
 					if (options.length === 1) onBattle = onValidate;
