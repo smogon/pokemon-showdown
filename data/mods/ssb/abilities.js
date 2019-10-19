@@ -861,8 +861,8 @@ let BattleAbilities = {
 	},
 	// ptoad
 	fatrain: {
-		desc: "This Pokemon summons Rain Dance when it switches in, and its Defense is 1.5x when Rain is active.",
-		shortDesc: "On switch-in, summons Rain Dance. This Pokemon's Defense is 1.5x during Rain.",
+		desc: "This Pokemon summons Rain Dance when it switches in, and its Defense is 2x when Rain is active.",
+		shortDesc: "On switch-in, summons Rain Dance. This Pokemon's Defense is 2x during Rain.",
 		id: "fatrain",
 		name: "Fat Rain",
 		isNonstandard: "Custom",
