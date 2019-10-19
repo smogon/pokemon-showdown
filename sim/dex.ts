@@ -826,7 +826,7 @@ export class ModdedDex {
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
-			if (ruleSpec.split(":").length > 1) {
+			if (ruleSpec.includes(":")) {
 				const parts = ruleSpec.split(":");
 				if (parts[0] === 'teamlength') {
 					const vals = ruleSpec.split(":")[1].split('-');
@@ -834,10 +834,9 @@ export class ModdedDex {
 					const onBattle = parseInt(vals[0]);
 					format.teamLength = {
 						validate: [onBattle, onValidate],
-						battle: onBattle
-					}
-				}
-				else if (parts[0] === 'level') {
+						battle: onBattle,
+					};
+				} else if (parts[0] === 'level') {
 					format.maxLevel = parseInt(parts[1]);
 				}
 				continue;
@@ -915,10 +914,10 @@ export class ModdedDex {
 			const id = toID(rule);
 			const parts = rule.replace('=', ':').split(":");
 			if (parts.length > 1) {
-				let type = toID(parts[0])
+				const type = toID(parts[0]);
 				if (type === "teamlength" || type === "teamcap") {
-					let options = parts[1].split('-')
-					let onValidate = parseInt(options[0]);
+					const options = parts[1].split('-');
+					const onValidate = parseInt(options[0]);
 					let onBattle = parseInt(options[1]);
 					if (options.length === 1) onBattle = onValidate;
 					if (!isNaN(onValidate) && !isNaN(onBattle)) {
@@ -930,16 +929,14 @@ export class ModdedDex {
 						}
 						return `teamlength:${onBattle}-${onValidate}`;
 					}
-				}
-				else if (type === "level" || type === "maxlevel") {
-					let level = parseInt(parts[1]);
+				} else if (type === "level" || type === "maxlevel") {
+					const level = parseInt(parts[1]);
 					if (!isNaN(level)) {
 						return `level:${level}`;
 					}
 				}
 				throw new Error(`Unrecognized rule "${rule}"`);
-			}
-			else if (!this.data.Formats.hasOwnProperty(id)) {
+			} else if (!this.data.Formats.hasOwnProperty(id)) {
 				throw new Error(`Unrecognized rule "${rule}"`);
 			}
 			if (rule.charAt(0) === '!') return `!${id}`;
