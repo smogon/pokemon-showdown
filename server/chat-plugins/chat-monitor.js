@@ -51,9 +51,6 @@ let filterWords = Chat.filterWords;
  * @param {string} str
  */
 function constructEvasionRegex(str) {
-	// Handle duplicate letters
-	str = str.replace(/(.)\1+/g, '$1');
-
 	let buf = '';
 	// substitutions
 	for (const letter of str) {
@@ -144,7 +141,6 @@ Chat.registerMonitor('evasion', {
 	monitor(line, room, user, message, lcMessage, isStaff) {
 		let [regex, word, reason] = line;
 		// Remove spaces and obvious false positives
-		lcMessage = lcMessage.replace(/niger/g, '').replace(/fagot/g, '');
 		lcMessage = lcMessage.replace(/[\s-_]/g, '');
 		const match = lcMessage.match(regex);
 		if (match) {
