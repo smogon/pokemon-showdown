@@ -532,14 +532,14 @@ const ticketPages = Object.assign(Object.create(null), {
 	pmharassment: `Someone is harassing me in PMs`,
 	battleharassment: `Someone is harassing me in a battle`,
 	inapname: `Someone is using an offensive username or status message`,
-	inappokemon: `Someone is using an offensive pokemon nickname`,
+	inappokemon: `Someone is using offensive Pokemon nicknames`,
 
 	appeal: `I want to appeal a punishment`,
 	permalock: `I want to appeal my permalock`,
 	lock: `I want to appeal my lock`,
 	ip: `I'm locked because I have the same IP as someone I don't recognize`,
 	semilock: `I can't talk in chat because of my ISP`,
-	hostfilter: `I'm locked because of #hostfilter`,
+	hostfilter: `I'm locked because of a proxy or VPN`,
 	hasautoconfirmed: `Yes, I have an autoconfirmed account`,
 	lacksautoconfirmed: `No, I don't have an autoconfirmed account`,
 	appealother: `I want to appeal a mute/roomban/blacklist`,
@@ -552,7 +552,7 @@ const ticketPages = Object.assign(Object.create(null), {
 	confirmpmharassment: `Report harassment in a private message (PM)`,
 	confirmbattleharassment: `Report harassment in a battle`,
 	confirminapname: `Report an inappropriate username or status message`,
-	confirminappokemon: `Report inappropriate Pok&eacute;mon nicknames`,
+	confirminappokemon: `Report inappropriate Pokemon nicknames`,
 	confirmappeal: `Appeal your lock`,
 	confirmipappeal: `Appeal IP lock`,
 	confirmappealsemi: `Appeal ISP lock`,
@@ -617,7 +617,7 @@ const pages = {
 					if (isStaff) {
 						buf += `<p class="message-error">Global staff cannot make Help requests. This form is only for reference.</p>`;
 					} else {
-						buf += `<p class="message-error">Abuse of Help requests can result in a punishment.</p>`;
+						buf += `<p class="message-error">Abuse of Help requests can result in punishments.</p>`;
 					}
 					if (!isLast) break;
 					buf += `<p><Button>report</Button></p>`;
@@ -633,24 +633,24 @@ const pages = {
 					buf += `<p><Button>inappokemon</Button></p>`;
 					break;
 				case 'pmharassment':
-					buf += `<p>If someone is harrassing you in pms, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. Consider using <code>/ignore [username]</code> if it's minor instead.</p>`;
+					buf += `<p>If someone is harrassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmpmharassment</Button></p>`;
 					break;
 				case 'battleharassment':
-					buf += `<p>If someone is harrassing you in a battle, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. Consider using <code>/ignore [username]</code> if it's minor instead.</p>`;
-					buf += `<p>Please save a replay of the battle if it has ended, or save a replay or when it ends.</p>`;
+					buf += `<p>If someone is harrassing you in a battle, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. If it's a minor issue, consider using <code>/ignore [username]</code> instead.</p>`;
+					buf += `<p>Please save a replay of the battle if it has ended, or provide a link to the battle if it is still ongoing.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmbattleharassment</Button></p>`;
 					break;
 				case 'inapname':
-					buf += `<p>If a user has an inappropriate name or status message click the appropriate button below and a global staff member will take a look.</p>`;
+					buf += `<p>If a user has an inappropriate name or status message, click the button below and a global staff member will take a look.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirminapname</Button></p>`;
 					break;
 				case 'inappokemon':
-					buf += `<p>If a user has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.</p>`;
-					buf += `<p>Please save a replay of the battle if it has ended, or save a replay when it ends.</p>`;
+					buf += `<p>If a user has inappropriate Pokemon nicknames, click the button below and a global staff member will take a look.</p>`;
+					buf += `<p>Please save a replay of the battle if it has ended, or provide a link to the battle if it is still ongoing.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirminappokemon</Button></p>`;
 					break;
@@ -681,7 +681,7 @@ const pages = {
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'permalock':
-					buf += `<p>Please make a post in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal Forums</a> to appeal a permalock.</p>`;
+					buf += `<p>Please visit the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeals</a> page to appeal your permalock.</p>`;
 					break;
 				case 'lock':
 					buf += `<p>If you want to appeal your lock or namelock, click the button below and a global staff member will be with you shortly.</p>`;
@@ -694,15 +694,15 @@ const pages = {
 					buf += `<p><Button>confirmipappeal</Button></p>`;
 					break;
 				case 'hostfilter':
-					buf += `<p>If you are locked under #hostfilter, it means you are connected to Pok&eacute;mon Showdown with a Proxy or VPN. We automatically lock these to prevent evasion of punishments. To get unlocked, you need to disable your Proxy or VPN, and use the /logout command.</p>`;
+					buf += `<p>If you are locked with the message: "Due to spam, you can't chat using a proxy," it means you are connected to Pokemon Showdown with a proxy or VPN. We automatically lock these to prevent evasion of punishments. To get unlocked, you need to disable your proxy or VPN, and then type the <code>/logout</code> command in any chatroom.</p>`;
 					break;
 				case 'semilock':
-					buf += `<p>Do you have an Autoconfirmed account? An account is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer.</p>`;
+					buf += `<p>Do you have an autoconfirmed account? An account is autoconfirmed when it has won at least one rated battle and has been registered for one week or longer.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>hasautoconfirmed</Button> <Button>lacksautoconfirmed</Button></p>`;
 					break;
 				case 'hasautoconfirmed':
-					buf += `<p>Login to your autoconfirmed account by using the /nick command, and the semilock will automatically be removed. Afterwords, you can use the /nick command to switch back to your current username without being semilocked again.</p>`;
+					buf += `<p>Login to your autoconfirmed account by using the <code>/nick</code> command in any chatroom, and the semilock will automatically be removed. Afterwords, you can use the <code>/nick</code> command to switch back to your current username without being semilocked again.</p>`;
 					buf += `<p>If the semilock does not go away, you can try asking a global staff member for help. Click the button below to call a global staff member.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmappealsemi</Button></p>`;
@@ -723,15 +723,15 @@ const pages = {
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'password':
-					buf += `<p>If you lost your password, click the button below to make a post in Admin Requests. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.</p>`;
+					buf += `<p>If you lost your password, click the button below to request a password reset. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.</p>`;
 					buf += `<p><a class="button" href="https://www.smogon.com/forums/password-reset-form/">Request a password reset</a></p>`;
 					break;
 				case 'roomhelp':
-					buf += `<p>If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you! Click the button below to call a Global Staff member.</p>`;
+					buf += `<p>If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!</p>`;
 					buf += `<p><Button>confirmroomhelp</Button></p>`;
 					break;
 				case 'other':
-					buf += `<p>If your issue is not handled above, click the button below to ask for a global. Please be ready to explain the situation.</p>`;
+					buf += `<p>If your issue is not handled above, click the button below to talk to a global staff member. Please be ready to explain the situation.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmother</Button></p>`;
 					break;
@@ -1085,7 +1085,7 @@ let commands = {
 				'PM Harassment': `Hi! Who was harassing you in private messages?`,
 				'Battle Harassment': `Hi! Who was harassing you, and in which battle did it happen? Please post a link to the battle or a replay of the battle.`,
 				'Inappropriate Username / Status Message': `Hi! Tell us the username that is inappropriate, or tell us which user has an inappropriate status message.`,
-				'Inappropriate Pokemon Nicknames': `Hi! Which user has pokemon with inappropriate nicknames, and in which battle? Please post a link to the battle or a replay of the battle.`,
+				'Inappropriate Pokemon Nicknames': `Hi! Which user has Pokemon with inappropriate nicknames, and in which battle? Please post a link to the battle or a replay of the battle.`,
 				'Appeal': `Hi! Can you please explain why you feel your punishment is undeserved?`,
 				'Public Room Assistance Request': `Hi! Which room(s) do you need us to help you watch?`,
 				'Other': `Hi! What seems to be the problem? Tell us about any people involved, and if this happened in a specific place on the site.`,
