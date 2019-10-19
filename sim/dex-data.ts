@@ -172,7 +172,7 @@ export class RuleTable extends Map<string, string> {
 	teamLength: {battle: number, validate: [number, number]} | null;
 	maxLevel: number | null;
 	maxForcedLevel: number | null;
-	
+
 	constructor() {
 		super();
 		this.complexBans = [];
