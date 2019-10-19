@@ -826,6 +826,22 @@ export class ModdedDex {
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
+			if (ruleSpec.split(":").length > 1) {
+				const parts = ruleSpec.split(":");
+				if (parts[0] === 'teamlength') {
+					const vals = ruleSpec.split(":")[1].split('-');
+					const onValidate = parseInt(vals[1]);
+					const onBattle = parseInt(vals[0]);
+					format.teamLength = {
+						validate: [onBattle, onValidate],
+						battle: onBattle
+					}
+				}
+				else if (parts[0] === 'level') {
+					format.maxLevel = parseInt(parts[1]);
+				}
+				continue;
+			}
 			const subformat = this.getFormat(ruleSpec);
 			if (ruleTable.has('!' + subformat.id)) continue;
 			ruleTable.set(subformat.id, '');
@@ -897,7 +913,33 @@ export class ModdedDex {
 			return rule.charAt(0) + this.validateBanRule(rule.slice(1));
 		default:
 			const id = toID(rule);
-			if (!this.data.Formats.hasOwnProperty(id)) {
+			const parts = rule.replace('=', ':').split(":");
+			if (parts.length > 1) {
+				let type = toID(parts[0])
+				if (type === "teamlength" || type === "teamcap") {
+					let options = parts[1].split('-')
+					let onValidate = parseInt(options[0]);
+					let onBattle = parseInt(options[1]);
+					if (options.length === 1) onBattle = onValidate;
+					if (!isNaN(onValidate) && !isNaN(onBattle)) {
+						if (onValidate < onBattle) {
+							throw new Error("You can't bring more Pokémon to a battle than the maximum team length");
+						}
+						if (preview > 24) {
+							throw new Error("You may not have more than 24 Pokémon on a team");
+						}
+						return `teamlength:${onBattle}-${onValidate}`;
+					}
+				}
+				else if (type === "level" || type === "maxlevel") {
+					let level = parseInt(parts[1]);
+					if (!isNaN(level)) {
+						return `level:${level}`;
+					}
+				}
+				throw new Error(`Unrecognized rule "${rule}"`);
+			}
+			else if (!this.data.Formats.hasOwnProperty(id)) {
 				throw new Error(`Unrecognized rule "${rule}"`);
 			}
 			if (rule.charAt(0) === '!') return `!${id}`;
