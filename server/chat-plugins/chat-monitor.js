@@ -155,7 +155,7 @@ Chat.registerMonitor('evasion', {
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
-				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`);
+				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${word}`, `<${room.roomid}> ${user.name}: \`\`${message}\`\`${reason ? ` __(${reason})__` : ''}`);
 			} else {
 				this.errorReply(`Please do not say '${word}'.`);
 			}
