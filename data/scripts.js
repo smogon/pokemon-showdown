@@ -291,19 +291,22 @@ let BattleScripts = {
 			// 3. check for powder immunity (gen 6+ only)
 			this.hitStepPowderImmunity,
 
-			// 4. check for prankster immunity (gen 6+ only)
+			// 4. check for move-specific immunity
+			this.hitStepTryImmunityEvent,
+
+			// 5. check for prankster immunity (gen 7+ only)
 			this.hitStepPranksterImmunity,
 
-			// 5. check accuracy
+			// 6. check accuracy
 			this.hitStepAccuracy,
 
-			// 6. break protection effects
+			// 7. break protection effects
 			this.hitStepBreakProtect,
 
-			// 7. steal positive boosts (Spectral Thief)
+			// 8. steal positive boosts (Spectral Thief)
 			this.hitStepStealBoosts,
 
-			// 8. loop that processes each hit of the move (has its own steps per iteration)
+			// 9. loop that processes each hit of the move (has its own steps per iteration)
 			this.hitStepMoveHitLoop,
 		];
 		if (this.gen <= 6) {
@@ -311,8 +314,8 @@ let BattleScripts = {
 			[moveSteps[1], moveSteps[2]] = [moveSteps[2], moveSteps[1]];
 		}
 		if (this.gen === 4) {
-			// Swap step 5 with new step 2 (old step 1)
-			[moveSteps[2], moveSteps[5]] = [moveSteps[5], moveSteps[2]];
+			// Swap step 6 with new step 2 (old step 1)
+			[moveSteps[2], moveSteps[6]] = [moveSteps[6], moveSteps[2]];
 		}
 
 		this.setActiveMove(move, pokemon, targets[0]);
@@ -404,6 +407,22 @@ let BattleScripts = {
 				hitResults[i] = false;
 			} else {
 				hitResults[i] = true;
+			}
+		}
+		return hitResults;
+	},
+	hitStepTryImmunityEvent(targets, pokemon, move) {
+		const hitResults = [];
+		if (!move.onTryImmunity) {
+			for (let i = 0; i < targets.length; i++) {
+				hitResults[i] = true;
+			}
+			return hitResults;
+		}
+		for (let [i, target] of targets.entries()) {
+			hitResults[i] = this.singleEvent('TryImmunity', move, {}, target, pokemon, move);
+			if (!hitResults[i]) {
+				this.add('-immune', target);
 			}
 		}
 		return hitResults;

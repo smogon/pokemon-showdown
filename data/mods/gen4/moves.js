@@ -488,11 +488,8 @@ let BattleMovedex = {
 	dreameater: {
 		inherit: true,
 		desc: "The target is unaffected by this move unless it is asleep and does not have a substitute. The user recovers 1/2 the HP lost by the target, rounded down, but not less than 1 HP. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
-		onTryHit(target) {
-			if (target.status !== 'slp' || target.volatiles['substitute']) {
-				this.add('-immune', target);
-				return null;
-			}
+		onTryImmunity(target) {
+			return target.status === 'slp' && !target.volatiles['substitute'];
 		},
 	},
 	earthquake: {

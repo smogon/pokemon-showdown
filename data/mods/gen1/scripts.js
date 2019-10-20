@@ -271,6 +271,11 @@ let BattleScripts = {
 			}
 			return false;
 		}
+		hitResult = this.singleEvent('TryImmunity', move, null, target, pokemon, move);
+		if (hitResult === false) {
+			this.add('-immune', pokemon);
+			return false;
+		}
 
 		// Now, let's calculate the accuracy.
 		/** @type {number | true} */

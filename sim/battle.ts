@@ -3137,6 +3137,10 @@ export class Battle {
 		throw new UnimplementedError('hitStepPowderImmunity');
 	}
 
+	hitStepTryImmunityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new UnimplementedError('hitStepTryImmunityEvent');
+	}
+
 	hitStepPranksterImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
 		throw new UnimplementedError('hitStepPranksterImmunity');
 	}

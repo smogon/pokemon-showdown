@@ -157,6 +157,7 @@ interface MoveEventMethods {
 	onTryHit?: CommonHandlers['ExtResultSourceMove']
 	onTryHitField?: CommonHandlers['ResultMove']
 	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void
+	onTryImmunity?: CommonHandlers['ResultMove']
 	onTryMove?: CommonHandlers['ResultSourceMove']
 	onUseMoveMessage?: CommonHandlers['VoidSourceMove']
 }
@@ -1047,6 +1048,7 @@ interface BattleScriptsData {
 	hitStepBreakProtect?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined
 	hitStepMoveHitLoop?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => SpreadMoveDamage
 	hitStepPowderImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
+	hitStepTryImmunityEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	hitStepPranksterImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	hitStepStealBoosts?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined
 	hitStepTryHitEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (boolean | '')[]
