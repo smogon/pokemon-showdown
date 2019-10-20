@@ -2726,7 +2726,7 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			let napWeather = this.field.pseudoWeather['naptime'];
 			// Trigger sleep clause if not the original user
-			if (!(target === napWeather.source)) {
+			if (target !== napWeather.source) {
 				for (const ally of target.side.pokemon) {
 					if (ally.status === 'slp') {
 						if (!(ally.statusData.source && ally.statusData.source.side === ally.side)) return false;
