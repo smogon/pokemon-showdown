@@ -2709,7 +2709,14 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			let napWeather = this.field.pseudoWeather['naptime'];
 			// Trigger sleep clause if not the original user
-			if (!target.trySetStatus('slp', napWeather.source, move)) return false;
+			if (target !== napWeather.source) {
+				for (const ally of target.side.pokemon) {
+					if (ally.status === 'slp') {
+						if (!(ally.statusData.source && ally.statusData.source.side === ally.side)) return false;
+					}
+				}
+			}
+			if (!target.setStatus('slp', napWeather.source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
 			this.heal(target.maxhp / 2); // Aesthetic only as the healing happens after you fall asleep in-game
@@ -3635,8 +3642,8 @@ let BattleMovedex = {
 		accuracy: 85,
 		basePower: 95,
 		category: "Physical",
-		desc: "Has a 70% chance to raise the user's Attack by one stage and a 20% chance to paralyze the foe or cause them to flinch.",
-		shortDesc: "70% user's Atk +1. 20% flinch or paralyze foe.",
+		desc: "Has a 50% chance to raise the user's Attack by one stage and a 20% chance to paralyze the foe or cause them to flinch.",
+		shortDesc: "50% user's Atk +1. 20% flinch or paralyze foe.",
 		id: "stunner",
 		name: "Stunner",
 		pp: 10,
