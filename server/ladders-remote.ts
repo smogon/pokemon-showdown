@@ -16,7 +16,7 @@
 
 export class LadderStore {
 	formatid: string;
-	static formatsListPrefix = '';
+	static readonly formatsListPrefix = '';
 
 	constructor(formatid: string) {
 		this.formatid = formatid;

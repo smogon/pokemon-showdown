@@ -57,41 +57,41 @@ type Announcement = import('./chat-plugins/announcements').AnnouncementType;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
-	roomid: RoomID;
-	title: string;
-	parent: Room | null;
-	aliases: string[] | null;
-	users: {[userid: string]: User};
-	userCount: number;
-	type: 'chat' | 'battle' | 'global';
-	auth: {[userid: string]: string} | null;
+	readonly roomid: RoomID;
+	readonly parent: Room | null;
+	readonly aliases: string[] | null;
+	readonly users: {[userid: string]: User};
+	readonly type: 'chat' | 'battle' | 'global';
 	/**
 	 * Scrollback log. This is the log that's sent to users when
 	 * joining the room. Should roughly match what's on everyone's
 	 * screen.
 	 */
-	log: Roomlog | null;
-	game: RoomGame | null;
-	battle: RoomBattle | null;
-	active: boolean;
-	muteQueue: MuteEntry[];
+	readonly log: Roomlog | null;
+	readonly game: RoomGame | null;
+	readonly battle: RoomBattle | null;
+	readonly active: boolean;
+	readonly muteQueue: MuteEntry[];
+	readonly chatRoomData: AnyObject | null;
+	readonly reportJoins: boolean;
+	readonly staffRoom: boolean;
+	title: string;
+	userCount: number;
+	auth: {[userid: string]: string} | null;
 	muteTimer: NodeJS.Timer | null;
 	lastUpdate: number;
 	lastBroadcast: string;
 	lastBroadcastTime: number;
-	chatRoomData: AnyObject | null;
 	isPrivate: boolean | 'hidden' | 'voice';
 	hideReplay: boolean;
 	isPersonal: boolean;
 	isHelp: string | boolean;
 	isOfficial: boolean;
-	reportJoins: boolean;
 	batchJoins: number;
 	reportJoinsInterval: NodeJS.Timer | null;
 	logTimes: boolean;
 	modjoin: string | true | null;
 	modchat: string | null;
-	staffRoom: boolean;
 	language: string | false;
 	slowchat: number | false;
 	filterStretching: boolean;
@@ -108,23 +108,28 @@ export abstract class BasicRoom {
 	highTraffic: boolean;
 	constructor(roomid: RoomID, title?: string) {
 		this.roomid = roomid;
-		this.title = (title || roomid);
 		this.parent = null;
 		this.aliases = null;
-
 		this.users = Object.create(null);
-		this.userCount = 0;
-
 		this.type = 'chat';
-		this.auth = null;
-
 		this.log = null;
 
 		this.game = null;
 		this.battle = null;
 		this.active = false;
 
+		this.chatRoomData = null;
+		this.reportJoins = true;
+		this.staffRoom = false;
+
 		this.muteQueue = [];
+
+		this.title = (title || roomid);
+
+		this.userCount = 0;
+
+		this.auth = null;
+
 		this.muteTimer = null;
 
 		this.lastUpdate = 0;
@@ -133,20 +138,17 @@ export abstract class BasicRoom {
 
 		// room settings
 
-		this.chatRoomData = null;
 		this.isPrivate = false;
 		this.hideReplay = false;
 		this.isPersonal = false;
 		this.isHelp = false;
 		this.isOfficial = false;
-		this.reportJoins = true;
 		this.batchJoins = 0;
 		this.reportJoinsInterval = null;
 
 		this.logTimes = false;
 		this.modjoin = null;
 		this.modchat = null;
-		this.staffRoom = false;
 		this.language = false;
 		this.slowchat = false;
 		this.filterStretching = false;
@@ -413,31 +415,31 @@ export abstract class BasicRoom {
 }
 
 export class GlobalRoom extends BasicRoom {
-	type: 'global';
-	active: false;
-	chatRoomData: null;
-	lockdown: boolean | 'pre' | 'ddos';
-	battleCount: number;
-	lastReportedCrash: number;
-	chatRoomDataList: AnyObject[];
-	chatRooms: ChatRoom[];
+	readonly type: 'global';
+	readonly active: false;
+	readonly chatRoomData: null;
+	readonly chatRoomDataList: AnyObject[];
+	readonly chatRooms: ChatRoom[];
 	/**
 	 * Rooms that users autojoin upon connecting
 	 */
-	autojoinList: RoomID[];
+	readonly autojoinList: RoomID[];
 	/**
 	 * Rooms that staff autojoin upon connecting
 	 */
-	staffAutojoinList: RoomID[];
-	ladderIpLog: WriteStream;
+	readonly staffAutojoinList: RoomID[];
+	readonly ladderIpLog: WriteStream;
+	readonly users: {[userid: string]: User};
+	readonly reportUserStatsInterval: NodeJS.Timeout;
+	readonly modlogStream: WriteStream;
+	lockdown: boolean | 'pre' | 'ddos';
+	battleCount: number;
+	lastReportedCrash: number;
 	lastBattle: number;
 	lastWrittenBattle: number;
-	users: {[userid: string]: User};
 	userCount: number;
 	maxUsers: number;
 	maxUsersDate: number;
-	reportUserStatsInterval: NodeJS.Timeout;
-	modlogStream: WriteStream;
 	formatList: string;
 	constructor(roomid: RoomID) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
@@ -446,13 +448,6 @@ export class GlobalRoom extends BasicRoom {
 		this.type = 'global';
 		this.active = false;
 		this.chatRoomData = null;
-		this.lockdown = false;
-
-		this.battleCount = 0;
-		this.lastReportedCrash = 0;
-
-		this.formatList = '';
-
 		this.chatRoomDataList = [];
 		try {
 			this.chatRoomDataList = require('../config/chatrooms.json');
@@ -507,6 +502,25 @@ export class GlobalRoom extends BasicRoom {
 			// of GlobalRoom can have.
 			this.ladderIpLog = new WriteStream({write() { return undefined; }});
 		}
+		// Create writestream for modlog
+		this.modlogStream = FS('logs/modlog/modlog_global.txt').createAppendStream();
+
+		this.reportUserStatsInterval = setInterval(
+			() => this.reportUserStats(),
+			REPORT_USER_STATS_INTERVAL
+		);
+
+		// init users
+		this.users = Object.create(null);
+		this.userCount = 0; // cache of `size(this.users)`
+		this.maxUsers = 0;
+		this.maxUsersDate = 0;
+		this.lockdown = false;
+
+		this.battleCount = 0;
+		this.lastReportedCrash = 0;
+
+		this.formatList = '';
 
 		let lastBattle;
 		try {
@@ -514,20 +528,6 @@ export class GlobalRoom extends BasicRoom {
 		} catch (e) {}
 		this.lastBattle = Number(lastBattle) || 0;
 		this.lastWrittenBattle = this.lastBattle;
-
-		// init users
-		this.users = Object.create(null);
-		this.userCount = 0; // cache of `size(this.users)`
-		this.maxUsers = 0;
-		this.maxUsersDate = 0;
-
-		this.reportUserStatsInterval = setInterval(
-			() => this.reportUserStats(),
-			REPORT_USER_STATS_INTERVAL
-		);
-
-		// Create writestream for modlog
-		this.modlogStream = FS('logs/modlog/modlog_global.txt').createAppendStream();
 	}
 
 	modlog(message: string) {
@@ -1018,7 +1018,12 @@ export class GlobalRoom extends BasicRoom {
 }
 
 export class BasicChatRoom extends BasicRoom {
-	log: Roomlog;
+	readonly log: Roomlog;
+	readonly autojoin: boolean;
+	readonly staffAutojoin: string | boolean;
+	readonly banwords: string[];
+	readonly uptime: number | null;
+	readonly type: 'chat' | 'battle';
 	minorActivity: Poll | Announcement | null;
 	desc: string;
 	modchat: string | null;
@@ -1028,15 +1033,10 @@ export class BasicChatRoom extends BasicRoom {
 	slowchat: false | number;
 	introMessage: string;
 	staffMessage: string;
-	autojoin: boolean;
-	staffAutojoin: string | boolean;
 	banwordRegex: RegExp | true | null;
-	banwords: string[];
-	uptime: number | null;
 	chatRoomData: AnyObject | null;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
-	type: 'chat' | 'battle';
 	active: boolean;
 	muteTimer: NodeJS.Timer | null;
 	logUserStatsInterval: NodeJS.Timer | null;
@@ -1059,10 +1059,14 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.log = Roomlogs.create(this, options);
 
-		this.minorActivity = null;
-
 		// room settings
 		this.desc = '';
+		this.autojoin = false;
+		this.staffAutojoin = false;
+		// Only available in groupchats
+		this.uptime = null;
+		this.banwords = [];
+		this.type = 'chat';
 		this.modchat = (Config.chatmodchat || null);
 		this.filterStretching = false;
 		this.filterEmojis = false;
@@ -1070,16 +1074,10 @@ export class BasicChatRoom extends BasicRoom {
 		this.slowchat = false;
 		this.introMessage = '';
 		this.staffMessage = '';
-		this.autojoin = false;
-		this.staffAutojoin = false;
-
 		this.banwordRegex = null;
-		this.banwords = [];
-
-		// Only available in groupchats
-		this.uptime = null;
 
 		this.chatRoomData = (options.isPersonal ? null : options);
+		this.minorActivity = null;
 		Object.assign(this, options);
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
 		this.parent = null;
@@ -1095,7 +1093,6 @@ export class BasicChatRoom extends BasicRoom {
 
 		this.subRooms = null;
 
-		this.type = 'chat';
 		this.active = false;
 		this.muteTimer = null;
 
@@ -1413,15 +1410,12 @@ export class ChatRoom extends BasicChatRoom {
 }
 
 export class GameRoom extends BasicChatRoom {
-	type: 'battle';
-	modchatUser: string;
-	active: boolean;
-	format: string;
-	auth: {[userid: string]: string};
-	p1: AnyObject | null;
-	p2: AnyObject | null;
-	p3: AnyObject | null;
-	p4: AnyObject | null;
+	readonly type: 'battle';
+	readonly format: string;
+	readonly p1: AnyObject | null;
+	readonly p2: AnyObject | null;
+	readonly p3: AnyObject | null;
+	readonly p4: AnyObject | null;
 	/**
 	 * The lower player's rating, for searching purposes.
 	 * 0 for unrated battles. 1 for unknown ratings.
@@ -1429,6 +1423,9 @@ export class GameRoom extends BasicChatRoom {
 	rated: number;
 	battle: RoomBattle | null;
 	game: RoomGame;
+	modchatUser: string;
+	active: boolean;
+	auth: {[userid: string]: string};
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		options.logTimes = false;
 		options.autoTruncate = false;
@@ -1440,11 +1437,7 @@ export class GameRoom extends BasicChatRoom {
 
 		this.type = 'battle';
 
-		this.modchatUser = '';
-		this.active = false;
-
 		this.format = options.format || '';
-		this.auth = Object.create(null);
 		// console.log("NEW BATTLE");
 
 		this.tour = options.tour || null;
@@ -1456,8 +1449,14 @@ export class GameRoom extends BasicChatRoom {
 		this.p4 = options.p4 || null;
 
 		this.rated = options.rated || 0;
+
 		this.battle = null;
 		this.game = null!;
+
+		this.modchatUser = '';
+
+		this.active = false;
+		this.auth = Object.create(null);
 	}
 	/**
 	 * - logNum = 0          : spectator log (no exact HP)

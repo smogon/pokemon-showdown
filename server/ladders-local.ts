@@ -33,8 +33,8 @@ export class LadderStore {
 	ladder: LadderRow[] | null;
 	ladderPromise: Promise<LadderRow[]> | null;
 	saving: boolean;
-	static formatsListPrefix = '|,LL';
-	static ladderCaches = ladderCaches;
+	static readonly formatsListPrefix = '|,LL';
+	static readonly ladderCaches = ladderCaches;
 
 	constructor(formatid: string) {
 		this.formatid = formatid;

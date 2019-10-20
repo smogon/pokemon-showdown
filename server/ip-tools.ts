@@ -22,11 +22,11 @@ import * as dns from 'dns';
 import {FS} from '../lib/fs';
 
 export const IPTools = new class {
-	dnsblCache = new Map<string, string | null>([
+	readonly dnsblCache = new Map<string, string | null>([
 		['127.0.0.1', null],
 	]);
 
-	proxyHosts = new Set([
+	readonly proxyHosts = new Set([
 		'alexhost.md',
 		'amazonaws.com',
 		'anchorfree.com',
@@ -130,7 +130,7 @@ export const IPTools = new class {
 		'zare.com',
 		'zenmate.com',
 	]);
-	residentialHosts = new Set([
+	readonly residentialHosts = new Set([
 		'bell.ca',
 		'bellmts.net',
 		'bellsouth.net',
@@ -165,7 +165,7 @@ export const IPTools = new class {
 		'wayport.net',
 		'windstream.net',
 	]);
-	mobileHosts = new Set([
+	readonly mobileHosts = new Set([
 		'myvzw.com',
 		'mycingular.net',
 		'spcsdns.net',
@@ -176,7 +176,7 @@ export const IPTools = new class {
 		'as13285.net',
 		'att.net',
 	]);
-	connectionTestCache = new Map<string, boolean>();
+	readonly connectionTestCache = new Map<string, boolean>();
 
 	async lookup(ip: string) {
 		// known TypeScript bug

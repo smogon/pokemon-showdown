@@ -19,11 +19,11 @@ const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
  * This represents a user's search for a battle under a format.
  */
 class BattleReady {
-	userid: ID;
-	formatid: string;
-	team: string;
-	rating: number;
-	time: number;
+	readonly userid: ID;
+	readonly formatid: string;
+	readonly team: string;
+	readonly rating: number;
+	readonly time: number;
 	constructor(userid: ID, formatid: string, team: string, rating: number = 0) {
 		this.userid = userid;
 		this.formatid = formatid;
@@ -39,10 +39,10 @@ class BattleReady {
 const searches = new Map<string, Map<string, BattleReady>>();
 
 class Challenge {
-	from: ID;
-	to: string;
-	formatid: string;
-	ready: BattleReady;
+	readonly from: ID;
+	readonly to: string;
+	readonly formatid: string;
+	readonly ready: BattleReady;
 	constructor(ready: BattleReady, to: string) {
 		this.from = ready.userid;
 		this.to = to;
