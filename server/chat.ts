@@ -153,7 +153,7 @@ class PatternTester {
 // These classes need to be declared here because they aren't hoisted
 class MessageContext {
 	readonly user: User;
-	readonly language: string | null;
+	language: string | null;
 	recursionDepth: number;
 	constructor(user: User, language: string | null = null) {
 		this.user = user;

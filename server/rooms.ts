@@ -57,41 +57,41 @@ type Announcement = import('./chat-plugins/announcements').AnnouncementType;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
-	readonly roomid: RoomID;
-	readonly parent: Room | null;
-	readonly aliases: string[] | null;
-	readonly users: {[userid: string]: User};
 	readonly type: 'chat' | 'battle' | 'global';
+	readonly users: {[userid: string]: User};
 	/**
 	 * Scrollback log. This is the log that's sent to users when
 	 * joining the room. Should roughly match what's on everyone's
 	 * screen.
 	 */
 	readonly log: Roomlog | null;
-	readonly game: RoomGame | null;
 	readonly battle: RoomBattle | null;
-	readonly active: boolean;
 	readonly muteQueue: MuteEntry[];
-	readonly chatRoomData: AnyObject | null;
-	readonly reportJoins: boolean;
-	readonly staffRoom: boolean;
+	roomid: RoomID;
 	title: string;
+	parent: Room | null;
+	aliases: string[] | null;
 	userCount: number;
 	auth: {[userid: string]: string} | null;
+	game: RoomGame | null;
+	active: boolean;
 	muteTimer: NodeJS.Timer | null;
 	lastUpdate: number;
 	lastBroadcast: string;
 	lastBroadcastTime: number;
+	chatRoomData: AnyObject | null;
 	isPrivate: boolean | 'hidden' | 'voice';
 	hideReplay: boolean;
 	isPersonal: boolean;
 	isHelp: string | boolean;
 	isOfficial: boolean;
+	reportJoins: boolean;
 	batchJoins: number;
 	reportJoinsInterval: NodeJS.Timer | null;
 	logTimes: boolean;
 	modjoin: string | true | null;
 	modchat: string | null;
+	staffRoom: boolean;
 	language: string | false;
 	slowchat: number | false;
 	filterStretching: boolean;
@@ -107,28 +107,23 @@ export abstract class BasicRoom {
 	gameNumber: number;
 	highTraffic: boolean;
 	constructor(roomid: RoomID, title?: string) {
-		this.roomid = roomid;
-		this.parent = null;
-		this.aliases = null;
 		this.users = Object.create(null);
 		this.type = 'chat';
 		this.log = null;
-
-		this.game = null;
 		this.battle = null;
-		this.active = false;
-
-		this.chatRoomData = null;
-		this.reportJoins = true;
-		this.staffRoom = false;
-
 		this.muteQueue = [];
 
+		this.roomid = roomid;
 		this.title = (title || roomid);
+		this.parent = null;
+		this.aliases = null;
 
 		this.userCount = 0;
 
 		this.auth = null;
+
+		this.game = null;
+		this.active = false;
 
 		this.muteTimer = null;
 
@@ -138,17 +133,20 @@ export abstract class BasicRoom {
 
 		// room settings
 
+		this.chatRoomData = null;
 		this.isPrivate = false;
 		this.hideReplay = false;
 		this.isPersonal = false;
 		this.isHelp = false;
 		this.isOfficial = false;
+		this.reportJoins = true;
 		this.batchJoins = 0;
 		this.reportJoinsInterval = null;
 
 		this.logTimes = false;
 		this.modjoin = null;
 		this.modchat = null;
+		this.staffRoom = false;
 		this.language = false;
 		this.slowchat = false;
 		this.filterStretching = false;
@@ -1412,10 +1410,10 @@ export class ChatRoom extends BasicChatRoom {
 export class GameRoom extends BasicChatRoom {
 	readonly type: 'battle';
 	readonly format: string;
-	readonly p1: AnyObject | null;
-	readonly p2: AnyObject | null;
-	readonly p3: AnyObject | null;
-	readonly p4: AnyObject | null;
+	p1: AnyObject | null;
+	p2: AnyObject | null;
+	p3: AnyObject | null;
+	p4: AnyObject | null;
 	/**
 	 * The lower player's rating, for searching purposes.
 	 * 0 for unrated battles. 1 for unknown ratings.

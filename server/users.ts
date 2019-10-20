@@ -420,6 +420,11 @@ const SETTINGS = [
 // User
 export class User extends Chat.MessageContext {
 	readonly user: User;
+	readonly inRooms: Set<RoomID>;
+	/**
+	 * Set of room IDs
+	 */
+	readonly games: Set<RoomID>;
 	mmrCache: {[format: string]: number};
 	guestNum: number;
 	name: string;
@@ -442,11 +447,6 @@ export class User extends Chat.MessageContext {
 	permalocked: string | ID | null;
 	prevNames: {[id: /** ID */ string]: string};
 
-	readonly inRooms: Set<RoomID>;
-	/**
-	 * Set of room IDs
-	 */
-	readonly games: Set<RoomID>;
 	/** Millisecond timestamp for last battle decision */
 	lastDecision: number;
 	lastChallenge: number;
@@ -489,6 +489,8 @@ export class User extends Chat.MessageContext {
 	constructor(connection: Connection) {
 		super(connection.user);
 		this.user = this;
+		this.inRooms = new Set();
+		this.games = new Set();
 		this.mmrCache = Object.create(null);
 		this.guestNum = -1;
 		this.name = "";
@@ -517,9 +519,7 @@ export class User extends Chat.MessageContext {
 		this.namelocked = null;
 		this.permalocked = null;
 		this.prevNames = Object.create(null);
-		this.inRooms = new Set();
 
-		this.games = new Set();
 		this.lastDecision = 0;
 
 		// misc state
