@@ -264,6 +264,7 @@ FS(MONITOR_FILE).readIfExists().then(data => {
 
 /** @type {ChatFilter} */
 let chatfilter = function (message, user, room) {
+	// eslint-disable-next-line no-misleading-character-class
 	let lcMessage = message.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
