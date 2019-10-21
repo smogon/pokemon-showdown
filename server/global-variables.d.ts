@@ -6,7 +6,7 @@ import * as TeamValidatorAsyncType from './team-validator-async';
 import * as UsersType from './users';
 import * as VerifierType from './verifier';
 
-import * as StreamsType from './../lib/streams';
+import * as StreamsType from '../lib/streams';
 
 import {IPTools as IPToolsType} from './ip-tools';
 import {LadderStore as LadderStoreType} from './ladders-remote';
