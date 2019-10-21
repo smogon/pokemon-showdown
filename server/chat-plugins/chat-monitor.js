@@ -139,6 +139,12 @@ Chat.registerMonitor('evasion', {
 	punishment: 'EVASION',
 	label: 'Filter Evasion Detection',
 	monitor(line, room, user, message, lcMessage, isStaff) {
+		// Many codepoints used in filter evasion detection can be decomposed
+		// into multiple codepoints that are canonically equivalent to the
+		// original. Perform a canonical composition on the message to detect
+		// when people attempt to evade by abusing this behaviour of Unicode.
+		lcMessage = lcMessage.normalize('NFKC');
+
 		let [regex, word, reason] = line;
 		// Remove spaces and obvious false positives
 		lcMessage = lcMessage.replace(/[\s-_,.]/g, '');
