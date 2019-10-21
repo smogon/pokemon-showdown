@@ -201,13 +201,14 @@ Chat.registerMonitor('battlefilter', {
 	label: 'Filtered in battles',
 	monitor(line, room, user, message, lcMessage, isStaff) {
 		let [regex, word, reason] = line;
-		if (regex.test(lcMessage)) {
+		const match = lcMessage.match(regex);
+		if (match) {
 			if (isStaff) return `${message} __[would be filtered: ${word}${reason ? ` (${reason})` : ''}]__`;
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
 				room.mute(user);
-				this.errorReply(`You have been muted for using a banned phrase. Please do not say '${word}'.`);
+				this.errorReply(`You have been muted for using a banned phrase. Please do not say '${match[0]}'.`);
 				const text = `[BattleMonitor] <${room.roomid}> MUTED: ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`;
 				const adminlog = Rooms.get('adminlog');
 				if (adminlog) {
