@@ -47,8 +47,8 @@ const DISCONNECTION_BANK_TIME = 300;
 const TIMER_COOLDOWN = 20 * SECONDS;
 
 export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
-	slot: SideID;
-	channelIndex: ChannelIndex;
+	readonly slot: SideID;
+	readonly channelIndex: ChannelIndex;
 	request: BattleRequestTracker;
 	wantsTie: boolean;
 	active: boolean;
@@ -157,9 +157,9 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 }
 
 export class RoomBattleTimer {
-	battle: RoomBattle;
+	readonly battle: RoomBattle;
+	readonly timerRequesters: Set<ID>;
 	timer: NodeJS.Timer | null;
-	timerRequesters: Set<ID>;
 	isFirstTurn: boolean;
 	/**
 	 * Last tick, as milliseconds since UNIX epoch.
@@ -445,17 +445,23 @@ export class RoomBattleTimer {
 }
 
 export class RoomBattle extends RoomGames.RoomGame {
-	gameid: ID;
-	room: GameRoom;
-	title: string;
-	allowRenames: boolean;
-	format: string;
-	gameType: string | undefined;
+	readonly gameid: ID;
+	readonly room: GameRoom;
+	readonly title: string;
+	readonly allowRenames: boolean;
+	readonly format: string;
+	readonly gameType: string | undefined;
 	/**
 	 * The lower player's rating, for searching purposes.
 	 * 0 for unrated battles. 1 for unknown ratings.
 	 */
-	rated: number;
+	readonly rated: number;
+	/**
+	 * userid that requested extraction -> playerids that accepted the extraction
+	 */
+	readonly allowExtraction: {[k: string]: Set<ID>};
+	readonly stream: Streams.ObjectReadWriteStream<string>;
+	readonly timer: RoomBattleTimer;
 	missingBattleStartMessage: boolean;
 	started: boolean;
 	ended: boolean;
@@ -467,10 +473,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 	p2: RoomBattlePlayer;
 	p3: RoomBattlePlayer;
 	p4: RoomBattlePlayer;
-	/**
-	 * userid that requested extraction -> playerids that accepted the extraction
-	 */
-	allowExtraction: {[k: string]: Set<ID>};
 	logData: AnyObject | null;
 	endType: string;
 	/**
@@ -481,8 +483,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 	turn: number;
 	rqid: number;
 	requestCount: number;
-	stream: Streams.ObjectReadWriteStream<string>;
-	timer: RoomBattleTimer;
 	constructor(room: GameRoom, formatid: string, options: AnyObject) {
 		super(room);
 		const format = Dex.getFormat(formatid, true);
@@ -1092,7 +1092,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 }
 
 export class RoomBattleStream extends BattleStream {
-	battle: Battle;
+	readonly battle: Battle;
 	constructor() {
 		super({keepAlive: true});
 		// @ts-ignore

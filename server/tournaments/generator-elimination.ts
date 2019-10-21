@@ -136,8 +136,8 @@ const nameMap = [
 ];
 
 export class Elimination {
-	name: string;
-	isDrawingSupported: boolean;
+	readonly name: string;
+	readonly isDrawingSupported: boolean;
 	isBracketFrozen: boolean;
 	players: TournamentPlayer[];
 	maxSubtrees: number;

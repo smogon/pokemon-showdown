@@ -96,8 +96,8 @@ class PatternTester {
 	// In fact, one could in theory implement it as a RegExp subclass
 	// However, ES2016 RegExp subclassing is a can of worms, and it wouldn't allow us
 	// to tailor the test method for fast command parsing.
-	elements: string[];
-	fastElements: Set<string>;
+	readonly elements: string[];
+	readonly fastElements: Set<string>;
 	regexp: RegExp | null;
 	constructor() {
 		this.elements = [];
@@ -152,14 +152,13 @@ class PatternTester {
 
 // These classes need to be declared here because they aren't hoisted
 class MessageContext {
-	recursionDepth: number;
-	user: User;
+	readonly user: User;
 	language: string | null;
+	recursionDepth: number;
 	constructor(user: User, language: string | null = null) {
-		this.recursionDepth = 0;
-
 		this.user = user;
 		this.language = language;
+		this.recursionDepth = 0;
 	}
 
 	splitOne(target: string) {
@@ -190,7 +189,7 @@ class MessageContext {
 }
 
 export class PageContext extends MessageContext {
-	connection: Connection;
+	readonly connection: Connection;
 	room: Room;
 	pageid: string;
 	initialized: boolean;
@@ -1107,7 +1106,7 @@ export const Chat = new class {
 	constructor() {
 		void this.loadTranslations();
 	}
-	multiLinePattern = new PatternTester();
+	readonly multiLinePattern = new PatternTester();
 
 	/*********************************************************
 	 * Load command files
@@ -1116,12 +1115,12 @@ export const Chat = new class {
 	commands: ChatCommands = undefined!;
 	basePages: PageTable = undefined!;
 	pages: PageTable = undefined!;
-	destroyHandlers: (() => void)[] = [];
+	readonly destroyHandlers: (() => void)[] = [];
 
 	/*********************************************************
 	 * Load chat filters
 	 *********************************************************/
-	filters: ChatFilter[] = [];
+	readonly filters: ChatFilter[] = [];
 	filter(
 		context: CommandContext,
 		message: string,
@@ -1144,7 +1143,7 @@ export const Chat = new class {
 		return message;
 	}
 
-	namefilters: NameFilter[] = [];
+	readonly namefilters: NameFilter[] = [];
 	namefilter(name: string, user: User) {
 		if (!Config.disablebasicnamefilter) {
 			// whitelist
@@ -1199,21 +1198,21 @@ export const Chat = new class {
 		return name;
 	}
 
-	hostfilters: HostFilter[] = [];
+	readonly hostfilters: HostFilter[] = [];
 	hostfilter(host: string, user: User, connection: Connection, hostType: string) {
 		for (const curFilter of Chat.hostfilters) {
 			curFilter(host, user, connection, hostType);
 		}
 	}
 
-	loginfilters: LoginFilter[] = [];
+	readonly loginfilters: LoginFilter[] = [];
 	loginfilter(user: User, oldUser: User | null, usertype: string) {
 		for (const curFilter of Chat.loginfilters) {
 			curFilter(user, oldUser, usertype);
 		}
 	}
 
-	nicknamefilters: NameFilter[] = [];
+	readonly nicknamefilters: NameFilter[] = [];
 	nicknamefilter(nickname: string, user: User) {
 		for (const curFilter of Chat.nicknamefilters) {
 			nickname = curFilter(nickname, user);
@@ -1222,7 +1221,7 @@ export const Chat = new class {
 		return nickname;
 	}
 
-	statusfilters: StatusFilter[] = [];
+	readonly statusfilters: StatusFilter[] = [];
 	statusfilter(status: string, user: User) {
 		status = status.replace(/\|/g, '');
 		for (const curFilter of Chat.statusfilters) {
@@ -1235,9 +1234,9 @@ export const Chat = new class {
 	 * Translations
 	 *********************************************************/
 	/** language id -> language name */
-	languages = new Map<string, string>();
+	readonly languages = new Map<string, string>();
 	/** language id -> (english string -> translated string) */
-	translations = new Map<string, Map<string, [string, string[], string[]]>>();
+	readonly translations = new Map<string, Map<string, [string, string[], string[]]>>();
 
 	loadTranslations() {
 		return FS(TRANSLATION_DIRECTORY).readdir().then(files => {
@@ -1313,9 +1312,9 @@ export const Chat = new class {
 		return translated;
 	}
 
-	MessageContext = MessageContext;
-	CommandContext = CommandContext;
-	PageContext = PageContext;
+	readonly MessageContext = MessageContext;
+	readonly CommandContext = CommandContext;
+	readonly PageContext = PageContext;
 	/**
 	 * Command parser
 	 *
@@ -1857,17 +1856,17 @@ export const Chat = new class {
 			}
 		}
 	}
-	formatText = formatText;
-	linkRegex = linkRegex;
-	stripFormatting = stripFormatting;
+	readonly formatText = formatText;
+	readonly linkRegex = linkRegex;
+	readonly stripFormatting = stripFormatting;
 
-	filterWords: {[k: string]: FilterWord[]} = {};
-	monitors: {[k: string]: Monitor} = {};
-	namefilterwhitelist = new Map<string, string>();
+	readonly filterWords: {[k: string]: FilterWord[]} = {};
+	readonly monitors: {[k: string]: Monitor} = {};
+	readonly namefilterwhitelist = new Map<string, string>();
 	/**
 	 * Inappropriate userid : number of times the name has been forcerenamed
 	 */
-	forceRenames = new Map<ID, number>();
+	readonly forceRenames = new Map<ID, number>();
 
 	registerMonitor(id: string, entry: Monitor) {
 		if (!Chat.filterWords[id]) Chat.filterWords[id] = [];

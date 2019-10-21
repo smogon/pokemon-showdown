@@ -116,27 +116,27 @@ export const Punishments = new class {
 	/**
 	 * ips is an ip:punishment Map
 	 */
-	ips = new PunishmentMap();
+	readonly ips = new PunishmentMap();
 	/**
 	 * userids is a userid:punishment Map
 	 */
-	userids = new PunishmentMap();
+	readonly userids = new PunishmentMap();
 	/**
 	 * roomUserids is a roomid:userid:punishment nested Map
 	 */
-	roomUserids = new NestedPunishmentMap();
+	readonly roomUserids = new NestedPunishmentMap();
 	/**
 	 * roomIps is a roomid:ip:punishment Map
 	 */
-	roomIps = new NestedPunishmentMap();
+	readonly roomIps = new NestedPunishmentMap();
 	/**
 	 * sharedIps is an ip:note Map
 	 */
-	sharedIps = new Map<string, string>();
+	readonly sharedIps = new Map<string, string>();
 	/**
 	 * Connection flood table. Separate table from IP bans.
 	 */
-	cfloods = new Set<string>();
+	readonly cfloods = new Set<string>();
 	/**
 	 * punishType is an allcaps string, for global punishments they can be
 	 * anything in the punishmentTypes map.
@@ -147,7 +147,7 @@ export const Punishments = new class {
 	 * they should be displayed in /alt
 	 *
 	 */
-	punishmentTypes = new Map<string, string>([
+	readonly punishmentTypes = new Map<string, string>([
 		['LOCK', 'locked'],
 		['BAN', 'globally banned'],
 		['NAMELOCK', 'namelocked'],
@@ -166,7 +166,7 @@ export const Punishments = new class {
 	 * - 'MUTE' (used by getRoomPunishments)
 	 *
 	 */
-	roomPunishmentTypes = new Map<string, string>([
+	readonly roomPunishmentTypes = new Map<string, string>([
 		['ROOMBAN', 'banned'],
 		['BLACKLIST', 'blacklisted'],
 		['BATTLEBAN', 'battlebanned'],

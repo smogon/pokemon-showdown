@@ -907,7 +907,7 @@ const commands = {
 		let targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
 			isPrivate: 'hidden',
-			uptime: parent ? null : Date.now(),
+			creationTime: parent ? null : Date.now(),
 			modjoin: parent ? null : '+',
 			parentid: parent,
 			auth: {},
@@ -932,9 +932,9 @@ const commands = {
 
 	'!groupchatuptime': true,
 	groupchatuptime(target, room, user) {
-		if (!room || !room.uptime) return this.errorReply("Can only be used in a groupchat.");
+		if (!room || !room.creationTime) return this.errorReply("Can only be used in a groupchat.");
 		if (!this.runBroadcast()) return;
-		const uptime = Chat.toDurationString(Date.now() - room.uptime);
+		const uptime = Chat.toDurationString(Date.now() - room.creationTime);
 		this.sendReplyBox(`Groupchat uptime: <b>${uptime}</b>`);
 	},
 	groupchatuptimehelp: [`/groupchatuptime - Displays the uptime if the current room is a groupchat.`],

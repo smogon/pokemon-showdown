@@ -17,7 +17,8 @@
 
 // globally Rooms.RoomGamePlayer
 export class RoomGamePlayer {
-	num: number;
+	readonly num: number;
+	readonly game: RoomGame;
 	/**
 	 * Will be the username of the user playing, but with some exceptions:
 	 *
@@ -33,14 +34,13 @@ export class RoomGamePlayer {
 	 * we explicitly don't hold a direct reference to the user
 	 */
 	id: ID;
-	game: RoomGame;
 	constructor(user: User | string | null, game: RoomGame, num = 0) {
 		this.num = num;
 		if (!user) user = num ? `Player ${num}` : `Player`;
+		this.game = game;
 		this.name = (typeof user === 'string' ? user : user.name);
 		if (typeof user === 'string') user = null;
 		this.id = user ? user.id : '';
-		this.game = game;
 		if (user) {
 			user.games.add(this.game.roomid);
 			user.updateSearch();
@@ -76,8 +76,8 @@ export class RoomGamePlayer {
  * globally Rooms.RoomGame
  */
 export class RoomGame {
-	roomid: RoomID;
-	room: ChatRoom | GameRoom;
+	readonly roomid: RoomID;
+	readonly room: ChatRoom | GameRoom;
 	gameid: ID;
 	title: string;
 	allowRenames: boolean;

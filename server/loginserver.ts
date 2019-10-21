@@ -43,7 +43,7 @@ interface IncomingMessage extends NodeJS.ReadableStream {
 }
 
 class LoginServerInstance {
-	uri: string;
+	readonly uri: string;
 	requestQueue: [AnyObject, (val: LoginServerResponse) => void][];
 	requestTimer: NodeJS.Timer | null;
 	requestLog: string;
