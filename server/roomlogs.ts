@@ -28,26 +28,26 @@ import {FS} from '../lib/fs';
  * It contains (nearly) everything.
  */
 export class Roomlog {
-	roomid: RoomID;
+	readonly roomid: RoomID;
+	/**
+	 * Battle rooms are multichannel, which means their logs are split
+	 * into four channels, public, p1, p2, full.
+	 */
+	readonly isMultichannel: boolean;
+	/**
+	 * Chat rooms auto-truncate, which means it only stores the recent
+	 * messages, if there are more.
+	 */
+	readonly autoTruncate: boolean;
+	/**
+	 * Chat rooms include timestamps.
+	 */
+	readonly logTimes: boolean;
 	/**
 	 * Scrollback log
 	 */
 	log: string[];
 	broadcastBuffer: string;
-	/**
-	 * Battle rooms are multichannel, which means their logs are split
-	 * into four channels, public, p1, p2, full.
-	 */
-	isMultichannel: boolean;
-	/**
-	 * Chat rooms auto-truncate, which means it only stores the recent
-	 * messages, if there are more.
-	 */
-	autoTruncate: boolean;
-	/**
-	 * Chat rooms include timestamps.
-	 */
-	logTimes: boolean;
 	/**
 	 * undefined = uninitialized,
 	 * null = disabled
@@ -62,12 +62,13 @@ export class Roomlog {
 	roomlogFilename: string;
 	constructor(room: BasicChatRoom, options: {isMultichannel?: any, autoTruncate?: any, logTimes?: any} = {}) {
 		this.roomid = room.roomid;
-		this.log = [];
-		this.broadcastBuffer = '';
 
 		this.isMultichannel = !!options.isMultichannel;
 		this.autoTruncate = !!options.autoTruncate;
 		this.logTimes = !!options.logTimes;
+
+		this.log = [];
+		this.broadcastBuffer = '';
 
 		this.modlogStream = undefined;
 		this.roomlogStream = undefined;

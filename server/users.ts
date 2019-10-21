@@ -321,10 +321,13 @@ function isTrusted(name: string | User) {
 const connections = new Map<string, Connection>();
 
 export class Connection {
-	id: string;
-	socketid: string;
-	worker: Worker;
-	inRooms: Set<RoomID>;
+	readonly id: string;
+	readonly socketid: string;
+	readonly worker: Worker;
+	readonly inRooms: Set<RoomID>;
+	readonly ip: string;
+	readonly protocol: string;
+	readonly connectedAt: number;
 	/**
 	 * This can be null during initialization and after disconnecting,
 	 * but we're asserting it non-null for ease of use. The main risk
@@ -332,12 +335,9 @@ export class Connection {
 	 * before using it.
 	 */
 	user: User;
-	ip: string;
-	protocol: string;
 	challenge: string;
 	autojoins: string;
 	lastActiveTime: number;
-	connectedAt: number;
 	constructor(
 		id: string,
 		worker: Worker,
@@ -353,15 +353,16 @@ export class Connection {
 		this.worker = worker;
 		this.inRooms = new Set();
 
-		this.user = user!;
-
 		this.ip = ip || '';
 		this.protocol = protocol || '';
+
+		this.connectedAt = now;
+
+		this.user = user!;
 
 		this.challenge = '';
 		this.autojoins = '';
 		this.lastActiveTime = now;
-		this.connectedAt = now;
 	}
 	sendTo(roomid: RoomID | BasicRoom | null, data: string) {
 		if (roomid && typeof roomid !== 'string') roomid = (roomid as BasicRoom).roomid;
@@ -418,7 +419,12 @@ const SETTINGS = [
 
 // User
 export class User extends Chat.MessageContext {
-	user: User;
+	readonly user: User;
+	readonly inRooms: Set<RoomID>;
+	/**
+	 * Set of room IDs
+	 */
+	readonly games: Set<RoomID>;
 	mmrCache: {[format: string]: number};
 	guestNum: number;
 	name: string;
@@ -441,11 +447,6 @@ export class User extends Chat.MessageContext {
 	permalocked: string | ID | null;
 	prevNames: {[id: /** ID */ string]: string};
 
-	inRooms: Set<RoomID>;
-	/**
-	 * Set of room IDs
-	 */
-	games: Set<RoomID>;
 	/** Millisecond timestamp for last battle decision */
 	lastDecision: number;
 	lastChallenge: number;
@@ -488,6 +489,8 @@ export class User extends Chat.MessageContext {
 	constructor(connection: Connection) {
 		super(connection.user);
 		this.user = this;
+		this.inRooms = new Set();
+		this.games = new Set();
 		this.mmrCache = Object.create(null);
 		this.guestNum = -1;
 		this.name = "";
@@ -516,9 +519,7 @@ export class User extends Chat.MessageContext {
 		this.namelocked = null;
 		this.permalocked = null;
 		this.prevNames = Object.create(null);
-		this.inRooms = new Set();
 
-		this.games = new Set();
 		this.lastDecision = 0;
 
 		// misc state

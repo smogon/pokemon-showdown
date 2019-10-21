@@ -31,8 +31,8 @@ function usersToNames(users: TournamentPlayer[]) {
 }
 
 export class TournamentPlayer extends Rooms.RoomGamePlayer {
+	readonly availableMatches: Set<TournamentPlayer>;
 	isBusy: boolean;
-	availableMatches: Set<TournamentPlayer>;
 	inProgressMatch: {to: TournamentPlayer, room: GameRoom} | null;
 	pendingChallenge: {from?: TournamentPlayer, to?: TournamentPlayer, team: string} | null;
 	isDisqualified: boolean;
@@ -45,8 +45,8 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer {
 	score: number;
 	constructor(user: User | string | null, game: Tournament, num: number) {
 		super(user, game, num);
-		this.isBusy = false;
 		this.availableMatches = new Set();
+		this.isBusy = false;
 		this.inProgressMatch = null;
 		this.pendingChallenge = null;
 		this.isDisqualified = false;
@@ -62,16 +62,17 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer {
 }
 
 export class Tournament extends Rooms.RoomGame {
-	playerTable: {[userid: string]: TournamentPlayer};
-	players: TournamentPlayer[];
-	isTournament: true;
-	name: string;
+	readonly playerTable: {[userid: string]: TournamentPlayer};
+	readonly players: TournamentPlayer[];
+	readonly isTournament: true;
+	readonly completedMatches: Set<RoomID>;
 	/** Format ID not including custom rules */
-	baseFormat: ID;
+	readonly baseFormat: ID;
 	/**
 	 * Full format specifier, including custom rules (such as 'gen7challengecup1v1@@@speciesclause')
 	 */
 	fullFormat: string;
+	name: string;
 	customRules: string[];
 	generator: Generator;
 	isRated: boolean;
@@ -84,7 +85,6 @@ export class Tournament extends Rooms.RoomGame {
 	lastBracketUpdate: number;
 	bracketUpdateTimer: NodeJS.Timeout | null;
 	bracketCache: AnyObject | null;
-	completedMatches: Set<RoomID>;
 	isAvailableMatchesInvalidated: boolean;
 	availableMatchesCache: {
 		challenges: Map<TournamentPlayer, TournamentPlayer[]>, challengeBys: Map<TournamentPlayer, TournamentPlayer[]>,
@@ -108,17 +108,16 @@ export class Tournament extends Rooms.RoomGame {
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		this.players = [];
 
-		this.roomid = room.roomid;
-		this.room = room;
 		this.title = format.name + ' tournament';
 		this.isTournament = true;
+		this.completedMatches = new Set();
 		this.allowRenames = false;
 		this.playerCap = (playerCap ? parseInt(playerCap) : Config.tourdefaultplayercap) || 0;
 
-		// This will sometimes be sent alone in updates as "format", if the tour doesn't have a custom name
-		this.name = name || formatId;
 		this.baseFormat = formatId;
 		this.fullFormat = formatId;
+		// This will sometimes be sent alone in updates as "format", if the tour doesn't have a custom name
+		this.name = name || formatId;
 		this.customRules = [];
 		this.generator = generator;
 		this.isRated = isRated;
@@ -137,7 +136,6 @@ export class Tournament extends Rooms.RoomGame {
 		this.bracketUpdateTimer = null;
 		this.bracketCache = null;
 
-		this.completedMatches = new Set();
 		this.isAvailableMatchesInvalidated = true;
 		this.availableMatchesCache = {challenges: new Map(), challengeBys: new Map()};
 
