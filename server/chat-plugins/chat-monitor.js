@@ -443,7 +443,7 @@ let commands = {
 		add(target, room, user) {
 			if (!this.can('rangeban')) return false;
 
-			let [list, ...rest] = target.split(',');
+			let [list, ...rest] = target.split(target.includes('\n') ? '\n' : ',');
 			list = toID(list);
 
 			if (!list || !rest.length) return this.errorReply("Syntax: /filter add list, word, reason");
@@ -485,7 +485,7 @@ let commands = {
 		remove(target, room, user) {
 			if (!this.can('rangeban')) return false;
 
-			let [list, ...words] = target.split(',').map(param => param.trim());
+			let [list, ...words] = target.split(target.includes('\n') ? '\n' : ',').map(param => param.trim());
 			list = toID(list);
 
 			if (!list || !words.length) return this.errorReply("Syntax: /filter remove list, words");
@@ -535,3 +535,7 @@ exports.namefilter = namefilter;
 exports.nicknamefilter = nicknamefilter;
 exports.statusfilter = statusfilter;
 exports.loginfilter = loginfilter;
+
+process.nextTick(() => {
+	Chat.multiLinePattern.register('/filter (add|remove) ');
+});
