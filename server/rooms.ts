@@ -1020,7 +1020,8 @@ export class BasicChatRoom extends BasicRoom {
 	readonly autojoin: boolean;
 	readonly staffAutojoin: string | boolean;
 	readonly banwords: string[];
-	readonly uptime: number | null;
+	/** Only available in groupchats */
+	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
 	minorActivity: Poll | Announcement | null;
 	desc: string;
@@ -1061,8 +1062,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.desc = '';
 		this.autojoin = false;
 		this.staffAutojoin = false;
-		// Only available in groupchats
-		this.uptime = null;
+		this.creationTime = null;
 		this.banwords = [];
 		this.type = 'chat';
 		this.modchat = (Config.chatmodchat || null);
