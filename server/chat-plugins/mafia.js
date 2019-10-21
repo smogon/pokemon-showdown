@@ -728,7 +728,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 */
 	lynchBoxFor(userid) {
 		let buf = '';
-		buf += `<h3>Lynches (Hammer: ${this.hammerCount || 'Disabled'}) <button class="button" name="send" value="/join view-mafia-${this.roomid}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
+		buf += `<h3>Lynches (Hammer: ${this.hammerCount || 'Disabled'}) <button class="button" name="send" value="/mafia refreshlynches ${this.roomid}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
 		let plur = this.getPlurality();
 		for (const key of Object.keys(this.playerTable).concat((this.enableNL ? ['nolynch'] : []))) {
 			if (this.lynches[key]) {
@@ -2691,6 +2691,18 @@ const commands = {
 			return this.parse(`/join view-mafia-${room.roomid}`);
 		},
 
+		'!refreshlynches': true,
+		refreshlynches(target, room, user, connection) {
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
+				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
+				targetRoom = room;
+			}
+			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
+			const game = /** @type {MafiaTracker} */ (targetRoom.game);
+			const lynches = game.lynchBoxFor(user.id);
+			user.send(`>view-mafia-${game.room.roomid}\n|selectorhtml|#mafia-lynches|` + lynches);
+		},
 		'!mafsub': true,
 		forcesub: 'mafsub',
 		sub: 'mafsub', // Typescript doesn't like "sub" as the command name for some reason, so this is a hack to get around that.
