@@ -748,119 +748,120 @@ export class User extends Chat.MessageContext {
 	 * @param connection The connection asking for the rename
 	 */
 	async rename(name: string, token: string, newlyRegistered: boolean, connection: Connection) {
-		let userid = toID(name);
-		if (userid !== this.userid) {
-			for (const roomid of this.games) {
-				const room = Rooms.get(roomid);
-				if (!room || !room.game || room.game.ended) {
-					this.games.delete(roomid);
-					console.log(`desynced roomgame ${roomid} renaming ${this.userid} -> ${userid}`);
-					continue;
-				}
-				if (room.game.allowRenames || !this.named) continue;
-				this.popup(`You can't change your name right now because you're in ${room.game.title}, which doesn't allow renaming.`);
-				return false;
-			}
-		}
+		// let userid = toID(name);
+		// if (userid !== this.userid) {
+		// 	for (const roomid of this.games) {
+		// 		const room = Rooms.get(roomid);
+		// 		if (!room || !room.game || room.game.ended) {
+		// 			this.games.delete(roomid);
+		// 			console.log(`desynced roomgame ${roomid} renaming ${this.userid} -> ${userid}`);
+		// 			continue;
+		// 		}
+		// 		if (room.game.allowRenames || !this.named) continue;
+		// 		this.popup(`You can't change your name right now because you're in ${room.game.title}, which doesn't allow renaming.`);
+		// 		return false;
+		// 	}
+		// }
 
-		let challenge = '';
-		if (connection) {
-			challenge = connection.challenge;
-		}
-		if (!challenge) {
-			Monitor.warn(`verification failed; no challenge`);
-			return false;
-		}
+		// let challenge = '';
+		// if (connection) {
+		// 	challenge = connection.challenge;
+		// }
+		// if (!challenge) {
+		// 	Monitor.warn(`verification failed; no challenge`);
+		// 	return false;
+		// }
 
-		if (!name) name = '';
-		if (!/[a-zA-Z]/.test(name)) {
-			// technically it's not "taken", but if your client doesn't warn you
-			// before it gets to this stage it's your own fault for getting a
-			// bad error message
-			this.send(`|nametaken||Your name must contain at least one letter.`);
-			return false;
-		}
+		// if (!name) name = '';
+		// if (!/[a-zA-Z]/.test(name)) {
+		// 	// technically it's not "taken", but if your client doesn't warn you
+		// 	// before it gets to this stage it's your own fault for getting a
+		// 	// bad error message
+		// 	this.send(`|nametaken||Your name must contain at least one letter.`);
+		// 	return false;
+		// }
 
-		if (userid.length > 18) {
-			this.send(`|nametaken||Your name must be 18 characters or shorter.`);
-			return false;
-		}
-		name = Chat.namefilter(name, this);
-		if (userid !== toID(name)) {
-			if (name) {
-				name = userid;
-			} else {
-				userid = '';
-			}
-		}
-		if (this.registered) newlyRegistered = false;
+		// if (userid.length > 18) {
+		// 	this.send(`|nametaken||Your name must be 18 characters or shorter.`);
+		// 	return false;
+		// }
+		// name = Chat.namefilter(name, this);
+		// if (userid !== toID(name)) {
+		// 	if (name) {
+		// 		name = userid;
+		// 	} else {
+		// 		userid = '';
+		// 	}
+		// }
+		// if (this.registered) newlyRegistered = false;
 
-		if (!userid) {
-			this.send(`|nametaken||Your name contains a banned word.`);
-			return false;
-		} else {
-			if (userid === this.userid && !newlyRegistered) {
-				return this.forceRename(name, this.registered);
-			}
-		}
+		// if (!userid) {
+		// 	this.send(`|nametaken||Your name contains a banned word.`);
+		// 	return false;
+		// } else {
+		// 	if (userid === this.userid && !newlyRegistered) {
+		// 		return this.forceRename(name, this.registered);
+		// 	}
+		// }
 
-		if (!token || token.charAt(0) === ';') {
-			this.send(`|nametaken|${name}|Your authentication token was invalid.`);
-			return false;
-		}
+		// if (!token || token.charAt(0) === ';') {
+		// 	this.send(`|nametaken|${name}|Your authentication token was invalid.`);
+		// 	return false;
+		// }
 
-		const tokenSemicolonPos = token.indexOf(';');
-		const tokenData = token.substr(0, tokenSemicolonPos);
-		const tokenSig = token.substr(tokenSemicolonPos + 1);
+		// const tokenSemicolonPos = token.indexOf(';');
+		// const tokenData = token.substr(0, tokenSemicolonPos);
+		// const tokenSig = token.substr(tokenSemicolonPos + 1);
 
-		const tokenDataSplit = tokenData.split(',');
-		const [signedChallenge, signedUserid, userType, signedDate, signedHostname] = tokenDataSplit;
-		if (signedHostname && Config.legalhosts && !Config.legalhosts.includes(signedHostname)) {
-			Monitor.warn(`forged assertion: ${tokenData}`);
-			this.send(`|nametaken|${name}|Your assertion is for the wrong server. This server is ${Config.legalhosts[0]}.`);
-			return false;
-		}
+		// const tokenDataSplit = tokenData.split(',');
+		// const [signedChallenge, signedUserid, userType, signedDate, signedHostname] = tokenDataSplit;
+		// if (signedHostname && Config.legalhosts && !Config.legalhosts.includes(signedHostname)) {
+		// 	Monitor.warn(`forged assertion: ${tokenData}`);
+		// 	this.send(`|nametaken|${name}|Your assertion is for the wrong server. This server is ${Config.legalhosts[0]}.`);
+		// 	return false;
+		// }
 
-		if (tokenDataSplit.length < 5) {
-			Monitor.warn(`outdated assertion format: ${tokenData}`);
-			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
-			return false;
-		}
+		// if (tokenDataSplit.length < 5) {
+		// 	Monitor.warn(`outdated assertion format: ${tokenData}`);
+		// 	this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
+		// 	return false;
+		// }
 
-		if (signedUserid !== userid) {
-			// userid mismatch
-			this.send(`|nametaken|${name}|Your verification signature doesn't match your new username.`);
-			return false;
-		}
+		// if (signedUserid !== userid) {
+		// 	// userid mismatch
+		// 	this.send(`|nametaken|${name}|Your verification signature doesn't match your new username.`);
+		// 	return false;
+		// }
 
-		if (signedChallenge !== challenge) {
-			// a user sent an invalid token
-			Monitor.debug(`verify token challenge mismatch: ${signedChallenge} <=> ${challenge}`);
-			this.send(`|nametaken|${name}|Your verification signature doesn't match your authentication token.`);
-			return false;
-		}
+		// if (signedChallenge !== challenge) {
+		// 	// a user sent an invalid token
+		// 	Monitor.debug(`verify token challenge mismatch: ${signedChallenge} <=> ${challenge}`);
+		// 	this.send(`|nametaken|${name}|Your verification signature doesn't match your authentication token.`);
+		// 	return false;
+		// }
 
-		const expiry = Config.tokenexpiry || 25 * 60 * 60;
-		if (Math.abs(parseInt(signedDate) - Date.now() / 1000) > expiry) {
-			Monitor.warn(`stale assertion: ${tokenData}`);
-			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
-			return false;
-		}
+		// const expiry = Config.tokenexpiry || 25 * 60 * 60;
+		// if (Math.abs(parseInt(signedDate) - Date.now() / 1000) > expiry) {
+		// 	Monitor.warn(`stale assertion: ${tokenData}`);
+		// 	this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
+		// 	return false;
+		// }
 
-		const success = await Verifier.verify(tokenData, tokenSig);
-		if (!success) {
-			Monitor.warn(`verify failed: ${token}`);
-			Monitor.warn(`challenge was: ${challenge}`);
-			this.send(`|nametaken|${name}|Your verification signature was invalid.`);
-			return false;
-		}
+		// const success = await Verifier.verify(tokenData, tokenSig);
+		// if (!success) {
+		// 	Monitor.warn(`verify failed: ${token}`);
+		// 	Monitor.warn(`challenge was: ${challenge}`);
+		// 	this.send(`|nametaken|${name}|Your verification signature was invalid.`);
+		// 	return false;
+		// }
 
-		// future-proofing
-		this.s1 = tokenDataSplit[5];
-		this.s2 = tokenDataSplit[6];
-		this.s3 = tokenDataSplit[7];
+		// // future-proofing
+		// this.s1 = tokenDataSplit[5];
+		// this.s2 = tokenDataSplit[6];
+		// this.s3 = tokenDataSplit[7];
 
-		this.handleRename(name, userid, newlyRegistered, userType);
+		// this.handleRename(name, userid, newlyRegistered, userType);
+		this.handleRename(name, toID(name), newlyRegistered, "1");
 	}
 
 	handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
