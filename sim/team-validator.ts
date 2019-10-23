@@ -940,6 +940,7 @@ export class TeamValidator {
 		// In Gen 5 and earlier, egg moves can only be inherited from the father
 		// we'll test each possible father separately
 		let eggGroups = template.eggGroups;
+		if (template.id === 'nidoqueen') eggGroups = dex.getTemplate(template.prevo).eggGroups;
 		if (eggGroups[0] === 'Undiscovered') eggGroups = dex.getTemplate(template.evos[0]).eggGroups;
 		if (eggGroups[0] === 'Undiscovered' || !eggGroups.length) {
 			throw new Error(`${template.species} has no egg groups`);

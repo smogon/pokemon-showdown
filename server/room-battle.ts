@@ -24,7 +24,11 @@ type PlayerIndex = 1 | 2 | 3 | 4;
 interface BattleRequestTracker {
 	rqid: number;
 	request: string;
-	// true = user has decided, false = user has yet to decide, 'cantUndo' = waiting on other user (U-turn, faint-switch) or uncancellable (trapping ability)
+	/**
+	 * - true = user has decided,
+	 * - false = user has yet to decide,
+	 * - 'cantUndo' = waiting on other user (U-turn, faint-switch) or uncancellable (trapping ability)
+	 */
 	isWait: 'cantUndo' | true | false;
 	choice: string;
 }
