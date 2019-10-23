@@ -3133,16 +3133,8 @@ export class Battle {
 		throw new UnimplementedError('hitStepMoveHitLoop');
 	}
 
-	hitStepPowderImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new UnimplementedError('hitStepPowderImmunity');
-	}
-
-	hitStepTryImmunityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+	hitStepTryImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
 		throw new UnimplementedError('hitStepTryImmunityEvent');
-	}
-
-	hitStepPranksterImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new UnimplementedError('hitStepPranksterImmunity');
 	}
 
 	hitStepStealBoosts(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
