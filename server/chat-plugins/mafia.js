@@ -182,6 +182,12 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 			Chat.resolvePage(`view-mafia-${this.game.room.roomid}`, user, conn);
 		}
 	}
+	updateHtmlLynches() {
+		const user = Users.get(this.id);
+		if (!user || !user.connected) return;
+		const lynches = (/** @type {MafiaTracker} */ (this.game).lynchBoxFor(this.id));
+		user.send(`>view-mafia-${this.game.room.roomid}\n|selectorhtml|#mafia-lynches|` + lynches);
+	}
 }
 
 class MafiaTracker extends Rooms.RoomGame {
@@ -663,7 +669,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			return;
 		}
 		this.hasPlurality = null;
-		player.updateHtmlRoom();
+		this.updatePlayersLynches();
 	}
 
 	/**
@@ -696,7 +702,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		player.lynching = '';
 		player.lastLynch = Date.now();
 		this.hasPlurality = null;
-		player.updateHtmlRoom();
+		this.updatePlayersLynches();
 	}
 
 	/**
@@ -717,7 +723,36 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		return buf;
 	}
-
+	/**
+	 * @param {ID} userid
+	 */
+	lynchBoxFor(userid) {
+		let buf = '';
+		buf += `<h3>Lynches (Hammer: ${this.hammerCount || 'Disabled'}) <button class="button" name="send" value="/mafia refreshlynches ${this.roomid}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
+		let plur = this.getPlurality();
+		for (const key of Object.keys(this.playerTable).concat((this.enableNL ? ['nolynch'] : []))) {
+			if (this.lynches[key]) {
+				buf += `<p style="font-weight:bold">${this.lynches[key].count}${plur === key ? '*' : ''} ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Lynch'} (${this.lynches[key].lynchers.map(a => this.playerTable[a] ? this.playerTable[a].safeName : a).join(', ')}) `;
+			} else {
+				buf += `<p style="font-weight:bold">0 ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Lynch'} `;
+			}
+			const isPlayer = (this.playerTable[userid]);
+			const isSpirit = (this.dead[userid] && this.dead[userid].restless);
+			if (isPlayer || isSpirit) {
+				if (isPlayer && this.playerTable[userid].lynching === key || isSpirit && this.dead[userid].lynching === key) {
+					buf += `<button class="button" name="send" value="/mafia unlynch ${this.roomid}">Unlynch ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Lynch'}</button>`;
+				} else if ((this.selfEnabled && !isSpirit) || userid !== key) {
+					buf += `<button class="button" name="send" value="/mafia lynch ${this.roomid}, ${key}">Lynch ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Lynch'}</button>`;
+				}
+			} else if (userid === this.hostid || this.cohosts.includes(userid)) {
+				const lynch = this.lynches[key];
+				if (lynch && lynch.count !== lynch.trueCount) buf += `(${lynch.trueCount})`;
+				if (this.hammerModifiers[key]) buf += `(${this.getHammerValue(key)} to hammer)`;
+			}
+			buf += `</p>`;
+		}
+		return buf;
+	}
 	/**
 	 * @param {User} user
 	 * @param {string} target
@@ -1369,6 +1404,15 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.updateHost();
 	}
 
+	updatePlayersLynches() {
+		for (const p in this.playerTable) {
+			this.playerTable[p].updateHtmlLynches();
+		}
+		for (const p in this.dead) {
+			if (this.dead[p].restless || this.dead[p].treestump) this.dead[p].updateHtmlLynches();
+		}
+	}
+
 	/**
 	 * @return {void}
 	 */
@@ -1717,28 +1761,9 @@ const pages = {
 			}
 		}
 		if (game.phase === "day") {
-			buf += `<h3>Lynches (Hammer: ${game.hammerCount || 'Disabled'}) <button class="button" name="send" value="/join view-mafia-${room.roomid}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
-			let plur = game.getPlurality();
-			for (const key of Object.keys(game.playerTable).concat((game.enableNL ? ['nolynch'] : []))) {
-				if (game.lynches[key]) {
-					buf += `<p style="font-weight:bold">${game.lynches[key].count}${plur === key ? '*' : ''} ${game.playerTable[key] ? game.playerTable[key].safeName : 'No Lynch'} (${game.lynches[key].lynchers.map(a => game.playerTable[a] ? game.playerTable[a].safeName : a).join(', ')}) `;
-				} else {
-					buf += `<p style="font-weight:bold">0 ${game.playerTable[key] ? game.playerTable[key].safeName : 'No Lynch'} `;
-				}
-				const isSpirit = (game.dead[user.id] && game.dead[user.id].restless);
-				if (isPlayer || isSpirit) {
-					if (isPlayer && game.playerTable[user.id].lynching === key || isSpirit && game.dead[user.id].lynching === key) {
-						buf += `<button class="button" name="send" value="/mafia unlynch ${room.roomid}">Unlynch ${game.playerTable[key] ? game.playerTable[key].safeName : 'No Lynch'}</button>`;
-					} else if ((game.selfEnabled && !isSpirit) || user.id !== key) {
-						buf += `<button class="button" name="send" value="/mafia lynch ${room.roomid}, ${key}">Lynch ${game.playerTable[key] ? game.playerTable[key].safeName : 'No Lynch'}</button>`;
-					}
-				} else if (isHost) {
-					const lynch = game.lynches[key];
-					if (lynch && lynch.count !== lynch.trueCount) buf += `(${lynch.trueCount})`;
-					if (game.hammerModifiers[key]) buf += `(${game.getHammerValue(key)} to hammer)`;
-				}
-				buf += `</p>`;
-			}
+			buf += `<span id="mafia-lynches">`;
+			buf += game.lynchBoxFor(user.id);
+			buf += `</span>`;
 		} else if (game.phase === "night" && isPlayer) {
 			buf += `<p style="font-weight:bold;">PM the host (${game.host}) the action you want to use tonight, and who you want to use it on. Or PM the host "idle".</p>`;
 		}
@@ -2666,6 +2691,18 @@ const commands = {
 			return this.parse(`/join view-mafia-${room.roomid}`);
 		},
 
+		'!refreshlynches': true,
+		refreshlynches(target, room, user, connection) {
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
+				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
+				targetRoom = room;
+			}
+			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
+			const game = /** @type {MafiaTracker} */ (targetRoom.game);
+			const lynches = game.lynchBoxFor(user.id);
+			user.send(`>view-mafia-${game.room.roomid}\n|selectorhtml|#mafia-lynches|` + lynches);
+		},
 		'!mafsub': true,
 		forcesub: 'mafsub',
 		sub: 'mafsub', // Typescript doesn't like "sub" as the command name for some reason, so this is a hack to get around that.
