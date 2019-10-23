@@ -53,10 +53,12 @@ let filterWords = Chat.filterWords;
 function constructEvasionRegex(str) {
 	let buf = '';
 	// substitutions
-	for (const letter of str) {
-		buf += EVASION_DETECTION_SUB_STRINGS[letter] || letter;
+	for (let i = 0; i < str.length; i++) {
+		buf += EVASION_DETECTION_SUB_STRINGS[str[i]] || str[i];
 		// Check any number of repeating letters
-		buf += '+';
+		// The first and last letters aren't repeated, as there's too many
+		// false positives with the end / start of the previous / next word
+		if (i !== 0 && i !== str.length - 1) buf += '+';
 	}
 
 	return new RegExp(buf, 'i');
