@@ -312,10 +312,14 @@ class HelpTicket extends Rooms.RoomGame {
 			this.result = result;
 		}
 		let firstClaimWait = 0;
-		if (this.activationTime) firstClaimWait = (this.firstClaimTime ? this.firstClaimTime : this.closeTime) - this.activationTime;
+		let involvedStaff = '';
+		if (this.activationTime) {
+			firstClaimWait = (this.firstClaimTime ? this.firstClaimTime : this.closeTime) - this.activationTime;
+			involvedStaff = Array.from(this.involvedStaff.entries()).map(s => s[0]).join(',');
+		}
 		// Write to TSV
 		// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
-		const line = `${this.ticket.type}\t${(this.closeTime - this.createTime)}\t${firstClaimWait}\t${this.unclaimedTime}\t${this.resolution}\t${this.result}\t${Array.from(this.involvedStaff.entries()).map(s => s[0]).join(',')}`;
+		const line = `${this.ticket.type}\t${(this.closeTime - this.createTime)}\t${firstClaimWait}\t${this.unclaimedTime}\t${this.resolution}\t${this.result}\t${involvedStaff}`;
 		writeStats(line);
 	}
 
@@ -1185,7 +1189,7 @@ let commands = {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');
 			let ticket = tickets[toID(this.inputUsername)];
-			if (!ticket || !ticket.open || (ticket.userid !== user.id && !user.can('lock'))) return this.errorReply(`${target} does not have an open ticket.`);
+			if (!ticket || !ticket.open || (ticket.userid !== user.id && !user.can('lock'))) return this.errorReply(`${this.inputUsername} does not have an open ticket.`);
 			const helpRoom = /** @type {ChatRoom?} */ (Rooms.get(`help-${ticket.userid}`));
 			if (helpRoom) {
 				const ticketGame = /** @type {HelpTicket} */ (helpRoom.game);
