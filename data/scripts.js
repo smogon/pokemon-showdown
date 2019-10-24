@@ -282,28 +282,25 @@ let BattleScripts = {
 			// 0. check for semi invulnerability
 			this.hitStepInvulnerabilityEvent,
 
-			// 1. run the 'TryHit' event (Protect, Magic Bounce, Volt Absorb, etc.) (this is step 2 in gens 5 & 6, and step 5 in gen 4)
+			// 1. run the 'TryHit' event (Protect, Magic Bounce, Volt Absorb, etc.) (this is step 2 in gens 5 & 6, and step 4 in gen 4)
 			this.hitStepTryHitEvent,
 
 			// 2. check for type immunity (this is step 1 in gens 4-6)
 			this.hitStepTypeImmunity,
 
-			// 3. check for powder immunity (gen 6+ only)
-			this.hitStepPowderImmunity,
+			// 3. check for various move-specific immunities
+			this.hitStepTryImmunity,
 
-			// 4. check for prankster immunity (gen 6+ only)
-			this.hitStepPranksterImmunity,
-
-			// 5. check accuracy
+			// 4. check accuracy
 			this.hitStepAccuracy,
 
-			// 6. break protection effects
+			// 5. break protection effects
 			this.hitStepBreakProtect,
 
-			// 7. steal positive boosts (Spectral Thief)
+			// 6. steal positive boosts (Spectral Thief)
 			this.hitStepStealBoosts,
 
-			// 8. loop that processes each hit of the move (has its own steps per iteration)
+			// 7. loop that processes each hit of the move (has its own steps per iteration)
 			this.hitStepMoveHitLoop,
 		];
 		if (this.gen <= 6) {
@@ -311,8 +308,8 @@ let BattleScripts = {
 			[moveSteps[1], moveSteps[2]] = [moveSteps[2], moveSteps[1]];
 		}
 		if (this.gen === 4) {
-			// Swap step 5 with new step 2 (old step 1)
-			[moveSteps[2], moveSteps[5]] = [moveSteps[5], moveSteps[2]];
+			// Swap step 4 with new step 2 (old step 1)
+			[moveSteps[2], moveSteps[4]] = [moveSteps[4], moveSteps[2]];
 		}
 
 		this.setActiveMove(move, pokemon, targets[0]);
@@ -389,35 +386,17 @@ let BattleScripts = {
 
 		return hitResults;
 	},
-	hitStepPowderImmunity(targets, pokemon, move) {
+	hitStepTryImmunity(targets, pokemon, move) {
 		const hitResults = [];
-		if (!move.flags['powder']) {
-			for (let i = 0; i < targets.length; i++) {
-				hitResults[i] = true;
-			}
-			return hitResults;
-		}
 		for (let [i, target] of targets.entries()) {
-			if (target !== pokemon && !this.dex.getImmunity('powder', target)) {
+			if (this.gen >= 6 && move.flags['powder'] && target !== pokemon && !this.dex.getImmunity('powder', target)) {
 				this.debug('natural powder immunity');
 				this.add('-immune', target);
 				hitResults[i] = false;
-			} else {
-				hitResults[i] = true;
-			}
-		}
-		return hitResults;
-	},
-	hitStepPranksterImmunity(targets, pokemon, move) {
-		const hitResults = [];
-		if (this.gen < 7 || !move.pranksterBoosted || !pokemon.hasAbility('prankster')) {
-			for (let i = 0; i < targets.length; i++) {
-				hitResults[i] = true;
-			}
-			return hitResults;
-		}
-		for (let [i, target] of targets.entries()) {
-			if (targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)) {
+			} else if (!this.singleEvent('TryImmunity', move, {}, target, pokemon, move)) {
+				this.add('-immune', target);
+				hitResults[i] = false;
+			} else if (this.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') && targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)) {
 				this.debug('natural prankster immunity');
 				if (!target.illusion) this.hint("In gen 7, Dark is immune to Prankster moves.");
 				this.add('-immune', target);

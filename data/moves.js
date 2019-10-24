@@ -2102,11 +2102,8 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		onTryHit(pokemon, source) {
-			if ((pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M')) {
-				return;
-			}
-			return false;
+		onTryImmunity(pokemon, source) {
+			return (pokemon.gender === 'M' && source.gender === 'F') || (pokemon.gender === 'F' && source.gender === 'M');
 		},
 		boosts: {
 			spa: -2,
@@ -4015,11 +4012,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
 		drain: [1, 2],
-		onTryHit(target) {
-			if (target.status !== 'slp' && !target.hasAbility('comatose')) {
-				this.add('-immune', target);
-				return null;
-			}
+		onTryImmunity(target) {
+			return target.status === 'slp' || target.hasAbility('comatose');
 		},
 		secondary: null,
 		target: "normal",
@@ -4510,11 +4504,8 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTry(pokemon, target) {
-			if (pokemon.hp >= target.hp) {
-				this.add('-immune', target);
-				return null;
-			}
+		onTryImmunity(target, pokemon) {
+			return pokemon.hp < target.hp;
 		},
 		secondary: null,
 		target: "normal",
@@ -9248,11 +9239,8 @@ let BattleMovedex = {
 				}
 			},
 		},
-		onTryHit(target) {
-			if (target.hasType('Grass')) {
-				this.add('-immune', target);
-				return null;
-			}
+		onTryImmunity(target) {
+			return !target.hasType('Grass');
 		},
 		secondary: null,
 		target: "normal",
@@ -17189,11 +17177,8 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, mystery: 1},
-		onTryHit(target) {
-			if (target.hasAbility('stickyhold')) {
-				this.add('-immune', target);
-				return null;
-			}
+		onTryImmunity(target) {
+			return !target.hasAbility('stickyhold');
 		},
 		onHit(target, source, move) {
 			let yourItem = target.takeItem(source);
@@ -17262,11 +17247,8 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryHit(target, source) {
-			if (!target.hasType(source.getTypes())) {
-				this.add('-immune', target);
-				return null;
-			}
+		onTryImmunity(target, source) {
+			return target.hasType(source.getTypes());
 		},
 		secondary: null,
 		target: "allAdjacent",
@@ -18172,11 +18154,8 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, mystery: 1},
-		onTryHit(target) {
-			if (target.hasAbility('stickyhold')) {
-				this.add('-immune', target);
-				return null;
-			}
+		onTryImmunity(target) {
+			return !target.hasAbility('stickyhold');
 		},
 		onHit(target, source, move) {
 			let yourItem = target.takeItem(source);
