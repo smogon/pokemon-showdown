@@ -210,6 +210,11 @@ let BattleScripts = {
 
 		if ((!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type)) {
 			naturalImmunity = true;
+		} else {
+			hitResult = this.singleEvent('TryImmunity', move, {}, target, pokemon, move);
+			if (hitResult === false) {
+				naturalImmunity = true;
+			}
 		}
 
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
