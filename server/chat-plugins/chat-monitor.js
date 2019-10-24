@@ -94,14 +94,15 @@ Chat.registerMonitor('autolock', {
 	label: 'Autolock',
 	monitor(line, room, user, message, lcMessage, isStaff) {
 		let [regex, word, reason] = line;
-		if (regex.test(lcMessage)) {
+		const match = lcMessage.match(regex);
+		if (match) {
 			if (isStaff) return `${message} __[would be locked: ${word}${reason ? ` (${reason})` : ''}]__`;
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
 				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
 			} else {
-				this.errorReply(`Please do not say '${word}'.`);
+				this.errorReply(`Please do not say '${match[0]}'.`);
 			}
 			return false;
 		}
@@ -114,9 +115,10 @@ Chat.registerMonitor('publicwarn', {
 	label: 'Filtered in public',
 	monitor(line, room, user, message, lcMessage, isStaff) {
 		let [regex, word, reason] = line;
-		if (regex.test(lcMessage)) {
+		const match = lcMessage.match(regex);
+		if (match) {
 			if (isStaff) return `${message} __[would be filtered in public: ${word}${reason ? ` (${reason})` : ''}]__`;
-			this.errorReply(`Please do not say '${word}'.`);
+			this.errorReply(`Please do not say '${match[0]}'.`);
 			return false;
 		}
 	},
@@ -128,9 +130,10 @@ Chat.registerMonitor('warn', {
 	label: 'Filtered',
 	monitor(line, room, user, message, lcMessage, isStaff) {
 		let [regex, word, reason] = line;
-		if (regex.test(lcMessage)) {
+		const match = lcMessage.match(regex);
+		if (match) {
 			if (isStaff) return `${message} __[would be filtered: ${word}${reason ? ` (${reason})` : ''}]__`;
-			this.errorReply(`Please do not say '${word}'.`);
+			this.errorReply(`Please do not say '${match[0]}'.`);
 			return false;
 		}
 	},
