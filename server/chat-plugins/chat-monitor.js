@@ -300,7 +300,7 @@ let chatfilter = function (message, user, room) {
 
 		for (const line of Chat.filterWords[list]) {
 			const ret = monitor.call(this, line, room, user, message, lcMessage, isStaff);
-			if (ret && ret !== message) {
+			if (ret !== message) {
 				line[4]++;
 				saveFilters();
 			}
