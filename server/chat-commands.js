@@ -4017,9 +4017,19 @@ const commands = {
 					playerUser.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`);
 				}
 			}
-			return this.addModAction(`${user.name} wants to extract the battle input log.`);
+			this.addModAction(`${user.name} wants to extract the battle input log.`);
+		} else {
+			// Re-request to make the buttons appear again for users who have not allowed extraction
+			let logExported = true;
+			for (const player of battle.players) {
+				const playerUser = player.getUser();
+				if (!playerUser || battle.allowExtraction[user.id].has(playerUser.id)) continue;
+				logExported = false;
+				playerUser.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`);
+			}
+			if (logExported) return this.errorReply(`You already extracted the battle input log.`);
+			this.sendReply(`Battle input log re-requested.`);
 		}
-		return this.errorReply("You have already requested extraction.");
 	},
 	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: & ~`],
 
