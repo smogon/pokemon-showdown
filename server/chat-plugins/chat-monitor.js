@@ -492,7 +492,10 @@ let commands = {
 				this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
 			}
 			saveFilters(true);
-			return this.sendReply(`'${word}' was added to the ${list} list.`);
+			const output = `'${word}' was added to the ${list} list.`;
+			const upperStaff = Rooms.get('upperstaff');
+			if (upperStaff) upperStaff.add(output).update();
+			if (room.roomid !== 'upperstaff') return this.sendReply(output);
 		},
 		remove(target, room, user) {
 			if (!this.can('rangeban')) return false;
@@ -510,7 +513,10 @@ let commands = {
 
 			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
 			saveFilters(true);
-			return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
+			const output = `'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`;
+			const upperStaff = Rooms.get('upperstaff');
+			if (upperStaff) upperStaff.add(output).update();
+			if (room.roomid !== 'upperstaff') return this.sendReply(output);
 		},
 		'': 'view',
 		list: 'view',
