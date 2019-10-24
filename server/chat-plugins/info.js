@@ -306,32 +306,33 @@ const commands = {
 		this.sendReplyBox(buf);
 	},
 
-	findsharedbattles(target, room) {
+	sharedbattles(target, room) {
 		if (!this.can('lock')) return false;
 
 		const [targetUsername1, targetUsername2] = target.split(',');
+		if (!targetUsername1 || !targetUsername2) return this.parse(`/help sharedbattles`);
 		const user1 = Users.get(targetUsername1);
 		const user2 = Users.get(targetUsername2);
-		if (!user1) return this.errorReply(`User ${targetUsername1} not found.`);
-		if (!user2) return this.errorReply(`User ${targetUsername2} not found.`);
+		const userID1 = toID(targetUsername1);
+		const userID2 = toID(targetUsername2);
 
 		const battles = [];
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle) continue;
-			if ((user1.inRooms.has(room.roomid) || (room.auth && room.auth[user1.id])) &&
-				room.log.hasUsername(user2.id)) {
+			if ((user1 && user1.inRooms.has(room.roomid) || (room.auth && room.auth[userID1])) &&
+				(user2 && user2.inRooms.has(room.roomid) || (room.auth && room.auth[userID2]))) {
 				battles.push(room.roomid);
 			}
 		}
 
-		if (!battles.length) return this.sendReply(`${user2.name} has not spoken in any of ${user1.name}'s recent battles.`);
+		if (!battles.length) return this.sendReply(`${targetUsername1} and ${targetUsername2} have no common battles.`);
 
-		this.sendReplyBox(Chat.html`Common battles between ${user1.name} and ${user2.name}:<br />` + battles.map(id => {
+		this.sendReplyBox(Chat.html`Common battles between ${targetUsername1} and ${targetUsername2}:<br />` + battles.map(id => {
 			let shortId = id.startsWith('battle-') ? id.slice(7) : id;
 			return Chat.html`<a href="/${id}">${shortId}</a>`;
 		}).join(' | '));
 	},
-	findsharedbattleshelp: [`/findsharedbattles [user1], [user2] - finds [user1]'s recent battles that [user2] has spoken in. Requires % @ & ~`],
+	sharedbattleshelp: [`/sharedbattles [user1], [user2] - Finds recent battles common to [user1] and [user2]. Requires % @ & ~`],
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
