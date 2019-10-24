@@ -238,6 +238,7 @@ const commands = {
 	],
 
 	'!offlinewhois': true,
+	'chp': 'offlinewhois',
 	checkpunishment: 'offlinewhois',
 	offlinewhois(target, room, user) {
 		if (!user.trusted) {
