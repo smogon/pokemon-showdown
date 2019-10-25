@@ -770,7 +770,7 @@ let BattleMovedex = {
 		onHit(target, source) {
 			// Store percent of HP left, percent of PP left, and status for each pokemon on the user's team
 			let carryOver = [];
-			let currentTeam = source.side.pokemon;
+			let currentTeam = source.side.pokemon.slice();
 			for (let pokemon of currentTeam) {
 				carryOver.push({
 					hp: pokemon.hp / pokemon.maxhp,
@@ -786,16 +786,21 @@ let BattleMovedex = {
 				}
 			}
 			// Generate a new team
+			/** @type {Pokemon[]} */
 			let team = this.teamGenerator.getTeam({name: source.side.name, inBattle: true});
+			// Remove Asheviere from generated teams to not allow duplicates
+			team = team.filter(pokemon => !(pokemon.name === 'Asheviere'));
 			// Overwrite un-fainted pokemon other than the user
 			for (let i = 0; i < currentTeam.length; i++) {
 				if (currentTeam[i].fainted || !currentTeam[i].hp || currentTeam[i].position === source.position) continue;
 				let set = team.shift();
+				if (!set) throw new Error('Not enough pokemon left to wonder trade to.');
 				let oldSet = carryOver[i];
-				// @ts-ignore
-				if (set.name === 'Asheviere') {
-					// No way am I allowing 2 of this mon on one team
+
+				if (set.name === 'Flare' && currentTeam.filter(p => !p.fainted && p.hp).length <= 2) {
+					// Don't select Super Illusion when there are only 2 unfainted pokemon
 					set = team.shift();
+					if (!set) throw new Error('Not enough pokemon left to wonder trade to.');
 				}
 
 				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
@@ -814,6 +819,17 @@ let BattleMovedex = {
 				pokemon.position = currentTeam[i].position;
 				currentTeam[i] = pokemon;
 			}
+			// Move flare to the front of the team if Super Illusion would not activate
+			let newTeam = currentTeam.slice().map(p => (!p.fainted && p.hp) ? p.name : null);
+			if (newTeam.filter(n => n).pop() === 'Flare') {
+				// Don't swap with the current pokemon or client will softlock
+				let newIdx = source.position === 0 ? 1 : 0;
+				let idx = newTeam.indexOf('Flare');
+				let original = currentTeam[newIdx];
+				currentTeam[newIdx] = currentTeam[idx];
+				currentTeam[idx] = original;
+			}
+			source.side.pokemon = currentTeam;
 			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
 		},
 		target: "self",
