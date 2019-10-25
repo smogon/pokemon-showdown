@@ -9,6 +9,19 @@
 
 'use strict';
 
+let formatEvent = function (event) {
+	let timeRemaining = new Date(event.date).getTime() - new Date().getTime();
+	if (!timeRemaining) timeRemaining = "The time remaining for this event is not available";
+	if (timeRemaining < 0) timeRemaining = "This event will start soon";
+	if (event.started) timeRemaining = "This event has started";
+	if (!isNaN(timeRemaining)) timeRemaining = `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`;
+	let ret = `<tr title="${timeRemaining}">`;
+	ret += `<td>${Chat.escapeHTML(event.eventName)}</td>`;
+	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
+	ret += `<td><time>${Chat.escapeHTML(event.date)}</time></td></tr>`;
+	return ret;
+};
+
 exports.commands = {
 	events: 'roomevents',
 	roomevent: 'roomevents',
@@ -21,13 +34,7 @@ exports.commands = {
 			if (!this.runBroadcast()) return;
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
 			buff += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
-			for (let i in room.events) {
-				let timeRemaining = new Date(room.events[i].date).getTime() - new Date().getTime();
-				if (!timeRemaining) timeRemaining = "The time remaining for this event is not available";
-				if (timeRemaining < 0) timeRemaining = "This event will start soon";
-				if (room.events[i].started) timeRemaining = "This event has started";
-				buff += `<tr title="${isNaN(timeRemaining) ? timeRemaining : `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`}"><td>${Chat.escapeHTML(room.events[i].eventName)}</td><td>${Chat.formatText(room.events[i].desc, true)}</td><td><time>${Chat.escapeHTML(room.events[i].date)}</time></td></tr>`;
-			}
+			for (let i in room.events) buff += formatEvent(room.events[i]);
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
 		},
@@ -115,7 +122,8 @@ exports.commands = {
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 
 			if (!this.runBroadcast()) return;
-			this.sendReplyBox(`<table border="1" cellspacing="0" cellpadding="3"><tr><td>${Chat.escapeHTML(room.events[target].eventName)}</td><td>${Chat.formatText(room.events[target].desc, true)}</td><td><time>${Chat.escapeHTML(room.events[target].date)}</time></td></tr></table>`);
+			let buff = `<table border="1" cellspacing="0" cellpadding="3">${formatEvent(room.events[target])}</table>`;
+			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
 			if (!this.broadcasting && user.can('ban', null, room)) this.sendReplyBox(Chat.html`<code>/roomevents add ${room.events[target].eventName} | ${room.events[target].date} | ${room.events[target].desc}</code>`);
 		},
 		help(target, room, user) {
