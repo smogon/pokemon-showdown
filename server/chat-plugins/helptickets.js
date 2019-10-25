@@ -685,6 +685,7 @@ const pages = {
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'permalock':
+					buf += `<p>Permalocks are usually for repeated incidents of poor behavior over an extended period of time, and rarely for a single severe infraction. Please keep this in mind when appealing a permalock.</p>`;
 					buf += `<p>Please visit the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeals</a> page to appeal your permalock.</p>`;
 					break;
 				case 'lock':
