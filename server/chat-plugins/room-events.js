@@ -9,17 +9,18 @@
 
 'use strict';
 
-let formatEvent = function(event) {
+let formatEvent = function (event) {
 	let timeRemaining = new Date(event.date).getTime() - new Date().getTime();
 	if (!timeRemaining) timeRemaining = "The time remaining for this event is not available";
 	if (timeRemaining < 0) timeRemaining = "This event will start soon";
 	if (event.started) timeRemaining = "This event has started";
-	let ret = `<tr title="${isNaN(timeRemaining) ? timeRemaining : `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`}">`;
+	if (!isNaN(timeRemaining)) timeRemaining = `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`;
+	let ret = `<tr title="${timeRemaining}">`;
 	ret += `<td>${Chat.escapeHTML(event.eventName)}</td>`;
 	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
 	ret += `<td><time>${Chat.escapeHTML(event.date)}</time></td></tr>`;
 	return ret;
-}
+};
 
 exports.commands = {
 	events: 'roomevents',
