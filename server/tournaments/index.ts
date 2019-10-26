@@ -1331,7 +1331,7 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			}
 			let name = this.canTalk(params[0].trim());
 			if (!name || typeof name !== 'string') return;
-			name = Chat.escapeHTML(name);
+
 			if (name.length > MAX_CUSTOM_NAME_LENGTH) {
 				return this.errorReply(`The tournament's name cannot exceed ${MAX_CUSTOM_NAME_LENGTH} characters.`);
 			}
