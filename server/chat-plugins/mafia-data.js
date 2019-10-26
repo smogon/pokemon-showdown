@@ -2063,7 +2063,7 @@ const themes = {
 		desc: `Nominations: A theme where every even day there's only three possible lynches, as chosen by the Mafia!`,
 		7: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		11: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		15: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		15: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	no_setup: {
