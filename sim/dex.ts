@@ -815,6 +815,15 @@ export class ModdedDex {
 				} else if (ruleSpec[0] === 'complexBan') {
 					const complexBan: Data.ComplexBan = ruleSpec.slice(1) as Data.ComplexBan;
 					ruleTable.addComplexBan(complexBan[0], complexBan[1], complexBan[2], complexBan[3]);
+				} else if (ruleSpec[0] === 'teamlength') {
+					const onValidate = parseInt(ruleSpec[2]);
+					const onBattle = parseInt(ruleSpec[1]);
+					ruleTable.teamLength = {
+						validate: [onBattle, onValidate],
+						battle: onBattle,
+					};
+				} else if (ruleSpec[0] === 'level') {
+					ruleTable.maxLevel = parseInt(ruleSpec[1]);
 				} else {
 					throw new Error(`Unrecognized rule spec ${ruleSpec}`);
 				}
@@ -824,21 +833,6 @@ export class ModdedDex {
 				if (ruleSpec.startsWith('+')) ruleTable.delete('-' + ruleSpec.slice(1));
 				if (ruleSpec.startsWith('-')) ruleTable.delete('+' + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
-				continue;
-			}
-			if (ruleSpec.includes(":")) {
-				const [ruleName, ruleValue] = ruleSpec.split(":");
-				if (ruleName === 'teamlength') {
-					const vals = ruleValue.split('-');
-					const onValidate = parseInt(vals[1]);
-					const onBattle = parseInt(vals[0]);
-					ruleTable.teamLength = {
-						validate: [onBattle, onValidate],
-						battle: onBattle,
-					};
-				} else if (ruleName === 'level') {
-					ruleTable.maxLevel = parseInt(ruleValue);
-				}
 				continue;
 			}
 			const subformat = this.getFormat(ruleSpec);
