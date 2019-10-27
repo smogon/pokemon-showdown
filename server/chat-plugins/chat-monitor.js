@@ -327,6 +327,7 @@ let namefilter = function (name, user) {
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
 	for (const list in filterWords) {
+		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (let line of filterWords[list]) {
 			let [regex] = line;
 
@@ -364,6 +365,7 @@ let nicknamefilter = function (name, user) {
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
 	for (const list in filterWords) {
+		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (let line of filterWords[list]) {
 			let [regex] = line;
 
@@ -392,6 +394,7 @@ let statusfilter = function (status, user) {
 	}
 
 	for (const list in filterWords) {
+		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (let line of filterWords[list]) {
 			let [regex] = line;
 
