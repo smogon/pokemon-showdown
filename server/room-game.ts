@@ -17,7 +17,8 @@
 
 // globally Rooms.RoomGamePlayer
 export class RoomGamePlayer {
-	num: number;
+	readonly num: number;
+	readonly game: RoomGame;
 	/**
 	 * Will be the username of the user playing, but with some exceptions:
 	 *
@@ -32,43 +33,42 @@ export class RoomGamePlayer {
 	 *
 	 * we explicitly don't hold a direct reference to the user
 	 */
-	userid: ID;
-	game: RoomGame;
+	id: ID;
 	constructor(user: User | string | null, game: RoomGame, num = 0) {
 		this.num = num;
 		if (!user) user = num ? `Player ${num}` : `Player`;
+		this.game = game;
 		this.name = (typeof user === 'string' ? user : user.name);
 		if (typeof user === 'string') user = null;
-		this.userid = user ? user.userid : '';
-		this.game = game;
+		this.id = user ? user.id : '';
 		if (user) {
-			user.games.add(this.game.id);
+			user.games.add(this.game.roomid);
 			user.updateSearch();
 		}
 	}
 	unlinkUser() {
-		if (!this.userid) return;
-		const user = Users.getExact(this.userid);
+		if (!this.id) return;
+		const user = Users.getExact(this.id);
 		if (user) {
-			user.games.delete(this.game.id);
+			user.games.delete(this.game.roomid);
 			user.updateSearch();
 		}
-		this.userid = '';
+		this.id = '';
 	}
 	destroy() {
 		this.unlinkUser();
 	}
 
 	toString() {
-		return this.userid;
+		return this.id;
 	}
 	send(data: string) {
-		const user = Users.getExact(this.userid);
+		const user = Users.getExact(this.id);
 		if (user) user.send(data);
 	}
 	sendRoom(data: string) {
-		const user = Users.getExact(this.userid);
-		if (user) user.sendTo(this.game.id, data);
+		const user = Users.getExact(this.id);
+		if (user) user.sendTo(this.game.roomid, data);
 	}
 }
 
@@ -76,8 +76,8 @@ export class RoomGamePlayer {
  * globally Rooms.RoomGame
  */
 export class RoomGame {
-	id: RoomID;
-	room: ChatRoom | GameRoom;
+	readonly roomid: RoomID;
+	readonly room: ChatRoom | GameRoom;
 	gameid: ID;
 	title: string;
 	allowRenames: boolean;
@@ -92,7 +92,7 @@ export class RoomGame {
 	playerCap: number;
 	ended: boolean;
 	constructor(room: ChatRoom | GameRoom) {
-		this.id = room.id;
+		this.roomid = room.roomid;
 		this.room = room;
 		this.gameid = 'game' as ID;
 		this.title = 'Game';
@@ -121,7 +121,7 @@ export class RoomGame {
 
 	addPlayer(user: User | string | null = null, ...rest: any[]) {
 		if (typeof user !== 'string' && user) {
-			if (user.userid in this.playerTable) return null;
+			if (user.id in this.playerTable) return null;
 		}
 		if (this.playerCap > 0 && this.playerCount >= this.playerCap) return null;
 		const player = this.makePlayer(user, ...rest);
@@ -129,7 +129,7 @@ export class RoomGame {
 		if (typeof user === 'string') user = null;
 		this.players.push(player);
 		if (user) {
-			this.playerTable[user.userid] = player;
+			this.playerTable[user.id] = player;
 			this.playerCount++;
 		}
 		return player;
@@ -137,17 +137,17 @@ export class RoomGame {
 
 	updatePlayer(player: RoomGamePlayer, user: User | null) {
 		if (!this.allowRenames) return;
-		if (player.userid) {
-			delete this.playerTable[player.userid];
+		if (player.id) {
+			delete this.playerTable[player.id];
 		}
 		if (user) {
-			player.userid = user.userid;
+			player.id = user.id;
 			player.name = user.name;
-			this.playerTable[player.userid] = player;
+			this.playerTable[player.id] = player;
 			if (!this.room.auth) {
 				this.room.auth = {};
 			}
-			this.room.auth[player.userid] = Users.PLAYER_SYMBOL;
+			this.room.auth[player.id] = Users.PLAYER_SYMBOL;
 		} else {
 			player.unlinkUser();
 		}
@@ -162,13 +162,13 @@ export class RoomGame {
 		if (player instanceof Users.User) {
 			// API changed
 			// TODO: deprecate
-			player = this.playerTable[player.userid];
+			player = this.playerTable[player.id];
 			if (!player) throw new Error("Player not found");
 		}
 		if (!this.allowRenames) return false;
 		const playerIndex = this.players.indexOf(player);
 		if (playerIndex < 0) return false;
-		if (player.userid) delete this.playerTable[player.userid];
+		if (player.id) delete this.playerTable[player.id];
 		this.players.splice(playerIndex, 1);
 		player.destroy();
 		this.playerCount--;
@@ -176,12 +176,12 @@ export class RoomGame {
 	}
 
 	renamePlayer(user: User, oldUserid: ID) {
-		if (user.userid === oldUserid) {
-			this.playerTable[user.userid].name = user.name;
+		if (user.id === oldUserid) {
+			this.playerTable[user.id].name = user.name;
 		} else {
-			this.playerTable[user.userid] = this.playerTable[oldUserid];
-			this.playerTable[user.userid].userid = user.userid;
-			this.playerTable[user.userid].name = user.name;
+			this.playerTable[user.id] = this.playerTable[oldUserid];
+			this.playerTable[user.id].id = user.id;
+			this.playerTable[user.id].name = user.name;
 			delete this.playerTable[oldUserid];
 		}
 	}
@@ -247,8 +247,8 @@ export class RoomGame {
 	 */
 	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
-			if (!(user.userid in this.playerTable)) {
-				user.games.delete(this.id);
+			if (!(user.id in this.playerTable)) {
+				user.games.delete(this.roomid);
 				user.updateSearch();
 			}
 			return;

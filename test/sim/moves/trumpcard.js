@@ -17,7 +17,7 @@ describe('Trump Card', function () {
 		]);
 
 		const basePowers = [];
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'trumpcard') {
 				basePowers.push(bp);
 			}
@@ -37,7 +37,7 @@ describe('Trump Card', function () {
 		]);
 
 		const basePowers = [];
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'trumpcard') {
 				basePowers.push(bp);
 			}
@@ -59,7 +59,7 @@ describe('Trump Card', function () {
 		]);
 
 		const basePowers = [];
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'trumpcard') {
 				basePowers.push(bp);
 			}

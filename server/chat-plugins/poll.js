@@ -16,6 +16,7 @@ class Poll {
 	 * @param {string[]} options
 	 */
 	constructor(room, questionData, options) {
+		this.activityId = 'poll';
 		this.pollNumber = ++room.gameNumber;
 		this.room = room;
 		this.question = questionData.source;
@@ -51,7 +52,7 @@ class Poll {
 	 */
 	vote(user, option) {
 		let ip = user.latestIp;
-		let userid = user.userid;
+		let userid = user.id;
 
 		if (userid in this.voters || ip in this.voterIps) {
 			return user.sendTo(this.room, `You have already voted for this poll.`);
@@ -71,7 +72,7 @@ class Poll {
 	 */
 	blankvote(user) {
 		let ip = user.latestIp;
-		let userid = user.userid;
+		let userid = user.id;
 
 		if (!(userid in this.voters) || !(ip in this.voterIps)) {
 			this.voters[userid] = 0;
@@ -142,8 +143,8 @@ class Poll {
 		// Update the poll results for everyone that has voted
 		for (let i in this.room.users) {
 			let user = this.room.users[i];
-			if (user.userid in this.voters) {
-				user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${results[this.voters[user.userid]]}`);
+			if (user.id in this.voters) {
+				user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${results[this.voters[user.id]]}`);
 			} else if (user.latestIp in this.voterIps) {
 				user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${results[this.voterIps[user.latestIp]]}`);
 			}
@@ -156,8 +157,8 @@ class Poll {
 	 */
 	updateTo(user, connection = null) {
 		const recipient = connection || user;
-		if (user.userid in this.voters) {
-			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
+		if (user.id in this.voters) {
+			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
 		} else if (user.latestIp in this.voterIps) {
 			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
 		} else {
@@ -169,8 +170,8 @@ class Poll {
 	 * @param {User} user
 	 */
 	updateFor(user) {
-		if (user.userid in this.voters) {
-			user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
+		if (user.id in this.voters) {
+			user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
 		}
 	}
 
@@ -185,8 +186,8 @@ class Poll {
 
 		for (let i in this.room.users) {
 			let thisUser = this.room.users[i];
-			if (thisUser.userid in this.voters) {
-				thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${results[this.voters[thisUser.userid]]}`);
+			if (thisUser.id in this.voters) {
+				thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${results[this.voters[thisUser.id]]}`);
 			} else if (thisUser.latestIp in this.voterIps) {
 				thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${results[this.voterIps[thisUser.latestIp]]}`);
 			} else {
@@ -201,8 +202,8 @@ class Poll {
 	 */
 	displayTo(user, connection = null) {
 		const recipient = connection || user;
-		if (user.userid in this.voters) {
-			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
+		if (user.id in this.voters) {
+			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
 		} else if (user.latestIp in this.voterIps) {
 			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
 		} else {
@@ -259,7 +260,7 @@ const commands = {
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (room.poll) return this.errorReply("There is already a poll in progress in this room.");
+			if (room.minorActivity) return this.errorReply("There is already a poll or announcement in progress in this room.");
 			if (params.length < 3) return this.errorReply("Not enough arguments for /poll new.");
 
 			// @ts-ignore In the case that any of these are null, the function is terminated, and the result never used.
@@ -275,8 +276,8 @@ const commands = {
 				return this.errorReply("There are duplicate options in the poll.");
 			}
 
-			room.poll = new Poll(room, {source: params[0], supportHTML: supportHTML}, options);
-			room.poll.display();
+			room.minorActivity = new Poll(room, {source: params[0], supportHTML: supportHTML}, options);
+			room.minorActivity.display();
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('POLL');
@@ -288,50 +289,51 @@ const commands = {
 		],
 
 		vote(target, room, user) {
-			if (!room.poll) return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
 			if (!target) return this.parse('/help poll vote');
-
+			const poll = /** @type {Poll} */(room.minorActivity);
 			if (target === 'blank') {
-				room.poll.blankvote(user);
+				poll.blankvote(user);
 				return;
 			}
 
 			let parsed = parseInt(target);
 			if (isNaN(parsed)) return this.errorReply("To vote, specify the number of the option.");
 
-			if (!room.poll.options.has(parsed)) return this.sendReply("Option not in poll.");
+			if (!poll.options.has(parsed)) return this.sendReply("Option not in poll.");
 
-			room.poll.vote(user, parsed);
+			poll.vote(user, parsed);
 		},
 		votehelp: [`/poll vote [number] - Votes for option [number].`],
 
 		timer(target, room, user) {
-			if (!room.poll) return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			const poll = /** @type {Poll} */(room.minorActivity);
 
 			if (target) {
 				if (!this.can('minigame', null, room)) return false;
 				if (target === 'clear') {
-					if (!room.poll.timeout) return this.errorReply("There is no timer to clear.");
-					clearTimeout(room.poll.timeout);
-					room.poll.timeout = null;
-					room.poll.timeoutMins = 0;
+					if (!poll.timeout) return this.errorReply("There is no timer to clear.");
+					clearTimeout(poll.timeout);
+					poll.timeout = null;
+					poll.timeoutMins = 0;
 					return this.add("The poll timer was turned off.");
 				}
 				let timeout = parseFloat(target);
 				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply("Invalid time given.");
-				if (room.poll.timeout) clearTimeout(room.poll.timeout);
-				room.poll.timeoutMins = timeout;
-				room.poll.timeout = setTimeout(() => {
-					if (room.poll) room.poll.end();
-					room.poll = null;
+				if (poll.timeout) clearTimeout(poll.timeout);
+				poll.timeoutMins = timeout;
+				poll.timeout = setTimeout(() => {
+					if (poll) poll.end();
+					room.minorActivity = null;
 				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
 				this.modlog('POLL TIMER', null, `${timeout} minutes`);
 				return this.privateModAction(`(The poll timer was set to ${timeout} minute(s) by ${user.name}.)`);
 			} else {
 				if (!this.runBroadcast()) return;
-				if (room.poll.timeout) {
-					return this.sendReply(`The poll timer is on and will end in ${room.poll.timeoutMins} minute(s).`);
+				if (poll.timeout) {
+					return this.sendReply(`The poll timer is on and will end in ${poll.timeoutMins} minute(s).`);
 				} else {
 					return this.sendReply("The poll timer is off.");
 				}
@@ -343,9 +345,10 @@ const commands = {
 		],
 
 		results(target, room, user) {
-			if (!room.poll) return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			const poll = /** @type {Poll} */(room.minorActivity);
 
-			return room.poll.blankvote(user);
+			return poll.blankvote(user);
 		},
 		resultshelp: [`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`],
 
@@ -354,11 +357,12 @@ const commands = {
 		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (!room.poll) return this.errorReply("There is no poll running in this room.");
-			if (room.poll.timeout) clearTimeout(room.poll.timeout);
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			const poll = /** @type {Poll} */(room.minorActivity);
+			if (poll.timeout) clearTimeout(poll.timeout);
 
-			room.poll.end();
-			delete room.poll;
+			poll.end();
+			room.minorActivity = null;
 			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
 		},
@@ -366,14 +370,15 @@ const commands = {
 
 		show: 'display',
 		display(target, room, user, connection) {
-			if (!room.poll) return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			const poll = /** @type {Poll} */(room.minorActivity);
 			if (!this.runBroadcast()) return;
 			room.update();
 
 			if (this.broadcasting) {
-				room.poll.display();
+				poll.display();
 			} else {
-				room.poll.displayTo(user, connection);
+				poll.displayTo(user, connection);
 			}
 		},
 		displayhelp: [`/poll display - Displays the poll`],

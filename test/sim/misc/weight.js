@@ -16,7 +16,7 @@ describe('Heavy Metal', function () {
 			[{species: "Simisage", ability: 'gluttony', moves: ['grassknot']}],
 		]);
 		let basePower = 0;
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
 			}
@@ -31,7 +31,7 @@ describe('Heavy Metal', function () {
 			[{species: "Simisage", ability: 'moldbreaker', moves: ['grassknot']}],
 		]);
 		let basePower = 0;
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
 			}
@@ -52,7 +52,7 @@ describe('Light Metal', function () {
 			[{species: "Simisage", ability: 'gluttony', moves: ['grassknot']}],
 		]);
 		let basePower = 0;
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
 			}
@@ -67,7 +67,7 @@ describe('Light Metal', function () {
 			[{species: "Simisage", ability: 'moldbreaker', moves: ['grassknot']}],
 		]);
 		let basePower = 0;
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
 			}
@@ -88,7 +88,7 @@ describe('Float Stone', function () {
 			[{species: "Simisage", ability: 'gluttony', moves: ['grassknot']}],
 		]);
 		let basePower = 0;
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
 			}
@@ -109,7 +109,7 @@ describe('Autotomize', function () {
 			[{species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot']}],
 		]);
 		let basePower = 0;
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
 			}
@@ -126,12 +126,28 @@ describe('Autotomize', function () {
 			[{species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot']}],
 		]);
 		let basePower = 0;
-		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
 			}
 		});
 		battle.makeChoices('move autotomize', 'move grassknot');
 		assert.strictEqual(basePower, 60);
+	});
+
+	it('should reset after a forme change', function () {
+		battle = common.createBattle([
+			[{species: "Aegislash", ability: 'stancechange', moves: ['autotomize', 'shadowsneak']}],
+			[{species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot']}],
+		]);
+		let basePower = 0;
+		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
+			if (move.id === 'grassknot') {
+				basePower = bp;
+			}
+		});
+		battle.makeChoices('move autotomize', 'move grassknot');
+		battle.makeChoices('move shadowsneak', 'move grassknot');
+		assert.strictEqual(basePower, 80);
 	});
 });

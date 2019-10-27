@@ -6,7 +6,6 @@
  */
 
 import {Battle} from './battle';
-import {Dex} from './dex';
 import * as Data from './dex-data';
 import {Field} from './field';
 import {Pokemon} from './pokemon';
@@ -36,7 +35,7 @@ type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item |
 // Battle inherits from Dex, but all of Dex's fields are redundant - we can
 // just recreate the Dex from the format.
 const BATTLE = new Set([
-	...Object.keys(Dex), 'id', 'log', 'inherit', 'cachedFormat',
+	'dex', 'gen', 'ruleTable', 'id', 'log', 'inherit', 'format',
 	'zMoveTable', 'teamGenerator', 'NOT_FAIL', 'FAIL', 'SILENT_FAIL',
 	'field', 'sides', 'prng', 'hints', 'deserialized',
 ]);
@@ -70,6 +69,7 @@ export const State = new class {
 		// We treat log specially because we only set it back on Battle after everything
 		// else has been deserialized to avoid anything accidentally `add`-ing to it.
 		state.log = battle.log;
+		state.formatid = battle.format.id;
 		return state;
 	}
 
@@ -83,7 +83,7 @@ export const State = new class {
 		const state: /* Battle */ AnyObject =
 			typeof serialized === 'string' ? JSON.parse(serialized) : serialized;
 		const options = {
-			formatid: state.format,
+			formatid: state.formatid,
 			seed: state.prngSeed,
 			rated: state.rated,
 			debug: state.debugMode,
@@ -256,7 +256,7 @@ export const State = new class {
 	// a bug in the simulator if it ever happened, but if not, the isActiveMove check can
 	// be extended.
 	private serializeActiveMove(move: ActiveMove, battle: Battle): /* ActiveMove */ AnyObject {
-		const base = battle.getMove(move.id);
+		const base = battle.dex.getMove(move.id);
 		const skip = new Set([...ACTIVE_MOVE]);
 		for (const [key, value] of Object.entries(base)) {
 			// This should really be a deepEquals check to see if anything on ActiveMove was
@@ -271,7 +271,7 @@ export const State = new class {
 	}
 
 	private deserializeActiveMove(state: /* ActiveMove */ AnyObject, battle: Battle): ActiveMove {
-		const move = battle.getActiveMove(this.fromRef(state.move, battle)! as Move);
+		const move = battle.dex.getActiveMove(this.fromRef(state.move, battle)! as Move);
 		this.deserialize(state, move, ACTIVE_MOVE, battle);
 		return move;
 	}
@@ -384,11 +384,11 @@ export const State = new class {
 		switch (type) {
 		case 'Side': return battle.sides[Number(id[1]) - 1];
 		case 'Pokemon': return battle.sides[Number(id[1]) - 1].pokemon[POSITIONS.indexOf(id[2])];
-		case 'Ability': return battle.getAbility(id);
-		case 'Item': return battle.getItem(id);
-		case 'Move': return battle.getMove(id);
-		case 'PureEffect': return battle.getEffect(id);
-		case 'Template': return battle.getTemplate(id);
+		case 'Ability': return battle.dex.getAbility(id);
+		case 'Item': return battle.dex.getItem(id);
+		case 'Move': return battle.dex.getMove(id);
+		case 'PureEffect': return battle.dex.getEffect(id);
+		case 'Template': return battle.dex.getTemplate(id);
 		default: return undefined; // maybe we actually got unlucky and its a string
 		}
 	}

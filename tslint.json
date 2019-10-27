@@ -10,6 +10,7 @@
         "member-access": [true, "no-public"],
         "no-empty": [true, "allow-empty-catch", "allow-empty-functions"],
         "no-string-literal": false,
+        "no-unnecessary-initializer": false,
         "interface-over-type-literal": true,
         "arrow-return-shorthand": true,
         "no-angle-bracket-type-assertion": true,
@@ -71,6 +72,6 @@
     "rulesDirectory": [],
     "linterOptions": {
       // TODO: why is tslint looking at .js files anyway?
-      "exclude": ["node_modules/", "**/*.js", "*/globals.ts"]
+      "exclude": ["node_modules/", "**/*.js", "*/global-types.ts"]
      }
 }

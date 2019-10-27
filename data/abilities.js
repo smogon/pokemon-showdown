@@ -144,9 +144,9 @@ let BattleAbilities = {
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
-					const move = this.getMove(moveSlot.move);
+					const move = this.dex.getMove(moveSlot.move);
 					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
-					if (move.category !== 'Status' && (this.getImmunity(moveType, pokemon) && this.getEffectiveness(moveType, pokemon) > 0 || move.ohko)) {
+					if (move.category !== 'Status' && (this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 || move.ohko)) {
 						this.add('-ability', pokemon, 'Anticipation');
 						return;
 					}
@@ -476,6 +476,7 @@ let BattleAbilities = {
 				}
 			}
 			if (statsLowered) {
+				this.add('-ability', target, 'Competitive');
 				this.boost({spa: 2}, target, target, null, true);
 			}
 		},
@@ -497,6 +498,7 @@ let BattleAbilities = {
 		num: 14,
 	},
 	"contrary": {
+		desc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa. This Ability does not affect stat stage increases received from Z-Power effects that happen before a Z-Move is used.",
 		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
 		onBoost(boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
@@ -646,6 +648,7 @@ let BattleAbilities = {
 				}
 			}
 			if (statsLowered) {
+				this.add('-ability', target, 'Defiant');
 				this.boost({atk: 2}, target, target, null, true);
 			}
 		},
@@ -1111,7 +1114,7 @@ let BattleAbilities = {
 			for (const target of pokemon.side.foe.active) {
 				if (target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
-					let move = this.getMove(moveSlot.move);
+					let move = this.dex.getMove(moveSlot.move);
 					let bp = move.basePower;
 					if (move.ohko) bp = 150;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
@@ -1290,7 +1293,7 @@ let BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			if (this.field.isWeather(['sunnyday', 'desolateland']) || this.randomChance(1, 2)) {
-				if (pokemon.hp && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
+				if (pokemon.hp && !pokemon.item && this.dex.getItem(pokemon.lastItem).isBerry) {
 					pokemon.setItem(pokemon.lastItem);
 					pokemon.lastItem = '';
 					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Harvest');
@@ -1342,8 +1345,9 @@ let BattleAbilities = {
 	},
 	"heavymetal": {
 		shortDesc: "This Pokemon's weight is doubled.",
-		onModifyWeight(weight) {
-			return weight * 2;
+		onModifyWeightPriority: 1,
+		onModifyWeight(weighthg) {
+			return weighthg * 2;
 		},
 		id: "heavymetal",
 		name: "Heavy Metal",
@@ -1459,7 +1463,7 @@ let BattleAbilities = {
 		},
 		onAfterDamage(damage, target, source, effect) {
 			if (target.illusion && effect && effect.effectType === 'Move' && effect.id !== 'confused') {
-				this.singleEvent('End', this.getAbility('Illusion'), target.abilityData, target, source, effect);
+				this.singleEvent('End', this.dex.getAbility('Illusion'), target.abilityData, target, source, effect);
 			}
 		},
 		onEnd(pokemon) {
@@ -1506,7 +1510,7 @@ let BattleAbilities = {
 			if (this.activeMove && this.activeMove.id === 'skillswap') return;
 			let target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
-				pokemon.transformInto(target, this.getAbility('imposter'));
+				pokemon.transformInto(target, this.dex.getAbility('imposter'));
 			}
 		},
 		id: "imposter",
@@ -1580,7 +1584,7 @@ let BattleAbilities = {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
-					this.boost({atk: -1}, target, pokemon);
+					this.boost({atk: -1}, target, pokemon, null, true);
 				}
 			}
 		},
@@ -1690,8 +1694,8 @@ let BattleAbilities = {
 	},
 	"lightmetal": {
 		shortDesc: "This Pokemon's weight is halved.",
-		onModifyWeight(weight) {
-			return weight / 2;
+		onModifyWeight(weighthg) {
+			return this.trunc(weighthg / 2);
 		},
 		id: "lightmetal",
 		name: "Light Metal",
@@ -1792,7 +1796,7 @@ let BattleAbilities = {
 			if (target === source || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
-			let newMove = this.getActiveMove(move.id);
+			let newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.useMove(newMove, target, source);
@@ -1802,7 +1806,7 @@ let BattleAbilities = {
 			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
-			let newMove = this.getActiveMove(move.id);
+			let newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.useMove(newMove, this.effectData.target, source);
@@ -2060,7 +2064,7 @@ let BattleAbilities = {
 			if (source && source !== target && move && move.flags['contact'] && source.ability !== 'mummy') {
 				let oldAbility = source.setAbility('mummy', target);
 				if (oldAbility) {
-					this.add('-activate', target, 'ability: Mummy', this.getAbility(oldAbility).name, '[of] ' + source);
+					this.add('-activate', target, 'ability: Mummy', this.dex.getAbility(oldAbility).name, '[of] ' + source);
 				}
 			}
 		},
@@ -2093,7 +2097,7 @@ let BattleAbilities = {
 					// this.add('-message', "" + curPoke + " skipped: Natural Cure already known");
 					continue;
 				}
-				let template = this.getTemplate(curPoke.species);
+				let template = this.dex.getTemplate(curPoke.species);
 				// pokemon can't get Natural Cure
 				if (Object.values(template.abilities).indexOf('Natural Cure') < 0) {
 					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
@@ -2168,6 +2172,10 @@ let BattleAbilities = {
 	},
 	"noguard": {
 		shortDesc: "Every move used by or against this Pokemon will always hit.",
+		onAnyInvulnerabilityPriority: 1,
+		onAnyInvulnerability(target, source, move) {
+			if (move && (source === this.effectData.target || target === this.effectData.target)) return 0;
+		},
 		onAnyAccuracy(accuracy, target, source, move) {
 			if (move && (source === this.effectData.target || target === this.effectData.target)) {
 				return true;
@@ -2234,7 +2242,7 @@ let BattleAbilities = {
 		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
-			if (move.flags['powder'] && target !== source && this.getImmunity('powder', target)) {
+			if (move.flags['powder'] && target !== source && this.dex.getImmunity('powder', target)) {
 				this.add('-immune', target, '[from] ability: Overcoat');
 				return null;
 			}
@@ -2353,7 +2361,7 @@ let BattleAbilities = {
 			let randomTarget = this.sample(pickupTargets);
 			let item = randomTarget.lastItem;
 			randomTarget.lastItem = '';
-			this.add('-item', pokemon, this.getItem(item), '[from] ability: Pickup');
+			this.add('-item', pokemon, this.dex.getItem(item), '[from] ability: Pickup');
 			pokemon.setItem(item);
 		},
 		id: "pickup",
@@ -2439,7 +2447,7 @@ let BattleAbilities = {
 			move.secondaries.push({
 				chance: 30,
 				status: 'psn',
-				ability: this.getAbility('poisontouch'),
+				ability: this.dex.getAbility('poisontouch'),
 			});
 		},
 		id: "poisontouch",
@@ -2471,7 +2479,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon copies the Ability of an ally that faints.",
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
-			let ability = this.getAbility(target.ability);
+			let ability = this.dex.getAbility(target.ability);
 			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode'];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
@@ -2646,7 +2654,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon copies the Ability of an ally that faints.",
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
-			let ability = this.getAbility(target.ability);
+			let ability = this.dex.getAbility(target.ability);
 			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode'];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
@@ -3054,6 +3062,7 @@ let BattleAbilities = {
 		num: 197,
 	},
 	"simple": {
+		desc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead. This Ability does not affect stat stage increases received from Z-Power effects that happen before a Z-Move is used.",
 		shortDesc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 		onBoost(boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
@@ -3586,7 +3595,7 @@ let BattleAbilities = {
 		onAfterDamage(damage, target, source, effect) {
 			if (effect && effect.flags['contact']) {
 				this.add('-ability', target, 'Tangling Hair');
-				this.boost({spe: -1}, source, target, null, false, true);
+				this.boost({spe: -1}, source, target, null, true);
 			}
 		},
 		id: "tanglinghair",
@@ -3734,7 +3743,7 @@ let BattleAbilities = {
 				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 				let target = possibleTargets[rand];
-				let ability = this.getAbility(target.ability);
+				let ability = this.dex.getAbility(target.ability);
 				let bannedAbilities = ['noability', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode'];
 				if (bannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
@@ -4151,7 +4160,7 @@ let BattleAbilities = {
 			if (target === source || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
-			let newMove = this.getActiveMove(move.id);
+			let newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			this.useMove(newMove, target, source);
 			return null;
@@ -4162,7 +4171,7 @@ let BattleAbilities = {
 			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
-			let newMove = this.getActiveMove(move.id);
+			let newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			this.useMove(newMove, this.effectData.target, source);
 			return null;

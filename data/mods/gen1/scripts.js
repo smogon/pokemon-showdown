@@ -11,7 +11,7 @@ let BattleScripts = {
 	inherit: 'gen2',
 	gen: 1,
 	debug(activity) {
-		if (this.getFormat().debug) {
+		if (this.format.debug) {
 			this.add('debug', activity);
 		}
 	},
@@ -39,7 +39,7 @@ let BattleScripts = {
 		modifyStat(statName, modifier) {
 			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
 			// @ts-ignore
-			this.modifiedStats[statName] = this.battle.clampIntRange(Math.floor(this.modifiedStats[statName] * modifier), 1, 999);
+			this.modifiedStats[statName] = this.battle.dex.clampIntRange(Math.floor(this.modifiedStats[statName] * modifier), 1, 999);
 		},
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
 		boostBy(boost) {
@@ -91,7 +91,7 @@ let BattleScripts = {
 	// It also deals with how PP reduction works on gen 1.
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
 		let target = this.getTarget(pokemon, moveOrMoveName, targetLoc);
-		let move = this.getActiveMove(moveOrMoveName);
+		let move = this.dex.getActiveMove(moveOrMoveName);
 		if (target && target.subFainted) target.subFainted = null;
 
 		this.setActiveMove(move, pokemon, target);
@@ -174,8 +174,8 @@ let BattleScripts = {
 	// @ts-ignore
 	useMove(moveOrMoveName, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
-		let baseMove = this.getMove(moveOrMoveName);
-		let move = this.getActiveMove(baseMove);
+		let baseMove = this.dex.getMove(moveOrMoveName);
+		let move = this.dex.getActiveMove(baseMove);
 		if (target === undefined) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self') {
 			target = pokemon;
@@ -205,7 +205,7 @@ let BattleScripts = {
 			return false;
 		}
 
-		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
+		if (sourceEffect) attrs += '|[from]' + this.dex.getEffect(sourceEffect);
 		this.addMove('move', pokemon, move.name, target + attrs);
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
@@ -257,8 +257,8 @@ let BattleScripts = {
 		let damage = 0;
 
 		// First, check if the target is semi-invulnerable
-		let hitResult = this.runEvent('TryImmunity', target, pokemon, move);
-		if (!hitResult) {
+		let hitResult = this.runEvent('Invulnerability', target, pokemon, move);
+		if (hitResult === false) {
 			if (!move.spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			return false;
@@ -269,6 +269,11 @@ let BattleScripts = {
 			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);
 			}
+			return false;
+		}
+		hitResult = this.singleEvent('TryImmunity', move, null, target, pokemon, move);
+		if (hitResult === false) {
+			this.add('-immune', pokemon);
 			return false;
 		}
 
@@ -628,7 +633,7 @@ let BattleScripts = {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (typeof effect === 'string') effect = this.getEffect(effect);
+		if (typeof effect === 'string') effect = this.dex.getEffect(effect);
 		if (!target || !target.hp) return 0;
 		let success = null;
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
@@ -680,7 +685,7 @@ let BattleScripts = {
 	getDamage(pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
 		if (typeof move === 'string') {
-			move = this.getActiveMove(move);
+			move = this.dex.getActiveMove(move);
 		} else if (typeof move === 'number') {
 			// @ts-ignore
 			move = /** @type {ActiveMove} */ ({
@@ -745,7 +750,7 @@ let BattleScripts = {
 		if (!basePower) {
 			return basePower === 0 ? undefined : basePower;
 		}
-		basePower = this.clampIntRange(basePower, 1);
+		basePower = this.dex.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
 		let isCrit = move.willCrit || false;
@@ -760,7 +765,7 @@ let BattleScripts = {
 				critChance = Math.floor(critChance / 2);
 			} else {
 				// Normally, without focus energy, crit chance is multiplied by 2 and capped at 255 here.
-				critChance = this.clampIntRange(critChance * 2, 1, 255);
+				critChance = this.dex.clampIntRange(critChance * 2, 1, 255);
 			}
 
 			// Now we check for the move's critical hit ratio.
@@ -769,7 +774,7 @@ let BattleScripts = {
 				critChance = Math.floor(critChance / 2);
 			} else if (move.critRatio === 2) {
 				// High crit ratio, we multiply the result so far by 4 and cap it at 255.
-				critChance = this.clampIntRange(critChance * 4, 1, 255);
+				critChance = this.dex.clampIntRange(critChance * 4, 1, 255);
 			}
 
 			// Last, we check deppending on ratio if the move critical hits or not.
@@ -789,7 +794,7 @@ let BattleScripts = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = this.clampIntRange(basePower, 1);
+		basePower = this.dex.clampIntRange(basePower, 1);
 
 		// We now check attacker's and defender's stats.
 		let level = pokemon.level;
@@ -807,7 +812,7 @@ let BattleScripts = {
 		if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
 			this.debug('Screen doubling (Sp)Def');
 			defense *= 2;
-			defense = this.clampIntRange(defense, 1, 1998);
+			defense = this.dex.clampIntRange(defense, 1, 1998);
 		}
 
 		// In the event of a critical hit, the offense and defense changes are ignored.
@@ -832,14 +837,14 @@ let BattleScripts = {
 		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
 		// This is what cuases the roll over bugs.
 		if (attack >= 256 || defense >= 256) {
-			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
+			attack = this.dex.clampIntRange(Math.floor(attack / 4) % 256, 1);
 			// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
+			defense = this.dex.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}
 
 		// Self destruct moves halve defense at this point.
 		if (move.selfdestruct && defType === 'def') {
-			defense = this.clampIntRange(Math.floor(defense / 2), 1);
+			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
 		// Let's go with the calculation now that we have what we need.
@@ -850,7 +855,7 @@ let BattleScripts = {
 		damage *= basePower;
 		damage *= attack;
 		damage = Math.floor(damage / defense);
-		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
+		damage = this.dex.clampIntRange(Math.floor(damage / 50), 1, 997);
 		damage += 2;
 
 		// STAB damage bonus, the "???" type never gets STAB

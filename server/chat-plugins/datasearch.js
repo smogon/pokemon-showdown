@@ -594,7 +594,6 @@ function runDexsearch(target, cmd, canAll, message) {
 	const accumulateKeyCount = (count, searchData) => count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
 	searches.sort((a, b) => Object.values(a).reduce(accumulateKeyCount, 0) - Object.values(b).reduce(accumulateKeyCount, 0));
 
-	let lsetData = {};
 	for (const alts of searches) {
 		if (alts.skip) continue;
 		for (let mon in dex) {
@@ -694,7 +693,7 @@ function runDexsearch(target, cmd, canAll, message) {
 						monStat += dex[mon].baseStats[monStats];
 					}
 				} else if (stat === 'weight') {
-					monStat = dex[mon].weightkg;
+					monStat = dex[mon].weighthg / 10;
 				} else if (stat === 'height') {
 					monStat = dex[mon].heightm;
 				} else if (stat === 'gen') {
@@ -723,12 +722,14 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (matched) continue;
 
+			const validator = TeamValidator.get(`gen${maxGen}ou`);
+			let pokemonSource = validator.allSources();
 			for (let move in alts.moves) {
-				if (!lsetData[mon]) lsetData[mon] = {fastCheck: true, sources: [], sourcesBefore: maxGen};
-				if (!TeamValidator.get(`gen${maxGen}ou`).checkLearnset(move, mon, lsetData[mon]) === alts.moves[move]) {
+				if (!validator.checkLearnset(move, mon, pokemonSource) === alts.moves[move]) {
 					matched = true;
 					break;
 				}
+				if (!pokemonSource.size()) break;
 			}
 			if (matched) continue;
 
@@ -761,8 +762,8 @@ function runDexsearch(target, cmd, canAll, message) {
 						monStat2 += mon2.baseStats[monStats];
 					}
 				} else if (stat === 'weight') {
-					monStat1 = mon1.weightkg;
-					monStat2 = mon2.weightkg;
+					monStat1 = mon1.weighthg;
+					monStat2 = mon2.weighthg;
 				} else if (stat === 'height') {
 					monStat1 = mon1.heightm;
 					monStat2 = mon2.heightm;
@@ -1575,13 +1576,12 @@ function runLearn(target, cmd) {
 		formatName = `Gen ${gen}`;
 		if (format.requirePentagon) formatName += ' Pentagon';
 	}
-	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
-
 	const validator = TeamValidator.get(format);
+
 	let template = validator.dex.getTemplate(targets.shift());
-	let move = {};
+	let setSources = validator.allSources(template);
+	let set = {level: cmd === 'learn5' ? 5 : 100};
 	let all = (cmd === 'learnall');
-	if (cmd === 'learn5') lsetData.set.level = 5;
 
 	if (!template.exists || template.id === 'missingno') {
 		return {error: `Pok\u00e9mon '${template.id}' not found.`};
@@ -1596,34 +1596,51 @@ function runLearn(target, cmd) {
 	}
 
 	let lsetProblem;
+	let moveNames = [];
 	for (const arg of targets) {
 		if (['ha', 'hidden', 'hiddenability'].includes(toID(arg))) {
-			lsetData.isHidden = true;
+			setSources.isHidden = true;
 			continue;
 		}
-		move = validator.dex.getMove(arg);
+		let move = validator.dex.getMove(arg);
+		moveNames.push(move.name);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
 			return {error: `Move '${move.id}' not found.`};
 		}
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		lsetProblem = validator.checkLearnset(move, template, lsetData);
+		lsetProblem = validator.checkLearnset(move, template, setSources, set);
 		if (lsetProblem) {
 			lsetProblem.moveName = move.name;
 			break;
 		}
 	}
-	let problems = validator.reconcileLearnset(template, lsetData, lsetProblem);
+	let problems = validator.reconcileLearnset(template, setSources, lsetProblem);
+	let sources = setSources.sources.map(source => {
+		if (source.charAt(1) !== 'E') return source;
+		const fathers = validator.findEggMoveFathers(source, template, setSources, true);
+		if (!fathers) return null;
+		return source + ':' + fathers.join(',');
+	}).filter(Boolean);
+	if (setSources.sources.length && !sources.length) {
+		if (!problems) problems = [];
+		problems.push(`${template.name} doesn't have a valid father for its egg moves (${setSources.limitedEggMoves.join(', ')})`);
+	}
 	let buffer = `In ${formatName}, `;
-	buffer += `${template.name}` + (problems ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + (targets.length > 1 ? `these moves` : move.name);
+	if (setSources.isHidden) {
+		buffer += `${template.abilities['H'] || 'HA'} `;
+	}
+	buffer += `${template.name}` + (problems ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + Chat.toListString(moveNames);
 	if (!problems) {
-		let sourceNames = {E: "egg", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "egg, traded back", Y: "event, traded back"};
-		let sourcesBefore = lsetData.sourcesBefore;
-		if (lsetData.sources || sourcesBefore < gen) buffer += " only when obtained";
+		let sourceNames = {
+			E: "", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "traded-back ", Y: "traded-back event",
+		};
+		let sourcesBefore = setSources.sourcesBefore;
+		if (sources.length || sourcesBefore < gen) buffer += " only when obtained";
 		buffer += " from:<ul class=\"message-learn-list\">";
-		if (lsetData.sources) {
-			let sources = lsetData.sources.map(source => {
+		if (sources.length) {
+			sources = sources.map(source => {
 				if (source.slice(0, 3) === '1ET') {
 					return '2X' + source.slice(3);
 				}
@@ -1632,34 +1649,35 @@ function runLearn(target, cmd) {
 				}
 				return source;
 			}).sort();
-			let prevSourceType;
-			let prevSourceCount = 0;
-			for (const source of sources) {
-				let hatchAs = ['6E', '7E'].includes(source.substr(0, 2)) ? 'hatched as ' : '';
-				if (source.substr(0, 2) === prevSourceType) {
-					if (!hatchAs && source.length <= 2) continue;
-					if (prevSourceCount < 0) {
-						buffer += `: ${hatchAs + source.substr(2)}`;
-					} else if (all || prevSourceCount < 3) {
-						buffer += `, ${hatchAs + source.substr(2)}`;
-					} else if (prevSourceCount === 3) {
-						buffer += ", ...";
-					}
-					++prevSourceCount;
-					continue;
-				}
-				prevSourceType = source.substr(0, 2);
-				prevSourceCount = source.substr(2) ? 0 : -1;
+			for (let source of sources) {
 				buffer += `<li>Gen ${source.charAt(0)} ${sourceNames[source.charAt(1)]}`;
-				if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
-				if (source.substr(2)) buffer += `: ${hatchAs + source.substr(2)}`;
+
+				if (source.charAt(1) === 'E') {
+					let fathers;
+					[source, fathers] = source.split(':');
+					fathers = fathers.split(',');
+					if (fathers.length > 4 && !all) fathers = fathers.slice(-4).concat('...');
+					if (source.length > 2) {
+						buffer += `${source.slice(2)} `;
+					}
+					buffer += `egg`;
+					if (!fathers[0]) {
+						buffer += `: chainbreed`;
+					} else {
+						buffer += `: breed ${fathers.join(', ')}`;
+					}
+				}
+
+				if (source.slice(0, 2) === '5E' && template.maleOnlyHidden) {
+					buffer += " (no hidden ability)";
+				}
 			}
 		}
 		if (sourcesBefore) {
 			buffer += `<li>${(sourcesBefore < gen ? "Gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in Gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "")})`;
 		}
-		if (lsetData.babyOnly && sourcesBefore) {
-			buffer += `<li>must be obtained as ` + Dex.getTemplate(lsetData.babyOnly).species;
+		if (setSources.babyOnly && sourcesBefore) {
+			buffer += `<li>must be obtained as ` + Dex.getTemplate(setSources.babyOnly).species;
 		}
 		buffer += "</ul>";
 	} else if (targets.length > 1 || problems.length > 1) {
@@ -1725,6 +1743,7 @@ if (!PM.isParentProcess) {
 	}
 
 	global.Dex = require('../../.sim-dist/dex').Dex;
+	global.Chat = require('../../.server-dist/chat').Chat;
 	global.toID = Dex.getId;
 	Dex.includeData();
 	global.TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;

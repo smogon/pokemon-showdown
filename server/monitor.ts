@@ -73,22 +73,25 @@ export const Monitor = {
 
 	log(text: string) {
 		this.notice(text);
-		if (Rooms.get('staff')) {
-			Rooms.get('staff').add(`|c|~|${text}`).update();
+		const staffRoom = Rooms.get('staff');
+		if (staffRoom) {
+			staffRoom.add(`|c|~|${text}`).update();
 		}
 	},
 
 	adminlog(text: string) {
 		this.notice(text);
-		if (Rooms.get('upperstaff')) {
-			Rooms.get('upperstaff').add(`|c|~|${text}`).update();
+		const upperstaffRoom = Rooms.get('upperstaff');
+		if (upperstaffRoom) {
+			upperstaffRoom.add(`|c|~|${text}`).update();
 		}
 	},
 
 	logHTML(text: string) {
 		this.notice(text);
-		if (Rooms.get('staff')) {
-			Rooms.get('staff').add(`|html|${text}`).update();
+		const staffRoom = Rooms.get('staff');
+		if (staffRoom) {
+			staffRoom.add(`|html|${text}`).update();
 		}
 	},
 
@@ -229,8 +232,7 @@ export const Monitor = {
 		for (const i in this.networkUse) {
 			buf += `${this.networkUse[i]}\t${this.networkCount[i]}\t${i}\n`;
 		}
-		// tslint:disable-next-line: no-floating-promises
-		FS('logs/networkuse.tsv').write(buf);
+		void FS('logs/networkuse.tsv').write(buf);
 	},
 
 	clearNetworkUse() {

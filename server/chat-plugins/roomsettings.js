@@ -44,7 +44,7 @@ class RoomSettings {
 				modchatOutput.push(this.button(rank, true));
 			} else if (rank) {
 				let rankIndex = RANKS.indexOf(rank);
-				let roomAuth = (this.room.auth && this.room.auth[this.user.userid] ? this.room.auth[this.user.userid] : false);
+				let roomAuth = (this.room.auth && this.room.auth[this.user.id] ? this.room.auth[this.user.id] : false);
 				let roomAuthIndex = (roomAuth ? RANKS.indexOf(roomAuth) : false);
 				if (rankIndex > 1 && !this.user.can('modchatall', null, this.room)) continue;
 				if (roomAuth && !this.user.can('bypassall')) {
@@ -216,7 +216,6 @@ exports.commands = {
 			const modchatSetting = (room.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
 		}
-		if (!this.canTalk()) return;
 		if (!this.can('modchat', null, room)) return false;
 
 		// 'modchat' lets you set up to 1 (ac/trusted also allowed)
@@ -593,11 +592,11 @@ exports.commands = {
 			if (words.length > 1) {
 				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were added by ${user.name}.)`);
 				this.modlog('BANWORD', null, words.map(w => `'${w}'`).join(', '));
-				this.sendReply(`Banned phrases succesfully added.`);
+				this.sendReply(`Banned phrases successfully added.`);
 			} else {
 				this.privateModAction(`(The banword '${words[0]}' was added by ${user.name}.)`);
 				this.modlog('BANWORD', null, words[0]);
-				this.sendReply(`Banned phrase succesfully added.`);
+				this.sendReply(`Banned phrase successfully added.`);
 			}
 			this.sendReply(`The list is currently: ${room.banwords.join(', ')}`);
 
@@ -628,11 +627,11 @@ exports.commands = {
 			if (words.length > 1) {
 				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.)`);
 				this.modlog('UNBANWORD', null, words.map(w => `'${w}'`).join(', '));
-				this.sendReply(`Banned phrases succesfully deleted.`);
+				this.sendReply(`Banned phrases successfully deleted.`);
 			} else {
 				this.privateModAction(`(The banword '${words[0]}' was removed by ${user.name}.)`);
 				this.modlog('UNBANWORD', null, words[0]);
-				this.sendReply(`Banned phrase succesfully deleted.`);
+				this.sendReply(`Banned phrase successfully deleted.`);
 			}
 			this.sendReply(room.banwords ? `The list is currently: ${room.banwords.join(', ')}` : `The list is now empty.`);
 
@@ -648,7 +647,7 @@ exports.commands = {
 
 			if (!room.banwords) return this.sendReply("This room has no banned phrases.");
 
-			return this.sendReply(`Banned phrases in room ${room.id}: ${room.banwords.join(', ')}`);
+			return this.sendReply(`Banned phrases in room ${room.roomid}: ${room.banwords.join(', ')}`);
 		},
 
 		""(target, room, user) {

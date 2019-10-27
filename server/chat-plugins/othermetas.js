@@ -3,7 +3,7 @@
 
 /**
  * @param {string} stone
- * @return {Object}
+ * @return {Item | null}
  */
 function getMegaStone(stone) {
 	let item = Dex.getItem(stone);
@@ -13,15 +13,21 @@ function getMegaStone(stone) {
 			return {
 				id: move.id,
 				name: move.name,
+				fullname: move.name,
 				megaEvolves: 'Rayquaza',
 				megaStone: 'Rayquaza-Mega',
 				exists: true,
+				// Adding extra values to appease typescript
+				gen: 6,
+				num: -1,
+				effectType: 'Item',
+				sourceEffect: '',
 			};
 		} else {
-			return {exists: false};
+			return null;
 		}
 	}
-	if (!item.megaStone && !item.onPrimal) return {exists: false};
+	if (!item.megaStone && !item.onPrimal) return null;
 	return item;
 }
 
@@ -72,7 +78,7 @@ const commands = {
 		let sep = target.split('@');
 		let stone = getMegaStone(sep[1]);
 		let template = Dex.getTemplate(sep[0]);
-		if (!stone.exists) return this.errorReply(`Error: Mega Stone not found.`);
+		if (!stone) return this.errorReply(`Error: Mega Stone not found.`);
 		if (!template.exists) return this.errorReply(`Error: Pokemon not found.`);
 		if (template.isMega || template.name === 'Necrozma-Ultra') { // Mega Pokemon and Ultra Necrozma cannot be mega evolved
 			this.errorReply(`Warning: You cannot mega evolve Mega Pokemon and Ultra Necrozma in Mix and Mega.`);
@@ -114,10 +120,10 @@ const commands = {
 			megaTemplate = Dex.getTemplate("Kyogre-Primal");
 			baseTemplate = Dex.getTemplate("Kyogre");
 		}
-		/** @type {{baseStats: {[k: string]: number}, weightkg: number, type?: string}} */
+		/** @type {{baseStats: {[k: string]: number}, weighthg: number, type?: string}} */
 		let deltas = {
 			baseStats: {},
-			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
+			weighthg: megaTemplate.weighthg - baseTemplate.weighthg,
 		};
 		for (let statId in megaTemplate.baseStats) {
 			// @ts-ignore
@@ -141,18 +147,18 @@ const commands = {
 		for (let statName in template.baseStats) { // Add the changed stats and weight
 			mixedTemplate.baseStats[statName] = Dex.clampIntRange(mixedTemplate.baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		mixedTemplate.weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
+		mixedTemplate.weighthg = Math.max(1, template.weighthg + deltas.weighthg);
 		mixedTemplate.tier = "MnM";
 		let weighthit = 20;
-		if (mixedTemplate.weightkg >= 200) {
+		if (mixedTemplate.weighthg >= 2000) {
 			weighthit = 120;
-		} else if (mixedTemplate.weightkg >= 100) {
+		} else if (mixedTemplate.weighthg >= 1000) {
 			weighthit = 100;
-		} else if (mixedTemplate.weightkg >= 50) {
+		} else if (mixedTemplate.weighthg >= 500) {
 			weighthit = 80;
-		} else if (mixedTemplate.weightkg >= 25) {
+		} else if (mixedTemplate.weighthg >= 250) {
 			weighthit = 60;
-		} else if (mixedTemplate.weightkg >= 10) {
+		} else if (mixedTemplate.weighthg >= 100) {
 			weighthit = 40;
 		}
 		/** @type {{[k: string]: string}} */
@@ -160,7 +166,7 @@ const commands = {
 			"Dex#": '' + mixedTemplate.num,
 			"Gen": '' + mixedTemplate.gen,
 			"Height": mixedTemplate.heightm + " m",
-			"Weight": mixedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Weight": mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 			"Dex Colour": mixedTemplate.color,
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
@@ -181,7 +187,7 @@ const commands = {
 		let targetid = toID(target);
 		if (!targetid) return this.parse('/help stone');
 		let stone = getMegaStone(targetid);
-		if (!stone.exists) return this.errorReply(`Error: Mega Stone not found.`);
+		if (!stone) return this.errorReply(`Error: Mega Stone not found.`);
 		let banlist = Dex.getFormat('gen7mixandmega').banlist;
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
@@ -209,10 +215,10 @@ const commands = {
 			baseTemplate = Dex.getTemplate("Kyogre");
 			megaTemplate = Dex.getTemplate("Kyogre-Primal");
 		}
-		/** @type {{baseStats: {[k: string]: number}, weightkg: number, type?: string}} */
+		/** @type {{baseStats: {[k: string]: number}, weighthg: number, type?: string}} */
 		let deltas = {
 			baseStats: {},
-			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
+			weighthg: megaTemplate.weighthg - baseTemplate.weighthg,
 		};
 		for (let statId in megaTemplate.baseStats) {
 			// @ts-ignore
@@ -227,7 +233,7 @@ const commands = {
 		}
 		let details = {
 			"Gen": 6,
-			"Weight": (JSON.stringify(deltas.weightkg).startsWith("-") ? "" : "+") + Math.round(deltas.weightkg * 100) / 100 + " kg",
+			"Weight": (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
 		};
 		let tier;
 		if (['redorb', 'blueorb'].includes(stone.id)) {
@@ -408,9 +414,9 @@ const commands = {
 		if (crossTemplate.types[0] !== prevo.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
 		if (crossTemplate.types[1] !== prevo.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
 		if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types = [mixedTemplate.types[0]];
-		mixedTemplate.weightkg += crossTemplate.weightkg - prevo.weightkg;
-		if (mixedTemplate.weightkg <= 0) {
-			mixedTemplate.weightkg = 0.1;
+		mixedTemplate.weighthg += crossTemplate.weighthg - prevo.weighthg;
+		if (mixedTemplate.weighthg < 1) {
+			mixedTemplate.weighthg = 1;
 		}
 		for (const stat of Object.values(mixedTemplate.baseStats)) {
 			if (stat < 1 || stat > 255) {
@@ -420,15 +426,15 @@ const commands = {
 		}
 		mixedTemplate.tier = "CE";
 		let weighthit = 20;
-		if (mixedTemplate.weightkg >= 200) {
+		if (mixedTemplate.weighthg >= 2000) {
 			weighthit = 120;
-		} else if (mixedTemplate.weightkg >= 100) {
+		} else if (mixedTemplate.weighthg >= 1000) {
 			weighthit = 100;
-		} else if (mixedTemplate.weightkg >= 50) {
+		} else if (mixedTemplate.weighthg >= 500) {
 			weighthit = 80;
-		} else if (mixedTemplate.weightkg >= 25) {
+		} else if (mixedTemplate.weighthg >= 250) {
 			weighthit = 60;
-		} else if (mixedTemplate.weightkg >= 10) {
+		} else if (mixedTemplate.weighthg >= 100) {
 			weighthit = 40;
 		}
 		/** @type {{[k: string]: string}} */
@@ -436,7 +442,7 @@ const commands = {
 			"Dex#": mixedTemplate.num,
 			"Gen": mixedTemplate.gen,
 			"Height": mixedTemplate.heightm + " m",
-			"Weight": mixedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Weight": mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 			"Dex Colour": mixedTemplate.color,
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");

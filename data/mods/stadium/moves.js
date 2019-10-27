@@ -46,7 +46,7 @@ let BattleMovedex = {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				let toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1);
+				let toLeech = this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1);
 				let damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) this.heal(damage, leecher, pokemon);
 			},

@@ -2,12 +2,11 @@
 
 /**@type {{[k: string]: ModdedFormatsData}} */
 let BattleFormats = {
-	pokemon: {
+	validatestats: {
 		inherit: true,
-		onValidateSet(set, format) {
-			if (!format || !this.getRuleTable(format).has('-illegal')) return;
-			let template = this.getTemplate(set.species);
-			let item = this.getItem(set.item);
+		onValidateSet(set) {
+			let template = this.dex.getTemplate(set.species);
+			let item = this.dex.getItem(set.item);
 			if (item && item.id === 'griseousorb' && template.num !== 487) {
 				return ['Griseous Orb can only be held by Giratina in Generation 4.'];
 			}

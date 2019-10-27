@@ -8,7 +8,7 @@ const {Connection, User} = require('../users-utils');
 describe('Matchmaker', function () {
 	const FORMATID = 'gen7ou';
 	const addSearch = (player, rating = 1000, formatid = FORMATID) => {
-		let search = new Ladders.BattleReady(player.userid, formatid, player.team, rating);
+		let search = new Ladders.BattleReady(player.id, formatid, player.team, rating);
 		Ladders(formatid).addSearch(search, player);
 		return search;
 	};
@@ -29,13 +29,13 @@ describe('Matchmaker', function () {
 		this.p1.forceRename('Morfent', true);
 		this.p1.connected = true;
 		this.p1.team = 'Gengar||||lick||252,252,4,,,|||||';
-		Users.users.set(this.p1.userid, this.p1);
+		Users.users.set(this.p1.id, this.p1);
 
 		this.p2 = new User(new Connection('0.0.0.0'));
 		this.p2.forceRename('Mrofnet', true);
 		this.p2.connected = true;
 		this.p2.team = 'Gengar||||lick||252,252,4,,,|||||';
-		Users.users.set(this.p2.userid, this.p2);
+		Users.users.set(this.p2.id, this.p2);
 	});
 
 	afterEach(function () {
@@ -50,7 +50,7 @@ describe('Matchmaker', function () {
 		let formatSearches = Ladders.searches.get(FORMATID);
 		assert.ok(formatSearches instanceof Map);
 		assert.strictEqual(formatSearches.size, 1);
-		assert.strictEqual(s1.userid, this.p1.userid);
+		assert.strictEqual(s1.userid, this.p1.id);
 		assert.strictEqual(s1.team, this.p1.team);
 		assert.strictEqual(s1.rating, 1000);
 	});

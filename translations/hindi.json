@@ -2,6 +2,9 @@
 	"name": "Hindi",
 
 	"strings": {
+		"namelocked": "namelocked",
+		"locked": "locked",
+
 		"Please follow the rules:": "कृपया इन नियमों का पालन करें:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-hi",
 		"Global Rules": "सामान्य नियम",
@@ -17,7 +20,7 @@
 
 		"<strong>Room ranks</strong>": "<strong>रूम के पद</strong>",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - ये लोग '!' commands का इस्तेमाल कर सकते हैं, जैसे की !groups",
-		
+
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा mute और warn भी कर सकते हैं",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा room ban भी कर सकते हैं",
 		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Bot</strong> - Moderator जैसा पर केवल Bots के लिए",
@@ -96,6 +99,24 @@
 		"Your status is too long; it must be under ${maxLength} characters.": "आपका status बहुत बड़ा है; ये अधिकतम ${maxLength} अक्षर का हो सकता है.",
 		"Your status contains a banned word.": "आपके status में एक प्रतिबंधित शब्द है.",
 		"Your status has been set to: ${target}.": "आपका status अब ये है : ${target}.", "You are now marked as busy.": "आपको अब busy (व्यस्त) मार्क कर दिया गया है.",
-		"You are now marked as away. Send a message or use /back to indicate you are back.": "आपको away (दूर) मार्क कर दिया गया है. अपनी वापसी दर्शाने के लिए एक सन्देश भेजें या /back का उपयोग करें."
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "आपको away (दूर) मार्क कर दिया गया है. अपनी वापसी दर्शाने के लिए एक सन्देश भेजें या /back का उपयोग करें.",
+
+		"You must choose a name before you can talk.": "बात करने के लिए एक नाम चुनें.",
+		"You are ${lockType} and can't talk in chat. ${lockExpiration}": "आप ${lockType} हैं और बात नहीं कर सकते हैं. ${lockExpiration}",
+		"Get help with [TN: your lock]this": "इसके लिए सहायता",
+		"You are muted and cannot talk in this room.": "आप इस room में muted हैं और बातचीत नही कर सकते",
+		"Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.": "क्योंकि chat सयंमित है, बात करने के लिए आपका खाता कम से कम एक सप्ताह पुराना और कम से कम एक मुकाबले का विजेता होना चाहिए.",
+		"Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.": "क्योंकि chat सयंमित है, बात करने के लिए आपका खाता वैश्विक पद या सार्वजनिक room में staff होना चाहिए.",
+		"Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.": "क्योंकि chat सयंमित है, बात करने के लिए आपका पद ${groupName} या उससे ऊँचा होना चाहिए.",
+		"Your message can't be blank.": "सन्देश खाली नहीं होना चाहिए.",
+		"Your message is too long: ": "सन्देश बहुत लम्बा है.",
+		"Your message contains banned characters.": "आपके सन्देश में प्रतिबंधित अक्षर हैं.",
+		"This room has slow-chat enabled. You can only talk once every ${time} seconds.": "इस room में slow-chat चालू है. आप बात केवल हर ${time} seconds में कर सकते हैं",
+		"Your username contains a phrase banned by this room.": "आपके नाम में इस room का एक प्रतिबंधित शब्द है.",
+		"Your status message contains a phrase banned by this room.": "आपके status में इस room का एक प्रतिबंधित शब्द है.",
+
+		"Your message contained banned words in this room.": "आपके सन्देश में इस room का एक प्रतिबंधित शब्द है.",
+		"You can't send the same message again so soon.": "आप एक ही सन्देश इतनी जल्दी दोबारा नहीं भेज सकते.",
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "क्योंकि ये एक तीव्र गतिविधि वाला room है, आपके सन्देश में कम से कम दो अक्षर रहने जरूरी हैं."
 	}
 }

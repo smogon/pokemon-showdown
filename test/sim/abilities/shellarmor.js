@@ -16,7 +16,7 @@ describe('Shell Armor', function () {
 			[{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']}],
 		]);
 		let successfulEvent = false;
-		battle.onEvent('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {
+		battle.onEvent('ModifyDamage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
 				assert.false(defender.getMoveHitData(move).crit);
@@ -32,7 +32,7 @@ describe('Shell Armor', function () {
 			[{species: 'Cryogonal', ability: 'moldbreaker', item: 'zoomlens', moves: ['frostbreath']}],
 		]);
 		let successfulEvent = false;
-		battle.onEvent('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {
+		battle.onEvent('ModifyDamage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
 				assert.ok(defender.getMoveHitData(move).crit);

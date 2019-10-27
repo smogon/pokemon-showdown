@@ -37,7 +37,7 @@ Most of the time, you only need the first three, though.
 
 - `target` = the part of the message after the command
 - `room` = the room object the message was sent to  
-  (The room name is `room.id`)
+  (The room name is `room.roomid`)
 - `user` = the user object that sent the message  
   (The user's name is `user.name`)
 - `connection` = the connection that the message was sent from

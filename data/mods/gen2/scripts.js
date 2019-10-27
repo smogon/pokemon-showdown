@@ -45,7 +45,7 @@ let BattleScripts = {
 			}
 
 			// Gen 2 caps stats at 999 and min is 1.
-			stat = this.battle.clampIntRange(stat, 1, 999);
+			stat = this.battle.dex.clampIntRange(stat, 1, 999);
 			if (fastReturn) return stat;
 
 			// Screens
@@ -96,12 +96,12 @@ let BattleScripts = {
 	},
 	// Battle scripts.
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
-		let move = this.getActiveMove(moveOrMoveName);
+		let move = this.dex.getActiveMove(moveOrMoveName);
 		let target = this.getTarget(pokemon, move, targetLoc);
 		if (!sourceEffect && move.id !== 'struggle') {
 			let changedMove = this.runEvent('OverrideAction', pokemon, target, move);
 			if (changedMove && changedMove !== true) {
-				move = this.getActiveMove(changedMove);
+				move = this.dex.getActiveMove(changedMove);
 				target = this.resolveTarget(pokemon, move);
 			}
 		}
@@ -167,8 +167,8 @@ let BattleScripts = {
 			return false;
 		}
 
-		hitResult = this.runEvent('TryImmunity', target, pokemon, move);
-		if (!hitResult) {
+		hitResult = this.runEvent('Invulnerability', target, pokemon, move);
+		if (hitResult === false) {
 			if (!move.spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			return false;
@@ -179,6 +179,12 @@ let BattleScripts = {
 		}
 
 		if ((!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) {
+			return false;
+		}
+
+		hitResult = this.singleEvent('TryImmunity', move, {}, target, pokemon, move);
+		if (hitResult === false) {
+			this.add('-immune', pokemon);
 			return false;
 		}
 
@@ -255,7 +261,7 @@ let BattleScripts = {
 			/**@type {number | undefined | false} */
 			let moveDamage;
 
-			let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
+			let isSleepUsable = move.sleepUsable || this.dex.getMove(move.sourceEffect).sleepUsable;
 			let i;
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
@@ -294,7 +300,7 @@ let BattleScripts = {
 	moveHit(target, pokemon, move, moveData, isSecondary, isSelf) {
 		/** @type {number | false | null | undefined} */
 		let damage = undefined;
-		move = this.getActiveMove(move);
+		move = this.dex.getActiveMove(move);
 
 		if (!moveData) moveData = move;
 		/**@type {?boolean | number} */
@@ -475,7 +481,7 @@ let BattleScripts = {
 	getDamage(pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
 		if (typeof move === 'string') {
-			move = this.getActiveMove(move);
+			move = this.dex.getActiveMove(move);
 		} else if (typeof move === 'number') {
 			move = /** @type {ActiveMove} */ ({
 				basePower: move,
@@ -532,11 +538,11 @@ let BattleScripts = {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
 			return basePower;
 		}
-		basePower = this.clampIntRange(basePower, 1);
+		basePower = this.dex.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit ratio
 		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
-		critRatio = this.clampIntRange(critRatio, 0, 5);
+		critRatio = this.dex.clampIntRange(critRatio, 0, 5);
 		let critMult = [0, 16, 8, 4, 3, 2];
 		let isCrit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined') {
@@ -565,7 +571,7 @@ let BattleScripts = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = this.clampIntRange(basePower, 1);
+		basePower = this.dex.clampIntRange(basePower, 1);
 
 		// We now check for attacker and defender
 		let level = pokemon.level;
@@ -644,13 +650,13 @@ let BattleScripts = {
 			if (attack >= 1024 || defense >= 1024) {
 				this.hint("In Gen 2, a stat will roll over to a small number if it is larger than 1024.");
 			}
-			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
-			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
+			attack = this.dex.clampIntRange(Math.floor(attack / 4) % 256, 1);
+			defense = this.dex.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}
 
 		// Self destruct moves halve defense at this point.
 		if (move.selfdestruct && defType === 'def') {
-			defense = this.clampIntRange(Math.floor(defense / 2), 1);
+			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
 		// Let's go with the calculation now that we have what we need.
@@ -661,7 +667,7 @@ let BattleScripts = {
 		damage *= basePower;
 		damage *= attack;
 		damage = Math.floor(damage / defense);
-		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
+		damage = this.dex.clampIntRange(Math.floor(damage / 50), 1, 997);
 		damage += 2;
 
 		// Weather modifiers

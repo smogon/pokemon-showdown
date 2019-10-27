@@ -52,10 +52,10 @@ type SpanType = '_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler'
 type FormatSpan = [SpanType, number];
 
 class TextFormatter {
-	str: string;
-	buffers: string[];
-	stack: FormatSpan[];
-	isTrusted: boolean;
+	readonly str: string;
+	readonly buffers: string[];
+	readonly stack: FormatSpan[];
+	readonly isTrusted: boolean;
 	/** offset of str that's been parsed so far */
 	offset: number;
 

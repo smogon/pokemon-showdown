@@ -63,7 +63,7 @@ export class Side {
 	lastMove: Move | null;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
-		const sideScripts = battle.data.Scripts.side;
+		const sideScripts = battle.dex.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
 		this.battle = battle;
@@ -185,7 +185,7 @@ export class Side {
 						return move + toID(pokemon.hpType) + (this.battle.gen < 6 ? '' : pokemon.hpPower);
 					}
 					if (move === 'frustration' || move === 'return') {
-						const m = this.battle.getMove(move)!;
+						const m = this.battle.dex.getMove(move)!;
 						// @ts-ignore - Frustration and Return only require the source Pokemon
 						const basePower = m.basePowerCallback(pokemon);
 						return `${move}${basePower}`;
@@ -218,7 +218,7 @@ export class Side {
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
 
-		status = this.battle.getEffect(status);
+		status = this.battle.dex.getEffect(status);
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
@@ -245,7 +245,7 @@ export class Side {
 		if (this.n >= 2 && this.battle.gameType === 'multi') {
 			return this.battle.sides[this.n % 2].getSideCondition(status);
 		}
-		status = this.battle.getEffect(status) as Effect;
+		status = this.battle.dex.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	}
@@ -254,7 +254,7 @@ export class Side {
 		if (this.n >= 2 && this.battle.gameType === 'multi') {
 			return this.battle.sides[this.n % 2].getSideConditionData(status);
 		}
-		status = this.battle.getEffect(status) as Effect;
+		status = this.battle.dex.getEffect(status) as Effect;
 		return this.sideConditions[status.id] || null;
 	}
 
@@ -262,7 +262,7 @@ export class Side {
 		if (this.n >= 2 && this.battle.gameType === 'multi') {
 			return this.battle.sides[this.n % 2].removeSideCondition(status);
 		}
-		status = this.battle.getEffect(status) as Effect;
+		status = this.battle.dex.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
@@ -278,7 +278,7 @@ export class Side {
 		if (target instanceof Pokemon) target = target.position;
 		if (!source) throw new Error(`setting sidecond without a source`);
 
-		status = this.battle.getEffect(status);
+		status = this.battle.dex.getEffect(status);
 		if (this.slotConditions[target][status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
@@ -303,14 +303,14 @@ export class Side {
 
 	getSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
-		status = this.battle.getEffect(status) as Effect;
+		status = this.battle.dex.getEffect(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return null;
 		return status;
 	}
 
 	removeSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
-		status = this.battle.getEffect(status) as Effect;
+		status = this.battle.dex.getEffect(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return false;
 		this.battle.singleEvent('End', status, this.slotConditions[target][status.id], this.active[target]);
 		delete this.slotConditions[target][status.id];
@@ -408,7 +408,7 @@ export class Side {
 				break;
 			}
 		}
-		const move = this.battle.getMove(moveid);
+		const move = this.battle.dex.getMove(moveid);
 
 		// Z-move
 
@@ -420,7 +420,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
 		}
 
-		if (zMove) targetType = this.battle.getMove(zMove).target;
+		if (zMove) targetType = this.battle.dex.getMove(zMove).target;
 
 		// Validate targetting
 

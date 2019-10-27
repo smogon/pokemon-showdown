@@ -39,12 +39,12 @@ let BattleScripts = {
 
 		// Do we have a proper sprite for it?
 		// @ts-ignore assert non-null pokemon.canMegaEvo
-		if (isUltraBurst || this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.m.originalSpecies) {
+		if (isUltraBurst || this.dex.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.m.originalSpecies) {
 			pokemon.formeChange(template, pokemon.getItem(), true);
 		} else {
-			let oTemplate = this.getTemplate(pokemon.m.originalSpecies);
+			let oTemplate = this.dex.getTemplate(pokemon.m.originalSpecies);
 			// @ts-ignore
-			let oMegaTemplate = this.getTemplate(template.originalMega);
+			let oMegaTemplate = this.dex.getTemplate(template.originalMega);
 			pokemon.formeChange(template, pokemon.getItem(), true);
 			this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
 			if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
@@ -57,8 +57,8 @@ let BattleScripts = {
 		return true;
 	},
 	getMixedTemplate(originalSpecies, megaSpecies) {
-		let originalTemplate = this.getTemplate(originalSpecies);
-		let megaTemplate = this.getTemplate(megaSpecies);
+		let originalTemplate = this.dex.getTemplate(originalSpecies);
+		let megaTemplate = this.dex.getTemplate(megaSpecies);
 		if (originalTemplate.baseSpecies === megaTemplate.baseSpecies) return megaTemplate;
 		// @ts-ignore
 		let deltas = this.getMegaDeltas(megaTemplate);
@@ -67,12 +67,12 @@ let BattleScripts = {
 		return template;
 	},
 	getMegaDeltas(megaTemplate) {
-		let baseTemplate = this.getTemplate(megaTemplate.baseSpecies);
-		/**@type {{ability: string, baseStats: {[k: string]: number}, weightkg: number, originalMega: string, requiredItem: string | undefined, type?: string, isMega?: boolean, isPrimal?: boolean}} */
+		let baseTemplate = this.dex.getTemplate(megaTemplate.baseSpecies);
+		/**@type {{ability: string, baseStats: {[k: string]: number}, weighthg: number, originalMega: string, requiredItem: string | undefined, type?: string, isMega?: boolean, isPrimal?: boolean}} */
 		let deltas = {
 			ability: megaTemplate.abilities['0'],
 			baseStats: {},
-			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
+			weighthg: megaTemplate.weighthg - baseTemplate.weighthg,
 			originalMega: megaTemplate.species,
 			requiredItem: megaTemplate.requiredItem,
 		};
@@ -93,7 +93,7 @@ let BattleScripts = {
 	},
 	doGetMixedTemplate(templateOrTemplateName, deltas) {
 		if (!deltas) throw new TypeError("Must specify deltas!");
-		let template = this.deepClone(this.getTemplate(templateOrTemplateName));
+		let template = this.dex.deepClone(this.dex.getTemplate(templateOrTemplateName));
 		template.abilities = {'0': deltas.ability};
 		if (template.types[0] === deltas.type) {
 			template.types = [deltas.type];
@@ -102,9 +102,9 @@ let BattleScripts = {
 		}
 		let baseStats = template.baseStats;
 		for (let statName in baseStats) {
-			baseStats[statName] = this.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
+			baseStats[statName] = this.dex.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
+		template.weighthg = Math.max(1, template.weighthg + deltas.weighthg);
 		template.originalMega = deltas.originalMega;
 		template.requiredItem = deltas.requiredItem;
 		if (deltas.isMega) template.isMega = true;
