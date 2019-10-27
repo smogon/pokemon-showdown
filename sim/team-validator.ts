@@ -372,12 +372,18 @@ export class TeamValidator {
 
 		let learnsetTemplate = template;
 		let tierTemplate = template;
-		if (ability.id === 'battlebond' && template.id === 'greninja' && ruleTable.has('obtainableformes')) {
-			tierTemplate = learnsetTemplate = dex.getTemplate('greninjaash');
-			if (set.gender && set.gender !== 'M') {
-				problems.push(`Battle Bond Greninja must be male.`);
+		if (ability.id === 'battlebond' && template.id === 'greninja') {
+			let ashTemplate = dex.getTemplate('greninjaash');
+			if (ruleTable.has('obtainableformes')) {
+				tierTemplate = ashTemplate;
 			}
-			set.gender = 'M';
+			learnsetTemplate = ashTemplate;
+			if (ruleTable.has('obtainablemisc')) {
+				if (set.gender && set.gender !== 'M') {
+					problems.push(`Battle Bond Greninja must be male.`);
+				}
+				set.gender = 'M';
+			}
 		}
 		if (ability.id === 'owntempo' && template.id === 'rockruff') {
 			tierTemplate = learnsetTemplate = dex.getTemplate('rockruffdusk');
