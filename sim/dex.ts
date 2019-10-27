@@ -816,14 +816,15 @@ export class ModdedDex {
 					const complexBan: Data.ComplexBan = ruleSpec.slice(1) as Data.ComplexBan;
 					ruleTable.addComplexBan(complexBan[0], complexBan[1], complexBan[2], complexBan[3]);
 				} else if (ruleSpec[0] === 'teamlength') {
-					const onValidate = ruleSpec[2];
-					const onBattle = ruleSpec[1];
+					const onValidate: number = ruleSpec[2];
+					const onBattle: number = ruleSpec[1];
 					ruleTable.teamLength = {
 						validate: [onBattle, onValidate],
 						battle: onBattle,
 					};
 				} else if (ruleSpec[0] === 'level') {
-					ruleTable.maxLevel = ruleSpec[1];
+					const maxLevel: number = ruleSpec[1];
+					ruleTable.maxLevel = maxLevel;
 				} else {
 					throw new Error(`Unrecognized rule spec ${ruleSpec}`);
 				}
