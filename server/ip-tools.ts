@@ -42,6 +42,7 @@ export const IPTools = new class {
 		'bnewstoday.com',
 		'brightnewfutures.net',
 		'cd-n.net',
+		'cdn77.com',
 		'choopa.com',
 		'choopa.net',
 		'cloudhosting.lv',
@@ -54,6 +55,7 @@ export const IPTools = new class {
 		'cyberghost.ro',
 		'cyberghostvpn.com',
 		'darkweb.love',
+		'deltahost-ptr',
 		'dockerapp.io',
 		'edis.at',
 		'elostech.cz',
@@ -640,7 +642,8 @@ export const IPTools = new class {
 			'115.21.84.115', '96.80.89.69', '118.168.195.232', '126.37.49.56', '60.112.178.85', '130.105.53.178',
 			'149.34.2.186', '165.73.105.51', '210.3.160.230', '219.241.2.151', '222.5.46.99', '73.212.251.26',
 			'59.133.28.51', '60.66.0.14', '107.242.117.13', '84.55.113.174', '85.67.25.112', '94.24.231.50',
-			'124.97.24.88', '74.82.232.201', '121.103.230.148', '126.216.8.82', '189.208.146.156',
+			'124.97.24.88', '74.82.232.201', '121.103.230.148', '126.216.8.82', '189.208.146.156', '77.89.251.138',
+			'185.244.172.3',
 		].includes(ip)) {
 			// single-IP open proxies
 			return 'proxy';
