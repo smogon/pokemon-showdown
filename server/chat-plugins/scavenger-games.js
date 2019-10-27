@@ -188,8 +188,14 @@ class ScavGame extends Rooms.RoomGame {
 	createHunt(room, staffHost, host, gameType, questions) {
 		if (this.childGame) return staffHost.sendTo(this.room, "There is already a scavenger hunt in progress.");
 		this.onStartEvent();
-		this.childGame = new Rooms.ScavengerHunt(room, staffHost, host, gameType, questions, this);
+		this.startHunt(room, staffHost, host, gameType, questions, this);
 		return true;
+	}
+
+	startHunt(...args) {
+		let self = this;
+		self.childGame = new Rooms.ScavengerHunt(...args);
+		this.room.game = self;
 	}
 
 	announce(msg) {
@@ -390,7 +396,7 @@ class JumpStart extends ScavGame {
 		this.earlyTimes = timesArray;
 		// start the hunt
 		this.onStartEvent();
-		this.childGame = new Rooms.ScavengerHunt(...this.hunts[0], this);
+		this.startHunt(...this.hunts[0], this);
 	}
 
 	runJumpStartTimer() {
@@ -401,7 +407,7 @@ class JumpStart extends ScavGame {
 			if (!targetUserId) {
 				this.timer = setTimeout(() => {
 					this.onStartEvent();
-					this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this); // start it after the last hunt object has been destroyed
+					this.startHunt(...this.hunts[1], this); // start it after the last hunt object has been destroyed
 				}, this.huntWait * 1000 + (this.jumpStartTimes.reduce((a, b) => a + b) * 1000));
 				return;
 			}
@@ -422,7 +428,7 @@ class JumpStart extends ScavGame {
 			this.timer = setTimeout(() => {
 				this.announce('starting second hunt ' + new Date());
 				this.onStartEvent();
-				this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this);
+				this.startHunt(...this.hunts[1], this);
 				this.room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(this.childGame.hosts.map(h => h.name))} has been automatically started.`).update(); // highlight the users with "hunt by"
 			}, this.huntWait * 1000);
 		}
