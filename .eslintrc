@@ -30,7 +30,7 @@
 		"eol-last": ["error", "always"],
 		"array-callback-return": "error",
 		"block-scoped-var": "error",
-		"comma-dangle": ["error", "always-multiline"],
+		"comma-dangle": ["error", {"arrays": "always-multiline", "objects": "always-multiline", "imports": "always-multiline", "exports": "always-multiline", "functions": "ignore"}],
 		"complexity": "off",
 		"consistent-return": "off",
 		"curly": ["error", "multi-line", "consistent"],
