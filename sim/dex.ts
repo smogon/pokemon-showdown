@@ -922,12 +922,12 @@ export class ModdedDex {
 						if (onValidate > 24) {
 							throw new Error("You may not have more than 24 Pokémon on a team");
 						}
-						return `teamlength:${onBattle}-${onValidate}`;
+						return ['teamlength', onBattle, onValidate];
 					}
 				} else if (type === "level" || type === "maxlevel") {
 					const level = parseInt(parts[1]);
 					if (!isNaN(level)) {
-						return `level:${level}`;
+						return ['level', level];
 					}
 				}
 				throw new Error(`Unrecognized rule "${rule}"`);
