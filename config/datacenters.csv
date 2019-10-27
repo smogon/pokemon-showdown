@@ -2320,14 +2320,14 @@
 179.61.207.0,179.61.207.255,Host1Plus Brazil,http://www.host1plus.com/
 179.43.147.0,179.43.147.127,Private Layer INC,http://privatelayer.com/
 179.48.248.0,179.48.251.255,Rack Nation,https://www.racknation.cr/
-179.61.205.0,179.61.205.255,Digital Energy Technologies Limited,digitalenergytech.net
-179.61.206.0,179.61.206.255,Digital Energy Technologies Limited,digitalenergytech.net
-179.61.207.0,179.61.207.255,Digital Energy Technologies Limited,digitalenergytech.net
-179.61.209.0,179.61.209.255,Digital Energy Technologies Limited,digitalenergytech.net
-179.61.211.0,179.61.211.255,Digital Energy Technologies Limited,digitalenergytech.net
-179.61.212.0,179.61.215.255,Digital Energy Technologies Limited,digitalenergytech.net
-179.61.221.0,179.61.221.255,Digital Energy Technologies Limited,digitalenergytech.net
-179.61.222.0,179.61.222.255,Digital Energy Technologies Limited,digitalenergytech.net
+179.61.205.0,179.61.205.255,Digital Energy Technologies Limited,https://det.global/
+179.61.206.0,179.61.206.255,Digital Energy Technologies Limited,https://det.global/
+179.61.207.0,179.61.207.255,Digital Energy Technologies Limited,https://det.global/
+179.61.209.0,179.61.209.255,Digital Energy Technologies Limited,https://det.global/
+179.61.211.0,179.61.211.255,Digital Energy Technologies Limited,https://det.global/
+179.61.212.0,179.61.215.255,Digital Energy Technologies Limited,https://det.global/
+179.61.221.0,179.61.221.255,Digital Energy Technologies Limited,https://det.global/
+179.61.222.0,179.61.222.255,Digital Energy Technologies Limited,https://det.global/
 179.107.32.0,179.107.47.255,alog,http://www.alog.com.br/
 180.92.184.0,180.92.191.255,Voxel,http://www.voxel.net/
 180.149.231.0,180.149.231.255,Ransom IT,https://www.ransomit.com.au/
@@ -2337,19 +2337,19 @@
 180.178.32.0,180.178.63.255,simcentric,http://simcentric.com/
 180.210.200.0,180.210.207.255,Sparkstation,http://sparkstation.net/
 181.41.197.0,181.41.197.255,Host1Plus Brazil,http://www.host1plus.com/
-181.41.198.0,181.41.198.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.201.0,181.41.201.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.203.0,181.41.203.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.205.0,181.41.205.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.209.0,181.41.209.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.210.0,181.41.210.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.212.0,181.41.212.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.214.0,181.41.214.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.217.0,181.41.217.255,Digital Energy Technologies Limited,digitalenergytech.net
+181.41.198.0,181.41.198.255,Digital Energy Technologies Limited,https://det.global/
+181.41.201.0,181.41.201.255,Digital Energy Technologies Limited,https://det.global/
+181.41.203.0,181.41.203.255,Digital Energy Technologies Limited,https://det.global/
+181.41.205.0,181.41.205.255,Digital Energy Technologies Limited,https://det.global/
+181.41.209.0,181.41.209.255,Digital Energy Technologies Limited,https://det.global/
+181.41.210.0,181.41.210.255,Digital Energy Technologies Limited,https://det.global/
+181.41.212.0,181.41.212.255,Digital Energy Technologies Limited,https://det.global/
+181.41.214.0,181.41.214.255,Digital Energy Technologies Limited,https://det.global/
+181.41.217.0,181.41.217.255,Digital Energy Technologies Limited,https://det.global/
 181.41.219.0,181.41.219.255,Host1Plus Brazil,http://www.host1plus.com/
-181.41.220.0,181.41.220.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.221.0,181.41.221.255,Digital Energy Technologies Limited,digitalenergytech.net
-181.41.222.0,181.41.223.255,Digital Energy Technologies Limited,digitalenergytech.net
+181.41.220.0,181.41.220.255,Digital Energy Technologies Limited,https://det.global/
+181.41.221.0,181.41.221.255,Digital Energy Technologies Limited,https://det.global/
+181.41.222.0,181.41.223.255,Digital Energy Technologies Limited,https://det.global/
 181.191.255.0,181.191.255.255,panamaserver.com,http://panamaserver.com/
 181.214.0.0,181.214.255.255,Host1Plus,http://www.host1plus.com/
 181.214.46.16,181.214.46.23,Digital Energy Technologies Limited,https://det.global/
@@ -2515,6 +2515,10 @@
 185.230.125.0,185.230.125.255,M247,https://www.m247.com/
 185.230.126.0,185.230.126.255,M247,https://www.m247.com/
 185.230.127.0,185.230.127.255,M247,https://www.m247.com/
+185.232.20.0,185.232.20.255,M247,https://www.m247.com/
+185.232.21.0,185.232.21.255,M247,https://www.m247.com/
+185.232.22.0,185.232.22.255,M247,https://www.m247.com/
+185.232.23.0,185.232.23.255,M247,https://www.m247.com/
 186.233.184.0,186.233.187.255,Maxihost,https://www.maxihost.com/
 185.236.200.0,185.236.200.255,M247 Dedicated Servers,https://m247.com/
 185.242.4.0,185.242.4.255,M247,https://www.m247.com/
@@ -2523,7 +2527,6 @@
 185.242.7.0,185.242.7.255,M247,https://www.m247.com/
 185.246.128.0,185.246.131.255,ICME Network,https://icmenet.com/
 185.246.211.0,185.246.211.255,CDN77,https://www.cdn77.com/
-185.247.210.0,185.247.211.255,Deltahost,http://deltahost.com.ua/
 185.253.96.0,185.253.96.255,M247,https://www.m247.com/
 185.253.97.0,185.253.97.255,M247,https://www.m247.com/
 185.253.98.0,185.253.98.255,M247,https://www.m247.com/
@@ -2579,33 +2582,33 @@
 190.123.32.0,190.123.47.255,panamaserver.com,http://panamaserver.com/
 190.151.128.0,190.151.131.255,corponetsa.net,http://www.corponetsa.net/
 190.242.28.0,190.242.28.255,corponetsa.net,http://www.corponetsa.net/
-191.96.4.0,191.96.4.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.5.0,191.96.5.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.6.0,191.96.7.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.9.0,191.96.9.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.11.0,191.96.11.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.13.0,191.96.13.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.15.0,191.96.15.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.17.0,191.96.17.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.19.0,191.96.19.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.20.0,191.96.20.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.22.0,191.96.22.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.24.0,191.96.24.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.26.0,191.96.26.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.28.0,191.96.28.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.33.0,191.96.33.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.63.0,191.96.63.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.70.0,191.96.71.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.95.0,191.96.95.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.99.0,191.96.99.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.123.0,191.96.123.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.130.0,191.96.130.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.132.0,191.96.132.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.169.24,191.96.169.32,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.180.0,191.96.180.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.184.0,191.96.184.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.248.0,191.96.248.255,Digital Energy Technologies Limited,digitalenergytech.net
-191.96.255.0,191.96.255.255,Digital Energy Technologies Limited,digitalenergytech.net
+191.96.4.0,191.96.4.255,Digital Energy Technologies Limited,https://det.global/
+191.96.5.0,191.96.5.255,Digital Energy Technologies Limited,https://det.global/
+191.96.6.0,191.96.7.255,Digital Energy Technologies Limited,https://det.global/
+191.96.9.0,191.96.9.255,Digital Energy Technologies Limited,https://det.global/
+191.96.11.0,191.96.11.255,Digital Energy Technologies Limited,https://det.global/
+191.96.13.0,191.96.13.255,Digital Energy Technologies Limited,https://det.global/
+191.96.15.0,191.96.15.255,Digital Energy Technologies Limited,https://det.global/
+191.96.17.0,191.96.17.255,Digital Energy Technologies Limited,https://det.global/
+191.96.19.0,191.96.19.255,Digital Energy Technologies Limited,https://det.global/
+191.96.20.0,191.96.20.255,Digital Energy Technologies Limited,https://det.global/
+191.96.22.0,191.96.22.255,Digital Energy Technologies Limited,https://det.global/
+191.96.24.0,191.96.24.255,Digital Energy Technologies Limited,https://det.global/
+191.96.26.0,191.96.26.255,Digital Energy Technologies Limited,https://det.global/
+191.96.28.0,191.96.28.255,Digital Energy Technologies Limited,https://det.global/
+191.96.33.0,191.96.33.255,Digital Energy Technologies Limited,https://det.global/
+191.96.63.0,191.96.63.255,Digital Energy Technologies Limited,https://det.global/
+191.96.70.0,191.96.71.255,Digital Energy Technologies Limited,https://det.global/
+191.96.95.0,191.96.95.255,Digital Energy Technologies Limited,https://det.global/
+191.96.99.0,191.96.99.255,Digital Energy Technologies Limited,https://det.global/
+191.96.123.0,191.96.123.255,Digital Energy Technologies Limited,https://det.global/
+191.96.130.0,191.96.130.255,Digital Energy Technologies Limited,https://det.global/
+191.96.132.0,191.96.132.255,Digital Energy Technologies Limited,https://det.global/
+191.96.169.24,191.96.169.32,Digital Energy Technologies Limited,https://det.global/
+191.96.180.0,191.96.180.255,Digital Energy Technologies Limited,https://det.global/
+191.96.184.0,191.96.184.255,Digital Energy Technologies Limited,https://det.global/
+191.96.248.0,191.96.248.255,Digital Energy Technologies Limited,https://det.global/
+191.96.255.0,191.96.255.255,Digital Energy Technologies Limited,https://det.global/
 191.101.0.0,191.101.255.255,Host1Plus,http://www.host1plus.com/
 191.232.32.0,191.232.63.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 191.233.32.0,191.233.127.255,Microsoft Azure,http://www.windowsazure.com/en-us/
@@ -2668,6 +2671,7 @@
 192.82.248.0,192.82.255.255,wehostwebsites.com,http://wehostwebsites.com/
 192.91.186.0,192.91.186.255,demos,http://demos.ru/
 192.95.0.0,192.95.63.255,OVH,http://www.ovh.co.uk/
+191.96.0.0,191.96.255.255,Digital Energy Technologies Limited,https://det.global/
 192.96.200.0,192.96.207.255,Leaseweb,http://www.leaseweb.com/
 192.99.0.0,192.99.255.255,OVH,http://www.ovh.co.uk/
 192.110.160.0,192.110.167.255,Input Output Flood LLC,http://ioflood.com/
