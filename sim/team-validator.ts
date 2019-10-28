@@ -373,11 +373,10 @@ export class TeamValidator {
 		let learnsetTemplate = template;
 		let tierTemplate = template;
 		if (ability.id === 'battlebond' && template.id === 'greninja') {
-			let ashTemplate = dex.getTemplate('greninjaash');
+			learnsetTemplate = dex.getTemplate('greninjaash');
 			if (ruleTable.has('obtainableformes')) {
-				tierTemplate = ashTemplate;
+				tierTemplate = learnsetTemplate;
 			}
-			learnsetTemplate = ashTemplate;
 			if (ruleTable.has('obtainablemisc')) {
 				if (set.gender && set.gender !== 'M') {
 					problems.push(`Battle Bond Greninja must be male.`);
