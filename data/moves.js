@@ -4928,7 +4928,7 @@ let BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
+		onAfterMoveSecondary(target, pokemon, move) {
 			if (!target || target.fainted || target.hp <= 0) this.boost({atk: 3}, pokemon, pokemon, move);
 		},
 		secondary: null,
@@ -13448,7 +13448,7 @@ let BattleMovedex = {
 				move.willChangeForme = true;
 			}
 		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
+		onAfterMoveSecondary(target, pokemon, move) {
 			if (move.willChangeForme) {
 				pokemon.formeChange(pokemon.template.speciesid === 'meloettapirouette' ? 'Meloetta' : 'Meloetta-Pirouette', this.effect, false, '[msg]');
 			}

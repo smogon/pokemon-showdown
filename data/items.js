@@ -2999,7 +2999,7 @@ let BattleItems = {
 		onModifyDamage(damage, source, target, move) {
 			return this.chainModify([0x14CC, 0x1000]);
 		},
-		onAfterMoveSecondarySelf(source, target, move) {
+		onSourceAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && move && move.category !== 'Status') {
 				this.damage(source.maxhp / 10, source, source, this.dex.getItem('lifeorb'));
 			}
@@ -5119,8 +5119,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterMoveSecondarySelfPriority: -1,
-		onAfterMoveSecondarySelf(pokemon, target, move) {
+		onSourceAfterMoveSecondary(target, pokemon, move) {
 			if (move.category !== 'Status') {
 				this.heal(pokemon.lastDamage / 8, pokemon);
 			}
