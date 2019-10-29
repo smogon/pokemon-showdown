@@ -1631,7 +1631,7 @@ const commands = {
 			`- <a href="https://www.smogon.com/cap/">CAP project website and description</a><br />` +
 			`- <a href="https://www.smogon.com/forums/threads/48782/">What Pok&eacute;mon have been made?</a><br />` +
 			`- <a href="https://www.smogon.com/forums/forums/477">Talk about the metagame here</a><br />` +
-			`- <a href="https://www.smogon.com/forums/threads/3634419/">Sample SM CAP teams</a>`
+			`- <a href="https://www.smogon.com/forums/threads/3648521/">Sample SM CAP teams</a>`
 		);
 	},
 	caphelp: [
