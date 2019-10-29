@@ -689,7 +689,10 @@ const commands = {
 		user.update('blockPMs');
 		return true;
 	},
-	blockpmshelp: [`/blockpms - Blocks private messages. Unblock them with /unblockpms.`],
+	blockpmshelp: [
+		`/blockpms - Blocks private messages except from staff. Unblock them with /unblockpms.`,
+		`/blockpms [ac/trusted/+] - Blocks private messages except from staff and the specified group.`,
+	],
 
 	'!unblockpms': true,
 	unblockpm: 'unblockpms',
