@@ -307,6 +307,34 @@ const commands = {
 		this.sendReplyBox(buf);
 	},
 
+	sharedbattles(target, room) {
+		if (!this.can('lock')) return false;
+
+		const [targetUsername1, targetUsername2] = target.split(',');
+		if (!targetUsername1 || !targetUsername2) return this.parse(`/help sharedbattles`);
+		const user1 = Users.get(targetUsername1);
+		const user2 = Users.get(targetUsername2);
+		const userID1 = toID(targetUsername1);
+		const userID2 = toID(targetUsername2);
+
+		const battles = [];
+		for (const room of Rooms.rooms.values()) {
+			if (!room.battle) continue;
+			if ((user1 && user1.inRooms.has(room.roomid) || (room.auth && room.auth[userID1])) &&
+				(user2 && user2.inRooms.has(room.roomid) || (room.auth && room.auth[userID2]))) {
+				battles.push(room.roomid);
+			}
+		}
+
+		if (!battles.length) return this.sendReply(`${targetUsername1} and ${targetUsername2} have no common battles.`);
+
+		this.sendReplyBox(Chat.html`Common battles between ${targetUsername1} and ${targetUsername2}:<br />` + battles.map(id => {
+			let shortId = id.startsWith('battle-') ? id.slice(7) : id;
+			return Chat.html`<a href="/${id}">${shortId}</a>`;
+		}).join(' | '));
+	},
+	sharedbattleshelp: [`/sharedbattles [user1], [user2] - Finds recent battles common to [user1] and [user2]. Requires % @ & ~`],
+
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
 		if (!room.chatRoomData || room.roomid.includes('-')) return this.errorReply("This command is unavailable in temporary rooms.");
