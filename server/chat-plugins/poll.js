@@ -368,8 +368,9 @@ const commands = {
 		},
 		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`],
 
-		show: 'display',
-		display(target, room, user, connection) {
+		show: '',
+		display: '',
+		''(target, room, user, connection) {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
 			const poll = /** @type {Poll} */(room.minorActivity);
 			if (!this.runBroadcast()) return;
@@ -382,10 +383,6 @@ const commands = {
 			}
 		},
 		displayhelp: [`/poll display - Displays the poll`],
-
-		''(target, room, user) {
-			this.parse('/help poll');
-		},
 	},
 	pollhelp: [
 		`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.`,
