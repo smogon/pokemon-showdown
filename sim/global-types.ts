@@ -617,6 +617,7 @@ interface EventMethods {
 	onResidualOrder?: number
 	onResidualPriority?: number
 	onResidualSubOrder?: number
+	onSourceAfterMoveSecondaryPriority?: number
 	onSourceBasePowerPriority?: number
 	onSourceInvulnerabilityPriority?: number
 	onSourceModifyAtkPriority?: number
