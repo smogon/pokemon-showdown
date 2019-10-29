@@ -9442,8 +9442,8 @@ let BattleMovedex = {
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			duration: 2,
-			onSourceInvulnerabilityPriority: 1,
-			onSourceInvulnerability(target, source, move) {
+			onAnyInvulnerabilityPriority: 1,
+			onAnyInvulnerability(target, source, move) { // onSourceInvulnerability would only run once
 				if (move && source === this.effectData.target && target === this.effectData.source) return 0;
 			},
 			onSourceAccuracy(accuracy, target, source, move) {
