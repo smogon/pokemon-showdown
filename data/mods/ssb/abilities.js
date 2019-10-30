@@ -128,18 +128,17 @@ let BattleAbilities = {
 		},
 	},
 	// Akir
-	regrowth: {
-		desc: "This Pokemon's healing moves have their priority increased by one stage. When switching out, this Pokemon restores 1/3 of its maximum HP, rounded down.",
-		shortDesc: "Healing moves have priority increased by 1. Heals 1/3 max HP when switching out.",
-		id: "regrowth",
-		name: "Regrowth",
+	neutralizingspores: {
+		desc: "Nullifies all abilities while on the field.",
+		shortDesc: "Nullifies all abilities while on the field.",
+		id: "neutralizingspores",
+		name: "Neutralizing Spores",
 		isNonstandard: "Custom",
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move && move.flags['heal']) return priority + 1;
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Neutralizing Spores');
+			this.add('-message', `${pokemon.name} neutralized all abilities on the field!`);
 		},
-		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.maxhp / 3);
-		},
+		// ability ignoring located in scripts.js
 	},
 	// Alpha
 	osolemio: {

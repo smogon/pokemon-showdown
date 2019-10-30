@@ -96,10 +96,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, spa: 4, spe: 252}, nature: 'Serious',
 			},
 			'Akir': {
-				species: 'Parasect', ability: 'Regrowth', item: 'Leftovers', gender: 'M',
-				moves: ['Spore', ['Leech Life', 'Horn Leech'], 'Healing Wish'],
+				species: 'Parasect', ability: 'Neutralizing Spores', item: 'Leftovers', gender: 'M',
+				moves: ['Toxic', 'Leech Life', ['Lunar Dance', 'Spore']],
 				signatureMove: 'Compost',
-				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
+				evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 			},
 			'Alpha': {
 				species: 'Espeon', ability: 'O SOLE MIO', item: 'Light Clay', gender: 'M',

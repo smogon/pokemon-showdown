@@ -1091,6 +1091,7 @@ interface ModdedBattlePokemon {
 	setAbility?: (this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean) => string | false
 	transformInto?: (this: Pokemon, pokemon: Pokemon, effect: Effect | null) => boolean
 	setStatus?: (this: Pokemon, status: string | PureEffect, source: Pokemon | null, sourceEffect: Effect | null, ignoreImmunities: boolean) => boolean
+	ignoringAbility?: (this: Pokemon) => boolean;
 }
 
 interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
