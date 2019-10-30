@@ -616,7 +616,7 @@ if (cluster.isMaster) {
 	process.once('exit', cleanup);
 
 	// this is global so it can be hotpatched if necessary
-	let isTrustedProxyIp = IPTools.checker(Config.proxyip);
+	let isTrustedProxyIp = Config.proxyip ? IPTools.checker(Config.proxyip) : () => false;
 	let socketCounter = 0;
 	server.on('connection', socket => {
 		// For reasons that are not entirely clear, SockJS sometimes triggers
@@ -683,9 +683,10 @@ if (cluster.isMaster) {
 	console.log(`Worker ${cluster.worker.id} now listening on ${Config.bindaddress}:${Config.port}`);
 
 	if (appssl) {
-		// @ts-ignore
 		server.installHandlers(appssl, {});
+		// @ts-ignore - if appssl exists, then `Config.ssl` must also exist
 		appssl.listen(Config.ssl.port, Config.bindaddress);
+		// @ts-ignore - if appssl exists, then `Config.ssl` must also exist
 		console.log(`Worker ${cluster.worker.id} now listening for SSL on port ${Config.ssl.port}`);
 	}
 
