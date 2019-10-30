@@ -355,6 +355,22 @@ let BattleScripts = {
 		return tr(baseDamage, 16);
 	},
 	pokemon: {
+		ignoringAbility() {
+			const abilities = [
+				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
+			];
+			// Neutralizing Spores modded into ignoringAbility
+			let sporeEffect = false;
+			for (const foeActive of this.side.foe.active) {
+				if (foeActive.ability.includes('neutralizingspores') && !foeActive.volatiles['gastroacid']) sporeEffect = true;
+			}
+			for (const allyActive of this.side.active) {
+				if (allyActive.ability.includes('neutralizingspores') && !allyActive.volatiles['gastroacid']) sporeEffect = true;
+			}
+			return !!((this.battle.gen >= 5 && !this.isActive) ||
+					  (this.volatiles['gastroacid'] && !abilities.includes(this.ability)) ||
+					  (sporeEffect && !this.ability.includes('neutralizingspores')));
+		},
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);
 			if ((this.battle.field.getPseudoWeather('trickroom') || this.battle.field.getPseudoWeather('alienwave')) &&

@@ -107,21 +107,21 @@ let BattleStatuses = {
 	},
 	akir: {
 		noCopy: true,
-		onStart(source) {
+		onStart() {
 			this.add(`c|%Akir|hey whats up`);
-			if (source.illusion) return;
-			this.boost({def: 1, spd: 1}, source);
 		},
-		onSwitchOut() {
+		onSwitchOut(pokemon) {
 			this.add(`c|%Akir|sorry need to build more`);
+			if (pokemon.illusion) return;
+			pokemon.heal(pokemon.maxhp / 3);
 		},
 		onFaint() {
 			this.add(`c|%Akir|too sleepy, c ya`);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).typeMod > 0 && !target.illusion) {
-				this.debug('Solid Rock neutralize');
-				return this.chainModify(0.75);
+			if (target.getMoveHitData(move) && !target.illusion) {
+				this.debug('Mushroom Guard halves damage.');
+				return this.chainModify(0.5);
 			}
 		},
 	},
@@ -828,13 +828,13 @@ let BattleStatuses = {
 	kay: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@kay|Every kiss begins with Kay`);
+			this.add(`c|+kay|Every kiss begins with Kay`);
 		},
 		onSwitchOut() {
-			this.add(`c|@kay|くコ:彡`);
+			this.add(`c|+kay|くコ:彡`);
 		},
 		onFaint() {
-			this.add(`c|@kay|'kay bye!くコ:彡`);
+			this.add(`c|+kay|'kay bye!くコ:彡`);
 		},
 		// Simple Innate
 		onBoost(boost, target, source, effect) {
@@ -928,15 +928,15 @@ let BattleStatuses = {
 	lifeisdank: {
 		noCopy: true,
 		onStart(target) {
-			this.add(`c|&LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
+			this.add(`c|+LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
 			if (target.illusion) return;
 			this.boost({spe: 2}, target);
 		},
 		onSwitchOut() {
-			this.add(`c|&LifeisDANK|!(•⌔• ) Peent Peent.`);
+			this.add(`c|+LifeisDANK|!(•⌔• ) Peent Peent.`);
 		},
 		onFaint() {
-			this.add(`c|&LifeisDANK|(•⌔•. ) Peent.`);
+			this.add(`c|+LifeisDANK|(•⌔•. ) Peent.`);
 		},
 		// Mountaineer innate
 		onDamage(damage, target, source, effect) {
@@ -1092,13 +1092,13 @@ let BattleStatuses = {
 	nui: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&nui|（*＾3＾）`);
+			this.add(`c|@nui|（*＾3＾）`);
 		},
 		onSwitchOut() {
-			this.add(`c|&nui|(´◔‸◔\`) **??+ !`);
+			this.add(`c|@nui|(´◔‸◔\`) **??+ !`);
 		},
 		onFaint() {
-			this.add(`c|&nui|(◕︿◕✿)`);
+			this.add(`c|@nui|(◕︿◕✿)`);
 		},
 	},
 	om: {
