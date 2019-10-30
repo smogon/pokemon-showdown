@@ -362,10 +362,12 @@ let BattleScripts = {
 			// Neutralizing Spores modded into ignoringAbility
 			let sporeEffect = false;
 			for (const foeActive of this.side.foe.active) {
-				if (foeActive.ability.includes('neutralizingspores') && !foeActive.volatiles['gastroacid']) sporeEffect = true;
+				// foeActive can be null when a pokemon isn't active
+				if (foeActive && foeActive.ability.includes('neutralizingspores') && !foeActive.volatiles['gastroacid']) sporeEffect = true;
 			}
 			for (const allyActive of this.side.active) {
-				if (allyActive.ability.includes('neutralizingspores') && !allyActive.volatiles['gastroacid']) sporeEffect = true;
+				// allyActive can be null when a pokemon isn't active
+				if (allyActive && allyActive.ability.includes('neutralizingspores') && !allyActive.volatiles['gastroacid']) sporeEffect = true;
 			}
 			return !!((this.battle.gen >= 5 && !this.isActive) ||
 					  (this.volatiles['gastroacid'] && !abilities.includes(this.ability)) ||
