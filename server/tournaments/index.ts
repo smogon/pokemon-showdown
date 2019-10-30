@@ -1329,7 +1329,7 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <comma-separated arguments>`);
 			}
-			let name = this.canTalk(params[0].trim());
+			const name = this.canTalk(params[0].trim());
 			if (!name || typeof name !== 'string') return;
 
 			if (name.length > MAX_CUSTOM_NAME_LENGTH) {

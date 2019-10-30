@@ -244,6 +244,7 @@ function cacheGroupData() {
 				continue;
 			}
 
+			// @ts-ignore - dyanmically assigned property
 			groupData.rank = numGroups - i - 1;
 			groups[groupData.symbol] = groupData;
 			Config.groupsranking.unshift(groupData.symbol);
