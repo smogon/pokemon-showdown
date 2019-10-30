@@ -6,6 +6,8 @@ import * as TeamValidatorAsyncType from './team-validator-async';
 import * as UsersType from './users';
 import * as VerifierType from './verifier';
 
+import * as ConfigType from "../config/config-example";
+
 import * as StreamsType from '../lib/streams';
 
 import {IPTools as IPToolsType} from './ip-tools';
@@ -24,7 +26,7 @@ declare global {
 			__version: {head: string, origin?: string, tree?: string};
 		}
 	}
-	const Config: AnyObject;
+	const Config: typeof ConfigType & AnyObject;
 	const Chat: typeof ChatType.Chat;
 	const IPTools: typeof IPToolsType;
 	const Ladders: typeof LaddersType

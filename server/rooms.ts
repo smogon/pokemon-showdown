@@ -1431,7 +1431,7 @@ export class GameRoom extends BasicChatRoom {
 		options.reportJoins = !!Config.reportbattlejoins;
 		options.batchJoins = 0;
 		super(roomid, title, options);
-		this.modchat = (Config.battlemodchat || false);
+		this.modchat = (Config.battlemodchat || null);
 
 		this.type = 'battle';
 
