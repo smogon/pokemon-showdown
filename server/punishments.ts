@@ -148,6 +148,56 @@ class PunishmentsStorage {
 	}
 }
 
+class CachingPunishmentsStorage implements IPunishmentsStorage {
+	storage: IPunishmentsStorage;
+	constructor(storage: IPunishmentsStorage) {
+		this.storage = storage;
+	}
+	load() {
+		this.storage.load();
+	}
+	appendPunishment(entry: PunishmentEntry, id: string) {
+		PunishmentsMemoryStorage.appendPunishment(entry, id);
+		this.storage.appendPunishment(entry, id);
+	}
+	appendRoomPunishment(entry: PunishmentEntry, id: string) {
+		PunishmentsMemoryStorage.appendRoomPunishment(entry, id);
+		this.storage.appendRoomPunishment(entry, id);
+	}
+	appendSharedIp(ip: string, note: string) {
+		PunishmentsMemoryStorage.appendSharedIp(ip, note);
+		this.storage.appendSharedIp(ip, note);
+	}
+	deleteRoomPunishment(roomid: RoomID, key: string) {
+		PunishmentsMemoryStorage.deleteRoomPunishment(roomid, key);
+		this.storage.deleteRoomPunishment(roomid, key);
+	}
+	deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {
+		PunishmentsMemoryStorage.deletePunishmentTypeFromRoom(roomid, punishType);
+		this.storage.deletePunishmentTypeFromRoom(roomid, punishType);
+	}
+	deleteAllPunishmentsOfRoom(roomid: RoomID) {
+		PunishmentsMemoryStorage.deleteAllPunishmentsOfRoom(roomid);
+		this.storage.deleteAllPunishmentsOfRoom(roomid);
+	}
+	deletePunishment(key: string) {
+		PunishmentsMemoryStorage.deletePunishment(key);
+		this.storage.deletePunishment(key);
+	}
+	deleteAllPunishments() {
+		PunishmentsMemoryStorage.deleteAllPunishments();
+		this.storage.deleteAllPunishments();
+	}
+	deleteSharedIp(ip: string) {
+		PunishmentsMemoryStorage.deleteSharedIp(ip);
+		this.storage.deleteSharedIp(ip);
+	}
+	deleteAllSharedIps() {
+		PunishmentsMemoryStorage.deleteAllSharedIps();
+		this.storage.deleteAllSharedIps();
+	}
+}
+
 const PunishmentsMemoryStorage = new class implements IPunishmentsStorage {
 	load() {}
 
@@ -403,56 +453,6 @@ const PunishmentsTsvStorage = new class implements IPunishmentsStorage {
 		return row.join('\t') + '\r\n';
 	}
 }();
-
-class CachingPunishmentsStorage implements IPunishmentsStorage {
-	storage: IPunishmentsStorage;
-	constructor(storage: IPunishmentsStorage) {
-		this.storage = storage;
-	}
-	load() {
-		this.storage.load();
-	}
-	appendPunishment(entry: PunishmentEntry, id: string) {
-		PunishmentsMemoryStorage.appendPunishment(entry, id);
-		this.storage.appendPunishment(entry, id);
-	}
-	appendRoomPunishment(entry: PunishmentEntry, id: string) {
-		PunishmentsMemoryStorage.appendRoomPunishment(entry, id);
-		this.storage.appendRoomPunishment(entry, id);
-	}
-	appendSharedIp(ip: string, note: string) {
-		PunishmentsMemoryStorage.appendSharedIp(ip, note);
-		this.storage.appendSharedIp(ip, note);
-	}
-	deleteRoomPunishment(roomid: RoomID, key: string) {
-		PunishmentsMemoryStorage.deleteRoomPunishment(roomid, key);
-		this.storage.deleteRoomPunishment(roomid, key);
-	}
-	deletePunishmentTypeFromRoom(roomid: RoomID, punishType: string) {
-		PunishmentsMemoryStorage.deletePunishmentTypeFromRoom(roomid, punishType);
-		this.storage.deletePunishmentTypeFromRoom(roomid, punishType);
-	}
-	deleteAllPunishmentsOfRoom(roomid: RoomID) {
-		PunishmentsMemoryStorage.deleteAllPunishmentsOfRoom(roomid);
-		this.storage.deleteAllPunishmentsOfRoom(roomid);
-	}
-	deletePunishment(key: string) {
-		PunishmentsMemoryStorage.deletePunishment(key);
-		this.storage.deletePunishment(key);
-	}
-	deleteAllPunishments() {
-		PunishmentsMemoryStorage.deleteAllPunishments();
-		this.storage.deleteAllPunishments();
-	}
-	deleteSharedIp(ip: string) {
-		PunishmentsMemoryStorage.deleteSharedIp(ip);
-		this.storage.deleteSharedIp(ip);
-	}
-	deleteAllSharedIps() {
-		PunishmentsMemoryStorage.deleteAllSharedIps();
-		this.storage.deleteAllSharedIps();
-	}
-}
 
 /*********************************************************
  * Persistence
