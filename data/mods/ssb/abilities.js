@@ -679,7 +679,7 @@ let BattleAbilities = {
 				return this.chainModify(1.5);
 			}
 		},
-		onModifyAccuracy(accuracy) {
+		onSourceModifyAccuracy(accuracy) {
 			if (!this.field.isWeather('')) {
 				return this.chainModify(1.5);
 			}
