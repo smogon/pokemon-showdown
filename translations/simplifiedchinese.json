@@ -126,6 +126,7 @@
 		"You are now blocking private messages, except from staff.": "您已屏蔽私信，除了管理用户",
 		"You are not blocking private messages! To block, use /blockpms": "您并未屏蔽私信。若要屏蔽私信，请使用/blockpms",
 		"You are no longer blocking private messages.": "您已停止屏蔽私信",
+		"You are now blocking all incoming challenge requests.": "您已屏蔽所有挑战请求",
 		"You are already blocking challenges!": "您已屏蔽挑战请求",
 		"You are already available for challenges!": "您已能够接收挑战请求",
 		"You are available for challenges from now on.": "您从现在开始接收挑战请求"

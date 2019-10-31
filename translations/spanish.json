@@ -127,6 +127,7 @@
 		"You are now blocking private messages, except from staff.": "Ahora estás bloqueando mensajes privados, con excepción del staff.",
 		"You are not blocking private messages! To block, use /blockpms": "¡No estás bloqueando mensajes privados! Para bloquearlos usa /blockpms",
 		"You are no longer blocking private messages.": "Ya no estás bloqueando mensajes privados.",
+		"You are now blocking all incoming challenge requests.": "Ahora estás bloqueando todas las solicitudes de batalla entrantes",
 		"You are already blocking challenges!": "¡Ya estás bloqueando solicitudes de batalla!",
 		"You are already available for challenges!": "¡Ya estás disponible para recibir solicitudes de batalla!",
 		"You are available for challenges from now on.": "Estás disponible para recibir solicitudes de batalla de ahora en adelante."

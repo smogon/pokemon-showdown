@@ -61,7 +61,7 @@
 		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute OU /m <em>pseudo</em> : Mute pendant 7 minutes",
 		"- /hourmute OR /hm <em>username</em>: 60 minute mute": "- /hourmute OU /hm <em>pseudo</em> : Mute pendant 60 minutes",
 		"- /unmute <em>username</em>: unmute": "- /unmute <em>pseudo</em> : Enl&egrave;ve un mute",
-	"- /hidetext <em>username</em>: hide a user's messages from the room": "- /hidetext <em>pseudo</em>: Cache les messages de l'utilisateur",
+		"- /hidetext <em>username</em>: hide a user's messages from the room": "- /hidetext <em>pseudo</em>: Cache les messages de l'utilisateur",
 		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce OU /wall <em>message</em> : Fait une annonce",
 		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>pseudo</em> : Affiche l'historique de mod&eacute;ration d'un utilisateur dans la room ",
 		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>note</em> : Ajoute une note de mod&eacute;ration qui peut &ecirc;tre lue dans le modlog",
