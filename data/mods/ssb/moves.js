@@ -1276,7 +1276,7 @@ let BattleMovedex = {
 		onHit(target, source) {
 			if (target.hasType('Grass') || target.volatiles['leechseed']) {
 				this.add('-fail', source);
-				return null;
+				return false;
 			} else {
 				target.addVolatile('leechseed');
 			}
