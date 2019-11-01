@@ -148,6 +148,11 @@ class PunishmentsStorage {
 	}
 }
 
+/**
+ * CachingPunishmentsStorage takes a persistent storage implementation
+ * in its constructor and calls the persistent impl along with
+ * the memory impl (hence 'caching')
+ */
 class CachingPunishmentsStorage implements IPunishmentsStorage {
 	storage: IPunishmentsStorage;
 	constructor(storage: IPunishmentsStorage) {
