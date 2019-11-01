@@ -1273,15 +1273,17 @@ export const Punishments = new class {
 			if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment;
 		}
 
-		for (const ip in user.ips) {
-			punishment = Punishments.roomIps.nestedGet(roomid, ip);
-			if (punishment) {
-				if (punishment[0] === 'ROOMBAN') {
-					return punishment;
-				} else if (punishment[0] === 'BLACKLIST') {
-					if (Punishments.sharedIps.has(ip) && user.autoconfirmed) return;
+		if (!user.trusted) {
+			for (const ip in user.ips) {
+				punishment = Punishments.roomIps.nestedGet(roomid, ip);
+				if (punishment) {
+					if (punishment[0] === 'ROOMBAN') {
+						return punishment;
+					} else if (punishment[0] === 'BLACKLIST') {
+						if (Punishments.sharedIps.has(ip) && user.autoconfirmed) return;
 
-					return punishment;
+						return punishment;
+					}
 				}
 			}
 		}
