@@ -1101,7 +1101,7 @@ let Formats = [
 			`&bullet; <a href="https://www.smogon.com/forums/posts/8031458/">ADV 1v1</a>`,
 		],
 
-		mod: 'gen4',
+		mod: 'gen3',
 		teamLength: {
 			validate: [1, 3],
 			battle: 1,
