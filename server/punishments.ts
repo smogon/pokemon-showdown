@@ -1246,7 +1246,7 @@ export const Punishments = new class {
 		return host.substr(dotLoc + 1);
 	}
 
-	/** Defined in Punishments.loadBanlist */
+	/** Defined in Punishments.storage.loadIpBanlist */
 	checkRangeBanned(ip: string) {
 		return false;
 	}
