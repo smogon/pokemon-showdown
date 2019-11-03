@@ -1652,7 +1652,6 @@ let BattleMovedex = {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceBasePower(basePower, target, source, move) {
@@ -3395,7 +3394,6 @@ let BattleMovedex = {
 				if (['earthquake', 'magnitude', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
@@ -3557,7 +3555,6 @@ let BattleMovedex = {
 				if (['surf', 'whirlpool', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
@@ -5640,7 +5637,6 @@ let BattleMovedex = {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
@@ -11836,7 +11832,6 @@ let BattleMovedex = {
 				if (move.id === 'helpinghand') {
 					return;
 				}
-				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 		},
@@ -14621,7 +14616,6 @@ let BattleMovedex = {
 				if (move.id === 'helpinghand') {
 					return;
 				}
-				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 		},
@@ -15253,7 +15247,6 @@ let BattleMovedex = {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onAnyBasePower(basePower, target, source, move) {
