@@ -1649,7 +1649,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onInvulnerability(target, source, move) {
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
 					return;
 				}
 				return false;
@@ -3391,7 +3391,7 @@ let BattleMovedex = {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onInvulnerability(target, source, move) {
-				if (['earthquake', 'magnitude', 'helpinghand'].includes(move.id)) {
+				if (['earthquake', 'magnitude'].includes(move.id)) {
 					return;
 				}
 				return false;
@@ -3552,7 +3552,7 @@ let BattleMovedex = {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onInvulnerability(target, source, move) {
-				if (['surf', 'whirlpool', 'helpinghand'].includes(move.id)) {
+				if (['surf', 'whirlpool'].includes(move.id)) {
 					return;
 				}
 				return false;
@@ -5634,7 +5634,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onInvulnerability(target, source, move) {
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
 					return;
 				}
 				return false;
@@ -11828,12 +11828,7 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onInvulnerability(target, source, move) {
-				if (move.id === 'helpinghand') {
-					return;
-				}
-				return false;
-			},
+			onInvulnerability: false,
 		},
 		secondary: null,
 		target: "normal",
@@ -14612,12 +14607,7 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onInvulnerability(target, source, move) {
-				if (move.id === 'helpinghand') {
-					return;
-				}
-				return false;
-			},
+			onInvulnerability: false,
 		},
 		secondary: null,
 		target: "normal",
@@ -15244,7 +15234,7 @@ let BattleMovedex = {
 				if (source === this.effectData.target && target === this.effectData.source) {
 					return;
 				}
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
 					return;
 				}
 				return false;
