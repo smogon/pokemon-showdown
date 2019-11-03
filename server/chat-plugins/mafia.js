@@ -1044,7 +1044,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (this.subs.includes(targetUser.id)) this.subs.splice(this.subs.indexOf(targetUser.id), 1);
 			this.played.push(targetUser.id);
 			this.playerTable[targetUser.id] = player;
-			this.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added to the game by ${Chat.escapeHTML(user.name)}!`, {declare: true});
+			this.sendRoom(Chat.html`${targetUser.name} has been added to the game by ${user.name}!`, {declare: true});
 		}
 		this.playerCount++;
 		this.updateRoleString();
@@ -2864,7 +2864,7 @@ const commands = {
 			}
 			if (cmd.includes('cohost')) {
 				game.cohosts.push(targetUser.id);
-				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
+				game.sendRoom(Chat.html`${targetUser.name} has been added as a cohost by ${user.name}`, {declare: true});
 				for (const conn of targetUser.connections) {
 					Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
@@ -2882,7 +2882,7 @@ const commands = {
 				for (const conn of targetUser.connections) {
 					Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
-				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
+				game.sendRoom(Chat.html`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
 				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
 			}
 		},
@@ -2904,7 +2904,7 @@ const commands = {
 				return this.errorReply(`${target} is not a cohost.`);
 			}
 			game.cohosts.splice(cohostIndex, 1);
-			game.sendRoom(`${target} was removed as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
+			game.sendRoom(Chat.html`${target} was removed as a cohost by ${user.name}`, {declare: true});
 			this.modlog('MAFIAUNCOHOST', target, null, {noalts: true, noip: true});
 		},
 

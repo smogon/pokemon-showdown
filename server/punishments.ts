@@ -1087,7 +1087,7 @@ export const Punishments = new class {
 
 		const id = punishment[0];
 		const punishUserid = punishment[1];
-		const reason = punishment[3] ?  `\n\nReason: ${Chat.escapeHTML(punishment[3])}` : '';
+		const reason = punishment[3] ? Chat.html`\n\nReason: ${punishment[3]}` : '';
 		let appeal = ``;
 		if (user.permalocked && Config.appealurl) {
 			appeal += `\n\nPermanent punishments can be appealed: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
