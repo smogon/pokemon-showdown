@@ -16,9 +16,9 @@ let formatEvent = function (event) {
 	if (event.started) timeRemaining = "This event has started";
 	if (!isNaN(timeRemaining)) timeRemaining = `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`;
 	let ret = `<tr title="${timeRemaining}">`;
-	ret += `<td>${Chat.escapeHTML(event.eventName)}</td>`;
+	ret += Chat.html`<td>${event.eventName}</td>`;
 	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
-	ret += `<td><time>${Chat.escapeHTML(event.date)}</time></td></tr>`;
+	ret += Chat.html`<td><time>${event.date}</time></td></tr>`;
 	return ret;
 };
 

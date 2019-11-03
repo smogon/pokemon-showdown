@@ -193,7 +193,11 @@ function formatQueue(queue = [], viewer, room, broadcasting) {
 			const queuedBy = item.hosts.every(h => h.id !== item.staffHostId) ? ` / ${item.staffHostId}` : '';
 			let questions;
 			if (!broadcasting && (item.hosts.some(h => h.id === viewer.id) || viewer.id === item.staffHostId)) {
-				questions = item.questions.map((q, i) => i % 2 ? `<span style="color: green"><em>[${Chat.escapeHTML(q.join(' / '))}]</em></span><br />` : Chat.escapeHTML(q)).join(" ");
+				questions = item.questions.map((q, i) => i % 2 ?
+					Chat.html`<span style="color: green"><em>[${q.join(' / ')}]</em></span><br />`
+					: // eslint-disable-line operator-linebreak
+					Chat.escapeHTML(q)
+				).join(" ");
 			} else {
 				questions = `[${item.questions.length / 2} hidden questions]`;
 			}
@@ -477,7 +481,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		this.completed.push({name: player.name, time: time, blitz: blitz});
 		let place = formatOrder(this.completed.length);
 
-		this.announce(`<em>${Chat.escapeHTML(player.name)}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
+		this.announce(Chat.html`<em>${player.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
 		if (this.parentGame) this.parentGame.onCompleteEvent(player);
 		player.destroy(); // remove from user.games;
 	}
@@ -940,7 +944,7 @@ let commands = {
 			room.game.leaderboard.visualize('points', targetId).then(rank => {
 				if (!rank) return this.sendReplyBox(`User '${targetId}' does not have any points on the scavenger games leaderboard.`);
 
-				this.sendReplyBox(`User '${Chat.escapeHTML(rank.name)}' is #${rank.rank} on the scavenger games leaderboard with ${rank.points} points.`);
+				this.sendReplyBox(Chat.html`User '${rank.name}' is #${rank.rank} on the scavenger games leaderboard with ${rank.points} points.`);
 			});
 		},
 	},
@@ -1034,7 +1038,12 @@ let commands = {
 				if (!players.length) {
 					str += `<tr><td>${questionNum}</td><td>None</td>`;
 				} else {
-					str += `<tr><td>${questionNum}</td><td>${players.map(pl => pl.lastGuess > Date.now() - 1000 * 300 ? `<strong>${Chat.escapeHTML(pl.name)}</strong>` : Chat.escapeHTML(pl.name)).join(", ")}`;
+					str += `<tr><td>${questionNum}</td><td>`;
+					str += players.map(pl => pl.lastGuess > Date.now() - 1000 * 300 ?
+						Chat.html`<strong>${pl.name}</strong>`
+						: // eslint-disable-line operator-linebreak
+						Chat.escapeHTML(pl.name)
+					).join(", ");
 				}
 			}
 			let completed = game.preCompleted ? game.preCompleted : game.completed;
@@ -1384,7 +1393,7 @@ let commands = {
 		Leaderboard.visualize('points', targetId).then(rank => {
 			if (!rank) return this.sendReplyBox(`User '${targetId}' does not have any points on the scavengers leaderboard.`);
 
-			this.sendReplyBox(`User '${Chat.escapeHTML(rank.name)}' is #${rank.rank} on the scavengers leaderboard with ${rank.points} points.`);
+			this.sendReplyBox(Chat.html`User '${rank.name}' is #${rank.rank} on the scavengers leaderboard with ${rank.points} points.`);
 			if (this.broadcasting) setImmediate(() => room.update()); // make sure the room updates for broadcasting since this is async.
 		});
 	},

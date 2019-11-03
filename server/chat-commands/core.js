@@ -732,7 +732,7 @@ exports.commands = {
 
 		Ladders.visualizeAll(target).then(values => {
 			let buffer = `<div class="ladder"><table>`;
-			buffer += `<tr><td colspan="8">User: <strong>${Chat.escapeHTML(target)}</strong></td></tr>`;
+			buffer += Chat.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
 
 			let ratings = values.join(``);
 			if (!ratings) {

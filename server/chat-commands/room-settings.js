@@ -715,15 +715,15 @@ exports.commands = {
 			targetRoom.chatRoomData.isPrivate = true;
 			Rooms.global.writeChatRoomData();
 			if (Rooms.get('upperstaff')) {
-				Rooms.get('upperstaff').add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+				Rooms.get('upperstaff').add(Chat.html`|raw|<div class="broadcast-green">Private chat room created: <b>${target}</b></div>`).update();
 			}
 			this.sendReply(`The private chat room '${target}' was created.`);
 		} else {
 			if (Rooms.get('staff')) {
-				Rooms.get('staff').add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+				Rooms.get('staff').add(Chat.html`|raw|<div class="broadcast-green">Public chat room created: <b>${target}</b></div>`).update();
 			}
 			if (Rooms.get('upperstaff')) {
-				Rooms.get('upperstaff').add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+				Rooms.get('upperstaff').add(Chat.html`|raw|<div class="broadcast-green">Public chat room created: <b>${target}</b></div>`).update();
 			}
 			this.sendReply(`The chat room '${target}' was created.`);
 		}
@@ -834,12 +834,11 @@ exports.commands = {
 		if (Rooms.global.deregisterChatRoom(id)) {
 			this.sendReply(`The room '${target}' was deregistered.`);
 			this.sendReply("It will be deleted as of the next server restart.");
-			target = Chat.escapeHTML(target);
 			if (isPrivate) {
-				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Private chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
+				if (upperStaffRoom) upperStaffRoom.add(Chat.html`|raw|<div class="broadcast-red">Private chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
 			} else {
-				if (staffRoom) staffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered: <b>${target}</b></div>`).update();
-				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
+				if (staffRoom) staffRoom.add(Chat.html`|raw|<div class="broadcast-red">Public chat room deregistered: <b>${target}</b></div>`).update();
+				if (upperStaffRoom) upperStaffRoom.add(Chat.html`|raw|<div class="broadcast-red">Public chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
 			}
 			return;
 		}
