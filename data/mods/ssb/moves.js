@@ -789,6 +789,14 @@ let BattleMovedex = {
 			let team = this.teamGenerator.getTeam({name: source.side.name, inBattle: true});
 			// Remove Asheviere from generated teams to not allow duplicates
 			team = team.filter(pokemon => !(pokemon.name === 'Asheviere'));
+			// Modify generated team so flare is at the first or second slot of the team.
+			if (team.filter(pokemon => pokemon).pop() === 'Flare') {
+				let newId = source.position === 0 ? 1 : 0;
+				let flarePos = team.indexOf('Flare');
+				let original = team[newId];
+				currentTeam[newId] = currentTeam[flarePos];
+				currentTeam[flarePos] = original;
+			}
 			// Overwrite un-fainted pokemon other than the user
 			for (let i = 0; i < currentTeam.length; i++) {
 				if (currentTeam[i].fainted || !currentTeam[i].hp || currentTeam[i].position === source.position) continue;
@@ -817,16 +825,6 @@ let BattleMovedex = {
 				}
 				pokemon.position = currentTeam[i].position;
 				currentTeam[i] = pokemon;
-			}
-			// Move flare to the front of the team if Super Illusion would not activate
-			let newTeam = currentTeam.slice().map(p => (!p.fainted && p.hp) ? p.name : null);
-			if (newTeam.filter(n => n).pop() === 'Flare') {
-				// Don't swap with the current pokemon or client will softlock
-				let newIdx = source.position === 0 ? 1 : 0;
-				let idx = newTeam.indexOf('Flare');
-				let original = currentTeam[newIdx];
-				currentTeam[newIdx] = currentTeam[idx];
-				currentTeam[idx] = original;
 			}
 			source.side.pokemon = currentTeam;
 			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
