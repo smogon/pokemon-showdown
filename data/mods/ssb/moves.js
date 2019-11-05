@@ -163,10 +163,10 @@ let BattleMovedex = {
 			let koed;
 			if (Math.round(this.random())) {
 				koed = target;
-				this.add(`c|+Aeonic|What a buncha jokers`);
+				this.add(`c|%Aeonic|What a buncha jokers`);
 			} else {
 				koed = source;
-				this.add(`c|+Aeonic|haha yeah`);
+				this.add(`c|%Aeonic|haha yeah`);
 			}
 
 			this.add('-anim', koed, "Explosion", koed);
@@ -207,7 +207,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 	},
-	// Akasianse
+	// Felucia
 	quickreload: {
 		accuracy: true,
 		basePower: 0,
