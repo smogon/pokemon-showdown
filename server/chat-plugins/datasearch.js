@@ -1238,10 +1238,17 @@ function runMovesearch(target, cmd, canAll, message) {
 						matched = true;
 						break;
 					}
-				} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
-					if ((dex[move].secondary.self.boosts[lower] < 0) === alts.boost[lower]) {
-						matched = true;
-						break;
+				} else if (dex[move].secondary) {
+					if (dex[move].secondary.boosts) {
+						if ((dex[move].secondary.boosts[lower] < 0) === alts.lower[lower]) {
+							matched = true;
+							break;
+						}
+					} else if (dex[move].secondary.self && dex[move].secondary.self.boosts) {
+						if ((dex[move].secondary.self.boosts[lower] < 0) === alts.lower[lower]) {
+							matched = true;
+							break;
+						}
 					}
 				}
 			}
