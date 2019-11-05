@@ -1265,6 +1265,12 @@ function runMovesearch(target, cmd, canAll, message) {
 
 			for (let searchStatus in alts.status) {
 				let canStatus = !!(dex[move].status === searchStatus || (dex[move].secondaries && dex[move].secondaries.some(entry => entry.status === searchStatus)));
+				if (searchStatus === 'slp') {
+					canStatus = canStatus || move === 'yawn';
+				}
+				if (searchStatus === 'brn' || searchStatus === 'frz' || searchStatus === 'par') {
+					canStatus = canStatus || move === 'triattack';
+				}
 				if (canStatus === alts.status[searchStatus]) {
 					matched = true;
 					break;
