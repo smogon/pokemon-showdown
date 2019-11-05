@@ -827,6 +827,9 @@ let BattleMovedex = {
 				let original = currentTeam[newIdx];
 				currentTeam[newIdx] = currentTeam[idx];
 				currentTeam[idx] = original;
+				// Update pokemon.position flags to prevent errors
+				currentTeam[newIdx].position = newIdx;
+				currentTeam[idx].position = idx;
 			}
 			source.side.pokemon = currentTeam;
 			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
