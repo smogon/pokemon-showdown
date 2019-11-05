@@ -83,12 +83,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Cataclysm',
 				evs: {hp: 252, atk: 252, spe: 4}, ivs: {spa: 0}, nature: 'Adamant',
 			},
-			'Akasianse': {
-				species: 'Durant', ability: 'Hustle', item: 'Choice Band', gender: 'F',
-				moves: ['Iron Head', ['Megahorn', 'Leech Life'], ['Wild Charge', 'Superpower']],
-				signatureMove: 'Quick Reload',
-				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
-			},
 			'Akiamara': {
 				species: 'Croagunk', ability: 'Toxic Swap', item: ['Life Orb', 'Black Sludge'], gender: '',
 				moves: [['Gunk Shot', 'Sludge Wave'], 'Taunt', 'Photon Geyser'],
@@ -299,6 +293,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Iron Head', 'Play Rough', 'U-turn'],
 				signatureMove: 'Soup-Stealing 7-Star Strike',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
+			},
+			'Felucia': {
+				species: 'Durant', ability: 'Hustle', item: 'Choice Band', gender: 'F',
+				moves: ['Iron Head', ['Megahorn', 'Leech Life'], ['Wild Charge', 'Superpower']],
+				signatureMove: 'Quick Reload',
+				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
 			},
 			'Flare': {
 				species: 'Zoroark', ability: 'Super Illusion', item: 'Choice Scarf', gender: 'N',
