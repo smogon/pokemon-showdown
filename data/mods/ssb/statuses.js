@@ -60,13 +60,13 @@ let BattleStatuses = {
 	aeonic: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Aeonic|Guys the emoji movie wasn't __that__ bad`);
+			this.add(`c|%Aeonic|Guys the emoji movie wasn't __that__ bad`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Aeonic|Still better than kie btw`);
+			this.add(`c|%Aeonic|Still better than kie btw`);
 		},
 		onFaint() {
-			this.add(`c|+Aeonic|Don't forget me`);
+			this.add(`c|%Aeonic|Don't forget me`);
 		},
 	},
 	aethernum: {
@@ -79,18 +79,6 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|@Aethernum| Has been fun! But i'm too lazy to keep fighting ^_^'`);
-		},
-	},
-	akasianse: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|%Akasianse|Hi I'm here to participate in a totally serious conversation`);
-		},
-		onSwitchOut() {
-			this.add(`c|%Akasianse|Okay that's enough shitposting for now`);
-		},
-		onFaint() {
-			this.add(`c|%Akasianse|Fine I'll go back to work...`);
 		},
 	},
 	akiamara: {
@@ -591,11 +579,23 @@ let BattleStatuses = {
 		},
 		onFaint(pokemon) {
 			let activeMon = toID(pokemon.side.foe.active[0].illusion ? pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name);
-			if (activeMon === 'akasianse') {
-				this.add(`c|%fart|Akasianse I'm deleting your mon`);
+			if (activeMon === 'felucia') {
+				this.add(`c|%fart|Felucia I'm deleting your mon`);
 			} else {
 				this.add(`c|%fart|the things I do for love...`);
 			}
+		},
+	},
+	felucia: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Felucia|Hi I'm here to participate in a totally serious conversation`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Felucia|Okay that's enough shitposting for now`);
+		},
+		onFaint() {
+			this.add(`c|%Felucia|Fine I'll go back to work...`);
 		},
 	},
 	flare: {

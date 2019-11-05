@@ -163,10 +163,10 @@ let BattleMovedex = {
 			let koed;
 			if (Math.round(this.random())) {
 				koed = target;
-				this.add(`c|+Aeonic|What a buncha jokers`);
+				this.add(`c|%Aeonic|What a buncha jokers`);
 			} else {
 				koed = source;
-				this.add(`c|+Aeonic|haha yeah`);
+				this.add(`c|%Aeonic|haha yeah`);
 			}
 
 			this.add('-anim', koed, "Explosion", koed);
@@ -206,32 +206,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-	},
-	// Akasianse
-	quickreload: {
-		accuracy: true,
-		basePower: 0,
-		category: "Physical",
-		desc: "Uses Defog and then attempts to use U-Turn.",
-		shortDesc: "Uses Defog, then U-Turn.",
-		id: "quickreload",
-		name: "Quick Reload",
-		isNonstandard: "Custom",
-		pp: 15,
-		priority: 0,
-		flags: {mirror: 1, protect: 1, authentic: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onHit(target, source) {
-			this.useMove('Defog', source, target);
-			let move = this.dex.getActiveMove('uturn');
-			move.basePower = 90;
-			this.useMove(move, source, target);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Bug",
 	},
 	// Akiamara
 	x1: {
@@ -1629,6 +1603,32 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
+	},
+	// Felucia
+	quickreload: {
+		accuracy: true,
+		basePower: 0,
+		category: "Physical",
+		desc: "Uses Defog and then attempts to use U-Turn.",
+		shortDesc: "Uses Defog, then U-Turn.",
+		id: "quickreload",
+		name: "Quick Reload",
+		isNonstandard: "Custom",
+		pp: 15,
+		priority: 0,
+		flags: {mirror: 1, protect: 1, authentic: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onHit(target, source) {
+			this.useMove('Defog', source, target);
+			let move = this.dex.getActiveMove('uturn');
+			move.basePower = 90;
+			this.useMove(move, source, target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Bug",
 	},
 	// Flare
 	distortionblast: {
