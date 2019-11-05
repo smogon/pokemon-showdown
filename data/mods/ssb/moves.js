@@ -207,32 +207,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 	},
-	// Felucia
-	quickreload: {
-		accuracy: true,
-		basePower: 0,
-		category: "Physical",
-		desc: "Uses Defog and then attempts to use U-Turn.",
-		shortDesc: "Uses Defog, then U-Turn.",
-		id: "quickreload",
-		name: "Quick Reload",
-		isNonstandard: "Custom",
-		pp: 15,
-		priority: 0,
-		flags: {mirror: 1, protect: 1, authentic: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onHit(target, source) {
-			this.useMove('Defog', source, target);
-			let move = this.dex.getActiveMove('uturn');
-			move.basePower = 90;
-			this.useMove(move, source, target);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Bug",
-	},
 	// Akiamara
 	x1: {
 		accuracy: 100,
@@ -1626,6 +1600,32 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
+	},
+	// Felucia
+	quickreload: {
+		accuracy: true,
+		basePower: 0,
+		category: "Physical",
+		desc: "Uses Defog and then attempts to use U-Turn.",
+		shortDesc: "Uses Defog, then U-Turn.",
+		id: "quickreload",
+		name: "Quick Reload",
+		isNonstandard: "Custom",
+		pp: 15,
+		priority: 0,
+		flags: {mirror: 1, protect: 1, authentic: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onHit(target, source) {
+			this.useMove('Defog', source, target);
+			let move = this.dex.getActiveMove('uturn');
+			move.basePower = 90;
+			this.useMove(move, source, target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Bug",
 	},
 	// Flare
 	distortionblast: {
