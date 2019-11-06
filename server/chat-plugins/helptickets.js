@@ -199,6 +199,7 @@ class HelpTicket extends Rooms.RoomGame {
 			this.activationTime = Date.now();
 			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
+			this.room.add(`|c|~Staff|Thank you for the information, global staff will be here shortly. Please stay in the room.`).update();
 		}
 	}
 
@@ -231,7 +232,8 @@ class HelpTicket extends Rooms.RoomGame {
 		if (!this.ticket.active) return `title="The ticket creator has not spoken yet."`;
 		let hoverText = [];
 		for (let i = this.room.log.log.length - 1; i >= 0; i--) {
-			let entry = this.room.log.log[i].split('|');
+			// Don't show anything after the first linebreak for multiline messages
+			let entry = this.room.log.log[i].split('\n')[0].split('|');
 			entry.shift(); // Remove empty string
 			if (!['c', 'c:'].includes(entry[0])) continue;
 			if (entry[0] === 'c:') entry.shift(); // c: includes a timestamp and needs an extra shift
@@ -1125,12 +1127,27 @@ let commands = {
 			default:
 				closeButtons = `<button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}">Close Ticket as Assisted</button> <button class="button" style="margin: 5px 0" name="send" value="/helpticket close ${user.id}, false">Close Ticket as Unable to Assist</button>`;
 			}
-			const pmLogButton = Config.pmLogButton && ticket.type === 'PM Harassment' && reportTargetType === 'user' && reportTarget ? Config.pmLogButton(user.id, toID(reportTarget)) : '';
-			const sharedBattlesButton = (ticket.type === 'Battle Harassment' || ticket.type === 'Inappropriate Pokemon Nicknames') && reportTarget && reportTargetType === 'user' ?
-				`<button class="button" name="send" value="/sharedbattles ${user.id}, ${toID(reportTarget)}">Shared battles</button>` :
-				'';
+			let staffIntroButtons = '';
+			let pmRequestButton = '';
+			if (reportTargetType === 'user' && reportTarget) {
+				switch (ticket.type) {
+				case 'PM Harassment':
+					if (!Config.pmLogButton) break;
+					pmRequestButton = Config.pmLogButton(user.id, toID(reportTarget));
+					contexts['PM Harassment'] = `Hi! Please click the button below to give global staff permission to check PMs. Or if ${reportTarget} is not the user you want to report, please tell us the name of the user who you want to report.`;
+					break;
+				case 'Inappropriate Username / Status Message':
+					staffIntroButtons = `<button class="button" name="send" value="/forcerename ${reportTarget}">Force-rename ${reportTarget}</button> <button class="button" name="send" value="/clearstatus ${reportTarget}">Clear ${reportTarget}'s status</button> `;
+					break;
+				case 'Battle Harassment':
+				case 'Inappropriate Pokemon Nicknames':
+					staffIntroButtons = `<button class="button" name="send" value="/sharedbattles ${user.id}, ${toID(reportTarget)}">Shared battles</button> `;
+					break;
+				}
+				staffIntroButtons += `<button class="button" name="send" value="/modlog global, ${reportTarget}">Global Modlog for ${reportTarget}</button> `;
+			}
 			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
-			const staffMessage = `<p>${closeButtons} <details><summary class="button">More Options</summary> ${pmLogButton}${sharedBattlesButton} <button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`;
+			const staffMessage = `<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`;
 			const staffHint = staffContexts[ticketType] || '';
 			const reportTargetInfo =
 				reportTargetType === 'room' ? `Reported in room: <a href="/${reportTarget}">${reportTarget}</a>` :
@@ -1164,6 +1181,10 @@ let commands = {
 			}
 			if (contexts[ticket.type]) {
 				helpRoom.add(`|c|~Staff|${contexts[ticket.type]}`);
+				helpRoom.update();
+			}
+			if (pmRequestButton) {
+				helpRoom.add(pmRequestButton);
 				helpRoom.update();
 			}
 			tickets[user.id] = ticket;
