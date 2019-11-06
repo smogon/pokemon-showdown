@@ -1,6 +1,6 @@
 'use strict';
 
-/** @typedef {import('../sim/prng').PRNG} PRNGType */
+/** @typedef {import('../sim/prng').PRNG} PRNG */
 
 /** @type {typeof import('../sim/dex').Dex} */
 const Dex = require(/** @type {any} */ ('../.sim-dist/dex')).Dex;
@@ -32,7 +32,7 @@ const randomFactorySets = require('./factory-sets.json');
 class RandomTeams {
 	/**
 	 * @param {Format | string} format
-	 * @param {?PRNGType | [number, number, number, number]} [prng]
+	 * @param {?PRNG | [number, number, number, number]} [prng]
 	 */
 	constructor(format, prng) {
 		format = Dex.getFormat(format);
@@ -47,7 +47,7 @@ class RandomTeams {
 	}
 
 	/**
-	 * @param {?PRNGType | [number, number, number, number]} [prng]
+	 * @param {?PRNG | [number, number, number, number]} [prng]
 	 */
 	setSeed(prng) {
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
