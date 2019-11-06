@@ -2,7 +2,6 @@ type Battle = import('./battle').Battle
 type Field = import('./field').Field
 type ModdedDex = import('./dex').ModdedDex
 type Pokemon = import('./pokemon').Pokemon
-type PRNG = import('./prng').PRNG;
 type PRNGSeed = import('./prng').PRNGSeed;
 type Side = import('./side').Side
 type TeamValidator = import('./team-validator').TeamValidator
