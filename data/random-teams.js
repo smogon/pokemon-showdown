@@ -1,5 +1,7 @@
 'use strict';
 
+/** @typedef {import('../sim/prng').PRNG} PRNG */
+
 /** @type {typeof import('../sim/dex').Dex} */
 const Dex = require(/** @type {any} */ ('../.sim-dist/dex')).Dex;
 /** @type {typeof import('../sim/prng').PRNG} */

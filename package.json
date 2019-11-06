@@ -71,6 +71,6 @@
     "mocha": "^6.2.1",
     "smogon": "^0.0.4",
     "tslint": "^5.20.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.2"
   }
 }
