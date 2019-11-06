@@ -133,10 +133,7 @@ class HelpTicket extends Rooms.RoomGame {
 				});
 				if (!users.length) this.emptyRoom = true;
 			}
-			if (!this.ticket.active) {
-				this.ticket.active = true;
-				this.activationTime = Date.now();
-			} else {
+			if (this.ticket.active) {
 				this.unclaimedTime += Date.now() - this.lastUnclaimedStart;
 				this.lastUnclaimedStart = 0; // Set back to 0 so we know that it was active when closed
 			}
@@ -188,7 +185,8 @@ class HelpTicket extends Rooms.RoomGame {
 		if (this.ticket.active) return;
 		const blockedMessages = [
 			'hi', 'hello', 'hullo', 'hey', 'yo', 'ok',
-			'hesrude', 'shesrude', 'hesinappropriate', 'shesinappropriate', 'heswore', 'sheswore', 'help',
+			'hesrude', 'shesrude', 'hesinappropriate', 'shesinappropriate', 'heswore', 'sheswore',
+			'help', 'yes',
 		];
 		if ((!user.isStaff || this.ticket.userid === user.id) && blockedMessages.includes(toID(message))) {
 			this.room.add(`|c|~Staff|Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`);
@@ -199,7 +197,7 @@ class HelpTicket extends Rooms.RoomGame {
 		if ((!user.isStaff || this.ticket.userid === user.id) && !this.ticket.active) {
 			this.ticket.active = true;
 			this.activationTime = Date.now();
-			this.lastUnclaimedStart = Date.now();
+			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
 		}
 	}
