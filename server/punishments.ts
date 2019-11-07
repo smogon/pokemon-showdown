@@ -1122,10 +1122,10 @@ export const Punishments = new class {
 			user.resetName();
 			user.updateIdentity();
 		} else {
-			if (punishUserid === '#hostfilter') {
-				user.popup(`Due to spam, you can't chat using a proxy. (Your IP ${user.latestIp} appears to be a proxy.)`);
-			} else if (punishUserid === '#ipban') {
-				user.popup(`Your IP (${user.latestIp}) is not allowed to chat on PS, because it has been used to spam, hack, or otherwise attack our server. Make sure you are not using any proxies to connect to PS.`);
+			if (punishUserid === '#hostfilter' || punishUserid === '#ipban') {
+				user.send(`|popup||html|Your IP (${user.latestIp}) is currently locked due to being a proxy. We automatically lock these connections since they are used to spam, hack, or otherwise attack our server. Disable any proxies you are using to connect to PS.\n\n<a href="view-help-request--appeal"><button class="button">Help me with a lock from a proxy</button></a>`);
+			} else if (user.latestHostType === 'proxy' && user.locked !== user.id) {
+				user.send(`|popup||html|You are locked${bannedUnder} on the IP (${user.latestIp}), which is a proxy. We automatically lock these connections since they are used to spam, hack, or otherwise attack our server. Disable any proxies you are using to connect to PS.\n\n<a href="view-help-request--appeal"><button class="button">Help me with a lock from a proxy</button></a>`);
 			} else if (!user.lockNotified) {
 				user.send(`|popup||html|You are locked${bannedUnder}. ${user.permalocked ? `This lock is permanent.` : `Your lock will expire in a few days.`}${reason}${appeal}`);
 			}
@@ -1158,7 +1158,6 @@ export const Punishments = new class {
 
 		return IPTools.lookup(ip).then(({dnsbl, host, hostType}) => {
 			user = connection.user || user;
-			if (user.locked === '#hostfilter') user.locked = null;
 
 			if (hostType === 'proxy' && !user.trusted && !user.locked) {
 				user.locked = '#hostfilter';
