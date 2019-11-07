@@ -122,14 +122,6 @@ let BattleMovedex = {
 	},
 	bounce: {
 		inherit: true,
-		effect: {
-			onInvulnerability(target, source, move) {
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
-					return;
-				}
-				return false;
-			},
-		},
 		desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
 	},
 	bubble: {
@@ -235,28 +227,6 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, Protect, Quick Guard, or Wide Guard. Fails if the user moves last this turn.",
 	},
-	dig: {
-		inherit: true,
-		effect: {
-			onInvulnerability(target, source, move) {
-				if (['earthquake', 'magnitude', 'helpinghand'].includes(move.id)) {
-					return;
-				}
-				return false;
-			},
-		},
-	},
-	dive: {
-		inherit: true,
-		effect: {
-			onInvulnerability(target, source, move) {
-				if (['surf', 'whirlpool', 'helpinghand'].includes(move.id)) {
-					return;
-				}
-				return false;
-			},
-		},
-	},
 	dracometeor: {
 		inherit: true,
 		basePower: 140,
@@ -339,14 +309,6 @@ let BattleMovedex = {
 	},
 	fly: {
 		inherit: true,
-		effect: {
-			onInvulnerability(target, source, move) {
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
-					return;
-				}
-				return false;
-			},
-		},
 		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
 	},
 	followme: {
@@ -923,14 +885,6 @@ let BattleMovedex = {
 	},
 	shadowforce: {
 		inherit: true,
-		effect: {
-			onInvulnerability(target, source, move) {
-				if (move.id === 'helpinghand') {
-					return;
-				}
-				return false;
-			},
-		},
 		desc: "If this move is successful, it breaks through the target's Detect or Protect for this turn, allowing other Pokemon to attack the target normally. If the target is an opponent and its side is protected by Quick Guard or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the opponent's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn.",
 	},
 	simplebeam: {
@@ -982,20 +936,6 @@ let BattleMovedex = {
 				source.addVolatile('twoturnmove', target);
 				return null;
 			}
-		},
-		effect: {
-			onAnyInvulnerability(target, source, move) {
-				if (target !== this.effectData.target && target !== this.effectData.source) {
-					return;
-				}
-				if (source === this.effectData.target && target === this.effectData.source) {
-					return;
-				}
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
-					return;
-				}
-				return false;
-			},
 		},
 	},
 	sleeppowder: {

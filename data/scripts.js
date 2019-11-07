@@ -354,6 +354,9 @@ let BattleScripts = {
 		return moveResult;
 	},
 	hitStepInvulnerabilityEvent(targets, pokemon, move) {
+		if (move.id === 'helpinghand' || (this.gen >= 6 && move.id === 'toxic' && pokemon.hasType('Poison'))) {
+			return new Array(targets.length).fill(true);
+		}
 		const hitResults = this.runEvent('Invulnerability', targets, pokemon, move);
 		for (const [i, target] of targets.entries()) {
 			if (hitResults[i] === false) {
