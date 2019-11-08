@@ -14,6 +14,7 @@ export function load(invalidate = false) {
 	const config: Config = Object.assign({}, defaults, require('../config/config'));
 	// config.routes is nested - we need to ensure values are set for its keys as well.
 	config.routes = Object.assign({}, defaults.routes, config.routes);
+	return config;
 }
 
 export const Config = load();
