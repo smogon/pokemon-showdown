@@ -884,7 +884,8 @@ export class TeamValidator {
 		let eventTemplate = template;
 		if (source.charAt(1) === 'S') {
 			const splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
-			eventTemplate = this.dex.getTemplate(splitSource[1]);
+			const dex = (this.dex.gen === 1 ? Dex.mod('gen2') : this.dex);
+			eventTemplate = dex.getTemplate(splitSource[1]);
 			if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0], 10)];
 			if (!eventData) {
 				throw new Error(`${eventTemplate.species} from ${template.species} doesn't have data for event ${source}`);
