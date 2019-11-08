@@ -946,7 +946,7 @@ export class Tournament extends Rooms.RoomGame {
 			p2: user,
 			p2team: ready.team,
 			rated: !Ladders.disabled && this.isRated,
-			type: ready.type,
+			challengeType: ready.challengeType,
 			tour: this,
 		});
 		if (!room || !room.battle) throw new Error(`Failed to create battle in ${room}`);

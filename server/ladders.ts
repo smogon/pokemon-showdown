@@ -15,7 +15,7 @@ const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.r
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
-type BattleType = import('./room-battle').BattleType;
+type ChallengeType = import('./room-battle').ChallengeType;
 
 /**
  * This represents a user's search for a battle under a format.
@@ -25,14 +25,14 @@ class BattleReady {
 	readonly formatid: string;
 	readonly team: string;
 	readonly rating: number;
-	readonly type: BattleType;
+	readonly challengeType: ChallengeType;
 	readonly time: number;
-	constructor(userid: ID, formatid: string, team: string, rating: number = 0, type: BattleType) {
+	constructor(userid: ID, formatid: string, team: string, rating: number = 0, challengeType: ChallengeType) {
 		this.userid = userid;
 		this.formatid = formatid;
 		this.team = team;
 		this.rating = rating;
-		this.type = type;
+		this.challengeType = challengeType;
 		this.time = Date.now();
 	}
 }
@@ -69,7 +69,7 @@ class Ladder extends LadderStore {
 		super(formatid);
 	}
 
-	async prepBattle(connection: Connection, type: BattleType, team: string | null = null, isRated = false) {
+	async prepBattle(connection: Connection, challengeType: ChallengeType, team: string | null = null, isRated = false) {
 		// all validation for a battle goes through here
 		const user = connection.user;
 		const userid = user.id;
@@ -148,7 +148,7 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		return new BattleReady(userid, this.formatid, valResult.slice(1), rating, type);
+		return new BattleReady(userid, this.formatid, valResult.slice(1), rating, challengeType);
 	}
 
 	static cancelChallenging(user: User) {
@@ -577,7 +577,7 @@ class Ladder extends LadderStore {
 			p2team: ready2.team,
 			p2rating: ready2.rating,
 			rated: Math.min(ready1.rating, ready2.rating),
-			type: ready1.type,
+			challengeType: ready1.challengeType,
 		});
 	}
 }
