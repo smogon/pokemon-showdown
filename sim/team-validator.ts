@@ -827,8 +827,9 @@ export class TeamValidator {
 			} else if (allowEVs && !capEVs && [508, 510].includes(totalEV)) {
 				problems.push(`${name} has exactly 510 EVs, but this format does not restrict you to 510 EVs: you can max out every EV (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			}
-			if (set.level === 50 && this.format.maxLevel !== 50) { // Check for level import errors from user in VGC -> DOU, etc.
-				problems.push(`${name} is level 50, but this format allows level 100 Pokémon.`);
+			// Check for level import errors from user in VGC -> DOU, etc.
+			if (set.level === 50 && allowEVs && totalEV % 4 === 0) {
+				problems.push(`${name} is level 50, but this format allows level 100 Pokémon. (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			}
 		}
 
