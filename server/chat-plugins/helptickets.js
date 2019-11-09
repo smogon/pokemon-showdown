@@ -49,7 +49,14 @@ try {
 			if (ticket.expires <= Date.now()) continue;
 			ticketBans[t] = ticket;
 		} else {
-			if (ticket.created + TICKET_CACHE_TIME <= Date.now() && !ticket.open) {
+			if (ticket.created + TICKET_CACHE_TIME <= Date.now()) {
+				// Tickets that have been open for 24+ hours will be automatically closed.
+				const ticketRoom = /** @type {ChatRoom | null} */ (Rooms.get(`help-${ticket.userid}`));
+				if (ticketRoom) {
+					const ticketGame = /** @type {HelpTicket} */ (ticketRoom.game);
+					ticketGame.writeStats(false);
+					ticketRoom.expire();
+				}
 				continue;
 			}
 			// Close open tickets after a restart
