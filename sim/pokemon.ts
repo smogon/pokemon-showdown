@@ -641,8 +641,19 @@ export class Pokemon {
 		const abilities = [
 			'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
 		];
+		// Check if any active pokemon have the ability Neutralizing Gas
+		let neutralizinggas = false;
+		for (const pokemon of this.battle.getAllActive()) {
+			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid']
+				&& !pokemon.abilityData.ending) {
+				neutralizinggas = true;
+				break;
+			}
+		}
+
 		return !!((this.battle.gen >= 5 && !this.isActive) ||
-			(this.volatiles['gastroacid'] && !abilities.includes(this.ability)));
+			((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID)))
+			&& !abilities.includes(this.ability)));
 	}
 
 	ignoringItem() {
