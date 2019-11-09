@@ -679,7 +679,7 @@ const commands = {
 		if (target in Config.groups) {
 			user.blockPMs = target;
 			this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
-		} else if (target === 'autoconfirmed' || target === 'trusted') {
+		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			user.blockPMs = target;
 			this.sendReply(`You are now blocking private messages, except from staff and ${target} users.`);
 		} else {
@@ -689,7 +689,10 @@ const commands = {
 		user.update('blockPMs');
 		return true;
 	},
-	blockpmshelp: [`/blockpms - Blocks private messages. Unblock them with /unblockpms.`],
+	blockpmshelp: [
+		`/blockpms - Blocks private messages except from staff. Unblock them with /unblockpms.`,
+		`/blockpms [unlocked/ac/trusted/+] - Blocks private messages except from staff and the specified group.`,
+	],
 
 	'!unblockpms': true,
 	unblockpm: 'unblockpms',

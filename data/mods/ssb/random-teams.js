@@ -83,12 +83,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Cataclysm',
 				evs: {hp: 252, atk: 252, spe: 4}, ivs: {spa: 0}, nature: 'Adamant',
 			},
-			'Akasianse': {
-				species: 'Durant', ability: 'Hustle', item: 'Choice Band', gender: 'F',
-				moves: ['Iron Head', ['Megahorn', 'Leech Life'], ['Wild Charge', 'Superpower']],
-				signatureMove: 'Quick Reload',
-				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
-			},
 			'Akiamara': {
 				species: 'Croagunk', ability: 'Toxic Swap', item: ['Life Orb', 'Black Sludge'], gender: '',
 				moves: [['Gunk Shot', 'Sludge Wave'], 'Taunt', 'Photon Geyser'],
@@ -96,10 +90,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, spa: 4, spe: 252}, nature: 'Serious',
 			},
 			'Akir': {
-				species: 'Parasect', ability: 'Regrowth', item: 'Leftovers', gender: 'M',
-				moves: ['Spore', ['Leech Life', 'Horn Leech'], 'Healing Wish'],
+				species: 'Parasect', ability: 'Neutralizing Spores', item: 'Leftovers', gender: 'M',
+				moves: ['Toxic', 'Leech Life', ['Lunar Dance', 'Spore']],
 				signatureMove: 'Compost',
-				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
+				evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
 			},
 			'Alpha': {
 				species: 'Espeon', ability: 'O SOLE MIO', item: 'Light Clay', gender: 'M',
@@ -299,6 +293,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Iron Head', 'Play Rough', 'U-turn'],
 				signatureMove: 'Soup-Stealing 7-Star Strike',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
+			},
+			'Felucia': {
+				species: 'Durant', ability: 'Hustle', item: 'Choice Band', gender: 'F',
+				moves: ['Iron Head', ['Megahorn', 'Leech Life'], ['Wild Charge', 'Superpower']],
+				signatureMove: 'Quick Reload',
+				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
 			},
 			'Flare': {
 				species: 'Zoroark', ability: 'Super Illusion', item: 'Choice Scarf', gender: 'N',

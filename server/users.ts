@@ -244,6 +244,7 @@ function cacheGroupData() {
 				continue;
 			}
 
+			// @ts-ignore - dyanmically assigned property
 			groupData.rank = numGroups - i - 1;
 			groups[groupData.symbol] = groupData;
 			Config.groupsranking.unshift(groupData.symbol);
@@ -622,6 +623,7 @@ export class User extends Chat.MessageContext {
 	}
 	authAtLeast(minAuth: string, room: BasicChatRoom | null = null) {
 		if (!minAuth || minAuth === ' ') return true;
+		if (minAuth === 'unlocked') return !(this.locked || this.semilocked);
 		if (minAuth === 'trusted' && this.trusted) return true;
 		if (minAuth === 'autoconfirmed' && this.autoconfirmed) return true;
 

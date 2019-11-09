@@ -6,7 +6,7 @@ const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
 
-// Substitution dictionary taken from https://github.com/ThreeLetters/NoSwearingPlease/blob/master/index.js, licensed under MIT.
+// Substitution dictionary adapted from https://github.com/ThreeLetters/NoSwearingPlease/blob/master/index.js, licensed under MIT.
 /** @type {{[k: string]: string[]}} */
 const EVASION_DETECTION_SUBSTITUTIONS = {
 	"a": ["a", "4", "@", "á", "â", "ã", "à", "ᗩ", "A", "ⓐ", "Ⓐ", "α", "͏", "₳", "ä", "Ä", "Ꮧ", "λ", "Δ", "Ḁ", "Ꭺ", "ǟ", "̾", "ａ", "Ａ", "ᴀ", "ɐ", "🅐", "𝐚", "𝐀", "𝘢", "𝘈", "𝙖", "𝘼", "𝒶", "𝓪", "𝓐", "𝕒", "𝔸", "𝔞", "𝔄", "𝖆", "𝕬", "🄰", "🅰", "𝒜", "𝚊", "𝙰", "ꍏ", "а"],
@@ -15,7 +15,7 @@ const EVASION_DETECTION_SUBSTITUTIONS = {
 	"d": ["d", "ᗪ", "D", "ⓓ", "Ⓓ", "∂", "Đ", "ď", "Ď", "Ꮄ", "Ḋ", "Ꭰ", "ɖ", "ｄ", "Ｄ", "ᴅ", "🅓", "𝐝", "𝐃", "𝘥", "𝘋", "𝙙", "𝘿", "𝒹", "𝓭", "𝓓", "𝕕", "​", "𝔡", "𝖉", "𝕯", "🄳", "🅳", "𝒟", "ԃ", "𝚍", "𝙳", "◗", "ⅾ"],
 	"e": ["e", "3", "é", "ê", "E", "ⓔ", "Ⓔ", "є", "͏", "Ɇ", "ệ", "Ệ", "Ꮛ", "ε", "Σ", "ḕ", "Ḕ", "Ꭼ", "ɛ", "̾", "ｅ", "Ｅ", "ᴇ", "ǝ", "🅔", "𝐞", "𝐄", "𝘦", "𝘌", "𝙚", "𝙀", "ℯ", "𝓮", "𝓔", "𝕖", "𝔻", "𝔢", "𝔇", "𝖊", "𝕰", "🄴", "🅴", "𝑒", "𝐸", "ҽ", "𝚎", "𝙴", "€", "е"],
 	"f": ["f", "ᖴ", "F", "ⓕ", "Ⓕ", "₣", "ḟ", "Ḟ", "Ꭶ", "ғ", "ʄ", "ｆ", "Ｆ", "ɟ", "🅕", "𝐟", "𝐅", "𝘧", "𝘍", "𝙛", "𝙁", "𝒻", "𝓯", "𝓕", "𝕗", "𝔼", "𝔣", "𝔈", "𝖋", "𝕱", "🄵", "🅵", "𝐹", "ϝ", "𝚏", "𝙵", "Ϝ", "f"],
-	"g": ["g", "G", "ⓖ", "Ⓖ", "͏", "₲", "ġ", "Ġ", "Ꮆ", "ϑ", "Ḡ", "ɢ", "̾", "ｇ", "Ｇ", "ƃ", "🅖", "𝐠", "𝐆", "𝘨", "𝘎", "𝙜", "𝙂", "ℊ", "𝓰", "𝓖", "𝕘", "𝔽", "𝔤", "𝔉", "𝖌", "𝕲", "🄶", "🅶", "𝑔", "𝒢", "ɠ", "𝚐", "𝙶", "❡", "ց"],
+	"g": ["g", "q", "6", "9", "G", "ⓖ", "Ⓖ", "͏", "₲", "ġ", "Ġ", "Ꮆ", "ϑ", "Ḡ", "ɢ", "̾", "ｇ", "Ｇ", "ƃ", "🅖", "𝐠", "𝐆", "𝘨", "𝘎", "𝙜", "𝙂", "ℊ", "𝓰", "𝓖", "𝕘", "𝔽", "𝔤", "𝔉", "𝖌", "𝕲", "🄶", "🅶", "𝑔", "𝒢", "ɠ", "𝚐", "𝙶", "❡", "ց"],
 	"h": ["h", "ᕼ", "H", "ⓗ", "Ⓗ", "н", "Ⱨ", "ḧ", "Ḧ", "Ꮒ", "ɦ", "ｈ", "Ｈ", "ʜ", "ɥ", "🅗", "𝐡", "𝐇", "𝘩", "𝘏", "𝙝", "𝙃", "𝒽", "𝓱", "𝓗", "𝕙", "𝔾", "𝔥", "𝔊", "𝖍", "𝕳", "🄷", "🅷", "𝐻", "ԋ", "𝚑", "𝙷", "♄", "h"],
 	"i": ["i", "!", "l", "1", "í", "I", "ⓘ", "Ⓘ", "ι", "͏", "ł", "ï", "Ï", "Ꭵ", "ḭ", "Ḭ", "ɨ", "̾", "ｉ", "Ｉ", "ɪ", "ı", "🅘", "𝐢", "𝐈", "𝘪", "𝘐", "𝙞", "𝙄", "𝒾", "𝓲", "𝓘", "𝕚", "ℍ", "𝔦", "ℌ", "𝖎", "𝕴", "🄸", "🅸", "𝐼", "𝚒", "𝙸", "♗", "і"],
 	"j": ["j", "ᒍ", "J", "ⓙ", "Ⓙ", "נ", "Ꮰ", "ϳ", "ʝ", "ｊ", "Ｊ", "ᴊ", "ɾ", "🅙", "𝐣", "𝐉", "𝘫", "𝘑", "𝙟", "𝙅", "𝒿", "𝓳", "𝓙", "𝕛", "​", "𝔧", "𝖏", "𝕵", "🄹", "🅹", "𝒥", "𝚓", "𝙹", "♪", "ј"],
@@ -166,7 +166,7 @@ Chat.registerMonitor('evasion', {
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
-				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${word}`, `<${room.roomid}> ${user.name}: \`\`${message}\`\` __(${match[0]} => ${word})__`);
+				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`, `<${room.roomid}> ${user.name}: \`\`${message}\`\` __(${match[0]} => ${word})__`);
 			} else {
 				this.errorReply(`Please do not say '${word}'.`);
 			}
@@ -286,7 +286,8 @@ let chatfilter = function (message, user, room) {
 	for (const list in Chat.monitors) {
 		const {location, condition, monitor} = Chat.monitors[list];
 		if (!monitor) continue;
-		if (location === 'BATTLES' && !(room && room.battle)) continue;
+		// Ignore challenge games, which are unrated and not part of roomtours.
+		if (location === 'BATTLES' && !(room && room.battle && (room.battle.rated || room.parent))) continue;
 		if (location === 'PUBLIC' && room && room.isPrivate === true) continue;
 
 		switch (condition) {
@@ -326,6 +327,7 @@ let namefilter = function (name, user) {
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
 	for (const list in filterWords) {
+		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (let line of filterWords[list]) {
 			let [regex] = line;
 
@@ -363,6 +365,7 @@ let nicknamefilter = function (name, user) {
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
 	for (const list in filterWords) {
+		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (let line of filterWords[list]) {
 			let [regex] = line;
 
@@ -391,6 +394,7 @@ let statusfilter = function (status, user) {
 	}
 
 	for (const list in filterWords) {
+		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (let line of filterWords[list]) {
 			let [regex] = line;
 

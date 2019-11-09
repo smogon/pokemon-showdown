@@ -163,10 +163,10 @@ let BattleMovedex = {
 			let koed;
 			if (Math.round(this.random())) {
 				koed = target;
-				this.add(`c|+Aeonic|What a buncha jokers`);
+				this.add(`c|%Aeonic|What a buncha jokers`);
 			} else {
 				koed = source;
-				this.add(`c|+Aeonic|haha yeah`);
+				this.add(`c|%Aeonic|haha yeah`);
 			}
 
 			this.add('-anim', koed, "Explosion", koed);
@@ -207,32 +207,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 	},
-	// Akasianse
-	quickreload: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Physical",
-		desc: "Uses Defog and then attempts to use U-Turn.",
-		shortDesc: "Uses Defog, then U-Turn.",
-		id: "quickreload",
-		name: "Quick Reload",
-		isNonstandard: "Custom",
-		pp: 15,
-		priority: 0,
-		flags: {mirror: 1, protect: 1, authentic: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onHit(target, source) {
-			this.useMove('Defog', source, target);
-			let move = this.dex.getActiveMove('uturn');
-			move.basePower = 90;
-			this.useMove(move, source, target);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Bug",
-	},
 	// Akiamara
 	x1: {
 		accuracy: 100,
@@ -267,8 +241,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user recovers half its HP. If any of the user's allies fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions. The terrain becomes Grassy Terrain.",
-		shortDesc: "Heal, Grassy Terrain, Heal Bell; ally fainted: Wish.",
+		desc: "The user recovers half its HP. If any Pokemon fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions.",
+		shortDesc: "Heal 50%, Heal Bell; any fainted: Wish.",
 		id: "compost",
 		name: "Compost",
 		isNonstandard: "Custom",
@@ -284,7 +258,7 @@ let BattleMovedex = {
 		onHit(target, source) {
 			let didSomething = false;
 			let side = source.side;
-			if (side.faintedLastTurn) {
+			if (side.faintedLastTurn || side.foe.faintedLastTurn) {
 				this.add('-anim', source, "Wish", target);
 				side.addSlotCondition(source, 'wish', source);
 				this.add('-message', `${source.name} made a wish!`);
@@ -294,7 +268,6 @@ let BattleMovedex = {
 				if (ally.cureStatus()) didSomething = true;
 			}
 			if (this.heal(source.maxhp / 2, source)) didSomething = true;
-			if (this.field.setTerrain('grassyterrain', source)) didSomething = true;
 			return didSomething;
 		},
 		secondary: null,
@@ -828,6 +801,9 @@ let BattleMovedex = {
 				let original = currentTeam[newIdx];
 				currentTeam[newIdx] = currentTeam[idx];
 				currentTeam[idx] = original;
+				// Update pokemon.position flags to prevent errors
+				currentTeam[newIdx].position = newIdx;
+				currentTeam[idx].position = idx;
 			}
 			source.side.pokemon = currentTeam;
 			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
@@ -1277,7 +1253,7 @@ let BattleMovedex = {
 		onHit(target, source) {
 			if (target.hasType('Grass') || target.volatiles['leechseed']) {
 				this.add('-fail', source);
-				return null;
+				return false;
 			} else {
 				target.addVolatile('leechseed');
 			}
@@ -1627,6 +1603,32 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
+	},
+	// Felucia
+	quickreload: {
+		accuracy: true,
+		basePower: 0,
+		category: "Physical",
+		desc: "Uses Defog and then attempts to use U-Turn.",
+		shortDesc: "Uses Defog, then U-Turn.",
+		id: "quickreload",
+		name: "Quick Reload",
+		isNonstandard: "Custom",
+		pp: 15,
+		priority: 0,
+		flags: {mirror: 1, protect: 1, authentic: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onHit(target, source) {
+			this.useMove('Defog', source, target);
+			let move = this.dex.getActiveMove('uturn');
+			move.basePower = 90;
+			this.useMove(move, source, target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Bug",
 	},
 	// Flare
 	distortionblast: {
