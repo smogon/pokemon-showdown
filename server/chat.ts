@@ -723,11 +723,15 @@ export class CommandContext extends MessageContext {
 		return true;
 	}
 	canBroadcast(ignoreCooldown?: boolean, suppressMessage?: string | null) {
-		if (this.room instanceof Rooms.GlobalRoom) return false;
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
+			if (this.room instanceof Rooms.GlobalRoom) {
+				this.errorReply(`You have no one to broadcast this to.`);
+				this.errorReply(`To see it for yourself, use: /${this.message.substr(1)}`);
+				return false;
+			}
 			if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
-				this.errorReply("You need to be voiced to broadcast this command's information.");
-				this.errorReply("To see it for yourself, use: /" + this.message.substr(1));
+				this.errorReply(`You need to be voiced to broadcast this command's information.`);
+				this.errorReply(`To see it for yourself, use: /${this.message.substr(1)}`);
 				return false;
 			}
 

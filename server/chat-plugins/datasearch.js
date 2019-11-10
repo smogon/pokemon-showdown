@@ -244,8 +244,8 @@ exports.commands = {
 	bw2learn: 'learn',
 	oraslearn: 'learn',
 	learn(target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help learn');
+		if (!this.canBroadcast()) return;
 
 		return runSearch({
 			target: target,
