@@ -1545,6 +1545,9 @@ export class TeamValidator {
 				if (source.charAt(1) === 'E') {
 					if (babyEvo && source.slice(2) === babyEvo) return false;
 				}
+				if (source.charAt(1) === 'D') {
+					if (babyEvo && source.slice(2) === babyEvo) return false;
+				}
 				return true;
 			});
 			if (!setSources.sources.length && !setSources.sourcesBefore) {
@@ -1748,7 +1751,7 @@ export class TeamValidator {
 					} else if (learned.charAt(1) === 'D') {
 						// DW moves:
 						//   only if that was the source
-						moveSources.add(learned);
+						moveSources.add(learned + template.id);
 					} else if (learned.charAt(1) === 'V') {
 						// Virtual Console moves:
 						//   only if that was the source
