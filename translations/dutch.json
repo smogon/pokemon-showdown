@@ -5,6 +5,9 @@
 		"namelocked": "genaamlockt",
 		"locked": "gelockt",
 
+		"autoconfirmed": "autoconfirmed",
+		"trusted": "vertrouwd",
+
 		"Please follow the rules:": "Volg de regels:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-nl",
 		"Global Rules": "Globale Regels",
@@ -116,6 +119,17 @@
 
 		"Your message contained banned words in this room.": "Je bericht bevat uit de room verbannen woorden.",
 		"You can't send the same message again so soon.": "Je kunt hetzelfde bericht niet zo snel nogmaals versturen.",
-		"Due to this room being a high traffic room, your message must contain at least two letters.": "Aangezien deze room een room is met veel verkeer, moet je bericht in ieder geval twee letters bevatten."
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "Aangezien deze room een room is met veel verkeer, moet je bericht in ieder geval twee letters bevatten.",
+
+		"You are already blocking private messages! To unblock, use /unblockpms": "Je bent al privéberichten aan het blokkeren. Om deze te deblokkeren, gebruik /unblockpms",
+		"You are now blocking private messages, except from staff and ${rank}.": "Je blokkeert nu privéberichten, behalve van staf en ${rank}.",
+		"You are now blocking private messages, except from staff and ${status} users.": "Je blokkeert nu privéberichten, behalve van staf en ${status}e gebruikers.",
+		"You are now blocking private messages, except from staff.": "Je blokkeert nu privéberichten, behalve van staf.",
+		"You are not blocking private messages! To block, use /blockpms": "Je blokkeert geen privéberichten! Om deze te blokkeren, gebruik /blockpms",
+		"You are no longer blocking private messages.": "Je blokkeert geen privéberichten meer.",
+		"You are now blocking all incoming challenge requests.": "Je blokkeert nu alle inkomende uitdagingen.",
+		"You are already blocking challenges!": "Je blokkeert al uitdagingen!",
+		"You are already available for challenges!": "Je bent al beschikbaar voor uitdagingen!",
+		"You are available for challenges from now on.": "Je bent vanaf nu beschikbaar voor uitdagingen."
 	}
 }

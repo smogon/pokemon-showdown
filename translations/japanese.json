@@ -5,6 +5,9 @@
 		"namelocked": "ユーザー名ロック",
 		"locked": "ロック",
 
+		"autoconfirmed": "自動登録認証済み",
+		"trusted": "信頼あり",
+
 		"Please follow the rules:": "ルールを守ってください:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-ja",
 		"Global Rules": "全部屋共通ルール",
@@ -116,6 +119,17 @@
 
 		"Your message contained banned words in this room.": "メッセージにこの部屋の禁止ワードが入っています。",
 		"You can't send the same message again so soon.": "高頻度で同じメッセージを送ることはできません。",
-		"Due to this room being a high traffic room, your message must contain at least two letters.": "このチャット部屋のメッセージ頻度が高いため、2文字以内のメッセージを送ることはできません。"
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "このチャット部屋のメッセージ頻度が高いため、2文字以内のメッセージを送ることはできません。",
+
+		"You are already blocking private messages! To unblock, use /unblockpms": "すでにプライベートメッセージをブロックしています。ブロックを解除するには /unblockpms を使ってください。",
+		"You are now blocking private messages, except from staff and ${rank}.": "プライベートメッセージをブロックしました。グローバルスタッフと ${rank} 権限を持つ人はブロックされません。",
+		"You are now blocking private messages, except from staff and ${status} users.": "プライベートメッセージをブロックしました。グローバルスタッフと ${status} 状態の人はブロックされません。",
+		"You are now blocking private messages, except from staff.": "プライベートメッセージをブロックしました。グローバルスタッフはブロックされません。",
+		"You are not blocking private messages! To block, use /blockpms": "プライベートメッセージをブロックしていません。ブロックしたい場合は、/blockpms を使ってください。",
+		"You are no longer blocking private messages.": "プライベートメッセージのブロックを解除しました。",
+		"You are now blocking all incoming challenge requests.": " 対戦の申し込みをブロックしました。",
+		"You are already blocking challenges!": "すでに対戦の申し込みをブロックしています。",
+		"You are already available for challenges!": "現在対戦の申し込みをブロックしていません。",
+		"You are available for challenges from now on.": "対戦の申し込みのブロックを解除しました。"
 	}
 }

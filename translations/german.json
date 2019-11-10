@@ -2,6 +2,9 @@
 	"name": "German",
 
 	"strings": {
+		"autoconfirmed": "autoconfirmed",
+		"trusted": "vertrauenswürdig",
+
 		"Please follow the rules:": "Bitte befolgt die Regeln:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-de",
 		"Global Rules": "Globale Regeln",
@@ -94,6 +97,17 @@
 		"Your status is too long; it must be under ${maxLength} characters.": "Dein Status ist zu lang; er muss kürzer als ${maxLength} Zeichen sein.",
 		"Your status contains a banned word.": "Dein Status beinhaltet ein verbotenes Wort.",
 		"Your status has been set to: ${target}.": "Dein Status wurde zu ${target} geändert.", "You are now marked as busy.": "Du bist jetzt als beschäftigt markiert.",
-		"You are now marked as away. Send a message or use /back to indicate you are back.": "Du bist jetzt als abwesend markiert. Versende eine Nachricht oder nutze /back um zu signalisieren, dass du zurück bist."
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "Du bist jetzt als abwesend markiert. Versende eine Nachricht oder nutze /back um zu signalisieren, dass du zurück bist.",
+
+		"You are already blocking private messages! To unblock, use /unblockpms": "Du blockierst bereits private Nachrichten! Um dies zu deaktivieren, benutze /unblockpms",
+		"You are now blocking private messages, except from staff and ${rank}.": "Du blockierst jetzt private Nachrichten, außer vom Staff und ${rank}. ",
+		"You are now blocking private messages, except from staff and ${status} users.": "Du blockierst jetzt private Nachrichten, außer von Staff und ${status} Usern. ",
+		"You are now blocking private messages, except from staff.": "Du blockierst jetzt private Nachrichten, außer vom Staff.",
+		"You are not blocking private messages! To block, use /blockpms": "Du blockierst keine privaten Nachrichten! Um diese zu blockieren, benutze /blockpms",
+		"You are no longer blocking private messages.": "Du blockierst keine privaten Nachrichten mehr.",
+		"You are now blocking all incoming challenge requests.": "Du blockierst jetzt alle eingehenden Herausforderungen.",
+		"You are already blocking challenges!": "Du blockierst bereits Herausforderungen!",
+		"You are already available for challenges!": "Du bist bereits für Herausforderungen verfügbar!",
+		"You are available for challenges from now on.": "Du bist ab jetzt für Herausforderungen verfügbar."
 	}
 }

@@ -5,6 +5,9 @@
 		"namelocked": "namelocked",
 		"locked": "locked",
 
+		"autoconfirmed": "autoconfirmed",
+		"trusted": "विश्वसनीय",
+
 		"Please follow the rules:": "कृपया इन नियमों का पालन करें:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-hi",
 		"Global Rules": "सामान्य नियम",
@@ -117,6 +120,17 @@
 
 		"Your message contained banned words in this room.": "आपके सन्देश में इस room का एक प्रतिबंधित शब्द है.",
 		"You can't send the same message again so soon.": "आप एक ही सन्देश इतनी जल्दी दोबारा नहीं भेज सकते.",
-		"Due to this room being a high traffic room, your message must contain at least two letters.": "क्योंकि ये एक तीव्र गतिविधि वाला room है, आपके सन्देश में कम से कम दो अक्षर रहने जरूरी हैं."
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "क्योंकि ये एक तीव्र गतिविधि वाला room है, आपके सन्देश में कम से कम दो अक्षर रहने जरूरी हैं.",
+
+		"You are already blocking private messages! To unblock, use /unblockpms": "आप पहले से ही निजी सन्देश रोक रहे हैं! खोलने के लिए /unblockpms उपयोग करें.",
+		"You are now blocking private messages, except from staff and ${rank}.": "अब आप staff और ${rank} को छोड़ कर सबके लिए निजी सन्देश रोक रहे हैं.",
+		"You are now blocking private messages, except from staff and ${status} users.": "अब आप staff और ${status} उपयोगकर्ता को छोड़ कर सबके लिए निजी सन्देश रोक रहे हैं.",
+		"You are now blocking private messages, except from staff.": "अब आप staff को छोड़ कर सबके लिए निजी सन्देश रोक रहे हैं.",
+		"You are not blocking private messages! To block, use /blockpms": "आप निजी सन्देश नहीं रोक रहे हैं! रोकने के लिए /blockpms का उपयोग करें.",
+		"You are no longer blocking private messages.": "अब आप निजी सन्देश नहीं रोक रहे हैं.",
+		"You are now blocking all incoming challenge requests.": "आप अभी मुकाबले के अनुरोध रोक रहे हैं.",
+		"You are already blocking challenges!": " आप पहले से ही मुकाबले रोक रहे हैं!",
+		"You are already available for challenges!": "आप पहले से ही मुकाबले के लिए तैयार हैं!",
+		"You are available for challenges from now on.": "अब आप मुकाबलों के लिए तैयार हैं."
 	}
 }

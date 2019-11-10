@@ -5,6 +5,9 @@
 		"namelocked": "",
 		"locked": "",
 
+		"autoconfirmed": "",
+		"trusted": "",
+
 		"Please follow the rules:": "",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "",
 		"Global Rules": "",
@@ -116,6 +119,17 @@
 
 		"Your message contained banned words in this room.": "",
 		"You can't send the same message again so soon.": "",
-		"Due to this room being a high traffic room, your message must contain at least two letters.": ""
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "",
+
+		"You are already blocking private messages! To unblock, use /unblockpms": "",
+		"You are now blocking private messages, except from staff and ${rank}.": "",
+		"You are now blocking private messages, except from staff and ${status} users.": "",
+		"You are now blocking private messages, except from staff.": "",
+		"You are not blocking private messages! To block, use /blockpms": "",
+		"You are no longer blocking private messages.": "",
+		"You are now blocking all incoming challenge requests.": "",
+		"You are already blocking challenges!": "",
+		"You are already available for challenges!": "",
+		"You are available for challenges from now on.": ""
 	}
 }

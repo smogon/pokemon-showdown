@@ -5,6 +5,9 @@
 		"namelocked": "用戶名封鎖",
 		"locked": "用戶封鎖",
 
+		"autoconfirmed": "自動確認用戶",
+		"trusted": "信任用戶",
+
 		"Please follow the rules:": "請遵守規則:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-tw",
 		"Global Rules": "全站規則",
@@ -115,6 +118,17 @@
  
 		"Your message contained banned words in this room.": "發言內容包含了房間內禁止詞匯",
 		"You can't send the same message again so soon.": "同樣的句子不能及時發出",
-		"Due to this room being a high traffic room, your message must contain at least two letters.": "由於此房間流量較大，因此您的消息必須至少包含兩個字母"
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "由於此房間流量較大，因此您的消息必須至少包含兩個字母",
+
+		"You are already blocking private messages! To unblock, use /unblockpms": "您已屏蔽私信。若要恢復接收私信，請使用/unblockpms",
+		"You are now blocking private messages, except from staff and ${rank}.": "您已屏蔽私信，除了管理與${rank}權限以上的用戶",
+		"You are now blocking private messages, except from staff and ${status} users.": "您已屏蔽私信，除了管理與${status}狀態的用戶",
+		"You are now blocking private messages, except from staff.": "您已屏蔽私信，除了管理用戶",
+		"You are not blocking private messages! To block, use /blockpms": "您並未屏蔽私信。若要屏蔽私信，請使用/blockpms",
+		"You are no longer blocking private messages.": "您已停止屏蔽私信",
+		"You are now blocking all incoming challenge requests.": "您已屏蔽所有挑戰請求",
+		"You are already blocking challenges!": "您已屏蔽挑戰請求",
+		"You are already available for challenges!": "您已能夠接收挑戰請求",
+		"You are available for challenges from now on.": "您從現在開始接收挑戰請求"
 	}
 }
