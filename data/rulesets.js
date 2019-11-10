@@ -538,7 +538,7 @@ let BattleFormats = {
 	nfeclause: {
 		effectType: 'ValidatorRule',
 		name: 'NFE Clause',
-		desc: "Bans Pok&eacute;mon that cannot evolve",
+		desc: "Bans Pok&eacute;mon that are fully evolved or can't evolve",
 		onValidateSet(set) {
 			const template = this.dex.getTemplate(set.species || set.name);
 			if (!template.nfe) {
