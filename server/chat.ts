@@ -1171,7 +1171,7 @@ export const Chat = new class {
 
 			// url
 			// tslint:disable-next-line: max-line-length
-			if (/[a-z0-9]\.(com|net|org|us|uk|co|gg|tk|ml|gq|ga|xxx|download|stream|)\b/.test(name)) name = name.replace(/\./g, '');
+			if (/[a-z0-9]\.(com|net|org|us|uk|co|gg|tk|ml|gq|ga|xxx|download|stream)\b/i.test(name)) name = name.replace(/\./g, '');
 
 			// Limit the amount of symbols allowed in usernames to 4 maximum, and disallow (R) and (C) from being used in the middle of names.
 			// tslint:disable-next-line: max-line-length
