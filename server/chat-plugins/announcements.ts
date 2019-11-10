@@ -1,60 +1,42 @@
 /*
-* Announcements chat plugin
-* By Spandamn
-*/
+ * Announcements chat plugin
+ * By Spandamn
+ */
 
 'use strict';
 
-/** @typedef {Announcement} AnnouncementType */
-
-class Announcement {
-	/**
-	 * @param {ChatRoom | GameRoom} room
-	 * @param {{source: string, supportHTML: boolean}} announcement
-	 */
-	constructor(room, announcement) {
+export class Announcement {
+	readonly activityId: 'announcement';
+	announcementNumber: number;
+	room: ChatRoom | GameRoom;
+	source: string;
+	timeout: NodeJS.Timer | null = null;
+	timeoutMins = 0;
+	constructor(room: ChatRoom | GameRoom, source: string) {
 		this.activityId = 'announcement';
 		this.announcementNumber = ++room.gameNumber;
 		this.room = room;
-		this.announcement = announcement.source;
-		this.supportHTML = announcement.supportHTML;
-		/** @type {NodeJS.Timer?} */
-		this.timeout = null;
-		this.timeoutMins = 0;
-	}
-
-	getAnnouncementMarkup() {
-		if (this.supportHTML) return this.announcement;
-		return Chat.escapeHTML(this.announcement);
+		this.source = source;
 	}
 
 	generateAnnouncement() {
-		const output = `<div class="broadcast-blue"><p style="margin: 2px 0 5px 0"><strong style="font-size:11pt">${this.getAnnouncementMarkup()}</strong></p></div>`;
-		return output;
+		return `<div class="broadcast-blue"><p style="margin: 2px 0 5px 0"><strong style="font-size:11pt">${this.source}</strong></p></div>`;
 	}
 
-	/**
-	 * @param {User} user
-	 * @param {Connection?} [connection]
-	 */
-	displayTo(user, connection = null) {
+	displayTo(user: User, connection: Connection | null = null) {
 		const recipient = connection || user;
 		recipient.sendTo(this.room, `|uhtml|announcement${this.announcementNumber}|${this.generateAnnouncement()}`);
 	}
 
 	display() {
 		const announcement = this.generateAnnouncement();
-		for (let i in this.room.users) {
-			const thisUser = this.room.users[i];
+		for (const id in this.room.users) {
+			const thisUser = this.room.users[id];
 			thisUser.sendTo(this.room, `|uhtml|announcement${this.announcementNumber}|${announcement}`);
 		}
 	}
 
-	/**
-	 * @param {User} user
-	 * @param {Connection?} [connection]
-	 */
-	onConnect(user, connection = null) {
+	onConnect(user: User, connection: Connection | null = null) {
 		this.displayTo(user, connection);
 	}
 
@@ -63,10 +45,7 @@ class Announcement {
 	}
 }
 
-exports.Announcement = Announcement;
-
-/** @type {ChatCommands} */
-const commands = {
+export const commands: ChatCommands = {
 	announcement: {
 		htmlcreate: 'new',
 		create: 'new',
@@ -85,11 +64,10 @@ const commands = {
 			if (!this.canTalk()) return;
 			if (room.minorActivity) return this.errorReply("There is already a poll or announcement in progress in this room.");
 
-			// @ts-ignore In the case that any of these are null, the function is terminated, and the result never used.
-			if (supportHTML) target = this.canHTML(target);
-			if (!target) return;
+			const source = supportHTML ? this.canHTML(target) : Chat.escapeHTML(target);
+			if (!source) return;
 
-			room.minorActivity = new Announcement(room, {source: target, supportHTML: supportHTML});
+			room.minorActivity = new Announcement(room, source);
 			room.minorActivity.display();
 
 			this.roomlog(`${user.name} used ${message}`);
@@ -100,7 +78,7 @@ const commands = {
 
 		timer(target, room, user) {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') return this.errorReply("There is no announcement running in this room.");
-			const announcement = /** @type {Announcement} */(room.minorActivity);
+			const announcement = room.minorActivity as Announcement;
 
 			if (target) {
 				if (!this.can('minigame', null, room)) return false;
@@ -141,8 +119,10 @@ const commands = {
 		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') return this.errorReply("There is no announcement running in this room.");
-			const announcement = /** @type {Announcement} */(room.minorActivity);
+			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
+				return this.errorReply("There is no announcement running in this room.");
+			}
+			const announcement = room.minorActivity as Announcement;
 			if (announcement.timeout) clearTimeout(announcement.timeout);
 
 			announcement.end();
@@ -154,8 +134,10 @@ const commands = {
 
 		show: 'display',
 		display(target, room, user, connection) {
-			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') return this.errorReply("There is no announcement running in this room.");
-			const announcement = /** @type {Announcement} */(room.minorActivity);
+			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
+				return this.errorReply("There is no announcement running in this room.");
+			}
+			const announcement = room.minorActivity as Announcement;
 			if (!this.runBroadcast()) return;
 			room.update();
 
@@ -181,8 +163,6 @@ const commands = {
 		`/announcement end - Ends a announcement. Requires: % @ # & ~`,
 	],
 };
-
-exports.commands = commands;
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/announcement (new|create|htmlcreate) ');
