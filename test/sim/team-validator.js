@@ -250,6 +250,13 @@ describe('Team Validator', function () {
 		illegal = TeamValidator.get('gen1ou').validateTeam(team);
 		assert(illegal);
 
+		// tradeback: don't crash if source is gen 2 event
+		team = [
+			{species: 'charizard', moves: ['crunch']},
+		];
+		illegal = TeamValidator.get('gen1outradeback').validateTeam(team);
+		assert(illegal);
+
 		// can't tradeback: gen 2 egg move
 		team = [
 			{species: 'marowak', moves: ['swordsdance', 'ancientpower', 'bodyslam']},
