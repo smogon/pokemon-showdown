@@ -128,6 +128,7 @@
 		"You are now blocking private messages, except from staff.": "अब आप staff को छोड़ कर सबके लिए निजी सन्देश रोक रहे हैं.",
 		"You are not blocking private messages! To block, use /blockpms": "आप निजी सन्देश नहीं रोक रहे हैं! रोकने के लिए /blockpms का उपयोग करें.",
 		"You are no longer blocking private messages.": "अब आप निजी सन्देश नहीं रोक रहे हैं.",
+		"You are now blocking all incoming challenge requests.": "आप अभी मुकाबले के अनुरोध रोक रहे हैं.",
 		"You are already blocking challenges!": " आप पहले से ही मुकाबले रोक रहे हैं!",
 		"You are already available for challenges!": "आप पहले से ही मुकाबले के लिए तैयार हैं!",
 		"You are available for challenges from now on.": "अब आप मुकाबलों के लिए तैयार हैं."
