@@ -5,6 +5,9 @@
 		"namelocked": "namelocked",
 		"locked": "locked",
 
+		"autoconfirmed": "autoconfirmed",
+		"trusted": "trusted",
+
 		"Please follow the rules:": "Veuillez suivre ces règles:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-fr",
 		"Global Rules": "Règles Générales",
@@ -58,7 +61,7 @@
 		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute OU /m <em>pseudo</em> : Mute pendant 7 minutes",
 		"- /hourmute OR /hm <em>username</em>: 60 minute mute": "- /hourmute OU /hm <em>pseudo</em> : Mute pendant 60 minutes",
 		"- /unmute <em>username</em>: unmute": "- /unmute <em>pseudo</em> : Enl&egrave;ve un mute",
-    "- /hidetext <em>username</em>: hide a user's messages from the room": "- /hidetext <em>pseudo</em>: Cache les messages de l'utilisateur",
+		"- /hidetext <em>username</em>: hide a user's messages from the room": "- /hidetext <em>pseudo</em>: Cache les messages de l'utilisateur",
 		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce OU /wall <em>message</em> : Fait une annonce",
 		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>pseudo</em> : Affiche l'historique de mod&eacute;ration d'un utilisateur dans la room ",
 		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>note</em> : Ajoute une note de mod&eacute;ration qui peut &ecirc;tre lue dans le modlog",
@@ -115,6 +118,17 @@
 		"Your status message contains a phrase banned by this room.": "Ton statut contient un terme banni dans cette room.",
 		"Your message contained banned words in this room.": "Ton message contient des mots bannis dans cette room.",
 		"You can't send the same message again so soon.": "Tu ne peux pas réenvoyer le même message si tôt.",
-		"Due to this room being a high traffic room, your message must contain at least two letters.": "Dû au fait que cette room a un trafic important, ton message doit contenir au moins deux lettres."
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "Dû au fait que cette room a un trafic important, ton message doit contenir au moins deux lettres.",
+
+		"You are already blocking private messages! To unblock, use /unblockpms": "Tu bloques déjà les messages privés ! Pour les débloquer, utilise /unblockpms",
+		"You are now blocking private messages, except from staff and ${rank}.": "Tu bloques maintenant les messages privés, sauf ceux du staff et des ${rank}.",
+		"You are now blocking private messages, except from staff and ${status} users.": "Tu bloques maintenant les messages privés, sauf ceux du staff et des utilisateurs ${status}.",
+		"You are now blocking private messages, except from staff.": "Tu bloques maintenant les messages privés, sauf ceux du staff.",
+		"You are not blocking private messages! To block, use /blockpms": "Tu ne bloques actuellement pas les messages privés ! Pour les bloquer, utilise /blockpms",
+		"You are no longer blocking private messages.": "Tu ne bloques plus les messages privés.",
+		"You are now blocking all incoming challenge requests.": "Tu bloques maintenant toutes les demandes de challenge à venir.",
+		"You are already blocking challenges!": "Tu bloques déjà les challenges !",
+		"You are already available for challenges!": "Tu es déjà disponible pour les challenges !",
+		"You are available for challenges from now on.": "Tu es maintenant disponible pour les challenges."
 	}
 }
