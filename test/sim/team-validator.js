@@ -180,6 +180,12 @@ describe('Team Validator', function () {
 		assert(illegal);
 
 		team = [
+			{species: 'marill', ability: 'hugepower', moves: ['splash', 'aquajet'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ou').validateTeam(team);
+		assert(illegal);
+
+		team = [
 			{species: 'mamoswine', ability: 'oblivious', moves: ['tackle', 'iceshard', 'amnesia', 'furyattack'], evs: {hp: 1}},
 		];
 		illegal = TeamValidator.get('gen5ou').validateTeam(team);
