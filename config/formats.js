@@ -232,18 +232,12 @@ let Formats = [
 
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['[Gen 7] OU'],
+		ruleset: ['[Gen 7] OU', 'NFE Clause'],
 		banlist: [
 			'Chansey', 'Doublade', 'Gligar', 'Golbat', 'Gurdurr', 'Magneton', 'Piloswine',
 			'Porygon2', 'Rhydon', 'Scyther', 'Sneasel', 'Type: Null', 'Vigoroth',
 			'Drought', 'Aurora Veil',
 		],
-		onValidateSet(set) {
-			let template = this.dex.getTemplate(set.species || set.name);
-			if (!template.nfe) {
-				return [set.species + " cannot evolve."];
-			}
-		},
 	},
 	{
 		name: "[Gen 7] CAP",
