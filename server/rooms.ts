@@ -1548,7 +1548,7 @@ export const Rooms = {
 		return room;
 	},
 	createBattle(formatid: string, options: AnyObject) {
-		const players: (User & {specialNextBattle: boolean})[] =
+		const players: (User & {specialNextBattle?: string })[] =
 			[options.p1, options.p2, options.p3, options.p4].filter(user => user);
 		const gameType = Dex.getFormat(formatid).gameType;
 		if (gameType !== 'multi' && gameType !== 'free-for-all') {
@@ -1571,21 +1571,21 @@ export const Rooms = {
 			return;
 		}
 
-		if (players.some(user => user.specialNextBattle)) {
-			const p1Special = players[0].specialNextBattle;
-			let mismatch = `"${p1Special}"`;
+		const p1Special = players[0].specialNextBattle;
+		let mismatch = `"${p1Special}"`;
+		for (const user of players) {
+			if (user.specialNextBattle !== p1Special) {
+				mismatch += ` vs. "${user.specialNextBattle}"`;
+			}
+			user.specialNextBattle = undefined;
+		}
+
+		if (mismatch !== `"${p1Special}"`) {
 			for (const user of players) {
-				if (user.specialNextBattle !== p1Special) {
-					mismatch += ` vs. "${user.specialNextBattle}"`;
-					break;
-				}
+				user.popup(`Your special battle settings don't match: ${mismatch}`);
 			}
-			if (mismatch !== `"${p1Special}"`) {
-				for (const user of players) {
-					user.popup(`Your special battle settings don't match: ${mismatch}`);
-				}
-				return;
-			}
+			return;
+		} else if (p1Special) {
 			options.ratedMessage = p1Special;
 		}
 
@@ -1611,6 +1611,8 @@ export const Rooms = {
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		const battle = new Rooms.RoomBattle(room, formatid, options);
 		room.game = battle;
+		// Special battles have modchat set to Player from the beginning
+		if (p1Special) room.modchat = '\u2606';
 
 		const inviteOnly = (options.inviteOnly || []);
 		for (const user of players) {
