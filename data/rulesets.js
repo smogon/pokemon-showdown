@@ -535,6 +535,20 @@ let BattleFormats = {
 			this.add('rule', 'Z-Move Clause: Z-Moves are banned');
 		},
 	},
+	nfeclause: {
+		effectType: 'ValidatorRule',
+		name: 'NFE Clause',
+		desc: "Bans Pok&eacute;mon that are fully evolved or can't evolve",
+		onValidateSet(set) {
+			const template = this.dex.getTemplate(set.species || set.name);
+			if (!template.nfe) {
+				return [set.species + " cannot evolve."];
+			}
+		},
+		onBegin() {
+			this.add('rule', 'NFE Clause: Fully Evolved Pok&eacute;mon are banned');
+		},
+	},
 	hppercentagemod: {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
