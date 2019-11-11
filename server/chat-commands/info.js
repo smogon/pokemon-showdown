@@ -6,7 +6,7 @@
  * 'whois' here, then use it by typing /whois into Pokemon Showdown.
  * For the API, see chat-plugins/COMMANDS.md
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
@@ -2415,107 +2415,6 @@ const commands = {
 		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`,
 		`In order to use !code in private messages you must be a global voice or higher`,
 		`/code [code] - Shows you code. Accepts multi-line arguments.`,
-	],
-
-	htmlbox(target, room, user) {
-		if (!target) return this.parse('/help htmlbox');
-		target = this.canHTML(target);
-		if (!target) return;
-		target = Chat.collapseLineBreaksHTML(target);
-		if (!this.canBroadcast(true, '!htmlbox')) return;
-		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
-
-		if (!this.runBroadcast(true, '!htmlbox')) return;
-
-		this.sendReplyBox(target);
-	},
-	htmlboxhelp: [
-		`/htmlbox [message] - Displays a message, parsing HTML code contained.`,
-		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # & ~`,
-	],
-	addhtmlbox(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-		target = this.canHTML(target);
-		if (!target) return;
-		if (!this.can('addhtml', null, room)) return;
-		target = Chat.collapseLineBreaksHTML(target);
-		if (!user.can('addhtml')) {
-			target += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		this.addBox(target);
-	},
-	addhtmlboxhelp: [
-		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * & ~`,
-	],
-	addrankhtmlbox(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-		let [rank, html] = this.splitOne(target);
-		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		html = this.canHTML(html);
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
-		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank);
-	},
-	addrankhtmlboxhelp: [
-		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * & ~`,
-	],
-	changeuhtml: 'adduhtml',
-	adduhtml(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-
-		let [name, html] = this.splitOne(target);
-		name = toID(name);
-		html = this.canHTML(html);
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
-		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		html = `|uhtml${(cmd === 'changeuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.add(html);
-	},
-	adduhtmlhelp: [
-		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.  Requires: * & ~`,
-	],
-	changeuhtmlhelp: [
-		`/changeuhtml [name], [message] - Changes the message previously shown with /adduhtml [name]. Requires: * & ~`,
-	],
-	changerankuhtml: 'addrankuhtml',
-	addrankuhtml(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-
-		let [rank, uhtml] = this.splitOne(target);
-		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		let [name, html] = this.splitOne(uhtml);
-		name = toID(name);
-		html = this.canHTML(html);
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
-		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		html = `|uhtml${(cmd === 'changerankuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.room.sendRankedUsers(html, rank);
-	},
-	addrankuhtmlhelp: [
-		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: * & ~`,
-	],
-	changerankuhtmlhelp: [
-		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * & ~`,
 	],
 };
 
