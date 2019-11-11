@@ -211,30 +211,6 @@ exports.commands = {
 	},
 	roomsettingshelp: [`/roomsettings - Shows current room settings with buttons to change them (if you can).`],
 
-	// TODO: how to indicate this helper method is not a command?
-	targetToModchat(target, threshold = 1) {
-		if (this.meansNo(target)) return false;
-		switch (target) {
-		case 'ac':
-		case 'autoconfirmed':
-			return 'autoconfirmed';
-		case 'trusted':
-			return 'trusted';
-		case 'player':
-			target = Users.PLAYER_SYMBOL;
-			/* falls through */
-		default:
-			if (!Config.groups[target]) {
-				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
-				return this.parse('/help modchat');
-			}
-			if (Config.groupsranking.indexOf(target) > threshold) {
-				return this.errorReply(`/modchat - Access denied for setting higher than ${Config.groupsranking[threshold]}.`);
-			}
-			return target;
-		}
-	},
-
 	modchat(target, room, user) {
 		if (!target) {
 			const modchatSetting = (room.modchat || "OFF");
@@ -264,9 +240,35 @@ exports.commands = {
 		}
 
 		target = target.toLowerCase().trim();
-		if (target === 'next') return this.parse('/modchatnext');
 		const currentModchat = room.modchat;
-		room.modchat = this.targetToModchat(target, threshold);
+		switch (target) {
+		case 'off':
+		case 'false':
+		case 'no':
+		case 'disable':
+			room.modchat = false;
+			break;
+		case 'ac':
+		case 'autoconfirmed':
+			room.modchat = 'autoconfirmed';
+			break;
+		case 'trusted':
+			room.modchat = 'trusted';
+			break;
+		case 'player':
+			target = Users.PLAYER_SYMBOL;
+			/* falls through */
+		default:
+			if (!Config.groups[target]) {
+				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
+				return this.parse('/help modchat');
+			}
+			if (Config.groupsranking.indexOf(target) > threshold) {
+				return this.errorReply(`/modchat - Access denied for setting higher than ${Config.groupsranking[threshold]}.`);
+			}
+			room.modchat = target;
+			break;
+		}
 		if (currentModchat === room.modchat) {
 			return this.errorReply(`Modchat is already set to ${currentModchat}.`);
 		}
@@ -286,21 +288,6 @@ exports.commands = {
 		}
 	},
 	modchathelp: [`/modchat [off/autoconfirmed/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: * @ \u2606 for off/autoconfirmed/+ options, # & ~ for all the options`],
-
-	'!modchatnext': true,
-	mcnext: 'modchatnext',
-	modchatnext(target, room, user) {
-		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
-		if (!(groupConfig && groupConfig.modchat)) return this.errorReply(`/modchat - Access denied.`);
-		target = this.targetToModchat(target.toLowerCase().trim()); // TODO threshold?
-		user.modchatNextBattle = target;
-		user.update('modchatNextBattle');
-		if (target) {
-			this.sendReply("Your next battle will not begin with modchat turned on.");
-		} else {
-			this.sendReply("Your next battle will begin with modchat turned on.");
-		}
-	},
 
 	ioo(target, room, user) {
 		return this.parse('/modjoin %');

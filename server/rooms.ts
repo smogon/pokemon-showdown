@@ -1618,7 +1618,6 @@ export const Rooms = {
 				inviteOnly.push(user.id);
 				user.inviteOnlyNextBattle = false;
 			}
-			// TODO: use most selective of the players choices for modchat?
 		}
 		if (inviteOnly.length) {
 			const prefix = battle.forcedPublic();
