@@ -10,13 +10,10 @@
  * @license MIT
  */
 
-'use strict';
+import * as child_process from 'child_process';
+import {FS} from '../../lib/fs';
 
-/* eslint no-else-return: "error" */
-
-const FS = require('../../.lib-dist/fs').FS;
-
-exports.commands = {
+export const commands: ChatCommands = {
 
 	/*********************************************************
 	 * Bot commands (chat-log manipulation)
@@ -24,7 +21,7 @@ exports.commands = {
 
 	htmlbox(target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
-		target = this.canHTML(target);
+		target = this.canHTML(target)!;
 		if (!target) return;
 		target = Chat.collapseLineBreaksHTML(target);
 		if (!this.canBroadcast(true, '!htmlbox')) return;
@@ -41,7 +38,7 @@ exports.commands = {
 	addhtmlbox(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
-		target = this.canHTML(target);
+		target = this.canHTML(target)!;
 		if (!target) return;
 		if (!this.can('addhtml', null, room)) return;
 		target = Chat.collapseLineBreaksHTML(target);
@@ -59,7 +56,7 @@ exports.commands = {
 		if (!this.canTalk()) return;
 		let [rank, html] = this.splitOne(target);
 		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		html = this.canHTML(html);
+		html = this.canHTML(html)!;
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
 		html = Chat.collapseLineBreaksHTML(html);
@@ -79,7 +76,7 @@ exports.commands = {
 
 		let [name, html] = this.splitOne(target);
 		name = toID(name);
-		html = this.canHTML(html);
+		html = this.canHTML(html)!;
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
 		html = Chat.collapseLineBreaksHTML(html);
@@ -101,11 +98,11 @@ exports.commands = {
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 
-		let [rank, uhtml] = this.splitOne(target);
+		const [rank, uhtml] = this.splitOne(target);
 		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
 		let [name, html] = this.splitOne(uhtml);
 		name = toID(name);
-		html = this.canHTML(html);
+		html = this.canHTML(html)!;
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
 		html = Chat.collapseLineBreaksHTML(html);
@@ -134,9 +131,9 @@ exports.commands = {
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help pminfobox");
 
-		target = this.canHTML(this.splitTarget(target));
+		target = this.canHTML(this.splitTarget(target))!;
 		if (!target) return;
-		let targetUser = this.targetUser;
+		const targetUser = this.targetUser;
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser.id in room.users) && !user.can('addhtml')) {
@@ -152,7 +149,7 @@ exports.commands = {
 
 		// Apply the infobox to the message
 		target = `/raw <div class="infobox">${target}</div>`;
-		let message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|${target}`;
+		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|${target}`;
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
@@ -167,19 +164,25 @@ exports.commands = {
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help " + cmd);
 
-		target = this.canHTML(this.splitTarget(target));
+		target = this.canHTML(this.splitTarget(target))!;
 		if (!target) return;
-		let targetUser = this.targetUser;
+		const targetUser = this.targetUser;
 
-		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
-		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
+		if (!targetUser || !targetUser.connected) {
+			return this.errorReply(`User ${this.targetUsername} is not currently online.`);
+		}
+		if (!(targetUser.id in room.users) && !user.can('addhtml')) {
+			return this.errorReply("You do not have permission to use this command to users who are not in this room.");
+		}
 		if (targetUser.blockPMs && (targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
 		}
-		if (targetUser.locked && !user.can('lock')) return this.errorReply("This user is currently locked, so you cannot send them UHTML.");
+		if (targetUser.locked && !user.can('lock')) {
+			return this.errorReply("This user is currently locked, so you cannot send them UHTML.");
+		}
 
-		let message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${target}`;
+		const message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${target}`;
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
@@ -196,13 +199,13 @@ exports.commands = {
 	memusage: 'memoryusage',
 	memoryusage(target) {
 		if (!this.can('hotpatch')) return false;
-		let memUsage = process.memoryUsage();
-		let results = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
-		let units = ["B", "KiB", "MiB", "GiB", "TiB"];
-		for (let i = 0; i < results.length; i++) {
-			let unitIndex = Math.floor(Math.log2(results[i]) / 10); // 2^10 base log
-			results[i] = `${(results[i] / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${units[unitIndex]}`;
-		}
+		const memUsage = process.memoryUsage();
+		const resultNums = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
+		const units = ["B", "KiB", "MiB", "GiB", "TiB"];
+		const results = resultNums.map(num => {
+			const unitIndex = Math.floor(Math.log2(num) / 10); // 2^10 base log
+			return `${(num / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${units[unitIndex]}`;
+		});
 		this.sendReply(`||[Main process] RSS: ${results[0]}, Heap: ${results[1]} / ${results[2]}`);
 	},
 
@@ -214,32 +217,40 @@ exports.commands = {
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl'];
 		const version = await Monitor.version();
-		let patch = target;
-		const requiresForce = (patch) =>
+		const requiresForce = (patch: string) =>
 			version && cmd !== 'forcehotpatch' &&
 			(Monitor.hotpatchVersions[patch] ?
 				Monitor.hotpatchVersions[patch] === version :
 				(global.__version && version === global.__version.tree));
 		const requiresForceMessage = `The git work tree has not changed since the last time ${target} was hotpatched (${version && version.slice(0, 8)}), use /forcehotpatch ${target} if you wish to hotpatch anyway.`;
 
+		let patch = target;
 		try {
 			if (target === 'all') {
-				if (lock['all']) return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
-				if (Config.disablehotpatchall) return this.errorReply("This server does not allow for the use of /hotpatch all");
+				if (lock['all']) {
+					return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
+				}
+				if (Config.disablehotpatchall) {
+					return this.errorReply("This server does not allow for the use of /hotpatch all");
+				}
 
 				for (const hotpatch of hotpatches) {
 					this.parse(`/hotpatch ${hotpatch}`);
 				}
 			} else if (target === 'chat' || target === 'commands') {
 				patch = 'chat';
-				if (lock['chat']) return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
-				if (lock['tournaments']) return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
+				if (lock['chat']) {
+					return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
+				}
+				if (lock['tournaments']) {
+					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
+				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				Chat.destroy();
 
 				const processManagers = require('../.lib-dist/process-manager').processManagers;
-				for (let manager of processManagers.slice()) {
+				for (const manager of processManagers.slice()) {
 					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
 						manager.destroy();
 					}
@@ -256,7 +267,9 @@ exports.commands = {
 				global.Tournaments = require('../.server-dist/tournaments').Tournaments;
 				this.sendReply("Chat commands have been hot-patched.");
 			} else if (target === 'tournaments') {
-				if (lock['tournaments']) return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
+				if (lock['tournaments']) {
+					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
+				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				Chat.uncacheDir('./.server-dist/tournaments');
@@ -264,9 +277,15 @@ exports.commands = {
 				this.sendReply("Tournaments have been hot-patched.");
 			} else if (target === 'formats' || target === 'battles') {
 				patch = 'formats';
-				if (lock['formats']) return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
-				if (lock['battles']) return this.errorReply(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);
-				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
+				if (lock['formats']) {
+					return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
+				}
+				if (lock['battles']) {
+					return this.errorReply(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);
+				}
+				if (lock['validator']) {
+					return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
+				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				// uncache the .sim-dist/dex.js dependency tree
@@ -278,9 +297,9 @@ exports.commands = {
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
-				TeamValidatorAsync.PM.respawn();
+				void TeamValidatorAsync.PM.respawn();
 				// respawn simulator processes
-				Rooms.PM.respawn();
+				void Rooms.PM.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.send(Rooms.global.formatListText);
 
@@ -293,15 +312,19 @@ exports.commands = {
 				this.sendReply("The login server has been hot-patched. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
 				patch = 'validator';
-				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
+				if (lock['validator']) {
+					return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
+				}
 				if (lock['formats']) return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				TeamValidatorAsync.PM.respawn();
+				void TeamValidatorAsync.PM.respawn();
 				this.sendReply("The team validator has been hot-patched. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
 				patch = 'punishments';
-				if (lock['punishments']) return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
+				if (lock['punishments']) {
+					return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
+				}
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				Chat.uncache('./.server-dist/punishments');
@@ -313,7 +336,7 @@ exports.commands = {
 
 				Chat.uncache('./.server-dist/ip-tools');
 				global.IPTools = require('../.server-dist/ip-tools').IPTools;
-				IPTools.loadDatacenters();
+				void IPTools.loadDatacenters();
 				this.sendReply("IPTools has been hot-patched.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
@@ -322,11 +345,17 @@ exports.commands = {
 				return this.errorReply("Your hot-patch command was unrecognized.");
 			}
 		} catch (e) {
-			Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`);
+			Rooms.global.notifyRooms(
+				['development', 'staff', 'upperstaff'] as RoomID[],
+				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`
+			);
 			return this.errorReply(`Something failed while trying to hot-patch ${target}: \n${e.stack}`);
 		}
 		Monitor.hotpatchVersions[patch] = version;
-		Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`);
+		Rooms.global.notifyRooms(
+			['development', 'staff', 'upperstaff'] as RoomID[],
+			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`
+		);
 	},
 	hotpatchhelp: [
 		`Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~`,
@@ -354,138 +383,139 @@ exports.commands = {
 		const reason = target.substr(target.indexOf(separator), target.length).trim();
 		if (!reason || !target.includes(separator)) return this.parse('/help nohotpatch');
 
-		let lock = Monitor.hotpatchLock;
+		const lock = Monitor.hotpatchLock;
 		const validDisable = ['chat', 'battles', 'formats', 'validator', 'tournaments', 'punishments', 'all'];
 
 		if (validDisable.includes(hotpatch)) {
 			if (lock[hotpatch]) return this.errorReply(`Hot-patching ${hotpatch} has already been disabled by ${lock[hotpatch].by} (${lock[hotpatch].reason})`);
 			lock[hotpatch] = {
 				by: user.name,
-				reason: reason,
+				reason,
 			};
 			this.sendReply(`You have disabled hot-patching ${hotpatch}.`);
 		} else {
 			return this.errorReply("This hot-patch is not an option to disable.");
 		}
-		Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} has disabled hot-patching ${hotpatch}. Reason: ${reason}`);
+		Rooms.global.notifyRooms(
+			['development', 'staff', 'upperstaff'] as RoomID[],
+			`|c|${user.getIdentity()}|/log ${user.name} has disabled hot-patching ${hotpatch}. Reason: ${reason}`
+		);
 	},
 	nohotpatchhelp: [`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: & ~`],
 
-	savelearnsets(target, room, user) {
+	async savelearnsets(target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		this.sendReply("saving...");
-		FS('data/learnsets.js').write(`'use strict';\n\nexports.BattleLearnsets = {\n` +
-			Object.entries(Dex.data.Learnsets).map(([k, v]) => (
-				`\t${k}: {learnset: {\n` +
-				Object.entries(v.learnset).sort(
+		await FS('data/learnsets.js').write(`'use strict';\n\nexports.BattleLearnsets = {\n` +
+			Object.entries(Dex.data.Learnsets).map(([speciesid, entry]) => (
+				`\t${speciesid}: {learnset: {\n` +
+				Object.entries(entry.learnset).sort(
 					(a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
-				).map(([k, v]) => (
-					`\t\t${k}: ["` + v.join(`", "`) + `"],\n`
+				).map(([moveid, sources]) => (
+					`\t\t${moveid}: ["` + sources.join(`", "`) + `"],\n`
 				)).join('') +
 				`\t}},\n`
 			)).join('') +
-		`};\n`).then(() => {
-			this.sendReply("learnsets.js saved.");
-		});
+		`};\n`);
+		this.sendReply("learnsets.js saved.");
 	},
 
 	widendatacenters: 'adddatacenters',
-	adddatacenters(target, room, user, connection, cmd) {
+	async adddatacenters(target, room, user, connection, cmd) {
 		if (!this.can('hotpatch')) return false;
 		if (!target) return this.parse(`/help adddatacenters`);
 		// should be in the format: IP, IP, name, URL
-		let widen = (cmd === 'widendatacenters');
+		const widen = (cmd === 'widendatacenters');
 
-		FS('config/datacenters.csv').readIfExists().then(data => {
-			let datacenters = [];
-			for (const row of data.split("\n")) {
-				if (!row) continue;
-				const rowSplit = row.split(',');
-				const rowData = [
-					IPTools.ipToNumber(rowSplit[0]),
-					IPTools.ipToNumber(rowSplit[1]),
-					IPTools.urlToHost(rowSplit[3]),
-					row,
-				];
-				datacenters.push(rowData);
+		const text = await FS('config/datacenters.csv').readIfExists();
+		const datacenters = [];
+		for (const row of text.split("\n")) {
+			if (!row) continue;
+			const rowSplit = row.split(',');
+			const rowData = [
+				IPTools.ipToNumber(rowSplit[0]),
+				IPTools.ipToNumber(rowSplit[1]),
+				IPTools.urlToHost(rowSplit[3]),
+				row,
+			];
+			datacenters.push(rowData);
+		}
+
+		const data = String(target).split("\n");
+		let successes = 0;
+		let identicals = 0;
+		let widenSuccesses = 0;
+		for (const row of data) {
+			if (!row) continue;
+			const rowSplit = row.split(',');
+			if (rowSplit.length !== 4) {
+				this.errorReply(`Invalid row: ${row}`);
+				continue;
+			}
+			const rowData = [
+				IPTools.ipToNumber(rowSplit[0]),
+				IPTools.ipToNumber(rowSplit[1]),
+				IPTools.urlToHost(rowSplit[3]),
+				row,
+			];
+			if (rowData[1] < rowData[0]) {
+				this.errorReply(`Invalid range: ${row}`);
+				continue;
 			}
 
-			data = String(target).split("\n");
-			let successes = 0;
-			let identicals = 0;
-			let widenSuccesses = 0;
-			for (const row of data) {
-				if (!row) continue;
-				let rowSplit = row.split(',');
-				if (rowSplit.length !== 4) {
-					this.errorReply(`Invalid row: ${row}`);
-					continue;
+			let iMin = 0;
+			let iMax = datacenters.length;
+			while (iMin < iMax) {
+				const i = Math.floor((iMax + iMin) / 2);
+				if (rowData[0] > datacenters[i][0]) {
+					iMin = i + 1;
+				} else {
+					iMax = i;
 				}
-				let rowData = [
-					IPTools.ipToNumber(rowSplit[0]),
-					IPTools.ipToNumber(rowSplit[1]),
-					IPTools.urlToHost(rowSplit[3]),
-					row,
-				];
-				if (rowData[1] < rowData[0]) {
-					this.errorReply(`Invalid range: ${row}`);
-					continue;
-				}
-
-				let iMin = 0;
-				let iMax = datacenters.length;
-				while (iMin < iMax) {
-					let i = Math.floor((iMax + iMin) / 2);
-					if (rowData[0] > datacenters[i][0]) {
-						iMin = i + 1;
-					} else {
-						iMax = i;
-					}
-				}
-				if (iMin < datacenters.length) {
-					let next = datacenters[iMin];
-					if (rowData[0] === next[0] && rowData[1] === next[1]) {
-						identicals++;
-						continue;
-					}
-					if (rowData[0] <= next[0] && rowData[1] >= next[1]) {
-						if (widen === true) {
-							widenSuccesses++;
-							datacenters.splice(iMin, 1, rowData);
-							continue;
-						}
-						this.errorReply(`Too wide: ${row}`);
-						this.errorReply(`Intersects with: ${next[3]}`);
-						continue;
-					}
-					if (rowData[1] >= next[0]) {
-						this.errorReply(`Could not insert: ${row}`);
-						this.errorReply(`Intersects with: ${next[3]}`);
-						continue;
-					}
-				}
-				if (iMin > 0) {
-					let prev = datacenters[iMin - 1];
-					if (rowData[0] >= prev[0] && rowData[1] <= prev[1]) {
-						this.errorReply(`Too narrow: ${row}`);
-						this.errorReply(`Intersects with: ${prev[3]}`);
-						continue;
-					}
-					if (rowData[0] <= prev[1]) {
-						this.errorReply(`Could not insert: ${row}`);
-						this.errorReply(`Intersects with: ${prev[3]}`);
-						continue;
-					}
-				}
-				successes++;
-				datacenters.splice(iMin, 0, rowData);
 			}
+			if (iMin < datacenters.length) {
+				const next = datacenters[iMin];
+				if (rowData[0] === next[0] && rowData[1] === next[1]) {
+					identicals++;
+					continue;
+				}
+				if (rowData[0] <= next[0] && rowData[1] >= next[1]) {
+					if (widen === true) {
+						widenSuccesses++;
+						datacenters.splice(iMin, 1, rowData);
+						continue;
+					}
+					this.errorReply(`Too wide: ${row}`);
+					this.errorReply(`Intersects with: ${next[3]}`);
+					continue;
+				}
+				if (rowData[1] >= next[0]) {
+					this.errorReply(`Could not insert: ${row}`);
+					this.errorReply(`Intersects with: ${next[3]}`);
+					continue;
+				}
+			}
+			if (iMin > 0) {
+				const prev = datacenters[iMin - 1];
+				if (rowData[0] >= prev[0] && rowData[1] <= prev[1]) {
+					this.errorReply(`Too narrow: ${row}`);
+					this.errorReply(`Intersects with: ${prev[3]}`);
+					continue;
+				}
+				if (rowData[0] <= prev[1]) {
+					this.errorReply(`Could not insert: ${row}`);
+					this.errorReply(`Intersects with: ${prev[3]}`);
+					continue;
+				}
+			}
+			successes++;
+			datacenters.splice(iMin, 0, rowData);
+		}
 
-			let output = datacenters.map(r => r[3]).join('\n') + '\n';
-			FS('config/datacenters.csv').write(output);
-			this.sendReply(`Done: ${successes} successes, ${identicals} unchanged.`);
-			if (widenSuccesses) this.sendReply(`${widenSuccesses} widens.`);
-		});
+		const output = datacenters.map(r => r[3]).join('\n') + '\n';
+		await FS('config/datacenters.csv').write(output);
+		this.sendReply(`Done: ${successes} successes, ${identicals} unchanged.`);
+		if (widenSuccesses) this.sendReply(`${widenSuccesses} widens.`);
 	},
 	adddatacentershelp: [
 		`/adddatacenters [list] - Add datacenters to datacenters.csv`,
@@ -512,7 +542,7 @@ exports.commands = {
 		);
 
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.type === 'battle') curRoom.rated = false;
+			if (curRoom.type === 'battle') curRoom.rated = 0;
 			if (curRoom.roomid !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
 		}
 		for (const u of Users.users.values()) {
@@ -607,13 +637,13 @@ exports.commands = {
 			return this.errorReply('/crashfixed - There is no active crash.');
 		}
 
-		let message = cmd === 'crashfixed' ? `<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b></div>` : `<div class="broadcast-green"><b>The server restart was canceled.</b></div>`;
+		const message = cmd === 'crashfixed' ? `<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b></div>` : `<div class="broadcast-green"><b>The server restart was canceled.</b></div>`;
 		if (Rooms.global.lockdown === true) {
 			for (const curRoom of Rooms.rooms.values()) {
 				if (curRoom.roomid !== 'global') curRoom.addRaw(message).update();
 			}
-			for (const user of Users.users.values()) {
-				user.send(`|pm|~|${user.group}${user.name}|/raw ${message}`);
+			for (const curUser of Users.users.values()) {
+				curUser.send(`|pm|~|${curUser.group}${curUser.name}|/raw ${message}`);
 			}
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");
@@ -673,13 +703,13 @@ exports.commands = {
 			worker.kill();
 		}
 
-		if (!room.destroyLog) {
+		const logRoom = Rooms.get('staff') || room;
+		if (!(logRoom as any).destroyLog) {
 			process.exit();
 			return;
 		}
-		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /kill`);
-		room.destroyLog(() => {
+		(logRoom as any).destroyLog(() => {
 			process.exit();
 		});
 
@@ -722,11 +752,10 @@ exports.commands = {
 
 		const logRoom = Rooms.get('staff') || room;
 
-		/** @return {Promise<[number, string, string]>} */
-		function exec(/** @type {string} */ command) {
+		function exec(command: string): Promise<[number, string, string]> {
 			logRoom.roomlog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
-				require('child_process').exec(command, {
+				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
@@ -807,11 +836,10 @@ exports.commands = {
 	async rebuild(target, room, user, connection) {
 		const logRoom = Rooms.get('staff') || room;
 
-		/** @return {Promise<[number, string, string]>} */
-		function exec(/** @type {string} */ command) {
+		function exec(command: string): Promise<[number, string, string]> {
 			logRoom.roomlog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
-				require('child_process').exec(command, {
+				child_process.exec(command, {
 					cwd: __dirname,
 				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
@@ -843,7 +871,7 @@ exports.commands = {
 		if (!target) return this.parse('/help bash');
 
 		connection.sendTo(room, `$ ${target}`);
-		require('child_process').exec(target, (error, stdout, stderr) => {
+		child_process.exec(target, (error, stdout, stderr) => {
 			connection.sendTo(room, (`${stdout}${stderr}`));
 		});
 	},
@@ -857,9 +885,9 @@ exports.commands = {
 
 		if (!this.broadcasting) this.sendReply(`||>> ${target}`);
 		try {
-			/* eslint-disable no-unused-vars */
-			let battle = room.battle;
-			let me = user;
+			const battle = room.battle;
+			const me = user;
+			// tslint:disable-next-line: no-eval
 			let result = eval(target);
 			if (result && result.then) {
 				result = `Promise -> ${Chat.stringify(await result)}`;
@@ -868,7 +896,6 @@ exports.commands = {
 			}
 			result = result.replace(/\n/g, '\n||');
 			this.sendReply('||<< ' + result);
-			/* eslint-enable no-unused-vars */
 		} catch (e) {
 			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '').replace(/\n/g, '\n||');
 			this.sendReply(`|| << ${message}`);
@@ -895,8 +922,9 @@ exports.commands = {
 			this.errorReply("/editbattle - This is not a battle room.");
 			return false;
 		}
+		const battle = room.battle;
 		let cmd;
-		let spaceIndex = target.indexOf(' ');
+		const spaceIndex = target.indexOf(' ');
 		if (spaceIndex > 0) {
 			cmd = target.substr(0, spaceIndex).toLowerCase();
 			target = target.substr(spaceIndex + 1);
@@ -905,15 +933,15 @@ exports.commands = {
 			target = '';
 		}
 		if (cmd.charAt(cmd.length - 1) === ',') cmd = cmd.slice(0, -1);
-		let targets = target.split(',');
-		function getPlayer(input) {
-			let player = room.battle.playerTable[toID(input)];
+		const targets = target.split(',');
+		function getPlayer(input: string) {
+			const player = battle.playerTable[toID(input)];
 			if (player) return player.slot;
 			if (input.includes('1')) return 'p1';
 			if (input.includes('2')) return 'p2';
 			return 'p3';
 		}
-		function getPokemon(input) {
+		function getPokemon(input: string) {
 			if (/^[0-9]+$/.test(input)) {
 				return `.pokemon[${(parseInt(input) - 1)}]`;
 			}
@@ -922,38 +950,38 @@ exports.commands = {
 		switch (cmd) {
 		case 'hp':
 		case 'h':
-			room.battle.stream.write(`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};p.sethp(${parseInt(targets[2])});if (p.isActive)battle.add('-damage',p,p.getHealth);`);
+			battle.stream.write(`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};p.sethp(${parseInt(targets[2])});if (p.isActive)battle.add('-damage',p,p.getHealth);`);
 			break;
 		case 'status':
 		case 's':
-			room.battle.stream.write(`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.setStatus('${toID(targets[2])}');if (!p.isActive){battle.add('','please ignore the above');battle.add('-status',pl.active[0],pl.active[0].status,'[silent]');}`);
+			battle.stream.write(`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.setStatus('${toID(targets[2])}');if (!p.isActive){battle.add('','please ignore the above');battle.add('-status',pl.active[0],pl.active[0].status,'[silent]');}`);
 			break;
 		case 'pp':
-			room.battle.stream.write(`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.moveSlots[p.moves.indexOf('${toID(targets[2])}')].pp = ${parseInt(targets[3])};`);
+			battle.stream.write(`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.moveSlots[p.moves.indexOf('${toID(targets[2])}')].pp = ${parseInt(targets[3])};`);
 			break;
 		case 'boost':
 		case 'b':
-			room.battle.stream.write(`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};battle.boost({${toID(targets[2])}:${parseInt(targets[3])}},p)`);
+			battle.stream.write(`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};battle.boost({${toID(targets[2])}:${parseInt(targets[3])}},p)`);
 			break;
 		case 'volatile':
 		case 'v':
-			room.battle.stream.write(`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};p.addVolatile('${toID(targets[2])}')`);
+			battle.stream.write(`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};p.addVolatile('${toID(targets[2])}')`);
 			break;
 		case 'sidecondition':
 		case 'sc':
-			room.battle.stream.write(`>eval let p=${getPlayer(targets[0])}.addSideCondition('${toID(targets[1])}', 'debug')`);
+			battle.stream.write(`>eval let p=${getPlayer(targets[0])}.addSideCondition('${toID(targets[1])}', 'debug')`);
 			break;
 		case 'fieldcondition': case 'pseudoweather':
 		case 'fc':
-			room.battle.stream.write(`>eval battle.field.addPseudoWeather('${toID(targets[0])}', 'debug')`);
+			battle.stream.write(`>eval battle.field.addPseudoWeather('${toID(targets[0])}', 'debug')`);
 			break;
 		case 'weather':
 		case 'w':
-			room.battle.stream.write(`>eval battle.field.setWeather('${toID(targets[0])}', 'debug')`);
+			battle.stream.write(`>eval battle.field.setWeather('${toID(targets[0])}', 'debug')`);
 			break;
 		case 'terrain':
 		case 't':
-			room.battle.stream.write(`>eval battle.field.setTerrain('${toID(targets[0])}', 'debug')`);
+			battle.stream.write(`>eval battle.field.setTerrain('${toID(targets[0])}', 'debug')`);
 			break;
 		default:
 			this.errorReply(`Unknown editbattle command: ${cmd}`);

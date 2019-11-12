@@ -331,10 +331,8 @@ export class QueryProcessManager extends ProcessManager {
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
-				/* tslint:disable:no-eval */
-				// @ts-ignore guaranteed to be defined here
-				process.send(`${taskId}\n` + eval(message));
-				/* tslint:enable:no-eval */
+				// tslint:disable-next-line: no-eval
+				process.send!(`${taskId}\n` + eval(message));
 				return;
 			}
 
@@ -399,10 +397,8 @@ export class StreamProcessManager extends ProcessManager {
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
-				/* tslint:disable:no-eval */
-				// @ts-ignore guaranteed to be a child process
-				process.send(`${taskId}\n` + eval(message));
-				/* tslint:enable:no-eval */
+				// tslint:disable-next-line: no-eval
+				process.send!(`${taskId}\n` + eval(message));
 				return;
 			}
 
