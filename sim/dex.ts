@@ -76,40 +76,40 @@ const DATA_FILES = {
 };
 
 interface BasicRule {
-	ruleType: 'basicRule',
-	rule: string,
+	ruleType: 'basicRule';
+	rule: string;
 }
 
 interface ComplexTeamRule {
-	ruleType: 'complexTeamRule',
-	innerRule: number,
-	source: number,
-	limit: string,
-	bans: string[],
+	ruleType: 'complexTeamRule';
+	innerRule: number;
+	source: number;
+	limit: string;
+	bans: string[];
 }
 
 interface ComplexRule {
-	ruleType: 'complexRule',
-	innerRule: number,
-	source: number,
-	limit: string,
-	bans: string[],
+	ruleType: 'complexRule';
+	innerRule: number;
+	source: number;
+	limit: string;
+	bans: string[];
 }
 
 interface BanRule {
-	ruleType: 'banRule',
-	ban: string,
+	ruleType: 'banRule';
+	ban: string;
 }
 
 interface TeamLengthRule {
-	ruleType: 'teamLengthRule',
-	onBattle: number,
+	ruleType: 'teamLengthRule';
+	onBattle: number;
 	onValidate: number,
 }
 
 interface LevelRule {
-	ruleType: 'levelRule',
-	level: number,
+	ruleType: 'levelRule';
+	level: number;
 }
 
 type ValidatedRule = BasicRule | ComplexTeamRule | ComplexRule | BanRule | TeamLengthRule | LevelRule;
@@ -847,6 +847,7 @@ export class ModdedDex {
 			if (rule.startsWith('!')) continue;
 
 			const ruleSpec = this.validateRule(rule, format);
+
 			switch(ruleSpec.ruleType) {
 				case 'complexTeamRule':
 					const complexTeamBan: Data.ComplexTeamBan = [ruleSpec.innerRule, ruleSpec.source, ruleSpec.limit, ruleSpec.bans] as Data.ComplexTeamBan;
@@ -935,19 +936,19 @@ export class ModdedDex {
 				if (checkTeam) {
 					return {
 						ruleType: 'complexTeamBan'
-						innerRule: innerRule,
+						innerRule,
 						source: '',
-						limit: limit,
-						bans: bans,
+						limit,
+						bans,
 					};
 				}
 				if (bans.length > 1 || limit > 0) {
 					return {
 						ruleType: 'complexBan'
-						innerRule: innerRule,
+						innerRule,
 						source: '',
-						limit: limit,
-						bans: bans,
+						limit,
+						bans,
 					};
 				}
 				throw new Error(`Confusing rule ${rule}`);
@@ -974,8 +975,8 @@ export class ModdedDex {
 						}
 						return {
 							ruleType: 'teamLengthRule',
-							onBattle: onBattle,
-							onValidate: onValidate,
+							onBattle,
+							onValidate,
 						};
 					}
 				} else if (type === "level" || type === "maxlevel") {
@@ -983,7 +984,7 @@ export class ModdedDex {
 					if (!isNaN(level)) {
 						return {
 							ruleType: 'levelRule'
-							level: level
+							level,
 						};
 					}
 				}
