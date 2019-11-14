@@ -953,7 +953,7 @@ export class ModdedDex {
 				}
 				throw new Error(`Confusing rule ${rule}`);
 			}
-			let banRule = this.validateBanRule(rule);
+			const banRule = this.validateBanRule(rule);
 			if (rule.charAt(0) === '-') banRule.ban = '-' + banRule.ban;
 			return banRule;
 		default:
@@ -962,7 +962,7 @@ export class ModdedDex {
 			if (parts.length > 1) {
 				const type = toID(parts[0]);
 				if (type === "teamlength" || type === "teamcap") {
-					let options = parts[1].split('-');
+					const options = parts[1].split('-');
 					const onValidate = parseInt(options[0]);
 					let onBattle = parseInt(options[1]);
 					if (options.length === 1) onBattle = onValidate;
