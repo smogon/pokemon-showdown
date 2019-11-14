@@ -75,6 +75,45 @@ const DATA_FILES = {
 	TypeChart: 'typechart',
 };
 
+interface BasicRule {
+	ruleType: 'basicRule',
+	rule: string,
+}
+
+interface ComplexTeamRule {
+	ruleType: 'complexTeamRule',
+	innerRule: number,
+	source: number,
+	limit: string,
+	bans: string[],
+}
+
+interface ComplexRule {
+	ruleType: 'complexRule',
+	innerRule: number,
+	source: number,
+	limit: string,
+	bans: string[],
+}
+
+interface BanRule {
+	ruleType: 'banRule',
+	ban: string,
+}
+
+interface TeamLengthRule {
+	ruleType: 'teamLengthRule',
+	onBattle: number,
+	onValidate: number,
+}
+
+interface LevelRule {
+	ruleType: 'levelRule',
+	level: number,
+}
+
+type ValidatedRule = BasicRule | ComplexTeamRule | ComplexRule | BanRule | TeamLengthRule | LevelRule;
+
 const nullEffect: PureEffect = new Data.PureEffect({name: '', exists: false});
 
 interface Nature {
@@ -800,7 +839,7 @@ export class ModdedDex {
 		for (const rule of ruleset) {
 			if (rule.startsWith('!')) {
 				const ruleSpec = this.validateRule(rule, format) as string;
-				ruleTable.set(ruleSpec, '');
+				ruleTable.set(ruleSpec.rule, '');
 			}
 		}
 
@@ -808,76 +847,73 @@ export class ModdedDex {
 			if (rule.startsWith('!')) continue;
 
 			const ruleSpec = this.validateRule(rule, format);
-			if (typeof ruleSpec !== 'string') {
-				if (ruleSpec[0] === 'complexTeamBan') {
-					const complexTeamBan: Data.ComplexTeamBan = ruleSpec.slice(1) as Data.ComplexTeamBan;
+			switch(ruleSpec.ruleType) {
+				case 'complexTeamRule':
+					const complexTeamBan: Data.ComplexTeamBan = [ruleSpec.innerRule, ruleSpec.source, ruleSpec.limit, ruleSpec.bans] as Data.ComplexTeamBan;
 					ruleTable.addComplexTeamBan(complexTeamBan[0], complexTeamBan[1], complexTeamBan[2], complexTeamBan[3]);
-				} else if (ruleSpec[0] === 'complexBan') {
-					const complexBan: Data.ComplexBan = ruleSpec.slice(1) as Data.ComplexBan;
+					continue;
+				case 'complexRule':
+					const complexBan: Data.ComplexBan = [ruleSpec.innerRule, ruleSpec.source, ruleSpec.limit, ruleSpec.bans] as Data.ComplexBan;
 					ruleTable.addComplexBan(complexBan[0], complexBan[1], complexBan[2], complexBan[3]);
-				} else if (ruleSpec[0] === 'teamlength') {
-					const onValidate = ruleSpec[2] as number;
-					const onBattle = ruleSpec[1] as number;
+					continue;
+				case 'teamLengthRule':
 					ruleTable.teamLength = {
-						validate: [onBattle, onValidate],
-						battle: onBattle,
+						validate: [ruleSpec.onBattle, ruleSpec.onValidate],
+						battle: ruleSpec.onBattle,
 					};
-				} else if (ruleSpec[0] === 'level') {
-					const maxLevel = ruleSpec[1] as number;
-					ruleTable.maxLevel = maxLevel;
-				} else {
-					throw new Error(`Unrecognized rule spec ${ruleSpec}`);
-				}
-				continue;
-			}
-			if ("!+-".includes(ruleSpec.charAt(0))) {
-				if (ruleSpec.startsWith('+')) ruleTable.delete('-' + ruleSpec.slice(1));
-				if (ruleSpec.startsWith('-')) ruleTable.delete('+' + ruleSpec.slice(1));
-				ruleTable.set(ruleSpec, '');
-				continue;
-			}
-			const subformat = this.getFormat(ruleSpec);
-			if (ruleTable.has('!' + subformat.id)) continue;
-			ruleTable.set(subformat.id, '');
-			if (!subformat.exists) continue;
-			if (depth > 16) {
-				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset}`);
-			}
-			const subRuleTable = this.getRuleTable(subformat, depth + 1);
-			for (const [k, v] of subRuleTable) {
-				if (!ruleTable.has('!' + k)) ruleTable.set(k, v || subformat.name);
-			}
-			// tslint:disable-next-line:no-shadowed-variable
-			for (const [rule, source, limit, bans] of subRuleTable.complexBans) {
-				ruleTable.addComplexBan(rule, source || subformat.name, limit, bans);
-			}
-			// tslint:disable-next-line:no-shadowed-variable
-			for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
-				ruleTable.addComplexTeamBan(rule, source || subformat.name, limit, bans);
-			}
-			if (subRuleTable.checkLearnset) {
-				if (ruleTable.checkLearnset) {
-					throw new Error(
-						`"${format.name}" has conflicting move validation rules from ` +
-						`"${ruleTable.checkLearnset[1]}" and "${subRuleTable.checkLearnset[1]}"`);
-				}
-				ruleTable.checkLearnset = subRuleTable.checkLearnset;
-			}
-			if (subRuleTable.timer) {
-				if (ruleTable.timer) {
-					throw new Error(
-						`"${format.name}" has conflicting timer validation rules from ` +
-						`"${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`);
-				}
-				ruleTable.timer = subRuleTable.timer;
+					continue;
+				case 'levelRule':
+					ruleTable.maxLevel = ruleSpec.level;
+					continue;
+				case 'banRule':
+					if (ruleSpec.ban.startsWith('+')) ruleTable.delete('-' + ruleSpec.ban.slice(1));
+					if (ruleSpec.ban.startsWith('-')) ruleTable.delete('+' + ruleSpec.ban.slice(1));
+					ruleTable.set(ruleSpec.ban, '');
+					continue;
+				case 'basicRule':
+					const subformat = this.getFormat(ruleSpec.rule);
+					if (ruleTable.has('!' + subformat.id)) continue;
+					ruleTable.set(subformat.id, '');
+					if (!subformat.exists) continue;
+					if (depth > 16) {
+						throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset}`);
+					}
+					const subRuleTable = this.getRuleTable(subformat, depth + 1);
+					for (const [k, v] of subRuleTable) {
+						if (!ruleTable.has('!' + k)) ruleTable.set(k, v || subformat.name);
+					}
+					// tslint:disable-next-line:no-shadowed-variable
+					for (const [rule, source, limit, bans] of subRuleTable.complexBans) {
+						ruleTable.addComplexBan(rule, source || subformat.name, limit, bans);
+					}
+					// tslint:disable-next-line:no-shadowed-variable
+					for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
+						ruleTable.addComplexTeamBan(rule, source || subformat.name, limit, bans);
+					}
+					if (subRuleTable.checkLearnset) {
+						if (ruleTable.checkLearnset) {
+							throw new Error(
+								`"${format.name}" has conflicting move validation rules from ` +
+								`"${ruleTable.checkLearnset[1]}" and "${subRuleTable.checkLearnset[1]}"`);
+						}
+						ruleTable.checkLearnset = subRuleTable.checkLearnset;
+					}
+					if (subRuleTable.timer) {
+						if (ruleTable.timer) {
+							throw new Error(
+								`"${format.name}" has conflicting timer validation rules from ` +
+								`"${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`);
+						}
+						ruleTable.timer = subRuleTable.timer;
+					}
+					continue;
 			}
 		}
-
 		format.ruleTable = ruleTable;
 		return ruleTable;
 	}
 
-	validateRule(rule: string, format: Format | null = null) {
+	validateRule(rule: string, format: Format | null = null): ValidatedRule {
 		switch (rule.charAt(0)) {
 		case '-':
 		case '+':
@@ -894,17 +930,31 @@ export class ModdedDex {
 				const banNames = buf.split(checkTeam ? '++' : '+').map(v => v.trim());
 				if (banNames.length === 1 && limit > 0) checkTeam = true;
 				const innerRule = banNames.join(checkTeam ? ' ++ ' : ' + ');
-				const bans = banNames.map(v => this.validateBanRule(v));
+				const bans = banNames.map(v => this.validateBanRule(v).ban);
 
 				if (checkTeam) {
-					return ['complexTeamBan', innerRule, '', limit, bans];
+					return {
+						ruleType: 'complexTeamBan'
+						innerRule: innerRule,
+						source: '',
+						limit: limit,
+						bans: bans,
+					};
 				}
 				if (bans.length > 1 || limit > 0) {
-					return ['complexBan', innerRule, '', limit, bans];
+					return {
+						ruleType: 'complexBan'
+						innerRule: innerRule,
+						source: '',
+						limit: limit,
+						bans: bans,
+					};
 				}
 				throw new Error(`Confusing rule ${rule}`);
 			}
-			return rule.charAt(0) + this.validateBanRule(rule.slice(1));
+			let banRule = this.validateBanRule(rule);
+			if (rule.charAt(0) === '-') banRule.ban = '-' + banRule.ban;
+			return banRule;
 		default:
 			const id = toID(rule);
 			const parts = rule.replace('=', ':').split(":");
@@ -922,27 +972,34 @@ export class ModdedDex {
 						if (onValidate > 24) {
 							throw new Error("You may not have more than 24 Pokémon on a team");
 						}
-						return ['teamlength', onBattle, onValidate];
+						return {
+							ruleType: 'teamLengthRule',
+							onBattle: onBattle,
+							onValidate: onValidate,
+						};
 					}
 				} else if (type === "level" || type === "maxlevel") {
 					const level = parseInt(parts[1]);
 					if (!isNaN(level)) {
-						return ['level', level];
+						return {
+							ruleType: 'levelRule'
+							level: level
+						};
 					}
 				}
 				throw new Error(`Unrecognized rule "${rule}"`);
 			} else if (!this.data.Formats.hasOwnProperty(id)) {
 				throw new Error(`Unrecognized rule "${rule}"`);
 			}
-			if (rule.charAt(0) === '!') return `!${id}`;
-			return id;
+			if (rule.charAt(0) === '!') return {ruleType: 'basicRule', rule: `!${id}`};
+			return {ruleType: 'basicRule', rule: id};
 		}
 	}
 
-	validateBanRule(rule: string) {
+	validateBanRule(rule: string): BanRule {
 		let id = toID(rule);
-		if (id === 'unreleased') return 'unreleased';
-		if (id === 'nonexistent') return 'nonexistent';
+		if (id === 'unreleased') return {ruleType: 'banRule', ban: 'unreleased'};
+		if (id === 'nonexistent') return {ruleType: 'banRule', ban: 'nonexistent'};
 		const matches = [];
 		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'pokemontag'];
 		for (const matchType of matchTypes) {
@@ -1000,7 +1057,7 @@ export class ModdedDex {
 		if (matches.length < 1) {
 			throw new Error(`Nothing matches "${rule}"`);
 		}
-		return matches[0];
+		return {ruleType: 'banRule', ban: matches[0]};
 	}
 
 	shuffle<T>(arr: T[]): T[] {
