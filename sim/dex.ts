@@ -934,7 +934,7 @@ export class ModdedDex {
 
 				if (checkTeam) {
 					return {
-						ruleType: 'complexTeamBan'
+						ruleType: 'complexTeamBan',
 						innerRule,
 						source: '',
 						limit,
@@ -943,7 +943,7 @@ export class ModdedDex {
 				}
 				if (bans.length > 1 || limit > 0) {
 					return {
-						ruleType: 'complexBan'
+						ruleType: 'complexBan',
 						innerRule,
 						source: '',
 						limit,
