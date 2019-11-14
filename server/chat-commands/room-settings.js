@@ -4,7 +4,7 @@
  *
  * Commands for settings relating to room setting filtering.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
@@ -14,6 +14,8 @@ const RANKS = Config.groupsranking;
 const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
 const SLOWCHAT_USER_REQUIREMENT = 10;
+
+const MAX_CHATROOM_ID_LENGTH = 225;
 
 class RoomSettings {
 	constructor(user, room, connection) {
@@ -684,4 +686,664 @@ exports.commands = {
 		`/hightraffic [true|false] - (Un)marks a room as a high traffic room. Requires & ~`,
 		`When a room is marked as high-traffic, PS requires all messages sent to that room to contain at least 2 letters.`,
 	],
+
+	/*********************************************************
+	 * Room management
+	 *********************************************************/
+
+	makeprivatechatroom: 'makechatroom',
+	makechatroom(target, room, user, connection, cmd) {
+		if (!this.can('makeroom')) return;
+
+		// `,` is a delimiter used by a lot of /commands
+		// `|` and `[` are delimiters used by the protocol
+		// `-` has special meaning in roomids
+		if (target.includes(',') || target.includes('|') || target.includes('[') || target.includes('-')) {
+			return this.errorReply("Room titles can't contain any of: ,|[-");
+		}
+
+		let id = toID(target);
+		if (!id) return this.parse('/help makechatroom');
+		if (id.length > MAX_CHATROOM_ID_LENGTH) return this.errorReply("The given room title is too long.");
+		// Check if the name already exists as a room or alias
+		if (Rooms.search(id)) return this.errorReply(`The room '${target}' already exists.`);
+		if (!Rooms.global.addChatRoom(target)) return this.errorReply(`An error occurred while trying to create the room '${target}'.`);
+
+		if (cmd === 'makeprivatechatroom') {
+			let targetRoom = Rooms.search(target);
+			targetRoom.isPrivate = true;
+			targetRoom.chatRoomData.isPrivate = true;
+			Rooms.global.writeChatRoomData();
+			if (Rooms.get('upperstaff')) {
+				Rooms.get('upperstaff').add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+			}
+			this.sendReply(`The private chat room '${target}' was created.`);
+		} else {
+			if (Rooms.get('staff')) {
+				Rooms.get('staff').add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+			}
+			if (Rooms.get('upperstaff')) {
+				Rooms.get('upperstaff').add(`|raw|<div class="broadcast-green">Public chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+			}
+			this.sendReply(`The chat room '${target}' was created.`);
+		}
+	},
+	makechatroomhelp: [`/makechatroom [roomname] - Creates a new room named [roomname]. Requires: & ~`],
+
+	subroomgroupchat: 'makegroupchat',
+	makegroupchat(target, room, user, connection, cmd) {
+		if (!this.canTalk()) return;
+		if (!user.autoconfirmed) {
+			return this.errorReply("You must be autoconfirmed to make a groupchat.");
+		}
+		if (cmd === 'subroomgroupchat') {
+			if (!user.can('mute', null, room)) return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");
+			if (room.battle) return this.errorReply("You cannot create a subroom of a battle.");
+			if (room.isPersonal) return this.errorReply("You cannot create a subroom of a groupchat.");
+		}
+		let parent = cmd === 'subroomgroupchat' ? room.roomid : null;
+		// if (!this.can('makegroupchat')) return false;
+
+		// Title defaults to a random 8-digit number.
+		let title = target.trim();
+		if (title.length >= 32) {
+			return this.errorReply("Title must be under 32 characters long.");
+		} else if (!title) {
+			title = (`${Math.floor(Math.random() * 100000000)}`);
+		} else if (Config.chatfilter) {
+			let filterResult = Config.chatfilter.call(this, title, user, null, connection);
+			if (!filterResult) return;
+			if (title !== filterResult) {
+				return this.errorReply("Invalid title.");
+			}
+		}
+		// `,` is a delimiter used by a lot of /commands
+		// `|` and `[` are delimiters used by the protocol
+		// `-` has special meaning in roomids
+		if (title.includes(',') || title.includes('|') || title.includes('[') || title.includes('-')) {
+			return this.errorReply("Room titles can't contain any of: ,|[-");
+		}
+
+		// Even though they're different namespaces, to cut down on confusion, you
+		// can't share names with registered chatrooms.
+		let existingRoom = Rooms.search(toID(title));
+		if (existingRoom && !existingRoom.modjoin) return this.errorReply(`The room '${title}' already exists.`);
+		// Room IDs for groupchats are groupchat-TITLEID
+		let titleid = toID(title);
+		if (!titleid) {
+			titleid = `${Math.floor(Math.random() * 100000000)}`;
+		}
+		let roomid = `groupchat-${parent || user.id}-${titleid}`;
+		// Titles must be unique.
+		if (Rooms.search(roomid)) return this.errorReply(`A group chat named '${title}' already exists.`);
+		// Tab title is prefixed with '[G]' to distinguish groupchats from
+		// registered chatrooms
+
+		if (Monitor.countGroupChat(connection.ip)) {
+			this.errorReply("Due to high load, you are limited to creating 4 group chats every hour.");
+			return;
+		}
+
+		let titleMsg = Chat.html `Welcome to ${parent ? room.title : user.name}'s${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
+		let targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
+			isPersonal: true,
+			isPrivate: 'hidden',
+			creationTime: parent ? null : Date.now(),
+			modjoin: parent ? null : '+',
+			parentid: parent,
+			auth: {},
+			introMessage: `<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//${Config.routes.client}/fx/groupchat.png" width=120 height=100></td><td><h2>${titleMsg}</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,
+			staffMessage: `<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p><p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p><p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | <button class="button" name="send" value="/roomsettings">Room Settings</button> | <button class="button" name="send" value="/tournaments help">Tournaments</button></p><p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`,
+		});
+		if (targetRoom) {
+			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
+			targetRoom.auth[user.id] = parent ? '#' : Users.HOST_SYMBOL;
+			// Join after creating room. No other response is given.
+			user.joinRoom(targetRoom.roomid);
+			user.popup(`You've just made a groupchat; it is now your responsibility, regardless of whether or not you actively partake in the room. For more info, read your groupchat's staff intro.`);
+			if (parent) this.modlog('SUBROOMGROUPCHAT', null, title);
+			return;
+		}
+		return this.errorReply(`An unknown error occurred while trying to create the room '${title}'.`);
+	},
+	makegroupchathelp: [
+		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname].`,
+		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
+	],
+
+	'!groupchatuptime': true,
+	groupchatuptime(target, room, user) {
+		if (!room || !room.creationTime) return this.errorReply("Can only be used in a groupchat.");
+		if (!this.runBroadcast()) return;
+		const uptime = Chat.toDurationString(Date.now() - room.creationTime);
+		this.sendReplyBox(`Groupchat uptime: <b>${uptime}</b>`);
+	},
+	groupchatuptimehelp: [`/groupchatuptime - Displays the uptime if the current room is a groupchat.`],
+
+	deregisterchatroom(target, room, user) {
+		if (!this.can('makeroom')) return;
+		this.errorReply("NOTE: You probably want to use `/deleteroom` now that it exists.");
+		let id = toID(target);
+		if (!id) return this.parse('/help deregisterchatroom');
+		let targetRoom = Rooms.search(id);
+		if (!targetRoom) return this.errorReply(`The room '${target}' doesn't exist.`);
+		target = targetRoom.title || targetRoom.roomid;
+		const isPrivate = targetRoom.isPrivate;
+		const staffRoom = Rooms.get('staff');
+		const upperStaffRoom = Rooms.get('upperstaff');
+		if (Rooms.global.deregisterChatRoom(id)) {
+			this.sendReply(`The room '${target}' was deregistered.`);
+			this.sendReply("It will be deleted as of the next server restart.");
+			target = Chat.escapeHTML(target);
+			if (isPrivate) {
+				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Private chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
+			} else {
+				if (staffRoom) staffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered: <b>${target}</b></div>`).update();
+				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered by ${user.id}: <b>${target}</b></div>`).update();
+			}
+			return;
+		}
+		return this.errorReply(`The room "${target}" isn't registered.`);
+	},
+	deregisterchatroomhelp: [`/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: & ~`],
+
+	deletechatroom: 'deleteroom',
+	deletegroupchat: 'deleteroom',
+	deleteroom(target, room, user, connection, cmd) {
+		let roomid = target.trim();
+		if (!roomid) {
+			// allow deleting personal rooms without typing out the room name
+			if (!room.isPersonal || cmd !== "deletegroupchat") {
+				return this.parse(`/help deleteroom`);
+			}
+		} else {
+			let targetRoom = Rooms.search(roomid);
+			if (targetRoom !== room) {
+				return this.parse(`/help deleteroom`);
+			}
+		}
+
+		if (room.isPersonal) {
+			if (!this.can('gamemanagement', null, room)) return;
+		} else {
+			if (!this.can('makeroom')) return;
+		}
+
+		const title = room.title || room.roomid;
+
+		if (room.roomid === 'global') {
+			return this.errorReply(`This room can't be deleted.`);
+		}
+
+		if (room.chatRoomData) {
+			if (room.isPrivate) {
+				if (Rooms.get('upperstaff')) {
+					Rooms.get('upperstaff').add(Chat.html`|raw|<div class="broadcast-red">Private chat room deleted by ${user.id}: <b>${title}</b></div>`).update();
+				}
+			} else {
+				if (Rooms.get('staff')) {
+					Rooms.get('staff').add(Chat.html`|raw|<div class="broadcast-red">Public chat room deleted: <b>${title}</b></div>`).update();
+				}
+				if (Rooms.get('upperstaff')) {
+					Rooms.get('upperstaff').add(Chat.html`|raw|<div class="broadcast-red">Public chat room deleted by ${user.id}: <b>${title}</b></div>`).update();
+				}
+			}
+		}
+
+		if (room.subRooms) {
+			for (const subRoom of room.subRooms.values()) subRoom.parent = null;
+		}
+
+		room.add(`|raw|<div class="broadcast-red"><b>This room has been deleted.</b></div>`);
+		room.update(); // |expire| needs to be its own message
+		room.add(`|expire|This room has been deleted.`);
+		this.sendReply(`The room "${title}" was deleted.`);
+		room.update();
+		room.destroy();
+	},
+	deleteroomhelp: [
+		`/deleteroom [roomname] - Deletes room [roomname]. Must be typed in the room to delete. Requires: & ~`,
+		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: ★ # & ~`,
+	],
+
+	hideroom: 'privateroom',
+	hiddenroom: 'privateroom',
+	secretroom: 'privateroom',
+	publicroom: 'privateroom',
+	privateroom(target, room, user, connection, cmd) {
+		if (room.isPersonal) {
+			if (!this.can('editroom', null, room)) return;
+		} else if (room.battle) {
+			if (!this.can('editprivacy', null, room)) return;
+			const prefix = room.battle.forcedPublic();
+			if (prefix && !user.can('editprivacy')) return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
+		} else {
+			// registered chatrooms show up on the room list and so require
+			// higher permissions to modify privacy settings
+			if (!this.can('makeroom')) return;
+		}
+		let setting;
+		switch (cmd) {
+		case 'privateroom':
+			return this.parse('/help privateroom');
+		case 'publicroom':
+			setting = false;
+			break;
+		case 'secretroom':
+			setting = true;
+			break;
+		default:
+			if (room.isPrivate === true && target !== 'force') {
+				return this.sendReply(`This room is a secret room. Use "/publicroom" to make it public, or "/hiddenroom force" to force it hidden.`);
+			}
+			setting = 'hidden';
+			break;
+		}
+
+		if ((setting === true || room.isPrivate === true) && !room.isPersonal) {
+			if (!this.can('makeroom')) return;
+		}
+
+		if (this.meansNo(target) || !setting) {
+			if (!room.isPrivate) {
+				return this.errorReply(`This room is already public.`);
+			}
+			if (room.parent && room.parent.isPrivate) {
+				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
+			}
+			if (room.isPersonal) return this.errorReply(`This room can't be made public.`);
+			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
+				if (!room.privacySetter.has(user.id)) {
+					const privacySetters = [...room.privacySetter].join(', ');
+					return this.errorReply(`You can't make the room public since you didn't make it private - only ${privacySetters} can.`);
+				}
+				room.privacySetter.delete(user.id);
+				if (room.privacySetter.size) {
+					const privacySetters = [...room.privacySetter].join(', ');
+					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Chat.plural(room.privacySetter, "", "s")} to use /publicroom to make the room public.`);
+				}
+			}
+			delete room.isPrivate;
+			room.privacySetter = null;
+			this.addModAction(`${user.name} made this room public.`);
+			this.modlog('PUBLICROOM');
+			if (room.chatRoomData) {
+				delete room.chatRoomData.isPrivate;
+				Rooms.global.writeChatRoomData();
+			}
+		} else {
+			const settingName = (setting === true ? 'secret' : setting);
+			if (room.subRooms) {
+				if (settingName === 'secret') return this.errorReply("Secret rooms cannot have subrooms.");
+				for (const subRoom of room.subRooms.values()) {
+					if (!subRoom.isPrivate) return this.errorReply(`Subroom ${subRoom.title} must be private to make this room private.`);
+				}
+			}
+			if (room.isPrivate === setting) {
+				if (room.privacySetter && !room.privacySetter.has(user.id)) {
+					room.privacySetter.add(user.id);
+					return this.sendReply(`This room is already ${settingName}, but is now forced to stay that way until you use /publicroom.`);
+				}
+				return this.errorReply(`This room is already ${settingName}.`);
+			}
+			room.isPrivate = setting;
+			this.addModAction(`${user.name} made this room ${settingName}.`);
+			this.modlog(`${settingName.toUpperCase()}ROOM`);
+			if (room.chatRoomData) {
+				room.chatRoomData.isPrivate = setting;
+				Rooms.global.writeChatRoomData();
+			}
+			room.privacySetter = new Set([user.id]);
+		}
+	},
+	privateroomhelp: [
+		`/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~`,
+		`/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2606 & ~`,
+		`/publicroom - Makes a room public. Requires: \u2606 & ~`,
+	],
+
+	officialchatroom: 'officialroom',
+	officialroom(target, room, user) {
+		if (!this.can('makeroom')) return;
+		if (!room.chatRoomData) {
+			return this.errorReply(`/officialroom - This room can't be made official`);
+		}
+		if (this.meansNo(target)) {
+			if (!room.isOfficial) return this.errorReply(`This chat room is already unofficial.`);
+			delete room.isOfficial;
+			this.addModAction(`${user.name} made this chat room unofficial.`);
+			this.modlog('UNOFFICIALROOM');
+			delete room.chatRoomData.isOfficial;
+			Rooms.global.writeChatRoomData();
+		} else {
+			if (room.isOfficial) return this.errorReply(`This chat room is already official.`);
+			room.isOfficial = true;
+			this.addModAction(`${user.name} made this chat room official.`);
+			this.modlog('OFFICIALROOM');
+			room.chatRoomData.isOfficial = true;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	psplwinnerroom(target, room, user) {
+		if (!this.can('makeroom')) return;
+		if (!room.chatRoomData) {
+			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room`);
+		}
+		if (this.meansNo(target)) {
+			if (!room.pspl) return this.errorReply(`This chat room is already not a PSPL Winner room.`);
+			delete room.pspl;
+			this.addModAction(`${user.name} made this chat room no longer a PSPL Winner room.`);
+			this.modlog('PSPLROOM');
+			delete room.chatRoomData.pspl;
+			Rooms.global.writeChatRoomData();
+		} else {
+			if (room.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
+			room.pspl = true;
+			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
+			this.modlog('UNPSPLROOM');
+			room.chatRoomData.pspl = true;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	setsubroom: 'subroom',
+	subroom(target, room, user) {
+		if (!user.can('makeroom')) return this.errorReply(`/subroom - Access denied. Did you mean /subrooms?`);
+		if (!target) return this.parse('/help subroom');
+
+		if (!room.chatRoomData) return this.errorReply(`Temporary rooms cannot be subrooms.`);
+		if (room.parent) return this.errorReply(`This room is already a subroom. To change which room this subroom belongs to, remove the subroom first.`);
+		if (room.subRooms) return this.errorReply(`This room is already a parent room, and a parent room cannot be made as a subroom.`);
+
+		const main = Rooms.search(target);
+
+		if (!main) return this.errorReply(`The room '${target}' does not exist.`);
+		if (main.parent) return this.errorReply(`Subrooms cannot have subrooms.`);
+		if (main.isPrivate === true) return this.errorReply(`Only public and hidden rooms can have subrooms.`);
+		if (main.isPrivate && !room.isPrivate) return this.errorReply(`Private rooms cannot have public subrooms.`);
+		if (!main.chatRoomData) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
+		if (room === main) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
+
+		room.parent = main;
+		if (!main.subRooms) main.subRooms = new Map();
+		main.subRooms.set(room.roomid, room);
+
+		const mainIdx = Rooms.global.chatRoomDataList.findIndex(r => r.title === main.title);
+		const subIdx = Rooms.global.chatRoomDataList.findIndex(r => r.title === room.title);
+
+		// This is needed to ensure that the main room gets loaded before the subroom.
+		if (mainIdx > subIdx) {
+			const tmp = Rooms.global.chatRoomDataList[mainIdx];
+			Rooms.global.chatRoomDataList[mainIdx] = Rooms.global.chatRoomDataList[subIdx];
+			Rooms.global.chatRoomDataList[subIdx] = tmp;
+		}
+
+		room.chatRoomData.parentid = main.roomid;
+		Rooms.global.writeChatRoomData();
+
+		for (let userid in room.users) {
+			room.users[userid].updateIdentity(room.roomid);
+		}
+
+		this.modlog('SUBROOM', null, `of ${main.title}`);
+		return this.addModAction(`This room was set as a subroom of ${main.title} by ${user.name}.`);
+	},
+
+	removesubroom: 'unsubroom',
+	desubroom: 'unsubroom',
+	unsubroom(target, room, user) {
+		if (!this.can('makeroom')) return;
+		if (!room.parent || !room.chatRoomData) return this.errorReply(`This room is not currently a subroom of a public room.`);
+
+		const parent = room.parent;
+		if (parent && parent.subRooms) {
+			parent.subRooms.delete(room.roomid);
+			if (!parent.subRooms.size) parent.subRooms = null;
+		}
+
+		room.parent = null;
+
+		delete room.chatRoomData.parentid;
+		Rooms.global.writeChatRoomData();
+
+		for (let userid in room.users) {
+			room.users[userid].updateIdentity(room.roomid);
+		}
+
+		this.modlog('UNSUBROOM');
+		return this.addModAction(`This room was unset as a subroom by ${user.name}.`);
+	},
+
+	parentroom: 'subrooms',
+	subrooms(target, room, user, connection, cmd) {
+		if (cmd === 'parentroom') {
+			if (!room.parent) return this.errorReply(`This room is not a subroom.`);
+			return this.sendReply(`This is a subroom of ${room.parent.title}.`);
+		}
+		if (!room.chatRoomData) return this.errorReply(`Temporary rooms cannot have subrooms.`);
+
+		if (!this.runBroadcast()) return;
+
+		const showSecret = !this.broadcasting && user.can('mute', null, room);
+
+		const subRooms = room.getSubRooms(showSecret);
+
+		if (!subRooms.length) return this.sendReply(`This room doesn't have any subrooms.`);
+
+		const subRoomText = subRooms.map(room => Chat.html`<a href="/${room.roomid}">${room.title}</a><br/><small>${room.desc}</small>`);
+
+		return this.sendReplyBox(`<p style="font-weight:bold;">${Chat.escapeHTML(room.title)}'s subroom${Chat.plural(subRooms)}:</p><ul><li>${subRoomText.join('</li><br/><li>')}</li></ul></strong>`);
+	},
+
+	subroomhelp: [
+		`/subroom [room] - Marks the current room as a subroom of [room]. Requires: & ~`,
+		`/unsubroom - Unmarks the current room as a subroom. Requires: & ~`,
+		`/subrooms - Displays the current room's subrooms.`,
+		`/parentroom - Displays the current room's parent room.`,
+	],
+
+	roomdesc(target, room, user) {
+		if (!target) {
+			if (!this.runBroadcast()) return;
+			if (!room.desc) return this.sendReply(`This room does not have a description set.`);
+			this.sendReplyBox(Chat.html`The room description is: ${room.desc}`);
+			return;
+		}
+		if (!this.can('declare')) return false;
+		if (target.length > 80) return this.errorReply(`Error: Room description is too long (must be at most 80 characters).`);
+		let normalizedTarget = ' ' + target.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim() + ' ';
+
+		if (normalizedTarget.includes(' welcome ')) {
+			return this.errorReply(`Error: Room description must not contain the word "welcome".`);
+		}
+		if (normalizedTarget.slice(0, 9) === ' discuss ') {
+			return this.errorReply(`Error: Room description must not start with the word "discuss".`);
+		}
+		if (normalizedTarget.slice(0, 12) === ' talk about ' || normalizedTarget.slice(0, 17) === ' talk here about ') {
+			return this.errorReply(`Error: Room description must not start with the phrase "talk about".`);
+		}
+
+		room.desc = target;
+		this.sendReply(`(The room description is now: ${target})`);
+
+		this.privateModAction(`(${user.name} changed the roomdesc to: "${target}".)`);
+		this.modlog('ROOMDESC', null, `to "${target}"`);
+
+		if (room.chatRoomData) {
+			room.chatRoomData.desc = room.desc;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	topic: 'roomintro',
+	roomintro(target, room, user, connection, cmd) {
+		if (!target) {
+			if (!this.runBroadcast()) return;
+			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
+			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
+			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
+				this.sendReply('Source:');
+				const code = Chat.escapeHTML(room.introMessage).replace(/\n/g, '<br />');
+				this.sendReplyBox(`<code style="white-space: pre-wrap">/roomintro ${code}</code>`);
+			}
+			return;
+		}
+		if (!this.can('editroom', null, room)) return false;
+		if (this.meansNo(target) || target === 'delete') return this.errorReply('Did you mean "/deleteroomintro"?');
+		target = this.canHTML(target);
+		if (!target) return;
+		if (!/</.test(target)) {
+			// not HTML, do some simple URL linking
+			let re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
+			target = target.replace(re, '<a href="$1">$1</a>');
+		}
+		if (target.substr(0, 11) === '/roomintro ') target = target.substr(11);
+
+		room.introMessage = target.replace(/\r/g, '');
+		this.sendReply("(The room introduction has been changed to:)");
+		this.sendReply(`|raw|<div class="infobox infobox-limited">${room.introMessage.replace(/\n/g, '')}</div>`);
+
+		this.privateModAction(`(${user.name} changed the roomintro.)`);
+		this.modlog('ROOMINTRO');
+		this.roomlog(room.introMessage.replace(/\n/g, ''));
+
+		if (room.chatRoomData) {
+			room.chatRoomData.introMessage = room.introMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	deletetopic: 'deleteroomintro',
+	deleteroomintro(target, room, user) {
+		if (!this.can('declare', null, room)) return false;
+		if (!room.introMessage) return this.errorReply("This room does not have a introduction set.");
+
+		this.privateModAction(`(${user.name} deleted the roomintro.)`);
+		this.modlog('DELETEROOMINTRO');
+		this.roomlog(target);
+
+		delete room.introMessage;
+		if (room.chatRoomData) {
+			delete room.chatRoomData.introMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	stafftopic: 'staffintro',
+	staffintro(target, room, user, connection, cmd) {
+		if (!target) {
+			if (!this.can('mute', null, room)) return false;
+			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
+			this.sendReply(`|raw|<div class="infobox">${room.staffMessage.replace(/\n/g, ``)}</div>`);
+			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
+				this.sendReply('Source:');
+				const code = Chat.escapeHTML(room.staffMessage).replace(/\n/g, '<br />');
+				this.sendReplyBox(`<code style="white-space: pre-wrap">/staffintro ${code}</code>`);
+			}
+			return;
+		}
+		if (!this.can('ban', null, room)) return false;
+		if (!this.canTalk()) return;
+		if (this.meansNo(target) || target === 'delete') return this.errorReply('Did you mean "/deletestaffintro"?');
+		target = this.canHTML(target);
+		if (!target) return;
+		if (!/</.test(target)) {
+			// not HTML, do some simple URL linking
+			let re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
+			target = target.replace(re, '<a href="$1">$1</a>');
+		}
+		if (target.substr(0, 12) === '/staffintro ') target = target.substr(12);
+
+		room.staffMessage = target.replace(/\r/g, '');
+		this.sendReply("(The staff introduction has been changed to:)");
+		this.sendReply(`|raw|<div class="infobox">${target.replace(/\n/g, ``)}</div>`);
+
+		this.privateModAction(`(${user.name} changed the staffintro.)`);
+		this.modlog('STAFFINTRO');
+		this.roomlog(room.staffMessage.replace(/\n/g, ``));
+
+		if (room.chatRoomData) {
+			room.chatRoomData.staffMessage = room.staffMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	deletestafftopic: 'deletestaffintro',
+	deletestaffintro(target, room, user) {
+		if (!this.can('ban', null, room)) return false;
+		if (!room.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
+
+		this.privateModAction(`(${user.name} deleted the staffintro.)`);
+		this.modlog('DELETESTAFFINTRO');
+		this.roomlog(target);
+
+		delete room.staffMessage;
+		if (room.chatRoomData) {
+			delete room.chatRoomData.staffMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	roomalias(target, room, user) {
+		if (!target) {
+			if (!this.runBroadcast()) return;
+			if (!room.aliases || !room.aliases.length) return this.sendReplyBox("This room does not have any aliases.");
+			return this.sendReplyBox(`This room has the following aliases: ${room.aliases.join(", ")}`);
+		}
+		if (!this.can('makeroom')) return false;
+		if (target.includes(',')) {
+			this.errorReply(`Invalid room alias: ${target.trim()}`);
+			return this.parse('/help roomalias');
+		}
+
+		let alias = toID(target);
+		if (!alias.length) return this.errorReply("Only alphanumeric characters are valid in an alias.");
+		if (Rooms.get(alias) || Rooms.aliases.has(alias)) return this.errorReply("You cannot set an alias to an existing room or alias.");
+		if (room.isPersonal) return this.errorReply("Personal rooms can't have aliases.");
+
+		Rooms.aliases.set(alias, room.roomid);
+		this.privateModAction(`(${user.name} added the room alias '${alias}'.)`);
+		this.modlog('ROOMALIAS', null, alias);
+
+		if (!room.aliases) room.aliases = [];
+		room.aliases.push(alias);
+		if (room.chatRoomData) {
+			room.chatRoomData.aliases = room.aliases;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	roomaliashelp: [
+		`/roomalias - displays a list of all room aliases of the room the command was entered in.`,
+		`/roomalias [alias] - adds the given room alias to the room the command was entered in. Requires: & ~`,
+		`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`,
+	],
+
+	deleteroomalias: 'removeroomalias',
+	deroomalias: 'removeroomalias',
+	unroomalias: 'removeroomalias',
+	removeroomalias(target, room, user) {
+		if (!room.aliases) return this.errorReply("This room does not have any aliases.");
+		if (!this.can('makeroom')) return false;
+		if (target.includes(',')) {
+			this.errorReply(`Invalid room alias: ${target.trim()}`);
+			return this.parse('/help removeroomalias');
+		}
+
+		let alias = toID(target);
+		if (!alias || !Rooms.aliases.has(alias)) return this.errorReply("Please specify an existing alias.");
+		if (Rooms.aliases.get(alias) !== room.roomid) return this.errorReply("You may only remove an alias from the current room.");
+
+		this.privateModAction(`(${user.name} removed the room alias '${alias}'.)`);
+		this.modlog('REMOVEALIAS', null, alias);
+
+		let aliasIndex = room.aliases.indexOf(alias);
+		if (aliasIndex >= 0) {
+			room.aliases.splice(aliasIndex, 1);
+			Rooms.aliases.delete(alias);
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	removeroomaliashelp: [`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`],
+
 };

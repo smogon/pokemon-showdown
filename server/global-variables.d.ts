@@ -16,6 +16,7 @@ import {Ladders as LaddersType} from './ladders';
 import {LoginServer as LoginServerType} from './loginserver';
 import {Monitor as MonitorType} from './monitor';
 import {Punishments as PunishmentsType} from './punishments';
+import {Tournaments as TournamentsType} from './tournaments';
 
 declare global {
 	namespace NodeJS {
@@ -23,6 +24,9 @@ declare global {
 			IPTools: any;
 			Config: any;
 			Chat: any;
+			Tournaments: any;
+			LoginServer: any;
+			Punishments: any;
 			__version: {head: string, origin?: string, tree?: string};
 		}
 	}
@@ -37,6 +41,7 @@ declare global {
 	const Sockets: typeof SocketsType;
 	const TeamValidatorAsync: typeof TeamValidatorAsyncType;
 	const Rooms: typeof RoomsType.Rooms;
+	const Tournaments: typeof TournamentsType;
 	const Roomlogs: typeof RoomlogsType.Roomlogs;
 	const Users: typeof UsersType.Users
 	const Verifier: typeof VerifierType;

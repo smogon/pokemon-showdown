@@ -7,7 +7,7 @@
  * (scroll down to its definition for details)
  *
  * Individual commands are put in:
- *   chat-commands.js - "core" commands that shouldn't be modified
+ *   chat-commands/ - "core" commands that shouldn't be modified
  *   chat-plugins/ - other commands that can be safely modified
  *
  * The command API is (mostly) documented in chat-plugins/COMMANDS.md
@@ -269,7 +269,7 @@ export class PageContext extends MessageContext {
 export class CommandContext extends MessageContext {
 
 	message: string;
-	pmTarget: User | undefined;
+	pmTarget: User | null;
 	room: Room;
 	connection: Connection;
 	cmd: string;
@@ -285,15 +285,15 @@ export class CommandContext extends MessageContext {
 	constructor(
 		options:
 			{message: string, room: Room, user: User, connection: Connection} &
-			Partial<{pmTarget: User, cmd: string, cmdToken: string, target: string, fullCmd: string}>
+			Partial<{pmTarget: User | null, cmd: string, cmdToken: string, target: string, fullCmd: string}>
 	) {
 		super(options.user, options.room && options.room.language ? options.room.language : options.user.language);
 
 		this.message = options.message || ``;
 
 		// message context
-		this.pmTarget = options.pmTarget;
-		this.room = options.room;
+		this.pmTarget = options.pmTarget || null;
+		this.room = options.room || null;
 		this.connection = options.connection;
 
 		// command context
@@ -420,7 +420,7 @@ export class CommandContext extends MessageContext {
 		let fullCmd = cmd;
 
 		do {
-			if (curCommands.hasOwnProperty(cmd)) {
+			if (cmd in curCommands) {
 				commandHandler = curCommands[cmd];
 			} else {
 				commandHandler = undefined;
@@ -780,6 +780,8 @@ export class CommandContext extends MessageContext {
 
 		return true;
 	}
+	canTalk(message: string, room?: GameRoom | ChatRoom | null, targetUser?: User | null): string | null;
+	canTalk(message?: null, room?: GameRoom | ChatRoom | null, targetUser?: User | null): true | null;
 	canTalk(message: string | null = null, room: GameRoom | ChatRoom | null = null, targetUser: User | null = null) {
 		if (!targetUser && this.pmTarget) {
 			targetUser = this.pmTarget;
@@ -789,7 +791,7 @@ export class CommandContext extends MessageContext {
 		} else if (!room) {
 			if (this.room.roomid === 'global') {
 				this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
-				return false;
+				return null;
 			}
 			// @ts-ignore excludes GlobalRoom above
 			room = this.room;
@@ -799,7 +801,7 @@ export class CommandContext extends MessageContext {
 
 		if (!user.named) {
 			connection.popup(this.tr(`You must choose a name before you can talk.`));
-			return false;
+			return null;
 		}
 		if (!user.can('bypassall')) {
 			const lockType = (user.namelocked ? this.tr(`namelocked`) : user.locked ? this.tr(`locked`) : ``);
@@ -808,28 +810,28 @@ export class CommandContext extends MessageContext {
 				if (lockType && !room.isHelp) {
 					this.errorReply(this.tr `You are ${lockType} and can't talk in chat. ${lockExpiration}`);
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr("Get help with this")}</a>`);
-					return false;
+					return null;
 				}
 				if (room.isMuted(user)) {
 					this.errorReply(this.tr(`You are muted and cannot talk in this room.`));
-					return false;
+					return null;
 				}
 				if (room.modchat && !user.authAtLeast(room.modchat, room)) {
 					if (room.modchat === 'autoconfirmed') {
 						this.errorReply(this.tr(`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`));
-						return false;
+						return null;
 					}
 					if (room.modchat === 'trusted') {
 						this.errorReply(this.tr(`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`));
-						return false;
+						return null;
 					}
 					const groupName = Config.groups[room.modchat] && Config.groups[room.modchat].name || room.modchat;
 					this.errorReply(this.tr `Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`);
-					return false;
+					return null;
 				}
 				if (!(user.id in room.users)) {
 					connection.popup(`You can't send a message to this room without being in it.`);
-					return false;
+					return null;
 				}
 			}
 			// TODO: translate these messages. Currently there isn't much of a point since languages are room-dependent, and these PM-related messages aren't
@@ -837,16 +839,19 @@ export class CommandContext extends MessageContext {
 			if (targetUser) {
 				if (lockType && !targetUser.can('lock')) {
 					this.errorReply(`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
-					return this.sendReply(`|html|<a href="view-help-request--appeal" class="button">Get help with this</a>`);
+					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">Get help with this</a>`);
+					return null;
 				}
 				if (targetUser.locked && !user.can('lock')) {
-					return this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
+					this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
+					return null;
 				}
 				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat) &&
 					!targetUser.canPromote(user.group, Config.pmmodchat)) {
 
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-					return this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
+					this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
+					return null;
 				}
 				if (targetUser.blockPMs &&
 					(targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) &&
@@ -854,15 +859,18 @@ export class CommandContext extends MessageContext {
 
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
-						return this.errorReply(`This user is blocking private messages right now.`);
+						this.errorReply(`This user is blocking private messages right now.`);
+						return null;
 					} else {
 						this.errorReply(`This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.`);
-						return this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
+						this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
+						return null;
 					}
 				}
 				if (user.blockPMs && (user.blockPMs === true
 					|| !targetUser.authAtLeast(user.blockPMs)) && !targetUser.can('lock')) {
-					return this.errorReply(`You are blocking private messages right now.`);
+					this.errorReply(`You are blocking private messages right now.`);
+					return null;
 				}
 			}
 		}
@@ -871,13 +879,13 @@ export class CommandContext extends MessageContext {
 
 		if (!message) {
 			connection.popup(this.tr("Your message can't be blank."));
-			return false;
+			return null;
 		}
 		let length = message.length;
 		length += 10 * message.replace(/[^\ufdfd]*/g, '').length;
 		if (length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 			this.errorReply(this.tr("Your message is too long: ") + message);
-			return false;
+			return null;
 		}
 
 		// remove zalgo
@@ -885,7 +893,7 @@ export class CommandContext extends MessageContext {
 		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 		if (/[\u115f\u1160\u239b-\u23b9]/.test(message)) {
 			this.errorReply(this.tr("Your message contains banned characters."));
-			return false;
+			return null;
 		}
 
 		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
@@ -898,42 +906,42 @@ export class CommandContext extends MessageContext {
 				const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
 				let host = hostMatches && hostMatches[1];
 				if (host && host.startsWith('www.')) host = host.slice(4);
-				if (!domain || !host) return false;
+				if (!domain || !host) return null;
 				return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
 			});
 			if (!allLinksWhitelisted && !(targetUser && targetUser.can('lock') || (room && room.isHelp))) {
 				this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
-				return false;
+				return null;
 			}
 		}
 
 		if (!this.checkFormat(room, user, message)) {
-			return false;
+			return null;
 		}
 
 		if (!this.checkSlowchat(room, user)) {
 			// @ts-ignore ~ The truthiness of room and room.slowchat are evaluated in checkSlowchat
 			this.errorReply(this.tr `This room has slow-chat enabled. You can only talk once every ${room.slowchat} seconds.`);
-			return false;
+			return null;
 		}
 
 		if (!this.checkBanwords(room, user.name) && !user.can('bypassall')) {
 			this.errorReply(this.tr(`Your username contains a phrase banned by this room.`));
-			return false;
+			return null;
 		}
 		if (user.userMessage && (!this.checkBanwords(room, user.userMessage) && !user.can('bypassall'))) {
 			this.errorReply(this.tr(`Your status message contains a phrase banned by this room.`));
-			return false;
+			return null;
 		}
 		if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
 			this.errorReply(this.tr("Your message contained banned words in this room."));
-			return false;
+			return null;
 		}
 
 		const gameFilter = this.checkGameFilter();
 		if (gameFilter && !user.can('bypassall')) {
 			this.errorReply(gameFilter);
-			return false;
+			return null;
 		}
 
 		if (room) {
@@ -941,7 +949,7 @@ export class CommandContext extends MessageContext {
 			if (!user.can('bypassall') && (['help', 'lobby'].includes(room.roomid)) && (normalized === user.lastMessage) &&
 					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
 				this.errorReply(this.tr("You can't send the same message again so soon."));
-				return false;
+				return null;
 			}
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
@@ -953,7 +961,7 @@ export class CommandContext extends MessageContext {
 			this.errorReply(
 				this.tr('Due to this room being a high traffic room, your message must contain at least two letters.')
 			);
-			return false;
+			return null;
 		}
 
 		if (Chat.filters.length) {
@@ -1140,6 +1148,7 @@ export const Chat = new class {
 		const originalMessage = message;
 		for (const curFilter of Chat.filters) {
 			const output = curFilter.call(context, message, user, room, connection, targetUser, originalMessage);
+			if (output === false) return null;
 			if (!output && output !== undefined) return output;
 			if (output !== undefined) message = output;
 		}
@@ -1361,7 +1370,7 @@ export const Chat = new class {
 		user.lastPM = pmTarget.id;
 	}
 
-	packageData = {};
+	packageData: AnyObject = {};
 
 	uncacheTree(root: string) {
 		let toUncache = [require.resolve('../' + root)];
@@ -1400,10 +1409,10 @@ export const Chat = new class {
 	loadPlugin(file: string) {
 		let plugin;
 		if (file.endsWith('.ts')) {
-			plugin = require(`./chat-plugins/${file.slice(0, -3)}`);
+			plugin = require(`./${file.slice(0, -3)}`);
 		} else if (file.endsWith('.js')) {
 			// Switch to server/ because we'll be in .server-dist/ after this file is compiled
-			plugin = require(`../server/chat-plugins/${file}`);
+			plugin = require(`../server/${file}`);
 		} else {
 			return;
 		}
@@ -1426,13 +1435,6 @@ export const Chat = new class {
 		void FS('package.json').readIfExists().then(data => {
 			if (data) Chat.packageData = JSON.parse(data);
 		});
-
-		// prevent TypeScript from resolving
-		const commandsFile = '../server/chat-commands';
-		Chat.baseCommands = require(commandsFile).commands;
-		Chat.basePages = require(commandsFile).pages;
-		Chat.commands = Object.assign({}, Chat.baseCommands);
-		Chat.pages = Object.assign({}, Chat.basePages);
 
 		if (Config.chatfilter) Chat.filters.push(Config.chatfilter);
 		if (Config.namefilter) Chat.namefilters.push(Config.namefilter);
@@ -1458,10 +1460,19 @@ export const Chat = new class {
 			}
 			return allFiles;
 		};
+
+		Chat.commands = Object.create(null);
+		Chat.pages = Object.create(null);
+		const coreFiles = FS('server/chat-commands').readdirSync();
+		for (const file of coreFiles) {
+			this.loadPlugin(`chat-commands/${file}`);
+		}
+		Chat.baseCommands = Chat.commands;
+		Chat.basePages = Chat.pages;
+		Chat.commands = Object.assign(Object.create(null), Chat.baseCommands);
+		Chat.pages = Object.assign(Object.create(null), Chat.basePages);
+
 		let files = FS('server/chat-plugins').readdirSync();
-		// info always goes first so other plugins can shadow it, and private plugins are loaded separately
-		files = files.filter(file => file !== 'info.js' && file !== 'private');
-		files.unshift('info.js');
 		try {
 			if (FS('server/chat-plugins/private').isDirectorySync()) {
 				files = files.concat(getFiles('server/chat-plugins', 'private'));
@@ -1471,7 +1482,7 @@ export const Chat = new class {
 		}
 
 		for (const file of files) {
-			this.loadPlugin(file);
+			this.loadPlugin(`chat-plugins/${file}`);
 		}
 	}
 	destroy() {
