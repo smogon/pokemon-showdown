@@ -982,7 +982,7 @@ export class ModdedDex {
 					const level = parseInt(parts[1]);
 					if (!isNaN(level)) {
 						return {
-							ruleType: 'levelRule'
+							ruleType: 'levelRule',
 							level,
 						};
 					}
