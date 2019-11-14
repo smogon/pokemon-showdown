@@ -1040,12 +1040,23 @@ export class User extends Chat.MessageContext {
 			Rooms.get(roomid)!.onLeave(oldUser);
 		}
 
-		if (this.locked === '#dnsbl' && !oldUser.locked) this.locked = null;
-		if (!this.locked && oldUser.locked === '#dnsbl') oldUser.locked = null;
-		if (oldUser.locked) this.locked = oldUser.locked;
+		const oldLocked = this.locked;
+		const oldSemilocked = this.semilocked;
+
+		if (!oldUser.semilocked) this.semilocked = null;
+
+		// If either user is unlocked and neither is locked by name, remove the lock.
+		// Otherwise, keep any locks that were by name.
+		if ((!oldUser.locked || !this.locked) && oldUser.locked !== oldUser.id && this.locked !== this.id) {
+			this.locked = null;
+		} else if (this.locked !== this.id) {
+			this.locked = oldUser.locked;
+		}
 		if (oldUser.autoconfirmed) this.autoconfirmed = oldUser.autoconfirmed;
 
 		this.updateGroup(this.registered);
+		if (oldLocked !== this.locked || oldSemilocked !== this.semilocked) this.updateIdentity();
+
 		// We only propagate the 'busy' statusType through merging - merging is
 		// active enough that the user should no longer be in the 'idle' state.
 		// Doing this before merging connections ensures the updateuser message

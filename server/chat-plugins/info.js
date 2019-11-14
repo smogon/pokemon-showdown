@@ -123,10 +123,7 @@ const commands = {
 			} else if (targetUser.locked) {
 				buf += `<br />LOCKED: ${targetUser.locked}`;
 				switch (targetUser.locked) {
-				case '#dnsbl':
-					buf += ` - IP is in a DNS-based blacklist`;
-					break;
-				case '#range':
+				case '#rangelock':
 					buf += ` - IP or host is in a temporary range-lock`;
 					break;
 				case '#hostfilter':
