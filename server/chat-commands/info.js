@@ -577,7 +577,7 @@ const commands = {
 							case 'levelHold':
 								evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
 								break;
-							case 'stone':
+							case 'useItem':
 								evos.push(`${evo.name} (${evo.evoItem})`);
 								break;
 							case 'levelMove':
