@@ -104,7 +104,7 @@ interface BanRule {
 interface TeamLengthRule {
 	ruleType: 'teamLengthRule';
 	onBattle: number;
-	onValidate: number,
+	onValidate: number;
 }
 
 interface LevelRule {
@@ -847,8 +847,7 @@ export class ModdedDex {
 			if (rule.startsWith('!')) continue;
 
 			const ruleSpec = this.validateRule(rule, format);
-
-			switch(ruleSpec.ruleType) {
+			switch (ruleSpec.ruleType) {
 				case 'complexTeamRule':
 					const complexTeamBan: Data.ComplexTeamBan = [ruleSpec.innerRule, ruleSpec.source, ruleSpec.limit, ruleSpec.bans] as Data.ComplexTeamBan;
 					ruleTable.addComplexTeamBan(complexTeamBan[0], complexTeamBan[1], complexTeamBan[2], complexTeamBan[3]);
