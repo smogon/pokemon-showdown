@@ -899,7 +899,7 @@ interface TemplateData {
 	evoCondition?: string
 	evoItem?: string
 	evos?: string[]
-	evoType?: 'trade' | 'stone' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold'
+	evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold'
 	forme?: string
 	formeLetter?: string
 	gender?: GenderName

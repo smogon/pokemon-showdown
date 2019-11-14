@@ -546,7 +546,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly prevo: ID;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
 	readonly evos: ID[];
-	readonly evoType?: 'trade' | 'stone' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold';
+	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold';
 	readonly evoMove?: string;
 	/** Evolution level. falsy if doesn't evolve. */
 	readonly evoLevel?: number;
@@ -584,6 +584,8 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly isMega?: boolean;
 	/** True if a pokemon is primal. */
 	readonly isPrimal?: boolean;
+	/** True if a pokemon is gigantamax. */
+	readonly isGigantamax?: boolean;
 	/** True if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: boolean;
 	/** Required item. Do not use this directly; see requiredItems. */
@@ -672,10 +674,13 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.eventOnly = !!data.eventOnly;
 		this.eventPokemon = data.eventPokemon || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
-		this.battleOnly = !!data.battleOnly || !!this.isMega || undefined;
+		this.isGigantamax = !!(this.forme && this.forme.endsWith('Gigantamax')) || undefined;
+		this.battleOnly = !!data.battleOnly || !!this.isMega || !!this.isGigantamax || undefined;
 
 		if (!this.gen && this.num >= 1) {
-			if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
+			if (this.num >= 810 || this.forme === 'Galar' || this.isGigantamax) {
+				this.gen = 8;
+			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;
 			} else if (this.forme === 'Primal') {
 				this.gen = 6;
