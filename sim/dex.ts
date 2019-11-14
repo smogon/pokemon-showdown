@@ -82,17 +82,17 @@ interface BasicRule {
 
 interface ComplexTeamRule {
 	ruleType: 'complexTeamRule';
-	innerRule: number;
-	source: number;
-	limit: string;
+	innerRule: string;
+	source: string;
+	limit: number;
 	bans: string[];
 }
 
 interface ComplexRule {
 	ruleType: 'complexRule';
-	innerRule: number;
-	source: number;
-	limit: string;
+	innerRule: string;
+	source: string;
+	limit: number;
 	bans: string[];
 }
 
@@ -838,7 +838,7 @@ export class ModdedDex {
 		// apply rule repeals before other rules
 		for (const rule of ruleset) {
 			if (rule.startsWith('!')) {
-				const ruleSpec = this.validateRule(rule, format);
+				const ruleSpec = this.validateRule(rule, format) as BasicRule;
 				ruleTable.set(ruleSpec.rule, '');
 			}
 		}
@@ -849,11 +849,11 @@ export class ModdedDex {
 			const ruleSpec = this.validateRule(rule, format);
 			switch (ruleSpec.ruleType) {
 				case 'complexTeamRule':
-					const complexTeamBan: Data.ComplexTeamBan = [ruleSpec.innerRule, ruleSpec.limit, ruleSpec.source, ruleSpec.bans] as Data.ComplexTeamBan;
+					const complexTeamBan: Data.ComplexTeamBan = [ruleSpec.innerRule, ruleSpec.source, ruleSpec.limit, ruleSpec.bans] as Data.ComplexTeamBan;
 					ruleTable.addComplexTeamBan(complexTeamBan[0], complexTeamBan[1], complexTeamBan[2], complexTeamBan[3]);
 					continue;
 				case 'complexRule':
-					const complexBan: Data.ComplexBan = [ruleSpec.innerRule, ruleSpec.limit, ruleSpec.source, ruleSpec.bans] as Data.ComplexBan;
+					const complexBan: Data.ComplexBan = [ruleSpec.innerRule, ruleSpec.source, ruleSpec.limit, ruleSpec.bans] as Data.ComplexBan;
 					ruleTable.addComplexBan(complexBan[0], complexBan[1], complexBan[2], complexBan[3]);
 					continue;
 				case 'teamLengthRule':
