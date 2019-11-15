@@ -14469,7 +14469,7 @@ let BattlePokedex = {
 	toxtricity: {
 		num: 849,
 		species: "Toxtricity",
-		baseForme: "Low-Key",
+		baseForme: "Amped",
 		types: ["Electric", "Poison"],
 		baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
 		abilities: {0: "Punk Rock", 1: "Plus", H: "Technician"},
@@ -14479,14 +14479,14 @@ let BattlePokedex = {
 		prevo: "toxel",
 		evoLevel: 30,
 		eggGroups: ["Human-Like"],
-		otherFormes: ["toxtricityamped", "toxtricitygigantamax"],
+		otherFormes: ["toxtricitylowkey", "toxtricitygigantamax"],
 	},
-	toxtricityamped: {
+	toxtricitylowkey: {
 		num: 849,
-		species: "Toxtricity-Amped",
+		species: "Toxtricity-Low-Key",
 		baseSpecies: "Toxtricity",
-		forme: "Amped",
-		formeLetter: "A",
+		forme: "Low-Key",
+		formeLetter: "L",
 		types: ["Electric", "Poison"],
 		baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
 		abilities: {0: "Punk Rock", 1: "Minus", H: "Technician"},
