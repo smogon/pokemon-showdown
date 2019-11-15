@@ -6916,6 +6916,395 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
+	"gmaxbefuddle": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Sleeps, Poisons or Paralyzes opponents. BP scales with base move's BP.",
+		id: "gmaxbefuddle",
+		isViable: true,
+		name: "G-Max Befuddle",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Butterfree",
+		secondary: {
+			chance: 100,
+			onHit(target, source) {
+				for (let pokemon in target.side.active) {
+					let result = this.random(3);
+					if (result === 0) {
+						pokemon.trySetStatus('slp', source);
+					} else if (result === 1) {
+						pokemon.trySetStatus('par', source);
+					} else {
+						pokemon.trySetStatus('psn', source);
+					}
+				}
+			},
+		},
+		target: "normal",
+		type: "Bug",
+		contestType: "Cool",
+	},
+	"gmaxcentiferno": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Traps and damages opponents. BP scales with base move's BP.",
+		id: "gmaxcentiferno",
+		isViable: true,
+		name: "G-Max Centiferno",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Centiskorch",
+		onHit(target, source) {
+			for (let pokemon in target.side.active) {
+				pokemon.addVolatile('partiallytrapped');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+		contestType: "Cool",
+	},
+	"gmaxchistrike": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Applies Focus Energy to user and allies. BP scales with base move's BP.",
+		id: "gmaxchistrike",
+		isViable: true,
+		name: "G-Max Chi Strike",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Machamp",
+		onHit(target, source) {
+			for (let pokemon in source.side.active) {
+				pokemon.addVolatile('focusenergy');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+		contestType: "Cool",
+	},
+	"gmaxcuddle": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Infatuates opponents. BP scales with base move's BP.",
+		id: "gmaxcuddle",
+		isViable: true,
+		name: "G-Max Cuddle",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Eevee",
+		onHit(target, source) {
+			for (let pokemon in target.side.active) {
+				pokemon.addVolatile('attract');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cool",
+	},
+	"gmaxdepletion": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Lowers the PP of opponents' last used move. BP scales with base move's BP.",
+		id: "gmaxdepletion",
+		isViable: true,
+		name: "G-Max Depletion",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Duraludon",
+		onAfterHit(target, source) {
+			for (let pokemon in target.side.active) {
+				if (pokemon.lastMove && !pokemon.lastMove.isZ) {
+					let ppDeducted = pokemon.deductPP(pokemon.lastMove.id, 4);
+					if (ppDeducted) {
+						this.add("-activate", pokemon, 'move: Max Depletion', this.dex.getMove(pokemon.lastMove.id).name, ppDeducted);
+						return;
+					}
+				}
+				return false;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
+		contestType: "Cool",
+	},
+	"gmaxfinale": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Heals user and allies. BP scales with base move's BP.",
+		id: "gmaxfinale",
+		isViable: true,
+		name: "G-Max Finale",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Alcremie",
+		onAfterHit(target, source) {
+			for (let pokemon in source.side.active) {
+				pokemon.heal(pokemon.maxhp);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+		contestType: "Cool",
+	},
+	"gmaxfoamburst": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Foes: -2 Speed. BP scales with base move's BP.",
+		id: "gmaxfoamburst",
+		isViable: true,
+		name: "G-Max Foam Burst",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Kingler",
+		onHit(target, source, move) {
+			for (let pokemon in target.side.active) {
+				pokemon.boost({spe: -2});
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+		contestType: "Cool",
+	},
+	"gmaxgoldrush": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Confuses opponents. BP scales with base move's BP.",
+		id: "gmaxgoldrush",
+		isViable: true,
+		name: "G-Max Gold Rush",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Meowth",
+		onHit(target, source) {
+			for (let pokemon in target.side.active) {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cool",
+	},
+	"gmaxgravitas": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Summons Gravity. BP scales with base move's BP.",
+		id: "gmaxgravitas",
+		isViable: true,
+		name: "G-Max Gravitas",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Orbeetle",
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setPseudoWeather('gravity');
+				}
+			},
+		},
+		target: "normal",
+		type: "Psychic",
+		contestType: "Cool",
+	},
+	"gmaxmalodor": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Poisons opponents. BP scales with base move's BP.",
+		id: "gmaxmalodor",
+		isViable: true,
+		name: "G-Max Malodor",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Garbodor",
+		secondary: {
+			chance: 100,
+			onHit(target, source) {
+				for (let pokemon in target.side.active) {
+					pokemon.trySetStatus('psn', source);
+				}
+			},
+		},
+		target: "normal",
+		type: "Poison",
+		contestType: "Cool",
+	},
+	"gmaxmeltdown": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Applies Torment to opponents. BP scales with base move's BP.",
+		id: "gmaxmeltdown",
+		isViable: true,
+		name: "G-Max Meltdown",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Melmetal",
+		onHit(target, source) {
+			for (let pokemon in target.side.active) {
+				pokemon.addVolatile('torment');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+		contestType: "Cool",
+	},
+	"gmaxreplenish": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Restores user's side's berries. BP scales with base move's BP.",
+		id: "gmaxreplenish",
+		isViable: true,
+		name: "G-Max Replenish",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Snorlax",
+		onHit(target, source) {
+			for (let pokemon in target.side.active) {
+				if (!pokemon.item && pokemon.lastItem && pokemon.lastItem.isBerry) {
+					let item = pokemon.lastItem;
+					pokemon.lastItem = '';
+					this.add('-item', pokemon, this.dex.getItem(item), '[from] move: Recycle');
+					pokemon.setItem(item);
+				}
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cool",
+	},
+	"gmaxresonance": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Summons Aurora Veil. BP scales with base move's BP.",
+		id: "gmaxresonance",
+		isViable: true,
+		name: "G-Max Resonance",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Lapras",
+		sideCondition: 'auroraveil',
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+		contestType: "Cool",
+	},
+	"gmaxsandblast": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Traps and damages opponents. BP scales with base move's BP.",
+		id: "gmaxsandblast",
+		isViable: true,
+		name: "G-Max Sandblast",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Sandaconda",
+		onHit(target, source) {
+			for (let pokemon in target.side.active) {
+				pokemon.addVolatile('partiallytrapped');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ground",
+		contestType: "Cool",
+	},
+	"gmaxsmite": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Confuses opponents. BP scales with base move's BP.",
+		id: "gmaxgoldrush",
+		isViable: true,
+		name: "G-Max Gold Rush",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Hatterene",
+		onHit(target, source) {
+			for (let pokemon in target.side.active) {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+		contestType: "Cool",
+	},
+	"gmaxsnooze": {
+		num: 1000,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Afflicts foes with Yawn. BP scales with base move's BP.",
+		id: "gmaxsnooze",
+		isViable: true,
+		name: "G-Max Snooze",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Grimmsnarl",
+		onHit(target, source) {
+			for (let pokemon in target.side.active) {
+				pokemon.addVolatile('yawn');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		contestType: "Cool",
+	},
 	"grassknot": {
 		num: 447,
 		accuracy: 100,
@@ -10608,6 +10997,471 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cool",
 	},
+	"maxairstream": {
+		num: 766,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "User: +1 Speed. BP scales with base move's BP.",
+		id: "maxairstream",
+		isViable: true,
+		name: "Max Airstream",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in source.side.active) {
+				pokemon.boost({spe: 1});
+			}
+		},
+		target: "normal",
+		type: "Flying",
+		contestType: "Cool",
+	},
+	"maxdarkness": {
+		num: 766,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Foes: -1 Sp.Def. BP scales with base move's BP.",
+		id: "maxdarkness",
+		isViable: true,
+		name: "Max Darkness",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in target.side.active) {
+				pokemon.boost({spd: -1});
+			}
+		},
+		target: "normal",
+		type: "Dark",
+		contestType: "Cool",
+	},
+	"maxflare": {
+		num: 757,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Sets Sun. BP scales with base move's BP.",
+		id: "maxflare",
+		isViable: true,
+		name: "Max Flare",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setWeather('sunnyday');
+				}
+			},
+		},
+		target: "normal",
+		type: "Fire",
+		contestType: "Cool",
+	},
+	"maxflutterby": {
+		num: 758,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Foes: -1 Sp.Atk. BP scales with base move's BP.",
+		id: "maxflutterby",
+		isViable: true,
+		name: "Max Flutterby",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in target.side.active) {
+				pokemon.boost({spa: -1});
+			}
+		},
+		target: "normal",
+		type: "Bug",
+		contestType: "Cool",
+	},
+	"maxgeyser": {
+		num: 757,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Sets Rain. BP scales with base move's BP.",
+		id: "maxgeyser",
+		isViable: true,
+		name: "Max Geyser",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setWeather('raindance');
+				}
+			},
+		},
+		target: "normal",
+		type: "Water",
+		contestType: "Cool",
+	},
+	"maxguard": {
+		num: 743,
+		accuracy: true,
+		basePower: 1,
+		category: "Status",
+		shortDesc: "Prevents all moves from affecting the user this turn.",
+		id: "maxgeyser",
+		isViable: true,
+		name: "Max Geyser",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		stallingMove: true,
+		volatileStatus: 'maxguard',
+		onPrepareHit(pokemon) {
+			return !!this.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		effect: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Max Guard');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				this.add('-activate', target, 'move: Max Guard');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				return this.NOT_FAIL;
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		contestType: "Cool",
+	},
+	"maxhailstorm": {
+		num: 763,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Sets Hail. BP scales with base move's BP.",
+		id: "maxhailstorm",
+		isViable: true,
+		name: "Max Hailstorm",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setWeather('hail');
+				}
+			},
+		},
+		target: "normal",
+		type: "Ice",
+		contestType: "Cool",
+	},
+	"maxknuckle": {
+		num: 761,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "User: +1 Attack. BP scales with base move's BP.",
+		id: "maxknuckle",
+		isViable: true,
+		name: "Max Knuckle",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in source.side.active) {
+				pokemon.boost({atk: 1});
+			}
+		},
+		target: "normal",
+		type: "Fighting",
+		contestType: "Cool",
+	},
+	"maxlightning": {
+		num: 759,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Sets Electric Terrain. BP scales with base move's BP.",
+		id: "maxlightning",
+		isViable: true,
+		name: "Max Lightning",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setTerrain('electricterrain');
+				}
+			},
+		},
+		target: "normal",
+		type: "Electric",
+		contestType: "Cool",
+	},
+	"maxmindstorm": {
+		num: 769,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Sets Psychic Terrain. BP scales with base move's BP.",
+		id: "maxmindstorm",
+		isViable: true,
+		name: "Max Mindstorm",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setTerrain('psychicterrain');
+				}
+			},
+		},
+		target: "normal",
+		type: "Psychic",
+		contestType: "Cool",
+	},
+	"maxooze": {
+		num: 764,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "User: +1 Sp.Atk. BP scales with base move's BP.",
+		id: "maxooze",
+		isViable: true,
+		name: "Max Ooze",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in source.side.active) {
+				pokemon.boost({spa: 1});
+			}
+		},
+		target: "normal",
+		type: "Poison",
+		contestType: "Cool",
+	},
+	"maxovergrowth": {
+		num: 773,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Sets Grassy Terrain. BP scales with base move's BP.",
+		id: "maxovergrowth",
+		isViable: true,
+		name: "Max Overgrowth",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setTerrain('grassyterrain');
+				}
+			},
+		},
+		target: "normal",
+		type: "Grass",
+		contestType: "Cool",
+	},
+	"maxphantasm": {
+		num: 762,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Foes: -1 Defense. BP scales with base move's BP.",
+		id: "maxphantasm",
+		isViable: true,
+		name: "Max Phantasm",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in target.side.active) {
+				pokemon.boost({def: -1});
+			}
+		},
+		target: "normal",
+		type: "Ghost",
+		contestType: "Cool",
+	},
+	"maxquake": {
+		num: 771,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "User: +1 Sp.Def. BP scales with base move's BP.",
+		id: "maxquake",
+		isViable: true,
+		name: "Max Quake",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in source.side.active) {
+				pokemon.boost({spd: 1});
+			}
+		},
+		target: "normal",
+		type: "Ground",
+		contestType: "Cool",
+	},
+	"maxrockfall": {
+		num: 770,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Sets Sandstorm. BP scales with base move's BP.",
+		id: "maxrockfall",
+		isViable: true,
+		name: "Max Rockfall",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setWeather('sandstorm');
+				}
+			},
+		},
+		target: "normal",
+		type: "Rock",
+		contestType: "Cool",
+	},
+	"maxstarfall": {
+		num: 767,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Sets Misty Terrain. BP scales with base move's BP.",
+		id: "maxstarfall",
+		isViable: true,
+		name: "Max Starfall",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setTerrain('mistyterrain');
+				}
+			},
+		},
+		target: "normal",
+		type: "Fairy",
+		contestType: "Cool",
+	},
+	"maxsteelspike": {
+		num: 774,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "User: +1 Defense. BP scales with base move's BP.",
+		id: "maxsteelspike",
+		isViable: true,
+		name: "Max Steelspike",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in source.side.active) {
+				pokemon.boost({def: 1});
+			}
+		},
+		target: "normal",
+		type: "Steel",
+		contestType: "Cool",
+	},
+	"maxstrike": {
+		num: 760,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Foes: -1 Speed. BP scales with base move's BP.",
+		id: "maxstrike",
+		isViable: true,
+		name: "Max Strike",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in target.side.active) {
+				pokemon.boost({spe: -1});
+			}
+		},
+		target: "normal",
+		type: "Normal",
+		contestType: "Cool",
+	},
+	"maxwyrmwind": {
+		num: 760,
+		accuracy: true,
+		basePower: 1,
+		category: "Physical",
+		shortDesc: "Foes: -1 Attack. BP scales with base move's BP.",
+		id: "maxwyrmwind",
+		isViable: true,
+		name: "Max Wyrmwind",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: true,
+		onHit(target, source, move) {
+			for (let pokemon in target.side.active) {
+				pokemon.boost({atk: -1});
+			}
+		},
+		target: "normal",
+		type: "Dragon",
+		contestType: "Cool",
+	},
+	
 	"meanlook": {
 		num: 212,
 		accuracy: true,
