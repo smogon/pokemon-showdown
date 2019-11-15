@@ -7361,7 +7361,7 @@ let BattleFormatsData = {
 	blipbug: {
 		tier: "LC",
 	},
-	dotter: {
+	dottler: {
 		tier: "NFE",
 	},
 	orbeetle: {
@@ -7571,7 +7571,7 @@ let BattleFormatsData = {
 		tier: "New",
 		doublesTier: "New",
 	},
-	failinks: {
+	falinks: {
 		randomBattleMoves: ["closecombat", "megahorn", "noretreat", "poisonjab", "rockslide", "throatchop"],
 		tier: "New",
 		doublesTier: "New",
