@@ -91,21 +91,21 @@ const commands = {
 		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
 		this.modlog('ROOMFAQ', null, `alias for '${topic}' - ${alias}`);
 	},
-	rfaq1: 'roomfaq',
+	viewfaq: 'roomfaq',
 	rfaq: 'roomfaq',
 	roomfaq(target, room, user, connection, cmd) {
 		if (!roomFaqs[room.roomid]) return this.errorReply("This room has no FAQ topics.");
 		/** @type {string} */
 		let topic = toID(target);
 		if (topic === 'constructor') return false;
-		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.roomid]).filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b)).map(rfaq => `<button class="button" name="send" value="/rfaq1 ${rfaq}">${rfaq}</button>`).join(', ')}`);
+		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.roomid]).filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b)).map(rfaq => `<button class="button" name="send" value="/viewfaq ${rfaq}">${rfaq}</button>`).join(', ')}`);
 		if (!roomFaqs[room.roomid][topic]) return this.errorReply("Invalid topic.");
 		topic = getAlias(room.roomid, topic) || topic;
 
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(Chat.formatText(roomFaqs[room.roomid][topic], true));
-		// /rfaq1 doesn't show source
-		if (!this.broadcasting && user.can('ban', null, room) && cmd !== 'rfaq1') {
+		// /viewfaq doesn't show source
+		if (!this.broadcasting && user.can('ban', null, room) && cmd !== 'viewfaq') {
 			const src = Chat.escapeHTML(roomFaqs[room.roomid][topic]).replace(/\n/g, `<br />`);
 			let extra = `<code>/addfaq ${topic}, ${src}</code>`;
 			const aliases = Object.keys(roomFaqs[room.roomid]).filter(val => getAlias(room.roomid, val) === topic);
