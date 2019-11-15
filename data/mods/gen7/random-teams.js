@@ -2,6 +2,8 @@
 
 const RandomTeams = require('../../random-teams');
 
+/** @typedef {import('../../random-teams').TeamData} TeamData */
+
 class RandomGen7Teams extends RandomTeams {
 	/**
 	 * @param {Format | string} format

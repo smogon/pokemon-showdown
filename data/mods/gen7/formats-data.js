@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: TemplateFormatsData}} */
+/**@type {{[k: string]: ModdedTemplateFormatsData}} */
 let BattleFormatsData = {
 	bulbasaur: {
 		inherit: true,

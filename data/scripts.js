@@ -4,7 +4,7 @@ const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAll
 
 /**@type {BattleScriptsData} */
 let BattleScripts = {
-	gen: 7,
+	gen: 8,
 	/**
 	 * runMove is the "outside" move caller. It handles deducting PP,
 	 * flinching, full paralysis, etc. All the stuff up to and including

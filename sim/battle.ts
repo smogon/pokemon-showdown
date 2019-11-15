@@ -21,8 +21,10 @@ interface FaintedPokemon {
 }
 
 interface BattleOptions {
-	formatid: ID; // Format ID
-	send?: (type: string, data: string | string[]) => void; // Output callback
+	format?: Format;
+	formatid: ID;
+	/** Output callback */
+	send?: (type: string, data: string | string[]) => void;
 	prng?: PRNG; // PRNG override (you usually don't need this, just pass a seed)
 	seed?: PRNGSeed; // PRNG seed
 	rated?: boolean | string; // Rated string
@@ -115,7 +117,7 @@ export class Battle {
 	trunc: (num: number, bits?: number) => number;
 
 	constructor(options: BattleOptions) {
-		const format = Dex.getFormat(options.formatid, true);
+		const format = options.format || Dex.getFormat(options.formatid, true);
 		this.format = format;
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;

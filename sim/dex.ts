@@ -398,8 +398,12 @@ export class ModdedDex {
 					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
 				} else {
-					template.tier = this.data.FormatsData[toID(template.baseSpecies)].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[toID(template.baseSpecies)].doublesTier || 'Illegal';
+					const baseFormatsData = this.data.FormatsData[toID(template.baseSpecies)];
+					if (!baseFormatsData) {
+						throw new Error(`${template.baseSpecies} has no formats-data entry`);
+					}
+					template.tier = baseFormatsData.tier || 'Illegal';
+					template.doublesTier = baseFormatsData.doublesTier || 'Illegal';
 				}
 			}
 			if (!template.tier) template.tier = 'Illegal';

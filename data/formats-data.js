@@ -7772,11 +7772,11 @@ let BattleFormatsData = {
 	sizzlipede: {
 		tier: "LC",
 	},
-	sentiskorch: {
+	centiskorch: {
 		tier: "New",
 		doublesTier: "New",
 	},
-	sentiskorchgigantamax: {
+	centiskorchgigantamax: {
 		tier: "New",
 		doublesTier: "New",
 	},

@@ -2,8 +2,7 @@
 
 /** @type {ModdedBattleScriptsData} */
 let BattleScripts = {
-	inherit: 'gen7',
-	gen: 6,
+	gen: 7,
 };
 
 exports.BattleScripts = BattleScripts;

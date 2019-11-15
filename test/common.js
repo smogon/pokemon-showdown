@@ -13,6 +13,7 @@ const RULE_FLAGS = {
 	sleepClause: 8,
 	cancel: 16,
 	endlessBattleClause: 32,
+	inverseMod: 64,
 };
 
 function capitalize(word) {
@@ -43,6 +44,7 @@ class TestTools {
 	}
 
 	mod(mod) {
+		if (typeof mod !== 'string') throw new Error("This only supports strings");
 		if (cache.has(mod)) return cache.get(mod);
 		if (Dex.dexes[mod]) return new TestTools({mod: mod});
 		const baseFormat = Dex.getFormat(mod);
@@ -86,6 +88,7 @@ class TestTools {
 		if (options.sleepClause) format.ruleset.push('Sleep Clause Mod');
 		if (options.cancel) format.ruleset.push('Cancel Mod');
 		if (options.endlessBattleClause) format.ruleset.push('Endless Battle Clause');
+		if (options.inverseMod) format.ruleset.push('Inverse Mod');
 
 		this.dex.installFormat(formatId, format);
 		return format;
@@ -129,4 +132,4 @@ class TestTools {
 
 const common = exports = module.exports = new TestTools();
 cache.set('base', common);
-cache.set('gen7', common);
+cache.set('gen8', common);
