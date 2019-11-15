@@ -90,7 +90,6 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["sleeppowder", "quiverdance", "bugbuzz", "airslash", "energyball"],
 		randomDoubleBattleMoves: ["quiverdance", "bugbuzz", "sleeppowder", "airslash", "shadowball", "protect"],
-		isNonstandard: null,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
