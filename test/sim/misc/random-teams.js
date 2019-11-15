@@ -136,7 +136,7 @@ describe(`Factory sets`, function () {
 	for (const filename of ['bss-factory-sets', 'factory-sets']) {
 		it(`should have valid sets in ${filename}.json (slow)`, function () {
 			this.timeout(0);
-			const setsJSON = require(`../../../data/${filename}.json`);
+			const setsJSON = require(`../../../data/mods/gen7/${filename}.json`);
 
 			for (const type in setsJSON) {
 				const typeTable = filename === 'bss-factory-sets' ? setsJSON : setsJSON[type];
