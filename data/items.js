@@ -5063,10 +5063,10 @@ let BattleItems = {
 			}
 			return true;
 		},
-		forcedForme: "Zamazenta-Crowned-Shield",
+		forcedForme: "Zamazenta-Crowned",
 		num: 1104,
 		gen: 8,
-		desc: "If held by a Zamazenta, this item changes it to Crowned Shield Forme.",
+		desc: "If held by a Zamazenta, this item changes it to Crowned Forme.",
 	},
 	"rustedsword": {
 		id: "rustedsword",
@@ -5078,10 +5078,10 @@ let BattleItems = {
 			}
 			return true;
 		},
-		forcedForme: "Zacian-Crowned-Sword",
+		forcedForme: "Zacian-Crowned",
 		num: 1103,
 		gen: 8,
-		desc: "If held by a Zacian, this item changes it to Crowned Sword Forme.",
+		desc: "If held by a Zacian, this item changes it to Crowned Forme.",
 	},
 	"sablenite": {
 		id: "sablenite",
