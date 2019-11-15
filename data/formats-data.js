@@ -1642,6 +1642,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 1, "level": 5},
 		],
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	seaking: {
@@ -1654,6 +1655,7 @@ let BattleFormatsData = {
 			{"generation": 6, "level": 26, "maxEggMoves": 1},
 			{"generation": 7, "level": 10},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7314,24 +7316,30 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	scorbunny: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	raboot: {
+		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	cinderace: {
 		randomBattleMoves: ["courtchange", "gunkshot", "highjumpkick", "ironhead", "pyroball", "uturn", "zenheadbutt"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
 	sobble: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	drizzile: {
+		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	inteleon: {
 		randomBattleMoves: ["airslash", "darkpulse", "hydropump", "icebeam", "scald", "snipeshot", "uturn"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7340,10 +7348,12 @@ let BattleFormatsData = {
 	},
 	greedent: {
 		randomBattleMoves: ["bodyslam", "crunch", "earthquake", "seedbomb", "superpower", "swordsdance", "wildcharge"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
 	rookidee: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	corvisquire: {
@@ -7634,21 +7644,25 @@ let BattleFormatsData = {
 	},
 	dracozolt: {
 		randomBattleMoves: ["boltbeak", "dragontail", "earthquake", "fireblast", "outrage"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
 	arctozolt: {
 		randomBattleMoves: ["boltbeak", "bulldoze", "iciclecrash", "freezedry"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
 	dracovish: {
 		randomBattleMoves: ["crunch", "earthquake", "fishiousrend", "iciclecrash", "ironhead", "psychicfangs"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
 	arctovish: {
 		randomBattleMoves: ["crunch", "fishiousrend", "freezedry", "iciclecrash", "ironhead", "psychicfangs"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
