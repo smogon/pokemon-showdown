@@ -182,9 +182,9 @@ describe('Heal Block [Gen 4]', function () {
 	it('should allow HP recovery items to activate', function () {
 		battle = common.gen(4).createBattle([
 			[{species: 'Spiritomb', ability: 'pressure', moves: ['healblock', 'shadowball']}],
-			[{species: 'Abra', level: 1, ability: 'synchronize', item: 'leftovers', moves: ['teleport', 'endure']}, {species: 'Abra', level: 1, ability: 'synchronize', item: 'sitrusberry', moves: ['teleport', 'endure']}],
+			[{species: 'Abra', level: 1, ability: 'synchronize', item: 'leftovers', moves: ['celebrate', 'endure']}, {species: 'Abra', level: 1, ability: 'synchronize', item: 'sitrusberry', moves: ['celebrate', 'endure']}],
 		]);
-		battle.makeChoices('move healblock', 'move teleport');
+		battle.makeChoices('move healblock', 'move celebrate');
 		battle.makeChoices('move shadowball', 'move endure');
 		assert.notStrictEqual(battle.p2.active[0].hp, 1);
 		battle.makeChoices('move healblock', 'switch 2');

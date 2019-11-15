@@ -7,6 +7,7 @@ let BattleAbilities = {
 		rating: 1,
 	},
 	"intimidate": {
+		inherit: true,
 		desc: "On switch-in, this Pokemon lowers the Attack of adjacent opposing Pokemon by 1 stage. Pokemon behind a substitute are immune.",
 		onStart(pokemon) {
 			let activated = false;
