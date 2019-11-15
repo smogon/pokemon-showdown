@@ -14479,7 +14479,7 @@ let BattlePokedex = {
 		prevo: "toxel",
 		evoLevel: 30,
 		eggGroups: ["Human-Like"],
-		otherFormes: ["toxtricityamped", "toxtricitygigantamax", "toxtricityampedgigantamax"],
+		otherFormes: ["toxtricityamped", "toxtricitygigantamax"],
 	},
 	toxtricityamped: {
 		num: 849,
@@ -14506,21 +14506,6 @@ let BattlePokedex = {
 		types: ["Electric", "Poison"],
 		baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
 		abilities: {0: "Punk Rock", 1: "Plus", H: "Technician"},
-		// TODO
-		heightm: 0,
-		weightkg: 0,
-		color: "Purple",
-		eggGroups: ["Human-Like"],
-	},
-	toxtricityampedgigantamax: {
-		num: 844,
-		species: "Toxtricity-Amped-Gigantamax",
-		baseSpecies: "Toxtricity",
-		forme: "Amped-Gigantamax",
-		formeLetter: "A",
-		types: ["Electric", "Poison"],
-		baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
-		abilities: {0: "Punk Rock", 1: "Minus", H: "Technician"},
 		// TODO
 		heightm: 0,
 		weightkg: 0,
