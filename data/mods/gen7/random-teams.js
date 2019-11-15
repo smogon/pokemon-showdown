@@ -36,7 +36,7 @@ class RandomGen7Teams extends RandomTeams {
 			template = this.dex.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			Monitor.crashlog(err, 'The randbat set generator');
+			Monitor.crashlog(err, 'The gen 7 randbat set generator');
 		}
 
 		if (template.battleOnly) {
@@ -362,7 +362,7 @@ class RandomGen7Teams extends RandomTeams {
 				case 'overheat':
 					if (hasMove['fireblast'] || hasMove['flareblitz'] || hasMove['lavaplume']) rejected = true;
 					break;
-				case 'airslash': case 'hurricane':
+				case 'hurricane':
 					if (hasMove['bravebird']) rejected = true;
 					break;
 				case 'hex':
@@ -1057,13 +1057,6 @@ class RandomGen7Teams extends RandomTeams {
 				bst += baseStats.atk + baseStats.spa;
 			}
 			level = 70 + Math.floor(((600 - this.dex.clampIntRange(bst, 300, 600)) / 10.34));
-		}
-
-		if (template.species === 'Stunfisk') {
-			// This is just to amuse Zarel
-			ability = 'Limber';
-			item = 'Cheri Berry';
-			level += 2;
 		}
 
 		// Prepare optimal HP
