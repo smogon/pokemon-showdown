@@ -1455,7 +1455,8 @@ export class ModdedDex {
 		}
 
 		// Flag the generation. Required for team validator.
-		this.gen = dataCache.Scripts.gen || 7;
+		this.gen = dataCache.Scripts.gen;
+		if (!this.gen) throw new Error(`Mod ${this.currentMod} needs a generation number in scripts.js`);
 		this.dataCache = dataCache as DexTableData;
 
 		// Execute initialization script.
@@ -1521,7 +1522,7 @@ export class ModdedDex {
 
 dexes['base'] = new ModdedDex(undefined, true);
 
-// "gen7" is an alias for the current base data
-dexes['gen7'] = dexes['base'];
+// "gen8" is an alias for the current base data
+dexes['gen8'] = dexes['base'];
 
-export const Dex = dexes['gen7'];
+export const Dex = dexes['gen8'];
