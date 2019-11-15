@@ -291,8 +291,8 @@ async function getModlog(connection, roomid = 'global', searchString = '', maxLi
 	let roomidList;
 	// handle this here so the child process doesn't have to load rooms data
 	if (roomid === 'public') {
-		const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
-		roomidList = [...Rooms.rooms.values()].filter(isPublicRoom).map(room => room.id);
+		const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.roomid === 'global'));
+		roomidList = [...Rooms.rooms.values()].filter(isPublicRoom).map(room => room.roomid);
 	} else {
 		roomidList = [roomid];
 	}
@@ -508,21 +508,30 @@ exports.commands = {
 	'!modlog': true,
 	ml: 'modlog',
 	punishlog: 'modlog',
+	pl: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
 		if (!room) room = Rooms.get('global');
-		let roomid = (room.id === 'staff' ? 'global' : room.id);
+		let roomid = (room.roomid === 'staff' ? 'global' : room.roomid);
 
 		if (target.includes(',')) {
 			let targets = target.split(',');
 			target = targets[1].trim();
-			roomid = toID(targets[0]) || room.id;
+			roomid = toID(targets[0]) || room.roomid;
 		}
 
 		let targetRoom = Rooms.search(roomid);
 		// if a room alias was used, replace alias with actual id
-		if (targetRoom) roomid = targetRoom.id;
-		if (roomid.includes('-')) return this.errorReply(`Battles and groupchats (and other rooms with - in their ID) don't have individual modlogs.`);
+		if (targetRoom) roomid = targetRoom.roomid;
+
+		if (roomid.includes('-')) {
+			if (user.can('modlog')) {
+				// default to global modlog for staff convenience
+				roomid = 'global';
+			} else {
+				return this.errorReply(`Access to global modlog denied. Battles and groupchats (and other rooms with - in their ID) don't have individual modlogs.`);
+			}
+		}
 
 		let lines;
 		if (target.includes(LINES_SEPARATOR)) { // undocumented line specification
@@ -542,7 +551,7 @@ exports.commands = {
 		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
 		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
 
-		getModlog(connection, roomid, target, lines, cmd === 'punishlog', cmd === 'timedmodlog');
+		getModlog(connection, roomid, target, lines, (cmd === 'punishlog' || cmd === 'pl'), cmd === 'timedmodlog');
 	},
 	modloghelp: [
 		`/modlog OR /ml [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,

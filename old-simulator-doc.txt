@@ -73,7 +73,7 @@ modifyPokemon(pokemon) [on pokemon]
 
 	These are the properties of pokemon you can modify:
 	- pokemon.stats
-	- pokemon.weightkg
+	- pokemon.weighthg
 	- pokemon.type
 
 	Whenever any effect is added or removed, the pokemon is reset and

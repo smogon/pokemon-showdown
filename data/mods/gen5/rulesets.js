@@ -2,11 +2,11 @@
 
 /**@type {{[k: string]: ModdedFormatsData}} */
 let BattleFormats = {
-	pokemon: {
+	obtainablemoves: {
 		inherit: true,
 		banlist: [
-			'Chansey + Charm + Seismic Toss',
-			'Blissey + Charm + Seismic Toss',
+			// Shell Smash: Clamperl Gen 5+ level-up
+			// Sucker Punch: Huntail Gen 4 tutor
 			'Huntail + Shell Smash + Sucker Punch',
 		],
 	},

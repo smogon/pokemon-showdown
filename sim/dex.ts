@@ -214,7 +214,7 @@ export class ModdedDex {
 		return dexes;
 	}
 
-	mod(mod: string): ModdedDex {
+	mod(mod: string | undefined): ModdedDex {
 		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
 		return dexes[mod || 'base'];
 	}
@@ -408,6 +408,13 @@ export class ModdedDex {
 				template.tier = 'Illegal';
 				template.doublesTier = 'Illegal';
 				template.isNonstandard = 'Future';
+			}
+			if (this.currentMod === 'letsgo' && !template.isNonstandard) {
+				const isLetsGo = (
+					(template.num <= 151 || ['Meltan', 'Melmetal'].includes(template.name)) &&
+					(!template.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme))
+				);
+				if (!isLetsGo) template.isNonstandard = 'Past';
 			}
 		} else {
 			template = new Data.Template({
@@ -608,6 +615,10 @@ export class ModdedDex {
 			if (item.gen > this.gen) {
 				(item as any).isNonstandard = 'Future';
 			}
+			// hack for allowing mega evolution in LGPE
+			if (this.currentMod === 'letsgo' && !item.isNonstandard && !item.megaStone) {
+				(item as any).isNonstandard = 'Past';
+			}
 		} else {
 			item = new Data.Item({id, name, exists: false});
 		}
@@ -633,6 +644,12 @@ export class ModdedDex {
 			ability = new Data.Ability({name}, this.data.Abilities[id]);
 			if (ability.gen > this.gen) {
 				(ability as any).isNonstandard = 'Future';
+			}
+			if (this.currentMod === 'letsgo' && ability.id !== 'noability') {
+				(ability as any).isNonstandard = 'Past';
+			}
+			if ((this.currentMod === 'letsgo' || this.gen <= 2) && ability.id === 'noability') {
+				(ability as any).isNonstandard = null;
 			}
 		} else {
 			ability = new Data.Ability({id, name, exists: false});
@@ -770,13 +787,7 @@ export class ModdedDex {
 			ruleset.push('+' + ban);
 		}
 		if (format.customRules) {
-			for (const rule of format.customRules) {
-				if (rule.startsWith('!')) {
-					ruleset.unshift(rule);
-				} else {
-					ruleset.push(rule);
-				}
-			}
+			ruleset.push(...format.customRules);
 		}
 		if (format.checkLearnset) {
 			ruleTable.checkLearnset = [format.checkLearnset, format.name];
@@ -785,7 +796,17 @@ export class ModdedDex {
 			ruleTable.timer = [format.timer, format.name];
 		}
 
+		// apply rule repeals before other rules
 		for (const rule of ruleset) {
+			if (rule.startsWith('!')) {
+				const ruleSpec = this.validateRule(rule, format) as string;
+				ruleTable.set(ruleSpec, '');
+			}
+		}
+
+		for (const rule of ruleset) {
+			if (rule.startsWith('!')) continue;
+
 			const ruleSpec = this.validateRule(rule, format);
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
@@ -800,9 +821,8 @@ export class ModdedDex {
 				continue;
 			}
 			if ("!+-".includes(ruleSpec.charAt(0))) {
-				if (ruleSpec.charAt(0) === '+' && ruleTable.has('-' + ruleSpec.slice(1))) {
-					ruleTable.delete('-' + ruleSpec.slice(1));
-				}
+				if (ruleSpec.startsWith('+')) ruleTable.delete('-' + ruleSpec.slice(1));
+				if (ruleSpec.startsWith('-')) ruleTable.delete('+' + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
@@ -888,7 +908,7 @@ export class ModdedDex {
 	validateBanRule(rule: string) {
 		let id = toID(rule);
 		if (id === 'unreleased') return 'unreleased';
-		if (id === 'illegal') return 'illegal';
+		if (id === 'nonexistent') return 'nonexistent';
 		const matches = [];
 		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'pokemontag'];
 		for (const matchType of matchTypes) {
@@ -911,11 +931,13 @@ export class ModdedDex {
 				// valid pokemontags
 				const validTags = [
 					// singles tiers
-					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
+					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe', 'ag',
 					// doubles tiers
 					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags
 					'mega',
+					// illegal/nonstandard reasons
+					'glitch', 'past', 'future', 'lgpe', 'pokestar', 'custom',
 				];
 				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
 				continue;

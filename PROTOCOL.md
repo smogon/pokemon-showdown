@@ -509,6 +509,8 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
 
 - `MOVES` is a comma-separated list of move IDs.
 
+- `NATURE` left blank means Serious, except in Gen 1-2, where it means no Nature.
+
 - `EVS` and `IVS` are comma-separated in standard order:
   HP, Atk, Def, SpA, SpD, Spe. EVs left blank are 0, IVs left blank are 31.
   If all EVs or IVs are blank, the commas can all be left off.
@@ -529,8 +531,9 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
 
 - `POKEBALL` is left blank if it's a regular Poké Ball.
 
-- `HIDDENPOWERTYPE` is left blank if the Pokémon is not Hyper Trained, or if
-  Hyper Training doesn't affect IVs.
+- `HIDDENPOWERTYPE` is left blank if the Pokémon is not Hyper Trained, if
+  Hyper Training doesn't affect IVs, or if it's represented by a move in
+  the moves list.
 
 - If `POKEBALL` and `HIDDENPOWERTYPE` are both blank, the commas will be left
   off.

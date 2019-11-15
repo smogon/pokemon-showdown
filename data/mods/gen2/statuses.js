@@ -111,7 +111,7 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
+			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
 		},
 		onSwitchIn(pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
@@ -119,7 +119,7 @@ let BattleStatuses = {
 			this.add('-status', pokemon, 'psn', '[silent]');
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+			this.damage(this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	confusion: {
@@ -198,7 +198,7 @@ let BattleStatuses = {
 			delete pokemon.volatiles['lockedmove'];
 		},
 		onBeforeTurn(pokemon) {
-			let move = this.getMove(this.effectData.move);
+			let move = this.dex.getMove(this.effectData.move);
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
 				this.changeAction(pokemon, {move: move.id});
@@ -252,10 +252,10 @@ let BattleStatuses = {
  */
 function residualdmg(battle, pokemon) {
 	if (pokemon.volatiles['residualdmg']) {
-		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 16) * pokemon.volatiles['residualdmg'].counter, 1), pokemon);
+		battle.damage(battle.dex.clampIntRange(Math.floor(pokemon.maxhp / 16) * pokemon.volatiles['residualdmg'].counter, 1), pokemon);
 		battle.hint("In Gen 2, Toxic's counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.", true);
 	} else {
-		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 8), 1), pokemon);
+		battle.damage(battle.dex.clampIntRange(Math.floor(pokemon.maxhp / 8), 1), pokemon);
 	}
 }
 

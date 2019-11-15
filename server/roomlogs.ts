@@ -28,26 +28,26 @@ import {FS} from '../lib/fs';
  * It contains (nearly) everything.
  */
 export class Roomlog {
-	id: string;
+	readonly roomid: RoomID;
+	/**
+	 * Battle rooms are multichannel, which means their logs are split
+	 * into four channels, public, p1, p2, full.
+	 */
+	readonly isMultichannel: boolean;
+	/**
+	 * Chat rooms auto-truncate, which means it only stores the recent
+	 * messages, if there are more.
+	 */
+	readonly autoTruncate: boolean;
+	/**
+	 * Chat rooms include timestamps.
+	 */
+	readonly logTimes: boolean;
 	/**
 	 * Scrollback log
 	 */
 	log: string[];
 	broadcastBuffer: string;
-	/**
-	 * Battle rooms are multichannel, which means their logs are split
-	 * into four channels, public, p1, p2, full.
-	 */
-	isMultichannel: boolean;
-	/**
-	 * Chat rooms auto-truncate, which means it only stores the recent
-	 * messages, if there are more.
-	 */
-	autoTruncate: boolean;
-	/**
-	 * Chat rooms include timestamps.
-	 */
-	logTimes: boolean;
 	/**
 	 * undefined = uninitialized,
 	 * null = disabled
@@ -61,13 +61,14 @@ export class Roomlog {
 	sharedModlog: boolean;
 	roomlogFilename: string;
 	constructor(room: BasicChatRoom, options: {isMultichannel?: any, autoTruncate?: any, logTimes?: any} = {}) {
-		this.id = room.id;
-		this.log = [];
-		this.broadcastBuffer = '';
+		this.roomid = room.roomid;
 
 		this.isMultichannel = !!options.isMultichannel;
 		this.autoTruncate = !!options.autoTruncate;
 		this.logTimes = !!options.logTimes;
+
+		this.log = [];
+		this.broadcastBuffer = '';
 
 		this.modlogStream = undefined;
 		this.roomlogStream = undefined;
@@ -78,8 +79,7 @@ export class Roomlog {
 		this.roomlogFilename = '';
 
 		this.setupModlogStream();
-		// tslint:disable-next-line: no-floating-promises
-		this.setupRoomlogStream(true);
+		void this.setupRoomlogStream(true);
 	}
 	getScrollback(channel = 0) {
 		let log = this.log;
@@ -104,11 +104,11 @@ export class Roomlog {
 	}
 	setupModlogStream() {
 		if (this.modlogStream !== undefined) return;
-		if (!this.id.includes('-')) {
-			this.modlogStream = FS(`logs/modlog/modlog_${this.id}.txt`).createAppendStream();
+		if (!this.roomid.includes('-')) {
+			this.modlogStream = FS(`logs/modlog/modlog_${this.roomid}.txt`).createAppendStream();
 			return;
 		}
-		const sharedStreamId = this.id.split('-')[0];
+		const sharedStreamId = this.roomid.split('-')[0];
 		let stream = Roomlogs.sharedModlogs.get(sharedStreamId);
 		if (!stream) {
 			stream = FS(`logs/modlog/modlog_${sharedStreamId}.txt`).createAppendStream();
@@ -123,14 +123,14 @@ export class Roomlog {
 			this.roomlogStream = null;
 			return;
 		}
-		if (this.id.startsWith('battle-')) {
+		if (this.roomid.startsWith('battle-')) {
 			this.roomlogStream = null;
 			return;
 		}
 		const date = new Date();
 		const dateString = Chat.toTimestamp(date).split(' ')[0];
 		const monthString = dateString.split('-', 2).join('-');
-		const basepath = `logs/chat/${this.id}/`;
+		const basepath = `logs/chat/${this.roomid}/`;
 		const relpath = `${monthString}/${dateString}.txt`;
 
 		if (relpath === this.roomlogFilename) return;
@@ -142,8 +142,7 @@ export class Roomlog {
 			if (this.roomlogStream === null) return;
 		}
 		this.roomlogFilename = relpath;
-		// tslint:disable-next-line: no-floating-promises
-		if (this.roomlogStream) this.roomlogStream.end();
+		if (this.roomlogStream) void this.roomlogStream.end();
 		this.roomlogStream = FS(basepath + relpath).createAppendStream();
 		// Create a symlink to today's lobby log.
 		// These operations need to be synchronous, but it's okay
@@ -154,8 +153,7 @@ export class Roomlog {
 			FS(link0).symlinkToSync(relpath); // intentionally a relative link
 			FS(link0).renameSync(basepath + 'today.txt');
 		} catch (e) {} // OS might not support symlinks or atomic rename
-		// tslint:disable-next-line: no-floating-promises
-		if (!Roomlogs.rollLogTimer) Roomlogs.rollLogs();
+		if (!Roomlogs.rollLogTimer) void Roomlogs.rollLogs();
 	}
 	add(message: string) {
 		if (message.startsWith('|uhtmlchange|')) return this.uhtmlchange(message);
@@ -190,7 +188,7 @@ export class Roomlog {
 				const userid = toID(parts[section - 1]);
 				if (userids.includes(userid)) {
 					if (!cleared.includes(userid)) cleared.push(userid);
-					if (this.id.startsWith('battle-')) return true; // Don't remove messages in battle rooms to preserve evidence
+					if (this.roomid.startsWith('battle-')) return true; // Don't remove messages in battle rooms to preserve evidence
 					return false;
 				}
 			}
@@ -254,7 +252,7 @@ export class Roomlog {
 			promises.push(this.roomlogStream.end());
 			this.roomlogStream = null;
 		}
-		Roomlogs.roomlogs.delete(this.id);
+		Roomlogs.roomlogs.delete(this.roomid);
 		return Promise.all(promises);
 	}
 }
@@ -264,11 +262,11 @@ const sharedModlogs = new Map<string, Streams.WriteStream>();
 const roomlogs = new Map<string, Roomlog>();
 
 function createRoomlog(room: BasicChatRoom, options = {}) {
-	let roomlog = Roomlogs.roomlogs.get(room.id);
-	if (roomlog) throw new Error(`Roomlog ${room.id} already exists`);
+	let roomlog = Roomlogs.roomlogs.get(room.roomid);
+	if (roomlog) throw new Error(`Roomlog ${room.roomid} already exists`);
 
 	roomlog = new Roomlog(room, options);
-	Roomlogs.roomlogs.set(room.id, roomlog);
+	Roomlogs.roomlogs.set(room.roomid, roomlog);
 	return roomlog;
 }
 

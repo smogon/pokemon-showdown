@@ -15,7 +15,7 @@ let BattleScripts = {
 		modifyStat(statName, modifier) {
 			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
 			// @ts-ignore
-			this.modifiedStats[statName] = this.battle.clampIntRange(Math.floor(this.modifiedStats[statName] * modifier), 1);
+			this.modifiedStats[statName] = this.battle.dex.clampIntRange(Math.floor(this.modifiedStats[statName] * modifier), 1);
 		},
 		// This is run on Stadium after boosts and status changes.
 		recalculateStats() {
@@ -79,7 +79,7 @@ let BattleScripts = {
 	},
 	// Battle scripts.
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
-		let move = this.getActiveMove(moveOrMoveName);
+		let move = this.dex.getActiveMove(moveOrMoveName);
 		let target = this.getTarget(pokemon, move, targetLoc);
 		if (target && target.subFainted) target.subFainted = null;
 
@@ -264,7 +264,7 @@ let BattleScripts = {
 	moveHit(target, pokemon, moveOrMoveName, moveData, isSecondary, isSelf) {
 		/** @type {number | null | false | undefined} */
 		let damage = 0;
-		let move = this.getActiveMove(moveOrMoveName);
+		let move = this.dex.getActiveMove(moveOrMoveName);
 
 		if (!isSecondary && !isSelf) this.setActiveMove(move, pokemon, target);
 		/** @type {number | boolean} */
@@ -424,7 +424,7 @@ let BattleScripts = {
 	getDamage(pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
 		if (typeof move === 'string') {
-			move = this.getActiveMove(move);
+			move = this.dex.getActiveMove(move);
 		} else if (typeof move === 'number') {
 			move = /** @type {ActiveMove} */ ({
 				basePower: move,
@@ -488,7 +488,7 @@ let BattleScripts = {
 		if (!basePower) {
 			return basePower === 0 ? undefined : basePower;
 		}
-		basePower = this.clampIntRange(basePower, 1);
+		basePower = this.dex.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
 		let isCrit = move.willCrit || false;
@@ -521,7 +521,7 @@ let BattleScripts = {
 			}
 
 			// Now we make sure it's a number between 1 and 255.
-			critChance = this.clampIntRange(critChance, 1, 255);
+			critChance = this.dex.clampIntRange(critChance, 1, 255);
 
 			// Last, we check deppending on ratio if the move critical hits or not.
 			// We compare our critical hit chance against a random number between 0 and 255.
@@ -543,7 +543,7 @@ let BattleScripts = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = this.clampIntRange(basePower, 1);
+		basePower = this.dex.clampIntRange(basePower, 1);
 
 		// We now check attacker's and defender's stats.
 		let level = pokemon.level;
@@ -561,7 +561,7 @@ let BattleScripts = {
 		if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
 			this.debug('Screen doubling (Sp)Def');
 			defense *= 2;
-			defense = this.clampIntRange(defense, 1, 1998);
+			defense = this.dex.clampIntRange(defense, 1, 1998);
 		}
 
 		// In the event of a critical hit, the offense and defense changes are ignored.
@@ -585,14 +585,14 @@ let BattleScripts = {
 		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
 		// This is what cuases the roll over bugs.
 		if (attack >= 256 || defense >= 256) {
-			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
+			attack = this.dex.clampIntRange(Math.floor(attack / 4) % 256, 1);
 			// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
+			defense = this.dex.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}
 
 		// Self destruct moves halve defense at this point.
 		if (move.selfdestruct && defType === 'def') {
-			defense = this.clampIntRange(Math.floor(defense / 2), 1);
+			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
 		// Let's go with the calculation now that we have what we need.
@@ -603,7 +603,7 @@ let BattleScripts = {
 		damage *= basePower;
 		damage *= attack;
 		damage = Math.floor(damage / defense);
-		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
+		damage = this.dex.clampIntRange(Math.floor(damage / 50), 1, 997);
 		damage += 2;
 
 		// STAB damage bonus, the "???" type never gets STAB
@@ -613,7 +613,7 @@ let BattleScripts = {
 
 		// Type effectiveness.
 		// The order here is not correct, must change to check the move versus each type.
-		let totalTypeMod = this.getEffectiveness(type, target);
+		let totalTypeMod = this.dex.getEffectiveness(type, target);
 		// Super effective attack
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
