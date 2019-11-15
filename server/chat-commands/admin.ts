@@ -249,7 +249,7 @@ export const commands: ChatCommands = {
 
 				Chat.destroy();
 
-				const processManagers = require('../.lib-dist/process-manager').processManagers;
+				const processManagers = require('../../lib/process-manager').processManagers;
 				for (const manager of processManagers.slice()) {
 					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
 						manager.destroy();
@@ -257,14 +257,15 @@ export const commands: ChatCommands = {
 				}
 
 				Chat.uncache('./.server-dist/chat');
-				Chat.uncache('./server/chat-commands');
+				Chat.uncacheDir('./server/chat-commands');
+				Chat.uncacheDir('./.server-dist/chat-plugins');
 				Chat.uncacheDir('./server/chat-plugins');
 				Chat.uncacheDir('./.server-dist/chat-plugins');
 				Chat.uncacheDir('./translations');
-				global.Chat = require('../.server-dist/chat').Chat;
+				global.Chat = require('../chat').Chat;
 
 				Chat.uncacheDir('./.server-dist/tournaments');
-				global.Tournaments = require('../.server-dist/tournaments').Tournaments;
+				global.Tournaments = require('../tournaments').Tournaments;
 				this.sendReply("Chat commands have been hot-patched.");
 			} else if (target === 'tournaments') {
 				if (lock['tournaments']) {
@@ -273,7 +274,7 @@ export const commands: ChatCommands = {
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				Chat.uncacheDir('./.server-dist/tournaments');
-				global.Tournaments = require('../.server-dist/tournaments').Tournaments;
+				global.Tournaments = require('../tournaments').Tournaments;
 				this.sendReply("Tournaments have been hot-patched.");
 			} else if (target === 'formats' || target === 'battles') {
 				patch = 'formats';
@@ -293,7 +294,7 @@ export const commands: ChatCommands = {
 				Chat.uncacheDir('./data');
 				Chat.uncache('./config/formats');
 				// reload .sim-dist/dex.js
-				global.Dex = require('../.sim-dist/dex').Dex;
+				global.Dex = require('../../sim/dex').Dex;
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
@@ -308,7 +309,7 @@ export const commands: ChatCommands = {
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 				FS('config/custom.css').unwatch();
 				Chat.uncache('./.server-dist/loginserver');
-				global.LoginServer = require('../.server-dist/loginserver').LoginServer;
+				global.LoginServer = require('../loginserver').LoginServer;
 				this.sendReply("The login server has been hot-patched. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
 				patch = 'validator';
@@ -328,14 +329,14 @@ export const commands: ChatCommands = {
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				Chat.uncache('./.server-dist/punishments');
-				global.Punishments = require('../.server-dist/punishments').Punishments;
+				global.Punishments = require('../punishments').Punishments;
 				this.sendReply("Punishments have been hot-patched.");
 			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
 				patch = 'dnsbl';
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
 				Chat.uncache('./.server-dist/ip-tools');
-				global.IPTools = require('../.server-dist/ip-tools').IPTools;
+				global.IPTools = require('../ip-tools').IPTools;
 				void IPTools.loadDatacenters();
 				this.sendReply("IPTools has been hot-patched.");
 			} else if (target.startsWith('disable')) {
