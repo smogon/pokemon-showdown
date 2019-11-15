@@ -15130,7 +15130,7 @@ let BattlePokedex = {
 	},
 	dragapult: {
 		num: 887,
-		species: "Drakloak",
+		species: "Dragapult",
 		types: ["Dragon", "Ghost"],
 		baseStats: {hp: 88, atk: 120, def: 75, spa: 100, spd: 75, spe: 142},
 		abilities: {0: "Clear Body", 1: "Infiltrator", H: "Cursed Body"},
