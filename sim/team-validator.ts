@@ -1186,7 +1186,7 @@ export class TeamValidator {
 		}
 
 		if (
-			tierTemplate.isNonstandard === 'Unusable' && dex.gen === 5 ||
+			tierTemplate.isNonstandard === 'Unusable' ||
 			tierTemplate.isNonstandard === 'Glitch' && dex.gen === 1
 		) {
 			banReason = ruleTable.check('pokemontag:hackmons', setHas);
