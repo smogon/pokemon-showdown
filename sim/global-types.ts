@@ -783,6 +783,7 @@ interface MoveData extends EffectData, MoveEventMethods {
 	isSelfHit?: boolean
 	isFutureMove?: boolean
 	isViable?: boolean
+	isMax?: boolean | string
 	mindBlownRecoil?: boolean
 	multiaccuracy?: boolean
 	multihit?: number | number[]
