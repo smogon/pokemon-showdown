@@ -539,7 +539,8 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	pikachugigantamax: {
-		tier: "NFE",
+		tier: "New",
+		doublesTier: "New",
 	},
 	raichu: {
 		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "grassknot", "hiddenpowerice", "focusblast", "voltswitch"],
@@ -865,7 +866,11 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	meowthgigantamax: {
-		tier: "LC",
+		eventPokemon: [
+			{"generation": 8, "level": 5, "shiny": false, "moves": ["fakeout", "growl", "slash", "payday"], "pokeball": "cherishball"},
+		],
+		tier: "New",
+		doublesTier: "New",
 	},
 	persian: {
 		randomBattleMoves: ["fakeout", "uturn", "taunt", "return", "knockoff"],
@@ -2082,7 +2087,8 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	eeveegigantamax: {
-		tier: "LC",
+		tier: "New",
+		doublesTier: "New",
 	},
 	vaporeon: {
 		randomBattleMoves: ["wish", "protect", "scald", "roar", "icebeam", "healbell"],
@@ -2270,8 +2276,8 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	snorlaxgigantamax: {
-		tier: "New",
-		doublesTier: "New",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	articuno: {
 		randomBattleMoves: ["icebeam", "roost", "freezedry", "toxic", "substitute", "hurricane"],
@@ -8421,12 +8427,8 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	toxtricitygigantamax: {
-		tier: "New",
-		doublesTier: "New",
-	},
-	toxtricityampedgigantamax: {
-		tier: "New",
-		doublesTier: "New",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	sizzlipede: {
 		tier: "LC",
