@@ -987,7 +987,7 @@ export class GlobalRoom extends BasicRoom {
 		}
 		const stack = stackLines.slice(0, 2).join(`<br />`);
 		let crashMessage;
-		if (/private|chat-plugins&#x2f;_/.test(stack)) {
+		if (/private/.test(stack)) {
 			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
 		} else {
 			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
