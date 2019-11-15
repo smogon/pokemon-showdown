@@ -160,10 +160,6 @@ let BattlePokedex = {
 		inherit: true,
 		color: "Pink",
 	},
-	heatran: {
-		inherit: true,
-		abilities: {0: "Flash Fire"},
-	},
 	arceus: {
 		inherit: true,
 		color: "Gray",
@@ -236,22 +232,6 @@ let BattlePokedex = {
 	meowstic: {
 		inherit: true,
 		color: "White",
-	},
-	pumpkaboosmall: {
-		inherit: true,
-		abilities: {0: "Pickup", 1: "Frisk"},
-	},
-	pumpkaboolarge: {
-		inherit: true,
-		abilities: {0: "Pickup", 1: "Frisk"},
-	},
-	gourgeistsmall: {
-		inherit: true,
-		abilities: {0: "Pickup", 1: "Frisk"},
-	},
-	gourgeistlarge: {
-		inherit: true,
-		abilities: {0: "Pickup", 1: "Frisk"},
 	},
 	zygarde: {
 		inherit: true,
