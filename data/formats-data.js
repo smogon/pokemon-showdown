@@ -2434,6 +2434,7 @@ let BattleFormatsData = {
 			{"generation": 6, "level": 100, "moves": ["pound"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 5, "perfectIVs": 5, "moves": ["pound"], "pokeball": "pokeball"},
 			{"generation": 7, "level": 50, "moves": ["psychic", "barrier", "metronome", "transform"], "pokeball": "cherishball"},
+			{"generation": 8, "level": 1, "perfectIVs": 6, "moves": ["pound"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 		tier: "New",
