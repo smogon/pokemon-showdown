@@ -540,7 +540,7 @@ let BattleAbilities = {
 		},
 		id: "cottondown",
 		name: "Cotton Down",
-		rating: 1.5,
+		rating: 2,
 		num: 238,
 	},
 	"cursedbody": {
@@ -629,7 +629,7 @@ let BattleAbilities = {
 		},
 		id: "dauntlessshield",
 		name: "Dauntless Shield",
-		rating: 1.5,
+		rating: 3,
 		num: 235,
 	},
 	"dazzling": {
@@ -1319,7 +1319,7 @@ let BattleAbilities = {
 		},
 		id: "gorillatactics",
 		name: "Gorilla Tactics",
-		rating: 2,
+		rating: 4,
 		num: 255,
 	},
 	"grasspelt": {
@@ -1581,7 +1581,7 @@ let BattleAbilities = {
 		*/
 		id: "iceface",
 		name: "Ice Face",
-		rating: 2,
+		rating: 3.5,
 		num: 248,
 	},
 	"icescales": {
@@ -1703,7 +1703,7 @@ let BattleAbilities = {
 		onFlinch: false,
 		id: "innerfocus",
 		name: "Inner Focus",
-		rating: 1,
+		rating: 1.5,
 		num: 39,
 	},
 	"insomnia": {
@@ -1758,7 +1758,7 @@ let BattleAbilities = {
 		},
 		id: "intrepidsword",
 		name: "Intrepid Sword",
-		rating: 1.5,
+		rating: 4,
 		num: 234,
 	},
 	"ironbarbs": {
@@ -2185,7 +2185,7 @@ let BattleAbilities = {
 		},
 		id: "mirrorarmor",
 		name: "Mirror Armor",
-		rating: 3,
+		rating: 2.5,
 		num: 240,
 	},
 	"mistysurge": {
@@ -2436,7 +2436,7 @@ let BattleAbilities = {
 		},
 		id: "neutralizinggas",
 		name: "Neutralizing Gas",
-		rating: 2.5,
+		rating: 4.5,
 		num: 256,
 	},
 	"noguard": {
@@ -2632,7 +2632,7 @@ let BattleAbilities = {
 		},
 		id: "perishbody",
 		name: "Perish Body",
-		rating: -0.5,
+		rating: 0.5,
 		num: 253,
 	},
 	"pickpocket": {
@@ -2810,7 +2810,7 @@ let BattleAbilities = {
 		// TODO lack of information, "Just being next to the Pokémon powers up moves" is too vague.
 		id: "powerspot",
 		name: "Power Spot",
-		rating: 1,
+		rating: 0,
 		num: 249,
 	},
 	"prankster": {
@@ -2895,7 +2895,7 @@ let BattleAbilities = {
 		},
 		id: "propellertail",
 		name: "Propeller Tail",
-		rating: 1,
+		rating: 0,
 		num: 239,
 	},
 	"protean": {
@@ -2953,7 +2953,7 @@ let BattleAbilities = {
 		},
 		id: "punkrock",
 		name: "Punk Rock",
-		rating: 1,
+		rating: 3,
 		num: 244,
 	},
 	"purepower": {
@@ -3117,7 +3117,7 @@ let BattleAbilities = {
 		},
 		id: "ripen",
 		name: "Ripen",
-		rating: 2,
+		rating: 2.5,
 		num: 247,
 	},
 	"rivalry": {
@@ -3228,7 +3228,7 @@ let BattleAbilities = {
 		},
 		id: "sandspit",
 		name: "Sand Spit",
-		rating: 2.5,
+		rating: 2,
 		num: 245,
 	},
 	"sandstream": {
@@ -3735,7 +3735,7 @@ let BattleAbilities = {
 		},
 		id: "stalwart",
 		name: "Stalwart",
-		rating: 1,
+		rating: 0,
 		num: 242,
 	},
 	"stamina": {
@@ -3798,7 +3798,7 @@ let BattleAbilities = {
 		},
 		id: "steamengine",
 		name: "Steam Engine",
-		rating: 1.5,
+		rating: 1,
 		num: 243,
 	},
 	"steelworker": {
@@ -3840,7 +3840,7 @@ let BattleAbilities = {
 		},
 		id: "steelyspirit",
 		name: "Steely Spirit",
-		rating: 1,
+		rating: 0,
 		num: 252,
 	},
 	"stench": {
@@ -4426,7 +4426,7 @@ let BattleAbilities = {
 		},
 		id: "wanderingspirit",
 		name: "Wandering Spirit",
-		rating: 1,
+		rating: 2.5,
 		num: 254,
 	},
 	"waterabsorb": {
