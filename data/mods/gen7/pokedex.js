@@ -2,6 +2,34 @@
 
 /**@type {{[k: string]: ModdedTemplateData}} */
 let BattlePokedex = {
+	pikachuoriginal: {
+		inherit: true,
+		abilities: {0: "Static"},
+	},
+	pikachuhoenn: {
+		inherit: true,
+		abilities: {0: "Static"},
+	},
+	pikachusinnoh: {
+		inherit: true,
+		abilities: {0: "Static"},
+	},
+	pikachuunova: {
+		inherit: true,
+		abilities: {0: "Static"},
+	},
+	pikachukalos: {
+		inherit: true,
+		abilities: {0: "Static"},
+	},
+	pikachualola: {
+		inherit: true,
+		abilities: {0: "Static"},
+	},
+	pikachupartner: {
+		inherit: true,
+		abilities: {0: "Static"},
+	},
 	leafeon: {
 		inherit: true,
 		evoType: "levelExtra",

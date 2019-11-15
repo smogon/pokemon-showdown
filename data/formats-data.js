@@ -455,8 +455,8 @@ let BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	pikachuhoenn: {
 		eventPokemon: [
@@ -464,8 +464,8 @@ let BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	pikachusinnoh: {
 		eventPokemon: [
@@ -473,8 +473,8 @@ let BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	pikachuunova: {
 		eventPokemon: [
@@ -482,8 +482,8 @@ let BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	pikachukalos: {
 		eventPokemon: [
@@ -491,8 +491,8 @@ let BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	pikachualola: {
 		eventPokemon: [
@@ -500,8 +500,8 @@ let BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	pikachupartner: {
 		eventPokemon: [
@@ -509,8 +509,8 @@ let BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	pikachustarter: {
 		eventPokemon: [
