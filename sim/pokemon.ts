@@ -198,6 +198,7 @@ export class Pokemon {
 
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
+	canDynamax: string | boolean | null | undefined;
 
 	staleness?: 'internal' | 'external';
 	pendingStaleness?: 'internal' | 'external';
@@ -363,6 +364,8 @@ export class Pokemon {
 
 		this.canMegaEvo = this.battle.canMegaEvo(this);
 		this.canUltraBurst = this.battle.canUltraBurst(this);
+		let canDynamax = this.battle.canDynamax(this);
+		this.canDynamax = canDynamax && canDynamax.gigantimax ? canDynamax.gigantimax : !!canDynamax;
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.

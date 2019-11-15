@@ -709,6 +709,36 @@ let BattleStatuses = {
 		},
 	},
 
+	dynamax: {
+		name: 'Dynamax',
+		id: 'dynamax',
+		num: 0,
+		duration: 3,
+		onStart(pokemon) {
+			this.add('-dynamax', pokemon);
+			let ratio = (2 / 3); // Changes based on dynamax level, static (LVL 0) until we know the levels
+			pokemon.maxhp = Math.floor(pokemon.maxhp / ratio);
+			pokemon.hp = Math.floor(pokemon.hp / ratio);
+			// TODO work on display for healing
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+		},
+		onFlinch: false,
+		onSwitchOut(pokemon) {
+			// Run the end event
+			pokemon.volatiles.dynamax.onEnd(pokemon);
+		},
+		onEnd(pokemon) {
+			// Play animation
+			// Modify HP - Work with LVL 0 for now
+			this.add('-undynamax', pokemon);
+			let ratio = (2 / 3); // Changes based on dynamax level, static (LVL 0) until we know the levels
+			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
+			pokemon.hp = Math.floor(pokemon.hp * ratio);
+			// TODO work on display for healing
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+		},
+	},
+
 	// Arceus and Silvally's actual typing is implemented here.
 	// Their true typing for all their formes is Normal, and it's only
 	// Multitype and RKS System, respectively, that changes their type,
