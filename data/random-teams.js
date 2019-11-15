@@ -308,7 +308,7 @@ class RandomTeams {
 		for (let id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
 			let template = this.dex.getTemplate(id);
-			if (template.gen <= this.gen && template.species !== 'Pichu-Spiky-eared' && template.species.substr(0, 8) !== 'Pikachu-') {
+			if (template.gen <= this.gen && !template.isNonstandard) {
 				formes[hasDexNumber[template.num]].push(template.species);
 			}
 		}
