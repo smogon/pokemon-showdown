@@ -1,6 +1,6 @@
 'use strict';
 
-const RandomGen3Teams = require('../../mods/gen3/random-teams');
+const RandomGen3Teams = require('../gen3/random-teams');
 
 class RandomGen2Teams extends RandomGen3Teams {
 	// @ts-ignore

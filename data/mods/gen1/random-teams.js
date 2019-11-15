@@ -1,6 +1,6 @@
 'use strict';
 
-const RandomGen2Teams = require('../../mods/gen2/random-teams');
+const RandomGen2Teams = require('../gen2/random-teams');
 
 class RandomGen1Teams extends RandomGen2Teams {
 	// Challenge Cup or CC teams are basically fully random teams.
