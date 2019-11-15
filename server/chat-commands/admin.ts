@@ -258,7 +258,7 @@ export const commands: ChatCommands = {
 
 				Chat.uncache('./.server-dist/chat');
 				Chat.uncacheDir('./server/chat-commands');
-				Chat.uncacheDir('./.server-dist/chat-plugins');
+				Chat.uncacheDir('./.server-dist/chat-commands');
 				Chat.uncacheDir('./server/chat-plugins');
 				Chat.uncacheDir('./.server-dist/chat-plugins');
 				Chat.uncacheDir('./translations');
