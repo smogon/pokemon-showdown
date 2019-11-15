@@ -775,7 +775,7 @@ export const commands: ChatCommands = {
 		if (!stdout && !stderr) {
 			Monitor.updateServerLock = false;
 			this.sendReply(`There were no updates.`);
-			[code, stdout, stderr] = await exec('../build');
+			[code, stdout, stderr] = await exec('../../build');
 			if (stderr) {
 				return this.errorReply(`Crash while rebuilding: ${stderr}`);
 			}
@@ -826,7 +826,7 @@ export const commands: ChatCommands = {
 			await exec(`git stash pop`);
 			this.sendReply(`FAILED, old changes restored.`);
 		}
-		[code, stdout, stderr] = await exec('../build');
+		[code, stdout, stderr] = await exec('../../build');
 		if (stderr) {
 			return this.errorReply(`Crash while rebuilding: ${stderr}`);
 		}
@@ -854,7 +854,7 @@ export const commands: ChatCommands = {
 		if (!user.can('hotpatch')) {
 			return this.errorReply(`/updateserver - Access denied.`);
 		}
-		const [, , stderr] = await exec('../build');
+		const [, , stderr] = await exec('../../build');
 		if (stderr) {
 			return this.errorReply(`Crash while rebuilding: ${stderr}`);
 		}
