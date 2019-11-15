@@ -1018,12 +1018,14 @@ let BattleFormatsData = {
 	},
 	goldeen: {
 		inherit: true,
+		unreleasedHidden: false,
 		tier: "LC",
 	},
 	seaking: {
 		inherit: true,
 		randomBattleMoves: ["waterfall", "megahorn", "knockoff", "drillrun", "scald", "icebeam"],
 		randomDoubleBattleMoves: ["waterfall", "surf", "megahorn", "knockoff", "drillrun", "icebeam", "icywind", "protect"],
+		unreleasedHidden: false,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
