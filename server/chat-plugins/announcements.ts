@@ -10,13 +10,15 @@ export class Announcement {
 	announcementNumber: number;
 	room: ChatRoom | GameRoom;
 	source: string;
-	timeout: NodeJS.Timer | null = null;
-	timeoutMins = 0;
+	timeout: NodeJS.Timer | null;
+	timeoutMins: number;
 	constructor(room: ChatRoom | GameRoom, source: string) {
 		this.activityId = 'announcement';
 		this.announcementNumber = ++room.gameNumber;
 		this.room = room;
 		this.source = source;
+		this.timeout = null;
+		this.timeoutMins = 0;
 	}
 
 	generateAnnouncement() {
