@@ -2550,8 +2550,8 @@ let BattleMovedex = {
 		category: "Status",
 		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage in exchange for the user losing 1/2 of its maximum HP, rounded down. Fails if the user would faint or if its Attck, Defense, Special Attack, Special Defense, and Speed stat stages are 6.",
 		shortDesc: "User loses 50% max HP. Raises all stats by 1.",
-		id: "bellydrum",
-		name: "Belly Drum",
+		id: "clangoroussoul",
+		name: "Clangorous Soul",
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, sound: 1},
@@ -4996,8 +4996,8 @@ let BattleMovedex = {
 		category: "Special",
 		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
 		shortDesc: "User cannot move next turn.",
-		id: "prismaticlaser",
-		name: "Prismatic Laser",
+		id: "eternabeam",
+		name: "Eterna Beam",
 		pp: 10,
 		priority: 0,
 		flags: {recharge: 1, protect: 1, mirror: 1},
@@ -7265,9 +7265,9 @@ let BattleMovedex = {
 		basePower: 1,
 		category: "Physical",
 		shortDesc: "Confuses opponents. BP scales with base move's BP.",
-		id: "gmaxgoldrush",
+		id: "gmaxsmite",
 		isViable: true,
-		name: "G-Max Gold Rush",
+		name: "G-Max Smite",
 		pp: 5,
 		priority: 0,
 		flags: {},
@@ -11119,9 +11119,9 @@ let BattleMovedex = {
 		basePower: 1,
 		category: "Status",
 		shortDesc: "Prevents all moves from affecting the user this turn.",
-		id: "maxgeyser",
+		id: "maxguard",
 		isViable: true,
-		name: "Max Geyser",
+		name: "Max Guard",
 		pp: 5,
 		priority: 0,
 		flags: {},
@@ -19185,7 +19185,7 @@ let BattleMovedex = {
 				this.add('-start', pokemon, 'Tar Shot');
 			},
 			onSourceModifyDamage(damage, source, target, move) {
-				if (target.volatiles['tarshot'] && Dex.getActiveMove(move).type === 'Fire') {
+				if (target.volatiles['tarshot'] && this.dex.getActiveMove(move).type === 'Fire') {
 					// TODO: Figure out damage modifier
 					return this.chainModify(1.2);
 				}
