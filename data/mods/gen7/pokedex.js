@@ -26,3 +26,5 @@ let BattlePokedex = {
 		evoCondition: "near a special magnetic field",
 	},
 };
+
+exports.BattlePokedex = BattlePokedex;

@@ -5902,7 +5902,7 @@ let BattleItems = {
 		name: "Tart Apple",
 		spritenum: 0,
 		fling: {
-			basePower:30,
+			basePower: 30,
 		},
 		num: 1117,
 		gen: 8,
