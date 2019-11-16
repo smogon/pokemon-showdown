@@ -253,89 +253,145 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 
+	"aloraichiumz": {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	"buginiumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"darkiniumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
+	},
+	"decidiumz": {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	"dragoniumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
+	},
+	"eeviumz": {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	"electriumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"fairiumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"fightiniumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"firiumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"flyiniumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"ghostiumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"grassiumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"groundiumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"iciumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
+	},
+	"inciniumz": {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	"kommoniumz": {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	"lunaliumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
+	},
+	"lycaniumz": {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	"marshadiumz": {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	"mewniumz": {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	"mimikiumz": {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	"normaliumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
+	},
+	"pikaniumz": {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	"pikashuniumz": {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	"poisoniumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
+	},
+	"primariumz": {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	"psychiumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"rockiumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
+	},
+	"snorliumz": {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	"solganiumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"steeliumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
+	},
+	"tapuniumz": {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	"ultranecroziumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	"wateriumz": {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 };
 exports.BattleItems = BattleItems;
