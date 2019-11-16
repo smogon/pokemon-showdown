@@ -3056,27 +3056,33 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1},
-		onHit(target, source) {
-			const sideConditions = {'spikes': 1, 'toxicspikes': 1, 'stealthrock': 1, 'stickyweb': 1, 'lightscreen': 1, 'reflect': 1, 'auroraveil': 1};
-			for (let i in sideConditions) {
-				let sourceLayers = source.side.sideConditions[i] ? (source.side.sideConditions[i].layers || 1) : 1;
-				let targetLayers = target.side.sideConditions[i] ? (target.side.sideConditions[i].layers || 1) : 1;
-				if (source.side.removeSideCondition(i)) {
-					this.add('-sideend', source.side, this.dex.getEffect(i).name, '[from] move: Court Change', '[of] ' + source);
-					for (sourceLayers; sourceLayers > 0; sourceLayers--) {
-						target.side.addSideCondition(i, source);
-					}
+		onHitField(target, source) {
+			const sideConditions = [
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'lightscreen', 'reflect', 'auroraveil',
+			];
+			const side1 = this.sides[0];
+			const side2 = this.sides[1];
+			for (let id of sideConditions) {
+				let sourceLayers = side1.sideConditions[id] ? (side1.sideConditions[id].layers || 1) : 0;
+				let targetLayers = side2.sideConditions[id] ? (side2.sideConditions[id].layers || 1) : 0;
+				if (sourceLayers === targetLayers) continue;
+				const effectName = this.dex.getEffect(id).name;
+				if (side1.removeSideCondition(id)) {
+					this.add('-sideend', side1, effectName, '[from] move: Court Change', '[of] ' + source);
 				}
-				if (target.side.removeSideCondition(i)) {
-					this.add('-sideend', target.side, this.dex.getEffect(i).name, '[from] move: Court Change', '[of] ' + target);
-					for (targetLayers; targetLayers > 0; targetLayers--) {
-						source.side.addSideCondition(i, target);
-					}
+				if (side2.removeSideCondition(id)) {
+					this.add('-sideend', side2, effectName, '[from] move: Court Change', '[of] ' + source);
+				}
+				for (; targetLayers > 0; targetLayers--) {
+					side1.addSideCondition(id, source);
+				}
+				for (; sourceLayers > 0; sourceLayers--) {
+					side2.addSideCondition(id, source);
 				}
 			}
 		},
 		secondary: null,
-		target: "any",
+		target: "field",
 		type: "Normal",
 	},
 	"covet": {
