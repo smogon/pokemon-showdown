@@ -7,7 +7,7 @@ bite: Power is multiplied by 1.5 when used by a Pokemon with the Strong Jaw Abil
 bullet: Has no effect on Pokemon with the Bulletproof Ability.
 charge: The user is unable to make a move between turns.
 contact: Makes contact.
-dance: When used by a Pokemon, othegrr Pokemon with the Dancer Ability can attempt to execute the same move.
+dance: When used by a Pokemon, other Pokemon with the Dancer Ability can attempt to execute the same move.
 defrost: Thaws the user if executed successfully while the user is frozen.
 distance: Can target a Pokemon positioned anywhere in a Triple Battle.
 gravity: Prevented from being executed or selected during Gravity's effect.
