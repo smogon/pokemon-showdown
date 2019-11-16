@@ -1891,8 +1891,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
-		desc: "100% chance to lower the foe's Defense by 1 stage. Hits all adjecent foes.",
-		shortDesc: "100% chance to lower adjacent foes' Def by 1.",
+		desc: "100% chance to lower the foe's Attack by 1 stage. Hits all adjecent foes.",
+		shortDesc: "100% chance to lower adjacent foes' Atk by 1.",
 		id: "breakingswipe",
 		name: "Breaking Swipe",
 		pp: 15,
@@ -1901,7 +1901,7 @@ let BattleMovedex = {
 		secondary: {
 			chance: 100,
 			boosts: {
-				def: -1,
+				atk: -1,
 			},
 		},
 		target: "allAdjacentFoes",
