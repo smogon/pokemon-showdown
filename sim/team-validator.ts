@@ -1185,10 +1185,22 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		if (
-			tierTemplate.isNonstandard === 'Unusable' ||
-			tierTemplate.isNonstandard === 'Glitch' && dex.gen === 1
-		) {
+		if (tierTemplate.isNonstandard === 'Unusable') {
+			if (dex.gen === 5) {
+				banReason = ruleTable.check('pokemontag:hackmons', setHas);
+				if (banReason) {
+					return `${tierTemplate.species} is not obtainable without hacking.`;
+				}
+				if (banReason === '') return null;
+			}
+			if (dex.gen === 8) {
+				banReason = ruleTable.check('pokemontag:hackmons', setHas);
+				if (banReason) {
+					return `${tierTemplate.species} is not obtainable without hacking.`;
+				}
+				if (banReason === '') return null;
+			}
+		} else if (tierTemplate.isNonstandard === 'Glitch' && dex.gen === 1) {
 			banReason = ruleTable.check('pokemontag:hackmons', setHas);
 			if (banReason) {
 				return `${tierTemplate.species} is not obtainable without hacking.`;
