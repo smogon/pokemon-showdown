@@ -3082,7 +3082,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "field",
+		target: "all",
 		type: "Normal",
 	},
 	"covet": {
