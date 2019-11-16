@@ -2,6 +2,7 @@
 
 /**@type {ModdedBattleScriptsData} */
 let BattleScripts = {
+	inherit: 'gen7',
 	init() {
 		this.modData('Abilities', 'noability').isNonstandard = false;
 		for (let i in this.data.Pokedex) {
