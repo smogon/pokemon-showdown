@@ -302,7 +302,7 @@ const commands = {
 	tiershift(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toID(target)) return this.parse('/help tiershift');
-		let template = Dex.deepClone(Dex.getTemplate(target));
+		let template = Dex.deepClone(Dex.mod('gen7').getTemplate(target));
 		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
 		/** @type {{[k: string]: number}} */
 		let boosts = {
