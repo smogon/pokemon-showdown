@@ -1200,7 +1200,7 @@ let BattleScripts = {
 		// TODO defined a Max Move Power in all moves and use that
 		if (move.category !== 'Status') {
 			// @ts-ignore
-			maxMove.basePower = move.zMovePower;
+			maxMove.basePower = move.zMovePower || 120;
 			// @ts-ignore
 			maxMove.category = move.category;
 		}
@@ -1218,7 +1218,7 @@ let BattleScripts = {
 		// TODO defined a Max Move Power in all moves and use that
 		if (move.category !== 'Status') {
 			// @ts-ignore
-			maxMove.basePower = move.zMovePower;
+			maxMove.basePower = move.zMovePower || 120;
 			// @ts-ignore
 			maxMove.category = move.category;
 		}
