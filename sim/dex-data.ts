@@ -587,7 +587,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/** True if a pokemon is primal. */
 	readonly isPrimal?: boolean;
 	/** True if a pokemon is gigantamax. */
-	readonly isGigantamax?: string;
+	readonly isGigantamax?: boolean;
 	/** True if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: boolean;
 	/** Required item. Do not use this directly; see requiredItems. */
