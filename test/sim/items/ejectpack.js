@@ -19,6 +19,6 @@ describe("Eject Pack", function () {
 			{species: 'Magikarp', ability: 'swiftswim', item: 'ejectpack', moves: ['splash']},
 		]});
 		battle.makeChoices();
-		assert.strictEquals(battle.p2.requestState, 'switch');
+		assert.strictEqual(battle.p2.requestState, 'switch');
 	});
 });
