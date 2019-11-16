@@ -2929,6 +2929,7 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["ironhead", "uturn", "firepunch", "icepunch", "stealthrock", "bodyslam", "toxic", "wish", "substitute"],
 		randomDoubleBattleMoves: ["bodyslam", "ironhead", "icywind", "thunderwave", "helpinghand", "trickroom", "uturn", "followme", "zenheadbutt", "protect"],
+		isUnreleased: false,
 		tier: "OU",
 		doublesTier: "DUber",
 	},
