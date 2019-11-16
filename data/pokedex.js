@@ -14777,7 +14777,7 @@ let BattlePokedex = {
 		color: "White",
 		prevo: "farfetchdgalar",
 		evoType: "levelExtra",
-		evoCondition: "KO 3 Pokemon in 1 battle",
+		evoCondition: "Land 3 critical hits in 1 battle",
 		eggGroups: ["Flying", "Field"],
 	},
 	mrrime: {
