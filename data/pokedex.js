@@ -14610,7 +14610,7 @@ let BattlePokedex = {
 	},
 	hatenna: {
 		num: 856,
-		species: "Hattena",
+		species: "Hatenna",
 		types: ["Psychic"],
 		gender: "F",
 		baseStats: {hp: 42, atk: 30, def: 45, spa: 56, spd: 53, spe: 39},
