@@ -3672,6 +3672,7 @@ let BattleFormatsData = {
 	},
 	herdier: {
 		inherit: true,
+		isNonstandard: null,
 		tier: "NFE",
 	},
 	stoutland: {
