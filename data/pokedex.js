@@ -715,7 +715,7 @@ let BattlePokedex = {
 		eggGroups: ["Undiscovered"],
 	},
 	pikachugmax: {
-		num: 12,
+		num: 25,
 		species: "Pikachu-Gmax",
 		baseSpecies: "Pikachu",
 		forme: "Gmax",
