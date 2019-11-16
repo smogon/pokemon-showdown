@@ -2,6 +2,18 @@
 
 /**@type {{[k: string]: ModdedTemplateData}} */
 let BattlePokedex = {
+	charizard: {
+		inherit: true,
+		otherFormes: ["charizardmegax", "charizardmegay"],
+	},
+	butterfree: {
+		inherit: true,
+		otherFormes: undefined,
+	},
+	pikachu: {
+		inherit: true,
+		otherFormes: ["pikachucosplay", "pikachurockstar", "pikachubelle", "pikachupopstar", "pikachuphd", "pikachulibre", "pikachuoriginal", "pikachuhoenn", "pikachusinnoh", "pikachuunova", "pikachukalos", "pikachualola", "pikachupartner", "pikachustarter"],
+	},
 	pikachuoriginal: {
 		inherit: true,
 		abilities: {0: "Static"},
@@ -30,6 +42,22 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: "Static"},
 	},
+	meowth: {
+		inherit: true,
+		otherFormes: ["meowthalola"],
+	},
+	machamp: {
+		inherit: true,
+		otherFormes: undefined,
+	},
+	gengar: {
+		inherit: true,
+		otherFormes: ['gengarmega'],
+	},
+	kingler: {
+		inherit: true,
+		otherFormes: undefined,
+	},
 	koffing: {
 		inherit: true,
 		abilities: {0: "Levitate"},
@@ -37,6 +65,18 @@ let BattlePokedex = {
 	weezing: {
 		inherit: true,
 		abilities: {0: "Levitate"},
+	},
+	lapras: {
+		inherit: true,
+		otherFormes: undefined,
+	},
+	eevee: {
+		inherit: true,
+		otherFormes: ['eeveestarter'],
+	},
+	snorlax: {
+		inherit: true,
+		otherFormes: undefined,
 	},
 	leafeon: {
 		inherit: true,
@@ -51,6 +91,10 @@ let BattlePokedex = {
 	heatran: {
 		inherit: true,
 		abilities: {0: "Flash Fire"},
+	},
+	garbodor: {
+		inherit: true,
+		otherFormes: undefined,
 	},
 	aegislash: {
 		inherit: true,
@@ -96,6 +140,10 @@ let BattlePokedex = {
 	tapufini: {
 		inherit: true,
 		abilities: {0: "Misty Surge"},
+	},
+	melmetal: {
+		inherit: true,
+		otherFormes: undefined,
 	},
 };
 
