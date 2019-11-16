@@ -2342,7 +2342,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 2, "level": 2},
 		],
-		tier: "New",
+		tier: "LC",
 	},
 	noctowl: {
 		randomBattleMoves: ["defog", "heatwave", "hurricane", "nastyplot", "roost", "whirlwind"],
