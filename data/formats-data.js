@@ -7509,7 +7509,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	barraskewda: {
-		randomBattleMoves: ["aquajet", "closecombat", "crunch", "liquidation", "poisonjab", "raindance"],
+		randomBattleMoves: ["aquajet", "closecombat", "crunch", "liquidation", "poisonjab"],
 		tier: "New",
 		doublesTier: "New",
 	},

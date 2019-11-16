@@ -1611,7 +1611,7 @@ class RandomTeams {
 						tierCount[tier] = 1;
 					} else {
 						tierCount[tier]++;
-						if (this.gen === 8 && (!isMonotype || tierCount[tier] > 2)) continue;
+						if (this.gen < 8 && (!isMonotype || tierCount[tier] > 2)) continue;
 					}
 
 					if (!isMonotype) {
