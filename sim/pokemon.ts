@@ -199,6 +199,7 @@ export class Pokemon {
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
 	canDynamax: string | boolean | null | undefined;
+	canGigantamax: string | null;
 
 	staleness?: 'internal' | 'external';
 	pendingStaleness?: 'internal' | 'external';
@@ -223,6 +224,13 @@ export class Pokemon {
 		this.baseTemplate = this.battle.dex.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
 			throw new Error(`Unidentified species: ${this.baseTemplate.name}`);
+		}
+		// FIXME This is probably a bad way to go about this and dosen't work anyways.
+		let gMax = '';
+		if (this.baseTemplate.forme === 'Gmax') {
+			// Use the base species, not gigantamax species.
+			gMax = this.baseTemplate.name;
+			this.baseTemplate = this.battle.dex.getTemplate(this.baseTemplate.baseSpecies);
 		}
 		this.template = this.baseTemplate;
 		this.species = this.battle.dex.getSpecies(set.species);
@@ -364,8 +372,11 @@ export class Pokemon {
 
 		this.canMegaEvo = this.battle.canMegaEvo(this);
 		this.canUltraBurst = this.battle.canUltraBurst(this);
-		let canDynamax = this.battle.canDynamax(this);
-		this.canDynamax = canDynamax && canDynamax.gigantimax ? canDynamax.gigantimax : !!canDynamax;
+		// Set to true if appropriate initially to allow battle.canDynamax to work.
+		this.canDynamax = true; // (this.battle.gen >= 8);
+		const canDynamax = this.battle.canDynamax(this);
+		this.canDynamax = canDynamax && canDynamax.gigantamax ? canDynamax.gigantamax : !!canDynamax;
+		this.canGigantamax = gMax || null;
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
@@ -791,6 +802,8 @@ export class Pokemon {
 			canMegaEvo?: boolean,
 			canUltraBurst?: boolean,
 			canZMove?: AnyObject | null,
+			canDynamax?: boolean,
+			maxMoves?: DynamaxOptions,
 		} = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle', target: 'randomNormal', disabled: false}]};
 
 		if (isLastActive) {
@@ -814,6 +827,9 @@ export class Pokemon {
 			if (this.canUltraBurst) data.canUltraBurst = true;
 			const canZMove = this.battle.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
+			// TODO interaction between dynamax and choice locked moves?
+			if (this.canDynamax) data.canDynamax = true;
+			if (this.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.battle.canDynamax(this, true);
 		}
 
 		return data;

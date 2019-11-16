@@ -1167,9 +1167,12 @@ let BattleScripts = {
 	},
 
 	canDynamax(pokemon, skipChecks) {
-		// {gigantimax?: string, maxMoves: {[k: string]: string} | null}[]
+		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
 			if (!pokemon.canDynamax) return;
+			if (this.canZMove(pokemon)) return;
+			if (this.canMegaEvo(pokemon)) return;
+			// TODO ban specific species from dynamaxing based on reserach
 		}
 		/** @type {DynamaxOptions} */
 		let result = {maxMoves: []};
@@ -1178,23 +1181,31 @@ let BattleScripts = {
 			let maxMove = this.getMaxMove(move, pokemon);
 			if (maxMove) result.maxMoves.push({move: maxMove.id, target: maxMove.target});
 		}
-		// TODO gigantimax
+		if (pokemon.canGigantamax) result.gigantamax = pokemon.canGigantamax;
 		return result;
 	},
 
 	getMaxMove(move, pokemon) {
-		// TODO Gigantimax
-		if (move.isMax) return move;
-		return this.dex.getMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
+		if (pokemon.canGigantamax) {
+			let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
+			let gMaxMove = this.dex.getMove(gMaxTemplate.isGigantamax);
+			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
+		}
+		let maxMove = this.dex.getMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
+		if (maxMove.exists) return maxMove;
 	},
 
 	getActiveMaxMove(move, pokemon) {
 		let maxMove = this.dex.getActiveMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
+		if (pokemon.canGigantamax) {
+			let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
+			let gMaxMove = this.dex.getActiveMove(gMaxTemplate.isGigantamax ? gMaxTemplate.isGigantamax : '');
+			if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
+		}
 		// @ts-ignore
-		//maxMove.basePower = move.maxPower; // TODO define this in all moves
+		// maxMove.basePower = move.maxPower; // TODO define this in all moves
 		// TODO actually modify max moves when they are coded & other moves have support for max moves
-		// TODO get gigantimax moves as approriate
-		maxMove.isMaxPowered = true;
+		maxMove.maxPowered = true;
 		return maxMove;
 	},
 

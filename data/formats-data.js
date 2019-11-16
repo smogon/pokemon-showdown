@@ -81,6 +81,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	charizardgmax: {
+		isGigantamax: "G-Max Wildfire",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -149,6 +150,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	butterfreegmax: {
+		isGigantamax: "G-Max Befuddle",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -514,6 +516,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	pikachugmax: {
+		isGigantamax: "G-Max Volt Crash",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -819,6 +822,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 8, "level": 5, "shiny": false, "moves": ["fakeout", "growl", "slash", "payday"], "pokeball": "cherishball"},
 		],
+		isGigantamax: "G-Max Gold Rush",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -1001,6 +1005,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	machampgmax: {
+		isGigantamax: "G-Max Chi Strike",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -1323,6 +1328,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	gengargmax: {
+		isGigantamax: "G-Max Terror",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -1380,6 +1386,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	kinglergmax: {
+		isGigantamax: "G-Max Foam Burst",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -1885,6 +1892,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	laprasgmax: {
+		isGigantamax: "G-Max Resonance",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -1928,6 +1936,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	eeveegmax: {
+		isGigantamax: "G-Max Cuddle",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -2095,6 +2104,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	snorlaxgmax: {
+		isGigantamax: "G-Max Replenish",
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
@@ -5415,6 +5425,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	garbodorgmax: {
+		isGigantamax: "G-Max Maloder",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7301,6 +7312,7 @@ let BattleFormatsData = {
 		tier: "Unreleased",
 	},
 	melmetalgmax: {
+		isGigantamax: "G-Max Meltdown",
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
@@ -7361,6 +7373,7 @@ let BattleFormatsData = {
 	},
 	corviknight: {
 		randomBattleMoves: ["bodypress", "bravebird", "bulkup", "defog", "ironhead", "roost", "uturn"],
+		isGigantamax: "G-Max Wind Rage",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7380,6 +7393,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	orbeetlegmax: {
+		isGigantamax: "G-Max Gravitas",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7416,6 +7430,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	drednawgmax: {
+		isGigantamax: "G-Max Stonesurge",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7439,6 +7454,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	coalossalgmax: {
+		isGigantamax: "G-Max Volcalith",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7451,6 +7467,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	flapplegmax: {
+		isGigantamax: "G-Max Tartness",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7460,6 +7477,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	appletungmax: {
+		isGigantamax: "G-Max Sweetness",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7472,6 +7490,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	sandacondagmax: {
+		isGigantamax: "G-Max Sandblast",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7508,6 +7527,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	toxtricitygmax: {
+		isGigantamax: "G-Max Stun Shock",
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
@@ -7516,6 +7536,7 @@ let BattleFormatsData = {
 	},
 	centiskorch: {
 		randomBattleMoves: ["coil", "firelash", "knockoff", "leechlife", "powerwhip"],
+		isGigantamax: "G-Max Centiferno",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7551,6 +7572,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	hatterenegmax: {
+		isGigantamax: "G-Max Smite",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7562,6 +7584,7 @@ let BattleFormatsData = {
 	},
 	grimmsnarl: {
 		randomBattleMoves: ["bulkup", "drainpunch", "falsesurrender", "playrough", "spiritbreak", "suckerpunch", "superpower", "thunderwave", "taunt"],
+		isGigantamax: "G-Max Snooze",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7578,6 +7601,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	alcremiegmax: {
+		isGigantamax: "G-Max Finale",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7635,6 +7659,7 @@ let BattleFormatsData = {
 	},
 	copperajah: {
 		randomBattleMoves: ["curse", "earthquake", "heavyslam", "ironhead", "powerwhip", "playrough", "rockslide", "stealthrock"],
+		isGigantamax: "G-Max Steelsurge",
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7672,6 +7697,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	duraludongmax: {
+		isGigantamax: "G-Max Depletion",
 		tier: "New",
 		doublesTier: "New",
 	},

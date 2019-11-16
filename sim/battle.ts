@@ -2394,6 +2394,15 @@ export class Battle {
 						}
 					}
 				}
+				if (action.maxMove) {
+					const maxMoveName = this.getMaxMove(action.maxMove, action.pokemon);
+					if (maxMoveName) {
+						const maxMove = this.getActiveMaxMove(action.move, action.pokemon);
+						if (maxMove.exists && maxMove.isMax) {
+							move = maxMove;
+						}
+					}
+				}
 				const priority = this.runEvent('ModifyPriority', action.pokemon, target, move, move.priority);
 				action.priority = priority;
 				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
@@ -2551,14 +2560,15 @@ export class Battle {
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
-			this.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect, action.zmove, undefined, action.maxMove);
+			this.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
+				action.zmove, undefined, action.maxMove);
 			break;
 		case 'megaEvo':
 			this.runMegaEvo(action.pokemon);
 			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
-			for (let pokemon of action.pokemon.side.pokemon) {
+			for (const pokemon of action.pokemon.side.pokemon) {
 				pokemon.canDynamax = null;
 			}
 			break;
@@ -3117,8 +3127,7 @@ export class Battle {
 		throw new UnimplementedError('canZMove');
 	}
 
-	// FIXME determine how to both return dyna moves and giga form if needed
-	canDynamax(pokemon: Pokemon): DynamaxOptions | undefined {
+	canDynamax(pokemon: Pokemon, skipChecks?: boolean): DynamaxOptions | undefined {
 		throw new UnimplementedError('canDynamax');
 	}
 

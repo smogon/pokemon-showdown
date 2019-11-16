@@ -935,6 +935,7 @@ interface TemplateFormatsData {
 	eventPokemon?: EventInfo[]
 	exclusiveMoves?: readonly string[]
 	gen?: number
+	isGigantamax?: string
 	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean
 	maleOnlyHidden?: boolean
@@ -1043,7 +1044,7 @@ interface Format extends Readonly<BasicEffect & FormatsData> {
 type SpreadMoveTargets = (Pokemon | false | null)[]
 type SpreadMoveDamage = (number | boolean | undefined)[]
 type ZMoveOptions = ({move: string, target: string} | null)[]
-type DynamaxOptions = {maxMoves: ({move: string, target: string} | null)[], gigantimax?: string}
+type DynamaxOptions = {maxMoves: ({move: string, target: string})[], gigantamax?: string}
 
 interface BattleScriptsData {
 	gen: number

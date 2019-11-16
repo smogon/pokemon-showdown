@@ -426,9 +426,9 @@ export class Side {
 		if (zMove) targetType = this.battle.dex.getMove(zMove).target;
 
 		// Dynamax
-		// TODO getMaxMove
 		// Is dynamaxed or will dynamax this turn.
-		const maxMove = (megaDynaOrZ === 'dynamax' || pokemon.volatiles['dynamax']) ? this.battle.getMaxMove(move, pokemon) : undefined;
+		const maxMove = (megaDynaOrZ === 'dynamax' || pokemon.volatiles['dynamax']) ?
+			this.battle.getMaxMove(move, pokemon) : undefined;
 		if (megaDynaOrZ === 'dynamax' && !maxMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
 		}
@@ -522,7 +522,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
 		const dynamax = (megaDynaOrZ === 'dynamax');
-		if (dynamax && this.choice.dynamax) {
+		if (dynamax && (this.choice.dynamax || !this.battle.canDynamax(pokemon))) {
 			return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 		}
 
@@ -534,7 +534,7 @@ export class Side {
 			moveid,
 			mega: mega || ultra,
 			zmove: zMove,
-			maxMove: maxMove ? maxMove.id : undefined, // TODO dynamax: "maxMoveid"
+			maxMove: maxMove ? maxMove.id : undefined,
 		});
 
 		if (pokemon.maybeDisabled) {
