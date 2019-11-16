@@ -716,8 +716,7 @@ let BattleStatuses = {
 		duration: 3,
 		onStart(pokemon) {
 			//this.add('-dynamax', pokemon);
-			this.add('-message', `${pokemon.name || pokemon.species} Dynamaxed!`);
-			this.debug(`Dynamax Start: ${pokemon} (${pokemon.side.name})`);
+			this.add('-start', pokemon, "Dynamax");
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.canGigantamax);
 			if (pokemon.species === 'Shedinja') return;
 			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
@@ -731,8 +730,7 @@ let BattleStatuses = {
 			// Run the end event
 			// pokemon.volatiles.dynamax.onEnd(pokemon);
 			//this.add('-undynamax', pokemon);
-			this.add('-message', `${pokemon.name || pokemon.species}'s dynamax ended.`);
-			this.debug(`Dynamax End: ${pokemon} (${pokemon.side.name})`);
+			this.add('-end', pokemon, "Dynamax");
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
 			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
@@ -746,8 +744,7 @@ let BattleStatuses = {
 			// Play animation
 			// Modify HP - Work with LVL 0 for now
 			//this.add('-undynamax', pokemon);
-			this.add('-message', `${pokemon.name || pokemon.species}'s dynamax ended.`);
-			this.debug(`Dynamax End: ${pokemon} (${pokemon.side.name})`);
+			this.add('-end', pokemon, "Dynamax");
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
 			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
