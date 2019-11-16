@@ -148,6 +148,7 @@ export class Side {
 				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc}`;
 				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.zmove) details += ` zmove`;
+				if (action.maxMove) details += ` dynamax`;
 				return `move ${action.moveid}${details}`;
 			case 'switch':
 			case 'instaswitch':
