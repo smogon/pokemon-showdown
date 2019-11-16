@@ -727,7 +727,7 @@ let BattleStatuses = {
 			this.add('-heal', pokemon, pokemon.getHealth, '[from] Dynamax');
 		},
 		onFlinch: false,
-		onSwitchOut(pokemon) {
+		onBeforeSwitchOut(pokemon) {
 			// Run the end event
 			// pokemon.volatiles.dynamax.onEnd(pokemon);
 			//this.add('-undynamax', pokemon);
