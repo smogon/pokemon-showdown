@@ -14171,7 +14171,7 @@ let BattlePokedex = {
 		species: "Chewtle",
 		types: ["Water"],
 		baseStats: {hp: 50, atk: 64, def: 50, spa: 38, spd: 38, spe: 44},
-		abilities: {0: "Strong Jaw", 1: "Shell Armor", H: "Swift swim"},
+		abilities: {0: "Strong Jaw", 1: "Shell Armor", H: "Swift Swim"},
 		heightm: 0.3,
 		weightkg: 8.5,
 		color: "Green",
