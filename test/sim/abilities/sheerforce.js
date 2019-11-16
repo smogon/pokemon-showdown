@@ -43,4 +43,20 @@ describe('Sheer Force', function () {
 		battle.makeChoices('move bodyslam', 'move rest');
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
+
+	it('should not eliminate the effect of a Max Move', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [
+			{species: 'Braviary', ability: 'sheerforce', moves: ['heatwave', 'facade', 'superpower']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Shedinja', ability: 'sturdy', item: 'ringtarget', moves: ['splash']},
+		]});
+		battle.makeChoices('move heatwave dynamax', 'auto');
+		assert.strictEqual(battle.field.weather, 'sun');
+		battle.makeChoices('move facade', 'auto');
+		assert.statStage(battle.p2.active[0], 'spe', -1);
+		battle.makeChoices('move superpower', 'auto');
+		assert.statStage(battle.p1.active[0], 'atk', 1);
+	});
 });
