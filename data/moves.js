@@ -13007,7 +13007,7 @@ let BattleMovedex = {
 			onStart(target) {
 				this.add('-start', target, 'Octolock');
 			},
-			onResidualOrder: 6,
+			onResidualOrder: 13,
 			onResidual(target) {
 				this.boost({def: -1, spd: -1});
 			},
