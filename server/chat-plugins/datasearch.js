@@ -28,6 +28,7 @@ exports.commands = {
 	ds5: 'dexsearch',
 	ds6: 'dexsearch',
 	ds7: 'dexsearch',
+	ds8: 'dexsearch',
 	dsearch: 'dexsearch',
 	dexsearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
@@ -383,7 +384,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target.substr(0, 6) === 'maxgen') {
 				maxGen = parseInt(target[6]);
-				if (!maxGen || maxGen < 1 || maxGen > 7) return {reply: "The generation must be between 1 and 7"};
+				if (!maxGen || maxGen < 1 || maxGen > 8) return {reply: "The generation must be between 1 and 8"};
 				orGroup.skip = true;
 				continue;
 			}
