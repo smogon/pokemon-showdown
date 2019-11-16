@@ -222,7 +222,7 @@ export class ModdedDex {
 	forFormat(format: Format | string): ModdedDex {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
-		return dexes[mod || 'gen7'].includeData();
+		return dexes[mod || 'gen8'].includeData();
 	}
 
 	modData(dataType: DataType, id: string) {
