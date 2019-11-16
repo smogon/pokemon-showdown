@@ -3798,10 +3798,10 @@ let BattleAbilities = {
 		num: 80,
 	},
 	"steamengine": {
-		shortDesc: "Boosts the Pokémon's Speed stat drastically if hit by a Fire- or Water-type move.",
+		shortDesc: "This Pokemon's Speed is raised by 6 stages after it is damaged by Fire/Water moves.",
 		onAfterDamage(damage, target, source, effect) {
 			if (effect && ['Water', 'Fire'].includes(effect.type)) {
-				this.boost({spe: 3});
+				this.boost({spe: 6});
 			}
 		},
 		id: "steamengine",
