@@ -3966,7 +3966,6 @@ let BattleMovedex = {
 		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. Has a 30% chance to flinch the target.",
 		shortDesc: "Hits twice. 30% chance to flinch.",
 		id: "doubleironbash",
-		isNonstandard: "LGPE",
 		isUnreleased: true,
 		isViable: true,
 		name: "Double Iron Bash",
