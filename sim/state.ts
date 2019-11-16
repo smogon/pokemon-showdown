@@ -37,7 +37,7 @@ type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item |
 const BATTLE = new Set([
 	'dex', 'gen', 'ruleTable', 'id', 'log', 'inherit', 'format',
 	'zMoveTable', 'teamGenerator', 'NOT_FAIL', 'FAIL', 'SILENT_FAIL',
-	'field', 'sides', 'prng', 'hints', 'deserialized',
+	'field', 'sides', 'prng', 'hints', 'deserialized', 'maxMoveTable',
 ]);
 const FIELD = new Set(['id', 'battle']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);

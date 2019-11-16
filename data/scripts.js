@@ -16,8 +16,8 @@ let BattleScripts = {
 	 * externalMove skips LockMove and PP deduction, mostly for use by
 	 * Dancer.
 	 */
-	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
-		let target = this.getTarget(pokemon, zMove || moveOrMoveName, targetLoc);
+	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove) {
+		let target = this.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc);
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
 		const pranksterBoosted = baseMove.pranksterBoosted;
 		if (baseMove.id !== 'struggle' && !zMove && !externalMove) {
@@ -28,7 +28,12 @@ let BattleScripts = {
 				target = this.resolveTarget(pokemon, baseMove);
 			}
 		}
-		let move = zMove ? this.getActiveZMove(baseMove, pokemon) : baseMove;
+		let move = baseMove;
+		if (zMove) {
+			move = this.getActiveZMove(baseMove, pokemon);
+		} else if (maxMove) {
+			move = this.getActiveMaxMove(baseMove, pokemon);
+		}
 
 		move.isExternal = externalMove;
 
@@ -90,7 +95,7 @@ let BattleScripts = {
 			this.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;
 		}
-		let moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
+		let moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
 		if (this.activeMove) move = this.activeMove;
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
@@ -134,15 +139,15 @@ let BattleScripts = {
 	 * The only ones that use runMove are Instruct, Pursuit, and
 	 * Dancer.
 	 */
-	useMove(move, pokemon, target, sourceEffect, zMove) {
+	useMove(move, pokemon, target, sourceEffect, zMove, maxMove) {
 		pokemon.moveThisTurnResult = undefined;
 		/** @type {boolean? | undefined} */ // Typescript bug
 		let oldMoveResult = pokemon.moveThisTurnResult;
-		let moveResult = this.useMoveInner(move, pokemon, target, sourceEffect, zMove);
+		let moveResult = this.useMoveInner(move, pokemon, target, sourceEffect, zMove, maxMove);
 		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;
 		return moveResult;
 	},
-	useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove) {
+	useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove, maxMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
 
@@ -155,6 +160,9 @@ let BattleScripts = {
 		}
 		if (zMove || (move.category !== 'Status' && sourceEffect && /** @type {ActiveMove} */(sourceEffect).isZ)) {
 			move = this.getActiveZMove(move, pokemon);
+		}
+		if (maxMove || (move.category !== 'Status' && sourceEffect && /** @type {ActiveMove} */(sourceEffect).isMax)) {
+			move = this.getActiveMaxMove(move, pokemon);
 		}
 
 		if (this.activeMove) {
@@ -1094,7 +1102,7 @@ let BattleScripts = {
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
 		let atLeastOne = false;
 		let mustStruggle = true;
-		/**@type {AnyObject?[]} */
+		/**@type {ZMoveOptions} */
 		let zMoves = [];
 		for (const moveSlot of pokemon.moveSlots) {
 			if (moveSlot.pp <= 0) {
@@ -1134,6 +1142,70 @@ let BattleScripts = {
 			return "Necrozma-Ultra";
 		}
 		return null;
+	},
+
+	maxMoveTable: {
+		Flying: 'Max Airstream',
+		Dark: 'Max Darkness',
+		Fire: 'Max Flare',
+		Bug: 'Max Flutterby',
+		Water: 'Max Geyser',
+		Status: 'Max Guard',
+		Ice: 'Max Hailstorm',
+		Fighting: 'Max Knuckle',
+		Electric: 'Max Lightning',
+		Psychic: 'Max Mindstorm',
+		Poison: 'Max Ooze',
+		Grass: 'Max Overgrowth',
+		Ghost: 'Max Phantasm',
+		Ground: 'Max Quake',
+		Rock: 'Max Rockfall',
+		Fairy: 'Max Starfall',
+		Steel: 'Max Steelspike',
+		Normal: 'Max Strike',
+		Dragon: 'Max Wyrmwind',
+	},
+
+	canDynamax(pokemon, skipChecks) {
+		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
+		if (!skipChecks) {
+			if (!pokemon.canDynamax) return;
+			if (this.canZMove(pokemon)) return;
+			if (this.canMegaEvo(pokemon)) return;
+			// TODO ban specific species from dynamaxing based on reserach
+		}
+		/** @type {DynamaxOptions} */
+		let result = {maxMoves: []};
+		for (let moveSlot of pokemon.moveSlots) {
+			let move = this.dex.getMove(moveSlot.id);
+			let maxMove = this.getMaxMove(move, pokemon);
+			if (maxMove) result.maxMoves.push({move: maxMove.id, target: maxMove.target});
+		}
+		if (pokemon.canGigantamax) result.gigantamax = pokemon.canGigantamax;
+		return result;
+	},
+
+	getMaxMove(move, pokemon) {
+		if (pokemon.canGigantamax) {
+			let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
+			let gMaxMove = this.dex.getMove(gMaxTemplate.isGigantamax);
+			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
+		}
+		let maxMove = this.dex.getMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
+		if (maxMove.exists) return maxMove;
+	},
+
+	getActiveMaxMove(move, pokemon) {
+		let maxMove = this.dex.getActiveMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
+		if (pokemon.canGigantamax) {
+			let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
+			let gMaxMove = this.dex.getActiveMove(gMaxTemplate.isGigantamax ? gMaxTemplate.isGigantamax : '');
+			if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
+		}
+		// @ts-ignore
+		maxMove.basePower = move.zMovePower; // TODO defined a Max Move Power in all moves and use that
+		maxMove.maxPowered = true;
+		return maxMove;
 	},
 
 	runMegaEvo(pokemon) {
