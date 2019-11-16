@@ -150,6 +150,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	grassknot: {
+		inherit: true,
+		onTryHit() {},
+	},
 	grasswhistle: {
 		inherit: true,
 		isNonstandard: null,
@@ -169,6 +173,14 @@ let BattleMovedex = {
 	heartstamp: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	heatcrash: {
+		inherit: true,
+		onTryHit() {},
+	},
+	heavyslam: {
+		inherit: true,
+		onTryHit() {},
 	},
 	hiddenpower: {
 		inherit: true,
@@ -317,6 +329,10 @@ let BattleMovedex = {
 	lightthatburnsthesky: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	lowkick: {
+		inherit: true,
+		onTryHit() {},
 	},
 	luckychant: {
 		inherit: true,
