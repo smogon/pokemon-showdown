@@ -1571,7 +1571,7 @@ export const Rooms = {
 			return;
 		}
 
-		const p1Special = players[0].specialNextBattle;
+		const p1Special = players.length ? players[0].specialNextBattle : undefined;
 		let mismatch = `"${p1Special}"`;
 		for (const user of players) {
 			if (user.specialNextBattle !== p1Special) {
