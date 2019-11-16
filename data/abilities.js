@@ -528,7 +528,8 @@ let BattleAbilities = {
 		num: 212,
 	},
 	"cottondown": {
-		shortDesc: "When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.",
+		desc: "When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.",
+		shortDesc: "Lowers Speed of all Pokémon except itself when hit by an attack.",
 		onAfterDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-ability', target, 'Cotton Down');
@@ -1344,7 +1345,8 @@ let BattleAbilities = {
 		num: 229,
 	},
 	"gulpmissile": {
-		shortDesc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.",
+		desc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.",
+		shortDesc: "Get prey with Surf/Dive. When taking damage, prey is used to attack.",
 		// TODO
 		id: "gulpmissile",
 		name: "Gulp Missile",
@@ -1454,7 +1456,8 @@ let BattleAbilities = {
 		num: 37,
 	},
 	"hungerswitch": {
-		shortDesc: "The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode after the end of each turn.",
+		desc: "The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode after the end of each turn.",
+		shortDesc: "Changes between Full Belly and Hangry Mode at the end of each turn.",
 		onResidual(pokemon) {
 			if (pokemon.template.baseSpecies !== 'Morpeko' || pokemon.transformed) return;
 			let targetForme = pokemon.template.species === 'Morpeko' ? 'Morpeko-Hangry' : 'Morpeko';
@@ -1534,7 +1537,8 @@ let BattleAbilities = {
 		num: 115,
 	},
 	"iceface": {
-		shortDesc: "The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it hails.",
+		desc: "The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it hails.",
+		shortDesc: "Pokémon's head functions as substitute for a physical attack. Restored in hail.",
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && effect.category === 'Physical' && target.template.speciesid === 'eiscue' && !target.transformed) {
@@ -1861,7 +1865,7 @@ let BattleAbilities = {
 		num: 26,
 	},
 	"libero": {
-		shortDesc: "Changes the Pokémon's type to the type of the move it's about to use",
+		shortDesc: "Changes the Pokémon's type to the type of the move it's about to use.",
 		onPrepareHit(source, target, move) {
 			if (move.hasBounced) return;
 			let type = move.type;
@@ -2413,7 +2417,8 @@ let BattleAbilities = {
 		num: 233,
 	},
 	"neutralizinggas": {
-		shortDesc: "If the Pokémon with Neutralizing Gas is in the battle, the effects of all Pokémon's Abilities will be nullified or will not be triggered.",
+		desc: "If the Pokémon with Neutralizing Gas is in the battle, the effects of all Pokémon's Abilities will be nullified or will not be triggered.",
+		shortDesc: "Nullifies abilities while on the field.",
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
 		// TODO Will abilities that already started start again? (Intimidate seems like a good test case)
 		onPreStart(pokemon) {
@@ -2615,7 +2620,8 @@ let BattleAbilities = {
 		num: 257,
 	},
 	"perishbody": {
-		shortDesc: "When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.",
+		desc: "When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.",
+		shortDesc: "When hit by a contact move, the Pokémon and the attacker faint in 3 turns.",
 		onAfterDamage(damage, target, source, move) {
 			if (!move.flags['contact']) return;
 
@@ -2925,7 +2931,8 @@ let BattleAbilities = {
 		num: 227,
 	},
 	"punkrock": {
-		shortDesc: "Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.",
+		desc: "Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.",
+		shortDesc: "Boosts sound move power, 0.5× damage from sound moves.",
 		// TODO boost the power of sound based moves by how much?
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.flags.sound) {
@@ -3331,7 +3338,8 @@ let BattleAbilities = {
 		num: 113,
 	},
 	"screencleaner": {
-		shortDesc: "When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.",
+		desc: "When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.",
+		shortDesc: "Removes Screens and Veil Effects on switchin.",
 		onStart(pokemon) {
 			for (let sideCondition of ['reflect', 'lightscreen', 'auroraveil']) {
 				if (pokemon.side.removeSideCondition(sideCondition)) {
@@ -4400,7 +4408,8 @@ let BattleAbilities = {
 		num: 10,
 	},
 	"wanderingspirit": {
-		shortDesc: "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.",
+		desc: "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.",
+		shortDesc: "Exchanges abilities when hitting a Pokémon with a contact move.",
 		onAfterDamage(damage, target, source, move) {
 			// Are these actually banned? Makes sense for them to be banned to me
 			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'illusion', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode'];
