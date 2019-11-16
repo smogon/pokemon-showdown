@@ -14,6 +14,7 @@ let BattleItems = {
 		},
 		num: 674,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by an Abomasnow, this item allows it to Mega Evolve in battle.",
 	},
 	"absolite": {
@@ -28,6 +29,7 @@ let BattleItems = {
 		},
 		num: 677,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by an Absol, this item allows it to Mega Evolve in battle.",
 	},
 	"absorbbulb": {
@@ -91,6 +93,7 @@ let BattleItems = {
 		},
 		num: 672,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by an Aerodactyl, this item allows it to Mega Evolve in battle.",
 	},
 	"aggronite": {
@@ -105,6 +108,7 @@ let BattleItems = {
 		},
 		num: 667,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by an Aggron, this item allows it to Mega Evolve in battle.",
 	},
 	"aguavberry": {
@@ -181,6 +185,7 @@ let BattleItems = {
 		},
 		num: 679,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by an Alakazam, this item allows it to Mega Evolve in battle.",
 	},
 	"aloraichiumz": {
@@ -207,6 +212,7 @@ let BattleItems = {
 		},
 		num: 755,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by an Altaria, this item allows it to Mega Evolve in battle.",
 	},
 	"ampharosite": {
@@ -221,6 +227,7 @@ let BattleItems = {
 		},
 		num: 658,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by an Ampharos, this item allows it to Mega Evolve in battle.",
 	},
 	"apicotberry": {
@@ -312,6 +319,7 @@ let BattleItems = {
 		},
 		num: 757,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by an Audino, this item allows it to Mega Evolve in battle.",
 	},
 	"babiriberry": {
@@ -349,6 +357,7 @@ let BattleItems = {
 		},
 		num: 668,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Banette, this item allows it to Mega Evolve in battle.",
 	},
 	"beastball": {
@@ -372,6 +381,7 @@ let BattleItems = {
 		},
 		num: 770,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Beedrill, this item allows it to Mega Evolve in battle.",
 	},
 	"belueberry": {
@@ -524,6 +534,7 @@ let BattleItems = {
 		},
 		num: 661,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Blastoise, this item allows it to Mega Evolve in battle.",
 	},
 	"blazikenite": {
@@ -538,6 +549,7 @@ let BattleItems = {
 		},
 		num: 664,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Blaziken, this item allows it to Mega Evolve in battle.",
 	},
 	"blueorb": {
@@ -659,6 +671,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Bug",
 		num: 787,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Bug move, this item allows it to use a Bug Z-Move.",
 	},
 	"burndrive": {
@@ -689,6 +702,7 @@ let BattleItems = {
 		},
 		num: 767,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Camerupt, this item allows it to Mega Evolve in battle.",
 	},
 	"cellbattery": {
@@ -736,6 +750,7 @@ let BattleItems = {
 		},
 		num: 660,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
 	},
 	"charizarditey": {
@@ -750,6 +765,7 @@ let BattleItems = {
 		},
 		num: 678,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
 	},
 	"chartiberry": {
@@ -1163,6 +1179,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Dark",
 		num: 791,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Dark move, this item allows it to use a Dark Z-Move.",
 	},
 	"dawnstone": {
@@ -1254,6 +1271,7 @@ let BattleItems = {
 		},
 		num: 764,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Diancie, this item allows it to Mega Evolve in battle.",
 	},
 	"diveball": {
@@ -1388,6 +1406,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Dragon",
 		num: 790,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Dragon move, this item allows it to use a Dragon Z-Move.",
 	},
 	"dreadplate": {
@@ -1633,6 +1652,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Electric",
 		num: 779,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has an Electric move, this item allows it to use an Electric Z-Move.",
 	},
 	"energypowder": {
@@ -1720,6 +1740,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Fairy",
 		num: 793,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Fairy move, this item allows it to use a Fairy Z-Move.",
 	},
 	"fairygem": {
@@ -1812,6 +1833,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Fighting",
 		num: 782,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Fighting move, this item allows it to use a Fighting Z-Move.",
 	},
 	"figyberry": {
@@ -1899,6 +1921,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Fire",
 		num: 777,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Fire move, this item allows it to use a Fire Z-Move.",
 	},
 	"fistplate": {
@@ -2033,6 +2056,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Flying",
 		num: 785,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Flying move, this item allows it to use a Flying Z-Move.",
 	},
 	"focusband": {
@@ -2153,6 +2177,7 @@ let BattleItems = {
 		},
 		num: 756,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Gallade, this item allows it to Mega Evolve in battle.",
 	},
 	"ganlonberry": {
@@ -2188,6 +2213,7 @@ let BattleItems = {
 		},
 		num: 683,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Garchomp, this item allows it to Mega Evolve in battle.",
 	},
 	"gardevoirite": {
@@ -2202,6 +2228,7 @@ let BattleItems = {
 		},
 		num: 657,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Gardevoir, this item allows it to Mega Evolve in battle.",
 	},
 	"gengarite": {
@@ -2216,6 +2243,7 @@ let BattleItems = {
 		},
 		num: 656,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Gengar, this item allows it to Mega Evolve in battle.",
 	},
 	"ghostgem": {
@@ -2264,6 +2292,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Ghost",
 		num: 789,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Ghost move, this item allows it to use a Ghost Z-Move.",
 	},
 	"glalitite": {
@@ -2278,6 +2307,7 @@ let BattleItems = {
 		},
 		num: 763,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Glalie, this item allows it to Mega Evolve in battle.",
 	},
 	"goldbottlecap": {
@@ -2337,6 +2367,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Grass",
 		num: 780,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Grass move, this item allows it to use a Grass Z-Move.",
 	},
 	"grassyseed": {
@@ -2465,6 +2496,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Ground",
 		num: 784,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Ground move, this item allows it to use a Ground Z-Move.",
 	},
 	"gyaradosite": {
@@ -2479,6 +2511,7 @@ let BattleItems = {
 		},
 		num: 676,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Gyarados, this item allows it to Mega Evolve in battle.",
 	},
 	"habanberry": {
@@ -2585,6 +2618,7 @@ let BattleItems = {
 		},
 		num: 680,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Heracross, this item allows it to Mega Evolve in battle.",
 	},
 	"hondewberry": {
@@ -2613,6 +2647,7 @@ let BattleItems = {
 		},
 		num: 666,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Houndoom, this item allows it to Mega Evolve in battle.",
 	},
 	"iapapaberry": {
@@ -2722,6 +2757,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Ice",
 		num: 781,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has an Ice move, this item allows it to use an Ice Z-Move.",
 	},
 	"icyrock": {
@@ -2936,6 +2972,7 @@ let BattleItems = {
 		},
 		num: 675,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Kangaskhan, this item allows it to Mega Evolve in battle.",
 	},
 	"kingsrock": {
@@ -3023,6 +3060,7 @@ let BattleItems = {
 		},
 		num: 684,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Latias, this item allows it to Mega Evolve in battle.",
 	},
 	"latiosite": {
@@ -3037,6 +3075,7 @@ let BattleItems = {
 		},
 		num: 685,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Latios, this item allows it to Mega Evolve in battle.",
 	},
 	"laxincense": {
@@ -3212,6 +3251,7 @@ let BattleItems = {
 		},
 		num: 768,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Lopunny, this item allows it to Mega Evolve in battle.",
 	},
 	"loveball": {
@@ -3246,6 +3286,7 @@ let BattleItems = {
 		},
 		num: 673,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Lucario, this item allows it to Mega Evolve in battle.",
 	},
 	"luckypunch": {
@@ -3312,6 +3353,7 @@ let BattleItems = {
 		zMoveUser: ["Lunala", "Necrozma-Dawn-Wings"],
 		num: 922,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "Lunala or Dawn Wings Necrozma with Moongeist Beam can use a special Z-Move.",
 	},
 	"lureball": {
@@ -3472,6 +3514,7 @@ let BattleItems = {
 		},
 		num: 682,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Manectric, this item allows it to Mega Evolve in battle.",
 	},
 	"marangaberry": {
@@ -3528,6 +3571,7 @@ let BattleItems = {
 		},
 		num: 681,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Mawile, this item allows it to Mega Evolve in battle.",
 	},
 	"meadowplate": {
@@ -3564,6 +3608,7 @@ let BattleItems = {
 		},
 		num: 665,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Medicham, this item allows it to Mega Evolve in battle.",
 	},
 	"mentalherb": {
@@ -3618,6 +3663,7 @@ let BattleItems = {
 		},
 		num: 758,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Metagross, this item allows it to Mega Evolve in battle.",
 	},
 	"metalcoat": {
@@ -3717,6 +3763,7 @@ let BattleItems = {
 		},
 		num: 662,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
 	},
 	"mewtwonitey": {
@@ -3731,6 +3778,7 @@ let BattleItems = {
 		},
 		num: 663,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
 	},
 	"micleberry": {
@@ -3983,6 +4031,7 @@ let BattleItems = {
 		zMoveType: "Normal",
 		num: 776,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Normal move, this item allows it to use a Normal Z-Move.",
 	},
 	"occaberry": {
@@ -4218,6 +4267,7 @@ let BattleItems = {
 		},
 		num: 762,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Pidgeot, this item allows it to Mega Evolve in battle.",
 	},
 	"pikaniumz": {
@@ -4270,6 +4320,7 @@ let BattleItems = {
 		},
 		num: 671,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Pinsir, this item allows it to Mega Evolve in battle.",
 	},
 	"pixieplate": {
@@ -4369,6 +4420,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Poison",
 		num: 783,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Poison move, this item allows it to use a Poison Z-Move.",
 	},
 	"pokeball": {
@@ -4660,6 +4712,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Psychic",
 		num: 786,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Psychic move, this item allows it to use a Psychic Z-Move.",
 	},
 	"qualotberry": {
@@ -4994,6 +5047,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Rock",
 		num: 788,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Rock move, this item allows it to use a Rock Z-Move.",
 	},
 	"rockyhelmet": {
@@ -5143,6 +5197,7 @@ let BattleItems = {
 		},
 		num: 754,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Sableye, this item allows it to Mega Evolve in battle.",
 	},
 	"sachet": {
@@ -5229,6 +5284,7 @@ let BattleItems = {
 		},
 		num: 769,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Salamence, this item allows it to Mega Evolve in battle.",
 	},
 	"sceptilite": {
@@ -5243,6 +5299,7 @@ let BattleItems = {
 		},
 		num: 753,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Sceptile, this item allows it to Mega Evolve in battle.",
 	},
 	"scizorite": {
@@ -5257,6 +5314,7 @@ let BattleItems = {
 		},
 		num: 670,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Scizor, this item allows it to Mega Evolve in battle.",
 	},
 	"scopelens": {
@@ -5319,6 +5377,7 @@ let BattleItems = {
 		},
 		num: 759,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Sharpedo, this item allows it to Mega Evolve in battle.",
 	},
 	"shedshell": {
@@ -5507,6 +5566,7 @@ let BattleItems = {
 		},
 		num: 760,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
 	},
 	"smoothrock": {
@@ -5575,6 +5635,7 @@ let BattleItems = {
 		zMoveUser: ["Solgaleo", "Necrozma-Dusk-Mane"],
 		num: 921,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "Solgaleo or Dusk Mane Necrozma with Sunsteel Strike can use a special Z-Move.",
 	},
 	"souldew": {
@@ -5736,6 +5797,7 @@ let BattleItems = {
 		},
 		num: 761,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Steelix, this item allows it to Mega Evolve in battle.",
 	},
 	"steelgem": {
@@ -5784,6 +5846,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Steel",
 		num: 792,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Steel move, this item allows it to use a Steel Z-Move.",
 	},
 	"stick": {
@@ -5883,6 +5946,7 @@ let BattleItems = {
 		},
 		num: 752,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Swampert, this item allows it to Mega Evolve in battle.",
 	},
 	"sweetapple": {
@@ -6089,6 +6153,7 @@ let BattleItems = {
 		},
 		num: 669,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Tyranitar, this item allows it to Mega Evolve in battle.",
 	},
 	"ultraball": {
@@ -6110,6 +6175,7 @@ let BattleItems = {
 		zMoveUser: ["Necrozma-Ultra"],
 		num: 923,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
 	},
 	"upgrade": {
@@ -6135,6 +6201,7 @@ let BattleItems = {
 		},
 		num: 659,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
 	},
 	"wacanberry": {
@@ -6218,6 +6285,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Water",
 		num: 778,
 		gen: 7,
+		isNonstandard: "Past",
 		desc: "If holder has a Water move, this item allows it to use a Water Z-Move.",
 	},
 	"watmelberry": {
