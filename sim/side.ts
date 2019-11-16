@@ -526,7 +526,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 		}
 
-		this.battle.debug(`Pushing choice: maxMove: ${maxMove}`);
 		this.choice.actions.push({
 			choice: 'move',
 			pokemon,
