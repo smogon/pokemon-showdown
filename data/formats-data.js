@@ -1098,7 +1098,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	rapidash: {
-		randomBattleMoves: ["flareblitz", "highhorsepower", "morningsun", "swordsdance", "wildcharge", "willowwisp"],
+		randomBattleMoves: ["flareblitz", "highhorsepower", "morningsun", "swordsdance", "wildcharge", "willowisp"],
 		eventPokemon: [
 			{"generation": 3, "level": 40, "moves": ["batonpass", "solarbeam", "sunnyday", "flamethrower"]},
 		],
