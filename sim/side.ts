@@ -20,6 +20,7 @@ interface ChosenAction {
 	side?: Side; // the action's side
 	mega?: boolean | null; // true if megaing or ultra bursting
 	zmove?: string; // if zmoving, the name of the zmove
+	maxMove?: string; // if dynamaxed, the name of the max move
 	priority?: number; // priority of the action
 }
 
@@ -34,6 +35,7 @@ export interface Choice {
 	zMove: boolean; // true if a Z-move has already been selected
 	mega: boolean; // true if a mega evolution has already been selected
 	ultra: boolean; // true if an ultra burst has already been selected
+	dynamax: boolean; // true if a dynamax has already been selected
 }
 
 export class Side {
@@ -117,6 +119,7 @@ export class Side {
 			zMove: false,
 			mega: false,
 			ultra: false,
+			dynamax: false,
 		};
 
 		// old-gens
@@ -352,7 +355,7 @@ export class Side {
 		return this.choice.actions.length >= this.active.length;
 	}
 
-	chooseMove(moveText?: string | number, targetLoc?: number, megaOrZ?: boolean | string) {
+	chooseMove(moveText?: string | number, targetLoc?: number, megaDynaOrZ?: boolean | string) {
 		if (this.requestState !== 'move') {
 			return this.emitChoiceError(`Can't move: You need a ${this.requestState} response`);
 		}
@@ -363,7 +366,7 @@ export class Side {
 		const autoChoose = !moveText;
 		const pokemon: Pokemon = this.active[index];
 
-		if (megaOrZ === true) megaOrZ = 'mega';
+		if (megaDynaOrZ === true) megaDynaOrZ = 'mega';
 		if (!targetLoc) targetLoc = 0;
 
 		// Parse moveText (name or index)
@@ -412,8 +415,8 @@ export class Side {
 
 		// Z-move
 
-		const zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, pokemon) : undefined;
-		if (megaOrZ === 'zmove' && !zMove) {
+		const zMove = megaDynaOrZ === 'zmove' ? this.battle.getZMove(move, pokemon) : undefined;
+		if (megaDynaOrZ === 'zmove' && !zMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
 		if (zMove && this.choice.zMove) {
@@ -421,6 +424,14 @@ export class Side {
 		}
 
 		if (zMove) targetType = this.battle.dex.getMove(zMove).target;
+
+		// Dynamax
+		// Is dynamaxed or will dynamax this turn.
+		const maxMove = (megaDynaOrZ === 'dynamax' || pokemon.volatiles['dynamax']) ?
+			this.battle.getMaxMove(move, pokemon) : undefined;
+		if (megaDynaOrZ === 'dynamax' && !maxMove) {
+			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
+		}
 
 		// Validate targetting
 
@@ -496,19 +507,23 @@ export class Side {
 
 		// Mega evolution
 
-		const mega = (megaOrZ === 'mega');
+		const mega = (megaDynaOrZ === 'mega');
 		if (mega && !pokemon.canMegaEvo) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
 		if (mega && this.choice.mega) {
 			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
-		const ultra = (megaOrZ === 'ultra');
+		const ultra = (megaDynaOrZ === 'ultra');
 		if (ultra && !pokemon.canUltraBurst) {
-			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
+			return this.emitChoiceError(`Can't move: ${pokemon.name} can't ultra burst`);
 		}
 		if (ultra && this.choice.ultra) {
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
+		}
+		const dynamax = (megaDynaOrZ === 'dynamax');
+		if (dynamax && (this.choice.dynamax || !this.battle.canDynamax(pokemon))) {
+			return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 		}
 
 		this.choice.actions.push({
@@ -518,6 +533,7 @@ export class Side {
 			moveid,
 			mega: mega || ultra,
 			zmove: zMove,
+			maxMove: maxMove ? maxMove.id : undefined,
 		});
 
 		if (pokemon.maybeDisabled) {
@@ -527,6 +543,7 @@ export class Side {
 		if (mega) this.choice.mega = true;
 		if (ultra) this.choice.ultra = true;
 		if (zMove) this.choice.zMove = true;
+		if (dynamax) this.choice.dynamax = true;
 
 		return true;
 	}
@@ -717,6 +734,7 @@ export class Side {
 			zMove: false,
 			mega: false,
 			ultra: false,
+			dynamax: false,
 		};
 	}
 
@@ -758,7 +776,7 @@ export class Side {
 				const original = data;
 				const error = () => this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
 				let targetLoc: number | undefined;
-				let megaOrZ = '';
+				let megaDynaOrZ = '';
 				while (true) {
 					// If data ends with a number, treat it as a target location.
 					// We need to special case 'Conversion 2' so it doesn't get
@@ -769,22 +787,26 @@ export class Side {
 						targetLoc = parseInt(data.slice(-2), 10);
 						data = data.slice(0, -2).trim();
 					} else if (data.endsWith(' mega')) {
-						if (megaOrZ) return error();
-						megaOrZ = 'mega';
+						if (megaDynaOrZ) return error();
+						megaDynaOrZ = 'mega';
 						data = data.slice(0, -5);
 					} else if (data.endsWith(' zmove')) {
-						if (megaOrZ) return error();
-						megaOrZ = 'zmove';
+						if (megaDynaOrZ) return error();
+						megaDynaOrZ = 'zmove';
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' ultra')) {
-						if (megaOrZ) return error();
-						megaOrZ = 'ultra';
+						if (megaDynaOrZ) return error();
+						megaDynaOrZ = 'ultra';
 						data = data.slice(0, -6);
+					} else if (data.endsWith(' dynamax')) {
+						if (megaDynaOrZ) return error();
+						megaDynaOrZ = 'dynamax';
+						data = data.slice(0, -8);
 					} else {
 						break;
 					}
 				}
-				if (!this.chooseMove(data, targetLoc, megaOrZ)) return false;
+				if (!this.chooseMove(data, targetLoc, megaDynaOrZ)) return false;
 				break;
 			case 'switch':
 				this.chooseSwitch(data);

@@ -587,7 +587,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/** True if a pokemon is primal. */
 	readonly isPrimal?: boolean;
 	/** True if a pokemon is gigantamax. */
-	readonly isGigantamax?: boolean;
+	readonly isGigantamax?: string;
 	/** True if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: boolean;
 	/** Required item. Do not use this directly; see requiredItems. */
@@ -676,7 +676,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.eventOnly = !!data.eventOnly;
 		this.eventPokemon = data.eventPokemon || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
-		this.isGigantamax = !!(this.forme && this.forme.endsWith('Gigantamax')) || undefined;
+		this.isGigantamax = data.isGigantamax || undefined;
 		this.battleOnly = !!data.battleOnly || !!this.isMega || !!this.isGigantamax || undefined;
 
 		if (!this.gen && this.num >= 1) {

@@ -659,6 +659,11 @@ interface EffectData {
 	 * Sparksurfer.
 	 */
 	isZ?: boolean | string
+	/**
+	 * `true` for Max moves like Max Airstream. If its a G-Max moves, this is
+	 * the species ID of the giganimax pokemon that can use this G-Max move.
+	 */
+	isMax?: boolean | string
 	noCopy?: boolean
 	recoil?: [number, number]
 	secondary?: SecondaryEffect | null
@@ -878,6 +883,11 @@ interface ActiveMove extends BasicEffect, MoveData {
 	 * truthy.
 	 */
 	isZPowered?: boolean
+	/**
+	 * Same idea has isZPowered. (Is only blocked by protect if its)
+	 * maxPowered. Update/remove this when this is confirmed.
+	 */
+	maxPowered?: boolean
 }
 
 type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}
@@ -925,6 +935,7 @@ interface TemplateFormatsData {
 	eventPokemon?: EventInfo[]
 	exclusiveMoves?: readonly string[]
 	gen?: number
+	isGigantamax?: string
 	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean
 	maleOnlyHidden?: boolean
@@ -1032,17 +1043,23 @@ interface Format extends Readonly<BasicEffect & FormatsData> {
 
 type SpreadMoveTargets = (Pokemon | false | null)[]
 type SpreadMoveDamage = (number | boolean | undefined)[]
+type ZMoveOptions = ({move: string, target: string} | null)[]
+type DynamaxOptions = {maxMoves: ({move: string, target: string})[], gigantamax?: string}
 
 interface BattleScriptsData {
 	gen: number
 	zMoveTable?: {[k: string]: string}
+	maxMoveTable?: {[k: string]: string}
 	afterMoveSecondaryEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined
 	calcRecoilDamage?: (this: Battle, damageDealt: number, move: Move) => number
 	canMegaEvo?: (this: Battle, pokemon: Pokemon) => string | undefined | null
 	canUltraBurst?: (this: Battle, pokemon: Pokemon) => string | null
-	canZMove?: (this: Battle, pokemon: Pokemon) => (AnyObject | null)[] | void
+	canZMove?: (this: Battle, pokemon: Pokemon) => ZMoveOptions | void
+	canDynamax?: (this: Battle, pokemon: Pokemon, skipChecks?: boolean) => DynamaxOptions | void
 	forceSwitch?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
+	getActiveMaxMove?: (this: Battle, move: Move, pokemon: Pokemon) => ActiveMove
 	getActiveZMove?: (this: Battle, move: Move, pokemon: Pokemon) => ActiveMove
+	getMaxMove?: (this: Battle, move: Move, pokemon: Pokemon) => Move | undefined
 	getSpreadDamage?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
 	getZMove?: (this: Battle, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | undefined
 	hitStepAccuracy?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
@@ -1058,7 +1075,7 @@ interface BattleScriptsData {
 	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions.Action
 	runAction?: (this: Battle, action: Actions.Action) => void
 	runMegaEvo?: (this: Battle, pokemon: Pokemon) => boolean
-	runMove?: (this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) => void
+	runMove?: (this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean, maxMove?: string) => void
 	runMoveEffects?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
 	runZPower?: (this: Battle, move: ActiveMove, pokemon: Pokemon) => void
 	secondaries?: (this: Battle, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSelf?: boolean) => void
@@ -1068,8 +1085,8 @@ interface BattleScriptsData {
 	tryMoveHit?: (this: Battle, target: Pokemon, pokemon: Pokemon, move: ActiveMove) => number | undefined | false | ''
 	tryPrimaryHitEvent?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean) => SpreadMoveDamage
 	trySpreadMoveHit?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean
-	useMove?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null, sourceEffect?: Effect | null, zMove?: string) => boolean
-	useMoveInner?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null, sourceEffect?: Effect | null, zMove?: string) => boolean
+	useMove?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null, sourceEffect?: Effect | null, zMove?: string, maxMove?: string) => boolean
+	useMoveInner?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null, sourceEffect?: Effect | null, zMove?: string, maxMove?: string) => boolean
 }
 
 interface ModdedBattleSide {
@@ -1081,7 +1098,7 @@ interface ModdedBattlePokemon {
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean | number
 	calculateStat?: (this: Pokemon, statName: StatNameExceptHP, boost: number, modifier?: number) => number
 	getActionSpeed?: (this: Pokemon) => number
-	getRequestData?: (this: Pokemon) => {moves: {move: string, id: ID, target?: string, disabled?: boolean}[], maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean, canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: AnyObject | null}
+	getRequestData?: (this: Pokemon) => {moves: {move: string, id: ID, target?: string, disabled?: boolean}[], maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean, canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: ZMoveOptions}
 	getStat?: (this: Pokemon, statName: StatNameExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean) => number
 	getWeight?: (this: Pokemon) => number
 	hasAbility?: (this: Pokemon, ability: string | string[]) => boolean
@@ -1117,7 +1134,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	getAbility?: (this: Battle, name: string | Ability ) => Ability
 	getZMove?: (this: Battle, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | undefined
 	getActiveZMove?: (this: Battle, move: Move, pokemon: Pokemon) => ActiveMove
-	canZMove?: (this: Battle, pokemon: Pokemon) => (AnyObject | null)[] | void
+	canZMove?: (this: Battle, pokemon: Pokemon) => ZMoveOptions | void
 }
 
 interface TypeData {
@@ -1170,6 +1187,8 @@ namespace Actions {
 		mega: boolean | 'done';
 		/** if zmoving, the name of the zmove */
 		zmove?: string;
+		/** if dynamaxed, the name of the max move */
+		maxMove?: string;
 		/** effect that called the move (eg Instruct) if any */
 		sourceEffect?: Effect | null;
 	}
@@ -1219,7 +1238,7 @@ namespace Actions {
 	/** A generic action done by a single pokemon */
 	export interface PokemonAction {
 		/** action type */
-		choice: 'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve';
+		choice: 'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve' | 'runDynamax';
 		/** priority of the action (lower first) */
 		priority: number;
 		/** speed of pokemon doing action (higher first if priority tie) */

@@ -11123,7 +11123,7 @@ let BattleMovedex = {
 		isViable: true,
 		name: "Max Guard",
 		pp: 5,
-		priority: 0,
+		priority: 4,
 		flags: {},
 		isMax: true,
 		stallingMove: true,
