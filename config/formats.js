@@ -688,7 +688,7 @@ let Formats = [
 		section: "OM of the Month",
 		// column: 2,
 	},
-	/*{
+	{
 		name: "[Gen 8] Balanced Hackmons (beta)",
 		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		threads: [
@@ -698,7 +698,7 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['-Nonexistent', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 		banlist: ['Arena Trap', 'Contrary', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Comatose + Sleep Talk'],
-	},*/
+	},
 	{
 		name: "[Gen 7] Tier Shift",
 		desc: "Pok&eacute;mon below OU get all their stats boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.",
@@ -1061,14 +1061,14 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 	},
-	{
+	/*{
 		name: "[Gen 7] Hackmons Cup",
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item.`,
 
 		mod: 'gen7',
 		team: 'randomHC',
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
-	},
+	},*/
 	{
 		name: "[Gen 7] Doubles Hackmons Cup",
 
