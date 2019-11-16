@@ -1203,8 +1203,7 @@ let BattleScripts = {
 			if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
 		}
 		// @ts-ignore
-		// maxMove.basePower = move.maxPower; // TODO define this in all moves
-		// TODO actually modify max moves when they are coded & other moves have support for max moves
+		maxMove.basePower = move.zMovePower; // TODO defined a Max Move Power in all moves and use that
 		maxMove.maxPowered = true;
 		return maxMove;
 	},
