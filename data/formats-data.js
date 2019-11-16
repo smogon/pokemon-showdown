@@ -7321,13 +7321,16 @@ let BattleFormatsData = {
 		tier: "Unreleased",
 	},
 	grookey: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	thwackey: {
+		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	rillaboom: {
 		randomBattleMoves: ["drumbeating", "highhorsepower", "knockoff", "superpower", "swordsdance", "uturn", "woodhammer"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7364,12 +7367,10 @@ let BattleFormatsData = {
 	},
 	greedent: {
 		randomBattleMoves: ["bodyslam", "crunch", "earthquake", "seedbomb", "superpower", "swordsdance", "wildcharge"],
-		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
 	rookidee: {
-		unreleasedHidden: true,
 		tier: "LC",
 	},
 	corvisquire: {
