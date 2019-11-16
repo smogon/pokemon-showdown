@@ -13002,10 +13002,14 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			return target.addVolatile('trapped', source, move, 'trapper');
 		},
+		volatileStatus: 'octolock',
 		effect: {
-			onResidualOrder: 13,
-			onResidual(target, source) {
-				this.boost({def: -1, spd: -1}, target, source, this.dex.getActiveMove("Octolock"));
+			onStart(target) {
+				this.add('-start', target, 'Octolock');
+			},
+			onResidualOrder: 6,
+			onResidual(target) {
+				this.boost({def: -1, spd: -1});
 			},
 		},
 		secondary: null,
