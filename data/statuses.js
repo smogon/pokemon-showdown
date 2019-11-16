@@ -342,7 +342,7 @@ let BattleStatuses = {
 				pokemon.removeVolatile('choicelock');
 				return;
 			}
-			if (pokemon.ignoringItem()) {
+			if (pokemon.ignoringItem() || pokemon.volatiles['dynamax']) {
 				return;
 			}
 			for (const moveSlot of pokemon.moveSlots) {
