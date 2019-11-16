@@ -225,13 +225,6 @@ export class Pokemon {
 		if (!this.baseTemplate.exists) {
 			throw new Error(`Unidentified species: ${this.baseTemplate.name}`);
 		}
-		// FIXME This is probably a bad way to go about this and dosen't work anyways.
-		let gMax = '';
-		if (this.baseTemplate.forme === 'Gmax') {
-			// Use the base species, not gigantamax species.
-			gMax = this.baseTemplate.name;
-			this.baseTemplate = this.battle.dex.getTemplate(this.baseTemplate.baseSpecies);
-		}
 		this.template = this.baseTemplate;
 		this.species = this.battle.dex.getSpecies(set.species);
 		this.speciesid = toID(this.species);
@@ -376,7 +369,7 @@ export class Pokemon {
 		this.canDynamax = true; // (this.battle.gen >= 8);
 		const canDynamax = this.battle.canDynamax(this);
 		this.canDynamax = canDynamax && canDynamax.gigantamax ? canDynamax.gigantamax : !!canDynamax;
-		this.canGigantamax = gMax || null;
+		this.canGigantamax = null; // TODO Gmax support
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
