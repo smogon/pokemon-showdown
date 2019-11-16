@@ -636,6 +636,7 @@ const commands = {
 						"Gen": move.gen || 'CAP',
 					};
 
+					if (move.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
 					if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
 					if (move.flags['contact']) details["&#10003; Contact"] = "";
 					if (move.flags['sound']) details["&#10003; Sound"] = "";
