@@ -13,7 +13,7 @@ describe("Mirror Armor", function () {
 	it("should bounce boosts back to the source", function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
-			{species: 'Corvinight', ability: 'mirrorarmor', moves: ['endure']},
+			{species: 'Corviknight', ability: 'mirrorarmor', moves: ['endure']},
 		]});
 		battle.setPlayer('p2', {team: [
 			{species: 'Machop', ability: 'noguard', moves: ['rocktomb', 'leer']},
