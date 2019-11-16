@@ -9444,7 +9444,7 @@ let BattlePokedex = {
 		formeLetter: "Z",
 		types: ["Ice", "Fire"],
 		baseStats: {hp: 105, atk: 160, def: 55, spa: 30, spd: 55, spe: 135},
-		abilities: {0: "Gorilla Tactics", H: "Zen Mode"},
+		abilities: {0: "Zen Mode"},
 		heightm: 1.7,
 		weightkg: 120,
 		color: "White",
