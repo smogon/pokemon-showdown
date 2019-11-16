@@ -7449,7 +7449,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	coalossal: {
-		randomBattleMoves: ["crunch", "firefang", "nuzzle", "playrough", "psychicfangs", "thunderfang", "voltswitch"],
+		randomBattleMoves: ["fireblast", "stoneedge", "stealthrock", "earthquake", "gyroball", "spikes"],
 		tier: "New",
 		doublesTier: "New",
 	},
