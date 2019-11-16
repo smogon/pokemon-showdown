@@ -1346,7 +1346,7 @@ let BattleAbilities = {
 	},
 	"gulpmissile": {
 		desc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.",
-		shortDesc: "Using Surf/Dive gives prey. When taking damage, prey is used to attack.",
+		shortDesc: "Get prey with Surf/Dive. When taking damage, prey is used to attack.",
 		// TODO
 		id: "gulpmissile",
 		name: "Gulp Missile",
