@@ -738,6 +738,7 @@ let BattleStatuses = {
 			let ratio = (2 / 3); // Changes based on dynamax level, static (LVL 0) until we know the levels
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
+			if (pokemon.hp <= 0) pokemon.hp = 1;
 			// TODO work on display for healing
 			this.add('-heal', pokemon, pokemon.getHealth, '[from] Dynamax');
 		},
@@ -752,6 +753,7 @@ let BattleStatuses = {
 			let ratio = (2 / 3); // Changes based on dynamax level, static (LVL 0) until we know the levels
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
+			if (pokemon.hp <= 0) pokemon.hp = 1;
 			// TODO work on display for healing
 			this.add('-heal', pokemon, pokemon.getHealth, '[from] Dynamax');
 		},
