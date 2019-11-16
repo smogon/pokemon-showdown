@@ -738,7 +738,8 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (matched) continue;
 
-			const validator = TeamValidator.get(`gen${maxGen}ou`);
+			let validator = TeamValidator.get(`gen${maxGen}ou`);
+			if (maxGen === 8) validator = TeamValidator.get(`gen8oubeta`);
 			let pokemonSource = validator.allSources();
 			for (let move in alts.moves) {
 				if (!validator.checkLearnset(move, mon, pokemonSource) === alts.moves[move]) {
