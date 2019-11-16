@@ -2093,7 +2093,6 @@ let BattleItems = {
 		gen: 8,
 		desc: "Can be revived into Dracozolt with Fossilized Drake or Arctozolt with Fossilized Bird.",
 		shortDesc: "Can be combined with certain fossils.",
-		
 	},
 	"fossilizeddrake": {
 		id: "fossilizeddrake",
