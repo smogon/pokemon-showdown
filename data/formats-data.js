@@ -3195,7 +3195,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 6, "level": 13, "maxEggMoves": 1},
 		],
-		tier: "New",
+		tier: "NFE",
 	},
 	ludicolo: {
 		randomBattleMoves: ["focusblast", "gigadrain", "hydropump", "icebeam", "raindance", "scald"],
