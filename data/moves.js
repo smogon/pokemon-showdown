@@ -2548,18 +2548,18 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage in exchange for the user losing 1/2 of its maximum HP, rounded down. Fails if the user would faint or if its Attck, Defense, Special Attack, Special Defense, and Speed stat stages are 6.",
-		shortDesc: "User loses 50% max HP. Raises all stats by 1.",
+		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage in exchange for the user losing 1/3 of its maximum HP, rounded down. Fails if the user would faint or if its Attack, Defense, Special Attack, Special Defense, and Speed stat stages are 6.",
+		shortDesc: "User loses 33% max HP. Raises all stats by 1.",
 		id: "clangoroussoul",
 		name: "Clangorous Soul",
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, sound: 1},
 		onHit(target) {
-			if (target.hp <= target.maxhp / 2 || target.boosts.atk >= 6 || target.boosts.def >= 6 || target.boosts.spa >= 6 || target.boosts.spd >= 6 || target.boosts.spe >= 6 || target.maxhp === 1) { // Shedinja clause
+			if (target.hp <= target.maxhp / 3 || target.boosts.atk >= 6 || target.boosts.def >= 6 || target.boosts.spa >= 6 || target.boosts.spd >= 6 || target.boosts.spe >= 6 || target.maxhp === 1) { // Shedinja clause
 				return false;
 			}
-			this.directDamage(target.maxhp / 2);
+			this.directDamage(target.maxhp / 3);
 			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, target);
 		},
 		secondary: null,
