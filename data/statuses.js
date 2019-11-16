@@ -720,7 +720,7 @@ let BattleStatuses = {
 			this.debug(`Dynamax Start: ${pokemon} (${pokemon.side.name})`);
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.canGigantamax);
 			if (pokemon.species === 'Shedinja') return;
-			let ratio = (2 / 3); // Changes based on dynamax level, static (LVL 0) until we know the levels
+			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
 			pokemon.maxhp = Math.floor(pokemon.maxhp / ratio);
 			pokemon.hp = Math.floor(pokemon.hp / ratio);
 			// TODO work on display for healing
@@ -735,7 +735,7 @@ let BattleStatuses = {
 			this.debug(`Dynamax End: ${pokemon} (${pokemon.side.name})`);
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
-			let ratio = (2 / 3); // Changes based on dynamax level, static (LVL 0) until we know the levels
+			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			if (pokemon.hp <= 0) pokemon.hp = 1;
@@ -750,7 +750,7 @@ let BattleStatuses = {
 			this.debug(`Dynamax End: ${pokemon} (${pokemon.side.name})`);
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
-			let ratio = (2 / 3); // Changes based on dynamax level, static (LVL 0) until we know the levels
+			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			if (pokemon.hp <= 0) pokemon.hp = 1;
