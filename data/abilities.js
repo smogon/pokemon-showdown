@@ -528,7 +528,7 @@ let BattleAbilities = {
 		num: 212,
 	},
 	"cottondown": {
-		shortDesc: "",
+		shortDesc: "When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.",
 		onAfterDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-ability', target, 'Cotton Down');
@@ -622,7 +622,7 @@ let BattleAbilities = {
 		num: 186,
 	},
 	"dauntlessshield": {
-		shortDesc: "",
+		shortDesc: "Boosts the Pokémon's Defense stat when the Pokémon enters a battle.",
 		onSwitchIn(pokemon) {
 			// TODO: exact defense boost. This is a placeholder value
 			this.boost({def: 1}, pokemon);
@@ -1284,7 +1284,7 @@ let BattleAbilities = {
 		num: 183,
 	},
 	"gorillatactics": {
-		shortDesc: "",
+		shortDesc: "Boosts the Pokémon's Attack stat but only allows the use of the first selected move.",
 		onStart(pokemon) {
 			pokemon.abilityData.choiceLock = "";
 		},
@@ -1344,7 +1344,7 @@ let BattleAbilities = {
 		num: 229,
 	},
 	"gulpmissile": {
-		shortDesc: "",
+		shortDesc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.",
 		// TODO
 		id: "gulpmissile",
 		name: "Gulp Missile",
@@ -1454,7 +1454,7 @@ let BattleAbilities = {
 		num: 37,
 	},
 	"hungerswitch": {
-		shortDesc: "",
+		shortDesc: "The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode after the end of each turn.",
 		onResidual(pokemon) {
 			if (pokemon.template.baseSpecies !== 'Morpeko' || pokemon.transformed) return;
 			let targetForme = pokemon.template.species === 'Morpeko' ? 'Morpeko-Hangry' : 'Morpeko';
@@ -1534,7 +1534,7 @@ let BattleAbilities = {
 		num: 115,
 	},
 	"iceface": {
-		shortDesc: "",
+		shortDesc: "The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it hails.",
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && effect.category === 'Physical' && target.template.speciesid === 'eiscue' && !target.transformed) {
@@ -1585,7 +1585,7 @@ let BattleAbilities = {
 		num: 248,
 	},
 	"icescales": {
-		shortDesc: "",
+		shortDesc: "The Pokémon is protected by ice scales, which halve the damage taken from special moves.",
 		// TODO verify this is the correct way to implement this
 		onModifySpD(spd) {
 			return this.chainModify(2);
@@ -1751,7 +1751,7 @@ let BattleAbilities = {
 		num: 22,
 	},
 	"intrepidsword": {
-		shortDesc: "",
+		shortDesc: "Boosts the Pokémon's Attack stat when the Pokémon enters a battle.",
 		onSwitchIn(pokemon) {
 			// TODO: exact attack boost. This is a placeholder value
 			this.boost({atk: 1}, pokemon);
@@ -1861,7 +1861,7 @@ let BattleAbilities = {
 		num: 26,
 	},
 	"libero": {
-		shortDesc: "",
+		shortDesc: "Changes the Pokémon's type to the type of the move it's about to use",
 		onPrepareHit(source, target, move) {
 			if (move.hasBounced) return;
 			let type = move.type;
@@ -2111,7 +2111,7 @@ let BattleAbilities = {
 		num: 196,
 	},
 	"mimicry": {
-		shortDesc: "",
+		shortDesc: "Changes the Pokémon's type depending on the terrain.",
 		onUpdate(pokemon) {
 			// PLACEHOLDERS. What types are used for each terrain? Does the type revert after?
 			let type = pokemon.baseTemplate.types;
@@ -2163,7 +2163,7 @@ let BattleAbilities = {
 		num: 58,
 	},
 	"mirrorarmor": {
-		shortDesc: "",
+		shortDesc: "Bounces back only the stat-lowering effects that the Pokémon receives.",
 		onBoost(boost, target, source, effect) {
 			// Don't bounce self stat changes, or boosts that have already bounced
 			if (target === source || !boost || effect.id === 'mirrorarmor') return;
@@ -2413,7 +2413,7 @@ let BattleAbilities = {
 		num: 233,
 	},
 	"neutralizinggas": {
-		shortDesc: "",
+		shortDesc: "If the Pokémon with Neutralizing Gas is in the battle, the effects of all Pokémon's Abilities will be nullified or will not be triggered.",
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
 		// TODO Will abilities that already started start again? (Intimidate seems like a good test case)
 		onPreStart(pokemon) {
@@ -2590,7 +2590,7 @@ let BattleAbilities = {
 		num: 184,
 	},
 	"pastelveil": {
-		shortDesc: "",
+		shortDesc: "Protects the Pokémon and its ally Pokémon from being poisoned.",
 		onAllySwitchIn(pokemon) {
 			if (['psn', 'tox'].includes(pokemon.status)) {
 				this.add('-activate', this.effectData.target, 'ability: Pastel Veil');
@@ -2615,7 +2615,7 @@ let BattleAbilities = {
 		num: 257,
 	},
 	"perishbody": {
-		shortDesc: "",
+		shortDesc: "When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.",
 		onAfterDamage(damage, target, source, move) {
 			if (!move.flags['contact']) return;
 
@@ -2806,7 +2806,7 @@ let BattleAbilities = {
 		num: 223,
 	},
 	"powerspot": {
-		shortDesc: "",
+		shortDesc: "Just being next to the Pokémon powers up moves.",
 		// TODO lack of information, "Just being next to the Pokémon powers up moves" is too vague.
 		id: "powerspot",
 		name: "Power Spot",
@@ -2882,7 +2882,7 @@ let BattleAbilities = {
 		num: 232,
 	},
 	"propellertail": {
-		shortDesc: "",
+		shortDesc: "Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves.",
 		onRedirectTargetPriority: 3,
 		onRedirectTarget(target, source, source2, move) {
 			// Fires for all pokemon on the ability holder's side apparently
@@ -2925,7 +2925,7 @@ let BattleAbilities = {
 		num: 227,
 	},
 	"punkrock": {
-		shortDesc: "",
+		shortDesc: "Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.",
 		// TODO boost the power of sound based moves by how much?
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.flags.sound) {
@@ -3085,7 +3085,7 @@ let BattleAbilities = {
 		// TODO Needs research. Following berries aren't supported currently:
 		// Custap, Jacoba, Rowap, Lanslat, Leppa, Micle
 		// Check if they are affected by ripen.
-		shortDesc: "",
+		shortDesc: "Ripens Berries and doubles their effect.",
 		onTryHeal(damage, target, source, effect) {
 			if (effect && /** @type {Item} */(effect).isBerry) {
 				this.debug(`Ripen doubled healing`);
@@ -3220,7 +3220,7 @@ let BattleAbilities = {
 		num: 146,
 	},
 	"sandspit": {
-		shortDesc: "",
+		shortDesc: "The Pokémon creates a sandstorm when it's hit by an attack.",
 		onAfterDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && effect.id !== 'confused' && this.field.getWeather().id !== 'sandstorm') {
 				this.field.setWeather('sandstorm');
@@ -3331,7 +3331,7 @@ let BattleAbilities = {
 		num: 113,
 	},
 	"screencleaner": {
-		shortDesc: "",
+		shortDesc: "When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.",
 		onStart(pokemon) {
 			for (let sideCondition of ['reflect', 'lightscreen', 'auroraveil']) {
 				if (pokemon.side.removeSideCondition(sideCondition)) {
@@ -3723,7 +3723,7 @@ let BattleAbilities = {
 		num: 100,
 	},
 	"stalwart": {
-		shortDesc: "",
+		shortDesc: "Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves.",
 		onRedirectTargetPriority: 3,
 		onRedirectTarget(target, source, source2, move) {
 			// Fires for all pokemon on the ability holder's side apparently
@@ -3790,7 +3790,7 @@ let BattleAbilities = {
 		num: 80,
 	},
 	"steamengine": {
-		shortDesc: "",
+		shortDesc: "Boosts the Pokémon's Speed stat drastically if hit by a Fire- or Water-type move.",
 		onAfterDamage(damage, target, source, effect) {
 			if (effect && ['Water', 'Fire'].includes(effect.type)) {
 				this.boost({spe: 3});
@@ -3823,7 +3823,7 @@ let BattleAbilities = {
 		num: 200,
 	},
 	"steelyspirit": {
-		shortDesc: "",
+		shortDesc: "Powers up ally Pokémon's Steel-type moves.",
 		onAllyModifyAtk(atk, source, target, move) {
 			if (source !== this.effectData.target && move.type === 'Steel') {
 				// Placeholder
@@ -4400,7 +4400,7 @@ let BattleAbilities = {
 		num: 10,
 	},
 	"wanderingspirit": {
-		shortDesc: "",
+		shortDesc: "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.",
 		onAfterDamage(damage, target, source, move) {
 			// Are these actually banned? Makes sense for them to be banned to me
 			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'illusion', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode'];
