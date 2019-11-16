@@ -14473,7 +14473,7 @@ let BattlePokedex = {
 		heightm: 0.4,
 		weightkg: 11,
 		color: "Purple",
-		evos: ["toxtricity"],
+		evos: ["toxtricity", "toxtricitylowkey"],
 		eggGroups: ["Undiscovered"],
 	},
 	toxtricity: {
