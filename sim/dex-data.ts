@@ -475,7 +475,9 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect & Abili
 		this.rating = data.rating!;
 
 		if (!this.gen) {
-			if (this.num >= 192) {
+			if (this.num >= 234) {
+				this.gen = 8;
+			} else if (this.num >= 192) {
 				this.gen = 7;
 			} else if (this.num >= 165) {
 				this.gen = 6;
