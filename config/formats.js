@@ -1072,14 +1072,14 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 	},
-	/*{
+	{
 		name: "[Gen 7] Hackmons Cup",
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item.`,
 
 		mod: 'gen7',
 		team: 'randomHC',
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
-	},*/
+	},
 	{
 		name: "[Gen 7] Doubles Hackmons Cup",
 
