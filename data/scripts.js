@@ -1173,6 +1173,10 @@ let BattleScripts = {
 			if (this.canZMove(pokemon)) return;
 			if (this.canMegaEvo(pokemon)) return;
 			// TODO ban specific species from dynamaxing based on reserach
+			const cannotDynamax = ['zacian', 'zamazenta', 'eternatus'];
+			if (cannotDynamax.includes(toID(pokemon.template.baseSpecies))) {
+				return;
+			}
 		}
 		/** @type {DynamaxOptions} */
 		let result = {maxMoves: []};
