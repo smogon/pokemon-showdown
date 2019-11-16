@@ -30,6 +30,14 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: "Static"},
 	},
+	koffing: {
+		inherit: true,
+		abilities: {0: "Levitate"},
+	},
+	weezing: {
+		inherit: true,
+		abilities: {0: "Levitate"},
+	},
 	leafeon: {
 		inherit: true,
 		evoType: "levelExtra",
