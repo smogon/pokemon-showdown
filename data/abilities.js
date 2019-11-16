@@ -4612,7 +4612,7 @@ let BattleAbilities = {
 		num: 147,
 	},
 	"zenmode": {
-		desc: "If this Pokemon is a Darmanitan, it changes to Zen Mode if it has 1/2 or less of its maximum HP at the end of a turn. If Darmanitan's HP is above 1/2 of its maximum HP at the end of a turn, it changes back to Standard Mode. This Ability cannot be removed or suppressed.",
+		desc: "If this Pokemon is a Darmanitan or Darmanitan-Galar, it changes to Zen Mode if it has 1/2 or less of its maximum HP at the end of a turn. If Darmanitan's HP is above 1/2 of its maximum HP at the end of a turn, it changes back to Standard Mode. This Ability cannot be removed or suppressed.",
 		shortDesc: "If Darmanitan, at end of turn changes Mode to Standard if > 1/2 max HP, else Zen.",
 		onResidualOrder: 27,
 		onResidual(pokemon) {
@@ -4625,19 +4625,31 @@ let BattleAbilities = {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitangalar') {
+				pokemon.addVolatile('zenmode');
+			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitanzengalar') {
+				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
+				pokemon.removeVolatile('zenmode');
+			}
 		},
 		onEnd(pokemon) {
 			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
-			pokemon.formeChange('Darmanitan', this.effect, false, '[silent]');
+			if (pokemon.template.speciesid === 'darmanitanzen') pokemon.formeChange('Darmanitan', this.effect, false, '[silent]');
+			if (pokemon.template.speciesid === 'darmanitanzengalar') pokemon.formeChange('Darmanitan-Galar', this.effect, false, '[silent]');
 		},
 		effect: {
 			onStart(pokemon) {
-				if (pokemon.template.speciesid !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
+				if (!pokemon.template.species.includes('Galar')) {
+					if (pokemon.template.speciesid !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
+				} else {
+					if (pokemon.template.speciesid !== 'darmanitanzengalar') pokemon.formeChange('Darmanitan-Zen-Galar');
+				}
 			},
 			onEnd(pokemon) {
-				pokemon.formeChange('Darmanitan');
+				if (pokemon.template.forme === 'Zen') pokemon.formeChange('Darmanitan');
+				if (pokemon.template.forme === 'Zen-Galar') pokemon.formeChange('Darmanitan-Galar');
 			},
 		},
 		id: "zenmode",
