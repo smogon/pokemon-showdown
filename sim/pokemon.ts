@@ -366,7 +366,7 @@ export class Pokemon {
 		this.canMegaEvo = this.battle.canMegaEvo(this);
 		this.canUltraBurst = this.battle.canUltraBurst(this);
 		// Set to true if appropriate initially to allow battle.canDynamax to work.
-		this.canDynamax = true; // (this.battle.gen >= 8);
+		this.canDynamax = (this.battle.gen >= 8);
 		const canDynamax = this.battle.canDynamax(this);
 		this.canDynamax = canDynamax && canDynamax.gigantamax ? canDynamax.gigantamax : !!canDynamax;
 		this.canGigantamax = null; // TODO Gmax support
