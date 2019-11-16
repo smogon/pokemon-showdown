@@ -5856,7 +5856,7 @@ let BattleFormatsData = {
 		tier: "Unreleased",
 	},
 	virizion: {
-		randomBattleMoves: ["closecombat", "leafblade", "stonedge", "substitute", "swordsdance"],
+		randomBattleMoves: ["closecombat", "leafblade", "stoneedge", "substitute", "swordsdance"],
 		eventPokemon: [
 			{"generation": 5, "level": 42, "shiny": 1, "moves": ["helpinghand", "retaliate", "gigadrain", "sacredsword"]},
 			{"generation": 5, "level": 45, "shiny": 1, "moves": ["helpinghand", "retaliate", "gigadrain", "sacredsword"]},
