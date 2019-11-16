@@ -4160,7 +4160,7 @@ let BattleMovedex = {
 		desc: "In singles, this move hits the target twice. In doubles, this move hits each target once.",
 		shortDesc: "Singles: Hits twice. Doubles: Hits each once.",
 		id: "dragondarts",
-		name: "dragondarts",
+		name: "Dragon Darts",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
