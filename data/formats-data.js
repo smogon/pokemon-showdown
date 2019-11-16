@@ -5332,6 +5332,10 @@ let BattleFormatsData = {
 		tier: "New",
 		doublesTier: "New",
 	},
+	darmanitanzengalar: {
+		requiredAbility: "Zen Mode",
+		battleOnly: true,
+	},
 	maractus: {
 		randomBattleMoves: ["solarbeam", "sunnyday", "synthesis", "weatherball"],
 		tier: "New",
