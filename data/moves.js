@@ -1075,7 +1075,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -1743,6 +1743,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ground",
 		zMovePower: 100,
+		gmaxPower: 130,
 		contestType: "Tough",
 	},
 	"bonerush": {
@@ -1762,6 +1763,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ground",
 		zMovePower: 140,
+		gmaxPower: 130,
 		contestType: "Tough",
 	},
 	"boomburst": {
@@ -2177,6 +2179,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 		zMovePower: 140,
+		gmaxPower: 130,
 		contestType: "Cool",
 	},
 	"burnup": {
@@ -2685,6 +2688,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 100,
+		gmaxPower: 100,
 		contestType: "Tough",
 	},
 	"confide": {
@@ -3037,6 +3041,7 @@ let BattleMovedex = {
 		target: "scripted",
 		type: "Fighting",
 		zMovePower: 100,
+		gmaxPower: 75,
 		contestType: "Tough",
 	},
 	"courtchange": {
@@ -3268,6 +3273,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 190,
+		gmaxPower: 140,
 		contestType: "Tough",
 	},
 	"curse": {
@@ -3956,6 +3962,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 140,
+		gmaxPower: 120,
 		contestType: "Cool",
 	},
 	"doubleironbash": {
@@ -3980,6 +3987,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 		zMovePower: 180,
+		gmaxPower: 140,
 		contestType: "Clever",
 	},
 	"doublekick": {
@@ -3999,6 +4007,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fighting",
 		zMovePower: 100,
+		gmaxPower: 80,
 		contestType: "Cool",
 	},
 	"doubleslap": {
@@ -4174,6 +4183,7 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Dragon",
+		gmaxPower: 130,
 	},
 	"dragonhammer": {
 		num: 692,
@@ -4407,6 +4417,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 		zMovePower: 100,
+		gmaxPower: 130,
 		contestType: "Tough",
 	},
 	"dynamaxcannon": {
@@ -4705,6 +4716,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Electric",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Cool",
 	},
 	"electroweb": {
@@ -4867,6 +4879,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Tough",
 	},
 	"endure": {
@@ -5636,6 +5649,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ground",
 		zMovePower: 180,
+		gmaxPower: 130,
 		contestType: "Tough",
 	},
 	"flail": {
@@ -5673,6 +5687,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Cute",
 	},
 	"flameburst": {
@@ -6475,6 +6490,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Cute",
 	},
 	"furyattack": {
@@ -6549,6 +6565,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 100,
+		gmaxPower: 100,
 		contestType: "Tough",
 	},
 	"fusionbolt": {
@@ -6694,6 +6711,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 		zMovePower: 180,
+		gmaxPower: 130,
 		contestType: "Clever",
 	},
 	"gearup": {
@@ -7352,6 +7370,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Cute",
 	},
 	"grasspledge": {
@@ -7795,6 +7814,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 180,
+		gmaxPower: 130,
 		contestType: "Cool",
 	},
 	"gunkshot": {
@@ -7860,6 +7880,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Cool",
 	},
 	"hail": {
@@ -8299,6 +8320,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Tough",
 	},
 	"heatwave": {
@@ -8363,6 +8385,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Tough",
 	},
 	"helpinghand": {
@@ -8875,6 +8898,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 180,
+		gmaxPower: 130,
 		contestType: "Cool",
 	},
 	"hornleech": {
@@ -9376,6 +9400,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ice",
 		zMovePower: 140,
+		gmaxPower: 130,
 		contestType: "Beautiful",
 	},
 	"icywind": {
@@ -9833,7 +9858,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -10950,6 +10975,7 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		type: "Ground",
 		zMovePower: 140,
+		gmaxPower: 140,
 		contestType: "Tough",
 	},
 	"maliciousmoonsault": {
@@ -10999,7 +11025,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
@@ -12594,6 +12620,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Clever",
 	},
 	"naturepower": {
@@ -13500,6 +13527,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Bug",
 		zMovePower: 140,
+		gmaxPower: 130,
 		contestType: "Cool",
 	},
 	"plasmafists": {
@@ -13957,6 +13985,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Clever",
 	},
 	"poweruppunch": {
@@ -14101,7 +14130,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -14454,6 +14483,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Cool",
 	},
 	"purify": {
@@ -14652,7 +14682,7 @@ let BattleMovedex = {
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings; Quick Claw/Custap Berry do not count)
 				if (move.priority <= 0.1) return;
 				if (!move.flags['protect']) {
-					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');
@@ -15162,6 +15192,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Cute",
 	},
 	"revelationdance": {
@@ -15312,6 +15343,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Rock",
 		zMovePower: 140,
+		gmaxPower: 130,
 		contestType: "Tough",
 	},
 	"rockclimb": {
@@ -16132,6 +16164,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fighting",
 		zMovePower: 100,
+		gmaxPower: 75,
 		contestType: "Tough",
 	},
 	"selfdestruct": {
@@ -16376,6 +16409,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ice",
 		zMovePower: 180,
+		gmaxPower: 130,
 		contestType: "Beautiful",
 	},
 	"shellsmash": {
@@ -17707,6 +17741,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 100,
+		gmaxPower: 120,
 		contestType: "Cool",
 	},
 	"spikes": {
@@ -17776,7 +17811,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -18344,6 +18379,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Psychic",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Clever",
 	},
 	"stormthrow": {
@@ -19104,6 +19140,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 140,
+		gmaxPower: 130,
 		contestType: "Cute",
 	},
 	"tailwhip": {
@@ -20117,6 +20154,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fighting",
 		zMovePower: 120,
+		gmaxPower: 80,
 		contestType: "Cool",
 	},
 	"tropkick": {
@@ -20177,6 +20215,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Cool",
 	},
 	"twineedle": {
@@ -20200,6 +20239,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Bug",
 		zMovePower: 100,
+		gmaxPower: 100,
 		contestType: "Cool",
 	},
 	"twinkletackle": {
@@ -20808,6 +20848,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 160,
+		gmaxPower: 130,
 		contestType: "Beautiful",
 	},
 	"whirlpool": {
@@ -20879,7 +20920,7 @@ let BattleMovedex = {
 				if (move && move.target !== 'allAdjacent' && move.target !== 'allAdjacentFoes') {
 					return;
 				}
-				if (move.isZ) {
+				if (move.isZ || move.isMax) {
 					target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
@@ -21167,6 +21208,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 		zMovePower: 190,
+		gmaxPower: 140,
 		contestType: "Tough",
 	},
 	"xscissor": {

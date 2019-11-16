@@ -1197,13 +1197,6 @@ let BattleScripts = {
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
 		}
 		let maxMove = this.dex.getMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
-		// TODO defined a Max Move Power in all moves and use that
-		if (move.category !== 'Status') {
-			// @ts-ignore
-			maxMove.basePower = move.zMovePower || 120;
-			// @ts-ignore
-			maxMove.category = move.category;
-		}
 		if (maxMove.exists) return maxMove;
 	},
 
@@ -1215,11 +1208,9 @@ let BattleScripts = {
 			let gMaxMove = this.dex.getActiveMove(gMaxTemplate.isGigantamax ? gMaxTemplate.isGigantamax : '');
 			if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
 		}
-		// TODO defined a Max Move Power in all moves and use that
 		if (move.category !== 'Status') {
-			// @ts-ignore
-			maxMove.basePower = move.zMovePower || 120;
-			// @ts-ignore
+			if (!move.gmaxPower) throw new Error(`${move.name} doesn't have a gmaxPower`);
+			maxMove.basePower = move.gmaxPower;
 			maxMove.category = move.category;
 		}
 		maxMove.maxPowered = true;
