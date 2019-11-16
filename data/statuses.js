@@ -329,7 +329,7 @@ let BattleStatuses = {
 				pokemon.removeVolatile('choicelock');
 				return;
 			}
-			if (!pokemon.ignoringItem() && move.id !== this.effectData.move && move.id !== 'struggle') {
+			if (!pokemon.ignoringItem() && !pokemon.volatiles['dynamax'] && move.id !== this.effectData.move && move.id !== 'struggle') {
 				// Fails unless the Choice item is being ignored, and no PP is lost
 				this.addMove('move', pokemon, move.name);
 				this.attrLastMove('[still]');

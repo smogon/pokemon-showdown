@@ -465,7 +465,7 @@ export class Side {
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
-		} else if (!zMove) {
+		} else if (!zMove && !(megaDynaOrZ === 'dynamax' || pokemon.volatiles['dynamax'])) {
 			// Check for disabled moves
 			let isEnabled = false;
 			let disabledSource = '';
