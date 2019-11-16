@@ -648,6 +648,17 @@ let Formats = [
 		banlist: ['Uber', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 8] Doubles OU (beta)",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/np-swsh-dou-stage-0-begin-again.3656244/">Doubles OU Metagame Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		ruleset: ['Obtainable', 'Standard Doubles', 'Team Preview'],
+		banlist: ['DUber', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
