@@ -7510,7 +7510,7 @@ let BattleMovedex = {
 		desc: "Has a 100% chance to lower the target's Defense by 1 stage.",
 		shortDesc: "100% chance to lower the target's Defense by 1.",
 		id: "gravapple",
-		name: "gravapple",
+		name: "Grav Apple",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
