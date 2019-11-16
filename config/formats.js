@@ -627,6 +627,7 @@ let Formats = [
 	///////////////////////////////////////////////////////////////////
 	{
 		section: "Sword/Shield",
+		column: 2,
 	},
 	{
 		name: "[Gen 8] Random Battle",
@@ -685,7 +686,7 @@ let Formats = [
 
 	{
 		section: "OM of the Month",
-		column: 2,
+		// column: 2,
 	},
 	{
 		name: "[Gen 8] Balanced Hackmons (beta)",
