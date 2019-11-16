@@ -5610,6 +5610,11 @@ let BattleFormatsData = {
 		tier: "OU",
 		doublesTier: "DUber",
 	},
+	magearnaoriginal: {
+		isNonstandard: null,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
 	marshadow: {
 		inherit: true,
 		randomBattleMoves: ["bulkup", "spectralthief", "closecombat", "rocktomb", "shadowsneak", "icepunch"],

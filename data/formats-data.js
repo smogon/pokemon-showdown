@@ -7256,8 +7256,8 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	magearnaoriginal: {
-		isUnreleased: true,
-		tier: "Unreleased",
+		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	marshadow: {
 		randomBattleMoves: ["bulkup", "closecombat", "icepunch", "rocktomb", "shadowsneak", "spectralthief"],
