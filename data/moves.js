@@ -19192,8 +19192,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 1/4 recoil.",
+		desc: "Lowers the target's Speed by 1 stage. Until the target switches out, it takes 2x damage from Fire moves.",
+		shortDesc: "-1 Spe. Target takes 2x damage from Fire moves.",
 		id: "tarshot",
 		name: "Tar Shot",
 		pp: 20,
@@ -19210,7 +19210,7 @@ let BattleMovedex = {
 			onSourceModifyDamage(damage, source, target, move) {
 				if (target.volatiles['tarshot'] && this.dex.getActiveMove(move).type === 'Fire') {
 					// TODO: Figure out damage modifier
-					return this.chainModify(1.2);
+					return this.chainModify(2);
 				}
 			},
 			onResidualOrder: 21,
