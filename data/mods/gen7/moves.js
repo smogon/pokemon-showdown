@@ -105,7 +105,6 @@ let BattleMovedex = {
 	doubleironbash: {
 		inherit: true,
 		isNonstandard: "LGPE",
-		isUnreleased: false,
 	},
 	doubleslap: {
 		inherit: true,
