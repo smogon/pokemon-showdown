@@ -11165,7 +11165,7 @@ let BattleMovedex = {
 	"maxguard": {
 		num: 743,
 		accuracy: true,
-		basePower: 1,
+		basePower: 0,
 		category: "Status",
 		shortDesc: "Prevents all moves from affecting the user this turn.",
 		id: "maxguard",
