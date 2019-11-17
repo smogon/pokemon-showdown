@@ -101,6 +101,7 @@ let BattleMovedex = {
 			onBeforeMove(pokemon, target, move) {
 				if (this.effectData.duration === 1) {
 					if (!this.effectData.totalDamage) {
+						this.debug("Bide failed due to 0 damage taken");
 						this.add('-fail', pokemon);
 						return false;
 					}
@@ -257,6 +258,7 @@ let BattleMovedex = {
 			if (lastUsedMove && lastUsedMove.basePower > 0 && ['Normal', 'Fighting'].includes(lastUsedMove.type) && this.lastDamage > 0 && !this.willMove(target)) {
 				return 2 * this.lastDamage;
 			}
+			this.debug("Gen 1 Counter failed due to conditions not met");
 			this.add('-fail', pokemon);
 			return false;
 		},
