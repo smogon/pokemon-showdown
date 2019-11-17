@@ -22,6 +22,9 @@ const PRNG = require(/** @type {any} */ ('../.sim-dist/prng')).PRNG;
  * @property {number} [eeveeLimCount]
  */
 
+/** @type {string[][]} */
+let gen8ValidPoolCache;
+
 class RandomTeams {
 	/**
 	 * @param {Format | string} format
@@ -292,6 +295,42 @@ class RandomTeams {
 		// Pick six random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
+
+		if (this.format.mod === 'gen8') {
+			// gen 8 has entire pokemon lines be nonstandard
+			if (!gen8ValidPoolCache) {
+				/** @type {{[num: string]: string[]}} */
+				const validPokemon = {};
+				for (const id in this.dex.data.Pokedex) {
+					const template = this.dex.getTemplate(id);
+
+					if (template.gen <= this.gen && !template.isNonstandard) {
+						if (!validPokemon[template.num]) {
+							validPokemon[template.num] = [template.species];
+						} else {
+							validPokemon[template.num].push(template.species);
+						}
+					}
+				}
+				gen8ValidPoolCache = [...Object.values(validPokemon)];
+			}
+			const pool = gen8ValidPoolCache;
+
+			// sample 6 sets of forms
+			/** @type {string[][]} */
+			const sampled = [];
+			for (let i = 0; i < 6; i++) {
+				let sample;
+				do {
+					sample = this.sample(pool);
+				} while (sampled.includes(sample));
+				sampled.push(sample);
+			}
+
+			// pick one form
+			return sampled.map(forms => this.sample(forms));
+		}
+
 		let last = [0, 151, 251, 386, 493, 649, 721, 807][this.gen];
 		/**@type {{[k: string]: number}} */
 		let hasDexNumber = {};
