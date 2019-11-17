@@ -219,12 +219,21 @@ export class Pokemon {
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
 		if (typeof set === 'string') set = {name: set};
-		this.set = set as PokemonSet;
 
 		this.baseTemplate = this.battle.dex.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
 			throw new Error(`Unidentified species: ${this.baseTemplate.name}`);
 		}
+		// Change Gigantamax formes to their base formes
+		let gMax: string | null = null;
+		if (this.baseTemplate.isGigantamax) {
+			gMax = this.baseTemplate.species;
+			if (set.species && toID(set.species) === this.baseTemplate.id) set.species = this.baseTemplate.baseSpecies;
+			if (set.name && toID(set.name) === this.baseTemplate.id) set.name = this.baseTemplate.baseSpecies;
+			this.baseTemplate = this.battle.dex.getTemplate(this.baseTemplate.baseSpecies);
+		}
+		this.set = set as PokemonSet;
+
 		this.template = this.baseTemplate;
 		this.species = this.battle.dex.getSpecies(set.species);
 		this.speciesid = toID(this.species);
@@ -369,7 +378,7 @@ export class Pokemon {
 		this.canDynamax = (this.battle.gen >= 8);
 		const canDynamax = this.battle.canDynamax(this);
 		this.canDynamax = canDynamax && canDynamax.gigantamax ? canDynamax.gigantamax : !!canDynamax;
-		this.canGigantamax = null; // TODO Gmax support
+		this.canGigantamax = gMax;
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
