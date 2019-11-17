@@ -172,6 +172,6 @@ TeamValidatorAsync.PM.spawn();
  * Start up the REPL server
  *********************************************************/
 
-import {Repl}  from '../lib/repl';
+import {Repl} from '../lib/repl';
 // tslint:disable-next-line: no-eval
 Repl.start('app', cmd => eval(cmd));
