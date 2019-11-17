@@ -252,6 +252,7 @@ interface EventMethods {
 	onUpdate?: (this: Battle, pokemon: Pokemon) => void
 	onWeather?: (this: Battle, target: Pokemon, source: null, effect: PureEffect) => void
 	onWeatherModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onStartWeather?: (this: Battle, target: Pokemon, source: null, weather: PureEffect) => void
 	onModifyDamagePhase1?: CommonHandlers['ModifierSourceMove']
 	onModifyDamagePhase2?: CommonHandlers['ModifierSourceMove']
 	onAllyAfterDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
