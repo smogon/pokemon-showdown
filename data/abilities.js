@@ -1851,7 +1851,7 @@ let BattleAbilities = {
 		num: 26,
 	},
 	"libero": {
-		shortDesc: "Changes the Pokémon's type to the type of the move it's about to use.",
+		shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
 		onPrepareHit(source, target, move) {
 			if (move.hasBounced) return;
 			let type = move.type;
