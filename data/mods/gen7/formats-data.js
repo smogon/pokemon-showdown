@@ -4615,7 +4615,6 @@ let BattleFormatsData = {
 	vivillon: {
 		randomBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "energyball", "substitute"],
 		randomDoubleBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "bugbuzz", "roost", "protect"],
-		isNonstandard: null,
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
