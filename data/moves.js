@@ -6946,20 +6946,17 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Butterfree",
-		secondary: {
-			chance: 100,
-			onHit(target, source) {
-				for (let pokemon of target.side.active) {
-					let result = this.random(3);
-					if (result === 0) {
-						pokemon.trySetStatus('slp', source);
-					} else if (result === 1) {
-						pokemon.trySetStatus('par', source);
-					} else {
-						pokemon.trySetStatus('psn', source);
-					}
+		onHit(target, source) {
+			for (let pokemon of target.side.active) {
+				let result = this.random(3);
+				if (result === 0) {
+					pokemon.trySetStatus('slp', source);
+				} else if (result === 1) {
+					pokemon.trySetStatus('par', source);
+				} else {
+					pokemon.trySetStatus('psn', source);
 				}
-			},
+			}
 		},
 		target: "normal",
 		type: "Bug",
@@ -7146,14 +7143,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Orbeetle",
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.addPseudoWeather('gravity');
-				},
-			},
-		},
+		pseudoWeather: 'gravity',
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
@@ -7171,13 +7161,10 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Garbodor",
-		secondary: {
-			chance: 100,
-			onHit(target, source) {
-				for (let pokemon of target.side.active) {
-					pokemon.trySetStatus('psn', source);
-				}
-			},
+		onHit(target, source) {
+			for (let pokemon of target.side.active) {
+				pokemon.trySetStatus('psn', source);
+			}
 		},
 		target: "normal",
 		type: "Poison",
@@ -11103,14 +11090,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setWeather('sunnyday');
-				},
-			},
-		},
+		weather: 'sunnyday',
 		target: "normal",
 		type: "Fire",
 		contestType: "Cool",
@@ -11150,14 +11130,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setWeather('raindance');
-				},
-			},
-		},
+		weather: 'raindance',
 		target: "normal",
 		type: "Water",
 		contestType: "Cool",
@@ -11219,14 +11192,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setWeather('hail');
-				},
-			},
-		},
+		weather: 'hail',
 		target: "normal",
 		type: "Ice",
 		contestType: "Cool",
@@ -11266,14 +11232,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setTerrain('electricterrain');
-				},
-			},
-		},
+		terrain: 'electricterrain',
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
@@ -11291,14 +11250,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setTerrain('psychicterrain');
-				},
-			},
-		},
+		terrain: 'psychicterrain',
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
@@ -11338,14 +11290,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setTerrain('grassyterrain');
-				},
-			},
-		},
+		terrain: 'grassyterrain',
 		target: "normal",
 		type: "Grass",
 		contestType: "Cool",
@@ -11407,14 +11352,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setWeather('sandstorm');
-				},
-			},
-		},
+		weather: 'sandstorm',
 		target: "normal",
 		type: "Rock",
 		contestType: "Cool",
@@ -11432,14 +11370,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setTerrain('mistyterrain');
-				},
-			},
-		},
+		terrain: 'mistyterrain',
 		target: "normal",
 		type: "Fairy",
 		contestType: "Cool",
