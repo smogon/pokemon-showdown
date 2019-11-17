@@ -7143,7 +7143,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Orbeetle",
-		pseudoweather: 'gravity',
+		pseudoWeather: 'gravity',
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
