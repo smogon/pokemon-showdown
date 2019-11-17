@@ -801,12 +801,11 @@ let BattleScripts = {
 		let attacker = pokemon;
 		let defender = target;
 		if (move.useTargetOffensive) attacker = target;
-		if (move.useSourceDefensive) defender = pokemon;
 		/** @type {StatNameExceptHP} */
 		let atkType = (move.category === 'Physical') ? 'atk' : 'spa';
 		/** @type {StatNameExceptHP} */
 		let defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
-		let attack = attacker.getStat(atkType);
+		let attack = attacker.getStat(move.useSourceDefensiveAsOffensive ? defType : atkType);
 		let defense = defender.getStat(defType);
 		// In gen 1, screen effect is applied here.
 		if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {

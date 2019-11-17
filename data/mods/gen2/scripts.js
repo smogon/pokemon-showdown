@@ -585,11 +585,11 @@ let BattleScripts = {
 		let attacker = pokemon;
 		let defender = target;
 		if (move.useTargetOffensive) attacker = target;
-		if (move.useSourceDefensive) defender = pokemon;
 		/** @type {StatNameExceptHP} */
 		let atkType = (move.category === 'Physical') ? 'atk' : 'spa';
 		/** @type {StatNameExceptHP} */
 		let defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
+		if (move.useSourceDefensiveAsOffensive) atkType = defType;
 		let unboosted = false;
 		let noburndrop = false;
 
