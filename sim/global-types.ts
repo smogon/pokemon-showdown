@@ -815,7 +815,7 @@ interface MoveData extends EffectData, MoveEventMethods {
 	terrain?: string
 	thawsTarget?: boolean
 	useTargetOffensive?: boolean
-	useSourceDefensive?: boolean
+	useSourceDefensiveAsOffensive?: boolean
 	volatileStatus?: string
 	weather?: string
 	willCrit?: boolean

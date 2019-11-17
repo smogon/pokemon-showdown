@@ -1982,14 +1982,16 @@ export class Battle {
 
 		const attacker = pokemon;
 		const defender = target;
-		const attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
+		let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
 		const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		if (move.useSourceDefensiveAsOffensive) attackStat = defenseStat;
+
 		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 		let attack;
 		let defense;
 
 		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
-		let defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
+		let defBoosts = defender.boosts[defenseStat];
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
@@ -2016,11 +2018,7 @@ export class Battle {
 			attack = attacker.calculateStat(attackStat, atkBoosts);
 		}
 
-		if (move.useSourceDefensive) {
-			defense = attacker.calculateStat(defenseStat, defBoosts);
-		} else {
-			defense = defender.calculateStat(defenseStat, defBoosts);
-		}
+		defense = defender.calculateStat(defenseStat, defBoosts);
 
 		// Apply Stat Modifiers
 		attack = this.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
