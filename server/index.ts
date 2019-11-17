@@ -66,7 +66,7 @@ import {FS} from '../lib/fs';
  *********************************************************/
 
 // global becomes much easier to use if declared as an object
-declare var global: any;
+declare const global: any;
 
 import * as ConfigLoader from './config-loader';
 global.Config = ConfigLoader.Config;
