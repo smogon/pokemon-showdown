@@ -1002,6 +1002,7 @@ interface FormatsData extends EventMethods {
 	rated?: boolean
 	requirePentagon?: boolean
 	requirePlus?: boolean
+	requireGalar?: boolean
 	restrictedAbilities?: string[]
 	restrictedMoves?: string[]
 	restrictedStones?: string[]

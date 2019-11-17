@@ -646,6 +646,7 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Baton Pass'],
+		requireGalar: true,
 	},
 	{
 		name: "[Gen 8] Doubles OU (beta)",
@@ -657,6 +658,7 @@ let Formats = [
 		gameType: 'doubles',
 		ruleset: ['Obtainable', 'Standard Doubles', 'Team Preview'],
 		banlist: ['DUber', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
+		requireGalar: true,
 	},
 	{
 		name: "[Gen 8] Custom Game",

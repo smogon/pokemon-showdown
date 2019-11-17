@@ -465,7 +465,7 @@ export class TeamValidator {
 					if (template.unreleasedHidden && ruleTable.has('-unreleased')) {
 						problems.push(`${name}'s Hidden Ability is unreleased.`);
 					} else if (['entei', 'suicune', 'raikou'].includes(template.id) &&
-						(format.requirePlus || format.requirePentagon)) {
+						(format.requireGalar || format.requirePlus || format.requirePentagon)) {
 						problems.push(`${name}'s Hidden Ability is only available from Virtual Console, which is not allowed in this format.`);
 					} else if (dex.gen === 6 && ability.name === 'Symbiosis' &&
 						(set.species.endsWith('Orange') || set.species.endsWith('White'))) {
@@ -586,7 +586,7 @@ export class TeamValidator {
 					problems.push(`${template.species} is only obtainable from events - it needs to match one of its events, such as:`);
 				}
 				let eventInfo = eventPokemon[0];
-				const minPastGen = (format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
+				const minPastGen = (format.requireGalar ? 8 : format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
 				let eventNum = 1;
 				for (const [i, eventData] of eventPokemon.entries()) {
 					if (eventData.generation <= dex.gen && eventData.generation >= minPastGen) {
@@ -606,7 +606,7 @@ export class TeamValidator {
 			problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
 		}
 		if (ruleTable.has('obtainablemoves') && template.id === 'keldeo' && set.moves.includes('secretsword') &&
-			(format.requirePlus || format.requirePentagon)) {
+			(format.requireGalar || format.requirePlus || format.requirePentagon)) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
 		const requiresGen3Source = setSources.maxSourceGen() <= 3;
@@ -1349,6 +1349,10 @@ export class TeamValidator {
 			if (fastReturn) return true;
 			problems.push(`This format requires Pokemon from gen 7 and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
+		if (this.format.requireGalar && eventData.generation < 8) {
+			if (fastReturn) return true;
+			problems.push(`This format requires Pokemon from gen 8 and ${name} is from gen ${eventData.generation}${etc}.`);
+		}
 		if (dex.gen < eventData.generation) {
 			if (fastReturn) return true;
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
@@ -1476,6 +1480,7 @@ export class TeamValidator {
 
 	allSources(template?: Template) {
 		let minPastGen = (
+			this.format.requireGalar ? 8 :
 			this.format.requirePlus ? 7 :
 			this.format.requirePentagon ? 6 :
 			this.dex.gen >= 3 ? 3 : 1
@@ -1502,7 +1507,7 @@ export class TeamValidator {
 				const plural = (parseInt(problem.maxSketches, 10) === 1 ? '' : 's');
 				problemString += ` can't be Sketched because it can only Sketch ${problem.maxSketches} move${plural}.`;
 			} else if (problem.type === 'pastgen') {
-				problemString += ` is not available in generation ${problem.gen} or later.`;
+				problemString += ` is not available in generation ${problem.gen}.`;
 			} else if (problem.type === 'invalid') {
 				problemString = `${name} can't learn ${problem.moveName}.`;
 			} else {
@@ -1612,7 +1617,7 @@ export class TeamValidator {
 		/**
 		 * The minimum past gen the format allows
 		 */
-		const minPastGen = (format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
+		const minPastGen = (format.requireGalar ? 8 : format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
 		/**
 		 * The format doesn't allow Pokemon traded from the future
 		 * (This is everything except in Gen 1 Tradeback)
