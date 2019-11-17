@@ -880,13 +880,15 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 				} else if (this.basePower >= 110) {
 					this.gmaxPower = 95;
 				} else if (this.basePower >= 75) {
-					this.gmaxPower = 95;
+					this.gmaxPower = 90;
 				} else if (this.basePower >= 65) {
 					this.gmaxPower = 85;
+				} else if (this.basePower >= 55) {
+					this.gmaxPower = 80;
 				} else if (this.basePower >= 45) {
 					this.gmaxPower = 75;
 				} else  {
-					this.gmaxPower = 10;
+					this.gmaxPower = 70;
 				}
 			} else {
 				if (this.basePower >= 150) {
