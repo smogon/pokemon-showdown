@@ -57,7 +57,7 @@
 		"no-lone-blocks": "off",
 		"no-loop-func": "off",
 		"no-magic-numbers": "off",
-		"no-multi-spaces": "warn",
+		"no-multi-spaces": "error",
 		"no-multi-str": "error",
 		"no-new-func": "error",
 		"no-new-wrappers": "error",

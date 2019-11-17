@@ -1377,7 +1377,7 @@ class RandomTeams {
 			/** @type {{[species: string]: number}} */
 			let customScale = {
 				// Unreleased Ubers
-				'Kyurem-Black': 78, 'Kyurem-White': 78, Lunala: 78, Marshadow: 78, Mewtwo: 78, 'Necrozma-Dawn-Wings': 78,  'Necrozma-Dusk-Mane': 78, Reshiram: 78, Solgaleo: 78, Zekrom: 78,
+				'Kyurem-Black': 78, 'Kyurem-White': 78, Lunala: 78, Marshadow: 78, Mewtwo: 78, 'Necrozma-Dawn-Wings': 78, 'Necrozma-Dusk-Mane': 78, Reshiram: 78, Solgaleo: 78, Zekrom: 78,
 
 				// Banned Ability
 				// Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Wobbuffet: 82,
