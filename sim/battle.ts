@@ -2017,9 +2017,9 @@ export class Battle {
 		}
 
 		if (move.useSourceDefensive) {
-			defense = attacker.calculateStat(defenseStat, defBoosts);
+			attack = attacker.calculateStat(defenseStat, defBoosts);
 		} else {
-			defense = defender.calculateStat(defenseStat, defBoosts);
+			attack = attacker.calculateStat(attackStat, atkBoosts);
 		}
 
 		// Apply Stat Modifiers
