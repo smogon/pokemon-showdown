@@ -4615,8 +4615,17 @@ let BattleFormatsData = {
 	vivillon: {
 		randomBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "energyball", "substitute"],
 		randomDoubleBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "bugbuzz", "roost", "protect"],
+		isNonstandard: null,
 		tier: "NU",
 		doublesTier: "(DUU)",
+	},
+	vivillonfancy: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	vivillonpokeball: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	litleo: {
 		tier: "LC",
