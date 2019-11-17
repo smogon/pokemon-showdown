@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import { crashlogger } from '../lib/crashlogger';
+import {crashlogger} from '../lib/crashlogger';
 
 declare var global: any;
 
@@ -35,7 +35,7 @@ export const get = TeamValidatorAsync.get;
  * Process manager
  *********************************************************/
 
-import { QueryProcessManager } from '../lib/process-manager';
+import {QueryProcessManager} from '../lib/process-manager';
 
 export const PM = new QueryProcessManager(module, async message => {
 	const {formatid, removeNicknames, team} = message;
@@ -61,11 +61,11 @@ export const PM = new QueryProcessManager(module, async message => {
 	return '1' + packedTeam;
 });
 
-import { Repl } from '../lib/repl';
-import { Dex as importedDex } from '../sim/dex';
-import { TeamValidator } from '../sim/team-validator';
-import { Chat } from './chat';
-import { Config } from './config-loader';
+import {Repl} from '../lib/repl';
+import {Dex as importedDex} from '../sim/dex';
+import {TeamValidator} from '../sim/team-validator';
+import {Chat} from './chat';
+import {Config} from './config-loader';
 
 if (!PM.isParentProcess) {
 	// This is a child process!

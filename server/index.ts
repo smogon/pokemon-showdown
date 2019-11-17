@@ -71,7 +71,7 @@ declare const global: any;
 import * as ConfigLoader from './config-loader';
 global.Config = ConfigLoader.Config;
 
-import { Monitor } from './monitor';
+import {Monitor} from './monitor';
 global.Monitor = Monitor;
 global.__version = {head: ''};
 void Monitor.version().then((hash: any) => {
@@ -94,36 +94,36 @@ if (Config.watchconfig) {
  * Set up most of our globals
  *********************************************************/
 
-import { Dex } from '../sim/dex';
+import {Dex} from '../sim/dex';
 global.Dex = Dex;
 global.toId = Dex.getId;
 
-import { LoginServer } from './loginserver';
+import {LoginServer} from './loginserver';
 global.LoginServer = LoginServer;
 
-import { Ladders } from './ladders';
+import {Ladders} from './ladders';
 global.Ladders = Ladders;
 
-import { Chat } from './chat';
+import {Chat} from './chat';
 global.Chat = Chat;
 
-import { Users } from './users';
+import {Users} from './users';
 global.Users = Users;
 
-import { Punishments } from './punishments';
+import {Punishments} from './punishments';
 global.Punishments = Punishments;
 
-import { Rooms } from './rooms';
+import {Rooms} from './rooms';
 global.Rooms = Rooms;
 
 import * as Verifier from './verifier';
 global.Verifier = Verifier;
 Verifier.PM.spawn();
 
-import { Tournaments } from './tournaments';
+import {Tournaments} from './tournaments';
 global.Tournaments = Tournaments;
 
-import { IPTools } from './ip-tools';
+import {IPTools} from './ip-tools';
 global.IPTools = IPTools;
 void IPTools.loadDatacenters();
 
@@ -172,6 +172,6 @@ TeamValidatorAsync.PM.spawn();
  * Start up the REPL server
  *********************************************************/
 
-import { Repl } from '../lib/repl';
+import {Repl}  from '../lib/repl';
 // tslint:disable-next-line: no-eval
 Repl.start('app', cmd => eval(cmd));
