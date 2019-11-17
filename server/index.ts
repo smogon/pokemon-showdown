@@ -58,7 +58,7 @@ try {
 	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
 
-import { FS } from '../.lib-dist/fs';
+import { FS } from '../lib/fs';
 
 /*********************************************************
  * Load configuration
@@ -67,10 +67,10 @@ import { FS } from '../.lib-dist/fs';
 // global becomes much easier to use if declared as an object
 declare var global: any;
 
-import * as ConfigLoader from '../server/config-loader';
+import * as ConfigLoader from './config-loader';
 global.Config = ConfigLoader.Config;
 
-import { Monitor } from '../server/monitor';
+import { Monitor } from './monitor';
 global.Monitor = Monitor;
 global.__version = {head: ''};
 void Monitor.version().then((hash: any) => {
@@ -93,36 +93,36 @@ if (Config.watchconfig) {
  * Set up most of our globals
  *********************************************************/
 
-import { Dex } from '../.sim-dist/dex';
+import { Dex } from '../sim/dex';
 global.Dex = Dex;
 global.toId = Dex.getId;
 
-import { LoginServer } from '../server/loginserver';
+import { LoginServer } from './loginserver';
 global.LoginServer = LoginServer;
 
-import { Ladders } from '../server/ladders';
+import { Ladders } from './ladders';
 global.Ladders = Ladders;
 
-import { Chat } from '../server/chat';
+import { Chat } from './chat';
 global.Chat = Chat;
 
-import { Users } from '../server/users';
+import { Users } from './users';
 global.Users = Users;
 
-import { Punishments } from '../server/punishments';
+import { Punishments } from './punishments';
 global.Punishments = Punishments;
 
-import { Rooms } from '../server/rooms';
+import { Rooms } from './rooms';
 global.Rooms = Rooms;
 
-import * as Verifier from '../server/verifier';
+import * as Verifier from './verifier';
 global.Verifier = Verifier;
 Verifier.PM.spawn();
 
-import { Tournaments } from '../server/tournaments';
+import { Tournaments } from './tournaments';
 global.Tournaments = Tournaments;
 
-import { IPTools } from '../server/ip-tools';
+import { IPTools } from './ip-tools';
 global.IPTools = IPTools;
 void IPTools.loadDatacenters();
 
@@ -131,6 +131,9 @@ if (Config.crashguard) {
 	process.on('uncaughtException', (err: Error) => {
 		Monitor.crashlog(err, 'The main process');
 	});
+
+	// Typescript doesn't like this call
+	// @ts-ignore
 	process.on('unhandledRejection', (err: Error, promise: Promise<any>) => {
 		Monitor.crashlog(err, 'A main process Promise');
 	});
@@ -140,7 +143,7 @@ if (Config.crashguard) {
  * Start networking processes to be connected to
  *********************************************************/
 
-import * as Sockets from './sockets';
+import * as Sockets from '../server/sockets';
 global.Sockets = Sockets;
 
 export function listen(port: number, bindAddress: string, workerCount: number) {
@@ -160,7 +163,7 @@ if (require.main === module) {
  * Set up our last global
  *********************************************************/
 
-import { TeamValidatorAsync } from './team-validator-async';
+import * as TeamValidatorAsync from './team-validator-async';
 global.TeamValidatorAsync = TeamValidatorAsync;
 TeamValidatorAsync.PM.spawn();
 
@@ -168,6 +171,6 @@ TeamValidatorAsync.PM.spawn();
  * Start up the REPL server
  *********************************************************/
 
-import { Repl } from '../.lib-dist/repl';
+import { Repl } from '../lib/repl';
 // tslint:disable-next-line: no-eval
 Repl.start('app', cmd => eval(cmd));
