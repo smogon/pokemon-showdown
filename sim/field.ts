@@ -80,6 +80,7 @@ export class Field {
 			this.weatherData = prevWeatherData;
 			return false;
 		}
+		this.battle.eachEvent('StartWeather', status);
 		return true;
 	}
 

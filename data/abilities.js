@@ -1548,7 +1548,7 @@ let BattleAbilities = {
 		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && effect.category === 'Physical' && target.template.speciesid === 'eiscue' && !target.transformed) {
 				this.add('-activate', target, 'ability: Ice Face');
-				this.effectData.melted = true;
+				target.addVolatile('iceface');
 				return 0;
 			}
 		},
@@ -1558,15 +1558,17 @@ let BattleAbilities = {
 			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
-		onUpdate(pokemon) {
-			if (pokemon.template.speciesid === 'eiscue' && this.effectData.melted) {
-				pokemon.formeChange('Eiscue-Noice', this.effect, true);
-			}
+		effect: {
+			onUpdate(pokemon) {
+				if (pokemon.template.speciesid === 'eiscue') {
+					pokemon.removeVolatile('iceface');
+					pokemon.formeChange('Eiscue-Noice', this.effect, true);
+				}
+			},
 		},
-		onAnySetWeather(target, source, weather) {
-			if (weather.id === 'hail' && this.effectData.target.template.speciesid === 'eiscuenoice' && !this.effectData.target.transformed) {
-				this.effectData.melted = false;
-				this.effectData.target.formeChange('Eiscue', this.effect, true);
+		onStartWeather(pokemon) {
+			if (this.field.isWeather('hail') && pokemon.template.speciesid === 'eiscuenoice' && !pokemon.transformed) {
+				pokemon.formeChange('Eiscue', this.effect, true);
 			}
 		},
 		id: "iceface",
