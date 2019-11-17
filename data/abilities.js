@@ -1563,31 +1563,12 @@ let BattleAbilities = {
 				pokemon.formeChange('Eiscue-Noice', this.effect, true);
 			}
 		},
-		// TODO Incomplete. Use one of these depending on how mechanics research determines this works exactly.
-		/*
-		// End of turn restore if hailing
-		onResidualOrder: 27,
-		onResidual(pokemon) {
-			if (this.field.isWeather('hail') && pokemon.template.speciesid === 'eiscuemelted' && !pokemon.transformed) {
-				this.effectData.melted = false;
-				pokemon.formeChange('Eiscue', this.effect, true);
-			}
-		},
-		// On switch-in if hailing
-		onStart(pokemon) {
-			if (this.field.isWeather('hail') && pokemon.template.speciesid === 'eiscuemelted' && !pokemon.transformed) {
-				this.effectData.melted = false;
-				pokemon.formeChange('Eiscue', this.effect, true);
-			}
-		},
-		// On start of hail
 		onAnyWeatherStart() {
 			if (this.field.isWeather('hail') && this.effectData.target.template.speciesid === 'eiscuenoice' && !this.effectData.target.transformed) {
 				this.effectData.melted = false;
 				this.effectData.target.formeChange('Eiscue', this.effect, true);
 			}
 		},
-		*/
 		id: "iceface",
 		name: "Ice Face",
 		rating: 3.5,
