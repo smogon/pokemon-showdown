@@ -728,18 +728,14 @@ let BattleStatuses = {
 		},
 		onFlinch: false,
 		onBeforeSwitchOut(pokemon) {
-			// Run the end event
-			// pokemon.volatiles.dynamax.onEnd(pokemon);
 			//this.add('-undynamax', pokemon);
-			this.add('-end', pokemon, "Dynamax");
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
 			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			if (pokemon.hp <= 0) pokemon.hp = 1;
-			// TODO work on display for healing
-			this.add('-heal', pokemon, pokemon.getHealth, '[from] Dynamax');
+			this.hint("Dynamax ended.");
 		},
 		onEnd(pokemon) {
 			// Play animation
