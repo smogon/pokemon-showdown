@@ -37,7 +37,6 @@ export const get = TeamValidatorAsync.get;
 
 import { QueryProcessManager } from '../lib/process-manager';
 
-// @ts-ignore
 export const PM = new QueryProcessManager(module, async message => {
 	const {formatid, removeNicknames, team} = message;
 	const parsedTeam = Dex.fastUnpackTeam(team);
