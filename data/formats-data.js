@@ -6174,12 +6174,14 @@ let BattleFormatsData = {
 			{"generation": 6, "level": 12, "isHidden": false, "moves": ["gust", "lightscreen", "strugglebug", "holdhands"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
+		isNonstandard: "Past",
 	},
 	vivillonpokeball: {
 		eventPokemon: [
 			{"generation": 6, "level": 12, "isHidden": false, "moves": ["stunspore", "gust", "lightscreen", "strugglebug"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
+		isNonstandard: "Past",
 	},
 	litleo: {
 		isNonstandard: "Past",

@@ -4596,6 +4596,14 @@ let BattleFormatsData = {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
+	vivillonfancy: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	vivillonpokeball: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	litleo: {
 		tier: "LC",
 	},
