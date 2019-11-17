@@ -1566,7 +1566,8 @@ let BattleAbilities = {
 				}
 			},
 		},
-		onStartWeather(pokemon) {
+		onAnyWeatherStart() {
+			const pokemon = this.effectData.target;
 			if (this.field.isWeather('hail') && pokemon.template.speciesid === 'eiscuenoice' && !pokemon.transformed) {
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
