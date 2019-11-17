@@ -6043,8 +6043,8 @@ let BattleFormatsData = {
 	keldeoresolute: {
 		eventOnly: true,
 		requiredMove: "Secret Sword",
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	meloetta: {
 		eventPokemon: [
