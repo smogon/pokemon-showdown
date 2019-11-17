@@ -14586,6 +14586,7 @@ let BattleMovedex = {
 		desc: "Has a 10% chance to burn the target.",
 		shortDesc: "10% chance to burn the target.",
 		id: "pyroball",
+		isViable: true,
 		name: "Pyro Ball",
 		pp: 5,
 		priority: 0,
