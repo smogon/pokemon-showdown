@@ -587,7 +587,7 @@ const commands = {
 								evos.push(`${evo.name} (trade)`);
 								break;
 							default:
-								evos.push(`${evo.name} (${evo.evoLevel})`);
+								evos.push(`${evo.name} (${evo.evoLevel > 0 ? evo.evoLevel : condition})`);
 							}
 						}
 					}

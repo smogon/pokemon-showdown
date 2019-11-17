@@ -14789,7 +14789,7 @@ let BattlePokedex = {
 		weightkg: 117,
 		color: "White",
 		prevo: "farfetchdgalar",
-		evoType: "levelExtra",
+		evoLevel: 0,
 		evoCondition: "Land 3 critical hits in 1 battle",
 		eggGroups: ["Flying", "Field"],
 	},
