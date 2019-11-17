@@ -1563,8 +1563,8 @@ let BattleAbilities = {
 				pokemon.formeChange('Eiscue-Noice', this.effect, true);
 			}
 		},
-		onAnyWeatherStart() {
-			if (this.field.isWeather('hail') && this.effectData.target.template.speciesid === 'eiscuenoice' && !this.effectData.target.transformed) {
+		onAnySetWeather(target, source, weather) {
+			if (weather.id === 'hail' && this.effectData.target.template.speciesid === 'eiscuenoice' && !this.effectData.target.transformed) {
 				this.effectData.melted = false;
 				this.effectData.target.formeChange('Eiscue', this.effect, true);
 			}
