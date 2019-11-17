@@ -277,6 +277,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	readonly requirePentagon: boolean;
 	/** Pokemon must be obtained from Gen 7 or later. */
 	readonly requirePlus: boolean;
+	/** Pokemon must be obtained from Gen 8 or later. */
+	readonly requireGalar: boolean;
 	/**
 	 * Maximum possible level pokemon you can bring. Note that this is
 	 * still 100 in VGC, because you can bring level 100 pokemon,
@@ -327,6 +329,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		this.onBegin = data.onBegin || undefined;
 		this.requirePentagon = !!data.requirePentagon;
 		this.requirePlus = !!data.requirePlus;
+		this.requireGalar = !!data.requireGalar;
 		this.maxLevel = data.maxLevel || 100;
 		this.defaultLevel = data.defaultLevel || this.maxLevel;
 		this.forcedLevel = data.forcedLevel || undefined;
