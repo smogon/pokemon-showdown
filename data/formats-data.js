@@ -4911,55 +4911,46 @@ let BattleFormatsData = {
 		eventOnly: true,
 		requiredItems: ["Insect Plate", "Buginium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusdark: {
 		eventOnly: true,
 		requiredItems: ["Dread Plate", "Darkinium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusdragon: {
 		eventOnly: true,
 		requiredItems: ["Draco Plate", "Dragonium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceuselectric: {
 		eventOnly: true,
 		requiredItems: ["Zap Plate", "Electrium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusfairy: {
 		eventOnly: true,
 		requiredItems: ["Pixie Plate", "Fairium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusfighting: {
 		eventOnly: true,
 		requiredItems: ["Fist Plate", "Fightinium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusfire: {
 		eventOnly: true,
 		requiredItems: ["Flame Plate", "Firium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusflying: {
 		eventOnly: true,
 		requiredItems: ["Sky Plate", "Flyinium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusghost: {
 		eventOnly: true,
 		requiredItems: ["Spooky Plate", "Ghostium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusgrass: {
 		eventOnly: true,
@@ -4971,41 +4962,36 @@ let BattleFormatsData = {
 		eventOnly: true,
 		requiredItems: ["Earth Plate", "Groundium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusice: {
 		eventOnly: true,
 		requiredItems: ["Icicle Plate", "Icium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceuspoison: {
 		eventOnly: true,
 		requiredItems: ["Toxic Plate", "Poisonium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceuspsychic: {
 		eventOnly: true,
 		requiredItems: ["Mind Plate", "Psychium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusrock: {
 		eventOnly: true,
 		requiredItems: ["Stone Plate", "Rockium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceussteel: {
 		eventOnly: true,
 		requiredItems: ["Iron Plate", "Steelium Z"],
+		isNonstandard: "Past",
 	},
 	arceuswater: {
 		eventOnly: true,
 		requiredItems: ["Splash Plate", "Waterium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	victini: {
 		eventPokemon: [
@@ -6044,7 +6030,6 @@ let BattleFormatsData = {
 		eventOnly: true,
 		requiredMove: "Secret Sword",
 		isUnreleased: true,
-		tier: "Unreleased",
 	},
 	meloetta: {
 		eventPokemon: [
@@ -6076,25 +6061,21 @@ let BattleFormatsData = {
 		eventOnly: true,
 		requiredItem: "Burn Drive",
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	genesectchill: {
 		eventOnly: true,
 		requiredItem: "Chill Drive",
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	genesectdouse: {
 		eventOnly: true,
 		requiredItem: "Douse Drive",
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	genesectshock: {
 		eventOnly: true,
 		requiredItem: "Shock Drive",
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	chespin: {
 		isNonstandard: "Past",
