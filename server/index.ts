@@ -35,6 +35,7 @@
  * Sockets - from sockets.js
  *
  *   Used to abstract out network connections. sockets.js handles
+ *   the actual server and connection set-up.
  *
  * @license MIT
  */
