@@ -19342,7 +19342,7 @@ let BattleMovedex = {
 		desc: "Forces all active Pokemon to consume their held berries. This move bypasses Substitutes.",
 		shortDesc: "All active Pokemon consume held Berries.",
 		id: "teatime",
-		name: "Tea Time",
+		name: "Teatime",
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1},
@@ -19351,7 +19351,7 @@ let BattleMovedex = {
 				for (const active of side.active) {
 					let item = active.getItem();
 					if (active.hp && item.isBerry) {
-						this.add('-enditem', target, item.name, '[from] eat', '[move] Tea Time', '[of] ' + active);
+						this.add('-enditem', target, item.name, '[from] eat', '[move] Teatime', '[of] ' + active);
 						if (this.singleEvent('Eat', item, null, active, null, null)) {
 							this.runEvent('EatItem', active, null, null, item);
 							// TODO: Test
