@@ -671,7 +671,7 @@ let Formats = [
 		ruleset: ['Obtainable', 'Standard' , 'Team Preview', 'Little Cup'],
 		banlist: ['Sneasel', 'Swirlix', 'Baton Pass',], 
                  requireGalar: true, 
-	}
+	},
 	{
 		name: "[Gen 8] Custom Game",
 
