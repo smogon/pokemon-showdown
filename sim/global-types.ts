@@ -1000,9 +1000,7 @@ interface FormatsData extends EventMethods {
 	onModifyMovePriority?: number
 	onSwitchInPriority?: number
 	rated?: boolean
-	requirePentagon?: boolean
-	requirePlus?: boolean
-	requireGalar?: boolean
+	minSourceGen?: number
 	restrictedAbilities?: string[]
 	restrictedMoves?: string[]
 	restrictedStones?: string[]

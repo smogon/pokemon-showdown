@@ -293,6 +293,7 @@ export class TeamValidator {
 		const format = this.format;
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
+		const minPastGen = format.minSourceGen || 1;
 
 		let problems: string[] = [];
 		if (!set) {
@@ -464,8 +465,7 @@ export class TeamValidator {
 
 					if (template.unreleasedHidden && ruleTable.has('-unreleased')) {
 						problems.push(`${name}'s Hidden Ability is unreleased.`);
-					} else if (['entei', 'suicune', 'raikou'].includes(template.id) &&
-						(format.requireGalar || format.requirePlus || format.requirePentagon)) {
+					} else if (['entei', 'suicune', 'raikou'].includes(template.id) && minPastGen > 1) {
 						problems.push(`${name}'s Hidden Ability is only available from Virtual Console, which is not allowed in this format.`);
 					} else if (dex.gen === 6 && ability.name === 'Symbiosis' &&
 						(set.species.endsWith('Orange') || set.species.endsWith('White'))) {
@@ -586,7 +586,6 @@ export class TeamValidator {
 					problems.push(`${template.species} is only obtainable from events - it needs to match one of its events, such as:`);
 				}
 				let eventInfo = eventPokemon[0];
-				const minPastGen = (format.requireGalar ? 8 : format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
 				let eventNum = 1;
 				for (const [i, eventData] of eventPokemon.entries()) {
 					if (eventData.generation <= dex.gen && eventData.generation >= minPastGen) {
@@ -606,7 +605,7 @@ export class TeamValidator {
 			problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
 		}
 		if (ruleTable.has('obtainablemoves') && template.id === 'keldeo' && set.moves.includes('secretsword') &&
-			(format.requireGalar || format.requirePlus || format.requirePentagon)) {
+			minPastGen > 5) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
 		const requiresGen3Source = setSources.maxSourceGen() <= 3;
@@ -735,7 +734,8 @@ export class TeamValidator {
 				if (set.ivs[stat as 'hp'] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < 3) {
-				const reason = (this.format.requirePentagon ? ` and this format requires gen ${dex.gen} Pokémon` : ` in gen 6`);
+				const minPastGen = this.format.minSourceGen || 1;
+				const reason = (minPastGen === 6 ? ` and this format requires gen ${dex.gen} Pokémon` : ` in gen 6`);
 				problems.push(`${name} must have at least three perfect IVs because it's a legendary${reason}.`);
 			}
 		}
@@ -1335,23 +1335,17 @@ export class TeamValidator {
 		if (!eventTemplate) eventTemplate = template;
 		if (set.name && set.species !== set.name && template.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 
+		const minPastGen = this.format.minSourceGen || 1;
+
 		const fastReturn = !because;
 		if (eventData.from) from = `from ${eventData.from}`;
 		const etc = `${because} ${from}`;
 
 		const problems = [];
 
-		if (this.format.requirePentagon && eventData.generation < 6) {
+		if (minPastGen > eventData.generation) {
 			if (fastReturn) return true;
-			problems.push(`This format requires Pokemon from gen 6 or later and ${name} is from gen ${eventData.generation}${etc}.`);
-		}
-		if (this.format.requirePlus && eventData.generation < 7) {
-			if (fastReturn) return true;
-			problems.push(`This format requires Pokemon from gen 7 and ${name} is from gen ${eventData.generation}${etc}.`);
-		}
-		if (this.format.requireGalar && eventData.generation < 8) {
-			if (fastReturn) return true;
-			problems.push(`This format requires Pokemon from gen 8 and ${name} is from gen ${eventData.generation}${etc}.`);
+			problems.push(`This format requires Pokemon from gen ${minPastGen} or later and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
 		if (dex.gen < eventData.generation) {
 			if (fastReturn) return true;
@@ -1479,12 +1473,7 @@ export class TeamValidator {
 	}
 
 	allSources(template?: Template) {
-		let minPastGen = (
-			this.format.requireGalar ? 8 :
-			this.format.requirePlus ? 7 :
-			this.format.requirePentagon ? 6 :
-			this.dex.gen >= 3 ? 3 : 1
-		);
+		let minPastGen = (this.dex.gen < 3 ? 1 : this.format.minSourceGen || 3);
 		if (template) minPastGen = Math.max(minPastGen, template.gen);
 		const maxPastGen = this.ruleTable.has('allowtradeback') ? 2 : this.dex.gen;
 		return new PokemonSources(maxPastGen, minPastGen);
@@ -1617,7 +1606,7 @@ export class TeamValidator {
 		/**
 		 * The minimum past gen the format allows
 		 */
-		const minPastGen = (format.requireGalar ? 8 : format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
+		const minPastGen = format.minSourceGen || 1;
 		/**
 		 * The format doesn't allow Pokemon traded from the future
 		 * (This is everything except in Gen 1 Tradeback)
