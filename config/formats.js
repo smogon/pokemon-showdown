@@ -661,7 +661,7 @@ let Formats = [
 		requireGalar: true,
 	},
 	{
-		name: "[Gen 8] LC (Beta) ",
+		name: "[Gen 8] LC (Beta)",
 		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/metagame-discussion-thread.3656348/">Metagame Discussion</a>`,
 			
 		],
