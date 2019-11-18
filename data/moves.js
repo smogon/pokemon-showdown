@@ -7143,7 +7143,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Orbeetle",
-		pseudoWeather: 'gravity',
+		self: {
+			onHit() {
+				this.field.addPseudoWeather('gravity');
+			},
+		},
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
@@ -11090,7 +11094,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		weather: 'sunnyday',
+		self: {
+			onHit() {
+				this.field.setWeather('sunnyday');
+			},
+		},
 		target: "normal",
 		type: "Fire",
 		contestType: "Cool",
@@ -11130,7 +11138,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		weather: 'raindance',
+		self: {
+			onHit() {
+				this.field.setWeather('raindance');
+			},
+		},
 		target: "normal",
 		type: "Water",
 		contestType: "Cool",
@@ -11192,7 +11204,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		weather: 'hail',
+		self: {
+			onHit() {
+				this.field.setWeather('hail');
+			},
+		},
 		target: "normal",
 		type: "Ice",
 		contestType: "Cool",
@@ -11232,7 +11248,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		terrain: 'electricterrain',
+		self: {
+			onHit() {
+				this.field.setTerrain('electricterrain');
+			},
+		},
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
@@ -11250,7 +11270,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		terrain: 'psychicterrain',
+		self: {
+			onHit() {
+				this.field.setTerrain('psychicterrain');
+			},
+		},
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
@@ -11290,7 +11314,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		terrain: 'grassyterrain',
+		self: {
+			onHit() {
+				this.field.setTerrain('grassyterrain');
+			},
+		},
 		target: "normal",
 		type: "Grass",
 		contestType: "Cool",
@@ -11352,7 +11380,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		weather: 'sandstorm',
+		self: {
+			onHit() {
+				this.field.setWeather('sandstorm');
+			},
+		},
 		target: "normal",
 		type: "Rock",
 		contestType: "Cool",
@@ -11370,7 +11402,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		terrain: 'mistyterrain',
+		self: {
+			onHit() {
+				this.field.setTerrain('mistyterrain');
+			},
+		},
 		target: "normal",
 		type: "Fairy",
 		contestType: "Cool",
