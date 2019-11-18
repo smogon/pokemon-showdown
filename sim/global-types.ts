@@ -83,9 +83,13 @@ type Effect = Ability | Item | ActiveMove | Template | PureEffect | Format
 interface SelfEffect {
 	boosts?: SparseBoostsTable
 	chance?: number
+	pseudoWeather?: string
 	sideCondition?: string
 	slotCondition?: string
+	terrain?: string
 	volatileStatus?: string
+	weather?: string
+	onAfterHit?: MoveEventMethods['onAfterHit']
 	onHit?: MoveEventMethods['onHit']
 }
 
