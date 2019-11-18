@@ -6998,10 +6998,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Machamp",
-		onHit(target, source) {
-			for (let pokemon of source.side.active) {
-				pokemon.addVolatile('focusenergy');
-			}
+		self: {
+			onHit(target, source) {
+				for (let pokemon of source.side.active) {
+					pokemon.addVolatile('focusenergy');
+				}
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -7074,10 +7076,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Alcremie",
-		onAfterHit(target, source) {
-			for (let pokemon of source.side.active) {
-				pokemon.heal(pokemon.maxhp);
-			}
+		self: {
+			onAfterHit(target, source) {
+				for (let pokemon of source.side.active) {
+					pokemon.heal(pokemon.maxhp);
+				}
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -7144,9 +7148,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Orbeetle",
 		self: {
-			onHit() {
-				this.field.addPseudoWeather('gravity');
-			},
+			pseudoWeather: 'gravity',
 		},
 		target: "normal",
 		type: "Psychic",
@@ -7210,15 +7212,17 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Snorlax",
-		onHit(target, source) {
-			for (let pokemon of target.side.active) {
-				if (!pokemon.item && pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
-					let item = pokemon.lastItem;
-					pokemon.lastItem = '';
-					this.add('-item', pokemon, this.dex.getItem(item), '[from] move: G-Max Replenish');
-					pokemon.setItem(item);
+		self: {
+			onHit(target, source) {
+				for (let pokemon of target.side.active) {
+					if (!pokemon.item && pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
+						let item = pokemon.lastItem;
+						pokemon.lastItem = '';
+						this.add('-item', pokemon, this.dex.getItem(item), '[from] move: G-Max Replenish');
+						pokemon.setItem(item);
+					}
 				}
-			}
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -7238,7 +7242,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Lapras",
-		sideCondition: 'auroraveil',
+		self: {
+			sideCondition: 'auroraveil',
+		},
 		secondary: null,
 		target: "normal",
 		type: "Ice",
@@ -11050,10 +11056,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({spe: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({spe: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Flying",
@@ -11095,9 +11103,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			onHit() {
-				this.field.setWeather('sunnyday');
-			},
+			weather: 'sunnyday',
 		},
 		target: "normal",
 		type: "Fire",
@@ -11139,9 +11145,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			onHit() {
-				this.field.setWeather('raindance');
-			},
+			weather: 'raindance',
 		},
 		target: "normal",
 		type: "Water",
@@ -11205,9 +11209,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			onHit() {
-				this.field.setWeather('hail');
-			},
+			weather: 'hail',
 		},
 		target: "normal",
 		type: "Ice",
@@ -11226,10 +11228,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({atk: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({atk: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Fighting",
@@ -11249,9 +11253,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			onHit() {
-				this.field.setTerrain('electricterrain');
-			},
+			terrain: 'electricterrain',
 		},
 		target: "normal",
 		type: "Electric",
@@ -11271,9 +11273,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			onHit() {
-				this.field.setTerrain('psychicterrain');
-			},
+			terrain: 'psychicterrain',
 		},
 		target: "normal",
 		type: "Psychic",
@@ -11292,10 +11292,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({spa: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({spa: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Poison",
@@ -11315,9 +11317,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			onHit() {
-				this.field.setTerrain('grassyterrain');
-			},
+			terrain: 'grassyterrain',
 		},
 		target: "normal",
 		type: "Grass",
@@ -11358,10 +11358,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({spd: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({spd: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Ground",
@@ -11381,9 +11383,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			onHit() {
-				this.field.setWeather('sandstorm');
-			},
+			weather: 'sandstorm',
 		},
 		target: "normal",
 		type: "Rock",
@@ -11403,9 +11403,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			onHit() {
-				this.field.setTerrain('mistyterrain');
-			},
+			terrain: 'mistyterrain',
 		},
 		target: "normal",
 		type: "Fairy",
@@ -11424,10 +11422,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({def: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({def: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Steel",
