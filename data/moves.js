@@ -4182,6 +4182,7 @@ let BattleMovedex = {
 			if (target.side.active.length === 2) {
 				move.multihit = 1;
 				move.spreadModifier = 1;
+				move.target = "allAdjacentFoes";
 			}
 		},
 		target: "normal",
