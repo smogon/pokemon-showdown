@@ -6897,6 +6897,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 40, "shiny": 1, "perfectIVs": 3, "moves": ["crushclaw", "scaryface", "xscissor", "takedown"]},
 			{"generation": 7, "level": 60, "shiny": 1, "perfectIVs": 3, "moves": ["metalsound", "ironhead", "doublehit", "airslash"]},
+			{"generation": 8, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["triattack", "xscissor", "ironhead", "takedown"]},
 		],
 		eventOnly: true,
 		tier: "NFE",
