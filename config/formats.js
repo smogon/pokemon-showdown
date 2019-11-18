@@ -661,6 +661,21 @@ let Formats = [
 		requireGalar: true,
 	},
 	{
+		name: "[Gen 8] LC (Beta) ",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/metagame-discussion-thread.3656348/">Metagame Discussion</a>`,
+			
+		],
+
+		mod: 'gen8',
+		maxLevel: 5,
+		ruleset: ['Obtainable', 'Standard' , 'Team Preview', 'Little Cup'],
+		banlist: [
+			'Sneasel', 'Swirlix',
+	 'Baton Pass', 'Dragon Rage', 'Sonic Boom',
+		], 
+                 requireGalar: true, 
+	}
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
