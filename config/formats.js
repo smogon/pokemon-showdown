@@ -669,8 +669,7 @@ let Formats = [
 		mod: 'gen8',
 		maxLevel: 5,
 		ruleset: ['Obtainable', 'Standard' , 'Team Preview', 'Little Cup'],
-		banlist: ['Sneasel', 'Swirlix', 'Baton Pass',
-		], 
+		banlist: ['Sneasel', 'Swirlix', 'Baton Pass',], 
                  requireGalar: true, 
 	}
 	{
