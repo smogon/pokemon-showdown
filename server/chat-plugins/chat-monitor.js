@@ -51,16 +51,9 @@ let filterWords = Chat.filterWords;
  * @param {string} str
  */
 function constructEvasionRegex(str) {
-	let buf = '';
-	// substitutions
-	for (let i = 0; i < str.length; i++) {
-		buf += EVASION_DETECTION_SUB_STRINGS[str[i]] || str[i];
-		// Check any number of repeating letters
-		// The first and last letters aren't repeated, as there's too many
-		// false positives with the end / start of the previous / next word
-		if (i !== 0 && i !== str.length - 1) buf += '+';
-	}
-
+	const buf = "\\b" +
+		str.split('').map(letter => (EVASION_DETECTION_SUB_STRINGS[letter] || letter) + '+').join('\\.?') +
+		"\\b";
 	return new RegExp(buf, 'i');
 }
 
@@ -151,8 +144,8 @@ Chat.registerMonitor('evasion', {
 		lcMessage = lcMessage.normalize('NFKC');
 
 		let [regex, word, reason] = line;
-		// Remove spaces and obvious false positives
-		lcMessage = lcMessage.replace(/[\s-_,.]/g, '');
+		// Normalise spaces and other common evasion characters to a period
+		lcMessage = lcMessage.replace(/[\s-_,.]+/g, '.');
 		const match = lcMessage.match(regex);
 		if (match) {
 			// Don't lock someone iff the word itself is used, and whitespace wasn't used to evade the filter,
