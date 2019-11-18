@@ -279,7 +279,7 @@ let Formats = [
 			battle: 3,
 		},
 		ruleset: ['Obtainable', 'Standard GBU'],
-		requirePentagon: true,
+		minSourceGen: 6,
 	},
 	{
 		name: "[Gen 7] Battle Spot Special 17",
@@ -402,7 +402,7 @@ let Formats = [
 		},
 		ruleset: ['Obtainable', 'Minimal GBU', 'VGC Timer'],
 		banlist: ['Unown', 'Dragon Ascent', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
-		requirePlus: true,
+		minSourceGen: 7,
 		onValidateTeam(team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
 			let n = 0;
@@ -432,7 +432,7 @@ let Formats = [
 		},
 		ruleset: ['Obtainable', 'Minimal GBU', 'VGC Timer'],
 		banlist: ['Unown', 'Dragon Ascent'],
-		requirePlus: true,
+		minSourceGen: 7,
 		onValidateTeam(team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
 			let n = 0;
@@ -465,7 +465,7 @@ let Formats = [
 		},
 		ruleset: ['Obtainable', 'Minimal GBU', 'VGC Timer'],
 		banlist: ['Unown'],
-		requirePlus: true,
+		minSourceGen: 7,
 		onValidateTeam(team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
 			let n = 0;
@@ -494,7 +494,7 @@ let Formats = [
 		timer: {starting: 5 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90, grace: 90, timeoutAutoChoose: true, dcTimerBank: false},
 		ruleset: ['Obtainable', 'Standard GBU'],
 		banlist: ['Unown', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
-		requirePlus: true,
+		minSourceGen: 7,
 	},
 	{
 		name: "[Gen 7] VGC 2017",
@@ -518,7 +518,7 @@ let Formats = [
 			'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zygarde', 'Mega',
 			'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry',
 		],
-		requirePlus: true,
+		minSourceGen: 7,
 	},
 	{
 		name: "[Gen 7] Battle Spot Doubles",
@@ -536,7 +536,7 @@ let Formats = [
 			battle: 4,
 		},
 		ruleset: ['Obtainable', 'Standard GBU'],
-		requirePentagon: true,
+		minSourceGen: 6,
 	},
 	{
 		name: "[Gen 7] 2v2 Doubles",
@@ -646,7 +646,7 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Shadow Tag', 'Baton Pass'],
-		requireGalar: true,
+		minSourceGen: 8,
 	},
 	{
 		name: "[Gen 8] Doubles OU (beta)",
@@ -658,7 +658,7 @@ let Formats = [
 		gameType: 'doubles',
 		ruleset: ['Obtainable', 'Standard Doubles', 'Team Preview'],
 		banlist: ['DUber', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
-		requireGalar: true,
+		minSourceGen: 8,
 	},
 	{
 		name: "[Gen 8] Custom Game",
@@ -1422,7 +1422,7 @@ let Formats = [
 			battle: 3,
 		},
 		ruleset: ['Obtainable', 'Standard GBU'],
-		requirePentagon: true,
+		minSourceGen: 6,
 	},
 	{
 		name: "[Gen 6] Custom Game",
@@ -1476,7 +1476,7 @@ let Formats = [
 			'Mew', 'Celebi', 'Jirachi', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Phione', 'Manaphy', 'Darkrai',
 			'Shaymin', 'Shaymin-Sky', 'Arceus', 'Victini', 'Keldeo', 'Meloetta', 'Genesect', 'Diancie', 'Hoopa', 'Hoopa-Unbound', 'Volcanion', 'Soul Dew',
 		],
-		requirePentagon: true,
+		minSourceGen: 6,
 		onValidateTeam(team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde'];
 			let n = 0;
@@ -1503,7 +1503,7 @@ let Formats = [
 			battle: 4,
 		},
 		ruleset: ['Obtainable', 'Standard GBU'],
-		requirePentagon: true,
+		minSourceGen: 6,
 	},
 	{
 		name: "[Gen 6] Doubles Custom Game",
@@ -1533,7 +1533,7 @@ let Formats = [
 			validate: [6, 6],
 		},
 		ruleset: ['Obtainable', 'Standard GBU'],
-		requirePentagon: true,
+		minSourceGen: 6,
 	},
 	{
 		name: "[Gen 6] Triples Custom Game",

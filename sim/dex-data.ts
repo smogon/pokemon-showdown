@@ -273,12 +273,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	readonly teamLength?: {battle?: number, validate?: [number, number]};
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
-	/** Pokemon must be obtained from Gen 6 or later. */
-	readonly requirePentagon: boolean;
-	/** Pokemon must be obtained from Gen 7 or later. */
-	readonly requirePlus: boolean;
-	/** Pokemon must be obtained from Gen 8 or later. */
-	readonly requireGalar: boolean;
+	/** Pokemon must be obtained from this generation or later. */
+	readonly minSourceGen?: number;
 	/**
 	 * Maximum possible level pokemon you can bring. Note that this is
 	 * still 100 in VGC, because you can bring level 100 pokemon,
@@ -327,9 +323,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		this.ruleTable = null;
 		this.teamLength = data.teamLength || undefined;
 		this.onBegin = data.onBegin || undefined;
-		this.requirePentagon = !!data.requirePentagon;
-		this.requirePlus = !!data.requirePlus;
-		this.requireGalar = !!data.requireGalar;
+		this.minSourceGen = data.minSourceGen || undefined;
 		this.maxLevel = data.maxLevel || 100;
 		this.defaultLevel = data.defaultLevel || this.maxLevel;
 		this.forcedLevel = data.forcedLevel || undefined;
