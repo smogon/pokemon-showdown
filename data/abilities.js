@@ -1476,7 +1476,7 @@ let BattleAbilities = {
 	"hustle": {
 		desc: "This Pokemon's Attack is multiplied by 1.5 and the accuracy of its physical attacks is multiplied by 0.8.",
 		shortDesc: "This Pokemon's Attack is 1.5x and accuracy of its physical attacks is 0.8x.",
-		// This should be applied directly to the stat as opposed to chaining witht he others
+		// This should be applied directly to the stat as opposed to chaining with the others
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
 			return this.modify(atk, 1.5);
@@ -1692,7 +1692,7 @@ let BattleAbilities = {
 		num: 215,
 	},
 	"innerfocus": {
-		shortDesc: "This Pokemon cannot be made to flinch.",
+		shortDesc: "This Pokemon cannot be made to flinch. Immune to Intimidate.",
 		onFlinch: false,
 		id: "innerfocus",
 		name: "Inner Focus",
@@ -1719,7 +1719,7 @@ let BattleAbilities = {
 		num: 15,
 	},
 	"intimidate": {
-		desc: "On switch-in, this Pokemon lowers the Attack of adjacent opposing Pokemon by 1 stage. Own Tempo, Inner Focus, Keen Eye, and Pokemon behind a substitute are immune.",
+		desc: "On switch-in, this Pokemon lowers the Attack of adjacent opposing Pokemon by 1 stage. Own Tempo, Inner Focus, Keen Eye, Oblivious, and Pokemon behind a substitute are immune.",
 		shortDesc: "On switch-in, this Pokemon lowers the Attack of adjacent opponents by 1 stage.",
 		onStart(pokemon) {
 			let activated = false;
@@ -1731,7 +1731,7 @@ let BattleAbilities = {
 				}
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
-				} else if (target.hasAbility(['Own Tempo', 'Inner Focus', 'Keen Eye'])) {
+				} else if (target.hasAbility(['Own Tempo', 'Inner Focus', 'Keen Eye', 'Oblivious'])) {
 					this.add('-immune', target, `[from] ability: ${this.dex.getAbility(target.ability).name}`);
 				} else {
 					this.boost({atk: -1}, target, pokemon, null, true);
@@ -1796,8 +1796,8 @@ let BattleAbilities = {
 		num: 154,
 	},
 	"keeneye": {
-		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage.",
-		shortDesc: "This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat.",
+		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage. Immune to Intimidate.",
+		shortDesc: "Foes cannot lower accuracy; enemy evasiveness is ignored. Immune to Intimidate.",
 		onBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost.accuracy && boost.accuracy < 0) {
@@ -2471,8 +2471,8 @@ let BattleAbilities = {
 		num: 96,
 	},
 	"oblivious": {
-		desc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability while affected cures it.",
-		shortDesc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability cures it.",
+		desc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability while affected cures it. Immune to Intimidate.",
+		shortDesc: "This Pokemon cannot be infatuated or taunted. Immune to Intimidate.",
 		onUpdate(pokemon) {
 			if (pokemon.volatiles['attract']) {
 				this.add('-activate', pokemon, 'ability: Oblivious');
@@ -2539,7 +2539,8 @@ let BattleAbilities = {
 		num: 65,
 	},
 	"owntempo": {
-		shortDesc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
+		desc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it. Immune to Intimidate.",
+		shortDesc: "This Pokemon cannot be confused. Immune to Intimidate.",
 		onUpdate(pokemon) {
 			if (pokemon.volatiles['confusion']) {
 				this.add('-activate', pokemon, 'ability: Own Tempo');
