@@ -645,7 +645,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Baton Pass'],
+		banlist: ['Uber', 'Shadow Tag', 'Baton Pass'],
 		requireGalar: true,
 	},
 	{
