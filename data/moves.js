@@ -17770,7 +17770,7 @@ let BattleMovedex = {
 	"spiritbreak": {
 		num: 789,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 75,
 		category: "Physical",
 		desc: "Has a 100% chance to lower the target's Special Attack by 1 stage.",
 		shortDesc: "100% chance to lower the target's Sp. Atk by 1.",
