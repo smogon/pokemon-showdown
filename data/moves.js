@@ -19157,7 +19157,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Speed by 1 stage. Until the target switches out, it takes 2x damage from Fire moves.",
-		shortDesc: "Lowers the target's Speed by 1 stage. Target takes 2x damage from Fire moves.",
+		shortDesc: "Target gets -1 Spe and takes 2x damage from Fire.",
 		id: "tarshot",
 		name: "Tar Shot",
 		pp: 20,
