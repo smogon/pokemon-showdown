@@ -1069,7 +1069,7 @@ export class TeamValidator {
 				// Meloetta-Pirouette, Rayquaza-Mega
 				problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`);
 			}
-			set.species = template.baseSpecies; // Fix battle-only forme
+			if (!template.isGigantamax) set.species = template.baseSpecies; // Fix battle-only forme
 		} else {
 			if (template.requiredAbility) {
 				// Impossible!
