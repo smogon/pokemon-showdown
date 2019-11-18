@@ -670,7 +670,7 @@ let Formats = [
 		maxLevel: 5,
 		ruleset: ['Obtainable', 'Standard' , 'Team Preview', 'Little Cup'],
 		banlist: ['Sneasel', 'Swirlix', 'Baton Pass'],
-                 requireGalar: true, 
+				requireGalar: true, 
 	},
 	{
 		name: "[Gen 8] Custom Game",
