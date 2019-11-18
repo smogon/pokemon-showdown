@@ -1583,7 +1583,6 @@ export class User extends Chat.MessageContext {
 				continue;
 			}
 			if (game.ended) continue;
-			// @ts-ignore
 			if (game.forfeit) game.forfeit(this);
 		}
 		this.clearChatQueue();
