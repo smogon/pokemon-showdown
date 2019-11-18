@@ -78,6 +78,30 @@ let BattlePokedex = {
 		inherit: true,
 		otherFormes: undefined,
 	},
+	ralts: {
+		inherit: true,
+		eggGroups: ["Amorphous"],
+	},
+	kirlia: {
+		inherit: true,
+		eggGroups: ["Amorphous"],
+	},
+	gardevoir: {
+		inherit: true,
+		eggGroups: ["Amorphous"],
+	},
+	trapinch: {
+		inherit: true,
+		eggGroups : ["Bug"],
+	},
+	vibrava: {
+		inherit: true,
+		eggGroups: ["Bug"],
+	},
+	flygon: {
+		inherit: true,
+		eggGroups: ["Bug"],
+	},
 	leafeon: {
 		inherit: true,
 		evoType: "levelExtra",
@@ -87,6 +111,10 @@ let BattlePokedex = {
 		inherit: true,
 		evoType: "levelExtra",
 		evoCondition: "near an Ice Rock",
+	},
+	gallade: {
+		inherit: true,
+		eggGroups: ["Amorphous"],
 	},
 	heatran: {
 		inherit: true,
