@@ -1045,7 +1045,7 @@ class RandomTeams {
 					(hasType['Electric'] && (!counter['Electric'] || (hasMove['voltswitch'] && counter.stab < 2))) ||
 					(hasType['Fairy'] && !counter['Fairy'] && !hasAbility['Pixilate'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fighting'] && !counter['Fighting'] && (template.baseStats.atk >= 110 || hasAbility['Justified'] || hasAbility['Unburden'] || counter.setupType || !counter['Status'])) ||
-					(hasType['Fire'] && !counter['Fire'] && !hasAbility['Libero']) ||
+					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Flying'] && !counter['Flying'] && (hasAbility['Serene Grace'] || (hasType['Normal'] && movePool.includes('bravebird')))) ||
 					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost'] && !hasAbility['Steelworker']) ||
 					(hasType['Grass'] && !counter['Grass'] && !hasType['Fairy'] && !hasType['Poison'] && !hasType['Steel']) ||
@@ -1422,11 +1422,6 @@ class RandomTeams {
 		if (!counter['Physical'] && !hasMove['copycat'] && !hasMove['transform']) {
 			evs.atk = 0;
 			ivs.atk = 0;
-		}
-
-		if (ability === 'Beast Boost' && counter.Special < 1) {
-			evs.spa = 0;
-			ivs.spa = 0;
 		}
 
 		if (hasMove['gyroball'] || hasMove['metalburst'] || hasMove['trickroom']) {

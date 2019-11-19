@@ -2769,6 +2769,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	cursola: {
+		randomBattleMoves: ["calmmind", "shadowball", "stealthrock", "strengthsap", "willowisp"],
 		tier: "New",
 		doublesTier: "New",
 	},
