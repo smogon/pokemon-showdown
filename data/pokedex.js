@@ -14211,7 +14211,7 @@ let BattlePokedex = {
 		species: "Yamper",
 		types: ["Electric"],
 		baseStats: {hp: 59, atk: 45, def: 50, spa: 40, spd: 50, spe: 26},
-		abilities: {0: "Ball Catch", H: "Rattled"},
+		abilities: {0: "Ball Fetch", H: "Rattled"},
 		heightm: 0.3,
 		weightkg: 13.5,
 		color: "Yellow",
