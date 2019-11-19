@@ -11117,7 +11117,7 @@ let BattleMovedex = {
 	"maxflare": {
 		num: 757,
 		accuracy: true,
-		basePower: 10,
+		basePower: 100,
 		category: "Physical",
 		shortDesc: "Sets Sun. BP scales with base move's BP.",
 		id: "maxflare",
