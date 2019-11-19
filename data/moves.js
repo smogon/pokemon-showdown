@@ -843,7 +843,6 @@ let BattleMovedex = {
 				},
 			},
 		},
-		// TODO: Check if other Pokemon can use Aura Wheel
 		onTryMove(pokemon, target, move) {
 			if (pokemon.template.baseSpecies === 'Morpeko' || move.hasBounced) {
 				return;
@@ -853,7 +852,6 @@ let BattleMovedex = {
 			return null;
 		},
 		onModifyMove(move, pokemon) {
-			// TODO: Check if aura wheel switches between Dark and Electric or types[0] and types[1]
 			if (pokemon.template.species === 'Morpeko-Hangry' && move.type !== 'Dark') {
 				move.type = "Dark";
 			} else if (pokemon.template.species === 'Morpeko' && move.type !== 'Electric') {
@@ -6937,9 +6935,10 @@ let BattleMovedex = {
 	"gmaxbefuddle": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
-		shortDesc: "Sleeps, Poisons or Paralyzes opponents. BP scales with base move's BP.",
+		desc: "Sleeps, poisons, or paralyzes opponent(s). Base Power scales with the base move's Base Power.",
+		shortDesc: "Foe: slp/psn/par. BP scales w/ base move BP.",
 		id: "gmaxbefuddle",
 		isViable: true,
 		name: "G-Max Befuddle",
@@ -6948,6 +6947,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Butterfree",
 		onHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				let result = this.random(3);
 				if (result === 0) {
@@ -6966,9 +6966,10 @@ let BattleMovedex = {
 	"gmaxcentiferno": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
-		shortDesc: "Traps and damages opponents. BP scales with base move's BP.",
+		desc: "Traps and damages the opponent(s) for 4-5 turns. Base Power scales with the base move's Base Power.",
+		shortDesc: "Traps and damages foe(s). BP scales w/ base move.",
 		id: "gmaxcentiferno",
 		isViable: true,
 		name: "G-Max Centiferno",
@@ -6977,6 +6978,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Centiskorch",
 		onHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('partiallytrapped');
 			}
@@ -6989,9 +6991,10 @@ let BattleMovedex = {
 	"gmaxchistrike": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
-		shortDesc: "Applies Focus Energy to user and allies. BP scales with base move's BP.",
+		desc: "Applies Focus Energy to the user and its allies. Base Power scales with the base move's Base Power.",
+		shortDesc: "User side: Focus Energy. BP scale's w/ base move.",
 		id: "gmaxchistrike",
 		isViable: true,
 		name: "G-Max Chi Strike",
@@ -7001,6 +7004,7 @@ let BattleMovedex = {
 		isMax: "Machamp",
 		self: {
 			onHit(target, source) {
+				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of source.side.active) {
 					pokemon.addVolatile('focusenergy');
 				}
@@ -7014,7 +7018,7 @@ let BattleMovedex = {
 	"gmaxcuddle": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Infatuates opponents. BP scales with base move's BP.",
 		id: "gmaxcuddle",
@@ -7025,6 +7029,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Eevee",
 		onHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('attract');
 			}
@@ -7037,9 +7042,10 @@ let BattleMovedex = {
 	"gmaxdepletion": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
-		shortDesc: "Lowers the PP of opponents' last used move. BP scales with base move's BP.",
+		desc: "Lowers the PP of the opponent(s) last used move. Base Power scales with the base move's Base Power.",
+		shortDesc: "Foe: Lowers PP of last move. BP scales.",
 		id: "gmaxdepletion",
 		isViable: true,
 		name: "G-Max Depletion",
@@ -7048,6 +7054,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Duraludon",
 		onAfterHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				if (pokemon.lastMove && !pokemon.lastMove.isZ) {
 					let ppDeducted = pokemon.deductPP(pokemon.lastMove.id, 4);
@@ -7067,7 +7074,7 @@ let BattleMovedex = {
 	"gmaxfinale": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Heals user and allies. BP scales with base move's BP.",
 		id: "gmaxfinale",
@@ -7079,6 +7086,7 @@ let BattleMovedex = {
 		isMax: "Alcremie",
 		self: {
 			onAfterHit(target, source) {
+				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of source.side.active) {
 					this.heal(pokemon.maxhp, pokemon, pokemon);
 				}
@@ -7092,7 +7100,7 @@ let BattleMovedex = {
 	"gmaxfoamburst": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Foes: -2 Speed. BP scales with base move's BP.",
 		id: "gmaxfoamburst",
@@ -7103,6 +7111,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Kingler",
 		onHit(target, source, move) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				this.boost({spe: -2}, pokemon, source, move);
 			}
@@ -7115,7 +7124,7 @@ let BattleMovedex = {
 	"gmaxgoldrush": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Confuses opponents. BP scales with base move's BP.",
 		id: "gmaxgoldrush",
@@ -7126,6 +7135,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Meowth",
 		onHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('confusion');
 			}
@@ -7138,7 +7148,7 @@ let BattleMovedex = {
 	"gmaxgravitas": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Summons Gravity. BP scales with base move's BP.",
 		id: "gmaxgravitas",
@@ -7149,7 +7159,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Orbeetle",
 		self: {
-			pseudoWeather: 'gravity',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				this.field.addPseudoWeather('gravity');
+			},
 		},
 		target: "normal",
 		type: "Psychic",
@@ -7158,7 +7171,7 @@ let BattleMovedex = {
 	"gmaxmalodor": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Poisons opponents. BP scales with base move's BP.",
 		id: "gmaxmalodor",
@@ -7169,6 +7182,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Garbodor",
 		onHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.trySetStatus('psn', source);
 			}
@@ -7180,7 +7194,7 @@ let BattleMovedex = {
 	"gmaxmeltdown": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Applies Torment to opponents. BP scales with base move's BP.",
 		id: "gmaxmeltdown",
@@ -7191,6 +7205,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Melmetal",
 		onHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('torment');
 			}
@@ -7203,7 +7218,7 @@ let BattleMovedex = {
 	"gmaxreplenish": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Restores user's side's berries. BP scales with base move's BP.",
 		id: "gmaxreplenish",
@@ -7215,6 +7230,7 @@ let BattleMovedex = {
 		isMax: "Snorlax",
 		self: {
 			onHit(target, source) {
+				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of target.side.active) {
 					if (!pokemon.item && pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
 						let item = pokemon.lastItem;
@@ -7233,7 +7249,7 @@ let BattleMovedex = {
 	"gmaxresonance": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Summons Aurora Veil. BP scales with base move's BP.",
 		id: "gmaxresonance",
@@ -7244,7 +7260,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Lapras",
 		self: {
-			sideCondition: 'auroraveil',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				source.side.addSideCondition('auroraveil');
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -7254,7 +7273,7 @@ let BattleMovedex = {
 	"gmaxsandblast": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Traps and damages opponents. BP scales with base move's BP.",
 		id: "gmaxsandblast",
@@ -7265,6 +7284,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Sandaconda",
 		onHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('partiallytrapped');
 			}
@@ -7288,6 +7308,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Hatterene",
 		onHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('confusion');
 			}
@@ -7300,7 +7321,7 @@ let BattleMovedex = {
 	"gmaxsnooze": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Afflicts foes with Yawn. BP scales with base move's BP.",
 		id: "gmaxsnooze",
@@ -7311,6 +7332,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Grimmsnarl",
 		onHit(target, source) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('yawn');
 			}
@@ -11047,7 +11069,7 @@ let BattleMovedex = {
 	"maxairstream": {
 		num: 766,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "User: +1 Speed. BP scales with base move's BP.",
 		id: "maxairstream",
@@ -11059,6 +11081,7 @@ let BattleMovedex = {
 		isMax: true,
 		self: {
 			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of source.side.active) {
 					this.boost({spe: 1}, pokemon, source, move);
 				}
@@ -11071,7 +11094,7 @@ let BattleMovedex = {
 	"maxdarkness": {
 		num: 766,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Foes: -1 Sp.Def. BP scales with base move's BP.",
 		id: "maxdarkness",
@@ -11082,6 +11105,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		onHit(target, source, move) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				this.boost({spd: -1}, pokemon, source, move);
 			}
@@ -11093,7 +11117,7 @@ let BattleMovedex = {
 	"maxflare": {
 		num: 757,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Sets Sun. BP scales with base move's BP.",
 		id: "maxflare",
@@ -11104,7 +11128,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			weather: 'sunnyday',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				this.field.setWeather('sunnyday');
+			},
 		},
 		target: "normal",
 		type: "Fire",
@@ -11124,6 +11151,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		onHit(target, source, move) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				this.boost({spa: -1}, pokemon, source, move);
 			}
@@ -11135,7 +11163,7 @@ let BattleMovedex = {
 	"maxgeyser": {
 		num: 757,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Sets Rain. BP scales with base move's BP.",
 		id: "maxgeyser",
@@ -11146,7 +11174,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			weather: 'raindance',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				this.field.setWeather('raindance');
+			},
 		},
 		target: "normal",
 		type: "Water",
@@ -11199,7 +11230,7 @@ let BattleMovedex = {
 	"maxhailstorm": {
 		num: 763,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Sets Hail. BP scales with base move's BP.",
 		id: "maxhailstorm",
@@ -11210,7 +11241,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			weather: 'hail',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				this.field.setWeather('hail');
+			},
 		},
 		target: "normal",
 		type: "Ice",
@@ -11219,7 +11253,7 @@ let BattleMovedex = {
 	"maxknuckle": {
 		num: 761,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "User: +1 Attack. BP scales with base move's BP.",
 		id: "maxknuckle",
@@ -11231,6 +11265,7 @@ let BattleMovedex = {
 		isMax: true,
 		self: {
 			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of source.side.active) {
 					this.boost({atk: 1}, pokemon, source, move);
 				}
@@ -11243,7 +11278,7 @@ let BattleMovedex = {
 	"maxlightning": {
 		num: 759,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Sets Electric Terrain. BP scales with base move's BP.",
 		id: "maxlightning",
@@ -11254,7 +11289,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			terrain: 'electricterrain',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				this.field.setTerrain('electricterrain');
+			},
 		},
 		target: "normal",
 		type: "Electric",
@@ -11263,7 +11301,7 @@ let BattleMovedex = {
 	"maxmindstorm": {
 		num: 769,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Sets Psychic Terrain. BP scales with base move's BP.",
 		id: "maxmindstorm",
@@ -11274,7 +11312,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			terrain: 'psychicterrain',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				this.field.setTerrain('psychicterrain');
+			},
 		},
 		target: "normal",
 		type: "Psychic",
@@ -11283,7 +11324,7 @@ let BattleMovedex = {
 	"maxooze": {
 		num: 764,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "User: +1 Sp.Atk. BP scales with base move's BP.",
 		id: "maxooze",
@@ -11295,6 +11336,7 @@ let BattleMovedex = {
 		isMax: true,
 		self: {
 			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of source.side.active) {
 					this.boost({spa: 1}, pokemon, source, move);
 				}
@@ -11307,7 +11349,7 @@ let BattleMovedex = {
 	"maxovergrowth": {
 		num: 773,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Sets Grassy Terrain. BP scales with base move's BP.",
 		id: "maxovergrowth",
@@ -11318,7 +11360,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			terrain: 'grassyterrain',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				this.field.setTerrain('grassyterrain');
+			},
 		},
 		target: "normal",
 		type: "Grass",
@@ -11327,7 +11372,7 @@ let BattleMovedex = {
 	"maxphantasm": {
 		num: 762,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Foes: -1 Defense. BP scales with base move's BP.",
 		id: "maxphantasm",
@@ -11338,6 +11383,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		onHit(target, source, move) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				this.boost({def: -1}, pokemon, source, move);
 			}
@@ -11349,7 +11395,7 @@ let BattleMovedex = {
 	"maxquake": {
 		num: 771,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "User: +1 Sp.Def. BP scales with base move's BP.",
 		id: "maxquake",
@@ -11361,6 +11407,7 @@ let BattleMovedex = {
 		isMax: true,
 		self: {
 			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of source.side.active) {
 					this.boost({spd: 1}, pokemon, source, move);
 				}
@@ -11373,7 +11420,7 @@ let BattleMovedex = {
 	"maxrockfall": {
 		num: 770,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Sets Sandstorm. BP scales with base move's BP.",
 		id: "maxrockfall",
@@ -11384,7 +11431,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			weather: 'sandstorm',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				this.field.setWeather('sandstorm');
+			},
 		},
 		target: "normal",
 		type: "Rock",
@@ -11393,7 +11443,7 @@ let BattleMovedex = {
 	"maxstarfall": {
 		num: 767,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Sets Misty Terrain. BP scales with base move's BP.",
 		id: "maxstarfall",
@@ -11404,7 +11454,10 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		self: {
-			terrain: 'mistyterrain',
+			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
+				this.field.setTerrain('mistyterrain');
+			},
 		},
 		target: "normal",
 		type: "Fairy",
@@ -11413,7 +11466,7 @@ let BattleMovedex = {
 	"maxsteelspike": {
 		num: 774,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "User: +1 Defense. BP scales with base move's BP.",
 		id: "maxsteelspike",
@@ -11425,6 +11478,7 @@ let BattleMovedex = {
 		isMax: true,
 		self: {
 			onHit(target, source, move) {
+				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of source.side.active) {
 					this.boost({def: 1}, pokemon, source, move);
 				}
@@ -11437,7 +11491,7 @@ let BattleMovedex = {
 	"maxstrike": {
 		num: 760,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Foes: -1 Speed. BP scales with base move's BP.",
 		id: "maxstrike",
@@ -11448,6 +11502,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		onHit(target, source, move) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				this.boost({spe: -1}, pokemon, source, move);
 			}
@@ -11459,7 +11514,7 @@ let BattleMovedex = {
 	"maxwyrmwind": {
 		num: 760,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Foes: -1 Attack. BP scales with base move's BP.",
 		id: "maxwyrmwind",
@@ -11470,6 +11525,7 @@ let BattleMovedex = {
 		flags: {},
 		isMax: true,
 		onHit(target, source, move) {
+			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				this.boost({atk: -1}, pokemon, source, move);
 			}
