@@ -6999,10 +6999,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Machamp",
-		onHit(target, source) {
-			for (let pokemon of source.side.active) {
-				pokemon.addVolatile('focusenergy');
-			}
+		self: {
+			onHit(target, source) {
+				for (let pokemon of source.side.active) {
+					pokemon.addVolatile('focusenergy');
+				}
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -7075,10 +7077,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Alcremie",
-		onAfterHit(target, source) {
-			for (let pokemon of source.side.active) {
-				pokemon.heal(pokemon.maxhp);
-			}
+		self: {
+			onAfterHit(target, source) {
+				for (let pokemon of source.side.active) {
+					this.heal(pokemon.maxhp, pokemon, pokemon);
+				}
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -7144,7 +7148,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Orbeetle",
-		pseudoWeather: 'gravity',
+		self: {
+			pseudoWeather: 'gravity',
+		},
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
@@ -7207,15 +7213,17 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Snorlax",
-		onHit(target, source) {
-			for (let pokemon of target.side.active) {
-				if (!pokemon.item && pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
-					let item = pokemon.lastItem;
-					pokemon.lastItem = '';
-					this.add('-item', pokemon, this.dex.getItem(item), '[from] move: G-Max Replenish');
-					pokemon.setItem(item);
+		self: {
+			onHit(target, source) {
+				for (let pokemon of target.side.active) {
+					if (!pokemon.item && pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
+						let item = pokemon.lastItem;
+						pokemon.lastItem = '';
+						this.add('-item', pokemon, this.dex.getItem(item), '[from] move: G-Max Replenish');
+						pokemon.setItem(item);
+					}
 				}
-			}
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -7235,7 +7243,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Lapras",
-		sideCondition: 'auroraveil',
+		self: {
+			sideCondition: 'auroraveil',
+		},
 		secondary: null,
 		target: "normal",
 		type: "Ice",
@@ -11047,10 +11057,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({spe: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({spe: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Flying",
@@ -11091,7 +11103,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		weather: 'sunnyday',
+		self: {
+			weather: 'sunnyday',
+		},
 		target: "normal",
 		type: "Fire",
 		contestType: "Cool",
@@ -11131,7 +11145,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		weather: 'raindance',
+		self: {
+			weather: 'raindance',
+		},
 		target: "normal",
 		type: "Water",
 		contestType: "Cool",
@@ -11193,7 +11209,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		weather: 'hail',
+		self: {
+			weather: 'hail',
+		},
 		target: "normal",
 		type: "Ice",
 		contestType: "Cool",
@@ -11211,10 +11229,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({atk: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({atk: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Fighting",
@@ -11233,7 +11253,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		terrain: 'electricterrain',
+		self: {
+			terrain: 'electricterrain',
+		},
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
@@ -11251,7 +11273,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		terrain: 'psychicterrain',
+		self: {
+			terrain: 'psychicterrain',
+		},
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
@@ -11269,10 +11293,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({spa: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({spa: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Poison",
@@ -11291,7 +11317,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		terrain: 'grassyterrain',
+		self: {
+			terrain: 'grassyterrain',
+		},
 		target: "normal",
 		type: "Grass",
 		contestType: "Cool",
@@ -11331,10 +11359,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({spd: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({spd: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Ground",
@@ -11353,7 +11383,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		weather: 'sandstorm',
+		self: {
+			weather: 'sandstorm',
+		},
 		target: "normal",
 		type: "Rock",
 		contestType: "Cool",
@@ -11371,7 +11403,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		terrain: 'mistyterrain',
+		self: {
+			terrain: 'mistyterrain',
+		},
 		target: "normal",
 		type: "Fairy",
 		contestType: "Cool",
@@ -11389,10 +11423,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: true,
-		onHit(target, source, move) {
-			for (let pokemon of source.side.active) {
-				this.boost({def: 1}, pokemon, source, move);
-			}
+		self: {
+			onHit(target, source, move) {
+				for (let pokemon of source.side.active) {
+					this.boost({def: 1}, pokemon, source, move);
+				}
+			},
 		},
 		target: "normal",
 		type: "Steel",
