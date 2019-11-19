@@ -14,6 +14,7 @@ let BattleAbilities = {
 	},
 	"innerfocus": {
 		inherit: true,
+		shortDesc: "This Pokemon cannot be made to flinch.",
 		rating: 1,
 	},
 	"intimidate": {
@@ -34,6 +35,35 @@ let BattleAbilities = {
 				}
 			}
 		},
+		rating: 4,
+	},
+	"oblivious": {
+		inherit: true,
+		desc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability while affected cures it.",
+		shortDesc: "This Pokemon cannot be infatuated or taunted.",
+	},
+	"owntempo": {
+		inherit: true,
+		desc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
+		shortDesc: "This Pokemon cannot be confused.",
+	},
+	"rattled": {
+		desc: "This Pokemon's Speed is raised by 1 stage if hit by a Bug-, Dark-, or Ghost-type attack.",
+		shortDesc: "This Pokemon's Speed is raised 1 stage if hit by a Bug-, Dark-, or Ghost-type attack.",
+		onAfterDamage(damage, target, source, effect) {
+			if (effect && (effect.type === 'Dark' || effect.type === 'Bug' || effect.type === 'Ghost')) {
+				this.boost({spe: 1});
+			}
+		},
+		id: "rattled",
+		name: "Rattled",
+		rating: 1.5,
+		num: 155,
+	},
+	"scrappy": {
+		inherit: true,
+		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves.",
+		shortDesc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves.",
 	},
 };
 
