@@ -2220,10 +2220,12 @@ let BattleFormatsData = {
 	mewtwomegax: {
 		requiredItem: "Mewtwonite X",
 		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	mewtwomegay: {
 		requiredItem: "Mewtwonite Y",
 		isNonstandard: "Past",
+		tier: "Illegal",
 	},
 	mew: {
 		randomBattleMoves: ["closecombat", "megahorn", "powerwhip", "psychicfangs", "swordsdance", "uturn"],
