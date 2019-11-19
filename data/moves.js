@@ -18573,15 +18573,27 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Raises the user's Def. by 2 stages.",
+		desc: "Consumes berry and raises the user's Defense by 2 stages.",
+		shortDesc: "Consumes berry and raises the user's Def. by 2 stages.",
 		id: "stuffcheeks",
 		name: "Stuff Cheeks",
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		boosts: {
-			def: 2,
+		onTryHit(target, source, move) {
+			if (source.ignoringItem()) return false;
+			let item = source.getItem();
+			if (!item.isBerry) return false;
+			source.setItem('');
+			source.lastItem = item.id;
+			source.usedItemThisTurn = true;
+			this.add("-enditem", source, item.name, '[from] move: Stuff Cheeks');
+			if (this.singleEvent('Eat', item, null, source, null, null)) {
+				this.runEvent('EatItem', source, null, null, item);
+				this.boost({def: 2}, source, null, null, false, true);
+				if (item.id === 'leppaberry') source.staleness = 'external';
+			}
+			if (item.onEat) source.ateBerry = true;
 		},
 		secondary: null,
 		target: "self",
