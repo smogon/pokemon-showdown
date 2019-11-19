@@ -5386,7 +5386,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	sigilyph: {
-		randomBattleMoves: ["cosmicpower", "psychoshift", "roost", "storedpower"],
+		randomBattleMoves: ["airslash", "energyball", "heatwave", "psychic", "trick"],
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5490,7 +5490,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	gothitelle: {
-		randomBattleMoves: ["calmmind", "charm", "psychic", "rest"],
+		randomBattleMoves: ["cosmicpower", "rest", "storedpower", "trick"],
 		encounters: [
 			{"generation": 5, "level": 34, "isHidden": false},
 		],
