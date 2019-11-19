@@ -50,7 +50,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
-		banlist: ['Baton Pass'],
+		banlist: [],
 		minSourceGen: 8,
 	},
 	/*{
@@ -784,8 +784,7 @@ let Formats = [
 	{
 		name: "[Gen 6] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3522911/">ORAS Ubers</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3535106/">ORAS Ubers Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286277/">ORAS Ubers</a>`,
 		],
 
 		mod: 'gen6',
@@ -917,9 +916,7 @@ let Formats = [
 	{
 		name: "[Gen 7] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3621030/">Ubers Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3623296/">Ubers Viability Rankings</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3639330/">Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286276/">USM Ubers</a>`,
 		],
 
 		mod: 'gen7',
@@ -1060,7 +1057,6 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['[Gen 7] PU'],
 		banlist: [
 			'PU', 'Carracosta', 'Crabominable', 'Gorebyss', 'Jynx', 'Raticate-Alola',
@@ -1531,8 +1527,7 @@ let Formats = [
 	{
 		name: "[Gen 5] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3550881/">BW2 Ubers Viability Ranking</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/6446463/">BW2 Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286278/">BW2 Ubers</a>`,
 		],
 
 		mod: 'gen5',
@@ -1688,8 +1683,7 @@ let Formats = [
 	{
 		name: "[Gen 4] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7433831/">DPP Ubers Information &amp; Resources</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3505128/">DPP Ubers Viability Ranking</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286279/">DPP Ubers</a>`,
 		],
 
 		mod: 'gen4',
@@ -1820,8 +1814,7 @@ let Formats = [
 	{
 		name: "[Gen 3] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7433832/">ADV Ubers Information &amp; Resources</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3536426/">ADV Ubers Viability Ranking</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286280/">ADV Ubers</a>`,
 		],
 
 		mod: 'gen3',
@@ -1875,8 +1868,7 @@ let Formats = [
 	{
 		name: "[Gen 2] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7433879/">GSC Ubers Information &amp; Resources</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/6431086/">GSC Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286282/">GSC Ubers</a>`,
 		],
 
 		mod: 'gen2',
@@ -1915,8 +1907,7 @@ let Formats = [
 	{
 		name: "[Gen 1] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3541329/">RBY Ubers Viability Ranking</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/6431045/">RBY Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286283/">RBY Ubers</a>`,
 		],
 
 		mod: 'gen1',
