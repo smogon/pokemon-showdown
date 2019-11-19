@@ -193,6 +193,24 @@ let Formats = [
 		minSourceGen: 8,
 	},
 	{
+		name: "[Gen 8] Battle Stadium Doubles",
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Obtainable', 'Standard GBU'],
+		minSourceGen: 8,
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.canGigantamax = null;
+			}
+		},
+	},
+	{
 		name: "[Gen 8] 2v2 Doubles",
 		desc: `Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.`,
 		threads: [
