@@ -225,7 +225,7 @@ let Formats = [
 			battle: 2,
 		},
 		ruleset: ['Obtainable', 'Standard Doubles', 'Accuracy Moves Clause', 'Team Preview', 'Sleep Clause Mod'],
-		banlist: ['DUber', 'Swagger'],
+		banlist: ['DUber', 'Focus Sash', 'Perish Song', 'Swagger'],
 		minSourceGen: 8,
 	},
 	{
