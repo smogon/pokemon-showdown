@@ -3073,6 +3073,12 @@ let BattleLearnsets = {
 		toxic: ["7M"],
 		zippyzap: ["7T"],
 	}},
+	pikachugmax: {learnset: {
+		doubleteam: ["8S0"],
+		growl: ["8S0"],
+		quickattack: ["8S0"],
+		thunderwave: ["8S0"],
+	}},
 	raichu: {learnset: {
 		agility: ["8M", "8L1"],
 		attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -6439,6 +6445,12 @@ let BattleLearnsets = {
 		uproar: ["8M"],
 		uturn: ["8M"],
 		workup: ["8M"],
+	}},
+	meowthgmax: {learnset: {
+		fakeout: ["8S0"],
+		growl: ["8S0"],
+		payday: ["8S0"],
+		slash: ["8S0"],
 	}},
 	persian: {learnset: {
 		aerialace: ["7M", "6M", "5M", "4M", "3M"],
@@ -16068,6 +16080,12 @@ let BattleLearnsets = {
 		takedown: ["7L24"],
 		toxic: ["7M"],
 		veeveevolley: ["7T"],
+	}},
+	eeveegmax: {learnset: {
+		growl: ["8S0"],
+		quickattack: ["8S0"],
+		sandattack: ["8S0"],
+		tailwhip: ["8S0"],
 	}},
 	vaporeon: {learnset: {
 		acidarmor: ["8L45", "7L29", "7V", "7V", "6L29", "5L64", "4L64", "3L47"],
