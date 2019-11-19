@@ -6947,7 +6947,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Butterfree",
 		onHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				let result = this.random(3);
 				if (result === 0) {
@@ -6978,7 +6977,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Centiskorch",
 		onHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('partiallytrapped');
 			}
@@ -7004,7 +7002,6 @@ let BattleMovedex = {
 		isMax: "Machamp",
 		self: {
 			onHit(target, source) {
-				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of source.side.active) {
 					pokemon.addVolatile('focusenergy');
 				}
@@ -7029,7 +7026,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Eevee",
 		onHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('attract');
 			}
@@ -7054,7 +7050,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Duraludon",
 		onAfterHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				if (pokemon.lastMove && !pokemon.lastMove.isZ) {
 					let ppDeducted = pokemon.deductPP(pokemon.lastMove.id, 4);
@@ -7086,7 +7081,6 @@ let BattleMovedex = {
 		isMax: "Alcremie",
 		self: {
 			onAfterHit(target, source) {
-				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of source.side.active) {
 					this.heal(pokemon.maxhp, pokemon, pokemon);
 				}
@@ -7111,7 +7105,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Kingler",
 		onHit(target, source, move) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				this.boost({spe: -2}, pokemon, source, move);
 			}
@@ -7135,7 +7128,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Meowth",
 		onHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('confusion');
 			}
@@ -7160,7 +7152,6 @@ let BattleMovedex = {
 		isMax: "Orbeetle",
 		self: {
 			onHit(target, source, move) {
-				if (!source.volatiles['dynamax']) return;
 				this.field.addPseudoWeather('gravity');
 			},
 		},
@@ -7182,7 +7173,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Garbodor",
 		onHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.trySetStatus('psn', source);
 			}
@@ -7205,7 +7195,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Melmetal",
 		onHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('torment');
 			}
@@ -7230,7 +7219,6 @@ let BattleMovedex = {
 		isMax: "Snorlax",
 		self: {
 			onHit(target, source) {
-				if (!source.volatiles['dynamax']) return;
 				for (let pokemon of target.side.active) {
 					if (!pokemon.item && pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
 						let item = pokemon.lastItem;
@@ -7261,7 +7249,6 @@ let BattleMovedex = {
 		isMax: "Lapras",
 		self: {
 			onHit(target, source, move) {
-				if (!source.volatiles['dynamax']) return;
 				source.side.addSideCondition('auroraveil');
 			},
 		},
@@ -7284,7 +7271,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Sandaconda",
 		onHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('partiallytrapped');
 			}
@@ -7308,7 +7294,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Hatterene",
 		onHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('confusion');
 			}
@@ -7332,7 +7317,6 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Grimmsnarl",
 		onHit(target, source) {
-			if (!source.volatiles['dynamax']) return;
 			for (let pokemon of target.side.active) {
 				pokemon.addVolatile('yawn');
 			}
@@ -7340,6 +7324,37 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
+		contestType: "Cool",
+	},
+	"gmaxsteelsurge": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Sets Steel-type entry hazard. BP scales with base move's BP.",
+		id: "gmaxsteelsurge",
+		isNonstandard: "Custom",
+		name: "G-Max Steelsurge",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Copperajah",
+		onHit(target, source, move) {
+			target.side.addSideCondition('gmaxsteelsurge');
+		},
+		effect: {
+			onStart(side) {
+				this.add('-sidestart', side, 'move: Steelsurge');
+			},
+			onSwitchIn(pokemon) {
+				if (pokemon.hasItem('heavydutyboots')) return;
+				let typeMod = this.dex.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('G-Max Steelsurge')), -6, 6);
+				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
 		contestType: "Cool",
 	},
 	"grassknot": {
