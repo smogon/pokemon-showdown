@@ -28,6 +28,7 @@ exports.commands = {
 	ds5: 'dexsearch',
 	ds6: 'dexsearch',
 	ds7: 'dexsearch',
+	ds8: 'dexsearch',
 	dsearch: 'dexsearch',
 	dexsearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
@@ -65,7 +66,7 @@ exports.commands = {
 		`'asc' or 'desc' following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively, e.g., 'speed asc'.`,
 		`Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.`,
 		`Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.`,
-		`The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon that are not in another tier.`,
+		`The parameter 'mega' can be added to search for Mega Evolutions only, the parameter 'gmax' can be added to search for Gigantamax Formes only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon that are not in another tier.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.`,
 		`You can search for info in a specific generation by appending the generation to ds, e.g. '/ds1 normal' searches for all Pok\u00e9mon that were normal type in Generation I.`,
 		`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix 'group' onto the egg group parameter, e.g., seaching for 'grass, grass group' will show all Grass types in the Grass egg group.`,
@@ -243,6 +244,7 @@ exports.commands = {
 	dpplearn: 'learn',
 	bw2learn: 'learn',
 	oraslearn: 'learn',
+	usumlearn: 'learn',
 	learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
 		if (!this.canBroadcast()) return;
@@ -286,6 +288,8 @@ function runDexsearch(target, cmd, canAll, message) {
 	let showAll = false;
 	let sort = null;
 	let megaSearch = null;
+	let gmaxSearch = null;
+	let tierSearch = null;
 	let capSearch = null;
 	let randomOutput = 0;
 	let maxGen = 0;
@@ -338,6 +342,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				}
 				let invalid = validParameter("tiers", target, isNotSearch, target);
 				if (invalid) return {reply: invalid};
+				tierSearch = tierSearch || !isNotSearch;
 				orGroup.tiers[target] = !isNotSearch;
 				continue;
 			}
@@ -346,6 +351,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				target = allDoublesTiers[toID(target)];
 				let invalid = validParameter("doubles tiers", target, isNotSearch, target);
 				if (invalid) return {reply: invalid};
+				tierSearch = tierSearch || !isNotSearch;
 				orGroup.doublesTiers[target] = !isNotSearch;
 				continue;
 			}
@@ -383,7 +389,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target.substr(0, 6) === 'maxgen') {
 				maxGen = parseInt(target[6]);
-				if (!maxGen || maxGen < 1 || maxGen > 7) return {reply: "The generation must be between 1 and 7"};
+				if (!maxGen || maxGen < 1 || maxGen > 8) return {reply: "The generation must be between 1 and 8"};
 				orGroup.skip = true;
 				continue;
 			}
@@ -416,7 +422,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			} else if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) {
 				targetInt = parseInt(target.substr(3).trim());
 			}
-			if (0 < targetInt && targetInt < 8) {
+			if (0 < targetInt && targetInt < 9) {
 				let invalid = validParameter("gens", targetInt, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup.gens[targetInt] = !isNotSearch;
@@ -455,9 +461,18 @@ function runDexsearch(target, cmd, canAll, message) {
 				break;
 			}
 
+			if (target === 'gmax' || target === 'gigantamax') {
+				if (gmaxSearch === isNotSearch) return {reply: "A search cannot include and exclude 'gigantamax'."};
+				if (parameters.length > 1) return {reply: "The parameter 'gigantamax' cannot have alternative parameters"};
+				gmaxSearch = !isNotSearch;
+				console.log(gmaxSearch);
+				orGroup.skip = true;
+				break;
+			}
+
 			if (target === 'recovery') {
 				if (parameters.length > 1) return {reply: "The parameter 'recovery' cannot have alternative parameters"};
-				let recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder", "shoreup"];
+				let recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder", "shoreup", "lifedew"];
 				for (const move of recoveryMoves) {
 					let invalid = validParameter("moves", move, isNotSearch, target);
 					if (invalid) return {reply: invalid};
@@ -578,14 +593,15 @@ function runDexsearch(target, cmd, canAll, message) {
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && searches.length === 0 && megaSearch === null && !maxGen) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
-	if (!maxGen) maxGen = 7;
+	if (showAll && searches.length === 0 && megaSearch === null && gmaxSearch === null && !maxGen) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
+	if (!maxGen) maxGen = 8;
 	let mod = Dex.mod('gen' + maxGen);
 	let dex = {};
 	for (let pokemon in mod.data.Pokedex) {
 		let template = mod.getTemplate(pokemon);
 		let megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
-		if (template.gen <= maxGen && template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (!template.tier.startsWith("CAP") || capSearch) && megaSearchResult) {
+		let gmaxSearchResult = (gmaxSearch === null || (gmaxSearch === true && template.isGigantamax) || (gmaxSearch === false && !template.isGigantamax));
+		if (template.gen <= maxGen && template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (!template.tier.startsWith("CAP") || capSearch) && megaSearchResult && gmaxSearchResult) {
 			dex[pokemon] = template;
 		}
 	}
@@ -614,16 +630,16 @@ function runDexsearch(target, cmd, canAll, message) {
 					break;
 				}
 			}
-
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				let tier = dex[mon].tier;
 				if (tier[0] === '(' && tier !== '(PU)') tier = tier.slice(1, -1);
+				if (tier === 'New') tier = 'OU';
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
 				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
 				// as well as event-only Pokemon that are not eligible for LC despite being the first stage
 				let format = Dex.getFormat('gen' + maxGen + 'lc');
-				if (!format.exists) format = Dex.getFormat('gen7lc');
+				if (!format.exists) format = Dex.getFormat('gen8lc');
 				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].evos.some(evo => mod.getTemplate(evo).gen <= mod.gen) && !format.banlist.includes(dex[mon].species) && !format.banlist.includes(dex[mon].species + "-Base")) {
 					if (dex[mon].eventPokemon && dex[mon].eventOnly) {
 						let validEvents = 0;
@@ -722,7 +738,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (matched) continue;
 
-			const validator = TeamValidator.get(`gen${maxGen}ou`);
+			let validator = TeamValidator.get(`gen${maxGen}ou`);
 			let pokemonSource = validator.allSources();
 			for (let move in alts.moves) {
 				if (!validator.checkLearnset(move, mon, pokemonSource) === alts.moves[move]) {
@@ -739,7 +755,9 @@ function runDexsearch(target, cmd, canAll, message) {
 	let results = [];
 	for (const mon of Object.keys(dex).sort()) {
 		const isAlola = dex[mon].forme === "Alola" && dex[mon].species !== "Pikachu-Alola";
+		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
+		if (dex[mon].isGigantamax && !allowGmax) continue;
 		results.push(dex[mon].species);
 	}
 
@@ -864,7 +882,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				targetInt = parseInt(target.substr(3).trim());
 			}
 
-			if (0 < targetInt && targetInt < 8) {
+			if (0 < targetInt && targetInt < 9) {
 				if ((orGroup.gens[targetInt] && isNotSearch) || (orGroup.flags[targetInt] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
 				orGroup.gens[targetInt] = !isNotSearch;
 				continue;
@@ -1552,7 +1570,7 @@ function runItemsearch(target, cmd, canAll, message) {
 function runLearn(target, cmd) {
 	let format = {};
 	let targets = target.split(',');
-	let gen = ({rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6}[cmd.slice(0, -5)] || 7);
+	let gen = ({rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7}[cmd.slice(0, -5)] || 8);
 	let formatid;
 	let formatName;
 
