@@ -571,6 +571,7 @@ let BattleItems = {
 		},
 		num: 535,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Kyogre, this item triggers its Primal Reversion in battle.",
 	},
 	"blukberry": {
@@ -4946,6 +4947,7 @@ let BattleItems = {
 		},
 		num: 534,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "If held by a Groudon, this item triggers its Primal Reversion in battle.",
 	},
 	"repeatball": {

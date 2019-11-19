@@ -63,6 +63,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	blueorb: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	buginiumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -306,6 +310,10 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	psychiumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	redorb: {
 		inherit: true,
 		isNonstandard: null,
 	},
