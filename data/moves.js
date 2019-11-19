@@ -3560,7 +3560,7 @@ let BattleMovedex = {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
 			onFaint(target, source, effect) {
-				if (!source || !effect || target.side === source.side) return;
+				if (!source || !effect || target.side === source.side || source.volatiles['dynamax']) return;
 				if (effect.effectType === 'Move' && !effect.isFutureMove) {
 					this.add('-activate', target, 'move: Destiny Bond');
 					source.faint();
