@@ -222,7 +222,7 @@ class RandomLetsGoTeams extends RandomTeams {
 		let pokemonPool = [];
 		for (let id in this.dex.data.FormatsData) {
 			let template = this.dex.getTemplate(id);
-			if (template.num < 1 || (template.num > 151 && ![808, 809].includes(template.num)) || template.nfe || !template.randomBattleMoves || !template.randomBattleMoves.length) continue;
+			if (template.num < 1 || (template.num > 151 && ![808, 809].includes(template.num)) || template.gen > 7 || template.nfe || !template.randomBattleMoves || !template.randomBattleMoves.length) continue;
 			pokemonPool.push(id);
 		}
 
