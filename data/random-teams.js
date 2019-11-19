@@ -1139,7 +1139,7 @@ class RandomTeams {
 				} else if (ability === 'Defiant' || ability === 'Moxie') {
 					rejectAbility = !counter['Physical'] || hasMove['dragontail'];
 				} else if (ability === 'Gluttony') {
-					rejectAbility = !hasMove['bellydrum'];
+					rejectAbility = !hasMove['bellydrum'] && !abilities.includes('Cheek Pouch');
 				} else if (ability === 'Harvest') {
 					rejectAbility = abilities.includes('Frisk');
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
@@ -1250,6 +1250,8 @@ class RandomTeams {
 			} else {
 				item = isDoubles || this.randomChance(1, 2) ? 'Sitrus Berry' : 'Leftovers';
 			}
+		} else if (ability === 'Cheek Pouch' || ability === 'Gluttony') {
+			item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
 		} else if (ability === 'Emergency Exit' && !!counter['Status']) {
 			item = 'Sitrus Berry';
 		} else if (ability === 'Imposter') {
@@ -1263,11 +1265,7 @@ class RandomTeams {
 		} else if (template.evos.length) {
 			item = 'Eviolite';
 		} else if (hasMove['bellydrum']) {
-			if (ability === 'Gluttony') {
-				item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
-			} else {
-				item = 'Sitrus Berry';
-			}
+			item = 'Sitrus Berry';
 		} else if (hasMove['copycat'] && counter.Physical >= 3) {
 			item = 'Choice Band';
 		} else if (hasMove['shellsmash']) {
@@ -1407,9 +1405,8 @@ class RandomTeams {
 			if (hasMove['substitute'] && hasMove['reversal']) {
 				// Reversal users should be able to use four Substitutes
 				if (hp % 4 > 0) break;
-			} else if (hasMove['substitute'] && (item === 'Petaya Berry' || item === 'Sitrus Berry' || ability === 'Power Construct' && item !== 'Leftovers')) {
-				// Three Substitutes should activate Petaya Berry for Dedenne
-				// Two Substitutes should activate Sitrus Berry or Power Construct
+			} else if (hasMove['substitute'] && item === 'Sitrus Berry') {
+				// Two Substitutes should activate Sitrus Berry
 				if (hp % 4 === 0) break;
 			} else if (hasMove['bellydrum'] && (item === 'Sitrus Berry' || ability === 'Gluttony')) {
 				// Belly Drum should activate Sitrus Berry
