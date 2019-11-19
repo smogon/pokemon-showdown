@@ -201,11 +201,39 @@ let BattleFormatsData = {
 		inherit: true,
 		tier: "LC",
 	},
+	pichuspikyeared: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	pikachu: {
 		inherit: true,
 		randomBattleMoves: ["volttackle", "voltswitch", "grassknot", "hiddenpowerice", "knockoff", "irontail"],
 		randomDoubleBattleMoves: ["fakeout", "thunderbolt", "volttackle", "voltswitch", "grassknot", "hiddenpowerice", "brickbreak", "extremespeed", "encore", "substitute", "knockoff", "protect", "discharge"],
 		tier: "NFE",
+	},
+	pikachucosplay: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	pikachurockstar: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	pikachubelle: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	pikachupopstar: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	pikachuphd: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	pikachulibre: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	pikachuoriginal: {
 		inherit: true,
@@ -5038,6 +5066,10 @@ let BattleFormatsData = {
 		isNonstandard: null,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
+	},
+	gumshoostotem: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	grubbin: {
 		tier: "LC",
