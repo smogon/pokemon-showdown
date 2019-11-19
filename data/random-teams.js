@@ -1130,8 +1130,6 @@ class RandomTeams {
 					rejectAbility = !!counter['recoil'] && !counter['recovery'];
 				} else if (ability === 'Flare Boost' || ability === 'Moody') {
 					rejectAbility = true;
-				} else if (ability === 'Cheek Pouch') {
-					rejectAbility = !hasMove['substitute'];
 				} else if (ability === 'Chlorophyll' || ability === 'Leaf Guard') {
 					rejectAbility = template.baseStats.spe > 100 || abilities.includes('Harvest') || (!hasMove['sunnyday'] && !teamDetails['sun']);
 				} else if (ability === 'Competitive') {
@@ -1141,7 +1139,7 @@ class RandomTeams {
 				} else if (ability === 'Defiant' || ability === 'Moxie') {
 					rejectAbility = !counter['Physical'] || hasMove['dragontail'];
 				} else if (ability === 'Gluttony') {
-					rejectAbility = !hasMove['bellydrum'] && (!abilities.includes('Cheek Pouch') || hasMove['substitute']);
+					rejectAbility = !hasMove['bellydrum'] && !abilities.includes('Cheek Pouch');
 				} else if (ability === 'Harvest') {
 					rejectAbility = abilities.includes('Frisk');
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
@@ -1253,7 +1251,11 @@ class RandomTeams {
 				item = isDoubles || this.randomChance(1, 2) ? 'Sitrus Berry' : 'Leftovers';
 			}
 		} else if (ability === 'Cheek Pouch') {
-			item = (counter.Physical > counter.Special) ? 'Liechi Berry' : 'Petaya Berry';
+			if (hasMove['substitute']) {
+				item = (counter.Physical > counter.Special) ? 'Liechi Berry' : 'Petaya Berry';
+			} else {
+				item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
+			}
 		} else if (ability === 'Emergency Exit' && !!counter['Status']) {
 			item = 'Sitrus Berry';
 		} else if (ability === 'Imposter') {
