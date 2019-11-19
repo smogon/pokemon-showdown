@@ -90,10 +90,6 @@ let BattlePokedex = {
 		inherit: true,
 		eggGroups: ["Amorphous"],
 	},
-	gardevoirmega: {
-		inherit: true,
-		eggGroups: ["Amorphous"],
-	},
 	trapinch: {
 		inherit: true,
 		eggGroups: ["Bug"],
@@ -117,10 +113,6 @@ let BattlePokedex = {
 		evoCondition: "near an Ice Rock",
 	},
 	gallade: {
-		inherit: true,
-		eggGroups: ["Amorphous"],
-	},
-	gallademega: {
 		inherit: true,
 		eggGroups: ["Amorphous"],
 	},

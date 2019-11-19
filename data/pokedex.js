@@ -4958,7 +4958,7 @@ let BattlePokedex = {
 		heightm: 1.6,
 		weightkg: 48.4,
 		color: "White",
-		eggGroups: ["Human-Like", "Amorphous"],
+		eggGroups: ["Amorphous"],
 	},
 	surskit: {
 		num: 283,
@@ -7951,7 +7951,7 @@ let BattlePokedex = {
 		heightm: 1.6,
 		weightkg: 56.4,
 		color: "White",
-		eggGroups: ["Human-Like", "Amorphous"],
+		eggGroups: ["Amorphous"],
 	},
 	probopass: {
 		num: 476,
