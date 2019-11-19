@@ -4788,6 +4788,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	sylveon: {
+		inherit: true,
 		randomBattleMoves: ["hypervoice", "calmmind", "psyshock", "hiddenpowerfire", "wish", "protect"],
 		randomDoubleBattleMoves: ["hypervoice", "calmmind", "wish", "protect", "psyshock", "helpinghand", "shadowball", "hiddenpowerground"],
 		tier: "UU",
