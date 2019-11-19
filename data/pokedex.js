@@ -15229,7 +15229,6 @@ let BattlePokedex = {
 		weightkg: 950,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["eternatuseternamax"],
 	},
 	missingno: {
 		num: 0,
