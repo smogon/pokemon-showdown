@@ -1477,7 +1477,7 @@ class RandomTeams {
 		let pokemon = [];
 
 		// For Monotype
-		let isMonotype = this.format.id === 'gen7monotyperandombattle';
+		let isMonotype = this.format.id === 'gen8monotyperandombattle';
 		let typePool = Object.keys(this.dex.data.TypeChart);
 		let type = this.sample(typePool);
 
