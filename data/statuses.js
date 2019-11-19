@@ -737,6 +737,11 @@ let BattleStatuses = {
 			if (pokemon.hp <= 0) pokemon.hp = 1;
 			this.hint("Dynamax ended.");
 		},
+		onDragOutPriority: 2,
+		onDragOut(pokemon) {
+			this.add('-message', "Dynamaxed Pokemon can't be switched out!");
+			return null;
+		},
 		onEnd(pokemon) {
 			// Play animation
 			// Modify HP - Work with LVL 0 for now
