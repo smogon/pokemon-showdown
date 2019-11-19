@@ -292,13 +292,24 @@ class RandomTeams {
 		// Pick six random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
-		let last = [0, 151, 251, 386, 493, 649, 721, 807][this.gen];
+		let last = [0, 151, 251, 386, 493, 649, 721, 807, 890][this.gen];
+
+		/**@type {number[]} */
+		let pool = [];
+		for (let id in this.dex.data.FormatsData) {
+			if (!this.dex.data.Pokedex[id] || this.dex.data.FormatsData[id].isNonstandard) continue;
+			let num = this.dex.data.Pokedex[id].num;
+			if (pool.includes(num)) continue;
+			if (num > last) break;
+			pool.push(num);
+		}
+
 		/**@type {{[k: string]: number}} */
 		let hasDexNumber = {};
 		for (let i = 0; i < 6; i++) {
 			let num;
 			do {
-				num = this.random(last) + 1;
+				num = this.sample(pool);
 			} while (num in hasDexNumber);
 			hasDexNumber[num] = i;
 		}
