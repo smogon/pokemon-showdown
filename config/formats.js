@@ -69,7 +69,7 @@ let Formats = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
 		],
 
-		mod: 'gen7',
+		mod: 'gen8',
 		maxLevel: 5,
 		ruleset: ['Obtainable', 'Little Cup', 'Standard', 'Team Preview'],
 		banlist: ['Sneasel', 'Swirlix', 'Baton Pass'],
@@ -84,7 +84,7 @@ let Formats = [
 			//`&bullet; <a href="https://www.smogon.com/forums/threads/3599682/">Monotype Sample Teams</a>`,
 		],
 
-		mod: 'gen7',
+		mod: 'gen8',
 		ruleset: ['Obtainable', 'Same Type Clause', 'Standard', 'Team Preview'],
 		banlist: ['Eternatus', 'Zacian', 'Zamazenta', 'Shadow Tag', 'Baton Pass'],
 		minSourceGen: 8,
