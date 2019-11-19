@@ -307,10 +307,7 @@ class RandomTeams {
 		/**@type {{[k: string]: number}} */
 		let hasDexNumber = {};
 		for (let i = 0; i < 6; i++) {
-			let num;
-			do {
-				num = this.sample(pool);
-			} while (num in hasDexNumber);
+			let num = this.sampleNoReplace(pool);
 			hasDexNumber[num] = i;
 		}
 
