@@ -7079,7 +7079,7 @@ let BattleMovedex = {
 		self: {
 			onAfterHit(target, source) {
 				for (let pokemon of source.side.active) {
-					pokemon.heal(pokemon.maxhp);
+					this.heal(pokemon.maxhp, pokemon, pokemon);
 				}
 			},
 		},
