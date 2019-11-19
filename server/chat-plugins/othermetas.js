@@ -108,7 +108,7 @@ const commands = {
 		if (template.isNonstandard) {
 			this.errorReply(`Warning: ${template.name} is not a real Pokemon and is therefore not usable in Mix and Mega.`);
 		}
-		if (stone.isNonstandard) {
+		if (stone.isNonstandard === "CAP") {
 			this.errorReply(`Warning: ${stone.name} is a fake mega stone created by the CAP Project and is restricted to the CAP ${stone.megaEvolves}.`);
 		}
 		let baseTemplate = Dex.getTemplate(stone.megaEvolves);
