@@ -4916,7 +4916,7 @@ let BattlePokedex = {
 		weightkg: 6.6,
 		color: "White",
 		evos: ["kirlia"],
-		eggGroups: ["Amorphous"],
+		eggGroups: ["Human-Like", "Amorphous"],
 	},
 	kirlia: {
 		num: 281,
@@ -4930,7 +4930,7 @@ let BattlePokedex = {
 		prevo: "ralts",
 		evoLevel: 20,
 		evos: ["gardevoir", "gallade"],
-		eggGroups: ["Amorphous"],
+		eggGroups: ["Human-Like", "Amorphous"],
 	},
 	gardevoir: {
 		num: 282,
@@ -4943,7 +4943,7 @@ let BattlePokedex = {
 		color: "White",
 		prevo: "kirlia",
 		evoLevel: 30,
-		eggGroups: ["Amorphous"],
+		eggGroups: ["Human-Like", "Amorphous"],
 		otherFormes: ["gardevoirmega"],
 	},
 	gardevoirmega: {
@@ -4958,7 +4958,7 @@ let BattlePokedex = {
 		heightm: 1.6,
 		weightkg: 48.4,
 		color: "White",
-		eggGroups: ["Amorphous"],
+		eggGroups: ["Human-Like", "Amorphous"],
 	},
 	surskit: {
 		num: 283,
@@ -5644,7 +5644,7 @@ let BattlePokedex = {
 		weightkg: 15,
 		color: "Brown",
 		evos: ["vibrava"],
-		eggGroups: ["Bug"],
+		eggGroups: ["Bug", "Dragon"],
 	},
 	vibrava: {
 		num: 329,
@@ -5658,7 +5658,7 @@ let BattlePokedex = {
 		prevo: "trapinch",
 		evos: ["flygon"],
 		evoLevel: 35,
-		eggGroups: ["Bug"],
+		eggGroups: ["Bug", "Dragon"],
 	},
 	flygon: {
 		num: 330,
@@ -5671,7 +5671,7 @@ let BattlePokedex = {
 		color: "Green",
 		prevo: "vibrava",
 		evoLevel: 45,
-		eggGroups: ["Bug"],
+		eggGroups: ["Bug", "Dragon"],
 	},
 	cacnea: {
 		num: 331,
@@ -7935,7 +7935,7 @@ let BattlePokedex = {
 		prevo: "kirlia",
 		evoType: "useItem",
 		evoItem: "Dawn Stone",
-		eggGroups: ["Amorphous"],
+		eggGroups: ["Human-Like", "Amorphous"],
 		otherFormes: ["gallademega"],
 	},
 	gallademega: {
@@ -7951,7 +7951,7 @@ let BattlePokedex = {
 		heightm: 1.6,
 		weightkg: 56.4,
 		color: "White",
-		eggGroups: ["Amorphous"],
+		eggGroups: ["Human-Like", "Amorphous"],
 	},
 	probopass: {
 		num: 476,
