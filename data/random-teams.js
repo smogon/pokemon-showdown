@@ -1250,12 +1250,8 @@ class RandomTeams {
 			} else {
 				item = isDoubles || this.randomChance(1, 2) ? 'Sitrus Berry' : 'Leftovers';
 			}
-		} else if (ability === 'Cheek Pouch') {
-			if (hasMove['substitute']) {
-				item = (counter.Physical > counter.Special) ? 'Liechi Berry' : 'Petaya Berry';
-			} else {
-				item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
-			}
+		} else if (ability === 'Cheek Pouch' || ability === 'Gluttony') {
+			item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
 		} else if (ability === 'Emergency Exit' && !!counter['Status']) {
 			item = 'Sitrus Berry';
 		} else if (ability === 'Imposter') {
@@ -1268,8 +1264,6 @@ class RandomTeams {
 			}
 		} else if (template.evos.length) {
 			item = 'Eviolite';
-		} else if (ability === 'Gluttony') {
-			item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
 		} else if (hasMove['bellydrum']) {
 			item = 'Sitrus Berry';
 		} else if (hasMove['copycat'] && counter.Physical >= 3) {
@@ -1411,9 +1405,8 @@ class RandomTeams {
 			if (hasMove['substitute'] && hasMove['reversal']) {
 				// Reversal users should be able to use four Substitutes
 				if (hp % 4 > 0) break;
-			} else if (hasMove['substitute'] && (item === 'Liechi Berry' || item === 'Petaya Berry' || item === 'Sitrus Berry' || ability === 'Power Construct' && item !== 'Leftovers')) {
-				// Three Substitutes should activate Petaya Berry for Dedenne
-				// Two Substitutes should activate Sitrus Berry or Power Construct
+			} else if (hasMove['substitute'] && item === 'Sitrus Berry') {
+				// Two Substitutes should activate Sitrus Berry
 				if (hp % 4 === 0) break;
 			} else if (hasMove['bellydrum'] && (item === 'Sitrus Berry' || ability === 'Gluttony')) {
 				// Belly Drum should activate Sitrus Berry
