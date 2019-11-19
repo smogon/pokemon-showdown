@@ -516,6 +516,10 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	pikachugmax: {
+		eventPokemon: [
+			{"generation": 8, "level": 10, "isHidden": false, "moves": ["growl", "quickattack", "thunderwave", "doubleteam"]},
+		],
+		eventOnly: true,
 		isGigantamax: "G-Max Volt Crash",
 		tier: "New",
 		doublesTier: "New",
@@ -820,8 +824,9 @@ let BattleFormatsData = {
 	},
 	meowthgmax: {
 		eventPokemon: [
-			{"generation": 8, "level": 5, "shiny": false, "moves": ["fakeout", "growl", "slash", "payday"], "pokeball": "cherishball"},
+			{"generation": 8, "level": 5, "isHidden": false, "moves": ["fakeout", "growl", "slash", "payday"], "pokeball": "cherishball"},
 		],
+		eventOnly: true,
 		isGigantamax: "G-Max Gold Rush",
 		tier: "New",
 		doublesTier: "New",
@@ -1936,6 +1941,10 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	eeveegmax: {
+		eventPokemon: [
+			{"generation": 8, "level": 10, "isHidden": false, "abilities": ["runaway"], "moves": ["growl", "tailwhip", "sandattack", "quickattack"]},
+		],
+		eventOnly: true,
 		isGigantamax: "G-Max Cuddle",
 		tier: "New",
 		doublesTier: "New",
