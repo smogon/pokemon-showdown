@@ -5039,6 +5039,10 @@ let BattleFormatsData = {
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
+	gumshoostotem: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	grubbin: {
 		tier: "LC",
 	},
