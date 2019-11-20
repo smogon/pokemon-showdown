@@ -524,7 +524,7 @@ let BattleAbilities = {
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
 		id: "corrosion",
 		name: "Corrosion",
-		rating: 2,
+		rating: 2.5,
 		num: 212,
 	},
 	"cottondown": {
