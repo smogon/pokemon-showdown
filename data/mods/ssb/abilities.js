@@ -249,7 +249,7 @@ let BattleAbilities = {
 			if (formes.includes(toID(source.template.species))) {
 				formes.splice(formes.indexOf(toID(source.template.species)), 1);
 				this.add('-activate', source, 'ability: Arabesque');
-				source.formeChange(formes[this.random(formes.length)], this.dex.getAbility('arabesque'), true);
+				source.formeChange(formes[this.random(formes.length)], this.dex.getAbility('arabesque'));
 			}
 		},
 	},
