@@ -13065,13 +13065,23 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit(target, source, move) {
-			return target.addVolatile('trapped', source, move, 'trapper');
-		},
+		volatileStatus: 'octolock',
 		effect: {
-			onResidualOrder: 13,
-			onResidual(target, source) {
-				this.boost({def: -1, spd: -1}, target, source, this.dex.getActiveMove("Octolock"));
+			onStart(pokemon, source) {
+				this.add('-activate', pokemon, 'move: Octolock', '[of] ' + source);
+			},
+			onResidualOrder: 11,
+			onResidual(pokemon) {
+				const source = this.effectData.source;
+				if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
+					delete pokemon.volatiles['ooctoloock'];
+					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
+					return;
+				}
+				this.boost({def: -1, spd: -1}, pokemon, pokemon, this.dex.getActiveMove("Octolock"));
+			},
+			onTrapPokemon(pokemon) {
+				if (this.effectData.source && this.effectData.source.isActive) pokemon.tryTrap();
 			},
 		},
 		secondary: null,
