@@ -14776,7 +14776,7 @@ let BattlePokedex = {
 		weightkg: 0.4,
 		color: "White",
 		prevo: "corsolagalar",
-		evoLevel: 1,
+		evoLevel: 38,
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	sirfetchd: {
@@ -14789,7 +14789,7 @@ let BattlePokedex = {
 		weightkg: 117,
 		color: "White",
 		prevo: "farfetchdgalar",
-		evoType: "levelExtra",
+		evoType: "other",
 		evoCondition: "Land 3 critical hits in 1 battle",
 		eggGroups: ["Flying", "Field"],
 	},
@@ -14816,8 +14816,8 @@ let BattlePokedex = {
 		weightkg: 66.6,
 		color: "Gray",
 		prevo: "yamaskgalar",
-		// TODO: Find correct evolution method
-		evoLevel: 34,
+		evoType: "other",
+		evoCondition: "Have 49+ HP lost and walk under stone sculpture in Dusty Bowl",
 		eggGroups: ["Mineral", "Amorphous"],
 	},
 	milcery: {

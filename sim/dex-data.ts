@@ -545,7 +545,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly prevo: ID;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
 	readonly evos: ID[];
-	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold';
+	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
 	readonly evoMove?: string;
 	/** Evolution level. falsy if doesn't evolve. */
 	readonly evoLevel?: number;
