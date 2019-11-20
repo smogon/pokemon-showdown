@@ -37,6 +37,37 @@ let BattleAbilities = {
 		},
 		rating: 4,
 	},
+	"moody": {
+		inherit: true,
+		desc: "This Pokemon has a random stat raised by 2 stages and another stat lowered by 1 stage at the end of each turn.",
+		shortDesc: "Raises a random stat by 2 and lowers another stat by 1 at the end of each turn.",
+		onResidual(pokemon) {
+			let stats = [];
+			let boost = {};
+			for (let statPlus in pokemon.boosts) {
+				// @ts-ignore
+				if (pokemon.boosts[statPlus] < 6) {
+					stats.push(statPlus);
+				}
+			}
+			let randomStat = stats.length ? this.sample(stats) : "";
+			// @ts-ignore
+			if (randomStat) boost[randomStat] = 2;
+
+			stats = [];
+			for (let statMinus in pokemon.boosts) {
+				// @ts-ignore
+				if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
+					stats.push(statMinus);
+				}
+			}
+			randomStat = stats.length ? this.sample(stats) : "";
+			// @ts-ignore
+			if (randomStat) boost[randomStat] = -1;
+
+			this.boost(boost);
+		},
+	},
 	"oblivious": {
 		inherit: true,
 		desc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability while affected cures it.",
