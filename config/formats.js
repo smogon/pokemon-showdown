@@ -1009,7 +1009,6 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Obtainable', 'Little Cup', 'Standard', 'Swagger Clause', 'Team Preview'],
 		banlist: [
@@ -1046,7 +1045,6 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
@@ -1063,7 +1061,6 @@ let Formats = [
 			validate: [1, 3],
 			battle: 1,
 		},
-		searchShow: false,
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Swagger Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 		banlist: [
 			'Arceus', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Defense', 'Dialga', 'Giratina',
@@ -1156,7 +1153,6 @@ let Formats = [
 
 		mod: 'gen7',
 		gameType: 'doubles',
-		searchShow: false,
 		ruleset: ['Obtainable', 'Standard Doubles', 'Swagger Clause', 'Team Preview'],
 		banlist: ['DUber', 'Power Construct', 'Eevium Z', 'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
 	},
