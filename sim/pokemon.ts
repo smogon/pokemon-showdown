@@ -1026,8 +1026,9 @@ export class Pokemon {
 	 * as well as sending all relevant messages sent to the client.
 	 */
 	formeChange(
-		templateId: string | Template, source: Effect = this.battle.effect, isPermanent?: boolean,
-		message?: string, abilitySlot: '0' | '1' | 'H' | 'S' = '0') {
+		templateId: string | Template, source: Effect = this.battle.effect,
+		isPermanent?: boolean, message?: string
+	) {
 		const rawTemplate = this.battle.dex.getTemplate(templateId);
 
 		const template = this.setTemplate(rawTemplate, source);
@@ -1069,11 +1070,11 @@ export class Pokemon {
 				this.battle.add('-formechange', this, this.illusion ? this.illusion.template.species : template.species, message);
 			}
 		}
-		if (source.effectType !== 'Ability' && source.id !== 'relicsong' && source.id !== 'zenmode') {
+		if (isPermanent && !['disguise', 'iceface'].includes(source.id)) {
 			if (this.illusion) {
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
-			this.setAbility(template.abilities[abilitySlot], null, true);
+			this.setAbility(template.abilities['0'], null, true);
 			if (isPermanent) this.baseAbility = this.ability;
 		}
 		return true;
