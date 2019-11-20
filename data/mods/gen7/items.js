@@ -67,6 +67,11 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	buggem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	buginiumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -83,6 +88,11 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	darkgem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	darkiniumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -95,6 +105,11 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dragongem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	dragoniumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -103,6 +118,11 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	electricgem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	electriumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -110,6 +130,16 @@ let BattleItems = {
 	fairiumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	fairygem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
+	fightinggem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
 	},
 	fightiniumz: {
 		inherit: true,
@@ -125,9 +155,19 @@ let BattleItems = {
 			}
 		},
 	},
+	firegem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	firiumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	flyinggem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
 	},
 	flyiniumz: {
 		inherit: true,
@@ -149,6 +189,11 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	ghostgem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	ghostiumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -157,9 +202,19 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	grassgem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	grassiumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	groundgem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
 	},
 	groundiumz: {
 		inherit: true,
@@ -186,6 +241,11 @@ let BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
+	},
+	icegem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
 	},
 	icestone: {
 		inherit: true,
@@ -301,6 +361,11 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	poisongem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	poisoniumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -309,6 +374,11 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	psychicgem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	psychiumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -316,6 +386,11 @@ let BattleItems = {
 	redorb: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	rockgem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
 	},
 	rockiumz: {
 		inherit: true,
@@ -353,6 +428,11 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	steelgem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
+	},
 	steeliumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -384,6 +464,11 @@ let BattleItems = {
 	venusaurite: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	watergem: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
 	},
 	wateriumz: {
 		inherit: true,
