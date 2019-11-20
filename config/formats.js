@@ -920,7 +920,6 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['Obtainable', 'Standard', 'Team Preview', 'Mega Rayquaza Clause'],
 		banlist: ['Baton Pass'],
 	},
@@ -1002,7 +1001,6 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['Obtainable', 'Same Type Clause', 'Standard', 'Swagger Clause', 'Team Preview'],
 		banlist: [
 			'Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Gengar-Mega', 'Giratina', 'Groudon',
