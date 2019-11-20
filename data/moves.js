@@ -18581,19 +18581,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		onTryHit(target, source, move) {
-			if (source.ignoringItem()) return false;
-			let item = source.getItem();
-			if (!item.isBerry) return false;
-			source.setItem('');
-			source.lastItem = item.id;
-			source.usedItemThisTurn = true;
-			this.add("-enditem", source, item.name, '[from] move: Stuff Cheeks');
-			if (this.singleEvent('Eat', item, null, source, null, null)) {
-				this.runEvent('EatItem', source, null, null, item);
+			if (source.eatItem()) {
 				this.boost({def: 2}, source, null, null, false, true);
-				if (item.id === 'leppaberry') source.staleness = 'external';
+			} else {
+				return false;
 			}
-			if (item.onEat) source.ateBerry = true;
 		},
 		secondary: null,
 		target: "self",
