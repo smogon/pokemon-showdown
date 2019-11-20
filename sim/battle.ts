@@ -2470,7 +2470,10 @@ export class Battle {
 			return;
 		}
 
-		if (chosenAction.pokemon) chosenAction.pokemon.updateSpeed();
+		if (chosenAction.pokemon) {
+			chosenAction.pokemon.updateSpeed();
+			chosenAction.speed = 0; // make resolveAction update Speed
+		}
 		const action = this.resolveAction(chosenAction, midTurn);
 		for (const [i, curAction] of this.queue.entries()) {
 			if (this.comparePriority(action, curAction) < 0) {
