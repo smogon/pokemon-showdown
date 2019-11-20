@@ -3051,7 +3051,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Switches the Spikes, Toxic Spikes, Stealth Rock, Sticky Web, Light Screen, Reflect, and Aurora Veil from the user's side to the target's side and vice versa.",
+		desc: "Switches the Spikes, Toxic Spikes, Stealth Rock, Sticky Web, Light Screen, Reflect, Aurora Veil, and Tailwind from the user's side to the target's side and vice versa.",
 		shortDesc: "Switches sides of field effects",
 		id: "courtchange",
 		name: "Court Change",
@@ -3060,7 +3060,7 @@ let BattleMovedex = {
 		flags: {mirror: 1},
 		onHitField(target, source) {
 			const sideConditions = [
-				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'lightscreen', 'reflect', 'auroraveil',
+				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'lightscreen', 'reflect', 'auroraveil', 'tailwind',
 			];
 			const side1 = this.sides[0];
 			const side2 = this.sides[1];
