@@ -31339,7 +31339,7 @@ let BattleLearnsets = {
 		cottonspore: ["8E", "7E", "6E", "5E", "4E", "3E"],
 		covet: ["7T", "6T", "5T"],
 		cut: ["6M", "5M", "4M", "3M"],
-		zzlinggleam: ["8M", "7M", "6M"],
+		dazzlinggleam: ["8M", "7M", "6M"],
 		doubleedge: ["3T"],
 		doubleteam: ["7M", "6M", "5M", "4M", "3M"],
 		endure: ["8M", "4M", "3T"],
