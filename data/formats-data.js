@@ -2702,7 +2702,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["scratch", "leer", "taunt", "quickattack"], "pokeball": "pokeball"},
 		],
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	weavile: {
 		randomBattleMoves: ["iceshard", "iciclecrash", "lowkick", "swordsdance", "throatchop"],
@@ -2777,7 +2777,7 @@ let BattleFormatsData = {
 		tier: "Unreleased",
 	},
 	corsolagalar: {
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	cursola: {
 		randomBattleMoves: ["calmmind", "shadowball", "stealthrock", "strengthsap", "willowisp"],
@@ -5488,7 +5488,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	gothita: {
-		tier: "NFE",
+		tier: "LC",
 	},
 	gothorita: {
 		eventPokemon: [
@@ -6298,7 +6298,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	swirlix: {
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	slurpuff: {
 		randomBattleMoves: ["calmmind", "dazzlinggleam", "energyball", "flamethrower"],
