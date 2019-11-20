@@ -434,6 +434,8 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
 		}
 
+		if (maxMove) targetType = this.battle.dex.getMove(maxMove).target;
+
 		// Validate targetting
 
 		if (autoChoose) {
