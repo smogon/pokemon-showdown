@@ -2630,16 +2630,19 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	castformsunny: {
-		inherit: true,
 		randomBattleMoves: ["sunnyday", "fireblast", "solarbeam", "icebeam"],
+		requiredAbility: 'Forecast',
+		battleOnly: true,
 	},
 	castformrainy: {
-		inherit: true,
 		randomBattleMoves: ["raindance", "hydropump", "thunder", "hurricane"],
+		requiredAbility: 'Forecast',
+		battleOnly: true,
 	},
 	castformsnowy: {
-		inherit: true,
 		randomBattleMoves: ["hail", "blizzard", "thunderbolt", "fireblast"],
+		requiredAbility: 'Forecast',
+		battleOnly: true,
 	},
 	kecleon: {
 		randomBattleMoves: ["fakeout", "knockoff", "drainpunch", "suckerpunch", "shadowsneak", "stealthrock", "recover"],
@@ -5423,6 +5426,10 @@ let BattleFormatsData = {
 		randomDoubleBattleMoves: ["shellsmash", "powergem", "acrobatics", "earthquake", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
+	},
+	miniormeteor: {
+		requiredAbility: 'Shields Down',
+		battleOnly: true,
 	},
 	komala: {
 		randomBattleMoves: ["return", "suckerpunch", "woodhammer", "earthquake", "playrough", "uturn"],

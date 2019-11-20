@@ -3862,14 +3862,17 @@ let BattleFormatsData = {
 	castformsunny: {
 		requiredAbility: 'Forecast',
 		battleOnly: true,
+		isNonstandard: "Past",
 	},
 	castformrainy: {
 		requiredAbility: 'Forecast',
 		battleOnly: true,
+		isNonstandard: "Past",
 	},
 	castformsnowy: {
 		requiredAbility: 'Forecast',
 		battleOnly: true,
+		isNonstandard: "Past",
 	},
 	kecleon: {
 		isNonstandard: "Past",
@@ -6060,6 +6063,7 @@ let BattleFormatsData = {
 	meloettapirouette: {
 		requiredMove: "Relic Song",
 		battleOnly: true,
+		isNonstandard: "Past",
 	},
 	genesect: {
 		eventPokemon: [
@@ -7034,6 +7038,7 @@ let BattleFormatsData = {
 	miniormeteor: {
 		requiredAbility: 'Shields Down',
 		battleOnly: true,
+		isNonstandard: "Past",
 	},
 	komala: {
 		isNonstandard: "Past",
