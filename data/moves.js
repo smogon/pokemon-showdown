@@ -11905,7 +11905,7 @@ let BattleMovedex = {
 			for (let i in exports.BattleMovedex) {
 				let move = exports.BattleMovedex[i];
 				if (i !== move.id) continue;
-				if (move.isZ || move.isNonstandard) continue;
+				if (move.isZ || move.isMax || move.isNonstandard) continue;
 				// @ts-ignore
 				if (effect.noMetronome.includes(move.id)) continue;
 				if (this.dex.getMove(i).gen > this.gen) continue;
