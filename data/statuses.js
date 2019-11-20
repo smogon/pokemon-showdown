@@ -245,12 +245,13 @@ let BattleStatuses = {
 		},
 		onResidualOrder: 11,
 		onResidual(pokemon) {
-			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0 || !this.effectData.source.activeTurns)) {
+			const source = this.effectData.source;
+			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
 				delete pokemon.volatiles['partiallytrapped'];
 				this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]', '[silent]');
 				return;
 			}
-			if (this.effectData.source.hasItem('bindingband')) {
+			if (source.hasItem('bindingband')) {
 				this.damage(pokemon.maxhp / 6);
 			} else {
 				this.damage(pokemon.maxhp / 8);

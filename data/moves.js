@@ -13065,13 +13065,23 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit(target, source, move) {
-			return target.addVolatile('trapped', source, move, 'trapper');
-		},
+		volatileStatus: 'octolock',
 		effect: {
-			onResidualOrder: 13,
-			onResidual(target, source) {
-				this.boost({def: -1, spd: -1}, target, source, this.dex.getActiveMove("Octolock"));
+			onStart(pokemon, source) {
+				this.add('-activate', pokemon, 'move: Octolock', '[of] ' + source);
+			},
+			onResidualOrder: 11,
+			onResidual(pokemon) {
+				const source = this.effectData.source;
+				if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
+					delete pokemon.volatiles['ooctoloock'];
+					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
+					return;
+				}
+				this.boost({def: -1, spd: -1}, pokemon, pokemon, this.dex.getActiveMove("Octolock"));
+			},
+			onTrapPokemon(pokemon) {
+				if (this.effectData.source && this.effectData.source.isActive) pokemon.tryTrap();
 			},
 		},
 		secondary: null,
@@ -19264,8 +19274,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers the target's Speed by 1 stage. Until the target switches out, it takes 2x damage from Fire moves.",
-		shortDesc: "Target gets -1 Spe and takes 2x damage from Fire.",
+		desc: "Lowers the target's Speed by 1 stage. Until the target switches out, its effectiveness against Fire type moves is changed.",
+		shortDesc: "Target gets -1 Spe and becomes weaker to Fire.",
 		id: "tarshot",
 		name: "Tar Shot",
 		pp: 20,
@@ -19279,11 +19289,10 @@ let BattleMovedex = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Tar Shot');
 			},
-			onSourceModifyDamage(damage, source, target, move) {
-				if (target.volatiles['tarshot'] && this.dex.getActiveMove(move).type === 'Fire') {
-					// TODO: Figure out damage modifier
-					return this.chainModify(2);
-				}
+			onEffectiveness(typeMod, target, type, move) {
+				if (move.type !== 'Fire') return;
+				if (!target || !target.volatiles['tarshot']) return;
+				return this.dex.getEffectiveness('Fire', target) + 1;
 			},
 			onResidualOrder: 21,
 			onEnd(pokemon) {
