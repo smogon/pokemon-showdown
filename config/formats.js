@@ -46,7 +46,7 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview', '+Past', '+Unreleased'],
 		banlist: ['Uber', 'Shadow Tag', 'Baton Pass',
-			"Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Mewtwo-Mega-X", "Mewtwo-Mega-Y", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Deoxys-Attack", "Deoxys-Defense", "Deoxys-Speed", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Giratina-Origin", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Zygarde-Complete", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel",
+			"Gengar-Mega", "Kangaskhan-Mega", "Mewtwo", "Lugia", "Ho-Oh", "Blaziken", "Blaziken-Mega", "Salamence-Mega", "Metagross-Mega", "Kyogre", "Groudon", "Rayquaza", "Deoxys", "Lucario-Mega", "Dialga", "Palkia", "Giratina", "Darkrai", "Shaymin-Sky", "Arceus", "Reshiram", "Zekrom", "Landorus-Base", "Kyurem-White", "Genesect", "Xerneas", "Yveltal", "Zygarde", "Solgaleo", "Lunala", "Pheromosa", "Necrozma-Dusk-Mane", "Necrozma-Dawn-Wings", "Necrozma-Ultra", "Marshadow", "Naganadel",
 		],
 		onBegin() {
 			// if you have a mega or z, you can't dynamax
