@@ -343,7 +343,6 @@ let BattleFormatsData = {
 	},
 	vulpixalola: {
 		inherit: true,
-		isUnreleased: false,
 		tier: "LC",
 	},
 	ninetales: {
@@ -356,7 +355,6 @@ let BattleFormatsData = {
 	ninetalesalola: {
 		randomBattleMoves: ["nastyplot", "blizzard", "moonblast", "substitute", "hiddenpowerfire", "freezedry", "auroraveil"],
 		randomDoubleBattleMoves: ["blizzard", "moonblast", "protect", "hiddenpowerfire", "freezedry", "auroraveil", "encore"],
-		isUnreleased: false,
 		tier: "UUBL",
 		doublesTier: "DOU",
 	},
@@ -449,7 +447,6 @@ let BattleFormatsData = {
 	},
 	diglettalola: {
 		inherit: true,
-		isUnreleased: false,
 		tier: "LC",
 	},
 	dugtrio: {
@@ -462,7 +459,6 @@ let BattleFormatsData = {
 	dugtrioalola: {
 		randomBattleMoves: ["earthquake", "ironhead", "substitute", "toxic", "stoneedge", "suckerpunch", "stealthrock"],
 		randomDoubleBattleMoves: ["earthquake", "ironhead", "protect", "rockslide", "stoneedge", "suckerpunch"],
-		isUnreleased: false,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
