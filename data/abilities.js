@@ -2207,15 +2207,23 @@ let BattleAbilities = {
 		num: 104,
 	},
 	"moody": {
-		desc: "This Pokemon has a random stat raised by 2 stages and another stat lowered by 1 stage at the end of each turn.",
+		desc: "This Pokemon has a random stat raised by 2 stages and another stat lowered by 1 stage at the end of each turn. This does not affect evasion and accuracy",
 		shortDesc: "Raises a random stat by 2 and lowers another stat by 1 at the end of each turn.",
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			let stats = [];
 			let boost = {};
-			for (let statPlus in pokemon.boosts) {
-				// @ts-ignore
+			let applicableBoosts = {};
+
+			for (let k in pokemon.boosts){
+				if (k !== 'accuracy' && k!== 'evasion'){
+					applicableBoosts[k] = pokemon.boosts[k];
+				}
+			}
+
+			for (let statPlus in applicableBoosts) {
+
 				if (pokemon.boosts[statPlus] < 6) {
 					stats.push(statPlus);
 				}
@@ -2225,7 +2233,7 @@ let BattleAbilities = {
 			if (randomStat) boost[randomStat] = 2;
 
 			stats = [];
-			for (let statMinus in pokemon.boosts) {
+			for (let statMinus in applicableBoosts) {
 				// @ts-ignore
 				if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
 					stats.push(statMinus);
