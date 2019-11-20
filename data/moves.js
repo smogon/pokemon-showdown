@@ -6958,7 +6958,7 @@ let BattleMovedex = {
 				}
 			}
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Bug",
 		contestType: "Cool",
 	},
@@ -6982,7 +6982,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Fire",
 		contestType: "Cool",
 	},
@@ -7008,7 +7008,7 @@ let BattleMovedex = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Fighting",
 		contestType: "Cool",
 	},
@@ -7031,7 +7031,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Normal",
 		contestType: "Cool",
 	},
@@ -7062,7 +7062,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Dragon",
 		contestType: "Cool",
 	},
@@ -7087,7 +7087,7 @@ let BattleMovedex = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Fairy",
 		contestType: "Cool",
 	},
@@ -7110,7 +7110,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Water",
 		contestType: "Cool",
 	},
@@ -7133,7 +7133,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Normal",
 		contestType: "Cool",
 	},
@@ -7155,7 +7155,7 @@ let BattleMovedex = {
 				this.field.addPseudoWeather('gravity');
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Psychic",
 		contestType: "Cool",
 	},
@@ -7177,7 +7177,7 @@ let BattleMovedex = {
 				pokemon.trySetStatus('psn', source);
 			}
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Poison",
 		contestType: "Cool",
 	},
@@ -7200,7 +7200,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Steel",
 		contestType: "Cool",
 	},
@@ -7230,7 +7230,7 @@ let BattleMovedex = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Normal",
 		contestType: "Cool",
 	},
@@ -7253,7 +7253,7 @@ let BattleMovedex = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Ice",
 		contestType: "Cool",
 	},
@@ -7276,7 +7276,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Ground",
 		contestType: "Cool",
 	},
@@ -7299,7 +7299,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Fairy",
 		contestType: "Cool",
 	},
@@ -7322,7 +7322,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Dark",
 		contestType: "Cool",
 	},
@@ -7353,7 +7353,7 @@ let BattleMovedex = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Steel",
 		contestType: "Cool",
 	},
@@ -11102,7 +11102,7 @@ let BattleMovedex = {
 				}
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Flying",
 		contestType: "Cool",
 	},
@@ -11125,7 +11125,7 @@ let BattleMovedex = {
 				this.boost({spd: -1}, pokemon, source, move);
 			}
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Dark",
 		contestType: "Cool",
 	},
@@ -11148,7 +11148,7 @@ let BattleMovedex = {
 				this.field.setWeather('sunnyday');
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Fire",
 		contestType: "Cool",
 	},
@@ -11171,7 +11171,7 @@ let BattleMovedex = {
 				this.boost({spa: -1}, pokemon, source, move);
 			}
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Bug",
 		contestType: "Cool",
 	},
@@ -11194,7 +11194,7 @@ let BattleMovedex = {
 				this.field.setWeather('raindance');
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Water",
 		contestType: "Cool",
 	},
@@ -11261,7 +11261,7 @@ let BattleMovedex = {
 				this.field.setWeather('hail');
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Ice",
 		contestType: "Cool",
 	},
@@ -11286,7 +11286,7 @@ let BattleMovedex = {
 				}
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Fighting",
 		contestType: "Cool",
 	},
@@ -11309,7 +11309,7 @@ let BattleMovedex = {
 				this.field.setTerrain('electricterrain');
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Electric",
 		contestType: "Cool",
 	},
@@ -11332,7 +11332,7 @@ let BattleMovedex = {
 				this.field.setTerrain('psychicterrain');
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Psychic",
 		contestType: "Cool",
 	},
@@ -11357,7 +11357,7 @@ let BattleMovedex = {
 				}
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Poison",
 		contestType: "Cool",
 	},
@@ -11380,7 +11380,7 @@ let BattleMovedex = {
 				this.field.setTerrain('grassyterrain');
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Grass",
 		contestType: "Cool",
 	},
@@ -11403,7 +11403,7 @@ let BattleMovedex = {
 				this.boost({def: -1}, pokemon, source, move);
 			}
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Ghost",
 		contestType: "Cool",
 	},
@@ -11428,7 +11428,7 @@ let BattleMovedex = {
 				}
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Ground",
 		contestType: "Cool",
 	},
@@ -11451,7 +11451,7 @@ let BattleMovedex = {
 				this.field.setWeather('sandstorm');
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Rock",
 		contestType: "Cool",
 	},
@@ -11474,7 +11474,7 @@ let BattleMovedex = {
 				this.field.setTerrain('mistyterrain');
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Fairy",
 		contestType: "Cool",
 	},
@@ -11499,7 +11499,7 @@ let BattleMovedex = {
 				}
 			},
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Steel",
 		contestType: "Cool",
 	},
@@ -11522,7 +11522,7 @@ let BattleMovedex = {
 				this.boost({spe: -1}, pokemon, source, move);
 			}
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Normal",
 		contestType: "Cool",
 	},
@@ -11545,7 +11545,7 @@ let BattleMovedex = {
 				this.boost({atk: -1}, pokemon, source, move);
 			}
 		},
-		target: "normal",
+		target: "adjacentFoe",
 		type: "Dragon",
 		contestType: "Cool",
 	},
