@@ -137,16 +137,18 @@ Chat.registerMonitor('evasion', {
 	punishment: 'EVASION',
 	label: 'Filter Evasion Detection',
 	monitor(line, room, user, message, lcMessage, isStaff) {
+		let [regex, word, reason] = line;
+
 		// Many codepoints used in filter evasion detection can be decomposed
 		// into multiple codepoints that are canonically equivalent to the
 		// original. Perform a canonical composition on the message to detect
 		// when people attempt to evade by abusing this behaviour of Unicode.
-		lcMessage = lcMessage.normalize('NFKC');
+		let normalizedMessage = lcMessage.normalize('NFKC');
 
-		let [regex, word, reason] = line;
-		// Normalise spaces and other common evasion characters to a period
-		lcMessage = lcMessage.replace(/[\s-_,.]+/g, '.');
-		const match = lcMessage.match(regex);
+		// Normalize spaces and other common evasion characters to a period
+		normalizedMessage = normalizedMessage.replace(/[\s-_,.]+/g, '.');
+
+		const match = normalizedMessage.match(regex);
 		if (match) {
 			// Don't lock someone iff the word itself is used, and whitespace wasn't used to evade the filter,
 			// in which case message (which doesn't have whitespace stripped) should also match the regex.
