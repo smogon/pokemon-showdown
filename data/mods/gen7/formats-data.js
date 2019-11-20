@@ -258,7 +258,6 @@ let BattleFormatsData = {
 	raichualola: {
 		randomBattleMoves: ["nastyplot", "thunderbolt", "psyshock", "focusblast", "voltswitch", "surf"],
 		randomDoubleBattleMoves: ["thunderbolt", "fakeout", "encore", "psychic", "protect", "voltswitch"],
-		isUnreleased: false,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -343,6 +342,7 @@ let BattleFormatsData = {
 	},
 	vulpixalola: {
 		inherit: true,
+		isUnreleased: false,
 		tier: "LC",
 	},
 	ninetales: {
@@ -447,6 +447,7 @@ let BattleFormatsData = {
 	},
 	diglettalola: {
 		inherit: true,
+		isUnreleased: false,
 		tier: "LC",
 	},
 	dugtrio: {
@@ -467,7 +468,6 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	meowthalola: {
-		isUnreleased: false,
 		tier: "LC",
 	},
 	persian: {
@@ -480,7 +480,6 @@ let BattleFormatsData = {
 	persianalola: {
 		randomBattleMoves: ["nastyplot", "darkpulse", "powergem", "hypnosis", "hiddenpowerfighting"],
 		randomDoubleBattleMoves: ["fakeout", "foulplay", "darkpulse", "powergem", "snarl", "hiddenpowerfighting", "partingshot", "protect"],
-		isUnreleased: false,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
