@@ -14639,7 +14639,7 @@ let BattleMovedex = {
 		name: "Pyro Ball",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, defrost: 1},
+		flags: {protect: 1, mirror: 1, defrost: 1, bullet: 1},
 		secondary: {
 			chance: 10,
 			status: 'brn',
