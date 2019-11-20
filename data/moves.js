@@ -19279,11 +19279,10 @@ let BattleMovedex = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Tar Shot');
 			},
-			onSourceModifyDamage(damage, source, target, move) {
-				if (target.volatiles['tarshot'] && this.dex.getActiveMove(move).type === 'Fire') {
-					// TODO: Figure out damage modifier
-					return this.chainModify(2);
-				}
+			onEffectiveness(typeMod, target, type, move) {
+				if (move.type !== 'Fire') return;
+				if (!target || !target.volatiles['tarshot']) return;
+				return this.dex.getEffectiveness('Fire', target) + 1;
 			},
 			onResidualOrder: 21,
 			onEnd(pokemon) {
