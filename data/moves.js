@@ -18608,15 +18608,20 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Raises the user's Def. by 2 stages.",
+		desc: "Consumes berry and raises the user's Defense by 2 stages.",
+		shortDesc: "Consumes berry and raises the user's Def. by 2 stages.",
 		id: "stuffcheeks",
 		name: "Stuff Cheeks",
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		boosts: {
-			def: 2,
+		onTryHit(target, source, move) {
+			let item = source.getItem();
+			if (item.isBerry && source.eatItem()) {
+				this.boost({def: 2}, source, null, null, false, true);
+			} else {
+				return false;
+			}
 		},
 		secondary: null,
 		target: "self",
