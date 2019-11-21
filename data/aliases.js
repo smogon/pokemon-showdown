@@ -536,7 +536,6 @@ let BattleAliases = {
 	"sash": "Focus Sash",
 	"scarf": "Choice Scarf",
 	"specs": "Choice Specs",
-	"stick": "Leek",
 	"wp": "Weakness Policy",
 
 	// pokemon
