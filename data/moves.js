@@ -20540,14 +20540,14 @@ let BattleMovedex = {
 		zMovePower: 120,
 		contestType: "Beautiful",
 	},
-	"vicegrip": {
+	"visegrip": {
 		num: 11,
 		accuracy: 100,
 		basePower: 55,
 		category: "Physical",
 		shortDesc: "No additional effect.",
-		id: "vicegrip",
-		name: "Vice Grip",
+		id: "visegrip",
+		name: "Vise Grip",
 		pp: 30,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
