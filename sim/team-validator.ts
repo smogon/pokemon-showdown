@@ -1367,7 +1367,7 @@ export class TeamValidator {
 				problems.push(`${name}'s gender must be ${eventData.gender}${etc}.`);
 			}
 		}
-		const canMint = dex.gen > 7
+		let canMint = dex.gen > 7;
 		if (eventData.nature && eventData.nature !== set.nature && !canMint) {
 			if (fastReturn) return true;
 			problems.push(`${name} must have a ${eventData.nature} nature${etc} - Mints are only available starting gen 8.`);
