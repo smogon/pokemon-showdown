@@ -13095,7 +13095,7 @@ let BattleMovedex = {
 			onResidual(pokemon) {
 				const source = this.effectData.source;
 				if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
-					delete pokemon.volatiles['ooctoloock'];
+					delete pokemon.volatiles['octolock'];
 					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
 					return;
 				}
