@@ -1367,9 +1367,10 @@ export class TeamValidator {
 				problems.push(`${name}'s gender must be ${eventData.gender}${etc}.`);
 			}
 		}
-		if (eventData.nature && eventData.nature !== set.nature) {
+		let canMint = dex.gen > 7;
+		if (eventData.nature && eventData.nature !== set.nature && !canMint) {
 			if (fastReturn) return true;
-			problems.push(`${name} must have a ${eventData.nature} nature${etc}.`);
+			problems.push(`${name} must have a ${eventData.nature} nature${etc} - Mints are only available starting gen 8.`);
 		}
 		let requiredIVs = 0;
 		if (eventData.ivs) {
