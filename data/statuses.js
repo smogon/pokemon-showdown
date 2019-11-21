@@ -717,22 +717,20 @@ let BattleStatuses = {
 		num: 0,
 		duration: 3,
 		onStart(pokemon) {
-			//this.add('-dynamax', pokemon);
-			this.add('-start', pokemon, "Dynamax");
+			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.canGigantamax);
 			if (pokemon.species === 'Shedinja') return;
-			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
+			let ratio = (1 / 2); // Changes based on dynamax level, max (LVL 10)
 			pokemon.maxhp = Math.floor(pokemon.maxhp / ratio);
 			pokemon.hp = Math.floor(pokemon.hp / ratio);
-			// TODO work on display for healing
-			this.add('-heal', pokemon, pokemon.getHealth, '[from] Dynamax');
+			// TODO work on display for HP
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		onFlinch: false,
 		onBeforeSwitchOut(pokemon) {
-			//this.add('-undynamax', pokemon);
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
-			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
+			let ratio = (1 / 2); // Changes based on dynamax level, max (LVL 10)
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			if (pokemon.hp <= 0) pokemon.hp = 1;
@@ -740,22 +738,19 @@ let BattleStatuses = {
 		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
-			this.add('-message', "Dynamaxed Pokemon can't be switched out!");
+			this.add('-fail', pokemon, 'Dynamax');
 			return null;
 		},
 		onEnd(pokemon) {
-			// Play animation
-			// Modify HP - Work with LVL 0 for now
-			//this.add('-undynamax', pokemon);
-			this.add('-end', pokemon, "Dynamax");
+			this.add('-end', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
 			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			if (pokemon.hp <= 0) pokemon.hp = 1;
-			// TODO work on display for healing
-			this.add('-heal', pokemon, pokemon.getHealth, '[from] Dynamax');
+			// TODO work on display for HP
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 	},
 
