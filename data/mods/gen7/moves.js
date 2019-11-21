@@ -14,6 +14,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	aeroblast: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	assist: {
 		inherit: true,
 		isNonstandard: null,
@@ -23,6 +27,10 @@ let BattleMovedex = {
 		isNonstandard: null,
 	},
 	barrier: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	beakblast: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -46,6 +54,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	bonemerang: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	breakneckblitz: {
 		inherit: true,
 		isNonstandard: null,
@@ -63,6 +75,10 @@ let BattleMovedex = {
 		isNonstandard: null,
 	},
 	catastropika: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	chatter: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -90,11 +106,35 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	conversion: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	conversion2: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	coreenforcer: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	corkscrewcrash: {
 		inherit: true,
 		isNonstandard: null,
 	},
+	crushgrip: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	darkvoid: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	devastatingdrake: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	diamondstorm: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -107,6 +147,14 @@ let BattleMovedex = {
 		isNonstandard: "LGPE",
 	},
 	doubleslap: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	dragonascent: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	dragonhammer: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -130,11 +178,23 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	fierydance: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	flameburst: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	flash: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	fleurcannon: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	floralhealing: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -147,6 +207,10 @@ let BattleMovedex = {
 		isNonstandard: null,
 	},
 	genesissupernova: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	geomancy: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -166,6 +230,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	headcharge: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	healblock: {
 		inherit: true,
 		isNonstandard: null,
@@ -175,6 +243,10 @@ let BattleMovedex = {
 		isNonstandard: null,
 	},
 	heartstamp: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	heartswap: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -267,7 +339,23 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	hyperfang: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	hyperspacefury: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	hyperspacehole: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	iceball: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	icehammer: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -276,6 +364,10 @@ let BattleMovedex = {
 		isNonstandard: null,
 	},
 	iondeluge: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	judgment: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -326,11 +418,23 @@ let BattleMovedex = {
 			},
 		},
 	},
+	landswrath: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	letssnuggleforever: {
 		inherit: true,
 		isNonstandard: null,
 	},
+	lightofruin: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	lightthatburnsthesky: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	lovelykiss: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -339,6 +443,18 @@ let BattleMovedex = {
 		onTryHit() {},
 	},
 	luckychant: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	lunardance: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	lusterpurge: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	magmastorm: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -366,6 +482,14 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	milkdrink: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	mindblown: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	miracleeye: {
 		inherit: true,
 		isNonstandard: null,
@@ -375,6 +499,10 @@ let BattleMovedex = {
 		isNonstandard: null,
 	},
 	mirrorshot: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	mistball: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -394,6 +522,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	naturesmadness: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	needlearm: {
 		inherit: true,
 		isNonstandard: null,
@@ -406,6 +538,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	oblivionwing: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	oceanicoperetta: {
 		inherit: true,
 		isNonstandard: null,
@@ -415,6 +551,18 @@ let BattleMovedex = {
 		isNonstandard: null,
 	},
 	ominouswind: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	originpulse: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	precipiceblades: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	psychoboost: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -453,7 +601,19 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	relicsong: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	return: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	revelationdance: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	roaroftime: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -469,6 +629,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	sacredfire: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	savagespinout: {
 		inherit: true,
 		isNonstandard: null,
@@ -481,11 +645,27 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	seedflare: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	shadowbone: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	shadowforce: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	sharpen: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	shatteredpsyche: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	shoreup: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -498,6 +678,10 @@ let BattleMovedex = {
 		isNonstandard: null,
 	},
 	sinisterarrowraid: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	sketch: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -525,6 +709,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	spacialrend: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	spiderweb: {
 		inherit: true,
 		isNonstandard: null,
@@ -538,6 +726,10 @@ let BattleMovedex = {
 		isNonstandard: null,
 	},
 	spotlight: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	steameruption: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -561,6 +753,14 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	tailglow: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	technoblast: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	tectonicrage: {
 		inherit: true,
 		isNonstandard: null,
@@ -576,6 +776,18 @@ let BattleMovedex = {
 		priority: 0,
 		selfSwitch: false,
 		onTryHit: false,
+	},
+	thousandarrows: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	thousandwaves: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	toxicthread: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	trumpcard: {
 		inherit: true,
