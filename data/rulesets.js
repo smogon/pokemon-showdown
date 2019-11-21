@@ -339,12 +339,12 @@ let BattleFormats = {
 			}
 		},
 	},
-	abilityclause: {
+	"2abilityclause": {
 		effectType: 'ValidatorRule',
-		name: 'Ability Clause',
+		name: '2 Ability Clause',
 		desc: "Prevents teams from having more than two Pok&eacute;mon with the same ability",
 		onBegin() {
-			this.add('rule', 'Ability Clause: Limit two of each ability');
+			this.add('rule', '2 Ability Clause: Limit two of each ability');
 		},
 		onValidateTeam(team, format) {
 			/**@type {{[k: string]: number}} */
