@@ -1353,7 +1353,29 @@ let BattleAbilities = {
 	"gulpmissile": {
 		desc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.",
 		shortDesc: "Get prey with Surf/Dive. When taking damage, prey is used to attack.",
-		// TODO
+		onDamagePriority: -1,
+		onDamage(damage, target, source, effect) {
+			// Needs to trigger even if cramorant is about to faint
+			if (effect && effect.effectType === 'Move' && ['cramorantgulping', 'cramorantgorging'].includes(target.template.speciesid) && !target.transformed) {
+				// Forme change before damaging to avoid a potential infinite loop with surf cramorant vs surf cramorant
+				const forme = target.template.speciesid;
+				target.formeChange('cramorant', effect);
+
+				this.damage(source.maxhp / 4, source, target, effect);
+				if (forme === 'cramorantgulping') {
+					this.boost({def: -1}, source, target, null, true);
+				} else {
+					source.trySetStatus('par', target, effect);
+				}
+			}
+		},
+		onAfterMove(source, target, move) {
+			if (!['surf', 'dive'].includes(move.id) || source.volatiles['dive'] || source.speciesid !== 'cramorant' || source.transformed) return;
+
+			// PLACEHOLDER Estimated 10% of the time you get pikachu
+			const forme = this.random(10) === 1 ? 'cramorantgorging' : 'cramorantgulping';
+			source.formeChange(forme, move);
+		},
 		id: "gulpmissile",
 		name: "Gulp Missile",
 		rating: 1.5,
