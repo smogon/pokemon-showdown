@@ -159,7 +159,6 @@ Chat.registerMonitor('evasion', {
 			}
 			if (isStaff) return `${message} __[would be locked for filter evading: ${match[0]} (${word})]__`;
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
-			message = message.replace(/\./g, '__.__');
 			if (room) {
 				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`, `<${room.roomid}> ${user.name}: \`\`${message}\`\` __(${match[0]} => ${word})__`);
 			} else {
