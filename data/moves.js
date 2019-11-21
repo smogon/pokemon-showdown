@@ -10298,12 +10298,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1, authentic: 1},
 		onHit(target, source) {
-			if (source.side.active.length === 2) {
-				for (const pokemon of source.side.active) {
-					this.heal(Math.ceil(pokemon.maxhp / 4), pokemon, source);
-				}
-			} else {
-				this.heal(Math.ceil(source.maxhp / 4), source, source);
+			for (const pokemon of source.side.active) {
+				this.heal(Math.ceil(pokemon.maxhp / 4), pokemon, source);
 			}
 		},
 		secondary: null,
