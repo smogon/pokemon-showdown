@@ -41,6 +41,7 @@ let BattleFormats = {
 			'Victini', 'Reshiram', 'Zekrom', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect',
 			'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion',
 			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zeraora',
+			'Zacian', 'Zamazenta', 'Eternatus',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && toID(set.item) === 'souldew') {
@@ -535,6 +536,20 @@ let BattleFormats = {
 			this.add('rule', 'Z-Move Clause: Z-Moves are banned');
 		},
 	},
+	nfeclause: {
+		effectType: 'ValidatorRule',
+		name: 'NFE Clause',
+		desc: "Bans Pok&eacute;mon that are fully evolved or can't evolve",
+		onValidateSet(set) {
+			const template = this.dex.getTemplate(set.species || set.name);
+			if (!template.nfe) {
+				return [set.species + " cannot evolve."];
+			}
+		},
+		onBegin() {
+			this.add('rule', 'NFE Clause: Fully Evolved Pok&eacute;mon are banned');
+		},
+	},
 	hppercentagemod: {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
@@ -657,6 +672,17 @@ let BattleFormats = {
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.speciesid === 'rayquaza') pokemon.canMegaEvo = null;
 			}
+		},
+	},
+	dynamaxclause: {
+		effectType: 'Rule',
+		name: 'Dynamax Clause',
+		desc: "Prevents Pok&eacute;mon from dynamaxing",
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.canDynamax = null;
+			}
+			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
 	},
 	arceusevclause: {

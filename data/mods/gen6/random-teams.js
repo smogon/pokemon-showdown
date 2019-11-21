@@ -1,8 +1,8 @@
 'use strict';
 
-const RandomTeams = require('../../random-teams');
+const RandomGen7Teams = require('../gen7/random-teams');
 
-class RandomGen6Teams extends RandomTeams {
+class RandomGen6Teams extends RandomGen7Teams {
 	/**
 	 * @param {Format | string} format
 	 * @param {?PRNG | [number, number, number, number]} [prng]
@@ -479,7 +479,8 @@ class RandomGen6Teams extends RandomTeams {
 					if (hasMove['destinybond']) rejected = true;
 					break;
 				case 'substitute':
-					if (hasMove['dracometeor'] || (hasMove['leafstorm'] && !hasAbility['Contrary']) || hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch']) rejected = true;
+					if (hasMove['dracometeor'] || hasMove['leafstorm'] && !hasAbility['Contrary']) rejected = true;
+					if (hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch'] || hasMove['whirlwind']) rejected = true;
 					if (movePool.includes('copycat')) rejected = true;
 					break;
 				}

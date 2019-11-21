@@ -410,7 +410,7 @@ export const IPTools = new class {
 				resolve('claro.com.pe.mobile-nohost');
 				return;
 			}
-			if (ip.startsWith('190.') || IPTools.checkPattern(rangeTelefonica, ipNumber)) {
+			if (IPTools.checkPattern(rangeTelefonica, ipNumber)) {
 				resolve('telefonica.net.pe.mobile-nohost');
 				return;
 			}
@@ -432,6 +432,10 @@ export const IPTools = new class {
 			}
 			if (IPTools.checkPattern(rangeStarhub, ipNumber)) {
 				resolve('starhub.com.mobile-nohost');
+				return;
+			}
+			if (IPTools.checkPattern(rangeM1, ipNumber)) {
+				resolve('m1.com.sg.mobile-nohost');
 				return;
 			}
 			if (ip.startsWith('202.12.94.') || ip.startsWith('202.12.95.')) {
@@ -643,7 +647,9 @@ export const IPTools = new class {
 			'149.34.2.186', '165.73.105.51', '210.3.160.230', '219.241.2.151', '222.5.46.99', '73.212.251.26',
 			'59.133.28.51', '60.66.0.14', '107.242.117.13', '84.55.113.174', '85.67.25.112', '94.24.231.50',
 			'124.97.24.88', '74.82.232.201', '121.103.230.148', '126.216.8.82', '189.208.146.156', '77.89.251.138',
-			'185.244.172.3',
+			'185.244.172.3', '31.46.32.20', '93.190.58.4', '78.62.219.250', '213.108.160.85', '93.125.109.222',
+			'94.156.119.32', '213.97.242.43', '193.138.63.157', '193.138.63.148', '83.175.166.234', '116.0.54.30',
+			'124.41.211.251', '81.161.205.4', '136.179.21.69',
 		].includes(ip)) {
 			// single-IP open proxies
 			return 'proxy';
@@ -663,7 +669,9 @@ const rangeTmobile = IPTools.cidrToPattern('172.32.0.0/11');
 const rangeCenet = IPTools.cidrToPattern('27.111.64.0/21');
 const rangeQlded = IPTools.cidrToPattern('203.104.0.0/20');
 const rangeCathednet = IPTools.cidrToPattern('180.95.40.0/21');
-const rangeTelefonica = IPTools.cidrToPattern('181.64.0.0/14');
+const rangeTelefonica = IPTools.cidrToPattern([
+	'181.64.0.0/15', '190.235.0.0/17', '200.10.75.128/26', '200.37.0.0/16', '200.48.0.0/16', '200.60.128.0/18',
+]);
 const rangeStarhub = IPTools.cidrToPattern([
 	'27.125.128.0/18', '58.96.192.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23',
 ]);
@@ -672,6 +680,7 @@ const rangePsci = IPTools.cidrToPattern(['96.31.192.0/20', '209.239.96.0/20', '2
 const rangeOcde = IPTools.cidrToPattern(['104.249.64.0/18', '209.232.144.0/20', '216.100.88.0/21']);
 const rangeIhet = IPTools.cidrToPattern('199.8.0.0/16');
 const rangeTimcelular = IPTools.cidrToPattern('191.128.0.0/12');
+const rangeM1 = IPTools.cidrToPattern('119.56.64.0/18');
 
 const rangeOVHres = IPTools.rangeToPattern([
 	'109.190.0.0 - 109.190.63.255', '109.190.64.0 - 109.190.127.255', '109.190.128.0 - 109.190.191.255', '109.190.192.0 - 109.190.255.255', '151.80.228.0 - 151.80.228.255', '178.32.37.0 - 178.32.37.255', '178.33.101.0 - 178.33.101.255', '185.15.68.0 - 185.15.69.255', '185.15.70.0 - 185.15.71.255',

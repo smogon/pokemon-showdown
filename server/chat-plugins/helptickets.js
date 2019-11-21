@@ -49,7 +49,14 @@ try {
 			if (ticket.expires <= Date.now()) continue;
 			ticketBans[t] = ticket;
 		} else {
-			if (ticket.created + TICKET_CACHE_TIME <= Date.now() && !ticket.open) {
+			if (ticket.created + TICKET_CACHE_TIME <= Date.now()) {
+				// Tickets that have been open for 24+ hours will be automatically closed.
+				const ticketRoom = /** @type {ChatRoom | null} */ (Rooms.get(`help-${ticket.userid}`));
+				if (ticketRoom) {
+					const ticketGame = /** @type {HelpTicket} */ (ticketRoom.game);
+					ticketGame.writeStats(false);
+					ticketRoom.expire();
+				}
 				continue;
 			}
 			// Close open tickets after a restart
@@ -671,10 +678,10 @@ const pages = {
 								buf += `<p><Button>lock</Button></p>`;
 							}
 						}
-						if (user.locked === '#hostfilter' || isStaff) {
+						if (user.locked === '#hostfilter' || (user.latestHostType === 'proxy' && user.locked !== user.id) || isStaff) {
 							buf += `<p><Button>hostfilter</Button></p>`;
 						}
-						if ((user.locked !== user.id && user.locked !== '#hostfilter') || isStaff) {
+						if ((user.locked !== '#hostfilter' && user.latestHostType !== 'proxy' && user.locked !== user.id) || isStaff) {
 							buf += `<p><Button>ip</Button></p>`;
 						}
 					}
@@ -699,7 +706,7 @@ const pages = {
 					buf += `<p><Button>confirmipappeal</Button></p>`;
 					break;
 				case 'hostfilter':
-					buf += `<p>If you are locked with the message: "Due to spam, you can't chat using a proxy," it means you are connected to Pokemon Showdown with a proxy or VPN. We automatically lock these to prevent evasion of punishments. To get unlocked, you need to disable your proxy or VPN, and then type the <code>/logout</code> command in any chatroom.</p>`;
+					buf += `<p>We automatically lock proxies and VPNs to prevent evasion of punishments and other attacks on our server. To get unlocked, you need to disable your proxy or VPN.</p>`;
 					break;
 				case 'semilock':
 					buf += `<p>Do you have an autoconfirmed account? An account is autoconfirmed when it has won at least one rated battle and has been registered for one week or longer.</p>`;

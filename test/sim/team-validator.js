@@ -180,6 +180,12 @@ describe('Team Validator', function () {
 		assert(illegal);
 
 		team = [
+			{species: 'marill', ability: 'hugepower', moves: ['splash', 'aquajet'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ou').validateTeam(team);
+		assert(illegal);
+
+		team = [
 			{species: 'mamoswine', ability: 'oblivious', moves: ['tackle', 'iceshard', 'amnesia', 'furyattack'], evs: {hp: 1}},
 		];
 		illegal = TeamValidator.get('gen5ou').validateTeam(team);
@@ -248,6 +254,13 @@ describe('Team Validator', function () {
 		illegal = TeamValidator.get('gen1outradeback').validateTeam(team);
 		assert.strictEqual(illegal, null);
 		illegal = TeamValidator.get('gen1ou').validateTeam(team);
+		assert(illegal);
+
+		// tradeback: don't crash if source is gen 2 event
+		team = [
+			{species: 'charizard', moves: ['crunch']},
+		];
+		illegal = TeamValidator.get('gen1outradeback').validateTeam(team);
 		assert(illegal);
 
 		// can't tradeback: gen 2 egg move

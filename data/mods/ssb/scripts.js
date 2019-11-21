@@ -2,6 +2,7 @@
 
 /** @type {ModdedBattleScriptsData} */
 let BattleScripts = {
+	inherit: 'gen7',
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
 		let target = this.getTarget(pokemon, zMove || moveOrMoveName, targetLoc);
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
@@ -201,17 +202,21 @@ let BattleScripts = {
 	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle
 	canZMove(pokemon) {
-		if (pokemon.m.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
+		if ((pokemon.m && pokemon.m.zMoveUsed) || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
 		let atLeastOne = false;
-		/**@type {AnyObject?[]} */
+		let mustStruggle = true;
+		/**@type {ZMoveOptions} */
 		let zMoves = [];
 		for (const moveSlot of pokemon.moveSlots) {
 			if (moveSlot.pp <= 0) {
 				zMoves.push(null);
 				continue;
+			}
+			if (!moveSlot.disabled) {
+				mustStruggle = false;
 			}
 			let move = this.dex.getMove(moveSlot.move);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
@@ -224,7 +229,7 @@ let BattleScripts = {
 			}
 			if (zMoveName) atLeastOne = true;
 		}
-		if (atLeastOne) return zMoves;
+		if (atLeastOne && !mustStruggle) return zMoves;
 	},
 	runZPower(move, pokemon) {
 		const zPower = this.dex.getEffect('zpower');
@@ -343,7 +348,7 @@ let BattleScripts = {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if (move.isZPowered && target.getMoveHitData(move).zBrokeProtect) {
+		if ((move.isZPowered || move.isMax) && target.getMoveHitData(move).zBrokeProtect) {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}

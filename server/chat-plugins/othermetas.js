@@ -108,7 +108,7 @@ const commands = {
 		if (template.isNonstandard) {
 			this.errorReply(`Warning: ${template.name} is not a real Pokemon and is therefore not usable in Mix and Mega.`);
 		}
-		if (stone.isNonstandard) {
+		if (stone.isNonstandard === "CAP") {
 			this.errorReply(`Warning: ${stone.name} is a fake mega stone created by the CAP Project and is restricted to the CAP ${stone.megaEvolves}.`);
 		}
 		let baseTemplate = Dex.getTemplate(stone.megaEvolves);
@@ -302,7 +302,7 @@ const commands = {
 	tiershift(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toID(target)) return this.parse('/help tiershift');
-		let template = Dex.deepClone(Dex.getTemplate(target));
+		let template = Dex.deepClone(Dex.mod('gen7').getTemplate(target));
 		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
 		/** @type {{[k: string]: number}} */
 		let boosts = {
