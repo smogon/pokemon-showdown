@@ -3125,7 +3125,7 @@ let BattleItems = {
 		},
 		spritenum: 475, //TODO: Sprite, using Stick as a placeholder
 		onModifyCritRatio(critRatio, user) {
-			if (user.baseTemplate.species === 'Farfetch\'d' || user.baseTemplate.species === 'Farfetch\'d-Galar' || user.baseTemplate.species == 'Sirfetch\'d') {
+			if (user.baseTemplate.species === 'Farfetch\'d' || user.baseTemplate.species === 'Farfetch\'d-Galar' || user.baseTemplate.species === 'Sirfetch\'d') {
 				return critRatio + 2;
 			}
 		},
