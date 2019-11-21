@@ -3129,7 +3129,7 @@ let BattleItems = {
 				return critRatio + 2;
 			}
 		},
-		num: 259, //TODO: Exact item number, this is a placeholder
+		num: 259,
 		gen: 8,
 		desc: "If held by a Farfetch'd or Sirfetch'd, its critical hit ratio is raised by 2 stages.",
 	},
