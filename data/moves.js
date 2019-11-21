@@ -7406,7 +7406,7 @@ let BattleMovedex = {
 			for (let pokemon of target.side.active) {
 				let result = this.random(2);
 				if (result === 0) {
-					pokemon.trySetStatus('slp', source);
+					pokemon.trySetStatus('par', source);
 				} else {
 					pokemon.trySetStatus('psn', source);
 				}
