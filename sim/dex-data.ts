@@ -907,7 +907,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		}
 
 		if (!this.gen) {
-			if (this.num >= 742) {
+			if (this.num >= 743) {
 				this.gen = 8;
 			} else if (this.num >= 622) {
 				this.gen = 7;
