@@ -3123,14 +3123,14 @@ let BattleItems = {
 		fling: {
 			basePower: 60,
 		},
-		spritenum: 475,
+		spritenum: 475, //TODO: Sprite, using Stick as a placeholder
 		onModifyCritRatio(critRatio, user) {
-			if (user.baseTemplate.species === 'Farfetch\'d' || user.baseTemplate.species == 'Farfetch\'d-Galar' || user.baseTemplate.species == 'Sirfetch\'d') {
+			if (user.baseTemplate.species === 'Farfetch\'d' || user.baseTemplate.species === 'Farfetch\'d-Galar' || user.baseTemplate.species == 'Sirfetch\'d') {
 				return critRatio + 2;
 			}
 		},
-		num: 259,
-		gen: 2,
+		num: 259, //TODO: Exact item number, this is a placeholder
+		gen: 8,
 		desc: "If held by a Farfetch'd or Sirfetch'd, its critical hit ratio is raised by 2 stages.",
 	},
 	"leftovers": {
@@ -5886,6 +5886,23 @@ let BattleItems = {
 		gen: 7,
 		isNonstandard: "Past",
 		desc: "If holder has a Steel move, this item allows it to use a Steel Z-Move.",
+	},
+	"stick": {
+		id: "stick",
+		name: "Stick",
+		fling: {
+			basePower: 60,
+		},
+		spritenum: 475,
+		onModifyCritRatio(critRatio, user) {
+			if (user.baseTemplate.species === 'Farfetch\'d') {
+				return critRatio + 2;
+			}
+		},
+		num: 259,
+		gen: 2,
+		isNonstandard: "Past",
+		desc: "If held by a Farfetch'd, its critical hit ratio is raised by 2 stages.",
 	},
 	"stickybarb": {
 		id: "stickybarb",
