@@ -18218,7 +18218,7 @@ let BattleMovedex = {
 	},
 	"steelbeam": {
 		num: 796,
-		accuracy: 100,
+		accuracy: 95,
 		basePower: 140,
 		category: "Special",
 		desc: "If this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
