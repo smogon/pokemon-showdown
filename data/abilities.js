@@ -2826,8 +2826,14 @@ let BattleAbilities = {
 		num: 223,
 	},
 	"powerspot": {
-		shortDesc: "Just being next to the Pokémon powers up moves.",
-		// TODO lack of information, "Just being next to the Pokémon powers up moves" is too vague.
+		shortDesc: "This Pokemon's allies have the base power of their moves multiplied by 1.3.",
+		onAllyBasePowerPriority: 8,
+		onAllyBasePower(basePower, attacker, defender, move) {
+			if (attacker !== this.effectData.target) {
+				this.debug('Power Spot boost');
+				return this.chainModify([0x14CD, 0x1000]);
+			}
+		},
 		id: "powerspot",
 		name: "Power Spot",
 		rating: 0,
