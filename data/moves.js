@@ -1662,8 +1662,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 85,
 		basePowerCallback(pokemon, target, move) {
-			// TODO: Check how move works against newly switched targets
-			if (this.willMove(target)) {
+			if (target.newlySwitched || this.willMove(target)) {
 				this.debug('Bolt Beak damage boost');
 				return move.basePower * 2;
 			}
@@ -5627,8 +5626,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 85,
 		basePowerCallback(pokemon, target, move) {
-			// TODO: Check how move works against newly switched targets
-			if (this.willMove(target)) {
+			if (target.newlySwitched || this.willMove(target)) {
 				this.debug('Fishious Rend damage boost');
 				return move.basePower * 2;
 			}
