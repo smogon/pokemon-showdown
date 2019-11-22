@@ -177,6 +177,15 @@ let Formats = [
 		},
 	},
 	{
+		name: "[Gen 8] CAP",
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] OU', '+CAP'],
+		banlist: [
+			'Crucibelle-Mega',
+		],
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
