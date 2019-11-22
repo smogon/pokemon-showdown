@@ -1371,9 +1371,7 @@ let BattleAbilities = {
 		},
 		onAfterMove(source, target, move) {
 			if (!['surf', 'dive'].includes(move.id) || source.volatiles['dive'] || source.speciesid !== 'cramorant' || source.transformed) return;
-
-			// PLACEHOLDER Estimated 10% of the time you get pikachu
-			const forme = this.random(10) === 1 ? 'cramorantgorging' : 'cramorantgulping';
+			const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
 			source.formeChange(forme, move);
 		},
 		id: "gulpmissile",
