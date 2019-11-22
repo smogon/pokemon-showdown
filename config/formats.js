@@ -157,6 +157,13 @@ let Formats = [
 		minSourceGen: 8,
 	},
 	{
+		name: "[Gen 8] CAP",
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] OU', '+CAP'],
+		banlist: ['Crucibelle-Mega'],
+	},
+	{
 		name: "[Gen 8] Battle Stadium Singles",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656336/">BSS Discussion</a>`,
