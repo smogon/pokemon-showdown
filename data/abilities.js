@@ -3851,24 +3851,17 @@ let BattleAbilities = {
 		num: 200,
 	},
 	"steelyspirit": {
-		shortDesc: "Powers up ally Pokémon's Steel-type moves.",
-		onAllyModifyAtk(atk, source, target, move) {
-			if (source !== this.effectData.target && move.type === 'Steel') {
-				// Placeholder
-				this.debug('Steely Spirit boost');
-				return this.chainModify(1.5);
-			}
-		},
-		onAllyModifySpA(spa, source, target, move) {
-			if (source !== this.effectData.target && move.type === 'Steel') {
-				// Placeholder
+		shortDesc: "This Pokemon and its allies' Steel-type moves have their BP mutiplied by 1.5.",
+		onAllyBasePowerPriority: 8,
+		onAllyBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Steel') {
 				this.debug('Steely Spirit boost');
 				return this.chainModify(1.5);
 			}
 		},
 		id: "steelyspirit",
 		name: "Steely Spirit",
-		rating: 0,
+		rating: 3,
 		num: 252,
 	},
 	"stench": {
