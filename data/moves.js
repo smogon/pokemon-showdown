@@ -11174,7 +11174,7 @@ let BattleMovedex = {
 	"maxflutterby": {
 		num: 758,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Foes: -1 Sp.Atk. BP scales with base move's BP.",
 		id: "maxflutterby",
