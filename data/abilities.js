@@ -2906,7 +2906,7 @@ let BattleAbilities = {
 		num: 232,
 	},
 	"propellertail": {
-		shortDesc: "Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves.",
+		shortDesc: "Ignores the effects of opposing Pokémon's moves/Abilities that redirect move targets.",
 		onRedirectTargetPriority: 3,
 		onRedirectTarget(target, source, source2, move) {
 			// Fires for all pokemon on the ability holder's side apparently
