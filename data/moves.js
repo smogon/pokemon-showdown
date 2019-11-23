@@ -18615,7 +18615,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Consumes berry and raises the user's Defense by 2 stages.",
-		shortDesc: "Consumes berry and raises the user's Def. by 2 stages.",
+		shortDesc: "Consumes berry and raises the user's Def. by 2.",
 		id: "stuffcheeks",
 		name: "Stuff Cheeks",
 		pp: 10,
