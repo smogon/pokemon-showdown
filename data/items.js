@@ -3117,6 +3117,22 @@ let BattleItems = {
 		desc: "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Eevee into Leafeon, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
+	"leek": {
+		id: "leek",
+		name: "Leek",
+		fling: {
+			basePower: 60,
+		},
+		spritenum: 475,
+		onModifyCritRatio(critRatio, user) {
+			if (["Farfetch'd", "Sirfetch'd"].includes(user.baseTemplate.baseSpecies)) {
+				return critRatio + 2;
+			}
+		},
+		num: 259,
+		gen: 8,
+		desc: "If held by a Farfetch'd or Sirfetch'd, its critical hit ratio is raised by 2 stages.",
+	},
 	"leftovers": {
 		id: "leftovers",
 		name: "Leftovers",
@@ -5885,6 +5901,7 @@ let BattleItems = {
 		},
 		num: 259,
 		gen: 2,
+		isNonstandard: "Past",
 		desc: "If held by a Farfetch'd, its critical hit ratio is raised by 2 stages.",
 	},
 	"stickybarb": {

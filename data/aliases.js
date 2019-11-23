@@ -738,6 +738,7 @@ let BattleAliases = {
 	"tbolt": "Thunderbolt",
 	"tspikes": "Toxic Spikes",
 	"twave": "Thunder Wave",
+	"vicegrip": "Vise Grip",
 	"web": "Sticky Web",
 	"wow": "Will-O-Wisp",
 
