@@ -9,26 +9,26 @@
  * between users and your server, and also sets up globals. You can
  * see details in their corresponding files, but here's an overview:
  *
- * Users - from users.js
+ * Users - from users.ts
  *
- *   Most of the communication with users happens in users.js, we just
- *   forward messages between the sockets.js and users.js.
+ *   Most of the communication with users happens in users.ts, we just
+ *   forward messages between the sockets.js and users.ts.
  *
- * Rooms - from rooms.js
+ * Rooms - from rooms.ts
  *
  *   Every chat room and battle is a room, and what they do is done in
- *   rooms.js. There's also a global room which every user is in, and
+ *   rooms.ts. There's also a global room which every user is in, and
  *   handles miscellaneous things like welcoming the user.
  *
- * Dex - from .sim-dist/dex.js
+ * Dex - from .sim-dist/dex.ts
  *
  *   Handles getting data about Pokemon, items, etc.
  *
- * Ladders - from ladders.js and ladders-remote.js
+ * Ladders - from ladders.ts and ladders-remote.ts
  *
  *   Handles Elo rating tracking for players.
  *
- * Chat - from chat.js
+ * Chat - from chat.ts
  *
  *   Handles chat and parses chat commands like /me and /ban
  *

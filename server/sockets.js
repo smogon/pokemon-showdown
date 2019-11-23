@@ -5,7 +5,7 @@
  * Abstraction layer for multi-process SockJS connections.
  *
  * This file handles all the communications between the users'
- * browsers, the networking processes, and users.js in the
+ * browsers, the networking processes, and users.ts in the
  * main process.
  *
  * @license MIT

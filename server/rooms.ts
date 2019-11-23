@@ -3,7 +3,7 @@
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
  * Every chat room and battle is a room, and what they do is done in
- * rooms.js. There's also a global room which every user is in, and
+ * rooms.ts. There's also a global room which every user is in, and
  * handles miscellaneous things like welcoming the user.
  *
  * @license MIT
