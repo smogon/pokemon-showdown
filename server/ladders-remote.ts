@@ -5,9 +5,9 @@
  * This file handles ladders for the main server on
  * play.pokemonshowdown.com.
  *
- * Ladders for all other servers is handled by ladders.js.
+ * Ladders for all other servers is handled by ladders.ts.
  *
- * Matchmaking is currently still implemented in rooms.js.
+ * Matchmaking is currently still implemented in rooms.ts.
  *
  * @license MIT
  */

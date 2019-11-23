@@ -8,7 +8,7 @@
  * Specifically, this is the file that handles calculating and keeping
  * track of players' Elo ratings for all formats.
  *
- * Matchmaking is currently still implemented in rooms.js.
+ * Matchmaking is currently still implemented in rooms.ts.
  *
  * @license MIT
  */
