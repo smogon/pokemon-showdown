@@ -409,7 +409,7 @@ let BattleScripts = {
 				hitResults[i] = false;
 			} else if (this.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') && targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)) {
 				this.debug('natural prankster immunity');
-				if (!target.illusion) this.hint("In gen 7, Dark is immune to Prankster moves.");
+				if (!target.illusion) this.hint("Since gen 7, Dark is immune to Prankster moves.");
 				this.add('-immune', target);
 				hitResults[i] = false;
 			} else {
