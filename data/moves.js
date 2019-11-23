@@ -7344,7 +7344,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Sets Steel entry hazard. BP scales with base move's BP.",
+		shortDesc: "Sets Steel entry hazard. BP scales w/ base move.",
 		id: "gmaxsteelsurge",
 		isNonstandard: "Custom",
 		name: "G-Max Steelsurge",
