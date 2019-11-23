@@ -7132,7 +7132,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Confuses opponents. BP scales with base move's BP.",
+		shortDesc: "Confuses foes. BP scales with base move's BP.",
 		id: "gmaxgoldrush",
 		isNonstandard: "Custom",
 		name: "G-Max Gold Rush",
