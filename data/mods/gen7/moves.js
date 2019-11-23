@@ -637,6 +637,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	searingshot: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	searingsunrazesmash: {
 		inherit: true,
 		isNonstandard: null,
