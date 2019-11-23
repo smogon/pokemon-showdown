@@ -6950,7 +6950,7 @@ let BattleMovedex = {
 		basePower: 10,
 		category: "Physical",
 		desc: "Sleeps, poisons, or paralyzes opponent(s). Base Power scales with the base move's Base Power.",
-		shortDesc: "Foe: slp/psn/par. BP scales w/ base move BP.",
+		shortDesc: "Foes: SLP/PSN/PAR. BP scales with base move's BP.",
 		id: "gmaxbefuddle",
 		isNonstandard: "Custom",
 		name: "G-Max Befuddle",
