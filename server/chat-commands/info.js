@@ -687,7 +687,7 @@ const commands = {
 							details["Z-Effect"] = "None";
 						}
 					}
-					
+
 					if (dex.gen >= 8 && move.isMax) {
 						details["&#10003; Max Move"] = "";
 						if (typeof move.isMax === "string") details["User"] = move.isMax + "-Gmax";
