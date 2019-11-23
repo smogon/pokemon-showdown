@@ -1621,7 +1621,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-		desc: "Damage is calculated using the user's Defense stat, including stat stage changes. The user's Ability is used as normal.",
+		desc: "Damage is calculated using the user's Defense stat instead of Attack, including stat stage changes. The user's Ability is used as normal.",
 		shortDesc: "More power the higher the user's Def.",
 		id: "bodypress",
 		name: "Body Press",
