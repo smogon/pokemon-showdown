@@ -7331,7 +7331,9 @@ let BattleMovedex = {
 		isMax: "Grimmsnarl",
 		onHit(target, source) {
 			for (let pokemon of target.side.active) {
-				pokemon.addVolatile('yawn');
+				if (!target.status && target.runStatusImmunity('slp')) {
+					pokemon.addVolatile('yawn');
+				}
 			}
 		},
 		secondary: null,
