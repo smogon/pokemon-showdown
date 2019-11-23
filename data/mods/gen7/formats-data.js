@@ -1052,7 +1052,6 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["nastyplot", "psyshock", "dazzlinggleam", "shadowball", "focusblast", "healingwish", "encore"],
 		randomDoubleBattleMoves: ["fakeout", "thunderwave", "hiddenpowerfighting", "psychic", "thunderbolt", "encore", "icywind", "protect", "wideguard", "dazzlinggleam", "followme"],
-		isUnreleased: false,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},

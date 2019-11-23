@@ -1703,8 +1703,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 1, "level": 6},
 		],
-		isUnreleased: true,
-		tier: "Unreleased",
+		tier: "New",
 	},
 	mrmimegalar: {
 		tier: "NFE",
