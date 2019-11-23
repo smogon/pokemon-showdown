@@ -7222,7 +7222,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Restores user's side's berries. BP scales w/ base move.",
+		shortDesc: "Restores user-side berries. BP scales w/ base move.",
 		id: "gmaxreplenish",
 		isNonstandard: "Custom",
 		name: "G-Max Replenish",
