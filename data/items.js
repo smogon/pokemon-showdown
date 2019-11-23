@@ -3123,7 +3123,7 @@ let BattleItems = {
 		fling: {
 			basePower: 60,
 		},
-		spritenum: 475, //TODO: Sprite, using Stick as a placeholder
+		spritenum: 475,
 		onModifyCritRatio(critRatio, user) {
 			if (user.baseTemplate.species === 'Farfetch\'d' || user.baseTemplate.species === 'Farfetch\'d-Galar' || user.baseTemplate.species === 'Sirfetch\'d') {
 				return critRatio + 2;
