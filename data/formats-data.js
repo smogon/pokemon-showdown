@@ -7855,238 +7855,293 @@ let BattleFormatsData = {
 		isNonstandard: "Glitch",
 		tier: "Illegal",
 	},
+	syclar: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	syclant: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	revenankh: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	embirch: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	flarelm: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP NFE",
+	},
+	pyroak: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	breezi: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	fidgit: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	rebble: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	tactite: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP NFE",
+	},
+	stratagem: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	privatyke: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	arghonaut: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	kitsunoh: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	cyclohm: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	colossoil: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	krilowatt: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	voodoll: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	voodoom: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	scratchet: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
+	},
 	tomohawk: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	necturine: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
 	},
 	necturna: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
 	},
 	mollux: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	cupra: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
+	},
+	argalis: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP NFE",
 	},
 	aurumoth: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	brattler: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
 	},
 	malaconda: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	cawdet: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
 	},
 	cawmodore: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	volkritter: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
 	},
 	volkraken: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	snugglow: {
+		isNonstandard: "CAP",
+		gen: 6,
+		tier: "CAP LC",
 	},
 	plasmanta: {
 		isNonstandard: "CAP",
+		gen: 6,
 		tier: "CAP",
+	},
+	floatoy: {
+		isNonstandard: "CAP",
+		gen: 6,
+		tier: "CAP LC",
+	},
+	caimanoe: {
+		isNonstandard: "CAP",
+		gen: 6,
+		tier: "CAP NFE",
 	},
 	naviathan: {
 		isNonstandard: "CAP",
+		gen: 6,
 		tier: "CAP",
 	},
 	crucibelle: {
 		isNonstandard: "CAP",
+		gen: 6,
 		tier: "CAP",
 	},
 	crucibellemega: {
 		requiredItem: "Crucibellite",
 		isNonstandard: "CAP",
+		gen: 6,
 		tier: "CAP",
+	},
+	pluffle: {
+		isNonstandard: "CAP",
+		gen: 6,
+		tier: "CAP LC",
 	},
 	kerfluffle: {
 		isNonstandard: "CAP",
 		eventPokemon: [
 			{"generation": 6, "level": 16, "isHidden": false, "abilities": ["naturalcure"], "moves": ["celebrate", "holdhands", "fly", "metronome"], "pokeball": "cherishball"},
 		],
+		gen: 6,
 		tier: "CAP",
 	},
 	pajantom: {
 		isNonstandard: "CAP",
+		gen: 7,
 		tier: "CAP",
+	},
+	mumbao: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP LC",
 	},
 	jumbao: {
 		isNonstandard: "CAP",
+		gen: 7,
 		tier: "CAP",
+	},
+	fawnifer: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP LC",
+	},
+	electrelk: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP NFE",
 	},
 	caribolt: {
 		isNonstandard: "CAP",
 		eventPokemon: [
 			{"generation": 7, "level": 50, "moves": ["celebrate", "hornleech", "wildcharge", "metronome"], "pokeball": "cherishball"},
 		],
+		gen: 7,
 		tier: "CAP",
+	},
+	smogecko: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP LC",
+	},
+	smoguana: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP NFE",
 	},
 	smokomodo: {
 		isNonstandard: "CAP",
 		eventPokemon: [
 			{"generation": 7, "level": 50, "moves": ["celebrate", "eruption", "magnitude", "camouflage"], "pokeball": "cherishball"},
 		],
+		gen: 7,
 		tier: "CAP",
+	},
+	swirlpool: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP LC",
+	},
+	coribalis: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP NFE",
 	},
 	snaelstrom: {
 		isNonstandard: "CAP",
 		eventPokemon: [
 			{"generation": 7, "level": 50, "moves": ["celebrate", "liquidation", "leechlife", "metronome"], "pokeball": "cherishball"},
 		],
+		gen: 7,
 		tier: "CAP",
 	},
 	equilibra: {
 		isNonstandard: "CAP",
+		gen: 7,
 		tier: "CAP",
-	},
-	syclant: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	revenankh: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	pyroak: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	fidgit: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	stratagem: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	arghonaut: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	kitsunoh: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	cyclohm: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	colossoil: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	krilowatt: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	voodoom: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	syclar: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	embirch: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	flarelm: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	breezi: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	scratchet: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	necturine: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	cupra: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	argalis: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	brattler: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	cawdet: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	volkritter: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	snugglow: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	floatoy: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	caimanoe: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	pluffle: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	rebble: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	tactite: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	privatyke: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	voodoll: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	mumbao: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	fawnifer: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	electrelk: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	smogecko: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	smoguana: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	swirlpool: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	coribalis: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
 	},
 	pokestarufo: {
 		isNonstandard: "Pokestar",
