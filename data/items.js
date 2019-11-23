@@ -3125,7 +3125,7 @@ let BattleItems = {
 		},
 		spritenum: 475,
 		onModifyCritRatio(critRatio, user) {
-			if (user.baseTemplate.species === 'Farfetch\'d' || user.baseTemplate.species === 'Farfetch\'d-Galar' || user.baseTemplate.species === 'Sirfetch\'d') {
+			if (["Farfetch'd", "Sirfetch'd"].includes(user.baseTemplate.baseSpecies)) {
 				return critRatio + 2;
 			}
 		},
