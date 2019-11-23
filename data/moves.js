@@ -7306,9 +7306,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Hatterene",
-		onHit(target, source) {
+		onHit(target, source, move) {
 			for (let pokemon of target.side.active) {
-				pokemon.addVolatile('confusion');
+				pokemon.addVolatile('confusion', source, move);
 			}
 		},
 		secondary: null,
@@ -7368,6 +7368,279 @@ let BattleMovedex = {
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Steel",
+		contestType: "Cool",
+	},
+	"gmaxstonesurge": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Sets Stealth Rock. BP scales w/ base move's BP.",
+		id: "gmaxstonesurge",
+		isNonstandard: "Custom",
+		name: "G-Max Stonesurge",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Drednaw",
+		onHit(target, source, move) {
+			target.side.addSideCondition('stealthrock');
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Water",
+		contestType: "Cool",
+	},
+	"gmaxstunshock": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Foe(s): Par/Psn. BP scales with base move's BP.",
+		id: "gmaxstunshock",
+		isNonstandard: "Custom",
+		name: "G-Max Stun Shock",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Toxtricity",
+		onHit(target, source) {
+			for (let pokemon of target.side.active) {
+				let result = this.random(2);
+				if (result === 0) {
+					pokemon.trySetStatus('par', source);
+				} else {
+					pokemon.trySetStatus('psn', source);
+				}
+			}
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Electric",
+		contestType: "Cool",
+	},
+	"gmaxsweetness": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Foe(s): -1 evasion. BP scales with base move's BP.",
+		id: "gmaxsweetness",
+		isNonstandard: "Custom",
+		name: "G-Max Sweetness",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Appletun",
+		onHit(target, source, move) {
+			this.add('-activate', source, 'move: G-Max Sweetness');
+			let success = false;
+			for (const ally of source.side.pokemon) {
+				// TODO: test move's interaction with sap sipper and Substitute
+				if (ally !== source && ((ally.hasAbility('sapsipper')) ||
+						(ally.volatiles['substitute'] && !move.infiltrates))) {
+					continue;
+				}
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Grass",
+		contestType: "Cool",
+	},
+	"gmaxterror": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Traps foe(s). BP scales with base move's BP.",
+		id: "gmaxterror",
+		isNonstandard: "Custom",
+		name: "G-Max Terror",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Gengar",
+		onHit(target, source, move) {
+			for (const pokemon of target.side.active) {
+				pokemon.addVolatile('trapped', source, move, 'trapper');
+			}
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Ghost",
+		contestType: "Cool",
+	},
+	"gmaxtartness": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Foe(s): -1 evasion. BP scales with base move's BP.",
+		id: "gmaxtartness",
+		isNonstandard: "Custom",
+		name: "G-Max Tartness",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Flapple",
+		onHit(target, source, move) {
+			for (const pokemon of target.side.active) {
+				this.boost({evasion: -1}, pokemon, source, move);
+			}
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Grass",
+		contestType: "Cool",
+	},
+	"gmaxvolcalith": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Damages opponent(s) by 1/8 of their maximum HP for four turns. Base Power scales with the base move's Base Power.",
+		shortDesc: "Damages foes for 4 turns. BP scales w/ base move.",
+		id: "gmaxvolcalith",
+		isNonstandard: "Custom",
+		name: "G-Max Volcalith",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Coalossal",
+		onHit(target, source, move) {
+			for (const pokemon of target.side.active) {
+				pokemon.addVolatile('gmaxvolcalith');
+			}
+		},
+		effect: {
+			duration: 4,
+			onStart(targetSide) {
+				this.add('-start', targetSide, 'G-Max Volcalith');
+			},
+			onResidual(targetSide) {
+				for (const pokemon of targetSide.active) {
+					if (!pokemon.volatiles['gmaxvolcalith']) return;
+					this.damage(pokemon.maxhp / 8, pokemon);
+				}
+			},
+			onEnd(targetSide) {
+				this.add('-end', targetSide, 'G-Max Volcalith');
+				for (const pokemon of targetSide.active) {
+					if (pokemon.volatiles['gmaxvolcalith']) delete pokemon.volatiles['gmaxvolcalith'];
+				}
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Rock",
+		contestType: "Cool",
+	},
+	"gmaxvoltcrash": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Paralyzes foe(s). BP scales with base move's BP.",
+		id: "gmaxvoltcrash",
+		isNonstandard: "Custom",
+		name: "G-Max Volt Crash",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Pikachu",
+		onHit(target, source, move) {
+			for (const pokemon of target.side.active) {
+				pokemon.trySetStatus('par', source, move);
+			}
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Electric",
+		contestType: "Cool",
+	},
+	"gmaxwildfire": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Damages opponent(s) by 1/8 of their maximum HP for four turns. Base Power scales with the base move's Base Power.",
+		shortDesc: "Damages foes for 4 turns. BP scales w/ base move.",
+		id: "gmaxwildfire",
+		isNonstandard: "Custom",
+		name: "G-Max Wildfire",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Charizard",
+		onHit(target, source, move) {
+			for (const pokemon of target.side.active) {
+				pokemon.addVolatile('gmaxwildfire');
+			}
+		},
+		effect: {
+			duration: 4,
+			onStart(targetSide) {
+				this.add('-start', targetSide, 'G-Max Wildfire');
+			},
+			onResidual(targetSide) {
+				for (const pokemon of targetSide.active) {
+					if (!pokemon.volatiles['gmaxwildfire']) return;
+					this.damage(pokemon.maxhp / 8, pokemon);
+				}
+			},
+			onEnd(targetSide) {
+				this.add('-end', targetSide, 'G-Max Wildfire');
+				for (const pokemon of targetSide.active) {
+					if (pokemon.volatiles['gmaxwildfire']) delete pokemon.volatiles['gmaxwildfire'];
+				}
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Fire",
+		contestType: "Cool",
+	},
+	"gmaxwindrage": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		// TODO: Test what G-Max Wind Rage actually removes from the field and from which sides
+		desc: "Removes Reflect, Light Screen, Aurora Veil, Spikes, Toxic Spikes, Stealth Rock, Sticky Web, Mist, Safeguard, G-Max Steelsurge, and Terrains from the field. This move's Base Power scales with the base move's Base Power.",
+		shortDesc: "Clears field. BP scales with base move's BP.",
+		id: "gmaxwindrage",
+		isNonstandard: "Custom",
+		name: "G-Max Wind Rage",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Corviknight",
+		onHit(target, source, move) {
+			let success = false;
+			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			for (const targetCondition of removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll.includes(targetCondition)) continue;
+					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			for (const sideCondition of removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			this.field.clearTerrain();
+			return success;
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Flying",
 		contestType: "Cool",
 	},
 	"grassknot": {
