@@ -291,6 +291,7 @@ let BattleStatuses = {
 			target.addVolatile('confusion');
 		},
 		onLockMove(pokemon) {
+			if (pokemon.volatiles['dynamax']) return;
 			return this.effectData.move;
 		},
 	},
