@@ -688,6 +688,11 @@ const commands = {
 						}
 					}
 
+					if (dex.gen >= 8 && move.isMax) {
+						details["&#10003; Max Move"] = "";
+						if (typeof move.isMax === "string") details["User"] = move.isMax + "-Gmax";
+					}
+
 					details["Target"] = {
 						'normal': "One Adjacent Pok\u00e9mon",
 						'self': "User",
