@@ -7296,7 +7296,7 @@ let BattleMovedex = {
 	"gmaxsmite": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Confuses opponents. BP scales with base move.",
 		id: "gmaxsmite",
