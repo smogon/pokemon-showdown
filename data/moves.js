@@ -7523,19 +7523,19 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 4,
-			onStart(targetSide) {
-				this.add('-start', targetSide, 'G-Max Volcalith');
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'G-Max Volcalith');
 			},
-			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.volatiles['gmaxvolcalith']) return;
-					this.damage(pokemon.maxhp / 8, pokemon);
+			onResidual(pokemon) {
+				for (const active of pokemon.side.active) {
+					if (!active.volatiles['gmaxvolcalith']) return;
+					this.damage(active.maxhp / 8, active);
 				}
 			},
-			onEnd(targetSide) {
-				this.add('-end', targetSide, 'G-Max Volcalith');
-				for (const pokemon of targetSide.active) {
-					if (pokemon.volatiles['gmaxvolcalith']) delete pokemon.volatiles['gmaxvolcalith'];
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'G-Max Volcalith');
+				for (const active of pokemon.side.active) {
+					if (active.volatiles['gmaxvolcalith']) delete active.volatiles['gmaxvolcalith'];
 				}
 			},
 		},
