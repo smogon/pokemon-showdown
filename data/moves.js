@@ -7536,9 +7536,6 @@ let BattleMovedex = {
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'G-Max Volcalith');
-				for (const active of pokemon.side.active) {
-					if (active.volatiles['gmaxvolcalith']) delete active.volatiles['gmaxvolcalith'];
-				}
 			},
 		},
 		secondary: null,
@@ -7601,9 +7598,6 @@ let BattleMovedex = {
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'G-Max Wildfire');
-				for (const active of pokemon.side.active) {
-					if (active.volatiles['gmaxwildfire']) delete active.volatiles['gmaxwildfire'];
-				}
 			},
 		},
 		secondary: null,
