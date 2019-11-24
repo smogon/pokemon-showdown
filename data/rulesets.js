@@ -714,6 +714,28 @@ let BattleFormats = {
 			return -typeMod;
 		},
 	},
+	natdex: {
+		effectType: 'Rule',
+		name: 'NatDex',
+		onBegin() {
+			// if you have a mega/primal or z, you can't dynamax
+			for (const side of this.sides) {
+				let canMegaOrZ = false;
+				for (const pokemon of side.pokemon) {
+					const item = this.dex.getItem(pokemon.item);
+					if (item.megaStone || item.onPrimal || item.zMove) {
+						canMegaOrZ = true;
+						break;
+					}
+				}
+				if (canMegaOrZ) {
+					for (const pokemon of side.pokemon) {
+						pokemon.canDynamax = false;
+					}
+				}
+			}
+		},
+	},
 	ignoreillegalabilities: {
 		effectType: 'ValidatorRule',
 		name: 'Ignore Illegal Abilities',
