@@ -717,6 +717,14 @@ let BattleFormats = {
 	natdex: {
 		effectType: 'Rule',
 		name: 'NatDex',
+		onValidateSet(set) {
+			// Item's other than Mega Stones, Z-Crystals, and the Orbs should still be illegal.
+			if (!set.item) return;
+			let item = this.dex.getItem(set.item);
+			if (item.isNonstandard === 'Past' && !item.megaStone && !item.zMove && !['redorb', 'blueorb'].includes(item.id)) {
+				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
+			}
+		},
 		onBegin() {
 			// if you have a mega/primal or z, you can't dynamax
 			for (const side of this.sides) {
