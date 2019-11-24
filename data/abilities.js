@@ -744,7 +744,7 @@ let BattleAbilities = {
 	},
 	"disguise": {
 		desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken, it changes to Busted Form, and it loses 1/10 of its max HP. Confusion damage also breaks the disguise.",
-		shortDesc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage.",
+		shortDesc: "If this Pokemon is a Mimikyu, first hit 0 damage. Breaks disguise losing 10% HP",
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) && !target.transformed) {
