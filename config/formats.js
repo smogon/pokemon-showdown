@@ -337,12 +337,12 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', '+Past', '+Unreleased'],
 		onBegin() {
-			// if you have a mega or z, you can't dynamax
+			// if you have a mega/primal or z, you can't dynamax
 			for (const side of this.sides) {
 				let canMegaOrZ = false;
 				for (const pokemon of side.pokemon) {
 					const item = this.dex.getItem(pokemon.item);
-					if (item.megaStone || item.zMove) {
+					if (item.megaStone || item.onPrimal || item.zMove) {
 						canMegaOrZ = true;
 						break;
 					}
