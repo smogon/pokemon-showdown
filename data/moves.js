@@ -7588,19 +7588,19 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 4,
-			onStart(targetSide) {
-				this.add('-start', targetSide, 'G-Max Wildfire');
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'G-Max Wildfire');
 			},
-			onResidual(targetSide) {
-				for (const pokemon of targetSide.active) {
-					if (!pokemon.volatiles['gmaxwildfire']) return;
-					this.damage(pokemon.maxhp / 8, pokemon);
+			onResidual(pokemon) {
+				for (const active of pokemon.side.active) {
+					if (!active.volatiles['gmaxwildfire']) return;
+					this.damage(active.maxhp / 8, active);
 				}
 			},
-			onEnd(targetSide) {
-				this.add('-end', targetSide, 'G-Max Wildfire');
-				for (const pokemon of targetSide.active) {
-					if (pokemon.volatiles['gmaxwildfire']) delete pokemon.volatiles['gmaxwildfire'];
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'G-Max Wildfire');
+				for (const active of pokemon.side.active) {
+					if (active.volatiles['gmaxwildfire']) delete active.volatiles['gmaxwildfire'];
 				}
 			},
 		},
