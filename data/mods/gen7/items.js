@@ -441,6 +441,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	stick: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	swampertite: {
 		inherit: true,
 		isNonstandard: null,
