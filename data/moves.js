@@ -7519,23 +7519,20 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Coalossal",
 		onHit(target, source, move) {
-			for (const pokemon of target.side.active) {
-				pokemon.addVolatile('gmaxvolcalith');
-			}
+			target.side.addSideCondition('gmaxvolcalith');
 		},
 		effect: {
 			duration: 4,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'G-Max Volcalith');
+			onStart(targetSide) {
+				this.add('-sidestart', targetSide, 'G-Max Volcalith');
 			},
-			onResidual(pokemon) {
-				for (const active of pokemon.side.active) {
-					if (!active.volatiles['gmaxvolcalith']) return;
-					this.damage(active.maxhp / 8, active);
+			onResidual(targetSide) {
+				for (const pokemon of targetSide.active) {
+					this.damage(pokemon.maxhp / 8, pokemon);
 				}
 			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'G-Max Volcalith');
+			onEnd(targetSide) {
+				this.add('-sideend', targetSide, 'G-Max Volcalith');
 			},
 		},
 		secondary: null,
@@ -7581,23 +7578,20 @@ let BattleMovedex = {
 		flags: {},
 		isMax: "Charizard",
 		onHit(target, source, move) {
-			for (const pokemon of target.side.active) {
-				pokemon.addVolatile('gmaxwildfire');
-			}
+			target.side.addSideCondition('gmaxwildfire');
 		},
 		effect: {
 			duration: 4,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'G-Max Wildfire');
+			onStart(targetSide) {
+				this.add('-sidestart', targetSide, 'G-Max Wildfire');
 			},
-			onResidual(pokemon) {
-				for (const active of pokemon.side.active) {
-					if (!active.volatiles['gmaxwildfire']) return;
-					this.damage(active.maxhp / 8, active);
+			onResidual(targetSide) {
+				for (const pokemon of targetSide.active) {
+					this.damage(pokemon.maxhp / 8, pokemon);
 				}
 			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'G-Max Wildfire');
+			onEnd(targetSide) {
+				this.add('-sideend', targetSide, 'G-Max Wildfire');
 			},
 		},
 		secondary: null,
