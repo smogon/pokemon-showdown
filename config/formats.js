@@ -98,7 +98,7 @@ let Formats = [
 
 		mod: 'gen8',
 		maxLevel: 5,
-		ruleset: ['Obtainable', 'Little Cup', 'Standard', 'Team Preview'],
+		ruleset: ['Obtainable', 'Little Cup', 'Standard', 'Team Preview', 'Dynamax Clause'],
 		banlist: ['Corsola-Galar', 'Sneasel', 'Swirlix', 'Baton Pass'],
 		minSourceGen: 8,
 	},
