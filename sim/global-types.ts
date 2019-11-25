@@ -752,7 +752,7 @@ interface ItemData extends EffectData, ItemEventMethods, EventMethods {
 	zMove?: string | true
 	zMoveFrom?: string
 	zMoveType?: string
-	zMoveUser?: string[]
+	itemUser?: string[]
 }
 
 interface ModdedItemData extends Partial<ItemData>, ModdedEffectData {
