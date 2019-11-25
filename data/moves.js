@@ -2556,18 +2556,12 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, sound: 1, dance: 1},
-		onHit(target) {
+		onHit(target, source, move) {
 			if (target.hp <= target.maxhp / 3 || target.boosts.atk >= 6 || target.boosts.def >= 6 || target.boosts.spa >= 6 || target.boosts.spd >= 6 || target.boosts.spe >= 6 || target.maxhp === 1) { // Shedinja clause
 				return false;
 			}
+			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, target, target, move);
 			this.directDamage(target.maxhp / 3);
-		},
-		boosts: {
-			atk: 1,
-			def: 1,
-			spa: 1,
-			spd: 1,
-			spe: 1,
 		},
 		secondary: null,
 		target: "self",
