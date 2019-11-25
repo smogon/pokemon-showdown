@@ -718,7 +718,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'NatDex',
 		onValidateSet(set) {
-			// Item's other than Mega Stones, Z-Crystals, and the Orbs should still be illegal.
+			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (!set.item) return;
 			let item = this.dex.getItem(set.item);
 			if (item.isNonstandard === 'Past' && !item.zMove && !item.itemUser) {
