@@ -717,6 +717,14 @@ let BattleFormats = {
 	natdex: {
 		effectType: 'Rule',
 		name: 'NatDex',
+		onValidateSet(set) {
+			// Items other than Z-Crystals and Pokémon-specific items should be illegal
+			if (!set.item) return;
+			let item = this.dex.getItem(set.item);
+			if (item.isNonstandard === 'Past' && !item.zMove && !item.itemUser) {
+				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
+			}
+		},
 		onBegin() {
 			// if you have a mega/primal or z, you can't dynamax
 			for (const side of this.sides) {
