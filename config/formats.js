@@ -1119,6 +1119,16 @@ let Formats = [
 		banlist: ['DUber', 'Power Construct', 'Eevium Z', 'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
 	},
 	{
+		name: "[Gen 7] Doubles UU",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3598014/">Doubles UU Metagame Discussion</a>`],
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['[Gen 7] Doubles OU'],
+		banlist: ['DOU', 'DBL'],
+	},
+	{
 		name: "[Gen 7] VGC 2019 Ultra Series",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3641100/">VGC 2019 Discussion</a>`,
