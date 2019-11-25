@@ -1367,7 +1367,7 @@ export class TeamValidator {
 				problems.push(`${name}'s gender must be ${eventData.gender}${etc}.`);
 			}
 		}
-		let canMint = dex.gen > 7;
+		const canMint = dex.gen > 7;
 		if (eventData.nature && eventData.nature !== set.nature && !canMint) {
 			if (fastReturn) return true;
 			problems.push(`${name} must have a ${eventData.nature} nature${etc} - Mints are only available starting gen 8.`);
@@ -1830,7 +1830,9 @@ export class TeamValidator {
 			template = this.dex.getTemplate(template.prevo);
 			if (template.gen > Math.max(2, this.dex.gen)) return null;
 			return template;
-		} else if (template.baseSpecies !== template.species && (['Rotom', 'Necrozma'].includes(template.baseSpecies) || template.forme === 'Gmax')) {
+		} else if (template.baseSpecies !== template.species && (
+			['Rotom', 'Necrozma'].includes(template.baseSpecies) || template.forme === 'Gmax'
+		)) {
 			// only Rotom and Necrozma inherit learnsets from base
 			return this.dex.getTemplate(template.baseSpecies);
 		}

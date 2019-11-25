@@ -398,7 +398,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect & ItemData
 	 * Note that these are the full names, e.g. 'Mimikyu-Busted'
 	 * undefined, if not a species-specific Z crystal
 	 */
-	readonly zMoveUser?: string[];
+	readonly itemUser?: string[];
 	/** Is this item a Berry? */
 	readonly isBerry: boolean;
 	/** Whether or not this item ignores the Klutz ability. */
@@ -424,7 +424,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect & ItemData
 		this.zMove = data.zMove || undefined;
 		this.zMoveType = data.zMoveType || undefined;
 		this.zMoveFrom = data.zMoveFrom || undefined;
-		this.zMoveUser = data.zMoveUser || undefined;
+		this.itemUser = data.itemUser || undefined;
 		this.isBerry = !!data.isBerry;
 		this.ignoreKlutz = !!data.ignoreKlutz;
 		this.onPlate = data.onPlate || undefined;
