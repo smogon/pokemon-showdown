@@ -2951,27 +2951,15 @@ let BattleAbilities = {
 	"punkrock": {
 		desc: "Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.",
 		shortDesc: "Boosts sound move power, 0.5× damage from sound moves.",
-		// TODO boost the power of sound based moves by how much?
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.flags.sound) {
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
 				this.debug('Punk Rock boost');
-				return this.chainModify(1.5); // PLACEHOLDER
+				return this.chainModify([0x14CD, 0x1000]);
 			}
 		},
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.flags.sound) {
-				this.debug('Punk Rock boost');
-				return this.chainModify(1.5); // PLACEHOLDER
-			}
-		},
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move.flags.sound) {
-				this.debug('Punk Rock weaken');
-				return this.chainModify(0.5);
-			}
-		},
-		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move.flags.sound) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.flags['sound']) {
 				this.debug('Punk Rock weaken');
 				return this.chainModify(0.5);
 			}
