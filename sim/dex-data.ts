@@ -796,8 +796,12 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly noPPBoosts: boolean;
 	/** Is this move a Z-Move? */
 	readonly isZ: boolean | string;
+	/** How many times does this move hit? */
+	readonly multihit?: number | number[];
 	/** Max/G-Max move power */
 	readonly gmaxPower?: number;
+	/** Z-move power */
+	readonly zMovePower?: number;
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
 	readonly selfSwitch?: ID | boolean;
@@ -903,6 +907,33 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 				} else  {
 					this.gmaxPower = 90;
 				}
+			}
+		}
+		if (this.category !== 'Status' && !this.zMovePower) {
+			let basePower = this.basePower;
+			if (Array.isArray(this.multihit)) basePower *= 3;
+			if (!basePower) {
+				this.zMovePower = 100;
+			} else if (basePower >= 140) {
+				this.zMovePower = 200;
+			} else if (basePower >= 130) {
+				this.zMovePower = 195;
+			} else if (basePower >= 120) {
+				this.zMovePower = 190;
+			} else if (basePower >= 110) {
+				this.zMovePower = 185;
+			} else if (basePower >= 100) {
+				this.zMovePower = 180;
+			} else if (basePower >= 90) {
+				this.zMovePower = 175;
+			} else if (basePower >= 80) {
+				this.zMovePower = 160;
+			} else if (basePower >= 70) {
+				this.zMovePower = 140;
+			} else if (basePower >= 60) {
+				this.zMovePower = 120;
+			} else  {
+				this.zMovePower = 100;
 			}
 		}
 
