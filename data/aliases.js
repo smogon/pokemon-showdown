@@ -143,7 +143,7 @@ let BattleAliases = {
 	"galarianponyta": "Ponyta-Galar",
 	"rapidashg": "Rapidash-Galar",
 	"galarianrapidash": "Rapidash-Galar",
-	"farfetchdgalar": "Farfetch'd-Galar",
+	"farfetchdg": "Farfetch'd-Galar",
 	"galarianfarfetchd": "Farfetch'd-Galar",
 	"weezingg": "Weezing-Galar",
 	"galarianweezing": "Weezing-Galar",
