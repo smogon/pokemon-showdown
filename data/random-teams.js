@@ -1168,6 +1168,8 @@ class RandomTeams {
 					rejectAbility = abilities.includes('Tinted Lens');
 				} else if (ability === 'Magnet Pull') {
 					rejectAbility = !!counter['Normal'] || !hasType['Electric'] && !hasMove['earthpower'];
+				} else if (ability === 'Misty Surge') {
+					rejectAbility = hasMove['sludgebomb'] || hasMove['willowisp'] || hasMove['toxicspikes'];
 				} else if (ability === 'Mold Breaker') {
 					rejectAbility = hasMove['acrobatics'] || abilities.includes('Adaptability') || abilities.includes('Sheer Force') && !!counter['sheerforce'];
 				} else if (ability === 'Overgrow') {
