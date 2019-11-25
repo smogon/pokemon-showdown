@@ -817,7 +817,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let allCategories = ['physical', 'special', 'status'];
 	let allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	let allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
-	let allFlags = ['authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary', 'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove'];
+	let allFlags = ['authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary', 'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection'];
 	let allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	let allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	let allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
@@ -1188,6 +1188,11 @@ function runMovesearch(target, cmd, canAll, message) {
 					}
 				} else if (flag === 'gmaxmove') {
 					if (!(typeof dex[move].isMax === 'string') === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'protection') {
+					if (!(dex[move].stallingMove && dex[move].id !== "endure") === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
