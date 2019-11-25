@@ -10,7 +10,7 @@ const importer = require('./importer');
 const Dex = require('../../.sim-dist/dex').Dex;
 
 const formats = new Map();
-for (let gen = 1; gen <= 7; gen++) {
+for (let gen = 1; gen <= 8; gen++) {
 	for (const tier of importer.TIERS) {
 		const format = Dex.getFormat(`gen${gen}${tier}`);
 		if (format.exists) {

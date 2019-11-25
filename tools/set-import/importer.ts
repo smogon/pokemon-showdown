@@ -41,18 +41,18 @@ interface FormatData {
 	[source: string]: PokemonSets;
 }
 
-type Generation = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+type Generation = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 // The tiers we support, ie. ones that we have data sources for.
 export const TIERS = new Set([
 	'ubers', 'ou', 'uu', 'ru', 'nu', 'pu', 'zu', 'lc', 'cap',
-	'doublesou', 'battlespotsingles', 'battlespotdoubles',
+	'doublesou', 'battlespotsingles', 'battlespotdoubles', 'battlestadiumsingles',
 	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', '1v1',
 	'anythinggoes', 'balancedhackmons', 'letsgoou', 'monotype',
 ]);
 const FORMATS = new Map<ID, {gen: Generation, format: Format}>();
 const VALIDATORS = new Map<ID, TeamValidator>();
-for (let gen = 1; gen <= 7; gen++) {
+for (let gen = 1; gen <= 8; gen++) {
 	for (const tier of TIERS) {
 		const format = Dex.getFormat(`gen${gen}${tier}`);
 		if (format.exists) {
@@ -88,7 +88,7 @@ export async function importAll() {
 	const index = await request(smogon.Statistics.URL);
 
 	const imports = [];
-	for (let gen = 1; gen <= 7; gen++) {
+	for (let gen = 1; gen <= 8; gen++) {
 		imports.push(importGen(gen as Generation, index));
 	}
 
@@ -174,6 +174,7 @@ function toGen(dex: ModdedDex, name: string): Generation | undefined {
 	if (!pokemon.exists || (pokemon.isNonstandard && pokemon.isNonstandard !== 'CAP')) return undefined;
 
 	const n = pokemon.num;
+	if (n > 810) return 8;
 	if (n > 721 || (n <= -23 && n >= -28) || (n <= -120 && n >= -126)) return 7;
 	if (n > 649 || (n <= -8 && n >= -22) || (n <= -106 && n >= -110)) return 6;
 	if (n > 493 || (n <= -12 && n >= -17) || (n <= -111 && n >= -115)) return 5;
@@ -329,7 +330,7 @@ function toPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: Deep
 	if (hp) {
 		const type = hp.slice(13);
 		if (type && dex.getHiddenPower(fillStats(set.ivs, fill)).type !== type) {
-			if (!set.ivs || (dex.gen === 7 && (!set.level || set.level === 100))) {
+			if (!set.ivs || (dex.gen >= 7 && (!set.level || set.level === 100))) {
 				set.hpType = type;
 				fill = 31;
 			} else if (dex.gen === 2) {
@@ -444,6 +445,7 @@ const STATISTICS: {[formatid: string]: [string, number]} = {
 	gen2nu: ['2018-11', 444],
 	gen2ubers: ['2019-07', 389],
 	gen2uu: ['2016-08', 1120],
+	gen31v1: ['2018-05', 434],
 	gen3nu: ['2016-09', 1227],
 	gen3ubers: ['2018-08', 960],
 	gen3uu: ['2016-11', 562],
