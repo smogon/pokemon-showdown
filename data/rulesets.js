@@ -541,7 +541,7 @@ let BattleFormats = {
 		name: 'NFE Clause',
 		desc: "Bans Pok&eacute;mon that are fully evolved or can't evolve",
 		onValidateSet(set) {
-			const template = this.dex.getTemplate(set.species || set.name);
+			const template = this.dex.getTemplate(set.name || set.species);
 			if (!template.nfe) {
 				return [set.species + " cannot evolve."];
 			}
@@ -748,7 +748,7 @@ let BattleFormats = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, template, setSources, set) {
 			const restrictedMoves = this.format.restrictedMoves || [];
-			if (!move.isUnreleased && !move.isZ && !restrictedMoves.includes(move.name)) {
+			if (!move.isNonstandard && !restrictedMoves.includes(move.name)) {
 				let dex = this.dex;
 				let types = template.types;
 				let baseTemplate = dex.getTemplate(template.baseSpecies);
@@ -757,7 +757,7 @@ let BattleFormats = {
 					for (const formeid of baseTemplate.otherFormes) {
 						let forme = dex.getTemplate(formeid);
 						if (!forme.battleOnly) {
-							if (forme.forme !== 'Alola' && forme.forme !== 'Alola-Totem' && forme.baseSpecies !== 'Wormadam') {
+							if (!forme.forme.includes('Alola') && forme.baseSpecies !== 'Wormadam') {
 								types = types.concat(forme.types).concat(baseTemplate.types);
 							}
 						}
@@ -767,7 +767,6 @@ let BattleFormats = {
 			}
 			return this.checkLearnset(move, template, setSources, set);
 		},
-		unbanlist: ['Shiftry + Leaf Blade + Sucker Punch'],
 	},
 	allowtradeback: {
 		effectType: 'ValidatorRule',

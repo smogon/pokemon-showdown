@@ -2,7 +2,6 @@
 
 /**@type {ModdedBattleScriptsData} */
 let BattleScripts = {
-	inherit: 'gen7',
 	init() {
 		for (let id in this.data.Items) {
 			if (!this.data.Items[id].megaStone) continue;
@@ -10,25 +9,22 @@ let BattleScripts = {
 		}
 	},
 	canMegaEvo(pokemon) {
-		if (pokemon.template.isMega || pokemon.template.isPrimal) return null;
+		if (pokemon.template.isMega) return null;
 
 		const item = pokemon.getItem();
 		if (item.megaStone) {
 			if (item.megaStone === pokemon.species) return null;
 			return item.megaStone;
-		} else if (pokemon.baseMoves.includes(/** @type {ID} */('dragonascent'))) {
-			return 'Rayquaza-Mega';
 		} else {
 			return null;
 		}
 	},
 	runMegaEvo(pokemon) {
-		if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
+		if (pokemon.template.isMega) return false;
 
-		const isUltraBurst = !pokemon.canMegaEvo;
 		/**@type {Template} */
 		// @ts-ignore
-		const template = this.getMixedTemplate(pokemon.m.originalSpecies, pokemon.canMegaEvo || pokemon.canUltraBurst);
+		const template = this.getMixedTemplate(pokemon.m.originalSpecies, pokemon.canMegaEvo);
 		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot Mega Evolve. Enforce it here for now.
@@ -40,21 +36,20 @@ let BattleScripts = {
 
 		// Do we have a proper sprite for it?
 		// @ts-ignore assert non-null pokemon.canMegaEvo
-		if (isUltraBurst || this.dex.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.m.originalSpecies) {
+		if (this.dex.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.m.originalSpecies) {
 			pokemon.formeChange(template, pokemon.getItem(), true);
 		} else {
 			let oTemplate = this.dex.getTemplate(pokemon.m.originalSpecies);
 			// @ts-ignore
 			let oMegaTemplate = this.dex.getTemplate(template.originalMega);
 			pokemon.formeChange(template, pokemon.getItem(), true);
-			this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
+			this.add('-start', pokemon, oMegaTemplate.requiredItem, '[silent]');
 			if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
 				this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 			}
 		}
 
 		pokemon.canMegaEvo = null;
-		if (isUltraBurst) pokemon.canUltraBurst = null;
 		return true;
 	},
 	getMixedTemplate(originalSpecies, megaSpecies) {
@@ -69,7 +64,7 @@ let BattleScripts = {
 	},
 	getMegaDeltas(megaTemplate) {
 		let baseTemplate = this.dex.getTemplate(megaTemplate.baseSpecies);
-		/**@type {{ability: string, baseStats: {[k: string]: number}, weighthg: number, originalMega: string, requiredItem: string | undefined, type?: string, isMega?: boolean, isPrimal?: boolean}} */
+		/**@type {{ability: string, baseStats: {[k: string]: number}, weighthg: number, originalMega: string, requiredItem: string | undefined, type?: string, isMega?: boolean}} */
 		let deltas = {
 			ability: megaTemplate.abilities['0'],
 			baseStats: {},
@@ -84,12 +79,11 @@ let BattleScripts = {
 		if (megaTemplate.types.length > baseTemplate.types.length) {
 			deltas.type = megaTemplate.types[1];
 		} else if (megaTemplate.types.length < baseTemplate.types.length) {
-			deltas.type = baseTemplate.types[0];
+			deltas.type = 'mono';
 		} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
 			deltas.type = megaTemplate.types[1];
 		}
 		if (megaTemplate.isMega) deltas.isMega = true;
-		if (megaTemplate.isPrimal) deltas.isPrimal = true;
 		return deltas;
 	},
 	doGetMixedTemplate(templateOrTemplateName, deltas) {
@@ -98,6 +92,8 @@ let BattleScripts = {
 		template.abilities = {'0': deltas.ability};
 		if (template.types[0] === deltas.type) {
 			template.types = [deltas.type];
+		} else if (deltas.type === 'mono') {
+			template.types = [template.types[0]];
 		} else if (deltas.type) {
 			template.types = [template.types[0], deltas.type];
 		}
@@ -109,7 +105,6 @@ let BattleScripts = {
 		template.originalMega = deltas.originalMega;
 		template.requiredItem = deltas.requiredItem;
 		if (deltas.isMega) template.isMega = true;
-		if (deltas.isPrimal) template.isPrimal = true;
 		return template;
 	},
 };
