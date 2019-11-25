@@ -757,7 +757,7 @@ let BattleFormats = {
 					for (const formeid of baseTemplate.otherFormes) {
 						let forme = dex.getTemplate(formeid);
 						if (!forme.battleOnly) {
-							if (!forme.forme.includes('Alola') && forme.baseSpecies !== 'Wormadam') {
+							if (!forme.forme.includes('Alola') && forme.forme !== 'Galar' && forme.baseSpecies !== 'Wormadam') {
 								types = types.concat(forme.types).concat(baseTemplate.types);
 							}
 						}
