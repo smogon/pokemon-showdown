@@ -2556,11 +2556,14 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, sound: 1, dance: 1},
-		onHit(target) {
-			if (target.hp <= target.maxhp / 3 || target.boosts.atk >= 6 || target.boosts.def >= 6 || target.boosts.spa >= 6 || target.boosts.spd >= 6 || target.boosts.spe >= 6 || target.maxhp === 1) { // Shedinja clause
+		onTryHit(pokemon, target, move) {
+			if (pokemon.hp <= pokemon.maxhp / 3 || pokemon.boosts.atk >= 6 || pokemon.boosts.def >= 6 || pokemon.boosts.spa >= 6 || pokemon.boosts.spd >= 6 || pokemon.boosts.spe >= 6 || pokemon.maxhp === 1) {
+				delete move.boosts;
 				return false;
 			}
-			this.directDamage(target.maxhp / 3);
+		},
+		onHit(pokemon) {
+			this.directDamage(pokemon.maxhp / 3);
 		},
 		boosts: {
 			atk: 1,
