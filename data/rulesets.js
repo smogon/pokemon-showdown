@@ -721,7 +721,7 @@ let BattleFormats = {
 			// Item's other than Mega Stones, Z-Crystals, and the Orbs should still be illegal.
 			if (!set.item) return;
 			let item = this.dex.getItem(set.item);
-			if (item.isNonstandard === 'Past' && !item.megaStone && !item.zMove && !['redorb', 'blueorb'].includes(item.id)) {
+			if (item.isNonstandard === 'Past' && !item.zMove && !item.itemUser) {
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}
 		},
