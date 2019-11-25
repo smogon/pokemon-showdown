@@ -520,6 +520,7 @@ let BattleFormatsData = {
 			{"generation": 8, "level": 10, "isHidden": false, "moves": ["growl", "quickattack", "thunderwave", "doubleteam"]},
 		],
 		eventOnly: true,
+		unreleasedHidden: true,
 		isGigantamax: "G-Max Volt Crash",
 		tier: "New",
 		doublesTier: "New",
@@ -606,16 +607,19 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	cleffa: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	clefairy: {
 		encounters: [
 			{"generation": 1, "level": 8},
 		],
+		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	clefable: {
 		randomBattleMoves: ["calmmind", "fireblast", "moonblast", "moonlight", "stealthrock", "thunderwave"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -830,6 +834,7 @@ let BattleFormatsData = {
 			{"generation": 8, "level": 5, "isHidden": false, "moves": ["fakeout", "growl", "slash", "payday"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
+		unreleasedHidden: true,
 		isGigantamax: "G-Max Gold Rush",
 		tier: "New",
 		doublesTier: "New",
@@ -1703,8 +1708,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 1, "level": 6},
 		],
-		isUnreleased: true,
-		tier: "Unreleased",
+		tier: "New",
 	},
 	mrmimegalar: {
 		tier: "NFE",
@@ -1948,6 +1952,7 @@ let BattleFormatsData = {
 			{"generation": 8, "level": 10, "isHidden": false, "abilities": ["runaway"], "moves": ["growl", "tailwhip", "sandattack", "quickattack"]},
 		],
 		eventOnly: true,
+		unreleasedHidden: true,
 		isGigantamax: "G-Max Cuddle",
 		tier: "New",
 		doublesTier: "New",
@@ -2356,6 +2361,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 2, "level": 2},
 		],
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	noctowl: {
@@ -2365,6 +2371,7 @@ let BattleFormatsData = {
 			{"generation": 4, "level": 5},
 			{"generation": 7, "level": 19},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -2406,6 +2413,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	chinchou: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	lanturn: {
@@ -2415,6 +2423,7 @@ let BattleFormatsData = {
 			{"generation": 6, "level": 26, "maxEggMoves": 1},
 			{"generation": 7, "level": 10},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -2495,10 +2504,12 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	bonsly: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	sudowoodo: {
 		randomBattleMoves: ["earthquake", "headsmash", "stealthrock", "suckerpunch", "woodhammer"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -2808,6 +2819,7 @@ let BattleFormatsData = {
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["present"], "pokeball": "pokeball"},
 			{"generation": 6, "level": 10, "isHidden": false, "abilities": ["vitalspirit"], "moves": ["present", "happyhour"], "pokeball": "cherishball"},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -3266,6 +3278,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 3, "level": 2},
 		],
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	pelipper: {
@@ -3274,6 +3287,7 @@ let BattleFormatsData = {
 			{"generation": 4, "level": 15},
 			{"generation": 6, "level": 18, "maxEggMoves": 1},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -3520,6 +3534,7 @@ let BattleFormatsData = {
 		isNonstandard: "Past",
 	},
 	electrike: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	manectric: {
@@ -3528,6 +3543,7 @@ let BattleFormatsData = {
 			{"generation": 3, "level": 44, "moves": ["refresh", "thunder", "raindance", "bite"]},
 			{"generation": 6, "level": 50, "nature": "Timid", "isHidden": false, "abilities": ["lightningrod"], "moves": ["overheat", "thunderbolt", "voltswitch", "protect"], "pokeball": "cherishball"},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -3772,6 +3788,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	barboach: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	whiscash: {
@@ -3783,6 +3800,7 @@ let BattleFormatsData = {
 			{"generation": 4, "level": 10},
 			{"generation": 7, "level": 10},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -4506,6 +4524,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	drifloon: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	drifblim: {
@@ -4513,6 +4532,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 7, "level": 11, "isHidden": false, "pokeball": "pokeball"},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -4551,6 +4571,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	bronzor: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	bronzong: {
@@ -4558,6 +4579,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 6, "level": 30},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -4631,6 +4653,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	skorupi: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	drapion: {
@@ -4639,6 +4662,7 @@ let BattleFormatsData = {
 			{"generation": 4, "level": 22, "pokeball": "safariball"},
 			{"generation": 6, "level": 30},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -4647,6 +4671,7 @@ let BattleFormatsData = {
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["astonish", "mudslap", "poisonsting", "taunt"]},
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["mudslap", "poisonsting", "taunt", "poisonjab"]},
 		],
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	toxicroak: {
@@ -4655,6 +4680,7 @@ let BattleFormatsData = {
 			{"generation": 4, "level": 22, "pokeball": "safariball"},
 			{"generation": 6, "level": 30},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -4674,6 +4700,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	snover: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	abomasnow: {
@@ -4681,6 +4708,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 4, "level": 38},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5103,6 +5131,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	purrloin: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	liepard: {
@@ -5110,6 +5139,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 20, "gender": "F", "nature": "Jolly", "isHidden": true, "moves": ["fakeout", "foulplay", "encore", "swagger"]},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5152,6 +5182,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	munna: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	musharna: {
@@ -5159,6 +5190,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 50, "isHidden": true, "moves": ["defensecurl", "luckychant", "psybeam", "hypnosis"]},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5166,9 +5198,11 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 1, "shiny": 1, "gender": "F", "nature": "Hardy", "ivs": {"atk": 31}, "isHidden": false, "abilities": ["superluck"], "moves": ["gust", "quickattack", "aircutter"], "pokeball": "pokeball"},
 		],
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	tranquill: {
+		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	unfezant: {
@@ -5176,6 +5210,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 5, "level": 22, "isHidden": false},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5202,10 +5237,12 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	woobat: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	swoobat: {
 		randomBattleMoves: ["airslash", "heatwave", "nastyplot", "roost", "storedpower"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5261,11 +5298,13 @@ let BattleFormatsData = {
 	},
 	throh: {
 		randomBattleMoves: ["bulkup", "circlethrow", "icepunch", "payback", "rest", "sleeptalk", "stormthrow"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
 	sawk: {
 		randomBattleMoves: ["bulkup", "closecombat", "poisonjab", "stoneedge", "throatchop"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5320,11 +5359,13 @@ let BattleFormatsData = {
 	},
 	basculin: {
 		randomBattleMoves: ["aquajet", "crunch", "headsmash", "liquidation", "psychicfangs"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
 	basculinbluestriped: {
 		randomBattleMoves: ["aquajet", "crunch", "headsmash", "liquidation", "psychicfangs"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5374,6 +5415,7 @@ let BattleFormatsData = {
 	},
 	maractus: {
 		randomBattleMoves: ["solarbeam", "sunnyday", "synthesis", "weatherball"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5659,10 +5701,12 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	elgyem: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	beheeyem: {
 		randomBattleMoves: ["nastyplot", "psychic", "shadowball", "thunderbolt", "trick", "trickroom"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5709,6 +5753,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 15, "isHidden": false, "moves": ["powdersnow", "growl", "bide", "icywind"], "pokeball": "cherishball"},
 		],
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	beartic: {
@@ -5716,6 +5761,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 6, "level": 30},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5764,6 +5810,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	golett: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	golurk: {
@@ -5774,6 +5821,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 6, "level": 30},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -6262,10 +6310,12 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	espurr: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	meowstic: {
 		randomBattleMoves: ["lightscreen", "psychic", "reflect", "thunderwave", "yawn"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -6327,6 +6377,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	binacle: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	barbaracle: {
@@ -6334,6 +6385,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 6, "level": 30},
 		],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -6471,18 +6523,22 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	bergmite: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	avalugg: {
 		randomBattleMoves: ["avalanche", "earthquake", "rapidspin", "recover"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
 	noibat: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	noivern: {
 		randomBattleMoves: ["boomburst", "dracometeor", "flamethrower", "hurricane", "roost", "uturn"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7409,10 +7465,12 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	skwovet: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	greedent: {
 		randomBattleMoves: ["bodyslam", "earthquake", "gyroball", "payback", "swordsdance", "wildcharge"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7449,10 +7507,12 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	nickit: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	thievul: {
 		randomBattleMoves: ["darkpulse", "nastyplot", "psychic", "shadowball", "taunt", "uturn"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7465,10 +7525,12 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	wooloo: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	dubwool: {
 		randomBattleMoves: ["bodypress", "bodyslam", "doubleedge", "swordsdance", "zenheadbutt"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7486,10 +7548,12 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	yamper: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	boltund: {
 		randomBattleMoves: ["bulkup", "crunch", "firefang", "playrough", "psychicfangs", "thunderfang", "voltswitch"],
+		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7794,238 +7858,293 @@ let BattleFormatsData = {
 		isNonstandard: "Glitch",
 		tier: "Illegal",
 	},
+	syclar: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	syclant: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	revenankh: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	embirch: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	flarelm: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP NFE",
+	},
+	pyroak: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	breezi: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	fidgit: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	rebble: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	tactite: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP NFE",
+	},
+	stratagem: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	privatyke: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	arghonaut: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	kitsunoh: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	cyclohm: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	colossoil: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	krilowatt: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	voodoll: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP LC",
+	},
+	voodoom: {
+		isNonstandard: "CAP",
+		gen: 4,
+		tier: "CAP",
+	},
+	scratchet: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
+	},
 	tomohawk: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	necturine: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
 	},
 	necturna: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
 	},
 	mollux: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	cupra: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
+	},
+	argalis: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP NFE",
 	},
 	aurumoth: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	brattler: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
 	},
 	malaconda: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	cawdet: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
 	},
 	cawmodore: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	volkritter: {
+		isNonstandard: "CAP",
+		gen: 5,
+		tier: "CAP LC",
 	},
 	volkraken: {
 		isNonstandard: "CAP",
+		gen: 5,
 		tier: "CAP",
+	},
+	snugglow: {
+		isNonstandard: "CAP",
+		gen: 6,
+		tier: "CAP LC",
 	},
 	plasmanta: {
 		isNonstandard: "CAP",
+		gen: 6,
 		tier: "CAP",
+	},
+	floatoy: {
+		isNonstandard: "CAP",
+		gen: 6,
+		tier: "CAP LC",
+	},
+	caimanoe: {
+		isNonstandard: "CAP",
+		gen: 6,
+		tier: "CAP NFE",
 	},
 	naviathan: {
 		isNonstandard: "CAP",
+		gen: 6,
 		tier: "CAP",
 	},
 	crucibelle: {
 		isNonstandard: "CAP",
+		gen: 6,
 		tier: "CAP",
 	},
 	crucibellemega: {
 		requiredItem: "Crucibellite",
 		isNonstandard: "CAP",
+		gen: 6,
 		tier: "CAP",
+	},
+	pluffle: {
+		isNonstandard: "CAP",
+		gen: 6,
+		tier: "CAP LC",
 	},
 	kerfluffle: {
 		isNonstandard: "CAP",
 		eventPokemon: [
 			{"generation": 6, "level": 16, "isHidden": false, "abilities": ["naturalcure"], "moves": ["celebrate", "holdhands", "fly", "metronome"], "pokeball": "cherishball"},
 		],
+		gen: 6,
 		tier: "CAP",
 	},
 	pajantom: {
 		isNonstandard: "CAP",
+		gen: 7,
 		tier: "CAP",
+	},
+	mumbao: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP LC",
 	},
 	jumbao: {
 		isNonstandard: "CAP",
+		gen: 7,
 		tier: "CAP",
+	},
+	fawnifer: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP LC",
+	},
+	electrelk: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP NFE",
 	},
 	caribolt: {
 		isNonstandard: "CAP",
 		eventPokemon: [
 			{"generation": 7, "level": 50, "moves": ["celebrate", "hornleech", "wildcharge", "metronome"], "pokeball": "cherishball"},
 		],
+		gen: 7,
 		tier: "CAP",
+	},
+	smogecko: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP LC",
+	},
+	smoguana: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP NFE",
 	},
 	smokomodo: {
 		isNonstandard: "CAP",
 		eventPokemon: [
 			{"generation": 7, "level": 50, "moves": ["celebrate", "eruption", "magnitude", "camouflage"], "pokeball": "cherishball"},
 		],
+		gen: 7,
 		tier: "CAP",
+	},
+	swirlpool: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP LC",
+	},
+	coribalis: {
+		isNonstandard: "CAP",
+		gen: 7,
+		tier: "CAP NFE",
 	},
 	snaelstrom: {
 		isNonstandard: "CAP",
 		eventPokemon: [
 			{"generation": 7, "level": 50, "moves": ["celebrate", "liquidation", "leechlife", "metronome"], "pokeball": "cherishball"},
 		],
+		gen: 7,
 		tier: "CAP",
 	},
 	equilibra: {
 		isNonstandard: "CAP",
+		gen: 7,
 		tier: "CAP",
-	},
-	syclant: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	revenankh: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	pyroak: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	fidgit: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	stratagem: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	arghonaut: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	kitsunoh: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	cyclohm: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	colossoil: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	krilowatt: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	voodoom: {
-		isNonstandard: "CAP",
-		tier: "CAP",
-	},
-	syclar: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	embirch: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	flarelm: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	breezi: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	scratchet: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	necturine: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	cupra: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	argalis: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	brattler: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	cawdet: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	volkritter: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	snugglow: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	floatoy: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	caimanoe: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	pluffle: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	rebble: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	tactite: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	privatyke: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	voodoll: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	mumbao: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	fawnifer: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	electrelk: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	smogecko: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	smoguana: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
-	},
-	swirlpool: {
-		isNonstandard: "CAP",
-		tier: "CAP LC",
-	},
-	coribalis: {
-		isNonstandard: "CAP",
-		tier: "CAP NFE",
 	},
 	pokestarufo: {
 		isNonstandard: "Pokestar",

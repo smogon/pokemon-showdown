@@ -1353,7 +1353,27 @@ let BattleAbilities = {
 	"gulpmissile": {
 		desc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.",
 		shortDesc: "Get prey with Surf/Dive. When taking damage, prey is used to attack.",
-		// TODO
+		onDamagePriority: -1,
+		onDamage(damage, target, source, effect) {
+			// Needs to trigger even if cramorant is about to faint
+			if (effect && effect.effectType === 'Move' && ['cramorantgulping', 'cramorantgorging'].includes(target.template.speciesid) && !target.transformed) {
+				// Forme change before damaging to avoid a potential infinite loop with surf cramorant vs surf cramorant
+				const forme = target.template.speciesid;
+				target.formeChange('cramorant', effect);
+
+				this.damage(source.maxhp / 4, source, target, effect);
+				if (forme === 'cramorantgulping') {
+					this.boost({def: -1}, source, target, null, true);
+				} else {
+					source.trySetStatus('par', target, effect);
+				}
+			}
+		},
+		onAfterMove(source, target, move) {
+			if (!['surf', 'dive'].includes(move.id) || source.volatiles['dive'] || source.speciesid !== 'cramorant' || source.transformed) return;
+			const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
+			source.formeChange(forme, move);
+		},
 		id: "gulpmissile",
 		name: "Gulp Missile",
 		rating: 1.5,
@@ -2804,8 +2824,14 @@ let BattleAbilities = {
 		num: 223,
 	},
 	"powerspot": {
-		shortDesc: "Just being next to the Pokémon powers up moves.",
-		// TODO lack of information, "Just being next to the Pokémon powers up moves" is too vague.
+		shortDesc: "This Pokemon's allies have the base power of their moves multiplied by 1.3.",
+		onAllyBasePowerPriority: 8,
+		onAllyBasePower(basePower, attacker, defender, move) {
+			if (attacker !== this.effectData.target) {
+				this.debug('Power Spot boost');
+				return this.chainModify([0x14CD, 0x1000]);
+			}
+		},
 		id: "powerspot",
 		name: "Power Spot",
 		rating: 0,
@@ -2880,7 +2906,7 @@ let BattleAbilities = {
 		num: 232,
 	},
 	"propellertail": {
-		shortDesc: "Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves.",
+		shortDesc: "Ignores the effects of opposing Pokémon's moves/Abilities that redirect move targets.",
 		onRedirectTargetPriority: 3,
 		onRedirectTarget(target, source, source2, move) {
 			// Fires for all pokemon on the ability holder's side apparently
@@ -3829,24 +3855,17 @@ let BattleAbilities = {
 		num: 200,
 	},
 	"steelyspirit": {
-		shortDesc: "Powers up ally Pokémon's Steel-type moves.",
-		onAllyModifyAtk(atk, source, target, move) {
-			if (source !== this.effectData.target && move.type === 'Steel') {
-				// Placeholder
-				this.debug('Steely Spirit boost');
-				return this.chainModify(1.5);
-			}
-		},
-		onAllyModifySpA(spa, source, target, move) {
-			if (source !== this.effectData.target && move.type === 'Steel') {
-				// Placeholder
+		shortDesc: "This Pokemon and its allies' Steel-type moves have their BP mutiplied by 1.5.",
+		onAllyBasePowerPriority: 8,
+		onAllyBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Steel') {
 				this.debug('Steely Spirit boost');
 				return this.chainModify(1.5);
 			}
 		},
 		id: "steelyspirit",
 		name: "Steely Spirit",
-		rating: 0,
+		rating: 3,
 		num: 252,
 	},
 	"stench": {

@@ -262,7 +262,7 @@ let BattleMovedex = {
 		desc: "Has a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
 		id: "aeroblast",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Aeroblast",
 		pp: 5,
 		priority: 0,
@@ -1174,7 +1174,7 @@ let BattleMovedex = {
 		desc: "If the user is hit by a contact move this turn before it can execute this move, the attacker is burned.",
 		shortDesc: "Burns on contact with the user before it moves.",
 		id: "beakblast",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Beak Blast",
 		pp: 15,
 		priority: -3,
@@ -1623,8 +1623,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-		desc: "Damage is calculated using the user's Defense stat, including stat stage changes. The user's Ability is used as normal.",
-		shortDesc: "Uses user's Defense stat in damage calculation.",
+		desc: "Damage is calculated using the user's Defense stat instead of Attack, including stat stage changes. The user's Ability is used as normal.",
+		shortDesc: "Uses Def instead of Atk in damage calculation.",
 		id: "bodypress",
 		name: "Body Press",
 		pp: 10,
@@ -1662,8 +1662,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 85,
 		basePowerCallback(pokemon, target, move) {
-			// TODO: Check how move works against newly switched targets
-			if (this.willMove(target)) {
+			if (target.newlySwitched || this.willMove(target)) {
 				this.debug('Bolt Beak damage boost');
 				return move.basePower * 2;
 			}
@@ -1734,7 +1733,7 @@ let BattleMovedex = {
 		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
 		shortDesc: "Hits 2 times in one turn.",
 		id: "bonemerang",
-		isViable: true,
+		isNonstandard: "Past",
 		name: "Bonemerang",
 		pp: 10,
 		priority: 0,
@@ -2446,7 +2445,7 @@ let BattleMovedex = {
 		desc: "Has a 100% chance to confuse the target.",
 		shortDesc: "100% chance to confuse the target.",
 		id: "chatter",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Chatter",
 		pp: 20,
 		priority: 0,
@@ -2562,7 +2561,13 @@ let BattleMovedex = {
 				return false;
 			}
 			this.directDamage(target.maxhp / 3);
-			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, target);
+		},
+		boosts: {
+			atk: 1,
+			def: 1,
+			spa: 1,
+			spd: 1,
+			spe: 1,
 		},
 		secondary: null,
 		target: "self",
@@ -2802,6 +2807,7 @@ let BattleMovedex = {
 		desc: "The user's type changes to match the original type of the move in its first move slot. Fails if the user cannot change its type, or if the type is one of the user's current types.",
 		shortDesc: "Changes user's type to match its first move.",
 		id: "conversion",
+		isNonstandard: 'Past',
 		name: "Conversion",
 		pp: 30,
 		priority: 0,
@@ -2825,6 +2831,7 @@ let BattleMovedex = {
 		desc: "The user's type changes to match a type that resists or is immune to the type of the last move used by the target, but not either of its current types. The determined type of the move is used rather than the original type. Fails if the target has not made a move, if the user cannot change its type, or if this move would only be able to select one of the user's current types.",
 		shortDesc: "Changes user's type to resist target's last move.",
 		id: "conversion2",
+		isNonstandard: 'Past',
 		name: "Conversion 2",
 		pp: 30,
 		priority: 0,
@@ -2892,7 +2899,7 @@ let BattleMovedex = {
 		desc: "If the user moves after the target, the target's Ability is rendered ineffective as long as it remains active. If the target uses Baton Pass, the replacement will remain under this effect. If the target's Ability is Battle Bond, Comatose, Disguise, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode, this effect does not happen, and receiving the effect through Baton Pass ends the effect immediately.",
 		shortDesc: "Nullifies the foe(s) Ability if the foe(s) move first.",
 		id: "coreenforcer",
-		isViable: true,
+		isNonstandard: "Past",
 		name: "Core Enforcer",
 		pp: 10,
 		priority: 0,
@@ -3273,6 +3280,7 @@ let BattleMovedex = {
 		desc: "Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
 		shortDesc: "More power the more HP the target has left.",
 		id: "crushgrip",
+		isNonstandard: 'Past',
 		name: "Crush Grip",
 		pp: 5,
 		priority: 0,
@@ -3399,7 +3407,7 @@ let BattleMovedex = {
 		desc: "Causes the target to fall asleep. This move cannot be used successfully unless the user's current form, while considering Transform, is Darkrai.",
 		shortDesc: "Darkrai: Causes the foe(s) to fall asleep.",
 		id: "darkvoid",
-		isViable: true,
+		isNonstandard: "Past",
 		name: "Dark Void",
 		pp: 10,
 		priority: 0,
@@ -3646,7 +3654,7 @@ let BattleMovedex = {
 		desc: "Has a 50% chance to raise the user's Defense by 2 stages.",
 		shortDesc: "50% chance to raise user's Def by 2 for each hit.",
 		id: "diamondstorm",
-		isViable: true,
+		isNonstandard: "Past",
 		name: "Diamond Storm",
 		pp: 5,
 		priority: 0,
@@ -4091,7 +4099,7 @@ let BattleMovedex = {
 		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
 		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 		id: "dragonascent",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Dragon Ascent",
 		pp: 5,
 		priority: 0,
@@ -4201,7 +4209,7 @@ let BattleMovedex = {
 		category: "Physical",
 		shortDesc: "No additional effect.",
 		id: "dragonhammer",
-		isViable: true,
+		isNonstandard: "Past",
 		name: "Dragon Hammer",
 		pp: 15,
 		priority: 0,
@@ -5021,7 +5029,7 @@ let BattleMovedex = {
 		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
 		shortDesc: "User cannot move next turn.",
 		id: "eternabeam",
-		name: "Eterna Beam",
+		name: "Eternabeam",
 		pp: 10,
 		priority: 0,
 		flags: {recharge: 1, protect: 1, mirror: 1},
@@ -5363,7 +5371,7 @@ let BattleMovedex = {
 		desc: "Has a 50% chance to raise the user's Special Attack by 1 stage.",
 		shortDesc: "50% chance to raise the user's Sp. Atk by 1.",
 		id: "fierydance",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Fiery Dance",
 		pp: 10,
 		priority: 0,
@@ -5624,8 +5632,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 85,
 		basePowerCallback(pokemon, target, move) {
-			// TODO: Check how move works against newly switched targets
-			if (this.willMove(target)) {
+			if (target.newlySwitched || this.willMove(target)) {
 				this.debug('Fishious Rend damage boost');
 				return move.basePower * 2;
 			}
@@ -5639,7 +5646,7 @@ let BattleMovedex = {
 		name: "Fishious Rend",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		secondary: null,
 		target: "normal",
 		type: "Water",
@@ -5909,7 +5916,7 @@ let BattleMovedex = {
 		desc: "Lowers the user's Special Attack by 2 stages.",
 		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "fleurcannon",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Fleur Cannon",
 		pp: 5,
 		priority: 0,
@@ -6003,6 +6010,7 @@ let BattleMovedex = {
 		desc: "The target restores 1/2 of its maximum HP, rounded half up. If the terrain is Grassy Terrain, the target instead restores 2/3 of its maximum HP, rounded half down.",
 		shortDesc: "Heals the target by 50% of its max HP.",
 		id: "floralhealing",
+		isNonstandard: 'Past',
 		name: "Floral Healing",
 		pp: 10,
 		priority: 0,
@@ -6790,7 +6798,7 @@ let BattleMovedex = {
 		desc: "Raises the user's Special Attack, Special Defense, and Speed by 2 stages. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Charges, then raises SpA, SpD, Spe by 2 turn 2.",
 		id: "geomancy",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Geomancy",
 		pp: 10,
 		priority: 0,
@@ -6948,7 +6956,7 @@ let BattleMovedex = {
 		basePower: 10,
 		category: "Physical",
 		desc: "Sleeps, poisons, or paralyzes opponent(s). Base Power scales with the base move's Base Power.",
-		shortDesc: "Foe: slp/psn/par. BP scales w/ base move BP.",
+		shortDesc: "Foes: SLP/PSN/PAR. BP scales with base move.",
 		id: "gmaxbefuddle",
 		isNonstandard: "Custom",
 		name: "G-Max Befuddle",
@@ -6978,7 +6986,7 @@ let BattleMovedex = {
 		basePower: 10,
 		category: "Physical",
 		desc: "Traps and damages the opponent(s) for 4-5 turns. Base Power scales with the base move's Base Power.",
-		shortDesc: "Traps and damages foe(s). BP scales w/ base move.",
+		shortDesc: "Traps/damages foes. BP scales w/ base move.",
 		id: "gmaxcentiferno",
 		isNonstandard: "Custom",
 		name: "G-Max Centiferno",
@@ -7002,7 +7010,7 @@ let BattleMovedex = {
 		basePower: 10,
 		category: "Physical",
 		desc: "Applies Focus Energy to the user and its allies. Base Power scales with the base move's Base Power.",
-		shortDesc: "User side: Focus Energy. BP scale's w/ base move.",
+		shortDesc: "User side: Focus Energy. BP scales w/ base move.",
 		id: "gmaxchistrike",
 		isNonstandard: "Custom",
 		name: "G-Max Chi Strike",
@@ -7027,7 +7035,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Infatuates opponents. BP scales with base move's BP.",
+		shortDesc: "Infatuates opponents. BP scales with base move.",
 		id: "gmaxcuddle",
 		isNonstandard: "Custom",
 		name: "G-Max Cuddle",
@@ -7051,7 +7059,7 @@ let BattleMovedex = {
 		basePower: 10,
 		category: "Physical",
 		desc: "Lowers the PP of the opponent(s) last used move. Base Power scales with the base move's Base Power.",
-		shortDesc: "Foe: Lowers PP of last move. BP scales.",
+		shortDesc: "Foe: Lowers PP of last move. BP scales w/ base move.",
 		id: "gmaxdepletion",
 		isNonstandard: "Custom",
 		name: "G-Max Depletion",
@@ -7082,7 +7090,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Heals user and allies. BP scales with base move's BP.",
+		shortDesc: "Heals user and allies. BP scales with base move.",
 		id: "gmaxfinale",
 		isNonstandard: "Custom",
 		name: "G-Max Finale",
@@ -7130,7 +7138,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Confuses opponents. BP scales with base move's BP.",
+		shortDesc: "Confuses foes. BP scales with base move's BP.",
 		id: "gmaxgoldrush",
 		isNonstandard: "Custom",
 		name: "G-Max Gold Rush",
@@ -7153,7 +7161,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Summons Gravity. BP scales with base move's BP.",
+		shortDesc: "Summons Gravity. BP scales with base move.",
 		id: "gmaxgravitas",
 		isNonstandard: "Custom",
 		name: "G-Max Gravitas",
@@ -7175,7 +7183,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Poisons opponents. BP scales with base move's BP.",
+		shortDesc: "Poisons opponents. BP scales with base move.",
 		id: "gmaxmalodor",
 		isNonstandard: "Custom",
 		name: "G-Max Malodor",
@@ -7197,7 +7205,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Applies Torment to opponents. BP scales with base move's BP.",
+		shortDesc: "Applies Torment to foes. BP scales with base move.",
 		id: "gmaxmeltdown",
 		isNonstandard: "Custom",
 		name: "G-Max Meltdown",
@@ -7220,7 +7228,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Restores user's side's berries. BP scales with base move's BP.",
+		shortDesc: "Restores user-side berries. BP scales w/ base move.",
 		id: "gmaxreplenish",
 		isNonstandard: "Custom",
 		name: "G-Max Replenish",
@@ -7250,7 +7258,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Summons Aurora Veil. BP scales with base move's BP.",
+		shortDesc: "Summons Aurora Veil. BP scales w/ base move.",
 		id: "gmaxresonance",
 		isNonstandard: "Custom",
 		name: "G-Max Resonance",
@@ -7273,7 +7281,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Traps and damages opponents. BP scales with base move's BP.",
+		shortDesc: "Traps/damages foes. BP scales w/ base move.",
 		id: "gmaxsandblast",
 		isNonstandard: "Custom",
 		name: "G-Max Sandblast",
@@ -7294,9 +7302,9 @@ let BattleMovedex = {
 	"gmaxsmite": {
 		num: 1000,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
-		shortDesc: "Confuses opponents. BP scales with base move's BP.",
+		shortDesc: "Confuses opponents. BP scales with base move.",
 		id: "gmaxsmite",
 		isNonstandard: "Custom",
 		name: "G-Max Smite",
@@ -7304,9 +7312,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Hatterene",
-		onHit(target, source) {
+		onHit(target, source, move) {
 			for (let pokemon of target.side.active) {
-				pokemon.addVolatile('confusion');
+				pokemon.addVolatile('confusion', source, move);
 			}
 		},
 		secondary: null,
@@ -7319,7 +7327,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Afflicts foes with Yawn. BP scales with base move's BP.",
+		shortDesc: "Afflicts foes with Yawn. BP scales w/ base move.",
 		id: "gmaxsnooze",
 		isNonstandard: "Custom",
 		name: "G-Max Snooze",
@@ -7329,7 +7337,9 @@ let BattleMovedex = {
 		isMax: "Grimmsnarl",
 		onHit(target, source) {
 			for (let pokemon of target.side.active) {
-				pokemon.addVolatile('yawn');
+				if (!target.status && target.runStatusImmunity('slp')) {
+					pokemon.addVolatile('yawn');
+				}
 			}
 		},
 		secondary: null,
@@ -7342,7 +7352,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Sets Steel-type entry hazard. BP scales with base move's BP.",
+		shortDesc: "Sets Steel entry hazard. BP scales w/ base move.",
 		id: "gmaxsteelsurge",
 		isNonstandard: "Custom",
 		name: "G-Max Steelsurge",
@@ -7366,6 +7376,267 @@ let BattleMovedex = {
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Steel",
+		contestType: "Cool",
+	},
+	"gmaxstonesurge": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Sets Stealth Rock. BP scales w/ base move's BP.",
+		id: "gmaxstonesurge",
+		isNonstandard: "Custom",
+		name: "G-Max Stonesurge",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Drednaw",
+		onHit(target, source, move) {
+			target.side.addSideCondition('stealthrock');
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Water",
+		contestType: "Cool",
+	},
+	"gmaxstunshock": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Foe(s): Par/Psn. BP scales with base move's BP.",
+		id: "gmaxstunshock",
+		isNonstandard: "Custom",
+		name: "G-Max Stun Shock",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Toxtricity",
+		onHit(target, source) {
+			for (let pokemon of target.side.active) {
+				let result = this.random(2);
+				if (result === 0) {
+					pokemon.trySetStatus('par', source);
+				} else {
+					pokemon.trySetStatus('psn', source);
+				}
+			}
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Electric",
+		contestType: "Cool",
+	},
+	"gmaxsweetness": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Foe(s): -1 evasion. BP scales with base move's BP.",
+		id: "gmaxsweetness",
+		isNonstandard: "Custom",
+		name: "G-Max Sweetness",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Appletun",
+		onHit(target, source, move) {
+			this.add('-activate', source, 'move: G-Max Sweetness');
+			let success = false;
+			for (const ally of source.side.pokemon) {
+				// TODO: test move's interaction with sap sipper and Substitute
+				if (ally !== source && ((ally.hasAbility('sapsipper')) ||
+						(ally.volatiles['substitute'] && !move.infiltrates))) {
+					continue;
+				}
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Grass",
+		contestType: "Cool",
+	},
+	"gmaxterror": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Traps foe(s). BP scales with base move's BP.",
+		id: "gmaxterror",
+		isNonstandard: "Custom",
+		name: "G-Max Terror",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Gengar",
+		onHit(target, source, move) {
+			for (const pokemon of target.side.active) {
+				pokemon.addVolatile('trapped', source, move, 'trapper');
+			}
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Ghost",
+		contestType: "Cool",
+	},
+	"gmaxtartness": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Foe(s): -1 evasion. BP scales with base move's BP.",
+		id: "gmaxtartness",
+		isNonstandard: "Custom",
+		name: "G-Max Tartness",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Flapple",
+		onHit(target, source, move) {
+			for (const pokemon of target.side.active) {
+				this.boost({evasion: -1}, pokemon, source, move);
+			}
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Grass",
+		contestType: "Cool",
+	},
+	"gmaxvolcalith": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Damages opponent(s) by 1/8 of their maximum HP for four turns. Base Power scales with the base move's Base Power.",
+		shortDesc: "Damages foes for 4 turns. BP scales w/ base move.",
+		id: "gmaxvolcalith",
+		isNonstandard: "Custom",
+		name: "G-Max Volcalith",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Coalossal",
+		onHit(target, source, move) {
+			target.side.addSideCondition('gmaxvolcalith');
+		},
+		effect: {
+			duration: 4,
+			onStart(targetSide) {
+				this.add('-sidestart', targetSide, 'G-Max Volcalith');
+			},
+			onResidual(targetSide) {
+				for (const pokemon of targetSide.active) {
+					this.damage(pokemon.maxhp / 8, pokemon);
+				}
+			},
+			onEnd(targetSide) {
+				this.add('-sideend', targetSide, 'G-Max Volcalith');
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Rock",
+		contestType: "Cool",
+	},
+	"gmaxvoltcrash": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Paralyzes foe(s). BP scales with base move's BP.",
+		id: "gmaxvoltcrash",
+		isNonstandard: "Custom",
+		name: "G-Max Volt Crash",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Pikachu",
+		onHit(target, source, move) {
+			for (const pokemon of target.side.active) {
+				pokemon.trySetStatus('par', source, move);
+			}
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Electric",
+		contestType: "Cool",
+	},
+	"gmaxwildfire": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		desc: "Damages opponent(s) by 1/8 of their maximum HP for four turns. Base Power scales with the base move's Base Power.",
+		shortDesc: "Damages foes for 4 turns. BP scales w/ base move.",
+		id: "gmaxwildfire",
+		isNonstandard: "Custom",
+		name: "G-Max Wildfire",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Charizard",
+		onHit(target, source, move) {
+			target.side.addSideCondition('gmaxwildfire');
+		},
+		effect: {
+			duration: 4,
+			onStart(targetSide) {
+				this.add('-sidestart', targetSide, 'G-Max Wildfire');
+			},
+			onResidual(targetSide) {
+				for (const pokemon of targetSide.active) {
+					this.damage(pokemon.maxhp / 8, pokemon);
+				}
+			},
+			onEnd(targetSide) {
+				this.add('-sideend', targetSide, 'G-Max Wildfire');
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Fire",
+		contestType: "Cool",
+	},
+	"gmaxwindrage": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		// TODO: Test what G-Max Wind Rage actually removes from the field and from which sides
+		desc: "Removes Reflect, Light Screen, Aurora Veil, Spikes, Toxic Spikes, Stealth Rock, Sticky Web, Mist, Safeguard, G-Max Steelsurge, and Terrains from the field. This move's Base Power scales with the base move's Base Power.",
+		shortDesc: "Clears field. BP scales with base move's BP.",
+		id: "gmaxwindrage",
+		isNonstandard: "Custom",
+		name: "G-Max Wind Rage",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Corviknight",
+		onHit(target, source, move) {
+			let success = false;
+			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			for (const targetCondition of removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll.includes(targetCondition)) continue;
+					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			for (const sideCondition of removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			this.field.clearTerrain();
+			return success;
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Flying",
 		contestType: "Cool",
 	},
 	"grassknot": {
@@ -8067,7 +8338,7 @@ let BattleMovedex = {
 		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded half up, but not less than 1 HP.",
 		shortDesc: "Has 1/4 recoil.",
 		id: "headcharge",
-		isViable: true,
+		isNonstandard: "Past",
 		name: "Head Charge",
 		pp: 15,
 		priority: 0,
@@ -8279,7 +8550,7 @@ let BattleMovedex = {
 		desc: "Has a 30% chance to flinch the target.",
 		shortDesc: "30% chance to flinch the target.",
 		id: "heartstamp",
-		isNonstandard: "Past",
+		isNonstandard: 'Past',
 		name: "Heart Stamp",
 		pp: 25,
 		priority: 0,
@@ -8301,6 +8572,7 @@ let BattleMovedex = {
 		desc: "The user swaps all its stat stage changes with the target.",
 		shortDesc: "Swaps all stat changes with target.",
 		id: "heartswap",
+		isNonstandard: 'Past',
 		name: "Heart Swap",
 		pp: 10,
 		priority: 0,
@@ -9104,6 +9376,7 @@ let BattleMovedex = {
 		desc: "Has a 10% chance to flinch the target.",
 		shortDesc: "10% chance to flinch the target.",
 		id: "hyperfang",
+		isNonstandard: 'Past',
 		name: "Hyper Fang",
 		pp: 15,
 		priority: 0,
@@ -9125,7 +9398,7 @@ let BattleMovedex = {
 		desc: "Lowers the user's Defense by 1 stage. This move cannot be used successfully unless the user's current form, while considering Transform, is Hoopa Unbound. If this move is successful, it breaks through the target's Baneful Bunker, Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
 		shortDesc: "Hoopa-U: Lowers user's Def by 1; breaks protect.",
 		id: "hyperspacefury",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Hyperspace Fury",
 		pp: 5,
 		priority: 0,
@@ -9162,6 +9435,7 @@ let BattleMovedex = {
 		desc: "If this move is successful, it breaks through the target's Baneful Bunker, Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
 		shortDesc: "Breaks the target's protection for this turn.",
 		id: "hyperspacehole",
+		isNonstandard: 'Past',
 		name: "Hyperspace Hole",
 		pp: 5,
 		priority: 0,
@@ -9349,7 +9623,7 @@ let BattleMovedex = {
 		desc: "Lowers the user's Speed by 1 stage.",
 		shortDesc: "Lowers the user's Speed by 1.",
 		id: "icehammer",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Ice Hammer",
 		pp: 10,
 		priority: 0,
@@ -9796,7 +10070,7 @@ let BattleMovedex = {
 		desc: "This move's type depends on the user's held Plate.",
 		shortDesc: "Type varies based on the held Plate.",
 		id: "judgment",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Judgment",
 		pp: 10,
 		priority: 0,
@@ -9979,6 +10253,7 @@ let BattleMovedex = {
 		desc: "No additional effect.",
 		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "landswrath",
+		isNonstandard: 'Past',
 		name: "Land's Wrath",
 		pp: 10,
 		priority: 0,
@@ -10298,12 +10573,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1, authentic: 1},
 		onHit(target, source) {
-			if (source.side.active.length === 2) {
-				for (const pokemon of source.side.active) {
-					this.heal(Math.ceil(pokemon.maxhp / 4), pokemon, source);
-				}
-			} else {
-				this.heal(Math.ceil(source.maxhp / 4), source, source);
+			for (const pokemon of source.side.active) {
+				this.heal(Math.ceil(pokemon.maxhp / 4), pokemon, source);
 			}
 		},
 		secondary: null,
@@ -10318,7 +10589,7 @@ let BattleMovedex = {
 		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
 		shortDesc: "Has 1/2 recoil.",
 		id: "lightofruin",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Light of Ruin",
 		pp: 5,
 		priority: 0,
@@ -10467,7 +10738,7 @@ let BattleMovedex = {
 		category: "Status",
 		shortDesc: "Causes the target to fall asleep.",
 		id: "lovelykiss",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Lovely Kiss",
 		pp: 10,
 		priority: 0,
@@ -10586,7 +10857,7 @@ let BattleMovedex = {
 		desc: "The user faints and the Pokemon brought out to replace it has its HP and PP fully restored along with having any major status condition cured. The new Pokemon is sent out at the end of the turn, and the healing happens before hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
 		shortDesc: "User faints. Replacement is fully healed, with PP.",
 		id: "lunardance",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Lunar Dance",
 		pp: 10,
 		priority: 0,
@@ -10669,6 +10940,7 @@ let BattleMovedex = {
 		desc: "Has a 50% chance to lower the target's Special Defense by 1 stage.",
 		shortDesc: "50% chance to lower the target's Sp. Def by 1.",
 		id: "lusterpurge",
+		isNonstandard: 'Past',
 		name: "Luster Purge",
 		pp: 5,
 		priority: 0,
@@ -10886,7 +11158,7 @@ let BattleMovedex = {
 		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Traps and damages the target for 4-5 turns.",
 		id: "magmastorm",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Magma Storm",
 		pp: 5,
 		priority: 0,
@@ -11171,7 +11443,7 @@ let BattleMovedex = {
 	"maxflutterby": {
 		num: 758,
 		accuracy: true,
-		basePower: 1,
+		basePower: 10,
 		category: "Physical",
 		shortDesc: "Foes: -1 Sp.Atk. BP scales with base move's BP.",
 		id: "maxflutterby",
@@ -11950,7 +12222,7 @@ let BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP, rounded half up.",
 		shortDesc: "Heals the user by 50% of its max HP.",
 		id: "milkdrink",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Milk Drink",
 		pp: 10,
 		priority: 0,
@@ -12010,7 +12282,7 @@ let BattleMovedex = {
 		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability. This move is prevented from executing and the user does not lose HP if any active Pokemon has the Damp Ability, or if this move is Fire type and the user is affected by Powder or the weather is Primordial Sea.",
 		shortDesc: "User loses 50% max HP. Hits adjacent Pokemon.",
 		id: "mindblown",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Mind Blown",
 		pp: 5,
 		priority: 0,
@@ -12279,6 +12551,7 @@ let BattleMovedex = {
 		desc: "Has a 50% chance to lower the target's Special Attack by 1 stage.",
 		shortDesc: "50% chance to lower the target's Sp. Atk by 1.",
 		id: "mistball",
+		isNonstandard: 'Past',
 		name: "Mist Ball",
 		pp: 5,
 		priority: 0,
@@ -12726,7 +12999,7 @@ let BattleMovedex = {
 		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
 		shortDesc: "Does damage equal to 1/2 target's current HP.",
 		id: "naturesmadness",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Nature's Madness",
 		pp: 10,
 		priority: 0,
@@ -12969,7 +13242,7 @@ let BattleMovedex = {
 		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "User recovers 75% of the damage dealt.",
 		id: "oblivionwing",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Oblivion Wing",
 		pp: 10,
 		priority: 0,
@@ -13009,7 +13282,10 @@ let BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect']) return;
+				if (!move.flags['protect']) {
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
 				this.add('-activate', target, 'move: Protect');
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -13170,7 +13446,7 @@ let BattleMovedex = {
 		desc: "No additional effect.",
 		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "originpulse",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Origin Pulse",
 		pp: 10,
 		priority: 0,
@@ -14109,7 +14385,7 @@ let BattleMovedex = {
 		desc: "No additional effect.",
 		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "precipiceblades",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Precipice Blades",
 		pp: 10,
 		priority: 0,
@@ -14387,7 +14663,7 @@ let BattleMovedex = {
 		desc: "Lowers the user's Special Attack by 2 stages.",
 		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		id: "psychoboost",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Psycho Boost",
 		pp: 5,
 		priority: 0,
@@ -14893,7 +15169,7 @@ let BattleMovedex = {
 		basePower: 50,
 		category: "Physical",
 		desc: "If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field. Has a 100% chance to raise the user's Speed by 1 stage.",
-		shortDesc: "Free user from hazards/binding/Leech Seed;+1 Spe.",
+		shortDesc: "Free user from hazards/bind/Leech Seed; +1 Spe.",
 		id: "rapidspin",
 		isViable: true,
 		name: "Rapid Spin",
@@ -15158,7 +15434,7 @@ let BattleMovedex = {
 		desc: "Has a 10% chance to cause the target to fall asleep. If this move is successful on at least one target and the user is a Meloetta, it changes to Pirouette Forme if it is currently in Aria Forme, or changes to Aria Forme if it is currently in Pirouette Forme. This forme change does not happen if the Meloetta has the Sheer Force Ability. The Pirouette Forme reverts to Aria Forme when Meloetta is not active.",
 		shortDesc: "10% chance to sleep foe(s). Meloetta transforms.",
 		id: "relicsong",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Relic Song",
 		pp: 10,
 		priority: 0,
@@ -15273,7 +15549,7 @@ let BattleMovedex = {
 		desc: "This move's type depends on the user's primary type. If the user's primary type is typeless, this move's type is the user's secondary type if it has one, otherwise the added type from Forest's Curse or Trick-or-Treat. This move is typeless if the user's type is typeless alone.",
 		shortDesc: "Type varies based on the user's primary type.",
 		id: "revelationdance",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Revelation Dance",
 		pp: 15,
 		priority: 0,
@@ -15382,6 +15658,7 @@ let BattleMovedex = {
 		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
 		shortDesc: "User cannot move next turn.",
 		id: "roaroftime",
+		isNonstandard: 'Past',
 		name: "Roar of Time",
 		pp: 5,
 		priority: 0,
@@ -15787,7 +16064,7 @@ let BattleMovedex = {
 		desc: "Has a 50% chance to burn the target.",
 		shortDesc: "50% chance to burn the target. Thaws user.",
 		id: "sacredfire",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Sacred Fire",
 		pp: 5,
 		priority: 0,
@@ -16068,7 +16345,7 @@ let BattleMovedex = {
 		desc: "Has a 30% chance to burn the target.",
 		shortDesc: "30% chance to burn adjacent Pokemon.",
 		id: "searingshot",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Searing Shot",
 		pp: 5,
 		priority: 0,
@@ -16199,7 +16476,7 @@ let BattleMovedex = {
 		desc: "Has a 40% chance to lower the target's Special Defense by 2 stages.",
 		shortDesc: "40% chance to lower the target's Sp. Def by 2.",
 		id: "seedflare",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Seed Flare",
 		pp: 5,
 		priority: 0,
@@ -16287,7 +16564,7 @@ let BattleMovedex = {
 		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
 		shortDesc: "20% chance to lower the target's Defense by 1.",
 		id: "shadowbone",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Shadow Bone",
 		pp: 10,
 		priority: 0,
@@ -16331,7 +16608,7 @@ let BattleMovedex = {
 		desc: "If this move is successful, it breaks through the target's Baneful Bunker, Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection.",
 		id: "shadowforce",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Shadow Force",
 		pp: 5,
 		priority: 0,
@@ -16595,7 +16872,7 @@ let BattleMovedex = {
 		desc: "The user restores 1/2 of its maximum HP, rounded half down. If the weather is Sandstorm, the user instead restores 2/3 of its maximum HP, rounded half down.",
 		shortDesc: "User restores 1/2 its max HP; 2/3 in Sandstorm.",
 		id: "shoreup",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Shore Up",
 		pp: 10,
 		priority: 0,
@@ -16764,6 +17041,7 @@ let BattleMovedex = {
 		desc: "This move is permanently replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, or if the move is Chatter, Sketch, Struggle, or any move the user knows.",
 		shortDesc: "Permanently copies the last move target used.",
 		id: "sketch",
+		isNonstandard: 'Past',
 		name: "Sketch",
 		pp: 1,
 		noPPBoosts: true,
@@ -17641,7 +17919,7 @@ let BattleMovedex = {
 		desc: "Has a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
 		id: "spacialrend",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Spacial Rend",
 		pp: 5,
 		priority: 0,
@@ -18171,7 +18449,7 @@ let BattleMovedex = {
 		desc: "Has a 30% chance to burn the target. The target thaws out if it is frozen.",
 		shortDesc: "30% chance to burn the target.",
 		id: "steameruption",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Steam Eruption",
 		pp: 5,
 		priority: 0,
@@ -18210,7 +18488,7 @@ let BattleMovedex = {
 	},
 	"steelbeam": {
 		num: 796,
-		accuracy: 100,
+		accuracy: 95,
 		basePower: 140,
 		category: "Special",
 		desc: "If this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
@@ -18609,7 +18887,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Consumes berry and raises the user's Defense by 2 stages.",
-		shortDesc: "Consumes berry and raises the user's Def. by 2 stages.",
+		shortDesc: "Consumes berry and raises the user's Def. by 2.",
 		id: "stuffcheeks",
 		name: "Stuff Cheeks",
 		pp: 10,
@@ -19183,7 +19461,7 @@ let BattleMovedex = {
 		desc: "Raises the user's Special Attack by 3 stages.",
 		shortDesc: "Raises the user's Sp. Atk by 3.",
 		id: "tailglow",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Tail Glow",
 		pp: 20,
 		priority: 0,
@@ -19442,7 +19720,7 @@ let BattleMovedex = {
 		desc: "This move's type depends on the user's held Drive.",
 		shortDesc: "Type varies based on the held Drive.",
 		id: "technoblast",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Techno Blast",
 		pp: 5,
 		priority: 0,
@@ -19604,7 +19882,7 @@ let BattleMovedex = {
 		desc: "This move can hit airborne Pokemon, which includes Flying-type Pokemon, Pokemon with the Levitate Ability, Pokemon holding an Air Balloon, and Pokemon under the effect of Magnet Rise or Telekinesis. If the target is a Flying type and is not already grounded, this move deals neutral damage regardless of its other type(s). This move can hit a target using Bounce, Fly, or Sky Drop. If this move hits a target under the effect of Bounce, Fly, Magnet Rise, or Telekinesis, the effect ends. If the target is a Flying type that has not used Roost this turn or a Pokemon with the Levitate Ability, it loses its immunity to Ground-type attacks and the Arena Trap Ability as long as it remains active. During the effect, Magnet Rise fails for the target and Telekinesis fails against the target.",
 		shortDesc: "Grounds adjacent foes. First hit neutral on Flying.",
 		id: "thousandarrows",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Thousand Arrows",
 		pp: 10,
 		priority: 0,
@@ -19633,6 +19911,7 @@ let BattleMovedex = {
 		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		shortDesc: "Hits adjacent foes. Prevents them from switching.",
 		id: "thousandwaves",
+		isNonstandard: 'Past',
 		name: "Thousand Waves",
 		pp: 10,
 		priority: 0,
@@ -20018,7 +20297,7 @@ let BattleMovedex = {
 		desc: "Lowers the target's Speed by 1 stage and poisons it.",
 		shortDesc: "Lowers the target's Speed by 1 and poisons it.",
 		id: "toxicthread",
-		isViable: true,
+		isNonstandard: 'Past',
 		name: "Toxic Thread",
 		pp: 20,
 		priority: 0,
@@ -20544,23 +20823,6 @@ let BattleMovedex = {
 		zMovePower: 120,
 		contestType: "Beautiful",
 	},
-	"vicegrip": {
-		num: 11,
-		accuracy: 100,
-		basePower: 55,
-		category: "Physical",
-		shortDesc: "No additional effect.",
-		id: "vicegrip",
-		name: "Vice Grip",
-		pp: 30,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		secondary: null,
-		target: "normal",
-		type: "Normal",
-		zMovePower: 100,
-		contestType: "Tough",
-	},
 	"vinewhip": {
 		num: 22,
 		accuracy: 100,
@@ -20577,6 +20839,23 @@ let BattleMovedex = {
 		type: "Grass",
 		zMovePower: 100,
 		contestType: "Cool",
+	},
+	"visegrip": {
+		num: 11,
+		accuracy: 100,
+		basePower: 55,
+		category: "Physical",
+		shortDesc: "No additional effect.",
+		id: "visegrip",
+		name: "Vise Grip",
+		pp: 30,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		zMovePower: 100,
+		contestType: "Tough",
 	},
 	"vitalthrow": {
 		num: 233,
