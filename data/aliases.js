@@ -6,6 +6,7 @@ let BattleAliases = {
 	"randbats": "[Gen 8] Random Battle",
 	"uber": "[Gen 8] Ubers",
 	"ag": "[Gen 8] Anything Goes",
+	"mono": "[Gen 8] Monotype",
 	"randdubs": "[Gen 8] Random Doubles Battle",
 	"doubles": "[Gen 8] Doubles OU",
 	"dubs": "[Gen 8] Doubles OU",
@@ -33,6 +34,7 @@ let BattleAliases = {
 	"ssb": "[Gen 7] Super Staff Bros Brawl",
 	"lgrandom": "[Gen 7] Let's Go Random Battle",
 	"gen6bf": "[Gen 6] Battle Factory",
+	"gen7mono": "[Gen 7] Monotype",
 	"gen7bss": "[Gen 7] Battle Spot Singles",
 	"gen7bsd": "[Gen 7] Battle Spot Doubles",
 
