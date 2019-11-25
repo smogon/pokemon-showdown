@@ -1597,7 +1597,7 @@ let BattleAbilities = {
 		num: 248,
 	},
 	"icescales": {
-		shortDesc: "The Pokémon is protected by ice scales, which halve the damage taken from special moves.",
+		shortDesc: "This Pokémon's Special Defense is doubled.",
 		// TODO verify this is the correct way to implement this
 		onModifySpD(spd) {
 			return this.chainModify(2);
