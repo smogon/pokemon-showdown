@@ -158,6 +158,21 @@ let Formats = [
 		},
 	},
 	{
+		name: "[Gen 8] Galar Beginnings",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656359/">Galar Beginnings</a>`,
+		],
+
+		mod: 'gen8',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Obtainable', 'Standard GBU'],
+		minSourceGen: 8,
+	},
+	{
 		name: "[Gen 8] Custom Game",
 
 		mod: 'gen8',
