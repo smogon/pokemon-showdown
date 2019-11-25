@@ -69,7 +69,7 @@
     "eslint": "^6.5.1",
     "husky": "^3.0.8",
     "mocha": "^6.2.1",
-    "smogon": "^0.0.4",
+    "smogon": "^0.0.5",
     "tslint": "^5.20.0",
     "typescript": "^3.7.2"
   }
