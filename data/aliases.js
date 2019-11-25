@@ -35,8 +35,11 @@ let BattleAliases = {
 	"lgrandom": "[Gen 7] Let's Go Random Battle",
 	"gen6bf": "[Gen 6] Battle Factory",
 	"gen7mono": "[Gen 7] Monotype",
+	"gen7ag": "[Gen 7] Anything Goes",
 	"gen7bss": "[Gen 7] Battle Spot Singles",
 	"gen7bsd": "[Gen 7] Battle Spot Doubles",
+	"gen6mono": "[Gen 6] Monotype",
+	"gen6ag": "[Gen 6] Anything Goes",
 
 	// mega evos
 	"fabio": "Ampharos-Mega",
