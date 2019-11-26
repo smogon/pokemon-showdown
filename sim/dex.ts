@@ -376,10 +376,11 @@ export class ModdedDex {
 				primal: 'primal',
 			};
 			for (const forme in formeNames) {
+				let pokeName = '';
 				if (id.startsWith(forme)) {
-					let pokeName = id.slice(forme.length);
+					pokeName = id.slice(forme.length);
 				} else if (id.endsWith(forme)) {
-					let pokeName = id.slice(0, id.length - forme.length);
+					pokeName = id.slice(0, id.length - forme.length);
 				}
 				if (this.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.data.Aliases[pokeName]);
 				if (this.data.Pokedex[pokeName + formeNames[forme]]) {
