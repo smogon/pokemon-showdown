@@ -453,15 +453,14 @@ class RandomGen3Teams extends RandomGen4Teams {
 			do {
 				rejectAbility = false;
 
-				if (ability === 'Hustle') {
-					// Counter ability (hustle)
-					rejectAbility = !counter['hustle'];
-				} else if (ability === 'Blaze') {
+				if (ability === 'Blaze') {
 					rejectAbility = !counter['Fire'];
 				} else if (ability === 'Chlorophyll') {
 					rejectAbility = !hasMove['sunnyday'];
 				} else if (ability === 'Compound Eyes') {
 					rejectAbility = !counter['inaccurate'];
+				} else if (ability === 'Hustle') {
+					rejectAbility = counter.Physical < 2;
 				} else if (ability === 'Lightning Rod') {
 					rejectAbility = template.types.includes('Ground');
 				} else if (ability === 'Limber') {

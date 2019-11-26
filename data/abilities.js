@@ -28,7 +28,7 @@ Ratings and how they work:
 
  5: Essential
 	  The sort of ability that defines metagames.
-	ex. Moody, Shadow Tag
+	ex. Imposter, Shadow Tag
 
 */
 
@@ -1326,7 +1326,7 @@ let BattleAbilities = {
 		},
 		id: "gorillatactics",
 		name: "Gorilla Tactics",
-		rating: 4,
+		rating: 4.5,
 		num: 255,
 	},
 	"grasspelt": {
@@ -2259,7 +2259,7 @@ let BattleAbilities = {
 		},
 		id: "moody",
 		name: "Moody",
-		rating: 5,
+		rating: 4.5,
 		num: 141,
 	},
 	"motordrive": {

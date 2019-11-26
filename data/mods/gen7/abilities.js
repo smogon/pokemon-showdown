@@ -67,6 +67,7 @@ let BattleAbilities = {
 
 			this.boost(boost);
 		},
+		rating: 5,
 	},
 	"oblivious": {
 		inherit: true,
