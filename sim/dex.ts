@@ -371,6 +371,14 @@ export class ModdedDex {
 				aliasTo = id.slice(6) + 'primal';
 			} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
 				aliasTo = id.slice(1) + 'primal';
+			} else if (id.startsWith('a') && this.data.Pokedex[id.slice(1) + 'alola']) {
+				aliasTo = id.slice(1) + 'alola';
+			} else if (id.startsWith('alolan') && this.data.Pokedex[id.slice(6) + 'alola']) {
+				aliasTo = id.slice(6) + 'alola';
+			} else if (id.startsWith('g') && this.data.Pokedex[id.slice(1) + 'galar']) {
+				aliasTo = id.slice(1) + 'galar';
+			} else if (id.startsWith('galarian') && this.data.Pokedex[id.slice(8) + 'galar']) {
+				aliasTo = id.slice(1) + 'galar';
 			}
 			if (aliasTo) {
 				template = this.getTemplate(aliasTo);
