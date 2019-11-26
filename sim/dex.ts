@@ -375,10 +375,8 @@ export class ModdedDex {
 				for (const i of formeNames[forme]) {
 					if (id.startsWith(i)) {
 						pokeName = id.slice(i.length);
-						break;
 					} else if (id.endsWith(i)) {
 						pokeName = id.slice(0, id.length - i.length);
-						break;
 					}
 				}
 				if (this.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.data.Aliases[pokeName]);
