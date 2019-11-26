@@ -145,7 +145,7 @@ let BattleAliases = {
 	"deod": "Deoxys-Defense",
 	"deoxyss": "Deoxys-Speed",
 	"deos": "Deoxys-Speed",
-	"eiscuen": "Eiscue-Noice"
+	"eiscuen": "Eiscue-Noice",
 	"eternalfloette": "Floette-Eternal",
 	"girao": "Giratina-Origin",
 	"giratinao": "Giratina-Origin",
@@ -164,7 +164,7 @@ let BattleAliases = {
 	"meloettas": "Meloetta-Pirouette",
 	"meloettastep": "Meloetta-Pirouette",
 	"meowsticfemale": "Meowstic-F",
-	"morpekoh": "Morpeko-Hangry"
+	"morpekoh": "Morpeko-Hangry",
 	"pumpkaboohuge": "Pumpkaboo-Super",
 	"rotomc": "Rotom-Mow",
 	"rotomcut": "Rotom-Mow",
