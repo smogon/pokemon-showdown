@@ -375,7 +375,6 @@ export class ModdedDex {
 				p: 'primal',
 				primal: 'primal',
 			};
-			let keys = Object.keys(formeNames);
 			for (const forme in formeNames) {
 				if (id.startsWith(forme) && this.data.Pokedex[id.slice(forme.length) + formeNames[forme]]) {
 					aliasTo = id.slice(forme.length) + formeNames[forme];
