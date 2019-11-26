@@ -88,7 +88,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 		// These moves can be used even if we aren't setting up to use them:
 		let SetupException = ['closecombat', 'diamondstorm', 'extremespeed', 'suckerpunch', 'superpower', 'dracometeor'];
 
-		let counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Skill Link'];
+		let counterAbilities = ['Adaptability', 'Contrary', 'Iron Fist', 'Skill Link', 'Strong Jaw'];
 		let ateAbilities = ['Aerilate', 'Pixilate', 'Refrigerate'];
 
 		/**@type {{[k: string]: boolean}} */
@@ -613,7 +613,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 			do {
 				rejectAbility = false;
 				if (counterAbilities.includes(ability)) {
-					// Adaptability, Contrary, Hustle, Iron Fist, Skill Link
+					// Adaptability, Contrary, Iron Fist, Skill Link, Strong Jaw
 					// @ts-ignore
 					rejectAbility = !counter[toID(ability)];
 				} else if (ateAbilities.includes(ability)) {
@@ -634,6 +634,8 @@ class RandomGen6Teams extends RandomGen7Teams {
 					rejectAbility = true;
 				} else if (ability === 'Harvest') {
 					rejectAbility = abilities.includes('Frisk');
+				} else if (ability === 'Hustle') {
+					rejectAbility = counter.Physical < 2;
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
 					rejectAbility = template.baseStats.spe > 100 || !hasMove['raindance'] && !teamDetails['rain'];
 				} else if (ability === 'Ice Body' || ability === 'Snow Cloak') {
@@ -676,8 +678,6 @@ class RandomGen6Teams extends RandomGen7Teams {
 					rejectAbility = !counter['Special'] || !teamDetails['sun'] || template.isMega;
 				} else if (ability === 'Speed Boost') {
 					rejectAbility = hasMove['uturn'];
-				} else if (ability === 'Strong Jaw') {
-					rejectAbility = !counter['bite'];
 				} else if (ability === 'Swarm') {
 					rejectAbility = !counter['Bug'] || template.isMega;
 				} else if (ability === 'Sweet Veil') {
