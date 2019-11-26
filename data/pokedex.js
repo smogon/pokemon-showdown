@@ -15242,7 +15242,7 @@ let BattlePokedex = {
 		abilities: {"0": "Pressure"},
 		heightm: 100,
 		weightkg: 0,
-		color: "Purple"
+		color: "Purple",
 		eggGroups: ["Undiscovered"],
 	},
 	missingno: {
