@@ -198,7 +198,6 @@ export class Pokemon {
 
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
-	canDynamax: string | boolean | null | undefined;
 	canGigantamax: string | null;
 
 	staleness?: 'internal' | 'external';
@@ -374,10 +373,6 @@ export class Pokemon {
 
 		this.canMegaEvo = this.battle.canMegaEvo(this);
 		this.canUltraBurst = this.battle.canUltraBurst(this);
-		// Set to true if appropriate initially to allow battle.canDynamax to work.
-		this.canDynamax = (this.battle.gen >= 8);
-		const canDynamax = this.battle.canDynamax(this);
-		this.canDynamax = canDynamax && canDynamax.gigantamax ? canDynamax.gigantamax : !!canDynamax;
 		this.canGigantamax = gMax;
 
 		// This is used in gen 1 only, here to avoid code repetition.
@@ -830,8 +825,8 @@ export class Pokemon {
 			const canZMove = this.battle.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
 			// TODO interaction between dynamax and choice locked moves?
-			if (this.canDynamax) data.canDynamax = true;
-			if (this.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.battle.canDynamax(this, true);
+			if (this.battle.canDynamax(this)) data.canDynamax = true;
+			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.battle.canDynamax(this, true);
 		}
 
 		return data;

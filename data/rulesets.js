@@ -679,8 +679,8 @@ let BattleFormats = {
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
 		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canDynamax = null;
+			for (let side of this.sides) {
+				side.canDynamax = false;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
@@ -736,11 +736,7 @@ let BattleFormats = {
 						break;
 					}
 				}
-				if (canMegaOrZ) {
-					for (const pokemon of side.pokemon) {
-						pokemon.canDynamax = false;
-					}
-				}
+				if (canMegaOrZ) side.canDynamax = false;
 			}
 		},
 	},
