@@ -2774,7 +2774,7 @@ let BattleItems = {
 		},
 		num: 849,
 		gen: 7,
-		desc: "Evolves Alolan Sandshrew into Alolan Sandslash, Alolan Vulpix into Alolan Ninetales, and Eevee into Glaceon when used.",
+		desc: "Evolves Alolan Sandshrew into Alolan Sandslash, Alolan Vulpix into Alolan Ninetales, Eevee into Glaceon, and Galarian Darumaka into Galarian Darmanitan when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
 	"icicleplate": {
