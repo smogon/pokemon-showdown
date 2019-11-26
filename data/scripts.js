@@ -1169,7 +1169,7 @@ let BattleScripts = {
 	canDynamax(pokemon, skipChecks) {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
-			if (!pokemon.canDynamax) return;
+			if (!pokemon.side.canDynamax) return;
 			if (this.canZMove(pokemon)) return;
 			if (this.canMegaEvo(pokemon)) return;
 			// TODO ban specific species from dynamaxing based on reserach
