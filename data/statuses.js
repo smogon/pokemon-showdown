@@ -718,6 +718,7 @@ let BattleStatuses = {
 		num: 0,
 		duration: 3,
 		onStart(pokemon) {
+			pokemon.removeVolatile('substitute');
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.canGigantamax);
 			if (pokemon.species === 'Shedinja') return;
