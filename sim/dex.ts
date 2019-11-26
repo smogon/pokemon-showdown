@@ -363,7 +363,7 @@ export class ModdedDex {
 		}
 		if (!this.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
-			const formeNames = {
+			const formeNames: {[k: string]: string} = {
 				a: 'alola',
 				alolan: 'alola',
 				g: 'galar',
