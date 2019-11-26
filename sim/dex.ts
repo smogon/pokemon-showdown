@@ -364,8 +364,8 @@ export class ModdedDex {
 		if (!this.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
 			const formeNames: {[k: string]: string[]} = {
-				alola: ['a', 'alola', alolan'],
-				galar: ['g', 'galar', galarian'],
+				alola: ['a', 'alola', 'alolan'],
+				galar: ['g', 'galar', 'galarian'],
 				gmax: ['gigantamax', 'gmax'],
 				mega: ['m', 'mega'],
 				primal: ['p', 'primal'],
