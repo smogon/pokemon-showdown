@@ -363,28 +363,27 @@ export class ModdedDex {
 		}
 		if (!this.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
-			const formeNames: {[k: string]: string} = {
-				a: 'alola',
-				alolan: 'alola',
-				g: 'galar',
-				galarian: 'galar',
-				gigantamax: 'gmax',
-				gmax: 'gmax',
-				m: 'mega',
-				mega: 'mega',
-				p: 'primal',
-				primal: 'primal',
+			const formeNames: {[k: string]: string[]} = {
+				alola: ['a', 'alola', alolan'],
+				galar: ['g', 'galar', galarian'],
+				gmax: ['gigantamax', 'gmax'],
+				mega: ['m', 'mega'],
+				primal: ['p', 'primal'],
 			};
 			for (const forme in formeNames) {
 				let pokeName = '';
-				if (id.startsWith(forme)) {
-					pokeName = id.slice(forme.length);
-				} else if (id.endsWith(forme)) {
-					pokeName = id.slice(0, id.length - forme.length);
+				for (const i of formeNames[forme]) {
+					if (id.startsWith(i)) {
+						pokeName = id.slice(i.length);
+						break;
+					} else if (id.endsWith(i)) {
+						pokeName = id.slice(0, id.length - i.length);
+						break;
+					}
 				}
 				if (this.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.data.Aliases[pokeName]);
-				if (this.data.Pokedex[pokeName + formeNames[forme]]) {
-					aliasTo = pokeName + formeNames[forme];
+				if (this.data.Pokedex[pokeName + forme]) {
+					aliasTo = pokeName + forme;
 					break;
 				}
 			}
