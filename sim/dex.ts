@@ -364,7 +364,7 @@ export class ModdedDex {
 		if (!this.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
 			const formeNames = {
-				a: 'alola',
+				a: 'alola'
 				alolan: 'alola',
 				g: 'galar',
 				galarian: 'galar',
@@ -375,13 +375,16 @@ export class ModdedDex {
 				p: 'primal',
 				primal: 'primal',
 			};
-			Object.keys(formeNames).forEach(forme => {
+			let keys = Object.keys(formeNames);
+			for (const forme in formeNames) {
 				if (id.startsWith(forme) && this.data.Pokedex[id.slice(forme.length) + formeNames[forme]]) {
 					aliasTo = id.slice(forme.length) + formeNames[forme];
+					break;
 				} else if (id.endsWith(forme) && this.data.Pokedex[id.slice(0, id.length - forme.length) + formeNames[forme]]) {
 					aliasTo = id.slice(0, id.length - forme.length) + formeNames[forme];
+					break;
 				}
-			});
+			}
 			if (aliasTo) {
 				template = this.getTemplate(aliasTo);
 				if (template.exists) {
