@@ -161,6 +161,15 @@ let BattleScripts = {
 		if (zMove || (move.category !== 'Status' && sourceEffect && /** @type {ActiveMove} */(sourceEffect).isZ)) {
 			move = this.getActiveZMove(move, pokemon);
 		}
+		if (pokemon.hasAbility('pixilate') || pokemon.hasAbility('refrigerate') || pokemon.hasAbility('galvanize') || pokemon.hasAbility('normalize') || pokemon.hasAbility('liquidvoice') && maxMove) {
+			this.singleEvent('ModifyMove', pokemon.getAbility(), null, pokemon, target, pokemon.getAbility(), move);
+			sourceEffect = move;
+		}
+		if (['aurawheel', 'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && maxMove) {
+			// Max moves change type when used directly
+			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+			if (move.type !== 'Normal') sourceEffect = move;
+		}
 		if (maxMove || (move.category !== 'Status' && sourceEffect && /** @type {ActiveMove} */(sourceEffect).isMax)) {
 			move = this.getActiveMaxMove(move, pokemon);
 		}
