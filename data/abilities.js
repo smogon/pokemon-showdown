@@ -1351,7 +1351,7 @@ let BattleAbilities = {
 		num: 229,
 	},
 	"gulpmissile": {
-		desc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.",
+		desc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to deal 25% damage. If the base HP is below 50%, the prey will be a Pikachu and paralyze the opponent after being damaged. Otherwise, the prey is an Arrokuda and will lower the opponent's Def by 1 stage after being damaged.",
 		shortDesc: "Get prey with Surf/Dive. When taking damage, prey is used to attack.",
 		onDamagePriority: -1,
 		onDamage(damage, target, source, effect) {
