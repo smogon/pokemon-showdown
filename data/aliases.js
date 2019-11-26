@@ -856,7 +856,7 @@ let BattleAliases = {
 	"maxwater": "Max Geyser",
 	"maxstatus": "Max Guard",
 	"maxprotect": "Max Guard",
-	
+
 	// Japanese names
 	"fushigidane": "Bulbasaur",
 	"fushigisou": "Ivysaur",
