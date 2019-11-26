@@ -1,7 +1,7 @@
 /*
 
 List of flags and their descriptions:
-
+a
 authentic: Ignores a target's substitute.
 bite: Power is multiplied by 1.5 when used by a Pokemon with the Strong Jaw Ability.
 bullet: Has no effect on Pokemon with the Bulletproof Ability.
