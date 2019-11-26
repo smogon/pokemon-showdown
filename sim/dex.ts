@@ -363,23 +363,25 @@ export class ModdedDex {
 		}
 		if (!this.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
-			if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
-				aliasTo = id.slice(4) + 'mega';
-			} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega']) {
-				aliasTo = id.slice(1) + 'mega';
-			} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
-				aliasTo = id.slice(6) + 'primal';
-			} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
-				aliasTo = id.slice(1) + 'primal';
-			} else if (id.startsWith('a') && this.data.Pokedex[id.slice(1) + 'alola']) {
-				aliasTo = id.slice(1) + 'alola';
-			} else if (id.startsWith('alolan') && this.data.Pokedex[id.slice(6) + 'alola']) {
-				aliasTo = id.slice(6) + 'alola';
-			} else if (id.startsWith('g') && this.data.Pokedex[id.slice(1) + 'galar']) {
-				aliasTo = id.slice(1) + 'galar';
-			} else if (id.startsWith('galarian') && this.data.Pokedex[id.slice(8) + 'galar']) {
-				aliasTo = id.slice(1) + 'galar';
-			}
+			const formeNames = {
+				a: 'alola',
+				alolan: 'alola',
+				g: 'galar',
+				galarian: 'galar',
+				gigantamax: 'gmax',
+				gmax: 'gmax',
+				m: 'mega',
+				mega: 'mega',
+				p: 'primal',
+				primal: 'primal',
+			};
+			Object.keys(formeNames).forEach(forme => {
+				if (id.startsWith(forme) && this.data.Pokedex[id.slice(forme.length) + formeNames[forme]]) {
+					aliasTo = id.slice(forme.length) + formeNames[forme];
+				} else if (id.endsWith(forme) && this.data.Pokedex[id.slice(0, id.length - forme.length) + formeNames[forme]]) {
+					aliasTo = id.slice(0, id.length - forme.length) + formeNames[forme];
+				}
+			});
 			if (aliasTo) {
 				template = this.getTemplate(aliasTo);
 				if (template.exists) {
