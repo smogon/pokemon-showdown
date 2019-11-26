@@ -18495,7 +18495,7 @@ let BattleMovedex = {
 		basePower: 140,
 		category: "Special",
 		desc: "If this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
-		shortDesc: "User loses 50% max HP. Hits adjacent Pokemon.",
+		shortDesc: "User loses 50% max HP.",
 		id: "steelbeam",
 		isViable: true,
 		name: "Steel Beam",
@@ -18509,7 +18509,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "allAdjacent",
+		target: "normal",
 		type: "Steel",
 	},
 	"steelwing": {
