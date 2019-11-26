@@ -13378,7 +13378,7 @@ let BattleMovedex = {
 					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
 					return;
 				}
-				this.boost({def: -1, spd: -1}, pokemon, pokemon, this.dex.getActiveMove("Octolock"));
+				this.boost({def: -1, spd: -1}, pokemon, source, this.dex.getActiveMove("Octolock"));
 			},
 			onTrapPokemon(pokemon) {
 				if (this.effectData.source && this.effectData.source.isActive) pokemon.tryTrap();
