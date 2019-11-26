@@ -1109,7 +1109,11 @@ export class Pokemon {
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
 			}
 		}
-		this.volatiles = {};
+		if (this.species === 'Eternatus-Eternamax' && this.volatiles.dynamax) {
+			this.volatiles = {dynamax: this.volatiles.dynamax};
+		} else {
+			this.volatiles = {};
+		}
 		if (includeSwitchFlags) {
 			this.switchFlag = false;
 			this.forceSwitchFlag = false;

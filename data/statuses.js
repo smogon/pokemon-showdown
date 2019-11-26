@@ -718,6 +718,14 @@ let BattleStatuses = {
 		num: 0,
 		duration: 3,
 		onStart(pokemon) {
+			if (pokemon.species === 'Eternatus-Eternamax') { // Special for Eternatus' Eternamax forme
+				this.add('-start', pokemon, 'Eternamax');
+				pokemon.maxhp = Math.floor(pokemon.maxhp * 2); // Assuming Eternamax is max level
+				pokemon.hp = Math.floor(pokemon.hp * 2);
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+				this.effectData.duration = 0;
+				return;
+			}
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.canGigantamax);
 			if (pokemon.species === 'Shedinja') return;
@@ -729,6 +737,13 @@ let BattleStatuses = {
 		},
 		onFlinch: false,
 		onBeforeSwitchOut(pokemon) {
+			if (pokemon.species === 'Eternatus-Eternamax') {
+				pokemon.maxhp = Math.floor(pokemon.maxhp / 2); // TODO prevent maxhp loss
+				pokemon.hp = Math.floor(pokemon.hp / 2);
+				if (pokemon.hp <= 0) pokemon.hp = 1;
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+				return;
+			}
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
 			let ratio = (1 / 2); // Changes based on dynamax level, max (LVL 10)
@@ -743,6 +758,13 @@ let BattleStatuses = {
 			return null;
 		},
 		onEnd(pokemon) {
+			if (pokemon.species === 'Eternatus-Eternamax') {
+				pokemon.maxhp = Math.floor(pokemon.maxhp / 2);
+				pokemon.hp = Math.floor(pokemon.hp / 2);
+				if (pokemon.hp <= 0) pokemon.hp = 1;
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+				return;
+			}
 			this.add('-end', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
@@ -761,6 +783,15 @@ let BattleStatuses = {
 	// but their formes are specified to be their corresponding type
 	// in the Pokedex, so that needs to be overridden.
 	// This is mainly relevant for Hackmons Cup and Balanced Hackmons.
+	eternatuseternamax: {
+		name: 'Eternatus-Eternamax',
+		id: 'eternatuseternamax',
+		num: 890,
+		onStart(pokemon) {
+			if (pokemon.transformed) return;
+			pokemon.addVolatile('dynamax');
+		},
+	},
 	arceus: {
 		name: 'Arceus',
 		id: 'arceus',
