@@ -922,7 +922,6 @@ interface TemplateData {
 	evos?: string[]
 	evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other'
 	forme?: string
-	formeLetter?: string
 	gender?: GenderName
 	genderRatio?: {[k: string]: number}
 	maxHP?: number
