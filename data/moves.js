@@ -10058,8 +10058,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		onHit(target, source, move) {
-			source.addVolatile('trapped', source, move, 'trapper');
-			target.addVolatile('trapped', target, move, 'trapper');
+			source.addVolatile('trapped', target, move, 'trapper');
+			target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: null,
 		target: "normal",
