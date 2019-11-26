@@ -378,18 +378,13 @@ export class ModdedDex {
 			for (const forme in formeNames) {
 				if (id.startsWith(forme)) {
 					let pokeName = id.slice(forme.length);
-					if (this.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.data.Aliases[pokeName]);
-					if (this.data.Pokedex[pokeName + formeNames[forme]]) {
-						aliasTo = pokeName + formeNames[forme];
-						break;
-					}
 				} else if (id.endsWith(forme)) {
 					let pokeName = id.slice(0, id.length - forme.length);
-					if (this.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.data.Aliases[pokeName]);
-					if (this.data.Pokedex[pokeName + formeNames[forme]]) {
-						aliasTo = pokeName + formeNames[forme];
-						break;
-					}
+				}
+				if (this.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.data.Aliases[pokeName]);
+				if (this.data.Pokedex[pokeName + formeNames[forme]]) {
+					aliasTo = pokeName + formeNames[forme];
+					break;
 				}
 			}
 			if (aliasTo) {
