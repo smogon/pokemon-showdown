@@ -5487,7 +5487,7 @@ let BattleFormatsData = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	mimikyubustedtotem: {
+	mimikyutotembusted: {
 		requiredAbility: 'Disguise',
 		battleOnly: true,
 	},
