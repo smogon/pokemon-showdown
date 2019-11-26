@@ -763,7 +763,7 @@ let BattleAbilities = {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
 				let templateid = pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(templateid, this.effect, true);
-				this.damage(pokemon.maxhp / 10, pokemon, pokemon);
+				this.damage(pokemon.maxhp / 8, pokemon, pokemon);
 			}
 		},
 		id: "disguise",
