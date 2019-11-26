@@ -11632,7 +11632,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "User/allies: +1 SpA. BP scales with base move's BP.",
+		shortDesc: "User/allies: +1 SpA. BP scales w/ base move.",
 		id: "maxooze",
 		isViable: true,
 		name: "Max Ooze",
