@@ -69,9 +69,6 @@ let BattleAliases = {
 	"zardx": "Charizard-Mega-X",
 	"zardy": "Charizard-Mega-y",
 
-	// galarian formes
-	"darmanitanzg": "Darmanitan-Zen-Galar",
-
 	// Pokéstar Studios
 	"blackdoor": "Pokestar Black-Door",
 	"brycen": "Brycen-Man",
@@ -148,6 +145,7 @@ let BattleAliases = {
 	"deod": "Deoxys-Defense",
 	"deoxyss": "Deoxys-Speed",
 	"deos": "Deoxys-Speed",
+	"eiscuen": "Eiscue-Noice"
 	"eternalfloette": "Floette-Eternal",
 	"girao": "Giratina-Origin",
 	"giratinao": "Giratina-Origin",
@@ -166,6 +164,7 @@ let BattleAliases = {
 	"meloettas": "Meloetta-Pirouette",
 	"meloettastep": "Meloetta-Pirouette",
 	"meowsticfemale": "Meowstic-F",
+	"morpekoh": "Morpeko-Hangry"
 	"pumpkaboohuge": "Pumpkaboo-Super",
 	"rotomc": "Rotom-Mow",
 	"rotomcut": "Rotom-Mow",
@@ -180,6 +179,8 @@ let BattleAliases = {
 	"thundyt": "Thundurus-Therian",
 	"tornadust": "Tornadus-Therian",
 	"tornt": "Tornadus-Therian",
+	"toxtricityl": "Toxtricity-Low-Key",
+	"toxtricitylk": "Toxtricity-Low-Key",
 	"wormadamg": "Wormadam-Sandy",
 	"wormadamground": "Wormadam-Sandy",
 	"wormadamsandycloak": "Wormadam-Sandy",
@@ -230,6 +231,8 @@ let BattleAliases = {
 	"unecro": "Necrozma-Ultra",
 	"ufop": "Pokestar UFO-2",
 	"ufopsychic": "Pokestar UFO-2",
+	"zacianc": "Zacian-Crowned",
+	"zamazentac": "Zamazenta-Crowned",
 
 	// base formes
 	"nidoranfemale": "Nidoran-F",
@@ -276,6 +279,8 @@ let BattleAliases = {
 	"wishiwashisolo": "Wishiwashi",
 	"pokestarufof": "Pokestar UFO",
 	"pokestarufoflying": "Pokestar UFO",
+	"toxtricitya": "Toxtricity",
+	"toxtricityamped": "Toxtricity",
 	"ufof": "Pokestar UFO",
 	"ufoflying": "Pokestar UFO",
 
@@ -311,6 +316,14 @@ let BattleAliases = {
 	"totemkommoo": "Kommo-o-Totem",
 
 	// cosmetic formes
+	"alcremierubycream": "Alcremie",
+	"alcremiematcha": "Alcremie",
+	"alcremiemint": "Alcremie",
+	"alcremielemon": "Alcremie",
+	"alcremiesalted": "Alcremie",
+	"alcremierubyswirl": "Alcremie",
+	"alcremiecaramel": "Alcremie",
+	"alcremierainbow": "Alcremie",
 	"burmygrass": "Burmy",
 	"burmyplant": "Burmy",
 	"burmysandy": "Burmy",
