@@ -525,12 +525,6 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 */
 	readonly otherFormes?: string[];
 	/**
-	 * Forme letter. One-letter version of the forme name. Usually the
-	 * first letter of the forme, but not always - e.g. Rotom-S is
-	 * Rotom-Fan because Rotom-F is Rotom-Frost.
-	 */
-	readonly formeLetter: string;
-	/**
 	 * Sprite ID. Basically the same as ID, but with a dash between
 	 * species and forme.
 	 */
@@ -639,7 +633,6 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.forme = data.forme || '';
 		this.otherForms = data.otherForms || undefined;
 		this.otherFormes = data.otherFormes || undefined;
-		this.formeLetter = data.formeLetter || '';
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || {0: ""};
