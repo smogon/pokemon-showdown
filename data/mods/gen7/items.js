@@ -88,6 +88,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	custapberry: {
+		inherit: true,
+		isUnreleased: undefined,
+	},
 	darkgem: {
 		inherit: true,
 		isNonstandard: null,
@@ -259,6 +263,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	jabocaberry: {
+		inherit: true,
+		isUnreleased: undefined,
+	},
 	kangaskhanite: {
 		inherit: true,
 		isNonstandard: null,
@@ -337,6 +345,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	micleberry: {
+		inherit: true,
+		isUnreleased: undefined,
+	},
 	mimikiumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -395,6 +407,10 @@ let BattleItems = {
 	rockiumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	rowapberry: {
+		inherit: true,
+		isUnreleased: undefined,
 	},
 	sablenite: {
 		inherit: true,

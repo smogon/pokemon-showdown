@@ -1128,6 +1128,7 @@ let BattleItems = {
 		name: "Custap Berry",
 		spritenum: 86,
 		isBerry: true,
+		isUnreleased: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Ghost",
@@ -2906,6 +2907,7 @@ let BattleItems = {
 		name: "Jaboca Berry",
 		spritenum: 230,
 		isBerry: true,
+		isUnreleased: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Dragon",
@@ -3876,6 +3878,7 @@ let BattleItems = {
 		name: "Micle Berry",
 		spritenum: 290,
 		isBerry: true,
+		isUnreleased: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Rock",
@@ -5243,6 +5246,7 @@ let BattleItems = {
 		name: "Rowap Berry",
 		spritenum: 420,
 		isBerry: true,
+		isUnreleased: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Dark",
