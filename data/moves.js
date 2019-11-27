@@ -6952,8 +6952,14 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {},
-		drain: [1, 2],
 		isMax: "Alcremie",
+		self: {
+			onAfterHit(target, source) {
+				for (let pokemon of source.side.active) {
+					this.heal(pokemon.maxhp / 6, pokemon, source);
+				}
+			},
+		},
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Fairy",
