@@ -7855,7 +7855,7 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	eternatuseternamax: {
-		isNonstandard: "Eternamax",
+		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
 	missingno: {

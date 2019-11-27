@@ -718,14 +718,7 @@ let BattleStatuses = {
 		num: 0,
 		duration: 3,
 		onStart(pokemon) {
-			if (pokemon.species === 'Eternatus-Eternamax') { // Special for Eternatus' Eternamax forme
-				this.add('-start', pokemon, 'Eternamax');
-				pokemon.maxhp = Math.floor(pokemon.maxhp * 2); // Assuming Eternamax is max level
-				pokemon.hp = Math.floor(pokemon.hp * 2);
-				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-				this.effectData.duration = 0;
-				return;
-			}
+			if (pokemon.species === 'Eternatus-Eternamax') return;
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.canGigantamax);
 			if (pokemon.species === 'Shedinja') return;
@@ -735,13 +728,21 @@ let BattleStatuses = {
 			// TODO work on display for HP
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
+		onSwitchIn(pokemon) { // Putting Eternamax in onSwitchIn so it shows up eveytime Eternatus switches in.
+			if (pokemon.species === 'Eternatus-Eternamax') { // Special for Eternatus' Eternamax forme
+				this.add('-start', pokemon, 'Eternamax');
+				this.effectData.duration = 0;
+				pokemon.maxhp = Math.floor(pokemon.maxhp * 2);
+				pokemon.hp = Math.floor(pokemon.hp * 2);
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			}
+		},
 		onFlinch: false,
 		onBeforeSwitchOut(pokemon) {
 			if (pokemon.species === 'Eternatus-Eternamax') {
 				pokemon.maxhp = Math.floor(pokemon.maxhp / 2); // TODO prevent maxhp loss
 				pokemon.hp = Math.floor(pokemon.hp / 2);
 				if (pokemon.hp <= 0) pokemon.hp = 1;
-				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 				return;
 			}
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
@@ -762,7 +763,6 @@ let BattleStatuses = {
 				pokemon.maxhp = Math.floor(pokemon.maxhp / 2);
 				pokemon.hp = Math.floor(pokemon.hp / 2);
 				if (pokemon.hp <= 0) pokemon.hp = 1;
-				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 				return;
 			}
 			this.add('-end', pokemon, 'Dynamax');
