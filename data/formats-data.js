@@ -6528,7 +6528,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	avalugg: {
-		randomBattleMoves: ["avalanche", "bodypress", "earthquake", "rapidspin", "recover"],
+		randomBattleMoves: ["avalanche", "bodypress", "curse", "rapidspin", "recover"],
 		unreleasedHidden: true,
 		tier: "New",
 		doublesTier: "New",
