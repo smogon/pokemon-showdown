@@ -14999,7 +14999,6 @@ let BattlePokedex = {
 		species: "Eternatus-Eternamax",
 		baseSpecies: "Eternatus",
 		forme: "Eternamax",
-		formeLetter: "E",
 		types: ["Poison", "Dragon"],
 		gender: "N",
 		baseStats: {hp: 255, atk: 115, def: 250, spa: 125, spd: 250, spe: 130},
