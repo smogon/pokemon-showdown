@@ -11164,7 +11164,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		desc: "Boosts the user and its allies Speed by 1 stage. BP scales with the base move's BP.",
+		desc: "Boosts the user and its allies' Speed by 1 stage. BP scales with the base move's BP.",
 		shortDesc: "User/allies: +1 Spe. BP scales w/ base move.",
 		id: "maxairstream",
 		isViable: true,
