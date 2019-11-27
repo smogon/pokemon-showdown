@@ -541,7 +541,7 @@ let BattleFormats = {
 		name: 'NFE Clause',
 		desc: "Bans Pok&eacute;mon that are fully evolved or can't evolve",
 		onValidateSet(set) {
-			const template = this.dex.getTemplate(set.name || set.species);
+			const template = this.dex.getTemplate(set.species);
 			if (!template.nfe) {
 				return [set.species + " cannot evolve."];
 			}
@@ -679,8 +679,8 @@ let BattleFormats = {
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
 		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canDynamax = null;
+			for (let side of this.sides) {
+				side.canDynamax = false;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
@@ -736,11 +736,7 @@ let BattleFormats = {
 						break;
 					}
 				}
-				if (canMegaOrZ) {
-					for (const pokemon of side.pokemon) {
-						pokemon.canDynamax = false;
-					}
-				}
+				if (canMegaOrZ) side.canDynamax = false;
 			}
 		},
 	},

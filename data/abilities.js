@@ -28,7 +28,7 @@ Ratings and how they work:
 
  5: Essential
 	  The sort of ability that defines metagames.
-	ex. Moody, Shadow Tag
+	ex. Imposter, Shadow Tag
 
 */
 
@@ -761,7 +761,7 @@ let BattleAbilities = {
 		},
 		onUpdate(pokemon) {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
-				let templateid = pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+				let templateid = pokemon.template.speciesid + 'busted';
 				pokemon.formeChange(templateid, this.effect, true);
 				this.damage(pokemon.maxhp / 10, pokemon, pokemon);
 			}
@@ -1326,7 +1326,7 @@ let BattleAbilities = {
 		},
 		id: "gorillatactics",
 		name: "Gorilla Tactics",
-		rating: 4,
+		rating: 4.5,
 		num: 255,
 	},
 	"grasspelt": {
@@ -2259,7 +2259,7 @@ let BattleAbilities = {
 		},
 		id: "moody",
 		name: "Moody",
-		rating: 5,
+		rating: 4.5,
 		num: 141,
 	},
 	"motordrive": {
@@ -4633,15 +4633,9 @@ let BattleAbilities = {
 			if (pokemon.baseTemplate.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitan') {
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.forme !== 'Zen') {
 				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitanzen') {
-				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
-				pokemon.removeVolatile('zenmode');
-			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitangalar') {
-				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitanzengalar') {
+			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.forme === 'Zen') {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
@@ -4650,20 +4644,18 @@ let BattleAbilities = {
 			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
-			if (pokemon.template.speciesid === 'darmanitanzen') pokemon.formeChange('Darmanitan', this.effect, false, '[silent]');
-			if (pokemon.template.speciesid === 'darmanitanzengalar') pokemon.formeChange('Darmanitan-Galar', this.effect, false, '[silent]');
+			pokemon.formeChange(pokemon.template.baseSpecies, this.effect, false, '[silent]');
 		},
 		effect: {
 			onStart(pokemon) {
 				if (!pokemon.template.species.includes('Galar')) {
 					if (pokemon.template.speciesid !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
 				} else {
-					if (pokemon.template.speciesid !== 'darmanitanzengalar') pokemon.formeChange('Darmanitan-Zen-Galar');
+					if (pokemon.template.speciesid !== 'darmanitangalarzen') pokemon.formeChange('Darmanitan-Galar-Zen');
 				}
 			},
 			onEnd(pokemon) {
-				if (pokemon.template.forme === 'Zen') pokemon.formeChange('Darmanitan');
-				if (pokemon.template.forme === 'Zen-Galar') pokemon.formeChange('Darmanitan-Galar');
+				if (pokemon.template.forme === 'Zen') pokemon.formeChange(pokemon.template.baseSpecies);
 			},
 		},
 		id: "zenmode",
