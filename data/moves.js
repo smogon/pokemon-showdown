@@ -7526,11 +7526,12 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		onTryHit(pokemon, target, move) {
-			if (!pokemon.volatiles['dynamax']) return;
-			this.add('-fail', pokemon);
-			this.attrLastMove('[still]');
-			return null;
+		onTryHit(target, source, move) {
+			if (target.volatiles['dynamax']) {
+				this.add('-fail', source, 'move: Grass Knot', '[from] Dynamax');
+				this.attrLastMove('[still]');
+				return null;
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -8469,11 +8470,12 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		onTryHit(pokemon, target, move) {
-			if (!pokemon.volatiles['dynamax']) return;
-			this.add('-fail', pokemon);
-			this.attrLastMove('[still]');
-			return null;
+		onTryHit(target, source, move) {
+			if (target.volatiles['dynamax']) {
+				this.add('-fail', source, 'move: Heat Crash', '[from] Dynamax');
+				this.attrLastMove('[still]');
+				return null;
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -8533,11 +8535,12 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		onTryHit(pokemon, target, move) {
-			if (!pokemon.volatiles['dynamax']) return;
-			this.add('-fail', pokemon);
-			this.attrLastMove('[still]');
-			return null;
+		onTryHit(target, source, move) {
+			if (target.volatiles['dynamax']) {
+				this.add('-fail', source, 'move: Grass Knot', '[from] Dynamax');
+				this.attrLastMove('[still]');
+				return null;
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -10580,11 +10583,12 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryHit(pokemon, target, move) {
-			if (!pokemon.volatiles['dynamax']) return;
-			this.add('-fail', pokemon);
-			this.attrLastMove('[still]');
-			return null;
+		onTryHit(target, source, move) {
+			if (target.volatiles['dynamax']) {
+				this.add('-fail', source, 'move: Low Kick', '[from] Dynamax');
+				this.attrLastMove('[still]');
+				return null;
+			}
 		},
 		secondary: null,
 		target: "normal",
