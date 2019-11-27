@@ -158,6 +158,11 @@ let BattleScripts = {
 			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 			if (move.type !== 'Normal') sourceEffect = move;
 		}
+		if (move.id === 'aurawheel' && maxMove) {
+			// Aura Wheel toggles between Max Lightning and Max Darkness depending on Morpeko's forme
+			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+			if (move.type !== 'Electric') sourceEffect = move;
+		}
 		if (zMove || (move.category !== 'Status' && sourceEffect && /** @type {ActiveMove} */(sourceEffect).isZ)) {
 			move = this.getActiveZMove(move, pokemon);
 		}
