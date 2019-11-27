@@ -817,7 +817,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let allCategories = ['physical', 'special', 'status'];
 	let allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	let allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
-	let allFlags = ['authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary', 'snatch', 'sound', 'zmove'];
+	let allFlags = ['authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary', 'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection'];
 	let allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	let allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	let allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
@@ -869,6 +869,8 @@ function runMovesearch(target, cmd, canAll, message) {
 
 			if (target === 'bypassessubstitute') target = 'authentic';
 			if (target === 'z') target = 'zmove';
+			if (target === 'max') target = 'maxmove';
+			if (target === 'gmax') target = 'gmaxmove';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
 				orGroup.flags[target] = !isNotSearch;
@@ -1176,6 +1178,21 @@ function runMovesearch(target, cmd, canAll, message) {
 					}
 				} else if (flag === 'zmove') {
 					if (!dex[move].isZ === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'maxmove') {
+					if (!(typeof dex[move].isMax === 'boolean') === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'gmaxmove') {
+					if (!(typeof dex[move].isMax === 'string') === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'protection') {
+					if (!(dex[move].stallingMove && dex[move].id !== "endure") === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
