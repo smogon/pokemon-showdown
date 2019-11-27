@@ -784,6 +784,28 @@ let BattleAliases = {
 	"zvolttackle": "Catastropika",
 	"zwater": "Hydro Vortex",
 
+	// Max moves
+	"maxbug": "Max Flutterby",
+	"maxdark": "Max Darkness",
+	"maxdragon": "Max Wyrmwind",
+	"maxelectric": "Max Lightning",
+	"maxfairy": "Max Starfall",
+	"maxfighting": "Max Knuckle",
+	"maxfire": "Max Flare",
+	"maxflying": "Max Airstream",
+	"maxghost": "Max Phantasm",
+	"maxgrass": "Max Overgrowth",
+	"maxground": "Max Quake",
+	"maxice": "Max Hailstorm",
+	"maxnormal": "Max Strike",
+	"maxpoison": "Max Ooze",
+	"maxpsychic": "Max Mindstorm",
+	"maxrock": "Max Rockfall",
+	"maxsteel": "Max Steelspike",
+	"maxwater": "Max Geyser",
+	"maxstatus": "Max Guard",
+	"maxprotect": "Max Guard",
+
 	// Japanese names
 	"fushigidane": "Bulbasaur",
 	"fushigisou": "Ivysaur",
