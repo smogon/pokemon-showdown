@@ -810,7 +810,7 @@ class RandomTeams {
 					if (hasMove['rest'] || hasMove['lightscreen'] && hasMove['reflect']) rejected = true;
 					break;
 				case 'rapidspin':
-					if (hasMove['shellsmash'] || teamDetails.hazardClear) rejected = true;
+					if (hasMove['curse'] || hasMove['shellsmash'] || teamDetails.hazardClear) rejected = true;
 					break;
 				case 'stealthrock':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['substitute'] || teamDetails.stealthRock) rejected = true;
