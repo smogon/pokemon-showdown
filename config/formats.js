@@ -454,8 +454,8 @@ let Formats = [
 		mod: 'mixandmega',
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Sleep Clause Mod', 'Endless Battle Clause'],
 		banlist: [
+			'Zacian-Crowned', 'Baton Pass', 'Electrify',
 			'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite',
-			'Baton Pass', 'Electrify',
 		],
 		cannotMega: ['Eternatus', 'Zacian', 'Zamazenta'],
 		onValidateTeam(team, format) {
