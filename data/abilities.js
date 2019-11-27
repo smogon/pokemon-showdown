@@ -28,7 +28,7 @@ Ratings and how they work:
 
  5: Essential
 	  The sort of ability that defines metagames.
-	ex. Moody, Shadow Tag
+	ex. Imposter, Shadow Tag
 
 */
 
@@ -761,7 +761,7 @@ let BattleAbilities = {
 		},
 		onUpdate(pokemon) {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
-				let templateid = pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+				let templateid = pokemon.template.speciesid + 'busted';
 				pokemon.formeChange(templateid, this.effect, true);
 				this.damage(pokemon.maxhp / 10, pokemon, pokemon);
 			}
@@ -1326,7 +1326,7 @@ let BattleAbilities = {
 		},
 		id: "gorillatactics",
 		name: "Gorilla Tactics",
-		rating: 4,
+		rating: 4.5,
 		num: 255,
 	},
 	"grasspelt": {
@@ -1351,7 +1351,7 @@ let BattleAbilities = {
 		num: 229,
 	},
 	"gulpmissile": {
-		desc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.",
+		desc: "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to deal 25% damage. If the base HP is below 50%, the prey will be a Pikachu and paralyze the opponent after being damaged. Otherwise, the prey is an Arrokuda and will lower the opponent's Def by 1 stage after being damaged.",
 		shortDesc: "Get prey with Surf/Dive. When taking damage, prey is used to attack.",
 		onDamagePriority: -1,
 		onDamage(damage, target, source, effect) {
@@ -1597,7 +1597,7 @@ let BattleAbilities = {
 		num: 248,
 	},
 	"icescales": {
-		shortDesc: "The Pokémon is protected by ice scales, which halve the damage taken from special moves.",
+		shortDesc: "This Pokémon's Special Defense is doubled.",
 		// TODO verify this is the correct way to implement this
 		onModifySpD(spd) {
 			return this.chainModify(2);
@@ -2226,7 +2226,7 @@ let BattleAbilities = {
 	},
 	"moody": {
 		desc: "This Pokemon has a random stat other than accuracy or evasion raised by 2 stages and another stat lowered by 1 stage at the end of each turn.",
-		shortDesc: "Raises a random stat by 2 and lowers another stat by 1 at the end of each turn.",
+		shortDesc: "Boosts a random stat (except accuracy/evasion) +2 and another stat -1 every turn.",
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
@@ -2259,7 +2259,7 @@ let BattleAbilities = {
 		},
 		id: "moody",
 		name: "Moody",
-		rating: 5,
+		rating: 4.5,
 		num: 141,
 	},
 	"motordrive": {
@@ -2951,27 +2951,15 @@ let BattleAbilities = {
 	"punkrock": {
 		desc: "Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.",
 		shortDesc: "Boosts sound move power, 0.5× damage from sound moves.",
-		// TODO boost the power of sound based moves by how much?
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.flags.sound) {
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
 				this.debug('Punk Rock boost');
-				return this.chainModify(1.5); // PLACEHOLDER
+				return this.chainModify([0x14CD, 0x1000]);
 			}
 		},
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.flags.sound) {
-				this.debug('Punk Rock boost');
-				return this.chainModify(1.5); // PLACEHOLDER
-			}
-		},
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move.flags.sound) {
-				this.debug('Punk Rock weaken');
-				return this.chainModify(0.5);
-			}
-		},
-		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move.flags.sound) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.flags['sound']) {
 				this.debug('Punk Rock weaken');
 				return this.chainModify(0.5);
 			}
@@ -4645,15 +4633,9 @@ let BattleAbilities = {
 			if (pokemon.baseTemplate.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitan') {
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.forme !== 'Zen') {
 				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitanzen') {
-				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
-				pokemon.removeVolatile('zenmode');
-			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitangalar') {
-				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitanzengalar') {
+			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.forme === 'Zen') {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
@@ -4662,20 +4644,18 @@ let BattleAbilities = {
 			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
-			if (pokemon.template.speciesid === 'darmanitanzen') pokemon.formeChange('Darmanitan', this.effect, false, '[silent]');
-			if (pokemon.template.speciesid === 'darmanitanzengalar') pokemon.formeChange('Darmanitan-Galar', this.effect, false, '[silent]');
+			pokemon.formeChange(pokemon.template.baseSpecies, this.effect, false, '[silent]');
 		},
 		effect: {
 			onStart(pokemon) {
 				if (!pokemon.template.species.includes('Galar')) {
 					if (pokemon.template.speciesid !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
 				} else {
-					if (pokemon.template.speciesid !== 'darmanitanzengalar') pokemon.formeChange('Darmanitan-Zen-Galar');
+					if (pokemon.template.speciesid !== 'darmanitangalarzen') pokemon.formeChange('Darmanitan-Galar-Zen');
 				}
 			},
 			onEnd(pokemon) {
-				if (pokemon.template.forme === 'Zen') pokemon.formeChange('Darmanitan');
-				if (pokemon.template.forme === 'Zen-Galar') pokemon.formeChange('Darmanitan-Galar');
+				if (pokemon.template.forme === 'Zen') pokemon.formeChange(pokemon.template.baseSpecies);
 			},
 		},
 		id: "zenmode",

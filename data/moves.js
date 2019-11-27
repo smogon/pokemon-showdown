@@ -66,7 +66,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"accelerock": {
@@ -85,7 +84,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"acid": {
@@ -108,7 +106,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Poison",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"acidarmor": {
@@ -172,7 +169,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Poison",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"acrobatics": {
@@ -197,7 +193,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"acupressure": {
@@ -251,7 +246,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"aeroblast": {
@@ -271,7 +265,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"afteryou": {
@@ -341,7 +334,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Flying",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"airslash": {
@@ -363,7 +355,6 @@ let BattleMovedex = {
 		},
 		target: "any",
 		type: "Flying",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"alloutpummeling": {
@@ -455,7 +446,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Steel",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"ancientpower": {
@@ -484,7 +474,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Rock",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"appleacid": {
@@ -524,7 +513,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"aquaring": {
@@ -570,7 +558,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"armthrust": {
@@ -589,7 +576,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"aromatherapy": {
@@ -708,7 +694,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 120,
 		contestType: "Clever",
 	},
 	"astonish": {
@@ -729,7 +714,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"attackorder": {
@@ -749,7 +733,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 175,
 		contestType: "Clever",
 	},
 	"attract": {
@@ -824,7 +807,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Fighting",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"aurawheel": {
@@ -885,7 +867,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ice",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"auroraveil": {
@@ -1001,7 +982,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ice",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"babydolleyes": {
@@ -1121,7 +1101,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"barrier": {
@@ -1200,7 +1179,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
-		zMovePower: 180,
 		contestType: "Tough",
 	},
 	"beatup": {
@@ -1226,7 +1204,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"behemothbash": {
@@ -1291,7 +1268,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		zMovePower: 190,
 		contestType: "Tough",
 	},
 	"bellydrum": {
@@ -1425,7 +1401,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"bind": {
@@ -1444,7 +1419,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"bite": {
@@ -1465,7 +1439,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Dark",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"blackholeeclipse": {
@@ -1505,7 +1478,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"blazekick": {
@@ -1528,7 +1500,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"blizzard": {
@@ -1553,7 +1524,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Ice",
-		zMovePower: 185,
 		contestType: "Beautiful",
 	},
 	"block": {
@@ -1615,7 +1585,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 195,
 		contestType: "Beautiful",
 	},
 	"bodypress": {
@@ -1654,7 +1623,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"boltbeak": {
@@ -1700,7 +1668,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 195,
 		contestType: "Beautiful",
 	},
 	"boneclub": {
@@ -1722,7 +1689,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ground",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"bonemerang": {
@@ -1742,7 +1708,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		zMovePower: 100,
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
@@ -1782,7 +1747,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Normal",
-		zMovePower: 200,
 		contestType: "Tough",
 	},
 	"bounce": {
@@ -1828,7 +1792,6 @@ let BattleMovedex = {
 		},
 		target: "any",
 		type: "Flying",
-		zMovePower: 160,
 		contestType: "Cute",
 	},
 	"bouncybubble": {
@@ -1884,7 +1847,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"breakingswipe": {
@@ -1951,7 +1913,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"brine": {
@@ -1974,7 +1935,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"brutalswing": {
@@ -1992,7 +1952,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Dark",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"bubble": {
@@ -2016,7 +1975,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Water",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"bubblebeam": {
@@ -2039,7 +1997,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Water",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"bugbite": {
@@ -2068,7 +2025,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 120,
 		contestType: "Cute",
 	},
 	"bugbuzz": {
@@ -2092,7 +2048,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Bug",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"bulkup": {
@@ -2138,7 +2093,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacent",
 		type: "Ground",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"bulletpunch": {
@@ -2157,7 +2111,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"bulletseed": {
@@ -2208,7 +2161,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 195,
 		contestType: "Clever",
 	},
 	"buzzybuzz": {
@@ -2413,7 +2365,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"charm": {
@@ -2457,7 +2408,6 @@ let BattleMovedex = {
 		},
 		target: "any",
 		type: "Flying",
-		zMovePower: 120,
 		contestType: "Cute",
 	},
 	"chipaway": {
@@ -2478,7 +2428,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Tough",
 	},
 	"circlethrow": {
@@ -2497,7 +2446,6 @@ let BattleMovedex = {
 		forceSwitch: true,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"clamp": {
@@ -2517,7 +2465,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"clangingscales": {
@@ -2541,7 +2488,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Dragon",
-		zMovePower: 185,
 		contestType: "Tough",
 	},
 	"clangoroussoul": {
@@ -2556,11 +2502,14 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, sound: 1, dance: 1},
-		onHit(target) {
-			if (target.hp <= target.maxhp / 3 || target.boosts.atk >= 6 || target.boosts.def >= 6 || target.boosts.spa >= 6 || target.boosts.spd >= 6 || target.boosts.spe >= 6 || target.maxhp === 1) { // Shedinja clause
+		onTryHit(pokemon, target, move) {
+			if (pokemon.hp <= pokemon.maxhp / 3 || pokemon.boosts.atk >= 6 || pokemon.boosts.def >= 6 || pokemon.boosts.spa >= 6 || pokemon.boosts.spd >= 6 || pokemon.boosts.spe >= 6 || pokemon.maxhp === 1) {
+				delete move.boosts;
 				return false;
 			}
-			this.directDamage(target.maxhp / 3);
+		},
+		onHit(pokemon) {
+			this.directDamage(pokemon.maxhp / 3);
 		},
 		boosts: {
 			atk: 1,
@@ -2622,7 +2571,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"closecombat": {
@@ -2647,7 +2595,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 190,
 		contestType: "Tough",
 	},
 	"coil": {
@@ -2691,7 +2638,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		gmaxPower: 100,
 		contestType: "Tough",
 	},
@@ -2753,7 +2699,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"constrict": {
@@ -2777,7 +2722,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"continentalcrush": {
@@ -3049,7 +2993,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "scripted",
 		type: "Fighting",
-		zMovePower: 100,
 		gmaxPower: 75,
 		contestType: "Tough",
 	},
@@ -3123,7 +3066,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 120,
 		contestType: "Cute",
 	},
 	"crabhammer": {
@@ -3143,7 +3085,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 180,
 		contestType: "Tough",
 	},
 	"craftyshield": {
@@ -3197,7 +3138,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"crosspoison": {
@@ -3219,7 +3159,6 @@ let BattleMovedex = {
 		critRatio: 2,
 		target: "normal",
 		type: "Poison",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"crunch": {
@@ -3243,7 +3182,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Dark",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"crushclaw": {
@@ -3266,7 +3204,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"crushgrip": {
@@ -3353,7 +3290,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"darkestlariat": {
@@ -3374,7 +3310,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"darkpulse": {
@@ -3396,7 +3331,6 @@ let BattleMovedex = {
 		},
 		target: "any",
 		type: "Dark",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"darkvoid": {
@@ -3443,7 +3377,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Fairy",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"decorate": {
@@ -3669,7 +3602,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Rock",
-		zMovePower: 180,
 		contestType: "Beautiful",
 	},
 	"dig": {
@@ -3715,7 +3647,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"disable": {
@@ -3808,7 +3739,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Fairy",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"discharge": {
@@ -3830,7 +3760,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacent",
 		type: "Electric",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"dive": {
@@ -3876,7 +3805,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"dizzypunch": {
@@ -3898,7 +3826,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Cute",
 	},
 	"doomdesire": {
@@ -3938,7 +3865,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"doubleedge": {
@@ -3958,7 +3884,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 190,
 		contestType: "Tough",
 	},
 	"doublehit": {
@@ -4022,7 +3947,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 100,
 		gmaxPower: 80,
 		contestType: "Cool",
 	},
@@ -4043,7 +3967,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"doubleteam": {
@@ -4088,7 +4011,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 195,
 		contestType: "Beautiful",
 	},
 	"dragonascent": {
@@ -4112,7 +4034,6 @@ let BattleMovedex = {
 		},
 		target: "any",
 		type: "Flying",
-		zMovePower: 190,
 		contestType: "Beautiful",
 	},
 	"dragonbreath": {
@@ -4133,7 +4054,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"dragonclaw": {
@@ -4151,7 +4071,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"dragondance": {
@@ -4217,7 +4136,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"dragonpulse": {
@@ -4235,7 +4153,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Dragon",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"dragonrage": {
@@ -4254,7 +4171,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"dragonrush": {
@@ -4275,7 +4191,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 180,
 		contestType: "Tough",
 	},
 	"dragontail": {
@@ -4294,7 +4209,6 @@ let BattleMovedex = {
 		forceSwitch: true,
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"drainingkiss": {
@@ -4313,7 +4227,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"drainpunch": {
@@ -4333,7 +4246,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 140,
 		contestType: "Tough",
 	},
 	"dreameater": {
@@ -4355,7 +4267,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 180,
 		contestType: "Clever",
 	},
 	"drillpeck": {
@@ -4373,7 +4284,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"drillrun": {
@@ -4393,7 +4303,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"drumbeating": {
@@ -4433,7 +4342,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 100,
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
@@ -4478,7 +4386,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"earthpower": {
@@ -4502,7 +4409,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ground",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"earthquake": {
@@ -4521,7 +4427,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Ground",
-		zMovePower: 180,
 		contestType: "Tough",
 	},
 	"echoedvoice": {
@@ -4562,7 +4467,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"eerieimpulse": {
@@ -4601,7 +4505,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 180,
 		contestType: "Cute",
 	},
 	"electricterrain": {
@@ -4756,7 +4659,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Electric",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"embargo": {
@@ -4808,7 +4710,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"encore": {
@@ -4962,7 +4863,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Grass",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"entrainment": {
@@ -5018,7 +4918,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Fire",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"eternabeam": {
@@ -5057,7 +4956,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Normal",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"extrasensory": {
@@ -5079,7 +4977,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"extremeevoboost": {
@@ -5125,7 +5022,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"facade": {
@@ -5149,7 +5045,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Cute",
 	},
 	"fairylock": {
@@ -5194,7 +5089,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"fakeout": {
@@ -5224,7 +5118,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"faketears": {
@@ -5280,7 +5173,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"featherdance": {
@@ -5321,7 +5213,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"feintattack": {
@@ -5339,7 +5230,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 120,
 		contestType: "Clever",
 	},
 	"fellstinger": {
@@ -5360,7 +5250,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"fierydance": {
@@ -5386,7 +5275,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"finalgambit": {
@@ -5433,7 +5321,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 185,
 		contestType: "Beautiful",
 	},
 	"firefang": {
@@ -5460,7 +5347,6 @@ let BattleMovedex = {
 		],
 		target: "normal",
 		type: "Fire",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"firelash": {
@@ -5484,7 +5370,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 160,
 		contestType: "Cute",
 	},
 	"firepledge": {
@@ -5556,7 +5441,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"firepunch": {
@@ -5578,7 +5462,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 140,
 		contestType: "Tough",
 	},
 	"firespin": {
@@ -5597,7 +5480,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"firstimpression": {
@@ -5624,7 +5506,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 175,
 		contestType: "Cute",
 	},
 	"fishiousrend": {
@@ -5745,7 +5626,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 140,
 		contestType: "Beautiful",
 	},
 	"flamecharge": {
@@ -5771,7 +5651,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"flamewheel": {
@@ -5792,7 +5671,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"flamethrower": {
@@ -5814,7 +5692,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"flareblitz": {
@@ -5837,7 +5714,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"flash": {
@@ -5883,7 +5759,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Steel",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"flatter": {
@@ -5929,7 +5804,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-		zMovePower: 195,
 		contestType: "Beautiful",
 	},
 	"fling": {
@@ -5977,7 +5851,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"floatyfall": {
@@ -6105,7 +5978,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 175,
 		contestType: "Clever",
 	},
 	"flyingpress": {
@@ -6150,7 +6022,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"focusenergy": {
@@ -6222,7 +6093,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 200,
 		contestType: "Tough",
 	},
 	"followme": {
@@ -6282,7 +6152,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"foresight": {
@@ -6362,7 +6231,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 175,
 		contestType: "Clever",
 	},
 	"freezedry": {
@@ -6387,7 +6255,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ice",
-		zMovePower: 140,
 		contestType: "Beautiful",
 	},
 	"freezeshock": {
@@ -6419,7 +6286,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ice",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"freezyfrost": {
@@ -6465,7 +6331,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 200,
 		contestType: "Cool",
 	},
 	"frostbreath": {
@@ -6484,7 +6349,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ice",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"frustration": {
@@ -6527,7 +6391,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"furycutter": {
@@ -6563,7 +6426,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"furyswipes": {
@@ -6582,7 +6444,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		gmaxPower: 100,
 		contestType: "Tough",
 	},
@@ -6608,7 +6469,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"fusionflare": {
@@ -6633,7 +6493,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 180,
 		contestType: "Beautiful",
 	},
 	"futuresight": {
@@ -6676,7 +6535,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 190,
 		contestType: "Clever",
 	},
 	"gastroacid": {
@@ -6842,7 +6700,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 140,
 		contestType: "Clever",
 	},
 	"gigaimpact": {
@@ -6863,7 +6720,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 200,
 		contestType: "Tough",
 	},
 	"gigavolthavoc": {
@@ -6905,7 +6761,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Ice",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"glare": {
@@ -7097,14 +6952,8 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {},
+		drain: [1, 2],
 		isMax: "Alcremie",
-		self: {
-			onAfterHit(target, source) {
-				for (let pokemon of source.side.active) {
-					this.heal(pokemon.maxhp / 2, pokemon, pokemon);
-				}
-			},
-		},
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Fairy",
@@ -7755,7 +7604,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"grasswhistle": {
@@ -8153,7 +8001,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Poison",
-		zMovePower: 190,
 		contestType: "Tough",
 	},
 	"gust": {
@@ -8171,7 +8018,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"gyroball": {
@@ -8240,7 +8086,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 180,
 		contestType: "Tough",
 	},
 	"happyhour": {
@@ -8327,7 +8172,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Tough",
 	},
 	"headcharge": {
@@ -8347,7 +8191,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 190,
 		contestType: "Tough",
 	},
 	"headsmash": {
@@ -8367,7 +8210,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMovePower: 200,
 		contestType: "Tough",
 	},
 	"healbell": {
@@ -8561,7 +8403,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 120,
 		contestType: "Cute",
 	},
 	"heartswap": {
@@ -8660,7 +8501,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Fire",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"heavyslam": {
@@ -8786,7 +8626,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 120,
 		contestType: "Clever",
 	},
 	"hiddenpowerbug": {
@@ -9096,7 +8935,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"highjumpkick": {
@@ -9119,7 +8957,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 195,
 		contestType: "Cool",
 	},
 	"holdback": {
@@ -9138,7 +8975,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"holdhands": {
@@ -9196,7 +9032,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"horndrill": {
@@ -9236,7 +9071,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 140,
 		contestType: "Tough",
 	},
 	"howl": {
@@ -9286,7 +9120,6 @@ let BattleMovedex = {
 		},
 		target: "any",
 		type: "Flying",
-		zMovePower: 185,
 		contestType: "Tough",
 	},
 	"hydrocannon": {
@@ -9307,7 +9140,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"hydropump": {
@@ -9325,7 +9157,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 185,
 		contestType: "Beautiful",
 	},
 	"hydrovortex": {
@@ -9365,7 +9196,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 200,
 		contestType: "Cool",
 	},
 	"hyperfang": {
@@ -9387,7 +9217,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"hyperspacefury": {
@@ -9424,7 +9253,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 180,
 		contestType: "Tough",
 	},
 	"hyperspacehole": {
@@ -9444,7 +9272,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 160,
 		contestType: "Clever",
 	},
 	"hypervoice": {
@@ -9463,7 +9290,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Normal",
-		zMovePower: 175,
 		contestType: "Cool",
 	},
 	"hypnosis": {
@@ -9531,7 +9357,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ice",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"icebeam": {
@@ -9553,7 +9378,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ice",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"iceburn": {
@@ -9585,7 +9409,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ice",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"icefang": {
@@ -9612,7 +9435,6 @@ let BattleMovedex = {
 		],
 		target: "normal",
 		type: "Ice",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"icehammer": {
@@ -9636,7 +9458,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ice",
-		zMovePower: 180,
 		contestType: "Tough",
 	},
 	"icepunch": {
@@ -9658,7 +9479,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ice",
-		zMovePower: 140,
 		contestType: "Beautiful",
 	},
 	"iceshard": {
@@ -9677,7 +9497,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ice",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"iciclecrash": {
@@ -9699,7 +9518,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ice",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"iciclespear": {
@@ -9743,7 +9561,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Ice",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"imprison": {
@@ -9807,7 +9624,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Fire",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"inferno": {
@@ -9828,7 +9644,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 180,
 		contestType: "Beautiful",
 	},
 	"infernooverdrive": {
@@ -9866,7 +9681,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"ingrain": {
@@ -10016,7 +9830,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Steel",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"irontail": {
@@ -10039,7 +9852,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Steel",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"jawlock": {
@@ -10055,8 +9867,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		onHit(target, source, move) {
-			source.addVolatile('trapped', source, move, 'trapper');
-			target.addVolatile('trapped', target, move, 'trapper');
+			source.addVolatile('trapped', target, move, 'trapper');
+			target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: null,
 		target: "normal",
@@ -10085,7 +9897,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 180,
 		contestType: "Beautiful",
 	},
 	"jumpkick": {
@@ -10109,7 +9920,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"karatechop": {
@@ -10129,7 +9939,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"kinesis": {
@@ -10242,7 +10051,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 120,
 		contestType: "Clever",
 	},
 	"landswrath": {
@@ -10330,7 +10138,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 200,
 		contestType: "Cute",
 	},
 	"lavaplume": {
@@ -10352,7 +10159,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacent",
 		type: "Fire",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"leafage": {
@@ -10369,7 +10175,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"leafblade": {
@@ -10389,7 +10194,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 175,
 		contestType: "Cool",
 	},
 	"leafstorm": {
@@ -10413,7 +10217,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 195,
 		contestType: "Beautiful",
 	},
 	"leaftornado": {
@@ -10436,7 +10239,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Grass",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"leechlife": {
@@ -10456,7 +10258,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 160,
 		contestType: "Clever",
 	},
 	"leechseed": {
@@ -10556,7 +10357,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"lifedew": {
@@ -10599,7 +10399,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"lightscreen": {
@@ -10692,7 +10491,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Water",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"lockon": {
@@ -10814,7 +10612,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 120,
 		contestType: "Clever",
 	},
 	"luckychant": {
@@ -10929,7 +10726,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Bug",
-		zMovePower: 160,
 		contestType: "Cute",
 	},
 	"lusterpurge": {
@@ -10953,7 +10749,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 140,
 		contestType: "Clever",
 	},
 	"machpunch": {
@@ -10972,7 +10767,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"magicalleaf": {
@@ -10989,7 +10783,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"magiccoat": {
@@ -11147,7 +10940,6 @@ let BattleMovedex = {
 		stealsBoosts: true,
 		target: "normal",
 		type: "Water",
-		zMovePower: 190,
 		contestType: "Cute",
 	},
 	"magmastorm": {
@@ -11167,7 +10959,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 180,
 		contestType: "Tough",
 	},
 	"magnetbomb": {
@@ -11185,7 +10976,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"magneticflux": {
@@ -11374,7 +11164,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "User: +1 Speed. BP scales with base move's BP.",
+		shortDesc: "User/allies: +1 Spe. BP scales w/ base move.",
 		id: "maxairstream",
 		isViable: true,
 		name: "Max Airstream",
@@ -11558,7 +11348,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "User: +1 Attack. BP scales with base move's BP.",
+		shortDesc: "User/allies: +1 Atk. BP scales w/ base move.",
 		id: "maxknuckle",
 		isViable: true,
 		name: "Max Knuckle",
@@ -11629,7 +11419,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "User: +1 Sp.Atk. BP scales with base move's BP.",
+		shortDesc: "User/allies: +1 SpA. BP scales w/ base move.",
 		id: "maxooze",
 		isViable: true,
 		name: "Max Ooze",
@@ -11700,7 +11490,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "User: +1 Sp.Def. BP scales with base move's BP.",
+		shortDesc: "User/allies: +1 SpD. BP scales w/ base move.",
 		id: "maxquake",
 		isViable: true,
 		name: "Max Quake",
@@ -11771,7 +11561,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "User: +1 Defense. BP scales with base move's BP.",
+		shortDesc: "User/allies: +1 Def. BP scales w/ base move.",
 		id: "maxsteelspike",
 		isViable: true,
 		name: "Max Steelspike",
@@ -11955,7 +11745,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"megakick": {
@@ -11972,7 +11761,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"megapunch": {
@@ -11989,7 +11777,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"memento": {
@@ -12081,7 +11868,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "scripted",
 		type: "Steel",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"metalclaw": {
@@ -12106,7 +11892,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Steel",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"metalsound": {
@@ -12172,7 +11957,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Steel",
-		zMovePower: 175,
 		contestType: "Cool",
 	},
 	"metronome": {
@@ -12296,7 +12080,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Fire",
-		zMovePower: 200,
 		contestType: "Cool",
 	},
 	"mindreader": {
@@ -12442,7 +12225,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "scripted",
 		type: "Psychic",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"mirrormove": {
@@ -12493,7 +12275,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Steel",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"mist": {
@@ -12564,7 +12345,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 140,
 		contestType: "Clever",
 	},
 	"mistyterrain": {
@@ -12648,7 +12428,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fairy",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"moongeistbeam": {
@@ -12668,7 +12447,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"moonlight": {
@@ -12748,7 +12526,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ground",
-		zMovePower: 120,
 		contestType: "Cute",
 	},
 	"mudshot": {
@@ -12771,7 +12548,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ground",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"mudslap": {
@@ -12794,7 +12570,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ground",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"mudsport": {
@@ -12854,7 +12629,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Water",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"multiattack": {
@@ -12900,7 +12674,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 140,
 		contestType: "Beautiful",
 	},
 	"nastyplot": {
@@ -13007,7 +12780,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"needlearm": {
@@ -13029,7 +12801,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Grass",
-		zMovePower: 120,
 		contestType: "Clever",
 	},
 	"neverendingnightmare": {
@@ -13071,7 +12842,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Dark",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"nightmare": {
@@ -13124,7 +12894,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"nightslash": {
@@ -13144,7 +12913,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"nobleroar": {
@@ -13231,7 +12999,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"oblivionwing": {
@@ -13251,7 +13018,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"obstruct": {
@@ -13347,7 +13113,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Water",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"octolock": {
@@ -13375,7 +13140,7 @@ let BattleMovedex = {
 					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
 					return;
 				}
-				this.boost({def: -1, spd: -1}, pokemon, pokemon, this.dex.getActiveMove("Octolock"));
+				this.boost({def: -1, spd: -1}, pokemon, source, this.dex.getActiveMove("Octolock"));
 			},
 			onTrapPokemon(pokemon) {
 				if (this.effectData.source && this.effectData.source.isActive) pokemon.tryTrap();
@@ -13435,7 +13200,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"originpulse": {
@@ -13453,7 +13217,6 @@ let BattleMovedex = {
 		flags: {protect: 1, pulse: 1, mirror: 1},
 		target: "allAdjacentFoes",
 		type: "Water",
-		zMovePower: 185,
 		contestType: "Beautiful",
 	},
 	"outrage": {
@@ -13480,7 +13243,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Dragon",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"overdrive": {
@@ -13520,7 +13282,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 195,
 		contestType: "Beautiful",
 	},
 	"painsplit": {
@@ -13571,7 +13332,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Rock",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"paraboliccharge": {
@@ -13590,7 +13350,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Electric",
-		zMovePower: 120,
 		contestType: "Clever",
 	},
 	"partingshot": {
@@ -13640,7 +13399,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"payday": {
@@ -13661,7 +13419,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"peck": {
@@ -13678,7 +13435,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"perishsong": {
@@ -13747,7 +13503,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Grass",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"petaldance": {
@@ -13773,7 +13528,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Grass",
-		zMovePower: 190,
 		contestType: "Beautiful",
 	},
 	"phantomforce": {
@@ -13807,7 +13561,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 175,
 		contestType: "Cool",
 	},
 	"photongeyser": {
@@ -13830,7 +13583,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"pikapapow": {
@@ -13892,7 +13644,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"playnice": {
@@ -13937,7 +13688,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fairy",
-		zMovePower: 175,
 		contestType: "Cute",
 	},
 	"pluck": {
@@ -13966,7 +13716,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 120,
 		contestType: "Cute",
 	},
 	"poisonfang": {
@@ -13987,7 +13736,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Poison",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"poisongas": {
@@ -14028,7 +13776,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Poison",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"poisonpowder": {
@@ -14068,7 +13815,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Poison",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"poisontail": {
@@ -14090,7 +13836,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Poison",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"pollenpuff": {
@@ -14114,7 +13859,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 175,
 		contestType: "Cute",
 	},
 	"pound": {
@@ -14131,7 +13875,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"powder": {
@@ -14185,7 +13928,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Ice",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"powergem": {
@@ -14203,7 +13945,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"powersplit": {
@@ -14356,7 +14097,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"powerwhip": {
@@ -14374,7 +14114,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 190,
 		contestType: "Tough",
 	},
 	"precipiceblades": {
@@ -14392,7 +14131,6 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		target: "allAdjacentFoes",
 		type: "Ground",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"present": {
@@ -14422,7 +14160,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"prismaticlaser": {
@@ -14443,7 +14180,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 200,
 		contestType: "Cool",
 	},
 	"protect": {
@@ -14513,7 +14249,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"psychup": {
@@ -14570,7 +14305,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 175,
 		contestType: "Clever",
 	},
 	"psychicfangs": {
@@ -14597,7 +14331,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 160,
 		contestType: "Clever",
 	},
 	"psychicterrain": {
@@ -14676,7 +14409,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 200,
 		contestType: "Clever",
 	},
 	"psychocut": {
@@ -14696,7 +14428,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"psychoshift": {
@@ -14743,7 +14474,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"psystrike": {
@@ -14763,7 +14493,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"psywave": {
@@ -14785,7 +14514,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"pulverizingpancake": {
@@ -14921,7 +14649,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"pyroball": {
@@ -14995,7 +14722,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"quickguard": {
@@ -15106,7 +14832,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"ragepowder": {
@@ -15202,7 +14927,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"razorleaf": {
@@ -15221,7 +14945,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Grass",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"razorshell": {
@@ -15245,7 +14968,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Water",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"razorwind": {
@@ -15276,7 +14998,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Normal",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"recover": {
@@ -15455,7 +15176,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Beautiful",
 	},
 	"rest": {
@@ -15514,7 +15234,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"return": {
@@ -15562,7 +15281,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"revenge": {
@@ -15590,7 +15308,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"reversal": {
@@ -15669,7 +15386,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"rockblast": {
@@ -15712,7 +15428,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"rockpolish": {
@@ -15756,7 +15471,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Rock",
-		zMovePower: 140,
 		contestType: "Tough",
 	},
 	"rocksmash": {
@@ -15779,7 +15493,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"rockthrow": {
@@ -15796,7 +15509,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"rocktomb": {
@@ -15819,7 +15531,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Rock",
-		zMovePower: 120,
 		contestType: "Clever",
 	},
 	"rockwrecker": {
@@ -15840,7 +15551,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMovePower: 200,
 		contestType: "Tough",
 	},
 	"roleplay": {
@@ -15895,7 +15605,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"rollout": {
@@ -15944,7 +15653,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"roost": {
@@ -16053,7 +15761,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"sacredfire": {
@@ -16075,7 +15782,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 180,
 		contestType: "Beautiful",
 	},
 	"sacredsword": {
@@ -16096,7 +15802,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 175,
 		contestType: "Cool",
 	},
 	"safeguard": {
@@ -16211,7 +15916,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"sappyseed": {
@@ -16275,7 +15979,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Water",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"scaryface": {
@@ -16313,7 +16016,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"screech": {
@@ -16356,7 +16058,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacent",
 		type: "Fire",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"searingsunrazesmash": {
@@ -16427,7 +16128,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Clever",
 	},
 	"secretsword": {
@@ -16447,7 +16147,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"seedbomb": {
@@ -16465,7 +16164,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"seedflare": {
@@ -16489,7 +16187,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Grass",
-		zMovePower: 190,
 		contestType: "Beautiful",
 	},
 	"seismictoss": {
@@ -16509,7 +16206,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 100,
 		gmaxPower: 75,
 		contestType: "Tough",
 	},
@@ -16529,7 +16225,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Normal",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"shadowball": {
@@ -16553,7 +16248,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 160,
 		contestType: "Clever",
 	},
 	"shadowbone": {
@@ -16577,7 +16271,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"shadowclaw": {
@@ -16597,7 +16290,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"shadowforce": {
@@ -16632,7 +16324,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"shadowpunch": {
@@ -16650,7 +16341,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 120,
 		contestType: "Clever",
 	},
 	"shadowsneak": {
@@ -16669,7 +16359,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 100,
 		contestType: "Clever",
 	},
 	"shadowstrike": {
@@ -16694,7 +16383,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 160,
 		contestType: "Clever",
 	},
 	"sharpen": {
@@ -16821,7 +16509,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Fire",
-		zMovePower: 200,
 		contestType: "Tough",
 	},
 	"shiftgear": {
@@ -16861,7 +16548,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"shoreup": {
@@ -16910,7 +16596,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Bug",
-		zMovePower: 140,
 		contestType: "Beautiful",
 	},
 	"silverwind": {
@@ -16940,7 +16625,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Bug",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"simplebeam": {
@@ -17143,7 +16827,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 195,
 		contestType: "Tough",
 	},
 	"skyattack": {
@@ -17176,7 +16859,6 @@ let BattleMovedex = {
 		},
 		target: "any",
 		type: "Flying",
-		zMovePower: 200,
 		contestType: "Cool",
 	},
 	"skydrop": {
@@ -17287,7 +16969,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"skyuppercut": {
@@ -17306,7 +16987,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"slackoff": {
@@ -17343,7 +17023,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"slash": {
@@ -17362,7 +17041,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"sleeppowder": {
@@ -17446,7 +17124,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Poison",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"sludgebomb": {
@@ -17468,7 +17145,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Poison",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"sludgewave": {
@@ -17490,7 +17166,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacent",
 		type: "Poison",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"smackdown": {
@@ -17539,7 +17214,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"smartstrike": {
@@ -17556,7 +17230,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"smellingsalts": {
@@ -17582,7 +17255,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
 		contestType: "Tough",
 	},
 	"smog": {
@@ -17603,7 +17275,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Poison",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"smokescreen": {
@@ -17664,7 +17335,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Dark",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"snatch": {
@@ -17743,7 +17413,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"soak": {
@@ -17830,7 +17499,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"solarblade": {
@@ -17870,7 +17538,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"sonicboom": {
@@ -17890,7 +17557,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"soulstealing7starstrike": {
@@ -17928,7 +17594,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		zMovePower: 180,
 		contestType: "Beautiful",
 	},
 	"spark": {
@@ -17949,7 +17614,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"sparklingaria": {
@@ -17973,7 +17637,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacent",
 		type: "Water",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"sparklyswirl": {
@@ -18024,7 +17687,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 175,
 		contestType: "Cool",
 	},
 	"speedswap": {
@@ -18090,7 +17752,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		gmaxPower: 120,
 		contestType: "Cool",
 	},
@@ -18232,7 +17893,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"spitup": {
@@ -18262,7 +17922,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"spite": {
@@ -18461,7 +18120,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Water",
-		zMovePower: 185,
 		contestType: "Beautiful",
 	},
 	"steamroller": {
@@ -18483,7 +18141,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Bug",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"steelbeam": {
@@ -18492,7 +18149,7 @@ let BattleMovedex = {
 		basePower: 140,
 		category: "Special",
 		desc: "If this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
-		shortDesc: "User loses 50% max HP. Hits adjacent Pokemon.",
+		shortDesc: "User loses 50% max HP.",
 		id: "steelbeam",
 		isViable: true,
 		name: "Steel Beam",
@@ -18506,7 +18163,7 @@ let BattleMovedex = {
 			}
 		},
 		secondary: null,
-		target: "allAdjacent",
+		target: "normal",
 		type: "Steel",
 	},
 	"steelwing": {
@@ -18531,7 +18188,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Steel",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"stickyweb": {
@@ -18663,7 +18319,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"stompingtantrum": {
@@ -18685,7 +18340,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		zMovePower: 140,
 		contestType: "Tough",
 	},
 	"stoneedge": {
@@ -18705,7 +18359,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMovePower: 180,
 		contestType: "Tough",
 	},
 	"storedpower": {
@@ -18747,7 +18400,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"strangesteam": {
@@ -18784,7 +18436,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"strengthsap": {
@@ -18878,7 +18529,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Bug",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"stuffcheeks": {
@@ -18940,7 +18590,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"substitute": {
@@ -19064,7 +18713,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 140,
 		contestType: "Clever",
 	},
 	"sunnyday": {
@@ -19103,7 +18751,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 180,
 		contestType: "Cool",
 	},
 	"superfang": {
@@ -19125,7 +18772,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"superpower": {
@@ -19150,7 +18796,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 190,
 		contestType: "Tough",
 	},
 	"supersonic": {
@@ -19206,7 +18851,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Water",
-		zMovePower: 175,
 		contestType: "Beautiful",
 	},
 	"swagger": {
@@ -19312,7 +18956,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Normal",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"switcheroo": {
@@ -19405,7 +19048,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Psychic",
-		zMovePower: 190,
 		contestType: "Clever",
 	},
 	"synthesis": {
@@ -19450,7 +19092,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"tailglow": {
@@ -19574,7 +19215,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"tarshot": {
@@ -19732,7 +19372,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"tectonicrage": {
@@ -19871,7 +19510,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 120,
 		contestType: "Tough",
 	},
 	"thousandarrows": {
@@ -19922,7 +19560,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Ground",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"thrash": {
@@ -19948,7 +19585,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Normal",
-		zMovePower: 190,
 		contestType: "Tough",
 	},
 	"throatchop": {
@@ -19995,7 +19631,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Dark",
-		zMovePower: 160,
 		contestType: "Clever",
 	},
 	"thunder": {
@@ -20024,7 +19659,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 185,
 		contestType: "Cool",
 	},
 	"thunderbolt": {
@@ -20046,7 +19680,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 175,
 		contestType: "Cool",
 	},
 	"thunderfang": {
@@ -20072,7 +19705,6 @@ let BattleMovedex = {
 		],
 		target: "normal",
 		type: "Electric",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"thunderpunch": {
@@ -20094,7 +19726,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"thundershock": {
@@ -20115,7 +19746,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"thunderwave": {
@@ -20363,7 +19993,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"trick": {
@@ -20530,7 +20159,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Grass",
-		zMovePower: 140,
 		contestType: "Cute",
 	},
 	"trumpcard": {
@@ -20591,7 +20219,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Bug",
-		zMovePower: 100,
 		gmaxPower: 100,
 		contestType: "Cool",
 	},
@@ -20632,7 +20259,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Dragon",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"uturn": {
@@ -20652,7 +20278,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 140,
 		contestType: "Cute",
 	},
 	"uproar": {
@@ -20707,7 +20332,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Normal",
-		zMovePower: 175,
 		contestType: "Cute",
 	},
 	"vacuumwave": {
@@ -20725,7 +20349,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"vcreate": {
@@ -20820,7 +20443,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"vinewhip": {
@@ -20837,7 +20459,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"visegrip": {
@@ -20854,7 +20475,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"vitalthrow": {
@@ -20872,7 +20492,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"voltswitch": {
@@ -20892,7 +20511,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		zMovePower: 140,
 		contestType: "Cool",
 	},
 	"volttackle": {
@@ -20915,7 +20533,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"wakeupslap": {
@@ -20941,7 +20558,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 140,
 		contestType: "Tough",
 	},
 	"waterfall": {
@@ -20963,7 +20579,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Water",
-		zMovePower: 160,
 		contestType: "Tough",
 	},
 	"watergun": {
@@ -20980,7 +20595,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 100,
 		contestType: "Cute",
 	},
 	"waterpledge": {
@@ -21053,7 +20667,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"waterpulse": {
@@ -21074,7 +20687,6 @@ let BattleMovedex = {
 		},
 		target: "any",
 		type: "Water",
-		zMovePower: 120,
 		contestType: "Beautiful",
 	},
 	"watershuriken": {
@@ -21100,7 +20712,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 100,
 		contestType: "Cool",
 	},
 	"watersport": {
@@ -21159,7 +20770,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Water",
-		zMovePower: 200,
 		contestType: "Beautiful",
 	},
 	"weatherball": {
@@ -21219,7 +20829,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMovePower: 100,
 		contestType: "Beautiful",
 	},
 	"whirlwind": {
@@ -21310,7 +20919,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		zMovePower: 175,
 		contestType: "Tough",
 	},
 	"willowisp": {
@@ -21347,7 +20955,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "any",
 		type: "Flying",
-		zMovePower: 120,
 		contestType: "Cool",
 	},
 	"wish": {
@@ -21461,7 +21068,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 190,
 		contestType: "Tough",
 	},
 	"workup": {
@@ -21537,7 +21143,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 100,
 		contestType: "Tough",
 	},
 	"wringout": {
@@ -21578,7 +21183,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"yawn": {
@@ -21635,7 +21239,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 190,
 		contestType: "Cool",
 	},
 	"zenheadbutt": {
@@ -21657,7 +21260,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 160,
 		contestType: "Clever",
 	},
 	"zingzap": {
@@ -21679,7 +21281,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 160,
 		contestType: "Cool",
 	},
 	"zippyzap": {

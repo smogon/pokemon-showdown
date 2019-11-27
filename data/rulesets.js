@@ -541,7 +541,7 @@ let BattleFormats = {
 		name: 'NFE Clause',
 		desc: "Bans Pok&eacute;mon that are fully evolved or can't evolve",
 		onValidateSet(set) {
-			const template = this.dex.getTemplate(set.name || set.species);
+			const template = this.dex.getTemplate(set.species);
 			if (!template.nfe) {
 				return [set.species + " cannot evolve."];
 			}
@@ -679,8 +679,8 @@ let BattleFormats = {
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
 		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canDynamax = null;
+			for (let side of this.sides) {
+				side.canDynamax = false;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
@@ -717,6 +717,14 @@ let BattleFormats = {
 	natdex: {
 		effectType: 'Rule',
 		name: 'NatDex',
+		onValidateSet(set) {
+			// Items other than Z-Crystals and Pokémon-specific items should be illegal
+			if (!set.item) return;
+			let item = this.dex.getItem(set.item);
+			if (item.isNonstandard === 'Past' && !item.zMove && !item.itemUser) {
+				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
+			}
+		},
 		onBegin() {
 			// if you have a mega/primal or z, you can't dynamax
 			for (const side of this.sides) {
@@ -728,11 +736,7 @@ let BattleFormats = {
 						break;
 					}
 				}
-				if (canMegaOrZ) {
-					for (const pokemon of side.pokemon) {
-						pokemon.canDynamax = false;
-					}
-				}
+				if (canMegaOrZ) side.canDynamax = false;
 			}
 		},
 	},
