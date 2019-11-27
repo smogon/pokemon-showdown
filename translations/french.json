@@ -95,8 +95,8 @@
 
 		"Your status cannot be updated while you are locked or semilocked.": "Ton statut ne peut être mis à jour quand tu es lock ou semi-lock.",
 		"Your status is too long; it must be under ${maxLength} characters.": "Ton statut est trop long ; il doit être en dessous de ${maxLength} caractères.",
-		"Your status contains a banned word.": "Ton statut contient un mot bannit.",
-		"Your status has been set to: ${target}.": "Ton statut a été fixé comme ${target}.",
+		"Your status contains a banned word.": "Ton statut contient un mot banni.",
+		"Your status has been set to: ${target}.": "Ton statut est désormais le suivant: ${target}.",
 		"You are now marked as busy.": "Tu es maintenant marqué comme occupé.",
 		"You are now marked as away. Send a message or use /back to indicate you are back.": "Tu es maintenant marqué comme absent. Envoie un message ou utilise /back pour indiquer que tu es de retour.",
 
