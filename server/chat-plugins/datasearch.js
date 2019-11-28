@@ -283,6 +283,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	}
 	let allColors = ['green', 'red', 'blue', 'white', 'brown', 'yellow', 'purple', 'pink', 'gray', 'black'];
 	let allEggGroups = {'amorphous': 'Amorphous', 'bug': 'Bug', 'ditto': 'Ditto', 'dragon': 'Dragon', 'fairy': 'Fairy', 'field': 'Field', 'flying': 'Flying', 'grass': 'Grass', 'humanlike': 'Human-Like', 'mineral': 'Mineral', 'monster': 'Monster', 'undiscovered': 'Undiscovered', 'water1': 'Water 1', 'water2': 'Water 2', 'water3': 'Water 3', __proto__: null};
+	let allFormes = ['alola', 'galar', 'primal', 'therian', 'totem'];
 	let allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen'];
 	let allStatAliases = {'attack': 'atk', 'defense': 'def', 'specialattack': 'spa', 'spc': 'spa', 'special': 'spa', 'spatk': 'spa', 'specialdefense': 'spd', 'spdef': 'spd', 'speed': 'spe', 'wt': 'weight', 'ht': 'height', 'generation': 'gen'};
 	let showAll = false;
@@ -315,7 +316,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	};
 
 	for (const andGroup of target.split(',')) {
-		let orGroup = {abilities: {}, tiers: {}, doublesTiers: {}, colors: {}, 'egg groups': {}, gens: {}, moves: {}, types: {}, resists: {}, weak: {}, stats: {}, skip: false};
+		let orGroup = {abilities: {}, tiers: {}, doublesTiers: {}, colors: {}, 'egg groups': {}, formes: {}, gens: {}, moves: {}, types: {}, resists: {}, weak: {}, stats: {}, skip: false};
 		let parameters = andGroup.split("|");
 		if (parameters.length > 3) return {reply: "No more than 3 alternatives for each parameter may be used."};
 		for (const parameter of parameters) {
@@ -450,6 +451,12 @@ function runDexsearch(target, cmd, canAll, message) {
 				//validation for this is in the /randpoke command
 				randomOutput = parseInt(target.substr(6));
 				orGroup.skip = true;
+				continue;
+			}
+
+			if (allFormes.includes(toID(target))) {
+				target = toID(target);
+				orGroup.formes[target] = !isNotSearch;
 				continue;
 			}
 
@@ -630,6 +637,7 @@ function runDexsearch(target, cmd, canAll, message) {
 					break;
 				}
 			}
+
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				let tier = dex[mon].tier;
 				if (tier[0] === '(' && tier !== '(PU)') tier = tier.slice(1, -1);
@@ -694,6 +702,14 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			for (let ability in alts.abilities) {
 				if (Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability]) {
+					matched = true;
+					break;
+				}
+			}
+			if (matched) continue;
+
+			for (let forme in alts.formes) {
+				if (toID(dex[mon].forme).includes(forme) === alts.formes[forme]) {
 					matched = true;
 					break;
 				}
