@@ -7855,6 +7855,10 @@ let BattleFormatsData = {
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
+	eternatuseternamax: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
 	missingno: {
 		isNonstandard: "Glitch",
 		tier: "Illegal",
