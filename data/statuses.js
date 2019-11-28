@@ -729,7 +729,7 @@ let BattleStatuses = {
 			// TODO work on display for HP
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
-		onSwitchIn(pokemon) { // Putting Eternamax in onSwitchIn so it shows up eveytime Eternatus switches in.
+		onSwitchIn(pokemon) { // Putting Eternamax in onSwitchIn so it shows up everytime Eternatus switches in.
 			if (pokemon.species !== 'Eternatus-Eternamax') return; // Special for Eternatus' Eternamax forme
 			pokemon.removeVolatile('substitute');
 			this.add('-start', pokemon, 'Eternamax');
