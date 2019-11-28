@@ -746,8 +746,7 @@ let BattleStatuses = {
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			if (pokemon.hp <= 0) pokemon.hp = 1;
-			if (pokemon.species === 'Eternatus-Eternamax') return;
-			this.hint("Dynamax ended.");
+			if (pokemon.species !== 'Eternatus-Eternamax') this.hint("Dynamax ended.");
 		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
@@ -755,11 +754,9 @@ let BattleStatuses = {
 			return null;
 		},
 		onEnd(pokemon) {
-			if (pokemon.species !== 'Eternatus-Eternamax') {
-				this.add('-end', pokemon, 'Dynamax');
-				if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
-				if (pokemon.species === 'Shedinja') return;
-			}
+			if (pokemon.species !== 'Eternatus-Eternamax') this.add('-end', pokemon, 'Dynamax');
+			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
+			if (pokemon.species === 'Shedinja') return;
 			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
