@@ -93,10 +93,10 @@ describe('Target Resolution', function () {
 	describe(`Targetted slot is empty`, function () {
 		it(`should redirect 'any' from a fainted foe to a targettable foe`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Wailord', ability: 'pressure', moves: ['waterpulse']},
+				{species: 'Wailord', ability: 'owntempo', moves: ['waterpulse']},
 				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
 			], [
-				{species: 'Wailord', ability: 'pressure', moves: ['waterpulse']},
+				{species: 'Wailord', ability: 'owntempo', moves: ['waterpulse']},
 				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
 			]]);
 			const attackers = battle.sides.map(side => side.active[0]);
