@@ -103,3 +103,53 @@ describe('Mega Evolution [Gen 6]', function () {
 		assert.fainted(fastMega);
 	});
 });
+
+describe('Pokemon Speed', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should update dynamically in Gen 8', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		const p1team = [
+			{species: 'Ludicolo', ability: 'swiftswim', moves: ['scald'], evs: {spe: 100}}, // 201 Speed
+			{species: 'Appletun', ability: 'ripen', moves: ['sleeptalk']}, // To be switched out
+			{species: 'Pelipper', ability: 'drizzle', moves: ['sleeptalk']}, // Will set rain on switch in
+		];
+		const p2team = [
+			{species: 'Accelgor', ability: 'hydration', moves: ['bugbuzz'], evs: {spe: 156}, nature: 'Timid'}, // 401 Speed
+			{species: 'Aegislash', ability: 'stancechange', moves: ['sleeptalk']}, // Does nothing but fill a slot
+		];
+		battle.setPlayer('p1', {team: p1team});
+		battle.setPlayer('p2', {team: p2team});
+
+		// Set ludicolo's and accelgor's HP to 1.
+		battle.p1.pokemon[0].sethp(1); // Ludicolo
+		battle.p2.pokemon[0].sethp(1); // Accelgor
+
+		battle.makeChoices('move scald 1, switch 3', 'move bugbuzz 1, auto');
+		assert.fainted(battle.p2.pokemon[0]); // Accelgor should be fainted
+	});
+
+	it('should NOT update dynamically in Gen 7', function () {
+		battle = common.gen(7).createBattle({gameType: 'doubles'});
+		const p1team = [
+			{species: 'Ludicolo', ability: 'swiftswim', moves: ['scald'], evs: {spe: 100}}, // 201 Speed
+			{species: 'Appletun', ability: 'ripen', moves: ['sleeptalk']}, // To be switched out
+			{species: 'Pelipper', ability: 'drizzle', moves: ['sleeptalk']}, // Will set rain on switch in
+		];
+		const p2team = [
+			{species: 'Accelgor', ability: 'hydration', moves: ['bugbuzz'], evs: {spe: 156}, nature: 'Timid'}, // 401 Speed
+			{species: 'Aegislash', ability: 'stancechange', moves: ['sleeptalk']}, // Does nothing but fill a slot
+		];
+		battle.setPlayer('p1', {team: p1team});
+		battle.setPlayer('p2', {team: p2team});
+
+		// Set ludicolo's and accelgor's HP to 1.
+		battle.p1.pokemon[0].sethp(1); // Ludicolo
+		battle.p2.pokemon[0].sethp(1); // Accelgor
+
+		battle.makeChoices('move scald 1, switch 3', 'move bugbuzz 1, auto');
+		assert.fainted(battle.p1.pokemon[0]); // Ludicolo should be fainted
+	});
+});

@@ -2374,7 +2374,6 @@ export class Battle {
 					});
 				}
 				if (action.maxMove && !action.pokemon.volatiles['dynamax']) {
-					this.debug(`Adding runDynamax to queue`);
 					this.addToQueue({
 						choice: 'runDynamax',
 						pokemon: action.pokemon,
@@ -2496,6 +2495,7 @@ export class Battle {
 			}
 		}
 		action.sourceEffect = sourceEffect;
+		action.priority = 10;
 		this.queue.unshift(action);
 	}
 
@@ -2731,7 +2731,7 @@ export class Battle {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
-		} else if (['megaEvo', 'runDynamax'].includes(action.choice) && this.gen >= 7) {
+		} else if (action.choice === 'megaEvo' && this.gen === 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			const moveIndex = this.queue.findIndex(queuedAction =>
@@ -2771,6 +2771,14 @@ export class Battle {
 		}
 
 		this.eachEvent('Update');
+		if (this.gen >= 8 && this.queue.length && this.queue[0].choice === 'move') {
+			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
+			this.updateSpeed();
+			for (const queueAction of this.queue) {
+				if (queueAction.pokemon) queueAction.speed = queueAction.pokemon.speed;
+			}
+			this.sortQueue();
+		}
 
 		return false;
 	}
