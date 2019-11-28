@@ -30,11 +30,13 @@ exports.commands = {
 	ds7: 'dexsearch',
 	ds8: 'dexsearch',
 	dsearch: 'dexsearch',
+	nds: 'dexsearch',
 	dexsearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help dexsearch');
 		let targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
+		if (cmd === 'nds') target += ', natdex';
 		return runSearch({
 			target: target,
 			cmd: 'dexsearch',
@@ -67,8 +69,10 @@ exports.commands = {
 		`Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.`,
 		`Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.`,
 		`The parameter 'mega' can be added to search for Mega Evolutions only, the parameter 'gmax' can be added to search for Gigantamax Formes only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon that are not in another tier.`,
+		`'Alola' 'Galar', 'Therian', 'Totem', or 'Primal' can be used as parameters to search for those formes.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.`,
 		`You can search for info in a specific generation by appending the generation to ds, e.g. '/ds1 normal' searches for all Pok\u00e9mon that were normal type in Generation I.`,
+		`/dexsearch will search the Galar Pokedex; You can search the National Pokedex by using /nds or by adding natdex as a parameter.`,
 		`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix 'group' onto the egg group parameter, e.g., seaching for 'grass, grass group' will show all Grass types in the Grass egg group.`,
 		`The order of the parameters does not matter.`,
 	],
@@ -198,6 +202,8 @@ exports.commands = {
 		`'asc' or 'desc' following a move property will arrange the names in ascending or descending order of that property respectively, e.g., basepower asc will arrange moves in ascending order of their basepowers.`,
 		`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, and zmove.`,
 		`A search that includes '!protect' will show all moves that bypass protection.`,
+		`'protection' as a parameter will search protection moves like Protect, Detect, etc.`,
+		`'max' or 'gmax' as parameters will search for Max Moves and G-Max moves respectively.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
 		`If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.`,
 		`The order of the parameters does not matter.`,
@@ -292,6 +298,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let gmaxSearch = null;
 	let tierSearch = null;
 	let capSearch = null;
+	let nationalSearch = null;
 	let randomOutput = 0;
 	let maxGen = 0;
 	let validParameter = (cat, param, isNotSearch, input) => {
@@ -391,6 +398,12 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (target.substr(0, 6) === 'maxgen') {
 				maxGen = parseInt(target[6]);
 				if (!maxGen || maxGen < 1 || maxGen > 8) return {reply: "The generation must be between 1 and 8"};
+				orGroup.skip = true;
+				continue;
+			}
+
+			if (target === 'natdex') {
+				nationalSearch = true;
 				orGroup.skip = true;
 				continue;
 			}
@@ -608,7 +621,7 @@ function runDexsearch(target, cmd, canAll, message) {
 		let template = mod.getTemplate(pokemon);
 		let megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
 		let gmaxSearchResult = (gmaxSearch === null || (gmaxSearch === true && template.isGigantamax) || (gmaxSearch === false && !template.isGigantamax));
-		if (template.gen <= maxGen && template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (!template.tier.startsWith("CAP") || capSearch) && megaSearchResult && gmaxSearchResult) {
+		if (template.gen <= maxGen && (nationalSearch || (template.tier !== 'Unreleased' && template.tier !== 'Illegal')) && (!template.tier.startsWith("CAP") || capSearch) && megaSearchResult && gmaxSearchResult) {
 			dex[pokemon] = template;
 		}
 	}

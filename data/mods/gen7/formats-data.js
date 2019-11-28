@@ -5087,6 +5087,8 @@ let BattleFormatsData = {
 	vikavolttotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "NU",
+		doublesTier: "DUU",
 	},
 	crabrawler: {
 		tier: "LC",
@@ -5138,6 +5140,8 @@ let BattleFormatsData = {
 	ribombeetotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "RU",
+		doublesTier: "(DUU)",
 	},
 	rockruff: {
 		tier: "LC",
@@ -5205,6 +5209,8 @@ let BattleFormatsData = {
 	araquanidtotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "RU",
+		doublesTier: "DUU",
 	},
 	fomantis: {
 		tier: "LC",
@@ -5241,6 +5247,8 @@ let BattleFormatsData = {
 	salazzletotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "RU",
+		doublesTier: "(DUU)",
 	},
 	stufful: {
 		tier: "LC",
@@ -5475,6 +5483,8 @@ let BattleFormatsData = {
 	togedemarutotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "NU",
+		doublesTier: "DUU",
 	},
 	mimikyu: {
 		inherit: true,
@@ -5486,6 +5496,8 @@ let BattleFormatsData = {
 	mimikyutotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "UU",
+		doublesTier: "DUU",
 	},
 	mimikyutotembusted: {
 		requiredAbility: 'Disguise',
@@ -5526,6 +5538,8 @@ let BattleFormatsData = {
 	kommoototem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	tapukoko: {
 		inherit: true,
