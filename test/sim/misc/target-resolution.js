@@ -116,10 +116,10 @@ describe('Target Resolution', function () {
 
 		it(`should not redirect 'any' from a fainted ally to another Pokémon by default`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Wailord', ability: 'pressure', moves: ['waterpulse']},
+				{species: 'Wailord', ability: 'pressure', moves: ['watergun']},
 				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
 			], [
-				{species: 'Wailord', ability: 'pressure', moves: ['waterpulse']},
+				{species: 'Wailord', ability: 'pressure', moves: ['watergun']},
 				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
 			]]);
 
@@ -132,13 +132,13 @@ describe('Target Resolution', function () {
 			assert.fainted(faintTargets[1]);
 
 			const prevHps = attackers.map(pokemon => pokemon.hp);
-			battle.makeChoices('move waterpulse -2, pass', 'move waterpulse -2, pass');
+			battle.makeChoices('move watergun -2, pass', 'move watergun -2, pass');
 			const newHps = attackers.map(pokemon => pokemon.hp);
 
 			assert.deepStrictEqual(prevHps, newHps);
-			assert(battle.log.includes('|move|p1a: Wailord|Water Pulse|p1: Shedinja|[notarget]'));
+			assert(battle.log.includes('|move|p1a: Wailord|Water Gun|p1: Shedinja|[notarget]'));
 			assert(battle.log.includes('|-fail|p1a: Wailord'));
-			assert(battle.log.includes('|move|p2a: Wailord|Water Pulse|p2: Shedinja|[notarget]'));
+			assert(battle.log.includes('|move|p2a: Wailord|Water Gun|p2: Shedinja|[notarget]'));
 			assert(battle.log.includes('|-fail|p2a: Wailord'));
 		});
 
