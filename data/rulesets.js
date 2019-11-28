@@ -717,6 +717,7 @@ let BattleFormats = {
 	natdex: {
 		effectType: 'Rule',
 		name: 'NatDex',
+		banlist: ['Floette-Eternal', 'Pichu-Spiky-eared'],
 		onValidateSet(set) {
 			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (!set.item) return;
