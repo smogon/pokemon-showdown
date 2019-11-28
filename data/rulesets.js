@@ -717,7 +717,7 @@ let BattleFormats = {
 	natdex: {
 		effectType: 'Rule',
 		name: 'NatDex',
-		banlist: ['Floette-Eternal', 'Magearna-Original', 'Pichu-Spiky-eared'],
+		banlist: ['Floette-Eternal', 'Magearna-Original', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter'],
 		onValidateSet(set) {
 			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (!set.item) return;
