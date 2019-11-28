@@ -718,11 +718,12 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'NatDex',
 		onValidateSet(set) {
+			// These Pokemon are still unobtainable
 			let unobtainables = ['Eevee-Starter', 'Floette-Eternal', 'Magearna-Original', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter'];
-			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (unobtainables.includes(set.species)) {
 				return [`${set.name || set.species} does not exist in Gen ${this.dex.gen}.`];
 			}
+			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (!set.item) return;
 			let item = this.dex.getItem(set.item);
 			if (item.isNonstandard === 'Past' && !item.zMove && !item.itemUser) {
