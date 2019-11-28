@@ -430,6 +430,7 @@ let Formats = [
 			'Eternatus', 'Shedinja', 'Zacian', 'Zamazenta',
 			'Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Libero', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard',
 		],
+		minSourceGen: 8,
 	},
 	{
 		name: "[Gen 8] STABmons",
@@ -442,6 +443,7 @@ let Formats = [
 		ruleset: ['[Gen 8] OU', 'STABmons Move Legality'],
 		banlist: ['Silvally', 'King\'s Rock', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Shell Smash', 'Shift Gear', 'Spore'],
+		minSourceGen: 8,
 	},
 	{
 		name: "[Gen 8] Mix and Mega",
@@ -458,6 +460,7 @@ let Formats = [
 			'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite',
 		],
 		cannotMega: ['Eternatus', 'Zacian', 'Zamazenta'],
+		minSourceGen: 8,
 		onValidateTeam(team, format) {
 			/**@type {{[k: string]: true}} */
 			let itemTable = {};
@@ -507,6 +510,7 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Endless Battle Clause'],
 		banlist: ['Eternatus', 'Shedinja', 'Zacian', 'Zamazenta'],
+		minSourceGen: 8,
 		onModifyTemplate(template, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
