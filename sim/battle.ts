@@ -308,6 +308,13 @@ export class Battle {
 		for (const pokemon of this.getAllActive()) {
 			pokemon.updateSpeed();
 		}
+
+		if (this.gen < 8) return;
+
+		// In gen 8, speed is updated dynamically so update the queue's speed properties.
+		for (const action of this.queue) {
+			if (action.pokemon) action.speed = action.pokemon.speed;
+		}
 	}
 
 	comparePriority(a: AnyObject, b: AnyObject) {
@@ -2374,7 +2381,6 @@ export class Battle {
 					});
 				}
 				if (action.maxMove && !action.pokemon.volatiles['dynamax']) {
-					this.debug(`Adding runDynamax to queue`);
 					this.addToQueue({
 						choice: 'runDynamax',
 						pokemon: action.pokemon,
@@ -2496,6 +2502,7 @@ export class Battle {
 			}
 		}
 		action.sourceEffect = sourceEffect;
+		action.priority = 7.1;
 		this.queue.unshift(action);
 	}
 
@@ -2790,6 +2797,12 @@ export class Battle {
 			this.queue.shift();
 			this.runAction(action);
 			if (this.requestState || this.ended) return;
+
+			if (this.gen >= 8 && this.turn > 0) {
+				// Dynamically updated speed mid-turn except during team selection.
+				this.updateSpeed();
+				this.sortQueue();
+			}
 		}
 
 		this.nextTurn();

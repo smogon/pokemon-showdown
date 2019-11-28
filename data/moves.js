@@ -284,6 +284,7 @@ let BattleMovedex = {
 			let action = this.willMove(target);
 			if (action) {
 				this.cancelMove(target);
+				action.priority = 7.1;
 				this.queue.unshift(action);
 				this.add('-activate', target, 'move: After You');
 			} else {
