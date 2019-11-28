@@ -7423,7 +7423,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		desc: "Damages opponent(s) by 1/8 of their maximum HP for four turns. Base Power scales with the base move's Base Power.",
+		desc: "Damages opponent(s) by 1/8 of their maximum HP for four turns on non-Fire-type Pokemon. Base Power scales with the base move's Base Power.",
 		shortDesc: "Damages foes for 4 turns. BP scales w/ base move.",
 		id: "gmaxwildfire",
 		isNonstandard: "Custom",
