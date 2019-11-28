@@ -308,13 +308,6 @@ export class Battle {
 		for (const pokemon of this.getAllActive()) {
 			pokemon.updateSpeed();
 		}
-
-		if (this.gen < 8) return;
-
-		// In gen 8, speed is updated dynamically so update the queue's speed properties.
-		for (const action of this.queue) {
-			if (action.pokemon) action.speed = action.pokemon.speed;
-		}
 	}
 
 	comparePriority(a: AnyObject, b: AnyObject) {
@@ -2779,7 +2772,11 @@ export class Battle {
 
 		this.eachEvent('Update');
 		if (this.gen >= 8 && this.queue.length && this.queue[0].choice === 'move') {
+			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
+			for (const queueAction of this.queue) {
+				if (queueAction.pokemon) queueAction.speed = queueAction.pokemon.speed;
+			}
 			this.sortQueue();
 		}
 
