@@ -600,6 +600,7 @@ let BattleAliases = {
 	"skarm": "Skarmory",
 	"smogon": "Koffing",
 	"smogonbird": "Talonflame",
+	"snips": "Drapion",
 	"staka": "Stakataka",
 	"steela": "Celesteela",
 	"sui": "Suicune",
