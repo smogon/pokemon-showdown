@@ -72,7 +72,7 @@ exports.commands = {
 		`'Alola' 'Galar', 'Therian', 'Totem', or 'Primal' can be sued as parameters to search for those formes.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.`,
 		`You can search for info in a specific generation by appending the generation to ds, e.g. '/ds1 normal' searches for all Pok\u00e9mon that were normal type in Generation I.`,
-		`You can search the National Pokedex by using /nds or by adding natdex as a parameter.`,
+		`/dexsearch will search the Galar Pokedex; You can search the National Pokedex by using /nds or by adding natdex as a parameter.`,
 		`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix 'group' onto the egg group parameter, e.g., seaching for 'grass, grass group' will show all Grass types in the Grass egg group.`,
 		`The order of the parameters does not matter.`,
 	],
