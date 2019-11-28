@@ -984,7 +984,12 @@ export class GlobalRoom extends BasicRoom {
 			}
 		}
 		const stack = stackLines.slice(0, 2).join(`<br />`);
-		const crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
+		let crashMessage;
+		if (/private/.test(stack)) {
+			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
+		} else {
+			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
+		}
 		const devRoom = Rooms.get('development');
 		if (devRoom) {
 			devRoom.add(crashMessage).update();
