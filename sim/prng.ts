@@ -108,7 +108,7 @@ export class PRNG {
 	 * This is how the game resolves speed ties.
 	 *
 	 * At least according to V4 in
-	 * https://github.com/Zarel/Pokemon-Showdown/issues/1157#issuecomment-214454873
+	 * https://github.com/smogon/pokemon-showdown/issues/1157#issuecomment-214454873
 	 */
 	shuffle<T>(items: T[], start: number = 0, end: number = items.length) {
 		while (start < end - 1) {

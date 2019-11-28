@@ -1473,9 +1473,9 @@ const commands = {
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown is open source:<br />` +
 			`- Language: JavaScript (Node.js)<br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master">What's new?</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown">Server source code</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Client">Client source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown/commits/master">What's new?</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown">Server source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown-client">Client source code</a><br />` +
 			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a>`
 		);
 	},
@@ -1650,7 +1650,7 @@ const commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown/blob/master/data/mods/gennext/README.md">README: overview of NEXT</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown/blob/master/data/mods/gennext/README.md">README: overview of NEXT</a><br />` +
 			"Example replays:<br />" +
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-120689854">Zergo vs Mr Weegle Snarf</a><br />` +
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-130756055">NickMP vs Khalogie</a>`

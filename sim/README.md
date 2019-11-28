@@ -103,7 +103,7 @@ Sets player information:
 
 Makes a choice for a player. [Possible choices are documented in `SIM-PROTOCOL.md`][possible-choices].
 
-  [possible-choices]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md#possible-choices
+  [possible-choices]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#possible-choices
 
 
 Reading from the simulator
@@ -120,7 +120,7 @@ An update which should be sent to all players and spectators.
 
 [The messages the simulator sends back are documented in `SIM-PROTOCOL.md`][sim-protocol]. You can also look at a replay log for examples.
 
-  [sim-protocol]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md
+  [sim-protocol]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
 
 One message type that only appears here is `|split|PLAYERID`:
 
@@ -144,7 +144,7 @@ Note that choice requests (updates telling the player what choices they have for
 
 [Choice requests are documented in "Choice requests" in `SIM-PROTOCOL.md`][choice-requests].
 
-  [choice-requests]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md#choice-requests
+  [choice-requests]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#choice-requests
 
     end
     LOGDATA
