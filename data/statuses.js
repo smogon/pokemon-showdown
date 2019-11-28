@@ -718,6 +718,7 @@ let BattleStatuses = {
 		num: 0,
 		duration: 3,
 		onStart(pokemon) {
+			if (pokemon.species === 'Eternatus-Eternamax') return;
 			pokemon.removeVolatile('substitute');
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.canGigantamax);
@@ -728,6 +729,15 @@ let BattleStatuses = {
 			// TODO work on display for HP
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
+		onSwitchIn(pokemon) { // Putting Eternamax in onSwitchIn so it shows up everytime Eternatus switches in.
+			if (pokemon.species !== 'Eternatus-Eternamax') return; // Special for Eternatus' Eternamax forme
+			pokemon.removeVolatile('substitute');
+			this.add('-start', pokemon, 'Eternamax');
+			this.effectData.duration = 0;
+			pokemon.maxhp = Math.floor(pokemon.maxhp * 2);
+			pokemon.hp = Math.floor(pokemon.hp * 2);
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+		},
 		onFlinch: false,
 		onBeforeSwitchOut(pokemon) {
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
@@ -736,7 +746,7 @@ let BattleStatuses = {
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio); // TODO prevent maxhp loss
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			if (pokemon.hp <= 0) pokemon.hp = 1;
-			this.hint("Dynamax ended.");
+			if (pokemon.species !== 'Eternatus-Eternamax') this.hint("Dynamax ended.");
 		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
@@ -744,7 +754,7 @@ let BattleStatuses = {
 			return null;
 		},
 		onEnd(pokemon) {
-			this.add('-end', pokemon, 'Dynamax');
+			if (pokemon.species !== 'Eternatus-Eternamax') this.add('-end', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
 			let ratio = (1 / 2); // Changes based on dynamax level, static (LVL 10) until we know the levels
@@ -762,6 +772,15 @@ let BattleStatuses = {
 	// but their formes are specified to be their corresponding type
 	// in the Pokedex, so that needs to be overridden.
 	// This is mainly relevant for Hackmons Cup and Balanced Hackmons.
+	eternatuseternamax: {
+		name: 'Eternatus-Eternamax',
+		id: 'eternatuseternamax',
+		num: 890,
+		onStart(pokemon) {
+			if (pokemon.transformed) return;
+			pokemon.addVolatile('dynamax');
+		},
+	},
 	arceus: {
 		name: 'Arceus',
 		id: 'arceus',
