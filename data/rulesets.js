@@ -547,7 +547,7 @@ let BattleFormats = {
 			}
 		},
 		onBegin() {
-			this.add('rule', 'NFE Clause: Fully Evolved Pok&eacute;mon are banned');
+			this.add('rule', 'NFE Clause: Fully Evolved Pokémon are banned');
 		},
 	},
 	hppercentagemod: {
