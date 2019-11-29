@@ -7015,7 +7015,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Summons Gravity. BP scales with base move.",
+		shortDesc: "Summons Gravity for 5 turns. BP scales with base move.",
 		id: "gmaxgravitas",
 		isNonstandard: "Custom",
 		name: "G-Max Gravitas",
