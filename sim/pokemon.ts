@@ -207,12 +207,16 @@ export class Pokemon {
 	modifiedStats?: StatsExceptHPTable;
 	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
 
-	// OMs
+	/**
+	 * An object for storing untyped data, for mods to use.
+	 */
 	m: PokemonModData;
 
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
 		this.battle = side.battle;
+
+		this.m = {};
 
 		const pokemonScripts = this.battle.dex.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
@@ -382,11 +386,6 @@ export class Pokemon {
 		this.clearVolatile();
 		this.maxhp = this.template.maxHP || this.baseStoredStats.hp;
 		this.hp = this.maxhp;
-
-		/**
-		 * An object for storing untyped data, for mods to use.
-		 */
-		this.m = {};
 	}
 
 	toJSON(): AnyObject {
