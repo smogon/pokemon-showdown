@@ -10855,14 +10855,9 @@ let BattleMovedex = {
 		name: "Magic Powder",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
+		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onHit(target) {
-			if (target.getTypes().join() === 'Psychic' || !target.setType('Psychic')) {
-				// Soak should animate even when it fails.
-				// Returning false would suppress the animation.
-				this.add('-fail', target);
-				return null;
-			}
+			if (target.getTypes().join() === 'Psychic' || !target.setType('Psychic')) return false;
 			this.add('-start', target, 'typechange', 'Psychic');
 		},
 		secondary: null,
