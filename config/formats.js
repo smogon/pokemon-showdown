@@ -456,7 +456,7 @@ let Formats = [
 		mod: 'mixandmega',
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Sleep Clause Mod', 'Endless Battle Clause'],
 		banlist: [
-			'Zacian-Crowned', 'Baton Pass', 'Electrify',
+			'Gothitelle', 'Gothorita', 'Zacian-Crowned', 'Baton Pass', 'Electrify',
 			'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite',
 		],
 		cannotMega: ['Eternatus', 'Zacian', 'Zamazenta'],
@@ -509,7 +509,7 @@ let Formats = [
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Endless Battle Clause'],
-		banlist: ['Eternatus', 'Shedinja', 'Zacian', 'Zamazenta'],
+		banlist: ['Darmanitan-Galar', 'Eternatus', 'Shedinja', 'Zacian', 'Zamazenta'],
 		minSourceGen: 8,
 		onModifyTemplate(template, target, source, effect) {
 			if (!target) return; // Chat command
