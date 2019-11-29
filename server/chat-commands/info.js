@@ -661,8 +661,7 @@ const commands = {
 					if (dex.gen >= 7) {
 						if (move.gen >= 8 && move.isMax) {
 							//Don't display Z-Power for Max / GMax moves
-						}
-						else if (move.zMovePower) {
+						} else if (move.zMovePower) {
 							details["Z-Power"] = move.zMovePower;
 						} else if (move.zMoveEffect) {
 							details["Z-Effect"] = {
