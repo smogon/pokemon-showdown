@@ -659,7 +659,9 @@ const commands = {
 					if (move.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
 
 					if (dex.gen >= 7) {
-						if (move.zMovePower) {
+						if (move.gen >= 8 && move.isMax) {
+							// Don't display Z-Power for Max/G-Max moves
+						} else if (move.zMovePower) {
 							details["Z-Power"] = move.zMovePower;
 						} else if (move.zMoveEffect) {
 							details["Z-Effect"] = {
