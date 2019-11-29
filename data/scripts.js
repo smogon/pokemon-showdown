@@ -1170,7 +1170,6 @@ let BattleScripts = {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
 			if (!pokemon.side.canDynamax) return;
-			if (this.canZMove(pokemon)) return;
 			if (this.canMegaEvo(pokemon)) return;
 			if (pokemon.getItem().zMove) return;
 			if (pokemon.template.isMega) return;
