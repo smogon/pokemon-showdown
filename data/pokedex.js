@@ -11494,7 +11494,7 @@ let BattlePokedex = {
 		heightm: 0.8,
 		weightkg: 21.5,
 		color: "Green",
-		eggGroups: ["Human-Like"],
+		eggGroups: ["Flying", "Human-Like"],
 	},
 	dedenne: {
 		num: 702,
@@ -11720,7 +11720,7 @@ let BattlePokedex = {
 		weightkg: 99.5,
 		color: "Blue",
 		evos: ["avalugg"],
-		eggGroups: ["Monster"],
+		eggGroups: ["Monster", "Mineral"],
 	},
 	avalugg: {
 		num: 713,
@@ -11733,7 +11733,7 @@ let BattlePokedex = {
 		color: "Blue",
 		prevo: "bergmite",
 		evoLevel: 37,
-		eggGroups: ["Monster"],
+		eggGroups: ["Monster", "Mineral"],
 	},
 	noibat: {
 		num: 714,
@@ -11745,7 +11745,7 @@ let BattlePokedex = {
 		weightkg: 8,
 		color: "Purple",
 		evos: ["noivern"],
-		eggGroups: ["Flying"],
+		eggGroups: ["Flying", "Dragon"],
 	},
 	noivern: {
 		num: 715,
@@ -11758,7 +11758,7 @@ let BattlePokedex = {
 		color: "Purple",
 		prevo: "noibat",
 		evoLevel: 48,
-		eggGroups: ["Flying"],
+		eggGroups: ["Flying", "Dragon"],
 	},
 	xerneas: {
 		num: 716,
