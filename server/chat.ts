@@ -1416,8 +1416,11 @@ export const Chat = new class {
 		} else {
 			return;
 		}
-		Object.assign(Chat.commands, plugin.commands);
-		Object.assign(Chat.pages, plugin.pages);
+		this.loadPluginData(plugin);
+	}
+	loadPluginData(plugin: AnyObject) {
+		if (plugin.commands) Object.assign(Chat.commands, plugin.commands);
+		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 
 		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
 
@@ -1428,20 +1431,12 @@ export const Chat = new class {
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 	}
-
 	loadPlugins() {
 		if (Chat.commands) return;
 
 		void FS('package.json').readIfExists().then(data => {
 			if (data) Chat.packageData = JSON.parse(data);
 		});
-
-		if (Config.chatfilter) Chat.filters.push(Config.chatfilter);
-		if (Config.namefilter) Chat.namefilters.push(Config.namefilter);
-		if (Config.hostfilter) Chat.hostfilters.push(Config.hostfilter);
-		if (Config.loginfilter) Chat.loginfilters.push(Config.loginfilter);
-		if (Config.nicknamefilter) Chat.nicknamefilters.push(Config.nicknamefilter);
-		if (Config.statusfilter) Chat.statusfilters.push(Config.statusfilter);
 
 		// Install plug-in commands and chat filters
 
@@ -1471,6 +1466,10 @@ export const Chat = new class {
 		Chat.basePages = Chat.pages;
 		Chat.commands = Object.assign(Object.create(null), Chat.baseCommands);
 		Chat.pages = Object.assign(Object.create(null), Chat.basePages);
+
+		// Load filters from Config
+		this.loadPluginData(Config);
+		this.loadPluginData(Tournaments);
 
 		let files = FS('server/chat-plugins').readdirSync();
 		try {
