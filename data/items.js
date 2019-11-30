@@ -6316,6 +6316,22 @@ let BattleItems = {
 		gen: 2,
 		desc: "Evolves Porygon into Porygon2 when traded.",
 	},
+	"utilityumbrella": {
+		id: "utilityumbrella",
+		name: "Utility Umbrella",
+		spritenum: 0,
+		fling: {
+			basePower: 60,
+		},
+		// Implemented in statuses.js
+		/* TODO:
+		 * Weathers: Test Desolate Land, Primordial Sea
+		 * Abilities: Test Forecast, Hydration, Solar Power
+		 */
+		num: 1123,
+		gen: 8,
+		desc: "Blocks the holder from receiving any effects of Sunny Day/Rain Dance.",
+	},
 	"venusaurite": {
 		id: "venusaurite",
 		name: "Venusaurite",
