@@ -3,15 +3,11 @@
 /**@type {ModdedBattleScriptsData} */
 let BattleScripts = {
 	init() {
-		for (let i in this.data.Pokedex) {
-			if (!this.data.Pokedex[i].forme) continue;
-			if (['Mega', 'Mega-X', 'Mega-Y'].includes(this.data.Pokedex[i].forme)) {
-				this.data.FormatsData[i].isNonstandard = null;
-			}
-		}
-		for (let id in this.data.Items) {
-			if (!this.data.Items[id].megaStone) continue;
-			this.modData('Items', id).onTakeItem = false;
+		for (let i in this.data.Items) {
+			if (!this.data.Items[i].megaStone) continue;
+			this.modData('Items', i).onTakeItem = false;
+			let id = toID(this.data.Items[i].megaStone);
+			this.modData('FormatsData', id).isNonstandard = null;
 		}
 	},
 	canMegaEvo(pokemon) {
