@@ -1141,7 +1141,7 @@ function createTournament(
 	return tour;
 }
 
-const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCommands} = {
+const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: TourCommands} = {
 	basic: {
 		j: 'join',
 		in: 'join',
@@ -1571,8 +1571,7 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 	},
 };
 
-Chat.loadPlugins();
-const chatCommands: ChatCommands = {
+export const commands: ChatCommands = {
 	tour: 'tournament',
 	tours: 'tournament',
 	tournaments: 'tournament',
@@ -1701,10 +1700,10 @@ const chatCommands: ChatCommands = {
 				return this.sendReply("There is currently no tournament running in this room.");
 			}
 
-			let commandHandler = commands.basic[cmd];
+			let commandHandler = tourCommands.basic[cmd];
 			if (commandHandler) {
-				if (typeof commandHandler === 'string') commandHandler = commands.basic[commandHandler];
-			} else if (commands.creation[cmd]) {
+				if (typeof commandHandler === 'string') commandHandler = tourCommands.basic[commandHandler];
+			} else if (tourCommands.creation[cmd]) {
 				if (room.toursEnabled === true) {
 					if (!this.can('tournaments', null, room)) return;
 				} else if (room.toursEnabled === '%') {
@@ -1714,14 +1713,14 @@ const chatCommands: ChatCommands = {
 						return this.errorReply(`Tournaments are disabled in this room (${room.roomid}).`);
 					}
 				}
-				commandHandler = commands.creation[cmd];
-				if (typeof commandHandler === 'string') commandHandler = commands.creation[commandHandler];
-			} else if (commands.moderation[cmd]) {
+				commandHandler = tourCommands.creation[cmd];
+				if (typeof commandHandler === 'string') commandHandler = tourCommands.creation[commandHandler];
+			} else if (tourCommands.moderation[cmd]) {
 				if (!user.can('gamemoderation', null, room)) {
 					return this.errorReply(`${cmd} -  Access denied.`);
 				}
-				commandHandler = commands.moderation[cmd];
-				if (typeof commandHandler === 'string') commandHandler = commands.moderation[commandHandler];
+				commandHandler = tourCommands.moderation[cmd];
+				if (typeof commandHandler === 'string') commandHandler = tourCommands.moderation[commandHandler];
 			}
 
 			if (typeof commandHandler === 'string') throw new Error(`Invalid tour command alis ${cmd}`);
@@ -1762,12 +1761,12 @@ const chatCommands: ChatCommands = {
 		);
 	},
 };
-Object.assign(Chat.commands, chatCommands);
 
 export const Tournaments = {
 	TournamentGenerators,
 	TournamentPlayer,
 	Tournament,
 	createTournament,
+	tourCommands,
 	commands,
 };
