@@ -100,6 +100,7 @@ export abstract class BasicRoom {
 	mafiaDisabled: boolean;
 	unoDisabled: boolean;
 	blackjackDisabled: boolean;
+	hangmanDisabled: boolean;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
 	privacySetter: Set<ID> | null;
@@ -155,6 +156,7 @@ export abstract class BasicRoom {
 		this.mafiaDisabled = false;
 		this.unoDisabled = false;
 		this.blackjackDisabled = false;
+		this.hangmanDisabled = false;
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
 		this.privacySetter = null;
@@ -1024,7 +1026,7 @@ export class BasicChatRoom extends BasicRoom {
 	readonly log: Roomlog;
 	readonly autojoin: boolean;
 	readonly staffAutojoin: string | boolean;
-	readonly banwords: string[];
+	banwords: string[];
 	/** Only available in groupchats */
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
