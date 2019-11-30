@@ -17,52 +17,32 @@ const SLOWCHAT_USER_REQUIREMENT = 10;
 
 const MAX_CHATROOM_ID_LENGTH = 225;
 
-class RoomSettings {
-	room: BasicChatRoom;
-	user: User;
-	connection: Connection;
-	sameCommand: boolean;
-	constructor(user: User, room: BasicChatRoom, connection: Connection) {
-		this.room = room;
-		this.user = user;
-		this.connection = connection;
-		this.sameCommand = true;
-	}
-	updateSetting(command: string) {
-		this.sameCommand = false;
-		this.generateDisplay();
-	}
-	button(setting: string, disable: boolean, command = ' ') {
-		if (disable) {
-			return Chat.html`<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">${setting}</button> `;
-		}
-		return Chat.html`<button class="button" name="send" value="/roomsetting ${command}">${setting}</button> `;
-	}
-	generateDisplay() {
-		let output = Chat.html`<div class="infobox">Room Settings for ${this.room.title}<br />`;
-
-		for (const handler of Chat.roomSettings) {
-			output += handler.call({button: this.button}, this.room, this.user, this.connection);
-		}
-
-		output += '</div>';
-		this.user.sendTo(this.room, `|uhtml${(this.sameCommand ? '' : 'change')}|roomsettings|${output}`);
-	}
-}
-
 export const commands: ChatCommands = {
 	roomsetting: 'roomsettings',
 	roomsettings(target, room, user, connection) {
 		if (room.battle) return this.errorReply("This command cannot be used in battle rooms.");
-		const settings = new RoomSettings(user, room, connection);
+		let uhtml = 'uhtml';
 
 		if (!target) {
 			room.update();
-			settings.generateDisplay();
 		} else {
 			this.parse(`/${target}`);
-			settings.updateSetting(target);
+			uhtml = 'uhtmlchange';
 		}
+		// send the settings list
+		function button(setting: string, disable: boolean, command = ' ') {
+			if (disable) {
+				return Chat.html`<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">${setting}</button> `;
+			}
+			return Chat.html`<button class="button" name="send" value="/roomsetting ${command}">${setting}</button> `;
+		}
+
+		let output = Chat.html`<div class="infobox">Room Settings for ${room.title}<br />`;
+		for (const handler of Chat.roomSettings) {
+			output += handler.call({button}, room, user, connection);
+		}
+		output += '</div>';
+		user.sendTo(room, `|${uhtml}|roomsettings|${output}`);
 	},
 	roomsettingshelp: [`/roomsettings - Shows current room settings with buttons to change them (if you can).`],
 
