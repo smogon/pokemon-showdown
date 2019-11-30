@@ -242,15 +242,9 @@ export const commands: ChatCommands = {
 		// 'modchat' lets you set up to 1 (ac/trusted also allowed)
 		// 'modchatall' lets you set up to your current rank
 		// 'makeroom' lets you set any rank, no limit
-		let threshold = 1;
-		const roomGroup = Config.groups[room.getAuth(user)];
-		if (roomGroup && user.can('modchatall', null, room)) {
-			if (user.can('makeroom')) {
-				threshold = Infinity;
-			} else {
-				threshold = roomGroup.rank;
-			}
-		}
+		const threshold = user.can('makeroom') ? Infinity :
+			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.getAuth(user)) :
+			1;
 
 		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > threshold) {
 			return this.errorReply(`/modchat - Access denied for changing a setting higher than ${Config.groupsranking[threshold]}.`);
