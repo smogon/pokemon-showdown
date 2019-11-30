@@ -275,6 +275,7 @@ export const commands: ChatCommands = {
 
 				Chat.uncacheDir('./.server-dist/tournaments');
 				global.Tournaments = require('../tournaments').Tournaments;
+				Chat.loadPluginData(Tournaments);
 				this.sendReply("Tournaments have been hot-patched.");
 			} else if (target === 'formats' || target === 'battles') {
 				patch = 'formats';
