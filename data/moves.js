@@ -3477,6 +3477,7 @@ let BattleMovedex = {
 					success = true;
 				}
 			}
+			this.field.clearTerrain();
 			return success;
 		},
 		secondary: null,
