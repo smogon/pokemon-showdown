@@ -198,6 +198,7 @@ export class Pokemon {
 
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
+	canDynamax: boolean;
 	canGigantamax: string | null;
 
 	staleness?: 'internal' | 'external';
@@ -377,6 +378,8 @@ export class Pokemon {
 
 		this.canMegaEvo = this.battle.canMegaEvo(this);
 		this.canUltraBurst = this.battle.canUltraBurst(this);
+		// Normally would want to use battle.canDynamax to set this, but it references this property.
+		this.canDynamax = (this.battle.gen >= 8);
 		this.canGigantamax = gMax;
 
 		// This is used in gen 1 only, here to avoid code repetition.
