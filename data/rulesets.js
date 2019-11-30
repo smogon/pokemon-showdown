@@ -679,8 +679,8 @@ let BattleFormats = {
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
 		onBegin() {
-			for (let side of this.sides) {
-				side.canDynamax = false;
+			for (let pokemon of this.getAllPokemon()) {
+				pokemon.canDynamax = false;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
@@ -714,9 +714,9 @@ let BattleFormats = {
 			return -typeMod;
 		},
 	},
-	natdex: {
+	natdexrule: {
 		effectType: 'Rule',
-		name: 'NatDex',
+		name: 'NatDex Rule',
 		onValidateSet(set) {
 			// These Pokemon are still unobtainable
 			const unobtainables = [
@@ -734,16 +734,12 @@ let BattleFormats = {
 		},
 		onBegin() {
 			// if you have a mega/primal or z, you can't dynamax
-			for (const side of this.sides) {
-				let canMegaOrZ = false;
-				for (const pokemon of side.pokemon) {
-					const item = this.dex.getItem(pokemon.item);
-					if (item.megaStone || item.onPrimal || item.zMove) {
-						canMegaOrZ = true;
-						break;
-					}
+			for (const pokemon of this.getAllPokemon()) {
+				const item = pokemon.getItem();
+				// this.canMegaEvo check is for Rayquaza.
+				if (item.megaStone || this.canMegaEvo(pokemon) || item.onPrimal || item.zMove) {
+					pokemon.canDynamax = false;
 				}
-				if (canMegaOrZ) side.canDynamax = false;
 			}
 		},
 	},

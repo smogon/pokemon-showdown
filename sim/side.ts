@@ -55,7 +55,6 @@ export class Side {
 	faintedLastTurn: boolean;
 	faintedThisTurn: boolean;
 	zMoveUsed: boolean;
-	canDynamax: boolean;
 
 	sideConditions: AnyObject;
 	slotConditions: AnyObject[];
@@ -103,7 +102,6 @@ export class Side {
 		this.faintedLastTurn = false;
 		this.faintedThisTurn = false;
 		this.zMoveUsed = false;
-		this.canDynamax = (this.battle.gen >= 8);
 
 		this.sideConditions = {};
 		this.slotConditions = [];
