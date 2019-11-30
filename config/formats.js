@@ -170,6 +170,7 @@ let Formats = [
 			battle: 3,
 		},
 		ruleset: ['Obtainable', 'Standard GBU'],
+		unbanlist: ['Snorlax-Gmax'],
 		minSourceGen: 8,
 	},
 	{
