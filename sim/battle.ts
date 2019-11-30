@@ -2588,7 +2588,9 @@ export class Battle {
 			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
-			action.pokemon.side.canDynamax = false;
+			for (const pokemon of action.pokemon.side.pokemon) {
+				pokemon.canDynamax = false;
+			}
 			break;
 		case 'beforeTurnMove': {
 			if (!action.pokemon.isActive) return false;

@@ -1169,10 +1169,8 @@ let BattleScripts = {
 	canDynamax(pokemon, skipChecks) {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
-			if (!pokemon.side.canDynamax) return;
-			if (this.canZMove(pokemon)) return;
-			if (this.canMegaEvo(pokemon)) return;
-			// TODO ban specific species from dynamaxing based on reserach
+			if (!pokemon.canDynamax) return;
+			// Some pokemon species are unable to dynamax
 			const cannotDynamax = ['zacian', 'zamazenta', 'eternatus'];
 			if (cannotDynamax.includes(toID(pokemon.template.baseSpecies))) {
 				return;
