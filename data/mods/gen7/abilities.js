@@ -2,6 +2,10 @@
 
 /**@type {{[k: string]: ModdedAbilityData}} */
 let BattleAbilities = {
+	"chlorophyll": {
+		inherit: true,
+		desc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
+	},
 	"disguise": {
 		inherit: true,
 		desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it changes to Busted Form. Confusion damage also breaks the disguise.",
@@ -12,6 +16,14 @@ let BattleAbilities = {
 				pokemon.formeChange(templateid, this.effect, true);
 			}
 		},
+	},
+	"dryskin": {
+		inherit: true,
+		desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain Dance, and loses 1/8 of its maximum HP, rounded down, if the weather is Sunny Day.",
+	},
+	"flowergift": {
+		inherit: true,
+		desc: "If this Pokemon is a Cherrim and Sunny Day is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5.",
 	},
 	"innerfocus": {
 		inherit: true,
@@ -37,6 +49,10 @@ let BattleAbilities = {
 			}
 		},
 		rating: 4,
+	},
+	"leafguard": {
+		inherit: true,
+		desc: "If Sunny Day is active, this Pokemon cannot gain a major status condition and Rest will fail for it.",
 	},
 	"moody": {
 		inherit: true,
@@ -79,9 +95,15 @@ let BattleAbilities = {
 		desc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
 		shortDesc: "This Pokemon cannot be confused.",
 	},
+<<<<<<< HEAD
 	"psychicsurge": {
 		inherit: true,
 		rating: 4.5,
+=======
+	"raindish": {
+		inherit: true,
+		desc: "If Rain Dance is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
+>>>>>>> Update past gen description of effects affected by Utility Umbrella and update item checking
 	},
 	"rattled": {
 		desc: "This Pokemon's Speed is raised by 1 stage if hit by a Bug-, Dark-, or Ghost-type attack.",
@@ -100,6 +122,10 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves.",
 		shortDesc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves.",
+	},
+	"swiftswim": {
+		inherit: true,
+		desc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
 	},
 };
 

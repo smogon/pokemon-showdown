@@ -385,7 +385,7 @@ let BattleAbilities = {
 		desc: "If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
 		onModifySpe(spe, pokemon) {
-			if (pokemon.item === "utilityumbrella") return;
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(2);
 			}
@@ -841,7 +841,7 @@ let BattleAbilities = {
 			}
 		},
 		onWeather(target, source, effect) {
-			if (target.item === "utilityumbrella") return;
+			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
 				this.heal(target.baseMaxhp / 8);
 			} else if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
@@ -1028,7 +1028,7 @@ let BattleAbilities = {
 			delete this.effectData.forme;
 		},
 		onUpdate(pokemon) {
-			if (!pokemon.isActive || pokemon.baseTemplate.baseSpecies !== 'Cherrim' || pokemon.transformed || pokemon.item === "utilityumbrella") return;
+			if (!pokemon.isActive || pokemon.baseTemplate.baseSpecies !== 'Cherrim' || pokemon.transformed || pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				if (pokemon.template.speciesid !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '[msg]');
@@ -1042,7 +1042,7 @@ let BattleAbilities = {
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
 			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
-			if (pokemon.item === "utilityumbrella") return;
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
@@ -1050,7 +1050,7 @@ let BattleAbilities = {
 		onModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
 			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
-			if (pokemon.item === "utilityumbrella") return;
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
@@ -1859,13 +1859,13 @@ let BattleAbilities = {
 		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
 		onSetStatus(status, target, source, effect) {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
-				if (target.item === "utilityumbrella") return;
+				if (target.hasItem('utilityumbrella')) return;
 				if (effect && effect.status) this.add('-immune', target, '[from] ability: Leaf Guard');
 				return false;
 			}
 		},
 		onTryAddVolatile(status, target) {
-			if (target.item === "utilityumbrella") return;
+			if (target.hasItem('utilityumbrella')) return;
 			if (status.id === 'yawn' && this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.add('-immune', target, '[from] ability: Leaf Guard');
 				return null;
@@ -3025,7 +3025,7 @@ let BattleAbilities = {
 		desc: "If Rain Dance is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its HP does not get restored.",
 		shortDesc: "If Rain Dance is active, this Pokemon heals 1/16 of its max HP each turn.",
 		onWeather(target, source, effect) {
-			if (target.item === "utilityumbrella") return;
+			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -4047,7 +4047,7 @@ let BattleAbilities = {
 		desc: "If Rain Dance is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled.",
 		shortDesc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
 		onModifySpe(spe, pokemon) {
-			if (pokemon.item === "utilityumbrella") return;
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				return this.chainModify(2);
 			}

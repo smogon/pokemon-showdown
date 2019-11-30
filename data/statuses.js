@@ -481,7 +481,7 @@ let BattleStatuses = {
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (move.type === 'Water') {
-				if (defender.item === "utilityumbrella") return;
+				if (defender.hasItem('utilityumbrella')) return;
 				this.debug('rain water boost');
 				return this.chainModify(1.5);
 			}
@@ -524,7 +524,7 @@ let BattleStatuses = {
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (move.type === 'Water') {
-				if (defender.item === "utilityumbrella") return;
+				if (defender.hasItem('utilityumbrella')) return;
 				this.debug('Rain water boost');
 				return this.chainModify(1.5);
 			}
@@ -555,12 +555,12 @@ let BattleStatuses = {
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (move.type === 'Fire') {
-				if (defender.item === "utilityumbrella") return;
+				if (defender.hasItem('utilityumbrella')) return;
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
 			}
 			if (move.type === 'Water') {
-				if (defender.item === "utilityumbrella") return;
+				if (defender.hasItem('utilityumbrella')) return;
 				this.debug('Sunny Day water suppress');
 				return this.chainModify(0.5);
 			}
@@ -574,7 +574,7 @@ let BattleStatuses = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (pokemon.item === "utilityumbrella") return;
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (type === 'frz') return false;
 		},
 		onResidualOrder: 1,
@@ -603,7 +603,7 @@ let BattleStatuses = {
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (move.type === 'Fire') {
-				if (defender.item === "utilityumbrella") return;
+				if (defender.hasItem('utilityumbrella')) return;
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
 			}
@@ -612,7 +612,7 @@ let BattleStatuses = {
 			this.add('-weather', 'DesolateLand', '[from] ability: ' + effect, '[of] ' + source);
 		},
 		onImmunity(type, pokemon) {
-			if (pokemon.item === "utilityumbrella") return;
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (type === 'frz') return false;
 		},
 		onResidualOrder: 1,
@@ -703,7 +703,7 @@ let BattleStatuses = {
 		effectType: 'Weather',
 		duration: 0,
 		onEffectiveness(typeMod, target, type, move) {
-			if (target && target.item === "utilityumbrella") return;
+			if (target && target.hasItem('utilityumbrella')) return;
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
 				this.add('-activate', '', 'deltastream');
 				return 0;

@@ -17566,7 +17566,7 @@ let BattleMovedex = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			if (pokemon.item === "utilityumbrella") return;
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -17606,7 +17606,7 @@ let BattleMovedex = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			if (pokemon.item === "utilityumbrella") return;
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -20871,12 +20871,12 @@ let BattleMovedex = {
 			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
-				if (pokemon.item === "utilityumbrella") break;
+				if (pokemon.hasItem('utilityumbrella')) break;
 				move.type = 'Fire';
 				break;
 			case 'raindance':
 			case 'primordialsea':
-				if (pokemon.item === "utilityumbrella") break;
+				if (pokemon.hasItem('utilityumbrella')) break;
 				move.type = 'Water';
 				break;
 			case 'sandstorm':
