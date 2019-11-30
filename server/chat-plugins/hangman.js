@@ -352,5 +352,21 @@ const commands = {
 		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
 	],
 };
+/** @type {SettingsHandler} */
+const roomSettings = function (room, user, connection) {
+	let buf;
 
-exports.commands = commands;
+	if (!user.can('editroom', null, room)) {
+		buf = this.button(room.hangmanDisabled ? 'off' : 'Hangman enabled', true);
+	} else if (room.hangmanDisabled) {
+		buf = `${this.button('Hangman enabled', false, 'hangman enable')} ${this.button('off', true)}`;
+	} else {
+		buf = `${this.button('Hangman enabled', true)} ${this.button('off', false, 'hangman disable')}`;
+	}
+	return `<strong>Hangman:</strong> <br />${buf}<br />`;
+};
+
+module.exports = {
+	commands,
+	roomSettings,
+};

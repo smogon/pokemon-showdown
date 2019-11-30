@@ -7,6 +7,7 @@ type CommandContext = Chat.CommandContext;
 type PageContext = Chat.PageContext;
 type PageTable = Chat.PageTable;
 type ChatCommands = Chat.ChatCommands;
+type SettingsHandler = Chat.SettingsHandler;
 type ChatFilter = Chat.ChatFilter;
 type NameFilter = Chat.NameFilter;
 type StatusFilter = Chat.StatusFilter;
@@ -14,6 +15,7 @@ type LoginFilter = Chat.LoginFilter;
 namespace Chat {
 	export type CommandContext = import('./chat').CommandContext;
 	export type PageContext = import('./chat').PageContext;
+	export type SettingsHandler = import('./chat').SettingsHandler;
 	export type PageTable = import('./chat').PageTable;
 	export type ChatCommands = import('./chat').ChatCommands;
 	export type ChatFilter = import('./chat').ChatFilter;

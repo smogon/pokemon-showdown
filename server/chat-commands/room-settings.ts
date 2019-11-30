@@ -136,54 +136,6 @@ class RoomSettings {
 		}
 		return slowchatOutput.join(' ');
 	}
-	tourStatus() {
-		if (!this.user.can('gamemanagement', null, this.room)) {
-			return this.button(this.room.toursEnabled === true ? '@' : this.room.toursEnabled === '%' ? '%' : '#', true);
-		}
-		if (this.room.toursEnabled === true) {
-			return `${this.button('%', false, 'tournament enable %')} ${this.button('@', true)} ${this.button('#', false, 'tournament disable')}`;
-		} else if (this.room.toursEnabled === '%') {
-			return `${this.button('%', true)} ${this.button('@', false, 'tournament enable @')} ${this.button('#', false, 'tournament disable')}`;
-		} else {
-			return `${this.button('%', false, 'tournament enable %')} ${this.button('@', false, 'tournament enable @')} ${this.button('#', true)}`;
-		}
-	}
-	uno() {
-		if (!this.user.can('editroom', null, this.room)) {
-			return this.button(this.room.unoDisabled ? 'off' : 'UNO enabled', true);
-		}
-		if (this.room.unoDisabled) {
-			return `${this.button('UNO enabled', false, 'uno enable')} ${this.button('off', true)}`;
-		} else {
-			return `${this.button('UNO enabled', true)} ${this.button('off', false, 'uno disable')}`;
-		}
-	}
-	hangman() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.hangmanDisabled ? 'off' : 'Hangman enabled', true);
-		if (this.room.hangmanDisabled) {
-			return `${this.button('Hangman enabled', false, 'hangman enable')} ${this.button('off', true)}`;
-		} else {
-			return `${this.button('Hangman enabled', true)} ${this.button('off', false, 'hangman disable')}`;
-		}
-	}
-	mafia() {
-		if (!this.user.can('editroom', null, this.room)) {
-			return this.button(this.room.mafiaDisabled ? 'off' : 'Mafia enabled', true);
-		}
-		if (this.room.mafiaDisabled) {
-			return `${this.button('Mafia enabled', false, 'mafia enable')} ${this.button('off', true)}`;
-		} else {
-			return `${this.button('Mafia enabled', true)} ${this.button('off', false, 'mafia disable')}`;
-		}
-	}
-	blackjack() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.blackjackDisabled ? 'off' : 'Blackjack enabled', true);
-		if (this.room.blackjackDisabled) {
-			return `${this.button('Blackjack enabled', false, 'blackjack enable')} ${this.button('off', true)}`;
-		} else {
-			return `${this.button('Blackjack enabled', true)} ${this.button('off', false, 'blackjack disable')}`;
-		}
-	}
 	language() {
 		if (!this.user.can('editroom', null, this.room)) {
 			return this.button(this.room.language ? Chat.languages.get(this.room.language)! : 'English', true);
@@ -205,13 +157,12 @@ class RoomSettings {
 		output += `<strong>Caps filter:</strong> <br />${this.capitals()}<br />`;
 		output += `<strong>Emoji filter:</strong> <br />${this.emojis()}<br />`;
 		output += `<strong>Slowchat:</strong> <br />${this.slowchat()}<br />`;
-		output += `<strong>Tournaments:</strong> <br />${this.tourStatus()}<br />`;
-		output += `<strong>UNO:</strong> <br />${this.uno()}<br />`;
-		output += `<strong>Hangman:</strong> <br />${this.hangman()}<br />`;
-		output += `<strong>Blackjack:</strong> <br />${this.blackjack()}<br />`;
-		output += `<strong>Mafia:</strong> <br />${this.mafia()}<br />`;
-		output += '</div>';
 
+		for (const handler of Chat.roomSettings) {
+			output += handler.call({button: this.button}, this.room, this.user, this.connection);
+		}
+
+		output += '</div>';
 		this.user.sendTo(this.room, `|uhtml${(this.sameCommand ? '' : 'change')}|roomsettings|${output}`);
 	}
 }

@@ -651,3 +651,14 @@ exports.commands = {
 		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # & ~",
 	],
 };
+exports.roomSettings = function (room, user, connection) {
+	let buf;
+	if (!user.can('editroom', null, this.room)) {
+		buf = this.button(room.blackjackDisabled ? 'off' : 'Blackjack enabled', true);
+	} else if (room.blackjackDisabled) {
+		buf = `${this.button('Blackjack enabled', false, 'blackjack enable')} ${this.button('off', true)}`;
+	} else {
+		buf = `${this.button('Blackjack enabled', true)} ${this.button('off', false, 'blackjack disable')}`;
+	}
+	return `<strong>Blackjack:</strong> <br />${buf}<br />`;
+};

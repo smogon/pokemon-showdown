@@ -44,6 +44,13 @@ export interface ChatCommands {
 	[k: string]: ChatHandler | string | string[] | true | ChatCommands;
 }
 
+export type SettingsHandler = (
+	this: {button: (setting: string, disable: boolean, command?: string) => string},
+	room: BasicChatRoom,
+	user: User,
+	connection: Connection
+) => string;
+
 /**
  * Chat filters can choose to:
  * 1. return false OR null - to not send a user's message
@@ -1128,6 +1135,7 @@ export const Chat = new class {
 	basePages: PageTable = undefined!;
 	pages: PageTable = undefined!;
 	readonly destroyHandlers: (() => void)[] = [];
+	readonly roomSettings: SettingsHandler[] = [];
 
 	/*********************************************************
 	 * Load chat filters
@@ -1423,6 +1431,7 @@ export const Chat = new class {
 		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 
 		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
+		if (plugin.roomSettings) Chat.roomSettings.push(plugin.roomSettings);
 
 		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
 		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);

@@ -973,5 +973,21 @@ const commands = {
 		`/uno suppress [on|off] - Toggles suppression of game messages.`,
 	],
 };
+/** @type {SettingsHandler} */
+const roomSettings = function (room, user, connection) {
+	let buf;
 
-exports.commands = commands;
+	if (!user.can('editroom', null, room)) {
+		buf = this.button(room.unoDisabled ? 'off' : 'UNO enabled', true);
+	} else if (room.unoDisabled) {
+		buf = `${this.button('UNO enabled', false, 'uno enable')} ${this.button('off', true)}`;
+	} else {
+		buf = `${this.button('UNO enabled', true)} ${this.button('off', false, 'uno disable')}`;
+	}
+	return `<strong>UNO:</strong> <br />${buf}<br />`;
+};
+
+module.exports = {
+	commands,
+	roomSettings,
+};
