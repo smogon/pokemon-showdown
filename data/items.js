@@ -6323,11 +6323,7 @@ let BattleItems = {
 		fling: {
 			basePower: 60,
 		},
-		// Implemented in statuses.js
-		/* TODO:
-		 * Weathers: Test Desolate Land, Primordial Sea
-		 * Abilities: Test Forecast, Hydration, Solar Power
-		 */
+		// Implemented in statuses.js, moves.js, and abilities.js
 		num: 1123,
 		gen: 8,
 		desc: "Blocks the holder from receiving any effects of Sunny Day/Rain Dance.",
