@@ -80,32 +80,12 @@ const commands = {
 		let template = Dex.getTemplate(sep[0]);
 		if (!stone) return this.errorReply(`Error: Mega Stone not found.`);
 		if (!template.exists) return this.errorReply(`Error: Pokemon not found.`);
-		if (template.isMega || template.name === 'Necrozma-Ultra') { // Mega Pokemon and Ultra Necrozma cannot be mega evolved
-			this.errorReply(`Warning: You cannot mega evolve Mega Pokemon and Ultra Necrozma in Mix and Mega.`);
-		}
-		let banlist = Dex.getFormat('gen7mixandmega').banlist;
+		let banlist = Dex.getFormat('gen8mixandmega').banlist;
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
-		let restrictedStones = Dex.getFormat('gen7mixandmega').restrictedStones || [];
-		if (restrictedStones.includes(stone.name) && template.name !== stone.megaEvolves) {
-			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega.`);
-		}
-		let cannotMega = Dex.getFormat('gen7mixandmega').cannotMega || [];
-		if (cannotMega.includes(template.name) && template.name !== stone.megaEvolves && !template.isMega) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
-			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega.`);
-		}
-		if (['Multitype', 'RKS System'].includes(template.abilities['0']) && !['Arceus', 'Silvally'].includes(template.name)) {
-			this.errorReply(`Warning: ${template.name} is required to hold ${template.baseSpecies === 'Arceus' && template.requiredItems ? 'either ' + template.requiredItems[0] + ' or ' + template.requiredItems[1] : template.requiredItem}.`);
-		}
-		if (stone.isUnreleased) {
-			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
-		}
-		if (toID(sep[1]) === 'dragonascent' && !['smeargle', 'rayquaza', 'rayquazamega'].includes(toID(sep[0]))) {
-			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits.`);
-		}
 		// Fake Pokemon and Mega Stones
-		if (template.isNonstandard) {
+		if (template.isNonstandard === "CAP") {
 			this.errorReply(`Warning: ${template.name} is not a real Pokemon and is therefore not usable in Mix and Mega.`);
 		}
 		if (stone.isNonstandard === "CAP") {
@@ -113,13 +93,6 @@ const commands = {
 		}
 		let baseTemplate = Dex.getTemplate(stone.megaEvolves);
 		let megaTemplate = Dex.getTemplate(stone.megaStone);
-		if (stone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
-			megaTemplate = Dex.getTemplate("Groudon-Primal");
-			baseTemplate = Dex.getTemplate("Groudon");
-		} else if (stone.id === 'blueorb') {
-			megaTemplate = Dex.getTemplate("Kyogre-Primal");
-			baseTemplate = Dex.getTemplate("Kyogre");
-		}
 		/** @type {{baseStats: {[k: string]: number}, weighthg: number, type?: string}} */
 		let deltas = {
 			baseStats: {},
@@ -132,7 +105,7 @@ const commands = {
 		if (megaTemplate.types.length > baseTemplate.types.length) {
 			deltas.type = megaTemplate.types[1];
 		} else if (megaTemplate.types.length < baseTemplate.types.length) {
-			deltas.type = baseTemplate.types[0];
+			deltas.type = 'mono';
 		} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
 			deltas.type = megaTemplate.types[1];
 		}
@@ -141,6 +114,8 @@ const commands = {
 		mixedTemplate.abilities = Object.assign({}, megaTemplate.abilities);
 		if (mixedTemplate.types[0] === deltas.type) { // Add any type gains
 			mixedTemplate.types = [deltas.type];
+		} else if (deltas.type === 'mono') {
+			mixedTemplate.types = [mixedTemplate.types[0]];
 		} else if (deltas.type) {
 			mixedTemplate.types = [mixedTemplate.types[0], deltas.type];
 		}
