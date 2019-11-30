@@ -1135,7 +1135,7 @@ export const Chat = new class {
 	basePages: PageTable = undefined!;
 	pages: PageTable = undefined!;
 	readonly destroyHandlers: (() => void)[] = [];
-	readonly roomSettings: SettingsHandler[] = [];
+	roomSettings: SettingsHandler[] = [];
 
 	/*********************************************************
 	 * Load chat filters
@@ -1431,8 +1431,10 @@ export const Chat = new class {
 		if (plugin.pages) Object.assign(Chat.pages, plugin.pages);
 
 		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
-		if (plugin.roomSettings) Chat.roomSettings.push(plugin.roomSettings);
-
+		if (plugin.roomSettings) {
+			if (!Array.isArray(plugin.roomSettings)) plugin.roomSettings = [plugin.roomSettings];
+			Chat.roomSettings = Chat.roomSettings.concat(plugin.roomSettings);
+		}
 		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
 		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
 		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
