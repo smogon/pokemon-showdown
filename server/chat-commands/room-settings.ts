@@ -657,7 +657,7 @@ export const commands: ChatCommands = {
 				this.modlog('UNBANWORD', null, words[0]);
 				this.sendReply(`Banned phrase successfully deleted.`);
 			}
-			this.sendReply(room.banwords ? `The list is currently: ${room.banwords.join(', ')}` : `The list is now empty.`);
+			this.sendReply(room.banwords && room.banwords.length ? `The list is currently: ${room.banwords.join(', ')}` : `The list is now empty.`);
 
 			if (room.chatRoomData) {
 				room.chatRoomData.banwords = room.banwords;
@@ -669,7 +669,7 @@ export const commands: ChatCommands = {
 		list(target, room, user) {
 			if (!this.can('mute', null, room)) return false;
 
-			if (!room.banwords) return this.sendReply("This room has no banned phrases.");
+			if (!room.banwords || !room.banwords.length) return this.sendReply("This room has no banned phrases.");
 
 			return this.sendReply(`Banned phrases in room ${room.roomid}: ${room.banwords.join(', ')}`);
 		},

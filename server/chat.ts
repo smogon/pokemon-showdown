@@ -555,7 +555,7 @@ export class CommandContext extends MessageContext {
 	checkBanwords(room: BasicChatRoom | null | undefined, message: string): boolean {
 		if (!room) return true;
 		if (!room.banwordRegex) {
-			if (room.banwords.length) {
+			if (room.banwords && room.banwords.length) {
 				room.banwordRegex = new RegExp('(?:\\b|(?!\\w))(?:' + room.banwords.join('|') + ')(?:\\b|\\B(?!\\w))', 'i');
 			} else {
 				room.banwordRegex = true;
