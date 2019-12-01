@@ -1579,6 +1579,24 @@ let Formats = [
 		banlist: ['RU', 'NUBL', 'Prankster + Assist'],
 	},
 	{
+		name: "[Gen 5] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7326932/">BW2 PU Information & Resources</a>`,
+		],
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['[Gen 5] NU'],
+		banlist: [
+			'Alomomola', 'Ampharos', 'Armaldo', 'Basculin', 'Braviary', 'Cacturne', 'Camerupt', 'Carracosta', 'Charizard',
+			'Combusken', 'Eelektross', 'Electabuzz', 'Exeggutor', 'Garbodor', 'Gardevoir', 'Gigalith', 'Golem', 'Golurk',
+			'Gorebyss', 'Gurdurr', 'Haunter', 'Jynx', 'Kadabra', 'Kangaskhan', 'Lapras', 'Lickilicky', 'Liepard', 'Linoone',
+			'Ludicolo', 'Mandibuzz', 'Metang', 'Miltank', 'Misdreavus', 'Musharna', 'Piloswine', 'Pinsir', 'Primeape',
+			'Probopass', 'Regirock', 'Roselia', 'Rotom-Fan', 'Rotom-Frost', 'Samurott', 'Sawk', 'Sawsbuck', 'Scolipede',
+			'Seismitoad', 'Serperior', 'Skuntank', 'Swellow', 'Tangela', 'Tauros', 'Torkoal', 'Wartortle', 'Weezing', 'Zangoose',
+		],
+	},
+	{
 		name: "[Gen 5] LC",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3485860/">BW2 LC Viability Ranking</a>`,
@@ -1735,6 +1753,23 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['[Gen 4] UU'],
 		banlist: ['UU', 'NUBL'],
+	},
+	{
+		name: "[Gen 4] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7260264/">DPP PU Information & Resources</a>`,
+		],
+
+		mod: 'gen4',
+		searchShow: false,
+		ruleset: ['[Gen 4] NU'],
+		banlist: [
+			'Articuno', 'Cacturne', 'Charizard', 'Cradily', 'Dodrio', 'Drifblim', 'Dusclops', 'Electrode',
+			'Gardevoir', 'Gligar', 'Golem', 'Grumpig', 'Haunter', 'Hitmonchan', 'Hypno', 'Jumpluff', 'Jynx',
+			'Lickilicky', 'Linoone', 'Magmortar', 'Magneton', 'Manectric', 'Medicham', 'Meganium', 'Nidoqueen',
+			'Ninetales', 'Piloswine', 'Poliwrath', 'Porygon2', 'Regice', 'Regirock', 'Roselia', 'Sandslash',
+			'Sharpedo', 'Shiftry', 'Skuntank', 'Slowking', 'Tauros', 'Typhlosion', 'Venomoth', 'Vileplume',
+		],
 	},
 	{
 		name: "[Gen 4] LC",
