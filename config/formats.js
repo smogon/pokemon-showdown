@@ -325,7 +325,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview', '+Past', '+Unreleased', 'NatDex Rule'],
-		banlist: ['Uber', 'Shadow Tag', 'Baton Pass',
+		banlist: ['Uber', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 			'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Dialga', 'Genesect', 'Gengar-Mega', 'Giratina', 'Groudon',
 			'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-White', 'Landorus-Base', 'Lucario-Mega', 'Lugia', 'Lunala',
 			'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Pheromosa',
