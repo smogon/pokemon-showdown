@@ -40,6 +40,16 @@ let Formats = [
 		banlist: ['Uber', 'Shadow Tag', 'Baton Pass'],
 		minSourceGen: 8,
 	},
+	/*{
+		name: "[Gen 8] OU (Blitz)",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656245/">OU Metagame Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] OU', 'Blitz'],
+		minSourceGen: 8,
+	},*/
 	{
 		name: "[Gen 8] Ubers",
 		threads: [
@@ -53,16 +63,14 @@ let Formats = [
 		banlist: [],
 		minSourceGen: 8,
 	},
-	/*{
-		name: "[Gen 8] OU (Blitz)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656245/">OU Metagame Discussion</a>`,
-		],
+	{
+		name: "[Gen 8] UU",
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU', 'Blitz'],
+		ruleset: ['[Gen 8] OU'],
+		banlist: ['OU', 'UUBL'],
 		minSourceGen: 8,
-	},*/
+	},
 	{
 		name: "[Gen 8] LC",
 		threads: [
