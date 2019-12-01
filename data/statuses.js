@@ -724,6 +724,7 @@ let BattleStatuses = {
 		name: 'Dynamax',
 		id: 'dynamax',
 		num: 0,
+		noCopy: true,
 		duration: 3,
 		onStart(pokemon) {
 			if (pokemon.species === 'Eternatus-Eternamax') return;
