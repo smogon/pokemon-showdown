@@ -7605,7 +7605,7 @@ let BattleFormatsData = {
 	},
 	toxtricitylowkey: {
 		randomBattleMoves: ["boomburst", "overdrive", "sludgewave", "voltswitch"],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "New",
 	},
 	toxtricitygmax: {
