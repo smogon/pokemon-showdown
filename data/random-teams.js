@@ -1341,7 +1341,6 @@ class RandomTeams {
 				NU: 86,
 				NUBL: 85,
 				RU: 84,
-				New: 84,
 				RUBL: 83,
 				UU: 82,
 				UUBL: 81,
@@ -1355,7 +1354,7 @@ class RandomTeams {
 				'Kyurem-Black': 78, 'Kyurem-White': 78, Lunala: 78, Marshadow: 78, Mewtwo: 78, 'Necrozma-Dawn-Wings': 78, 'Necrozma-Dusk-Mane': 78, Reshiram: 78, Solgaleo: 78, Zekrom: 78,
 
 				// Banned Ability
-				// Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Wobbuffet: 82,
+				Gothitelle: 80, Wobbuffet: 80,
 
 				// Holistic judgement
 				// Delibird: 100,
