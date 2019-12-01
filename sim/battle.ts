@@ -2453,7 +2453,15 @@ export class Battle {
 	}
 
 	sortQueue() {
+		// this.log.push('SORT ' + this.debugQueue());
 		this.speedSort(this.queue);
+	}
+
+	debugQueue() {
+		return this.queue.map(action =>
+			// @ts-ignore
+			`${action.order || ''}:${action.priority || ''}:${action.speed || ''}:${action.subOrder || ''} - ${action.choice}${action.pokemon ? ' ' + action.pokemon : ''}${action.move ? ' ' + action.move : ''}`
+		).join('\n') + '\n';
 	}
 
 	/**
