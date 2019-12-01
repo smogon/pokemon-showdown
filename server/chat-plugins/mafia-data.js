@@ -1333,7 +1333,7 @@ const modifiers = {
 	illusionist: {
 		name: `Illusionist`,
 		id: `illusionist`,
-		memo: [`Illusionist: You may still lynch and talk after death.`],
+		memo: [`Illusionist: You become a Restless Spirit after death.`],
 	},
 	immobile_os_parrot: 'immobile_parrot',
 	immobile_parrot: {
