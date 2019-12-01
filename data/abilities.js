@@ -2655,7 +2655,7 @@ let BattleAbilities = {
 		},
 		id: "perishbody",
 		name: "Perish Body",
-		rating: 0.5,
+		rating: 1,
 		num: 253,
 	},
 	"pickpocket": {

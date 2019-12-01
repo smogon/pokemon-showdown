@@ -55,7 +55,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	charizard: {
-		randomBattleMoves: ["airslash", "defog", "earthquake", "fireblast", "focusblast"],
+		randomBattleMoves: ["airslash", "earthquake", "fireblast", "focusblast", "workup"],
 		eventPokemon: [
 			{"generation": 3, "level": 70, "moves": ["wingattack", "slash", "dragonrage", "firespin"], "pokeball": "pokeball"},
 			{"generation": 6, "level": 36, "gender": "M", "isHidden": false, "moves": ["firefang", "flameburst", "airslash", "inferno"], "pokeball": "cherishball"},
@@ -1187,7 +1187,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	farfetchd: {
-		randomBattleMoves: ["bodyslam", "bravebird", "closecombat", "knockoff", "leafblade", "roost", "swordsdance"],
+		randomBattleMoves: ["bravebird", "closecombat", "knockoff", "leafblade", "roost", "slash", "swordsdance"],
 		eventPokemon: [
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["yawn", "wish"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 36, "moves": ["batonpass", "slash", "swordsdance", "aerialace"]},
@@ -3387,7 +3387,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	shedinja: {
-		randomBattleMoves: ["shadowclaw", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
+		randomBattleMoves: ["shadowclaw", "shadowsneak", "toxic", "willowisp", "xscissor"],
 		eventPokemon: [
 			{"generation": 3, "level": 50, "moves": ["spite", "confuseray", "shadowball", "grudge"], "pokeball": "pokeball"},
 		],
@@ -3977,7 +3977,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	glalie: {
-		randomBattleMoves: ["earthquake", "freezedry", "protect", "spikes", "taunt"],
+		randomBattleMoves: ["earthquake", "freezedry", "protect", "substitute", "taunt"],
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -5870,7 +5870,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	heatmor: {
-		randomBattleMoves: ["fireblast", "firelash", "gigadrain", "suckerpunch", "superpower"],
+		randomBattleMoves: ["firelash", "gigadrain", "substitute", "suckerpunch", "superpower"],
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7539,7 +7539,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	drednaw: {
-		randomBattleMoves: ["earthquake", "liquidation", "stoneedge", "superpower", "swordsdance"],
+		randomBattleMoves: ["crunch", "liquidation", "stoneedge", "superpower", "swordsdance"],
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7745,7 +7745,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	eiscue: {
-		randomBattleMoves: ["bellydrum", "iciclecrash", "liquidation", "zenheadbutt"],
+		randomBattleMoves: ["bellydrum", "iciclecrash", "liquidation", "substitute", "zenheadbutt"],
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7763,7 +7763,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	morpeko: {
-		randomBattleMoves: ["aurawheel", "foulplay", "partingshot", "psychicfangs", "rapidspin", "superfang"],
+		randomBattleMoves: ["aurawheel", "foulplay", "partingshot", "protect", "psychicfangs", "rapidspin"],
 		tier: "New",
 		doublesTier: "New",
 	},
@@ -7829,7 +7829,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	zacian: {
-		randomBattleMoves: ["closecombat", "crunch", "ironhead", "playrough", "psychicfangs", "swordsdance"],
+		randomBattleMoves: ["closecombat", "crunch", "playrough", "psychicfangs", "swordsdance"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -7840,18 +7840,18 @@ let BattleFormatsData = {
 		requiredItem: "Rusted Sword",
 	},
 	zamazenta: {
-		randomBattleMoves: ["closecombat", "crunch", "ironhead", "psychicfangs"],
+		randomBattleMoves: ["closecombat", "crunch", "psychicfangs", "wildcharge"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
 	zamazentacrowned: {
-		randomBattleMoves: ["behemothbash", "closecombat", "crunch", "psychicfangs"],
+		randomBattleMoves: ["behemothbash", "closecombat", "crunch", "metalburst"],
 		tier: "Uber",
 		doublesTier: "DUber",
 		requiredItem: "Rusted Shield",
 	},
 	eternatus: {
-		randomBattleMoves: ["dynamaxcannon", "flamethrower", "recover", "sludgewave"],
+		randomBattleMoves: ["dracometeor", "dynamaxcannon", "flamethrower", "recover", "sludgewave"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
