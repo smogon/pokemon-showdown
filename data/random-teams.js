@@ -749,7 +749,6 @@ class RandomTeams {
 						if (!hasMove['growth'] || hasMove['sunnyday']) rejected = true;
 					}
 					if (counter.Physical + counter['physicalpool'] < 2 && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
-					if (moveid === 'bellydrum' && !hasAbility['Unburden'] && !counter['priority']) rejected = true;
 					isSetup = true;
 					break;
 				case 'calmmind': case 'nastyplot': case 'quiverdance':
@@ -1255,7 +1254,7 @@ class RandomTeams {
 		} else if (hasMove['shellsmash']) {
 			item = 'White Herb';
 		} else if (ability === 'Guts' && hasMove['facade']) {
-			item = 'Flame Orb';
+			item = hasType['Fire'] ? 'Toxic Orb' : 'Flame Orb';
 		} else if ((ability === 'Magic Guard' && counter.damagingMoves.length > 1) || (ability === 'Sheer Force' && !!counter['sheerforce'])) {
 			item = 'Life Orb';
 		} else if (ability === 'Unburden') {
