@@ -22,10 +22,13 @@ describe('Pressure', function () {
 	});
 
 	it('should deduct PP if moves are redirected to the user', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
-			[{species: "Giratina", ability: 'pressure', moves: ['followme']}, {species: "Talonflame", ability: 'galewings', moves: ['peck']}],
-			[{species: "Clefable", ability: 'unaware', moves: ['followme']}, {species: "Ho-Oh", ability: 'pressure', moves: ['peck']}],
-		]);
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Giratina", ability: 'pressure', moves: ['followme']},
+			{species: "Talonflame", ability: 'galewings', moves: ['peck']},
+		], [
+			{species: "Clefable", ability: 'unaware', moves: ['followme']},
+			{species: "Ho-Oh", ability: 'pressure', moves: ['peck']},
+		]]);
 		battle.makeChoices('move followme, move peck 2', 'move followme, move peck 2');
 		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);

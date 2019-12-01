@@ -2384,11 +2384,10 @@ export class Battle {
 					action.sourceEffect = this.dex.getMove(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
-				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
 			}
 		}
 
-		const deferPriority = this.gen >= 7 && action.mega && action.mega !== 'done';
+		const deferPriority = this.gen === 7 && action.mega && action.mega !== 'done';
 		if (action.move) {
 			let target = null;
 			action.move = this.dex.getActiveMove(action.move);
@@ -2398,43 +2397,48 @@ export class Battle {
 				// TODO: what actually happens here?
 				if (target) action.targetLoc = this.getTargetLoc(target, action.pokemon);
 			}
-
-			if (!action.priority && !deferPriority) {
-				let move = action.move;
-				if (action.zmove) {
-					const zMoveName = this.getZMove(action.move, action.pokemon, true);
-					if (zMoveName) {
-						const zMove = this.dex.getActiveMove(zMoveName);
-						if (zMove.exists && zMove.isZ) {
-							move = zMove;
-						}
-					}
-				}
-				if (action.maxMove) {
-					const maxMoveName = this.getMaxMove(action.maxMove, action.pokemon);
-					if (maxMoveName) {
-						const maxMove = this.getActiveMaxMove(action.move, action.pokemon);
-						if (maxMove.exists && maxMove.isMax) {
-							move = maxMove;
-						}
-					}
-				}
-				const priority = this.runEvent('ModifyPriority', action.pokemon, target, move, move.priority);
-				action.priority = priority;
-				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
-				if (this.gen > 5) action.move.priority = priority;
-			}
 		}
-		if (!action.speed) {
-			if ((action.choice === 'switch' || action.choice === 'instaswitch') && action.target) {
-				action.speed = action.target.getActionSpeed();
-			} else if (!action.pokemon) {
-				action.speed = 1;
-			} else if (!deferPriority) {
-				action.speed = action.pokemon.getActionSpeed();
-			}
-		}
+		if (!deferPriority) this.getActionSpeed(action);
 		return action as any;
+	}
+
+	getActionSpeed(action: AnyObject) {
+		if (action.choice === 'move') {
+			let move = action.move;
+			if (action.zmove) {
+				const zMoveName = this.getZMove(action.move, action.pokemon, true);
+				if (zMoveName) {
+					const zMove = this.dex.getActiveMove(zMoveName);
+					if (zMove.exists && zMove.isZ) {
+						move = zMove;
+					}
+				}
+			}
+			if (action.maxMove) {
+				const maxMoveName = this.getMaxMove(action.maxMove, action.pokemon);
+				if (maxMoveName) {
+					const maxMove = this.getActiveMaxMove(action.move, action.pokemon);
+					if (maxMove.exists && maxMove.isMax) {
+						move = maxMove;
+					}
+				}
+			}
+			// take priority from the base move, so abilities like Prankster only apply once
+			// (instead of compounding every time `getActionSpeed` is called)
+			let priority = this.dex.getMove(move.id).priority;
+			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
+			action.priority = priority;
+			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
+			if (this.gen > 5) action.move.priority = priority;
+		}
+
+		if ((action.choice === 'switch' || action.choice === 'instaswitch') && action.target) {
+			action.speed = action.target.getActionSpeed();
+		} else if (!action.pokemon) {
+			action.speed = 1;
+		} else {
+			action.speed = action.pokemon.getActionSpeed();
+		}
 	}
 
 	/**
@@ -2479,7 +2483,6 @@ export class Battle {
 
 		if (chosenAction.pokemon) {
 			chosenAction.pokemon.updateSpeed();
-			chosenAction.speed = 0; // make resolveAction update Speed
 		}
 		const action = this.resolveAction(chosenAction, midTurn);
 		for (const [i, curAction] of this.queue.entries()) {
@@ -2785,7 +2788,7 @@ export class Battle {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue) {
-				if (queueAction.pokemon) queueAction.speed = queueAction.pokemon.speed;
+				if (queueAction.pokemon) this.getActionSpeed(queueAction);
 			}
 			this.sortQueue();
 		}
