@@ -660,7 +660,7 @@ interface EffectData {
 	effectType?: string
 	infiltrates?: boolean
 	isNonstandard?: Nonstandard | null
-	isUnreleased?: boolean
+	isUnreleased?: boolean | 'Past'
 	/**
 	 * `true` for generic Z-moves like Gigavolt Havoc.
 	 * Also `true` for Z-powered status moves like Z-Encore.
@@ -946,7 +946,7 @@ interface TemplateFormatsData {
 	gen?: number
 	isGigantamax?: string
 	isNonstandard?: Nonstandard | null
-	isUnreleased?: boolean
+	isUnreleased?: boolean | 'Past'
 	maleOnlyHidden?: boolean
 	randomBattleMoves?: readonly string[]
 	randomDoubleBattleMoves?: readonly string[]
@@ -955,7 +955,7 @@ interface TemplateFormatsData {
 	requiredItems?: string[]
 	requiredMove?: string
 	tier?: string
-	unreleasedHidden?: boolean
+	unreleasedHidden?: boolean | 'Past'
 }
 
 interface ModdedTemplateFormatsData extends Partial<TemplateFormatsData> {

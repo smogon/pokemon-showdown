@@ -96,7 +96,7 @@ export class BasicEffect implements EffectData {
 	 * Is this item/move/ability/pokemon unreleased? True if there's
 	 * no known way to get access to it without cheating.
 	 */
-	isUnreleased: boolean;
+	isUnreleased: boolean | 'Past';
 	/**
 	 * A shortened form of the description of this effect.
 	 * Not all effects have this.
@@ -567,7 +567,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/** Color. */
 	readonly color: string;
 	/** Does this Pokemon have an unreleased hidden ability? */
-	readonly unreleasedHidden: boolean;
+	readonly unreleasedHidden: boolean | 'Past';
 	/**
 	 * Is it only possible to get the hidden ability on a male pokemon?
 	 * This is mainly relevant to Gen 5.
