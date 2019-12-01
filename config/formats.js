@@ -350,6 +350,52 @@ let Formats = [
 		column: 2,
 	},
 	{
+		name: "[Gen 8] Camomons",
+		desc: `Pok&eacute;mon change type to match their first two moves.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656413/">Camomons</a>`,
+		],
+
+		mod: 'gen8',
+		// searchShow: false,
+		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Endless Battle Clause'],
+		banlist: ['Darmanitan-Galar', 'Eternatus', 'Shedinja', 'Zacian', 'Zamazenta'],
+		minSourceGen: 8,
+		onModifyTemplate(template, target, source, effect) {
+			if (!target) return; // Chat command
+			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
+			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.getMove(move.id).type))];
+			return Object.assign({}, template, {types: types});
+		},
+		onSwitchIn(pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
+		},
+		onAfterMega(pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
+		},
+	},
+	{
+		name: "[Gen 7] Balanced Hackmons",
+		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3587475/">Balanced Hackmons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3588586/">BH Suspects and Bans Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3593766/">BH Resources</a>`,
+		],
+
+		mod: 'gen7',
+		ruleset: ['-Nonexistent', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'CFZ Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: ['Groudon-Primal', 'Rayquaza-Mega', 'Arena Trap', 'Contrary', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Psychic Surge', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Chatter', 'Comatose + Sleep Talk'],
+	},
+
+	// Other Metagames
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Other Metagames",
+		column: 2,
+	},
+	{
 		name: "[Gen 8] Balanced Hackmons",
 		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		threads: [
@@ -363,60 +409,6 @@ let Formats = [
 			'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
 			'Comatose + Sleep Talk',
 		],
-	},
-	{
-		name: "[Gen 7] Tier Shift",
-		desc: "Pok&eacute;mon below OU get all their stats boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.",
-		threads: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3610073/\">Tier Shift</a>",
-		],
-
-		mod: 'gen7',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Drought', 'Damp Rock', 'Deep Sea Tooth', 'Eviolite', 'Heat Rock'],
-		onModifyTemplate(template, target, source, effect) {
-			if (!template.abilities) return false;
-			/** @type {{[tier: string]: number}} */
-			let boosts = {
-				'UU': 10,
-				'RUBL': 10,
-				'RU': 20,
-				'NUBL': 20,
-				'NU': 30,
-				'PUBL': 30,
-				'PU': 40,
-				'NFE': 40,
-				'LC Uber': 40,
-				'LC': 40,
-			};
-			if (target && target.set.ability === 'Drizzle') return;
-			let tier = template.tier;
-			if (target && target.set.item) {
-				let item = this.dex.getItem(target.set.item);
-				if (item.name === 'Kommonium Z' || item.name === 'Mewnium Z') return;
-				if (item.megaEvolves === template.species) tier = this.dex.getTemplate(item.megaStone).tier;
-			}
-			if (target && target.set.moves.includes('auroraveil')) tier = 'UU';
-			if (target && target.set.ability === 'Drought') tier = 'RU';
-
-			if (tier[0] === '(') tier = tier.slice(1, -1);
-			if (!(tier in boosts)) return;
-			let pokemon = this.dex.deepClone(template);
-			let boost = boosts[tier];
-			for (let statName in pokemon.baseStats) {
-				if (statName === 'hp') continue;
-				pokemon.baseStats[statName] = this.dex.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
-			}
-			return pokemon;
-		},
-	},
-
-	// Other Metagames
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "Other Metagames",
-		column: 2,
 	},
 	{
 		name: "[Gen 8] Almost Any Ability",
@@ -502,42 +494,51 @@ let Formats = [
 		},
 	},
 	{
-		name: "[Gen 8] Camomons",
-		desc: `Pok&eacute;mon change type to match their first two moves.`,
+		name: "[Gen 7] Tier Shift",
+		desc: "Pok&eacute;mon below OU get all their stats boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656413/">Camomons</a>`,
-		],
-
-		mod: 'gen8',
-		searchShow: false,
-		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Endless Battle Clause'],
-		banlist: ['Darmanitan-Galar', 'Eternatus', 'Shedinja', 'Zacian', 'Zamazenta'],
-		minSourceGen: 8,
-		onModifyTemplate(template, target, source, effect) {
-			if (!target) return; // Chat command
-			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
-			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.getMove(move.id).type))];
-			return Object.assign({}, template, {types: types});
-		},
-		onSwitchIn(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
-		},
-		onAfterMega(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
-		},
-	},
-	{
-		name: "[Gen 7] Balanced Hackmons",
-		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3587475/">Balanced Hackmons</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3588586/">BH Suspects and Bans Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3593766/">BH Resources</a>`,
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3610073/\">Tier Shift</a>",
 		],
 
 		mod: 'gen7',
-		ruleset: ['-Nonexistent', '2 Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'CFZ Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Groudon-Primal', 'Rayquaza-Mega', 'Arena Trap', 'Contrary', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Psychic Surge', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Chatter', 'Comatose + Sleep Talk'],
+		searchShow: false,
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Drought', 'Damp Rock', 'Deep Sea Tooth', 'Eviolite', 'Heat Rock'],
+		onModifyTemplate(template, target, source, effect) {
+			if (!template.abilities) return false;
+			/** @type {{[tier: string]: number}} */
+			let boosts = {
+				'UU': 10,
+				'RUBL': 10,
+				'RU': 20,
+				'NUBL': 20,
+				'NU': 30,
+				'PUBL': 30,
+				'PU': 40,
+				'NFE': 40,
+				'LC Uber': 40,
+				'LC': 40,
+			};
+			if (target && target.set.ability === 'Drizzle') return;
+			let tier = template.tier;
+			if (target && target.set.item) {
+				let item = this.dex.getItem(target.set.item);
+				if (item.name === 'Kommonium Z' || item.name === 'Mewnium Z') return;
+				if (item.megaEvolves === template.species) tier = this.dex.getTemplate(item.megaStone).tier;
+			}
+			if (target && target.set.moves.includes('auroraveil')) tier = 'UU';
+			if (target && target.set.ability === 'Drought') tier = 'RU';
+
+			if (tier[0] === '(') tier = tier.slice(1, -1);
+			if (!(tier in boosts)) return;
+			let pokemon = this.dex.deepClone(template);
+			let boost = boosts[tier];
+			for (let statName in pokemon.baseStats) {
+				if (statName === 'hp') continue;
+				pokemon.baseStats[statName] = this.dex.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
+			}
+			return pokemon;
+		},
 	},
 
 	// Pet Mods
