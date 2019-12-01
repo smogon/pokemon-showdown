@@ -69,7 +69,10 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['OU', 'UUBL'],
+<<<<<<< HEAD
 		minSourceGen: 8,
+=======
+>>>>>>> Add Sw/Sh UU
 	},
 	{
 		name: "[Gen 8] LC",
