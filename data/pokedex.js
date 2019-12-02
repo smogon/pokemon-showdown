@@ -7895,7 +7895,6 @@ let BattlePokedex = {
 		color: "Red",
 		eggGroups: ["Amorphous"],
 		otherFormes: ["rotomheat", "rotomwash", "rotomfrost", "rotomfan", "rotommow"],
-		inheritsLearnsetFrom: "rotom",
 	},
 	rotomheat: {
 		num: 479,
