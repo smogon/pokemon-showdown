@@ -306,7 +306,7 @@ let BattleFormatsData = {
 			baseMove1: "thunderbolt", baseMove2: "surf", baseMove3: "thunderwave",
 			fillerMoves1: ["reflect", "lightscreen"],
 		},
-		tier: "NU",
+		tier: "NUBL",
 	},
 	sandshrew: {
 		tier: "LC",
@@ -676,7 +676,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["surf", "surf", "hydropump"],
 			fillerMoves2: ["hypnosis", "hypnosis", "hypnosis", "hiddenpowerelectric", "psychic"],
 		},
-		tier: "NU",
+		tier: "NUBL",
 	},
 	mankey: {
 		tier: "LC",
@@ -760,7 +760,7 @@ let BattleFormatsData = {
 			fillerMoves2: ["icebeam", "icebeam", "bodyslam"],
 			fillerMoves3: ["lovelykiss", "lovelykiss", "lovelykiss", "lovelykiss", "dynamicpunch", "bodyslam", "counter"],
 		},
-		tier: "NU",
+		tier: "NUBL",
 	},
 	politoed: {
 		randomSet1: { // Belly Drum
@@ -2547,7 +2547,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves": ["watergun", "bite", "scaryface", "slash"]},
 		],
-		tier: "UU",
+		tier: "NUBL",
 	},
 	sentret: {
 		eventPokemon: [

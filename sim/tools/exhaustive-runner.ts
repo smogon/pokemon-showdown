@@ -71,6 +71,7 @@ export class ExhaustiveRunner {
 
 	async run() {
 		const dex = Dex.forFormat(this.format);
+		dex.loadData(); // FIXME: This is required for `dex.gen` to be set properly...
 
 		const seed = this.prng.seed;
 		const pools = this.createPools(dex);
@@ -138,8 +139,8 @@ export class ExhaustiveRunner {
 					signatures.set(pokemon, combos);
 				}
 				combos.push(combo);
-			} else if (item.zMoveUser) {
-				for (const user of item.zMoveUser) {
+			} else if (item.itemUser) {
+				for (const user of item.itemUser) {
 					const pokemon = toID(user);
 					const combo: {item: string, move?: string} = {item: id};
 					if (item.zMoveFrom) combo.move = toID(item.zMoveFrom);

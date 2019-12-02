@@ -97,7 +97,7 @@ const SETS = path.resolve(__dirname, 'sets');
 		"types": "build/index.d.ts",
 		"repository": {
 			"type": "git",
-			"url": "https://github.com/Zarel/Pokemon-Showdown.git",
+			"url": "https://github.com/smogon/pokemon-showdown.git",
 		},
 		"author": "Kirk Scheibelhut",
 		"license": "UNLICENSED", // The code/typings are MIT, but not all sources of data fall under MIT

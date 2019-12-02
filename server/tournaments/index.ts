@@ -234,10 +234,10 @@ export class Tournament extends Rooms.RoomGame {
 			}
 		}
 		const html = [];
-		if (bans.length) html.push(`<b>Bans</b> - ${Chat.escapeHTML(bans.join(', '))}`);
-		if (unbans.length) html.push(`<b>Unbans</b> - ${Chat.escapeHTML(unbans.join(', '))}`);
-		if (addedRules.length) html.push(`<b>Added rules</b> - ${Chat.escapeHTML(addedRules.join(', '))}`);
-		if (removedRules.length) html.push(`<b>Removed rules</b> - ${Chat.escapeHTML(removedRules.join(', '))}`);
+		if (bans.length) html.push(Chat.html`<b>Bans</b> - ${bans.join(', ')}`);
+		if (unbans.length) html.push(Chat.html`<b>Unbans</b> - ${unbans.join(', ')}`);
+		if (addedRules.length) html.push(Chat.html`<b>Added rules</b> - ${addedRules.join(', ')}`);
+		if (removedRules.length) html.push(Chat.html`<b>Removed rules</b> - ${removedRules.join(', ')}`);
 		return html.join(`<br />`);
 	}
 
@@ -491,7 +491,7 @@ export class Tournament extends Rooms.RoomGame {
 			matchPlayer.inProgressMatch.to.isBusy = false;
 			matchPlayer.isBusy = false;
 
-			matchPlayer.inProgressMatch.room.addRaw(`<div class="broadcast-red"><b>${Chat.escapeHTML(user.name)} is no longer in the tournament.<br />You can finish playing, but this battle is no longer considered a tournament battle.</div>`).update();
+			matchPlayer.inProgressMatch.room.addRaw(Chat.html`<div class="broadcast-red"><b>${user.name} is no longer in the tournament.<br />You can finish playing, but this battle is no longer considered a tournament battle.</div>`).update();
 			matchPlayer.inProgressMatch.room.parent = null;
 			this.completedMatches.add(matchPlayer.inProgressMatch.room.roomid);
 			matchPlayer.inProgressMatch = null;
@@ -1141,7 +1141,7 @@ function createTournament(
 	return tour;
 }
 
-const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCommands} = {
+const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: TourCommands} = {
 	basic: {
 		j: 'join',
 		in: 'join',
@@ -1164,7 +1164,7 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 		getusers(tournament) {
 			if (!this.runBroadcast()) return;
 			const users = usersToNames(tournament.getRemainingPlayers().sort());
-			this.sendReplyBox(`<strong>${users.length}/${tournament.players.length} users remain in this tournament:</strong><br />${Chat.escapeHTML(users.join(', '))}`);
+			this.sendReplyBox(Chat.html`<strong>${users.length}/${tournament.players.length} users remain in this tournament:</strong><br />${users.join(', ')}`);
 		},
 		getupdate(tournament, user) {
 			tournament.updateFor(user);
@@ -1571,8 +1571,7 @@ const commands: {basic: TourCommands, creation: TourCommands, moderation: TourCo
 	},
 };
 
-Chat.loadPlugins();
-const chatCommands: ChatCommands = {
+export const commands: ChatCommands = {
 	tour: 'tournament',
 	tours: 'tournament',
 	tournaments: 'tournament',
@@ -1691,7 +1690,7 @@ const chatCommands: ChatCommands = {
 				if (room.tourAnnouncements) {
 					const tourRoom = Rooms.search(Config.tourroom || 'tournaments');
 					if (tourRoom && tourRoom !== room) {
-						tourRoom.addRaw(`<div class="infobox"><a href="/${room.roomid}" class="ilink"><strong>${Chat.escapeHTML(Dex.getFormat(tour.name).name)}</strong> tournament created in <strong>${Chat.escapeHTML(room.title)}</strong>.</a></div>`).update();
+						tourRoom.addRaw(Chat.html`<div class="infobox"><a href="/${room.roomid}" class="ilink"><strong>${Dex.getFormat(tour.name).name}</strong> tournament created in <strong>${room.title}</strong>.</a></div>`).update();
 					}
 				}
 			}
@@ -1701,10 +1700,10 @@ const chatCommands: ChatCommands = {
 				return this.sendReply("There is currently no tournament running in this room.");
 			}
 
-			let commandHandler = commands.basic[cmd];
+			let commandHandler = tourCommands.basic[cmd];
 			if (commandHandler) {
-				if (typeof commandHandler === 'string') commandHandler = commands.basic[commandHandler];
-			} else if (commands.creation[cmd]) {
+				if (typeof commandHandler === 'string') commandHandler = tourCommands.basic[commandHandler];
+			} else if (tourCommands.creation[cmd]) {
 				if (room.toursEnabled === true) {
 					if (!this.can('tournaments', null, room)) return;
 				} else if (room.toursEnabled === '%') {
@@ -1714,14 +1713,14 @@ const chatCommands: ChatCommands = {
 						return this.errorReply(`Tournaments are disabled in this room (${room.roomid}).`);
 					}
 				}
-				commandHandler = commands.creation[cmd];
-				if (typeof commandHandler === 'string') commandHandler = commands.creation[commandHandler];
-			} else if (commands.moderation[cmd]) {
+				commandHandler = tourCommands.creation[cmd];
+				if (typeof commandHandler === 'string') commandHandler = tourCommands.creation[commandHandler];
+			} else if (tourCommands.moderation[cmd]) {
 				if (!user.can('gamemoderation', null, room)) {
 					return this.errorReply(`${cmd} -  Access denied.`);
 				}
-				commandHandler = commands.moderation[cmd];
-				if (typeof commandHandler === 'string') commandHandler = commands.moderation[commandHandler];
+				commandHandler = tourCommands.moderation[cmd];
+				if (typeof commandHandler === 'string') commandHandler = tourCommands.moderation[commandHandler];
 			}
 
 			if (typeof commandHandler === 'string') throw new Error(`Invalid tour command alis ${cmd}`);
@@ -1762,12 +1761,12 @@ const chatCommands: ChatCommands = {
 		);
 	},
 };
-Object.assign(Chat.commands, chatCommands);
 
 export const Tournaments = {
 	TournamentGenerators,
 	TournamentPlayer,
 	Tournament,
 	createTournament,
+	tourCommands,
 	commands,
 };

@@ -10,7 +10,7 @@ let BattleAbilities = {
 		id: "abilityid",
 		name: "Ability Name",
 		// The bulk of an ability is not easily shown in an example since it varies
-		// For more examples, see https://github.com/Zarel/Pokemon-Showdown/blob/master/data/abilities.js
+		// For more examples, see https://github.com/smogon/pokemon-showdown/blob/master/data/abilities.js
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
@@ -249,7 +249,7 @@ let BattleAbilities = {
 			if (formes.includes(toID(source.template.species))) {
 				formes.splice(formes.indexOf(toID(source.template.species)), 1);
 				this.add('-activate', source, 'ability: Arabesque');
-				source.formeChange(formes[this.random(formes.length)], this.dex.getAbility('arabesque'), true);
+				source.formeChange(formes[this.random(formes.length)], this.dex.getAbility('arabesque'));
 			}
 		},
 	},

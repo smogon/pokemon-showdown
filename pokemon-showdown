@@ -130,8 +130,11 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 			var stdin = new Streams.ReadStream(process.stdin);
 			var stdout = new Streams.WriteStream(process.stdout);
 
+			var args = process.argv[3].split(' ');
+
 			var battleStream = new BattleTextStream({
-				debug: process.argv[3] === '--debug'
+				debug: args.includes('--debug') || args.includes('-D') || args.includes('-DR') || args.includes('-RD'),
+				replay: args.includes('--replay') || args.includes('-R') || args.includes('-DR') || args.includes('-RD')
 			});
 			battleStream.start();
 			stdin.pipeTo(battleStream);

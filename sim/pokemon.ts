@@ -198,6 +198,8 @@ export class Pokemon {
 
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
+	canDynamax: boolean;
+	canGigantamax: string | null;
 
 	staleness?: 'internal' | 'external';
 	pendingStaleness?: 'internal' | 'external';
@@ -206,23 +208,36 @@ export class Pokemon {
 	modifiedStats?: StatsExceptHPTable;
 	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
 
-	// OMs
+	/**
+	 * An object for storing untyped data, for mods to use.
+	 */
 	m: PokemonModData;
 
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
 		this.battle = side.battle;
 
+		this.m = {};
+
 		const pokemonScripts = this.battle.dex.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
 		if (typeof set === 'string') set = {name: set};
-		this.set = set as PokemonSet;
 
 		this.baseTemplate = this.battle.dex.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
 			throw new Error(`Unidentified species: ${this.baseTemplate.name}`);
 		}
+		// Change Gigantamax formes to their base formes
+		let gMax: string | null = null;
+		if (this.baseTemplate.isGigantamax) {
+			gMax = this.baseTemplate.species;
+			if (set.species && toID(set.species) === this.baseTemplate.id) set.species = this.baseTemplate.baseSpecies;
+			if (set.name && toID(set.name) === this.baseTemplate.id) set.name = this.baseTemplate.baseSpecies;
+			this.baseTemplate = this.battle.dex.getTemplate(this.baseTemplate.baseSpecies);
+		}
+		this.set = set as PokemonSet;
+
 		this.template = this.baseTemplate;
 		this.species = this.battle.dex.getSpecies(set.species);
 		this.speciesid = toID(this.species);
@@ -363,6 +378,9 @@ export class Pokemon {
 
 		this.canMegaEvo = this.battle.canMegaEvo(this);
 		this.canUltraBurst = this.battle.canUltraBurst(this);
+		// Normally would want to use battle.canDynamax to set this, but it references this property.
+		this.canDynamax = (this.battle.gen >= 8);
+		this.canGigantamax = gMax;
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
@@ -371,11 +389,6 @@ export class Pokemon {
 		this.clearVolatile();
 		this.maxhp = this.template.maxHP || this.baseStoredStats.hp;
 		this.hp = this.maxhp;
-
-		/**
-		 * An object for storing untyped data, for mods to use.
-		 */
-		this.m = {};
 	}
 
 	toJSON(): AnyObject {
@@ -788,6 +801,8 @@ export class Pokemon {
 			canMegaEvo?: boolean,
 			canUltraBurst?: boolean,
 			canZMove?: AnyObject | null,
+			canDynamax?: boolean,
+			maxMoves?: DynamaxOptions,
 		} = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle', target: 'randomNormal', disabled: false}]};
 
 		if (isLastActive) {
@@ -811,6 +826,9 @@ export class Pokemon {
 			if (this.canUltraBurst) data.canUltraBurst = true;
 			const canZMove = this.battle.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
+			// TODO interaction between dynamax and choice locked moves?
+			if (this.battle.canDynamax(this)) data.canDynamax = true;
+			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.battle.canDynamax(this, true);
 		}
 
 		return data;
@@ -893,7 +911,7 @@ export class Pokemon {
 		const template = pokemon.template;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
-			!this.setTemplate(template)) {
+			!this.setTemplate(template) || template.species === 'Eternatus-Eternamax') {
  			return false;
 		}
 		this.transformed = true;
@@ -1005,8 +1023,9 @@ export class Pokemon {
 	 * as well as sending all relevant messages sent to the client.
 	 */
 	formeChange(
-		templateId: string | Template, source: Effect = this.battle.effect, isPermanent?: boolean,
-		message?: string, abilitySlot: '0' | '1' | 'H' | 'S' = '0') {
+		templateId: string | Template, source: Effect = this.battle.effect,
+		isPermanent?: boolean, message?: string
+	) {
 		const rawTemplate = this.battle.dex.getTemplate(templateId);
 
 		const template = this.setTemplate(rawTemplate, source);
@@ -1048,11 +1067,11 @@ export class Pokemon {
 				this.battle.add('-formechange', this, this.illusion ? this.illusion.template.species : template.species, message);
 			}
 		}
-		if (source.effectType !== 'Ability' && source.id !== 'relicsong' && source.id !== 'zenmode') {
+		if (isPermanent && !['disguise', 'iceface'].includes(source.id)) {
 			if (this.illusion) {
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
-			this.setAbility(template.abilities[abilitySlot], null, true);
+			this.setAbility(template.abilities['0'], null, true);
 			if (isPermanent) this.baseAbility = this.ability;
 		}
 		return true;
@@ -1087,7 +1106,11 @@ export class Pokemon {
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
 			}
 		}
-		this.volatiles = {};
+		if (this.species === 'Eternatus-Eternamax' && this.volatiles.dynamax) {
+			this.volatiles = {dynamax: this.volatiles.dynamax};
+		} else {
+			this.volatiles = {};
+		}
 		if (includeSwitchFlags) {
 			this.switchFlag = false;
 			this.forceSwitchFlag = false;

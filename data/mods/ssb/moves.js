@@ -19,7 +19,7 @@ let BattleMovedex = {
 		name: "Move Name",
 		pp: 10, // unboosted PP count
 		priority: 0, // move priority, -6 -> 6
-		flags: {}, // Move flags https://github.com/Zarel/Pokemon-Showdown/blob/master/data/moves.js#L1-L27
+		flags: {}, // Move flags https://github.com/smogon/pokemon-showdown/blob/master/data/moves.js#L1-L27
 		secondary: {
 			status: "tox",
 			chance: 20,
@@ -337,7 +337,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -3547,7 +3547,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
