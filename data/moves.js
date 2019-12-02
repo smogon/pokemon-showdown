@@ -855,7 +855,7 @@ let BattleMovedex = {
 			this.hint("Only a Pokemon whose form is Morpeko or Morpeko-Hangry can use this move.");
 			return null;
 		},
-		onModifyMove(move, pokemon) {
+		onModifyType(move, pokemon) {
 			if (pokemon.template.species === 'Morpeko-Hangry' && move.type !== 'Dark') {
 				move.type = "Dark";
 			} else if (pokemon.template.species === 'Morpeko' && move.type !== 'Electric') {
@@ -4689,8 +4689,8 @@ let BattleMovedex = {
 			onStart(target) {
 				this.add('-singleturn', target, 'move: Electrify');
 			},
-			onModifyMovePriority: -2,
-			onModifyMove(move) {
+			onModifyTypePriority: -2,
+			onModifyType(move) {
 				if (move.id !== 'struggle') {
 					this.debug('Electrify making move type electric');
 					move.type = 'Electric';
@@ -8783,7 +8783,7 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onModifyMove(move, pokemon) {
+		onModifyType(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
 		},
 		secondary: null,
@@ -9965,8 +9965,8 @@ let BattleMovedex = {
 			onStart(target) {
 				this.add('-fieldactivate', 'move: Ion Deluge');
 			},
-			onModifyMovePriority: -2,
-			onModifyMove(move) {
+			onModifyTypePriority: -2,
+			onModifyType(move) {
 				if (move.type === 'Normal') {
 					move.type = 'Electric';
 					this.debug(move.name + "'s type changed to Electric");
@@ -10078,7 +10078,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onModifyMove(move, pokemon) {
+		onModifyType(move, pokemon) {
 			if (pokemon.ignoringItem()) return;
 			const item = pokemon.getItem();
 			if (item.id && item.onPlate && !item.zMove) {
@@ -12873,7 +12873,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onModifyMove(move, pokemon) {
+		onModifyType(move, pokemon) {
 			if (pokemon.ignoringItem()) return;
 			move.type = this.runEvent('Memory', pokemon, null, move, 'Normal');
 		},
@@ -12941,12 +12941,17 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		onModifyType(move, pokemon) {
+			if (pokemon.ignoringItem()) return;
+			let item = pokemon.getItem();
+			if (!item.naturalGift) return;
+			move.type = item.naturalGift.type;
+		},
 		onPrepareHit(target, pokemon, move) {
 			if (pokemon.ignoringItem()) return false;
 			let item = pokemon.getItem();
 			if (!item.naturalGift) return false;
 			move.basePower = item.naturalGift.basePower;
-			move.type = item.naturalGift.type;
 			pokemon.setItem('');
 			pokemon.lastItem = item.id;
 			pokemon.usedItemThisTurn = true;
@@ -15557,7 +15562,7 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
-		onModifyMove(move, pokemon) {
+		onModifyType(move, pokemon) {
 			let type = pokemon.types[0];
 			if (type === "Bird") type = "???";
 			move.type = type;
@@ -19728,7 +19733,7 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onModifyMove(move, pokemon) {
+		onModifyType(move, pokemon) {
 			if (pokemon.ignoringItem()) return;
 			move.type = this.runEvent('Drive', pokemon, null, move, 'Normal');
 		},
@@ -21177,24 +21182,38 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		onModifyMove(move) {
+		onModifyType(move) {
 			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
 				move.type = 'Fire';
-				move.basePower *= 2;
 				break;
 			case 'raindance':
 			case 'primordialsea':
 				move.type = 'Water';
-				move.basePower *= 2;
 				break;
 			case 'sandstorm':
 				move.type = 'Rock';
-				move.basePower *= 2;
 				break;
 			case 'hail':
 				move.type = 'Ice';
+				break;
+			}
+		},
+		onModifyMove(move) {
+			switch (this.field.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				move.basePower *= 2;
+				break;
+			case 'raindance':
+			case 'primordialsea':
+				move.basePower *= 2;
+				break;
+			case 'sandstorm':
+				move.basePower *= 2;
+				break;
+			case 'hail':
 				move.basePower *= 2;
 				break;
 			}
