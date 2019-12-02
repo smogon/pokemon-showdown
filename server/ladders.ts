@@ -474,8 +474,8 @@ class Ladder extends LadderStore {
 		// search must be within range
 		let searchRange = 100;
 		const elapsed = Date.now() - Math.min(search1.time, search2.time);
-		if (formatid === 'gen7ou' || formatid === 'gen7oucurrent' ||
-				formatid === 'gen7oususpecttest' || formatid === 'gen7randombattle') {
+		if (formatid === 'gen8ou' || formatid === 'gen8oucurrent' ||
+				formatid === 'gen8oususpecttest' || formatid === 'gen8randombattle') {
 			searchRange = 50;
 		}
 
