@@ -305,7 +305,7 @@ let BattleItems = {
 	},
 	magoberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
+		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
 		onEat(pokemon) {
 			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'spe') {
@@ -497,6 +497,7 @@ let BattleItems = {
 	wikiberry: {
 		inherit: true,
 		isNonstandard: null,
+		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
 		onEat(pokemon) {
 			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'spa') {
