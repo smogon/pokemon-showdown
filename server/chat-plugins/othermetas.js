@@ -27,7 +27,7 @@ function getMegaStone(stone) {
 			return null;
 		}
 	}
-	if (!item.megaStone && !item.onPrimal) return null;
+	if (!item.megaStone) return null;
 	return item;
 }
 
