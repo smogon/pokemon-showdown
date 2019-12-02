@@ -928,6 +928,7 @@ interface TemplateData {
 	otherForms?: string[]
 	otherFormes?: string[]
 	prevo?: string
+	inheritsLearnsetFrom?: string
 }
 
 interface ModdedTemplateData extends Partial<TemplateData> {
