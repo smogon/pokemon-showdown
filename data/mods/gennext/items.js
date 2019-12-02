@@ -173,7 +173,7 @@ let BattleItems = {
 		},
 		// onResidual(pokemon) {
 		// 	if (pokemon.template.species === 'Shuckle') {
-		// 		this.heal(this.clampIntRange(pokemon.maxhp / 16, 1));
+		// 		this.heal(this.dex.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}
 		// },
 		desc: "Raises Farfetch'd's critical hit rate two stages.",

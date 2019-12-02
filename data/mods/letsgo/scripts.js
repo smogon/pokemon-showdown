@@ -2,6 +2,7 @@
 
 /**@type {ModdedBattleScriptsData} */
 let BattleScripts = {
+	inherit: 'gen7',
 	init() {
 		this.modData('Abilities', 'noability').isNonstandard = false;
 		for (let i in this.data.Pokedex) {
@@ -27,7 +28,7 @@ let BattleScripts = {
 			let stat = baseStats['hp'];
 			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + 100) * set.level / 100 + 10);
 		}
-		return this.natureModify(modStats, set);
+		return this.dex.natureModify(modStats, set);
 	},
 
 	/**
@@ -36,7 +37,7 @@ let BattleScripts = {
 	 * @return {StatsTable}
 	 */
 	natureModify(stats, set) {
-		let nature = this.getNature(set.nature);
+		let nature = this.dex.getNature(set.nature);
 		// @ts-ignore
 		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
 		// @ts-ignore
@@ -56,11 +57,10 @@ let BattleScripts = {
 
 	pokemon: {
 		getWeight() {
-			let weight = this.template.weightkg;
-			weight = this.battle.runEvent('ModifyWeight', this, null, null, weight);
-			if (weight < 0.1) weight = 0.1;
+			let weighthg = this.battle.runEvent('ModifyWeight', this, null, null, this.weighthg);
+			if (weighthg < 1) weighthg = 1;
 			let weightModifierFinal = 20 * Math.random() * 0.01;
-			return weight + (weight * (this.battle.random(2) === 1 ? 1 : -1) * weightModifierFinal);
+			return weighthg + (weighthg * (this.battle.random(2) === 1 ? 1 : -1) * weightModifierFinal);
 		},
 	},
 };

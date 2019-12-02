@@ -2,6 +2,18 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
+	// Aeonic
+	noseiumz: {
+		id: "noseiumz",
+		name: "Noseium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Shitpost",
+		zMoveFrom: "Fissure",
+		itemUser: ["Nosepass"],
+		gen: 7,
+		desc: "If held by a Nosepass with Fissure, it can use Shitpost.",
+	},
 	// E4 Flint
 	magmarizer: {
 		inherit: true,
@@ -22,9 +34,35 @@ let BattleItems = {
 		onTakeItem: false,
 		zMove: "Rickrollout",
 		zMoveFrom: "Rock Slide",
-		zMoveUser: ["Golem"],
+		itemUser: ["Golem"],
 		gen: 7,
 		desc: "If held by a Golem with Rock Slide, it can use Rickrollout.",
+	},
+	// inactive
+	dusknoiriumz: {
+		id: "dusknoiriumz",
+		name: "Dusknoirium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Petrifying Gaze",
+		zMoveFrom: "Mean Look",
+		itemUser: ["Dusknoir"],
+		gen: 7,
+		desc: "If held by a Dusknoir with Mean Look, it can use Petrifying Gaze.",
+	},
+	// Kris
+	thunderstone: {
+		inherit: true,
+		// @ts-ignore
+		megaStone: ["Rotom-Wash", "Rotom-Mow", "Rotom-Heat", "Rotom-Frost", "Rotom-Fan"],
+		megaEvolves: "Rotom",
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		fling: undefined, // Cannot be flung now since its a mega stone
+		desc: "If held by a Rotom, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Rotom, this item allows it to Mega Evolve in battle.",
 	},
 	// MajorBowman
 	victiniumz: {
@@ -34,9 +72,21 @@ let BattleItems = {
 		onTakeItem: false,
 		zMove: "Blaze of Glory",
 		zMoveFrom: "V-create",
-		zMoveUser: ["Victini"],
+		itemUser: ["Victini"],
 		gen: 7,
 		desc: "If held by a Victini with V-create, it can use Blaze of Glory.",
+	},
+	// Pohjis
+	marowakiumz: {
+		id: "marowakiumz",
+		name: "Marowakium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Great Eqake",
+		zMoveFrom: "Earthquake",
+		itemUser: ["Marowak"],
+		gen: 7,
+		desc: "If held by a Marowak with Earthquake, it can use Great Eqake.",
 	},
 	// SamJo
 	thicciniumz: {
@@ -46,9 +96,21 @@ let BattleItems = {
 		onTakeItem: false,
 		zMove: "Extra T h i c c",
 		zMoveFrom: "Thicc",
-		zMoveUser: ["Mamoswine"],
+		itemUser: ["Mamoswine"],
 		gen: 7,
 		desc: "If held by a Mamoswine with Thicc, it can use Extra T h i c c.",
+	},
+	// Schiavetto
+	mariahcariumz: {
+		id: "mariahcariumz",
+		name: "Mariahcarium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Plurshift",
+		zMoveFrom: "Poison Jab",
+		itemUser: ["Scolipede"],
+		gen: 7,
+		desc: "If held by a Scolipede with Poison Jab, it can use Plurshift.",
 	},
 	// Snaquaza
 	fakeclaimiumz: {
@@ -59,21 +121,9 @@ let BattleItems = {
 		zMove: "Fake Claim",
 		// @ts-ignore hack for Snaquaza's Z move.
 		zMoveFrom: ["Brave Bird", "Superpower", "Sucker Punch", "Flamethrower", "Ice Beam", "Thunderbolt"],
-		zMoveUser: ["Honchkrow"],
+		itemUser: ["Honchkrow"],
 		gen: 7,
 		desc: "If held by a Honchkrow, it can use Fake Claim.",
-	},
-	// SunGodVolcarona
-	volcaroniumz: {
-		id: "volcaroniumz",
-		name: "Volcaronium Z",
-		isNonstandard: "Custom",
-		onTakeItem: false,
-		zMove: "Scorching Global Vortex",
-		zMoveFrom: "Fiery Dance",
-		zMoveUser: ["Volcarona"],
-		gen: 7,
-		desc: "If held by a Volcarona with Fiery Dance, it can use Scorching Global Vortex.",
 	},
 	// The Immortal
 	buzzniumz: {
@@ -83,33 +133,29 @@ let BattleItems = {
 		onTakeItem: false,
 		zMove: "Ultra Succ",
 		zMoveFrom: "Drain Punch",
-		zMoveUser: ["Buzzwole"],
+		itemUser: ["Buzzwole"],
 		gen: 7,
 		desc: "If held by a Buzzwole with Drain Punch, it can use Ultra Succ.",
 	},
-	// Tiksi
-	tiksiumz: {
-		id: "tiksiumz",
-		name: "Tiksium Z",
+	// Teclis
+	darkrainiumz: {
+		id: "darkrainiumz",
+		name: "Darkrainium Z",
 		isNonstandard: "Custom",
 		onTakeItem: false,
-		zMove: "Devolution Wave",
-		zMoveFrom: "Rock Slide",
-		zMoveUser: ["Cradily"],
+		zMove: "Absolute Configuration",
+		zMoveFrom: "Dark Void",
+		itemUser: ["Darkrai"],
 		gen: 7,
-		desc: "If held by a Cradily with Rock Slide, it can use Devolution Wave.",
+		desc: "If held by a Darkrai with Dark Void, it can use Absolute Configuration.",
 	},
-	// Uselesscrab
-	nichiumz: {
-		id: "nichiumz",
-		name: "Nichium Z",
-		isNonstandard: "Custom",
-		onTakeItem: false,
-		zMove: "Revamped Suspect Philosophy",
-		zMoveFrom: "Icicle Crash",
-		zMoveUser: ["Kyurem-Black"],
-		gen: 7,
-		desc: "If held by a Kyurem-Black with Icicle Crash, it can use Revamped Suspect Philosophy.",
+	// XpRienzo
+	"charcoal": {
+		inherit: true,
+		zMove: "Bleh Flame",
+		zMoveFrom: "Blue Flare",
+		itemUser: ["Reshiram"],
+		desc: "Fire-type attacks have 1.2x power. Reshiram with Blue Flare can use Bleh Flame.",
 	},
 };
 

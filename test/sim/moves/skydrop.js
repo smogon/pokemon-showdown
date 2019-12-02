@@ -161,7 +161,7 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Kabutops", ability: 'swiftswim', moves: ['aquajet']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Azumarill", ability: 'thickfat', moves: ['aquajet']}],
 		]);
-		battle.onEvent('Damage', battle.getFormat(), function (damage, target, source, effect) {
+		battle.onEvent('Damage', battle.format, function (damage, target, source, effect) {
 			// mod Sky Drop to deal no damage
 			if (effect.id === 'skydrop') return 0;
 		});

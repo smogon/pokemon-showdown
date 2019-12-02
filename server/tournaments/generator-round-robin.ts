@@ -7,11 +7,11 @@ interface Match {
 type TournamentPlayer = import('./index').TournamentPlayer;
 
 export class RoundRobin {
-	name: string;
-	isDrawingSupported: boolean;
+	readonly name: string;
+	readonly isDrawingSupported: boolean;
+	readonly isDoubles: boolean;
 	isBracketFrozen: boolean;
 	players: TournamentPlayer[];
-	isDoubles: boolean;
 	matches: (Match | null)[][];
 	totalPendingMatches: number;
 	perPlayerPendingMatches: number;
@@ -19,10 +19,10 @@ export class RoundRobin {
 	constructor(isDoubles: string) {
 		this.name = "Round Robin";
 		this.isDrawingSupported = true;
+		this.isDoubles = !!isDoubles;
 		this.isBracketFrozen = false;
 		this.players = [];
 
-		this.isDoubles = !!isDoubles;
 		this.matches = [];
 		this.totalPendingMatches = -1;
 		this.perPlayerPendingMatches = -1;

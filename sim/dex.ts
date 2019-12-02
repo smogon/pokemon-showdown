@@ -214,7 +214,7 @@ export class ModdedDex {
 		return dexes;
 	}
 
-	mod(mod: string): ModdedDex {
+	mod(mod: string | undefined): ModdedDex {
 		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
 		return dexes[mod || 'base'];
 	}
@@ -222,7 +222,7 @@ export class ModdedDex {
 	forFormat(format: Format | string): ModdedDex {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
-		return dexes[mod || 'gen7'];
+		return dexes[mod || 'gen8'].includeData();
 	}
 
 	modData(dataType: DataType, id: string) {
@@ -363,14 +363,27 @@ export class ModdedDex {
 		}
 		if (!this.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
-			if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
-				aliasTo = id.slice(4) + 'mega';
-			} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega']) {
-				aliasTo = id.slice(1) + 'mega';
-			} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
-				aliasTo = id.slice(6) + 'primal';
-			} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
-				aliasTo = id.slice(1) + 'primal';
+			const formeNames: {[k: string]: string[]} = {
+				alola: ['a', 'alola', 'alolan'],
+				galar: ['g', 'galar', 'galarian'],
+				gmax: ['gigantamax', 'gmax'],
+				mega: ['m', 'mega'],
+				primal: ['p', 'primal'],
+			};
+			for (const forme in formeNames) {
+				let pokeName = '';
+				for (const i of formeNames[forme]) {
+					if (id.startsWith(i)) {
+						pokeName = id.slice(i.length);
+					} else if (id.endsWith(i)) {
+						pokeName = id.slice(0, -i.length);
+					}
+				}
+				if (this.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.data.Aliases[pokeName]);
+				if (this.data.Pokedex[pokeName + forme]) {
+					aliasTo = pokeName + forme;
+					break;
+				}
 			}
 			if (aliasTo) {
 				template = this.getTemplate(aliasTo);
@@ -398,8 +411,12 @@ export class ModdedDex {
 					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
 				} else {
-					template.tier = this.data.FormatsData[toID(template.baseSpecies)].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[toID(template.baseSpecies)].doublesTier || 'Illegal';
+					const baseFormatsData = this.data.FormatsData[toID(template.baseSpecies)];
+					if (!baseFormatsData) {
+						throw new Error(`${template.baseSpecies} has no formats-data entry`);
+					}
+					template.tier = baseFormatsData.tier || 'Illegal';
+					template.doublesTier = baseFormatsData.doublesTier || 'Illegal';
 				}
 			}
 			if (!template.tier) template.tier = 'Illegal';
@@ -408,6 +425,13 @@ export class ModdedDex {
 				template.tier = 'Illegal';
 				template.doublesTier = 'Illegal';
 				template.isNonstandard = 'Future';
+			}
+			if (this.currentMod === 'letsgo' && !template.isNonstandard) {
+				const isLetsGo = (
+					(template.num <= 151 || ['Meltan', 'Melmetal'].includes(template.name)) &&
+					(!template.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme))
+				);
+				if (!isLetsGo) template.isNonstandard = 'Past';
 			}
 		} else {
 			template = new Data.Template({
@@ -608,6 +632,10 @@ export class ModdedDex {
 			if (item.gen > this.gen) {
 				(item as any).isNonstandard = 'Future';
 			}
+			// hack for allowing mega evolution in LGPE
+			if (this.currentMod === 'letsgo' && !item.isNonstandard && !item.megaStone) {
+				(item as any).isNonstandard = 'Past';
+			}
 		} else {
 			item = new Data.Item({id, name, exists: false});
 		}
@@ -633,6 +661,12 @@ export class ModdedDex {
 			ability = new Data.Ability({name}, this.data.Abilities[id]);
 			if (ability.gen > this.gen) {
 				(ability as any).isNonstandard = 'Future';
+			}
+			if (this.currentMod === 'letsgo' && ability.id !== 'noability') {
+				(ability as any).isNonstandard = 'Past';
+			}
+			if ((this.currentMod === 'letsgo' || this.gen <= 2) && ability.id === 'noability') {
+				(ability as any).isNonstandard = null;
 			}
 		} else {
 			ability = new Data.Ability({id, name, exists: false});
@@ -770,13 +804,7 @@ export class ModdedDex {
 			ruleset.push('+' + ban);
 		}
 		if (format.customRules) {
-			for (const rule of format.customRules) {
-				if (rule.startsWith('!')) {
-					ruleset.unshift(rule);
-				} else {
-					ruleset.push(rule);
-				}
-			}
+			ruleset.push(...format.customRules);
 		}
 		if (format.checkLearnset) {
 			ruleTable.checkLearnset = [format.checkLearnset, format.name];
@@ -785,7 +813,17 @@ export class ModdedDex {
 			ruleTable.timer = [format.timer, format.name];
 		}
 
+		// apply rule repeals before other rules
 		for (const rule of ruleset) {
+			if (rule.startsWith('!')) {
+				const ruleSpec = this.validateRule(rule, format) as string;
+				ruleTable.set(ruleSpec, '');
+			}
+		}
+
+		for (const rule of ruleset) {
+			if (rule.startsWith('!')) continue;
+
 			const ruleSpec = this.validateRule(rule, format);
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
@@ -800,9 +838,8 @@ export class ModdedDex {
 				continue;
 			}
 			if ("!+-".includes(ruleSpec.charAt(0))) {
-				if (ruleSpec.charAt(0) === '+' && ruleTable.has('-' + ruleSpec.slice(1))) {
-					ruleTable.delete('-' + ruleSpec.slice(1));
-				}
+				if (ruleSpec.startsWith('+')) ruleTable.delete('-' + ruleSpec.slice(1));
+				if (ruleSpec.startsWith('-')) ruleTable.delete('+' + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
@@ -888,7 +925,7 @@ export class ModdedDex {
 	validateBanRule(rule: string) {
 		let id = toID(rule);
 		if (id === 'unreleased') return 'unreleased';
-		if (id === 'illegal') return 'illegal';
+		if (id === 'nonexistent') return 'nonexistent';
 		const matches = [];
 		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'pokemontag'];
 		for (const matchType of matchTypes) {
@@ -911,11 +948,13 @@ export class ModdedDex {
 				// valid pokemontags
 				const validTags = [
 					// singles tiers
-					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
+					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe', 'ag',
 					// doubles tiers
 					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags
 					'mega',
+					// illegal/nonstandard reasons
+					'glitch', 'past', 'future', 'lgpe', 'pokestar', 'custom',
 				];
 				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
 				continue;
@@ -1429,7 +1468,8 @@ export class ModdedDex {
 		}
 
 		// Flag the generation. Required for team validator.
-		this.gen = dataCache.Scripts.gen || 7;
+		this.gen = dataCache.Scripts.gen;
+		if (!this.gen) throw new Error(`Mod ${this.currentMod} needs a generation number in scripts.js`);
 		this.dataCache = dataCache as DexTableData;
 
 		// Execute initialization script.
@@ -1495,7 +1535,7 @@ export class ModdedDex {
 
 dexes['base'] = new ModdedDex(undefined, true);
 
-// "gen7" is an alias for the current base data
-dexes['gen7'] = dexes['base'];
+// "gen8" is an alias for the current base data
+dexes['gen8'] = dexes['base'];
 
-export const Dex = dexes['gen7'];
+export const Dex = dexes['gen8'];

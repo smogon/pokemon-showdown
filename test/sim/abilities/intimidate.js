@@ -11,7 +11,7 @@ describe('Intimidate', function () {
 	});
 
 	it('should decrease Atk by 1 level', function () {
-		battle = common.createBattle();
+		battle = common.gen(7).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', moves: ['sketch']}]});
 		battle.setPlayer('p2', {team: [{species: "Gyarados", ability: 'intimidate', moves: ['splash']}]});
 		assert.statStage(battle.p1.active[0], 'atk', -1);
@@ -81,7 +81,7 @@ describe('Intimidate', function () {
 		battle.setPlayer('p1', {team: [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]});
 		battle.setPlayer('p2', {team: [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]});
 		let intimidateCount = 0;
-		battle.onEvent('Boost', battle.getFormat(), function (boost, target, source) {
+		battle.onEvent('Boost', battle.format, function (boost, target, source) {
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
@@ -96,7 +96,7 @@ describe('Intimidate', function () {
 		battle.setPlayer('p1', {team: [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]});
 		battle.setPlayer('p2', {team: [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]});
 		intimidateCount = 0;
-		battle.onEvent('Boost', battle.getFormat(), function (boost, target, source) {
+		battle.onEvent('Boost', battle.format, function (boost, target, source) {
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
@@ -120,7 +120,7 @@ describe('Intimidate', function () {
 		]});
 		const [p1active, p2active] = [battle.p1.active, battle.p2.active];
 		let intimidateCount = 0;
-		battle.onEvent('Boost', battle.getFormat(), function (boost, target, source) {
+		battle.onEvent('Boost', battle.format, function (boost, target, source) {
 			assert.species(source, intimidateCount % 2 === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});

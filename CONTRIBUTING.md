@@ -5,7 +5,7 @@ In general, we welcome pull requests that fix bugs.
 
 For feature additions and large projects, please discuss with us at http://psim.us/development first. We'd hate to have to reject a pull request that you spent a long time working on...
 
-If you're looking for inspiration for something to do, the Ideas issue is a good place to look: https://github.com/Zarel/Pokemon-Showdown/issues/2444
+If you're looking for inspiration for something to do, the Ideas issue is a good place to look: https://github.com/smogon/pokemon-showdown/issues/2444
 
 
 License

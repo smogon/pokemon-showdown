@@ -20,13 +20,14 @@ const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
  * connecting to the server, starting a battle, validating a team, and
  * sending/receiving data over a connection's socket.
  */
-class TimedCounter extends Map<string, [number, number]> {
+export class TimedCounter extends Map<string, [number, number]> {
 	/**
 	 * Increments the number of times an action has been committed by one, and
 	 * updates the delta of time since it was last committed.
 	 *
+	 * @returns [action count, time delta]
 	 */
-	increment(key: string, timeLimit: number): /** [action count, time delta] */ [number, number] {
+	increment(key: string, timeLimit: number): [number, number] {
 		const val = this.get(key);
 		const now = Date.now();
 		if (!val || now > val[1] + timeLimit) {
@@ -51,7 +52,24 @@ if (('Config' in global) &&
 	Config.loglevel = 2;
 }
 
-export const Monitor = {
+export const Monitor = new class {
+	connections = new TimedCounter();
+	battles = new TimedCounter();
+	battlePreps = new TimedCounter();
+	groupChats = new TimedCounter();
+	tickets = new TimedCounter();
+
+	activeIp: string | null = null;
+	networkUse: {[k: string]: number} = {};
+	networkCount: {[k: string]: number} = {};
+	hotpatchLock: {[k: string]: {by: string, reason: string}} = {};
+	hotpatchVersions: {[k: string]: string | undefined} = {};
+
+	TimedCounter = TimedCounter;
+
+	updateServerLock = false;
+	cleanInterval: NodeJS.Timeout | null = null;
+
 	/*********************************************************
 	 * Logging
 	 *********************************************************/
@@ -69,40 +87,43 @@ export const Monitor = {
 		if (crashType === 'lockdown') {
 			Rooms.global.startLockdown(error);
 		}
-	},
+	}
 
 	log(text: string) {
 		this.notice(text);
-		if (Rooms.get('staff')) {
-			Rooms.get('staff').add(`|c|~|${text}`).update();
+		const staffRoom = Rooms.get('staff');
+		if (staffRoom) {
+			staffRoom.add(`|c|~|${text}`).update();
 		}
-	},
+	}
 
 	adminlog(text: string) {
 		this.notice(text);
-		if (Rooms.get('upperstaff')) {
-			Rooms.get('upperstaff').add(`|c|~|${text}`).update();
+		const upperstaffRoom = Rooms.get('upperstaff');
+		if (upperstaffRoom) {
+			upperstaffRoom.add(`|c|~|${text}`).update();
 		}
-	},
+	}
 
 	logHTML(text: string) {
 		this.notice(text);
-		if (Rooms.get('staff')) {
-			Rooms.get('staff').add(`|html|${text}`).update();
+		const staffRoom = Rooms.get('staff');
+		if (staffRoom) {
+			staffRoom.add(`|html|${text}`).update();
 		}
-	},
+	}
 
 	debug(text: string) {
 		if (Config.loglevel <= 1) console.log(text);
-	},
+	}
 
 	warn(text: string) {
 		if (Config.loglevel <= 3) console.log(text);
-	},
+	}
 
 	notice(text: string) {
 		if (Config.loglevel <= 2) console.log(text);
-	},
+	}
 
 	/*********************************************************
 	 * Resource Monitor
@@ -114,19 +135,7 @@ export const Monitor = {
 		this.battles.clear();
 		this.connections.clear();
 		IPTools.dnsblCache.clear();
-	},
-
-	connections: new TimedCounter(),
-	battles: new TimedCounter(),
-	battlePreps: new TimedCounter(),
-	groupChats: new TimedCounter(),
-	tickets: new TimedCounter(),
-
-	activeIp: null as string | null,
-	networkUse: {} as unknown as {[k: string]: number},
-	networkCount: {} as unknown as {[k: string]: number},
-	hotpatchLock: {} as unknown as {[k: string]: number},
-	hotpatchVersions: {} as unknown as {[k: string]: number},
+	}
 
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
@@ -149,7 +158,7 @@ export const Monitor = {
 		// }
 
 		return false;
-	},
+	}
 
 	/**
 	 * Counts battles created. Returns true if the connection should be
@@ -168,7 +177,7 @@ export const Monitor = {
 		// }
 
 		return false;
-	},
+	}
 
 	/**
 	 * Counts team validations. Returns true if too many.
@@ -197,7 +206,7 @@ export const Monitor = {
 	countGroupChat(ip: string) {
 		const count = this.groupChats.increment(ip, 60 * 60 * 1000)[0];
 		return count > 4;
-	},
+	}
 
 	/**
 	 * Counts ticket creation. Returns true if too much.
@@ -225,23 +234,22 @@ export const Monitor = {
 			this.networkUse[this.activeIp] = size;
 			this.networkCount[this.activeIp] = 1;
 		}
-	},
+	}
 
 	writeNetworkUse() {
 		let buf = '';
 		for (const i in this.networkUse) {
 			buf += `${this.networkUse[i]}\t${this.networkCount[i]}\t${i}\n`;
 		}
-		// tslint:disable-next-line: no-floating-promises
-		FS('logs/networkuse.tsv').write(buf);
-	},
+		void FS('logs/networkuse.tsv').write(buf);
+	}
 
 	clearNetworkUse() {
 		if (Config.emergency) {
 			this.networkUse = {};
 			this.networkCount = {};
 		}
-	},
+	}
 
 	/**
 	 * Counts roughly the size of an object to have an idea of the server load.
@@ -275,7 +283,7 @@ export const Monitor = {
 		}
 
 		return bytes;
-	},
+	}
 
 	sh(command: string, options: ExecOptions = {}): Promise<[number, string, string]> {
 		return new Promise((resolve, reject) => {
@@ -283,7 +291,7 @@ export const Monitor = {
 				resolve([error && error.code || 0, '' + stdout, '' + stderr]);
 			});
 		});
-	},
+	}
 
 	async version() {
 		let hash;
@@ -306,12 +314,7 @@ export const Monitor = {
 			await index.unlinkIfExists();
 		} catch (err) {}
 		return hash;
-	},
-
-	TimedCounter: TimedCounter as new(entries: [any, [number, number]]) => TimedCounter,
-
-	updateServerLock: false,
-	cleanInterval: null as NodeJS.Timeout | null,
+	}
 };
 
 Monitor.cleanInterval = setInterval(() => Monitor.clean(), MONITOR_CLEAN_TIMEOUT);

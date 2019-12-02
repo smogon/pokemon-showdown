@@ -16,7 +16,7 @@ describe('Battle Armor', function () {
 			[{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']}],
 		]);
 		let successfulEvent = false;
-		battle.onEvent('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {
+		battle.onEvent('ModifyDamage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
 				assert.ok(!defender.getMoveHitData(move).crit);
@@ -33,7 +33,7 @@ describe('Battle Armor', function () {
 		]);
 		battle.makeChoices('move quickattack', 'move frostbreath');
 		let successfulEvent = false;
-		battle.onEvent('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {
+		battle.onEvent('ModifyDamage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
 				assert.ok(defender.getMoveHitData(move).crit);

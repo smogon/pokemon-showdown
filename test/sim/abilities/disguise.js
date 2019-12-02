@@ -9,7 +9,7 @@ describe('Disguise', function () {
 	afterEach(() => battle.destroy());
 
 	it('should block damage from one move', function () {
-		battle = common.createBattle();
+		battle = common.gen(7).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['psystrike']}]});
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
@@ -17,7 +17,7 @@ describe('Disguise', function () {
 	});
 
 	it('should only block damage from the first hit of a move', function () {
-		battle = common.createBattle();
+		battle = common.gen(7).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: 'Beedrill', ability: 'swarm', moves: ['twineedle']}]});
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
@@ -60,7 +60,7 @@ describe('Disguise', function () {
 	});
 
 	it('should not block secondary effects from damaging moves', function () {
-		battle = common.createBattle();
+		battle = common.gen(7).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: 'Pikachu', ability: 'lightningrod', moves: ['nuzzle']}]});
 		let pokemon = battle.p1.active[0];
@@ -80,7 +80,7 @@ describe('Disguise', function () {
 		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['counter']}]});
 		battle.setPlayer('p2', {team: [{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']}]});
 		let successfulEvent = false;
-		battle.onEvent('Damage', battle.getFormat(), function (damage, attacker, defender, move) {
+		battle.onEvent('Damage', battle.format, function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
 				assert.ok(!defender.getMoveHitData(move).crit);

@@ -37,10 +37,11 @@ describe('Users features', function () {
 
 				it('should destroy any user on the connection as well', function () {
 					let user = new User(this.connection);
-					let {userid} = user;
+					let userid = user.id;
+					assert.strictEqual(Users.users.has(userid), true, 'before disconnecting');
 					user.disconnectAll();
 					user.destroy();
-					assert.strictEqual(Users.users.has(userid), false);
+					assert.strictEqual(Users.users.has(userid), false, 'after disconnecting');
 				});
 			});
 
@@ -133,6 +134,54 @@ describe('Users features', function () {
 					Punishments.ban(user);
 					for (let ip in user.ips) {
 						assert.strictEqual(user.ips[ip], 0);
+					}
+				});
+			});
+
+			describe('#can', function () {
+				afterEach(function () {
+					for (const user of Users.users.values()) {
+						user.disconnectAll();
+						user.destroy();
+					}
+				});
+				it(`should allow 's' permissions only on self`, function () {
+					const user = new User();
+					user.group = '+';
+					assert.strictEqual(user.can('alts', user), true, 'targeting self');
+
+					const target = new User();
+					target.group = ' ';
+					assert.strictEqual(user.can('alts', target), false, 'targeting lower rank');
+					target.group = '+';
+					assert.strictEqual(user.can('alts', target), false, 'targeting same rank');
+					target.group = '%';
+					assert.strictEqual(user.can('alts', target), false, 'targeting higher rank');
+				});
+				it(`should allow 'u' permissions on lower ranked users`, function () {
+					const user = new User();
+					user.group = '&';
+					assert.strictEqual(user.can('promote', user), false, 'targeting self');
+
+					const target = new User();
+					target.group = ' ';
+					assert.strictEqual(user.can('promote', target), true, 'targeting lower rank');
+					target.group = '&';
+					assert.strictEqual(user.can('promote', target), false, 'targeting same rank');
+					target.group = '~';
+					assert.strictEqual(user.can('promote', target), false, 'targeting higher rank');
+				});
+				it(`should not allow users to demote themselves`, function () {
+					const room = Rooms.lobby;
+					if (!room.auth) room.auth = {};
+					const user = new User();
+					user.forceRename("User", true);
+					user.joinRoom(room);
+					for (const group of [' ', '+', '@']) {
+						room.auth[user.id] = group;
+						assert.strictEqual(room.getAuth(user), group, 'before demotion attempt');
+						Chat.parse("/roomdeauth User", room, user, user.connections[0]);
+						assert.strictEqual(room.getAuth(user), group, 'after demotion attempt');
 					}
 				});
 			});

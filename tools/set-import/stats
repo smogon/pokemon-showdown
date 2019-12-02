@@ -1,0 +1,47 @@
+#!/usr/bin/env node
+// Determines total battle counts per format since the beginning of stats
+// collection in order to determine what the fallback dates for the importer's
+// `STATISTICS` map should be.
+
+'use strict';
+
+const smogon = require('smogon');
+const importer = require('./importer');
+const Dex = require('../../.sim-dist/dex').Dex;
+
+const formats = new Map();
+for (let gen = 1; gen <= 8; gen++) {
+	for (const tier of importer.TIERS) {
+		const format = Dex.getFormat(`gen${gen}${tier}`);
+		if (format.exists) {
+			formats.set(format.id, {});
+		}
+	}
+}
+
+(async () => {
+	const index = await importer.fetch(smogon.Statistics.URL);
+	const begin = new Date('Nov 2014');
+	const end = new Date(smogon.Statistics.latest(index));
+	end.setDate(end.getDate() + 1);
+	for (const d = begin; d <= end; d.setMonth(d.getMonth() + 1)) {
+		const month = `${d.getMonth() + 1}`.padStart(2, '0');
+		const date = `${1900 + d.getYear()}-${month}`;
+		const raw = await importer.fetch(`${smogon.Statistics.URL}${date}/`);
+		for (const format of formats.keys()) {
+			// Some formats changed names after Gen 6 (eg. 'ou' -> 'gen6ou.json' etc), but for
+			// our purposes this doesn't really matter as there should still be the data we need
+			// under the correct format ID.
+			if (raw.includes(format)) {
+				try {
+					const usage = await importer.fetch(`${smogon.Statistics.URL}${date}/${format}-1500.txt`);
+					formats.get(format)[date] = Number(usage.match(/Total battles: (.*)/)[1]);
+				} catch (err) {
+					if (!err.message.startsWith('HTTP 404')) throw err;
+				}
+			}
+		}
+	}
+
+	console.log(JSON.stringify(Array.from(formats.entries()), null, 2));
+})().catch(err => console.error(err));

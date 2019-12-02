@@ -55,9 +55,9 @@ describe(`Random Team generator (slow)`, function () {
 		});
 	}
 
-	it(`should successfully create valid gen7monotyperandombattle teams`, function () {
+	it(`should successfully create valid gen8monotyperandombattle teams`, function () {
 		this.timeout(0);
-		const generator = Dex.getTeamGenerator('gen7monotyperandombattle', [46, 41716, 23878, 52950]);
+		const generator = Dex.getTeamGenerator('gen8monotyperandombattle', [46, 41716, 23878, 52950]);
 
 		let teamCount = 1000;
 		while (teamCount--) {
@@ -68,7 +68,7 @@ describe(`Random Team generator (slow)`, function () {
 
 				let types;
 				for (const set of team) {
-					if (!isValidSet(7, set)) throw new Error(`Invalid set: ${JSON.stringify(set)}`);
+					if (!isValidSet(8, set)) throw new Error(`Invalid set: ${JSON.stringify(set)}`);
 					const template = Dex.getTemplate(set.species || set.name);
 					if (types) {
 						if (!types.filter(t => template.types.includes(t)).length) {
@@ -136,7 +136,7 @@ describe(`Factory sets`, function () {
 	for (const filename of ['bss-factory-sets', 'factory-sets']) {
 		it(`should have valid sets in ${filename}.json (slow)`, function () {
 			this.timeout(0);
-			const setsJSON = require(`../../../data/${filename}.json`);
+			const setsJSON = require(`../../../data/mods/gen7/${filename}.json`);
 
 			for (const type in setsJSON) {
 				const typeTable = filename === 'bss-factory-sets' ? setsJSON : setsJSON[type];

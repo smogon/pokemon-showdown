@@ -17,14 +17,14 @@ describe('Battle#on', function () {
 		]);
 		let eventCount = 0;
 		let eventCount2 = 0;
-		battle.onEvent('Hit', battle.getFormat(), function () {
+		battle.onEvent('Hit', battle.format, function () {
 			eventCount++;
 		});
-		battle.onEvent('Hit', battle.getFormat(), function () {
+		battle.onEvent('Hit', battle.format, function () {
 			eventCount++;
 			eventCount2++;
 		});
-		battle.onEvent('ModifyDamage', battle.getFormat(), function () {
+		battle.onEvent('ModifyDamage', battle.format, function () {
 			return 5;
 		});
 		battle.makeChoices('move bulkup', 'move peck');
@@ -46,7 +46,7 @@ describe('Battle#on', function () {
 			};
 		};
 		for (let i = 0; i < 9; i++) {
-			battle.onEvent('ModifyDamage', battle.getFormat(), -i, modHandler(i));
+			battle.onEvent('ModifyDamage', battle.format, -i, modHandler(i));
 		}
 		battle.makeChoices('move bulkup', 'move peck');
 		assert.strictEqual(eventCount, 9);
@@ -59,6 +59,6 @@ describe('Battle#on', function () {
 		]);
 		assert.throws(battle.onEvent, TypeError);
 		assert.throws(() => { battle.onEvent('Hit'); }, TypeError);
-		assert.throws(() => { battle.onEvent('Hit', battle.getFormat()); }, TypeError);
+		assert.throws(() => { battle.onEvent('Hit', battle.format); }, TypeError);
 	});
 });

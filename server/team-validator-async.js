@@ -45,7 +45,7 @@ class TeamValidatorAsync {
 /** @type {typeof import('../lib/process-manager').QueryProcessManager} */
 const QueryProcessManager = require(/** @type {any} */('../.lib-dist/process-manager')).QueryProcessManager;
 
-/** @type {QueryProcessManager} */
+/** @type {import('../lib/process-manager').QueryProcessManager} */
 // @ts-ignore
 const PM = new QueryProcessManager(module, async message => {
 	let {formatid, removeNicknames, team} = message;

@@ -22,7 +22,7 @@ Client implementations you might want to look at for reference include:
 - Morfent's chat bot (Perl 6) -
     https://github.com/Kaiepi/p6-PSBot
 - the official client (HTML5 + JavaScript) -
-    https://github.com/Zarel/Pokemon-Showdown-Client
+    https://github.com/smogon/pokemon-showdown-client
 
 The official client logs protocol messages in the JavaScript console,
 so opening that (F12 in most browsers) can help tell you what's going
@@ -394,12 +394,12 @@ Battles
 Battle rooms will have a mix of room messages and battle messages. [Battle
 messages are documented in `SIM-PROTOCOL.md`][sim-protocol].
 
-  [sim-protocol]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md
+  [sim-protocol]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md
 
 To make decisions in battle, players should use the `/choose` command,
 [also documented in `SIM-PROTOCOL.md`][sending-decisions].
 
-  [sending-decisions]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md#sending-decisions
+  [sending-decisions]: https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#sending-decisions
 
 ### Starting battles through challenges
 
@@ -509,6 +509,8 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
 
 - `MOVES` is a comma-separated list of move IDs.
 
+- `NATURE` left blank means Serious, except in Gen 1-2, where it means no Nature.
+
 - `EVS` and `IVS` are comma-separated in standard order:
   HP, Atk, Def, SpA, SpD, Spe. EVs left blank are 0, IVs left blank are 31.
   If all EVs or IVs are blank, the commas can all be left off.
@@ -529,8 +531,9 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,
 
 - `POKEBALL` is left blank if it's a regular Poké Ball.
 
-- `HIDDENPOWERTYPE` is left blank if the Pokémon is not Hyper Trained, or if
-  Hyper Training doesn't affect IVs.
+- `HIDDENPOWERTYPE` is left blank if the Pokémon is not Hyper Trained, if
+  Hyper Training doesn't affect IVs, or if it's represented by a move in
+  the moves list.
 
 - If `POKEBALL` and `HIDDENPOWERTYPE` are both blank, the commas will be left
   off.

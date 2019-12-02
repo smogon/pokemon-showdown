@@ -101,7 +101,7 @@ class ScavGame extends Rooms.RoomGame {
 	joinGame(user) {
 		if (!this.childGame) return user.sendTo(this.room, "There is no hunt to join yet.");
 		if (!this.canJoinGame(user)) return user.sendTo(this.room, "You are not allowed to join this hunt.");
-		if ((user.userid in this.playerTable) || this._joinGame(user)) { // if user is already in this parent game, or if the user is able to join this parent game
+		if ((user.id in this.playerTable) || this._joinGame(user)) { // if user is already in this parent game, or if the user is able to join this parent game
 			if (this.childGame && this.childGame.joinGame) return this.childGame.joinGame(user);
 		}
 	}
@@ -116,8 +116,8 @@ class ScavGame extends Rooms.RoomGame {
 	// renaming in the parent game
 	onRename(user, oldUserid, isJoining, isForceRenamed) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
-			if (!(user.userid in this.playerTable)) {
-				user.games.delete(this.id);
+			if (!(user.id in this.playerTable)) {
+				user.games.delete(this.roomid);
 				user.updateSearch();
 			}
 			return;
@@ -223,7 +223,7 @@ class KOGame extends ScavGame {
 	}
 
 	canJoinGame(user) {
-		return this.round === 1 || (user.userid in this.playerTable);
+		return this.round === 1 || (user.id in this.playerTable);
 	}
 
 	onStartEvent() {
@@ -285,7 +285,7 @@ class ScavengerGames extends ScavGame {
 	}
 
 	canJoinGame(user) {
-		return this.round === 1 || (user.userid in this.playerTable);
+		return this.round === 1 || (user.id in this.playerTable);
 	}
 
 	onStartEvent() {
@@ -431,7 +431,7 @@ class JumpStart extends ScavGame {
 	onCompleteEvent(player) {
 		if (this.round === 1 && this.completed.length < this.jumpStartTimes.length) {
 			player.sendRoom(`You will receive your hint ${this.earlyTimes.shift()} seconds ahead of time!`);
-			this.completed.push(player.userid);
+			this.completed.push(player.id);
 		}
 	}
 
@@ -520,12 +520,12 @@ class Incognito extends ScavGame {
 	onSubmit(user, value) {
 		if (this.childGame && this.childGame.onSubmit) {
 			// intercept handling of the last question
-			if (user.userid in this.childGame.playerTable && this.childGame.playerTable[user.userid].currentQuestion + 1 >= this.childGame.questions.length) {
+			if (user.id in this.childGame.playerTable && this.childGame.playerTable[user.id].currentQuestion + 1 >= this.childGame.questions.length) {
 				let hunt = this.childGame;
 
 				value = toID(value);
 
-				let player = hunt.playerTable[user.userid];
+				let player = hunt.playerTable[user.id];
 				if (player.completed) {
 					if (!this.blind) return;
 					return player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
@@ -551,7 +551,7 @@ class Incognito extends ScavGame {
 	markComplete(player) {
 		if (player.completed) return false;
 
-		if (this.childGame.preCompleted.find(p => toID(p.name) === player.userid)) return false;
+		if (this.childGame.preCompleted.find(p => toID(p.name) === player.id)) return false;
 
 		let now = Date.now();
 		let time = Chat.toDurationString(now - this.childGame.startTime, {hhmmss: true});

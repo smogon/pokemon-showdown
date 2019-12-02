@@ -101,6 +101,7 @@ let BattleMovedex = {
 			onBeforeMove(pokemon, target, move) {
 				if (this.effectData.duration === 1) {
 					if (!this.effectData.totalDamage) {
+						this.debug("Bide failed due to 0 damage taken");
 						this.add('-fail', pokemon);
 						return false;
 					}
@@ -253,10 +254,11 @@ let BattleMovedex = {
 			// It will fail if the last move selected by the opponent has base power 0 or is not Normal or Fighting Type.
 			// If both are true, counter will deal twice the last damage dealt in battle, no matter what was the move.
 			// That means that, if opponent switches, counter will use last counter damage * 2.
-			let lastUsedMove = target.side.lastMove && this.getMove(target.side.lastMove.id);
+			let lastUsedMove = target.side.lastMove && this.dex.getMove(target.side.lastMove.id);
 			if (lastUsedMove && lastUsedMove.basePower > 0 && ['Normal', 'Fighting'].includes(lastUsedMove.type) && this.lastDamage > 0 && !this.willMove(target)) {
 				return 2 * this.lastDamage;
 			}
+			this.debug("Gen 1 Counter failed due to conditions not met");
 			this.add('-fail', pokemon);
 			return false;
 		},
@@ -276,7 +278,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onLockMove: 'dig',
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
 				return null;
@@ -306,7 +308,7 @@ let BattleMovedex = {
 					this.effectData.duration++;
 				}
 				let moves = pokemon.moves;
-				let move = this.getMove(this.sample(moves));
+				let move = this.dex.getMove(this.sample(moves));
 				this.add('-start', pokemon, 'Disable', move.name);
 				this.effectData.move = move.id;
 				return;
@@ -413,7 +415,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onLockMove: 'fly',
-			onTryImmunity(target, source, move) {
+			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
 				return null;
@@ -558,7 +560,7 @@ let BattleMovedex = {
 					residualdmg.counter++;
 					toxicCounter = residualdmg.counter;
 				}
-				let toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
+				let toLeech = this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
 				let damage = this.damage(toLeech, pokemon, leecher);
 				if (residualdmg) this.hint("In Gen 1, Leech Seed's damage is affected by Toxic's counter.", true);
 				if (!damage || toLeech > damage) {
@@ -613,7 +615,7 @@ let BattleMovedex = {
 			let moves = target.moves;
 			let moveid = this.sample(moves);
 			if (!moveid) return false;
-			let move = this.getMove(moveid);
+			let move = this.dex.getMove(moveid);
 			source.moveSlots[moveslot] = {
 				move: move.name,
 				id: move.id,

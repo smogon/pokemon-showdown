@@ -6,7 +6,7 @@
  * 'whois' here, then use it by typing /whois into Pokemon Showdown.
  * For the API, see chat-plugins/COMMANDS.md
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
@@ -23,7 +23,7 @@ const commands = {
 	alts: 'whois',
 	whoare: 'whois',
 	whois(target, room, user, connection, cmd) {
-		if (room && room.id === 'staff' && !this.runBroadcast()) return;
+		if (room && room.roomid === 'staff' && !this.runBroadcast()) return;
 		if (!room) room = Rooms.global;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
@@ -37,12 +37,14 @@ const commands = {
 
 		let buf = Chat.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
 		const ac = targetUser.autoconfirmed;
-		if (ac && showAll) buf += ` <small style="color:gray">(ac${targetUser.userid === ac ? `` : `: ${ac}`})</small>`;
+		if (ac && showAll) buf += ` <small style="color:gray">(ac${targetUser.id === ac ? `` : `: <span class="username">${ac}</span>`})</small>`;
 		const trusted = targetUser.trusted;
-		if (trusted && showAll) buf += ` <small style="color:gray">(trusted${targetUser.userid === trusted ? `` : `: ${trusted}`})</small>`;
+		if (trusted && showAll) {
+			buf += ` <small style="color:gray">(trusted${targetUser.id === trusted ? `` : `: <span class="username">${trusted}</span>`})</small>`;
+		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
-		if (room.auth && targetUser.userid in room.auth) roomauth = room.auth[targetUser.userid];
+		if (room.auth && targetUser.id in room.auth) roomauth = room.auth[targetUser.id];
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
@@ -62,7 +64,7 @@ const commands = {
 			if (roomid === 'global') continue;
 			let targetRoom = Rooms.get(roomid);
 
-			let authSymbol = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '');
+			let authSymbol = (targetRoom.auth && targetRoom.auth[targetUser.id] ? targetRoom.auth[targetUser.id] : '');
 			let battleTitle = (roomid.battle ? ` title="${roomid.title}"` : '');
 			let output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.isPrivate === true) {
@@ -83,14 +85,14 @@ const commands = {
 			return this.sendReplyBox(buf);
 		}
 		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
-		const canViewPunishments = canViewAlts || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users);
+		const canViewPunishments = canViewAlts || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.id in room.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
 		buf += '<br />';
 
 		if (canViewAlts) {
 			let prevNames = Object.keys(targetUser.prevNames).map(userid => {
 				const punishment = Punishments.userids.get(userid);
-				return userid + (punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetUser.userid ? ` as ${punishment[1]}` : ''})` : '');
+				return userid + (punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetUser.id ? ` as ${punishment[1]}` : ''})` : '');
 			}).join(", ");
 			if (prevNames) buf += Chat.html`<br />Previous names: ${prevNames}`;
 
@@ -98,13 +100,13 @@ const commands = {
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
-				const punishment = Punishments.userids.get(targetAlt.userid);
-				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetAlt.userid ? ` as ${punishment[1]}` : ''})` : '';
+				const punishment = Punishments.userids.get(targetAlt.id);
+				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetAlt.id ? ` as ${punishment[1]}` : ''})` : '';
 				buf += Chat.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = Object.keys(targetAlt.prevNames).map(userid => {
 					const punishment = Punishments.userids.get(userid);
-					return userid + (punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetAlt.userid ? ` as ${punishment[1]}` : ''})` : '');
+					return userid + (punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetAlt.id ? ` as ${punishment[1]}` : ''})` : '');
 				}).join(", ");
 				if (prevNames) buf += `<br />Previous names: ${prevNames}`;
 			}
@@ -121,10 +123,7 @@ const commands = {
 			} else if (targetUser.locked) {
 				buf += `<br />LOCKED: ${targetUser.locked}`;
 				switch (targetUser.locked) {
-				case '#dnsbl':
-					buf += ` - IP is in a DNS-based blacklist`;
-					break;
-				case '#range':
+				case '#rangelock':
 					buf += ` - IP or host is in a temporary range-lock`;
 					break;
 				case '#hostfilter':
@@ -156,7 +155,7 @@ const commands = {
 				buf += `<br />Semilocked: ${targetUser.semilocked}`;
 			}
 		}
-		if ((user.can('ip', targetUser) || user === targetUser)) {
+		if (user.can('ip', targetUser)) {
 			let ips = Object.keys(targetUser.ips);
 			ips = ips.map(ip => {
 				let status = [];
@@ -164,7 +163,7 @@ const commands = {
 				if (user.can('ip') && punishment) {
 					let [punishType, userid] = punishment;
 					let punishMsg = Punishments.punishmentTypes.get(punishType) || 'punished';
-					if (userid !== targetUser.userid) punishMsg += ` as ${userid}`;
+					if (userid !== targetUser.id) punishMsg += ` as ${userid}`;
 					status.push(punishMsg);
 				}
 				if (Punishments.sharedIps.has(ip)) {
@@ -174,12 +173,14 @@ const commands = {
 					}
 					status.push(sharedStr);
 				}
-				return ip + (status.length ? ` (${status.join('; ')})` : '');
+				return `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>` + (status.length ? ` (${status.join('; ')})` : '');
 			});
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
 			if (user.group !== ' ' && targetUser.latestHost) {
 				buf += Chat.html`<br />Host: ${targetUser.latestHost} [${targetUser.latestHostType}]`;
 			}
+		} else if (user === targetUser) {
+			buf += `<br /> IP: <a href="https://whatismyipaddress.com/ip/${connection.ip}" target="_blank">${connection.ip}</a>`;
 		}
 		if (canViewAlts && hiddenrooms) {
 			buf += `<br />Hidden rooms: ${hiddenrooms}`;
@@ -191,12 +192,12 @@ const commands = {
 		let gameRooms = [];
 		for (const room of Rooms.rooms.values()) {
 			if (!room.game) continue;
-			if ((targetUser.userid in room.game.playerTable && !targetUser.inRooms.has(room.id)) ||
-				(room.auth && room.auth[targetUser.userid] === Users.PLAYER_SYMBOL)) {
+			if ((targetUser.id in room.game.playerTable && !targetUser.inRooms.has(room.roomid)) ||
+				(room.auth && room.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
 				if (room.isPrivate && !canViewAlts) {
 					continue;
 				}
-				gameRooms.push(room.id);
+				gameRooms.push(room.roomid);
 			}
 		}
 		if (gameRooms.length) {
@@ -216,7 +217,7 @@ const commands = {
 					const [punishType, punishUserid, expireTime, reason] = punishment;
 					let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
 					if (!punishDesc) punishDesc = `punished`;
-					if (punishUserid !== targetUser.userid) punishDesc += ` as ${punishUserid}`;
+					if (punishUserid !== targetUser.id) punishDesc += ` as ${punishUserid}`;
 					let expiresIn = new Date(expireTime).getTime() - Date.now();
 					let expireString = Chat.toDurationString(expiresIn, {precision: 1});
 					punishDesc += ` for ${expireString}`;
@@ -234,6 +235,7 @@ const commands = {
 	],
 
 	'!offlinewhois': true,
+	'chp': 'offlinewhois',
 	checkpunishment: 'offlinewhois',
 	offlinewhois(target, room, user) {
 		if (!user.trusted) {
@@ -271,13 +273,13 @@ const commands = {
 		}
 
 		if (!user.can('alts') && !atLeastOne) {
-			let hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.id, userid);
+			let hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.roomid, userid);
 			if (!hasJurisdiction) {
 				return this.errorReply("/checkpunishment - User not found.");
 			}
 		}
 
-		let punishments = Punishments.getRoomPunishments(targetUser || {userid});
+		let punishments = Punishments.getRoomPunishments(targetUser || {id: userid});
 
 		if (punishments && punishments.length) {
 			buf += `<br />Room punishments: `;
@@ -302,9 +304,37 @@ const commands = {
 		this.sendReplyBox(buf);
 	},
 
+	sharedbattles(target, room) {
+		if (!this.can('lock')) return false;
+
+		const [targetUsername1, targetUsername2] = target.split(',');
+		if (!targetUsername1 || !targetUsername2) return this.parse(`/help sharedbattles`);
+		const user1 = Users.get(targetUsername1);
+		const user2 = Users.get(targetUsername2);
+		const userID1 = toID(targetUsername1);
+		const userID2 = toID(targetUsername2);
+
+		const battles = [];
+		for (const room of Rooms.rooms.values()) {
+			if (!room.battle) continue;
+			if ((user1 && user1.inRooms.has(room.roomid) || (room.auth && room.auth[userID1])) &&
+				(user2 && user2.inRooms.has(room.roomid) || (room.auth && room.auth[userID2]))) {
+				battles.push(room.roomid);
+			}
+		}
+
+		if (!battles.length) return this.sendReply(`${targetUsername1} and ${targetUsername2} have no common battles.`);
+
+		this.sendReplyBox(Chat.html`Common battles between ${targetUsername1} and ${targetUsername2}:<br />` + battles.map(id => {
+			let shortId = id.startsWith('battle-') ? id.slice(7) : id;
+			return Chat.html`<a href="/${id}">${shortId}</a>`;
+		}).join(' | '));
+	},
+	sharedbattleshelp: [`/sharedbattles [user1], [user2] - Finds recent battles common to [user1] and [user2]. Requires % @ & ~`],
+
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!room.chatRoomData || room.id.includes('-')) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.chatRoomData || room.roomid.includes('-')) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-punishments-${room}`);
 	},
 	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # & ~`],
@@ -349,7 +379,7 @@ const commands = {
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 			if (results.length > 100 && !isAll) {
@@ -362,7 +392,7 @@ const commands = {
 			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) continue;
 				if (!curUser.latestIp.startsWith(ip)) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 			if (results.length > 100 && !isAll) {
@@ -372,7 +402,7 @@ const commands = {
 			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
 				if (curUser.latestIp !== ip) continue;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.roomid)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 		}
@@ -399,19 +429,19 @@ const commands = {
 			return this.errorReply(`Both users must be in this room.`);
 		}
 		let challenges = [];
-		const user1Challs = Ladders.challenges.get(user1.userid);
+		const user1Challs = Ladders.challenges.get(user1.id);
 		if (user1Challs) {
 			for (const chall of user1Challs) {
-				if (chall.from === user1.userid && Users.get(chall.to) === user2) {
+				if (chall.from === user1.id && Users.get(chall.to) === user2) {
 					challenges.push(Chat.html`${user1.name} is challenging ${user2.name} in ${Dex.getFormat(chall.formatid).name}.`);
 					break;
 				}
 			}
 		}
-		const user2Challs = Ladders.challenges.get(user2.userid);
+		const user2Challs = Ladders.challenges.get(user2.id);
 		if (user2Challs) {
 			for (const chall of user2Challs) {
-				if (chall.from === user2.userid && Users.get(chall.to) === user1) {
+				if (chall.from === user2.id && Users.get(chall.to) === user1) {
 					challenges.push(Chat.html`${user2.name} is challenging ${user1.name} in ${Dex.getFormat(chall.formatid).name}.`);
 					break;
 				}
@@ -462,30 +492,30 @@ const commands = {
 				}
 			}
 		}
-		let mod = Dex;
+		let dex = Dex;
 		/** @type {Format?} */
 		let format = null;
 		if (sep[1] && toID(sep[1]) in Dex.dexes) {
-			mod = Dex.mod(toID(sep[1]));
+			dex = Dex.mod(toID(sep[1]));
 		} else if (sep[1]) {
 			format = Dex.getFormat(sep[1]);
 			if (!format.exists) {
 				return this.errorReply(`Unrecognized format or mod "${format.name}"`);
 			}
-			mod = Dex.mod(format.mod);
+			dex = Dex.mod(format.mod);
 		} else if (room && room.battle) {
 			format = Dex.getFormat(room.battle.format);
-			mod = Dex.mod(format.mod);
+			dex = Dex.mod(format.mod);
 		}
-		let newTargets = mod.dataSearch(target);
+		let newTargets = dex.dataSearch(target);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (!newTargets || !newTargets.length) {
-			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. (Check your spelling?)`);
+			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
 
 		for (const [i, newTarget] of newTargets.entries()) {
 			if (newTarget.isInexact && !i) {
-				buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
+				buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 			}
 			/** @type {AnyObject} */
 			let details = null;
@@ -501,41 +531,42 @@ const commands = {
 				}
 				return this.sendReply(buffer);
 			case 'pokemon':
-				let pokemon = mod.getTemplate(newTarget.name);
+				let pokemon = dex.getTemplate(newTarget.name);
 				if (format && format.onModifyTemplate) {
-					pokemon = format.onModifyTemplate.call(Dex, pokemon) || pokemon;
+					pokemon = format.onModifyTemplate.call({dex}, pokemon) || pokemon;
 				}
 				let tier = pokemon.tier;
-				if (room && (room.id === 'smogondoubles' ||
+				if (room && (room.roomid === 'smogondoubles' ||
 					['gen7doublesou', 'gen7doublesubers', 'gen7doublesuu'].includes(room.battle && room.battle.format))) {
 					tier = pokemon.doublesTier;
 				}
-				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, mod.gen, tier)}\n`;
+				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, dex.gen, tier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
-					if (pokemon.weightkg >= 200) {
+					if (pokemon.weighthg >= 2000) {
 						weighthit = 120;
-					} else if (pokemon.weightkg >= 100) {
+					} else if (pokemon.weighthg >= 1000) {
 						weighthit = 100;
-					} else if (pokemon.weightkg >= 50) {
+					} else if (pokemon.weighthg >= 500) {
 						weighthit = 80;
-					} else if (pokemon.weightkg >= 25) {
+					} else if (pokemon.weighthg >= 250) {
 						weighthit = 60;
-					} else if (pokemon.weightkg >= 10) {
+					} else if (pokemon.weighthg >= 100) {
 						weighthit = 40;
 					}
 					details = {
 						"Dex#": pokemon.num,
 						"Gen": pokemon.gen || 'CAP',
 						"Height": pokemon.heightm + " m",
-						"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
 					};
-					if (pokemon.color && mod.gen >= 5) details["Dex Colour"] = pokemon.color;
-					if (pokemon.eggGroups && mod.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
+					if (!pokemon.forme || pokemon.forme !== "Gmax") details["Weight"] = pokemon.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>";
+					else details["Weight"] = "0 kg <em>(GK/LK fail)</em>";
+					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
+					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					let evos = /** @type {string[]} */ ([]);
 					for (const evoName of pokemon.evos) {
-						const evo = mod.getTemplate(evoName);
-						if (evo.gen <= mod.gen) {
+						const evo = dex.getTemplate(evoName);
+						if (evo.gen <= dex.gen) {
 							let condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 							switch (evo.evoType) {
 							case 'levelExtra':
@@ -547,11 +578,14 @@ const commands = {
 							case 'levelHold':
 								evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
 								break;
-							case 'stone':
+							case 'useItem':
 								evos.push(`${evo.name} (${evo.evoItem})`);
 								break;
 							case 'levelMove':
 								evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
+								break;
+							case 'other':
+								evos.push(`${evo.name} (${condition})`);
 								break;
 							case 'trade':
 								evos.push(`${evo.name} (trade)`);
@@ -569,14 +603,14 @@ const commands = {
 				}
 				break;
 			case 'item':
-				let item = mod.getItem(newTarget.name);
+				let item = dex.getItem(newTarget.name);
 				buffer += `|raw|${Chat.getDataItemHTML(item)}\n`;
 				if (showDetails) {
 					details = {
 						"Gen": item.gen,
 					};
 
-					if (mod.gen >= 4) {
+					if (dex.gen >= 4) {
 						if (item.fling) {
 							details["Fling Base Power"] = item.fling.basePower;
 							if (item.fling.status) details["Fling Effect"] = item.fling.status;
@@ -588,17 +622,17 @@ const commands = {
 							details["Fling"] = "This item cannot be used with Fling.";
 						}
 					}
-					if (item.naturalGift && mod.gen >= 3) {
+					if (item.naturalGift && dex.gen >= 3) {
 						details["Natural Gift Type"] = item.naturalGift.type;
 						details["Natural Gift Base Power"] = item.naturalGift.basePower;
 					}
 					if (item.isUnreleased) {
-						details["Unreleased in Gen " + mod.gen] = "";
+						details["Unreleased in Gen " + dex.gen] = "";
 					}
 				}
 				break;
 			case 'move':
-				let move = mod.getMove(newTarget.name);
+				let move = dex.getMove(newTarget.name);
 				buffer += `|raw|${Chat.getDataMoveHTML(move)}\n`;
 				if (showDetails) {
 					details = {
@@ -606,6 +640,7 @@ const commands = {
 						"Gen": move.gen || 'CAP',
 					};
 
+					if (move.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
 					if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
 					if (move.flags['contact']) details["&#10003; Contact"] = "";
 					if (move.flags['sound']) details["&#10003; Sound"] = "";
@@ -620,11 +655,13 @@ const commands = {
 					if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
 					if (move.flags['charge']) details["&#10003; Two-turn move"] = "";
 					if (move.flags['recharge']) details["&#10003; Has recharge turn"] = "";
-					if (move.flags['gravity'] && mod.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
-					if (move.flags['dance'] && mod.gen >= 7) details["&#10003; Dance move"] = "";
+					if (move.flags['gravity'] && dex.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
+					if (move.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
 
-					if (mod.gen >= 7) {
-						if (move.zMovePower) {
+					if (dex.gen >= 7) {
+						if (move.gen >= 8 && move.isMax) {
+							// Don't display Z-Power for Max/G-Max moves
+						} else if (move.zMovePower) {
 							details["Z-Power"] = move.zMovePower;
 						} else if (move.zMoveEffect) {
 							details["Z-Effect"] = {
@@ -644,14 +681,19 @@ const commands = {
 							}
 						} else if (move.isZ) {
 							details["&#10003; Z-Move"] = "";
-							details["Z-Crystal"] = mod.getItem(move.isZ).name;
+							details["Z-Crystal"] = dex.getItem(move.isZ).name;
 							if (move.basePower !== 1) {
-								details["User"] = mod.getItem(move.isZ).zMoveUser.join(", ");
-								details["Required Move"] = mod.getItem(move.isZ).zMoveFrom;
+								details["User"] = dex.getItem(move.isZ).itemUser.join(", ");
+								details["Required Move"] = dex.getItem(move.isZ).zMoveFrom;
 							}
 						} else {
 							details["Z-Effect"] = "None";
 						}
+					}
+
+					if (dex.gen >= 8 && move.isMax) {
+						details["&#10003; Max Move"] = "";
+						if (typeof move.isMax === "string") details["User"] = move.isMax + "-Gmax";
 					}
 
 					details["Target"] = {
@@ -669,19 +711,19 @@ const commands = {
 						'all': "All Pok\u00e9mon",
 					}[move.target] || "Unknown";
 
-					if (move.id === 'snatch' && mod.gen >= 3) {
-						details[`<a href="https://${Config.routes.dex}/moves/snatch">Snatchable Moves</a>`] = '';
+					if (move.id === 'snatch' && dex.gen >= 3) {
+						details[`<a href="https://${Config.routes.dex}/tags/nonsnatchable">Non-Snatchable Moves</a>`] = '';
 					}
 					if (move.id === 'mirrormove') {
-						details[`<a href="https://${Config.routes.dex}/moves/mirrormove">Mirrorable Moves</a>`] = '';
+						details[`<a href="https://${Config.routes.dex}/tags/nonmirror">Non-Mirrorable Moves</a>`] = '';
 					}
 					if (move.isUnreleased) {
-						details["Unreleased in Gen " + mod.gen] = "";
+						details["Unreleased in Gen " + dex.gen] = "";
 					}
 				}
 				break;
 			case 'ability':
-				let ability = mod.getAbility(newTarget.name);
+				let ability = dex.getAbility(newTarget.name);
 				buffer += `|raw|${Chat.getDataAbilityHTML(ability)}\n`;
 				break;
 			default:
@@ -755,7 +797,7 @@ const commands = {
 			}
 
 			if (types.length === 0) {
-				return this.sendReplyBox(`${Chat.escapeHTML(target)} isn't a recognized type or pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
+				return this.sendReplyBox(Chat.html`${target} isn't a recognized type or pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
 			}
 			pokemon = {types: types};
 			target = types.join("/");
@@ -856,7 +898,7 @@ const commands = {
 			if (source.effectType !== 'Move' || source.category !== 'Status' && (source.basePower || source.basePowerCallback)) {
 				for (const type of defender.types) {
 					let baseMod = Dex.getEffectiveness(source, type);
-					let moveMod = source.onEffectiveness && source.onEffectiveness.call(Dex, baseMod, null, type, source);
+					let moveMod = source.onEffectiveness && source.onEffectiveness.call({dex: Dex}, baseMod, null, type, source);
 					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 			}
@@ -881,19 +923,19 @@ const commands = {
 
 		let targets = target.split(/[,+]/);
 		let sources = [];
-		let mod = Dex;
+		let dex = Dex;
 		if (room && room.battle) {
 			let format = Dex.getFormat(room.battle.format);
-			mod = Dex.mod(format.mod);
+			dex = Dex.mod(format.mod);
 		}
 		if (targets[targets.length - 1] && toID(targets[targets.length - 1]) in Dex.dexes) {
-			mod = Dex.mod(toID(targets[targets.length - 1]));
+			dex = Dex.mod(toID(targets[targets.length - 1]));
 		}
 		let dispTable = false;
 		let bestCoverage = {};
 		let hasThousandArrows = false;
 
-		for (let type in mod.data.TypeChart) {
+		for (let type in dex.data.TypeChart) {
 			// This command uses -5 to designate immunity
 			bestCoverage[type] = -5;
 		}
@@ -902,7 +944,7 @@ const commands = {
 			arg = toID(arg);
 
 			// arg is the gen?
-			if (arg === mod.currentMod) continue;
+			if (arg === dex.currentMod) continue;
 
 			// arg is 'table' or 'all'?
 			if (arg === 'table' || arg === 'all') {
@@ -914,22 +956,22 @@ const commands = {
 			// arg is a type?
 			let argType = arg.charAt(0).toUpperCase() + arg.slice(1);
 			let eff;
-			if (argType in mod.data.TypeChart) {
+			if (argType in dex.data.TypeChart) {
 				sources.push(argType);
 				for (let type in bestCoverage) {
-					if (!mod.getImmunity(argType, type)) continue;
-					eff = mod.getEffectiveness(argType, type);
+					if (!dex.getImmunity(argType, type)) continue;
+					eff = dex.getEffectiveness(argType, type);
 					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
 				}
 				continue;
 			}
 
 			// arg is a move?
-			let move = mod.getMove(arg);
+			let move = dex.getMove(arg);
 			if (!move.exists) {
 				return this.errorReply(`Type or move '${arg}' not found.`);
-			} else if (move.gen > mod.gen) {
-				return this.errorReply(`Move '${arg}' is not available in Gen ${mod.gen}.`);
+			} else if (move.gen > dex.gen) {
+				return this.errorReply(`Move '${arg}' is not available in Gen ${dex.gen}.`);
 			}
 
 			if (!move.basePower && !move.basePowerCallback) continue;
@@ -939,9 +981,9 @@ const commands = {
 				if (move.id === "struggle") {
 					eff = 0;
 				} else {
-					if (!mod.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
-					let baseMod = mod.getEffectiveness(move, type);
-					let moveMod = move.onEffectiveness && move.onEffectiveness.call(mod, baseMod, null, type, move);
+					if (!dex.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
+					let baseMod = dex.getEffectiveness(move, type);
+					let moveMod = move.onEffectiveness && move.onEffectiveness.call({dex}, baseMod, null, type, move);
 					eff = typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 				if (eff > bestCoverage[type]) bestCoverage[type] = eff;
@@ -995,16 +1037,16 @@ const commands = {
 		} else {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			let icon = {};
-			for (let type in mod.data.TypeChart) {
+			for (let type in dex.data.TypeChart) {
 				icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
 				// row of icons at top
 				buffer += '<th>' + icon[type] + '</th>';
 			}
 			buffer += '</tr>';
-			for (let type1 in mod.data.TypeChart) {
+			for (let type1 in dex.data.TypeChart) {
 				// assembles the rest of the rows
 				buffer += '<tr><th>' + icon[type1] + '</th>';
-				for (let type2 in mod.data.TypeChart) {
+				for (let type2 in dex.data.TypeChart) {
 					let typing;
 					let cell = '<th ';
 					let bestEff = -5;
@@ -1016,11 +1058,11 @@ const commands = {
 						typing = type1 + "/" + type2;
 						for (const move of sources) {
 							let curEff = 0;
-							if ((!mod.getImmunity((move.type || move), type1) || !mod.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
-							let baseMod = mod.getEffectiveness(move, type1);
+							if ((!dex.getImmunity((move.type || move), type1) || !dex.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
+							let baseMod = dex.getEffectiveness(move, type1);
 							let moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, null, type1, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
-							baseMod = mod.getEffectiveness(move, type2);
+							baseMod = dex.getEffectiveness(move, type2);
 							moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, null, type2, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
 
@@ -1434,9 +1476,9 @@ const commands = {
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown is open source:<br />` +
 			`- Language: JavaScript (Node.js)<br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master">What's new?</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown">Server source code</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Client">Client source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown/commits/master">What's new?</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown">Server source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown-client">Client source code</a><br />` +
 			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a>`
 		);
 	},
@@ -1598,7 +1640,7 @@ const commands = {
 			`- <a href="https://www.smogon.com/cap/">CAP project website and description</a><br />` +
 			`- <a href="https://www.smogon.com/forums/threads/48782/">What Pok&eacute;mon have been made?</a><br />` +
 			`- <a href="https://www.smogon.com/forums/forums/477">Talk about the metagame here</a><br />` +
-			`- <a href="https://www.smogon.com/forums/threads/3634419/">Sample SM CAP teams</a>`
+			`- <a href="https://www.smogon.com/forums/threads/3648521/">Sample SM CAP teams</a>`
 		);
 	},
 	caphelp: [
@@ -1611,7 +1653,7 @@ const commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown/blob/master/data/mods/gennext/README.md">README: overview of NEXT</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown/blob/master/data/mods/gennext/README.md">README: overview of NEXT</a><br />` +
 			"Example replays:<br />" +
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-120689854">Zergo vs Mr Weegle Snarf</a><br />` +
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-130756055">NickMP vs Khalogie</a>`
@@ -2003,14 +2045,14 @@ const commands = {
 			if (['ou', 'uu'].includes(formatId) && generation === 'sm' && room && room.language in supportedLanguages) {
 				// Limited support for translated analysis
 				// Translated analysis do not support automatic redirects from a speciesid to the proper page
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			} else if (['ou', 'uu'].includes(formatId) && generation === 'sm') {
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
 					`Other languages: <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=es">Español</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=fr">Français</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=it">Italiano</a>, ` +
 					`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=de">Deutsch</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=pt">Português</a>`
 				);
 			} else {
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
@@ -2059,7 +2101,7 @@ const commands = {
 			}
 			if (formatName) {
 				atLeastOne = true;
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${formatName} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
@@ -2386,107 +2428,6 @@ const commands = {
 		`In order to use !code in private messages you must be a global voice or higher`,
 		`/code [code] - Shows you code. Accepts multi-line arguments.`,
 	],
-
-	htmlbox(target, room, user) {
-		if (!target) return this.parse('/help htmlbox');
-		target = this.canHTML(target);
-		if (!target) return;
-		target = Chat.collapseLineBreaksHTML(target);
-		if (!this.canBroadcast(true, '!htmlbox')) return;
-		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
-
-		if (!this.runBroadcast(true, '!htmlbox')) return;
-
-		this.sendReplyBox(target);
-	},
-	htmlboxhelp: [
-		`/htmlbox [message] - Displays a message, parsing HTML code contained.`,
-		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # & ~`,
-	],
-	addhtmlbox(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-		target = this.canHTML(target);
-		if (!target) return;
-		if (!this.can('addhtml', null, room)) return;
-		target = Chat.collapseLineBreaksHTML(target);
-		if (!user.can('addhtml')) {
-			target += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		this.addBox(target);
-	},
-	addhtmlboxhelp: [
-		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * & ~`,
-	],
-	addrankhtmlbox(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-		let [rank, html] = this.splitOne(target);
-		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		html = this.canHTML(html);
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
-		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank);
-	},
-	addrankhtmlboxhelp: [
-		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * & ~`,
-	],
-	changeuhtml: 'adduhtml',
-	adduhtml(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-
-		let [name, html] = this.splitOne(target);
-		name = toID(name);
-		html = this.canHTML(html);
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
-		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		html = `|uhtml${(cmd === 'changeuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.add(html);
-	},
-	adduhtmlhelp: [
-		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.  Requires: * & ~`,
-	],
-	changeuhtmlhelp: [
-		`/changeuhtml [name], [message] - Changes the message previously shown with /adduhtml [name]. Requires: * & ~`,
-	],
-	changerankuhtml: 'addrankuhtml',
-	addrankuhtml(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-
-		let [rank, uhtml] = this.splitOne(target);
-		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		let [name, html] = this.splitOne(uhtml);
-		name = toID(name);
-		html = this.canHTML(html);
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
-		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		html = `|uhtml${(cmd === 'changerankuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.room.sendRankedUsers(html, rank);
-	},
-	addrankuhtmlhelp: [
-		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: * & ~`,
-	],
-	changerankuhtmlhelp: [
-		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * & ~`,
-	],
 };
 
 /** @type {PageTable} */
@@ -2499,7 +2440,7 @@ const pages = {
 		if (!this.room.chatRoomData) return;
 		if (!this.can('mute', null, this.room)) return;
 		// Ascending order
-		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.id)).sort((a, b) => a[1].expireTime - b[1].expireTime);
+		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.roomid)).sort((a, b) => a[1].expireTime - b[1].expireTime);
 		buf += Punishments.visualizePunishments(sortedPunishments, user);
 		return buf;
 	},
@@ -2521,6 +2462,6 @@ exports.commands = commands;
 process.nextTick(() => {
 	Dex.includeData();
 	Chat.multiLinePattern.register(
-		'/htmlbox', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduthml', '/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
+		'/htmlbox', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml', '/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
 	);
 });

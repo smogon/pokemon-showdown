@@ -382,7 +382,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["sleeppowder", "bodyslam", "stunspore"],
 		essentialMove: "razorleaf",
 		comboMoves: ["swordsdance", "hyperbeam"],
-		tier: "UU",
+		tier: "OU",
 	},
 	tentacool: {
 		randomBattleMoves: ["barrier", "hydropump", "surf"],
@@ -406,7 +406,7 @@ let BattleFormatsData = {
 	},
 	golem: {
 		randomBattleMoves: ["explosion", "bodyslam", "earthquake", "rockslide"],
-		tier: "OU",
+		tier: "UU",
 	},
 	ponyta: {
 		randomBattleMoves: ["fireblast", "agility", "bodyslam", "reflect"],
@@ -495,7 +495,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["explosion", "megadrain", "nightshade", "psychic"],
 		essentialMove: "thunderbolt",
 		exclusiveMoves: ["hypnosis", "hypnosis", "confuseray"],
-		tier: "NFE",
+		tier: "UU",
 	},
 	gengar: {
 		randomBattleMoves: ["explosion", "megadrain", "nightshade", "psychic"],
@@ -721,7 +721,7 @@ let BattleFormatsData = {
 	omanyte: {
 		randomBattleMoves: ["hydropump", "surf", "bodyslam", "rest"],
 		essentialMove: "blizzard",
-		exclusiveMoves: ["surf", "hydropump"],
+		comboMoves: ["surf", "hydropump"],
 		tier: "LC",
 	},
 	omastar: {
