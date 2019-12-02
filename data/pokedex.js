@@ -9284,6 +9284,7 @@ let BattlePokedex = {
 		prevo: "darumaka",
 		evoLevel: 35,
 		eggGroups: ["Field"],
+		inheritsLearnsetFrom: "darmanitan",
 	},
 	darmanitangalar: {
 		num: 555,
@@ -9316,6 +9317,7 @@ let BattlePokedex = {
 		evoType: "useItem",
 		evoItem: "Ice Stone",
 		eggGroups: ["Field"],
+		inheritsLearnsetFrom: "darmanitangalar",
 	},
 	maractus: {
 		num: 556,
@@ -13122,6 +13124,7 @@ let BattlePokedex = {
 		weightkg: 0.7,
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "mimikyu",
 	},
 	mimikyutotem: {
 		num: 778,
@@ -13148,6 +13151,7 @@ let BattlePokedex = {
 		weightkg: 2.8,
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "mimikyutotem",
 	},
 	bruxish: {
 		num: 779,
