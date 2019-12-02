@@ -1301,7 +1301,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 1, "level": 18, "shiny": false},
 		],
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	haunter: {
 		eventPokemon: [
@@ -5523,7 +5523,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	gothita: {
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	gothorita: {
 		eventPokemon: [
