@@ -8,7 +8,7 @@ let BattleAbilities = {
 		shortDesc: "(Mimikyu only) First hit deals 0 damage, breaks disguise.",
 		onUpdate(pokemon) {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
-				let templateid = pokemon.template.speciesid + 'busted';
+				let templateid = pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(templateid, this.effect, true);
 			}
 		},

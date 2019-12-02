@@ -4641,9 +4641,9 @@ let BattleAbilities = {
 			if (pokemon.baseTemplate.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.forme !== 'Zen') {
+			if (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Zen-Galar'].includes(pokemon.template.forme)) {
 				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.forme === 'Zen') {
+			} else if (pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Zen-Galar'].includes(pokemon.template.forme)) {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
@@ -4652,18 +4652,18 @@ let BattleAbilities = {
 			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
-			pokemon.formeChange(pokemon.template.baseSpecies, this.effect, false, '[silent]');
+			pokemon.formeChange(pokemon.template.inheritsLearnsetFrom, this.effect, false, '[silent]');
 		},
 		effect: {
 			onStart(pokemon) {
 				if (!pokemon.template.species.includes('Galar')) {
 					if (pokemon.template.speciesid !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
 				} else {
-					if (pokemon.template.speciesid !== 'darmanitangalarzen') pokemon.formeChange('Darmanitan-Galar-Zen');
+					if (pokemon.template.speciesid !== 'darmanitanzengalar') pokemon.formeChange('Darmanitan-Zen-Galar');
 				}
 			},
 			onEnd(pokemon) {
-				if (pokemon.template.forme === 'Zen') pokemon.formeChange(pokemon.template.baseSpecies);
+				if (['Zen', 'Zen-Galar'].includes(pokemon.template.forme)) pokemon.formeChange(pokemon.template.inheritsLearnsetFrom);
 			},
 		},
 		id: "zenmode",
