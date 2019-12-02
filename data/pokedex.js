@@ -4585,7 +4585,7 @@ let BattlePokedex = {
 		color: "Brown",
 		evos: ["linoone"],
 		eggGroups: ["Field"],
-		otherFormes: ["Zigzagoon-Galar"],
+		otherFormes: ["zigzagoongalar"],
 	},
 	zigzagoongalar: {
 		num: 263,
@@ -4613,7 +4613,7 @@ let BattlePokedex = {
 		prevo: "zigzagoon",
 		evoLevel: 20,
 		eggGroups: ["Field"],
-		otherFormes: ["Linoone-Galar"],
+		otherFormes: ["linoonegalar"],
 	},
 	linoonegalar: {
 		num: 264,
@@ -7909,6 +7909,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	rotomwash: {
 		num: 479,
@@ -7923,6 +7924,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	rotomfrost: {
 		num: 479,
@@ -7937,6 +7939,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	rotomfan: {
 		num: 479,
@@ -7951,6 +7954,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	rotommow: {
 		num: 479,
@@ -7965,6 +7969,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	uxie: {
 		num: 480,
@@ -9279,6 +9284,7 @@ let BattlePokedex = {
 		prevo: "darumaka",
 		evoLevel: 35,
 		eggGroups: ["Field"],
+		inheritsLearnsetFrom: "darmanitan",
 	},
 	darmanitangalar: {
 		num: 555,
@@ -9311,6 +9317,7 @@ let BattlePokedex = {
 		evoType: "useItem",
 		evoItem: "Ice Stone",
 		eggGroups: ["Field"],
+		inheritsLearnsetFrom: "darmanitangalar",
 	},
 	maractus: {
 		num: 556,
@@ -13117,6 +13124,7 @@ let BattlePokedex = {
 		weightkg: 0.7,
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "mimikyu",
 	},
 	mimikyutotem: {
 		num: 778,
@@ -13143,6 +13151,7 @@ let BattlePokedex = {
 		weightkg: 2.8,
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "mimikyutotem",
 	},
 	bruxish: {
 		num: 779,
@@ -13445,6 +13454,7 @@ let BattlePokedex = {
 		weightkg: 460,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		inheritsLearnsetFrom: "necrozma",
 	},
 	necrozmadawnwings: {
 		num: 800,
@@ -13459,6 +13469,7 @@ let BattlePokedex = {
 		weightkg: 350,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		inheritsLearnsetFrom: "necrozma",
 	},
 	necrozmaultra: {
 		num: 800,
@@ -13473,6 +13484,7 @@ let BattlePokedex = {
 		weightkg: 230,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		inheritsLearnsetFrom: "necrozma",
 	},
 	magearna: {
 		num: 801,

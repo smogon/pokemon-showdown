@@ -1838,11 +1838,9 @@ export class TeamValidator {
 			template = this.dex.getTemplate(template.prevo);
 			if (template.gen > Math.max(2, this.dex.gen)) return null;
 			return template;
-		} else if (template.baseSpecies !== template.species && (
-			['Rotom', 'Necrozma'].includes(template.baseSpecies) || template.forme === 'Gmax'
-		)) {
-			// only Rotom and Necrozma inherit learnsets from base
-			return this.dex.getTemplate(template.baseSpecies);
+		} else if (template.inheritsLearnsetFrom) {
+			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
+			return this.dex.getTemplate(template.inheritsLearnsetFrom);
 		}
 		return null;
 	}

@@ -599,6 +599,8 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * form moveid:sources[].
 	 */
 	readonly learnset?: {[moveid: string]: MoveSource[]};
+	/** Source of learnsets for Pokemon that lack their own */
+	readonly inheritsLearnsetFrom: ID;
 	/** True if the only way to get this pokemon is from events. */
 	readonly eventOnly: boolean;
 	/** List of event data for each event. */
@@ -668,6 +670,10 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 		this.isGigantamax = data.isGigantamax || undefined;
 		this.battleOnly = !!data.battleOnly || !!this.isMega || !!this.isGigantamax || undefined;
+		this.inheritsLearnsetFrom = data.inheritsLearnsetFrom || undefined;
+		if (this.forme === 'Gmax') {
+			this.inheritsLearnsetFrom = toID(data.baseSpecies);
+		}
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || this.species.includes('Galar') || this.forme === 'Gmax') {
