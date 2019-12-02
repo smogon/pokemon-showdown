@@ -755,7 +755,7 @@ let BattleFormats = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, template, setSources, set) {
 			const restrictedMoves = this.format.restrictedMoves || [];
-			if (!move.isNonstandard && !restrictedMoves.includes(move.name)) {
+			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.id.startsWith('max')) {
 				let dex = this.dex;
 				let types = template.types;
 				let baseTemplate = dex.getTemplate(template.baseSpecies);
