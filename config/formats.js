@@ -792,14 +792,17 @@ let Formats = [
 	{
 		name: "[Gen 2] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7792280/">GSC 1v1</a>`,
+		],
 
 		mod: 'gen2',
 		teamLength: {
 			validate: [1, 3],
 			battle: 1,
 		},
-		ruleset: ['[Gen 2] OU', 'Team Preview'],
-		banlist: [],
+		ruleset: ['[Gen 2] OU', 'Accuracy Moves Clause', 'Team Preview'],
+		banlist: ['Snorlax', 'Hypnosis', 'Lovely Kiss', 'Sing', 'Sleep Powder', 'Spore', 'Swagger'],
 	},
 	{
 		name: "[Gen 6] NU",
