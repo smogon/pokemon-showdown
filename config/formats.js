@@ -332,7 +332,7 @@ let Formats = [
 		name: "[Gen 8] National Dex (beta)",
 
 		mod: 'gen8',
-		ruleset: ['Obtainable', 'Standard', 'Team Preview', '+Past', '+Unreleased', 'NatDex Rule'],
+		ruleset: ['Obtainable', 'Standard', 'Team Preview', '+Past', 'NatDex Rule'],
 		banlist: [
 			'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Dialga', 'Eternatus', 'Genesect', 'Gengar-Mega', 'Giratina', 'Groudon',
 			'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lucario-Mega', 'Lugia', 'Lunala',
@@ -348,7 +348,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', '+Past', '+Unreleased', 'NatDex Rule'],
+		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', '+Past', 'NatDex Rule'],
 	},
 
 	// OM of the Month
