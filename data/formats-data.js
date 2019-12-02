@@ -5392,7 +5392,7 @@ let BattleFormatsData = {
 		tier: "OU",
 		doublesTier: "New",
 	},
-	darmanitangalarzen: {
+	darmanitanzengalar: {
 		requiredAbility: "Zen Mode",
 		battleOnly: true,
 	},
@@ -7124,7 +7124,7 @@ let BattleFormatsData = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
-	mimikyutotembusted: {
+	mimikyubustedtotem: {
 		requiredAbility: 'Disguise',
 		battleOnly: true,
 		isNonstandard: "Past",
