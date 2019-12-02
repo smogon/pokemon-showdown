@@ -13585,7 +13585,6 @@ let BattlePokedex = {
 		heightm: 0.2,
 		weightkg: 8,
 		color: "Gray",
-		evos: ["melmetal"],
 		eggGroups: ["Undiscovered"],
 	},
 	melmetal: {
@@ -13598,7 +13597,6 @@ let BattlePokedex = {
 		heightm: 2.5,
 		weightkg: 800,
 		color: "Gray",
-		prevo: "meltan",
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["melmetalgmax"],
 	},
