@@ -518,6 +518,8 @@ let BattleFormatsData = {
 		eventOnly: true,
 		unreleasedHidden: true,
 		isGigantamax: "G-Max Volt Crash",
+		tier: "UU",
+		doublesTier: "New",
 	},
 	raichu: {
 		randomBattleMoves: ["encore", "focusblast", "grassknot", "nastyplot", "thunderbolt", "voltswitch"],
@@ -830,6 +832,8 @@ let BattleFormatsData = {
 		eventOnly: true,
 		unreleasedHidden: true,
 		isGigantamax: "G-Max Gold Rush",
+		tier: "UU",
+		doublesTier: "New",
 	},
 	persian: {
 		randomBattleMoves: ["hypervoice", "icywind", "nastyplot", "taunt", "thunderbolt"],
@@ -1938,6 +1942,8 @@ let BattleFormatsData = {
 		eventOnly: true,
 		unreleasedHidden: true,
 		isGigantamax: "G-Max Cuddle",
+		tier: "UU",
+		doublesTier: "New",
 	},
 	vaporeon: {
 		randomBattleMoves: ["haze", "icebeam", "protect", "scald", "wish", "yawn"],
