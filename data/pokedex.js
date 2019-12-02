@@ -4585,7 +4585,7 @@ let BattlePokedex = {
 		color: "Brown",
 		evos: ["linoone"],
 		eggGroups: ["Field"],
-		otherFormes: ["Zigzagoon-Galar"],
+		otherFormes: ["zigzagoongalar"],
 	},
 	zigzagoongalar: {
 		num: 263,
@@ -4613,7 +4613,7 @@ let BattlePokedex = {
 		prevo: "zigzagoon",
 		evoLevel: 20,
 		eggGroups: ["Field"],
-		otherFormes: ["Linoone-Galar"],
+		otherFormes: ["linoonegalar"],
 	},
 	linoonegalar: {
 		num: 264,
@@ -7895,6 +7895,7 @@ let BattlePokedex = {
 		color: "Red",
 		eggGroups: ["Amorphous"],
 		otherFormes: ["rotomheat", "rotomwash", "rotomfrost", "rotomfan", "rotommow"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	rotomheat: {
 		num: 479,
@@ -7909,6 +7910,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	rotomwash: {
 		num: 479,
@@ -7923,6 +7925,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	rotomfrost: {
 		num: 479,
@@ -7937,6 +7940,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	rotomfan: {
 		num: 479,
@@ -7951,6 +7955,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	rotommow: {
 		num: 479,
@@ -7965,6 +7970,7 @@ let BattlePokedex = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
+		inheritsLearnsetFrom: "rotom",
 	},
 	uxie: {
 		num: 480,
@@ -13445,6 +13451,7 @@ let BattlePokedex = {
 		weightkg: 460,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		inheritsLearnsetFrom: "necrozma",
 	},
 	necrozmadawnwings: {
 		num: 800,
@@ -13459,6 +13466,7 @@ let BattlePokedex = {
 		weightkg: 350,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		inheritsLearnsetFrom: "necrozma",
 	},
 	necrozmaultra: {
 		num: 800,
@@ -13473,6 +13481,7 @@ let BattlePokedex = {
 		weightkg: 230,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		inheritsLearnsetFrom: "necrozma",
 	},
 	magearna: {
 		num: 801,
