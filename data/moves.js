@@ -533,7 +533,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 6,
 			onResidual(pokemon) {
-				this.heal(pokemon.maxhp / 16);
+				this.heal(pokemon.baseMaxhp / 16);
 			},
 		},
 		secondary: null,
@@ -3265,7 +3265,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 10,
 			onResidual(pokemon) {
-				this.damage(pokemon.maxhp / 4);
+				this.damage(pokemon.baseMaxhp / 4);
 			},
 		},
 		secondary: null,
@@ -4782,7 +4782,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			return target.hp - pokemon.hp;
+			return target.getUndynamaxedHP() - pokemon.hp;
 		},
 		category: "Physical",
 		desc: "Deals damage to the target equal to (target's current HP - user's current HP). The target is unaffected if its current HP is less than or equal to the user's current HP.",
@@ -5433,7 +5433,7 @@ let BattleMovedex = {
 			onResidual(side) {
 				for (const pokemon of side.active) {
 					if (pokemon && !pokemon.hasType('Fire')) {
-						this.damage(pokemon.maxhp / 8, pokemon);
+						this.damage(pokemon.baseMaxhp / 8, pokemon);
 					}
 				}
 			},
@@ -5609,7 +5609,7 @@ let BattleMovedex = {
 			}
 			for (const ally of target.side.active) {
 				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.maxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
+					this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
 				}
 			}
 		},
@@ -5619,7 +5619,7 @@ let BattleMovedex = {
 			}
 			for (const ally of target.side.active) {
 				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.maxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
+					this.damage(ally.baseMaxhp / 16, ally, source, this.dex.getEffect('Flame Burst'));
 				}
 			}
 		},
@@ -7415,7 +7415,7 @@ let BattleMovedex = {
 			},
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
-					this.damage(pokemon.maxhp / 8, pokemon);
+					this.damage(pokemon.baseMaxhp / 8, pokemon);
 				}
 			},
 			onEnd(targetSide) {
@@ -7478,7 +7478,7 @@ let BattleMovedex = {
 			},
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
-					if (!pokemon.hasType('Fire')) this.damage(pokemon.maxhp / 6, pokemon);
+					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 			},
 			onEnd(targetSide) {
@@ -7717,7 +7717,7 @@ let BattleMovedex = {
 			onTerrain(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
-					this.heal(pokemon.maxhp / 16, pokemon, pokemon);
+					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				}
 			},
 			onEnd() {
@@ -7925,11 +7925,12 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		damageCallback(pokemon, target) {
+			const hp75 = Math.floor(target.getUndynamaxedHP() * 3 / 4);
 			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.getSideCondition('matblock') || target.volatiles['protect'] || target.volatiles['spikyshield']) {
 				this.add('-zbroken', target);
-				return this.dex.clampIntRange(Math.ceil(Math.floor(target.hp * 3 / 4) / 4 - 0.5), 1);
+				return this.dex.clampIntRange(Math.ceil(hp75 / 4 - 0.5), 1);
 			}
-			return this.dex.clampIntRange(Math.floor(target.hp * 3 / 4), 1);
+			return this.dex.clampIntRange(hp75, 1);
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to 3/4 of its current HP, rounded down, but not less than 1 HP.",
@@ -8999,7 +9000,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCustomRecoil: true,
 		onMoveFail(target, source, move) {
-			this.damage(source.maxhp / 2, source, source, this.dex.getEffect('High Jump Kick'));
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.getEffect('High Jump Kick'));
 		},
 		secondary: null,
 		target: "normal",
@@ -9749,7 +9750,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 7,
 			onResidual(pokemon) {
-				this.heal(pokemon.maxhp / 16);
+				this.heal(pokemon.baseMaxhp / 16);
 			},
 			onTrapPokemon(pokemon) {
 				pokemon.tryTrap();
@@ -9962,7 +9963,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCustomRecoil: true,
 		onMoveFail(target, source, move) {
-			this.damage(source.maxhp / 2, source, source, this.dex.getEffect('Jump Kick'));
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.getEffect('Jump Kick'));
 		},
 		secondary: null,
 		target: "normal",
@@ -10332,7 +10333,7 @@ let BattleMovedex = {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				let damage = this.damage(pokemon.maxhp / 8, pokemon, target);
+				let damage = this.damage(pokemon.baseMaxhp / 8, pokemon, target);
 				if (damage) {
 					this.heal(damage, target, pokemon);
 				}
@@ -12838,7 +12839,7 @@ let BattleMovedex = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			return this.dex.clampIntRange(Math.floor(target.hp / 2), 1);
+			return this.dex.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
@@ -12940,7 +12941,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 9,
 			onResidual(pokemon) {
-				this.damage(pokemon.maxhp / 4);
+				this.damage(pokemon.baseMaxhp / 4);
 			},
 		},
 		secondary: null,
@@ -13370,10 +13371,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, mystery: 1},
 		onHit(target, pokemon) {
-			let averagehp = Math.floor((target.hp + pokemon.hp) / 2) || 1;
-			target.sethp(averagehp);
+			let averagehp = Math.floor((target.getUndynamaxedHP() + pokemon.hp) / 2) || 1;
+			let selfChange = averagehp - pokemon.hp;
+			target.sethp(pokemon.hp - selfChange);
 			this.add('-sethp', target, target.getHealth, '[from] move: Pain Split', '[silent]');
-			pokemon.sethp(averagehp);
+			pokemon.sethp(pokemon.hp + selfChange);
 			this.add('-sethp', pokemon, pokemon.getHealth, '[from] move: Pain Split');
 		},
 		secondary: null,
@@ -17908,13 +17910,13 @@ let BattleMovedex = {
 					}
 				}
 				if (move.flags['contact']) {
-					this.damage(source.maxhp / 8, source, target);
+					this.damage(source.baseMaxhp / 8, source, target);
 				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
 				if (move.isZPowered && move.flags['contact']) {
-					this.damage(source.maxhp / 8, source, target);
+					this.damage(source.baseMaxhp / 8, source, target);
 				}
 			},
 		},
@@ -18832,7 +18834,7 @@ let BattleMovedex = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			return this.dex.clampIntRange(Math.floor(target.hp / 2), 1);
+			return this.dex.clampIntRange(target.getUndynamaxedHP() / 2, 1);
 		},
 		category: "Physical",
 		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",

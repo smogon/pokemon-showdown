@@ -244,7 +244,7 @@ let BattleScripts = {
 				break;
 			case 'healhalf':
 				// For DragonWhale
-				this.heal(pokemon.maxhp / 2, pokemon, pokemon, zPower);
+				this.heal(pokemon.baseMaxhp / 2, pokemon, pokemon, zPower);
 				break;
 			case 'healreplacement':
 				move.self = {sideCondition: 'healreplacement'};

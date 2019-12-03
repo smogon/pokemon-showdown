@@ -82,7 +82,7 @@ let BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
-				this.damage(source.maxhp / 4, source, target);
+				this.damage(source.baseMaxhp / 4, source, target);
 			}
 		},
 		rating: 2.5,
@@ -220,7 +220,7 @@ let BattleAbilities = {
 			for (const target of pokemon.side.foe.active) {
 				if (!target || !target.hp) continue;
 				if (target.status === 'slp' || target.hasAbility('comatose')) {
-					this.damage(target.maxhp / 8, target, pokemon);
+					this.damage(target.baseMaxhp / 8, target, pokemon);
 				}
 			}
 		},
@@ -374,7 +374,7 @@ let BattleAbilities = {
 		desc: "If this Pokemon eats a Berry, it restores 1/3 of its maximum HP, rounded down, in addition to the Berry's effect.",
 		shortDesc: "If this Pokemon eats a Berry, it restores 1/3 of its max HP after the Berry's effect.",
 		onEatItem(item, pokemon) {
-			this.heal(pokemon.maxhp / 3);
+			this.heal(pokemon.baseMaxhp / 3);
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
@@ -764,7 +764,7 @@ let BattleAbilities = {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
 				let templateid = pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(templateid, this.effect, true);
-				this.damage(pokemon.maxhp / 8, pokemon, pokemon);
+				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
 			}
 		},
 		id: "disguise",
@@ -827,7 +827,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon is healed 1/4 by Water, 1/8 by Rain; is hurt 1.25x by Fire, 1/8 by Sun.",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
-				if (!this.heal(target.maxhp / 4)) {
+				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Dry Skin');
 				}
 				return null;
@@ -843,9 +843,9 @@ let BattleAbilities = {
 		onWeather(target, source, effect) {
 			if (target.item === "utilityumbrella") return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
-				this.heal(target.maxhp / 8);
+				this.heal(target.baseMaxhp / 8);
 			} else if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
-				this.damage(target.maxhp / 8, target, target);
+				this.damage(target.baseMaxhp / 8, target, target);
 			}
 		},
 		id: "dryskin",
@@ -1365,7 +1365,7 @@ let BattleAbilities = {
 				const forme = target.template.speciesid;
 				target.formeChange('cramorant', effect);
 
-				this.damage(source.maxhp / 4, source, target, effect);
+				this.damage(source.baseMaxhp / 4, source, target, effect);
 				if (forme === 'cramorantgulping') {
 					this.boost({def: -1}, source, target, null, true);
 				} else {
@@ -1555,7 +1555,7 @@ let BattleAbilities = {
 		shortDesc: "If Hail is active, this Pokemon heals 1/16 of its max HP each turn; immunity to Hail.",
 		onWeather(target, source, effect) {
 			if (effect.id === 'hail') {
-				this.heal(target.maxhp / 16);
+				this.heal(target.baseMaxhp / 16);
 			}
 		},
 		onImmunity(type, pokemon) {
@@ -1782,7 +1782,7 @@ let BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 8, source, target);
+				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
 		id: "ironbarbs",
@@ -2751,7 +2751,7 @@ let BattleAbilities = {
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'psn' || effect.id === 'tox') {
-				this.heal(target.maxhp / 8);
+				this.heal(target.baseMaxhp / 8);
 				return false;
 			}
 		},
@@ -3019,7 +3019,7 @@ let BattleAbilities = {
 		onWeather(target, source, effect) {
 			if (target.item === "utilityumbrella") return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
-				this.heal(target.maxhp / 16);
+				this.heal(target.baseMaxhp / 16);
 			}
 		},
 		id: "raindish",
@@ -3098,7 +3098,7 @@ let BattleAbilities = {
 	"regenerator": {
 		shortDesc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out.",
 		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.maxhp / 3);
+			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
 		id: "regenerator",
 		name: "Regenerator",
@@ -3192,7 +3192,7 @@ let BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 8, source, target);
+				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
 		id: "roughskin",
@@ -3651,7 +3651,7 @@ let BattleAbilities = {
 		},
 		onWeather(target, source, effect) {
 			if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
-				this.damage(target.maxhp / 8, target, target);
+				this.damage(target.baseMaxhp / 8, target, target);
 			}
 		},
 		id: "solarpower",
@@ -4409,7 +4409,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Electric moves; Electric immunity.",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
-				if (!this.heal(target.maxhp / 4)) {
+				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Volt Absorb');
 				}
 				return null;
@@ -4456,7 +4456,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Water moves; Water immunity.",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
-				if (!this.heal(target.maxhp / 4)) {
+				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Water Absorb');
 				}
 				return null;
@@ -4641,9 +4641,9 @@ let BattleAbilities = {
 			if (pokemon.baseTemplate.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Zen-Galar'].includes(pokemon.template.forme)) {
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.forme !== 'Zen') {
 				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Zen-Galar'].includes(pokemon.template.forme)) {
+			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.forme === 'Zen') {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
@@ -4652,18 +4652,18 @@ let BattleAbilities = {
 			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
-			pokemon.formeChange(pokemon.template.inheritsLearnsetFrom, this.effect, false, '[silent]');
+			pokemon.formeChange(pokemon.template.baseSpecies, this.effect, false, '[silent]');
 		},
 		effect: {
 			onStart(pokemon) {
 				if (!pokemon.template.species.includes('Galar')) {
 					if (pokemon.template.speciesid !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
 				} else {
-					if (pokemon.template.speciesid !== 'darmanitanzengalar') pokemon.formeChange('Darmanitan-Zen-Galar');
+					if (pokemon.template.speciesid !== 'darmanitangalarzen') pokemon.formeChange('Darmanitan-Galar-Zen');
 				}
 			},
 			onEnd(pokemon) {
-				if (['Zen', 'Zen-Galar'].includes(pokemon.template.forme)) pokemon.formeChange(pokemon.template.inheritsLearnsetFrom);
+				if (pokemon.template.forme === 'Zen') pokemon.formeChange(pokemon.template.baseSpecies);
 			},
 		},
 		id: "zenmode",

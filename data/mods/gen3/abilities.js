@@ -149,7 +149,7 @@ let BattleAbilities = {
 		shortDesc: "Pokemon making contact with this Pokemon lose 1/16 of their max HP.",
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 16, source, target);
+				this.damage(source.baseMaxhp / 16, source, target);
 			}
 		},
 	},
@@ -211,7 +211,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon heals 1/4 its max HP when hit by a damaging Electric move; immunity.",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
-				if (!this.heal(target.maxhp / 4)) {
+				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Volt Absorb');
 				}
 				return null;

@@ -5,7 +5,7 @@ let BattleStatuses = {
 	brn: {
 		inherit: true,
 		onResidual(pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			this.damage(pokemon.baseMaxhp / 8);
 		},
 	},
 	par: {

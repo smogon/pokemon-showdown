@@ -121,7 +121,7 @@ let BattleAbilities = {
 		desc: "This Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail. There is a 30% chance a Pokemon making contact with this Pokemon will be frozen.",
 		shortDesc: "This Pokemon heals 1/16 of its max HP each turn; immunity to Hail; 30% chance a Pokemon making contact with this Pokemon will be frozen.",
 		onResidual(target, source, effect) {
-			this.heal(target.maxhp / 16);
+			this.heal(target.baseMaxhp / 16);
 		},
 		onAfterDamage(damage, target, source, move) {
 			if (move && move.flags['contact'] && this.field.isWeather('hail')) {
@@ -484,7 +484,7 @@ let BattleAbilities = {
 		inherit: true,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && !target.hp) {
-				this.damage(source.maxhp / 3, source, target, null, true);
+				this.damage(source.baseMaxhp / 3, source, target, null, true);
 			}
 		},
 		desc: "If this Pokemon is knocked out, that move's user loses 1/4 of its maximum HP, rounded down. If any active Pokemon has the Ability Damp, this effect is prevented.",
@@ -563,7 +563,7 @@ let BattleAbilities = {
 			onBeforeMove(pokemon, target, move) {
 				if (pokemon.removeVolatile('truant')) {
 					this.add('cant', pokemon, 'ability: Truant');
-					this.heal(pokemon.maxhp / 3);
+					this.heal(pokemon.baseMaxhp / 3);
 					return false;
 				}
 			},

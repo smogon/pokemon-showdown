@@ -11,7 +11,7 @@ let BattleItems = {
 			}
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.baseMaxhp / 8);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
 			}
@@ -42,7 +42,7 @@ let BattleItems = {
 			}
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.baseMaxhp / 8);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
 			}
@@ -57,7 +57,7 @@ let BattleItems = {
 			}
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.baseMaxhp / 8);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
 			}
@@ -68,7 +68,7 @@ let BattleItems = {
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.category === 'Physical') {
 				if (target.eatItem()) {
-					this.damage(source.maxhp / 8, source, target, null, true);
+					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
 			}
 		},
@@ -77,7 +77,7 @@ let BattleItems = {
 		inherit: true,
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (source && source !== target && move && move.category !== 'Status' && !move.ohko) {
-				this.damage(source.maxhp / 10, source, source, this.dex.getItem('lifeorb'));
+				this.damage(source.baseMaxhp / 10, source, source, this.dex.getItem('lifeorb'));
 			}
 		},
 	},
@@ -98,7 +98,7 @@ let BattleItems = {
 			}
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.baseMaxhp / 8);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
 			}
@@ -132,7 +132,7 @@ let BattleItems = {
 		inherit: true,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 6, source, target, null, true);
+				this.damage(source.baseMaxhp / 6, source, target, null, true);
 			}
 		},
 	},
@@ -141,7 +141,7 @@ let BattleItems = {
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.category === 'Special') {
 				if (target.eatItem()) {
-					this.damage(source.maxhp / 8, source, target, null, true);
+					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
 			}
 		},
@@ -184,7 +184,7 @@ let BattleItems = {
 			}
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.baseMaxhp / 8);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
 			}

@@ -149,7 +149,7 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onWeather(target, source, effect) {
 			if (effect.id === 'sunnyday') {
-				this.heal(target.maxhp / 16);
+				this.heal(target.baseMaxhp / 16);
 			}
 		},
 	},
@@ -294,7 +294,7 @@ let BattleAbilities = {
 		desc: "When this Pokemon switches out, it regains 33% of its HP, then its replacement recovers 33% of its HP.",
 		shortDesc: "Upon switching out, this Pokemon and its replacement regain 33% of their HP.",
 		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.maxhp / 3);
+			pokemon.heal(pokemon.baseMaxhp / 3);
 			pokemon.side.addSlotCondition(pokemon, 'seraphicregeneration');
 		},
 		id: "seraphicregeneration",
@@ -304,7 +304,7 @@ let BattleAbilities = {
 			duration: 1,
 			onSwitchInPriority: -1,
 			onSwitchIn(pokemon) {
-				pokemon.heal(pokemon.maxhp / 3);
+				pokemon.heal(pokemon.baseMaxhp / 3);
 				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			},
 		},
@@ -360,7 +360,7 @@ let BattleAbilities = {
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'psn' || effect.id === 'tox') {
-				this.heal(target.maxhp / 8);
+				this.heal(target.baseMaxhp / 8);
 				return false;
 			}
 		},
@@ -388,7 +388,7 @@ let BattleAbilities = {
 		onAfterDamage(damage, target, source, effect) {
 			if (effect && effect.flags['contact']) {
 				this.boost({def: 1}, target);
-				this.heal(target.maxhp / 5, target);
+				this.heal(target.baseMaxhp / 5, target);
 			}
 		},
 		id: "giblovepls",
@@ -565,7 +565,7 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ice') {
-				if (!this.heal(target.maxhp / 4)) {
+				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Ice Absorb');
 				}
 				return null;
@@ -785,7 +785,7 @@ let BattleAbilities = {
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
-				if (!this.heal(target.maxhp / 4)) {
+				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Shell Shocker');
 				}
 				return null;
@@ -958,7 +958,7 @@ let BattleAbilities = {
 			pokemon.addVolatile('charge');
 		},
 		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.maxhp / 3);
+			pokemon.heal(pokemon.baseMaxhp / 3);
 
 			if (!pokemon.status) return;
 			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Recharge');

@@ -101,7 +101,7 @@ let BattleStatuses = {
 		onSwitchOut(pokemon) {
 			this.add(`c|%Akir|sorry need to build more`);
 			if (pokemon.illusion) return;
-			pokemon.heal(pokemon.maxhp / 3);
+			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
 		onFaint() {
 			this.add(`c|%Akir|too sleepy, c ya`);
@@ -527,7 +527,7 @@ let BattleStatuses = {
 		onTryHit(target, source, move) {
 			if (target.illusion) return;
 			if (target !== source && move.type === 'Water') {
-				if (!this.heal(target.maxhp / 4)) {
+				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Water Absorb');
 				}
 				return null;
@@ -787,7 +787,7 @@ let BattleStatuses = {
 			let newHP = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
 			pokemon.hp = newHP - (pokemon.maxhp - pokemon.hp);
 			pokemon.maxhp = newHP;
-			pokemon.heal(pokemon.maxhp / 4);
+			pokemon.heal(pokemon.baseMaxhp / 4);
 			this.add('-heal', pokemon, pokemon.getHealth);
 			pokemon.takeItem();
 			pokemon.setItem('toxicorb');
@@ -1741,7 +1741,7 @@ let BattleStatuses = {
 		},
 		onResidualOrder: 10,
 		onResidual(pokemon) {
-			this.damage(pokemon.maxhp / 6);
+			this.damage(pokemon.baseMaxhp / 6);
 			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was damaged by the corrosive goo!`);
 		},
 	},
@@ -1774,7 +1774,7 @@ let BattleStatuses = {
 		},
 		onWeather(target) {
 			if (target.hasType('Poison')) return;
-			this.damage(target.maxhp / 16);
+			this.damage(target.baseMaxhp / 16);
 		},
 		onModifyMovePriority: -5,
 		onModifyMove(move) {
