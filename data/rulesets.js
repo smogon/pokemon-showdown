@@ -738,7 +738,7 @@ let BattleFormats = {
 			for (const pokemon of this.getAllPokemon()) {
 				const item = pokemon.getItem();
 				// this.canMegaEvo check is for Rayquaza.
-				if (item.megaStone || this.canMegaEvo(pokemon) || item.onPrimal || item.zMove) {
+				if (item.megaStone || this.canMegaEvo(pokemon) || item.onPrimal || item.zMove  || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra" || pokemon.template === 'zacian'|| pokemon.template === 'zamazenta' || pokemon.template === 'eternatus'))) {
 					pokemon.canDynamax = false;
 				}
 			}
