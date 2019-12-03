@@ -1170,7 +1170,7 @@ let BattleScripts = {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
 			if (!pokemon.canDynamax) return;
-			if (pokemon.transformed && (pokemon.baseSpecies === 'zacian' || pokemon.baseSpecies === 'zamazenta' || pokemon.baseSpecies === 'eternatus')) return;
+			if (pokemon.transformed && (pokemon.template.baseSpecies === 'zacian' || pokemon.template.baseSpecies === 'zamazenta' || pokemon.template.baseSpecies === 'eternatus')) return;
 			// Some pokemon species are unable to dynamax
 			const cannotDynamax = ['zacian', 'zamazenta', 'eternatus'];
 			if (cannotDynamax.includes(toID(pokemon.template.baseSpecies))) {
