@@ -878,7 +878,6 @@ class RandomTeams {
 					break;
 				case 'superpower':
 					if (counter['Fighting'] > 1 && counter.setupType) rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk'] && !hasAbility['Contrary']) rejected = true;
 					if (hasAbility['Contrary']) isSetup = true;
 					break;
 				case 'vacuumwave':
@@ -945,6 +944,9 @@ class RandomTeams {
 					break;
 				case 'poisonjab': case 'sludgebomb':
 					if (hasMove['gunkshot'] || hasMove['sludgewave']) rejected = true;
+					break;
+				case 'psychocut':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'zenheadbutt':
 					if (movePool.includes('bellydrum') || hasMove['bellydrum'] && hasMove['substitute']) rejected = true;
@@ -1050,7 +1052,6 @@ class RandomTeams {
 					(hasType['Water'] && (!counter['Water'] || !counter.stab)) ||
 					// @ts-ignore
 					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
-					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Moody'] && movePool.includes('protect')) ||
 					(hasAbility['Pixilate'] && !counter['Normal']) ||
 					(hasAbility['Psychic Surge'] && !counter['Psychic']) ||
@@ -1319,7 +1320,7 @@ class RandomTeams {
 			item = 'Metronome';
 		} else if (ability === 'Super Luck') {
 			item = 'Scope Lens';
-		} else if (hasMove['boomburst'] && !!counter['speedsetup']) {
+		} else if (hasMove['clangoroussoul'] || hasMove['boomburst'] && !!counter['speedsetup']) {
 			item = 'Throat Spray';
 		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['superfang'] && !hasMove['uturn']) {
 			if (!!counter['speedsetup'] || hasMove['trickroom'] || template.baseStats.spe > 40 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) item = 'Life Orb';

@@ -6356,7 +6356,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	malamar: {
-		randomBattleMoves: ["rest", "sleeptalk", "superpower", "throatchop"],
+		randomBattleMoves: ["psychocut", "rest", "sleeptalk", "superpower", "throatchop", "trickroom"],
 		eventPokemon: [
 			{"generation": 6, "level": 50, "nature": "Adamant", "ivs": {"hp": 31, "atk": 31}, "isHidden": false, "abilities": ["contrary"], "moves": ["superpower", "knockoff", "facade", "rockslide"], "pokeball": "cherishball"},
 		],
@@ -7805,7 +7805,7 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	zamazentacrowned: {
-		randomBattleMoves: ["behemothbash", "closecombat", "crunch", "metalburst"],
+		randomBattleMoves: ["behemothbash", "closecombat", "crunch", "psychicfangs"],
 		tier: "Uber",
 		doublesTier: "DUber",
 		requiredItem: "Rusted Shield",
