@@ -974,18 +974,14 @@ const commands = {
 	],
 };
 /** @type {SettingsHandler} */
-const roomSettings = function (room, user, connection) {
-	let buf;
-
-	if (!user.can('editroom', null, room)) {
-		buf = this.button(room.unoDisabled ? 'off' : 'UNO enabled', true);
-	} else if (room.unoDisabled) {
-		buf = `${this.button('UNO enabled', false, 'uno enable')} ${this.button('off', true)}`;
-	} else {
-		buf = `${this.button('UNO enabled', true)} ${this.button('off', false, 'uno disable')}`;
-	}
-	return `<strong>UNO:</strong> <br />${buf}<br />`;
-};
+const roomSettings = (room, user) => ({
+	label: "UNO",
+	permission: user.can('editroom', null, room),
+	options: [
+		[`disabled`, room.unoDisabled || 'uno disable'],
+		[`enabled`, !room.unoDisabled || 'uno enable'],
+	]
+});
 
 module.exports = {
 	commands,

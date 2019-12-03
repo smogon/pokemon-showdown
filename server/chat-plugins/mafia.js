@@ -3286,18 +3286,14 @@ const commands = {
 };
 
 /** @type {SettingsHandler} */
-const roomSettings = function (room, user, connection) {
-	let buf;
-
-	if (!user.can('editroom', null, room)) {
-		buf = this.button(room.mafiaDisabled ? 'off' : 'Mafia enabled', true);
-	} else if (room.mafiaDisabled) {
-		buf = `${this.button('Mafia enabled', false, 'mafia enable')} ${this.button('off', true)}`;
-	} else {
-		buf = `${this.button('Mafia enabled', true)} ${this.button('off', false, 'mafia disable')}`;
-	}
-	return `<strong>Mafia:</strong> <br />${buf}<br />`;
-};
+const roomSettings = (room, user) => ({
+	label: "Mafia",
+	permission: user.can('editroom', null, room),
+	options: [
+		[`disabled`, room.mafiaDisabled || 'mafia disable'],
+		[`enabled`, !room.mafiaDisabled || 'mafia enable'],
+	],
+});
 
 module.exports = {
 	commands,

@@ -1761,20 +1761,15 @@ export const commands: ChatCommands = {
 		);
 	},
 };
-export const roomSettings: SettingsHandler = function (room, user, connection) {
-	let buf;
-
-	if (!user.can('gamemanagement', null, room)) {
-		buf = this.button(room.toursEnabled === true ? '@' : room.toursEnabled === '%' ? '%' : '#', true);
-	} else if (room.toursEnabled === true) {
-		buf = `${this.button('%', false, 'tournament enable %')} ${this.button('@', true)} ${this.button('#', false, 'tournament disable')}`;
-	} else if (room.toursEnabled === '%') {
-		buf = `${this.button('%', true)} ${this.button('@', false, 'tournament enable @')} ${this.button('#', false, 'tournament disable')}`;
-	} else {
-		buf = `${this.button('%', false, 'tournament enable %')} ${this.button('@', false, 'tournament enable @')} ${this.button('#', true)}`;
-	}
-	return `<strong>Tournaments:</strong> <br />${buf}<br />`;
-};
+const roomSettings: SettingsHandler = (room, user) => ({
+	label: "Tournaments",
+	permission: user.can('gamemanagement', null, room),
+	options: [
+		['%', room.toursEnabled === '%' || 'tournament enable %'],
+		['@', room.toursEnabled === true || 'tournament enable @'],
+		['#', room.toursEnabled === false || 'tournament disable'],
+	],
+});
 
 export const Tournaments = {
 	TournamentGenerators,

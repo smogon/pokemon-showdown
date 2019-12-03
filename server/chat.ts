@@ -45,11 +45,15 @@ export interface ChatCommands {
 }
 
 export type SettingsHandler = (
-	this: {button: (setting: string, disable: boolean, command?: string) => string},
 	room: BasicChatRoom,
 	user: User,
 	connection: Connection
-) => string;
+) => {
+	label: string,
+	permission: boolean,
+	// button label, command | disabled
+	options: [string, string | true][],
+};
 
 /**
  * Chat filters can choose to:
@@ -1261,6 +1265,8 @@ export const Chat = new class {
 
 	loadTranslations() {
 		return FS(TRANSLATION_DIRECTORY).readdir().then(files => {
+			// ensure that english is the first entry when we iterate over Chat.languages
+			Chat.languages.set('english', 'English');
 			for (const fname of files) {
 				if (!fname.endsWith('.json')) continue;
 

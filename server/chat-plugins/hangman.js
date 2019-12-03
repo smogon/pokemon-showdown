@@ -353,18 +353,14 @@ const commands = {
 	],
 };
 /** @type {SettingsHandler} */
-const roomSettings = function (room, user, connection) {
-	let buf;
-
-	if (!user.can('editroom', null, room)) {
-		buf = this.button(room.hangmanDisabled ? 'off' : 'Hangman enabled', true);
-	} else if (room.hangmanDisabled) {
-		buf = `${this.button('Hangman enabled', false, 'hangman enable')} ${this.button('off', true)}`;
-	} else {
-		buf = `${this.button('Hangman enabled', true)} ${this.button('off', false, 'hangman disable')}`;
-	}
-	return `<strong>Hangman:</strong> <br />${buf}<br />`;
-};
+const roomSettings = (room, user) => ({
+	label: "Hangman",
+	permission: user.can('editroom', null, room),
+	options: [
+		[`disabled`, room.hangmanDisabled || 'hangman disable'],
+		[`enabled`, !room.hangmanDisabled || 'hangman enable'],
+	]
+});
 
 module.exports = {
 	commands,
