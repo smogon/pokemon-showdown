@@ -9,8 +9,6 @@
 
 'use strict';
 
-import { RSA_PKCS1_PADDING } from "constants";
-
 const RANKS: string[] = Config.groupsranking;
 
 const SLOWCHAT_MINIMUM = 2;
@@ -1212,7 +1210,7 @@ export const roomSettings: SettingsHandler[] = [
 	(room, user) => {
 		const threshold = user.can('makeroom') ? Infinity :
 			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.getAuth(user)) :
-			user.can('modchat', null, room) ? 2 :
+			user.can('modchat', null, room) ? 1 :
 			null;
 
 		const permission = !!threshold;

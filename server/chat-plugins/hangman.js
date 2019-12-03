@@ -359,7 +359,7 @@ const roomSettings = (room, user) => ({
 	options: [
 		[`disabled`, room.hangmanDisabled || 'hangman disable'],
 		[`enabled`, !room.hangmanDisabled || 'hangman enable'],
-	]
+	],
 });
 
 module.exports = {

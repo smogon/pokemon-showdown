@@ -657,5 +657,5 @@ exports.roomSettings = (room, user) => ({
 	options: [
 		[`disabled`, room.blackjackDisabled || 'blackjack disable'],
 		[`enabled`, !room.blackjackDisabled || 'blackjack enable'],
-	]
+	],
 });

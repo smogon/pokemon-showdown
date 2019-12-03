@@ -980,7 +980,7 @@ const roomSettings = (room, user) => ({
 	options: [
 		[`disabled`, room.unoDisabled || 'uno disable'],
 		[`enabled`, !room.unoDisabled || 'uno enable'],
-	]
+	],
 });
 
 module.exports = {
