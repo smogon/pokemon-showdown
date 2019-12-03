@@ -472,7 +472,7 @@ let Formats = [
 			for (const set of team) {
 				let item = this.dex.getItem(set.item);
 				if (!item || !item.megaStone) continue;
-				let template = this.dex.getTemplate(set.name || set.species);
+				let template = this.dex.getTemplate(set.species);
 				if (format.banlist.includes('AG') && ['Eternatus', 'Zacian', 'Zamazenta'].includes(template.baseSpecies)) {
 					return [`${template.species} is not allowed to hold ${item.name}.`];
 				}
