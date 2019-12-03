@@ -267,7 +267,7 @@ let BattleMovedex = {
 			for (const ally of side.pokemon) {
 				if (ally.cureStatus()) didSomething = true;
 			}
-			if (this.heal(source.maxhp / 2, source)) didSomething = true;
+			if (this.heal(source.baseMaxhp / 2, source)) didSomething = true;
 			return didSomething;
 		},
 		secondary: null,
@@ -418,10 +418,10 @@ let BattleMovedex = {
 			},
 			onTerrain(pokemon) {
 				if (pokemon.hasType('Fire')) {
-					this.heal(pokemon.maxhp / 16);
+					this.heal(pokemon.baseMaxhp / 16);
 					this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was healed by the Lava Terrain!`);
 				} else {
-					this.damage(pokemon.maxhp / 16);
+					this.damage(pokemon.baseMaxhp / 16);
 					this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was hurt by Lava Terrain!`);
 				}
 			},
@@ -904,7 +904,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		onHit(target, source, effect) {
-			this.heal(source.maxhp / 3, source);
+			this.heal(source.baseMaxhp / 3, source);
 			let dancemoves = ['dragondance', 'featherdance', 'fierydance', 'petaldance', 'quiverdance', 'revelationdance', 'swordsdance', 'teeterdance'];
 			let randomMove = dancemoves[this.random(dancemoves.length)];
 			this.useMove(randomMove, target);
@@ -1284,7 +1284,7 @@ let BattleMovedex = {
 			this.add('-anim', target, 'Nasty Plot', target);
 		},
 		onHit(target, source, move) {
-			this.heal(source.maxhp / 4, source, source, this.dex.getActiveMove('Super Ego Inflation'));
+			this.heal(source.baseMaxhp / 4, source, source, this.dex.getActiveMove('Super Ego Inflation'));
 			this.boost({atk: 2, spa: 2}, target, source, this.dex.getActiveMove('Super Ego Inflation'));
 			target.addVolatile('taunt', source, this.dex.getActiveMove('Super Ego Inflation'));
 		},
@@ -2342,9 +2342,9 @@ let BattleMovedex = {
 			onResidual(pokemon) {
 				if (this.effectData.source.hasItem('bindingband')) {
 					this.debug('maelstrm binding band damage boost');
-					this.damage(pokemon.maxhp / 6);
+					this.damage(pokemon.baseMaxhp / 6);
 				} else {
-					this.damage(pokemon.maxhp / 8);
+					this.damage(pokemon.baseMaxhp / 8);
 				}
 			},
 			onEnd() {
@@ -2737,7 +2737,7 @@ let BattleMovedex = {
 			if (!target.setStatus('slp', napWeather.source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
-			this.heal(target.maxhp / 2); // Aesthetic only as the healing happens after you fall asleep in-game
+			this.heal(target.baseMaxhp / 2); // Aesthetic only as the healing happens after you fall asleep in-game
 			if (napWeather.source === target) {
 				for (const curMon of this.getAllActive()) {
 					if (curMon === source) continue;
@@ -2864,7 +2864,7 @@ let BattleMovedex = {
 			default:
 				if (this.field.setWeather(['raindance', 'sunnyday', 'hail'][this.random(3)], source)) didSomething = true;
 			}
-			if (this.heal(source.maxhp / 4, source)) didSomething = true;
+			if (this.heal(source.baseMaxhp / 4, source)) didSomething = true;
 			if (source.addVolatile('stall')) didSomething = true;
 			if (source.addVolatile('protect')) didSomething = true;
 			return didSomething;
@@ -3446,12 +3446,12 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Discharge', source);
 		},
 		onHit(target, source) {
-			this.heal(source.maxhp / 2, source);
+			this.heal(source.baseMaxhp / 2, source);
 			if (!this.canSwitch(source.side)) return;
 			for (const ally of source.side.pokemon) {
 				if (ally === source) continue;
 				if (ally.fainted || !ally.hp) continue;
-				ally.heal(ally.maxhp / 8, ally);
+				ally.heal(ally.baseMaxhp / 8, ally);
 			}
 			this.add('-message', `${source.name} restored everyone's HP.`);
 		},
@@ -3559,13 +3559,13 @@ let BattleMovedex = {
 					}
 				}
 				if (move.flags['contact']) {
-					this.heal(target.maxhp / 4, target, target);
+					this.heal(target.baseMaxhp / 4, target, target);
 				}
 				return null;
 			},
 			onHit(target, source, move) {
 				if (move.isZPowered && move.flags['contact']) {
-					this.heal(target.maxhp / 4, target, target);
+					this.heal(target.baseMaxhp / 4, target, target);
 				}
 			},
 		},
@@ -4222,7 +4222,7 @@ let BattleMovedex = {
 			onResidual() {
 				for (const curMon of this.getAllActive()) {
 					if (curMon.status === 'slp' || curMon.hasAbility('comatose')) {
-						this.damage(curMon.maxhp / 4, curMon);
+						this.damage(curMon.baseMaxhp / 4, curMon);
 					}
 				}
 			},
@@ -4526,7 +4526,7 @@ let BattleMovedex = {
 			this.useMove("taunt", pokemon);
 		},
 		onHit(source) {
-			this.heal(source.maxhp / 2, source);
+			this.heal(source.baseMaxhp / 2, source);
 		},
 		secondary: null,
 		target: "self",
