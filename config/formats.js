@@ -592,7 +592,7 @@ let Formats = [
 		teamLength: {
 			battle: 1,
 		},
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Dynamax Clause'],
 	},
 	{
 		name: "[Gen 8] Challenge Cup 2v2",
@@ -604,7 +604,7 @@ let Formats = [
 			battle: 2,
 		},
 		searchShow: false,
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Dynamax Clause'],
 	},
 	{
 		name: "[Gen 8] Hackmons Cup",
