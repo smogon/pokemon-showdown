@@ -86,17 +86,14 @@ export class LadderStore {
 				room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
 			}
 			problem = true;
-		}
-		if (!room.battle) {
+		} else if (!room.battle) {
 			Monitor.warn(`room expired before ladder update was received`);
 			problem = true;
-		}
-		if (!data) {
+		} else if (!data) {
 			room.add(`|error|Unexpected response ${data} from ladder server.`);
 			room.update();
 			problem = true;
-		}
-		if (data && data.errorip) {
+		} else if (data && data.errorip) {
 			room.add(`|error|This server's request IP ${data.errorip} is not a registered server.`);
 			room.add(`|error|You should be using ladders.js and not ladders-remote.js for ladder tracking.`);
 			room.update();
