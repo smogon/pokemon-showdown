@@ -2338,24 +2338,34 @@ export class Battle {
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
 		if (!action.move && action.moveid) action.move = this.dex.getActiveMove(action.moveid);
 		if (!action.choice && action.move) action.choice = 'move';
-		if (!action.priority && action.priority !== 0) {
-			const priorities = {
-				beforeTurn: 100,
-				beforeTurnMove: 99,
-				switch: 7,
-				runUnnerve: 7.3,
-				runSwitch: 7.2,
-				runPrimal: 7.1,
-				instaswitch: 101,
-				megaEvo: 6.9,
-				runDynamax: 6.8,
-				residual: -100,
-				team: 102,
-				start: 101,
+		if (!action.order) {
+			const orders: {[choice: string]: number} = {
+				team: 1,
+				start: 2,
+				instaswitch: 3,
+				beforeTurn: 4,
+				beforeTurnMove: 5,
+
+				runUnnerve: 100,
+				runSwitch: 101,
+				runPrimal: 102,
+				switch: 103,
+				megaEvo: 104,
+				runDynamax: 105,
+
+				shift: 106,
+
+				// default is 200 (for moves)
+
+				residual: 300,
 			};
-			if (action.choice in priorities) {
-				// @ts-ignore - Typescript being dumb about index signatures
-				action.priority = priorities[action.choice];
+			if (action.choice in orders) {
+				action.order = orders[action.choice];
+			} else {
+				action.order = 200;
+				if (!['move', 'event'].includes(action.choice)) {
+					throw new Error(`Unexpected orderless action ${action.choice}`);
+				}
 			}
 		}
 		if (!midTurn) {
@@ -2506,7 +2516,7 @@ export class Battle {
 			}
 		}
 		action.sourceEffect = sourceEffect;
-		action.priority = 10;
+		action.order = 3;
 		this.queue.unshift(action);
 	}
 
