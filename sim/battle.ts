@@ -2516,7 +2516,7 @@ export class Battle {
 			}
 		}
 		action.sourceEffect = sourceEffect;
-		action.priority = 10;
+		action.order = 3;
 		this.queue.unshift(action);
 	}
 
