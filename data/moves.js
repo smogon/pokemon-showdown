@@ -13200,7 +13200,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryImmunity(target) {
-			if (!this.dex.getImmunity('trapped', target)) return false;
+			return this.dex.getImmunity('trapped', target);
 		},
 		volatileStatus: 'octolock',
 		effect: {
