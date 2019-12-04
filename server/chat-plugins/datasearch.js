@@ -767,7 +767,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (matched) continue;
 
-			let validator = TeamValidator.get(`gen${maxGen}ou`);
+			let validator = TeamValidator.get(nationalSearch ? `gen8nationaldexag` : `gen${maxGen}ou`);
 			let pokemonSource = validator.allSources();
 			for (let move in alts.moves) {
 				if (!validator.checkLearnset(move, mon, pokemonSource) === alts.moves[move]) {
