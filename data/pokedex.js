@@ -9268,7 +9268,7 @@ let BattlePokedex = {
 		prevo: "darumaka",
 		evoLevel: 35,
 		eggGroups: ["Field"],
-		otherFormes: ["darmanitanzen", "darmanitangalar", "darmanitanzengalar"],
+		otherFormes: ["darmanitanzen", "darmanitangalar", "darmanitangalarzen"],
 	},
 	darmanitanzen: {
 		num: 555,
@@ -9302,11 +9302,11 @@ let BattlePokedex = {
 		evoItem: "Ice Stone",
 		eggGroups: ["Field"],
 	},
-	darmanitanzengalar: {
+	darmanitangalarzen: {
 		num: 555,
-		species: "Darmanitan-Zen-Galar",
+		species: "Darmanitan-Galar-Zen",
 		baseSpecies: "Darmanitan",
-		forme: "Zen-Galar",
+		forme: "Galar-Zen",
 		types: ["Ice", "Fire"],
 		baseStats: {hp: 105, atk: 160, def: 55, spa: 30, spd: 55, spe: 135},
 		abilities: {0: "Zen Mode"},

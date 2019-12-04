@@ -5396,7 +5396,7 @@ let BattleFormatsData = {
 		tier: "OU",
 		doublesTier: "New",
 	},
-	darmanitanzengalar: {
+	darmanitangalarzen: {
 		requiredAbility: "Zen Mode",
 		battleOnly: true,
 	},
