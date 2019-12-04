@@ -153,3 +153,22 @@ describe('Pokemon Speed', function () {
 		assert.fainted(battle.p1.pokemon[0]); // Ludicolo should be fainted
 	});
 });
+
+describe('Switching', function () {
+	it('should happen in order of switch-out\'s Speed stat', function () {
+		battle = common.createBattle();
+		const p1team = [
+			{species: 'Accelgor', ability: 'runaway', moves: ['sleeptalk']},
+			{species: 'Shuckle', ability: 'intimidate', moves: ['sleeptalk']},
+		];
+		const p2team = [
+			{species: 'Durant', ability: 'runaway', moves: ['sleeptalk']},
+			{species: 'Barraskewda', ability: 'runaway', moves: ['sleeptalk']},
+		];
+		battle.setPlayer('p1', {team: p1team});
+		battle.setPlayer('p2', {team: p2team});
+
+		battle.makeChoices('switch 2', 'switch 2');
+		assert.strictEqual(battle.p2.pokemon[0].boosts.atk, 0);
+	});
+});

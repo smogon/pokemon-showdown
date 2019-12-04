@@ -2442,9 +2442,7 @@ export class Battle {
 			if (this.gen > 5) action.move.priority = priority;
 		}
 
-		if ((action.choice === 'switch' || action.choice === 'instaswitch') && action.target) {
-			action.speed = action.target.getActionSpeed();
-		} else if (!action.pokemon) {
+		if (!action.pokemon) {
 			action.speed = 1;
 		} else {
 			action.speed = action.pokemon.getActionSpeed();
