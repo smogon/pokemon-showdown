@@ -30,7 +30,6 @@
         "./server/chat-plugins/hangman.js",
         "./server/chat-plugins/helptickets.js",
         "./server/chat-plugins/mafia-data.js",
-        "./server/chat-plugins/mafia.js",
         "./server/chat-plugins/othermetas.js",
         "./server/chat-plugins/room-faqs.js",
         "./server/chat-plugins/thecafe.js",
