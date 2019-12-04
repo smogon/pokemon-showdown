@@ -1365,7 +1365,7 @@ let BattleAbilities = {
 				const forme = target.template.speciesid;
 				target.formeChange('cramorant', effect);
 
-				this.damage(source.baseMaxhp / 4, source, target, effect);
+				this.damage(source.baseMaxhp / 4, source, target);
 				if (forme === 'cramorantgulping') {
 					this.boost({def: -1}, source, target, null, true);
 				} else {
