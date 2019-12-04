@@ -1568,10 +1568,11 @@ let BattleAbilities = {
 	},
 	"iceface": {
 		desc: "If this Pokemon is a Eiscue, the first physical hit it takes will deal 0 damage. Its ice head is then broken, it changes to Noice Form. The ice will be restored when hail is summoned or when the Pokemon is switched in while hail is active.",
-		shortDesc: "First physical hit deals 0 damage, breaks ice head.",
+		shortDesc: "(Eiscue only) First physical hit deals 0 damage, breaks ice head.",
 		onDamagePriority: 1,
 		onStart(pokemon) {
 			if (this.field.isWeather('hail') && pokemon.template.speciesid === 'eiscuenoice' && !pokemon.transformed) {
+				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectData.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
@@ -1597,6 +1598,7 @@ let BattleAbilities = {
 		onAnyWeatherStart() {
 			const pokemon = this.effectData.target;
 			if (this.field.isWeather('hail') && pokemon.template.speciesid === 'eiscuenoice' && !pokemon.transformed) {
+				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectData.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
