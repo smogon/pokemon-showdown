@@ -20859,7 +20859,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		onModifyType(move) {
+		onModifyType(move, pokemon) {
 			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
@@ -20879,14 +20879,16 @@ let BattleMovedex = {
 				break;
 			}
 		},
-		onModifyMove(move) {
+		onModifyMove(move, pokemon) {
 			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
+				if (pokemon.item === "utilityumbrella") break;
 				move.basePower *= 2;
 				break;
 			case 'raindance':
 			case 'primordialsea':
+				if (pokemon.item === "utilityumbrella") break;
 				move.basePower *= 2;
 				break;
 			case 'sandstorm':
