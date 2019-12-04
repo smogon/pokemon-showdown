@@ -3143,8 +3143,7 @@ export const commands: ChatCommands = {
 	},
 };
 
-/** @type {SettingsHandler} */
-const roomSettings = room => ({
+export const roomSettings: SettingsHandler = room => ({
 	label: "Mafia",
 	permission: 'editroom',
 	options: [
@@ -3152,12 +3151,6 @@ const roomSettings = room => ({
 		[`enabled`, !room.mafiaDisabled || 'mafia enable'],
 	],
 });
-
-module.exports = {
-	commands,
-	pages,
-	roomSettings,
-};
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/mafia customidea');
