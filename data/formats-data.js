@@ -2110,8 +2110,6 @@ let BattleFormatsData = {
 	},
 	snorlaxgmax: {
 		isGigantamax: "G-Max Replenish",
-		isUnreleased: true,
-		tier: "Unreleased",
 	},
 	articuno: {
 		eventPokemon: [
