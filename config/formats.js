@@ -243,6 +243,20 @@ let Formats = [
 		},
 	},
 	{
+		name: "[Gen 8] VGC 2020",
+		mod: 'gen8',
+		gameType: 'doubles',
+		banlist: ['Charizard-Gmax ++ Solar Power', 'Alcremie-Gmax', 'Machamp-Gmax', 'Gengar-Gmax', 'Toxtricity-Gmax', 'Melmetal-Gmax', 'Coalossal-Gmax', 'Grimmsnarl-Gmax', 'Hatterene-Gmax', 'Copperajah-Gmax', 'Duraludon-Gmax', 'Flapple-Gmax', 'Appletun-Gmax', 'Orbeetle-Gmax', 'Garbodor-Gmax', 'Kingler-Gmax', 'Lapras-Gmax'],
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Obtainable', 'Standard GBU', 'VGC Timer'],
+		minSourceGen: 8,
+		
+	},
+	{
 		name: "[Gen 8] 2v2 Doubles",
 		desc: `Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.`,
 		threads: [
