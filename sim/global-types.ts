@@ -928,6 +928,7 @@ interface TemplateData {
 	otherForms?: string[]
 	otherFormes?: string[]
 	prevo?: string
+	inheritsLearnsetFrom?: string
 }
 
 interface ModdedTemplateData extends Partial<TemplateData> {
@@ -1179,6 +1180,7 @@ namespace Actions {
 	export interface MoveAction {
 		/** action type */
 		choice: 'move' | 'beforeTurnMove';
+		order: 3 | 5 | 200 | 201 | 199;
 		/** priority of the action (lower first) */
 		priority: number;
 		/** speed of pokemon using move (higher first if priority tie) */
@@ -1205,6 +1207,7 @@ namespace Actions {
 	export interface SwitchAction {
 		/** action type */
 		choice: 'switch' | 'instaswitch';
+		order: 3 | 103;
 		/** priority of the action (lower first) */
 		priority: number;
 		/** speed of pokemon switching (higher first if priority tie) */
