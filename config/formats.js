@@ -254,7 +254,6 @@ let Formats = [
 		},
 		ruleset: ['Obtainable', 'Standard GBU', 'VGC Timer'],
 		minSourceGen: 8,
-		
 	},
 	{
 		name: "[Gen 8] 2v2 Doubles",
