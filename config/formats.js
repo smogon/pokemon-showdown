@@ -225,6 +225,23 @@ let Formats = [
 		minSourceGen: 8,
 	},
 	{
+		name: "[Gen 8] VGC 2020",
+		threads: [
+			`&bullet; <a href="https://www.pokemon.com/us/pokemon-news/2020-pokemon-video-game-championships-vgc-format-rules/">VGC 2020 Rules</a>`,
+		],
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		banlist: ['Alcremie-Gmax', 'Appletun-Gmax', 'Charizard-Gmax ++ Solar Power', 'Coalossal-Gmax', 'Copperajah-Gmax', 'Duraludon-Gmax', 'Flapple-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Grimmsnarl-Gmax', 'Hatterene-Gmax', 'Kingler-Gmax', 'Lapras-Gmax', 'Machamp-Gmax', 'Melmetal-Gmax', 'Orbeetle-Gmax', 'Toxtricity-Gmax'],
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Obtainable', 'Standard GBU', 'VGC Timer'],
+		minSourceGen: 8,
+	},
+	{
 		name: "[Gen 8] Battle Stadium Doubles",
 
 		mod: 'gen8',
@@ -241,19 +258,6 @@ let Formats = [
 				pokemon.canGigantamax = null;
 			}
 		},
-	},
-	{
-		name: "[Gen 8] VGC 2020",
-		mod: 'gen8',
-		gameType: 'doubles',
-		banlist: ['Charizard-Gmax ++ Solar Power', 'Alcremie-Gmax', 'Machamp-Gmax', 'Gengar-Gmax', 'Toxtricity-Gmax', 'Melmetal-Gmax', 'Coalossal-Gmax', 'Grimmsnarl-Gmax', 'Hatterene-Gmax', 'Copperajah-Gmax', 'Duraludon-Gmax', 'Flapple-Gmax', 'Appletun-Gmax', 'Orbeetle-Gmax', 'Garbodor-Gmax', 'Kingler-Gmax', 'Lapras-Gmax'],
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Obtainable', 'Standard GBU', 'VGC Timer'],
-		minSourceGen: 8,
 	},
 	{
 		name: "[Gen 8] 2v2 Doubles",
