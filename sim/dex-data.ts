@@ -96,7 +96,7 @@ export class BasicEffect implements EffectData {
 	 * Is this item/move/ability/pokemon unreleased? True if there's
 	 * no known way to get access to it without cheating.
 	 */
-	isUnreleased: boolean;
+	isUnreleased: boolean | 'Past';
 	/**
 	 * A shortened form of the description of this effect.
 	 * Not all effects have this.
@@ -525,12 +525,6 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 */
 	readonly otherFormes?: string[];
 	/**
-	 * Forme letter. One-letter version of the forme name. Usually the
-	 * first letter of the forme, but not always - e.g. Rotom-S is
-	 * Rotom-Fan because Rotom-F is Rotom-Frost.
-	 */
-	readonly formeLetter: string;
-	/**
 	 * Sprite ID. Basically the same as ID, but with a dash between
 	 * species and forme.
 	 */
@@ -573,7 +567,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/** Color. */
 	readonly color: string;
 	/** Does this Pokemon have an unreleased hidden ability? */
-	readonly unreleasedHidden: boolean;
+	readonly unreleasedHidden: boolean | 'Past';
 	/**
 	 * Is it only possible to get the hidden ability on a male pokemon?
 	 * This is mainly relevant to Gen 5.
@@ -605,6 +599,8 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * form moveid:sources[].
 	 */
 	readonly learnset?: {[moveid: string]: MoveSource[]};
+	/** Source of learnsets for Pokemon that lack their own */
+	readonly inheritsLearnsetFrom: ID;
 	/** True if the only way to get this pokemon is from events. */
 	readonly eventOnly: boolean;
 	/** List of event data for each event. */
@@ -639,7 +635,6 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.forme = data.forme || '';
 		this.otherForms = data.otherForms || undefined;
 		this.otherFormes = data.otherFormes || undefined;
-		this.formeLetter = data.formeLetter || '';
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || {0: ""};
@@ -675,6 +670,10 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 		this.isGigantamax = data.isGigantamax || undefined;
 		this.battleOnly = !!data.battleOnly || !!this.isMega || !!this.isGigantamax || undefined;
+		this.inheritsLearnsetFrom = data.inheritsLearnsetFrom || undefined;
+		if (this.forme === 'Gmax') {
+			this.inheritsLearnsetFrom = toID(data.baseSpecies);
+		}
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || this.forme.endsWith('Galar') || this.forme === 'Gmax') {

@@ -560,7 +560,7 @@ let BattleMovedex = {
 					residualdmg.counter++;
 					toxicCounter = residualdmg.counter;
 				}
-				let toLeech = this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
+				let toLeech = this.dex.clampIntRange(Math.floor(pokemon.baseMaxhp / 16), 1) * toxicCounter;
 				let damage = this.damage(toLeech, pokemon, leecher);
 				if (residualdmg) this.hint("In Gen 1, Leech Seed's damage is affected by Toxic's counter.", true);
 				if (!damage || toLeech > damage) {

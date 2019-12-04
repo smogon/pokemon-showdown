@@ -21,7 +21,7 @@ let BattleItems = {
 		inherit: true,
 		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 2);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
 			}
@@ -88,6 +88,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	custapberry: {
+		inherit: true,
+		isUnreleased: undefined,
+	},
 	darkgem: {
 		inherit: true,
 		isNonstandard: null,
@@ -149,7 +153,7 @@ let BattleItems = {
 		inherit: true,
 		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 2);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
 			}
@@ -236,7 +240,7 @@ let BattleItems = {
 		inherit: true,
 		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 2);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
 			}
@@ -258,6 +262,10 @@ let BattleItems = {
 	inciniumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	jabocaberry: {
+		inherit: true,
+		isUnreleased: undefined,
 	},
 	kangaskhanite: {
 		inherit: true,
@@ -297,9 +305,9 @@ let BattleItems = {
 	},
 	magoberry: {
 		inherit: true,
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
+		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 2);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
 			}
@@ -336,6 +344,10 @@ let BattleItems = {
 	mewtwonitey: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	micleberry: {
+		inherit: true,
+		isUnreleased: undefined,
 	},
 	mimikiumz: {
 		inherit: true,
@@ -395,6 +407,10 @@ let BattleItems = {
 	rockiumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	rowapberry: {
+		inherit: true,
+		isUnreleased: undefined,
 	},
 	sablenite: {
 		inherit: true,
@@ -481,8 +497,9 @@ let BattleItems = {
 	wikiberry: {
 		inherit: true,
 		isNonstandard: null,
+		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
 		onEat(pokemon) {
-			this.heal(pokemon.maxhp / 2);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
 			}

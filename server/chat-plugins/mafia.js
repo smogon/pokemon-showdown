@@ -278,6 +278,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'signups') return user.sendTo(this.room, `|error|The game of ${this.title} has already started.`);
 		const canJoin = this.canJoin(user, true);
 		if (canJoin) return user.sendTo(this.room, `|error|${canJoin}`);
+		if (this.playerCount >= this.playerCap) return user.sendTo(this.room, `|error|The game of ${this.title} is full.`);
 		if (!this.addPlayer(user)) return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
 		if (this.subs.includes(user.id)) this.subs.splice(this.subs.indexOf(user.id), 1);
 		this.playerTable[user.id].updateHtmlRoom();
@@ -1044,7 +1045,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (this.subs.includes(targetUser.id)) this.subs.splice(this.subs.indexOf(targetUser.id), 1);
 			this.played.push(targetUser.id);
 			this.playerTable[targetUser.id] = player;
-			this.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added to the game by ${Chat.escapeHTML(user.name)}!`, {declare: true});
+			this.sendRoom(Chat.html`${targetUser.name} has been added to the game by ${user.name}!`, {declare: true});
 		}
 		this.playerCount++;
 		this.updateRoleString();
@@ -2428,19 +2429,12 @@ const commands = {
 			} else {
 				const num = parseInt(target);
 				if (isNaN(num)) {
-					if ((game.hostid === user.id || game.cohosts.includes(user.id)) && this.cmdToken === "!") {
-						const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-						if (room.lastBroadcast === broadcastMessage &&
-							room.lastBroadcastTime >= Date.now() - 20 * 1000) {
-							return this.errorReply("You can't broadcast this because it was just broadcasted.");
-						}
-						this.broadcasting = true;
-						this.broadcastMessage = broadcastMessage;
-						this.sendReply('|c|' + this.user.getIdentity(this.room.roomid) + '|' + this.message);
-						room.lastBroadcastTime = Date.now();
-						room.lastBroadcast = broadcastMessage;
+					// hack to let hosts broadcast
+					if (game.hostid === user.id || game.cohosts.includes(user.id)) {
+						this.broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 					}
 					if (!this.runBroadcast()) return false;
+
 					if ((game.dlAt - Date.now()) > 0) {
 						return this.sendReply(`|raw|<strong>The deadline is in ${Chat.toDurationString(game.dlAt - Date.now()) || '0 seconds'}.</strong>`);
 					} else {
@@ -2610,17 +2604,10 @@ const commands = {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (!game.started) return this.errorReply(`The game of mafia has not started yet.`);
-			if ((game.hostid === user.id || game.cohosts.includes(user.id)) && this.cmdToken === "!") {
-				const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-				if (room.lastBroadcast === broadcastMessage &&
-					room.lastBroadcastTime >= Date.now() - 20 * 1000) {
-					return this.errorReply("You can't broadcast this because it was just broadcasted.");
-				}
-				this.broadcasting = true;
-				this.broadcastMessage = broadcastMessage;
-				this.sendReply('|c|' + this.user.getIdentity(this.room.roomid) + '|' + this.message);
-				room.lastBroadcastTime = Date.now();
-				room.lastBroadcast = broadcastMessage;
+
+			// hack to let hosts broadcast
+			if (game.hostid === user.id || game.cohosts.includes(user.id)) {
+				this.broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 			}
 			if (!this.runBroadcast()) return false;
 
@@ -2631,17 +2618,10 @@ const commands = {
 		players(target, room, user) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
-			if ((game.hostid === user.id || game.cohosts.includes(user.id)) && this.cmdToken === "!") {
-				const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-				if (room.lastBroadcast === broadcastMessage &&
-					room.lastBroadcastTime >= Date.now() - 20 * 1000) {
-					return this.errorReply("You can't broadcast this because it was just broadcasted.");
-				}
-				this.broadcasting = true;
-				this.broadcastMessage = broadcastMessage;
-				this.sendReply('|c|' + this.user.getIdentity(this.room.roomid) + '|' + this.message);
-				room.lastBroadcastTime = Date.now();
-				room.lastBroadcast = broadcastMessage;
+
+			// hack to let hosts broadcast
+			if (game.hostid === user.id || game.cohosts.includes(user.id)) {
+				this.broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 			}
 			if (!this.runBroadcast()) return false;
 
@@ -2864,7 +2844,7 @@ const commands = {
 			}
 			if (cmd.includes('cohost')) {
 				game.cohosts.push(targetUser.id);
-				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
+				game.sendRoom(Chat.html`${targetUser.name} has been added as a cohost by ${user.name}`, {declare: true});
 				for (const conn of targetUser.connections) {
 					Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
@@ -2882,7 +2862,7 @@ const commands = {
 				for (const conn of targetUser.connections) {
 					Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
-				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
+				game.sendRoom(Chat.html`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
 				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
 			}
 		},
@@ -2904,7 +2884,7 @@ const commands = {
 				return this.errorReply(`${target} is not a cohost.`);
 			}
 			game.cohosts.splice(cohostIndex, 1);
-			game.sendRoom(`${target} was removed as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
+			game.sendRoom(Chat.html`${target} was removed as a cohost by ${user.name}`, {declare: true});
 			this.modlog('MAFIAUNCOHOST', target, null, {noalts: true, noip: true});
 		},
 
@@ -2942,7 +2922,14 @@ const commands = {
 				if (!role) return this.errorReply(`You do not have a role yet.`);
 				return this.sendReplyBox(`Your role is: ${role.safeName}`);
 			}
-			if (!this.runBroadcast()) return;
+
+			// hack to let hosts broadcast
+			const game = room && room.game && room.game.gameid === 'mafia' ? /** @type {MafiaTracker} */(room.game) : null;
+			if (game && (game.hostid === user.id || game.cohosts.includes(user.id))) {
+				this.broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+			}
+			if (!this.runBroadcast()) return false;
+
 			if (!target) return this.parse(`/help mafia data`);
 
 			/** @type {{[k: string]: string}} */

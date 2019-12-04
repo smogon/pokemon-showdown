@@ -100,6 +100,7 @@ export abstract class BasicRoom {
 	mafiaDisabled: boolean;
 	unoDisabled: boolean;
 	blackjackDisabled: boolean;
+	hangmanDisabled: boolean;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
 	privacySetter: Set<ID> | null;
@@ -155,6 +156,7 @@ export abstract class BasicRoom {
 		this.mafiaDisabled = false;
 		this.unoDisabled = false;
 		this.blackjackDisabled = false;
+		this.hangmanDisabled = false;
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
 		this.privacySetter = null;
@@ -984,7 +986,12 @@ export class GlobalRoom extends BasicRoom {
 			}
 		}
 		const stack = stackLines.slice(0, 2).join(`<br />`);
-		const crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
+		let crashMessage;
+		if (/private/.test(stack)) {
+			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
+		} else {
+			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
+		}
 		const devRoom = Rooms.get('development');
 		if (devRoom) {
 			devRoom.add(crashMessage).update();
@@ -1019,7 +1026,7 @@ export class BasicChatRoom extends BasicRoom {
 	readonly log: Roomlog;
 	readonly autojoin: boolean;
 	readonly staffAutojoin: string | boolean;
-	readonly banwords: string[];
+	banwords: string[];
 	/** Only available in groupchats */
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';

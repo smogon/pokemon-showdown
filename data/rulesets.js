@@ -13,7 +13,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	standardnext: {
 		effectType: 'ValidatorRule',
@@ -240,7 +240,7 @@ let BattleFormats = {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
-				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
+				this.add('poke', pokemon.side.id, details, this.gen < 8 && pokemon.item ? 'item' : '');
 			}
 		},
 		onTeamPreview() {
@@ -541,13 +541,13 @@ let BattleFormats = {
 		name: 'NFE Clause',
 		desc: "Bans Pok&eacute;mon that are fully evolved or can't evolve",
 		onValidateSet(set) {
-			const template = this.dex.getTemplate(set.name || set.species);
+			const template = this.dex.getTemplate(set.species);
 			if (!template.nfe) {
 				return [set.species + " cannot evolve."];
 			}
 		},
 		onBegin() {
-			this.add('rule', 'NFE Clause: Fully Evolved Pok&eacute;mon are banned');
+			this.add('rule', 'NFE Clause: Fully Evolved Pokémon are banned');
 		},
 	},
 	hppercentagemod: {
@@ -679,8 +679,8 @@ let BattleFormats = {
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
 		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canDynamax = null;
+			for (let pokemon of this.getAllPokemon()) {
+				pokemon.canDynamax = false;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
@@ -714,10 +714,17 @@ let BattleFormats = {
 			return -typeMod;
 		},
 	},
-	natdex: {
+	natdexrule: {
 		effectType: 'Rule',
-		name: 'NatDex',
+		name: 'NatDex Rule',
 		onValidateSet(set) {
+			// These Pokemon are still unobtainable
+			const unobtainables = [
+				'Eevee-Starter', 'Floette-Eternal', 'Magearna-Original', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter',
+			];
+			if (unobtainables.includes(set.species)) {
+				return [`${set.name || set.species} does not exist in the National Dex.`];
+			}
 			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (!set.item) return;
 			let item = this.dex.getItem(set.item);
@@ -727,19 +734,11 @@ let BattleFormats = {
 		},
 		onBegin() {
 			// if you have a mega/primal or z, you can't dynamax
-			for (const side of this.sides) {
-				let canMegaOrZ = false;
-				for (const pokemon of side.pokemon) {
-					const item = this.dex.getItem(pokemon.item);
-					if (item.megaStone || item.onPrimal || item.zMove) {
-						canMegaOrZ = true;
-						break;
-					}
-				}
-				if (canMegaOrZ) {
-					for (const pokemon of side.pokemon) {
-						pokemon.canDynamax = false;
-					}
+			for (const pokemon of this.getAllPokemon()) {
+				const item = pokemon.getItem();
+				// this.canMegaEvo check is for Rayquaza.
+				if (item.megaStone || this.canMegaEvo(pokemon) || item.onPrimal || item.zMove) {
+					pokemon.canDynamax = false;
 				}
 			}
 		},
@@ -756,7 +755,7 @@ let BattleFormats = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, template, setSources, set) {
 			const restrictedMoves = this.format.restrictedMoves || [];
-			if (!move.isNonstandard && !restrictedMoves.includes(move.name)) {
+			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.id.startsWith('max')) {
 				let dex = this.dex;
 				let types = template.types;
 				let baseTemplate = dex.getTemplate(template.baseSpecies);

@@ -39,7 +39,7 @@
   "homepage": "http://pokemonshowdown.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zarel/Pokemon-Showdown.git"
+    "url": "https://github.com/smogon/pokemon-showdown.git"
   },
   "author": {
     "name": "Guangcong Luo",

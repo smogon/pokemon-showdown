@@ -16,9 +16,9 @@ let BattleStatuses = {
 				return;
 			}
 			if (this.effectData.source.hasItem('bindingband')) {
-				this.damage(pokemon.maxhp / 8);
+				this.damage(pokemon.baseMaxhp / 8);
 			} else {
-				this.damage(pokemon.maxhp / 16);
+				this.damage(pokemon.baseMaxhp / 16);
 			}
 		},
 	},

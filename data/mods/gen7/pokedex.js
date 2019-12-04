@@ -148,6 +148,26 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: "Pickup", 1: "Frisk"},
 	},
+	hawlucha: {
+		inherit: true,
+		eggGroups: ["Human-Like"],
+	},
+	bergmite: {
+		inherit: true,
+		eggGroups: ["Monster"],
+	},
+	avalugg: {
+		inherit: true,
+		eggGroups: ["Monster"],
+	},
+	noibat: {
+		inherit: true,
+		eggGroups: ["Flying"],
+	},
+	noivern: {
+		inherit: true,
+		eggGroups: ["Flying"],
+	},
 	vikavolt: {
 		inherit: true,
 		evoType: "levelExtra",

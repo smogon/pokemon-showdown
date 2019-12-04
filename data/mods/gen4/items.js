@@ -131,7 +131,7 @@ let BattleItems = {
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && move && move.category === 'Physical') {
 				if (target.eatItem()) {
-					this.damage(source.maxhp / 8, source, target, null, true);
+					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
 			}
 		},
@@ -166,7 +166,7 @@ let BattleItems = {
 			duration: 1,
 			onAfterMoveSecondarySelf(source, target, move) {
 				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
-					this.damage(source.maxhp / 10, source, source, this.dex.getItem('lifeorb'));
+					this.damage(source.baseMaxhp / 10, source, source, this.dex.getItem('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
 			},
@@ -264,7 +264,7 @@ let BattleItems = {
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && move && move.category === 'Special') {
 				if (target.eatItem()) {
-					this.damage(source.maxhp / 8, source, target, null, true);
+					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
 			}
 		},

@@ -558,8 +558,9 @@ const commands = {
 						"Dex#": pokemon.num,
 						"Gen": pokemon.gen || 'CAP',
 						"Height": pokemon.heightm + " m",
-						"Weight": pokemon.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 					};
+					if (!pokemon.forme || pokemon.forme !== "Gmax") details["Weight"] = pokemon.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>";
+					else details["Weight"] = "0 kg <em>(GK/LK fail)</em>";
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					let evos = /** @type {string[]} */ ([]);
@@ -658,7 +659,9 @@ const commands = {
 					if (move.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
 
 					if (dex.gen >= 7) {
-						if (move.zMovePower) {
+						if (move.gen >= 8 && move.isMax) {
+							// Don't display Z-Power for Max/G-Max moves
+						} else if (move.zMovePower) {
 							details["Z-Power"] = move.zMovePower;
 						} else if (move.zMoveEffect) {
 							details["Z-Effect"] = {
@@ -794,7 +797,7 @@ const commands = {
 			}
 
 			if (types.length === 0) {
-				return this.sendReplyBox(`${Chat.escapeHTML(target)} isn't a recognized type or pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
+				return this.sendReplyBox(Chat.html`${target} isn't a recognized type or pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
 			}
 			pokemon = {types: types};
 			target = types.join("/");
@@ -1473,9 +1476,9 @@ const commands = {
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown is open source:<br />` +
 			`- Language: JavaScript (Node.js)<br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master">What's new?</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown">Server source code</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Client">Client source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown/commits/master">What's new?</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown">Server source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown-client">Client source code</a><br />` +
 			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a>`
 		);
 	},
@@ -1650,7 +1653,7 @@ const commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown/blob/master/data/mods/gennext/README.md">README: overview of NEXT</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown/blob/master/data/mods/gennext/README.md">README: overview of NEXT</a><br />` +
 			"Example replays:<br />" +
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-120689854">Zergo vs Mr Weegle Snarf</a><br />` +
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-130756055">NickMP vs Khalogie</a>`
@@ -2042,14 +2045,14 @@ const commands = {
 			if (['ou', 'uu'].includes(formatId) && generation === 'sm' && room && room.language in supportedLanguages) {
 				// Limited support for translated analysis
 				// Translated analysis do not support automatic redirects from a speciesid to the proper page
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			} else if (['ou', 'uu'].includes(formatId) && generation === 'sm') {
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
 					`Other languages: <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=es">Español</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=fr">Français</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=it">Italiano</a>, ` +
 					`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=de">Deutsch</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=pt">Português</a>`
 				);
 			} else {
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
@@ -2098,7 +2101,7 @@ const commands = {
 			}
 			if (formatName) {
 				atLeastOne = true;
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${formatName} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 

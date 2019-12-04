@@ -72,7 +72,7 @@ let BattleScripts = {
 			if (!lockedMove) {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.add('cant', pokemon, 'nopp', move);
-					let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
+					let gameConsole = [null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS'][this.gen] || 'Switch';
 					this.hint(`This is not a bug, this is really how it works on the ${gameConsole}; try it yourself if you don't believe us.`);
 					this.clearActiveMove(true);
 					pokemon.moveThisTurnResult = false;
@@ -1179,9 +1179,7 @@ let BattleScripts = {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
 			if (!pokemon.canDynamax) return;
-			if (this.canZMove(pokemon)) return;
-			if (this.canMegaEvo(pokemon)) return;
-			// TODO ban specific species from dynamaxing based on reserach
+			// Some pokemon species are unable to dynamax
 			const cannotDynamax = ['zacian', 'zamazenta', 'eternatus'];
 			if (cannotDynamax.includes(toID(pokemon.template.baseSpecies))) {
 				return;
@@ -1200,7 +1198,7 @@ let BattleScripts = {
 
 	getMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getMove(move);
-		if (pokemon.canGigantamax) {
+		if (pokemon.canGigantamax && move.category !== 'Status') {
 			let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
 			let gMaxMove = this.dex.getMove(gMaxTemplate.isGigantamax);
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
@@ -1212,12 +1210,12 @@ let BattleScripts = {
 	getActiveMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 		let maxMove = this.dex.getActiveMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
-		if (pokemon.canGigantamax) {
-			let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
-			let gMaxMove = this.dex.getActiveMove(gMaxTemplate.isGigantamax ? gMaxTemplate.isGigantamax : '');
-			if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
-		}
 		if (move.category !== 'Status') {
+			if (pokemon.canGigantamax) {
+				let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
+				let gMaxMove = this.dex.getActiveMove(gMaxTemplate.isGigantamax ? gMaxTemplate.isGigantamax : '');
+				if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
+			}
 			if (!move.gmaxPower) throw new Error(`${move.name} doesn't have a gmaxPower`);
 			maxMove.basePower = move.gmaxPower;
 			maxMove.category = move.category;

@@ -660,7 +660,7 @@ interface EffectData {
 	effectType?: string
 	infiltrates?: boolean
 	isNonstandard?: Nonstandard | null
-	isUnreleased?: boolean
+	isUnreleased?: boolean | 'Past'
 	/**
 	 * `true` for generic Z-moves like Gigavolt Havoc.
 	 * Also `true` for Z-powered status moves like Z-Encore.
@@ -922,13 +922,13 @@ interface TemplateData {
 	evos?: string[]
 	evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other'
 	forme?: string
-	formeLetter?: string
 	gender?: GenderName
 	genderRatio?: {[k: string]: number}
 	maxHP?: number
 	otherForms?: string[]
 	otherFormes?: string[]
 	prevo?: string
+	inheritsLearnsetFrom?: string
 }
 
 interface ModdedTemplateData extends Partial<TemplateData> {
@@ -947,7 +947,7 @@ interface TemplateFormatsData {
 	gen?: number
 	isGigantamax?: string
 	isNonstandard?: Nonstandard | null
-	isUnreleased?: boolean
+	isUnreleased?: boolean | 'Past'
 	maleOnlyHidden?: boolean
 	randomBattleMoves?: readonly string[]
 	randomDoubleBattleMoves?: readonly string[]
@@ -956,7 +956,7 @@ interface TemplateFormatsData {
 	requiredItems?: string[]
 	requiredMove?: string
 	tier?: string
-	unreleasedHidden?: boolean
+	unreleasedHidden?: boolean | 'Past'
 }
 
 interface ModdedTemplateFormatsData extends Partial<TemplateFormatsData> {
@@ -1180,6 +1180,7 @@ namespace Actions {
 	export interface MoveAction {
 		/** action type */
 		choice: 'move' | 'beforeTurnMove';
+		order: 3 | 5 | 200 | 201 | 199;
 		/** priority of the action (lower first) */
 		priority: number;
 		/** speed of pokemon using move (higher first if priority tie) */
@@ -1206,6 +1207,7 @@ namespace Actions {
 	export interface SwitchAction {
 		/** action type */
 		choice: 'switch' | 'instaswitch';
+		order: 3 | 103;
 		/** priority of the action (lower first) */
 		priority: number;
 		/** speed of pokemon switching (higher first if priority tie) */

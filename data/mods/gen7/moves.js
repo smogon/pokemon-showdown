@@ -22,6 +22,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	banefulbunker: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user become poisoned. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+	},
 	barrage: {
 		inherit: true,
 		isNonstandard: null,
@@ -130,6 +134,33 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	detect: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+	},
+	defog: {
+		inherit: true,
+		onHit(target, source, move) {
+			let success = false;
+			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
+			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			for (const targetCondition of removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll.includes(targetCondition)) continue;
+					this.add('-sideend', target.side, this.dex.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			for (const sideCondition of removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			return success;
+		},
+	},
 	devastatingdrake: {
 		inherit: true,
 		isNonstandard: null,
@@ -169,6 +200,10 @@ let BattleMovedex = {
 	embargo: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	endure: {
+		inherit: true,
+		desc: "The user will survive attacks made by other Pokemon during this turn with at least 1 HP. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 	},
 	extremeevoboost: {
 		inherit: true,
@@ -562,6 +597,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	protect: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+	},
 	psychoboost: {
 		inherit: true,
 		isNonstandard: null,
@@ -581,6 +620,28 @@ let BattleMovedex = {
 	pursuit: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	quash: {
+		inherit: true,
+		onHit(target) {
+			if (target.side.active.length < 2) return false; // fails in singles
+			let action = this.willMove(target);
+			if (!action) return false;
+
+			action.priority = -7.1;
+			this.cancelMove(target);
+			for (let i = this.queue.length - 1; i >= 0; i--) {
+				if (this.queue[i].choice === 'residual') {
+					this.queue.splice(i, 0, action);
+					break;
+				}
+			}
+			this.add('-activate', target, 'move: Quash');
+		},
+	},
+	quickguard: {
+		inherit: true,
+		desc: "The user and its party members are protected from attacks with original or altered priority greater than 0 made by other Pokemon, including allies, during this turn. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 	},
 	rage: {
 		inherit: true,
@@ -725,6 +786,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	spikyshield: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+	},
 	splinteredstormshards: {
 		inherit: true,
 		isNonstandard: null,
@@ -812,6 +877,10 @@ let BattleMovedex = {
 	watersport: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	wideguard: {
+		inherit: true,
+		desc: "The user and its party members are protected from moves made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 	},
 	wringout: {
 		inherit: true,

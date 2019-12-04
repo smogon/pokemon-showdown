@@ -2338,24 +2338,34 @@ export class Battle {
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
 		if (!action.move && action.moveid) action.move = this.dex.getActiveMove(action.moveid);
 		if (!action.choice && action.move) action.choice = 'move';
-		if (!action.priority && action.priority !== 0) {
-			const priorities = {
-				beforeTurn: 100,
-				beforeTurnMove: 99,
-				switch: 7,
-				runUnnerve: 7.3,
-				runSwitch: 7.2,
-				runPrimal: 7.1,
-				instaswitch: 101,
-				megaEvo: 6.9,
-				runDynamax: 6.8,
-				residual: -100,
-				team: 102,
-				start: 101,
+		if (!action.order) {
+			const orders: {[choice: string]: number} = {
+				team: 1,
+				start: 2,
+				instaswitch: 3,
+				beforeTurn: 4,
+				beforeTurnMove: 5,
+
+				runUnnerve: 100,
+				runSwitch: 101,
+				runPrimal: 102,
+				switch: 103,
+				megaEvo: 104,
+				runDynamax: 105,
+
+				shift: 106,
+
+				// default is 200 (for moves)
+
+				residual: 300,
 			};
-			if (action.choice in priorities) {
-				// @ts-ignore - Typescript being dumb about index signatures
-				action.priority = priorities[action.choice];
+			if (action.choice in orders) {
+				action.order = orders[action.choice];
+			} else {
+				action.order = 200;
+				if (!['move', 'event'].includes(action.choice)) {
+					throw new Error(`Unexpected orderless action ${action.choice}`);
+				}
 			}
 		}
 		if (!midTurn) {
@@ -2374,7 +2384,6 @@ export class Battle {
 					});
 				}
 				if (action.maxMove && !action.pokemon.volatiles['dynamax']) {
-					this.debug(`Adding runDynamax to queue`);
 					this.addToQueue({
 						choice: 'runDynamax',
 						pokemon: action.pokemon,
@@ -2385,11 +2394,10 @@ export class Battle {
 					action.sourceEffect = this.dex.getMove(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
-				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
 			}
 		}
 
-		const deferPriority = this.gen >= 7 && action.mega && action.mega !== 'done';
+		const deferPriority = this.gen === 7 && action.mega && action.mega !== 'done';
 		if (action.move) {
 			let target = null;
 			action.move = this.dex.getActiveMove(action.move);
@@ -2399,43 +2407,46 @@ export class Battle {
 				// TODO: what actually happens here?
 				if (target) action.targetLoc = this.getTargetLoc(target, action.pokemon);
 			}
-
-			if (!action.priority && !deferPriority) {
-				let move = action.move;
-				if (action.zmove) {
-					const zMoveName = this.getZMove(action.move, action.pokemon, true);
-					if (zMoveName) {
-						const zMove = this.dex.getActiveMove(zMoveName);
-						if (zMove.exists && zMove.isZ) {
-							move = zMove;
-						}
-					}
-				}
-				if (action.maxMove) {
-					const maxMoveName = this.getMaxMove(action.maxMove, action.pokemon);
-					if (maxMoveName) {
-						const maxMove = this.getActiveMaxMove(action.move, action.pokemon);
-						if (maxMove.exists && maxMove.isMax) {
-							move = maxMove;
-						}
-					}
-				}
-				const priority = this.runEvent('ModifyPriority', action.pokemon, target, move, move.priority);
-				action.priority = priority;
-				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
-				if (this.gen > 5) action.move.priority = priority;
-			}
 		}
-		if (!action.speed) {
-			if ((action.choice === 'switch' || action.choice === 'instaswitch') && action.target) {
-				action.speed = action.target.getActionSpeed();
-			} else if (!action.pokemon) {
-				action.speed = 1;
-			} else if (!deferPriority) {
-				action.speed = action.pokemon.getActionSpeed();
-			}
-		}
+		if (!deferPriority) this.getActionSpeed(action);
 		return action as any;
+	}
+
+	getActionSpeed(action: AnyObject) {
+		if (action.choice === 'move') {
+			let move = action.move;
+			if (action.zmove) {
+				const zMoveName = this.getZMove(action.move, action.pokemon, true);
+				if (zMoveName) {
+					const zMove = this.dex.getActiveMove(zMoveName);
+					if (zMove.exists && zMove.isZ) {
+						move = zMove;
+					}
+				}
+			}
+			if (action.maxMove) {
+				const maxMoveName = this.getMaxMove(action.maxMove, action.pokemon);
+				if (maxMoveName) {
+					const maxMove = this.getActiveMaxMove(action.move, action.pokemon);
+					if (maxMove.exists && maxMove.isMax) {
+						move = maxMove;
+					}
+				}
+			}
+			// take priority from the base move, so abilities like Prankster only apply once
+			// (instead of compounding every time `getActionSpeed` is called)
+			let priority = this.dex.getMove(move.id).priority;
+			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
+			action.priority = priority;
+			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
+			if (this.gen > 5) action.move.priority = priority;
+		}
+
+		if (!action.pokemon) {
+			action.speed = 1;
+		} else {
+			action.speed = action.pokemon.getActionSpeed();
+		}
 	}
 
 	/**
@@ -2454,7 +2465,15 @@ export class Battle {
 	}
 
 	sortQueue() {
+		// this.log.push('SORT ' + this.debugQueue());
 		this.speedSort(this.queue);
+	}
+
+	debugQueue() {
+		return this.queue.map(action =>
+			// @ts-ignore
+			`${action.order || ''}:${action.priority || ''}:${action.speed || ''}:${action.subOrder || ''} - ${action.choice}${action.pokemon ? ' ' + action.pokemon : ''}${action.move ? ' ' + action.move : ''}`
+		).join('\n') + '\n';
 	}
 
 	/**
@@ -2472,7 +2491,6 @@ export class Battle {
 
 		if (chosenAction.pokemon) {
 			chosenAction.pokemon.updateSpeed();
-			chosenAction.speed = 0; // make resolveAction update Speed
 		}
 		const action = this.resolveAction(chosenAction, midTurn);
 		for (const [i, curAction] of this.queue.entries()) {
@@ -2496,6 +2514,7 @@ export class Battle {
 			}
 		}
 		action.sourceEffect = sourceEffect;
+		action.order = 3;
 		this.queue.unshift(action);
 	}
 
@@ -2589,7 +2608,7 @@ export class Battle {
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
 			for (const pokemon of action.pokemon.side.pokemon) {
-				pokemon.canDynamax = null;
+				pokemon.canDynamax = false;
 			}
 			break;
 		case 'beforeTurnMove': {
@@ -2733,7 +2752,7 @@ export class Battle {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
-		} else if (['megaEvo', 'runDynamax'].includes(action.choice) && this.gen >= 7) {
+		} else if (action.choice === 'megaEvo' && this.gen === 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			const moveIndex = this.queue.findIndex(queuedAction =>
@@ -2773,6 +2792,14 @@ export class Battle {
 		}
 
 		this.eachEvent('Update');
+		if (this.gen >= 8 && this.queue.length && this.queue[0].choice === 'move') {
+			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
+			this.updateSpeed();
+			for (const queueAction of this.queue) {
+				if (queueAction.pokemon) this.getActionSpeed(queueAction);
+			}
+			this.sortQueue();
+		}
 
 		return false;
 	}
