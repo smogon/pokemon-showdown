@@ -15,7 +15,7 @@
                 "--timeout",
                 "999999",
                 "--colors",
-                "-f",
+                "-g",
                 // Make this string non-empty to run only tests whose names match it
                 ""
             ],
@@ -26,7 +26,7 @@
             "request": "launch",
             "name": "Parse input log (paste in terminal)",
             "program": "${workspaceRoot}/pokemon-showdown",
-            "args": ["simulate-battle"],
+            "args": ["simulate-battle", "-R"],
             "console": "integratedTerminal"
         },
     ]
