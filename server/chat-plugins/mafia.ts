@@ -26,8 +26,7 @@ interface MafiaLynch {
 	trueCount: number;
 	lastLynch: number;
 	dir: 'up' | 'down';
-	// todo id?
-	lynchers: string[];
+	lynchers: ID[];
 }
 
 interface MafiaIDEAData {
@@ -67,8 +66,7 @@ let logs: MafiaLog = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: 
 
 let hostBans: MafiaHostBans = Object.create(null);
 
-// todo - id?
-const hostQueue: string[] = [];
+const hostQueue: ID[] = [];
 
 const IDEA_TIMER = 90 * 1000;
 
@@ -283,7 +281,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			waitingPick: [],
 		};
 
-		this.sendRoom(this.roomWindow(), {uhtml: true});
+		this.sendHTML(this.roomWindow());
 	}
 
 	join(user: User) {
@@ -513,7 +511,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (Object.keys(this.roles).length < this.playerCount) return user.sendTo(this.room, `You have not provided enough roles for the players.`);
 		}
 		this.started = true;
-		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
+		this.sendDeclare(`The game of ${this.title} is starting!`);
 		// MafiaTracker#played gets set in distributeRoles
 		this.distributeRoles();
 		if (night) {
@@ -536,7 +534,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		this.dead = {};
 		this.played = [this.hostid, ...this.cohosts, ...(Object.keys(this.playerTable) as ID[])];
-		this.sendRoom(`The roles have been distributed.`, {declare: true});
+		this.sendDeclare(`The roles have been distributed.`);
 		this.updatePlayers();
 	}
 
@@ -566,9 +564,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.dayNum++;
 		}
 		if (isNaN(this.hammerCount)) {
-			this.sendRoom(`Day ${this.dayNum}. Hammering is disabled.`, {declare: true});
+			this.sendDeclare(`Day ${this.dayNum}. Hammering is disabled.`);
 		} else {
-			this.sendRoom(`Day ${this.dayNum}. The hammer count is set at ${this.hammerCount}`, {declare: true});
+			this.sendDeclare(`Day ${this.dayNum}. The hammer count is set at ${this.hammerCount}`);
 		}
 		this.sendPlayerList();
 		this.updatePlayers();
@@ -582,7 +580,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			const host = Users.get(hostid);
 			if (host && host.connected) host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
 		}
-		this.sendRoom(`Night ${this.dayNum}. PM the host your action, or idle.`, {declare: true});
+		this.sendDeclare(`Night ${this.dayNum}. PM the host your action, or idle.`);
 		const hasPlurality = this.getPlurality();
 		if (!early && hasPlurality) this.sendRoom(`Plurality is on ${this.playerTable[hasPlurality] ? this.playerTable[hasPlurality].name : 'No Lynch'}`);
 		if (!early && !initial) this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
@@ -622,14 +620,14 @@ class MafiaTracker extends Rooms.RoomGame {
 		const name = player.lynching === 'nolynch' ? 'No Lynch' : this.playerTable[player.lynching].name;
 		const targetUser = Users.get(userid);
 		if (previousLynch) {
-			this.sendRoom(`${(targetUser ? targetUser.name : userid)} has shifted their lynch from ${previousLynch === 'nolynch' ? 'No Lynch' : this.playerTable[previousLynch].name} to ${name}`, {timestamp: true});
+			this.sendTimestamp(`${(targetUser ? targetUser.name : userid)} has shifted their lynch from ${previousLynch === 'nolynch' ? 'No Lynch' : this.playerTable[previousLynch].name} to ${name}`);
 		} else {
-			this.sendRoom(name === 'No Lynch' ? `${(targetUser ? targetUser.name : userid)} has abstained from lynching.` : `${(targetUser ? targetUser.name : userid)} has lynched ${name}.`, {timestamp: true});
+			this.sendTimestamp(name === 'No Lynch' ? `${(targetUser ? targetUser.name : userid)} has abstained from lynching.` : `${(targetUser ? targetUser.name : userid)} has lynched ${name}.`);
 		}
 		player.lastLynch = Date.now();
 		if (this.getHammerValue(target) <= lynch.trueCount) {
 			// HAMMER
-			this.sendRoom(`Hammer! ${target === 'nolynch' ? 'Nobody' : Chat.escapeHTML(name)} was lynched!`, {declare: true});
+			this.sendDeclare(`Hammer! ${target === 'nolynch' ? 'Nobody' : Chat.escapeHTML(name)} was lynched!`);
 			this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
 			if (target !== 'nolynch') this.eliminate(this.playerTable[target], 'kill');
 			this.night(true);
@@ -660,7 +658,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			lynch.lynchers.splice(lynch.lynchers.indexOf(userid), 1);
 		}
 		const targetUser = Users.get(userid);
-		if (!force) this.sendRoom(player.lynching === 'nolynch' ? `${(targetUser ? targetUser.name : userid)} is no longer abstaining from lynching.` : `${(targetUser ? targetUser.name : userid)} has unlynched ${this.playerTable[player.lynching].name}.`, {timestamp: true});
+		if (!force) this.sendTimestamp(player.lynching === 'nolynch' ? `${(targetUser ? targetUser.name : userid)} is no longer abstaining from lynching.` : `${(targetUser ? targetUser.name : userid)} has unlynched ${this.playerTable[player.lynching].name}.`);
 		player.lynching = '';
 		player.lastLynch = Date.now();
 		this.hasPlurality = null;
@@ -786,9 +784,9 @@ class MafiaTracker extends Rooms.RoomGame {
 	setHammer(count: number) {
 		this.hammerCount = count;
 		if (isNaN(count)) {
-			this.sendRoom(`Hammering has been disabled, and lynches have been reset.`, {declare: true});
+			this.sendDeclare(`Hammering has been disabled, and lynches have been reset.`);
 		} else {
-			this.sendRoom(`The hammer count has been set at ${this.hammerCount}, and lynches have been reset.`, {declare: true});
+			this.sendDeclare(`The hammer count has been set at ${this.hammerCount}, and lynches have been reset.`);
 		}
 		this.clearLynches();
 	}
@@ -796,9 +794,9 @@ class MafiaTracker extends Rooms.RoomGame {
 	shiftHammer(count: number) {
 		this.hammerCount = count;
 		if (isNaN(count)) {
-			this.sendRoom(`Hammering has been disabled. Lynches have not been reset.`, {declare: true});
+			this.sendDeclare(`Hammering has been disabled. Lynches have not been reset.`);
 		} else {
-			this.sendRoom(`The hammer count has been shifted to ${this.hammerCount}. Lynches have not been reset.`, {declare: true});
+			this.sendDeclare(`The hammer count has been shifted to ${this.hammerCount}. Lynches have not been reset.`);
 		}
 		const hammered = [];
 		for (const lynch in this.lynches) {
@@ -807,7 +805,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		if (hammered.length) {
-			this.sendRoom(`${Chat.count(hammered, "players have")} been hammered: ${hammered.join(', ')}. They have not been removed from the game.`, {declare: true});
+			this.sendDeclare(`${Chat.count(hammered, "players have")} been hammered: ${hammered.join(', ')}. They have not been removed from the game.`);
 			this.night(true);
 		}
 	}
@@ -847,7 +845,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!(player.id in this.playerTable)) return;
 		if (!this.started) {
 			// Game has not started, simply kick the player
-			this.sendRoom(`${player.safeName} was kicked from the game!`, {declare: true});
+			this.sendDeclare(`${player.safeName} was kicked from the game!`);
 			if (this.hostRequestedSub.includes(player.id)) {
 				this.hostRequestedSub.splice(this.hostRequestedSub.indexOf(player.id), 1);
 			}
@@ -883,7 +881,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			msg += ` was eliminated`;
 		}
 		if (player.lynching) this.unlynch(player.id, true);
-		this.sendRoom(`${msg}! ${!this.noReveal && toID(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`, {declare: true});
+		this.sendDeclare(`${msg}! ${!this.noReveal && toID(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`);
 		const targetRole = player.role;
 		if (targetRole) {
 			for (const [roleIndex, role] of this.roles.entries()) {
@@ -916,7 +914,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			const deadPlayer = this.dead[toRevive];
 			if (deadPlayer.treestump) deadPlayer.treestump = false;
 			if (deadPlayer.restless) deadPlayer.restless = false;
-			this.sendRoom(`${deadPlayer.safeName} was revived!`, {declare: true});
+			this.sendDeclare(`${deadPlayer.safeName} was revived!`);
 			this.playerTable[deadPlayer.id] = deadPlayer;
 			const targetRole = deadPlayer.role;
 			if (targetRole) {
@@ -963,7 +961,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (this.subs.includes(targetUser.id)) this.subs.splice(this.subs.indexOf(targetUser.id), 1);
 			this.played.push(targetUser.id);
 			this.playerTable[targetUser.id] = player;
-			this.sendRoom(Chat.html`${targetUser.name} has been added to the game by ${user.name}!`, {declare: true});
+			this.sendDeclare(Chat.html`${targetUser.name} has been added to the game by ${user.name}!`);
 		}
 		this.playerCount++;
 		this.updateRoleString();
@@ -977,7 +975,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			clearTimeout(this.timer);
 			this.timer = null;
 			this.dlAt = 0;
-			if (!silent) this.sendRoom(`The deadline has been cleared.`, {strong: true});
+			if (!silent) this.sendTimestamp(`**The deadline has been cleared.**`);
 			return;
 		}
 		if (minutes < 1 || minutes > 20) return;
@@ -985,30 +983,30 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.dlAt = Date.now() + (minutes * 60000);
 		if (minutes > 3) {
 			this.timer = setTimeout(() => {
-				this.sendRoom(`3 minutes left!`, {strong: true});
+				this.sendTimestamp(`**3 minutes left!**`);
 				this.timer = setTimeout(() => {
-					this.sendRoom(`1 minute left!`, {strong: true});
+					this.sendTimestamp(`**1 minute left!**`);
 					this.timer = setTimeout(() => {
-						this.sendRoom(`Time is up!`, {strong: true});
+						this.sendTimestamp(`**Time is up!**`);
 						this.night();
 					}, 60000);
 				}, 2 * 60000);
 			}, (minutes - 3) * 60000);
 		} else if (minutes > 1) {
 			this.timer = setTimeout(() => {
-				this.sendRoom(`1 minute left!`, {strong: true});
+				this.sendTimestamp(`**1 minute left!**`);
 				this.timer = setTimeout(() => {
-					this.sendRoom(`Time is up!`, {strong: true});
+					this.sendTimestamp(`**Time is up!**`);
 					if (this.phase === 'day') this.night();
 				}, 60000);
 			}, (minutes - 1) * 60000);
 		} else {
 			this.timer = setTimeout(() => {
-				this.sendRoom(`Time is up!`, {strong: true});
+				this.sendTimestamp(`**Time is up!**`);
 				if (this.phase === 'day') this.night();
 			}, minutes * 60000);
 		}
-		this.sendRoom(`The deadline has been set for ${minutes} minute${minutes === 1 ? '' : 's'}.`, {strong: true});
+		this.sendTimestamp(`**The deadline has been set for ${minutes} minute${minutes === 1 ? '' : 's'}.**`);
 	}
 
 	sub(player: string, replacement: string) {
@@ -1047,7 +1045,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			newUser.send(`>${this.room.roomid}\n|notify|You have been substituted in the mafia game for ${oldPlayer.safeName}.`);
 		}
 		if (this.started) this.played.push(newPlayer.id);
-		this.sendRoom(`${oldPlayer.safeName} has been subbed out. ${newPlayer.safeName} has joined the game.`, {declare: true});
+		this.sendDeclare(`${oldPlayer.safeName} has been subbed out. ${newPlayer.safeName} has joined the game.`);
 		this.updatePlayers();
 
 		delete this.playerTable[oldPlayer.id];
@@ -1159,7 +1157,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.phase = 'IDEApicking';
 		this.updatePlayers();
 
-		this.sendRoom(`${this.IDEA.data.name} roles have been distributed. You will have ${IDEA_TIMER / 1000} seconds to make your picks.`, {declare: true});
+		this.sendDeclare(`${this.IDEA.data.name} roles have been distributed. You will have ${IDEA_TIMER / 1000} seconds to make your picks.`);
 		this.IDEA.timer = setTimeout(() => { this.ideaFinalizePicks(); }, IDEA_TIMER);
 
 		return ``;
@@ -1270,9 +1268,9 @@ class MafiaTracker extends Rooms.RoomGame {
 
 		this.phase = 'IDEAlocked';
 		if (randed.length) {
-			this.sendRoom(`${randed.join(', ')} did not pick a role in time and were randomly assigned one.`, {declare: true});
+			this.sendDeclare(`${randed.join(', ')} did not pick a role in time and were randomly assigned one.`);
 		}
-		this.sendRoom(`IDEA picks are locked!`, {declare: true});
+		this.sendDeclare(`IDEA picks are locked!`);
 		this.sendRoom(`To start, use /mafia start, or to reroll use /mafia ideareroll`);
 		this.updatePlayers();
 	}
@@ -1315,13 +1313,20 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.roleString = this.roles.slice().map(r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`).join(', ');
 	}
 
-	// TODO
-	sendRoom(message: string, options: AnyObject = {}) {
-		if (options.uhtml) return this.room.add(`|uhtml|mafia|${message}`).update();
-		if (options.declare) return this.room.add(`|raw|<div class="broadcast-blue">${message}</div>`).update();
-		if (options.strong) return this.room.add(`|raw|<strong>${message}</strong>`).update();
-		if (options.timestamp) return this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|${message}`).update();
-		return this.room.add(message).update();
+	sendRoom(message: string) {
+		this.room.add(message).update();
+	}
+	sendHTML(message: string) {
+		this.room.add(`|uhtml|mafia|${message}`).update();
+	}
+	sendDeclare(message: string) {
+		this.room.add(`|raw|<div class="broadcast-blue">${message}</div>`).update();
+	}
+	sendStrong(message: string) {
+		this.room.add(`|raw|<strong>${message}</strong>`).update();
+	}
+	sendTimestamp(message: string) {
+		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|${message}`).update();
 	}
 
 	roomWindow() {
@@ -1362,9 +1367,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		const from = this.selfEnabled;
 		if (from === setting) return user.sendTo(this.room, `|error|Selflynching is already ${setting ? `set to Self${setting === 'hammer' ? 'hammering' : 'lynching'}` : 'disabled'}.`);
 		if (from) {
-			this.sendRoom(`Self${from === 'hammer' ? 'hammering' : 'lynching'} has been ${setting ? `changed to Self${setting === 'hammer' ? 'hammering' : 'lynching'}` : 'disabled'}.`, {declare: true});
+			this.sendDeclare(`Self${from === 'hammer' ? 'hammering' : 'lynching'} has been ${setting ? `changed to Self${setting === 'hammer' ? 'hammering' : 'lynching'}` : 'disabled'}.`);
 		} else {
-			this.sendRoom(`Self${setting === 'hammer' ? 'hammering' : 'lynching'} has been ${setting ? 'enabled' : 'disabled'}.`, {declare: true});
+			this.sendDeclare(`Self${setting === 'hammer' ? 'hammering' : 'lynching'} has been ${setting ? 'enabled' : 'disabled'}.`);
 		}
 		this.selfEnabled = setting;
 		if (!setting) {
@@ -1377,7 +1382,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	setNoLynch(user: User, setting: boolean) {
 		if (this.enableNL === setting) return user.sendTo(this.room, `|error|No Lynch is already ${setting ? 'enabled' : 'disabled'}.`);
 		this.enableNL = setting;
-		this.sendRoom(`No Lynch has been ${setting ? 'enabled' : 'disabled'}.`, {declare: true});
+		this.sendDeclare(`No Lynch has been ${setting ? 'enabled' : 'disabled'}.`);
 		if (!setting) this.clearLynches('nolynch');
 		this.updatePlayers();
 	}
@@ -1462,7 +1467,7 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	end() {
 		this.ended = true;
-		this.sendRoom(this.roomWindow(), {uhtml: true});
+		this.sendHTML(this.roomWindow());
 		this.updatePlayers();
 		if (this.room.roomid === 'mafia' && this.started) {
 			// Intead of using this.played, which shows players who have subbed out as well
@@ -1888,7 +1893,7 @@ export const commands: ChatCommands = {
 			if (num < game.playerCount) return this.errorReply(`Player cap has to be equal or more than the amount of players in game.`);
 			if (num === game.playerCap) return this.errorReply(`Player cap is already set at ${game.playerCap}.`);
 			game.playerCap = num;
-			game.sendRoom(`Player cap has been set to ${game.playerCap}`, {declare: true});
+			game.sendDeclare(`Player cap has been set to ${game.playerCap}`);
 		},
 		playercaphelp: [`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2. Requires: host % @ # & ~`],
 
@@ -1905,7 +1910,7 @@ export const commands: ChatCommands = {
 			if (game.phase !== 'signups') return user.sendTo(targetRoom, `|error|Signups are already closed.`);
 			if (game.playerCount < 2) return user.sendTo(targetRoom, `|error|You need at least 2 players to start.`);
 			game.phase = 'locked';
-			game.sendRoom(game.roomWindow(), {uhtml: true});
+			game.sendDeclare(game.roomWindow());
 			game.updatePlayers();
 		},
 		closehelp: [`/mafia close - Closes signups for the current game. Requires: host % @ # & ~`],
@@ -1950,7 +1955,7 @@ export const commands: ChatCommands = {
 			if (!['on', 'off'].includes(action)) return this.parse('/help mafia reveal');
 			if ((action === 'off' && game.noReveal) || (action === 'on' && !game.noReveal)) return user.sendTo(targetRoom, `|error|Revealing of roles is already ${game.noReveal ? 'disabled' : 'enabled'}.`);
 			game.noReveal = action === 'off';
-			game.sendRoom(`Revealing of roles has been ${action === 'off' ? 'disabled' : 'enabled'}.`, {declare: true});
+			game.sendDeclare(`Revealing of roles has been ${action === 'off' ? 'disabled' : 'enabled'}.`);
 			game.updatePlayers();
 		},
 		revealhelp: [`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # & ~`],
@@ -2435,11 +2440,11 @@ export const commands: ChatCommands = {
 				if (game.forceLynch) return this.errorReply(`Forcelynching is already enabled.`);
 				game.forceLynch = true;
 				if (game.started) game.resetHammer();
-				game.sendRoom(`Forcelynching has been enabled. Your lynch will start on yourself, and you cannot unlynch!`, {declare: true});
+				game.sendDeclare(`Forcelynching has been enabled. Your lynch will start on yourself, and you cannot unlynch!`);
 			} else if (this.meansNo(target)) {
 				if (!game.forceLynch) return this.errorReply(`Forcelynching is already disabled.`);
 				game.forceLynch = false;
-				game.sendRoom(`Forcelynching has been disabled. You can lynch normally now!`, {declare: true});
+				game.sendDeclare(`Forcelynching has been disabled. You can lynch normally now!`);
 			} else {
 				this.parse('/help mafia forcelynch');
 			}
@@ -2695,7 +2700,7 @@ export const commands: ChatCommands = {
 			}
 			if (cmd.includes('cohost')) {
 				game.cohosts.push(targetUser.id);
-				game.sendRoom(Chat.html`${targetUser.name} has been added as a cohost by ${user.name}`, {declare: true});
+				game.sendDeclare(Chat.html`${targetUser.name} has been added as a cohost by ${user.name}`);
 				for (const conn of targetUser.connections) {
 					void Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
@@ -2714,7 +2719,7 @@ export const commands: ChatCommands = {
 					void Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
 				// tslint:disable-next-line: max-line-length
-				game.sendRoom(Chat.html`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
+				game.sendDeclare(Chat.html`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`);
 				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
 			}
 		},
@@ -2736,7 +2741,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`${target} is not a cohost.`);
 			}
 			game.cohosts.splice(cohostIndex, 1);
-			game.sendRoom(Chat.html`${target} was removed as a cohost by ${user.name}`, {declare: true});
+			game.sendDeclare(Chat.html`${target} was removed as a cohost by ${user.name}`);
 			this.modlog('MAFIAUNCOHOST', target, null, {noalts: true, noip: true});
 		},
 
@@ -2790,7 +2795,7 @@ export const commands: ChatCommands = {
 			let result = null;
 			let dataType = cmd;
 			if (cmd in types) {
-				const type: 'alignments' | 'roles' | 'modifiers' | 'themes' | 'IDEAs' | 'terms' = types[i] as any;
+				const type: 'alignments' | 'roles' | 'modifiers' | 'themes' | 'IDEAs' | 'terms' = types[cmd] as any;
 				const data = MafiaData[type];
 				if (!data) return this.errorReply(`"${type}" is not a valid search area.`); // Should never happen
 				if (!data[id]) return this.errorReply(`"${target} is not a valid ${cmd}."`);
