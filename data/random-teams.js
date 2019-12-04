@@ -264,7 +264,7 @@ class RandomTeams {
 			}
 
 			// Random happiness
-			let happiness = this.random(256);
+			let happiness = (this.gen <= 7 ? this.random(256) : 160);
 
 			// Random shininess
 			let shiny = this.randomChance(1, 1024);
@@ -418,7 +418,7 @@ class RandomTeams {
 			}
 
 			// Random happiness
-			let happiness = this.random(256);
+			let happiness = (this.gen <= 7 ? this.random(256) : 160);
 
 			// Random shininess
 			let shiny = this.randomChance(1, 1024);
