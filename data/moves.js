@@ -3664,7 +3664,7 @@ let BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'disable',
 		onTryHit(target) {
-			if (!target.lastMove || target.lastMove.isZ) {
+			if (!target.lastMove || target.lastMove.isZ || target.lastMove.isMax) {
 				return false;
 			}
 		},
