@@ -25,6 +25,10 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "If this Pokemon is a Cherrim and Sunny Day is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5.",
 	},
+	"forecast": {
+		inherit: true,
+		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm.",
+	},
 	"innerfocus": {
 		inherit: true,
 		shortDesc: "This Pokemon cannot be made to flinch.",
