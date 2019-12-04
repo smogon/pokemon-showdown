@@ -13200,6 +13200,9 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		onTryImmunity(target) {
+			return this.dex.getImmunity('trapped', target);
+		},
 		volatileStatus: 'octolock',
 		effect: {
 			onStart(pokemon, source) {
