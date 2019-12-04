@@ -651,9 +651,9 @@ exports.commands = {
 		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # & ~",
 	],
 };
-exports.roomSettings = (room, user) => ({
+exports.roomSettings = room => ({
 	label: "Blackjack",
-	permission: user.can('editroom', null, room),
+	permission: 'editroom',
 	options: [
 		[`disabled`, room.blackjackDisabled || 'blackjack disable'],
 		[`enabled`, !room.blackjackDisabled || 'blackjack enable'],

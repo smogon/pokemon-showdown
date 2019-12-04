@@ -1761,9 +1761,9 @@ export const commands: ChatCommands = {
 		);
 	},
 };
-const roomSettings: SettingsHandler = (room, user) => ({
+const roomSettings: SettingsHandler = room => ({
 	label: "Tournaments",
-	permission: user.can('gamemanagement', null, room),
+	permission: 'gamemanagement',
 	options: [
 		['%', room.toursEnabled === '%' || 'tournament enable %'],
 		['@', room.toursEnabled === true || 'tournament enable @'],

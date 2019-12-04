@@ -3286,9 +3286,9 @@ const commands = {
 };
 
 /** @type {SettingsHandler} */
-const roomSettings = (room, user) => ({
+const roomSettings = room => ({
 	label: "Mafia",
-	permission: user.can('editroom', null, room),
+	permission: 'editroom',
 	options: [
 		[`disabled`, room.mafiaDisabled || 'mafia disable'],
 		[`enabled`, !room.mafiaDisabled || 'mafia enable'],

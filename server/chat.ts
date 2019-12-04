@@ -50,7 +50,7 @@ export type SettingsHandler = (
 	connection: Connection
 ) => {
 	label: string,
-	permission: boolean,
+	permission: boolean | string,
 	// button label, command | disabled
 	options: [string, string | true][],
 };

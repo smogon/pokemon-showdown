@@ -974,9 +974,9 @@ const commands = {
 	],
 };
 /** @type {SettingsHandler} */
-const roomSettings = (room, user) => ({
+const roomSettings = room => ({
 	label: "UNO",
-	permission: user.can('editroom', null, room),
+	permission: 'editroom',
 	options: [
 		[`disabled`, room.unoDisabled || 'uno disable'],
 		[`enabled`, !room.unoDisabled || 'uno enable'],

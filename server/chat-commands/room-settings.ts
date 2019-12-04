@@ -33,6 +33,7 @@ export const commands: ChatCommands = {
 		let output = Chat.html`<div class="infobox">Room Settings for ${room.title}<br />`;
 		for (const handler of Chat.roomSettings) {
 			const setting = handler(room, user, connection);
+			if (typeof setting.permission === 'string') setting.permission = user.can(setting.permission, null, room);
 
 			output += `<strong>${setting.label}:</strong> <br />`;
 
@@ -1232,7 +1233,7 @@ export const roomSettings: SettingsHandler[] = [
 	},
 	(room, user) => ({
 		label: "Modjoin",
-		permission: room.isPersonal ? user.can('editroom', null, room) : user.can('makeroom'),
+		permission: room.isPersonal ? 'editroom' : 'makeroom',
 		options: [
 			'off',
 			'autoconfirmed',
@@ -1243,41 +1244,40 @@ export const roomSettings: SettingsHandler[] = [
 			[rank, (rank === 'off' ? !room.modjoin : rank === room.modjoin) || `modjoin ${rank || 'off'}`]
 		),
 	}),
-	(room, user) => ({
+	room => ({
 		label: "Language",
-		permission: user.can('editroom', null, room),
+		permission: 'editroom',
 		options: [...Chat.languages].map(([id, name]) =>
 			[name, (id === 'english' ? !room.language : id === room.language) || `roomlanguage ${id}`]
 		),
 	}),
-	(room, user) => ({
+	room => ({
 		label: "Stretch filter",
-		permission: user.can('editroom', null, room),
+		permission: 'editroom',
 		options: [
 			[`off`, !room.filterStretching || 'stretchfilter off'],
 			[`on`, room.filterStretching || 'stretchfilter on'],
 		],
 	}),
-	(room, user) => ({
+	room => ({
 		label: "Caps filter",
-		permission: user.can('editroom', null, room),
+		permission: 'editroom',
 		options: [
 			[`off`, !room.filterCaps || 'capsfilter off'],
 			[`on`, room.filterCaps || 'capsfilter on'],
 		],
 	}),
-	(room, user) => ({
+	room => ({
 		label: "Emoji filter",
-		permission: user.can('editroom', null, room),
+		permission: 'editroom',
 		options: [
 			[`off`, !room.filterEmojis || 'emojifilter off'],
 			[`on`, room.filterEmojis || 'emojifilter on'],
 		],
 	}),
-	(room, user) => ({
+	room => ({
 		label: "Slowchat",
-		permission: room.userCount < SLOWCHAT_USER_REQUIREMENT ? user.can('bypassall') :
-			user.can('editroom', null, room),
+		permission: room.userCount < SLOWCHAT_USER_REQUIREMENT ? 'bypassall' : 'editroom',
 		options: ['off', 5, 10, 20, 30, 60].map(time =>
 			[`${time}`, (time === 'off' ? !room.slowchat : time === room.slowchat) || `slowchat ${time || 'false'}`]
 		),
