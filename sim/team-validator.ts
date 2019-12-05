@@ -1080,7 +1080,9 @@ export class TeamValidator {
 			}
 			if (template.requiredItems && !template.requiredItems.includes(item.name)) {
 				// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
-				problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
+				if (dex.gen <= 7 || !['Multitype', 'RKS System'].includes(template.abilities[0]) || set.ability === template.abilities[0]) {
+					problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
+				}
 			}
 			if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
 				// Keldeo-Resolute
