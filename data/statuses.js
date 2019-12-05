@@ -751,9 +751,7 @@ let BattleStatuses = {
 		},
 		onFlinch: false,
 		onBeforeSwitchOut(pokemon) {
-			if (pokemon.species !== 'Eternatus-Eternamax') {
-				pokemon.removeVolatile('dynamax');
-			}
+			pokemon.removeVolatile('dynamax');
 		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
