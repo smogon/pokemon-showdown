@@ -104,7 +104,8 @@ let BattleFormats = {
 		name: 'Obtainable Formes',
 		desc: "Makes sure in-battle formes only appear in-battle.",
 		// Mostly hardcoded in team-validator.ts
-		onValidateTeam(team) {
+		onValidateTeam(team, format) {
+			if (!this.dex.getRuleTable(format).has('obtainable')) return [];
 			let kyuremCount = 0;
 			let necrozmaDMCount = 0;
 			let necrozmaDWCount = 0;
