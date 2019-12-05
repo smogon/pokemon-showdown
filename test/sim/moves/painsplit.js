@@ -17,6 +17,7 @@ describe('Pain Split', function () {
 		battle.makeChoices('move painsplit', 'move judgment');
 		assert.strictEqual(battle.p2.active[0].hp, (battle.p2.active[0].maxhp + 1) / 2);
 	});
+
 	it('should calculate HP changes against a dynamaxed target properly', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Drifblim', ability: 'unburden', moves: ['painsplit']}]});

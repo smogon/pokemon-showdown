@@ -61,4 +61,12 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices('switch 2', 'switch 2');
 		assert.strictEqual(battle.p2.active[0].status, 'tox');
 	});
+
+	it('should negate abilities that modify move type', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'neutralizinggas', moves: ['laserfocus']}]});
+		battle.setPlayer('p2', {team: [{species: "Sylveon", ability: 'pixilate', moves: ['hypervoice']}]});
+		battle.makeChoices('move laserfocus', 'move hypervoice');
+		assert.fullHP(battle.p1.active[0]);
+	});
 });
