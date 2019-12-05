@@ -93,6 +93,11 @@ let BattleFormats = {
 					}
 					kyuremCount++;
 				}
+				if (set.species === 'Keldeo-Resolute') {
+					if (!set.moves.includes('secretsword')) {
+						return ['Keldeo-Resolute needs to have the move Secret Sword.'];
+					}
+				}
 				if (set.species === 'Necrozma-Dusk-Mane') {
 					if (necrozmaDMCount > 0) {
 						return ['You cannot have more than one Necrozma-Dusk-Mane.'];

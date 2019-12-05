@@ -1084,10 +1084,6 @@ export class TeamValidator {
 					problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
 				}
 			}
-			if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
-				// Keldeo-Resolute
-				problems.push(`${name} needs to have the move ${template.requiredMove}.`);
-			}
 
 			// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
 			// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally).
