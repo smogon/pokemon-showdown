@@ -7586,9 +7586,11 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	cramorantgulping: {
+		requiredAbility: "Gulp Missile",
 		battleOnly: true,
 	},
 	cramorantgorging: {
+		requiredAbility: "Gulp Missile",
 		battleOnly: true,
 	},
 	arrokuda: {
@@ -7712,6 +7714,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	eiscuenoice: {
+		requiredAbility: "Ice Face",
 		battleOnly: true,
 	},
 	indeedee: {
@@ -7730,6 +7733,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	morpekohangry: {
+		requiredAbility: "Hunger Switch",
 		battleOnly: true,
 	},
 	cufant: {
