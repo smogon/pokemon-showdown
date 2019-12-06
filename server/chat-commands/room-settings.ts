@@ -1233,7 +1233,7 @@ export const roomSettings: SettingsHandler[] = [
 	},
 	(room, user) => ({
 		label: "Modjoin",
-		permission: room.isPersonal ? 'editroom' : 'makeroom',
+		permission: room.isPersonal ? user.can('editroom', null, room) : user.can('makeroom'),
 		options: [
 			'off',
 			'autoconfirmed',

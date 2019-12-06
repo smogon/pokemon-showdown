@@ -353,9 +353,9 @@ const commands = {
 	],
 };
 /** @type {SettingsHandler} */
-const roomSettings = (room, user) => ({
+const roomSettings = room => ({
 	label: "Hangman",
-	permission: user.can('editroom', null, room),
+	permission: 'editroom',
 	options: [
 		[`disabled`, room.hangmanDisabled || 'hangman disable'],
 		[`enabled`, !room.hangmanDisabled || 'hangman enable'],
