@@ -3285,9 +3285,20 @@ const commands = {
 	},
 };
 
+/** @type {SettingsHandler} */
+const roomSettings = room => ({
+	label: "Mafia",
+	permission: 'editroom',
+	options: [
+		[`disabled`, room.mafiaDisabled || 'mafia disable'],
+		[`enabled`, !room.mafiaDisabled || 'mafia enable'],
+	],
+});
+
 module.exports = {
 	commands,
 	pages,
+	roomSettings,
 };
 
 process.nextTick(() => {
