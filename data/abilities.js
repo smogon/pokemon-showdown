@@ -1373,10 +1373,10 @@ let BattleAbilities = {
 				}
 			}
 		},
-		onAfterMove(source, target, move) {
-			if (!['surf', 'dive'].includes(move.id) || source.volatiles['dive'] || source.speciesid !== 'cramorant' || source.transformed) return;
-			const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
-			source.formeChange(forme, move);
+		onAfterMove(pokemon, target, move) {
+			if (pokemon.template.species !== 'Cramorant' || pokemon.transformed || !['dive', 'surf'].includes(move.id) || pokemon.volatiles['dive']) return;
+			const forme = pokemon.hp <= pokemon.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
+			pokemon.formeChange(forme, move);
 		},
 		id: "gulpmissile",
 		name: "Gulp Missile",
