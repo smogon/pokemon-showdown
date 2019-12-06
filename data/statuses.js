@@ -740,7 +740,8 @@ let BattleStatuses = {
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
-		onSwitchIn(pokemon) { // Special for Eternatus-Eternamax
+		onSwitchIn(pokemon) {
+			// Special case for Eternamax
 			if (pokemon.species !== 'Eternatus-Eternamax') return;
 			pokemon.removeVolatile('substitute');
 			this.effectData.duration = 0;
