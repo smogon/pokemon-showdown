@@ -743,15 +743,12 @@ let BattleStatuses = {
 		onSwitchIn(pokemon) { // Putting Eternamax in onSwitchIn so it shows up everytime Eternatus switches in.
 			if (pokemon.species !== 'Eternatus-Eternamax') return; // Special for Eternatus' Eternamax forme
 			pokemon.removeVolatile('substitute');
-			this.add('-start', pokemon, 'Eternamax');
+			//this.add('-start', pokemon, 'Eternamax');
 			this.effectData.duration = 0;
-			pokemon.maxhp = Math.floor(pokemon.maxhp * 2);
-			pokemon.hp = Math.floor(pokemon.hp * 2);
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		onFlinch: false,
 		onBeforeSwitchOut(pokemon) {
-			pokemon.removeVolatile('dynamax');
+			if(pokemon.species !== 'Eternatus-Eternamax') pokemon.removeVolatile('dynamax');
 		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
@@ -759,7 +756,7 @@ let BattleStatuses = {
 			return null;
 		},
 		onEnd(pokemon) {
-			if (pokemon.species !== 'Eternatus-Eternamax') this.add('-end', pokemon, 'Dynamax');
+			this.add('-end', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
@@ -781,6 +778,8 @@ let BattleStatuses = {
 		onStart(pokemon) {
 			if (pokemon.transformed) return;
 			pokemon.addVolatile('dynamax');
+			pokemon.maxhp = Math.floor(pokemon.maxhp * 2);
+			pokemon.hp = Math.floor(pokemon.hp * 2);
 		},
 	},
 	arceus: {
