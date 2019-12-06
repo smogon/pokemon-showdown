@@ -740,18 +740,15 @@ let BattleStatuses = {
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
-		onSwitchIn(pokemon) { // Putting Eternamax in onSwitchIn so it shows up everytime Eternatus switches in.
-			if (pokemon.species !== 'Eternatus-Eternamax') return; // Special for Eternatus' Eternamax forme
+		onSwitchIn(pokemon) {
+			// Special case for Eternamax
+			if (pokemon.species !== 'Eternatus-Eternamax') return;
 			pokemon.removeVolatile('substitute');
-			this.add('-start', pokemon, 'Eternamax');
 			this.effectData.duration = 0;
-			pokemon.maxhp = Math.floor(pokemon.maxhp * 2);
-			pokemon.hp = Math.floor(pokemon.hp * 2);
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		onFlinch: false,
 		onBeforeSwitchOut(pokemon) {
-			pokemon.removeVolatile('dynamax');
+			if (pokemon.species !== 'Eternatus-Eternamax') pokemon.removeVolatile('dynamax');
 		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
@@ -759,7 +756,7 @@ let BattleStatuses = {
 			return null;
 		},
 		onEnd(pokemon) {
-			if (pokemon.species !== 'Eternatus-Eternamax') this.add('-end', pokemon, 'Dynamax');
+			this.add('-end', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
 			if (pokemon.species === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
@@ -774,15 +771,6 @@ let BattleStatuses = {
 	// but their formes are specified to be their corresponding type
 	// in the Pokedex, so that needs to be overridden.
 	// This is mainly relevant for Hackmons Cup and Balanced Hackmons.
-	eternatuseternamax: {
-		name: 'Eternatus-Eternamax',
-		id: 'eternatuseternamax',
-		num: 890,
-		onStart(pokemon) {
-			if (pokemon.transformed) return;
-			pokemon.addVolatile('dynamax');
-		},
-	},
 	arceus: {
 		name: 'Arceus',
 		id: 'arceus',
@@ -817,6 +805,17 @@ let BattleStatuses = {
 				}
 			}
 			return [type];
+		},
+	},
+	eternatuseternamax: {
+		name: 'Eternatus-Eternamax',
+		id: 'eternatuseternamax',
+		num: 890,
+		onStart(pokemon) {
+			if (pokemon.transformed) return;
+			pokemon.addVolatile('dynamax');
+			pokemon.maxhp = Math.floor(pokemon.maxhp * 2);
+			pokemon.hp = Math.floor(pokemon.hp * 2);
 		},
 	},
 };
