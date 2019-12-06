@@ -1374,7 +1374,7 @@ let BattleAbilities = {
 			}
 		},
 		onAfterMove(source, target, move) {
-			if (!['surf', 'dive'].includes(move.id) || source.volatiles['dive'] || source.speciesid !== 'cramorant' || source.transformed) return;
+			if (!['surf', 'dive'].includes(move.id) || source.volatiles['dive'] || source.speciesid !== 'cramorant' || ['cramorantgulping', 'cramorantgorging'].includes(source.template.speciesid) || source.transformed) return;
 			const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
 			source.formeChange(forme, move);
 		},
