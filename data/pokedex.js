@@ -14372,8 +14372,7 @@ let BattlePokedex = {
 		color: "Blue",
 		prevo: "clobbopus",
 		evoType: "levelMove",
-		// TODO: Figure out evolution move
-		evoMove: "",
+		evoMove: "Taunt",
 		eggGroups: ["Water 1", "Human-Like"],
 	},
 	sinistea: {
@@ -14628,9 +14627,8 @@ let BattlePokedex = {
 		weightkg: 0.5,
 		color: "White",
 		prevo: "milcery",
-		evoType: "levelHold",
-		// TODO
-		evoItem: "cloversweet",
+		evoType: "other",
+		evoCondition: "spin while holding a Sweet",
 		eggGroups: ["Fairy", "Amorphous"],
 		otherFormes: ["alcremiegmax"],
 		otherForms: ["alcremierubycream", "alcremiematcha", "alcremiemint", "alcremielemon", "alcremiesalted", "alcremierubyswirl", "alcremiecaramel", "alcremierainbow"],
