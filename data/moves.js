@@ -7311,7 +7311,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		shortDesc: "Foe(s): -1 evasion. BP scales with base move's BP.",
+		shortDesc: "Cures team's statuses. BP scales with base move's BP.",
 		id: "gmaxsweetness",
 		isNonstandard: "Custom",
 		name: "G-Max Sweetness",
