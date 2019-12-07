@@ -638,7 +638,7 @@ let Formats = [
 		mod: 'gen8',
 		team: 'randomHC',
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
-	},	
+	},
 	{
 		name: "[Gen 7] Doubles Hackmons Cup",
 
