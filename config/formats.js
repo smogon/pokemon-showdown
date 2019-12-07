@@ -688,6 +688,15 @@ let Formats = [
 		ruleset: ['Obtainable', 'Standard GBU'],
 	},
 	{
+		name: "[Gen 7] Hackmons Cup",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item.`,
+
+		mod: 'gen7',
+		team: 'randomHC',
+		searchShow: false,
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "[Gen 7] Super Staff Bros Brawl",
 		desc: "Super Staff Bros returns for another round! Battle with a random team of pokemon created by the sim staff.",
 		threads: [
