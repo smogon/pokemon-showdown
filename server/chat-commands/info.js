@@ -585,7 +585,7 @@ const commands = {
 								evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
 								break;
 							case 'other':
-								evos.push(`${evo.name} (${condition})`);
+								evos.push(`${evo.name} (${evo.evoCondition})`);
 								break;
 							case 'trade':
 								evos.push(`${evo.name} (trade)`);
