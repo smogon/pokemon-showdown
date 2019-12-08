@@ -4706,7 +4706,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	rotom: {
-		randomBattleMoves: ["nastyplot", "shadowball", "storedpower", "thunderbolt"],
+		randomBattleMoves: ["nastyplot", "shadowball", "thunderbolt", "voltswitch", "willowisp"],
 		eventPokemon: [
 			{"generation": 5, "level": 10, "nature": "Naughty", "moves": ["uproar", "astonish", "trick", "thundershock"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 10, "nature": "Quirky", "moves": ["shockwave", "astonish", "trick", "thunderwave"], "pokeball": "cherishball"},
@@ -5455,7 +5455,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	runerigus: {
-		randomBattleMoves: ["earthquake", "haze", "nightshade", "stealthrock", "toxicspikes", "willowisp"],
+		randomBattleMoves: ["bodypress", "earthquake", "haze", "stealthrock", "toxicspikes", "willowisp"],
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -6191,7 +6191,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	diggersby: {
-		randomBattleMoves: ["bodyslam", "earthquake", "swordsdance", "uturn", "wildcharge"],
+		randomBattleMoves: ["earthquake", "quickattack", "swordsdance", "uturn", "wildcharge"],
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -6791,11 +6791,11 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	wishiwashi: {
-		randomBattleMoves: ["earthquake", "hydropump", "icebeam", "scald", "uturn"],
 		tier: "UU",
 		doublesTier: "New",
 	},
 	wishiwashischool: {
+		randomBattleMoves: ["earthquake", "hydropump", "icebeam", "scald", "uturn"],
 		requiredAbility: 'Schooling',
 		battleOnly: true,
 	},
@@ -7742,12 +7742,12 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	copperajah: {
-		randomBattleMoves: ["curse", "earthquake", "heatcrash", "heavyslam", "rest", "stealthrock"],
+		randomBattleMoves: ["earthquake", "ironhead", "playrough", "rockslide", "stealthrock"],
 		tier: "UU",
 		doublesTier: "New",
 	},
 	copperajahgmax: {
-		randomBattleMoves: ["earthquake", "ironhead", "playrough", "rockslide", "stealthrock"],
+		randomBattleMoves: ["earthquake", "heatcrash", "heavyslam", "powerwhip", "stoneedge"],
 		isGigantamax: "G-Max Steelsurge",
 	},
 	dracozolt: {
