@@ -7332,31 +7332,6 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"gmaxterror": {
-		num: 1000,
-		accuracy: true,
-		basePower: 10,
-		category: "Physical",
-		shortDesc: "Traps foe(s). BP scales with base move's BP.",
-		id: "gmaxterror",
-		isNonstandard: "Custom",
-		name: "G-Max Terror",
-		pp: 10,
-		priority: 0,
-		flags: {},
-		isMax: "Gengar",
-		self: {
-			onHit(source) {
-				for (const pokemon of source.side.foe.active) {
-					pokemon.addVolatile('trapped', source, null, 'trapper');
-				}
-			},
-		},
-		secondary: null,
-		target: "adjacentFoe",
-		type: "Ghost",
-		contestType: "Cool",
-	},
 	"gmaxtartness": {
 		num: 1000,
 		accuracy: true,
@@ -7380,6 +7355,31 @@ let BattleMovedex = {
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Grass",
+		contestType: "Cool",
+	},
+	"gmaxterror": {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		shortDesc: "Traps foe(s). BP scales with base move's BP.",
+		id: "gmaxterror",
+		isNonstandard: "Custom",
+		name: "G-Max Terror",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		isMax: "Gengar",
+		self: {
+			onHit(source) {
+				for (const pokemon of source.side.foe.active) {
+					pokemon.addVolatile('trapped', source, null, 'trapper');
+				}
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Ghost",
 		contestType: "Cool",
 	},
 	"gmaxvolcalith": {
