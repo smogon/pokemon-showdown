@@ -13525,7 +13525,7 @@ let BattleMovedex = {
 			let result = false;
 			let message = false;
 			for (const pokemon of this.getAllActive()) {
-				if (!this.runEvent('Accuracy', pokemon, source, move, true)) {
+				if (!this.runEvent('Invulnerability', pokemon, source, move)) {
 					this.add('-miss', source, pokemon);
 					result = true;
 				} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
@@ -19397,11 +19397,16 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1},
-		onTryMove(pokemon, target, move) {
-			for (const side of this.sides) {
-				for (const active of side.active) {
+		onHitField(target, source, move) {
+			let result = false;
+			for (const active of this.getAllActive()) {
+				if (!this.runEvent('Invulnerability', active, source, move)) {
+					this.add('-miss', source, active);
+					result = true;
+				} else {
 					let item = active.getItem();
 					if (active.hp && item.isBerry) {
+						// Not using `eatItem` as we need to bypass Unnerve.
 						this.add('-enditem', target, item.name, '[from] eat', '[move] Teatime', '[of] ' + active);
 						if (this.singleEvent('Eat', item, null, active, null, null)) {
 							this.runEvent('EatItem', active, null, null, item);
@@ -19409,12 +19414,14 @@ let BattleMovedex = {
 							if (item.id === 'leppaberry') active.staleness = 'external';
 						}
 						if (item.onEat) active.ateBerry = true;
+						result = true;
 					}
 				}
 			}
+			return result;
 		},
 		secondary: null,
-		target: "any",
+		target: "all",
 		type: "Normal",
 	},
 	"technoblast": {
