@@ -1106,7 +1106,7 @@ class RandomTeams {
 			let rejectAbility;
 			do {
 				rejectAbility = false;
-				if (['Inner Focus', 'Flare Boost', 'Liquid Voice', 'Misty Surge', 'Quick Feet', 'Weak Armor'].includes(ability)) {
+				if (['Inner Focus', 'Flare Boost', 'Liquid Voice', 'Misty Surge', 'Quick Feet', 'Speed Boost', 'Weak Armor'].includes(ability)) {
 					rejectAbility = true;
 				} else if (counterAbilities.includes(ability)) {
 					// Adaptability, Contrary, Iron Fist, Skill Link, Strong Jaw
@@ -1199,7 +1199,7 @@ class RandomTeams {
 				}
 			} while (rejectAbility);
 
-			if (template.species === 'Copperajah') {
+			if (template.species === 'Copperajah-Gmax') {
 				ability = 'Heavy Metal';
 			} else if (abilities.includes('Guts') && (hasMove['facade'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
 				ability = 'Guts';
@@ -1288,28 +1288,28 @@ class RandomTeams {
 			item = 'Chople Berry';
 		} else if (hasMove['substitute']) {
 			item = counter.damagingMoves.length > 2 && !!counter['drain'] ? 'Life Orb' : 'Leftovers';
-		} else if (this.dex.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate') {
-			item = 'Air Balloon';
 		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
-		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.spd >= 50 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 235) {
-			item = 'Assault Vest';
-		} else if (isLead && !['Disguise', 'Regenerator', 'Sturdy'].includes(ability) && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) {
+		} else if (isLead && !['Disguise', 'Sturdy'].includes(ability) && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 255) {
 			item = 'Focus Sash';
-		} else if (this.dex.getEffectiveness('Rock', template) >= 2) {
+		} else if (this.dex.getEffectiveness('Rock', template) >= 2 || hasMove['courtchange']) {
 			item = 'Heavy-Duty Boots';
+		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 235) {
+			item = 'Assault Vest';
 
-		// This is the "REALLY can't think of a good item" cutoff
-		} else if (counter.damagingMoves.length >= 4) {
-			item = (!counter['Dragon'] && !counter['Dark'] && !counter['Normal']) ? 'Expert Belt' : 'Life Orb';
+		// Usual items don't fit
+		} else if (this.dex.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate') {
+			item = 'Air Balloon';
 		} else if (hasMove['stickyweb'] && ability === 'Sturdy') {
 			item = 'Mental Herb';
 		} else if (ability === 'Super Luck') {
 			item = 'Scope Lens';
 		} else if (hasMove['clangoroussoul'] || hasMove['boomburst'] && !!counter['speedsetup']) {
 			item = 'Throat Spray';
+		} else if (counter.damagingMoves.length >= 4 && !counter['Dragon'] && !counter['Dark'] && !counter['Normal']) {
+			item = 'Expert Belt';
 		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['coil'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['uturn']) {
-			if (!!counter['speedsetup'] || hasMove['trickroom'] || template.baseStats.spe > 40 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) item = 'Life Orb';
+			if (!!counter['speedsetup'] || hasMove['trickroom'] || template.baseStats.spe > 40 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 255) item = 'Life Orb';
 		}
 
 		// For Trick / Switcheroo
@@ -1351,8 +1351,6 @@ class RandomTeams {
 			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored.
 			let baseStats = template.baseStats;
-			// If Wishiwashi, use the school-forme's much higher stats
-			if (template.baseSpecies === 'Wishiwashi') baseStats = this.dex.getTemplate('wishiwashischool').baseStats;
 
 			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
 			// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite
