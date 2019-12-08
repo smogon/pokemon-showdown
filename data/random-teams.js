@@ -344,6 +344,10 @@ class RandomTeams {
 		for (let i = 0; i < 6; i++) {
 			// Choose forme
 			let template = this.dex.getTemplate(random6[i]);
+			// Hacking formes is no longer possible
+			if (this.gen > 7 && (template.battleOnly || (template.requiredItems && template.learnset))) {
+				template = this.dex.getTemplate(template.baseSpecies);
+			}
 
 			// Random unique item
 			let item = '';
