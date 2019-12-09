@@ -5557,7 +5557,7 @@ let BattleMovedex = {
 				this.attrLastMove('[still]');
 				return null;
 			}
-		}
+		},
 	},
 	"flail": {
 		num: 175,
@@ -8033,7 +8033,7 @@ let BattleMovedex = {
 				this.attrLastMove('[still]');
 				return null;
 			}
-		}
+		},
 	},
 	"gunkshot": {
 		num: 441,
@@ -9114,7 +9114,7 @@ let BattleMovedex = {
 				this.attrLastMove('[still]');
 				return null;
 			}
-		}
+		},
 	},
 	"hornleech": {
 		num: 532,
@@ -16535,7 +16535,7 @@ let BattleMovedex = {
 				this.attrLastMove('[still]');
 				return null;
 			}
-		}
+		},
 	},
 	"shellsmash": {
 		num: 504,
