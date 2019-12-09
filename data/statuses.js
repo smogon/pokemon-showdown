@@ -247,6 +247,8 @@ let BattleStatuses = {
 		onResidual(pokemon) {
 			const source = this.effectData.source;
 			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
+				// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
+				if (['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectData.sourceEffect.id)) return;
 				delete pokemon.volatiles['partiallytrapped'];
 				this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]', '[silent]');
 				return;
