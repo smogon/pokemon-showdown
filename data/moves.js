@@ -7860,14 +7860,15 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day, raises the user's Attack and Special Attack by 2 stages.",
+		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages. If the user is holding Utility Umbrella, this move will only raise the user's Attack and Special Attack by 1 stage, even if the weather is Sunny Day or Desolate Land.",
 		shortDesc: "Raises user's Attack and Sp. Atk by 1; 2 in Sun.",
 		id: "growth",
 		name: "Growth",
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		onModifyMove(move) {
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) move.boosts = {atk: 2, spa: 2};
 		},
 		boosts: {
@@ -9147,7 +9148,7 @@ let BattleMovedex = {
 		accuracy: 70,
 		basePower: 110,
 		category: "Special",
-		desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
+		desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
 		shortDesc: "30% chance to confuse target. Can't miss in rain.",
 		id: "hurricane",
 		isViable: true,
@@ -9155,7 +9156,8 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, distance: 1},
-		onModifyMove(move) {
+		onModifyMove(move, pokemon, target) {
+			if (target.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				move.accuracy = true;
 			} else if (this.field.isWeather(['sunnyday', 'desolateland'])) {
@@ -19722,7 +19724,7 @@ let BattleMovedex = {
 		accuracy: 70,
 		basePower: 110,
 		category: "Special",
-		desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
+		desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
 		shortDesc: "30% chance to paralyze. Can't miss in rain.",
 		id: "thunder",
 		isViable: true,
@@ -19730,7 +19732,8 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onModifyMove(move) {
+		onModifyMove(move, pokemon, target) {
+			if (target.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				move.accuracy = true;
 			} else if (this.field.isWeather(['sunnyday', 'desolateland'])) {

@@ -353,6 +353,10 @@ let BattleMovedex = {
 			},
 		},
 	},
+	growth: {
+		inherit: true,
+		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages.",
+	},
 	guardianofalola: {
 		inherit: true,
 		isNonstandard: null,
@@ -384,6 +388,10 @@ let BattleMovedex = {
 	heavyslam: {
 		inherit: true,
 		onTryHit() {},
+	},
+	hurricane: {
+		inherit: true,
+		desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
 	},
 	hiddenpower: {
 		inherit: true,
@@ -1001,6 +1009,10 @@ let BattleMovedex = {
 	trumpcard: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	thunder: {
+		inherit: true,
+		desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
 	},
 	twineedle: {
 		inherit: true,

@@ -1520,11 +1520,12 @@ let BattleAbilities = {
 		num: 55,
 	},
 	"hydration": {
-		desc: "This Pokemon has its major status condition cured at the end of each turn if Rain Dance is active.",
+		desc: "This Pokemon has its major status condition cured at the end of each turn if Rain Dance is active. If this Pokemon is holding Utility Umbrella, its major status condition will not be cured.",
 		shortDesc: "This Pokemon has its status cured at the end of each turn if Rain Dance is active.",
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (pokemon.status && this.field.isWeather(['raindance', 'primordialsea'])) {
 				this.debug('hydration');
 				this.add('-activate', pokemon, 'ability: Hydration');
@@ -3651,15 +3652,17 @@ let BattleAbilities = {
 		num: 117,
 	},
 	"solarpower": {
-		desc: "If Sunny Day is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn.",
+		desc: "If Sunny Day is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its Special Attack remains the same and it does not lose any HP.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Sp. Atk is 1.5x; loses 1/8 max HP per turn.",
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
 		},
 		onWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
 				this.damage(target.baseMaxhp / 8, target, target);
 			}

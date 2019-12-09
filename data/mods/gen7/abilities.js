@@ -29,6 +29,10 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm.",
 	},
+	"hydration": {
+		inherit: true,
+		desc: "This Pokemon has its major status condition cured at the end of each turn if Rain Dance is active.",
+	},
 	"innerfocus": {
 		inherit: true,
 		shortDesc: "This Pokemon cannot be made to flinch.",
@@ -126,6 +130,10 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves.",
 		shortDesc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves.",
+	},
+	"solarpower": {
+		inherit: true,
+		desc: "If Sunny Day is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn.",
 	},
 	"swiftswim": {
 		inherit: true,

@@ -733,7 +733,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Raises the user's Special Attack by 1 stage.",
 		shortDesc: "Raises the user's Sp. Atk by 1.",
-		onModifyMove() { },
+		onModifyMove() {},
 		boosts: {
 			spa: 1,
 		},
