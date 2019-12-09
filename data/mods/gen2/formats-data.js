@@ -3081,7 +3081,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	forretress: { // Spikes
-		randomSet3: {
+		randomSet1: {
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "spikes", baseMove2: "explosion",
