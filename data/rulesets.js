@@ -118,12 +118,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable Moves',
 		desc: "Makes sure moves are learnable by the species.",
-		banlist: [
-			// Leaf Blade: Gen 6+ Nuzleaf level-up
-			// Sucker Punch: Gen 4 Shiftry tutor
-			'Shiftry + Leaf Blade + Sucker Punch',
-		],
-		// Mostly hardcoded in team-validator.ts
+		// Hardcoded in team-validator.ts
 	},
 	obtainableabilities: {
 		effectType: 'ValidatorRule',
