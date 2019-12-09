@@ -5551,6 +5551,13 @@ let BattleMovedex = {
 		zMovePower: 180,
 		gmaxPower: 130,
 		contestType: "Tough",
+		onTryHit(target, source, move) {
+			if (target.volatiles['dynamax']) {
+				this.add('-fail', source, 'move: Fissure', '[from] Dynamax');
+				this.attrLastMove('[still]');
+				return null;
+			}
+		}
 	},
 	"flail": {
 		num: 175,
@@ -8020,6 +8027,13 @@ let BattleMovedex = {
 		zMovePower: 180,
 		gmaxPower: 130,
 		contestType: "Cool",
+		onTryHit(target, source, move) {
+			if (target.volatiles['dynamax']) {
+				this.add('-fail', source, 'move: Guillotine', '[from] Dynamax');
+				this.attrLastMove('[still]');
+				return null;
+			}
+		}
 	},
 	"gunkshot": {
 		num: 441,
@@ -8575,7 +8589,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
 		onTryHit(target, source, move) {
 			if (target.volatiles['dynamax']) {
-				this.add('-fail', source, 'move: Grass Knot', '[from] Dynamax');
+				this.add('-fail', source, 'move: Heavy Slam', '[from] Dynamax');
 				this.attrLastMove('[still]');
 				return null;
 			}
@@ -9094,6 +9108,13 @@ let BattleMovedex = {
 		zMovePower: 180,
 		gmaxPower: 130,
 		contestType: "Cool",
+		onTryHit(target, source, move) {
+			if (target.volatiles['dynamax']) {
+				this.add('-fail', source, 'move: Horn Drill', '[from] Dynamax');
+				this.attrLastMove('[still]');
+				return null;
+			}
+		}
 	},
 	"hornleech": {
 		num: 532,
@@ -16508,6 +16529,13 @@ let BattleMovedex = {
 		zMovePower: 180,
 		gmaxPower: 130,
 		contestType: "Beautiful",
+		onTryHit(target, source, move) {
+			if (target.volatiles['dynamax']) {
+				this.add('-fail', source, 'move: Sheer Cold', '[from] Dynamax');
+				this.attrLastMove('[still]');
+				return null;
+			}
+		}
 	},
 	"shellsmash": {
 		num: 504,
