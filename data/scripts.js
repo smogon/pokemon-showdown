@@ -430,7 +430,7 @@ let BattleScripts = {
 					if (move.ohko === 'Ice' && this.gen >= 7 && !pokemon.hasType('Ice')) {
 						accuracy = 20;
 					}
-					if (pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
+					if (!target.volatiles['dynamax'] && pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
 						accuracy += (pokemon.level - target.level);
 					} else {
 						this.add('-immune', target, '[ohko]');
