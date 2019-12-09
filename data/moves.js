@@ -829,7 +829,7 @@ let BattleMovedex = {
 			},
 		},
 		onTryMove(pokemon, target, move) {
-			if (pokemon.template.baseSpecies === 'Morpeko' || move.hasBounced) {
+			if (pokemon.template.baseSpecies === 'Morpeko') {
 				return;
 			}
 			this.add('-fail', pokemon, 'move: Aura Wheel');
@@ -837,10 +837,10 @@ let BattleMovedex = {
 			return null;
 		},
 		onModifyMove(move, pokemon) {
-			if (pokemon.template.species === 'Morpeko-Hangry' && move.type !== 'Dark') {
-				move.type = "Dark";
-			} else if (pokemon.template.species === 'Morpeko' && move.type !== 'Electric') {
-				move.type = "Electric";
+			if (pokemon.template.species === 'Morpeko-Hangry') {
+				move.type = 'Dark';
+			} else {
+				move.type = 'Electric';
 			}
 		},
 		target: "normal",
