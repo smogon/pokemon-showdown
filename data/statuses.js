@@ -754,7 +754,7 @@ let BattleStatuses = {
 		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
-			this.add('-fail', pokemon, 'Dynamax');
+			this.add('-block', pokemon, 'Dynamax');
 			return null;
 		},
 		onEnd(pokemon) {

@@ -8509,9 +8509,9 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		onTryHit(target, source, move) {
+		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
-				this.add('-fail', source, 'move: Heat Crash', '[from] Dynamax');
+				this.add('-fail', pokemon, 'Dynamax');
 				this.attrLastMove('[still]');
 				return null;
 			}
@@ -8574,9 +8574,9 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		onTryHit(target, source, move) {
+		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
-				this.add('-fail', source, 'move: Grass Knot', '[from] Dynamax');
+				this.add('-fail', pokemon, 'Dynamax');
 				this.attrLastMove('[still]');
 				return null;
 			}
@@ -10622,9 +10622,9 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryHit(target, source, move) {
+		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
-				this.add('-fail', source, 'move: Low Kick', '[from] Dynamax');
+				this.add('-fail', pokemon, 'Dynamax');
 				this.attrLastMove('[still]');
 				return null;
 			}
