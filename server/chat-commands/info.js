@@ -1972,7 +1972,7 @@ const commands = {
 
 		if (['8', 'gen8', 'eight', 'ss', 'swsh'].includes(generation)) {
 			generation = 'ss';
-		if (['7', 'gen7', 'seven', 'sm', 'sumo', 'usm', 'usum'].includes(generation)) {
+		} else if (['7', 'gen7', 'seven', 'sm', 'sumo', 'usm', 'usum'].includes(generation)) {
 			generation = 'sm';
 			genNumber = 7;
 		} else if (['6', 'gen6', 'oras', 'six', 'xy'].includes(generation)) {
