@@ -5183,7 +5183,7 @@ let BattleItems = {
 		},
 		onUpdate(pokemon) {
 			if (this.field.getPseudoWeather('trickroom') && pokemon.useItem()) {
-				this.boost({spe: -1});
+				this.boost({spe: -1}, pokemon, pokemon);
 			}
 		},
 		num: 1122,
