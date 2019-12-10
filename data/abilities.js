@@ -58,8 +58,8 @@ let BattleAbilities = {
 	"aerilate": {
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.2x power.",
-		onModifyMovePriority: -1,
-		onModifyMove(move, pokemon) {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
 			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Flying';
 				move.aerilateBoosted = true;
@@ -1253,8 +1253,8 @@ let BattleAbilities = {
 	"galvanize": {
 		desc: "This Pokemon's Normal-type moves become Electric-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power.",
-		onModifyMovePriority: -1,
-		onModifyMove(move, pokemon) {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
 			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Electric';
 				move.galvanizeBoosted = true;
@@ -1966,8 +1966,8 @@ let BattleAbilities = {
 	"liquidvoice": {
 		desc: "This Pokemon's sound-based moves become Water-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's sound-based moves become Water type.",
-		onModifyMovePriority: -1,
-		onModifyMove(move) {
+		onModifyTypePriority: -1,
+		onModifyType(move) {
 			if (move.flags['sound']) {
 				move.type = 'Water';
 			}
@@ -2480,8 +2480,8 @@ let BattleAbilities = {
 	"normalize": {
 		desc: "This Pokemon's moves are changed to be Normal type and have their power multiplied by 1.2. This effect comes before other effects that change a move's type.",
 		shortDesc: "This Pokemon's moves are changed to be Normal type and have 1.2x power.",
-		onModifyMovePriority: 1,
-		onModifyMove(move, pokemon) {
+		onModifyTypePriority: 1,
+		onModifyType(move, pokemon) {
 			if (!(move.isZ && move.category !== 'Status') && !['hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'weatherball'].includes(move.id)) {
 				move.type = 'Normal';
 				move.normalizeBoosted = true;
@@ -2710,8 +2710,8 @@ let BattleAbilities = {
 	"pixilate": {
 		desc: "This Pokemon's Normal-type moves become Fairy-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.2x power.",
-		onModifyMovePriority: -1,
-		onModifyMove(move, pokemon) {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
 			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Fairy';
 				move.pixilateBoosted = true;
@@ -3079,8 +3079,8 @@ let BattleAbilities = {
 	"refrigerate": {
 		desc: "This Pokemon's Normal-type moves become Ice-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.2x power.",
-		onModifyMovePriority: -1,
-		onModifyMove(move, pokemon) {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
 			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Ice';
 				move.refrigerateBoosted = true;
