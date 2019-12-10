@@ -264,7 +264,7 @@ class RandomTeams {
 			}
 
 			// Random happiness
-			let happiness = this.random(256);
+			let happiness = (this.gen <= 7 ? this.random(256) : 160);
 
 			// Random shininess
 			let shiny = this.randomChance(1, 1024);
@@ -344,6 +344,10 @@ class RandomTeams {
 		for (let i = 0; i < 6; i++) {
 			// Choose forme
 			let template = this.dex.getTemplate(random6[i]);
+			// Hacking formes is no longer possible
+			if (this.gen > 7 && (template.battleOnly || (template.requiredItems && template.learnset))) {
+				template = this.dex.getTemplate(template.baseSpecies);
+			}
 
 			// Random unique item
 			let item = '';
@@ -418,7 +422,7 @@ class RandomTeams {
 			}
 
 			// Random happiness
-			let happiness = this.random(256);
+			let happiness = (this.gen <= 7 ? this.random(256) : 160);
 
 			// Random shininess
 			let shiny = this.randomChance(1, 1024);
@@ -625,16 +629,9 @@ class RandomTeams {
 			Monitor.crashlog(err, 'The randbat set generator');
 		}
 
-		if (template.battleOnly) {
+		if (template.battleOnly && !template.isGigantamax) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
 			species = template.baseSpecies;
-		}
-
-		// Gigantamax
-		let formes = template.otherFormes || [];
-		let gmax = template.id + 'gmax';
-		if (formes.includes(gmax)) {
-			species = this.dex.getTemplate(gmax).species;
 		}
 
 		const randMoves = !isDoubles ? template.randomBattleMoves : template.randomDoubleBattleMoves || template.randomBattleMoves;
@@ -817,6 +814,9 @@ class RandomTeams {
 				case 'stickyweb':
 					if (teamDetails.stickyWeb) rejected = true;
 					break;
+				case 'toxic':
+					if (counter.setupType || hasMove['sludgewave'] || hasMove['willowisp']) rejected = true;
+					break;
 				case 'toxicspikes':
 					if (counter.setupType || teamDetails.toxicSpikes) rejected = true;
 					break;
@@ -863,7 +863,6 @@ class RandomTeams {
 					break;
 				case 'aurasphere': case 'focusblast':
 					if ((hasMove['closecombat'] || hasMove['superpower']) && counter.setupType !== 'Special') rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'drainpunch':
 					if (!hasMove['bulkup'] && (hasMove['closecombat'] || hasMove['highjumpkick'])) rejected = true;
@@ -884,7 +883,7 @@ class RandomTeams {
 					if ((hasMove['closecombat'] || hasMove['machpunch']) && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'firepunch': case 'flamethrower':
-					if (hasMove['blazekick'] || hasMove['heatwave'] || hasMove['overheat']) rejected = true;
+					if (hasMove['heatwave'] || hasMove['overheat']) rejected = true;
 					if ((hasMove['fireblast'] || hasMove['lavaplume']) && counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'fireblast': case 'magmastorm':
@@ -972,12 +971,7 @@ class RandomTeams {
 
 				// Status:
 				case 'electroweb': case 'stunspore': case 'thunderwave':
-					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
-					if (hasMove['discharge'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
-					break;
-				case 'toxic':
-					if (hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
-					if (counter.setupType || hasMove['flamecharge'] || hasMove['raindance']) rejected = true;
+					if (hasMove['spore'] || hasMove['toxic'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'raindance':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -1116,7 +1110,7 @@ class RandomTeams {
 			let rejectAbility;
 			do {
 				rejectAbility = false;
-				if (['Inner Focus', 'Flare Boost', 'Liquid Voice', 'Misty Surge', 'Quick Feet', 'Weak Armor'].includes(ability)) {
+				if (['Inner Focus', 'Flare Boost', 'Liquid Voice', 'Misty Surge', 'Quick Feet', 'Speed Boost', 'Weak Armor'].includes(ability)) {
 					rejectAbility = true;
 				} else if (counterAbilities.includes(ability)) {
 					// Adaptability, Contrary, Iron Fist, Skill Link, Strong Jaw
@@ -1209,7 +1203,7 @@ class RandomTeams {
 				}
 			} while (rejectAbility);
 
-			if (template.species === 'Copperajah') {
+			if (template.species === 'Copperajah-Gmax') {
 				ability = 'Heavy Metal';
 			} else if (abilities.includes('Guts') && (hasMove['facade'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
 				ability = 'Guts';
@@ -1225,6 +1219,8 @@ class RandomTeams {
 			item = this.sample(template.requiredItems);
 
 		// First, the extra high-priority items
+		} else if (template.species === 'Eternatus' && counter.Status < 2) {
+			item = 'Metronome';
 		} else if (template.species === 'Farfetch\'d') {
 			item = 'Leek';
 		} else if (template.baseSpecies === 'Pikachu') {
@@ -1259,11 +1255,7 @@ class RandomTeams {
 		} else if ((ability === 'Magic Guard' && counter.damagingMoves.length > 1) || (ability === 'Sheer Force' && !!counter['sheerforce'])) {
 			item = 'Life Orb';
 		} else if (ability === 'Unburden') {
-			if (hasMove['fakeout']) {
-				item = 'Normal Gem';
-			} else {
-				item = hasMove['closecombat'] ? 'White Herb' : 'Sitrus Berry';
-			}
+			item = hasMove['closecombat'] ? 'White Herb' : 'Sitrus Berry';
 		} else if (hasMove['acrobatics']) {
 			item = '';
 		} else if (hasMove['auroraveil'] || hasMove['lightscreen'] && hasMove['reflect']) {
@@ -1280,7 +1272,7 @@ class RandomTeams {
 			item = (template.baseStats.atk >= 100 || ability === 'Huge Power') && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
 		} else if (counter.Special >= 4 && !hasMove['clearsmog'] && !isDoubles) {
 			item = template.baseStats.spa >= 100 && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && ability !== 'Tinted Lens' && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Specs';
-		} else if (counter.Physical >= 3 && hasMove['defog'] && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && !hasMove['foulplay'] && !isDoubles) {
+		} else if (counter.Physical >= 3 && hasMove['defog'] && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && !hasMove['foulplay'] && !hasMove['uturn'] && !isDoubles) {
 			item = 'Choice Scarf';
 		} else if (counter.Special >= 3 && hasMove['uturn'] && !isDoubles) {
 			item = 'Choice Specs';
@@ -1300,30 +1292,28 @@ class RandomTeams {
 			item = 'Chople Berry';
 		} else if (hasMove['substitute']) {
 			item = counter.damagingMoves.length > 2 && !!counter['drain'] ? 'Life Orb' : 'Leftovers';
-		} else if (this.dex.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate') {
-			item = 'Air Balloon';
 		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
-		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.spd >= 50 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 235) {
-			item = 'Assault Vest';
-		} else if (isLead && !['Disguise', 'Regenerator', 'Sturdy'].includes(ability) && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) {
+		} else if (isLead && !['Disguise', 'Sturdy'].includes(ability) && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 255) {
 			item = 'Focus Sash';
-		} else if (this.dex.getEffectiveness('Rock', template) >= 2) {
+		} else if (this.dex.getEffectiveness('Rock', template) >= 2 || hasMove['courtchange']) {
 			item = 'Heavy-Duty Boots';
-		} else if (counter.damagingMoves.length >= 4) {
-			item = (!counter['Dragon'] && !counter['Dark'] && !counter['Normal']) ? 'Expert Belt' : 'Life Orb';
+		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 235) {
+			item = 'Assault Vest';
 
-		// This is the "REALLY can't think of a good item" cutoff
+		// Usual items don't fit
+		} else if (this.dex.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate') {
+			item = 'Air Balloon';
 		} else if (hasMove['stickyweb'] && ability === 'Sturdy') {
 			item = 'Mental Herb';
-		} else if (ability === 'Serene Grace' && hasMove['airslash'] && template.baseStats.spe > 100) {
-			item = 'Metronome';
 		} else if (ability === 'Super Luck') {
 			item = 'Scope Lens';
 		} else if (hasMove['clangoroussoul'] || hasMove['boomburst'] && !!counter['speedsetup']) {
 			item = 'Throat Spray';
-		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['superfang'] && !hasMove['uturn']) {
-			if (!!counter['speedsetup'] || hasMove['trickroom'] || template.baseStats.spe > 40 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) item = 'Life Orb';
+		} else if (counter.damagingMoves.length >= 4 && !counter['Dragon'] && !counter['Dark'] && !counter['Normal']) {
+			item = 'Expert Belt';
+		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['coil'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['uturn']) {
+			if (!!counter['speedsetup'] || hasMove['trickroom'] || template.baseStats.spe > 40 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 255) item = 'Life Orb';
 		}
 
 		// For Trick / Switcheroo
@@ -1365,8 +1355,6 @@ class RandomTeams {
 			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored.
 			let baseStats = template.baseStats;
-			// If Wishiwashi, use the school-forme's much higher stats
-			if (template.baseSpecies === 'Wishiwashi') baseStats = this.dex.getTemplate('wishiwashischool').baseStats;
 
 			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
 			// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite

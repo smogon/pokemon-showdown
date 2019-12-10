@@ -9,7 +9,7 @@
 
 'use strict';
 
-const RANKS = Config.groupsranking;
+const RANKS: string[] = Config.groupsranking;
 
 const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
@@ -17,218 +17,41 @@ const SLOWCHAT_USER_REQUIREMENT = 10;
 
 const MAX_CHATROOM_ID_LENGTH = 225;
 
-class RoomSettings {
-	room: BasicChatRoom;
-	user: User;
-	connection: Connection;
-	sameCommand: boolean;
-	constructor(user: User, room: BasicChatRoom, connection: Connection) {
-		this.room = room;
-		this.user = user;
-		this.connection = connection;
-		this.sameCommand = true;
-	}
-	updateSetting(command: string) {
-		this.sameCommand = false;
-		this.generateDisplay();
-	}
-	button(setting: string, disable: boolean, command = ' ') {
-		if (disable) {
-			return Chat.html`<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">${setting}</button> `;
-		}
-		return Chat.html`<button class="button" name="send" value="/roomsetting ${command}">${setting}</button> `;
-	}
-	modchat() {
-		if (!this.user.can('modchat', null, this.room)) {
-			return this.button(this.room.modchat ? this.room.modchat : 'off', true);
-		}
-		const modchatOutput = [];
-		for (const rank of RANKS) {
-			if (rank === Config.groupsranking[0] && !this.room.modchat) {
-				modchatOutput.push(this.button('off', true));
-			} else if (rank === Config.groupsranking[0]) {
-				modchatOutput.push(this.button('off', false, 'modchat off'));
-			} else if (rank === this.room.modchat) {
-				modchatOutput.push(this.button(rank, true));
-			} else if (rank) {
-				const rankIndex = RANKS.indexOf(rank);
-				const roomAuth = (this.room.auth && this.room.auth[this.user.id] ? this.room.auth[this.user.id] : false);
-				const roomAuthIndex = (roomAuth ? RANKS.indexOf(roomAuth) : false);
-				if (rankIndex > 1 && !this.user.can('modchatall', null, this.room)) continue;
-				if (roomAuth && !this.user.can('bypassall')) {
-					if (rankIndex > roomAuthIndex) continue;
-				}
-				modchatOutput.push(this.button(rank, false, `modchat ${rank}`));
-			}
-		}
-		// Since autoconfirmed isn't technically a Config rank...
-		const acStatus = this.room.modchat === 'autoconfirmed';
-		modchatOutput.splice(1, 0, this.button('AC', acStatus, 'modchat autoconfirmed'));
-		return modchatOutput.join(' ');
-	}
-	modjoin() {
-		if (!this.user.can('makeroom') && !this.room.isPersonal ||
-			!this.user.can('editroom', null, this.room)) {
-			return this.button(this.room.modjoin ? '' + this.room.modjoin : 'off', true);
-		}
-		const modjoinOutput = [];
-		for (const rank of RANKS) {
-			if (rank === Config.groupsranking[0] && !this.room.modjoin) {
-				modjoinOutput.push(this.button('off', true));
-			} else if (rank === Config.groupsranking[0]) {
-				modjoinOutput.push(this.button('off', false, 'modjoin off'));
-			} else if (rank === this.room.modjoin) {
-				modjoinOutput.push(this.button(rank, true));
-			} else if (rank) {
-				// groupchat hosts can set modjoin, but only to +
-				if (this.room.isPersonal && !this.user.can('makeroom') && rank !== '+') continue;
-
-				modjoinOutput.push(this.button(rank, false, `modjoin ${rank}`));
-			}
-		}
-		return modjoinOutput.join(' ');
-	}
-	stretching() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.filterStretching ? 'filter stretching' : 'off', true);
-		if (this.room.filterStretching) {
-			return `${this.button('off', false, 'stretchfilter off')} ${this.button('filter stretching', true)}`;
-		} else {
-			return `${this.button('off', true)} ${this.button('filter stretching', false, 'stretchfilter on')}`;
-		}
-	}
-	capitals() {
-		if (!this.user.can('editroom', null, this.room)) {
-			return this.button(this.room.filterCaps ? 'filter capitals' : 'off', true);
-		}
-		if (this.room.filterCaps) {
-			return `${this.button('off', false, 'capsfilter off')} ${this.button('filter capitals', true)}`;
-		} else {
-			return `${this.button('off', true)} ${this.button('filter capitals', false, 'capsfilter on')}`;
-		}
-	}
-	emojis() {
-		if (!this.user.can('editroom', null, this.room)) {
-			return this.button(this.room.filterEmojis ? 'filter emojis' : 'off', true);
-		}
-		if (this.room.filterEmojis) {
-			return `${this.button('off', false, 'emojifilter off')} ${this.button('filter emojis', true)}`;
-		} else {
-			return `${this.button('off', true)} ${this.button('filter emojis', false, 'emojifilter on')}`;
-		}
-	}
-	slowchat() {
-		if (!this.user.can('editroom', null, this.room) ||
-			(!this.user.can('bypassall') && this.room.userCount < SLOWCHAT_USER_REQUIREMENT)) {
-			return this.button(this.room.slowchat ? '' + this.room.slowchat : 'off', true);
-		}
-		const slowchatOutput = [];
-		for (const i of [5, 10, 20, 30, 60]) {
-			if (this.room.slowchat === i) {
-				slowchatOutput.push(this.button(`${i}s`, true));
-			} else {
-				slowchatOutput.push(this.button(`${i}s`, false, `slowchat ${i}`));
-			}
-		}
-		if (!this.room.slowchat) {
-			slowchatOutput.unshift(this.button('off', true));
-		} else {
-			slowchatOutput.unshift(this.button('off', false, 'slowchat false'));
-		}
-		return slowchatOutput.join(' ');
-	}
-	tourStatus() {
-		if (!this.user.can('gamemanagement', null, this.room)) {
-			return this.button(this.room.toursEnabled === true ? '@' : this.room.toursEnabled === '%' ? '%' : '#', true);
-		}
-		if (this.room.toursEnabled === true) {
-			return `${this.button('%', false, 'tournament enable %')} ${this.button('@', true)} ${this.button('#', false, 'tournament disable')}`;
-		} else if (this.room.toursEnabled === '%') {
-			return `${this.button('%', true)} ${this.button('@', false, 'tournament enable @')} ${this.button('#', false, 'tournament disable')}`;
-		} else {
-			return `${this.button('%', false, 'tournament enable %')} ${this.button('@', false, 'tournament enable @')} ${this.button('#', true)}`;
-		}
-	}
-	uno() {
-		if (!this.user.can('editroom', null, this.room)) {
-			return this.button(this.room.unoDisabled ? 'off' : 'UNO enabled', true);
-		}
-		if (this.room.unoDisabled) {
-			return `${this.button('UNO enabled', false, 'uno enable')} ${this.button('off', true)}`;
-		} else {
-			return `${this.button('UNO enabled', true)} ${this.button('off', false, 'uno disable')}`;
-		}
-	}
-	hangman() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.hangmanDisabled ? 'off' : 'Hangman enabled', true);
-		if (this.room.hangmanDisabled) {
-			return `${this.button('Hangman enabled', false, 'hangman enable')} ${this.button('off', true)}`;
-		} else {
-			return `${this.button('Hangman enabled', true)} ${this.button('off', false, 'hangman disable')}`;
-		}
-	}
-	mafia() {
-		if (!this.user.can('editroom', null, this.room)) {
-			return this.button(this.room.mafiaDisabled ? 'off' : 'Mafia enabled', true);
-		}
-		if (this.room.mafiaDisabled) {
-			return `${this.button('Mafia enabled', false, 'mafia enable')} ${this.button('off', true)}`;
-		} else {
-			return `${this.button('Mafia enabled', true)} ${this.button('off', false, 'mafia disable')}`;
-		}
-	}
-	blackjack() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.blackjackDisabled ? 'off' : 'Blackjack enabled', true);
-		if (this.room.blackjackDisabled) {
-			return `${this.button('Blackjack enabled', false, 'blackjack enable')} ${this.button('off', true)}`;
-		} else {
-			return `${this.button('Blackjack enabled', true)} ${this.button('off', false, 'blackjack disable')}`;
-		}
-	}
-	language() {
-		if (!this.user.can('editroom', null, this.room)) {
-			return this.button(this.room.language ? Chat.languages.get(this.room.language)! : 'English', true);
-		}
-
-		const languageOutput = [];
-		languageOutput.push(this.button(`English`, !this.room.language, 'roomlanguage english'));
-		for (const [id, text] of Chat.languages) {
-			languageOutput.push(this.button(text, this.room.language === id, `roomlanguage ${id}`));
-		}
-		return languageOutput.join(' ');
-	}
-	generateDisplay() {
-		let output = Chat.html`<div class="infobox">Room Settings for ${this.room.title}<br />`;
-		output += `<strong>Language:</strong> <br />${this.language()}<br />`;
-		output += `<strong>Modchat:</strong> <br />${this.modchat()}<br />`;
-		output += `<strong>Modjoin:</strong> <br />${this.modjoin()}<br />`;
-		output += `<strong>Stretch filter:</strong> <br />${this.stretching()}<br />`;
-		output += `<strong>Caps filter:</strong> <br />${this.capitals()}<br />`;
-		output += `<strong>Emoji filter:</strong> <br />${this.emojis()}<br />`;
-		output += `<strong>Slowchat:</strong> <br />${this.slowchat()}<br />`;
-		output += `<strong>Tournaments:</strong> <br />${this.tourStatus()}<br />`;
-		output += `<strong>UNO:</strong> <br />${this.uno()}<br />`;
-		output += `<strong>Hangman:</strong> <br />${this.hangman()}<br />`;
-		output += `<strong>Blackjack:</strong> <br />${this.blackjack()}<br />`;
-		output += `<strong>Mafia:</strong> <br />${this.mafia()}<br />`;
-		output += '</div>';
-
-		this.user.sendTo(this.room, `|uhtml${(this.sameCommand ? '' : 'change')}|roomsettings|${output}`);
-	}
-}
-
 export const commands: ChatCommands = {
 	roomsetting: 'roomsettings',
 	roomsettings(target, room, user, connection) {
 		if (room.battle) return this.errorReply("This command cannot be used in battle rooms.");
-		const settings = new RoomSettings(user, room, connection);
+		let uhtml = 'uhtml';
 
 		if (!target) {
 			room.update();
-			settings.generateDisplay();
 		} else {
 			this.parse(`/${target}`);
-			settings.updateSetting(target);
+			uhtml = 'uhtmlchange';
 		}
+
+		let output = Chat.html`<div class="infobox">Room Settings for ${room.title}<br />`;
+		for (const handler of Chat.roomSettings) {
+			const setting = handler(room, user, connection);
+			if (typeof setting.permission === 'string') setting.permission = user.can(setting.permission, null, room);
+
+			output += `<strong>${setting.label}:</strong> <br />`;
+
+			for (const option of setting.options) {
+				// disabled button
+				if (option[1] === true) {
+					output += Chat.html`<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">${option[0]}</button> `;
+				} else {
+					// only show proper buttons if we have the permissions to use them
+					if (!setting.permission) continue;
+
+					output += Chat.html`<button class="button" name="send" value="/roomsetting ${option[1]}">${option[0]}</button> `;
+				}
+			}
+			output += `<br />`;
+		}
+		output += '</div>';
+		user.sendTo(room, `|${uhtml}|roomsettings|${output}`);
 	},
 	roomsettingshelp: [`/roomsettings - Shows current room settings with buttons to change them (if you can).`],
 
@@ -1382,3 +1205,81 @@ export const commands: ChatCommands = {
 	},
 	removeroomaliashelp: [`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`],
 };
+
+export const roomSettings: SettingsHandler[] = [
+	// modchat
+	(room, user) => {
+		const threshold = user.can('makeroom') ? Infinity :
+			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.getAuth(user)) :
+			user.can('modchat', null, room) ? 1 :
+			null;
+
+		const permission = !!threshold;
+
+		// typescript seems to think that [prop, true] is of type [prop, boolean] unless we tell it explicitly
+		const options: [string, string | true][] = !permission ? [[room.modchat || 'off', true]] :
+			[
+				'off',
+				'autoconfirmed',
+				'trusted',
+				...RANKS.slice(1, threshold + 1),
+			].map(rank => [rank, (rank === 'off' ? !room.modchat : rank === room.modchat) || `modchat ${rank || 'off'}`]);
+
+		return {
+			label: "Modchat",
+			permission,
+			options,
+		};
+	},
+	(room, user) => ({
+		label: "Modjoin",
+		permission: room.isPersonal ? user.can('editroom', null, room) : user.can('makeroom'),
+		options: [
+			'off',
+			'autoconfirmed',
+			// groupchat ROs can set modjoin, but only to +
+			// first rank is for modjoin off
+			...RANKS.slice(1, room.isPersonal && !user.can('makeroom') ? 2 : undefined),
+		].map(rank =>
+			[rank, (rank === 'off' ? !room.modjoin : rank === room.modjoin) || `modjoin ${rank || 'off'}`]
+		),
+	}),
+	room => ({
+		label: "Language",
+		permission: 'editroom',
+		options: [...Chat.languages].map(([id, name]) =>
+			[name, (id === 'english' ? !room.language : id === room.language) || `roomlanguage ${id}`]
+		),
+	}),
+	room => ({
+		label: "Stretch filter",
+		permission: 'editroom',
+		options: [
+			[`off`, !room.filterStretching || 'stretchfilter off'],
+			[`on`, room.filterStretching || 'stretchfilter on'],
+		],
+	}),
+	room => ({
+		label: "Caps filter",
+		permission: 'editroom',
+		options: [
+			[`off`, !room.filterCaps || 'capsfilter off'],
+			[`on`, room.filterCaps || 'capsfilter on'],
+		],
+	}),
+	room => ({
+		label: "Emoji filter",
+		permission: 'editroom',
+		options: [
+			[`off`, !room.filterEmojis || 'emojifilter off'],
+			[`on`, room.filterEmojis || 'emojifilter on'],
+		],
+	}),
+	room => ({
+		label: "Slowchat",
+		permission: room.userCount < SLOWCHAT_USER_REQUIREMENT ? 'bypassall' : 'editroom',
+		options: ['off', 5, 10, 20, 30, 60].map(time =>
+			[`${time}`, (time === 'off' ? !room.slowchat : time === room.slowchat) || `slowchat ${time || 'false'}`]
+		),
+	}),
+];

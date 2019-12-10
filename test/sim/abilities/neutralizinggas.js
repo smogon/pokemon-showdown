@@ -48,4 +48,25 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices('move spore', 'move sleeptalk');
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
+
+	it(`should negate abilites that activate on switch-out`, function () {
+		battle = common.createBattle([
+			[{species: "Weezing", ability: 'neutralizinggas', moves: ['toxic']},
+				{species: "Type: Null", ability: 'battlearmor', moves: ['facade']}],
+			[{species: "Corsola", ability: 'naturalcure', moves: ['uturn']},
+				{species: "Magikarp", ability: 'rattled', moves: ['splash']}],
+		]);
+		battle.makeChoices('move toxic', 'move uturn');
+		battle.makeChoices('', 'switch 2');
+		battle.makeChoices('switch 2', 'switch 2');
+		assert.strictEqual(battle.p2.active[0].status, 'tox');
+	});
+
+	it('should negate abilities that modify move type', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'neutralizinggas', moves: ['laserfocus']}]});
+		battle.setPlayer('p2', {team: [{species: "Sylveon", ability: 'pixilate', moves: ['hypervoice']}]});
+		battle.makeChoices('move laserfocus', 'move hypervoice');
+		assert.fullHP(battle.p1.active[0]);
+	});
 });

@@ -352,5 +352,17 @@ const commands = {
 		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
 	],
 };
+/** @type {SettingsHandler} */
+const roomSettings = room => ({
+	label: "Hangman",
+	permission: 'editroom',
+	options: [
+		[`disabled`, room.hangmanDisabled || 'hangman disable'],
+		[`enabled`, !room.hangmanDisabled || 'hangman enable'],
+	],
+});
 
-exports.commands = commands;
+module.exports = {
+	commands,
+	roomSettings,
+};

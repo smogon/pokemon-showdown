@@ -248,7 +248,7 @@ class TeamGenerator {
 				},
 				nature: this.prng.sample(this.natures),
 				level: this.prng.next(50, 100),
-				happiness: this.prng.next(256),
+				happiness: (this.dex.gen <= 7 ? this.prng.next(256) : 160),
 				shiny: this.prng.randomChance(1, 1024),
 			});
 		}

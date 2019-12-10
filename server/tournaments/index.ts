@@ -1761,6 +1761,15 @@ export const commands: ChatCommands = {
 		);
 	},
 };
+const roomSettings: SettingsHandler = room => ({
+	label: "Tournaments",
+	permission: 'gamemanagement',
+	options: [
+		['%', room.toursEnabled === '%' || 'tournament enable %'],
+		['@', room.toursEnabled === true || 'tournament enable @'],
+		['#', room.toursEnabled === false || 'tournament disable'],
+	],
+});
 
 export const Tournaments = {
 	TournamentGenerators,
@@ -1769,4 +1778,5 @@ export const Tournaments = {
 	createTournament,
 	tourCommands,
 	commands,
+	roomSettings,
 };

@@ -81,30 +81,8 @@ let BattleFormats = {
 		desc: "Makes sure the team is possible to obtain in-game.",
 		ruleset: ['Obtainable Moves', 'Obtainable Abilities', 'Obtainable Formes', 'Obtainable Misc'],
 		banlist: ['Unreleased', 'Nonexistent'],
-	},
-	obtainablemoves: {
-		effectType: 'ValidatorRule',
-		name: 'Obtainable Moves',
-		desc: "Makes sure moves are learnable by the species.",
-		banlist: [
-			// Leaf Blade: Gen 6+ Nuzleaf level-up
-			// Sucker Punch: Gen 4 Shiftry tutor
-			'Shiftry + Leaf Blade + Sucker Punch',
-		],
 		// Mostly hardcoded in team-validator.ts
-	},
-	obtainableabilities: {
-		effectType: 'ValidatorRule',
-		name: 'Obtainable Abilities',
-		desc: "Makes sure abilities match the species.",
-		// Hardcoded in team-validator.ts
-	},
-	obtainableformes: {
-		effectType: 'ValidatorRule',
-		name: 'Obtainable Formes',
-		desc: "Makes sure in-battle formes only appear in-battle.",
-		// Mostly hardcoded in team-validator.ts
-		onValidateTeam(team) {
+		onValidateTeam(team, format) {
 			let kyuremCount = 0;
 			let necrozmaDMCount = 0;
 			let necrozmaDWCount = 0;
@@ -114,6 +92,11 @@ let BattleFormats = {
 						return ['You cannot have more than one Kyurem-Black/Kyurem-White.'];
 					}
 					kyuremCount++;
+				}
+				if (set.species === 'Keldeo-Resolute') {
+					if (!set.moves.includes('secretsword')) {
+						return ['Keldeo-Resolute needs to have the move Secret Sword.'];
+					}
 				}
 				if (set.species === 'Necrozma-Dusk-Mane') {
 					if (necrozmaDMCount > 0) {
@@ -130,6 +113,29 @@ let BattleFormats = {
 			}
 			return [];
 		},
+	},
+	obtainablemoves: {
+		effectType: 'ValidatorRule',
+		name: 'Obtainable Moves',
+		desc: "Makes sure moves are learnable by the species.",
+		// Mostly hardcoded in team-validator.ts
+		banlist: [
+			// Sunsteel Strike: only obtainable from Necrozma-Ultra that start as Necrozma-Dusk-Mane
+			// Moongeist Beam: only obtainable from Necrozma-Ultra that start as Necrozma-Dawn-Wings
+			'Necrozma-Ultra + Moongeist Beam + Sunsteel Strike',
+		],
+	},
+	obtainableabilities: {
+		effectType: 'ValidatorRule',
+		name: 'Obtainable Abilities',
+		desc: "Makes sure abilities match the species.",
+		// Hardcoded in team-validator.ts
+	},
+	obtainableformes: {
+		effectType: 'ValidatorRule',
+		name: 'Obtainable Formes',
+		desc: "Makes sure in-battle formes only appear in-battle.",
+		// Hardcoded in team-validator.ts
 	},
 	obtainablemisc: {
 		effectType: 'ValidatorRule',
@@ -755,7 +761,7 @@ let BattleFormats = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, template, setSources, set) {
 			const restrictedMoves = this.format.restrictedMoves || [];
-			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.id.startsWith('max')) {
+			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.isMax) {
 				let dex = this.dex;
 				let types = template.types;
 				let baseTemplate = dex.getTemplate(template.baseSpecies);

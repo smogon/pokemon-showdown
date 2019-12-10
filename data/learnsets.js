@@ -64701,6 +64701,10 @@ let BattleLearnsets = {
 	necrozmadawnwings: {learnset: {
 		moongeistbeam: ["8R", "7R"],
 	}},
+	necrozmaultra: {learnset: {
+		moongeistbeam: ["8R", "7R"],
+		sunsteelstrike: ["8R", "7R"],
+	}},
 	magearna: {learnset: {
 		afteryou: ["7T"],
 		aurasphere: ["7L81"],

@@ -135,7 +135,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	butterfree: {
-		randomBattleMoves: ["airslash", "bugbuzz", "energyball", "hurricane", "quiverdance", "sleeppowder"],
+		randomBattleMoves: ["energyball", "hurricane", "quiverdance", "sleeppowder"],
 		eventPokemon: [
 			{"generation": 3, "level": 30, "moves": ["morningsun", "psychic", "sleeppowder", "aerialace"]},
 		],
@@ -148,6 +148,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	butterfreegmax: {
+		randomBattleMoves: ["airslash", "bugbuzz", "quiverdance", "sleeppowder"],
 		isGigantamax: "G-Max Befuddle",
 	},
 	weedle: {
@@ -1316,7 +1317,6 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	gengar: {
-		randomBattleMoves: ["encore", "focusblast", "nastyplot", "shadowball", "sludgewave"],
 		eventPokemon: [
 			{"generation": 3, "level": 23, "gender": "F", "nature": "Hardy", "ivs": {"hp": 19, "atk": 14, "def": 0, "spa": 14, "spd": 17, "spe": 27}, "moves": ["spite", "curse", "nightshade", "confuseray"], "pokeball": "pokeball"},
 			{"generation": 6, "level": 25, "nature": "Timid", "moves": ["psychic", "confuseray", "suckerpunch", "shadowpunch"], "pokeball": "cherishball"},
@@ -1335,6 +1335,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	gengargmax: {
+		randomBattleMoves: ["encore", "focusblast", "nastyplot", "shadowball", "sludgewave"],
 		isGigantamax: "G-Max Terror",
 	},
 	onix: {
@@ -1381,7 +1382,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	kingler: {
-		randomBattleMoves: ["liquidation", "xscissor", "rockslide", "swordsdance", "agility", "superpower", "knockoff"],
+		randomBattleMoves: ["agility", "liquidation", "rockslide", "superpower", "swordsdance", "xscissor"],
 		encounters: [
 			{"generation": 1, "level": 15},
 			{"generation": 3, "level": 25},
@@ -1883,7 +1884,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	lapras: {
-		randomBattleMoves: ["freezedry", "icebeam", "sparklingaria", "substitute", "thunderbolt"],
 		eventPokemon: [
 			{"generation": 3, "level": 44, "moves": ["hydropump", "raindance", "blizzard", "healbell"]},
 		],
@@ -1894,6 +1894,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	laprasgmax: {
+		randomBattleMoves: ["freezedry", "icebeam", "sparklingaria", "substitute", "thunderbolt"],
 		isGigantamax: "G-Max Resonance",
 	},
 	ditto: {
@@ -4487,7 +4488,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	cherubi: {
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	cherrim: {
 		randomBattleMoves: ["dazzlinggleam", "energyball", "healingwish", "leechseed", "substitute"],
@@ -4705,7 +4706,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	rotom: {
-		randomBattleMoves: ["nastyplot", "shadowball", "storedpower", "thunderbolt"],
+		randomBattleMoves: ["nastyplot", "shadowball", "thunderbolt", "voltswitch", "willowisp"],
 		eventPokemon: [
 			{"generation": 5, "level": 10, "nature": "Naughty", "moves": ["uproar", "astonish", "trick", "thundershock"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 10, "nature": "Quirky", "moves": ["shockwave", "astonish", "trick", "thunderwave"], "pokeball": "cherishball"},
@@ -5454,7 +5455,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	runerigus: {
-		randomBattleMoves: ["earthquake", "haze", "nightshade", "stealthrock", "toxicspikes", "willowisp"],
+		randomBattleMoves: ["bodypress", "earthquake", "haze", "stealthrock", "toxicspikes", "willowisp"],
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -5484,7 +5485,6 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	garbodor: {
-		randomBattleMoves: ["drainpunch", "gunkshot", "painsplit", "spikes", "toxicspikes"],
 		encounters: [
 			{"generation": 5, "level": 31, "isHidden": false},
 			{"generation": 6, "level": 30},
@@ -5494,6 +5494,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	garbodorgmax: {
+		randomBattleMoves: ["drainpunch", "gunkshot", "painsplit", "spikes", "toxicspikes"],
 		isGigantamax: "G-Max Malodor",
 	},
 	zorua: {
@@ -6190,7 +6191,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	diggersby: {
-		randomBattleMoves: ["bodyslam", "earthquake", "swordsdance", "uturn", "wildcharge"],
+		randomBattleMoves: ["earthquake", "quickattack", "swordsdance", "uturn", "wildcharge"],
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -6750,7 +6751,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	ribombee: {
-		randomBattleMoves: ["aromatherapy", "moonblast", "stickyweb", "stunspore", "uturn"],
+		randomBattleMoves: ["bugbuzz", "moonblast", "stickyweb", "stunspore", "uturn"],
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -6790,11 +6791,11 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	wishiwashi: {
-		randomBattleMoves: ["earthquake", "hydropump", "icebeam", "scald", "uturn"],
 		tier: "UU",
 		doublesTier: "New",
 	},
 	wishiwashischool: {
+		randomBattleMoves: ["earthquake", "hydropump", "icebeam", "scald", "uturn"],
 		requiredAbility: 'Schooling',
 		battleOnly: true,
 	},
@@ -7519,7 +7520,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	drednaw: {
-		randomBattleMoves: ["crunch", "liquidation", "stoneedge", "superpower", "swordsdance"],
+		randomBattleMoves: ["liquidation", "stealthrock", "stoneedge", "superpower", "swordsdance"],
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -7562,22 +7563,23 @@ let BattleFormatsData = {
 		isGigantamax: "G-Max Tartness",
 	},
 	appletun: {
-		randomBattleMoves: ["appleacid", "dracometeor", "leechseed", "recover", "substitute"],
 		tier: "UU",
 		doublesTier: "New",
 	},
 	appletungmax: {
+		randomBattleMoves: ["appleacid", "dracometeor", "leechseed", "recover", "substitute"],
 		isGigantamax: "G-Max Sweetness",
 	},
 	silicobra: {
 		tier: "LC",
 	},
 	sandaconda: {
-		randomBattleMoves: ["bodypress", "coil", "earthquake", "glare", "stealthrock", "stoneedge", "rest"],
+		randomBattleMoves: ["bodypress", "coil", "earthquake", "stoneedge", "rest"],
 		tier: "UU",
 		doublesTier: "New",
 	},
 	sandacondagmax: {
+		randomBattleMoves: ["bodypress", "earthquake", "glare", "stealthrock", "stoneedge"],
 		isGigantamax: "G-Max Sandblast",
 	},
 	cramorant: {
@@ -7586,9 +7588,11 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	cramorantgulping: {
+		requiredAbility: "Gulp Missile",
 		battleOnly: true,
 	},
 	cramorantgorging: {
+		requiredAbility: "Gulp Missile",
 		battleOnly: true,
 	},
 	arrokuda: {
@@ -7651,11 +7655,11 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	hatterene: {
-		randomBattleMoves: ["calmmind", "dazzlinggleam", "mysticalfire", "psychic", "darkpulse", "trickroom"],
 		tier: "OU",
 		doublesTier: "New",
 	},
 	hatterenegmax: {
+		randomBattleMoves: ["calmmind", "dazzlinggleam", "mysticalfire", "psychic", "darkpulse", "trickroom"],
 		isGigantamax: "G-Max Smite",
 	},
 	impidimp: {
@@ -7665,22 +7669,22 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	grimmsnarl: {
-		randomBattleMoves: ["bulkup", "darkestlariat", "drainpunch", "playrough", "thunderwave", "taunt"],
 		tier: "OU",
 		doublesTier: "New",
 	},
 	grimmsnarlgmax: {
+		randomBattleMoves: ["bulkup", "darkestlariat", "playrough", "thunderwave", "taunt"],
 		isGigantamax: "G-Max Snooze",
 	},
 	milcery: {
 		tier: "LC",
 	},
 	alcremie: {
-		randomBattleMoves: ["aromatherapy", "calmmind", "dazzlinggleam", "mysticalfire", "psychic", "recover"],
 		tier: "UU",
 		doublesTier: "New",
 	},
 	alcremiegmax: {
+		randomBattleMoves: ["calmmind", "dazzlinggleam", "mysticalfire", "psychic", "recover"],
 		isGigantamax: "G-Max Finale",
 	},
 	falinks: {
@@ -7712,6 +7716,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	eiscuenoice: {
+		requiredAbility: "Ice Face",
 		battleOnly: true,
 	},
 	indeedee: {
@@ -7730,17 +7735,19 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	morpekohangry: {
+		requiredAbility: "Hunger Switch",
 		battleOnly: true,
 	},
 	cufant: {
 		tier: "LC",
 	},
 	copperajah: {
-		randomBattleMoves: ["curse", "earthquake", "heatcrash", "heavyslam", "rest", "stealthrock"],
+		randomBattleMoves: ["earthquake", "ironhead", "playrough", "rockslide", "stealthrock"],
 		tier: "UU",
 		doublesTier: "New",
 	},
 	copperajahgmax: {
+		randomBattleMoves: ["earthquake", "heatcrash", "heavyslam", "powerwhip", "stoneedge"],
 		isGigantamax: "G-Max Steelsurge",
 	},
 	dracozolt: {
@@ -7809,7 +7816,7 @@ let BattleFormatsData = {
 		requiredItem: "Rusted Shield",
 	},
 	eternatus: {
-		randomBattleMoves: ["dracometeor", "dynamaxcannon", "flamethrower", "recover", "sludgewave"],
+		randomBattleMoves: ["dynamaxcannon", "flamethrower", "recover", "sludgewave", "toxic"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},

@@ -973,5 +973,17 @@ const commands = {
 		`/uno suppress [on|off] - Toggles suppression of game messages.`,
 	],
 };
+/** @type {SettingsHandler} */
+const roomSettings = room => ({
+	label: "UNO",
+	permission: 'editroom',
+	options: [
+		[`disabled`, room.unoDisabled || 'uno disable'],
+		[`enabled`, !room.unoDisabled || 'uno enable'],
+	],
+});
 
-exports.commands = commands;
+module.exports = {
+	commands,
+	roomSettings,
+};
