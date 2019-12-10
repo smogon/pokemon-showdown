@@ -1522,15 +1522,6 @@ export class ModdedDex {
 
 		return this;
 	}
-
-	installFormat(id: string, format: Format) {
-		dexes['base'].includeFormats();
-		dexes['base'].formatsCache![id] = format;
-		if (this.dataCache) this.dataCache.Formats[id] = format;
-		if (!this.isBase) {
-			if (dexes['base'].dataCache) dexes['base'].dataCache.Formats[id] = format;
-		}
-	}
 }
 
 dexes['base'] = new ModdedDex(undefined, true);
