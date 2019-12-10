@@ -2190,7 +2190,7 @@ let BattleLearnsets = {
 		toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 		uproar: ["8M"],
 		voltswitch: ["8M", "7M", "6M", "5M", "5S29"],
-		volttackle: ["7T", "6S39", "5S29", "5S25", "4S21", "4S9"],
+		volttackle: ["8R", "7T", "6S39", "5S29", "5S25", "4S21", "4S9"],
 		wildcharge: ["8M", "7M", "7L50", "6M", "6L50", "5M"],
 		yawn: ["4S19"],
 		zapcannon: ["7V"],
