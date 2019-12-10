@@ -75,6 +75,7 @@ let Formats = [
 		name: "[Gen 8] LC",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3657374/">LC Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -113,6 +114,7 @@ let Formats = [
 		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656332/">NFE Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3657558/">NFE Resources</a>`,
 		],
 
 		mod: 'gen8',
