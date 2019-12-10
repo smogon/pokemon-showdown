@@ -641,6 +641,14 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	moonlight: {
+		inherit: true,
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+	},
+	morningsun: {
+		inherit: true,
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+	},
 	mudbomb: {
 		inherit: true,
 		isNonstandard: null,
@@ -969,6 +977,10 @@ let BattleMovedex = {
 	synchronoise: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	synthesis: {
+		inherit: true,
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
 	},
 	tailglow: {
 		inherit: true,

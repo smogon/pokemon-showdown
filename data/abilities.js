@@ -1124,12 +1124,18 @@ let BattleAbilities = {
 			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
-				if (pokemon.hasItem('utilityumbrella')) break;
+				if (pokemon.hasItem('utilityumbrella')) {
+					forme = 'Castform';
+					break;
+				}
 				if (pokemon.template.speciesid !== 'castformsunny') forme = 'Castform-Sunny';
 				break;
 			case 'raindance':
 			case 'primordialsea':
-				if (pokemon.hasItem('utilityumbrella')) break;
+				if (pokemon.hasItem('utilityumbrella')) {
+					forme = 'Castform';
+					break;
+				}
 				if (pokemon.template.speciesid !== 'castformrainy') forme = 'Castform-Rainy';
 				break;
 			case 'hail':

@@ -12529,7 +12529,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		id: "moonlight",
 		isViable: true,
@@ -12543,6 +12543,8 @@ let BattleMovedex = {
 				factor = 0.667;
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				factor = 0.25;
+			} else if (pokemon.hasItem('utilityumbrella')) {
+				factor = 0.5;
 			}
 			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
@@ -12557,7 +12559,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		id: "morningsun",
 		isViable: true,
@@ -12571,6 +12573,8 @@ let BattleMovedex = {
 				factor = 0.667;
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				factor = 0.25;
+			} else if (pokemon.hasItem('utilityumbrella')) {
+				factor = 0.5;
 			}
 			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
@@ -17556,7 +17560,7 @@ let BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.field.isWeather(['sunnyday', 'desolateland']) && attacker.item !== "utilityumbrella") {
+			if (this.field.isWeather(['sunnyday', 'desolateland']) && !attacker.hasItem('utilityumbrella')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -17596,7 +17600,7 @@ let BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.field.isWeather(['sunnyday', 'desolateland']) && attacker.item !== "utilityumbrella") {
+			if (this.field.isWeather(['sunnyday', 'desolateland']) && !attacker.hasItem('utilityumbrella')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -19134,7 +19138,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		id: "synthesis",
 		isViable: true,
@@ -19148,6 +19152,8 @@ let BattleMovedex = {
 				factor = 0.667;
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				factor = 0.25;
+			} else if (pokemon.hasItem('utilityumbrella')) {
+				factor = 0.5;
 			}
 			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
