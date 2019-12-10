@@ -118,7 +118,12 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable Moves',
 		desc: "Makes sure moves are learnable by the species.",
-		// Hardcoded in team-validator.ts
+		// Mostly hardcoded in team-validator.ts
+		banlist: [
+			// Sunsteel Strike: only obtainable from Necrozma-Ultra that start as Necrozma-Dusk-Mane
+			// Moongeist Beam: only obtainable from Necrozma-Ultra that start as Necrozma-Dawn-Wings
+			'Necrozma-Ultra + Moongeist Beam + Sunsteel Strike',
+		],
 	},
 	obtainableabilities: {
 		effectType: 'ValidatorRule',

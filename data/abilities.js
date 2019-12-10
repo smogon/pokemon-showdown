@@ -4642,9 +4642,9 @@ let BattleAbilities = {
 			if (pokemon.baseTemplate.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.forme !== 'Zen') {
+			if (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.template.forme)) {
 				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.forme === 'Zen') {
+			} else if (pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.template.forme)) {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
@@ -4653,7 +4653,7 @@ let BattleAbilities = {
 			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
-			pokemon.formeChange(pokemon.template.baseSpecies, this.effect, false, '[silent]');
+			pokemon.formeChange(pokemon.template.inheritsFrom, this.effect, false, '[silent]');
 		},
 		effect: {
 			onStart(pokemon) {
@@ -4664,7 +4664,9 @@ let BattleAbilities = {
 				}
 			},
 			onEnd(pokemon) {
-				if (pokemon.template.forme === 'Zen') pokemon.formeChange(pokemon.template.baseSpecies);
+				if (['Zen', 'Galar-Zen'].includes(pokemon.template.forme)) {
+					pokemon.formeChange(pokemon.template.inheritsFrom);
+				}
 			},
 		},
 		id: "zenmode",
