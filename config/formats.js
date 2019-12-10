@@ -37,7 +37,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Uber', 'Moody', 'Shadow Tag', 'Baton Pass'],
 		minSourceGen: 8,
 	},
 	/*{
