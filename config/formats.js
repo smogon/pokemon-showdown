@@ -1979,7 +1979,7 @@ let Formats = [
 		mod: 'gen2',
 		searchShow: false,
 		ruleset: ['[Gen 2] UU'],
-		banlist: ['UU'],
+		banlist: ['UU', 'NUBL'],
 	},
 	{
 		name: "[Gen 2] Custom Game",
