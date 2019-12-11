@@ -1729,6 +1729,19 @@ let Formats = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
+	{
+		name: "[Gen 5] Triples Custom Game",
+
+		mod: 'gen5',
+		gameType: 'triples',
+		searchShow: false,
+		debug: true,
+		maxLevel: 9999,
+		trunc(n) { return Math.trunc(n); },
+		defaultLevel: 100,
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Cancel Mod'],
+	},
 
 	// DPP Singles
 	///////////////////////////////////////////////////////////////////

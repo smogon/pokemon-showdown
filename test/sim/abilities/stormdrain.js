@@ -20,7 +20,7 @@ describe('Storm Drain', function () {
 	});
 
 	it('should redirect single-target Water-type attacks to the user if it is a valid target', function () {
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
 			{species: 'Azumarill', ability: 'thickfat', moves: ['aquajet']},
