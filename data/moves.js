@@ -7107,6 +7107,7 @@ let BattleMovedex = {
 		isMax: "Snorlax",
 		self: {
 			onHit(source) {
+				if (this.random(2) === 0) return;
 				for (let pokemon of source.side.active) {
 					if (!pokemon.item && pokemon.lastItem && this.dex.getItem(pokemon.lastItem).isBerry) {
 						let item = pokemon.lastItem;
@@ -7207,14 +7208,15 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isMax: "Grimmsnarl",
-		self: {
-			onHit(source) {
-				for (let pokemon of source.side.foe.active) {
-					if (!pokemon.status && pokemon.runStatusImmunity('slp')) {
-						pokemon.addVolatile('yawn');
-					}
-				}
-			},
+		onHit(target) {
+			if (target.status || !target.runStatusImmunity('slp')) return;
+			if (this.random(2) === 0) return;
+			target.addVolatile('yawn');
+		},
+		onAfterSubDamage(damage, target) {
+			if (target.status || !target.runStatusImmunity('slp')) return;
+			if (this.random(2) === 0) return;
+			target.addVolatile('yawn');
 		},
 		secondary: null,
 		target: "adjacentFoe",
