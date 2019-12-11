@@ -277,7 +277,7 @@ export abstract class BasicRoom {
 			this.runMuteTimer(true);
 		}, timeUntilExpire);
 	}
-	isMuted(user: User) {
+	isMuted(user: User): ID | undefined {
 		if (!user) return;
 		if (this.muteQueue) {
 			for (const entry of this.muteQueue) {
@@ -286,15 +286,16 @@ export abstract class BasicRoom {
 					(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
 					if (entry.time - Date.now() < 0) {
 						this.unmute(user.id);
-						return null;
+						return;
 					} else {
 						return entry.userid;
 					}
 				}
 			}
 		}
+		if (this.parent) return this.parent.isMuted(user);
 	}
-	getMuteTime(user: User) {
+	getMuteTime(user: User): number | undefined {
 		const userid = this.isMuted(user);
 		if (!userid) return;
 		for (const entry of this.muteQueue) {
@@ -302,6 +303,7 @@ export abstract class BasicRoom {
 				return entry.time - Date.now();
 			}
 		}
+		if (this.parent) return this.parent.getMuteTime(user);
 	}
 	/**
 	 * Gets the group symbol of a user in the room.
@@ -373,7 +375,7 @@ export abstract class BasicRoom {
 		}
 		this.runMuteTimer();
 
-		user.updateIdentity(this.roomid);
+		user.updateIdentity();
 
 		if (!(this.isPrivate === true || this.isPersonal || this.battle)) Punishments.monitorRoomPunishments(user);
 
@@ -404,7 +406,7 @@ export abstract class BasicRoom {
 		}
 
 		if (user && successUserid && userid in this.users) {
-			user.updateIdentity(this.roomid);
+			user.updateIdentity();
 			if (notifyText) user.popup(notifyText);
 		}
 		return successUserid;
@@ -714,7 +716,7 @@ export class GlobalRoom extends BasicRoom {
 		return true;
 	}
 	isMuted(user: User) {
-		return null;
+		return undefined;
 	}
 	send(message: string) {
 		Sockets.roomBroadcast(this.roomid, message);
