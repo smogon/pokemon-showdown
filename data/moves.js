@@ -4115,6 +4115,12 @@ let BattleMovedex = {
 				move.multihit = 1;
 				move.spreadModifier = 1;
 				move.target = "allAdjacentFoes";
+				for (const currentTarget of target.side.active) {
+					if (currentTarget.volatiles['protect'] || !currentTarget.runImmunity('Dragon') || currentTarget.fainted) {
+						move.multihit = 2;
+						break;
+					}
+				}
 			}
 		},
 		target: "normal",

@@ -1724,6 +1724,7 @@ export class Pokemon {
 		return totalTypeMod;
 	}
 
+	/** false = immune, true = not immune */
 	runImmunity(type: string, message?: string | boolean) {
 		if (!type || type === '???') return true;
 		if (!(type in this.battle.dex.data.TypeChart)) {
