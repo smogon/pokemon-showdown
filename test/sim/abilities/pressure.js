@@ -51,7 +51,7 @@ describe('Pressure', function () {
 
 	it('should deduct PP for each Pressure Pokemon targetted', function () {
 		this.timeout(3000);
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
 			{species: "Palkia", ability: 'pressure', moves: ['rest']},
@@ -70,7 +70,7 @@ describe('Pressure', function () {
 
 	it('should deduct PP for each opposing Pressure Pokemon when Snatch of Imprison are used', function () {
 		this.timeout(3000);
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
 			{species: "Palkia", ability: 'pressure', moves: ['rest']},

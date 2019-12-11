@@ -57,7 +57,7 @@ describe('Intimidate', function () {
 	});
 
 	it('should affect adjacent foes only', function () {
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Bulbasaur", item: 'leftovers', ability: 'overgrow', moves: ['vinewhip']},
 			{species: "Charmander", item: 'leftovers', ability: 'blaze', moves: ['ember']},

@@ -44,7 +44,7 @@ describe('Target Resolution', function () {
 		});
 
 		it(`should support RedirectTarget event for a fainted foe and type 'any' `, function () {
-			battle = common.createBattle({gameType: 'triples'}, [[
+			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['waterpulse']}, // Water Pulse over Water Gun due to targeting in triples
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
@@ -60,7 +60,7 @@ describe('Target Resolution', function () {
 
 			// Do it again with swapped positions
 			battle.destroy();
-			battle = common.createBattle({gameType: 'triples'}, [[
+			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},

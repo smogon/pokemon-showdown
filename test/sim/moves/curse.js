@@ -188,7 +188,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 			p1team.splice(cursePos, 0, triplesTeams[0][0]);
 			let p2team = triplesTeams[1].slice();
 
-			battle = common.createBattle({gameType: 'triples'}, [p1team, p2team]);
+			battle = common.gen(5).createBattle({gameType: 'triples'}, [p1team, p2team]);
 			runTriplesTest(battle, battle.p1.active[cursePos]);
 		});
 	}

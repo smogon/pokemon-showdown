@@ -13,7 +13,7 @@ describe('Follow Me', function () {
 	it('should redirect single-target moves towards it if it is a valid target', function () {
 		this.timeout(5000);
 
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
 			{species: 'Clefairy', ability: 'unaware', moves: ['calmmind']},

@@ -251,7 +251,7 @@ describe('Choice parser', function () {
 
 		describe('Triples', function () {
 			it('should accept only `move` and `switch` choices for a healthy Pokémon on the center', function () {
-				battle = common.createBattle({gameType: 'triples'});
+				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -280,7 +280,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the left', function () {
-				battle = common.createBattle({gameType: 'triples'});
+				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -310,7 +310,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the right', function () {
-				battle = common.createBattle({gameType: 'triples'});
+				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -340,7 +340,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should enforce `pass` choices for fainted Pokémon', function () {
-				battle = common.createBattle({gameType: 'triples'});
+				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},

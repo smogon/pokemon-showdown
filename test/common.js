@@ -7,16 +7,6 @@ const Dex = Sim.Dex;
 const cache = new Map();
 const formatsCache = new Map();
 
-const RULE_FLAGS = {
-	pokemon: 1,
-	legality: 2,
-	preview: 4,
-	sleepClause: 8,
-	cancel: 16,
-	endlessBattleClause: 32,
-	inverseMod: 64,
-};
-
 function capitalize(word) {
 	return word.charAt(0).toUpperCase() + word.slice(1);
 }
@@ -31,7 +21,7 @@ class TestTools {
 		this.currentMod = mod;
 		this.dex = Dex.mod(mod);
 
-		this.modPrefix = this.dex.isBase ? `` : `[${mod}]`;
+		this.modPrefix = this.dex.isBase ? `[gen8] ` : `[${mod}] `;
 	}
 
 	mod(mod) {
@@ -52,43 +42,29 @@ class TestTools {
 	getFormat(options) {
 		if (options.formatid) return Dex.getFormat(options.formatid);
 
-		let mask = 0;
-		for (let property in options) {
-			if (property === 'gameType' || !options[property]) continue;
-			mask |= RULE_FLAGS[property];
-		}
 		const gameType = Dex.getId(options.gameType || 'singles');
+		const customRules = [
+			options.pokemon && '-Nonexistent',
+			options.legality && 'Obtainable',
+			!options.preview && '!Team Preview',
+			options.sleepClause && 'Sleep Clause Mod',
+			!options.cancel && '!Cancel Mod',
+			options.endlessBattleClause && 'Endless Battle Clause',
+			options.inverseMod && 'Inverse Mod',
+		].filter(Boolean);
+		const customRulesID = customRules.length ? `@@@${customRules.join(',')}` : ``;
 
-		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType);
-		const formatName = [this.modPrefix, gameTypePrefix, "Custom Game", '' + mask].filter(part => part).join(" ");
-		const formatId = Dex.getId(formatName);
+		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
+		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType) + ' ';
+		const formatName = `${this.modPrefix}${gameTypePrefix}${basicFormat}${customRulesID}`;
 
-		let format = formatsCache.get(formatId);
+		let format = formatsCache.get(formatName);
 		if (format) return format;
 
-		format = new Dex.Data.Format({
-			id: formatId,
-			name: formatName,
+		format = Dex.getFormat(formatName);
+		if (!format.exists) throw new Error(`Unidentified format: ${formatName}`);
 
-			mod: this.currentMod,
-			mask: mask,
-			gameType: options.gameType || 'singles',
-			isCustomGameFormat: true,
-			ruleset: [
-				options.pokemon && '-Nonexistent',
-				options.legality && 'Obtainable',
-				options.preview && 'Team Preview',
-				options.sleepClause && 'Sleep Clause Mod',
-				options.cancel && 'Cancel Mod',
-				options.endlessBattleClause && 'Endless Battle Clause',
-				options.inverseMod && 'Inverse Mod',
-			].filter(Boolean),
-			rated: false,
-
-			effectType: 'Format',
-		});
-
-		formatsCache.set(formatId, format);
+		formatsCache.set(formatName, format);
 		return format;
 	}
 

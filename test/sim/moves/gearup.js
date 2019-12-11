@@ -11,7 +11,7 @@ describe('Gear Up', function () {
 	});
 
 	it('should boost the Attack and Special Attack of all active allies with Plus or Minus', function () {
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Minun", ability: 'minus', moves: ['sleeptalk']},
 			{species: "Klinklang", ability: 'plus', moves: ['gearup']},

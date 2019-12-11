@@ -92,7 +92,7 @@ describe('Pickup', function () {
 	});
 
 	it('should not pick up items from non-adjacent allies and enemies', function () {
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Ambipom', ability: 'pickup', moves: ['protect']},
 			{species: 'Regirock', ability: 'sturdy', moves: ['curse']},
