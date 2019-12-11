@@ -93,7 +93,7 @@ export class LadderStore {
 			room.add(`|error|Unexpected response ${data} from ladder server.`);
 			room.update();
 			problem = true;
-		} else if (data && data.errorip) {
+		} else if (data.errorip) {
 			room.add(`|error|This server's request IP ${data.errorip} is not a registered server.`);
 			room.add(`|error|You should be using ladders.js and not ladders-remote.js for ladder tracking.`);
 			room.update();
