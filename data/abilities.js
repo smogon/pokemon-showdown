@@ -4661,7 +4661,7 @@ let BattleAbilities = {
 			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
-			pokemon.formeChange(pokemon.template.inheritsFrom, this.effect, false, '[silent]');
+			pokemon.formeChange(/** @type {string} */ (pokemon.template.inheritsFrom), this.effect, false, '[silent]');
 		},
 		effect: {
 			onStart(pokemon) {
@@ -4673,7 +4673,7 @@ let BattleAbilities = {
 			},
 			onEnd(pokemon) {
 				if (['Zen', 'Galar-Zen'].includes(pokemon.template.forme)) {
-					pokemon.formeChange(pokemon.template.inheritsFrom);
+					pokemon.formeChange(/** @type {string} */ (pokemon.template.inheritsFrom));
 				}
 			},
 		},
