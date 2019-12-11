@@ -4854,6 +4854,7 @@ let BattleItems = {
 			onModifyPriority(priority, pokemon) {
 				return Math.round(priority) + 0.1;
 			},
+			duration: 1,
 		},
 		name: "Quick Claw",
 		spritenum: 373,
