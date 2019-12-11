@@ -733,16 +733,6 @@ let BattleFormats = {
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}
 		},
-		onBegin() {
-			// if you have a mega/primal or z, you can't dynamax
-			for (const pokemon of this.getAllPokemon()) {
-				const item = pokemon.getItem();
-				// this.canMegaEvo check is for Rayquaza.
-				if (item.megaStone || this.canMegaEvo(pokemon) || item.onPrimal || item.zMove) {
-					pokemon.canDynamax = false;
-				}
-			}
-		},
 	},
 	ignoreillegalabilities: {
 		effectType: 'ValidatorRule',
