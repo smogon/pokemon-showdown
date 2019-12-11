@@ -1848,7 +1848,7 @@ export class TeamValidator {
 			return template;
 		} else if (template.inheritsFrom) {
 			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
-			return this.dex.getTemplate(template.inheritsFrom);
+			return this.dex.getTemplate(Array.isArray(template.inheritsFrom) ? template.inheritsFrom[0] : template.inheritsFrom);
 		}
 		return null;
 	}
