@@ -154,7 +154,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		maxForcedLevel: 50,
+		forcedLevel: 50,
 		teamLength: {
 			validate: [3, 6],
 			battle: 3,
@@ -218,7 +218,7 @@ let Formats = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		maxForcedLevel: 50,
+		forcedLevel: 50,
 		teamLength: {
 			validate: [4, 6],
 			battle: 4,
@@ -232,7 +232,7 @@ let Formats = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		maxForcedLevel: 50,
+		forcedLevel: 50,
 		teamLength: {
 			validate: [4, 6],
 			battle: 4,
