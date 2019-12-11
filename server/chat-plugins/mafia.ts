@@ -319,13 +319,32 @@ class MafiaTracker extends Rooms.RoomGame {
 		let roles = roleString.split(',').map(x => x.trim());
 		if (roles.length === 1) {
 			// Attempt to set roles from a theme
-			let theme = MafiaData.themes[toID(roles[0])];
-			if (typeof theme === 'string') theme = MafiaData.themes[theme];
-			if (typeof theme !== 'object') return user.sendTo(this.room, `|error|The theme "${roles[0]}" was not found.`);
-			if (!theme[this.playerCount]) return user.sendTo(this.room, `|error|The theme "${theme.name}" does not have a role list for ${this.playerCount} players.`);
-			const themeRoles: string = theme[this.playerCount].slice();
-			roles = themeRoles.split(',').map(x => x.trim());
-			this.theme = theme;
+			const themeName = toID(roles[0]);
+			if (themeName in MafiaData.themes) {
+				// setting a proper theme
+				let theme = MafiaData.themes[themeName];
+				if (typeof theme === 'string') theme = MafiaData.themes[theme];
+				if (typeof theme === 'object') {
+					if (!theme[this.playerCount]) return user.sendTo(this.room, `|error|The theme "${theme.name}" does not have a role list for ${this.playerCount} players.`);
+					const themeRoles: string = theme[this.playerCount].slice();
+					roles = themeRoles.split(',').map(x => x.trim());
+					this.theme = theme;
+				} else {
+					return this.sendRoom(`Invalid alias in mafia-data themes: ${roles[0]}`);
+				}
+			} else if (themeName in MafiaData.IDEAs) {
+				// setting an IDEA's rolelist as a theme, a la Great Idea
+				let IDEA = MafiaData.IDEAs[themeName];
+				if (typeof IDEA === 'string') IDEA = MafiaData.IDEAs[IDEA];
+				if (typeof IDEA === 'object') {
+					roles = IDEA.roles.slice();
+				} else {
+					return this.sendRoom(`Invalid alias in mafia-data IDEAs: ${roles[0]}`);
+				}
+				this.theme = null;
+			} else {
+				return user.sendTo(this.room, `|error|${roles[0]} is not a valid theme or IDEA.`);
+			}
 		} else {
 			this.theme = null;
 		}
