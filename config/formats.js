@@ -343,6 +343,7 @@ let Formats = [
 			'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
+		unbanlist: ['Melmetal', 'Meltan'],
 	},
 	{
 		name: "[Gen 8] National Dex AG",
@@ -352,6 +353,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Team Preview', 'Nickname Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', '+Past', 'NatDex Rule'],
+		unbanlist: ['Melmetal', 'Meltan'],
 	},
 
 	// OM of the Month
