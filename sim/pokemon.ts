@@ -674,6 +674,7 @@ export class Pokemon {
 		// Check if any active pokemon have the ability Neutralizing Gas
 		let neutralizinggas = false;
 		for (const pokemon of this.battle.getAllActive()) {
+			// can't use hasAbility because it would lead to infinite recursion
 			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid']
 				&& !pokemon.abilityData.ending) {
 				neutralizinggas = true;
