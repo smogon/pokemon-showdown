@@ -353,6 +353,10 @@ let BattleMovedex = {
 			},
 		},
 	},
+	growth: {
+		inherit: true,
+		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages.",
+	},
 	guardianofalola: {
 		inherit: true,
 		isNonstandard: null,
@@ -384,6 +388,10 @@ let BattleMovedex = {
 	heavyslam: {
 		inherit: true,
 		onTryHit() {},
+	},
+	hurricane: {
+		inherit: true,
+		desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
 	},
 	hiddenpower: {
 		inherit: true,
@@ -632,6 +640,14 @@ let BattleMovedex = {
 	mistball: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	moonlight: {
+		inherit: true,
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+	},
+	morningsun: {
+		inherit: true,
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
 	},
 	mudbomb: {
 		inherit: true,
@@ -898,6 +914,14 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	solarbeam: {
+		inherit: true,
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
+	},
+	solarblade: {
+		inherit: true,
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
+	},
 	sonicboom: {
 		inherit: true,
 		isNonstandard: null,
@@ -954,6 +978,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	synthesis: {
+		inherit: true,
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+	},
 	tailglow: {
 		inherit: true,
 		isNonstandard: null,
@@ -993,6 +1021,10 @@ let BattleMovedex = {
 	trumpcard: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	thunder: {
+		inherit: true,
+		desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
 	},
 	twineedle: {
 		inherit: true,
