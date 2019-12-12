@@ -12543,12 +12543,10 @@ let BattleMovedex = {
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
-			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
+			if (!pokemon.hasItem('utilityumbrella') && this.field.isWeather(['sunnyday', 'desolateland'])) {
 				factor = 0.667;
-			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+			} else if (this.field.isWeather(pokemon.hasItem('utilityumbrella') ? ['sandstorm', 'hail'] : ['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				factor = 0.25;
-			} else if (pokemon.hasItem('utilityumbrella')) {
-				factor = 0.5;
 			}
 			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
@@ -12573,12 +12571,10 @@ let BattleMovedex = {
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
-			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
+			if (!pokemon.hasItem('utilityumbrella') && this.field.isWeather(['sunnyday', 'desolateland'])) {
 				factor = 0.667;
-			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+			} else if (this.field.isWeather(pokemon.hasItem('utilityumbrella') ? ['sandstorm', 'hail'] : ['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				factor = 0.25;
-			} else if (pokemon.hasItem('utilityumbrella')) {
-				factor = 0.5;
 			}
 			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
@@ -17576,8 +17572,7 @@ let BattleMovedex = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+			if (this.field.isWeather(pokemon.hasItem('utilityumbrella') ? ['sandstorm', 'hail'] : ['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
@@ -17616,8 +17611,7 @@ let BattleMovedex = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+			if (this.field.isWeather(pokemon.hasItem('utilityumbrella') ? ['sandstorm', 'hail'] : ['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
@@ -19152,12 +19146,10 @@ let BattleMovedex = {
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
-			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
+			if (!pokemon.hasItem('utilityumbrella') && this.field.isWeather(['sunnyday', 'desolateland'])) {
 				factor = 0.667;
-			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+			} else if (this.field.isWeather(pokemon.hasItem('utilityumbrella') ? ['sandstorm', 'hail'] : ['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				factor = 0.25;
-			} else if (pokemon.hasItem('utilityumbrella')) {
-				factor = 0.5;
 			}
 			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
@@ -20904,12 +20896,12 @@ let BattleMovedex = {
 			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
-				if (pokemon.item === "utilityumbrella") break;
+				if (pokemon.hasItem('utilityumbrella')) break;
 				move.basePower *= 2;
 				break;
 			case 'raindance':
 			case 'primordialsea':
-				if (pokemon.item === "utilityumbrella") break;
+				if (pokemon.hasItem('utilityumbrella')) break;
 				move.basePower *= 2;
 				break;
 			case 'sandstorm':
