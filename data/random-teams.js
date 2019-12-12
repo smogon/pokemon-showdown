@@ -925,8 +925,8 @@ class RandomTeams {
 				case 'earthpower':
 					if (hasMove['earthquake'] && counter.setupType !== 'Special') rejected = true;
 					break;
-				case 'freezedry':
-					if (hasMove['icebeam'] || counter.stab < 2) rejected = true;
+				case 'icebeam':
+					if (hasMove['freezedry']) rejected = true;
 					break;
 				case 'bodyslam':
 					if (hasMove['doubleedge']) rejected = true;
@@ -991,6 +991,7 @@ class RandomTeams {
 					break;
 				case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'synthesis':
 					if (hasMove['leechseed'] || hasMove['rest'] || hasMove['selfdestruct'] || hasMove['wish']) rejected = true;
+					if (move.id === 'roost' && hasMove['stoneedge']) rejected = true;
 					break;
 				case 'substitute':
 					if (hasMove['clangoroussoul'] || hasMove['dracometeor'] || hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch'] || hasMove['whirlwind']) rejected = true;
@@ -1032,7 +1033,7 @@ class RandomTeams {
 					(hasType['Dragon'] && !counter['Dragon'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Electric'] && (!counter['Electric'] || (hasMove['voltswitch'] && counter.stab < 2))) ||
 					(hasType['Fairy'] && !counter['Fairy'] && !hasAbility['Pixilate'] && (counter.setupType || !counter['Status'])) ||
-					(hasType['Fighting'] && !counter['Fighting'] && (template.baseStats.atk >= 110 || hasAbility['Justified'] || hasAbility['Unburden'] || counter.setupType || !counter['Status'])) ||
+					(hasType['Fighting'] && !counter['Fighting'] && (template.baseStats.atk >= 110 || hasAbility['Justified'] || counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Flying'] && !counter['Flying'] && (hasAbility['Serene Grace'] || (hasType['Normal'] && movePool.includes('bravebird')))) ||
 					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost'] && !hasAbility['Steelworker']) ||
@@ -1143,7 +1144,7 @@ class RandomTeams {
 				} else if (ability === 'Magic Guard') {
 					rejectAbility = abilities.includes('Tinted Lens');
 				} else if (ability === 'Mold Breaker') {
-					rejectAbility = hasMove['acrobatics'] || abilities.includes('Adaptability');
+					rejectAbility = abilities.includes('Adaptability') || abilities.includes('Unburden');
 				} else if (ability === 'Overgrow') {
 					rejectAbility = !counter['Grass'];
 				} else if (ability === 'Pixilate') {
@@ -1164,8 +1165,6 @@ class RandomTeams {
 					rejectAbility = !counter['sheerforce'] || abilities.includes('Guts') || hasMove['doubleedge'];
 				} else if (ability === 'Slush Rush') {
 					rejectAbility = hasMove['raindance'];
-				} else if (ability === 'Solar Power') {
-					rejectAbility = !counter['Special'] || !teamDetails['sun'];
 				} else if (ability === 'Sturdy') {
 					rejectAbility = !!counter['recoil'];
 				} else if (ability === 'Swarm') {
@@ -1183,7 +1182,7 @@ class RandomTeams {
 				} else if (ability === 'Unaware') {
 					rejectAbility = counter.setupType || hasMove['stealthrock'];
 				} else if (ability === 'Unburden') {
-					rejectAbility = abilities.includes('Prankster') || (!counter.setupType && !hasMove['acrobatics']);
+					rejectAbility = !counter.setupType || abilities.includes('Prankster');
 				} else if (ability === 'Volt Absorb') {
 					rejectAbility = this.dex.getEffectiveness('Electric', template) < -1;
 				} else if (ability === 'Water Absorb') {
@@ -1344,7 +1343,7 @@ class RandomTeams {
 				'Kyurem-Black': 78, 'Kyurem-White': 78, Lunala: 78, Marshadow: 78, Mewtwo: 78, 'Necrozma-Dawn-Wings': 78, 'Necrozma-Dusk-Mane': 78, Reshiram: 78, Solgaleo: 78, Zekrom: 78,
 
 				// Banned Ability
-				Gothitelle: 80, Wobbuffet: 80,
+				Glalie: 80, Gothitelle: 80, Octillery: 80, Wobbuffet: 80,
 
 				// Holistic judgement
 				// Delibird: 100,
