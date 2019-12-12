@@ -4860,6 +4860,7 @@ let BattleFormatsData = {
 	giratinaorigin: {
 		eventOnly: true,
 		requiredItem: "Griseous Orb",
+		requiredAbility: "Levitate",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -7803,6 +7804,7 @@ let BattleFormatsData = {
 		tier: "Uber",
 		doublesTier: "DUber",
 		requiredItem: "Rusted Sword",
+		requiredAbility: "Intrepid Sword",
 	},
 	zamazenta: {
 		randomBattleMoves: ["closecombat", "crunch", "psychicfangs", "wildcharge"],
@@ -7814,6 +7816,7 @@ let BattleFormatsData = {
 		tier: "Uber",
 		doublesTier: "DUber",
 		requiredItem: "Rusted Shield",
+		requiredAbility: "Dauntless Shield",
 	},
 	eternatus: {
 		randomBattleMoves: ["dynamaxcannon", "flamethrower", "recover", "sludgewave", "toxic"],
