@@ -103,15 +103,9 @@ let BattleAbilities = {
 		desc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
 		shortDesc: "This Pokemon cannot be confused.",
 	},
-<<<<<<< HEAD
-	"psychicsurge": {
-		inherit: true,
-		rating: 4.5,
-=======
 	"raindish": {
 		inherit: true,
 		desc: "If Rain Dance is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
->>>>>>> Update past gen description of effects affected by Utility Umbrella and update item checking
 	},
 	"rattled": {
 		desc: "This Pokemon's Speed is raised by 1 stage if hit by a Bug-, Dark-, or Ghost-type attack.",
