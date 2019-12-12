@@ -395,6 +395,7 @@ let BattleMovedex = {
 	},
 	growth: {
 		inherit: true,
+		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day, this move raises the user's Attack and Special Attack by 2 stages.",
 		pp: 40,
 	},
 	gunkshot: {
