@@ -89,8 +89,28 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	custapberry: {
-		inherit: true,
-		isUnreleased: undefined,
+		id: "custapberry",
+		name: "Custap Berry",
+		spritenum: 86,
+		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Ghost",
+		},
+		onModifyPriorityPriority: -1,
+		onModifyPriority(priority, pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+				if (pokemon.eatItem()) {
+					this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
+					pokemon.removeVolatile('custapberry');
+					return Math.round(priority) + 0.1;
+				}
+			}
+		},
+		onEat() { },
+		num: 210,
+		gen: 4,
+		desc: "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use.",
 	},
 	darkgem: {
 		inherit: true,
