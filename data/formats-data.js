@@ -798,7 +798,7 @@ let BattleFormatsData = {
 		doublesTier: "New",
 	},
 	dugtrioalola: {
-		randomBattleMoves: ["earthquake", "ironhead", "stoneedge", "substitute", "suckerpunch"],
+		randomBattleMoves: ["earthquake", "ironhead", "memento", "stoneedge", "suckerpunch"],
 		isUnreleased: "Past",
 		tier: "Unreleased",
 	},
@@ -5229,7 +5229,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	swoobat: {
-		randomBattleMoves: ["airslash", "heatwave", "nastyplot", "roost", "storedpower"],
+		randomBattleMoves: ["airslash", "calmmind", "heatwave", "roost", "storedpower"],
 		unreleasedHidden: "Past",
 		tier: "UU",
 		doublesTier: "New",
@@ -6191,7 +6191,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	diggersby: {
-		randomBattleMoves: ["earthquake", "quickattack", "swordsdance", "uturn", "wildcharge"],
+		randomBattleMoves: ["earthquake", "firepunch", "quickattack", "swordsdance", "uturn", "wildcharge"],
 		tier: "UU",
 		doublesTier: "New",
 	},
@@ -6428,7 +6428,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	hawlucha: {
-		randomBattleMoves: ["acrobatics", "closecombat", "stoneedge", "substitute", "swordsdance"],
+		randomBattleMoves: ["bravebird", "closecombat", "roost", "stoneedge", "swordsdance"],
 		tier: "OU",
 		doublesTier: "New",
 	},
@@ -7467,7 +7467,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	corviknight: {
-		randomBattleMoves: ["bodypress", "bravebird", "bulkup", "defog", "roost", "uturn"],
+		randomBattleMoves: ["bodypress", "bravebird", "bulkup", "defog", "roost"],
 		tier: "OU",
 		doublesTier: "New",
 	},

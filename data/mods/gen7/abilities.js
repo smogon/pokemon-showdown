@@ -68,7 +68,6 @@ let BattleAbilities = {
 
 			this.boost(boost);
 		},
-		rating: 5,
 	},
 	"oblivious": {
 		inherit: true,
@@ -79,6 +78,10 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
 		shortDesc: "This Pokemon cannot be confused.",
+	},
+	"psychicsurge": {
+		inherit: true,
+		rating: 4.5,
 	},
 	"rattled": {
 		desc: "This Pokemon's Speed is raised by 1 stage if hit by a Bug-, Dark-, or Ghost-type attack.",
