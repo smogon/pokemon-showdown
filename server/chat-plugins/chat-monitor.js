@@ -281,7 +281,7 @@ let chatfilter = function (message, user, room) {
 		const {location, condition, monitor} = Chat.monitors[list];
 		if (!monitor) continue;
 		// Ignore challenge games, which are unrated and not part of roomtours.
-		if (location === 'BATTLES' && !(room && room.battle && (room.battle.rated || room.parent))) continue;
+		if (location === 'BATTLES' && !(room && room.battle && room.battle.challengeType !== 'challenge')) continue;
 		if (location === 'PUBLIC' && room && room.isPrivate === true) continue;
 
 		switch (condition) {
