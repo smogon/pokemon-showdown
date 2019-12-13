@@ -131,7 +131,7 @@ function findEndOfCategory(category, inSubmissions) {
 	let i = 0;
 	let curCategory;
 	while (left < right) {
-		i = (left + right) / 2 | 0;
+		i = Math.floor((left + right) / 2);
 		curCategory = questions[i].category;
 		if (curCategory < category) {
 			left = i + 1;
@@ -884,7 +884,7 @@ class TimerModeTrivia extends Trivia {
 	 * @return {number}
 	 */
 	calculatePoints(diff, totalDiff) {
-		return 6 - 5 * diff / totalDiff | 0;
+		return Math.floor(6 - 5 * diff / totalDiff);
 	}
 
 	tallyAnswers() {
@@ -987,7 +987,7 @@ class NumberModeTrivia extends Trivia {
 	 * @return {number}
 	 */
 	calculatePoints(correctPlayers) {
-		return correctPlayers && (6 - (5 * correctPlayers / this.playerCount | 0));
+		return correctPlayers && (6 - Math.floor(5 * correctPlayers / this.playerCount));
 	}
 
 	getRoundLength() {
@@ -1315,7 +1315,7 @@ const commands = {
 		let questions;
 		if (isRandom) {
 			let categories = Object.keys(MAIN_CATEGORIES);
-			let randCategory = categories[Math.random() * categories.length | 0];
+			let randCategory = categories[Math.floor(Math.random() * categories.length)];
 			questions = sliceCategory(randCategory);
 		} else if (isAll) {
 			questions = triviaData.questions.slice();
