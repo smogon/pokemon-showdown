@@ -1118,6 +1118,16 @@ export class TeamValidator {
 				}
 			}
 		}
+
+		const crowned: {[k: string]: string} = {
+			'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
+		};
+		if (set.species in crowned) {
+			const ironHead = set.moves.indexOf('ironhead');
+			if (ironHead >= 0) {
+				set.moves[ironHead] = crowned[set.species];
+			}
+		}
 		return problems;
 	}
 
