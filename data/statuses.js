@@ -730,7 +730,7 @@ let BattleStatuses = {
 			if (pokemon.species === 'Eternatus-Eternamax') return;
 			pokemon.removeVolatile('substitute');
 			this.add('-start', pokemon, 'Dynamax');
-			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.canGigantamax);
+			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.canGigantamax);
 			if (pokemon.species === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
@@ -757,7 +757,7 @@ let BattleStatuses = {
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
-			if (pokemon.canGigantamax) pokemon.formeChange(pokemon.baseTemplate.species);
+			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.template.species);
 			if (pokemon.species === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
 			pokemon.maxhp = pokemon.baseMaxhp;
