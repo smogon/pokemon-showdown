@@ -1715,6 +1715,22 @@ export class Pokemon {
 		return false;
 	}
 
+	/**
+	 * Like Field.effectiveWeather(), but ignores sun and rain if
+	 * the Utility Umbrella is active for the Pokemon.
+	 */
+	effectiveWeather() {
+		const weather = this.battle.field.effectiveWeather();
+		switch (weather) {
+		case 'sunnyday':
+		case 'raindance':
+		case 'desolateland':
+		case 'primordialsea':
+			if (this.hasItem('utilityumbrella')) return '';
+		}
+		return weather;
+	}
+
 	runEffectiveness(move: ActiveMove) {
 		let totalTypeMod = 0;
 		for (const type of this.getTypes()) {

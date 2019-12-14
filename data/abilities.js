@@ -385,8 +385,7 @@ let BattleAbilities = {
 		desc: "If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
 		onModifySpe(spe, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(2);
 			}
 		},
@@ -1029,7 +1028,7 @@ let BattleAbilities = {
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isActive || pokemon.baseTemplate.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
-			if (this.field.isWeather(['sunnyday', 'desolateland']) && !pokemon.hasItem('utilityumbrella')) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				if (pokemon.template.speciesid !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '[msg]');
 				}
@@ -1042,16 +1041,14 @@ let BattleAbilities = {
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
 			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
 			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1119,22 +1116,14 @@ let BattleAbilities = {
 		onUpdate(pokemon) {
 			if (pokemon.baseTemplate.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
-			switch (this.field.effectiveWeather()) {
+			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
-				if (pokemon.hasItem('utilityumbrella')) {
-					if (pokemon.template.speciesid !== 'castform') forme = 'Castform';
-				} else {
-					if (pokemon.template.speciesid !== 'castformsunny') forme = 'Castform-Sunny';
-				}
+				if (pokemon.template.speciesid !== 'castformsunny') forme = 'Castform-Sunny';
 				break;
 			case 'raindance':
 			case 'primordialsea':
-				if (pokemon.hasItem('utilityumbrella')) {
-					if (pokemon.template.speciesid !== 'castform') forme = 'Castform';
-				} else {
-					if (pokemon.template.speciesid !== 'castformrainy') forme = 'Castform-Rainy';
-				}
+				if (pokemon.template.speciesid !== 'castformrainy') forme = 'Castform-Rainy';
 				break;
 			case 'hail':
 				if (pokemon.template.speciesid !== 'castformsnowy') forme = 'Castform-Snowy';
@@ -1531,8 +1520,7 @@ let BattleAbilities = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (pokemon.status && this.field.isWeather(['raindance', 'primordialsea'])) {
+			if (pokemon.status && ['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
 				this.debug('hydration');
 				this.add('-activate', pokemon, 'ability: Hydration');
 				pokemon.cureStatus();
@@ -1867,15 +1855,13 @@ let BattleAbilities = {
 		desc: "If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon cannot gain a major status condition and Rest will fail for it.",
 		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
 		onSetStatus(status, target, source, effect) {
-			if (target.hasItem('utilityumbrella')) return;
-			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
+			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
 				if (effect && effect.status) this.add('-immune', target, '[from] ability: Leaf Guard');
 				return false;
 			}
 		},
 		onTryAddVolatile(status, target) {
-			if (target.hasItem('utilityumbrella')) return;
-			if (status.id === 'yawn' && this.field.isWeather(['sunnyday', 'desolateland'])) {
+			if (status.id === 'yawn' && ['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
 				this.add('-immune', target, '[from] ability: Leaf Guard');
 				return null;
 			}
@@ -3662,8 +3648,7 @@ let BattleAbilities = {
 		shortDesc: "If Sunny Day is active, this Pokemon's Sp. Atk is 1.5x; loses 1/8 max HP per turn.",
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -4058,8 +4043,7 @@ let BattleAbilities = {
 		desc: "If Rain Dance is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled.",
 		shortDesc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
 		onModifySpe(spe, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isWeather(['raindance', 'primordialsea'])) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(2);
 			}
 		},
