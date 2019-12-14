@@ -118,8 +118,8 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU', 'NFE Clause'],
-		banlist: ['Doublade', 'Rhydon', 'Type: Null', 'Shadow Tag'],
+		ruleset: ['Obtainable', 'NFE Clause', 'Standard', 'Team Preview'],
+		banlist: ['Doublade', 'Rhydon', 'Type: Null', 'Shadow Tag', 'Baton Pass'],
 		minSourceGen: 8,
 	},
 	{
