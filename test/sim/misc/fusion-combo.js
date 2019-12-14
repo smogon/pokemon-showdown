@@ -11,10 +11,13 @@ describe('Fusion Bolt + Fusion Flare', function () {
 	});
 
 	it('should boost the second move if the first was used immediately before it', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
-			[{species: 'Zekrom', ability: 'teravolt', moves: ['fusionbolt']}, {species: 'Reshiram', ability: 'teravolt', moves: ['fusionflare']}],
-			[{species: 'Dragonite', ability: 'Multiscale', moves: ['roost']}, {species: 'Lugia', ability: 'Multiscale', moves: ['fusionbolt']}],
-		]);
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Zekrom', ability: 'teravolt', moves: ['fusionbolt']},
+			{species: 'Reshiram', ability: 'teravolt', moves: ['fusionflare'], evs: {spe: 4}},
+		], [
+			{species: 'Dragonite', ability: 'Multiscale', moves: ['roost']},
+			{species: 'Lugia', ability: 'Multiscale', moves: ['fusionbolt']},
+		]]);
 
 		battle.makeChoices();
 

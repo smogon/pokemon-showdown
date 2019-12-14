@@ -28,7 +28,7 @@
     "pretest": "npm run lint && npm run build",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "fulltest": "npm run pretest && npm run tsc && mocha -g \".*\""
+    "fulltest": "npm run pretest && npm run tsc && mocha -R spec -g \".*\""
   },
   "husky": {
     "hooks": {
@@ -39,7 +39,7 @@
   "homepage": "http://pokemonshowdown.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zarel/Pokemon-Showdown.git"
+    "url": "https://github.com/smogon/pokemon-showdown.git"
   },
   "author": {
     "name": "Guangcong Luo",
@@ -69,7 +69,7 @@
     "eslint": "^6.5.1",
     "husky": "^3.0.8",
     "mocha": "^6.2.1",
-    "smogon": "^0.0.4",
+    "smogon": "^0.0.5",
     "tslint": "^5.20.0",
     "typescript": "^3.7.2"
   }

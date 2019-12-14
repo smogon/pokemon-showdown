@@ -27,7 +27,7 @@ describe('Electric Terrain', function () {
 	});
 
 	it('should increase the base power of Electric-type attacks used by grounded Pokemon', function () {
-		battle = common.createBattle();
+		battle = common.gen(7).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Thundurus", ability: 'defiant', moves: ['thunderwave']}]});
 		battle.makeChoices('move electricterrain', 'move thunderwave');

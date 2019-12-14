@@ -20,6 +20,7 @@ import * as RoomGames from "./room-game";
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
+export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour';
 
 interface BattleRequestTracker {
 	rqid: number;
@@ -455,6 +456,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	readonly allowRenames: boolean;
 	readonly format: string;
 	readonly gameType: string | undefined;
+	readonly challengeType: ChallengeType;
 	/**
 	 * The lower player's rating, for searching purposes.
 	 * 0 for unrated battles. 1 for unknown ratings.
@@ -498,6 +500,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		this.format = formatid;
 		this.gameType = format.gameType;
+		this.challengeType = options.challengeType;
 		this.rated = options.rated || 0;
 		// true when onCreateBattleRoom has been called
 		this.missingBattleStartMessage = !!options.inputLog;
@@ -1134,7 +1137,6 @@ export class RoomBattleStream extends BattleStream {
 	_writeLine(type: string, message: string) {
 		switch (type) {
 		case 'eval':
-			/* eslint-disable no-eval, no-unused-vars */
 			const battle = this.battle;
 			const p1 = battle && battle.sides[0];
 			const p2 = battle && battle.sides[1];
@@ -1167,7 +1169,6 @@ export class RoomBattleStream extends BattleStream {
 			} catch (e) {
 				battle.add('', '<<< error: ' + e.message);
 			}
-			/* eslint-enable no-eval, no-unused-vars */
 			break;
 		default: super._writeLine(type, message);
 		}

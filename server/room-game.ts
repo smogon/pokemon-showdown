@@ -190,27 +190,37 @@ export class RoomGame {
 
 	// These are all optional to implement:
 
-	// forfeit(user)
-	//   Called when a user uses /forfeit
-	//   Also planned to be used for some force-forfeit situations, such
-	//   as when a user changes their name and .allowRenames === false
-	//   This is strongly recommended to be supported, as the user is
-	//   extremely unlikely to keep playing after this function is
-	//   called.
+	/**
+	 * Called when a user uses /forfeit
+	 * Also planned to be used for some force-forfeit situations, such
+	 * as when a user changes their name and .allowRenames === false
+	 * This is strongly recommended to be supported, as the user is
+	 * extremely unlikely to keep playing after this function is
+	 * called.
+	 */
+	forfeit?(user: User) {}
 
-	// choose(user, text)
-	//   Called when a user uses /choose [text]
-	//   If you have buttons, you are recommended to use this interface
-	//   instead of making your own commands.
+	/**
+	 * Called when a user uses /choose [text]
+	 * If you have buttons, you are recommended to use this interface
+	 * instead of making your own commands.
+	 */
+	choose?(user: User, text: string) {}
 
-	// undo(user, text)
-	//   Called when a user uses /undo [text]
+	/**
+	 * Called when a user uses /undo [text]
+	 */
+	undo?(user: User, text: string) {}
 
-	// joinGame(user, text)
-	//   Called when a user uses /joingame [text]
+	/**
+	 * Called when a user uses /joingame [text]
+	 */
+	joinGame?(user: User, text?: string) {}
 
-	// leaveGame(user, text)
-	//   Called when a user uses /leavegame [text]
+	/**
+	 * Called when a user uses /leavegame [text]
+	 */
+	leaveGame?(user: User, text?: string) {}
 
 	// Events:
 
@@ -234,7 +244,6 @@ export class RoomGame {
 	 * place in.
 	 */
 	removeBannedUser(user: User) {
-		// @ts-ignore
 		if (this.forfeit) this.forfeit(user);
 	}
 

@@ -6,7 +6,7 @@
  * 'whois' here, then use it by typing /whois into Pokemon Showdown.
  * For the API, see chat-plugins/COMMANDS.md
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
@@ -123,10 +123,7 @@ const commands = {
 			} else if (targetUser.locked) {
 				buf += `<br />LOCKED: ${targetUser.locked}`;
 				switch (targetUser.locked) {
-				case '#dnsbl':
-					buf += ` - IP is in a DNS-based blacklist`;
-					break;
-				case '#range':
+				case '#rangelock':
 					buf += ` - IP or host is in a temporary range-lock`;
 					break;
 				case '#hostfilter':
@@ -561,8 +558,9 @@ const commands = {
 						"Dex#": pokemon.num,
 						"Gen": pokemon.gen || 'CAP',
 						"Height": pokemon.heightm + " m",
-						"Weight": pokemon.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 					};
+					if (!pokemon.forme || pokemon.forme !== "Gmax") details["Weight"] = pokemon.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>";
+					else details["Weight"] = "0 kg <em>(GK/LK fail)</em>";
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					let evos = /** @type {string[]} */ ([]);
@@ -580,11 +578,14 @@ const commands = {
 							case 'levelHold':
 								evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
 								break;
-							case 'stone':
+							case 'useItem':
 								evos.push(`${evo.name} (${evo.evoItem})`);
 								break;
 							case 'levelMove':
 								evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
+								break;
+							case 'other':
+								evos.push(`${evo.name} (${evo.evoCondition})`);
 								break;
 							case 'trade':
 								evos.push(`${evo.name} (trade)`);
@@ -639,6 +640,7 @@ const commands = {
 						"Gen": move.gen || 'CAP',
 					};
 
+					if (move.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
 					if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
 					if (move.flags['contact']) details["&#10003; Contact"] = "";
 					if (move.flags['sound']) details["&#10003; Sound"] = "";
@@ -657,7 +659,9 @@ const commands = {
 					if (move.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
 
 					if (dex.gen >= 7) {
-						if (move.zMovePower) {
+						if (move.gen >= 8 && move.isMax) {
+							// Don't display Z-Power for Max/G-Max moves
+						} else if (move.zMovePower) {
 							details["Z-Power"] = move.zMovePower;
 						} else if (move.zMoveEffect) {
 							details["Z-Effect"] = {
@@ -679,12 +683,17 @@ const commands = {
 							details["&#10003; Z-Move"] = "";
 							details["Z-Crystal"] = dex.getItem(move.isZ).name;
 							if (move.basePower !== 1) {
-								details["User"] = dex.getItem(move.isZ).zMoveUser.join(", ");
+								details["User"] = dex.getItem(move.isZ).itemUser.join(", ");
 								details["Required Move"] = dex.getItem(move.isZ).zMoveFrom;
 							}
 						} else {
 							details["Z-Effect"] = "None";
 						}
+					}
+
+					if (dex.gen >= 8 && move.isMax) {
+						details["&#10003; Max Move"] = "";
+						if (typeof move.isMax === "string") details["User"] = move.isMax + "-Gmax";
 					}
 
 					details["Target"] = {
@@ -788,7 +797,7 @@ const commands = {
 			}
 
 			if (types.length === 0) {
-				return this.sendReplyBox(`${Chat.escapeHTML(target)} isn't a recognized type or pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
+				return this.sendReplyBox(Chat.html`${target} isn't a recognized type or pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
 			}
 			pokemon = {types: types};
 			target = types.join("/");
@@ -1467,9 +1476,9 @@ const commands = {
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown is open source:<br />` +
 			`- Language: JavaScript (Node.js)<br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master">What's new?</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown">Server source code</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Client">Client source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown/commits/master">What's new?</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown">Server source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown-client">Client source code</a><br />` +
 			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a>`
 		);
 	},
@@ -1644,7 +1653,7 @@ const commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown/blob/master/data/mods/gennext/README.md">README: overview of NEXT</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown/blob/master/data/mods/gennext/README.md">README: overview of NEXT</a><br />` +
 			"Example replays:<br />" +
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-120689854">Zergo vs Mr Weegle Snarf</a><br />` +
 			`- <a href="https://replay.pokemonshowdown.com/gennextou-130756055">NickMP vs Khalogie</a>`
@@ -1957,12 +1966,15 @@ const commands = {
 		let ability = Dex.getAbility(targets[0]);
 		let format = Dex.getFormat(targets[0]);
 		let atLeastOne = false;
-		let generation = (targets[1] || 'sm').trim().toLowerCase();
-		let genNumber = 7;
+		let generation = (targets[1] || 'ss').trim().toLowerCase();
+		let genNumber = 8;
 		let extraFormat = Dex.getFormat(targets[2]);
 
-		if (['7', 'gen7', 'seven', 'sm', 'sumo', 'usm', 'usum'].includes(generation)) {
+		if (['8', 'gen8', 'eight', 'ss', 'swsh'].includes(generation)) {
+			generation = 'ss';
+		} else if (['7', 'gen7', 'seven', 'sm', 'sumo', 'usm', 'usum'].includes(generation)) {
 			generation = 'sm';
+			genNumber = 7;
 		} else if (['6', 'gen6', 'oras', 'six', 'xy'].includes(generation)) {
 			generation = 'xy';
 			genNumber = 6;
@@ -1982,7 +1994,7 @@ const commands = {
 			generation = 'rb';
 			genNumber = 1;
 		} else {
-			generation = 'sm';
+			generation = 'ss';
 		}
 
 		// Pokemon
@@ -2036,14 +2048,14 @@ const commands = {
 			if (['ou', 'uu'].includes(formatId) && generation === 'sm' && room && room.language in supportedLanguages) {
 				// Limited support for translated analysis
 				// Translated analysis do not support automatic redirects from a speciesid to the proper page
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			} else if (['ou', 'uu'].includes(formatId) && generation === 'sm') {
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
 					`Other languages: <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=es">Español</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=fr">Français</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=it">Italiano</a>, ` +
 					`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=de">Deutsch</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=pt">Português</a>`
 				);
 			} else {
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
@@ -2092,7 +2104,7 @@ const commands = {
 			}
 			if (formatName) {
 				atLeastOne = true;
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${formatName} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
@@ -2418,107 +2430,6 @@ const commands = {
 		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`,
 		`In order to use !code in private messages you must be a global voice or higher`,
 		`/code [code] - Shows you code. Accepts multi-line arguments.`,
-	],
-
-	htmlbox(target, room, user) {
-		if (!target) return this.parse('/help htmlbox');
-		target = this.canHTML(target);
-		if (!target) return;
-		target = Chat.collapseLineBreaksHTML(target);
-		if (!this.canBroadcast(true, '!htmlbox')) return;
-		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
-
-		if (!this.runBroadcast(true, '!htmlbox')) return;
-
-		this.sendReplyBox(target);
-	},
-	htmlboxhelp: [
-		`/htmlbox [message] - Displays a message, parsing HTML code contained.`,
-		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # & ~`,
-	],
-	addhtmlbox(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-		target = this.canHTML(target);
-		if (!target) return;
-		if (!this.can('addhtml', null, room)) return;
-		target = Chat.collapseLineBreaksHTML(target);
-		if (!user.can('addhtml')) {
-			target += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		this.addBox(target);
-	},
-	addhtmlboxhelp: [
-		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * & ~`,
-	],
-	addrankhtmlbox(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-		let [rank, html] = this.splitOne(target);
-		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		html = this.canHTML(html);
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
-		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank);
-	},
-	addrankhtmlboxhelp: [
-		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * & ~`,
-	],
-	changeuhtml: 'adduhtml',
-	adduhtml(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-
-		let [name, html] = this.splitOne(target);
-		name = toID(name);
-		html = this.canHTML(html);
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
-		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		html = `|uhtml${(cmd === 'changeuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.add(html);
-	},
-	adduhtmlhelp: [
-		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.  Requires: * & ~`,
-	],
-	changeuhtmlhelp: [
-		`/changeuhtml [name], [message] - Changes the message previously shown with /adduhtml [name]. Requires: * & ~`,
-	],
-	changerankuhtml: 'addrankuhtml',
-	addrankuhtml(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ' + cmd);
-		if (!this.canTalk()) return;
-
-		let [rank, uhtml] = this.splitOne(target);
-		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		let [name, html] = this.splitOne(uhtml);
-		name = toID(name);
-		html = this.canHTML(html);
-		if (!html) return;
-		if (!this.can('addhtml', null, room)) return;
-		html = Chat.collapseLineBreaksHTML(html);
-		if (!user.can('addhtml')) {
-			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
-		}
-
-		html = `|uhtml${(cmd === 'changerankuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.room.sendRankedUsers(html, rank);
-	},
-	addrankuhtmlhelp: [
-		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: * & ~`,
-	],
-	changerankuhtmlhelp: [
-		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * & ~`,
 	],
 };
 

@@ -72,7 +72,7 @@ describe('Paralysis', function () {
 	});
 
 	it('should reduce speed to 25% of its original value in Stadium', function () {
-		battle = common.mod('stadium').createBattle([
+		battle = common.createBattle({formatid: 'gen1stadiumou@@@!teampreview'}, [
 			[{species: 'Vaporeon', moves: ['growl']}],
 			[{species: 'Jolteon', moves: ['thunderwave']}],
 		]);

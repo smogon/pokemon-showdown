@@ -3,7 +3,7 @@
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
  * Every chat room and battle is a room, and what they do is done in
- * rooms.js. There's also a global room which every user is in, and
+ * rooms.ts. There's also a global room which every user is in, and
  * handles miscellaneous things like welcoming the user.
  *
  * @license MIT
@@ -52,8 +52,8 @@ interface BattleRoomTable {
 }
 
 export type Room = GlobalRoom | GameRoom | ChatRoom;
-type Poll = import('./chat-plugins/poll').PollType;
-type Announcement = import('./chat-plugins/announcements').AnnouncementType;
+type Poll = import('./chat-plugins/poll').Poll;
+type Announcement = import('./chat-plugins/announcements').Announcement;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
@@ -100,6 +100,7 @@ export abstract class BasicRoom {
 	mafiaDisabled: boolean;
 	unoDisabled: boolean;
 	blackjackDisabled: boolean;
+	hangmanDisabled: boolean;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
 	privacySetter: Set<ID> | null;
@@ -155,6 +156,7 @@ export abstract class BasicRoom {
 		this.mafiaDisabled = false;
 		this.unoDisabled = false;
 		this.blackjackDisabled = false;
+		this.hangmanDisabled = false;
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
 		this.privacySetter = null;
@@ -275,7 +277,7 @@ export abstract class BasicRoom {
 			this.runMuteTimer(true);
 		}, timeUntilExpire);
 	}
-	isMuted(user: User) {
+	isMuted(user: User): ID | undefined {
 		if (!user) return;
 		if (this.muteQueue) {
 			for (const entry of this.muteQueue) {
@@ -284,15 +286,16 @@ export abstract class BasicRoom {
 					(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
 					if (entry.time - Date.now() < 0) {
 						this.unmute(user.id);
-						return null;
+						return;
 					} else {
 						return entry.userid;
 					}
 				}
 			}
 		}
+		if (this.parent) return this.parent.isMuted(user);
 	}
-	getMuteTime(user: User) {
+	getMuteTime(user: User): number | undefined {
 		const userid = this.isMuted(user);
 		if (!userid) return;
 		for (const entry of this.muteQueue) {
@@ -300,6 +303,7 @@ export abstract class BasicRoom {
 				return entry.time - Date.now();
 			}
 		}
+		if (this.parent) return this.parent.getMuteTime(user);
 	}
 	/**
 	 * Gets the group symbol of a user in the room.
@@ -371,7 +375,7 @@ export abstract class BasicRoom {
 		}
 		this.runMuteTimer();
 
-		user.updateIdentity(this.roomid);
+		user.updateIdentity();
 
 		if (!(this.isPrivate === true || this.isPersonal || this.battle)) Punishments.monitorRoomPunishments(user);
 
@@ -402,7 +406,7 @@ export abstract class BasicRoom {
 		}
 
 		if (user && successUserid && userid in this.users) {
-			user.updateIdentity(this.roomid);
+			user.updateIdentity();
 			if (notifyText) user.popup(notifyText);
 		}
 		return successUserid;
@@ -712,7 +716,7 @@ export class GlobalRoom extends BasicRoom {
 		return true;
 	}
 	isMuted(user: User) {
-		return null;
+		return undefined;
 	}
 	send(message: string) {
 		Sockets.roomBroadcast(this.roomid, message);
@@ -984,7 +988,12 @@ export class GlobalRoom extends BasicRoom {
 			}
 		}
 		const stack = stackLines.slice(0, 2).join(`<br />`);
-		const crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
+		let crashMessage;
+		if (/private/.test(stack)) {
+			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
+		} else {
+			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
+		}
 		const devRoom = Rooms.get('development');
 		if (devRoom) {
 			devRoom.add(crashMessage).update();
@@ -1019,7 +1028,7 @@ export class BasicChatRoom extends BasicRoom {
 	readonly log: Roomlog;
 	readonly autojoin: boolean;
 	readonly staffAutojoin: string | boolean;
-	readonly banwords: string[];
+	banwords: string[];
 	/** Only available in groupchats */
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
@@ -1548,7 +1557,7 @@ export const Rooms = {
 		return room;
 	},
 	createBattle(formatid: string, options: AnyObject) {
-		const players: (User & {specialNextBattle: boolean})[] =
+		const players: (User & {specialNextBattle?: string })[] =
 			[options.p1, options.p2, options.p3, options.p4].filter(user => user);
 		const gameType = Dex.getFormat(formatid).gameType;
 		if (gameType !== 'multi' && gameType !== 'free-for-all') {
@@ -1571,21 +1580,21 @@ export const Rooms = {
 			return;
 		}
 
-		if (players.some(user => user.specialNextBattle)) {
-			const p1Special = players[0].specialNextBattle;
-			let mismatch = `"${p1Special}"`;
+		const p1Special = players.length ? players[0].specialNextBattle : undefined;
+		let mismatch = `"${p1Special}"`;
+		for (const user of players) {
+			if (user.specialNextBattle !== p1Special) {
+				mismatch += ` vs. "${user.specialNextBattle}"`;
+			}
+			user.specialNextBattle = undefined;
+		}
+
+		if (mismatch !== `"${p1Special}"`) {
 			for (const user of players) {
-				if (user.specialNextBattle !== p1Special) {
-					mismatch += ` vs. "${user.specialNextBattle}"`;
-					break;
-				}
+				user.popup(`Your special battle settings don't match: ${mismatch}`);
 			}
-			if (mismatch !== `"${p1Special}"`) {
-				for (const user of players) {
-					user.popup(`Your special battle settings don't match: ${mismatch}`);
-				}
-				return;
-			}
+			return;
+		} else if (p1Special) {
 			options.ratedMessage = p1Special;
 		}
 
@@ -1611,6 +1620,8 @@ export const Rooms = {
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		const battle = new Rooms.RoomBattle(room, formatid, options);
 		room.game = battle;
+		// Special battles have modchat set to Player from the beginning
+		if (p1Special) room.modchat = '\u2606';
 
 		const inviteOnly = (options.inviteOnly || []);
 		for (const user of players) {

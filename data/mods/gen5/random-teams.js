@@ -1,6 +1,6 @@
 'use strict';
 
-const RandomGen6Teams = require('../../mods/gen6/random-teams');
+const RandomGen6Teams = require('../gen6/random-teams');
 
 class RandomGen5Teams extends RandomGen6Teams {
 	/**

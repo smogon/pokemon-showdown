@@ -5,6 +5,9 @@
 		"namelocked": "namelocked",
 		"locked": "locked",
 
+		"autoconfirmed": "verificados",
+		"trusted": "confiáveis",
+
 		"Please follow the rules:": "Por favor siga as regras:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-pt",
 		"Global Rules": "Regras Globais",
@@ -117,6 +120,17 @@
 
 		"Your message contained banned words in this room.": "Sua mensagem continha palavras banidas nesta sala.",
 		"You can't send the same message again so soon.": "Você não pode enviar a mesma mensagem de novo tão cedo.",
-		"Due to this room being a high traffic room, your message must contain at least two letters.": "Como esta sala contém um grande tráfego de mensagens, sua mensagem deve conter no mínimo duas letras."
+		"Due to this room being a high traffic room, your message must contain at least two letters.": "Como esta sala contém um grande tráfego de mensagens, sua mensagem deve conter no mínimo duas letras.",
+
+		"You are already blocking private messages! To unblock, use /unblockpms": "Você já está bloqueando mensagens privadas! Para desbloqueá-las, utilize /unblockpms",
+		"You are now blocking private messages, except from staff and ${rank}.": "Agora você está bloqueando mensagens privadas, exceto de staff e de usuários ${rank}.",
+		"You are now blocking private messages, except from staff and ${status} users.": "Agora você está bloqueando mensagens privadas, exceto de staff e de usuários ${status}.",
+		"You are now blocking private messages, except from staff.": "Agora você está bloqueando mensagens privadas, exceto de staff.",
+		"You are not blocking private messages! To block, use /blockpms": "Você não está bloqueando mensagens privadas! Para bloqueá-las, utilize /blockpms",
+		"You are no longer blocking private messages.": "Você não está mais bloqueando mensagens privadas.",
+		"You are now blocking all incoming challenge requests.": "Agora você está bloqueando todos os pedidos de desafio.",
+		"You are already blocking challenges!": "Você já está bloqueando desafios",
+		"You are already available for challenges!": "Você já está disponível para desafios!",
+		"You are available for challenges from now on.": "Você está disponível para desafios a partir de agora."
 	}
 }

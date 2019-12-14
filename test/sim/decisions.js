@@ -226,7 +226,7 @@ describe('Choices', function () {
 		});
 
 		it('should allow shifting the Pokémon on the left to the center', function () {
-			battle = common.createBattle({gameType: 'triples'});
+			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
 				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
@@ -249,7 +249,7 @@ describe('Choices', function () {
 		});
 
 		it('should allow shifting the Pokémon on the right to the center', function () {
-			battle = common.createBattle({gameType: 'triples'});
+			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
 				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
@@ -396,7 +396,7 @@ describe('Choices', function () {
 		});
 
 		it('should allow passing when there are not enough available switch-ins even if an active Pokémon is not fainted', function () {
-			battle = common.createBattle({gameType: 'triples'}, [[
+			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 				{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
 				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
 				{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
@@ -532,7 +532,7 @@ describe('Choices', function () {
 
 		it('should allow specifying the team order in a slot-per-slot basis in Triples', function () {
 			for (let i = 0; i < 5; i++) {
-				battle = common.createBattle({preview: true, gameType: 'triples'}, TRIPLES_TEAMS.full);
+				battle = common.gen(5).createBattle({preview: true, gameType: 'triples'}, TRIPLES_TEAMS.full);
 				const teamOrder = Dex.shuffle(BASE_TEAM_ORDER.slice());
 
 				battle.makeChoices(`team ${teamOrder.join('')}`, 'default');
@@ -668,7 +668,7 @@ describe('Choices', function () {
 		});
 
 		it('should privately log shifting decisions for the Pokémon on the left', function () {
-			battle = common.createBattle({gameType: 'triples'});
+			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
 				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
@@ -687,7 +687,7 @@ describe('Choices', function () {
 		});
 
 		it('should privately log shifting decisions for the Pokémon on the right', function () {
-			battle = common.createBattle({gameType: 'triples'});
+			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
 				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
@@ -912,7 +912,7 @@ describe('Choice extensions', function () {
 					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
 					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
 				]];
-				battle = common.createBattle({gameType: 'triples', cancel: true}, TEAMS);
+				battle = common.gen(5).createBattle({gameType: 'triples', cancel: true}, TEAMS);
 
 				battle.choose('p1', 'shift, move 1, move 1');
 				assert(!battle.p1.activeRequest.noCancel);
@@ -925,7 +925,7 @@ describe('Choice extensions', function () {
 				assert.strictEqual(battle.p1.active[0].lastMove.id, 'synthesis');
 
 				battle.destroy();
-				battle = common.createBattle({gameType: 'triples', cancel: true}, TEAMS);
+				battle = common.gen(5).createBattle({gameType: 'triples', cancel: true}, TEAMS);
 
 				battle.choose('p1', 'move 1, move 1, shift');
 				assert(!battle.p1.activeRequest.noCancel);
@@ -948,7 +948,7 @@ describe('Choice extensions', function () {
 					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
 					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
 				]];
-				battle = common.createBattle({gameType: 'triples'}, TEAMS);
+				battle = common.gen(5).createBattle({gameType: 'triples'}, TEAMS);
 
 				battle.choose('p1', 'shift, move 1, move 1');
 				assert(battle.p1.activeRequest.noCancel);
@@ -962,7 +962,7 @@ describe('Choice extensions', function () {
 				assert.strictEqual(battle.p1.active[0].lastMove.id, 'growth');
 
 				battle.destroy();
-				battle = common.createBattle({gameType: 'triples'}, TEAMS);
+				battle = common.gen(5).createBattle({gameType: 'triples'}, TEAMS);
 
 				battle.choose('p1', 'move 1, move 1, shift');
 				assert(battle.p1.activeRequest.noCancel);
@@ -1374,7 +1374,7 @@ describe('Choice internals', function () {
 	});
 
 	it('should empty the actions list when undoing a shift', function () {
-		battle = common.createBattle({gameType: 'triples', cancel: true});
+		battle = common.gen(5).createBattle({gameType: 'triples', cancel: true});
 		battle.supportCancel = true;
 		battle.setPlayer('p1', {team: [
 			{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},

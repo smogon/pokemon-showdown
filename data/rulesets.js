@@ -13,7 +13,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	standardnext: {
 		effectType: 'ValidatorRule',
@@ -41,6 +41,7 @@ let BattleFormats = {
 			'Victini', 'Reshiram', 'Zekrom', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect',
 			'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion',
 			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zeraora',
+			'Zacian', 'Zamazenta', 'Eternatus',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && toID(set.item) === 'souldew') {
@@ -72,7 +73,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard Doubles',
 		desc: "The standard ruleset for all official Smogon doubles tiers",
-		ruleset: ['Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	obtainable: {
 		effectType: 'ValidatorRule',
@@ -80,30 +81,8 @@ let BattleFormats = {
 		desc: "Makes sure the team is possible to obtain in-game.",
 		ruleset: ['Obtainable Moves', 'Obtainable Abilities', 'Obtainable Formes', 'Obtainable Misc'],
 		banlist: ['Unreleased', 'Nonexistent'],
-	},
-	obtainablemoves: {
-		effectType: 'ValidatorRule',
-		name: 'Obtainable Moves',
-		desc: "Makes sure moves are learnable by the species.",
-		banlist: [
-			// Leaf Blade: Gen 6+ Nuzleaf level-up
-			// Sucker Punch: Gen 4 Shiftry tutor
-			'Shiftry + Leaf Blade + Sucker Punch',
-		],
 		// Mostly hardcoded in team-validator.ts
-	},
-	obtainableabilities: {
-		effectType: 'ValidatorRule',
-		name: 'Obtainable Abilities',
-		desc: "Makes sure abilities match the species.",
-		// Hardcoded in team-validator.ts
-	},
-	obtainableformes: {
-		effectType: 'ValidatorRule',
-		name: 'Obtainable Formes',
-		desc: "Makes sure in-battle formes only appear in-battle.",
-		// Mostly hardcoded in team-validator.ts
-		onValidateTeam(team) {
+		onValidateTeam(team, format) {
 			let kyuremCount = 0;
 			let necrozmaDMCount = 0;
 			let necrozmaDWCount = 0;
@@ -113,6 +92,11 @@ let BattleFormats = {
 						return ['You cannot have more than one Kyurem-Black/Kyurem-White.'];
 					}
 					kyuremCount++;
+				}
+				if (set.species === 'Keldeo-Resolute') {
+					if (!set.moves.includes('secretsword')) {
+						return ['Keldeo-Resolute needs to have the move Secret Sword.'];
+					}
 				}
 				if (set.species === 'Necrozma-Dusk-Mane') {
 					if (necrozmaDMCount > 0) {
@@ -129,6 +113,24 @@ let BattleFormats = {
 			}
 			return [];
 		},
+	},
+	obtainablemoves: {
+		effectType: 'ValidatorRule',
+		name: 'Obtainable Moves',
+		desc: "Makes sure moves are learnable by the species.",
+		// Hardcoded in team-validator.ts
+	},
+	obtainableabilities: {
+		effectType: 'ValidatorRule',
+		name: 'Obtainable Abilities',
+		desc: "Makes sure abilities match the species.",
+		// Hardcoded in team-validator.ts
+	},
+	obtainableformes: {
+		effectType: 'ValidatorRule',
+		name: 'Obtainable Formes',
+		desc: "Makes sure in-battle formes only appear in-battle.",
+		// Hardcoded in team-validator.ts
 	},
 	obtainablemisc: {
 		effectType: 'ValidatorRule',
@@ -239,7 +241,7 @@ let BattleFormats = {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
 				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
-				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
+				this.add('poke', pokemon.side.id, details, this.gen < 8 && pokemon.item ? 'item' : '');
 			}
 		},
 		onTeamPreview() {
@@ -338,12 +340,12 @@ let BattleFormats = {
 			}
 		},
 	},
-	abilityclause: {
+	"2abilityclause": {
 		effectType: 'ValidatorRule',
-		name: 'Ability Clause',
+		name: '2 Ability Clause',
 		desc: "Prevents teams from having more than two Pok&eacute;mon with the same ability",
 		onBegin() {
-			this.add('rule', 'Ability Clause: Limit two of each ability');
+			this.add('rule', '2 Ability Clause: Limit two of each ability');
 		},
 		onValidateTeam(team, format) {
 			/**@type {{[k: string]: number}} */
@@ -535,6 +537,20 @@ let BattleFormats = {
 			this.add('rule', 'Z-Move Clause: Z-Moves are banned');
 		},
 	},
+	nfeclause: {
+		effectType: 'ValidatorRule',
+		name: 'NFE Clause',
+		desc: "Bans Pok&eacute;mon that are fully evolved or can't evolve",
+		onValidateSet(set) {
+			const template = this.dex.getTemplate(set.species);
+			if (!template.nfe) {
+				return [set.species + " cannot evolve."];
+			}
+		},
+		onBegin() {
+			this.add('rule', 'NFE Clause: Fully Evolved Pokémon are banned');
+		},
+	},
 	hppercentagemod: {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
@@ -659,6 +675,17 @@ let BattleFormats = {
 			}
 		},
 	},
+	dynamaxclause: {
+		effectType: 'Rule',
+		name: 'Dynamax Clause',
+		desc: "Prevents Pok&eacute;mon from dynamaxing",
+		onBegin() {
+			for (let pokemon of this.getAllPokemon()) {
+				pokemon.canDynamax = false;
+			}
+			this.add('rule', 'Dynamax Clause: You cannot dynamax');
+		},
+	},
 	arceusevclause: {
 		effectType: 'ValidatorRule',
 		name: 'Arceus EV Clause',
@@ -688,6 +715,25 @@ let BattleFormats = {
 			return -typeMod;
 		},
 	},
+	natdexrule: {
+		effectType: 'Rule',
+		name: 'NatDex Rule',
+		onValidateSet(set) {
+			// These Pokemon are still unobtainable
+			const unobtainables = [
+				'Eevee-Starter', 'Floette-Eternal', 'Magearna-Original', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter',
+			];
+			if (unobtainables.includes(set.species)) {
+				return [`${set.name || set.species} does not exist in the National Dex.`];
+			}
+			// Items other than Z-Crystals and Pokémon-specific items should be illegal
+			if (!set.item) return;
+			let item = this.dex.getItem(set.item);
+			if (item.isNonstandard === 'Past' && !item.zMove && !item.itemUser) {
+				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
+			}
+		},
+	},
 	ignoreillegalabilities: {
 		effectType: 'ValidatorRule',
 		name: 'Ignore Illegal Abilities',
@@ -700,7 +746,7 @@ let BattleFormats = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, template, setSources, set) {
 			const restrictedMoves = this.format.restrictedMoves || [];
-			if (!move.isUnreleased && !move.isZ && !restrictedMoves.includes(move.name)) {
+			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.isMax) {
 				let dex = this.dex;
 				let types = template.types;
 				let baseTemplate = dex.getTemplate(template.baseSpecies);
@@ -709,7 +755,7 @@ let BattleFormats = {
 					for (const formeid of baseTemplate.otherFormes) {
 						let forme = dex.getTemplate(formeid);
 						if (!forme.battleOnly) {
-							if (forme.forme !== 'Alola' && forme.forme !== 'Alola-Totem' && forme.baseSpecies !== 'Wormadam') {
+							if (!forme.forme.includes('Alola') && forme.forme !== 'Galar' && forme.baseSpecies !== 'Wormadam') {
 								types = types.concat(forme.types).concat(baseTemplate.types);
 							}
 						}
@@ -719,7 +765,6 @@ let BattleFormats = {
 			}
 			return this.checkLearnset(move, template, setSources, set);
 		},
-		unbanlist: ['Shiftry + Leaf Blade + Sucker Punch'],
 	},
 	allowtradeback: {
 		effectType: 'ValidatorRule',

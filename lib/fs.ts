@@ -244,7 +244,7 @@ class FSPath {
 				err ? reject(err) : resolve();
 			});
 		});
-}
+	}
 
 	rename(target: string) {
 		if (Config.nofswriting) return Promise.resolve();

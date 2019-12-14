@@ -222,7 +222,7 @@ export class ModdedDex {
 	forFormat(format: Format | string): ModdedDex {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
-		return dexes[mod || 'gen7'];
+		return dexes[mod || 'gen8'].includeData();
 	}
 
 	modData(dataType: DataType, id: string) {
@@ -363,14 +363,27 @@ export class ModdedDex {
 		}
 		if (!this.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
-			if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
-				aliasTo = id.slice(4) + 'mega';
-			} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega']) {
-				aliasTo = id.slice(1) + 'mega';
-			} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
-				aliasTo = id.slice(6) + 'primal';
-			} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
-				aliasTo = id.slice(1) + 'primal';
+			const formeNames: {[k: string]: string[]} = {
+				alola: ['a', 'alola', 'alolan'],
+				galar: ['g', 'galar', 'galarian'],
+				gmax: ['gigantamax', 'gmax'],
+				mega: ['m', 'mega'],
+				primal: ['p', 'primal'],
+			};
+			for (const forme in formeNames) {
+				let pokeName = '';
+				for (const i of formeNames[forme]) {
+					if (id.startsWith(i)) {
+						pokeName = id.slice(i.length);
+					} else if (id.endsWith(i)) {
+						pokeName = id.slice(0, -i.length);
+					}
+				}
+				if (this.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.data.Aliases[pokeName]);
+				if (this.data.Pokedex[pokeName + forme]) {
+					aliasTo = pokeName + forme;
+					break;
+				}
 			}
 			if (aliasTo) {
 				template = this.getTemplate(aliasTo);
@@ -398,8 +411,12 @@ export class ModdedDex {
 					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
 				} else {
-					template.tier = this.data.FormatsData[toID(template.baseSpecies)].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[toID(template.baseSpecies)].doublesTier || 'Illegal';
+					const baseFormatsData = this.data.FormatsData[toID(template.baseSpecies)];
+					if (!baseFormatsData) {
+						throw new Error(`${template.baseSpecies} has no formats-data entry`);
+					}
+					template.tier = baseFormatsData.tier || 'Illegal';
+					template.doublesTier = baseFormatsData.doublesTier || 'Illegal';
 				}
 			}
 			if (!template.tier) template.tier = 'Illegal';
@@ -561,8 +578,8 @@ export class ModdedDex {
 			name = this.data.Aliases[id];
 			id = toID(name);
 		}
-		if (this.data.Formats.hasOwnProperty('gen7' + id)) {
-			id = ('gen7' + id) as ID;
+		if (this.data.Formats.hasOwnProperty('gen8' + id)) {
+			id = ('gen8' + id) as ID;
 		}
 		let supplementaryAttributes: AnyObject | null = null;
 		if (name.includes('@@@')) {
@@ -1451,7 +1468,8 @@ export class ModdedDex {
 		}
 
 		// Flag the generation. Required for team validator.
-		this.gen = dataCache.Scripts.gen || 7;
+		this.gen = dataCache.Scripts.gen;
+		if (!this.gen) throw new Error(`Mod ${this.currentMod} needs a generation number in scripts.js`);
 		this.dataCache = dataCache as DexTableData;
 
 		// Execute initialization script.
@@ -1504,20 +1522,11 @@ export class ModdedDex {
 
 		return this;
 	}
-
-	installFormat(id: string, format: Format) {
-		dexes['base'].includeFormats();
-		dexes['base'].formatsCache![id] = format;
-		if (this.dataCache) this.dataCache.Formats[id] = format;
-		if (!this.isBase) {
-			if (dexes['base'].dataCache) dexes['base'].dataCache.Formats[id] = format;
-		}
-	}
 }
 
 dexes['base'] = new ModdedDex(undefined, true);
 
-// "gen7" is an alias for the current base data
-dexes['gen7'] = dexes['base'];
+// "gen8" is an alias for the current base data
+dexes['gen8'] = dexes['base'];
 
-export const Dex = dexes['gen7'];
+export const Dex = dexes['gen8'];

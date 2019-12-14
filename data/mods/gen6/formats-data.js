@@ -169,31 +169,37 @@ let BattleFormatsData = {
 	},
 	pikachucosplay: {
 		inherit: true,
+		isNonstandard: null,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	pikachurockstar: {
 		inherit: true,
+		isNonstandard: null,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	pikachubelle: {
 		inherit: true,
+		isNonstandard: null,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	pikachupopstar: {
 		inherit: true,
+		isNonstandard: null,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	pikachuphd: {
 		inherit: true,
+		isNonstandard: null,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
 	pikachulibre: {
 		inherit: true,
+		isNonstandard: null,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
