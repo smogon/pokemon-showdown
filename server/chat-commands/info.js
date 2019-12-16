@@ -691,9 +691,13 @@ const commands = {
 						}
 					}
 
-					if (dex.gen >= 8 && move.isMax) {
-						details["&#10003; Max Move"] = "";
-						if (typeof move.isMax === "string") details["User"] = move.isMax + "-Gmax";
+					if (dex.gen >= 8) {
+						if (move.isMax) {
+							details["&#10003; Max Move"] = "";
+							if (typeof move.isMax === "string") details["User"] = move.isMax + "-Gmax";
+						} else if (move.gmaxPower) {
+							details["Dynamax Power"] = move.gmaxPower;
+						}
 					}
 
 					details["Target"] = {
