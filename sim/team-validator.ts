@@ -1054,55 +1054,46 @@ export class TeamValidator {
 		const template = dex.getTemplate(set.species);
 		const battleForme = template.battleOnly && template.species;
 
-		if (template.requiredAbility && set.ability !== template.requiredAbility) {
-			if (battleForme) {
+		if (battleForme) {
+			if (template.requiredAbility && set.ability !== template.requiredAbility) {
 				// Darmanitan-Zen, Zygarde-Complete
 				problems.push(`${template.species} transforms in-battle with ${template.requiredAbility}.`);
-			} else {
-				// In gen 8, certain formes always require the natural ability even in Hackmons.
-				problems.push(`${template.species} needs to have ${template.requiredAbility}.`);
 			}
-		}
-
-		if (template.requiredItems && !template.requiredItems.includes(item.name)) {
-			if (template.species === 'Necrozma-Ultra') {
-				// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
-				problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dawn-Wings or Necrozma-Dusk-Mane holding Ultranecrozium Z.`);
-			} else if (battleForme) {
-				// Mega or Primal
-				problems.push(`${template.species} transforms in-battle with ${Chat.toOrList(template.requiredItems)}.`);
-			} else {
-				if (dex.gen <= 7 || template.requiredAbility) {
-					// Drive/Griseous Orb/Memory/Plate/Z-Crystal - Forme mismatch
-					// In gen 8, certain formes require items even in Hackmons.
-					problems.push(`${template.species} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
-				} else {
-					if (set.ability === template.abilities[0] && template.baseSpecies !== 'Genesect') {
-						// Arceus/Silvally in gen 8 require the item only with their natural ability.
-						problems.push(`${template.species} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
-					}
+			if (template.requiredItems) {
+				if (template.species === 'Necrozma-Ultra') {
+					// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
+					problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dawn-Wings or Necrozma-Dusk-Mane holding Ultranecrozium Z.`);
+				} else if (!template.requiredItems.includes(item.name)) {
+					// Mega or Primal
+					problems.push(`${template.species} transforms in-battle with ${Chat.toOrList(template.requiredItems)}.`);
 				}
 			}
-		}
-
-		if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
-			// Meloetta-Pirouette, Rayquaza-Mega
-			problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`);
-		}
-
-		// Fix battle-only forme
-		if (battleForme && !template.isGigantamax) set.species = template.baseSpecies;
-
-		if (item.forcedForme) {
-			const forcedForme = dex.getTemplate(item.forcedForme);
-			if (template.species === forcedForme.baseSpecies) {
-				// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
-				// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally/Zacian/Zamazenta).
-				set.species = item.forcedForme;
+			if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
+				// Meloetta-Pirouette, Rayquaza-Mega
+				problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`);
 			}
-			if (dex.gen >= 8 && forcedForme.requiredAbility) {
-				// In gen 8, certain formes always require the natural ability.
-				set.ability = forcedForme.requiredAbility;
+			if (!template.isGigantamax) set.species = template.baseSpecies; // Fix battle-only forme
+		} else {
+			if (template.requiredAbility) {
+				// Impossible!
+				throw new Error(`Species ${template.name} has a required ability despite not being a battle-only forme; it should just be in its abilities table.`);
+			}
+			if (template.requiredItems && !template.requiredItems.includes(item.name)) {
+				if (dex.gen >= 8 && (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally')) {
+					// Arceus/Silvally formes in gen 8 only require the item with Multitype/RKS System
+					if (set.ability === template.abilities[0]) {
+						problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
+					}
+				} else {
+					// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
+					problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
+				}
+			}
+
+			// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
+			// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally).
+			if (item.forcedForme && template.species === dex.getTemplate(item.forcedForme).baseSpecies) {
+				set.species = item.forcedForme;
 			}
 		}
 
