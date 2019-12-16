@@ -95,7 +95,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Same Type Clause', 'Standard', 'Team Preview'],
-		banlist: ['Eternatus', 'Zacian', 'Zamazenta', 'Damp Rock', 'Smooth Rock', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Eternatus', 'Zacian', 'Zamazenta', 'Damp Rock', 'Smooth Rock', 'Moody', 'Shadow Tag', 'Baton Pass'],
 		minSourceGen: 8,
 	},
 	{
