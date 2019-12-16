@@ -22,6 +22,11 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	baddybad: {
+		inherit: true,
+		accuracy: 100,
+		basePower: 90,
+	},
 	banefulbunker: {
 		inherit: true,
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user become poisoned. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
@@ -62,6 +67,11 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	bouncybubble: {
+		inherit: true,
+		basePower: 90,
+		pp: 15,
+	},
 	breakneckblitz: {
 		inherit: true,
 		isNonstandard: null,
@@ -69,6 +79,11 @@ let BattleMovedex = {
 	bubble: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	buzzybuzz: {
+		inherit: true,
+		basePower: 90,
+		pp: 15,
 	},
 	camouflage: {
 		inherit: true,
@@ -283,6 +298,12 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	freezyfrost: {
+		inherit: true,
+		accuracy: 100,
+		basePower: 90,
+		pp: 15,
+	},
 	frustration: {
 		inherit: true,
 		isNonstandard: null,
@@ -298,6 +319,11 @@ let BattleMovedex = {
 	gigavolthavoc: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	glitzyglow: {
+		inherit: true,
+		accuracy: 100,
+		basePower: 90,
 	},
 	grassknot: {
 		inherit: true,
@@ -842,6 +868,12 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	sappyseed: {
+		inherit: true,
+		accuracy: 100,
+		basePower: 90,
+		pp: 15,
+	},
 	savagespinout: {
 		inherit: true,
 		isNonstandard: null,
@@ -894,6 +926,11 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	sizzlyslide: {
+		inherit: true,
+		basePower: 90,
+		pp: 15,
+	},
 	sketch: {
 		inherit: true,
 		isNonstandard: null,
@@ -933,6 +970,12 @@ let BattleMovedex = {
 	spacialrend: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	sparklyswirl: {
+		inherit: true,
+		accuracy: 100,
+		basePower: 90,
+		pp: 15,
 	},
 	spiderweb: {
 		inherit: true,
@@ -1049,6 +1092,14 @@ let BattleMovedex = {
 	wringout: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	zippyzap: {
+		inherit: true,
+		basePower: 50,
+		desc: "Will always result in a critical hit.",
+		shortDesc: "Nearly always goes first. Always crits.",
+		pp: 15,
+		secondary: null,
 	},
 };
 
