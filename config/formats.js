@@ -36,7 +36,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Obtainable', 'Standard', 'Team Preview'],
+		ruleset: ['Obtainable', 'Standard', 'Team Preview', 'Dynamax Clause'],
 		banlist: ['Uber', 'Moody', 'Shadow Tag', 'Baton Pass'],
 		minSourceGen: 8,
 	},
@@ -94,7 +94,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Dynamax Clause', 'Obtainable', 'Same Type Clause', 'Standard', 'Team Preview'],
+		ruleset: ['Obtainable', 'Same Type Clause', 'Standard', 'Team Preview', 'Dynamax Clause'],
 		banlist: ['Eternatus', 'Zacian', 'Zamazenta', 'Damp Rock', 'Smooth Rock', 'Moody', 'Shadow Tag', 'Baton Pass'],
 		minSourceGen: 8,
 	},
