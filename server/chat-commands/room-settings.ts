@@ -117,7 +117,7 @@ export const commands: ChatCommands = {
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
 		}
 		if ((room as GameRoom).requestModchat && !room.modchat) (room as GameRoom).requestModchat(null);
-		this.privateModAction(`(${user.name} set modchat to ${room.modchat})`);
+		this.privateModAction(`(${user.name} set modchat to ${room.modchat ? room.modchat : "off"})`);
 		this.modlog('MODCHAT', null, `to ${room.modchat}`);
 
 		if (room.chatRoomData) {
