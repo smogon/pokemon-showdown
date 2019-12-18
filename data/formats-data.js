@@ -4860,7 +4860,6 @@ let BattleFormatsData = {
 	giratinaorigin: {
 		eventOnly: true,
 		requiredItem: "Griseous Orb",
-		requiredAbility: "Levitate",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
