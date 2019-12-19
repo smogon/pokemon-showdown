@@ -13560,7 +13560,7 @@ let BattleMovedex = {
 			let result = false;
 			let message = false;
 			for (const pokemon of this.getAllActive()) {
-				if (!this.runEvent('Invulnerability', pokemon, source, move)) {
+				if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
 					this.add('-miss', source, pokemon);
 					result = true;
 				} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
@@ -19440,7 +19440,7 @@ let BattleMovedex = {
 		onHitField(target, source, move) {
 			let result = false;
 			for (const active of this.getAllActive()) {
-				if (!this.runEvent('Invulnerability', active, source, move)) {
+				if (this.runEvent('Invulnerability', active, source, move) === false) {
 					this.add('-miss', source, active);
 					result = true;
 				} else {
