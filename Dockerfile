@@ -1,10 +1,10 @@
 # Dockerfile for Pokemon Showdown Server
-FROM node:10
+FROM node:13
 
 # Create app directory
 WORKDIR /usr/src/app
 
-# Copy pacakge and cache things
+# Copy package and cache things
 COPY package*.json ./
 RUN npm install
 
@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 8000
 
 # Start the server
-CMD ["node", "pokemon-showdown"]
+CMD ["pokemon-showdown"]
