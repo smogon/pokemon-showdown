@@ -588,7 +588,7 @@ const commands = {
 								evos.push(`${evo.name} (${evo.evoCondition})`);
 								break;
 							case 'trade':
-								evos.push(`${evo.name} (trade)`);
+								evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : evo.evoCondition ? ` ${evo.evoCondition}` : ``})`);
 								break;
 							default:
 								evos.push(`${evo.name} (${evo.evoLevel})`);
