@@ -331,7 +331,7 @@ let Formats = [
 		section: "National Dex",
 	},
 	{
-		name: "[Gen 8] National Dex (beta)",
+		name: "[Gen 8] National Dex OU",
 
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview', '+Past', 'NatDex Rule'],
