@@ -1805,7 +1805,6 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["spikes", "rapidspin", "icywind", "freezedry", "destinybond"],
 		randomDoubleBattleMoves: ["fakeout", "iceshard", "icepunch", "aerialace", "brickbreak", "protect"],
-		unreleasedHidden: false,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
