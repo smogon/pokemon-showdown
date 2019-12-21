@@ -19,7 +19,7 @@ let BattleAliases = {
 	"bsd": "[Gen 8] Battle Stadium Doubles",
 	"bsdoubles": "[Gen 8] Battle Stadium Doubles",
 	"2v2": "[Gen 8] 2v2 Doubles",
-	"natdex": "[Gen 8] National Dex (beta)",
+	"natdex": "[Gen 8] National Dex",
 	"natdexag": "[Gen 8] National Dex AG",
 	"bh": "[Gen 8] Balanced Hackmons",
 	"mnm": "[Gen 8] Mix and Mega",
