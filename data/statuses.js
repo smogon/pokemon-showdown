@@ -728,6 +728,7 @@ let BattleStatuses = {
 		duration: 3,
 		onStart(pokemon) {
 			pokemon.removeVolatile('substitute');
+			if (pokemon.illusion) this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon);
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.canGigantamax);
 			if (pokemon.species === 'Shedinja') return;
