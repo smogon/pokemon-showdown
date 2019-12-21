@@ -499,9 +499,6 @@ let Formats = [
 			'AG', 'Gothitelle', 'Gothorita', 'Zacian', 'Baton Pass', 'Electrify',
 			'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8mixandmega') this.add('html', `<div class="broadcast-red"><strong>Mix and Mega is currently suspecting Eternatus! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3658002/">suspect thread</a>.</strong></div>`);
-		},
 		minSourceGen: 8,
 		onValidateTeam(team, format) {
 			/**@type {{[k: string]: true}} */
@@ -521,6 +518,7 @@ let Formats = [
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.m.originalSpecies = pokemon.baseTemplate.species;
 			}
+			if (this.rated && this.format.id === 'gen8mixandmega') this.add('html', `<div class="broadcast-red"><strong>Mix and Mega is currently suspecting Eternatus! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3658002/">suspect thread</a>.</strong></div>`);
 		},
 		onSwitchIn(pokemon) {
 			// @ts-ignore
