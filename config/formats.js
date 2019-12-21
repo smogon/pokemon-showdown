@@ -83,6 +83,9 @@ let Formats = [
 		ruleset: ['Obtainable', 'Little Cup', 'Standard', 'Team Preview', 'Dynamax Clause'],
 		banlist: ['Cherubi', 'Corsola-Galar', 'Gastly', 'Gothita', 'Sneasel', 'Swirlix', 'Moody', 'Baton Pass'],
 		minSourceGen: 8,
+		onBegin() {
+			if (this.rated && this.format === 'gen8lc') this.add('html', `<div class="broadcast-red"><strong>LC is currently suspecting Drifloon! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3658010/">suspect thread</a>.</strong></div>`);
+		},
 	},
 	{
 		name: "[Gen 8] Monotype",
