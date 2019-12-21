@@ -727,7 +727,6 @@ let BattleStatuses = {
 		noCopy: true,
 		duration: 3,
 		onStart(pokemon) {
-			if (pokemon.species === 'Eternatus-Eternamax') return;
 			pokemon.removeVolatile('substitute');
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.canGigantamax);
@@ -740,15 +739,9 @@ let BattleStatuses = {
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
-		onSwitchIn(pokemon) {
-			// Special case for Eternamax
-			if (pokemon.species !== 'Eternatus-Eternamax') return;
-			pokemon.removeVolatile('substitute');
-			this.effectData.duration = 0;
-		},
 		onFlinch: false,
 		onBeforeSwitchOut(pokemon) {
-			if (pokemon.species !== 'Eternatus-Eternamax') pokemon.removeVolatile('dynamax');
+			pokemon.removeVolatile('dynamax');
 		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
@@ -805,17 +798,6 @@ let BattleStatuses = {
 				}
 			}
 			return [type];
-		},
-	},
-	eternatuseternamax: {
-		name: 'Eternatus-Eternamax',
-		id: 'eternatuseternamax',
-		num: 890,
-		onStart(pokemon) {
-			if (pokemon.transformed) return;
-			pokemon.addVolatile('dynamax');
-			pokemon.maxhp = Math.floor(pokemon.maxhp * 2);
-			pokemon.hp = Math.floor(pokemon.hp * 2);
 		},
 	},
 };
