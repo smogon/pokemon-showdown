@@ -17752,8 +17752,8 @@ let BattleMovedex = {
 	},
 	"sparklyswirl": {
 		num: 740,
-		accuracy: 120,
-		basePower: 85,
+		accuracy: 85,
+		basePower: 120,
 		category: "Special",
 		desc: "Every Pokemon in the user's party is cured of its major status condition.",
 		shortDesc: "Cures the user's party of all status conditions.",
