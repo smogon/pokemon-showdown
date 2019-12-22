@@ -2133,35 +2133,56 @@ let BattleAbilities = {
 	},
 	"mimicry": {
 		shortDesc: "Changes the Pokémon's type depending on the terrain.",
-		onUpdate(pokemon) {
-			// PLACEHOLDERS. What types are used for each terrain? Does the type revert after?
-			let type = pokemon.baseTemplate.types;
-			let addedType = pokemon.addedType;
-			switch (this.field.terrain) {
-			case 'electricterrain':
-				type = ['Electric'];
-				break;
-			case 'grassyterrain':
-				type = ['Grass'];
-				break;
-			case 'mistyterrain':
-				type = ['Fairy'];
-				break;
-			case 'psychicterrain':
-				type = ['Psychic'];
-				break;
+		onStart(pokemon) {
+			if (this.field.terrain) {
+				pokemon.addVolatile('mimicry');
+			} else {
+				let types = pokemon.baseTemplate.types;
+				if (pokemon.getTypes().join() === types.join() || !pokemon.setType(types)) return;
+				this.add('-start', pokemon, 'typechange', types, '[from] ability: Mimicry');
 			}
-			if (!pokemon.hasType(type)) {
-				this.add('-ability', pokemon, 'Mimicry');
-				pokemon.setType(type);
-				// Don't override the added type
-				pokemon.addType(addedType);
-				this.add('-start', pokemon, 'typechange', type.join('/'));
-			}
+		},
+		onAnyTerrainStart() {
+			let pokemon = this.effectData.target;
+			delete pokemon.volatiles['mimicry'];
+			pokemon.addVolatile('mimicry');
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['mimicry'];
+		},
+		effect: {
+			onStart(pokemon) {
+				let newType;
+				switch (this.field.terrain) {
+				case 'electricterrain':
+					newType = 'Electric';
+					break;
+				case 'grassyterrain':
+					newType = 'Grass';
+					break;
+				case 'mistyterrain':
+					newType = 'Fairy';
+					break;
+				case 'psychicterrain':
+					newType = 'Psychic';
+					break;
+				}
+				if (!newType || pokemon.getTypes().join() === newType || !pokemon.setType(newType)) return;
+				this.add('-start', pokemon, 'typechange', newType, '[from] ability: Mimicry');
+			},
+			onUpdate(pokemon) {
+				if (!this.field.terrain) {
+					let types = pokemon.template.types;
+					if (pokemon.getTypes().join() === types.join() || !pokemon.setType(types)) return;
+					this.add('-activate', pokemon, 'ability: Mimicry');
+					this.add('-end', pokemon, 'typechange', '[silent]');
+					pokemon.removeVolatile('mimicry');
+				}
+			},
 		},
 		id: "mimicry",
 		name: "Mimicry",
-		rating: 1,
+		rating: 0.5,
 		num: 250,
 	},
 	"minus": {
