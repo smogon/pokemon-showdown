@@ -2,6 +2,8 @@
 
 const assert = require('assert');
 
+const {User, Connection} = require('../users-utils');
+
 describe('Chat', function () {
 	it('should run formatText correctly', function () {
 		assert.strictEqual(
@@ -88,5 +90,75 @@ describe('Chat', function () {
 			Chat.formatText(`:)`, true),
 			`:)`
 		);
+	});
+
+	let called = false;
+	const name = 'bad memes';
+	const entry = {
+		location: 'EVERYWHERE',
+		punishment: 'AUTOLOCK',
+		label: 'Bad Memes',
+		monitor(line, room, user, message, lcMessage, isStaff) {
+			const [regex] = line;
+			if (!regex.test(lcMessage)) return;
+			if (called) return `${message.replace(/r/g, 'w')} OwO`;
+			called = true;
+			return false;
+		},
+	};
+
+	it('should register chat monitors properly', function () {
+		Chat.registerMonitor(name, entry);
+		assert.deepStrictEqual(Chat.filterWords[name], [], 'registering a chat monitor adds a filter words list');
+		assert.strictEqual(Chat.monitors[name], entry, 'registering a chat monitor sets a chat monitor');
+		// Clean up after the next set of tests.
+	});
+
+	it('should filter messages properly', function () {
+		const filter = (message, user, room, connection, targetUser = null) => {
+			const context = new Chat.CommandContext({message, room, user, connection});
+			return Chat.filter(context, message, user, room, connection, targetUser);
+		};
+
+		if (!Rooms.rooms.has('lobby')) Rooms.global.addChatRoom('Lobby');
+		const room = Rooms.get('lobby');
+		const connection = new Connection('127.0.0.1');
+		const user = new User(connection);
+		user.forceRename('Morfent', true);
+		user.setGroup('@');
+		user.connected = true;
+		Users.users.set(user.id, user);
+		user.joinRoom('global', connection);
+		user.joinRoom('lobby', connection);
+
+		const filters = Chat.filters.splice(0);
+		Chat.filters.push(function (message, user, room) {
+			for (const line of Chat.filterWords[name]) {
+				const result = entry.monitor.call(this, line, room, user, message, message, user.isStaff);
+				if (result !== undefined) return result;
+			}
+		});
+
+		Chat.filterWords[name].push([/rof/, 'rof', 'stale, dare i say, moldy', '', 0]);
+		assert.strictEqual(
+			filter('just lost the ru tour rof', user, room, connection),
+			null,
+			'filtering returns null when filters return null'
+		);
+		assert.strictEqual(
+			filter('just lost the ru tour rof', user, room, connection),
+			'just lost the wu touw wof OwO',
+			'filtering returns an altered message when filters return strings'
+		);
+		assert.strictEqual(
+			filter('hey dyde', user, room, connection),
+			'hey dyde',
+			'filtering returns the original message when filters return undefined'
+		);
+		Chat.filterWords[name].pop();
+
+		Chat.filters = filters;
+		delete Chat.filterWords[name];
+		delete Chat.monitors[name];
 	});
 });
