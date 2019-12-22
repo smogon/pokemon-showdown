@@ -357,7 +357,7 @@ const commands = {
 			this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 		});
 	},
-	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: & ~`],
+	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ & ~`],
 
 	'!ipsearch': true,
 	searchip: 'ipsearch',
