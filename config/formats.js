@@ -333,6 +333,9 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] National Dex",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656899/">National Dex Metagame Discussion</a>`,
+		],
 
 		mod: 'gen8',
 		ruleset: ['Obtainable', 'Standard', 'Team Preview', '+Past', 'NatDex Rule'],
@@ -344,6 +347,9 @@ let Formats = [
 			'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
 		unbanlist: ['Melmetal', 'Meltan'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nationaldex') this.add('html', `<div class="broadcast-red"><strong>National Dex is currently suspecting Dynamax! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3658063/">suspect thread</a>.</strong></div>`);
+		},
 	},
 	{
 		name: "[Gen 8] National Dex AG",
