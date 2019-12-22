@@ -40,7 +40,18 @@ const alignments = {
 			`Factional Kill: The Mafia may kill one player per night.`,
 			`You are aligned with the <span style="color:#F00;font-weight:bold">Mafia</span>. You win when all players without a Mafia wincon are eliminated and at least one Mafia-aligned player is still alive (or nothing can prevent the same).`,
 		],
-		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-mafia.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-mafia.png"/>`,	
+	},
+	Traitor: {
+		name: `Traitor`,
+		plural: `Traitors`,
+		id: `traitor`,
+		color: `#F4CBB2`,
+		memo: [
+			`You are aligned with the <span style="color:#F00;font-weight:bold">Mafia</span>. You win when all players without a Mafia wincon are eliminated and at least one Mafia-aligned player is still alive (or nothing can prevent the same).`,
+		],
+				// Added the same image as Mafia
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-mafia.png"/>`,	
 	},
 	werewolf: {
 		name: `Werewolf`,
@@ -209,6 +220,15 @@ const roles = {
 		alignment: `solo`,
 		memo: [`Aligner: Once a game, you may target someone. You will win if that person wins. Otherwise, you are a Survivor.`],
 	},
+		amnesic_cop: `amnesiac_cop`,
+		amnesic_seer: `amnesiac_cop`,
+		amnesiac_cop: {
+		name: `Amnesiac Cop`,
+		id: `amnesiac_cop`,
+		memo: [`Each night phase you may target a player you wish to investigate and who you wish to receive the result. 
+The player you choose to receive the result will receive either "Guilty" or "Not Guilty". (Depends on what you investigate for) 
+You may not target yourself to investigate or receive and investigation.`],
+	},
 	anti_survivor: `anti-survivor`,
 	antisurvivor: `anti-survivor`,
 	'anti-survivor': {
@@ -312,6 +332,7 @@ const roles = {
 		id: `broken_vanillaiser`,
 		memo: [`Broken Vanillaiser: Once a game, at night, you may PM the host that you want to activate the Broken Vanillaiser. For the next day and night, all players will be their Vanilla variants.`],
 	},
+	bus_driver: `busdriver`,
 	busdriver: {
 		name: `Bus Driver`,
 		id: `busdriver`,
@@ -411,6 +432,7 @@ const roles = {
 		alignment: `solo`,
 		memo: [`Corrupt Queen: During the Night, you may PM the host the name of another player. This player will become a King, and be the only person to be able to lynch the following day. However, after the following day, this player will die.`],
 	},
+	ch: `cowardly_hero`,
 	cowardly_hero: {
 		name: `Cowardly Hero`,
 		id: `cowardlyhero`,
@@ -431,6 +453,7 @@ const roles = {
 		id: `deputy`,
 		memo: [`Deputy: If a Cop dies, you will inherit their ability and become a Cop yourself.`],
 	},
+	midnight_desperado: `desperado`,
 	desperado: {
 		name: `Desperado`,
 		id: `desperado`,
@@ -469,18 +492,31 @@ const roles = {
 		id: `doityourselfer`,
 		memo: [`Do-It-Yourselfer: Each Night, you may use a One-Shot ability of a discarded role. You may not use a discarded role multiple times.`],
 	},
+	dragoon: {
+		name: `Dragoon`,
+		id: `dragoon`,
+		memo: [`Dragoon:  If you are one of the last 3 players alive, you instantly win. Has no factional kill but says one message anonymously each night through the host. The message takes place at the same time as the werewolves’ kill, if one exists and is compulsive.
+		The message appears as 
+		“Message” ~ The Dragoon.`],
+	},	
 	deathproof_mafias_child_lover: `drookez`,
 	drookez: {
 		name: `Drookez`,
 		id: `drookez`,
 		alignment: `mafia`,
 		memo: [`Drookez: A Deathproof Mafia's Child Lover. Drookez gets revealed at the start of the game, but can only die when their (unknown) lover dies!`],
-	},
-	duskiller: {
-		name: `Duskiller`,
-		id: `duskiller`,
+	},	
+	bp_duskkiller: `duskkiller`,
+	duskiller: `duskkiller`,
+	bulletproof_duskkiller: `duskkiller`,
+	bp_duskiller: `duskkiller`,
+	bulletproof_duskiller: `duskkiller`,
+//It's misspelled on the SI page, so the misspelled aliases are in here too
+	duskkiller: {
+		name: `Duskkiller`,
+		id: `duskkiller`,
 		alignment: `solo`,
-		memo: [`Duskiller: At night you may PM the host the name of another player. This player will die after the following day.`],
+		memo: [`Duskkiller: At night you may PM the host the name of another player. This player will die after the following day.`],
 	},
 	et: {
 		name: `E.T.`,
@@ -517,6 +553,7 @@ const roles = {
 		id: `friendrecruiter`,
 		memo: [`Besides your normal win-condition, you can win when only Friends are left alive. You can talk to other Friends. Once a game, at night, you may PM the host the name of another player. This player will be turned into a Friend.`],
 	},
+	fv: `fruit_vendor`,
 	fruit_vendor: {
 		name: `Fruit Vendor`,
 		id: `fruitvendor`,
@@ -601,6 +638,12 @@ const roles = {
 		id: `homekeeper`,
 		memo: [`Homekeeper: During the Night, you may PM the host the name of another player. If they idled, they will not be able to be nightkilled that night.`],
 	},
+		houdini: {
+		name: `Houdini`,
+		id: `houdini`,
+		memo: [`Once a game, you can switch someone’s role with their discarded role. Their alignment doesn’t change.`],
+	},
+	ic: `innocent_child`,
 	child: `innocent_child`,
 	innocent_child: {
 		name: `Innocent Child`,
@@ -669,9 +712,12 @@ const roles = {
 		id: `leader`,
 		memo: [`Leader: You are the leader of a faction. You may get special actions. Ask the host for more information.`],
 	},
-	litteliar: {
+	mafia_little_liar: `littleliar`,
+	mll: `littleliar`,
+	mafia_little_liar: `littleliar`,
+	littleliar: {
 		name: `Little Liar`,
-		id: `litteliar`,
+		id: `littleliar`,
 		memo: [`Little Liar: At any point during the game, you may PM the host to reveal you as TOWN publicly.`],
 	},
 	loner: {
@@ -793,6 +839,11 @@ const roles = {
 		name: `Palette Goo`,
 		id: `palettegoo`,
 		memo: [`Palette Goo: During the Night, you may PM the the host a Goo type. You will turn into this type of Goo.`],
+	},
+	panther: {
+		name: `Panther`,
+		id: `panther`,
+		memo: [`Parrot Role: Target someone at night. They become Voteless the next day and the Panther becomes a Mayor.`],
 	},
 	parrot: `parrot_role`,
 	wereparrot: `parrot_role`,
@@ -1032,7 +1083,7 @@ const roles = {
 	traitor: {
 		name: `Traitor`,
 		id: `traitor`,
-		alignment: `solo`,
+		alignment: `traitor`,
 		memo: [`Traitor: You are aligned with the MAFIA, but are not able to perform the factional kill, and do not know the other members of the Mafia.`],
 	},
 	unblocker: {
@@ -1260,7 +1311,7 @@ const modifiers = {
 		id: `ecxellentsenseofsmell`,
 		memo: [`Excellent Sense of Smell: You know how many Goo-aligned players there are in the game.`],
 	},
-	false: {
+	"false": {
 		name: `False`,
 		id: `false`,
 		memo: [`False: You are not aware that this part of your role doesn't work.`],
@@ -1304,6 +1355,11 @@ const modifiers = {
 		name: `Hallucinator`,
 		id: `hallucinator`,
 		memo: [`Hallucinator: While you are alive, all dead players reveal a random role in the setup, instead of their own role.`],
+	},
+		hated: {
+		name: `Hated`,
+		id: `hated`,
+		memo: [`Hated: You take 1 less vote to be hammered.`],
 	},
 	haunting: {
 		name: `Haunting`,
@@ -1507,6 +1563,11 @@ const modifiers = {
 		id: `postrestriction`,
 		memo: [`Post Restriction: You have a certain limit on what you post.`],
 	},
+			praised: {
+		name: `Praised`,
+		id: `praised`,
+		memo: [`Praised: You take 1 less more to be hammered.`],
+	},
 	psychotrooper: {
 		name: `Psychotrooper`,
 		id: `psychotrooper`,
@@ -1620,7 +1681,7 @@ const modifiers = {
 	supersaint: {
 		name: `Supersaint`,
 		id: `supersaint`,
-		memo: [`Supersaint: When this player is lynched, the player who placed the hammering vote dies as well..`],
+		memo: [`Supersaint: When this player is lynched by a majority vote, the player who placed the hammering vote dies as well..`],
 	},
 	talkative: {
 		name: `Talkative`,
@@ -1716,6 +1777,8 @@ const modifiers = {
 		id: `whitegoo`,
 		memo: [`White Goo: All dead players will turn to White Goo as they die. You show up as town on death.`],
 	},
+	wpatwtt: `wrong_place_at_the_wrong_time`,
+	wpatwt: `wrong_place_at_the_wrong_time`,
 	wrong_place_at_the_wrong_time: {
 		name: `Wrong Place at the Wrong Time`,
 		id: `wrongplaceatthewrongtime`,
@@ -1745,10 +1808,27 @@ const themes = {
 		12: `Mafia Goon, Mafia Goon, Mafia Infiltrator, Werewolf Assassin, DC Cop, Ambassador, Pope, Citizen, Citizen, Citizen, Citizen`,
 		15: `Mafia Goon, Mafia Goon, Mafia Infiltrator, Werewolf Assassin, Werewolf, President, Navy Seal, DC Cop, Pope, Ambassador, Citizen, Citizen, Citizen, Citizen, Citizen`,
 	},
+	"8ball": `8-ball`,
+	"8-ball": {
+		name: `8-Ball`,
+		desc: `Mafia has no nightkills, but between every day, they select a player to be the 8-Ball. If that player is lynched, Mafia does get a kill!`,
+		8: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
 	ace: {
 		name: `Ace`,
 		desc: `Ace: Coordinate your shots to not lose the game! Reroll if nobody is Mafia.`,
 		5: `Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Compulsive Vigilante, Compulsive Vigilante, Compulsive Vigilante`,
+	},
+		"anti-nommination": `antinommy`,
+		"antinommination": `antinommy`,
+		"anti-nommy": `antinommy`,
+		antinommy: {
+		name: `Antinommy`,
+		desc: `Antinommy: Nightless. Every even day, Mafia selects 3 Kings. Only those 3 people can vote that day.`,
+		7: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		11: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		15: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	aitc: `assassin_in_the_court`,
 	aitp: `assassin_in_the_court`,
@@ -1770,6 +1850,12 @@ const themes = {
 		desc: `Too Much Scum: Find the many scum, reminiscent of the Jungle Republic setup.`,
 		8: `Mafia Goon, Mafia Goon, Solo Serial Killer, FBI Agent, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		12: `Mafia Goon, Mafia Goon, Mafia Goon, Werewolf, Werewolf, Solo Lyncher, Cop, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+	black_flag: `black_flag_nightless`,
+	black_flag_nightless: {
+		name: `Black Flag Nightless`,
+		desc: `Black Flag Nightless: a nightless theme that uses a modified White Flag mechanic that applies to both factions: Town loses if reduced to 3 members, Mafia if reduced to 1 member`,
+		10: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	brothel_mafia: `brothel`,
 	brothel: {
@@ -1808,10 +1894,45 @@ const themes = {
 		desc: `Conformities: Don't get too attached to your role, because it is bound to change.`,
 		3: `Mafia Goon, Alien, Pygmee`,
 	},
+	citp: `contagion_in_the_palace`,
+	contagion: `contagion_in_the_palace`,
+	contagioninthepalace: `contagion_in_the_palace`,
+	contagion_in_the_palace: {
+		name: `Contagion in the Palance (CitP)`,
+		desc: `Contagion in the Palance: Variant of AITC. When you get lynched, you pass on an infectious disease! Assassin tries to infect the king to win.`,
+		6: `Solo Assassin, King, Guard, Guard, Guard, Guard`,
+	},	
 	creepy_girl: {
 		name: `Creepy Girl`,
 		desc: `Creepy Girl: Night 0 the Creepy Girl gives someone a doll. Each night, it has to be passed. If the person with the Doll is lynched, or a person gets the Doll for a second time, the Creepy Girl wins.`,
 		5: `Solo Creepy Girl, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+		cultshot: {
+		name: `Cultshot`,
+		desc: `Cultshot: A 6p theme with a Cult Recruiter.`,
+		6: `Cult Recuiter, Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+		deathnommination: `deathnommy`,
+		deathnommy: {
+		name: `Deathnommy`,
+		desc: `Deathnommy: Nightless. When someone is lynched, they can nominate 3 players. Only those 3 people can be lynched the next day.`,
+		4: `Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		5: `Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		6: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		7: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		8: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		9: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		10: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		11: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		12: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		13: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		14: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		15: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		16: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		17: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		18: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		20: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	desperado: {
 		name: `Desperado`,
@@ -1821,6 +1942,13 @@ const themes = {
 		8: `Mafia Goon, Mafia Goon, Desperado, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		10: `Mafia Goon, Mafia Goon, Desperado, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		12: `Mafia Goon, Mafia Goon, Mafia Little Liar, Innocent Child, Desperado, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+		dd: `desperation_day`,
+		desperationday: `desperation_day`,
+		desperation_day: {
+		name: `Desperation Day`,
+		desc: `Desperation Day: If Mafia is lynched on day 3, the game ends and Town wins!`,
+		9: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`
 	},
 	dethy: {
 		name: `Dethy`,
@@ -1848,8 +1976,23 @@ const themes = {
 	drookez_is_mafia_mafia: {
 		name: `Drookez is Mafia Mafia`,
 		desc: `Drookez is Mafia Mafia: Drookez is Mafia, but try to find his Lover! Drookez must survive with his Lover to win.`,
-		5: `Drookez, Solo Traitor Lover, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		5: `Mafia Drookez, Traitor Lover, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
+	empk: `empking`,
+	empking: {
+		name: `EMPking`,
+		desc: `EMPking: Mafia only kills on even nights. OS Public cop publicly reveals 1 role.`,
+		5: `Mafia Goon, Mafia Goon, OS Publishing Cop, Vanilla Townie, Vanilla Townie`,
+	},
+	eome: `enemy_of_my_enemy`,
+	enemyofmyenemy: `enemy_of_my_enemy`,
+	enemy_of_my_enemy: {
+		name: `Enemy of my Enemy`,
+		desc: `Enemy of my Enemy: A  multiball theme where scum inspects for the other factions with a twist!`,
+		13: `Mafia Amnesic Seer,Mafia Goon,Werewolf Amnesic Cop,Werewolf, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+	esun: `eternal_sun`,
+	eternalsun: `eternal_sun`,
 	eternal_sun: {
 		name: `Eternal Sun`,
 		desc: `Eternal Sun: A theme without nights! Everyone can use their action once a day.`,
@@ -1875,11 +2018,23 @@ const themes = {
 		desc: `Eyes: Avoid the Tracker and Watcher to last till the end!`,
 		7: `Mafia Roleblocker, Mafia Goon, Watcher, Tracker, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
+	fe: `friends_and_enemies`,
+	friends_and_enemies: {
+		name: `Friends and Enemies`,
+		desc: `A theme centered around Masons.`,
+		13: `Mafia Goon, Mafia Goon, Mafia Goon, Mason, Mason, Mason, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
 	fee: `friends_and_enemies_and_enemies`,
 	friends_and_enemies_and_enemies: {
 		name: `Friends and Enemies and Enemies`,
 		desc: `Two opposing scum factions and a group of Masons fight for dominance!`,
 		12: `Mafia Goon, Mafia Goon, Werewolf, Werewolf, Mason, Mason, Mason, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+		feetog: `friends_and_enemies_and_enemies_and_that_other_guy`,
+	friends_and_enemies_and_enemies_and_that_other_guy: {
+		name: `Friends and Enemies and Enemies and That Other Guy`,
+		desc: `A multiball theme that features Backup Mason`,
+		11: `Mafia Goon, Mafia Goon, Werewolf, Werewolf, Mason, Mason, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	ff: `forest_fire`,
 	forest_fire: {
@@ -1915,6 +2070,12 @@ const themes = {
 		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Vigilante, Vigilante, Vigilante, Vigilante`,
 		20: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Unblocker, Vigilante, Vigilante, Vigilante, Vigilante`,
 	},
+	grey_flag: `grey_flag_nightless`,
+	grey_flag_nightless: {
+		name: `Grey Flag Nightless`,
+		desc: `Nightless. Lynch 2 mafia to win!`,
+		9: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
 	journalist: {
 		name: `Journalist`,
 		desc: `Journalist: Successful inspections require death...`,
@@ -1942,6 +2103,28 @@ const themes = {
 		desc: `Kill All Townies: The more Town deaths, the more days! For each Town role's death at Night, there's a Day.`,
 		17: `Mafia Goon, Mafia Godfather, Mafia Doctor, Werewolf, Alpha Werewolf, Werewolf Doctor, Cop, Seer, Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
+	koth: `king_of_the_hill`,
+		king_of_the_hill: {
+		name: `King of the Hill`,
+		desc: `Day 1, the town picks a King by lynch.
+Any later Day is split into two phases. First there's a discussion phase. 
+During this phase, people are allowed to Challenge the King, only the King and the Challenger can be lynched afterwards. 
+When one is lynched, the other becomes king and decides lynch.`,
+		7: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		8: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		9: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		10: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		11: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		12: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		13: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		14: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		15: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		16: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		17: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		18: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		20: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
 	kwg: `kids_with_guns`,
 	kids_with_guns: {
 		name: `Kids With Guns`,
@@ -1956,6 +2139,25 @@ const themes = {
 		11: `Mafia Goon, Mafia Goon, Solo Serial Killer, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		14: `Mafia Goon, Mafia Goon, Mafia Goon, Solo Serial Killer, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		16: `Mafia Goon, Mafia Goon, Mafia Goon, Solo One-Shot Bulletproof Serial Killer, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+	last_will: `last_will_mafia`,
+		last_will_mafia: {
+		name: `Last Will Mafia`,
+		desc: `When someone is lynched, they die. But they also select another player that can perform a nightkill! Mafia does not have its factional kill.`,
+		7: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		8: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		9: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		10: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		11: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		12: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		13: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		14: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		15: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		16: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		17: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		18: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		20: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	less_pressure: {
 		name: `Less Pressure`,
@@ -2002,6 +2204,12 @@ const themes = {
 		6: `Solo Traitor One-Shot Vigilante, Solo Traitor One-Shot Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		9: `Werewolf, Werewolf, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		12: `Werewolf, Werewolf, Werewolf, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+	mm: `masons_and_monks`,
+		masons_and_monks: {
+		name: `Masons and Monks`,
+		desc: `2 people who aren't mafia are /pick'ed to become Mason, 2 people who aren't Werewolf are /pick'ed to become Monk.`,
+		13: `Mafia Goon, Mafia Goon, Werewolf, Werewolf, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	mlosr: `maintaining_law_order_and_shallow_relationships`,
 	maintaining_law_order_and_shallow_relationships: {
@@ -2100,9 +2308,16 @@ const themes = {
 		11: `Mafia Goon, Mafia Goon, Mime, Mime, Watcher, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		12: `Mafia Goon, Mafia Goon, Mime, Mime, Watcher, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
+	"popcorn-mini": `popcorn`,
+	popcorn_mini: `popcorn`,
+	mini_popcorn: `popcorn`,
+	minipopcorn: `popcorn`,
+	megapopcorn: `popcorn`,
+	mega_popcorn: `popcorn`,
 	popcorn: {
 		name: `Popcorn`,
 		desc: `Mafia picks a person to start with the gun. The person with the gun is the person who decides the lynch. If Mafia is chosen, the Mafia dies and the person keeps the gun. If Town is chosen, then the person with the gun dies, and the Town gets the gun instead.`,
+		6: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		11: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		18: `Vengeful Mafia, Vengeful Mafia, Vengeful Mafia, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
@@ -2133,11 +2348,38 @@ const themes = {
 		19: `Town Elder, Town Spy, Town Spy, Town Patrol, Town Patrol, Town Patrol, Town Scout, Town Villager, Town Villager, Town Villager, Town Villager, Town Villager, Town Villager, Town Villager, Pygmee Elder, Pygmee Warrior, Pygmee Member, Pygmee Member, Pygmee Member`,
 		20: `Town Elder, Town Spy, Town Spy, Town Spy, Town Patrol, Town Patrol, Town Patrol, Town Scout, Town Villager, Town Villager, Town Villager, Town Villager, Town Villager, Town Villager, Town Villager, Pygmee Elder, Pygmee Warrior, Pygmee Member, Pygmee Member, Pygmee Member`,
 	},
+	red_flag: {
+		name: `Red Flag`,
+		desc: `Lynch 2 mafia to win!`,
+		11: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		13: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		15: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		17: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
 	sacrifice: {
 		name: `Sacrifice`,
 		desc: `Sacrifice: The Vanilla Townies can't die until a Mafia Sacrifice has died. Use this to clear them!`,
 		4: `Mafia Sacrifice, Mafia Sacrifice, Vanilla Townie, Vanilla Townie`,
 	},
+	sh: `safehouse`,
+	safehouse: {
+		name: `Safehouse`,
+		desc: `Safehouse: The world is ending, nearly everyone will die. Select the few people who can be sent to the Safehouse, only they will survive!`,
+		7: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		8: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		9: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		10: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		11: `Mafia Goon, Mafia Goon, Traitor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		12: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		13: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		14: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		15: `Mafia Goon, Mafia Goon, Mafia Goon, Traitor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		16: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		17: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		18: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Traitor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		20: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},	
 	semi_nightless: `seminightless`,
 	seminightless: {
 		name: `Semi-Nightless`,
@@ -2186,11 +2428,21 @@ const themes = {
 		desc: `SS3: A three-player theme where even the Mafia has to be careful of whom they hammer!`,
 		3: `Mafia Goon, Supersaint, Vanilla Townie`,
 	},
+		think_twice: {
+		name: `Think Twice`,
+		desc: `Think Twice: Nightless. If Town is lynched Day 1, their death is postponed and they die after Day 2. If Mafia Godfather is lynched, Town wins. Before lynching someone, think twice!`,
+		5: `Mafia Goon, Mafia Godfather, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
 	triplets: {
 		name: `Triplets`,
 		desc: `Triplets: A nine-player theme, where at first everyone is split into groups of three. You must lynch someone in this group first!`,
 		9: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
+	twin_trap: {
+		name: `Twin Trap`,
+		desc: `Twin Trap: A theme were scum have split immunites to PRs`,
+		9: `Track Immune Mafia, Watch Immune Mafia, Tracker, Watcher, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},	
 	semipriest: `the_one_i_cannot_kill`,
 	the_one_i_cannot_kill: {
 		name: `The One I Cannot Kill`,
@@ -2229,6 +2481,17 @@ const themes = {
 		19: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		20: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
+	vengeball: {
+		name: `Vengeball`,
+		desc: `Vengeball: If Mafia Godfather or Alpha Werewolf is LYNCHED, their partner dies with them. No vengeful shots in lylo.`,
+		9: `Mafia Goon, Mafia Godfather, Werewolf, Alpha Werewolf, Vengeful Townie, Vengeful Townie, Vengeful Townie, Vengeful Townie, Vengeful Towniee`,
+	},	
+	vftm: `vote_for_town_mafia`,
+	vote_for_town_mafia: {
+		name: `Vote For Town Mafia (VFTM)`,
+		desc: `Vote For Town Mafia: Mafia wins if they are all lynched. Town wins if they reach equal numbers with the mafia.`,
+		8: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},	
 	wnac: `we_need_a_clear`,
 	we_need_a_clear: {
 		name: `We Need a Clear`,
@@ -2241,6 +2504,17 @@ const themes = {
 		desc: `We Need a Fifth: When a Vanilla Townie is lynched Day 1, they shoot another player instead. When a Mafia Goon is lynched, they have to clear a Vanilla Townie.`,
 		4: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie`,
 	},
+	wnas: `we_need_a_seventh`,
+	we_need_a_seventh: {
+		name: `We Need a Seventh`,
+		desc: `We Need a Seventh: If a Mafia or Werewolf is lynched: The player is eliminated along with his/her Partner is also eliminated and chooses one of the opposite scumfaction to eliminate.
+If a Vanilla Townie is lynched, he takes a Vig Shot. If he shoots a player of either scum faction, that player is eliminated and his partner will be aligned with the town players! If the Vanilla Townie ends up shooting the other Vanilla Townie, the game goes on as normal.`,
+		6: `Vanilla Townie, Vanilla Townie, Mafia Goon, Mafia Goon, Werewolf, Werewolf`,
+	},
+		white_flag: {
+		name: `White Flag`,
+		desc: `Lynch 2 mafia to win!`,
+		13: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,	},
 };
 
 /** @type {MafiaIDEAs} */
@@ -3246,12 +3520,29 @@ const terms = {
 	bandwagon: {
 		name: `Bandwagon`,
 		memo: [`Bandwagon: A group of people following a lynch or thought.`],
+	},	
+	cfd: `chinese_fire_drill`,
+	chinese_fire_drill: {
+		name: `Chinese Fire Drill`,
+		memo: [`Chinese Fire Drill: When the players quickly shift votes en masse from one player onto another, at the very end of a day`],
 	},
 	cc: `counter_claim`,
 	counterclaim: `counter_claim`,
 	counter_claim: {
 		name: `Counter Claim`,
 		memo: [`Counter Claim: When someone claims a role, in response of someone else claiming that role (of which there's usually only one left in the game).`],
+	},
+	cc: `counterwagon`,
+	counter_wagon: `counterwagon`,
+	counterwagon: {
+		name: `Counterwagon`,
+		memo: [`Counterwagon: A series of lynches made on one player with the intent of keeping another player from being lynched`],
+	},
+	crossvote: `cross`,
+	crosslynch: `cross`,
+	cross: {
+		name: `Cross`,
+		memo: [`Cross: Voting one person with the expectation that they will reciprocate the vote. Especially common during lylo, but sometimes used to condense town's voting options`],
 	},
 	defmaj: `definite_majority`,
 	definitemajority: `definite_majority`,
@@ -3268,6 +3559,12 @@ const terms = {
 		name: `Filler`,
 		memo: [`Filler: Excessive talk about things that are not related or important to the game.`],
 	},
+	fd: `fire_drill`,
+	firedrill: `fire_drill`,
+	fire_drill: {
+		name: `Fire Drill`,
+		memo: [`Fire Drill: Quickly shifting votes en masse from one player onto another.`],
+	},
 	fos: `finger_of_suspect`,
 	finger_of_suspect: {
 		name: `Finger of Suspect`,
@@ -3281,11 +3578,16 @@ const terms = {
 		name: `Hypo`,
 		memo: [`Hypo: When everyone claims what they would've done if they were a specific role. This is done to not out the power role, but that Town still has access to their actions or results in case they die.`],
 	},
-	'l-1': `l-x`,	'l-2': `l-x`,	'l-3': `l-x`,	'l-4': `l-x`,	lx: `l-x`,	l1: `l-x`,	l2: `l-x`,	l3: `l-x`,	l4: `l-x`,
-	'l-x': {
+	"l-1": `l-x`,	"l-2": `l-x`,	"l-3": `l-x`,	"l-4": `l-x`,	"l-n":`l-x`, 	lx: `l-x`,	"l1": `l-x`,	"l2": `l-x`,	"l3": `l-x`,	"l4": `l-x`, ln: `l-x`,	
+	"l-x": {
 		name: `L-x`,
-		memo: [`L-x: When a player is a specific amount of votes away from hammer.`],
+		memo: [`L-x: When a player is a specific amount of votes (x) away from hammer.`],
 	},
+		lolhammer: {
+		name: `Lolhammer`,
+		memo: [`Lolhammer: A hammer that is made prematurely and with no warning.`],
+	},	
+	lurk: `lurking`,
 	lurking: {
 		name: `Lurking`,
 		memo: [`Lurking: When someone is purposefully not talking in the chat, even while they're there.`],
@@ -3308,6 +3610,10 @@ const terms = {
 		name: `Modified Plurality`,
 		memo: [`Modified Plurality: Plurality, but if a certain amount of votes isn't reached at the deadline, no one is lynched.`],
 	},
+	multiball_slip: {
+		name: `MultiBall Slip`,
+		memo: [`Multiball Slip: When there are multiple factions, and scum forgets that it's possible to other people that they are from the other scumfaction`],
+	},
 	mylo: {
 		name: `MyLo`,
 		memo: [`MyLo: If the wrong player is lynched today, town loses.`],
@@ -3320,6 +3626,11 @@ const terms = {
 		name: `OMGUS`,
 		memo: [`OMGUS: Accusing someone solely because they accused you.`],
 	},
+	parking: `park`,
+	parked: `park`,
+	park: {
+		name: `Park`,
+		memo: [`Parking: Leaving a vote on someone with no intention of shifting.`],
 	plop: {
 		name: `PLOP`,
 		memo: [`PLOP: "Pretty Lady Over-Powered", using the Pretty Lady (protected by a Doctor) to find solo scum, by judging whether the Nightkill went through.`],
@@ -3341,24 +3652,59 @@ const terms = {
 		name: `PMyLo`,
 		memo: [`PMyLo: "Potential MyLo", there's a chance but it's not definite that if the wrong person is lynched, town loses.`],
 	},
+	policy: {
+		name: `Policy`,
+		memo: [`Policy: Voting a player out due to a behavior that is generally perceived as anti-town, with no regard for that player’s alignment.`],
+	},
+	potatoe: `potato`,
+	potato_townie: `potato`,
+	potato_town: `potato`,
+	potato: {
+		name: `Potato (townie)`,
+		memo: [`Potato: Town that doesn't do anything to help town (Use your vote!)`],
+	},
 	qh: `quickhammer`,
 	quickhammer: {
 		name: `Quickhammer`,
 		memo: [`Quickhammer: When all of the Mafia quickly lynch someone, to reach hammer and cause a Mafia win.`],
 	},
-	scorched_earth: {
-		name: `Scorched Earth`,
-		memo: [`Scorched Earth: When no players are left alive.`],
+	RVS: `random_voting_stage`,
+	random_voting_stage: {
+		name: `Random Voting Stage (RVS)`,
+		memo: [`Random Voting Stage: When town, due to a lack of information at the start of a game, randomly lynches someone with little to no legitimate reads or evidences to back the lynch, in order to put people in a readable situation`],
+	},
+	scum: {
+		name: `Scum`,
+		memo: [`Scum: Someone with a Wincondition contradictory to Town (the Majority)'s Wincondition`],
+	},
+	sl: `scumlean`,
+	scumlean: {
+		name: `Scumlean`,
+		memo: [`Scumlean: A player you feel is not aligned with Town, with less certainty than a Scumread.`],
 	},
 	sr: `scumread`,
 	scumread: {
 		name: `Scumread`,
 		memo: [`Scumread: A player who you think is not aligned with the Town.`],
 	},
+	sheep: `sheeping`,
+	sheeping: {
+		name: `Sheeping`,
+		memo: [`Sheeping: Following another player's/group of players’ vote, without fully understanding the reasoning behind it`],
+	},	
+	softing: `soft`,
+	soft: {
+		name: `Soft`,
+		memo: [`soft: Dropping a subtle hint towards your role, that will NOT be recognised unless you analyse its meaning`],
+	},	
 	snaq_bastard: {
 		name: `Snaq Bastard`,
 		memo: [`Snaq Bastard: Any role can be in the game, excluding Hidden or False ones. The host will not lie to the players.`],
 	},
+	tl: `townlean`,
+	townlean: {
+		name: `Townlean`,
+		memo: [`Townlean: A player you feel is aligned with Town, with less certainty than a Townread.`],
 	tr: `townread`,
 	townread: {
 		name: `Townread`,
@@ -3368,6 +3714,23 @@ const terms = {
 		name: `Tunnel`,
 		memo: [`Tunnel: When a player is convinced another player is scum, and will consider anything the player does scummy.`],
 	},
+	turboing: `turbo`,	
+	turbo: {
+		name: `Turbo`,
+		memo: [`Turbo: Quickly building a wagon on one player, typically with the aim of preventing discussion.`],
+	vanity_lynch: `vanity_wagon`,
+	vanity: `vanity_wagon`,
+	vanity_wagon: {
+		name: `Vanity Wagon`,
+		memo: [`Vanity Wagon: A wagon consisting of a single vote, generally not expected to gain any support.`],
+	},
+	vca: `wagonmics`,
+	vote_count_analysis: `wagonmics`,
+	votecountanalysis: `wagonmics`,
+	wagonmics: {
+		name: `Wagonomics`,
+		memo: [`Reading players’ voting histories to look for possible clues as to their alignment / check for partners`],
+	},	
 	wifom: {
 		name: `WIFOM`,
 		memo: [`WIFOM: "Wine In Front Of Me", the circular reasoning that Mafia could've anticipated something, and did it because of that.`],
