@@ -349,7 +349,7 @@ const commands = {
 	'!host': true,
 	host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
-		if (!this.can('rangeban')) return;
+		if (!this.can('ip')) return;
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
@@ -357,7 +357,7 @@ const commands = {
 			this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 		});
 	},
-	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: & ~`],
+	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ & ~`],
 
 	'!ipsearch': true,
 	searchip: 'ipsearch',
