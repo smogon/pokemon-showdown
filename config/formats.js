@@ -146,6 +146,12 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
 		banlist: ['Crucibelle-Mega', 'Aurumoth + Quiver Dance', 'Crucibelle + Head Smash', 'Crucibelle + Low Kick', 'Tomohawk + Earth Power', 'Tomohawk + Reflect'],
+		onValidateSet(set) {
+			let template = Dex.getTemplate(set.species);
+			let problems = [];
+			if (template.isUnreleased === 'Past') problems.push(`${set.species} is unreleased.`);
+			return problems;
+		},
 	},
 	{
 		name: "[Gen 8] Battle Stadium Singles",
