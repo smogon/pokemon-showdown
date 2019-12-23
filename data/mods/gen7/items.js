@@ -51,6 +51,15 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	beastball: {
+		id: "beastball",
+		name: "Beast Ball",
+		spritenum: 661,
+		num: 851,
+		gen: 7,
+		isPokeball: true,
+		desc: "A special Poké Ball designed to catch Ultra Beasts.",
+	},
 	beedrillite: {
 		inherit: true,
 		isNonstandard: null,
@@ -138,6 +147,15 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dreamball: {
+		id: "dreamball",
+		name: "Dream Ball",
+		spritenum: 111,
+		num: 576,
+		gen: 5,
+		isPokeball: true,
+		desc: "A special Poké Ball that appears out of nowhere in a bag at the Entree Forest.",
+	},
 	eeviumz: {
 		inherit: true,
 		isNonstandard: null,
@@ -150,6 +168,17 @@ let BattleItems = {
 	electriumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	energypowder: {
+		id: "energypowder",
+		name: "Energy Powder",
+		spritenum: 123,
+		fling: {
+			basePower: 30,
+		},
+		num: 34,
+		gen: 2,
+		desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
 	},
 	fairiumz: {
 		inherit: true,

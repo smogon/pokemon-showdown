@@ -378,7 +378,7 @@ let BattleItems = {
 		num: 851,
 		gen: 7,
 		isPokeball: true,
-		desc: "A special Poke Ball designed to catch Ultra Beasts.",
+		desc: "A Poké Ball that has a low success rate for catching a Pokémon.",
 	},
 	"beedrillite": {
 		id: "beedrillite",
@@ -842,7 +842,7 @@ let BattleItems = {
 		num: 16,
 		gen: 4,
 		isPokeball: true,
-		desc: "A rare Poke Ball that has been crafted to commemorate an occasion.",
+		desc: "A rare Poké Ball that has been crafted to commemorate an occasion.",
 	},
 	"chestoberry": {
 		id: "chestoberry",
@@ -1317,7 +1317,7 @@ let BattleItems = {
 		num: 7,
 		gen: 3,
 		isPokeball: true,
-		desc: "A Poke Ball that works especially well on Pokemon that live underwater.",
+		desc: "A Poké Ball that works especially well on Pokemon that live underwater.",
 	},
 	"domefossil": {
 		id: "domefossil",
@@ -1476,7 +1476,7 @@ let BattleItems = {
 		num: 576,
 		gen: 5,
 		isPokeball: true,
-		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
+		desc: "A Poké Ball that makes it easier to catch wild Pokémon while they're asleep.",
 	},
 	"dubiousdisc": {
 		id: "dubiousdisc",
@@ -1511,7 +1511,7 @@ let BattleItems = {
 		num: 13,
 		gen: 4,
 		isPokeball: true,
-		desc: "A Poke Ball that makes it easier to catch wild Pokemon at night or in caves.",
+		desc: "A Poké Ball that makes it easier to catch wild Pokemon at night or in caves.",
 	},
 	"duskstone": {
 		id: "duskstone",
@@ -1705,7 +1705,7 @@ let BattleItems = {
 		},
 		num: 34,
 		gen: 2,
-		desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
+		desc: "Restores 60 HP to one Pokemon",
 	},
 	"enigmaberry": {
 		id: "enigmaberry",

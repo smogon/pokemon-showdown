@@ -33,6 +33,17 @@ let BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
+	energypowder: {
+		id: "energypowder",
+		name: "Energy Powder",
+		spritenum: 123,
+		fling: {
+			basePower: 30,
+		},
+		num: 34,
+		gen: 2,
+		desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
+	},
 	figyberry: {
 		inherit: true,
 		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
