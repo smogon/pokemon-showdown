@@ -708,16 +708,18 @@ let BattleFormats = {
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
 	},
-	arceusevclause: {
+	arceusevlimit: {
 		effectType: 'ValidatorRule',
-		name: 'Arceus EV Clause',
-		desc: "Restricts Arceus to a maximum of 100 EVs in any one stat",
-		onValidateSet(set, format) {
+		name: 'Arceus EV Limit',
+		desc: "Restricts Arceus to a maximum of 100 EVs in any one stat, and only multiples of 10",
+		onValidateSet(set) {
 			let template = this.dex.getTemplate(set.species);
 			if (template.num === 493 && set.evs) {
 				for (let stat in set.evs) {
 					// @ts-ignore
-					if (set.evs[stat] > 100) return ["Arceus may not have more than 100 of any EVs."];
+					if (set.evs[stat] > 100) return ["Arceus cannot have more than 100 of any EVs."];
+					// @ts-ignore
+					if (set.evs[stat] % 10) return ["Arceus can only have EV numbers that are multiples of 10."];
 				}
 			}
 		},

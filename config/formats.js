@@ -1793,7 +1793,7 @@ let Formats = [
 
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['Obtainable', 'Standard', 'Arceus EV Clause'],
+		ruleset: ['Obtainable', 'Standard', 'Arceus EV Limit'],
 	},
 	{
 		name: "[Gen 4] UU",
