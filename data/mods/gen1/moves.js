@@ -281,7 +281,7 @@ let BattleMovedex = {
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-				return null;
+				return false;
 			},
 			onDamage(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
@@ -418,7 +418,7 @@ let BattleMovedex = {
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-				return null;
+				return false;
 			},
 			onDamage(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
