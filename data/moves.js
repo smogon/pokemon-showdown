@@ -7760,9 +7760,15 @@ let BattleMovedex = {
 		num: 788,
 		accuracy: 100,
 		basePower: 80,
+		basePowerCallback(pokemon, target, move) {
+			if (this.field.getPseudoWeather('gravity')) {
+				return move.basePower * 1.5;
+			}
+			return move.basePower;
+		},
 		category: "Physical",
-		desc: "Has a 100% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "100% chance to lower the target's Defense by 1.",
+		desc: "Has a 100% chance to lower the target's Defense by 1 stage. This move's base power is 1.5x stronger in Gravity.",
+		shortDesc: "Foe: 100% -1 Def. 1.5x Power in Gravity.",
 		id: "gravapple",
 		name: "Grav Apple",
 		pp: 10,
