@@ -7761,13 +7761,18 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-		desc: "Has a 100% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "100% chance to lower the target's Defense by 1.",
+		desc: "Has a 100% chance to lower the target's Defense by 1 stage. This move's base power is 1.5x stronger in Gravity.",
+		shortDesc: "Foe: 100% -1 Def. 1.5x Power in Gravity.",
 		id: "gravapple",
 		name: "Grav Apple",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		onBasePower(basePower) {
+			if (this.field.getPseudoWeather('gravity')) {
+				return this.chainModify(1.5);
+			}
+		},
 		secondary: {
 			chance: 100,
 			boosts: {
