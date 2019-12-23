@@ -33,6 +33,16 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon has its major status condition cured at the end of each turn if Rain Dance is active.",
 	},
+	"illusion": {
+		inherit: true,
+		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",
+		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes direct damage.",
+		onAfterDamage(damage, target, source, effect) {
+			if (target.illusion && effect && effect.effectType === 'Move' && effect.id !== 'confused') {
+				this.singleEvent('End', this.dex.getAbility('Illusion'), target.abilityData, target, source, effect);
+			}
+		},
+	},
 	"innerfocus": {
 		inherit: true,
 		shortDesc: "This Pokemon cannot be made to flinch.",
