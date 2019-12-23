@@ -169,17 +169,6 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	energypowder: {
-		id: "energypowder",
-		name: "Energy Powder",
-		spritenum: 123,
-		fling: {
-			basePower: 30,
-		},
-		num: 34,
-		gen: 2,
-		desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
-	},
 	fairiumz: {
 		inherit: true,
 		isNonstandard: null,
