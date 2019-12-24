@@ -1385,11 +1385,11 @@ export class Pokemon {
 			if (item.id === 'leppaberry') {
 				switch (this.pendingStaleness) {
 				case 'internal':
-						if (this.staleness !== 'external') this.staleness = 'internal';
-						break;
+					if (this.staleness !== 'external') this.staleness = 'internal';
+					break;
 				case 'external':
-						this.staleness = 'external';
-						break;
+					this.staleness = 'external';
+					break;
 				}
 				this.pendingStaleness = undefined;
 			}
