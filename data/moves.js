@@ -19447,7 +19447,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Forces all active Pokemon to consume their held berries. This move bypasses Substitutes.",
+		desc: "Forces all active Pokemon to consume their held berries. This move bypasses Substitutes and Unnerve.",
 		shortDesc: "All active Pokemon consume held Berries.",
 		id: "teatime",
 		name: "Teatime",
@@ -19463,14 +19463,8 @@ let BattleMovedex = {
 				} else {
 					let item = active.getItem();
 					if (active.hp && item.isBerry) {
-						// Not using `eatItem` as we need to bypass Unnerve.
-						this.add('-enditem', target, item.name, '[from] eat', '[move] Teatime', '[of] ' + active);
-						if (this.singleEvent('Eat', item, null, active, null, null)) {
-							this.runEvent('EatItem', active, null, null, item);
-							// TODO: Test
-							if (item.id === 'leppaberry') active.staleness = 'external';
-						}
-						if (item.onEat) active.ateBerry = true;
+						// bypasses Unnerve
+						active.eatItem(true);
 						result = true;
 					}
 				}
