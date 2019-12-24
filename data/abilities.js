@@ -1303,7 +1303,7 @@ let BattleAbilities = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			if (move.isZPowered || move.maxPowered || move.id === 'struggle') return;
+			if (pokemon.abilityData.choiceLock || move.isZPowered || move.maxPowered || move.id === 'struggle') return;
 			pokemon.abilityData.choiceLock = move.id;
 		},
 		onModifyAtkPriority: 1,
