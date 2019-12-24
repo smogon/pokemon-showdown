@@ -797,6 +797,10 @@ let BattleFormatsData = {
 		eventOnly: true,
 		tier: "Uber",
 	},
+	missingno: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
 };
 
 exports.BattleFormatsData = BattleFormatsData;

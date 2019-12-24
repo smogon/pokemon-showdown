@@ -3538,6 +3538,82 @@ let BattleFormatsData = {
 		eventOnly: true,
 		requiredItem: "Shock Drive",
 	},
+	pokestarsmeargle: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarufo: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarufo2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarbrycenman: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarmt: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarmt2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestartransport: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestargiant: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestargiant2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarhumanoid: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarmonster: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarf00: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarf002: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarspirit: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarblackdoor: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarwhitedoor: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarblackbelt: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestargiantpropo2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
+	pokestarufopropu2: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
+	},
 };
 
 exports.BattleFormatsData = BattleFormatsData;
