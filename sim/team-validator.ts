@@ -1193,21 +1193,10 @@ export class TeamValidator {
 		if (banReason === '') return null;
 
 		// obtainability
-		if (tierTemplate.isNonstandard) {
+		if (tierTemplate.isNonstandard === 'Unobtainable') {
 			banReason = ruleTable.check('pokemontag:' + toID(tierTemplate.isNonstandard));
 			if (banReason) {
-				return `${tierTemplate.species} is tagged ${tierTemplate.isNonstandard}, which is ${banReason}.`;
-			}
-			if (banReason === '') return null;
-		}
-
-		if (
-			tierTemplate.isNonstandard === 'Pokestar' && dex.gen === 5 ||
-			tierTemplate.isNonstandard === 'Glitch' && dex.gen === 1
-		) {
-			banReason = ruleTable.check('pokemontag:hackmons', setHas);
-			if (banReason) {
-				return `${tierTemplate.species} is not obtainable without hacking.`;
+				return `${tierTemplate.species} is not obtainable without hacking or glitches.`;
 			}
 			if (banReason === '') return null;
 		} else if (tierTemplate.isNonstandard) {

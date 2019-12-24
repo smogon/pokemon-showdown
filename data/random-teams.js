@@ -297,7 +297,7 @@ class RandomTeams {
 		/**@type {number[]} */
 		let pool = [];
 		for (let id in this.dex.data.FormatsData) {
-			if (!this.dex.data.Pokedex[id] || this.dex.data.FormatsData[id].isNonstandard) continue;
+			if (!this.dex.data.Pokedex[id] || this.dex.data.FormatsData[id].isNonstandard && this.dex.data.FormatsData[id].isNonstandard !== 'Unobtainable') continue;
 			let num = this.dex.data.Pokedex[id].num;
 			if (pool.includes(num)) continue;
 			if (num > last) break;
@@ -316,7 +316,7 @@ class RandomTeams {
 		for (let id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
 			let template = this.dex.getTemplate(id);
-			if (template.gen <= this.gen && !template.isNonstandard) {
+			if (template.gen <= this.gen && template.isNonstandard !== 'Past') {
 				formes[hasDexNumber[template.num]].push(template.species);
 			}
 		}
@@ -1429,7 +1429,7 @@ class RandomTeams {
 				if (template.battleOnly) types = this.dex.getTemplate(template.baseSpecies).types;
 				if (types.indexOf(type) < 0) continue;
 			}
-			if (template.gen <= this.gen && (!template.nfe || allowedNFE.includes(template.species)) && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
+			if (template.gen <= this.gen && (!template.nfe || allowedNFE.includes(template.species)) && !template.isMega && !template.isPrimal && template.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
 		}

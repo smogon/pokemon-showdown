@@ -4057,10 +4057,9 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	floetteeternal: {
+		inherit: true,
 		randomBattleMoves: ["lightofruin", "psychic", "hiddenpowerfire", "hiddenpowerground", "moonblast"],
 		randomDoubleBattleMoves: ["lightofruin", "dazzlinggleam", "wish", "psychic", "aromatherapy", "protect", "calmmind"],
-		isUnreleased: true,
-		tier: "Unreleased",
 	},
 	florges: {
 		randomBattleMoves: ["calmmind", "moonblast", "synthesis", "aromatherapy", "wish", "toxic", "protect"],

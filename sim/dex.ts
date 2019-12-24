@@ -954,7 +954,7 @@ export class ModdedDex {
 					// custom tags
 					'mega',
 					// illegal/nonstandard reasons
-					'glitch', 'past', 'future', 'lgpe', 'pokestar', 'custom',
+					'past', 'future', 'unobtainable', 'lgpe', 'custom',
 				];
 				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
 				continue;
