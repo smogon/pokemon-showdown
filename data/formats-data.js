@@ -7820,7 +7820,7 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	eternatuseternamax: {
-		battleOnly: true,
+		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
 	missingno: {
