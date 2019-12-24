@@ -51,15 +51,6 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	beastball: {
-		id: "beastball",
-		name: "Beast Ball",
-		spritenum: 661,
-		num: 851,
-		gen: 7,
-		isPokeball: true,
-		desc: "A special Poké Ball designed to catch Ultra Beasts.",
-	},
 	beedrillite: {
 		inherit: true,
 		isNonstandard: null,
@@ -154,7 +145,7 @@ let BattleItems = {
 		num: 576,
 		gen: 5,
 		isPokeball: true,
-		desc: "A special Poké Ball that appears out of nowhere in a bag at the Entree Forest.",
+		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
 	},
 	eeviumz: {
 		inherit: true,
