@@ -3380,15 +3380,24 @@ let BattleAbilities = {
 		num: 113,
 	},
 	"screencleaner": {
-		desc: "When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.",
-		shortDesc: "Removes Screens and Veil Effects on switchin.",
+		desc: "On switch-in, this Pokémon ends the effects of Reflect, Light Screen, and Aurora Veil for both the user's and the opposing side.",
+		shortDesc: "Removes Reflect, Light Screen, and Aurora Veil on switch-in.",
 		onStart(pokemon) {
-			for (let sideCondition of ['reflect', 'lightscreen', 'auroraveil']) {
+			let activated = false;
+			for (const sideCondition of ['reflect', 'lightscreen', 'auroraveil']) {
 				if (pokemon.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', pokemon.side, this.dex.getEffect(sideCondition).name, '[from] ability: Screen Cleaner', '[of] ' + pokemon);
+					if (!activated) {
+						this.add('-activate', pokemon, 'ability: Screen Cleaner');
+						activated = true;
+					}
+					this.add('-sideend', pokemon.side, this.dex.getEffect(sideCondition).name);
 				}
 				if (pokemon.side.foe.removeSideCondition(sideCondition)) {
-					this.add('-sideend', pokemon.side.foe, this.dex.getEffect(sideCondition).name, '[from] ability: Screen Cleaner', '[of] ' + pokemon);
+					if (!activated) {
+						this.add('-activate', pokemon, 'ability: Screen Cleaner');
+						activated = true;
+					}
+					this.add('-sideend', pokemon.side.foe, this.dex.getEffect(sideCondition).name);
 				}
 			}
 		},
