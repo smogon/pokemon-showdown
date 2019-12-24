@@ -1367,15 +1367,17 @@ export class Pokemon {
 		return this.battle.dex.getEffectByID(this.status);
 	}
 
-	eatItem(source?: Pokemon, sourceEffect?: Effect) {
+	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
 		if (!this.hp || !this.isActive) return false;
 		if (!this.item) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		const item = this.getItem();
-		if (this.battle.runEvent('UseItem', this, null, null, item) &&
-			this.battle.runEvent('TryEatItem', this, null, null, item)) {
+		if (
+			this.battle.runEvent('UseItem', this, null, null, item) &&
+			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
+		) {
 
 			this.battle.add('-enditem', this, item, '[eat]');
 
