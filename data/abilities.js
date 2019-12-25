@@ -1987,7 +1987,7 @@ let BattleAbilities = {
 		},
 		id: "longreach",
 		name: "Long Reach",
-		rating: 1.5,
+		rating: 1,
 		num: 203,
 	},
 	"magicbounce": {
@@ -3403,7 +3403,7 @@ let BattleAbilities = {
 		},
 		id: "screencleaner",
 		name: "Screen Cleaner",
-		rating: 1.5,
+		rating: 2,
 		num: 251,
 	},
 	"serenegrace": {
