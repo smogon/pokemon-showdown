@@ -148,6 +148,7 @@ let BattleAliases = {
 	"deos": "Deoxys-Speed",
 	"eiscuen": "Eiscue-Noice",
 	"eternalfloette": "Floette-Eternal",
+	"eternamax": "Eternatus-Eternamax",
 	"girao": "Giratina-Origin",
 	"giratinao": "Giratina-Origin",
 	"gourgeists": "Gourgeist-Small",
