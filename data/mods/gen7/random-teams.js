@@ -296,8 +296,7 @@ class RandomGen7Teams extends RandomTeams {
 					if ((hasMove['crunch'] || hasMove['knockoff'] || hasMove['hyperspacefury']) && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'suckerpunch':
-					if (counter.damagingMoves.length < 2 || hasMove['glare'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					if (counter['Dark'] > 1 && !hasType['Dark']) rejected = true;
+					if (counter.damagingMoves.length < 2 || hasMove['glare'] || !hasType['Dark'] && counter['Dark'] > 1) rejected = true;
 					break;
 				case 'dragonclaw':
 					if (hasMove['dragontail'] || hasMove['outrage']) rejected = true;
