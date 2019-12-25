@@ -966,7 +966,7 @@ export class ModdedDex {
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
 					const template: Template = table[id] as Template;
-					if (template.otherFormes) {
+					if (template.otherFormes && ruleid !== template.id + toID(template.baseForme)) {
 						matches.push('basepokemon:' + id);
 						continue;
 					}

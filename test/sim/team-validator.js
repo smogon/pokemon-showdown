@@ -484,15 +484,15 @@ describe('Team Validator', function () {
 
 	it('should allow Pokemon to be whitelisted', function () {
 		let team = [
-			{species: 'eevee', ability: 'runaway', moves: ['tackle'], evs: {hp: 1}},
+			{species: 'giratina', ability: 'pressure', moves: ['protect'], evs: {hp: 1}},
 		];
-		let illegal = TeamValidator.get('gen7ou@@@-allpokemon,+eevee').validateTeam(team);
+		let illegal = TeamValidator.get('gen7ubers@@@-allpokemon,+giratinaaltered').validateTeam(team);
 		assert.strictEqual(illegal, null);
 
 		team = [
-			{species: 'pikachu', ability: 'static', moves: ['thundershock'], evs: {hp: 1}},
+			{species: 'giratinaorigin', ability: 'levitate', moves: ['protect'], evs: {hp: 1}},
 		];
-		illegal = TeamValidator.get('gen7ou@@@-allpokemon,+eevee').validateTeam(team);
+		illegal = TeamValidator.get('gen7ubers@@@-allpokemon,+giratinaaltered').validateTeam(team);
 		assert(illegal);
 	});
 

@@ -514,6 +514,10 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 */
 	readonly forme: string;
 	/**
+	 * Base forme name (e.g. 'Altered' for Giratina).
+	 */
+	readonly baseForme: string;
+	/**
 	 * Other forms. List of names of cosmetic forms. These should have
 	 * `aliases.js` aliases to this entry, but not have their own
 	 * entry in `pokedex.js`.
@@ -633,6 +637,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.name = data.species;
 		this.baseSpecies = data.baseSpecies || this.name;
 		this.forme = data.forme || '';
+		this.baseForme = data.baseForme || '';
 		this.otherForms = data.otherForms || undefined;
 		this.otherFormes = data.otherFormes || undefined;
 		this.spriteid = data.spriteid ||
