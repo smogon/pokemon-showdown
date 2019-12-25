@@ -1193,18 +1193,22 @@ export class TeamValidator {
 		if (banReason === '') return null;
 
 		// obtainability
-		if (tierTemplate.isNonstandard === 'Unobtainable') {
+		if (tierTemplate.isNonstandard) {
 			banReason = ruleTable.check('pokemontag:' + toID(tierTemplate.isNonstandard));
 			if (banReason) {
-				return `${tierTemplate.species} is not obtainable without hacking or glitches.`;
-			}
-			if (banReason === '') return null;
-		} else if (tierTemplate.isNonstandard) {
-			banReason = ruleTable.check('nonexistent', setHas);
-			if (banReason) {
+				if (tierTemplate.isNonstandard === 'Unobtainable') {
+					return `${tierTemplate.species} is not obtainable without hacking or glitches.`;
+				}
 				if (['Past', 'Future'].includes(tierTemplate.isNonstandard)) {
 					return `${tierTemplate.species} does not exist in Gen ${dex.gen}.`;
 				}
+			}
+			if (banReason === '') return null;
+		}
+
+		if (tierTemplate.isNonstandard) {
+			banReason = ruleTable.check('nonexistent', setHas);
+			if (banReason) {
 				return `${tierTemplate.species} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
