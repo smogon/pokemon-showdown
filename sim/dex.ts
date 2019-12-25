@@ -955,6 +955,8 @@ export class ModdedDex {
 					'mega',
 					// illegal/nonstandard reasons
 					'past', 'future', 'unobtainable', 'lgpe', 'custom',
+					// all
+					'allpokemon', 'allitems', 'allmoves', 'allabilities',
 				];
 				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
 				continue;
@@ -978,7 +980,7 @@ export class ModdedDex {
 			}
 		}
 		if (matches.length > 1) {
-			throw new Error(`More than one thing matches "${rule}"; please use something like "-item:metronome" to disambiguate`);
+			throw new Error(`More than one thing matches "${rule}"; please specify one of: ` + matches.join(', '));
 		}
 		if (matches.length < 1) {
 			throw new Error(`Nothing matches "${rule}"`);

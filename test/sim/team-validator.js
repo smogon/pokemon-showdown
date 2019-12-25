@@ -479,7 +479,21 @@ describe('Team Validator', function () {
 			{species: 'blaziken', ability: 'blaze', moves: ['skyuppercut'], evs: {hp: 1}},
 		];
 		let illegal = TeamValidator.get('gen7ou@@@+Blaziken').validateTeam(team);
-		assert(!illegal);
+		assert.strictEqual(illegal, null);
+	});
+
+	it('should allow Pokemon to be whitelisted', function () {
+		let team = [
+			{species: 'eevee', ability: 'runaway', moves: ['tackle'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen7ou@@@-allpokemon,+eevee').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
+		team = [
+			{species: 'pikachu', ability: 'static', moves: ['thundershock'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen7ou@@@-allpokemon,+eevee').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should allow moves to be banned', function () {
