@@ -1134,14 +1134,15 @@ let BattleItems = {
 			type: "Ghost",
 		},
 		onBeforeTurn(pokemon) {
+			if (!this.willMove(pokemon)) return;
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
-				pokemon.eatItem();
+				if (pokemon.eatItem()) {
+					this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
+					pokemon.addVolatile('custapberry');
+				}
 			}
 		},
-		onEat(pokemon) {
-			this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
-			pokemon.addVolatile('custapberry');
-		},
+		onEat() { },
 		effect: {
 			onModifyPriorityPriority: -1,
 			onModifyPriority(priority, pokemon) {
@@ -4849,6 +4850,7 @@ let BattleItems = {
 	"quickclaw": {
 		id: "quickclaw",
 		onBeforeTurn(pokemon) {
+			if (!this.willMove(pokemon)) return;
 			if (this.randomChance(1, 5)) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
 				pokemon.addVolatile('quickclaw');
