@@ -18663,7 +18663,7 @@ let BattleMovedex = {
 		flags: {snatch: 1},
 		onTryHit(target, source, move) {
 			let item = source.getItem();
-			if (item.isBerry && source.eatItem()) {
+			if (item.isBerry && source.eatItem(true)) {
 				this.boost({def: 2}, source, null, null, false, true);
 			} else {
 				return false;
