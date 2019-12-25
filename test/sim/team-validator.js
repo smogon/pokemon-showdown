@@ -419,6 +419,15 @@ describe('Team Validator', function () {
 		assert.strictEqual(illegal, null);
 	});
 
+	it('should reject Ultra Necrozma where ambiguous', function () {
+		let team = [
+			{species: 'necrozmaultra', ability: 'neuroforce', moves: ['confusion']},
+		];
+		let illegal = TeamValidator.get('gen7ubers').validateTeam(team);
+		console.log(illegal);
+		assert(illegal);
+	});
+
 	it('should reject newer Pokemon in older gens', function () {
 		let team = [
 			{species: 'pichu', ability: 'static', moves: ['thunderbolt']},
