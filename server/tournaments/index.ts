@@ -1071,12 +1071,14 @@ export class Tournament extends Rooms.RoomGame {
 		this.room.update();
 	}
 	onTournamentEnd() {
+		const bracketData = this.getBracketData();
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
 			format: this.name,
 			generator: this.generator.name,
-			bracketData: this.getBracketData(),
+			bracketData,
 		};
+		this.room.roomlog(this.generator.getBBCode());
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		this.remove();
 	}
@@ -1694,6 +1696,17 @@ export const commands: ChatCommands = {
 						tourRoom.addRaw(Chat.html`<div class="infobox"><a href="/${room.roomid}" class="ilink"><strong>${Dex.getFormat(tour.name).name}</strong> tournament created in <strong>${room.title}</strong>.</a></div>`).update();
 					}
 				}
+			}
+		} else if (cmd === 'export') {
+			if (room.game && room.game.gameid === 'tournament') {
+				if (!this.can('gamemoderation', null, room)) return;
+				const tour = room.game as Tournament;
+				if (!tour.isTournamentStarted) return this.errorReply(`You can't export a tournament that hasn't started.`);
+				const tourData = tour.generator.getBBCode();
+				const data = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${tourData.replace(/\n/g, '<br>')}</code></div>`;
+				this.sendReplyBox(data);
+			} else {
+				this.errorReply(`No tournament is currently running - the BBCode for a previous tournament is accessible through the roomlog.`);
 			}
 		} else {
 			const tournament = (room.game && room.game.gameid === 'tournament') ? room.game as Tournament : null;

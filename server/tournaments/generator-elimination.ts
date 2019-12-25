@@ -457,4 +457,58 @@ export class Elimination {
 
 		return results;
 	}
+	getBBCode() {
+		if (!this.treeRoot) return `No root node.`;
+
+		let buf = ``;
+		const results = this.bracketToRounds();
+		// losersBracketIndex -> roundIndex -> matches[]
+		const games: (typeof results)[][] = [];
+		for (const game of results) {
+			if (!games[game.losersBracketIndex]) games[game.losersBracketIndex] = [];
+			if (!games[game.losersBracketIndex][game.roundIndex]) games[game.losersBracketIndex][game.roundIndex] = [];
+			games[game.losersBracketIndex][game.roundIndex].push(game);
+		}
+
+		for (let losersIdx = 0; losersIdx < games.length; losersIdx++) {
+			const currentBracket = games[losersIdx].reverse();
+			buf += losersIdx ? `[b]Loser's bracket` + (losersIdx !== 1 ? ` ${losersIdx}` : ``) : `[b]Winner's bracket`;
+			buf += `:[/b]\n`;
+			for (let round = 0; round < currentBracket.length; round++) {
+				const roundGames = currentBracket[round];
+				// i think that the only time this can happen is the
+				// loser's bracket not having a game of index 0, because that's
+				// the grand final and part of the winner's bracket
+				if (!roundGames) continue;
+				buf += `[b]Round ${round + 1}[/b]\n`;
+				for (const game of roundGames) {
+					buf += `[b]${game.winner}[/b] vs ${game.loser}\n`;
+				}
+				buf += '\n';
+			}
+		}
+		return buf;
+	}
+	bracketToRounds(node?: ElimNode, roundIndex = 0)
+	: {roundIndex: number, losersBracketIndex: number, winner: string, loser: string}[] {
+		if (!node) node = this.treeRoot;
+		// player node
+		if (!node.children) return [];
+
+		const res = [];
+		if (node.user) {
+			// there's a winner
+			res.push({
+				roundIndex,
+				losersBracketIndex: node.losersBracketIndex,
+				winner: node.user.name,
+				loser: node.children[node.result === 'win' ? 1 : 0].user!.name,
+			});
+		}
+		return [
+			...res,
+			...this.bracketToRounds(node.children[0], roundIndex + 1),
+			...this.bracketToRounds(node.children[1], roundIndex + 1),
+		];
+	}
 }

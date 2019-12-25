@@ -190,4 +190,36 @@ export class RoundRobin {
 		}
 		return results;
 	}
+	getBBCode() {
+		let buf = `[table]\n`;
+
+		buf += `[tr]`;
+		buf += `[td][/td]`; // blank cell in the top corner
+		buf += this.players.map(player => Chat.html`[th]${player.name}[/th]`).join('');
+		buf += `[th](Score)[/th]`;
+		buf += `[/tr]\n`;
+
+		for (let row = 0; row < this.players.length; row++) {
+			buf += `[tr]`;
+			buf += Chat.html`[th]${this.players[row].name}[/th]`;
+			for (let col = 0; col < this.players.length; col++) {
+				const match = this.matches[row][col];
+				if (!match || match.state !== 'finished' || !match.score) {
+					buf += `[td][/td]`; // no match, leave an empty space
+					continue;
+				}
+
+				const color = match.result === 'win' ? 'green' :
+					match.result === 'loss' ? 'red' :
+					'orange';
+
+				buf += `[td][color=${color}]${match.score.join(', ')}[/color] (${match.result})[/td]`;
+			}
+			buf += `[td]${this.players[row].score}[/td]`;
+			buf += `[/tr]\n`;
+		}
+
+		buf += `[/table]`;
+		return buf;
+	}
 }
