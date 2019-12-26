@@ -1208,12 +1208,6 @@ let BattleMovedex = {
 		num: 782,
 		accuracy: 100,
 		basePower: 100,
-		basePowerCallback(pokemon, target, move) {
-			if (target.volatiles['dynamax']) {
-				return move.basePower * 2;
-			}
-			return move.basePower;
-		},
 		category: "Physical",
 		desc: "Deals double damage against Dynamax and Gigantamax Pokemon.",
 		shortDesc: "Double damage against Dynamax/Gigantamax.",
@@ -1223,6 +1217,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onBasePower(basePower, pokemon, target) {
+			if (target.volatiles['dynamax']) {
+				return this.chainModify(2);
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
@@ -1231,12 +1230,6 @@ let BattleMovedex = {
 		num: 781,
 		accuracy: 100,
 		basePower: 100,
-		basePowerCallback(pokemon, target, move) {
-			if (target.volatiles['dynamax']) {
-				return move.basePower * 2;
-			}
-			return move.basePower;
-		},
 		category: "Physical",
 		desc: "Deals double damage against Dynamax and Gigantamax Pokemon.",
 		shortDesc: "Double damage against Dynamax/Gigantamax.",
@@ -1246,6 +1239,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onBasePower(basePower, pokemon, target) {
+			if (target.volatiles['dynamax']) {
+				return this.chainModify(2);
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
