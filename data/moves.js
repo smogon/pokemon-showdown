@@ -7266,7 +7266,7 @@ let BattleMovedex = {
 		},
 		effect: {
 			onStart(side) {
-				this.add('-sidestart', side, 'move: Steelsurge');
+				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
