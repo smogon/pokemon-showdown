@@ -2999,26 +2999,31 @@ let BattleMovedex = {
 			const sideConditions = [
 				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'lightscreen', 'reflect', 'auroraveil', 'tailwind',
 			];
-			const side1 = this.sides[0];
-			const side2 = this.sides[1];
+			const side1 = source.side;
+			const side2 = source.side.foe;
+			let success = false;
 			for (let id of sideConditions) {
 				let sourceLayers = side1.sideConditions[id] ? (side1.sideConditions[id].layers || 1) : 0;
 				let targetLayers = side2.sideConditions[id] ? (side2.sideConditions[id].layers || 1) : 0;
 				if (sourceLayers === targetLayers) continue;
 				const effectName = this.dex.getEffect(id).name;
 				if (side1.removeSideCondition(id)) {
-					this.add('-sideend', side1, effectName, '[from] move: Court Change', '[of] ' + source);
+					this.add('-sideend', side1, effectName, '[silent]');
+					success = true;
 				}
 				if (side2.removeSideCondition(id)) {
-					this.add('-sideend', side2, effectName, '[from] move: Court Change', '[of] ' + source);
+					this.add('-sideend', side2, effectName, '[silent]');
+					success = true;
 				}
 				for (; targetLayers > 0; targetLayers--) {
 					side1.addSideCondition(id, source);
 				}
 				for (; sourceLayers > 0; sourceLayers--) {
-					side2.addSideCondition(id, source);
+					side2.addSideCondition(id, side2.active[0]);
 				}
 			}
+			if (!success) return false;
+			this.add('-activate', source, 'move: Court Change');
 		},
 		secondary: null,
 		target: "all",
