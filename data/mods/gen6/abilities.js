@@ -65,6 +65,12 @@ let BattleAbilities = {
 			}
 		},
 	},
+	"magicguard": {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') return false;
+		},
+	},
 	"multitype": {
 		inherit: true,
 		shortDesc: "If this Pokemon is an Arceus, its type changes to match its held Plate.",
