@@ -4352,14 +4352,7 @@ let BattleMovedex = {
 		num: 744,
 		accuracy: 100,
 		basePower: 100,
-		basePowerCallback(pokemon, target, move) {
-			if (target.volatiles['dynamax']) {
-				return move.basePower * 2;
-			}
-			return move.basePower;
-		},
 		category: "Special",
-		// TODO: Check to see if power doubles against Gigantamax
 		desc: "Deals double damage against Dynamax and Gigantamax Pokemon.",
 		shortDesc: "Double damage against Dynamax/Gigantamax.",
 		id: "dynamaxcannon",

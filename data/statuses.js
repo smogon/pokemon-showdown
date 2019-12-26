@@ -745,7 +745,7 @@ let BattleStatuses = {
 			pokemon.removeVolatile('dynamax');
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.id === 'behemothbash' || move.id === 'behemothblade') {
+			if (move.id === 'behemothbash' || move.id === 'behemothblade' || move.id === 'dynamaxcannon') {
 				return this.chainModify(2);
 			}
 		},
