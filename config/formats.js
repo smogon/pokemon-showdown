@@ -212,7 +212,7 @@ let Formats = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		ruleset: ['Obtainable', 'Standard Doubles', 'Team Preview'],
-		banlist: ['DUber', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
+		banlist: ['DUber'],
 		minSourceGen: 8,
 	},
 	{
