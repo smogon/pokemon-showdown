@@ -17,8 +17,6 @@ let BattleFormats = {
 			'Vaporeon + Tackle + Growl',
 			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
 			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember',
-
-			'Sunflora + Razor Leaf + Synthesis',
 		],
 	},
 	standard: {
