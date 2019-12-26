@@ -2675,6 +2675,9 @@ export class Battle {
 				if (this.gen <= 4) {
 					// in gen 2-4, the switch still happens
 					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
+					action.priority = -101;
+					this.queue.unshift(action);
+					break;
 				} else {
 					// in gen 5+, the switch is cancelled
 					this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
