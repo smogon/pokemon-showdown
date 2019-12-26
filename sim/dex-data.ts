@@ -643,7 +643,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || {0: ""};
-		this.types = data.types!;
+		this.types = data.types || ['???'];
 		this.addedType = data.addedType || undefined;
 		this.prevo = data.prevo || '';
 		this.tier = data.tier || '';
@@ -661,10 +661,10 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 					{M: 0.5, F: 0.5});
 		this.requiredItem = data.requiredItem || undefined;
 		this.requiredItems = this.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
-		this.baseStats = data.baseStats!;
-		this.weightkg = data.weightkg!;
+		this.baseStats = data.baseStats || {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+		this.weightkg = data.weightkg || 0;
 		this.weighthg = this.weightkg * 10;
-		this.heightm = data.heightm!;
+		this.heightm = data.heightm || 0;
 		this.color = data.color || '';
 		this.unreleasedHidden = data.unreleasedHidden || false;
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
