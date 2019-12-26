@@ -920,7 +920,10 @@ let Formats = [
 
 		mod: 'gen5',
 		ruleset: ['Obtainable', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Uber', 'Arena Trap', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Rush', 'Shadow Tag', 'Soul Dew'],
+		banlist: [
+			'Uber', 'Arena Trap', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Rush', 'Shadow Tag', 'Soul Dew',
+			'Dark Void', 'Grass Whistle', 'Hypnosis', 'Lovely Kiss', 'Sing', 'Sleep Powder', 'Spore', 'Yawn',
+		],
 	},
 	{
 		name: "[Gen 4] OU",
@@ -1614,7 +1617,7 @@ let Formats = [
 
 		mod: 'gen5',
 		searchShow: false,
-		ruleset: ['Obtainable', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
+		ruleset: ['Obtainable', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview', 'Sleep Clause Mod'],
 		banlist: ['Uber', 'OU', 'UUBL', 'Arena Trap', 'Drought', 'Sand Stream', 'Snow Warning'],
 	},
 	{
@@ -1669,7 +1672,7 @@ let Formats = [
 		mod: 'gen5',
 		searchShow: false,
 		maxLevel: 5,
-		ruleset: ['Obtainable', 'Standard', 'Team Preview', 'Little Cup'],
+		ruleset: ['Obtainable', 'Little Cup', 'Standard', 'Team Preview', 'Sleep Clause Mod'],
 		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Sand Rush', 'Gligar', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela'],
 	},
 	{
@@ -1696,7 +1699,7 @@ let Formats = [
 			validate: [1, 3],
 			battle: 1,
 		},
-		ruleset: ['Obtainable', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
+		ruleset: ['Obtainable', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview', 'Sleep Clause Mod'],
 		banlist: ['Uber', 'Whimsicott', 'Focus Sash', 'Soul Dew', 'Perish Song'],
 		unbanlist: ['Genesect', 'Landorus', 'Manaphy', 'Thundurus', 'Tornadus-Therian'],
 	},
@@ -1743,7 +1746,7 @@ let Formats = [
 		mod: 'gen5',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Obtainable', 'Standard', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
+		ruleset: ['Obtainable', 'Standard', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview', 'Sleep Clause Mod'],
 		banlist: ['DUber', 'Soul Dew', 'Dark Void', 'Sky Drop'],
 	},
 	{
