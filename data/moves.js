@@ -1217,11 +1217,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onBasePower(basePower, pokemon, target) {
-			if (target.volatiles['dynamax']) {
-				return this.chainModify(2);
-			}
-		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
@@ -1239,11 +1234,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onBasePower(basePower, pokemon, target) {
-			if (target.volatiles['dynamax']) {
-				return this.chainModify(2);
-			}
-		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",

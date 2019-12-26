@@ -744,6 +744,11 @@ let BattleStatuses = {
 		onBeforeSwitchOut(pokemon) {
 			pokemon.removeVolatile('dynamax');
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.id === 'behemothbash' || move.id === 'behemothblade') {
+				return this.chainModify(2);
+			}
+		},
 		onDragOutPriority: 2,
 		onDragOut(pokemon) {
 			this.add('-block', pokemon, 'Dynamax');
