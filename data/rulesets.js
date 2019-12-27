@@ -448,9 +448,9 @@ let BattleFormats = {
 			this.add('rule', 'Accuracy Moves Clause: Accuracy-lowering moves are banned');
 		},
 	},
-	sleepclause: {
+	sleepmovesclause: {
 		effectType: 'ValidatorRule',
-		name: 'Sleep Clause',
+		name: 'Sleep Moves Clause',
 		desc: "Bans all moves that induce sleep, such as Hypnosis",
 		banlist: ['Yawn'],
 		onBegin() {
