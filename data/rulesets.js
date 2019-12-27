@@ -448,6 +448,25 @@ let BattleFormats = {
 			this.add('rule', 'Accuracy Moves Clause: Accuracy-lowering moves are banned');
 		},
 	},
+	sleepclause: {
+		effectType: 'ValidatorRule',
+		name: 'Sleep Clause',
+		desc: "Bans all moves that induce sleep, such as Hypnosis",
+		banlist: ['Yawn'],
+		onBegin() {
+			this.add('rule', 'Sleep Clause: Sleep-inducing moves are banned');
+		},
+		onValidateSet(set) {
+			let problems = [];
+			if (set.moves) {
+				for (const id of set.moves) {
+					let move = this.dex.getMove(id);
+					if (move.status && move.status === 'slp') problems.push(move.name + ' is banned by Sleep Clause.');
+				}
+			}
+			return problems;
+		},
+	},
 	endlessbattleclause: {
 		effectType: 'Rule',
 		name: 'Endless Battle Clause',
