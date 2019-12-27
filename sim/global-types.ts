@@ -207,6 +207,7 @@ interface EventMethods {
 	onEffectiveness?: MoveEventMethods['onEffectiveness']
 	onFaint?: CommonHandlers['VoidEffect']
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	onFractionalPriority?: CommonHandlers['ModifierSourceMove']
 	onHit?: MoveEventMethods['onHit']
 	onImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void
 	onLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string)
@@ -625,6 +626,7 @@ interface EventMethods {
 	onFoeModifyDefPriority?: number
 	onFoeRedirectTargetPriority?: number
 	onFoeTrapPokemonPriority?: number
+	onFractionalPriorityPriority?: number
 	onHitPriority?: number
 	onModifyAccuracyPriority?: number
 	onModifyAtkPriority?: number
@@ -1191,6 +1193,8 @@ namespace Actions {
 		order: 3 | 5 | 200 | 201 | 199;
 		/** priority of the action (lower first) */
 		priority: number;
+		/** fractional priority of the action (lower first) */
+		fractionalPriority: number;
 		/** speed of pokemon using move (higher first if priority tie) */
 		speed: number;
 		/** the pokemon doing the move */

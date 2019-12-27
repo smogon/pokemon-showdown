@@ -3774,7 +3774,7 @@ let BattleAbilities = {
 	},
 	"stall": {
 		shortDesc: "This Pokemon moves last among Pokemon using the same or greater priority moves.",
-		onModifyPriority(priority) {
+		onFractionalPriority(priority) {
 			return Math.round(priority) - 0.1;
 		},
 		id: "stall",
