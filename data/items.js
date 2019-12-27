@@ -6337,7 +6337,8 @@ let BattleItems = {
 		// Implemented in statuses.js, moves.js, and abilities.js
 		num: 1123,
 		gen: 8,
-		desc: "Blocks the holder from receiving any effects of Sunny Day/Rain Dance.",
+		desc: "The holder is immune to the weather-based modifiers of the attacker's moves in the effects of Sunny Day and Rain Dance. However, the user's Weather Ball and own weather-based abilities will not activate.",
+		shortDesc: "Blocks the holder from the effects of sun/rain",
 	},
 	"venusaurite": {
 		id: "venusaurite",
