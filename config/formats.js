@@ -864,7 +864,7 @@ let Formats = [
 			validate: [1, 3],
 			battle: 1,
 		},
-		ruleset: ['[Gen 2] OU', 'Accuracy Moves Clause', 'Sleep Clause', 'Team Preview'],
+		ruleset: ['[Gen 2] OU', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview'],
 		banlist: ['Snorlax', 'Swagger'],
 	},
 	{
@@ -919,7 +919,7 @@ let Formats = [
 		],
 
 		mod: 'gen5',
-		ruleset: ['Obtainable', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Sleep Clause', 'Swagger Clause', 'Team Preview'],
+		ruleset: ['Obtainable', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Sleep Moves Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Uber', 'Arena Trap', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Rush', 'Shadow Tag', 'Soul Dew'],
 	},
 	{
@@ -1882,7 +1882,7 @@ let Formats = [
 			validate: [1, 3],
 			battle: 1,
 		},
-		ruleset: ['[Gen 4] OU', 'Accuracy Moves Clause', 'Sleep Clause', 'Team Preview'],
+		ruleset: ['[Gen 4] OU', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview'],
 		banlist: ['Latias', 'Porygon-Z', 'Focus Sash', 'Soul Dew', 'Destiny Bond', 'Explosion', 'Perish Song', 'Self-Destruct'],
 		unbanlist: ['Wobbuffet', 'Wynaut', 'Sand Veil'],
 	},
