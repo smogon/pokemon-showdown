@@ -4686,7 +4686,9 @@ let BattleAbilities = {
 			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
-			pokemon.formeChange(/** @type {string} */ (pokemon.template.inheritsFrom), this.effect, false, '[silent]');
+			if (pokemon.template.baseSpecies === 'Darmanitan' && pokemon.template.inheritsFrom) {
+				pokemon.formeChange(/** @type {string} */ (pokemon.template.inheritsFrom), this.effect, false, '[silent]');
+			}
 		},
 		effect: {
 			onStart(pokemon) {
