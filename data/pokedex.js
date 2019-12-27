@@ -14394,7 +14394,7 @@ let BattlePokedex = {
 		eggGroups: ["Human-Like"],
 	},
 	toxtricitygmax: {
-		num: 844,
+		num: 849,
 		species: "Toxtricity-Gmax",
 		baseSpecies: "Toxtricity",
 		forme: "Gmax",
