@@ -311,7 +311,7 @@ class UnoGame extends Rooms.RoomGame {
 	}
 
 	nextTurn(starting?: boolean) {
-		this.onAwaitUno()
+		void this.onAwaitUno()
 			.then(x => {
 				if (!starting) this.onNextPlayer();
 
