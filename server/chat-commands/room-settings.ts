@@ -108,7 +108,7 @@ export const commands: ChatCommands = {
 			break;
 		}
 		if (currentModchat === room.modchat) {
-			return this.errorReply(`Modchat is already set to ${currentModchat}.`);
+			return this.errorReply(`Modchat is already set to ${currentModchat || 'off'}.`);
 		}
 		if (!room.modchat) {
 			this.add("|raw|<div class=\"broadcast-blue\"><strong>Moderated chat was disabled!</strong><br />Anyone may talk now.</div>");
