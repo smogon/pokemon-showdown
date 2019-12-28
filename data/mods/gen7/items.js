@@ -88,6 +88,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	custapberry: {
+		inherit: true,
+		isUnreleased: false,
+	},
 	darkgem: {
 		inherit: true,
 		isNonstandard: null,
