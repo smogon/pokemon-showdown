@@ -9,6 +9,14 @@
 
 'use strict';
 
+type Color = 'Green' | 'Yellow' | 'Red' | 'Blue' | 'Black';
+interface Card {
+	value: string
+	color: Color
+	changedColor?: Color
+	name: string
+}
+
 const maxTime = 60; // seconds
 
 const rgbGradients = {
@@ -29,15 +37,7 @@ const textColors = {
 
 const textShadow = 'text-shadow: 1px 0px black, -1px 0px black, 0px -1px black, 0px 1px black, 2px -2px black;';
 
-/** @typedef {'Green' | 'Yellow' | 'Red' | 'Blue' | 'Black'} Color */
-/** @typedef {{value: string, color: Color, changedColor?: Color, name: string}} Card */
-
-/**
- * @param {Card} card
- * @param {boolean} fullsize
- * @return {string}
- */
-function cardHTML(card, fullsize) {
+function cardHTML(card: Card, fullsize: boolean) {
 	let surface = card.value.replace(/[^A-Z0-9+]/g, "");
 	let background = rgbGradients[card.color];
 	if (surface === 'R') surface = '<i class="fa fa-refresh" aria-hidden="true"></i>';
@@ -48,60 +48,65 @@ function cardHTML(card, fullsize) {
 /**
  * @return {Card[]}
  */
-function createDeck() {
-	/** @type {Color[]} */
-	const colors = ['Red', 'Blue', 'Green', 'Yellow'];
+function createDeck(): Card[] {
+	const colors: Color[] = ['Red', 'Blue', 'Green', 'Yellow'];
 	const values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'Reverse', 'Skip', '+2'];
 
-	let basic = /** @type {Card[]} */ ([]);
+	let basic: Card[] = [];
 
 	for (const color of colors) {
 		basic.push(...values.map(v => {
-			/** @type {Card} */
-			let c = {value: v, color: color, name: color + " " + v};
+			let c: Card = {value: v, color: color, name: color + " " + v};
 			return c;
 		}));
 	}
 
 	return [
 		// two copies of the basic stuff (total 96)
-		...basic,
-		...basic,
+		...basic as Card[],
+		...basic as Card[],
 		// The four 0s
 		...[0, 1, 2, 3].map(v => {
-			/** @type {Card} */
-			let c = {color: colors[v], value: '0', name: colors[v] + ' 0'};
+			let c: Card = {color: colors[v], value: '0', name: colors[v] + ' 0'};
 			return c;
 		}),
 		 // Wild cards
 		...[0, 1, 2, 3].map(v => {
-			/** @type {Card} */
-			let c = {color: 'Black', value: 'Wild', name: 'Wild'};
+			let c: Card = {color: 'Black', value: 'Wild', name: 'Wild'};
 			return c;
 		}),
 		// Wild +4 cards
 		...[0, 1, 2, 3].map(v => {
-			/** @type {Card} */
-			let c = {color: 'Black', value: '+4', name: 'Wild +4'};
+			let c: Card = {color: 'Black', value: '+4', name: 'Wild +4'};
 			return c;
 		}),
 	]; // 108 cards
 }
 
 class UnoGame extends Rooms.RoomGame {
-	/**
-	 * @param {ChatRoom | GameRoom} room
-	 * @param {number} cap
-	 * @param {boolean} suppressMessages
-	 */
-	constructor(room, cap, suppressMessages) {
+	playerTable: {[userid: string]: UnoGamePlayer};
+	players: UnoGamePlayer[];
+	playerCap: number;
+	allowRenames: boolean;
+	maxTime: number;
+	timer: NodeJS.Timer | null;
+	autostartTimer: NodeJS.Timer | null;
+	state: string;
+	currentPlayerid: ID;
+	deck: Card[];
+	discards: Card[];
+	topCard: Card | null;
+	awaitUno: string | null;
+	unoId: ID | null;
+	direction: number;
+	suppressMessages: boolean;
+	spectators: {[k: string]: number};
+	isPlusFour: boolean;
+
+	constructor(room: ChatRoom | GameRoom, cap: number, suppressMessages: boolean) {
 		super(room);
 
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		/** @type {{[userid: string]: UnoGamePlayer}} */
 		this.playerTable = Object.create(null);
-		// TypeScript bug: no `T extends RoomGamePlayer`
-		/** @type {UnoGamePlayer[]} */
 		this.players = [];
 
 		if (room.gameNumber) {
@@ -110,34 +115,23 @@ class UnoGame extends Rooms.RoomGame {
 			room.gameNumber = 1;
 		}
 
-		/** @type {number} */
 		this.playerCap = cap;
 		this.allowRenames = true;
-		/** @type {number} */
 		this.maxTime = maxTime;
-		/** @type {NodeJS.Timer?} */
 		this.timer = null;
-		/** @type {NodeJS.Timer?} */
 		this.autostartTimer = null;
 
-		this.gameid = /** @type {ID} */ ('uno');
+		this.gameid = 'uno' as ID;
 		this.title = 'UNO';
 
-		/** @type {string} */
 		this.state = 'signups';
-
-		/** @type {string} */
 		this.currentPlayerid = '';
-		/** @type {Card[]} */
 		this.deck = Dex.shuffle(createDeck());
-		/** @type {Card[]} */
 		this.discards = [];
-		/** @type {Card?} */
 		this.topCard = null;
-		/** @type {string?} */
 		this.awaitUno = null;
-		/** @type {string?} */
 		this.unoId = null;
+		this.isPlusFour = false;
 
 		this.direction = 1;
 
@@ -149,11 +143,7 @@ class UnoGame extends Rooms.RoomGame {
 
 	onUpdateConnection() {}
 
-	/**
-	 * @param {User} user
-	 * @param {Connection} connection
-	 */
-	onConnect(user, connection) {
+	onConnect(user: User, connection: Connection) {
 		if (this.state === 'signups') {
 			connection.sendTo(this.room, `|uhtml|uno-${this.room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button name="send" value="/uno join">Join</button><br />Or use <strong>/uno join</strong> to join the game.</p>${(this.suppressMessages ? `<p style="font-size: 6pt; text-align: center">Game messages will be shown to only players.  If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`);
 		} else if (this.onSendHand(user) === false) {
@@ -161,10 +151,7 @@ class UnoGame extends Rooms.RoomGame {
 		}
 	}
 
-	/**
-	 * @return {false | void}
-	 */
-	onStart() {
+	onStart(): false | void {
 		if (this.playerCount < 2) return false;
 		if (this.autostartTimer) clearTimeout(this.autostartTimer);
 		this.sendToRoom(`|uhtmlchange|uno-${this.room.gameNumber}|<div class="infobox"><p>The game of UNO has started.</p>${(this.suppressMessages ? `<p style="font-size: 6pt">Game messages will be shown to only players.  If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`, true);
@@ -189,11 +176,7 @@ class UnoGame extends Rooms.RoomGame {
 		this.nextTurn(true);
 	}
 
-	/**
-	 * @param {User} user
-	 * @return {boolean}
-	 */
-	joinGame(user) {
+	joinGame(user: User): boolean {
 		if (this.state === 'signups' && this.addPlayer(user)) {
 			this.sendToRoom(`${user.name} has joined the game of UNO.`);
 			return true;
@@ -201,11 +184,7 @@ class UnoGame extends Rooms.RoomGame {
 		return false;
 	}
 
-	/**
-	 * @param {User} user
-	 * @return {boolean}
-	 */
-	leaveGame(user) {
+	leaveGame(user: User): boolean {
 		if (!(user.id in this.playerTable)) return false;
 		if (this.state === 'signups' && this.removePlayer(user)) {
 			this.sendToRoom(`${user.name} has left the game of UNO.`);
@@ -216,21 +195,12 @@ class UnoGame extends Rooms.RoomGame {
 
 	/**
 	 * Overwrite the default makePlayer so it makes an UnoGamePlayer instead.
-	 * @param {User} user
-	 * @return {UnoGamePlayer}
 	 */
-	makePlayer(user) {
+	makePlayer(user: User): UnoGamePlayer {
 		return new UnoGamePlayer(user, this);
 	}
 
-	/**
-	 * @param {User} user
-	 * @param {string} oldUserid
-	 * @param {boolean} isJoining
-	 * @param {boolean} isForceRenamed
-	 * @return {false | void}
-	 */
-	onRename(user, oldUserid, isJoining, isForceRenamed) {
+	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean): false | void {
 		if (!(oldUserid in this.playerTable) || user.id === oldUserid) return false;
 		if (!user.named && !isForceRenamed) {
 			user.games.delete(this.roomid);
@@ -248,11 +218,7 @@ class UnoGame extends Rooms.RoomGame {
 		if (this.currentPlayerid === oldUserid) this.currentPlayerid = user.id;
 	}
 
-	/**
-	 * @param {string} userid
-	 * @return {string | false}
-	 */
-	eliminate(userid) {
+	eliminate(userid: ID): string | false {
 		if (!(userid in this.playerTable)) return false;
 
 		let name = this.playerTable[userid].name;
@@ -286,11 +252,7 @@ class UnoGame extends Rooms.RoomGame {
 		return name;
 	}
 
-	/**
-	 * @param {string} msg
-	 * @param {boolean} [overrideSuppress]
-	 */
-	sendToRoom(msg, overrideSuppress = false) {
+	sendToRoom(msg: string, overrideSuppress: boolean = false) {
 		if (!this.suppressMessages || overrideSuppress) {
 			this.room.add(msg).update();
 		} else {
@@ -308,11 +270,7 @@ class UnoGame extends Rooms.RoomGame {
 		}
 	}
 
-	/**
-	 * @param {boolean} [showCards]
-	 * @return {string[]}
-	 */
-	getPlayers(showCards) {
+	getPlayers(showCards?: boolean): string[] {
 		let playerList = Object.keys(this.playerTable);
 		if (!showCards) {
 			return playerList.sort().map(id => Chat.escapeHTML(this.playerTable[id].name));
@@ -321,10 +279,7 @@ class UnoGame extends Rooms.RoomGame {
 		return playerList.map(id => `${(this.currentPlayerid === id ? '<strong>' : '')}${Chat.escapeHTML(this.playerTable[id].name)} (${this.playerTable[id].hand.length}) ${(this.currentPlayerid === id ? '</strong>' : "")}`);
 	}
 
-	/**
-	 * @return {Promise<void>}
-	 */
-	onAwaitUno() {
+	onAwaitUno(): Promise<void> {
 		return new Promise((resolve, reject) => {
 			if (!this.awaitUno) return resolve();
 
@@ -339,10 +294,7 @@ class UnoGame extends Rooms.RoomGame {
 		});
 	}
 
-	/**
-	 * @param {boolean} [starting]
-	 */
-	nextTurn(starting) {
+	nextTurn(starting?: boolean) {
 		this.onAwaitUno()
 			.then(() => {
 				if (!starting) this.onNextPlayer();
@@ -366,16 +318,13 @@ class UnoGame extends Rooms.RoomGame {
 		// if none is set
 		if (!this.currentPlayerid) {
 			let userList = Object.keys(this.playerTable);
-			this.currentPlayerid = userList[Math.floor(this.playerCount * Math.random())];
+			this.currentPlayerid = userList[Math.floor(this.playerCount * Math.random())] as ID;
 		}
 
 		this.currentPlayerid = this.getNextPlayer();
 	}
 
-	/**
-	 * @return {string}
-	 */
-	getNextPlayer() {
+	getNextPlayer(): ID {
 		let userList = Object.keys(this.playerTable);
 
 		let player = userList[(userList.indexOf(this.currentPlayerid) + this.direction)];
@@ -383,14 +332,10 @@ class UnoGame extends Rooms.RoomGame {
 		if (!player) {
 			player = this.direction === 1 ? userList[0] : userList[this.playerCount - 1];
 		}
-		return player;
+		return player as ID;
 	}
 
-	/**
-	 * @param {UnoGamePlayer} player
-	 * @return {boolean | void}
-	 */
-	onDraw(player) {
+	onDraw(player: UnoGamePlayer): boolean | void {
 		if (this.currentPlayerid !== player.id || this.state !== 'play') return false;
 		if (player.cardLock) return true;
 
@@ -403,12 +348,7 @@ class UnoGame extends Rooms.RoomGame {
 		player.cardLock = card[0].name;
 	}
 
-	/**
-	 * @param {UnoGamePlayer} player
-	 * @param {string} cardName
-	 * @return {false | string | void}
-	 */
-	onPlay(player, cardName) {
+	onPlay(player: UnoGamePlayer, cardName: string): false | string | void {
 		if (this.currentPlayerid !== player.id || this.state !== 'play') return false;
 
 		let card = player.hasCard(cardName);
@@ -435,7 +375,7 @@ class UnoGame extends Rooms.RoomGame {
 		// update the unoId here, so when the display is sent to the player when the play is made
 		if (player.hand.length === 1) {
 			this.awaitUno = player.id;
-			this.unoId = Math.floor(Math.random() * 100).toString();
+			this.unoId = toID(Math.floor(Math.random() * 100).toString());
 		}
 
 		player.sendDisplay(); // update display without the card in it for purposes such as choosing colors
@@ -453,11 +393,7 @@ class UnoGame extends Rooms.RoomGame {
 		if (this.state === 'play') this.nextTurn();
 	}
 
-	/**
-	 * @param {string} value
-	 * @param {boolean} [initialize]
-	 */
-	onRunEffect(value, initialize) {
+	onRunEffect(value: string, initialize?: boolean) {
 		const colorDisplay = `|uhtml|uno-hand|<table style="width: 100%; border: 1px solid black"><tr><td style="width: 50%"><button style="width: 100%; background-color: red; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px" name=send value="/uno color Red">Red</button></td><td style="width: 50%"><button style="width: 100%; background-color: blue; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; color: white; padding: 5px" name=send value="/uno color Blue">Blue</button></td></tr><tr><td style="width: 50%"><button style="width: 100%; background-color: green; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px" name=send value="/uno color Green">Green</button></td><td style="width: 50%"><button style="width: 100%; background-color: yellow; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px" name=send value="/uno color Yellow">Yellow</button></td></tr></table>`;
 
 		switch (value) {
@@ -500,12 +436,7 @@ class UnoGame extends Rooms.RoomGame {
 		if (initialize) this.onNextPlayer();
 	}
 
-	/**
-	 * @param {UnoGamePlayer} player
-	 * @param {Color} color
-	 * @return {false | void}
-	 */
-	onSelectColor(player, color) {
+	onSelectColor(player: UnoGamePlayer, color: Color): false | void {
 		if (!['Red', 'Blue', 'Green', 'Yellow'].includes(color) || player.id !== this.currentPlayerid || this.state !== 'color') return false;
 		if (!this.topCard) {
 			// should never happen
@@ -526,29 +457,20 @@ class UnoGame extends Rooms.RoomGame {
 		this.nextTurn();
 	}
 
-	/**
-	 * @param {UnoGamePlayer} player
-	 * @param {number} count
-	 * @return {Card[]}
-	 */
-	onDrawCard(player, count) {
+	onDrawCard(player: UnoGamePlayer, count: number): Card[] {
 		if (typeof count === 'string') count = parseInt(count);
 		if (!count || isNaN(count) || count < 1) count = 1;
-		let drawnCards = /** @type {Card[]} */ (this.drawCard(count));
+		let drawnCards: Card[] = this.drawCard(count);
 
 		player.hand.push(...drawnCards);
 		player.sendRoom(`|raw|You have drawn the following card${Chat.plural(drawnCards)}: ${drawnCards.map(card => `<span style="color: ${textColors[card.color]}">${card.name}</span>`).join(', ')}.`);
 		return drawnCards;
 	}
 
-	/**
-	 * @param {number} count
-	 * @return {Card[]}
-	 */
-	drawCard(count) {
+	drawCard(count: number): Card[] {
 		if (typeof count === 'string') count = parseInt(count);
 		if (!count || isNaN(count) || count < 1) count = 1;
-		let drawnCards = /** @type {Card[]} */ ([]);
+		let drawnCards: Card[] = [];
 
 		for (let i = 0; i < count; i++) {
 			if (!this.deck.length) {
@@ -561,12 +483,7 @@ class UnoGame extends Rooms.RoomGame {
 		return drawnCards;
 	}
 
-	/**
-	 * @param {UnoGamePlayer} player
-	 * @param {string} unoId
-	 * @return {false | void}
-	 */
-	onUno(player, unoId) {
+	onUno(player: UnoGamePlayer, unoId: string): false | void {
 		// uno id makes spamming /uno uno impossible
 		if (this.unoId !== unoId || player.id !== this.awaitUno) return false;
 		this.sendToRoom(Chat.html`|raw|<strong>UNO!</strong> ${player.name} is down to their last card!`);
@@ -586,20 +503,13 @@ class UnoGame extends Rooms.RoomGame {
 		}
 	}
 
-	/**
-	 * @param {User} user
-	 * @return {false | void}
-	 */
-	onSendHand(user) {
+	onSendHand(user: User): false | void {
 		if (!(user.id in this.playerTable) || this.state === 'signups') return false;
 
 		this.playerTable[user.id].sendDisplay();
 	}
 
-	/**
-	 * @param {UnoGamePlayer} player
-	 */
-	onWin(player) {
+	onWin(player: UnoGamePlayer) {
 		this.sendToRoom(Chat.html`|raw|<div class="broadcast-green">Congratulations to ${player.name} for winning the game of UNO!</div>`, true);
 		this.destroy();
 	}
@@ -618,22 +528,18 @@ class UnoGame extends Rooms.RoomGame {
 }
 
 class UnoGamePlayer extends Rooms.RoomGamePlayer {
-	/**
-	 * @param {User} user
-	 * @param {UnoGame} game
-	 */
-	constructor(user, game) {
+	hand: Card[];
+	game: UnoGame;
+	cardLock: string | null;
+
+	constructor(user: User, game: UnoGame) {
 		super(user, game);
-		this.hand = /** @type {Card[]} */ ([]);
+		this.hand = [];
 		this.game = game;
-		/** @type {string?} */
 		this.cardLock = null;
 	}
 
-	/**
-	 * @return {boolean}
-	 */
-	canPlayWildFour() {
+	canPlayWildFour(): boolean {
 		if (!this.game.topCard) {
 			// should never happen
 			throw new Error(`No top card in the discard pile.`);
@@ -644,17 +550,11 @@ class UnoGamePlayer extends Rooms.RoomGamePlayer {
 		return true;
 	}
 
-	/**
-	 * @param {string} cardName
-	 */
-	hasCard(cardName) {
+	hasCard(cardName: string): Card | undefined {
 		return this.hand.find(card => card.name === cardName);
 	}
 
-	/**
-	 * @param {string} cardName
-	 */
-	removeCard(cardName) {
+	removeCard(cardName: string) {
 		for (const [i, card] of this.hand.entries()) {
 			if (card.name === cardName) {
 				this.hand.splice(i, 1);
@@ -663,10 +563,7 @@ class UnoGamePlayer extends Rooms.RoomGamePlayer {
 		}
 	}
 
-	/**
-	 * @return {string[]}
-	 */
-	buildHand() {
+	buildHand(): string[] {
 		return this.hand.sort((a, b) => a.color.localeCompare(b.color) || a.value.localeCompare(b.value))
 			.map((c, i) => cardHTML(c, i === this.hand.length - 1));
 	}
@@ -694,8 +591,7 @@ class UnoGamePlayer extends Rooms.RoomGamePlayer {
 	}
 }
 
-/** @type {ChatCommands} */
-const commands = {
+export const commands: ChatCommands = {
 	uno: {
 		// roomowner commands
 		off: 'disable',
@@ -750,7 +646,7 @@ const commands = {
 
 		start(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno' || game.state !== 'signups') return this.errorReply("There is no UNO game in signups phase in this room.");
 			if (game.onStart()) {
 				this.privateModAction(`(The game of UNO was started by ${user.name}.)`);
@@ -770,7 +666,7 @@ const commands = {
 
 		timer(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room.");
 			let amount = parseInt(target);
 			if (!amount || amount < 5 || amount > 300) return this.errorReply("The amount must be a number between 5 and 300.");
@@ -786,7 +682,7 @@ const commands = {
 
 		autostart(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (toID(target) === 'off') {
 				if (!game.autostartTimer) return this.errorReply("There is no autostart timer running on.");
@@ -807,7 +703,7 @@ const commands = {
 		dq: 'disqualify',
 		disqualify(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 
 			let disqualified = game.eliminate(toID(target));
@@ -822,7 +718,7 @@ const commands = {
 		// TypeScript doesn't like 'join' being defined as a function
 		join: 'unojoin',
 		unojoin(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (!this.canTalk()) return false;
 			if (!game.joinGame(user)) return this.errorReply("Unable to join the game.");
@@ -832,38 +728,35 @@ const commands = {
 
 		l: 'leave',
 		leave(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (!game.leaveGame(user)) return this.errorReply("Unable to leave the game.");
 			return this.sendReply("You have left the game of UNO.");
 		},
 
 		play(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
-			/** @type {UnoGamePlayer | undefined} */
-			let player = game.playerTable[user.id];
+			let player: UnoGamePlayer | undefined = game.playerTable[user.id];
 			if (!player) return this.errorReply(`You are not in the game of UNO.`);
 			let error = game.onPlay(player, target);
 			if (error) this.errorReply(error);
 		},
 
 		draw(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
-			/** @type {UnoGamePlayer | undefined} */
-			let player = game.playerTable[user.id];
+			let player: UnoGamePlayer | undefined = game.playerTable[user.id];
 			if (!player) return this.errorReply(`You are not in the game of UNO.`);
 			let error = game.onDraw(player);
 			if (error) return this.errorReply("You have already drawn a card this turn.");
 		},
 
 		pass(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (game.currentPlayerid !== user.id) return this.errorReply("It is currently not your turn.");
-			/** @type {UnoGamePlayer | undefined} */
-			let player = game.playerTable[user.id];
+			let player: UnoGamePlayer | undefined = game.playerTable[user.id];
 			if (!player) return this.errorReply(`You are not in the game of UNO.`);
 			if (!player.cardLock) return this.errorReply("You cannot pass until you draw a card.");
 			if (game.state === 'color') return this.errorReply("You cannot pass until you choose a color.");
@@ -873,13 +766,11 @@ const commands = {
 		},
 
 		color(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return false;
-			/** @type {UnoGamePlayer | undefined} */
-			let player = game.playerTable[user.id];
+			let player: UnoGamePlayer | undefined = game.playerTable[user.id];
 			if (!player) return this.errorReply(`You are not in the game of UNO.`);
-			/** @type {Color} */
-			let color;
+			let color: Color;
 			if (target === 'Red' || target === 'Green' || target === 'Blue' || target === 'Yellow' || target === 'Black') {
 				color = target;
 			} else {
@@ -889,10 +780,9 @@ const commands = {
 		},
 
 		uno(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return false;
-			/** @type {UnoGamePlayer | undefined} */
-			let player = game.playerTable[user.id];
+			let player: UnoGamePlayer | undefined = game.playerTable[user.id];
 			if (!player) return this.errorReply(`You are not in the game of UNO.`);
 			game.onUno(player, target);
 		},
@@ -900,7 +790,7 @@ const commands = {
 		// information commands
 		'': 'hand',
 		hand(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.parse("/help uno");
 			game.onSendHand(user);
 		},
@@ -909,7 +799,7 @@ const commands = {
 		users: 'getusers',
 		getplayers: 'getusers',
 		getusers(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (!this.runBroadcast()) return false;
 			this.sendReplyBox(`<strong>Players (${game.playerCount})</strong>:<br />${game.getPlayers().join(', ')}`);
@@ -921,7 +811,7 @@ const commands = {
 
 		// suppression commands
 		suppress(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (!this.can('minigame', null, room)) return;
 
@@ -938,7 +828,7 @@ const commands = {
 		},
 
 		spectate(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 
 			if (!game.suppressMessages) return this.errorReply("The current UNO game is not suppressing messages.");
@@ -949,7 +839,7 @@ const commands = {
 		},
 
 		unspectate(target, room, user) {
-			const game = /** @type {UnoGame} */ (room.game);
+			const game = room.game as UnoGame;
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 
 			if (!game.suppressMessages) return this.errorReply("The current UNO game is not suppressing messages.");
@@ -973,8 +863,8 @@ const commands = {
 		`/uno suppress [on|off] - Toggles suppression of game messages.`,
 	],
 };
-/** @type {SettingsHandler} */
-const roomSettings = room => ({
+
+export const roomSettings: SettingsHandler = room => ({
 	label: "UNO",
 	permission: 'editroom',
 	options: [
@@ -982,8 +872,3 @@ const roomSettings = room => ({
 		[`enabled`, !room.unoDisabled || 'uno enable'],
 	],
 });
-
-module.exports = {
-	commands,
-	roomSettings,
-};

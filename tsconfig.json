@@ -34,7 +34,6 @@
         "./server/chat-plugins/room-faqs.js",
         "./server/chat-plugins/thecafe.js",
         "./server/chat-plugins/thing-of-the-day.js",
-        "./server/chat-plugins/uno.js",
         "./server/chat-plugins/wifi.js",
         "./sim/**/*",
         "./tools/set-import/*.ts"
