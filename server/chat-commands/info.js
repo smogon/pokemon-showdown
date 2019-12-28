@@ -2401,16 +2401,17 @@ const commands = {
 	'!code': true,
 	code(target, room, user) {
 		if (!target) return this.parse('/help code');
-		if (!this.canTalk()) return;
-		if (!this.runBroadcast(true, '!code')) return;
 		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
 
 		const params = target.split('\n');
 		if (!params[0]) params.unshift();
 		if (!params[params.length - 1]) params.pop();
-		if (params.length === 1 && params[0].length < 80 && !target.includes('```') && this.message.startsWith('/')) {
-			return `\`\`\`${params[0]}\`\`\``;
+		if (params.length === 1 && params[0].length < 80 && !params[0].includes('```') && this.shouldBroadcast()) {
+			return this.canTalk(`\`\`\`${params[0]}\`\`\``);
 		}
+
+		if (!this.canBroadcast(true, '!code')) return;
+
 		let output = [];
 		let cutoff = 3;
 		for (const param of params) {
@@ -2425,6 +2426,7 @@ const commands = {
 			code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${output.join('<br />')}</code></div>`;
 		}
 
+		this.runBroadcast(true);
 		this.sendReplyBox(code);
 	},
 	codehelp: [
