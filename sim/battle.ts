@@ -2017,6 +2017,7 @@ export class Battle {
 				} else if (attackStat === 'spd') {
 					attackStat = 'def';
 				}
+				if (attacker.boosts[attackStat]) this.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
 			}
 		}
 
