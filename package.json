@@ -23,6 +23,7 @@
   "scripts": {
     "start": "node pokemon-showdown start",
     "build": "node build",
+    "migrate": "node databases/migrate",
     "tsc": "tsc",
     "lint": "eslint --cache . && tslint --project .",
     "pretest": "npm run lint && npm run build",

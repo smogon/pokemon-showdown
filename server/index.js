@@ -92,8 +92,8 @@ if (Config.watchconfig) {
  * Run database migrations and conversions
  *********************************************************/
 
-if (Object.values(Config.storage || {}).includes('sqlite')) {
-	child_process.execSync('node ../database/migrate', {stdio: 'inherit', cwd: __dirname});
+if (!Object.values(Config.storage || {}).includes('sqlite')) {
+	child_process.execSync('npm run migrate', {stdio: 'inherit', cwd: __dirname});
 }
 
 /*********************************************************
