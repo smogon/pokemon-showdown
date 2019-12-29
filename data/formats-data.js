@@ -5384,7 +5384,7 @@ let BattleFormatsData = {
 	},
 	darmanitangalar: {
 		randomBattleMoves: ["earthquake", "flareblitz", "iciclecrash", "superpower", "uturn"],
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "New",
 	},
 	darmanitangalarzen: {
