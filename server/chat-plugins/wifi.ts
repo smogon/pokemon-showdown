@@ -1,8 +1,8 @@
 /**
-* Wi-Fi chat-plugin. Only works in a room with id 'wifi'
-* Handles giveaways in the formats: question, lottery, gts
-* Written by bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
-**/
+ * Wi-Fi chat-plugin. Only works in a room with id 'wifi'
+ * Handles giveaways in the formats: question, lottery, gts
+ * Written by bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
+ */
 
 'use strict';
 
@@ -16,15 +16,29 @@ const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
 const STATS_FILE = 'config/chat-plugins/wifi.json';
 
 let stats: {[k: string]: number[]} = Object.create(null);
+
+function readFile(path: string) {
+	try {
+		const json = FS(path).readIfExistsSync();
+		if (!json) {
+			saveStats(path, {});
+			return false;
+		}
+		return Object.assign(Object.create(null), JSON.parse(json));
+	} catch (e) {
+		if (e.code !== 'ENOENT') throw e;
+	}
+}
+
 try {
-	stats = require(`../../${STATS_FILE}`);
+	stats = readFile(STATS_FILE);
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
 if (!stats || typeof stats !== 'object') stats = Object.create(null);
 
-function saveStats() {
-	FS(STATS_FILE).writeUpdate(() => JSON.stringify(stats));
+function saveStats(path: string, data: AnyObject) {
+	FS(path).writeUpdate(() => JSON.stringify(data));
 }
 
 function toPokemonId(str: string) {
@@ -192,7 +206,7 @@ class Giveaway {
 			stats[mon].push(Date.now());
 		}
 
-		saveStats();
+		saveStats(STATS_FILE, stats);
 	}
 
 	generateWindow(rightSide: string) {
@@ -451,7 +465,6 @@ class GtsGiveaway {
 		this.sprite = '';
 		[this.monIDs, this.sprite] = Giveaway.getSprite(this.summary);
 
-		/** @type {string[]} */
 		this.sent = [];
 		this.noDeposits = false;
 
@@ -487,8 +500,8 @@ class GtsGiveaway {
 			`<td style="text-align:center;width:${35 - sentModifier}%">${rightSide}</td></tr></table>`;
 	}
 
-	updateLeft(number: number) {
-		this.left = number;
+	updateLeft(num: number) {
+		this.left = num;
 		if (this.left < 1) return this.end();
 
 		this.changeUhtml(this.generateWindow());
@@ -812,41 +825,41 @@ export const commands: ChatCommands = {
 		case 'staff':
 			if (!this.can('broadcast', null, room)) return;
 			reply = '<strong>Staff commands:</strong><br />' +
-			        '- question or qg <em>User | OT | TID | Friend Code | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
-			        '- lottery or lg <em>User | OT | TID | Friend Code | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
-			        '- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
-			        '- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
-					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
-					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ # & ~)<br />' +
-			        '- end - Forcibly ends the current giveaway (Requires: % @ # & ~)<br />' +
-					'- count <em>Mon</em> - Displays how often a certain mon has been given away. Use <code>!giveaway count</code> to broadcast this to the entire room<br />';
+				'- question or qg <em>User | OT | TID | Friend Code | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
+				'- lottery or lg <em>User | OT | TID | Friend Code | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
+				'- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
+				'- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
+				'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
+				'- ban - Temporarily bans a user from entering giveaways (Requires: % @ # & ~)<br />' +
+				'- end - Forcibly ends the current giveaway (Requires: % @ # & ~)<br />' +
+				'- count <em>Mon</em> - Displays how often a certain mon has been given away. Use <code>!giveaway count</code> to broadcast this to the entire room<br />';
 			break;
 		case 'gts':
 			if (!this.can('broadcast', null, room)) return;
 			reply = '<strong>GTS giveaway commands:</strong><br />' +
-			        '- gts start <em>User | Amount | Summary of given mon | What to deposit | What to look for</em> - Starts a gts giveaway (Requires: % @ # & ~)<br />' +
-					'- gts left <em>Amount</em> - Updates the amount left for the current GTS giveaway. Without an amount specified, shows how many Pokémon are left, and who the latest winners are.<br />' +
-					'- gts sent <em>IGN</em> - Adds an ign to the list of latest winners, and updates left count accordingly.<br />' +
-					'- gts full - Signifies enough mons have been received, and will update the GTS giveaway to reflect that.<br />' +
-			        '- gts end - Forcibly ends the current gts giveaway (Requires: % @ # & ~)<br />';
+				'- gts start <em>User | Amount | Summary of given mon | What to deposit | What to look for</em> - Starts a gts giveaway (Requires: % @ # & ~)<br />' +
+				'- gts left <em>Amount</em> - Updates the amount left for the current GTS giveaway. Without an amount specified, shows how many Pokémon are left, and who the latest winners are.<br />' +
+				'- gts sent <em>IGN</em> - Adds an ign to the list of latest winners, and updates left count accordingly.<br />' +
+				'- gts full - Signifies enough mons have been received, and will update the GTS giveaway to reflect that.<br />' +
+				'- gts end - Forcibly ends the current gts giveaway (Requires: % @ # & ~)<br />';
 			break;
 		case 'game':
 		case 'giveaway':
 		case 'user':
 			if (!this.runBroadcast()) return;
 			reply = '<strong>Giveaway participation commands: </strong> (start with /giveaway, except for /ga) <br />' +
-			        '- guess or /ga <em>answer</em> - Guesses the answer for a question giveaway<br />' +
-			        '- viewanswer - Shows the answer in a question giveaway (only to host/giver)<br />' +
-			        '- remind - Shows the details of the current giveaway (can be broadcast)<br />' +
-			        '- join or joinlottery - Joins a lottery giveaway<br />' +
-			        '- leave or leavelottery - Leaves a lottery giveaway<br />';
+				'- guess or /ga <em>answer</em> - Guesses the answer for a question giveaway<br />' +
+				'- viewanswer - Shows the answer in a question giveaway (only to host/giver)<br />' +
+				'- remind - Shows the details of the current giveaway (can be broadcast)<br />' +
+				'- join or joinlottery - Joins a lottery giveaway<br />' +
+				'- leave or leavelottery - Leaves a lottery giveaway<br />';
 			break;
 		default:
 			if (!this.runBroadcast()) return;
 			reply = '<b>Wi-Fi room.giveaways.wifi help and info</b><br />' +
-			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: + % @ # & ~)<br />' +
-			'- help gts - shows gts giveaway commands (Requires: + % @ # & ~)';
+				'- help user - shows list of participation commands<br />' +
+				'- help staff - shows giveaway staff commands (Requires: + % @ # & ~)<br />' +
+				'- help gts - shows gts giveaway commands (Requires: + % @ # & ~)';
 		}
 		this.sendReplyBox(reply);
 	},

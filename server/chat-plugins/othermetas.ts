@@ -152,9 +152,9 @@ export const commands: ChatCommands = {
 		}
 		const details: {[k: string]: string} = {
 			"Dex#": '' + mixedTemplate.num,
-			"Gen": '' + mixedTemplate.gen,
-			"Height": mixedTemplate.heightm + " m",
-			"Weight": mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
+			Gen: '' + mixedTemplate.gen,
+			Height: mixedTemplate.heightm + " m",
+			Weight: mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 			"Dex Colour": mixedTemplate.color,
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
@@ -226,8 +226,8 @@ export const commands: ChatCommands = {
 			deltas.type = megaTemplate.types[1];
 		}
 		const details = {
-			"Gen": stone.gen,
-			"Weight": (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+			Gen: stone.gen,
+			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
 		};
 		let tier;
 		if (['redorb', 'blueorb'].includes(stone.id)) {
@@ -278,7 +278,7 @@ export const commands: ChatCommands = {
 	stonehelp: [`/stone <mega stone>[, generation] - Shows the changes that a mega stone/orb applies to a Pokemon.`],
 
 	'!350cup': true,
-	'350': '350cup',
+	350: '350cup',
 	'350cup'(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toID(target)) return this.parse('/help 350cup');
@@ -303,16 +303,16 @@ export const commands: ChatCommands = {
 		const template = Dex.deepClone(Dex.mod('gen7').getTemplate(target));
 		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
 		const boosts: {[tier in TierShiftTiers]: number} = {
-			'UU': 10,
-			'RUBL': 10,
-			'RU': 20,
-			'NUBL': 20,
-			'NU': 30,
-			'PUBL': 30,
-			'PU': 40,
-			'NFE': 40,
+			UU: 10,
+			RUBL: 10,
+			RU: 20,
+			NUBL: 20,
+			NU: 30,
+			PUBL: 30,
+			PU: 40,
+			NFE: 40,
 			'LC Uber': 40,
-			'LC': 40,
+			LC: 40,
 		};
 		let tier = template.tier;
 		if (tier[0] === '(') tier = tier.slice(1, -1);
@@ -435,9 +435,9 @@ export const commands: ChatCommands = {
 		}
 		const details: {[k: string]: string} = {
 			"Dex#": mixedTemplate.num,
-			"Gen": mixedTemplate.gen,
-			"Height": mixedTemplate.heightm + " m",
-			"Weight": mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
+			Gen: mixedTemplate.gen,
+			Height: mixedTemplate.heightm + " m",
+			Weight: mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 			"Dex Colour": mixedTemplate.color,
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
