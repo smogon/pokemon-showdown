@@ -16594,12 +16594,11 @@ let BattleMovedex = {
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('shelltrap');
 		},
-		// TODO: In order to correct PP usage, after spread move order has been reworked,
-		// switch this to `onTry` + add `this.attrLastMove('[still]');`.
-		beforeMoveCallback(pokemon) {
+		onTryMove(pokemon) {
 			if (!pokemon.volatiles['shelltrap'] || !pokemon.volatiles['shelltrap'].gotHit) {
+				this.attrLastMove('[still]');
 				this.add('cant', pokemon, 'Shell Trap', 'Shell Trap');
-				return true;
+				return null;
 			}
 		},
 		effect: {
@@ -16610,6 +16609,10 @@ let BattleMovedex = {
 			onHit(pokemon, source, move) {
 				if (pokemon.side !== source.side && move.category === 'Physical') {
 					pokemon.volatiles['shelltrap'].gotHit = true;
+					let action = this.willMove(pokemon);
+					if (action) {
+						this.prioritizeAction(action);
+					}
 				}
 			},
 		},
