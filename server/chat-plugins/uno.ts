@@ -264,7 +264,7 @@ class UnoGame extends Rooms.RoomGame {
 		return name;
 	}
 
-	sendToRoom(msg: string, overrideSuppress: boolean = false) {
+	sendToRoom(msg: string, overrideSuppress = false) {
 		if (!this.suppressMessages || overrideSuppress) {
 			this.room.add(msg).update();
 		} else {
@@ -343,12 +343,12 @@ class UnoGame extends Rooms.RoomGame {
 	getNextPlayer() {
 		const userList = Object.keys(this.playerTable);
 
-		let player = userList[(userList.indexOf(this.currentPlayerid) + this.direction)];
+		let player: ID = userList[(userList.indexOf(this.currentPlayerid) + this.direction)] as ID;
 
 		if (!player) {
-			player = this.direction === 1 ? userList[0] : userList[this.playerCount - 1];
+			player = toID(this.direction === 1 ? userList[0] : userList[this.playerCount - 1]);
 		}
-		return player as ID;
+		return player;
 	}
 
 	onDraw(player: UnoGamePlayer) {
@@ -493,7 +493,7 @@ class UnoGame extends Rooms.RoomGame {
 	onDrawCard(player: UnoGamePlayer, count: number) {
 		if (typeof count === 'string') count = parseInt(count);
 		if (!count || isNaN(count) || count < 1) count = 1;
-		const drawnCards: Card[] = this.drawCard(count);
+		const drawnCards = this.drawCard(count);
 
 		player.hand.push(...drawnCards);
 		player.sendRoom(
@@ -520,7 +520,7 @@ class UnoGame extends Rooms.RoomGame {
 		return drawnCards;
 	}
 
-	onUno(player: UnoGamePlayer, unoId: string) {
+	onUno(player: UnoGamePlayer, unoId: ID) {
 		// uno id makes spamming /uno uno impossible
 		if (this.unoId !== unoId || player.id !== this.awaitUno) return false;
 		this.sendToRoom(Chat.html`|raw|<strong>UNO!</strong> ${player.name} is down to their last card!`);
@@ -828,7 +828,7 @@ export const commands: ChatCommands = {
 			if (!game || game.gameid !== 'uno') return false;
 			const player: UnoGamePlayer | undefined = game.playerTable[user.id];
 			if (!player) return this.errorReply(`You are not in the game of UNO.`);
-			game.onUno(player, target);
+			game.onUno(player, toID(target));
 		},
 
 		// information commands
