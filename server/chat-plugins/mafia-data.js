@@ -42,7 +42,7 @@ const alignments = {
 		],
 		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-mafia.png"/>`,	
 	},
-	Traitor: {
+	traitor: {
 		name: `Traitor`,
 		plural: `Traitors`,
 		id: `traitor`,
@@ -219,15 +219,6 @@ const roles = {
 		id: `aligner`,
 		alignment: `solo`,
 		memo: [`Aligner: Once a game, you may target someone. You will win if that person wins. Otherwise, you are a Survivor.`],
-	},
-		amnesic_cop: `amnesiac_cop`,
-		amnesic_seer: `amnesiac_cop`,
-		amnesiac_cop: {
-		name: `Amnesiac Cop`,
-		id: `amnesiac_cop`,
-		memo: [`Each night phase you may target a player you wish to investigate and who you wish to receive the result. 
-The player you choose to receive the result will receive either "Guilty" or "Not Guilty". (Depends on what you investigate for) 
-You may not target yourself to investigate or receive and investigation.`],
 	},
 	anti_survivor: `anti-survivor`,
 	antisurvivor: `anti-survivor`,
@@ -495,9 +486,8 @@ You may not target yourself to investigate or receive and investigation.`],
 	dragoon: {
 		name: `Dragoon`,
 		id: `dragoon`,
-		memo: [`Dragoon:  If you are one of the last 3 players alive, you instantly win. Has no factional kill but says one message anonymously each night through the host. The message takes place at the same time as the werewolves’ kill, if one exists and is compulsive.
-		The message appears as 
-		“Message” ~ The Dragoon.`],
+		alignment: `solo`,
+		memo: [`Dragoon:  You win if you are one of the last 3 players alive. Has no factional kill but compulsively says one anonymous message each night, through the host.`],
 	},	
 	deathproof_mafias_child_lover: `drookez`,
 	drookez: {
@@ -506,17 +496,17 @@ You may not target yourself to investigate or receive and investigation.`],
 		alignment: `mafia`,
 		memo: [`Drookez: A Deathproof Mafia's Child Lover. Drookez gets revealed at the start of the game, but can only die when their (unknown) lover dies!`],
 	},	
-	bp_duskkiller: `duskkiller`,
-	duskiller: `duskkiller`,
-	bulletproof_duskkiller: `duskkiller`,
-	bp_duskiller: `duskkiller`,
-	bulletproof_duskiller: `duskkiller`,
-//It's misspelled on the SI page, so the misspelled aliases are in here too
-	duskkiller: {
-		name: `Duskkiller`,
-		id: `duskkiller`,
+	bp_duskkiller: `duskiller`,
+	duskkiller: `duskiller`,
+	bulletproof_duskkiller: `duskiller`,
+	bp_duskiller: `duskiller`,
+	bulletproof_duskiller: `duskiller`,
+//Turns out people don't want logical spelling
+	duskiller: {
+		name: `Duskiller`,
+		id: `duskiller`,
 		alignment: `solo`,
-		memo: [`Duskkiller: At night you may PM the host the name of another player. This player will die after the following day.`],
+		memo: [`Duskiller: At night you may PM the host the name of another player. This player will die after the following day.`],
 	},
 	et: {
 		name: `E.T.`,
@@ -843,7 +833,8 @@ You may not target yourself to investigate or receive and investigation.`],
 	panther: {
 		name: `Panther`,
 		id: `panther`,
-		memo: [`Parrot Role: Target someone at night. They become Voteless the next day and the Panther becomes a Mayor.`],
+		alignment: `solo`,
+		memo: [`Panther: Target someone at night. They become Voteless the next day and the Panther becomes a Mayor.`],
 	},
 	parrot: `parrot_role`,
 	wereparrot: `parrot_role`,
@@ -1183,6 +1174,14 @@ const modifiers = {
 		id: `alpha`,
 		memo: [`Alpha: You will be inspected as NOT WEREWOLF.`],
 	},
+		amnesic_cop: `amnesiac`,
+		amnesic_seer: `amnesiac`,
+		amnesic: `amnesiac`,
+		amnesiac: {
+		name: `Amnesiac`,
+		id: `amnesiac`,
+		memo: [`Amnesiac: For investigative roles; Another player will receive the results of your inspections.`],
+	},
 	ascetic: {
 		name: `Ascetic`,
 		id: `ascetic`,
@@ -1356,7 +1355,7 @@ const modifiers = {
 		id: `hallucinator`,
 		memo: [`Hallucinator: While you are alive, all dead players reveal a random role in the setup, instead of their own role.`],
 	},
-		hated: {
+	hated: {
 		name: `Hated`,
 		id: `hated`,
 		memo: [`Hated: You take 1 less vote to be hammered.`],
@@ -1563,10 +1562,11 @@ const modifiers = {
 		id: `postrestriction`,
 		memo: [`Post Restriction: You have a certain limit on what you post.`],
 	},
-			praised: {
+	loved: `praised`,
+	praised: {
 		name: `Praised`,
 		id: `praised`,
-		memo: [`Praised: You take 1 less more to be hammered.`],
+		memo: [`Praised: You take 1 more vote to be hammered.`],
 	},
 	psychotrooper: {
 		name: `Psychotrooper`,
@@ -1681,7 +1681,7 @@ const modifiers = {
 	supersaint: {
 		name: `Supersaint`,
 		id: `supersaint`,
-		memo: [`Supersaint: When this player is lynched by a majority vote, the player who placed the hammering vote dies as well..`],
+		memo: [`Supersaint: When this player is lynched by a majority vote, the player who placed the hammering vote dies as well.`],
 	},
 	talkative: {
 		name: `Talkative`,
@@ -1980,8 +1980,8 @@ const themes = {
 	},
 	empk: `empking`,
 	empking: {
-		name: `EMPking`,
-		desc: `EMPking: Mafia only kills on even nights. OS Public cop publicly reveals 1 role.`,
+		name: `Empking`,
+		desc: `Empking: Mafia only kills on even nights. OS Public cop publicly reveals 1 role.`,
 		5: `Mafia Goon, Mafia Goon, OS Publishing Cop, Vanilla Townie, Vanilla Townie`,
 	},
 	eome: `enemy_of_my_enemy`,
@@ -2073,7 +2073,7 @@ const themes = {
 	grey_flag: `grey_flag_nightless`,
 	grey_flag_nightless: {
 		name: `Grey Flag Nightless`,
-		desc: `Nightless. Lynch 2 mafia to win!`,
+		desc: `Nightless. Lynch 2 Mafia to win!`,
 		9: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	journalist: {
@@ -2106,10 +2106,7 @@ const themes = {
 	koth: `king_of_the_hill`,
 		king_of_the_hill: {
 		name: `King of the Hill`,
-		desc: `Day 1, the town picks a King by lynch.
-Any later Day is split into two phases. First there's a discussion phase. 
-During this phase, people are allowed to Challenge the King, only the King and the Challenger can be lynched afterwards. 
-When one is lynched, the other becomes king and decides lynch.`,
+		desc: `At the start, the players vote for a King, who decides a lynch. Every day after, the King can either be challenged.`,
 		7: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		8: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		9: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
@@ -2208,7 +2205,7 @@ When one is lynched, the other becomes king and decides lynch.`,
 	mm: `masons_and_monks`,
 		masons_and_monks: {
 		name: `Masons and Monks`,
-		desc: `2 people who aren't mafia are /pick'ed to become Mason, 2 people who aren't Werewolf are /pick'ed to become Monk.`,
+		desc: `2 random people who aren't mafia become Mason, 2 people who aren't Werewolf become Monk.`,
 		13: `Mafia Goon, Mafia Goon, Werewolf, Werewolf, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	mlosr: `maintaining_law_order_and_shallow_relationships`,
@@ -2489,7 +2486,7 @@ When one is lynched, the other becomes king and decides lynch.`,
 	vftm: `vote_for_town_mafia`,
 	vote_for_town_mafia: {
 		name: `Vote For Town Mafia (VFTM)`,
-		desc: `Vote For Town Mafia: Mafia wins if they are all lynched. Town wins if they reach equal numbers with the mafia.`,
+		desc: `Vote For Town Mafia: Mafia wins if they are all lynched. Town wins if they reach equal numbers with the Mafia.`,
 		8: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},	
 	wnac: `we_need_a_clear`,
@@ -3524,7 +3521,7 @@ const terms = {
 	cfd: `chinese_fire_drill`,
 	chinese_fire_drill: {
 		name: `Chinese Fire Drill`,
-		memo: [`Chinese Fire Drill: When the players quickly shift votes en masse from one player onto another, at the very end of a day`],
+		memo: [`Chinese Fire Drill: When the players quickly shift votes en masse from one player onto another, at the very end of a day.`],
 	},
 	cc: `counter_claim`,
 	counterclaim: `counter_claim`,
@@ -3542,7 +3539,7 @@ const terms = {
 	crosslynch: `cross`,
 	cross: {
 		name: `Cross`,
-		memo: [`Cross: Voting one person with the expectation that they will reciprocate the vote. Especially common during lylo, but sometimes used to condense town's voting options`],
+		memo: [`Cross: Voting one person with the expectation that they will reciprocate the vote. Especially common during lylo, but sometimes used to condense town's voting options.`],
 	},
 	defmaj: `definite_majority`,
 	definitemajority: `definite_majority`,
@@ -3612,7 +3609,7 @@ const terms = {
 	},
 	multiball_slip: {
 		name: `MultiBall Slip`,
-		memo: [`Multiball Slip: When there are multiple factions, and scum forgets that it's possible to other people that they are from the other scumfaction`],
+		memo: [`Multiball Slip: When there are multiple factions, and scum forgets that it's possible to other people that they are from the other scumfaction.`],
 	},
 	mylo: {
 		name: `MyLo`,
@@ -3661,7 +3658,7 @@ const terms = {
 	potato_town: `potato`,
 	potato: {
 		name: `Potato (townie)`,
-		memo: [`Potato: Town that doesn't do anything to help town (Use your vote!)`],
+		memo: [`Potato: Town that doesn't do anything to help town. (Use your vote!)`],
 	},
 	qh: `quickhammer`,
 	quickhammer: {
@@ -3671,11 +3668,11 @@ const terms = {
 	RVS: `random_voting_stage`,
 	random_voting_stage: {
 		name: `Random Voting Stage (RVS)`,
-		memo: [`Random Voting Stage: When town, due to a lack of information at the start of a game, randomly lynches someone with little to no legitimate reads or evidences to back the lynch, in order to put people in a readable situation`],
+		memo: [`Random Voting Stage: When town, due to a lack of information at the start of a game, randomly lynches someone with little to no legitimate reads or evidences to back the lynch, in order to put people in a readable situation.`],
 	},
 	scum: {
 		name: `Scum`,
-		memo: [`Scum: Someone with a Wincondition contradictory to Town (the Majority)'s Wincondition`],
+		memo: [`Scum: Someone with a Wincondition contradictory to Town (the Majority)'s Wincondition.`],
 	},
 	sl: `scumlean`,
 	scumlean: {
@@ -3690,12 +3687,12 @@ const terms = {
 	sheep: `sheeping`,
 	sheeping: {
 		name: `Sheeping`,
-		memo: [`Sheeping: Following another player's/group of players’ vote, without fully understanding the reasoning behind it`],
+		memo: [`Sheeping: Following another player's/group of players’ vote, without fully understanding the reasoning behind it.`],
 	},	
 	softing: `soft`,
 	soft: {
 		name: `Soft`,
-		memo: [`soft: Dropping a subtle hint towards your role, that will NOT be recognised unless you analyse its meaning`],
+		memo: [`Soft: Dropping a subtle hint towards your role, that will NOT be recognised unless you analyse its meaning.`],
 	},	
 	snaq_bastard: {
 		name: `Snaq Bastard`,
