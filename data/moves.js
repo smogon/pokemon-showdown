@@ -1840,7 +1840,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
-		desc: "100% chance to lower the foe's Attack by 1 stage. Hits all adjecent foes.",
+		desc: "100% chance to lower the foe's Attack by 1 stage. Hits all adjacent foes.",
 		shortDesc: "100% chance to lower adjacent foes' Atk by 1.",
 		id: "breakingswipe",
 		name: "Breaking Swipe",
