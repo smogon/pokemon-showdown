@@ -328,7 +328,7 @@ export const commands: ChatCommands = {
 		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
 	],
 };
-/** @type {SettingsHandler} */
+
 export const roomSettings: SettingsHandler = room => ({
 	label: "Hangman",
 	permission: 'editroom',
