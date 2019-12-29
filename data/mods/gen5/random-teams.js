@@ -709,9 +709,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			let tier = template.tier;
 
 			// Limit two Pokemon per tier
-			if (!tierCount[tier]) {
-				tierCount[tier] = 1;
-			} else if (tierCount[tier] > 1 && this.gen === 5) {
+			if (tierCount[tier] > 1 && this.gen === 5) {
 				continue;
 			}
 
@@ -754,7 +752,13 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[template.baseSpecies] = 1;
-			tierCount[tier]++;
+
+			// Increment tier counter
+			if (tierCount[tier]) {
+				tierCount[tier]++;
+			} else {
+				tierCount[tier] = 1;
+			}
 
 			// Increment type counters
 			for (const type of types) {
