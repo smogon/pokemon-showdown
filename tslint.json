@@ -72,6 +72,10 @@
     "rulesDirectory": [],
     "linterOptions": {
       // TODO: why is tslint looking at .js files anyway?
+<<<<<<< HEAD
       "exclude": ["node_modules/", "**/*.js", "*/global-types.ts"]
+=======
+      "exclude": ["node_modules/", "**/*.js", "databases/migrate", "*/globals.ts"]
+>>>>>>> Make migrate script an executable
      }
 }
