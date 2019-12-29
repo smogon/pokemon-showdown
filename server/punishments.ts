@@ -49,6 +49,10 @@ interface PunishmentEntry {
 
 interface IPunishmentsStorage {
 	load(): void;
+	loadPunishments?(): Promise<void>;
+	loadRoomPunishments?(): Promise<void>;
+	loadSharedIps?(): Promise<void>;
+	loadIpBanlist?(): Promise<void>;
 	appendPunishment(entry: PunishmentEntry, id: string): void;
 	appendRoomPunishment(entry: PunishmentEntry, id: string): void;
 	appendSharedIp(ip: string, note: string): void;

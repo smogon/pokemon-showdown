@@ -729,7 +729,7 @@ export const commands: ChatCommands = {
 		connection.sendTo(room, "Loading ipbans.txt...");
 		if (Punishments.storage.loadIpBanlist) {
 			connection.sendTo(room, "Loading ipbans...");
-			Punishments.storage.loadBanlist().then(
+			Punishments.storage.loadIpBanlist().then(
 				() => connection.sendTo(room, "ipbans has been reloaded."),
 				error => connection.sendTo(room, `Something went wrong while loading ipbans: ${error}`)
 			);
