@@ -20,7 +20,9 @@ interface MoveSlot {
 	virtual?: boolean;
 }
 
-type EffectState = {[k: string]: any};
+interface EffectState {
+	[k: string]: any;
+}
 
 export class Pokemon {
 	readonly side: Side;
