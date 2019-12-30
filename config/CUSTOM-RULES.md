@@ -206,7 +206,7 @@ Standard Rulesets
 
 `Minimal GBU` - the standard ruleset for in-game formats but without restricted legendary bans. Still bans mythical Pokémon.
 
-`Standard ND` - the standard ruleset for National Dex formats. Allows the National Dex. Includes Nickname Clause, HP Percentage Mod, Cancel Mod, Endless Battle Clause.
+`Standard NatDex` - the standard ruleset for National Dex formats. Allows the National Dex. Includes Nickname Clause, HP Percentage Mod, Cancel Mod, Endless Battle Clause.
 
 `Standard Doubles` - the standard ruleset for most Smogon doubles formats. Includes Species Clause, Nickname Clause, OHKO Clause, Evasion Abilities Clause, Evasion Moves Clause, Endless Battle Clause, HP Percentage Mod, Cancel Mod.
 
