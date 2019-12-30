@@ -424,7 +424,6 @@ describe('Team Validator', function () {
 			{species: 'necrozmaultra', ability: 'neuroforce', moves: ['confusion']},
 		];
 		let illegal = TeamValidator.get('gen7ubers').validateTeam(team);
-		console.log(illegal);
 		assert(illegal);
 	});
 
