@@ -197,11 +197,9 @@ In-battle rules
 Standard Rulesets
 -----------------
 
-`Standard` - the standard ruleset for most Smogon singles formats. Includes the Evasion Moves Clause, Sleep Clause Mod, Species Clause, Nickname Clause, OHKO Clause, Endless Battle Clause, HP Percentage Mod, and Cancel Mod.
+`Standard` - the standard ruleset for most Smogon singles formats. Includes the Evasion Moves Clause, Sleep Clause Mod, Species Clause, Nickname Clause, OHKO Clause, Endless Battle Clause, HP Percentage Mod, and Cancel Mod. 
 
 `Standard NEXT` - the standard ruleset for NEXT. Allows some unreleased Pokémon and includes the Evasion Moves Clause, Nickname Clause, Sleep Clause Mod, Species Clause, OHKO Clause, HP Percentage Mod, and Cancel Mod. Bans Soul Dew.
-
-`Standard Ubers` - the standard ruleset for Gen 5 Ubers. Includes Sleep Clause Mod, Species Clause, Nickname Clause, Moody Clause, OHKO Clause, Endless Battle Clause, HP Percentage Mod, and Cancel Mod.
 
 `Standard GBU` - the standard ruleset for in-game formats, such as Battle Spot. Includes Species Clause, Item Clause, Nickname Clause, Team Preview, and Cancel Mod. Bans mythical Pokémon and restricted legendaries (e.g. Zekrom, Reshiram, Zygarde, Eternatus)
 
@@ -232,7 +230,6 @@ Any format (starting with `Gen [number]`) can be used as a rule, to add all rule
 For example:
 
 `Gen 8 OU` - add all clauses and bans from Gen 8 OU.
-
 
 `Gen 8 Mix and Mega` - add all rules from Mix and Mega, allowing almost any Pokémon to Mega Evolve using almost any Mega Stone.
 
