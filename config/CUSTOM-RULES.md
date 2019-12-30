@@ -231,7 +231,7 @@ Any format (starting with `Gen [number]`) can be used as a rule, to add all rule
 
 For example:
 
-`gen8ou` - follow the clause list and banlist of Gen 8 OU.
+`Gen 8 OU` - add all clauses and bans from Gen 8 OU.
 
 
 `Gen 8 Mix and Mega` - add all rules from Mix and Mega, allowing almost any Pokémon to Mega Evolve using almost any Mega Stone.
