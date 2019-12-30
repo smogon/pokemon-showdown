@@ -227,11 +227,12 @@ You can use this to remove individual parts of rules, like:
 Tiers and Formats
 -----------------
 
-For any Smogon format, there is a corresponding tournament rule. For every tier, there is a corresponding banlist. For formats, use `addedrule, !removedrule`. For tiers, use `+addedtier, -removedtier`. For example:
+Any format (starting with `Gen [number]`) can be used as a rule, to add all rules from that format.
+
+For example:
 
 `gen8ou` - follow the clause list and banlist of Gen 8 OU.
 
 `-ou, +ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
 
 `Gen 8 Mix and Mega` - follow the Mix and Mega ruleset, allowing almost any Pokémon to Mega Evolve using almost any Mega Stone.
-
