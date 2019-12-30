@@ -2197,7 +2197,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyPriority(priority, pokemon) {
+		onFractionalPriority(priority, pokemon) {
 			return Math.round(priority) - 0.1;
 		},
 		num: 316,
@@ -3077,7 +3077,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyPriority(priority, pokemon) {
+		onFractionalPriority(priority, pokemon) {
 			return Math.round(priority) - 0.1;
 		},
 		num: 279,
