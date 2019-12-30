@@ -103,7 +103,7 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Obtainable Misc` - allow only legal EVs, IVs, levels, genders, and Hidden Power types
 
-### Pokedex rules
+### Pokedex rules and tier-based rules
 
 `Hoenn Pokedex` - allow only Pokémon in the Hoenn Pokédex
 
@@ -117,6 +117,20 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Little Cup` - allow only Pokémon that can evolve and aren't evolved
 
+`Gen 8 STABmons` - allow Pokémon to use almost any move that matches their typing
+
+`Gen 7 Almost Any Ability` - allow Pokémon to use almost any ability available in Gen 7. Matches the banlist of Gen 7 Almost Any Ability.
+
+`Gen 8 Almost Any Ability` - allow Pokémon to use almost any ability available in Gen 8. Matches the banlist of Gen 8 Almost Any Ability.
+
+`Gen 7 Mix and Mega` - allow almost any Pokémon to Mega Evolve using almost any Mega Stone, like in the format Gen 7 Mix and Mega.
+
+`Gen 8 Mix and Mega` - allow almost any Pokémon to Mega Evolve using almost any Mega Stone, like in the format Gen 8 Mix and Mega.
+
+`Gen 7 Balanced Hackmons` - allow Pokémon to use almost any set hackable into the Gen 7 games.
+
+`Gen 8 Balanced Hackmons` - allow Pokémon to use almost any set hackable into the Gen 8 games.
+
 ### Clauses
 
 `Species Clause` - limit one Pokémon per dex number
@@ -129,7 +143,33 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `OHKO Clause` - ban one-hit KO moves (Fissure, Sheer Cold, etc)
 
-And more (TODO: finish this list)
+`Evasion Moves Clause` - ban moves that directly boost evasion (Double Team, Minimize)
+
+`Evasion Abilities Clause` - ban abilities that boost evasion (Sand Veil, Snow Cloak)
+
+`Moody Clause` - ban the ability Moody
+
+`Swagger Clause` - ban the move Swagger
+
+`NFE Clause` - ban Pokemon that are fully evolved or can't evolve
+
+`CFZ Clause` - ban the use of crystal-free Z-Moves
+
+`Z-Move Clause` - ban Pokémon from holding Z-Crystals
+
+`3 Baton Pass Clause` - prevent more than three Pokémon from having Baton Pass on a team
+
+`Baton Pass Clause` - prevent more than one Pokémon from having Baton Pass, and prevent Pokémon from being capable of passing boosts in Speed and another stat at the same time.
+
+`Accuracy Moves Clause` - ban moves that have a chance to lower the target's accuracy when used
+
+`Same Type Clause` - force all Pokémon on a team to share a type with one another
+
+### Miscellaneous
+
+`Allow AVs` - allow Pokémon to have their stats boosted by Awakening Values in Let's Go formats
+
+`Allow Tradeback` - Allow Pokémon in Gen 1 to have moves from their Gen 2 learnsets
 
 
 In-battle rules
@@ -151,14 +191,48 @@ In-battle rules
 
 `Inverse Mod` - inverse type effectiveness (like in Gen 6 Inverse Battles)
 
+`Gen 8 Camomons` - Pokémon will change their typing to match their first two moveslots
+
+`Gen 7 Tier Shift` - Pokémon will have higher base stats the lower their Gen 7 Smogon tier is
+
+`Dynamax Clause` - prevent Pokémon from Dynamaxing during battle. Cannot be used to allow Dynamaxing in old gens
+
+`Endless Battle Clause` - prevent battles from proceeding endlessly
+
+`HP Percentage Mod` - Show the opposing Pokémon's HP rounded to the nearest percent, as opposed to a range of percentages based upon the health bar's size in-game
+
+`Exact HP Mod` - Show the opposing Pokémon's HP rounded to the nearest tenth of a percent
+
+`Cancel Mod` - allow players to cancel their moves
+
+`Switch Priority Clause Mod` - make the fastest Pokémon switch first when more than one Pokémon switches out at once, unlike in Emerald link battles, where Player 1's Pokémon would switch first.
+
+
+Standard Rulesets
+-----------------
+
+`Standard` - the standard ruleset for most Smogon singles formats. Includes the Evasion Moves Clause, Sleep Clause Mod, Species Clause, Nickname Clause, OHKO Clause, Endless Battle Clause, HP Percentage Mod, and Cancel Mod.
+
+`Standard NEXT` - the standard ruleset for NEXT. Allows some unreleased Pokémon and includes the Evasion Moves Clause, Nickname Clause, Sleep Clause Mod, Species Clause, OHKO Clause, HP Percentage Mod, and Cancel Mod. Bans Soul Dew.
+
+`Standard Ubers` - the standard ruleset for Gen 5 Ubers. Includes Sleep Clause Mod, Species Clause, Nickname Clause, Moody Clause, OHKO Clause, Endless Battle Clause, HP Percentage Mod, and Cancel Mod.
+
+`Standard GBU` - the standard ruleset for in-game formats, such as Battle Spot. Includes Species Clause, Item Clause, Nickname Clause, Team Preview, and Cancel Mod. Bans mythical Pokémon and restricted legendaries (e.g. Zekrom, Reshiram, Zygarde, Eternatus)
+
+`Minimal GBU` - the standard ruleset for in-game formats but without restricted legendary bans. Still bans mythical Pokémon.
+
+`Standard ND` - the standard ruleset for National Dex formats. Allows the National Dex. Includes Nickname Clause, HP Percentage Mod, Cancel Mod, Endless Battle Clause.
+
+`Standard Doubles` - the standard ruleset for most Smogon doubles formats. Includes Species Clause, Nickname Clause, OHKO Clause, Evasion Abilities Clause, Evasion Moves Clause, Endless Battle Clause, HP Percentage Mod, Cancel Mod.
+
 
 Removing rules
 --------------
 
 Put `!` in front of a rule to remove it, like:
 
-`! Team Preview` - do not use Team Preview
+`!Team Preview` - do not use Team Preview
 
 You can use this to remove individual parts of rules, like:
 
-`Obtainable, ! Obtainable Moves` - require pokemon to be obtained legitimately, except for moves, which they can use whatever
+`Obtainable, !Obtainable Moves` - require pokemon to be obtained legitimately, except for moves, which they can use whatever
