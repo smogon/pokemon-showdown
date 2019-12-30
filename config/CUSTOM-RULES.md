@@ -236,4 +236,4 @@ For example:
 
 People often use "tier" to mean "format", but in rulesets, the difference is important. A format is a list of rules for a game you can play, such as "Gen 8 OU". A tier is a list of Pokémon which can be banned or unbanned, such as "OU".
 
-`- OU, + Ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
+`-OU, +Ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
