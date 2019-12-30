@@ -157,6 +157,8 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `STABmons Move Legality` - allow Pokémon to have almost any move that matches their typing
 
+`Little Cup` - allow only Pokémon that can evolve and aren't evolved
+
 
 In-battle rules
 ---------------
