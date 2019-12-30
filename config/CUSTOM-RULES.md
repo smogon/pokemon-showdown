@@ -233,7 +233,6 @@ For example:
 
 `gen8ou` - follow the clause list and banlist of Gen 8 OU.
 
-`-ou, +ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
 
 `Gen 8 Mix and Mega` - add all rules from Mix and Mega, allowing almost any Pokémon to Mega Evolve using almost any Mega Stone.
 
