@@ -20,6 +20,8 @@ interface MoveSlot {
 	virtual?: boolean;
 }
 
+type EffectState = {[k: string]: any};
+
 export class Pokemon {
 	readonly side: Side;
 	readonly battle: Battle;
@@ -50,11 +52,11 @@ export class Pokemon {
 
 	baseTemplate: Template;
 	template: Template;
-	speciesData: AnyObject;
+	speciesData: EffectState;
 
 	status: ID;
-	statusData: AnyObject;
-	volatiles: AnyObject;
+	statusData: EffectState;
+	volatiles: {[id: string]: EffectState};
 	showCure?: boolean;
 
 	/**
@@ -82,10 +84,10 @@ export class Pokemon {
 
 	baseAbility: ID;
 	ability: ID;
-	abilityData: {[k: string]: string | Pokemon};
+	abilityData: EffectState;
 
 	item: ID;
-	itemData: {[k: string]: string | Pokemon};
+	itemData: EffectState;
 	lastItem: ID;
 	usedItemThisTurn: boolean;
 	ateBerry: boolean;
