@@ -199,6 +199,8 @@ In-battle rules
 Standard Rulesets
 -----------------
 
+Most formats already come with a standard ruleset. To change which one you use in a tournament, you would have to do something like `!Standard, Standard NatDex`.
+
 `Standard` - the standard ruleset for most Smogon singles formats. Includes the Evasion Moves Clause, Sleep Clause Mod, Species Clause, Nickname Clause, OHKO Clause, Endless Battle Clause, HP Percentage Mod, and Cancel Mod. 
 
 `Standard NEXT` - the standard ruleset for NEXT. Allows some unreleased Pokémon and includes the Evasion Moves Clause, Nickname Clause, Sleep Clause Mod, Species Clause, OHKO Clause, HP Percentage Mod, and Cancel Mod. Bans Soul Dew.
