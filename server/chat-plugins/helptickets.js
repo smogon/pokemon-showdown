@@ -1099,7 +1099,7 @@ let commands = {
 				'Inappropriate Username / Status Message': `Hi! Tell us the username that is inappropriate, or tell us which user has an inappropriate status message.`,
 				'Inappropriate Pokemon Nicknames': `Hi! Which user has Pokemon with inappropriate nicknames, and in which battle? Please post a link to the battle or a replay of the battle.`,
 				'Appeal': `Hi! Can you please explain why you feel your punishment is undeserved?`,
-				'IP Appeal': `Hi! How are you connecting to Showdown right now? At home, at school, on a phone using mobile data, or some other way?`,
+				'IP-Appeal': `Hi! How are you connecting to Showdown right now? At home, at school, on a phone using mobile data, or some other way?`,
 				'Public Room Assistance Request': `Hi! Which room(s) do you need us to help you watch?`,
 				'Other': `Hi! What seems to be the problem? Tell us about any people involved, and if this happened in a specific place on the site.`,
 			};
