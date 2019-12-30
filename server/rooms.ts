@@ -1377,6 +1377,9 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.active = false;
 
+		// Ensure there aren't any pending messages that could restart the expire timer
+		this.update();
+
 		// Clear any active timers for the room
 		if (this.muteTimer) {
 			clearTimeout(this.muteTimer);
