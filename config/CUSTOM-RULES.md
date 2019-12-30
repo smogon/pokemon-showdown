@@ -235,4 +235,8 @@ For example:
 
 `-ou, +ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
 
-`Gen 8 Mix and Mega` - follow the Mix and Mega ruleset, allowing almost any Pokémon to Mega Evolve using almost any Mega Stone.
+`Gen 8 Mix and Mega` - add all rules from Mix and Mega, allowing almost any Pokémon to Mega Evolve using almost any Mega Stone.
+
+People often use "tier" to mean "format", but in rulesets, the difference is important. A format is a list of rules for a game you can play, such as "Gen 8 OU". A tier is a list of Pokémon which can be banned or unbanned, such as "OU".
+
+`- OU, + Ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
