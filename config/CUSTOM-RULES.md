@@ -153,7 +153,7 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `NFE Clause` - ban Pokemon that are fully evolved or can't evolve
 
-`CFZ Clause` - ban the use of crystal-free Z-Moves
+`CFZ Clause` - ban the use of crystal-free Z-Moves (having moves like Devastating Drake hacked directly on the moveset in formats like Hackmons, instead of using Dragon Claw + Dragonium Z)
 
 `Z-Move Clause` - ban Pokémon from holding Z-Crystals
 
