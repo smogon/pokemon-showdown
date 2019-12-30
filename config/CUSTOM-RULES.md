@@ -103,7 +103,7 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Obtainable Misc` - allow only legal EVs, IVs, levels, genders, and Hidden Power types
 
-### Pokedex rules and tier-based rules
+### Pokedex rules
 
 `Hoenn Pokedex` - allow only Pokémon in the Hoenn Pokédex
 
@@ -114,22 +114,6 @@ Custom rules can have more complicated behavior. They can also include other rul
 `Alola Pokedex` - allow only Pokémon in the Alola Pokédex
 
 (There is no `Galar Pokedex` rule, `-Nonexistent` covers it in Gen 8.)
-
-`Little Cup` - allow only Pokémon that can evolve and aren't evolved
-
-`Gen 8 STABmons` - allow Pokémon to use almost any move that matches their typing
-
-`Gen 7 Almost Any Ability` - allow Pokémon to use almost any ability available in Gen 7. Matches the banlist of Gen 7 Almost Any Ability.
-
-`Gen 8 Almost Any Ability` - allow Pokémon to use almost any ability available in Gen 8. Matches the banlist of Gen 8 Almost Any Ability.
-
-`Gen 7 Mix and Mega` - allow almost any Pokémon to Mega Evolve using almost any Mega Stone, like in the format Gen 7 Mix and Mega.
-
-`Gen 8 Mix and Mega` - allow almost any Pokémon to Mega Evolve using almost any Mega Stone, like in the format Gen 8 Mix and Mega.
-
-`Gen 7 Balanced Hackmons` - allow Pokémon to use almost any set hackable into the Gen 7 games.
-
-`Gen 8 Balanced Hackmons` - allow Pokémon to use almost any set hackable into the Gen 8 games.
 
 ### Clauses
 
@@ -169,7 +153,9 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Allow AVs` - allow Pokémon to have their stats boosted by Awakening Values in Let's Go formats
 
-`Allow Tradeback` - Allow Pokémon in Gen 1 to have moves from their Gen 2 learnsets
+`Allow Tradeback` - allow Pokémon in Gen 1 to have moves from their Gen 2 learnsets
+
+`STABmons Move Legality` - allow Pokémon to have almost any move that matches their typing
 
 
 In-battle rules
@@ -236,3 +222,16 @@ Put `!` in front of a rule to remove it, like:
 You can use this to remove individual parts of rules, like:
 
 `Obtainable, !Obtainable Moves` - require pokemon to be obtained legitimately, except for moves, which they can use whatever
+
+
+Tiers and Formats
+-----------------
+
+For any Smogon format, there is a corresponding tournament rule. For every tier, there is a corresponding banlist. For formats, use `addedrule, !removedrule`. For tiers, use `+addedtier, -removedtier`. For example:
+
+`gen8ou` - follow the clause list and banlist of Gen 8 OU.
+
+`-ou, +ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
+
+`Gen 8 Mix and Mega` - follow the Mix and Mega ruleset, allowing almost any Pokémon to Mega Evolve using almost any Mega Stone.
+
