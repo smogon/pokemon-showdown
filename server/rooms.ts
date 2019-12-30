@@ -101,7 +101,6 @@ export abstract class BasicRoom {
 	unoDisabled: boolean;
 	blackjackDisabled: boolean;
 	hangmanDisabled: boolean;
-	giveaways: {wifi: any, gts: any};
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
 	privacySetter: Set<ID> | null;
@@ -158,7 +157,6 @@ export abstract class BasicRoom {
 		this.unoDisabled = false;
 		this.blackjackDisabled = false;
 		this.hangmanDisabled = false;
-		this.giveaways = Object.create(null);
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
 		this.privacySetter = null;

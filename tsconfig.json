@@ -35,5 +35,5 @@
         "./server/chat-plugins/wifi.js",
         "./sim/**/*",
         "./tools/set-import/*.ts"
-    ],
+    ]
 }
