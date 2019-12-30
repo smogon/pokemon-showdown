@@ -401,7 +401,7 @@ class UnoGame extends Rooms.RoomGame {
 		// update the unoId here, so when the display is sent to the player when the play is made
 		if (player.hand.length === 1) {
 			this.awaitUno = player.id;
-			this.unoId = toID(Math.floor(Math.random() * 100).toString());
+			this.unoId = Math.floor(Math.random() * 100).toString() as ID;
 		}
 
 		player.sendDisplay(); // update display without the card in it for purposes such as choosing colors
