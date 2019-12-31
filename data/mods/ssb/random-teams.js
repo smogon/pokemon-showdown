@@ -779,20 +779,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 		let pool = Object.keys(sets);
 		/** @type {{[type: string]: number}} */
 		let typePool = {};
-		let debug = true;
 		let depth = 0;
 		if (options.inBattle) this.allXfix = false;
 		while (pool.length && team.length < 6) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
-			let name = '';
-			if (debug && team.length === 1 && !options.inBattle) {
-				// DEBUG CODE, remove before commiting to the main server
-				name = 'Andrew'; // Change name to force a set to appear
-				pool.splice(pool.indexOf(name), 1);
-			} else {
-				name = this.allXfix ? 'xfix' : this.sampleNoReplace(pool);
-			}
+			let name = this.allXfix ? 'xfix' : this.sampleNoReplace(pool);
 			let ssbSet = sets[name];
 
 			if (!this.allXfix) {

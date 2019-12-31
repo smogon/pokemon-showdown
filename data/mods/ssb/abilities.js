@@ -363,6 +363,22 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Dragontite
+	iceabsorb: {
+		desc: "This Pokemon is immune to Ice-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Ice-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Ice moves; Ice immunity.",
+		id: "iceabsorb",
+		name: "Ice Absorb",
+		isNonstandard: "Custom",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Ice') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Ice Absorb');
+				}
+				return null;
+			}
+		},
+	},
 	// E4 Flint
 	starkmountain: {
 		desc: "The user summons Sunny Day when it switches in. In addition, the Base Power of Water-type attacks is multiplied by 0.5 against this Pokemon.",
@@ -552,22 +568,6 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onModifyMove(move) {
 			move.drain = [1, 3];
-		},
-	},
-	// Jolteonite
-	iceabsorb: {
-		desc: "This Pokemon is immune to Ice-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Ice-type move.",
-		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Ice moves; Ice immunity.",
-		id: "iceabsorb",
-		name: "Ice Absorb",
-		isNonstandard: "Custom",
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Ice') {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Ice Absorb');
-				}
-				return null;
-			}
 		},
 	},
 	// Kie
@@ -800,18 +800,6 @@ let BattleAbilities = {
 		id: "acidrain",
 		name: "Acid Rain",
 	},
-	// PokemonDeadChannel
-	numbnumbjuice: {
-		desc: "This Pokemon is immune to volatile statuses.",
-		shortDesc: "This Pokemon is immune to volatile statuses.",
-		onTryAddVolatile(status, target) {
-			if (toID(target.name).includes(status.id)) return;
-			this.add('-immune', target, '[from] ability: Numb Numb Juice');
-			return null;
-		},
-		id: "numbnumbjuice",
-		name: "Numb Numb Juice",
-	},
 	// pre
 	optimize: {
 		desc: "This Pokemon changes forme and sets depending on which attack it uses, before the attack takes place. If this Pokemon uses Psycho Boost, it first changes to its Attack forme. If this Pokemon uses Recover, it first changes to its Defense forme. If this Pokemon uses Extreme Speed, it first changes to its Speed forme. If this Pokemon uses Refactor, it first changes to its Base forme.",
@@ -996,6 +984,18 @@ let BattleAbilities = {
 			this.add('-immune', target, '[from] ability: Thiccer Fat');
 			return false;
 		},
+	},
+	// Salamander
+	numbnumbjuice: {
+		desc: "This Pokemon is immune to volatile statuses.",
+		shortDesc: "This Pokemon is immune to volatile statuses.",
+		onTryAddVolatile(status, target) {
+			if (toID(target.name).includes(status.id)) return;
+			this.add('-immune', target, '[from] ability: Numb Numb Juice');
+			return null;
+		},
+		id: "numbnumbjuice",
+		name: "Numb Numb Juice",
 	},
 	// Schiavetto
 	rvs: {
