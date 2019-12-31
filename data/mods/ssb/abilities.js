@@ -245,11 +245,17 @@ let BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon switches to a different Oricorio forme.",
 		isNonstandard: "Custom",
 		onStart(source) {
+			if (source.m.hasTransformed) {
+				// Pull the breaks before it infinitely swaps formes.
+				source.m.hasTransformed = false;
+				return;
+			}
 			let formes = ['oricorio', 'oricoriosensu', 'oricoriopompom', 'oricoriopau'];
 			if (formes.includes(toID(source.template.species))) {
 				formes.splice(formes.indexOf(toID(source.template.species)), 1);
 				this.add('-activate', source, 'ability: Arabesque');
-				source.formeChange(formes[this.random(formes.length)], this.dex.getAbility('arabesque'));
+				source.m.hasTransformed = true;
+				source.formeChange(formes[this.random(formes.length)], this.effect, true);
 			}
 		},
 	},
@@ -260,17 +266,9 @@ let BattleAbilities = {
 		id: "gracideamastery",
 		name: "Gracidea Mastery",
 		isNonstandard: "Custom",
-		onDamagePriority: 1,
-		onDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'shayminsky' && !target.transformed) {
-				target.formeChange('Shaymin', this.effect);
-				return damage;
-			}
-		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target) return;
-			if (target.template.baseSpecies !== 'Shaymin' || target.transformed) return;
-			return this.dex.getEffectiveness(move.type, 'Grass');
+		onTryHit(target, source, move) {
+			if (target === source || move.category === 'Status' && target.template.speciesid !== 'shayminsky' && target.transformed) return;
+			target.formeChange('Shaymin', this.effect);
 		},
 		onAfterDamage(damage, target, source, effect) {
 			if (source === target) return;

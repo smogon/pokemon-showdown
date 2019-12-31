@@ -457,6 +457,18 @@ let BattleStatuses = {
 			this.add(`c|+deetah|I have 8 lives left, you can't get rid of me that easily.`);
 		},
 	},
+	dragontite: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Dragontite|**Time to electrify you**`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Dragontite|__I'll be coming back for you!__`);
+		},
+		onFaint() {
+			this.add(`c|+Dragontite|I'm shocked that you mere mortal actually defeated __me__`);
+		},
+	},
 	dragonwhale: {
 		noCopy: true,
 		onStart() {
@@ -563,8 +575,8 @@ let BattleStatuses = {
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
 			let activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
-			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'jolteonite'];
-			if (activeMon === 'hoeenhero' || activeMon === 'pokemondeadchannel') {
+			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'dragontite'];
+			if (activeMon === 'hoeenhero' || activeMon === 'salamander') {
 				 this.add(`c|%fart|what song should I sing?`);
 			} else if (activeMon === 'lifeisdank' || activeMon === 'nui' || activeMon === 'grimauxiliatrix') {
 				this.add(`c|%fart|the gang's all here!`);
@@ -752,18 +764,6 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|&Iyarito|RIP Patrona`);
-		},
-	},
-	jolteonite: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Jolteonite|**Time to electrify you**`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Jolteonite|__I'll be coming back for you!__`);
-		},
-		onFaint() {
-			this.add(`c|+Jolteonite|I'm shocked that you mere mortal actually defeated __me__`);
 		},
 	},
 	kaijubunny: {
@@ -1177,18 +1177,6 @@ let BattleStatuses = {
 			this.add(`c|@pluviometer|${["Follow SmogonU on Facebook! https://www.facebook.com/SmogonU", "Follow SmogonU on Twitter! https://twitter.com/SmogonU"][this.random(2)]}`);
 		},
 	},
-	pokemondeadchannel: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+pokemondeadchannel|${["Lucario•1582 is cute", "Swagn check Z room"][this.random(2)]}`);
-		},
-		onSwitchOut() {
-			this.add(`c|+pokemondeadchannel|Hey Noctrine this set isnt working. I might need a new team.`);
-		},
-		onFaint() {
-			this.add(`c|+pokemondeadchannel|I ${["listen to way too much rap music", "change names way too often"][this.random(2)]} x_x`);
-		},
-	},
 	pohjis: {
 		noCopy: true,
 		onStart() {
@@ -1332,6 +1320,18 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|+SamJo|Oof, gotta get thiccer……. ;(`);
+		},
+	},
+	salamander: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Salamander|I am here to bully Aroma Electra`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Salamander|Remember these two things: Lucario•1582 will always be cute, and Swagn will never be able to dab`);
+		},
+		onFaint() {
+			this.add(`c|+Salamander|Noctrine help this isn't working as well as we planned`);
 		},
 	},
 	schiavetto: {
