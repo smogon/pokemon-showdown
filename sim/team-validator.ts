@@ -276,6 +276,7 @@ export class TeamValidator {
 		}
 
 		for (const rule of ruleTable.keys()) {
+			if ('!+-'.includes(rule.charAt(0))) continue;
 			const subformat = dex.getFormat(rule);
 			if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onValidateTeam.call(this, team, format, teamHas) || []);
@@ -357,6 +358,7 @@ export class TeamValidator {
 		const setSources = this.allSources(template);
 
 		for (const [rule] of ruleTable) {
+			if ('!+-'.includes(rule.charAt(0))) continue;
 			const subformat = dex.getFormat(rule);
 			if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onChangeSet.call(this, set, format, setHas, teamHas) || []);
@@ -654,7 +656,7 @@ export class TeamValidator {
 		}
 
 		for (const [rule] of ruleTable) {
-			if (rule.startsWith('!')) continue;
+			if ('!+-'.includes(rule.charAt(0))) continue;
 			const subformat = dex.getFormat(rule);
 			if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onValidateSet.call(this, set, format, setHas, teamHas) || []);
