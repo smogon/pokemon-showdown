@@ -1864,7 +1864,7 @@ let BattleFormatsData = {
 			fillerMoves2: ["hiddenpowerbug", "hiddenpowerrock", "hiddenpowerground"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves": ["vicegrip", "rockthrow"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["visegrip", "rockthrow"]},
 		],
 		tier: "UU",
 	},
