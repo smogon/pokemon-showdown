@@ -888,7 +888,6 @@ let Formats = [
 		],
 
 		mod: 'mixandmega7',
-		// searchShow: false,
 		ruleset: ['Obtainable', 'Standard', 'Mega Rayquaza Clause', 'Team Preview'],
 		banlist: ['Shadow Tag', 'Gengarite', 'Baton Pass', 'Electrify'],
 		restrictedStones: ['Beedrillite', 'Blazikenite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Ultranecrozium Z'],
