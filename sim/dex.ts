@@ -795,8 +795,8 @@ export class ModdedDex {
 		}
 	}
 
-	getRuleTable(format: Format, depth: number = 0): Data.RuleTable {
-		if (format.ruleTable) return format.ruleTable;
+	getRuleTable(format: Format, depth: number = 1, repeals?: Map<string, number>): Data.RuleTable {
+		if (format.ruleTable && !repeals) return format.ruleTable;
 		const ruleTable = new Data.RuleTable();
 
 		const ruleset = format.ruleset.slice();
@@ -817,17 +817,18 @@ export class ModdedDex {
 		}
 
 		// apply rule repeals before other rules
+		// repeals is a ruleid:depth map
 		for (const rule of ruleset) {
 			if (rule.startsWith('!')) {
 				const ruleSpec = this.validateRule(rule, format) as string;
-				ruleTable.set(ruleSpec, '');
+				if (!repeals) repeals = new Map();
+				repeals.set(ruleSpec.slice(1), depth);
 			}
 		}
 
 		for (const rule of ruleset) {
-			if (rule.startsWith('!')) continue;
-
 			const ruleSpec = this.validateRule(rule, format);
+
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
 					const complexTeamBan: Data.ComplexTeamBan = ruleSpec.slice(1) as Data.ComplexTeamBan;
@@ -840,20 +841,32 @@ export class ModdedDex {
 				}
 				continue;
 			}
-			if ("!+-".includes(ruleSpec.charAt(0))) {
+
+			if (rule.startsWith('!')) {
+				const repealDepth = repeals!.get(ruleSpec.slice(1));
+				if (repealDepth === undefined) throw new Error(`Multiple "${rule}" rules in ${format.name}`);
+				if (repealDepth === depth) throw new Error(`Rule "${rule}" did nothing because "${rule.slice(1)}" is not in effect`);
+				if (repealDepth === -depth) repeals!.delete(ruleSpec.slice(1));
+				continue;
+			}
+
+			if ("+-".includes(ruleSpec.charAt(0))) {
 				if (ruleSpec.startsWith('+')) ruleTable.delete('-' + ruleSpec.slice(1));
 				if (ruleSpec.startsWith('-')) ruleTable.delete('+' + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
 			const subformat = this.getFormat(ruleSpec);
-			if (ruleTable.has('!' + subformat.id)) continue;
+			if (repeals && repeals.has(subformat.id)) {
+				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
+				continue;
+			}
 			ruleTable.set(subformat.id, '');
 			if (!subformat.exists) continue;
 			if (depth > 16) {
 				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset}`);
 			}
-			const subRuleTable = this.getRuleTable(subformat, depth + 1);
+			const subRuleTable = this.getRuleTable(subformat, depth + 1, repeals);
 			for (const [k, v] of subRuleTable) {
 				if (!ruleTable.has('!' + k)) ruleTable.set(k, v || subformat.name);
 			}
