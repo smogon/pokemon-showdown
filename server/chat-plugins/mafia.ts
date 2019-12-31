@@ -558,7 +558,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	getPartners(alignment: string, player: MafiaPlayer) {
-		if (!player || !player.role || ['town', 'solo'].includes(player.role.alignment)) return "";
+		if (!player || !player.role || ['town', 'solo', 'traitor'].includes(player.role.alignment)) return "";
 		const partners = [];
 		for (const p in this.playerTable) {
 			if (p === player.id) continue;
