@@ -2103,22 +2103,6 @@ let Formats = [
 		ruleset: ['Obtainable', 'Standard'],
 	},
 	{
-		name: "[Gen 2] 1v1",
-		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7792280/">GSC 1v1</a>`,
-		],
-
-		mod: 'gen2',
-		searchShow: false,
-		teamLength: {
-			validate: [1, 3],
-			battle: 1,
-		},
-		ruleset: ['[Gen 2] OU', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview'],
-		banlist: ['Snorlax', 'Swagger'],
-	},
-	{
 		name: "[Gen 2] Custom Game",
 
 		mod: 'gen2',
