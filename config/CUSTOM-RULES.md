@@ -204,6 +204,7 @@ Note: Most formats already come with one standard ruleset. Removing and adding m
 `Standard` - the standard ruleset for most Smogon singles formats. Includes the Evasion Moves Clause, Sleep Clause Mod, Species Clause, Nickname Clause, OHKO Clause, Endless Battle Clause, HP Percentage Mod, and Cancel Mod.
 
 `Standard NEXT` - the standard ruleset for NEXT. Allows some unreleased Pokémon and includes the Evasion Moves Clause, Nickname Clause, Sleep Clause Mod, Species Clause, OHKO Clause, HP Percentage Mod, and Cancel Mod. Bans Soul Dew.
+
 `Standard GBU` - the standard ruleset for in-game formats, such as Battle Spot. Includes Species Clause, Item Clause, Nickname Clause, Team Preview, and Cancel Mod. Bans mythical Pokémon and restricted legendaries (e.g. Zekrom, Reshiram, Zygarde, Eternatus)
 
 `Minimal GBU` - the standard ruleset for in-game formats but without restricted legendary bans. Still bans mythical Pokémon.
