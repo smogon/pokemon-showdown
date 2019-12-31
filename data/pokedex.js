@@ -12213,7 +12213,7 @@ let BattlePokedex = {
 		color: "Blue",
 		prevo: "charjabug",
 		evoType: "useItem",
-		evoCondition: "Thunder Stone",
+		evoItem: "Thunder Stone",
 		eggGroups: ["Bug"],
 		otherFormes: ["vikavolttotem"],
 	},
