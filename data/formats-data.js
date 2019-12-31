@@ -82,6 +82,8 @@ let BattleFormatsData = {
 	},
 	charizardgmax: {
 		isGigantamax: "G-Max Wildfire",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	squirtle: {
 		eventPokemon: [
@@ -150,6 +152,8 @@ let BattleFormatsData = {
 	butterfreegmax: {
 		randomBattleMoves: ["airslash", "bugbuzz", "quiverdance", "sleeppowder"],
 		isGigantamax: "G-Max Befuddle",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	weedle: {
 		encounters: [
@@ -519,7 +523,7 @@ let BattleFormatsData = {
 		eventOnly: true,
 		unreleasedHidden: true,
 		isGigantamax: "G-Max Volt Crash",
-		tier: "UU",
+		tier: "Uber",
 		doublesTier: "New",
 	},
 	raichu: {
@@ -833,7 +837,7 @@ let BattleFormatsData = {
 		eventOnly: true,
 		unreleasedHidden: true,
 		isGigantamax: "G-Max Gold Rush",
-		tier: "UU",
+		tier: "Uber",
 		doublesTier: "New",
 	},
 	persian: {
@@ -1016,6 +1020,8 @@ let BattleFormatsData = {
 	},
 	machampgmax: {
 		isGigantamax: "G-Max Chi Strike",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	bellsprout: {
 		eventPokemon: [
@@ -1337,6 +1343,8 @@ let BattleFormatsData = {
 	gengargmax: {
 		randomBattleMoves: ["focusblast", "nastyplot", "shadowball", "sludgewave", "taunt"],
 		isGigantamax: "G-Max Terror",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	onix: {
 		encounters: [
@@ -1393,6 +1401,8 @@ let BattleFormatsData = {
 	},
 	kinglergmax: {
 		isGigantamax: "G-Max Foam Burst",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	voltorb: {
 		eventPokemon: [
@@ -1897,6 +1907,8 @@ let BattleFormatsData = {
 	laprasgmax: {
 		randomBattleMoves: ["freezedry", "icebeam", "sparklingaria", "substitute", "thunderbolt"],
 		isGigantamax: "G-Max Resonance",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	ditto: {
 		randomBattleMoves: ["transform"],
@@ -1944,7 +1956,7 @@ let BattleFormatsData = {
 		eventOnly: true,
 		unreleasedHidden: true,
 		isGigantamax: "G-Max Cuddle",
-		tier: "UU",
+		tier: "Uber",
 		doublesTier: "New",
 	},
 	vaporeon: {
@@ -2112,6 +2124,8 @@ let BattleFormatsData = {
 	},
 	snorlaxgmax: {
 		isGigantamax: "G-Max Replenish",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	articuno: {
 		eventPokemon: [
@@ -5486,6 +5500,8 @@ let BattleFormatsData = {
 	garbodorgmax: {
 		randomBattleMoves: ["drainpunch", "gunkshot", "painsplit", "spikes", "toxicspikes"],
 		isGigantamax: "G-Max Malodor",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	zorua: {
 		isNonstandard: "Past",
@@ -7463,6 +7479,8 @@ let BattleFormatsData = {
 	},
 	corviknightgmax: {
 		isGigantamax: "G-Max Wind Rage",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	blipbug: {
 		tier: "LC",
@@ -7477,6 +7495,8 @@ let BattleFormatsData = {
 	},
 	orbeetlegmax: {
 		isGigantamax: "G-Max Gravitas",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	nickit: {
 		unreleasedHidden: true,
@@ -7516,6 +7536,8 @@ let BattleFormatsData = {
 	},
 	drednawgmax: {
 		isGigantamax: "G-Max Stonesurge",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	yamper: {
 		unreleasedHidden: true,
@@ -7540,6 +7562,8 @@ let BattleFormatsData = {
 	},
 	coalossalgmax: {
 		isGigantamax: "G-Max Volcalith",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	applin: {
 		tier: "LC",
@@ -7551,6 +7575,8 @@ let BattleFormatsData = {
 	},
 	flapplegmax: {
 		isGigantamax: "G-Max Tartness",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	appletun: {
 		tier: "UU",
@@ -7559,6 +7585,8 @@ let BattleFormatsData = {
 	appletungmax: {
 		randomBattleMoves: ["appleacid", "dracometeor", "dragonpulse", "leechseed", "recover"],
 		isGigantamax: "G-Max Sweetness",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	silicobra: {
 		tier: "LC",
@@ -7571,6 +7599,8 @@ let BattleFormatsData = {
 	sandacondagmax: {
 		randomBattleMoves: ["bodypress", "earthquake", "glare", "stealthrock", "stoneedge"],
 		isGigantamax: "G-Max Sandblast",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	cramorant: {
 		randomBattleMoves: ["defog", "hurricane", "icebeam", "roost", "surf"],
@@ -7621,6 +7651,8 @@ let BattleFormatsData = {
 	},
 	centiskorchgmax: {
 		isGigantamax: "G-Max Centiferno",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	clobbopus: {
 		tier: "LC",
@@ -7651,6 +7683,8 @@ let BattleFormatsData = {
 	hatterenegmax: {
 		randomBattleMoves: ["calmmind", "darkpulse", "dazzlinggleam", "mysticalfire", "psychic", "trickroom"],
 		isGigantamax: "G-Max Smite",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	impidimp: {
 		tier: "LC",
@@ -7666,6 +7700,8 @@ let BattleFormatsData = {
 	grimmsnarlgmax: {
 		randomBattleMoves: ["bulkup", "darkestlariat", "playrough", "substitute", "suckerpunch", "thunderwave", "trick"],
 		isGigantamax: "G-Max Snooze",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	milcery: {
 		tier: "LC",
@@ -7677,6 +7713,8 @@ let BattleFormatsData = {
 	alcremiegmax: {
 		randomBattleMoves: ["calmmind", "dazzlinggleam", "mysticalfire", "psychic", "recover"],
 		isGigantamax: "G-Max Finale",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	falinks: {
 		randomBattleMoves: ["closecombat", "noretreat", "poisonjab", "rockslide", "throatchop"],
@@ -7740,6 +7778,8 @@ let BattleFormatsData = {
 	copperajahgmax: {
 		randomBattleMoves: ["earthquake", "heatcrash", "heavyslam", "powerwhip", "stoneedge"],
 		isGigantamax: "G-Max Steelsurge",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	dracozolt: {
 		randomBattleMoves: ["aerialace", "boltbeak", "earthquake", "lowkick", "outrage"],
@@ -7772,6 +7812,8 @@ let BattleFormatsData = {
 	},
 	duraludongmax: {
 		isGigantamax: "G-Max Depletion",
+		tier: "Uber",
+		doublesTier: "New",
 	},
 	dreepy: {
 		tier: "LC",
