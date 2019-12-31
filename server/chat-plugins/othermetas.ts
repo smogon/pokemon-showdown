@@ -1,18 +1,21 @@
 // Other Metas plugin by Spandan
 'use strict';
 
-/**
- * @param {string} stone
- * @param {string} mod
- * @return {Item | null}
- */
-function getMegaStone(stone, mod = 'gen8') {
+interface StoneDeltas {
+	baseStats: {[stat in StatName]: number};
+	weighthg: number;
+	type?: string;
+}
+
+type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'NFE' | 'LC Uber' | 'LC';
+
+function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 	let dex = Dex;
 	if (mod && toID(mod) in Dex.dexes) dex = Dex.mod(toID(mod));
-	let item = dex.getItem(stone);
+	const item = dex.getItem(stone);
 	if (!item.exists) {
 		if (toID(stone) === 'dragonascent') {
-			let move = dex.getMove(stone);
+			const move = dex.getMove(stone);
 			return {
 				id: move.id,
 				name: move.name,
@@ -34,8 +37,7 @@ function getMegaStone(stone, mod = 'gen8') {
 	return item;
 }
 
-/** @type {ChatCommands} */
-const commands = {
+export const commands: ChatCommands = {
 	'!othermetas': true,
 	om: 'othermetas',
 	othermetas(target, room, user) {
@@ -51,7 +53,7 @@ const commands = {
 			buffer += `- <a href="https://www.smogon.com/forums/forums/394/">Other Metagames Forum</a><br />`;
 			if (!target) return this.sendReplyBox(buffer);
 		}
-		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
+		const showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
 
 		if (target === 'all') {
 			// Display OMotM formats, with forum thread links as caption
@@ -87,7 +89,7 @@ const commands = {
 		const template = dex.getTemplate(sep[0]);
 		if (!stone || (dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id))) return this.errorReply(`Error: Mega Stone not found.`);
 		if (!template.exists) return this.errorReply(`Error: Pokemon not found.`);
-		let banlist = Dex.getFormat('gen8mixandmega').banlist;
+		const banlist = Dex.getFormat('gen8mixandmega').banlist;
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
@@ -107,14 +109,12 @@ const commands = {
 			megaTemplate = dex.getTemplate("Kyogre-Primal");
 			baseTemplate = dex.getTemplate("Kyogre");
 		}
-		/** @type {{baseStats: {[k: string]: number}, weighthg: number, type?: string}} */
-		let deltas = {
-			baseStats: {},
+		const deltas: StoneDeltas = {
+			baseStats: Object.create(null),
 			weighthg: megaTemplate.weighthg - baseTemplate.weighthg,
 		};
-		for (let statId in megaTemplate.baseStats) {
-			// @ts-ignore
-			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
+		for (const statId in megaTemplate.baseStats) {
+			deltas.baseStats[statId as StatName] = megaTemplate.baseStats[statId as StatName] - baseTemplate.baseStats[statId as StatName];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
 			deltas.type = megaTemplate.types[1];
@@ -124,8 +124,8 @@ const commands = {
 			deltas.type = megaTemplate.types[1];
 		}
 		//////////////////////////////////////////
-		let mixedTemplate = Dex.deepClone(template);
-		mixedTemplate.abilities = Object.assign({}, megaTemplate.abilities);
+		const mixedTemplate = Dex.deepClone(template);
+		mixedTemplate.abilities = Dex.deepClone(megaTemplate.abilities);
 		if (mixedTemplate.types[0] === deltas.type) { // Add any type gains
 			mixedTemplate.types = [deltas.type];
 		} else if (deltas.type === 'mono') {
@@ -133,8 +133,8 @@ const commands = {
 		} else if (deltas.type) {
 			mixedTemplate.types = [mixedTemplate.types[0], deltas.type];
 		}
-		for (let statName in template.baseStats) { // Add the changed stats and weight
-			mixedTemplate.baseStats[statName] = Dex.clampIntRange(mixedTemplate.baseStats[statName] + deltas.baseStats[statName], 1, 255);
+		for (const statName in template.baseStats) { // Add the changed stats and weight
+			mixedTemplate.baseStats[statName] = Dex.clampIntRange(mixedTemplate.baseStats[statName] + deltas.baseStats[statName as StatName], 1, 255);
 		}
 		mixedTemplate.weighthg = Math.max(1, template.weighthg + deltas.weighthg);
 		mixedTemplate.tier = "MnM";
@@ -150,12 +150,11 @@ const commands = {
 		} else if (mixedTemplate.weighthg >= 100) {
 			weighthit = 40;
 		}
-		/** @type {{[k: string]: string}} */
-		let details = {
+		const details: {[k: string]: string} = {
 			"Dex#": '' + mixedTemplate.num,
-			"Gen": '' + mixedTemplate.gen,
-			"Height": mixedTemplate.heightm + " m",
-			"Weight": mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
+			Gen: '' + mixedTemplate.gen,
+			Height: mixedTemplate.heightm + " m",
+			Weight: mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 			"Dex Colour": mixedTemplate.color,
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
@@ -173,18 +172,18 @@ const commands = {
 	megastone: 'stone',
 	stone(target) {
 		if (!this.runBroadcast()) return;
-		let sep = target.split(',');
+		const sep = target.split(',');
 		let dex = Dex;
 		if (sep[1] && toID(sep[1]) in Dex.dexes) dex = Dex.mod(toID(sep[1]));
-		let targetid = toID(sep[0]);
+		const targetid = toID(sep[0]);
 		if (!targetid) return this.parse('/help stone');
-		let stone = getMegaStone(targetid, sep[1]);
+		const stone = getMegaStone(targetid, sep[1]);
 		if (!stone || (dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id))) return this.errorReply(`Error: Mega Stone not found.`);
-		let banlist = Dex.getFormat('gen8mixandmega').banlist;
+		const banlist = Dex.getFormat('gen8mixandmega').banlist;
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
-		let restrictedStones = Dex.getFormat('gen8mixandmega').restrictedStones || [];
+		const restrictedStones = Dex.getFormat('gen8mixandmega').restrictedStones || [];
 		if (restrictedStones.includes(stone.name)) {
 			if (dex.getTemplate(stone.megaEvolves).isNonstandard === "Past") {
 				this.errorReply(`Warning: ${stone.name} is restricted in Mix and Mega.`);
@@ -212,14 +211,12 @@ const commands = {
 			megaTemplate = dex.getTemplate("Kyogre-Primal");
 			baseTemplate = dex.getTemplate("Kyogre");
 		}
-		/** @type {{baseStats: {[k: string]: number}, weighthg: number, type?: string}} */
-		let deltas = {
-			baseStats: {},
+		const deltas: StoneDeltas = {
+			baseStats: Object.create(null),
 			weighthg: megaTemplate.weighthg - baseTemplate.weighthg,
 		};
-		for (let statId in megaTemplate.baseStats) {
-			// @ts-ignore
-			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
+		for (const statId in megaTemplate.baseStats) {
+			deltas.baseStats[statId as StatName] = megaTemplate.baseStats[statId as StatName] - baseTemplate.baseStats[statId as StatName];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
 			deltas.type = megaTemplate.types[1];
@@ -228,9 +225,9 @@ const commands = {
 		} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
 			deltas.type = megaTemplate.types[1];
 		}
-		let details = {
-			"Gen": stone.gen,
-			"Weight": (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+		const details = {
+			Gen: stone.gen,
+			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
 		};
 		let tier;
 		if (['redorb', 'blueorb'].includes(stone.id)) {
@@ -281,17 +278,17 @@ const commands = {
 	stonehelp: [`/stone <mega stone>[, generation] - Shows the changes that a mega stone/orb applies to a Pokemon.`],
 
 	'!350cup': true,
-	'350': '350cup',
+	350: '350cup',
 	'350cup'(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toID(target)) return this.parse('/help 350cup');
-		let template = Dex.deepClone(Dex.getTemplate(target));
+		const template = Dex.deepClone(Dex.getTemplate(target));
 		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
 		let bst = 0;
-		for (let i in template.baseStats) {
+		for (const i in template.baseStats) {
 			bst += template.baseStats[i];
 		}
-		for (let i in template.baseStats) {
+		for (const i in template.baseStats) {
 			template.baseStats[i] = template.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(template)}`);
@@ -303,26 +300,25 @@ const commands = {
 	tiershift(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toID(target)) return this.parse('/help tiershift');
-		let template = Dex.deepClone(Dex.mod('gen7').getTemplate(target));
+		const template = Dex.deepClone(Dex.mod('gen7').getTemplate(target));
 		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
-		/** @type {{[k: string]: number}} */
-		let boosts = {
-			'UU': 10,
-			'RUBL': 10,
-			'RU': 20,
-			'NUBL': 20,
-			'NU': 30,
-			'PUBL': 30,
-			'PU': 40,
-			'NFE': 40,
+		const boosts: {[tier in TierShiftTiers]: number} = {
+			UU: 10,
+			RUBL: 10,
+			RU: 20,
+			NUBL: 20,
+			NU: 30,
+			PUBL: 30,
+			PU: 40,
+			NFE: 40,
 			'LC Uber': 40,
-			'LC': 40,
+			LC: 40,
 		};
 		let tier = template.tier;
 		if (tier[0] === '(') tier = tier.slice(1, -1);
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(template)}`);
-		let boost = boosts[tier];
-		for (let statName in template.baseStats) {
+		const boost = boosts[tier as TierShiftTiers];
+		for (const statName in template.baseStats) {
 			if (statName === 'hp') continue;
 			template.baseStats[statName] = Dex.clampIntRange(template.baseStats[statName] + boost, 1, 255);
 		}
@@ -335,11 +331,11 @@ const commands = {
 	scalemons(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toID(target)) return this.parse(`/help scalemons`);
-		let template = Dex.deepClone(Dex.getTemplate(target));
+		const template = Dex.deepClone(Dex.getTemplate(target));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${target} not found.`);
-		let stats = ['atk', 'def', 'spa', 'spd', 'spe'];
-		let pst = stats.map(stat => template.baseStats[stat]).reduce((x, y) => x + y);
-		let scale = 600 - template.baseStats['hp'];
+		const stats = ['atk', 'def', 'spa', 'spd', 'spe'];
+		const pst = stats.map(stat => template.baseStats[stat]).reduce((x, y) => x + y);
+		const scale = 600 - template.baseStats['hp'];
 		for (const stat of stats) {
 			template.baseStats[stat] = Dex.clampIntRange(template.baseStats[stat] * scale / pst, 1, 255);
 		}
@@ -351,15 +347,15 @@ const commands = {
 	ns: 'natureswap',
 	natureswap(target, room, user) {
 		if (!this.runBroadcast()) return;
-		let nature = target.trim().split(' ')[0];
-		let pokemon = target.trim().split(' ')[1];
+		const nature = target.trim().split(' ')[0];
+		const pokemon = target.trim().split(' ')[1];
 		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
-		let natureObj = /** @type {{name: string, plus?: string | undefined, minus?: string | undefined, exists?: boolean}} */ Dex.getNature(nature);
+		const natureObj: {name: string, plus?: string | undefined, minus?: string | undefined, exists?: boolean} = Dex.getNature(nature);
 		if (!natureObj.exists) return this.errorReply(`Error: Nature ${nature} not found.`);
-		let template = Dex.deepClone(Dex.getTemplate(pokemon));
+		const template = Dex.deepClone(Dex.getTemplate(pokemon));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${pokemon} not found.`);
 		if (natureObj.minus && natureObj.plus) {
-			let swap = template.baseStats[natureObj.minus];
+			const swap = template.baseStats[natureObj.minus];
 			template.baseStats[natureObj.minus] = template.baseStats[natureObj.plus];
 			template.baseStats[natureObj.plus] = swap;
 			template.tier = 'NS';
@@ -406,9 +402,8 @@ const commands = {
 		const mixedTemplate = Dex.deepClone(template);
 		mixedTemplate.abilities = Dex.deepClone(crossTemplate.abilities);
 		mixedTemplate.baseStats = Dex.deepClone(mixedTemplate.baseStats);
-		for (let statName in template.baseStats) {
-			// @ts-ignore
-			mixedTemplate.baseStats[statName] += crossTemplate.baseStats[statName] - prevo.baseStats[statName];
+		for (const statName in template.baseStats) {
+			mixedTemplate.baseStats[statName as StatName] += crossTemplate.baseStats[statName as StatName] - prevo.baseStats[statName as StatName];
 		}
 		mixedTemplate.types = [template.types[0]];
 		if (template.types[1]) mixedTemplate.types.push(template.types[1]);
@@ -419,8 +414,8 @@ const commands = {
 		if (mixedTemplate.weighthg < 1) {
 			mixedTemplate.weighthg = 1;
 		}
-		for (const stat of Object.values(mixedTemplate.baseStats)) {
-			if (stat < 1 || stat > 255) {
+		for (const stat in mixedTemplate.baseStats) {
+			if (mixedTemplate.baseStats[stat] < 1 || mixedTemplate.baseStats[stat] > 255) {
 				this.errorReply(`Warning: This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
 				break;
 			}
@@ -438,12 +433,11 @@ const commands = {
 		} else if (mixedTemplate.weighthg >= 100) {
 			weighthit = 40;
 		}
-		/** @type {{[k: string]: string}} */
-		let details = {
+		const details: {[k: string]: string} = {
 			"Dex#": mixedTemplate.num,
-			"Gen": mixedTemplate.gen,
-			"Height": mixedTemplate.heightm + " m",
-			"Weight": mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
+			Gen: mixedTemplate.gen,
+			Height: mixedTemplate.heightm + " m",
+			Weight: mixedTemplate.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
 			"Dex Colour": mixedTemplate.color,
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
@@ -456,5 +450,3 @@ const commands = {
 	},
 	crossevolvehelp: ["/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon."],
 };
-
-exports.commands = commands;
