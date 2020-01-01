@@ -648,11 +648,11 @@ let Formats = [
 			`<a href="https://www.smogon.com/forums/threads/3652540/">Clean Slate: Micro</a>`,
 		],
 
-		mod: 'cleanslatemicro',
+		mod: 'petmod',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['All Pokemon'],
 		unbanlist: [
-			'Crobat', 'Dragalge', 'Dugtrio-Alola', 'Farfetch\'d', 'Galvantula', 'Heracross-Base', 'Kyurem-Base', 'Ludicolo', 'Magearna',
+			'Crobat', 'Dragalge', 'Dugtrio-Alola', 'Farfetch\'d', 'Galvantula', 'Heracross-Base', 'Kyurem-Base', 'Ludicolo', 'Magearna-Base',
 			'Malamar', 'Ninetales-Base', 'Pupitar', 'Rotom-Base', 'Rotom-Mow', 'Rotom-Wash', 'Torterra', 'Type: Null', 'Umbreon', 'Wailord',
 		],
 		onSwitchIn(pokemon) {
