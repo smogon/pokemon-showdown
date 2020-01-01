@@ -648,7 +648,7 @@ let Formats = [
 			`<a href="https://www.smogon.com/forums/threads/3652540/">Clean Slate: Micro</a>`,
 		],
 
-		mod: 'petmod',
+		mod: 'cleanslatemicro',
 		ruleset: ['Standard Pet Mod'],
 		unbanlist: [
 			'Crobat', 'Dragalge', 'Dugtrio-Alola', 'Farfetch\'d', 'Galvantula', 'Heracross-Base', 'Kyurem-Base', 'Ludicolo', 'Magearna-Base',
