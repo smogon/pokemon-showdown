@@ -11,8 +11,6 @@ let BattlePokedex = {
 		heightm: 1.9,
 		weightkg: 120.5,
 		color: "Gray",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Undiscovered"],
 	},
 	crobat: {
@@ -24,8 +22,6 @@ let BattlePokedex = {
 		heightm: 1.8,
 		weightkg: 75,
 		color: "Purple",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Flying"],
 	},
 	galvantula: {
@@ -37,8 +33,6 @@ let BattlePokedex = {
 		heightm: 0.8,
 		weightkg: 14.3,
 		color: "Yellow",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Bug"],
 	},
 	dugtrioalola: {
@@ -50,8 +44,6 @@ let BattlePokedex = {
 		heightm: 0.7,
 		weightkg: 66.6,
 		color: "Brown",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Field"],
 	},
 	rotom: {
@@ -77,8 +69,6 @@ let BattlePokedex = {
 		heightm: 2.2,
 		weightkg: 310,
 		color: "Green",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Monster", "Grass"],
 	},
 	dragalge: {
@@ -90,8 +80,6 @@ let BattlePokedex = {
 		heightm: 1.8,
 		weightkg: 81.5,
 		color: "Brown",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Water 1", "Dragon"],
 	},
 	ninetales: {
@@ -104,8 +92,6 @@ let BattlePokedex = {
 		heightm: 1.1,
 		weightkg: 19.9,
 		color: "Yellow",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Field"],
 	},
 	pupitar: {
@@ -117,9 +103,7 @@ let BattlePokedex = {
 		heightm: 1.2,
 		weightkg: 152,
 		color: "Gray",
-		prevo: "rotom",
-		evoLevel: 2,
-		evos: ["wailord"],
+		evos: ["tyranitar"],
 		eggGroups: ["Monster"],
 	},
 	farfetchd: {
@@ -131,8 +115,6 @@ let BattlePokedex = {
 		heightm: 0.8,
 		weightkg: 15,
 		color: "Brown",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Flying", "Field"],
 	},
 	purugly: {
@@ -145,8 +127,6 @@ let BattlePokedex = {
 		heightm: 1,
 		weightkg: 43.8,
 		color: "Gray",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Field"],
 	},
 	kyurem: {
@@ -159,8 +139,6 @@ let BattlePokedex = {
 		heightm: 3,
 		weightkg: 325,
 		color: "Gray",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Undiscovered"],
 	},
 	rotomwash: {
@@ -173,8 +151,6 @@ let BattlePokedex = {
 		heightm: 0.3,
 		weightkg: 0.3,
 		color: "Red",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Amorphous"],
 	},
 	umbreon: {
@@ -187,8 +163,6 @@ let BattlePokedex = {
 		heightm: 1,
 		weightkg: 27,
 		color: "Black",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Field"],
 	},
 	heracross: {
@@ -200,8 +174,6 @@ let BattlePokedex = {
 		heightm: 1.5,
 		weightkg: 54,
 		color: "Blue",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Bug"],
 	},
 	magearna: {
@@ -214,8 +186,6 @@ let BattlePokedex = {
 		heightm: 1,
 		weightkg: 80.5,
 		color: "Gray",
-		prevo: "rotom",
-		evoLevel: 2,
 		eggGroups: ["Undiscovered"],
 	},
 	rotommow: {
