@@ -231,7 +231,6 @@ let Formats = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		searchShow: false,
 		ruleset: ['[Gen 8] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
 		minSourceGen: 8,
