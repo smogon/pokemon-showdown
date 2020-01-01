@@ -267,7 +267,7 @@ let BattleAbilities = {
 		name: "Gracidea Mastery",
 		isNonstandard: "Custom",
 		onTryHit(target, source, move) {
-			if (target === source || move.category === 'Status' && target.template.speciesid !== 'shayminsky' && target.transformed) return;
+			if ((target === source || move.category === 'Status') && target.template.speciesid !== 'shayminsky' && target.transformed) return;
 			target.formeChange('Shaymin', this.effect);
 		},
 		onAfterDamage(damage, target, source, effect) {
