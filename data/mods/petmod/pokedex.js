@@ -3,7 +3,7 @@
 /**@type {{[k: string]: ModdedTemplateData}} */
 let BattlePokedex = {
 	typenull: {
-		num: 1,
+		num: 772,
 		species: "Type: Null",
 		types: ["Normal", "Steel"],
 		baseStats: {hp: 70, atk: 120, def: 80, spa: 70, spd: 60, spe: 85},
@@ -14,7 +14,7 @@ let BattlePokedex = {
 		eggGroups: ["Undiscovered"],
 	},
 	crobat: {
-		num: 2,
+		num: 169,
 		species: "Crobat",
 		types: ["Poison", "Fighting"],
 		baseStats: {hp: 110, atk: 70, def: 100, spa: 60, spd: 65, spe: 80},
@@ -25,7 +25,7 @@ let BattlePokedex = {
 		eggGroups: ["Flying"],
 	},
 	galvantula: {
-		num: 3,
+		num: 596,
 		species: "Galvantula",
 		types: ["Bug", "Electric"],
 		baseStats: {hp: 60, atk: 50, def: 65, spa: 104, spd: 79, spe: 107},
@@ -36,7 +36,7 @@ let BattlePokedex = {
 		eggGroups: ["Bug"],
 	},
 	dugtrioalola: {
-		num: 4,
+		num: 51,
 		species: "Dugtrio-Alola",
 		types: ["Ground", "Steel"],
 		baseStats: {hp: 55, atk: 90, def: 95, spa: 38, spd: 61, spe: 126},
@@ -47,7 +47,7 @@ let BattlePokedex = {
 		eggGroups: ["Field"],
 	},
 	rotom: {
-		num: 5,
+		num: 479,
 		species: "Rotom",
 		types: ["Electric", "Ghost"],
 		gender: "N",
@@ -60,7 +60,7 @@ let BattlePokedex = {
 		eggGroups: ["Amorphous"],
 	},
 	torterra: {
-		num: 6,
+		num: 389,
 		species: "Torterra",
 		types: ["Grass", "Dragon"],
 		genderRatio: {M: 0.875, F: 0.125},
@@ -72,7 +72,7 @@ let BattlePokedex = {
 		eggGroups: ["Monster", "Grass"],
 	},
 	dragalge: {
-		num: 7,
+		num: 691,
 		species: "Dragalge",
 		types: ["Poison", "Dragon"],
 		baseStats: {hp: 71, atk: 85, def: 90, spa: 87, spd: 123, spe: 44},
@@ -83,7 +83,7 @@ let BattlePokedex = {
 		eggGroups: ["Water 1", "Dragon"],
 	},
 	ninetales: {
-		num: 8,
+		num: 38,
 		species: "Ninetales",
 		types: ["Fire", "Fairy"],
 		genderRatio: {M: 0.25, F: 0.75},
@@ -95,7 +95,7 @@ let BattlePokedex = {
 		eggGroups: ["Field"],
 	},
 	pupitar: {
-		num: 9,
+		num: 247,
 		species: "Pupitar",
 		types: ["Rock", "Ground"],
 		baseStats: {hp: 90, atk: 110, def: 100, spa: 50, spd: 60, spe: 60},
@@ -107,7 +107,7 @@ let BattlePokedex = {
 		eggGroups: ["Monster"],
 	},
 	farfetchd: {
-		num: 10,
+		num: 83,
 		species: "Farfetch'd",
 		types: ["Fighting", "Flying"],
 		baseStats: {hp: 75, atk: 115, def: 85, spa: 45, spd: 55, spe: 95},
@@ -118,7 +118,7 @@ let BattlePokedex = {
 		eggGroups: ["Flying", "Field"],
 	},
 	purugly: {
-		num: 11,
+		num: 432,
 		species: "Purugly",
 		types: ["Dark", "Fairy"],
 		genderRatio: {M: 0.25, F: 0.75},
@@ -130,7 +130,7 @@ let BattlePokedex = {
 		eggGroups: ["Field"],
 	},
 	kyurem: {
-		num: 12,
+		num: 646,
 		species: "Kyurem",
 		types: ["Ice"],
 		gender: "N",
@@ -142,7 +142,7 @@ let BattlePokedex = {
 		eggGroups: ["Undiscovered"],
 	},
 	rotomwash: {
-		num: 13,
+		num: 479,
 		species: "Rotom-Wash",
 		types: ["Water", "Ghost"],
 		gender: "N",
@@ -154,7 +154,7 @@ let BattlePokedex = {
 		eggGroups: ["Amorphous"],
 	},
 	umbreon: {
-		num: 14,
+		num: 197,
 		species: "Umbreon",
 		types: ["Dark", "Ghost"],
 		genderRatio: {M: 0.875, F: 0.125},
@@ -166,7 +166,7 @@ let BattlePokedex = {
 		eggGroups: ["Field"],
 	},
 	heracross: {
-		num: 15,
+		num: 214,
 		species: "Heracross",
 		types: ["Bug", "Ghost"],
 		baseStats: {hp: 75, atk: 95, def: 105, spa: 44, spd: 73, spe: 75},
@@ -177,7 +177,7 @@ let BattlePokedex = {
 		eggGroups: ["Bug"],
 	},
 	magearna: {
-		num: 16,
+		num: 801,
 		species: "Magearna",
 		types: ["Steel", "Fairy"],
 		gender: "N",
@@ -189,7 +189,7 @@ let BattlePokedex = {
 		eggGroups: ["Undiscovered"],
 	},
 	rotommow: {
-		num: 17,
+		num: 479,
 		species: "Rotom-Mow",
 		types: ["Grass", "Psychic"],
 		gender: "N",
@@ -201,7 +201,7 @@ let BattlePokedex = {
 		eggGroups: ["Amorphous"],
 	},
 	malamar: {
-		num: 18,
+		num: 687,
 		species: "Malamar",
 		types: ["Steel", "Psychic"],
 		baseStats: {hp: 86, atk: 60, def: 78, spa: 100, spd: 75, spe: 73},
@@ -212,7 +212,7 @@ let BattlePokedex = {
 		eggGroups: ["Water 1", "Water 2"],
 	},
 	wailord: {
-		num: 19,
+		num: 321,
 		species: "Wailord",
 		types: ["Water", "Flying"],
 		abilities: {0: "Oblivious", 1: "Pressure"},
