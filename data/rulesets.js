@@ -803,6 +803,12 @@ let BattleFormats = {
 		desc: "Tells formats with the 'letsgo' mod to take Awakening Values into consideration when calculating stats",
 		// Implemented in mods/letsgo/rulesets.js
 	},
+	standardpetmod: {
+		effectType: 'ValidatorRule',
+		name: 'Standard Pet Mod',
+		desc: "Holds all custom Pet Mod ruleset validation",
+		// Implemented in mods/petmod/rulesets.js
+	},
 };
 
 exports.BattleFormats = BattleFormats;

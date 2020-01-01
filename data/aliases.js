@@ -40,6 +40,9 @@ let BattleAliases = {
 	"gen7bsd": "[Gen 7] Battle Spot Doubles",
 	"gen6mono": "[Gen 6] Monotype",
 	"gen6ag": "[Gen 6] Anything Goes",
+	"petmod": "[Gen 7 Pet Mod] Clean Slate: Micro",
+	"cleanslatemicro": "[Gen 7 Pet Mod] Clean Slate: Micro",
+	"csm": "[Gen 7 Pet Mod] Clean Slate: Micro",
 
 	// mega evos
 	"fabio": "Ampharos-Mega",
