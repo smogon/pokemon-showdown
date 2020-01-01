@@ -642,6 +642,24 @@ let Formats = [
 		column: 2,
 	},
 	{
+		name: "[Gen 7] Clean Slate: Micro",
+		desc: `Create a brand new "micrometagame" from scratch, with the ultimate goal of creating a unique, compact metagame different from any other tier.`,
+		threads: [
+			`<a href="https://www.smogon.com/forums/threads/3652540/">Clean Slate: Micro</a>`,
+		],
+
+		mod: 'cleanslatemicro',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['All Pokemon'],
+		unbanlist: [
+			'Crobat', 'Dragalge', 'Dugtrio-Alola', 'Farfetch\'d', 'Galvantula', 'Heracross-Base', 'Kyurem-Base', 'Ludicolo', 'Magearna',
+			'Malamar', 'Ninetales-Base', 'Pupitar', 'Rotom-Base', 'Rotom-Mow', 'Rotom-Wash', 'Torterra', 'Type: Null', 'Umbreon', 'Wailord',
+		],
+		onSwitchIn(pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
+		},
+	},
+	{
 		name: "[Gen 6] Gen-NEXT OU",
 
 		mod: 'gennext',
