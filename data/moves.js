@@ -9161,7 +9161,7 @@ let BattleMovedex = {
 			atk: 1,
 		},
 		secondary: null,
-		target: "allyTeam",
+		target: "allies",
 		type: "Normal",
 		zMoveBoost: {atk: 1},
 		contestType: "Cool",

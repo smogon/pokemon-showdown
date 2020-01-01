@@ -41,10 +41,10 @@ describe('Follow Me', function () {
 			{species: 'Clefairy', ability: 'unaware', moves: ['softboiled']},
 		]});
 		battle.setPlayer('p2', {team: [
-			{species: 'Alakazam', ability: 'synchronize', moves: ['howl']},
-			{species: 'Kadabra', ability: 'synchronize', moves: ['howl']},
+			{species: 'Alakazam', ability: 'synchronize', moves: ['honeclaws']},
+			{species: 'Kadabra', ability: 'synchronize', moves: ['honeclaws']},
 		]});
-		battle.makeChoices('move followme, move softboiled', 'move howl, move howl');
+		battle.makeChoices('move followme, move softboiled', 'move honeclaws, move honeclaws');
 		assert.strictEqual(battle.p1.active[0].boosts['atk'], 0);
 		assert.strictEqual(battle.p2.active[0].boosts['atk'], 1);
 		assert.strictEqual(battle.p2.active[1].boosts['atk'], 1);
