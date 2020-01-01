@@ -649,8 +649,7 @@ let Formats = [
 		],
 
 		mod: 'petmod',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['All Pokemon'],
+		ruleset: ['Standard Pet Mod'],
 		unbanlist: [
 			'Crobat', 'Dragalge', 'Dugtrio-Alola', 'Farfetch\'d', 'Galvantula', 'Heracross-Base', 'Kyurem-Base', 'Ludicolo', 'Magearna-Base',
 			'Malamar', 'Ninetales-Base', 'Pupitar', 'Rotom-Base', 'Rotom-Mow', 'Rotom-Wash', 'Torterra', 'Type: Null', 'Umbreon', 'Wailord',

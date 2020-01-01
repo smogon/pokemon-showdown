@@ -2,11 +2,12 @@
 
 /**@type {{[k: string]: ModdedFormatsData}} */
 let BattleFormats = {
-	speciesclause: {
-		effectType: 'ValidatorRule',
-		name: 'Species Clause',
-		desc: "Prevents teams from having more than one Pok&eacute;mon from the same species",
+	standardpetmod: {
+		inherit: true,
+		ruleset: ['[Gen 7] OU', '!Species Clause'],
+		banlist: ['All Pokemon'],
 		onBegin() {
+			// The only validator rule this currently modifies is Species Clause, so the added rule is just this
 			this.add('rule', 'Species Clause: Limit one of each Pokémon');
 		},
 		onValidateTeam(team, format) {
