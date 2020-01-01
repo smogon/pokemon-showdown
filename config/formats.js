@@ -70,6 +70,14 @@ let Formats = [
 		minSourceGen: 8,
 	},
 	{
+		name: "[Gen 8] RU",
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] UU'],
+		banlist: ['UU', 'RUBL'],
+		minSourceGen: 8,
+	},
+	{
 		name: "[Gen 8] LC",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
@@ -213,6 +221,18 @@ let Formats = [
 		gameType: 'doubles',
 		ruleset: ['Obtainable', 'Standard Doubles', 'Team Preview'],
 		banlist: ['DUber'],
+		minSourceGen: 8,
+	},
+	{
+		name: "[Gen 8] Doubles UU",
+		threads: [
+			// `&bullet; <a href="https://www.smogon.com/forums/threads/3656244/">Doubles UU Metagame Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		ruleset: ['[Gen 8] Doubles OU'],
+		banlist: [],
 		minSourceGen: 8,
 	},
 	{
