@@ -222,6 +222,17 @@ let BattlePokedex = {
 		color: "Blue",
 		eggGroups: ["Field", "Water 2"],
 	},
+	ludicolo: {
+		num: 272,
+		species: "Ludicolo",
+		types: ["Water", "Grass"],
+		baseStats: {hp: 80, atk: 60, def: 70, spa: 100, spd: 100, spe: 75},
+		abilities: {0: "Swift Swim", 1: "Rain Dish", H: "Thick Fat"},
+		heightm: 1.5,
+		weightkg: 55,
+		color: "Green",
+		eggGroups: ["Water 1", "Grass"],
+	},
 };
 
 exports.BattlePokedex = BattlePokedex;
