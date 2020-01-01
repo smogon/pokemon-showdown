@@ -9157,6 +9157,14 @@ let BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {snatch: 1},
+		self: {
+			onHit(source) {
+				let ally;
+				if (source.side.active[0] === source) ally = source.side.active[1];
+				else ally = source.side.active[0];
+				this.boost({atk: 1}, ally);
+			},
+		},
 		boosts: {
 			atk: 1,
 		},
