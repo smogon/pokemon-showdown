@@ -226,7 +226,7 @@ class RandomGen7Teams extends RandomTeams {
 					if ((counter[move.type] > 1 && counter.Status > 1) || (hasAbility['Sheer Force'] && !!counter['sheerforce'])) rejected = true;
 					break;
 				case 'defog':
-					if (counter.setupType || hasMove['spikes'] || hasMove['stealthrock'] || (hasMove['rest'] && hasMove['sleeptalk']) || teamDetails.hazardClear) rejected = true;
+					if (counter.setupType || hasMove['spikes'] || hasMove['stealthrock'] || teamDetails.hazardClear) rejected = true;
 					break;
 				case 'fakeout': case 'tailwind':
 					if (counter.setupType || hasMove['substitute'] || hasMove['switcheroo'] || hasMove['trick']) rejected = true;
