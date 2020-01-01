@@ -15,7 +15,7 @@ let BattleFormats = {
 			for (const set of team) {
 				let template = this.dex.getTemplate(set.species);
 				if (speciesTable[template.species]) {
-					return ["You are limited to one of each Pokémon by Species Clause.", "(You have more than one " + template.baseSpecies + ")"];
+					return ["You are limited to one of each Pokémon by Species Clause.", "(You have more than one " + template.species + ")"];
 				}
 				speciesTable[template.species] = true;
 			}
