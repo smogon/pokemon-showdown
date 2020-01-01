@@ -643,7 +643,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7 Pet Mod] Clean Slate: Micro",
-		desc: `Create a brand new "micrometagame" from scratch, with the ultimate goal of creating a unique, compact metagame different from any other tier.`,
+		desc: `A brand new "micrometagame" created from scratch, with the ultimate goal of creating a unique, compact metagame different from any other tier.`,
 		threads: [
 			`<a href="https://www.smogon.com/forums/threads/3652540/">Clean Slate: Micro</a>`,
 		],
