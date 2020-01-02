@@ -4657,7 +4657,7 @@ let BattleFormatsData = {
 			{"generation": 6, "level": 30},
 		],
 		unreleasedHidden: "Past",
-		tier: "U",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	croagunk: {
