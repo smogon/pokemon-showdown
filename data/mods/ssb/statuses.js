@@ -272,13 +272,13 @@ let BattleStatuses = {
 	birdy: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Birdy~!|And I oop- uh, I mean, hi!`);
+			this.add(`c|+Birdy~!|And I oop- uh, I mean, hi!`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Birdy~!|Be like that, then. Don't blame ME if you lose.`);
+			this.add(`c|+Birdy~!|Be like that, then. Don't blame ME if you lose.`);
 		},
 		onFaint() {
-			this.add(`c|%Birdy~!|My last words will always be that I don't spam.`);
+			this.add(`c|+Birdy~!|My last words will always be that I don't spam.`);
 		},
 		// Feather Tuft Innate
 		onModifyDefPriority: 6,
@@ -916,13 +916,13 @@ let BattleStatuses = {
 	level51: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Level 51|Calculating chance of victory!`);
+			this.add(`c|+Level 51|Calculating chance of victory!`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Level 51|chance_victory < 1. Recalibrating...`);
+			this.add(`c|+Level 51|chance_victory < 1. Recalibrating...`);
 		},
 		onFaint() {
-			this.add(`c|%Level 51|**IndexError**: list index out of range`);
+			this.add(`c|+Level 51|**IndexError**: list index out of range`);
 		},
 	},
 	lifeisdank: {
@@ -972,10 +972,10 @@ let BattleStatuses = {
 	macchaeger: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@MacChaeger|What are you gonna do with that big bat? Gonna hit me? Better make it count. Better make it hurt. Better kill me in one shot.`);
+			this.add(`c|+MacChaeger|What are you gonna do with that big bat? Gonna hit me? Better make it count. Better make it hurt. Better kill me in one shot.`);
 		},
 		onFaint() {
-			this.add(`c|@MacChaeger|im gonna pyuk`);
+			this.add(`c|+MacChaeger|im gonna pyuk`);
 		},
 	},
 	madmonty: {
@@ -1132,13 +1132,13 @@ let BattleStatuses = {
 	pablo: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Pablo|Let's get this party started.`);
+			this.add(`c|+Pablo|Let's get this party started.`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Pablo|I need a break, this is getting boring.`);
+			this.add(`c|+Pablo|I need a break, this is getting boring.`);
 		},
 		onFaint() {
-			this.add(`c|%Pablo|It's cool, I didn't wanna battle anyway.`);
+			this.add(`c|+Pablo|It's cool, I didn't wanna battle anyway.`);
 		},
 	},
 	paradise: {
@@ -1386,17 +1386,17 @@ let BattleStatuses = {
 	snaquaza: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Snaquaza|Snaq is baq... with a vengeance!`);
+			this.add(`c|+Snaquaza|Snaq is baq... with a vengeance!`);
 		},
 		onSwitchOut(pokemon) {
-			this.add(`c|@Snaquaza|Lynch Hoeen while I'm away...`);
+			this.add(`c|+Snaquaza|Lynch Hoeen while I'm away...`);
 			if (pokemon.m.claimHP) {
 				pokemon.hp = pokemon.m.claimHP;
 				pokemon.m.claimHP = null;
 			}
 		},
 		onFaint() {
-			this.add(`c|@Snaquaza|How did you know I was scum?`);
+			this.add(`c|+Snaquaza|How did you know I was scum?`);
 		},
 		onDamage(damage, pokemon) {
 			// Hack for Snaquaza's Z move
@@ -1467,7 +1467,7 @@ let BattleStatuses = {
 	teremiare: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|%Teremiare|<('o'<)`);
+			this.add(`c|+Teremiare|<('o'<)`);
 			if (source.illusion) return;
 			let target = source.side.foe.active[0];
 
@@ -1493,7 +1493,7 @@ let BattleStatuses = {
 			this.field.clearTerrain();
 		},
 		onFaint() {
-			this.add(`c|%Teremiare|(>'o')>`);
+			this.add(`c|+Teremiare|(>'o')>`);
 		},
 	},
 	theimmortal: {
