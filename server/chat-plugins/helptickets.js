@@ -492,29 +492,29 @@ function checkTicketBanned(user) {
 	} else {
 		/** @type {BannedTicketState?} */
 		let bannedTicket = null;
-		const checkIp = !(Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed);
-		if (checkIp) {
-			for (let t in ticketBans) {
-				if (ticketBans[t].ip === user.latestIp) {
-					bannedTicket = ticketBans[t];
-					break;
+		// Skip the IP based check if the user is autoconfirmed and on a shared IP.
+		if (Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) return false;
+
+		for (let t in ticketBans) {
+			if (ticketBans[t].ip === user.latestIp) {
+				bannedTicket = ticketBans[t];
+				// A match was found, if its not expired, ticket ban them. Otherwise remove the expired entry and keep searching.
+				if (bannedTicket.expires > Date.now()) {
+					ticket = Object.assign({}, bannedTicket);
+					ticket.name = user.name;
+					ticket.userid = user.id;
+					ticket.by = bannedTicket.by + ' (IP)';
+					ticketBans[user.id] = ticket;
+					writeTickets();
+					return `You are banned from creating tickets${toID(ticket.banned) !== user.id ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
+				} else {
+					delete ticketBans[bannedTicket.userid];
+					writeTickets();
 				}
 			}
 		}
-		if (!bannedTicket) return false;
-		if (bannedTicket.expires > Date.now()) {
-			ticket = Object.assign({}, bannedTicket);
-			ticket.name = user.name;
-			ticket.userid = user.id;
-			ticket.by = bannedTicket.by + ' (IP)';
-			ticketBans[user.id] = ticket;
-			writeTickets();
-			return `You are banned from creating tickets${toID(ticket.banned) !== user.id ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
-		} else {
-			delete ticketBans[bannedTicket.userid];
-			writeTickets();
-			return false;
-		}
+		// No un-expired IP matches found.
+		return false;
 	}
 }
 
