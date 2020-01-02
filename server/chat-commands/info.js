@@ -1273,7 +1273,7 @@ const commands = {
 
 			if (!pokemon) {
 				let testPoke = Dex.getTemplate(arg);
-				if (testPoke.baseStats) {
+				if (testPoke.exists) {
 					pokemon = testPoke.baseStats;
 					baseSet = true;
 					continue;
