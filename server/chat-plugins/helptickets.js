@@ -872,22 +872,27 @@ const pages = {
 			this.title = 'Ticket Stats';
 			if (!this.can('lock')) return;
 
-			let [table, year, month, col] = query;
+			let [table, yearString, monthString, col] = query;
 			if (!['staff', 'tickets'].includes(table)) table = 'tickets';
-			let monthString = `${year}-${month}`;
+			let year = parseInt(yearString);
+			let month = parseInt(monthString) - 1;
 			let date = null;
-			if (monthString.includes('undefined')) {
-				// year/month not provided, use current month
+			if (isNaN(year) || isNaN(month) || month < 0 || month > 11 || year < 2010) {
+				// year/month not provided or is invalid, use current date
 				date = new Date();
-				monthString = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
+			} else {
+				date = new Date(year, month);
 			}
-			let rawTicketStats = FS(`logs/tickets/${monthString}.tsv`).readIfExistsSync();
+			let dateUrl = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
+
+			let rawTicketStats = FS(`logs/tickets/${dateUrl}.tsv`).readIfExistsSync();
 			if (!rawTicketStats) return `<div class="pad"><br />No ticket stats found.</div>`;
 
 			// Calculate next/previous month for stats and validate stats exist for the month
-			const prevDate = new Date(monthString);
-			if (!date) date = new Date((prevDate.getMonth() === 11 ? prevDate.getFullYear() + 1 : prevDate.getFullYear()), (prevDate.getMonth() === 11 ? 0 : prevDate.getMonth() + 1));
-			const nextDate = new Date((prevDate.getMonth() >= 10 ? prevDate.getFullYear() + 1 : prevDate.getFullYear()), (prevDate.getMonth() + 2 > 11 ? (prevDate.getMonth() + 2) - 12 : prevDate.getMonth() + 2));
+
+			// date.getMonth() returns 0-11, we need 1-12 +/-1 for this
+			let prevDate = new Date(date.getMonth() === 0 ? date.getFullYear() - 1 : date.getFullYear(), date.getMonth() === 0 ? 11 : date.getMonth() - 1);
+			let nextDate = new Date(date.getMonth() === 11 ? date.getFullYear() + 1 : date.getFullYear(), date.getMonth() === 11 ? 0 : date.getMonth() + 1);
 			let prevString = Chat.toTimestamp(prevDate).split(' ')[0].split('-', 2).join('-');
 			let nextString = Chat.toTimestamp(nextDate).split(' ')[0].split('-', 2).join('-');
 
@@ -897,7 +902,7 @@ const pages = {
 			} else {
 				buttonBar += `<a class="button disabled" style="float: left">&lt; Previous Month</a>`;
 			}
-			buttonBar += `<a class="button${table === 'tickets' ? ' disabled"' : `" href="/view-help-stats-tickets-${monthString}" target="replace"`}>Ticket Stats</a> <a class="button ${table === 'staff' ? ' disabled"' : `" href="/view-help-stats-staff-${monthString}" target="replace"`}>Staff Stats</a>`;
+			buttonBar += `<a class="button${table === 'tickets' ? ' disabled"' : `" href="/view-help-stats-tickets-${dateUrl}" target="replace"`}>Ticket Stats</a> <a class="button ${table === 'staff' ? ' disabled"' : `" href="/view-help-stats-staff-${dateUrl}" target="replace"`}>Staff Stats</a>`;
 			if (FS(`logs/tickets/${nextString}.tsv`).readIfExistsSync()) {
 				buttonBar += `<a class="button" href="/view-help-stats-${table}-${nextString}" target="replace" style="float: right">Next Month &gt;</a>`;
 			} else {
@@ -1012,7 +1017,7 @@ const pages = {
 			};
 			buf = buf.replace(/<Button>([a-z]+)<\/Button>/g, (match, id) => {
 				if (col === id) return headerTitles[id];
-				return `<a class="button" href="/view-help-stats-${table}-${monthString}-${id}" target="replace">${headerTitles[id]}</a>`;
+				return `<a class="button" href="/view-help-stats-${table}-${dateUrl}-${id}" target="replace">${headerTitles[id]}</a>`;
 			});
 			return buf;
 		},
