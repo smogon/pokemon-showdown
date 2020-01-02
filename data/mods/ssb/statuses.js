@@ -309,7 +309,7 @@ let BattleStatuses = {
 	brandon: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Brandon|Let's set some mood music: ${['https://www.youtube.com/watch?time_continue=2&v=xFrGuyw1V8s', 'https://www.youtube.com/watch?v=m3-hY-hlhBg', 'https://www.youtube.com/watch?v=IyYnnUcgeMc', 'https://www.youtube.com/watch?v=na7lIb09898', 'https://www.youtube.com/watch?v=FrLequ6dUdM'][this.random(5)]}`);
+			this.add(`c|%Brandon|Let's put the petal to the medal!`);
 		},
 		onSwitchOut() {
 			this.add(`c|%Brandon|I gotta charge my phone brb`);
