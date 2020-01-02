@@ -260,7 +260,6 @@ class HelpTicket extends Rooms.RoomGame {
 	 * @param {boolean | 'ticketban' | 'deleted'} result
 	 */
 	close(staff, result) {
-		this.room.isHelp = 'closed';
 		this.ticket.open = false;
 		tickets[this.ticket.userid] = this.ticket;
 		writeTickets();
@@ -340,6 +339,30 @@ class HelpTicket extends Rooms.RoomGame {
 		writeTickets();
 		notifyStaff();
 		this.room.destroy();
+	}
+
+	// Modified version of RoomGame.destory
+	destroy() {
+		if (tickets[this.ticket.userid]) {
+			// Ticket was not deleted - deleted tickets already have this done to them
+			// Write stats and change flags as appropriate prior to deletion.
+			this.ticket.open = false;
+			tickets[this.ticket.userid] = this.ticket;
+			notifyStaff();
+			writeTickets();
+			this.writeStats(false);
+		}
+
+		this.room.game = null;
+		// @ts-ignore
+		this.room = null;
+		for (const player of this.players) {
+			player.destroy();
+		}
+		// @ts-ignore
+		this.players = null;
+		// @ts-ignore
+		this.playerTable = null;
 	}
 }
 
@@ -1169,7 +1192,7 @@ let commands = {
 			if (!helpRoom) {
 				helpRoom = Rooms.createChatRoom(/** @type {RoomID} */ (`help-${user.id}`), `[H] ${user.name}`, {
 					isPersonal: true,
-					isHelp: 'open',
+					isHelp: true,
 					isPrivate: 'hidden',
 					modjoin: '%',
 					auth: {[user.id]: '+'},
@@ -1178,10 +1201,9 @@ let commands = {
 				});
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			} else {
-				helpRoom.isHelp = 'open';
-				if (helpRoom.expireTimer) clearTimeout(helpRoom.expireTimer);
+				helpRoom.pokeExpireTimer();
 				helpRoom.introMessage = introMessage;
-				helpRoom.staffMessage = staffMessage + staffHint;
+				helpRoom.staffMessage = staffMessage + staffHint + reportTargetInfo;
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
