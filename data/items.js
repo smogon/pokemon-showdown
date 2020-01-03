@@ -1470,7 +1470,7 @@ let BattleItems = {
 		num: 576,
 		gen: 5,
 		isPokeball: true,
-		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
+		desc: "A Poke Ball that makes it easier to catch Pokemon that are asleep.",
 	},
 	"dubiousdisc": {
 		id: "dubiousdisc",
