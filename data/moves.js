@@ -8438,9 +8438,9 @@ let BattleMovedex = {
 		onHit(target, source) {
 			let success = false;
 			if (source.hasAbility('megalauncher')) {
-				success = !!this.heal(this.modify(target.maxhp, 0.75));
+				success = !!this.heal(this.modify(target.baseMaxhp, 0.75));
 			} else {
-				success = !!this.heal(Math.ceil(target.maxhp * 0.5));
+				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
 			if (success && target.side.id !== source.side.id) {
 				target.staleness = 'external';
