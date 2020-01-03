@@ -645,7 +645,7 @@ let BattleFormats = {
 			this.add('-message', 'No Switch Mod activated.');
 		},
 		onBeforeSwitchOut(pokemon) {
-			if (!(typeof pokemon.switchFlag === 'string')) {
+			if (typeof pokemon.switchFlag !== 'string') {
 				pokemon.switchFlag = false;
 				this.add('-message', 'No Switch Mod activated.');
 			}
