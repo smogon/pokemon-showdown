@@ -6315,6 +6315,7 @@ let BattleFormatsData = {
 	},
 	meowsticf: {
 		randomBattleMoves: ["energyball", "nastyplot", "psychic", "shadowball", "thunderbolt"],
+		unreleasedHidden: "Past",
 		tier: "RU",
 		doublesTier: "DUU",
 	},
