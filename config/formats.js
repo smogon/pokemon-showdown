@@ -235,7 +235,7 @@ let Formats = [
 	{
 		name: "[Gen 8] Doubles UU",
 		threads: [
-			 `&bullet; <a href="https://www.smogon.com/forums/threads/3658504/">Doubles UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658504/">Doubles UU Metagame Discussion</a>`,
 		],
 
 		mod: 'gen8',
@@ -248,6 +248,7 @@ let Formats = [
 		name: "[Gen 8] VGC 2020",
 		threads: [
 			`&bullet; <a href="https://www.pokemon.com/us/pokemon-news/2020-pokemon-video-game-championships-vgc-format-rules/">VGC 2020 Rules</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3657818/">VGC 2020 Sample Teams</a>`,
 		],
 
 		mod: 'gen8',
