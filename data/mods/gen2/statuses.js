@@ -208,7 +208,7 @@ let BattleStatuses = {
 	sandstorm: {
 		inherit: true,
 		onWeather(target) {
-			this.damage(target.maxhp / 8);
+			this.damage(target.baseMaxhp / 8);
 		},
 	},
 	stall: {

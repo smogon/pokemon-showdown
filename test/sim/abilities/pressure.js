@@ -22,10 +22,13 @@ describe('Pressure', function () {
 	});
 
 	it('should deduct PP if moves are redirected to the user', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
-			[{species: "Giratina", ability: 'pressure', moves: ['followme']}, {species: "Talonflame", ability: 'galewings', moves: ['peck']}],
-			[{species: "Clefable", ability: 'unaware', moves: ['followme']}, {species: "Ho-Oh", ability: 'pressure', moves: ['peck']}],
-		]);
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Giratina", ability: 'pressure', moves: ['followme']},
+			{species: "Talonflame", ability: 'galewings', moves: ['peck']},
+		], [
+			{species: "Clefable", ability: 'unaware', moves: ['followme']},
+			{species: "Ho-Oh", ability: 'pressure', moves: ['peck']},
+		]]);
 		battle.makeChoices('move followme, move peck 2', 'move followme, move peck 2');
 		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
@@ -48,7 +51,7 @@ describe('Pressure', function () {
 
 	it('should deduct PP for each Pressure Pokemon targetted', function () {
 		this.timeout(3000);
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
 			{species: "Palkia", ability: 'pressure', moves: ['rest']},
@@ -67,7 +70,7 @@ describe('Pressure', function () {
 
 	it('should deduct PP for each opposing Pressure Pokemon when Snatch of Imprison are used', function () {
 		this.timeout(3000);
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
 			{species: "Palkia", ability: 'pressure', moves: ['rest']},

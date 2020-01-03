@@ -3235,7 +3235,7 @@ let BattleLearnsets = {
 		superpower: ["7M"],
 		surf: ["7M"],
 		toxic: ["7M"],
-		vicegrip: ["7L5"],
+		visegrip: ["7L5"],
 		xscissor: ["7M"],
 	}},
 	kingler: {learnset: {
@@ -3264,7 +3264,7 @@ let BattleLearnsets = {
 		superpower: ["7M"],
 		surf: ["7M"],
 		toxic: ["7M"],
-		vicegrip: ["7L5", "7L1"],
+		visegrip: ["7L5", "7L1"],
 		xscissor: ["7M"],
 	}},
 	voltorb: {learnset: {
@@ -4176,7 +4176,7 @@ let BattleLearnsets = {
 		swordsdance: ["7L32"],
 		thrash: ["7L38"],
 		toxic: ["7M"],
-		vicegrip: ["7L1"],
+		visegrip: ["7L1"],
 		xscissor: ["7M", "7L20"],
 	}},
 	tauros: {learnset: {

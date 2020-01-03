@@ -38,7 +38,7 @@ describe('Lightning Rod', function () {
 
 	it('should redirect single-target Electric-type attacks to the user if it is a valid target', function () {
 		this.timeout(3000);
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
 			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},

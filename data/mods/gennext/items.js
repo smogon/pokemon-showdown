@@ -52,7 +52,7 @@ let BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
 			if (pokemon.hasType('Grass')) {
-				this.heal(pokemon.maxhp / 16);
+				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
 		desc: "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap; If the user is a Grass type, the holder heals 1/16 of its max HP every turn, and for every damaging move the holder uses 1/8th of the damage dealt is restored.",
@@ -64,9 +64,9 @@ let BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
 			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.maxhp / (pokemon.getTypes().length === 1 ? 8 : 16));
+				this.heal(pokemon.baseMaxhp / (pokemon.getTypes().length === 1 ? 8 : 16));
 			} else {
-				this.damage(pokemon.maxhp / 8);
+				this.damage(pokemon.baseMaxhp / 8);
 			}
 		},
 		desc: "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not. Pure Poison types restore 1/8 max HP.",
@@ -168,7 +168,7 @@ let BattleItems = {
 		onAfterMoveSecondarySelf(source, target, move) {
 			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
 			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers.includes(source.template.species)) {
-				this.heal(source.maxhp / 16);
+				this.heal(source.baseMaxhp / 16);
 			}
 		},
 		// onResidual(pokemon) {

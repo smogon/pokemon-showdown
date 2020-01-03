@@ -13,7 +13,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	standardnext: {
 		effectType: 'ValidatorRule',
@@ -21,12 +21,6 @@ let BattleFormats = {
 		desc: "The standard ruleset for the NEXT mod",
 		ruleset: ['+Unreleased', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Soul Dew'],
-	},
-	standardubers: {
-		effectType: 'ValidatorRule',
-		name: 'Standard Ubers',
-		desc: "The standard ruleset for [Gen 5] Ubers",
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	standardgbu: {
 		effectType: 'ValidatorRule',
@@ -75,36 +69,36 @@ let BattleFormats = {
 		desc: "The standard ruleset for all official Smogon doubles tiers",
 		ruleset: ['Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
+	standardnatdex: {
+		effectType: 'ValidatorRule',
+		name: 'Standard NatDex',
+		desc: "The standard ruleset for all National Dex tiers",
+		ruleset: ['+Past', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+		unbanlist: ['Melmetal', 'Meltan'],
+		onValidateSet(set) {
+			// These Pokemon are still unobtainable
+			const unobtainables = [
+				'Eevee-Starter', 'Floette-Eternal', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter', 'Magearna-Original',
+			];
+			if (unobtainables.includes(set.species)) {
+				return [`${set.name || set.species} does not exist in the National Dex.`];
+			}
+			// Items other than Z-Crystals and Pokémon-specific items should be illegal
+			if (!set.item) return;
+			let item = this.dex.getItem(set.item);
+			if (item.isNonstandard === 'Past' && !item.zMove && !item.itemUser) {
+				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
+			}
+		},
+	},
 	obtainable: {
 		effectType: 'ValidatorRule',
 		name: 'Obtainable',
 		desc: "Makes sure the team is possible to obtain in-game.",
 		ruleset: ['Obtainable Moves', 'Obtainable Abilities', 'Obtainable Formes', 'Obtainable Misc'],
-		banlist: ['Unreleased', 'Nonexistent'],
-	},
-	obtainablemoves: {
-		effectType: 'ValidatorRule',
-		name: 'Obtainable Moves',
-		desc: "Makes sure moves are learnable by the species.",
-		banlist: [
-			// Leaf Blade: Gen 6+ Nuzleaf level-up
-			// Sucker Punch: Gen 4 Shiftry tutor
-			'Shiftry + Leaf Blade + Sucker Punch',
-		],
+		banlist: ['Unreleased', 'Unobtainable', 'Nonexistent'],
 		// Mostly hardcoded in team-validator.ts
-	},
-	obtainableabilities: {
-		effectType: 'ValidatorRule',
-		name: 'Obtainable Abilities',
-		desc: "Makes sure abilities match the species.",
-		// Hardcoded in team-validator.ts
-	},
-	obtainableformes: {
-		effectType: 'ValidatorRule',
-		name: 'Obtainable Formes',
-		desc: "Makes sure in-battle formes only appear in-battle.",
-		// Mostly hardcoded in team-validator.ts
-		onValidateTeam(team) {
+		onValidateTeam(team, format) {
 			let kyuremCount = 0;
 			let necrozmaDMCount = 0;
 			let necrozmaDWCount = 0;
@@ -114,6 +108,11 @@ let BattleFormats = {
 						return ['You cannot have more than one Kyurem-Black/Kyurem-White.'];
 					}
 					kyuremCount++;
+				}
+				if (set.species === 'Keldeo-Resolute') {
+					if (!set.moves.includes('secretsword')) {
+						return ['Keldeo-Resolute needs to have the move Secret Sword.'];
+					}
 				}
 				if (set.species === 'Necrozma-Dusk-Mane') {
 					if (necrozmaDMCount > 0) {
@@ -130,6 +129,24 @@ let BattleFormats = {
 			}
 			return [];
 		},
+	},
+	obtainablemoves: {
+		effectType: 'ValidatorRule',
+		name: 'Obtainable Moves',
+		desc: "Makes sure moves are learnable by the species.",
+		// Hardcoded in team-validator.ts
+	},
+	obtainableabilities: {
+		effectType: 'ValidatorRule',
+		name: 'Obtainable Abilities',
+		desc: "Makes sure abilities match the species.",
+		// Hardcoded in team-validator.ts
+	},
+	obtainableformes: {
+		effectType: 'ValidatorRule',
+		name: 'Obtainable Formes',
+		desc: "Makes sure in-battle formes only appear in-battle.",
+		// Hardcoded in team-validator.ts
 	},
 	obtainablemisc: {
 		effectType: 'ValidatorRule',
@@ -239,8 +256,8 @@ let BattleFormats = {
 		onBegin() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
-				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
-				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
+				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally|Zacian|Zamazenta)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
+				this.add('poke', pokemon.side.id, details, this.gen < 8 && pokemon.item ? 'item' : '');
 			}
 		},
 		onTeamPreview() {
@@ -425,6 +442,25 @@ let BattleFormats = {
 			this.add('rule', 'Accuracy Moves Clause: Accuracy-lowering moves are banned');
 		},
 	},
+	sleepmovesclause: {
+		effectType: 'ValidatorRule',
+		name: 'Sleep Moves Clause',
+		desc: "Bans all moves that induce sleep, such as Hypnosis",
+		banlist: ['Yawn'],
+		onBegin() {
+			this.add('rule', 'Sleep Clause: Sleep-inducing moves are banned');
+		},
+		onValidateSet(set) {
+			let problems = [];
+			if (set.moves) {
+				for (const id of set.moves) {
+					let move = this.dex.getMove(id);
+					if (move.status && move.status === 'slp') problems.push(move.name + ' is banned by Sleep Clause.');
+				}
+			}
+			return problems;
+		},
+	},
 	endlessbattleclause: {
 		effectType: 'Rule',
 		name: 'Endless Battle Clause',
@@ -541,13 +577,13 @@ let BattleFormats = {
 		name: 'NFE Clause',
 		desc: "Bans Pok&eacute;mon that are fully evolved or can't evolve",
 		onValidateSet(set) {
-			const template = this.dex.getTemplate(set.name || set.species);
+			const template = this.dex.getTemplate(set.species);
 			if (!template.nfe) {
 				return [set.species + " cannot evolve."];
 			}
 		},
 		onBegin() {
-			this.add('rule', 'NFE Clause: Fully Evolved Pok&eacute;mon are banned');
+			this.add('rule', 'NFE Clause: Fully Evolved Pokémon are banned');
 		},
 	},
 	hppercentagemod: {
@@ -679,22 +715,37 @@ let BattleFormats = {
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
 		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canDynamax = null;
+			for (let pokemon of this.getAllPokemon()) {
+				pokemon.canDynamax = false;
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
 	},
-	arceusevclause: {
+	arceusevlimit: {
 		effectType: 'ValidatorRule',
-		name: 'Arceus EV Clause',
-		desc: "Restricts Arceus to a maximum of 100 EVs in any one stat",
-		onValidateSet(set, format) {
+		name: 'Arceus EV Limit',
+		desc: "Restricts Arceus to a maximum of 100 EVs in any one stat, and only multiples of 10",
+		onValidateSet(set) {
 			let template = this.dex.getTemplate(set.species);
 			if (template.num === 493 && set.evs) {
 				for (let stat in set.evs) {
 					// @ts-ignore
-					if (set.evs[stat] > 100) return ["Arceus may not have more than 100 of any EVs."];
+					const ev = set.evs[stat];
+					if (ev > 100) {
+						return [
+							"Arceus can't have more than 100 EVs in any stat, because Arceus is only obtainable from level 100 events.",
+							"Level 100 Pokemon can only gain EVs from vitamins (Carbos etc), which are capped at 100 EVs.",
+						];
+					}
+					if (!(
+						ev % 10 === 0 ||
+						(ev % 10 === 8 && ev % 4 === 0)
+					)) {
+						return [
+							"Arceus can only have EVs that are multiples of 10, because Arceus is only obtainable from level 100 events.",
+							"Level 100 Pokemon can only gain EVs from vitamins (Carbos etc), which boost in multiples of 10.",
+						];
+					}
 				}
 			}
 		},
@@ -714,49 +765,13 @@ let BattleFormats = {
 			return -typeMod;
 		},
 	},
-	natdex: {
-		effectType: 'Rule',
-		name: 'NatDex',
-		onValidateSet(set) {
-			// Items other than Z-Crystals and Pokémon-specific items should be illegal
-			if (!set.item) return;
-			let item = this.dex.getItem(set.item);
-			if (item.isNonstandard === 'Past' && !item.zMove && !item.itemUser) {
-				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
-			}
-		},
-		onBegin() {
-			// if you have a mega/primal or z, you can't dynamax
-			for (const side of this.sides) {
-				let canMegaOrZ = false;
-				for (const pokemon of side.pokemon) {
-					const item = this.dex.getItem(pokemon.item);
-					if (item.megaStone || item.onPrimal || item.zMove) {
-						canMegaOrZ = true;
-						break;
-					}
-				}
-				if (canMegaOrZ) {
-					for (const pokemon of side.pokemon) {
-						pokemon.canDynamax = false;
-					}
-				}
-			}
-		},
-	},
-	ignoreillegalabilities: {
-		effectType: 'ValidatorRule',
-		name: 'Ignore Illegal Abilities',
-		desc: "Allows Pok&eacute;mon to use any ability",
-		// Implemented in the 'pokemon' ruleset and in team-validator.js
-	},
 	stabmonsmovelegality: {
 		effectType: 'ValidatorRule',
 		name: 'STABmons Move Legality',
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, template, setSources, set) {
 			const restrictedMoves = this.format.restrictedMoves || [];
-			if (!move.isNonstandard && !restrictedMoves.includes(move.name)) {
+			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.isMax) {
 				let dex = this.dex;
 				let types = template.types;
 				let baseTemplate = dex.getTemplate(template.baseSpecies);
@@ -787,6 +802,12 @@ let BattleFormats = {
 		name: 'Allow AVs',
 		desc: "Tells formats with the 'letsgo' mod to take Awakening Values into consideration when calculating stats",
 		// Implemented in mods/letsgo/rulesets.js
+	},
+	standardpetmod: {
+		effectType: 'ValidatorRule',
+		name: 'Standard Pet Mod',
+		desc: "Holds all custom Pet Mod ruleset validation",
+		// Implemented in mods/petmod/rulesets.js
 	},
 };
 

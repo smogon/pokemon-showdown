@@ -96,7 +96,7 @@ export class BasicEffect implements EffectData {
 	 * Is this item/move/ability/pokemon unreleased? True if there's
 	 * no known way to get access to it without cheating.
 	 */
-	isUnreleased: boolean;
+	isUnreleased: boolean | 'Past';
 	/**
 	 * A shortened form of the description of this effect.
 	 * Not all effects have this.
@@ -514,6 +514,10 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 */
 	readonly forme: string;
 	/**
+	 * Base forme name (e.g. 'Altered' for Giratina).
+	 */
+	readonly baseForme: string;
+	/**
 	 * Other forms. List of names of cosmetic forms. These should have
 	 * `aliases.js` aliases to this entry, but not have their own
 	 * entry in `pokedex.js`.
@@ -524,12 +528,6 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * forme. Unlike forms, these have their own entry in `pokedex.js`.
 	 */
 	readonly otherFormes?: string[];
-	/**
-	 * Forme letter. One-letter version of the forme name. Usually the
-	 * first letter of the forme, but not always - e.g. Rotom-S is
-	 * Rotom-Fan because Rotom-F is Rotom-Frost.
-	 */
-	readonly formeLetter: string;
 	/**
 	 * Sprite ID. Basically the same as ID, but with a dash between
 	 * species and forme.
@@ -573,7 +571,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/** Color. */
 	readonly color: string;
 	/** Does this Pokemon have an unreleased hidden ability? */
-	readonly unreleasedHidden: boolean;
+	readonly unreleasedHidden: boolean | 'Past';
 	/**
 	 * Is it only possible to get the hidden ability on a male pokemon?
 	 * This is mainly relevant to Gen 5.
@@ -605,10 +603,12 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * form moveid:sources[].
 	 */
 	readonly learnset?: {[moveid: string]: MoveSource[]};
+	/** Source of learnsets for Pokemon that lack their own */
+	readonly inheritsFrom: string | string[];
 	/** True if the only way to get this pokemon is from events. */
 	readonly eventOnly: boolean;
 	/** List of event data for each event. */
-	readonly eventPokemon?: EventInfo[] ;
+	readonly eventPokemon?: EventInfo[];
 
 	/**
 	 * Singles Tier. The Pokemon's location in the Smogon tier system.
@@ -637,13 +637,13 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.name = data.species;
 		this.baseSpecies = data.baseSpecies || this.name;
 		this.forme = data.forme || '';
+		this.baseForme = data.baseForme || '';
 		this.otherForms = data.otherForms || undefined;
 		this.otherFormes = data.otherFormes || undefined;
-		this.formeLetter = data.formeLetter || '';
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || {0: ""};
-		this.types = data.types!;
+		this.types = data.types || ['???'];
 		this.addedType = data.addedType || undefined;
 		this.prevo = data.prevo || '';
 		this.tier = data.tier || '';
@@ -661,12 +661,12 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 					{M: 0.5, F: 0.5});
 		this.requiredItem = data.requiredItem || undefined;
 		this.requiredItems = this.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
-		this.baseStats = data.baseStats!;
-		this.weightkg = data.weightkg!;
+		this.baseStats = data.baseStats || {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+		this.weightkg = data.weightkg || 0;
 		this.weighthg = this.weightkg * 10;
-		this.heightm = data.heightm!;
+		this.heightm = data.heightm || 0;
 		this.color = data.color || '';
-		this.unreleasedHidden = !!data.unreleasedHidden;
+		this.unreleasedHidden = data.unreleasedHidden || false;
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
 		this.learnset = data.learnset || undefined;
@@ -675,9 +675,10 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 		this.isGigantamax = data.isGigantamax || undefined;
 		this.battleOnly = !!data.battleOnly || !!this.isMega || !!this.isGigantamax || undefined;
+		this.inheritsFrom = data.inheritsFrom || undefined;
 
 		if (!this.gen && this.num >= 1) {
-			if (this.num >= 810 || this.forme.endsWith('Galar') || this.forme === 'Gmax') {
+			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {
 				this.gen = 8;
 			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
 				this.gen = 7;

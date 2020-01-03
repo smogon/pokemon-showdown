@@ -733,7 +733,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Raises the user's Special Attack by 1 stage.",
 		shortDesc: "Raises the user's Sp. Atk by 1.",
-		onModifyMove() { },
+		onModifyMove() {},
 		boosts: {
 			spa: 1,
 		},
@@ -1123,9 +1123,9 @@ let BattleMovedex = {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.maxhp * 2 / 3);
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				this.heal(pokemon.maxhp / 4);
+				this.heal(pokemon.baseMaxhp / 4);
 			} else {
-				this.heal(pokemon.maxhp / 2);
+				this.heal(pokemon.baseMaxhp / 2);
 			}
 		},
 	},
@@ -1136,9 +1136,9 @@ let BattleMovedex = {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.maxhp * 2 / 3);
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				this.heal(pokemon.maxhp / 4);
+				this.heal(pokemon.baseMaxhp / 4);
 			} else {
-				this.heal(pokemon.maxhp / 2);
+				this.heal(pokemon.baseMaxhp / 2);
 			}
 		},
 	},
@@ -1572,9 +1572,9 @@ let BattleMovedex = {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.maxhp * 2 / 3);
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				this.heal(pokemon.maxhp / 4);
+				this.heal(pokemon.baseMaxhp / 4);
 			} else {
-				this.heal(pokemon.maxhp / 2);
+				this.heal(pokemon.baseMaxhp / 2);
 			}
 		},
 	},
@@ -1790,7 +1790,7 @@ let BattleMovedex = {
 			onEnd(target) {
 				if (!target.fainted) {
 					let source = this.effectData.source;
-					let damage = this.heal(target.maxhp / 2, target, target);
+					let damage = this.heal(target.baseMaxhp / 2, target, target);
 					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + source.name);
 				}
 			},

@@ -363,14 +363,27 @@ export class ModdedDex {
 		}
 		if (!this.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
-			if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
-				aliasTo = id.slice(4) + 'mega';
-			} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega']) {
-				aliasTo = id.slice(1) + 'mega';
-			} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
-				aliasTo = id.slice(6) + 'primal';
-			} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
-				aliasTo = id.slice(1) + 'primal';
+			const formeNames: {[k: string]: string[]} = {
+				alola: ['a', 'alola', 'alolan'],
+				galar: ['g', 'galar', 'galarian'],
+				gmax: ['gigantamax', 'gmax'],
+				mega: ['m', 'mega'],
+				primal: ['p', 'primal'],
+			};
+			for (const forme in formeNames) {
+				let pokeName = '';
+				for (const i of formeNames[forme]) {
+					if (id.startsWith(i)) {
+						pokeName = id.slice(i.length);
+					} else if (id.endsWith(i)) {
+						pokeName = id.slice(0, -i.length);
+					}
+				}
+				if (this.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.data.Aliases[pokeName]);
+				if (this.data.Pokedex[pokeName + forme]) {
+					aliasTo = pokeName + forme;
+					break;
+				}
 			}
 			if (aliasTo) {
 				template = this.getTemplate(aliasTo);
@@ -397,6 +410,9 @@ export class ModdedDex {
 				} else if (template.speciesid.endsWith('totem')) {
 					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
+				}  else if (template.inheritsFrom) {
+					template.tier = this.data.FormatsData[template.inheritsFrom].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[template.inheritsFrom].doublesTier || 'Illegal';
 				} else {
 					const baseFormatsData = this.data.FormatsData[toID(template.baseSpecies)];
 					if (!baseFormatsData) {
@@ -565,8 +581,8 @@ export class ModdedDex {
 			name = this.data.Aliases[id];
 			id = toID(name);
 		}
-		if (this.data.Formats.hasOwnProperty('gen7' + id)) {
-			id = ('gen7' + id) as ID;
+		if (this.data.Formats.hasOwnProperty('gen8' + id)) {
+			id = ('gen8' + id) as ID;
 		}
 		let supplementaryAttributes: AnyObject | null = null;
 		if (name.includes('@@@')) {
@@ -779,8 +795,8 @@ export class ModdedDex {
 		}
 	}
 
-	getRuleTable(format: Format, depth: number = 0): Data.RuleTable {
-		if (format.ruleTable) return format.ruleTable;
+	getRuleTable(format: Format, depth: number = 1, repeals?: Map<string, number>): Data.RuleTable {
+		if (format.ruleTable && !repeals) return format.ruleTable;
 		const ruleTable = new Data.RuleTable();
 
 		const ruleset = format.ruleset.slice();
@@ -801,17 +817,18 @@ export class ModdedDex {
 		}
 
 		// apply rule repeals before other rules
+		// repeals is a ruleid:depth map
 		for (const rule of ruleset) {
 			if (rule.startsWith('!')) {
 				const ruleSpec = this.validateRule(rule, format) as string;
-				ruleTable.set(ruleSpec, '');
+				if (!repeals) repeals = new Map();
+				repeals.set(ruleSpec.slice(1), depth);
 			}
 		}
 
 		for (const rule of ruleset) {
-			if (rule.startsWith('!')) continue;
-
 			const ruleSpec = this.validateRule(rule, format);
+
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
 					const complexTeamBan: Data.ComplexTeamBan = ruleSpec.slice(1) as Data.ComplexTeamBan;
@@ -824,20 +841,32 @@ export class ModdedDex {
 				}
 				continue;
 			}
-			if ("!+-".includes(ruleSpec.charAt(0))) {
+
+			if (rule.startsWith('!')) {
+				const repealDepth = repeals!.get(ruleSpec.slice(1));
+				if (repealDepth === undefined) throw new Error(`Multiple "${rule}" rules in ${format.name}`);
+				if (repealDepth === depth) throw new Error(`Rule "${rule}" did nothing because "${rule.slice(1)}" is not in effect`);
+				if (repealDepth === -depth) repeals!.delete(ruleSpec.slice(1));
+				continue;
+			}
+
+			if ("+-".includes(ruleSpec.charAt(0))) {
 				if (ruleSpec.startsWith('+')) ruleTable.delete('-' + ruleSpec.slice(1));
 				if (ruleSpec.startsWith('-')) ruleTable.delete('+' + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
 			const subformat = this.getFormat(ruleSpec);
-			if (ruleTable.has('!' + subformat.id)) continue;
+			if (repeals && repeals.has(subformat.id)) {
+				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
+				continue;
+			}
 			ruleTable.set(subformat.id, '');
 			if (!subformat.exists) continue;
 			if (depth > 16) {
 				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset}`);
 			}
-			const subRuleTable = this.getRuleTable(subformat, depth + 1);
+			const subRuleTable = this.getRuleTable(subformat, depth + 1, repeals);
 			for (const [k, v] of subRuleTable) {
 				if (!ruleTable.has('!' + k)) ruleTable.set(k, v || subformat.name);
 			}
@@ -941,7 +970,9 @@ export class ModdedDex {
 					// custom tags
 					'mega',
 					// illegal/nonstandard reasons
-					'glitch', 'past', 'future', 'lgpe', 'pokestar', 'custom',
+					'past', 'future', 'unobtainable', 'lgpe', 'custom',
+					// all
+					'allpokemon', 'allitems', 'allmoves', 'allabilities',
 				];
 				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
 				continue;
@@ -951,7 +982,7 @@ export class ModdedDex {
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
 					const template: Template = table[id] as Template;
-					if (template.otherFormes) {
+					if (template.otherFormes && ruleid !== template.id + toID(template.baseForme)) {
 						matches.push('basepokemon:' + id);
 						continue;
 					}
@@ -965,7 +996,7 @@ export class ModdedDex {
 			}
 		}
 		if (matches.length > 1) {
-			throw new Error(`More than one thing matches "${rule}"; please use something like "-item:metronome" to disambiguate`);
+			throw new Error(`More than one thing matches "${rule}"; please specify one of: ` + matches.join(', '));
 		}
 		if (matches.length < 1) {
 			throw new Error(`Nothing matches "${rule}"`);
@@ -1508,15 +1539,6 @@ export class ModdedDex {
 		}
 
 		return this;
-	}
-
-	installFormat(id: string, format: Format) {
-		dexes['base'].includeFormats();
-		dexes['base'].formatsCache![id] = format;
-		if (this.dataCache) this.dataCache.Formats[id] = format;
-		if (!this.isBase) {
-			if (dexes['base'].dataCache) dexes['base'].dataCache.Formats[id] = format;
-		}
 	}
 }
 

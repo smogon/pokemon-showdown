@@ -40,7 +40,7 @@ describe('Counter', function () {
 	});
 
 	it('should target the opposing Pokemon that hit the user with a Physical attack most recently that turn', function () {
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Bastiodon', ability: 'sturdy', moves: ['counter']},
 			{species: 'Toucannon', ability: 'keeneye', moves: ['beakblast']},

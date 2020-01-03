@@ -276,6 +276,7 @@ export class TeamValidator {
 		}
 
 		for (const rule of ruleTable.keys()) {
+			if ('!+-'.includes(rule.charAt(0))) continue;
 			const subformat = dex.getFormat(rule);
 			if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onValidateTeam.call(this, team, format, teamHas) || []);
@@ -357,6 +358,7 @@ export class TeamValidator {
 		const setSources = this.allSources(template);
 
 		for (const [rule] of ruleTable) {
+			if ('!+-'.includes(rule.charAt(0))) continue;
 			const subformat = dex.getFormat(rule);
 			if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onChangeSet.call(this, set, format, setHas, teamHas) || []);
@@ -463,7 +465,10 @@ export class TeamValidator {
 				if (ability.name === template.abilities['H']) {
 					setSources.isHidden = true;
 
-					if (template.unreleasedHidden && ruleTable.has('-unreleased')) {
+					let unreleasedHidden = template.unreleasedHidden;
+					if (unreleasedHidden === 'Past' && minPastGen < dex.gen) unreleasedHidden = false;
+
+					if (unreleasedHidden && ruleTable.has('-unreleased')) {
 						problems.push(`${name}'s Hidden Ability is unreleased.`);
 					} else if (['entei', 'suicune', 'raikou'].includes(template.id) && minPastGen > 1) {
 						problems.push(`${name}'s Hidden Ability is only available from Virtual Console, which is not allowed in this format.`);
@@ -651,7 +656,7 @@ export class TeamValidator {
 		}
 
 		for (const [rule] of ruleTable) {
-			if (rule.startsWith('!')) continue;
+			if ('!+-'.includes(rule.charAt(0))) continue;
 			const subformat = dex.getFormat(rule);
 			if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onValidateSet.call(this, set, format, setHas, teamHas) || []);
@@ -1076,12 +1081,15 @@ export class TeamValidator {
 				throw new Error(`Species ${template.name} has a required ability despite not being a battle-only forme; it should just be in its abilities table.`);
 			}
 			if (template.requiredItems && !template.requiredItems.includes(item.name)) {
-				// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
-				problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
-			}
-			if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
-				// Keldeo-Resolute
-				problems.push(`${name} needs to have the move ${template.requiredMove}.`);
+				if (dex.gen >= 8 && (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally')) {
+					// Arceus/Silvally formes in gen 8 only require the item with Multitype/RKS System
+					if (set.ability === template.abilities[0]) {
+						problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
+					}
+				} else {
+					// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
+					problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
+				}
 			}
 
 			// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
@@ -1101,6 +1109,16 @@ export class TeamValidator {
 					set.species = cosplay[moveid];
 					break;
 				}
+			}
+		}
+
+		const crowned: {[k: string]: string} = {
+			'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
+		};
+		if (set.species in crowned) {
+			const ironHead = set.moves.indexOf('ironhead');
+			if (ironHead >= 0) {
+				set.moves[ironHead] = crowned[set.species];
 			}
 		}
 		return problems;
@@ -1180,35 +1198,38 @@ export class TeamValidator {
 		if (tierTemplate.isNonstandard) {
 			banReason = ruleTable.check('pokemontag:' + toID(tierTemplate.isNonstandard));
 			if (banReason) {
-				return `${tierTemplate.species} is tagged ${tierTemplate.isNonstandard}, which is ${banReason}.`;
+				if (tierTemplate.isNonstandard === 'Unobtainable') {
+					return `${tierTemplate.species} is not obtainable without hacking or glitches.`;
+				}
+				if (['Past', 'Future'].includes(tierTemplate.isNonstandard)) {
+					return `${tierTemplate.species} does not exist in Gen ${dex.gen}.`;
+				}
 			}
 			if (banReason === '') return null;
 		}
 
-		if (
-			tierTemplate.isNonstandard === 'Pokestar' && dex.gen === 5 ||
-			tierTemplate.isNonstandard === 'Glitch' && dex.gen === 1
-		) {
-			banReason = ruleTable.check('pokemontag:hackmons', setHas);
-			if (banReason) {
-				return `${tierTemplate.species} is not obtainable without hacking.`;
-			}
-			if (banReason === '') return null;
-		} else if (tierTemplate.isNonstandard) {
+		if (tierTemplate.isNonstandard) {
 			banReason = ruleTable.check('nonexistent', setHas);
 			if (banReason) {
-				if (['Past', 'Future'].includes(tierTemplate.isNonstandard)) {
-					return `${tierTemplate.species} does not exist in Gen ${dex.gen}.`;
-				}
 				return `${tierTemplate.species} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
 		} else if (tierTemplate.isUnreleased) {
-			banReason = ruleTable.check('unreleased', setHas);
-			if (banReason) {
-				return `${tierTemplate.species} is unreleased.`;
+			let isUnreleased: boolean | 'Past' = tierTemplate.isUnreleased;
+			if (isUnreleased === 'Past' && (this.format.minSourceGen || 0) < dex.gen) isUnreleased = false;
+
+			if (isUnreleased) {
+				banReason = ruleTable.check('unreleased', setHas);
+				if (banReason) {
+					return `${tierTemplate.species} is unreleased.`;
+				}
+				if (banReason === '') return null;
 			}
-			if (banReason === '') return null;
+		}
+
+		banReason = ruleTable.check('pokemontag:allpokemon');
+		if (banReason) {
+			return `${template.species} is not in the list of allowed pokemon.`;
 		}
 
 		return null;
@@ -1250,6 +1271,11 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
+		banReason = ruleTable.check('pokemontag:allitems');
+		if (banReason) {
+			return `${set.name}'s item ${item.name} is not in the list of allowed items.`;
+		}
+
 		return null;
 	}
 
@@ -1283,6 +1309,11 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
+		banReason = ruleTable.check('pokemontag:allmoves');
+		if (banReason) {
+			return `${set.name}'s move ${move.name} is not in the list of allowed moves.`;
+		}
+
 		return null;
 	}
 
@@ -1314,6 +1345,11 @@ export class TeamValidator {
 				return `${set.name}'s ability ${ability.name} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
+		}
+
+		banReason = ruleTable.check('pokemontag:allabilities');
+		if (banReason) {
+			return `${set.name}'s ability ${ability.name} is not in the list of allowed abilities.`;
 		}
 
 		return null;
@@ -1690,7 +1726,7 @@ export class TeamValidator {
 
 					if (learned.charAt(1) === 'L') {
 						// special checking for level-up moves
-						if (level >= parseInt(learned.substr(2), 10) || learnedGen >= 7) {
+						if (level >= parseInt(learned.substr(2), 10) || learnedGen === 7) {
 							// we're past the required level to learn it
 							// (gen 7 level-up moves can be relearnered at any level)
 							// falls through to LMT check below
@@ -1830,11 +1866,12 @@ export class TeamValidator {
 			template = this.dex.getTemplate(template.prevo);
 			if (template.gen > Math.max(2, this.dex.gen)) return null;
 			return template;
-		} else if (template.baseSpecies !== template.species && (
-			['Rotom', 'Necrozma'].includes(template.baseSpecies) || template.forme === 'Gmax'
-		)) {
-			// only Rotom and Necrozma inherit learnsets from base
-			return this.dex.getTemplate(template.baseSpecies);
+		} else if (template.inheritsFrom) {
+			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
+			if (Array.isArray(template.inheritsFrom)) {
+				throw new Error(`Ambiguous template ${template.species} passed to learnsetParent`);
+			}
+			return this.dex.getTemplate(template.inheritsFrom);
 		}
 		return null;
 	}

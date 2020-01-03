@@ -281,7 +281,7 @@ let BattleMovedex = {
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-				return null;
+				return false;
 			},
 			onDamage(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
@@ -418,7 +418,7 @@ let BattleMovedex = {
 			onInvulnerability(target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-				return null;
+				return false;
 			},
 			onDamage(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
@@ -560,7 +560,7 @@ let BattleMovedex = {
 					residualdmg.counter++;
 					toxicCounter = residualdmg.counter;
 				}
-				let toLeech = this.dex.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
+				let toLeech = this.dex.clampIntRange(Math.floor(pokemon.baseMaxhp / 16), 1) * toxicCounter;
 				let damage = this.damage(toLeech, pokemon, leecher);
 				if (residualdmg) this.hint("In Gen 1, Leech Seed's damage is affected by Toxic's counter.", true);
 				if (!damage || toLeech > damage) {

@@ -1805,7 +1805,6 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["spikes", "rapidspin", "icywind", "freezedry", "destinybond"],
 		randomDoubleBattleMoves: ["fakeout", "iceshard", "icepunch", "aerialace", "brickbreak", "protect"],
-		unreleasedHidden: false,
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
@@ -4649,12 +4648,10 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	floetteeternal: {
-		inherit: true,
 		randomBattleMoves: ["lightofruin", "psychic", "hiddenpowerfire", "hiddenpowerground", "moonblast"],
 		randomDoubleBattleMoves: ["lightofruin", "dazzlinggleam", "wish", "psychic", "aromatherapy", "protect", "calmmind"],
-		isNonstandard: null,
-		isUnreleased: true,
-		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
 	},
 	florges: {
 		randomBattleMoves: ["calmmind", "moonblast", "synthesis", "aromatherapy", "wish", "toxic", "protect", "defog"],
@@ -5087,6 +5084,8 @@ let BattleFormatsData = {
 	vikavolttotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "NU",
+		doublesTier: "DUU",
 	},
 	crabrawler: {
 		tier: "LC",
@@ -5138,6 +5137,8 @@ let BattleFormatsData = {
 	ribombeetotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "RU",
+		doublesTier: "(DUU)",
 	},
 	rockruff: {
 		tier: "LC",
@@ -5205,6 +5206,8 @@ let BattleFormatsData = {
 	araquanidtotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "RU",
+		doublesTier: "DUU",
 	},
 	fomantis: {
 		tier: "LC",
@@ -5241,6 +5244,8 @@ let BattleFormatsData = {
 	salazzletotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "RU",
+		doublesTier: "(DUU)",
 	},
 	stufful: {
 		tier: "LC",
@@ -5475,6 +5480,8 @@ let BattleFormatsData = {
 	togedemarutotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "NU",
+		doublesTier: "DUU",
 	},
 	mimikyu: {
 		inherit: true,
@@ -5486,6 +5493,8 @@ let BattleFormatsData = {
 	mimikyutotem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "UU",
+		doublesTier: "DUU",
 	},
 	mimikyubustedtotem: {
 		requiredAbility: 'Disguise',
@@ -5526,6 +5535,8 @@ let BattleFormatsData = {
 	kommoototem: {
 		inherit: true,
 		isNonstandard: null,
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	tapukoko: {
 		inherit: true,
@@ -5675,9 +5686,8 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	magearnaoriginal: {
-		isNonstandard: null,
-		isUnreleased: true,
-		tier: "Unreleased",
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
 	},
 	marshadow: {
 		inherit: true,

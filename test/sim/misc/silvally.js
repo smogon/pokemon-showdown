@@ -30,8 +30,8 @@ describe(`[Hackmons] Silvally`, function () {
 		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Normal"]);
 	});
 
-	it(`in a typed forme should be Normal-typed despite holding a memory if Silvally does not have the RKS System ability`, function () {
-		const battle = common.createBattle([
+	it(`[Gen 7] in a typed forme should be Normal-typed despite holding a memory if Silvally does not have the RKS System ability`, function () {
+		const battle = common.gen(7).createBattle([
 			[{species: 'silvallyfire', ability: 'truant', item: 'firememory', moves: ['rest']}],
 			[unimportantPokemon],
 		]);
