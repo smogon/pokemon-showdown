@@ -306,7 +306,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most moves made by other Pokemon during this turn, and if targeted with a move, the opposing Pokemon is forced to switch to a random ally. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard, or this move, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		desc: "The user is protected from most moves made by other Pokemon during this turn, and if targeted with a move, the opposing Pokemon is forced to switch to a random ally. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard, or this move, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Protects from moves. Targeted: Force switch foe.",
 		id: "backoffgrrr",
 		name: "Back Off! GRRR!",
@@ -336,7 +336,7 @@ let BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect']) {
+				if (!move.flags['protect'] || move.category === 'Status') {
 					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
@@ -353,14 +353,6 @@ let BattleMovedex = {
 				source.forceSwitchFlag = true;
 				this.add('-message', `${source.name} was scared off!`);
 				return null;
-			},
-			onHit(target, source, move) {
-				if (target !== source) {
-					this.add('-anim', target, "Scary Face", source);
-					this.add('-anim', target, "Roar", source);
-					source.forceSwitchFlag = true;
-					this.add('-message', `${source.name} was scared off!`);
-				}
 			},
 		},
 		secondary: null,
@@ -1351,6 +1343,32 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Electric",
 	},
+	// Dragontite
+	hyperforcestrike: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Damages the target and restores user's HP by 15% of its total health.",
+		shortDesc: "Damages the target and heals 15% total HP.",
+		id: "hyperforcestrike",
+		name: "Hyperforce Strike",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Draco Meteor", target);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			this.heal(pokemon.maxhp * 0.15, pokemon, pokemon, move); // 15% health recovered
+		},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
 	// DragonWhale
 	earthsblessing: {
 		accuracy: true,
@@ -1444,6 +1462,8 @@ let BattleMovedex = {
 				victini: ['V-create', 'Blue Flare'],
 			};
 			let forme = Object.keys(formes)[this.random(5)];
+			// Suppress Ability now to prevent starting new abilities when transforming
+			source.addVolatile('gastroacid', source);
 			source.formeChange(forme, this.dex.getAbility('psychicsurge'), true);
 			this.boost({atk: 1, spa: 1}, source, source, move);
 			this.useMove(formes[forme][0], source, target);
@@ -2252,32 +2272,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allyTeam",
 		type: "Poison",
-	},
-	// Jolteonite
-	hyperforcestrike: {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		desc: "Damages the target and restores user's HP by 15% of its total health.",
-		shortDesc: "Damages the target and heals 15% total HP.",
-		id: "hyperforcestrike",
-		name: "Hyperforce Strike",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Draco Meteor", target);
-		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			this.heal(pokemon.maxhp * 0.15, pokemon, pokemon, move); // 15% health recovered
-		},
-		secondary: null,
-		target: "normal",
-		type: "Flying",
 	},
 	// Kaiju Bunny
 	bestialstrike: {
@@ -3425,40 +3419,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ground",
 	},
-	// PokemonDeadChannel
-	expressyourself: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		isNonstandard: "Custom",
-		desc: "The user is healed for 50% of its HP. All Pokemon in the team's party get healed by 12.5% of their maximum HP.",
-		shortDesc: "User heals 50% HP. User's team heals 12.5% HP.",
-		id: "expressyourself",
-		name: "Express Yourself",
-		pp: 5,
-		priority: 0,
-		flags: {snatch: 1, heal: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Tail Glow', source);
-			this.add('-anim', source, 'Discharge', source);
-		},
-		onHit(target, source) {
-			this.heal(source.baseMaxhp / 2, source);
-			if (!this.canSwitch(source.side)) return;
-			for (const ally of source.side.pokemon) {
-				if (ally === source) continue;
-				if (ally.fainted || !ally.hp) continue;
-				ally.heal(ally.baseMaxhp / 8, ally);
-			}
-			this.add('-message', `${source.name} restored everyone's HP.`);
-		},
-		secondary: null,
-		target: "self",
-		type: "Fairy",
-	},
 	// pre
 	"refactor": {
 		accuracy: true,
@@ -3888,6 +3848,40 @@ let BattleMovedex = {
 		secondary: null,
 		target: "self",
 		type: "Ice",
+	},
+	// Salamander
+	expressyourself: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Custom",
+		desc: "The user is healed for 50% of its HP. All Pokemon in the team's party get healed by 12.5% of their maximum HP.",
+		shortDesc: "User heals 50% HP. User's team heals 12.5% HP.",
+		id: "expressyourself",
+		name: "Express Yourself",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Tail Glow', source);
+			this.add('-anim', source, 'Discharge', source);
+		},
+		onHit(target, source) {
+			this.heal(source.baseMaxhp / 2, source);
+			if (!this.canSwitch(source.side)) return;
+			for (const ally of source.side.pokemon) {
+				if (ally === source) continue;
+				if (ally.fainted || !ally.hp) continue;
+				ally.heal(ally.baseMaxhp / 8, ally);
+			}
+			this.add('-message', `${source.name} restored everyone's HP.`);
+		},
+		secondary: null,
+		target: "self",
+		type: "Fairy",
 	},
 	// Schiavetto
 	plurshift: {
