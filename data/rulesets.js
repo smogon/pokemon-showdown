@@ -636,6 +636,21 @@ let BattleFormats = {
 			}
 		},
 	},
+	noswitchmod: {
+		effectType: 'Rule',
+		name: 'No Switch Mod',
+		desc: "Prevents players from switching pokemon, except via move i.e. U-turn",
+		onBegin() {
+			this.add('rule', 'No Switch Mod: No switching allowed');
+			this.add('-message', 'No Switch Mod activated.');
+		},
+		onBeforeSwitchOut(pokemon) {
+			if (!(typeof pokemon.switchFlag === 'string')) {
+				pokemon.switchFlag = false;
+				this.add('-message', 'No Switch Mod activated.');
+			}
+		},
+	},
 	switchpriorityclausemod: {
 		effectType: 'Rule',
 		name: 'Switch Priority Clause Mod',
