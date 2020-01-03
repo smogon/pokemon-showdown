@@ -245,11 +245,17 @@ let BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon switches to a different Oricorio forme.",
 		isNonstandard: "Custom",
 		onStart(source) {
+			if (source.m.hasTransformed) {
+				// Pull the breaks before it infinitely swaps formes.
+				source.m.hasTransformed = false;
+				return;
+			}
 			let formes = ['oricorio', 'oricoriosensu', 'oricoriopompom', 'oricoriopau'];
 			if (formes.includes(toID(source.template.species))) {
 				formes.splice(formes.indexOf(toID(source.template.species)), 1);
 				this.add('-activate', source, 'ability: Arabesque');
-				source.formeChange(formes[this.random(formes.length)], this.dex.getAbility('arabesque'));
+				source.m.hasTransformed = true;
+				source.formeChange(formes[this.random(formes.length)], this.effect, true);
 			}
 		},
 	},
@@ -260,17 +266,9 @@ let BattleAbilities = {
 		id: "gracideamastery",
 		name: "Gracidea Mastery",
 		isNonstandard: "Custom",
-		onDamagePriority: 1,
-		onDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'shayminsky' && !target.transformed) {
-				target.formeChange('Shaymin', this.effect);
-				return damage;
-			}
-		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target) return;
-			if (target.template.baseSpecies !== 'Shaymin' || target.transformed) return;
-			return this.dex.getEffectiveness(move.type, 'Grass');
+		onTryHit(target, source, move) {
+			if ((target === source || move.category === 'Status') && target.template.speciesid !== 'shayminsky' && target.transformed) return;
+			target.formeChange('Shaymin', this.effect);
 		},
 		onAfterDamage(damage, target, source, effect) {
 			if (source === target) return;
@@ -362,6 +360,22 @@ let BattleAbilities = {
 			if (effect.id === 'psn' || effect.id === 'tox') {
 				this.heal(target.baseMaxhp / 8);
 				return false;
+			}
+		},
+	},
+	// Dragontite
+	iceabsorb: {
+		desc: "This Pokemon is immune to Ice-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Ice-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Ice moves; Ice immunity.",
+		id: "iceabsorb",
+		name: "Ice Absorb",
+		isNonstandard: "Custom",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Ice') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Ice Absorb');
+				}
+				return null;
 			}
 		},
 	},
@@ -554,22 +568,6 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onModifyMove(move) {
 			move.drain = [1, 3];
-		},
-	},
-	// Jolteonite
-	iceabsorb: {
-		desc: "This Pokemon is immune to Ice-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Ice-type move.",
-		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Ice moves; Ice immunity.",
-		id: "iceabsorb",
-		name: "Ice Absorb",
-		isNonstandard: "Custom",
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Ice') {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Ice Absorb');
-				}
-				return null;
-			}
 		},
 	},
 	// Kie
@@ -802,18 +800,6 @@ let BattleAbilities = {
 		id: "acidrain",
 		name: "Acid Rain",
 	},
-	// PokemonDeadChannel
-	numbnumbjuice: {
-		desc: "This Pokemon is immune to volatile statuses.",
-		shortDesc: "This Pokemon is immune to volatile statuses.",
-		onTryAddVolatile(status, target) {
-			if (toID(target.name).includes(status.id)) return;
-			this.add('-immune', target, '[from] ability: Numb Numb Juice');
-			return null;
-		},
-		id: "numbnumbjuice",
-		name: "Numb Numb Juice",
-	},
 	// pre
 	optimize: {
 		desc: "This Pokemon changes forme and sets depending on which attack it uses, before the attack takes place. If this Pokemon uses Psycho Boost, it first changes to its Attack forme. If this Pokemon uses Recover, it first changes to its Defense forme. If this Pokemon uses Extreme Speed, it first changes to its Speed forme. If this Pokemon uses Refactor, it first changes to its Base forme.",
@@ -998,6 +984,18 @@ let BattleAbilities = {
 			this.add('-immune', target, '[from] ability: Thiccer Fat');
 			return false;
 		},
+	},
+	// Salamander
+	numbnumbjuice: {
+		desc: "This Pokemon is immune to volatile statuses.",
+		shortDesc: "This Pokemon is immune to volatile statuses.",
+		onTryAddVolatile(status, target) {
+			if (toID(target.name).includes(status.id)) return;
+			this.add('-immune', target, '[from] ability: Numb Numb Juice');
+			return null;
+		},
+		id: "numbnumbjuice",
+		name: "Numb Numb Juice",
 	},
 	// Schiavetto
 	rvs: {
