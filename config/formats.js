@@ -34,6 +34,7 @@ let Formats = [
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3657920/">OU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3657382/">OU Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658351/">OU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -52,8 +53,8 @@ let Formats = [
 		name: "[Gen 8] Ubers",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656638/">Ubers Metagame Discussion</a>`,
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3623296/">Ubers Viability Rankings</a>`,
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3639330/">Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658364/">Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658509/">Ubers Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -63,6 +64,9 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658529/">UU Metagame Discussion</a>`,
+		],
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
@@ -71,6 +75,9 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] RU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658495/">RU Metagame Discussion</a>`,
+		],
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] UU'],
@@ -98,8 +105,8 @@ let Formats = [
 		desc: `All the Pok&eacute;mon on a team must share a type.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656253/">Monotype Metagame Discussion</a>`,
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3622349">Monotype Viability Rankings</a>`,
 			//`&bullet; <a href="https://www.smogon.com/forums/threads/3599682/">Monotype Sample Teams</a>`,
+			//`&bullet; <a href="https://www.smogon.com/forums/threads/3622349">Monotype Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -150,6 +157,10 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] CAP",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656824/">CAP Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658514/">CAP Viability Rankings</a>`,
+		],
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
@@ -215,6 +226,7 @@ let Formats = [
 		name: "[Gen 8] Doubles OU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656244/">Doubles OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658242/">Doubles OU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -226,7 +238,7 @@ let Formats = [
 	{
 		name: "[Gen 8] Doubles UU",
 		threads: [
-			// `&bullet; <a href="https://www.smogon.com/forums/threads/3656244/">Doubles UU Metagame Discussion</a>`,
+			 `&bullet; <a href="https://www.smogon.com/forums/threads/3658504/">Doubles UU Metagame Discussion</a>`,
 		],
 
 		mod: 'gen8',
@@ -254,6 +266,9 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] Battle Stadium Doubles",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658057/">BSD Discussion</a>`,
+		],
 
 		mod: 'gen8',
 		gameType: 'doubles',
