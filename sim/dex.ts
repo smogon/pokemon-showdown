@@ -821,6 +821,9 @@ export class ModdedDex {
 		if (format.timer) {
 			ruleTable.timer = [format.timer, format.name];
 		}
+		if (format.minSourceGen) {
+			ruleTable.minSourceGen = [format.minSourceGen, format.name];
+		}
 
 		// apply rule repeals before other rules
 		// repeals is a ruleid:depth map
@@ -908,6 +911,17 @@ export class ModdedDex {
 						`"${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`);
 				}
 				ruleTable.timer = subRuleTable.timer;
+			}
+			// minSourceGen is automatically ignored if higher than current gen
+			// this helps the common situation where Standard has a minSourceGen in the
+			// latest gen but not in any past gens
+			if (subRuleTable.minSourceGen && subRuleTable.minSourceGen[0] <= this.gen) {
+				if (ruleTable.minSourceGen) {
+					throw new Error(
+						`"${format.name}" has conflicting minSourceGen from ` +
+						`"${ruleTable.minSourceGen[1]}" and "${subRuleTable.minSourceGen[1]}"`);
+				}
+				ruleTable.minSourceGen = subRuleTable.minSourceGen;
 			}
 		}
 

@@ -169,6 +169,7 @@ export class RuleTable extends Map<string, string> {
 	// tslint:disable-next-line:ban-types
 	checkLearnset: [Function, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
+	minSourceGen: [number, string] | null;
 
 	constructor() {
 		super();
@@ -176,6 +177,7 @@ export class RuleTable extends Map<string, string> {
 		this.complexTeamBans = [];
 		this.checkLearnset = null;
 		this.timer = null;
+		this.minSourceGen = null;
 	}
 
 	isBanned(thing: string) {
