@@ -2390,7 +2390,7 @@ export class Battle {
 		}
 		if (!midTurn) {
 			if (action.choice === 'move') {
-				if (!action.zmove && action.move.beforeTurnCallback) {
+				if (!action.maxMove && !action.zmove && action.move.beforeTurnCallback) {
 					this.addToQueue({
 						choice: 'beforeTurnMove', pokemon: action.pokemon, move: action.move, targetLoc: action.targetLoc,
 					});

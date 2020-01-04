@@ -86,4 +86,36 @@ describe('Focus Punch', function () {
 		battle.makeChoices('move focuspunch', 'move toxic');
 		assert.strictEqual(move.pp, move.maxpp - 2);
 	});
+
+	it('should not tighten the pokemon\'s focus when Dynamaxing', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]});
+		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf', 'toxic']}]});
+
+		battle.makeChoices('move focuspunch dynamax', 'move magicalleaf');
+		const tighteningFocusMessage = battle.log.filter(str => str === '|-singleturn|p1a: Chansey|move: Focus Punch');
+
+		assert.strictEqual(tighteningFocusMessage.length, 0);
+	});
+
+	it('should not tighten the pokemon\'s focus when already Dynamaxed', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]});
+		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf', 'toxic']}]});
+
+		battle.makeChoices('move focuspunch dynamax', 'move magicalleaf');
+		battle.makeChoices('move focuspunch', 'move magicalleaf');
+		const tighteningFocusMessage = battle.log.filter(str => str === '|-singleturn|p1a: Chansey|move: Focus Punch');
+		assert.strictEqual(tighteningFocusMessage.length, 0);
+	});
+
+	it('should tighten the pokemon\'s focus when not Dynamaxed', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]});
+		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf', 'toxic']}]});
+
+		battle.makeChoices('move focuspunch', 'move magicalleaf');
+		const tighteningFocusMessage = battle.log.filter(str => str === '|-singleturn|p1a: Chansey|move: Focus Punch');
+		assert.strictEqual(tighteningFocusMessage.length, 1);
+	});
 });
