@@ -372,6 +372,7 @@ exports.customavatars = {
  * tourroom - specify a room to receive tournament announcements (defaults to
  * the room 'tournaments').
  * tourannouncements - announcements are only allowed in these rooms
+ * touralts - whether or not alts are allowed in a tournament
  * tourdefaultplayercap - a set cap of how many players can be in a tournament
  * ratedtours - toggles tournaments being ladder rated (true) or not (false)
  */
@@ -379,6 +380,7 @@ exports.tourroom = '';
 /** @type {string[]} */
 exports.tourannouncements = [/* roomids */];
 exports.tourdefaultplayercap = 0;
+exports.touralts = false;
 exports.ratedtours = false;
 
 /**
