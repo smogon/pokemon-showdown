@@ -96,7 +96,7 @@ if (!PM.isParentProcess) {
 	}
 
 	global.Dex = importedDex.includeData();
-	global.toId = Dex.getId;
+	global.toID = Dex.getId;
 
 	// tslint:disable-next-line: no-eval
 	Repl.start(`team-validator-${process.pid}`, cmd => eval(cmd));
