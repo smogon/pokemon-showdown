@@ -184,8 +184,8 @@ let Formats = [
 		minSourceGen: 8,
 		onBegin() {
 			const allowedGigantamaxes = [
-				"Charizard", "Butterfree", "Pikachu", "Meowth", "Eevee", "Snorlax",
-				"Corviknight", "Dreadnaw", "Sandaconda", "Centiscorch",
+				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
+				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
 			];
 			for (const pokemon of this.getAllPokemon()) {
 				if (!allowedGigantamaxes.includes(pokemon.species)) pokemon.canGigantamax = null;
@@ -283,8 +283,8 @@ let Formats = [
 		minSourceGen: 8,
 		onBegin() {
 			const allowedGigantamaxes = [
-				"Charizard", "Butterfree", "Pikachu", "Meowth", "Eevee", "Snorlax",
-				"Corviknight", "Dreadnaw", "Sandaconda", "Centiscorch",
+				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
+				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
 			];
 			for (const pokemon of this.getAllPokemon()) {
 				if (!allowedGigantamaxes.includes(pokemon.species)) pokemon.canGigantamax = null;
