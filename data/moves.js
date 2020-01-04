@@ -4369,7 +4369,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1},
 		secondary: null,
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Dragon",
 	},
 	"dynamicpunch": {
