@@ -183,8 +183,12 @@ let Formats = [
 		ruleset: ['Obtainable', 'Standard GBU'],
 		minSourceGen: 8,
 		onBegin() {
+			const allowedGigantamaxes = [
+				"Charizard", "Butterfree", "Pikachu", "Meowth", "Eevee", "Snorlax",
+				"Corviknight", "Dreadnaw", "Sandaconda", "Centiscorch",
+			];
 			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canGigantamax = null;
+				if (allowedGigantamaxes.indexOf(pokemon.species) === -1) pokemon.canGigantamax = null;
 			}
 		},
 	},
@@ -278,8 +282,12 @@ let Formats = [
 		ruleset: ['Obtainable', 'Standard GBU'],
 		minSourceGen: 8,
 		onBegin() {
+			const allowedGigantamaxes = [
+				"Charizard", "Butterfree", "Pikachu", "Meowth", "Eevee", "Snorlax",
+				"Corviknight", "Dreadnaw", "Sandaconda", "Centiscorch",
+			];
 			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canGigantamax = null;
+				if (allowedGigantamaxes.indexOf(pokemon.species) === -1) pokemon.canGigantamax = null;
 			}
 		},
 	},
