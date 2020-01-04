@@ -38,7 +38,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	// $ ./pokemon-showdown 9000
 
 	if (!built) build();
-	require('module')._load('./server', module, true);
+	require('module')._load('./.server-dist', module, true);
 } else switch (process.argv[2]) {
 	case 'help':
 	case 'h':
@@ -87,7 +87,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		{
 			process.argv[2] = process.argv[3];
 			if (!built) build();
-			require('module')._load('./server', module, true);
+			require('module')._load('./.server-dist', module, true);
 			break;
 		}
 	case 'generate-team':
