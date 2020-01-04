@@ -188,7 +188,7 @@ let Formats = [
 				"Corviknight", "Dreadnaw", "Sandaconda", "Centiscorch",
 			];
 			for (const pokemon of this.getAllPokemon()) {
-				if (allowedGigantamaxes.indexOf(pokemon.species) === -1) pokemon.canGigantamax = null;
+				if (!allowedGigantamaxes.includes(pokemon.species)) pokemon.canGigantamax = null;
 			}
 		},
 	},
@@ -287,7 +287,7 @@ let Formats = [
 				"Corviknight", "Dreadnaw", "Sandaconda", "Centiscorch",
 			];
 			for (const pokemon of this.getAllPokemon()) {
-				if (allowedGigantamaxes.indexOf(pokemon.species) === -1) pokemon.canGigantamax = null;
+				if (!allowedGigantamaxes.includes(pokemon.species)) pokemon.canGigantamax = null;
 			}
 		},
 	},
