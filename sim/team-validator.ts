@@ -1201,16 +1201,17 @@ export class TeamValidator {
 				if (tierTemplate.isNonstandard === 'Unobtainable') {
 					return `${tierTemplate.species} is not obtainable without hacking or glitches.`;
 				}
-				if (['Past', 'Future'].includes(tierTemplate.isNonstandard)) {
-					return `${tierTemplate.species} does not exist in Gen ${dex.gen}.`;
-				}
+				return `${tierTemplate.species} is tagged ${tierTemplate.isNonstandard}, which is ${banReason}.`;
 			}
 			if (banReason === '') return null;
 		}
 
-		if (tierTemplate.isNonstandard) {
+		if (tierTemplate.isNonstandard && tierTemplate.isNonstandard !== 'Unobtainable') {
 			banReason = ruleTable.check('nonexistent', setHas);
 			if (banReason) {
+				if (['Past', 'Future'].includes(tierTemplate.isNonstandard)) {
+					return `${tierTemplate.species} does not exist in Gen ${dex.gen}.`;
+				}
 				return `${tierTemplate.species} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
