@@ -172,8 +172,12 @@ let Formats = [
 		},
 		ruleset: ['Standard GBU'],
 		onBegin() {
+			const allowedGigantamaxes = [
+				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
+				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
+			];
 			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canGigantamax = null;
+				if (!allowedGigantamaxes.includes(pokemon.species)) pokemon.canGigantamax = null;
 			}
 		},
 	},
@@ -263,8 +267,12 @@ let Formats = [
 		},
 		ruleset: ['Standard GBU'],
 		onBegin() {
+			const allowedGigantamaxes = [
+				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
+				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
+			];
 			for (const pokemon of this.getAllPokemon()) {
-				pokemon.canGigantamax = null;
+				if (!allowedGigantamaxes.includes(pokemon.species)) pokemon.canGigantamax = null;
 			}
 		},
 	},
