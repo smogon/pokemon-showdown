@@ -136,9 +136,17 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Spores');
+			const abilities = [
+				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
+			];
+			for (const curMon of this.getAllActive()) {
+				if (curMon === pokemon) continue;
+				if (abilities.includes(curMon.ability)) continue;
+				this.singleEvent('End', this.dex.getAbility(curMon.ability), curMon.abilityData, curMon, curMon, 'gastroacid');
+			}
 			this.add('-message', `${pokemon.name} neutralized all abilities on the field!`);
 		},
-		// ability ignoring located in scripts.js
+		// ability ignoring further located in scripts.js
 	},
 	// Alpha
 	osolemio: {
