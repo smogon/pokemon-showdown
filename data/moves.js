@@ -13966,7 +13966,11 @@ let BattleMovedex = {
 		onTryHit(target, source, move) {
 			if (source.side === target.side) {
 				move.basePower = 0;
-				move.heal = [1, 2];
+			}
+		},
+		onHit(target, source) {
+			if (source.side === target.side) {
+				this.heal(Math.floor(target.baseMaxhp * 0.5));
 			}
 		},
 		secondary: null,
