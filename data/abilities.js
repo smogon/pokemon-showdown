@@ -273,6 +273,7 @@ let BattleAbilities = {
 				move.multihit = 3;
 			}
 		},
+		permanent: true,
 		id: "battlebond",
 		name: "Battle Bond",
 		rating: 4,
@@ -464,6 +465,7 @@ let BattleAbilities = {
 		},
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
 		isUnbreakable: true,
+		permanent: true,
 		id: "comatose",
 		name: "Comatose",
 		rating: 3.5,
@@ -766,6 +768,7 @@ let BattleAbilities = {
 				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
 			}
 		},
+		permanent: true,
 		id: "disguise",
 		name: "Disguise",
 		rating: 4,
@@ -1375,6 +1378,7 @@ let BattleAbilities = {
 			const forme = pokemon.hp <= pokemon.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
 			pokemon.formeChange(forme, move);
 		},
+		permanent: true,
 		id: "gulpmissile",
 		name: "Gulp Missile",
 		rating: 1.5,
@@ -1490,6 +1494,7 @@ let BattleAbilities = {
 			let targetForme = pokemon.template.species === 'Morpeko' ? 'Morpeko-Hangry' : 'Morpeko';
 			pokemon.formeChange(targetForme);
 		},
+		permanent: true,
 		id: "hungerswitch",
 		name: "Hunger Switch",
 		rating: 1,
@@ -1600,6 +1605,7 @@ let BattleAbilities = {
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
 		},
+		permanent: true,
 		id: "iceface",
 		name: "Ice Face",
 		rating: 3.5,
@@ -2336,6 +2342,7 @@ let BattleAbilities = {
 	"multitype": {
 		shortDesc: "If this Pokemon is an Arceus, its type changes to match its held Plate or Z-Crystal.",
 		// Multitype's type-changing itself is implemented in statuses.js
+		permanent: true,
 		id: "multitype",
 		name: "Multitype",
 		rating: 4,
@@ -2832,6 +2839,7 @@ let BattleAbilities = {
 			pokemon.maxhp = newHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
+		permanent: true,
 		id: "powerconstruct",
 		name: "Power Construct",
 		rating: 5,
@@ -2843,7 +2851,8 @@ let BattleAbilities = {
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
 			let ability = this.dex.getAbility(target.ability);
-			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode'];
+			if (ability.permanent) return;
+			let bannedAbilities = ['flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'wonderguard'];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
@@ -3076,7 +3085,8 @@ let BattleAbilities = {
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
 			let ability = this.dex.getAbility(target.ability);
-			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode'];
+			if (ability.permanent) return;
+			let bannedAbilities = ['flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'wonderguard'];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
@@ -3192,6 +3202,7 @@ let BattleAbilities = {
 	"rkssystem": {
 		shortDesc: "If this Pokemon is a Silvally, its type changes to match its held Memory.",
 		// RKS System's type-changing itself is implemented in statuses.js
+		permanent: true,
 		id: "rkssystem",
 		name: "RKS System",
 		rating: 4,
@@ -3359,6 +3370,7 @@ let BattleAbilities = {
 				}
 			}
 		},
+		permanent: true,
 		id: "schooling",
 		name: "Schooling",
 		rating: 2.5,
@@ -3556,6 +3568,7 @@ let BattleAbilities = {
 			return null;
 		},
 		isUnbreakable: true,
+		permanent: true,
 		id: "shieldsdown",
 		name: "Shields Down",
 		rating: 3.5,
@@ -3821,6 +3834,7 @@ let BattleAbilities = {
 			let targetSpecies = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.template.species !== targetSpecies) attacker.formeChange(targetSpecies);
 		},
+		permanent: true,
 		id: "stancechange",
 		name: "Stance Change",
 		rating: 4.5,
@@ -4288,8 +4302,8 @@ let BattleAbilities = {
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 				let target = possibleTargets[rand];
 				let ability = this.dex.getAbility(target.ability);
-				let bannedAbilities = ['noability', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode'];
-				if (bannedAbilities.includes(target.ability)) {
+				let bannedAbilities = ['noability', 'flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'zenmode'];
+				if (ability.permanent || bannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
 					continue;
 				}
@@ -4459,11 +4473,11 @@ let BattleAbilities = {
 		desc: "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.",
 		shortDesc: "Exchanges abilities when hitting a Pokémon with a contact move.",
 		onAfterDamage(damage, target, source, move) {
+			let sourceAbility = this.dex.getAbility(source.ability);
 			// Are these actually banned? Makes sense for them to be banned to me
-			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode'];
-			if (source && source !== target && move && move.flags['contact'] && !bannedAbilities.includes(source.ability)) {
+			let bannedAbilities = ['illusion', 'wonderguard'];
+			if (source && source !== target && move && move.flags['contact'] && !sourceAbility.permanent && !bannedAbilities.includes(source.ability)) {
 				let targetAbility = this.dex.getAbility(target.ability);
-				let sourceAbility = this.dex.getAbility(source.ability);
 				if (target.side === source.side) {
 					this.add('-activate', source, 'ability: Wandering Spirit', '', '', '[of] ' + target);
 				} else {
@@ -4705,6 +4719,7 @@ let BattleAbilities = {
 				}
 			},
 		},
+		permanent: true,
 		id: "zenmode",
 		name: "Zen Mode",
 		rating: 0,

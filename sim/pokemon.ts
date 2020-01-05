@@ -667,9 +667,6 @@ export class Pokemon {
 	}
 
 	ignoringAbility() {
-		const abilities = [
-			'battlebond', 'comatose', 'disguise', 'gulpmissile', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
-		];
 		// Check if any active pokemon have the ability Neutralizing Gas
 		let neutralizinggas = false;
 		for (const pokemon of this.battle.getAllActive()) {
@@ -683,7 +680,7 @@ export class Pokemon {
 
 		return !!((this.battle.gen >= 5 && !this.isActive) ||
 			((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID)))
-			&& !abilities.includes(this.ability)));
+			&& !this.battle.dex.getAbility(this.ability).permanent));
 	}
 
 	ignoringItem() {
@@ -1491,20 +1488,14 @@ export class Pokemon {
 	}
 
 	setAbility(ability: string | Ability, source?: Pokemon | null, isFromFormeChange?: boolean) {
-		if (!this.hp) return false;
+		if (!this.hp) return null;
 		if (typeof ability === 'string') ability = this.battle.dex.getAbility(ability) as Ability;
-		const oldAbility = this.ability;
-		if (!isFromFormeChange) {
-			const abilities = [
-				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
-			];
-			if ('illusion' === ability.id || abilities.includes(ability.id) || abilities.includes(oldAbility)) return false;
-			if (this.battle.gen >= 7 && (ability.id === 'zenmode' || oldAbility === 'zenmode')) return false;
-		}
-		if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return false;
-		this.battle.singleEvent('End', this.battle.dex.getAbility(oldAbility), this.abilityData, this, source);
+		const oldAbility = this.battle.dex.getAbility(this.ability);
+		if (!isFromFormeChange && ('illusion' === ability.id || ability.permanent || oldAbility.permanent)) return null;
+		if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return null;
+		this.battle.singleEvent('End', oldAbility, this.abilityData, this, source);
 		if (this.battle.effect && this.battle.effect.effectType === 'Move') {
-			this.battle.add('-endability', this, this.battle.dex.getAbility(oldAbility), '[from] move: ' +
+			this.battle.add('-endability', this, oldAbility, '[from] move: ' +
 				this.battle.dex.getMove(this.battle.effect.id));
 		}
 		this.ability = ability.id;

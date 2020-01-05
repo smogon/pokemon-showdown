@@ -729,6 +729,13 @@ const commands = {
 			case 'ability':
 				let ability = dex.getAbility(newTarget.name);
 				buffer += `|raw|${Chat.getDataAbilityHTML(ability)}\n`;
+				if (showDetails) {
+					details = {
+						"Gen": ability.gen || "CAP",
+					};
+					if (ability.permanent) details["&#10003; Not affected by Gastro Acid"] = "";
+					if (ability.isUnbreakable) details["&#10003; Not affected by Mold Breaker"] = "";
+				}
 				break;
 			default:
 				throw new Error(`Unrecognized searchType`);

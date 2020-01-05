@@ -724,6 +724,7 @@ interface PureEffect extends Readonly<BasicEffect & PureEffectData> {
 interface AbilityData extends EffectData, AbilityEventMethods, EventMethods {
 	rating: number
 	isUnbreakable?: boolean
+	permanent?: boolean
 	suppressWeather?: boolean
 }
 
@@ -1125,7 +1126,7 @@ interface ModdedBattlePokemon {
 	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void
 	moveUsed?: (this: Pokemon, move: Move, targetLoc?: number) => void
 	recalculateStats?: (this: Pokemon) => void
-	setAbility?: (this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean) => string | false
+	setAbility?: (this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean) => Ability | null
 	transformInto?: (this: Pokemon, pokemon: Pokemon, effect: Effect | null) => boolean
 	setStatus?: (this: Pokemon, status: string | PureEffect, source: Pokemon | null, sourceEffect: Effect | null, ignoreImmunities: boolean) => boolean
 	ignoringAbility?: (this: Pokemon) => boolean;

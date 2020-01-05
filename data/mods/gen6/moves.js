@@ -371,22 +371,10 @@ let BattleMovedex = {
 	simplebeam: {
 		inherit: true,
 		desc: "Causes the target's Ability to become Simple. Fails if the target's Ability is Multitype, Simple, Stance Change, or Truant.",
-		onTryHit(pokemon) {
-			let bannedAbilities = ['multitype', 'simple', 'stancechange', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability)) {
-				return false;
-			}
-		},
 	},
 	skillswap: {
 		inherit: true,
 		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Illusion, Multitype, Stance Change, or Wonder Guard.",
-		onTryHit(target, source) {
-			let bannedAbilities = ['illusion', 'multitype', 'stancechange', 'wonderguard'];
-			if (bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)) {
-				return false;
-			}
-		},
 	},
 	sleeptalk: {
 		inherit: true,
@@ -518,12 +506,6 @@ let BattleMovedex = {
 	worryseed: {
 		inherit: true,
 		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is Insomnia, Multitype, Stance Change, or Truant.",
-		onTryHit(pokemon) {
-			let bannedAbilities = ['insomnia', 'multitype', 'stancechange', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability)) {
-				return false;
-			}
-		},
 	},
 };
 

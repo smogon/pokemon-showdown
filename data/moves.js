@@ -2836,12 +2836,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
-			if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode'].includes(target.ability)) return;
+			if (this.dex.getAbility(target.ability).permanent) return;
 			if (target.newlySwitched || this.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
 		onAfterSubDamage(damage, target) {
-			if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode'].includes(target.ability)) return;
+			if (this.dex.getAbility(target.ability).permanent) return;
 			if (target.newlySwitched || this.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
@@ -4883,8 +4883,9 @@ let BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit(target, source) {
 			if (target === source || target.volatiles['dynamax']) return false;
-			let bannedTargetAbilities = ['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'truant'];
-			let bannedSourceAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode'];
+			if (this.dex.getAbility(target.ability).permanent || this.dex.getAbility(source.ability).permanent) return;
+			let bannedTargetAbilities = ['truant'];
+			let bannedSourceAbilities = ['flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'zenmode'];
 			if (bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability) || target.ability === source.ability) {
 				return false;
 			}
@@ -6555,16 +6556,16 @@ let BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		volatileStatus: 'gastroacid',
 		onTryHit(pokemon) {
-			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'zenmode'];
-			if (bannedAbilities.includes(pokemon.ability)) {
-				return false;
-			}
+			if (this.dex.getAbility(pokemon.ability).permanent) return false;
 		},
 		effect: {
 			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.js
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', this.dex.getAbility(pokemon.ability), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
+			},
+			onCopy(pokemon) {
+				if (this.dex.getAbility(pokemon.ability).permanent) pokemon.removeVolatile('gastroacid');
 			},
 		},
 		secondary: null,
@@ -15673,9 +15674,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {authentic: 1, mystery: 1},
 		onTryHit(target, source) {
-			let bannedTargetAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode'];
-			let bannedSourceAbilities = ['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'];
-			if (bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability) || target.ability === source.ability) {
+			if (this.dex.getAbility(target.ability).permanent || this.dex.getAbility(source.ability).permanent) return;
+			let bannedTargetAbilities = ['flowergift', 'forecast', 'illusion', 'imposter', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', 'zenmode'];
+			if (bannedTargetAbilities.includes(target.ability) || target.ability === source.ability) {
 				return false;
 			}
 		},
@@ -16750,7 +16751,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit(pokemon) {
-			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'simple', 'stancechange', 'truant', 'zenmode'];
+			if (this.dex.getAbility(pokemon.ability).permanent) return false;
+			let bannedAbilities = ['simple', 'truant'];
 			if (bannedAbilities.includes(pokemon.ability)) {
 				return false;
 			}
@@ -16881,7 +16883,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1},
 		onTryHit(target, source) {
-			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'illusion', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode'];
+			if (this.dex.getAbility(target.ability).permanent || this.dex.getAbility(source.ability).permanent) return;
+			let bannedAbilities = ['illusion', 'wonderguard'];
 			if (target.volatiles['dynamax'] || bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)) {
 				return false;
 			}
@@ -21243,7 +21246,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit(pokemon) {
-			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'insomnia', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'truant', 'zenmode'];
+			if (this.dex.getAbility(pokemon.ability).permanent) return false;
+			let bannedAbilities = ['insomnia', 'truant'];
 			if (bannedAbilities.includes(pokemon.ability)) {
 				return false;
 			}
