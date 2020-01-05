@@ -23,38 +23,23 @@ type SparseBoostsTable = Partial<BoostsTable>;
 type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom';
 /**
  * Describes the acceptable target(s) of a move.
+ * adjacentAlly - Only relevant to Doubles or Triples, the move only targets an ally of the user.
+ * adjacentAllyOrSelf - The move can target the user or its ally.
+ * adjacentFoe - The move can target a foe, but not (in Triples) a distant foe.
+ * all - The move targets the field or all Pokémon at once.
+ * allAdjacent - The move is a spread move that also hits the user's ally.
+ * allAdjacentFoes - The move is a spread move.
+ * allies - The move affects all active Pokémon on the user's team.
+ * allySide - The move adds a side condition on the user's side.
+ * allyTeam - The move affects all unfainted Pokémon on the user's team.
+ * any - The move can hit any other active Pokémon, not just those adjacent.
+ * foeSide - The move adds a side condition on the foe's side.
+ * normal - The move can hit one adjacent Pokémon of your choice.
+ * randomNormal - The move targets an adjacent foe at random.
+ * scripted - The move targets the foe that damaged the user.
+ * self - The move affects the user of the move.
  */
-type MoveTarget =
-	// Only relevant to Doubles or Triples, the move targets your ally only.
-	'adjacentAlly' |
-	// This move can target your ally or yourself.
-	'adjacentAllyOrSelf' |
-	// This move can only target a foe, but not (in Triples) a distant foe.
-	'adjacentFoe' |
-	// This move targets the field or all Pokémon at once.
-	'all' |
-	// This is a spread move that also hits your ally.
-	'allAdjacent' |
-	// This is a spread move.
-	'allAdjacentFoes' |
-	// This move affects all active Pokémon on your team.
-	'allies' |
-	// This move is a side effect for your side.
-	'allySide' |
-	// This move affects all unfainted Pokémon on your team.
-	'allyTeam' |
-	// This move can hit any other active Pokémon, even in Triples.
-	'any' |
-	// This move is a side effect for your opponent.
-	'foeSide' |
-	// This move can hit one adjacent Pokémon of your choice.
-	'normal' |
-	// This move targets an adjacent foe at random.
-	'randomNormal' |
-	// This move targets the foe that damaged the user.
-	'scripted' |
-	// This move affects the user of the move.
-	'self';
+type MoveTarget = 'adjacentAlly' | 'adjacentAllyOrSelf' | 'adjacentFoe' | 'all' | 'allAdjacent' | 'allAdjacentFoes' | 'allies' | 'allySide' | 'allyTeam' | 'any' | 'foeSide' | 'normal' | 'randomNormal' | 'scripted' | 'self';
 
 type PokemonSet = {
 	name: string,
