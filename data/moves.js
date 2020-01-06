@@ -21434,8 +21434,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-		desc: "Will always result in a critical hit. Has a 100% chance to raise the user's evasion by 1 stage.",
-		shortDesc: "Goes first. Always crits. 100% +1 evasion.",
+		desc: "Has a 100% chance to raise the user's evasion by 1 stage.",
+		shortDesc: "Goes first. Raises user's evasion by 1.",
 		id: "zippyzap",
 		isNonstandard: "LGPE",
 		isViable: true,
@@ -21443,7 +21443,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 2,
 		flags: {contact: 1, protect: 1},
-		willCrit: true,
 		secondary: {
 			chance: 100,
 			self: {
