@@ -1070,7 +1070,7 @@ export class TeamValidator {
 					problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dawn-Wings or Necrozma-Dusk-Mane holding Ultranecrozium Z.`);
 				} else if (!template.requiredItems.includes(item.name)) {
 					// Mega or Primal
-					problems.push(`${template.species} transforms in-battle with ${Chat.toOrList(template.requiredItems)}.`);
+					problems.push(`${template.species} transforms in-battle with ${template.requiredItem}.`);
 				}
 			}
 			if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
@@ -1087,11 +1087,11 @@ export class TeamValidator {
 				if (dex.gen >= 8 && (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally')) {
 					// Arceus/Silvally formes in gen 8 only require the item with Multitype/RKS System
 					if (set.ability === template.abilities[0]) {
-						problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
+						problems.push(`${name} needs to hold ${template.requiredItems.join(' or ')}.`);
 					}
 				} else {
 					// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
-					problems.push(`${name} needs to hold ${Chat.toOrList(template.requiredItems)}.`);
+					problems.push(`${name} needs to hold ${template.requiredItems.join(' or ')}.`);
 				}
 			}
 
