@@ -485,6 +485,8 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	psyduck: {
+		inherit: true,
+		isNonstandard: null,
 		tier: "LC",
 	},
 	golduck: {
