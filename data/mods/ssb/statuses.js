@@ -134,7 +134,7 @@ let BattleStatuses = {
 			this.add(`c|%Andrew|brb kuncing`);
 		},
 		onFaint() {
-			this.add(`c|%Andrew|avenge me c.kilgannon!`);
+			this.add(`c|%Andrew|<_<`);
 		},
 	},
 	anubis: {
