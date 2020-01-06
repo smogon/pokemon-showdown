@@ -1470,7 +1470,7 @@ let BattleItems = {
 		num: 576,
 		gen: 5,
 		isPokeball: true,
-		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
+		desc: "A Poke Ball that makes it easier to catch wild Pokémon while they're asleep.",
 	},
 	"dubiousdisc": {
 		id: "dubiousdisc",
@@ -1699,7 +1699,7 @@ let BattleItems = {
 		},
 		num: 34,
 		gen: 2,
-		desc: "Restores 50 HP to one Pokemon but lowers Happiness.",
+		desc: "Restores 60 HP to one Pokemon.",
 	},
 	"enigmaberry": {
 		id: "enigmaberry",
@@ -6325,7 +6325,8 @@ let BattleItems = {
 		// Implemented in statuses.js, moves.js, and abilities.js
 		num: 1123,
 		gen: 8,
-		desc: "Blocks the holder from receiving any effects of Sunny Day/Rain Dance.",
+		desc: "The holder is immune to the weather-based modifiers of the attacker's moves in the effects of Sunny Day and Rain Dance. However, the user's Weather Ball and own weather-based abilities will not activate.",
+		shortDesc: "Blocks the holder from the effects of sun/rain",
 	},
 	"venusaurite": {
 		id: "venusaurite",

@@ -118,6 +118,15 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dreamball: {
+		id: "dreamball",
+		name: "Dream Ball",
+		spritenum: 111,
+		num: 576,
+		gen: 5,
+		isPokeball: true,
+		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
+	},
 	eeviumz: {
 		inherit: true,
 		isNonstandard: null,
