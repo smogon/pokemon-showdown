@@ -1099,6 +1099,7 @@ let BattleMovedex = {
 		desc: "Will always result in a critical hit.",
 		shortDesc: "Nearly always goes first. Always crits.",
 		pp: 15,
+		willCrit: true,
 		secondary: null,
 	},
 };
