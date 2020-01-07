@@ -1297,7 +1297,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	cloyster: {
-		randomBattleMoves: ["iciclespear", "liquidation", "pinmissile", "rockblast", "shellsmash"],
+		randomBattleMoves: ["explosion", "iciclespear", "liquidation", "rockblast", "shellsmash"],
 		eventPokemon: [
 			{"generation": 5, "level": 30, "gender": "M", "nature": "Naughty", "isHidden": false, "abilities": ["skilllink"], "moves": ["iciclespear", "rockblast", "hiddenpower", "razorshell"], "pokeball": "pokeball"},
 		],
@@ -1534,7 +1534,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	weezing: {
-		randomBattleMoves: ["defog", "fireblast", "painsplit", "sludgebomb", "toxicspikes", "willowisp"],
+		randomBattleMoves: ["fireblast", "painsplit", "sludgebomb", "toxicspikes", "willowisp"],
 		encounters: [
 			{"generation": 2, "level": 16},
 			{"generation": 3, "level": 32},
@@ -2001,7 +2001,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	umbreon: {
-		randomBattleMoves: ["foulplay", "protect", "taunt", "wish"],
+		randomBattleMoves: ["foulplay", "protect", "wish", "yawn"],
 		eventPokemon: [
 			{"generation": 3, "level": 70, "moves": ["feintattack", "meanlook", "screech", "moonlight"], "pokeball": "pokeball"},
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
@@ -3379,7 +3379,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	shedinja: {
-		randomBattleMoves: ["shadowclaw", "shadowsneak", "toxic", "willowisp", "xscissor"],
+		randomBattleMoves: ["shadowclaw", "shadowsneak", "willowisp", "xscissor"],
 		eventPokemon: [
 			{"generation": 3, "level": 50, "moves": ["spite", "confuseray", "shadowball", "grudge"], "pokeball": "pokeball"},
 		],
@@ -5543,7 +5543,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	gothitelle: {
-		randomBattleMoves: ["cosmicpower", "rest", "storedpower", "trick"],
+		randomBattleMoves: ["charm", "psychic", "rest", "taunt"],
 		encounters: [
 			{"generation": 5, "level": 34, "isHidden": false},
 		],
@@ -7477,11 +7477,12 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	corviknight: {
-		randomBattleMoves: ["bodypress", "bravebird", "bulkup", "defog", "roost"],
+		randomBattleMoves: ["bodypress", "bravebird", "bulkup", "roost"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	corviknightgmax: {
+		randomBattleMoves: ["bodypress", "bravebird", "defog", "roost", "uturn"],
 		isGigantamax: "G-Max Wind Rage",
 		tier: "Uber",
 		doublesTier: "DOU",
