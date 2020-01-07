@@ -269,6 +269,7 @@ let BattleItems = {
 		},
 		num: 104,
 		gen: 4,
+		isNonstandard: "Past",
 		desc: "Can be revived into Shieldon.",
 	},
 	"aspearberry": {
@@ -1027,6 +1028,7 @@ let BattleItems = {
 		},
 		num: 100,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Can be revived into Anorith.",
 	},
 	"cloversweet": {
@@ -1110,6 +1112,7 @@ let BattleItems = {
 		},
 		num: 572,
 		gen: 5,
+		isNonstandard: "Past",
 		desc: "Can be revived into Tirtouga.",
 	},
 	"crackedpot": {
@@ -1322,6 +1325,7 @@ let BattleItems = {
 		},
 		num: 102,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Can be revived into Kabuto.",
 	},
 	"dousedrive": {
@@ -2654,6 +2658,7 @@ let BattleItems = {
 		},
 		num: 101,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Can be revived into Omanyte.",
 	},
 	"heracronite": {
@@ -2932,6 +2937,7 @@ let BattleItems = {
 		},
 		num: 710,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "Can be revived into Tyrunt.",
 	},
 	"kasibberry": {
@@ -4177,6 +4183,7 @@ let BattleItems = {
 		},
 		num: 103,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Can be revived into Aerodactyl.",
 	},
 	"oranberry": {
@@ -4452,6 +4459,7 @@ let BattleItems = {
 		},
 		num: 573,
 		gen: 5,
+		isNonstandard: "Past",
 		desc: "Can be revived into Archen.",
 	},
 	"poisonbarb": {
@@ -5198,6 +5206,7 @@ let BattleItems = {
 		},
 		num: 99,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Can be revived into Lileep.",
 	},
 	"roseincense": {
@@ -5359,6 +5368,7 @@ let BattleItems = {
 		},
 		num: 711,
 		gen: 6,
+		isNonstandard: "Past",
 		desc: "Can be revived into Amaura.",
 	},
 	"salacberry": {
@@ -5645,6 +5655,7 @@ let BattleItems = {
 		},
 		num: 105,
 		gen: 4,
+		isNonstandard: "Past",
 		desc: "Can be revived into Cranidos.",
 	},
 	"skyplate": {
