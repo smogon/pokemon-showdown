@@ -127,6 +127,10 @@ let BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
+	oldamber: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	pamtreberry: {
 		inherit: true,
 		isUnreleased: false,
