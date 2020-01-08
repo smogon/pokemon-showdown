@@ -125,7 +125,7 @@ export const commands: ChatCommands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	modchathelp: [`/modchat [off/autoconfirmed/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: * @ \u2606 for off/autoconfirmed/+ options, # & ~ for all the options`],
+	modchathelp: [`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+ options, * @ # & ~ for all the options`],
 
 	ioo(target, room, user) {
 		return this.parse('/modjoin %');
