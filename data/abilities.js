@@ -4461,7 +4461,7 @@ let BattleAbilities = {
 	},
 	"wanderingspirit": {
 		desc: "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.",
-		shortDesc: "Exchanges abilities when being hit with a contact move.",
+		shortDesc: "Exchanges abilities when hit with a contact move.",
 		onAfterDamage(damage, target, source, move) {
 			// Are these actually banned? Makes sense for them to be banned to me
 			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode'];
