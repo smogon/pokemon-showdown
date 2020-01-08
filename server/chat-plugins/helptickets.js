@@ -343,8 +343,8 @@ class HelpTicket extends Rooms.RoomGame {
 
 	// Modified version of RoomGame.destory
 	destroy() {
-		if (tickets[this.ticket.userid]) {
-			// Ticket was not deleted - deleted tickets already have this done to them
+		if (tickets[this.ticket.userid] && this.ticket.open) {
+			// Ticket was not deleted - deleted tickets already have this done to them - and was not closed.
 			// Write stats and change flags as appropriate prior to deletion.
 			this.ticket.open = false;
 			tickets[this.ticket.userid] = this.ticket;
