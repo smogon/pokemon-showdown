@@ -222,7 +222,7 @@ let Formats = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles'],
+		ruleset: ['Standard Doubles', '!Evasion Abilities Clause'],
 		banlist: ['DUber'],
 	},
 	{
