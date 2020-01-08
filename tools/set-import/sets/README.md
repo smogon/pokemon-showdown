@@ -11,6 +11,6 @@ This package contains sets imported or generated from the following sources:
 
 The types and loading logic, as well as data from the `smogon.com/stats` source is distributed under the terms of the [MIT License][0].
 
-  [0]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+  [0]: https://github.com/smogon/pokemon-showdown/blob/master/LICENSE
 
 Other sources of data may be subject to additional restrictions and their use should be negotiated beforehand with their original authors.

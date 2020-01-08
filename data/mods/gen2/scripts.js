@@ -184,7 +184,7 @@ let BattleScripts = {
 
 		hitResult = this.singleEvent('TryImmunity', move, {}, target, pokemon, move);
 		if (hitResult === false) {
-			this.add('-immune', pokemon);
+			this.add('-immune', target);
 			return false;
 		}
 

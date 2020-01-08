@@ -248,7 +248,7 @@ let BattleMovedex = {
 				if (move && (move.target === 'self' || move.id === 'suckerpunch')) return;
 				this.add('-activate', target, 'move: Protect');
 				if (move.flags['contact']) {
-					this.damage(source.maxhp / 8, source, target);
+					this.damage(source.baseMaxhp / 8, source, target);
 				}
 				return null;
 			},
@@ -303,7 +303,7 @@ let BattleMovedex = {
 			duration: 2,
 			onLockMove: 'solarbeam',
 			onStart(pokemon) {
-				this.heal(pokemon.maxhp / 2);
+				this.heal(pokemon.baseMaxhp / 2);
 			},
 		},
 		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn. The user heals 1/2 of its max HP during the charge turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",

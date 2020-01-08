@@ -282,7 +282,8 @@ class RandomGen2Teams extends RandomGen3Teams {
 		let levelScale = {
 			LC: 90, // unused
 			NFE: 84, // unused
-			NU: 78,
+			NU: 80,
+			NUBL: 76,
 			UU: 74,
 			UUBL: 70,
 			OU: 68,

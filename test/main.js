@@ -43,7 +43,8 @@ before('initialization', function () {
 	require('../.lib-dist/repl').Repl.start = noop;
 
 	// Start the server.
-	require('../server');
+	// NOTE: This used "server" before when we needed ".server-dist"
+	require('../.server-dist');
 
 	LoginServer.disabled = true;
 

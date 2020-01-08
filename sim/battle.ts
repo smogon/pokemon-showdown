@@ -1215,30 +1215,34 @@ export class Battle {
 		return true;
 	}
 
-	switchIn(pokemon: Pokemon, pos?: number, sourceEffect: Effect | null = null) {
-		if (!pokemon || pokemon.isActive) return false;
-		if (!pos) pos = 0;
+	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null) {
+		if (!pokemon || pokemon.isActive) {
+			this.hint("A switch failed because the Pokémon trying to switch in is already in.");
+			return false;
+		}
+
 		const side = pokemon.side;
 		if (pos >= side.active.length) {
-			throw new Error("Invalid switch position");
+			throw new Error(`Invalid switch position ${pos}`);
 		}
-		let newMove = null;
-		if (side.active[pos]) {
-			const oldActive = side.active[pos];
+		const oldActive = side.active[pos];
+		if (oldActive) {
+			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it no longer takes its turn
+			this.cancelAction(oldActive);
+
+			let newMove = null;
 			if (this.gen === 4 && sourceEffect) {
 				newMove = oldActive.lastMove;
 			}
-			this.cancelMove(oldActive);
 			if (oldActive.switchCopyFlag) {
 				oldActive.switchCopyFlag = false;
 				pokemon.copyVolatileFrom(oldActive);
 			}
+			if (newMove) pokemon.lastMove = newMove;
 		}
-		if (newMove) pokemon.lastMove = newMove;
 		pokemon.isActive = true;
 		this.runEvent('BeforeSwitchIn', pokemon);
-		if (side.active[pos]) {
-			const oldActive = side.active[pos];
+		if (oldActive) {
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.usedItemThisTurn = false;
@@ -1246,7 +1250,6 @@ export class Battle {
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
-			this.cancelMove(oldActive);
 			oldActive.clearVolatile();
 		}
 		side.active[pos] = pokemon;
@@ -2003,7 +2006,22 @@ export class Battle {
 		const defender = target;
 		let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
 		const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
-		if (move.useSourceDefensiveAsOffensive) attackStat = defenseStat;
+		if (move.useSourceDefensiveAsOffensive) {
+			attackStat = defenseStat;
+			// Body press really wants to use the def stat,
+			// so it switches stats to compensate for Wonder Room.
+			// Of course, the game thus miscalculates the boosts...
+			if ('wonderroom' in this.field.pseudoWeather) {
+				if (attackStat === 'def') {
+					attackStat = 'spd';
+				} else if (attackStat === 'spd') {
+					attackStat = 'def';
+				}
+				if (attacker.boosts['def'] || attacker.boosts['spd']) {
+					this.hint("Body Press uses Sp. Def boosts when Wonder Room is active.");
+				}
+			}
+		}
 
 		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 		let attack;
@@ -2037,6 +2055,7 @@ export class Battle {
 			attack = attacker.calculateStat(attackStat, atkBoosts);
 		}
 
+		attackStat = (category === 'Physical' ? 'atk' : 'spa');
 		defense = defender.calculateStat(defenseStat, defBoosts);
 
 		// Apply Stat Modifiers
@@ -2264,19 +2283,20 @@ export class Battle {
 		}
 		let faintData;
 		while (this.faintQueue.length) {
-			faintData = this.faintQueue[0];
-			this.faintQueue.shift();
-			if (!faintData.target.fainted &&
-					this.runEvent('BeforeFaint', faintData.target, faintData.source, faintData.effect)) {
-				this.add('faint', faintData.target);
-				faintData.target.side.pokemonLeft--;
-				this.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
-				this.singleEvent('End', this.dex.getAbility(faintData.target.ability), faintData.target.abilityData, faintData.target);
-				faintData.target.clearVolatile(false);
-				faintData.target.fainted = true;
-				faintData.target.isActive = false;
-				faintData.target.isStarted = false;
-				faintData.target.side.faintedThisTurn = true;
+			faintData = this.faintQueue.shift()!;
+			const pokemon: Pokemon = faintData.target;
+			if (!pokemon.fainted &&
+					this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
+				this.add('faint', pokemon);
+				pokemon.side.pokemonLeft--;
+				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				this.singleEvent('End', this.dex.getAbility(pokemon.ability), pokemon.abilityData, pokemon);
+				pokemon.clearVolatile(false);
+				pokemon.fainted = true;
+				pokemon.illusion = null;
+				pokemon.isActive = false;
+				pokemon.isStarted = false;
+				pokemon.side.faintedThisTurn = true;
 			}
 		}
 
@@ -2338,29 +2358,39 @@ export class Battle {
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
 		if (!action.move && action.moveid) action.move = this.dex.getActiveMove(action.moveid);
 		if (!action.choice && action.move) action.choice = 'move';
-		if (!action.priority && action.priority !== 0) {
-			const priorities = {
-				beforeTurn: 100,
-				beforeTurnMove: 99,
-				switch: 7,
-				runUnnerve: 7.3,
-				runSwitch: 7.2,
-				runPrimal: 7.1,
-				instaswitch: 101,
-				megaEvo: 6.9,
-				runDynamax: 6.8,
-				residual: -100,
-				team: 102,
-				start: 101,
+		if (!action.order) {
+			const orders: {[choice: string]: number} = {
+				team: 1,
+				start: 2,
+				instaswitch: 3,
+				beforeTurn: 4,
+				beforeTurnMove: 5,
+
+				runUnnerve: 100,
+				runSwitch: 101,
+				runPrimal: 102,
+				switch: 103,
+				megaEvo: 104,
+				runDynamax: 105,
+
+				shift: 106,
+
+				// default is 200 (for moves)
+
+				residual: 300,
 			};
-			if (action.choice in priorities) {
-				// @ts-ignore - Typescript being dumb about index signatures
-				action.priority = priorities[action.choice];
+			if (action.choice in orders) {
+				action.order = orders[action.choice];
+			} else {
+				action.order = 200;
+				if (!['move', 'event'].includes(action.choice)) {
+					throw new Error(`Unexpected orderless action ${action.choice}`);
+				}
 			}
 		}
 		if (!midTurn) {
 			if (action.choice === 'move') {
-				if (!action.zmove && action.move.beforeTurnCallback) {
+				if (!action.maxMove && !action.zmove && action.move.beforeTurnCallback) {
 					this.addToQueue({
 						choice: 'beforeTurnMove', pokemon: action.pokemon, move: action.move, targetLoc: action.targetLoc,
 					});
@@ -2374,22 +2404,21 @@ export class Battle {
 					});
 				}
 				if (action.maxMove && !action.pokemon.volatiles['dynamax']) {
-					this.debug(`Adding runDynamax to queue`);
 					this.addToQueue({
 						choice: 'runDynamax',
 						pokemon: action.pokemon,
 					});
 				}
-			} else if (action.choice === 'switch' || action.choice === 'instaswitch') {
+				action.fractionalPriority = this.runEvent('FractionalPriority', action.pokemon, null, action.move, 0);
+			} else if (['switch', 'instaswitch'].includes(action.choice)) {
 				if (typeof action.pokemon.switchFlag === 'string') {
 					action.sourceEffect = this.dex.getMove(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
-				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
 			}
 		}
 
-		const deferPriority = this.gen >= 7 && action.mega && action.mega !== 'done';
+		const deferPriority = this.gen === 7 && action.mega && action.mega !== 'done';
 		if (action.move) {
 			let target = null;
 			action.move = this.dex.getActiveMove(action.move);
@@ -2399,43 +2428,46 @@ export class Battle {
 				// TODO: what actually happens here?
 				if (target) action.targetLoc = this.getTargetLoc(target, action.pokemon);
 			}
-
-			if (!action.priority && !deferPriority) {
-				let move = action.move;
-				if (action.zmove) {
-					const zMoveName = this.getZMove(action.move, action.pokemon, true);
-					if (zMoveName) {
-						const zMove = this.dex.getActiveMove(zMoveName);
-						if (zMove.exists && zMove.isZ) {
-							move = zMove;
-						}
-					}
-				}
-				if (action.maxMove) {
-					const maxMoveName = this.getMaxMove(action.maxMove, action.pokemon);
-					if (maxMoveName) {
-						const maxMove = this.getActiveMaxMove(action.move, action.pokemon);
-						if (maxMove.exists && maxMove.isMax) {
-							move = maxMove;
-						}
-					}
-				}
-				const priority = this.runEvent('ModifyPriority', action.pokemon, target, move, move.priority);
-				action.priority = priority;
-				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
-				if (this.gen > 5) action.move.priority = priority;
-			}
 		}
-		if (!action.speed) {
-			if ((action.choice === 'switch' || action.choice === 'instaswitch') && action.target) {
-				action.speed = action.target.getActionSpeed();
-			} else if (!action.pokemon) {
-				action.speed = 1;
-			} else if (!deferPriority) {
-				action.speed = action.pokemon.getActionSpeed();
-			}
-		}
+		if (!deferPriority) this.getActionSpeed(action);
 		return action as any;
+	}
+
+	getActionSpeed(action: AnyObject) {
+		if (action.choice === 'move') {
+			let move = action.move;
+			if (action.zmove) {
+				const zMoveName = this.getZMove(action.move, action.pokemon, true);
+				if (zMoveName) {
+					const zMove = this.dex.getActiveMove(zMoveName);
+					if (zMove.exists && zMove.isZ) {
+						move = zMove;
+					}
+				}
+			}
+			if (action.maxMove) {
+				const maxMoveName = this.getMaxMove(action.maxMove, action.pokemon);
+				if (maxMoveName) {
+					const maxMove = this.getActiveMaxMove(action.move, action.pokemon);
+					if (maxMove.exists && maxMove.isMax) {
+						move = maxMove;
+					}
+				}
+			}
+			// take priority from the base move, so abilities like Prankster only apply once
+			// (instead of compounding every time `getActionSpeed` is called)
+			let priority = this.dex.getMove(move.id).priority;
+			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
+			action.priority = priority + action.fractionalPriority;
+			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
+			if (this.gen > 5) action.move.priority = priority;
+		}
+
+		if (!action.pokemon) {
+			action.speed = 1;
+		} else {
+			action.speed = action.pokemon.getActionSpeed();
+		}
 	}
 
 	/**
@@ -2454,7 +2486,15 @@ export class Battle {
 	}
 
 	sortQueue() {
+		// this.log.push('SORT ' + this.debugQueue());
 		this.speedSort(this.queue);
+	}
+
+	debugQueue() {
+		return this.queue.map(action =>
+			// @ts-ignore
+			`${action.order || ''}:${action.priority || ''}:${action.speed || ''}:${action.subOrder || ''} - ${action.choice}${action.pokemon ? ' ' + action.pokemon : ''}${action.move ? ' ' + action.move : ''}`
+		).join('\n') + '\n';
 	}
 
 	/**
@@ -2472,7 +2512,6 @@ export class Battle {
 
 		if (chosenAction.pokemon) {
 			chosenAction.pokemon.updateSpeed();
-			chosenAction.speed = 0; // make resolveAction update Speed
 		}
 		const action = this.resolveAction(chosenAction, midTurn);
 		for (const [i, curAction] of this.queue.entries()) {
@@ -2496,6 +2535,7 @@ export class Battle {
 			}
 		}
 		action.sourceEffect = sourceEffect;
+		action.order = 3;
 		this.queue.unshift(action);
 	}
 
@@ -2519,10 +2559,11 @@ export class Battle {
 	}
 
 	cancelAction(pokemon: Pokemon) {
-		const length = this.queue.length;
+		const oldLength = this.queue.length;
 		this.queue = this.queue.filter(action =>
-			!(action.pokemon === pokemon && action.priority >= -100));
-		return this.queue.length !== length;
+			action.pokemon !== pokemon
+		);
+		return this.queue.length !== oldLength;
 	}
 
 	cancelMove(pokemon: Pokemon) {
@@ -2537,7 +2578,7 @@ export class Battle {
 
 	willSwitch(pokemon: Pokemon) {
 		for (const action of this.queue) {
-			if ((action.choice === 'switch' || action.choice === 'instaswitch') && action.pokemon === pokemon) {
+			if (['switch', 'instaswitch'].includes(action.choice) && action.pokemon === pokemon) {
 				return action;
 			}
 		}
@@ -2589,7 +2630,7 @@ export class Battle {
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
 			for (const pokemon of action.pokemon.side.pokemon) {
-				pokemon.canDynamax = null;
+				pokemon.canDynamax = false;
 			}
 			break;
 		case 'beforeTurnMove': {
@@ -2642,24 +2683,22 @@ export class Battle {
 					break;
 				}
 			}
-			action.pokemon.illusion = null;
-			this.singleEvent('End', this.dex.getAbility(action.pokemon.ability), action.pokemon.abilityData, action.pokemon);
-			if (!action.pokemon.hp && !action.pokemon.fainted) {
+			if (action.pokemon.hp) {
+				action.pokemon.illusion = null;
+				this.singleEvent('End', this.dex.getAbility(action.pokemon.ability), action.pokemon.abilityData, action.pokemon);
+			} else if (!action.pokemon.fainted) {
 				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
 					// in gen 2-4, the switch still happens
+					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
 					action.priority = -101;
 					this.queue.unshift(action);
-					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
+					break;
+				} else {
+					// in gen 5+, the switch is cancelled
+					this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
 					break;
 				}
-				// in gen 5+, the switch is cancelled
-				this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
-				break;
-			}
-			if (action.target.isActive) {
-				this.hint("A switch failed because the Pokémon trying to switch in is already in.");
-				break;
 			}
 			this.switchIn(action.target, action.pokemon.position, action.sourceEffect);
 			break;
@@ -2733,7 +2772,7 @@ export class Battle {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
-		} else if (['megaEvo', 'runDynamax'].includes(action.choice) && this.gen >= 7) {
+		} else if (action.choice === 'megaEvo' && this.gen === 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			const moveIndex = this.queue.findIndex(queuedAction =>
@@ -2773,6 +2812,14 @@ export class Battle {
 		}
 
 		this.eachEvent('Update');
+		if (this.gen >= 8 && this.queue.length && this.queue[0].choice === 'move') {
+			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
+			this.updateSpeed();
+			for (const queueAction of this.queue) {
+				if (queueAction.pokemon) this.getActionSpeed(queueAction);
+			}
+			this.sortQueue();
+		}
 
 		return false;
 	}

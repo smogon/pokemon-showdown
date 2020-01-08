@@ -316,6 +316,13 @@ stat boosts are minor actions.
 > where `STAT` indicates where the ability prevents stat drops. (For abilities
 > that block all stat drops, like Clear Body, `|STAT` does not appear.) 
 
+`|-block|POKEMON|EFFECT|MOVE|ATTACKER`
+
+> An effect targeted at `POKEMON` was blocked by `EFFECT`. This may optionally
+> specify that the effect was a `MOVE` from `ATTACKER`. `[of]SOURCE` will note
+> the owner of the `EFFECT`, in the case that it's not `EFFECT` (for instance,
+> an ally with Aroma Veil.)
+
 `|-notarget|POKEMON`
 
 > A move has failed due to their being no target Pokémon `POKEMON`. `POKEMON` is

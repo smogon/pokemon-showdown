@@ -46,7 +46,7 @@ try {
 	for (let t in ticketData) {
 		const ticket = ticketData[t];
 		if (ticket.banned) {
-			if (ticket.expires <= Date.now()) continue;
+			if (ticket.expires && ticket.expires <= Date.now()) continue;
 			ticketBans[t] = ticket;
 		} else {
 			if (ticket.created + TICKET_CACHE_TIME <= Date.now()) {
@@ -260,7 +260,6 @@ class HelpTicket extends Rooms.RoomGame {
 	 * @param {boolean | 'ticketban' | 'deleted'} result
 	 */
 	close(staff, result) {
-		this.room.isHelp = 'closed';
 		this.ticket.open = false;
 		tickets[this.ticket.userid] = this.ticket;
 		writeTickets();
@@ -340,6 +339,30 @@ class HelpTicket extends Rooms.RoomGame {
 		writeTickets();
 		notifyStaff();
 		this.room.destroy();
+	}
+
+	// Modified version of RoomGame.destory
+	destroy() {
+		if (tickets[this.ticket.userid] && this.ticket.open) {
+			// Ticket was not deleted - deleted tickets already have this done to them - and was not closed.
+			// Write stats and change flags as appropriate prior to deletion.
+			this.ticket.open = false;
+			tickets[this.ticket.userid] = this.ticket;
+			notifyStaff();
+			writeTickets();
+			this.writeStats(false);
+		}
+
+		this.room.game = null;
+		// @ts-ignore
+		this.room = null;
+		for (const player of this.players) {
+			player.destroy();
+		}
+		// @ts-ignore
+		this.players = null;
+		// @ts-ignore
+		this.playerTable = null;
 	}
 }
 
@@ -492,29 +515,29 @@ function checkTicketBanned(user) {
 	} else {
 		/** @type {BannedTicketState?} */
 		let bannedTicket = null;
-		const checkIp = !(Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed);
-		if (checkIp) {
-			for (let t in ticketBans) {
-				if (ticketBans[t].ip === user.latestIp) {
-					bannedTicket = ticketBans[t];
-					break;
+		// Skip the IP based check if the user is autoconfirmed and on a shared IP.
+		if (Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) return false;
+
+		for (let t in ticketBans) {
+			if (ticketBans[t].ip === user.latestIp) {
+				bannedTicket = ticketBans[t];
+				// A match was found, if its not expired, ticket ban them. Otherwise remove the expired entry and keep searching.
+				if (bannedTicket.expires > Date.now()) {
+					ticket = Object.assign({}, bannedTicket);
+					ticket.name = user.name;
+					ticket.userid = user.id;
+					ticket.by = bannedTicket.by + ' (IP)';
+					ticketBans[user.id] = ticket;
+					writeTickets();
+					return `You are banned from creating tickets${toID(ticket.banned) !== user.id ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
+				} else {
+					delete ticketBans[bannedTicket.userid];
+					writeTickets();
 				}
 			}
 		}
-		if (!bannedTicket) return false;
-		if (bannedTicket.expires > Date.now()) {
-			ticket = Object.assign({}, bannedTicket);
-			ticket.name = user.name;
-			ticket.userid = user.id;
-			ticket.by = bannedTicket.by + ' (IP)';
-			ticketBans[user.id] = ticket;
-			writeTickets();
-			return `You are banned from creating tickets${toID(ticket.banned) !== user.id ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
-		} else {
-			delete ticketBans[bannedTicket.userid];
-			writeTickets();
-			return false;
-		}
+		// No un-expired IP matches found.
+		return false;
 	}
 }
 
@@ -872,22 +895,27 @@ const pages = {
 			this.title = 'Ticket Stats';
 			if (!this.can('lock')) return;
 
-			let [table, year, month, col] = query;
+			let [table, yearString, monthString, col] = query;
 			if (!['staff', 'tickets'].includes(table)) table = 'tickets';
-			let monthString = `${year}-${month}`;
+			let year = parseInt(yearString);
+			let month = parseInt(monthString) - 1;
 			let date = null;
-			if (monthString.includes('undefined')) {
-				// year/month not provided, use current month
+			if (isNaN(year) || isNaN(month) || month < 0 || month > 11 || year < 2010) {
+				// year/month not provided or is invalid, use current date
 				date = new Date();
-				monthString = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
+			} else {
+				date = new Date(year, month);
 			}
-			let rawTicketStats = FS(`logs/tickets/${monthString}.tsv`).readIfExistsSync();
+			let dateUrl = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
+
+			let rawTicketStats = FS(`logs/tickets/${dateUrl}.tsv`).readIfExistsSync();
 			if (!rawTicketStats) return `<div class="pad"><br />No ticket stats found.</div>`;
 
 			// Calculate next/previous month for stats and validate stats exist for the month
-			const prevDate = new Date(monthString);
-			if (!date) date = new Date((prevDate.getMonth() === 11 ? prevDate.getFullYear() + 1 : prevDate.getFullYear()), (prevDate.getMonth() === 11 ? 0 : prevDate.getMonth() + 1));
-			const nextDate = new Date((prevDate.getMonth() >= 10 ? prevDate.getFullYear() + 1 : prevDate.getFullYear()), (prevDate.getMonth() + 2 > 11 ? (prevDate.getMonth() + 2) - 12 : prevDate.getMonth() + 2));
+
+			// date.getMonth() returns 0-11, we need 1-12 +/-1 for this
+			let prevDate = new Date(date.getMonth() === 0 ? date.getFullYear() - 1 : date.getFullYear(), date.getMonth() === 0 ? 11 : date.getMonth() - 1);
+			let nextDate = new Date(date.getMonth() === 11 ? date.getFullYear() + 1 : date.getFullYear(), date.getMonth() === 11 ? 0 : date.getMonth() + 1);
 			let prevString = Chat.toTimestamp(prevDate).split(' ')[0].split('-', 2).join('-');
 			let nextString = Chat.toTimestamp(nextDate).split(' ')[0].split('-', 2).join('-');
 
@@ -897,7 +925,7 @@ const pages = {
 			} else {
 				buttonBar += `<a class="button disabled" style="float: left">&lt; Previous Month</a>`;
 			}
-			buttonBar += `<a class="button${table === 'tickets' ? ' disabled"' : `" href="/view-help-stats-tickets-${monthString}" target="replace"`}>Ticket Stats</a> <a class="button ${table === 'staff' ? ' disabled"' : `" href="/view-help-stats-staff-${monthString}" target="replace"`}>Staff Stats</a>`;
+			buttonBar += `<a class="button${table === 'tickets' ? ' disabled"' : `" href="/view-help-stats-tickets-${dateUrl}" target="replace"`}>Ticket Stats</a> <a class="button ${table === 'staff' ? ' disabled"' : `" href="/view-help-stats-staff-${dateUrl}" target="replace"`}>Staff Stats</a>`;
 			if (FS(`logs/tickets/${nextString}.tsv`).readIfExistsSync()) {
 				buttonBar += `<a class="button" href="/view-help-stats-${table}-${nextString}" target="replace" style="float: right">Next Month &gt;</a>`;
 			} else {
@@ -1012,7 +1040,7 @@ const pages = {
 			};
 			buf = buf.replace(/<Button>([a-z]+)<\/Button>/g, (match, id) => {
 				if (col === id) return headerTitles[id];
-				return `<a class="button" href="/view-help-stats-${table}-${monthString}-${id}" target="replace">${headerTitles[id]}</a>`;
+				return `<a class="button" href="/view-help-stats-${table}-${dateUrl}-${id}" target="replace">${headerTitles[id]}</a>`;
 			});
 			return buf;
 		},
@@ -1099,6 +1127,7 @@ let commands = {
 				'Inappropriate Username / Status Message': `Hi! Tell us the username that is inappropriate, or tell us which user has an inappropriate status message.`,
 				'Inappropriate Pokemon Nicknames': `Hi! Which user has Pokemon with inappropriate nicknames, and in which battle? Please post a link to the battle or a replay of the battle.`,
 				'Appeal': `Hi! Can you please explain why you feel your punishment is undeserved?`,
+				'IP-Appeal': `Hi! How are you connecting to Showdown right now? At home, at school, on a phone using mobile data, or some other way?`,
 				'Public Room Assistance Request': `Hi! Which room(s) do you need us to help you watch?`,
 				'Other': `Hi! What seems to be the problem? Tell us about any people involved, and if this happened in a specific place on the site.`,
 			};
@@ -1163,7 +1192,7 @@ let commands = {
 			if (!helpRoom) {
 				helpRoom = Rooms.createChatRoom(/** @type {RoomID} */ (`help-${user.id}`), `[H] ${user.name}`, {
 					isPersonal: true,
-					isHelp: 'open',
+					isHelp: true,
 					isPrivate: 'hidden',
 					modjoin: '%',
 					auth: {[user.id]: '+'},
@@ -1172,10 +1201,9 @@ let commands = {
 				});
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			} else {
-				helpRoom.isHelp = 'open';
-				if (helpRoom.expireTimer) clearTimeout(helpRoom.expireTimer);
+				helpRoom.pokeExpireTimer();
 				helpRoom.introMessage = introMessage;
-				helpRoom.staffMessage = staffMessage + staffHint;
+				helpRoom.staffMessage = staffMessage + staffHint + reportTargetInfo;
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
@@ -1285,7 +1313,7 @@ let commands = {
 
 			if (targetUser) {
 				affected.push(targetUser);
-				affected.concat(targetUser.getAltUsers(false, true));
+				affected = affected.concat(targetUser.getAltUsers(false, true));
 			} else {
 				let foundKeys = Punishments.search(userid).map(([key]) => key);
 				let userids = new Set([userid]);

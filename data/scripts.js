@@ -72,7 +72,7 @@ let BattleScripts = {
 			if (!lockedMove) {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.add('cant', pokemon, 'nopp', move);
-					let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
+					let gameConsole = [null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS'][this.gen] || 'Switch';
 					this.hint(`This is not a bug, this is really how it works on the ${gameConsole}; try it yourself if you don't believe us.`);
 					this.clearActiveMove(true);
 					pokemon.moveThisTurnResult = false;
@@ -155,11 +155,18 @@ let BattleScripts = {
 		if (move.id === 'weatherball' && zMove) {
 			// Z-Weather Ball only changes types if it's used directly,
 			// not if it's called by Z-Sleep Talk or something.
-			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+			this.singleEvent('ModifyType', move, null, pokemon, target, move, move);
 			if (move.type !== 'Normal') sourceEffect = move;
 		}
 		if (zMove || (move.category !== 'Status' && sourceEffect && /** @type {ActiveMove} */(sourceEffect).isZ)) {
 			move = this.getActiveZMove(move, pokemon);
+		}
+		if (maxMove && move.category !== 'Status') {
+			let moveType = move.type;
+			// Max move outcome is dependent on the move type after type modifications from ability and the move itself
+			this.singleEvent('ModifyType', move, null, pokemon, target, move, move);
+			this.runEvent('ModifyType', pokemon, target, move, move);
+			if (move.type !== moveType) sourceEffect = move;
 		}
 		if (maxMove || (move.category !== 'Status' && sourceEffect && /** @type {ActiveMove} */(sourceEffect).isMax)) {
 			move = this.getActiveMaxMove(move, pokemon);
@@ -182,6 +189,7 @@ let BattleScripts = {
 
 		this.setActiveMove(move, pokemon, target);
 
+		this.singleEvent('ModifyType', move, null, pokemon, target, move, move);
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 		if (baseTarget !== move.target) {
 			// Target changed in ModifyMove, so we must adjust it here
@@ -189,6 +197,7 @@ let BattleScripts = {
 			// event
 			target = this.resolveTarget(pokemon, move);
 		}
+		move = this.runEvent('ModifyType', pokemon, target, move, move);
 		move = this.runEvent('ModifyMove', pokemon, target, move, move);
 		if (baseTarget !== move.target) {
 			// Adjust again
@@ -430,7 +439,7 @@ let BattleScripts = {
 					if (move.ohko === 'Ice' && this.gen >= 7 && !pokemon.hasType('Ice')) {
 						accuracy = 20;
 					}
-					if (pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
+					if (!target.volatiles['dynamax'] && pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
 						accuracy += (pokemon.level - target.level);
 					} else {
 						this.add('-immune', target, '[ohko]');
@@ -1050,7 +1059,7 @@ let BattleScripts = {
 		if (!skipChecks) {
 			if (pokemon.side.zMoveUsed) return;
 			if (!item.zMove) return;
-			if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
+			if (item.itemUser && !item.itemUser.includes(pokemon.template.species)) return;
 			let moveData = pokemon.getMoveData(move);
 			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
 		}
@@ -1099,7 +1108,7 @@ let BattleScripts = {
 		if (pokemon.side.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
-		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
+		if (item.itemUser && !item.itemUser.includes(pokemon.template.species)) return;
 		let atLeastOne = false;
 		let mustStruggle = true;
 		/**@type {ZMoveOptions} */
@@ -1170,9 +1179,10 @@ let BattleScripts = {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
 			if (!pokemon.canDynamax) return;
-			if (this.canZMove(pokemon)) return;
-			if (this.canMegaEvo(pokemon)) return;
-			// TODO ban specific species from dynamaxing based on reserach
+			if (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra" || pokemon.getItem().zMove || this.canMegaEvo(pokemon)) {
+				return;
+			}
+			// Some pokemon species are unable to dynamax
 			const cannotDynamax = ['zacian', 'zamazenta', 'eternatus'];
 			if (cannotDynamax.includes(toID(pokemon.template.baseSpecies))) {
 				return;
@@ -1191,7 +1201,7 @@ let BattleScripts = {
 
 	getMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getMove(move);
-		if (pokemon.canGigantamax) {
+		if (pokemon.canGigantamax && move.category !== 'Status') {
 			let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
 			let gMaxMove = this.dex.getMove(gMaxTemplate.isGigantamax);
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
@@ -1203,12 +1213,12 @@ let BattleScripts = {
 	getActiveMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 		let maxMove = this.dex.getActiveMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
-		if (pokemon.canGigantamax) {
-			let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
-			let gMaxMove = this.dex.getActiveMove(gMaxTemplate.isGigantamax ? gMaxTemplate.isGigantamax : '');
-			if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
-		}
 		if (move.category !== 'Status') {
+			if (pokemon.canGigantamax) {
+				let gMaxTemplate = this.dex.getTemplate(pokemon.canGigantamax);
+				let gMaxMove = this.dex.getActiveMove(gMaxTemplate.isGigantamax ? gMaxTemplate.isGigantamax : '');
+				if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
+			}
 			if (!move.gmaxPower) throw new Error(`${move.name} doesn't have a gmaxPower`);
 			maxMove.basePower = move.gmaxPower;
 			maxMove.category = move.category;

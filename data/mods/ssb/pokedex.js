@@ -47,6 +47,11 @@ let BattlePokedex = {
 		abilities: {0: 'Stark Mountain'},
 		types: ['Steel', 'Ground', 'Fire'],
 	},
+	// Eien
+	mew: {
+		inherit: true,
+		abilities: {0: 'Psychic Surge'},
+	},
 	// Elgino
 	mimikyubusted: {
 		inherit: true,

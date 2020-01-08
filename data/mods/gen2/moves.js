@@ -174,7 +174,7 @@ let BattleMovedex = {
 				this.add('-start', pokemon, 'Curse', '[of] ' + source);
 			},
 			onAfterMoveSelf(pokemon) {
-				this.damage(pokemon.maxhp / 4);
+				this.damage(pokemon.baseMaxhp / 4);
 			},
 		},
 	},
@@ -543,9 +543,9 @@ let BattleMovedex = {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.maxhp);
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				this.heal(pokemon.maxhp / 4);
+				this.heal(pokemon.baseMaxhp / 4);
 			} else {
-				this.heal(pokemon.maxhp / 2);
+				this.heal(pokemon.baseMaxhp / 2);
 			}
 		},
 	},
@@ -556,9 +556,9 @@ let BattleMovedex = {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.maxhp);
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				this.heal(pokemon.maxhp / 4);
+				this.heal(pokemon.baseMaxhp / 4);
 			} else {
-				this.heal(pokemon.maxhp / 2);
+				this.heal(pokemon.baseMaxhp / 2);
 			}
 		},
 	},
@@ -574,7 +574,7 @@ let BattleMovedex = {
 			},
 			onAfterMoveSelfPriority: 1,
 			onAfterMoveSelf(pokemon) {
-				if (pokemon.status === 'slp') this.damage(pokemon.maxhp / 4);
+				if (pokemon.status === 'slp') this.damage(pokemon.baseMaxhp / 4);
 			},
 		},
 	},
@@ -938,9 +938,9 @@ let BattleMovedex = {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.maxhp);
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				this.heal(pokemon.maxhp / 4);
+				this.heal(pokemon.baseMaxhp / 4);
 			} else {
-				this.heal(pokemon.maxhp / 2);
+				this.heal(pokemon.baseMaxhp / 2);
 			}
 		},
 	},

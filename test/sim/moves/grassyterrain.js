@@ -38,7 +38,7 @@ describe('Grassy Terrain', function () {
 	});
 
 	it('should increase the base power of Grass-type attacks used by grounded Pokemon', function () {
-		battle = common.createBattle();
+		battle = common.gen(7).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Shaymin", ability: 'naturalcure', moves: ['grassyterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]});
 		battle.makeChoices('move grassyterrain', 'move leechseed');

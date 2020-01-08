@@ -15,7 +15,7 @@ let BattleAbilities = {
 		inherit: true,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
-				this.damage(source.maxhp / 4, source, target, null, true);
+				this.damage(source.baseMaxhp / 4, source, target, null, true);
 			}
 		},
 	},
@@ -49,7 +49,7 @@ let BattleAbilities = {
 		inherit: true,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 8, source, target, null, true);
+				this.damage(source.baseMaxhp / 8, source, target, null, true);
 			}
 		},
 	},
@@ -63,6 +63,12 @@ let BattleAbilities = {
 				this.damage(damage, null, null, null, true);
 				return 0;
 			}
+		},
+	},
+	"magicguard": {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') return false;
 		},
 	},
 	"multitype": {
@@ -120,7 +126,7 @@ let BattleAbilities = {
 		inherit: true,
 		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 8, source, target, null, true);
+				this.damage(source.baseMaxhp / 8, source, target, null, true);
 			}
 		},
 	},

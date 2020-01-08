@@ -524,9 +524,13 @@ export class Side {
 		if (ultra && this.choice.ultra) {
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
-		const dynamax = (megaDynaOrZ === 'dynamax');
+		let dynamax = (megaDynaOrZ === 'dynamax');
 		if (dynamax && (this.choice.dynamax || !this.battle.canDynamax(pokemon))) {
-			return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
+			if (pokemon.volatiles['dynamax']) {
+				dynamax = false;
+			} else {
+				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
+			}
 		}
 
 		this.choice.actions.push({

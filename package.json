@@ -39,7 +39,7 @@
   "homepage": "http://pokemonshowdown.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zarel/Pokemon-Showdown.git"
+    "url": "https://github.com/smogon/pokemon-showdown.git"
   },
   "author": {
     "name": "Guangcong Luo",
@@ -62,14 +62,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/cloud-env": "^0.2.0",
-    "@types/node": "^12.7.11",
+    "@types/node": "^12.12.6",
     "@types/node-static": "^0.7.3",
     "@types/nodemailer": "^6.2.1",
     "@types/sockjs": "^0.3.31",
     "eslint": "^6.5.1",
     "husky": "^3.0.8",
     "mocha": "^6.2.1",
-    "smogon": "^0.0.4",
+    "smogon": "^0.0.5",
     "tslint": "^5.20.0",
     "typescript": "^3.7.2"
   }

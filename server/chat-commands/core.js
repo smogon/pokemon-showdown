@@ -732,7 +732,7 @@ exports.commands = {
 
 		Ladders.visualizeAll(target).then(values => {
 			let buffer = `<div class="ladder"><table>`;
-			buffer += `<tr><td colspan="8">User: <strong>${Chat.escapeHTML(target)}</strong></td></tr>`;
+			buffer += Chat.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
 
 			let ratings = values.join(``);
 			if (!ratings) {
@@ -1512,8 +1512,8 @@ exports.commands = {
 			this.sendReply(`${this.tr('INFORMATIONAL/RESOURCE COMMANDS')}: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq ${broadcastMsg}`);
 			this.sendReply(`${this.tr('DATA COMMANDS')}: /data, /dexsearch, /movesearch, /itemsearch, /learn, /statcalc, /effectiveness, /weakness, /coverage, /randommove, /randompokemon ${broadcastMsg}`);
 			if (user.group !== Config.groupsranking[0]) {
-				this.sendReply(`${this.tr('DRIVER COMMANDS')}: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /weeklock, /unlock, /announce`);
-				this.sendReply(`${this.tr('MODERATOR COMMANDS')}: /globalban, /unglobalban, /ip, /modchat, /markshared, /unlockip`);
+				this.sendReply(`${this.tr('DRIVER COMMANDS')}: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /modchat, /lock, /weeklock, /unlock, /announce`);
+				this.sendReply(`${this.tr('MODERATOR COMMANDS')}: /globalban, /unglobalban, /ip, /markshared, /unlockip`);
 				this.sendReply(`${this.tr('LEADER COMMANDS')}: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /unbanall, /ipsearch`);
 			}
 			this.sendReply(this.tr("For an overview of room commands, use /roomhelp"));

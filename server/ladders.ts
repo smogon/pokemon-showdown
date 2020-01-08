@@ -15,6 +15,8 @@ const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.r
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
+type ChallengeType = import('./room-battle').ChallengeType;
+
 /**
  * This represents a user's search for a battle under a format.
  */
@@ -23,12 +25,14 @@ class BattleReady {
 	readonly formatid: string;
 	readonly team: string;
 	readonly rating: number;
+	readonly challengeType: ChallengeType;
 	readonly time: number;
-	constructor(userid: ID, formatid: string, team: string, rating: number = 0) {
+	constructor(userid: ID, formatid: string, team: string, rating: number = 0, challengeType: ChallengeType) {
 		this.userid = userid;
 		this.formatid = formatid;
 		this.team = team;
 		this.rating = rating;
+		this.challengeType = challengeType;
 		this.time = Date.now();
 	}
 }
@@ -65,7 +69,7 @@ class Ladder extends LadderStore {
 		super(formatid);
 	}
 
-	async prepBattle(connection: Connection, team: string | null = null, isRated = false) {
+	async prepBattle(connection: Connection, challengeType: ChallengeType, team: string | null = null, isRated = false) {
 		// all validation for a battle goes through here
 		const user = connection.user;
 		const userid = user.id;
@@ -144,7 +148,7 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		return new BattleReady(userid, this.formatid, valResult.slice(1), rating);
+		return new BattleReady(userid, this.formatid, valResult.slice(1), rating, challengeType);
 	}
 
 	static cancelChallenging(user: User) {
@@ -205,7 +209,7 @@ class Ladder extends LadderStore {
 			connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
 			return false;
 		}
-		const ready = await this.prepBattle(connection);
+		const ready = await this.prepBattle(connection, 'challenge');
 		if (!ready) return false;
 		// If our target is already challenging us in the same format,
 		// simply accept the pending challenge instead of creating a new one.
@@ -233,7 +237,7 @@ class Ladder extends LadderStore {
 			return false;
 		}
 		const ladder = Ladders(chall.formatid);
-		const ready = await ladder.prepBattle(connection);
+		const ready = await ladder.prepBattle(connection, 'challenge');
 		if (!ready) return false;
 		if (Ladder.removeChallenge(chall)) {
 			Ladders.match(chall.ready, ready);
@@ -412,7 +416,7 @@ class Ladder extends LadderStore {
 		}
 
 		const oldUserid = user.id;
-		const search = await this.prepBattle(connection, null, format.rated !== false);
+		const search = await this.prepBattle(connection, format.rated ? 'rated' : 'unrated', null, format.rated !== false);
 
 		if (oldUserid !== user.id) return;
 		if (!search) return;
@@ -474,8 +478,8 @@ class Ladder extends LadderStore {
 		// search must be within range
 		let searchRange = 100;
 		const elapsed = Date.now() - Math.min(search1.time, search2.time);
-		if (formatid === 'gen7ou' || formatid === 'gen7oucurrent' ||
-				formatid === 'gen7oususpecttest' || formatid === 'gen7randombattle') {
+		if (formatid === 'gen8ou' || formatid === 'gen8oucurrent' ||
+				formatid === 'gen8oususpecttest' || formatid === 'gen8randombattle') {
 			searchRange = 50;
 		}
 
@@ -573,6 +577,7 @@ class Ladder extends LadderStore {
 			p2team: ready2.team,
 			p2rating: ready2.rating,
 			rated: Math.min(ready1.rating, ready2.rating),
+			challengeType: ready1.challengeType,
 		});
 	}
 }

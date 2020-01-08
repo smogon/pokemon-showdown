@@ -2,6 +2,10 @@
 
 /**@type {{[k: string]: ModdedFormatsData}} */
 let BattleFormats = {
+	standard: {
+		inherit: true,
+		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+	},
 	validatestats: {
 		inherit: true,
 		onValidateSet(set) {

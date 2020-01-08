@@ -40,8 +40,6 @@
  * @license MIT
  */
 
-'use strict';
-
 // NOTE: This file intentionally doesn't use too many modern JavaScript
 // features, so that it doesn't crash old versions of Node.js, so we
 // can successfully print the "We require Node.js 8+" message.
@@ -54,24 +52,29 @@ try {
 } catch (e) {
 	throw new Error("We require Node.js version 10 or later; you're using " + process.version);
 }
+
 try {
 	require.resolve('../.sim-dist/index');
 } catch (e) {
 	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
 
-const FS = require('../.lib-dist/fs').FS;
+import {FS} from '../lib/fs';
 
 /*********************************************************
  * Load configuration
  *********************************************************/
 
-const ConfigLoader = require('../.server-dist/config-loader');
+// global becomes much easier to use if declared as an object
+declare const global: any;
+
+import * as ConfigLoader from './config-loader';
 global.Config = ConfigLoader.Config;
 
-global.Monitor = require('../.server-dist/monitor').Monitor;
+import {Monitor} from './monitor';
+global.Monitor = Monitor;
 global.__version = {head: ''};
-Monitor.version().then(function (hash) {
+void Monitor.version().then((hash: any) => {
 	global.__version.tree = hash;
 });
 
@@ -91,35 +94,48 @@ if (Config.watchconfig) {
  * Set up most of our globals
  *********************************************************/
 
-global.Dex = require('../.sim-dist/dex').Dex;
+import {Dex} from '../sim/dex';
+global.Dex = Dex;
 global.toID = Dex.getId;
 
-global.LoginServer = require('../.server-dist/loginserver').LoginServer;
+import {LoginServer} from './loginserver';
+global.LoginServer = LoginServer;
 
-global.Ladders = require('../.server-dist/ladders').Ladders;
+import {Ladders} from './ladders';
+global.Ladders = Ladders;
 
-global.Chat = require('../.server-dist/chat').Chat;
+import {Chat} from './chat';
+global.Chat = Chat;
 
-global.Users = require('../.server-dist/users').Users;
+import {Users} from './users';
+global.Users = Users;
 
-global.Punishments = require('../.server-dist/punishments').Punishments;
+import {Punishments} from './punishments';
+global.Punishments = Punishments;
 
-global.Rooms = require('../.server-dist/rooms').Rooms;
+import {Rooms} from './rooms';
+global.Rooms = Rooms;
 
-global.Verifier = require('../.server-dist/verifier');
+import * as Verifier from './verifier';
+global.Verifier = Verifier;
 Verifier.PM.spawn();
 
-global.Tournaments = require('../.server-dist/tournaments').Tournaments;
+import {Tournaments} from './tournaments';
+global.Tournaments = Tournaments;
 
-global.IPTools = require('../.server-dist/ip-tools').IPTools;
-IPTools.loadDatacenters();
+import {IPTools} from './ip-tools';
+global.IPTools = IPTools;
+void IPTools.loadDatacenters();
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
-	process.on('uncaughtException', err => {
+	process.on('uncaughtException', (err: Error) => {
 		Monitor.crashlog(err, 'The main process');
 	});
-	process.on('unhandledRejection', err => {
+
+	// Typescript doesn't like this call
+	// @ts-ignore
+	process.on('unhandledRejection', (err: Error, promise: Promise<any>) => {
 		Monitor.crashlog(err, 'A main process Promise');
 	});
 }
@@ -128,11 +144,12 @@ if (Config.crashguard) {
  * Start networking processes to be connected to
  *********************************************************/
 
-global.Sockets = require('./sockets');
+import * as Sockets from '../server/sockets';
+global.Sockets = Sockets;
 
-exports.listen = function (port, bindAddress, workerCount) {
+export function listen(port: number, bindAddress: string, workerCount: number) {
 	Sockets.listen(port, bindAddress, workerCount);
-};
+}
 
 if (require.main === module) {
 	// Launch the server directly when app.js is the main module. Otherwise,
@@ -147,11 +164,14 @@ if (require.main === module) {
  * Set up our last global
  *********************************************************/
 
-global.TeamValidatorAsync = require('./team-validator-async');
+import * as TeamValidatorAsync from './team-validator-async';
+global.TeamValidatorAsync = TeamValidatorAsync;
 TeamValidatorAsync.PM.spawn();
 
 /*********************************************************
  * Start up the REPL server
  *********************************************************/
 
-require('../.lib-dist/repl').Repl.start('app', cmd => eval(cmd));
+import {Repl} from '../lib/repl';
+// tslint:disable-next-line: no-eval
+Repl.start('app', cmd => eval(cmd));
