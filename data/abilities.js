@@ -4462,27 +4462,17 @@ let BattleAbilities = {
 	"wanderingspirit": {
 		desc: "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.",
 		shortDesc: "Exchanges abilities when hit with a contact move.",
-		onAfterDamage(damage, target, source, move) {
-			// Are these actually banned? Makes sense for them to be banned to me
-			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode'];
-			if (source && source !== target && move && move.flags['contact'] && !bannedAbilities.includes(source.ability)) {
-				let targetAbility = this.dex.getAbility(target.ability);
-				let sourceAbility = this.dex.getAbility(source.ability);
+		onAfterDamage(damage, target, source, effect) {
+			if (!source || source.ability === 'wanderingspirit' || target.volatiles['dynamax']) return;
+			if (effect && effect.effectType === 'Move' && effect.flags['contact']) {
+				let sourceAbility = source.setAbility('wanderingspirit', target);
+				if (!sourceAbility) return;
 				if (target.side === source.side) {
-					this.add('-activate', source, 'ability: Wandering Spirit', '', '', '[of] ' + target);
+					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
 				} else {
-					this.add('-activate', source, 'ability: Wandering Spirit', targetAbility, sourceAbility, '[of] ' + target);
+					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.getAbility(sourceAbility).name, 'Wandering Spirit', '[of] ' + source);
 				}
-				this.singleEvent('End', sourceAbility, source.abilityData, source);
-				this.singleEvent('End', targetAbility, target.abilityData, target);
-				if (targetAbility.id !== sourceAbility.id) {
-					source.ability = targetAbility.id;
-					target.ability = sourceAbility.id;
-					source.abilityData = {id: toID(source.ability), target: source};
-					target.abilityData = {id: toID(target.ability), target: target};
-				}
-				this.singleEvent('Start', targetAbility, source.abilityData, source);
-				this.singleEvent('Start', sourceAbility, target.abilityData, target);
+				target.setAbility(sourceAbility);
 			}
 		},
 		id: "wanderingspirit",
