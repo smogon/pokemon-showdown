@@ -1142,7 +1142,6 @@ let BattleFormatsData = {
 	},
 	slowpokegalar: {
 		unreleasedHidden: true,
-		nfe: true,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
