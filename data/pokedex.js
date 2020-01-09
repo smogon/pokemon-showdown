@@ -1710,6 +1710,7 @@ let BattlePokedex = {
 		color: "Pink",
 		evos: ["slowbro", "slowking"],
 		eggGroups: ["Monster", "Water 1"],
+		otherFormes: ["slowpokegalar"],
 	},
 	slowpokegalar: {
 		num: 79,
