@@ -2833,7 +2833,7 @@ let BattleAbilities = {
 			pokemon.formeChange('Zygarde-Complete', this.effect, true);
 			let newHP = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
 			pokemon.hp = newHP - (pokemon.maxhp - pokemon.hp);
-			pokemon.maxhp = newHP;
+			pokemon.maxhp = pokemon.baseMaxhp = newHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		id: "powerconstruct",
