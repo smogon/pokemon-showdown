@@ -1141,6 +1141,10 @@ let BattleFormatsData = {
 		tier: "Unreleased",
 	},
 	slowpokegalar: {
+		eventPokemon: [
+			{"generation": 7, "level": 12, "shiny": false, "isHidden": false, "moves": ["growl", "acid", "yawn", "confusion"]},
+		],
+		unreleasedHidden: true,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
