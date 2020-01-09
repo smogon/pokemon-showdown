@@ -958,6 +958,7 @@ interface TemplateFormatsData {
 	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean | 'Past'
 	maleOnlyHidden?: boolean
+	nfe?: boolean,
 	randomBattleMoves?: readonly string[]
 	randomDoubleBattleMoves?: readonly string[]
 	requiredAbility?: string

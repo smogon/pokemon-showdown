@@ -654,7 +654,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.evoType = data.evoType || undefined;
 		this.evoMove = data.evoMove || undefined;
 		this.evoLevel = data.evoLevel || undefined;
-		this.nfe = !!this.evos.length;
+		this.nfe = !!this.evos.length || !!data.nfe;
 		this.eggGroups = data.eggGroups || [];
 		this.gender = data.gender || '';
 		this.genderRatio = data.genderRatio || (this.gender === 'M' ? {M: 1, F: 0} :
