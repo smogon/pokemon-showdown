@@ -1137,8 +1137,8 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 1, "level": 15},
 		],
-		isNonstandard: "Past",
-		tier: "Illegal",
+		isUnreleased: "Past",
+		tier: "Unreleased",
 	},
 	slowbro: {
 		eventPokemon: [
