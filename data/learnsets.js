@@ -9384,7 +9384,7 @@ let BattleLearnsets = {
 		storedpower: ["8M"],
 		substitute: ["8M"],
 		sunnyday: ["8M"],
-		surf: ["8L30", "8M"],
+		surf: ["8M", "8L30"],
 		swift: ["8M"],
 		tackle: ["8L1"],
 		thunderwave: ["8M"],
