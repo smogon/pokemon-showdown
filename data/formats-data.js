@@ -1140,6 +1140,10 @@ let BattleFormatsData = {
 		isUnreleased: "Past",
 		tier: "Unreleased",
 	},
+	slowpokegalar: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
 	slowbro: {
 		eventPokemon: [
 			{"generation": 6, "level": 100, "nature": "Quiet", "isHidden": false, "abilities": ["oblivious"], "moves": ["scald", "trickroom", "slackoff", "irontail"], "pokeball": "cherishball"},
