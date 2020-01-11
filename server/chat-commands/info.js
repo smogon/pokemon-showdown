@@ -1064,10 +1064,10 @@ const commands = {
 							let curEff = 0;
 							if ((!dex.getImmunity((move.type || move), type1) || !dex.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
 							let baseMod = dex.getEffectiveness(move, type1);
-							let moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, null, type1, move);
+							let moveMod = move.onEffectiveness && move.onEffectiveness.call({dex}, baseMod, null, type1, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
 							baseMod = dex.getEffectiveness(move, type2);
-							moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, null, type2, move);
+							moveMod = move.onEffectiveness && move.onEffectiveness.call({dex}, baseMod, null, type2, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
 
 							if (curEff > bestEff) bestEff = curEff;
