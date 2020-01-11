@@ -21,6 +21,26 @@ type BoostName = StatNameExceptHP | 'accuracy' | 'evasion';
 type BoostsTable = {[boost in BoostName]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
 type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom';
+/**
+ * Describes the acceptable target(s) of a move.
+ * adjacentAlly - Only relevant to Doubles or Triples, the move only targets an ally of the user.
+ * adjacentAllyOrSelf - The move can target the user or its ally.
+ * adjacentFoe - The move can target a foe, but not (in Triples) a distant foe.
+ * all - The move targets the field or all Pokémon at once.
+ * allAdjacent - The move is a spread move that also hits the user's ally.
+ * allAdjacentFoes - The move is a spread move.
+ * allies - The move affects all active Pokémon on the user's team.
+ * allySide - The move adds a side condition on the user's side.
+ * allyTeam - The move affects all unfainted Pokémon on the user's team.
+ * any - The move can hit any other active Pokémon, not just those adjacent.
+ * foeSide - The move adds a side condition on the foe's side.
+ * normal - The move can hit one adjacent Pokémon of your choice.
+ * randomNormal - The move targets an adjacent foe at random.
+ * scripted - The move targets the foe that damaged the user.
+ * self - The move affects the user of the move.
+ */
+type MoveTarget = 'adjacentAlly' | 'adjacentAllyOrSelf' | 'adjacentFoe' | 'all' | 'allAdjacent' | 'allAdjacentFoes' | 'allies' | 'allySide' | 'allyTeam' | 'any' | 'foeSide' | 'normal' | 'randomNormal' | 'scripted' | 'self';
+
 type PokemonSet = {
 	name: string,
 	species: string,
@@ -779,7 +799,7 @@ interface MoveData extends EffectData, MoveEventMethods {
 	flags: AnyObject
 	pp: number
 	priority: number
-	target: string
+	target: MoveTarget
 	type: string
 	alwaysHit?: boolean
 	baseMoveType?: string
@@ -1062,8 +1082,8 @@ interface Format extends Readonly<BasicEffect & FormatsData> {
 
 type SpreadMoveTargets = (Pokemon | false | null)[]
 type SpreadMoveDamage = (number | boolean | undefined)[]
-type ZMoveOptions = ({move: string, target: string} | null)[]
-type DynamaxOptions = {maxMoves: ({move: string, target: string})[], gigantamax?: string}
+type ZMoveOptions = ({move: string, target: MoveTarget} | null)[]
+type DynamaxOptions = {maxMoves: ({move: string, target: MoveTarget})[], gigantamax?: string}
 
 interface BattleScriptsData {
 	gen: number

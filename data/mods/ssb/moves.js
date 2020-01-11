@@ -4129,7 +4129,7 @@ let BattleMovedex = {
 			chance: 10,
 			status: 'par',
 		},
-		target: "Normal",
+		target: "normal",
 		type: "Fire",
 	},
 	// Sundar
