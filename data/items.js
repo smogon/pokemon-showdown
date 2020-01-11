@@ -2166,7 +2166,7 @@ let BattleItems = {
 	"fossilizeddrake": {
 		id: "fossilizeddrake",
 		name: "Fossilized Drake",
-		spritenum: 701,
+		spritenum: 702,
 		fling: {
 			basePower: 100,
 		},
@@ -2178,7 +2178,7 @@ let BattleItems = {
 	"fossilizedfish": {
 		id: "fossilizedfish",
 		name: "Fossilized Fish",
-		spritenum: 702,
+		spritenum: 701,
 		fling: {
 			basePower: 100,
 		},
