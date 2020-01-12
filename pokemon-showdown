@@ -46,7 +46,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case '-h':
 	case '--help':
 	case '-?':
-		console.log('pokemon-showdown start [PORT]');
+		console.log('pokemon-showdown start [--skip-build] [PORT]');
 		console.log('');
 		console.log('  Starts a PS server on the specified port');
 		console.log('  (Defaults to the port setting in config/config.js)');
@@ -85,7 +85,11 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'start':
 		{
-			process.argv[2] = process.argv[3];
+			process.argv.splice(2, 1);
+			if (process.argv[2] === '--skip-build') {
+				process.argv.splice(2, 1);
+				built = true;
+			}
 			if (!built) build();
 			require('module')._load('./.server-dist', module, true);
 			break;
