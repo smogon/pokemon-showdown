@@ -250,7 +250,7 @@ interface EventMethods {
 	onNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
 	onOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
 	onPrepareHit?: CommonHandlers['ResultSourceMove']
-	onRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove) => Pokemon | void
+	onRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove) => Pokemon | Pokemon[] | void
 	onResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void
 	onSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => boolean | void
 	onSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => boolean | null | void

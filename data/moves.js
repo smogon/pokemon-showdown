@@ -4116,20 +4116,13 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		multihit: 2,
 		secondary: null,
+		beforeMoveCallback(pokemon) {
+			// We need to do this before targeting is calculated.
+			pokemon.addVolatile('smarttarget');
+		},
 		onModifyMove(move, pokemon, target) {
-			if (target.side.active.length === 2) {
-				move.multihit = 1;
-				move.spreadModifier = 1;
-				move.target = "allAdjacentFoes";
-				for (const currentTarget of target.side.active) {
-					if (currentTarget.volatiles['protect'] || !currentTarget.runImmunity('Dragon') || currentTarget.fainted) {
-						move.multihit = 2;
-						break;
-					}
-				}
-			}
+			if (target.side.active.length === 2) move.spreadModifier = 1;
 		},
 		target: "normal",
 		type: "Dragon",

@@ -462,6 +462,30 @@ let BattleStatuses = {
 			return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
+	smarttarget: {
+		name: 'smarttarget',
+		id: 'smarttarget',
+		num: 0,
+		duration: 1,
+		onRedirectTargetPriority: -1,
+		onRedirectTarget(target, source, source2, move) {
+			// Calculate smart targeting, goes last to allow redirection moves to override smart targeting
+			let targets = source.nearbyFoes();
+			// Handle singles/empty slots in doubles
+			if (targets.length === 1) targets.push(targets[0]);
+			// Smart target moves like Dragon Darts will avoid hitting pokemon that would not be damaged (if not force redirected)
+			for (let i = 0; i < targets.length; i++) {
+				const potentialTarget = targets[i];
+				if (potentialTarget.volatiles['protect'] || !potentialTarget.runImmunity(move.type) || potentialTarget.fainted) {
+					// Target the other pokemon twice
+					targets.splice(i, 1);
+					targets.push(targets[0]);
+					break;
+				}
+			}
+			return targets;
+		},
+	},
 
 	// weather is implemented here since it's so important to the game
 

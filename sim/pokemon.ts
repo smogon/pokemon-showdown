@@ -601,7 +601,7 @@ export class Pokemon {
 	}
 
 	getMoveTargets(move: Move, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
-		let targets = [];
+		let targets: Pokemon[] = [];
 		let pressureTargets;
 
 		switch (move.target) {
@@ -639,20 +639,28 @@ export class Pokemon {
 				if (!possibleTarget) return {targets: [], pressureTargets: []};
 				target = possibleTarget;
 			}
-			if (target.side.active.length > 1 && !move.tracksTarget) {
+			if ((target.side.active.length > 1 || move.id === 'dragondarts') && !move.tracksTarget) {
 				if (!move.flags['charge'] || this.volatiles['twoturnmove'] ||
 						(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) ||
 						(this.hasItem('powerherb') && move.id !== 'skydrop')) {
-					target = this.battle.priorityEvent('RedirectTarget', this, this, this.battle.dex.getActiveMove(move), target);
+					const redirection: Pokemon | Pokemon[] =
+						this.battle.priorityEvent('RedirectTarget', this, this, this.battle.dex.getActiveMove(move), target);
+					if (Array.isArray(redirection)) {
+						targets = redirection;
+					} else {
+						targets = [redirection];
+						if (move.id === 'dragondarts') targets.push(targets[0]);
+					}
 				}
 			}
-			if (target.fainted) {
+			if (!targets.length) targets.push(target);
+
+			if (targets.every(pokemon => pokemon.fainted)) {
 				return {targets: [], pressureTargets: []};
 			}
-			if (selectedTarget !== target) {
-				this.battle.retargetLastMove(target);
+			if (!targets.includes(selectedTarget)) {
+				this.battle.retargetLastMove(targets[0]);
 			}
-			targets.push(target);
 
 			// Resolve apparent targets for Pressure.
 			if (move.pressureTarget) {
