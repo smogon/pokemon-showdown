@@ -294,7 +294,6 @@ let Formats = [
 			battle: 4,
 		},
 		ruleset: ['Standard GBU'],
-		banlist: ['Zacian', 'Zamazenta', 'Eternatus'],
 		unbanlist: [
 			'Corviknight-Gmax', 'Orbeetle-Gmax', 'Drednaw-Gmax', 'Coalossal-Gmax', 'Flapple-Gmax', 'Appletun-Gmax', 'Sandaconda-Gmax',
 			'Centiskorch-Gmax', 'Hatterene-Gmax', 'Grimmsnarl-Gmax', 'Alcremie-Gmax', 'Copperajah-Gmax', 'Duraludon-Gmax',
