@@ -294,10 +294,6 @@ let Formats = [
 			battle: 4,
 		},
 		ruleset: ['Standard GBU'],
-		unbanlist: [
-			'Corviknight-Gmax', 'Orbeetle-Gmax', 'Drednaw-Gmax', 'Coalossal-Gmax', 'Flapple-Gmax', 'Appletun-Gmax', 'Sandaconda-Gmax',
-			'Centiskorch-Gmax', 'Hatterene-Gmax', 'Grimmsnarl-Gmax', 'Alcremie-Gmax', 'Copperajah-Gmax', 'Duraludon-Gmax',
-		],
 		onValidateSet(set) {
 			let template = Dex.getTemplate(set.species);
 			if (template.gen < 8 || (template.isGigantamax && Dex.getTemplate(template.baseSpecies).gen < 8)) {
