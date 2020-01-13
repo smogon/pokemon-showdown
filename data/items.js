@@ -433,7 +433,7 @@ let BattleItems = {
 	"berrysweet": {
 		id: "berrysweet",
 		name: "Berry Sweet",
-		spritenum: 0,
+		spritenum: 706,
 		fling: {
 			basePower: 10,
 		},
@@ -606,7 +606,7 @@ let BattleItems = {
 	"blunderpolicy": {
 		id: "blunderpolicy",
 		name: "Blunder Policy",
-		spritenum: 0,
+		spritenum: 716,
 		fling: {
 			basePower: 80,
 		},
@@ -911,7 +911,7 @@ let BattleItems = {
 	"chippedpot": {
 		id: "chippedpot",
 		name: "Chipped Pot",
-		spritenum: 0,
+		spritenum: 720,
 		fling: {
 			basePower: 80,
 		},
@@ -1034,7 +1034,7 @@ let BattleItems = {
 	"cloversweet": {
 		id: "cloversweet",
 		name: "Clover Sweet",
-		spritenum: 0,
+		spritenum: 707,
 		fling: {
 			basePower: 10,
 		},
@@ -1118,7 +1118,7 @@ let BattleItems = {
 	"crackedpot": {
 		id: "crackedpot",
 		name: "Cracked Pot",
-		spritenum: 0,
+		spritenum: 719,
 		fling: {
 			basePower: 80,
 		},
@@ -1585,7 +1585,7 @@ let BattleItems = {
 	"ejectpack": {
 		id: "ejectpack",
 		name: "Eject Pack",
-		spritenum: 0,
+		spritenum: 714,
 		fling: {
 			basePower: 50,
 		},
@@ -2046,7 +2046,7 @@ let BattleItems = {
 	"flowersweet": {
 		id: "flowersweet",
 		name: "Flower Sweet",
-		spritenum: 10,
+		spritenum: 708,
 		fling: {
 			basePower: 0,
 		},
@@ -2142,7 +2142,7 @@ let BattleItems = {
 	"fossilizedbird": {
 		id: "fossilizedbird",
 		name: "Fossilized Bird",
-		spritenum: 0,
+		spritenum: 700,
 		fling: {
 			basePower: 100,
 		},
@@ -2154,7 +2154,7 @@ let BattleItems = {
 	"fossilizeddino": {
 		id: "fossilizeddino",
 		name: "Fossilized Dino",
-		spritenum: 0,
+		spritenum: 703,
 		fling: {
 			basePower: 100,
 		},
@@ -2166,7 +2166,7 @@ let BattleItems = {
 	"fossilizeddrake": {
 		id: "fossilizeddrake",
 		name: "Fossilized Drake",
-		spritenum: 0,
+		spritenum: 702,
 		fling: {
 			basePower: 100,
 		},
@@ -2178,7 +2178,7 @@ let BattleItems = {
 	"fossilizedfish": {
 		id: "fossilizedfish",
 		name: "Fossilized Fish",
-		spritenum: 0,
+		spritenum: 701,
 		fling: {
 			basePower: 100,
 		},
@@ -2642,7 +2642,7 @@ let BattleItems = {
 	"heavydutyboots": {
 		id: "heavydutyboots",
 		name: "Heavy-Duty Boots",
-		spritenum: 0,
+		spritenum: 715,
 		fling: {
 			basePower: 80,
 		},
@@ -3352,7 +3352,7 @@ let BattleItems = {
 	"lovesweet": {
 		id: "lovesweet",
 		name: "Love Sweet",
-		spritenum: 0,
+		spritenum: 705,
 		fling: {
 			basePower: 10,
 		},
@@ -5056,7 +5056,7 @@ let BattleItems = {
 	"ribbonsweet": {
 		id: "ribbonsweet",
 		name: "Ribbon Sweet",
-		spritenum: 0,
+		spritenum: 710,
 		fling: {
 			basePower: 10,
 		},
@@ -5186,7 +5186,7 @@ let BattleItems = {
 	"roomservice": {
 		id: "roomservice",
 		name: "Room Service",
-		spritenum: 0,
+		spritenum: 717,
 		fling: {
 			basePower: 100,
 		},
@@ -5276,7 +5276,7 @@ let BattleItems = {
 	"rustedshield": {
 		id: "rustedshield",
 		name: "Rusted Shield",
-		spritenum: 0,
+		spritenum: 699,
 		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 889) || pokemon.baseTemplate.num === 889) {
 				return false;
@@ -5292,7 +5292,7 @@ let BattleItems = {
 	"rustedsword": {
 		id: "rustedsword",
 		name: "Rusted Sword",
-		spritenum: 0,
+		spritenum: 698,
 		onTakeItem(item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 888) || pokemon.baseTemplate.num === 888) {
 				return false;
@@ -5908,7 +5908,7 @@ let BattleItems = {
 	"starsweet": {
 		id: "starsweet",
 		name: "Star Sweet",
-		spritenum: 0,
+		spritenum: 709,
 		fling: {
 			basePower: 10,
 		},
@@ -6049,7 +6049,7 @@ let BattleItems = {
 	"strawberrysweet": {
 		id: "strawberrysweet",
 		name: "Strawberry Sweet",
-		spritenum: 0,
+		spritenum: 704,
 		fling: {
 			basePower: 10,
 		},
@@ -6088,7 +6088,7 @@ let BattleItems = {
 	"sweetapple": {
 		id: "sweetapple",
 		name: "Sweet Apple",
-		spritenum: 0,
+		spritenum: 711,
 		fling: {
 			basePower: 30,
 		},
@@ -6149,7 +6149,7 @@ let BattleItems = {
 	"tartapple": {
 		id: "tartapple",
 		name: "Tart Apple",
-		spritenum: 0,
+		spritenum: 712,
 		fling: {
 			basePower: 30,
 		},
@@ -6189,7 +6189,7 @@ let BattleItems = {
 	"throatspray": {
 		id: "throatspray",
 		name: "Throat Spray",
-		spritenum: 0,
+		spritenum: 713,
 		fling: {
 			basePower: 30,
 		},
@@ -6331,7 +6331,7 @@ let BattleItems = {
 	"utilityumbrella": {
 		id: "utilityumbrella",
 		name: "Utility Umbrella",
-		spritenum: 0,
+		spritenum: 718,
 		fling: {
 			basePower: 60,
 		},
@@ -6339,7 +6339,7 @@ let BattleItems = {
 		num: 1123,
 		gen: 8,
 		desc: "The holder is immune to the weather-based modifiers of the attacker's moves in the effects of Sunny Day and Rain Dance. However, the user's Weather Ball and own weather-based abilities will not activate.",
-		shortDesc: "Blocks the holder from the effects of sun/rain",
+		shortDesc: "Blocks the holder from the effects of sun/rain.",
 	},
 	"venusaurite": {
 		id: "venusaurite",
