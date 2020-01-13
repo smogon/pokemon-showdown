@@ -300,7 +300,7 @@ let Formats = [
 		],
 		onValidateSet(set) {
 			let template = Dex.getTemplate(set.species);
-			if (template.gen < 8) {
+			if (template.gen < 8 || (template.isGigantamax && Dex.getTemplate(template.baseSpecies).gen < 8)) {
 				return [`Only Pokemon from Generation 8 are allowed.`, `(${set.species} is from Generation ${template.gen}.)`];
 			}
 		},
