@@ -300,9 +300,9 @@ let Formats = [
 			'Centiskorch-Gmax', 'Hatterene-Gmax', 'Grimmsnarl-Gmax', 'Alcremie-Gmax', 'Copperajah-Gmax', 'Duraludon-Gmax',
 		],
 		onValidateSet(set) {
-		let template = Dex.getTemplate(set.species);
-		if (template.gen < 8) {
-		return [`Only Pokemon from Generation 8 are allowed.`, `(${set.species} is from Generation ${template.gen}.)`];
+			let template = Dex.getTemplate(set.species);
+			if (template.gen < 8) {
+				return [`Only Pokemon from Generation 8 are allowed.`, `(${set.species} is from Generation ${template.gen}.)`];
 			}
 		},
 	},
