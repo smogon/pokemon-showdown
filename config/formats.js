@@ -282,6 +282,37 @@ let Formats = [
 			}
 		},
 	},
+		{
+		name: "[Gen 8] Galar Newcomers",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3658774</a>`],
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		forcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Standard GBU'],
+		unbanlist: [
+			'Corviknight-Gmax', 'Orbeetle-Gmax', 'Drednaw-Gmax', 'Coalossal-Gmax', 'Flapple-Gmax', 'Appletun-Gmax', 'Sandaconda-Gmax',
+			'Centiskorch-Gmax', 'Hatterene-Gmax', 'Grimmsnarl-Gmax', 'Alcremie-Gmax', 'Copperajah-Gmax', 'Duraludon-Gmax',
+		],
+		onValidateSet(set) {
+			let newMonsList = [
+				'Grookey', 'Thwackey', 'Rillaboom', 'Scorbunny', 'Raboot', 'Cinderace', 'Sobble', 'Drizzile', 'Inteleon', 'Skwovet', 'Greedent',
+				'Rookidee', 'Corvisquire', 'Corviknight', 'Blipbug', 'Dottler', 'Orbeetle', 'Nickit', 'Thievul', 'Gossifleur', 'Eldegoss',
+				'Wooloo', 'Dubwool', 'Chewtle', 'Drednaw', 'Yamper', 'Boltund', 'Rolycoly', 'Carkol', 'Coalossal', 'Applin', 'Flapple', 'Appletun',
+				'Silicobra', 'Sandaconda', 'Cramorant', 'Arrokuda', 'Barraskewda', 'Toxel', 'Toxtricity', 'Sizzlipede', 'Centiskorch', 'Clobbopus', 'Grapploct', 'Sinistea', 'Polteageist',
+				'Hatenna', 'Hattrem', 'Hatterene', 'Impidimp', 'Morgrem', 'Grimmsnarl', 'Obstagoon', 'Meowth-Galar', 'Perrserker', 'Zigzagoon-Galar', 'Linoone-Galar', 'Obstagoon', 'Corsola-Galar',
+				'Cursola', 'Farfetch\'d-Galar', 'Sirfetch\'d', 'Mr. Mime-Galar', 'Mr. Rime', 'Yamask-Galar', 'Runerigus', 'Milcery', 'Alcremie', 'Falinks',
+				'Pincurchin', 'Snom', 'Frosmoth', 'Stonjourner', 'Eiscue', 'Indeedee', 'Morpeko', 'Cufant', 'Copperajah', 'Dracozolt', 'Arctozolt', 'Dracovish',
+				'Arctovish', 'Duraludon', 'Dreepy', 'Drakloak', 'Dragapult',
+			];
+			let template = Dex.getTemplate(set.species);
+			if (!newMonsList.includes(template.species)) return [`${template.species} is banned.`];
+		},
+	},
 	{
 		name: '[Gen 8] Metronome Battle',
 		threads: [
