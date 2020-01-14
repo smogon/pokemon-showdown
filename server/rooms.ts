@@ -72,7 +72,7 @@ export abstract class BasicRoom {
 	parent: Room | null;
 	aliases: string[] | null;
 	userCount: number;
-	auth: {[userid: string]: ServerGroup} | null;
+	auth: {[userid: string]: GroupSymbol} | null;
 	game: RoomGame | null;
 	active: boolean;
 	muteTimer: NodeJS.Timer | null;
@@ -179,7 +179,7 @@ export abstract class BasicRoom {
 	sendMods(data: string) {
 		this.sendRankedUsers(data, '%');
 	}
-	sendRankedUsers(data: string, minRank: ServerGroup = '+') {
+	sendRankedUsers(data: string, minRank: GroupSymbol = '+') {
 		if (this.staffRoom) {
 			if (!this.log) throw new Error(`Staff room ${this.roomid} has no log`);
 			this.log.add(data);
@@ -308,7 +308,7 @@ export abstract class BasicRoom {
 	/**
 	 * Gets the group symbol of a user in the room.
 	 */
-	getAuth(user: User): ServerGroup {
+	getAuth(user: User): GroupSymbol {
 		if (this.auth && user.id in this.auth) {
 			return this.auth[user.id];
 		}
@@ -1435,7 +1435,7 @@ export class GameRoom extends BasicChatRoom {
 	game: RoomGame;
 	modchatUser: string;
 	active: boolean;
-	auth: {[userid: string]: ServerGroup};
+	auth: {[userid: string]: GroupSymbol};
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		options.logTimes = false;
 		options.autoTruncate = false;
