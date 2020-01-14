@@ -2692,7 +2692,7 @@ let BattleAbilities = {
 		shortDesc: "If this Pokemon has no item, it steals the item off a Pokemon making contact with it.",
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				if (target.item) {
+				if (target.item || target.switchFlag) {
 					return;
 				}
 				let yourItem = source.takeItem(target);
