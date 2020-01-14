@@ -64,7 +64,7 @@ export const commands: ChatCommands = {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
-		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank);
+		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank as GroupSymbol);
 	},
 	addrankhtmlboxhelp: [
 		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * & ~`,
@@ -111,7 +111,7 @@ export const commands: ChatCommands = {
 		}
 
 		html = `|uhtml${(cmd === 'changerankuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.room.sendRankedUsers(html, rank);
+		this.room.sendRankedUsers(html, rank as GroupSymbol);
 	},
 	addrankuhtmlhelp: [
 		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: * & ~`,
