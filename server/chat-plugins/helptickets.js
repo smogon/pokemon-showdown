@@ -1175,12 +1175,8 @@ let commands = {
 				case 'Inappropriate Username / Status Message':
 					staffIntroButtons = `<button class="button" name="send" value="/forcerename ${reportTarget}">Force-rename ${reportTarget}</button> <button class="button" name="send" value="/clearstatus ${reportTarget}">Clear ${reportTarget}'s status</button> `;
 					break;
-				case 'Battle Harassment':
-				case 'Inappropriate Pokemon Nicknames':
-					staffIntroButtons = `<button class="button" name="send" value="/sharedbattles ${user.id}, ${toID(reportTarget)}">Shared battles</button> `;
-					break;
 				}
-				staffIntroButtons += `<button class="button" name="send" value="/modlog global, ${reportTarget}">Global Modlog for ${reportTarget}</button> `;
+				staffIntroButtons += `<button class="button" name="send" value="/modlog global, ${reportTarget}">Global Modlog for ${reportTarget}</button> <button class="button" name="send" value="/sharedbattles ${user.id}, ${toID(reportTarget)}">Shared battles</button> `;
 			}
 			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
 			const staffMessage = `<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`;
