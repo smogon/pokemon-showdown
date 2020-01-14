@@ -642,7 +642,7 @@ export class User extends Chat.MessageContext {
 			return true;
 		}
 
-		let group: GroupSymbol = ' ';
+		let group: GroupSymbol;
 		let targetGroup = '';
 		let targetUser = null;
 
