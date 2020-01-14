@@ -113,8 +113,9 @@ export const commands: ChatCommands = {
 			baseStats: Object.create(null),
 			weighthg: megaTemplate.weighthg - baseTemplate.weighthg,
 		};
-		for (const statId in megaTemplate.baseStats) {
-			deltas.baseStats[statId as StatName] = megaTemplate.baseStats[statId as StatName] - baseTemplate.baseStats[statId as StatName];
+		let statId: StatName;
+		for (statId in megaTemplate.baseStats) {
+			deltas.baseStats[statId] = megaTemplate.baseStats[statId as StatName] - baseTemplate.baseStats[statId];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
 			deltas.type = megaTemplate.types[1];
@@ -133,8 +134,11 @@ export const commands: ChatCommands = {
 		} else if (deltas.type) {
 			mixedTemplate.types = [mixedTemplate.types[0], deltas.type];
 		}
-		for (const statName in template.baseStats) { // Add the changed stats and weight
-			mixedTemplate.baseStats[statName] = Dex.clampIntRange(mixedTemplate.baseStats[statName] + deltas.baseStats[statName as StatName], 1, 255);
+		let statName: StatName;
+		for (statName in template.baseStats) { // Add the changed stats and weight
+			mixedTemplate.baseStats[statName] = Dex.clampIntRange(
+				mixedTemplate.baseStats[statName] + deltas.baseStats[statName], 1, 255
+			);
 		}
 		mixedTemplate.weighthg = Math.max(1, template.weighthg + deltas.weighthg);
 		mixedTemplate.tier = "MnM";
@@ -215,8 +219,9 @@ export const commands: ChatCommands = {
 			baseStats: Object.create(null),
 			weighthg: megaTemplate.weighthg - baseTemplate.weighthg,
 		};
-		for (const statId in megaTemplate.baseStats) {
-			deltas.baseStats[statId as StatName] = megaTemplate.baseStats[statId as StatName] - baseTemplate.baseStats[statId as StatName];
+		let statId: StatName;
+		for (statId in megaTemplate.baseStats) {
+			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
 			deltas.type = megaTemplate.types[1];
@@ -350,7 +355,9 @@ export const commands: ChatCommands = {
 		const nature = target.trim().split(' ')[0];
 		const pokemon = target.trim().split(' ')[1];
 		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
-		const natureObj: {name: string, plus?: string | undefined, minus?: string | undefined, exists?: boolean} = Dex.getNature(nature);
+		const natureObj: {
+			name: string, plus?: string | undefined, minus?: string | undefined, exists?: boolean,
+		} = Dex.getNature(nature);
 		if (!natureObj.exists) return this.errorReply(`Error: Nature ${nature} not found.`);
 		const template = Dex.deepClone(Dex.getTemplate(pokemon));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${pokemon} not found.`);
@@ -402,13 +409,16 @@ export const commands: ChatCommands = {
 		const mixedTemplate = Dex.deepClone(template);
 		mixedTemplate.abilities = Dex.deepClone(crossTemplate.abilities);
 		mixedTemplate.baseStats = Dex.deepClone(mixedTemplate.baseStats);
-		for (const statName in template.baseStats) {
-			mixedTemplate.baseStats[statName as StatName] += crossTemplate.baseStats[statName as StatName] - prevo.baseStats[statName as StatName];
+		let statName: StatName;
+		for (statName in template.baseStats) {
+			mixedTemplate.baseStats[statName] += crossTemplate.baseStats[statName] - prevo.baseStats[statName];
 		}
 		mixedTemplate.types = [template.types[0]];
 		if (template.types[1]) mixedTemplate.types.push(template.types[1]);
 		if (crossTemplate.types[0] !== prevo.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
-		if (crossTemplate.types[1] !== prevo.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
+		if (crossTemplate.types[1] !== prevo.types[1]) {
+			mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
+		}
 		if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types = [mixedTemplate.types[0]];
 		mixedTemplate.weighthg += crossTemplate.weighthg - prevo.weighthg;
 		if (mixedTemplate.weighthg < 1) {
