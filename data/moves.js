@@ -4734,6 +4734,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'encore',
+		onTryHit(target) {
+			if (target.volatiles['dynamax']) return false;
+		},
 		effect: {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
@@ -19968,6 +19971,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'torment',
+		onTryHit(target) {
+			if (target.volatiles['dynamax']) return false;
+		},
 		effect: {
 			noCopy: true,
 			onStart(pokemon) {
