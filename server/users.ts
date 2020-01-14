@@ -25,8 +25,8 @@
 
 type StatusType = 'online' | 'busy' | 'idle';
 
-const PLAYER_SYMBOL = '\u2606';
-const HOST_SYMBOL = '\u2605';
+const PLAYER_SYMBOL: GroupSymbol = '\u2606';
+const HOST_SYMBOL: GroupSymbol = '\u2605';
 
 const THROTTLE_DELAY = 600;
 const THROTTLE_DELAY_TRUSTED = 100;
@@ -274,7 +274,7 @@ function cacheGroupData() {
 }
 cacheGroupData();
 
-function setOfflineGroup(name: string, group: string, forceTrusted: boolean) {
+function setOfflineGroup(name: string, group: GroupSymbol, forceTrusted: boolean) {
 	if (!group) throw new Error(`Falsy value passed to setOfflineGroup`);
 	const userid = toID(name);
 	const user = getExactUser(userid);
@@ -432,7 +432,7 @@ export class User extends Chat.MessageContext {
 	named: boolean;
 	registered: boolean;
 	id: ID;
-	group: string;
+	group: GroupSymbol;
 	avatar: string | number;
 	language: string | null;
 
@@ -642,7 +642,7 @@ export class User extends Chat.MessageContext {
 			return true;
 		}
 
-		let group: string = '';
+		let group: GroupSymbol;
 		let targetGroup = '';
 		let targetUser = null;
 
@@ -1197,9 +1197,9 @@ export class User extends Chat.MessageContext {
 	 * Set a user's group. Pass (' ', true) to force trusted
 	 * status without giving the user a group.
 	 */
-	setGroup(group: string, forceTrusted = false) {
+	setGroup(group: GroupSymbol, forceTrusted = false) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
-		this.group = group.charAt(0);
+		this.group = group;
 		const wasStaff = this.isStaff;
 		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
 		if (!this.isStaff) {
