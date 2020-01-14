@@ -854,7 +854,9 @@ export class ModdedDex {
 			if (rule.startsWith('!')) {
 				const repealDepth = repeals!.get(ruleSpec.slice(1));
 				if (repealDepth === undefined) throw new Error(`Multiple "${rule}" rules in ${format.name}`);
-				if (repealDepth === depth) throw new Error(`Rule "${rule}" did nothing because "${rule.slice(1)}" is not in effect`);
+				if (repealDepth === depth) {
+					throw new Error(`Rule "${rule}" did nothing because "${rule.slice(1)}" is not in effect`);
+				}
 				if (repealDepth === -depth) repeals!.delete(ruleSpec.slice(1));
 				continue;
 			}
