@@ -123,7 +123,7 @@ export const commands: ChatCommands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.modchat = room.modchat;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 	modchathelp: [
@@ -199,7 +199,7 @@ export const commands: ChatCommands = {
 			this.modlog('MODJOIN', null, 'OFF');
 			if (room.chatRoomData) {
 				room.chatRoomData.modjoin = null;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
 			return;
 		} else if (target === 'sync') {
@@ -231,12 +231,12 @@ export const commands: ChatCommands = {
 			this.parse('/help modjoin');
 			return false;
 		}
-		if (room.chatRoomData) {
-			room.chatRoomData.modjoin = room.modjoin;
-			Rooms.global.writeChatRoomData();
-		}
 		if (target === 'sync' && !room.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
 		if (!room.isPrivate) this.parse('/hiddenroom');
+		if (room.chatRoomData) {
+			room.chatRoomData.modjoin = room.modjoin;
+			return Rooms.global.writeChatRoomData();
+		}
 	},
 	modjoinhelp: [
 		`/modjoin [+|%|@|*|player|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room unless they have a room rank. Requires: \u2606 # & ~`,
@@ -254,12 +254,13 @@ export const commands: ChatCommands = {
 
 		room.language = targetLanguage === 'english' ? false : targetLanguage;
 
-		if (room.chatRoomData) {
-			room.chatRoomData.language = room.language;
-			Rooms.global.writeChatRoomData();
-		}
 		this.modlog(`LANGUAGE`, null, Chat.languages.get(targetLanguage));
 		this.sendReply(`The room's language has been set to ${Chat.languages.get(targetLanguage)}`);
+
+		if (room.chatRoomData) {
+			room.chatRoomData.language = room.language;
+			return Rooms.global.writeChatRoomData();
+		}
 	},
 	roomlanguagehelp: [
 		`/roomlanguage [language] - Sets the the language for the room, which changes language of a few commands. Requires # & ~`,
@@ -297,7 +298,7 @@ export const commands: ChatCommands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.slowchat = room.slowchat;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 	slowchathelp: [
@@ -330,7 +331,7 @@ export const commands: ChatCommands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.filterStretching = room.filterStretching;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 	stretchfilterhelp: [
@@ -362,7 +363,7 @@ export const commands: ChatCommands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.filterCaps = room.filterCaps;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 	capsfilterhelp: [`/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~`],
@@ -392,7 +393,7 @@ export const commands: ChatCommands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.filterEmojis = room.filterEmojis;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 	emojifilterhelp: [`/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~`],
@@ -466,7 +467,7 @@ export const commands: ChatCommands = {
 
 			if (room.chatRoomData) {
 				room.chatRoomData.banwords = room.banwords;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
 		},
 
@@ -505,7 +506,7 @@ export const commands: ChatCommands = {
 			if (room.chatRoomData) {
 				room.chatRoomData.banwords = room.banwords;
 				if (!room.banwords) delete room.chatRoomData.banwords;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
 		},
 
@@ -544,7 +545,7 @@ export const commands: ChatCommands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.highTraffic = room.highTraffic;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 		this.modlog(`HIGHTRAFFIC`, null, '' + room.highTraffic);
 		this.addModAction(`This room was marked as high traffic by ${user.name}.`);
@@ -584,12 +585,12 @@ export const commands: ChatCommands = {
 			targetRoom.isPrivate = true;
 			if (!targetRoom.chatRoomData) throw new Error(`Private chat room created without chatRoomData.`);
 			targetRoom.chatRoomData.isPrivate = true;
-			Rooms.global.writeChatRoomData();
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
 				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
 			}
 			this.sendReply(`The private chat room '${target}' was created.`);
+			return Rooms.global.writeChatRoomData();
 		} else {
 			const staffRoom = Rooms.get('staff');
 			if (staffRoom) {
@@ -605,7 +606,7 @@ export const commands: ChatCommands = {
 	makechatroomhelp: [`/makechatroom [roomname] - Creates a new room named [roomname]. Requires: & ~`],
 
 	subroomgroupchat: 'makegroupchat',
-	makegroupchat(target, room, user, connection, cmd) {
+	async makegroupchat(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
 		if (!user.autoconfirmed) {
 			return this.errorReply("You must be autoconfirmed to make a groupchat.");
@@ -662,7 +663,7 @@ export const commands: ChatCommands = {
 
 		const titleMsg = Chat.html`Welcome to ${parent ? room.title : user.name}'s` +
 			`${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
-		const targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
+		const targetRoom = await Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
 			isPrivate: 'hidden',
 			creationTime: parent ? null : Date.now(),
@@ -795,7 +796,7 @@ export const commands: ChatCommands = {
 		room.add(`|expire|This room has been deleted.`);
 		this.sendReply(`The room "${title}" was deleted.`);
 		room.update();
-		room.destroy();
+		return room.destroy();
 	},
 	deleteroomhelp: [
 		`/deleteroom [roomname] - Deletes room [roomname]. Must be typed in the room to delete. Requires: & ~`,
@@ -890,7 +891,7 @@ export const commands: ChatCommands = {
 			this.modlog('PUBLICROOM');
 			if (room.chatRoomData) {
 				delete room.chatRoomData.isPrivate;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
@@ -912,11 +913,11 @@ export const commands: ChatCommands = {
 			room.isPrivate = setting;
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
+			room.privacySetter = new Set([user.id]);
 			if (room.chatRoomData) {
 				room.chatRoomData.isPrivate = setting;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
-			room.privacySetter = new Set([user.id]);
 		}
 	},
 	privateroomhelp: [
@@ -937,14 +938,14 @@ export const commands: ChatCommands = {
 			this.addModAction(`${user.name} made this chat room unofficial.`);
 			this.modlog('UNOFFICIALROOM');
 			delete room.chatRoomData.isOfficial;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		} else {
 			if (room.isOfficial) return this.errorReply(`This chat room is already official.`);
 			room.isOfficial = true;
 			this.addModAction(`${user.name} made this chat room official.`);
 			this.modlog('OFFICIALROOM');
 			room.chatRoomData.isOfficial = true;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 
@@ -961,7 +962,7 @@ export const commands: ChatCommands = {
 			this.addModAction(`${user.name} made this chat room no longer a PSPL Winner room.`);
 			this.modlog('PSPLROOM');
 			delete room.chatRoomData.pspl;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		} else {
 			// @ts-ignore
 			if (room.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
@@ -970,7 +971,7 @@ export const commands: ChatCommands = {
 			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
 			this.modlog('UNPSPLROOM');
 			room.chatRoomData.pspl = true;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 
@@ -1011,14 +1012,15 @@ export const commands: ChatCommands = {
 		}
 
 		room.chatRoomData.parentid = main.roomid;
-		Rooms.global.writeChatRoomData();
 
 		for (const userid in room.users) {
 			room.users[userid].updateIdentity(room.roomid);
 		}
 
 		this.modlog('SUBROOM', null, `of ${main.title}`);
-		return this.addModAction(`This room was set as a subroom of ${main.title} by ${user.name}.`);
+		this.addModAction(`This room was set as a subroom of ${main.title} by ${user.name}.`);
+
+		return Rooms.global.writeChatRoomData();
 	},
 
 	removesubroom: 'unsubroom',
@@ -1038,14 +1040,15 @@ export const commands: ChatCommands = {
 		room.parent = null;
 
 		delete room.chatRoomData.parentid;
-		Rooms.global.writeChatRoomData();
 
 		for (const userid in room.users) {
 			room.users[userid].updateIdentity(room.roomid);
 		}
 
 		this.modlog('UNSUBROOM');
-		return this.addModAction(`This room was unset as a subroom by ${user.name}.`);
+		this.addModAction(`This room was unset as a subroom by ${user.name}.`);
+
+		return Rooms.global.writeChatRoomData();
 	},
 
 	parentroom: 'subrooms',
@@ -1110,7 +1113,7 @@ export const commands: ChatCommands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.desc = room.desc;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 
@@ -1148,7 +1151,7 @@ export const commands: ChatCommands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.introMessage = room.introMessage;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 
@@ -1164,7 +1167,7 @@ export const commands: ChatCommands = {
 		delete room.introMessage;
 		if (room.chatRoomData) {
 			delete room.chatRoomData.introMessage;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 
@@ -1203,7 +1206,7 @@ export const commands: ChatCommands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.staffMessage = room.staffMessage;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 
@@ -1219,7 +1222,7 @@ export const commands: ChatCommands = {
 		delete room.staffMessage;
 		if (room.chatRoomData) {
 			delete room.chatRoomData.staffMessage;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 
@@ -1250,7 +1253,7 @@ export const commands: ChatCommands = {
 		room.aliases.push(alias);
 		if (room.chatRoomData) {
 			room.chatRoomData.aliases = room.aliases;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 	roomaliashelp: [
@@ -1283,7 +1286,7 @@ export const commands: ChatCommands = {
 		if (aliasIndex >= 0) {
 			room.aliases.splice(aliasIndex, 1);
 			Rooms.aliases.delete(alias);
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		}
 	},
 	removeroomaliashelp: [

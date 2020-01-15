@@ -304,10 +304,8 @@ export const commands: ChatCommands = {
 				global.Dex = require('../../sim/dex').Dex;
 				// rebuild the formats list
 				delete Rooms.global.formatList;
-				// respawn validator processes
-				void TeamValidatorAsync.PM.respawn();
-				// respawn simulator processes
-				void Rooms.PM.respawn();
+				// respawn validator and simulator processes
+				await Promise.all([TeamValidatorAsync.PM.respawn(), Rooms.PM.respawn()]);
 				// broadcast the new formats list to clients
 				Rooms.global.send(Rooms.global.formatListText);
 
@@ -326,7 +324,7 @@ export const commands: ChatCommands = {
 				if (lock['formats']) return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 				if (requiresForce(patch)) return this.errorReply(requiresForceMessage);
 
-				void TeamValidatorAsync.PM.respawn();
+				await TeamValidatorAsync.PM.respawn();
 				this.sendReply("The team validator has been hot-patched. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
 				patch = 'punishments';
@@ -344,7 +342,7 @@ export const commands: ChatCommands = {
 
 				Chat.uncache('./.server-dist/ip-tools');
 				global.IPTools = require('../ip-tools').IPTools;
-				void IPTools.loadDatacenters();
+				await IPTools.loadDatacenters();
 				this.sendReply("IPTools has been hot-patched.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");

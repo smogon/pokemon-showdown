@@ -101,8 +101,7 @@ export class LadderStore {
 		for (const row of ladder) {
 			stream.write(row.slice(1).join('\t') + '\r\n');
 		}
-		// tslint:disable-next-line no-floating-promises
-		stream.end();
+		await stream.end();
 		this.saving = false;
 	}
 
@@ -278,8 +277,7 @@ export class LadderStore {
 			if (p1) p1.mmrCache[formatid] = +p1newElo;
 			const p2 = Users.getExact(p2name);
 			if (p2) p2.mmrCache[formatid] = +p2newElo;
-			// tslint:disable-next-line no-floating-promises
-			this.save();
+			await this.save();
 
 			if (!room.battle) {
 				Monitor.warn(`room expired before ladder update was received`);

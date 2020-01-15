@@ -82,6 +82,7 @@ global.Config = ConfigLoader.Config;
 import {Monitor} from './monitor';
 global.Monitor = Monitor;
 global.__version = {head: ''};
+
 void Monitor.version().then((hash: any) => {
 	global.__version.tree = hash;
 });
@@ -113,12 +114,14 @@ import {Ladders} from './ladders';
 global.Ladders = Ladders;
 
 import {Chat} from './chat';
+void Chat.loadTranslations();
 global.Chat = Chat;
 
 import {Users} from './users';
 global.Users = Users;
 
 import {Punishments} from './punishments';
+void Punishments.load();
 global.Punishments = Punishments;
 
 import {Rooms} from './rooms';

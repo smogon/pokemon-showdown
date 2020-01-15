@@ -34,10 +34,45 @@ interface PendingUpdate {
 	pendingDataFetcher: (() => string | Buffer) | null;
 	pendingOptions: object | null;
 	throttleTime: number; // throttling until time (0 for no throttle)
-	throttleTimer: NodeJS.Timer | null;
+	throttleTimer: CancellableTimerPromise<void> | null;
+	finish: Promise<void>;
 }
 
 const pendingUpdates = new Map<string, PendingUpdate>();
+
+/**
+ * Givn an async function and ms, this will create a promise that resolves
+ * when the timer and async function ends
+ *
+ * It also has a `cancel` function that will clear the timer
+ * and resolve the promise
+ */
+class CancellableTimerPromise<T, U extends T | PromiseLike<T> | undefined = undefined> {
+	promise: Promise<T>;
+	private readonly resolveVal: U | undefined;
+	private timeout: NodeJS.Timeout;
+	private resolve: (value?: any) => void;
+	constructor(fn: () => Promise<T>, ms: number, resolveVal?: U) {
+		this.timeout = null!;
+		this.resolve = null!;
+		this.resolveVal = resolveVal;
+		this.promise = new Promise<T>(resolve => {
+			const timeout = setTimeout(async () => {
+				await fn();
+				resolve(resolveVal);
+			}, ms);
+			this.timeout = timeout;
+			this.resolve = resolve;
+		});
+	}
+	/**
+	 * Clears the timer and resolves the promise
+	 */
+	cancel() {
+		clearTimeout(this.timeout);
+		this.resolve(this.resolveVal);
+	}
+}
 
 class FSPath {
 	path: string;
@@ -158,7 +193,7 @@ class FSPath {
 	 * No synchronous version because there's no risk of race conditions
 	 * with synchronous code; just use `safeWriteSync`.
 	 */
-	writeUpdate(dataFetcher: () => string | Buffer, options: object = {}) {
+	async writeUpdate(dataFetcher: () => string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return;
 		const pendingUpdate: PendingUpdate | undefined = pendingUpdates.get(this.path);
 
@@ -170,13 +205,15 @@ class FSPath {
 			pendingUpdate.pendingOptions = options;
 			if (pendingUpdate.throttleTimer && throttleTime < pendingUpdate.throttleTime) {
 				pendingUpdate.throttleTime = throttleTime;
-				clearTimeout(pendingUpdate.throttleTimer);
-				pendingUpdate.throttleTimer = setTimeout(() => this.checkNextUpdate(), throttleTime - Date.now());
+				pendingUpdate.throttleTimer.cancel();
+				pendingUpdate.throttleTimer = new CancellableTimerPromise(async () => {
+					await this.checkNextUpdate();
+				}, throttleTime - Date.now());
 			}
-			return;
+			return pendingUpdate.finish;
 		}
 
-		this.writeUpdateNow(dataFetcher, options);
+		return this.writeUpdateNow(dataFetcher, options);
 	}
 
 	writeUpdateNow(dataFetcher: () => string | Buffer, options: object) {
@@ -188,9 +225,10 @@ class FSPath {
 			pendingOptions: null,
 			throttleTime,
 			throttleTimer: null,
+			finish: this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate()),
 		};
 		pendingUpdates.set(this.path, update);
-		void this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
+		return update.finish;
 	}
 	checkNextUpdate() {
 		const pendingUpdate = pendingUpdates.get(this.path);
@@ -204,9 +242,9 @@ class FSPath {
 			return;
 		}
 
-		this.writeUpdateNow(dataFetcher, options);
+		return this.writeUpdateNow(dataFetcher, options);
 	}
-	finishUpdate() {
+	async finishUpdate() {
 		const pendingUpdate = pendingUpdates.get(this.path);
 		if (!pendingUpdate) throw new Error(`FS: Pending update not found`);
 		if (!pendingUpdate.isWriting) throw new Error(`FS: Conflicting update`);
@@ -214,11 +252,13 @@ class FSPath {
 		pendingUpdate.isWriting = false;
 		const throttleTime = pendingUpdate.throttleTime;
 		if (!throttleTime || throttleTime < Date.now()) {
-			this.checkNextUpdate();
+			await this.checkNextUpdate();
 			return;
 		}
-
-		pendingUpdate.throttleTimer = setTimeout(() => this.checkNextUpdate(), throttleTime - Date.now());
+		pendingUpdate.throttleTimer = new CancellableTimerPromise(async () => {
+			await this.checkNextUpdate();
+		}, throttleTime - Date.now());
+		return pendingUpdate.throttleTimer.promise;
 	}
 
 	append(data: string | Buffer, options: object = {}) {

@@ -170,13 +170,14 @@ export const Punishments = new class {
 		['BATTLEBAN', 'battlebanned'],
 		['MUTE', 'muted'],
 	]);
-	constructor() {
-		setImmediate(() => {
-			void Punishments.loadPunishments();
-			void Punishments.loadRoomPunishments();
-			void Punishments.loadBanlist();
-			void Punishments.loadSharedIps();
-		});
+
+	load() {
+		return Promise.all([
+			Punishments.loadPunishments(),
+			Punishments.loadRoomPunishments(),
+			Punishments.loadBanlist(),
+			Punishments.loadSharedIps(),
+		]);
 	}
 
 	// punishments.tsv is in the format:
@@ -234,7 +235,7 @@ export const Punishments = new class {
 	}
 
 	savePunishments() {
-		FS(PUNISHMENT_FILE).writeUpdate(() => {
+		return FS(PUNISHMENT_FILE).writeUpdate(() => {
 			const saveTable = Punishments.getPunishments();
 			let buf = 'Punishment\tUser ID\tIPs and alts\tExpires\tReason\r\n';
 			for (const [id, entry] of saveTable) {
@@ -245,7 +246,7 @@ export const Punishments = new class {
 	}
 
 	saveRoomPunishments() {
-		FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
+		return FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
 			const saveTable = new Map<string, PunishmentEntry>();
 			for (const roomid of Punishments.roomIps.keys()) {
 				for (const [userid, punishment] of Punishments.getPunishments(roomid, true)) {
@@ -455,7 +456,7 @@ export const Punishments = new class {
 		return affected;
 	}
 
-	unpunish(id: string, punishType: string) {
+	async unpunish(id: string, punishType: string) {
 		id = toID(id);
 		const punishment = Punishments.userids.get(id);
 		if (punishment) {
@@ -478,7 +479,7 @@ export const Punishments = new class {
 			}
 		});
 		if (success) {
-			Punishments.savePunishments();
+			await Punishments.savePunishments();
 		}
 		return success;
 	}
@@ -565,7 +566,7 @@ export const Punishments = new class {
 	/**
 	 * @param ignoreWrite skip persistent storage
 	 */
-	roomUnpunish(room: Room | RoomID, id: string, punishType: string, ignoreWrite = false) {
+	async roomUnpunish(room: Room | RoomID, id: string, punishType: string, ignoreWrite = false) {
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
 		id = toID(id);
 		const punishment = Punishments.roomUserids.nestedGet(roomid, id);
@@ -595,7 +596,7 @@ export const Punishments = new class {
 			}
 		}
 		if (success && !ignoreWrite) {
-			Punishments.saveRoomPunishments();
+			await Punishments.saveRoomPunishments();
 		}
 		return success;
 	}
@@ -904,26 +905,25 @@ export const Punishments = new class {
 		return Punishments.roomUnpunish(room, userid, 'BLACKLIST', ignoreWrite);
 	}
 
-	roomUnblacklistAll(room: Room) {
+	async roomUnblacklistAll(room: Room) {
 		const roombans = Punishments.roomUserids.get(room.roomid);
 		if (!roombans) return false;
 
 		const unblacklisted: string[] = [];
 
-		roombans.forEach(([punishType], userid) => {
+		roombans.forEach(async ([punishType], userid) => {
 			if (punishType === 'BLACKLIST') {
-				Punishments.roomUnblacklist(room, userid, true);
+				await Punishments.roomUnblacklist(room, userid, true);
 				unblacklisted.push(userid);
 			}
 		});
 		if (unblacklisted.length === 0) return false;
-		Punishments.saveRoomPunishments();
+		await Punishments.saveRoomPunishments();
 		return unblacklisted;
 	}
 
 	addSharedIp(ip: string, note: string) {
 		Punishments.sharedIps.set(ip, note);
-		void Punishments.appendSharedIp(ip, note);
 
 		for (const user of Users.users.values()) {
 			if (user.locked && user.locked !== user.id && ip in user.ips) {
@@ -936,11 +936,12 @@ export const Punishments = new class {
 				user.updateIdentity();
 			}
 		}
+		return Punishments.appendSharedIp(ip, note);
 	}
 
 	removeSharedIp(ip: string) {
 		Punishments.sharedIps.delete(ip);
-		void Punishments.saveSharedIps();
+		return Punishments.saveSharedIps();
 	}
 
 	/*********************************************************
@@ -1044,7 +1045,7 @@ export const Punishments = new class {
 		return false;
 	}
 
-	checkName(user: User, userid: string, registered: boolean) {
+	async checkName(user: User, userid: string, registered: boolean) {
 		if (userid.startsWith('guest')) return;
 		for (const roomid of user.inRooms) {
 			Punishments.checkNewNameInRoom(user, userid, roomid);
@@ -1066,7 +1067,7 @@ export const Punishments = new class {
 
 		if (battleban) {
 			if (battleban[1] !== user.id && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
-				Punishments.roomUnpunish("battle" as RoomID, userid, 'BATTLEBAN');
+				await Punishments.roomUnpunish("battle" as RoomID, userid, 'BATTLEBAN');
 			} else {
 				Punishments.roomPunish("battle" as RoomID, user, battleban);
 				user.cancelReady();

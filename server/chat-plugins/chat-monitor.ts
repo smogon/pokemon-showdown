@@ -1,6 +1,7 @@
 'use strict';
 
 import {FS} from '../../lib/fs';
+import { Monitor } from '../monitor';
 
 type FilterWord = [RegExp, string, string, string | null, number];
 
@@ -90,7 +91,9 @@ function saveFilters(force = false) {
 			).join('');
 		}
 		return buf;
-	}, {throttle: force ? 0 : WRITE_THROTTLE_TIME});
+	}, {throttle: force ? 0 : WRITE_THROTTLE_TIME}).catch(err => {
+		Monitor.crashlog(err, "A save filters attempt");
+	});
 }
 
 // Register the chat monitors used

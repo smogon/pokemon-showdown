@@ -817,7 +817,7 @@ exports.commands = {
 	},
 	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: & ~`],
 
-	importinputlog(target, room, user, connection) {
+	async importinputlog(target, room, user, connection) {
 		if (!this.can('broadcast')) return;
 		const formatIndex = target.indexOf(`"formatid":"`);
 		const nextQuoteIndex = target.indexOf(`"`, formatIndex + 12);
@@ -828,7 +828,7 @@ exports.commands = {
 		}
 
 		const formatid = target.slice(formatIndex + 12, nextQuoteIndex);
-		const battleRoom = Rooms.createBattle(formatid, {inputLog: target});
+		const battleRoom = await Rooms.createBattle(formatid, {inputLog: target});
 
 		const nameIndex1 = target.indexOf(`"name":"`);
 		const nameNextQuoteIndex1 = target.indexOf(`"`, nameIndex1 + 8);

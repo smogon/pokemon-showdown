@@ -14,7 +14,7 @@ try {
 if (!spotlights || typeof spotlights !== 'object') spotlights = {};
 
 function saveSpotlights() {
-	FS(SPOTLIGHT_FILE).writeUpdate(() => JSON.stringify(spotlights));
+	return FS(SPOTLIGHT_FILE).writeUpdate(() => JSON.stringify(spotlights));
 }
 
 function nextDaily() {
@@ -26,8 +26,8 @@ function nextDaily() {
 		}
 	}
 
-	saveSpotlights();
 	timeout = setTimeout(nextDaily, DAY);
+	return saveSpotlights();
 }
 
 const midnight = new Date();
@@ -81,6 +81,7 @@ export const commands: ChatCommands = {
 		if (!spotlights[room.roomid][key]) return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
 
 		if (!this.can('announce', null, room)) return false;
+		let shouldUpdate = false;
 		if (rest) {
 			const queueNumber = parseInt(rest);
 			if (isNaN(queueNumber) || queueNumber < 1) return this.errorReply("Invalid queue number");
@@ -88,7 +89,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`Queue number needs to be between 1 and ${spotlights[room.roomid][key].length - 1}`);
 			}
 			spotlights[room.roomid][key].splice(queueNumber, 1);
-			saveSpotlights();
+			shouldUpdate = true;
 
 			this.modlog(`DAILY REMOVE`, `${key}[${queueNumber}]`);
 			this.sendReply(`Removed the ${queueNumber}th entry from the queue of the daily spotlight named '${key}'.`);
@@ -97,10 +98,11 @@ export const commands: ChatCommands = {
 			if (!spotlights[room.roomid][key].length) {
 				delete spotlights[room.roomid][key];
 			}
-			saveSpotlights();
+			shouldUpdate = true;
 			this.modlog(`DAILY REMOVE`, key);
 			this.sendReply(`The daily spotlight named '${key}' has been successfully removed.`);
 		}
+		if (shouldUpdate) return saveSpotlights();
 	},
 	queuedaily: 'setdaily',
 	async setdaily(target, room, user, connection, cmd) {
@@ -140,7 +142,7 @@ export const commands: ChatCommands = {
 			this.privateModAction(`${user.name} queued a daily ${key}.`);
 		}
 
-		saveSpotlights();
+		return saveSpotlights();
 	},
 	async daily(target, room, user) {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");

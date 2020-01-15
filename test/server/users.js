@@ -56,8 +56,8 @@ describe('Users features', function () {
 					if (room) room.destroy();
 				});
 
-				it('should join a room if not already present', function () {
-					room = Rooms.createChatRoom('test');
+				it('should join a room if not already present', async function () {
+					room = await Rooms.createChatRoom('test');
 					this.connection.joinRoom(Rooms.get('test'));
 					assert.ok(this.connection.inRooms.has('test'));
 				});
@@ -68,9 +68,9 @@ describe('Users features', function () {
 				afterEach(function () {
 					if (room) room.destroy();
 				});
-				it('should leave a room that is present', function () {
+				it('should leave a room that is present', async function () {
 					this.connection = new Connection('127.0.0.1');
-					room = Rooms.createChatRoom('test');
+					room = await Rooms.createChatRoom('test');
 					this.connection.joinRoom(room);
 					this.connection.leaveRoom(room);
 					assert.ok(!this.connection.inRooms.has('test'));
@@ -153,9 +153,7 @@ describe('Users features', function () {
 						user.disconnectAll();
 						user.destroy();
 					}
-					if (room) {
-						if (room) room.destroy();
-					}
+					if (room) room.destroy();
 				});
 				it(`should allow 's' permissions only on self`, function () {
 					const user = new User();
@@ -183,8 +181,8 @@ describe('Users features', function () {
 					target.group = '~';
 					assert.equal(user.can('promote', target), false, 'targeting higher rank');
 				});
-				it(`should not allow users to demote themselves`, function () {
-					room = Rooms.createChatRoom("test");
+				it(`should not allow users to demote themselves`, async function () {
+					room = await Rooms.createChatRoom("test");
 					if (!room.auth) room.auth = {};
 					const user = new User();
 					user.forceRename("User", true);

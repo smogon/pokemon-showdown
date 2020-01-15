@@ -184,7 +184,7 @@ export class UnoGame extends Rooms.RoomGame {
 		this.sendToRoom(`|raw|The top card is <span style="color: ${textColors[this.topCard.color]}">${this.topCard.name}</span>.`);
 
 		this.onRunEffect(this.topCard.value, true);
-		this.nextTurn(true);
+		return this.nextTurn(true);
 	}
 
 	joinGame(user: User) {
@@ -230,7 +230,7 @@ export class UnoGame extends Rooms.RoomGame {
 		if (this.currentPlayerid === oldUserid) this.currentPlayerid = user.id;
 	}
 
-	eliminate(userid: ID) {
+	async eliminate(userid: ID) {
 		if (!(userid in this.playerTable)) return false;
 
 		const name = this.playerTable[userid].name;
@@ -253,7 +253,7 @@ export class UnoGame extends Rooms.RoomGame {
 			}
 
 			if (this.timer) clearTimeout(this.timer);
-			this.nextTurn();
+			await this.nextTurn();
 		}
 		if (this.awaitUno === userid) this.awaitUno = null;
 
@@ -311,7 +311,7 @@ export class UnoGame extends Rooms.RoomGame {
 	}
 
 	nextTurn(starting?: boolean) {
-		void this.onAwaitUno()
+		return this.onAwaitUno()
 			.then(x => {
 				if (!starting) this.onNextPlayer();
 
@@ -325,7 +325,7 @@ export class UnoGame extends Rooms.RoomGame {
 
 				this.timer = setTimeout(() => {
 					this.sendToRoom(`${player.name} has been automatically disqualified.`);
-					this.eliminate(this.currentPlayerid);
+					return this.eliminate(this.currentPlayerid);
 				}, this.maxTime * 1000);
 			});
 	}
@@ -416,7 +416,7 @@ export class UnoGame extends Rooms.RoomGame {
 
 		// continue with effects and next player
 		this.onRunEffect(card.value);
-		if (this.state === 'play') this.nextTurn();
+		if (this.state === 'play') return this.nextTurn();
 	}
 
 	onRunEffect(value: string, initialize?: boolean) {
@@ -448,7 +448,7 @@ export class UnoGame extends Rooms.RoomGame {
 			this.isPlusFour = true;
 			this.timer = setTimeout(() => {
 				this.sendToRoom(`${this.playerTable[this.currentPlayerid].name} has been automatically disqualified.`);
-				this.eliminate(this.currentPlayerid);
+				return this.eliminate(this.currentPlayerid);
 			}, this.maxTime * 1000);
 			break;
 		case 'Wild':
@@ -456,7 +456,7 @@ export class UnoGame extends Rooms.RoomGame {
 			this.state = 'color';
 			this.timer = setTimeout(() => {
 				this.sendToRoom(`${this.playerTable[this.currentPlayerid].name} has been automatically disqualified.`);
-				this.eliminate(this.currentPlayerid);
+				return this.eliminate(this.currentPlayerid);
 			}, this.maxTime * 1000);
 			break;
 		}
@@ -487,7 +487,7 @@ export class UnoGame extends Rooms.RoomGame {
 			this.onNextPlayer(); // handle the skipping here.
 		}
 
-		this.nextTurn();
+		return this.nextTurn();
 	}
 
 	onDrawCard(player: UnoGamePlayer, count: number) {
@@ -641,11 +641,11 @@ export const commands: ChatCommands = {
 				return this.errorReply("UNO is already disabled in this room.");
 			}
 			room.unoDisabled = true;
+			this.sendReply("UNO has been disabled for this room.");
 			if (room.chatRoomData) {
 				room.chatRoomData.unoDisabled = true;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
-			return this.sendReply("UNO has been disabled for this room.");
 		},
 
 		on: 'enable',
@@ -655,11 +655,11 @@ export const commands: ChatCommands = {
 				return this.errorReply("UNO is already enabled in this room.");
 			}
 			delete room.unoDisabled;
+			this.sendReply("UNO has been enabled for this room.");
 			if (room.chatRoomData) {
 				delete room.chatRoomData.unoDisabled;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
-			return this.sendReply("UNO has been enabled for this room.");
 		},
 
 		// moderation commands
@@ -716,7 +716,7 @@ export const commands: ChatCommands = {
 			game.maxTime = amount;
 			if (game.timer) clearTimeout(game.timer);
 			game.timer = setTimeout(() => {
-				game.eliminate(game.currentPlayerid);
+				return game.eliminate(game.currentPlayerid);
 			}, amount * 1000);
 			this.addModAction(`${user.name} has set the UNO automatic disqualification timer to ${amount} seconds.`);
 			this.modlog('UNO TIMER', null, `${amount} seconds`);
@@ -745,12 +745,12 @@ export const commands: ChatCommands = {
 		},
 
 		dq: 'disqualify',
-		disqualify(target, room, user) {
+		async disqualify(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
 			const game = room.getGame(UnoGame);
 			if (!game) return this.errorReply("There is no UNO game going on in this room right now.");
 
-			const disqualified = game.eliminate(toID(target));
+			const disqualified = await game.eliminate(toID(target));
 			if (disqualified === false) return this.errorReply(`Unable to disqualify ${target}.`);
 			this.privateModAction(`(${user.name} has disqualified ${disqualified} from the UNO game.)`);
 			this.modlog('UNO DQ', toID(target));
@@ -778,12 +778,12 @@ export const commands: ChatCommands = {
 			return this.sendReply("You have left the game of UNO.");
 		},
 
-		play(target, room, user) {
+		async play(target, room, user) {
 			const game = room.getGame(UnoGame);
 			if (!game) return this.errorReply("There is no UNO game going on in this room right now.");
 			const player: UnoGamePlayer | undefined = game.playerTable[user.id];
 			if (!player) return this.errorReply(`You are not in the game of UNO.`);
-			const error = game.onPlay(player, target);
+			const error = await game.onPlay(player, target);
 			if (error) this.errorReply(error);
 		},
 
@@ -806,7 +806,7 @@ export const commands: ChatCommands = {
 			if (game.state === 'color') return this.errorReply("You cannot pass until you choose a color.");
 
 			game.sendToRoom(`${user.name} has passed.`);
-			game.nextTurn();
+			return game.nextTurn();
 		},
 
 		color(target, room, user) {

@@ -749,11 +749,11 @@ export const commands: ChatCommands = {
 			}
 
 			room.blackjackDisabled = true;
+			this.sendReply(`Blackjack has been disabled for this room.`);
 			if (room.chatRoomData) {
 				room.chatRoomData.blackjackDisabled = true;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
-			this.sendReply(`Blackjack has been disabled for this room.`);
 		},
 		enable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
@@ -762,10 +762,10 @@ export const commands: ChatCommands = {
 			}
 
 			delete room.blackjackDisabled;
+			this.sendReply(`Blackjack has been enabled for this room.`);
 			if (room.chatRoomData) {
 				delete room.chatRoomData.blackjackDisabled;
-				Rooms.global.writeChatRoomData();
-				this.sendReply(`Blackjack has been enabled for this room.`);
+				return Rooms.global.writeChatRoomData();
 			}
 		},
 		'': 'help',

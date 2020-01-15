@@ -191,8 +191,7 @@ function exportUsergroups() {
 	}
 	return FS('config/usergroups.csv').write(buffer);
 }
-// tslint:disable-next-line:no-floating-promises
-importUsergroups();
+void importUsergroups();
 
 function cacheGroupData() {
 	if (Config.groups) {
@@ -289,8 +288,7 @@ function setOfflineGroup(name: string, group: GroupSymbol, forceTrusted: boolean
 		name = usergroup ? usergroup.substr(1) : name;
 		usergroups[userid] = group + name;
 	}
-	void exportUsergroups();
-	return true;
+	return exportUsergroups();
 }
 function isUsernameKnown(name: string) {
 	const userid = toID(name);
@@ -872,10 +870,10 @@ export class User extends Chat.MessageContext {
 		this.s2 = tokenDataSplit[6];
 		this.s3 = tokenDataSplit[7];
 
-		this.handleRename(name, userid, newlyRegistered, userType);
+		return this.handleRename(name, userid, newlyRegistered, userType);
 	}
 
-	handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
+	async handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
 		const conflictUser = users.get(userid);
 		if (conflictUser && !conflictUser.registered && conflictUser.connected) {
 			if (newlyRegistered && userType !== '1') {
@@ -942,14 +940,14 @@ export class User extends Chat.MessageContext {
 			if (this.named) user.prevNames[this.id] = this.name;
 			this.destroy();
 
-			Punishments.checkName(user, userid, registered);
+			await Punishments.checkName(user, userid, registered);
 
 			Rooms.global.checkAutojoin(user);
 			Chat.loginfilter(user, this, userType);
 			return true;
 		}
 
-		Punishments.checkName(this, userid, registered);
+		await Punishments.checkName(this, userid, registered);
 		if (this.namelocked) return false;
 
 		// rename success
@@ -1218,7 +1216,7 @@ export class User extends Chat.MessageContext {
 				delete usergroups[this.id];
 				this.trusted = '';
 			}
-			void exportUsergroups();
+			return exportUsergroups();
 		}
 	}
 	/**
@@ -1653,14 +1651,15 @@ function socketConnect(
 	if (banned) {
 		return connection.destroy();
 	}
+	const promises = [];
 	// Emergency mode connections logging
 	if (Config.emergency) {
-		void FS('logs/cons.emergency.log').append('[' + ip + ']\n');
+		promises.push(FS('logs/cons.emergency.log').append('[' + ip + ']\n'));
 	}
 
 	const user = new User(connection);
 	connection.user = user;
-	void Punishments.checkIp(user, connection);
+	promises.push(Punishments.checkIp(user, connection));
 	// Generate 1024-bit challenge string.
 	require('crypto').randomBytes(128, (err: Error | null, buffer: Buffer) => {
 		if (err) {
@@ -1679,6 +1678,8 @@ function socketConnect(
 	});
 
 	user.joinRoom('global' as RoomID, connection);
+
+	return Promise.all(promises);
 }
 function socketDisconnect(worker: Worker, workerid: number, socketid: string) {
 	const id = '' + workerid + '-' + socketid;
@@ -1729,9 +1730,10 @@ function socketReceive(worker: Worker, workerid: number, socketid: string, messa
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;
 	}
+	const logging = [];
 	// Emergency logging
 	if (Config.emergency) {
-		void FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`);
+		logging.push(FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`));
 	}
 
 	const startTime = Date.now();
@@ -1742,6 +1744,7 @@ function socketReceive(worker: Worker, workerid: number, socketid: string, messa
 	if (deltaTime > 1000) {
 		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${roomId}|${message}`);
 	}
+	return Promise.all(logging);
 }
 
 const users = new Map<ID, User>();

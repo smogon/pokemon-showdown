@@ -1139,9 +1139,6 @@ export class CommandContext extends MessageContext {
 }
 
 export const Chat = new class {
-	constructor() {
-		void this.loadTranslations();
-	}
 	readonly multiLinePattern = new PatternTester();
 
 	/*********************************************************
@@ -1464,10 +1461,6 @@ export const Chat = new class {
 	loadPlugins() {
 		if (Chat.commands) return;
 
-		void FS('package.json').readIfExists().then(data => {
-			if (data) Chat.packageData = JSON.parse(data);
-		});
-
 		// Install plug-in commands and chat filters
 
 		// All resulting filenames will be relative to basePath
@@ -1513,6 +1506,10 @@ export const Chat = new class {
 		for (const file of files) {
 			this.loadPlugin(`chat-plugins/${file}`);
 		}
+
+		return FS('package.json').readIfExists().then(data => {
+			if (data) Chat.packageData = JSON.parse(data);
+		});
 	}
 	destroy() {
 		for (const handler of Chat.destroyHandlers) {

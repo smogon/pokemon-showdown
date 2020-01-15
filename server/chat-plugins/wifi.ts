@@ -24,7 +24,7 @@ try {
 if (!stats || typeof stats !== 'object') stats = {};
 
 function saveStats() {
-	FS(STATS_FILE).writeUpdate(() => JSON.stringify(stats));
+	return FS(STATS_FILE).writeUpdate(() => JSON.stringify(stats));
 }
 
 function toPokemonId(str: string) {
@@ -120,7 +120,7 @@ class Giveaway {
 	}
 
 	static unban(room: ChatRoom | GameRoom, user: User) {
-		Punishments.roomUnpunish(room, toID(user), 'GIVEAWAYBAN', false);
+		return Punishments.roomUnpunish(room, toID(user), 'GIVEAWAYBAN', false);
 	}
 
 	static getSprite(text: string): [Set<string>, string] {
@@ -199,7 +199,7 @@ class Giveaway {
 			stats[mon].push(Date.now());
 		}
 
-		saveStats();
+		return saveStats();
 	}
 
 	generateWindow(rightSide: string) {
@@ -291,7 +291,8 @@ export class QuestionGiveaway extends Giveaway {
 		user.sendTo(this.room, `The answer${Chat.plural(ans, "s have", "has")} been changed to ${ans.join(', ')}.`);
 	}
 
-	end(force: boolean) {
+	async end(force: boolean) {
+		let shouldUpdate = false;
 		if (force) {
 			this.clearTimer();
 			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
@@ -310,11 +311,12 @@ export class QuestionGiveaway extends Giveaway {
 				this.winner.sendTo(this.room, `|raw|You have won the giveaway. PM <b>${Chat.escapeHTML(this.giver.name)}</b> (FC: ${this.fc}) to claim your prize!`);
 				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
 				if (this.giver.connected) this.giver.popup(`${this.winner.name} has won your question giveaway!`);
-				Giveaway.updateStats(this.monIDs);
+				shouldUpdate = true;
 			}
 		}
 
 		delete this.room.giveaway;
+		if (shouldUpdate) return Giveaway.updateStats(this.monIDs);
 	}
 
 	static sanitize(str: string) {
@@ -403,7 +405,7 @@ export class LotteryGiveaway extends Giveaway {
 		user.sendTo(this.room, "You have left the lottery giveaway.");
 	}
 
-	drawLottery() {
+	async drawLottery() {
 		this.clearTimer();
 
 		const userlist = Object.values(this.joined);
@@ -418,10 +420,11 @@ export class LotteryGiveaway extends Giveaway {
 			if (!winner) continue;
 			this.winners.push(winner);
 		}
-		this.end();
+		return this.end();
 	}
 
-	end(force = false) {
+	async end(force = false) {
+		let shouldUpdate = false;
 		if (force) {
 			this.clearTimer();
 			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
@@ -437,9 +440,10 @@ export class LotteryGiveaway extends Giveaway {
 				if (winner.connected) winner.popup(`You have won the lottery giveaway! PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
 			}
 			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${winnerNames}`);
-			Giveaway.updateStats(this.monIDs);
+			shouldUpdate = true;
 		}
 		delete this.room.giveaway;
+		if (shouldUpdate) return Giveaway.updateStats(this.monIDs);
 	}
 }
 
@@ -532,7 +536,8 @@ export class GTSGiveaway {
 		this.changeUhtml(this.generateWindow());
 	}
 
-	end(force = false) {
+	async end(force = false) {
+		let shouldUpdate = false;
 		if (force) {
 			this.clearTimer();
 			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway was forcibly ended.</p>');
@@ -542,9 +547,10 @@ export class GTSGiveaway {
 			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`);
 			this.room.modlog(`(wifi) GTS FINISHED: ${this.giver.name} has finished their GTS giveaway for "${this.summary}"`);
 			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Chat.escapeHTML(this.lookfor)}</strong>" has finished.</p>`);
-			Giveaway.updateStats(this.monIDs);
+			shouldUpdate = true;
 		}
 		delete this.room.gtsga;
+		if (shouldUpdate) await Giveaway.updateStats(this.monIDs);
 		return this.left;
 	}
 
@@ -786,9 +792,9 @@ const cmds: ChatCommands = {
 		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
 		if (!Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
 
-		Giveaway.unban(room, targetUser);
 		this.privateModAction(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
 		this.modlog('GIVEAWAYUNBAN', targetUser, null, {noip: 1, noalts: 1});
+		return Giveaway.unban(room, targetUser);
 	},
 	stop: 'end',
 	end(target, room, user) {
@@ -799,10 +805,10 @@ const cmds: ChatCommands = {
 		if (target && target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		room.giveaway.end(true);
 		this.modlog('GIVEAWAY END', null, target);
 		if (target) target = `: ${target}`;
 		this.privateModAction(`(The giveaway was forcibly ended by ${user.name}${target})`);
+		return room.giveaway.end(true);
 	},
 	rm: 'remind',
 	remind(target, room, user) {

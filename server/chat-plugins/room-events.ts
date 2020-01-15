@@ -78,7 +78,7 @@ export const commands: ChatCommands = {
 			};
 
 			room.chatRoomData.events = room.events;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		},
 
 		begin: 'start',
@@ -110,7 +110,7 @@ export const commands: ChatCommands = {
 			this.modlog('ROOMEVENT', null, `started "${target}"`);
 			room.events[target].started = true;
 			room.chatRoomData.events = room.events;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		},
 
 		delete: 'remove',
@@ -128,7 +128,7 @@ export const commands: ChatCommands = {
 			this.modlog('ROOMEVENT', null, `removed "${target}"`);
 
 			room.chatRoomData.events = room.events;
-			Rooms.global.writeChatRoomData();
+			return Rooms.global.writeChatRoomData();
 		},
 		view(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");

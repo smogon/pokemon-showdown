@@ -7,9 +7,9 @@ const {Connection, User} = require('../users-utils');
 
 describe('Matchmaker', function () {
 	const FORMATID = 'gen7ou';
-	const addSearch = (player, rating = 1000, formatid = FORMATID) => {
+	const addSearch = async (player, rating = 1000, formatid = FORMATID) => {
 		let search = new Ladders.BattleReady(player.id, formatid, player.team, rating);
-		Ladders(formatid).addSearch(search, player);
+		await Ladders(formatid).addSearch(search, player);
 		return search;
 	};
 	const destroyPlayer = player => {
@@ -43,8 +43,8 @@ describe('Matchmaker', function () {
 		this.p2 = destroyPlayer(this.p2);
 	});
 
-	it('should add a search', function () {
-		let s1 = addSearch(this.p1);
+	it('should add a search', async function () {
+		let s1 = await addSearch(this.p1);
 		assert.ok(Ladders.searches.has(FORMATID));
 
 		let formatSearches = Ladders.searches.get(FORMATID);
@@ -55,28 +55,28 @@ describe('Matchmaker', function () {
 		assert.equal(s1.rating, 1000);
 	});
 
-	it('should matchmake users when appropriate', function () {
-		addSearch(this.p1);
-		addSearch(this.p2);
+	it('should matchmake users when appropriate', async function () {
+		await addSearch(this.p1);
+		await addSearch(this.p2);
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
 	});
 
-	it('should matchmake users within a reasonable rating range', function () {
-		addSearch(this.p1);
-		addSearch(this.p2, 2000);
+	it('should matchmake users within a reasonable rating range', async function () {
+		await addSearch(this.p1);
+		await addSearch(this.p2, 2000);
 		assert.equal(Ladders.searches.get(FORMATID).size, 2);
 	});
 
-	it('should cancel searches', function () {
-		addSearch(this.p1);
+	it('should cancel searches', async function () {
+		await addSearch(this.p1);
 		Ladders(FORMATID).cancelSearch(this.p1);
 		Ladders.cancelSearches(this.p2);
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
 	});
 
-	it('should periodically matchmake users when appropriate', function () {
-		addSearch(this.p1);
-		let s2 = addSearch(this.p2, 2000);
+	it('should periodically matchmake users when appropriate', async function () {
+		await addSearch(this.p1);
+		let s2 = await addSearch(this.p2, 2000);
 		assert.equal(Ladders.searches.get(FORMATID).size, 2);
 
 		s2.rating = 1000;
@@ -84,32 +84,32 @@ describe('Matchmaker', function () {
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
 	});
 
-	it('should create a new battle room after matchmaking', function () {
+	it('should create a new battle room after matchmaking', async function () {
 		assert.equal(this.p1.games.size, 0);
-		addSearch(this.p1);
-		addSearch(this.p2);
+		await addSearch(this.p1);
+		await addSearch(this.p2);
 		assert.equal(this.p1.games.size, 1);
 		for (const roomid of this.p1.games) {
 			assert.ok(Rooms.get(roomid).battle);
 		}
 	});
 
-	it('should cancel search on disconnect', function () {
-		addSearch(this.p1);
+	it('should cancel search on disconnect', async function () {
+		await addSearch(this.p1);
 		this.p1.onDisconnect(this.p1.connections[0]);
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
 	});
 
-	it('should cancel search on merge', function () {
-		addSearch(this.p1);
+	it('should cancel search on merge', async function () {
+		await addSearch(this.p1);
 		this.p2.merge(this.p1);
 		assert.equal(Ladders.searches.get(FORMATID).size, 0);
 	});
 
 	describe('#startBattle', function () {
-		beforeEach(function () {
-			this.s1 = addSearch(this.p1);
-			this.s2 = addSearch(this.p2);
+		beforeEach(async function () {
+			this.s1 = await addSearch(this.p1);
+			this.s2 = await addSearch(this.p2);
 		});
 
 		afterEach(function () {
@@ -117,11 +117,11 @@ describe('Matchmaker', function () {
 			this.s2 = null;
 		});
 
-		it('should prevent battles from starting if both players are identical', function () {
+		it('should prevent battles from starting if both players are identical', async function () {
 			Object.assign(this.s2, this.s1);
 			let room;
 			try {
-				room = Rooms.createBattle(FORMATID, {p1: this.p1, p2: this.p1, p1team: this.s1.team, p2team: this.s2.team, rated: 1000});
+				room = await Rooms.createBattle(FORMATID, {p1: this.p1, p2: this.p1, p1team: this.s1.team, p2team: this.s2.team, rated: 1000});
 			} catch (e) {}
 			assert.equal(room, undefined);
 		});
@@ -136,8 +136,8 @@ describe('Matchmaker', function () {
 			this.lockdown = null;
 		});
 
-		it('should prevent battles from starting if the server is in lockdown', function () {
-			let room = Rooms.createBattle(FORMATID, {p1: this.p1, p2: this.p2, p1team: this.s1.team, p2team: this.s2.team, rated: 1000});
+		it('should prevent battles from starting if the server is in lockdown', async function () {
+			let room = await Rooms.createBattle(FORMATID, {p1: this.p1, p2: this.p2, p1team: this.s1.team, p2team: this.s2.team, rated: 1000});
 			assert.equal(room, undefined);
 		});
 	});

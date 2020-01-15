@@ -943,7 +943,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (!challenge.from.pendingChallenge) return;
 		if (!player.pendingChallenge) return;
 
-		const room = Rooms.createBattle(this.fullFormat, {
+		const room = await Rooms.createBattle(this.fullFormat, {
 			isPrivate: this.room.isPrivate,
 			p1: from,
 			p1team: challenge.team,
@@ -1182,19 +1182,19 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
-			void tournament.challenge(user, toID(params[0]), this);
+			return tournament.challenge(user, toID(params[0]), this);
 		},
 		cancelchallenge(tournament, user) {
 			tournament.cancelChallenge(user, this);
 		},
 		acceptchallenge(tournament, user) {
-			void tournament.acceptChallenge(user, this);
+			return tournament.acceptChallenge(user, this);
 		},
 		vtm(tournament, user, params, cmd, connection) {
 			if (Monitor.countPrepBattle(connection.ip, connection)) {
 				return;
 			}
-			void TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.team).then(result => {
+			return TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.team).then(result => {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");
 				} else {
@@ -1571,10 +1571,13 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 
 			if (!tournament.checkBanned(targetUserid)) return this.errorReply("This user isn't banned from tournaments.");
 
-			if (targetUser) { Punishments.roomUnpunish(this.room, targetUserid, 'TOURBAN', false); }
 			tournament.removeBannedUser(targetUserid);
 			this.privateModAction(`${typeof targetUser !== 'string' ? targetUser.name : targetUserid} was unbanned from joining tournaments by ${user.name}.`);
 			this.modlog('TOUR UNBAN', targetUser, null, {noip: 1, noalts: 1});
+
+			if (targetUser) {
+				return Punishments.roomUnpunish(this.room, targetUserid, 'TOURBAN', false);
+			}
 		},
 	},
 };
@@ -1614,21 +1617,21 @@ export const commands: ChatCommands = {
 					return this.errorReply("Tournaments are already enabled for @ and above in this room.");
 				}
 				room.toursEnabled = true;
+				this.sendReply("Tournaments are now enabled for @ and up.");
 				if (room.chatRoomData) {
 					room.chatRoomData.toursEnabled = true;
-					Rooms.global.writeChatRoomData();
+					return Rooms.global.writeChatRoomData();
 				}
-				return this.sendReply("Tournaments are now enabled for @ and up.");
 			} else if (rank === '%') {
 				if (room.toursEnabled === rank) {
 					return this.errorReply("Tournaments are already enabled for % and above in this room.");
 				}
 				room.toursEnabled = rank;
+				this.sendReply("Tournaments are now enabled for % and up.");
 				if (room.chatRoomData) {
 					room.chatRoomData.toursEnabled = rank;
-					Rooms.global.writeChatRoomData();
+					return Rooms.global.writeChatRoomData();
 				}
-				return this.sendReply("Tournaments are now enabled for % and up.");
 			} else {
 				return this.errorReply("Tournament enable setting not recognized.  Valid options include [%|@].");
 			}
@@ -1638,11 +1641,11 @@ export const commands: ChatCommands = {
 				return this.errorReply("Tournaments are already disabled.");
 			}
 			room.toursEnabled = false;
+			this.sendReply("Tournaments are now disabled.");
 			if (room.chatRoomData) {
 				room.chatRoomData.toursEnabled = false;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
-			return this.sendReply("Tournaments are now disabled.");
 		} else if (cmd === 'announce' || cmd === 'announcements') {
 			if (!this.can('gamemanagement', null, room)) return;
 			if (!Config.tourannouncements.includes(room.roomid)) {
@@ -1673,7 +1676,7 @@ export const commands: ChatCommands = {
 
 			if (room.chatRoomData) {
 				room.chatRoomData.tourAnnouncements = room.tourAnnouncements;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
 		} else if (cmd === 'create' || cmd === 'new') {
 			if (room.toursEnabled === true) {

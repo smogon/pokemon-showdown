@@ -573,11 +573,11 @@ export const commands: ChatCommands = {
 				return this.errorReply("Jeopardy is already disabled in this room.");
 			}
 			room.jeopardyDisabled = true;
+			this.sendReply("Jeopardy has been disabled for this room.");
 			if (room.chatRoomData) {
 				room.chatRoomData.jeopardyDisabled = true;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
-			return this.sendReply("Jeopardy has been disabled for this room.");
 		},
 
 		on: 'enable',
@@ -587,11 +587,11 @@ export const commands: ChatCommands = {
 				return this.errorReply("Jeopardy is already enabled in this room.");
 			}
 			delete room.jeopardyDisabled;
+			this.sendReply("Jeopardy has been enabled for this room.");
 			if (room.chatRoomData) {
 				delete room.chatRoomData.jeopardyDisabled;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
-			return this.sendReply("Jeopardy has been enabled for this room.");
 		},
 
 		help(target, room, user) {

@@ -14,7 +14,7 @@ try {
 if (!roomFaqs || typeof roomFaqs !== 'object') roomFaqs = {};
 
 function saveRoomFaqs() {
-	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(roomFaqs));
+	return FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(roomFaqs));
 }
 
 /**
@@ -50,10 +50,10 @@ export const commands: ChatCommands = {
 
 		if (!roomFaqs[room.roomid]) roomFaqs[room.roomid] = {};
 		roomFaqs[room.roomid][topic] = text;
-		saveRoomFaqs();
 		this.sendReplyBox(Chat.formatText(text, true));
 		this.privateModAction(`(${user.name} added a FAQ for '${topic}')`);
 		this.modlog('RFAQ', null, `added '${topic}'`);
+		return saveRoomFaqs();
 	},
 	removefaq(target, room, user) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
@@ -70,9 +70,9 @@ export const commands: ChatCommands = {
 			val => delete roomFaqs[room.roomid][val]
 		);
 		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
-		saveRoomFaqs();
 		this.privateModAction(`(${user.name} removed the FAQ for '${topic}')`);
 		this.modlog('ROOMFAQ', null, `removed ${topic}`);
+		return saveRoomFaqs();
 	},
 	addalias(target, room, user) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
@@ -86,9 +86,9 @@ export const commands: ChatCommands = {
 		if (!(roomFaqs[room.roomid] && topic in roomFaqs[room.roomid])) return this.errorReply(`The topic ${topic} was not found in this room's faq list.`);
 		if (getAlias(room.roomid, topic)) return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
 		roomFaqs[room.roomid][alias] = `>${topic}`;
-		saveRoomFaqs();
 		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
 		this.modlog('ROOMFAQ', null, `alias for '${topic}' - ${alias}`);
+		return saveRoomFaqs();
 	},
 	viewfaq: 'roomfaq',
 	rfaq: 'roomfaq',

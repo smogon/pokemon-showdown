@@ -20,10 +20,10 @@ describe('Rooms features', function () {
 
 	describe('BasicRoom', function () {
 		describe('getGame', function () {
-			it('should return the game only when the gameids match', function () {
+			it('should return the game only when the gameids match', async function () {
 				const Hangman = require('../../.server-dist/chat-plugins/hangman').Hangman;
 				const Uno = require('../../.server-dist/chat-plugins/uno').UnoGame;
-				const room = Rooms.createChatRoom('r/relationshipadvice');
+				const room = await Rooms.createChatRoom('r/relationshipadvice');
 				const game = new Hangman(room, new User(), 'There\'s a lot of red flags here');
 				room.game = game;
 				assert.equal(room.getGame(Hangman), game);
@@ -46,12 +46,12 @@ describe('Rooms features', function () {
 			if (parent) parent.destroy();
 		});
 
-		it('should allow two users to join the battle', function () {
+		it('should allow two users to join the battle', async function () {
 			let p1 = new User();
 			let p2 = new User();
 			let options = [{rated: false, tour: false}, {rated: false, tour: {onBattleWin() {}}}, {rated: true, tour: false}, {rated: true, tour: {onBattleWin() {}}}];
 			for (let option of options) {
-				room = Rooms.createBattle('customgame', Object.assign({
+				room = await Rooms.createBattle('customgame', Object.assign({
 					p1,
 					p2,
 					p1team: packedTeam,
@@ -61,8 +61,8 @@ describe('Rooms features', function () {
 			}
 		});
 
-		it('should copy auth from tournament', function () {
-			parent = Rooms.createChatRoom('parentroom', '', {});
+		it('should copy auth from tournament', async function () {
+			parent = await Rooms.createChatRoom('parentroom', '', {});
 			parent.getAuth = () => '%';
 			const p1 = new User();
 			const p2 = new User();
@@ -78,12 +78,12 @@ describe('Rooms features', function () {
 					room: parent,
 				},
 			};
-			room = Rooms.createBattle('customgame', options);
+			room = await Rooms.createBattle('customgame', options);
 			assert.equal(room.getAuth(new User()), '%');
 		});
 
-		it('should prevent overriding tournament room auth by a tournament player', function () {
-			parent = Rooms.createChatRoom('parentroom2', '', {});
+		it('should prevent overriding tournament room auth by a tournament player', async function () {
+			parent = await Rooms.createChatRoom('parentroom2', '', {});
 			parent.getAuth = () => '%';
 			const p1 = new User();
 			const p2 = new User();
@@ -104,7 +104,7 @@ describe('Rooms features', function () {
 					room: parent,
 				},
 			};
-			room = Rooms.createBattle('customgame', options);
+			room = await Rooms.createBattle('customgame', options);
 			roomStaff.joinRoom(room);
 			administrator.joinRoom(room);
 			assert.equal(room.getAuth(roomStaff), '%', 'before promotion attempt');

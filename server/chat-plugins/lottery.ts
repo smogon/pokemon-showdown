@@ -23,7 +23,7 @@ function createLottery(roomid: RoomID, maxWinners: number, name: string, markup:
 		maxWinners, name, markup, participants: (lottery && lottery.participants) || Object.create(null),
 		winners: (lottery && lottery.winners) || [], running: true,
 	};
-	writeLotteries();
+	return writeLotteries();
 }
 function writeLotteries() {
 	for (const roomid of Object.keys(lotteries)) {
@@ -31,11 +31,11 @@ function writeLotteries() {
 			delete lotteries[roomid];
 		}
 	}
-	FS(LOTTERY_FILE).writeUpdate(() => JSON.stringify(lotteries));
+	return FS(LOTTERY_FILE).writeUpdate(() => JSON.stringify(lotteries));
 }
 function destroyLottery(roomid: RoomID) {
 	delete lotteries[roomid];
-	writeLotteries();
+	return writeLotteries();
 }
 function endLottery(roomid: RoomID, winners: string[]) {
 	const lottery = lotteries[roomid];
@@ -43,28 +43,28 @@ function endLottery(roomid: RoomID, winners: string[]) {
 	lottery.winners = winners;
 	lottery.running = false;
 	Object.freeze(lottery);
-	writeLotteries();
+	return writeLotteries();
 }
-function addUserToLottery(roomid: RoomID, user: User) {
+async function addUserToLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
 	const userSignedup = participants[user.latestIp] || Object.values(participants).map(toID).includes(user.id);
 	if (!userSignedup) {
 		participants[user.latestIp] = user.name;
-		writeLotteries();
+		await writeLotteries();
 		return true;
 	}
 	return false;
 }
-function removeUserFromLottery(roomid: RoomID, user: User) {
+async function removeUserFromLottery(roomid: RoomID, user: User) {
 	const lottery = lotteries[roomid];
 	if (!lottery) return;
 	const participants = lottery.participants;
 	for (const [ip, participant] of Object.entries(participants)) {
 		if (toID(participant) === user.id || ip === user.latestIp) {
 			delete participants[ip];
-			writeLotteries();
+			await writeLotteries();
 			return true;
 		}
 	}
@@ -94,7 +94,7 @@ export const commands: ChatCommands = {
 			return this.parse(`/join view-lottery-${room.roomid}`);
 		},
 		edit: 'create',
-		create(target, room, user, connection, cmd) {
+		async create(target, room, user, connection, cmd) {
 			if (!this.can('declare', null, room)) return;
 			if (room.battle || !room.chatRoomData) {
 				return this.errorReply('This room does not support the creation of lotteries.');
@@ -124,7 +124,7 @@ export const commands: ChatCommands = {
 			if (name.length > 50) {
 				return this.errorReply('Name needs to be under 50 characters.');
 			}
-			createLottery(room.roomid, maxWinnersNum, name, markup);
+			await createLottery(room.roomid, maxWinnersNum, name, markup);
 			this.sendReply(`The lottery was successfully ${edited ? 'edited' : 'created'}.`);
 			if (!edited) {
 				this.add(
@@ -134,13 +134,13 @@ export const commands: ChatCommands = {
 			}
 			this.modlog(`LOTTERY ${edited ? 'EDIT' : 'CREATE'} ${name}`, null, `${maxWinnersNum} max winners`);
 		},
-		delete(target, room, user) {
+		async delete(target, room, user) {
 			if (!this.can('declare', null, room)) return;
 			const lottery = lotteries[room.roomid];
 			if (!lottery) {
 				return this.errorReply('This room does not have a lottery running.');
 			}
-			destroyLottery(room.roomid);
+			await destroyLottery(room.roomid);
 			this.addModAction(`${user.name} deleted the "${lottery.name}" lottery.`);
 			this.modlog('LOTTERY DELETE');
 			this.sendReply('The lottery was successfully deleted.');

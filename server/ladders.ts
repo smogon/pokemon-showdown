@@ -220,7 +220,7 @@ class Ladder extends LadderStore {
 					chall.to === user.id &&
 					chall.formatid === this.formatid) {
 						if (Ladder.removeChallenge(chall)) {
-							Ladders.match(chall.ready, ready);
+							await Ladders.match(chall.ready, ready);
 							return true;
 						}
 					}
@@ -240,7 +240,7 @@ class Ladder extends LadderStore {
 		const ready = await ladder.prepBattle(connection, 'challenge');
 		if (!ready) return false;
 		if (Ladder.removeChallenge(chall)) {
-			Ladders.match(chall.ready, ready);
+			await Ladders.match(chall.ready, ready);
 		}
 		return true;
 	}
@@ -421,7 +421,7 @@ class Ladder extends LadderStore {
 		if (oldUserid !== user.id) return;
 		if (!search) return;
 
-		this.addSearch(search, user);
+		return this.addSearch(search, user);
 	}
 
 	/**
@@ -515,8 +515,7 @@ class Ladder extends LadderStore {
 			const matched = this.matchmakingOK(search, newSearch, searcher, user);
 			if (matched) {
 				formatTable.delete(search.userid);
-				Ladder.match(search, newSearch);
-				return;
+				return Ladder.match(search, newSearch);
 			}
 		}
 
@@ -529,7 +528,7 @@ class Ladder extends LadderStore {
 	 * valid match can be made. This is run periodically depending on
 	 * PERIODIC_MATCH_INTERVAL.
 	 */
-	static periodicMatch() {
+	static async periodicMatch() {
 		// In order from longest waiting to shortest waiting
 		for (const [formatid, formatTable] of Ladders.searches) {
 			const matchmaker = Ladders(formatid);
@@ -549,7 +548,7 @@ class Ladder extends LadderStore {
 				if (matched) {
 					formatTable.delete(search.userid);
 					formatTable.delete(longestSearch.userid);
-					Ladder.match(longestSearch, search);
+					await Ladder.match(longestSearch, search);
 					return;
 				}
 			}
@@ -569,7 +568,7 @@ class Ladder extends LadderStore {
 			user1.popup(`Sorry, your opponent ${ready2.userid} went offline before your battle could start.`);
 			return false;
 		}
-		Rooms.createBattle(ready1.formatid, {
+		return Rooms.createBattle(ready1.formatid, {
 			p1: user1,
 			p1team: ready1.team,
 			p1rating: ready1.rating,

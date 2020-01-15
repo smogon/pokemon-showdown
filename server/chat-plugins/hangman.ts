@@ -273,11 +273,11 @@ export const commands: ChatCommands = {
 				return this.errorReply("Hangman is already disabled.");
 			}
 			room.hangmanDisabled = true;
+			this.sendReply("Hangman has been disabled for this room.");
 			if (room.chatRoomData) {
 				room.chatRoomData.hangmanDisabled = true;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
-			return this.sendReply("Hangman has been disabled for this room.");
 		},
 
 		enable(target, room, user) {
@@ -286,11 +286,11 @@ export const commands: ChatCommands = {
 				return this.errorReply("Hangman is already enabled.");
 			}
 			delete room.hangmanDisabled;
+			this.sendReply("Hangman has been enabled for this room.");
 			if (room.chatRoomData) {
 				delete room.chatRoomData.hangmanDisabled;
-				Rooms.global.writeChatRoomData();
+				return Rooms.global.writeChatRoomData();
 			}
-			return this.sendReply("Hangman has been enabled for this room.");
 		},
 
 		display(target, room, user) {

@@ -558,6 +558,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.stream.write(`>start ` + JSON.stringify(battleOptions));
 		}
 
+		// this will only resolve when the battle ends
 		void this.listen();
 
 		this.addPlayer(options.p1, options.p1team || '', options.p1rating);
@@ -700,7 +701,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		let next;
 		// tslint:disable-next-line: no-conditional-assignment
 		while ((next = await this.stream.read())) {
-			this.receive(next.split('\n'));
+			await this.receive(next.split('\n'));
 		}
 		if (!this.ended) {
 			this.room.add(`|bigerror|The simulator process has crashed. We've been notified and will fix this ASAP.`);
@@ -710,7 +711,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.checkActive();
 		}
 	}
-	receive(lines: string[]) {
+	async receive(lines: string[]) {
 		for (const player of this.players) player.wantsTie = false;
 
 		switch (lines[0]) {
@@ -761,7 +762,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.started = true;
 			if (!this.ended) {
 				this.ended = true;
-				void this.onEnd(this.logData!.winner);
+				await this.onEnd(this.logData!.winner);
 				this.clearPlayers();
 			}
 			this.checkActive();
@@ -793,14 +794,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 				this.room.sendUser(winner, '|askreg|' + winner.id);
 			}
 			const [score, p1rating, p2rating] = await Ladders(this.format).updateRating(p1name, p2name, p1score, this.room);
-			void this.logBattle(score, p1rating, p2rating);
+			await this.logBattle(score, p1rating, p2rating);
 		} else if (Config.logchallenges) {
 			if (winnerid === p1id) {
 				p1score = 1;
 			} else if (winnerid === p2id) {
 				p1score = 0;
 			}
-			void this.logBattle(p1score);
+			await this.logBattle(p1score);
 		} else {
 			this.logData = null;
 		}
@@ -1087,7 +1088,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.p4 = null;
 
 		this.ended = true;
-		void this.stream.destroy();
 		if (this.active) {
 			Rooms.global.battleCount += -1;
 			this.active = false;
@@ -1095,6 +1095,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		// @ts-ignore
 		this.room = null;
+
+		return this.stream.destroy();
 	}
 }
 

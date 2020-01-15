@@ -464,6 +464,7 @@ export class GlobalRoom extends BasicRoom {
 
 		this.type = 'global';
 		this.active = false;
+
 		this.chatRoomData = null;
 		this.chatRoomDataList = [];
 		try {
@@ -483,33 +484,9 @@ export class GlobalRoom extends BasicRoom {
 				staffAutojoin: true,
 			}];
 		}
-
 		this.chatRooms = [];
-
 		this.autojoinList = [];
 		this.staffAutojoinList = [];
-		for (const [i, chatRoomData] of this.chatRoomDataList.entries()) {
-			if (!chatRoomData || !chatRoomData.title) {
-				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
-				continue;
-			}
-			// We're okay with assinging type `ID` to `RoomID` here
-			// because the hyphens in chatrooms don't have any special
-			// meaning, unlike in helptickets, groupchats, battles etc
-			// where they are used for shared modlogs and the like
-			const id = toID(chatRoomData.title) as RoomID;
-			Monitor.notice("NEW CHATROOM: " + id);
-			const room = Rooms.createChatRoom(id, chatRoomData.title, chatRoomData);
-			if (room.aliases) {
-				for (const alias of room.aliases) {
-					Rooms.aliases.set(alias, id);
-				}
-			}
-			this.chatRooms.push(room);
-			if (room.autojoin) this.autojoinList.push(id);
-			if (room.staffAutojoin) this.staffAutojoinList.push(id);
-		}
-		Rooms.lobby = Rooms.rooms.get('lobby' as RoomID) as ChatRoom;
 
 		// init battle room logging
 		if (Config.logladderip) {
@@ -547,12 +524,37 @@ export class GlobalRoom extends BasicRoom {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
+	async initRooms() {
+		for (const [i, chatRoomData] of this.chatRoomDataList.entries()) {
+			if (!chatRoomData || !chatRoomData.title) {
+				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
+				continue;
+			}
+			// We're okay with assinging type `ID` to `RoomID` here
+			// because the hyphens in chatrooms don't have any special
+			// meaning, unlike in helptickets, groupchats, battles etc
+			// where they are used for shared modlogs and the like
+			const id = toID(chatRoomData.title) as RoomID;
+			Monitor.notice("NEW CHATROOM: " + id);
+			const room = await Rooms.createChatRoom(id, chatRoomData.title, chatRoomData);
+			if (room.aliases) {
+				for (const alias of room.aliases) {
+					Rooms.aliases.set(alias, id);
+				}
+			}
+			this.chatRooms.push(room);
+			if (room.autojoin) this.autojoinList.push(id);
+			if (room.staffAutojoin) this.staffAutojoinList.push(id);
+		}
+		Rooms.lobby = Rooms.rooms.get('lobby' as RoomID) as ChatRoom;
+	}
+
 	modlog(message: string) {
 		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
 	}
 
 	writeChatRoomData() {
-		FS('config/chatrooms.json').writeUpdate(() => (
+		return FS('config/chatrooms.json').writeUpdate(() => (
 			JSON.stringify(this.chatRoomDataList)
 				.replace(/\{"title":/g, '\n{"title":')
 				.replace(/\]$/, '\n]')
@@ -570,23 +572,25 @@ export class GlobalRoom extends BasicRoom {
 			if (this.lastBattle < this.lastWrittenBattle) return;
 			this.lastWrittenBattle = this.lastBattle + LAST_BATTLE_WRITE_THROTTLE;
 		}
-		FS('logs/lastbattle.txt').writeUpdate(() =>
+		return FS('logs/lastbattle.txt').writeUpdate(() =>
 			`${this.lastWrittenBattle}`
 		);
 	}
 
 	reportUserStats() {
+		const requests = [];
 		if (this.maxUsersDate) {
-			void LoginServer.request('updateuserstats', {
+			requests.push(LoginServer.request('updateuserstats', {
 				date: this.maxUsersDate,
 				users: this.maxUsers,
-			});
+			}));
 			this.maxUsersDate = 0;
 		}
-		void LoginServer.request('updateuserstats', {
+		requests.push(LoginServer.request('updateuserstats', {
 			date: Date.now(),
 			users: this.userCount,
-		});
+		}));
+		return Promise.all(requests);
 	}
 
 	get formatListText() {
@@ -740,7 +744,7 @@ export class GlobalRoom extends BasicRoom {
 		// TODO: make sure this never happens
 		return this;
 	}
-	addChatRoom(title: string) {
+	async addChatRoom(title: string) {
 		const id = toID(title) as RoomID;
 		if (['battles', 'rooms', 'ladder', 'teambuilder', 'home', 'all', 'public'].includes(id)) {
 			return false;
@@ -750,10 +754,10 @@ export class GlobalRoom extends BasicRoom {
 		const chatRoomData = {
 			title,
 		};
-		const room = Rooms.createChatRoom(id, title, chatRoomData);
+		const room = await Rooms.createChatRoom(id, title, chatRoomData);
 		this.chatRoomDataList.push(chatRoomData);
 		this.chatRooms.push(room);
-		this.writeChatRoomData();
+		await this.writeChatRoomData();
 		return true;
 	}
 
@@ -792,7 +796,7 @@ export class GlobalRoom extends BasicRoom {
 		}
 	}
 
-	deregisterChatRoom(id: string) {
+	async deregisterChatRoom(id: string) {
 		id = toID(id);
 		const room = Rooms.get(id);
 		if (!room) return false; // room doesn't exist
@@ -804,7 +808,7 @@ export class GlobalRoom extends BasicRoom {
 		for (let i = this.chatRoomDataList.length - 1; i >= 0; i--) {
 			if (id === toID(this.chatRoomDataList[i].title)) {
 				this.chatRoomDataList.splice(i, 1);
-				this.writeChatRoomData();
+				await this.writeChatRoomData();
 				break;
 			}
 		}
@@ -856,14 +860,18 @@ export class GlobalRoom extends BasicRoom {
 				user.joinRoom(room.roomid, connection);
 			}
 		}
+		const roomjoins = [];
 		for (const conn of user.connections) {
 			if (conn.autojoins) {
 				const autojoins = conn.autojoins.split(',') as RoomID[];
 				for (const roomName of autojoins) {
-					void user.tryJoinRoom(roomName, conn);
+					roomjoins.push(user.tryJoinRoom(roomName, conn));
 				}
 				conn.autojoins = '';
 			}
+		}
+		if (roomjoins.length) {
+			return Promise.all(roomjoins);
 		}
 	}
 	onConnect(user: User, connection: Connection) {
@@ -1210,7 +1218,7 @@ export class BasicChatRoom extends BasicRoom {
 	}
 	expire() {
 		this.send('|expire|');
-		this.destroy();
+		return this.destroy();
 	}
 	reportJoin(type: 'j' | 'l' | 'n', entry: string, user: User) {
 		let reportJoins = this.reportJoins;
@@ -1398,7 +1406,7 @@ export class BasicChatRoom extends BasicRoom {
 
 		return this.log.rename(newID);
 	}
-	destroy() {
+	async destroy() {
 		// deallocate ourself
 
 		if (this.battle && this.tour) {
@@ -1419,7 +1427,7 @@ export class BasicChatRoom extends BasicRoom {
 			if (!this.parent.subRooms.size) this.parent.subRooms = null;
 		}
 
-		Rooms.global.deregisterChatRoom(this.roomid);
+		await Rooms.global.deregisterChatRoom(this.roomid);
 		Rooms.global.delistChatRoom(this.roomid);
 
 		if (this.aliases) {
@@ -1456,10 +1464,10 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.logUserStatsInterval = null;
 
-		void this.log.destroy();
-
 		// get rid of some possibly-circular references
 		Rooms.rooms.delete(this.roomid);
+
+		return this.log.destroy();
 	}
 }
 
@@ -1642,20 +1650,22 @@ export const Rooms = {
 		return getRoom(name) || getRoom(toID(name)) || getRoom(Rooms.aliases.get(toID(name)));
 	},
 
-	createGameRoom(roomid: RoomID, title: string, options: AnyObject) {
+	async createGameRoom(roomid: RoomID, title: string, options: AnyObject) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
 		Monitor.debug("NEW BATTLE ROOM: " + roomid);
 		const room = new GameRoom(roomid, title, options);
 		Rooms.rooms.set(roomid, room);
+		await room.log.setupStreams(options.asyncStreams ? false : true);
 		return room;
 	},
-	createChatRoom(roomid: RoomID, title: string, options: AnyObject) {
+	async createChatRoom(roomid: RoomID, title: string, options: AnyObject) {
 		if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
 		const room = new BasicChatRoom(roomid, title, options) as ChatRoom;
 		Rooms.rooms.set(roomid, room);
+		await room.log.setupStreams(options?.asyncStreams ? false : true);
 		return room;
 	},
-	createBattle(formatid: string, options: AnyObject) {
+	async createBattle(formatid: string, options: AnyObject) {
 		const players: (User & {specialNextBattle?: string })[] =
 			[options.p1, options.p2, options.p3, options.p4].filter(user => user);
 		const gameType = Dex.getFormat(formatid).gameType;
@@ -1716,7 +1726,7 @@ export const Rooms = {
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}
-		const room = Rooms.createGameRoom(roomid, roomTitle, options);
+		const room = await Rooms.createGameRoom(roomid, roomTitle, options);
 		const battle = new Rooms.RoomBattle(room, formatid, options);
 		room.game = battle;
 		// Special battles have modchat set to Player from the beginning
@@ -1782,5 +1792,7 @@ export const Rooms = {
 Monitor.notice("NEW GLOBAL: global");
 
 Rooms.global = new GlobalRoom('global' as RoomID);
+
+void Rooms.global.initRooms();
 
 Rooms.rooms.set('global' as RoomID, Rooms.global);

@@ -51,7 +51,7 @@ try {
 				if (ticketRoom) {
 					const ticketGame = ticketRoom.game as HelpTicket;
 					ticketGame.writeStats(false);
-					ticketRoom.expire();
+					void ticketRoom.expire();
 				}
 				continue;
 			}
@@ -66,7 +66,7 @@ try {
 }
 
 function writeTickets() {
-	FS(TICKET_FILE).writeUpdate(() => (
+	return FS(TICKET_FILE).writeUpdate(() => (
 		JSON.stringify(Object.assign({}, tickets, ticketBans))
 	));
 }
@@ -117,7 +117,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.result = null;
 	}
 
-	onJoin(user: User, connection: Connection) {
+	async onJoin(user: User, connection: Connection) {
 		if (!this.ticket.open) return false;
 		if (!user.isStaff || user.id === this.ticket.userid) {
 			if (this.emptyRoom) this.emptyRoom = false;
@@ -140,9 +140,9 @@ export class HelpTicket extends Rooms.RoomGame {
 				this.lastUnclaimedStart = 0; // Set back to 0 so we know that it was active when closed
 			}
 			tickets[this.ticket.userid] = this.ticket;
-			writeTickets();
 			this.modnote(user, `${user.name} claimed this ticket.`);
 			notifyStaff();
+			return writeTickets();
 		} else {
 			this.claimQueue.push(user.name);
 		}
@@ -166,7 +166,7 @@ export class HelpTicket extends Rooms.RoomGame {
 				notifyStaff();
 			}
 			tickets[this.ticket.userid] = this.ticket;
-			writeTickets();
+			return writeTickets();
 		} else {
 			const index = this.claimQueue.map(toID).indexOf(user.id);
 			if (index > -1) this.claimQueue.splice(index, 1);
@@ -197,13 +197,13 @@ export class HelpTicket extends Rooms.RoomGame {
 		}
 	}
 
-	forfeit(user: User) {
+	async forfeit(user: User) {
 		if (!(user.id in this.playerTable)) return;
 		this.removePlayer(user);
 		if (!this.ticket.open) return;
 		this.modnote(user, `${user.name} is no longer interested in this ticket.`);
 		if (this.playerCount - 1 > 0) return; // There are still users in the ticket room, dont close the ticket
-		this.close(user, !!(this.firstClaimTime));
+		await this.close(user, !!(this.firstClaimTime));
 		return true;
 	}
 
@@ -235,7 +235,6 @@ export class HelpTicket extends Rooms.RoomGame {
 	close(staff: User, result: boolean | 'ticketban' | 'deleted') {
 		this.ticket.open = false;
 		tickets[this.ticket.userid] = this.ticket;
-		writeTickets();
 		this.modnote(staff, `${staff.name} closed this ticket.`);
 		notifyStaff();
 		this.room.pokeExpireTimer();
@@ -252,6 +251,7 @@ export class HelpTicket extends Rooms.RoomGame {
 			}
 		}
 		this.writeStats(result);
+		return writeTickets();
 	}
 
 	writeStats(result: boolean | 'ticketban' | 'deleted') {
@@ -299,25 +299,28 @@ export class HelpTicket extends Rooms.RoomGame {
 		writeStats(line);
 	}
 
-	deleteTicket(staff: User) {
-		this.close(staff, 'deleted');
+	async deleteTicket(staff: User) {
 		this.modnote(staff, `${staff.name} deleted this ticket.`);
 		delete tickets[this.ticket.userid];
-		writeTickets();
 		notifyStaff();
-		this.room.destroy();
+		await Promise.all([
+			writeTickets(),
+			this.close(staff, 'deleted'),
+		]);
+		return this.room.destroy();
 	}
 
 	// Modified version of RoomGame.destory
 	destroy() {
+		let shouldWrite;
 		if (tickets[this.ticket.userid] && this.ticket.open) {
 			// Ticket was not deleted - deleted tickets already have this done to them - and was not closed.
 			// Write stats and change flags as appropriate prior to deletion.
 			this.ticket.open = false;
 			tickets[this.ticket.userid] = this.ticket;
 			notifyStaff();
-			writeTickets();
 			this.writeStats(false);
+			shouldWrite = true;
 		}
 
 		this.room.game = null;
@@ -330,6 +333,7 @@ export class HelpTicket extends Rooms.RoomGame {
 		this.players = null;
 		// @ts-ignore
 		this.playerTable = null;
+		if (shouldWrite) return writeTickets();
 	}
 }
 
@@ -464,21 +468,21 @@ function checkIp(ip: string) {
 	return false;
 }
 
-function checkTicketBanned(user: User) {
+async function checkTicketBanned(user: User) {
 	let ticket = ticketBans[user.id];
 	if (ticket) {
 		if (ticket.expires > Date.now()) {
 			return `You are banned from creating tickets${toID(ticket.banned) !== user.id ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
 		} else {
 			delete ticketBans[ticket.userid];
-			writeTickets();
+			await writeTickets();
 			return false;
 		}
 	} else {
 		let bannedTicket: BannedTicketState | null = null;
 		// Skip the IP based check if the user is autoconfirmed and on a shared IP.
 		if (Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) return false;
-
+		let shouldWrite = false;
 		for (const t in ticketBans) {
 			if (ticketBans[t].ip === user.latestIp) {
 				bannedTicket = ticketBans[t];
@@ -489,14 +493,15 @@ function checkTicketBanned(user: User) {
 					ticket.userid = user.id;
 					ticket.by = bannedTicket.by + ' (IP)';
 					ticketBans[user.id] = ticket;
-					writeTickets();
+					shouldWrite = true;
 					return `You are banned from creating tickets${toID(ticket.banned) !== user.id ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
 				} else {
 					delete ticketBans[bannedTicket.userid];
-					writeTickets();
+					shouldWrite = true;
 				}
 			}
 		}
+		if (shouldWrite) await writeTickets();
 		// No un-expired IP matches found.
 		return false;
 	}
@@ -555,7 +560,7 @@ const ticketPages: {[k: string]: string} = Object.assign(Object.create(null), {
 
 export const pages: PageTable = {
 	help: {
-		request(query, user, connection) {
+		async request(query, user, connection) {
 			if (!user.named) {
 				const buf = `>view-help-request${query.length ? '-' + query.join('-') : ''}\n` +
 					`|init|html\n` +
@@ -567,17 +572,18 @@ export const pages: PageTable = {
 			this.title = 'Request Help';
 			let buf = `<div class="pad"><h2>Request help from global staff</h2>`;
 
-			const banMsg = checkTicketBanned(user);
+			const banMsg = await checkTicketBanned(user);
 			if (banMsg) return connection.popup(banMsg);
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
+			let shouldWrite = false;
 			if ((ticket && ticket.open) || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
 					// Should never happen
 					tickets[ticket.userid].open = false;
-					writeTickets();
+					shouldWrite = true;
 				} else {
 					if (!helpRoom.auth) {
 						helpRoom.auth = {};
@@ -745,6 +751,7 @@ export const pages: PageTable = {
 			buf = buf.replace(/<Button>([a-z]+)<\/Button>/g, (match, id) =>
 				`<a class="button" href="/view-help-request${curPageLink}-${id}${meta}" target="replace">${ticketPages[id]}</a>`
 			);
+			if (shouldWrite) await writeTickets();
 			return buf;
 		},
 		tickets(query, user, connection) {
@@ -1075,22 +1082,23 @@ export const commands: ChatCommands = {
 		createhelp: [`/helpticket create - Creates a new ticket requesting help from global staff.`],
 
 		'!submit': true,
-		submit(target, room, user, connection) {
+		async submit(target, room, user, connection) {
 			if (user.can('lock') && !user.can('bypassall')) {
 				return this.popupReply(`Global staff can't make tickets. They can only use the form for reference.`);
 			}
 			if (!user.named) return this.popupReply(`You need to choose a username before doing this.`);
-			const banMsg = checkTicketBanned(user);
+			const banMsg = await checkTicketBanned(user);
 			if (banMsg) return this.popupReply(banMsg);
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
+			let shouldWrite = false;
 			if ((ticket && ticket.open) || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
 					// Should never happen
 					tickets[ticket.userid].open = false;
-					writeTickets();
+					shouldWrite = true;
 				} else {
 					if (!helpRoom.auth) {
 						helpRoom.auth = {};
@@ -1183,7 +1191,7 @@ export const commands: ChatCommands = {
 			}
 			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;
 			if (!helpRoom) {
-				helpRoom = Rooms.createChatRoom(`help-${user.id}` as RoomID, `[H] ${user.name}`, {
+				helpRoom = await Rooms.createChatRoom(`help-${user.id}` as RoomID, `[H] ${user.name}`, {
 					isPersonal: true,
 					isHelp: true,
 					isPrivate: 'hidden',
@@ -1216,9 +1224,9 @@ export const commands: ChatCommands = {
 				helpRoom.update();
 			}
 			tickets[user.id] = ticket;
-			writeTickets();
 			notifyStaff();
 			connection.send(`>view-help-request\n|deinit`);
+			if (shouldWrite) return writeTickets();
 		},
 
 		'!list': true,
@@ -1236,7 +1244,7 @@ export const commands: ChatCommands = {
 		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ & ~`],
 
 		'!close': true,
-		close(target, room, user) {
+		async close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');
 			const ticket = tickets[toID(this.inputUsername)];
@@ -1244,19 +1252,21 @@ export const commands: ChatCommands = {
 				return this.errorReply(`${this.inputUsername} does not have an open ticket.`);
 			}
 			const helpRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
+			let shouldWrite = false;
 			if (helpRoom) {
 				const ticketGame = helpRoom.getGame(HelpTicket)!;
 				if (ticket.userid === user.id && !user.isStaff) {
 					result = !!(ticketGame.firstClaimTime);
 				}
-				ticketGame.close(user, result);
+				await ticketGame.close(user, result);
 			} else {
 				ticket.open = false;
 				notifyStaff();
-				writeTickets();
+				shouldWrite = true;
 			}
 			ticket.claimed = user.name;
 			this.sendReply(`You closed ${ticket.creator}'s ticket.`);
+			if (shouldWrite) return writeTickets();
 		},
 		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ & ~`],
 
@@ -1353,12 +1363,11 @@ export const commands: ChatCommands = {
 				}
 				ticketBans[userObjID] = punishment;
 			}
-			writeTickets();
 			notifyStaff();
 			notifyStaff();
 
 			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${(target ? `: ${target}` : ``)}`);
-			return true;
+			return writeTickets();
 		},
 		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ & ~`],
 
@@ -1373,8 +1382,8 @@ export const commands: ChatCommands = {
 			}
 			if (ticket.expires <= Date.now()) {
 				delete tickets[ticket.userid];
-				writeTickets();
-				return this.errorReply(`${targetUser ? targetUser.name : target}'s ticket ban is already expired.`);
+				this.errorReply(`${targetUser ? targetUser.name : target}'s ticket ban is already expired.`);
+				return writeTickets();
 			}
 
 			const affected = [];
@@ -1386,11 +1395,11 @@ export const commands: ChatCommands = {
 			}
 			affected.unshift(ticket.name);
 			delete ticketBans[ticket.userid];
-			writeTickets();
 
 			this.addModAction(`${affected.join(', ')} ${Chat.plural(affected.length, "were", "was")} ticket unbanned by ${user.name}.`);
 			this.globalModlog("UNTICKETBAN", target, ` by ${user.id}`);
 			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
+			return writeTickets();
 		},
 		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ & ~`],
 
@@ -1416,21 +1425,23 @@ export const commands: ChatCommands = {
 		},
 		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ & ~`],
 
-		delete(target, room, user) {
+		async delete(target, room, user) {
 			// This is a utility only to be used if something goes wrong
 			if (!this.can('declare')) return;
 			if (!target) return this.parse(`/help helpticket delete`);
 			const ticket = tickets[toID(target)];
 			if (!ticket) return this.errorReply(`${target} does not have a ticket.`);
 			const targetRoom = Rooms.get(`help-${ticket.userid}`);
+			let shouldWrite = false;
 			if (targetRoom) {
-				targetRoom.getGame(HelpTicket)!.deleteTicket(user);
+				await targetRoom.getGame(HelpTicket)!.deleteTicket(user);
 			} else {
 				delete tickets[ticket.userid];
-				writeTickets();
+				shouldWrite = true;
 				notifyStaff();
 			}
 			this.sendReply(`You deleted ${target}'s ticket.`);
+			if  (shouldWrite) return writeTickets();
 		},
 		deletehelp: [`/helpticket delete [user] - Deletes a users ticket. Requires: & ~`],
 
