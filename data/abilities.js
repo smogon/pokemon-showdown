@@ -1725,7 +1725,9 @@ let BattleAbilities = {
 	},
 	"innerfocus": {
 		shortDesc: "This Pokemon cannot be made to flinch. Immune to Intimidate.",
-		onFlinch: false,
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') return null;
+		},
 		id: "innerfocus",
 		name: "Inner Focus",
 		rating: 1.5,
