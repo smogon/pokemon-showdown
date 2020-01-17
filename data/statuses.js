@@ -206,10 +206,8 @@ let BattleStatuses = {
 		duration: 1,
 		onBeforeMovePriority: 8,
 		onBeforeMove(pokemon) {
-			if (!this.runEvent('Flinch', pokemon)) {
-				return;
-			}
 			this.add('cant', pokemon, 'flinch');
+			this.runEvent('Flinch', pokemon);
 			return false;
 		},
 	},
@@ -740,7 +738,9 @@ let BattleStatuses = {
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
-		onFlinch: false,
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') return null;
+		},
 		onBeforeSwitchOut(pokemon) {
 			pokemon.removeVolatile('dynamax');
 		},
