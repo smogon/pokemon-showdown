@@ -1006,7 +1006,6 @@ class RandomGen7Teams extends RandomTeams {
 				UUBL: 81,
 				'(OU)': 80,
 				OU: 80,
-				Unreleased: 80,
 				Uber: 78,
 			};
 			/** @type {{[species: string]: number}} */
@@ -1015,7 +1014,7 @@ class RandomGen7Teams extends RandomTeams {
 				Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Politoed: 84, Wobbuffet: 82,
 
 				// Holistic judgement
-				'Genesect-Douse': 80,
+				'Floette-Eternal': 80, 'Genesect-Douse': 80,
 				Castform: 100, Delibird: 100, Spinda: 100, Unown: 100,
 			};
 			level = levelScale[template.tier] || 90;
