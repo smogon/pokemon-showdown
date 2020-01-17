@@ -4121,9 +4121,6 @@ let BattleMovedex = {
 			// We need to do this before targeting is calculated.
 			pokemon.addVolatile('smarttarget');
 		},
-		onModifyMove(move, pokemon, target) {
-			if (target.side.active.length === 2) move.spreadModifier = 1;
-		},
 		target: "normal",
 		type: "Dragon",
 		gmaxPower: 130,

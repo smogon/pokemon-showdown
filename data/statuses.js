@@ -476,7 +476,8 @@ let BattleStatuses = {
 			// Smart target moves like Dragon Darts will avoid hitting pokemon that would not be damaged (if not force redirected)
 			for (let i = 0; i < targets.length; i++) {
 				const potentialTarget = targets[i];
-				if (potentialTarget.volatiles['protect'] || !potentialTarget.runImmunity(move.type) || potentialTarget.fainted) {
+				let invulrabilities = this.runEvent('Invulnerability', [potentialTarget], source, move).includes(false);
+				if (potentialTarget.volatiles['protect'] || invulrabilities || !potentialTarget.runImmunity(move.type) || potentialTarget.fainted) {
 					// Target the other pokemon twice
 					targets.splice(i, 1);
 					targets.push(targets[0]);
