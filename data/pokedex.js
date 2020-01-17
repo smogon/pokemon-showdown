@@ -144,6 +144,7 @@ let BattlePokedex = {
 		color: "Red",
 		eggGroups: ["Monster", "Dragon"],
 		inheritsFrom: "charizard",
+		hide: "SpriteOnly",
 	},
 	squirtle: {
 		num: 7,
@@ -255,6 +256,7 @@ let BattlePokedex = {
 		color: "White",
 		eggGroups: ["Bug"],
 		inheritsFrom: "butterfree",
+		hide: "SpriteOnly",
 	},
 	weedle: {
 		num: 13,
@@ -430,6 +432,7 @@ let BattlePokedex = {
 		weightkg: 105,
 		color: "Black",
 		eggGroups: ["Field"],
+		hide: "SpriteOnly",
 	},
 	spearow: {
 		num: 21,
@@ -509,6 +512,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "Minute",
 	},
 	pikachurockstar: {
 		num: 25,
@@ -523,6 +527,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "Minute",
 	},
 	pikachubelle: {
 		num: 25,
@@ -537,6 +542,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "Minute",
 	},
 	pikachupopstar: {
 		num: 25,
@@ -551,6 +557,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "Minute",
 	},
 	pikachuphd: {
 		num: 25,
@@ -565,6 +572,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "Minute",
 	},
 	pikachulibre: {
 		num: 25,
@@ -579,6 +587,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "SpriteOnly",
 	},
 	pikachuoriginal: {
 		num: 25,
@@ -593,6 +602,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "SpriteOnly",
 	},
 	pikachuhoenn: {
 		num: 25,
@@ -607,6 +617,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "SpriteOnly",
 	},
 	pikachusinnoh: {
 		num: 25,
@@ -621,6 +632,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "SpriteOnly",
 	},
 	pikachuunova: {
 		num: 25,
@@ -635,6 +647,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "SpriteOnly",
 	},
 	pikachukalos: {
 		num: 25,
@@ -649,6 +662,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "SpriteOnly",
 	},
 	pikachualola: {
 		num: 25,
@@ -663,6 +677,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "SpriteOnly",
 	},
 	pikachupartner: {
 		num: 25,
@@ -677,6 +692,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "SpriteOnly",
 	},
 	pikachustarter: {
 		num: 25,
@@ -690,6 +706,7 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		hide: "Minute",
 	},
 	pikachugmax: {
 		num: 25,
@@ -1227,6 +1244,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		eggGroups: ["Field"],
 		inheritsFrom: "meowth",
+		hide: "SpriteOnly",
 	},
 	persian: {
 		num: 53,
@@ -1490,6 +1508,7 @@ let BattlePokedex = {
 		color: "Gray",
 		eggGroups: ["Human-Like"],
 		inheritsFrom: "machamp",
+		hide: "SpriteOnly",
 	},
 	bellsprout: {
 		num: 69,
@@ -2005,6 +2024,7 @@ let BattlePokedex = {
 		color: "Purple",
 		eggGroups: ["Amorphous"],
 		inheritsFrom: "gengar",
+		hide: "SpriteOnly",
 	},
 	onix: {
 		num: 95,
@@ -2083,6 +2103,7 @@ let BattlePokedex = {
 		color: "Red",
 		eggGroups: ["Water 3"],
 		inheritsFrom: "kingler",
+		hide: "SpriteOnly",
 	},
 	voltorb: {
 		num: 100,
@@ -2207,6 +2228,7 @@ let BattlePokedex = {
 		weightkg: 98,
 		color: "Purple",
 		eggGroups: ["Monster"],
+		hide: "SpriteOnly",
 	},
 	hitmonlee: {
 		num: 106,
@@ -2643,6 +2665,7 @@ let BattlePokedex = {
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
 		inheritsFrom: "lapras",
+		hide: "SpriteOnly",
 	},
 	ditto: {
 		num: 132,
@@ -2698,6 +2721,7 @@ let BattlePokedex = {
 		color: "Brown",
 		eggGroups: ["Field"],
 		inheritsFrom: "eevee",
+		hide: "SpriteOnly",
 	},
 	vaporeon: {
 		num: 134,
@@ -2869,6 +2893,7 @@ let BattlePokedex = {
 		color: "Black",
 		eggGroups: ["Monster"],
 		inheritsFrom: "snorlax",
+		hide: "SpriteOnly",
 	},
 	articuno: {
 		num: 144,
@@ -5907,6 +5932,7 @@ let BattlePokedex = {
 		weightkg: 0.8,
 		color: "Red",
 		eggGroups: ["Fairy", "Amorphous"],
+		hide: "Minute",
 	},
 	castformrainy: {
 		num: 351,
@@ -5920,6 +5946,7 @@ let BattlePokedex = {
 		weightkg: 0.8,
 		color: "Blue",
 		eggGroups: ["Fairy", "Amorphous"],
+		hide: "Minute",
 	},
 	castformsnowy: {
 		num: 351,
@@ -5933,6 +5960,7 @@ let BattlePokedex = {
 		weightkg: 0.8,
 		color: "White",
 		eggGroups: ["Fairy", "Amorphous"],
+		hide: "Minute",
 	},
 	kecleon: {
 		num: 352,
@@ -7083,6 +7111,7 @@ let BattlePokedex = {
 		prevo: "cherubi",
 		evoLevel: 25,
 		eggGroups: ["Fairy", "Grass"],
+		hide: "SpriteOnly",
 	},
 	shellos: {
 		num: 422,
@@ -9249,6 +9278,7 @@ let BattlePokedex = {
 		color: "Green",
 		eggGroups: ["Water 2"],
 		inheritsFrom: "basculin",
+		hide: "Minute",
 	},
 	sandile: {
 		num: 551,
@@ -9346,6 +9376,7 @@ let BattlePokedex = {
 		evoLevel: 35,
 		eggGroups: ["Field"],
 		inheritsFrom: "darmanitan",
+		hide: "SpriteMinute",
 	},
 	darmanitangalar: {
 		num: 555,
@@ -9379,6 +9410,7 @@ let BattlePokedex = {
 		evoItem: "Ice Stone",
 		eggGroups: ["Field"],
 		inheritsFrom: "darmanitangalar",
+		hide: "SpriteMinute",
 	},
 	maractus: {
 		num: 556,
@@ -9586,6 +9618,7 @@ let BattlePokedex = {
 		color: "Green",
 		eggGroups: ["Mineral"],
 		inheritsFrom: "garbodor",
+		hide: "SpriteOnly",
 	},
 	zorua: {
 		num: 570,
@@ -10693,6 +10726,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
 		inheritsFrom: "keldeo",
+		hide: "SpriteOnly",
 	},
 	meloetta: {
 		num: 648,
@@ -10721,6 +10755,7 @@ let BattlePokedex = {
 		weightkg: 6.5,
 		color: "White",
 		eggGroups: ["Undiscovered"],
+		hide: "SpriteMinute",
 	},
 	genesect: {
 		num: 649,
@@ -10749,6 +10784,7 @@ let BattlePokedex = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		inheritsFrom: "genesect",
+		hide: "Minute",
 	},
 	genesectshock: {
 		num: 649,
@@ -10764,6 +10800,7 @@ let BattlePokedex = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		inheritsFrom: "genesect",
+		hide: "Minute",
 	},
 	genesectburn: {
 		num: 649,
@@ -10779,6 +10816,7 @@ let BattlePokedex = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		inheritsFrom: "genesect",
+		hide: "Minute",
 	},
 	genesectchill: {
 		num: 649,
@@ -10794,6 +10832,7 @@ let BattlePokedex = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		inheritsFrom: "genesect",
+		hide: "Minute",
 	},
 	chespin: {
 		num: 650,
@@ -11053,6 +11092,7 @@ let BattlePokedex = {
 		weightkg: 17,
 		color: "Black",
 		eggGroups: ["Bug"],
+		hide: "SpriteMinute",
 	},
 	vivillonpokeball: {
 		num: 666,
@@ -11066,6 +11106,7 @@ let BattlePokedex = {
 		weightkg: 17,
 		color: "Black",
 		eggGroups: ["Bug"],
+		hide: "SpriteMinute",
 	},
 	litleo: {
 		num: 667,
@@ -11263,6 +11304,7 @@ let BattlePokedex = {
 		prevo: "espurr",
 		evoLevel: 25,
 		eggGroups: ["Field"],
+		hide: "SpriteMinute",
 	},
 	honedge: {
 		num: 679,
@@ -11321,6 +11363,7 @@ let BattlePokedex = {
 		evoType: "useItem",
 		evoItem: "Dusk Stone",
 		eggGroups: ["Mineral"],
+		hide: "SpriteMinute",
 	},
 	spritzee: {
 		num: 682,
@@ -12189,6 +12232,7 @@ let BattlePokedex = {
 		weightkg: 60,
 		color: "Brown",
 		eggGroups: ["Field"],
+		hide: "SpriteOnly",
 	},
 	grubbin: {
 		num: 736,
@@ -12243,6 +12287,7 @@ let BattlePokedex = {
 		weightkg: 147.5,
 		color: "Blue",
 		eggGroups: ["Bug"],
+		hide: "SpriteOnly",
 	},
 	crabrawler: {
 		num: 739,
@@ -12367,6 +12412,7 @@ let BattlePokedex = {
 		weightkg: 2,
 		color: "Yellow",
 		eggGroups: ["Bug", "Fairy"],
+		hide: "SpriteOnly",
 	},
 	rockruff: {
 		num: 744,
@@ -12451,6 +12497,7 @@ let BattlePokedex = {
 		weightkg: 78.6,
 		color: "Blue",
 		eggGroups: ["Water 2"],
+		hide: "Minute",
 	},
 	mareanie: {
 		num: 747,
@@ -12540,6 +12587,7 @@ let BattlePokedex = {
 		weightkg: 217.5,
 		color: "Green",
 		eggGroups: ["Water 1", "Bug"],
+		hide: "SpriteOnly",
 	},
 	fomantis: {
 		num: 753,
@@ -12579,6 +12627,7 @@ let BattlePokedex = {
 		weightkg: 58,
 		color: "Pink",
 		eggGroups: ["Grass"],
+		hide: "SpriteOnly",
 	},
 	morelull: {
 		num: 755,
@@ -12646,6 +12695,7 @@ let BattlePokedex = {
 		weightkg: 81,
 		color: "Black",
 		eggGroups: ["Monster", "Dragon"],
+		hide: "SpriteOnly",
 	},
 	stufful: {
 		num: 759,
@@ -13155,6 +13205,7 @@ let BattlePokedex = {
 		weightkg: 40,
 		color: "Brown",
 		eggGroups: ["Mineral"],
+		hide: "SpriteMinute",
 	},
 	komala: {
 		num: 775,
@@ -13202,6 +13253,7 @@ let BattlePokedex = {
 		weightkg: 13,
 		color: "Gray",
 		eggGroups: ["Field", "Fairy"],
+		hide: "SpriteOnly",
 	},
 	mimikyu: {
 		num: 778,
@@ -13228,6 +13280,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
 		inheritsFrom: "mimikyu",
+		hide: "SpriteOnly",
 	},
 	mimikyutotem: {
 		num: 778,
@@ -13241,6 +13294,7 @@ let BattlePokedex = {
 		weightkg: 2.8,
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
+		hide: "SpriteOnly",
 	},
 	mimikyubustedtotem: {
 		num: 778,
@@ -13255,6 +13309,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
 		inheritsFrom: "mimikyutotem",
+		hide: "SpriteOnly",
 	},
 	bruxish: {
 		num: 779,
@@ -13342,6 +13397,7 @@ let BattlePokedex = {
 		weightkg: 207.5,
 		color: "Gray",
 		eggGroups: ["Dragon"],
+		hide: "SpriteOnly",
 	},
 	tapukoko: {
 		num: 785,
@@ -13616,6 +13672,7 @@ let BattlePokedex = {
 		color: "Red",
 		eggGroups: ["Undiscovered"],
 		inheritsFrom: "magearna",
+		hide: "SpriteOnly",
 	},
 	marshadow: {
 		num: 802,
@@ -13733,6 +13790,7 @@ let BattlePokedex = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		inheritsFrom: "melmetal",
+		hide: "SpriteOnly",
 	},
 	grookey: {
 		num: 810,
@@ -13938,6 +13996,7 @@ let BattlePokedex = {
 		color: "Purple",
 		eggGroups: ["Flying"],
 		inheritsFrom: "corviknight",
+		hide: "SpriteOnly",
 	},
 	blipbug: {
 		num: 824,
@@ -13993,6 +14052,7 @@ let BattlePokedex = {
 		color: "Red",
 		eggGroups: ["Bug"],
 		inheritsFrom: "orbeetle",
+		hide: "SpriteOnly",
 	},
 	nickit: {
 		num: 827,
@@ -14108,6 +14168,7 @@ let BattlePokedex = {
 		color: "Green",
 		eggGroups: ["Monster", "Water 1"],
 		inheritsFrom: "drednaw",
+		hide: "SpriteOnly",
 	},
 	yamper: {
 		num: 835,
@@ -14188,6 +14249,7 @@ let BattlePokedex = {
 		color: "Black",
 		eggGroups: ["Mineral"],
 		inheritsFrom: "coalossal",
+		hide: "SpriteOnly",
 	},
 	applin: {
 		num: 840,
@@ -14230,6 +14292,7 @@ let BattlePokedex = {
 		color: "Green",
 		eggGroups: ["Grass", "Dragon"],
 		inheritsFrom: "flapple",
+		hide: "SpriteOnly",
 	},
 	appletun: {
 		num: 842,
@@ -14260,6 +14323,7 @@ let BattlePokedex = {
 		color: "Green",
 		eggGroups: ["Grass", "Dragon"],
 		inheritsFrom: "appletun",
+		hide: "SpriteOnly",
 	},
 	silicobra: {
 		num: 843,
@@ -14301,6 +14365,7 @@ let BattlePokedex = {
 		color: "Green",
 		eggGroups: ["Field", "Dragon"],
 		inheritsFrom: "sandaconda",
+		hide: "SpriteOnly",
 	},
 	cramorant: {
 		num: 845,
@@ -14326,6 +14391,7 @@ let BattlePokedex = {
 		weightkg: 18,
 		color: "Blue",
 		eggGroups: ["Water 1", "Flying"],
+		hide: "SpriteOnly",
 	},
 	cramorantgorging: {
 		num: 845,
@@ -14339,6 +14405,7 @@ let BattlePokedex = {
 		weightkg: 18,
 		color: "Blue",
 		eggGroups: ["Water 1", "Flying"],
+		hide: "SpriteOnly",
 	},
 	arrokuda: {
 		num: 846,
@@ -14406,6 +14473,7 @@ let BattlePokedex = {
 		prevo: "toxel",
 		evoLevel: 30,
 		eggGroups: ["Human-Like"],
+		hide: "Minute",
 	},
 	toxtricitygmax: {
 		num: 849,
@@ -14421,6 +14489,7 @@ let BattlePokedex = {
 		color: "Purple",
 		eggGroups: ["Human-Like"],
 		inheritsFrom: "toxtricity",
+		hide: "SpriteOnly",
 	},
 	sizzlipede: {
 		num: 850,
@@ -14462,6 +14531,7 @@ let BattlePokedex = {
 		color: "Red",
 		eggGroups: ["Bug"],
 		inheritsFrom: "centiskorch",
+		hide: "SpriteOnly",
 	},
 	clobbopus: {
 		num: 852,
@@ -14577,6 +14647,7 @@ let BattlePokedex = {
 		color: "Pink",
 		eggGroups: ["Fairy"],
 		inheritsFrom: "hatterene",
+		hide: "SpriteOnly",
 	},
 	impidimp: {
 		num: 859,
@@ -14636,6 +14707,7 @@ let BattlePokedex = {
 		color: "Purple",
 		eggGroups: ["Fairy", "Human-Like"],
 		inheritsFrom: "grimmsnarl",
+		hide: "SpriteOnly",
 	},
 	obstagoon: {
 		num: 862,
@@ -14763,6 +14835,7 @@ let BattlePokedex = {
 		color: "White",
 		eggGroups: ["Fairy", "Amorphous"],
 		inheritsFrom: "alcremie",
+		hide: "SpriteOnly",
 	},
 	falinks: {
 		num: 870,
@@ -14848,6 +14921,7 @@ let BattlePokedex = {
 		weightkg: 89,
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
+		hide: "Minute",
 	},
 	indeedee: {
 		num: 876,
@@ -14901,6 +14975,7 @@ let BattlePokedex = {
 		weightkg: 3,
 		color: "Yellow",
 		eggGroups: ["Field", "Fairy"],
+		hide: "SpriteOnly",
 	},
 	cufant: {
 		num: 878,
@@ -14942,6 +15017,7 @@ let BattlePokedex = {
 		color: "Green",
 		eggGroups: ["Field", "Mineral"],
 		inheritsFrom: "copperajah",
+		hide: "SpriteOnly",
 	},
 	dracozolt: {
 		num: 880,
@@ -15017,6 +15093,7 @@ let BattlePokedex = {
 		color: "White",
 		eggGroups: ["Mineral", "Dragon"],
 		inheritsFrom: "duraludon",
+		hide: "SpriteOnly",
 	},
 	dreepy: {
 		num: 885,

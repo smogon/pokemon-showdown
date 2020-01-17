@@ -606,7 +606,9 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 */
 	readonly learnset?: {[moveid: string]: MoveSource[]};
 	/** Source of learnsets for Pokemon that lack their own */
-	readonly inheritsFrom: string | string[];
+	readonly inheritsFrom?: string | string[];
+	/** Whether or not a Pokemon should be hidden in the teambuilder */
+	readonly hide?: 'SpriteOnly' | 'SpriteMinute' | 'Minute';
 	/** True if the only way to get this pokemon is from events. */
 	readonly eventOnly: boolean;
 	/** List of event data for each event. */
@@ -678,6 +680,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.isGigantamax = data.isGigantamax || undefined;
 		this.battleOnly = !!data.battleOnly || !!this.isMega || !!this.isGigantamax || undefined;
 		this.inheritsFrom = data.inheritsFrom || undefined;
+		this.hide = data.hide || undefined;
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {

@@ -958,6 +958,7 @@ interface TemplateData {
 	otherFormes?: string[]
 	prevo?: string
 	inheritsFrom?: string | string[]
+	hide?: 'SpriteOnly' | 'Minute' | 'SpriteMinute'
 }
 
 interface ModdedTemplateData extends Partial<TemplateData> {
