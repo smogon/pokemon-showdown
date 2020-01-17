@@ -2681,7 +2681,6 @@ let BattleAbilities = {
 					announced = true;
 				}
 				pokemon.addVolatile('perishsong');
-				this.add('-start', pokemon, 'perish3');
 			}
 		},
 		id: "perishbody",
