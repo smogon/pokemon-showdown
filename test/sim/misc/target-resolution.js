@@ -171,5 +171,31 @@ describe('Target Resolution', function () {
 			battle.makeChoices('move watergun -2, pass', 'auto');
 			assert.statStage(redirector, 'spa', 2);
 		});
+
+		it(`should smart-track targets for Stalwart`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
+				{species: 'Ninjask', ability: 'runaway', moves: ['splash']},
+			], [
+				{species: 'Gastrodon', ability: 'runaway', moves: ['splash']},
+				{species: 'Ninjask', ability: 'runaway', moves: ['allyswitch']},
+			]]);
+
+			battle.makeChoices('move watergun 1, move splash', 'auto');
+			assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+		});
+
+		it(`should smart-track targets for Snipe Shot`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Duraludon', ability: 'runaway', moves: ['snipeshot']},
+				{species: 'Ninjask', ability: 'runaway', moves: ['splash']},
+			], [
+				{species: 'Gastrodon', ability: 'runaway', moves: ['splash']},
+				{species: 'Ninjask', ability: 'runaway', moves: ['allyswitch']},
+			]]);
+
+			battle.makeChoices('move snipeshot 1, move splash', 'auto');
+			assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+		});
 	});
 });

@@ -852,6 +852,11 @@ interface MoveData extends EffectData, MoveEventMethods {
 	struggleRecoil?: boolean
 	terrain?: string
 	thawsTarget?: boolean
+	/**
+	 * Tracks the original target through Ally Switch and other switch-out-and-back-in
+	 * situations, rather than just targeting a slot. (Stalwart, Snipe Shot)
+	 */
+	tracksTarget?: boolean
 	useTargetOffensive?: boolean
 	useSourceDefensiveAsOffensive?: boolean
 	volatileStatus?: string
@@ -900,6 +905,7 @@ interface ActiveMove extends BasicEffect, MoveData {
 	hasAuraBreak?: boolean
 	hasBounced?: boolean
 	hasSheerForce?: boolean
+	/** Is the move called by Dancer? Used to prevent infinite Dancer recursion. */
 	isExternal?: boolean
 	lastHit?: boolean
 	magnitude?: number
@@ -1114,7 +1120,7 @@ interface BattleScriptsData {
 	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions.Action
 	runAction?: (this: Battle, action: Actions.Action) => void
 	runMegaEvo?: (this: Battle, pokemon: Pokemon) => boolean
-	runMove?: (this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean, maxMove?: string) => void
+	runMove?: (this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon) => void
 	runMoveEffects?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
 	runZPower?: (this: Battle, move: ActiveMove, pokemon: Pokemon) => void
 	secondaries?: (this: Battle, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSelf?: boolean) => void
@@ -1221,6 +1227,8 @@ namespace Actions {
 		pokemon: Pokemon;
 		/** location of the target, relative to pokemon's side */
 		targetLoc: number;
+		/** original target pokemon, for target-tracking moves */
+		originalTarget: Pokemon;
 		/** a move to use (move action only) */
 		moveid: ID
 		/** a move to use (move action only) */

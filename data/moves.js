@@ -17502,6 +17502,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		critRatio: 2,
+		tracksTarget: true,
 		secondary: null,
 		target: "normal",
 		type: "Water",
