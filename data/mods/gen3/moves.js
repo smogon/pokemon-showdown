@@ -81,7 +81,7 @@ let BattleMovedex = {
 						return false;
 					}
 					if (!target.isActive) {
-						const possibleTarget = this.resolveTarget(pokemon, this.dex.getMove('pound'));
+						const possibleTarget = this.getRandomTarget(pokemon, this.dex.getMove('pound'));
 						if (!possibleTarget) {
 							this.add('-miss', pokemon);
 							return false;

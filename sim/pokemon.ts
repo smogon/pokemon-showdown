@@ -635,7 +635,7 @@ export class Pokemon {
 			const selectedTarget = target;
 			if (!target || (target.fainted && target.side !== this.side)) {
 				// If a targeted foe faints, the move is retargeted
-				const possibleTarget = this.battle.resolveTarget(this, move);
+				const possibleTarget = this.battle.getRandomTarget(this, move);
 				if (!possibleTarget) return {targets: [], pressureTargets: []};
 				target = possibleTarget;
 			}

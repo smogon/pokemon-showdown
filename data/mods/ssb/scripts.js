@@ -12,7 +12,7 @@ let BattleScripts = {
 			if (changedMove && changedMove !== true) {
 				baseMove = this.dex.getActiveMove(changedMove);
 				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
-				target = this.resolveTarget(pokemon, baseMove);
+				target = this.getRandomTarget(pokemon, baseMove);
 			}
 		}
 		let move = zMove ? this.getActiveZMove(baseMove, pokemon) : baseMove;
