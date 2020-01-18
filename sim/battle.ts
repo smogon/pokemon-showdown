@@ -2236,12 +2236,12 @@ export class Battle {
 			}
 
 			// Chosen target not valid,
-			// retarget randomly with resolveTarget
+			// retarget randomly with getRandomTarget
 		}
-		return this.resolveTarget(pokemon, move);
+		return this.getRandomTarget(pokemon, move);
 	}
 
-	resolveTarget(pokemon: Pokemon, move: string | Move) {
+	getRandomTarget(pokemon: Pokemon, move: string | Move) {
 		// A move was used without a chosen target
 
 		// For instance: Metronome chooses Ice Beam. Since the user didn't
@@ -2440,7 +2440,7 @@ export class Battle {
 			action.move = this.dex.getActiveMove(action.move);
 
 			if (!action.targetLoc) {
-				target = this.resolveTarget(action.pokemon, action.move);
+				target = this.getRandomTarget(action.pokemon, action.move);
 				// TODO: what actually happens here?
 				if (target) action.targetLoc = this.getTargetLoc(target, action.pokemon);
 			}

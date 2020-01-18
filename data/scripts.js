@@ -25,7 +25,7 @@ let BattleScripts = {
 			if (changedMove && changedMove !== true) {
 				baseMove = this.dex.getActiveMove(changedMove);
 				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
-				target = this.resolveTarget(pokemon, baseMove);
+				target = this.getRandomTarget(pokemon, baseMove);
 			}
 		}
 		let move = baseMove;
@@ -177,7 +177,7 @@ let BattleScripts = {
 			if (!move.hasBounced) move.pranksterBoosted = this.activeMove.pranksterBoosted;
 		}
 		let baseTarget = move.target;
-		if (target === undefined) target = this.resolveTarget(pokemon, move);
+		if (target === undefined) target = this.getRandomTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
@@ -195,13 +195,13 @@ let BattleScripts = {
 			// Target changed in ModifyMove, so we must adjust it here
 			// Adjust before the next event so the correct target is passed to the
 			// event
-			target = this.resolveTarget(pokemon, move);
+			target = this.getRandomTarget(pokemon, move);
 		}
 		move = this.runEvent('ModifyType', pokemon, target, move, move);
 		move = this.runEvent('ModifyMove', pokemon, target, move, move);
 		if (baseTarget !== move.target) {
 			// Adjust again
-			target = this.resolveTarget(pokemon, move);
+			target = this.getRandomTarget(pokemon, move);
 		}
 		if (!move || pokemon.fainted) {
 			return false;

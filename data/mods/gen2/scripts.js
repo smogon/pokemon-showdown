@@ -102,10 +102,10 @@ let BattleScripts = {
 			let changedMove = this.runEvent('OverrideAction', pokemon, target, move);
 			if (changedMove && changedMove !== true) {
 				move = this.dex.getActiveMove(changedMove);
-				target = this.resolveTarget(pokemon, move);
+				target = this.getRandomTarget(pokemon, move);
 			}
 		}
-		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
+		if (!target && target !== false) target = this.getRandomTarget(pokemon, move);
 
 		this.setActiveMove(move, pokemon, target);
 

@@ -176,7 +176,7 @@ let BattleScripts = {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		let baseMove = this.dex.getMove(moveOrMoveName);
 		let move = this.dex.getActiveMove(baseMove);
-		if (target === undefined) target = this.resolveTarget(pokemon, move);
+		if (target === undefined) target = this.getRandomTarget(pokemon, move);
 		if (move.target === 'self') {
 			target = pokemon;
 		}
@@ -187,12 +187,12 @@ let BattleScripts = {
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 		if (baseMove.target !== move.target) {
 			// Target changed in ModifyMove, so we must adjust it here
-			target = this.resolveTarget(pokemon, move);
+			target = this.getRandomTarget(pokemon, move);
 		}
 		move = this.runEvent('ModifyMove', pokemon, target, move, move);
 		if (baseMove.target !== move.target) {
 			// Check again, this shouldn't ever happen on Gen 1.
-			target = this.resolveTarget(pokemon, move);
+			target = this.getRandomTarget(pokemon, move);
 			this.debug('not a gen 1 mechanic');
 		}
 		if (!move) return false;
