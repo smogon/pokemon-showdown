@@ -278,7 +278,7 @@ let Formats = [
 				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
 			];
 			for (const pokemon of this.getAllPokemon()) {
-				if (!allowedGigantamaxes.includes(pokemon.species)) pokemon.canGigantamax = null;
+				if (pokemon.canGigantamax && !allowedGigantamaxes.includes(pokemon.canGigantamax)) pokemon.canGigantamax = null;
 			}
 		},
 	},
