@@ -81,7 +81,6 @@ let BattleMovedex = {
 				let moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
 				if (!target.lastMove || noEncore.includes(target.lastMove.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
-					delete target.volatiles['encore'];
 					return false;
 				}
 				this.effectData.move = target.lastMove.id;
@@ -96,8 +95,7 @@ let BattleMovedex = {
 			onResidualOrder: 13,
 			onResidual(target) {
 				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) { // early termination if you run out of PP
-					delete target.volatiles.encore;
-					this.add('-end', target, 'Encore');
+					target.removeVolatile('encore');
 				}
 			},
 			onEnd(target) {
