@@ -707,6 +707,7 @@ let BattleItems = {
 		itemUser: ["Genesect-Burn"],
 		num: 118,
 		gen: 5,
+		isNonstandard: "Past",
 		desc: "Holder's Techno Blast is Fire type.",
 	},
 	"cameruptite": {
@@ -906,6 +907,7 @@ let BattleItems = {
 		itemUser: ["Genesect-Chill"],
 		num: 119,
 		gen: 5,
+		isNonstandard: "Past",
 		desc: "Holder's Techno Blast is Ice type.",
 	},
 	"chippedpot": {
@@ -1343,6 +1345,7 @@ let BattleItems = {
 		itemUser: ["Genesect-Douse"],
 		num: 116,
 		gen: 5,
+		isNonstandard: "Past",
 		desc: "Holder's Techno Blast is Water type.",
 	},
 	"dracoplate": {
@@ -5565,6 +5568,7 @@ let BattleItems = {
 		itemUser: ["Genesect-Shock"],
 		num: 117,
 		gen: 5,
+		isNonstandard: "Past",
 		desc: "Holder's Techno Blast is Electric type.",
 	},
 	"shucaberry": {

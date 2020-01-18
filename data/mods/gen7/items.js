@@ -80,6 +80,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	burndrive: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	cameruptite: {
 		inherit: true,
 		isNonstandard: null,
@@ -89,6 +93,10 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	charizarditey: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	chilldrive: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -122,6 +130,10 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	domefossil: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	dousedrive: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -474,6 +486,10 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	sharpedonite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	shockdrive: {
 		inherit: true,
 		isNonstandard: null,
 	},
