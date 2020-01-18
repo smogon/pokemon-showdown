@@ -142,7 +142,7 @@ let BattleAbilities = {
 			for (const curMon of this.getAllActive()) {
 				if (curMon === pokemon) continue;
 				if (abilities.includes(curMon.ability)) continue;
-				this.singleEvent('End', this.dex.getAbility(curMon.ability), curMon.abilityData, curMon, curMon, 'gastroacid');
+				this.singleEvent('End', curMon.getAbility(), curMon.abilityData, curMon, curMon, 'gastroacid');
 			}
 			this.add('-message', `${pokemon.name} neutralized all abilities on the field!`);
 		},
