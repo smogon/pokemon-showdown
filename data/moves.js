@@ -4734,9 +4734,6 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'encore',
-		onTryHit(target) {
-			if (target.volatiles['dynamax']) return false;
-		},
 		effect: {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
@@ -4746,7 +4743,7 @@ let BattleMovedex = {
 				];
 				const move = target.lastMove;
 				let moveIndex = move ? target.moves.indexOf(move.id) : -1;
-				if (!move || move.isZ || move.isMax || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
+				if (!move || move.isZ || move.isMax || target.volatiles['dynamax'] || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					delete target.volatiles['encore'];
 					return false;
@@ -7101,7 +7098,7 @@ let BattleMovedex = {
 		self: {
 			onHit(source) {
 				for (let pokemon of source.side.foe.active) {
-					pokemon.addVolatile('torment');
+					if (!pokemon.volatiles['dynamax']) pokemon.addVolatile('torment');
 				}
 			},
 		},
@@ -19971,12 +19968,13 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'torment',
-		onTryHit(target) {
-			if (target.volatiles['dynamax']) return false;
-		},
 		effect: {
 			noCopy: true,
 			onStart(pokemon) {
+				if (pokemon.volatiles['dynamax']) {
+					delete pokemon.volatiles['torment'];
+					return false;
+				}
 				this.add('-start', pokemon, 'Torment');
 			},
 			onEnd(pokemon) {
