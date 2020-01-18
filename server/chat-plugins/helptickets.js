@@ -508,7 +508,7 @@ function checkTicketBanned(user) {
 		if (ticket.expires > Date.now()) {
 			return `You are banned from creating tickets${toID(ticket.banned) !== user.id ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
 		} else {
-			delete tickets[ticket.userid];
+			delete ticketBans[ticket.userid];
 			writeTickets();
 			return false;
 		}
