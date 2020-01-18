@@ -719,6 +719,7 @@ let BattleFormats = {
 		onBegin() {
 			for (let pokemon of this.getAllPokemon()) {
 				pokemon.canDynamax = false;
+			if (pokemon.speciesid === 'charizardgmax', 'alcremiegmax', 'appletungmax', 'butterfreegmax', 'centiskrochgmax', 'coalossalgmax', 'copperajahgmax', 'corviknightgmax', 'drenawgmax', 'duraludongmax', 'eeveegmax', 'flapplegmax', 'garbodorgmax', 'gengargmax', 'grimmsnarlgmax', 'hatterenegmax', 'kinglergmax', 'laprasgmax', 'machampgmax', 'melmetalgmax', 'meowthgmax', 'orbeetlegmax', 'pikachugmax', 'sandacondagmax', 'snorlaxgmax', 'toxicitygmax') pokemon.canDynamax = true
 			}
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
