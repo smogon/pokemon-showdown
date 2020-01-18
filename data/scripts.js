@@ -16,8 +16,8 @@ let BattleScripts = {
 	 * externalMove skips LockMove and PP deduction, mostly for use by
 	 * Dancer.
 	 */
-	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove) {
-		let target = this.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc);
+	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove, originalTarget) {
+		let target = this.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
 		const pranksterBoosted = baseMove.pranksterBoosted;
 		if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {

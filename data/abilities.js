@@ -2942,15 +2942,10 @@ let BattleAbilities = {
 	},
 	"propellertail": {
 		shortDesc: "Ignores the effects of opposing Pokémon's moves/Abilities that redirect move targets.",
-		onRedirectTargetPriority: 3,
-		onRedirectTarget(target, source, source2, move) {
-			// Fires for all pokemon on the ability holder's side apparently
-			// Ensure source is the ability holder
-			this.debug(`onRedirectTarget: ${target} (${target.side.name}), ${source} (${source.side.name}), ${source2}, ${move}`);
-			if (source.hasAbility('Propeller Tail')) {
-				this.debug(`Propeller Tail prevented redirection`);
-				return target;
-			}
+		onModifyMove(move) {
+			// this doesn't actually do anything because ModifyMove happens after the tracksTarget check
+			// the actual implementation is in Battle#getTarget
+			move.tracksTarget = true;
 		},
 		id: "propellertail",
 		name: "Propeller Tail",
@@ -3790,14 +3785,10 @@ let BattleAbilities = {
 	},
 	"stalwart": {
 		shortDesc: "Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves.",
-		onRedirectTargetPriority: 3,
-		onRedirectTarget(target, source, source2, move) {
-			// Fires for all pokemon on the ability holder's side apparently
-			// Ensure source is the ability holder
-			if (source.hasAbility('Stalwart')) {
-				this.debug(`Stalwart prevented redirection`);
-				return target;
-			}
+		onModifyMove(move) {
+			// this doesn't actually do anything because ModifyMove happens after the tracksTarget check
+			// the actual implementation is in Battle#getTarget
+			move.tracksTarget = true;
 		},
 		id: "stalwart",
 		name: "Stalwart",
