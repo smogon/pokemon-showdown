@@ -4536,6 +4536,7 @@ let BattleItems = {
 		id: "pokeball",
 		name: "Poke Ball",
 		spritenum: 345,
+		onTakeItem: false,
 		num: 4,
 		gen: 1,
 		isPokeball: true,
