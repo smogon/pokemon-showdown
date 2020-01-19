@@ -490,7 +490,7 @@ let BattleLearnsets = {
 		attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 		beatup: ["8M"],
 		bide: ["7V"],
-		blastburn: ["7T", "6T", "6S4", "5T", "4T", "3T"],
+		blastburn: ["8T", "7T", "6T", "6S4", "5T", "4T", "3T"],
 		blazekick: ["8M"],
 		bodyslam: ["8M", "7V", "3T"],
 		breakingswipe: ["8M"],
