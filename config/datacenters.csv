@@ -43,10 +43,8 @@
 5.187.49.184,5.187.49.191,OneProvider,http://oneprovider.com/
 5.189.144.0,5.189.159.255,Contabo GmbH,https://contabo.de/
 5.196.0.0,5.196.255.255,OVH FR,http://www.ovh.com
-5.199.129.64,5.199.129.95,myLoc,http://www.myloc.de/
-5.199.132.0,5.199.132.255,myLoc,http://www.myloc.de/
-5.199.135.0,5.199.135.192,myLoc,http://www.myloc.de/
-5.199.137.192,5.199.137.255,myLoc,http://www.myloc.de/
+5.199.0.0,5.199.127.255,DataTech UK,https://www.datatechuk.com/
+5.199.128.0,5.199.143.255,myLoc,http://www.myloc.de/
 5.199.162.0,5.199.163.255,Duomenu Centras Lithuania,http://www.duomenucentras.lt/lt/
 5.199.171.224,5.199.171.239,OneProvider,http://oneprovider.com/
 5.199.173.240,5.199.173.247,OneProvider,http://oneprovider.com/
@@ -410,6 +408,7 @@
 40.127.64.0,40.127.111.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 40.127.128.0,40.127.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 42.1.60.0,42.1.63.255,Exa Bytes Network Sdn Bhd,http://exabytes.com/
+43.231.112.0,43.231.115.255,itools,https://www.itools.mn/
 43.245.160.0,43.245.163.255,Intergrid,https://intergrid.com.au/
 43.245.164.0,43.245.164.255,Virtual Data Centre,http://www.virtual-dc.com.au/
 43.249.38.0,43.249.39.255,Leaseweb,https://www.leaseweb.com/
@@ -623,7 +622,6 @@
 64.13.192.0,64.13.255.255,Media Temple,http://www.mediatemple.net/
 64.15.64.0,64.15.79.255,Netelligent,http://www.netelligent.ca/en/ca
 64.15.128.0,64.15.159.255,iWeb Technologies Inc.,http://iweb.com/
-64.18.128.0,64.18.159.255,Rackvibe.com,http://www.rackvibe.com/
 64.20.32.0,64.20.63.255,InterServer.net,http://www.interserver.net/
 64.22.192.0,64.22.223.255,LightEdge,http://www.lightedge.com
 64.26.0.0,64.26.63.255,Hostway,http://www.hostway.com/
@@ -1230,6 +1228,7 @@
 81.93.240.0,81.93.255.255,euro-web.com,http://fr.euro-web.com/
 81.95.144.0,81.95.159.255,SoftLayer,http://www.softlayer.com/
 81.169.128.0,81.169.255.255,Strato,http://www.strato.de
+81.171.0.0,81.171.31.255,Leaseweb,http://www.leaseweb.com/
 81.176.224.0,81.176.225.255,eserver.ru,http://www.eserver.ru/
 81.177.26.0,81.177.27.255,erix-colo,http://
 82.98.128.0,82.98.191.255,dinahosting,https://en.dinahosting.com/
@@ -1295,6 +1294,7 @@
 85.31.184.0,85.31.191.255,ISPpro Germany,http://isppro.de/
 85.94.192.0,85.94.223.255,seeweb.it,http://seeweb.it/
 85.114.96.0,85.114.103.255,Fusion Services,http://www.fusion.ps/
+85.114.128.0,85.114.159.255,myLoc,http://www.myloc.de/
 85.119.104.0,85.119.104.31,prolocation.net,http://prolocation.net/
 85.119.104.64,85.119.105.23,prolocation.net,http://prolocation.net/
 85.119.152.0,85.119.159.255,Host Europe,http://www.hosteurope.de/
@@ -1350,7 +1350,6 @@
 87.238.168.0,87.238.175.255,duocast,http://duocast.nl/
 87.239.248.0,87.239.248.255,HostRoyale,https://hostroyale.com/
 87.239.254.0,87.239.255.255,HostRoyale,https://hostroyale.com/
-87.239.255.0,87.239.255.255,HostRoyale,https://hostroyale.com/
 87.242.64.0,87.242.127.255,masterhost.ru,http://masterhost.ru/
 87.253.128.0,87.253.159.255,transip,https://www.transip.nl/
 88.80.0.0,88.80.31.255,prq.se,http://prq.se/
@@ -1914,6 +1913,7 @@
 118.214.0.0,118.215.255.255,Akamai,http://akamai.com/
 119.31.224.0,119.31.231.255,Micron21,http://www.micron21.com/
 119.37.0.0,119.37.191.255,21vianet,http://21vianet.com/
+119.59.96.0,119.59.127.255,MetraByte Cloud,https://metrabyte.cloud/
 120.132.128.0,120.135.255.255,21vianet,http://21vianet.com/
 120.136.32.0,120.136.47.255,Rackspace,http://www.rackspace.com/
 121.50.64.0,121.50.127.255,kinx.net,http://idc.kinx.net/
@@ -1986,6 +1986,7 @@
 142.111.0.0,142.111.255.255,EGIHosting.com,http://www.egihosting.com/
 142.234.0.0,142.234.255.255,Ubiquity Server Solutions,http://www.ubiquityservers.com/
 142.252.0.0,142.252.255.255,EGIHosting.com,http://www.egihosting.com/
+146.0.32.0,146.0.47.255,myLoc,http://www.myloc.de/
 146.0.72.0,146.0.79.255,HostKey,http://www.hostkey.com/
 146.0.229.24,146.0.229.31,Surfeasy,https://www.surfeasy.com/
 146.0.237.48,146.0.237.55,Surfeasy,https://www.surfeasy.com/
@@ -2455,6 +2456,7 @@
 185.62.190.0,185.62.191.255,BlazingFast,https://blazingfast.io/
 185.72.246.0,185.72.247.255,Dolorem Ipsum s.r.o,http://doip.cz
 185.73.240.0,185.73.240.255,SinaVPS,https://sinavps.ch/
+185.114.20.0,185.114.23.255,Osbil Technology,http://www.yoncu.com/
 185.180.197.0,185.180.197.255,King Servers,https://www.king-servers.com/
 185.82.216.0,185.82.217.255,Sofia Data Center,http://sdc.bg/
 185.86.148.0,185.86.149.255,Yourserver Sweden,https://www.yourserver.se/
@@ -3485,6 +3487,7 @@
 213.149.224.0,213.149.255.255,acens Technologies S.L.,http://www.acens.com/
 213.152.96.0,213.152.127.255,ConnectingBytes Gbmh,http://www.connectingbytes.de/
 213.152.160.0,213.152.191.255,serverboost.nl,http://serverboost.nl/
+213.158.96.0,213.158.127.255,Ennit Server GmbH,http://www.ennit.de
 213.155.0.0,213.155.31.255,hosting.ua,http://hosting.ua/
 213.163.0.0,213.163.63.255,Invitech Data Centers,https://www.invitech.hu/
 213.163.64.0,213.163.95.255,i3d.net,http://i3d.net/
