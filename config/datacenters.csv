@@ -65,6 +65,7 @@
 8.24.248.0,8.24.255.255,gorack.net,http://gorack.net/
 8.26.56.0,8.26.56.255,Peak10,http://www.peak10.com/
 8.30.160.0,8.30.167.255,Native Hosting,http://nativehosting.com/
+8.38.147.0,8.38.147.255,CloudFlare Inc,https://www.cloudflare.com/
 12.16.248.192,12.16.248.199,Media Temple,http://www.mediatemple.net/
 12.27.226.168,12.27.226.175,Media Temple,http://www.mediatemple.net/
 12.54.126.240,12.54.126.247,GoDaddy.com Inc,http://www.godaddy.com/
@@ -358,6 +359,10 @@
 37.220.35.0,37.220.35.255,yisp Netherlands,http://yisp.nl/
 37.220.97.240,37.220.97.247,Tagadab,http://tagadab.com/
 37.220.98.8,37.220.98.15,Tagadab,http://tagadab.com/
+37.221.112.0,37.221.112.255,M247,http://www.m247.com/
+37.221.113.0,37.221.113.255,M247,http://www.m247.com/
+37.221.114.0,37.221.114.255,M247,http://www.m247.com/
+37.221.115.0,37.221.115.255,M247,http://www.m247.com/
 37.221.160.0,37.221.160.31,LippunerHosting,http://server4.pro/
 37.221.160.32,37.221.160.63,ixam-hosting,http://ixam-hosting.com/
 37.221.160.80,37.221.160.95,EpioHost,http://epiohost.net/
@@ -366,6 +371,7 @@
 37.221.160.224,37.221.160.255,CINIPAC,http://cinipac.com/
 37.235.49.0,37.235.49.255,EDIS,http://www.edis.at/
 37.235.53.0,37.235.63.255,EDIS,http://www.edis.at/
+38.132.108.0,38.132.120.0,PSINet,https://cogentco.com/en/
 40.74.0.0,40.77.127.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 40.78.0.0,40.79.7.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 40.79.8.32,40.79.8.47,Microsoft Azure,http://www.windowsazure.com/en-us/
@@ -942,6 +948,7 @@
 69.164.240.0,69.164.255.255,Host Department LLC,http://www.hostdepartment.com/
 69.165.48.0,69.165.63.255,American Internet Services,http://americanis.net/
 69.167.128.0,69.167.191.255,Liquid Web,http://www.liquidweb.com/
+69.169.18.0,69.169.19.255,Atlantic Metro,https://www.atlanticmetro.net/
 69.170.128.0,69.170.143.255,Layered Technologies Inc,http://www.layeredtech.com/
 69.171.0.0,69.171.63.255,latisys,http://www.latisys.com/
 69.171.128.0,69.171.159.255,Canaca-com Inc.,http://canaca.com
@@ -1241,6 +1248,7 @@
 82.211.0.0,82.211.63.255,accelerated.de,http://accelerated.de/
 82.221.102.32,82.221.102.55,Cyberghost,http://www.cyberghostvpn.com/
 83.97.20.0,83.97.20.255,OvO Systems,https://ovo.sc/
+83.97.20.0,83.97.23.255,M247,http://www.m247.com/
 83.98.128.0,83.98.128.255,Flexwebhosting.nl,http://www.flexwebhosting.nl/
 83.136.80.0,83.136.87.255,myLoc,http://www.myloc.de/
 83.137.144.0,83.137.151.255,duocast,http://duocast.nl/
@@ -1342,6 +1350,7 @@
 87.238.168.0,87.238.175.255,duocast,http://duocast.nl/
 87.239.248.0,87.239.248.255,HostRoyale,https://hostroyale.com/
 87.239.254.0,87.239.255.255,HostRoyale,https://hostroyale.com/
+87.239.255.0,87.239.255.255,HostRoyale,https://hostroyale.com/
 87.242.64.0,87.242.127.255,masterhost.ru,http://masterhost.ru/
 87.253.128.0,87.253.159.255,transip,https://www.transip.nl/
 88.80.0.0,88.80.31.255,prq.se,http://prq.se/
@@ -1498,6 +1507,7 @@
 92.38.228.0,92.38.228.255,Digital Network JSC,http://www.di-net.ru/
 92.38.230.0,92.38.230.255,Digital Network JSC,http://www.di-net.ru/
 92.38.232.0,92.38.255.255,Digital Network JSC,http://www.di-net.ru/
+92.39.48.0,92.39.55.255,Airstream SRL,https://airstream.md/
 92.42.184.0,92.42.191.255,nine.ch,http://nine.ch/
 92.43.40.0,92.43.47.255,Xtraordinary Networks Limited,http://xtrahost.co.uk/
 92.48.64.0,92.48.127.255,BlueConnex,http://www.simplytransit.net/
@@ -1685,8 +1695,10 @@
 103.28.148.0,103.28.149.255,Argon Data Communication,http://easyway.co.id
 103.75.118.0,103.75.118.255,OneProvider,http://oneprovider.com/
 103.75.119.0,103.75.119.255,OneProvider,http://oneprovider.com/
+103.86.98.0,103.86.98.255,Nord VPN,https://nordvpn.com/
 103.99.87.0,103.99.87.255,FXTrading,http://fxtrading.net/
 103.107.196.0,103.107.196.255,GSL Networks,https://gslnetworks.com.au/
+103.108.94.0,103.108.94.255,Intergrid,https://intergrid.com.au/
 103.111.60.0,103.111.60.255,Micfo,https://www.micfo.com/
 103.115.184.0,103.115.184.255,Streamnet,http://streamingnetworks.net
 103.115.185.0,103.115.185.255,Streamnet,http://streamingnetworks.net
@@ -1712,6 +1724,7 @@
 103.210.15.0,103.210.15.255,Vivid-Hosting,http://vivid-hosting.net/
 103.212.220.0,103.212.223.255,NeoSilkRoad,http://neosilkroad.com
 103.212.227.0,103.212.227.255,Keystone Servers,http://keystoneservers.com
+103.221.233.10,103.221.233.13,ProtonVPN,https://protonvpn.com/
 103.231.88.0,103.231.91.255,Intergrid,https://intergrid.com.au/
 103.246.248.0,103.246.248.255,quickweb.co.nz,http://quickweb.co.nz/
 103.246.250.0,103.246.251.255,quickweb.co.nz,http://quickweb.co.nz/
@@ -1804,6 +1817,7 @@
 107.164.0.0,107.165.255.255,EGIHosting.com,http://www.egihosting.com/
 107.167.96.0,107.167.127.255,Opera Mini Proxy,https://www.opera.com/
 107.170.0.0,107.170.255.255,DigitalOcean USA,https://www.digitalocean.com/
+107.173.59.96,107.173.59.103,Nord VPN,https://nordvpn.com/
 107.181.160.0,107.181.191.255,Total Server Solutions,http://totalserversolutions.com/
 107.182.224.0,107.182.239.255,UK2 Group,http://www.uk2.net/
 107.186.0.0,107.187.255.255,EGIHosting.com,http://www.egihosting.com/
@@ -2103,6 +2117,7 @@
 167.99.0.0,167.99.255.255,DigitalOcean USA,https://www.digitalocean.com/
 167.114.0.0,167.114.255.255,OVH,http://www.ovh.co.uk/
 167.160.32.0,167.160.63.255,Web2Objects,https://web2objects.com/
+167.172.0.0,167.172.255.255,DigitalOcean USA,https://www.digitalocean.com/
 168.1.112.64,168.1.112.127,SoftLayer,http://www.softlayer.com/
 168.61.0.0,168.62.63.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 168.62.96.0,168.62.251.255,Microsoft Azure,http://www.windowsazure.com/en-us/
@@ -2184,6 +2199,7 @@
 174.36.0.0,174.37.255.255,SoftLayer,http://www.softlayer.com/
 174.120.0.0,174.123.255.255,SoftLayer,http://www.softlayer.com/
 174.127.64.0,174.127.127.255,Midphase,http://www.midphase.com/
+174.128.160.0,174.128.183.255,Atlantic Metro,https://www.atlanticmetro.net/
 174.128.224.0,174.128.255.255,SharkTECH Internet Services,http://sharktech.net/
 174.129.0.0,174.129.255.255,Amazon AWS,http://www.amazon.com/aws/
 174.132.0.0,174.133.255.255,SoftLayer,http://www.softlayer.com/
@@ -2201,6 +2217,7 @@
 175.41.128.0,175.41.255.255,Amazon AWS,http://www.amazon.com/aws/
 176.9.0.0,176.9.255.255,Hetzner Online AG,http://www.hetzner.de/
 176.10.83.0,176.10.83.255,M247,http://www.m247.com/
+176.10.125.1,176.10.125.127,VPS2DAY,https://www.vps2day.com/
 176.28.0.0,176.28.63.255,Host Europe,http://www.hosteurope.de/
 176.28.96.0,176.28.127.255,acens Technologies S.L.,http://www.acens.com/
 176.31.0.0,176.31.255.255,OVH,http://www.ovh.co.uk/
@@ -2459,6 +2476,7 @@
 185.61.151.0,185.61.151.255,Yourserver Sweden,https://www.yourserver.se/
 185.62.190.0,185.62.191.255,BlazingFast,https://blazingfast.io/
 185.72.246.0,185.72.247.255,Dolorem Ipsum s.r.o,http://doip.cz
+185.73.240.0,185.73.240.255,SinaVPS,https://sinavps.ch/
 185.180.197.0,185.180.197.255,King Servers,https://www.king-servers.com/
 185.82.216.0,185.82.217.255,Sofia Data Center,http://sdc.bg/
 185.86.148.0,185.86.149.255,Yourserver Sweden,https://www.yourserver.se/
@@ -2523,6 +2541,7 @@
 185.163.110.0,185.163.111.255,M247,https://www.m247.com/
 185.165.241.0,185.165.241.255,WorldStream Dedicated Servers,https://www.worldstream.nl/
 185.167.160.0,185.167.161.255,Deltahost,http://deltahost.com.ua/
+185.180.13.0,185.180.13.255,CDN77,https://www.cdn77.com/
 185.180.198.0,185.180.198.255,King Servers,https://www.king-servers.com/
 185.183.104.0,185.183.104.255,M247,https://www.m247.com/
 185.183.105.0,185.183.105.255,M247,https://www.m247.com/
@@ -2537,6 +2556,7 @@
 185.195.16.0,185.195.17.255,M247,https://www.m247.com/
 185.195.18.0,185.195.19.255,M247,https://www.m247.com/
 185.198.91.0,185.198.91.255,FXTrading,http://fxtrading.net/
+185.198.242.0,185.198.242.255,Falco Networks,https://falco-networks.com/
 185.200.116.0,185.200.116.255,M247,https://m247.com/
 185.201.42.0,185.201.42.255,FXTrading,http://fxtrading.net/
 185.205.207.0,185.205.207.255,FXTrading,http://fxtrading.net/
@@ -2599,6 +2619,7 @@
 188.214.128.0,188.214.135.255,Duomenu Centras Lithuania,http://www.duomenucentras.lt/lt/
 188.225.36.0,188.225.36.255,TimeWeb,https://timeweb.com
 188.225.39.0,188.225.39.255,TimeWeb,https://timeweb.com
+188.225.75.0,188.225.75.255,TimeWeb,https://timeweb.com
 188.226.128.0,188.226.191.255,DigitalOcean Netherlands,https://www.digitalocean.com/
 188.226.192.0,188.226.255.255,DigitalOcean Netherlands,https://www.digitalocean.com/
 188.227.160.0,188.227.191.255,Redstation Limited,http://redstation.com/
@@ -2787,6 +2808,7 @@
 193.34.88.0,193.34.91.255,easyhost.be,http://easyhost.be/
 193.34.144.0,193.34.145.255,Giga-Hosting GmbH,http://giga-hosting.biz/
 193.34.166.0,193.34.167.255,Snel Internet Services B.V.,https://www.snelserver.com/
+193.34.232.0,193.34.232.255,pango,https://www.pango.co/
 193.37.152.0,193.37.152.255,Giga-Hosting GmbH,http://giga-hosting.biz/
 193.47.99.0,193.47.99.255,Hetzner Online AG,http://www.hetzner.de/
 193.47.184.0,193.47.184.255,euro-web.com,http://fr.euro-web.com/
@@ -2850,6 +2872,7 @@
 194.28.132.0,194.28.135.255,vds64.com,http://vds64.com/
 194.30.168.0,194.30.168.255,smart-hosting.ro,http://smart-hosting.ro/
 194.30.189.0,194.30.189.255,NetBenefit,http://www.netbenefit.com/
+194.32.146.0,194.32.146.255,Obe Hosting,https://www.obehosting.com/
 194.34.128.0,194.34.131.255,CoreIP Solutions,http://www.coreipsolutions.com/
 194.34.132.0,194.34.134.255,Creanova Hosting Solutions Ltd,https://creanova.org/
 194.54.88.0,194.54.91.255,hosting.ua,http://hosting.ua/
@@ -2951,6 +2974,7 @@
 196.196.192.0,196.196.199.255,Packet Exchange,https://packetexchange.eu/
 196.196.200.0,196.196.207.255,Fiber Grid Inc,http://www.fibergrid.net
 196.196.240.0,196.196.247.255,Green Bei LImited,http://greenbei.com/
+196.240.54.0,196.240.54.255,Fiber Grid Inc,http://www.fibergrid.net
 196.247.56.0,196.247.59.255,Fiber Grid Inc,http://www.fibergrid.net
 198.7.56.0,198.7.63.255,Leaseweb,http://www.leaseweb.com/
 198.8.80.0,198.8.95.255,colo@,http://coloat.com/
@@ -3678,6 +3702,7 @@
 217.118.16.0,217.118.31.255,plusserver.de,http://plusserver.de/
 217.118.128.0,217.118.143.255,rapidhost.co.uk,http://rapidhost.co.uk/
 217.118.226.32,217.118.226.63,Akamai,http://akamai.com/
+217.138.0.0,217.138.255.255,M247,https://www.m247.com/
 217.147.29.0,217.147.30.255,nthost.ru,http://nthost.ru/
 217.147.80.0,217.147.95.255,iomart Hosting Ltd,http://www.rapidswitch.com/
 217.148.178.128,217.148.178.191,serverboost.nl,http://serverboost.nl/
@@ -3695,6 +3720,7 @@
 217.198.128.0,217.198.143.255,LINK11 Gmbh,http://www.link11.de/
 217.199.160.0,217.199.191.255,Webfusion,http://www.webfusion.com/
 219.94.128.0,219.94.255.255,Sakura Internet,http://www.sakura.ne.jp/
+219.100.36.0,219.100.39.255,SoftEther VPN,https://www.softether.org/
 220.158.196.0,220.158.196.255,Trabia Network,https://www.trabia.com/
 221.121.128.0,221.121.159.255,Servers Australia,http://serversaustralia.com.au/
 221.132.16.0,221.132.39.255,Superdata,http://superdata.vn/
