@@ -4896,7 +4896,7 @@ let BattleMovedex = {
 		onHit(target, source) {
 			let oldAbility = target.setAbility(source.ability);
 			if (oldAbility) {
-				this.add('-ability', target, this.dex.getAbility(target.ability).name, '[from] move: Entrainment');
+				this.add('-ability', target, target.getAbility().name, '[from] move: Entrainment');
 				return;
 			}
 			return false;
@@ -6568,7 +6568,7 @@ let BattleMovedex = {
 			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.js
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
-				this.singleEvent('End', this.dex.getAbility(pokemon.ability), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
+				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
 			},
 		},
 		secondary: null,
@@ -15686,7 +15686,7 @@ let BattleMovedex = {
 		onHit(target, source) {
 			let oldAbility = source.setAbility(target.ability);
 			if (oldAbility) {
-				this.add('-ability', source, this.dex.getAbility(source.ability).name, '[from] move: Role Play', '[of] ' + target);
+				this.add('-ability', source, source.getAbility().name, '[from] move: Role Play', '[of] ' + target);
 				return;
 			}
 			return false;
@@ -16891,8 +16891,8 @@ let BattleMovedex = {
 			}
 		},
 		onHit(target, source, move) {
-			let targetAbility = this.dex.getAbility(target.ability);
-			let sourceAbility = this.dex.getAbility(source.ability);
+			let targetAbility = target.getAbility();
+			let sourceAbility = source.getAbility();
 			if (target.side === source.side) {
 				this.add('-activate', source, 'move: Skill Swap', '', '', '[of] ' + target);
 			} else {

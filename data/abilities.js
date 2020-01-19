@@ -1766,7 +1766,7 @@ let BattleAbilities = {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else if (target.hasAbility(['Inner Focus', 'Oblivious', 'Own Tempo', 'Scrappy'])) {
-					this.add('-immune', target, `[from] ability: ${this.dex.getAbility(target.ability).name}`);
+					this.add('-immune', target, `[from] ability: ${target.getAbility().name}`);
 				} else {
 					this.boost({atk: -1}, target, pokemon, null, true);
 				}
@@ -2482,7 +2482,7 @@ let BattleAbilities = {
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon !== source) {
 					// Will be suppressed by Pokemon#ignoringAbility if needed
-					this.singleEvent('Start', this.dex.getAbility(pokemon.ability), pokemon.abilityData, pokemon);
+					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
 				}
 			}
 		},
@@ -2847,7 +2847,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon copies the Ability of an ally that faints.",
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
-			let ability = this.dex.getAbility(target.ability);
+			let ability = target.getAbility();
 			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode'];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
@@ -3075,7 +3075,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon copies the Ability of an ally that faints.",
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
-			let ability = this.dex.getAbility(target.ability);
+			let ability = target.getAbility();
 			let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode'];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
@@ -4283,7 +4283,7 @@ let BattleAbilities = {
 				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 				let target = possibleTargets[rand];
-				let ability = this.dex.getAbility(target.ability);
+				let ability = target.getAbility();
 				let bannedAbilities = ['noability', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode'];
 				if (bannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
