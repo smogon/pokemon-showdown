@@ -1300,7 +1300,7 @@ export class Battle {
 			}
 			this.runEvent('SwitchOut', oldActive);
 			oldActive.illusion = null;
-			this.singleEvent('End', this.dex.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
+			this.singleEvent('End', oldActive.getAbility(), oldActive.abilityData, oldActive);
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.usedItemThisTurn = false;
@@ -2306,7 +2306,7 @@ export class Battle {
 				this.add('faint', pokemon);
 				pokemon.side.pokemonLeft--;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
-				this.singleEvent('End', this.dex.getAbility(pokemon.ability), pokemon.abilityData, pokemon);
+				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityData, pokemon);
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;
 				pokemon.illusion = null;
@@ -2702,7 +2702,7 @@ export class Battle {
 			}
 			if (action.pokemon.hp) {
 				action.pokemon.illusion = null;
-				this.singleEvent('End', this.dex.getAbility(action.pokemon.ability), action.pokemon.abilityData, action.pokemon);
+				this.singleEvent('End', action.pokemon.getAbility(), action.pokemon.abilityData, action.pokemon);
 			} else if (!action.pokemon.fainted) {
 				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
