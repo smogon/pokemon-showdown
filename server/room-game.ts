@@ -77,7 +77,7 @@ export class RoomGamePlayer {
  */
 export class RoomGame {
 	readonly roomid: RoomID;
-	readonly room: ChatRoom | GameRoom;
+	room: ChatRoom | GameRoom;
 	gameid: ID;
 	title: string;
 	allowRenames: boolean;
