@@ -523,8 +523,7 @@ let BattleMovedex = {
 					// it failed
 					this.add('-fail', source);
 					this.attrLastMove('[still]');
-					delete target.volatiles['encore'];
-					return;
+					return false;
 				}
 				this.effectData.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
@@ -539,8 +538,7 @@ let BattleMovedex = {
 			onResidual(target) {
 				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
 					// early termination if you run out of PP
-					delete target.volatiles.encore;
-					this.add('-end', target, 'Encore');
+					target.removeVolatile('encore');
 				}
 			},
 			onEnd(target) {
