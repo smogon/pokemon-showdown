@@ -1455,6 +1455,7 @@ exports.commands = {
 
 			for (let userid in targetRoom.users) {
 				let user = targetRoom.users[userid];
+				if (!user.named) continue;
 				let userinfo = user.getIdentity(targetRoom.roomid);
 				roominfo.users.push(userinfo);
 			}
