@@ -19359,13 +19359,10 @@ let BattleMovedex = {
 				this.add('-start', pokemon, 'Tar Shot');
 			},
 			onEffectiveness(typeMod, target, type, move) {
-				if (move.type !== 'Fire') return;
-				if (!target || !target.volatiles['tarshot']) return;
-				return typeMod + 1;
-			},
-			onResidualOrder: 21,
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Tar Shot');
+				if (!target) return;
+				if (move.type === 'Fire') {
+					return this.dex.getEffectiveness('Fire', target) + 1;
+				}
 			},
 		},
 		secondary: null,
