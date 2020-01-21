@@ -98,4 +98,23 @@ describe('Endless Battle Clause (slow)', () => {
 		assert(battle.ended);
 		assert(battle.winner === 'Player 2');
 	});
+
+	it('should allow for a maximum of 1000 turns', function () {
+		this.timeout(0);
+		battle = common.createBattle({endlessBattleClause: true});
+		battle.setPlayer('p1', {team: [
+			{species: "Gengar", moves: ['splash']},
+			{species: "Clefable", moves: ['splash']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: "Blissey", moves: ['splash']},
+			{species: "Vaporeon", moves: ['splash']},
+		]});
+		for (let i = 0; i < 999; i++) {
+			battle.makeChoices('switch 2', 'switch 2');
+		}
+		assert(!battle.ended);
+		battle.makeChoices('switch 2', 'switch 2');
+		assert(battle.ended);
+	});
 });
