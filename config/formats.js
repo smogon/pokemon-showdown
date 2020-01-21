@@ -222,7 +222,7 @@ let Formats = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles'],
+		ruleset: ['Standard Doubles', 'GravSleep Clause'],
 		banlist: ['DUber'],
 	},
 	{
@@ -1330,8 +1330,8 @@ let Formats = [
 
 		mod: 'gen7',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles', 'Swagger Clause'],
-		banlist: ['DUber', 'Power Construct', 'Eevium Z', 'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
+		ruleset: ['Standard Doubles', 'Swagger Clause', 'GravSleep Clause'],
+		banlist: ['DUber', 'Power Construct', 'Eevium Z', 'Dark Void'],
 	},
 	{
 		name: "[Gen 7] Doubles UU",
@@ -1639,8 +1639,8 @@ let Formats = [
 		mod: 'gen6',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard Doubles', 'Swagger Clause'],
-		banlist: ['DUber', 'Soul Dew', 'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
+		ruleset: ['Standard Doubles', 'Swagger Clause', 'GravSleep Clause'],
+		banlist: ['DUber', 'Soul Dew', 'Dark Void'],
 	},
 	{
 		name: "[Gen 6] VGC 2016",

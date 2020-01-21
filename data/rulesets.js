@@ -444,6 +444,38 @@ let BattleFormats = {
 			this.add('rule', 'Accuracy Moves Clause: Accuracy-lowering moves are banned');
 		},
 	},
+	gravsleepclause: {
+		effectType: 'ValidatorRule',
+		name: 'GravSleep Clause',
+		desc: "Bans the combination of Gravity and Orbeetle-Gmax with sleep-inducing moves with imperfect accuracy",
+		onBegin() {
+			this.add('rule', 'GravSleep Clause: Sleep-inducing moves with imperfect accuracy are banned with Gravity and Orbeetle-Gmax');
+		},
+		onValidateTeam(team) {
+			let hasGravity = 0;
+			let hasSleep = 0;
+			let moves = [];
+			let isOrbeetle = false;
+			for (const set of team) {
+				if (set.moves) {
+					for (const id of set.moves) {
+						let move = this.dex.getMove(id);
+						if (move.status && move.status === 'slp' && move.accuracy < 100) {
+							hasSleep++;
+							moves.push(move.name);
+						}
+						if (move.id === 'gravity' || set.species === 'Orbeetle-Gmax') {
+							hasGravity++;
+							if (set.species === 'Orbeetle-Gmax') isOrbeetle = true;
+						}
+					}
+				}
+			}
+			if (hasGravity > 0 && hasSleep > 0) {
+				return [`Your team has the combination of ${isOrbeetle ? 'Orbeetle-Gmax' : 'Gravity'} and ${moves.join(' and ')}, which is banned by GravSleep Clause.`];
+			}
+		},
+	},
 	sleepmovesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Sleep Moves Clause',
