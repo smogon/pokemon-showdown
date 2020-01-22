@@ -27,6 +27,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
+		let rejectedPool = [];
 		/**@type {string[]} */
 		let moves = [];
 		let ability = '';
@@ -99,6 +100,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 				} else {
 					hasMove[moveid] = true;
 				}
+				moves.push(moveid);
+			}
+			while (moves.length < 4 && rejectedPool.length) {
+				let moveid = this.sampleNoReplace(rejectedPool);
+				hasMove[moveid] = true;
 				moves.push(moveid);
 			}
 
@@ -321,10 +327,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 				// This move doesn't satisfy our setup requirements:
 				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
 					// Reject STABs last in case the setup type changes later on
-					if (!SetupException.includes(moveid) && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
+					// @ts-ignore
+					let stabs = counter[template.types[0]] + (counter[template.types[1]] || 0);
+					if (!SetupException.includes(moveid) && (!hasType[move.type] || stabs > 1 || counter[move.category] < 2)) rejected = true;
 				}
 				// @ts-ignore
-				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass'] && moveid !== 'rest' && moveid !== 'sleeptalk') {
+				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass'] && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'sleeptalk') {
 					// Mono-attacking with setup and RestTalk is allowed
 					// Reject Status moves only if there is nothing else to reject
 					// @ts-ignore
@@ -338,8 +346,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				// @ts-ignore
 				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)) &&
-					((counter.damagingMoves.length === 0 && !hasMove['metalburst']) ||
-					(!counter.stab && (template.types.length > 1 || (template.types[0] !== 'Normal' && template.types[0] !== 'Psychic') || !hasMove['icebeam'] || template.baseStats.spa >= template.baseStats.spd) && (!!counter['physicalpool'] || !!counter['specialpool'])) ||
+					((!counter.stab && !counter['damage'] && (template.types.length > 1 || (template.types[0] !== 'Normal' && template.types[0] !== 'Psychic') || !hasMove['icebeam'] || template.baseStats.spa >= template.baseStats.spd)) ||
 					(hasType['Dark'] && !counter['Dark']) ||
 					(hasType['Dragon'] && !counter['Dragon']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
@@ -357,10 +364,10 @@ class RandomGen5Teams extends RandomGen6Teams {
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
-					(!counter.recovery && (movePool.includes('softboiled') || template.nfe && !!counter['Status'] && (movePool.includes('recover') || movePool.includes('roost')))) ||
+					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')) && (counter.Status > 1 || (template.nfe && !!counter['Status']))) ||
 					(template.requiredMove && movePool.includes(toID(template.requiredMove)))))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && !move.damage && !move.heal && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
+					if (!isSetup && !move.weather && !move.damage && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'judgment' && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
 					}
 				}
@@ -379,6 +386,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 				// Remove rejected moves from the move list
 				if (rejected && (movePool.length - availableHP || availableHP && (moveid === 'hiddenpower' || !hasMove['hiddenpower']))) {
+					if (move.category !== 'Status' && !move.damage && !move.flags.charge && (moveid !== 'hiddenpower' || !availableHP)) rejectedPool.push(moves[i]);
+					moves.splice(i, 1);
+					break;
+				}
+				if (rejected && rejectedPool.length) {
 					moves.splice(i, 1);
 					break;
 				}
@@ -392,7 +404,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 					}
 				}
 			}
-		} while (moves.length < 4 && movePool.length);
+		} while (moves.length < 4 && (movePool.length || rejectedPool.length));
 
 		// If Hidden Power has been removed, reset the IVs
 		if (!hasMove['hiddenpower']) {
@@ -477,9 +489,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 				}
 
 				if (rejectAbility) {
-					if (ability === ability0.name && ability1.rating > 1) {
+					if (ability === ability0.name && ability1.rating >= 1) {
 						ability = ability1.name;
-					} else if (ability === ability1.name && abilities[2] && ability2.rating > 1) {
+					} else if (ability === ability1.name && abilities[2] && ability2.rating >= 1) {
 						ability = ability2.name;
 					} else {
 						// Default to the highest rated ability if all are rejected
@@ -628,7 +640,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		// @ts-ignore
 		let level = levelScale[template.tier] || 80;
 		// @ts-ignore
-		if (customScale[template.name]) level = customScale[template.name];
+		if (customScale[species]) level = customScale[species];
 
 		// Minimize confusion damage
 		if (!counter['Physical'] && !hasMove['transform']) {
@@ -636,7 +648,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			ivs.atk = hasMove['hiddenpower'] ? ivs.atk - 28 : 0;
 		}
 
-		if (hasMove['gyroball'] || hasMove['trickroom']) {
+		if (hasMove['gyroball'] || hasMove['metalburst'] || hasMove['trickroom']) {
 			evs.spe = 0;
 			ivs.spe = hasMove['hiddenpower'] ? ivs.spe - 28 : 0;
 		}
