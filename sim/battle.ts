@@ -604,6 +604,10 @@ export class Battle {
 		if (!target) target = this;
 		let effectSource = null;
 		if (source instanceof Pokemon) effectSource = source;
+		if (eventid === 'TakeItem' && source && source.ability === 'pickpocket' && !source.item && target && target.item && target.item === 'ejectbutton') {
+			// fail pickpocket against ejectbutton
+			return false;
+		}
 		const handlers = this.findEventHandlers(target, eventid, effectSource);
 		if (eventid === 'Invulnerability' || eventid === 'TryHit' || eventid === 'AfterDamage') {
 			handlers.sort(Battle.compareLeftToRightOrder);
