@@ -67,7 +67,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard Doubles',
 		desc: "The standard ruleset for all official Smogon doubles tiers",
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	standardnatdex: {
 		effectType: 'ValidatorRule',
@@ -461,6 +461,18 @@ let BattleFormats = {
 				}
 			}
 			return problems;
+		},
+	},
+	gravitysleepclause: {
+		effectType: 'ValidatorRule',
+		name: 'Gravity Sleep Clause',
+		desc: "Bans sleep moves below 100% accuracy, in conjunction with Gravity or Gigantamax Orbeetle",
+		banlist: [
+			'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
+			'Orbeetle-Gmax ++ Grass Whistle', 'Orbeetle-Gmax ++ Hypnosis', 'Orbeetle-Gmax ++ Lovely Kiss', 'Orbeetle-Gmax ++ Sing', 'Orbeetle-Gmax ++ Sleep Powder',
+		],
+		onBegin() {
+			this.add('rule', 'Gravity Sleep Clause: The combination of sleep-inducing moves with imperfect accuracy and Gravity or Gigantamax Orbeetle are banned');
 		},
 	},
 	endlessbattleclause: {
