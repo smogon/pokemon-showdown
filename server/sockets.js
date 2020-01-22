@@ -456,6 +456,45 @@ if (cluster.isMaster) {
 		return message.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
 	};
 
+	// Clean up any open connections when exiting gracefully. While exiting a
+	// process closes does call close(3) any sockets it has allocated,
+	// depending on the platform, TCP sockets may not have shutdown(3) closed
+	// on them beforehand. If this cleanup isn't done, it's possible for
+	// sockets on the client end to wind up in a TCP CLOSE_WAIT state until the
+	// connection times out, meaning the client won't get notified that the
+	// connection was closed immediately when the worker process exits.
+	let exiting = false;
+	/**
+	 * @param {number} signal
+	 * @return {() => void}
+	 */
+	const cleanupOnSignal = signal => () => {
+		if (exiting) return;
+		exiting = true;
+
+		for (const socket of sockets.values()) {
+			try {
+				socket.end();
+			} catch (e) {
+				socket.destroy();
+			}
+			// Socket state cleanup happens in the socket's close event
+			// handler.
+		}
+
+		if (appssl) {
+			// @ts-ignore
+			app.once('close', () => appssl.close());
+			appssl.once('close', () => process.exit(signal));
+		} else {
+			app.once('close', () => process.exit(signal));
+		}
+		app.close();
+	};
+	process.once('disconnect', cleanupOnSignal(0));
+	process.once('SIGINT', cleanupOnSignal(2));
+	process.once('SIGTERM', cleanupOnSignal(15));
+
 	process.on('message', data => {
 		// console.log('worker received: ' + data);
 		/** @type {import('sockjs').Connection | undefined?} */
@@ -592,29 +631,6 @@ if (cluster.isMaster) {
 		}
 	});
 
-	// Clean up any remaining connections on disconnect. If this isn't done,
-	// the process will not exit until any remaining connections have been destroyed.
-	// Afterwards, the worker process will die on its own.
-	const cleanup = () => {
-		for (const socket of sockets.values()) {
-			try {
-				socket.destroy();
-			} catch (e) {}
-		}
-		sockets.clear();
-		rooms.clear();
-		roomChannels.clear();
-
-		app.close();
-		if (appssl) appssl.close();
-
-		// Let the server(s) finish closing.
-		setImmediate(() => process.exit(0));
-	};
-
-	process.once('disconnect', cleanup);
-	process.once('exit', cleanup);
-
 	// this is global so it can be hotpatched if necessary
 	let isTrustedProxyIp = Config.proxyip ? IPTools.checker(Config.proxyip) : () => false;
 	let socketCounter = 0;
@@ -622,13 +638,20 @@ if (cluster.isMaster) {
 		// For reasons that are not entirely clear, SockJS sometimes triggers
 		// this event with a null `socket` argument.
 		if (!socket) return;
-
 		if (!socket.remoteAddress) {
-			// SockJS sometimes fails to be able to cache the IP, port, and
-			// address from connection request headers.
+			// The connection was closed before it even managed to end up here.
 			try {
 				socket.destroy();
 			} catch (e) {}
+			return;
+		}
+
+		if (exiting) {
+			try {
+				socket.end();
+			} catch (e) {
+				socket.destroy();
+			}
 			return;
 		}
 
@@ -653,6 +676,7 @@ if (cluster.isMaster) {
 		process.send(`*${socketid}\n${socketip}\n${socket.protocol}`);
 
 		socket.on('data', message => {
+			if (exiting) return;
 			// drop empty messages (DDoS?)
 			if (!message) return;
 			// drop messages over 100KB
@@ -672,10 +696,25 @@ if (cluster.isMaster) {
 		});
 
 		socket.once('close', () => {
-			// @ts-ignore
-			process.send(`!${socketid}`);
+			if (!exiting) {
+				// @ts-ignore
+				process.send(`!${socketid}`);
+				return;
+			}
+
+			// Clean up socket state manually if this event is emitted while
+			// the worker process is exiting, since we never notify the parent
+			// process that the connection has closed when this is the case.
 			sockets.delete(socketid);
-			for (const room of rooms.values()) room.delete(socketid);
+			for (const [roomid, room] of rooms) {
+				room.delete(socketid);
+				const roomChannel = roomChannels.get(roomid);
+				if (roomChannel) roomChannel.delete(socketid);
+				if (!room.size) {
+					rooms.delete(roomid);
+					if (roomChannel) roomChannels.delete(roomid);
+				}
+			}
 		});
 	});
 	server.installHandlers(app, {});
