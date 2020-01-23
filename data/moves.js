@@ -11256,7 +11256,7 @@ let BattleMovedex = {
 		contestType: "Cool",
 	},
 	"maxdarkness": {
-		num: 766,
+		num: 772,
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
@@ -11686,7 +11686,7 @@ let BattleMovedex = {
 		contestType: "Cool",
 	},
 	"maxwyrmwind": {
-		num: 760,
+		num: 768,
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
