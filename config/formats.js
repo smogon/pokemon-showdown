@@ -699,7 +699,8 @@ let Formats = [
 		ruleset: ['Standard Pet Mod'],
 		unbanlist: [
 			'Crobat', 'Dragalge', 'Dugtrio-Alola', 'Farfetch\'d', 'Galvantula', 'Heracross-Base', 'Kyurem-Base', 'Ludicolo', 'Magearna-Base',
-			'Malamar', 'Ninetales-Base', 'Pupitar', 'Purugly', 'Rotom-Base', 'Rotom-Mow', 'Rotom-Wash', 'Torterra', 'Type: Null', 'Umbreon', 'Wailord',
+			'Malamar', 'Ninetales-Base', 'Pupitar', 'Purugly', 'Rotom-Base', 'Rotom-Mow', 'Rotom-Wash', 'Torterra', 'Type: Null', 'Umbreon',
+			'Wailord', 'Rotom-Heat',
 		],
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
