@@ -141,6 +141,9 @@ let Formats = [
 		},
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Endless Battle Clause'],
 		banlist: ['Eternatus', 'Sableye', 'Zacian', 'Zamazenta', 'Focus Sash', 'Perish Song'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen81v1') this.add('html', `<div class="broadcast-red"><strong>1v1 is currently suspecting Mew! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3659304/">suspect thread</a>.</strong></div>`);
+		},
 	},
 	{
 		name: "[Gen 8] CAP",
@@ -463,9 +466,6 @@ let Formats = [
 			'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Libero', 'Magnet Pull', 'Moody',
 			'Neutralizing Gas', 'Parental Bond', 'Protean', 'Psychic Surge', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8balancedhackmons') this.add('html', `<div class="broadcast-red"><strong>Balanced Hackmons is currently suspecting Shedinja! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3658789/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 8] Mix and Mega",
