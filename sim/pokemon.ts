@@ -1446,6 +1446,7 @@ export class Pokemon {
 			if (source && toID(source.ability) === 'multitype') return false;
 		}
 		const item = this.getItem();
+		if (source.ability === 'pickpocket' && item && item === 'ejectbutton') return false;
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';
 			this.itemData = {id: '', target: this};
