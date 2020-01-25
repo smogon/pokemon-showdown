@@ -147,9 +147,8 @@ describe('Rooms features', function () {
 			});
 
 			it("should move the users and their connections", async function () {
-				const user = new User();
-				user.forceRename("jetou");
 				room = Rooms.createChatRoom("test", "Test");
+				const user = new User();
 				user.joinRoom(room);
 				await room.rename("Test2");
 				assert.strictEqual(user.inRooms.has("test"), false);
@@ -169,7 +168,7 @@ describe('Rooms features', function () {
 			it("should rename their subrooms parent reference", async function () {
 				parent = Rooms.createChatRoom("parent", "Parent");
 				subroom = Rooms.createChatRoom("subroom", "Subroom", {parentid: "parent"});
-				await parent.rename("TheSubroom");
+				await parent.rename("TheParent");
 				assert.strictEqual(subroom.parent, parent);
 			});
 		});

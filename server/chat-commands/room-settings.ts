@@ -768,7 +768,7 @@ export const commands: ChatCommands = {
 			return this.errorReply("Battle rooms cannot be renamed.");
 		}
 
-		const roomid = toID(target);
+		const roomid = toID(target) as RoomID;
 		const roomtitle = target;
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol

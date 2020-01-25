@@ -1345,10 +1345,13 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.game && this.game.onLeave) this.game.onLeave(user);
 		return true;
 	}
-	async rename(newTitle: string) {
+	/**
+	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
+	 */
+	async rename(newTitle: string, newID?: RoomID) {
+		if (!newID) newID = toID(newTitle) as RoomID;
 		if (this.game || this.tour) return;
 
-		const newID = toID(newTitle) as RoomID;
 		const oldID = this.roomid;
 		this.roomid = newID;
 		this.title = newTitle;
@@ -1364,7 +1367,7 @@ export class BasicChatRoom extends BasicRoom {
 				Sockets.roomRemove(connection.worker, oldID, connection.socketid);
 				Sockets.roomAdd(connection.worker, newID, connection.socketid);
 			}
-			user.send(`>${oldID}\n|noinit|rename|${newTitle}`);
+			user.send(`>${oldID}\n|noinit|rename|${newTitle}|${newID}`);
 		}
 
 		if (this.parent && this.parent.subRooms) {
