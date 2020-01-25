@@ -305,6 +305,10 @@ export abstract class BasicRoom {
 		}
 		if (this.parent) return this.parent.getMuteTime(user);
 	}
+	getGame<T extends RoomGame>(constructor: new (...args: any[]) => T): T | null {
+		if (this.game && this.game.constructor.prototype.gameid === constructor.prototype.gameid) return this.game as T;
+		return null;
+	}
 	/**
 	 * Gets the group symbol of a user in the room.
 	 */
