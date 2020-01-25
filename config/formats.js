@@ -466,33 +466,6 @@ let Formats = [
 		onBegin() {
 			if (this.rated && this.format.id === 'gen8balancedhackmons') this.add('html', `<div class="broadcast-red"><strong>Balanced Hackmons is currently suspecting Shedinja! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3658789/">suspect thread</a>.</strong></div>`);
 		},
-		onChangeSet(set) {
-			const item = toID(set.item);
-			if (set.species === 'Zacian' || set.species === 'Zacian-Crowned') {
-				if (item === 'rustedsword') {
-					set.species = 'Zacian-Crowned';
-					set.ability = 'Intrepid Sword';
-					let ironHead = set.moves.indexOf('ironhead');
-					if (ironHead >= 0) {
-						set.moves[ironHead] = 'behemothblade';
-					}
-				} else {
-					set.species = 'Zacian';
-				}
-			}
-			if (set.species === 'Zamazenta' || set.species === 'Zamazenta-Crowned') {
-				if (item === 'rustedshield') {
-					set.species = 'Zamazenta-Crowned';
-					set.ability = 'Dauntless Shield';
-					let ironHead = set.moves.indexOf('ironhead');
-					if (ironHead >= 0) {
-						set.moves[ironHead] = 'behemothbash';
-					}
-				} else {
-					set.species = 'Zamazenta';
-				}
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Mix and Mega",
