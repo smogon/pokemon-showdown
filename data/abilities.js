@@ -2697,7 +2697,7 @@ let BattleAbilities = {
 					return;
 				}
 				let yourItem = source.takeItem(target);
-				if (!yourItem) {
+				if (!yourItem || yourItem.id === 'ejectbutton') {
 					return;
 				}
 				if (!target.setItem(yourItem)) {
