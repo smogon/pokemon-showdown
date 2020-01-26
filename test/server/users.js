@@ -46,26 +46,34 @@ describe('Users features', function () {
 			});
 
 			describe('#joinRoom', function () {
+				let room;
 				beforeEach(function () {
 					this.connection = new Connection('127.0.0.1');
 				});
 
 				afterEach(function () {
 					this.connection.destroy();
+					if (room) room.destroy();
 				});
 
 				it('should join a room if not already present', function () {
-					this.connection.joinRoom(Rooms.lobby);
-					assert.ok(this.connection.inRooms.has('lobby'));
+					room = Rooms.createChatRoom('test');
+					this.connection.joinRoom(Rooms.get('test'));
+					assert.ok(this.connection.inRooms.has('test'));
 				});
 			});
 
 			describe('#leaveRoom', function () {
+				let room;
+				afterEach(function () {
+					if (room) room.destroy();
+				});
 				it('should leave a room that is present', function () {
 					this.connection = new Connection('127.0.0.1');
-					this.connection.joinRoom(Rooms.lobby);
-					this.connection.leaveRoom(Rooms.lobby);
-					assert.ok(!this.connection.inRooms.has('lobby'));
+					room = Rooms.createChatRoom('test');
+					this.connection.joinRoom(room);
+					this.connection.leaveRoom(room);
+					assert.ok(!this.connection.inRooms.has('test'));
 				});
 			});
 		});
@@ -139,10 +147,14 @@ describe('Users features', function () {
 			});
 
 			describe('#can', function () {
+				let room;
 				afterEach(function () {
 					for (const user of Users.users.values()) {
 						user.disconnectAll();
 						user.destroy();
+					}
+					if (room) {
+						if (room) room.destroy();
 					}
 				});
 				it(`should allow 's' permissions only on self`, function () {
@@ -172,7 +184,7 @@ describe('Users features', function () {
 					assert.strictEqual(user.can('promote', target), false, 'targeting higher rank');
 				});
 				it(`should not allow users to demote themselves`, function () {
-					const room = Rooms.lobby;
+					room = Rooms.createChatRoom("test");
 					if (!room.auth) room.auth = {};
 					const user = new User();
 					user.forceRename("User", true);
