@@ -412,6 +412,7 @@
 43.245.160.0,43.245.163.255,Intergrid,https://intergrid.com.au/
 43.245.164.0,43.245.164.255,Virtual Data Centre,http://www.virtual-dc.com.au/
 43.249.38.0,43.249.39.255,Leaseweb,https://www.leaseweb.com/
+45.9.236.0,45.9.239.255,Deltahost,http://deltahost.com.ua/
 45.9.248.0,45.9.248.255,M247,http://www.m247.com/
 45.9.249.0,45.9.249.255,M247,http://www.m247.com/
 45.9.250.0,45.9.250.255,M247,http://www.m247.com/
@@ -1199,6 +1200,7 @@
 80.93.160.0,80.93.175.255,host-it.co.uk,http://www.host-it.co.uk/
 80.94.128.0,80.94.143.255,ConnectingBytse Gbmh,http://www.connectingbytes.de/
 80.95.144.0,80.95.159.255,LINK11 Gmbh,http://www.link11.de/
+80.179.42.0,80.179.42.63,HQServ Networks,https://www.hqserv.co.il/
 80.190.0.0,80.190.255.255,IP Exchange GmbH,http://www.ip-exchange.de/
 80.237.128.0,80.237.255.255,Host Europe,http://www.hosteurope.de/
 80.243.176.0,80.243.191.255,Redstation Limited,http://redstation.com/
@@ -1373,6 +1375,7 @@
 89.36.224.0,89.36.224.127,M247,http://www.m247.com/
 89.36.224.128,89.36.224.255,M247,http://www.m247.com/
 89.39.107.0,89.39.107.255,WorldStream Dedicated Servers,https://www.worldstream.nl/
+89.40.71.0,89.40.71.127,M247,http://www.m247.com/
 89.45.192.0,89.45.199.255,xservers.ro,http://www.xservers.ro/
 89.47.16.0,89.47.31.255,everhost.ro,http://everhost.ro/
 89.106.0.0,89.106.31.255,Grid Telekom,http://grid.com.tr/
@@ -1496,6 +1499,7 @@
 91.234.22.0,91.234.22.255,T-N Media,http://t-n-media.de/
 91.235.142.0,91.235.143.255,Virtual Systems,https://vsys.host/
 91.237.52.0,91.237.52.255,Biznes-Host.pl,http://biznes-host.pl/
+91.239.206.0,91.239.207.255,Pro-Service,https://proservice.ge/
 91.239.232.0,91.239.235.255,hostpro.ua,http://hostpro.ua/
 91.241.60.0,91.241.63.255,kylos.pl,http://www.kylos.pl/
 91.250.80.0,91.250.87.255,Host Europe,http://www.hosteurope.de/
@@ -1677,10 +1681,12 @@
 103.3.164.0,103.3.167.255,ReadySpace,http://www.readyspace.com.sg/en/
 103.3.172.0,103.3.175.255,IP ServerOne,http://ipserverone.com/
 103.4.8.0,103.4.15.255,Amazon AWS,http://www.amazon.com/aws/
+103.4.28.0,103.4.31.255,Gigabit Hosting,https://thegigabit.com/
 103.4.112.0,103.4.113.255,Datapipe,http://www.datapipe.com/
 103.5.12.0,103.5.13.255,OVH,http://www.ovh.co.uk/
 103.6.192.0,103.6.195.255,easyhost.com.hk,http://easyhost.com.hk/
 103.8.124.0,103.8.127.255,CtrlS,http://www.ctrls.in/
+103.9.76.0,103.9.79.255,vinahost,https://vinahost.vn/
 103.10.197.0,103.10.197.255,Leaseweb,http://leaseweb.com/
 103.11.152.0,103.11.155.255,Web Werks,http://www.web-werks.com/
 103.11.244.0,103.11.247.255,easyhost.com.hk,http://easyhost.com.hk/
@@ -1920,6 +1926,7 @@
 121.52.192.0,121.52.199.255,Conetix,http://conetix.com.au/
 121.78.0.0,121.78.255.255,kinx.net,http://idc.kinx.net/
 122.49.64.0,122.49.127.255,kinx.net,http://idc.kinx.net/
+122.155.160.0,122.155.191.255,CAT data center,http://idc.cattelecom.com/
 122.200.132.0,122.200.135.255,Datapipe,http://www.datapipe.com/
 122.248.192.0,122.248.255.255,Amazon AWS,http://www.amazon.com/aws/
 122.252.32.0,122.252.63.255,Akamai,http://akamai.com/
@@ -1962,6 +1969,7 @@
 138.91.112.0,138.91.129.79,Microsoft Azure,http://www.windowsazure.com/en-us/
 138.91.136.0,138.91.199.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 138.91.224.0,138.91.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
+139.5.176.0,139.5.179.255,Gigabit Hosting,https://thegigabit.com/
 139.28.216.0,139.28.216.255,M247,https://www.m247.com/
 139.28.217.0,139.28.217.255,M247,https://www.m247.com/
 139.28.218.0,139.28.218.255,M247,https://www.m247.com/
@@ -1972,6 +1980,10 @@
 139.59.0.0,139.59.255.255,DigitalOcean AP,https://www.digitalocean.com/
 141.0.8.0,141.0.11.255,Opera Mini Proxy,https://www.opera.com/
 141.0.160.0,141.0.167.255,NuFuture Ltd,http://www.nublue.co.uk/
+141.98.100.0,141.98.100.255,M247,http://www.m247.com/
+141.98.101.0,141.98.101.255,M247,http://www.m247.com/
+141.98.102.0,141.98.102.255,M247,http://www.m247.com/
+141.98.103.0,141.98.103.255,M247,http://www.m247.com/
 141.101.64.0,141.101.127.255,CloudFlare Inc,https://www.cloudflare.com/
 141.105.64.0,141.105.71.255,HostKey,http://www.hostkey.com/
 141.138.136.0,141.138.143.255,transip,https://www.transip.nl/
@@ -2456,6 +2468,7 @@
 185.62.190.0,185.62.191.255,BlazingFast,https://blazingfast.io/
 185.72.246.0,185.72.247.255,Dolorem Ipsum s.r.o,http://doip.cz
 185.73.240.0,185.73.240.255,SinaVPS,https://sinavps.ch/
+185.76.8.0,185.76.11.255,SuperHosting,https://www.superhosting.cz/
 185.114.20.0,185.114.23.255,Osbil Technology,http://www.yoncu.com/
 185.180.197.0,185.180.197.255,King Servers,https://www.king-servers.com/
 185.82.216.0,185.82.217.255,Sofia Data Center,http://sdc.bg/
@@ -2532,6 +2545,7 @@
 185.189.113.0,185.189.113.255,M247,https://www.m247.com/
 185.189.114.0,185.189.114.255,M247,https://www.m247.com/
 185.189.115.0,185.189.115.255,M247,https://www.m247.com/
+185.191.207.0,185.191.207.255,HQServ Networks,https://www.hqserv.co.il/
 185.192.68.0,185.192.70.255,Legaco Networks,http://legaconetworks.nl
 185.195.16.0,185.195.17.255,M247,https://www.m247.com/
 185.195.18.0,185.195.19.255,M247,https://www.m247.com/
@@ -2553,6 +2567,7 @@
 185.220.69.0,185.220.69.255,M247,https://www.m247.com/
 185.220.70.0,185.220.70.255,M247,https://www.m247.com/
 185.220.71.0,185.220.71.255,M247,https://www.m247.com/
+185.225.28.0,185.225.31.255,Teleks Dooel Skopje,http://teleks.mk/
 185.229.59.0,185.229.59.255,Nord VPN,https://nordvpn.com/
 185.230.124.0,185.230.124.255,M247,https://www.m247.com/
 185.230.125.0,185.230.125.255,M247,https://www.m247.com/
@@ -2929,6 +2944,7 @@
 196.196.200.0,196.196.207.255,Fiber Grid Inc,http://www.fibergrid.net
 196.196.240.0,196.196.247.255,Green Bei LImited,http://greenbei.com/
 196.240.54.0,196.240.54.255,Fiber Grid Inc,http://www.fibergrid.net
+196.245.148.0.196.245.151.255,Fiber Grid Inc,http://www.fibergrid.net
 196.247.56.0,196.247.59.255,Fiber Grid Inc,http://www.fibergrid.net
 198.7.56.0,198.7.63.255,Leaseweb,http://www.leaseweb.com/
 198.8.80.0,198.8.95.255,colo@,http://coloat.com/
@@ -3137,6 +3153,7 @@
 202.131.94.0,202.131.94.255,Dedicated Servers,http://dedicatedservers.net.au/
 202.157.128.0,202.157.191.255,webvisions.com,http://webvisions.com/
 202.168.208.0,202.168.215.255,Datapipe,http://www.datapipe.com/
+202.176.4.0,202.176.7.255,TeamCloud,https://www.teamcloud.my/
 203.19.59.0,203.19.59.255,Digital Pacific,http://www.digitalpacific.com.au/
 203.77.184.0,203.77.191.255,Limelight Networks Inc,http://www.limelight.com/
 203.84.240.0,203.84.255.255,kinx.net,http://idc.kinx.net/
