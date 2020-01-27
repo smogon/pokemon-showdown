@@ -5741,7 +5741,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	haxorus: {
-		randomBattleMoves: ["dragondance", "earthquake", "outrage", "poisonjab", "swordsdance", "taunt"],
+		randomBattleMoves: ["closecombat", "dragondance", "earthquake", "outrage", "poisonjab", "taunt"],
 		eventPokemon: [
 			{"generation": 5, "level": 59, "gender": "F", "nature": "Naive", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "isHidden": false, "abilities": ["moldbreaker"], "moves": ["earthquake", "dualchop", "xscissor", "dragondance"], "pokeball": "cherishball"},
 		],
@@ -7460,7 +7460,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	inteleon: {
-		randomBattleMoves: ["airslash", "darkpulse", "hydropump", "icebeam", "scald", "uturn"],
+		randomBattleMoves: ["airslash", "darkpulse", "hydropump", "icebeam", "scald", "snipeshot", "uturn"],
 		unreleasedHidden: true,
 		tier: "UU",
 		doublesTier: "DUU",
@@ -7612,7 +7612,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	cramorant: {
-		randomBattleMoves: ["defog", "hurricane", "icebeam", "roost", "surf"],
+		randomBattleMoves: ["defog", "hurricane", "roost", "superpower", "surf"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
