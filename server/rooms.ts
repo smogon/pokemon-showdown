@@ -1367,7 +1367,7 @@ export class BasicChatRoom extends BasicRoom {
 				Sockets.roomRemove(connection.worker, oldID, connection.socketid);
 				Sockets.roomAdd(connection.worker, newID, connection.socketid);
 			}
-			user.send(`>${oldID}\n|noinit|rename|${newTitle}|${newID}`);
+			user.send(`>${oldID}\n|noinit|rename|${newID}|${newTitle}`);
 		}
 
 		if (this.parent && this.parent.subRooms) {
