@@ -4455,7 +4455,8 @@ let BattleAbilities = {
 		desc: "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.",
 		shortDesc: "Exchanges abilities when hit with a contact move.",
 		onAfterDamage(damage, target, source, effect) {
-			if (!source || source.ability === 'wanderingspirit' || target.volatiles['dynamax']) return;
+			if (!source || source.ability === 'wanderingspirit') return;
+			if (target.volatiles['dynamax'] || target.ability === 'illusion' || target.ability === 'wonderguard') return;
 			if (effect && effect.effectType === 'Move' && effect.flags['contact']) {
 				let sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
