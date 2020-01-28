@@ -2531,13 +2531,27 @@ export class Battle {
 			chosenAction.pokemon.updateSpeed();
 		}
 		const action = this.resolveAction(chosenAction, midTurn);
+		let tieStart = -1, tieEnd = this.queue.length;
 		for (const [i, curAction] of this.queue.entries()) {
-			if (this.comparePriority(action, curAction) < 0) {
-				this.queue.splice(i, 0, action);
-				return;
+			const delta = this.comparePriority(action, curAction);
+			if (delta === 0 && tieStart === -1) {
+				tieStart = i; // Mark the index where the first tie occurs
+			} else if (delta < 0) {
+				if (tieStart === -1) {
+					this.queue.splice(i, 0, action);
+					return;
+				}
+				tieEnd = i; // Mark the index after the last tie occurs
+				break;
 			}
 		}
-		this.queue.push(action);
+		if (tieStart !== -1) {
+			// Shuffle all of the tied actions
+			this.queue.splice(tieStart, 0, action);
+			this.prng.shuffle(this.queue, tieStart, tieEnd + 1);
+		} else {
+			this.queue.push(action);
+		}
 	}
 
 	/**
