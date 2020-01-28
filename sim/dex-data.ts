@@ -411,6 +411,8 @@ export class Item extends BasicEffect implements Readonly<BasicEffect & ItemData
 	readonly isGem: boolean;
 	/** Is this item a Pokeball? */
 	readonly isPokeball: boolean;
+	/** Is this item a Technical Record? */
+	readonly isTR: string;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
@@ -432,6 +434,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect & ItemData
 		this.onPlate = data.onPlate || undefined;
 		this.isGem = !!data.isGem;
 		this.isPokeball = !!data.isPokeball;
+		this.isTR = data.isTR || undefined;
 
 		if (!this.gen) {
 			if (this.num >= 689) {
@@ -454,6 +457,10 @@ export class Item extends BasicEffect implements Readonly<BasicEffect & ItemData
 		if (this.onDrive) this.fling = {basePower: 70};
 		if (this.megaStone) this.fling = {basePower: 80};
 		if (this.onMemory) this.fling = {basePower: 50};
+		if (this.isTR && !this.fling) {
+			let move = Dex.getMove(this.isTR);
+			this.fling = {basePower: move.basePower === 0 ? 10 : move.basePower};
+		}
 	}
 }
 
