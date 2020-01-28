@@ -159,6 +159,7 @@ let BattleLearnsets = {
 		wish: ["7L1"],
 		aromatherapy: ["7L1"],
 		topsyturvy: ["7L1"],
+		partingshot: ["7L1"],
 	}},
 	galvantula: {learnset: {
 		absorb: ["7L1"],
