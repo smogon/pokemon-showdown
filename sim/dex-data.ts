@@ -457,7 +457,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect & ItemData
 		if (this.onDrive) this.fling = {basePower: 70};
 		if (this.megaStone) this.fling = {basePower: 80};
 		if (this.onMemory) this.fling = {basePower: 50};
-		if (this.isTR && !this.fling) {
+		if (this.isTR) {
 			let move = Dex.getMove(this.isTR);
 			this.fling = {basePower: move.basePower === 0 ? 10 : move.basePower};
 		}
