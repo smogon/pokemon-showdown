@@ -1637,6 +1637,8 @@ export class Battle {
 					if (!effect) break;
 					if (effect.effectType === 'Move') {
 						this.add(msg, target, boostName, boostBy);
+					} else if (effect.effectType === 'Item') {
+						this.add(msg, target, boostName, boostBy, '[from] item: ' + effect.name);
 					} else {
 						if (effect.effectType === 'Ability' && !boosted) {
 							this.add('-ability', target, effect.name, 'boost');
