@@ -1419,8 +1419,13 @@ export class Pokemon {
 				this.battle.add('-enditem', this, item, '[of] ' + source);
 				break;
 			default:
-				if (!item.isGem) {
+				if (item.isGem) {
+					this.battle.add('-enditem', this, item, '[from] gem');
+				} else {
 					this.battle.add('-enditem', this, item);
+				}
+				if (item.boosts) {
+					this.battle.boost(item.boosts, this, source, item);
 				}
 				break;
 			}
