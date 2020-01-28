@@ -1193,9 +1193,7 @@ let BattleAbilities = {
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
 				if (target.item) {
-					let itemName = target.getItem().name;
-					if (target.getItem().isTR) itemName = itemName.slice(0, 4);
-					this.add('-item', target, itemName, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
+					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
 				}
 			}
 		},
