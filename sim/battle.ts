@@ -2531,7 +2531,8 @@ export class Battle {
 			chosenAction.pokemon.updateSpeed();
 		}
 		const action = this.resolveAction(chosenAction, midTurn);
-		let tieStart = -1, tieEnd = this.queue.length;
+		let tieStart = -1;
+		let tieEnd = this.queue.length;
 		for (const [i, curAction] of this.queue.entries()) {
 			const delta = this.comparePriority(action, curAction);
 			if (delta === 0 && tieStart === -1) {
