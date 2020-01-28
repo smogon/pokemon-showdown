@@ -1424,10 +1424,10 @@ export class Pokemon {
 				} else {
 					this.battle.add('-enditem', this, item);
 				}
-				if (item.boosts) {
-					this.battle.boost(item.boosts, this, source, item);
-				}
 				break;
+			}
+			if (item.boosts) {
+				this.battle.boost(item.boosts, this, source, item);
 			}
 
 			this.battle.singleEvent('Use', item, this.itemData, this, source, sourceEffect);
