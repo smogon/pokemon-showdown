@@ -2988,7 +2988,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Switches the Spikes, Toxic Spikes, Stealth Rock, Sticky Web, Light Screen, Reflect, Aurora Veil, and Tailwind from the user's side to the target's side and vice versa.",
-		shortDesc: "Switches sides of field effects",
+		shortDesc: "Swaps field effects with the foe.",
 		id: "courtchange",
 		isViable: true,
 		name: "Court Change",
@@ -7515,7 +7515,6 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		// TODO: Test what G-Max Wind Rage actually removes from the field and from which sides
 		desc: "Removes Reflect, Light Screen, Aurora Veil, Spikes, Toxic Spikes, Stealth Rock, Sticky Web, Mist, Safeguard, G-Max Steelsurge, and Terrains from the field. This move's Base Power scales with the base move's Base Power.",
 		shortDesc: "Clears field. BP scales with base move's BP.",
 		id: "gmaxwindrage",
