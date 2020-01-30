@@ -2490,7 +2490,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, sound: 1, dance: 1},
 		onTryHit(pokemon, target, move) {
-			if (pokemon.hp <= pokemon.maxhp / 3 || pokemon.boosts.atk >= 6 || pokemon.boosts.def >= 6 || pokemon.boosts.spa >= 6 || pokemon.boosts.spd >= 6 || pokemon.boosts.spe >= 6 || pokemon.maxhp === 1) {
+			if (pokemon.hp <= pokemon.maxhp / 3 || pokemon.boosts.atk >= 6 && pokemon.boosts.def >= 6 && pokemon.boosts.spa >= 6 && pokemon.boosts.spd >= 6 && pokemon.boosts.spe >= 6 || pokemon.maxhp === 1) {
 				delete move.boosts;
 				return false;
 			}
