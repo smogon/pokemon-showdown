@@ -181,11 +181,9 @@ exports.commands = {
 	movesearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help movesearch');
-		
 		let targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (cmd === 'nms') target += ', natdex';
-
 		return runSearch({
 			target: target,
 			cmd: 'movesearch',
