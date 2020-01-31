@@ -2987,7 +2987,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Switches the Spikes, Toxic Spikes, Stealth Rock, Sticky Web, Light Screen, Reflect, Aurora Veil, and Tailwind from the user's side to the target's side and vice versa.",
+		desc: "Switches the Mist, Light Screen, Reflect, Spikes, Toxic Spikes, Tailwind, Stealth Rock, Water Pledge, Fire Pledge, Grass Pledge, Sticky Web, Aurora Veil, G-Max Steelsurge, and G-Max Wildfire effects from the user's side to the target's side and vice versa.",
 		shortDesc: "Swaps field effects with the foe.",
 		id: "courtchange",
 		isViable: true,
@@ -2999,7 +2999,7 @@ let BattleMovedex = {
 			const sourceSide = source.side;
 			const targetSide = source.side.foe;
 			const sideConditions = [
-				'spikes', 'toxicspikes', 'stealthrock', 'gmaxsteelsurge', 'stickyweb', 'lightscreen', 'reflect', 'auroraveil', 'tailwind',
+				'mist', 'lightscreen', 'reflect', 'spikes', 'toxicspikes', 'tailwind', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxwildfire',
 			];
 			let success = false;
 			for (let id of sideConditions) {
