@@ -223,7 +223,7 @@ export class Pokemon {
 
 		this.m = {};
 
-		const pokemonScripts = this.battle.dex.data.Scripts.pokemon;
+		const pokemonScripts = this.battle.format.pokemon || this.battle.dex.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
 		if (typeof set === 'string') set = {name: set};
