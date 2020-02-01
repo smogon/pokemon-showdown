@@ -1109,6 +1109,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['Standard', 'Mega Rayquaza Clause'],
 		banlist: ['Baton Pass'],
 	},
@@ -1121,6 +1122,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought', 'Kommonium Z', 'Mewnium Z'],
 	},
@@ -1133,6 +1135,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'RUBL', 'Mimikyu', 'Aurora Veil'],
 		unbanlist: ['Drought'],
@@ -1146,6 +1149,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] RU'],
 		banlist: ['RU', 'NUBL', 'Drought'],
 	},
@@ -1158,6 +1162,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'PUBL'],
 	},
@@ -1171,6 +1176,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Little Cup', 'Standard', 'Swagger Clause'],
 		banlist: [
@@ -1189,6 +1195,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['Same Type Clause', 'Standard', 'Swagger Clause'],
 		banlist: [
 			'Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Gengar-Mega', 'Giratina', 'Groudon',
@@ -1207,6 +1214,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
@@ -1219,6 +1227,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		teamLength: {
 			validate: [1, 3],
 			battle: 1,
@@ -1241,6 +1250,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] PU'],
 		banlist: [
 			'PU', 'Carracosta', 'Crabominable', 'Gorebyss', 'Jynx', 'Raticate-Alola',
@@ -1256,6 +1266,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] OU', '+CAP'],
 	},
 	{
@@ -1323,6 +1334,7 @@ let Formats = [
 
 		mod: 'gen7',
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Standard Doubles', 'Swagger Clause'],
 		banlist: ['DUber', 'Power Construct', 'Eevium Z', 'Dark Void'],
 	},
@@ -1337,7 +1349,7 @@ let Formats = [
 		banlist: ['DOU', 'DBL'],
 	},
 	{
-		name: "[Gen 7] VGC 2019 Ultra Series",
+		name: "[Gen 7] VGC 2019",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3641100/">VGC 2019 Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3641123/">VGC 2019 Viability Rankings</a>`,
@@ -1345,6 +1357,7 @@ let Formats = [
 
 		mod: 'gen7',
 		gameType: 'doubles',
+		searchShow: false,
 		forcedLevel: 50,
 		teamLength: {
 			validate: [4, 6],
