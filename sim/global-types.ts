@@ -1025,6 +1025,7 @@ interface FormatsData extends EventMethods {
 	name: string
 	banlist?: string[]
 	battle?: ModdedBattleScriptsData
+	pokemon?: ModdedBattlePokemon
 	cannotMega?: string[]
 	challengeShow?: boolean
 	debug?: boolean
@@ -1143,6 +1144,7 @@ interface ModdedBattlePokemon {
 	inherit?: boolean
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean | number
 	calculateStat?: (this: Pokemon, statName: StatNameExceptHP, boost: number, modifier?: number) => number
+	getAbility?: (this: Pokemon) => Ability
 	getActionSpeed?: (this: Pokemon) => number
 	getRequestData?: (this: Pokemon) => {moves: {move: string, id: ID, target?: string, disabled?: boolean}[], maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean, canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: ZMoveOptions}
 	getStat?: (this: Pokemon, statName: StatNameExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean) => number
