@@ -13045,7 +13045,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user raises each of its stats by one stage, but it is prevented from switching out and other Pokemon cannot force the user to switch out. The user can still switch out if it uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the user leaves the field using Baton Pass, the replacement will remain trapped. Can only be used once while on the field.",
+		desc: "The user raises each of its stats by one stage, but it is prevented from switching out. The user can still switch out if it uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the user leaves the field using Baton Pass, the replacement will remain trapped. Can only be used once while on the field.",
 		shortDesc: "Raises all stats by 1 (not acc/eva). Traps user.",
 		id: "noretreat",
 		isViable: true,
@@ -13054,17 +13054,18 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		volatileStatus: 'noretreat',
+		onTryMove(pokemon, target, move) {
+			if (!pokemon.volatiles['noretreat']) return;
+			this.add('-fail', pokemon, 'move: No Retreat');
+			this.attrLastMove('[still]');
+			return null;
+		},
 		effect: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: No Retreat');
 			},
 			onTrapPokemon(pokemon) {
 				pokemon.tryTrap();
-			},
-			// TODO: Check if No Retreat traps the user like Ingrain
-			onDragOut(pokemon) {
-				this.add('-activate', pokemon, 'move: No Retreat');
-				return null;
 			},
 		},
 		boosts: {
@@ -13073,12 +13074,6 @@ let BattleMovedex = {
 			spa: 1,
 			spd: 1,
 			spe: 1,
-		},
-		onTryMove(pokemon, target, move) {
-			if (!pokemon.volatiles['noretreat']) return;
-			this.add('-fail', pokemon, 'move: No Retreat');
-			this.attrLastMove('[still]');
-			return null;
 		},
 		secondary: null,
 		target: "self",
@@ -19351,9 +19346,6 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		boosts: {
-			spe: -1,
-		},
 		volatileStatus: 'tarshot',
 		effect: {
 			onStart(pokemon) {
@@ -19365,6 +19357,9 @@ let BattleMovedex = {
 					return this.dex.getEffectiveness('Fire', target) + 1;
 				}
 			},
+		},
+		boosts: {
+			spe: -1,
 		},
 		secondary: null,
 		target: "normal",
