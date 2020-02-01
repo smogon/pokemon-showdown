@@ -80,6 +80,13 @@ let Formats = [
 		banlist: ['UU', 'RUBL'],
 	},
 	{
+		name: "[Gen 8] NU",
+
+		mod: 'gen8',
+		ruleset: ['[Gen 8] RU'],
+		banlist: ['RU', 'NUBL'],
+	},
+	{
 		name: "[Gen 8] LC",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3656348/">LC Metagame Discussion</a>`,
