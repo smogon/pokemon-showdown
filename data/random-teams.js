@@ -712,6 +712,9 @@ class RandomTeams {
 				case 'hex':
 					if (!hasMove['willowisp']) rejected = true;
 					break;
+				case 'payback': case 'psychocut':
+					if (!counter.Status || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
 				case 'raindance':
 					if (!counter['Water']) rejected = true;
 					break;
@@ -799,9 +802,6 @@ class RandomTeams {
 					break;
 				case 'partingshot':
 					if (counter.setupType || hasMove['fakeout'] || hasMove['uturn']) rejected = true;
-					break;
-				case 'payback': case 'psychocut':
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'rapidspin':
 					if (hasMove['curse'] || hasMove['nastyplot'] || hasMove['shellsmash'] || teamDetails.rapidSpin) rejected = true;
