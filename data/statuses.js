@@ -735,7 +735,7 @@ let BattleStatuses = {
 			const ratio = 2;
 
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
-			pokemon.hp = Math.floor(pokemon.hp * ratio);
+			pokemon.hp = Math.ceil(pokemon.hp * ratio);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		onTryAddVolatile(status, pokemon) {
