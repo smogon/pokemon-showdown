@@ -1615,6 +1615,7 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Swagger Clause'],
 		banlist: ['DUber', 'Soul Dew', 'Dark Void'],
+		unbanlist: ['Shaymin-Sky'],
 	},
 	{
 		name: "[Gen 6] VGC 2016",
