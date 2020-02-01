@@ -839,7 +839,6 @@ let Formats = [
 
 		mod: 'gen7',
 		team: 'randomFactory',
-		searchShow: false,
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
