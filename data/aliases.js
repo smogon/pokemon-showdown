@@ -14,7 +14,7 @@ let BattleAliases = {
 	"duu": "[Gen 8] Doubles UU",
 	"vgc17": "[Gen 7] VGC 2017",
 	"vgc18": "[Gen 7] VGC 2018",
-	"vgc19": "[Gen 7] VGC 2019 Ultra Series",
+	"vgc19": "[Gen 7] VGC 2019",
 	"bss": "[Gen 8] Battle Stadium Singles",
 	"bsd": "[Gen 8] Battle Stadium Doubles",
 	"bsdoubles": "[Gen 8] Battle Stadium Doubles",
