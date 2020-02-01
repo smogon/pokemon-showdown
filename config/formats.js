@@ -518,17 +518,10 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['-Nonexistent', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Endless Battle Clause'],
 		banlist: [
-			'Eternatus-Eternamax', 'Shedinja', 'Comatose + Sleep Talk', 'Double Iron Bash',
+			'Eternatus-Eternamax', 'Shedinja', 'Comatose + Sleep Talk',
 			'Arena Trap', 'Contrary', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Innards Out', 'Libero', 'Magnet Pull', 'Moody',
 			'Neutralizing Gas', 'Parental Bond', 'Protean', 'Psychic Surge', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard',
 		],
-		onValidateSet(set) {
-			if (set.species === 'Zacian-Crowned') {
-				// Validating instead of changing here since it is a ban
-				if (toID(set.item) !== 'rustedsword') return [`${set.species} must run Rusted Sword as an item.`, `(${set.species} currently has ${set.item}.)`];
-				if (toID(set.ability) !== 'intrepidsword') return [`${set.species} must run Intrepid Sword as an ability.`, `(${set.species} currently has ${set.ability}.)`];
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Mix and Mega",
