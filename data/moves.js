@@ -10202,10 +10202,10 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryHit(target, source) {
-			if (source.moveSlots.length < 2) return false; // Last Resort fails unless the user knows at least 2 moves
+		onTry(pokemon, target) {
+			if (pokemon.moveSlots.length < 2) return false; // Last Resort fails unless the user knows at least 2 moves
 			let hasLastResort = false; // User must actually have Last Resort for it to succeed
-			for (const moveSlot of source.moveSlots) {
+			for (const moveSlot of pokemon.moveSlots) {
 				if (moveSlot.id === 'lastresort') {
 					hasLastResort = true;
 					continue;
@@ -13054,10 +13054,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
-		onTryHit(pokemon) {
-			if (pokemon.volatiles['noretreat']) return false;
-			if (!pokemon.volatiles['trapped']) {
-				pokemon.addVolatile('noretreat');
+		volatileStatus: 'noretreat',
+		onTryHit(target, source, move) {
+			if (target.volatiles['noretreat']) return false;
+			if (target.volatiles['trapped']) {
+				delete move.volatileStatus;
 			}
 		},
 		effect: {
