@@ -42,7 +42,7 @@ describe('Pickpocket', function () {
 		assert.strictEqual(battle.p2.active[0].item, '');
 	});
 
-	it('should steal a foe\'s item if forced to switch out', function () {
+	it('should not steal a foe\'s item if forced to switch out', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {
 			team: [
@@ -55,7 +55,6 @@ describe('Pickpocket', function () {
 		});
 
 		battle.makeChoices('move agility', 'move dragontail');
-		assert.holdsItem(battle.p1.pokemon.find(mon => mon.name === 'Weavile'), "The foe should have their item stolen");
-		assert.strictEqual(battle.p2.active[0].item, '');
+		assert.holdsItem(battle.p2.active[0], "The Pickpocket Pokemon should not steal an item while being forced out");
 	});
 });
