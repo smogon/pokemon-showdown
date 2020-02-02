@@ -240,7 +240,7 @@ export const commands: ChatCommands = {
 
 		guess(target, room, user) {
 			if (!target) return this.parse('/help guess');
-			const game = room.getGame<Hangman>(Hangman);
+			const game = room.getGame(Hangman);
 			if (!game) return this.errorReply("There is no game of hangman running in this room.");
 			if (!this.canTalk()) return;
 
@@ -255,7 +255,7 @@ export const commands: ChatCommands = {
 		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
-			const game = room.getGame<Hangman>(Hangman);
+			const game = room.getGame(Hangman);
 			if (!game) return this.errorReply("There is no game of hangman running in this room.");
 			game.end();
 			this.modlog('ENDHANGMAN');
@@ -290,7 +290,7 @@ export const commands: ChatCommands = {
 		},
 
 		display(target, room, user) {
-			const game = room.getGame<Hangman>(Hangman);
+			const game = room.getGame(Hangman);
 			if (!game) return this.errorReply("There is no game of hangman running in this room.");
 			if (!this.runBroadcast()) return;
 			room.update();
@@ -315,7 +315,7 @@ export const commands: ChatCommands = {
 	],
 
 	guess(target, room, user) {
-		const game = room.getGame<Hangman>(Hangman);
+		const game = room.getGame(Hangman);
 		if (!game) return this.errorReply("There is no game of hangman running in this room.");
 		if (!this.canTalk()) return;
 

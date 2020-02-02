@@ -1588,7 +1588,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const update = [];
 			for (const tourRoom of Rooms.rooms.values()) {
-				const tournament = tourRoom.getGame<Tournament>(Tournament);
+				const tournament = tourRoom.getGame(Tournament);
 				if (!tournament) continue;
 				if (tourRoom.isPrivate || tourRoom.isPersonal || tourRoom.staffRoom) continue;
 				update.push({
@@ -1696,7 +1696,7 @@ export const commands: ChatCommands = {
 				}
 			}
 		} else {
-			const tournament = room.getGame<Tournament>(Tournament);
+			const tournament = room.getGame(Tournament);
 			if (!tournament) {
 				return this.sendReply("There is currently no tournament running in this room.");
 			}
