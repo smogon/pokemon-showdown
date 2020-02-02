@@ -466,7 +466,7 @@ let Formats = [
 		banlist: [],
 		restrictedMoves: [
 			'Baneful Bunker', 'Block', 'Copycat', 'Detect', 'Destiny Bond', 'Ingrain', 'King\'s Shield', 'Mean Look', 'Metronome',
-			'Obstruct', 'Octolock', 'Nature Power', 'Parting Shot', 'Protect', 'Roar', 'Skill Swap', 'Spiky Shield', 'Whirlwind',
+			'Obstruct', 'Octolock', 'Nature Power', 'Parting Shot', 'Protect', 'Roar', 'Skill Swap', 'Spiky Shield', 'Teleport', 'Whirlwind',
 		],
 		onValidateTeam(team, format, teamHas) {
 			for (const trademark in teamHas.trademarks) {
