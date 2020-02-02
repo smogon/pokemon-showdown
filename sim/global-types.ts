@@ -871,6 +871,17 @@ interface MoveData extends EffectData, MoveEventMethods {
 	gmaxPower?: number
 	basePowerCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => number | false | null
 	baseMove?: string
+	/**
+	 * Has this move been boosted by a Z-crystal? Usually the same as
+	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
+	 * truthy.
+	 */
+	isZPowered?: boolean
+	/**
+	 * Same idea has `isZPowered`. Hacked Max moves will have this be
+	 * `false` and `isMax` be truthy.
+	 */
+	maxPowered?: boolean
 }
 
 interface ModdedMoveData extends Partial<MoveData>, ModdedEffectData {}
@@ -925,18 +936,6 @@ interface ActiveMove extends BasicEffect, MoveData {
 	totalDamage?: number | false
 	willChangeForme?: boolean
 	infiltrates?: boolean
-	baseMove?: string
-	/**
-	 * Has this move been boosted by a Z-crystal? Usually the same as
-	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
-	 * truthy.
-	 */
-	isZPowered?: boolean
-	/**
-	 * Same idea has isZPowered. (Is only blocked by protect if its)
-	 * maxPowered. Update/remove this when this is confirmed.
-	 */
-	maxPowered?: boolean
 }
 
 type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}
