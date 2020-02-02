@@ -297,7 +297,7 @@ class RandomTeams {
 		/**@type {number[]} */
 		let pool = [];
 		for (let id in this.dex.data.FormatsData) {
-			if (!this.dex.data.Pokedex[id]) continue;
+			if (!this.dex.data.Pokedex[id] || this.dex.data.FormatsData[id].isNonstandard && this.dex.data.FormatsData[id].isNonstandard === 'Past') continue;
 			let num = this.dex.data.Pokedex[id].num;
 			if (num <= 0 || pool.includes(num)) continue;
 			if (num > last) break;
