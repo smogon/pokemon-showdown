@@ -2815,7 +2815,7 @@ let BattleMovedex = {
 			let move = this.lastMove;
 			if (!move) return;
 
-			if (move.isMax) move = this.dex.getMove(move.baseMove);
+			if (move.isMax && move.baseMove) move = this.dex.getMove(move.baseMove);
 			if (noCopycat.includes(move.id) || move.isZ || move.isMax) {
 				return false;
 			}
