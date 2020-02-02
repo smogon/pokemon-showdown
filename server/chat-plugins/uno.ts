@@ -811,7 +811,7 @@ export const commands: ChatCommands = {
 
 		color(target, room, user) {
 			const game = room.getGame<UnoGame>(UnoGame);
-			if (!game || game.gameid !== 'uno') return false;
+			if (!game) return false;
 			const player: UnoGamePlayer | undefined = game.playerTable[user.id];
 			if (!player) return this.errorReply(`You are not in the game of UNO.`);
 			let color: Color;
@@ -825,7 +825,7 @@ export const commands: ChatCommands = {
 
 		uno(target, room, user) {
 			const game = room.getGame<UnoGame>(UnoGame);
-			if (!game || game.gameid !== 'uno') return false;
+			if (!game) return false;
 			const player: UnoGamePlayer | undefined = game.playerTable[user.id];
 			if (!player) return this.errorReply(`You are not in the game of UNO.`);
 			game.onUno(player, toID(target));
@@ -835,7 +835,7 @@ export const commands: ChatCommands = {
 		'': 'hand',
 		hand(target, room, user) {
 			const game = room.getGame<UnoGame>(UnoGame);
-			if (!game || game.gameid !== 'uno') return this.parse("/help uno");
+			if (!game) return this.parse("/help uno");
 			game.onSendHand(user);
 		},
 

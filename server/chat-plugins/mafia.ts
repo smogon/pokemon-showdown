@@ -1813,7 +1813,7 @@ export const commands: ChatCommands = {
 	mafia: {
 		''(target, room, user) {
 			const game = room.getGame<MafiaTracker>(MafiaTracker);
-			if (game && game.gameid === 'mafia') {
+			if (game) {
 				if (!this.runBroadcast()) return;
 				return this.sendReply(`|html|${game.roomWindow()}`);
 			}
@@ -2928,7 +2928,7 @@ export const commands: ChatCommands = {
 			}
 
 			// hack to let hosts broadcast
-			const game = room && room.game && room.game.gameid === 'mafia' ? room.getGame<MafiaTracker>(MafiaTracker) : null;
+			const game = room && room.getGame<MafiaTracker>(MafiaTracker);
 			if (game && (game.hostid === user.id || game.cohosts.includes(user.id))) {
 				this.broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 			}
