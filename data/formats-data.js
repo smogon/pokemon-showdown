@@ -153,7 +153,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["airslash", "bugbuzz", "quiverdance", "sleeppowder"],
 		isGigantamax: "G-Max Befuddle",
 		tier: "Uber",
-		doublesTier: "(DUU)",
+		doublesTier: "DOU",
 	},
 	weedle: {
 		encounters: [
