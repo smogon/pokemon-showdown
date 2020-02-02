@@ -258,6 +258,7 @@ interface EventMethods {
 	onStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void
 	onSwitchIn?: (this: Battle, pokemon: Pokemon) => void
 	onSwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onSwap?: (this: Battle, target: Pokemon, source: Pokemon) => void
 	onTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void) | boolean
 	onTerrain?: (this: Battle, pokemon: Pokemon) => void
 	onTerrainStart?: (this: Battle, target: Pokemon, source: Pokemon, terrain: PureEffect) => void
