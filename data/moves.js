@@ -8372,8 +8372,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any major status condition cured. The new Pokemon is sent out at the end of the turn, and the healing happens before hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
-		shortDesc: "User faints. Replacement is fully healed.",
+		desc: "The user faints and the next injured or statused Pokemon brought in has its HP fully restored along with having any major status condition cured. The healing happens before hazards take effect. Is not consumed if the Pokemon sent out is not injured or statused. Fails if the user is the last unfainted Pokemon in its party.",
+		shortDesc: "User faints. Next hurt Pokemon is fully healed.",
 		id: "healingwish",
 		isViable: true,
 		name: "Healing Wish",
@@ -8389,10 +8389,8 @@ let BattleMovedex = {
 		selfdestruct: "ifHit",
 		slotCondition: 'healingwish',
 		effect: {
-			duration: 2,
-			onSwitchInPriority: 1,
-			onSwitchIn(target) {
-				if (!target.fainted) {
+			onSwap(target) {
+				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
