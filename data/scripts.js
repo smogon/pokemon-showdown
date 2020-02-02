@@ -1223,6 +1223,7 @@ let BattleScripts = {
 			maxMove.basePower = move.gmaxPower;
 			maxMove.category = move.category;
 		}
+		maxMove.baseMove = move.id;
 		maxMove.maxPowered = true;
 		return maxMove;
 	},

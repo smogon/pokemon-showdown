@@ -870,6 +870,7 @@ interface MoveData extends EffectData, MoveEventMethods {
 	zMoveBoost?: SparseBoostsTable
 	gmaxPower?: number
 	basePowerCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => number | false | null
+	baseMove?: string
 }
 
 interface ModdedMoveData extends Partial<MoveData>, ModdedEffectData {}
@@ -924,6 +925,7 @@ interface ActiveMove extends BasicEffect, MoveData {
 	totalDamage?: number | false
 	willChangeForme?: boolean
 	infiltrates?: boolean
+	baseMove?: string
 	/**
 	 * Has this move been boosted by a Z-crystal? Usually the same as
 	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
