@@ -13054,12 +13054,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
-		volatileStatus: 'noretreat',
-		onTryMove(pokemon, target, move) {
-			if (!pokemon.volatiles['noretreat']) return;
-			this.add('-fail', pokemon, 'move: No Retreat');
-			this.attrLastMove('[still]');
-			return null;
+		onTryHit(pokemon) {
+			if (pokemon.volatiles['noretreat']) return false;
+			if (!pokemon.volatiles['trapped']) {
+				pokemon.addVolatile('noretreat');
+			}
 		},
 		effect: {
 			onStart(pokemon) {
