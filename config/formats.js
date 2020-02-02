@@ -1006,12 +1006,12 @@ let Formats = [
 		unbanlist: ['Wobbuffet', 'Wynaut', 'Sand Veil'],
 	},
 	{
-		name: "[Gen 1] OU (No Defense Curl, Harden, or Reflect)",
-		desc: `[Gen 1] OU, but common Defense-boosting moves are banned.`,
+		name: "[Gen 1] OU (No Defense Boosting)",
+		desc: `[Gen 1] OU, but all Defense-boosting moves are banned.`,
 
 		mod: 'gen1',
 		ruleset: ['[Gen 1] OU'],
-		banlist: ['Defense Curl', 'Harden', 'Reflect'],
+		banlist: ['Acid Armor', 'Barrier', 'Defense Curl', 'Harden', 'Reflect', 'Withdraw'],
 	},
 
 	// Past Gens OU
