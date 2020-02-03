@@ -80,7 +80,7 @@ function createDeck() {
 	]; // 108 cards
 }
 
-class UnoGame extends Rooms.RoomGame {
+export class UnoGame extends Rooms.RoomGame {
 	playerTable: {[userid: string]: UnoGamePlayer};
 	players: UnoGamePlayer[];
 	playerCap: number;

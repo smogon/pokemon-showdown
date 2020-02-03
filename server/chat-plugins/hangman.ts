@@ -7,7 +7,7 @@
 
 const maxMistakes = 6;
 
-class Hangman extends Rooms.RoomGame {
+export class Hangman extends Rooms.RoomGame {
 	gameNumber: number;
 	creator: ID;
 	word: string;
