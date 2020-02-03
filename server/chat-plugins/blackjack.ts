@@ -18,7 +18,7 @@ export class Blackjack extends Rooms.RoomGame {
 
 	blackjack: boolean;
 
-	roomID: ID;
+	roomID: RoomID;
 
 	autostart: NodeJS.Timer | null;
 	dqTimer: NodeJS.Timer | null;
@@ -80,7 +80,7 @@ export class Blackjack extends Rooms.RoomGame {
 		};
 		this.deck = new BlackjackDeck().shuffle();
 
-		this.roomID = this.room.roomid as ID;
+		this.roomID = this.room.roomid as RoomID;
 		this.title = `Blackjack (${room.title})`;
 		this.blackjack = true;
 		this.state = 'signups';
