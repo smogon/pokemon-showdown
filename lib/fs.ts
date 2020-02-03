@@ -80,7 +80,7 @@ class FSPath {
 		return fs.readFileSync(this.path, options) as Buffer;
 	}
 
-	checkIfExists(): Promise<boolean> {
+	exists(): Promise<boolean> {
 		return new Promise(resolve => {
 			fs.exists(this.path, exists => {
 				resolve(exists);
@@ -88,7 +88,7 @@ class FSPath {
 		});
 	}
 
-	checkIfExistsSync() {
+	existsSync() {
 		return fs.existsSync(this.path);
 	}
 
