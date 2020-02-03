@@ -13,8 +13,6 @@
 
 import {FS} from '../lib/fs';
 
-type Tournament = import('./tournaments').Tournament;
-
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
 const SHAREDIPS_FILE = 'config/sharedips.tsv';
@@ -771,14 +769,12 @@ export const Punishments = new class {
 
 		// Handle tournaments the user was in before being battle banned
 		for (const games of user.games.keys()) {
-			const game = Rooms.get(games)!.game;
+			const game = Rooms.get(games)!.getGame(Tournaments.Tournament);
 			if (!game) continue; // this should never happen
-			if ((game as Tournament).isTournament) {
-				if ((game as Tournament).isTournamentStarted) {
-					(game as Tournament).disqualifyUser(id, null, null);
-				} else if (!(game as Tournament).isTournamentStarted) {
-					(game as Tournament).removeUser(user.id);
-				}
+			if (game.isTournamentStarted) {
+				game.disqualifyUser(id, null, null);
+			} else if (!game.isTournamentStarted) {
+				game.removeUser(user.id);
 			}
 		}
 

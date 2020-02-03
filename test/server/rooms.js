@@ -18,6 +18,20 @@ describe('Rooms features', function () {
 		});
 	});
 
+	describe('BasicRoom', function () {
+		describe('getGame', function () {
+			it('should return the game only when the gameids match', function () {
+				const Hangman = require('../../.server-dist/chat-plugins/hangman').Hangman;
+				const Uno = require('../../.server-dist/chat-plugins/uno').UnoGame;
+				const room = Rooms.createChatRoom('r/relationshipadvice');
+				const game = new Hangman(room, new User(), 'There\'s a lot of red flags here');
+				room.game = game;
+				assert.strictEqual(room.getGame(Hangman), game);
+				assert.strictEqual(room.getGame(Uno), null);
+			});
+		});
+	});
+
 	describe('GameRoom', function () {
 		const packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 

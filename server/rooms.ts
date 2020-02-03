@@ -305,6 +305,11 @@ export abstract class BasicRoom {
 		}
 		if (this.parent) return this.parent.getMuteTime(user);
 	}
+	getGame<T extends RoomGame>(constructor: new (...args: any[]) => T): T | null {
+		// TODO: switch to `static readonly gameid` when all game files are TypeScripted
+		if (this.game && this.game.constructor.name === constructor.name) return this.game as T;
+		return null;
+	}
 	/**
 	 * Gets the group symbol of a user in the room.
 	 */
