@@ -2920,11 +2920,7 @@ export const commands: ChatCommands = {
 			if (cmd === 'role' && !target && room) {
 				// Support /mafia role showing your current role if you're in a game
 				const game = room.getGame(MafiaTracker);
-<<<<<<< HEAD
 				if (!game) return this.errorReply(`There is no game of mafia running in this room. If you meant to display information about a role, use /mafia role [role name]`);
-=======
-				if (!game || game.roomid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room. If you meant to display information about a role, use /mafia role [role name]`);
->>>>>>> TypeScript can infer template type
 				if (!(user.id in game.playerTable)) return this.errorReply(`You are not in the game of ${game.title}.`);
 				const role = game.playerTable[user.id].role;
 				if (!role) return this.errorReply(`You do not have a role yet.`);
