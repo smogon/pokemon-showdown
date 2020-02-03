@@ -257,6 +257,7 @@ export const commands: ChatCommands = {
 			if (!this.canTalk()) return;
 			const game = room.getGame(Hangman);
 			if (!game) return this.errorReply("There is no game of hangman running in this room.");
+
 			game.end();
 			this.modlog('ENDHANGMAN');
 			return this.privateModAction(`(The game of hangman was ended by ${user.name}.)`);
