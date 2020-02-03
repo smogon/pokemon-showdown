@@ -778,7 +778,6 @@ interface ItemData extends EffectData, ItemEventMethods, EventMethods {
 	onDrive?: string
 	onMemory?: string
 	onPlate?: string
-	isTR?: string
 	spritenum?: number
 	zMove?: string | true
 	zMoveFrom?: string
