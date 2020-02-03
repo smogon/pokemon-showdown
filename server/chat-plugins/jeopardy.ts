@@ -13,7 +13,7 @@ interface Question {
 	dd: boolean;
 }
 
-class Jeopardy extends Rooms.RoomGame {
+export class Jeopardy extends Rooms.RoomGame {
 	playerTable: {[userid: string]: JeopardyGamePlayer};
 	host: User;
 	state: string;
@@ -602,8 +602,8 @@ export const commands: ChatCommands = {
 		},
 
 		categories(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const params = target.split(",");
 			if (params.length !== game.categoryCount) return this.errorReply(`You must set exactly ${game.categoryCount} categories.`);
@@ -612,8 +612,8 @@ export const commands: ChatCommands = {
 		},
 
 		category(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const params = target.split(",");
 			if (params.length !== 2) return this.errorReply("You must specify the category number and the category.");
@@ -628,37 +628,37 @@ export const commands: ChatCommands = {
 		},
 
 		select(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			const reply = game.select(target, user);
 			if (reply) this.errorReply(reply);
 		},
 
 		buzz(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			const reply = game.buzz(user);
 			if (reply) this.errorReply(reply);
 		},
 
 		wager(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			const reply = game.wager(target, user);
 			if (reply) this.errorReply(reply);
 		},
 
 		answer(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			const reply = game.answer(target, user);
 			if (reply) this.errorReply(reply);
 		},
 
 		import(target, room, user) {
-			const game = room.game as Jeopardy;
+			const game = room.getGame(Jeopardy);
 			if (!target) return this.errorReply("You must specify at least one question");
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const params = target.split(",");
 			let dataStart = 0;
@@ -695,8 +695,8 @@ export const commands: ChatCommands = {
 
 		dd: 'dailydouble',
 		dailydouble(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const params = target.split(",");
 			if (params.length !== 2) return this.errorReply("You must specify the category number and question number");
@@ -714,8 +714,8 @@ export const commands: ChatCommands = {
 		dailydoublehelp: [`/jeopardy dailydouble [category number], [question number] - Set a question to be a daily double.`],
 
 		view(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const params = target.split(",");
 			if (params.length !== 2) return this.errorReply("You must specify the category number and question number");
@@ -728,8 +728,8 @@ export const commands: ChatCommands = {
 
 		addplayer: 'adduser',
 		adduser(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply("User '" + target + "' not found.");
@@ -743,24 +743,24 @@ export const commands: ChatCommands = {
 
 		incorrect: 'correct',
 		correct(target, room, user, connection, cmd) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const reply = game.mark(cmd === 'correct');
 			if (reply) this.errorReply(reply);
 		},
 
 		start(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const reply = game.start();
 			if (reply) this.errorReply(reply);
 		},
 		removeplayer: 'removeuser',
 		removeuser(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
@@ -772,8 +772,8 @@ export const commands: ChatCommands = {
 		},
 
 		subhost(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
@@ -782,15 +782,15 @@ export const commands: ChatCommands = {
 		},
 
 		state(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			this.sendReply(`The game is currently in the ${game.state} state.`);
 		},
 
 		end(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (!this.can('minigame', null, room)) return;
 			game.destroy();
 			this.privateModAction(`The game of Jeopardy was ended by ${user.name}`);
@@ -798,15 +798,15 @@ export const commands: ChatCommands = {
 		},
 
 		pass(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			game.nextQuestion();
 		},
 
 		timer(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const amount = parseInt(target);
 			if (!amount || amount < 2 || amount > 120) return this.errorReply("The amount must be a number between 2 and 120.");
@@ -817,8 +817,8 @@ export const commands: ChatCommands = {
 		},
 
 		finaltimer(target, room, user) {
-			const game = room.game as Jeopardy;
-			if (!game || game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			const game = room.getGame(Jeopardy);
+			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const amount = parseInt(target);
 			if (!amount || amount < 2 || amount > 300) return this.errorReply("The amount must be a number between 2 and 300.");
@@ -851,3 +851,12 @@ export const commands: ChatCommands = {
 		`/jp finaltimer [seconds] - Set the answering window for answering the final question`,
 	],
 };
+
+export const roomSettings: SettingsHandler = room => ({
+	label: "Jeopardy",
+	permission: 'editroom',
+	options: [
+		[`disabled`, room.jeopardyDisabled || 'jeopardy disable'],
+		[`enabled`, !room.jeopardyDisabled || 'jeopardy enable'],
+	],
+});
