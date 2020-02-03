@@ -6251,8 +6251,10 @@ let BattleItems = {
 	"tr00": {
 		id: "tr00",
 		name: "TR00",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 508,
-		isTR: "Swords Dance",
 		num: 1130,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Swords Dance. One use.",
@@ -6260,8 +6262,10 @@ let BattleItems = {
 	"tr01": {
 		id: "tr01",
 		name: "TR01",
+		fling: {
+			basePower: 85,
+		},
 		spritenum: 508,
-		isTR: "Body Slam",
 		num: 1131,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Body Slam. One use.",
@@ -6269,8 +6273,10 @@ let BattleItems = {
 	"tr02": {
 		id: "tr02",
 		name: "TR02",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 502,
-		isTR: "Flamethrower",
 		num: 1132,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Flamethrower. One use.",
@@ -6278,8 +6284,10 @@ let BattleItems = {
 	"tr03": {
 		id: "tr03",
 		name: "TR03",
+		fling: {
+			basePower: 110,
+		},
 		spritenum: 513,
-		isTR: "Hydro Pump",
 		num: 1133,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Hydro Pump. One use.",
@@ -6287,8 +6295,10 @@ let BattleItems = {
 	"tr04": {
 		id: "tr04",
 		name: "TR04",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 513,
-		isTR: "Surf",
 		num: 1134,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Surf. One use.",
@@ -6296,8 +6306,10 @@ let BattleItems = {
 	"tr05": {
 		id: "tr05",
 		name: "TR05",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 507,
-		isTR: "Ice Beam",
 		num: 1135,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Ice Beam. One use.",
@@ -6305,8 +6317,10 @@ let BattleItems = {
 	"tr06": {
 		id: "tr06",
 		name: "TR06",
+		fling: {
+			basePower: 110,
+		},
 		spritenum: 507,
-		isTR: "Blizzard",
 		num: 1136,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Blizzard. One use.",
@@ -6314,8 +6328,10 @@ let BattleItems = {
 	"tr07": {
 		id: "tr07",
 		name: "TR07",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 501,
-		isTR: "Low Kick",
 		num: 1137,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Low Kick. One use.",
@@ -6323,8 +6339,10 @@ let BattleItems = {
 	"tr08": {
 		id: "tr08",
 		name: "TR08",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 500,
-		isTR: "Thunderbolt",
 		num: 1138,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Thunderbolt. One use.",
@@ -6332,8 +6350,10 @@ let BattleItems = {
 	"tr09": {
 		id: "tr09",
 		name: "TR09",
+		fling: {
+			basePower: 110,
+		},
 		spritenum: 500,
-		isTR: "Thunder",
 		num: 1139,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Thunder. One use.",
@@ -6341,8 +6361,10 @@ let BattleItems = {
 	"tr10": {
 		id: "tr10",
 		name: "TR10",
+		fling: {
+			basePower: 100,
+		},
 		spritenum: 506,
-		isTR: "Earthquake",
 		num: 1140,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Earthquake. One use.",
@@ -6350,8 +6372,10 @@ let BattleItems = {
 	"tr11": {
 		id: "tr11",
 		name: "TR11",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 510,
-		isTR: "Psychic",
 		num: 1141,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Psychic. One use.",
@@ -6359,8 +6383,10 @@ let BattleItems = {
 	"tr12": {
 		id: "tr12",
 		name: "TR12",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 510,
-		isTR: "Agility",
 		num: 1142,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Agility. One use.",
@@ -6368,8 +6394,10 @@ let BattleItems = {
 	"tr13": {
 		id: "tr13",
 		name: "TR13",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 508,
-		isTR: "Focus Energy",
 		num: 1143,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Focus Energy. One use.",
@@ -6377,8 +6405,10 @@ let BattleItems = {
 	"tr14": {
 		id: "tr14",
 		name: "TR14",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 508,
-		isTR: "Metronome",
 		num: 1144,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Metronome. One use.",
@@ -6386,8 +6416,10 @@ let BattleItems = {
 	"tr15": {
 		id: "tr15",
 		name: "TR15",
+		fling: {
+			basePower: 110,
+		},
 		spritenum: 502,
-		isTR: "Fire Blast",
 		num: 1145,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Fire Blast. One use.",
@@ -6395,8 +6427,10 @@ let BattleItems = {
 	"tr16": {
 		id: "tr16",
 		name: "TR16",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 513,
-		isTR: "Waterfall",
 		num: 1146,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Waterfall. One use.",
@@ -6404,8 +6438,10 @@ let BattleItems = {
 	"tr17": {
 		id: "tr17",
 		name: "TR17",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 510,
-		isTR: "Amnesia",
 		num: 1147,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Amnesia. One use.",
@@ -6413,8 +6449,10 @@ let BattleItems = {
 	"tr18": {
 		id: "tr18",
 		name: "TR18",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 496,
-		isTR: "Leech Life",
 		num: 1148,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Leech Life. One use.",
@@ -6422,8 +6460,10 @@ let BattleItems = {
 	"tr19": {
 		id: "tr19",
 		name: "TR19",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 508,
-		isTR: "Tri Attack",
 		num: 1149,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Tri Attack. One use.",
@@ -6431,8 +6471,10 @@ let BattleItems = {
 	"tr20": {
 		id: "tr20",
 		name: "TR20",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 508,
-		isTR: "Substitue",
 		num: 1150,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Substitue. One use.",
@@ -6440,8 +6482,10 @@ let BattleItems = {
 	"tr21": {
 		id: "tr21",
 		name: "TR21",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 501,
-		isTR: "Reversal",
 		num: 1151,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Reversal. One use.",
@@ -6449,8 +6493,10 @@ let BattleItems = {
 	"tr22": {
 		id: "tr22",
 		name: "TR22",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 509,
-		isTR: "Sludge Bomb",
 		num: 1152,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Sludge Bomb. One use.",
@@ -6458,8 +6504,10 @@ let BattleItems = {
 	"tr23": {
 		id: "tr23",
 		name: "TR23",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 506,
-		isTR: "Spikes",
 		num: 1153,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Spikes. One use.",
@@ -6467,8 +6515,10 @@ let BattleItems = {
 	"tr24": {
 		id: "tr24",
 		name: "TR24",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 499,
-		isTR: "Outrage",
 		num: 1154,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Outrage. One use.",
@@ -6476,8 +6526,10 @@ let BattleItems = {
 	"tr25": {
 		id: "tr25",
 		name: "TR25",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 510,
-		isTR: "Psyshock",
 		num: 1155,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Psyshock. One use.",
@@ -6485,8 +6537,10 @@ let BattleItems = {
 	"tr26": {
 		id: "tr26",
 		name: "TR26",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 508,
-		isTR: "Endure",
 		num: 1156,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Endure. One use.",
@@ -6494,8 +6548,10 @@ let BattleItems = {
 	"tr27": {
 		id: "tr27",
 		name: "TR27",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 508,
-		isTR: "Sleep Talk",
 		num: 1157,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Sleep Talk. One use.",
@@ -6503,8 +6559,10 @@ let BattleItems = {
 	"tr28": {
 		id: "tr28",
 		name: "TR28",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 496,
-		isTR: "Megahorn",
 		num: 1158,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Megahorn. One use.",
@@ -6512,8 +6570,10 @@ let BattleItems = {
 	"tr29": {
 		id: "tr29",
 		name: "TR29",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 508,
-		isTR: "Baton Pass",
 		num: 1159,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Baton Pass. One use.",
@@ -6521,8 +6581,10 @@ let BattleItems = {
 	"tr30": {
 		id: "tr30",
 		name: "TR30",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 508,
-		isTR: "Encore",
 		num: 1160,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Encore. One use.",
@@ -6530,8 +6592,10 @@ let BattleItems = {
 	"tr31": {
 		id: "tr31",
 		name: "TR31",
+		fling: {
+			basePower: 100,
+		},
 		spritenum: 512,
-		isTR: "Iron Tail",
 		num: 1161,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Iron Tail. One use.",
@@ -6539,8 +6603,10 @@ let BattleItems = {
 	"tr32": {
 		id: "tr32",
 		name: "TR32",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 498,
-		isTR: "Crunch",
 		num: 1162,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Crunch. One use.",
@@ -6548,8 +6614,10 @@ let BattleItems = {
 	"tr33": {
 		id: "tr33",
 		name: "TR33",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 504,
-		isTR: "Shadow Ball",
 		num: 1163,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Shadow Ball. One use.",
@@ -6557,8 +6625,10 @@ let BattleItems = {
 	"tr34": {
 		id: "tr34",
 		name: "TR34",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 510,
-		isTR: "Future Sight",
 		num: 1164,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Future Sight. One use.",
@@ -6566,8 +6636,10 @@ let BattleItems = {
 	"tr35": {
 		id: "tr35",
 		name: "TR35",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 508,
-		isTR: "Uproar",
 		num: 1165,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Uproar. One use.",
@@ -6575,8 +6647,10 @@ let BattleItems = {
 	"tr36": {
 		id: "tr36",
 		name: "TR36",
+		fling: {
+			basePower: 95,
+		},
 		spritenum: 502,
-		isTR: "Heat Wave",
 		num: 1166,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Heat Wave. One use.",
@@ -6584,8 +6658,10 @@ let BattleItems = {
 	"tr37": {
 		id: "tr37",
 		name: "TR37",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 498,
-		isTR: "Taunt",
 		num: 1167,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Taunt. One use.",
@@ -6593,8 +6669,10 @@ let BattleItems = {
 	"tr38": {
 		id: "tr38",
 		name: "TR38",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 510,
-		isTR: "Trick",
 		num: 1168,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Trick. One use.",
@@ -6602,8 +6680,10 @@ let BattleItems = {
 	"tr39": {
 		id: "tr39",
 		name: "TR39",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 501,
-		isTR: "Superpower",
 		num: 1169,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Superpower. One use.",
@@ -6611,8 +6691,10 @@ let BattleItems = {
 	"tr40": {
 		id: "tr40",
 		name: "TR40",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 510,
-		isTR: "Skill Swap",
 		num: 1170,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Skill Swap. One use.",
@@ -6620,8 +6702,10 @@ let BattleItems = {
 	"tr41": {
 		id: "tr41",
 		name: "TR41",
+		fling: {
+			basePower: 85,
+		},
 		spritenum: 502,
-		isTR: "Blaze Kick",
 		num: 1171,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Blaze Kick. One use.",
@@ -6629,8 +6713,10 @@ let BattleItems = {
 	"tr42": {
 		id: "tr42",
 		name: "TR42",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 508,
-		isTR: "Hyper Voice",
 		num: 1172,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Hyper Voice. One use.",
@@ -6638,8 +6724,10 @@ let BattleItems = {
 	"tr43": {
 		id: "tr43",
 		name: "TR43",
+		fling: {
+			basePower: 130,
+		},
 		spritenum: 502,
-		isTR: "Overheat",
 		num: 1173,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Overheat. One use.",
@@ -6647,8 +6735,10 @@ let BattleItems = {
 	"tr44": {
 		id: "tr44",
 		name: "TR44",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 510,
-		isTR: "Cosmic Power",
 		num: 1174,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Cosmic Power. One use.",
@@ -6656,8 +6746,10 @@ let BattleItems = {
 	"tr45": {
 		id: "tr45",
 		name: "TR45",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 513,
-		isTR: "Muddy Water",
 		num: 1175,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Muddy Water. One use.",
@@ -6665,8 +6757,10 @@ let BattleItems = {
 	"tr46": {
 		id: "tr46",
 		name: "TR46",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 512,
-		isTR: "Iron Defense",
 		num: 1176,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Iron Defense. One use.",
@@ -6674,8 +6768,10 @@ let BattleItems = {
 	"tr47": {
 		id: "tr47",
 		name: "TR47",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 499,
-		isTR: "Dragon Claw",
 		num: 1177,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dragon Claw. One use.",
@@ -6683,8 +6779,10 @@ let BattleItems = {
 	"tr48": {
 		id: "tr48",
 		name: "TR48",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 501,
-		isTR: "Bulk Up",
 		num: 1178,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Bulk Up. One use.",
@@ -6692,8 +6790,10 @@ let BattleItems = {
 	"tr49": {
 		id: "tr49",
 		name: "TR49",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 510,
-		isTR: "Calm Mind",
 		num: 1179,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Calm Mind. One use.",
@@ -6701,8 +6801,10 @@ let BattleItems = {
 	"tr50": {
 		id: "tr50",
 		name: "TR50",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 505,
-		isTR: "Leaf Blade",
 		num: 1180,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Leaf Blade. One use.",
@@ -6710,8 +6812,10 @@ let BattleItems = {
 	"tr51": {
 		id: "tr51",
 		name: "TR51",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 499,
-		isTR: "Dragon Dance",
 		num: 1181,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dragon Dance. One use.",
@@ -6719,8 +6823,10 @@ let BattleItems = {
 	"tr52": {
 		id: "tr52",
 		name: "TR52",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 512,
-		isTR: "Gyro Ball",
 		num: 1182,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Gyro Ball. One use.",
@@ -6728,8 +6834,10 @@ let BattleItems = {
 	"tr53": {
 		id: "tr53",
 		name: "TR53",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 501,
-		isTR: "Close Combat",
 		num: 1183,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Close Combat. One use.",
@@ -6737,8 +6845,10 @@ let BattleItems = {
 	"tr54": {
 		id: "tr54",
 		name: "TR54",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 509,
-		isTR: "Toxic Spikes",
 		num: 1184,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Toxic Spikes. One use.",
@@ -6746,8 +6856,10 @@ let BattleItems = {
 	"tr55": {
 		id: "tr55",
 		name: "TR55",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 502,
-		isTR: "Flare Blitz",
 		num: 1185,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Flare Blitz. One use.",
@@ -6755,8 +6867,10 @@ let BattleItems = {
 	"tr56": {
 		id: "tr56",
 		name: "TR56",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 501,
-		isTR: "Aura Sphere",
 		num: 1186,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Aura Sphere. One use.",
@@ -6764,8 +6878,10 @@ let BattleItems = {
 	"tr57": {
 		id: "tr57",
 		name: "TR57",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 509,
-		isTR: "Poison Jab",
 		num: 1187,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Poison Jab. One use.",
@@ -6773,8 +6889,10 @@ let BattleItems = {
 	"tr58": {
 		id: "tr58",
 		name: "TR58",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 498,
-		isTR: "Dark Pulse",
 		num: 1188,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dark Pulse. One use.",
@@ -6782,8 +6900,10 @@ let BattleItems = {
 	"tr59": {
 		id: "tr59",
 		name: "TR59",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 505,
-		isTR: "Seed Bomb",
 		num: 1189,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Seed Bomb. One use.",
@@ -6791,8 +6911,10 @@ let BattleItems = {
 	"tr60": {
 		id: "tr60",
 		name: "TR60",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 496,
-		isTR: "X-Scissor",
 		num: 1190,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move X-Scissor. One use.",
@@ -6800,8 +6922,10 @@ let BattleItems = {
 	"tr61": {
 		id: "tr61",
 		name: "TR61",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 496,
-		isTR: "Bug Buzz",
 		num: 1191,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Bug Buzz. One use.",
@@ -6809,8 +6933,10 @@ let BattleItems = {
 	"tr62": {
 		id: "tr62",
 		name: "TR62",
+		fling: {
+			basePower: 85,
+		},
 		spritenum: 499,
-		isTR: "Dragon Pulse",
 		num: 1192,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dragon Pulse. One use.",
@@ -6818,8 +6944,10 @@ let BattleItems = {
 	"tr63": {
 		id: "tr63",
 		name: "TR63",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 511,
-		isTR: "Power Gem",
 		num: 1193,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Power Gem. One use.",
@@ -6827,8 +6955,10 @@ let BattleItems = {
 	"tr64": {
 		id: "tr64",
 		name: "TR64",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 501,
-		isTR: "Focus Blast",
 		num: 1194,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Focus Blast. One use.",
@@ -6836,8 +6966,10 @@ let BattleItems = {
 	"tr65": {
 		id: "tr65",
 		name: "TR65",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 505,
-		isTR: "Energy Ball",
 		num: 1195,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Energy Ball. One use.",
@@ -6845,8 +6977,10 @@ let BattleItems = {
 	"tr66": {
 		id: "tr66",
 		name: "TR66",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 503,
-		isTR: "Brave Bird",
 		num: 1196,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Brave Bird. One use.",
@@ -6854,8 +6988,10 @@ let BattleItems = {
 	"tr67": {
 		id: "tr67",
 		name: "TR67",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 506,
-		isTR: "Earth Power",
 		num: 1197,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Earth Power. One use.",
@@ -6863,8 +6999,10 @@ let BattleItems = {
 	"tr68": {
 		id: "tr68",
 		name: "TR68",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 498,
-		isTR: "Nasty Plot",
 		num: 1198,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Nasty Plot. One use.",
@@ -6872,8 +7010,10 @@ let BattleItems = {
 	"tr69": {
 		id: "tr69",
 		name: "TR69",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 510,
-		isTR: "Zen Headbutt",
 		num: 1199,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Zen Headbutt. One use.",
@@ -6881,8 +7021,10 @@ let BattleItems = {
 	"tr70": {
 		id: "tr70",
 		name: "TR70",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 512,
-		isTR: "Flash Cannon",
 		num: 1200,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Flash Cannon. One use.",
@@ -6890,8 +7032,10 @@ let BattleItems = {
 	"tr71": {
 		id: "tr71",
 		name: "TR71",
+		fling: {
+			basePower: 130,
+		},
 		spritenum: 505,
-		isTR: "Leaf Storm",
 		num: 1201,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Leaf Storm. One use.",
@@ -6899,8 +7043,10 @@ let BattleItems = {
 	"tr72": {
 		id: "tr72",
 		name: "TR72",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 505,
-		isTR: "Power Whip",
 		num: 1202,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Power Whip. One use.",
@@ -6908,8 +7054,10 @@ let BattleItems = {
 	"tr73": {
 		id: "tr73",
 		name: "TR73",
+		fling: {
+			basePower: 120,
+		},
 		spritenum: 509,
-		isTR: "Gunk Shot",
 		num: 1203,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Gunk Shot. One use.",
@@ -6917,8 +7065,10 @@ let BattleItems = {
 	"tr74": {
 		id: "tr74",
 		name: "TR74",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 512,
-		isTR: "Iron Head",
 		num: 1204,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Iron Head. One use.",
@@ -6926,8 +7076,10 @@ let BattleItems = {
 	"tr75": {
 		id: "tr75",
 		name: "TR75",
+		fling: {
+			basePower: 100,
+		},
 		spritenum: 511,
-		isTR: "Stone Edge",
 		num: 1205,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Stone Edge. One use.",
@@ -6935,8 +7087,10 @@ let BattleItems = {
 	"tr76": {
 		id: "tr76",
 		name: "TR76",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 511,
-		isTR: "Stealth Rock",
 		num: 1206,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Stealth Rock. One use.",
@@ -6944,8 +7098,10 @@ let BattleItems = {
 	"tr77": {
 		id: "tr77",
 		name: "TR77",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 505,
-		isTR: "Grass Knot",
 		num: 1207,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Grass Knot. One use.",
@@ -6953,8 +7109,10 @@ let BattleItems = {
 	"tr78": {
 		id: "tr78",
 		name: "TR78",
+		fling: {
+			basePower: 95,
+		},
 		spritenum: 509,
-		isTR: "Sludge Wave",
 		num: 1208,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Sludge Wave. One use.",
@@ -6962,8 +7120,10 @@ let BattleItems = {
 	"tr79": {
 		id: "tr79",
 		name: "TR79",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 512,
-		isTR: "Heavy Slam",
 		num: 1209,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Heavy Slam. One use.",
@@ -6971,8 +7131,10 @@ let BattleItems = {
 	"tr80": {
 		id: "tr80",
 		name: "TR80",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 500,
-		isTR: "Electro Ball",
 		num: 1210,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Electro Ball. One use.",
@@ -6980,8 +7142,10 @@ let BattleItems = {
 	"tr81": {
 		id: "tr81",
 		name: "TR81",
+		fling: {
+			basePower: 95,
+		},
 		spritenum: 498,
-		isTR: "Foul Play",
 		num: 1211,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Foul Play. One use.",
@@ -6989,8 +7153,10 @@ let BattleItems = {
 	"tr82": {
 		id: "tr82",
 		name: "TR82",
+		fling: {
+			basePower: 20,
+		},
 		spritenum: 510,
-		isTR: "Stored Power",
 		num: 1212,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Stored Power. One use.",
@@ -6998,8 +7164,10 @@ let BattleItems = {
 	"tr83": {
 		id: "tr83",
 		name: "TR83",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 510,
-		isTR: "Ally Switch",
 		num: 1213,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Ally Switch. One use.",
@@ -7007,8 +7175,10 @@ let BattleItems = {
 	"tr84": {
 		id: "tr84",
 		name: "TR84",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 513,
-		isTR: "Scald",
 		num: 1214,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Scald. One use.",
@@ -7016,8 +7186,10 @@ let BattleItems = {
 	"tr85": {
 		id: "tr85",
 		name: "TR85",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 508,
-		isTR: "Work Up",
 		num: 1215,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Work Up. One use.",
@@ -7025,8 +7197,10 @@ let BattleItems = {
 	"tr86": {
 		id: "tr86",
 		name: "TR86",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 500,
-		isTR: "Wild Charge",
 		num: 1216,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Wild Charge. One use.",
@@ -7034,8 +7208,10 @@ let BattleItems = {
 	"tr87": {
 		id: "tr87",
 		name: "TR87",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 506,
-		isTR: "Drill Run",
 		num: 1217,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Drill Run. One use.",
@@ -7043,8 +7219,10 @@ let BattleItems = {
 	"tr88": {
 		id: "tr88",
 		name: "TR88",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 502,
-		isTR: "Heat Crash",
 		num: 1218,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Heat Crash. One use.",
@@ -7052,8 +7230,10 @@ let BattleItems = {
 	"tr89": {
 		id: "tr89",
 		name: "TR89",
+		fling: {
+			basePower: 110,
+		},
 		spritenum: 503,
-		isTR: "Hurricane",
 		num: 1219,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Hurricane. One use.",
@@ -7061,9 +7241,11 @@ let BattleItems = {
 	"tr90": {
 		id: "tr90",
 		name: "TR90",
+		fling: {
+			basePower: 90,
+		},
 		// TODO: Add Fairy TM to spritesheet
 		spritenum: 0,
-		isTR: "Play Rough",
 		num: 1220,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Play Rough. One use.",
@@ -7071,8 +7253,10 @@ let BattleItems = {
 	"tr91": {
 		id: "tr91",
 		name: "TR91",
+		fling: {
+			basePower: 10,
+		},
 		spritenum: 509,
-		isTR: "Venom Drench",
 		num: 1221,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Venom Drench. One use.",
@@ -7080,9 +7264,11 @@ let BattleItems = {
 	"tr92": {
 		id: "tr92",
 		name: "TR92",
+		fling: {
+			basePower: 80,
+		},
 		// TODO: Add Fairy TM to spritesheet
 		spritenum: 0,
-		isTR: "Dazzling Gleam",
 		num: 1222,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dazzling Gleam. One use.",
@@ -7090,8 +7276,10 @@ let BattleItems = {
 	"tr93": {
 		id: "tr93",
 		name: "TR93",
+		fling: {
+			basePower: 85,
+		},
 		spritenum: 498,
-		isTR: "Darkest Lariat",
 		num: 1223,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Darkest Lariat. One use.",
@@ -7099,8 +7287,10 @@ let BattleItems = {
 	"tr94": {
 		id: "tr94",
 		name: "TR94",
+		fling: {
+			basePower: 95,
+		},
 		spritenum: 506,
-		isTR: "High Horsepower",
 		num: 1224,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move High Horsepower. One use.",
@@ -7108,8 +7298,10 @@ let BattleItems = {
 	"tr95": {
 		id: "tr95",
 		name: "TR95",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 498,
-		isTR: "Throat Chop",
 		num: 1225,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Throat Chop. One use.",
@@ -7117,8 +7309,10 @@ let BattleItems = {
 	"tr96": {
 		id: "tr96",
 		name: "TR96",
+		fling: {
+			basePower: 90,
+		},
 		spritenum: 496,
-		isTR: "Pollen Puff",
 		num: 1226,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Pollen Puff. One use.",
@@ -7126,8 +7320,10 @@ let BattleItems = {
 	"tr97": {
 		id: "tr97",
 		name: "TR97",
+		fling: {
+			basePower: 85,
+		},
 		spritenum: 510,
-		isTR: "Psychic Fangs",
 		num: 1227,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Psychic Fangs. One use.",
@@ -7135,8 +7331,10 @@ let BattleItems = {
 	"tr98": {
 		id: "tr98",
 		name: "TR98",
+		fling: {
+			basePower: 85,
+		},
 		spritenum: 513,
-		isTR: "Liquidation",
 		num: 1228,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Liquidation. One use.",
@@ -7144,8 +7342,10 @@ let BattleItems = {
 	"tr99": {
 		id: "tr99",
 		name: "TR99",
+		fling: {
+			basePower: 80,
+		},
 		spritenum: 501,
-		isTR: "Body Press",
 		num: 1229,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Body Press. One use.",
