@@ -1588,9 +1588,9 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			const update = [];
 			for (const tourRoom of Rooms.rooms.values()) {
-				if (!tourRoom.game || tourRoom.game.gameid !== 'tournament') continue;
+				const tournament = tourRoom.getGame(Tournament);
+				if (!tournament) continue;
 				if (tourRoom.isPrivate || tourRoom.isPersonal || tourRoom.staffRoom) continue;
-				const tournament = tourRoom.game as Tournament;
 				update.push({
 					room: tourRoom.roomid, title: room.title, format: tournament.name,
 					generator: tournament.generator.name, isStarted: tournament.isTournamentStarted,
@@ -1696,7 +1696,7 @@ export const commands: ChatCommands = {
 				}
 			}
 		} else {
-			const tournament = (room.game && room.game.gameid === 'tournament') ? room.game as Tournament : null;
+			const tournament = room.getGame(Tournament);
 			if (!tournament) {
 				return this.sendReply("There is currently no tournament running in this room.");
 			}
