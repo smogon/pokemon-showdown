@@ -2472,8 +2472,8 @@ export const commands: ChatCommands = {
 
 		unnighttalk: 'nighttalk',
 		nighttalk(target, room, user, connection, cmd) {
-			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			const game = room.game as MafiaTracker;
+			const game = room && room.getGame(MafiaTracker);
+			if (!game) return this.errorReply(`There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
 
@@ -2493,8 +2493,8 @@ export const commands: ChatCommands = {
 		unactor: 'priest',
 		unpriest: 'priest',
 		priest(target, room, user, connection, cmd) {
-			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			const game = room.game as MafiaTracker;
+			const game = room && room.getGame(MafiaTracker);
+			if (!game) return this.errorReply(`There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
 
@@ -2660,7 +2660,8 @@ export const commands: ChatCommands = {
 
 		spectate: 'view',
 		view(target, room, user, connection) {
-			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			const game = room && room.getGame(MafiaTracker);
+			if (!game) return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!this.runBroadcast()) return;
 			if (this.broadcasting) return this.sendReplyBox(`<button name="joinRoom" value="view-mafia-${room.roomid}" class="button"><strong>Spectate the game</strong></button>`);
 			return this.parse(`/join view-mafia-${room.roomid}`);
@@ -2990,7 +2991,6 @@ export const commands: ChatCommands = {
 		win(target, room, user, connection, cmd) {
 			if (!room || room.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.roomid !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
-			if (cmd === 'winfaction' && (!room.game || room.game.gameid !== 'mafia')) return this.errorReply(`There is no game of mafia running in the room`);
 			if (!this.can('mute', null, room)) return;
 			const args = target.split(',');
 			let points = parseInt(args[0]);
@@ -3010,7 +3010,8 @@ export const commands: ChatCommands = {
 			let toGiveTo = [];
 			let buf = `${points} point${Chat.plural(points, 's were', ' was')} awarded to: `;
 			if (cmd === 'winfaction') {
-				const game = room.getGame(MafiaTracker)!;
+				const game = room.getGame(MafiaTracker);
+				if (!game) return this.errorReply(`There is no game of mafia running in the room`);
 				for (let faction of args) {
 					faction = toID(faction);
 					const inFaction = [];
