@@ -387,11 +387,10 @@ let BattleMovedex = {
 					return this.chainModify(2);
 				}
 			},
-			onAnyModifyDamage(basePower, attacker, defender, move) {
+			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Fire') {
 					return this.chainModify(1.5);
-				}
-				if (move.type === 'Water') {
+				} else if (move.type === 'Water') {
 					return this.chainModify(0.5);
 				}
 			},
