@@ -146,7 +146,7 @@ export class Tournament extends Rooms.RoomGame {
 
 		this.isEnded = false;
 
-		room.add(`|tournament|create|${this.name}|${generator.name}|${this.playerCap}`);
+		room.add(`|tournament|create|${this.baseFormat}|${generator.name}|${this.playerCap}${this.name === this.baseFormat ? `` : `|${this.name}`}`);
 		const update: {
 			format: string, teambuilderFormat?: string, generator: string,
 			playerCap: number, isStarted: boolean, isJoined: boolean,
