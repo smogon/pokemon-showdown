@@ -1238,7 +1238,11 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		if (this.modjoin) {
 			const modjoin = this.modjoin === true ? this.modchat : this.modjoin;
-			message += ` [${modjoin} or higher to join]`;
+			if (this.staffRoom) {
+				message += ` [room staff or higher to join]`;
+			} else {
+				message += ` [${modjoin} or higher to join]`;
+			}
 		}
 		if (this.slowchat) {
 			message += ` [Slowchat ${this.slowchat}s]`;
