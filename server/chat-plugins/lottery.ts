@@ -248,7 +248,7 @@ export const commands: ChatCommands = {
 		`/lottery create max winners, name, html - creates a new lottery with [name] as the header and [html] as body. Max winners is the amount of people that will win the lottery. Requires # & ~`,
 		`/lottery delete - deletes the current lottery without declaring a winner. Requires # & ~`,
 		`/lottery end - ends the current lottery, declaring a random participant as the winner. Requires # & ~`,
-		`/lottery editmarkup html - edits the lottery markup with the provided HTML. Requires # & ~`,
+		`/lottery edit max winners, name, html - edits the lottery with the provided parameters. Requires # & ~`,
 		`/lottery join - joins the current lottery, if it exists, you need to be not currently punished in any public room, not locked and be autoconfirmed.`,
 		`/lottery leave - leaves the current lottery, if it exists.`,
 		`/lottery participants - shows the current participants in the lottery.`,
