@@ -611,7 +611,7 @@ let BattleFormatsData = {
 	gengarmega: {
 		inherit: true,
 		randomBattleMoves: ["shadowball", "sludgebomb", "thunderbolt", "willowisp", "substitute", "dazzlinggleam"],
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 	},
 	onix: {
