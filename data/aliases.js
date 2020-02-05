@@ -237,6 +237,7 @@ let BattleAliases = {
 	"ufop": "Pokestar UFO-2",
 	"ufopsychic": "Pokestar UFO-2",
 	"goon": "Obstagoon",
+	"rime": "Mr. Rime",
 	"zacianc": "Zacian-Crowned",
 	"zamazentac": "Zamazenta-Crowned",
 
