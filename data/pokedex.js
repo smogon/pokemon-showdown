@@ -14735,6 +14735,7 @@ let BattlePokedex = {
 	alcremie: {
 		num: 869,
 		species: "Alcremie",
+		baseForme: "Vanilla Cream",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 65, atk: 60, def: 75, spa: 110, spd: 121, spe: 64},
@@ -14747,7 +14748,7 @@ let BattlePokedex = {
 		evoCondition: "spin while holding a Sweet",
 		eggGroups: ["Fairy", "Amorphous"],
 		otherFormes: ["alcremiegmax"],
-		otherForms: ["alcremierubycream", "alcremiematcha", "alcremiemint", "alcremielemon", "alcremiesalted", "alcremierubyswirl", "alcremiecaramel", "alcremierainbow"],
+		otherForms: ["alcremierubycream", "alcremiematchacream", "alcremiemintcream", "alcremielemoncream", "alcremiesaltedcream", "alcremierubyswirl", "alcremiecaramelswirl", "alcremierainbowswirl"],
 	},
 	alcremiegmax: {
 		num: 869,
