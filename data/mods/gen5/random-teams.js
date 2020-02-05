@@ -434,24 +434,22 @@ class RandomGen5Teams extends RandomGen6Teams {
 					// Adaptability, Contrary, Hustle, Iron Fist, Skill Link
 					// @ts-ignore
 					rejectAbility = !counter[toID(ability)];
-				} else if (ability === 'Blaze') {
-					rejectAbility = !counter['Fire'];
 				} else if (ability === 'Chlorophyll') {
 					rejectAbility = !hasMove['sunnyday'] && !teamDetails['sun'];
 				} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
 					rejectAbility = !counter['inaccurate'];
 				} else if (ability === 'Defiant' || ability === 'Moxie') {
 					rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
-				} else if (ability === 'Gluttony' || ability === 'Inner Focus' || ability === 'Moody') {
+				} else if (ability === 'Gluttony' || ability === 'Moody') {
 					rejectAbility = true;
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
 					rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
 				} else if (ability === 'Ice Body' || ability === 'Snow Cloak') {
 					rejectAbility = !teamDetails['hail'];
 				} else if (ability === 'Lightning Rod') {
-					rejectAbility = template.types.indexOf('Ground') >= 0;
+					rejectAbility = template.types.includes('Ground');
 				} else if (ability === 'Limber') {
-					rejectAbility = template.types.indexOf('Electric') >= 0;
+					rejectAbility = template.types.includes('Electric');
 				} else if (ability === 'Overgrow') {
 					rejectAbility = !counter['Grass'];
 				} else if (ability === 'Poison Heal') {
