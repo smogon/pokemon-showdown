@@ -80,7 +80,7 @@ export class Blackjack extends Rooms.RoomGame {
 		};
 		this.deck = new BlackjackDeck().shuffle();
 
-		this.roomID = this.room.roomid as RoomID;
+		this.roomID = this.room.roomid;
 		this.title = `Blackjack (${room.title})`;
 		this.blackjack = true;
 		this.state = 'signups';
@@ -456,7 +456,7 @@ export class Blackjack extends Rooms.RoomGame {
 		this.turnLog += turnLine;
 		if (player.cards.length > 2) this.display(turnLine, false, player.name);
 
-		if (player instanceof BlackjackDealer) {
+		if (player === this.dealer) {
 			if (player.points > 21) {
 				let cards = '';
 				for (const card of player.cards) {
@@ -475,7 +475,7 @@ export class Blackjack extends Rooms.RoomGame {
 				return;
 			}
 		} else if (player.points > 21) {
-			player.status = 'bust';
+			(player as BlackjackPlayer).status = 'bust';
 			let cards = '';
 			for (const card of player.cards) {
 				cards += `[${card}] `;
@@ -485,13 +485,13 @@ export class Blackjack extends Rooms.RoomGame {
 			this.display(turnLine, false, player.name);
 			this.clear();
 		} else if (player.points === 21) {
-			player.status = 'stand';
+			(player as BlackjackPlayer).status = 'stand';
 			turnLine = Chat.html`<br /><strong>${player.name}</strong> has blackjack!`;
 			this.turnLog += turnLine;
 			this.display(turnLine, false, player.name);
 			this.clear();
 		}
-		if (!(player instanceof BlackjackDealer)) this.playerTable[userid].cards = player.cards;
+		if (player !== this.dealer) this.playerTable[userid].cards = player.cards;
 		this.next();
 	}
 	getCardPoints(playerid: string) {
