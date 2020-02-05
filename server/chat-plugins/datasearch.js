@@ -168,11 +168,22 @@ exports.commands = {
 
 	'!movesearch': true,
 	ms: 'movesearch',
+	ms1: 'movesearch',
+	ms2: 'movesearch',
+	ms3: 'movesearch',
+	ms4: 'movesearch',
+	ms5: 'movesearch',
+	ms6: 'movesearch',
+	ms7: 'movesearch',
+	ms8: 'movesearch',
 	msearch: 'movesearch',
+	nms: 'movesearch',
 	movesearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help movesearch');
-
+		let targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen) target += `, maxgen${targetGen}`;
+		if (cmd === 'nms') target += ', natdex';
 		return runSearch({
 			target: target,
 			cmd: 'movesearch',
@@ -206,6 +217,8 @@ exports.commands = {
 		`'max' or 'gmax' as parameters will search for Max Moves and G-Max moves respectively.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
 		`If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.`,
+		`You can search for info in a specific generation by appending the generation to ms, e.g. '/ms1 normal' searches for all moves that were normal type in Generation I.`,
+		`/ms will search the Galar Movedex; You can search the National Movedex by using '/nms' or by adding 'natdex' as a parameter.`,
 		`The order of the parameters does not matter.`,
 	],
 
@@ -856,7 +869,9 @@ function runMovesearch(target, cmd, canAll, message) {
 	let showAll = false;
 	let sort = null;
 	let targetMons = [];
+	let nationalSearch = null;
 	let randomOutput = 0;
+	let maxGen = 0;
 	for (const arg of target.split(',')) {
 		let orGroup = {types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {}, boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, skip: false};
 		let parameters = arg.split("|");
@@ -921,6 +936,19 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (target === 'all') {
 				if (!canAll) return {reply: "A search with the parameter 'all' cannot be broadcast."};
 				showAll = true;
+				orGroup.skip = true;
+				continue;
+			}
+
+			if (target.substr(0, 6) === 'maxgen') {
+				maxGen = parseInt(target[6]);
+				if (!maxGen || maxGen < 1 || maxGen > 8) return {reply: "The generation must be between 1 and 8"};
+				orGroup.skip = true;
+				continue;
+			}
+
+			if (target === 'natdex') {
+				nationalSearch = true;
 				orGroup.skip = true;
 				continue;
 			}
@@ -1129,19 +1157,22 @@ function runMovesearch(target, cmd, canAll, message) {
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && !searches.length && !targetMons.length) {
+	if (showAll && !searches.length && !targetMons.length && !maxGen) {
 		return {reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command."};
 	}
 
+	if (!maxGen) maxGen = 8;
+	let mod = Dex.mod('gen' + maxGen);
+
 	const getFullLearnsetOfPokemon = (template) => {
 		if (!template.learnset) {
-			template = Dex.getTemplate(template.baseSpecies);
+			template = mod.getTemplate(template.baseSpecies);
 			template.learnset = template.learnset || {};
 		}
 		const lsetData = new Set(Object.keys(template.learnset));
 
 		while (template.prevo) {
-			template = Dex.getTemplate(template.prevo);
+			template = mod.getTemplate(template.prevo);
 			for (const move in template.learnset) {
 				lsetData.add(move);
 			}
@@ -1155,7 +1186,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	const validMoves = new Set(Object.keys(Dex.data.Movedex));
 	validMoves.delete('magikarpsrevenge');
 	for (const mon of targetMons) {
-		const template = Dex.getTemplate(mon.name);
+		const template = mod.getTemplate(mon.name);
 		const lsetData = getFullLearnsetOfPokemon(template);
 		// This pokemon's learnset needs to be excluded, so we perform a difference operation on the valid moveset and this pokemon's moveset.
 		if (mon.shouldBeExcluded) {
@@ -1175,8 +1206,15 @@ function runMovesearch(target, cmd, canAll, message) {
 	// At this point, we've trimmed down the valid moveset to be
 	// the moves that are appropriate considering the requested pokemon.
 	let dex = {};
-	for (const move of validMoves) {
-		dex[move] = Dex.getMove(move);
+	for (const moveid of validMoves) {
+		const move = mod.getMove(moveid);
+		if (move.gen <= maxGen) {
+			if ((!nationalSearch && move.isNonstandard) || (nationalSearch && move.isNonstandard && move.isNonstandard !== "Past")) {
+				continue;
+			} else {
+				dex[moveid] = move;
+			}
+		}
 	}
 
 	for (const alts of searches) {
