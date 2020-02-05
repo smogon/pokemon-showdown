@@ -7647,8 +7647,8 @@ let BattleFormatsData = {
 	},
 	toxtricitygmax: {
 		isGigantamax: "G-Max Stun Shock",
-		isUnreleased: true,
-		tier: "Unreleased",
+		tier: "Uber",
+		doublesTier: "DOU",
 	},
 	sizzlipede: {
 		tier: "LC",
