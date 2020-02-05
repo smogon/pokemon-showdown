@@ -51,7 +51,7 @@ export const commands: ChatCommands = {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			if (!room.events) room.events = Object.create(null);
-			let [eventName, date, ...desc] = target.split(target.includes('|') ? '|' : ',');
+			const [eventName, date, ...desc] = target.split(target.includes('|') ? '|' : ',');
 
 			if (!(eventName && date && desc)) {
 				return this.errorReply("You're missing a command parameter - see /help roomevents for this command's syntax.");

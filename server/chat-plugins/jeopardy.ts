@@ -323,8 +323,7 @@ export class Jeopardy extends Rooms.RoomGame {
 			this.dailyDouble();
 		} else {
 			for (const userID in this.playerTable) {
-				const player = this.playerTable[userID];
-				if (!player.wager) return;
+				if (!this.playerTable[userID].wager) return;
 			}
 			if (this.timeout) clearTimeout(this.timeout);
 			this.finalWagers();
