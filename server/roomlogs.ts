@@ -225,10 +225,10 @@ export class Roomlog {
 		const roomlogStreamExisted = !!this.roomlogStream;
 		await this.destroy();
 		await Promise.all([
-			FS(modlogPath + `/modlog_${this.roomid}.txt`).isFile(),
-			FS(roomlogPath + `/${this.roomid}`).isDirectory(),
-			FS(modlogPath + `/modlog_${newID}.txt`).isFile(),
-			FS(roomlogPath + `/${newID}`).isDirectory(),
+			FS(modlogPath + `/modlog_${this.roomid}.txt`).exists(),
+			FS(roomlogPath + `/${this.roomid}`).exists(),
+			FS(modlogPath + `/modlog_${newID}.txt`).exists(),
+			FS(roomlogPath + `/${newID}`).exists(),
 		]).then(([modlogExists, roomlogExists, newModlogExists, newRoomlogExists]) => {
 			return Promise.all([
 				modlogExists && !newModlogExists
