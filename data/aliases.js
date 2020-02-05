@@ -236,6 +236,7 @@ let BattleAliases = {
 	"unecro": "Necrozma-Ultra",
 	"ufop": "Pokestar UFO-2",
 	"ufopsychic": "Pokestar UFO-2",
+	"goon": "Obstagoon",
 	"zacianc": "Zacian-Crowned",
 	"zamazentac": "Zamazenta-Crowned",
 
