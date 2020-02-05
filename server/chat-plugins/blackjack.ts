@@ -495,7 +495,7 @@ export class Blackjack extends Rooms.RoomGame {
 		this.next();
 	}
 	getCardPoints(playerid: string) {
-		const player = (playerid === 'dealer' ? this.dealer : this.playerTable[playerid])
+		const player = (playerid === 'dealer' ? this.dealer : this.playerTable[playerid]);
 		let points = 0;
 		let aceCount = 0;
 		for (const card of player.cards.map(x => toID(x).toUpperCase())) {
