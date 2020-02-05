@@ -3419,13 +3419,7 @@ let BattleFormatsData = {
 			baseMove1: "fireblast", baseMove2: "crunch", baseMove3: "pursuit",
 			fillerMoves1: ["counter", "hiddenpowergrass"],
 		},
-		randomSet3: { // Substitute
-			chance: 14,
-			item: ["leftovers"],
-			baseMove1: "fireblast", baseMove2: "crunch", baseMove3: "substitute",
-			fillerMoves1: ["counter", "pursuit", "pursuit", "hiddenpowergrass"],
-		},
-		randomSet4: { // Thief
+		randomSet3: { // Thief
 			chance: 16,
 			item: ["", "", "miracleberry"],
 			baseMove1: "fireblast", baseMove2: "crunch", baseMove3: "thief",
