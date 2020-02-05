@@ -13,8 +13,6 @@
  * @license MIT
  */
 
-'use strict';
-
 import * as child_process from 'child_process';
 import * as path from 'path';
 import * as util from 'util';
@@ -180,9 +178,8 @@ async function runModlog(
 }
 
 async function checkRoomModlog(pathString: string, regex: RegExp | null, results: SortedLimitedLengthList) {
-	const fileStream = await FS(pathString).createReadStream();
+	const fileStream = FS(pathString).createReadStream();
 	let line;
-	// tslint:disable-next-line no-conditional-assignment
 	while ((line = await fileStream.readLine()) !== null) {
 		if (!regex || regex.test(line)) {
 			results.insert(line);
@@ -324,7 +321,7 @@ async function getModlog(
 	if (roomid === 'public') {
 		const isPublicRoom = (
 			(room: Room) =>
-			!(room.isPrivate || room.battle || room.isPersonal || room.roomid === 'global')
+				!(room.isPrivate || room.battle || room.isPersonal || room.roomid === 'global')
 		);
 		roomidList = [...Rooms.rooms.values()].filter(isPublicRoom).map(room => room.roomid);
 	} else {
@@ -608,7 +605,7 @@ export const commands: ChatCommands = {
 
 		void getModlog(
 			connection,
-			roomid as RoomID,
+			roomid,
 			target,
 			lines,
 			(cmd === 'punishlog' || cmd === 'pl'),

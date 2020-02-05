@@ -28,6 +28,7 @@
  * @license MIT license
  */
 
+// eslint-disable-next-line no-extend-native
 Object.defineProperty(Array.prototype, 'flatMap', {
 	value<T, U, W>(this: T[], callback: (this: W, item: T, index: number, array: T[]) => U[], thisArg: W): U[] {
 		const newArray = [];
@@ -156,7 +157,7 @@ export class ModdedDex {
 	dataCache: DexTableData | null;
 	formatsCache: DexTable<Format> | null;
 
-	constructor(mod: string = 'base', isOriginal: boolean = false) {
+	constructor(mod = 'base', isOriginal = false) {
 		this.ModdedDex = ModdedDex;
 		this.Data = Data;
 
@@ -265,6 +266,7 @@ export class ModdedDex {
 
 		// remove zalgo
 		name = name.replace(
+			// eslint-disable-next-line max-len
 			/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,
 			''
 		);
@@ -327,7 +329,7 @@ export class ModdedDex {
 	getSpecies(species: string | Template): string {
 		const id = toID(species || '');
 		const template = this.getTemplate(id);
-		if (template.otherForms && template.otherForms.indexOf(id) >= 0) {
+		if (template.otherForms && template.otherForms.includes(id)) {
 			const form = id.slice(template.species.length);
 			if (form) return template.species + '-' + form[0].toUpperCase() + form.slice(1);
 		}
@@ -412,7 +414,7 @@ export class ModdedDex {
 				} else if (template.speciesid.endsWith('totem')) {
 					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
-				}  else if (template.inheritsFrom) {
+				} else if (template.inheritsFrom) {
 					template.tier = this.data.FormatsData[template.inheritsFrom].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[template.inheritsFrom].doublesTier || 'Illegal';
 				} else {
@@ -797,7 +799,7 @@ export class ModdedDex {
 		}
 	}
 
-	getRuleTable(format: Format, depth: number = 1, repeals?: Map<string, number>): Data.RuleTable {
+	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): Data.RuleTable {
 		if (format.ruleTable && !repeals) return format.ruleTable;
 		if (depth === 1 && dexes[format.mod || 'base'] !== this) {
 			// throw new Error(`${format.mod} ${this.currentMod}`);
@@ -941,7 +943,7 @@ export class ModdedDex {
 				const gtIndex = buf.lastIndexOf('>');
 				let limit = rule.charAt(0) === '+' ? Infinity : 0;
 				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
-					if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1), 10);
+					if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1));
 					buf = buf.slice(0, gtIndex);
 				}
 				let checkTeam = buf.includes('++');
@@ -1104,12 +1106,13 @@ export class ModdedDex {
 	 * Truncate a number into an unsigned 32-bit integer, for
 	 * compatibility with the cartridge games' math systems.
 	 */
-	trunc(num: number, bits: number = 0) {
+	trunc(num: number, bits = 0) {
 		if (bits) return (num >>> 0) % (2 ** bits);
 		return num >>> 0;
 	}
 
 	getTeamGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const TeamGenerator = require(dexes['base'].forFormat(format).dataDir + '/random-teams');
 		return new TeamGenerator(format, seed);
 	}
@@ -1367,7 +1370,7 @@ export class ModdedDex {
 			// level
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
-			if (i !== j) set.level = parseInt(buf.substring(i, j), 10);
+			if (i !== j) set.level = parseInt(buf.substring(i, j));
 			i = j + 1;
 
 			// happiness
@@ -1403,6 +1406,7 @@ export class ModdedDex {
 	loadDataFile(basePath: string, dataType: DataType | 'Aliases'): AnyObject {
 		try {
 			const filePath = basePath + DATA_FILES[dataType];
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const dataObject = require(filePath);
 			const key = `Battle${dataType}`;
 			if (!dataObject || typeof dataObject !== 'object') {

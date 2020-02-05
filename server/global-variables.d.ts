@@ -33,7 +33,7 @@ declare global {
 	const Config: typeof ConfigType & AnyObject;
 	const Chat: typeof ChatType.Chat;
 	const IPTools: typeof IPToolsType;
-	const Ladders: typeof LaddersType
+	const Ladders: typeof LaddersType;
 	const LadderStoreT: typeof LadderStoreType;
 	const LoginServer: typeof LoginServerType;
 	const Monitor: typeof MonitorType;
@@ -43,6 +43,6 @@ declare global {
 	const Rooms: typeof RoomsType.Rooms;
 	const Tournaments: typeof TournamentsType;
 	const Roomlogs: typeof RoomlogsType.Roomlogs;
-	const Users: typeof UsersType.Users
+	const Users: typeof UsersType.Users;
 	const Verifier: typeof VerifierType;
 }

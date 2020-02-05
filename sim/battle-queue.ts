@@ -132,7 +132,7 @@ export class BattleQueue extends Array<Action> {
 	 * Returns an array of Actions because some ActionChoices (like mega moves)
 	 * resolve to two Actions (mega evolution + use move)
 	 */
-	resolveAction(action: ActionChoice, midTurn: boolean = false): Action[] {
+	resolveAction(action: ActionChoice, midTurn = false): Action[] {
 		if (!action) throw new Error(`Action not passed to resolveAction`);
 		if (action.choice === 'pass') return [];
 		const actions = [action];
@@ -304,7 +304,7 @@ export class BattleQueue extends Array<Action> {
 	 * would have happened (sorting by priority/speed), without
 	 * re-sorting the existing actions.
 	 */
-	insertChoice(choices: ActionChoice | ActionChoice[], midTurn: boolean = false) {
+	insertChoice(choices: ActionChoice | ActionChoice[], midTurn = false) {
 		if (Array.isArray(choices)) {
 			for (const choice of choices) {
 				this.insertChoice(choice);

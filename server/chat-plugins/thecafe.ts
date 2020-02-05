@@ -1,5 +1,3 @@
-'use strict';
-
 import {FS} from '../../lib/fs';
 
 const DISHES_FILE = 'config/chat-plugins/thecafe-foodfight.json';
@@ -112,7 +110,9 @@ export const commands: ChatCommands = {
 
 		if (!Object.keys(dishes).length) return this.errorReply("No dishes found. Add some dishes first.");
 
-		if (user.foodfight && user.foodfight.timestamp + FOODFIGHT_COOLDOWN > Date.now()) return this.errorReply("Please wait a few minutes before using this command again.");
+		if (user.foodfight && user.foodfight.timestamp + FOODFIGHT_COOLDOWN > Date.now()) {
+			return this.errorReply("Please wait a few minutes before using this command again.");
+		}
 
 		target = toID(target);
 
@@ -127,7 +127,12 @@ export const commands: ChatCommands = {
 			team = generateTeam(target);
 		}
 		user.foodfight = {generatedTeam: team, dish: newDish, ingredients: newIngredients, timestamp: Date.now()};
-		const importStr = importable ? `<tr><td colspan=7><details><summary style="font-size:13pt;">Importable team:</summary><div style="width:100%;height:400px;overflow:auto;color:black;font-family:monospace;background:white;text-align:left;">${importable}</textarea></details></td></tr>` : '';
+		const importStr = importable
+			?
+			`<tr><td colspan=7><details><summary style="font-size:13pt;">Importable team:</summary>
+			<div style="width:100%;height:400px;overflow:auto;color:black;font-family:monospace;background:white;text-align:left;">
+			${importable}</textarea></details></td></tr>`
+			: '';
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">Your dish is: <u>${newDish}</u></th></tr><tr><th>Team</th>${team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${newIngredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>${importStr}</table></div>`);
 	},
 	checkfoodfight(target, room, user) {
@@ -137,7 +142,9 @@ export const commands: ChatCommands = {
 		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
 		const self = targetUser === user;
 		if (!self && !this.can('mute', targetUser, room)) return false;
-		if (!targetUser.foodfight) return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
+		if (!targetUser.foodfight) {
+			return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
+		}
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">${self ? `Your` : `${this.targetUsername}'s`} dish is: <u>${targetUser.foodfight.dish}</u></th></tr><tr><th>Team</th>${targetUser.foodfight.generatedTeam.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${targetUser.foodfight.ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr></table></div>`);
 	},
 	addingredients: 'adddish',
@@ -166,7 +173,9 @@ export const commands: ChatCommands = {
 			dishes[id] = [dish];
 		} else {
 			if (!dishes[id]) return this.errorReply(`Dish not found: ${dish}`);
-			if (ingredients.some(ingredient => dishes[id].includes(ingredient))) return this.errorReply("Please don't enter duplicate ingredients.");
+			if (ingredients.some(ingredient => dishes[id].includes(ingredient))) {
+				return this.errorReply("Please don't enter duplicate ingredients.");
+			}
 		}
 
 		dishes[id] = dishes[id].concat(ingredients);

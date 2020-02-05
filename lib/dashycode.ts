@@ -74,7 +74,7 @@ function streamRead(stream: DashyStream, readLength: number, readMask: number = 
 	return output;
 }
 
-export function encode(str: string, allowCaps: boolean = false) {
+export function encode(str: string, allowCaps = false) {
 	if (!str) return '0--0';
 	let safePart = '';
 	const unsafeStream: DashyStream = {
@@ -266,7 +266,7 @@ export function decode(codedStr: string) {
 	return str;
 }
 
-export function vizStream(codeBuf: string, translate: boolean = true) {
+export function vizStream(codeBuf: string, translate = true) {
 	let spacedStream = '';
 	if (codeBuf.charAt(0) === '0') {
 		codeBuf = codeBuf.slice(1);

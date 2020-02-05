@@ -4,8 +4,6 @@
  * Written by Asheviere, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
  */
 
-'use strict';
-
 import {FS} from '../../lib/fs';
 
 Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
@@ -100,7 +98,10 @@ class Giveaway {
 	kickUser(user: User) {
 		for (const ip in this.joined) {
 			if (user.latestIp === ip || this.joined[ip] in user.prevNames) {
-				user.sendTo(this.room, `|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder()}</div>`);
+				user.sendTo(
+					this.room,
+					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder()}</div>`
+				);
 				delete this.joined[ip];
 			}
 		}
@@ -249,12 +250,16 @@ export class QuestionGiveaway extends Giveaway {
 	guessAnswer(user: User, guess: string) {
 		if (this.phase !== 'started') return user.sendTo(this.room, "The giveaway has not started yet.");
 
-		if (this.checkJoined(user) && Object.values(this.joined).indexOf(user.id) < 0) return user.sendTo(this.room, "You have already joined the giveaway.");
+		if (this.checkJoined(user) && !Object.values(this.joined).includes(user.id)) {
+			return user.sendTo(this.room, "You have already joined the giveaway.");
+		}
 		if (Giveaway.checkBanned(this.room, user)) return user.sendTo(this.room, "You are banned from entering giveaways.");
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
 		if (!this.answered[user.id]) this.answered[user.id] = 0;
-		if (this.answered[user.id] >= 3) return user.sendTo(this.room, "You have already guessed three times. You cannot guess anymore in this giveaway.");
+		if (this.answered[user.id] >= 3) {
+			return user.sendTo(this.room, "You have already guessed three times. You cannot guess anymore in this giveaway.");
+		}
 
 		const sanitized = toID(guess);
 
@@ -280,13 +285,17 @@ export class QuestionGiveaway extends Giveaway {
 
 	change(key: string, value: string, user: User) {
 		if (user.id !== this.host.id) return user.sendTo(this.room, "Only the host can edit the giveaway.");
-		if (this.phase !== 'pending') return user.sendTo(this.room, "You cannot change the question or answer once the giveaway has started.");
+		if (this.phase !== 'pending') {
+			return user.sendTo(this.room, "You cannot change the question or answer once the giveaway has started.");
+		}
 		if (key === 'question') {
 			this.question = value;
 			return user.sendTo(this.room, `The question has been changed to ${value}.`);
 		}
 		const ans = QuestionGiveaway.sanitizeAnswers(value.split(',').map(val => val.trim()));
-		if (!ans.length) return user.sendTo(this.room, "You must specify at least one answer and it must not contain any special characters.");
+		if (!ans.length) {
+			return user.sendTo(this.room, "You must specify at least one answer and it must not contain any special characters.");
+		}
 		this.answers = ans;
 		user.sendTo(this.room, `The answer${Chat.plural(ans, "s have", "has")} been changed to ${ans.join(', ')}.`);
 	}
@@ -305,10 +314,19 @@ export class QuestionGiveaway extends Giveaway {
 				this.phase = 'ended';
 				this.clearTimer();
 				this.room.modlog(`(wifi) GIVEAWAY WIN: ${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}" (OT: ${this.ot} TID: ${this.tid} FC: ${this.fc})`);
-				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>${Chat.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
-				`<p style="text-align:center;">${this.question}<br />Correct answer${Chat.plural(this.answers)}: ${this.answers.join(', ')}</p>`));
-				this.winner.sendTo(this.room, `|raw|You have won the giveaway. PM <b>${Chat.escapeHTML(this.giver.name)}</b> (FC: ${this.fc}) to claim your prize!`);
-				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
+				this.send(
+					this.generateWindow(
+						`<p style="text-align:center;font-size:12pt;"><b>${Chat.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
+						`<p style="text-align:center;">${this.question}<br />Correct answer${Chat.plural(this.answers)}: ${this.answers.join(', ')}</p>`
+					)
+				);
+				this.winner.sendTo(
+					this.room,
+					`|raw|You have won the giveaway. PM <b>${Chat.escapeHTML(this.giver.name)}</b> (FC: ${this.fc}) to claim your prize!`
+				);
+				if (this.winner.connected) {
+					this.winner.popup(`You have won the giveaway. PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
+				}
 				if (this.giver.connected) this.giver.popup(`${this.winner.name} has won your question giveaway!`);
 				Giveaway.updateStats(this.monIDs);
 			}
@@ -371,9 +389,15 @@ export class LotteryGiveaway extends Giveaway {
 		for (const i in this.room.users) {
 			const thisUser = this.room.users[i];
 			if (this.checkJoined(thisUser)) {
-				thisUser.sendTo(this.room, `|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${joined}</div>`);
+				thisUser.sendTo(
+					this.room,
+					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${joined}</div>`
+				);
 			} else {
-				thisUser.sendTo(this.room, `|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${notJoined}</div>`);
+				thisUser.sendTo(
+					this.room,
+					`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${notJoined}</div>`
+				);
 			}
 		}
 	}
@@ -387,7 +411,9 @@ export class LotteryGiveaway extends Giveaway {
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
 		this.joined[user.latestIp] = user.id;
-		user.sendTo(this.room, `|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(true)}</div>`);
+		user.sendTo(
+			this.room,
+			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(true)}</div>`);
 		user.sendTo(this.room, "You have successfully joined the lottery giveaway.");
 	}
 
@@ -399,7 +425,10 @@ export class LotteryGiveaway extends Giveaway {
 				delete this.joined[ip];
 			}
 		}
-		user.sendTo(this.room, `|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(false)}</div>`);
+		user.sendTo(
+			this.room,
+			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(false)}</div>`
+		);
 		user.sendTo(this.room, "You have left the lottery giveaway.");
 	}
 
@@ -431,10 +460,21 @@ export class LotteryGiveaway extends Giveaway {
 			this.phase = 'ended';
 			const winnerNames = this.winners.map(winner => winner.name).join(', ');
 			this.room.modlog(`(wifi) GIVEAWAY WIN: ${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}" (OT: ${this.ot} TID: ${this.tid} FC: ${this.fc})`);
-			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
+			this.send(
+				this.generateWindow(
+					`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p>
+					<p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />
+					Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b>Congratulations!</p>`
+				)
+			);
 			for (const winner of this.winners) {
-				winner.sendTo(this.room, `|raw|You have won the lottery giveaway! PM <b>${this.giver.name}</b> (FC: ${this.fc}) to claim your prize!`);
-				if (winner.connected) winner.popup(`You have won the lottery giveaway! PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
+				winner.sendTo(
+					this.room,
+					`|raw|You have won the lottery giveaway! PM <b>${this.giver.name}</b> (FC: ${this.fc}) to claim your prize!`
+				);
+				if (winner.connected) {
+					winner.popup(`You have won the lottery giveaway! PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
+				}
 			}
 			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${winnerNames}`);
 			Giveaway.updateStats(this.monIDs);
@@ -499,11 +539,17 @@ export class GTSGiveaway {
 
 	generateWindow() {
 		const sentModifier = this.sent.length ? 5 : 0;
-		const rightSide = this.noDeposits ? `<strong>More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</strong>` : `To participate, deposit <strong>${this.deposit}</strong> into the GTS and look for <strong>${Chat.escapeHTML(this.lookfor)}</strong>`;
+		const rightSide = this.noDeposits ?
+			`<strong>More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted.
+			If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</strong>
+			` :
+			`To participate, deposit <strong>${this.deposit}</strong> into the GTS and look for <strong>${Chat.escapeHTML(this.lookfor)}</strong>`;
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">There is a GTS giveaway going on!</p>` +
 			`<p style="text-align:center;font-size:10pt;margin-top:0px;">Hosted by: ${Chat.escapeHTML(this.giver.name)} | Left: <b>${this.left}</b></p>` +
 			`<table style="margin-left:auto;margin-right:auto;"><tr>` +
-			(sentModifier ? `<td style="text-align:center;width:10%"><b>Last winners:</b><br/>${this.sent.join('<br/>')}</td>` : '') +
+			(sentModifier ?
+				`<td style="text-align:center;width:10%"><b>Last winners:</b><br/>${this.sent.join('<br/>')}</td>`
+				: '') +
 			`<td style="text-align:center;width:15%">${this.sprite}</td><td style="text-align:center;width:${40 - sentModifier}%">${Chat.formatText(this.summary, true)}</td>` +
 			`<td style="text-align:center;width:${35 - sentModifier}%">${rightSide}</td></tr></table>`;
 	}
@@ -548,7 +594,9 @@ export class GTSGiveaway {
 		return this.left;
 	}
 
-	// This currently doesn't match some of the edge cases the other pokemon matching function does account for (such as Type: Null). However, this should never be used as a fodder mon anyway, so I don't see a huge need to implement it.
+	// This currently doesn't match some of the edge cases the other pokemon matching function does account for
+	// (such as Type: Null). However, this should never be used as a fodder mon anyway,
+	// so I don't see a huge need to implement it.
 	static linkify(text: string) {
 		const parsed = text.toLowerCase().replace(/é/g, 'e');
 
@@ -560,7 +608,9 @@ export class GTSGiveaway {
 			const regexp = new RegExp(`\\b${id}\\b`, 'ig');
 			const res = regexp.exec(parsed);
 			if (res) {
-				const num = Dex.data.Pokedex[i].num < 100 ? (Dex.data.Pokedex[i].num < 10 ? `00${Dex.data.Pokedex[i].num}` : `0${Dex.data.Pokedex[i].num}`) : Dex.data.Pokedex[i].num;
+				const num = Dex.data.Pokedex[i].num < 100 ? (Dex.data.Pokedex[i].num < 10
+					? `00${Dex.data.Pokedex[i].num}` : `0${Dex.data.Pokedex[i].num}`)
+					: Dex.data.Pokedex[i].num;
 				return `${text.slice(0, res.index)}<a href="http://www.serebii.net/pokedex-sm/location/${num}.shtml">${text.slice(res.index, res.index + res[0].length)}</a>${text.slice(res.index + res[0].length)}`;
 			}
 		}
@@ -579,7 +629,9 @@ const cmds: ChatCommands = {
 		let [giver, ot, tid, fc, prize, question, ...answers] = target.split(target.includes('|') ? '|' : ',').map(
 			param => param.trim()
 		);
-		if (!(giver && ot && tid && fc && prize && question && answers.length)) return this.errorReply("Invalid arguments specified - /question giver | ot | tid | fc | prize | question | answer(s)");
+		if (!(giver && ot && tid && fc && prize && question && answers.length)) {
+			return this.errorReply("Invalid arguments specified - /question giver | ot | tid | fc | prize | question | answer(s)");
+		}
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		fc = toID(fc);
@@ -589,7 +641,9 @@ const cmds: ChatCommands = {
 		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) {
 			return this.errorReply("/qg - Access denied.");
 		}
-		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
+		if (!targetUser.autoconfirmed) {
+			return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
+		}
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
 		room.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, fc, prize, question, answers);
@@ -635,7 +689,9 @@ const cmds: ChatCommands = {
 		if (room.giveaway) return this.errorReply("There is already a giveaway going on!");
 
 		let [giver, ot, tid, fc, prize, winners] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
-		if (!(giver && ot && tid && fc && prize)) return this.errorReply("Invalid arguments specified - /lottery giver | ot | tid | fc | prize | winners");
+		if (!(giver && ot && tid && fc && prize)) {
+			return this.errorReply("Invalid arguments specified - /lottery giver | ot | tid | fc | prize | winners");
+		}
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		fc = toID(fc);
@@ -645,13 +701,17 @@ const cmds: ChatCommands = {
 		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) {
 			return this.errorReply("/lg - Access denied.");
 		}
-		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
+		if (!targetUser.autoconfirmed) {
+			return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
+		}
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
 		let numWinners = 1;
 		if (winners) {
 			numWinners = parseInt(winners);
-			if (isNaN(numWinners) || numWinners < 1 || numWinners > 5) return this.errorReply("The lottery giveaway can have a minimum of 1 and a maximum of 5 winners.");
+			if (isNaN(numWinners) || numWinners < 1 || numWinners > 5) {
+				return this.errorReply("The lottery giveaway can have a minimum of 1 and a maximum of 5 winners.");
+			}
 		}
 
 		room.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, fc, prize, numWinners);
@@ -694,13 +754,19 @@ const cmds: ChatCommands = {
 			const [giver, amountStr, summary, deposit, lookfor] = target.split(target.includes('|') ? '|' : ',').map(
 				param => param.trim()
 			);
-			if (!(giver && amountStr && summary && deposit && lookfor)) return this.errorReply("Invalid arguments specified - /gts start giver | amount | summary | deposit | lookfor");
+			if (!(giver && amountStr && summary && deposit && lookfor)) {
+				return this.errorReply("Invalid arguments specified - /gts start giver | amount | summary | deposit | lookfor");
+			}
 			const amount = parseInt(amountStr);
-			if (!amount || amount < 20 || amount > 100) return this.errorReply("Please enter a valid amount. For a GTS giveaway, you need to give away at least 20 mons, and no more than 100.");
+			if (!amount || amount < 20 || amount > 100) {
+				return this.errorReply("Please enter a valid amount. For a GTS giveaway, you need to give away at least 20 mons, and no more than 100.");
+			}
 			const targetUser = Users.get(giver);
 			if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
 			if (!this.can('warn', null, room)) return this.errorReply("Permission denied.");
-			if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to host a giveaway.`);
+			if (!targetUser.autoconfirmed) {
+				return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to host a giveaway.`);
+			}
 			if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
 			room.gtsga = new GTSGiveaway(room, targetUser, amount, summary, deposit, lookfor);
@@ -711,7 +777,9 @@ const cmds: ChatCommands = {
 		left(target, room, user) {
 			if (room.roomid !== 'wifi') return false;
 			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
-			if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+			if (!user.can('warn', null, room) && user !== room.gtsga.giver) {
+				return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+			}
 			if (!target) {
 				if (!this.runBroadcast()) return;
 				let output = `The GTS giveaway from ${room.gtsga.giver} has ${room.gtsga.left} Pokémon remaining!`;
@@ -721,14 +789,18 @@ const cmds: ChatCommands = {
 			const newamount = parseInt(target);
 			if (isNaN(newamount)) return this.errorReply("Please enter a valid amount.");
 			if (newamount > room.gtsga.left) return this.errorReply("The new amount must be lower than the old amount.");
-			if (newamount < room.gtsga.left - 1) this.modlog(`GTS GIVEAWAY`, null, `set from ${room.gtsga.left} to ${newamount} left`);
+			if (newamount < room.gtsga.left - 1) {
+				this.modlog(`GTS GIVEAWAY`, null, `set from ${room.gtsga.left} to ${newamount} left`);
+			}
 
 			room.gtsga.updateLeft(newamount);
 		},
 		sent(target, room, user) {
 			if (room.roomid !== 'wifi') return false;
 			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
-			if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+			if (!user.can('warn', null, room) && user !== room.gtsga.giver) {
+				return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+			}
 
 			if (!target || target.length > 12) return this.errorReply("Please enter a valid IGN.");
 
@@ -737,7 +809,9 @@ const cmds: ChatCommands = {
 		full(target, room, user) {
 			if (room.roomid !== 'wifi') return false;
 			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
-			if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+			if (!user.can('warn', null, room) && user !== room.gtsga.giver) {
+				return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+			}
 			if (room.gtsga.noDeposits) return this.errorReply("The GTS giveaway was already set to not accept deposits.");
 
 			room.gtsga.stopDeposits();
@@ -768,7 +842,9 @@ const cmds: ChatCommands = {
 		if (target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		if (Punishments.getRoomPunishType(room, this.targetUsername)) return this.errorReply(`User '${this.targetUsername}' is already punished in this room.`);
+		if (Punishments.getRoomPunishType(room, this.targetUsername)) {
+			return this.errorReply(`User '${this.targetUsername}' is already punished in this room.`);
+		}
 
 		Giveaway.ban(room, targetUser, target);
 		if (room.giveaway) room.giveaway.kickUser(targetUser);
@@ -784,7 +860,9 @@ const cmds: ChatCommands = {
 		this.splitTarget(target, false);
 		const targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
-		if (!Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
+		if (!Giveaway.checkBanned(room, targetUser)) {
+			return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
+		}
 
 		Giveaway.unban(room, targetUser);
 		this.privateModAction(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
