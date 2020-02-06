@@ -700,7 +700,7 @@ interface EffectData {
 	isZ?: boolean | string
 	/**
 	 * `true` for Max moves like Max Airstream. If its a G-Max moves, this is
-	 * the species ID of the giganimax pokemon that can use this G-Max move.
+	 * the species ID of the Gigantamax Pokemon that can use this G-Max move.
 	 */
 	isMax?: boolean | string
 	noCopy?: boolean
