@@ -1337,13 +1337,13 @@ let BattleStatuses = {
 	schiavetto: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Schiavetto|Aight, sis, guess I'm parking.`);
+			this.add(`c|%Schiavetto|Aight, sis, guess I'm parking.`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Schiavetto|Someone help me press this.`);
+			this.add(`c|%Schiavetto|Someone help me press this.`);
 		},
 		onFaint() {
-			this.add(`c|+Schiavetto|Read my ISOs when I'm dead`);
+			this.add(`c|%Schiavetto|Read my ISOs when I'm dead`);
 		},
 	},
 	scotteh: {
