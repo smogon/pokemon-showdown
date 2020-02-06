@@ -19,7 +19,7 @@ let BattleStatuses = {
 		// Damage reduction is handled directly in the sim/battle.js damage function
 		onResidualOrder: 9,
 		onResidual(pokemon) {
-			this.damage(pokemon.baseMaxhp / 16);
+			this.damage(pokemon.baseMaxhp / 16)
 		},
 	},
 	par: {

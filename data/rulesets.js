@@ -58,7 +58,7 @@ let BattleFormats = {
 			'Magearna', 'Marshadow', 'Zeraora',
 		],
 		onValidateSet(set, format) {
-			if (this.gen < 7 && toID(set.item) === 'souldew') {
+			if (this.gen < 7 && (set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
@@ -78,7 +78,7 @@ let BattleFormats = {
 		onValidateSet(set) {
 			// These Pokemon are still unobtainable
 			const unobtainables = [
-				'Eevee-Starter', 'Floette-Eternal', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter', 'Magearna-Original',
+				'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Magearna-Original',
 			];
 			if (unobtainables.includes(set.species)) {
 				return [`${set.name || set.species} does not exist in the National Dex.`];
@@ -717,11 +717,10 @@ let BattleFormats = {
 		name: 'Dynamax Clause',
 		desc: "Prevents Pok&eacute;mon from dynamaxing",
 		onBegin() {
-			for (let pokemon of this.getAllPokemon()) {
-				pokemon.canDynamax = false;
-			if (pokemon.speciesid === 'charizardgmax', 'alcremiegmax', 'appletungmax', 'butterfreegmax', 'centiskrochgmax', 'coalossalgmax', 'copperajahgmax', 'corviknightgmax', 'drenawgmax', 'duraludongmax', 'eeveegmax', 'flapplegmax', 'garbodorgmax', 'gengargmax', 'grimmsnarlgmax', 'hatterenegmax', 'kinglergmax', 'laprasgmax', 'machampgmax', 'melmetalgmax', 'meowthgmax', 'orbeetlegmax', 'pikachugmax', 'sandacondagmax', 'snorlaxgmax', 'toxicitygmax') pokemon.canDynamax = true
+      for (let pokemon of this.getAllPokemon()) {
+                pokemon.canDynamax = false;
+      this.add('rule', 'Dynamax Clause: You cannot dynamax');  
 			}
-			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
 	},
 	arceusevlimit: {
@@ -812,6 +811,17 @@ let BattleFormats = {
 		desc: "Holds all custom Pet Mod ruleset validation",
 		// Implemented in mods/petmod/rulesets.js
 	},
+  gigamaxclause: {
+		effectType: 'ValidatorRule',
+		name: 'Gigamax Clause',
+		desc: "Only Gigantamax can Dynamax",
+		onBegin() {
+			this.add('rule', 'Gigamax Clause: You can Dynamax only Gigantamax pokemon');
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.speciesid !== 'charizard', 'alcremie', 'appletun', 'butterfree', 'centiskroch', 'coalossal', 'copperajah', 'corviknight', 'drenaw', 'duraludon', 'eevee', 'flapple', 'garbodor', 'gengar', 'grimmsnarl', 'hatterene', 'kingler', 'lapras', 'machamp', 'melmetal', 'meowth', 'orbeetle', 'pikachu', 'sandaconda', 'snorlax', 'toxicity') pokemon.canDynamax = false
+      }
+    },
+  }, 
 };
 
 exports.BattleFormats = BattleFormats;
