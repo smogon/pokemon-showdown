@@ -851,9 +851,6 @@ class RandomTeams {
 				case 'hydropump':
 					if (hasMove['scald'] && ((counter.Special < 4 && !hasMove['uturn']) || (template.types.length > 1 && counter.stab < 3))) rejected = true;
 					break;
-				case 'snipeshot':
-					if (hasMove['scald']) rejected = true;
-					break;
 				case 'thunderbolt':
 					if (hasMove['powerwhip']) rejected = true;
 					break;
@@ -1103,7 +1100,7 @@ class RandomTeams {
 				} else if (ability === 'Slush Rush') {
 					rejectAbility = hasMove['raindance'];
 				} else if (ability === 'Sniper') {
-					rejectAbility = (!hasMove['snipeshot'] && abilities.includes('Torrent'));
+					rejectAbility = counter['Water'] > 1;
 				} else if (ability === 'Sturdy') {
 					rejectAbility = !!counter['recoil'];
 				} else if (ability === 'Swarm') {
