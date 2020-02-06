@@ -343,7 +343,8 @@ let loginfilter = function (user) {
 
 	const forceRenamed = Chat.forceRenames.get(user.id);
 	if (user.trackRename) {
-		Rooms.global.notifyRooms([/** @type {RoomID} */('staff')], Chat.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${forceRenamed ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`);
+		const manualForceRename = Chat.forceRenames.get(toID(user.trackRename));
+		Rooms.global.notifyRooms([/** @type {RoomID} */('staff')], Chat.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`);
 		user.trackRename = '';
 	}
 	if (Chat.namefilterwhitelist.has(user.id)) return;
