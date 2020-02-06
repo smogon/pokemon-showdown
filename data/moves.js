@@ -7316,7 +7316,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		isMax: ["Toxtricity", "Toxtricity-Low-Key"],
+		isMax: "Toxtricity",
 		self: {
 			onHit(source) {
 				for (let pokemon of source.side.foe.active) {
