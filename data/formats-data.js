@@ -7650,6 +7650,11 @@ let BattleFormatsData = {
 		tier: "Uber",
 		doublesTier: "DOU",
 	},
+	toxtricitylowkeygmax: {
+		isGigantamax: "G-Max Stun Shock",
+		tier: "Uber",
+		doublesTier: "DOU",
+	},
 	sizzlipede: {
 		tier: "LC",
 	},
