@@ -695,7 +695,6 @@ const commands = {
 						if (move.isMax) {
 							details["&#10003; Max Move"] = "";
 							if (typeof move.isMax === "string") details["User"] = move.isMax + "-Gmax";
-							if (Array.isArray(move.isMax)) details["User"] = move.isMax.map(x => `${x}-Gmax`).join(', ');
 						} else if (move.gmaxPower) {
 							details["Dynamax Power"] = move.gmaxPower;
 						}

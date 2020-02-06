@@ -702,7 +702,7 @@ interface EffectData {
 	 * `true` for Max moves like Max Airstream. If its a G-Max moves, this is
 	 * the species ID of the Gigantamax Pokemon that can use this G-Max move.
 	 */
-	isMax?: boolean | string | string[]
+	isMax?: boolean | string
 	noCopy?: boolean
 	recoil?: [number, number]
 	secondary?: SecondaryEffect | null
@@ -828,7 +828,7 @@ interface MoveData extends EffectData, MoveEventMethods {
 	isSelfHit?: boolean
 	isFutureMove?: boolean
 	isViable?: boolean
-	isMax?: boolean | string | string[]
+	isMax?: boolean | string
 	mindBlownRecoil?: boolean
 	multiaccuracy?: boolean
 	multihit?: number | number[]
