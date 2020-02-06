@@ -212,13 +212,13 @@ let BattleStatuses = {
 	arsenal: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Arsenal|Wenger In`);
+			this.add(`c|%Arsenal|Wenger In`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Arsenal|Time to watch anime`);
+			this.add(`c|%Arsenal|Time to watch anime`);
 		},
 		onFaint() {
-			this.add(`c|+Arsenal|Wenger Out`);
+			this.add(`c|%Arsenal|Wenger Out`);
 		},
 	},
 	asheviere: {
@@ -1627,13 +1627,13 @@ let BattleStatuses = {
 	xprienzo: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+XpRienzo ☑◡☑|Bleh`);
+			this.add(`c|%XpRienzo ☑◡☑|Bleh`);
 		},
 		onSwitchOut() {
-			this.add(`c|+XpRienzo ☑◡☑|>.>`);
+			this.add(`c|%XpRienzo ☑◡☑|>.>`);
 		},
 		onFaint() {
-			this.add(`c|+XpRienzo ☑◡☑|Wait what?`);
+			this.add(`c|%XpRienzo ☑◡☑|Wait what?`);
 		},
 	},
 	yuki: {
