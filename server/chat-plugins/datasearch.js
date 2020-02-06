@@ -1253,7 +1253,7 @@ function runMovesearch(target, cmd, canAll, message) {
 						break;
 					}
 				} else if (flag === 'gmaxmove') {
-					if (!(typeof dex[move].isMax === 'string') === !alts.flags[flag]) {
+					if (!(typeof dex[move].isMax === 'string' || Array.isArray(dex[move].isMax)) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
