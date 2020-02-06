@@ -998,7 +998,7 @@ let BattleAbilities = {
 		desc: "This Pokemon is immune to volatile statuses.",
 		shortDesc: "This Pokemon is immune to volatile statuses.",
 		onTryAddVolatile(status, target) {
-			if (toID(target.name).includes(status.id)) return;
+			if ([toID(target.name), 'furycutter', 'stockpile'].includes(status.id)) return;
 			this.add('-immune', target, '[from] ability: Numb Numb Juice');
 			return null;
 		},
