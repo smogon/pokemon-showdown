@@ -7462,7 +7462,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	inteleon: {
-		randomBattleMoves: ["airslash", "darkpulse", "hydropump", "icebeam", "scald", "snipeshot", "uturn"],
+		randomBattleMoves: ["airslash", "darkpulse", "hydropump", "icebeam", "scald", "uturn"],
 		unreleasedHidden: true,
 		tier: "UU",
 		doublesTier: "DUU",
