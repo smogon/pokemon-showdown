@@ -68,8 +68,8 @@ export const commands: ChatCommands = {
 			const eventId = toID(eventName);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
-			this.privateModAction(`(${user.name} ${room.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventName}".)`);
-			this.modlog('ROOMEVENT', null, `${room.events[eventId] ? "edited" : "added"} "${eventName}"`);
+			this.privateModAction(`(${user.name} ${room.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
+			this.modlog('ROOMEVENT', null, `${room.events[eventId] ? "edited" : "added"} "${eventNameActual}"`);
 			room.events[eventId] = {
 				eventName: eventNameActual,
 				date: dateActual,
