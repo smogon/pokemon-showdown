@@ -642,6 +642,7 @@ let BattleFormatsData = {
 	},
 	slowpoke: {
 		inherit: true,
+		isUnreleased: false,
 		tier: "LC",
 	},
 	slowbro: {
@@ -662,6 +663,7 @@ let BattleFormatsData = {
 	slowking: {
 		randomBattleMoves: ["scald", "fireblast", "icebeam", "psychic", "grassknot", "thunderwave", "toxic", "slackoff", "trickroom", "nastyplot", "dragontail", "psyshock"],
 		randomDoubleBattleMoves: ["scald", "fireblast", "icebeam", "psychic", "grassknot", "thunderwave", "slackoff", "trickroom", "protect", "psyshock"],
+		isNonstandard: null,
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
