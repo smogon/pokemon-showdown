@@ -278,9 +278,8 @@ let BattleAbilities = {
 			if ((target === source || move.category === 'Status') && target.template.speciesid !== 'shayminsky' && target.transformed) return;
 			target.formeChange('Shaymin', this.effect);
 		},
-		onAfterDamage(damage, target, source, effect) {
-			if (source === target) return;
-			if (target && target.template.speciesid === 'shaymin') {
+		onDamagingHit(damage, target, source, move) {
+			if (target.template.speciesid === 'shaymin') {
 				target.formeChange('Shaymin-Sky', this.effect);
 			}
 		},
@@ -333,9 +332,9 @@ let BattleAbilities = {
 				pokemon.maybeTrapped = true;
 			}
 		},
-		onAfterDamageOrder: 1,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.effectType === 'Move' && !target.hp) {
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
 				this.damage(damage, source, target);
 			}
 		},
@@ -407,8 +406,8 @@ let BattleAbilities = {
 	giblovepls: {
 		desc: "After being damaged by a contact move, this Pokemon is healed by 20% of its maximum HP and has its Defense raised by one stage.",
 		shortDesc: "Defense +1 and heal 20% after hit by contact move.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.boost({def: 1}, target);
 				this.heal(target.baseMaxhp / 5, target);
 			}
@@ -452,10 +451,10 @@ let BattleAbilities = {
 			if (pokemon === pokemon.side.pokemon[i]) return;
 			pokemon.illusion = pokemon.side.pokemon[i];
 		},
-		onAfterDamage(damage, target, source, effect) {
+		onDamagingHit(damage, target, source, move) {
 			// Illusion that only breaks when hit with a move that is super effective VS dark
-			if (target.illusion && effect && effect.effectType === 'Move' && effect.id !== 'confused' && this.dex.getEffectiveness(effect.type, target.getTypes()) > 0) {
-				this.singleEvent('End', this.dex.getAbility('Illusion'), target.abilityData, target, source, effect);
+			if (target.illusion && this.dex.getEffectiveness(move.type, target.getTypes()) > 0) {
+				this.singleEvent('End', this.dex.getAbility('Illusion'), target.abilityData, target, source, move);
 			}
 		},
 		onEnd(pokemon) {
@@ -632,8 +631,8 @@ let BattleAbilities = {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.flags.contact && effect.id !== 'confused') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.boost({spe: 1});
 			}
 		},
@@ -917,7 +916,7 @@ let BattleAbilities = {
 				return false;
 			}
 		},
-		onAfterDamage(damage, target, source, move) {
+		onDamagingHit(damage, target, source, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				if (target.m.heavilydamaged && !target.m.quoteplayed) {
 					this.add(`c|@Ransei|Yo really? Why do you keep hitting me with super effective moves?`);

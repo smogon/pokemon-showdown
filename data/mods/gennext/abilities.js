@@ -123,8 +123,8 @@ let BattleAbilities = {
 		onResidual(target, source, effect) {
 			this.heal(target.baseMaxhp / 16);
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact'] && this.field.isWeather('hail')) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact'] && this.field.isWeather('hail')) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('frz', target);
 				}
@@ -141,8 +141,8 @@ let BattleAbilities = {
 	},
 	"static": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				source.trySetStatus('par', target);
 			}
 		},
@@ -150,8 +150,8 @@ let BattleAbilities = {
 	},
 	"cutecharm": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				source.addVolatile('Attract', target);
 			}
 		},
@@ -160,8 +160,8 @@ let BattleAbilities = {
 	},
 	"poisonpoint": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				source.trySetStatus('psn', target);
 			}
 		},
@@ -416,7 +416,7 @@ let BattleAbilities = {
 				return damage;
 			}
 		},
-		onAfterDamage() {},
+		onDamagingHit() {},
 		desc: "This ability reduces incoming move damage by 1/10 of the user's max HP and increases the user's Speed for the first hit after switch-in (and does not activate again until the next switch-in).",
 		shortDesc: "Reduces incoming move damage by 1/10 of the user's max HP and increases the user's Spe for the 1st hit after switch-in (doesn't activate until next switch-in).",
 	},
@@ -482,8 +482,8 @@ let BattleAbilities = {
 	},
 	"aftermath": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && !target.hp) {
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
 				this.damage(source.baseMaxhp / 3, source, target, null, true);
 			}
 		},
