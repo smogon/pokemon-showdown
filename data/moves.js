@@ -14475,7 +14475,7 @@ let BattleMovedex = {
 				}
 				if (target.isSemiInvulnerable() || target.side === source.side) return;
 				if (!target.isGrounded()) {
-					const baseMove = Dex.getMove(effect.id);
+					const baseMove = this.dex.getMove(effect.id);
 					if (baseMove.priority > 0) {
 						this.hint("Psychic Terrain doesn't affect Pokémon immune to Ground.");
 					}
