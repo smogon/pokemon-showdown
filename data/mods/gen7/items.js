@@ -348,6 +348,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	machobrace: {
+		inherit: true,
+		isUnreleased: true,
+	},
 	magoberry: {
 		inherit: true,
 		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
