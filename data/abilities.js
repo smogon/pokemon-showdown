@@ -79,9 +79,9 @@ let BattleAbilities = {
 		shortDesc: "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
 		id: "aftermath",
 		name: "Aftermath",
-		onAfterDamageOrder: 1,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact'] && !target.hp) {
 				this.damage(source.baseMaxhp / 4, source, target);
 			}
 		},
@@ -531,13 +531,11 @@ let BattleAbilities = {
 	"cottondown": {
 		desc: "When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.",
 		shortDesc: "Lowers Speed of all Pokémon except itself when hit by an attack.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.id !== 'confused') {
-				this.add('-ability', target, 'Cotton Down');
-				for (let pokemon of this.getAllActive()) {
-					if (pokemon === target) continue;
-					this.boost({spe: -1}, pokemon, target, null, true);
-				}
+		onDamagingHit(damage, target, source, move) {
+			this.add('-ability', target, 'Cotton Down');
+			for (let pokemon of this.getAllActive()) {
+				if (pokemon === target) continue;
+				this.boost({spe: -1}, pokemon, target, null, true);
 			}
 		},
 		id: "cottondown",
@@ -548,9 +546,9 @@ let BattleAbilities = {
 	"cursedbody": {
 		desc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets disabled unless one of the attacker's moves is already disabled.",
 		shortDesc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets disabled.",
-		onAfterDamage(damage, target, source, move) {
-			if (!source || source.volatiles['disable']) return;
-			if (source !== target && move && move.effectType === 'Move' && !move.isFutureMove) {
+		onDamagingHit(damage, target, source, move) {
+			if (source.volatiles['disable']) return;
+			if (!move.isFutureMove) {
 				if (this.randomChance(3, 10)) {
 					source.addVolatile('disable', this.effectData.target);
 				}
@@ -564,8 +562,8 @@ let BattleAbilities = {
 	"cutecharm": {
 		desc: "There is a 30% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
 		shortDesc: "30% chance of infatuating Pokemon of the opposite gender if they make contact.",
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				if (this.randomChance(3, 10)) {
 					source.addVolatile('attract', this.effectData.target);
 				}
@@ -863,8 +861,8 @@ let BattleAbilities = {
 	"effectspore": {
 		desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep.",
 		shortDesc: "30% chance of poison/paralysis/sleep on others making contact with this Pokemon.",
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact'] && !source.status && source.runStatusImmunity('powder')) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact'] && !source.status && source.runStatusImmunity('powder')) {
 				let r = this.random(100);
 				if (r < 11) {
 					source.setStatus('slp', target);
@@ -902,14 +900,6 @@ let BattleAbilities = {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 				target.switchFlag = true;
 				source.switchFlag = false;
-				this.add('-activate', target, 'ability: Emergency Exit');
-			}
-		},
-		onAfterDamage(damage, target, source, effect) {
-			if (!target.hp || effect.effectType === 'Move') return;
-			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
-				target.switchFlag = true;
 				this.add('-activate', target, 'ability: Emergency Exit');
 			}
 		},
@@ -951,8 +941,8 @@ let BattleAbilities = {
 	},
 	"flamebody": {
 		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned.",
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('brn', target);
 				}
@@ -1275,8 +1265,8 @@ let BattleAbilities = {
 	},
 	"gooey": {
 		shortDesc: "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.add('-ability', target, 'Gooey');
 				this.boost({spe: -1}, source, target, null, true);
 			}
@@ -1354,15 +1344,15 @@ let BattleAbilities = {
 	"gulpmissile": {
 		desc: "If this Pokemon is a Cramorant, it changes forme when it hits a target with Surf or uses the first turn of Dive successfully. It becomes Gulping Form with an Arrokuda in its mouth if it has more than 1/2 of its maximum HP remaining, or Gorging Form with a Pikachu in its mouth if it has 1/2 or less of its maximum HP remaining. If Cramorant gets hit in Gulping or Gorging Form, it spits the Arrokuda or Pikachu at its attacker, even if it has no HP remaining. The projectile deals damage equal to 1/4 of the target's maximum HP, rounded down; this damage is blocked by the Magic Guard Ability but not by a substitute. An Arrokuda also lowers the target's Defense by 1 stage, and a Pikachu paralyzes the target. Cramorant will return to normal if it spits out a projectile, switches out, or Dynamaxes.",
 		shortDesc: "When hit after Surf/Dive, attacker takes 1/4 max HP and -1 Defense or paralysis.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.id !== 'confused' && ['cramorantgulping', 'cramorantgorging'].includes(target.template.speciesid) && !target.transformed && !target.isSemiInvulnerable()) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.effectType === 'Move' && ['cramorantgulping', 'cramorantgorging'].includes(target.template.speciesid) && !target.transformed && !target.isSemiInvulnerable()) {
 				this.damage(source.baseMaxhp / 4, source, target);
 				if (target.template.speciesid === 'cramorantgulping') {
 					this.boost({def: -1}, source, target, null, true);
 				} else {
-					source.trySetStatus('par', target, effect);
+					source.trySetStatus('par', target, move);
 				}
-				target.formeChange('cramorant', effect);
+				target.formeChange('cramorant', move);
 			}
 		},
 		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.js
@@ -1641,9 +1631,9 @@ let BattleAbilities = {
 			if (pokemon === pokemon.side.pokemon[i]) return;
 			pokemon.illusion = pokemon.side.pokemon[i];
 		},
-		onAfterDamage(damage, target, source, effect) {
-			if (target.illusion && effect && effect.effectType === 'Move' && effect.id !== 'confused') {
-				this.singleEvent('End', this.dex.getAbility('Illusion'), target.abilityData, target, source, effect);
+		onDamagingHit(damage, target, source, move) {
+			if (target.illusion) {
+				this.singleEvent('End', this.dex.getAbility('Illusion'), target.abilityData, target, source, move);
 			}
 		},
 		onEnd(pokemon) {
@@ -1714,9 +1704,9 @@ let BattleAbilities = {
 		shortDesc: "If this Pokemon is KOed with a move, that move's user loses an equal amount of HP.",
 		id: "innardsout",
 		name: "Innards Out",
-		onAfterDamageOrder: 1,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.effectType === 'Move' && !target.hp) {
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
 				this.damage(target.getUndynamaxedHP(damage), source, target);
 			}
 		},
@@ -1790,9 +1780,9 @@ let BattleAbilities = {
 	"ironbarbs": {
 		desc: "Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down.",
 		shortDesc: "Pokemon making contact with this Pokemon lose 1/8 of their max HP.",
-		onAfterDamageOrder: 1,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
@@ -1818,8 +1808,8 @@ let BattleAbilities = {
 	},
 	"justified": {
 		shortDesc: "This Pokemon's Attack is raised by 1 stage after it is damaged by a Dark-type move.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.type === 'Dark') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Dark') {
 				this.boost({atk: 1});
 			}
 		},
@@ -2352,8 +2342,8 @@ let BattleAbilities = {
 		shortDesc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy.",
 		id: "mummy",
 		name: "Mummy",
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact'] && source.ability !== 'mummy') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact'] && source.ability !== 'mummy') {
 				let oldAbility = source.setAbility('mummy', target);
 				if (oldAbility) {
 					this.add('-activate', target, 'ability: Mummy', this.dex.getAbility(oldAbility).name, '[of] ' + source);
@@ -2670,7 +2660,7 @@ let BattleAbilities = {
 	"perishbody": {
 		desc: "When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.",
 		shortDesc: "When hit by a contact move, the Pokémon and the attacker faint in 3 turns.",
-		onAfterDamage(damage, target, source, move) {
+		onDamagingHit(damage, target, source, move) {
 			if (!move.flags['contact']) return;
 
 			let announced = false;
@@ -2792,8 +2782,8 @@ let BattleAbilities = {
 	},
 	"poisonpoint": {
 		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be poisoned.",
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('psn', target);
 				}
@@ -3056,8 +3046,8 @@ let BattleAbilities = {
 	"rattled": {
 		desc: "This Pokemon's Speed is raised by 1 stage if hit by a Bug-, Dark-, or Ghost-type attack, or Intimidate.",
 		shortDesc: "Speed is raised 1 stage if hit by a Bug-, Dark-, or Ghost-type attack, or Intimidated.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && (effect.type === 'Dark' || effect.type === 'Bug' || effect.type === 'Ghost')) {
+		onDamagingHit(damage, target, source, move) {
+			if (['Dark', 'Bug', 'Ghost'].includes(move.type)) {
 				this.boost({spe: 1});
 			}
 		},
@@ -3215,9 +3205,9 @@ let BattleAbilities = {
 	"roughskin": {
 		desc: "Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down.",
 		shortDesc: "Pokemon making contact with this Pokemon lose 1/8 of their max HP.",
-		onAfterDamageOrder: 1,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
@@ -3271,8 +3261,8 @@ let BattleAbilities = {
 	},
 	"sandspit": {
 		shortDesc: "The Pokémon creates a sandstorm when it's hit by an attack.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.id !== 'confused' && this.field.getWeather().id !== 'sandstorm') {
+		onDamagingHit(damage, target, source, move) {
+			if (this.field.getWeather().id !== 'sandstorm') {
 				this.field.setWeather('sandstorm');
 			}
 		},
@@ -3798,10 +3788,8 @@ let BattleAbilities = {
 	},
 	"stamina": {
 		shortDesc: "This Pokemon's Defense is raised by 1 stage after it is damaged by a move.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.id !== 'confused') {
-				this.boost({def: 1});
-			}
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({def: 1});
 		},
 		id: "stamina",
 		name: "Stamina",
@@ -3825,8 +3813,8 @@ let BattleAbilities = {
 	},
 	"static": {
 		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed.",
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('par', target);
 				}
@@ -3849,8 +3837,8 @@ let BattleAbilities = {
 	},
 	"steamengine": {
 		shortDesc: "This Pokemon's Speed is raised by 6 stages after it is damaged by Fire/Water moves.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && ['Water', 'Fire'].includes(effect.type)) {
+		onDamagingHit(damage, target, source, move) {
+			if (['Water', 'Fire'].includes(move.type)) {
 				this.boost({spe: 6});
 			}
 		},
@@ -4133,8 +4121,8 @@ let BattleAbilities = {
 	},
 	"tanglinghair": {
 		shortDesc: "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.add('-ability', target, 'Tangling Hair');
 				this.boost({spe: -1}, source, target, null, true);
 			}
@@ -4455,10 +4443,10 @@ let BattleAbilities = {
 	"wanderingspirit": {
 		desc: "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.",
 		shortDesc: "Exchanges abilities when hit with a contact move.",
-		onAfterDamage(damage, target, source, effect) {
-			if (!source || source.ability === 'wanderingspirit') return;
+		onDamagingHit(damage, target, source, move) {
+			if (source.ability === 'wanderingspirit') return;
 			if (target.volatiles['dynamax'] || target.ability === 'illusion' || target.ability === 'wonderguard') return;
-			if (effect && effect.effectType === 'Move' && effect.flags['contact']) {
+			if (move.flags['contact']) {
 				let sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
 				if (target.side === source.side) {
@@ -4534,8 +4522,8 @@ let BattleAbilities = {
 	},
 	"watercompaction": {
 		shortDesc: "This Pokemon's Defense is raised 2 stages after it is damaged by a Water-type move.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.type === 'Water') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Water') {
 				this.boost({def: 2});
 			}
 		},
@@ -4566,7 +4554,7 @@ let BattleAbilities = {
 	"weakarmor": {
 		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 2 stages.",
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 2.",
-		onAfterDamage(damage, target, source, move) {
+		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical') {
 				this.boost({def: -1, spe: 2}, target, target);
 			}
@@ -4610,14 +4598,6 @@ let BattleAbilities = {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 				target.switchFlag = true;
 				source.switchFlag = false;
-				this.add('-activate', target, 'ability: Wimp Out');
-			}
-		},
-		onAfterDamage(damage, target, source, effect) {
-			if (!target.hp || effect.effectType === 'Move') return;
-			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
-				target.switchFlag = true;
 				this.add('-activate', target, 'ability: Wimp Out');
 			}
 		},

@@ -76,8 +76,8 @@ let BattleItems = {
 	},
 	jabocaberry: {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.category === 'Physical') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Physical') {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
@@ -145,16 +145,16 @@ let BattleItems = {
 	},
 	rockyhelmet: {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.damage(source.baseMaxhp / 6, source, target, null, true);
 			}
 		},
 	},
 	rowapberry: {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.category === 'Special') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Special') {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}

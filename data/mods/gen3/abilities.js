@@ -6,8 +6,8 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "There is a 1/3 chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
 		shortDesc: "1/3 chance of infatuating Pokemon of the opposite gender if they make contact.",
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				if (this.randomChance(1, 3)) {
 					source.addVolatile('attract', target);
 				}
@@ -18,8 +18,8 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "10% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep.",
 		shortDesc: "10% chance of poison/paralysis/sleep on others making contact with this Pokemon.",
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact'] && !source.status) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact'] && !source.status) {
 				let r = this.random(300);
 				if (r < 10) {
 					source.setStatus('slp', target);
@@ -34,8 +34,8 @@ let BattleAbilities = {
 	"flamebody": {
 		inherit: true,
 		shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be burned.",
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				if (this.randomChance(1, 3)) {
 					source.trySetStatus('brn', target);
 				}
@@ -129,8 +129,8 @@ let BattleAbilities = {
 	"poisonpoint": {
 		inherit: true,
 		shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be poisoned.",
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				if (this.randomChance(1, 3)) {
 					source.trySetStatus('psn', target);
 				}
@@ -147,8 +147,8 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "Pokemon making contact with this Pokemon lose 1/16 of their maximum HP, rounded down.",
 		shortDesc: "Pokemon making contact with this Pokemon lose 1/16 of their max HP.",
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.damage(source.baseMaxhp / 16, source, target);
 			}
 		},
@@ -164,8 +164,8 @@ let BattleAbilities = {
 	"static": {
 		inherit: true,
 		shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be paralyzed.",
-		onAfterDamage(damage, target, source, effect) {
-			if (effect && effect.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				if (this.randomChance(1, 3)) {
 					source.trySetStatus('par', target);
 				}
