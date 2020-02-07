@@ -956,7 +956,7 @@ let BattleMovedex = {
 		onAfterHit() {},
 		secondary: {
 			chance: 100,
-			onAfterHit(target, source) {
+			onHit(target, source) {
 				if (source.item || source.volatiles['gem']) {
 					return;
 				}

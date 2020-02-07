@@ -416,7 +416,8 @@ export class Battle {
 	singleEvent(
 		eventid: string, effect: Effect, effectData: AnyObject | null,
 		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
-		sourceEffect?: Effect | string | null, relayVar?: any) {
+		sourceEffect?: Effect | string | null, relayVar?: any
+	) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -588,7 +589,8 @@ export class Battle {
 	 */
 	runEvent(
 		eventid: string, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
-		effect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean) {
+		effect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean
+	) {
 		// if (Battle.eventCounter) {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
 		// 	Battle.eventCounter[eventid]++;
@@ -605,7 +607,7 @@ export class Battle {
 		let effectSource = null;
 		if (source instanceof Pokemon) effectSource = source;
 		const handlers = this.findEventHandlers(target, eventid, effectSource);
-		if (eventid === 'Invulnerability' || eventid === 'TryHit' || eventid === 'AfterDamage') {
+		if (eventid === 'Invulnerability' || eventid === 'TryHit' || eventid === 'DamagingHit') {
 			handlers.sort(Battle.compareLeftToRightOrder);
 		} else if (fastExit) {
 			handlers.sort(Battle.compareRedirectOrder);
@@ -650,7 +652,7 @@ export class Battle {
 			if (handler.index !== undefined) {
 				// TODO: find a better way to do this
 				if (!targetRelayVars[handler.index] && !(targetRelayVars[handler.index] === 0 &&
-					eventid === 'AfterDamage')) continue;
+					eventid === 'DamagingHit')) continue;
 				if (handler.target) {
 					args[hasRelayVar] = handler.target;
 					this.event.target = handler.target;
@@ -763,7 +765,8 @@ export class Battle {
 	 */
 	priorityEvent(
 		eventid: string, target: Pokemon | Side | Battle, source?: Pokemon | null,
-		effect?: Effect, relayVar?: any, onEffect?: boolean): any {
+		effect?: Effect, relayVar?: any, onEffect?: boolean
+	): any {
 		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
 	}
 
@@ -1750,8 +1753,6 @@ export class Battle {
 			}
 		}
 
-		// @ts-ignore - FIXME AfterDamage passes an Effect, not an ActiveMove
-		if (!effect.flags) effect.flags = {};
 		if (instafaint) {
 			for (const [i, target] of targetArray.entries()) {
 				if (!retVals[i] || !target) continue;
@@ -1766,7 +1767,6 @@ export class Battle {
 				}
 			}
 		}
-		retVals = this.runEvent('AfterDamage', (targetArray.filter(val => !!val)) as Pokemon[], source, effect, retVals);
 
 		return retVals;
 	}

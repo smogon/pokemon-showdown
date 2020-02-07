@@ -291,6 +291,7 @@ let BattleScripts = {
 
 		return true;
 	},
+	/** NOTE: includes single-target moves */
 	trySpreadMoveHit(targets, pokemon, move) {
 		if (targets.length > 1) move.spreadHit = true;
 
@@ -549,6 +550,7 @@ let BattleScripts = {
 		}
 		return undefined;
 	},
+	/** NOTE: used only for moves that target sides/fields rather than pokemon */
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 
@@ -790,6 +792,24 @@ let BattleScripts = {
 			if (!damage[j] && damage[j] !== 0) targets[j] = false;
 		}
 
+		/** @type {Pokemon[]} */
+		let damagedTargets = [];
+		let damagedDamage = [];
+		for (let i = 0; i < targets.length; i++) {
+			if (typeof damage[i] === 'number') {
+				damagedTargets.push(/** @type {Pokemon} */ (targets[i]));
+				damagedDamage.push(damage[i]);
+			}
+		}
+		if (damagedDamage.length) {
+			this.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
+			if (moveData.onAfterHit) {
+				for (const target of damagedTargets) {
+					this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
+				}
+			}
+		}
+
 		return [damage, targets];
 	},
 	tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary) {
@@ -940,10 +960,6 @@ let BattleScripts = {
 					}
 					if (!isSelf && !isSecondary) {
 						this.runEvent('Hit', target, pokemon, move);
-					}
-					if (moveData.onAfterHit) {
-						hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
-						didSomething = this.combineResults(didSomething, hitResult);
 					}
 				}
 			}

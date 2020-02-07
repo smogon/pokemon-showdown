@@ -41,7 +41,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage(damage, target, source, move) {
+		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water') {
 				target.useItem();
 			}
@@ -162,18 +162,15 @@ let BattleItems = {
 			}
 		},
 		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
-		onAfterDamage(damage, target, source, effect) {
-			this.debug('effect: ' + effect.id);
-			if (effect.effectType === 'Move' && effect.id !== 'confused') {
-				this.add('-enditem', target, 'Air Balloon');
-				target.item = '';
-				target.itemData = {id: '', target};
-				this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
-			}
+		onDamagingHit(damage, target, source, move) {
+			this.add('-enditem', target, 'Air Balloon');
+			target.item = '';
+			target.itemData = {id: '', target};
+			this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
 		},
 		onAfterSubDamage(damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
-			if (effect.effectType === 'Move' && effect.id !== 'confused') {
+			if (effect.effectType === 'Move') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				target.itemData = {id: '', target};
@@ -736,7 +733,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage(damage, target, source, move) {
+		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Electric') {
 				target.useItem();
 			}
@@ -2900,8 +2897,8 @@ let BattleItems = {
 			basePower: 100,
 			type: "Dragon",
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (source && source.hp && source !== target && move && move.category === 'Physical') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Physical') {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target);
 				}
@@ -3404,7 +3401,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage(damage, target, source, move) {
+		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water') {
 				target.useItem();
 			}
@@ -5151,9 +5148,9 @@ let BattleItems = {
 		fling: {
 			basePower: 60,
 		},
-		onAfterDamageOrder: 2,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
+		onDamagingHitOrder: 2,
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.damage(source.baseMaxhp / 6, source, target);
 			}
 		},
@@ -5242,8 +5239,8 @@ let BattleItems = {
 			basePower: 100,
 			type: "Dark",
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (source && source.hp && source !== target && move && move.category === 'Special') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Special') {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target);
 				}
@@ -5711,7 +5708,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage(damage, target, source, move) {
+		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Ice') {
 				target.useItem();
 			}

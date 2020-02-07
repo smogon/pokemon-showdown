@@ -1404,7 +1404,7 @@ let BattleStatuses = {
 			// Prevent Snaquaza from fainting while using a fake claim to prevent visual bug
 			if (pokemon.hp - damage <= 0) return (pokemon.hp - 1);
 		},
-		onAfterDamage(damage, pokemon) {
+		onDamagingHit(damage, pokemon) {
 			// Hack for Snaquaza's Z move
 			if (!pokemon.m.claimHP || pokemon.hp > 1) return;
 			// Now we handle the fake claim "fainting"

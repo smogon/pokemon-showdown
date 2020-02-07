@@ -82,13 +82,11 @@ runAction() - runs runSwitch, runAfterSwitch, and runMove in priority order, the
 					[Damage] (A,U)
 					-> false => exit damage()
 					damage
-					[AfterDamage] (U)
 				}
 				heal() {
 					[Heal] (A)
 					-> false => exit heal()
 					heal
-					[AfterHeal]
 				}
 				status() (U) {
 					[Status] (A)

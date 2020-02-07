@@ -125,17 +125,6 @@ let BattleItems = {
 		onEffectiveness() {},
 		desc: "Holder's Speed is halved and it becomes grounded.",
 	},
-	"jabocaberry": {
-		inherit: true,
-		onAfterDamage() {},
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move && move.category === 'Physical') {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target, null, true);
-				}
-			}
-		},
-	},
 	"kingsrock": {
 		inherit: true,
 		onModifyMove(move) {
@@ -255,17 +244,6 @@ let BattleItems = {
 					chance: 10,
 					volatileStatus: 'flinch',
 				});
-			}
-		},
-	},
-	"rowapberry": {
-		inherit: true,
-		onAfterDamage() {},
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move && move.category === 'Special') {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target, null, true);
-				}
 			}
 		},
 	},
