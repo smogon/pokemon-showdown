@@ -94,9 +94,11 @@ export abstract class BasicRoom {
 	staffRoom: boolean;
 	language: string | false;
 	slowchat: number | false;
+	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean}};
 	filterStretching: boolean;
 	filterEmojis: boolean;
 	filterCaps: boolean;
+	jeopardyDisabled: boolean;
 	mafiaDisabled: boolean;
 	unoDisabled: boolean;
 	blackjackDisabled: boolean;
@@ -150,9 +152,11 @@ export abstract class BasicRoom {
 		this.staffRoom = false;
 		this.language = false;
 		this.slowchat = false;
+		this.events = {};
 		this.filterStretching = false;
 		this.filterEmojis = false;
 		this.filterCaps = false;
+		this.jeopardyDisabled = false;
 		this.mafiaDisabled = false;
 		this.unoDisabled = false;
 		this.blackjackDisabled = false;

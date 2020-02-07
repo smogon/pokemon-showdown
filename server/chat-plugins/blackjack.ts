@@ -9,8 +9,49 @@
  */
 'use strict';
 
-class Blackjack extends Rooms.RoomGame {
-	constructor(room, user, target) {
+type Deck = 'A♥' | 'A♦' | 'A♣' | 'A♠' | '2♥' | '2♦' | '2♣' | '2♠' | '3♥' | '3♦' | '3♣' | '3♠' | '4♥' | '4♦' | '4♣' | '4♠' | '5♥' | '5♦' | '5♣' | '5♠' | '6♥' | '6♦' | '6♣' | '6♠' | '7♥' | '7♦' | '7♣' | '7♠' | '8♥' | '8♦' | '8♣' | '8♠' | '9♥' | '9♦' | '9♣' | '9♠' | '10♥' | '10♦' | '10♣' | '10♠' | 'J♥' | 'J♦' | 'J♣' | 'J♠' | 'Q♥' | 'Q♦' | 'Q♣' | 'Q♠' | 'K♥' | 'K♦' | 'K♣' | 'K♠';
+type Symbols = '♥' | '♦' | '♣' | '♠';
+type SymbolName = 'Hearts' | 'Diamonds' | 'Clubs' | 'Spades';
+
+export class Blackjack extends Rooms.RoomGame {
+	room: ChatRoom | GameRoom;
+
+	blackjack: boolean;
+
+	roomID: RoomID;
+
+	autostart: NodeJS.Timer | null;
+	dqTimer: NodeJS.Timer | null;
+	timerTick: NodeJS.Timer | null;
+
+	cardHeight: number;
+	cardWidth: number;
+	minimumPlayers: number;
+	playerScrollWheel: number;
+	turnTimeoutMinutes: number;
+	timerTickSeconds: number;
+
+	button: string;
+	createdBy: string;
+	curUsername: string;
+	endedBy: string;
+	infoboxLimited: string;
+	lastMessage: string;
+	slideButton: string;
+	spectateButton: string;
+	startedBy: string;
+	state: string;
+	turnLog: string;
+	uhtmlChange: string;
+
+	spectators: {[k: string]: ID};
+	symbols: {[k in Symbols]: SymbolName};
+
+	dealer: BlackjackDealer;
+	deck: Deck[];
+	playerTable: {[k: string]: BlackjackPlayer};
+
+	constructor(room: ChatRoom | GameRoom, user: User, target = 0) {
 		super(room);
 		this.room = room;
 
@@ -28,6 +69,7 @@ class Blackjack extends Rooms.RoomGame {
 		this.cardHeight = 85;
 
 		this.spectators = Object.create(null);
+		this.playerTable = Object.create(null);
 		this.dealer = new BlackjackDealer();
 
 		this.symbols = {
@@ -38,7 +80,7 @@ class Blackjack extends Rooms.RoomGame {
 		};
 		this.deck = new BlackjackDeck().shuffle();
 
-		this.roomid = this.room.roomid;
+		this.roomID = this.room.roomid;
 		this.title = `Blackjack (${room.title})`;
 		this.blackjack = true;
 		this.state = 'signups';
@@ -46,13 +88,17 @@ class Blackjack extends Rooms.RoomGame {
 		this.lastMessage = '';
 		this.turnLog = '';
 		this.uhtmlChange = '';
-		this.curUser = '';
+		this.curUsername = '';
 		this.endedBy = '';
 		this.infoboxLimited = '';
 
 		this.button = '<button class="button" name="send" value="/joingame" title="Join Blackjack">Join</button> | <button class="button" name="send" value="/leavegame" title="Leave Blackjack">Leave</button>';
 		this.spectateButton = '<button class="button" name="send" value="/blackjack spectate" title="Spectate Blackjack">Spectate</button>';
 		this.slideButton = '<button class="button" name="send" value="/blackjack slide" title="Slide the game log down in the chat">(<i class="fa fa-arrow-down" aria-hidden="true"></i> slide)</button>';
+
+		this.autostart = null;
+		this.dqTimer = null;
+		this.timerTick = null;
 
 		this.makeGame(target);
 	}
@@ -63,23 +109,21 @@ class Blackjack extends Rooms.RoomGame {
 	 * makePlayer - adds blackjack-specific properties to player object
 	 * sendInvite - called when a game is created, or when a player joins/leaves
 	 */
-	makeGame(target) {
-		if (target) target = parseFloat(target);
-		if (isNaN(target) || target <= 0) target = '';
-		if (target !== '') {
+	makeGame(target = 0) {
+		if (target > 0) {
 			this.autostart = setTimeout(() => this.start(), (target * 60000));
 		}
 
 		this.sendInvite();
 	}
-	makePlayer(user) {
+	makePlayer(user: User) {
 		return new BlackjackPlayer(user, this);
 	}
 	sendInvite() {
 		const change = this.uhtmlChange;
 		const players = Object.keys(this.playerTable);
-		let playerList = [];
-		for (let player of players) playerList.push(Chat.escapeHTML(this.playerTable[player].name));
+		const playerList = [];
+		for (const player of players) playerList.push(Chat.escapeHTML(this.playerTable[player].name));
 		this.room.send(`|uhtml${change}|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : playerList.join(', ')}</div>`);
 		this.uhtmlChange = 'change';
 	}
@@ -91,7 +135,7 @@ class Blackjack extends Rooms.RoomGame {
 	 * spectate - spectates the game
 	 * unspectate - stops spectating the game
 	 */
-	joinGame(user) {
+	joinGame(user: User) {
 		if (!user.named) return this.errorMessage(user, `You must first choose a name to play Blackjack.`);
 		if (this.state === 'started') return this.errorMessage(user, `Blackjack has already started.`);
 		const joined = this.addPlayer(user);
@@ -105,22 +149,22 @@ class Blackjack extends Rooms.RoomGame {
 		if (Object.keys(this.playerTable).length === this.playerCap) {
 			this.start();
 		}
-		if (this.spectators[user]) delete this.spectators[user]; // prevent player from spectating
+		if (this.spectators[user.id]) delete this.spectators[user.id]; // prevent player from spectating
 		return true;
 	}
-	leaveGame(user) {
+	leaveGame(user: User) {
 		if (this.state === 'started') return this.errorMessage(user, `You cannot leave this game; it has already started.`);
 		if (!this.playerTable[user.id]) return this.errorMessage(user, "You are not in this game to leave.");
 		this.removePlayer(user);
 		this.sendInvite();
 	}
-	spectate(user) {
-		if (this.spectators[user]) return this.errorMessage(user, `You are already spectating this game.`);
-		if (this.playerTable[user]) return this.errorMessage(user, `You don't need to spectate the game; you're playing the game.`);
+	spectate(user: User) {
+		if (this.spectators[user.id]) return this.errorMessage(user, `You are already spectating this game.`);
+		if (this.playerTable[user.id]) return this.errorMessage(user, `You don't need to spectate the game; you're playing the game.`);
 		this.spectators[user.id] = user.id;
 		user.sendTo(this.roomid, `You are now spectating this game.`);
 	}
-	unspectate(user) {
+	unspectate(user: User) {
 		if (!this.spectators[user.id]) return this.errorMessage(user, `You are already not spectating this game.`);
 		delete this.spectators[user.id];
 		user.sendTo(this.roomid, `You are no longer spectating this game.`);
@@ -140,16 +184,16 @@ class Blackjack extends Rooms.RoomGame {
 	 * generateCard - generates the card for the UI
 	 * getWinners - returns an array of the winners and their cards
 	 */
-	errorMessage(user, message) {
+	errorMessage(user: User, message: string) {
 		user.sendTo(this.room, Chat.html`|html|<div class="message-error">${message}</div>`);
 	}
-	send(message, clean) {
+	send(message: string, clean = false) {
 		const change = this.uhtmlChange;
 		this.room.send(`|uhtml${change}|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">${(clean ? message : this.lastMessage + message)}</div>`);
 		this.lastMessage += message;
 		this.uhtmlChange = 'change';
 	}
-	display(text, clean, playerName, noChange, end) {
+	display(text: string, clean = false, playerName?: string, noChange = false, end = false) {
 		const force = (end && this.endedBy);
 		let change = this.uhtmlChange;
 		if (noChange) change = '';
@@ -160,7 +204,7 @@ class Blackjack extends Rooms.RoomGame {
 			text = `The game of blackjack has ${force ? `been forcibly ended by ${this.endedBy}` : 'ended'}. <details><summary>View turn log</summary>${this.turnLog}</details>${text}`;
 			this.lastMessage = '';
 		}
-		for (let player of Object.keys(this.playerTable)) {
+		for (const player of Object.keys(this.playerTable)) {
 			if (playerName && this.playerTable[player].name === playerName) { // turn highlighting
 				this.playerTable[player].gameLog += `<span class="highlighted">${text}</span>`;
 				this.playerTable[player].sendRoom(`${message}${end ? text : this.playerTable[player].gameLog}</div>`);
@@ -169,14 +213,14 @@ class Blackjack extends Rooms.RoomGame {
 				this.playerTable[player].sendRoom(`${message}${end ? text : this.playerTable[player].gameLog}</div>`);
 			}
 		}
-		for (let spectator of Object.keys(this.spectators)) {
-			spectator = Users.get(this.spectators[spectator]);
+		for (const spectatorID of Object.keys(this.spectators)) {
+			const spectator = Users.get(this.spectators[spectatorID]);
 			if (spectator) spectator.sendTo(this.roomid, `${message}${this.lastMessage + text}</div>`);
 		}
 	}
 	clear() {
-		const player = this.playerTable[this.curUser];
-		if (!player) return; // this should never happen
+		const player = this.playerTable[this.curUsername];
+		if (!player) throw new Error(`Player not in player table`); // this should never happen
 		player.sendRoom(`|uhtmlchange|user-blackjack-${this.room.gameNumber}|`);
 	}
 	clearAllTimers() {
@@ -193,18 +237,18 @@ class Blackjack extends Rooms.RoomGame {
 			this.autostart = null;
 		}
 	}
-	slide(user) {
+	slide(user: User) {
 		user.sendTo(this.roomid, `|uhtml|blackjack-${this.room.gameNumber}|`);
-		this.display('', null, user.name);
+		this.display('', false, user.name);
 	}
-	onConnect(user) {
+	onConnect(user: User) {
 		const message = `|uhtml|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
 		if (this.state === 'signups') {
 			this.sendInvite();
 		} else if (this.state === 'started') {
-			const player = this.playerTable[user];
-			const spectator = this.spectators[user];
-			if (player && user.id === toID(this.curUser)) { // their turn; send gamelog and game screen
+			const player = this.playerTable[user.id];
+			const spectator = this.spectators[user.id];
+			if (player && user.id === toID(this.curUsername)) { // their turn; send gamelog and game screen
 				player.sendRoom(`${message}${player.gameLog}`);
 				player.sendRoom(player.playScreen.replace('|uhtmlchange|', '|uhtml|'));
 				return;
@@ -222,47 +266,48 @@ class Blackjack extends Rooms.RoomGame {
 		// changes, such as going on a new name. We don't want to do
 		// anything for such a situation, so we're overriding this.
 	}
-	createTimer(player) {
+	createTimer(user: User) {
+		const player = this.playerTable[user.id];
 		this.dqTimer = setTimeout(() => {
 			let cards = '';
-			for (let card of player.cards) cards += `[${card}] `;
+			for (const card of player.cards) cards += `[${card}] `;
 			player.status = 'stand';
-			this.display(Chat.html`<br /><strong>${player.name}</strong> stands with ${cards} (${player.points}) (Auto-stand: took too long to move)`, null, this.playerTable[this.curUser].name);
+			this.display(Chat.html`<br /><strong>${player.name}</strong> stands with ${cards} (${player.points}) (Auto-stand: took too long to move)`, false, this.playerTable[this.curUsername].name);
 			this.clear();
 			this.next();
 		}, this.turnTimeoutMinutes * 60 * 1000);
 		this.timerTick = setInterval(() => {
-			let display = player.playScreen.replace('|uhtml|', '|uhtmlchange|');
+			const display = player.playScreen.replace('|uhtml|', '|uhtmlchange|');
 			if (display !== '') {
-				let timeLeft = player.timerTicksLeft - 5;
-				let buffer = (String(timeLeft).length === 1 ? '0' : '');
-				let half = (timeLeft <= ((this.turnTimeoutMinutes * 60) / 2));
+				const timeLeft = player.timerTicksLeft - 5;
+				const buffer = (String(timeLeft).length === 1 ? '0' : '');
+				const half = (timeLeft <= ((this.turnTimeoutMinutes * 60) / 2));
 				player.sendRoom(`${display} | <span${half ? ` class="message-error"` : ``}>[<i class="fa fa-hourglass-${half ? 2 : 1}" aria-hidden="true"></i> 0:${buffer}${timeLeft}]</span>`);
 				player.timerTicksLeft -= this.timerTickSeconds;
 			}
 		}, this.timerTickSeconds * 1000);
 	}
-	generateCard(card) {
+	generateCard(card: string) {
 		const value = toID(card).toUpperCase();
-		const symbol = this.symbols[card.substr(-1)];
-		const red = (symbol.charAt(0) === 'H' || symbol.charAt(0) === 'D');
+		const symbolName = this.symbols[card.substr(-1) as Symbols];
+		const red = ['D', 'H'].includes(symbolName.charAt(0));
 		let cardUI = value;
 		if (value === 'K') cardUI = 'King';
 		if (value === 'Q') cardUI = 'Queen';
 		if (value === 'A') cardUI = 'Ace';
 		if (value === 'J') cardUI = 'Joker';
-		return `<div title="${cardUI} of ${symbol}" style="color: ${red ? '#992222' : '#000000'}; border-radius: 6px; background-color: #ffffff; position: relative; font-size: 14px; display: inline-block; width: ${this.cardWidth}px; height: ${this.cardHeight}px; border: 1px solid #000000; padding: 2px 4px;">${value}<br /> ${card.substr(-1)}<br /><span style="padding: 2px 4px; position: absolute; bottom: 0; right: 0; transform: rotate(-180deg);">${value}<br />${card.substr(-1)}</span></div> `;
+		return `<div title="${cardUI} of ${symbolName}" style="color: ${red ? '#992222' : '#000000'}; border-radius: 6px; background-color: #ffffff; position: relative; font-size: 14px; display: inline-block; width: ${this.cardWidth}px; height: ${this.cardHeight}px; border: 1px solid #000000; padding: 2px 4px;">${value}<br /> ${card.substr(-1)}<br /><span style="padding: 2px 4px; position: absolute; bottom: 0; right: 0; transform: rotate(-180deg);">${value}<br />${card.substr(-1)}</span></div> `;
 	}
-	getWinners(forceend) {
-		let winners = [];
+	getWinners(forceend = false) {
+		const winners = [];
 		if (forceend) this.giveCard('dealer');
 		if (this.dealer.points > 21) {
-			for (let player of Object.keys(this.playerTable)) {
+			for (const player of Object.keys(this.playerTable)) {
 				if (this.playerTable[player].status === 'bust') continue;
 				winners.push(Chat.html`<strong>${this.playerTable[player].name}</strong> [${this.playerTable[player].cards.join(', ')}]`);
 			}
 		} else if (this.dealer.points !== 21) {
-			for (let player of Object.keys(this.playerTable)) {
+			for (const player of Object.keys(this.playerTable)) {
 				if (this.playerTable[player].status === 'bust' || this.playerTable[player].points <= this.dealer.points) continue;
 				winners.push(Chat.html`<strong>${this.playerTable[player].name}</strong> [${this.playerTable[player].cards.join(', ')}]`);
 			}
@@ -278,7 +323,7 @@ class Blackjack extends Rooms.RoomGame {
 	 * end - ends the game
 	 * destroy - destroys the game
 	 */
-	start(user) {
+	start(user?: User) {
 		const numberOfPlayers = Object.keys(this.playerTable).length;
 		if (numberOfPlayers < this.minimumPlayers) {
 			if (this.autostart) {
@@ -291,46 +336,51 @@ class Blackjack extends Rooms.RoomGame {
 		}
 		if (user) this.startedBy = Chat.escapeHTML(user.name);
 		this.infoboxLimited = (numberOfPlayers >= this.playerScrollWheel ? ' infobox-limited' : '');
-		this.send(`[Blackjack has started. ${this.spectateButton}]`, true, true);
+		this.send(`[Blackjack has started. ${this.spectateButton}]`, true);
 
-		this.curUser = Object.keys(this.playerTable)[0];
+		this.curUsername = Object.keys(this.playerTable)[0];
 
-		let header = `The game of blackjack has started${(this.startedBy !== '' ? ` (started by ${this.startedBy})` : ``)}. ${this.slideButton}<br />`;
+		const header = `The game of blackjack has started${(this.startedBy !== '' ? ` (started by ${this.startedBy})` : ``)}. ${this.slideButton}<br />`;
 		this.state = 'started';
 
 		this.giveCard('dealer');
 		this.giveCard('dealer');
 		this.turnLog += `<strong>${this.dealer.name}</strong>: [${this.dealer.cards[0]}]`;
 
-		for (let player of Object.keys(this.playerTable)) {
-			this.giveCard(this.playerTable[player]);
-			this.giveCard(this.playerTable[player]);
+		for (const player of Object.keys(this.playerTable)) {
+			this.giveCard(this.playerTable[player].user.id);
+			this.giveCard(this.playerTable[player].user.id);
 			this.turnLog += Chat.html`<br /><strong>${this.playerTable[player].name}</strong>: [${this.playerTable[player].cards[0]}] [${this.playerTable[player].cards[1]}] (${this.playerTable[player].points})`;
 		}
 
-		this.display(`${header}${this.turnLog}`, true);
+		this.display(`${header}${this.turnLog}`, true, '');
 		this.next();
 	}
-	end(user, cmd) {
+	end(user: User | true, cmd?: string) {
 		const force = (cmd && toID(cmd) === 'forceend');
+		if (user === true) {
+			this.state = 'ended';
+			this.destroy();
+			return true;
+		}
 		if (this.state === 'started' && cmd && !force) return this.errorMessage(user, `Because this game has started, you can only end this game by using /blackjack forceend.`);
 		let winners = this.getWinners();
 		if (force) {
 			winners = this.getWinners(true);
 			this.endedBy = Chat.escapeHTML(user.name);
-			if (this.curUser) this.playerTable[this.curUser].send(`|uhtmlchange|user-blackjack-${this.room.gameNumber}|`);
+			if (this.curUsername) this.playerTable[this.curUsername].send(`|uhtmlchange|user-blackjack-${this.room.gameNumber}|`);
 			if (winners.length < 1) {
-				this.display(`There are no winners this time.`, null, null, null, true);
+				this.display(`There are no winners this time.`, false, undefined, false, true);
 			} else {
-				this.display(`<strong>Winner${Chat.plural(winners.length)}</strong>: ${winners.join(', ')}`, null, null, null, true);
+				this.display(`<strong>Winner${Chat.plural(winners.length)}</strong>: ${winners.join(', ')}`, false, undefined, false, true);
 			}
 		}
 
 		if (!force && this.state !== 'signups') {
 			if (winners.length < 1) {
-				this.display(`There are no winners this time.`, null, null, null, true);
+				this.display(`There are no winners this time.`, false, undefined, false, true);
 			} else {
-				this.display(`<strong>Winner${Chat.plural(winners.length)}</strong>: ${winners.join(', ')}`, null, null, null, true);
+				this.display(`<strong>Winner${Chat.plural(winners.length)}</strong>: ${winners.join(', ')}`, false, undefined, false, true);
 			}
 		} else if (this.state === 'signups') {
 			this.send(Chat.html`The game of blackjack has been ended by ${user.name}, and there are no winners because the game never started.`, true);
@@ -343,7 +393,7 @@ class Blackjack extends Rooms.RoomGame {
 	}
 	destroy() {
 		if (Object.keys(this.playerTable).length) {
-			for (let player of Object.keys(this.playerTable)) {
+			for (const player of Object.keys(this.playerTable)) {
 				this.playerTable[player].destroy();
 			}
 		}
@@ -360,34 +410,34 @@ class Blackjack extends Rooms.RoomGame {
 	 * getCardPoints - returns the point value of a user's cards
 	 * next - game goes on to the next turn
 	 */
-	hit(user) {
+	hit(user: User) {
 		if (this.state !== 'started') return this.errorMessage(user, `Blackjack hasn't started yet.`);
-		if (!this.playerTable[user]) return this.errorMessage(user, `You aren't a player in this game.`);
-		if (this.curUser !== user.id) return this.errorMessage(user, `It's not your turn.`);
-		this.playerTable[user].selfUhtml = 'change';
-		this.playerTable[user].resetTimerTicks();
+		if (!this.playerTable[user.id]) return this.errorMessage(user, `You aren't a player in this game.`);
+		if (this.curUsername !== user.id) return this.errorMessage(user, `It's not your turn.`);
+		this.playerTable[user.id].selfUhtml = 'change';
+		this.playerTable[user.id].resetTimerTicks();
 
-		this.giveCard(user);
+		this.giveCard(user.id);
 	}
-	stand(user) {
-		const player = this.playerTable[user];
+	stand(user: User) {
+		const player = this.playerTable[user.id];
 		if (this.state !== 'started') return this.errorMessage(user, `Blackjack hasn't started yet.`);
 		if (!player) return this.errorMessage(user, `You aren't a player in this game.`);
-		if (this.curUser !== user.id) return this.errorMessage(user, `It's not your turn.`);
+		if (this.curUsername !== user.id) return this.errorMessage(user, `It's not your turn.`);
 		player.status = 'stand';
 		let cards = '';
-		for (let card of player.cards) cards += `[${card}] `;
-		let turnLine = Chat.html`<br /><strong>${player.name}</strong> stands with ${cards} (${player.points}${player.points === 21 ? ' - blackjack!' : ''})`;
+		for (const card of player.cards) cards += `[${card}] `;
+		const turnLine = Chat.html`<br /><strong>${player.name}</strong> stands with ${cards} (${player.points}${player.points === 21 ? ' - blackjack!' : ''})`;
 
 		this.turnLog += turnLine;
-		this.display(turnLine, null, player.name);
+		this.display(turnLine, false, player.name);
 		this.clear();
 
 		this.next();
 	}
-	giveCard(user) {
+	giveCard(userid: string) {
 		if (this.deck.length < 1) this.deck = new BlackjackDeck().shuffle();
-		const player = (user === 'dealer' ? this.dealer : this.playerTable[user]);
+		const player = (userid === 'dealer' ? this.dealer : this.playerTable[userid]);
 		if (!player) return; // this should never happen
 		player.cards.push(this.deck[0]);
 
@@ -398,53 +448,57 @@ class Blackjack extends Rooms.RoomGame {
 			this.deck = new BlackjackDeck().shuffle();
 		}
 
-		player.points = this.getCardPoints(player);
+		player.points = this.getCardPoints(userid);
 
 		if (player.cards.length < 3) return;
 
 		let turnLine = Chat.html`<br /><strong>${player.name}</strong> hit and received [${player.cards[player.cards.length - 1]}] (${player.points})`;
 		this.turnLog += turnLine;
-		if (player.cards.length > 2) this.display(turnLine, null, player.name);
+		if (player.cards.length > 2) this.display(turnLine, false, player.name);
 
 		if (player === this.dealer) {
 			if (player.points > 21) {
 				let cards = '';
-				for (let card of player.cards) cards += `[${card}] `;
-				let turnLine = Chat.html`<br /><strong>${this.dealer.name}</strong> has busted with ${cards} (${player.points})`;
+				for (const card of player.cards) {
+					cards += `[${card}] `;
+				}
+				turnLine = Chat.html`<br /><strong>${this.dealer.name}</strong> has busted with ${cards} (${player.points})`;
 				this.turnLog += turnLine;
 				this.display(turnLine);
-				this.end();
+				this.end(true);
 				return;
 			} else if (player.points === 21) {
-				let turnLine = Chat.html`<br /><strong>${this.dealer.name}</strong> has blackjack!`;
+				turnLine = Chat.html`<br /><strong>${this.dealer.name}</strong> has blackjack!`;
 				this.turnLog += turnLine;
 				this.display(turnLine);
-				this.end();
+				this.end(true);
 				return;
 			}
 		} else if (player.points > 21) {
-			player.status = 'bust';
+			(player as BlackjackPlayer).status = 'bust';
 			let cards = '';
-			for (let card of player.cards) cards += `[${card}] `;
-			let turnLine = Chat.html`<br /><strong>${player.name}</strong> has busted with ${cards} (${player.points})`;
+			for (const card of player.cards) {
+				cards += `[${card}] `;
+			}
+			turnLine = Chat.html`<br /><strong>${player.name}</strong> has busted with ${cards} (${player.points})`;
 			this.turnLog += turnLine;
-			this.display(turnLine, null, player.name);
+			this.display(turnLine, false, player.name);
 			this.clear();
 		} else if (player.points === 21) {
-			player.status = 'stand';
-			let turnLine = Chat.html`<br /><strong>${player.name}</strong> has blackjack!`;
+			(player as BlackjackPlayer).status = 'stand';
+			turnLine = Chat.html`<br /><strong>${player.name}</strong> has blackjack!`;
 			this.turnLog += turnLine;
-			this.display(turnLine, null, player.name);
+			this.display(turnLine, false, player.name);
 			this.clear();
 		}
-		if (user !== 'dealer') this.playerTable[user].cards = player.cards;
+		if (player !== this.dealer) this.playerTable[userid].cards = player.cards;
 		this.next();
 	}
-	getCardPoints(player) {
+	getCardPoints(playerid: string) {
+		const player = (playerid === 'dealer' ? this.dealer : this.playerTable[playerid]);
 		let points = 0;
 		let aceCount = 0;
-		for (let card of player.cards) {
-			card = toID(card).toUpperCase();
+		for (const card of player.cards.map(x => toID(x).toUpperCase())) {
 			if (!isNaN(Number(card))) {
 				points += Number(card);
 			} else if (['K', 'Q', 'J'].includes(card)) {
@@ -467,43 +521,62 @@ class Blackjack extends Rooms.RoomGame {
 	}
 	next() {
 		this.clearAllTimers();
-		if (Object.keys(this.playerTable)[Object.keys(this.playerTable).length - 1] === this.curUser && this.playerTable[this.curUser].status !== 'playing') {
+		if (Object.keys(this.playerTable)[Object.keys(this.playerTable).length - 1] === this.curUsername && this.playerTable[this.curUsername].status !== 'playing') {
 			if (this.dealer.points < 17) {
 				this.giveCard('dealer');
 			} else if (this.dealer.points >= 17) {
 				let cards = '';
-				for (let card of this.dealer.cards) cards += `[${card}] `;
-				let turnLine = `<br /><strong>${this.dealer.name}</strong> stands with ${cards} (${this.dealer.points})`;
+				for (const card of this.dealer.cards) {
+					cards += `[${card}] `;
+				}
+				const turnLine = `<br /><strong>${this.dealer.name}</strong> stands with ${cards} (${this.dealer.points})`;
 				this.turnLog += turnLine;
 				this.display(turnLine);
-				this.end();
+				this.end(true);
 			}
 			return;
 		}
-		if (this.playerTable[this.curUser].status !== 'playing') {
-			let number = 0;
-			while (this.playerTable[Object.keys(this.playerTable)[number]].status !== 'playing') number++;
-			this.curUser = Object.keys(this.playerTable)[number];
+		if (this.playerTable[this.curUsername].status !== 'playing') {
+			let num = 0;
+			while (this.playerTable[Object.keys(this.playerTable)[num]].status !== 'playing') {
+				num++;
+			}
+			this.curUsername = Object.keys(this.playerTable)[num];
 		}
-		let output = `|uhtml${this.playerTable[this.curUser].selfUhtml}|user-blackjack-${this.room.gameNumber}|<div class="infobox" style="line-height: 20px;">`;
-		output += `It's your turn to move, ${this.playerTable[this.curUser].name}<br />`;
-		for (let card of this.playerTable[this.curUser].cards) {
+		let output = `|uhtml${this.playerTable[this.curUsername].selfUhtml}|user-blackjack-${this.room.gameNumber}|<div class="infobox" style="line-height: 20px;">`;
+		output += `It's your turn to move, ${this.playerTable[this.curUsername].name}<br />`;
+		for (const card of this.playerTable[this.curUsername].cards) {
 			output += this.generateCard(card);
 		}
-		output += `<br />Score: ${this.playerTable[this.curUser].points}${(this.playerTable[this.curUser].points === 21 ? ` (you have blackjack!)` : ``)}`;
+		output += `<br />Score: ${this.playerTable[this.curUsername].points}${(this.playerTable[this.curUsername].points === 21 ? ` (you have blackjack!)` : ``)}`;
 		output += `<br /><button class="button" name="send" value="/blackjack hit" title="Hit (get another card)">Hit</button> | <button class="button" name="send" value="/blackjack stand" title="Stand (just keep these cards)">Stand</button>`;
 
-		this.playerTable[this.curUser].sendRoom(`|notify|Blackjack (${this.room.title})|It's your turn to play!`);
-		this.playerTable[this.curUser].sendRoom(output);
-		this.playerTable[this.curUser].playScreen = output;
+		this.playerTable[this.curUsername].sendRoom(`|notify|Blackjack (${this.room.title})|It's your turn to play!`);
+		this.playerTable[this.curUsername].sendRoom(output);
+		this.playerTable[this.curUsername].playScreen = output;
 
-		this.createTimer(this.playerTable[this.curUser]);
+		this.createTimer(this.playerTable[this.curUsername].user);
 	}
 }
 
 class BlackjackPlayer extends Rooms.RoomGamePlayer {
-	constructor(user, game) {
+	user: User;
+	game: Blackjack;
+
+	points: number;
+	slide: number;
+	timerTicksLeft: number;
+
+	cards: string[];
+
+	gameLog: string;
+	playScreen: string;
+	selfUhtml: string;
+	status: string;
+
+	constructor(user: User, game: Blackjack) {
 		super(user, game);
+		this.user = user;
 		this.game = game;
 
 		this.cards = [];
@@ -522,6 +595,10 @@ class BlackjackPlayer extends Rooms.RoomGamePlayer {
 }
 
 class BlackjackDealer {
+	cards: string[];
+	points: number;
+	name: string;
+
 	constructor() {
 		this.cards = [];
 		this.points = 0;
@@ -530,6 +607,7 @@ class BlackjackDealer {
 }
 
 class BlackjackDeck {
+	deck: Deck[];
 	constructor() {
 		this.deck = [
 			'A♥', 'A♦', 'A♣', 'A♠', '2♥', '2♦', '2♣', '2♠', '3♥', '3♦', '3♣',
@@ -544,7 +622,7 @@ class BlackjackDeck {
 	}
 }
 
-exports.commands = {
+export const commands: ChatCommands = {
 	blj: 'blackjack',
 	blackjack: {
 		new: 'create',
@@ -555,43 +633,49 @@ exports.commands = {
 
 			this.privateModAction(`(A game of blackjack was created by ${user.name}.)`);
 			this.modlog(`BLACKJACK CREATE`);
-			room.game = new Blackjack(room, user, target);
+			if (isNaN(parseFloat(target))) return this.parse('/help blackjack');
+			room.game = new Blackjack(room, user, parseFloat(target));
 		},
 		start(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
-			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
-			if (room.game.state !== 'signups') return this.errorReply("This game of blackjack has already started.");
+			const game = room.getGame(Blackjack);
+			if (!game || !game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
+			if (game.state !== 'signups') return this.errorReply("This game of blackjack has already started.");
 
 			this.privateModAction(`(The game of blackjack was started by ${user.name}.)`);
 			this.modlog(`BLACKJACK START`);
-			room.game.start(user);
+			game.start(user);
 		},
 		forceend: 'end',
 		end(target, room, user, connection, cmd) {
 			if (!this.can('minigame', null, room)) return;
-			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
+			const game = room.getGame(Blackjack);
+			if (!game || !game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
 			const force = cmd === 'forceend' ? 'forcibly ' : '';
 
-			const end = room.game.end(user, cmd);
+			const end = game.end(user, cmd);
 			if (end) {
 				this.privateModAction(`(The game of blackjack was ${force}ended by ${user.name}.)`);
 				this.modlog(`BLACKJACK END`);
 			}
 		},
 		hit(target, room, user) {
-			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
+			const game = room.getGame(Blackjack);
+			if (!game || !game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
 
-			room.game.hit(user);
+			game.hit(user);
 		},
 		stand(target, room, user) {
-			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
+			const game = room.getGame(Blackjack);
+			if (!game || !game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
 
-			room.game.stand(user);
+			game.stand(user);
 		},
 		slide(target, room, user) { // undocumented (used in UI)
-			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
+			const game = room.getGame(Blackjack);
+			if (!game || !game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
 
-			room.game.slide(user);
+			game.slide(user);
 		},
 		j: 'join',
 		join(target, room, user) {
@@ -603,34 +687,39 @@ exports.commands = {
 		},
 		unspectate: 'spectate',
 		spectate(target, room, user, connection, cmd) {
-			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
+			const game = room.getGame(Blackjack);
+			if (!game || !game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
 
 			if (cmd === 'spectate') {
-				room.game.spectate(user);
+				game.spectate(user);
 			} else if (cmd === 'unspectate') {
-				room.game.unspectate(user);
+				game.unspectate(user);
 			}
 		},
 		disable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (room.blackjackDisabled) return this.errorReply("Blackjack is already disabled in this room.");
-			room.blackjackDisabled = true;
-			this.privateModAction(`(${user.name} disabled games of blackjack in this room.)`);
+			if (room.blackjackDisabled) {
+				return this.errorReply("Blackjack is already disabled in this room.");
+			}
 
+			room.blackjackDisabled = true;
 			if (room.chatRoomData) {
-				room.chatRoomData.blackjackDisabled = room.blackjackDisabled;
+				room.chatRoomData.blackjackDisabled = true;
 				Rooms.global.writeChatRoomData();
 			}
+			this.sendReply(`Blackjack has been disabled for this room.`);
 		},
 		enable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (!room.blackjackDisabled) return this.errorReply("Blackjack is already enabled in this room.");
-			room.blackjackDisabled = false;
-			this.privateModAction(`(${user.name} enabled games of blackjack in this room.)`);
+			if (!room.blackjackDisabled) {
+				return this.errorReply("Blackjack is already enabled in this room.");
+			}
 
+			delete room.blackjackDisabled;
 			if (room.chatRoomData) {
-				room.chatRoomData.blackjackDisabled = room.blackjackDisabled;
+				delete room.chatRoomData.blackjackDisabled;
 				Rooms.global.writeChatRoomData();
+				this.sendReply(`Blackjack has been enabled for this room.`);
 			}
 		},
 		'': 'help',
@@ -651,7 +740,7 @@ exports.commands = {
 		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # & ~",
 	],
 };
-exports.roomSettings = room => ({
+export const roomSettings: SettingsHandler = room => ({
 	label: "Blackjack",
 	permission: 'editroom',
 	options: [
