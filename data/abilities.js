@@ -891,17 +891,15 @@ let BattleAbilities = {
 	"emergencyexit": {
 		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage bringing it to 1/2 or less of its maximum HP, it immediately switches out to a chosen ally. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect. This effect applies to both direct and indirect damage, except Curse and Substitute on use, Belly Drum, Pain Split, and confusion damage.",
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
-		onAfterMoveSecondary(target, source, move) {
-			if (!source || source === target || !target.hp || !move.totalDamage) return;
-			const lastAttackedBy = target.getLastAttackedBy();
-			if (!lastAttackedBy) return;
-			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
-			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
-				target.switchFlag = true;
-				source.switchFlag = false;
-				this.add('-activate', target, 'ability: Emergency Exit');
+		onEmergencyExit(target) {
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+			for (const side of this.sides) {
+				for (const active of side.active) {
+					active.switchFlag = false;
+				}
 			}
+			target.switchFlag = true;
+			this.add('-activate', target, 'ability: Emergency Exit');
 		},
 		id: "emergencyexit",
 		name: "Emergency Exit",
@@ -4589,17 +4587,15 @@ let BattleAbilities = {
 	"wimpout": {
 		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage bringing it to 1/2 or less of its maximum HP, it immediately switches out to a chosen ally. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect. This effect applies to both direct and indirect damage, except Curse and Substitute on use, Belly Drum, Pain Split, and confusion damage.",
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
-		onAfterMoveSecondary(target, source, move) {
-			if (!source || source === target || !target.hp || !move.totalDamage) return;
-			const lastAttackedBy = target.getLastAttackedBy();
-			if (!lastAttackedBy) return;
-			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
-			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
-				target.switchFlag = true;
-				source.switchFlag = false;
-				this.add('-activate', target, 'ability: Wimp Out');
+		onEmergencyExit(target) {
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+			for (const side of this.sides) {
+				for (const active of side.active) {
+					active.switchFlag = false;
+				}
 			}
+			target.switchFlag = true;
+			this.add('-activate', target, 'ability: Wimp Out');
 		},
 		id: "wimpout",
 		name: "Wimp Out",

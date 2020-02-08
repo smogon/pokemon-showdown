@@ -2608,6 +2608,7 @@ export class Battle {
 	}
 
 	runAction(action: Actions.Action) {
+		const pokemonOriginalHP = action.pokemon?.hp;
 		// returns whether or not we ended in a callback
 		switch (action.choice) {
 		case 'start': {
@@ -2835,6 +2836,13 @@ export class Battle {
 		}
 
 		this.eachEvent('Update');
+
+		if (action.choice === 'runSwitch') {
+			if (action.pokemon.hp <= action.pokemon.maxhp / 2 && pokemonOriginalHP! > action.pokemon.maxhp / 2) {
+				this.runEvent('EmergencyExit', action.pokemon);
+			}
+		}
+
 		if (this.gen >= 8 && this.queue.length && this.queue[0].choice === 'move') {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();

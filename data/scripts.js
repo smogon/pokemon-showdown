@@ -708,6 +708,15 @@ let BattleScripts = {
 		// @ts-ignore
 		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
+		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			for (let i = 0; i < damage.length; i++) {
+				const curDamage = damage[i];
+				if (typeof curDamage === 'number' && targets[i].hp <= targets[i].maxhp / 2 && targets[i].hp + curDamage > targets[i].maxhp / 2) {
+					this.runEvent('EmergencyExit', targets[i], pokemon);
+				}
+			}
+		}
+
 		return damage;
 	},
 	spreadMoveHit(targets, pokemon, moveOrMoveName, moveData, isSecondary, isSelf) {
@@ -801,12 +810,16 @@ let BattleScripts = {
 				damagedDamage.push(damage[i]);
 			}
 		}
+		const pokemonOriginalHP = pokemon.hp;
 		if (damagedDamage.length) {
 			this.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 			if (moveData.onAfterHit) {
 				for (const target of damagedTargets) {
 					this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
 				}
+			}
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
+				this.runEvent('EmergencyExit', pokemon);
 			}
 		}
 

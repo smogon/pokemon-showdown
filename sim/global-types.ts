@@ -195,6 +195,7 @@ interface PureEffectEventMethods {
 
 interface EventMethods {
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onEmergencyExit?: (this: Battle, pokemon: Pokemon) => void
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void
 	onAfterHit?: MoveEventMethods['onAfterHit']
 	onAfterSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
