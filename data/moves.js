@@ -12489,8 +12489,8 @@ let BattleMovedex = {
 			let rand = this.random(10);
 			if (rand < 2) {
 				move.heal = [1, 4];
-				// For the purposes of kee berry
-				move.category = "Status";
+				// Shouldn't activate Kee Berry
+				move.category = 'Status';
 			} else if (rand < 6) {
 				move.basePower = 40;
 			} else if (rand < 9) {
