@@ -2978,6 +2978,7 @@ let BattleItems = {
 		},
 		onAfterMoveSecondary(target, source, move) {
 			if (move.category === 'Physical') {
+				if (move.id === 'present' && move.heal) return;
 				target.eatItem();
 			}
 		},
