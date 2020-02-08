@@ -102,13 +102,13 @@ let BattleFormatsData = {
 	beedrill: {
 		inherit: true,
 		randomBattleMoves: [],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	beedrillmega: {
 		inherit: true,
 		randomBattleMoves: ["drillrun", "poisonjab", "uturn", "xscissor", "brickbreak"],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	pidgey: {
@@ -211,7 +211,7 @@ let BattleFormatsData = {
 	sandslashalola: {
 		inherit: true,
 		randomBattleMoves: ["earthquake", "iceshard", "icepunch", "swordsdance", "stealthrock", "irontail"],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	nidoranf: {
@@ -509,7 +509,7 @@ let BattleFormatsData = {
 	rapidash: {
 		inherit: true,
 		randomBattleMoves: ["flareblitz", "drillrun", "megahorn", "willowisp", "irontail"],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	slowpoke: {
@@ -653,7 +653,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 42, "shiny": 1, "perfectIVs": 3, "moves": ["thunderbolt", "screech", "selfdestruct", "swift"]},
 		],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	exeggcute: {
@@ -669,7 +669,7 @@ let BattleFormatsData = {
 	exeggutoralola: {
 		inherit: true,
 		randomBattleMoves: ["megadrain", "dragonpulse", "flamethrower", "stunspore", "earthquake"],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	cubone: {
@@ -750,13 +750,13 @@ let BattleFormatsData = {
 	kangaskhan: {
 		inherit: true,
 		randomBattleMoves: [],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	kangaskhanmega: {
 		inherit: true,
 		randomBattleMoves: ["fakeout", "earthquake", "suckerpunch", "facade", "brickbreak"],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	horsea: {
