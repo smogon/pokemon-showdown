@@ -23,12 +23,26 @@ describe(`Emergency Exit`, function () {
 		assert.strictEqual(battle.requestState, 'switch');
 	});
 
-	it(`should not request switch-out if first healed by berry`, function () {
+	it(`should not request switch-out if attacked and healed by berry`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}],
 		]);
 		battle.makeChoices('move sleeptalk', 'move superfang');
+		assert.strictEqual(battle.requestState, 'move');
+	});
+
+	it(`should not request switch-out after taking residual damage and getting healed by berry`, function () {
+		battle = common.createBattle([
+			[{species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk'], item: 'sitrusberry'}, {species: "Magikarp", ability: 'swiftswim', moves: ['splash']}],
+			[{species: "Ferrothorn", ability: 'ironbarbs', moves: ['stealthrock', 'spikes', 'protect']}],
+		]);
+		battle.makeChoices('move uturn', 'move stealthrock');
+		battle.makeChoices('switch 2', '');
+		battle.makeChoices('move splash', 'move spikes');
+		battle.makeChoices('move splash', 'move spikes');
+		battle.makeChoices('move splash', 'move spikes');
+		battle.makeChoices('switch 2', 'move protect');
 		assert.strictEqual(battle.requestState, 'move');
 	});
 
