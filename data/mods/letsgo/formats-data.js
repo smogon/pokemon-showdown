@@ -39,19 +39,19 @@ let BattleFormatsData = {
 	charizard: {
 		inherit: true,
 		randomBattleMoves: [],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	charizardmegax: {
 		inherit: true,
 		randomBattleMoves: ["roost", "flareblitz", "outrage", "earthquake", "willowisp"],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	charizardmegay: {
 		inherit: true,
 		randomBattleMoves: ["airslash", "roost", "dragonpulse", "flamethrower", "fireblast"],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	squirtle: {
@@ -205,7 +205,7 @@ let BattleFormatsData = {
 	sandslash: {
 		inherit: true,
 		randomBattleMoves: ["earthquake", "rockslide", "stealthrock", "swordsdance", "toxic"],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	sandslashalola: {
@@ -399,7 +399,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 16, "shiny": 1, "ivs": {hp: 25, atk: 30, def: 25, spa: 30, spd: 25, spe: 31}, "moves": ["roar", "leer", "ember", "doubleedge"], "pokeball": "pokeball"},
 		],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	poliwag: {
@@ -653,7 +653,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 42, "shiny": 1, "perfectIVs": 3, "moves": ["thunderbolt", "screech", "selfdestruct", "swift"]},
 		],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	exeggcute: {
@@ -738,7 +738,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 1, "gender": "F", "nature": "Mild", "moves": ["celebrate", "pound"], "pokeball": "cherishball"},
 		],
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	tangela: {
