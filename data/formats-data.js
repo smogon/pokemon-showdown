@@ -7798,7 +7798,7 @@ let BattleFormatsData = {
 	dracozolt: {
 		randomBattleMoves: ["aerialace", "boltbeak", "earthquake", "lowkick", "outrage"],
 		unreleasedHidden: true,
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	arctozolt: {
