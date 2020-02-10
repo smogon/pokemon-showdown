@@ -192,6 +192,12 @@ export const commands: ChatCommands = {
 	pmuhtmlhelp: [`/pmuhtml [user], [name], [html] - PMs [html] that can change to [user]. Requires * ~`],
 	pmuhtmlchangehelp: [`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * ~`],
 
+	nick() {
+		this.sendReply(`||New to the Pokémon Showdown protocol? Your client needs to get a signed assertion from the login server and send /trn`);
+		this.sendReply(`||https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md#global-messages`);
+		this.sendReply(`||Follow the instructions for handling |challstr| in this documentation`);
+	},
+
 	/*********************************************************
 	 * Server management commands
 	 *********************************************************/
