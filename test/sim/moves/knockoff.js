@@ -18,6 +18,14 @@ describe('Knock Off', function () {
 		assert.strictEqual(battle.p2.active[0].item, '');
 	});
 
+	it('should not remove items when hitting Sub', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'noability', moves: ['knockoff']}]});
+		battle.setPlayer('p2', {team: [{species: "Ninjask", ability: 'noability', item: 'shedshell', moves: ['substitute']}]});
+		battle.makeChoices();
+		assert.strictEqual(battle.p2.active[0].item, 'shedshell');
+	});
+
 	it('should not remove plates from Arceus', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['knockoff']}]});

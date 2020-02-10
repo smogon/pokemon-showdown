@@ -805,7 +805,7 @@ let BattleScripts = {
 		let damagedTargets = [];
 		let damagedDamage = [];
 		for (let i = 0; i < targets.length; i++) {
-			if (typeof damage[i] === 'number') {
+			if (typeof damage[i] === 'number' && targets[i]) {
 				damagedTargets.push(/** @type {Pokemon} */ (targets[i]));
 				damagedDamage.push(damage[i]);
 			}
