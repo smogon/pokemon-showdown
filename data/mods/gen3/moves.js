@@ -256,7 +256,7 @@ let BattleMovedex = {
 			},
 			noCopy: true,
 			onStart(pokemon) {
-				if (!this.willMove(pokemon)) {
+				if (!this.queue.willMove(pokemon)) {
 					this.effectData.duration++;
 				}
 				if (!pokemon.lastMove) {
@@ -365,7 +365,7 @@ let BattleMovedex = {
 				}
 				this.effectData.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
-				if (!this.willMove(target)) {
+				if (!this.queue.willMove(target)) {
 					this.effectData.duration++;
 				}
 			},

@@ -817,11 +817,11 @@ let BattleMovedex = {
 		inherit: true,
 		onHit(target) {
 			if (target.side.active.length < 2) return false; // fails in singles
-			let action = this.willMove(target);
+			let action = this.queue.willMove(target);
 			if (!action) return false;
 
 			action.priority = -7.1;
-			this.cancelMove(target);
+			this.queue.cancelMove(target);
 			for (let i = this.queue.length - 1; i >= 0; i--) {
 				if (this.queue[i].choice === 'residual') {
 					this.queue.splice(i, 0, action);

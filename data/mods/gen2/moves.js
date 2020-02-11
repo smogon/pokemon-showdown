@@ -252,7 +252,7 @@ let BattleMovedex = {
 				}
 				this.effectData.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
-				if (!this.willMove(target)) {
+				if (!this.queue.willMove(target)) {
 					this.effectData.duration++;
 				}
 			},

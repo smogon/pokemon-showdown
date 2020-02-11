@@ -324,7 +324,7 @@ let BattleMovedex = {
 		stallingMove: true,
 		volatileStatus: 'backoffgrrr',
 		onTryHit(target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
+			return !!this.queue.willAct() && this.runEvent('StallMove', target);
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
@@ -447,7 +447,7 @@ let BattleMovedex = {
 			this.add('-anim', target, 'Dark Void', target);
 		},
 		onHit(target, source, move) {
-			let wouldMove = this.cancelMove(target);
+			let wouldMove = this.queue.cancelMove(target);
 			// Generate a new team
 			let team = this.teamGenerator.getTeam({name: target.side.name, inBattle: true});
 			let set = team.shift();
@@ -2495,7 +2495,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		onTryHit(pokemon) {
-			return !!this.willAct() && this.runEvent('StallMove', pokemon);
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "King's Shield", source);
@@ -2839,7 +2839,7 @@ let BattleMovedex = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Protect", source);
 			this.add('-anim', source, "Quiver Dance", source);
-			let result = !!this.willAct() && this.runEvent('StallMove', source);
+			let result = !!this.queue.willAct() && this.runEvent('StallMove', source);
 			return result;
 		},
 		onHit(target, source) {
@@ -3493,7 +3493,7 @@ let BattleMovedex = {
 		stallingMove: true,
 		volatileStatus: 'lilypadshield',
 		onTryHit(target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
+			return !!this.queue.willAct() && this.runEvent('StallMove', target);
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
@@ -3675,7 +3675,7 @@ let BattleMovedex = {
 		},
 		onHit(target, source) {
 			source.addVolatile('rage', source);
-			if (this.willAct() && this.runEvent('StallMove', source)) {
+			if (this.queue.willAct() && this.runEvent('StallMove', source)) {
 				this.debug('Rageeeee endure');
 				source.addVolatile('endure', source);
 				source.addVolatile('stall');
@@ -4281,7 +4281,7 @@ let BattleMovedex = {
 				this.add('-message', `${source.active[0].name}'s replacement is going to switch out next turn!`);
 			},
 			onBeforeTurn(pokemon) {
-				this.insertQueue({choice: 'event', event: 'SSBRotate', pokemon: pokemon, priority: -69});
+				this.queue.insertChoice({choice: 'event', event: 'SSBRotate', pokemon: pokemon, priority: -69});
 			},
 			// @ts-ignore unsupported custom event
 			onSSBRotate(/** @type {Pokemon} */ pokemon) {

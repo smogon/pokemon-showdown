@@ -382,7 +382,7 @@ let BattleMovedex = {
 			},
 			noCopy: true,
 			onStart(pokemon) {
-				if (!this.willMove(pokemon)) {
+				if (!this.queue.willMove(pokemon)) {
 					this.effectData.duration++;
 				}
 				if (!pokemon.lastMove) {
@@ -527,7 +527,7 @@ let BattleMovedex = {
 				}
 				this.effectData.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
-				if (!this.willMove(target)) {
+				if (!this.queue.willMove(target)) {
 					this.effectData.duration++;
 				}
 			},
@@ -1182,7 +1182,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Power doubles if the user moves after the target this turn. Switching in counts as an action.",
 		basePowerCallback(pokemon, target) {
-			if (this.willMove(target)) {
+			if (this.queue.willMove(target)) {
 				return 50;
 			}
 			return 100;
@@ -1543,7 +1543,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Fails if the target did not select a physical or special attack for use this turn, or if the target moves before the user.",
 		onTry(source, target) {
-			let action = this.willMove(target);
+			let action = this.queue.willMove(target);
 			if (!action || action.choice !== 'move' || action.move.category === 'Status' || target.volatiles.mustrecharge) {
 				this.add('-fail', source);
 				return null;
