@@ -832,15 +832,25 @@ export class CommandContext extends MessageContext {
 				}
 				if (room.modchat && !user.authAtLeast(room.modchat, room)) {
 					if (room.modchat === 'autoconfirmed') {
-						this.errorReply(this.tr(`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`));
+						this.errorReply(
+							this.tr(
+								`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
+							)
+						);
 						return null;
 					}
 					if (room.modchat === 'trusted') {
-						this.errorReply(this.tr(`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`));
+						this.errorReply(
+							this.tr(
+								`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`
+							)
+						);
 						return null;
 					}
 					const groupName = Config.groups[room.modchat] && Config.groups[room.modchat].name || room.modchat;
-					this.errorReply(this.tr `Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`);
+					this.errorReply(
+						this.tr `Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
+					);
 					return null;
 				}
 				if (!(user.id in room.users)) {

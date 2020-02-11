@@ -127,7 +127,10 @@ export const commands: ChatCommands = {
 			createLottery(room.roomid, maxWinnersNum, name, markup);
 			this.sendReply(`The lottery was successfully ${edited ? 'edited' : 'created'}.`);
 			if (!edited) {
-				this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the "<a href="/view-lottery-${room.roomid}">${name}</a>" lottery!</b></div>`);
+				this.add(
+					Chat.html`|raw|<div class="broadcast-blue"><b>${user.name} created the` +
+					` "<a href="/view-lottery-${room.roomid}">${name}</a>" lottery!</b></div>`
+				);
 			}
 			this.modlog(`LOTTERY ${edited ? 'EDIT' : 'CREATE'} ${name}`, null, `${maxWinnersNum} max winners`);
 		},

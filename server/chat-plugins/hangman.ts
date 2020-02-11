@@ -138,7 +138,7 @@ export class Hangman extends Rooms.RoomGame {
 		}
 
 		const color = result === 1 ? 'red' : (result === 2 ? 'green' : 'blue');
-		const message = result === 1 ? 'Too bad! The mon has been hanged.' : (result === 2 ? 'The word has been guessed. Congratulations!' : 'Hangman');
+		const message = `${result === 1 ? 'Too bad! The mon has been hanged.' : (result === 2 ? 'The word has been guessed. Congratulations!' : 'Hangman')}`;
 		let output = `<div class="broadcast-${color}">`;
 		output += `<p style="text-align:left;font-weight:bold;font-size:10pt;margin:5px 0 0 15px">${message}</p>`;
 		output += `<table><tr><td style="text-align:center;">${this.hangingMan()}</td><td style="text-align:center;width:100%;word-wrap:break-word">`;
@@ -165,7 +165,8 @@ export class Hangman extends Rooms.RoomGame {
 				// last guess was a letter
 				output += Chat.html` <small>&ndash; ${this.lastGuesser}</small>`;
 			} else {
-				output += Chat.html`<br />Guessed: ${this.guesses[this.guesses.length - 1]} <small>&ndash; ${this.lastGuesser}</small>`;
+				output += Chat.html`<br />Guessed: ${this.guesses[this.guesses.length - 1]} ` +
+					`<small>&ndash; ${this.lastGuesser}</small>`;
 			}
 		}
 
@@ -220,7 +221,9 @@ export const commands: ChatCommands = {
 			const word = params[0].replace(/[^A-Za-z '-]/g, '');
 			if (word.replace(/ /g, '').length < 1) return this.errorReply("Enter a valid word");
 			if (word.length > 30) return this.errorReply("Phrase must be less than 30 characters.");
-			if (word.split(' ').some(w => w.length > 20)) return this.errorReply("Each word in the phrase must be less than 20 characters.");
+			if (word.split(' ').some(w => w.length > 20)) {
+				return this.errorReply("Each word in the phrase must be less than 20 characters.");
+			}
 			if (!/[a-zA-Z]/.test(word)) return this.errorReply("Word must contain at least one letter.");
 
 			let hint;

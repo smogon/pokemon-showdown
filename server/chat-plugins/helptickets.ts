@@ -341,9 +341,16 @@ function pokeUnclaimedTicketTimer(hasUnclaimed: boolean, hasAssistRequest: boole
 	const room = Rooms.get('staff');
 	if (!room) return;
 	if (hasUnclaimed && !unclaimedTicketTimer[room.roomid]) {
-		unclaimedTicketTimer[room.roomid] = setTimeout(() => notifyUnclaimedTicket(hasAssistRequest), hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT);
+		unclaimedTicketTimer[room.roomid] = setTimeout(
+			() =>
+			notifyUnclaimedTicket(hasAssistRequest), hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT
+		);
 		timerEnds[room.roomid] = Date.now() + (hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT);
-	} else if (hasAssistRequest && (timerEnds[room.roomid] - NOTIFY_ASSIST_TIMEOUT) > NOTIFY_ASSIST_TIMEOUT && unclaimedTicketTimer[room.roomid]) {
+	} else if (
+		hasAssistRequest &&
+		(timerEnds[room.roomid] - NOTIFY_ASSIST_TIMEOUT) > NOTIFY_ASSIST_TIMEOUT &&
+		unclaimedTicketTimer[room.roomid]
+	) {
 		// Shorten timer
 		clearTimeout(unclaimedTicketTimer[room.roomid]!);
 		unclaimedTicketTimer[room.roomid] = setTimeout(() => notifyUnclaimedTicket(hasAssistRequest), NOTIFY_ASSIST_TIMEOUT);
@@ -362,7 +369,12 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 	timerEnds[room.roomid] = 0;
 	for (const i in room.users) {
 		const user = room.users[i];
-		if (user.can('mute', null, room) && !user.ignoreTickets) user.sendTo(room, `|tempnotify|helptickets|Unclaimed help tickets!|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`);
+		if (user.can('mute', null, room) && !user.ignoreTickets) {
+			user.sendTo(
+				room,
+				`|tempnotify|helptickets|Unclaimed help tickets!|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`
+			);
+		}
 	}
 }
 
@@ -420,7 +432,8 @@ function notifyStaff() {
 	if (hiddenTicketCount > 1) {
 		const notifying = hiddenTicketUnclaimedCount > 0 ? ` notifying` : ``;
 		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
-		buf = buf.slice(0, fourthTicketIndex) + `<a class="button${notifying}" href="/view-help-tickets">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</a>`;
+		buf = buf.slice(0, fourthTicketIndex) +
+			`<a class="button${notifying}" href="/view-help-tickets">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</a>`;
 	}
 	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox" style="padding: 6px 4px">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
 	room.send(buf);
@@ -859,8 +872,22 @@ export const pages: PageTable = {
 			// Calculate next/previous month for stats and validate stats exist for the month
 
 			// date.getMonth() returns 0-11, we need 1-12 +/-1 for this
-			const prevDate = new Date(date.getMonth() === 0 ? date.getFullYear() - 1 : date.getFullYear(), date.getMonth() === 0 ? 11 : date.getMonth() - 1);
-			const nextDate = new Date(date.getMonth() === 11 ? date.getFullYear() + 1 : date.getFullYear(), date.getMonth() === 11 ? 0 : date.getMonth() + 1);
+			const prevDate = new Date(
+				date.getMonth() === 0 ?
+					date.getFullYear() - 1 :
+						date.getFullYear(),
+				date.getMonth() === 0 ?
+					11 :
+						date.getMonth() - 1
+			);
+			const nextDate = new Date(
+				date.getMonth() === 11 ?
+					date.getFullYear() + 1 :
+						date.getFullYear(),
+				date.getMonth() === 11 ?
+					0 :
+						date.getMonth() + 1
+			);
 			const prevString = Chat.toTimestamp(prevDate).split(' ')[0].split('-', 2).join('-');
 			const nextString = Chat.toTimestamp(nextDate).split(' ')[0].split('-', 2).join('-');
 
@@ -887,22 +914,36 @@ export const pages: PageTable = {
 				buf += `<tr><th><Button>staff</Button></th><th><Button>num</Button></th><th><Button>time</Button></th></tr>`;
 			}
 
-			const ticketStats: {[k: string]: string}[] = rawTicketStats.split('\n').filter((line: string) => line).map((line: string) => {
-				const splitLine = line.split('\t');
-				return {
-					type: splitLine[0],
-					total: splitLine[1],
-					initwait: splitLine[2],
-					wait: splitLine[3],
-					resolution: splitLine[4],
-					result: splitLine[5],
-					staff: splitLine[6],
-				};
-			});
+			const ticketStats: {[k: string]: string}[] = rawTicketStats.split('\n').filter(
+				(line: string) => line
+			).map(
+				(line: string) => {
+					const splitLine = line.split('\t');
+					return {
+						type: splitLine[0],
+						total: splitLine[1],
+						initwait: splitLine[2],
+						wait: splitLine[3],
+						resolution: splitLine[4],
+						result: splitLine[5],
+						staff: splitLine[6],
+					};
+				});
 			if (table === 'tickets') {
 				const typeStats: {[key: string]: {[key: string]: number}} = {};
 				for (const stats of ticketStats) {
-					if (!typeStats[stats.type]) typeStats[stats.type] = {total: 0, initwait: 0, wait: 0, dead: 0, unresolved: 0, resolved: 0, result: 0, totaltickets: 0};
+					if (!typeStats[stats.type]) {
+						typeStats[stats.type] = {
+							total: 0,
+							initwait: 0,
+							wait: 0,
+							dead: 0,
+							unresolved: 0,
+							resolved: 0,
+							result: 0,
+							totaltickets: 0,
+						};
+					}
 					const type = typeStats[stats.type];
 					type.totaltickets++;
 					type.total += parseInt(stats.total);
@@ -1025,7 +1066,9 @@ export const commands: ChatCommands = {
 			if (this.broadcasting) {
 				return this.sendReplyBox(`<button name="joinRoom" value="view-help-request${meta}" class="button"><strong>Request help</strong></button>`);
 			}
-			if (user.can('lock')) return this.parse('/join view-help-request'); // Globals automatically get the form for reference.
+			if (user.can('lock')) {
+				return this.parse('/join view-help-request'); // Globals automatically get the form for reference.
+			}
 			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);
 			return this.parse(`/join view-help-request${meta}`);
 		},
@@ -1033,7 +1076,9 @@ export const commands: ChatCommands = {
 
 		'!submit': true,
 		submit(target, room, user, connection) {
-			if (user.can('lock') && !user.can('bypassall')) return this.popupReply(`Global staff can't make tickets. They can only use the form for reference.`);
+			if (user.can('lock') && !user.can('bypassall')) {
+				return this.popupReply(`Global staff can't make tickets. They can only use the form for reference.`);
+			}
 			if (!user.named) return this.popupReply(`You need to choose a username before doing this.`);
 			const banMsg = checkTicketBanned(user);
 			if (banMsg) return this.popupReply(banMsg);
@@ -1055,7 +1100,9 @@ export const commands: ChatCommands = {
 					return this.popupReply(`You already have an open ticket; please wait for global staff to respond.`);
 				}
 			}
-			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
+			if (Monitor.countTickets(user.latestIp)) {
+				return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
+			}
 			let [ticketType, reportTargetType, reportTarget] = Chat.splitFirst(target, '|', 2).map(s => s.trim());
 			reportTarget = Chat.escapeHTML(reportTarget);
 			if (!Object.values(ticketTitles).includes(ticketType)) return this.parse('/helpticket');
@@ -1067,7 +1114,8 @@ export const commands: ChatCommands = {
 				Appeal: `Hi! Can you please explain why you feel your punishment is undeserved?`,
 				'IP-Appeal': `Hi! How are you connecting to Showdown right now? At home, at school, on a phone using mobile data, or some other way?`,
 				'Public Room Assistance Request': `Hi! Which room(s) do you need us to help you watch?`,
-				Other: `Hi! What seems to be the problem? Tell us about any people involved, and if this happened in a specific place on the site.`,
+				Other: `Hi! What seems to be the problem? Tell us about any people involved,` +
+				` and if this happened in a specific place on the site.`,
 			};
 			const staffContexts: {[k: string]: string} = {
 				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${Object.keys(user.ips).map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
@@ -1107,7 +1155,8 @@ export const commands: ChatCommands = {
 				case 'PM Harassment':
 					if (!Config.pmLogButton) break;
 					pmRequestButton = Config.pmLogButton(user.id, toID(reportTarget));
-					contexts['PM Harassment'] = `Hi! Please click the button below to give global staff permission to check PMs. Or if ${reportTarget} is not the user you want to report, please tell us the name of the user who you want to report.`;
+					contexts['PM Harassment'] = `Hi! Please click the button below to give global staff permission to check PMs.` +
+						` Or if ${reportTarget} is not the user you want to report, please tell us the name of the user who you want to report.`;
 					break;
 				case 'Inappropriate Username / Status Message':
 					staffIntroButtons = `<button class="button" name="send" value="/forcerename ${reportTarget}">Force-rename ${reportTarget}</button> <button class="button" name="send" value="/clearstatus ${reportTarget}">Clear ${reportTarget}'s status</button> `;
@@ -1118,7 +1167,8 @@ export const commands: ChatCommands = {
 			if (ticket.type === 'Appeal') {
 				staffIntroButtons += `<button class="button" name="send" value="/modlog global, ${user.name}">Global Modlog for ${user.name}</button>`;
 			}
-			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
+			const introMsg = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2>` +
+				`<p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
 			const staffMessage = `<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`;
 			const staffHint = staffContexts[ticketType] || '';
 			const reportTargetInfo =
@@ -1132,13 +1182,13 @@ export const commands: ChatCommands = {
 					isPrivate: 'hidden',
 					modjoin: '%',
 					auth: {[user.id]: '+'},
-					introMessage: introMessage,
+					introMessage: introMsg,
 					staffMessage: staffMessage + staffHint + reportTargetInfo,
 				});
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			} else {
 				helpRoom.pokeExpireTimer();
-				helpRoom.introMessage = introMessage;
+				helpRoom.introMessage = introMsg;
 				helpRoom.staffMessage = staffMessage + staffHint + reportTargetInfo;
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
@@ -1183,7 +1233,9 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse(`/help helpticket close`);
 			let result = !(this.splitTarget(target) === 'false');
 			const ticket = tickets[toID(this.inputUsername)];
-			if (!ticket || !ticket.open || (ticket.userid !== user.id && !user.can('lock'))) return this.errorReply(`${this.inputUsername} does not have an open ticket.`);
+			if (!ticket || !ticket.open || (ticket.userid !== user.id && !user.can('lock'))) {
+				return this.errorReply(`${this.inputUsername} does not have an open ticket.`);
+			}
 			const helpRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom | null;
 			if (helpRoom) {
 				const ticketGame = helpRoom.getGame(HelpTicket)!;
@@ -1216,31 +1268,37 @@ export const commands: ChatCommands = {
 				return this.errorReply(`The reason is too long. It cannot exceed 300 characters.`);
 			}
 
-			let name;
+			let username;
 			let userid;
 
 			if (targetUser) {
-				name = targetUser.getLastName();
+				username = targetUser.getLastName();
 				userid = targetUser.getLastId();
-				if (ticketBan && ticketBan.expires > Date.now()) return this.privateModAction(`(${name} would be ticket banned by ${user.name} but was already ticket banned.)`);
-				if (targetUser.trusted) Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was ticket banned by ${user.name}, and should probably be demoted.`);
+				if (ticketBan && ticketBan.expires > Date.now()) {
+					return this.privateModAction(`(${username} would be ticket banned by ${user.name} but was already ticket banned.)`);
+				}
+				if (targetUser.trusted) {
+					Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was ticket banned by ${user.name}, and should probably be demoted.`);
+				}
 			} else {
-				name = this.targetUsername;
+				username = this.targetUsername;
 				userid = toID(this.targetUsername);
-				if (ticketBan && ticketBan.expires > Date.now()) return this.privateModAction(`(${name} would be ticket banned by ${user.name} but was already ticket banned.)`);
+				if (ticketBan && ticketBan.expires > Date.now()) {
+					return this.privateModAction(`(${username} would be ticket banned by ${user.name} but was already ticket banned.)`);
+				}
 			}
 
 			if (targetUser) {
 				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(target ? `\n\nReason: ${target}` : ``)}\n\nYour ban will expire in a few days.`);
 			}
 
-			this.addModAction(`${name} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
+			this.addModAction(`${username} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
 
 			let affected: any[] = [];
 			const punishment: BannedTicketState = {
-				banned: name,
-				name: name,
-				userid: toID(name),
+				banned: username,
+				name: username,
+				userid: toID(username),
 				by: user.name,
 				created: Date.now(),
 				expires: Date.now() + TICKET_BAN_DURATION,
@@ -1269,24 +1327,24 @@ export const commands: ChatCommands = {
 			const acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
-				displayMessage = `(${name}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`;
+				displayMessage = `(${username}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(userObj => userObj.getLastName()).join(", ")})`;
 				this.privateModAction(displayMessage);
 			} else if (acAccount) {
-				displayMessage = `(${name}'s ac account: ${acAccount})`;
+				displayMessage = `(${username}'s ac account: ${acAccount})`;
 				this.privateModAction(displayMessage);
 			}
 
-			for (const user of affected) {
-				const userid = (typeof user !== 'string' ? user.getLastId() : toID(user));
-				const targetTicket = tickets[userid];
+			for (const userObj of affected) {
+				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
+				const targetTicket = tickets[userObjID];
 				if (targetTicket && targetTicket.open) targetTicket.open = false;
-				const helpRoom = Rooms.get(`help-${userid}`);
+				const helpRoom = Rooms.get(`help-${userObjID}`);
 				if (helpRoom) {
 					const ticketGame = helpRoom.getGame(HelpTicket)!;
 					ticketGame.writeStats('ticketban');
 					helpRoom.destroy();
 				}
-				ticketBans[userid] = punishment;
+				ticketBans[userObjID] = punishment;
 			}
 			writeTickets();
 			notifyStaff();
@@ -1303,7 +1361,9 @@ export const commands: ChatCommands = {
 			if (!this.can('lock')) return;
 			const targetUser = Users.get(target, true);
 			const ticket = ticketBans[toID(target)];
-			if (!ticket || !ticket.banned) return this.errorReply(`${targetUser ? targetUser.name : target} is not ticket banned.`);
+			if (!ticket || !ticket.banned) {
+				return this.errorReply(`${targetUser ? targetUser.name : target} is not ticket banned.`);
+			}
 			if (ticket.expires <= Date.now()) {
 				delete tickets[ticket.userid];
 				writeTickets();
@@ -1329,7 +1389,9 @@ export const commands: ChatCommands = {
 
 		ignore(target, room, user) {
 			if (!this.can('lock')) return;
-			if (user.ignoreTickets) return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
+			if (user.ignoreTickets) {
+				return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
+			}
 			user.ignoreTickets = true;
 			user.update('ignoreTickets');
 			this.sendReply(`You are now ignoring help ticket notifications.`);
@@ -1338,7 +1400,9 @@ export const commands: ChatCommands = {
 
 		unignore(target, room, user) {
 			if (!this.can('lock')) return;
-			if (!user.ignoreTickets) return this.errorReply(`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
+			if (!user.ignoreTickets) {
+				return this.errorReply(`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
+			}
 			user.ignoreTickets = false;
 			user.update('ignoreTickets');
 			this.sendReply(`You will now receive help ticket notifications.`);

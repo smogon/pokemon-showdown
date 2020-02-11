@@ -15,15 +15,16 @@
 
 'use strict';
 
-import {Config} from '../config-loader';
-import {Dex} from '../../sim/dex';
+import * as child_process from 'child_process';
+import * as path from 'path';
+import * as util from 'util';
+import * as Dashycode from '../../lib/dashycode';
+
 import {FS} from '../../lib/fs';
 import {QueryProcessManager} from '../../lib/process-manager';
 import {Repl} from '../../lib/repl';
-import * as path from 'path';
-import * as Dashycode from '../../lib/dashycode';
-import * as util from 'util';
-import * as childProcess from 'child_process';
+import {Dex} from '../../sim/dex';
+import {Config} from '../config-loader';
 
 interface Results {
 	[k: string]: number;
@@ -33,7 +34,7 @@ interface Results {
 	totalTies: number;
 }
 
-const execFile = util.promisify(childProcess.execFile);
+const execFile = util.promisify(child_process.execFile);
 
 const MAX_PROCESSES = 1;
 const MAX_QUERY_LENGTH = 2500;
@@ -108,7 +109,10 @@ function checkRipgrepAvailability() {
 	return Config.ripgrepmodlog;
 }
 
-function getMoreButton(roomid: RoomID, search: string, useExactSearch: boolean, lines: number, maxLines: number, onlyPunishments: boolean) {
+function getMoreButton(
+	roomid: RoomID, search: string, useExactSearch: boolean,
+	lines: number, maxLines: number, onlyPunishments: boolean
+) {
 	let newLines = 0;
 	for (const increase of MORE_BUTTON_INCREMENTS) {
 		if (increase > lines) {
@@ -124,7 +128,10 @@ function getMoreButton(roomid: RoomID, search: string, useExactSearch: boolean, 
 	}
 }
 
-async function runModlog(roomidList: RoomID[], searchString: string, exactSearch: boolean, maxLines: number, onlyPunishments: boolean) {
+async function runModlog(
+	roomidList: RoomID[], searchString: string, exactSearch: boolean,
+	maxLines: number, onlyPunishments: boolean
+) {
 	const useRipgrep = await checkRipgrepAvailability();
 	let fileNameList: string[] = [];
 	let checkAllRooms = false;
@@ -172,15 +179,15 @@ async function runModlog(roomidList: RoomID[], searchString: string, exactSearch
 	return resultData;
 }
 
-async function checkRoomModlog(path: string, regex: RegExp | null, results: SortedLimitedLengthList) {
-	const fileStream = await FS(path).createReadStream();
-	let line;
-	while ((line = await fileStream.readLine()) !== null) {
+async function checkRoomModlog(pathString: string, regex: RegExp | null, results: SortedLimitedLengthList) {
+	const fileStream = await FS(pathString).createReadStream();
+	const line = await fileStream.readLine();
+	while (line !== null) {
 		if (!regex || regex.test(line)) {
 			results.insert(line);
 		}
 	}
-	fileStream.destroy();
+	void fileStream.destroy();
 	return results;
 }
 
@@ -207,7 +214,10 @@ async function runRipgrepModlog(paths: string[], regexString: string, results: S
 	return results;
 }
 
-function prettifyResults(resultArray: string[], roomid: RoomID, searchString: string, exactSearch: boolean, addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean) {
+function prettifyResults(
+	resultArray: string[], roomid: RoomID, searchString: string, exactSearch: boolean,
+	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
+) {
 	if (resultArray === null) {
 		return "|popup|The modlog query has crashed.";
 	}
@@ -263,7 +273,7 @@ function prettifyResults(resultArray: string[], roomid: RoomID, searchString: st
 	let preamble;
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
-		const searchStringDescription = (exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`);
+		const searchStringDescription = `${exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`}`;
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
 			`|pagehtml|<div class="pad"><p>The last ${scope}${Chat.count(lines, "logged actions")} ${searchStringDescription} on ${roomName}.` +
 			(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
@@ -275,7 +285,10 @@ function prettifyResults(resultArray: string[], roomid: RoomID, searchString: st
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
-async function getModlog(connection: Connection, roomid = 'global' as RoomID, searchString = '', maxLines = 20, onlyPunishments = false, timed = false) {
+async function getModlog(
+	connection: Connection, roomid = 'global' as RoomID, searchString = '',
+	maxLines = 20, onlyPunishments = false, timed = false
+) {
 	const startTime = Date.now();
 	const targetRoom = Rooms.search(roomid) as BasicChatRoom;
 	const user = connection.user;
@@ -308,7 +321,10 @@ async function getModlog(connection: Connection, roomid = 'global' as RoomID, se
 	let roomidList;
 	// handle this here so the child process doesn't have to load rooms data
 	if (roomid === 'public') {
-		const isPublicRoom = ((room: Room) => !(room.isPrivate || room.battle || room.isPersonal || room.roomid === 'global'));
+		const isPublicRoom = (
+			(room: Room) =>
+			!(room.isPrivate || room.battle || room.isPersonal || room.roomid === 'global')
+		);
 		roomidList = [...Rooms.rooms.values()].filter(isPublicRoom).map(room => room.roomid);
 	} else {
 		roomidList = [roomid];
@@ -316,7 +332,18 @@ async function getModlog(connection: Connection, roomid = 'global' as RoomID, se
 
 	const query = {cmd: 'modlog', roomidList, searchString, exactSearch, maxLines, onlyPunishments};
 	const response = await PM.query(query);
-	connection.send(prettifyResults(response, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines, onlyPunishments));
+	connection.send(
+		prettifyResults(
+			response,
+			roomid,
+			searchString,
+			exactSearch,
+			addModlogLinks,
+			hideIps,
+			maxLines,
+			onlyPunishments
+		)
+	);
 	const duration = Date.now() - startTime;
 	if (timed) connection.popup(`The modlog query took ${duration} ms to complete.`);
 	if (duration > LONG_QUERY_DURATION) console.log(`Long modlog query took ${duration} ms to complete:`, query);
@@ -328,7 +355,7 @@ async function getModlog(connection: Connection, roomid = 'global' as RoomID, se
 
 async function runBattleSearch(userid: ID, turnLimit: number, month: string, tierid: ID, date: string) {
 	const useRipgrep = await checkRipgrepAvailability();
-	const path = `logs/${month}/${tierid}/${date}`;
+	const pathString = `logs/${month}/${tierid}/${date}`;
 	const results: Results = {
 		totalBattles: 0,
 		totalWins: 0,
@@ -337,7 +364,7 @@ async function runBattleSearch(userid: ID, turnLimit: number, month: string, tie
 	};
 	let files = [];
 	try {
-		files = await FS(path).readdir();
+		files = await FS(pathString).readdir();
 	} catch (err) {
 		if (err.code === 'ENOENT') {
 			return results;
@@ -350,7 +377,7 @@ async function runBattleSearch(userid: ID, turnLimit: number, month: string, tie
 		const regexString = `("p1":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"|"p2":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*")`;
 		let output;
 		try {
-			output = await execFile('rg', ['-i', regexString, '--no-filename', '--no-line-number', '-tjson', path]);
+			output = await execFile('rg', ['-i', regexString, '--no-filename', '--no-line-number', '-tjson', pathString]);
 		} catch (error) {
 			return results;
 		}
@@ -373,7 +400,7 @@ async function runBattleSearch(userid: ID, turnLimit: number, month: string, tie
 		return results;
 	}
 	for (const file of files) {
-		const json = await FS(`${path}/${file}`).readIfExists();
+		const json = await FS(`${pathString}/${file}`).readIfExists();
 		const data = JSON.parse(json);
 		if (toID(data.p1) !== userid && toID(data.p2) !== userid) continue;
 		if (data.turns > turnLimit) continue;
@@ -406,7 +433,10 @@ function buildResults(data: Results, userid: ID, turnLimit: number, month: strin
 	return buf;
 }
 
-async function getBattleSearch(connection: Connection, userid: ID, turnLimit = 1, month: string, tierid: ID, date: string) {
+async function getBattleSearch(
+	connection: Connection, userid: ID, turnLimit = 1,
+	month: string, tierid: ID, date: string
+) {
 	const user = connection.user;
 	if (!user.can('forcewin')) return connection.popup(`/battlesearch - Access Denied`);
 
@@ -420,14 +450,16 @@ export const pages: PageTable = {
 		const roomid = args[0];
 		const target = Dashycode.decode(args.slice(1).join('-'));
 
-		getModlog(connection, roomid as RoomID, target);
+		void getModlog(connection, roomid as RoomID, target);
 	},
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!this.can('forcewin')) return;
 		const userid = toID(args.shift());
 		const turnLimit = parseInt(args.shift()!);
-		if (!userid || !turnLimit || turnLimit < 1) return user.popup(`Some arguments are missing or invalid for battlesearch. Use /battlesearch to start over.`);
+		if (!userid || !turnLimit || turnLimit < 1) {
+			return user.popup(`Some arguments are missing or invalid for battlesearch. Use /battlesearch to start over.`);
+		}
 		this.title = `[Battle Search][${userid}]`;
 		let buf = `<div class="pad ladder"><h2>Battle Search</h2><p>Userid: ${userid}</p><p>Maximum Turns: ${turnLimit}</p>`;
 
@@ -443,10 +475,12 @@ export const pages: PageTable = {
 			for (const i of months) {
 				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${i}" target="replace"><button class="button">${i}</button></li>`;
 			}
-			return buf + `</ul></div>`;
+			return `${buf}</ul></div>`;
 		} else {
 			month = month += `-${args.shift()}`;
-			if (!months.includes(month)) return buf + `Invalid month selected. <a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back to month selection</button></a></div>`;
+			if (!months.includes(month)) {
+				return `${buf}Invalid month selected. <a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back to month selection</button></a></div>`;
+			}
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${month}</button></p>`;
 		}
 
@@ -479,10 +513,12 @@ export const pages: PageTable = {
 			for (const tier of tiers) {
 				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${toID(tier)}" target="replace"><button class="button">${tier}</button></a></li>`;
 			}
-			return buf + `</ul></div>`;
+			return `${buf}</ul></div>`;
 		} else {
 			const tierids = tiers.map(toID);
-			if (!tierids.includes(tierid)) return buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
+			if (!tierids.includes(tierid)) {
+				return `${buf}Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
+			}
 			this.title += `[${tierid}]`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${tierid}</button></p>`;
 		}
@@ -500,10 +536,12 @@ export const pages: PageTable = {
 			for (const day of days) {
 				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${day}" target="replace"><button class="button">${day}</button></a></li>`;
 			}
-			return buf + `</ul></div>`;
+			return `${buf}</ul></div>`;
 		} else {
 			date = date += `-${args.shift()}-${args.shift()}`;
-			if (!days.includes(date)) return buf + `Invalid date selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back to date selection</button></a></div>`;
+			if (!days.includes(date)) {
+				return `${buf}Invalid date selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back to date selection</button></a></div>`;
+			}
 			this.title += `[${date}]`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${date}</button></p>`;
 		}
@@ -511,11 +549,11 @@ export const pages: PageTable = {
 		if (args[0] !== 'confirm') {
 			buf += `<p>Are you sure you want to run a battle search for for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}?</p>`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${date}-confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">No, go back</button></a></p>`;
-			return buf + `</div>`;
+			return `${buf}</div>`;
 		}
 
 		// Run search
-		getBattleSearch(connection, userid, turnLimit, month, tierid, date);
+		void getBattleSearch(connection, userid, turnLimit, month, tierid, date);
 		return `<div class="pad ladder"><h2>Battle Search</h2><p>Searching for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.</p><p>Loading... (this will take a while)</p></div>`;
 	},
 };
@@ -567,7 +605,14 @@ export const commands: ChatCommands = {
 		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
 		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
 
-		getModlog(connection, roomid as RoomID, target, lines, (cmd === 'punishlog' || cmd === 'pl'), cmd === 'timedmodlog');
+		void getModlog(
+			connection,
+			roomid as RoomID,
+			target,
+			lines,
+			(cmd === 'punishlog' || cmd === 'pl'),
+			cmd === 'timedmodlog'
+		);
 	},
 	modloghelp: [
 		`/modlog OR /ml [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
@@ -585,13 +630,16 @@ export const commands: ChatCommands = {
 		if (!turnLimit) {
 			turnLimit = 1;
 		} else {
-			if (isNaN(turnLimit) || turnLimit < 1) return this.errorReply(`The turn limit should be a number that is greater than 0.`);
+			if (isNaN(turnLimit) || turnLimit < 1) {
+				return this.errorReply(`The turn limit should be a number that is greater than 0.`);
+			}
 		}
-
 		// Selection on month, tier, and date will be handled in the HTML room
 		return this.parse(`/join view-battlesearch-${userid}-${turnLimit}`);
 	},
-	battlesearchhelp: ['/battlesearch [user], (turn limit) - Searches a users rated battle history and returns information on battles that ended in less than (turn limit or 1) turns. Requires &, ~'],
+	battlesearchhelp: [
+		'/battlesearch [user], (turn limit) - Searches a users rated battle history and returns information on battles that ended in less than (turn limit or 1) turns. Requires & ~',
+	],
 };
 
 /*********************************************************
@@ -649,7 +697,7 @@ if (!PM.isParentProcess) {
 	});
 	global.Dex = Dex;
 	global.toID = Dex.getId;
-
+	// tslint:disable-next-line: no-eval
 	Repl.start('modlog', cmd => eval(cmd));
 } else {
 	PM.spawn(MAX_PROCESSES);
