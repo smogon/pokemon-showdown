@@ -1604,7 +1604,8 @@ export class Battle {
 
 	boost(
 		boost: SparseBoostsTable, target: Pokemon | null = null, source: Pokemon | null = null,
-		effect: Effect | null = null, isSecondary: boolean = false, isSelf: boolean = false) {
+		effect: Effect | null = null, isSecondary: boolean = false, isSelf: boolean = false
+	) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;

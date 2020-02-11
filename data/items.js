@@ -1598,7 +1598,7 @@ let BattleItems = {
 				}
 			}
 			if (eject) {
-				if (source && target.hp) {
+				if (target.hp) {
 					if (!this.canSwitch(target.side)) return;
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.switchFlag === true) return;
