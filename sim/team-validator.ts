@@ -197,8 +197,7 @@ export class TeamValidator {
 		this.ruleTable = this.dex.getRuleTable(this.format);
 
 		this.minSourceGen = this.ruleTable.minSourceGen ?
-			this.ruleTable.minSourceGen[0] :
-			(this.dex.gen === 8 && this.ruleTable.has('-unreleased') ? 8 : 1);
+			this.ruleTable.minSourceGen[0] : 1;
 	}
 
 	validateTeam(team: PokemonSet[] | null, removeNicknames: boolean = false): string[] | null {

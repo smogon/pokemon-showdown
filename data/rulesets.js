@@ -90,7 +90,6 @@ let BattleFormats = {
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}
 		},
-		minSourceGen: 1,
 	},
 	obtainable: {
 		effectType: 'ValidatorRule',
