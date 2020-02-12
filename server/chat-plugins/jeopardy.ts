@@ -684,7 +684,9 @@ export const commands: ChatCommands = {
 				}
 				params.splice(0, dataStart);
 			}
-			const reply = game.importQuestions(params, questionStart - 1, (typeof catStart === 'string' ? catStart : catStart - 1));
+			const reply = game.importQuestions(
+				params, questionStart - 1, (typeof catStart === 'string' ? catStart : catStart - 1)
+			);
 			if (reply) {
 				this.errorReply(reply);
 			} else {
