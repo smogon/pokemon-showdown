@@ -117,7 +117,11 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['Same Type Clause', 'Standard', 'Dynamax Clause'],
-		banlist: ['Eternatus', 'Zacian', 'Zamazenta', 'Damp Rock', 'Smooth Rock', 'Moody', 'Shadow Tag', 'Baton Pass'],
+		banlist: [
+			'Eternatus', 'Kyurem-White', 'Lunala', 'Marshadow', 'Mewtwo', 'Necrozma-Dawn-Wings',
+			'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
+			'Damp Rock', 'Smooth Rock', 'Moody', 'Shadow Tag', 'Baton Pass',
+		],
 	},
 	{
 		name: "[Gen 8] Anything Goes",
