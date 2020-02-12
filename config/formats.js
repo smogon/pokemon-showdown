@@ -713,7 +713,7 @@ let Formats = [
 		onModifyTemplate(template, target, source, effect) {
 			if (!template.abilities) return false;
 			/** @type {{[tier: string]: number}} */
-			let boosts = {
+			const boosts = {
 				'UU': 10,
 				'RUBL': 10,
 				'RU': 20,
@@ -726,7 +726,7 @@ let Formats = [
 				'LC': 40,
 			};
 			if (target && target.set.ability === 'Drizzle') return;
-			let tier = template.tier;
+			let tier = template.tier || 'OU';
 			if (target && target.set.item) {
 				let item = this.dex.getItem(target.set.item);
 				if (item.name === 'Kommonium Z' || item.name === 'Mewnium Z') return;
