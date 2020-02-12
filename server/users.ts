@@ -412,7 +412,7 @@ export class Connection {
 
 type ChatQueueEntry = [string, RoomID, Connection];
 
-const SETTINGS = [
+const SETTINGS: (keyof User)[] = [
 	'isSysop', 'isStaff', 'blockChallenges', 'blockPMs',
 	'ignoreTickets', 'lastConnected', 'lastDisconnected',
 	'inviteOnlyNextBattle',
@@ -1018,12 +1018,14 @@ export class User extends Chat.MessageContext {
 	/**
 	 * @param updated the settings which have been updated or none for all settings.
 	 */
-	getUpdateuserText(...updated: string[]) {
+	getUpdateuserText(...updated: (keyof User)[]) {
 		const named = this.named ? 1 : 0;
-		const diff = {};
+		// This type is actually {-readonly [k in keyof User]?: User[k]}, but
+		// typescript dies if we use that. It should be safe enough as is, since
+		// all we do is stringify the value.
+		const diff: {-readonly [k in keyof User]?: any} = {};
 		const settings = updated.length ? updated : SETTINGS;
 		for (const setting of settings) {
-			// @ts-ignore - dynamic lookup
 			diff[setting] = this[setting];
 		}
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
@@ -1031,7 +1033,7 @@ export class User extends Chat.MessageContext {
 	/**
 	 * @param updated the settings which have been updated or none for all settings.
 	 */
-	update(...updated: string[]) {
+	update(...updated: (keyof User)[]) {
 		this.send(this.getUpdateuserText(...updated));
 	}
 	merge(oldUser: User) {
