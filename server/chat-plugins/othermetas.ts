@@ -187,14 +187,6 @@ export const commands: ChatCommands = {
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
-		const restrictedStones = Dex.getFormat('gen8mixandmega').restrictedStones || [];
-		if (restrictedStones.includes(stone.name)) {
-			if (dex.getTemplate(stone.megaEvolves).isNonstandard === "Past") {
-				this.errorReply(`Warning: ${stone.name} is restricted in Mix and Mega.`);
-			} else {
-				this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega.`);
-			}
-		}
 		if (stone.isUnreleased) {
 			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
 		}

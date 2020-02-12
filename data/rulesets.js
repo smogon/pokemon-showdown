@@ -784,7 +784,7 @@ let BattleFormats = {
 		name: 'STABmons Move Legality',
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, template, setSources, set) {
-			const restrictedMoves = this.format.restrictedMoves || [];
+			const restrictedMoves = this.format.restricted || [];
 			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.isMax) {
 				let dex = this.dex;
 				let types = template.types;
