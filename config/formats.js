@@ -165,7 +165,6 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		minSourceGen: 1,
 		ruleset: ['[Gen 8] OU', '+CAP'],
 		banlist: ['Crucibelle-Mega'],
 		onValidateSet(set) {
