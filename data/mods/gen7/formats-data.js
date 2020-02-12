@@ -4442,8 +4442,8 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	keldeoresolute: {
+		eventOnly: true,
 		requiredMove: "Secret Sword",
-		isUnreleased: false,
 	},
 	meloetta: {
 		inherit: true,
