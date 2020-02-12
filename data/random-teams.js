@@ -1274,14 +1274,11 @@ class RandomTeams {
 			};
 			/** @type {{[species: string]: number}} */
 			let customScale = {
-				// Unreleased Ubers
-				'Kyurem-Black': 75, 'Kyurem-White': 75, Lunala: 75, Marshadow: 75, Mewtwo: 75, 'Necrozma-Dawn-Wings': 75, 'Necrozma-Dusk-Mane': 75, Reshiram: 75, Solgaleo: 75, Zekrom: 75,
-
 				// Banned Ability
 				Glalie: 75, Gothitelle: 75, Octillery: 75, Wobbuffet: 75,
 
 				// Holistic judgement
-				Delibird: 100, 'Type: Null': 88,
+				Delibird: 100, 'Mr. Mime-Galar': 88, 'Type: Null': 88,
 			};
 			let tier = (template.isGigantamax ? this.dex.getTemplate(template.baseSpecies) : template).tier;
 			level = levelScale[tier] || 90;
