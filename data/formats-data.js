@@ -7295,7 +7295,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 50, "moves": ["spectralthief", "closecombat", "forcepalm", "shadowball"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 	},
 	poipole: {
