@@ -155,7 +155,11 @@ let Formats = [
 			battle: 1,
 		},
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Endless Battle Clause'],
-		banlist: ['Eternatus', 'Mew', 'Sableye', 'Zacian', 'Zamazenta', 'Moody', 'Focus Sash', 'Perish Song'],
+		banlist: [
+			'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Mew', 'Mewtwo', 'Necrozma-Dawn-Wings',
+			'Necrozma-Dusk-Mane', 'Reshiram', 'Sableye', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
+			'Focus Sash', 'Moody', 'Perish Song',
+		],
 	},
 	{
 		name: "[Gen 8] CAP",
