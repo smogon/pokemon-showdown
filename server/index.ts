@@ -55,6 +55,14 @@ try {
 
 try {
 	require.resolve('../.sim-dist/index');
+	// tslint:disable-next-line
+	const sucraseVersion = require('sucrase').getVersion().split('.');
+	if (
+		parseInt(sucraseVersion[0]) < 3 ||
+		(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 12)
+	) {
+		throw new Error("Sucrase version too old");
+	}
 } catch (e) {
 	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
