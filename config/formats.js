@@ -271,7 +271,7 @@ let Formats = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		ruleset: ['Standard GBU', 'VGC Timer', 'Galar Pokedex'],
+		ruleset: ['Standard GBU', 'Galar Pokedex', 'VGC Timer'],
 		banlist: [
 			'Alcremie-Gmax', 'Appletun-Gmax', 'Charizard-Gmax + Solar Power', 'Coalossal-Gmax', 'Copperajah-Gmax',
 			'Duraludon-Gmax', 'Flapple-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Grimmsnarl-Gmax', 'Hatterene-Gmax',
