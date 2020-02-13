@@ -918,7 +918,6 @@ export class TeamValidator {
 			const isMew = template.speciesid === 'mew';
 			eventData = {
 				generation: 8,
-				level: undefined,
 				perfectIVs: isMew ? 3 : undefined,
 				shiny: isMew ? undefined : 1,
 				from: 'Gen 7 Let\'s Go! HOME transfer',
