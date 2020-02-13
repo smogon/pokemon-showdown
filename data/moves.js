@@ -17460,6 +17460,7 @@ let BattleMovedex = {
 		desc: "If another Pokemon uses certain non-damaging moves this turn, the user steals that move to use itself. If multiple Pokemon use one of those moves this turn, the applicable moves are all stolen by the first Pokemon in turn order that used this move this turn. This effect is ignored while the user is under the effect of Sky Drop.",
 		shortDesc: "User steals certain support moves to use itself.",
 		id: "snatch",
+		isNonstandard: "Past",
 		name: "Snatch",
 		pp: 10,
 		priority: 4,
