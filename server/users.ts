@@ -1021,11 +1021,10 @@ export class User extends Chat.MessageContext {
 	 */
 	getUpdateuserText(...updated: UserSetting[]) {
 		const named = this.named ? 1 : 0;
-		const diff: Partial<Pick<User, UserSetting>> = {};
+		const diff: AnyObject = {};
 		const settings = updated.length ? updated : SETTINGS;
 		for (const setting of settings) {
-			// typescript doesn't seem to understand the setting <- setting assignment
-			diff[setting] = this[setting] as any;
+			diff[setting] = this[setting];
 		}
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
 	}
