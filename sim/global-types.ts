@@ -73,6 +73,7 @@ type PokemonSet = {
  * - S = event, 3rd char+ is the index in .eventPokemon
  * - D = Dream World, only 5D is valid
  * - V = Virtual Console transfer, only 7V is valid
+ * - G = LGPE transfer, only 7G is valid
  * - C = NOT A REAL SOURCE, see note, only 3C/4C is valid
  *
  * C marks certain moves learned by a pokemon's prevo. It's used to
