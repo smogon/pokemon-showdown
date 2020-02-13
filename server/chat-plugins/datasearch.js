@@ -1748,7 +1748,7 @@ function runLearn(target, cmd) {
 	buffer += `${template.name}` + (problems ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + Chat.toListString(moveNames);
 	if (!problems) {
 		let sourceNames = {
-			E: "", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "traded-back ", Y: "traded-back event",
+			E: "", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "traded-back ", Y: "traded-back event", G: "transferred from Let's Go!",
 		};
 		let sourcesBefore = setSources.sourcesBefore;
 		if (sources.length || sourcesBefore < gen) buffer += " only when obtained";
