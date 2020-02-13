@@ -412,11 +412,12 @@ export class Connection {
 
 type ChatQueueEntry = [string, RoomID, Connection];
 
-const SETTINGS: (keyof User)[] = [
+const SETTINGS = [
 	'isSysop', 'isStaff', 'blockChallenges', 'blockPMs',
 	'ignoreTickets', 'lastConnected', 'lastDisconnected',
-	'inviteOnlyNextBattle',
-];
+	'inviteOnlyNextBattle', 'statusType',
+] as const;
+type UserSetting = typeof SETTINGS[number];
 
 // User
 export class User extends Chat.MessageContext {
@@ -1018,22 +1019,20 @@ export class User extends Chat.MessageContext {
 	/**
 	 * @param updated the settings which have been updated or none for all settings.
 	 */
-	getUpdateuserText(...updated: (keyof User)[]) {
+	getUpdateuserText(...updated: UserSetting[]) {
 		const named = this.named ? 1 : 0;
-		// This type is actually {-readonly [k in keyof User]?: User[k]}, but
-		// typescript dies if we use that. It should be safe enough as is, since
-		// all we do is stringify the value.
-		const diff: {-readonly [k in keyof User]?: any} = {};
+		const diff: Partial<Pick<User, UserSetting>> = {};
 		const settings = updated.length ? updated : SETTINGS;
 		for (const setting of settings) {
-			diff[setting] = this[setting];
+			// typescript doesn't seem to understand the setting <- setting assignment
+			diff[setting] = this[setting] as any;
 		}
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
 	}
 	/**
 	 * @param updated the settings which have been updated or none for all settings.
 	 */
-	update(...updated: (keyof User)[]) {
+	update(...updated: UserSetting[]) {
 		this.send(this.getUpdateuserText(...updated));
 	}
 	merge(oldUser: User) {
