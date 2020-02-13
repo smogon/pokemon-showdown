@@ -7,7 +7,7 @@ interface MafiaData {
 	themes: {[k: string]: MafiaDataTheme};
 	IDEAs: {[k: string]: MafiaDataIDEA};
 	terms: {[k: string]: MafiaDataTerm};
-	aliases: {[k: string]: string};
+	aliases: {[k: string]: ID};
 }
 interface MafiaDataAlignment {
 	name: string;
@@ -1156,16 +1156,15 @@ class MafiaTracker extends Rooms.RoomGame {
 		};
 		return this.ideaDistributeRoles(user);
 	}
-	ideaInit(user: User, moduleName: string) {
+	ideaInit(user: User, moduleID: ID) {
 		this.originalRoles = [];
 		this.originalRoleString = '';
 		this.roles = [];
 		this.roleString = '';
 
-		this.IDEA.data = MafiaData.IDEAs[moduleName];
-		if (typeof this.IDEA.data === 'string') this.IDEA.data = MafiaData.IDEAs[this.IDEA.data];
-		if (!this.IDEA.data) return user.sendTo(this.room, `|error|${moduleName} is not a valid IDEA.`);
-		if (typeof this.IDEA.data !== 'object') return this.sendRoom(`Invalid alias for IDEA ${moduleName}. Please report this to a mod.`);
+		if (moduleID in MafiaData.aliases) moduleID = MafiaData.aliases[moduleID];
+		this.IDEA.data = MafiaData.IDEAs[moduleID];
+		if (!this.IDEA.data) return user.sendTo(this.room, `|error|${moduleID} is not a valid IDEA.`);
 		return this.ideaDistributeRoles(user);
 	}
 
@@ -1511,7 +1510,7 @@ class MafiaTracker extends Rooms.RoomGame {
 
 		if (this.phase === 'night') {
 			if (!player.nighttalk) {
-				return `You cannot talk at night.${user.can('mute', null, this.room) ? " You can bypass this using /mafia insomniac." : ''}`;
+				return `You cannot talk at night.${user.can('mute', null, this.room) ? " You can bypass this using /mafia nighttalk." : ''}`;
 			}
 		}
 
@@ -2470,6 +2469,8 @@ export const commands: ChatCommands = {
 			`/mafia unsilence [player] - Removes a silence on [player], allowing them to talk again. Requires host % @ # & ~`,
 		],
 
+		insomniac: 'nighttalk',
+		uninsomniac: 'nighttalk',
 		unnighttalk: 'nighttalk',
 		nighttalk(target, room, user, connection, cmd) {
 			const game = room && room.getGame(MafiaTracker);
@@ -2479,7 +2480,7 @@ export const commands: ChatCommands = {
 
 			target = toID(target);
 			const targetPlayer = game.playerTable[target] || game.dead[target];
-			const nighttalk = cmd === 'nighttalk';
+			const nighttalk = !cmd.startsWith('un');
 			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
 			if (nighttalk === targetPlayer.silenced) return this.errorReply(`${targetPlayer.name} is already ${!nighttalk ? 'not' : ''} able to talk during the night.`);
 			targetPlayer.nighttalk = nighttalk;
