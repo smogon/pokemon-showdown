@@ -415,8 +415,9 @@ type ChatQueueEntry = [string, RoomID, Connection];
 const SETTINGS = [
 	'isSysop', 'isStaff', 'blockChallenges', 'blockPMs',
 	'ignoreTickets', 'lastConnected', 'lastDisconnected',
-	'inviteOnlyNextBattle',
-];
+	'inviteOnlyNextBattle', 'statusType',
+] as const;
+type UserSetting = typeof SETTINGS[number];
 
 // User
 export class User extends Chat.MessageContext {
@@ -1018,12 +1019,11 @@ export class User extends Chat.MessageContext {
 	/**
 	 * @param updated the settings which have been updated or none for all settings.
 	 */
-	getUpdateuserText(...updated: string[]) {
+	getUpdateuserText(...updated: UserSetting[]) {
 		const named = this.named ? 1 : 0;
-		const diff = {};
+		const diff: AnyObject = {};
 		const settings = updated.length ? updated : SETTINGS;
 		for (const setting of settings) {
-			// @ts-ignore - dynamic lookup
 			diff[setting] = this[setting];
 		}
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
@@ -1031,7 +1031,7 @@ export class User extends Chat.MessageContext {
 	/**
 	 * @param updated the settings which have been updated or none for all settings.
 	 */
-	update(...updated: string[]) {
+	update(...updated: UserSetting[]) {
 		this.send(this.getUpdateuserText(...updated));
 	}
 	merge(oldUser: User) {
