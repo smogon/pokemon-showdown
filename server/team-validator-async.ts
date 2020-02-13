@@ -49,7 +49,10 @@ export const PM = new QueryProcessManager(module, async message => {
 			formatid,
 			team,
 		});
-		problems = [`Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now.`];
+		problems = [
+			`Your team crashed the team validator. We've been automatically notified and will fix this crash,` +
+			` but you should use a different team for now.`,
+		];
 	}
 
 	if (problems && problems.length) {

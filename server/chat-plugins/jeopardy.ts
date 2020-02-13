@@ -211,9 +211,13 @@ export class Jeopardy extends Rooms.RoomGame {
 		const params = target.split(",");
 		if (params.length < 2) return "You must specify a row and a column number.";
 		const categoryNumber = parseInt(params[0]);
-		if (!categoryNumber || categoryNumber < 1 || categoryNumber > this.categoryCount) return `The category must be a number between 1 and ${this.categoryCount}`;
+		if (!categoryNumber || categoryNumber < 1 || categoryNumber > this.categoryCount) {
+			return `The category must be a number between 1 and ${this.categoryCount}`;
+		}
 		const questionNumber = parseInt(params[1]);
-		if (!questionNumber || questionNumber < 1 || questionNumber > this.questionCount) return `The question must be a number between 1 and ${this.questionCount}`;
+		if (!questionNumber || questionNumber < 1 || questionNumber > this.questionCount) {
+			return `The question must be a number between 1 and ${this.questionCount}`;
+		}
 		const question = this.questions[questionNumber - 1][categoryNumber - 1];
 		if (question.answered) return "That question has already been answered.";
 		this.question = question;
@@ -308,14 +312,18 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	wager(amount: string | number, user: User) {
-		if (this.state !== "wagering" && (!this.finals || this.curPlayer.id !== user.id)) return "You cannot wager at this time.";
+		if (this.state !== "wagering" && (!this.finals || this.curPlayer.id !== user.id)) {
+			return "You cannot wager at this time.";
+		}
 		const player = this.playerTable[user.id];
 		if (!player) return "You are not in the game of Jeopardy.";
 		amount = toID(amount);
 		const wager = (amount === 'all' ? player.points : parseInt(amount));
 		if (!wager) return "Your wager must be a number, or 'all'";
 		if (wager < 0) return "You cannot wager a negative amount";
-		if (wager > player.points && (wager > (this.round * 1000) || this.finals)) return "You cannot wager more than your current number of points";
+		if (wager > player.points && (wager > (this.round * 1000) || this.finals)) {
+			return "You cannot wager more than your current number of points";
+		}
 		if (player.wager) return "You have already wagered";
 		player.wager = wager;
 		player.send(`You have wagered ${wager} points!`);
@@ -516,7 +524,9 @@ export class Jeopardy extends Rooms.RoomGame {
 						return;
 					}
 					const split = questions[0].split("|");
-					if (split.length !== 2) return `Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`;
+					if (split.length !== 2) {
+						return `Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`;
+					}
 					this.questions[j][i].question = split[0].trim();
 					this.questions[j][i].answer = split[1].trim();
 					questions.shift();
@@ -524,7 +534,9 @@ export class Jeopardy extends Rooms.RoomGame {
 			}
 			if (questions.length > 0) {
 				const split = questions[0].split("|");
-				if (split.length !== 2) return `Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`;
+				if (split.length !== 2) {
+					return `Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`;
+				}
 				this.finalQuestion.question = split[0].trim();
 				this.finalQuestion.answer = split[1].trim();
 			}
@@ -588,13 +600,21 @@ export const commands: ChatCommands = {
 
 		create: 'new',
 		new(target, room, user) {
-			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
+			if (room.game) {
+				return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
+			}
 			if (!this.can('minigame', null, room)) return;
 			const params = target.split(",");
 			const categoryCount = parseInt(params[0]) || MAX_CATEGORY_COUNT;
 			const questionCount = parseInt(params[1]) || MAX_QUESTION_COUNT;
-			if (categoryCount > MAX_CATEGORY_COUNT) return this.sendReply(`A match with more than ${MAX_CATEGORY_COUNT} categories cannot be created.`);
-			if (questionCount > MAX_QUESTION_COUNT) return this.sendReply(`A match with more than ${MAX_QUESTION_COUNT} questions per category cannot be created.`);
+			if (categoryCount > MAX_CATEGORY_COUNT) {
+				return this.sendReply(`A match with more than ${MAX_CATEGORY_COUNT} categories cannot be created.`);
+			}
+			if (questionCount > MAX_QUESTION_COUNT) {
+				return this.sendReply(
+					`A match with more than ${MAX_QUESTION_COUNT} questions per category cannot be created.`
+				);
+			}
 			room.game = new Jeopardy(room, user, categoryCount, questionCount);
 			this.privateModAction(`A new game of Jeopardy was started by ${user.name}`);
 			this.modlog('JEOPARDY');
@@ -605,7 +625,9 @@ export const commands: ChatCommands = {
 			if (!game) return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.id !== game.host.id) return this.errorReply("This command can only be used by the host.");
 			const params = target.split(",");
-			if (params.length !== game.categoryCount) return this.errorReply(`You must set exactly ${game.categoryCount} categories.`);
+			if (params.length !== game.categoryCount) {
+				return this.errorReply(`You must set exactly ${game.categoryCount} categories.`);
+			}
 			const reply = game.setCategories(params);
 			if (reply) this.errorReply(reply);
 		},
@@ -621,7 +643,9 @@ export const commands: ChatCommands = {
 				categoryNumber = "final";
 			} else {
 				categoryNumber = parseInt(params[0]);
-				if (!categoryNumber || categoryNumber < 1 || categoryNumber > game.categoryCount) return this.errorReply(`The category number must be between 1 and ${game.categoryCount}.`);
+				if (!categoryNumber || categoryNumber < 1 || categoryNumber > game.categoryCount) {
+					return this.errorReply(`The category number must be between 1 and ${game.categoryCount}.`);
+				}
 			}
 			game.setCategory((typeof categoryNumber === 'string' ? categoryNumber : categoryNumber - 1), params[1]);
 		},
@@ -669,11 +693,15 @@ export const commands: ChatCommands = {
 			} else {
 				catStart = parseInt(params[0]);
 				if (catStart) {
-					if (catStart < 1 || catStart > game.categoryCount) return this.errorReply(`The category must be a number between 1 and ${game.categoryCount}.`);
+					if (catStart < 1 || catStart > game.categoryCount) {
+						return this.errorReply(`The category must be a number between 1 and ${game.categoryCount}.`);
+					}
 					dataStart = 1;
 					questionStart = parseInt(params[1]);
 					if (questionStart) {
-						if (questionStart < 1 || questionStart > game.questionCount) return this.errorReply(`The question must be a number between 1 and "${game.questionCount}.`);
+						if (questionStart < 1 || questionStart > game.questionCount) {
+							return this.errorReply(`The question must be a number between 1 and ${game.questionCount}.`);
+						}
 						dataStart = 2;
 					} else {
 						questionStart = 1;
@@ -702,9 +730,13 @@ export const commands: ChatCommands = {
 			const params = target.split(",");
 			if (params.length !== 2) return this.errorReply("You must specify the category number and question number");
 			const categoryNumber = parseInt(params[0]);
-			if (!categoryNumber || categoryNumber < 1 || categoryNumber > game.categoryCount) return this.errorReply(`The category must be a number between 1 and ${game.categoryCount}.`);
+			if (!categoryNumber || categoryNumber < 1 || categoryNumber > game.categoryCount) {
+				return this.errorReply(`The category must be a number between 1 and ${game.categoryCount}.`);
+			}
 			const questionNumber = parseInt(params[0]);
-			if (!questionNumber || questionNumber < 1 || questionNumber > game.questionCount) return this.errorReply(`The question must be a number between 1 and ${game.questionCount}.`);
+			if (!questionNumber || questionNumber < 1 || questionNumber > game.questionCount) {
+				return this.errorReply(`The question must be a number between 1 and ${game.questionCount}.`);
+			}
 			const reply = game.setDailyDouble(categoryNumber - 1, questionNumber - 1);
 			if (reply) {
 				this.errorReply(reply);
@@ -712,7 +744,9 @@ export const commands: ChatCommands = {
 				this.sendReply("Daily double has been added.");
 			}
 		},
-		dailydoublehelp: [`/jeopardy dailydouble [category number], [question number] - Set a question to be a daily double.`],
+		dailydoublehelp: [
+			`/jeopardy dailydouble [category number], [question number] - Set a question to be a daily double.`,
+		],
 
 		view(target, room, user) {
 			const game = room.getGame(Jeopardy);
@@ -721,9 +755,13 @@ export const commands: ChatCommands = {
 			const params = target.split(",");
 			if (params.length !== 2) return this.errorReply("You must specify the category number and question number");
 			const categoryNumber = parseInt(params[0]);
-			if (!categoryNumber || categoryNumber < 1 || categoryNumber > game.categoryCount) return this.errorReply(`The category must be a number between 1 and ${game.categoryCount}.`);
+			if (!categoryNumber || categoryNumber < 1 || categoryNumber > game.categoryCount) {
+				return this.errorReply(`The category must be a number between 1 and ${game.categoryCount}.`);
+			}
 			const questionNumber = parseInt(params[1]);
-			if (!questionNumber || questionNumber < 1 || questionNumber > game.questionCount) return this.errorReply(`The question must be a number between 1 and ${game.questionCount}.`);
+			if (!questionNumber || questionNumber < 1 || questionNumber > game.questionCount) {
+				return this.errorReply(`The question must be a number between 1 and ${game.questionCount}.`);
+			}
 			this.sendReplyBox(game.getQuestion(categoryNumber - 1, questionNumber - 1));
 		},
 

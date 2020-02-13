@@ -79,7 +79,9 @@ export const commands: ChatCommands = {
 		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # & ~`],
 
 		timer(target, room, user) {
-			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') return this.errorReply("There is no announcement running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
+				return this.errorReply("There is no announcement running in this room.");
+			}
 			const announcement = room.minorActivity as Announcement;
 
 			if (target) {
