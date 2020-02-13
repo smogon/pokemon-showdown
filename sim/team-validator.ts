@@ -914,6 +914,14 @@ export class TeamValidator {
 				pokeball: 'pokeball',
 				from: 'Gen 1-2 Virtual Console transfer',
 			};
+		} else if (source.charAt(1) === 'G') {
+			const isMew = template.speciesid === 'mew';
+			eventData = {
+				generation: 8,
+				perfectIVs: isMew ? 3 : undefined,
+				shiny: isMew ? undefined : 1,
+				from: 'Gen 7 Let\'s Go! HOME transfer',
+			};
 		} else if (source.charAt(1) === 'D') {
 			eventData = {
 				generation: 5,
@@ -1783,6 +1791,10 @@ export class TeamValidator {
 						moveSources.add(learned + template.id);
 					} else if (learned.charAt(1) === 'V') {
 						// Virtual Console moves:
+						//   only if that was the source
+						moveSources.add(learned);
+					} else if (learned.charAt(1) === 'G') {
+						// LGPE transfer moves:
 						//   only if that was the source
 						moveSources.add(learned);
 					}
