@@ -491,7 +491,10 @@ export class Tournament extends Rooms.RoomGame {
 			matchPlayer.inProgressMatch.to.isBusy = false;
 			matchPlayer.isBusy = false;
 
-			matchPlayer.inProgressMatch.room.addRaw(Chat.html`<div class="broadcast-red"><b>${user.name} is no longer in the tournament.<br />You can finish playing, but this battle is no longer considered a tournament battle.</div>`).update();
+			matchPlayer.inProgressMatch.room.addRaw(
+				Chat.html`<div class="broadcast-red"><b>${user.name} is no longer in the tournament.<br />` +
+				`You can finish playing, but this battle is no longer considered a tournament battle.</div>`
+			).update();
 			matchPlayer.inProgressMatch.room.parent = null;
 			this.completedMatches.add(matchPlayer.inProgressMatch.room.roomid);
 			matchPlayer.inProgressMatch = null;
@@ -1165,7 +1168,10 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 		getusers(tournament) {
 			if (!this.runBroadcast()) return;
 			const users = usersToNames(tournament.getRemainingPlayers().sort());
-			this.sendReplyBox(Chat.html`<strong>${users.length}/${tournament.players.length} users remain in this tournament:</strong><br />${users.join(', ')}`);
+			this.sendReplyBox(
+				Chat.html`<strong>${users.length}/${tournament.players.length}` +
+				` users remain in this tournament:</strong><br />${users.join(', ')}`
+			);
 		},
 		getupdate(tournament, user) {
 			tournament.updateFor(user);
@@ -1691,7 +1697,11 @@ export const commands: ChatCommands = {
 				if (room.tourAnnouncements) {
 					const tourRoom = Rooms.search(Config.tourroom || 'tournaments');
 					if (tourRoom && tourRoom !== room) {
-						tourRoom.addRaw(Chat.html`<div class="infobox"><a href="/${room.roomid}" class="ilink"><strong>${Dex.getFormat(tour.name).name}</strong> tournament created in <strong>${room.title}</strong>.</a></div>`).update();
+						tourRoom.addRaw(
+							Chat.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
+							`<strong>${Dex.getFormat(tour.name).name}</strong> tournament created in` +
+							` <strong>${room.title}</strong>.</a></div>`
+						).update();
 					}
 				}
 			}

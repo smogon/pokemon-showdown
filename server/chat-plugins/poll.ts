@@ -101,7 +101,7 @@ export class Poll {
 		const colors = ['#79A', '#8A8', '#88B'];
 		while (!i.done) {
 			const percentage = Math.round((i.value[1].votes * 100) / (this.totalVotes || 1));
-			const answerMarkup = this.isQuiz ? `<span style="color:${i.value[1].correct ? 'green' : 'red'};">${i.value[1].correct ? '' : '<s>'}${this.getOptionMarkup(i.value[1])}${i.value[1].correct ? '' : '</s>'}</span>` : this.getOptionMarkup(i.value[1]);
+			const answerMarkup = `${this.isQuiz ? `<span style="color:${i.value[1].correct ? 'green' : 'red'};">${i.value[1].correct ? '' : '<s>'}${this.getOptionMarkup(i.value[1])}${i.value[1].correct ? '' : '</s>'}</span>` : this.getOptionMarkup(i.value[1])}`;
 			output += `<div style="margin-top: 3px">${i.value[0]}. <strong>${i.value[0] === option ? '<em>' : ''}${answerMarkup}${i.value[0] === option ? '</em>' : ''}</strong> <small>(${i.value[1].votes} vote${i.value[1].votes === 1 ? '' : 's'})</small><br /><span style="font-size:7pt;background:${colors[c % 3]};padding-right:${percentage * 3}px"></span><small>&nbsp;${percentage}%</small></div>`;
 			i = iter.next();
 			c++;
@@ -143,9 +143,15 @@ export class Poll {
 	updateTo(user: User, connection: Connection | null = null) {
 		const recipient = connection || user;
 		if (user.id in this.voters) {
-			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
+			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(
+				false,
+				this.voters[user.id]
+			)}`);
 		} else if (user.latestIp in this.voterIps) {
-			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
+			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(
+				false,
+				this.voterIps[user.latestIp]
+			)}`);
 		} else {
 			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateVotes()}`);
 		}
@@ -183,7 +189,10 @@ export class Poll {
 		if (user.id in this.voters) {
 			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.id])}`);
 		} else if (user.latestIp in this.voterIps) {
-			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
+			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(
+				false,
+				this.voterIps[user.latestIp]
+			)}`);
 		} else {
 			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateVotes()}`);
 		}
@@ -260,7 +269,9 @@ export const commands: ChatCommands = {
 		],
 
 		vote(target, room, user) {
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+				return this.errorReply("There is no poll running in this room.");
+			}
 			if (!target) return this.parse('/help poll vote');
 			const poll = room.minorActivity as Poll;
 			if (target === 'blank') {
@@ -278,7 +289,9 @@ export const commands: ChatCommands = {
 		votehelp: [`/poll vote [number] - Votes for option [number].`],
 
 		timer(target, room, user) {
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+				return this.errorReply("There is no poll running in this room.");
+			}
 			const poll = room.minorActivity as Poll;
 
 			if (target) {
@@ -316,19 +329,25 @@ export const commands: ChatCommands = {
 		],
 
 		results(target, room, user) {
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+				return this.errorReply("There is no poll running in this room.");
+			}
 			const poll = room.minorActivity as Poll;
 
 			return poll.blankvote(user);
 		},
-		resultshelp: [`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`],
+		resultshelp: [
+			`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
+		],
 
 		close: 'end',
 		stop: 'end',
 		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+				return this.errorReply("There is no poll running in this room.");
+			}
 			const poll = room.minorActivity as Poll;
 			if (poll.timeout) clearTimeout(poll.timeout);
 
@@ -342,7 +361,9 @@ export const commands: ChatCommands = {
 		show: '',
 		display: '',
 		''(target, room, user, connection) {
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+				return this.errorReply("There is no poll running in this room.");
+			}
 			const poll = room.minorActivity as Poll;
 			if (!this.runBroadcast()) return;
 			room.update();
