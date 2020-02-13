@@ -246,7 +246,7 @@ Chat.registerMonitor('shorteners', {
  * Location: EVERYWHERE, PUBLIC, NAMES, BATTLES
  * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER, MUTE, EVASION
  */
-FS(MONITOR_FILE).readIfExists().then(data => {
+void FS(MONITOR_FILE).readIfExists().then(data => {
 	const lines = data.split('\n');
 	loop: for (const line of lines) {
 		if (!line || line === '\r') continue;
@@ -314,7 +314,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 	return message;
 };
 
-export const namefilter: NameFilter = function (name, user) {
+export const namefilter: NameFilter = (name, user) => {
 	const id = toID(name);
 	if (Chat.namefilterwhitelist.has(id)) return name;
 	if (id === toID(user.trackRename)) return '';
@@ -339,7 +339,7 @@ export const namefilter: NameFilter = function (name, user) {
 	}
 	return name;
 };
-export const loginfilter: LoginFilter = function (user) {
+export const loginfilter: LoginFilter = user => {
 	if (user.namelocked) return;
 
 	const forceRenamed = Chat.forceRenames.get(user.id);
@@ -354,7 +354,7 @@ export const loginfilter: LoginFilter = function (user) {
 		Rooms.global.notifyRooms(['staff' as RoomID], Chat.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`);
 	}
 };
-export const nicknamefilter: NameFilter = function (name, user) {
+export const nicknamefilter: NameFilter = (name, user) => {
 	let lcName = name.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	// Remove false positives.
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
@@ -377,7 +377,7 @@ export const nicknamefilter: NameFilter = function (name, user) {
 
 	return name;
 };
-export const statusfilter: StatusFilter = function (status, user) {
+export const statusfilter: StatusFilter = (status, user) => {
 	let lcStatus = status.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	// Remove false positives.
 	lcStatus = lcStatus.replace('herapist', '').replace('grape', '').replace('scrape', '');
@@ -457,7 +457,9 @@ export const commands: ChatCommands = {
 
 			if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 
-			let word, filterTo, reasonParts;
+			let word = '';
+			let filterTo = '';
+			let reasonParts: string[] = [];
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
 				[word, filterTo, ...reasonParts] = rest;
 				if (!filterTo) return this.errorReply(`Syntax for word filters: /filter add ${list}, regex, filter to, reason`);
