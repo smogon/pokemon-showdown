@@ -201,7 +201,7 @@ let BattleStatuses = {
 			let move = this.dex.getMove(this.effectData.move);
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
-				this.changeAction(pokemon, {move: move.id});
+				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
 			}
 		},
 	},

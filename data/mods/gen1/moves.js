@@ -255,7 +255,7 @@ let BattleMovedex = {
 			// If both are true, counter will deal twice the last damage dealt in battle, no matter what was the move.
 			// That means that, if opponent switches, counter will use last counter damage * 2.
 			let lastUsedMove = target.side.lastMove && this.dex.getMove(target.side.lastMove.id);
-			if (lastUsedMove && lastUsedMove.basePower > 0 && ['Normal', 'Fighting'].includes(lastUsedMove.type) && this.lastDamage > 0 && !this.willMove(target)) {
+			if (lastUsedMove && lastUsedMove.basePower > 0 && ['Normal', 'Fighting'].includes(lastUsedMove.type) && this.lastDamage > 0 && !this.queue.willMove(target)) {
 				return 2 * this.lastDamage;
 			}
 			this.debug("Gen 1 Counter failed due to conditions not met");
@@ -304,7 +304,7 @@ let BattleMovedex = {
 				return duration;
 			},
 			onStart(pokemon) {
-				if (!this.willMove(pokemon)) {
+				if (!this.queue.willMove(pokemon)) {
 					this.effectData.duration++;
 				}
 				let moves = pokemon.moves;

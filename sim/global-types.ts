@@ -1,4 +1,5 @@
 type Battle = import('./battle').Battle
+type Action = import('./battle-queue').Action
 type Field = import('./field').Field
 type ModdedDex = import('./dex').ModdedDex
 type Pokemon = import('./pokemon').Pokemon
@@ -1118,8 +1119,7 @@ interface BattleScriptsData {
 	hitStepTypeImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	isAdjacent?: (this: Battle, pokemon1: Pokemon, pokemon2: Pokemon) => boolean
 	moveHit?: (this: Battle, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => number | undefined | false
-	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions.Action
-	runAction?: (this: Battle, action: Actions.Action) => void
+	runAction?: (this: Battle, action: Action) => void
 	runMegaEvo?: (this: Battle, pokemon: Pokemon) => boolean
 	runMove?: (this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon) => void
 	runMoveEffects?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
@@ -1211,96 +1211,6 @@ interface PlayerOptions {
 	rating?: number;
 	team?: PokemonSet[] | string | null;
 	seed?: PRNGSeed;
-}
-
-namespace Actions {
-	/** A move action */
-	export interface MoveAction {
-		/** action type */
-		choice: 'move' | 'beforeTurnMove';
-		order: 3 | 5 | 200 | 201 | 199;
-		/** priority of the action (lower first) */
-		priority: number;
-		/** fractional priority of the action (lower first) */
-		fractionalPriority: number;
-		/** speed of pokemon using move (higher first if priority tie) */
-		speed: number;
-		/** the pokemon doing the move */
-		pokemon: Pokemon;
-		/** location of the target, relative to pokemon's side */
-		targetLoc: number;
-		/** original target pokemon, for target-tracking moves */
-		originalTarget: Pokemon;
-		/** a move to use (move action only) */
-		moveid: ID
-		/** a move to use (move action only) */
-		move: Move;
-		/** true if megaing or ultra bursting */
-		mega: boolean | 'done';
-		/** if zmoving, the name of the zmove */
-		zmove?: string;
-		/** if dynamaxed, the name of the max move */
-		maxMove?: string;
-		/** effect that called the move (eg Instruct) if any */
-		sourceEffect?: Effect | null;
-	}
-
-	/** A switch action */
-	export interface SwitchAction {
-		/** action type */
-		choice: 'switch' | 'instaswitch';
-		order: 3 | 103;
-		/** priority of the action (lower first) */
-		priority: number;
-		/** speed of pokemon switching (higher first if priority tie) */
-		speed: number;
-		/** the pokemon doing the switch */
-		pokemon: Pokemon;
-		/** pokemon to switch to */
-		target: Pokemon;
-		/** effect that called the switch (eg U */
-		sourceEffect: Effect | null;
-	}
-
-	/** A Team Preview choice action */
-	export interface TeamAction {
-		/** action type */
-		choice: 'team';
-		/** priority of the action (lower first) */
-		priority: number;
-		/** unused for this action type */
-		speed: 1;
-		/** the pokemon switching */
-		pokemon: Pokemon;
-		/** new index */
-		index: number;
-	}
-
-	/** A generic action not done by a pokemon */
-	export interface FieldAction {
-		/** action type */
-		choice: 'start' | 'residual' | 'pass' | 'beforeTurn';
-		/** priority of the action (lower first) */
-		priority: number;
-		/** unused for this action type */
-		speed: 1;
-		/** unused for this action type */
-		pokemon: null;
-	}
-
-	/** A generic action done by a single pokemon */
-	export interface PokemonAction {
-		/** action type */
-		choice: 'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve' | 'runDynamax';
-		/** priority of the action (lower first) */
-		priority: number;
-		/** speed of pokemon doing action (higher first if priority tie) */
-		speed: number;
-		/** the pokemon doing action */
-		pokemon: Pokemon;
-	}
-
-	export type Action = MoveAction | SwitchAction | TeamAction | FieldAction | PokemonAction;
 }
 
 namespace RandomTeamsTypes {

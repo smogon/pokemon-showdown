@@ -625,7 +625,7 @@ let BattleMovedex = {
 	bide: {
 		inherit: true,
 		onTryHit(pokemon) {
-			return this.willAct() && this.runEvent('StallMove', pokemon);
+			return this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
 		effect: {
 			duration: 2,
