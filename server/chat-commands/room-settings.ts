@@ -761,8 +761,8 @@ export const commands: ChatCommands = {
 
 	rename(target, room) {
 		if (!this.can('declare')) return;
-		if (room.game || room.tour) {
-			return this.errorReply("Cannot rename room when there's a tour or game running.");
+		if (room.minorActivity || room.game || room.tour) {
+			return this.errorReply("Cannot rename room when there's a tour/game/poll/announcement running.");
 		}
 		if (room.battle) {
 			return this.errorReply("Battle rooms cannot be renamed.");
