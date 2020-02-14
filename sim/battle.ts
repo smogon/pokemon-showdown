@@ -2933,7 +2933,9 @@ export class Battle {
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
 		this.add('player', side.id, side.name, side.avatar, options.rating || '');
-		if (this.sides.every(battleSide => !!battleSide)) this.start();
+
+		// Start the battle if it's ready to start
+		if (this.sides.every(side => !!side) && !this.started) this.start();
 	}
 
 	/** @deprecated */
