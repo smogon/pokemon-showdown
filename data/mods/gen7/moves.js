@@ -745,6 +745,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	powder: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	precipiceblades: {
 		inherit: true,
 		isNonstandard: null,
