@@ -311,10 +311,9 @@ stat boosts are minor actions.
 `|-fail|POKEMON|ACTION`
 
 > The specified `ACTION` has failed against the `POKEMON` targetted. The
-> `ACTION` in question can be a move that fails, or a stat drop blocked by an
-> ability like Hyper Cutter, in which case `ACTION` will be `unboost|STAT`,
-> where `STAT` indicates where the ability prevents stat drops. (For abilities
-> that block all stat drops, like Clear Body, `|STAT` does not appear.) 
+> `ACTION` in question should be a move that fails due to its own mechanics.
+> Moves (or effect activations) that fail because they're blocked by another
+> effect should use `-block` instead.
 
 `|-block|POKEMON|EFFECT|MOVE|ATTACKER`
 
@@ -381,9 +380,10 @@ stat boosts are minor actions.
 
 `|-swapboost|SOURCE|TARGET|STATS`
 
-> Swaps the boosts from `STATS` between the `SOURCE` Pokémon and `TARGET
-> Pokémon.`STATS`takes the form of a comma-separated list of`STAT`abbreviations
-> as described in`-boost`. (For example: Guard Swap, Heart Swap).
+> Swaps the boosts from `STATS` between the `SOURCE` Pokémon and `TARGET`
+> Pokémon. `STATS` takes the form of a comma-separated list of `STAT`
+> abbreviations as described in `-boost`. (For example: Guard Swap, Heart
+> Swap).
 
 `|-invertboost|POKEMON`
 
@@ -466,41 +466,60 @@ stat boosts are minor actions.
 
 > The `POKEMON` was immune to a move.
 
-`|-item|POKEMON|ITEM`
+`|-item|POKEMON|ITEM|[from]EFFECT`
 
 > The `ITEM` held by the `POKEMON` has been changed or revealed due to a move or 
-> ability. In addition, Air Balloon reveals itself when the Pokémon holding it 
-> switches in, so it will also cause this message to appear.
+> ability `EFFECT`.
+
+`|-item|POKEMON|ITEM`
+
+> `POKEMON` has just switched in, and its item `ITEM` is being announced to have a
+> long-term effect (will not use `[from]`). Air Balloon is the only current user of
+> this.
+
+`|-enditem|POKEMON|ITEM|[from]EFFECT`
+
+> The `ITEM` held by `POKEMON` has been destroyed by a move or ability (like
+> Knock Off), and it now holds no item.
+>
+> This will be silent `[silent]` if the item's ownership was changed (with a move
+> or ability like Thief or Trick), even if the move or ability would result in
+> a Pokémon without an item.
 
 `|-enditem|POKEMON|ITEM`
 
-> The `ITEM` held by `POKEMON` has been destroyed, and it now holds no item. This can 
-> be because of an item's own effects (consumed Berries, Air Balloon), or by a move or 
-> ability, like Knock Off. If a berry is consumed, it also has an additional modifier 
-> `|[eat]` to indicate that it was consumed. This message does not appear if the item's 
-> ownership was changed (with a move or ability like Thief or Trick), even if the move 
-> or ability would result in a Pokémon without an item.
+> `POKEMON`'s `ITEM` has destroyed itself (consumed Berries, Air Balloon). If a
+> berry is consumed, it also has an additional modifier `|[eat]` to indicate
+> that it was consumed.
+>
+> Sticky Barb does not announce itself with this or any other message when it
+> changes hands.
 
-`|-ability|POKEMON|ABILITY`
+`|-ability|POKEMON|ABILITY|[from]EFFECT`
 
-> The `ABILITY` of the `POKEMON` has been changed due to a move/ability, or it has
-> activated in a way that could not be better described by one of the other minor
-> messages. For example, Clear Body sends `-fail` when it blocks stat drops, while
-> Mold Breaker sends this message to reveal itself upon switch-in.
+> The `ABILITY` of the `POKEMON` has been changed due to a move/ability `EFFECT`.
 >
 > Note that Skill Swap does not send this message despite it changing abilities,
 > because it does not reveal abilities when used between allies in a Double or
 > Triple Battle.
 
+`|-ability|POKEMON|ABILITY`
+
+> `POKEMON` has just switched-in, and its ability `ABILITY` is being announced
+> to have a long-term effect (will not use `[from]`).
+>
+> Effects that start at switch-in include Mold Breaker and Neutralizing Gas. It
+> does not include abilities that activate once and don't have any long-term
+> effects, like Intimidate (Intimidate should use `-activate`).
+
 `|-endability|POKEMON`
 
-> The `POKEMON` has had its ability surpressed, either by a move like Gastro Acid, or 
-> by the effects of Mummy.
+> The `POKEMON` has had its ability suppressed by Gastro Acid.
 
 `|-transform|POKEMON|SPECIES`
 
-> The Pokémon `POKEMON` has transformed into `SPECIES` by the effect of Transform 
-> or the ability Imposter.
+> The Pokémon `POKEMON` has transformed into `SPECIES` by the move Transform or
+> the ability Imposter.
 
 `|-mega|POKEMON|MEGASTONE`
 
@@ -526,8 +545,11 @@ stat boosts are minor actions.
 
 > A miscellaneous effect has activated. This is triggered whenever an effect could 
 > not be better described by one of the other minor messages: for example, healing 
-> abilities like Water Absorb simply use `-heal`, and items that are consumed upon 
-> use have the `-enditem` message instead.
+> abilities like Water Absorb simply use `-heal`.
+>
+> Items usually activate with `-end`, although items with two messages, like Berries
+> ("POKEMON ate the Leppa Berry! POKEMON restored PP...!"), will send the "ate"
+> message as `-eat`, and the "restored" message as `-activate`.
 
 `|-hint|MESSAGE`
 
