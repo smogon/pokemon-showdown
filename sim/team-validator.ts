@@ -1748,6 +1748,9 @@ export class TeamValidator {
 						}
 					}
 
+					// Gen 8 egg moves can be taught to any pokemon from any source
+					if (learned === '8E') learned = '8T';
+
 					if ('LMTR'.includes(learned.charAt(1))) {
 						if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
 							// current-gen level-up, TM or tutor moves:
