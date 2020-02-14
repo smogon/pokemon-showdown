@@ -625,7 +625,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 1, "level": 18},
 		],
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	vulpixalola: {
 		eventPokemon: [
@@ -4474,7 +4474,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	cherubi: {
-		tier: "LC Uber",
+		tier: "LC",
 	},
 	cherrim: {
 		randomBattleMoves: ["dazzlinggleam", "energyball", "healingwish", "leechseed", "substitute"],
@@ -4498,7 +4498,7 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	drifloon: {
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	drifblim: {
 		randomBattleMoves: ["acrobatics", "destinybond", "shadowball", "strengthsap", "substitute"],
