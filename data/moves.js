@@ -4621,6 +4621,9 @@ let BattleMovedex = {
 		basePower: 0,
 		basePowerCallback(pokemon, target) {
 			let ratio = (pokemon.getStat('spe') / target.getStat('spe'));
+			if (target.getStat('spe') === 0) {
+				ratio = 0;
+			}
 			this.debug([40, 60, 80, 120, 150][(Math.floor(ratio) > 4 ? 4 : Math.floor(ratio))] + ' bp');
 			if (ratio >= 4) {
 				return 150;
@@ -8099,7 +8102,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon, target) {
-			let power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) || 1);
+			let power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) + 1);
+			if (pokemon.getStat('spe') === 0) power = 1;
 			if (power > 150) power = 150;
 			this.debug('' + power + ' bp');
 			return power;
