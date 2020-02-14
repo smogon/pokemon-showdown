@@ -2482,7 +2482,7 @@ export const commands: ChatCommands = {
 			const targetPlayer = game.playerTable[target] || game.dead[target];
 			const nighttalk = !cmd.startsWith('un');
 			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
-			if (nighttalk === targetPlayer.silenced) return this.errorReply(`${targetPlayer.name} is already ${!nighttalk ? 'not' : ''} able to talk during the night.`);
+			if (nighttalk === targetPlayer.nighttalk) return this.errorReply(`${targetPlayer.name} is already ${!nighttalk ? 'not' : ''} able to talk during the night.`);
 			targetPlayer.nighttalk = nighttalk;
 			this.sendReply(`${targetPlayer.name} can ${!nighttalk ? 'no longer' : 'now'} talk during the night.`);
 		},
@@ -3181,7 +3181,7 @@ export const commands: ChatCommands = {
 			this.modlog(`MAFIAADDROLE`, user, id, {noalts: true, noip: true});
 			this.sendReply(`The role ${id} was added to the database.`);
 		},
-		addrolehelp: [`/mafia addrole name|alignment|image|memo1|memo2... - adds a role to the database. Name, memo are required. Requires @ # & ~`],
+		addrolehelp: [`/mafia addrole name|alignment|image|memo1|memo2... - adds a role to the database. Name, memo are required. Requires % @ # & ~`],
 
 		overwritealignment: 'addalignment',
 		addalignment(target, room, user, connection, cmd) {
