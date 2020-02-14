@@ -87,7 +87,7 @@ describe('Trick Room', function () {
 
 		battle.onEvent('BasePower', battle.format, function (bp, pokemon, target, move) {
 			if (move.id !== 'gyroball') return;
-			assert.strictEqual(bp, 25); // BP should theoretically be this based on speed values
+			assert.strictEqual(bp, 26); // BP should theoretically be this based on speed values
 		});
 
 		battle.makeChoices('move earthquake', 'move gyroball');
