@@ -1788,7 +1788,21 @@ function runLearn(target, cmd) {
 			}
 		}
 		if (sourcesBefore) {
-			buffer += `<li>${(sourcesBefore < gen ? "Gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in Gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "")})`;
+			const sourceGen = sourcesBefore < gen ? `Gen ${sourcesBefore} or earlier` : `anywhere`;
+			if (moveNames.length === 1) {
+				if (sourcesBefore >= 8) {
+					buffer += `<li>${sourceGen} (move is level-up/tutor/TM/HM/egg in Gen ${sourcesBefore})`;
+				} else {
+					buffer += `<li>${sourceGen} (move is level-up/tutor/TM/HM in Gen ${sourcesBefore})`;
+				}
+			} else if (gen >= 8) {
+				const orEarlier = sourcesBefore < gen ? ` or level-up/tutor/TM/HM in Gen ${sourcesBefore}${
+					sourcesBefore < 7 ? " to 7" : ""
+				}` : ``;
+				buffer += `<li>${sourceGen} (all moves are level-up/tutor/TM/HM/egg in Gen ${sourcesBefore}${orEarlier})`;
+			} else {
+				buffer += `<li>${sourceGen} (all moves are level-up/tutor/TM/HM in Gen ${Math.min(gen, sourcesBefore)}${sourcesBefore < gen ? " to " + gen : ""})`;
+			}
 		}
 		if (setSources.babyOnly && sourcesBefore) {
 			buffer += `<li>must be obtained as ` + Dex.getTemplate(setSources.babyOnly).species;
