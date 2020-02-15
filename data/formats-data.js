@@ -1126,7 +1126,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 1, "level": 15},
 		],
-		isUnreleased: "Past",
+		isUnreleased: true,
 		tier: "Unreleased",
 	},
 	slowpokegalar: {
