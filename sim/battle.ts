@@ -2935,7 +2935,7 @@ export class Battle {
 		this.add('player', side.id, side.name, side.avatar, options.rating || '');
 
 		// Start the battle if it's ready to start
-		if (this.sides.every(side => !!side) && !this.started) this.start();
+		if (this.sides.every(playerSide => !!playerSide) && !this.started) this.start();
 	}
 
 	/** @deprecated */
