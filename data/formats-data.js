@@ -6008,7 +6008,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["slash", "fusionbolt", "freezeshock", "dragonpulse"]},
 		],
 		eventOnly: true,
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DUber",
 	},
 	kyuremwhite: {
@@ -7342,7 +7342,7 @@ let BattleFormatsData = {
 	},
 	melmetal: {
 		randomBattleMoves: ["doubleironbash", "highhorsepower", "icepunch", "thunderpunch", "thunderwave"],
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 	},
 	melmetalgmax: {
