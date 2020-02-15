@@ -13,7 +13,7 @@ describe('Pledge moves', function () {
 	it(`should work`, function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
-			{species: 'Ninjask', ability: 'noability',  moves: ['waterpledge']},
+			{species: 'Ninjask', ability: 'noability', moves: ['waterpledge']},
 			{species: 'Incineroar', ability: 'noability', moves: ['grasspledge']},
 		]});
 		battle.setPlayer('p2', {team: [

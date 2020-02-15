@@ -15848,7 +15848,7 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		onTry() {
+		onTry(target, source, move) {
 			for (const action of this.queue) {
 				// @ts-ignore
 				if (!action.pokemon || !action.move) continue;
