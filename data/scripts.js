@@ -811,7 +811,7 @@ let BattleScripts = {
 			}
 		}
 		const pokemonOriginalHP = pokemon.hp;
-		if (damagedDamage.length) {
+		if (damagedDamage.length && !isSecondary && !isSelf) {
 			this.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 			if (moveData.onAfterHit) {
 				for (const target of damagedTargets) {
