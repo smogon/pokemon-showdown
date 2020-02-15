@@ -218,7 +218,7 @@ export class BattleQueue extends Array<Action> {
 	/**
 	 * Makes the passed action happen next (skipping speed order).
 	 */
-	prioritizeAction(action: MoveAction | SwitchAction, source?: Pokemon, sourceEffect?: Effect) {
+	prioritizeAction(action: MoveAction | SwitchAction, sourceEffect?: Effect) {
 		for (const [i, curAction] of this.entries()) {
 			if (curAction === action) {
 				this.splice(i, 1);

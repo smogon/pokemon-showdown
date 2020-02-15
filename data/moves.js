@@ -278,11 +278,11 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {authentic: 1, mystery: 1},
-		onHit(target) {
+		onHit(target, source, move) {
 			if (target.side.active.length < 2) return false; // fails in singles
 			let action = this.queue.willMove(target);
 			if (action) {
-				this.queue.prioritizeAction(action);
+				this.queue.prioritizeAction(action, move);
 				this.add('-activate', target, 'move: After You');
 			} else {
 				return false;
@@ -5410,7 +5410,7 @@ let BattleMovedex = {
 				// @ts-ignore
 				if (action.pokemon.side === source.side && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
 					// @ts-ignore
-					this.queue.prioritizeAction(action);
+					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
 				}
@@ -5420,18 +5420,12 @@ let BattleMovedex = {
 			if (move.sourceEffect === 'waterpledge') {
 				move.type = 'Water';
 				move.forceSTAB = true;
+				move.self = {sideCondition: 'waterpledge'};
 			}
 			if (move.sourceEffect === 'grasspledge') {
 				move.type = 'Fire';
 				move.forceSTAB = true;
-			}
-		},
-		onHit(target, source, move) {
-			if (move.sourceEffect === 'grasspledge') {
-				target.side.addSideCondition('firepledge');
-			}
-			if (move.sourceEffect === 'waterpledge') {
-				source.side.addSideCondition('waterpledge');
+				move.sideCondition = 'firepledge';
 			}
 		},
 		effect: {
@@ -7636,7 +7630,7 @@ let BattleMovedex = {
 				// @ts-ignore
 				if (action.pokemon.side === source.side && ['waterpledge', 'firepledge'].includes(action.move.id)) {
 					// @ts-ignore
-					this.queue.prioritizeAction(action);
+					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
 				}
@@ -7646,18 +7640,12 @@ let BattleMovedex = {
 			if (move.sourceEffect === 'waterpledge') {
 				move.type = 'Grass';
 				move.forceSTAB = true;
+				move.sideCondition = 'grasspledge';
 			}
 			if (move.sourceEffect === 'firepledge') {
 				move.type = 'Fire';
 				move.forceSTAB = true;
-			}
-		},
-		onHit(target, source, move) {
-			if (move.sourceEffect === 'waterpledge') {
-				target.side.addSideCondition('grasspledge');
-			}
-			if (move.sourceEffect === 'firepledge') {
-				target.side.addSideCondition('firepledge');
+				move.sideCondition = 'firepledge';
 			}
 		},
 		effect: {
@@ -15867,7 +15855,7 @@ let BattleMovedex = {
 				// @ts-ignore
 				if (action.move.id === 'round') {
 					// @ts-ignore
-					this.queue.prioritizeAction(action);
+					this.queue.prioritizeAction(action, move);
 					return;
 				}
 			}
@@ -16618,7 +16606,7 @@ let BattleMovedex = {
 					pokemon.volatiles['shelltrap'].gotHit = true;
 					let action = this.queue.willMove(pokemon);
 					if (action) {
-						this.queue.prioritizeAction(action);
+						this.queue.prioritizeAction(action, move);
 					}
 				}
 			},
@@ -20758,7 +20746,7 @@ let BattleMovedex = {
 				// @ts-ignore
 				if (action.pokemon.side === source.side && ['firepledge', 'grasspledge'].includes(action.move.id)) {
 					// @ts-ignore
-					this.queue.prioritizeAction(action);
+					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
 				}
@@ -20768,18 +20756,12 @@ let BattleMovedex = {
 			if (move.sourceEffect === 'grasspledge') {
 				move.type = 'Grass';
 				move.forceSTAB = true;
+				move.sideCondition = 'grasspledge';
 			}
 			if (move.sourceEffect === 'firepledge') {
 				move.type = 'Water';
 				move.forceSTAB = true;
-			}
-		},
-		onHit(target, source, move) {
-			if (move.sourceEffect === 'firepledge') {
-				source.side.addSideCondition('waterpledge');
-			}
-			if (move.sourceEffect === 'grasspledge') {
-				target.side.addSideCondition('grasspledge');
+				move.self = {sideCondition: 'waterpledge'};
 			}
 		},
 		effect: {
