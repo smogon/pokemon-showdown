@@ -600,6 +600,7 @@ let Formats = [
 				let item = this.dex.getItem(set.item);
 				if (!item || !item.megaStone) continue;
 				let template = this.dex.getTemplate(set.species);
+				if (template.isNonstandard) return [`${template.baseSpecies} does not exist in gen 8.`];
 				if (restrictedPokemon.includes(template.species)) {
 					return [`${template.species} is not allowed to hold ${item.name}.`];
 				}
