@@ -1694,7 +1694,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	mrmime: {
-		randomBattleMoves: ["dazzlinggleam", "focusblast", "healingwish", "nastyplot", "psychic", "shadowball"],
+		randomBattleMoves: ["dazzlinggleam", "focusblast", "healingwish", "nastyplot", "psychic"],
 		eventPokemon: [
 			{"generation": 3, "level": 42, "abilities": ["soundproof"], "moves": ["followme", "psychic", "encore", "thunderpunch"]},
 		],
@@ -1952,7 +1952,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	vaporeon: {
-		randomBattleMoves: ["healbell", "icebeam", "protect", "scald", "toxic", "wish"],
+		randomBattleMoves: ["icebeam", "protect", "roar", "scald", "toxic", "wish"],
 		eventPokemon: [
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
 			{"generation": 6, "level": 10, "isHidden": false, "moves": ["celebrate", "tailwhip", "sandattack", "watergun"], "pokeball": "cherishball"},
@@ -1993,7 +1993,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	umbreon: {
-		randomBattleMoves: ["foulplay", "healbell", "protect", "toxic", "wish"],
+		randomBattleMoves: ["foulplay", "protect", "toxic", "wish", "yawn"],
 		eventPokemon: [
 			{"generation": 3, "level": 70, "moves": ["feintattack", "meanlook", "screech", "moonlight"], "pokeball": "pokeball"},
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
@@ -3961,7 +3961,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	froslass: {
-		randomBattleMoves: ["destinybond", "icebeam", "shadowball", "spikes", "taunt", "thunderwave"],
+		randomBattleMoves: ["destinybond", "icebeam", "shadowball", "spikes", "taunt", "willowisp"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
@@ -4119,6 +4119,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	latias: {
+		randomBattleMoves: ["aurasphere", "calmmind", "dracometeor", "healingwish", "psychic", "roost"],
 		eventPokemon: [
 			{"generation": 3, "level": 40, "shiny": 1, "moves": ["watersport", "refresh", "mistball", "psychic"]},
 			{"generation": 3, "level": 50, "shiny": 1, "moves": ["mistball", "psychic", "recover", "charm"]},
@@ -4140,6 +4141,7 @@ let BattleFormatsData = {
 		isNonstandard: "Past",
 	},
 	latios: {
+		randomBattleMoves: ["aurasphere", "defog", "dracometeor", "psychic", "roost", "trick"],
 		eventPokemon: [
 			{"generation": 3, "level": 40, "shiny": 1, "moves": ["protect", "refresh", "lusterpurge", "psychic"]},
 			{"generation": 3, "level": 50, "shiny": 1, "moves": ["lusterpurge", "psychic", "recover", "dragondance"]},
@@ -4451,7 +4453,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	vespiquen: {
-		randomBattleMoves: ["airslash", "bugbuzz", "powergem", "sludgebomb", "uturn"],
+		randomBattleMoves: ["airslash", "defog", "roost", "toxic", "uturn"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -4791,6 +4793,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	heatran: {
+		randomBattleMoves: ["earthpower", "flashcannon", "lavaplume", "protect", "stealthrock", "taunt", "toxic"],
 		eventPokemon: [
 			{"generation": 4, "level": 70, "shiny": 1, "moves": ["scaryface", "lavaplume", "firespin", "ironhead"]},
 			{"generation": 4, "level": 50, "shiny": 1, "moves": ["metalsound", "crunch", "scaryface", "lavaplume"]},
@@ -5100,7 +5103,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	liepard: {
-		randomBattleMoves: ["copycat", "darkpulse", "encore", "nastyplot", "playrough", "substitute", "thunderwave", "uturn"],
+		randomBattleMoves: ["copycat", "encore", "knockoff", "playrough", "thunderwave", "uturn"],
 		eventPokemon: [
 			{"generation": 5, "level": 20, "gender": "F", "nature": "Jolly", "isHidden": true, "moves": ["fakeout", "foulplay", "encore", "swagger"]},
 		],
@@ -5815,7 +5818,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	heatmor: {
-		randomBattleMoves: ["firelash", "gigadrain", "substitute", "suckerpunch", "superpower"],
+		randomBattleMoves: ["firelash", "gigadrain", "knockoff", "substitute", "suckerpunch", "superpower"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -5942,7 +5945,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	reshiram: {
-		randomBattleMoves: ["blueflare", "dracometeor", "earthpower", "flamecharge", "roost", "stoneedge"],
+		randomBattleMoves: ["blueflare", "dracometeor", "dragonpulse", "earthpower", "roost", "stoneedge"],
 		eventPokemon: [
 			{"generation": 5, "level": 50, "moves": ["dragonbreath", "slash", "extrasensory", "fusionflare"]},
 			{"generation": 5, "level": 70, "moves": ["extrasensory", "fusionflare", "dragonpulse", "imprison"]},
@@ -7532,7 +7535,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	sandaconda: {
-		randomBattleMoves: ["bodypress", "coil", "earthquake", "glare", "stealthrock", "stoneedge", "rest"],
+		randomBattleMoves: ["coil", "earthquake", "glare", "stealthrock", "stoneedge", "rest"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -7571,6 +7574,7 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	toxtricitylowkey: {
+		randomBattleMoves: ["boomburst", "overdrive", "sludgewave", "voltswitch"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -7580,7 +7584,6 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	toxtricitylowkeygmax: {
-		randomBattleMoves: ["boomburst", "overdrive", "sludgewave", "voltswitch"],
 		isGigantamax: "G-Max Stun Shock",
 		tier: "(Uber)",
 		doublesTier: "DOU",
@@ -7698,7 +7701,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	indeedeef: {
-		randomBattleMoves: ["aromatherapy", "calmmind", "hypervoice", "mysticalfire", "psychic"],
+		randomBattleMoves: ["calmmind", "healingwish", "hypervoice", "mysticalfire", "psychic"],
 		tier: "RU",
 		doublesTier: "DOU",
 	},
