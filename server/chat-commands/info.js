@@ -2342,14 +2342,11 @@ const commands = {
 	'!shuffle': true,
 	shuffle(target, room, user) {
 		if (!target) return false;
-		if (!target.includes(',')) return this.parse('/help pick');
+		if (!target.includes(',')) return this.parse('/help shuffle');
 		if (!this.runBroadcast(true)) return false;
-		if (this.broadcasting) {
-			[, target] = Chat.splitFirst(this.message, ' ');
-		}
 		let args = target.split(',');
 		const results = Dex.shuffle(args);
-		return this.sendReplyBox(Chat.html`<em>Shuffled:</em> ${results.join(', ')}`);
+		return this.sendReplyBox(Chat.html`<em>Shuffled:</em><br> ${results.join(', ')}`);
 	},
 	shufflehelp: [`/shuffle [option], [option], [option] ... - Randomly shuffles a list of 3 or more elements.`],
 
