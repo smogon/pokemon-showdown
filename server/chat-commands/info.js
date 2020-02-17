@@ -2339,6 +2339,20 @@ const commands = {
 	},
 	pickrandomhelp: [`/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.`],
 
+	'!shuffle': true,
+	shuffle(target, room, user) {
+		if (!target) return false;
+		if (!target.includes(',')) return this.parse('/help pick');
+		if (!this.runBroadcast(true)) return false;
+		if (this.broadcasting) {
+			[, target] = Chat.splitFirst(this.message, ' ');
+		}
+		let args = target.split(',');
+		const results = Dex.shuffle(args);
+		return this.sendReplyBox(Chat.html`<em>Shuffled:</em> ${results.join(', ')}`);
+	},
+	shufflehelp: [`/shuffle [option], [option], [option] ... - Randomly shuffles a list of 3 or more elements.`],
+
 	showimage(target, room, user) {
 		if (!target) return this.parse('/help showimage');
 		if (!this.can('declare', null, room)) return false;
