@@ -1334,7 +1334,8 @@ let Formats = [
 	{
 		name: "[Gen 7 Let's Go] OU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3644015/">LGPE OverUsed</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658931/">LGPE OU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3656868/">LGPE OU Viability Rankings</a>`,
 		],
 
 		mod: 'letsgo',
