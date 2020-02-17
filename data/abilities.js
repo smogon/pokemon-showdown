@@ -473,8 +473,11 @@ let BattleAbilities = {
 	"competitive": {
 		desc: "This Pokemon's Special Attack is raised by 2 stages for each of its stat stages that is lowered by an opposing Pokemon.",
 		shortDesc: "This Pokemon's Sp. Atk is raised by 2 for each of its stats that is lowered by a foe.",
-		onAfterEachBoost(boost, target, source) {
+		onAfterEachBoost(boost, target, source, effect) {
 			if (!source || target.side === source.side) {
+				if (effect.id === 'stickyweb') {
+					this.hint("Court Change Sticky Web counts as lowering your own Speed, and Competitive only affects stats lowered by foes.", true, source.side);
+				}
 				return;
 			}
 			let statsLowered = false;
@@ -670,8 +673,11 @@ let BattleAbilities = {
 	"defiant": {
 		desc: "This Pokemon's Attack is raised by 2 stages for each of its stat stages that is lowered by an opposing Pokemon.",
 		shortDesc: "This Pokemon's Attack is raised by 2 for each of its stats that is lowered by a foe.",
-		onAfterEachBoost(boost, target, source) {
+		onAfterEachBoost(boost, target, source, effect) {
 			if (!source || target.side === source.side) {
+				if (effect.id === 'stickyweb') {
+					this.hint("Court Change Sticky Web counts as lowering your own Speed, and Defiant only affects stats lowered by foes.", true, source.side);
+				}
 				return;
 			}
 			let statsLowered = false;
