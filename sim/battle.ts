@@ -1681,7 +1681,7 @@ export class Battle {
 		source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false
 	) {
 		if (!targetArray) return [0];
-		let retVals: (number | false | undefined)[] = [];
+		const retVals: (number | false | undefined)[] = [];
 		if (typeof effect === 'string' || !effect) effect = this.dex.getEffectByID((effect || '') as ID);
 		for (const [i, curDamage] of damage.entries()) {
 			const target = targetArray[i];
@@ -2648,8 +2648,9 @@ export class Battle {
 		this.eachEvent('Update');
 
 		if (action.choice === 'runSwitch') {
-			if (action.pokemon.hp <= action.pokemon.maxhp / 2 && pokemonOriginalHP! > action.pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', action.pokemon);
+			const pokemon = action.pokemon;
+			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
+				this.runEvent('EmergencyExit', pokemon);
 			}
 		}
 
