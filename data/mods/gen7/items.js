@@ -362,6 +362,10 @@ let BattleItems = {
 			}
 		},
 	},
+	mail: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	manectite: {
 		inherit: true,
 		isNonstandard: null,
