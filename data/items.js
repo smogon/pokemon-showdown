@@ -3569,9 +3569,9 @@ let BattleItems = {
 			if (!this.activeMove) return false;
 			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
-		isUnreleased: true,
 		num: 0,
 		gen: 2,
+		isNonstandard: "Past",
 		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
 	},
 	"manectite": {
