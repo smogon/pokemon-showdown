@@ -16,6 +16,18 @@ describe('Rapid Spin', function () {
 		battle.setPlayer('p2', {team: [{species: "Armaldo", moves: ['sleeptalk', 'rapidspin']}]});
 		battle.makeChoices('move stealthrock', 'move sleeptalk');
 		battle.makeChoices('move spikes', 'move sleeptalk');
+		battle.makeChoices('move toxicspikes', 'move rapidspin');
+		assert(!battle.p2.sideConditions['stealthrock']);
+		assert(!battle.p2.sideConditions['spikes']);
+		assert(!battle.p2.sideConditions['toxicspikes']);
+	});
+
+	it('should remove entry hazards past a Sub', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: "Omastar", moves: ['stealthrock', 'spikes', 'toxicspikes', 'substitute']}]});
+		battle.setPlayer('p2', {team: [{species: "Armaldo", moves: ['sleeptalk', 'rapidspin']}]});
+		battle.makeChoices('move stealthrock', 'move sleeptalk');
+		battle.makeChoices('move spikes', 'move sleeptalk');
 		battle.makeChoices('move toxicspikes', 'move sleeptalk');
 		battle.makeChoices('move substitute', 'move rapidspin');
 		assert(!battle.p2.sideConditions['stealthrock']);
