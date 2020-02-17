@@ -158,7 +158,7 @@ let BattleStatuses = {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
-			this.damage(this.dex.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
+			this.damage(this.dex.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectData.stage);
 		},
 	},
 	confusion: {
