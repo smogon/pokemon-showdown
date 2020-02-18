@@ -1748,7 +1748,7 @@ function runLearn(target, cmd) {
 	buffer += `${template.name}` + (problems ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + Chat.toListString(moveNames);
 	if (!problems) {
 		let sourceNames = {
-			'7V': "virtual console transfer from gen 1-2", '8V': "virtual console transfer from LGPE", E: "", S: "event", D: "dream world", X: "traded-back ", Y: "traded-back event",
+			'7V': "virtual console transfer from gen 1-2", '8V': "Pokémon Home transfer from LGPE", E: "", S: "event", D: "dream world", X: "traded-back ", Y: "traded-back event",
 		};
 		let sourcesBefore = setSources.sourcesBefore;
 		if (sources.length || sourcesBefore < gen) buffer += " only when obtained";
