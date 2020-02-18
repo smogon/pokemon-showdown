@@ -569,7 +569,7 @@ export class GTSGiveaway {
 	}
 }
 
-export const commands: ChatCommands = {
+const cmds: ChatCommands = {
 	// question giveaway.
 	quiz: 'question',
 	qg: 'question',
@@ -879,3 +879,14 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(reply);
 	},
 };
+
+export const commands = {
+	giveaway: cmds,
+	ga: cmds.guess,
+	gh: cmds.help,
+	qg: cmds.question,
+	lg: cmds.lottery,
+	gts: cmds.gts,
+	left: cmds.left,
+	sent: cmds.sent,
+}
