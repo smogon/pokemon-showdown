@@ -286,12 +286,12 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 	// eslint-disable-next-line no-misleading-character-class
 	let lcMessage = message
 		.replace(/\u039d/g, 'N').toLowerCase()
-			.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
-				.replace(/\u03bf/g, 'o')
-					.replace(/\u043e/g, 'o')
-						.replace(/\u0430/g, 'a')
-							.replace(/\u0435/g, 'e')
-								.replace(/\u039d/g, 'e');
+		.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
+		.replace(/\u03bf/g, 'o')
+		.replace(/\u043e/g, 'o')
+		.replace(/\u0430/g, 'a')
+		.replace(/\u0435/g, 'e')
+		.replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
 	const isStaffRoom = room && ((room.chatRoomData && room.roomid.endsWith('staff')) || room.roomid.startsWith('help-'));
@@ -337,12 +337,12 @@ export const namefilter: NameFilter = (name, user) => {
 	if (id === toID(user.trackRename)) return '';
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
-			.replace(/[\u200b\u007F\u00AD]/g, '')
-				.replace(/\u03bf/g, 'o')
-					.replace(/\u043e/g, 'o')
-						.replace(/\u0430/g, 'a')
-							.replace(/\u0435/g, 'e')
-								.replace(/\u039d/g, 'e');
+		.replace(/[\u200b\u007F\u00AD]/g, '')
+		.replace(/\u03bf/g, 'o')
+		.replace(/\u043e/g, 'o')
+		.replace(/\u0430/g, 'a')
+		.replace(/\u0435/g, 'e')
+		.replace(/\u039d/g, 'e');
 	// Remove false positives.
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
@@ -381,12 +381,12 @@ export const loginfilter: LoginFilter = user => {
 export const nicknamefilter: NameFilter = (name, user) => {
 	let lcName = name
 		.replace(/\u039d/g, 'N').toLowerCase()
-			.replace(/[\u200b\u007F\u00AD]/g, '')
-				.replace(/\u03bf/g, 'o')
-					.replace(/\u043e/g, 'o')
-						.replace(/\u0430/g, 'a')
-							.replace(/\u0435/g, 'e')
-								.replace(/\u039d/g, 'e');
+		.replace(/[\u200b\u007F\u00AD]/g, '')
+		.replace(/\u03bf/g, 'o')
+		.replace(/\u043e/g, 'o')
+		.replace(/\u0430/g, 'a')
+		.replace(/\u0435/g, 'e')
+		.replace(/\u039d/g, 'e');
 	// Remove false positives.
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
@@ -411,12 +411,12 @@ export const nicknamefilter: NameFilter = (name, user) => {
 export const statusfilter: StatusFilter = (status, user) => {
 	let lcStatus = status
 		.replace(/\u039d/g, 'N').toLowerCase()
-			.replace(/[\u200b\u007F\u00AD]/g, '')
-				.replace(/\u03bf/g, 'o')
-					.replace(/\u043e/g, 'o')
-						.replace(/\u0430/g, 'a')
-							.replace(/\u0435/g, 'e')
-								.replace(/\u039d/g, 'e');
+		.replace(/[\u200b\u007F\u00AD]/g, '')
+		.replace(/\u03bf/g, 'o')
+		.replace(/\u043e/g, 'o')
+		.replace(/\u0430/g, 'a')
+		.replace(/\u0435/g, 'e')
+		.replace(/\u039d/g, 'e');
 	// Remove false positives.
 	lcStatus = lcStatus.replace('herapist', '').replace('grape', '').replace('scrape', '');
 	// Check for blatant staff impersonation attempts. Ideally this could be completely generated from Config.grouplist
@@ -512,13 +512,9 @@ export const commands: ChatCommands = {
 					regex = constructEvasionRegex(word);
 				} else {
 					regex = new RegExp(
-						Chat.monitors[list].punishment === 'SHORTENER' ?
-							`\\b${word}` :
-								word,
-						filterTo ?
-							'ig' :
-								'i'
-					); // eslint-disable-line no-unused-vars
+						Chat.monitors[list].punishment === 'SHORTENER' ? `\\b${word}` : word,
+						filterTo ? 'ig' : 'i'
+					);
 				}
 			} catch (e) {
 				return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
