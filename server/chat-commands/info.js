@@ -2345,7 +2345,7 @@ const commands = {
 		const args = target.split(',');
 		if (!this.runBroadcast(true)) return false;
 		if (args.length < 3) return this.parse(`${this.cmdToken}pick ${target}`);
-		const results = Dex.shuffle(args);
+		const results = Dex.shuffle(args.map(arg => arg.trim()));
 		return this.sendReplyBox(Chat.html`<em>Shuffled:</em><br> ${results.join(', ')}`);
 	},
 	shufflehelp: [
