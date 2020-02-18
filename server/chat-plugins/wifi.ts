@@ -889,4 +889,4 @@ export const commands = {
 	gts: cmds.gts,
 	left: cmds.left,
 	sent: cmds.sent,
-}
+};
