@@ -15947,6 +15947,7 @@ let BattleMovedex = {
 			},
 			onSetStatus(status, target, source, effect) {
 				if (!effect || !source) return;
+				if (effect.id === 'yawn') return;
 				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
 				if (target !== source) {
 					this.debug('interrupting setStatus');
