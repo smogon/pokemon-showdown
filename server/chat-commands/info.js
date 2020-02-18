@@ -2341,9 +2341,9 @@ const commands = {
 
 	'!shuffle': true,
 	shuffle(target, room, user) {
-		if (!target || !target.includes(',')) return this.parse('/help shuffle');
+		if (!target || !target.includes(',')) return this.parse('help shuffle');
 		const args = target.split(',');
-		if (args.length < 3) return this.parse(`/pick ${target}`);
+		if (args.length < 3) return this.parse(`${this.cmdToken}pick ${target}`);
 		const results = Dex.shuffle(args);
 		return this.sendReplyBox(Chat.html`<em>Shuffled:</em><br> ${results.join(', ')}`);
 	},
