@@ -2341,7 +2341,6 @@ const commands = {
 
 	'!shuffle': true,
 	shuffle(target, room, user) {
-		if (!target) return false;
 		if (!target || !target.includes(',')) return this.parse('/help shuffle');
 		const args = target.split(',');
 		if (args.length < 3) return this.parse(`/pick ${target}`);
