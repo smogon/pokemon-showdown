@@ -1764,11 +1764,7 @@ function runLearn(target, cmd) {
 				return source;
 			}).sort();
 			for (let source of sources) {
-				if (source.charAt(1) === 'V') {
-					buffer += `<li>Gen ${source.charAt(0)} ${sourceNames[source]}`;
-				} else {
-					buffer += `<li>Gen ${source.charAt(0)} ${sourceNames[source.charAt(1)]}`;
-				}
+				buffer += `<li>Gen ${source.charAt(0)} ${sourceNames[source] || sourceNames[source.charAt(1)]}`;
 
 				if (source.charAt(1) === 'E') {
 					let fathers;
