@@ -23,6 +23,7 @@ const RETRY_AFTER_LOGIN = null;
 
 import {FS} from '../lib/fs';
 import {WriteStream} from '../lib/streams';
+import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
@@ -103,6 +104,8 @@ export abstract class BasicRoom {
 	unoDisabled: boolean;
 	blackjackDisabled: boolean;
 	hangmanDisabled: boolean;
+	giveaway: QuestionGiveaway | LotteryGiveaway | null;
+	gtsga: GTSGiveaway | null;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
 	privacySetter: Set<ID> | null;
@@ -161,6 +164,8 @@ export abstract class BasicRoom {
 		this.unoDisabled = false;
 		this.blackjackDisabled = false;
 		this.hangmanDisabled = false;
+		this.giveaway = null;
+		this.gtsga = null;
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
 		this.privacySetter = null;
