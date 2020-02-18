@@ -5424,6 +5424,11 @@ let BattleMovedex = {
 				this.add('-sidestart', targetSide, 'Fire Pledge');
 			},
 			onEnd(targetSide) {
+				for (const pokemon of targetSide.active) {
+					if (pokemon && !pokemon.hasType('Fire')) {
+						this.damage(pokemon.baseMaxhp / 8, pokemon);
+					}
+				}
 				this.add('-sideend', targetSide, 'Fire Pledge');
 			},
 			onResidual(side) {
@@ -7493,6 +7498,9 @@ let BattleMovedex = {
 				}
 			},
 			onEnd(targetSide) {
+				for (const pokemon of targetSide.active) {
+					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				}
 				this.add('-sideend', targetSide, 'G-Max Wildfire');
 			},
 		},
