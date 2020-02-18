@@ -25,12 +25,8 @@
         "./server/tournaments/*",
         "./server/chat-commands/*.ts",
         "./server/chat-plugins/*.ts",
-        "./server/chat-plugins/daily-spotlight.js",
-        "./server/chat-plugins/mafia-data.js",
-        "./server/chat-plugins/room-faqs.js",
         "./server/chat-plugins/thecafe.js",
         "./server/chat-plugins/thing-of-the-day.js",
-        "./server/chat-plugins/wifi.js",
         "./sim/**/*",
         "./tools/set-import/*.ts"
     ]
