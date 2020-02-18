@@ -2349,7 +2349,9 @@ const commands = {
 		const results = Dex.shuffle(args);
 		return this.sendReplyBox(Chat.html`<em>Shuffled:</em><br> ${results.join(', ')}`);
 	},
-	shufflehelp: [`/shuffle [option], [option], [option] ... - Randomly shuffles a list of 3 or more elements.`],
+	shufflehelp: [
+		`/shuffle [option], [option], [option], ... - Randomly shuffles a list of 3 or more elements.`,
+	],
 
 	showimage(target, room, user) {
 		if (!target) return this.parse('/help showimage');
