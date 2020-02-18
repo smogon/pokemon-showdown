@@ -23,6 +23,16 @@ describe(`Emergency Exit`, function () {
 		assert.strictEqual(battle.requestState, 'switch');
 	});
 
+	it(`should request switch-out at the end of a multi-hit move`, function () {
+		battle = common.createBattle([
+			[{species: "Cinccino", ability: 'skilllink', moves: ['bulletseed']}],
+			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
+		]);
+		battle.makeChoices('move bulletseed', 'move sleeptalk');
+		battle.makeChoices('move bulletseed', 'move sleeptalk');
+		assert.strictEqual(battle.requestState, 'switch');
+	});
+
 	it(`should not request switch-out if attacked and healed by berry`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
