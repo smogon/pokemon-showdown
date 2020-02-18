@@ -2344,7 +2344,7 @@ const commands = {
 		if (!target) return false;
 		if (!target.includes(',')) return this.parse('/help shuffle');
 		if (!this.runBroadcast(true)) return false;
-		let args = target.split(',');
+		const args = target.split(',');
 		if (args.length < 3) return this.errorReply('Give at least 3 arguments to shuffle.');
 		const results = Dex.shuffle(args);
 		return this.sendReplyBox(Chat.html`<em>Shuffled:</em><br> ${results.join(', ')}`);
