@@ -254,21 +254,10 @@ let BattleMovedex = {
 	electroball: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			let ratio = (pokemon.getStat('spe') / Math.max(1, target.getStat('spe')));
-			this.debug([40, 60, 80, 120, 150][(Math.floor(ratio) > 4 ? 4 : Math.floor(ratio))] + ' bp');
-			if (ratio >= 4) {
-				return 150;
-			}
-			if (ratio >= 3) {
-				return 120;
-			}
-			if (ratio >= 2) {
-				return 80;
-			}
-			if (ratio >= 1) {
-				return 60;
-			}
-			return 40;
+			const ratio = Math.floor(pokemon.getStat('spe') / Math.max(1, target.getStat('spe')));
+			const bp = [40, 60, 80, 120, 150][Math.min(ratio, 4)];
+			this.debug(`${bp} bp`);
+			return bp;
 		},
 		desc: "The power of this move depends on (user's current Speed / target's current Speed), rounded down. Power is equal to 150 if the result is 4 or more, 120 if 3, 80 if 2, 60 if 1, 40 if less than 1. If the target's current Speed is 0, it is treated as 1 instead.",
 	},
@@ -422,9 +411,9 @@ let BattleMovedex = {
 	gyroball: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
-			let power = (Math.floor(25 * target.getStat('spe') / Math.max(1, pokemon.getStat('spe'))) + 1);
+			let power = Math.floor(25 * target.getStat('spe') / Math.max(1, pokemon.getStat('spe'))) + 1;
 			if (power > 150) power = 150;
-			this.debug('' + power + ' bp');
+			this.debug(`${power} bp`);
 			return power;
 		},
 		desc: "Power is equal to (25 * target's current Speed / user's current Speed) + 1, rounded down, but not more than 150. If the user's current Speed is 0, it is treated as 1 instead.",

@@ -4620,24 +4620,11 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon, target) {
-			let ratio = (pokemon.getStat('spe') / target.getStat('spe'));
-			if (target.getStat('spe') === 0) {
-				ratio = 0;
-			}
-			this.debug([40, 60, 80, 120, 150][(Math.floor(ratio) > 4 ? 4 : Math.floor(ratio))] + ' bp');
-			if (ratio >= 4) {
-				return 150;
-			}
-			if (ratio >= 3) {
-				return 120;
-			}
-			if (ratio >= 2) {
-				return 80;
-			}
-			if (ratio >= 1) {
-				return 60;
-			}
-			return 40;
+			let ratio = Math.floor(pokemon.getStat('spe') / target.getStat('spe'));
+			if (!isFinite(ratio)) ratio = 0;
+			const bp = [40, 60, 80, 120, 150][Math.min(ratio, 4)];
+			this.debug(`${bp} bp`);
+			return bp;
 		},
 		category: "Special",
 		desc: "The power of this move depends on (user's current Speed / target's current Speed), rounded down. Power is equal to 150 if the result is 4 or more, 120 if 3, 80 if 2, 60 if 1, 40 if less than 1. If the target's current Speed is 0, this move's power is 40.",
@@ -8093,10 +8080,10 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon, target) {
-			let power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) + 1);
-			if (pokemon.getStat('spe') === 0) power = 1;
+			let power = Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) + 1;
+			if (!isFinite(power)) power = 1;
 			if (power > 150) power = 150;
-			this.debug('' + power + ' bp');
+			this.debug(`${power} bp`);
 			return power;
 		},
 		category: "Physical",
