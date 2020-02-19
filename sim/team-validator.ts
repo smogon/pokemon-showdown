@@ -1084,7 +1084,10 @@ export class TeamValidator {
 				// Meloetta-Pirouette, Rayquaza-Mega
 				problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`);
 			}
-			if (!template.isGigantamax) set.species = template.baseSpecies; // Fix battle-only forme
+			if (!template.isGigantamax) {
+				// Set to out-of-battle forme
+				set.species = template.forme === 'Galar-Zen' ? 'Darmanitan-Galar' : template.baseSpecies;
+			}
 		} else {
 			if (template.requiredAbility) {
 				// Impossible!
