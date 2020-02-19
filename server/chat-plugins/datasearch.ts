@@ -1859,7 +1859,11 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 
 	const template = validator.dex.getTemplate(targets.shift());
 	const setSources = validator.allSources(template);
-	const set = {level: cmd === 'learn5' ? 5 : 100};
+	const set: Partial<PokemonSet> = {
+		name: template.baseSpecies,
+		species: template.species,
+		level: cmd === 'learn5' ? 5 : 100,
+	};
 	const all = (cmd === 'learnall');
 
 	if (!template.exists || template.id === 'missingno') {
@@ -1874,7 +1878,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		return {error: "You must specify at least one move."};
 	}
 
-	let lsetProblem: {[k: string]: any, type: string, moveName: string} = Object.create(null);
+	let lsetProblem: {type: string, moveName: string, [k: string]: any} | null = null;
 	const moveNames = [];
 	for (const arg of targets) {
 		if (['ha', 'hidden', 'hiddenability'].includes(toID(arg))) {
@@ -1889,13 +1893,19 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		const prob = validator.checkLearnset(move, template, setSources, set);
-		if (prob !== null) {
-			lsetProblem = Object.assign({moveName: move.name}, prob);
+		const checkLsetProblem = validator.checkLearnset.call(validator, move, template, setSources, set);
+		if (checkLsetProblem !== null && Object.keys(checkLsetProblem).length) {
+			lsetProblem = Object.create(null);
+			for (let i in checkLsetProblem) {
+				lsetProblem![i] = checkLsetProblem[i];
+			}
+			lsetProblem!.moveName = move.name;
 			break;
 		}
 	}
-	const problems: string[] = validator.reconcileLearnset(template, setSources, lsetProblem) || [];
+	const lsetProblems = validator.reconcileLearnset.call(validator, template, setSources, lsetProblem ? lsetProblem : null, template.species);
+	const problems: string[] = [];
+	if (lsetProblems) problems.push(...lsetProblems);
 	let sources: string[] = setSources.sources.map(source => {
 		if (source.charAt(1) !== 'E') return source;
 		const fathers = validator.findEggMoveFathers(source, template, setSources, true);
@@ -1909,8 +1919,8 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	if (setSources.isHidden) {
 		buffer += `${template.abilities['H'] || 'HA'} `;
 	}
-	buffer += `${template.name}` + (problems ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + Chat.toListString(moveNames);
-	if (!problems) {
+	buffer += `${template.name}` + (problems.length ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + Chat.toListString(moveNames);
+	if (!problems.length) {
 		const sourceNames: {[k: string]: string} = {
 			'7V': "virtual console transfer from gen 1-2", '8V': "Pok&eacute;mon Home transfer from LGPE", E: "", S: "event", D: "dream world", X: "traded-back ", Y: "traded-back event",
 		};
