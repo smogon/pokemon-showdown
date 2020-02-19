@@ -119,4 +119,19 @@ describe('Lightning Rod', function () {
 		assert.false.fullHP(rodPokemon);
 		assert.false.fullHP(ally);
 	});
+
+	it('should redirect Max Lightning from an ally', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: 'Manectric', ability: 'lightningrod', moves: ['sleep talk']},
+			{species: 'Boltund', ability: 'strong jaw', moves: ['thunderbolt']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Igglybuff', ability: 'cute charm', moves: ['sleep talk']},
+			{species: 'Igglybuff', ability: 'cute charm', moves: ['sleep talk']},
+		]});
+		battle.makeChoices('move sleeptalk, move thunderbolt 1 dynamax', 'move sleep talk, move sleep talk');
+		assert.fullHP(battle.p1.active[0]);
+		assert.statStage(battle.p1.active[0], 'spa', 1);
+	});
 });

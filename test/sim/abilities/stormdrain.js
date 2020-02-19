@@ -85,4 +85,19 @@ describe('Storm Drain', function () {
 		assert.false.fullHP(stormDrainMon);
 		assert.false.fullHP(ally);
 	});
+
+	it('should redirect Max Geyser from an ally', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleep talk']},
+			{species: 'Manaphy', ability: 'hydration', moves: ['scald']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Igglybuff', ability: 'cute charm', moves: ['sleep talk']},
+			{species: 'Igglybuff', ability: 'cute charm', moves: ['sleep talk']},
+		]});
+		battle.makeChoices('move sleeptalk, move scald 1 dynamax', 'move sleep talk, move sleep talk');
+		assert.fullHP(battle.p1.active[0]);
+		assert.statStage(battle.p1.active[0], 'spa', 1);
+	});
 });
