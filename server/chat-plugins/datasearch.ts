@@ -1889,12 +1889,13 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		lsetProblem = Object.assign(
-			{moveName: validator.checkLearnset(move, template, setSources, set) ? move.name : ''},
-			validator.checkLearnset(move, template, setSources, set)
-		);
+		const prob = validator.checkLearnset(move, template, setSources, set);
+		if (prob !== null) {
+			lsetProblem = Object.assign({moveName: move.name}, prob);
+			break;
+		}
 	}
-	const problems = validator.reconcileLearnset(template, setSources, lsetProblem) || [];
+	const problems: string[] = validator.reconcileLearnset(template, setSources, lsetProblem) || [];
 	let sources: string[] = setSources.sources.map(source => {
 		if (source.charAt(1) !== 'E') return source;
 		const fathers = validator.findEggMoveFathers(source, template, setSources, true);
