@@ -8,7 +8,7 @@ const SPOTLIGHT_FILE = 'config/chat-plugins/spotlights.json';
 
 let spotlights: {[k: string]: {[k: string]: {image?: string, description: string}[]}} = {};
 try {
-	spotlights = JSON.parse(fs.readFileSync(`../../${SPOTLIGHT_FILE}`).toString());
+	spotlights = JSON.parse(FS(SPOTLIGHT_FILE).readIfExistsSync());
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
