@@ -8,7 +8,7 @@ const MAX_ROOMFAQ_LENGTH = 8192;
 
 let roomFaqs: {[k: string]: {[k: string]: string}} = {};
 try {
-	roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync());
+	roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
