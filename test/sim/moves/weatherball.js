@@ -19,7 +19,7 @@ describe('Weather Ball', function () {
 			{species: "Gastly", level: 2, ability: 'drought', item: 'focussash', moves: ['splash']},
 		]});
 		battle.makeChoices('move weatherball zmove', 'move splash');
-		assert.strictEqual(battle.p2.active[0].item, '');
+		assert.equal(battle.p2.active[0].item, '');
 	});
 
 	it('should not change type when called by a Z-move in weather', function () {

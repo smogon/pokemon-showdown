@@ -16,6 +16,6 @@ describe('Rocky Helmet', function () {
 		battle.setPlayer('p2', {team: [{species: "Drampa", item: 'rockyhelmet', moves: ['sleeptalk']}]});
 		battle.makeChoices('move outrage', 'move sleeptalk');
 		const attacker = battle.p1.active[0];
-		assert.strictEqual(attacker.hp, attacker.maxhp - Math.floor(attacker.maxhp / 6));
+		assert.equal(attacker.hp, attacker.maxhp - Math.floor(attacker.maxhp / 6));
 	});
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert');
+const assert = require('assert').strict;
 
 const {User} = require('../users-utils');
 
@@ -8,7 +8,7 @@ describe('Rooms features', function () {
 	describe('Rooms', function () {
 		describe('Rooms.get', function () {
 			it('should be a function', function () {
-				assert.strictEqual(typeof Rooms.get, 'function');
+				assert.equal(typeof Rooms.get, 'function');
 			});
 		});
 		describe('Rooms.rooms', function () {
@@ -26,8 +26,8 @@ describe('Rooms features', function () {
 				const room = Rooms.createChatRoom('r/relationshipadvice');
 				const game = new Hangman(room, new User(), 'There\'s a lot of red flags here');
 				room.game = game;
-				assert.strictEqual(room.getGame(Hangman), game);
-				assert.strictEqual(room.getGame(Uno), null);
+				assert.equal(room.getGame(Hangman), game);
+				assert.equal(room.getGame(Uno), null);
 			});
 		});
 	});
@@ -79,7 +79,7 @@ describe('Rooms features', function () {
 				},
 			};
 			room = Rooms.createBattle('customgame', options);
-			assert.strictEqual(room.getAuth(new User()), '%');
+			assert.equal(room.getAuth(new User()), '%');
 		});
 
 		it('should prevent overriding tournament room auth by a tournament player', function () {
@@ -107,11 +107,11 @@ describe('Rooms features', function () {
 			room = Rooms.createBattle('customgame', options);
 			roomStaff.joinRoom(room);
 			administrator.joinRoom(room);
-			assert.strictEqual(room.getAuth(roomStaff), '%', 'before promotion attempt');
+			assert.equal(room.getAuth(roomStaff), '%', 'before promotion attempt');
 			Chat.parse("/roomvoice Room auth", room, p1, p1.connections[0]);
-			assert.strictEqual(room.getAuth(roomStaff), '%', 'after promotion attempt');
+			assert.equal(room.getAuth(roomStaff), '%', 'after promotion attempt');
 			Chat.parse("/roomvoice Room auth", room, administrator, administrator.connections[0]);
-			assert.strictEqual(room.getAuth(roomStaff), '+', 'after being promoted by an administrator');
+			assert.equal(room.getAuth(roomStaff), '+', 'after being promoted by an administrator');
 		});
 	});
 });

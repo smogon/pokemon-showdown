@@ -16,6 +16,6 @@ describe('Aftermath', function () {
 		battle.setPlayer('p2', {team: [{species: 'Shiftry', ability: 'aftermath', moves: ['sleeptalk']}]});
 		battle.makeChoices('move lunge', 'move sleeptalk');
 		const attacker = battle.p1.active[0];
-		assert.strictEqual(attacker.hp, attacker.maxhp - Math.floor(attacker.maxhp / 4));
+		assert.equal(attacker.hp, attacker.maxhp - Math.floor(attacker.maxhp / 4));
 	});
 });

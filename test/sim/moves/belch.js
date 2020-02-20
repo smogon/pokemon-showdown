@@ -15,9 +15,9 @@ describe('Belch', function () {
 		battle.setPlayer('p1', {team: [{species: 'Swalot', ability: 'gluttony', item: 'lumberry', moves: ['belch', 'stockpile']}]});
 		battle.setPlayer('p2', {team: [{species: 'Registeel', ability: 'clearbody', item: 'laggingtail', moves: ['thunderwave']}]});
 		battle.makeChoices('move Stockpile', 'move Thunderwave');
-		assert.strictEqual(battle.p1.active[0].lastMove.id, 'stockpile');
+		assert.equal(battle.p1.active[0].lastMove.id, 'stockpile');
 		battle.makeChoices('move Belch', 'move Thunderwave');
-		assert.strictEqual(battle.p1.active[0].lastMove.id, 'belch');
+		assert.equal(battle.p1.active[0].lastMove.id, 'belch');
 	});
 
 	it('should count berries as consumed with Bug Bite or Pluck', function () {
@@ -26,8 +26,8 @@ describe('Belch', function () {
 		battle.setPlayer('p2', {team: [{species: 'Swalot', ability: 'gluttony', item: 'salacberry', moves: ['belch', 'pluck']}]});
 		battle.makeChoices('move Bugbite', 'move Pluck');
 		battle.makeChoices('move Belch', 'move Belch');
-		assert.strictEqual(battle.p1.active[0].lastMove.id, 'belch');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'belch');
+		assert.equal(battle.p1.active[0].lastMove.id, 'belch');
+		assert.equal(battle.p2.active[0].lastMove.id, 'belch');
 	});
 
 	it('should count berries as consumed when they are Flung', function () {
@@ -36,7 +36,7 @@ describe('Belch', function () {
 		battle.setPlayer('p2', {team: [{species: 'Machamp', ability: 'noguard', item: 'salacberry', moves: ['fling']}]});
 		battle.makeChoices('move Stockpile', 'move Fling');
 		battle.makeChoices('move Belch', 'move Fling');
-		assert.strictEqual(battle.p1.active[0].lastMove.id, 'belch');
+		assert.equal(battle.p1.active[0].lastMove.id, 'belch');
 	});
 
 	it('should still count berries as consumed after switch out', function () {
@@ -52,6 +52,6 @@ describe('Belch', function () {
 		battle.makeChoices('switch 2', ''); // For U-Turn
 		battle.makeChoices('switch 2', 'move Will-o-Wisp');
 		battle.makeChoices('move Belch', 'move Will-o-Wisp');
-		assert.strictEqual(battle.p1.active[0].lastMove.id, 'belch');
+		assert.equal(battle.p1.active[0].lastMove.id, 'belch');
 	});
 });

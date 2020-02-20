@@ -31,7 +31,7 @@ describe('Follow Me', function () {
 			}
 		});
 		battle.makeChoices('move followme, move calmmind, move calmmind', 'move lowkick 2, move lowkick 2, move lowkick 2');
-		assert.strictEqual(hitCount, 2);
+		assert.equal(hitCount, 2);
 	});
 
 	it('should not redirect self-targetting moves', function () {
@@ -45,8 +45,8 @@ describe('Follow Me', function () {
 			{species: 'Kadabra', ability: 'synchronize', moves: ['honeclaws']},
 		]});
 		battle.makeChoices('move followme, move softboiled', 'move honeclaws, move honeclaws');
-		assert.strictEqual(battle.p1.active[0].boosts['atk'], 0);
-		assert.strictEqual(battle.p2.active[0].boosts['atk'], 1);
-		assert.strictEqual(battle.p2.active[1].boosts['atk'], 1);
+		assert.equal(battle.p1.active[0].boosts['atk'], 0);
+		assert.equal(battle.p2.active[0].boosts['atk'], 1);
+		assert.equal(battle.p2.active[1].boosts['atk'], 1);
 	});
 });

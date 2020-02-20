@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert');
+const assert = require('assert').strict;
 const common = require('./../../common');
 
 const unimportantPokemon = {species: 'magikarp', moves: ['splash']};
@@ -11,7 +11,7 @@ describe(`[Hackmons] Silvally`, function () {
 			[{species: 'silvally', ability: 'rkssystem', item: 'firememory', moves: ['rest']}],
 			[unimportantPokemon],
 		]);
-		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Fire"]);
+		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire"]);
 	});
 
 	it(`in Steel forme should should be Water-typed to match the held Water Memory`, function () {
@@ -19,7 +19,7 @@ describe(`[Hackmons] Silvally`, function () {
 			[{species: 'silvallysteel', ability: 'rkssystem', item: 'watermemory', moves: ['rest']}],
 			[unimportantPokemon],
 		]);
-		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Water"]);
+		assert.deepEqual(battle.p1.active[0].getTypes(), ["Water"]);
 	});
 
 	it(`in a typed forme should be Normal-typed if no memory is held`, function () {
@@ -27,7 +27,7 @@ describe(`[Hackmons] Silvally`, function () {
 			[{species: 'silvallyfire', ability: 'rkssystem', item: 'leftovers', moves: ['rest']}],
 			[unimportantPokemon],
 		]);
-		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Normal"]);
+		assert.deepEqual(battle.p1.active[0].getTypes(), ["Normal"]);
 	});
 
 	it(`[Gen 7] in a typed forme should be Normal-typed despite holding a memory if Silvally does not have the RKS System ability`, function () {
@@ -35,6 +35,6 @@ describe(`[Hackmons] Silvally`, function () {
 			[{species: 'silvallyfire', ability: 'truant', item: 'firememory', moves: ['rest']}],
 			[unimportantPokemon],
 		]);
-		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Normal"]);
+		assert.deepEqual(battle.p1.active[0].getTypes(), ["Normal"]);
 	});
 });

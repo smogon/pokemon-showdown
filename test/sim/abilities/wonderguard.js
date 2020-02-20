@@ -16,7 +16,7 @@ describe('Wonder Guard', function () {
 		battle.setPlayer('p2', {team: [{species: "Smeargle", ability: 'owntempo', moves: ['knockoff', 'flamethrower', 'thousandarrows', 'moonblast']}]});
 		for (let i = 1; i <= 4; i++) {
 			battle.makeChoices('move sleeptalk', 'move ' + i);
-			assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+			assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		}
 		// Thousand Arrows shouldn't add the Smack Down volatile if blocked by Wonder Guard
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices('move sleeptalk', 'move thousandarrows'));
@@ -28,7 +28,7 @@ describe('Wonder Guard', function () {
 		battle.setPlayer('p2', {team: [{species: "Smeargle", ability: 'noguard', moves: ['poisongas', 'screech', 'healpulse', 'gastroacid']}]});
 		const wwTarget = battle.p1.active[0];
 		battle.makeChoices('move teleport', 'move poisongas');
-		assert.strictEqual(wwTarget.status, 'psn');
+		assert.equal(wwTarget.status, 'psn');
 		battle.makeChoices('move teleport', 'move screech');
 		assert.statStage(wwTarget, 'def', -2);
 		assert.hurtsBy(wwTarget, -Math.floor(wwTarget.maxhp / 8), () => battle.makeChoices('move teleport', 'move healpulse'));

@@ -7,23 +7,23 @@ describe('Mod loader', function () {
 		{
 			Chat.uncacheTree('./.sim-dist/dex');
 			let Dex = require('./../../../.sim-dist/dex').Dex;
-			assert.strictEqual(Dex.mod('gen2').getTemplate('nidoking').learnset.bubblebeam.join(','), '1M');
-			assert.strictEqual(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
+			assert.equal(Dex.mod('gen2').getTemplate('nidoking').learnset.bubblebeam.join(','), '1M');
+			assert.equal(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
 		}
 		{
 			Chat.uncacheTree('./.sim-dist/dex');
 			let Dex = require('./../../../.sim-dist/dex').Dex;
 			Dex.mod('gen2').getTemplate('nidoking');
 			Dex.mod('gen4').getMove('crunch');
-			assert.strictEqual(Dex.mod('gen2').getTemplate('nidoking').learnset.bubblebeam.join(','), '1M');
-			assert.strictEqual(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
+			assert.equal(Dex.mod('gen2').getTemplate('nidoking').learnset.bubblebeam.join(','), '1M');
+			assert.equal(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
 		}
 	});
 });
 
 describe('Dex#getEffect', function () {
 	it('returns the same object for the same id', function () {
-		assert.strictEqual(Dex.getEffect('Stealth Rock'), Dex.getEffect('stealthrock'));
+		assert.equal(Dex.getEffect('Stealth Rock'), Dex.getEffect('stealthrock'));
 		assert.notStrictEqual(Dex.getEffect('move: Stealth Rock'), Dex.getEffect('stealthrock'));
 	});
 

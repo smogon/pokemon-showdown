@@ -50,7 +50,7 @@ describe('Paralysis', function () {
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
+		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
 	});
 
 	it('should reduce speed to 25% of its original value in Gen 6', function () {
@@ -59,7 +59,7 @@ describe('Paralysis', function () {
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
+		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
 	it('should reduce speed to 25% of its original value in Gen 2', function () {
@@ -68,7 +68,7 @@ describe('Paralysis', function () {
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
+		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
 	it('should reduce speed to 25% of its original value in Stadium', function () {
@@ -78,7 +78,7 @@ describe('Paralysis', function () {
 		]);
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move growl', 'move thunderwave');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
+		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
 	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', function () {
@@ -89,7 +89,7 @@ describe('Paralysis', function () {
 		battle.makeChoices('move rest', 'move thunderwave');
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move rest', 'move amnesia');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
+		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
 	it('should not reapply its speed drop when an opponent uses a failed stat-altering move in Gen 1', function () {
@@ -103,7 +103,7 @@ describe('Paralysis', function () {
 		battle.makeChoices('move rest', 'move thunderwave');
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move rest', 'move amnesia');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), speed);
+		assert.equal(battle.p1.active[0].getStat('spe'), speed);
 	});
 });
 
@@ -120,7 +120,7 @@ describe('Toxic Poison', function () {
 		const target = battle.p1.active[0];
 		for (let i = 1; i <= 8; i++) {
 			battle.makeChoices('move softboiled', 'move toxic');
-			assert.strictEqual(target.maxhp - target.hp, Math.floor(target.maxhp / 16) * i);
+			assert.equal(target.maxhp - target.hp, Math.floor(target.maxhp / 16) * i);
 		}
 	});
 
@@ -135,7 +135,7 @@ describe('Toxic Poison', function () {
 		let pokemon = battle.p1.active[0];
 		pokemon.hp = pokemon.maxhp;
 		battle.makeChoices('switch 2', 'move whirlwind');
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
 	});
 });
 
@@ -159,8 +159,8 @@ describe('Freeze', function () {
 			}
 		});
 		battle.makeChoices('move icebeam', 'move sleeptalk');
-		assert.strictEqual(battle.p2.active[0].status, 'frz');
-		assert.strictEqual(battle.p2.active[0].template.species, 'Shaymin');
+		assert.equal(battle.p2.active[0].status, 'frz');
+		assert.equal(battle.p2.active[0].template.species, 'Shaymin');
 	});
 
 	it('should not cause an afflicted Pokemon transformed into Shaymin-Sky to change to Shaymin', function () {
@@ -177,8 +177,8 @@ describe('Freeze', function () {
 			}
 		});
 		battle.makeChoices('move sleeptalk', 'move icebeam');
-		assert.strictEqual(battle.p1.active[0].status, 'frz');
-		assert.strictEqual(battle.p1.active[0].template.species, 'Shaymin-Sky');
+		assert.equal(battle.p1.active[0].status, 'frz');
+		assert.equal(battle.p1.active[0].template.species, 'Shaymin-Sky');
 	});
 });
 
@@ -209,10 +209,10 @@ describe('Toxic Poison [Gen 1]', function () {
 		]);
 		battle.makeChoices('move toxic', 'move splash');
 		let pokemon = battle.p2.active[0];
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
 		battle.makeChoices('move leechseed', 'move splash');
 		// (1/16) + (2/16) + (3/16) = (6/16)
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 6);
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 6);
 	});
 });
 
@@ -229,10 +229,10 @@ describe('Toxic Poison [Gen 2]', function () {
 		]);
 		battle.makeChoices('move toxic', 'move splash');
 		let pokemon = battle.p2.active[0];
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
 		battle.makeChoices('move leechseed', 'move splash');
 		// (1/16) + (2/16) + (1/8) = (5/16)
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 5);
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 5);
 	});
 
 	it('should pass the damage counter to Pokemon with Baton Pass', function () {
@@ -254,16 +254,16 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.makeChoices('', 'switch 2');
 		let hp = pokemon.hp;
 		battle.makeChoices('move splash', 'move splash');
-		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 4);
+		assert.equal(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 4);
 
 		// Only hint about this once per battle, not every turn.
-		assert.strictEqual(battle.log.filter(m => m.startsWith('|-hint')).length, 1);
+		assert.equal(battle.log.filter(m => m.startsWith('|-hint')).length, 1);
 
 		// Damage counter should be removed on regular switch out
 		battle.makeChoices('move splash', 'switch 2');
 		hp = pokemon.hp;
 		battle.makeChoices('move splash', 'switch 2');
-		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 8));
+		assert.equal(hp - pokemon.hp, Math.floor(pokemon.maxhp / 8));
 	});
 
 	it('should revert to regular poison on switch in, even for Poison types', function () {
@@ -280,7 +280,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		// We could check 'psn' at this point, but the following line caused crashes
 		// before #5463 was fixed so its useful to execute for regression testing purposes.
 		battle.makeChoices('move splash', 'move splash');
-		assert.strictEqual(battle.p2.active[0].status, 'psn');
+		assert.equal(battle.p2.active[0].status, 'psn');
 	});
 
 	it('should not have its damage counter affected by Heal Bell', function () {
@@ -295,13 +295,13 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.makeChoices('move sacredfire', 'move splash');
 		let hp = pokemon.hp;
 		battle.makeChoices('move splash', 'move splash');
-		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 3);
+		assert.equal(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 3);
 		hp = pokemon.hp;
 
 		battle.makeChoices('move splash', 'move healbell');
 		battle.resetRNG(); // Guarantee Toxic hits
 		battle.makeChoices('move toxic', 'move splash');
 		// Toxic counter should be reset by a successful Toxic
-		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+		assert.equal(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
 	});
 });

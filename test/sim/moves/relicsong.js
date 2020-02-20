@@ -15,7 +15,7 @@ describe('Relic Song', function () {
 		battle.setPlayer('p1', {team: [{species: "Meloetta", ability: 'serenegrace', moves: ['relicsong']}]});
 		battle.setPlayer('p2', {team: [{species: "Registeel", ability: 'clearbody', moves: ['rest']}]});
 		battle.makeChoices('move relicsong', 'move rest');
-		assert.strictEqual(battle.p1.active[0].template.speciesid, 'meloettapirouette');
+		assert.equal(battle.p1.active[0].template.speciesid, 'meloettapirouette');
 	});
 
 	it('should transform Meloetta-Pirouette into its Aria forme', function () {
@@ -23,7 +23,7 @@ describe('Relic Song', function () {
 		battle.setPlayer('p1', {team: [{species: "Meloetta-Pirouette", ability: 'serenegrace', moves: ['relicsong']}]});
 		battle.setPlayer('p2', {team: [{species: "Registeel", ability: 'clearbody', moves: ['rest']}]});
 		battle.makeChoices('move relicsong', 'move rest');
-		assert.strictEqual(battle.p1.active[0].template.speciesid, 'meloetta');
+		assert.equal(battle.p1.active[0].template.speciesid, 'meloetta');
 	});
 
 	it('should pierce through substitutes', function () {
@@ -32,7 +32,7 @@ describe('Relic Song', function () {
 		battle.setPlayer('p2', {team: [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]});
 		battle.makeChoices('move splash', 'move substitute');
 		battle.makeChoices('move relicsong', 'move rest');
-		assert.strictEqual(battle.p2.active[0].item, '');
+		assert.equal(battle.p2.active[0].item, '');
 	});
 });
 
@@ -48,7 +48,7 @@ describe('Relic Song [Gen 5]', function () {
 		]);
 		battle.makeChoices('move splash', 'move substitute');
 		battle.makeChoices('move relicsong', 'move rest');
-		assert.strictEqual(battle.p2.active[0].item, 'focussash');
+		assert.equal(battle.p2.active[0].item, 'focussash');
 	});
 
 	it('should transform Meloetta into its Pirouette forme even if it hits a substitute', function () {
@@ -57,6 +57,6 @@ describe('Relic Song [Gen 5]', function () {
 			[{species: "Registeel", ability: 'prankster', moves: ['substitute']}],
 		]);
 		battle.makeChoices('move relicsong', 'move substitute');
-		assert.strictEqual(battle.p1.active[0].template.speciesid, 'meloettapirouette');
+		assert.equal(battle.p1.active[0].template.speciesid, 'meloettapirouette');
 	});
 });

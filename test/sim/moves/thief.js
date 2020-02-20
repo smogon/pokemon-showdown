@@ -15,7 +15,7 @@ describe('Thief', function () {
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['thief']}]});
 		battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled']}]});
 		battle.makeChoices('move thief', 'move softboiled');
-		assert.strictEqual(battle.p1.active[0].item, 'shedshell');
+		assert.equal(battle.p1.active[0].item, 'shedshell');
 	});
 
 	it('should not steal items if it is holding an item', function () {
@@ -23,7 +23,7 @@ describe('Thief', function () {
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', item: 'focussash', moves: ['thief']}]});
 		battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled']}]});
 		battle.makeChoices('move thief', 'move softboiled');
-		assert.strictEqual(battle.p2.active[0].item, 'shedshell');
+		assert.equal(battle.p2.active[0].item, 'shedshell');
 	});
 
 	it('should take Life Orb damage from a stolen Life Orb', function () {
@@ -31,6 +31,6 @@ describe('Thief', function () {
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['thief']}]});
 		battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', item: 'lifeorb', moves: ['softboiled']}]});
 		battle.makeChoices('move thief', 'move softboiled');
-		assert.strictEqual(battle.p1.active[0].hp, Math.ceil(9 / 10 * battle.p1.active[0].maxhp));
+		assert.equal(battle.p1.active[0].hp, Math.ceil(9 / 10 * battle.p1.active[0].maxhp));
 	});
 });

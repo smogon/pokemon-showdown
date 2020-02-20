@@ -24,7 +24,7 @@ describe('Klutz', function () {
 		battle.setPlayer('p2', {team: [{species: "Deoxys", ability: 'noguard', moves: ['psychic']}]});
 		const klutzMon = battle.p1.active[0];
 		assert.constant(() => klutzMon.item, () => battle.makeChoices('move endure', 'move psychic'));
-		assert.strictEqual(klutzMon.hp, 1);
+		assert.equal(klutzMon.hp, 1);
 	});
 
 	it('should ignore the effects of items that disable moves', function () {
@@ -32,7 +32,7 @@ describe('Klutz', function () {
 		battle.setPlayer('p1', {team: [{species: "Lopunny", ability: 'klutz', item: 'assaultvest', moves: ['protect']}]});
 		battle.setPlayer('p2', {team: [{species: "Deoxys", ability: 'noguard', moves: ['psychic']}]});
 		battle.makeChoices('move protect', 'move psychic');
-		assert.strictEqual(battle.p1.active[0].lastMove.id, 'protect');
+		assert.equal(battle.p1.active[0].lastMove.id, 'protect');
 	});
 
 	it('should not ignore item effects that prevent item removal', function () {

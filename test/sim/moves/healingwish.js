@@ -31,8 +31,8 @@ describe('Healing Wish', function () {
 
 		// sand happens after Jirachi faints and before any switch-in
 		battle.makeChoices('switch Caterpie', ''); // Caterpie heals before taking SR damage
-		assert.strictEqual(battle.p1.active[0].hp, 174);
-		assert.strictEqual(battle.p1.active[0].moveSlots[0].pp, 63);
+		assert.equal(battle.p1.active[0].hp, 174);
+		assert.equal(battle.p1.active[0].moveSlots[0].pp, 63);
 	});
 
 	it('should not be consumed if a switch-in is fully healed already', function () {
@@ -72,7 +72,7 @@ describe('Healing Wish', function () {
 		// Caterpie gets healed by Healing Wish triggered by Ally Switch
 		battle.makeChoices('move Ally Switch, move String Shot', 'move Sleep Talk, move Protect');
 
-		assert.strictEqual(battle.p1.active[0].hp, 231); // Caterpie start in slot 1 -> Ally Switch-ed to slot 0
+		assert.equal(battle.p1.active[0].hp, 231); // Caterpie start in slot 1 -> Ally Switch-ed to slot 0
 		assert.false(battle.p1.slotConditions[0]['healingwish']);
 	});
 
@@ -99,11 +99,11 @@ describe('Healing Wish', function () {
 		battle.makeChoices('move Healing Wish', 'move Seismic Toss');
 
 		battle.makeChoices('switch Caterpie', ''); // Caterpie faints from hazards
-		assert.strictEqual(battle.p1.active[0].hp, 0);
+		assert.equal(battle.p1.active[0].hp, 0);
 
 		battle.makeChoices('switch Raichu', ''); // Raichu fully heals and takes stoss + Sandstorm damage
-		assert.strictEqual(battle.turn, 6);
-		assert.strictEqual(battle.p1.active[0].hp, 145); // after stoss + Sandstorm
-		assert.strictEqual(battle.p1.active[0].moveSlots[0].pp, 63);
+		assert.equal(battle.turn, 6);
+		assert.equal(battle.p1.active[0].hp, 145); // after stoss + Sandstorm
+		assert.equal(battle.p1.active[0].moveSlots[0].pp, 63);
 	});
 });

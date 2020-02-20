@@ -23,7 +23,7 @@ describe('Quash', function () {
 		]});
 		battle.makeChoices('move quash 2, move earthquake', 'move voltswitch 2, move swift');
 		battle.makeChoices('', 'switch 3, pass'); // Volt Switch
-		assert.strictEqual(battle.log[battle.lastMoveLine].split('|')[3], 'Swift');
+		assert.equal(battle.log[battle.lastMoveLine].split('|')[3], 'Swift');
 	});
 
 	it('should not cause the target to move again if it has already moved', function () {

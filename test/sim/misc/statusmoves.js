@@ -23,7 +23,7 @@ describe('Most status moves', function () {
 		battle.makeChoices('move gastroacid', 'move return');
 		assert.false.holdsItem(battle.p2.active[0]); // Klefki's Magician suppressed by Gastro Acid.
 		battle.makeChoices('move glare', 'switch 2'); // Dusknoir
-		assert.strictEqual(battle.p2.active[0].status, 'par');
+		assert.equal(battle.p2.active[0].status, 'par');
 		battle.makeChoices('move confuseray', 'switch 3'); // Slaking
 		assert.ok(battle.p2.active[0].volatiles['confusion']);
 		battle.makeChoices('move sandattack', 'switch 4'); // Tornadus
@@ -45,27 +45,27 @@ describe('Most status moves', function () {
 		]});
 
 		battle.makeChoices('move thunderwave', 'move charge');
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move willowisp', 'switch 2'); // Emboar
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move poisongas', 'switch 3'); // Muk
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move toxic', 'move shadowsneak');
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move poisongas', 'switch 4'); // Aron
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
 		battle.makeChoices('move toxic', 'move magnetrise');
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 	});
 });

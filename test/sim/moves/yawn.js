@@ -17,9 +17,9 @@ describe('Yawn', function () {
 			{species: "Ninjask", moves: ['splash']},
 		]]);
 		battle.makeChoices();
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 		battle.makeChoices('move 2', 'move 1');
-		assert.strictEqual(battle.p2.active[0].status, 'slp');
+		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 
 	it(`should be blocked by Safeguard`, function () {
@@ -30,7 +30,7 @@ describe('Yawn', function () {
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 	});
 
 	it(`should be able to put foes to sleep through Safeguard if used first`, function () {
@@ -41,6 +41,6 @@ describe('Yawn', function () {
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
-		assert.strictEqual(battle.p2.active[0].status, 'slp');
+		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 });

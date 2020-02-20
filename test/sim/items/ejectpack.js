@@ -20,6 +20,6 @@ describe('Eject Pack', function () {
 			{species: 'Mew', ability: 'noability', moves: ['protect']},
 		]});
 		battle.makeChoices();
-		assert.strictEqual(battle.requestState, 'switch');
+		assert.equal(battle.requestState, 'switch');
 	});
 });

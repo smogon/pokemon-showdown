@@ -401,7 +401,7 @@ export const State = new class {
 			if (skip.has(key)) continue;
 			const val = this.serializeWithRefs(value, battle);
 			// JSON.stringify will get rid of keys with undefined values anyway, but
-			// we also do it here so that assert.deepStrictEqual works on battle.toJSON().
+			// we also do it here so that assert.deepEqual works on battle.toJSON().
 			if (typeof val !== 'undefined') state[key] = val;
 		}
 		return state;
