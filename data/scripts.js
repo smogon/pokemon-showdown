@@ -481,7 +481,8 @@ let BattleScripts = {
 			}
 			if (accuracy !== true && !this.randomChance(accuracy, 100)) {
 				if (!move.spreadHit) this.attrLastMove('[miss]');
-				this.add('-miss', pokemon, target);
+				const hideFailure = move.smartTarget && (i < targets.length - 1 || hitResults.some(Boolean));
+				if (!hideFailure) this.add('-miss', pokemon, target);
 				if (pokemon.hasItem('blunderpolicy') && pokemon.useItem()) this.boost({spe: 2}, pokemon);
 				hitResults[i] = false;
 				continue;
@@ -614,11 +615,11 @@ let BattleScripts = {
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
 			if (hit > 1 && pokemon.status === 'slp' && !isSleepUsable) break;
-			if (targets.some(target => target && !target.hp)) break;
+			if (targets.every(target => !target || !target.hp)) break;
 			move.hit = hit;
-			if (move.smartTarget && targets.length > hit - 1) {
-				targetsCopy = targets.slice(hit - 1, hit);
-				if (targetsCopy[0]) this.addMove('-anim', pokemon, move.name, targetsCopy[0]);
+			if (move.smartTarget && targets.length > 1) {
+				targetsCopy = [targets[hit - 1]];
+				if (targetsCopy[0] && hit > 1) this.addMove('-anim', pokemon, move.name, targetsCopy[0]);
 			} else {
 				targetsCopy = targets.slice(0);
 			}
@@ -677,7 +678,7 @@ let BattleScripts = {
 				move.mindBlownRecoil = false;
 			}
 			this.eachEvent('Update');
-			if (!pokemon.hp) {
+			if (!pokemon.hp && targets.length === 1) {
 				hit++; // report the correct number of hits for multihit moves
 				break;
 			}
@@ -685,7 +686,9 @@ let BattleScripts = {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
-		if (move.multihit && !move.smartTarget) this.add('-hitcount', targets[0], hit - 1);
+		if (move.multihit && typeof move.smartTarget === 'boolean') {
+			this.add('-hitcount', targets[0], hit - 1);
+		}
 
 		if (move.recoil && move.totalDamage) {
 			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
