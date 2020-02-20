@@ -293,7 +293,7 @@ let BattleScripts = {
 	},
 	/** NOTE: includes single-target moves */
 	trySpreadMoveHit(targets, pokemon, move) {
-		if (targets.length > 1) move.spreadHit = true;
+		if (targets.length > 1 && !move.smartTarget) move.spreadHit = true;
 
 		/** @type {((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (number | boolean | "" | undefined)[] | undefined)[]} */
 		let moveSteps = [
@@ -616,7 +616,12 @@ let BattleScripts = {
 			if (hit > 1 && pokemon.status === 'slp' && !isSleepUsable) break;
 			if (targets.some(target => target && !target.hp)) break;
 			move.hit = hit;
-			targetsCopy = targets.slice(0);
+			if (move.smartTarget && targets.length > hit - 1) {
+				targetsCopy = targets.slice(hit - 1, hit);
+				if (targetsCopy[0]) this.addMove('-anim', pokemon, move.name, targetsCopy[0]);
+			} else {
+				targetsCopy = targets.slice(0);
+			}
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
 
 			// like this (Triple Kick)
@@ -680,7 +685,7 @@ let BattleScripts = {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
-		if (move.multihit) this.add('-hitcount', targets[0], hit - 1);
+		if (move.multihit && !move.smartTarget) this.add('-hitcount', targets[0], hit - 1);
 
 		if (move.recoil && move.totalDamage) {
 			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
@@ -690,6 +695,9 @@ let BattleScripts = {
 			// @ts-ignore
 			this.directDamage(this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
 		}
+
+		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
+		if (move.smartTarget) targetsCopy = targets.slice(0);
 
 		for (let i = 0; i < targetsCopy.length; i++) {
 			let target = targetsCopy[i];

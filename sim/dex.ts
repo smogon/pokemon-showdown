@@ -283,7 +283,7 @@ export class ModdedDex {
 	): boolean {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-ignore
-		const targetTyping: string[] | string = target.getTypes && target.getTypes() || target.types || target;
+		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
 		if (Array.isArray(targetTyping)) {
 			for (const type of targetTyping) {
 				if (!this.getImmunity(sourceType, type)) return false;
@@ -301,7 +301,7 @@ export class ModdedDex {
 	): number {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-ignore
-		const targetTyping: string[] | string = target.getTypes && target.getTypes() || target.types || target;
+		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
 		let totalTypeMod = 0;
 		if (Array.isArray(targetTyping)) {
 			for (const type of targetTyping) {

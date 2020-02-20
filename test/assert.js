@@ -1,6 +1,6 @@
 'use strict';
 
-const baseAssert = require('assert');
+const baseAssert = require('assert').strict;
 const AssertionError = baseAssert.AssertionError;
 
 const assert = exports = module.exports = function assert(value, message) {

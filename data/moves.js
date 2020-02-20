@@ -4121,20 +4121,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		multihit: 2,
+		smartTarget: true,
 		secondary: null,
-		onModifyMove(move, pokemon, target) {
-			if (target.side.active.length === 2) {
-				move.multihit = 1;
-				move.spreadModifier = 1;
-				move.target = "allAdjacentFoes";
-				for (const currentTarget of target.side.active) {
-					if (currentTarget.volatiles['protect'] || !currentTarget.runImmunity('Dragon') || currentTarget.fainted) {
-						move.multihit = 2;
-						break;
-					}
-				}
-			}
-		},
 		target: "normal",
 		type: "Dragon",
 		gmaxPower: 130,
@@ -6125,6 +6113,7 @@ let BattleMovedex = {
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget(target, source, source2, move) {
 				if (!this.effectData.target.isSkyDropped() && this.validTarget(this.effectData.target, source, move.target)) {
+					if (move.smartTarget) move.smartTarget = false;
 					this.debug("Follow Me redirected target of move");
 					return this.effectData.target;
 				}
@@ -14959,6 +14948,7 @@ let BattleMovedex = {
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget(target, source, source2, move) {
 				if (!this.effectData.target.isSkyDropped() && source.runStatusImmunity('powder') && this.validTarget(this.effectData.target, source, move.target)) {
+					if (move.smartTarget) move.smartTarget = false;
 					this.debug("Rage Powder redirected target of move");
 					return this.effectData.target;
 				}
