@@ -34,6 +34,36 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[1], 'def', 1);
 	});
 
+	it(`should hit the other foe twice if it misses against one`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Ninjask", moves: ['dragondarts']},
+			{species: "Mew", ability: 'stamina', moves: ['splash']},
+		], [
+			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{species: "Shaymin", ability: 'stamina', moves: ['splash']},
+		]]);
+		battle.p2.active[0].boostBy({evasion: 6});
+		battle.makeChoices();
+		assert.statStage(battle.p1.active[1], 'def', 0);
+		assert.statStage(battle.p2.active[0], 'def', 0);
+		assert.statStage(battle.p2.active[1], 'def', 2);
+	});
+
+	it(`should hit itself and ally if it targets itself after Ally Switch`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Ninjask", ability: 'stamina', moves: ['dragondarts']},
+			{species: "Mew", ability: 'stamina', moves: ['allyswitch']},
+		], [
+			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{species: "Shaymin", ability: 'stamina', moves: ['splash']},
+		]]);
+		battle.makeChoices('move dragondarts -2, move allyswitch', 'move splash, move splash');
+		assert.statStage(battle.p1.active[0], 'def', 1);
+		assert.statStage(battle.p1.active[1], 'def', 1);
+		assert.statStage(battle.p2.active[0], 'def', 0);
+		assert.statStage(battle.p2.active[1], 'def', 0);
+	});
+
 	it(`should hit the ally twice in doubles`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", moves: ['dragondarts']},
