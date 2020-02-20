@@ -2235,6 +2235,10 @@ export class Battle {
 			return originalTarget;
 		}
 
+		// banning Dragon Darts from directly targeting itself is done in side.ts, but
+		// Dragon Darts can target itself if Ally Switch is used afterwards
+		if (move.smartTarget) return this.getAtLoc(pokemon, targetLoc);
+
 		// Fails if the target is the user and the move can't target its own position
 		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1) &&
 				!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']) {
