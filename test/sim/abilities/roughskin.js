@@ -17,6 +17,6 @@ describe('Rough Skin', function () {
 		battle.setPlayer('p2', {team: [{species: 'Pachirisu', ability: 'voltabsorb', moves: ['nuzzle']}]});
 		battle.makeChoices('auto', 'move nuzzle');
 		const pachi = battle.p2.active[0];
-		assert.strictEqual(pachi.hp, Math.ceil(pachi.maxhp - pachi.maxhp / 8));
+		assert.equal(pachi.hp, Math.ceil(pachi.maxhp - pachi.maxhp / 8));
 	});
 });

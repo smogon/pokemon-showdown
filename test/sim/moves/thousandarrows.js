@@ -25,11 +25,11 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows']}]});
 		battle.setPlayer('p2', {team: [{species: "Ho-Oh", ability: 'shellarmor', item: 'weaknesspolicy', moves: ['recover']}]});
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.strictEqual(battle.p2.active[0].boosts.atk, 0);
-		assert.strictEqual(battle.p2.active[0].boosts.spa, 0);
+		assert.equal(battle.p2.active[0].boosts.atk, 0);
+		assert.equal(battle.p2.active[0].boosts.spa, 0);
 		battle.makeChoices('move thousandarrows', 'move recover');
-		assert.strictEqual(battle.p2.active[0].boosts.atk, 2);
-		assert.strictEqual(battle.p2.active[0].boosts.spa, 2);
+		assert.equal(battle.p2.active[0].boosts.atk, 2);
+		assert.equal(battle.p2.active[0].boosts.spa, 2);
 	});
 
 	it('should not ignore type effectiveness on the first hit against Flying-type Pokemon with Ring Target', function () {
@@ -49,7 +49,7 @@ describe('Thousand Arrows', function () {
 		let hp = battle.p2.active[0].hp;
 		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move mudslap', 'move trick');
-		assert.strictEqual(hp, battle.p2.active[0].hp);
+		assert.equal(hp, battle.p2.active[0].hp);
 	});
 
 	it('should not ground or deal neutral damage to Flying-type Pokemon affected by Gravity', function () {
@@ -83,8 +83,8 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", ability: 'aurabreak', moves: ['thousandarrows', 'earthquake']}]});
 		battle.setPlayer('p2', {team: [{species: "Eelektross", ability: 'levitate', item: 'weaknesspolicy', moves: ['thunderwave']}]});
 		battle.makeChoices('move thousandarrows', 'move thunderwave');
-		assert.strictEqual(battle.p2.active[0].boosts.atk, 2);
-		assert.strictEqual(battle.p2.active[0].boosts.spa, 2);
+		assert.equal(battle.p2.active[0].boosts.atk, 2);
+		assert.equal(battle.p2.active[0].boosts.spa, 2);
 	});
 
 	it('should hit Pokemon with Air Balloon', function () {
@@ -102,7 +102,7 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]});
 		battle.setPlayer('p2', {team: [{species: "Stunfisk", ability: 'limber', moves: ['electrify']}]});
 		battle.makeChoices('move thousandarrows', 'move electrify');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should not hit Ghost-type Pokemon when affected by Normalize', function () {
@@ -110,6 +110,6 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p1', {team: [{species: "Zygarde", ability: 'normalize', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]});
 		battle.setPlayer('p2', {team: [{species: "Dusknoir", ability: 'pressure', moves: ['haze']}]});
 		battle.makeChoices('move thousandarrows', 'move haze');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 });

@@ -18,9 +18,9 @@ describe(`Emergency Exit`, function () {
 		const eePokemon = battle.p1.active[0];
 		const foePokemon = battle.p2.active[0];
 		battle.makeChoices('move superfang', 'move superfang');
-		assert.strictEqual(foePokemon.hp, foePokemon.maxhp);
+		assert.equal(foePokemon.hp, foePokemon.maxhp);
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
-		assert.strictEqual(battle.requestState, 'switch');
+		assert.equal(battle.requestState, 'switch');
 	});
 
 	it(`should request switch-out at the end of a multi-hit move`, function () {
@@ -30,7 +30,7 @@ describe(`Emergency Exit`, function () {
 		]);
 		battle.makeChoices('move bulletseed', 'move sleeptalk');
 		battle.makeChoices('move bulletseed', 'move sleeptalk');
-		assert.strictEqual(battle.requestState, 'switch');
+		assert.equal(battle.requestState, 'switch');
 	});
 
 	it(`should not request switch-out if attacked and healed by berry`, function () {
@@ -39,7 +39,7 @@ describe(`Emergency Exit`, function () {
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}],
 		]);
 		battle.makeChoices('move sleeptalk', 'move superfang');
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 	});
 
 	it(`should not request switch-out if fainted`, function () {
@@ -69,7 +69,7 @@ describe(`Emergency Exit`, function () {
 		battle.makeChoices('move splash', 'move spikes');
 		battle.makeChoices('move splash', 'move spikes');
 		battle.makeChoices('switch 2', 'move protect');
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 	});
 
 	it(`should not request switch-out on usage of Substitute`, function () {
@@ -82,7 +82,7 @@ describe(`Emergency Exit`, function () {
 		assert.false.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		battle.makeChoices('move substitute', 'move thunderbolt');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 	});
 
 	it(`should prevent Volt Switch after-switches`, function () {
@@ -95,7 +95,7 @@ describe(`Emergency Exit`, function () {
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
-		assert.strictEqual(battle.requestState, 'switch');
+		assert.equal(battle.requestState, 'switch');
 
 		battle.makeChoices('default', '');
 		assert.species(battle.p1.active[0], 'Clefable');
@@ -112,7 +112,7 @@ describe(`Emergency Exit`, function () {
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
-		assert.strictEqual(battle.requestState, 'switch');
+		assert.equal(battle.requestState, 'switch');
 
 		battle.makeChoices('auto', '');
 		assert.species(battle.p1.active[0], 'Clefable');
@@ -129,7 +129,7 @@ describe(`Emergency Exit`, function () {
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
-		assert.strictEqual(battle.requestState, 'switch');
+		assert.equal(battle.requestState, 'switch');
 
 		battle.makeChoices('auto', '');
 		assert.species(battle.p1.active[0], 'Clefable');
@@ -143,6 +143,6 @@ describe(`Emergency Exit`, function () {
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move thunder');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 	});
 });

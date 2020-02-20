@@ -27,7 +27,7 @@ describe('Trump Card', function () {
 			battle.makeChoices();
 		}
 
-		assert.deepStrictEqual(basePowers, [40, 50, 60, 80, 200]);
+		assert.deepEqual(basePowers, [40, 50, 60, 80, 200]);
 	});
 
 	it('should get its base power calculated from a move calling it', function () {
@@ -49,7 +49,7 @@ describe('Trump Card', function () {
 			battle.makeChoices();
 		}
 
-		assert.deepStrictEqual(basePowers, [80, 200]);
+		assert.deepEqual(basePowers, [80, 200]);
 	});
 
 	it('should work if called via Custap Berry in Gen 4', function () {
@@ -68,6 +68,6 @@ describe('Trump Card', function () {
 		battle.makeChoices();
 		battle.makeChoices();
 
-		assert.deepStrictEqual(basePowers, [40, 50]);
+		assert.deepEqual(basePowers, [40, 50]);
 	});
 });

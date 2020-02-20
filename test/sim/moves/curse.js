@@ -14,7 +14,7 @@ describe('Curse', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
-		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
 	});
 
 	it('should request the Ghost target after the user becomes Ghost', function () {
@@ -22,9 +22,9 @@ describe('Curse', function () {
 		battle.setPlayer('p1', {team: [{species: "Rapidash", ability: 'levitate', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Trevenant", ability: 'shedskin', item: 'laggingtail', moves: ['trickortreat']}]});
 
-		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 		battle.makeChoices('auto', 'auto');
-		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
 	});
 
 	it('should not request a target after the user stops being Ghost', function () {
@@ -32,16 +32,16 @@ describe('Curse', function () {
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Jellicent", ability: 'waterabsorb', item: '', moves: ['soak']}]});
 
-		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
 		battle.makeChoices('auto', 'auto');
-		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 	});
 
 	it('should not request a target if the user is a known non-Ghost', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
-		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 	});
 
 	it('should not request a target if the user is an unknown non-Ghost', function () {
@@ -54,7 +54,7 @@ describe('Curse', function () {
 		battle.makeChoices('move reflecttype', 'auto'); // Reflect Type!
 
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Dark"]); // Copied Zoroark's type instead of Gengar's
-		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 	});
 
 	it('should curse a non-Ghost user with Protean', function () {
@@ -65,11 +65,11 @@ describe('Curse', function () {
 		battle.makeChoices('auto', 'auto');
 		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
 		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down + residual damage
-		assert.strictEqual(hps[1], battle.p2.active[0].maxhp); // Foe unaffected
+		assert.equal(hps[1], battle.p2.active[0].maxhp); // Foe unaffected
 
 		battle.makeChoices('move spite', 'auto');
 		assert.notStrictEqual(hps[0], battle.p1.active[0].hp); // Curse user is hurt by residual damage
-		assert.strictEqual(hps[1], battle.p2.active[0].hp); // Foe unaffected
+		assert.equal(hps[1], battle.p2.active[0].hp); // Foe unaffected
 	});
 
 	it('should curse the target if a Ghost user has Protean', function () {
@@ -84,7 +84,7 @@ describe('Curse', function () {
 
 		battle.makeChoices('move spite', 'auto');
 		// Check residual damage
-		assert.strictEqual(hps[0], battle.p1.active[0].hp); // Curse user unaffected
+		assert.equal(hps[0], battle.p1.active[0].hp); // Curse user unaffected
 		assert.notStrictEqual(hps[1], battle.p2.active[0].hp); // Curse residual damage
 	});
 });
@@ -129,7 +129,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		assert.notStrictEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
 		if (curseUser.position === 0) {
 			// Expected behavior
-			assert.strictEqual(cursePartner.hp, cursePartner.maxhp); // Partner unaffected by Curse
+			assert.equal(cursePartner.hp, cursePartner.maxhp); // Partner unaffected by Curse
 			assert.ok(foeHP[0] !== p2active[0].maxhp || foeHP[1] !== p2active[1].maxhp); // Foe afflicted by Curse
 		} else {
 			// Cartridge glitch
@@ -158,7 +158,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 			if (allyPokemon === curseUser) {
 				assert.notStrictEqual(allyPokemon.hp, allyPokemon.maxhp); // Curse user cut its HP down
 			} else {
-				assert.strictEqual(allyPokemon.hp, allyPokemon.maxhp); // Partners unaffected by Curse
+				assert.equal(allyPokemon.hp, allyPokemon.maxhp); // Partners unaffected by Curse
 			}
 
 			let foePokemon = p2active[i];

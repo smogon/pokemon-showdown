@@ -18,7 +18,7 @@ describe('Focus Sash', function () {
 		battle.makeChoices('move sleeptalk', 'move incinerate');
 		assert.false.holdsItem(holder);
 		assert.false.fainted(holder);
-		assert.strictEqual(holder.hp, 1);
+		assert.equal(holder.hp, 1);
 	});
 
 	it('should be consumed and allow its user to survive a confusion damage hit from full HP', function () {
@@ -29,7 +29,7 @@ describe('Focus Sash', function () {
 		battle.makeChoices('move absorb', 'move confuseray');
 		assert.false.holdsItem(holder);
 		assert.false.fainted(holder);
-		assert.strictEqual(holder.hp, 1);
+		assert.equal(holder.hp, 1);
 	});
 
 	it('should not trigger on recoil damage', function () {

@@ -15,11 +15,11 @@ describe('Future Sight', function () {
 		battle.setPlayer('p1', {team: [{species: "Sneasel", ability: 'innerfocus', moves: ['odorsleuth', 'futuresight', 'protect']}]});
 		battle.setPlayer('p2', {team: [{species: "Girafarig", ability: 'innerfocus', moves: ['odorsleuth', 'futuresight', 'protect']}]});
 		battle.makeChoices('move Future Sight', 'move Future Sight');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('auto', 'auto');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('auto', 'move Protect');
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -38,9 +38,9 @@ describe('Future Sight', function () {
 		battle.setPlayer('p2', {team: [{species: "Girafarig", moves: ['odorsleuth', 'futuresight', 'protect', 'sweetscent']}]});
 		battle.makeChoices('move Sweet Scent', 'move Sweet Scent'); // counteract imperfect accuracy
 		battle.makeChoices('move Future Sight', 'move Future Sight');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('auto', 'auto');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('auto', 'move Protect');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);

@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert');
+const assert = require('assert').strict;
 
 const {User} = require('../users-utils');
 
@@ -29,7 +29,7 @@ describe('Simulator abstraction layer features', function () {
 				room = Rooms.createBattle('', {p1, p2, p1team: packedTeam, p2team: packedTeam, allowRenames: false});
 				p1.resetName();
 				for (const player of room.battle.players) {
-					assert.strictEqual(player, room.battle.playerTable[toID(player.name)]);
+					assert.equal(player, room.battle.playerTable[toID(player.name)]);
 				}
 			});
 		});

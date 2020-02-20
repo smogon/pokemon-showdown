@@ -27,8 +27,8 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		});
 		battle.makeChoices('move fusionbolt 1, move fusionflare 1', 'default');
 
-		assert.strictEqual(bpModifiers.get('fusionbolt'), 2);
-		assert.strictEqual(bpModifiers.get('fusionflare'), 2);
+		assert.equal(bpModifiers.get('fusionbolt'), 2);
+		assert.equal(bpModifiers.get('fusionflare'), 2);
 	});
 
 	it('should boost the second move if the first was used by the same pokemon', function () {
@@ -45,8 +45,8 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		});
 		battle.makeChoices('move fusionflare 2, move instruct -1', 'default');
 
-		assert.strictEqual(bpModifiers.get('fusionbolt'), 1);
-		assert.strictEqual(bpModifiers.get('fusionflare'), 2);
+		assert.equal(bpModifiers.get('fusionbolt'), 1);
+		assert.equal(bpModifiers.get('fusionflare'), 2);
 	});
 
 	it('should not boost the second move if another move was used between them', function () {
@@ -63,6 +63,6 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		});
 		battle.makeChoices('move fusionbolt 1, move fusionflare 1', 'default');
 
-		assert.strictEqual(bpModifiers.get('fusionflare'), 1);
+		assert.equal(bpModifiers.get('fusionflare'), 1);
 	});
 });

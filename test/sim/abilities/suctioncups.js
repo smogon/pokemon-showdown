@@ -20,10 +20,10 @@ describe('Suction Cups', function () {
 		const [cupsMon, redCardHolder] = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices('move rapidspin', 'move healpulse');
 		assert.false.holdsItem(redCardHolder, "Red Card should activate");
-		assert.strictEqual(cupsMon, battle.p1.active[0]);
+		assert.equal(cupsMon, battle.p1.active[0]);
 		for (let i = 2; i <= 4; i++) {
 			battle.makeChoices('move rapidspin', 'move ' + i);
-			assert.strictEqual(cupsMon, battle.p1.active[0]);
+			assert.equal(cupsMon, battle.p1.active[0]);
 		}
 	});
 

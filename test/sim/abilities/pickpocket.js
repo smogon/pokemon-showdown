@@ -39,7 +39,7 @@ describe('Pickpocket', function () {
 
 		battle.makeChoices('move agility', 'move quickattack');
 		assert.holdsItem(battle.p1.active[0], "The foe should have their item stolen");
-		assert.strictEqual(battle.p2.active[0].item, '');
+		assert.equal(battle.p2.active[0].item, '');
 	});
 
 	it('should not steal a foe\'s item if forced to switch out', function () {

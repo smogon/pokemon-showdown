@@ -15,7 +15,7 @@ describe('Magic Room', function () {
 		battle.setPlayer('p1', {team: [{species: "Lopunny", ability: 'limber', item: 'leftovers', moves: ['bellydrum']}]});
 		battle.setPlayer('p2', {team: [{species: "Giratina", ability: 'pressure', moves: ['magicroom']}]});
 		battle.makeChoices('move bellydrum', 'move magicroom');
-		assert.strictEqual(battle.p1.active[0].hp, Math.ceil(battle.p1.active[0].maxhp / 2));
+		assert.equal(battle.p1.active[0].hp, Math.ceil(battle.p1.active[0].maxhp / 2));
 	});
 
 	it('should prevent items from being consumed', function () {
@@ -23,7 +23,7 @@ describe('Magic Room', function () {
 		battle.setPlayer('p1', {team: [{species: "Lopunny", ability: 'limber', item: 'chopleberry', moves: ['magicroom']}]});
 		battle.setPlayer('p2', {team: [{species: "Golem", ability: 'noguard', moves: ['lowkick']}]});
 		battle.makeChoices('move magicroom', 'move lowkick');
-		assert.strictEqual(battle.p1.active[0].item, 'chopleberry');
+		assert.equal(battle.p1.active[0].item, 'chopleberry');
 	});
 
 	it('should ignore the effects of items that disable moves', function () {
@@ -31,9 +31,9 @@ describe('Magic Room', function () {
 		battle.setPlayer('p1', {team: [{species: "Lopunny", ability: 'limber', item: 'assaultvest', moves: ['protect']}]});
 		battle.setPlayer('p2', {team: [{species: "Golem", ability: 'noguard', moves: ['magicroom']}]});
 		battle.makeChoices('default', 'move magicroom');
-		assert.strictEqual(battle.p1.active[0].lastMove.id, 'struggle');
+		assert.equal(battle.p1.active[0].lastMove.id, 'struggle');
 		battle.makeChoices('default', 'move magicroom');
-		assert.strictEqual(battle.p1.active[0].lastMove.id, 'protect');
+		assert.equal(battle.p1.active[0].lastMove.id, 'protect');
 	});
 
 	it('should cause Fling to fail', function () {
@@ -41,7 +41,7 @@ describe('Magic Room', function () {
 		battle.setPlayer('p1', {team: [{species: "Lopunny", ability: 'limber', item: 'seaincense', moves: ['fling']}]});
 		battle.setPlayer('p2', {team: [{species: "Sableye", ability: 'prankster', moves: ['magicroom']}]});
 		battle.makeChoices('move fling', 'move magicroom');
-		assert.strictEqual(battle.p1.active[0].item, 'seaincense');
+		assert.equal(battle.p1.active[0].item, 'seaincense');
 	});
 
 	it('should not prevent Pokemon from Mega Evolving', function () {
@@ -50,7 +50,7 @@ describe('Magic Room', function () {
 		battle.setPlayer('p2', {team: [{species: "Golem", ability: 'noguard', moves: ['magicroom', 'rest']}]});
 		battle.makeChoices('move bulkup', 'move magicroom');
 		battle.makeChoices('move bulkup mega', 'move rest');
-		assert.strictEqual(battle.p1.active[0].template.speciesid, 'lopunnymega');
+		assert.equal(battle.p1.active[0].template.speciesid, 'lopunnymega');
 	});
 
 	it('should not prevent Primal Reversion', function () {
@@ -62,6 +62,6 @@ describe('Magic Room', function () {
 		battle.setPlayer('p2', {team: [{species: "Meowstic", ability: 'prankster', moves: ['magicroom']}]});
 		battle.makeChoices('move voltswitch', 'move magicroom');
 		battle.makeChoices('switch groudon', '');
-		assert.strictEqual(battle.p1.active[0].template.speciesid, 'groudonprimal');
+		assert.equal(battle.p1.active[0].template.speciesid, 'groudonprimal');
 	});
 });

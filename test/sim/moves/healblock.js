@@ -23,8 +23,8 @@ describe('Heal Block', function () {
 		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', moves: ['healblock']}]});
 		battle.setPlayer('p2', {team: [{species: 'Pansage', ability: 'gluttony', item: 'berryjuice', moves: ['bellydrum']}]});
 		battle.makeChoices('move healblock', 'move bellydrum');
-		assert.strictEqual(battle.p2.active[0].item, 'berryjuice');
-		assert.strictEqual(battle.p2.active[0].hp, Math.ceil(battle.p2.active[0].maxhp / 2));
+		assert.equal(battle.p2.active[0].item, 'berryjuice');
+		assert.equal(battle.p2.active[0].hp, Math.ceil(battle.p2.active[0].maxhp / 2));
 	});
 
 	it('should disable the use of healing moves', function () {
@@ -40,7 +40,7 @@ describe('Heal Block', function () {
 		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', moves: ['healblock']}]});
 		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['gigadrain']}]});
 		battle.makeChoices('move healblock', 'move gigadrain');
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should prevent abilities from recovering HP', function () {
@@ -50,7 +50,7 @@ describe('Heal Block', function () {
 		battle.makeChoices('move healblock', 'move bellydrum');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move surf', 'move calmmind');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 	});
 
 	it('should prevent Leech Seed from healing HP', function () {
@@ -60,7 +60,7 @@ describe('Heal Block', function () {
 		battle.makeChoices('move healblock', 'move substitute');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move leechseed');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
@@ -96,8 +96,8 @@ describe('Heal Block [Gen 5]', function () {
 			[{species: 'Pansage', ability: 'gluttony', item: 'sitrusberry', moves: ['bellydrum']}],
 		]);
 		battle.makeChoices('move healblock', 'move bellydrum');
-		assert.strictEqual(battle.p2.active[0].item, 'sitrusberry');
-		assert.strictEqual(battle.p2.active[0].hp, Math.ceil(battle.p2.active[0].maxhp / 2));
+		assert.equal(battle.p2.active[0].item, 'sitrusberry');
+		assert.equal(battle.p2.active[0].hp, Math.ceil(battle.p2.active[0].maxhp / 2));
 	});
 
 	it('should disable the use of healing moves', function () {
@@ -117,7 +117,7 @@ describe('Heal Block [Gen 5]', function () {
 		battle.makeChoices('move healblock', 'move bellydrum');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move surf', 'move calmmind');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 	});
 
 	it('should prevent draining moves from healing HP', function () {
@@ -128,7 +128,7 @@ describe('Heal Block [Gen 5]', function () {
 		battle.makeChoices('move healblock', 'move substitute');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move gigadrain');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
@@ -139,7 +139,7 @@ describe('Heal Block [Gen 5]', function () {
 		]);
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move leechseed');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 });
@@ -175,7 +175,7 @@ describe('Heal Block [Gen 4]', function () {
 		battle.makeChoices('move healblock', 'move substitute');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move gigadrain');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
@@ -189,7 +189,7 @@ describe('Heal Block [Gen 4]', function () {
 		assert.notStrictEqual(battle.p2.active[0].hp, 1);
 		battle.makeChoices('move healblock', 'switch 2');
 		battle.makeChoices('move shadowball', 'move endure');
-		assert.strictEqual(battle.p2.active[0].item, '');
+		assert.equal(battle.p2.active[0].item, '');
 		assert.notStrictEqual(battle.p2.active[0].hp, 1);
 	});
 
@@ -212,7 +212,7 @@ describe('Heal Block [Gen 4]', function () {
 		battle.makeChoices('move healblock', 'move substitute');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move leechseed');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 });

@@ -10,7 +10,7 @@ describe(`PRNG`, function () {
 		it(`should always return false`, function () {
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 100; ++i) {
-				assert.strictEqual(prng.randomChance(0, 1), false);
+				assert.equal(prng.randomChance(0, 1), false);
 			}
 		});
 	});
@@ -18,7 +18,7 @@ describe(`PRNG`, function () {
 		it(`should always return true`, function () {
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 100; ++i) {
-				assert.strictEqual(prng.randomChance(1, 1), true);
+				assert.equal(prng.randomChance(1, 1), true);
 			}
 		});
 	});
@@ -26,7 +26,7 @@ describe(`PRNG`, function () {
 		it(`should always return true`, function () {
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 100; ++i) {
-				assert.strictEqual(prng.randomChance(256, 256), true);
+				assert.equal(prng.randomChance(256, 256), true);
 			}
 		});
 	});
@@ -46,7 +46,7 @@ describe(`PRNG`, function () {
 			const coinPRNG = new PRNG(testSeed);
 			const numberPRNG = new PRNG(testSeed);
 			for (let i = 0; i < 10; ++i) {
-				assert.strictEqual(numberPRNG.next(2) === 0, coinPRNG.randomChance(1, 2));
+				assert.equal(numberPRNG.next(2) === 0, coinPRNG.randomChance(1, 2));
 			}
 		});
 	});
@@ -66,7 +66,7 @@ describe(`PRNG`, function () {
 			const coinPRNG = new PRNG(testSeed);
 			const numberPRNG = new PRNG(testSeed);
 			for (let i = 0; i < 10; ++i) {
-				assert.strictEqual(numberPRNG.next(256) < 217, coinPRNG.randomChance(217, 256));
+				assert.equal(numberPRNG.next(256) < 217, coinPRNG.randomChance(217, 256));
 			}
 		});
 	});
@@ -101,7 +101,7 @@ describe(`PRNG`, function () {
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 10; ++i) {
 				const sample = prng.sample([item]);
-				assert.strictEqual(sample, item);
+				assert.equal(sample, item);
 			}
 		});
 		it(`should return items with equal probability for a five-item array`, function () {
@@ -135,7 +135,7 @@ describe(`PRNG`, function () {
 			const samplePRNG = new PRNG(testSeed);
 			const randomIntegerPRNG = new PRNG(testSeed);
 			for (let i = 0; i < 10; ++i) {
-				assert.strictEqual(items[randomIntegerPRNG.next(items.length)], samplePRNG.sample(items));
+				assert.equal(items[randomIntegerPRNG.next(items.length)], samplePRNG.sample(items));
 			}
 		});
 	});

@@ -17,7 +17,7 @@ describe('Sitrus Berry', function () {
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move aurasphere');
 		assert.false.holdsItem(holder);
-		assert.strictEqual(holder.hp, Math.floor(holder.maxhp / 4) + 1);
+		assert.equal(holder.hp, Math.floor(holder.maxhp / 4) + 1);
 	});
 
 	it('should be eaten immediately if (re)gained on low hp', function () {
@@ -29,7 +29,7 @@ describe('Sitrus Berry', function () {
 		const hpgain = Math.floor(holder.maxhp / 4);
 		battle.makeChoices('move recycle', 'move earthquake');
 		assert.false.holdsItem(holder);
-		assert.strictEqual(holder.hp, hpgain + hpgain + 1);
+		assert.equal(holder.hp, hpgain + hpgain + 1);
 	});
 
 	it('should not heal if Knocked Off', function () {
@@ -38,7 +38,7 @@ describe('Sitrus Berry', function () {
 			[{species: 'Krookodile', ability: 'intimidate', moves: ['knockoff']}],
 		]);
 		battle.makeChoices('move sleeptalk', 'move knockoff');
-		assert.strictEqual(battle.p1.active[0].hp, 1);
+		assert.equal(battle.p1.active[0].hp, 1);
 	});
 
 	it.skip('should not heal 25% hp if a confusion self-hit triggers the healing', function () {

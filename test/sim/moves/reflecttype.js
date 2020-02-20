@@ -22,10 +22,10 @@ describe('Reflect Type', function () {
 		battle.setPlayer('p1', {team: [{species: 'Latias', ability: 'levitate', item: 'laggingtail', moves: ['reflecttype', 'trickortreat']}]});
 		battle.setPlayer('p2', {team: [{species: 'Moltres', ability: 'pressure', moves: ['burnup']}]});
 		battle.makeChoices('move reflecttype', 'move burnup');
-		assert.strictEqual(battle.p1.active[0].getTypes().join('/'), 'Flying');
+		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Flying');
 		battle.makeChoices('move trickortreat', 'move burnup');
 		battle.makeChoices('move reflecttype', 'move burnup');
-		assert.strictEqual(battle.p1.active[0].getTypes().join('/'), 'Flying/Ghost');
+		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Flying/Ghost');
 	});
 
 	it('should turn the "???" type into "Normal" when used against a Pokemon whose type is only "???" and an added type', function () {
@@ -34,6 +34,6 @@ describe('Reflect Type', function () {
 		battle.setPlayer('p2', {team: [{species: 'Arcanine', ability: 'intimidate', moves: ['burnup']}]});
 		battle.makeChoices('move trickortreat', 'move burnup');
 		battle.makeChoices('move reflecttype', 'move burnup');
-		assert.strictEqual(battle.p1.active[0].getTypes().join('/'), 'Normal/Ghost');
+		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Normal/Ghost');
 	});
 });

@@ -15,7 +15,7 @@ describe('Pain Split', function () {
 		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'wonderguard', moves: ['painsplit']}]});
 		battle.setPlayer('p2', {team: [{species: 'Arceus', ability: 'multitype', moves: ['judgment']}]});
 		battle.makeChoices('move painsplit', 'move judgment');
-		assert.strictEqual(battle.p2.active[0].hp, (battle.p2.active[0].maxhp + 1) / 2);
+		assert.equal(battle.p2.active[0].hp, (battle.p2.active[0].maxhp + 1) / 2);
 	});
 
 	it('should calculate HP changes against a dynamaxed target properly', function () {
@@ -29,7 +29,7 @@ describe('Pain Split', function () {
 		battle.p1.active[0].sethp(160); // non-dynamaxed
 		battle.p2.active[0].sethp(174); // dynamaxed
 		battle.makeChoices('move painsplit', 'move doubleedge');
-		assert.strictEqual(battle.p1.active[0].hp, 123, 'non-dynamaxed');
-		assert.strictEqual(battle.p2.active[0].hp, 210, 'dynamaxed');
+		assert.equal(battle.p1.active[0].hp, 123, 'non-dynamaxed');
+		assert.equal(battle.p2.active[0].hp, 210, 'dynamaxed');
 	});
 });

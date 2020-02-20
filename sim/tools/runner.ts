@@ -5,8 +5,8 @@
  * @license MIT
  */
 
-import assert = require('assert');
-import fs = require('fs');
+import {strict as assert} from 'assert';
+import * as fs from 'fs';
 
 import {ObjectReadWriteStream} from '../../lib/streams';
 import {Battle} from '../battle';
@@ -156,7 +156,7 @@ class DualStream {
 	get rawInputLog() {
 		const control = this.control.rawInputLog;
 		const test = this.test.rawInputLog;
-		assert.deepStrictEqual(test, control);
+		assert.deepEqual(test, control);
 		return control;
 	}
 
@@ -165,7 +165,7 @@ class DualStream {
 		const test = await this.test.read();
 		// In debug mode, wait to catch this as a difference in the inputLog
 		// and error there so we get the full battle state dumped instead.
-		if (!this.debug) assert.strictEqual(test, control);
+		if (!this.debug) assert.equal(test, control);
 		return control;
 	}
 
@@ -188,7 +188,7 @@ class DualStream {
 		const control = this.control.battle.toJSON();
 		const test = this.test.battle.toJSON();
 		try {
-			assert.deepStrictEqual(test, control);
+			assert.deepEqual(test, control);
 		} catch (err) {
 			if (this.debug) {
 				// NOTE: diffing these directly won't work because the key ordering isn't stable.

@@ -55,7 +55,7 @@ describe('Mega Evolution', function () {
 		battle.setPlayer('p2', {team: [{species: 'Hoopa-Unbound', ability: 'magician', moves: ['darkpulse']}]});
 		const fastBase = battle.p2.active[0];
 		battle.makeChoices('move xscissor ultra', 'move darkpulse');
-		assert.strictEqual(fastBase.hp, 0);
+		assert.equal(fastBase.hp, 0);
 	});
 });
 
@@ -169,6 +169,6 @@ describe('Switching', function () {
 		battle.setPlayer('p2', {team: p2team});
 
 		battle.makeChoices('switch 2', 'switch 2');
-		assert.strictEqual(battle.p2.pokemon[0].boosts.atk, 0);
+		assert.equal(battle.p2.pokemon[0].boosts.atk, 0);
 	});
 });

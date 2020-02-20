@@ -75,6 +75,6 @@ describe('Iron Ball', function () {
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', moves: ['spore']}]});
 		battle.setPlayer('p2', {team: [{species: "Thundurus", ability: 'prankster', item: 'ironball', moves: ['electricterrain']}]});
 		battle.makeChoices('move spore', 'move electricterrain');
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 	});
 });

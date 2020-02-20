@@ -16,8 +16,8 @@ describe('Symbiosis', function () {
 			[{species: 'Smeargle', moves: ['snarl']}, {species: 'Smeargle', moves: ['snarl']}],
 		]);
 		battle.makeChoices('move snarl, move snarl', 'move snarl, move snarl');
-		assert.strictEqual(battle.p1.active[0].item, '');
-		assert.strictEqual(battle.p1.active[1].item, '');
+		assert.equal(battle.p1.active[0].item, '');
+		assert.equal(battle.p1.active[1].item, '');
 	});
 
 	it('should not share an item required to change forme', function () {
@@ -26,7 +26,7 @@ describe('Symbiosis', function () {
 			[{species: 'Smeargle', moves: ['snarl']}, {species: 'Smeargle', moves: ['snarl']}],
 		]);
 		battle.makeChoices('move snarl, move snarl', 'move snarl, move snarl');
-		assert.strictEqual(battle.p1.active[0].item, 'latiasite');
-		assert.strictEqual(battle.p1.active[1].item, '');
+		assert.equal(battle.p1.active[0].item, 'latiasite');
+		assert.equal(battle.p1.active[1].item, '');
 	});
 });

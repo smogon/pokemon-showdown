@@ -29,7 +29,7 @@ describe('Counter', function () {
 		});
 
 		battle.makeChoices();
-		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
+		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
 	it('should fail if user is not damaged by Physical attacks this turn', function () {
@@ -97,7 +97,7 @@ describe('Mirror Coat', function () {
 		});
 
 		battle.makeChoices();
-		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
+		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
 	it('should fail if user is not damaged by Special attacks this turn', function () {

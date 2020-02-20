@@ -47,7 +47,7 @@ describe('Intimidate', function () {
 		battle.makeChoices('', 'switch 3, pass');
 
 		const activate = '|-ability|p2a: Gyarados|Intimidate|boost';
-		assert.strictEqual(battle.log.filter(m => m === activate).length, 0);
+		assert.equal(battle.log.filter(m => m === activate).length, 0);
 		assert.statStage(battle.p1.active[0], 'atk', 0);
 		assert.statStage(battle.p1.active[1], 'atk', 0);
 
@@ -86,7 +86,7 @@ describe('Intimidate', function () {
 			intimidateCount++;
 		});
 		battle.makeChoices('default', 'default'); // Finish Team Preview, switch both Pokemon in
-		assert.strictEqual(intimidateCount, 2);
+		assert.equal(intimidateCount, 2);
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 
@@ -101,7 +101,7 @@ describe('Intimidate', function () {
 			intimidateCount++;
 		});
 		battle.makeChoices('default', 'default'); // Finish Team Preview, switch both Pokemon in
-		assert.strictEqual(intimidateCount, 2);
+		assert.equal(intimidateCount, 2);
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
@@ -130,13 +130,13 @@ describe('Intimidate', function () {
 
 		battle.makeChoices('switch arcanine', 'switch gyarados');
 		// Both Pokemon switched in at the same time
-		assert.strictEqual(intimidateCount, 2);
+		assert.equal(intimidateCount, 2);
 		assert.statStage(p1active[0], 'atk', -1);
 		assert.statStage(p2active[0], 'atk', -1);
 		// Do it again with the Pokemon in reverse order
 		battle.makeChoices('move healingwish', 'move healingwish');
 		battle.makeChoices('switch gyarados', 'switch arcanine');
-		assert.strictEqual(intimidateCount, 4);
+		assert.equal(intimidateCount, 4);
 		assert.statStage(p1active[0], 'atk', -1);
 		assert.statStage(p2active[0], 'atk', -1);
 	});

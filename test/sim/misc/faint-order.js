@@ -23,7 +23,7 @@ describe('Fainting', function () {
 		]);
 		battle.makeChoices('move Explosion', 'move Substitute');
 		battle.makeChoices('switch Pikachu', '');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should end the turn in Gen 3', function () {
@@ -38,7 +38,7 @@ describe('Fainting', function () {
 		]);
 		battle.makeChoices('move Explosion', 'move Substitute');
 		battle.makeChoices('switch Pikachu', '');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should not end the turn in Gen 4', function () {

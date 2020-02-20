@@ -17,7 +17,7 @@ describe('Stomping Tantrum', function () {
 		]);
 
 		battle.onEvent('BasePower', battle.format, function (basePower) {
-			assert.strictEqual(basePower, 150);
+			assert.equal(basePower, 150);
 		});
 
 		battle.makeChoices('move attract', 'move rest');
@@ -33,7 +33,7 @@ describe('Stomping Tantrum', function () {
 		]);
 
 		battle.onEvent('BasePower', battle.format, function (basePower) {
-			assert.strictEqual(basePower, 75);
+			assert.equal(basePower, 75);
 		});
 
 		battle.makeChoices('move stompingtantrum', 'move protect');
@@ -52,7 +52,7 @@ describe('Stomping Tantrum', function () {
 		]});
 
 		battle.onEvent('BasePower', battle.format, function (basePower, attacker, defender, move) {
-			if (move.id === 'stompingtantrum') assert.strictEqual(basePower, 150);
+			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
 		});
 
 		battle.makeChoices('move sunnyday, move precipiceblades', 'move protect, move recover');
@@ -66,7 +66,7 @@ describe('Stomping Tantrum', function () {
 		]);
 
 		battle.onEvent('BasePower', battle.format, function (basePower) {
-			assert.strictEqual(basePower, 75);
+			assert.equal(basePower, 75);
 		});
 
 		battle.makeChoices('move celebrate', 'move rest');
@@ -80,7 +80,7 @@ describe('Stomping Tantrum', function () {
 		]);
 
 		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
-			if (move.id === 'stompingtantrum') assert.strictEqual(basePower, 75);
+			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
 		});
 
 		battle.makeChoices('move hyperbeam', 'move sleeptalk');

@@ -14,7 +14,7 @@ describe('Belly Drum', function () {
 		battle.setPlayer('p2', {team: [{species: "Terrakion", ability: 'justified', moves: ['bulkup']}]});
 		const user = battle.p1.active[0];
 		battle.makeChoices('move bellydrum', 'move bulkup');
-		assert.strictEqual(user.hp, Math.ceil(user.maxhp / 2));
+		assert.equal(user.hp, Math.ceil(user.maxhp / 2));
 		assert.statStage(user, 'atk', 6);
 	});
 
@@ -24,7 +24,7 @@ describe('Belly Drum', function () {
 		battle.setPlayer('p2', {team: [{species: "Terrakion", ability: 'justified', moves: ['closecombat']}]});
 		const user = battle.p1.active[0];
 		battle.makeChoices('move bellydrum', 'move closecombat');
-		assert.strictEqual(user.hp, 1);
+		assert.equal(user.hp, 1);
 		assert.statStage(user, 'atk', 0);
 	});
 });
@@ -38,7 +38,7 @@ describe('Z-Belly Drum', function () {
 		battle.setPlayer('p2', {team: [{species: "Rattata", ability: 'guts', moves: ['quickattack']}]});
 		const user = battle.p1.active[0];
 		battle.makeChoices('move bellydrum zmove', 'move quickattack');
-		assert.strictEqual(user.hp, Math.ceil(user.maxhp / 2));
+		assert.equal(user.hp, Math.ceil(user.maxhp / 2));
 		assert.statStage(user, 'atk', 6);
 	});
 
@@ -48,7 +48,7 @@ describe('Z-Belly Drum', function () {
 		battle.setPlayer('p2', {team: [{species: "Terrakion", ability: 'justified', moves: ['closecombat']}]});
 		const user = battle.p1.active[0];
 		battle.makeChoices('move bellydrum zmove', 'move closecombat');
-		assert.strictEqual(user.hp, Math.ceil(user.maxhp / 2));
+		assert.equal(user.hp, Math.ceil(user.maxhp / 2));
 		assert.statStage(user, 'atk', 6);
 	});
 });

@@ -28,10 +28,10 @@ describe('Cloud Nine', function () {
 		battle.makeChoices('move rest', 'move calmmind');
 		move = Dex.getMove('firepledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
-		assert.strictEqual(basePower, move.basePower);
+		assert.equal(basePower, move.basePower);
 		move = Dex.getMove('waterpledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
-		assert.strictEqual(basePower, move.basePower);
+		assert.equal(basePower, move.basePower);
 	});
 
 	it('should negate the effects of Rain on Fire-type and Water-type attacks', function () {
@@ -42,10 +42,10 @@ describe('Cloud Nine', function () {
 		battle.makeChoices('move rest', 'move calmmind');
 		move = Dex.getMove('firepledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
-		assert.strictEqual(basePower, move.basePower);
+		assert.equal(basePower, move.basePower);
 		move = Dex.getMove('waterpledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
-		assert.strictEqual(basePower, move.basePower);
+		assert.equal(basePower, move.basePower);
 	});
 
 	it('should negate the damage-dealing effects of Sandstorm', function () {
@@ -88,11 +88,11 @@ describe('Cloud Nine', function () {
 		battle.setPlayer('p1', {team: [{species: 'Golduck', ability: 'cloudnine', moves: ['calmmind']}]});
 		battle.setPlayer('p2', {team: [{species: 'Sunkern', ability: 'solarpower', moves: ['sunnyday']}]});
 		battle.makeChoices('move calmmind', 'move sunnyday');
-		assert.strictEqual(battle.log[battle.lastMoveLine + 1], '|-weather|SunnyDay');
+		assert.equal(battle.log[battle.lastMoveLine + 1], '|-weather|SunnyDay');
 		for (let i = 0; i < 4; i++) {
-			assert.strictEqual(battle.log[battle.lastMoveLine + 3], '|-weather|SunnyDay|[upkeep]');
+			assert.equal(battle.log[battle.lastMoveLine + 3], '|-weather|SunnyDay|[upkeep]');
 			battle.makeChoices('move calmmind', 'move sunnyday');
 		}
-		assert.strictEqual(battle.log[battle.lastMoveLine + 3], '|-weather|none');
+		assert.equal(battle.log[battle.lastMoveLine + 3], '|-weather|none');
 	});
 });

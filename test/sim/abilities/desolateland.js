@@ -27,7 +27,7 @@ describe('Desolate Land', function () {
 		assert.hurtsBy(defender, 152, () => battle.makeChoices('move incinerate', 'move splash'));
 		const move = Dex.getMove('incinerate');
 		const basePower = battle.runEvent('BasePower', attacker, defender, move, move.basePower, true);
-		assert.strictEqual(basePower, move.basePower);
+		assert.equal(basePower, move.basePower);
 	});
 
 	it('should cause Water-type attacks to fail', function () {
@@ -76,7 +76,7 @@ describe('Desolate Land', function () {
 		]});
 		battle.onEvent('Hit', battle.format, (target, pokemon, move) => {
 			if (move.id === 'weatherball') {
-				assert.strictEqual(move.type, 'Fire');
+				assert.equal(move.type, 'Fire');
 			}
 		});
 		const myActive = battle.p2.active;
@@ -87,7 +87,7 @@ describe('Desolate Land', function () {
 		battle.makeChoices('move helpinghand', 'switch 3');
 		assert.false.fullHP(myActive[0], "Charizard should be hurt by Solar Power");
 		battle.makeChoices('move solarbeam', 'switch 4');
-		assert.strictEqual(myActive[0].getStat('spe'), 2 * myActive[0].storedStats['spe'], "Venusaur's speed should be doubled by Chlorophyll");
+		assert.equal(myActive[0].getStat('spe'), 2 * myActive[0].storedStats['spe'], "Venusaur's speed should be doubled by Chlorophyll");
 		assert.false.fullHP(myActive[0], "Solar Beam should skip its charge turn");
 		battle.makeChoices('move helpinghand', 'switch 5');
 		assert.false.fullHP(myActive[0], "Toxicroak should be hurt by Dry Skin");

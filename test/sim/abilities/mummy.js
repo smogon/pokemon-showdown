@@ -15,7 +15,7 @@ describe('Mummy', function () {
 		battle.setPlayer('p1', {team: [{species: 'Cofagrigus', ability: 'mummy', moves: ['calmmind']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mew', ability: 'synchronize', moves: ['aerialace']}]});
 		battle.makeChoices('move calmmind', 'move aerialace');
-		assert.strictEqual(battle.p2.active[0].ability, 'mummy');
+		assert.equal(battle.p2.active[0].ability, 'mummy');
 	});
 
 	it("should not change certain abilities", function () {
@@ -23,7 +23,7 @@ describe('Mummy', function () {
 		battle.setPlayer('p1', {team: [{species: 'Cofagrigus', ability: 'mummy', moves: ['calmmind']}]});
 		battle.setPlayer('p2', {team: [{species: 'Greninja', ability: 'battlebond', moves: ['aerialace']}]});
 		battle.makeChoices('move calmmind', 'move aerialace');
-		assert.strictEqual(battle.p2.active[0].ability, 'battlebond');
+		assert.equal(battle.p2.active[0].ability, 'battlebond');
 	});
 
 	it(`should not activate before all damage calculation is complete`, function () {

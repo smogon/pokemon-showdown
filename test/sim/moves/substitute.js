@@ -16,7 +16,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
 		battle.makeChoices('move substitute', 'move recover');
 		let pokemon = battle.p1.active[0];
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
 	it('should not block the user\'s own moves from targetting itself', function () {
@@ -25,8 +25,8 @@ describe('Substitute', function () {
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
 		battle.makeChoices('move substitute', 'move recover');
 		battle.makeChoices('move calmmind', 'move recover');
-		assert.strictEqual(battle.p1.active[0].boosts['spa'], 1);
-		assert.strictEqual(battle.p1.active[0].boosts['spd'], 1);
+		assert.equal(battle.p1.active[0].boosts['spa'], 1);
+		assert.equal(battle.p1.active[0].boosts['spd'], 1);
 	});
 
 	it('should block damage from most moves', function () {
@@ -35,7 +35,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['psystrike']}]});
 		battle.makeChoices('move substitute', 'move psystrike');
 		let pokemon = battle.p1.active[0];
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
 	it('should not block recoil damage', function () {
@@ -55,18 +55,18 @@ describe('Substitute', function () {
 		battle.makeChoices('move substitute', 'move substitute');
 
 		let subhp = battle.p1.active[0].volatiles['substitute'].hp;
-		assert.strictEqual(subhp, battle.p2.active[0].volatiles['substitute'].hp);
+		assert.equal(subhp, battle.p2.active[0].volatiles['substitute'].hp);
 
 		battle.resetRNG(); // Make Hi Jump Kick miss and cause recoil.
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Both Pokemon had a substitute, so the *target* Substitute takes recoil damage.
 		let pokemon = battle.p1.active[0];
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
-		assert.strictEqual(pokemon.volatiles['substitute'].hp, subhp);
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(pokemon.volatiles['substitute'].hp, subhp);
 		pokemon = battle.p2.active[0];
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
-		assert.strictEqual(pokemon.volatiles['substitute'].hp, subhp - 1);
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(pokemon.volatiles['substitute'].hp, subhp - 1);
 
 		// Hi Jump Kick hits and breaks the Substitite.
 		battle.makeChoices('move highjumpkick', 'move agility');
@@ -75,10 +75,10 @@ describe('Substitute', function () {
 
 		// Only P1 has a substitute, so no one takes recoil damage.
 		pokemon = battle.p1.active[0];
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
-		assert.strictEqual(pokemon.volatiles['substitute'].hp, subhp);
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(pokemon.volatiles['substitute'].hp, subhp);
 		pokemon = battle.p2.active[0];
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
 	it('should cause recoil damage from an opponent\'s moves to be based on damage dealt to the substitute', function () {
@@ -88,7 +88,7 @@ describe('Substitute', function () {
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move substitute', 'move lightofruin');
 		let pokemon = battle.p2.active[0];
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.ceil(Math.floor(battle.p1.active[0].maxhp / 4) / 2));
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.ceil(Math.floor(battle.p1.active[0].maxhp / 4) / 2));
 	});
 
 	it('should cause recovery from an opponent\'s draining moves to be based on damage dealt to the substitute', function () {
@@ -98,7 +98,7 @@ describe('Substitute', function () {
 		battle.makeChoices('move substitute', 'move bellydrum');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move substitute', 'move drainpunch');
-		assert.strictEqual(battle.p2.active[0].hp - hp, Math.ceil(Math.floor(battle.p1.active[0].maxhp / 4) / 2));
+		assert.equal(battle.p2.active[0].hp - hp, Math.ceil(Math.floor(battle.p1.active[0].maxhp / 4) / 2));
 	});
 
 	it('should block most status moves targetting the user', function () {
@@ -107,7 +107,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['hypnosis', 'toxic', 'poisongas', 'thunderwave', 'willowisp']}]});
 		for (let i = 1; i <= 5; i++) {
 			battle.makeChoices('move substitute', 'move ' + i);
-			assert.strictEqual(battle.p1.active[0].status, '');
+			assert.equal(battle.p1.active[0].status, '');
 		}
 	});
 
@@ -128,7 +128,7 @@ describe('Substitute', function () {
 
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices('move substitute', 'move clamp');
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 
 		const hp = pokemon.hp;
 		battle.makeChoices('move growl', 'move clamp');

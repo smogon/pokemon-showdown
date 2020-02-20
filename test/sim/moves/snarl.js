@@ -18,7 +18,7 @@ describe('Snarl', function () {
 		battle.makeChoices('move Splash', 'move Substitute');
 		battle.makeChoices('move Snarl', 'move Rest');
 
-		assert.strictEqual(battle.p2.active[0].item, '');
+		assert.equal(battle.p2.active[0].item, '');
 	});
 });
 
@@ -36,6 +36,6 @@ describe('Snarl [Gen 5]', function () {
 		battle.makeChoices('move Splash', 'move Substitute');
 		battle.makeChoices('move Snarl', 'move Rest');
 
-		assert.strictEqual(battle.p2.active[0].item, 'focussash');
+		assert.equal(battle.p2.active[0].item, 'focussash');
 	});
 });

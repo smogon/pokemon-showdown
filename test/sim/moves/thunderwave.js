@@ -15,7 +15,7 @@ describe('Thunder Wave', function () {
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'quickfeet', moves: ['thunderwave']}]});
 		battle.setPlayer('p2', {team: [{species: "Vaporeon", ability: 'hydration', moves: ['aquaring']}]});
 		battle.makeChoices('move thunderwave', 'move aquaring');
-		assert.strictEqual(battle.p2.active[0].status, 'par');
+		assert.equal(battle.p2.active[0].status, 'par');
 	});
 
 	it('should not ignore natural type immunities', function () {
@@ -23,6 +23,6 @@ describe('Thunder Wave', function () {
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'quickfeet', moves: ['thunderwave']}]});
 		battle.setPlayer('p2', {team: [{species: "Hippowdon", ability: 'sandforce', moves: ['slackoff']}]});
 		battle.makeChoices('move thunderwave', 'move slackoff');
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 	});
 });

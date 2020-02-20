@@ -17,8 +17,8 @@ describe('Trick Room', function () {
 		]);
 		battle.makeChoices('move trickroom', 'move poisonjab');
 		battle.makeChoices('move spore', 'move spore');
-		assert.strictEqual(battle.p1.active[0].status, '');
-		assert.strictEqual(battle.p2.active[0].status, 'slp');
+		assert.equal(battle.p1.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 
 	it('should not allow Pokemon using a lower priority move to act before other Pokemon', function () {
@@ -28,8 +28,8 @@ describe('Trick Room', function () {
 		]);
 		battle.makeChoices('move trickroom', 'move poisonjab');
 		battle.makeChoices('move spore', 'move protect');
-		assert.strictEqual(battle.p1.active[0].status, '');
-		assert.strictEqual(battle.p2.active[0].status, '');
+		assert.equal(battle.p1.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, '');
 	});
 
 	it('should also affect the activation order for abilities and other non-move actions', function () {
@@ -45,9 +45,9 @@ describe('Trick Room', function () {
 		battle.makeChoices('move trickroom', 'move shellsmash');
 		battle.makeChoices('move explosion', 'move shellsmash');
 		battle.makeChoices('switch hippowdon', 'switch ninetales');
-		assert.strictEqual(battle.p1.active[0].speciesid, 'hippowdon');
-		assert.strictEqual(battle.p2.active[0].speciesid, 'ninetales');
-		assert.strictEqual(battle.field.effectiveWeather(), 'sunnyday');
+		assert.equal(battle.p1.active[0].speciesid, 'hippowdon');
+		assert.equal(battle.p2.active[0].speciesid, 'ninetales');
+		assert.equal(battle.field.effectiveWeather(), 'sunnyday');
 	});
 
 	// The following two tests involve the Trick Room glitch, where turn order changes when a Pokemon goes to 1809 speed.
@@ -66,13 +66,13 @@ describe('Trick Room', function () {
 		battle.p2.active[0].boostBy({spe: 6});
 
 		battle.makeChoices('move spore', 'move spore');
-		assert.strictEqual(battle.p1.active[0].status, '');
-		assert.strictEqual(battle.p2.active[0].status, 'slp');
+		assert.equal(battle.p1.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, 'slp');
 		battle.p2.active[0].setStatus('');
 		battle.p2.active[0].setItem('choicescarf'); // Deoxys is now much faster speed-wise than Ninjask, but should still be slower in Trick Room.
 		battle.makeChoices('move spore', 'move spore');
-		assert.strictEqual(battle.p1.active[0].status, '');
-		assert.strictEqual(battle.p2.active[0].status, 'slp');
+		assert.equal(battle.p1.active[0].status, '');
+		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 
 	it('should not affect damage dealt by moves whose power is reliant on speed', function () {
@@ -87,7 +87,7 @@ describe('Trick Room', function () {
 
 		battle.onEvent('BasePower', battle.format, function (bp, pokemon, target, move) {
 			if (move.id !== 'gyroball') return;
-			assert.strictEqual(bp, 26); // BP should theoretically be this based on speed values
+			assert.equal(bp, 26); // BP should theoretically be this based on speed values
 		});
 
 		battle.makeChoices('move earthquake', 'move gyroball');

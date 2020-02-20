@@ -16,6 +16,6 @@ describe('Boomburst', function () {
 		battle.setPlayer('p2', {team: [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]});
 		battle.makeChoices('move splash', 'move substitute');
 		battle.makeChoices('move boomburst', 'move rest');
-		assert.strictEqual(battle.p2.active[0].item, '');
+		assert.equal(battle.p2.active[0].item, '');
 	});
 });

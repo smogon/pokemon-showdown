@@ -39,9 +39,9 @@ describe('Rage Powder', function () {
 			return Sim.Pokemon.prototype.damage.apply(this, args);
 		};
 		battle.makeChoices('move ragepowder, move growth, move growth', 'move absorb 2, move absorb 2, move absorb 2');
-		assert.strictEqual(hitCount[0], 2);
-		assert.strictEqual(hitCount[1], 1);
-		assert.strictEqual(hitCount[2], 0);
+		assert.equal(hitCount[0], 2);
+		assert.equal(hitCount[1], 1);
+		assert.equal(hitCount[2], 0);
 	});
 
 	it('should not affect Pokemon with Powder immunities', function () {
@@ -70,8 +70,8 @@ describe('Rage Powder', function () {
 			return Sim.Pokemon.prototype.damage.apply(this, args);
 		};
 		battle.makeChoices('move growth, move ragepowder, move growth', 'move absorb 3, move absorb 1, move absorb 1');
-		assert.strictEqual(hitCount[0], 2);
-		assert.strictEqual(hitCount[1], 1);
-		assert.strictEqual(hitCount[2], 0);
+		assert.equal(hitCount[0], 2);
+		assert.equal(hitCount[1], 1);
+		assert.equal(hitCount[2], 0);
 	});
 });

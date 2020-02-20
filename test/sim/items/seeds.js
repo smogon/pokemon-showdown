@@ -29,6 +29,6 @@ describe('Seeds', function () {
 		]);
 		battle.makeChoices('move protect', 'move magicroom');
 		battle.makeChoices('switch 2', 'move magicroom');
-		assert.strictEqual(battle.p1.active[0].item, 'electricseed');
+		assert.equal(battle.p1.active[0].item, 'electricseed');
 	});
 });

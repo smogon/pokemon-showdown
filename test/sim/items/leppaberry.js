@@ -21,7 +21,7 @@ describe('Leppa Berry', function () {
 		battle.makeChoices('move sleeptalk', 'move sleeptalk');
 		battle.makeChoices('move splash', 'move fling');
 
-		assert.strictEqual(pokemon.getMoveData('sleeptalk').pp, 16);
+		assert.equal(pokemon.getMoveData('sleeptalk').pp, 16);
 		assert.false.strictEqual(pokemon.getMoveData('splash').pp, 64);
 	});
 });

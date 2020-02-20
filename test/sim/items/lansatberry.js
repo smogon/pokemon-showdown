@@ -30,14 +30,14 @@ describe('Lansat Berry', function () {
 		let i = 0;
 		let expectedRatio = [1, 1, 1, 1, 1, 3];
 		battle.onEvent('ModifyCritRatio', battle.format, -99, function (critRatio, pokemon) {
-			assert.strictEqual(critRatio, expectedRatio[i++]);
+			assert.equal(critRatio, expectedRatio[i++]);
 		});
 
 		battle.makeChoices('move triplekick', 'move acidarmor');
 		battle.makeChoices('move triplekick', 'move acidarmor');
 
 		assert.false.holdsItem(holder);
-		assert.strictEqual(holder.hp, 3);
-		assert.strictEqual(i, 6);
+		assert.equal(holder.hp, 3);
+		assert.equal(i, 6);
 	});
 });

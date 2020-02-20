@@ -31,7 +31,7 @@ describe('Immunity', function () {
 		battle.setPlayer('p1', {team: [{species: 'Snorlax', ability: 'immunity', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: 'Crobat', ability: 'moldbreaker', moves: ['toxic']}]});
 		battle.makeChoices('move curse', 'move toxic');
-		assert.strictEqual(battle.log.filter(line => line.match(/-status\|.*\|tox/)).length, 1);
-		assert.strictEqual(battle.p1.active[0].status, '');
+		assert.equal(battle.log.filter(line => line.match(/-status\|.*\|tox/)).length, 1);
+		assert.equal(battle.p1.active[0].status, '');
 	});
 });
