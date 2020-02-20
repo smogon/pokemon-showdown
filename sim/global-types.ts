@@ -859,6 +859,10 @@ interface MoveData extends EffectData, MoveEventMethods {
 	 * situations, rather than just targeting a slot. (Stalwart, Snipe Shot)
 	 */
 	tracksTarget?: boolean
+	/**
+	 * Will change target if current target is unavailable. (Dragon Darts)
+	 */
+	smartTarget?: boolean
 	useTargetOffensive?: boolean
 	useSourceDefensiveAsOffensive?: boolean
 	volatileStatus?: string
