@@ -378,8 +378,12 @@ let BattleScripts = {
 		const hitResults = this.runEvent('Invulnerability', targets, pokemon, move);
 		for (const [i, target] of targets.entries()) {
 			if (hitResults[i] === false) {
-				if (!move.spreadHit) this.attrLastMove('[miss]');
-				this.add('-miss', pokemon, target);
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					if (!move.spreadHit) this.attrLastMove('[miss]');
+					this.add('-miss', pokemon, target);
+				}
 			}
 		}
 		return hitResults;
@@ -402,7 +406,8 @@ let BattleScripts = {
 
 		const hitResults = [];
 		for (let i = 0; i < targets.length; i++) {
-			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) || targets[i].runImmunity(move.type, true);
+			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) || targets[i].runImmunity(move.type, !move.smartTarget);
+			if (move.smartTarget && !hitResults[i]) move.smartTarget = false;
 		}
 
 		return hitResults;
@@ -480,9 +485,12 @@ let BattleScripts = {
 				accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 			}
 			if (accuracy !== true && !this.randomChance(accuracy, 100)) {
-				if (!move.spreadHit) this.attrLastMove('[miss]');
-				const hideFailure = move.smartTarget && (i < targets.length - 1 || hitResults.some(Boolean));
-				if (!hideFailure) this.add('-miss', pokemon, target);
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					if (!move.spreadHit) this.attrLastMove('[miss]');
+					this.add('-miss', pokemon, target);
+				}
 				if (pokemon.hasItem('blunderpolicy') && pokemon.useItem()) this.boost({spe: 2}, pokemon);
 				hitResults[i] = false;
 				continue;
@@ -619,11 +627,11 @@ let BattleScripts = {
 			move.hit = hit;
 			if (move.smartTarget && targets.length > 1) {
 				targetsCopy = [targets[hit - 1]];
-				if (targetsCopy[0] && hit > 1) this.addMove('-anim', pokemon, move.name, targetsCopy[0]);
 			} else {
 				targetsCopy = targets.slice(0);
 			}
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
+			if (target && typeof move.smartTarget === 'boolean') this.addMove('-anim', pokemon, move.name, target);
 
 			// like this (Triple Kick)
 			if (target && move.multiaccuracy && hit > 1) {
