@@ -10,13 +10,6 @@
 
 'use strict';
 
-import {QueryProcessManager} from '../../lib/process-manager';
-import {Repl} from '../../lib/repl';
-import {Chat} from '../chat';
-import * as CL from '../config-loader';
-import {Dex} from '../../sim/dex';
-import {TeamValidator} from '../../sim/team-validator';
-
 interface DexOrGroup {
 	abilities: {[k: string]: boolean};
 	tiers: {[k: string]: boolean};
@@ -86,6 +79,7 @@ export const commands: ChatCommands = {
 			cmd: 'dexsearch',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
+		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast()) return;
 			if (response.error) {
@@ -150,6 +144,7 @@ export const commands: ChatCommands = {
 			cmd: 'randmove',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
+		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast(true)) return;
 			if (response.error) {
@@ -196,6 +191,7 @@ export const commands: ChatCommands = {
 			cmd: 'randpoke',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
+		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast(true)) return;
 			if (response.error) {
@@ -239,6 +235,7 @@ export const commands: ChatCommands = {
 			cmd: 'movesearch',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
+		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast()) return;
 			if (response.error) {
@@ -286,6 +283,7 @@ export const commands: ChatCommands = {
 			cmd: 'itemsearch',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
+		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast()) return;
 			if (response.error) {
@@ -327,6 +325,7 @@ export const commands: ChatCommands = {
 			cmd: 'learn',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: cmd,
+		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast()) return;
 			if (response.error) {
@@ -1896,14 +1895,16 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		const checkLsetProblem = validator.checkLearnset.call(validator, move, template, setSources, set);
 		if (checkLsetProblem !== null && Object.keys(checkLsetProblem).length) {
 			lsetProblem = Object.create(null);
-			for (let i in checkLsetProblem) {
+			for (const i in checkLsetProblem) {
 				lsetProblem![i] = checkLsetProblem[i];
 			}
 			lsetProblem!.moveName = move.name;
 			break;
 		}
 	}
-	const lsetProblems = validator.reconcileLearnset.call(validator, template, setSources, lsetProblem ? lsetProblem : null, template.species);
+	const lsetProblems = validator.reconcileLearnset.call(
+		validator, template, setSources, lsetProblem ? lsetProblem : null, template.species
+	);
 	const problems: string[] = [];
 	if (lsetProblems) problems.push(...lsetProblems);
 	let sources: string[] = setSources.sources.map(source => {
@@ -1998,6 +1999,10 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
  * Process manager
  *********************************************************/
 
+// tslint:disable-next-line: no-var-requires
+const QueryProcessManager = require('../../lib/process-manager').QueryProcessManager;
+
+// @ts-ignore
 const PM = new QueryProcessManager(module, async query => {
 	try {
 		switch (query.cmd) {
@@ -2022,7 +2027,8 @@ const PM = new QueryProcessManager(module, async query => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = CL.Config;
+	// tslint:disable-next-line: no-var-requires
+	global.Config = require('../config-loader').Config;
 	// @ts-ignore ???
 	global.Monitor = {
 		crashlog(error: Error, source = 'A datasearch process', details: {} | null = null) {
@@ -2037,14 +2043,17 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = Dex;
-	global.Chat = Chat;
+	// tslint:disable-next-line: no-var-requires
+	global.Dex = require('../../sim/dex').Dex;
+	// tslint:disable-next-line: no-var-requires
+	global.Chat = require('../chat').Chat;
 	global.toID = Dex.getId;
 	Dex.includeData();
-	global.TeamValidator = TeamValidator;
+	// tslint:disable-next-line: no-var-requires
+	global.TeamValidator = require('../../sim/team-validator').TeamValidator;
 
-	// tslint:disable-next-line: no-eval
-	Repl.start('dexsearch', cmd => eval(cmd));
+	// @ts-ignore
+	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // tslint:disable-line: no-eval no-var-requires
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
