@@ -198,8 +198,10 @@ let Formats = [
 		minSourceGen: 8,
 		onBegin() {
 			const allowedGigantamaxes = [
-				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
-				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
+				"Alcremie-Gmax", "Appletun-Gmax", "Butterfree-Gmax", "Centiskorch-Gmax", "Charizard-Gmax","Coalossal-Gmax",
+				"Corviknight-Gmax", "Drednaw-Gmax", "Eevee-Gmax", "Flapple-Gmax", "Grimmsnarl-Gmax", "Hatterene-Gmax",
+				"Kingler-Gmax", "Lapras-Gmax", "Meowth-Gmax", "Orbeetle-Gmax", "Pikachu-Gmax", "Sandaconda-Gmax", "Snorlax-Gmax",
+				"Toxtricity-Gmax", "Toxtricity-Low-Key-Gmax",
 			];
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.canGigantamax && !allowedGigantamaxes.includes(pokemon.canGigantamax)) pokemon.canGigantamax = null;
@@ -277,12 +279,10 @@ let Formats = [
 		},
 		ruleset: ['Standard GBU', 'Galar Pokedex', 'VGC Timer'],
 		banlist: [
-			'Alcremie-Gmax', 'Appletun-Gmax', 'Charizard-Gmax + Solar Power', 'Coalossal-Gmax', 'Copperajah-Gmax',
-			'Corsola-Base', 'Darmanitan-Base', 'Darumaka-Base', 'Diglett-Alola', 'Dugtrio-Alola', 'Duraludon-Gmax',
-			'Farfetch\'d-Base', 'Flapple-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Grimmsnarl-Gmax', 'Hatterene-Gmax',
-			'Kingler-Gmax', 'Lapras-Gmax', 'Linoone-Base', 'Machamp-Gmax', 'Meowth-Alola', 'Ninetales-Alola',
-			'Orbeetle-Gmax', 'Persian-Alola', 'Ponyta-Base', 'Rapidash-Base', 'Slowpoke-Galar', 'Stunfisk-Base',
-			'Toxtricity-Gmax', 'Toxtricity-Low-Key-Gmax', 'Vulpix-Alola', 'Zigzagoon-Base',
+			'Copperajah-Gmax', 'Corsola-Base', 'Darmanitan-Base', 'Darumaka-Base', 'Diglett-Alola', 'Dugtrio-Alola',
+			'Duraludon-Gmax', 'Farfetch\'d-Base', 'Flapple-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Linoone-Base',
+			'Machamp-Gmax', 'Meowth-Alola', 'Ninetales-Alola', 'Persian-Alola', 'Ponyta-Base', 'Rapidash-Base',
+			'Slowpoke-Galar', 'Stunfisk-Base', 'Vulpix-Alola', 'Zigzagoon-Base',
 		],
 		minSourceGen: 8,
 	},
@@ -303,8 +303,10 @@ let Formats = [
 		minSourceGen: 8,
 		onBegin() {
 			const allowedGigantamaxes = [
-				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
-				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
+				"Alcremie-Gmax", "Appletun-Gmax", "Butterfree-Gmax", "Centiskorch-Gmax", "Charizard-Gmax","Coalossal-Gmax",
+				"Corviknight-Gmax", "Drednaw-Gmax", "Eevee-Gmax", "Flapple-Gmax", "Grimmsnarl-Gmax", "Hatterene-Gmax",
+				"Kingler-Gmax", "Lapras-Gmax", "Meowth-Gmax", "Orbeetle-Gmax", "Pikachu-Gmax", "Sandaconda-Gmax", "Snorlax-Gmax",
+				"Toxtricity-Gmax", "Toxtricity-Low-Key-Gmax",
 			];
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.canGigantamax && !allowedGigantamaxes.includes(pokemon.canGigantamax)) pokemon.canGigantamax = null;
