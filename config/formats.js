@@ -198,7 +198,7 @@ let Formats = [
 		minSourceGen: 8,
 		onBegin() {
 			const allowedGigantamaxes = [
-				"Alcremie-Gmax", "Appletun-Gmax", "Butterfree-Gmax", "Centiskorch-Gmax", "Charizard-Gmax","Coalossal-Gmax",
+				"Alcremie-Gmax", "Appletun-Gmax", "Butterfree-Gmax", "Centiskorch-Gmax", "Charizard-Gmax", "Coalossal-Gmax",
 				"Corviknight-Gmax", "Drednaw-Gmax", "Eevee-Gmax", "Flapple-Gmax", "Grimmsnarl-Gmax", "Hatterene-Gmax",
 				"Kingler-Gmax", "Lapras-Gmax", "Meowth-Gmax", "Orbeetle-Gmax", "Pikachu-Gmax", "Sandaconda-Gmax", "Snorlax-Gmax",
 				"Toxtricity-Gmax", "Toxtricity-Low-Key-Gmax",
