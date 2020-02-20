@@ -36,14 +36,20 @@ describe('Dragon Darts', function () {
 
 	it(`should hit the other foe twice if it misses against one`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Ninjask", moves: ['dragondarts']},
+			{species: "Ninjask", item: 'blunderpolicy', moves: ['dragondarts']},
 			{species: "Mew", ability: 'stamina', moves: ['splash']},
 		], [
 			{species: "Mew", ability: 'stamina', moves: ['splash']},
 			{species: "Shaymin", ability: 'stamina', moves: ['splash']},
 		]]);
+
+		// default seed will make Dragon Darts miss at +6 evasion
+		// remember to manually set the seed if an engine change means it doesn't
 		battle.p2.active[0].boostBy({evasion: 6});
+
 		battle.makeChoices();
+		assert(!battle.log.includes('|-miss|p1a: Ninjask|p2a: Mew'));
+		assert.statStage(battle.p1.active[0], 'spe', 2);
 		assert.statStage(battle.p1.active[1], 'def', 0);
 		assert.statStage(battle.p2.active[0], 'def', 0);
 		assert.statStage(battle.p2.active[1], 'def', 2);
@@ -62,6 +68,20 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p1.active[1], 'def', 1);
 		assert.statStage(battle.p2.active[0], 'def', 0);
 		assert.statStage(battle.p2.active[1], 'def', 0);
+	});
+
+	it(`should hit both targets even if one faints`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Ninjask", moves: ['dragondarts']},
+			{species: "Mew", moves: ['splash']},
+		], [
+			{species: "Shedinja", moves: ['splash']},
+			{species: "Shedinja", moves: ['splash']},
+		]]);
+		battle.makeChoices();
+		battle.getDebugLog();
+		assert.equal(battle.p2.active[0].hp, 0);
+		assert.equal(battle.p2.active[1].hp, 0);
 	});
 
 	it(`should hit the ally twice in doubles`, function () {
