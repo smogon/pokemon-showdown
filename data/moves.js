@@ -14362,7 +14362,6 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {authentic: 1, mystery: 1},
 		onHit(target, source) {
-			if (target.volatiles['maxguard']) return false;
 			for (let i in target.boosts) {
 				// @ts-ignore
 				source.boosts[i] = target.boosts[i];
@@ -20089,7 +20088,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {mystery: 1},
 		onHit(target, pokemon) {
-			if (target.volatiles['maxguard'] || !pokemon.transformInto(target)) {
+			if (!pokemon.transformInto(target)) {
 				return false;
 			}
 		},
