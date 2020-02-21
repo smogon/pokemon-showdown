@@ -17,8 +17,6 @@
 
 /* eslint no-else-return: "error" */
 
-const crypto = require('crypto');
-
 const avatarTable = new Set([
 	'aaron',
 	'acetrainercouple-gen3', 'acetrainercouple',
