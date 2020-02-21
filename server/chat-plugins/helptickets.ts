@@ -1171,9 +1171,16 @@ export const commands: ChatCommands = {
 				`<p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
 			const staffMessage = `<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`;
 			const staffHint = staffContexts[ticketType] || '';
-			const reportTargetInfo =
-				reportTargetType === 'room' ? `Reported in room: <a href="/${reportTarget}">${reportTarget}</a>` :
-					reportTargetType === 'user' ? `Reported user: <strong class="username">${reportTarget}</strong>` : '';
+			let reportTargetInfo = '';
+			if (reportTargetType === 'room') {
+				reportTargetInfo = `Reported in room: <a href="/${reportTarget}">${reportTarget}</a>`;
+				const reportRoom = Rooms.get(reportTarget);
+				if (reportRoom && (reportRoom as GameRoom).uploadReplay) {
+					void (reportRoom as GameRoom).uploadReplay(user, connection, 'forpunishment');
+				}
+			} else if (reportTargetType === 'user') {
+				reportTargetInfo = `Reported user: <strong class="username">${reportTarget}</strong>`;
+			}
 			let helpRoom = Rooms.get(`help-${user.id}`) as ChatRoom | null;
 			if (!helpRoom) {
 				helpRoom = Rooms.createChatRoom(`help-${user.id}` as RoomID, `[H] ${user.name}`, {
