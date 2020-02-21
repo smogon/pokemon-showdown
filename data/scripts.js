@@ -631,7 +631,13 @@ let BattleScripts = {
 				targetsCopy = targets.slice(0);
 			}
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
-			if (target && typeof move.smartTarget === 'boolean') this.addMove('-anim', pokemon, move.name, target);
+			if (target && typeof move.smartTarget === 'boolean') {
+				if (hit > 1) {
+					this.addMove('-anim', pokemon, move.name, target);
+				} else {
+					this.retargetLastMove(target);
+				}
+			}
 
 			// like this (Triple Kick)
 			if (target && move.multiaccuracy && hit > 1) {

@@ -603,7 +603,6 @@ export class Pokemon {
 
 	/** Get targets for Dragon Darts */
 	getSmartTargets(target: Pokemon, move: ActiveMove) {
-		this.battle.attrLastMove('[still]');
 		const target2 = target.nearbyAllies()[0];
 		if (!target2 || target2 === this || !target2.hp) {
 			move.smartTarget = false;
