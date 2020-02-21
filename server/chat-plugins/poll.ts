@@ -117,9 +117,9 @@ export class Poll {
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px">${iconText}</span> <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
 		for (const [num, option] of this.options) {
 			const selected = pendingVotes.includes(num);
-			output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Chat.escapeHTML(option.name)}">${selected ? chosen : empty} ${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
+			output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;${selected ? 'font-weight:bold' : ''}" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Chat.escapeHTML(option.name)}">${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}</button></div>`;
 		}
-		output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll submit" name="send" title="${pendingVotes.length ? "Submit your vote" : "View results - you will not be able to vote after viewing results"}"><small>(${pendingVotes.length ? "Submit" : "View results"})</small></button></div>`;
+		output += `<div style="margin-top: 7px; padding-left: 12px"><button class="button" value="/poll submit" name="send" title="${pendingVotes.length ? "Submit your vote" : "View results - you will not be able to vote after viewing results"}">${pendingVotes.length ? "Submit" : "View results"}</button></div>`;
 		output += `</div>`;
 
 		return output;
