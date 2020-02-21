@@ -54,13 +54,16 @@ export class Poll {
 
 	select(user: User, option: number) {
 		const userid = user.id;
-		if (!this.pendingVotes[userid]) {
-			this.pendingVotes[userid] = [];
-		} else if (!this.multiPoll) {
-			// can only have one option selected, automatically deselect the previous one
-			this.pendingVotes[userid] = [];
+		if (!this.multiPoll) {
+			// vote immediately
+			this.pendingVotes[userid] = [option];
+			this.submit(user);
+			return;
 		}
 
+		if (!this.pendingVotes[userid]) {
+			this.pendingVotes[userid] = [];
+		}
 		this.pendingVotes[userid].push(option);
 		this.updateFor(user);
 	}
@@ -109,18 +112,27 @@ export class Poll {
 	}
 
 	generateVotes(user: User | null) {
-		const empty = this.multiPoll ? `<i class="fa fa-square-o" aria-hidden="true"></i>` : `<i class="fa fa-circle-o" aria-hidden="true"></i>`;
-		const chosen = this.multiPoll ? `<i class="fa fa-check-square-o" aria-hidden="true"></i>` : `<i class="fa fa-dot-circle-o" aria-hidden="true"></i>`;
-
-		const pendingVotes = (user && this.pendingVotes[user.id]) || [];
 		const iconText = this.isQuiz ? '<i class="fa fa-question"></i> Quiz' : '<i class="fa fa-bar-chart"></i> Poll';
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px">${iconText}</span> <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
-		for (const [num, option] of this.options) {
-			const selected = pendingVotes.includes(num);
-			output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;${selected ? 'font-weight:bold' : ''}" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Chat.escapeHTML(option.name)}">${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}</button></div>`;
+
+		if (this.multiPoll) {
+			const empty = `<i class="fa fa-square-o" aria-hidden="true"></i>`;
+			const chosen = `<i class="fa fa-check-square-o" aria-hidden="true"></i>`;
+
+			const pendingVotes = (user && this.pendingVotes[user.id]) || [];
+			for (const [num, option] of this.options) {
+				const selected = pendingVotes.includes(num);
+				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;${selected ? 'font-weight:bold' : ''}" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Chat.escapeHTML(option.name)}">${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}</button></div>`;
+			}
+			output += `<div style="margin-top: 7px; padding-left: 12px"><button class="button" value="/poll submit" name="send" title="${pendingVotes.length ? "Submit your vote" : "View results - you will not be able to vote after viewing results"}">${pendingVotes.length ? "Submit" : "View results"}</button></div>`;
+			output += `</div>`;
+		} else {
+			for (const [num, option] of this.options) {
+				output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${num}" name="send" title="Vote for ${num}. ${Chat.escapeHTML(option.name)}">${num}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
+			}
+			output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="View results - you will not be able to vote after viewing results"><small>(View results)</small></button></div>`;
+			output += `</div>`;
 		}
-		output += `<div style="margin-top: 7px; padding-left: 12px"><button class="button" value="/poll submit" name="send" title="${pendingVotes.length ? "Submit your vote" : "View results - you will not be able to vote after viewing results"}">${pendingVotes.length ? "Submit" : "View results"}</button></div>`;
-		output += `</div>`;
 
 		return output;
 	}
@@ -207,7 +219,7 @@ export class Poll {
 					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${blankvote}`);
 				}
 			} else {
-				if (thisUser.id in this.pendingVotes) {
+				if (this.multiPoll && thisUser.id in this.pendingVotes) {
 					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateVotes(thisUser)}`);
 				} else {
 					thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${blankquestions}`);
