@@ -21,6 +21,7 @@ namespace Chat {
 	export type SettingsHandler = import('./chat').SettingsHandler;
 	export type PageTable = import('./chat').PageTable;
 	export type ChatCommands = import('./chat').ChatCommands;
+	export type ChatHandler = import('./chat').ChatHandler;
 	export type ChatFilter = import('./chat').ChatFilter;
 	export type NameFilter = import('./chat').NameFilter;
 	export type StatusFilter = import('./chat').StatusFilter;
