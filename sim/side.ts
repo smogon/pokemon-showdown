@@ -469,9 +469,9 @@ export class Side {
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
 		} else if (maxMove) {
-			// Dynamaxed; only Assault Vest Max Guard is disabled
-			if (maxMove.id === 'maxguard' && pokemon.hasItem('assaultvest')) {
-				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled by Assault Vest`);
+			// Dynamaxed; only Taunt and Assault Vest disable Max Guard
+			if (maxMove.id === 'maxguard' && (pokemon.hasItem('assaultvest') || pokemon.volatiles['taunt'])) {
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`);
 			}
 		} else if (!zMove) {
 			// Check for disabled moves
