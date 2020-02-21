@@ -47,7 +47,6 @@ interface MoveOrGroup {
 }
 
 type Direction = 'less' | 'greater' | 'equal';
-type StatAliases = 'attack' | 'defense' | 'specialattack' | 'spc' | 'special' | 'spatk' | 'specialdefense' | 'spdef' | 'speed' | 'wt' | 'ht' | 'generation';
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
@@ -385,7 +384,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	});
 	const allFormes = ['alola', 'galar', 'primal', 'therian', 'totem'];
 	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen'];
-	const allStatAliases: {[k in StatAliases]: string} = {
+	const allStatAliases: {[k: string]: string} = {
 		attack: 'atk', defense: 'def', specialattack: 'spa', spc: 'spa', special: 'spa', spatk: 'spa',
 		specialdefense: 'spd', spdef: 'spd', speed: 'spe', wt: 'weight', ht: 'height', generation: 'gen',
 	};
@@ -546,7 +545,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.endsWith(' asc') || target.endsWith(' desc')) {
 				if (parameters.length > 1) return {reply: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters`};
-				const stat = allStatAliases[toID(target.split(' ')[0]) as StatAliases] || toID(target.split(' ')[0]);
+				const stat = allStatAliases[toID(target.split(' ')[0])] || toID(target.split(' ')[0]);
 				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
 				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
 				orGroup.skip = true;
@@ -700,7 +699,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					return {reply: `No value given to compare with '${escapeHTML(target)}'.`};
 				}
 				if (inequalityString.slice(-1) === '=') directions.push('equal');
-				if (stat in allStatAliases) stat = allStatAliases[stat as StatAliases];
+				if (stat in allStatAliases) stat = allStatAliases[stat];
 				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
 				if (!orGroup.stats[stat]) orGroup.stats[stat] = Object.create(null);
 				for (const direction of directions) {
