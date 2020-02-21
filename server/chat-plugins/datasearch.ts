@@ -8,9 +8,9 @@
  * @license MIT
  */
 
-import {QueryProcessManager} from '../../lib/process-manager';
-
 'use strict';
+
+import {QueryProcessManager} from '../../lib/process-manager';
 
 interface DexOrGroup {
 	abilities: {[k: string]: boolean};
