@@ -25,4 +25,17 @@ describe("Dynamax", function () {
 		battle.makeChoices('move superpower', 'auto');
 		assert.statStage(battle.p1.active[0], 'atk', 1);
 	});
+
+	it('Max Move versions of disabled moves should not be disabled, except by Assault Vest', function () {
+		battle = common.createBattle([[
+			{species: 'Mew', item: 'assaultvest', moves: ['watergun', 'protect']},
+		], [
+			{species: 'Mew', item: 'choiceband', moves: ['watergun', 'protect']},
+		]]);
+		battle.makeChoices('move 1 dynamax', 'move 1 dynamax');
+		assert.throws(() => {
+			battle.makeChoices('move 2', 'move 1');
+		});
+		battle.makeChoices('move 1', 'move 2');
+	});
 });

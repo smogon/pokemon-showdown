@@ -1237,7 +1237,13 @@ let BattleScripts = {
 		for (let moveSlot of pokemon.moveSlots) {
 			let move = this.dex.getMove(moveSlot.id);
 			let maxMove = this.getMaxMove(move, pokemon);
-			if (maxMove) result.maxMoves.push({move: maxMove.id, target: maxMove.target});
+			if (maxMove) {
+				if (maxMove.id === 'maxguard' && pokemon.hasItem('assaultvest')) {
+					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
+				} else {
+					result.maxMoves.push({move: maxMove.id, target: maxMove.target});
+				}
+			}
 		}
 		if (pokemon.canGigantamax) result.gigantamax = pokemon.canGigantamax;
 		return result;
