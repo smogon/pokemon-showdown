@@ -126,6 +126,24 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[1], 'def', 0);
 	});
 
+	it('should hit one target twice if the other is protected by an ability', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"]},
+			{species: "Grimmsnarl", ability: "Prankster", moves: ["electrify"]},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
+			{species: "Emolga", ability: "Motor Drive", moves: ["sleeptalk"]},
+		]});
+		battle.makeChoices('move dragondarts 2, move electrify -1', 'move sleeptalk, move sleeptalk');
+
+		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+		assert.statStage(battle.p2.active[0], 'def', 2);
+		assert.statStage(battle.p2.active[1], 'spe', 1);
+	});
+
 	it('should hit one target twice if the other is immunue', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
