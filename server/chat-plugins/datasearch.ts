@@ -8,6 +8,8 @@
  * @license MIT
  */
 
+import {QueryProcessManager} from '../../lib/process-manager';
+
 'use strict';
 
 interface DexOrGroup {
@@ -79,7 +81,6 @@ export const commands: ChatCommands = {
 			cmd: 'dexsearch',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
-		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast()) return;
 			if (response.error) {
@@ -144,7 +145,6 @@ export const commands: ChatCommands = {
 			cmd: 'randmove',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
-		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast(true)) return;
 			if (response.error) {
@@ -191,7 +191,6 @@ export const commands: ChatCommands = {
 			cmd: 'randpoke',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
-		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast(true)) return;
 			if (response.error) {
@@ -235,7 +234,6 @@ export const commands: ChatCommands = {
 			cmd: 'movesearch',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
-		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast()) return;
 			if (response.error) {
@@ -283,7 +281,6 @@ export const commands: ChatCommands = {
 			cmd: 'itemsearch',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
-		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast()) return;
 			if (response.error) {
@@ -325,7 +322,6 @@ export const commands: ChatCommands = {
 			cmd: 'learn',
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: cmd,
-		// @ts-ignore
 		}).then(response => {
 			if (!this.runBroadcast()) return;
 			if (response.error) {
@@ -1999,10 +1995,6 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
  * Process manager
  *********************************************************/
 
-// tslint:disable-next-line: no-var-requires
-const QueryProcessManager = require('../../lib/process-manager').QueryProcessManager;
-
-// @ts-ignore
 const PM = new QueryProcessManager(module, async query => {
 	try {
 		switch (query.cmd) {
