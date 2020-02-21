@@ -1354,6 +1354,49 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.game && this.game.onLeave) this.game.onLeave(user);
 		return true;
 	}
+	/**
+	 * @param newID Add this param if the roomid is different from `toID(newTitle)`
+	 */
+	async rename(newTitle: string, newID?: RoomID) {
+		if (!newID) newID = toID(newTitle) as RoomID;
+		if (this.game || this.tour) return;
+
+		const oldID = this.roomid;
+		this.roomid = newID;
+		this.title = newTitle;
+		Rooms.rooms.delete(oldID);
+		Rooms.rooms.set(newID, this as ChatRoom);
+
+		for (const user of Object.values(this.users)) {
+			user.inRooms.delete(oldID);
+			user.inRooms.add(newID);
+			for (const connection of user.connections) {
+				connection.inRooms.delete(oldID);
+				connection.inRooms.add(newID);
+				Sockets.roomRemove(connection.worker, oldID, connection.socketid);
+				Sockets.roomAdd(connection.worker, newID, connection.socketid);
+			}
+			user.send(`>${oldID}\n|noinit|rename|${newID}|${newTitle}`);
+		}
+
+		if (this.parent && this.parent.subRooms) {
+			this.parent.subRooms.delete(oldID);
+			this.parent.subRooms.set(newID, this as ChatRoom);
+		}
+
+		if (this.subRooms) {
+			for (const subRoom of this.subRooms.values()) {
+				subRoom.parent = this as ChatRoom;
+			}
+		}
+
+		if (this.chatRoomData) {
+			this.chatRoomData.title = newTitle;
+			Rooms.global.writeChatRoomData();
+		}
+
+		return this.log.rename(newID);
+	}
 	destroy() {
 		// deallocate ourself
 
