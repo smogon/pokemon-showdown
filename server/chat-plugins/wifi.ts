@@ -7,7 +7,6 @@
 'use strict';
 
 import {FS} from '../../lib/fs';
-import * as fs from 'fs';
 
 Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
 
