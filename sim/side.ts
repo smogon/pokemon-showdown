@@ -468,7 +468,12 @@ export class Side {
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
-		} else if (!zMove && !(megaDynaOrZ === 'dynamax' || pokemon.volatiles['dynamax'])) {
+		} else if (maxMove) {
+			// Dynamaxed; only Assault Vest Max Guard is disabled
+			if (maxMove.id === 'maxguard' && pokemon.hasItem('assaultvest')) {
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled by Assault Vest`);
+			}
+		} else if (!zMove) {
 			// Check for disabled moves
 			let isEnabled = false;
 			let disabledSource = '';
