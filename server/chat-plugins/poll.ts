@@ -124,7 +124,7 @@ export class Poll {
 				const selected = pendingVotes.includes(num);
 				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;${selected ? 'font-weight:bold' : ''}" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Chat.escapeHTML(option.name)}">${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}</button></div>`;
 			}
-			output += `<div style="margin-top: 7px; padding-left: 12px"><button class="button" value="/poll submit" name="send" title="${pendingVotes.length ? "Submit your vote" : "View results - you will not be able to vote after viewing results"}">${pendingVotes.length ? "Submit" : "View results"}</button></div>`;
+			output += `<div style="margin-top: 7px; padding-left: 12px"><button class="button" style="font-weight: bold" value="/poll submit" name="send" title="${pendingVotes.length ? "Submit your vote" : "View results - you will not be able to vote after viewing results"}">${pendingVotes.length ? "Submit" : "View results"}</button></div>`;
 			output += `</div>`;
 		} else {
 			for (const [num, option] of this.options) {
