@@ -485,7 +485,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	 * If the battle is ended: an array of the number of Pokemon left for each side.
 	 */
 	score: number[] | null;
-	inputLog: string | null;
+	inputLog: string[] | null;
 	turn: number;
 	rqid: number;
 	requestCount: number;
