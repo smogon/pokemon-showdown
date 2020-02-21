@@ -27,6 +27,7 @@ import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wif
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
+import * as crypto from 'crypto';
 
 /*********************************************************
  * the Room object.
@@ -1581,6 +1582,44 @@ export class GameRoom extends BasicChatRoom {
 	onConnect(user: User, connection: Connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
+	}
+	async uploadReplay(user: User, connection: Connection, options?: 'forpunishment' | 'silent') {
+		const battle = this.battle;
+		if (!battle) return;
+
+		// retrieve spectator log (0) if there are privacy concerns
+		const format = Dex.getFormat(this.format, true);
+
+		// custom games always show full details
+		// random-team battles show full details if the battle is ended
+		// otherwise, don't show full details
+		let hideDetails = !format.id.includes('customgame');
+		if (format.team && battle.ended) hideDetails = false;
+
+		const data = this.getLog(hideDetails ? 0 : -1);
+		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
+		let rating = 0;
+		if (battle.ended && this.rated) rating = this.rated;
+		const [success] = await LoginServer.request('prepreplay', {
+			id: this.roomid.substr(7),
+			loghash: datahash,
+			p1: battle.p1.name,
+			p2: battle.p2.name,
+			format: format.id,
+			rating,
+			hidden: options === 'forpunishment' || (this as any).unlistReplay ? '2' : this.isPrivate || this.hideReplay ? '1' : '',
+			inputlog: battle.inputLog?.join('\n') || null,
+		});
+		if (success) battle.replaySaved = true;
+		if (success && success.errorip) {
+			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
+			return;
+		}
+		connection.send('|queryresponse|savereplay|' + JSON.stringify({
+			log: data,
+			id: this.roomid.substr(7),
+			silent: options === 'forpunishment' || options === 'silent',
+		}));
 	}
 }
 
