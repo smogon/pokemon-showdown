@@ -196,13 +196,13 @@ let Formats = [
 		},
 		ruleset: ['Standard GBU'],
 		minSourceGen: 8,
-		onBegin() {
+		onValidateSet(set) {
 			const allowedGigantamaxes = [
 				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
 				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
 			];
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.canGigantamax && !allowedGigantamaxes.includes(pokemon.canGigantamax)) pokemon.canGigantamax = null;
+			if (set.species.endsWith('-Gmax') && !allowedGigantamaxes.includes(set.species)) {
+				return [`${set.species} is not an allowed Gigantamax in this format.`];
 			}
 		},
 	},
@@ -301,13 +301,13 @@ let Formats = [
 		},
 		ruleset: ['Standard GBU'],
 		minSourceGen: 8,
-		onBegin() {
+		onValidateSet(set) {
 			const allowedGigantamaxes = [
 				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
 				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
 			];
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.canGigantamax && !allowedGigantamaxes.includes(pokemon.canGigantamax)) pokemon.canGigantamax = null;
+			if (set.species.endsWith('-Gmax') && !allowedGigantamaxes.includes(set.species)) {
+				return [`${set.species} is not an allowed Gigantamax in this format.`];
 			}
 		},
 	},

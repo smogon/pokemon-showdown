@@ -203,7 +203,7 @@ export class Pokemon {
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
 	canDynamax: boolean;
-	canGigantamax: string | null;
+	readonly canGigantamax: string | null;
 
 	staleness?: 'internal' | 'external';
 	pendingStaleness?: 'internal' | 'external';
