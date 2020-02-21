@@ -686,7 +686,7 @@ let BattleScripts = {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
-		if (move.multihit && typeof move.smartTarget === 'boolean') {
+		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.add('-hitcount', targets[0], hit - 1);
 		}
 
