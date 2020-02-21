@@ -1,7 +1,6 @@
 'use strict';
 
 import {FS} from '../../lib/fs';
-import * as fs from 'fs';
 
 const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
