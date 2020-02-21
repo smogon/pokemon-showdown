@@ -802,6 +802,29 @@ export const commands: ChatCommands = {
 		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: ★ # & ~`,
 	],
 
+	rename(target, room) {
+		if (!this.can('declare')) return;
+		if (room.minorActivity || room.game || room.tour) {
+			return this.errorReply("Cannot rename room when there's a tour/game/poll/announcement running.");
+		}
+		if (room.battle) {
+			return this.errorReply("Battle rooms cannot be renamed.");
+		}
+
+		const roomid = toID(target) as RoomID;
+		const roomtitle = target;
+		// `,` is a delimiter used by a lot of /commands
+		// `|` and `[` are delimiters used by the protocol
+		// `-` has special meaning in roomids
+		if (roomtitle.includes(',') || roomtitle.includes('|') || roomtitle.includes('[') || roomtitle.includes('-')) {
+			return this.errorReply("Room titles can't contain any of: ,|[-");
+		}
+		if (roomid.length > MAX_CHATROOM_ID_LENGTH) return this.errorReply("The given room title is too long.");
+		if (Rooms.search(roomtitle)) return this.errorReply(`The room '${roomtitle}' already exists.`);
+		return room.rename(roomtitle);
+	},
+	renamehelp: [`/rename [new title] - Renames the current room to [new title]. Requires & ~.`],
+
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
 	secretroom: 'privateroom',

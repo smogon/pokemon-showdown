@@ -80,6 +80,18 @@ class FSPath {
 		return fs.readFileSync(this.path, options) as Buffer;
 	}
 
+	exists(): Promise<boolean> {
+		return new Promise(resolve => {
+			fs.exists(this.path, exists => {
+				resolve(exists);
+			});
+		});
+	}
+
+	existsSync() {
+		return fs.existsSync(this.path);
+	}
+
 	readIfExists(): Promise<string> {
 		return new Promise((resolve, reject) => {
 			fs.readFile(this.path, 'utf8', (err, data) => {

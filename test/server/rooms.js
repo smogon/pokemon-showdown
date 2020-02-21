@@ -114,4 +114,63 @@ describe('Rooms features', function () {
 			assert.equal(room.getAuth(roomStaff), '+', 'after being promoted by an administrator');
 		});
 	});
+
+	describe("ChatRoom", function () {
+		describe("#rename", function () {
+			let room;
+			let parent;
+			let subroom;
+			afterEach(function () {
+				for (const user of Users.users.values()) {
+					user.disconnectAll();
+					user.destroy();
+				}
+				const rooms = [room, parent, subroom];
+				for (const room of rooms) {
+					if (room) {
+						room.destroy();
+					}
+				}
+			});
+			it("should rename its roomid and title", async function () {
+				room = Rooms.createChatRoom("test", "Test");
+				await room.rename("Test2");
+				assert.strictEqual(room.roomid, "test2");
+				assert.strictEqual(room.title, "Test2");
+			});
+
+			it("should rename its key in Rooms.rooms", async function () {
+				room = Rooms.createChatRoom("test", "Test");
+				await room.rename("Test2");
+				assert.strictEqual(Rooms.rooms.has("test"), false);
+				assert.strictEqual(Rooms.rooms.has("test2"), true);
+			});
+
+			it("should move the users and their connections", async function () {
+				room = Rooms.createChatRoom("test", "Test");
+				const user = new User();
+				user.joinRoom(room);
+				await room.rename("Test2");
+				assert.strictEqual(user.inRooms.has("test"), false);
+				assert.strictEqual(user.inRooms.has("test2"), true);
+				assert.strictEqual(user.connections[0].inRooms.has("test"), false);
+				assert.strictEqual(user.connections[0].inRooms.has("test2"), true);
+			});
+
+			it("should rename their parents subroom reference", async function () {
+				parent = Rooms.createChatRoom("parent", "Parent");
+				subroom = Rooms.createChatRoom("subroom", "Subroom", {parentid: "parent"});
+				await subroom.rename("TheSubroom");
+				assert.strictEqual(parent.subRooms.has("subroom"), false);
+				assert.strictEqual(parent.subRooms.has("thesubroom"), true);
+			});
+
+			it("should rename their subrooms parent reference", async function () {
+				parent = Rooms.createChatRoom("parent", "Parent");
+				subroom = Rooms.createChatRoom("subroom", "Subroom", {parentid: "parent"});
+				await parent.rename("TheParent");
+				assert.strictEqual(subroom.parent, parent);
+			});
+		});
+	});
 });

@@ -28,7 +28,6 @@ import {FS} from '../lib/fs';
  * It contains (nearly) everything.
  */
 export class Roomlog {
-	readonly roomid: RoomID;
 	/**
 	 * Battle rooms are multichannel, which means their logs are split
 	 * into four channels, public, p1, p2, full.
@@ -43,6 +42,7 @@ export class Roomlog {
 	 * Chat rooms include timestamps.
 	 */
 	readonly logTimes: boolean;
+	roomid: RoomID;
 	/**
 	 * Scrollback log
 	 */
@@ -217,6 +217,37 @@ export class Roomlog {
 	modlog(message: string) {
 		if (!this.modlogStream) return;
 		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
+	}
+	async rename(newID: RoomID) {
+		const modlogPath = `logs/modlog`;
+		const roomlogPath = `logs/chat`;
+		const modlogStreamExisted = !!this.modlogStream;
+		const roomlogStreamExisted = !!this.roomlogStream;
+		await this.destroy();
+		await Promise.all([
+			FS(modlogPath + `/modlog_${this.roomid}.txt`).exists(),
+			FS(roomlogPath + `/${this.roomid}`).exists(),
+			FS(modlogPath + `/modlog_${newID}.txt`).exists(),
+			FS(roomlogPath + `/${newID}`).exists(),
+		]).then(([modlogExists, roomlogExists, newModlogExists, newRoomlogExists]) => {
+			return Promise.all([
+				modlogExists && !newModlogExists
+					? FS(modlogPath + `/modlog_${this.roomid}.txt`).rename(modlogPath + `/modlog_${newID}.txt`)
+					: undefined,
+				roomlogExists && !newRoomlogExists
+					? FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`)
+					: undefined,
+			]);
+		});
+		this.roomid = newID;
+		Roomlogs.roomlogs.set(newID, this);
+		if (modlogStreamExisted) {
+			this.setupModlogStream();
+		}
+		if (roomlogStreamExisted) {
+			await this.setupRoomlogStream(true);
+		}
+		return true;
 	}
 	static async rollLogs() {
 		if (Roomlogs.rollLogTimer === true) return;
