@@ -195,18 +195,8 @@ let Formats = [
 			battle: 3,
 		},
 		ruleset: ['Standard GBU'],
+		banlist: ['Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax'],
 		minSourceGen: 8,
-		onBegin() {
-			const allowedGigantamaxes = [
-				"Alcremie-Gmax", "Appletun-Gmax", "Butterfree-Gmax", "Centiskorch-Gmax", "Charizard-Gmax", "Coalossal-Gmax",
-				"Corviknight-Gmax", "Drednaw-Gmax", "Eevee-Gmax", "Flapple-Gmax", "Grimmsnarl-Gmax", "Hatterene-Gmax",
-				"Kingler-Gmax", "Lapras-Gmax", "Meowth-Gmax", "Orbeetle-Gmax", "Pikachu-Gmax", "Sandaconda-Gmax", "Snorlax-Gmax",
-				"Toxtricity-Gmax", "Toxtricity-Low-Key-Gmax",
-			];
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.canGigantamax && !allowedGigantamaxes.includes(pokemon.canGigantamax)) pokemon.canGigantamax = null;
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Custom Game",
@@ -278,12 +268,7 @@ let Formats = [
 			battle: 4,
 		},
 		ruleset: ['Standard GBU', 'Galar Pokedex', 'VGC Timer'],
-		banlist: [
-			'Copperajah-Gmax', 'Corsola-Base', 'Darmanitan-Base', 'Darumaka-Base', 'Diglett-Alola', 'Dugtrio-Alola',
-			'Duraludon-Gmax', 'Farfetch\'d-Base', 'Flapple-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Linoone-Base',
-			'Machamp-Gmax', 'Meowth-Alola', 'Ninetales-Alola', 'Persian-Alola', 'Ponyta-Base', 'Rapidash-Base',
-			'Slowpoke-Galar', 'Stunfisk-Base', 'Vulpix-Alola', 'Zigzagoon-Base',
-		],
+		banlist: ['Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax'],
 		minSourceGen: 8,
 	},
 	{
@@ -300,18 +285,8 @@ let Formats = [
 			battle: 4,
 		},
 		ruleset: ['Standard GBU'],
+		banlist: ['Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax'],
 		minSourceGen: 8,
-		onBegin() {
-			const allowedGigantamaxes = [
-				"Alcremie-Gmax", "Appletun-Gmax", "Butterfree-Gmax", "Centiskorch-Gmax", "Charizard-Gmax", "Coalossal-Gmax",
-				"Corviknight-Gmax", "Drednaw-Gmax", "Eevee-Gmax", "Flapple-Gmax", "Grimmsnarl-Gmax", "Hatterene-Gmax",
-				"Kingler-Gmax", "Lapras-Gmax", "Meowth-Gmax", "Orbeetle-Gmax", "Pikachu-Gmax", "Sandaconda-Gmax", "Snorlax-Gmax",
-				"Toxtricity-Gmax", "Toxtricity-Low-Key-Gmax",
-			];
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.canGigantamax && !allowedGigantamaxes.includes(pokemon.canGigantamax)) pokemon.canGigantamax = null;
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Galar Newcomers",
