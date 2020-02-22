@@ -69,4 +69,16 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices('move laserfocus', 'move hypervoice');
 		assert.fullHP(battle.p1.active[0]);
 	});
+
+	it("should negate abilities that damage the attacker", function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [
+			{species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['payback']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Ferrothorn', ability: 'ironbarbs', moves: ['rockpolish']},
+		]});
+		battle.makeChoices();
+		assert.fullHP(battle.p1.active[0]);
+	});
 });

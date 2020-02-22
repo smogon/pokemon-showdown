@@ -378,8 +378,12 @@ let BattleScripts = {
 		const hitResults = this.runEvent('Invulnerability', targets, pokemon, move);
 		for (const [i, target] of targets.entries()) {
 			if (hitResults[i] === false) {
-				if (!move.spreadHit) this.attrLastMove('[miss]');
-				this.add('-miss', pokemon, target);
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					if (!move.spreadHit) this.attrLastMove('[miss]');
+					this.add('-miss', pokemon, target);
+				}
 			}
 		}
 		return hitResults;
@@ -402,7 +406,8 @@ let BattleScripts = {
 
 		const hitResults = [];
 		for (let i = 0; i < targets.length; i++) {
-			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) || targets[i].runImmunity(move.type, true);
+			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) || targets[i].runImmunity(move.type, !move.smartTarget);
+			if (move.smartTarget && !hitResults[i]) move.smartTarget = false;
 		}
 
 		return hitResults;
@@ -480,8 +485,12 @@ let BattleScripts = {
 				accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 			}
 			if (accuracy !== true && !this.randomChance(accuracy, 100)) {
-				if (!move.spreadHit) this.attrLastMove('[miss]');
-				this.add('-miss', pokemon, target);
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					if (!move.spreadHit) this.attrLastMove('[miss]');
+					this.add('-miss', pokemon, target);
+				}
 				if (pokemon.hasItem('blunderpolicy') && pokemon.useItem()) this.boost({spe: 2}, pokemon);
 				hitResults[i] = false;
 				continue;
@@ -614,15 +623,21 @@ let BattleScripts = {
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
 			if (hit > 1 && pokemon.status === 'slp' && !isSleepUsable) break;
-			if (targets.some(target => target && !target.hp)) break;
+			if (targets.every(target => !target || !target.hp)) break;
 			move.hit = hit;
-			if (move.smartTarget && targets.length > hit - 1) {
-				targetsCopy = targets.slice(hit - 1, hit);
-				if (targetsCopy[0]) this.addMove('-anim', pokemon, move.name, targetsCopy[0]);
+			if (move.smartTarget && targets.length > 1) {
+				targetsCopy = [targets[hit - 1]];
 			} else {
 				targetsCopy = targets.slice(0);
 			}
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
+			if (target && typeof move.smartTarget === 'boolean') {
+				if (hit > 1) {
+					this.addMove('-anim', pokemon, move.name, target);
+				} else {
+					this.retargetLastMove(target);
+				}
+			}
 
 			// like this (Triple Kick)
 			if (target && move.multiaccuracy && hit > 1) {
@@ -677,7 +692,7 @@ let BattleScripts = {
 				move.mindBlownRecoil = false;
 			}
 			this.eachEvent('Update');
-			if (!pokemon.hp) {
+			if (!pokemon.hp && targets.length === 1) {
 				hit++; // report the correct number of hits for multihit moves
 				break;
 			}
@@ -685,7 +700,9 @@ let BattleScripts = {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
-		if (move.multihit && !move.smartTarget) this.add('-hitcount', targets[0], hit - 1);
+		if (move.multihit && typeof move.smartTarget !== 'boolean') {
+			this.add('-hitcount', targets[0], hit - 1);
+		}
 
 		if (move.recoil && move.totalDamage) {
 			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
@@ -1234,7 +1251,13 @@ let BattleScripts = {
 		for (let moveSlot of pokemon.moveSlots) {
 			let move = this.dex.getMove(moveSlot.id);
 			let maxMove = this.getMaxMove(move, pokemon);
-			if (maxMove) result.maxMoves.push({move: maxMove.id, target: maxMove.target});
+			if (maxMove) {
+				if (maxMove.id === 'maxguard' && (pokemon.hasItem('assaultvest') || pokemon.volatiles['taunt'])) {
+					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
+				} else {
+					result.maxMoves.push({move: maxMove.id, target: maxMove.target});
+				}
+			}
 		}
 		if (pokemon.canGigantamax) result.gigantamax = pokemon.canGigantamax;
 		return result;

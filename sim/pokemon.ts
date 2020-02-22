@@ -203,7 +203,7 @@ export class Pokemon {
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
 	canDynamax: boolean;
-	canGigantamax: string | null;
+	readonly canGigantamax: string | null;
 
 	staleness?: 'internal' | 'external';
 	pendingStaleness?: 'internal' | 'external';
@@ -602,33 +602,20 @@ export class Pokemon {
 	}
 
 	/** Get targets for Dragon Darts */
-	getSmartTargets(target: Pokemon, move: Move) {
+	getSmartTargets(target: Pokemon, move: ActiveMove) {
 		const target2 = target.nearbyAllies()[0];
-		if (!target2 || target2 === this || !target2.hp) return [target];
-		if (!target.hp) return [target2];
-
-		if (target.isSemiInvulnerable()) return [target2];
-		if (target2.isSemiInvulnerable()) return [target];
-
-		if (target.isProtected()) return [target2];
-		if (target2.isProtected()) return [target];
-
-		if (target.side.sideConditions['matblock']) return [target2];
-
-		if (target.hasAbility('wonderguard') && this.battle.dex.getEffectiveness(move.type, target) <= 0) {
-			return [target2];
-		}
-		if (target2.hasAbility('wonderguard') && this.battle.dex.getEffectiveness(move.type, target2) <= 0) {
+		if (!target2 || target2 === this || !target2.hp) {
+			move.smartTarget = false;
 			return [target];
 		}
-
-		if (!target.hasItem('ringtarget') && !this.battle.dex.getImmunity(move.type, target)) return [target2];
-		if (!target2.hasItem('ringtarget') && !this.battle.dex.getImmunity(move.type, target2)) return [target];
-
+		if (!target.hp) {
+			move.smartTarget = false;
+			return [target2];
+		}
 		return [target, target2];
 	}
 
-	getMoveTargets(move: Move, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
+	getMoveTargets(move: ActiveMove, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
 		let targets: Pokemon[] = [];
 		let pressureTargets;
 
@@ -667,16 +654,15 @@ export class Pokemon {
 				if (!possibleTarget) return {targets: [], pressureTargets: []};
 				target = possibleTarget;
 			}
-			const activeMove = this.battle.dex.getActiveMove(move);
 			if (target.side.active.length > 1 && !move.tracksTarget) {
 				const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
 					!(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) &&
 					!(this.hasItem('powerherb') && move.id !== 'skydrop');
 				if (!isCharging) {
-					target = this.battle.priorityEvent('RedirectTarget', this, this, activeMove, target);
+					target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
 				}
 			}
-			if (activeMove.smartTarget) {
+			if (move.smartTarget) {
 				targets = this.getSmartTargets(target, move);
 				target = targets[0];
 			} else {

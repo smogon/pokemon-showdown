@@ -1095,7 +1095,7 @@ interface Format extends Readonly<BasicEffect & FormatsData> {
 type SpreadMoveTargets = (Pokemon | false | null)[]
 type SpreadMoveDamage = (number | boolean | undefined)[]
 type ZMoveOptions = ({move: string, target: MoveTarget} | null)[]
-type DynamaxOptions = {maxMoves: ({move: string, target: MoveTarget})[], gigantamax?: string}
+type DynamaxOptions = {maxMoves: ({move: string, target: MoveTarget, disabled?: boolean})[], gigantamax?: string}
 
 interface BattleScriptsData {
 	gen: number

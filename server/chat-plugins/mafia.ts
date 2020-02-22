@@ -3178,7 +3178,7 @@ export const commands: ChatCommands = {
 
 			MafiaData.roles[id] = role;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDROLE`, user, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDROLE`, null, id, {noalts: true, noip: true});
 			this.sendReply(`The role ${id} was added to the database.`);
 		},
 		addrolehelp: [`/mafia addrole name|alignment|image|memo1|memo2... - adds a role to the database. Name, memo are required. Requires % @ # & ~`],
@@ -3207,7 +3207,7 @@ export const commands: ChatCommands = {
 
 			MafiaData.alignments[id] = alignment;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDALIGNMENT`, user, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDALIGNMENT`, null, id, {noalts: true, noip: true});
 			this.sendReply(`The alignment ${id} was added to the database.`);
 		},
 		addalignmenthelp: [`/mafia addalignment name|plural|color|button color|image|memo1|memo2... - adds a memo to the database. Name, plural, memo are required. Requires % @ # & ~`],
@@ -3249,7 +3249,7 @@ export const commands: ChatCommands = {
 			const theme: MafiaDataTheme = {name, desc, ...rolelistsMap};
 			MafiaData.themes[id] = theme;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDTHEME`, user, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDTHEME`, null, id, {noalts: true, noip: true});
 			this.sendReply(`The theme ${id} was added to the database.`);
 		},
 		addthemehelp: [`/mafia addtheme name|description|players:rolelist|players:rolelist... - adds a theme to the database. Requires % @ # & ~`],
@@ -3287,7 +3287,7 @@ export const commands: ChatCommands = {
 			const IDEA: MafiaDataIDEA = {name, choices, picks, roles};
 			MafiaData.IDEAs[id] = IDEA;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDIDEA`, user, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDIDEA`, null, id, {noalts: true, noip: true});
 			this.sendReply(`The IDEA ${id} was added to the database.`);
 		},
 		addideahelp: [
@@ -3311,7 +3311,7 @@ export const commands: ChatCommands = {
 			const term: MafiaDataTerm = {name, memo};
 			MafiaData.terms[id] = term;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDTERM`, user, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDTERM`, null, id, {noalts: true, noip: true});
 			this.sendReply(`The term ${id} was added to the database.`);
 		},
 		addtermhelp: [`/mafia addterm name|memo1|memo2... - Adds a term to the database. Requires % @ # & ~`],
@@ -3335,7 +3335,7 @@ export const commands: ChatCommands = {
 
 			MafiaData.aliases[from] = to;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDALIAS`, user, `${from}: ${to}`, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDALIAS`, null, `${from}: ${to}`, {noalts: true, noip: true});
 			this.sendReply(`The alias ${from} was added, pointing to ${to}.`);
 		},
 		addaliashelp: [
@@ -3378,7 +3378,7 @@ export const commands: ChatCommands = {
 
 			writeFile(DATA_FILE, MafiaData);
 			if (buf) this.sendReply(buf);
-			this.modlog(`MAFIADELETEDATA`, user, `${entry} from ${source}`, {noalts: true, noip: true});
+			this.modlog(`MAFIADELETEDATA`, null, `${entry} from ${source}`, {noalts: true, noip: true});
 			this.sendReply(`The entry ${entry} was deleted from the ${source} database.`);
 		},
 		deletedatahelp: [`/mafia deletedata source,entry - Removes an entry from the database. Requires % @ # & ~`],

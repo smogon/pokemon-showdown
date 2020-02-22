@@ -4459,8 +4459,8 @@ let BattleAbilities = {
 		desc: "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.",
 		shortDesc: "Exchanges abilities when hit with a contact move.",
 		onDamagingHit(damage, target, source, move) {
-			if (source.ability === 'wanderingspirit') return;
-			if (target.volatiles['dynamax'] || target.ability === 'illusion' || target.ability === 'wonderguard') return;
+			if (target.volatiles['dynamax']) return;
+			if (['illusion', 'wanderingspirit', 'wonderguard'].includes(source.ability)) return;
 			if (move.flags['contact']) {
 				let sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
@@ -4625,7 +4625,11 @@ let BattleAbilities = {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
 			if (target.runEffectiveness(move) <= 0) {
-				this.add('-immune', target, '[from] ability: Wonder Guard');
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-immune', target, '[from] ability: Wonder Guard');
+				}
 				return null;
 			}
 		},

@@ -1,7 +1,6 @@
 'use strict';
 
 import {FS} from '../../lib/fs';
-import * as fs from 'fs';
 
 const DAY = 24 * 60 * 60 * 1000;
 const SPOTLIGHT_FILE = 'config/chat-plugins/spotlights.json';
