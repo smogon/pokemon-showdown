@@ -3382,6 +3382,9 @@ let BattleItems = {
 			basePower: 80,
 			type: "Flying",
 		},
+		onAfterSetStatus(status, pokemon) {
+			pokemon.eatItem();
+		},
 		onUpdate(pokemon) {
 			if (pokemon.status || pokemon.volatiles['confusion']) {
 				pokemon.eatItem();
