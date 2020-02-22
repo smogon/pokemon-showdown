@@ -18,7 +18,15 @@ describe('Lum Berry', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it.skip('should be eaten immediately when the holder gains a status condition', function () {
+	it('should cure confusion', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Golurk', ability: 'noguard', moves: ['dynamicpunch']}]});
+		battle.setPlayer('p2', {team: [{species: 'Shuckle', item: 'lumberry', moves: ['sleeptalk']}]});
+		battle.makeChoices('move dynamicpunch', 'move sleeptalk');
+		assert.ok(!battle.p2.active[0].volatiles['confusion']);
+	});
+
+	it('should be eaten immediately when the holder gains a status condition', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Charizard', item: 'lumberry', moves: ['outrage']}]});
 		battle.setPlayer('p2', {team: [{species: 'Toxapex', moves: ['recover', 'banefulbunker']}]});
