@@ -197,15 +197,6 @@ let Formats = [
 		ruleset: ['Standard GBU'],
 		banlist: ['Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax'],
 		minSourceGen: 8,
-		onValidateSet(set) {
-			const allowedGigantamaxes = [
-				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
-				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
-			];
-			if (set.species.endsWith('-Gmax') && !allowedGigantamaxes.includes(set.species)) {
-				return [`${set.species} is not an allowed Gigantamax in this format.`];
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Custom Game",
@@ -296,15 +287,6 @@ let Formats = [
 		ruleset: ['Standard GBU'],
 		banlist: ['Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax'],
 		minSourceGen: 8,
-		onValidateSet(set) {
-			const allowedGigantamaxes = [
-				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
-				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
-			];
-			if (set.species.endsWith('-Gmax') && !allowedGigantamaxes.includes(set.species)) {
-				return [`${set.species} is not an allowed Gigantamax in this format.`];
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Galar Newcomers",
