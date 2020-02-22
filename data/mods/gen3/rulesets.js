@@ -13,7 +13,7 @@ let BattleFormats = {
 		name: 'UU NFE Clause',
 		desc: "Bans all NFE Pokemon, except Scyther.",
 		banlist: [
-			"Abra", "Anorith", "Aron", "Azurill", "Bagon", "Baltoy", "Barboach", "Bayleef", "Beldum", "Bellsprout", "Bulbasaur","Cacnea",
+			"Abra", "Anorith", "Aron", "Azurill", "Bagon", "Baltoy", "Barboach", "Bayleef", "Beldum", "Bellsprout", "Bulbasaur", "Cacnea",
 			"Carvanha", "Cascoon", "Caterpie", "Charmander", "Charmeleon", "Chikorita", "Chinchou", "Clamperl", "Clefairy", "Cleffa",
 			"Combusken", "Corphish", "Croconaw", "Cubone", "Cyndaquil", "Diglett", "Doduo", "Dragonair", "Dratini", "Drowzee", "Duskull",
 			"Eevee", "Ekans", "Electrike", "Elekid", "Exeggcute", "Feebas", "Flaaffy", "Gastly", "Geodude", "Gloom", "Goldeen", "Grimer",
