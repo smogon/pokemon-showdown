@@ -267,8 +267,13 @@ let Formats = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		ruleset: ['Standard GBU', 'Galar Pokedex', 'VGC Timer'],
-		banlist: ['Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax'],
+		ruleset: ['Standard GBU', 'VGC Timer'],
+		banlist: [
+			// Gigantamax Pokemon
+			'Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax',
+			// Can't obtain in Galar without transferring
+			'Cobalion', 'Raichu-Alola', 'Terrakion', 'Virizion', 'Weezing-Base',
+		],
 		minSourceGen: 8,
 	},
 	{
