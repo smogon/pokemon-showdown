@@ -415,6 +415,12 @@ exports.disablehotpatchall = false;
 exports.forcedpublicprefixes = [];
 
 /**
+ * startuphook - function to call when the server is fully initialized and ready
+ * to serve requests.
+ */
+exports.startuphook = function () {};
+
+/**
  * permissions and groups:
  *   Each entry in `grouplist` is a seperate group. Some of the members are "special"
  *     while the rest is just a normal permission.
