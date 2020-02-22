@@ -26,7 +26,11 @@ class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 		this.process.send(`${taskId}\nNEW`);
 	}
 	_write(message: string) {
-		if (!this.process.connected) return;
+		if (!this.process.connected) {
+			// we don't throw an error here because it would overwhelm the error logger;
+			// instead, we let ProcessManager#releaseCrashed do it once per process
+			return;
+		}
 		this.process.send(`${this.taskId}\nWRITE\n${message}`);
 		// responses are handled in ProcessWrapper
 	}
@@ -38,11 +42,12 @@ class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 
 interface ProcessWrapper {
 	load: number;
+	process: ChildProcess;
 	release: () => Promise<void>;
 }
 
 /** Wraps the process object in the PARENT process. */
-export class QueryProcessWrapper {
+export class QueryProcessWrapper implements ProcessWrapper {
 	process: ChildProcess;
 	taskId: number;
 	pendingTasks: Map<number, (resp: string) => void>;
@@ -124,19 +129,15 @@ export class QueryProcessWrapper {
 }
 
 /** Wraps the process object in the PARENT process. */
-export class StreamProcessWrapper {
+export class StreamProcessWrapper implements ProcessWrapper {
 	process: ChildProcess;
-	taskId: number;
-	activeStreams: Map<number, SubprocessStream>;
-	pendingRelease: Promise<void> | null;
-	resolveRelease: (() => void) | null;
+	taskId = 0;
+	activeStreams = new Map<number, SubprocessStream>();
+	pendingRelease: Promise<void> | null = null;
+	resolveRelease: (() => void) | null = null;
 
 	constructor(file: string) {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
-		this.taskId = 0;
-		this.activeStreams = new Map();
-		this.pendingRelease = null;
-		this.resolveRelease = null;
 
 		this.process.on('message', (message: string) => {
 			let nlLoc = message.indexOf('\n');
@@ -232,18 +233,16 @@ export class StreamProcessWrapper {
  * string and returns a string or Promise<string>.
  */
 export class ProcessManager {
-	processes: ProcessWrapper[];
-	releasingProcesses: ProcessWrapper[];
-	// @ts-ignore
-	module: NodeJs.Module;
-	filename: string;
-	basename: string;
-	isParentProcess: boolean;
+	processes: ProcessWrapper[] = [];
+	releasingProcesses: ProcessWrapper[] = [];
+	readonly module: NodeJS.Module;
+	readonly filename: string;
+	readonly basename: string;
+	readonly isParentProcess: boolean;
+	crashTime = 0;
+	crashRespawnCount = 0;
 
-	// @ts-ignore
-	constructor(module: NodeJs.Module) {
-		this.processes = [];
-		this.releasingProcesses = [];
+	constructor(module: NodeJS.Module) {
 		this.module = module;
 		this.filename = module.filename;
 		this.basename = path.basename(module.filename);
@@ -256,12 +255,56 @@ export class ProcessManager {
 			return null;
 		}
 		let lowestLoad = this.processes[0];
+		let crashed = false;
 		for (const process of this.processes) {
+			if (!process.process.connected) {
+				// process crashed
+				crashed = true;
+				continue;
+			}
 			if (process.load < lowestLoad.load) {
 				lowestLoad = process;
 			}
 		}
+		if (crashed) this.releaseCrashed();
 		return lowestLoad;
+	}
+	releaseCrashed() {
+		const count = this.processes.length;
+
+		const released = [];
+		const unreleased = [];
+		for (const process of this.processes) {
+			if (process.process.connected) {
+				unreleased.push(process);
+				continue;
+			}
+			released.push(process);
+			void process.release().then(() => {
+				const index = this.releasingProcesses.indexOf(process);
+				if (index >= 0) {
+					this.releasingProcesses.splice(index, 1);
+				}
+			});
+		}
+		const now = Date.now();
+		if (this.crashTime && now - this.crashTime > 30 * 60 * 1000) {
+			this.crashTime = 0;
+			this.crashRespawnCount = 0;
+		}
+		if (!this.crashTime) this.crashTime = now;
+		this.crashRespawnCount += released.length;
+		// Notify any global crash logger
+		void Promise.reject(
+			new Error(`Process ${this.basename} ${released.map(process => process.process.pid).join(', ')} crashed and had to be restarted`)
+		);
+		this.releasingProcesses = this.releasingProcesses.concat(released);
+		this.processes = unreleased;
+
+		// only respawn processes if there have been fewer than 5 crashes in 30 minutes
+		if (this.crashRespawnCount <= 5) {
+			this.spawn(count);
+		}
 	}
 	unspawn() {
 		const released = [];
@@ -293,7 +336,7 @@ export class ProcessManager {
 	createProcess(): ProcessWrapper {
 		throw new Error(`implemented by subclass`);
 	}
-	listen() {
+	listen(): void {
 		throw new Error(`implemented by subclass`);
 	}
 	destroy() {
