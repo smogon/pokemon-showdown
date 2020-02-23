@@ -1252,7 +1252,7 @@ let BattleScripts = {
 			let move = this.dex.getMove(moveSlot.id);
 			let maxMove = this.getMaxMove(move, pokemon);
 			if (maxMove) {
-				if (maxMove.id === 'maxguard' && (pokemon.hasItem('assaultvest') || pokemon.volatiles['taunt'])) {
+				if (pokemon.maxMoveDisabled(maxMove)) {
 					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
 				} else {
 					result.maxMoves.push({move: maxMove.id, target: maxMove.target});
