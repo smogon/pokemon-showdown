@@ -284,24 +284,18 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's highest stat is raised by 1 if it attacks and KOes another Pokemon.",
 		onSourceFaint(target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				source.addVolatile('beastboost');
-			}
-		},
-		effect: {
-			duration: 1,
-			onStart(pokemon) {
 				let statName = 'atk';
 				let bestStat = 0;
 				/** @type {StatNameExceptHP} */
 				let s;
-				for (s in pokemon.storedStats) {
-					if (pokemon.storedStats[s] > bestStat) {
+				for (s in source.storedStats) {
+					if (source.storedStats[s] > bestStat) {
 						statName = s;
-						bestStat = pokemon.storedStats[s];
+						bestStat = source.storedStats[s];
 					}
 				}
-				this.boost({[statName]: 1}, pokemon);
-			},
+				this.boost({[statName]: 1}, source);
+			}
 		},
 		id: "beastboost",
 		name: "Beast Boost",
@@ -2324,14 +2318,8 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
 		onSourceFaint(target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				source.addVolatile('moxie');
+				this.boost({atk: 1}, source);
 			}
-		},
-		effect: {
-			duration: 1,
-			onStart(pokemon) {
-				this.boost({atk: 1}, pokemon);
-			},
 		},
 		id: "moxie",
 		name: "Moxie",

@@ -17,19 +17,4 @@ describe('Moxie', function () {
 		battle.makeChoices('move crunch', 'move sleeptalk');
 		assert.statStage(battle.p1.active[0], 'atk', 1);
 	});
-
-	it('should only activate once if multiple Pokemon are KOed', function () {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: "Krookodile", ability: 'moxie', moves: ['earthquake']},
-			{species: "Swanna", moves: ['tailwind']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Heatran", moves: ['sleeptalk']},
-			{species: 'Magnezone', moves: ['sleeptalk']},
-			{species: "Magikarp", moves: ['splash']},
-		]});
-		battle.makeChoices('move earthquake, move tailwind', 'move sleep talk, move sleep talk');
-		assert.statStage(battle.p1.active[0], 'atk', 1);
-	});
 });
