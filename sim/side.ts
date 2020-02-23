@@ -470,8 +470,8 @@ export class Side {
 			moveid = 'struggle';
 		} else if (maxMove) {
 			// Dynamaxed; only Taunt and Assault Vest disable Max Guard
-			if (maxMove.id === 'maxguard' && (pokemon.hasItem('assaultvest') || pokemon.volatiles['taunt'])) {
-				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`);
+			if (pokemon.maxMoveDisabled(maxMove)) {
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${maxMove.name} is disabled`);
 			}
 		} else if (!zMove) {
 			// Check for disabled moves
@@ -909,9 +909,19 @@ export class Side {
 		if (this.requestState === 'teampreview') {
 			if (!this.isChoiceDone()) this.chooseTeam();
 		} else if (this.requestState === 'switch') {
-			while (!this.isChoiceDone()) this.chooseSwitch();
+			let i = 0;
+			while (!this.isChoiceDone()) {
+				if (!this.chooseSwitch()) throw new Error(`autoChoose switch crashed: ${this.choice.error}`);
+				i++;
+				if (i > 10) throw new Error(`autoChoose failed: infinite looping`);
+			}
 		} else if (this.requestState === 'move') {
-			while (!this.isChoiceDone()) this.chooseMove();
+			let i = 0;
+			while (!this.isChoiceDone()) {
+				if (!this.chooseMove()) throw new Error(`autoChoose crashed: ${this.choice.error}`);
+				i++;
+				if (i > 10) throw new Error(`autoChoose failed: infinite looping`);
+			}
 		}
 		return true;
 	}
