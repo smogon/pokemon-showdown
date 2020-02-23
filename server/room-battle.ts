@@ -699,8 +699,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 	async listen() {
 		let next;
 		let disconnected = false;
-		// tslint:disable-next-line: no-conditional-assignment
 		try {
+			// tslint:disable-next-line: no-conditional-assignment
 			while ((next = await this.stream.read())) {
 				this.receive(next.split('\n'));
 			}
