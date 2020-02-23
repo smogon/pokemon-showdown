@@ -835,7 +835,13 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard Pet Mod',
 		desc: "Holds all custom Pet Mod ruleset validation",
-		// Implemented in mods/petmod/rulesets.js
+		// Implemented in mods/[petmod]/rulesets.js
+	},
+	uunfeclause: {
+		effectType: 'ValidatorRule',
+		name: 'UU NFE Clause',
+		desc: "Bans all NFE Pokemon, except Scyther, from [Gen 3] UU.",
+		// Implemented in mods/gen3/rulesets.js
 	},
 };
 
