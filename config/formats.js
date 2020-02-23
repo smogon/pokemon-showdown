@@ -1022,7 +1022,7 @@ let Formats = [
 
 		mod: 'gen3',
 		// searchShow: false,
-		ruleset: ['Standard'],
+		ruleset: ['Standard', 'UU NFE Clause'],
 		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain'],
 	},
 	{
@@ -2139,7 +2139,7 @@ let Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['[Gen 3] UU'],
+		ruleset: ['[Gen 3] UU', '!UU NFE Clause'],
 		banlist: ['UU'],
 	},
 	{
