@@ -1159,7 +1159,7 @@ export class RoomBattleStream extends BattleStream {
 			const p2active = p2 && p2.active[0];
 			const p3active = p3 && p3.active[0];
 			const p4active = p4 && p4.active[0];
-			battle.inputLog.push(`${type} ${message}`);
+			battle.inputLog.push(`>${type} ${message}`);
 			message = message.replace(/\f/g, '\n');
 			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
 			try {
