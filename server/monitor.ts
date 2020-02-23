@@ -85,6 +85,7 @@ export const Monitor = new class {
 		const crashType = crashlogger(error, source, details);
 		Rooms.global.reportCrash(error, source);
 		if (crashType === 'lockdown') {
+			Config.autolockdown = false;
 			Rooms.global.startLockdown(error);
 		}
 	}
