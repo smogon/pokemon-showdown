@@ -27,8 +27,8 @@ class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	}
 	_write(message: string) {
 		if (!this.process.connected) {
-			// we don't throw an error here because it would overwhelm the error logger;
-			// instead, we let ProcessManager#releaseCrashed do it once per process
+			this.pushError(new Error(`Process disconnected (possibly crashed?)`));
+			this.push(null);
 			return;
 		}
 		this.process.send(`${this.taskId}\nWRITE\n${message}`);
@@ -53,6 +53,7 @@ export class QueryProcessWrapper implements ProcessWrapper {
 	pendingTasks: Map<number, (resp: string) => void>;
 	pendingRelease: Promise<void> | null;
 	resolveRelease: (() => void) | null;
+	debug?: string;
 
 	constructor(file: string) {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
@@ -68,6 +69,11 @@ export class QueryProcessWrapper implements ProcessWrapper {
 				const error = new Error();
 				error.stack = message.slice(nlLoc + 1);
 				throw error;
+			}
+
+			if (message.slice(0, nlLoc) === 'DEBUG') {
+				this.debug = message.slice(nlLoc + 1);
+				return;
 			}
 
 			const taskId = parseInt(message.slice(0, nlLoc), 10);
@@ -135,6 +141,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	activeStreams = new Map<number, SubprocessStream>();
 	pendingRelease: Promise<void> | null = null;
 	resolveRelease: (() => void) | null = null;
+	debug?: string;
 
 	constructor(file: string) {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
@@ -146,6 +153,11 @@ export class StreamProcessWrapper implements ProcessWrapper {
 				const error = new Error();
 				error.stack = message.slice(nlLoc + 1);
 				throw error;
+			}
+
+			if (message.slice(0, nlLoc) === 'DEBUG') {
+				this.debug = message.slice(nlLoc + 1);
+				return;
 			}
 
 			const taskId = parseInt(message.slice(0, nlLoc), 10);
@@ -235,6 +247,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 export class ProcessManager {
 	processes: ProcessWrapper[] = [];
 	releasingProcesses: ProcessWrapper[] = [];
+	crashedProcesses: ProcessWrapper[] = [];
 	readonly module: NodeJS.Module;
 	readonly filename: string;
 	readonly basename: string;
@@ -299,6 +312,7 @@ export class ProcessManager {
 			new Error(`Process ${this.basename} ${released.map(process => process.process.pid).join(', ')} crashed and had to be restarted`)
 		);
 		this.releasingProcesses = this.releasingProcesses.concat(released);
+		this.crashedProcesses = this.crashedProcesses.concat(released);
 		this.processes = unreleased;
 
 		// only respawn processes if there have been fewer than 5 crashes in 30 minutes

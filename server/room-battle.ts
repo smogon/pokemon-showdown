@@ -698,13 +698,24 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 	async listen() {
 		let next;
+		let disconnected = false;
 		// tslint:disable-next-line: no-conditional-assignment
-		while ((next = await this.stream.read())) {
-			this.receive(next.split('\n'));
+		try {
+			while ((next = await this.stream.read())) {
+				this.receive(next.split('\n'));
+			}
+		} catch (err) {
+			// Disconnected processes are already crashlogged when they happen;
+			// also logging every battle room would overwhelm the crashlogger
+			if (err.message.includes('Process disconnected')) {
+				disconnected = true;
+			} else {
+				Monitor.crashlog(err, 'A sim stream');
+			}
 		}
 		if (!this.ended) {
 			this.room.add(`|bigerror|The simulator process has crashed. We've been notified and will fix this ASAP.`);
-			Monitor.crashlog(new Error(`Process disconnected`), `A battle`);
+			if (!disconnected) Monitor.crashlog(new Error(`Sim stream interrupted`), `A sim stream`);
 			this.started = true;
 			this.ended = true;
 			this.checkActive();
@@ -1102,12 +1113,14 @@ export class RoomBattleStream extends BattleStream {
 	readonly battle: Battle;
 	constructor() {
 		super({keepAlive: true});
-		// @ts-ignore
-		this.battle = null;
+		this.battle = null!;
 	}
 
 	_write(chunk: string) {
 		const startTime = Date.now();
+		if (this.battle && Config.debugsimprocesses && process.send) {
+			process.send('DEBUG\n' + this.battle.inputLog.join('\n'));
+		}
 		try {
 			this._writeLines(chunk);
 		} catch (err) {
