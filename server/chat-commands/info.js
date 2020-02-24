@@ -2409,12 +2409,14 @@ const commands = {
 
 	'!code': true,
 	code(target, room, user) {
+		// XXX: target is trimmed by Chat#splitMessage. Let's not add another
+		// awful hack like ! or help command keys for whether or not the target
+		// is raw for now.
+		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimEnd();
 		if (!target) return this.parse('/help code');
 		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
 
-		const params = target.split('\n');
-		if (!params[0]) params.unshift();
-		if (!params[params.length - 1]) params.pop();
+		const params = target.substr(+target.startsWith('\n')).split('\n');
 		if (params.length === 1 && params[0].length < 80 && !params[0].includes('```') && this.shouldBroadcast()) {
 			return this.canTalk(`\`\`\`${params[0]}\`\`\``);
 		}
