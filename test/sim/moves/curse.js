@@ -14,7 +14,7 @@ describe('Curse', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
-		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
 	it('should request the Ghost target after the user becomes Ghost', function () {
@@ -22,9 +22,9 @@ describe('Curse', function () {
 		battle.setPlayer('p1', {team: [{species: "Rapidash", ability: 'levitate', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Trevenant", ability: 'shedskin', item: 'laggingtail', moves: ['trickortreat']}]});
 
-		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 		battle.makeChoices('auto', 'auto');
-		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
 	it('should not request a target after the user stops being Ghost', function () {
@@ -32,16 +32,16 @@ describe('Curse', function () {
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Jellicent", ability: 'waterabsorb', item: '', moves: ['soak']}]});
 
-		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 		battle.makeChoices('auto', 'auto');
-		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
 	it('should not request a target if the user is a known non-Ghost', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
-		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
 	it('should not request a target if the user is an unknown non-Ghost', function () {
@@ -54,7 +54,7 @@ describe('Curse', function () {
 		battle.makeChoices('move reflecttype', 'auto'); // Reflect Type!
 
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Dark"]); // Copied Zoroark's type instead of Gengar's
-		assert.equal(battle.p1.active[0].getRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
 	it('should curse a non-Ghost user with Protean', function () {

@@ -172,36 +172,7 @@ export class Side {
 			pokemon: [] as AnyObject[],
 		};
 		for (const pokemon of this.pokemon) {
-			const entry: AnyObject = {
-				ident: pokemon.fullname,
-				details: pokemon.details,
-				condition: pokemon.getHealth().secret,
-				active: (pokemon.position < pokemon.side.active.length),
-				stats: {
-					atk: pokemon.baseStoredStats['atk'],
-					def: pokemon.baseStoredStats['def'],
-					spa: pokemon.baseStoredStats['spa'],
-					spd: pokemon.baseStoredStats['spd'],
-					spe: pokemon.baseStoredStats['spe'],
-				},
-				moves: pokemon.moves.map(move => {
-					if (move === 'hiddenpower') {
-						return move + toID(pokemon.hpType) + (this.battle.gen < 6 ? '' : pokemon.hpPower);
-					}
-					if (move === 'frustration' || move === 'return') {
-						const m = this.battle.dex.getMove(move)!;
-						// @ts-ignore - Frustration and Return only require the source Pokemon
-						const basePower = m.basePowerCallback(pokemon);
-						return `${move}${basePower}`;
-					}
-					return move;
-				}),
-				baseAbility: pokemon.baseAbility,
-				item: pokemon.item,
-				pokeball: pokemon.pokeball,
-			};
-			if (this.battle.gen > 6) entry.ability = pokemon.ability;
-			data.pokemon.push(entry);
+			data.pokemon.push(pokemon.getSwitchRequestData);
 		}
 		return data;
 	}
@@ -373,7 +344,7 @@ export class Side {
 		// Parse moveText (name or index)
 		// If the move is not found, the action is invalid without requiring further inspection.
 
-		const requestMoves = pokemon.getRequestData().moves;
+		const requestMoves = pokemon.getMoveRequestData().moves;
 		let moveid = '';
 		let targetType = '';
 		if (autoChoose) moveText = 1;

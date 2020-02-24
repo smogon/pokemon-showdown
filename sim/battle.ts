@@ -1132,7 +1132,7 @@ export class Battle {
 		default: {
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
-				const activeData = side.active.map(pokemon => pokemon && pokemon.getRequestData());
+				const activeData = side.active.map(pokemon => pokemon?.getMoveRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
 			}
 			break;
