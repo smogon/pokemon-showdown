@@ -41,69 +41,132 @@ const pendingUpdates = new Map<string, PendingUpdate>();
 
 class FSPath {
 	path: string;
+	queue: Promise<any>;
 
 	constructor(path: string) {
 		this.path = pathModule.resolve(ROOT_PATH, path);
+		this.queue = Promise.resolve();
 	}
 
 	parentDir() {
 		return new FSPath(pathModule.dirname(this.path));
 	}
 
+	lock(): Promise<number> {
+		return new Promise((resolve, reject) => {
+			fs.open(`${this.path}.lock`, 'ax', 0o000, (err, fd) => {
+				err ? reject(err) : resolve(fd);
+			});
+		});
+	}
+
+	unlock(fd: number): Promise<true> {
+		return new Promise((resolve, reject) => {
+			fs.close(fd, closeErr => {
+				if (closeErr) return reject(closeErr);
+				fs.unlink(`${this.path}.lock`, unlinkErr => {
+					unlinkErr ? reject(unlinkErr) : resolve(true);
+				});
+			});
+		});
+	}
+
+	async protect<T>(syscall: () => Promise<T>): Promise<T> {
+		return this.queue = this.queue.then(() => this.doProtect(syscall));
+	}
+	private async doProtect<T>(syscall: () => Promise<T>): Promise<T> {
+		const lock = await this.lock();
+		const result = await syscall();
+		await this.unlock(lock);
+		return result;
+	}
+
+	lockSync(): number {
+		return fs.openSync(`${this.path}.lock`, 'ax', 0o000);
+	}
+
+	unlockSync(fd: number): void {
+		fs.closeSync(fd);
+		fs.unlinkSync(`${this.path}.lock`);
+	}
+
+	protectSync<T>(syscall: () => T): T {
+		const lock = this.lockSync();
+		const result = syscall();
+		this.unlockSync(lock);
+		return result;
+	}
+
 	read(options: AnyObject | string = 'utf8'): Promise<string> {
 		if (typeof options !== 'string' && options.encoding === undefined) {
 			options.encoding = 'utf8';
 		}
-		return new Promise((resolve, reject) => {
-			fs.readFile(this.path, options, (err, data) => {
-				err ? reject(err) : resolve(data as string);
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.readFile(this.path, options, (err, data) => {
+					err ? reject(err) : resolve(data as string);
+				});
+			})
+		));
 	}
 
 	readSync(options: AnyObject | string = 'utf8'): string {
 		if (typeof options !== 'string' && options.encoding === undefined) {
 			options.encoding = 'utf8';
 		}
-		return fs.readFileSync(this.path, options) as string;
+		return this.protectSync(() => (
+			fs.readFileSync(this.path, options) as string
+		));
 	}
 
 	readBuffer(options: AnyObject | string = {}): Promise<Buffer> {
-		return new Promise((resolve, reject) => {
-			fs.readFile(this.path, options, (err, data) => {
-				err ? reject(err) : resolve(data as Buffer);
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.readFile(this.path, options, (err, data) => {
+					err ? reject(err) : resolve(data as Buffer);
+				});
+			})
+		));
 	}
 
 	readBufferSync(options: AnyObject | string = {}) {
-		return fs.readFileSync(this.path, options) as Buffer;
+		return this.protectSync(() => (
+			fs.readFileSync(this.path, options) as Buffer
+		));
 	}
 
 	exists(): Promise<boolean> {
-		return new Promise(resolve => {
-			fs.exists(this.path, exists => {
-				resolve(exists);
-			});
-		});
+		return this.protect(() => (
+			new Promise(resolve => {
+				fs.exists(this.path, exists => {
+					resolve(exists);
+				});
+			})
+		));
 	}
 
-	existsSync() {
-		return fs.existsSync(this.path);
+	existsSync(): boolean {
+		return this.protectSync(() => (
+			fs.existsSync(this.path)
+		));
 	}
 
 	readIfExists(): Promise<string> {
-		return new Promise((resolve, reject) => {
-			fs.readFile(this.path, 'utf8', (err, data) => {
-				if (err && err.code === 'ENOENT') return resolve('');
-				err ? reject(err) : resolve(data);
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.readFile(this.path, 'utf8', (err, data) => {
+					if (err && err.code === 'ENOENT') return resolve('');
+					err ? reject(err) : resolve(data);
+				});
+			})
+		));
 	}
 
-	readIfExistsSync() {
+	readIfExistsSync(): string {
 		try {
-			return fs.readFileSync(this.path, 'utf8');
+			return this.protectSync(() => (
+				fs.readFileSync(this.path, 'utf8')
+			));
 		} catch (err) {
 			if (err.code !== 'ENOENT') throw err;
 		}
@@ -112,37 +175,25 @@ class FSPath {
 
 	write(data: string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
-			fs.writeFile(this.path, data, options, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.writeFile(this.path, data, options, err => {
+					err ? reject(err) : resolve();
+				});
+			})
+		));
 	}
 
 	writeSync(data: string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return;
-		return fs.writeFileSync(this.path, data, options);
-	}
-
-	/**
-	 * Writes to a new file before renaming to replace an old file. If
-	 * the process crashes while writing, the old file won't be lost.
-	 * Does not protect against simultaneous writing; use writeUpdate
-	 * for that.
-	 */
-	async safeWrite(data: string | Buffer, options: object = {}) {
-		await FS(this.path + '.NEW').write(data, options);
-		await FS(this.path + '.NEW').rename(this.path);
-	}
-
-	safeWriteSync(data: string | Buffer, options: object = {}) {
-		FS(this.path + '.NEW').writeSync(data, options);
-		FS(this.path + '.NEW').renameSync(this.path);
+		return this.protectSync(() => (
+			fs.writeFileSync(this.path, data, options)
+		));
 	}
 
 	waitUntil(time: number): Promise<void> {
 		return new Promise(resolve => {
-			setTimeout(() => resolve(), time - Date.now());
+			setTimeout(resolve, time - Date.now());
 		});
 	}
 
@@ -190,7 +241,7 @@ class FSPath {
 			throttleTimer: null,
 		};
 		pendingUpdates.set(this.path, update);
-		void this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
+		void this.write(dataFetcher(), options).then(() => this.finishUpdate());
 	}
 	checkNextUpdate() {
 		const pendingUpdate = pendingUpdates.get(this.path);
@@ -223,65 +274,83 @@ class FSPath {
 
 	append(data: string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
-			fs.appendFile(this.path, data, options, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.appendFile(this.path, data, options, err => {
+					err ? reject(err) : resolve();
+				});
+			})
+		));
 	}
 
 	appendSync(data: string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return;
-		return fs.appendFileSync(this.path, data, options);
+		return this.protectSync(() => (
+			fs.appendFileSync(this.path, data, options)
+		));
 	}
 
 	symlinkTo(target: string) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
-			fs.symlink(target, this.path, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.symlink(target, this.path, err => {
+					err ? reject(err) : resolve();
+				});
+			})
+		));
 	}
 
 	symlinkToSync(target: string) {
 		if (Config.nofswriting) return;
-		return fs.symlinkSync(target, this.path);
+		return this.protectSync(() => (
+			fs.symlinkSync(target, this.path)
+		));
 	}
 
 	copyFile(dest: string) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
-			fs.copyFile(this.path, dest, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.copyFile(this.path, dest, err => {
+					err ? reject(err) : resolve();
+				});
+			})
+		));
 	}
 
 	rename(target: string) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
-			fs.rename(this.path, target, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.rename(this.path, target, err => {
+					err ? reject(err) : resolve();
+				});
+			})
+		));
 	}
 
 	renameSync(target: string) {
 		if (Config.nofswriting) return;
-		return fs.renameSync(this.path, target);
+		return this.protectSync(() => (
+			fs.renameSync(this.path, target)
+		));
 	}
 
 	readdir(): Promise<string[]> {
-		return new Promise((resolve, reject) => {
-			fs.readdir(this.path, (err, data) => {
-				err ? reject(err) : resolve(data);
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.readdir(this.path, (err, data) => {
+					err ? reject(err) : resolve(data);
+				});
+			})
+		));
 	}
 
 	readdirSync() {
-		return fs.readdirSync(this.path);
+		return this.protectSync(() => (
+			fs.readdirSync(this.path)
+		));
 	}
 
 	createReadStream() {
@@ -310,18 +379,22 @@ class FSPath {
 
 	unlinkIfExists() {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
-			fs.unlink(this.path, err => {
-				if (err && err.code === 'ENOENT') return resolve();
-				err ? reject(err) : resolve();
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.unlink(this.path, err => {
+					if (err && err.code === 'ENOENT') return resolve();
+					err ? reject(err) : resolve();
+				});
+			})
+		));
 	}
 
 	unlinkIfExistsSync() {
 		if (Config.nofswriting) return;
 		try {
-			fs.unlinkSync(this.path);
+			return this.protectSync(() => (
+				fs.unlinkSync(this.path)
+			));
 		} catch (err) {
 			if (err.code !== 'ENOENT') throw err;
 		}
@@ -329,32 +402,40 @@ class FSPath {
 
 	mkdir(mode: string | number = 0o755) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
-			fs.mkdir(this.path, mode, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.mkdir(this.path, mode, err => {
+					err ? reject(err) : resolve();
+				});
+			})
+		));
 	}
 
 	mkdirSync(mode: string | number = 0o755) {
 		if (Config.nofswriting) return;
-		return fs.mkdirSync(this.path, mode);
+		return this.protectSync(() => (
+			fs.mkdirSync(this.path, mode)
+		));
 	}
 
 	mkdirIfNonexistent(mode: string | number = 0o755) {
 		if (Config.nofswriting) return Promise.resolve();
-		return new Promise((resolve, reject) => {
-			fs.mkdir(this.path, mode, err => {
-				if (err && err.code === 'EEXIST') return resolve();
-				err ? reject(err) : resolve();
-			});
-		});
+		return this.protect(() => (
+			new Promise((resolve, reject) => {
+				fs.mkdir(this.path, mode, err => {
+					if (err && err.code === 'EEXIST') return resolve();
+					err ? reject(err) : resolve();
+				});
+			})
+		));
 	}
 
 	mkdirIfNonexistentSync(mode: string | number = 0o755) {
 		if (Config.nofswriting) return;
 		try {
-			fs.mkdirSync(this.path, mode);
+			return this.protectSync(() => (
+				fs.mkdirSync(this.path, mode)
+			));
 		} catch (err) {
 			if (err.code !== 'EEXIST') throw err;
 		}
@@ -401,27 +482,35 @@ class FSPath {
 	}
 
 	async isFile() {
-		return new Promise<boolean>((resolve, reject) => {
-			fs.stat(this.path, (err, stats) => {
-				err ? reject(err) : resolve(stats.isFile());
-			});
-		});
+		return this.protect(() => (
+			new Promise<boolean>((resolve, reject) => {
+				fs.stat(this.path, (err, stats) => {
+					err ? reject(err) : resolve(stats.isFile());
+				});
+			})
+		));
 	}
 
 	isFileSync() {
-		return fs.statSync(this.path).isFile();
+		return this.protectSync(() => (
+			fs.statSync(this.path).isFile()
+		));
 	}
 
 	async isDirectory() {
-		return new Promise<boolean>((resolve, reject) => {
-			fs.stat(this.path, (err, stats) => {
-				err ? reject(err) : resolve(stats.isDirectory());
-			});
-		});
+		return this.protect(() => (
+			new Promise<boolean>((resolve, reject) => {
+				fs.stat(this.path, (err, stats) => {
+					err ? reject(err) : resolve(stats.isDirectory());
+				});
+			})
+		));
 	}
 
 	isDirectorySync() {
-		return fs.statSync(this.path).isDirectory();
+		return this.protectSync(() => (
+			fs.statSync(this.path).isDirectory()
+		));
 	}
 }
 
@@ -461,14 +550,24 @@ class FileReadStream extends ReadStream {
 	_destroy() {
 		return new Promise(resolve => {
 			return this.fd.then(fd => {
-				fs.close(fd, () => resolve());
+				fs.close(fd, resolve);
 			});
 		});
 	}
 }
 
+const cache: Map<string, FSPath> = new Map();
+process.once('exit', async () => {
+	await Promise.all([...cache.values()].map(file => file.queue));
+});
+
 function getFs(path: string) {
-	return new FSPath(path);
+	const cached = cache.get(path);
+	if (cached) return cached;
+
+	const file = new FSPath(path);
+	cache.set(path, file);
+	return file;
 }
 
 export const FS = Object.assign(getFs, {
