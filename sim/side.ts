@@ -172,7 +172,7 @@ export class Side {
 			pokemon: [] as AnyObject[],
 		};
 		for (const pokemon of this.pokemon) {
-			data.pokemon.push(pokemon.getSwitchRequestData);
+			data.pokemon.push(pokemon.getSwitchRequestData());
 		}
 		return data;
 	}
