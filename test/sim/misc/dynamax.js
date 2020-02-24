@@ -38,4 +38,24 @@ describe("Dynamax", function () {
 		});
 		battle.makeChoices('move 1', 'move 2');
 	});
+
+	it('Max Move weather activates even if foe faints', function () {
+		battle = common.createBattle([[
+			{species: 'Shedinja', moves: ['splash']},
+		], [
+			{species: 'Mew', moves: ['watergun']},
+		]]);
+		battle.makeChoices('move 1', 'move 1 dynamax');
+		assert.equal(battle.field.weather, 'raindance');
+	});
+
+	it('Max Move weather activates before Sand Spit', function () {
+		battle = common.createBattle([[
+			{species: 'Shedinja', ability: 'sandspit', moves: ['splash']},
+		], [
+			{species: 'Mew', moves: ['watergun']},
+		]]);
+		battle.makeChoices('move 1', 'move 1 dynamax');
+		assert.equal(battle.field.weather, 'sandstorm');
+	});
 });
