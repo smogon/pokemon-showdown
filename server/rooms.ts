@@ -1368,6 +1368,13 @@ export class BasicChatRoom extends BasicRoom {
 		Rooms.rooms.delete(oldID);
 		Rooms.rooms.set(newID, this as ChatRoom);
 
+		for (const [alias, roomid] of Rooms.aliases.entries()) {
+			if (roomid === oldID) {
+				Rooms.aliases.set(alias, newID);
+			}
+		}
+		Rooms.aliases.set(oldID, newID);
+
 		for (const user of Object.values(this.users)) {
 			user.inRooms.delete(oldID);
 			user.inRooms.add(newID);
