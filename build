@@ -72,7 +72,7 @@ replace(path.join(__dirname, '.sim-dist'), [
 replace(path.join(__dirname, '.server-dist'), [
 	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.$2-dist$3`},
 ]);
-replace(path.join(__dirname, './tools/set-import'), [
+replace(path.join(__dirname, './tools/set-import/importer.js'), [
 	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.$2-dist$3`},
 ]);
 
