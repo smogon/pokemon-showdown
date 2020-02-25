@@ -795,6 +795,7 @@ export const commands: ChatCommands = {
 		room.add(`|expire|This room has been deleted.`);
 		this.sendReply(`The room "${title}" was deleted.`);
 		room.update();
+		if (room.roomid === 'lobby') Rooms.lobby = null;
 		room.destroy();
 	},
 	deleteroomhelp: [
