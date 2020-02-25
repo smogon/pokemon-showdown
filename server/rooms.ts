@@ -1373,7 +1373,14 @@ export class BasicChatRoom extends BasicRoom {
 				Rooms.aliases.set(alias, newID);
 			}
 		}
+		// add an alias from the old id
 		Rooms.aliases.set(oldID, newID);
+		if (!this.aliases) this.aliases = [];
+		this.aliases.push(oldID);
+		if (this.chatRoomData) {
+			this.chatRoomData.aliases = this.aliases;
+			Rooms.global.writeChatRoomData();
+		}
 
 		for (const user of Object.values(this.users)) {
 			user.inRooms.delete(oldID);
