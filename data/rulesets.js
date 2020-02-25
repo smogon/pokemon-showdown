@@ -294,7 +294,7 @@ let BattleFormats = {
 			}
 			// Temporary hack for LC past-gen formats and other mashups
 			if (set.level > 5) {
-				return [`${set.species} needs to be level 5 or lower.`];
+				return [`${set.species} can't be above level 5 in Little Cup formats.`];
 			}
 		},
 	},
