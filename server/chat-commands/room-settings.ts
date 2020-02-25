@@ -795,6 +795,7 @@ export const commands: ChatCommands = {
 		room.add(`|expire|This room has been deleted.`);
 		this.sendReply(`The room "${title}" was deleted.`);
 		room.update();
+		if (room.roomid === 'lobby') Rooms.lobby = null;
 		room.destroy();
 	},
 	deleteroomhelp: [
@@ -802,7 +803,7 @@ export const commands: ChatCommands = {
 		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: ★ # & ~`,
 	],
 
-	rename(target, room) {
+	async rename(target, room) {
 		if (!this.can('declare')) return;
 		if (room.minorActivity || room.game || room.tour) {
 			return this.errorReply("Cannot rename room when there's a tour/game/poll/announcement running.");
@@ -810,7 +811,7 @@ export const commands: ChatCommands = {
 		if (room.battle) {
 			return this.errorReply("Battle rooms cannot be renamed.");
 		}
-
+		const oldTitle = room.title;
 		const roomid = toID(target) as RoomID;
 		const roomtitle = target;
 		// `,` is a delimiter used by a lot of /commands
@@ -821,7 +822,19 @@ export const commands: ChatCommands = {
 		}
 		if (roomid.length > MAX_CHATROOM_ID_LENGTH) return this.errorReply("The given room title is too long.");
 		if (Rooms.search(roomtitle)) return this.errorReply(`The room '${roomtitle}' already exists.`);
-		return room.rename(roomtitle);
+		if (!(await room.rename(roomtitle))) {
+			return this.errorReply(`An error occured while renaming the room.`);
+		}
+		this.modlog(`RENAMEROOM`, null, `from ${oldTitle}`);
+		const privacy = room.isPrivate === true ? "Private" :
+			room.isPrivate === false ? "Public" :
+			`${room.isPrivate.charAt(0).toUpperCase()}${room.isPrivate.slice(1)}`;
+		const message = Chat.html`|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>`;
+
+		const toNotify: RoomID[] = ['upperstaff'];
+		if (room.isPrivate !== true) toNotify.push('staff');
+		Rooms.global.notifyRooms(toNotify, message);
+		room.add(Chat.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
 	renamehelp: [`/rename [new title] - Renames the current room to [new title]. Requires & ~.`],
 
