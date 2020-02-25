@@ -252,12 +252,20 @@ let BattleItems = {
 		},
 	},
 	"quickclaw": {
-		inherit: true,
+		id: "quickclaw",
 		onModifyPriority(priority, pokemon) {
 			if (this.randomChance(1, 5)) {
 				return Math.round(priority) + 0.1;
 			}
 		},
+		name: "Quick Claw",
+		spritenum: 373,
+		fling: {
+			basePower: 80,
+		},
+		num: 217,
+		gen: 2,
+		desc: "Each turn, holder has a 20% chance to move first in its priority bracket (no message).",
 	},
 	"salacberry": {
 		inherit: true,
