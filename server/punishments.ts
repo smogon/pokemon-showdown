@@ -778,7 +778,7 @@ export const Punishments = new class {
 			}
 		}
 
-		return Punishments.roomPunish("battle" as RoomID, user, punishment);
+		return Punishments.roomPunish("battle", user, punishment);
 	}
 	unbattleban(userid: string) {
 		const user = Users.get(userid);
@@ -786,21 +786,21 @@ export const Punishments = new class {
 			const punishment = Punishments.isBattleBanned(user);
 			if (punishment) userid = punishment[1];
 		}
-		return Punishments.roomUnpunish("battle" as RoomID, userid, 'BATTLEBAN');
+		return Punishments.roomUnpunish("battle", userid, 'BATTLEBAN');
 	}
 	isBattleBanned(user: User) {
 		if (!user) throw new Error(`Trying to check if a non-existent user is battlebanned.`);
 
-		let punishment = Punishments.roomUserids.nestedGet("battle" as RoomID, user.id);
+		let punishment = Punishments.roomUserids.nestedGet("battle", user.id);
 		if (punishment && punishment[0] === 'BATTLEBAN') return punishment;
 
 		if (user.autoconfirmed) {
-			punishment = Punishments.roomUserids.nestedGet("battle" as RoomID, user.autoconfirmed);
+			punishment = Punishments.roomUserids.nestedGet("battle", user.autoconfirmed);
 			if (punishment && punishment[0] === 'BATTLEBAN') return punishment;
 		}
 
 		for (const ip in user.ips) {
-			punishment = Punishments.roomIps.nestedGet("battle" as RoomID, ip);
+			punishment = Punishments.roomIps.nestedGet("battle", ip);
 			if (punishment && punishment[0] === 'BATTLEBAN') {
 				if (Punishments.sharedIps.has(ip) && user.autoconfirmed) return;
 				return punishment;
@@ -959,14 +959,14 @@ export const Punishments = new class {
 			const [, id] = punishment;
 
 			if (searchId === id || searchId === ip) {
-				results.push([ip, '' as RoomID, punishment]);
+				results.push([ip, '', punishment]);
 			}
 		});
 		Punishments.userids.forEach((punishment, userid) => {
 			const [, id] = punishment;
 
 			if (searchId === id || searchId === userid) {
-				results.push([userid, '' as RoomID, punishment]);
+				results.push([userid, '', punishment]);
 			}
 		});
 		Punishments.roomIps.nestedForEach((punishment, roomid, ip) => {
@@ -1066,9 +1066,9 @@ export const Punishments = new class {
 
 		if (battleban) {
 			if (battleban[1] !== user.id && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
-				Punishments.roomUnpunish("battle" as RoomID, userid, 'BATTLEBAN');
+				Punishments.roomUnpunish("battle", userid, 'BATTLEBAN');
 			} else {
-				Punishments.roomPunish("battle" as RoomID, user, battleban);
+				Punishments.roomPunish("battle", user, battleban);
 				user.cancelReady();
 				if (!punishment) {
 					const appealLink = ticket || (Config.appealurl ? `appeal at: ${Config.appealurl}` : ``);
@@ -1453,7 +1453,7 @@ export const Punishments = new class {
 				const reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
 				const message = `${(user as User).name || userid} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
 
-				Punishments.autolock(user, 'staff' as RoomID, 'PunishmentMonitor', reason, message);
+				Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message);
 				if (typeof user !== 'string') {
 					// tslint:disable-next-line: max-line-length
 					(user as User).popup("|modal|You've been locked for breaking the rules in multiple chatrooms.\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");

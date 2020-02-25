@@ -286,7 +286,7 @@ function prettifyResults(
 }
 
 async function getModlog(
-	connection: Connection, roomid = 'global' as RoomID, searchString = '',
+	connection: Connection, roomid: RoomID = 'global', searchString = '',
 	maxLines = 20, onlyPunishments = false, timed = false
 ) {
 	const startTime = Date.now();
@@ -566,12 +566,12 @@ export const commands: ChatCommands = {
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
 		if (!room) room = Rooms.get('global') as ChatRoom | GameRoom;
-		let roomid = (room.roomid === 'staff' ? 'global' : room.roomid);
+		let roomid: RoomID = (room.roomid === 'staff' ? 'global' : room.roomid);
 
 		if (target.includes(',')) {
 			const targets = target.split(',');
 			target = targets[1].trim();
-			roomid = toID(targets[0]) || room.roomid;
+			roomid = toID(targets[0]) as RoomID || room.roomid;
 		}
 
 		const targetRoom = Rooms.search(roomid);

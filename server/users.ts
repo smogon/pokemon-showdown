@@ -590,7 +590,7 @@ export class User extends Chat.MessageContext {
 	popup(message: string) {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
-	getIdentity(roomid = '' as RoomID) {
+	getIdentity(roomid: RoomID = '') {
 		if (this.locked || this.namelocked) {
 			const lockedSymbol = (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol
 				: '\u203d');
@@ -613,7 +613,7 @@ export class User extends Chat.MessageContext {
 		}
 		return this.group + this.name;
 	}
-	getIdentityWithStatus(roomid = '' as RoomID) {
+	getIdentityWithStatus(roomid: RoomID = '') {
 		const identity = this.getIdentity(roomid);
 		const status = this.statusType === 'online' ? '' : '@!';
 		return `${identity}${status}`;
@@ -1384,7 +1384,7 @@ export class User extends Chat.MessageContext {
 				// only join full clients, not pop-out single-room
 				// clients
 				// (...no, pop-out rooms haven't been implemented yet)
-				if (curConnection.inRooms.has('global' as RoomID)) {
+				if (curConnection.inRooms.has('global')) {
 					this.joinRoom(room, curConnection);
 				}
 			}
@@ -1678,7 +1678,7 @@ function socketConnect(
 		}
 	});
 
-	user.joinRoom('global' as RoomID, connection);
+	user.joinRoom('global', connection);
 }
 function socketDisconnect(worker: Worker, workerid: number, socketid: string) {
 	const id = '' + workerid + '-' + socketid;

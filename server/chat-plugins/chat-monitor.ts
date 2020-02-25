@@ -353,7 +353,7 @@ export const namefilter: NameFilter = (name, user) => {
 
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, 'staff' as RoomID, `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
+					Punishments.autolock(user, 'staff', `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
 				}
 				line[4]++;
 				saveFilters();
@@ -369,13 +369,13 @@ export const loginfilter: LoginFilter = user => {
 	const forceRenamed = Chat.forceRenames.get(user.id);
 	if (user.trackRename) {
 		const manualForceRename = Chat.forceRenames.get(toID(user.trackRename));
-		Rooms.global.notifyRooms(['staff' as RoomID], Chat.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`);
+		Rooms.global.notifyRooms(['staff'], Chat.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`);
 		user.trackRename = '';
 	}
 	if (Chat.namefilterwhitelist.has(user.id)) return;
 	if (typeof forceRenamed === 'number') {
 		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
-		Rooms.global.notifyRooms(['staff' as RoomID], Chat.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`);
+		Rooms.global.notifyRooms(['staff'], Chat.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`);
 	}
 };
 export const nicknamefilter: NameFilter = (name, user) => {
@@ -397,7 +397,7 @@ export const nicknamefilter: NameFilter = (name, user) => {
 
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, 'staff' as RoomID, `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true);
+					Punishments.autolock(user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true);
 				}
 				line[4]++;
 				saveFilters();
@@ -432,7 +432,7 @@ export const statusfilter: StatusFilter = (status, user) => {
 
 			if (regex.test(lcStatus)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, 'staff' as RoomID, `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
+					Punishments.autolock(user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
 				}
 				line[4]++;
 				saveFilters();
