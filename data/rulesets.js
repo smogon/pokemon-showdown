@@ -844,7 +844,7 @@ let BattleFormats = {
 	uunfeclause: {
 		effectType: 'ValidatorRule',
 		name: 'UU NFE Clause',
-		desc: "Bans all NFE Pokemon, barring some exceptions",
+		desc: "Bans all NFE Pokemon, except Scyther in Gen 3",
 		onValidateSet(set) {
 			const template = this.dex.getTemplate(set.species || set.name);
 			const feInCurrentGen = template.evos && this.dex.getTemplate(template.evos[0]).gen > this.gen;
