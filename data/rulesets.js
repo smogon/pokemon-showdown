@@ -293,8 +293,8 @@ let BattleFormats = {
 				return [set.species + " doesn't have an evolution family."];
 			}
 			// Temporary hack for LC past-gen formats and other mashups
-			if (set.level !== 5) {
-				return [`${set.species} needs to be level 5.`];
+			if (set.level > 5) {
+				return [`${set.species} needs to be level 5 or lower.`];
 			}
 		},
 	},
