@@ -245,7 +245,7 @@ function movesetToPokemonSet(dex: ModdedDex, format: Format, pokemon: string, se
 	const level = getLevel(format, set.level);
 	return {
 		level: level === 100 ? undefined : level,
-		moves: set.moveslots.map(ms => ms[0]),
+		moves: set.moveslots.map(ms => ms[0]).map(s => s.type ? `${s.move} ${s.type}` : s.move),
 		ability: fixedAbility(dex, pokemon, set.abilities[0]),
 		item: set.items[0] === 'No Item' ? undefined : set.items[0],
 		nature: set.natures[0],
