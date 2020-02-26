@@ -173,7 +173,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 					if (counter.setupType && ((!hasMove['rest'] && !hasMove['sleeptalk']) || hasMove['stormthrow'])) rejected = true;
 					if (!!counter['speedsetup'] || hasMove['encore'] || hasMove['roar'] || hasMove['whirlwind']) rejected = true;
 					break;
-				case 'dracometeor': 'leafstorm': case 'superpower':
+				case 'dracometeor': case 'leafstorm': case 'superpower':
 					if (hasMove['substitute']) rejected = true;
 					break;
 				case 'fakeout':
