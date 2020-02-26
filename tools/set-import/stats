@@ -5,9 +5,11 @@
 
 'use strict';
 
+const Dex = require('../../.sim-dist/dex').Dex;
+global.toID = Dex.getId;
+
 const smogon = require('smogon');
 const importer = require('./importer');
-const Dex = require('../../.sim-dist/dex').Dex;
 
 const formats = new Map();
 for (let gen = 1; gen <= 8; gen++) {
