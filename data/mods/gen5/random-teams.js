@@ -652,7 +652,10 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		let pokemonPool = [];
 		for (let id in this.dex.data.FormatsData) {
-			if (this.dex.getTemplate(id).randomBattleMoves) pokemonPool.push(id);
+			let template = this.dex.getTemplate(id);
+			if (!template.isNonstandard && template.randomBattleMoves) {
+				pokemonPool.push(id);
+			}
 		}
 
 		/**@type {{[k: string]: number}} */
