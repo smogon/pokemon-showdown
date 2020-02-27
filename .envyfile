@@ -1,0 +1,37 @@
+environment:
+  base:
+    image: node:latest
+  setup-steps:
+    - name: npm install
+      label: 'Installing NPM packages'
+      type: script
+      run:
+        - 'npm install --dev'
+      triggers:
+        files:
+          - package.json
+          - package-lock.json
+
+actions:
+  - name: 'pokemon-showdown'
+    script: './pokemon-showdown'
+    help: 'Runs the pokemon-showdown script'
+  - name: start
+    script: 'npm run start 8000'
+    help: 'Starts a Pokemon Showdown server on port 8000'
+  - name: lint
+    script: 'npm run lint && echo "Linting Succeeded"'
+    help: 'Lint the project'
+  - name: build
+    script: 'npm run build && echo "Build Succeeded"'
+    help: 'Build the project'
+  - name: test
+    script: 'npm run test'
+    help: 'Run mocha tests'
+  - name: npm
+    script: 'npm run'
+    help: 'Run an npm script'
+
+network:
+  ports: 
+    - '8000:8000'
