@@ -774,7 +774,7 @@ export class Tournament extends Rooms.RoomGame {
 	}
 
 	setAutoDisqualifyTimeout(timeout: number, output: CommandContext) {
-		if (timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT || timeout > MAX_AUTO_DISQUALIFY_TIMEOUT || isNaN(timeout)) {
+		if (timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT || timeout > MAX_AUTO_DISQUALIFY_TIMEOUT && timeout !== Infinity || isNaN(timeout)) {
 			output.sendReply('|tournament|error|InvalidAutoDisqualifyTimeout');
 			return false;
 		}
