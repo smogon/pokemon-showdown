@@ -13251,7 +13251,7 @@ let BattleMovedex = {
 		volatileStatus: 'octolock',
 		effect: {
 			onStart(pokemon, source) {
-				this.add('-activate', pokemon, 'move: Octolock', '[of] ' + source);
+				this.add('-start', pokemon, 'move: Octolock', '[of] ' + source);
 			},
 			onResidualOrder: 11,
 			onResidual(pokemon) {
@@ -13261,7 +13261,7 @@ let BattleMovedex = {
 					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
 					return;
 				}
-				this.boost({def: -1, spd: -1}, pokemon, source, this.dex.getActiveMove("Octolock"));
+				this.boost({def: -1, spd: -1}, pokemon, source, this.dex.getActiveMove('octolock'));
 			},
 			onTrapPokemon(pokemon) {
 				if (this.effectData.source && this.effectData.source.isActive) pokemon.tryTrap();
