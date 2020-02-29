@@ -3476,7 +3476,8 @@
 209.151.64.0,209.151.95.255,latisys,http://www.latisys.com/
 209.151.224.0,209.151.255.255,Cyberverse,http://www.cyberverse.com/
 209.159.144.0,209.159.159.255,InterServer.net,http://www.interserver.net/
-209.160.0.0,209.160.79.255,HopOne,http://www.hopone.net/
+209.160.0.0,209.160.15.255,HopOne,http://www.hopone.net/
+209.160.20.0,209.160.79.255,HopOne,http://www.hopone.net/
 209.164.0.0,209.164.63.255,HostMySite.com,http://www.webmysite.com/
 209.164.64.0,209.164.127.255,C I Host,http://www.cihost.com/
 209.172.32.0,209.172.63.255,iWeb Technologies Inc.,http://iweb.com/
