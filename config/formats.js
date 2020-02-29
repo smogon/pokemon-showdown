@@ -198,16 +198,8 @@ let Formats = [
 			battle: 3,
 		},
 		ruleset: ['Standard GBU'],
+		banlist: ['Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax'],
 		minSourceGen: 8,
-		onValidateSet(set) {
-			const allowedGigantamaxes = [
-				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
-				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
-			];
-			if (set.species.endsWith('-Gmax') && !allowedGigantamaxes.includes(set.species)) {
-				return [`${set.species} is not an allowed Gigantamax in this format.`];
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Custom Game",
@@ -278,14 +270,12 @@ let Formats = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		ruleset: ['Standard GBU', 'Galar Pokedex', 'VGC Timer'],
+		ruleset: ['Standard GBU', 'VGC Timer'],
 		banlist: [
-			'Alcremie-Gmax', 'Appletun-Gmax', 'Charizard-Gmax + Solar Power', 'Coalossal-Gmax', 'Copperajah-Gmax',
-			'Corsola-Base', 'Darmanitan-Base', 'Darumaka-Base', 'Diglett-Alola', 'Dugtrio-Alola', 'Duraludon-Gmax',
-			'Farfetch\'d-Base', 'Flapple-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Grimmsnarl-Gmax', 'Hatterene-Gmax',
-			'Kingler-Gmax', 'Lapras-Gmax', 'Linoone-Base', 'Machamp-Gmax', 'Meowth-Alola', 'Ninetales-Alola',
-			'Orbeetle-Gmax', 'Persian-Alola', 'Ponyta-Base', 'Rapidash-Base', 'Slowpoke-Galar', 'Stunfisk-Base',
-			'Toxtricity-Gmax', 'Toxtricity-Low-Key-Gmax', 'Vulpix-Alola', 'Zigzagoon-Base',
+			// Gigantamax Pokemon
+			'Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax',
+			// Can't obtain in Galar without transferring
+			'Cobalion', 'Raichu-Alola', 'Terrakion', 'Virizion', 'Weezing-Base',
 		],
 		minSourceGen: 8,
 	},
@@ -303,16 +293,8 @@ let Formats = [
 			battle: 4,
 		},
 		ruleset: ['Standard GBU'],
+		banlist: ['Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax'],
 		minSourceGen: 8,
-		onValidateSet(set) {
-			const allowedGigantamaxes = [
-				"Charizard-Gmax", "Butterfree-Gmax", "Pikachu-Gmax", "Meowth-Gmax", "Eevee-Gmax", "Snorlax-Gmax",
-				"Corviknight-Gmax", "Dreadnaw-Gmax", "Sandaconda-Gmax", "Centiskorch-Gmax",
-			];
-			if (set.species.endsWith('-Gmax') && !allowedGigantamaxes.includes(set.species)) {
-				return [`${set.species} is not an allowed Gigantamax in this format.`];
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Galar Newcomers",
