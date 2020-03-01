@@ -613,7 +613,7 @@ export class TeamValidator {
 			problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
 		}
 		if (ruleTable.has('obtainablemoves') && template.id === 'keldeo' && set.moves.includes('secretsword') &&
-			this.minSourceGen > 5) {
+			this.minSourceGen > 5 && dex.gen <= 7) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
 		const requiresGen3Source = setSources.maxSourceGen() <= 3;
@@ -1129,6 +1129,10 @@ export class TeamValidator {
 					break;
 				}
 			}
+		}
+
+		if (template.species === 'Keldeo' && set.moves.includes('secretsword') && dex.gen >= 8) {
+			set.species = 'Keldeo-Resolute';
 		}
 
 		const crowned: {[k: string]: string} = {
