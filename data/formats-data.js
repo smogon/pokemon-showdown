@@ -7427,12 +7427,11 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	corviknight: {
-		randomBattleMoves: ["bodypress", "bravebird", "bulkup", "roost"],
+		randomBattleMoves: ["bodypress", "bravebird", "bulkup", "defog", "roost"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	corviknightgmax: {
-		randomBattleMoves: ["bodypress", "bravebird", "defog", "roost", "uturn"],
 		isGigantamax: "G-Max Wind Rage",
 		tier: "(Uber)",
 		doublesTier: "DOU",
@@ -7557,7 +7556,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	cramorant: {
-		randomBattleMoves: ["defog", "hurricane", "roost", "superpower", "surf"],
+		randomBattleMoves: ["bravebird", "defog", "roost", "superpower", "surf"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},

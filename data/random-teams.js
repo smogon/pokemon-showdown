@@ -674,7 +674,7 @@ class RandomTeams {
 		// These moves can be used even if we aren't setting up to use them:
 		let SetupException = ['closecombat', 'diamondstorm', 'extremespeed', 'superpower', 'dracometeor'];
 
-		let counterAbilities = ['Adaptability', 'Contrary', 'Iron Fist', 'Skill Link', 'Strong Jaw'];
+		let counterAbilities = ['Adaptability', 'Contrary', 'Iron Fist', 'Serene Grace', 'Skill Link', 'Strong Jaw'];
 
 		/**@type {{[k: string]: boolean}} */
 		let hasMove = {};
@@ -1245,9 +1245,11 @@ class RandomTeams {
 			item = 'Assault Vest';
 		} else if (isLead && !['Disguise', 'Sturdy'].includes(ability) && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 255) {
 			item = 'Focus Sash';
+		} else if (ability === 'Water Bubble') {
+			item = 'Mystic Water';
 		} else if (hasMove['clangoroussoul'] || hasMove['boomburst'] && !!counter['speedsetup']) {
 			item = 'Throat Spray';
-		} else if (this.dex.getEffectiveness('Rock', template) >= 1 && !!counter['recovery']) {
+		} else if (this.dex.getEffectiveness('Rock', template) >= 1 && !!counter['recovery'] && !counter.setupType) {
 			item = 'Heavy-Duty Boots';
 		} else if (this.dex.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasAbility['Iron Barbs']) {
 			item = 'Air Balloon';
@@ -1443,7 +1445,7 @@ class RandomTeams {
 					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
 					break;
 				case 'Corsola': case 'Darmanitan': case 'Indeedee': case 'Mr. Mime': case 'Rapidash': case 'Stunfisk': case 'Toxtricity': case 'Weezing': case 'Zacian': case 'Zamazenta':
-				case 'Butterfree': case 'Copperajah': case 'Corviknight': case 'Grimmsnarl':
+				case 'Butterfree': case 'Copperajah': case 'Grimmsnarl':
 					if (this.gen >= 8 && this.randomChance(1, 2)) continue;
 					break;
 				}
