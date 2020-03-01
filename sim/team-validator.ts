@@ -813,6 +813,12 @@ export class TeamValidator {
 			set.nature = 'Serious';
 		}
 
+		for (const stat in set.evs) {
+			if (set.evs[stat as 'hp'] < 0) {
+				problems.push(`${name} has less than 0 ${allowAVs ? 'Awakening Values' : 'EVs'} in ${statTable[stat as 'hp']}.`);
+			}
+		}
+
 		if (dex.currentMod === 'letsgo') { // AVs
 			for (const stat in set.evs) {
 				if (set.evs[stat as 'hp'] > 0 && !allowAVs) {
