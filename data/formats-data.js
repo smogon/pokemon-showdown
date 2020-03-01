@@ -634,6 +634,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 10, "gender": "F", "nature": "Modest", "isHidden": false, "moves": ["powdersnow"], "pokeball": "cherishball"},
 		],
 		tier: "LC",
+		doublesTier: "LC Uber",
 	},
 	ninetales: {
 		randomBattleMoves: ["fireblast", "nastyplot", "solarbeam", "substitute", "willowisp"],
@@ -1316,6 +1317,7 @@ let BattleFormatsData = {
 			{"generation": 4, "level": 16},
 		],
 		tier: "NU",
+		doublesTier: "NFE",
 	},
 	gengar: {
 		eventPokemon: [
@@ -1561,6 +1563,7 @@ let BattleFormatsData = {
 			{"generation": 6, "level": 30},
 		],
 		tier: "NU",
+		doublesTier: "NFE",
 	},
 	rhyperior: {
 		randomBattleMoves: ["earthquake", "firepunch", "megahorn", "rockblast", "rockpolish", "stealthrock", "stoneedge"],
@@ -1705,10 +1708,12 @@ let BattleFormatsData = {
 			{"generation": 1, "level": 6},
 		],
 		tier: "PU",
+		doublesTier: "(DUU)",
 	},
 	mrmimegalar: {
 		randomBattleMoves: ["focusblast", "freezedry", "nastyplot", "psychic", "rapidspin"],
 		tier: "NU",
+		doublesTier: "NFE",
 	},
 	mrrime: {
 		randomBattleMoves: ["focusblast", "freezedry", "psychic", "rapidspin", "slackoff", "trick"],
@@ -2429,7 +2434,6 @@ let BattleFormatsData = {
 	},
 	togetic: {
 		tier: "NFE",
-		doublesTier: "DUU",
 	},
 	togekiss: {
 		randomBattleMoves: ["airslash", "aurasphere", "dazzlinggleam", "nastyplot", "roost", "trick"],
@@ -2710,6 +2714,7 @@ let BattleFormatsData = {
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["scratch", "leer", "taunt", "quickattack"], "pokeball": "pokeball"},
 		],
 		tier: "NU",
+		doublesTier: "LC Uber",
 	},
 	weavile: {
 		randomBattleMoves: ["iceshard", "iciclecrash", "knockoff", "lowkick", "swordsdance"],
@@ -2764,6 +2769,7 @@ let BattleFormatsData = {
 			{"generation": 6, "level": 30},
 		],
 		tier: "NU",
+		doublesTier: "NFE",
 	},
 	mamoswine: {
 		randomBattleMoves: ["earthquake", "iceshard", "iciclecrash", "knockoff", "stealthrock", "superpower"],
@@ -5624,6 +5630,7 @@ let BattleFormatsData = {
 	},
 	ferroseed: {
 		tier: "NU",
+		doublesTier: "LC",
 	},
 	ferrothorn: {
 		randomBattleMoves: ["leechseed", "gyroball", "powerwhip", "protect", "spikes", "stealthrock"],
@@ -6699,6 +6706,7 @@ let BattleFormatsData = {
 	},
 	cutiefly: {
 		tier: "LC",
+		doublesTier: "LC Uber",
 	},
 	ribombee: {
 		randomBattleMoves: ["bugbuzz", "moonblast", "stickyweb", "stunspore", "uturn"],
