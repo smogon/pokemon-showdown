@@ -78,6 +78,7 @@ let Formats = [
 		name: "[Gen 8] RU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3659533/">RU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660617/">RU Viability Rankings</a>`,
 		],
 
 		mod: 'gen8',
@@ -87,7 +88,7 @@ let Formats = [
 	{
 		name: "[Gen 8] NU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3659534/">NU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660646/">NU Metagame Discussion</a>`,
 		],
 
 		mod: 'gen8',
@@ -96,6 +97,9 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660651/">PU Metagame Discussion</a>`,
+		],
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] NU'],
