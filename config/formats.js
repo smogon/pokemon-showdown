@@ -453,6 +453,7 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '!Obtainable Abilities', '!Obtainable Moves'],
 		banlist: ['Shedinja', 'Assist', 'Shell Smash', 'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Water Bubble'],
+		restricted: ['Dracovish', 'Dracozolt'],
 		validateSet(set, teamHas) {
 			const dex = this.dex;
 			const getEvoFamily = (/** @type {string | Template} */ species) => {
@@ -466,8 +467,10 @@ let Formats = [
 			/** @type {{[k: string]: string[]}} */
 			const abilityMap = Object.create(null);
 
+			const donorBanlist = this.format.restricted || [];
 			for (const speciesid of Object.keys(dex.data.Pokedex)) {
 				const pokemon = dex.getTemplate(speciesid);
+				if (donorBanlist.includes(pokemon.species)) continue;
 				if (pokemon.isNonstandard) continue;
 				if (pokemon.isUnreleased) continue;
 				if (pokemon.requiredItem || pokemon.requiredMove) continue;
