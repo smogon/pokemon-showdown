@@ -458,7 +458,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU', '!Obtainable Abilities', '!Obtainable Moves'],
+		ruleset: ['[Gen 8] OU'],
 		banlist: ['Shedinja', 'Assist', 'Shell Smash', 'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Water Bubble'],
 		restricted: ['Dracovish', 'Dracozolt'],
 		validateSet(set, teamHas) {
@@ -499,7 +499,7 @@ let Formats = [
 
 			const ability = dex.getAbility(set.ability);
 			const pokemonWithAbility = abilityMap[ability.id];
-			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pok\u00e9mon.`];
+			if (!pokemonWithAbility) return [`"${ability.name}" is not available on a legal Pok\u00e9mon.`];
 
 			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
 			if (!teamHas.abilitySources) teamHas.abilitySources = Object.create(null);
@@ -534,8 +534,6 @@ let Formats = [
 				if (!problems.length) {
 					canonicalSource = donorTemplate.species;
 					validSources.push(evoFamily);
-				} else {
-					break;
 				}
 				if (validSources.length > 1) {
 					// Specific for the basic implementation of Donor Clause (see onValidateTeam).
