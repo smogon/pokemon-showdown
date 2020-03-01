@@ -478,9 +478,9 @@ let Formats = [
 			for (const speciesid of Object.keys(dex.data.Pokedex)) {
 				const pokemon = dex.getTemplate(speciesid);
 				if (donorBanlist.includes(pokemon.species)) continue;
-				if (pokemon.isNonstandard) continue;
-				if (pokemon.isUnreleased) continue;
+				if (pokemon.isUnreleased || pokemon.isNonstandard) continue;
 				if (pokemon.requiredItem || pokemon.requiredMove) continue;
+				if (pokemon.isGigantamax) continue;
 				for (const key of Object.values(pokemon.abilities)) {
 					const abilityId = toID(key);
 					if (abilityMap[abilityId]) {
@@ -507,7 +507,6 @@ let Formats = [
 			let validSources = teamHas.abilitySources[toID(set.species)] = []; // Evolution families
 			for (const donor of pokemonWithAbility) {
 				let donorTemplate = dex.getTemplate(donor);
-				if (donorTemplate.isNonstandard) continue;
 				let evoFamily = getEvoFamily(donorTemplate);
 
 				if (validSources.includes(evoFamily)) continue;
@@ -618,7 +617,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause'],
-		banlist: ['Darmanitan-Galar', 'Baton Pass', 'Eviolite', 'Light Ball', 'Shadow Tag'],
+		banlist: ['Darmanitan-Galar', 'Arena Trap', 'Shadow Tag', 'Baton Pass', 'Eviolite', 'Light Ball'],
 		onModifyTemplate(template, target, source) {
 			const newTemplate = this.dex.deepClone(template);
 			newTemplate.baseStats = this.dex.deepClone(newTemplate.baseStats);
