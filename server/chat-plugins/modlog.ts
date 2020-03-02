@@ -181,8 +181,9 @@ async function runModlog(
 
 async function checkRoomModlog(pathString: string, regex: RegExp | null, results: SortedLimitedLengthList) {
 	const fileStream = await FS(pathString).createReadStream();
-	const line = await fileStream.readLine();
-	while (line !== null) {
+	let line;
+	// tslint:disable-next-line no-conditional-assignment
+	while ((line = await fileStream.readLine()) !== null) {
 		if (!regex || regex.test(line)) {
 			results.insert(line);
 		}
