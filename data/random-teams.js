@@ -790,7 +790,7 @@ class RandomTeams {
 					if (counter.setupType || hasMove['spikes'] || hasMove['stealthrock'] || teamDetails.defog) rejected = true;
 					break;
 				case 'fakeout':
-					if (counter.setupType || hasMove['rapidspin'] || hasMove['substitute'] || hasMove['uturn']) rejected = true;
+					if (counter.setupType || hasMove['partingshot'] || hasMove['rapidspin'] || hasMove['substitute'] || hasMove['uturn']) rejected = true;
 					break;
 				case 'healingwish': case 'memento':
 					if (counter.setupType || !!counter['recovery'] || hasMove['substitute']) rejected = true;
@@ -931,6 +931,7 @@ class RandomTeams {
 					break;
 				case 'partingshot': case 'substitute':
 					if (!!counter['speedsetup'] || hasMove['uturn'] || hasMove['voltswitch'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (movePool.includes('calmmind')) rejected = true;
 					break;
 				case 'sleeppowder': case 'yawn':
 					if (hasMove['thunderwave'] || hasMove['toxic'] || movePool.includes('quiverdance')) rejected = true;
@@ -1087,6 +1088,8 @@ class RandomTeams {
 					rejectAbility = hasAbility['Tinted Lens'];
 				} else if (ability === 'Mold Breaker') {
 					rejectAbility = (hasAbility['Adaptability'] || hasAbility['Unburden'] && counter.setupType);
+				} else if (ability === 'Moody') {
+					rejectAbility = (template.species === 'Octillery');
 				} else if (ability === 'Neutralizing Gas') {
 					rejectAbility = !hasMove['toxicspikes'];
 				} else if (ability === 'Overgrow') {
@@ -1103,6 +1106,8 @@ class RandomTeams {
 					rejectAbility = !teamDetails['sand'];
 				} else if (ability === 'Scrappy') {
 					rejectAbility = template.types.includes('Dark');
+				} else if (ability === 'Shadow Tag') {
+					rejectAbility = (template.species === 'Gothitelle');
 				} else if (ability === 'Sheer Force') {
 					rejectAbility = (!counter['sheerforce'] || hasAbility['Guts']);
 				} else if (ability === 'Sniper') {
@@ -1217,7 +1222,7 @@ class RandomTeams {
 			item = template.baseStats.spa >= 100 && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && ability !== 'Tinted Lens' && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (((counter.Physical >= 3 && hasMove['defog']) || (counter.Special >= 3 && hasMove['healingwish'])) && !counter['priority'] && !hasMove['uturn'] && !isDoubles) {
 			item = 'Choice Scarf';
-		} else if (counter.Physical >= 3 && hasMove['copycat']) {
+		} else if (counter.Physical >= 3 && (hasMove['copycat'] || hasMove['partingshot']) && !hasMove['fakeout'] && !hasMove['rapidspin']) {
 			item = 'Choice Band';
 		} else if (counter.Special >= 3 && (hasMove['partingshot'] || hasMove['uturn']) && !isDoubles) {
 			item = 'Choice Specs';
@@ -1279,16 +1284,14 @@ class RandomTeams {
 				UU: 82,
 				UUBL: 81,
 				OU: 80,
-				Uber: 75,
+				Uber: 72,
 			};
 			/** @type {{[species: string]: number}} */
 			let customScale = {
-				// Banned Ability
-				Glalie: 75, Gothitelle: 75, Octillery: 75, Wobbuffet: 75,
-
-				// Holistic judgement
 				Delibird: 100, Shedinja: 100,
 				Pikachu: 90, 'Pikachu-Original': 90, 'Pikachu-Hoenn': 90, 'Pikachu-Sinnoh': 90, 'Pikachu-Unova': 90, 'Pikachu-Kalos': 90, 'Pikachu-Alola': 90, 'Pikachu-Partner': 90,
+				Wobbuffet: 80,
+				Glalie: 72,
 			};
 			let tier = (template.isGigantamax ? this.dex.getTemplate(template.baseSpecies) : template).tier;
 			level = levelScale[tier] || 80;

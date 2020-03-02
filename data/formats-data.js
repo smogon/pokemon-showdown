@@ -2802,7 +2802,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	octillery: {
-		randomBattleMoves: ["energyball", "fireblast", "gunkshot", "icebeam", "protect", "surf"],
+		randomBattleMoves: ["energyball", "fireblast", "gunkshot", "hydropump", "icebeam"],
 		eventPokemon: [
 			{"generation": 4, "level": 50, "gender": "F", "nature": "Serious", "abilities": ["suctioncups"], "moves": ["octazooka", "icebeam", "signalbeam", "hyperbeam"], "pokeball": "cherishball"},
 		],
@@ -5511,7 +5511,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	gothitelle: {
-		randomBattleMoves: ["charm", "psychic", "rest", "taunt"],
+		randomBattleMoves: ["nastyplot", "psychic", "shadowball", "thunderbolt", "trick"],
 		encounters: [
 			{"generation": 5, "level": 34, "isHidden": false},
 		],
@@ -6255,7 +6255,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	pangoro: {
-		randomBattleMoves: ["closecombat", "darkestlariat", "drainpunch", "gunkshot", "icepunch", "partingshot"],
+		randomBattleMoves: ["closecombat", "darkestlariat", "gunkshot", "icepunch", "partingshot"],
 		encounters: [
 			{"generation": 7, "level": 24},
 		],
