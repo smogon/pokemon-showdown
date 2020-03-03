@@ -132,7 +132,7 @@ async function importGen(gen: Generation, index: string) {
 
 		const u = getStatisticsURL(index, format);
 		try {
-			const statistics = smogon.Statistics.parse(await request(u));
+			const statistics = smogon.Statistics.process(await request(u));
 			const sets = await importUsageBasedSets(gen, format, statistics);
 			if (Object.keys(sets).length) {
 				data[format.id] = data[format.id] || {};
