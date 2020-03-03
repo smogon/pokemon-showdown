@@ -12,7 +12,7 @@
     "cloud-env": "^0.2.3",
     "node-oom-heapdump": "^1.2.0",
     "node-static": "^0.7.11",
-    "nodemailer": "^6.4.2",
+    "nodemailer": "^6.4.4",
     "permessage-deflate": "^0.1.7",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^3.0.3"
@@ -62,15 +62,15 @@
   "license": "MIT",
   "devDependencies": {
     "@types/cloud-env": "^0.2.0",
-    "@types/node": "^13.7.0",
+    "@types/node": "^13.7.7",
     "@types/node-static": "^0.7.3",
     "@types/nodemailer": "^6.4.0",
     "@types/sockjs": "^0.3.31",
     "eslint": "^6.8.0",
-    "husky": "^4.2.1",
-    "mocha": "^7.0.1",
-    "smogon": "^0.2.0",
+    "husky": "^4.2.3",
+    "mocha": "^7.1.0",
+    "smogon": "^0.3.0",
     "tslint": "^6.0.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.3"
   }
 }
