@@ -158,7 +158,7 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['NFE Clause', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'Doublade', 'Gurdurr', 'Ivysaur', 'Mr. Mime-Galar', 'Rhydon', 'Rufflet', 'Sneasel', 
+			'Doublade', 'Gurdurr', 'Ivysaur', 'Mr. Mime-Galar', 'Rhydon', 'Rufflet', 'Sneasel',
 			'Type: Null', 'Shadow Tag', 'Baton Pass'
 		],
 	},
