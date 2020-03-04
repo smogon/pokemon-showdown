@@ -202,19 +202,23 @@ export class TeamValidator {
 
 	validateTeam(
 		team: PokemonSet[] | null,
-		removeNicknames = false,
-		skipSets: Record<string, Record<string, boolean>> = {}
+		options: {
+			removeNicknames?: boolean,
+			skipSets?: {[name: string]: {[key: string]: boolean}},
+		} = {}
 	): string[] | null {
 		if (team && this.format.validateTeam) {
-			return this.format.validateTeam.call(this, team, removeNicknames, skipSets) || null;
+			return this.format.validateTeam.call(this, team, options) || null;
 		}
-		return this.baseValidateTeam(team, removeNicknames, skipSets);
+		return this.baseValidateTeam(team, options);
 	}
 
 	baseValidateTeam(
 		team: PokemonSet[] | null,
-		removeNicknames = false,
-		skipSets: Record<string, Record<string, boolean>> = {}
+		options: {
+			removeNicknames?: boolean,
+			skipSets?: {[name: string]: {[key: string]: boolean}},
+		} = {}
 	): string[] | null {
 		const format = this.format;
 		const dex = this.dex;
@@ -253,8 +257,8 @@ export class TeamValidator {
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 
 			let setProblems: string[] | null = null;
-			if (skipSets[set.name]) {
-				for (const i in skipSets[set.name]) {
+			if (options.skipSets && options.skipSets[set.name]) {
+				for (const i in options.skipSets[set.name]) {
 					teamHas[i] = (teamHas[i] || 0) + 1;
 				}
 			} else {
@@ -270,7 +274,7 @@ export class TeamValidator {
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
-			if (removeNicknames) {
+			if (options.removeNicknames) {
 				let crossTemplate: Template;
 				if (format.name === '[Gen 7] Cross Evolution' && (crossTemplate = dex.getTemplate(set.name)).exists) {
 					set.name = crossTemplate.species;
