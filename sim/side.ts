@@ -562,7 +562,7 @@ export class Side {
 			slot = this.active.length;
 			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
 		} else {
-			slot = parseInt(slotText!, 10) - 1;
+			slot = parseInt(slotText!) - 1;
 		}
 		if (isNaN(slot) || slot < 0) {
 			// maybe it's a name/species id!
@@ -635,7 +635,7 @@ export class Side {
 		if (!data) data = `123456`;
 		const positions = (('' + data)
 			.split(data.includes(',') ? ',' : '')
-			.map(datum => parseInt(datum, 10) - 1));
+			.map(datum => parseInt(datum) - 1));
 
 		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
 		if (this.requestState !== 'teampreview') {
@@ -767,7 +767,7 @@ export class Side {
 					// '2' (since Conversion targets 'self', targetLoc can't be 2).
 					if (/\s(?:-|\+)?[1-3]$/.test(data) && toID(data) !== 'conversion2') {
 						if (targetLoc !== undefined) return error();
-						targetLoc = parseInt(data.slice(-2), 10);
+						targetLoc = parseInt(data.slice(-2));
 						data = data.slice(0, -2).trim();
 					} else if (data.endsWith(' mega')) {
 						if (megaDynaOrZ) return error();

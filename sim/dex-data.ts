@@ -659,8 +659,8 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.gender = data.gender || '';
 		this.genderRatio = data.genderRatio || (this.gender === 'M' ? {M: 1, F: 0} :
 			this.gender === 'F' ? {M: 0, F: 1} :
-				this.gender === 'N' ? {M: 0, F: 0} :
-					{M: 0.5, F: 0.5});
+			this.gender === 'N' ? {M: 0, F: 0} :
+			{M: 0.5, F: 0.5});
 		this.requiredItem = data.requiredItem || undefined;
 		this.requiredItems = this.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
 		this.baseStats = data.baseStats || {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
@@ -891,7 +891,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 					this.gmaxPower = 80;
 				} else if (this.basePower >= 45) {
 					this.gmaxPower = 75;
-				} else  {
+				} else {
 					this.gmaxPower = 70;
 				}
 			} else {
@@ -907,7 +907,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 					this.gmaxPower = 110;
 				} else if (this.basePower >= 45) {
 					this.gmaxPower = 100;
-				} else  {
+				} else {
 					this.gmaxPower = 90;
 				}
 			}
@@ -935,7 +935,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 				this.zMovePower = 140;
 			} else if (basePower >= 60) {
 				this.zMovePower = 120;
-			} else  {
+			} else {
 				this.zMovePower = 100;
 			}
 		}

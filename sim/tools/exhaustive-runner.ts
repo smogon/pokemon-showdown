@@ -354,7 +354,7 @@ class Pool {
 		if (!this.unused.size) this.reset();
 
 		if (this.iter) {
-			if (!this.iter!.done) {
+			if (!this.iter.done) {
 				const next = this.iter.next();
 				this.iter.done = next.done;
 				if (!next.done) return next.value;
@@ -364,7 +364,7 @@ class Pool {
 
 		this.iter = this.unused.values();
 		const next = this.iter.next();
-		this.iter!.done = next.done;
+		this.iter.done = next.done;
 		// this.iter.next() must have a value (!this.iter.done) because this.unused.size > 0
 		// after this.reset(), and the only places that mutate this.unused clear this.iter.
 		return next.value;

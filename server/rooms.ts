@@ -9,8 +9,6 @@
  * @license MIT
  */
 
-'use strict';
-
 const TIMEOUT_EMPTY_DEALLOCATE = 10 * 60 * 1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
@@ -315,6 +313,8 @@ export abstract class BasicRoom {
 		}
 		if (this.parent) return this.parent.getMuteTime(user);
 	}
+	// I think putting the `new` before the signature is confusing the linter
+	// eslint-disable-next-line @typescript-eslint/type-annotation-spacing
 	getGame<T extends RoomGame>(constructor: new (...args: any[]) => T): T | null {
 		// TODO: switch to `static readonly gameid` when all game files are TypeScripted
 		if (this.game && this.game.constructor.name === constructor.name) return this.game as T;
@@ -548,7 +548,7 @@ export class GlobalRoom extends BasicRoom {
 	}
 
 	modlog(message: string) {
-		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
+		void this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
 	}
 
 	writeChatRoomData() {
@@ -789,7 +789,7 @@ export class GlobalRoom extends BasicRoom {
 		}
 		if (Config.logladderip && options.rated) {
 			const ladderIpLogString = players.map(p => `${p.id}: ${p.latestIp}\n`).join('');
-			this.ladderIpLog.write(ladderIpLogString);
+			void this.ladderIpLog.write(ladderIpLogString);
 		}
 	}
 
@@ -1005,7 +1005,7 @@ export class GlobalRoom extends BasicRoom {
 		}
 		const stack = stackLines.slice(0, 2).join(`<br />`);
 		let crashMessage;
-		if (/private/.test(stack)) {
+		if (stack.includes("private")) {
 			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
 		} else {
 			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;

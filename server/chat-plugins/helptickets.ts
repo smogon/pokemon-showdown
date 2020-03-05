@@ -1,5 +1,3 @@
-'use strict';
-
 import {FS} from '../../lib/fs';
 
 const TICKET_FILE = 'config/tickets.json';
@@ -343,7 +341,7 @@ function pokeUnclaimedTicketTimer(hasUnclaimed: boolean, hasAssistRequest: boole
 	if (hasUnclaimed && !unclaimedTicketTimer[room.roomid]) {
 		unclaimedTicketTimer[room.roomid] = setTimeout(
 			() =>
-			notifyUnclaimedTicket(hasAssistRequest), hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT
+				notifyUnclaimedTicket(hasAssistRequest), hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT
 		);
 		timerEnds[room.roomid] = Date.now() + (hasAssistRequest ? NOTIFY_ASSIST_TIMEOUT : NOTIFY_ALL_TIMEOUT);
 	} else if (
@@ -875,18 +873,18 @@ export const pages: PageTable = {
 			const prevDate = new Date(
 				date.getMonth() === 0 ?
 					date.getFullYear() - 1 :
-						date.getFullYear(),
+					date.getFullYear(),
 				date.getMonth() === 0 ?
 					11 :
-						date.getMonth() - 1
+					date.getMonth() - 1
 			);
 			const nextDate = new Date(
 				date.getMonth() === 11 ?
 					date.getFullYear() + 1 :
-						date.getFullYear(),
+					date.getFullYear(),
 				date.getMonth() === 11 ?
 					0 :
-						date.getMonth() + 1
+					date.getMonth() + 1
 			);
 			const prevString = Chat.toTimestamp(prevDate).split(' ')[0].split('-', 2).join('-');
 			const nextString = Chat.toTimestamp(nextDate).split(' ')[0].split('-', 2).join('-');

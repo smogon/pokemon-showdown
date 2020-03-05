@@ -14,8 +14,6 @@
  * @license MIT
  */
 
-'use strict';
-
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 import * as dns from 'dns';
@@ -234,9 +232,9 @@ export const IPTools = new class {
 		});
 	}
 
-/*********************************************************
- * IP parsing
- *********************************************************/
+	/*********************************************************
+	 * IP parsing
+	 *********************************************************/
 
 	ipToNumber(ip: string) {
 		if (ip.includes(':') && !ip.includes('.')) {
@@ -330,9 +328,9 @@ export const IPTools = new class {
 		return (ip: string) => IPTools.checkPattern(patterns, IPTools.ipToNumber(ip));
 	}
 
-/*********************************************************
- * Datacenter parsing
- *********************************************************/
+	/*********************************************************
+	 * Datacenter parsing
+	 *********************************************************/
 
 	urlToHost(url: string) {
 		if (url.startsWith('http://')) url = url.slice(7);
@@ -558,15 +556,15 @@ export const IPTools = new class {
 		}, () => {
 			connected = true;
 			this.connectionTestCache.set(ip, true);
-			callback(true);
 			socket.destroy();
+			return callback(true);
 		});
 		socket.on('error', () => {});
 		socket.on('timeout', () => socket.destroy());
 		socket.on('close', () => {
 			if (!connected) {
 				this.connectionTestCache.set(ip, false);
-				callback(false);
+				return callback(false);
 			}
 		});
 	}

@@ -3,8 +3,6 @@
  * By Spandamn
  */
 
-'use strict';
-
 export class Announcement {
 	readonly activityId: 'announcement';
 	announcementNumber: number;
@@ -82,7 +80,7 @@ export const commands: ChatCommands = {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
 				return this.errorReply("There is no announcement running in this room.");
 			}
-			const announcement = room.minorActivity as Announcement;
+			const announcement = room.minorActivity;
 
 			if (target) {
 				if (!this.can('minigame', null, room)) return false;
@@ -126,7 +124,7 @@ export const commands: ChatCommands = {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
 				return this.errorReply("There is no announcement running in this room.");
 			}
-			const announcement = room.minorActivity as Announcement;
+			const announcement = room.minorActivity;
 			if (announcement.timeout) clearTimeout(announcement.timeout);
 
 			announcement.end();
@@ -141,7 +139,7 @@ export const commands: ChatCommands = {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
 				return this.errorReply("There is no announcement running in this room.");
 			}
-			const announcement = room.minorActivity as Announcement;
+			const announcement = room.minorActivity;
 			if (!this.runBroadcast()) return;
 			room.update();
 

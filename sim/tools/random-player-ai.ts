@@ -18,7 +18,7 @@ export class RandomPlayerAI extends BattlePlayer {
 	constructor(
 		playerStream: ObjectReadWriteStream<string>,
 		options: {move?: number, mega?: number, seed?: PRNG | PRNGSeed | null } = {},
-		debug: boolean = false
+		debug = false
 	) {
 		super(playerStream, debug);
 		this.move = options.move || 1.0;
@@ -83,7 +83,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				)).map(j => ({
 					slot: j,
 					move: active.moves[j - 1].move,
-					target: active.moves[j  - 1].target,
+					target: active.moves[j - 1].target,
 					zMove: false,
 				}));
 				if (canZMove) {

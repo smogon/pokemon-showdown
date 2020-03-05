@@ -774,7 +774,10 @@ export class Tournament extends Rooms.RoomGame {
 	}
 
 	setAutoDisqualifyTimeout(timeout: number, output: CommandContext) {
-		if (timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT || timeout > MAX_AUTO_DISQUALIFY_TIMEOUT && timeout !== Infinity || isNaN(timeout)) {
+		if (
+			isNaN(timeout) || timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT ||
+			(timeout > MAX_AUTO_DISQUALIFY_TIMEOUT && timeout !== Infinity)
+		) {
 			output.sendReply('|tournament|error|InvalidAutoDisqualifyTimeout');
 			return false;
 		}
@@ -1098,14 +1101,14 @@ function getGenerator(generator: string | undefined) {
 function createTournamentGenerator(
 	generatorName: string | undefined, modifier: string | undefined, output: CommandContext
 ) {
-	const generator = getGenerator(generatorName);
-	if (!generator) {
+	const TourGenerator = getGenerator(generatorName);
+	if (!TourGenerator) {
 		output.errorReply(`${generatorName} is not a valid type.`);
 		const generatorNames = Object.keys(TournamentGenerators).join(', ');
 		output.errorReply(`Valid types: ${generatorNames}`);
 		return;
 	}
-	return new generator(modifier || '');
+	return new TourGenerator(modifier || '');
 }
 function createTournament(
 	room: ChatRoom | GameRoom, formatId: string | undefined, generator: string | undefined, playerCap: string | undefined,

@@ -88,12 +88,10 @@ export class Runner {
 			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options));
 		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
 		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).
-		/* tslint:disable:no-floating-promises */
-		p1.start();
-		p2.start();
-		/* tslint:enable:no-floating-promises */
+		void p1.start();
+		void p2.start();
 
-		streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
+		void streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
 			`>player p2 ${JSON.stringify(p2spec)}`);
 
@@ -175,11 +173,11 @@ class DualStream {
 		this.compare();
 	}
 
-	async end() {
+	end() {
 		// We need to compare first because _end() destroys the battle object.
 		this.compare(true);
-		await this.control._end();
-		await this.test._end();
+		this.control._end();
+		this.test._end();
 	}
 
 	compare(end?: boolean) {

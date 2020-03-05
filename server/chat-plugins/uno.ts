@@ -7,8 +7,6 @@
  * @license MIT license
  */
 
-'use strict';
-
 type Color = 'Green' | 'Yellow' | 'Red' | 'Blue' | 'Black';
 interface Card {
 	value: string;
@@ -60,8 +58,8 @@ function createDeck() {
 
 	return [
 		// two copies of the basic stuff (total 96)
-		...basic as Card[],
-		...basic as Card[],
+		...basic,
+		...basic,
 		// The four 0s
 		...[0, 1, 2, 3].map(v => {
 			const c: Card = {color: colors[v] as Color, value: '0', name: colors[v] + ' 0'};
@@ -149,8 +147,8 @@ export class UnoGame extends Rooms.RoomGame {
 				`<p style="font-size: 9pt; text-align: center"><button name="send" value="/uno join">Join</button>` +
 				`<br />Or use <strong>/uno join</strong> to join the game.</p>` +
 				`${this.suppressMessages ?
-				`<p style="font-size: 6pt; text-align: center">Game messages will be shown to only players. ` +
-				`If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : ''}</div>`
+					`<p style="font-size: 6pt; text-align: center">Game messages will be shown to only players. ` +
+					`If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : ''}</div>`
 			);
 		} else if (this.onSendHand(user) === false) {
 			connection.sendTo(

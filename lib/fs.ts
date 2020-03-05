@@ -21,11 +21,9 @@
  * @license MIT
  */
 
-'use strict';
-
 import * as fs from 'fs';
 import * as pathModule from 'path';
-import { ReadStream, WriteStream } from './streams';
+import {ReadStream, WriteStream} from './streams';
 
 const ROOT_PATH = pathModule.resolve(__dirname, '..');
 
@@ -437,7 +435,7 @@ class FileReadStream extends ReadStream {
 	}
 
 	// @ts-ignore
-	_read(size: number = 16384) {
+	_read(size = 16384) {
 		return new Promise((resolve, reject) => {
 			if (this.atEOF) return resolve(false);
 			this.ensureCapacity(size);

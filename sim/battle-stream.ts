@@ -22,7 +22,7 @@ import {Battle} from './battle';
  *
  * Returns an array of length exactly limit + 1.
  */
-function splitFirst(str: string, delimiter: string, limit: number = 1) {
+function splitFirst(str: string, delimiter: string, limit = 1) {
 	const splitStr: string[] = [];
 	while (splitStr.length < limit) {
 		const delimiterIndex = str.indexOf(delimiter);
@@ -136,7 +136,7 @@ export function getPlayerStreams(stream: BattleStream) {
 	const streams = {
 		omniscient: new Streams.ObjectReadWriteStream({
 			write(data: string) {
-				stream.write(data);
+				void stream.write(data);
 			},
 			end() {
 				return stream.end();
@@ -147,22 +147,22 @@ export function getPlayerStreams(stream: BattleStream) {
 		}),
 		p1: new Streams.ObjectReadWriteStream({
 			write(data: string) {
-				stream.write(data.replace(/(^|\n)/g, `$1>p1 `));
+				void stream.write(data.replace(/(^|\n)/g, `$1>p1 `));
 			},
 		}),
 		p2: new Streams.ObjectReadWriteStream({
 			write(data: string) {
-				stream.write(data.replace(/(^|\n)/g, `$1>p2 `));
+				void stream.write(data.replace(/(^|\n)/g, `$1>p2 `));
 			},
 		}),
 		p3: new Streams.ObjectReadWriteStream({
 			write(data: string) {
-				stream.write(data.replace(/(^|\n)/g, `$1>p3 `));
+				void stream.write(data.replace(/(^|\n)/g, `$1>p3 `));
 			},
 		}),
 		p4: new Streams.ObjectReadWriteStream({
 			write(data: string) {
-				stream.write(data.replace(/(^|\n)/g, `$1>p4 `));
+				void stream.write(data.replace(/(^|\n)/g, `$1>p4 `));
 			},
 		}),
 	};
@@ -205,7 +205,7 @@ export abstract class BattlePlayer {
 	readonly log: string[];
 	readonly debug: boolean;
 
-	constructor(playerStream: Streams.ObjectReadWriteStream<string>, debug: boolean = false) {
+	constructor(playerStream: Streams.ObjectReadWriteStream<string>, debug = false) {
 		this.stream = playerStream;
 		this.log = [];
 		this.debug = debug;
@@ -241,7 +241,7 @@ export abstract class BattlePlayer {
 	}
 
 	choose(choice: string) {
-		this.stream.write(choice);
+		void this.stream.write(choice);
 	}
 }
 
@@ -269,7 +269,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		this.currentMessage += '' + message;
 		const index = this.currentMessage.lastIndexOf('\n');
 		if (index >= 0) {
-			this.battleStream.write(this.currentMessage.slice(0, index));
+			void this.battleStream.write(this.currentMessage.slice(0, index));
 			this.currentMessage = this.currentMessage.slice(index + 1);
 		}
 	}

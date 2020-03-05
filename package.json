@@ -24,15 +24,16 @@
     "start": "node pokemon-showdown start",
     "build": "node build",
     "tsc": "tsc",
-    "lint": "eslint --cache . && tslint --project .",
+    "lint": "eslint . --config .eslintrc-syntax.json --cache --ext .js,.ts",
+    "fulllint": "eslint . --config .eslintrc --ext .js,.ts",
     "pretest": "npm run lint && npm run build",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "fulltest": "npm run pretest && npm run tsc && mocha --forbid-only -R spec -g \".*\""
+    "fulltest": "npm run fulllint && npm run build && npm run tsc && mocha --forbid-only -R spec -g \".*\""
   },
   "husky": {
     "hooks": {
-      "pre-push": "eslint --cache ."
+      "pre-push": "eslint --cache . --ext .js,.ts"
     }
   },
   "bin": "./pokemon-showdown",
@@ -66,7 +67,12 @@
     "@types/node-static": "^0.7.3",
     "@types/nodemailer": "^6.4.0",
     "@types/sockjs": "^0.3.31",
+    "@typescript-eslint/eslint-plugin": "^2.19.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.20.0",
+    "@typescript-eslint/parser": "^2.19.0",
     "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsdoc": "^21.0.0",
     "husky": "^4.2.3",
     "mocha": "^7.1.0",
     "smogon": "^0.3.0",

@@ -8,6 +8,7 @@
  * @license MIT
  */
 
+// eslint-disable-next-line no-undef
 const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.remoteladder
 	? require('./ladders-remote')
 	: require('./ladders-local')).LadderStore;
@@ -27,7 +28,7 @@ class BattleReady {
 	readonly rating: number;
 	readonly challengeType: ChallengeType;
 	readonly time: number;
-	constructor(userid: ID, formatid: string, team: string, rating: number = 0, challengeType: ChallengeType) {
+	constructor(userid: ID, formatid: string, team: string, rating = 0, challengeType: ChallengeType) {
 		this.userid = userid;
 		this.formatid = formatid;
 		this.team = team;
@@ -219,11 +220,11 @@ class Ladder extends LadderStore {
 				if (chall.from === targetUser.id &&
 					chall.to === user.id &&
 					chall.formatid === this.formatid) {
-						if (Ladder.removeChallenge(chall)) {
-							Ladders.match(chall.ready, ready);
-							return true;
-						}
+					if (Ladder.removeChallenge(chall)) {
+						Ladders.match(chall.ready, ready);
+						return true;
 					}
+				}
 			}
 		}
 		Ladder.addChallenge(new Challenge(ready, targetUser.id));

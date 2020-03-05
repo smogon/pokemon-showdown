@@ -12,8 +12,6 @@
  * @license MIT
  */
 
-'use strict';
-
 export class LadderStore {
 	formatid: string;
 	static readonly formatsListPrefix = '';
@@ -28,7 +26,7 @@ export class LadderStore {
 	 * client.
 	 */
 	async getTop(prefix?: string): Promise<[string, string] | null> {
-		return null;
+		return new Promise(resolve => resolve(null));
 	}
 
 	/**
@@ -137,7 +135,6 @@ export class LadderStore {
 			room.addRaw(`There was an error calculating rating changes.`);
 			room.update();
 		}
-
 		return [p1score, p1rating, p2rating];
 	}
 
@@ -145,6 +142,8 @@ export class LadderStore {
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
 	 */
 	static async visualizeAll(username: string) {
-		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
+		return new Promise(resolve => {
+			resolve([`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`]);
+		});
 	}
 }

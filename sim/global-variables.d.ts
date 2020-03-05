@@ -7,7 +7,7 @@ import {Field as FieldType} from './field';
 import {Pokemon as PokemonType} from './pokemon';
 import {PRNG as PRNGType} from './prng';
 import {Side as SideType} from './side';
-import {TeamValidator as TeamValidatorType} from'./team-validator';
+import {TeamValidator as TeamValidatorType} from './team-validator';
 
 declare global {
 	namespace NodeJS {
@@ -18,26 +18,26 @@ declare global {
 			__version: {head: string, origin?: string, tree?: string}
 		}
 	}
-	const Battle: BattleType
-	const BattleStream: BattleStreamType.BattleStream
-	const Dex: typeof DexType
-	const Field: FieldType
-	const ModdedDex: typeof DexType
-	const PRNG: PRNGType
-	const Pokemon: PokemonType
-	const Side: SideType
-	const Sim: typeof SimType
-	const TeamValidator: typeof TeamValidatorType
+	const Battle: BattleType;
+	const BattleStream: BattleStreamType.BattleStream;
+	const Dex: typeof DexType;
+	const Field: FieldType;
+	const ModdedDex: typeof DexType;
+	const PRNG: PRNGType;
+	const Pokemon: PokemonType;
+	const Side: SideType;
+	const Sim: typeof SimType;
+	const TeamValidator: typeof TeamValidatorType;
 
-	const Ability: DataType.Ability
-	const BasicEffect: DataType.BasicEffect
-	const Format: DataType.Format
-	const Item: DataType.Item
-	const Move: DataType.Move
-	const PureEffect: DataType.PureEffect
-	const RuleTable: DataType.RuleTable
-	const Template: DataType.Template
-	const Tools: DataType.Tools
-	const TypeInfo: DataType.TypeInfo
-	const toID: typeof DataType.Tools.getId
+	const Ability: DataType.Ability;
+	const BasicEffect: DataType.BasicEffect;
+	const Format: DataType.Format;
+	const Item: DataType.Item;
+	const Move: DataType.Move;
+	const PureEffect: DataType.PureEffect;
+	const RuleTable: DataType.RuleTable;
+	const Template: DataType.Template;
+	const Tools: DataType.Tools;
+	const TypeInfo: DataType.TypeInfo;
+	const toID: typeof DataType.Tools.getId;
 }

@@ -7,8 +7,6 @@
  * @license MIT
  */
 
-'use strict';
-
 const RANKS: string[] = Config.groupsranking;
 
 const SLOWCHAT_MINIMUM = 2;
@@ -73,7 +71,7 @@ export const commands: ChatCommands = {
 		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > threshold) {
 			return this.errorReply(`/modchat - Access denied for changing a setting higher than ${Config.groupsranking[threshold]}.`);
 		}
-		if (!!(room as GameRoom).requestModchat) {
+		if ((room as GameRoom).requestModchat) {
 			const error = (room as GameRoom).requestModchat(user);
 			if (error) return this.errorReply(error);
 		}
@@ -427,13 +425,13 @@ export const commands: ChatCommands = {
 			let banwordRegexLen = (room.banwordRegex instanceof RegExp) ? room.banwordRegex.source.length : 32;
 			for (const word of words) {
 				try {
-					// tslint:disable-next-line: no-unused-expression
+					// eslint-disable-next-line no-new
 					new RegExp(word);
 				} catch (e) {
 					return this.errorReply(
 						e.message.startsWith('Invalid regular expression: ') ?
 							e.message :
-								`Invalid regular expression: /${word}/: ${e.message}`
+							`Invalid regular expression: /${word}/: ${e.message}`
 					);
 				}
 				if (room.banwords.includes(word)) return this.errorReply(`${word} is already a banned phrase.`);
@@ -500,7 +498,7 @@ export const commands: ChatCommands = {
 			this.sendReply(
 				room.banwords && room.banwords.length ?
 					`The list is currently: ${room.banwords.join(', ')}` :
-						`The list is now empty.`);
+					`The list is now empty.`);
 
 			if (room.chatRoomData) {
 				room.chatRoomData.banwords = room.banwords;
@@ -829,7 +827,9 @@ export const commands: ChatCommands = {
 		const privacy = room.isPrivate === true ? "Private" :
 			room.isPrivate === false ? "Public" :
 			`${room.isPrivate.charAt(0).toUpperCase()}${room.isPrivate.slice(1)}`;
-		const message = Chat.html`|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>`;
+		const message = Chat.html`
+			|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>
+		`;
 
 		const toNotify: RoomID[] = ['upperstaff'];
 		if (room.isPrivate !== true) toNotify.push('staff');
@@ -1079,7 +1079,7 @@ export const commands: ChatCommands = {
 
 		const subRoomText = subRooms.map(
 			subRoom =>
-			Chat.html`<a href="/${subRoom.roomid}">${subRoom.title}</a><br/><small>${subRoom.desc}</small>`
+				Chat.html`<a href="/${subRoom.roomid}">${subRoom.title}</a><br/><small>${subRoom.desc}</small>`
 		);
 
 		return this.sendReplyBox(`<p style="font-weight:bold;">${Chat.escapeHTML(room.title)}'s subroom${Chat.plural(subRooms)}:</p><ul><li>${subRoomText.join('</li><br/><li>')}</li></ul></strong>`);
@@ -1144,7 +1144,7 @@ export const commands: ChatCommands = {
 		if (this.meansNo(target) || target === 'delete') return this.errorReply('Did you mean "/deleteroomintro"?');
 		target = this.canHTML(target)!;
 		if (!target) return; // canHTML sends its own errors
-		if (!/</.test(target)) {
+		if (!target.includes("<")) {
 			// not HTML, do some simple URL linking
 			const re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
 			target = target.replace(re, '<a href="$1">$1</a>');
@@ -1199,7 +1199,7 @@ export const commands: ChatCommands = {
 		if (this.meansNo(target) || target === 'delete') return this.errorReply('Did you mean "/deletestaffintro"?');
 		target = this.canHTML(target)!;
 		if (!target) return;
-		if (!/</.test(target)) {
+		if (!target.includes("<")) {
 			// not HTML, do some simple URL linking
 			const re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
 			target = target.replace(re, '<a href="$1">$1</a>');

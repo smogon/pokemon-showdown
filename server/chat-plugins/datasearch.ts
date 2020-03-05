@@ -8,8 +8,6 @@
  * @license MIT
  */
 
-'use strict';
-
 import {QueryProcessManager} from '../../lib/process-manager';
 
 interface DexOrGroup {
@@ -53,7 +51,13 @@ const RESULTS_MAX_LENGTH = 10;
 
 function escapeHTML(str?: string) {
 	if (!str) return '';
-	return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
+	return ('' + str)
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&apos;')
+		.replace(/\//g, '&#x2f;');
 }
 
 export const commands: ChatCommands = {
@@ -490,7 +494,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				target = allTypes[targetType];
 				const invalid = validParameter("types", target, isNotSearch, target);
 				if (invalid) return {reply: invalid};
-				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
+				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) {
+					return {reply: 'A search cannot both exclude and include a type.'};
+				}
 				orGroup.types[target] = !isNotSearch;
 				continue;
 			}
@@ -591,7 +597,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'recovery') {
 				if (parameters.length > 1) return {reply: "The parameter 'recovery' cannot have alternative parameters"};
-				const recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder", "shoreup", "lifedew"];
+				const recoveryMoves = [
+					"recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink",
+					"slackoff", "softboiled", "wish", "healorder", "shoreup", "lifedew"
+				];
 				for (const move of recoveryMoves) {
 					const invalid = validParameter("moves", move, isNotSearch, target);
 					if (invalid) return {reply: invalid};
@@ -609,7 +618,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'zrecovery') {
 				if (parameters.length > 1) return {reply: "The parameter 'zrecovery' cannot have alternative parameters"};
-				const recoveryMoves = ["aromatherapy", "bellydrum", "conversion2", "haze", "healbell", "mist", "psychup", "refresh", "spite", "stockpile", "teleport", "transform"];
+				const recoveryMoves = [
+					"aromatherapy", "bellydrum", "conversion2", "haze", "healbell", "mist",
+					"psychup", "refresh", "spite", "stockpile", "teleport", "transform"
+				];
 				for (const moveid of recoveryMoves) {
 					const invalid = validParameter("moves", moveid, isNotSearch, target);
 					if (invalid) return {reply: invalid};
@@ -714,7 +726,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && searches.length === 0 && megaSearch === null && gmaxSearch === null && !maxGen) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
+	if (showAll && searches.length === 0 && megaSearch === null && gmaxSearch === null && !maxGen) {
+		return {
+			reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."
+		};
+	}
 	if (!maxGen) maxGen = 8;
 	const mod = Dex.mod('gen' + maxGen);
 	const dex: {[k: string]: Template} = {};
@@ -960,7 +976,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//${Config.routes.dex}/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`).join(", ");
+		resultsStr += results.map(
+			result => `<a href="//${Config.routes.dex}/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`
+		).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
@@ -977,7 +995,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allCategories = ['physical', 'special', 'status'];
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
-	const allFlags = ['authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror', 'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary', 'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection'];
+	const allFlags = [
+		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror',
+		'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
+		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection'
+	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	const allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
@@ -1013,7 +1035,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (allTypes[targetType]) {
 				target = allTypes[targetType];
-				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
+				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) {
+					return {reply: 'A search cannot both exclude and include a type.'};
+				}
 				orGroup.types[target] = !isNotSearch;
 				continue;
 			}
@@ -1047,7 +1071,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'max') target = 'maxmove';
 			if (target === 'gmax') target = 'gmaxmove';
 			if (allFlags.includes(target)) {
-				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
+				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
+					return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
+				}
 				orGroup.flags[target] = !isNotSearch;
 				continue;
 			}
@@ -1060,7 +1086,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 
 			if (0 < targetInt && targetInt < 9) {
-				if ((orGroup.gens[targetInt] && isNotSearch) || (orGroup.flags[targetInt] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
+				if ((orGroup.gens[targetInt] && isNotSearch) || (orGroup.flags[targetInt] === false && !isNotSearch)) {
+					return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
+				}
 				orGroup.gens[targetInt] = !isNotSearch;
 				continue;
 			}
@@ -1137,8 +1165,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			const template = Dex.getTemplate(target);
 			if (template.exists) {
 				if (parameters.length > 1) return {reply: "A Pok\u00e9mon learnset cannot have alternative parameters."};
-				if (targetMons.some(mon => mon.name === template.name && isNotSearch !== mon.shouldBeExcluded)) return {reply: "A search cannot both exclude and include the same Pok\u00e9mon."};
-				if (targetMons.some(mon => mon.name === template.name)) return {reply: "A search should not include a Pok\u00e9mon twice."};
+				if (targetMons.some(mon => mon.name === template.name && isNotSearch !== mon.shouldBeExcluded)) {
+					return {reply: "A search cannot both exclude and include the same Pok\u00e9mon."};
+				}
+				if (targetMons.some(mon => mon.name === template.name)) {
+					return {reply: "A search should not include a Pok\u00e9mon twice."};
+				}
 				targetMons.push({name: template.name, shouldBeExcluded: isNotSearch});
 				orGroup.skip = true;
 				continue;
@@ -1231,10 +1263,14 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				}
 				if (!allBoosts.includes(target)) return {reply: `'${escapeHTML(target)}' is not a recognized stat.`};
 				if (isBoost) {
-					if ((orGroup.boost[target] && isNotSearch) || (orGroup.boost[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
+					if ((orGroup.boost[target] && isNotSearch) || (orGroup.boost[target] === false && !isNotSearch)) {
+						return {reply: 'A search cannot both exclude and include a stat boost.'};
+					}
 					orGroup.boost[target] = !isNotSearch;
 				} else {
-					if ((orGroup.lower[target] && isNotSearch) || (orGroup.lower[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
+					if ((orGroup.lower[target] && isNotSearch) || (orGroup.lower[target] === false && !isNotSearch)) {
+						return {reply: 'A search cannot both exclude and include a stat boost.'};
+					}
 					orGroup.lower[target] = !isNotSearch;
 				}
 				continue;
@@ -1254,7 +1290,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				default: target = target.substr(8);
 				}
 				if (!allBoosts.includes(target)) return {reply: `'${escapeHTML(target)}' is not a recognized stat.`};
-				if ((orGroup.zboost[target] && isNotSearch) || (orGroup.zboost[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
+				if ((orGroup.zboost[target] && isNotSearch) || (orGroup.zboost[target] === false && !isNotSearch)) {
+					return {reply: 'A search cannot both exclude and include a stat boost.'};
+				}
 				orGroup.zboost[target] = !isNotSearch;
 				continue;
 			}
@@ -1274,7 +1312,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 
 			if (allStatus.includes(target)) {
-				if ((orGroup.status[target] && isNotSearch) || (orGroup.status[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a status.'};
+				if ((orGroup.status[target] && isNotSearch) || (orGroup.status[target] === false && !isNotSearch)) {
+					return {reply: 'A search cannot both exclude and include a status.'};
+				}
 				orGroup.status[target] = !isNotSearch;
 				continue;
 			}
@@ -1297,7 +1337,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		}
 	}
 	if (showAll && !searches.length && !targetMons.length && !maxGen) {
-		return {reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command."};
+		return {
+			reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command."
+		};
 	}
 
 	if (!maxGen) maxGen = 8;
@@ -1328,13 +1370,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	for (const mon of targetMons) {
 		const template = mod.getTemplate(mon.name);
 		const lsetData = getFullLearnsetOfPokemon(template);
-		// This pokemon's learnset needs to be excluded, so we perform a difference operation on the valid moveset and this pokemon's moveset.
+		// This pokemon's learnset needs to be excluded, so we perform a difference operation
+		// on the valid moveset and this pokemon's moveset.
 		if (mon.shouldBeExcluded) {
 			for (const move of lsetData) {
 				validMoves.delete(move);
 			}
 		} else {
-			// This pokemon's learnset needs to be included, so we perform an intersection operation on the valid moveset and this pokemon's moveset.
+			// This pokemon's learnset needs to be included, so we perform an intersection operation
+			// on the valid moveset and this pokemon's moveset.
 			for (const move of validMoves) {
 				if (!lsetData.has(move)) {
 					validMoves.delete(move);
@@ -1757,7 +1801,9 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 				if (item.naturalGift.type === type) foundItems.push(item.name);
 			}
 		}
-		if (foundItems.length === 0) return {reply: 'No berries inflict ' + basePower + 'bp damage when used with Natural Gift.'};
+		if (foundItems.length === 0) {
+			return {reply: 'No berries inflict ' + basePower + 'bp damage when used with Natural Gift.'};
+		}
 	} else {
 		let bestMatched = 0;
 		for (const n in Dex.data.Items) {
@@ -1797,7 +1843,9 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			notShown = foundItems.length - RESULTS_MAX_LENGTH;
 			foundItems = foundItems.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += foundItems.map(result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`).join(", ");
+		resultsStr += foundItems.map(
+			result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`
+		).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
@@ -1887,7 +1935,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		const checkLsetProblem = validator.checkLearnset.call(validator, move, template, setSources, set);
+		const checkLsetProblem = validator.checkLearnset(move, template, setSources, set);
 		if (checkLsetProblem !== null && Object.keys(checkLsetProblem).length) {
 			lsetProblem = Object.create(null);
 			for (const i in checkLsetProblem) {
@@ -1897,8 +1945,8 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			break;
 		}
 	}
-	const lsetProblems = validator.reconcileLearnset.call(
-		validator, template, setSources, lsetProblem ? lsetProblem : null, template.species
+	const lsetProblems = validator.reconcileLearnset(
+		template, setSources, lsetProblem ? lsetProblem : null, template.species
 	);
 	const problems: string[] = [];
 	if (lsetProblems) problems.push(...lsetProblems);
@@ -1994,7 +2042,7 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
  * Process manager
  *********************************************************/
 
-const PM = new QueryProcessManager(module, async query => {
+const PM = new QueryProcessManager(module, query => {
 	try {
 		switch (query.cmd) {
 		case 'randpoke':
@@ -2013,7 +2061,9 @@ const PM = new QueryProcessManager(module, async query => {
 	} catch (err) {
 		Monitor.crashlog(err, 'A search query', query);
 	}
-	return {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
+	return {
+		error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."
+	};
 });
 
 if (!PM.isParentProcess) {

@@ -1,5 +1,3 @@
-'use strict';
-
 const BACKGROUND_COLOR = "#0000FF";
 const HEIGHT = 40;
 const MAX_CATEGORY_COUNT = 5;
@@ -158,7 +156,7 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	getGrid() {
-		let buffer = `<div class=\"infobox\"><html><body><table align="center" border="2" style="table-layout: fixed; width: 100%"><tr>`;
+		let buffer = `<div class="infobox"><html><body><table align="center" border="2" style="table-layout: fixed; width: 100%"><tr>`;
 		for (let i = 0; i < this.categoryCount; i++) {
 			buffer += `<td style="word-wrap: break-word" bgcolor="${BACKGROUND_COLOR}"; height="${HEIGHT}px"; width="30px" align="center"><font color="white">${Chat.escapeHTML(this.categories[i])}</font></td>`;
 		}

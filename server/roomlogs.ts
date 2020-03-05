@@ -212,11 +212,11 @@ export class Roomlog {
 		if (!this.roomlogStream) return;
 		const timestamp = Chat.toTimestamp(date).split(' ')[1] + ' ';
 		message = message.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
-		this.roomlogStream.write(timestamp + message + '\n');
+		void this.roomlogStream.write(timestamp + message + '\n');
 	}
 	modlog(message: string) {
 		if (!this.modlogStream) return;
-		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
+		void this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
 	}
 	async rename(newID: RoomID): Promise<true> {
 		const modlogPath = `logs/modlog`;

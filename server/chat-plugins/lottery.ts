@@ -168,7 +168,9 @@ export const commands: ChatCommands = {
 			const winners = getWinnersInLottery(room.roomid);
 			if (!winners) return this.errorReply(`An error occured while getting the winners.`);
 			// tslint:disable-next-line: max-line-length
-			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${Chat.toListString(winners)} won the "<a href="/view-lottery-${room.roomid}">${lottery.name}</a>" lottery!</b></div>`);
+			this.add(
+				Chat.html`|raw|<div class="broadcast-blue"><b>${Chat.toListString(winners)} won the "<a href="/view-lottery-${room.roomid}">${lottery.name}</a>" lottery!</b></div>`
+			);
 			this.modlog(`LOTTERY END ${lottery.name}`);
 			endLottery(room.roomid, winners);
 		},

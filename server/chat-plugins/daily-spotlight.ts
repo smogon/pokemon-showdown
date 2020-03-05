@@ -1,5 +1,3 @@
-'use strict';
-
 import {FS} from '../../lib/fs';
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -73,7 +71,7 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	async removedaily(target, room, user) {
+	removedaily(target, room, user) {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, rest] = target.split(',');
 		key = toID(key);
@@ -114,14 +112,13 @@ export const commands: ChatCommands = {
 		if (!this.can('announce', null, room)) return false;
 		if (!rest.length) return this.parse('/help daily');
 		let img;
-		let desc;
 		if (rest[0].trim().startsWith('http://') || rest[0].trim().startsWith('https://')) {
 			[img, ...rest] = rest;
 			img = img.trim();
 			const ret = await Chat.getImageDimensions(img);
 			if (ret.err) return this.errorReply(`Invalid image url: ${img}`);
 		}
-		desc = rest.join(',');
+		const desc = rest.join(',');
 		if (Chat.stripFormatting(desc).length > 500) {
 			return this.errorReply("Descriptions can be at most 500 characters long.");
 		}

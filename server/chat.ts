@@ -23,10 +23,8 @@ To reload chat commands:
 
 */
 
-'use strict';
-
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
-	=> Promise<string | null | void> | string | null | void;
+=> Promise<string | null | void> | string | null | void;
 export interface PageTable {
 	[k: string]: PageHandler | PageTable;
 }
@@ -93,8 +91,8 @@ const BROADCAST_TOKEN = '!';
 
 const TRANSLATION_DIRECTORY = 'translations/';
 
-import { FS } from '../lib/fs';
-import { formatText, linkRegex, stripFormatting } from './chat-formatter';
+import {FS} from '../lib/fs';
+import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 
 // @ts-ignore no typedef available
 import ProbeModule = require('probe-image-size');
@@ -278,7 +276,6 @@ export class PageContext extends MessageContext {
 }
 
 export class CommandContext extends MessageContext {
-
 	message: string;
 	pmTarget: User | null;
 	room: Room;
@@ -295,8 +292,8 @@ export class CommandContext extends MessageContext {
 	inputUsername: string;
 	constructor(
 		options:
-			{message: string, room: Room, user: User, connection: Connection} &
-			Partial<{pmTarget: User | null, cmd: string, cmdToken: string, target: string, fullCmd: string}>
+		{message: string, room: Room, user: User, connection: Connection} &
+		Partial<{pmTarget: User | null, cmd: string, cmdToken: string, target: string, fullCmd: string}>
 	) {
 		super(options.user, options.room && options.room.language ? options.room.language : options.user.language);
 
@@ -755,7 +752,6 @@ export class CommandContext extends MessageContext {
 			if (!ignoreCooldown && this.room && this.room.lastBroadcast === broadcastMessage &&
 				this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN &&
 				!this.user.can('bypassall')) {
-
 				this.errorReply("You can't broadcast this because it was just broadcasted.");
 				return false;
 			}
@@ -764,7 +760,7 @@ export class CommandContext extends MessageContext {
 			if (!message) return false;
 
 			// canTalk will only return true with no message
-			this.message = message as string;
+			this.message = message;
 			this.broadcastMessage = broadcastMessage;
 		}
 		return true;
@@ -858,8 +854,9 @@ export class CommandContext extends MessageContext {
 					return null;
 				}
 			}
-			// TODO: translate these messages. Currently there isn't much of a point since languages are room-dependent, and these PM-related messages aren't
-			// attached to any rooms. If we ever get to letting users set their own language these messages should also be translated. - Asheviere
+			// TODO: translate these messages. Currently there isn't much of a point since languages are room-dependent,
+			// and these PM-related messages aren't attached to any rooms. If we ever get to letting users set their
+			// own language these messages should also be translated. - Asheviere
 			if (targetUser) {
 				if (lockType && !targetUser.can('lock')) {
 					this.errorReply(`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
@@ -872,7 +869,6 @@ export class CommandContext extends MessageContext {
 				}
 				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat) &&
 					!targetUser.canPromote(user.group, Config.pmmodchat)) {
-
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 					return null;
@@ -880,7 +876,6 @@ export class CommandContext extends MessageContext {
 				if (targetUser.blockPMs &&
 					(targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) &&
 					!user.can('lock')) {
-
 					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						this.errorReply(`This user is blocking private messages right now.`);
@@ -913,7 +908,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		// remove zalgo
-		// tslint:disable-next-line: max-line-length
+		// eslint-disable-next-line max-len
 		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 		if (/[\u115f\u1160\u239b-\u23b9]/.test(message)) {
 			this.errorReply(this.tr("Your message contains banned characters."));
@@ -1076,8 +1071,9 @@ export class CommandContext extends MessageContext {
 		}
 
 		// check for mismatched tags
-		// tslint:disable-next-line: max-line-length
-		const tags = htmlContent.toLowerCase().match(/<\/?(div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr|style|script)\b/g);
+		const tags = htmlContent
+			.toLowerCase()
+			.match(/<\/?(div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr|style|script)\b/g);
 		if (tags) {
 			const stack = [];
 			for (const tag of tags) {
@@ -1193,7 +1189,7 @@ export const Chat = new class {
 			// \u2E80-\u32FF              CJK symbols
 			// \u3400-\u9FFF              CJK
 			// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
-			// tslint:disable-next-line: max-line-length
+			// eslint-disable-next-line no-misleading-character-class, max-len
 			name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
 
 			// blacklist
@@ -1208,14 +1204,14 @@ export const Chat = new class {
 			if (name.includes('@') && name.includes('.')) return '';
 
 			// url
-			// tslint:disable-next-line: max-line-length
 			if (/[a-z0-9]\.(com|net|org|us|uk|co|gg|tk|ml|gq|ga|xxx|download|stream)\b/i.test(name)) name = name.replace(/\./g, '');
 
-			// Limit the amount of symbols allowed in usernames to 4 maximum, and disallow (R) and (C) from being used in the middle of names.
-			// tslint:disable-next-line: max-line-length
+			// Limit the amount of symbols allowed in usernames to 4 maximum, and
+			// disallow (R) and (C) from being used in the middle of names.
+			// eslint-disable-next-line max-len
 			const nameSymbols = name.replace(/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g, '');
 			// \u00ae\u00a9 (R) (C)
-			// tslint:disable-next-line: max-line-length
+			// eslint-disable-next-line no-misleading-character-class, max-len
 			if (nameSymbols.length > 4 || /[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)) name = name.replace(/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g, '').replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
 		}
 		name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
@@ -1286,6 +1282,7 @@ export const Chat = new class {
 				interface TRStrings {
 					[k: string]: string;
 				}
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				const content: {name: string, strings: TRStrings} = require(`../${TRANSLATION_DIRECTORY}${fname}`);
 				const id = fname.slice(0, -5);
 
@@ -1772,7 +1769,9 @@ export const Chat = new class {
 		buf += `<span class="col typecol"><img src="//${Config.routes.client}/sprites/types/${encodedMoveType}.png" alt="${move.type}" width="32" height="14">`;
 		buf += `<img src="//${Config.routes.client}/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
 		// tslint:disable-next-line: max-line-length
-		if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
+		if (move.basePower) {
+			buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
+		}
 		buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
 		const basePP = move.pp || 1;
 		const pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);

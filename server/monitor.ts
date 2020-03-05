@@ -6,7 +6,6 @@
  *
  * @license MIT
  */
-'use strict';
 
 import {exec, ExecException, ExecOptions} from 'child_process';
 import {crashlogger} from "../lib/crashlogger";

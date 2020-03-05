@@ -274,7 +274,7 @@ export class Battle {
 		return this.prng.randomChance(numerator, denominator);
 	}
 
-	sample<T>(items: ReadonlyArray<T>): T {
+	sample<T>(items: readonly T[]): T {
 		return this.prng.sample(items);
 	}
 
@@ -886,7 +886,7 @@ export class Battle {
 					callback,
 					statusData: slotConditionData,
 					end: side.removeSlotCondition,
-					endCallArgs: [side, pokemon, slotCondition!.id],
+					endCallArgs: [side, pokemon, slotCondition.id],
 					thing: side,
 				}, callbackName));
 			}
@@ -1614,7 +1614,7 @@ export class Battle {
 
 	boost(
 		boost: SparseBoostsTable, target: Pokemon | null = null, source: Pokemon | null = null,
-		effect: Effect | null = null, isSecondary: boolean = false, isSelf: boolean = false
+		effect: Effect | null = null, isSecondary = false, isSelf = false
 	) {
 		if (this.event) {
 			if (!target) target = this.event.target;
@@ -1678,7 +1678,7 @@ export class Battle {
 
 	spreadDamage(
 		damage: SpreadMoveDamage, targetArray: (false | Pokemon | null)[] | null = null,
-		source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false
+		source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false
 	) {
 		if (!targetArray) return [0];
 		const retVals: (number | false | undefined)[] = [];
@@ -1784,7 +1784,7 @@ export class Battle {
 
 	damage(
 		damage: number, target: Pokemon | null = null, source: Pokemon | null = null,
-		effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false) {
+		effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -1808,7 +1808,6 @@ export class Battle {
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
 		if (this.gen <= 1 && this.dex.currentMod !== 'stadium' &&
 			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
-
 			const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
 			if (source && source.volatiles['substitute']) {
 				source.volatiles['substitute'].hp -= damage;
@@ -1945,7 +1944,7 @@ export class Battle {
 	 */
 	getDamage(
 		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
-		suppressMessages: boolean = false
+		suppressMessages = false
 	): number | undefined | null | false {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 
@@ -2088,7 +2087,7 @@ export class Battle {
 	}
 
 	modifyDamage(
-		baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages: boolean = false
+		baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages = false
 	) {
 		const tr = this.trunc;
 		if (!move.type) move.type = '???';
@@ -2310,7 +2309,7 @@ export class Battle {
 		}
 	}
 
-	faintMessages(lastFirst: boolean = false) {
+	faintMessages(lastFirst = false) {
 		if (this.ended) return;
 		if (!this.faintQueue.length) return false;
 		if (lastFirst) {
@@ -2911,7 +2910,7 @@ export class Battle {
 	setPlayer(slot: SideID, options: PlayerOptions) {
 		let side;
 		let didSomething = true;
-		const slotNum = parseInt(slot[1], 10) - 1;
+		const slotNum = parseInt(slot[1]) - 1;
 		if (!this.sides[slotNum]) {
 			// create player
 			const team = this.getTeam(options);
@@ -3006,7 +3005,7 @@ export class Battle {
 	}
 
 	getSide(sideid: SideID): Side {
-		return this.sides[parseInt(sideid[1], 10) - 1];
+		return this.sides[parseInt(sideid[1]) - 1];
 	}
 
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {

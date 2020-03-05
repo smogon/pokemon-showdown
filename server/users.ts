@@ -38,7 +38,7 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000;
 
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
-import { FS } from '../lib/fs';
+import {FS} from '../lib/fs';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -191,8 +191,7 @@ function exportUsergroups() {
 	}
 	return FS('config/usergroups.csv').write(buffer);
 }
-// tslint:disable-next-line:no-floating-promises
-importUsergroups();
+void importUsergroups();
 
 function cacheGroupData() {
 	if (Config.groups) {
@@ -1402,7 +1401,7 @@ export class User extends Chat.MessageContext {
 	leaveRoom(
 		room: Room | string,
 		connection: Connection | null = null,
-		force: boolean = false
+		force = false
 	) {
 		room = Rooms.get(room)!;
 		if (room.roomid === 'global') {
@@ -1725,7 +1724,7 @@ function socketReceive(worker: Worker, workerid: number, socketid: string, messa
 	if (!lines[lines.length - 1]) lines.pop();
 	if (lines.length > (user.isStaff ||
 		(room.auth && room.auth[user.id] && room.auth[user.id] !== '+') ? THROTTLE_MULTILINE_WARN_STAFF
-			: THROTTLE_MULTILINE_WARN)) {
+		: THROTTLE_MULTILINE_WARN)) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;
 	}

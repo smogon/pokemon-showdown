@@ -76,7 +76,7 @@ export class QueryProcessWrapper implements ProcessWrapper {
 				return;
 			}
 
-			const taskId = parseInt(message.slice(0, nlLoc), 10);
+			const taskId = parseInt(message.slice(0, nlLoc));
 			const resolve = this.pendingTasks.get(taskId);
 			if (!resolve) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
 			this.pendingTasks.delete(taskId);
@@ -160,7 +160,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 				return;
 			}
 
-			const taskId = parseInt(message.slice(0, nlLoc), 10);
+			const taskId = parseInt(message.slice(0, nlLoc));
 			const stream = this.activeStreams.get(taskId);
 			if (!stream) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
 
@@ -185,14 +185,14 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			}
 		});
 		this.process.on('disconnect', () => {
-			this.destroy();
+			void this.destroy();
 		});
 	}
 
 	deleteStream(taskId: number) {
 		this.activeStreams.delete(taskId);
 		// try to release
-		if (this.resolveRelease && !this.load) this.destroy();
+		if (this.resolveRelease && !this.load) void this.destroy();
 	}
 
 	get load() {
@@ -210,7 +210,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
 		if (!this.load) {
-			this.destroy();
+			void this.destroy();
 		} else {
 			this.pendingRelease = new Promise(resolve => {
 				this.resolveRelease = resolve;
@@ -471,7 +471,7 @@ export class StreamProcessManager extends ProcessManager {
 				return destroyed;
 			} else if (messageType === 'WRITE') {
 				if (!stream) throw new Error(`WRITE: Invalid taskId ${taskId}`);
-				stream.write(message);
+				void stream.write(message);
 			} else {
 				throw new Error(`Unrecognized messageType ${messageType}`);
 			}
