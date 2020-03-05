@@ -200,14 +200,26 @@ export class TeamValidator {
 			this.ruleTable.minSourceGen[0] : 1;
 	}
 
-	validateTeam(team: PokemonSet[] | null, removeNicknames = false): string[] | null {
+	validateTeam(
+		team: PokemonSet[] | null,
+		options: {
+			removeNicknames?: boolean,
+			skipSets?: {[name: string]: {[key: string]: boolean}},
+		} = {}
+	): string[] | null {
 		if (team && this.format.validateTeam) {
-			return this.format.validateTeam.call(this, team, removeNicknames) || null;
+			return this.format.validateTeam.call(this, team, options) || null;
 		}
-		return this.baseValidateTeam(team, removeNicknames);
+		return this.baseValidateTeam(team, options);
 	}
 
-	baseValidateTeam(team: PokemonSet[] | null, removeNicknames = false): string[] | null {
+	baseValidateTeam(
+		team: PokemonSet[] | null,
+		options: {
+			removeNicknames?: boolean,
+			skipSets?: {[name: string]: {[key: string]: boolean}},
+		} = {}
+	): string[] | null {
 		const format = this.format;
 		const dex = this.dex;
 
@@ -243,7 +255,16 @@ export class TeamValidator {
 		let lgpeStarterCount = 0;
 		for (const set of team) {
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
-			const setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
+
+			let setProblems: string[] | null = null;
+			if (options.skipSets && options.skipSets[set.name]) {
+				for (const i in options.skipSets[set.name]) {
+					teamHas[i] = (teamHas[i] || 0) + 1;
+				}
+			} else {
+				setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
+			}
+
 			if (set.species === 'Pikachu-Starter' || set.species === 'Eevee-Starter') {
 				lgpeStarterCount++;
 				if (lgpeStarterCount === 2 && ruleTable.isBanned('nonexistent')) {
@@ -253,7 +274,7 @@ export class TeamValidator {
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
-			if (removeNicknames) {
+			if (options.removeNicknames) {
 				let crossTemplate: Template;
 				if (format.name === '[Gen 7] Cross Evolution' && (crossTemplate = dex.getTemplate(set.name)).exists) {
 					set.name = crossTemplate.species;
