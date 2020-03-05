@@ -977,8 +977,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
 		resultsStr += results.map(
-			// TODO: update the regex to allow this
-			// eslint-disable-next-line max-len
 			result => `<a href="//${Config.routes.dex}/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`
 		).join(", ");
 		if (notShown) {
