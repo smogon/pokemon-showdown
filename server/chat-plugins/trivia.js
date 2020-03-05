@@ -1772,7 +1772,8 @@ const commands = {
 		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
 	],
 
-	search(target, room, user) {
+	omitcasesearch: 'search',
+	search(target, room, user, connection, cmd) {
 		if (room.roomid !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop.");
 		if (!this.can('broadcast', null, room)) return false;
 		if (!target.includes(',')) return this.errorReply("No valid search arguments entered.");
@@ -1790,7 +1791,12 @@ const commands = {
 		query = query.join(',').trim();
 		if (!query) return this.errorReply("No valid search query as entered.");
 
-		let results = triviaData[type].filter(q => q.question.includes(query) && !SPECIAL_CATEGORIES[q.category]);
+		let transformQuestion = question => question;
+		if (cmd === 'omitcasesearch') {
+			query = query.toLowerCase();
+			transformQuestion = question => question.toLowerCase();
+		}
+		let results = triviaData[type].filter(q => transformQuestion(q.question).includes(query) && !SPECIAL_CATEGORIES[q.category]);
 		if (!results.length) return this.sendReply(`No results found under the ${type} list.`);
 
 		let buffer = "|raw|<div class=\"ladder\"><table><tr><th>#</th><th>Category</th><th>Question</th></tr>" +
@@ -1802,7 +1808,8 @@ const commands = {
 
 		this.sendReply(buffer);
 	},
-	searchhelp: [`/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * & ~`],
+	omitcasesearchhelp: [`/trivia omitcasesearch [type], [query] - Searches for questions based on their type and their query, case-insensitive. Valid types: submissions, subs, questions, qs. Requires: + % @ * & ~`],
+	searchhelp: [`/trivia search [type], [query] - Searches for questions based on their type and their query, case-sensitive. Valid types: submissions, subs, questions, qs. Requires: + % @ * & ~`],
 
 	rank(target, room, user) {
 		if (room.roomid !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1967,7 +1974,8 @@ module.exports = {
 			`- /trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~`,
 			`- /trivia clearqs [category] - Clear all questions in the given category. Requires: # & ~`,
 			`Informational commands:`,
-			`- /trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~`,
+			`- /trivia search [type], [query] - Searches for questions based on their type and their query, case-sensitive. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~`,
+			`- /trivia omitcasesearch [type], [query] - Searches for questions based on their type and their query, case-insensitive. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~`,
 			`- /trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.`,
 			`- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.`,
 			`- /trivia ladder - View information about the top 15 users on the trivia leaderboard.`,
