@@ -233,8 +233,8 @@ export const IPTools = new class {
 	}
 
 	/*********************************************************
-	* IP parsing
- 	*********************************************************/
+	 * IP parsing
+	 *********************************************************/
 
 	ipToNumber(ip: string) {
 		if (ip.includes(':') && !ip.includes('.')) {
@@ -329,8 +329,8 @@ export const IPTools = new class {
 	}
 
 	/*********************************************************
- 	* Datacenter parsing
- 	*********************************************************/
+	 * Datacenter parsing
+	 *********************************************************/
 
 	urlToHost(url: string) {
 		if (url.startsWith('http://')) url = url.slice(7);
