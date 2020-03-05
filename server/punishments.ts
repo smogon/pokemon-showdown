@@ -1124,7 +1124,7 @@ export const Punishments = new class {
 		if (registered && id === 'BAN') {
 			user.popup(`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`);
 			user.punishmentNotified = true;
-			Punishments.punish(user, punishment, false);
+			void Punishments.punish(user, punishment, false);
 			user.disconnectAll();
 			return;
 		}
@@ -1470,7 +1470,7 @@ export const Punishments = new class {
 				const reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
 				const message = `${(user as User).name || userid} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
 
-				Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message).then(() => {
+				void Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message).then(() => {
 					if (typeof user !== 'string') {
 						(user as User).popup(
 							`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +

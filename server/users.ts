@@ -905,9 +905,9 @@ export class User extends Chat.MessageContext {
 				this.autoconfirmed = userid;
 			} else if (userType === '5') {
 				this.permalocked = userid;
-				Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permalocked as ${name}`);
+				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permalocked as ${name}`);
 			} else if (userType === '6') {
-				Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permabanned as ${name}`);
+				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permabanned as ${name}`);
 				this.disconnectAll();
 			}
 		}
