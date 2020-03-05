@@ -433,9 +433,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			});
 			this.originalRoles.sort((a, b) => a.name.localeCompare(b.name));
 			this.roles = this.originalRoles.slice();
-			this.originalRoleString = this.originalRoles.map(r => {
-				return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`;
-			}).join(', ');
+			this.originalRoleString = this.originalRoles.map(
+				r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
+			).join(', ');
 			this.roleString = this.originalRoleString;
 			return this.sendRoom(`The roles have been set.`);
 		}
@@ -473,9 +473,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.originalRoles = newRoles;
 		this.originalRoles.sort((a, b) => a.alignment.localeCompare(b.alignment) || a.name.localeCompare(b.name));
 		this.roles = this.originalRoles.slice();
-		this.originalRoleString = this.originalRoles.map(r => {
-			return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`;
-		}).join(', ');
+		this.originalRoleString = this.originalRoles.map(
+			r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
+		).join(', ');
 		this.roleString = this.originalRoleString;
 
 		if (!reset) this.phase = 'locked';
@@ -1446,9 +1446,9 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	updateRoleString() {
-		this.roleString = this.roles.map(r => {
-			return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`;
-		}).join(',');
+		this.roleString = this.roles.map(
+			r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
+		).join(',');
 	}
 
 	sendRoom(message: string) {
@@ -2813,9 +2813,9 @@ export const commands: ChatCommands = {
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id)) return this.errorReply(`Only the host can view roles.`);
 			if (!game.started) return this.errorReply(`The game has not started.`);
 			const players = [...Object.values(game.playerTable), ...Object.values(game.dead)];
-			this.sendReplyBox(players.map(p => {
-				return `${p.safeName}: ${p.role ? (p.role.alignment === 'solo' ? 'Solo ' : '') + p.role.safeName : 'No role'}`;
-			}).join('<br/>'));
+			this.sendReplyBox(players.map(
+				p => `${p.safeName}: ${p.role ? (p.role.alignment === 'solo' ? 'Solo ' : '') + p.role.safeName : 'No role'}`
+			).join('<br/>'));
 		},
 
 		spectate: 'view',
