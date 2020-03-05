@@ -635,7 +635,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause'],
-		banlist: ['Darmanitan-Galar', 'Arena Trap', 'Huge Power', 'Shadow Tag', 'Baton Pass', 'Eviolite', 'Light Ball'],
+		banlist: ['Darmanitan-Galar', 'Gastly', 'Arena Trap', 'Drizzle', 'Drought', 'Huge Power', 'Shadow Tag', 'Baton Pass', 'Eviolite', 'Light Ball'],
 		onModifyTemplate(template, target, source) {
 			const newTemplate = this.dex.deepClone(template);
 			newTemplate.baseStats = this.dex.deepClone(newTemplate.baseStats);
