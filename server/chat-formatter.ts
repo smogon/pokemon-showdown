@@ -7,8 +7,6 @@
  * @license MIT
  */
 
-'use strict';
-
 // Regex copied from the client
 const domainRegex = '[a-z0-9-]+(?:[.][a-z0-9-]+)*';
 const parenthesisRegex = '[(](?:[^\\s()<>&]|&amp;)*[)]';
@@ -45,6 +43,7 @@ export const linkRegex = new RegExp(
 	'ig'
 );
 // compiled from above
+// eslint-disable-next-line max-len
 // const linkRegex = /(?:(?:(?:https?:\/\/|\bwww[.])[a-z0-9-]+(?:[.][a-z0-9-]+)*|\b[a-z0-9-]+(?:[.][a-z0-9-]+)*[.](?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?:[:][0-9]+)?\b(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|[(](?:[^\s()<>&]|&amp;)*[)])*(?:[^\s`()[\]{}'".,!?;:&<>*`^~\\]|[(](?:[^\s()<>&]|&amp;)*[)]))?)?|[a-z0-9.]+\b@[a-z0-9-]+(?:[.][a-z0-9-]+)*[.][a-z]{2,})(?![^ ]*&gt;)/ig;
 
 type SpanType = '_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '(';
@@ -59,7 +58,7 @@ class TextFormatter {
 	/** offset of str that's been parsed so far */
 	offset: number;
 
-	constructor(str: string, isTrusted: boolean = false) {
+	constructor(str: string, isTrusted = false) {
 		// escapeHTML, without escaping /
 		str = `${str}`
 			.replace(/&/g, '&amp;')
@@ -97,6 +96,7 @@ class TextFormatter {
 		this.isTrusted = isTrusted;
 		this.offset = 0;
 	}
+	// eslint-disable-next-line max-len
 	// debugAt(i=0, j=i+1) { console.log(this.slice(0, i) + '[' + this.slice(i, j) + ']' + this.slice(j, this.str.length)); }
 
 	slice(start: number, end: number) {
@@ -450,7 +450,7 @@ export function formatText(str: string, isTrusted = false) {
  */
 export function stripFormatting(str: string) {
 	// Doesn't match > meme arrows because the angle bracket appears in the chat still.
-	str = str.replace(/\*\*([^\s\*]+)\*\*|__([^\s_]+)__|~~([^\s~]+)~~|``([^\s`]+)``|\^\^([^\s\^]+)\^\^|\\([^\s\\]+)\\/g,
+	str = str.replace(/\*\*([^\s*]+)\*\*|__([^\s_]+)__|~~([^\s~]+)~~|``([^\s`]+)``|\^\^([^\s^]+)\^\^|\\([^\s\\]+)\\/g,
 		(match, $1, $2, $3, $4, $5, $6) => $1 || $2 || $3 || $4 || $5 || $6);
 	// Remove all of the link expect for the text in [[text<url>]]
 	return str.replace(/\[\[(?:([^<]*)\s*<[^>]+>|([^\]]+))\]\]/g, (match, $1, $2) => $1 || $2 || '');

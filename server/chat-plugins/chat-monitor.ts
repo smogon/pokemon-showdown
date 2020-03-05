@@ -1,5 +1,3 @@
-'use strict';
-
 import {FS} from '../../lib/fs';
 
 type FilterWord = [RegExp, string, string, string | null, number];
@@ -24,7 +22,9 @@ interface Monitor {
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
 
-// Substitution dictionary adapted from https://github.com/ThreeLetters/NoSwearingPlease/blob/master/index.js, licensed under MIT.
+// Substitution dictionary adapted from https://github.com/ThreeLetters/NoSwearingPlease/blob/master/index.js
+// Licensed under MIT.
+/* eslint-disable max-len */
 const EVASION_DETECTION_SUBSTITUTIONS: {[k: string]: string[]} = {
 	a: ["a", "4", "@", "á", "â", "ã", "à", "ᗩ", "A", "ⓐ", "Ⓐ", "α", "͏", "₳", "ä", "Ä", "Ꮧ", "λ", "Δ", "Ḁ", "Ꭺ", "ǟ", "̾", "ａ", "Ａ", "ᴀ", "ɐ", "🅐", "𝐚", "𝐀", "𝘢", "𝘈", "𝙖", "𝘼", "𝒶", "𝓪", "𝓐", "𝕒", "𝔸", "𝔞", "𝔄", "𝖆", "𝕬", "🄰", "🅰", "𝒜", "𝚊", "𝙰", "ꍏ", "а"],
 	b: ["b", "8", "ᗷ", "B", "ⓑ", "Ⓑ", "в", "฿", "ḅ", "Ḅ", "Ᏸ", "ϐ", "Ɓ", "ḃ", "Ḃ", "ɮ", "ｂ", "Ｂ", "ʙ", "🅑", "𝐛", "𝐁", "𝘣", "𝘉", "𝙗", "𝘽", "𝒷", "𝓫", "𝓑", "𝕓", "𝔹", "𝔟", "𝔅", "𝖇", "𝕭", "🄱", "🅱", "𝐵", "Ⴆ", "𝚋", "𝙱", "♭", "b"],
@@ -61,6 +61,7 @@ const EVASION_DETECTION_SUBSTITUTIONS: {[k: string]: string[]} = {
 	],
 	z: ["z", "ᘔ", "Z", "ⓩ", "Ⓩ", "Ⱬ", "ẓ", "Ẓ", "ፚ", "Ꮓ", "ʐ", "ｚ", "Ｚ", "ᴢ", "🅩", "𝐳", "𝐙", "𝘻", "𝘡", "𝙯", "𝙕", "𝓏", "𝔃", "𝓩", "𝕫", "𝕋", "𝔷", "𝔙", "𝖟", "𝖅", "🅉", "🆉", "𝒵", "ȥ", "𝚣", "𝚉", "☡", "z"],
 };
+/* eslint-enable max-len */
 
 const EVASION_DETECTION_SUB_STRINGS: {[k: string]: string} = {};
 
@@ -107,7 +108,10 @@ Chat.registerMonitor('autolock', {
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
-				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
+				Punishments.autolock(
+					user, room,
+					'ChatMonitor', `Filtered phrase: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
+				);
 			} else {
 				this.errorReply(`Please do not say '${match[0]}'.`);
 			}
@@ -174,7 +178,10 @@ Chat.registerMonitor('evasion', {
 			if (isStaff) return `${message} __[would be locked for filter evading: ${match[0]} (${word})]__`;
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			if (room) {
-				Punishments.autolock(user, room, 'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`, `<${room.roomid}> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`);
+				Punishments.autolock(
+					user, room,
+					'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`, `<${room.roomid}> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`
+				);
 			} else {
 				this.errorReply(`Please do not say '${word}'.`);
 			}
@@ -194,7 +201,9 @@ Chat.registerMonitor('wordfilter', {
 		while (match) {
 			let filtered = line[3] || '';
 			if (match[0] === match[0].toUpperCase()) filtered = filtered.toUpperCase();
-			if (match[0][0] === match[0][0].toUpperCase()) filtered = `${filtered ? filtered[0].toUpperCase() : ''}${filtered.slice(1)}`;
+			if (match[0][0] === match[0][0].toUpperCase()) {
+				filtered = `${filtered ? filtered[0].toUpperCase() : ''}${filtered.slice(1)}`;
+			}
 			message = message.replace(match[0], filtered);
 			match = regex.exec(message);
 		}
@@ -283,9 +292,9 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 });
 
 export const chatfilter: ChatFilter = function (message, user, room) {
-	// eslint-disable-next-line no-misleading-character-class
 	let lcMessage = message
 		.replace(/\u039d/g, 'N').toLowerCase()
+		// eslint-disable-next-line no-misleading-character-class
 		.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
 		.replace(/\u03bf/g, 'o')
 		.replace(/\u043e/g, 'o')
@@ -353,7 +362,10 @@ export const namefilter: NameFilter = (name, user) => {
 
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, 'staff', `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
+					Punishments.autolock(
+						user, 'staff', `NameMonitor`,
+						`inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name
+					);
 				}
 				line[4]++;
 				saveFilters();
@@ -369,13 +381,19 @@ export const loginfilter: LoginFilter = user => {
 	const forceRenamed = Chat.forceRenames.get(user.id);
 	if (user.trackRename) {
 		const manualForceRename = Chat.forceRenames.get(toID(user.trackRename));
-		Rooms.global.notifyRooms(['staff'], Chat.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`);
+		Rooms.global.notifyRooms(
+			['staff'],
+			Chat.html`|html|[NameMonitor] Username used: <span class="username">${user.name}</span> ${user.getAccountStatusString()} (${!manualForceRename ? 'automatically ' : ''}forcerenamed from <span class="username">${user.trackRename}</span>)`
+		);
 		user.trackRename = '';
 	}
 	if (Chat.namefilterwhitelist.has(user.id)) return;
 	if (typeof forceRenamed === 'number') {
 		const count = forceRenamed ? ` (forcerenamed ${forceRenamed} time${Chat.plural(forceRenamed)})` : '';
-		Rooms.global.notifyRooms(['staff'], Chat.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`);
+		Rooms.global.notifyRooms(
+			['staff'],
+			Chat.html`|html|[NameMonitor] Reused name${count}: <span class="username">${user.name}</span> ${user.getAccountStatusString()}`
+		);
 	}
 };
 export const nicknamefilter: NameFilter = (name, user) => {
@@ -397,7 +415,10 @@ export const nicknamefilter: NameFilter = (name, user) => {
 
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true);
+					Punishments.autolock(
+						user, 'staff',
+						`NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true
+					);
 				}
 				line[4]++;
 				saveFilters();
@@ -421,6 +442,7 @@ export const statusfilter: StatusFilter = (status, user) => {
 	lcStatus = lcStatus.replace('herapist', '').replace('grape', '').replace('scrape', '');
 	// Check for blatant staff impersonation attempts. Ideally this could be completely generated from Config.grouplist
 	// for better support for side servers, but not all ranks are staff ranks or should necessarily be filted.
+	// eslint-disable-next-line max-len
 	if (/\b(?:global|room|upper|senior)?\s*(?:staff|admin|administrator|leader|owner|founder|mod|moderator|driver|voice|operator|sysop|creator)\b/gi.test(lcStatus)) {
 		return '';
 	}
@@ -432,7 +454,10 @@ export const statusfilter: StatusFilter = (status, user) => {
 
 			if (regex.test(lcStatus)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
+					Punishments.autolock(
+						user, 'staff', `NameMonitor`,
+						`inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true
+					);
 				}
 				line[4]++;
 				saveFilters();
@@ -493,7 +518,9 @@ export const commands: ChatCommands = {
 
 			if (!list || !rest.length) return this.errorReply("Syntax: /filter add list, word, reason");
 
-			if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
+			if (!(list in filterWords)) {
+				return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
+			}
 
 			let word = '';
 			let filterTo = '';
@@ -517,11 +544,15 @@ export const commands: ChatCommands = {
 					);
 				}
 			} catch (e) {
-				return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
+				return this.errorReply(
+					e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`
+				);
 			}
 
 			const reason = reasonParts.join(',').trim();
-			if (filterWords[list].some(val => String(val[0]) === String(regex))) return this.errorReply(`${word} is already added to the ${list} list.`);
+			if (filterWords[list].some(val => String(val[0]) === String(regex))) {
+				return this.errorReply(`${word} is already added to the ${list} list.`);
+			}
 			filterWords[list].push([regex, word, reason, filterTo || null, 0]);
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
 				this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${filterTo}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
@@ -542,10 +573,14 @@ export const commands: ChatCommands = {
 
 			if (!list || !words.length) return this.errorReply("Syntax: /filter remove list, words");
 
-			if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
+			if (!(list in filterWords)) {
+				return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
+			}
 
 			const notFound = words.filter(val => !filterWords[list].filter(entry => entry[1] === val).length);
-			if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
+			if (notFound.length) {
+				return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
+			}
 			filterWords[list] = filterWords[list].filter(entry => !words.includes(entry[1]));
 
 			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);

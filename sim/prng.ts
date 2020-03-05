@@ -92,7 +92,7 @@ export class PRNG {
 	 *
 	 * The array must not be sparse.
 	 */
-	sample<T>(items: ReadonlyArray<T>): T {
+	sample<T>(items: readonly T[]): T {
 		if (items.length === 0) {
 			throw new RangeError(`Cannot sample an empty array`);
 		}
@@ -110,7 +110,7 @@ export class PRNG {
 	 * At least according to V4 in
 	 * https://github.com/smogon/pokemon-showdown/issues/1157#issuecomment-214454873
 	 */
-	shuffle<T>(items: T[], start: number = 0, end: number = items.length) {
+	shuffle<T>(items: T[], start = 0, end: number = items.length) {
 		while (start < end - 1) {
 			const nextIndex = this.next(start, end);
 			if (start !== nextIndex) {
@@ -172,7 +172,7 @@ export class PRNG {
 	 * This is all ignoring overflow/carry because that cannot be shown in a pseudo-mathematical equation.
 	 * The below code implements a optimised version of that equation while also checking for overflow/carry.
 	 */
-	nextFrame(initialSeed: PRNGSeed, framesToAdvance: number = 1): PRNGSeed {
+	nextFrame(initialSeed: PRNGSeed, framesToAdvance = 1): PRNGSeed {
 		// Use Slice so we don't actually alter the original seed.
 		let seed: PRNGSeed = initialSeed.slice() as PRNGSeed;
 		for (let frame = 0; frame < framesToAdvance; ++frame) {

@@ -15,7 +15,7 @@ import * as crypto from 'crypto';
 
 import {QueryProcessManager} from '../lib/process-manager';
 
-export const PM = new QueryProcessManager(module, async ({data, signature}) => {
+export const PM = new QueryProcessManager(module, ({data, signature}) => {
 	const verifier = crypto.createVerify(Config.loginserverkeyalgo);
 	verifier.update(data);
 	let success = false;

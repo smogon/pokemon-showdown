@@ -1,5 +1,3 @@
-'use strict';
-
 import {FS} from '../../lib/fs';
 
 const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
@@ -44,7 +42,9 @@ export const commands: ChatCommands = {
 		if (!(topic && rest.length)) return this.parse('/help roomfaq');
 		let text = rest.join(',').trim();
 		if (topic.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
-		if (Chat.stripFormatting(text).length > MAX_ROOMFAQ_LENGTH) return this.errorReply(`FAQ entries should not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+		if (Chat.stripFormatting(text).length > MAX_ROOMFAQ_LENGTH) {
+			return this.errorReply(`FAQ entries should not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+		}
 
 		text = text.replace(/^>/, '&gt;');
 
@@ -83,8 +83,12 @@ export const commands: ChatCommands = {
 		if (!(alias && topic)) return this.parse('/help roomfaq');
 		if (alias.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
 
-		if (!(roomFaqs[room.roomid] && topic in roomFaqs[room.roomid])) return this.errorReply(`The topic ${topic} was not found in this room's faq list.`);
-		if (getAlias(room.roomid, topic)) return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
+		if (!(roomFaqs[room.roomid] && topic in roomFaqs[room.roomid])) {
+			return this.errorReply(`The topic ${topic} was not found in this room's faq list.`);
+		}
+		if (getAlias(room.roomid, topic)) {
+			return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
+		}
 		roomFaqs[room.roomid][alias] = `>${topic}`;
 		saveRoomFaqs();
 		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
@@ -96,7 +100,9 @@ export const commands: ChatCommands = {
 		if (!roomFaqs[room.roomid]) return this.errorReply("This room has no FAQ topics.");
 		let topic: string = toID(target);
 		if (topic === 'constructor') return false;
-		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.roomid]).filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b)).map(rfaq => `<button class="button" name="send" value="/viewfaq ${rfaq}">${rfaq}</button>`).join(', ')}`);
+		if (!topic) {
+			return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.roomid]).filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b)).map(rfaq => `<button class="button" name="send" value="/viewfaq ${rfaq}">${rfaq}</button>`).join(', ')}`);
+		}
 		if (!roomFaqs[room.roomid][topic]) return this.errorReply("Invalid topic.");
 		topic = getAlias(room.roomid, topic) || topic;
 

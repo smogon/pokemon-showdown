@@ -149,7 +149,10 @@ export class Poll {
 		while (!i.done) {
 			const selected = option && option.includes(i.value[0]);
 			const percentage = Math.round((i.value[1].votes * 100) / (this.totalVotes || 1));
-			const answerMarkup = this.isQuiz ? `<span style="color:${i.value[1].correct ? 'green' : 'red'};">${i.value[1].correct ? '' : '<s>'}${this.getOptionMarkup(i.value[1])}${i.value[1].correct ? '' : '</s>'}</span>` : this.getOptionMarkup(i.value[1]);
+			const answerMarkup = this.isQuiz
+				?
+				`<span style="color:${i.value[1].correct ? 'green' : 'red'};">${i.value[1].correct ? '' : '<s>'}${this.getOptionMarkup(i.value[1])}${i.value[1].correct ? '' : '</s>'}</span>`
+				: this.getOptionMarkup(i.value[1]);
 			output += `<div style="margin-top: 3px">${i.value[0]}. <strong>${selected ? '<em>' : ''}${answerMarkup}${selected ? '</em>' : ''}</strong> <small>(${i.value[1].votes} vote${i.value[1].votes === 1 ? '' : 's'})</small><br /><span style="font-size:7pt;background:${colors[c % 3]};padding-right:${percentage * 3}px"></span><small>&nbsp;${percentage}%</small></div>`;
 			i = iter.next();
 			c++;
@@ -323,7 +326,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("There is no poll running in this room.");
 			}
 			if (!target) return this.parse('/help poll vote');
-			const poll = room.minorActivity as Poll;
+			const poll = room.minorActivity;
 
 			const parsed = parseInt(target);
 			if (isNaN(parsed)) return this.errorReply("To vote, specify the number of the option.");
@@ -341,8 +344,10 @@ export const commands: ChatCommands = {
 			`/poll deselect [number] - Deselects option [number].`,
 		],
 		submit(target, room, user) {
-			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') return this.errorReply("There is no poll running in this room.");
-			const poll = room.minorActivity as Poll;
+			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
+				return this.errorReply("There is no poll running in this room.");
+			}
+			const poll = room.minorActivity;
 
 			poll.submit(user);
 		},
@@ -352,7 +357,7 @@ export const commands: ChatCommands = {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply("There is no poll running in this room.");
 			}
-			const poll = room.minorActivity as Poll;
+			const poll = room.minorActivity;
 
 			if (target) {
 				if (!this.can('minigame', null, room)) return false;
@@ -392,7 +397,7 @@ export const commands: ChatCommands = {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply("There is no poll running in this room.");
 			}
-			const poll = room.minorActivity as Poll;
+			const poll = room.minorActivity;
 
 			return poll.blankvote(user);
 		},
@@ -408,7 +413,7 @@ export const commands: ChatCommands = {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply("There is no poll running in this room.");
 			}
-			const poll = room.minorActivity as Poll;
+			const poll = room.minorActivity;
 			if (poll.timeout) clearTimeout(poll.timeout);
 
 			poll.end();
@@ -424,7 +429,7 @@ export const commands: ChatCommands = {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'poll') {
 				return this.errorReply("There is no poll running in this room.");
 			}
-			const poll = room.minorActivity as Poll;
+			const poll = room.minorActivity;
 			if (!this.runBroadcast()) return;
 			room.update();
 
