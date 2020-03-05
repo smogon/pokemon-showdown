@@ -1182,7 +1182,10 @@ interface FormatsData extends EventMethods {
 	) => string[] | void
 	onValidateTeam?: (this: TeamValidator, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void
 	validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null
-	validateTeam?: (this: TeamValidator, team: PokemonSet[], removeNicknames: boolean) => string[] | void,
+	validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
+		removeNicknames?: boolean,
+		skipSets?: {[name: string]: {[key: string]: boolean}},
+	}) => string[] | void,
 	trunc?: (n: number) => number;
 	section?: string,
 	column?: number
