@@ -825,9 +825,8 @@ export const commands: ChatCommands = {
 		}
 		this.modlog(`RENAMEROOM`, null, `from ${oldTitle}`);
 		const privacy = room.isPrivate === true ? "Private" :
-			room.isPrivate === false
-				? "Public"
-				: `${room.isPrivate.charAt(0).toUpperCase()}${room.isPrivate.slice(1)}`;
+			room.isPrivate === false ? "Public" :
+			`${room.isPrivate.charAt(0).toUpperCase()}${room.isPrivate.slice(1)}`;
 		const message = Chat.html`
 			|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>
 		`;

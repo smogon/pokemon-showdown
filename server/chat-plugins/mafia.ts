@@ -719,7 +719,8 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.sendTimestamp(
 				name === 'No Lynch'
 					? `${(targetUser ? targetUser.name : userid)} has abstained from lynching.`
-					: `${(targetUser ? targetUser.name : userid)} has lynched ${name}.`);
+					: `${(targetUser ? targetUser.name : userid)} has lynched ${name}.`
+			);
 		}
 		player.lastLynch = Date.now();
 		if (this.getHammerValue(target) <= lynch.trueCount) {
@@ -763,9 +764,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		const targetUser = Users.get(userid);
 		if (!force) {
-			this.sendTimestamp(player.lynching === 'nolynch'
-				? `${(targetUser ? targetUser.name : userid)} is no longer abstaining from lynching.`
-				: `${(targetUser ? targetUser.name : userid)} has unlynched ${this.playerTable[player.lynching].name}.`
+			this.sendTimestamp(
+				player.lynching === 'nolynch'
+					? `${(targetUser ? targetUser.name : userid)} is no longer abstaining from lynching.`
+					: `${(targetUser ? targetUser.name : userid)} has unlynched ${this.playerTable[player.lynching].name}.`
 			);
 		}
 		player.lynching = '';
