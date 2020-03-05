@@ -634,7 +634,6 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 10, "gender": "F", "nature": "Modest", "isHidden": false, "moves": ["powdersnow"], "pokeball": "cherishball"},
 		],
 		tier: "LC",
-		doublesTier: "LC Uber",
 	},
 	ninetales: {
 		randomBattleMoves: ["fireblast", "nastyplot", "solarbeam", "substitute", "willowisp"],
@@ -1134,7 +1133,7 @@ let BattleFormatsData = {
 	slowpokegalar: {
 		unreleasedHidden: true,
 		tier: "RU",
-		doublesTier: "DUU",
+		doublesTier: "(DUU)",
 	},
 	slowbro: {
 		eventPokemon: [
@@ -2792,6 +2791,7 @@ let BattleFormatsData = {
 	corsolagalar: {
 		randomBattleMoves: ["nightshade", "stealthrock", "strengthsap", "willowisp"],
 		tier: "UU",
+		doublesTier: "LC Uber",
 	},
 	cursola: {
 		randomBattleMoves: ["earthpower", "hex", "hydropump", "icebeam", "shadowball", "stealthrock", "strengthsap", "willowisp"],
@@ -6706,7 +6706,6 @@ let BattleFormatsData = {
 	},
 	cutiefly: {
 		tier: "LC",
-		doublesTier: "LC Uber",
 	},
 	ribombee: {
 		randomBattleMoves: ["bugbuzz", "moonblast", "stickyweb", "stunspore", "uturn"],
@@ -7592,12 +7591,12 @@ let BattleFormatsData = {
 	toxtricitygmax: {
 		isGigantamax: "G-Max Stun Shock",
 		tier: "(Uber)",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	toxtricitylowkeygmax: {
 		isGigantamax: "G-Max Stun Shock",
 		tier: "(Uber)",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	sizzlipede: {
 		tier: "LC",
