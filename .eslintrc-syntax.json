@@ -267,7 +267,7 @@
 				}],
 				"no-unused-expressions": ["error", {"allowTernary": true}],
 				"no-prototype-builtins":"off",
-				"max-len": ["warn", {"code": 120, "tabWidth": 0, "ignorePattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`]"}],
+				"max-len": ["warn", {"code": 120, "tabWidth": 0, "ignorePattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?=>? (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`]"}],
 				"constructor-super": "error",
 				"max-classes-per-file": "off",
 				"no-bitwise": "off",
