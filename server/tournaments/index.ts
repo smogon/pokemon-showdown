@@ -1130,7 +1130,7 @@ function createTournament(
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(`${format.id} is not a valid tournament format.`);
 		const formats = Object.values(Dex.formats).filter(f => f.tournamentShow).map(f => f.name).join(', ');
-		output.errorReply(`Valid formats: ${formats}`);
+		output.sendReplyBox(`<details><summary>Valid tournament formats</summary><p>${formats}</p></details>`);
 		return;
 	}
 	if (!getGenerator(generator)) {
