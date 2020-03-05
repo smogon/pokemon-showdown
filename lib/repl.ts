@@ -20,7 +20,7 @@ export const Repl = new class {
 	 */
 	socketPathnames: Set<string> = new Set();
 
-	listenersSetup: boolean = false;
+	listenersSetup = false;
 
 	setupListeners() {
 		if (Repl.listenersSetup) return;

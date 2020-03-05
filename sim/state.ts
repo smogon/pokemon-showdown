@@ -358,7 +358,7 @@ export const State = new class {
 				Data.Ability, Data.Item, Data.Move, Data.Template,
 			]);
 		}
-		return this.REFERABLE!.has(obj.constructor);
+		return this.REFERABLE.has(obj.constructor);
 	}
 
 	private toRef(obj: Referable): string {

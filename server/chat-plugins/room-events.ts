@@ -7,8 +7,6 @@
  * @license MIT license
  */
 
-'use strict';
-
 function formatEvent(event: {eventName: string, date: string, desc: string, started: boolean}) {
 	const timeRemaining = new Date(event.date).getTime() - new Date().getTime();
 	let explanation = timeRemaining.toString();
@@ -184,8 +182,8 @@ export const commands: ChatCommands = {
 			case "eventdate":
 				sortable.sort(
 					(a, b) =>
-					(toID(a.date) < toID(b.date)) ? -1 * multiplier :
-					(toID(b.date) < toID(a.date)) ? 1 * multiplier : 0
+						(toID(a.date) < toID(b.date)) ? -1 * multiplier :
+						(toID(b.date) < toID(a.date)) ? 1 * multiplier : 0
 				);
 				break;
 			case "desc":
@@ -193,16 +191,16 @@ export const commands: ChatCommands = {
 			case "eventdescription":
 				sortable.sort(
 					(a, b) =>
-					(toID(a.desc) < toID(b.desc)) ? -1 * multiplier :
-					(toID(b.desc) < toID(a.desc)) ? 1 * multiplier : 0
+						(toID(a.desc) < toID(b.desc)) ? -1 * multiplier :
+						(toID(b.desc) < toID(a.desc)) ? 1 * multiplier : 0
 				);
 				break;
 			case "eventname":
 			case "name":
 				sortable.sort(
 					(a, b) =>
-					(toID(a.eventName) < toID(b.eventName)) ? -1 * multiplier :
-					(toID(b.eventName) < toID(a.eventName)) ? 1 * multiplier : 0
+						(toID(a.eventName) < toID(b.eventName)) ? -1 * multiplier :
+						(toID(b.eventName) < toID(a.eventName)) ? 1 * multiplier : 0
 				);
 				break;
 			default:

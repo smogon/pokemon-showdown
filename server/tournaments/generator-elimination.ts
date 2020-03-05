@@ -78,6 +78,7 @@ class ElimNode {
 		let node;
 		// tslint:disable-next-line: no-conditional-assignment
 		while ((node = queue.shift())) {
+			// eslint-disable-next-line callback-return
 			callback(node);
 			if (node.children) queue.push(...node.children);
 		}
@@ -96,11 +97,13 @@ class ElimNode {
 		}
 		return undefined;
 	}
+	// eslint-disable-next-line no-restricted-globals
 	[Symbol.iterator]() {
 		const results: ElimNode[] = [this];
 		for (const result of results) {
 			if (result.children) results.push(...result.children);
 		}
+		// eslint-disable-next-line no-restricted-globals
 		return results[Symbol.iterator]();
 	}
 	toJSON() {

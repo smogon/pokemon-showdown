@@ -9,7 +9,7 @@
 
 import {crashlogger} from '../lib/crashlogger';
 
-declare var global: any;
+declare let global: any;
 
 export class TeamValidatorAsync {
 	format: Format;
@@ -18,7 +18,7 @@ export class TeamValidatorAsync {
 		this.format = Dex.getFormat(format);
 	}
 
-	validateTeam(team: string, removeNicknames: boolean = false) {
+	validateTeam(team: string, removeNicknames = false) {
 		let formatid = this.format.id;
 		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
 		return PM.query({formatid, removeNicknames, team});
@@ -37,7 +37,7 @@ export const get = TeamValidatorAsync.get;
 
 import {QueryProcessManager} from '../lib/process-manager';
 
-export const PM = new QueryProcessManager(module, async message => {
+export const PM = new QueryProcessManager(module, message => {
 	const {formatid, removeNicknames, team} = message;
 	const parsedTeam = Dex.fastUnpackTeam(team);
 
@@ -78,7 +78,7 @@ if (!PM.isParentProcess) {
 
 	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source: string = 'A team validator process', details: any = null) {
+		crashlog(error: Error, source = 'A team validator process', details: any = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);

@@ -646,7 +646,7 @@ let BattleFormatsData = {
 	},
 	ninetalesalola: {
 		randomBattleMoves: ["auroraveil", "blizzard", "freezedry", "moonblast", "nastyplot", "substitute"],
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	igglybuff: {

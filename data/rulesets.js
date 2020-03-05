@@ -307,7 +307,7 @@ let BattleFormats = {
 		onBegin() {
 			this.add('rule', 'Blitz: Super-fast timer');
 		},
-		timer: {starting: 15, addPerTurn: 5, maxPerTurn: 15, maxFirstTurn: 30, grace: 30},
+		timer: {starting: 15, addPerTurn: 5, maxPerTurn: 15, maxFirstTurn: 40, grace: 30},
 	},
 	vgctimer: {
 		effectType: 'Rule',

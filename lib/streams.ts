@@ -172,7 +172,7 @@ export class ReadStream {
 		});
 	}
 
-	_read(size: number = 0): void | Promise<void> {
+	_read(size = 0): void | Promise<void> {
 		throw new Error(`ReadStream needs to be subclassed and the _read function needs to be implemented.`);
 	}
 
@@ -205,8 +205,8 @@ export class ReadStream {
 
 	async doLoad(chunkSize?: number | null, readError?: boolean) {
 		while (!this.errorBuf && !this.atEOF && this.bufSize < this.readSize) {
-			if (chunkSize) this._read(chunkSize);
-			else this._read();
+			if (chunkSize) void this._read(chunkSize);
+			else void this._read();
 			await this.nextPush;
 			this[readError ? 'readError' : 'peekError']();
 		}
@@ -305,7 +305,7 @@ export class ReadStream {
 		return line;
 	}
 
-	async destroy() {
+	destroy() {
 		this.atEOF = true;
 		this.bufStart = 0;
 		this.bufEnd = 0;
@@ -558,7 +558,7 @@ export class ObjectReadStream<T> {
 		});
 	}
 
-	_read(size: number = 0): void | Promise<void> {
+	_read(size = 0): void | Promise<void> {
 		throw new Error(`ReadStream needs to be subclassed and the _read function needs to be implemented.`);
 	}
 
@@ -618,7 +618,7 @@ export class ObjectReadStream<T> {
 		return this.buf.slice();
 	}
 
-	async destroy() {
+	destroy() {
 		this.atEOF = true;
 		this.buf = [];
 		this.resolvePush();

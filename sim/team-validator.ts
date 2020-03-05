@@ -136,14 +136,14 @@ export class PokemonSources {
 			// in sources, so we fill the other array in preparation for intersection
 			if (other.sourcesBefore > this.sourcesBefore) {
 				for (const source of this.sources) {
-					const sourceGen = parseInt(source.charAt(0), 10);
+					const sourceGen = parseInt(source.charAt(0));
 					if (sourceGen <= other.sourcesBefore) {
 						other.sources.push(source);
 					}
 				}
 			} else if (this.sourcesBefore > other.sourcesBefore) {
 				for (const source of other.sources) {
-					const sourceGen = parseInt(source.charAt(0), 10);
+					const sourceGen = parseInt(source.charAt(0));
 					if (sourceGen <= this.sourcesBefore) {
 						this.sources.push(source);
 					}
@@ -200,7 +200,7 @@ export class TeamValidator {
 			this.ruleTable.minSourceGen[0] : 1;
 	}
 
-	validateTeam(team: PokemonSet[] | null, removeNicknames: boolean = false): string[] | null {
+	validateTeam(team: PokemonSet[] | null, removeNicknames = false): string[] | null {
 		if (team && this.format.validateTeam) {
 			return this.format.validateTeam.call(this, team, removeNicknames) || null;
 		}
@@ -904,7 +904,7 @@ export class TeamValidator {
 			const splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
 			const dex = (this.dex.gen === 1 ? Dex.mod('gen2') : this.dex);
 			eventTemplate = dex.getTemplate(splitSource[1]);
-			if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0], 10)];
+			if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0])];
 			if (!eventData) {
 				throw new Error(`${eventTemplate.species} from ${template.species} doesn't have data for event ${source}`);
 			}
@@ -1553,7 +1553,7 @@ export class TeamValidator {
 			} else if (problem.type === 'incompatible') {
 				problemString = `${name}'s moves ${(setSources.restrictiveMoves || []).join(', ')} are incompatible.`;
 			} else if (problem.type === 'oversketched') {
-				const plural = (parseInt(problem.maxSketches, 10) === 1 ? '' : 's');
+				const plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
 				problemString += ` can't be Sketched because it can only Sketch ${problem.maxSketches} move${plural}.`;
 			} else if (problem.type === 'pastgen') {
 				problemString += ` is not available in generation ${problem.gen}.`;
@@ -1579,7 +1579,7 @@ export class TeamValidator {
 
 		if (setSources.isHidden) {
 			setSources.sources = setSources.sources.filter(source =>
-				parseInt(source.charAt(0), 10) >= 5
+				parseInt(source.charAt(0)) >= 5
 			);
 			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
 			if (!setSources.sourcesBefore && !setSources.sources.length) {
@@ -1745,7 +1745,7 @@ export class TeamValidator {
 
 					if (learned.charAt(1) === 'L') {
 						// special checking for level-up moves
-						if (level >= parseInt(learned.substr(2), 10) || learnedGen === 7) {
+						if (level >= parseInt(learned.substr(2)) || learnedGen === 7) {
 							// we're past the required level to learn it
 							// (gen 7 level-up moves can be relearnered at any level)
 							// falls through to LMT check below
@@ -1903,7 +1903,7 @@ export class TeamValidator {
 			!template.prevo && !template.nfe && template.species !== 'Unown' && template.baseSpecies !== 'Pikachu');
 	}
 
-	static fillStats(stats: SparseStatsTable | null, fillNum: number = 0): StatsTable {
+	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {
 		const filledStats: StatsTable = {hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum};
 		if (stats) {
 			let statName: StatName;

@@ -1,5 +1,3 @@
-'use strict';
-
 type Operator = '^' | '%' | '/' | '*' | '+' | '-';
 interface Operators {
 	precedence: number;
@@ -139,7 +137,9 @@ export const commands: ChatCommands = {
 			const result = solveRPN(parseMathematicalExpression(target));
 			this.sendReplyBox(Chat.html`${target}<br />= <strong>${Chat.stringify(result)}</strong>`);
 		} catch (e) {
-			this.sendReplyBox(Chat.html`${target}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`);
+			this.sendReplyBox(
+				Chat.html`${target}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`
+			);
 		}
 	},
 	calculatehelp: [

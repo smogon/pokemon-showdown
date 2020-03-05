@@ -60,6 +60,7 @@ class PunishmentMap extends Map<string, Punishment> {
 	forEach(callback: (punishment: Punishment, id: string, map: PunishmentMap) => void) {
 		for (const [k, punishment] of super.entries()) {
 			if (Date.now() < punishment[2]) {
+				// eslint-disable-next-line callback-return
 				callback(punishment, k, this);
 				continue;
 			}
@@ -99,6 +100,7 @@ class NestedPunishmentMap extends Map<RoomID, Map<string, Punishment>> {
 		for (const [k1, subMap] of this.entries()) {
 			for (const [k2, punishment] of subMap.entries()) {
 				if (Date.now() < punishment[2]) {
+					// eslint-disable-next-line callback-return
 					callback(punishment, k1, k2);
 					continue;
 				}
@@ -377,7 +379,7 @@ export const Punishments = new class {
 
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		userids.delete(id as ID);
-		Punishments.appendPunishment({
+		void Punishments.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
@@ -457,7 +459,7 @@ export const Punishments = new class {
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		const affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id as ID);
-		Punishments.appendPunishment({
+		void Punishments.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
@@ -508,7 +510,7 @@ export const Punishments = new class {
 
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		userids.delete(id as ID);
-		Punishments.appendPunishment({
+		void Punishments.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
@@ -563,7 +565,7 @@ export const Punishments = new class {
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		const affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id as ID);
-		Punishments.appendPunishment({
+		void Punishments.appendPunishment({
 			userids: [...userids],
 			ips: [...ips],
 			punishType,
@@ -685,8 +687,9 @@ export const Punishments = new class {
 		}
 		Monitor.log(`[${source}] ${punishment}: ${message}`);
 		const roomauth = Rooms.global.destroyPersonalRooms(userid);
-		// tslint:disable-next-line: max-line-length
-		if (roomauth.length) Monitor.log(`[CrisisMonitor] Autolocked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+		if (roomauth.length) {
+			Monitor.log(`[CrisisMonitor] Autolocked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+		}
 
 		const ipStr = typeof user !== 'string' ? ` [${(user as User).latestIp}]` : '';
 		const roomid = typeof room !== 'string' ? (room as Room).roomid : room;
@@ -1469,8 +1472,11 @@ export const Punishments = new class {
 
 				Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message).then(() => {
 					if (typeof user !== 'string') {
-						// tslint:disable-next-line: max-line-length
-						(user as User).popup("|modal|You've been locked for breaking the rules in multiple chatrooms.\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
+						(user as User).popup(
+							`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
+							`If you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
+							`Your lock will expire in a few days.`
+						);
 					}
 				});
 			} else {

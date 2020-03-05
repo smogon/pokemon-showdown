@@ -3,8 +3,6 @@
 * By bumbadadabum and Zarel. Art by crobat.
 */
 
-'use strict';
-
 const maxMistakes = 6;
 
 export class Hangman extends Rooms.RoomGame {

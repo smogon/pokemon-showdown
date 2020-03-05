@@ -1,5 +1,4 @@
 // Other Metas plugin by Spandan
-'use strict';
 
 interface StoneDeltas {
 	baseStats: {[stat in StatName]: number};
@@ -117,7 +116,7 @@ export const commands: ChatCommands = {
 		};
 		let statId: StatName;
 		for (statId in megaTemplate.baseStats) {
-			deltas.baseStats[statId] = megaTemplate.baseStats[statId as StatName] - baseTemplate.baseStats[statId];
+			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
 			deltas.type = megaTemplate.types[1];
@@ -126,7 +125,6 @@ export const commands: ChatCommands = {
 		} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
 			deltas.type = megaTemplate.types[1];
 		}
-		//////////////////////////////////////////
 		const mixedTemplate = Dex.deepClone(template);
 		mixedTemplate.abilities = Dex.deepClone(megaTemplate.abilities);
 		if (mixedTemplate.types[0] === deltas.type) { // Add any type gains

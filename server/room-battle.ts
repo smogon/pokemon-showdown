@@ -438,7 +438,7 @@ export class RoomBattleTimer {
 		for (const player of players) {
 			if (player.turnSecondsLeft > 0) continue;
 			if (this.settings.timeoutAutoChoose && player.secondsLeft > 0 && player.connected) {
-				this.battle.stream.write(`>${player.slot} default`);
+				void this.battle.stream.write(`>${player.slot} default`);
 				didSomething = true;
 			} else {
 				this.battle.forfeitPlayer(player, ' lost due to inactivity.');
@@ -553,9 +553,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 			seed: options.seed,
 		};
 		if (options.inputLog) {
-			this.stream.write(options.inputLog);
+			void this.stream.write(options.inputLog);
 		} else {
-			this.stream.write(`>start ` + JSON.stringify(battleOptions));
+			void this.stream.write(`>start ` + JSON.stringify(battleOptions));
 		}
 
 		void this.listen();
@@ -567,7 +567,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.addPlayer(options.p4, options.p4team || '', options.p4rating);
 		}
 		this.timer = new RoomBattleTimer(this);
-		if (Config.forcetimer) this.timer.start();
+		if (Config.forcetimer || this.format.includes('blitz')) this.timer.start();
 		this.start();
 	}
 
@@ -610,7 +610,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		request.isWait = true;
 		request.choice = choice;
 
-		this.stream.write(`>${player.slot} ${choice}`);
+		void this.stream.write(`>${player.slot} ${choice}`);
 	}
 	undo(user: User, data: string) {
 		const player = this.playerTable[user.id];
@@ -629,7 +629,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 		request.isWait = false;
 
-		this.stream.write(`>${player.slot} undo`);
+		void this.stream.write(`>${player.slot} undo`);
 	}
 	joinGame(user: User, slot?: SideID) {
 		if (!user.can('joinbattle', null, this.room)) {
@@ -840,7 +840,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	async logBattle(
 		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
 		p3rating: AnyObject | null = null, p4rating: AnyObject | null = null
-		) {
+	) {
 		if (Dex.getFormat(this.format, true).noLog) return;
 		const logData = this.logData;
 		if (!logData) return;
@@ -935,7 +935,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			name: user.name,
 			avatar: user.avatar,
 		};
-		this.stream.write(`>player ${player.slot} ` + JSON.stringify(options));
+		void this.stream.write(`>player ${player.slot} ` + JSON.stringify(options));
 	}
 	onJoin(user: User) {
 		const player = this.playerTable[user.id];
@@ -962,13 +962,13 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 		const player = this.playerTable[user.id];
 		if (!player) return false;
-		this.stream.write(`>forcewin ${player.slot}`);
+		void this.stream.write(`>forcewin ${player.slot}`);
 	}
 	tie() {
-		this.stream.write(`>forcetie`);
+		void this.stream.write(`>forcetie`);
 	}
 	tiebreak() {
-		this.stream.write(`>tiebreak`);
+		void this.stream.write(`>tiebreak`);
 	}
 	forfeit(user: User | string, message = '') {
 		if (typeof user !== 'string') user = user.id;
@@ -985,7 +985,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.room.add(`|-message|${player.name}${message}`);
 		this.endType = 'forfeit';
 		const otherids = ['p2', 'p1'];
-		this.stream.write(`>forcewin ${otherids[player.num - 1]}`);
+		void this.stream.write(`>forcewin ${otherids[player.num - 1]}`);
 		return true;
 	}
 
@@ -1007,7 +1007,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 				team,
 				rating: Math.round(rating),
 			};
-			this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
+			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}
 
 		if (user) this.room.auth[user.id] = Users.PLAYER_SYMBOL;
@@ -1037,14 +1037,14 @@ export class RoomBattle extends RoomGames.RoomGame {
 				name: player.name,
 				avatar: user.avatar,
 			};
-			this.stream.write(`>player ${slot} ` + JSON.stringify(options));
+			void this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 
 			this.room.add(`|player|${slot}|${player.name}|${user.avatar}`);
 		} else {
 			const options = {
 				name: '',
 			};
-			this.stream.write(`>player ${slot} ` + JSON.stringify(options));
+			void this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 
 			this.room.add(`|player|${slot}|`);
 		}
