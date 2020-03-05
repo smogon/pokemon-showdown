@@ -567,8 +567,11 @@ export class RoomBattle extends RoomGames.RoomGame {
 			this.addPlayer(options.p4, options.p4team || '', options.p4rating);
 		}
 		this.timer = new RoomBattleTimer(this);
-		if (Config.forcetimer) this.timer.start();
-		if (this.format.includes('blitz')) this.timer.start();
+		if (Config.forcetimer) {
+			this.timer.start();
+		} else if (this.format.includes('blitz')) {
+			this.timer.start();
+		}
 		this.start();
 	}
 
