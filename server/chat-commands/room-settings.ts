@@ -135,7 +135,7 @@ export const commands: ChatCommands = {
 	inviteonlynext: 'ionext',
 	ionext(target, room, user) {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
-		if (!(groupConfig && groupConfig.editprivacy)) return this.errorReply(`/ionext - Access denied.`);
+		if (!groupConfig?.editprivacy) return this.errorReply(`/ionext - Access denied.`);
 		if (this.meansNo(target)) {
 			user.inviteOnlyNextBattle = false;
 			user.update('inviteOnlyNextBattle');
@@ -1043,7 +1043,7 @@ export const commands: ChatCommands = {
 		}
 
 		const parent = room.parent;
-		if (parent && parent.subRooms) {
+		if (parent?.subRooms) {
 			parent.subRooms.delete(room.roomid);
 			if (!parent.subRooms.size) parent.subRooms = null;
 		}

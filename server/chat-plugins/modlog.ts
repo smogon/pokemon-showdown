@@ -499,7 +499,7 @@ export const pages: PageTable = {
 		}).map(tier => {
 			// Use the official tier name
 			const format = Dex.getFormat(tier);
-			if (format && format.exists) tier = format.name;
+			if (format?.exists) tier = format.name;
 			// Otherwise format as best as possible
 			if (tier.substring(0, 3) === 'gen') {
 				return `[Gen ${tier.substring(3, 4)}] ${tier.substring(4)}`;

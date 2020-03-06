@@ -639,7 +639,7 @@ export class User extends Chat.MessageContext {
 		if (this.hasSysopAccess()) return true;
 
 		let groupData = Config.groups[this.group];
-		if (groupData && groupData['root']) {
+		if (groupData?.['root']) {
 			return true;
 		}
 
@@ -672,7 +672,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 
-		if (groupData && groupData[permission]) {
+		if (groupData?.[permission]) {
 			const jurisdiction = groupData[permission];
 			if (!targetUser && !targetGroup) {
 				return !!jurisdiction;
@@ -924,7 +924,7 @@ export class User extends Chat.MessageContext {
 
 		let user = users.get(userid);
 		const possibleUser = Users.get(userid);
-		if (possibleUser && possibleUser.namelocked) {
+		if (possibleUser?.namelocked) {
 			// allows namelocked users to be merged
 			user = possibleUser;
 		}
@@ -1173,7 +1173,7 @@ export class User extends Chat.MessageContext {
 		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!(staffRoom && staffRoom.auth && staffRoom.auth[this.id]);
+			this.isStaff = !!staffRoom?.auth?.[this.id];
 		}
 		if (this.trusted) {
 			if (this.locked && this.permalocked) {
@@ -1204,7 +1204,7 @@ export class User extends Chat.MessageContext {
 		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!(staffRoom && staffRoom.auth && staffRoom.auth[this.id]);
+			this.isStaff = !!(staffRoom?.auth?.[this.id]);
 		}
 		if (wasStaff !== this.isStaff) this.update('isStaff');
 		Rooms.global.checkAutojoin(this);

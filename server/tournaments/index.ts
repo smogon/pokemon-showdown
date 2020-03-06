@@ -488,7 +488,7 @@ export class Tournament extends Rooms.RoomGame {
 				}
 			}
 		}
-		if (matchPlayer && matchPlayer.inProgressMatch) {
+		if (matchPlayer?.inProgressMatch) {
 			matchPlayer.inProgressMatch.to.isBusy = false;
 			matchPlayer.isBusy = false;
 
@@ -812,11 +812,11 @@ export class Tournament extends Rooms.RoomGame {
 				player.autoDisqualifyWarned = false;
 				continue;
 			}
-			if (pendingChallenge && pendingChallenge.to) continue;
+			if (pendingChallenge?.to) continue;
 
 			if (now > time + this.autoDisqualifyTimeout && player.autoDisqualifyWarned) {
 				let reason;
-				if (pendingChallenge && pendingChallenge.from) {
+				if (pendingChallenge?.from) {
 					reason = "You failed to accept your opponent's challenge in time.";
 				} else {
 					reason = "You failed to challenge your opponent in time.";
@@ -1066,7 +1066,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (this.generator.isTournamentEnded()) {
 			if (!this.room.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
 				const uploader = Users.get(winnerid);
-				if (uploader && uploader.connections[0]) {
+				if (uploader?.connections[0]) {
 					Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
 				}
 			}
