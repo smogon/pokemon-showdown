@@ -505,7 +505,7 @@ let Formats = [
 			let template = Dex.getTemplate(set.species);
 			if (!template.exists || template.num < 1) return [`The Pok\u00e9mon "${set.species}" does not exist.`];
 			if (template.isNonstandard || template.isUnreleased) return [`${template.species} is not obtainable in gen 8.`];
-			if (toID(template.tier === 'uber') || this.format.banlist.includes(template.species)) {
+			if (toID(template.tier) === 'uber' || this.format.banlist.includes(template.species)) {
 				return [`${template.species} is banned.`];
 			}
 
