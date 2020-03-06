@@ -20,8 +20,8 @@ function createLottery(roomid: RoomID, maxWinners: number, name: string, markup:
 	}
 	const lottery = lotteries[roomid];
 	lotteries[roomid] = {
-		maxWinners, name, markup, participants: (lottery?.participants) || Object.create(null),
-		winners: (lottery?.winners) || [], running: true,
+		maxWinners, name, markup, participants: lottery?.participants || Object.create(null),
+		winners: lottery?.winners || [], running: true,
 	};
 	writeLotteries();
 }
@@ -178,7 +178,7 @@ export const commands: ChatCommands = {
 		join(target, room, user) {
 			// This hack is used for the HTML room to be able to
 			// join lotteries in other rooms from the global room
-			const roomid = target || (room?.roomid);
+			const roomid = target || room?.roomid;
 			if (!roomid) {
 				return this.errorReply(`This is not a valid room.`);
 			}
@@ -209,7 +209,7 @@ export const commands: ChatCommands = {
 		leave(target, room, user) {
 			// This hack is used for the HTML room to be able to
 			// join lotteries in other rooms from the global room
-			const roomid = target || (room?.roomid);
+			const roomid = target || room?.roomid;
 			if (!roomid) {
 				return this.errorReply('This can only be used in rooms.');
 			}

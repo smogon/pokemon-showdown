@@ -380,7 +380,7 @@ export class RoomBattleTimer {
 	checkActivity() {
 		if (this.battle.ended) return;
 		for (const player of this.battle.players) {
-			const isConnected = !!(player?.active);
+			const isConnected = !!player?.active;
 
 			if (isConnected === player.connected) continue;
 

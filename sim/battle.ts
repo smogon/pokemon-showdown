@@ -1099,7 +1099,7 @@ export class Battle {
 
 	getMaxTeamSize() {
 		const teamLengthData = this.format.teamLength;
-		return (teamLengthData?.battle) || 6;
+		return teamLengthData?.battle || 6;
 	}
 
 	getRequests(type: RequestState, maxTeamSize: number) {
@@ -1112,7 +1112,7 @@ export class Battle {
 				const side = this.sides[i];
 				const switchTable = [];
 				for (const pokemon of side.active) {
-					switchTable.push(!!(pokemon?.switchFlag));
+					switchTable.push(!!pokemon?.switchFlag);
 				}
 				if (switchTable.some(flag => flag === true)) {
 					requests[i] = {forceSwitch: switchTable, side: side.getRequestData()};

@@ -569,7 +569,7 @@ export const pages: PageTable = {
 			if (banMsg) return connection.popup(banMsg);
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
-			if ((ticket?.open) || ipTicket) {
+			if (ticket?.open || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
@@ -1082,7 +1082,7 @@ export const commands: ChatCommands = {
 			if (banMsg) return this.popupReply(banMsg);
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
-			if ((ticket?.open) || ipTicket) {
+			if (ticket?.open || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
