@@ -873,7 +873,7 @@ export class ModdedDex {
 				continue;
 			}
 			const subformat = this.getFormat(ruleSpec);
-			if (repeals && repeals.has(subformat.id)) {
+			if (repeals?.has(subformat.id)) {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
 			}
@@ -888,7 +888,7 @@ export class ModdedDex {
 			const subRuleTable = this.getRuleTable(subformat, depth + 1, repeals);
 			for (const [k, v] of subRuleTable) {
 				// don't check for "already exists" here; multiple inheritance is allowed
-				if (!(repeals && repeals.has(k))) {
+				if (!repeals?.has(k)) {
 					ruleTable.set(k, v || subformat.name);
 				}
 			}
@@ -937,7 +937,7 @@ export class ModdedDex {
 		switch (rule.charAt(0)) {
 		case '-':
 		case '+':
-			if (format && format.team) throw new Error(`We don't currently support bans in generated teams`);
+			if (format?.team) throw new Error(`We don't currently support bans in generated teams`);
 			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
 				let buf = rule.slice(1);
 				const gtIndex = buf.lastIndexOf('>');
@@ -1118,7 +1118,7 @@ export class ModdedDex {
 	}
 
 	generateTeam(format: Format | string, options: PlayerOptions | null = null): PokemonSet[] {
-		return this.getTeamGenerator(format, options && options.seed).getTeam(options);
+		return this.getTeamGenerator(format, options?.seed).getTeam(options);
 	}
 
 	dataSearch(target: string, searchIn?: DataType[] | null, isInexact?: boolean): AnyObject[] | false {

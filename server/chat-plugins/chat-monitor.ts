@@ -291,6 +291,8 @@ void FS(MONITOR_FILE).readIfExists().then(data => {
 	}
 });
 
+/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
+/* eslint-disable @typescript-eslint/prefer-optional-chain */
 export const chatfilter: ChatFilter = function (message, user, room) {
 	let lcMessage = message
 		.replace(/\u039d/g, 'N').toLowerCase()
@@ -339,6 +341,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 
 	return message;
 };
+/* eslint-enable @typescript-eslint/prefer-optional-chain */
 
 export const namefilter: NameFilter = (name, user) => {
 	const id = toID(name);

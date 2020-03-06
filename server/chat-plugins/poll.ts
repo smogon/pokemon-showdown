@@ -147,7 +147,7 @@ export class Poll {
 		let c = 0;
 		const colors = ['#79A', '#8A8', '#88B'];
 		while (!i.done) {
-			const selected = option && option.includes(i.value[0]);
+			const selected = option?.includes(i.value[0]);
 			const percentage = Math.round((i.value[1].votes * 100) / (this.totalVotes || 1));
 			const answerMarkup = this.isQuiz
 				?

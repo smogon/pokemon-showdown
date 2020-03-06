@@ -702,7 +702,7 @@ export class Side {
 		let forcedSwitches = 0;
 		let forcedPasses = 0;
 		if (this.battle.requestState === 'switch') {
-			const canSwitchOut = this.active.filter(pokemon => pokemon && pokemon.switchFlag).length;
+			const canSwitchOut = this.active.filter(pokemon => pokemon?.switchFlag).length;
 			const canSwitchIn = this.pokemon.slice(this.active.length).filter(pokemon => pokemon && !pokemon.fainted).length;
 			forcedSwitches = Math.min(canSwitchOut, canSwitchIn);
 			forcedPasses = canSwitchOut - forcedSwitches;

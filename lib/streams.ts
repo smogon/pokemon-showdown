@@ -301,7 +301,7 @@ export class ReadStream {
 	async readLine(encoding: BufferEncoding = this.encoding) {
 		if (!encoding) throw new Error(`readLine must have an encoding`);
 		let line = await this.readDelimitedBy('\n', encoding);
-		if (line && line.endsWith('\r')) line = line.slice(0, -1);
+		if (line?.endsWith('\r')) line = line.slice(0, -1);
 		return line;
 	}
 
@@ -572,7 +572,7 @@ export class ObjectReadStream<T> {
 		this.readSize = Math.max(count, this.readSize);
 		while (!this.errorBuf && !this.atEOF && this.buf.length < this.readSize) {
 			const readResult = this._read();
-			if (readResult && readResult.then) {
+			if (readResult) {
 				await readResult;
 			} else {
 				await this.nextPush;

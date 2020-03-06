@@ -150,7 +150,7 @@ export class LadderStore {
 	async getRating(userid: string) {
 		const formatid = this.formatid;
 		const user = Users.getExact(userid);
-		if (user && user.mmrCache[formatid]) {
+		if (user?.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
 		const ladder = await this.getLadder();

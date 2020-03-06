@@ -343,7 +343,7 @@ class Ladder extends LadderStore {
 		if (!user || !user.connected || user.id !== search.userid) {
 			const formatTable = Ladders.searches.get(formatid);
 			if (formatTable) formatTable.delete(search.userid);
-			if (user && user.connected) {
+			if (user?.connected) {
 				user.popup(`You changed your name and are no longer looking for a battle in ${formatid}`);
 				Ladder.updateSearch(user);
 			}

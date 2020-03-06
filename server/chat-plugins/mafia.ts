@@ -606,7 +606,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				const role = roles.shift()!;
 				this.playerTable[p].role = role;
 				const u = Users.get(p);
-				if (u && u.connected) {
+				if (u?.connected) {
 					u.send(`>${this.room.roomid}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PM.`);
 				}
 			}
@@ -657,7 +657,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.phase = 'night';
 		for (const hostid of [...this.cohosts, this.hostid]) {
 			const host = Users.get(hostid);
-			if (host && host.connected) host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+			if (host?.connected) host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
 		}
 		this.sendDeclare(`Night ${this.dayNum}. PM the host your action, or idle.`);
 		const hasPlurality = this.getPlurality();
@@ -1157,7 +1157,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				if (this.dead[p].restless && this.dead[p].lynching === oldPlayer.id) this.dead[p].lynching = newPlayer.id;
 			}
 		}
-		if (newUser && newUser.connected) {
+		if (newUser?.connected) {
 			for (const conn of newUser.connections) {
 				void Chat.resolvePage(`view-mafia-${this.room.roomid}`, newUser, conn);
 			}
@@ -1273,7 +1273,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				this.IDEA.waitingPick.push(p);
 			}
 			const u = Users.get(p);
-			if (u && u.connected) u.send(`>${this.room.roomid}\n|notify|Pick your role in the IDEA module.`);
+			if (u?.connected) u.send(`>${this.room.roomid}\n|notify|Pick your role in the IDEA module.`);
 		}
 
 		this.phase = 'IDEApicking';
@@ -1689,7 +1689,7 @@ export const pages: PageTable = {
 		let roomid = query.shift();
 		if (roomid === 'groupchat') roomid += `-${query.shift()}-${query.shift()}`;
 		const room = Rooms.get(roomid);
-		const game = room && room.getGame(MafiaTracker);
+		const game = room?.getGame(MafiaTracker);
 		if (!room || !room.users[user.id] || !game || game.ended) {
 			return this.close();
 		}
@@ -2622,7 +2622,7 @@ export const commands: ChatCommands = {
 		uninsomniac: 'nighttalk',
 		unnighttalk: 'nighttalk',
 		nighttalk(target, room, user, connection, cmd) {
-			const game = room && room.getGame(MafiaTracker);
+			const game = room?.getGame(MafiaTracker);
 			if (!game) return this.errorReply(`There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
@@ -2645,7 +2645,7 @@ export const commands: ChatCommands = {
 		unactor: 'priest',
 		unpriest: 'priest',
 		priest(target, room, user, connection, cmd) {
-			const game = room && room.getGame(MafiaTracker);
+			const game = room?.getGame(MafiaTracker);
 			if (!game) return this.errorReply(`There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
@@ -2822,7 +2822,7 @@ export const commands: ChatCommands = {
 
 		spectate: 'view',
 		view(target, room, user, connection) {
-			const game = room && room.getGame(MafiaTracker);
+			const game = room?.getGame(MafiaTracker);
 			if (!game) return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!this.runBroadcast()) return;
 			if (this.broadcasting) {
@@ -3100,7 +3100,7 @@ export const commands: ChatCommands = {
 		term: 'data',
 		dt: 'data',
 		data(target, room, user, connection, cmd) {
-			if (room && room.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room?.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (cmd === 'role' && !target && room) {
 				// Support /mafia role showing your current role if you're in a game
 				const game = room.getGame(MafiaTracker);
@@ -3114,7 +3114,7 @@ export const commands: ChatCommands = {
 			}
 
 			// hack to let hosts broadcast
-			const game = room && room.getGame(MafiaTracker);
+			const game = room?.getGame(MafiaTracker);
 			if (game && (game.hostid === user.id || game.cohosts.includes(user.id))) {
 				this.broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 			}

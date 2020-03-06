@@ -790,6 +790,8 @@ export class CommandContext extends MessageContext {
 
 		return true;
 	}
+	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
+	/* eslint-disable @typescript-eslint/prefer-optional-chain */
 	canTalk(message: string, room?: GameRoom | ChatRoom | null, targetUser?: User | null): string | null;
 	canTalk(message?: null, room?: GameRoom | ChatRoom | null, targetUser?: User | null): true | null;
 	canTalk(message: string | null = null, room: GameRoom | ChatRoom | null = null, targetUser: User | null = null) {
@@ -921,14 +923,14 @@ export class CommandContext extends MessageContext {
 			const allLinksWhitelisted = !links || links.every(link => {
 				link = link.toLowerCase();
 				const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
-				const domain = domainMatches && domainMatches[1];
+				const domain = domainMatches?.[1];
 				const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
-				let host = hostMatches && hostMatches[1];
-				if (host && host.startsWith('www.')) host = host.slice(4);
+				let host = hostMatches?.[1];
+				if (host?.startsWith('www.')) host = host.slice(4);
 				if (!domain || !host) return null;
 				return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
 			});
-			if (!allLinksWhitelisted && !(targetUser && targetUser.can('lock') || (room && room.isHelp))) {
+			if (!allLinksWhitelisted && !(targetUser?.can('lock') || room?.isHelp)) {
 				this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
 				return null;
 			}
@@ -974,7 +976,7 @@ export class CommandContext extends MessageContext {
 			user.lastMessageTime = Date.now();
 		}
 
-		if (room && room.highTraffic &&
+		if (room?.highTraffic &&
 			toID(message).replace(/[^a-z]+/, '').length < 2
 			&& !user.can('broadcast', null, room)) {
 			this.errorReply(
@@ -989,6 +991,7 @@ export class CommandContext extends MessageContext {
 
 		return message;
 	}
+	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 	canEmbedURI(uri: string, isRelative = false) {
 		if (uri.startsWith('https://')) return uri;
 		if (uri.startsWith('//')) return uri;
@@ -1660,8 +1663,8 @@ export const Chat = new class {
 		const roundingBoundaries = [6, 15, 12, 30, 30];
 		const unitNames = ["second", "minute", "hour", "day", "month", "year"];
 		const positiveIndex = parts.findIndex(elem => elem > 0);
-		const precision = (options && options.precision ? options.precision : parts.length);
-		if (options && options.hhmmss) {
+		const precision = (options?.precision ? options.precision : parts.length);
+		if (options?.hhmmss) {
 			const str = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
 			return str.length === 2 ? "00:" + str : str;
 		}

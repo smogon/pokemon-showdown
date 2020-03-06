@@ -1064,7 +1064,7 @@ export class Pokemon {
 			if (this.template.num === 493) {
 				// Arceus formes
 				const item = this.getItem();
-				const targetForme = (item && item.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
+				const targetForme = (item?.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
 				if (this.template.species !== targetForme) {
 					this.formeChange(targetForme);
 				}
@@ -1366,7 +1366,7 @@ export class Pokemon {
 		if (this.status === status.id) {
 			if (sourceEffect && sourceEffect.status === this.status) {
 				this.battle.add('-fail', this, this.status);
-			} else if (sourceEffect && sourceEffect.status) {
+			} else if (sourceEffect?.status) {
 				this.battle.add('-fail', source);
 				this.battle.attrLastMove('[still]');
 			}
@@ -1374,11 +1374,11 @@ export class Pokemon {
 		}
 
 		if (!ignoreImmunities && status.id &&
-				!(source && source.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))) {
+				!(source?.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))) {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');
-				if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this);
+				if (sourceEffect?.status) this.battle.add('-immune', this);
 				return false;
 			}
 		}
@@ -1616,7 +1616,7 @@ export class Pokemon {
 		}
 		if (!this.runStatusImmunity(status.id)) {
 			this.battle.debug('immune to volatile status');
-			if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this);
+			if (sourceEffect?.status) this.battle.add('-immune', this);
 			return false;
 		}
 		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
