@@ -790,6 +790,8 @@ export class CommandContext extends MessageContext {
 
 		return true;
 	}
+	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
+	/* eslint-disable @typescript-eslint/prefer-optional-chain */
 	canTalk(message: string, room?: GameRoom | ChatRoom | null, targetUser?: User | null): string | null;
 	canTalk(message?: null, room?: GameRoom | ChatRoom | null, targetUser?: User | null): true | null;
 	canTalk(message: string | null = null, room: GameRoom | ChatRoom | null = null, targetUser: User | null = null) {
@@ -989,6 +991,7 @@ export class CommandContext extends MessageContext {
 
 		return message;
 	}
+	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 	canEmbedURI(uri: string, isRelative = false) {
 		if (uri.startsWith('https://')) return uri;
 		if (uri.startsWith('//')) return uri;
