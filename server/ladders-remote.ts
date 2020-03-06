@@ -25,8 +25,10 @@ export class LadderStore {
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
 	 */
+	// This requires to be `async` because it must conform with the `LadderStore` interface
+	// eslint-disable-next-line @typescript-eslint/require-await
 	async getTop(prefix?: string): Promise<[string, string] | null> {
-		return Promise.resolve(null);
+		return null;
 	}
 
 	/**
@@ -141,9 +143,9 @@ export class LadderStore {
 	/**
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
 	 */
+	// This requires to be `async` because it must conform with the `LadderStore` interface
+	// eslint-disable-next-line @typescript-eslint/require-await
 	static async visualizeAll(username: string) {
-		return Promise.resolve(
-			[`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`]
-		);
+		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`]
 	}
 }
