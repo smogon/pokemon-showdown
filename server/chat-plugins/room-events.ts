@@ -144,7 +144,7 @@ export const commands: ChatCommands = {
 			if (!this.broadcasting && user.can('ban', null, room)) {
 				this.sendReplyBox(
 					Chat.html`<code>/roomevents add ${room.events[target].eventName} |` +
-					Chat.html`${room.events[target].date} | ${.events[target].desc}</code>`
+					Chat.html`${room.events[target].date} | ${room.events[target].desc}</code>`
 				);
 			}
 		},
