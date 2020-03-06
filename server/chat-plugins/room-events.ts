@@ -143,8 +143,8 @@ export const commands: ChatCommands = {
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
 			if (!this.broadcasting && user.can('ban', null, room)) {
 				this.sendReplyBox(
-					Chat.html`<code>/roomevents add ${Chat.escapeHTML(room.events[target].eventName)} |` +
-					`${room.events[target].date} | ${Chat.escapeHTML(room.events[target].desc)}</code>`
+					Chat.html`<code>/roomevents add ${room.events[target].eventName} |` +
+					Chat.html`${room.events[target].date} | ${.events[target].desc}</code>`
 				);
 			}
 		},
