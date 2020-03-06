@@ -564,7 +564,13 @@ export class TeamValidator {
 		const lsetProblems = this.reconcileLearnset(learnsetTemplate, setSources, lsetProblem, name);
 		if (lsetProblems) problems.push(...lsetProblems);
 
-		if (!setSources.sourcesBefore && setSources.sources.length) {
+		if (ruleTable.has('obtainablemisc') && learnsetTemplate.forme?.includes('Gmax')) {
+			if (!setSources.sourcesBefore) {
+				problems.push(`${name} has an exclusive move that it doesn't qualify for (because Gmax Pokemon can only be obtained from a Max Raid).`);
+			} else if (setSources.sourcesBefore < 8) {
+				problems.push(`${name} has a Gen ${setSources.sourcesBefore} move that it doesn't qualify for (because Gmax Pokemon can only be obtained from a Max Raid in Gen 8).`);
+			}
+		} else if (!setSources.sourcesBefore && setSources.sources.length) {
 			let legal = false;
 			for (const source of setSources.sources) {
 				if (this.validateSource(set, source, setSources, learnsetTemplate)) continue;
@@ -625,7 +631,6 @@ export class TeamValidator {
 				}
 				const eventName = eventPokemon.length > 1 ? ` #${eventNum}` : ``;
 				const eventProblems = this.validateEvent(set, eventInfo, eventTemplate, ` to be`, `from its event${eventName}`);
-				// @ts-ignore validateEvent must have returned an array because it was passed a because param
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		}
@@ -1794,7 +1799,13 @@ export class TeamValidator {
 						}
 						// past-gen level-up, TM, or tutor moves:
 						//   available as long as the source gen was or was before this gen
-						if (learned.charAt(1) === 'R') moveSources.restrictedMove = moveid;
+						if (learned.charAt(1) === 'R') {
+							if (baseTemplate.species === 'Pikachu-Gmax') {
+								// Volt Tackle is weird (from egg, but not an egg move), and Pikachu-Gmax can't learn it
+								continue;
+							}
+							moveSources.restrictedMove = moveid;
+						}
 						limit1 = false;
 						moveSources.addGen(learnedGen);
 					} else if (learned.charAt(1) === 'E') {
