@@ -6,4 +6,4 @@ cache:
   directories:
     - node_modules
     - .eslintfullcache
-script: npm run fulltest
+script: npm run full-test
