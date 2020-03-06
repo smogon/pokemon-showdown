@@ -4,8 +4,8 @@
     "ecmaVersion": 9,
     "sourceType": "script",
     "ecmaFeatures": {
-    "globalReturn": true
-  }
+      "globalReturn": true
+    }
   },
   "env": {
     "es6": true,
@@ -17,6 +17,15 @@
     "Tournaments": false, "IPTools": false, "Sockets": false, "TeamValidator": false,
     "TeamValidatorAsync": false, "Ladders": false
   },
+  "ignorePatterns": [
+    "logs/",
+    "node_modules/",
+    ".*-dist/",
+    "tools/set-import/importer.js",
+    "tools/set-import/sets",
+    "server/global-variables.d.ts",
+    "sim/global-variables.d.ts"
+ ],
   "extends": "eslint:recommended",
   "rules": {
     "no-cond-assign": ["error", "except-parens"],
