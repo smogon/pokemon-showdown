@@ -146,6 +146,6 @@ export class LadderStore {
 	// This requires to be `async` because it must conform with the `LadderStore` interface
 	// eslint-disable-next-line @typescript-eslint/require-await
 	static async visualizeAll(username: string) {
-		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`]
+		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}
 }
