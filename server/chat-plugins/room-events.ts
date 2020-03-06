@@ -94,7 +94,7 @@ export const commands: ChatCommands = {
 			}
 			for (const u in room.users) {
 				const activeUser = Users.get(u);
-				if (activeUser && activeUser.connected) {
+				if (activeUser?.connected) {
 					activeUser.sendTo(
 						room,
 						Chat.html`|notify|A new roomevent in ${room.title} has started!|` +

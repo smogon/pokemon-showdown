@@ -26,7 +26,7 @@ export class LadderStore {
 	 * client.
 	 */
 	async getTop(prefix?: string): Promise<[string, string] | null> {
-		return new Promise(resolve => resolve(null));
+		return Promise.resolve(null);
 	}
 
 	/**
@@ -35,7 +35,7 @@ export class LadderStore {
 	async getRating(userid: string) {
 		const formatid = this.formatid;
 		const user = Users.getExact(userid);
-		if (user && user.mmrCache[formatid]) {
+		if (user?.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
 		const [data] = await LoginServer.request('mmr', {
@@ -142,8 +142,8 @@ export class LadderStore {
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
 	 */
 	static async visualizeAll(username: string) {
-		return new Promise(resolve => {
-			resolve([`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`]);
-		});
+		return Promise.resolve(
+			[`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`]
+		);
 	}
 }

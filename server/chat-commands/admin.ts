@@ -237,7 +237,7 @@ export const commands: ChatCommands = {
 			(Monitor.hotpatchVersions[patch] ?
 				Monitor.hotpatchVersions[patch] === version :
 				(global.__version && version === global.__version.tree));
-		const requiresForceMessage = `The git work tree has not changed since the last time ${target} was hotpatched (${version && version.slice(0, 8)}), use /forcehotpatch ${target} if you wish to hotpatch anyway.`;
+		const requiresForceMessage = `The git work tree has not changed since the last time ${target} was hotpatched (${version?.slice(0, 8)}), use /forcehotpatch ${target} if you wish to hotpatch anyway.`;
 
 		let patch = target;
 		try {
@@ -798,7 +798,7 @@ export const commands: ChatCommands = {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
 					logRoom.roomlog(log);
-					resolve([error && error.code || 0, stdout, stderr]);
+					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});
 		}
@@ -882,7 +882,7 @@ export const commands: ChatCommands = {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
 					logRoom.roomlog(log);
-					resolve([error && error.code || 0, stdout, stderr]);
+					resolve([error?.code || 0, stdout, stderr]);
 				});
 			});
 		}
@@ -926,7 +926,7 @@ export const commands: ChatCommands = {
 			const me = user;
 			// tslint:disable-next-line: no-eval
 			let result = eval(target);
-			if (result && result.then) {
+			if (result?.then) {
 				result = `Promise -> ${Chat.stringify(await result)}`;
 			} else {
 				result = Chat.stringify(result);

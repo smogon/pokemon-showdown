@@ -38,11 +38,11 @@ export class Tools {
 	 * commonly it's used.
 	 */
 	static getId(text: any): ID {
-		if (text && text.id) {
+		if (text?.id) {
 			text = text.id;
-		} else if (text && text.userid) {
+		} else if (text?.userid) {
 			text = text.userid;
-		} else if (text && text.roomid) {
+		} else if (text?.roomid) {
 			text = text.roomid;
 		}
 		if (typeof text !== 'string' && typeof text !== 'number') return '';

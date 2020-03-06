@@ -1330,7 +1330,7 @@ export class BasicChatRoom extends BasicRoom {
 	 * onRename, but without a userid change
 	 */
 	onUpdateIdentity(user: User) {
-		if (user && user.connected) {
+		if (user?.connected) {
 			if (!this.users[user.id]) return false;
 			if (user.named) {
 				this.reportJoin('n', user.getIdentityWithStatus(this.roomid) + '|' + user.id, user);
@@ -1632,7 +1632,7 @@ export class GameRoom extends BasicChatRoom {
 			inputlog: battle.inputLog?.join('\n') || null,
 		});
 		if (success) battle.replaySaved = true;
-		if (success && success.errorip) {
+		if (success?.errorip) {
 			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
 			return;
 		}

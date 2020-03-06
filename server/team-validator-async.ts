@@ -55,7 +55,7 @@ export const PM = new QueryProcessManager(module, message => {
 		];
 	}
 
-	if (problems && problems.length) {
+	if (problems?.length) {
 		return '0' + problems.join('\n');
 	}
 	const packedTeam = Dex.packTeam(parsedTeam);

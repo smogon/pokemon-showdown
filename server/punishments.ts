@@ -683,7 +683,7 @@ export const Punishments = new class {
 
 		const roomObject = Rooms.get(room);
 		const userObject = Users.get(user);
-		if (roomObject && roomObject.battle && userObject && userObject.connections[0]) {
+		if (roomObject?.battle && userObject && userObject.connections[0]) {
 			Chat.parse('/savereplay forpunishment', roomObject, userObject, userObject.connections[0]);
 		}
 	}
@@ -691,7 +691,7 @@ export const Punishments = new class {
 		const user = Users.get(name);
 		let id: string = toID(name);
 		const success: string[] = [];
-		if (user && user.locked && !user.namelocked) {
+		if (user?.locked && !user.namelocked) {
 			id = user.locked;
 			user.locked = null;
 			user.namelocked = null;
@@ -737,10 +737,10 @@ export const Punishments = new class {
 		const user = Users.get(name);
 		let id: string = toID(name);
 		const success: string[] = [];
-		if (user && user.namelocked) name = user.namelocked;
+		if (user?.namelocked) name = user.namelocked;
 
 		const unpunished = Punishments.unpunish(name, 'NAMELOCK');
-		if (user && user.locked) {
+		if (user?.locked) {
 			id = user.locked;
 			user.locked = null;
 			user.namelocked = null;
@@ -1245,7 +1245,7 @@ export const Punishments = new class {
 
 		if (punishment) {
 			const user = Users.get(userid);
-			if (user && user.permalocked) return ` (never expires; you are permalocked)`;
+			if (user?.permalocked) return ` (never expires; you are permalocked)`;
 			const expiresIn = new Date(punishment[2]).getTime() - Date.now();
 			const expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
 			let expiresText = '';
@@ -1314,7 +1314,7 @@ export const Punishments = new class {
 			if (punishment) {
 				punishments.push([curRoom, punishment]);
 				continue;
-			} else if (options && options.checkIps) {
+			} else if (options?.checkIps) {
 				if (typeof user !== 'string') {
 					for (const ip in user.ips) {
 						punishment = Punishments.roomIps.nestedGet(curRoom.roomid, ip);
@@ -1385,7 +1385,7 @@ export const Punishments = new class {
 		});
 		if (roomid && ignoreMutes !== false) {
 			const room = Rooms.get(roomid);
-			if (room && room.muteQueue) {
+			if (room?.muteQueue) {
 				for (const mute of room.muteQueue) {
 					punishmentTable.set(mute.userid, {
 						userids: [], ips: [], punishType: "MUTE", expireTime: mute.time, reason: "", rest: [],

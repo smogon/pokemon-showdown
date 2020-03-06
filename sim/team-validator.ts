@@ -1670,7 +1670,7 @@ export class TeamValidator {
 		const noFutureGen = !ruleTable.has('allowtradeback');
 
 		let tradebackEligible = false;
-		while (template && template.species && !alreadyChecked[template.speciesid]) {
+		while (template?.species && !alreadyChecked[template.speciesid]) {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen <= 2 && template.gen === 1) tradebackEligible = true;
 			if (!template.learnset) {

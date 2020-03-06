@@ -20,8 +20,8 @@ function createLottery(roomid: RoomID, maxWinners: number, name: string, markup:
 	}
 	const lottery = lotteries[roomid];
 	lotteries[roomid] = {
-		maxWinners, name, markup, participants: (lottery && lottery.participants) || Object.create(null),
-		winners: (lottery && lottery.winners) || [], running: true,
+		maxWinners, name, markup, participants: (lottery?.participants) || Object.create(null),
+		winners: (lottery?.winners) || [], running: true,
 	};
 	writeLotteries();
 }
@@ -100,7 +100,7 @@ export const commands: ChatCommands = {
 				return this.errorReply('This room does not support the creation of lotteries.');
 			}
 			const lottery = lotteries[room.roomid];
-			const edited = lottery && lottery.running;
+			const edited = lottery?.running;
 			if (cmd === 'edit' && !target && lottery) {
 				this.sendReply('Source:');
 				const markup = Chat.html`${lottery.markup}`.replace(/\n/g, '<br />');
@@ -178,7 +178,7 @@ export const commands: ChatCommands = {
 		join(target, room, user) {
 			// This hack is used for the HTML room to be able to
 			// join lotteries in other rooms from the global room
-			const roomid = target || (room && room.roomid);
+			const roomid = target || (room?.roomid);
 			if (!roomid) {
 				return this.errorReply(`This is not a valid room.`);
 			}
@@ -209,7 +209,7 @@ export const commands: ChatCommands = {
 		leave(target, room, user) {
 			// This hack is used for the HTML room to be able to
 			// join lotteries in other rooms from the global room
-			const roomid = target || (room && room.roomid);
+			const roomid = target || (room?.roomid);
 			if (!roomid) {
 				return this.errorReply('This can only be used in rooms.');
 			}
