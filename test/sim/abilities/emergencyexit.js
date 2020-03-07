@@ -33,6 +33,18 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
+	it(`should request switch-out if brought below half HP by residual damage`, function () {
+		battle = common.createBattle([[
+			{species: "Mew", moves: ['toxic']},
+		], [
+			{species: "Mew", ability: 'emergencyexit', moves: ['splash']},
+			{species: "Shaymin", moves: ['splash']},
+		]]);
+		battle.p2.active[0].hp = Math.floor(battle.p2.active[0].maxhp / 2 + 2);
+		battle.makeChoices();
+		assert.equal(battle.requestState, 'switch');
+	});
+
 	it(`should not request switch-out if attacked and healed by berry`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
