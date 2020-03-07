@@ -7791,6 +7791,10 @@ let BattleFormatsData = {
 	},
 	zacian: {
 		randomBattleMoves: ["closecombat", "crunch", "playrough", "psychicfangs", "swordsdance"],
+		eventPokemon: [
+			{"generation": 8, "level": 70, "moves": ["moonblast", "crunch", "laserfocus", "crunch"]},
+		],
+		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -7799,9 +7803,14 @@ let BattleFormatsData = {
 		tier: "Uber",
 		doublesTier: "DUber",
 		requiredItem: "Rusted Sword",
+		battleOnly: true,
 	},
 	zamazenta: {
 		randomBattleMoves: ["closecombat", "crunch", "psychicfangs", "wildcharge"],
+		eventPokemon: [
+			{"generation": 8, "level": 70, "moves": ["moonblast", "crunch", "laserfocus", "crunch"]},
+		],
+		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -7810,9 +7819,14 @@ let BattleFormatsData = {
 		tier: "Uber",
 		doublesTier: "DUber",
 		requiredItem: "Rusted Shield",
+		battleOnly: true,
 	},
 	eternatus: {
 		randomBattleMoves: ["dynamaxcannon", "flamethrower", "recover", "sludgewave", "toxic"],
+		eventPokemon: [
+			{"generation": 8, "level": 60, "moves": ["dynamaxcannon", "flamethrower", "dragonpulse", "crosspoison"]},
+		],
+		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
