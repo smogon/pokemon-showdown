@@ -124,6 +124,7 @@ const SETS = path.resolve(__dirname, 'sets');
 		'	return Promise.resolve(require(path));',
 		'}',
 		'function forGen(gen) {',
+		// eslint-disable-next-line no-template-curly-in-string
 		'	return JSON[`gen${gen}`];',
 		'}',
 		'exports.forGen = forGen;',
