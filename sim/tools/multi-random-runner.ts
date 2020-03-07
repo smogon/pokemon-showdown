@@ -71,7 +71,9 @@ export class MultiRandomRunner {
 				failures++;
 				console.error(
 					`Run \`node tools/simulate multi 1 --format=${format} --seed=${seed.join()}\` ` +
-					`to debug (optionally with \`--output\` and/or \`--input\` for more info):\n`, err);
+					`to debug (optionally with \`--output\` and/or \`--input\` for more info):\n`,
+					err
+				);
 			});
 
 			if (!this.async) await game;

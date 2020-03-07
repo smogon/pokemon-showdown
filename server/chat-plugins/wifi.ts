@@ -409,7 +409,8 @@ export class LotteryGiveaway extends Giveaway {
 		this.joined[user.latestIp] = user.id;
 		user.sendTo(
 			this.room,
-			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(true)}</div>`);
+			`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(true)}</div>`
+		);
 		user.sendTo(this.room, "You have successfully joined the lottery giveaway.");
 	}
 
@@ -542,8 +543,8 @@ export class GTSGiveaway {
 			`<p style="text-align:center;font-size:10pt;margin-top:0px;">Hosted by: ${Chat.escapeHTML(this.giver.name)} | Left: <b>${this.left}</b></p>` +
 			`<table style="margin-left:auto;margin-right:auto;"><tr>` +
 			(sentModifier ?
-				`<td style="text-align:center;width:10%"><b>Last winners:</b><br/>${this.sent.join('<br/>')}</td>`
-				: '') +
+				`<td style="text-align:center;width:10%"><b>Last winners:</b><br/>${this.sent.join('<br/>')}</td>` :
+				'') +
 			`<td style="text-align:center;width:15%">${this.sprite}</td><td style="text-align:center;width:${40 - sentModifier}%">${Chat.formatText(this.summary, true)}</td>` +
 			`<td style="text-align:center;width:${35 - sentModifier}%">${rightSide}</td></tr></table>`;
 	}
@@ -602,9 +603,9 @@ export class GTSGiveaway {
 			const regexp = new RegExp(`\\b${id}\\b`, 'ig');
 			const res = regexp.exec(parsed);
 			if (res) {
-				const num = Dex.data.Pokedex[i].num < 100 ? (Dex.data.Pokedex[i].num < 10
-					? `00${Dex.data.Pokedex[i].num}` : `0${Dex.data.Pokedex[i].num}`)
-					: Dex.data.Pokedex[i].num;
+				const num = Dex.data.Pokedex[i].num < 100 ? (Dex.data.Pokedex[i].num < 10 ?
+					`00${Dex.data.Pokedex[i].num}` : `0${Dex.data.Pokedex[i].num}`) :
+					Dex.data.Pokedex[i].num;
 				return `${text.slice(0, res.index)}<a href="http://www.serebii.net/pokedex-sm/location/${num}.shtml">${text.slice(res.index, res.index + res[0].length)}</a>${text.slice(res.index + res[0].length)}`;
 			}
 		}

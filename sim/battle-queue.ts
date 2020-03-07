@@ -331,9 +331,9 @@ export class BattleQueue extends Array<Action> {
 	}
 
 	debug() {
-		return this.map(action =>
+		return this.map(
 			// @ts-ignore
-			`${action.order || ''}:${action.priority || ''}:${action.speed || ''}:${action.subOrder || ''} - ${action.choice}${action.pokemon ? ' ' + action.pokemon : ''}${action.move ? ' ' + action.move : ''}`
+			action => `${action.order || ''}:${action.priority || ''}:${action.speed || ''}:${action.subOrder || ''} - ${action.choice}${action.pokemon ? ' ' + action.pokemon : ''}${action.move ? ' ' + action.move : ''}`
 		).join('\n') + '\n';
 	}
 

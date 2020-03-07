@@ -232,8 +232,8 @@ export class Battle {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
 			const subFormat = this.dex.getFormat(rule);
 			if (subFormat.exists) {
-				const hasEventHandler = Object.keys(subFormat).some(val =>
-					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
+				const hasEventHandler = Object.keys(subFormat).some(
+					val => val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
 				);
 				if (hasEventHandler) this.field.addPseudoWeather(rule);
 			}
@@ -1784,7 +1784,8 @@ export class Battle {
 
 	damage(
 		damage: number, target: Pokemon | null = null, source: Pokemon | null = null,
-		effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false) {
+		effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false
+	) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -2625,8 +2626,8 @@ export class Battle {
 			return false;
 		}
 
-		const switches = this.sides.map(side =>
-			side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
+		const switches = this.sides.map(
+			side => side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
 		);
 
 		for (let i = 0; i < this.sides.length; i++) {

@@ -83,9 +83,11 @@ export class Runner {
 		const p2spec = this.getPlayerSpec("Bot 2", this.p2options);
 
 		const p1 = this.p1options.createAI(
-			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options));
+			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options)
+		);
 		const p2 = this.p2options.createAI(
-			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options));
+			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options)
+		);
 		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
 		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).
 		void p1.start();

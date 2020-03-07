@@ -888,8 +888,8 @@ export class CommandContext extends MessageContext {
 						return null;
 					}
 				}
-				if (user.blockPMs && (user.blockPMs === true
-					|| !targetUser.authAtLeast(user.blockPMs)) && !targetUser.can('lock')) {
+				if (user.blockPMs && (user.blockPMs === true ||
+					!targetUser.authAtLeast(user.blockPMs)) && !targetUser.can('lock')) {
 					this.errorReply(`You are blocking private messages right now.`);
 					return null;
 				}
@@ -967,8 +967,10 @@ export class CommandContext extends MessageContext {
 
 		if (room) {
 			const normalized = message.trim();
-			if (!user.can('bypassall') && (['help', 'lobby'].includes(room.roomid)) && (normalized === user.lastMessage) &&
-					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
+			if (
+				!user.can('bypassall') && (['help', 'lobby'].includes(room.roomid)) && (normalized === user.lastMessage) &&
+				((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)
+			) {
 				this.errorReply(this.tr("You can't send the same message again so soon."));
 				return null;
 			}
@@ -977,8 +979,8 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (room?.highTraffic &&
-			toID(message).replace(/[^a-z]+/, '').length < 2
-			&& !user.can('broadcast', null, room)) {
+			toID(message).replace(/[^a-z]+/, '').length < 2 &&
+			!user.can('broadcast', null, room)) {
 			this.errorReply(
 				this.tr('Due to this room being a high traffic room, your message must contain at least two letters.')
 			);
@@ -1062,8 +1064,10 @@ export class CommandContext extends MessageContext {
 				images.lastIndex = match.index + 11;
 			}
 		}
-		if ((this.room.isPersonal || this.room.isPrivate === true)
-		&& !this.user.can('lock') && htmlContent.replace(/\s*style\s*=\s*"?[^"]*"\s*>/g, '>').match(/<button[^>]/)) {
+		if (
+			(this.room.isPersonal || this.room.isPrivate === true) &&
+			!this.user.can('lock') && htmlContent.replace(/\s*style\s*=\s*"?[^"]*"\s*>/g, '>').match(/<button[^>]/)
+		) {
 			this.errorReply('You do not have permission to use scripted buttons in HTML.');
 			this.errorReply('If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>');
 			return null;
@@ -1771,7 +1775,6 @@ export const Chat = new class {
 		const encodedMoveType = encodeURIComponent(move.type);
 		buf += `<span class="col typecol"><img src="//${Config.routes.client}/sprites/types/${encodedMoveType}.png" alt="${move.type}" width="32" height="14">`;
 		buf += `<img src="//${Config.routes.client}/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
-		// tslint:disable-next-line: max-line-length
 		if (move.basePower) {
 			buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
 		}

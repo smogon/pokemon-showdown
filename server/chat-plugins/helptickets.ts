@@ -740,8 +740,11 @@ export const pages: PageTable = {
 			}
 			buf += '</div>';
 			const curPageLink = query.length ? '-' + query.join('-') : '';
-			buf = buf.replace(/<Button>([a-z]+)<\/Button>/g, (match, id) =>
-				`<a class="button" href="/view-help-request${curPageLink}-${id}${meta}" target="replace">${ticketPages[id]}</a>`
+			buf = buf.replace(
+				/<Button>([a-z]+)<\/Button>/g,
+				(match, id) => (
+					`<a class="button" href="/view-help-request${curPageLink}-${id}${meta}" target="replace">${ticketPages[id]}</a>`
+				)
 			);
 			return buf;
 		},
@@ -926,7 +929,8 @@ export const pages: PageTable = {
 						result: splitLine[5],
 						staff: splitLine[6],
 					};
-				});
+				}
+			);
 			if (table === 'tickets') {
 				const typeStats: {[key: string]: {[key: string]: number}} = {};
 				for (const stats of ticketStats) {

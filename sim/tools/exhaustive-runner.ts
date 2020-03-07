@@ -97,7 +97,9 @@ export class ExhaustiveRunner {
 				this.failures++;
 				console.error(
 					`\n\nRun \`node tools/simulate exhaustive --cycles=${this.cycles} ` +
-					`--format=${this.format} --seed=${seed.join()}\`:\n`, err);
+						`--format=${this.format} --seed=${seed.join()}\`:\n`,
+					err
+				);
 			}
 		} while ((!this.maxGames || this.games < this.maxGames) &&
 					(!this.maxFailures || this.failures < this.maxFailures) &&
@@ -123,7 +125,8 @@ export class ExhaustiveRunner {
 		if (this.games) process.stdout.write('\r\x1b[K');
 		// Deliberately don't print a `\n` character so that we can overwrite
 		process.stdout.write(
-			`[${this.format}] P:${p.pokemon} I:${p.items} A:${p.abilities} M:${p.moves} = ${this.games}`);
+			`[${this.format}] P:${p.pokemon} I:${p.items} A:${p.abilities} M:${p.moves} = ${this.games}`
+		);
 	}
 
 	private static getSignatures(dex: typeof Dex, pools: Pools): Map<string, {item: string, move?: string}[]> {

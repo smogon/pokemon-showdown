@@ -1063,9 +1063,9 @@ export const Punishments = new class {
 			if (!punishment) punishment = ['LOCK', user.locked, 0, ''];
 		}
 
-		const ticket = Chat.pages.help
-			? `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>`
-			: '';
+		const ticket = Chat.pages.help ?
+			`<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>` :
+			'';
 
 		if (battleban) {
 			if (battleban[1] !== user.id && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
@@ -1306,10 +1306,10 @@ export const Punishments = new class {
 		const punishments: [Room, Punishment][] = [];
 
 		for (const curRoom of Rooms.global.chatRooms) {
-			if (!curRoom
-				|| curRoom.isPrivate === true
-				|| (options.publicOnly
-					&& (curRoom.isPersonal || curRoom.battle))) continue;
+			if (
+				!curRoom || curRoom.isPrivate === true ||
+				(options.publicOnly && (curRoom.isPersonal || curRoom.battle))
+			) continue;
 			let punishment = Punishments.roomUserids.nestedGet(curRoom.roomid, userid);
 			if (punishment) {
 				punishments.push([curRoom, punishment]);

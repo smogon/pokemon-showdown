@@ -157,8 +157,10 @@ export const commands: ChatCommands = {
 			for (const [ip, participant] of Object.entries(lottery.participants)) {
 				const userid = toID(participant);
 				const pUser = Users.get(userid);
-				if (Punishments.userids.get(userid)
-					|| Punishments.getRoomPunishments(pUser || userid, {publicOnly: true, checkIps: true}).length) {
+				if (
+					Punishments.userids.get(userid) ||
+					Punishments.getRoomPunishments(pUser || userid, {publicOnly: true, checkIps: true}).length
+				) {
 					delete lottery.participants[ip];
 				}
 			}
@@ -167,7 +169,6 @@ export const commands: ChatCommands = {
 			}
 			const winners = getWinnersInLottery(room.roomid);
 			if (!winners) return this.errorReply(`An error occured while getting the winners.`);
-			// tslint:disable-next-line: max-line-length
 			this.add(
 				Chat.html`|raw|<div class="broadcast-blue"><b>${Chat.toListString(winners)} won the "<a href="/view-lottery-${room.roomid}">${lottery.name}</a>" lottery!</b></div>`
 			);
@@ -272,8 +273,8 @@ export const pages: PageTable = {
 		}
 		buf += `<h2 style="text-align: center">${lottery.name}</h2>${lottery.markup}<br />`;
 		if (lottery.running) {
-			const userSignedUp = lottery.participants[user.latestIp]
-				|| Object.values(lottery.participants).map(toID).includes(user.id);
+			const userSignedUp = lottery.participants[user.latestIp] ||
+				Object.values(lottery.participants).map(toID).includes(user.id);
 			buf += `<button class="button" name="send" style=" display: block; margin: 0 auto" value="/lottery ${userSignedUp ? 'leave' : 'join'} ${this.room.roomid}">${userSignedUp ? "Leave the " : "Sign up for the"} lottery</button>`;
 		} else {
 			buf += '<p style="text-align: center"><b>This lottery has already ended. The winners are:</b></p>';

@@ -143,8 +143,9 @@ export const commands: ChatCommands = {
 		if (!(targetUser.id in room.users) && !user.can('addhtml')) {
 			return this.errorReply("You do not have permission to use this command to users who are not in this room.");
 		}
-		if (targetUser.blockPMs
-			&& (targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')
+		if (
+			targetUser.blockPMs &&
+			(targetUser.blockPMs === true || !user.authAtLeast(targetUser.blockPMs)) && !user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, user);
 			return this.errorReply("This user is currently blocking PMs.");
@@ -198,7 +199,7 @@ export const commands: ChatCommands = {
 	},
 	pmuhtmlhelp: [`/pmuhtml [user], [name], [html] - PMs [html] that can change to [user]. Requires * ~`],
 	pmuhtmlchangehelp: [
-		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * ~`
+		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * ~`,
 	],
 
 	nick() {
@@ -423,7 +424,7 @@ export const commands: ChatCommands = {
 		);
 	},
 	nohotpatchhelp: [
-		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: & ~`
+		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: & ~`,
 	],
 
 	async savelearnsets(target, room, user) {
@@ -605,7 +606,7 @@ export const commands: ChatCommands = {
 		logRoom.roomlog(`${user.name} used /lockdown`);
 	},
 	lockdownhelp: [
-		`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~`
+		`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~`,
 	],
 
 	autolockdown: 'autolockdownkill',
@@ -666,9 +667,9 @@ export const commands: ChatCommands = {
 			return this.errorReply('/crashfixed - There is no active crash.');
 		}
 
-		const message = cmd === 'crashfixed'
-			? `<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b></div>`
-			: `<div class="broadcast-green"><b>The server restart was canceled.</b></div>`;
+		const message = cmd === 'crashfixed' ?
+			`<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b></div>` :
+			`<div class="broadcast-green"><b>The server restart was canceled.</b></div>`;
 		if (Rooms.global.lockdown === true) {
 			for (const curRoom of Rooms.rooms.values()) {
 				if (curRoom.roomid !== 'global') curRoom.addRaw(message).update();
@@ -766,7 +767,7 @@ export const commands: ChatCommands = {
 		);
 	},
 	loadbanlisthelp: [
-		`/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~`
+		`/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~`,
 	],
 
 	refreshpage(target, room, user) {
@@ -922,10 +923,12 @@ export const commands: ChatCommands = {
 
 		if (!this.broadcasting) this.sendReply(`||>> ${target}`);
 		try {
+			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
 			const battle = room.battle;
 			const me = user;
-			// tslint:disable-next-line: no-eval
 			let result = eval(target);
+			/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
+
 			if (result?.then) {
 				result = `Promise -> ${Chat.stringify(await result)}`;
 			} else {

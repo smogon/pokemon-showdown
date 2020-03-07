@@ -176,7 +176,7 @@ export class ReadStream {
 		throw new Error(`ReadStream needs to be subclassed and the _read function needs to be implemented.`);
 	}
 
-	_destroy() {}
+	_destroy(): void | Promise<void> {}
 	_pause() {}
 
 	/**
@@ -319,12 +319,10 @@ export class ReadStream {
 	}
 
 	async pipeTo(outStream: WriteStream, options: {noEnd?: boolean} = {}) {
-		/* tslint:disable */
 		let value, done;
 		while (({value, done} = await this.next(), !done)) {
 			await outStream.write(value);
 		}
-		/* tslint:enable */
 		if (!options.noEnd) return outStream.end();
 	}
 }

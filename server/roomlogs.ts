@@ -231,12 +231,12 @@ export class Roomlog {
 			FS(roomlogPath + `/${newID}`).exists(),
 		]).then(([modlogExists, roomlogExists, newModlogExists, newRoomlogExists]) => {
 			return Promise.all([
-				modlogExists && !newModlogExists
-					? FS(modlogPath + `/modlog_${this.roomid}.txt`).rename(modlogPath + `/modlog_${newID}.txt`)
-					: undefined,
-				roomlogExists && !newRoomlogExists
-					? FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`)
-					: undefined,
+				modlogExists && !newModlogExists ?
+					FS(modlogPath + `/modlog_${this.roomid}.txt`).rename(modlogPath + `/modlog_${newID}.txt`) :
+					undefined,
+				roomlogExists && !newRoomlogExists ?
+					FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`) :
+					undefined,
 			]);
 		});
 		this.roomid = newID;
@@ -264,7 +264,7 @@ export class Roomlog {
 		const time = Date.now();
 		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
 		nextMidnight.setHours(0, 0, 1);
-		Roomlogs.rollLogTimer = setTimeout(() => Roomlog.rollLogs(), nextMidnight.getTime() - time);
+		Roomlogs.rollLogTimer = setTimeout(() => void Roomlog.rollLogs(), nextMidnight.getTime() - time);
 	}
 	truncate() {
 		if (!this.autoTruncate) return;
