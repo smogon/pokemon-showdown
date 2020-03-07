@@ -39,4 +39,20 @@ describe('Stealth Rock', function () {
 			assert.equal(pokemon.maxhp - pokemon.hp, expectedDamage, `${pokemon.name} should take ${expectedPercent * 100}%`);
 		}
 	});
+
+	it('should deal 2x damage to Eiscue', function () {
+		battle = common.createBattle([[
+			{species: "Ninjask", moves: ['stealthrock']},
+		], [
+			{species: "Mew", moves: ['uturn']},
+			{species: "Eiscue", ability: 'iceface', moves: ['splash']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('', 'switch eiscue');
+
+		const pokemon = battle.p2.active[0];
+		const expectedPercent = Math.pow(0.5, 2);
+		const expectedDamage = Math.floor(pokemon.maxhp * expectedPercent);
+		assert.equal(pokemon.maxhp - pokemon.hp, expectedDamage, `${pokemon.name} should take ${expectedPercent * 100}%`);
+	});
 });
