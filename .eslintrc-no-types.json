@@ -47,7 +47,6 @@
     "no-sync": "off",
     "no-void": "off", // used for spawning Promises only
     "strict": ["error", "global"],
-    "no-eval": "off",
 
     // bad code, modern (new code patterns we don't like because they're less readable or performant)
     "no-restricted-globals": ["error", "Proxy", "Reflect", "Symbol", "WeakSet"],
@@ -58,6 +57,7 @@
     "guard-for-in": "off", // guarding is a deprecated pattern, we just use no-extend-native instead
     "init-declarations": "off", // TypeScript lets us delay initialization safely
     "no-caller": "error",
+    "no-eval": "error",
     "no-extend-native": "error",
     "no-implied-eval": "error",
     "no-inner-declarations": ["error", "functions"],
@@ -86,6 +86,7 @@
     "no-empty": ["error", {"allowEmptyCatch": true}],
     "no-extra-bind": "error",
     "no-extra-label": "error",
+    "no-fallthrough": "error",
     "no-label-var": "error",
     "no-new-require": "error",
     "no-new": "error",
@@ -164,6 +165,7 @@
     "dot-location": ["error", "property"],
     "eol-last": ["error", "always"],
     "func-call-spacing": "error",
+    "function-paren-newline": ["error", "consistent"],
     "indent": ["error", "tab", {"flatTernaryExpressions": true}],
     "key-spacing": "error",
     "keyword-spacing": ["error", {"before": true, "after": true}],
@@ -202,19 +204,16 @@
       ],
       "rules": {
         // TODO revisit
-        "comma-dangle": ["error", "only-multiline", {"objects": "always", "arrays": "always", "functions": "never"}],
-        "no-fallthrough": "off",
-        "operator-linebreak": "off",
         "prefer-object-spread": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/member-delimiter-style": "off",
         "@typescript-eslint/member-ordering": "off",
         // "@typescript-eslint/no-extraneous-class": "error",
-        "@typescript-eslint/no-misused-promises": "off",
         // "@typescript-eslint/no-type-alias": "error",
-        // "@typescript-eslint/no-unused-vars": ["warn", {"args": "none"}],
-        "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-parameter-properties": "off",
+
+        // test only (should never be committed, but useful when testing)
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": ["warn", {"args": "none"}],
 
         // PS code (code specific to PS)
         "@typescript-eslint/no-namespace": "off",
@@ -252,6 +251,10 @@
         "@typescript-eslint/consistent-type-assertions": ["error", {"assertionStyle": "as"}],
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
         "@typescript-eslint/explicit-member-accessibility": ["error", {"accessibility": "no-public"}],
+        "@typescript-eslint/member-delimiter-style": ["error", {"overrides": {"typeLiteral": {
+          "multiline": {"delimiter": "comma", "requireLast": true},
+          "singleline": {"delimiter": "comma", "requireLast": false}
+        }}}],
         "@typescript-eslint/no-this-alias": "error",
         "@typescript-eslint/no-var-requires": "error",
         "@typescript-eslint/prefer-as-const": "error",
@@ -264,12 +267,14 @@
         "@typescript-eslint/unified-signatures": "error",
 
         // syntax style, overriding base
+        "quotes": "off",
         "@typescript-eslint/quotes": "off",
+        "semi": "off",
         "@typescript-eslint/semi": ["error", "always"],
 
         // whitespace
         "@typescript-eslint/type-annotation-spacing": "error",
-        "spaced-comment": ["error", "always", {"exceptions": ["*"]}],
+        "spaced-comment": ["error", "always", {"exceptions": ["*", "/"]}],
 
         // whitespace, overriding base
         "indent": "off",

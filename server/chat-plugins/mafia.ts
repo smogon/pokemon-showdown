@@ -99,7 +99,7 @@ const BANS_FILE = 'config/chat-plugins/mafia-bans.json';
 
 // see: https://play.pokemonshowdown.com/fx/
 const VALID_IMAGES = [
-	'cop', 'dead', 'doctor', 'fool', 'godfather', 'goon', 'hooker', 'mafia', 'mayor', 'villager', 'werewolf'
+	'cop', 'dead', 'doctor', 'fool', 'godfather', 'goon', 'hooker', 'mafia', 'mayor', 'villager', 'werewolf',
 ];
 
 let MafiaData: MafiaData = Object.create(null);
@@ -137,12 +137,12 @@ function writeFile(path: string, data: AnyObject) {
 MafiaData = readFile(DATA_FILE) || {alignments: {}, roles: {}, themes: {}, IDEAs: {}, terms: {}, aliases: {}};
 if (!MafiaData.alignments.town) {
 	MafiaData.alignments.town = {
-		name: 'town', plural: 'town', memo: [`This alignment is required for the script to function properly.`]
+		name: 'town', plural: 'town', memo: [`This alignment is required for the script to function properly.`],
 	};
 }
 if (!MafiaData.alignments.solo) {
 	MafiaData.alignments.solo = {
-		name: 'solo', plural: 'solo', memo: [`This alignment is required for the script to function properly.`]
+		name: 'solo', plural: 'solo', memo: [`This alignment is required for the script to function properly.`],
 	};
 }
 
@@ -700,8 +700,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (previousLynch) this.unlynch(userid, true);
 		let lynch = this.lynches[target];
 		if (!lynch) {
-			this.lynches[target]
-				= {count: 1, trueCount: this.getLynchValue(userid), lastLynch: Date.now(), dir: 'up', lynchers: [userid]};
+			this.lynches[target] = {
+				count: 1, trueCount: this.getLynchValue(userid), lastLynch: Date.now(), dir: 'up', lynchers: [userid],
+			};
 			lynch = this.lynches[target];
 		} else {
 			lynch.count++;
@@ -717,9 +718,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.sendTimestamp(`${(targetUser ? targetUser.name : userid)} has shifted their lynch from ${previousLynch === 'nolynch' ? 'No Lynch' : this.playerTable[previousLynch].name} to ${name}`);
 		} else {
 			this.sendTimestamp(
-				name === 'No Lynch'
-					? `${(targetUser ? targetUser.name : userid)} has abstained from lynching.`
-					: `${(targetUser ? targetUser.name : userid)} has lynched ${name}.`
+				name === 'No Lynch' ?
+					`${(targetUser ? targetUser.name : userid)} has abstained from lynching.` :
+					`${(targetUser ? targetUser.name : userid)} has lynched ${name}.`
 			);
 		}
 		player.lastLynch = Date.now();
@@ -765,9 +766,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		const targetUser = Users.get(userid);
 		if (!force) {
 			this.sendTimestamp(
-				player.lynching === 'nolynch'
-					? `${(targetUser ? targetUser.name : userid)} is no longer abstaining from lynching.`
-					: `${(targetUser ? targetUser.name : userid)} has unlynched ${this.playerTable[player.lynching].name}.`
+				player.lynching === 'nolynch' ?
+					`${(targetUser ? targetUser.name : userid)} is no longer abstaining from lynching.` :
+					`${(targetUser ? targetUser.name : userid)} has unlynched ${this.playerTable[player.lynching].name}.`
 			);
 		}
 		player.lynching = '';
@@ -1045,7 +1046,7 @@ class MafiaTracker extends Rooms.RoomGame {
 					alignment: 'solo',
 					image: '',
 					memo: [
-						`You were revived, but had no role. Please let a Mafia Room Owner know this happened. To learn about your role, PM the host (${this.host}).`
+						`You were revived, but had no role. Please let a Mafia Room Owner know this happened. To learn about your role, PM the host (${this.host}).`,
 					],
 				};
 				this.roles.push(deadPlayer.role);
@@ -1546,8 +1547,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (this.forceLynch) {
 				if (!target || (player.lynching === target)) {
 					player.lynching = player.id;
-					this.lynches[player.id]
-						= {count: 1, trueCount: this.getLynchValue(player.id), lastLynch: Date.now(), dir: 'up', lynchers: [player.id]};
+					this.lynches[player.id] = {
+						count: 1, trueCount: this.getLynchValue(player.id), lastLynch: Date.now(), dir: 'up', lynchers: [player.id],
+					};
 				}
 			} else {
 				if (!target || (player.lynching === target)) player.lynching = '';
@@ -2094,7 +2096,7 @@ export const commands: ChatCommands = {
 			game.sendDeclare(`Player cap has been set to ${game.playerCap}`);
 		},
 		playercaphelp: [
-			`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2. Requires: host % @ # & ~`
+			`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2. Requires: host % @ # & ~`,
 		],
 
 		'!close': true,
@@ -2144,7 +2146,7 @@ export const commands: ChatCommands = {
 			game.updateHost();
 		},
 		closedsetuphelp: [
-			`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ # & ~`
+			`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ # & ~`,
 		],
 
 		'!reveal': true,
@@ -2441,7 +2443,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		selflynchhelp: [
-			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ # & ~`
+			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ # & ~`,
 		],
 
 		'!kill': true,
@@ -2496,7 +2498,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		revivehelp: [
-			`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ # & ~`
+			`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ # & ~`,
 		],
 
 		dl: 'deadline',
@@ -2527,7 +2529,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		deadlinehelp: [
-			`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`
+			`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`,
 		],
 
 		applylynchmodifier: 'applyhammermodifier',
@@ -2730,7 +2732,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		enablenlhelp: [
-			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # & ~`
+			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # & ~`,
 		],
 
 		forcelynch(target, room, user) {
@@ -2752,7 +2754,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		forcelynchhelp: [
-			`/mafia forcelynch [yes/no] - Forces player's lynches onto themselves, and prevents unlynching. Requires host % @ # & ~`
+			`/mafia forcelynch [yes/no] - Forces player's lynches onto themselves, and prevents unlynching. Requires host % @ # & ~`,
 		],
 
 		lynches(target, room, user) {
@@ -2999,7 +3001,7 @@ export const commands: ChatCommands = {
 			}
 		},
 		autosubhelp: [
-			`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Requires host % @ # & ~`
+			`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Requires host % @ # & ~`,
 		],
 
 		cohost: 'subhost',
@@ -3046,14 +3048,13 @@ export const commands: ChatCommands = {
 				for (const conn of targetUser.connections) {
 					void Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
-				// tslint:disable-next-line: max-line-length
 				game.sendDeclare(Chat.html`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`);
 				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
 			}
 		},
 		subhosthelp: [`/mafia subhost [user] - Substitues the user as the new game host.`],
 		cohosthelp: [
-			`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions.`
+			`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions.`,
 		],
 
 		uncohost: 'removecohost',
@@ -3129,7 +3130,7 @@ export const commands: ChatCommands = {
 			let dataType = cmd;
 
 			const cmdTypes: {[k: string]: keyof MafiaData} = {
-				role: 'roles', alignment: 'alignments', theme: 'themes', term: 'terms'
+				role: 'roles', alignment: 'alignments', theme: 'themes', term: 'terms',
 			};
 			if (cmd in cmdTypes) {
 				const toSearch = MafiaData[cmdTypes[cmd]];
@@ -3175,7 +3176,7 @@ export const commands: ChatCommands = {
 			return this.sendReplyBox(buf);
 		},
 		datahelp: [
-			`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`
+			`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`,
 		],
 
 		winfaction: 'win',
@@ -3380,7 +3381,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`The role ${id} was added to the database.`);
 		},
 		addrolehelp: [
-			`/mafia addrole name|alignment|image|memo1|memo2... - adds a role to the database. Name, memo are required. Requires % @ # & ~`
+			`/mafia addrole name|alignment|image|memo1|memo2... - adds a role to the database. Name, memo are required. Requires % @ # & ~`,
 		],
 
 		overwritealignment: 'addalignment',
@@ -3415,7 +3416,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`The alignment ${id} was added to the database.`);
 		},
 		addalignmenthelp: [
-			`/mafia addalignment name|plural|color|button color|image|memo1|memo2... - adds a memo to the database. Name, plural, memo are required. Requires % @ # & ~`
+			`/mafia addalignment name|plural|color|button color|image|memo1|memo2... - adds a memo to the database. Name, plural, memo are required. Requires % @ # & ~`,
 		],
 
 		overwritetheme: 'addtheme',
@@ -3463,7 +3464,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`The theme ${id} was added to the database.`);
 		},
 		addthemehelp: [
-			`/mafia addtheme name|description|players:rolelist|players:rolelist... - adds a theme to the database. Requires % @ # & ~`
+			`/mafia addtheme name|description|players:rolelist|players:rolelist... - adds a theme to the database. Requires % @ # & ~`,
 		],
 
 		overwriteidea: 'addidea',

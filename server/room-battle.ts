@@ -1151,20 +1151,22 @@ export class RoomBattleStream extends BattleStream {
 		switch (type) {
 		case 'eval':
 			const battle = this.battle;
-			const p1 = battle?.sides[0];
-			const p2 = battle?.sides[1];
-			const p3 = battle?.sides[2];
-			const p4 = battle?.sides[3];
-			const p1active = p1?.active[0];
-			const p2active = p2?.active[0];
-			const p3active = p3?.active[0];
-			const p4active = p4?.active[0];
 			battle.inputLog.push(`>${type} ${message}`);
 			message = message.replace(/\f/g, '\n');
 			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
 			try {
-				// tslint:disable-next-line: no-eval
+				/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
+				const p1 = battle?.sides[0];
+				const p2 = battle?.sides[1];
+				const p3 = battle?.sides[2];
+				const p4 = battle?.sides[3];
+				const p1active = p1?.active[0];
+				const p2active = p2?.active[0];
+				const p3active = p3?.active[0];
+				const p4active = p4?.active[0];
 				let result = eval(message);
+				/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
+
 				if (result?.then) {
 					result.then((unwrappedResult: any) => {
 						unwrappedResult = Chat.stringify(unwrappedResult);
@@ -1235,7 +1237,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	// tslint:disable-next-line: no-eval
+	// eslint-disable-next-line no-eval
 	Repl.start(`sim-${process.pid}`, cmd => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.simulatorprocesses : 1);

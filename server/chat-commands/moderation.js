@@ -183,8 +183,8 @@ exports.commands = {
 			rankLists[targetRoom.auth[u]].push(u);
 		}
 
-		let buffer = Object.keys(rankLists).sort((a, b) =>
-			(Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
+		let buffer = Object.keys(rankLists).sort(
+			(a, b) => (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
 		).map(r => {
 			let roomRankList = rankLists[r].sort();
 			roomRankList = roomRankList.map(s => {
@@ -283,8 +283,8 @@ exports.commands = {
 		Rooms.global.autojoinRooms(user, connection);
 		let autojoins = [];
 
-		const promises = targets.map(target =>
-			user.tryJoinRoom(target, connection).then(ret => {
+		const promises = targets.map(
+			target => user.tryJoinRoom(target, connection).then(ret => {
 				if (ret === Rooms.RETRY_AFTER_LOGIN) {
 					autojoins.push(target);
 				}

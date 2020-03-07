@@ -434,31 +434,30 @@ class FileReadStream extends ReadStream {
 		this.atEOF = false;
 	}
 
-	// @ts-ignore
-	_read(size = 16384) {
-		return new Promise((resolve, reject) => {
-			if (this.atEOF) return resolve(false);
+	_read(size = 16384): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
+			if (this.atEOF) return resolve();
 			this.ensureCapacity(size);
-			return this.fd.then(fd => {
+			void this.fd.then(fd => {
 				fs.read(fd, this.buf, this.bufEnd, size, null, (err, bytesRead, buf) => {
 					if (err) return reject(err);
 					if (!bytesRead) {
 						this.atEOF = true;
 						this.resolvePush();
-						return resolve(false);
+						return resolve();
 					}
 					this.bufEnd += bytesRead;
 					// throw new Error([...this.buf].map(x => x.toString(16)).join(' '));
 					this.resolvePush();
-					resolve(true);
+					resolve();
 				});
 			});
 		});
 	}
 
 	_destroy() {
-		return new Promise(resolve => {
-			return this.fd.then(fd => {
+		return new Promise<void>(resolve => {
+			void this.fd.then(fd => {
 				fs.close(fd, () => resolve());
 			});
 		});

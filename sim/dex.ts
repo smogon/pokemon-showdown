@@ -779,7 +779,8 @@ export class ModdedDex {
 			return {
 				type: hpTypes[4 * (atkDV % 4) + (defDV % 4)],
 				power: tr(
-					(5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV % 4)) / 2 + 31),
+					(5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV % 4)) / 2 + 31
+				),
 			};
 		} else {
 			// Hidden Power check for Gen 3 onwards
@@ -902,15 +903,16 @@ export class ModdedDex {
 				if (ruleTable.checkLearnset) {
 					throw new Error(
 						`"${format.name}" has conflicting move validation rules from ` +
-						`"${ruleTable.checkLearnset[1]}" and "${subRuleTable.checkLearnset[1]}"`);
+						`"${ruleTable.checkLearnset[1]}" and "${subRuleTable.checkLearnset[1]}"`
+					);
 				}
 				ruleTable.checkLearnset = subRuleTable.checkLearnset;
 			}
 			if (subRuleTable.timer) {
 				if (ruleTable.timer) {
 					throw new Error(
-						`"${format.name}" has conflicting timer validation rules from ` +
-						`"${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`);
+						`"${format.name}" has conflicting timer validation rules from "${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`
+					);
 				}
 				ruleTable.timer = subRuleTable.timer;
 			}
@@ -920,8 +922,8 @@ export class ModdedDex {
 			if (subRuleTable.minSourceGen && subRuleTable.minSourceGen[0] <= this.gen) {
 				if (ruleTable.minSourceGen) {
 					throw new Error(
-						`"${format.name}" has conflicting minSourceGen from ` +
-						`"${ruleTable.minSourceGen[1]}" and "${subRuleTable.minSourceGen[1]}"`);
+						`"${format.name}" has conflicting minSourceGen from "${ruleTable.minSourceGen[1]}" and "${subRuleTable.minSourceGen[1]}"`
+					);
 				}
 				ruleTable.minSourceGen = subRuleTable.minSourceGen;
 			}
@@ -1461,8 +1463,8 @@ export class ModdedDex {
 			parentDex = dexes[this.parentMod];
 			if (!parentDex || parentDex === this) {
 				throw new Error(
-					"Unable to load " + this.currentMod + ". `inherit` should specify a parent mod " +
-					"from which to inherit data, or must be not specified.");
+					`Unable to load ${this.currentMod}. 'inherit' should specify a parent mod from which to inherit data, or must be not specified.`
+				);
 			}
 		}
 
@@ -1474,8 +1476,8 @@ export class ModdedDex {
 			const BattleData = this.loadDataFile(basePath, dataType);
 			if (!BattleData || typeof BattleData !== 'object') {
 				throw new TypeError(
-					"Exported property `Battle" + dataType + "`from `" + './data/' +
-					DATA_FILES[dataType] + "` must be an object except `null`.");
+					`Exported property 'Battle${dataType}'from './data/${DATA_FILES[dataType]}' must be an object except 'null'.`
+				);
 			}
 			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
 			if (dataType === 'Formats' && !parentDex) Object.assign(BattleData, this.formats);

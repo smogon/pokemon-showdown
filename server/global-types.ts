@@ -52,6 +52,8 @@ namespace Rooms {
 }
 
 // Streams
+// (I don't understand why eslint only has a problem with this - it's used in room-battle)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Streams {
 	export type WriteStream = import('../lib/streams').WriteStream;
 	export type ReadStream = import('../lib/streams').ReadStream;

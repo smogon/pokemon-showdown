@@ -1593,8 +1593,8 @@ export class TeamValidator {
 
 		if (setSources.size() && setSources.moveEvoCarryCount > 3) {
 			if (setSources.sourcesBefore < 6) setSources.sourcesBefore = 0;
-			setSources.sources = setSources.sources.filter(source =>
-				source.charAt(1) === 'E' && parseInt(source.charAt(0)) >= 6
+			setSources.sources = setSources.sources.filter(
+				source => source.charAt(1) === 'E' && parseInt(source.charAt(0)) >= 6
 			);
 			if (!setSources.size()) {
 				problems.push(`${name} needs to know ${species.evoMove || 'a Fairy-type move'} to evolve, so it can only know 3 other moves from ${dex.getTemplate(species.prevo).name}.`);
@@ -1604,8 +1604,8 @@ export class TeamValidator {
 		if (problems.length) return problems;
 
 		if (setSources.isHidden) {
-			setSources.sources = setSources.sources.filter(source =>
-				parseInt(source.charAt(0)) >= 5
+			setSources.sources = setSources.sources.filter(
+				source => parseInt(source.charAt(0)) >= 5
 			);
 			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
 			if (!setSources.sourcesBefore && !setSources.sources.length) {

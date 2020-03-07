@@ -566,8 +566,8 @@ export class Pokemon {
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.n % 2;
 			// @ts-ignore
-			allies = this.battle.sides.flatMap(side =>
-				side.n % 2 === team ? side.active : []
+			allies = this.battle.sides.flatMap(
+				(side: Side) => side.n % 2 === team ? side.active : []
 			);
 		}
 		return allies.filter(ally => ally && !ally.fainted);
@@ -582,8 +582,8 @@ export class Pokemon {
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.foe.n % 2;
 			// @ts-ignore
-			foes = this.battle.sides.flatMap(side =>
-				side.n % 2 === team ? side.active : []
+			foes = this.battle.sides.flatMap(
+				(side: Side) => side.n % 2 === team ? side.active : []
 			);
 		}
 		return foes.filter(foe => foe && !foe.fainted);
@@ -695,16 +695,18 @@ export class Pokemon {
 		let neutralizinggas = false;
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
-			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid']
-				&& !pokemon.abilityData.ending) {
+			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
+				!pokemon.abilityData.ending) {
 				neutralizinggas = true;
 				break;
 			}
 		}
 
-		return !!((this.battle.gen >= 5 && !this.isActive) ||
-			((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID)))
-			&& !abilities.includes(this.ability)));
+		return !!(
+			(this.battle.gen >= 5 && !this.isActive) ||
+			((this.volatiles['gastroacid'] || (neutralizinggas && this.ability !== ('neutralizinggas' as ID))) &&
+			!abilities.includes(this.ability))
+		);
 	}
 
 	ignoringItem() {
@@ -757,9 +759,10 @@ export class Pokemon {
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
-	getMoves(lockedMove?: string | null, restrictData?: boolean):
-	{move: string, id: string, disabled?: string | boolean,
-		disabledSource?: string, target?: string, pp?: number, maxpp?: number}[] {
+	getMoves(lockedMove?: string | null, restrictData?: boolean): {
+		move: string, id: string, disabled?: string | boolean, disabledSource?: string,
+		target?: string, pp?: number, maxpp?: number,
+	}[] {
 		if (lockedMove) {
 			lockedMove = toID(lockedMove);
 			this.trapped = true;
@@ -1599,7 +1602,8 @@ export class Pokemon {
 
 	addVolatile(
 		status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null,
-		linkedStatus: string | PureEffect | null = null): boolean | any {
+		linkedStatus: string | PureEffect | null = null
+	): boolean | any {
 		let result;
 		status = this.battle.dex.getEffect(status);
 		if (!this.hp && !status.affectsFainted) return false;
