@@ -60,13 +60,13 @@ let BattleStatuses = {
 	aeonic: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Aeonic|Guys the emoji movie wasn't __that__ bad`);
+			this.add(`c|@Aeonic|Guys the emoji movie wasn't __that__ bad`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Aeonic|Still better than kie btw`);
+			this.add(`c|@Aeonic|Still better than kie btw`);
 		},
 		onFaint() {
-			this.add(`c|%Aeonic|Don't forget me`);
+			this.add(`c|@Aeonic|Don't forget me`);
 		},
 	},
 	aethernum: {
