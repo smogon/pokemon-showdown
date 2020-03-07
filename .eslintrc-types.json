@@ -23,9 +23,8 @@
       "rules": {
         // TODO investigate
         "@typescript-eslint/restrict-plus-operands": "off",
-        // "@typescript-eslint/@typescript-eslint/switch-exhaustiveness-check": "error",
-        "@typescript-eslint/prefer-regexp-exec": "off",
         "@typescript-eslint/prefer-string-starts-ends-with": "off",
+        // "@typescript-eslint/switch-exhaustiveness-check": "error",
 
         // test only (should never be committed, but useful when testing)
         "no-unused-vars": "off",
@@ -42,11 +41,12 @@
         "@typescript-eslint/no-unnecessary-qualifier": "off",
         "@typescript-eslint/no-unnecessary-type-arguments": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
+        "@typescript-eslint/prefer-regexp-exec": "error",
 
         // test only (should never be committed, but useful when testing)
         "max-len": ["error", {
           "code": 120, "tabWidth": 0,
-          "ignorePattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?=>? (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`]"
+          "ignorePattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?=>? (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`/]"
         }],
         "prefer-const": ["error", {"destructuring": "all"}]
       }

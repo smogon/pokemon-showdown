@@ -283,7 +283,7 @@
         // test only (should never be committed, but useful when testing)
         "max-len": ["warn", {
           "code": 120, "tabWidth": 0,
-          "ignorePattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?=>? (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`]"
+          "ignorePattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?=>? (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`/]"
         }],
         "prefer-const": ["warn", {"destructuring": "all"}]
       }

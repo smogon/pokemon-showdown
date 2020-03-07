@@ -98,7 +98,7 @@ import {formatText, linkRegex, stripFormatting} from './chat-formatter';
 import ProbeModule = require('probe-image-size');
 const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
 
-const emojiRegex = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
+const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -527,25 +527,25 @@ export class CommandContext extends MessageContext {
 		if (!room.filterStretching && !room.filterCaps && !room.filterEmojis) return true;
 		if (user.can('bypassall')) return true;
 
-		if (room.filterStretching && user.name.match(/(.+?)\1{5,}/i)) {
+		if (room.filterStretching && /(.+?)\1{5,}/i.test(user.name)) {
 			return this.errorReply(`Your username contains too much stretching, which this room doesn't allow.`);
 		}
-		if (room.filterCaps && user.name.match(/[A-Z\s]{6,}/)) {
+		if (room.filterCaps && /[A-Z\s]{6,}/.test(user.name)) {
 			return this.errorReply(`Your username contains too many capital letters, which this room doesn't allow.`);
 		}
-		if (room.filterEmojis && user.name.match(emojiRegex)) {
+		if (room.filterEmojis && EMOJI_REGEX.test(user.name)) {
 			return this.errorReply(`Your username contains emojis, which this room doesn't allow.`);
 		}
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
-		if (room.filterStretching && message.match(/(.+?)\1{7,}/i)) {
+		if (room.filterStretching && /(.+?)\1{7,}/i.test(message)) {
 			return this.errorReply(`Your message contains too much stretching, which this room doesn't allow.`);
 		}
-		if (room.filterCaps && message.match(/[A-Z\s]{18,}/)) {
+		if (room.filterCaps && /[A-Z\s]{18,}/.test(message)) {
 			return this.errorReply(`Your message contains too many capital letters, which this room doesn't allow.`);
 		}
-		if (room.filterEmojis && message.match(emojiRegex)) {
+		if (room.filterEmojis && EMOJI_REGEX.test(message)) {
 			return this.errorReply(`Your message contains emojis, which this room doesn't allow.`);
 		}
 
@@ -919,6 +919,7 @@ export class CommandContext extends MessageContext {
 
 		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
 		if (Config.restrictLinks && !user.autoconfirmed) {
+			// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 			const links = message.match(Chat.linkRegex);
 			const allLinksWhitelisted = !links || links.every(link => {
 				link = link.toLowerCase();
@@ -941,8 +942,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (!this.checkSlowchat(room, user)) {
-			// @ts-ignore ~ The truthiness of room and room.slowchat are evaluated in checkSlowchat
-			this.errorReply(this.tr `This room has slow-chat enabled. You can only talk once every ${room.slowchat} seconds.`);
+			this.errorReply(this.tr `This room has slow-chat enabled. You can only talk once every ${room!.slowchat} seconds.`);
 			return null;
 		}
 
@@ -1066,7 +1066,7 @@ export class CommandContext extends MessageContext {
 		}
 		if (
 			(this.room.isPersonal || this.room.isPrivate === true) &&
-			!this.user.can('lock') && htmlContent.replace(/\s*style\s*=\s*"?[^"]*"\s*>/g, '>').match(/<button[^>]/)
+			!this.user.can('lock') && /<button[^>]/.test(htmlContent.replace(/\s*style\s*=\s*"?[^"]*"\s*>/g, '>'))
 		) {
 			this.errorReply('You do not have permission to use scripted buttons in HTML.');
 			this.errorReply('If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>');
@@ -1080,7 +1080,8 @@ export class CommandContext extends MessageContext {
 		// check for mismatched tags
 		const tags = htmlContent
 			.toLowerCase()
-			.match(/<\/?(div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr|style|script)\b/g);
+			// eslint-ignore-next-line @typescript-eslint/prefer-regexp-exec
+			.match(/<\/?(?:div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr|style|script)\b/g);
 		if (tags) {
 			const stack = [];
 			for (const tag of tags) {
