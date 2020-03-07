@@ -572,7 +572,7 @@ exports.commands = {
 	ipmute: 'lock',
 	wl: 'lock',
 	weeklock: 'lock',
-	lock(target, room, user, connection, cmd) {
+	async lock(target, room, user, connection, cmd) {
 		let week = cmd === 'wl' || cmd === 'weeklock';
 
 		if (!target) {
@@ -633,9 +633,9 @@ exports.commands = {
 
 		if (targetUser) {
 			const ignoreAlts = Punishments.sharedIps.has(targetUser.latestIP);
-			affected = Punishments.lock(targetUser, duration, targetUser.locked, ignoreAlts, userReason);
+			affected = await Punishments.lock(targetUser, duration, targetUser.locked, ignoreAlts, userReason);
 		} else {
-			affected = Punishments.lock(null, duration, userid, false, userReason);
+			affected = await Punishments.lock(null, duration, userid, false, userReason);
 		}
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
@@ -782,7 +782,7 @@ exports.commands = {
 
 	forceglobalban: 'globalban',
 	gban: 'globalban',
-	globalban(target, room, user, connection, cmd) {
+	async globalban(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help globalban');
 
 		target = this.splitTarget(target);
@@ -833,7 +833,7 @@ exports.commands = {
 			Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${banMessage}`);
 		}
 
-		let affected = Punishments.ban(targetUser, null, null, false, userReason);
+		let affected = await Punishments.ban(targetUser, null, null, false, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
 		if (affected.length > 1) {
@@ -1323,7 +1323,7 @@ exports.commands = {
 
 	nl: 'namelock',
 	forcenamelock: 'namelock',
-	namelock(target, room, user, connection, cmd) {
+	async namelock(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help namelock');
 
 		let reason = this.splitTarget(target);
@@ -1352,7 +1352,7 @@ exports.commands = {
 
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.id}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
-		Punishments.namelock(targetUser, null, null, false, reason);
+		await Punishments.namelock(targetUser, null, null, false, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room.battle) this.parse('/savereplay forpunishment');

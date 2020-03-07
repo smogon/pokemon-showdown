@@ -123,23 +123,23 @@ describe('Users features', function () {
 					}
 				});
 
-				it('should disconnect every user at that IP', function () {
+				it('should disconnect every user at that IP', async function () {
 					Punishments.sharedIps = new Map();
 					let users = ['127.0.0.1', '127.0.0.1'].map(ip => new User(new Connection(ip)));
-					Punishments.ban(users[0]);
+					await Punishments.ban(users[0]);
 					assert.equal(users[0].connected, false);
 					assert.equal(users[1].connected, false);
 				});
 
-				it('should not disconnect users at other IPs', function () {
+				it('should not disconnect users at other IPs', async function () {
 					let users = ['127.0.0.1', '127.0.0.2'].map(ip => new User(new Connection(ip)));
-					Punishments.ban(users[0]);
+					await Punishments.ban(users[0]);
 					assert.equal(users[1].connected, true);
 				});
 
-				it('should update IP count properly', function () {
+				it('should update IP count properly', async function () {
 					let user = new User();
-					Punishments.ban(user);
+					await Punishments.ban(user);
 					for (let ip in user.ips) {
 						assert.equal(user.ips[ip], 0);
 					}
