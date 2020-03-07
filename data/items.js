@@ -922,7 +922,7 @@ let BattleItems = {
 		},
 		num: 1254,
 		gen: 8,
-		desc: "Evolves Sinistea into Polteageist when used.",
+		desc: "Evolves Sinistea-Antique into Polteageist-Antique when used.",
 	},
 	"choiceband": {
 		id: "choiceband",

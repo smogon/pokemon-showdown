@@ -7622,10 +7622,16 @@ let BattleFormatsData = {
 	sinistea: {
 		tier: "LC",
 	},
+	sinisteaantique: {
+		unreleasedHidden: true,
+	},
 	polteageist: {
 		randomBattleMoves: ["gigadrain", "shadowball", "shellsmash", "storedpower", "strengthsap"],
 		tier: "UU",
 		doublesTier: "(DUU)",
+	},
+	polteageistantique: {
+		unreleasedHidden: true,
 	},
 	hatenna: {
 		tier: "LC",
