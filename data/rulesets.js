@@ -760,8 +760,9 @@ let BattleFormats = {
 		onValidateSet(set) {
 			let template = this.dex.getTemplate(set.species);
 			if (template.num === 493 && set.evs) {
-				for (let stat in set.evs) {
-					// @ts-ignore
+				/** @type {StatName} */
+				let stat;
+				for (stat in set.evs) {
 					const ev = set.evs[stat];
 					if (ev > 100) {
 						return [
@@ -853,6 +854,12 @@ let BattleFormats = {
 				return [`${set.species} is banned due to UU NFE Clause.`];
 			}
 		},
+	},
+	mimicglitch: {
+		effectType: 'ValidatorRule',
+		name: 'Mimic Glitch',
+		desc: "Allows any Pokemon with access to Assist, Copycat, Metronome, Mimic, or Transform to gain access to almost any other move.",
+		// Implemented in sim/team-validator.ts
 	},
 };
 
