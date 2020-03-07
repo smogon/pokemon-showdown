@@ -484,7 +484,7 @@ function getUsageThreshold(format: Format, count: number) {
 	if (count < 100) return Infinity;
 	if (count < 400) return 0.05;
 	// These formats are deemed to have playerbases of lower quality than normal
-	return format.id.match(/uber|anythinggoes|doublesou/) ? 0.03 : 0.01;
+	return /uber|anythinggoes|doublesou/.test(format.id) ? 0.03 : 0.01;
 }
 
 const STATS: StatName[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
@@ -527,7 +527,7 @@ async function importThirdPartySets(
 
 		const file = data.files[formatid];
 		const raw = await request(`${data.url}${file}`);
-		const match = raw.match(/var.*?=.*?({.*})/s);
+		const match = /var.*?=.*?({.*})/s.exec(raw);
 		if (!match) {
 			error(`Could not find sets for ${source} in ${file}`);
 			continue;

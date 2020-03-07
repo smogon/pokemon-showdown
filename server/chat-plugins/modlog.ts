@@ -311,7 +311,7 @@ async function getModlog(
 	}
 
 	let exactSearch = false;
-	if (searchString.match(/^["'].+["']$/)) {
+	if (/^["'].+["']$/.test(searchString)) {
 		exactSearch = true;
 		searchString = searchString.substring(1, searchString.length - 1);
 	}
