@@ -1082,7 +1082,6 @@ export const Punishments = new class {
 		const ticket = Chat.pages?.help ?
 			`<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>` : '';
 
-
 		if (battleban) {
 			if (battleban[1] !== user.id && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
 				Punishments.roomUnpunish("battle", userid, 'BATTLEBAN');
@@ -1124,7 +1123,10 @@ export const Punishments = new class {
 			return;
 		}
 		if (registered && id === 'BAN') {
-			user.popup(`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`);
+			user.popup(
+				`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}` +
+				`${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`
+			);
 			user.punishmentNotified = true;
 			void Punishments.punish(user, punishment, false);
 			user.disconnectAll();
