@@ -9,9 +9,9 @@
  */
 
 // eslint-disable-next-line no-undef
-const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.remoteladder
-	? require('./ladders-remote')
-	: require('./ladders-local')).LadderStore;
+const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.remoteladder ?
+	require('./ladders-remote') :
+	require('./ladders-local')).LadderStore;
 
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
@@ -125,7 +125,7 @@ class Ladder extends LadderStore {
 		if (isRated && !Ladders.disabled) {
 			const uid = user.id;
 			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync.get(this.formatid).validateTeam(team, !!(user.locked || user.namelocked)),
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)}),
 				this.getRating(uid),
 			]);
 			if (uid !== user.id) {
@@ -138,7 +138,8 @@ class Ladder extends LadderStore {
 				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
 				rating = 1;
 			}
-			valResult = await TeamValidatorAsync.get(this.formatid).validateTeam(team, !!(user.locked || user.namelocked));
+			const validator = TeamValidatorAsync.get(this.formatid);
+			valResult = await validator.validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)});
 		}
 
 		if (valResult.charAt(0) !== '1') {
@@ -343,7 +344,7 @@ class Ladder extends LadderStore {
 		if (!user || !user.connected || user.id !== search.userid) {
 			const formatTable = Ladders.searches.get(formatid);
 			if (formatTable) formatTable.delete(search.userid);
-			if (user && user.connected) {
+			if (user?.connected) {
 				user.popup(`You changed your name and are no longer looking for a battle in ${formatid}`);
 				Ladder.updateSearch(user);
 			}

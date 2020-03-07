@@ -18,10 +18,10 @@ export class TeamValidatorAsync {
 		this.format = Dex.getFormat(format);
 	}
 
-	validateTeam(team: string, removeNicknames = false) {
+	validateTeam(team: string, options?: {removeNicknames?: boolean}) {
 		let formatid = this.format.id;
 		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
-		return PM.query({formatid, removeNicknames, team});
+		return PM.query({formatid, options, team});
 	}
 
 	static get(format: string) {
@@ -37,13 +37,15 @@ export const get = TeamValidatorAsync.get;
 
 import {QueryProcessManager} from '../lib/process-manager';
 
-export const PM = new QueryProcessManager(module, message => {
-	const {formatid, removeNicknames, team} = message;
+export const PM = new QueryProcessManager<{
+	formatid: string, options?: {removeNicknames?: boolean}, team: string,
+}>(module, message => {
+	const {formatid, options, team} = message;
 	const parsedTeam = Dex.fastUnpackTeam(team);
 
 	let problems;
 	try {
-		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, removeNicknames);
+		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, options);
 	} catch (err) {
 		crashlogger(err, 'A team validation', {
 			formatid,
@@ -55,7 +57,7 @@ export const PM = new QueryProcessManager(module, message => {
 		];
 	}
 
-	if (problems && problems.length) {
+	if (problems?.length) {
 		return '0' + problems.join('\n');
 	}
 	const packedTeam = Dex.packTeam(parsedTeam);
@@ -67,7 +69,6 @@ export const PM = new QueryProcessManager(module, message => {
 import {Repl} from '../lib/repl';
 import {Dex as importedDex} from '../sim/dex';
 import {TeamValidator} from '../sim/team-validator';
-import {Chat} from './chat';
 import {Config} from './config-loader';
 
 if (!PM.isParentProcess) {
@@ -101,7 +102,7 @@ if (!PM.isParentProcess) {
 	global.Dex = importedDex.includeData();
 	global.toID = Dex.getId;
 
-	// tslint:disable-next-line: no-eval
+	// eslint-disable-next-line no-eval
 	Repl.start(`team-validator-${process.pid}`, cmd => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.validatorprocesses : 1);

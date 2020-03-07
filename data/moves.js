@@ -960,8 +960,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback(pokemon, target, move) {
-			let damagedByTarget = pokemon.attackedBy.some(p =>
-				p.source === target && p.damage > 0 && p.thisTurn
+			let damagedByTarget = pokemon.attackedBy.some(
+				p => p.source === target && p.damage > 0 && p.thisTurn
 			);
 			if (damagedByTarget) {
 				this.debug('Boosted for getting hit by ' + target);
@@ -15437,8 +15437,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback(pokemon, target, move) {
-			let damagedByTarget = pokemon.attackedBy.some(p =>
-				p.source === target && p.damage > 0 && p.thisTurn
+			let damagedByTarget = pokemon.attackedBy.some(
+				p => p.source === target && p.damage > 0 && p.thisTurn
 			);
 			if (damagedByTarget) {
 				this.debug('Boosted for getting hit by ' + target);
@@ -18792,7 +18792,10 @@ let BattleMovedex = {
 			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);
-				delete target.volatiles['partiallytrapped'];
+				if (target.volatiles['partiallytrapped']) {
+					this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
+					delete target.volatiles['partiallytrapped'];
+				}
 			},
 			onTryPrimaryHitPriority: -1,
 			onTryPrimaryHit(target, source, move) {

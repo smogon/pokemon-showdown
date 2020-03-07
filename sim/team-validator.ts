@@ -200,14 +200,26 @@ export class TeamValidator {
 			this.ruleTable.minSourceGen[0] : 1;
 	}
 
-	validateTeam(team: PokemonSet[] | null, removeNicknames = false): string[] | null {
+	validateTeam(
+		team: PokemonSet[] | null,
+		options: {
+			removeNicknames?: boolean,
+			skipSets?: {[name: string]: {[key: string]: boolean}},
+		} = {}
+	): string[] | null {
 		if (team && this.format.validateTeam) {
-			return this.format.validateTeam.call(this, team, removeNicknames) || null;
+			return this.format.validateTeam.call(this, team, options) || null;
 		}
-		return this.baseValidateTeam(team, removeNicknames);
+		return this.baseValidateTeam(team, options);
 	}
 
-	baseValidateTeam(team: PokemonSet[] | null, removeNicknames = false): string[] | null {
+	baseValidateTeam(
+		team: PokemonSet[] | null,
+		options: {
+			removeNicknames?: boolean,
+			skipSets?: {[name: string]: {[key: string]: boolean}},
+		} = {}
+	): string[] | null {
 		const format = this.format;
 		const dex = this.dex;
 
@@ -243,7 +255,16 @@ export class TeamValidator {
 		let lgpeStarterCount = 0;
 		for (const set of team) {
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
-			const setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
+
+			let setProblems: string[] | null = null;
+			if (options.skipSets && options.skipSets[set.name]) {
+				for (const i in options.skipSets[set.name]) {
+					teamHas[i] = (teamHas[i] || 0) + 1;
+				}
+			} else {
+				setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
+			}
+
 			if (set.species === 'Pikachu-Starter' || set.species === 'Eevee-Starter') {
 				lgpeStarterCount++;
 				if (lgpeStarterCount === 2 && ruleTable.isBanned('nonexistent')) {
@@ -253,7 +274,7 @@ export class TeamValidator {
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
-			if (removeNicknames) {
+			if (options.removeNicknames) {
 				let crossTemplate: Template;
 				if (format.name === '[Gen 7] Cross Evolution' && (crossTemplate = dex.getTemplate(set.name)).exists) {
 					set.name = crossTemplate.species;
@@ -543,7 +564,13 @@ export class TeamValidator {
 		const lsetProblems = this.reconcileLearnset(learnsetTemplate, setSources, lsetProblem, name);
 		if (lsetProblems) problems.push(...lsetProblems);
 
-		if (!setSources.sourcesBefore && setSources.sources.length) {
+		if (ruleTable.has('obtainablemisc') && learnsetTemplate.forme?.includes('Gmax')) {
+			if (!setSources.sourcesBefore) {
+				problems.push(`${name} has an exclusive move that it doesn't qualify for (because Gmax Pokemon can only be obtained from a Max Raid).`);
+			} else if (setSources.sourcesBefore < 8) {
+				problems.push(`${name} has a Gen ${setSources.sourcesBefore} move that it doesn't qualify for (because Gmax Pokemon can only be obtained from a Max Raid in Gen 8).`);
+			}
+		} else if (!setSources.sourcesBefore && setSources.sources.length) {
 			let legal = false;
 			for (const source of setSources.sources) {
 				if (this.validateSource(set, source, setSources, learnsetTemplate)) continue;
@@ -604,7 +631,6 @@ export class TeamValidator {
 				}
 				const eventName = eventPokemon.length > 1 ? ` #${eventNum}` : ``;
 				const eventProblems = this.validateEvent(set, eventInfo, eventTemplate, ` to be`, `from its event${eventName}`);
-				// @ts-ignore validateEvent must have returned an array because it was passed a because param
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		}
@@ -1567,8 +1593,8 @@ export class TeamValidator {
 
 		if (setSources.size() && setSources.moveEvoCarryCount > 3) {
 			if (setSources.sourcesBefore < 6) setSources.sourcesBefore = 0;
-			setSources.sources = setSources.sources.filter(source =>
-				source.charAt(1) === 'E' && parseInt(source.charAt(0)) >= 6
+			setSources.sources = setSources.sources.filter(
+				source => source.charAt(1) === 'E' && parseInt(source.charAt(0)) >= 6
 			);
 			if (!setSources.size()) {
 				problems.push(`${name} needs to know ${species.evoMove || 'a Fairy-type move'} to evolve, so it can only know 3 other moves from ${dex.getTemplate(species.prevo).name}.`);
@@ -1578,8 +1604,8 @@ export class TeamValidator {
 		if (problems.length) return problems;
 
 		if (setSources.isHidden) {
-			setSources.sources = setSources.sources.filter(source =>
-				parseInt(source.charAt(0)) >= 5
+			setSources.sources = setSources.sources.filter(
+				source => parseInt(source.charAt(0)) >= 5
 			);
 			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
 			if (!setSources.sourcesBefore && !setSources.sources.length) {
@@ -1670,7 +1696,7 @@ export class TeamValidator {
 		const noFutureGen = !ruleTable.has('allowtradeback');
 
 		let tradebackEligible = false;
-		while (template && template.species && !alreadyChecked[template.speciesid]) {
+		while (template?.species && !alreadyChecked[template.speciesid]) {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen <= 2 && template.gen === 1) tradebackEligible = true;
 			if (!template.learnset) {
@@ -1773,7 +1799,13 @@ export class TeamValidator {
 						}
 						// past-gen level-up, TM, or tutor moves:
 						//   available as long as the source gen was or was before this gen
-						if (learned.charAt(1) === 'R') moveSources.restrictedMove = moveid;
+						if (learned.charAt(1) === 'R') {
+							if (baseTemplate.species === 'Pikachu-Gmax') {
+								// Volt Tackle is weird (from egg, but not an egg move), and Pikachu-Gmax can't learn it
+								continue;
+							}
+							moveSources.restrictedMove = moveid;
+						}
 						limit1 = false;
 						moveSources.addGen(learnedGen);
 					} else if (learned.charAt(1) === 'E') {

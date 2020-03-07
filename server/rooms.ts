@@ -197,8 +197,8 @@ export abstract class BasicRoom {
 		for (const i in this.users) {
 			const user = this.users[i];
 			// hardcoded for performance reasons (this is an inner loop)
-			if (user.isStaff || (this.auth && this.auth[user.id] && this.auth[user.id] in Config.groups
-				 && Config.groups[this.auth[user.id]].rank >= Config.groups[minRank].rank)) {
+			if (user.isStaff || (this.auth && this.auth[user.id] && this.auth[user.id] in Config.groups &&
+				 Config.groups[this.auth[user.id]].rank >= Config.groups[minRank].rank)) {
 				user.sendTo(this, data);
 			}
 		}
@@ -570,8 +570,8 @@ export class GlobalRoom extends BasicRoom {
 			if (this.lastBattle < this.lastWrittenBattle) return;
 			this.lastWrittenBattle = this.lastBattle + LAST_BATTLE_WRITE_THROTTLE;
 		}
-		FS('logs/lastbattle.txt').writeUpdate(() =>
-			`${this.lastWrittenBattle}`
+		FS('logs/lastbattle.txt').writeUpdate(
+			() => `${this.lastWrittenBattle}`
 		);
 	}
 
@@ -633,8 +633,8 @@ export class GlobalRoom extends BasicRoom {
 			if (!Config.groups[rank] || !rank) continue;
 
 			const tarGroup = Config.groups[rank];
-			const groupType = tarGroup.addhtml || (!tarGroup.mute && !tarGroup.root)
-				? 'normal' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
+			const groupType = tarGroup.addhtml || (!tarGroup.mute && !tarGroup.root) ?
+				'normal' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
 
 			rankList.push({
 				symbol: rank,
@@ -696,7 +696,7 @@ export class GlobalRoom extends BasicRoom {
 	}
 	getRooms(user: User) {
 		const roomsData: {
-			official: ChatRoomTable[], pspl: ChatRoomTable[], chat: ChatRoomTable[], userCount: number, battleCount: number;
+			official: ChatRoomTable[], pspl: ChatRoomTable[], chat: ChatRoomTable[], userCount: number, battleCount: number,
 		} = {
 			official: [],
 			pspl: [],
@@ -1269,8 +1269,8 @@ export class BasicChatRoom extends BasicRoom {
 	}
 	getSubRooms(includeSecret = false) {
 		if (!this.subRooms) return [];
-		return [...this.subRooms.values()].filter(room =>
-			!room.isPrivate || includeSecret
+		return [...this.subRooms.values()].filter(
+			room => !room.isPrivate || includeSecret
 		);
 	}
 	onConnect(user: User, connection: Connection) {
@@ -1330,7 +1330,7 @@ export class BasicChatRoom extends BasicRoom {
 	 * onRename, but without a userid change
 	 */
 	onUpdateIdentity(user: User) {
-		if (user && user.connected) {
+		if (user?.connected) {
 			if (!this.users[user.id]) return false;
 			if (user.named) {
 				this.reportJoin('n', user.getIdentityWithStatus(this.roomid) + '|' + user.id, user);
@@ -1632,7 +1632,7 @@ export class GameRoom extends BasicChatRoom {
 			inputlog: battle.inputLog?.join('\n') || null,
 		});
 		if (success) battle.replaySaved = true;
-		if (success && success.errorip) {
+		if (success?.errorip) {
 			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
 			return;
 		}

@@ -590,9 +590,9 @@ export class User extends Chat.MessageContext {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
 	getIdentity(roomid: RoomID = '') {
+		const punishgroups = Config.punishgroups || {locked: null, muted: null};
 		if (this.locked || this.namelocked) {
-			const lockedSymbol = (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol
-				: '\u203d');
+			const lockedSymbol = (punishgroups.locked && punishgroups.locked.symbol || '\u203d');
 			return lockedSymbol + this.name;
 		}
 		if (roomid && roomid !== 'global') {
@@ -601,13 +601,13 @@ export class User extends Chat.MessageContext {
 				throw new Error(`Room doesn't exist: ${roomid}`);
 			}
 			if (room.isMuted(this)) {
-				const mutedSymbol = (Config.punishgroups && Config.punishgroups.muted ? Config.punishgroups.muted.symbol : '!');
+				const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 				return mutedSymbol + this.name;
 			}
 			return room.getAuth(this) + this.name;
 		}
 		if (this.semilocked) {
-			const mutedSymbol = (Config.punishgroups && Config.punishgroups.muted ? Config.punishgroups.muted.symbol : '!');
+			const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 			return mutedSymbol + this.name;
 		}
 		return this.group + this.name;
@@ -639,7 +639,7 @@ export class User extends Chat.MessageContext {
 		if (this.hasSysopAccess()) return true;
 
 		let groupData = Config.groups[this.group];
-		if (groupData && groupData['root']) {
+		if (groupData?.['root']) {
 			return true;
 		}
 
@@ -672,7 +672,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 
-		if (groupData && groupData[permission]) {
+		if (groupData?.[permission]) {
 			const jurisdiction = groupData[permission];
 			if (!targetUser && !targetGroup) {
 				return !!jurisdiction;
@@ -924,7 +924,7 @@ export class User extends Chat.MessageContext {
 
 		let user = users.get(userid);
 		const possibleUser = Users.get(userid);
-		if (possibleUser && possibleUser.namelocked) {
+		if (possibleUser?.namelocked) {
 			// allows namelocked users to be merged
 			user = possibleUser;
 		}
@@ -1173,7 +1173,7 @@ export class User extends Chat.MessageContext {
 		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!(staffRoom && staffRoom.auth && staffRoom.auth[this.id]);
+			this.isStaff = !!staffRoom?.auth?.[this.id];
 		}
 		if (this.trusted) {
 			if (this.locked && this.permalocked) {
@@ -1204,7 +1204,7 @@ export class User extends Chat.MessageContext {
 		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!(staffRoom && staffRoom.auth && staffRoom.auth[this.id]);
+			this.isStaff = !!(staffRoom?.auth?.[this.id]);
 		}
 		if (wasStaff !== this.isStaff) this.update('isStaff');
 		Rooms.global.checkAutojoin(this);
@@ -1475,8 +1475,9 @@ export class User extends Chat.MessageContext {
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
 			if (this.chatQueue.length >= THROTTLE_BUFFER_LIMIT - 1) {
-				connection.sendTo(room, `|raw|` +
-					`<strong class="message-throttle-notice">Your message was not sent because you've been typing too quickly.</strong>`
+				connection.sendTo(
+					room,
+					`|raw|<strong class="message-throttle-notice">Your message was not sent because you've been typing too quickly.</strong>`
 				);
 				return false;
 			} else {
@@ -1539,8 +1540,7 @@ export class User extends Chat.MessageContext {
 		const throttleDelay = this.trusted ? THROTTLE_DELAY_TRUSTED : THROTTLE_DELAY;
 
 		if (this.chatQueue.length) {
-			this.chatQueueTimeout = setTimeout(
-				() => this.processChatQueue(), throttleDelay);
+			this.chatQueueTimeout = setTimeout(() => this.processChatQueue(), throttleDelay);
 		} else {
 			this.chatQueue = null;
 		}
@@ -1562,10 +1562,10 @@ export class User extends Chat.MessageContext {
 		this.updateIdentity();
 	}
 	getAccountStatusString() {
-		return this.trusted === this.id ? `[trusted]`
-			: this.autoconfirmed === this.id ? `[ac]`
-			: this.registered ? `[registered]`
-			: ``;
+		return this.trusted === this.id ? `[trusted]` :
+			this.autoconfirmed === this.id ? `[ac]` :
+			this.registered ? `[registered]` :
+			``;
 	}
 	destroy() {
 		// deallocate user
@@ -1628,9 +1628,9 @@ function logGhostConnections(threshold: number): Promise<unknown> {
 			buffer.push(log);
 		}
 	}
-	return buffer.length
-		? FS(`logs/ghosts-${process.pid}.log`).append(buffer.join('\r\n') + '\r\n')
-		: Promise.resolve();
+	return buffer.length ?
+		FS(`logs/ghosts-${process.pid}.log`).append(buffer.join('\r\n') + '\r\n') :
+		Promise.resolve();
 }
 
 /*********************************************************
@@ -1722,9 +1722,9 @@ function socketReceive(worker: Worker, workerid: number, socketid: string, messa
 
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
-	if (lines.length > (user.isStaff ||
-		(room.auth && room.auth[user.id] && room.auth[user.id] !== '+') ? THROTTLE_MULTILINE_WARN_STAFF
-		: THROTTLE_MULTILINE_WARN)) {
+	const maxLineCount = user.isStaff || (room.auth && room.auth[user.id] && room.auth[user.id] !== '+') ?
+		THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN;
+	if (lines.length > maxLineCount) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;
 	}
@@ -1775,8 +1775,8 @@ export const Users = {
 		pruneInactive(Config.inactiveuserthreshold || 60 * MINUTES);
 	}, 30 * MINUTES),
 	logGhostConnections,
-	logGhostConnectionsTimer: setInterval(async () => {
-		await logGhostConnections(7 * 24 * 60 * MINUTES);
+	logGhostConnectionsTimer: setInterval(() => {
+		void logGhostConnections(7 * 24 * 60 * MINUTES);
 	}, 7 * 24 * 60 * MINUTES),
 	socketConnect,
 };

@@ -82,7 +82,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'dexsearch',
-			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
+			canAll: (!this.broadcastMessage || room?.isPersonal),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
@@ -146,7 +146,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: targetsBuffer.join(","),
 			cmd: 'randmove',
-			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
+			canAll: (!this.broadcastMessage || room?.isPersonal),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast(true)) return;
@@ -192,7 +192,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
+			canAll: (!this.broadcastMessage || room?.isPersonal),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast(true)) return;
@@ -235,7 +235,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'movesearch',
-			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
+			canAll: (!this.broadcastMessage || room?.isPersonal),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
@@ -282,7 +282,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'itemsearch',
-			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
+			canAll: (!this.broadcastMessage || room?.isPersonal),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
@@ -323,7 +323,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'learn',
-			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
+			canAll: (!this.broadcastMessage || room?.isPersonal),
 			message: cmd,
 		}).then(response => {
 			if (!this.runBroadcast()) return;
@@ -599,7 +599,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (parameters.length > 1) return {reply: "The parameter 'recovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink",
-					"slackoff", "softboiled", "wish", "healorder", "shoreup", "lifedew"
+					"slackoff", "softboiled", "wish", "healorder", "shoreup", "lifedew",
 				];
 				for (const move of recoveryMoves) {
 					const invalid = validParameter("moves", move, isNotSearch, target);
@@ -620,7 +620,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (parameters.length > 1) return {reply: "The parameter 'zrecovery' cannot have alternative parameters"};
 				const recoveryMoves = [
 					"aromatherapy", "bellydrum", "conversion2", "haze", "healbell", "mist",
-					"psychup", "refresh", "spite", "stockpile", "teleport", "transform"
+					"psychup", "refresh", "spite", "stockpile", "teleport", "transform",
 				];
 				for (const moveid of recoveryMoves) {
 					const invalid = validParameter("moves", moveid, isNotSearch, target);
@@ -728,7 +728,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	if (showAll && searches.length === 0 && megaSearch === null && gmaxSearch === null && !maxGen) {
 		return {
-			reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."
+			reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
 		};
 	}
 	if (!maxGen) maxGen = 8;
@@ -998,7 +998,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allFlags = [
 		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror',
 		'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
-		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection'
+		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection',
 	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
@@ -1338,7 +1338,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	}
 	if (showAll && !searches.length && !targetMons.length && !maxGen) {
 		return {
-			reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command."
+			reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.",
 		};
 	}
 
@@ -1625,9 +1625,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result =>
-			`<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
-			`${sort ? ` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` : ''}`
+		resultsStr += results.map(
+			result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
+				`${sort ? ` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` : ''}`
 		).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
@@ -2042,7 +2042,7 @@ function runSearch(query: {tar: string, cmd: string, canAll: boolean, message: s
  * Process manager
  *********************************************************/
 
-const PM = new QueryProcessManager(module, query => {
+const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query => {
 	try {
 		switch (query.cmd) {
 		case 'randpoke':
@@ -2062,7 +2062,7 @@ const PM = new QueryProcessManager(module, query => {
 		Monitor.crashlog(err, 'A search query', query);
 	}
 	return {
-		error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."
+		error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash.",
 	};
 });
 
@@ -2094,7 +2094,7 @@ if (!PM.isParentProcess) {
 	global.TeamValidator = require('../../sim/team-validator').TeamValidator;
 
 	// @ts-ignore
-	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // tslint:disable-line: no-eval no-var-requires
+	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval, @typescript-eslint/no-var-requires
 } else {
 	PM.spawn(MAX_PROCESSES);
 }

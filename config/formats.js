@@ -470,134 +470,107 @@ let Formats = [
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['Shedinja', 'Assist', 'Shell Smash', 'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Water Bubble'],
 		restricted: ['Dracovish', 'Dracozolt'],
+		// @ts-ignore
+		getEvoFamily(species) {
+			let template = Dex.getTemplate(species);
+			while (template.prevo) {
+				template = Dex.getTemplate(template.prevo);
+			}
+			return template.speciesid;
+		},
 		validateSet(set, teamHas) {
-			const dex = this.dex;
-			const getEvoFamily = (/** @type {string | Template} */ species) => {
-				let template = dex.getTemplate(species);
-				while (template.prevo) {
-					template = dex.getTemplate(template.prevo);
-				}
-				return template.speciesid;
-			};
+			const bannedDonors = this.format.restricted || [];
+			if (!teamHas.abilityMap) {
+				teamHas.abilityMap = Object.create(null);
+				for (const speciesid in Dex.data.Pokedex) {
+					let pokemon = Dex.getTemplate(speciesid);
+					if (pokemon.isNonstandard || pokemon.isUnreleased) continue;
+					if (pokemon.requiredAbility || pokemon.requiredItem || pokemon.requiredMove) continue;
+					if (pokemon.isGigantamax || bannedDonors.includes(pokemon.species)) continue;
 
-			/** @type {{[k: string]: string[]}} */
-			const abilityMap = Object.create(null);
-
-			const moves = set.moves.map(toID);
-
-			const donorBanlist = this.format.restricted || [];
-			for (const speciesid of Object.keys(dex.data.Pokedex)) {
-				const pokemon = dex.getTemplate(speciesid);
-				if (donorBanlist.includes(pokemon.species)) continue;
-				if (pokemon.isUnreleased || pokemon.isNonstandard) continue;
-				if (pokemon.requiredItem || pokemon.requiredMove) continue;
-				if (pokemon.isGigantamax) continue;
-				/** @type {AnyObject | null} */
-				let learnset = null;
-				if (pokemon.learnset) learnset = pokemon.learnset;
-				if (!pokemon.learnset && dex.getLearnset(pokemon.baseSpecies)) learnset = dex.getLearnset(pokemon.baseSpecies);
-				if (!learnset) continue;
-				let learnsMove = true;
-				// @ts-ignore
-				if (learnset && !moves.some(move => !!Object.keys(learnset).map(toID).includes(move))) learnsMove = false;
-				if (!learnsMove) continue;
-				for (const key of Object.values(pokemon.abilities)) {
-					const abilityId = toID(key);
-					if (abilityMap[abilityId]) {
-						abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
-					} else {
-						abilityMap[abilityId] = [speciesid];
+					for (const key of Object.values(pokemon.abilities)) {
+						let abilityId = toID(key);
+						if (abilityId in teamHas.abilityMap) {
+							teamHas.abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
+						} else {
+							teamHas.abilityMap[abilityId] = [speciesid];
+						}
 					}
 				}
 			}
 
-			/** @type {string[]} */
-			let problems = [];
+			const problem = this.validateForme(set);
+			if (problem.length) return problem;
 
-			const template = dex.getTemplate(set.species);
-			if (!template.exists || template.isNonstandard) return [`${set.species} is illegal.`];
+			let template = Dex.getTemplate(set.species);
+			if (!template.exists || template.num < 1) return [`The Pok\u00e9mon "${set.species}" does not exist.`];
+			if (template.isNonstandard || template.isUnreleased) return [`${template.species} is not obtainable in gen 8.`];
+			if (toID(template.tier) === 'uber' || this.format.banlist.includes(template.species)) {
+				return [`${template.species} is banned.`];
+			}
 
-			const ability = dex.getAbility(set.ability);
-			const pokemonWithAbility = abilityMap[ability.id];
-			if (!pokemonWithAbility) return [`"${ability.name}" is not available on a legal Pok\u00e9mon.`];
+			const name = set.name;
 
-			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
+			let ability = Dex.getAbility(set.ability);
+			if (!ability.exists || ability.isNonstandard) return [`${name} needs to have a valid ability.`];
+			let pokemonWithAbility = teamHas.abilityMap[ability.id];
+			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pok\u00e9mon.`];
+
+			// @ts-ignore
+			this.format.debug = true;
+
 			if (!teamHas.abilitySources) teamHas.abilitySources = Object.create(null);
 			/** @type {string[]} */
 			let validSources = teamHas.abilitySources[toID(set.species)] = []; // Evolution families
-			for (const donor of pokemonWithAbility) {
-				let donorTemplate = dex.getTemplate(donor);
-				let evoFamily = getEvoFamily(donorTemplate);
 
+			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
+
+			for (const donor of pokemonWithAbility) {
+				let donorTemplate = Dex.getTemplate(donor);
+				// @ts-ignore
+				let evoFamily = this.format.getEvoFamily(donorTemplate);
 				if (validSources.includes(evoFamily)) continue;
 
-				if (set.name === set.species) delete set.name;
 				set.species = donorTemplate.species;
-				// This is used to bypass the 0 Total EV check; otherwise,
-				// the error returned would just be "x's set is illegal."
-				let totalEVs = 0;
-				if (!set.evs) {
-					return [
-						`${template.species} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`,
-					];
-				}
-				for (const ev of Object.values(set.evs)) {
-					totalEVs += ev;
-				}
-				if (totalEVs === 0) {
-					return [
-						`${template.species} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`,
-					];
-				}
-				problems = this.validateSet(set, teamHas) || [];
-
+				const problems = this.validateSet(set, teamHas) || [];
 				if (!problems.length) {
-					canonicalSource = donorTemplate.species;
 					validSources.push(evoFamily);
+					canonicalSource = donorTemplate.species;
 				}
-				if (validSources.length > 1) {
-					// Specific for the basic implementation of Donor Clause (see onValidateTeam).
-					break;
-				}
+				// Specific for the basic implementation of Donor Clause (see onValidateTeam).
+				if (validSources.length > 1) break;
 			}
+			// @ts-ignore
+			this.format.debug = false;
 
+			set.name = name;
 			set.species = template.species;
 			if (!validSources.length) {
-				if (pokemonWithAbility.length > 1) return [`${template.species}'s set is illegal.`];
-				problems.unshift(`${template.species} has an illegal set with an ability from ${dex.getTemplate(pokemonWithAbility[0]).name}.`);
-				return problems.length ? problems : null;
+				if (pokemonWithAbility.length > 1) return [`${name}'s set is illegal.`];
+				return [`${name} has an illegal set with an ability from ${Dex.getTemplate(pokemonWithAbility[0]).name}.`];
 			}
 
 			// Protocol: Include the data of the donor species in the `ability` data slot.
-			// Afterwards, we are going to reset the name to what the user intended. :]
+			// Afterwards, we are going to reset the name to what the user intended.
 			set.ability = `${set.ability}0${canonicalSource}`;
-			return problems.length ? problems : null;
+			return null;
 		},
 		onValidateTeam(team, format, teamHas) {
-			const dex = this.dex;
-			const getEvoFamily = (/** @type {string | Template} */ species) => {
-				let template = dex.getTemplate(species);
-				while (template.prevo) {
-					template = dex.getTemplate(template.prevo);
-				}
-				return template.speciesid;
-			};
 			// Donor Clause
-			/** @type {string[][]} */
-			const evoFamilyLists = [];
+			let evoFamilyLists = [];
 			for (const set of team) {
-				/** @type {string[]} */
-				const abilitySources = teamHas.abilitySources && teamHas.abilitySources[toID(set.species)];
-				if (!abilitySources || !abilitySources.length) continue;
-				evoFamilyLists.push(abilitySources.map(getEvoFamily));
+				let abilitySources = (teamHas.abilitySources && teamHas.abilitySources[toID(set.species)]);
+				if (!abilitySources) continue;
+				// @ts-ignore
+				evoFamilyLists.push(abilitySources.map(this.format.getEvoFamily));
 			}
 
 			// Checking actual full incompatibility would require expensive algebra.
 			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
-			const requiredFamilies = Object.create(null);
+			let requiredFamilies = Object.create(null);
 			for (const evoFamilies of evoFamilyLists) {
 				if (evoFamilies.length !== 1) continue;
-				const [familyId] = evoFamilies;
+				let [familyId] = evoFamilies;
 				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
 				requiredFamilies[familyId]++;
 				if (requiredFamilies[familyId] > 2) {
@@ -610,7 +583,7 @@ let Formats = [
 		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.baseAbility.includes('0') && !pokemon.m.donor) {
+				if (pokemon.baseAbility.includes('0')) {
 					let donor = pokemon.baseAbility.split('0')[1];
 					pokemon.m.donor = toID(donor);
 					pokemon.baseAbility = toID(pokemon.baseAbility.split('0')[0]);

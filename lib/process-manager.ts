@@ -171,9 +171,9 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			message = message.slice(nlLoc + 1);
 
 			if (messageType === 'END') {
-				const end = stream.end();
+				void stream.end();
 				this.deleteStream(taskId);
-				return end;
+				return;
 			} else if (messageType === 'PUSH') {
 				stream.push(message);
 			} else if (messageType === 'THROW') {
@@ -360,17 +360,16 @@ export class ProcessManager {
 	}
 }
 
-export class QueryProcessManager extends ProcessManager {
-	// tslint:disable-next-line:variable-name
-	_query: (input: any) => any;
+export class QueryProcessManager<T = string, U = string> extends ProcessManager {
+	_query: (input: T) => U | Promise<U>;
 
-	constructor(module: NodeJS.Module, query: (input: any) => any) {
+	constructor(module: NodeJS.Module, query: (input: T) => U | Promise<U>) {
 		super(module);
 		this._query = query;
 
 		processManagers.push(this);
 	}
-	query(input: any) {
+	query(input: T) {
 		const process = this.acquire() as QueryProcessWrapper;
 		if (!process) return Promise.resolve(this._query(input));
 		return process.query(input);
@@ -381,21 +380,21 @@ export class QueryProcessManager extends ProcessManager {
 	listen() {
 		if (this.isParentProcess) return;
 		// child process
-		process.on('message', async (message: string) => {
+		process.on('message', (message: string) => {
 			const nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			const taskId = message.slice(0, nlLoc);
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
-				// tslint:disable-next-line: no-eval
+				// eslint-disable-next-line no-eval
 				process.send!(`${taskId}\n` + eval(message));
 				return;
 			}
 
-			const response = await this._query(JSON.parse(message));
-			// @ts-ignore guaranteed to be defined here
-			process.send(`${taskId}\n${JSON.stringify(response)}`);
+			void Promise.resolve(this._query(JSON.parse(message))).then(
+				response => process.send!(`${taskId}\n${JSON.stringify(response)}`)
+			);
 		});
 		process.on('disconnect', () => {
 			process.exit();
@@ -441,7 +440,7 @@ export class StreamProcessManager extends ProcessManager {
 	listen() {
 		if (this.isParentProcess) return;
 		// child process
-		process.on('message', async (message: string) => {
+		process.on('message', (message: string) => {
 			let nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid request ${message}`);
 			const taskId = message.slice(0, nlLoc);
@@ -454,7 +453,7 @@ export class StreamProcessManager extends ProcessManager {
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
-				// tslint:disable-next-line: no-eval
+				// eslint-disable-next-line no-eval
 				process.send!(`${taskId}\n` + eval(message));
 				return;
 			}
@@ -463,12 +462,11 @@ export class StreamProcessManager extends ProcessManager {
 				if (stream) throw new Error(`NEW: taskId ${taskId} already exists`);
 				const newStream = this._createStream();
 				this.activeStreams.set(taskId, newStream);
-				return this.pipeStream(taskId, newStream);
+				void this.pipeStream(taskId, newStream);
 			} else if (messageType === 'DESTROY') {
 				if (!stream) throw new Error(`DESTROY: Invalid taskId ${taskId}`);
-				const destroyed = stream.destroy();
+				void stream.destroy();
 				this.activeStreams.delete(taskId);
-				return destroyed;
 			} else if (messageType === 'WRITE') {
 				if (!stream) throw new Error(`WRITE: Invalid taskId ${taskId}`);
 				void stream.write(message);

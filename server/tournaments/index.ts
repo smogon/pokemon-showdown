@@ -488,7 +488,7 @@ export class Tournament extends Rooms.RoomGame {
 				}
 			}
 		}
-		if (matchPlayer && matchPlayer.inProgressMatch) {
+		if (matchPlayer?.inProgressMatch) {
 			matchPlayer.inProgressMatch.to.isBusy = false;
 			matchPlayer.isBusy = false;
 
@@ -812,11 +812,11 @@ export class Tournament extends Rooms.RoomGame {
 				player.autoDisqualifyWarned = false;
 				continue;
 			}
-			if (pendingChallenge && pendingChallenge.to) continue;
+			if (pendingChallenge?.to) continue;
 
 			if (now > time + this.autoDisqualifyTimeout && player.autoDisqualifyWarned) {
 				let reason;
-				if (pendingChallenge && pendingChallenge.from) {
+				if (pendingChallenge?.from) {
 					reason = "You failed to accept your opponent's challenge in time.";
 				} else {
 					reason = "You failed to challenge your opponent in time.";
@@ -1066,7 +1066,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (this.generator.isTournamentEnded()) {
 			if (!this.room.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
 				const uploader = Users.get(winnerid);
-				if (uploader && uploader.connections[0]) {
+				if (uploader?.connections[0]) {
 					Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
 				}
 			}
@@ -1129,8 +1129,7 @@ function createTournament(
 	const format = Dex.getFormat(formatId);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(`${format.id} is not a valid tournament format.`);
-		const formats = Object.values(Dex.formats).filter(f => f.tournamentShow).map(f => f.name).join(', ');
-		output.errorReply(`Valid formats: ${formats}`);
+		output.parse(`/tour formats`);
 		return;
 	}
 	if (!getGenerator(generator)) {
@@ -1385,7 +1384,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 				}
 			}
 			if (tournament.disqualifyUser(targetUserid, this, reason)) {
-				this.privateModAction(`(${(targetUser ? targetUser.name : targetUserid)} was disqualified from the tournament by ${user.name} ${(reason ? ' (' + reason + ')' : '')})`);
+				this.privateModAction(`(${(targetUser ? targetUser.name : targetUserid)} was disqualified from the tournament by ${user.name}${(reason ? ' (' + reason + ')' : '')})`);
 				this.modlog('TOUR DQ', targetUserid, reason);
 			}
 		},
@@ -1709,6 +1708,21 @@ export const commands: ChatCommands = {
 					}
 				}
 			}
+		} else if (cmd === 'formats') {
+			if (!this.runBroadcast()) return;
+			let buf = ``;
+			let section = undefined;
+			for (const format of Object.values(Dex.formats)) {
+				if (!format.tournamentShow) continue;
+				const name = format.name.startsWith(`[Gen ${Dex.gen}] `) ? format.name.slice(8) : format.name;
+				if (format.section !== section) {
+					section = format.section;
+					buf += Chat.html`<br /><strong>${section}:</strong><br />&bull; ${name}`;
+				} else {
+					buf += Chat.html`<br />&bull; ${name}`;
+				}
+			}
+			this.sendReplyBox(`<div class="chat"><details class="readmore"><summary>Valid Formats: </summary>${buf}</details></div>`);
 		} else {
 			const tournament = room.getGame(Tournament);
 			if (!tournament) {

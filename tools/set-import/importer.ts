@@ -22,7 +22,7 @@ type DeepPartial<T> = {
 
 interface PokemonSets {
 	[speciesid: string]: {
-		[name: string]: DeepPartial<PokemonSet>;
+		[name: string]: DeepPartial<PokemonSet>,
 	};
 }
 

@@ -193,7 +193,7 @@ export class RoomBattleTimer {
 		const hasLongTurns = Dex.getFormat(battle.format, true).gameType !== 'singles';
 		const isChallenge = (!battle.rated && !battle.room.tour);
 		const timerEntry = Dex.getRuleTable(Dex.getFormat(battle.format, true)).timer;
-		const timerSettings = timerEntry && timerEntry[0];
+		const timerSettings = timerEntry?.[0];
 
 		// so that Object.assign doesn't overwrite anything with `undefined`
 		for (const k in timerSettings) {
@@ -380,7 +380,7 @@ export class RoomBattleTimer {
 	checkActivity() {
 		if (this.battle.ended) return;
 		for (const player of this.battle.players) {
-			const isConnected = !!(player && player.active);
+			const isConnected = !!player?.active;
 
 			if (isConnected === player.connected) continue;
 
@@ -820,13 +820,13 @@ export class RoomBattle extends RoomGames.RoomGame {
 		// reflect any changes that may have been made to the replay's hidden status).
 		if (this.replaySaved || Config.autosavereplays) {
 			const uploader = Users.get(winnerid || p1id);
-			if (uploader && uploader.connections[0]) {
+			if (uploader?.connections[0]) {
 				Chat.parse('/savereplay silent', this.room, uploader, uploader.connections[0]);
 			}
 		}
 		const parentGame = this.room.parent && this.room.parent.game;
 		// @ts-ignore - Tournaments aren't TS'd yet
-		if (parentGame && parentGame.onBattleWin) {
+		if (parentGame?.onBattleWin) {
 			// @ts-ignore
 			parentGame.onBattleWin(this.room, winnerid);
 		}
@@ -947,7 +947,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	}
 	onLeave(user: User, oldUserid?: ID) {
 		const player = this.playerTable[oldUserid || user.id];
-		if (player && player.active) {
+		if (player?.active) {
 			player.sendRoom(`|request|null`);
 			player.active = false;
 			this.timer.checkActivity();
@@ -1011,7 +1011,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 
 		if (user) this.room.auth[user.id] = Users.PLAYER_SYMBOL;
-		if (user && user.inRooms.has(this.roomid)) this.onConnect(user);
+		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
 	}
 
@@ -1019,7 +1019,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		if (!this.rated) return;
 		for (const player of this.players) {
 			const user = player.getUser();
-			if (user && user.forcedPublic) return user.forcedPublic;
+			if (user?.forcedPublic) return user.forcedPublic;
 		}
 	}
 
@@ -1134,7 +1134,7 @@ export class RoomBattleStream extends BattleStream {
 			this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`);
 			if (battle) {
 				for (const side of battle.sides) {
-					if (side && side.requestState) {
+					if (side?.requestState) {
 						this.push(`sideupdate\n${side.id}\n|error|[Invalid choice] The battle crashed`);
 					}
 				}
@@ -1151,21 +1151,23 @@ export class RoomBattleStream extends BattleStream {
 		switch (type) {
 		case 'eval':
 			const battle = this.battle;
-			const p1 = battle && battle.sides[0];
-			const p2 = battle && battle.sides[1];
-			const p3 = battle && battle.sides[2];
-			const p4 = battle && battle.sides[3];
-			const p1active = p1 && p1.active[0];
-			const p2active = p2 && p2.active[0];
-			const p3active = p3 && p3.active[0];
-			const p4active = p4 && p4.active[0];
 			battle.inputLog.push(`>${type} ${message}`);
 			message = message.replace(/\f/g, '\n');
 			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
 			try {
-				// tslint:disable-next-line: no-eval
+				/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
+				const p1 = battle?.sides[0];
+				const p2 = battle?.sides[1];
+				const p3 = battle?.sides[2];
+				const p4 = battle?.sides[3];
+				const p1active = p1?.active[0];
+				const p2active = p2?.active[0];
+				const p3active = p3?.active[0];
+				const p4active = p4?.active[0];
 				let result = eval(message);
-				if (result && result.then) {
+				/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
+
+				if (result?.then) {
 					result.then((unwrappedResult: any) => {
 						unwrappedResult = Chat.stringify(unwrappedResult);
 						battle.add('', 'Promise -> ' + unwrappedResult);
@@ -1235,7 +1237,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	// tslint:disable-next-line: no-eval
+	// eslint-disable-next-line no-eval
 	Repl.start(`sim-${process.pid}`, cmd => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.simulatorprocesses : 1);

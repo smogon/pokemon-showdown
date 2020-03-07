@@ -569,7 +569,7 @@ export const pages: PageTable = {
 			if (banMsg) return connection.popup(banMsg);
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
-			if ((ticket && ticket.open) || ipTicket) {
+			if (ticket?.open || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
@@ -740,8 +740,11 @@ export const pages: PageTable = {
 			}
 			buf += '</div>';
 			const curPageLink = query.length ? '-' + query.join('-') : '';
-			buf = buf.replace(/<Button>([a-z]+)<\/Button>/g, (match, id) =>
-				`<a class="button" href="/view-help-request${curPageLink}-${id}${meta}" target="replace">${ticketPages[id]}</a>`
+			buf = buf.replace(
+				/<Button>([a-z]+)<\/Button>/g,
+				(match, id) => (
+					`<a class="button" href="/view-help-request${curPageLink}-${id}${meta}" target="replace">${ticketPages[id]}</a>`
+				)
 			);
 			return buf;
 		},
@@ -926,7 +929,8 @@ export const pages: PageTable = {
 						result: splitLine[5],
 						staff: splitLine[6],
 					};
-				});
+				}
+			);
 			if (table === 'tickets') {
 				const typeStats: {[key: string]: {[key: string]: number}} = {};
 				for (const stats of ticketStats) {
@@ -1033,7 +1037,7 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
 		if (this.broadcasting) {
-			if (room && room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
+			if (room?.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--report${meta}" class="button"><strong>Report someone</strong></button>`);
 		}
 
@@ -1045,7 +1049,7 @@ export const commands: ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
 		if (this.broadcasting) {
-			if (room && room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
+			if (room?.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--appeal${meta}" class="button"><strong>Appeal a punishment</strong></button>`);
 		}
 
@@ -1082,7 +1086,7 @@ export const commands: ChatCommands = {
 			if (banMsg) return this.popupReply(banMsg);
 			let ticket = tickets[user.id];
 			const ipTicket = checkIp(user.latestIp);
-			if ((ticket && ticket.open) || ipTicket) {
+			if (ticket?.open || ipTicket) {
 				if (!ticket && ipTicket) ticket = ipTicket;
 				const helpRoom = Rooms.get(`help-${ticket.userid}`);
 				if (!helpRoom) {
@@ -1342,7 +1346,7 @@ export const commands: ChatCommands = {
 			for (const userObj of affected) {
 				const userObjID = (typeof userObj !== 'string' ? userObj.getLastId() : toID(userObj));
 				const targetTicket = tickets[userObjID];
-				if (targetTicket && targetTicket.open) targetTicket.open = false;
+				if (targetTicket?.open) targetTicket.open = false;
 				const helpRoom = Rooms.get(`help-${userObjID}`);
 				if (helpRoom) {
 					const ticketGame = helpRoom.getGame(HelpTicket)!;

@@ -5,5 +5,5 @@ node_js:
 cache:
   directories:
     - node_modules
-    - .eslintcache
-script: npm run fulltest
+    - .eslintfullcache
+script: npm run full-test

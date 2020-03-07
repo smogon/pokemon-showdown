@@ -232,8 +232,8 @@ export class Battle {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
 			const subFormat = this.dex.getFormat(rule);
 			if (subFormat.exists) {
-				const hasEventHandler = Object.keys(subFormat).some(val =>
-					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
+				const hasEventHandler = Object.keys(subFormat).some(
+					val => val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
 				);
 				if (hasEventHandler) this.field.addPseudoWeather(rule);
 			}
@@ -1099,7 +1099,7 @@ export class Battle {
 
 	getMaxTeamSize() {
 		const teamLengthData = this.format.teamLength;
-		return (teamLengthData && teamLengthData.battle) || 6;
+		return teamLengthData?.battle || 6;
 	}
 
 	getRequests(type: RequestState, maxTeamSize: number) {
@@ -1112,7 +1112,7 @@ export class Battle {
 				const side = this.sides[i];
 				const switchTable = [];
 				for (const pokemon of side.active) {
-					switchTable.push(!!(pokemon && pokemon.switchFlag));
+					switchTable.push(!!pokemon?.switchFlag);
 				}
 				if (switchTable.some(flag => flag === true)) {
 					requests[i] = {forceSwitch: switchTable, side: side.getRequestData()};
@@ -1639,7 +1639,7 @@ export class Battle {
 			}
 			if (boostBy) {
 				success = true;
-				switch (effect && effect.id) {
+				switch (effect?.id) {
 				case 'bellydrum':
 					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
 					break;
@@ -1784,7 +1784,8 @@ export class Battle {
 
 	damage(
 		damage: number, target: Pokemon | null = null, source: Pokemon | null = null,
-		effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false) {
+		effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false
+	) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -1809,7 +1810,7 @@ export class Battle {
 		if (this.gen <= 1 && this.dex.currentMod !== 'stadium' &&
 			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
 			const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
-			if (source && source.volatiles['substitute']) {
+			if (source?.volatiles['substitute']) {
 				source.volatiles['substitute'].hp -= damage;
 				if (source.volatiles['substitute'].hp <= 0) {
 					source.removeVolatile('substitute');
@@ -1857,7 +1858,7 @@ export class Battle {
 		if (!target.isActive) return false;
 		if (target.hp >= target.maxhp) return false;
 		const finalDamage = target.heal(damage, source, effect);
-		switch (effect && effect.id) {
+		switch (effect?.id) {
 		case 'leechseed':
 		case 'rest':
 			this.add('-heal', target, target.getHealth, '[silent]');
@@ -2245,7 +2246,7 @@ export class Battle {
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			const target = this.getAtLoc(pokemon, targetLoc);
-			if (target && target.fainted && target.side === pokemon.side) {
+			if (target?.fainted && target.side === pokemon.side) {
 				// Target is a fainted ally: attack shouldn't retarget
 				return target;
 			}
@@ -2625,8 +2626,8 @@ export class Battle {
 			return false;
 		}
 
-		const switches = this.sides.map(side =>
-			side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
+		const switches = this.sides.map(
+			side => side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
 		);
 
 		for (let i = 0; i < this.sides.length; i++) {

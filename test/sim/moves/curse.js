@@ -122,9 +122,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
 
 		let foeHP = [p2active[0].hp, p2active[1].hp];
-		battle.makeChoices(
-			`move 2, move 2`,
-			`move 2, move 2`);
+		battle.makeChoices(`move 2, move 2`, `move 2, move 2`);
 
 		assert.notStrictEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
 		if (curseUser.position === 0) {

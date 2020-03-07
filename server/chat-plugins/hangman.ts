@@ -144,8 +144,9 @@ export class Hangman extends Rooms.RoomGame {
 		let wordString = this.wordSoFar.join('');
 		if (result === 1) {
 			const word = this.word;
-			wordString = wordString.replace(/_+/g, (match, offset) =>
-				`<font color="#7af87a">${word.substr(offset, match.length)}</font>`
+			wordString = wordString.replace(
+				/_+/g,
+				(match, offset) => `<font color="#7af87a">${word.substr(offset, match.length)}</font>`
 			);
 		}
 
@@ -153,8 +154,8 @@ export class Hangman extends Rooms.RoomGame {
 		output += `<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">${wordString}</p>`;
 		if (this.guesses.length) {
 			if (this.letterGuesses.length) {
-				output += 'Letters: ' + this.letterGuesses.map(g =>
-					`<strong${g[1] === '1' ? '' : ' style="color: #DBA"'}>${Chat.escapeHTML(g[0])}</strong>`
+				output += 'Letters: ' + this.letterGuesses.map(
+					g => `<strong${g[1] === '1' ? '' : ' style="color: #DBA"'}>${Chat.escapeHTML(g[0])}</strong>`
 				).join(', ');
 			}
 			if (result === 2) {

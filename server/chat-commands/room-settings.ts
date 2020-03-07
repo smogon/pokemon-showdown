@@ -135,7 +135,7 @@ export const commands: ChatCommands = {
 	inviteonlynext: 'ionext',
 	ionext(target, room, user) {
 		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
-		if (!(groupConfig && groupConfig.editprivacy)) return this.errorReply(`/ionext - Access denied.`);
+		if (!groupConfig?.editprivacy) return this.errorReply(`/ionext - Access denied.`);
 		if (this.meansNo(target)) {
 			user.inviteOnlyNextBattle = false;
 			user.update('inviteOnlyNextBattle');
@@ -498,7 +498,8 @@ export const commands: ChatCommands = {
 			this.sendReply(
 				room.banwords && room.banwords.length ?
 					`The list is currently: ${room.banwords.join(', ')}` :
-					`The list is now empty.`);
+					`The list is now empty.`
+			);
 
 			if (room.chatRoomData) {
 				room.chatRoomData.banwords = room.banwords;
@@ -1043,7 +1044,7 @@ export const commands: ChatCommands = {
 		}
 
 		const parent = room.parent;
-		if (parent && parent.subRooms) {
+		if (parent?.subRooms) {
 			parent.subRooms.delete(room.roomid);
 			if (!parent.subRooms.size) parent.subRooms = null;
 		}
@@ -1338,15 +1339,15 @@ export const roomSettings: SettingsHandler[] = [
 			// groupchat ROs can set modjoin, but only to +
 			// first rank is for modjoin off
 			...RANKS.slice(1, room.isPersonal && !user.can('makeroom') ? 2 : undefined),
-		].map(rank =>
-			[rank, (rank === 'off' ? !room.modjoin : rank === room.modjoin) || `modjoin ${rank || 'off'}`]
+		].map(
+			rank => [rank, (rank === 'off' ? !room.modjoin : rank === room.modjoin) || `modjoin ${rank || 'off'}`]
 		),
 	}),
 	room => ({
 		label: "Language",
 		permission: 'editroom',
-		options: [...Chat.languages].map(([id, name]) =>
-			[name, (id === 'english' ? !room.language : id === room.language) || `roomlanguage ${id}`]
+		options: [...Chat.languages].map(
+			([id, name]) => [name, (id === 'english' ? !room.language : id === room.language) || `roomlanguage ${id}`]
 		),
 	}),
 	room => ({
@@ -1376,8 +1377,8 @@ export const roomSettings: SettingsHandler[] = [
 	room => ({
 		label: "Slowchat",
 		permission: room.userCount < SLOWCHAT_USER_REQUIREMENT ? 'bypassall' : 'editroom',
-		options: ['off', 5, 10, 20, 30, 60].map(time =>
-			[`${time}`, (time === 'off' ? !room.slowchat : time === room.slowchat) || `slowchat ${time || 'false'}`]
+		options: ['off', 5, 10, 20, 30, 60].map(
+			time => [`${time}`, (time === 'off' ? !room.slowchat : time === room.slowchat) || `slowchat ${time || 'false'}`]
 		),
 	}),
 ];

@@ -499,7 +499,7 @@ export const pages: PageTable = {
 		}).map(tier => {
 			// Use the official tier name
 			const format = Dex.getFormat(tier);
-			if (format && format.exists) tier = format.name;
+			if (format?.exists) tier = format.name;
 			// Otherwise format as best as possible
 			if (tier.substring(0, 3) === 'gen') {
 				return `[Gen ${tier.substring(3, 4)}] ${tier.substring(4)}`;
@@ -644,7 +644,7 @@ export const commands: ChatCommands = {
  * Process manager
  *********************************************************/
 
-export const PM: QueryProcessManager = new QueryProcessManager(module, async data => {
+export const PM = new QueryProcessManager<AnyObject, AnyObject>(module, async data => {
 	switch (data.cmd) {
 	case 'modlog':
 		const {roomidList, searchString, exactSearch, maxLines, onlyPunishments} = data;
@@ -695,7 +695,7 @@ if (!PM.isParentProcess) {
 	});
 	global.Dex = Dex;
 	global.toID = Dex.getId;
-	// tslint:disable-next-line: no-eval
+	// eslint-disable-next-line no-eval
 	Repl.start('modlog', cmd => eval(cmd));
 } else {
 	PM.spawn(MAX_PROCESSES);

@@ -56,7 +56,8 @@ export class RandomPlayerAI extends BattlePlayer {
 
 				if (!canSwitch.length) return `pass`;
 				const target = this.chooseSwitch(
-					canSwitch.map(slot => ({slot, pokemon: pokemon[slot - 1]})));
+					canSwitch.map(slot => ({slot, pokemon: pokemon[slot - 1]}))
+				);
 				chosen.push(target);
 				return `switch ${target}`;
 			});
@@ -138,7 +139,8 @@ export class RandomPlayerAI extends BattlePlayer {
 
 				if (switches.length && (!moves.length || this.prng.next() > this.move)) {
 					const target = this.chooseSwitch(
-						canSwitch.map(slot => ({slot, pokemon: pokemon[slot - 1]})));
+						canSwitch.map(slot => ({slot, pokemon: pokemon[slot - 1]}))
+					);
 					chosen.push(target);
 					return `switch ${target}`;
 				} else if (moves.length) {

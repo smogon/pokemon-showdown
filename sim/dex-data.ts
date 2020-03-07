@@ -37,6 +37,8 @@ export class Tools {
 	 * Dex.getId is generally assigned to the global toID, because of how
 	 * commonly it's used.
 	 */
+	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
+	/* eslint-disable @typescript-eslint/prefer-optional-chain */
 	static getId(text: any): ID {
 		if (text && text.id) {
 			text = text.id;
@@ -48,6 +50,7 @@ export class Tools {
 		if (typeof text !== 'string' && typeof text !== 'number') return '';
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
 	}
+	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 }
 const toID = Tools.getId;
 
@@ -312,7 +315,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		super(data, ...moreData);
 		data = this;
 
-		this.mod = Tools.getString(data.mod) || 'gen7';
+		this.mod = Tools.getString(data.mod) || 'gen8';
 		this.effectType = Tools.getString(data.effectType) as FormatEffectType || 'Format';
 		this.debug = !!data.debug;
 		this.rated = (data.rated !== false);

@@ -94,7 +94,7 @@ export const commands: ChatCommands = {
 			}
 			for (const u in room.users) {
 				const activeUser = Users.get(u);
-				if (activeUser && activeUser.connected) {
+				if (activeUser?.connected) {
 					activeUser.sendTo(
 						room,
 						Chat.html`|notify|A new roomevent in ${room.title} has started!|` +
@@ -144,7 +144,7 @@ export const commands: ChatCommands = {
 			if (!this.broadcasting && user.can('ban', null, room)) {
 				this.sendReplyBox(
 					Chat.html`<code>/roomevents add ${room.events[target].eventName} |` +
-					`${room.events[target].date} | ${room.events[target].desc}</code>`
+					Chat.html`${room.events[target].date} | ${room.events[target].desc}</code>`
 				);
 			}
 		},
