@@ -109,8 +109,8 @@ Chat.registerMonitor('autolock', {
 			message = message.replace(/\./g, '__.__');
 			if (room) {
 				void Punishments.autolock(
-					user, room,
-					'ChatMonitor', `Filtered phrase: ${word}`, `<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
+					user, room, 'ChatMonitor', `Filtered phrase: ${word}`,
+					`<${room.roomid}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true
 				);
 			} else {
 				this.errorReply(`Please do not say '${match[0]}'.`);
@@ -179,8 +179,8 @@ Chat.registerMonitor('evasion', {
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			if (room) {
 				void Punishments.autolock(
-					user, room,
-					'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`, `<${room.roomid}> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`
+					user, room, 'FilterEvasionMonitor', `Evading filter: ${message} (${match[0]} => ${word})`,
+					`<${room.roomid}> ${user.name}: SPOILER: \`\`${message}\`\` __(${match[0]} => ${word})__`
 				);
 			} else {
 				this.errorReply(`Please do not say '${word}'.`);
@@ -366,8 +366,8 @@ export const namefilter: NameFilter = (name, user) => {
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
-						user, 'staff', `NameMonitor`,
-						`inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name
+						user, 'staff', `NameMonitor`, `inappropriate name: ${name}`,
+						`using an inappropriate name: ${name} (from ${user.name})`, false, name
 					);
 				}
 				line[4]++;
@@ -419,8 +419,8 @@ export const nicknamefilter: NameFilter = (name, user) => {
 			if (regex.test(lcName)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
-						user, 'staff',
-						`NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true
+						user, 'staff', `NameMonitor`, `inappropriate Pokémon nickname: ${name}`,
+						`${user.name} - using an inappropriate Pokémon nickname: ${name}`, true
 					);
 				}
 				line[4]++;
@@ -458,8 +458,8 @@ export const statusfilter: StatusFilter = (status, user) => {
 			if (regex.test(lcStatus)) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					void Punishments.autolock(
-						user, 'staff', `NameMonitor`,
-						`inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true
+						user, 'staff', `NameMonitor`, `inappropriate status message: ${status}`,
+						`${user.name} - using an inappropriate status: ${status}`, true
 					);
 				}
 				line[4]++;
