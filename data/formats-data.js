@@ -7792,7 +7792,7 @@ let BattleFormatsData = {
 	zacian: {
 		randomBattleMoves: ["closecombat", "crunch", "playrough", "psychicfangs", "swordsdance"],
 		eventPokemon: [
-			{"generation": 8, "level": 70, "moves": ["moonblast", "crunch", "laserfocus", "crunch"]},
+			{"generation": 8, "level": 70, "perfectIVs": 3, "moves": ["moonblast", "crunch", "laserfocus", "crunch"]},
 		],
 		eventOnly: true,
 		tier: "Uber",
@@ -7808,7 +7808,7 @@ let BattleFormatsData = {
 	zamazenta: {
 		randomBattleMoves: ["closecombat", "crunch", "psychicfangs", "wildcharge"],
 		eventPokemon: [
-			{"generation": 8, "level": 70, "moves": ["moonblast", "crunch", "laserfocus", "crunch"]},
+			{"generation": 8, "level": 70, "perfectIVs": 3, "moves": ["moonblast", "crunch", "laserfocus", "crunch"]},
 		],
 		eventOnly: true,
 		tier: "Uber",
@@ -7824,7 +7824,7 @@ let BattleFormatsData = {
 	eternatus: {
 		randomBattleMoves: ["dynamaxcannon", "flamethrower", "recover", "sludgewave", "toxic"],
 		eventPokemon: [
-			{"generation": 8, "level": 60, "moves": ["dynamaxcannon", "flamethrower", "dragonpulse", "crosspoison"]},
+			{"generation": 8, "level": 60, "perfectIVs": 3, "moves": ["dynamaxcannon", "flamethrower", "dragonpulse", "crosspoison"]},
 		],
 		eventOnly: true,
 		tier: "Uber",
