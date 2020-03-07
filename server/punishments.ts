@@ -388,10 +388,12 @@ export const Punishments = new class {
 			rest,
 		}, id, PUNISHMENT_FILE);
 
-		const mobileExpireTime = Date.now() + MOBILE_PUNISHMENT_DURATIION;
-		const mobilePunishment = [punishType, id, mobileExpireTime, reason, ...rest] as Punishment;
-		for (const mobileIp of mobileIps) {
-			Punishments.ips.set(mobileIp, mobilePunishment);
+		if (mobileIps.size) {
+			const mobileExpireTime = Date.now() + MOBILE_PUNISHMENT_DURATIION;
+			const mobilePunishment = [punishType, id, mobileExpireTime, reason, ...rest] as Punishment;
+			for (const mobileIp of mobileIps) {
+				Punishments.ips.set(mobileIp, mobilePunishment);
+			}
 		}
 
 		return affected;
@@ -1470,15 +1472,14 @@ export const Punishments = new class {
 				const reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
 				const message = `${(user as User).name || userid} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
 
-				void Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message).then(() => {
-					if (typeof user !== 'string') {
-						(user as User).popup(
-							`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
-							`If you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
-							`Your lock will expire in a few days.`
-						);
-					}
-				});
+				void Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message);
+				if (typeof user !== 'string') {
+					(user as User).popup(
+						`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
+						`If you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
+						`Your lock will expire in a few days.`
+					);
+				}
 			} else {
 				Monitor.log(`[PunishmentMonitor] ${(user as User).name || userid} currently has punishments in ${punishments.length} rooms: ${punishmentText}`);
 			}
