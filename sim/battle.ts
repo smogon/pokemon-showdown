@@ -2582,7 +2582,13 @@ export class Battle {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
+			const residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.hp] as const);
 			this.residualEvent('Residual');
+			for (const [pokemon, originalHP] of residualPokemon) {
+				if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && originalHP > pokemon.maxhp / 2) {
+					this.runEvent('EmergencyExit', pokemon);
+				}
+			}
 			this.add('upkeep');
 			break;
 		}
