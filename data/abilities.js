@@ -1976,8 +1976,8 @@ let BattleAbilities = {
 		desc: "This Pokemon's sound-based moves become Water-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's sound-based moves become Water type.",
 		onModifyTypePriority: -1,
-		onModifyType(move) {
-			if (move.flags['sound']) {
+		onModifyType(move, pokemon) {
+			if (move.flags['sound'] && !pokemon.volatiles.dynamax) { // hardcode
 				move.type = 'Water';
 			}
 		},

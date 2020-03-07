@@ -59,6 +59,16 @@ describe("Dynamax", function () {
 		assert.equal(battle.field.weather, 'sandstorm');
 	});
 
+	it('makes Liquid Voice stop working', function () {
+		battle = common.createBattle([[
+			{species: 'Primarina', ability: 'liquidvoice', moves: ['hypervoice']},
+		], [
+			{species: 'Rhyhorn', ability: 'wonderguard', moves: ['splash']},
+		]]);
+		battle.makeChoices('move 1 dynamax', 'move 1');
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+	});
+
 	it('G-Max Steelsurge hazard should deal 2x damage to Eiscue', function () {
 		battle = common.createBattle([[
 			{species: "Copperajah-Gmax", moves: ['ironhead']},
