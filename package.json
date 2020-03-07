@@ -71,7 +71,6 @@
     "@typescript-eslint/parser": "^2.19.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-jsdoc": "^21.0.0",
     "husky": "^4.2.3",
     "mocha": "^7.1.0",
     "smogon": "^0.3.0",

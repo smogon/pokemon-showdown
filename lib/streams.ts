@@ -148,7 +148,7 @@ export class ReadStream {
 
 	readError() {
 		if (this.errorBuf) {
-			const err = this.errorBuf.shift();
+			const err = this.errorBuf.shift()!;
 			if (!this.errorBuf.length) this.errorBuf = null;
 			throw err;
 		}
@@ -534,7 +534,7 @@ export class ObjectReadStream<T> {
 
 	readError() {
 		if (this.errorBuf) {
-			const err = this.errorBuf.shift();
+			const err = this.errorBuf.shift()!;
 			if (!this.errorBuf.length) this.errorBuf = null;
 			throw err;
 		}
