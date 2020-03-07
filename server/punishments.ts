@@ -1079,9 +1079,9 @@ export const Punishments = new class {
 			if (!punishment) punishment = ['LOCK', user.locked, 0, ''];
 		}
 
-		const ticket = Chat.pages?.help
-			? `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>`
-			: '';
+		const ticket = Chat.pages?.help ?
+			`<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>` : '';
+
 
 		if (battleban) {
 			if (battleban[1] !== user.id && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
