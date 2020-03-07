@@ -1384,7 +1384,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 				}
 			}
 			if (tournament.disqualifyUser(targetUserid, this, reason)) {
-				this.privateModAction(`(${(targetUser ? targetUser.name : targetUserid)} was disqualified from the tournament by ${user.name} ${(reason ? ' (' + reason + ')' : '')})`);
+				this.privateModAction(`(${(targetUser ? targetUser.name : targetUserid)} was disqualified from the tournament by ${user.name}${(reason ? ' (' + reason + ')' : '')})`);
 				this.modlog('TOUR DQ', targetUserid, reason);
 			}
 		},
