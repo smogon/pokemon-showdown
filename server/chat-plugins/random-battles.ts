@@ -1,3 +1,8 @@
+/**
+ * Random Battles chat-plugin
+ * Written by Kris with inspiration from sirDonovan and The Immortal
+ */
+
 import {FS} from "../../lib/fs";
 
 const GEN_NAMES: {[k: string]: string} = {
@@ -316,7 +321,7 @@ export const commands: ChatCommands = {
 		if (!args[0]) return this.parse(`/help randomdoublesbattle`);
 		let dex = Dex;
 		if (args[1] && toID(args[1]) in Dex.dexes) dex = Dex.dexes[toID(args[1])];
-		if (dex.gen < 4) return this.parse(`/help randomdoublesbattle`);
+		if (parseInt(toID(args[1])[3]) < 6) return this.parse(`/help randomdoublesbattle`);
 		const template = dex.getTemplate(args[0]);
 		const formatName = dex.gen > 6 ? dex.getFormat(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
 			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
@@ -331,7 +336,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(`<span style="color:#999999;">Doubles moves for ${template.species} in ${formatName}:</span><br />${moves.join(`, `)}`);
 	},
 	randomdoublesbattlehelp: [
-		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8.`,
+		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 6-8. Defaults to Gen 8.`,
 	],
 
 	'!battlefactory': true,
