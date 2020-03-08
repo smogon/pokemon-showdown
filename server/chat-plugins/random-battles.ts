@@ -1,9 +1,7 @@
-'use strict';
-
 function formatMove(move: Move | string) {
 	move = Dex.getMove(move);
 	return `<a href="${Config.routes.dex}/moves/${move.id}" target="_blank" class="subtle" style="white-space:nowrap">${move.name}</a>`;
-};
+}
 
 function formatItem(item: Item | string) {
 	item = Dex.getItem(item);
