@@ -35,6 +35,7 @@ export class ExhaustiveRunner {
 
 	// TODO: Add triple battles once supported by the AI.
 	static readonly FORMATS = [
+		'gen8customgame', 'gen8doublescustomgame',
 		'gen7customgame', 'gen7doublescustomgame',
 		'gen6customgame', 'gen6doublescustomgame',
 		'gen5customgame', 'gen5doublescustomgame',
@@ -409,7 +410,8 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		return `team ${this.choosePokemon(team.map((p, i) => ({slot: i + 1, pokemon: p}))) || 1}`;
 	}
 
-	protected chooseMove(moves: {choice: string, move: AnyObject}[]): string {
+	protected chooseMove(active: AnyObject, moves: {choice: string, move: AnyObject}[]): string {
+		this.markUsedIfGmax(active);
 		// Prefer to use a move which hasn't been used yet.
 		for (const {choice, move} of moves) {
 			const id = this.fixMove(move);
@@ -418,11 +420,12 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 				return choice;
 			}
 		}
-		return super.chooseMove(moves);
+		return super.chooseMove(active, moves);
 	}
 
-	protected chooseSwitch(switches: {slot: number, pokemon: AnyObject}[]): number {
-		return this.choosePokemon(switches) || super.chooseSwitch(switches);
+	protected chooseSwitch(active: AnyObject | undefined, switches: {slot: number, pokemon: AnyObject}[]): number {
+		this.markUsedIfGmax(active);
+		return this.choosePokemon(switches) || super.chooseSwitch(active, switches);
 	}
 
 	private choosePokemon(choices: {slot: number, pokemon: AnyObject}[]) {
@@ -442,12 +445,20 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 	}
 
 	// The move options provided by the simulator have been converted from the name
-	// which we're tracking, so we need to convert them back;
+	// which we're tracking, so we need to convert them back.
 	private fixMove(m: AnyObject) {
 		const id = toID(m.move);
 		if (id.startsWith('return')) return 'return';
 		if (id.startsWith('frustration')) return 'frustration';
 		if (id.startsWith('hiddenpower')) return 'hiddenpower';
 		return id;
+	}
+
+	// Gigantamax Pokemon need to be special cased for tracking because the current
+	// tracking only works if you can switch in a Pokemon.
+	private markUsedIfGmax(active: AnyObject | undefined) {
+		if (active && !active.canDynamax && active.maxMoves && active.maxMoves.gigantamax) {
+			this.pools.pokemon.markUsed(toID(active.maxMoves.gigantamax));
+		}
 	}
 }
