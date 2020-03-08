@@ -6254,7 +6254,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1130,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Swords Dance. One use.",
@@ -6265,7 +6265,7 @@ let BattleItems = {
 		fling: {
 			basePower: 85,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1131,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Body Slam. One use.",
@@ -6276,7 +6276,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 502,
+		spritenum: 730,
 		num: 1132,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Flamethrower. One use.",
@@ -6287,7 +6287,7 @@ let BattleItems = {
 		fling: {
 			basePower: 110,
 		},
-		spritenum: 513,
+		spritenum: 731,
 		num: 1133,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Hydro Pump. One use.",
@@ -6298,7 +6298,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 513,
+		spritenum: 731,
 		num: 1134,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Surf. One use.",
@@ -6309,7 +6309,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 507,
+		spritenum: 735,
 		num: 1135,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Ice Beam. One use.",
@@ -6320,7 +6320,7 @@ let BattleItems = {
 		fling: {
 			basePower: 110,
 		},
-		spritenum: 507,
+		spritenum: 735,
 		num: 1136,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Blizzard. One use.",
@@ -6331,7 +6331,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 501,
+		spritenum: 722,
 		num: 1137,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Low Kick. One use.",
@@ -6342,7 +6342,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 500,
+		spritenum: 733,
 		num: 1138,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Thunderbolt. One use.",
@@ -6353,7 +6353,7 @@ let BattleItems = {
 		fling: {
 			basePower: 110,
 		},
-		spritenum: 500,
+		spritenum: 733,
 		num: 1139,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Thunder. One use.",
@@ -6364,7 +6364,7 @@ let BattleItems = {
 		fling: {
 			basePower: 100,
 		},
-		spritenum: 506,
+		spritenum: 725,
 		num: 1140,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Earthquake. One use.",
@@ -6375,7 +6375,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1141,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Psychic. One use.",
@@ -6386,7 +6386,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1142,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Agility. One use.",
@@ -6397,7 +6397,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1143,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Focus Energy. One use.",
@@ -6408,7 +6408,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1144,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Metronome. One use.",
@@ -6419,7 +6419,7 @@ let BattleItems = {
 		fling: {
 			basePower: 110,
 		},
-		spritenum: 502,
+		spritenum: 730,
 		num: 1145,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Fire Blast. One use.",
@@ -6430,7 +6430,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 513,
+		spritenum: 731,
 		num: 1146,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Waterfall. One use.",
@@ -6441,7 +6441,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1147,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Amnesia. One use.",
@@ -6452,7 +6452,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 496,
+		spritenum: 727,
 		num: 1148,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Leech Life. One use.",
@@ -6463,7 +6463,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1149,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Tri Attack. One use.",
@@ -6474,10 +6474,10 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1150,
 		gen: 8,
-		desc: "Teaches certain Pokemon the move Substitue. One use.",
+		desc: "Teaches certain Pokemon the move Substitute. One use.",
 	},
 	"tr21": {
 		id: "tr21",
@@ -6485,7 +6485,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 501,
+		spritenum: 722,
 		num: 1151,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Reversal. One use.",
@@ -6496,7 +6496,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 509,
+		spritenum: 724,
 		num: 1152,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Sludge Bomb. One use.",
@@ -6507,7 +6507,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 506,
+		spritenum: 725,
 		num: 1153,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Spikes. One use.",
@@ -6518,7 +6518,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 499,
+		spritenum: 736,
 		num: 1154,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Outrage. One use.",
@@ -6529,7 +6529,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1155,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Psyshock. One use.",
@@ -6540,7 +6540,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1156,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Endure. One use.",
@@ -6551,7 +6551,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1157,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Sleep Talk. One use.",
@@ -6562,7 +6562,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 496,
+		spritenum: 727,
 		num: 1158,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Megahorn. One use.",
@@ -6573,7 +6573,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1159,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Baton Pass. One use.",
@@ -6584,7 +6584,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1160,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Encore. One use.",
@@ -6595,7 +6595,7 @@ let BattleItems = {
 		fling: {
 			basePower: 100,
 		},
-		spritenum: 512,
+		spritenum: 729,
 		num: 1161,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Iron Tail. One use.",
@@ -6606,7 +6606,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 498,
+		spritenum: 737,
 		num: 1162,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Crunch. One use.",
@@ -6617,7 +6617,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 504,
+		spritenum: 728,
 		num: 1163,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Shadow Ball. One use.",
@@ -6628,7 +6628,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1164,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Future Sight. One use.",
@@ -6639,7 +6639,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1165,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Uproar. One use.",
@@ -6650,7 +6650,7 @@ let BattleItems = {
 		fling: {
 			basePower: 95,
 		},
-		spritenum: 502,
+		spritenum: 730,
 		num: 1166,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Heat Wave. One use.",
@@ -6661,7 +6661,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 498,
+		spritenum: 737,
 		num: 1167,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Taunt. One use.",
@@ -6672,7 +6672,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1168,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Trick. One use.",
@@ -6683,7 +6683,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 501,
+		spritenum: 722,
 		num: 1169,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Superpower. One use.",
@@ -6694,7 +6694,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1170,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Skill Swap. One use.",
@@ -6705,7 +6705,7 @@ let BattleItems = {
 		fling: {
 			basePower: 85,
 		},
-		spritenum: 502,
+		spritenum: 730,
 		num: 1171,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Blaze Kick. One use.",
@@ -6716,7 +6716,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1172,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Hyper Voice. One use.",
@@ -6727,7 +6727,7 @@ let BattleItems = {
 		fling: {
 			basePower: 130,
 		},
-		spritenum: 502,
+		spritenum: 730,
 		num: 1173,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Overheat. One use.",
@@ -6738,7 +6738,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1174,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Cosmic Power. One use.",
@@ -6749,7 +6749,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 513,
+		spritenum: 731,
 		num: 1175,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Muddy Water. One use.",
@@ -6760,7 +6760,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 512,
+		spritenum: 729,
 		num: 1176,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Iron Defense. One use.",
@@ -6771,7 +6771,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 499,
+		spritenum: 736,
 		num: 1177,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dragon Claw. One use.",
@@ -6782,7 +6782,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 501,
+		spritenum: 722,
 		num: 1178,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Bulk Up. One use.",
@@ -6793,7 +6793,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1179,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Calm Mind. One use.",
@@ -6804,7 +6804,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 505,
+		spritenum: 732,
 		num: 1180,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Leaf Blade. One use.",
@@ -6815,7 +6815,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 499,
+		spritenum: 736,
 		num: 1181,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dragon Dance. One use.",
@@ -6826,7 +6826,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 512,
+		spritenum: 729,
 		num: 1182,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Gyro Ball. One use.",
@@ -6837,7 +6837,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 501,
+		spritenum: 722,
 		num: 1183,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Close Combat. One use.",
@@ -6848,7 +6848,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 509,
+		spritenum: 724,
 		num: 1184,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Toxic Spikes. One use.",
@@ -6859,7 +6859,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 502,
+		spritenum: 730,
 		num: 1185,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Flare Blitz. One use.",
@@ -6870,7 +6870,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 501,
+		spritenum: 722,
 		num: 1186,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Aura Sphere. One use.",
@@ -6881,7 +6881,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 509,
+		spritenum: 724,
 		num: 1187,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Poison Jab. One use.",
@@ -6892,7 +6892,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 498,
+		spritenum: 737,
 		num: 1188,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dark Pulse. One use.",
@@ -6903,7 +6903,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 505,
+		spritenum: 732,
 		num: 1189,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Seed Bomb. One use.",
@@ -6914,7 +6914,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 496,
+		spritenum: 727,
 		num: 1190,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move X-Scissor. One use.",
@@ -6925,7 +6925,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 496,
+		spritenum: 727,
 		num: 1191,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Bug Buzz. One use.",
@@ -6936,7 +6936,7 @@ let BattleItems = {
 		fling: {
 			basePower: 85,
 		},
-		spritenum: 499,
+		spritenum: 736,
 		num: 1192,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dragon Pulse. One use.",
@@ -6947,7 +6947,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 511,
+		spritenum: 726,
 		num: 1193,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Power Gem. One use.",
@@ -6958,7 +6958,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 501,
+		spritenum: 722,
 		num: 1194,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Focus Blast. One use.",
@@ -6969,7 +6969,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 505,
+		spritenum: 732,
 		num: 1195,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Energy Ball. One use.",
@@ -6980,7 +6980,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 503,
+		spritenum: 723,
 		num: 1196,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Brave Bird. One use.",
@@ -6991,7 +6991,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 506,
+		spritenum: 725,
 		num: 1197,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Earth Power. One use.",
@@ -7002,7 +7002,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 498,
+		spritenum: 737,
 		num: 1198,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Nasty Plot. One use.",
@@ -7013,7 +7013,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1199,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Zen Headbutt. One use.",
@@ -7024,7 +7024,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 512,
+		spritenum: 729,
 		num: 1200,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Flash Cannon. One use.",
@@ -7035,7 +7035,7 @@ let BattleItems = {
 		fling: {
 			basePower: 130,
 		},
-		spritenum: 505,
+		spritenum: 732,
 		num: 1201,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Leaf Storm. One use.",
@@ -7046,7 +7046,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 505,
+		spritenum: 732,
 		num: 1202,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Power Whip. One use.",
@@ -7057,7 +7057,7 @@ let BattleItems = {
 		fling: {
 			basePower: 120,
 		},
-		spritenum: 509,
+		spritenum: 724,
 		num: 1203,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Gunk Shot. One use.",
@@ -7068,7 +7068,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 512,
+		spritenum: 729,
 		num: 1204,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Iron Head. One use.",
@@ -7079,7 +7079,7 @@ let BattleItems = {
 		fling: {
 			basePower: 100,
 		},
-		spritenum: 511,
+		spritenum: 726,
 		num: 1205,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Stone Edge. One use.",
@@ -7090,7 +7090,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 511,
+		spritenum: 726,
 		num: 1206,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Stealth Rock. One use.",
@@ -7101,7 +7101,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 505,
+		spritenum: 732,
 		num: 1207,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Grass Knot. One use.",
@@ -7112,7 +7112,7 @@ let BattleItems = {
 		fling: {
 			basePower: 95,
 		},
-		spritenum: 509,
+		spritenum: 724,
 		num: 1208,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Sludge Wave. One use.",
@@ -7123,7 +7123,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 512,
+		spritenum: 729,
 		num: 1209,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Heavy Slam. One use.",
@@ -7134,7 +7134,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 500,
+		spritenum: 733,
 		num: 1210,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Electro Ball. One use.",
@@ -7145,7 +7145,7 @@ let BattleItems = {
 		fling: {
 			basePower: 95,
 		},
-		spritenum: 498,
+		spritenum: 737,
 		num: 1211,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Foul Play. One use.",
@@ -7156,7 +7156,7 @@ let BattleItems = {
 		fling: {
 			basePower: 20,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1212,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Stored Power. One use.",
@@ -7167,7 +7167,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1213,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Ally Switch. One use.",
@@ -7178,7 +7178,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 513,
+		spritenum: 731,
 		num: 1214,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Scald. One use.",
@@ -7189,7 +7189,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 508,
+		spritenum: 721,
 		num: 1215,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Work Up. One use.",
@@ -7200,7 +7200,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 500,
+		spritenum: 733,
 		num: 1216,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Wild Charge. One use.",
@@ -7211,7 +7211,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 506,
+		spritenum: 725,
 		num: 1217,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Drill Run. One use.",
@@ -7222,7 +7222,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 502,
+		spritenum: 730,
 		num: 1218,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Heat Crash. One use.",
@@ -7233,7 +7233,7 @@ let BattleItems = {
 		fling: {
 			basePower: 110,
 		},
-		spritenum: 503,
+		spritenum: 723,
 		num: 1219,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Hurricane. One use.",
@@ -7244,8 +7244,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		// TODO: Add Fairy TM to spritesheet
-		spritenum: 0,
+		spritenum: 738,
 		num: 1220,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Play Rough. One use.",
@@ -7256,7 +7255,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		spritenum: 509,
+		spritenum: 724,
 		num: 1221,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Venom Drench. One use.",
@@ -7267,8 +7266,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		// TODO: Add Fairy TM to spritesheet
-		spritenum: 0,
+		spritenum: 738,
 		num: 1222,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dazzling Gleam. One use.",
@@ -7279,7 +7277,7 @@ let BattleItems = {
 		fling: {
 			basePower: 85,
 		},
-		spritenum: 498,
+		spritenum: 737,
 		num: 1223,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Darkest Lariat. One use.",
@@ -7290,7 +7288,7 @@ let BattleItems = {
 		fling: {
 			basePower: 95,
 		},
-		spritenum: 506,
+		spritenum: 725,
 		num: 1224,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move High Horsepower. One use.",
@@ -7301,7 +7299,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 498,
+		spritenum: 737,
 		num: 1225,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Throat Chop. One use.",
@@ -7312,7 +7310,7 @@ let BattleItems = {
 		fling: {
 			basePower: 90,
 		},
-		spritenum: 496,
+		spritenum: 727,
 		num: 1226,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Pollen Puff. One use.",
@@ -7323,7 +7321,7 @@ let BattleItems = {
 		fling: {
 			basePower: 85,
 		},
-		spritenum: 510,
+		spritenum: 734,
 		num: 1227,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Psychic Fangs. One use.",
@@ -7334,7 +7332,7 @@ let BattleItems = {
 		fling: {
 			basePower: 85,
 		},
-		spritenum: 513,
+		spritenum: 731,
 		num: 1228,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Liquidation. One use.",
@@ -7345,7 +7343,7 @@ let BattleItems = {
 		fling: {
 			basePower: 80,
 		},
-		spritenum: 501,
+		spritenum: 722,
 		num: 1229,
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Body Press. One use.",
