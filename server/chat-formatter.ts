@@ -7,44 +7,58 @@
  * @license MIT
  */
 
-// Regex copied from the client
-const domainRegex = '[a-z0-9-]+(?:[.][a-z0-9-]+)*';
-const parenthesisRegex = '[(](?:[^\\s()<>&]|&amp;)*[)]';
-export const linkRegex = new RegExp(
-	'(?:' +
-		'(?:' +
-			// When using www. or http://, allow any-length TLD (like .museum)
-			'(?:https?://|\\bwww[.])' + domainRegex +
-			'|\\b' + domainRegex + '[.]' +
-				// Allow a common TLD, or any 2-3 letter TLD followed by : or /
-				'(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/]))' +
-		')' +
-		'(?:[:][0-9]+)?' +
-		'\\b' +
-		'(?:' +
-			'/' +
-			'(?:' +
-				'(?:' +
-					'[^\\s()&<>]|&amp;|&quot;' +
-					'|' + parenthesisRegex +
-				')*' +
-				// URLs usually don't end with punctuation, so don't allow
-				// punctuation symbols that probably aren't related to URL.
-				'(?:' +
-					'[^\\s`()[\\]{}\'".,!?;:&<>*`^~\\\\]' +
-					'|' + parenthesisRegex +
-				')' +
-			')?' +
-		')?' +
-		// email address
-		'|[a-z0-9.]+\\b@' + domainRegex + '[.][a-z]{2,}' +
-	')' +
-	'(?![^ ]*&gt;)',
-	'ig'
-);
-// compiled from above
-// eslint-disable-next-line max-len
-// const linkRegex = /(?:(?:(?:https?:\/\/|\bwww[.])[a-z0-9-]+(?:[.][a-z0-9-]+)*|\b[a-z0-9-]+(?:[.][a-z0-9-]+)*[.](?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?:[:][0-9]+)?\b(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|[(](?:[^\s()<>&]|&amp;)*[)])*(?:[^\s`()[\]{}'".,!?;:&<>*`^~\\]|[(](?:[^\s()<>&]|&amp;)*[)]))?)?|[a-z0-9.]+\b@[a-z0-9-]+(?:[.][a-z0-9-]+)*[.][a-z]{2,})(?![^ ]*&gt;)/ig;
+/*
+REGEXFREE SOURCE FOR LINKREGEX
+
+	(
+		(
+			# When using http://, allow any domain
+			https?:\/\/ [a-z0-9-]+ ( \. [a-z0-9-]+ )*
+		|
+			# When using www., expect at least one more dot
+			www \. [a-z0-9-]+ ( \. [a-z0-9-]+ )+
+		|
+			# Otherwise, allow any domain, but only if
+			\b [a-z0-9-]+ ( \. [a-z0-9-]+ )* \.
+			(
+				# followed either a common TLD...
+				com? | org | net | edu | info | us | jp
+			|
+				# or any 2-3 letter TLD followed by : or /
+				[a-z]{2,3} (?=[:\/])
+			)
+		)
+		# possible custom port
+		( : [0-9]+ )?
+		(
+			\/
+			(
+				# characters allowed inside URL paths
+				(
+					[^\s()&<>] | &amp; | &quot;
+				|
+					# parentheses in URLs should be matched, so they're not confused
+					# for parentheses around URLs
+					\( ( [^\\s()<>&] | &amp; )* \)
+				)*
+				# URLs usually don't end with punctuation, so don't allow
+				# punctuation symbols that probably arent related to URL.
+				(
+					[^\s`()[\]{}\".,!?;:&<>*`^~\\]
+				|
+					# annoyingly, Wikipedia URLs often end in )
+					\( ( [^\s()<>&] | &amp; )* \)
+				)
+			)?
+		)?
+	|
+		# email address
+		[a-z0-9.]+ @ [a-z0-9-]+ ( \. [a-z0-9-]+ )* \. [a-z]{2,}
+	)
+	(?! [^ ]*&gt; )
+
+*/
+export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|\((?:[^\\s()<>&]|&amp;)*\))*(?:[^\s`()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
 
 type SpanType = '_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '(';
 
