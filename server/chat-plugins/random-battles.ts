@@ -186,7 +186,9 @@ function battleFactorySets(template: string | Template, tier: string | null, gen
 		if (!(toID(tier) in TIERS)) return {e: `That tier isn't supported.`};
 		const t = statsFile[TIERS[toID(tier)]];
 		if (!(template.speciesid in t)) {
-			return {e: `${template.species} doesn't have any sets in ${TIERS[toID(tier)]} for ${Dex.getFormat(`${gen}battlefactory`).name}.`};
+			return {
+				e: `${template.species} doesn't have any sets in ${TIERS[toID(tier)]} for ${Dex.getFormat(`${gen}battlefactory`).name}.`,
+			};
 		}
 		const setObj = t[template.speciesid];
 		buf += `<span style="color:#999999;">Sets for ${template.species} in${genNum === 8 ? `` : ` ${GEN_NAMES[gen]}`} ${TIERS[toID(tier)]}:</span><br />`;
