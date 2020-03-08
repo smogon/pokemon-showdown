@@ -214,6 +214,12 @@
         // test only (should never be committed, but useful when testing)
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": ["warn", {"args": "none"}],
+        "max-len": ["warn", {
+          "code": 120, "tabWidth": 0,
+          // see bottom of file for source
+          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9$.]+ \\+?=>? |(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Chat\\.html|\\$\\()?['\"`/]"
+        }],
+        "prefer-const": ["warn", {"destructuring": "all"}],
 
         // PS code (code specific to PS)
         "@typescript-eslint/no-namespace": "off",
@@ -278,14 +284,7 @@
 
         // whitespace, overriding base
         "indent": "off",
-        "@typescript-eslint/indent": ["error", "tab", {"flatTernaryExpressions": true}],
-
-        // test only (should never be committed, but useful when testing)
-        "max-len": ["warn", {
-          "code": 120, "tabWidth": 0,
-          "ignorePattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?=>? (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`/]"
-        }],
-        "prefer-const": ["warn", {"destructuring": "all"}]
+        "@typescript-eslint/indent": ["error", "tab", {"flatTernaryExpressions": true}]
       }
     },
     {
@@ -299,3 +298,30 @@
     }
   ]
 }
+
+/*
+REGEXFREE SOURCE FOR IGNOREPATTERN
+
+  # indentation
+  ^\s*(\/\/\ \s*)?
+
+  (
+    # define a variable, append to a variable, or define a single-arg arrow function
+    (export\ )?(let\ |const\ )?[a-zA-Z0-9$.]+\ \+?=>?\ 
+  |
+    # optionally return or throw
+    (return\ |throw\ )?
+    # call a function or constructor
+    (new\ )?([a-zA-Z0-9$.]+\()?
+  )?
+
+  (
+    Chat\.html
+  |
+    \$\(
+  )?
+
+  # start of string or regex
+  ['"`\/]
+
+*/

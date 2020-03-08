@@ -27,8 +27,14 @@
         // "@typescript-eslint/switch-exhaustiveness-check": "error",
 
         // test only (should never be committed, but useful when testing)
+        "max-len": ["error", {
+          "code": 120, "tabWidth": 0,
+          // see bottom of .eslintrc-no-types.json for source
+          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9$.]+ \\+?=>? |(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Chat\\.html|\\$\\()?['\"`/]"
+        }],
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],
+        "prefer-const": ["error", {"destructuring": "all"}],
 
         // probably bugs
         "@typescript-eslint/no-floating-promises": ["error", {"ignoreVoid": true}],
@@ -41,14 +47,7 @@
         "@typescript-eslint/no-unnecessary-qualifier": "off",
         "@typescript-eslint/no-unnecessary-type-arguments": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
-        "@typescript-eslint/prefer-regexp-exec": "error",
-
-        // test only (should never be committed, but useful when testing)
-        "max-len": ["error", {
-          "code": 120, "tabWidth": 0,
-          "ignorePattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?=>? (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`/]"
-        }],
-        "prefer-const": ["error", {"destructuring": "all"}]
+        "@typescript-eslint/prefer-regexp-exec": "error"
       }
     }
   ]

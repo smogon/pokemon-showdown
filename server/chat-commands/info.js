@@ -2229,7 +2229,7 @@ const commands = {
 	'!dice': true,
 	roll: 'dice',
 	dice(target, room, user) {
-		if (!target || target.match(/[^\d\sdHL+-]/i)) return this.parse('/help dice');
+		if (!target || /[^\d\sdHL+-]/i.test(target)) return this.parse('/help dice');
 		if (!this.runBroadcast(true)) return;
 
 		// ~30 is widely regarded as the sample size required for sum to be a Gaussian distribution.
