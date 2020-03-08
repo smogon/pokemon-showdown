@@ -172,17 +172,22 @@ function battleFactorySets(template: string | Template, tier: string | null, gen
 	gen = toID(gen);
 	const genNum = parseInt(gen[3]);
 	if (isNaN(genNum) || genNum < 6 || (isBSS && genNum < 7)) return false;
-	let statsFile = JSON.parse(FS(`data${gen === 'gen8' ? '/' : `/mods/${gen}`}/${isBSS ? `bss-` : ``}factory-sets.json`).readIfExistsSync() || "{}");
+	const statsFile = JSON.parse(
+		FS(`data${gen === 'gen8' ? '/' : `/mods/${gen}`}/${isBSS ? `bss-` : ``}factory-sets.json`).readIfExistsSync() ||
+		"{}"
+	);
 	if (!Object.keys(statsFile).length) return false;
 	let buf = ``;
 	const statNames: {[k: string]: string} = {
 		hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
-	}
+	};
 	if (!isBSS) {
 		if (!tier) return {e: `Please provide a valid tier.`};
 		if (!(toID(tier) in TIERS)) return {e: `That tier isn't supported.`};
 		const t = statsFile[TIERS[toID(tier)]];
-		if (!(template.speciesid in t)) return {e: `${template.species} doesn't have any sets in ${TIERS[toID(tier)]} for ${Dex.getFormat(`${gen}battlefactory`).name}.`};
+		if (!(template.speciesid in t)) {
+			return {e: `${template.species} doesn't have any sets in ${TIERS[toID(tier)]} for ${Dex.getFormat(`${gen}battlefactory`).name}.`};
+		}
 		const setObj = t[template.speciesid];
 		buf += `<span style="color:#999999;">Sets for ${template.species} in${genNum === 8 ? `` : ` ${GEN_NAMES[gen]}`} ${TIERS[toID(tier)]}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
@@ -312,9 +317,9 @@ export const commands: ChatCommands = {
 		if (args[1] && toID(args[1]) in Dex.dexes) dex = Dex.dexes[toID(args[1])];
 		if (dex.gen < 4) return this.parse(`/help randomdoublesbattle`);
 		const template = dex.getTemplate(args[0]);
-		let formatName = dex.gen > 6 ? dex.getFormat(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
+		const formatName = dex.gen > 6 ? dex.getFormat(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
 			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
-			'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
+				'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
 		if (!template.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
@@ -363,7 +368,7 @@ export const commands: ChatCommands = {
 			} else {
 				tier = 'ou';
 			}
-			let mod = args[2] || 'gen7';
+			const mod = args[2] || 'gen7';
 			const bfSets = battleFactorySets(template, tier, mod);
 			if (!bfSets) return this.parse(`/help battlefactory`);
 			if (typeof bfSets !== 'string') {
