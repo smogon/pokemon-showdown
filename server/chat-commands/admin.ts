@@ -43,9 +43,8 @@ export const commands: ChatCommands = {
 		if (!this.can('addhtml', null, room)) return;
 		target = Chat.collapseLineBreaksHTML(target);
 		if (!user.can('addhtml')) {
-			target += Chat.html`
-				<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>
-			`;
+			target +=
+				Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
 		this.addBox(target);
