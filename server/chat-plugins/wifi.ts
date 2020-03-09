@@ -458,9 +458,9 @@ export class LotteryGiveaway extends Giveaway {
 			const winnerNames = this.winners.map(winner => winner.name).join(', ');
 			this.room.modlog(`(wifi) GIVEAWAY WIN: ${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}" (OT: ${this.ot} TID: ${this.tid})`);
 			this.send(this.generateWindow(
-				`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p>
-				<p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />
-				Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b>Congratulations!</p>`
+				`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p>` +
+				`<p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />` +
+				`Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b>Congratulations!</p>`
 			));
 			for (const winner of this.winners) {
 				winner.sendTo(
