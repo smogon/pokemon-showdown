@@ -34,7 +34,7 @@ function formatItem(item: Item | string) {
 	return `<a href="${Config.routes.dex}/items/${item.id}" target="_blank" class="subtle" style="white-space:nowrap">${item.name}</a>`;
 }
 
-function trimmedItemsArray(items: readonly ID[]) {
+function trimmedItemsArray(items: string[]) {
 	const data: string[] = [];
 	for (const item of items) {
 		if (data.includes(item)) continue;
@@ -43,7 +43,7 @@ function trimmedItemsArray(items: readonly ID[]) {
 	return data;
 }
 
-function trimmedMovesArray(moves: readonly ID[]) {
+function trimmedMovesArray(moves: string[]) {
 	const data: string[] = [];
 	for (const move of moves) {
 		if (data.includes(move)) continue;
@@ -87,12 +87,12 @@ function getRBYMoves(template: string | Template) {
 function getGSCMoves(template: string | Template) {
 	template = Dex.mod('gen2').getTemplate(template);
 	let buf = ``;
-	if (template.randomSet1) {
-		const set = template.randomSet1;
+	if (!template.randomSets || !template.randomSets.length) return false;
+	for (const [i, set] of template.randomSets.entries()) {
 		const items = trimmedItemsArray(set.item).map(formatItem).join(" / ");
-		buf += `<details><summary>Set 1</summary>`;
+		buf += `<details><summary>Set ${i + 1}</summary>`;
 		buf += `<ul style="list-style-type:none;">`;
-		buf += `<li>${template.species} @ ${items}</ul>`;
+		buf += `<li>${template.species}${items.length ? ` @ ${items}` : ``}</li>`;
 		if (set.baseMove1) buf += `<li>- ${formatMove(set.baseMove1)}</li>`;
 		if (set.baseMove2) buf += `<li>- ${formatMove(set.baseMove2)}</li>`;
 		if (set.baseMove3) buf += `<li>- ${formatMove(set.baseMove3)}</li>`;
@@ -103,71 +103,6 @@ function getGSCMoves(template: string | Template) {
 		if (set.fillerMoves4) buf += `<li>- ${trimmedMovesArray(set.fillerMoves4).map(formatMove).join(" / ")}</li>`;
 		buf += `</ul></details>`;
 	}
-	if (template.randomSet2) {
-		const set = template.randomSet2;
-		const items = trimmedItemsArray(set.item).map(formatItem).join(" / ");
-		buf += `<details><summary>Set 2</summary>`;
-		buf += `<ul style="list-style-type:none;">`;
-		buf += `<li>${template.species} @ ${items}</ul>`;
-		if (set.baseMove1) buf += `<li>- ${formatMove(set.baseMove1)}</li>`;
-		if (set.baseMove2) buf += `<li>- ${formatMove(set.baseMove2)}</li>`;
-		if (set.baseMove3) buf += `<li>- ${formatMove(set.baseMove3)}</li>`;
-		if (set.baseMove4) buf += `<li>- ${formatMove(set.baseMove4)}</li>`;
-		if (set.fillerMoves1) buf += `<li>- ${trimmedMovesArray(set.fillerMoves1).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves2) buf += `<li>- ${trimmedMovesArray(set.fillerMoves2).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves3) buf += `<li>- ${trimmedMovesArray(set.fillerMoves3).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves4) buf += `<li>- ${trimmedMovesArray(set.fillerMoves4).map(formatMove).join(" / ")}</li>`;
-		buf += `</ul></details>`;
-	}
-	if (template.randomSet3) {
-		const set = template.randomSet3;
-		const items = trimmedItemsArray(set.item).map(formatItem).join(" / ");
-		buf += `<details><summary>Set 3</summary>`;
-		buf += `<ul style="list-style-type:none;">`;
-		buf += `<li>${template.species} @ ${items}</ul>`;
-		if (set.baseMove1) buf += `<li>- ${formatMove(set.baseMove1)}</li>`;
-		if (set.baseMove2) buf += `<li>- ${formatMove(set.baseMove2)}</li>`;
-		if (set.baseMove3) buf += `<li>- ${formatMove(set.baseMove3)}</li>`;
-		if (set.baseMove4) buf += `<li>- ${formatMove(set.baseMove4)}</li>`;
-		if (set.fillerMoves1) buf += `<li>- ${trimmedMovesArray(set.fillerMoves1).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves2) buf += `<li>- ${trimmedMovesArray(set.fillerMoves2).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves3) buf += `<li>- ${trimmedMovesArray(set.fillerMoves3).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves4) buf += `<li>- ${trimmedMovesArray(set.fillerMoves4).map(formatMove).join(" / ")}</li>`;
-		buf += `</ul></details>`;
-	}
-	if (template.randomSet4) {
-		const set = template.randomSet4;
-		const items = trimmedItemsArray(set.item).map(formatItem).join(" / ");
-		buf += `<details><summary>Set 4</summary>`;
-		buf += `<ul style="list-style-type:none;">`;
-		buf += `<li>${template.species} @ ${items}</ul>`;
-		if (set.baseMove1) buf += `<li>- ${formatMove(set.baseMove1)}</li>`;
-		if (set.baseMove2) buf += `<li>- ${formatMove(set.baseMove2)}</li>`;
-		if (set.baseMove3) buf += `<li>- ${formatMove(set.baseMove3)}</li>`;
-		if (set.baseMove4) buf += `<li>- ${formatMove(set.baseMove4)}</li>`;
-		if (set.fillerMoves1) buf += `<li>- ${trimmedMovesArray(set.fillerMoves1).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves2) buf += `<li>- ${trimmedMovesArray(set.fillerMoves2).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves3) buf += `<li>- ${trimmedMovesArray(set.fillerMoves3).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves4) buf += `<li>- ${trimmedMovesArray(set.fillerMoves4).map(formatMove).join(" / ")}</li>`;
-		buf += `</ul></details>`;
-	}
-	if (template.randomSet5) {
-		const set = template.randomSet5;
-		const items = trimmedItemsArray(set.item).map(formatItem).join(" / ");
-		buf += `<details><summary>Set 5</summary>`;
-		buf += `<ul style="list-style-type:none;">`;
-		buf += `<li>${template.species} @ ${items}</ul>`;
-		if (set.baseMove1) buf += `<li>- ${formatMove(set.baseMove1)}</li>`;
-		if (set.baseMove2) buf += `<li>- ${formatMove(set.baseMove2)}</li>`;
-		if (set.baseMove3) buf += `<li>- ${formatMove(set.baseMove3)}</li>`;
-		if (set.baseMove4) buf += `<li>- ${formatMove(set.baseMove4)}</li>`;
-		if (set.fillerMoves1) buf += `<li>- ${trimmedMovesArray(set.fillerMoves1).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves2) buf += `<li>- ${trimmedMovesArray(set.fillerMoves2).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves3) buf += `<li>- ${trimmedMovesArray(set.fillerMoves3).map(formatMove).join(" / ")}</li>`;
-		if (set.fillerMoves4) buf += `<li>- ${trimmedMovesArray(set.fillerMoves4).map(formatMove).join(" / ")}</li>`;
-		buf += `</ul></details>`;
-	}
-	if (!template.randomSet1) return false;
 	return buf;
 }
 
