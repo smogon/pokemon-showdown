@@ -1392,7 +1392,7 @@ let BattleFormatsData = {
 			{"generation": 3, "level": 25},
 			{"generation": 4, "level": 22},
 		],
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
 	kinglergmax: {
@@ -6669,7 +6669,7 @@ let BattleFormatsData = {
 	},
 	vikavolt: {
 		randomBattleMoves: ["agility", "bugbuzz", "energyball", "stickyweb", "thunderbolt", "voltswitch"],
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 	},
 	vikavolttotem: {
@@ -7049,7 +7049,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 1, "shiny": 1, "moves": ["flamethrower", "bodyslam", "wideguard"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 30, "gender": "M", "nature": "Brave", "moves": ["flamethrower", "shelltrap", "dragontail"], "pokeball": "cherishball"},
 		],
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
 	togedemaru: {
