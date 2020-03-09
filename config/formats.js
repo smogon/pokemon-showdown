@@ -1970,7 +1970,7 @@ let Formats = [
 		ruleset: ['Standard', 'Little Cup'],
 		banlist: [
 			'Gligar', 'Meditite', 'Murkrow', 'Scraggy', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma',
-			'Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'Sand Rush',
+			'Sand Rush', 'Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom',
 		],
 	},
 	{
