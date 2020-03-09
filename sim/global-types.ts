@@ -1102,6 +1102,7 @@ interface TemplateFormatsData {
 	maleOnlyHidden?: boolean;
 	randomBattleMoves?: readonly string[];
 	randomDoubleBattleMoves?: readonly string[];
+	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 	requiredAbility?: string;
 	requiredItem?: string;
 	requiredItems?: string[];
@@ -1112,11 +1113,6 @@ interface TemplateFormatsData {
 
 interface ModdedTemplateFormatsData extends Partial<TemplateFormatsData> {
 	inherit?: true;
-	randomSet1?: RandomTeamsTypes.TemplateRandomSet;
-	randomSet2?: RandomTeamsTypes.TemplateRandomSet;
-	randomSet3?: RandomTeamsTypes.TemplateRandomSet;
-	randomSet4?: RandomTeamsTypes.TemplateRandomSet;
-	randomSet5?: RandomTeamsTypes.TemplateRandomSet;
 }
 
 type Template = import('./dex-data').Template;
@@ -1448,7 +1444,7 @@ namespace RandomTeamsTypes {
 		nature: string;
 		moves: string[];
 	}
-	export interface TemplateRandomSet {
+	export interface Gen2RandomSet {
 		chance: number;
 		item: string[];
 		baseMove1?: string;
