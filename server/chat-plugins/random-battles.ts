@@ -283,7 +283,12 @@ export const commands: ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
 		let dex = Dex;
-		if (args[1] && toID(args[1]) in Dex.dexes) dex = Dex.dexes[toID(args[1])];
+		if (args[1] && toID(args[1]) in Dex.dexes) {
+			dex = Dex.dexes[toID(args[1])];
+		} else if (room?.battle) {
+			const format = Dex.getFormat(room.battle.format);
+			dex = Dex.mod(format.mod);
+		}
 		const template = dex.getTemplate(args[0]);
 		if (!template.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
@@ -310,7 +315,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${moves.join(`, `)}`);
 	},
 	randombattleshelp: [
-		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8.`,
+		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8. If used in a battle, defaults to the gen of that battle.`,
 	],
 
 	'!randomdoublesbattle': true,
@@ -320,8 +325,19 @@ export const commands: ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randomdoublesbattle`);
 		let dex = Dex;
-		if (args[1] && toID(args[1]) in Dex.dexes) dex = Dex.dexes[toID(args[1])];
-		if (parseInt(toID(args[1])[3]) < 6) return this.parse(`/help randomdoublesbattle`);
+		if (args[1] && toID(args[1]) in Dex.dexes) {
+			dex = Dex.dexes[toID(args[1])];
+		} else if (room?.battle) {
+			const format = Dex.getFormat(room.battle.format);
+			dex = Dex.mod(format.mod);
+		}
+		if (parseInt(toID(args[1])[3]) < 4) {
+			if (room?.battle) {
+				dex = Dex.mod('gen8');
+			} else {
+				return this.parse(`/help randomdoublesbattle`);
+			}
+		}
 		const template = dex.getTemplate(args[0]);
 		const formatName = dex.gen > 6 ? dex.getFormat(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
 			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
@@ -336,7 +352,7 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(`<span style="color:#999999;">Doubles moves for ${template.species} in ${formatName}:</span><br />${moves.join(`, `)}`);
 	},
 	randomdoublesbattlehelp: [
-		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 6-8. Defaults to Gen 8.`,
+		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8. If used in a battle, defaults to that gen.`,
 	],
 
 	'!battlefactory': true,
