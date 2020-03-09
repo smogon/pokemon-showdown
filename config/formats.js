@@ -257,6 +257,15 @@ let Formats = [
 		banlist: ['DUber', 'Beat Up'],
 	},
 	{
+		name: "[Gen 8] Doubles Ubers",
+
+		mod: 'gen8',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles'],
+		banlist: [],
+	},
+	{
 		name: "[Gen 8] Doubles UU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3658504/">Doubles UU Metagame Discussion</a>`,
