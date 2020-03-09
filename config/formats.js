@@ -1674,7 +1674,10 @@ let Formats = [
 		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Standard', 'Little Cup'],
-		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
+		banlist: [
+			'Drifloon', 'Gligar', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Yanma',
+			'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger',
+		],
 	},
 	{
 		name: "[Gen 6] Monotype",
@@ -1965,7 +1968,10 @@ let Formats = [
 		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Standard', 'Little Cup'],
-		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Sand Rush', 'Gligar', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela'],
+		banlist: [
+			'Gligar', 'Meditite', 'Murkrow', 'Scraggy', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma',
+			'Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'Sand Rush',
+		],
 	},
 	{
 		name: "[Gen 5] Monotype",
@@ -2140,7 +2146,7 @@ let Formats = [
 		maxLevel: 5,
 		ruleset: ['Standard', 'Little Cup'],
 		banlist: [
-			'LC Uber', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma',
+			'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma',
 			'Berry Juice', 'Deep Sea Tooth', 'Dragon Rage', 'Hypnosis', 'Sonic Boom',
 		],
 	},
