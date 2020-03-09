@@ -2632,6 +2632,17 @@ export class Battle {
 			return false;
 		}
 
+		if (this.gen >= 5) {
+			this.eachEvent('Update');
+		}
+
+		if (action.choice === 'runSwitch') {
+			const pokemon = action.pokemon;
+			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
+				this.runEvent('EmergencyExit', pokemon);
+			}
+		}
+
 		const switches = this.sides.map(
 			side => side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
 		);
@@ -2647,22 +2658,12 @@ export class Battle {
 
 		for (const playerSwitch of switches) {
 			if (playerSwitch) {
-				if (this.gen >= 5) {
-					this.eachEvent('Update');
-				}
 				this.makeRequest('switch');
 				return true;
 			}
 		}
 
-		this.eachEvent('Update');
-
-		if (action.choice === 'runSwitch') {
-			const pokemon = action.pokemon;
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
-			}
-		}
+		if (this.gen < 5) this.eachEvent('Update');
 
 		if (this.gen >= 8 && this.queue.length && this.queue[0].choice === 'move') {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.

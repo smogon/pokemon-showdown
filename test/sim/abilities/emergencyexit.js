@@ -45,6 +45,17 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
+	it(`should request switch-out if brought below half HP by Photon Geyser`, function () {
+		battle = common.createBattle([[
+			{species: "Mew", moves: ['photongeyser']},
+		], [
+			{species: "Charmeleon", ability: 'emergencyexit', moves: ['splash']},
+			{species: "Shaymin", moves: ['splash']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.requestState, 'switch');
+	});
+
 	it(`should not request switch-out if attacked and healed by berry`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
@@ -68,6 +79,21 @@ describe(`Emergency Exit`, function () {
 		]});
 		battle.makeChoices('move thunderbolt 1, move batonpass', 'move sleeptalk, move sleeptalk');
 		assert(!battle.p2.activeRequest.forceSwitch);
+	});
+
+	it(`should request switch-out after taking hazard damage`, function () {
+		battle = common.createBattle([
+			[{species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk']}, {species: "Magikarp", ability: 'swiftswim', moves: ['splash']}],
+			[{species: "Arceus-Flying", ability: 'ironbarbs', moves: ['stealthrock', 'spikes', 'dragonascent']}],
+		]);
+		battle.makeChoices('move uturn', 'move stealthrock');
+		battle.makeChoices('switch 2', '');
+		battle.makeChoices('move splash', 'move spikes');
+		battle.makeChoices('move splash', 'move spikes');
+		battle.makeChoices('move splash', 'move spikes');
+		battle.makeChoices('switch 2', 'move dragonascent');
+		assert(battle.p1.active[0].hp);
+		assert.equal(battle.requestState, 'switch');
 	});
 
 	it(`should not request switch-out after taking residual damage and getting healed by berry`, function () {
