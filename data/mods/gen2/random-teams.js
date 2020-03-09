@@ -3,15 +3,16 @@
 const RandomGen3Teams = require('../gen3/random-teams');
 
 class RandomGen2Teams extends RandomGen3Teams {
-	// @ts-ignore
 	randomTeam() {
 		let pokemonLeft = 6;
+		/** @type {RandomTeamsTypes.RandomSet[]} */
 		let pokemon = [];
 
+		/** @type {string[]} */
 		let pokemonPool = [];
 		for (let id in this.dex.data.FormatsData) {
 			let template = this.dex.getTemplate(id);
-			if (!template.isNonstandard && this.dex.data.FormatsData[id].randomSet1) {
+			if (!template.isNonstandard && this.dex.data.FormatsData[id].randomSets) {
 				pokemonPool.push(id);
 			}
 		}
@@ -87,20 +88,17 @@ class RandomGen2Teams extends RandomGen3Teams {
 
 			// The set passes the randomTeam limitations.
 			let set = this.randomSet(template, restrictMoves, pokemon.length);
-			// @ts-ignore
-			if (set.other.discard && pokemonPool.length + 1 > pokemonLeft) continue;
+			if (set.other && set.other.discard && pokemonPool.length + 1 > pokemonLeft) continue;
 
 			// The set also passes the randomSet limitations.
-			pokemon.push(set.moveset);
+			pokemon.push(set);
 
 			// Now let's update the counters. First, the Pokémon left.
 			pokemonLeft--;
 
 			// Moves counter.
-			// @ts-ignore
-			restrictMoves = set.other.restrictMoves;
-			// @ts-ignore
-			for (const moveid of set.moveset.moves) {
+			if (set.other) restrictMoves = set.other.restrictMoves;
+			for (const moveid of set.moves) {
 				if (restrictMoves[moveid]) restrictMoves[moveid]--;
 				if (restrictMoves['phazing'] && ['roar', 'whirlwind'].includes(moveid)) {
 					restrictMoves['phazing']--;
@@ -148,11 +146,12 @@ class RandomGen2Teams extends RandomGen3Teams {
 		if (slot === undefined) slot = 1;
 		template = this.dex.getTemplate(template);
 		if (!template.exists) template = this.dex.getTemplate('unown');
+		if (!template.randomSets || !template.randomSets.length) template = this.dex.getTemplate('unown');
 
 		let randomSetNumber = 0;
-		/**@type {RandomTeamsTypes.RandomSet} */
+		/**@type {RandomTeamsTypes.Gen2RandomSet} */
 		// @ts-ignore
-		let set = template.randomSet1;
+		let set = template.randomSets[0];
 		/**@type {string[]} */
 		let moves = [];
 		/**@type {{[k: string]: number}} */
@@ -179,50 +178,27 @@ class RandomGen2Teams extends RandomGen3Teams {
 			hasMove = {};
 
 			// @ts-ignore
-			if (template.randomSet2) {
-				randomSetNumber = this.random(15);
+			if (template.randomSets.length > 1) {
+				randomSetNumber = 15;
 				// @ts-ignore
-				if (randomSetNumber < template.randomSet1.chance) {
-					// @ts-ignore
-					set = template.randomSet1;
-					// @ts-ignore
-				} else if (randomSetNumber < template.randomSet2.chance) {
-					// @ts-ignore
-					set = template.randomSet2;
-					// @ts-ignore
-				} else if (template.randomSet3 && randomSetNumber < template.randomSet3.chance) {
-					// @ts-ignore
-					set = template.randomSet3;
-					// @ts-ignore
-				} else if (template.randomSet4 && randomSetNumber < template.randomSet4.chance) {
-					// @ts-ignore
-					set = template.randomSet4;
-					// @ts-ignore
-				} else if (template.randomSet5) {
-					// @ts-ignore
-					set = template.randomSet5;
+				for (const s of template.randomSets) {
+					if (randomSetNumber < s.chance) {
+						set = s;
+					}
 				}
 			}
 
 			// Even if we want to discard this set, return a proper moveset in case there's no room to discard more Pokemon
 			// Add the base moves (between 0 and 4) of the chosen set
-			// @ts-ignore
 			if (set.baseMove1 && moves.length < 4) moves.push(set.baseMove1);
-			// @ts-ignore
 			if (set.baseMove2 && moves.length < 4) moves.push(set.baseMove2);
-			// @ts-ignore
 			if (set.baseMove3 && moves.length < 4) moves.push(set.baseMove3);
-			// @ts-ignore
 			if (set.baseMove4 && moves.length < 4) moves.push(set.baseMove4);
 
 			// Add the filler moves (between 0 and 4) of the chosen set
-			// @ts-ignore
 			if (set.fillerMoves1 && moves.length < 4) this.randomMove(moves, hasMove, set.fillerMoves1);
-			// @ts-ignore
 			if (set.fillerMoves2 && moves.length < 4) this.randomMove(moves, hasMove, set.fillerMoves2);
-			// @ts-ignore
 			if (set.fillerMoves3 && moves.length < 4) this.randomMove(moves, hasMove, set.fillerMoves3);
-			// @ts-ignore
 			if (set.fillerMoves4 && moves.length < 4) this.randomMove(moves, hasMove, set.fillerMoves4);
 
 			// Make sure it's not an undesired moveset according to restrictMoves and the rest of the team
@@ -251,7 +227,6 @@ class RandomGen2Teams extends RandomGen3Teams {
 
 		// Add the held item
 		// TODO: for some reason, items like Thick Club are not working in randbats
-		// @ts-ignore
 		if (set.item) item = this.sample(set.item);
 
 		// Adjust ivs for hiddenpower
@@ -279,6 +254,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			if (ivs.def === 28 || ivs.def === 24) ivs.hp -= 8;
 		}
 
+		/** @type {{[k: string]: number}} */
 		let levelScale = {
 			LC: 90, // unused
 			NFE: 84, // unused
@@ -289,30 +265,26 @@ class RandomGen2Teams extends RandomGen3Teams {
 			OU: 68,
 			Uber: 64,
 		};
+		/** @type {{[k: string]: number}} */
 		let customScale = {
 			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99, // unused
 			Unown: 98, Wobbuffet: 82, Ditto: 82,
 			Snorlax: 66, Nidoqueen: 70,
 		};
-		// @ts-ignore
 		let level = levelScale[template.tier] || 90;
-		// @ts-ignore
 		if (customScale[template.name]) level = customScale[template.name];
 
-		// @ts-ignore
 		return {
-			moveset: {
-				name: template.name,
-				species: template.name,
-				moves: moves,
-				ability: 'None',
-				evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
-				ivs: ivs,
-				item: item,
-				level: level,
-				shiny: false,
-				gender: template.gender ? template.gender : 'M',
-			},
+			name: template.name,
+			species: template.name,
+			moves: moves,
+			ability: 'None',
+			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
+			ivs: ivs,
+			item: item,
+			level: level,
+			shiny: false,
+			gender: template.gender ? template.gender : 'M',
 			other: {
 				discard: discard,
 				restrictMoves: restrictMoves,
