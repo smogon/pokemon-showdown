@@ -630,6 +630,41 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly exclusiveMoves?: readonly ID[];
 	readonly comboMoves?: readonly ID[];
 	readonly essentialMove?: ID;
+	readonly randomSet1?: {
+		chance: number,
+		item: readonly ID[],
+		baseMove1?: ID, baseMove2?: ID, baseMove3?: ID, baseMove4?: ID,
+		fillerMoves1?: readonly ID[], fillerMoves2?: readonly ID[],
+		fillerMoves3?: readonly ID[], fillerMoves4?: readonly ID[],
+	};
+	readonly randomSet2?: {
+		chance: number,
+		item: readonly ID[],
+		baseMove1?: ID, baseMove2?: ID, baseMove3?: ID, baseMove4?: ID,
+		fillerMoves1?: readonly ID[], fillerMoves2?: readonly ID[],
+		fillerMoves3?: readonly ID[], fillerMoves4?: readonly ID[],
+	};
+	readonly randomSet3?: {
+		chance: number,
+		item: readonly ID[],
+		baseMove1?: ID, baseMove2?: ID, baseMove3?: ID, baseMove4?: ID,
+		fillerMoves1?: readonly ID[], fillerMoves2?: readonly ID[],
+		fillerMoves3?: readonly ID[], fillerMoves4?: readonly ID[],
+	};
+	readonly randomSet4?: {
+		chance: number,
+		item: readonly ID[],
+		baseMove1?: ID, baseMove2?: ID, baseMove3?: ID, baseMove4?: ID,
+		fillerMoves1?: readonly ID[], fillerMoves2?: readonly ID[],
+		fillerMoves3?: readonly ID[], fillerMoves4?: readonly ID[],
+	};
+	readonly randomSet5?: {
+		chance: number,
+		item: readonly ID[],
+		baseMove1?: ID, baseMove2?: ID, baseMove3?: ID, baseMove4?: ID,
+		fillerMoves1?: readonly ID[], fillerMoves2?: readonly ID[],
+		fillerMoves3?: readonly ID[], fillerMoves4?: readonly ID[],
+	};
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
