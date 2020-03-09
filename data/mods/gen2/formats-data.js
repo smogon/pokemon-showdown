@@ -3377,7 +3377,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	granbull: {
-			randomSets: [
+		randomSets: [
 			{ // Curse
 				chance: 8,
 				item: ["leftovers"],
@@ -3458,7 +3458,7 @@ let BattleFormatsData = {
 		tier: "OU",
 	},
 	sneasel: {
-			randomSets: [
+		randomSets: [
 			{ // Attacker
 				chance: 16,
 				item: ["leftovers", "leftovers", "leftovers", "miracleberry"],
@@ -3478,7 +3478,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	ursaring: {
-			randomSets: [
+		randomSets: [
 			{ // Curse + EQ + Rest
 				chance: 6,
 				item: ["leftovers", "leftovers", "mintberry"],
