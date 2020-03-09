@@ -330,10 +330,13 @@ export class BattleQueue extends Array<Action> {
 		this.splice(0);
 	}
 
-	debug() {
-		return this.map(
+	debug(action?: Action): string {
+		if (action) {
 			// @ts-ignore
-			action => `${action.order || ''}:${action.priority || ''}:${action.speed || ''}:${action.subOrder || ''} - ${action.choice}${action.pokemon ? ' ' + action.pokemon : ''}${action.move ? ' ' + action.move : ''}`
+			return `${action.order || ''}:${action.priority || ''}:${action.speed || ''}:${action.subOrder || ''} - ${action.choice}${action.pokemon ? ' ' + action.pokemon : ''}${action.move ? ' ' + action.move : ''}`;
+		}
+		return this.map(
+			queueAction => this.debug(queueAction)
 		).join('\n') + '\n';
 	}
 
