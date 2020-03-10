@@ -609,7 +609,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 */
 	readonly learnset?: {[moveid: string]: MoveSource[]};
 	/** Source of learnsets for Pokemon that lack their own */
-	readonly inheritsFrom: string | string[];
+	readonly inheritsFrom: string;
 	/** True if the only way to get this pokemon is from events. */
 	readonly eventOnly: boolean;
 	/** List of event data for each event. */
