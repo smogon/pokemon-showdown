@@ -625,7 +625,7 @@ class RandomTeams {
 
 		if (template.battleOnly && !template.isGigantamax) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			species = template.inheritsFrom || template.baseSpecies;
+			species = (template.inheritsFrom ? this.dex.getTemplate(template.inheritsFrom).species : template.baseSpecies);
 		}
 
 		const randMoves = !isDoubles ? template.randomBattleMoves : (template.randomDoubleBattleMoves || template.randomBattleMoves);
