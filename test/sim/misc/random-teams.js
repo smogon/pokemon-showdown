@@ -4,7 +4,7 @@ const assert = require('./../../assert');
 const TeamValidator = require('./../../../.sim-dist/team-validator').TeamValidator;
 
 const TOTAL_TEAMS = 10;
-const ALL_GENS = [1, 2, 3, 4, 5, 6, 7];
+const ALL_GENS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function isValidSet(gen, set) {
 	const dex = Dex.mod(`gen${gen}`);
@@ -51,6 +51,185 @@ describe(`Random Team generator (slow)`, function () {
 					err.message += ` (seed ${seed})`;
 					throw err;
 				}
+			}
+		});
+		it(`should make sure all moves exist in [Gen 3-8] Random Battle`, function () {
+			this.timeout(0);
+			const generator = Dex.getTeamGenerator(`gen${gen}randombattle`);
+			if (generator.gen !== gen) return;
+			if (generator.gen < 3) return; // Gens 1-2 Random Battle have different random move validation
+
+			let team = generator.getTeam();
+			for (const set of team) {
+				const template = Dex.getTemplate(set.species);
+				if (!template.randomBattleMoves) continue;
+				for (const moveid of template.randomBattleMoves) {
+					const move = Dex.getMove(moveid);
+					assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
+					assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
+				}
+			}
+		});
+		it(`should make sure all moves exist in [Gen 1] Random Battle`, function () {
+			this.timeout(0);
+			const generator = Dex.getTeamGenerator(`gen${gen}randombattle`);
+			if (generator.gen !== 1) return;
+
+			let team = generator.getTeam();
+			for (const set of team) {
+				const template = Dex.mod('gen1').getTemplate(set.species);
+				if (!template.randomBattleMoves) continue;
+				for (const moveid of template.randomBattleMoves) {
+					const move = Dex.getMove(moveid);
+					assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
+					assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
+					assert(move.gen < 2, `Future move '${move.id}' on ${template.species}`);
+				}
+				if (!template.exclusiveMoves) continue;
+				for (const moveid of template.exclusiveMoves) {
+					const move = Dex.getMove(moveid);
+					assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
+					assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
+					assert(move.gen < 2, `Future move '${move.id}' on ${template.species}`);
+				}
+				if (!template.comboMoves) continue;
+				for (const moveid of template.comboMoves) {
+					const move = Dex.getMove(moveid);
+					assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
+					assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
+					assert(move.gen < 2, `Future move '${move.id}' on ${template.species}`);
+				}
+				if (template.essentialMove) {
+					const move = Dex.getMove(template.essentialMove);
+					assert(move.exists, `Invalid move '${template.essentialMove}' on ${template.species}`);
+					assert(move.id === template.essentialMove, `Miscapitalized move ID '${template.essentialMove}' on ${template.species}`);
+					assert(move.gen < 2, `Future move '${move.id}' on ${template.species}`);
+				}
+			}
+		});
+		it(`should make sure all moves and items exist in [Gen 2] Random Battle`, function () {
+			this.timeout(0);
+			const generator = Dex.getTeamGenerator(`gen${gen}randombattle`);
+			if (generator.gen !== 2) return;
+
+			let team = generator.getTeam();
+			for (const set of team) {
+				const template = Dex.mod('gen2').getTemplate(set.species);
+				if (!template.randomSets) continue;
+				const moveSample = [];
+				for (const set of template.randomSets) {
+					if (set.item && !set.item.every(x => x === "")) {
+						for (const itemid of set.item) {
+							const item = Dex.getItem(itemid);
+							assert(item.exists, `Invalid item '${itemid}' on ${template.species}`);
+							assert(item.id === itemid, `Miscapitalized item ID '${itemid}' on ${template.species}`);
+							assert(item.gen < 3, `Future item '${item.id}' on ${template.species}`);
+						}
+					} else {
+						continue;
+					}
+					if (set.baseMove1) {
+						const move = Dex.getMove(set.baseMove1);
+						assert(move.exists, `Invalid move '${set.baseMove1}' on ${template.species}`);
+						assert(move.id === set.baseMove1, `Miscapitalized move ID '${set.baseMove1}' on ${template.species}`);
+						assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
+						moveSample.push(move.id);
+					} else {
+						continue;
+					}
+					if (set.baseMove2) {
+						const move = Dex.getMove(set.baseMove2);
+						assert(move.exists, `Invalid move '${set.baseMove2}' on ${template.species}`);
+						assert(move.id === set.baseMove2, `Miscapitalized move ID '${set.baseMove2}' on ${template.species}`);
+						assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
+						moveSample.push(move.id);
+					} else {
+						continue;
+					}
+					if (set.baseMove3) {
+						const move = Dex.getMove(set.baseMove3);
+						assert(move.exists, `Invalid move '${set.baseMove3}' on ${template.species}`);
+						assert(move.id === set.baseMove3, `Miscapitalized move ID '${set.baseMove3}' on ${template.species}`);
+						assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
+						moveSample.push(move.id);
+					} else {
+						continue;
+					}
+					if (set.baseMove4) {
+						const move = Dex.getMove(set.baseMove4);
+						assert(move.exists, `Invalid move '${set.baseMove4}' on ${template.species}`);
+						assert(move.id === set.baseMove4, `Miscapitalized move ID '${set.baseMove4}' on ${template.species}`);
+						assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
+						moveSample.push(move.id);
+					} else {
+						continue;
+					}
+					if (set.fillerMoves1) {
+						for (const moveid of set.fillerMoves1) {
+							const move = Dex.getMove(moveid);
+							assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
+							assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
+							assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
+							if (moveSample.includes(move.id)) {
+								continue;
+							} else {
+								moveSample.push(move.id);
+								break;
+							}
+						}
+					} else {
+						continue;
+					}
+					if (set.fillerMoves2) {
+						for (const moveid of set.fillerMoves2) {
+							const move = Dex.getMove(moveid);
+							assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
+							assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
+							assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
+							if (moveSample.includes(move.id)) {
+								continue;
+							} else {
+								moveSample.push(move.id);
+								break;
+							}
+						}
+					} else {
+						continue;
+					}
+					if (set.fillerMoves3) {
+						for (const moveid of set.fillerMoves3) {
+							const move = Dex.getMove(moveid);
+							assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
+							assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
+							assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
+							if (moveSample.includes(move.id)) {
+								continue;
+							} else {
+								moveSample.push(move.id);
+								break;
+							}
+						}
+					} else {
+						continue;
+					}
+					if (set.fillerMoves4) {
+						for (const moveid of set.fillerMoves4) {
+							const move = Dex.getMove(moveid);
+							assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
+							assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
+							assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
+							if (moveSample.includes(move.id)) {
+								continue;
+							} else {
+								moveSample.push(move.id);
+								break;
+							}
+						}
+					} else {
+						continue;
+					}
+				}
+				assert(moveSample.length === 4, `${template.species} has more than 4 possible moves`);
 			}
 		});
 	}
