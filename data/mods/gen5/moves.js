@@ -615,7 +615,7 @@ let BattleMovedex = {
 	},
 	magicroom: {
 		inherit: true,
-		priority: 0,
+		priority: -7,
 	},
 	magmastorm: {
 		inherit: true,
