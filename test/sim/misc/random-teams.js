@@ -116,7 +116,6 @@ describe(`Random Team generator (slow)`, function () {
 			for (const set of team) {
 				const template = Dex.mod('gen2').getTemplate(set.species);
 				if (!template.randomSets) continue;
-				const moveSample = [];
 				for (const set of template.randomSets) {
 					if (set.item && !set.item.every(x => x === "")) {
 						for (const itemid of set.item) {
@@ -133,7 +132,6 @@ describe(`Random Team generator (slow)`, function () {
 						assert(move.exists, `Invalid move '${set.baseMove1}' on ${template.species}`);
 						assert(move.id === set.baseMove1, `Miscapitalized move ID '${set.baseMove1}' on ${template.species}`);
 						assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
-						moveSample.push(move.id);
 					} else {
 						continue;
 					}
@@ -142,7 +140,6 @@ describe(`Random Team generator (slow)`, function () {
 						assert(move.exists, `Invalid move '${set.baseMove2}' on ${template.species}`);
 						assert(move.id === set.baseMove2, `Miscapitalized move ID '${set.baseMove2}' on ${template.species}`);
 						assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
-						moveSample.push(move.id);
 					} else {
 						continue;
 					}
@@ -151,7 +148,6 @@ describe(`Random Team generator (slow)`, function () {
 						assert(move.exists, `Invalid move '${set.baseMove3}' on ${template.species}`);
 						assert(move.id === set.baseMove3, `Miscapitalized move ID '${set.baseMove3}' on ${template.species}`);
 						assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
-						moveSample.push(move.id);
 					} else {
 						continue;
 					}
@@ -160,7 +156,6 @@ describe(`Random Team generator (slow)`, function () {
 						assert(move.exists, `Invalid move '${set.baseMove4}' on ${template.species}`);
 						assert(move.id === set.baseMove4, `Miscapitalized move ID '${set.baseMove4}' on ${template.species}`);
 						assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
-						moveSample.push(move.id);
 					} else {
 						continue;
 					}
@@ -170,12 +165,6 @@ describe(`Random Team generator (slow)`, function () {
 							assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
 							assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
 							assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
-							if (moveSample.includes(move.id)) {
-								continue;
-							} else {
-								moveSample.push(move.id);
-								break;
-							}
 						}
 					} else {
 						continue;
@@ -186,12 +175,6 @@ describe(`Random Team generator (slow)`, function () {
 							assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
 							assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
 							assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
-							if (moveSample.includes(move.id)) {
-								continue;
-							} else {
-								moveSample.push(move.id);
-								break;
-							}
 						}
 					} else {
 						continue;
@@ -202,12 +185,6 @@ describe(`Random Team generator (slow)`, function () {
 							assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
 							assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
 							assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
-							if (moveSample.includes(move.id)) {
-								continue;
-							} else {
-								moveSample.push(move.id);
-								break;
-							}
 						}
 					} else {
 						continue;
@@ -218,18 +195,11 @@ describe(`Random Team generator (slow)`, function () {
 							assert(move.exists, `Invalid move '${moveid}' on ${template.species}`);
 							assert(move.id === moveid, `Miscapitalized move ID '${moveid}' on ${template.species}`);
 							assert(move.gen < 3, `Future move '${move.id}' on ${template.species}`);
-							if (moveSample.includes(move.id)) {
-								continue;
-							} else {
-								moveSample.push(move.id);
-								break;
-							}
 						}
 					} else {
 						continue;
 					}
 				}
-				assert(moveSample.length === 4, `${template.species} has more than 4 possible moves`);
 			}
 		});
 	}
