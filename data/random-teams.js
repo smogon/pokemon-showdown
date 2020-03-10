@@ -628,7 +628,7 @@ class RandomTeams {
 			species = template.species.slice(0, template.species.lastIndexOf('-'));
 		}
 
-		const randMoves = !isDoubles ? template.randomBattleMoves : template.randomDoubleBattleMoves || template.randomBattleMoves;
+		const randMoves = !isDoubles ? template.randomBattleMoves : (template.randomDoubleBattleMoves || template.randomBattleMoves);
 		let movePool = (randMoves ? randMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
 		let rejectedPool = [];
 		/**@type {string[]} */
@@ -1268,7 +1268,7 @@ class RandomTeams {
 			};
 			let tier = toID((template.isGigantamax ? this.dex.getTemplate(template.baseSpecies) : template).tier).replace('bl', '');
 			level = levelScale[tier] || (template.nfe ? 90 : 80);
-			if (customScale[species]) level = customScale[species];
+			if (customScale[template.species]) level = customScale[template.species];
 			if (tier === 'illegal' && Dex.mod('gen7').getTemplate(species).tier === 'Uber') level = 72;
 		} else {
 			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
@@ -1345,15 +1345,17 @@ class RandomTeams {
 		const pokemonPool = [];
 		for (let id in this.dex.data.FormatsData) {
 			let template = this.dex.getTemplate(id);
-			if (exclude.includes(template.id)) continue;
+			if (template.gen > this.gen || exclude.includes(template.id)) continue;
+			if (template.isMega || template.isPrimal) continue;
+			if (!template.randomBattleMoves) continue;
 			if (isMonotype) {
-				let types = template.types;
-				if (template.battleOnly) types = this.dex.getTemplate(template.baseSpecies).types;
-				if (types.indexOf(type) < 0) continue;
+				if (template.types.indexOf(type) < 0) continue;
+				if (template.battleOnly) {
+					template = this.dex.getTemplate(template.inheritsFrom || template.baseSpecies);
+					if (template.types.indexOf(type) < 0) continue;
+				}
 			}
-			if (template.gen <= this.gen && !template.isMega && !template.isPrimal && template.randomBattleMoves) {
-				pokemonPool.push(id);
-			}
+			pokemonPool.push(id);
 		}
 		return pokemonPool;
 	}

@@ -1079,7 +1079,7 @@ interface TemplateData {
 	otherForms?: string[];
 	otherFormes?: string[];
 	prevo?: string;
-	inheritsFrom?: string | string[];
+	inheritsFrom?: string;
 }
 
 interface ModdedTemplateData extends Partial<TemplateData> {
