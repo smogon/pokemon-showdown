@@ -189,25 +189,23 @@ class RandomTeams {
 			// Random legal ability
 			let abilities = Object.values(template.abilities).filter(a => this.dex.getAbility(a).gen <= this.gen);
 			/**@type {string} */
-			// @ts-ignore
 			let ability = this.gen <= 2 ? 'None' : this.sample(abilities);
 
 			// Four random unique moves from the movepool
 			let moves;
 			let pool = ['struggle'];
 			if (species === 'Smeargle') {
-				pool = Object.keys(this.dex.data.Movedex).filter(moveid => !(['chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge'].includes(moveid) || this.dex.data.Movedex[moveid].isZ || this.dex.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
-			} else if (template.learnset) {
-				// @ts-ignore
-				pool = Object.keys(template.learnset).filter(moveid => template.learnset[moveid].find(learned => learned.startsWith(this.gen)));
-				if (template.species.substr(0, 9) === 'Necrozma-' || template.species.substr(0, 6) === 'Rotom-') {
-					const learnset = this.dex.getTemplate(template.baseSpecies).learnset;
-					if (learnset) pool = [...new Set(pool.concat(Object.keys(learnset)))];
-				}
+				pool = Object.keys(this.dex.data.Movedex).filter(moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || this.dex.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
 			} else {
-				const learnset = this.dex.getTemplate(template.baseSpecies).learnset;
+				let learnset = template.learnset || this.dex.getTemplate(template.baseSpecies).learnset;
 				// @ts-ignore
 				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
+				if (template.species.substr(0, 9) === 'Necrozma-' || template.species.substr(0, 6) === 'Rotom-') {
+					learnset = this.dex.getTemplate(template.baseSpecies).learnset;
+					// @ts-ignore
+					const basePool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
+					pool = [...new Set(pool.concat(basePool))];
+				}
 			}
 			if (pool.length <= 4) {
 				moves = pool;
