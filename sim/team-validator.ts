@@ -1118,7 +1118,7 @@ export class TeamValidator {
 			}
 			if (!template.isGigantamax) {
 				// Set to out-of-battle forme
-				set.species = template.forme === 'Galar-Zen' ? 'Darmanitan-Galar' : template.baseSpecies;
+				set.species = template.inheritsFrom || template.baseSpecies;
 			}
 		} else {
 			if (template.requiredAbility) {
@@ -1912,8 +1912,15 @@ export class TeamValidator {
 	}
 
 	learnsetParent(template: Template) {
+		// Own Tempo Rockruff and Battle Bond Greninja are special event formes
+		// that are visually indistinguishable from their base forme but have
+		// different learnsets. To prevent a leak, we make them show up as their
+		// base forme, but hardcode their learnsets into Rockruff-Dusk and
+		// Greninja-Ash
 		if (template.species === 'Lycanroc-Dusk') {
 			return this.dex.getTemplate('Rockruff-Dusk');
+		} else if (template.species === 'Greninja-Ash') {
+			return null;
 		} else if (template.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
 			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar

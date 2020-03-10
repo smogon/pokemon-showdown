@@ -19,7 +19,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 			Monitor.crashlog(err, 'The gen 3 randbat set generator');
 		}
 
-		if (template.battleOnly) species = template.baseSpecies;
+		if (template.battleOnly) species = template.inheritsFrom || template.baseSpecies;
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
 		/**@type {string[]} */

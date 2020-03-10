@@ -108,7 +108,7 @@ function getGSCMoves(template: string | Template) {
 
 function battleFactorySets(template: string | Template, tier: string | null, gen = 'gen7', isBSS = false) {
 	template = Dex.getTemplate(template);
-	if (template.battleOnly) template = Dex.getTemplate(template.baseSpecies);
+	if (template.battleOnly) template = Dex.getTemplate(template.inheritsFrom || template.baseSpecies);
 	gen = toID(gen);
 	const genNum = parseInt(gen[3]);
 	if (isNaN(genNum) || genNum < 6 || (isBSS && genNum < 7)) return false;

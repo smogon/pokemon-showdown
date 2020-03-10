@@ -21,7 +21,7 @@ class RandomLetsGoTeams extends RandomTeams {
 
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			species = template.baseSpecies;
+			species = template.inheritsFrom || template.baseSpecies;
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);

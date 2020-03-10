@@ -2005,8 +2005,8 @@ const commands = {
 				return this.sendReplyBox(`${pokemon.name} did not exist in ${generation.toUpperCase()}!`);
 			}
 
-			if ((pokemon.battleOnly && pokemon.baseSpecies !== 'Greninja') || pokemon.baseSpecies === 'Keldeo' || pokemon.baseSpecies === 'Genesect') {
-				pokemon = Dex.getTemplate(pokemon.baseSpecies);
+			if ((pokemon.battleOnly && pokemon.baseSpecies !== 'Greninja') || ['Keldeo', 'Genesect'].includes(pokemon.baseSpecies)) {
+				pokemon = Dex.getTemplate(pokemon.inheritsFrom || pokemon.baseSpecies);
 			}
 
 			let formatName = extraFormat.name;

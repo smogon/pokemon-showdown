@@ -173,7 +173,7 @@ class RandomTeams {
 
 			// Make sure forme is legal
 			if (template.battleOnly || template.requiredItems && !template.requiredItems.some(req => toID(req) === item)) {
-				template = Dex.mod('gen' + this.gen).getTemplate(template.baseSpecies);
+				template = Dex.mod('gen' + this.gen).getTemplate(template.inheritsFrom || template.baseSpecies);
 				species = template.name;
 			}
 
@@ -625,7 +625,7 @@ class RandomTeams {
 
 		if (template.battleOnly && !template.isGigantamax) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			species = template.species.slice(0, template.species.lastIndexOf('-'));
+			species = template.inheritsFrom || template.baseSpecies;
 		}
 
 		const randMoves = !isDoubles ? template.randomBattleMoves : (template.randomDoubleBattleMoves || template.randomBattleMoves);

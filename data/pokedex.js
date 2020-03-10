@@ -5907,6 +5907,7 @@ let BattlePokedex = {
 		weightkg: 0.8,
 		color: "Red",
 		eggGroups: ["Fairy", "Amorphous"],
+		inheritsFrom: "castform",
 	},
 	castformrainy: {
 		num: 351,
@@ -5920,6 +5921,7 @@ let BattlePokedex = {
 		weightkg: 0.8,
 		color: "Blue",
 		eggGroups: ["Fairy", "Amorphous"],
+		inheritsFrom: "castform",
 	},
 	castformsnowy: {
 		num: 351,
@@ -5933,6 +5935,7 @@ let BattlePokedex = {
 		weightkg: 0.8,
 		color: "White",
 		eggGroups: ["Fairy", "Amorphous"],
+		inheritsFrom: "castform",
 	},
 	kecleon: {
 		num: 352,
@@ -7083,6 +7086,7 @@ let BattlePokedex = {
 		prevo: "cherubi",
 		evoLevel: 25,
 		eggGroups: ["Fairy", "Grass"],
+		inheritsFrom: "cherrim",
 	},
 	shellos: {
 		num: 422,
@@ -10721,6 +10725,7 @@ let BattlePokedex = {
 		weightkg: 6.5,
 		color: "White",
 		eggGroups: ["Undiscovered"],
+		inheritsFrom: "meloetta",
 	},
 	genesect: {
 		num: 649,
@@ -10935,6 +10940,7 @@ let BattlePokedex = {
 		weightkg: 40,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		inheritsFrom: "greninja",
 	},
 	bunnelby: {
 		num: 659,
@@ -11321,6 +11327,7 @@ let BattlePokedex = {
 		evoType: "useItem",
 		evoItem: "Dusk Stone",
 		eggGroups: ["Mineral"],
+		inheritsFrom: "aegislash",
 	},
 	spritzee: {
 		num: 682,
@@ -12451,6 +12458,7 @@ let BattlePokedex = {
 		weightkg: 78.6,
 		color: "Blue",
 		eggGroups: ["Water 2"],
+		inheritsFrom: "wishiwashi",
 	},
 	mareanie: {
 		num: 747,
@@ -13155,6 +13163,7 @@ let BattlePokedex = {
 		weightkg: 40,
 		color: "Brown",
 		eggGroups: ["Mineral"],
+		inheritsFrom: "minior",
 	},
 	komala: {
 		num: 775,
@@ -14326,6 +14335,7 @@ let BattlePokedex = {
 		weightkg: 18,
 		color: "Blue",
 		eggGroups: ["Water 1", "Flying"],
+		inheritsFrom: "cramorant",
 	},
 	cramorantgorging: {
 		num: 845,
@@ -14339,6 +14349,7 @@ let BattlePokedex = {
 		weightkg: 18,
 		color: "Blue",
 		eggGroups: ["Water 1", "Flying"],
+		inheritsFrom: "cramorant",
 	},
 	arrokuda: {
 		num: 846,
@@ -14899,6 +14910,7 @@ let BattlePokedex = {
 		weightkg: 89,
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
+		inheritsFrom: "eiscue",
 	},
 	indeedee: {
 		num: 876,
@@ -14952,6 +14964,7 @@ let BattlePokedex = {
 		weightkg: 3,
 		color: "Yellow",
 		eggGroups: ["Field", "Fairy"],
+		inheritsFrom: "morpeko",
 	},
 	cufant: {
 		num: 878,
