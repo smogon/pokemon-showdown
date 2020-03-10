@@ -627,7 +627,7 @@ class RandomTeams {
 
 		if (template.battleOnly && !template.isGigantamax) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			species = template.baseSpecies;
+			species = template.species.slice(0, template.species.lastIndexOf('-'));
 		}
 
 		const randMoves = !isDoubles ? template.randomBattleMoves : template.randomDoubleBattleMoves || template.randomBattleMoves;
