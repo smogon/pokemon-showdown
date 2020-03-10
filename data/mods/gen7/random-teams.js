@@ -41,14 +41,14 @@ class RandomGen7Teams extends RandomTeams {
 
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			species = template.inheritsFrom || template.baseSpecies;
+			species = (template.inheritsFrom ? this.dex.getTemplate(template.inheritsFrom).species : template.baseSpecies);
 		}
 		let battleForme = this.checkBattleForme(template);
 		if (battleForme && battleForme.randomBattleMoves && template.otherFormes && (battleForme.isMega ? !teamDetails.megaStone : this.random(2))) {
 			template = this.dex.getTemplate(template.otherFormes.length >= 2 ? this.sample(template.otherFormes) : template.otherFormes[0]);
 		}
 
-		const randMoves = !isDoubles ? template.randomBattleMoves : template.randomDoubleBattleMoves || template.randomBattleMoves;
+		const randMoves = !isDoubles ? template.randomBattleMoves : (template.randomDoubleBattleMoves || template.randomBattleMoves);
 		let movePool = (randMoves ? randMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
 		let rejectedPool = [];
 		/**@type {string[]} */
