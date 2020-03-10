@@ -511,6 +511,9 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly name: string;
 	/**
 	 * Base species. Species, but without the forme name.
+	 *
+	 * DO NOT ASSUME A POKEMON CAN TRANSFORM FROM `baseSpecies` TO
+	 * `species`. USE `inheritsFrom` FOR THAT.
 	 */
 	readonly baseSpecies: string;
 	/**
@@ -608,8 +611,16 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * form moveid:sources[].
 	 */
 	readonly learnset?: {[moveid: string]: MoveSource[]};
-	/** Source of learnsets for Pokemon that lack their own */
-	readonly inheritsFrom: string;
+	/**
+	 * Formes that can transform into this Pokemon, to inherit learnsets
+	 * from. (Like `prevo`, but for transformations that aren't
+	 * technically evolution. Includes in-battle transformations like
+	 * Zen Mode and out-of-battle transformations like Rotom.)
+	 *
+	 * Not filled out for megas/primals - fall back to baseSpecies
+	 * for in-battle formes.
+	 */
+	readonly inheritsFrom: ID;
 	/** True if the only way to get this pokemon is from events. */
 	readonly eventOnly: boolean;
 	/** List of event data for each event. */
