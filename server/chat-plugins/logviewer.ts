@@ -74,17 +74,14 @@ export const pages: PageTable = {
 		this.extractRoom();
 		this.title = `[Logs] ${datestring}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		let content;
+		let content = FS(`logs/chat/${this.room}/${monthstring}/${datestring}.txt`).readIfExistsSync();
 		let buf = `<b><h2>Logs for ${datestring} on ${this.room}:</h2></b>`;
-		try {
-			content = FS(`logs/chat/${this.room}/${monthstring}/${datestring}.txt`).readSync();
-		} catch (e) {}
 		if (!user.can('mute', null, this.room as ChatRoom | GameRoom)) return;
 		if (!content) {
 			buf = `<h2>All logs for ${this.room}. ${viewer.directory(this.room)}</h2>`;
 			this.title = `[Logs] Main Directory`;
 		} else {
-			if (parts[6] && parts[6] === 'true' || parts[3] === 'today' && parts[4] === 'true') {
+			if (parts[6] && parts[6] === 'true') {
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
 				buf += viewer.button('Main Directory', this.room, true);
 				buf += viewer.button(datestring, this.room);
