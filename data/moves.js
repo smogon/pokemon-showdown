@@ -7414,7 +7414,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		desc: "Damages opponent(s) by 1/8 of their maximum HP for four turns. Base Power scales with the base move's Base Power.",
+		desc: "Damages opponent(s) by 1/6 of their maximum HP for four turns. Base Power scales with the base move's Base Power.",
 		shortDesc: "Damages foes for 4 turns. BP scales w/ base move.",
 		id: "gmaxvolcalith",
 		isNonstandard: "Unobtainable",
@@ -7435,10 +7435,13 @@ let BattleMovedex = {
 			},
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
-					this.damage(pokemon.baseMaxhp / 8, pokemon);
+					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
 				}
 			},
 			onEnd(targetSide) {
+				for (const pokemon of targetSide.active) {
+					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
+				}
 				this.add('-sideend', targetSide, 'G-Max Volcalith');
 			},
 		},
