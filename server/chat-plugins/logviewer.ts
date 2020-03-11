@@ -14,7 +14,7 @@ class RoomlogViewer {
 
 	directory(room: Room) {
 		let buf = "&nbsp;&nbsp;<h2><b>Select a date to view logs.</b></h2>";
-		let months = FS(`logs/chat/${room}/`).readdirSync();
+		const months = FS(`logs/chat/${room}/`).readdirSync();
 		for (const m of months) {
 			if (!FS(`logs/chat/${room}/${m}`).isDirectorySync()) continue;
 			buf += `<br><br><b><center>$bb{m}</center></b><br>`;
@@ -30,7 +30,6 @@ class RoomlogViewer {
 
 	clean(content: string, showall = false) {
 		const cleaned = [];
-		//prettifying
 		for (let line of content.split('\n')) {
 			const part = line.split('|');
 			const cp = ['c', 'c:'];
@@ -56,12 +55,13 @@ const viewer = new RoomlogViewer();
 
 export const commands: ChatCommands = {
 	viewlogs(target, room, user) {
-		if (!room.chatRoomData || room.roomid.includes('-')) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.chatRoomData || room.roomid.includes('-')) return this.errorReply("This room has no logs.");
 		target = target.trim();
 		if (target) room = Rooms.get(target);
 		if (!Rooms.search(target)) return this.errorReply(`Room ${target} does not exist.`);
 		if (!this.can('mute', null, room) || !this.can('lock')) return false;
-		const msg = `${viewer.button('today', room)}${viewer.button(`Main Directory for ${room.title}`, room, true)}`;
+		const today = Chat.toTimestamp(new Date()).split(' ')[0];
+		const msg = `${viewer.button(today, room)}${viewer.button(`Main Directory for ${room.title}`, room, true)}`;
 		return this.sendReplyBox(msg);
 	},
 	viewlogshelp: [`/viewlogs [room] - view logs of the specified room. Requires: % @ & ~`],
@@ -70,22 +70,16 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	logs(query, user, connection) {
-		let parts = this.pageid.split('-');
-		const datestring = `${parts[3]}-${parts[4]}-${parts[5]}`;
+		const parts = this.pageid.split('-');
+		let datestring = `${parts[3]}-${parts[4]}-${parts[5]}`;
 		const monthstring = `${parts[3]}-${parts[4]}`;
 		this.extractRoom();
 		this.title = `[Logs] ${datestring}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
 		let buf = `<b><h2>Logs for ${datestring} on ${this.room}:</h2></b>`;
-		try {
-			if (parts[3] === 'today') {
-				this.title = `[Logs] Today`;
-				buf = `<b><h2>Logs for today on ${this.room}:</h2></b>`;
-				content = FS(`logs/chat/${this.room}/today.txt`).readSync();
-			} else {
+		try { 
 				content = FS(`logs/chat/${this.room}/${monthstring}/${datestring}.txt`).readSync();
-			}
 		} catch (e) {}
 		if (!user.can('mute', null, this.room)) return;
 		if (!content) {
