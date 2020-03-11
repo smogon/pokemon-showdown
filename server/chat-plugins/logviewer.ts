@@ -1,9 +1,6 @@
 import {FS} from '../../lib/fs';
 
 class RoomlogViewer {
-	constructor() {
-	}
-
 	button(datestring: string, room: Room, nodate = false) {
 		if (!nodate) {
 			return `<button class="button" name="send" value="/join view-logs-${room}-${datestring}">${datestring}</button>`;
@@ -23,7 +20,6 @@ class RoomlogViewer {
 				buf += `${this.button(file.slice(0, -4), room)}`;
 			}
 		}
-		if (FS(`logs/chat/${room}/today.txt`).checkIfExistsSync()) buf += `${this.button('today', room)}`;
 
 		return buf;
 	}
@@ -50,14 +46,13 @@ class RoomlogViewer {
 	}
 }
 
-
 const viewer = new RoomlogViewer();
 
 export const commands: ChatCommands = {
 	viewlogs(target, room, user) {
 		if (!room.chatRoomData || room.roomid.includes('-')) return this.errorReply("This room has no logs.");
 		target = target.trim();
-		if (target) room = Rooms.get(target);
+		if (target) room = Rooms.get(target) as ChatRoom | GameRoom;
 		if (!Rooms.search(target)) return this.errorReply(`Room ${target} does not exist.`);
 		if (!this.can('mute', null, room) || !this.can('lock')) return false;
 		const today = Chat.toTimestamp(new Date()).split(' ')[0];
@@ -66,7 +61,6 @@ export const commands: ChatCommands = {
 	},
 	viewlogshelp: [`/viewlogs [room] - view logs of the specified room. Requires: % @ & ~`],
 };
-
 
 export const pages: PageTable = {
 	logs(query, user, connection) {
@@ -81,7 +75,7 @@ export const pages: PageTable = {
 		try {
 			content = FS(`logs/chat/${this.room}/${monthstring}/${datestring}.txt`).readSync();
 		} catch (e) {}
-		if (!user.can('mute', null, this.room)) return;
+		if (!user.can('mute', null, this.room as ChatRoom | GameRoom)) return;
 		if (!content) {
 			buf = `<h2>All logs for ${this.room}. ${viewer.directory(this.room)}</h2>`;
 			this.title = `[Logs] Main Directory`;
