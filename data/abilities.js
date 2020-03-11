@@ -2981,8 +2981,8 @@ let BattleAbilities = {
 		num: 227,
 	},
 	"punkrock": {
-		desc: "Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.",
-		shortDesc: "Boosts sound move power, 0.5× damage from sound moves.",
+		desc: "This Pokemon's sound-based moves have their power multiplied by 1.3x. This Pokemon also receives 1/2 damage from sound-based attacks.",
+		shortDesc: "This Pokemon receives 1/2 damage from sound moves. Its own have 1.3x power.",
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['sound']) {
