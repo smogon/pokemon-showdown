@@ -52,7 +52,11 @@ export const commands: ChatCommands = {
 	viewlogs(target, room, user) {
 		if (!room.chatRoomData || room.roomid.includes('-')) return this.errorReply("This room has no logs.");
 		target = target.trim();
-		if (target) room = Rooms.get(target) as ChatRoom | GameRoom;
+		if (target) { 
+			room = Rooms.get(target) as ChatRoom | GameRoom;
+		} else { 
+			target = room;
+		}
 		if (!Rooms.search(target)) return this.errorReply(`Room ${target} does not exist.`);
 		if (!this.can('mute', null, room) || !this.can('lock')) return false;
 		const today = Chat.toTimestamp(new Date()).split(' ')[0];
