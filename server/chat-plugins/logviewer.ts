@@ -40,7 +40,7 @@ class RoomlogReaderFS implements RoomlogReader {
 
 		return buf;
 	}
-	
+
 	button(datestring: string, room: Room, nodate = false) {
 		if (!nodate) {
 			return `<button class="button" name="send" value="/join view-logs--${room}--${datestring}">${datestring}</button>`;
@@ -50,10 +50,10 @@ class RoomlogReaderFS implements RoomlogReader {
 	}
 }
 class RoomlogViewer<T extends RoomlogReader> {
-    reader: T;
-    constructor(reader: T) {
-        this.reader = reader;
-	 }
+	reader: T;
+	constructor(reader: T) {
+		this.reader = reader;
+	}
 
 
 	clean(content: string, showall = false) {
@@ -104,7 +104,7 @@ export const pages: PageTable = {
 		this.extractRoom();
 		if (!date) date = '';
 		if (!room) room = this.room;
-		let [Y, M, D] = date.split('-');
+		const [Y, M, D] = date.split('-');
 		this.title = `[Logs] ${date}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
@@ -118,7 +118,7 @@ export const pages: PageTable = {
 		if (!content) {
 			buf = `<h2>All logs for ${room}. ${viewer.reader.directory(room)}</h2>`;
 			this.title = `[Logs] Main Directory`;
-		} else if (!content && M && Y && !D) { 
+		} else if (!content && M && Y && !D) {
 				buf += viewer.reader.month(`${Y}-${M}`, room);
 				buf += viewer.reader.button('Main Directory', room, true);
 				this.title = `[Logs] ${Y}-${M}`;
