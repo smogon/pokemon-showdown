@@ -14,7 +14,7 @@ class RoomlogViewer {
 		const months = FS(`logs/chat/${room}/`).readdirSync();
 		for (const m of months) {
 			if (!FS(`logs/chat/${room}/${m}`).isDirectorySync()) continue;
-			buf += `<br><br><b><center>$bb{m}</center></b><br>`;
+			buf += `<br><br><b><center>${m}</center></b><br>`;
 			for (const file of FS(`logs/chat/${room}/${m}`).readdirSync()) {
 				if (!file.endsWith('.txt')) continue;
 				buf += `${this.button(file.slice(0, -4), room)}`;
