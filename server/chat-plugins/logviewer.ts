@@ -71,15 +71,15 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	logs(query, user, connection) {
 		const parts = this.pageid.split('-');
-		let datestring = `${parts[3]}-${parts[4]}-${parts[5]}`;
+		const datestring = `${parts[3]}-${parts[4]}-${parts[5]}`;
 		const monthstring = `${parts[3]}-${parts[4]}`;
 		this.extractRoom();
 		this.title = `[Logs] ${datestring}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
 		let buf = `<b><h2>Logs for ${datestring} on ${this.room}:</h2></b>`;
-		try { 
-				content = FS(`logs/chat/${this.room}/${monthstring}/${datestring}.txt`).readSync();
+		try {
+			content = FS(`logs/chat/${this.room}/${monthstring}/${datestring}.txt`).readSync();
 		} catch (e) {}
 		if (!user.can('mute', null, this.room)) return;
 		if (!content) {
