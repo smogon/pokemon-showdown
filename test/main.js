@@ -31,6 +31,12 @@ before('initialization', function () {
 	require('./../.lib-dist/process-manager').disabled = true;
 
 	Object.assign(config, require('../config/config-example'));
+	// stop chatrooms from loading through modifying the require cache
+	try {
+		const chatrooms = require('../config/chatrooms.json');
+		chatrooms.splice(0, chatrooms.length);
+	} catch (e) {}
+
 	// Actually crash if we crash
 	config.crashguard = false;
 	// Don't allow config to be overridden while test is running
