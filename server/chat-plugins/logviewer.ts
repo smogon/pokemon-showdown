@@ -55,7 +55,7 @@ export const commands: ChatCommands = {
 		if (target) {
 			room = Rooms.get(target) as ChatRoom | GameRoom;
 		} else {
-			target = room;
+			target = room.roomid;
 		}
 		if (!Rooms.search(target)) return this.errorReply(`Room ${target} does not exist.`);
 		if (!this.can('mute', null, room) || !this.can('lock')) return false;
