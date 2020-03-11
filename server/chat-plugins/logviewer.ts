@@ -74,7 +74,7 @@ export const pages: PageTable = {
 		this.extractRoom();
 		this.title = `[Logs] ${datestring}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		let content = FS(`logs/chat/${this.room}/${monthstring}/${datestring}.txt`).readIfExistsSync();
+		const content = FS(`logs/chat/${this.room}/${monthstring}/${datestring}.txt`).readIfExistsSync();
 		let buf = `<b><h2>Logs for ${datestring} on ${this.room}:</h2></b>`;
 		if (!user.can('mute', null, this.room as ChatRoom | GameRoom)) return;
 		if (!content) {
