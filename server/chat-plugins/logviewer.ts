@@ -1,21 +1,21 @@
 import {FS} from '../../lib/fs';
 
 interface RoomlogReader {
-    readLogs: (roomid: RoomID, year: string, month: string, date: string) => string;
-    directory: (room: Room) => string;
+	readLogs: (roomid: RoomID, year: string, month: string, date: string) => string;
+	directory: (room: Room) => string;
 }
 class RoomlogReaderFS implements RoomlogReader {
-    readLogs(roomid: RoomID, year: string, month: string, date: string) {
+	readLogs(roomid: RoomID, year: string, month: string, date: string) {
 		 let buf;
-		try { 
+		try {
 			buf = FS(`logs/chat/${roomid}/${year}-${month}/${year}-${month}-${date}.txt`).readIfExistsSync();
-		} catch (e) { 
+		} catch (e) {
 			buf = '';
 		}
 		return buf;
 	}
-	
-   directory(room: Room) {
+
+	directory(room: Room) {
 		let buf = "&nbsp;&nbsp;<h2><b>Select a date to view logs.</b></h2>";
 		const months = FS(`logs/chat/${room}/`).readdirSync();
 		for (const m of months) {
@@ -29,9 +29,9 @@ class RoomlogReaderFS implements RoomlogReader {
 
 		return buf;
 	}
-	
-	month(month: string, room: Room) { 
-	let buf = "&nbsp;&nbsp;<h2><b>Select a date to view logs.</b></h2>";
+
+	month(month: string, room: Room) {
+		let buf = "&nbsp;&nbsp;<h2><b>Select a date to view logs.</b></h2>";
 		const days = FS(`logs/chat/${room}/${month}`).readdirSync();
 		for (const file of days) {
 			if (!file.endsWith('.txt')) continue;
