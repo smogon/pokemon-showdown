@@ -109,7 +109,7 @@ export const pages: PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
 		if (D && M && Y) {
-			content = viewer.reader.readLogs(room, Y, M, D)
+			content = viewer.reader.readLogs(room, Y, M, D);
 		} else {
 			content = null;
 		}
@@ -119,9 +119,9 @@ export const pages: PageTable = {
 			buf = `<h2>All logs for ${room}. ${viewer.reader.directory(room)}</h2>`;
 			this.title = `[Logs] Main Directory`;
 		} else if (!content && M && Y && !D) {
-				buf += viewer.reader.month(`${Y}-${M}`, room);
-				buf += viewer.reader.button('Main Directory', room, true);
-				this.title = `[Logs] ${Y}-${M}`;
+			buf += viewer.reader.month(`${Y}-${M}`, room);
+			buf += viewer.reader.button('Main Directory', room, true);
+			this.title = `[Logs] ${Y}-${M}`;
 		} else {
 			if (all) {
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
