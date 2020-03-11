@@ -1,15 +1,21 @@
 import {FS} from '../../lib/fs';
 
-class RoomlogViewer {
-	button(datestring: string, room: Room, nodate = false) {
-		if (!nodate) {
-			return `<button class="button" name="send" value="/join view-logs-${room}-${datestring}">${datestring}</button>`;
-		} else {
-			return `<button class="button" name="send" value="/join view-logs-${room}">${datestring}</button>`;
+interface RoomlogReader {
+    readLogs: (roomid: RoomID, year: string, month: string, date: string) => string;
+    directory: (room: Room) => string;
+}
+class RoomlogReaderFS implements RoomlogReader {
+    readLogs(roomid: RoomID, year: string, month: string, date: string) {
+		 let buf;
+		try { 
+			buf = FS(`logs/chat/${roomid}/${year}-${month}/${year}-${month}-${date}.txt`).readIfExistsSync();
+		} catch (e) { 
+			buf = '';
 		}
+		return buf;
 	}
-
-	directory(room: Room) {
+	
+   directory(room: Room) {
 		let buf = "&nbsp;&nbsp;<h2><b>Select a date to view logs.</b></h2>";
 		const months = FS(`logs/chat/${room}/`).readdirSync();
 		for (const m of months) {
@@ -23,6 +29,32 @@ class RoomlogViewer {
 
 		return buf;
 	}
+	
+	month(month: string, room: Room) { 
+	let buf = "&nbsp;&nbsp;<h2><b>Select a date to view logs.</b></h2>";
+		const days = FS(`logs/chat/${room}/${month}`).readdirSync();
+		for (const file of days) {
+			if (!file.endsWith('.txt')) continue;
+			buf += `${this.button(file.slice(0, -4), room)}`;
+		}
+
+		return buf;
+	}
+	
+	button(datestring: string, room: Room, nodate = false) {
+		if (!nodate) {
+			return `<button class="button" name="send" value="/join view-logs--${room}--${datestring}">${datestring}</button>`;
+		} else {
+			return `<button class="button" name="send" value="/join view-logs--${room}">${datestring}</button>`;
+		}
+	}
+}
+class RoomlogViewer<T extends RoomlogReader> {
+    reader: T;
+    constructor(reader: T) {
+        this.reader = reader;
+	 }
+
 
 	clean(content: string, showall = false) {
 		const cleaned = [];
@@ -46,7 +78,7 @@ class RoomlogViewer {
 	}
 }
 
-const viewer = new RoomlogViewer();
+const viewer = new RoomlogViewer(new RoomlogReaderFS());
 
 export const commands: ChatCommands = {
 	viewlogs(target, room, user) {
@@ -58,37 +90,47 @@ export const commands: ChatCommands = {
 			target = room.roomid;
 		}
 		if (!Rooms.search(target)) return this.errorReply(`Room ${target} does not exist.`);
-		if (!this.can('mute', null, room) || !this.can('lock')) return false;
+		if (!this.can('mute', null, room)) return false;
 		const today = Chat.toTimestamp(new Date()).split(' ')[0];
-		const msg = `${viewer.button(today, room)}${viewer.button(`Main Directory for ${room.title}`, room, true)}`;
+		const msg = `${viewer.reader.button(today, room)}${viewer.reader.button(`Main Directory for ${room.title}`, room, true)}`;
 		return this.sendReplyBox(msg);
 	},
-	viewlogshelp: [`/viewlogs [room] - view logs of the specified room. Requires: % @ & ~`],
+	viewlogshelp: [`/viewlogs [room] - view logs of the specified room. Requires: % @ # & ~`],
 };
 
 export const pages: PageTable = {
 	logs(query, user, connection) {
-		const parts = this.pageid.split('-');
-		const datestring = `${parts[3]}-${parts[4]}-${parts[5]}`;
-		const monthstring = `${parts[3]}-${parts[4]}`;
+		let [_view, room, date, all] = this.pageid.split('--');
 		this.extractRoom();
-		this.title = `[Logs] ${datestring}`;
+		if (!date) date = '';
+		if (!room) room = this.room;
+		let [Y, M, D] = date.split('-');
+		this.title = `[Logs] ${date}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		const content = FS(`logs/chat/${this.room}/${monthstring}/${datestring}.txt`).readIfExistsSync();
-		let buf = `<b><h2>Logs for ${datestring} on ${this.room}:</h2></b>`;
-		if (!user.can('mute', null, this.room as ChatRoom | GameRoom)) return;
-		if (!content) {
-			buf = `<h2>All logs for ${this.room}. ${viewer.directory(this.room)}</h2>`;
-			this.title = `[Logs] Main Directory`;
+		let content;
+		if (D && M && Y) {
+			content = viewer.reader.readLogs(room, Y, M, D)
 		} else {
-			if (parts[6] && parts[6] === 'true') {
+			content = null;
+		}
+		let buf = `<b><h2>Logs for ${Y}-${M}-${D} on ${room}:</h2></b>`;
+		if (!user.can('mute', null, Rooms.get(room)) || !user.can('lock')) return;
+		if (!content) {
+			buf = `<h2>All logs for ${room}. ${viewer.reader.directory(room)}</h2>`;
+			this.title = `[Logs] Main Directory`;
+		} else if (!content && M && Y && !D) { 
+				buf += viewer.reader.month(`${Y}-${M}`, room);
+				buf += viewer.reader.button('Main Directory', room, true);
+				this.title = `[Logs] ${Y}-${M}`;
+		} else {
+			if (all) {
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
-				buf += viewer.button('Main Directory', this.room, true);
-				buf += viewer.button(datestring, this.room);
+				buf += viewer.reader.button('Main Directory', room, true);
+				buf += viewer.button(`${Y}-${M}-${D}`, room);
 			} else {
 				buf += viewer.clean(content).join('<br>&nbsp; ');
-				buf += viewer.button('Main Directory', this.room, true);
-				buf += `<br><button class="button" name="send" value="/join view-logs-${this.room}-${datestring}-true">Show extra</button></center>`;
+				buf += viewer.reader.button('Main Directory', room, true);
+				buf += `<br><button class="button" name="send" value="/join view-logs-${room}-${Y}-${M}-${D}-true">Show extra</button></center>`;
 			}
 		}
 		return buf;
