@@ -228,6 +228,9 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help hotpatch');
 		if (!this.can('hotpatch')) return;
 
+		if (Monitor.updateServerLock) {
+			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
+		}
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl'];
 		const version = await Monitor.version();
@@ -808,13 +811,13 @@ export const commands: ChatCommands = {
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
 		if (!stdout && !stderr) {
-			Monitor.updateServerLock = false;
 			this.sendReply(`There were no updates.`);
 			[code, stdout, stderr] = await exec('node ../../build');
 			if (stderr) {
 				return this.errorReply(`Crash while rebuilding: ${stderr}`);
 			}
 			this.sendReply(`Rebuilt.`);
+			Monitor.updateServerLock = false;
 			return;
 		}
 
@@ -889,10 +892,12 @@ export const commands: ChatCommands = {
 		if (!user.can('hotpatch')) {
 			return this.errorReply(`/updateserver - Access denied.`);
 		}
+		Monitor.updateServerLock = true;
 		const [, , stderr] = await exec('node ../../build');
 		if (stderr) {
 			return this.errorReply(`Crash while rebuilding: ${stderr}`);
 		}
+		Monitor.updateServerLock = false;
 		this.sendReply(`Rebuilt.`);
 	},
 
