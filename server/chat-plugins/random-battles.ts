@@ -30,17 +30,25 @@ function formatMove(move: Move | string) {
 }
 
 function formatItem(item: Item | string) {
-	item = Dex.getItem(item);
-	return `<a href="${Config.routes.dex}/items/${item.id}" target="_blank" class="subtle" style="white-space:nowrap">${item.name}</a>`;
+	if (typeof item === 'string' && item === "No Item") {
+		return `No Item`;
+	} else {
+		item = Dex.getItem(item);
+		return `<a href="${Config.routes.dex}/items/${item.id}" target="_blank" class="subtle" style="white-space:nowrap">${item.name}</a>`;
+	}
 }
 
 function trimmedItemsArray(items: string[]) {
 	const data: string[] = [];
 	for (const item of items) {
-		if (data.includes(item)) continue;
-		data.push(item);
+		if (data.includes(toID(item) === "" ? "No Item" : item)) continue;
+		if (toID(item) === "") {
+			data.push("No Item");
+		} else {
+			data.push(item);
+		}
 	}
-	return data;
+	return data.sort();
 }
 
 function trimmedMovesArray(moves: string[]) {
@@ -49,7 +57,7 @@ function trimmedMovesArray(moves: string[]) {
 		if (data.includes(move)) continue;
 		data.push(move);
 	}
-	return data;
+	return data.sort();
 }
 
 function getRBYMoves(template: string | Template) {
@@ -89,10 +97,14 @@ function getGSCMoves(template: string | Template) {
 	let buf = ``;
 	if (!template.randomSets || !template.randomSets.length) return false;
 	for (const [i, set] of template.randomSets.entries()) {
-		const items = trimmedItemsArray(set.item).map(formatItem).join(" / ");
 		buf += `<details><summary>Set ${i + 1}</summary>`;
 		buf += `<ul style="list-style-type:none;">`;
-		buf += `<li>${template.species}${items.length ? ` @ ${items}` : ``}</li>`;
+		buf += `<li>${template.species}`;
+		if (set.item) {
+			const items = trimmedItemsArray(set.item).map(formatItem).join(" / ");
+			buf += ` @ ${items}`;
+		}
+		buf += `</li>`;
 		if (set.baseMove1) buf += `<li>- ${formatMove(set.baseMove1)}</li>`;
 		if (set.baseMove2) buf += `<li>- ${formatMove(set.baseMove2)}</li>`;
 		if (set.baseMove3) buf += `<li>- ${formatMove(set.baseMove3)}</li>`;
@@ -246,8 +258,13 @@ export const commands: ChatCommands = {
 		if (!template.randomBattleMoves) {
 			return this.errorReply(`Error: No moves data found for ${template.species}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
 		}
-		const moves = template.randomBattleMoves.map(formatMove);
-		this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${moves.join(`, `)}`);
+		const moves: string[] = [];
+		// Done because template.randomBattleMoves is readonly
+		for (const move of template.randomBattleMoves) {
+			moves.push(move);
+		}
+		const m = moves.sort().map(formatMove);
+		this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${m.join(`, `)}`);
 	},
 	randombattleshelp: [
 		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8. If used in a battle, defaults to the gen of that battle.`,
@@ -283,8 +300,13 @@ export const commands: ChatCommands = {
 		if (!template.randomDoubleBattleMoves) {
 			return this.errorReply(`Error: No doubles moves data found for ${template.species}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
 		}
-		const moves = template.randomDoubleBattleMoves.map(formatMove);
-		this.sendReplyBox(`<span style="color:#999999;">Doubles moves for ${template.species} in ${formatName}:</span><br />${moves.join(`, `)}`);
+		const moves: string[] = [];
+		// Done because template.randomDoubleBattleMoves is readonly
+		for (const move of template.randomDoubleBattleMoves) {
+			moves.push(move);
+		}
+		const m = moves.sort().map(formatMove);
+		this.sendReplyBox(`<span style="color:#999999;">Doubles moves for ${template.species} in ${formatName}:</span><br />${m.join(`, `)}`);
 	},
 	randomdoublesbattlehelp: [
 		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8. If used in a battle, defaults to that gen.`,
@@ -337,6 +359,6 @@ export const commands: ChatCommands = {
 	battlefactoryhelp: [
 		`/battlefactory [pokemon], [tier], [gen] - Displays a Pok\u00e9mon's Battle Factory sets. Supports Gens 6-7. Defaults to Gen 7. If no tier is provided, defaults to OU.`,
 		`- Supported tiers: OU, Ubers, UU, RU, NU, PU, Monotype (Gen 7 only), LC (Gen 7 only)`,
-		`/bssfactory [pokemon], [gen] - Displays a Pok\u00e9mon's Battle Factory sets. Supports Gen7. Defaults to Gen 7.`,
+		`/bssfactory [pokemon], [gen] - Displays a Pok\u00e9mon's BSS Factory sets. Supports Gen 7. Defaults to Gen 7.`,
 	],
 };

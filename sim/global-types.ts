@@ -1446,7 +1446,7 @@ namespace RandomTeamsTypes {
 	}
 	export interface Gen2RandomSet {
 		chance: number;
-		item: string[];
+		item?: string[];
 		baseMove1?: string;
 		baseMove2?: string;
 		baseMove3?: string;

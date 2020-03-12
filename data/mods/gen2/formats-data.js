@@ -182,7 +182,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 9,
-				item: [""],
 				baseMove1: "return", baseMove2: "thief",
 				fillerMoves1: ["wingattack", "hiddenpowerflying", "hiddenpowerground"],
 				fillerMoves2: ["toxic", "reflect", "hiddenpowerground"],
@@ -224,7 +223,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 13,
-				item: [""],
 				baseMove1: "superfang", baseMove2: "return", baseMove3: "thief",
 				fillerMoves1: ["irontail", "irontail", "irontail", "shadowball", "hiddenpowerground"],
 			},
@@ -259,7 +257,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 11,
-				item: [""],
 				baseMove1: "return", baseMove2: "drillpeck", baseMove3: "thief",
 				fillerMoves1: ["hiddenpowerground", "steelwing"],
 			},
@@ -533,7 +530,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 12,
-				item: [""],
 				baseMove1: "wingattack", baseMove2: "hiddenpowerground", baseMove3: "thief",
 				fillerMoves1: ["return", "doubleedge", "confuseray", "confuseray"],
 			},
@@ -1145,7 +1141,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 11,
-				item: [""],
 				baseMove1: "return", baseMove2: "drillpeck", baseMove3: "thief",
 				fillerMoves1: ["hiddenpowerground", "steelwing"],
 			},
@@ -1469,7 +1464,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 12,
-				item: [""],
 				baseMove1: "hijumpkick", baseMove2: "bodyslam", baseMove3: "thief",
 				fillerMoves1: ["hiddenpowerbug", "hiddenpowerghost", "hiddenpowerrock"],
 			},
@@ -1905,7 +1899,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 12,
-				item: [""],
 				baseMove1: "icebeam", baseMove2: "psychic", baseMove3: "lovelykiss", baseMove4: "thief",
 			},
 			{ // Perish trapper
@@ -2767,7 +2760,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief attacker
 				chance: 16,
-				item: [""],
 				baseMove1: "thief",
 				fillerMoves1: ["return", "doubleedge"],
 				fillerMoves2: ["hiddenpowerground", "shadowball", "irontail", "surf", "dynamicpunch"],
@@ -2801,7 +2793,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 16,
-				item: [""],
 				baseMove1: "thief", baseMove2: "hypnosis", baseMove3: "nightshade",
 				fillerMoves1: ["hiddenpowerflying", "return"],
 			},
@@ -2838,7 +2829,6 @@ let BattleFormatsData = {
 			},
 			{ // Support + Thief
 				chance: 16,
-				item: [""],
 				baseMove1: "thief",
 				fillerMoves1: ["reflect", "lightscreen", "safeguard"],
 				fillerMoves2: ["reflect", "lightscreen", "safeguard"],
@@ -3088,7 +3078,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 14,
-				item: [""],
 				baseMove1: "thief", baseMove2: "return",
 				fillerMoves2: ["hiddenpowerground", "shadowball", "irontail"],
 				fillerMoves3: ["hiddenpowerground", "shadowball", "irontail", "counter", "thunderbolt", "thunder"],
@@ -3134,14 +3123,12 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 12,
-				item: [""],
 				baseMove1: "thief", baseMove2: "toxic",
 				fillerMoves1: ["gigadrain", "hiddenpowerice"],
 				fillerMoves2: ["return", "hiddenpowerbug", "hiddenpowerbug", "hiddenpowerrock"],
 			},
 			{ // Other
 				chance: 16,
-				item: [""],
 				baseMove1: "toxic",
 				fillerMoves1: ["gigadrain", "hiddenpowerice"],
 				fillerMoves2: ["return", "hiddenpowerbug", "hiddenpowerbug", "hiddenpowerrock"],
@@ -3361,7 +3348,6 @@ let BattleFormatsData = {
 			},
 			{ // Thief
 				chance: 16,
-				item: [""],
 				baseMove1: "earthquake", baseMove2: "wingattack", baseMove3: "hiddenpowerrock", baseMove4: "thief",
 			},
 		],
