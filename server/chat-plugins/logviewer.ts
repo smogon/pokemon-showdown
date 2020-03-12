@@ -2,8 +2,9 @@ import {FS} from '../../lib/fs';
 
 interface RoomlogReader {
 	readLogs: (roomid: RoomID, year: string, month: string, date: string) => string;
-	months: (room: Room) => any[];
+	months: (room: Room) => [string[], string[]];
 }
+
 class RoomlogReaderFS implements RoomlogReader {
 	readLogs(roomid: RoomID, year: string, month: string, date: string) {
 		let buf;
@@ -15,8 +16,8 @@ class RoomlogReaderFS implements RoomlogReader {
 		return buf;
 	}
 	months(room: Room) {
-		const months = [];
-		const days = [];
+		const months: string[] = [];
+		const days: string[] = [];
 		for (const m of FS(`logs/chat/${room}/`).readdirSync()) {
 			if (!FS(`logs/chat/${room}/${m}/`).isDirectorySync()) continue;
 			months.push(m);
@@ -107,7 +108,7 @@ export const pages: PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
 		if (D && M && Y) {
-			content = viewer.reader.readLogs(room, Y, M, D);
+			content = viewer.reader.readLogs(room as RoomID, Y, M, D);
 		} else {
 			content = null;
 		}
