@@ -14,33 +14,28 @@ class RoomlogReaderFS implements RoomlogReader {
 		}
 		return buf;
 	}
-
-	directory(room: Room) {
-		let buf = "&nbsp;&nbsp;<h2><b>Select a date to view logs.</b></h2>";
-		const months = FS(`logs/chat/${room}/`).readdirSync();
-		for (const m of months) {
-			if (!FS(`logs/chat/${room}/${m}`).isDirectorySync()) continue;
-			buf += `<br><br><b><center>${m}</center></b><br>`;
-			for (const file of FS(`logs/chat/${room}/${m}`).readdirSync()) {
-				if (!file.endsWith('.txt')) continue;
-				buf += `${this.button(file.slice(0, -4), room)}`;
+	months(room:  Room) { 
+		const months = [];
+		const days = [];
+		for (const m of FS(`logs/chat/${room}/`).readdirSync()) { 
+			if (!FS(`logs/chat/${room}/${m}/`).isDirectorySync()) continue;
+			months.push(m);
+		}
+		for (const month of months) {
+			for (const day of FS(`logs/chat/${room}/${month}`).readdirSync()) { 
+				if (day.endsWith('.txt')) days.push(day.slice(0, -4));
 			}
 		}
-
-		return buf;
+		return [months, days];
 	}
 
-	month(month: string, room: Room) {
-		let buf = "&nbsp;&nbsp;<h2><b>Select a date to view logs.</b></h2>";
-		const days = FS(`logs/chat/${room}/${month}`).readdirSync();
-		for (const file of days) {
-			if (!file.endsWith('.txt')) continue;
-			buf += `${this.button(file.slice(0, -4), room)}`;
-		}
+}
 
-		return buf;
+class RoomlogViewer<T extends RoomlogReader> {
+	reader: T;
+	constructor(reader: T) {
+		this.reader = reader;
 	}
-
 	button(datestring: string, room: Room, nodate = false) {
 		if (!nodate) {
 			return `<button class="button" name="send" value="/join view-logs--${room}--${datestring}">${datestring}</button>`;
@@ -48,14 +43,18 @@ class RoomlogReaderFS implements RoomlogReader {
 			return `<button class="button" name="send" value="/join view-logs--${room}">${datestring}</button>`;
 		}
 	}
-}
-class RoomlogViewer<T extends RoomlogReader> {
-	reader: T;
-	constructor(reader: T) {
-		this.reader = reader;
+	structure(room: Room) {
+		let buf = `<b>Logs for ${room}</b><br>`
+		const [months, days] = this.reader.months(room);
+		for (const month of months) {
+			buf += `<br><br><b>${month}</b><br>`;	
+			for (const day of days) {
+				if (!day.includes(month)) continue;
+				buf += this.button(day, room);
+			}
+		}
+		return buf;
 	}
-
-
 	clean(content: string, showall = false) {
 		const cleaned = [];
 		for (let line of content.split('\n')) {
@@ -92,7 +91,7 @@ export const commands: ChatCommands = {
 		if (!Rooms.search(target)) return this.errorReply(`Room ${target} does not exist.`);
 		if (!this.can('mute', null, room)) return false;
 		const today = Chat.toTimestamp(new Date()).split(' ')[0];
-		const msg = `${viewer.reader.button(today, room)}${viewer.reader.button(`Main Directory for ${room.title}`, room, true)}`;
+		const msg = `${viewer.button(today, room)}${viewer.button(`Main Directory for ${room.title}`, room, true)}`;
 		return this.sendReplyBox(msg);
 	},
 	viewlogshelp: [`/viewlogs [room] - view logs of the specified room. Requires: % @ # & ~`],
@@ -116,20 +115,20 @@ export const pages: PageTable = {
 		let buf = `<b><h2>Logs for ${Y}-${M}-${D} on ${room}:</h2></b>`;
 		if (!user.can('mute', null, Rooms.get(room)) || !user.can('lock')) return;
 		if (!content) {
-			buf = `<h2>All logs for ${room}. ${viewer.reader.directory(room)}</h2>`;
+			buf = `<h2>All logs for ${room}. <br> ${viewer.structure(room)}</h2>`;
 			this.title = `[Logs] Main Directory`;
 		} else if (!content && M && Y && !D) {
-			buf += viewer.reader.month(`${Y}-${M}`, room);
-			buf += viewer.reader.button('Main Directory', room, true);
+			buf += viewer.month(`${Y}-${M}`, room);
+			buf += viewer.button('Main Directory', room, true);
 			this.title = `[Logs] ${Y}-${M}`;
 		} else {
 			if (all) {
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
-				buf += viewer.reader.button('Main Directory', room, true);
+				buf += viewer.button('Main Directory', room, true);
 				buf += viewer.button(`${Y}-${M}-${D}`, room);
 			} else {
 				buf += viewer.clean(content).join('<br>&nbsp; ');
-				buf += viewer.reader.button('Main Directory', room, true);
+				buf += viewer.button('Main Directory', room, true);
 				buf += `<br><button class="button" name="send" value="/join view-logs-${room}-${Y}-${M}-${D}-true">Show extra</button></center>`;
 			}
 		}
