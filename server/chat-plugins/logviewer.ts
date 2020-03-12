@@ -63,7 +63,7 @@ class RoomlogViewer<T extends RoomlogReader> {
 			timestamp = timestamp.trim();
 			if (cp.includes(protocol)) {
 				const [,, user, message] = line.split('|');
-				line = `[${timestamp}] <b>${user}</b>: ${message.replace('/log', '')}`;
+				line = `[${timestamp}] <b>${user}</b>: ${Chat.formatText(message.replace('/log', ''))}`;
 				cleaned.push(`&nbsp;${line}`);
 			} else if (protocol === 'html' || protocol === 'raw') {
 				line = `[${timestamp}]: ${rest}`;
