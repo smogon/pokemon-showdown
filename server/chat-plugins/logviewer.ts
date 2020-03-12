@@ -102,8 +102,9 @@ export const pages: PageTable = {
 		let [, room, date, all] = this.pageid.split('--');
 		this.extractRoom();
 		if (!date) date = '';
+		room = Rooms.get(room) as ChatRoom | GameRoom;
 		const [Y, M, D] = date.split('-');
-		this.title = `[Logs] ${date}: [${room}]`;
+		this.title = `[Logs] [${room.title}] ${date}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
 		if (D && M && Y) {
@@ -111,11 +112,11 @@ export const pages: PageTable = {
 		} else {
 			content = null;
 		}
-		let buf = `<b><h2>Logs for ${Y}-${M}-${D} on ${room}:</h2></b>`;
-		if (!user.can('mute', null, Rooms.get(room) as ChatRoom | GameRoom) || !user.can('lock')) return;
+		let buf = `<b><h2>Logs for ${Y}-${M}-${D} on ${room.title}:</h2></b>`;
+		if (!user.can('mute', null, room) || !user.can('lock')) return;
 		if (!content) {
-			buf = `<h2>All logs for ${room}. <br> ${viewer.structure(room)}</h2>`;
-			this.title = `[Logs] Main Directory: [${room}]`;
+			buf = `<h2>All logs for ${room.title}. <br> ${viewer.structure(room)}</h2>`;
+			this.title = `[Logs] [${room.title}] Main Directory`;
 		} else {
 			if (all) {
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
@@ -124,7 +125,7 @@ export const pages: PageTable = {
 			} else {
 				buf += viewer.clean(content).join('<br>&nbsp; ');
 				buf += viewer.button('Main Directory', room, true);
-				buf += `<br><button class="button" name="send" value="/join view-logs-${room}-${Y}-${M}-${D}-true">Show extra</button></center>`;
+				buf += `<br><button class="button" name="send" value="/join view-logs-${room.roomid}-${Y}-${M}-${D}-true">Show extra</button></center>`;
 			}
 		}
 		return buf;
