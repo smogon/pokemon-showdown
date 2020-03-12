@@ -100,32 +100,36 @@ export const commands: ChatCommands = {
 export const pages: PageTable = {
 	logs(query, user, connection) {
 		let [, room, date, all] = this.pageid.split('--');
-		this.extractRoom();
 		if (!date) date = '';
-		room = Rooms.get(room) as ChatRoom | GameRoom;
+		this.room = Rooms.get(room) as ChatRoom | GameRoom; 
+		if (!this.room) {
+ 			return `<h2>Invalid Room</h2>`;
+			//extractRoom() fails on -- id's 
+			//manually do what this.extractRoom() would if there's no room
+		}
 		const [Y, M, D] = date.split('-');
 		this.title = `[Logs] [${room.title}] ${date}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
 		if (D && M && Y) {
-			content = viewer.reader.readLogs(room as RoomID, Y, M, D);
+			content = viewer.reader.readLogs(this.room as RoomID, Y, M, D);
 		} else {
 			content = null;
 		}
-		let buf = `<b><h2>Logs for ${Y}-${M}-${D} on ${room.title}:</h2></b>`;
+		let buf = `<b><h2>Logs for ${Y}-${M}-${D} on ${this.room.title}:</h2></b>`;
 		if (!user.can('mute', null, room) || !user.can('lock')) return;
 		if (!content) {
-			buf = `<h2>All logs for ${room.title}. <br> ${viewer.structure(room)}</h2>`;
-			this.title = `[Logs] [${room.title}] Main Directory`;
+			buf = `<h2>All logs for ${this.room.title}. <br> ${viewer.structure(this.room)}</h2>`;
+			this.title = `[Logs] [${this.room.title}] Main Directory`;
 		} else {
 			if (all) {
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
-				buf += viewer.button('Main Directory', room, true);
-				buf += viewer.button(`${Y}-${M}-${D}`, room);
+				buf += viewer.button('Main Directory', this.room, true);
+				buf += viewer.button(`${Y}-${M}-${D}`, this.room);
 			} else {
 				buf += viewer.clean(content).join('<br>&nbsp; ');
-				buf += viewer.button('Main Directory', room, true);
-				buf += `<br><button class="button" name="send" value="/join view-logs-${room.roomid}-${Y}-${M}-${D}-true">Show extra</button></center>`;
+				buf += viewer.button('Main Directory', this.room, true);
+				buf += `<br><button class="button" name="send" value="/join view-logs-${this.room}-${Y}-${M}-${D}-true">Show extra</button></center>`;
 			}
 		}
 		return buf;
