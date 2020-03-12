@@ -46,7 +46,7 @@ class RoomlogViewer<T extends RoomlogReader> {
 		let buf = `<b>Logs for ${room}</b><br>`;
 		const [months, days] = this.reader.months(room);
 		for (const month of months) {
-			buf += `<br><br><b>${month}</b><br>`;	
+			buf += `<br><br><b>${month}</b><br>`;
 			for (const day of days) {
 				if (!day.includes(month)) continue;
 				buf += this.button(day, room);
