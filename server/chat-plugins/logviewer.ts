@@ -98,7 +98,7 @@ export const commands: ChatCommands = {
 
 export const pages: PageTable = {
 	logs(query, user, connection) {
-		let [_view, room, date, all] = this.pageid.split('--');
+		let [, room, date, all] = this.pageid.split('--');
 		this.extractRoom();
 		if (!date) date = '';
 		if (!room) room = this.room;
