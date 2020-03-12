@@ -2,7 +2,7 @@ import {FS} from '../../lib/fs';
 
 interface RoomlogReader {
 	readLogs: (roomid: RoomID, year: string, month: string, date: string) => string;
-	months: (room: Room) => [string[], string[]];
+	months: (room: Room) => string[][];
 }
 
 class RoomlogReaderFS implements RoomlogReader {
@@ -113,7 +113,7 @@ export const pages: PageTable = {
 			content = null;
 		}
 		let buf = `<b><h2>Logs for ${Y}-${M}-${D} on ${room}:</h2></b>`;
-		if (!user.can('mute', null, Rooms.get(room)) || !user.can('lock')) return;
+		if (!user.can('mute', null, Rooms.get(room) as ChatRoom | GameRoom) || !user.can('lock')) return;
 		if (!content) {
 			buf = `<h2>All logs for ${room}. <br> ${viewer.structure(room)}</h2>`;
 			this.title = `[Logs] Main Directory`;
