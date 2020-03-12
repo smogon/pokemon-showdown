@@ -2,7 +2,7 @@ import {FS} from '../../lib/fs';
 
 interface RoomlogReader {
 	readLogs: (roomid: RoomID, year: string, month: string, date: string) => string;
-	directory: (room: Room) => string;
+	months: (room: Room) => string;
 }
 class RoomlogReaderFS implements RoomlogReader {
 	readLogs(roomid: RoomID, year: string, month: string, date: string) {
@@ -14,21 +14,20 @@ class RoomlogReaderFS implements RoomlogReader {
 		}
 		return buf;
 	}
-	months(room:  Room) { 
+	months(room: Room) {
 		const months = [];
 		const days = [];
-		for (const m of FS(`logs/chat/${room}/`).readdirSync()) { 
+		for (const m of FS(`logs/chat/${room}/`).readdirSync()) {
 			if (!FS(`logs/chat/${room}/${m}/`).isDirectorySync()) continue;
 			months.push(m);
 		}
 		for (const month of months) {
-			for (const day of FS(`logs/chat/${room}/${month}`).readdirSync()) { 
+			for (const day of FS(`logs/chat/${room}/${month}`).readdirSync()) {
 				if (day.endsWith('.txt')) days.push(day.slice(0, -4));
 			}
 		}
 		return [months, days];
 	}
-
 }
 
 class RoomlogViewer<T extends RoomlogReader> {
@@ -44,7 +43,7 @@ class RoomlogViewer<T extends RoomlogReader> {
 		}
 	}
 	structure(room: Room) {
-		let buf = `<b>Logs for ${room}</b><br>`
+		let buf = `<b>Logs for ${room}</b><br>`;
 		const [months, days] = this.reader.months(room);
 		for (const month of months) {
 			buf += `<br><br><b>${month}</b><br>`;	
