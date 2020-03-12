@@ -1018,10 +1018,10 @@ let BattleStatuses = {
 	martha: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@martha|in to lose r1`);
+			this.add(`c|+martha|in to lose r1`);
 		},
 		onSwitchOut() {
-			this.add(`c|@martha|bad`);
+			this.add(`c|+martha|bad`);
 		},
 	},
 	marty: {
