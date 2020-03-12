@@ -108,11 +108,11 @@ export const pages: PageTable = {
 			// manually do what this.extractRoom() would if there's no room
 		}
 		const [Y, M, D] = date.split('-');
-		this.title = `[Logs] [${room.title}] ${date}`;
+		this.title = `[Logs] [${this.room.title}] ${date}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
 		if (D && M && Y) {
-			content = viewer.reader.readLogs(this.room as RoomID, Y, M, D);
+			content = viewer.reader.readLogs(this.room.roomid, Y, M, D);
 		} else {
 			content = null;
 		}
