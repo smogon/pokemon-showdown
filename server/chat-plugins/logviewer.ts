@@ -116,10 +116,6 @@ export const pages: PageTable = {
 		if (!content) {
 			buf = `<h2>All logs for ${room}. <br> ${viewer.structure(room)}</h2>`;
 			this.title = `[Logs] Main Directory`;
-		} else if (!content && M && Y && !D) {
-			buf += viewer.reader.month(`${Y}-${M}`, room.roomid);
-			buf += viewer.button('Main Directory', room, true);
-			this.title = `[Logs] ${Y}-${M}`;
 		} else {
 			if (all) {
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
