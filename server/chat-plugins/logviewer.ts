@@ -58,19 +58,28 @@ class RoomlogViewer<T extends RoomlogReader> {
 	clean(content: string, showall = false) {
 		const cleaned = [];
 		for (let line of content.split('\n')) {
-			const part = line.split('|');
+			let [timestamp, protocol, rest] = line.split('|');
 			const cp = ['c', 'c:'];
-			if (cp.includes(part[1])) {
-				line = `[${part[0].trim()}] ${part[2]}: ${part[3]}`;
+			timestamp = timestamp.trim();
+			if (cp.includes(protocol)) {
+				const [,, user, message] = line.split('|');
+				line = `[${timestamp}] <b>${user}</b>: ${message.replace('/log', '')}`;
 				cleaned.push(`&nbsp;${line}`);
-			} else if (part[1] === 'html') {
-				line = `[${part[0].trim()}]: ${part[2]}`;
+			} else if (protocol === 'html' || protocol === 'raw') {
+				line = `[${timestamp}]: ${rest}`;
 				cleaned.push(`&nbsp;${line}`);
 			} else if (showall) {
-				cleaned.push(`&nbsp;${line}`);
+				cleaned.push(line);
+			} else if (!protocol) {
+				line = `[${timestamp}]: ${line.slice(timestamp.length)}`;
+				cleaned.push(line);
 			} else {
-				const exceptions = ['N', 'J', 'L', 'userstats'];
-				if (!exceptions.includes(part[1])) cleaned.push(`&nbsp;${line}`);
+				const exceptions = ['N', 'J', 'L', 'userstats', 'j', 'l', 'n'];
+				if (exceptions.includes(line.split('|')[1])) {
+					continue;
+				} else {
+					cleaned.push(`&nbsp;[${timestamp}]: <code>${line}</code>`);
+				}
 			}
 		}
 		return cleaned;
@@ -81,7 +90,6 @@ const viewer = new RoomlogViewer(new RoomlogReaderFS());
 
 export const commands: ChatCommands = {
 	viewlogs(target, room, user) {
-		if (!room.chatRoomData || room.roomid.includes('-')) return this.errorReply("This room has no logs.");
 		target = target.trim();
 		if (target) {
 			room = Rooms.get(target) as ChatRoom | GameRoom;
@@ -107,8 +115,9 @@ export const pages: PageTable = {
 			// extractRoom() fails on -- id's
 			// manually do what this.extractRoom() would if there's no room
 		}
+		if (!user.can('mute', null, this.room) || !user.can('lock')) return;
 		const [Y, M, D] = date.split('-');
-		this.title = `[Logs] [${this.room.title}] ${date}`;
+		this.title = `[Logs] ${date}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
 		if (D && M && Y) {
@@ -117,10 +126,9 @@ export const pages: PageTable = {
 			content = null;
 		}
 		let buf = `<b><h2>Logs for ${Y}-${M}-${D} on ${this.room.title}:</h2></b>`;
-		if (!user.can('mute', null, room) || !user.can('lock')) return;
 		if (!content) {
 			buf = `<h2>All logs for ${this.room.title}. <br> ${viewer.structure(this.room)}</h2>`;
-			this.title = `[Logs] [${this.room.title}] Main Directory`;
+			this.title = `[Logs] Main Directory`;
 		} else {
 			if (all) {
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
@@ -129,7 +137,7 @@ export const pages: PageTable = {
 			} else {
 				buf += viewer.clean(content).join('<br>&nbsp; ');
 				buf += viewer.button('Main Directory', this.room, true);
-				buf += `<br><button class="button" name="send" value="/join view-logs-${this.room}-${Y}-${M}-${D}-true">Show extra</button></center>`;
+				buf += `<br><button class="button" name="send" value="/join view-logs--${this.room}--${Y}-${M}-${D}--true">Show extra</button></center>`;
 			}
 		}
 		return buf;
