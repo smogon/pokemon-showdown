@@ -2,11 +2,11 @@ import {FS} from '../../lib/fs';
 
 interface RoomlogReader {
 	readLogs: (roomid: RoomID, year: string, month: string, date: string) => string;
-	months: (room: Room) => string;
+	months: (room: Room) => any[];
 }
 class RoomlogReaderFS implements RoomlogReader {
 	readLogs(roomid: RoomID, year: string, month: string, date: string) {
-		 let buf;
+		let buf;
 		try {
 			buf = FS(`logs/chat/${roomid}/${year}-${month}/${year}-${month}-${date}.txt`).readIfExistsSync();
 		} catch (e) {
@@ -101,7 +101,7 @@ export const pages: PageTable = {
 		let [, room, date, all] = this.pageid.split('--');
 		this.extractRoom();
 		if (!date) date = '';
-		if (!room) room = this.room;
+		if (!room) room = this.room as ChatRoom | GameRoom;
 		const [Y, M, D] = date.split('-');
 		this.title = `[Logs] ${date}`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
