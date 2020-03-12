@@ -102,9 +102,8 @@ export const pages: PageTable = {
 		let [, room, date, all] = this.pageid.split('--');
 		this.extractRoom();
 		if (!date) date = '';
-		if (!room) room = this.room.roomid;
 		const [Y, M, D] = date.split('-');
-		this.title = `[Logs] ${date}`;
+		this.title = `[Logs] ${date}: [${room}]`;
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let content;
 		if (D && M && Y) {
@@ -116,7 +115,7 @@ export const pages: PageTable = {
 		if (!user.can('mute', null, Rooms.get(room) as ChatRoom | GameRoom) || !user.can('lock')) return;
 		if (!content) {
 			buf = `<h2>All logs for ${room}. <br> ${viewer.structure(room)}</h2>`;
-			this.title = `[Logs] Main Directory`;
+			this.title = `[Logs] Main Directory: [${room}]`;
 		} else {
 			if (all) {
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
