@@ -101,11 +101,11 @@ export const pages: PageTable = {
 	logs(query, user, connection) {
 		let [, room, date, all] = this.pageid.split('--');
 		if (!date) date = '';
-		this.room = Rooms.get(room) as ChatRoom | GameRoom; 
+		this.room = Rooms.get(room) as ChatRoom | GameRoom;
 		if (!this.room) {
- 			return `<h2>Invalid Room</h2>`;
-			//extractRoom() fails on -- id's 
-			//manually do what this.extractRoom() would if there's no room
+			return `<h2>Invalid Room</h2>`;
+			// extractRoom() fails on -- id's
+			// manually do what this.extractRoom() would if there's no room
 		}
 		const [Y, M, D] = date.split('-');
 		this.title = `[Logs] [${room.title}] ${date}`;
