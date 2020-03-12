@@ -205,9 +205,18 @@ class RandomGen2Teams extends RandomGen3Teams {
 			rerollsLeft--;
 			discard = false;
 			for (const moveid of moves) {
-				if (restrictMoves[moveid] === 0) { discard = true; break; }
-				if (isPhazingMove(moveid) && restrictMoves['phazing'] === 0) { discard = true; break; }
-				if (isSleepMove(moveid) && restrictMoves['sleeping'] === 0) { discard = true; break; }
+				if (restrictMoves[moveid] === 0) {
+					discard = true;
+					break;
+				}
+				if (isPhazingMove(moveid) && restrictMoves['phazing'] === 0) {
+					discard = true;
+					break;
+				}
+				if (isSleepMove(moveid) && restrictMoves['sleeping'] === 0) {
+					discard = true;
+					break;
+				}
 			}
 		} while (rerollsLeft > 0 && discard);
 
