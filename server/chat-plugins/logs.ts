@@ -73,7 +73,7 @@ const LogReader = new class {
 };
 
 const LogViewer = new class {
-	async day(roomid: RoomID, day: string) {
+	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">← All logs</a> / ` +
@@ -87,7 +87,7 @@ const LogViewer = new class {
 			return this.linkify(buf);
 		}
 
-		buf += `<p><a roomid="view-chatlog-${roomid}--${LogReader.prevDay(day)}">⬆️ Earlier</a></p>`;
+		buf += `<p><a roomid="view-chatlog-${roomid}--${LogReader.prevDay(day)}">⬆️ Earlier</a></p><div>`;
 
 		const stream = await roomLog.getLog(day);
 		if (!stream) {
@@ -95,14 +95,41 @@ const LogViewer = new class {
 		} else {
 			let line;
 			while ((line = await stream.readLine()) !== null) {
-				buf += Chat.escapeHTML(line) + `<br />`;
+				buf += this.renderLine(line, opts);
 			}
 		}
 
-		buf += `<p><a roomid="view-chatlog-${roomid}--${LogReader.nextDay(day)}">⬇️ Later</a></p>`;
+		buf += `</div><p><a roomid="view-chatlog-${roomid}--${LogReader.nextDay(day)}">⬇️ Later</a></p>`;
 
 		buf += `</div>`;
 		return this.linkify(buf);
+	}
+	renderLine(fullLine: string, opts?: string) {
+		const timestamp = fullLine.slice(0, opts ? 8 : 5);
+		const line = fullLine.charAt(9) === '|' ? fullLine.slice(10) : '|' + fullLine.slice(9);
+		if (opts !== 'all' && (
+			line.startsWith(`userstats|`) ||
+			line.startsWith('J|') || line.startsWith('L|') || line.startsWith('N|')
+		)) return ``;
+
+		const cmd = line.slice(0, line.indexOf('|'));
+		switch (cmd) {
+		case 'c': {
+			const [, name, message] = Chat.splitFirst(line, '|', 2);
+			if (name.length <= 1) {
+				return `<div class="chat"><small>[${timestamp}] </small><em>${Chat.formatText(message)}</em></div>`;
+			}
+			return `<div class="chat"><small>[${timestamp}] </small><strong><small>${name.charAt(0)}</small>${name.slice(1)}:</strong> <em>${Chat.formatText(message)}</em></div>`;
+		}
+		case 'html': {
+			const [, html] = Chat.splitFirst(line, '|', 1);
+			return `<div class="notice">${html}</div>`;
+		}
+		case '':
+			return `<div class="chat"><small>[${timestamp}] </small>${Chat.escapeHTML(line.slice(1))}</div>`;
+		default:
+			return `<div class="chat"><small>[${timestamp}] </small>${'|' + Chat.escapeHTML(line)}</div>`;
+		}
 	}
 	async month(roomid: RoomID, month: string) {
 		let buf = `<div class="pad"><p>` +
@@ -176,7 +203,7 @@ export const pages: PageTable = {
 			return LogViewer.error("Access denied");
 		}
 
-		const [roomid, date] = args.join('-').split('--') as [RoomID, string | undefined, string | undefined];
+		const [roomid, date, opts] = args.join('-').split('--') as [RoomID, string | undefined, string | undefined];
 
 		if (!roomid) {
 			this.title = '[Logs]';
@@ -204,7 +231,7 @@ export const pages: PageTable = {
 
 		this.title = '[Logs] ' + roomid;
 		if (date && date.length === 10) {
-			return LogViewer.day(roomid, date);
+			return LogViewer.day(roomid, date, opts);
 		}
 		if (date) {
 			return LogViewer.month(roomid, date);
