@@ -35,4 +35,17 @@ describe('Eject Pack', function () {
 		battle.makeChoices();
 		assert.equal(battle.p2.requestState, 'switch');
 	});
+
+	it("should not trigger until after all entrance abilities have resolved", function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [
+			{species: 'Hydreigon', ability: 'intimidate', moves: ['sleeptalk']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Morelull', ability: 'drought', item: 'ejectpack', moves: ['sleeptalk']},
+			{species: 'Mew', moves: ['splash']},
+		]});
+		battle.makeChoices();
+		assert.ok(battle.field.isWeather('sunnyday'));
+	});
 });
