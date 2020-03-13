@@ -13,18 +13,28 @@ class LogReaderRoom {
 	}
 
 	async listMonths() {
-		const listing = await FS(`logs/chat/${this.roomid}`).readdir();
-		return listing.filter(file => /^[0-9][0-9][0-9][0-9]-[0-9][0-9]$/.test(file));
+		try {
+			const listing = await FS(`logs/chat/${this.roomid}`).readdir();
+			return listing.filter(file => /^[0-9][0-9][0-9][0-9]-[0-9][0-9]$/.test(file));
+		} catch (err) {
+			return [];
+		}
 	}
 
 	async listDays(month: string) {
-		const listing = await FS(`logs/chat/${this.roomid}/${month}`).readdir();
-		return listing.filter(file => /\.txt$/.test(file)).map(file => file.slice(0, -4));
+		try {
+			const listing = await FS(`logs/chat/${this.roomid}/${month}`).readdir();
+			return listing.filter(file => /\.txt$/.test(file)).map(file => file.slice(0, -4));
+		} catch (err) {
+			return [];
+		}
 	}
 
-	getLog(day: string) {
+	async getLog(day: string) {
 		const month = LogReader.getMonth(day);
-		return FS(`logs/chat/${this.roomid}/${month}/${day}.txt`).createReadStream();
+		const log = FS(`logs/chat/${this.roomid}/${month}/${day}.txt`);
+		if (!await log.exists()) return null;
+		return log.createReadStream();
 	}
 }
 
@@ -64,47 +74,90 @@ const LogReader = new class {
 
 const LogViewer = new class {
 	async day(roomid: RoomID, day: string) {
-		const roomLog = await LogReader.get(roomid);
-		if (!roomLog) {
-			return `<div class="pad">Room "${roomid}" doesn't exist</div>`;
-		}
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
-			`<a href="/view-log">← All logs</a> / ` +
-			`<a href="/view-log-${roomid}">${roomid}</a> /  ` +
-			`<a href="/view-log-${roomid}--${month}">${month}</a> / ` +
+			`<a roomid="view-chatlog">← All logs</a> / ` +
+			`<a roomid="view-chatlog-${roomid}">${roomid}</a> /  ` +
+			`<a roomid="view-chatlog-${roomid}--${month}">${month}</a> / ` +
 			`<strong>${day}</strong></p>`;
-		const stream = roomLog.getLog(day);
-		let line;
-		while ((line = await stream.readLine()) !== null) {
-			buf += Chat.escapeHTML(line) + `<br />`;
-		}
-		buf += `</div>`;
-		return buf;
-	}
-	async month(roomid: RoomID, month: string) {
+
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
-			return `<div class="pad">Room "${roomid}" doesn't exist</div>`;
+			buf += `<p class="error">Room "${roomid}" doesn't exist</p></div>`;
+			return this.linkify(buf);
 		}
-		let buf = `<div class="pad"><p>` +
-			`<a href="/view-log">← All logs</a> / ` +
-			`<a href="/view-log-${roomid}">${roomid}</a> / ` +
-			`<strong>${month}</strong></p>`;
-		const days = await roomLog.listDays(month);
-		for (const day of days) {
-			buf += `<p>- <a href="/view-log-${roomid}--${day}">${day}</a></p>`;
+
+		buf += `<p><a roomid="view-chatlog-${roomid}--${LogReader.prevDay(day)}">⬆️ Earlier</a></p>`;
+
+		const stream = await roomLog.getLog(day);
+		if (!stream) {
+			buf += `<p class="error">Room "${roomid}" doesn't have logs for ${day}</p>`;
+		} else {
+			let line;
+			while ((line = await stream.readLine()) !== null) {
+				buf += Chat.escapeHTML(line) + `<br />`;
+			}
 		}
+
+		buf += `<p><a roomid="view-chatlog-${roomid}--${LogReader.nextDay(day)}">⬇️ Later</a></p>`;
+
 		buf += `</div>`;
-		return buf;
+		return this.linkify(buf);
 	}
-	room(roomid: RoomID) {
+	async month(roomid: RoomID, month: string) {
 		let buf = `<div class="pad"><p>` +
-			`<a href="/view-log">← All logs</a> / ` +
-			`<strong>${roomid}</strong></p>`;
-		buf += `Unimplemented.`;
+			`<a roomid="view-chatlog">← All logs</a> / ` +
+			`<a roomid="view-chatlog-${roomid}">${roomid}</a> / ` +
+			`<strong>${month}</strong></p>`;
+
+		const roomLog = await LogReader.get(roomid);
+		if (!roomLog) {
+			buf += `<p class="error">Room "${roomid}" doesn't exist</p></div>`;
+			return this.linkify(buf);
+		}
+
+		buf += `<p><a roomid="view-chatlog-${roomid}--${LogReader.prevMonth(month)}">⬆️ Earlier</a></p>`;
+
+		const days = await roomLog.listDays(month);
+		if (!days.length) {
+			buf += `<p class="error">Room "${roomid}" doesn't have logs in ${month}</p></div>`;
+			return this.linkify(buf);
+		} else {
+			for (const day of days) {
+				buf += `<p>- <a roomid="view-chatlog-${roomid}--${day}">${day}</a></p>`;
+			}
+		}
+
+		buf += `<p><a roomid="view-chatlog-${roomid}--${LogReader.nextMonth(month)}">⬇️ Later</a></p>`;
+
 		buf += `</div>`;
-		return buf;
+		return this.linkify(buf);
+	}
+	async room(roomid: RoomID) {
+		let buf = `<div class="pad"><p>` +
+			`<a roomid="view-chatlog">← All logs</a> / ` +
+			`<strong>${roomid}</strong></p>`;
+
+		const roomLog = await LogReader.get(roomid);
+		if (!roomLog) {
+			buf += `<p class="error">Room "${roomid}" doesn't exist</p></div>`;
+			return this.linkify(buf);
+		}
+
+		const months = await roomLog.listMonths();
+		if (!months.length) {
+			buf += `<p class="error">Room "${roomid}" doesn't have logs</p></div>`;
+			return this.linkify(buf);
+		}
+
+		for (const month of months) {
+			buf += `<p>- <a roomid="view-chatlog-${roomid}--${month}">${month}</a></p>`;
+		}
+		buf += `</div>`;
+		return this.linkify(buf);
+	}
+	linkify(buf: string) {
+		return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
 	}
 	list() {
 		return `<div class="pad">Unimplemented.</div>`;
@@ -112,7 +165,7 @@ const LogViewer = new class {
 };
 
 export const pages: PageTable = {
-	async log(args, user, connection) {
+	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		// TODO: permissions
 		if (!this.can('rangeban')) return;
