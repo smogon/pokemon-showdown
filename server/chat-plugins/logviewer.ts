@@ -58,6 +58,8 @@ class RoomlogViewer<T extends RoomlogReader> {
 	clean(content: string, showall = false) {
 		const cleaned = [];
 		for (let line of content.split('\n')) {
+			line = line.trim();
+			if (!line) continue;
 			let [timestamp, protocol, rest] = line.split('|');
 			const cp = ['c', 'c:'];
 			timestamp = timestamp.trim();
@@ -69,6 +71,7 @@ class RoomlogViewer<T extends RoomlogReader> {
 				line = `[${timestamp}]: ${rest}`;
 				cleaned.push(`&nbsp;${line}`);
 			} else if (showall) {
+				line = `[${timestamp}]: ${line.slice(timestamp.length)}`;
 				cleaned.push(line);
 			} else if (!protocol) {
 				line = `[${timestamp}]: ${line.slice(timestamp.length)}`;
@@ -131,13 +134,19 @@ export const pages: PageTable = {
 			this.title = `[Logs] Main Directory`;
 		} else {
 			if (all) {
+				buf += `<a href="/view-logs--${this.room.roomid}" target="_blank">Main Directory</a>`;
+				buf += `<br><br>`;
 				buf += viewer.clean(content, true).join('<br>&nbsp; ');
-				buf += viewer.button('Main Directory', this.room, true);
-				buf += viewer.button(`${Y}-${M}-${D}`, this.room);
+				buf += `<br>`;
+				buf += `<center><a href="/view-logs--${this.room.roomid}" target="_blank">Main Directory</a><`;
+				buf += `<br><a href="/view-logs--${this.room.roomid}--${Y}-${M}-${D}" target="_blank">Hide extra</a></center>`;
 			} else {
+				buf += `<a href="/view-logs--${this.room.roomid}" target="_blank">Main Directory</a>`;
+				buf += `<br><br>`;
 				buf += viewer.clean(content).join('<br>&nbsp; ');
-				buf += viewer.button('Main Directory', this.room, true);
-				buf += `<br><button class="button" name="send" value="/join view-logs--${this.room}--${Y}-${M}-${D}--true">Show extra</button></center>`;
+				buf += `<br>`;
+				buf += `<center><a href="/view-logs--${this.room.roomid}" target="_blank">Main Directory</a>`;
+				buf += `<br><a href="/view-logs--${this.room.roomid}--${Y}-${M}-${D}--true" target="_blank">Show extra</a></center>`;
 			}
 		}
 		return buf;
