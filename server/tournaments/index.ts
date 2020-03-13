@@ -591,7 +591,14 @@ export class Tournament extends Rooms.RoomGame {
 		}
 
 		if (this.players.length < 2) {
-			output.sendReply('|tournament|error|NotEnoughUsers');
+			if (output.target.startsWith('autostart')) {
+				this.room.send('|tournament|error|NotEnoughUsers');
+				this.forceEnd();
+				this.room.update();
+				output.modlog('TOUR END');
+			} else { // manual tour start without enough users
+				output.sendReply('|tournament|error|NotEnoughUsers');
+			}
 			return false;
 		}
 
