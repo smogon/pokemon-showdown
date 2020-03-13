@@ -167,6 +167,8 @@ const LogViewer = new class {
 	}
 };
 
+const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
+
 export const pages: PageTable = {
 	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
@@ -197,6 +199,8 @@ export const pages: PageTable = {
 		} else {
 			if (!this.can('lock')) return;
 		}
+
+		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 
 		this.title = '[Logs] ' + roomid;
 		if (date && date.length === 10) {
