@@ -83,7 +83,7 @@ const LogViewer = new class {
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
-			buf += `<p class="error">Room "${roomid}" doesn't exist</p></div>`;
+			buf += `<p class="message-error">Room "${roomid}" doesn't exist</p></div>`;
 			return this.linkify(buf);
 		}
 
@@ -91,7 +91,7 @@ const LogViewer = new class {
 
 		const stream = await roomLog.getLog(day);
 		if (!stream) {
-			buf += `<p class="error">Room "${roomid}" doesn't have logs for ${day}</p>`;
+			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
 			let line;
 			while ((line = await stream.readLine()) !== null) {
@@ -112,7 +112,7 @@ const LogViewer = new class {
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
-			buf += `<p class="error">Room "${roomid}" doesn't exist</p></div>`;
+			buf += `<p class="message-error">Room "${roomid}" doesn't exist</p></div>`;
 			return this.linkify(buf);
 		}
 
@@ -120,7 +120,7 @@ const LogViewer = new class {
 
 		const days = await roomLog.listDays(month);
 		if (!days.length) {
-			buf += `<p class="error">Room "${roomid}" doesn't have logs in ${month}</p></div>`;
+			buf += `<p class="message-error">Room "${roomid}" doesn't have logs in ${month}</p></div>`;
 			return this.linkify(buf);
 		} else {
 			for (const day of days) {
@@ -140,13 +140,13 @@ const LogViewer = new class {
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
-			buf += `<p class="error">Room "${roomid}" doesn't exist</p></div>`;
+			buf += `<p class="message-error">Room "${roomid}" doesn't exist</p></div>`;
 			return this.linkify(buf);
 		}
 
 		const months = await roomLog.listMonths();
 		if (!months.length) {
-			buf += `<p class="error">Room "${roomid}" doesn't have logs</p></div>`;
+			buf += `<p class="message-error">Room "${roomid}" doesn't have logs</p></div>`;
 			return this.linkify(buf);
 		}
 
@@ -156,30 +156,49 @@ const LogViewer = new class {
 		buf += `</div>`;
 		return this.linkify(buf);
 	}
+	error(message: string) {
+		return `<div class="pad"><p class="message-error">${message}</p></div>`;
+	}
 	linkify(buf: string) {
 		return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
 	}
 	list() {
-		return `<div class="pad">Unimplemented.</div>`;
+		return this.error(`Unimplemented.`);
 	}
 };
 
 export const pages: PageTable = {
 	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		// TODO: permissions
-		if (!this.can('rangeban')) return;
+		if (!user.trusted) {
+			return LogViewer.error("Access denied");
+		}
 
 		const [roomid, date] = args.join('-').split('--') as [RoomID, string | undefined, string | undefined];
+
 		if (!roomid) {
 			this.title = '[Logs]';
 			return LogViewer.list();
 		}
-		this.title = '[Logs] ' + roomid;
-		const roomLog = await LogReader.get(roomid);
-		if (!roomLog) {
-			return `<div class="pad">Room "${roomid}" doesn't exist</div>`;
+
+		// permission check
+		const room = Rooms.get(roomid);
+		if (roomid.startsWith('spl') && roomid !== 'splatoon' && !user.can('rangeban')) {
+			return LogViewer.error("SPL team discussions are super secret.");
 		}
+		if (roomid.startsWith('wcop') && !user.can('rangeban')) {
+			return LogViewer.error("WCOP team discussions are super secret.");
+		}
+		if (room) {
+			if (!room.checkModjoin(user) && !user.can('bypassall')) {
+				return LogViewer.error("Access denied");
+			}
+			if (!this.can('lock', null, room as BasicChatRoom)) return;
+		} else {
+			if (!this.can('lock')) return;
+		}
+
+		this.title = '[Logs] ' + roomid;
 		if (date && date.length === 10) {
 			return LogViewer.day(roomid, date);
 		}
