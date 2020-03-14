@@ -1870,6 +1870,21 @@ export const Chat = new class {
 	}
 
 	/**
+	 * Normalize a message for the purposes of applying chat filters.
+	 *
+	 * Not used by PS itself, but feel free to use it in your own chat filters.
+	 */
+	normalize(message: string) {
+		message = message.replace(/'/g, '').replace(/[^A-Za-z0-9]+/g, ' ').trim();
+		if (!/[A-Za-z][A-Za-z]/.test(message)) {
+			message = message.replace(/ */g, '');
+		} else if (!message.includes(' ')) {
+			message = message.replace(/([A-Z])/g, ' $1').trim();
+		}
+		return ' ' + message.toLowerCase() + ' ';
+	}
+
+	/**
 	 * Generates dimensions to fit an image at url into a maximum size of maxWidth x maxHeight,
 	 * preserving aspect ratio.
 	 */
