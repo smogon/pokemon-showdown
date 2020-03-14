@@ -1885,7 +1885,7 @@ let BattleFormatsData = {
 			{"generation": 5, "level": 1, "isHidden": false},
 			{"generation": 7, "level": 10},
 		],
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 	},
 	gyaradosmega: {
@@ -6631,7 +6631,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 50, "isHidden": true, "moves": ["hypervoice", "moonblast", "icywind", "perishsong"], "pokeball": "pokeball"},
 		],
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	pikipek: {
