@@ -866,7 +866,7 @@ let BattleFormats = {
 		name: 'Forme Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon of the same forme",
 		onBegin() {
-			this.add('rule', 'Species Clause: Limit one of each forme of a Pokémon');
+			this.add('rule', 'Forme Clause: Limit one of each forme of a Pokémon');
 		},
 		onValidateTeam(team) {
 			/** @type {{[k: string]: boolean}} */
