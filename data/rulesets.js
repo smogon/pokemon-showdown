@@ -869,14 +869,14 @@ let BattleFormats = {
 			this.add('rule', 'Forme Clause: Limit one of each forme of a Pokémon');
 		},
 		onValidateTeam(team) {
-			/** @type {{[k: string]: boolean}} */
-			const formeTable = {};
+			/** @type {Set<string>} */
+			const formeTable = new Set();
 			for (const set of team) {
 				let template = this.dex.getTemplate(set.species);
-				if (formeTable[template.species]) {
+				if (formeTable.has(template.species)) {
 					return [`You are limited to one of each forme of a Pokémon by Species Clause.`, `(You have more than one of ${template.species})`];
 				}
-				formeTable[template.species] = true;
+				formeTable.add(template.species);
 			}
 		},
 	},
