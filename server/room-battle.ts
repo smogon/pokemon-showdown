@@ -1119,7 +1119,7 @@ export class RoomBattleStream extends BattleStream {
 	_write(chunk: string) {
 		const startTime = Date.now();
 		if (this.battle && Config.debugsimprocesses && process.send) {
-			process.send('DEBUG\n' + this.battle.inputLog.join('\n'));
+			process.send('DEBUG\n' + this.battle.inputLog.join('\n') + '\n' + chunk);
 		}
 		try {
 			this._writeLines(chunk);
