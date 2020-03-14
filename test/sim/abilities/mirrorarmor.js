@@ -28,7 +28,7 @@ describe("Mirror Armor", function () {
 		assert.statStage(machop, 'def', -1);
 	});
 
-	it("should reflect Parting Shot's stat drops, then the Parting Shot user should switch", function () {
+	it.skip("should reflect Parting Shot's stat drops, then the Parting Shot user should switch", function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Corviknight', ability: 'mirrorarmor', moves: ['sleeptalk']},
