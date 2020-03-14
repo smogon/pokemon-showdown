@@ -861,6 +861,25 @@ let BattleFormats = {
 		desc: "Allows any Pokemon with access to Assist, Copycat, Metronome, Mimic, or Transform to gain access to almost any other move.",
 		// Implemented in sim/team-validator.ts
 	},
+	formeclause: {
+		effectType: 'ValidatorRule',
+		name: 'Forme Clause',
+		desc: "Prevents teams from having more than one Pok&eacute;mon of the same forme",
+		onBegin() {
+			this.add('rule', 'Forme Clause: Limit one of each forme of a Pokémon');
+		},
+		onValidateTeam(team) {
+			/** @type {Set<string>} */
+			const formeTable = new Set();
+			for (const set of team) {
+				let template = this.dex.getTemplate(set.species);
+				if (formeTable.has(template.species)) {
+					return [`You are limited to one of each forme of a Pokémon by Species Clause.`, `(You have more than one of ${template.species})`];
+				}
+				formeTable.add(template.species);
+			}
+		},
+	},
 };
 
 exports.BattleFormats = BattleFormats;
