@@ -48,7 +48,51 @@ const LogReader = new class {
 
 	async list() {
 		const listing = await FS(`logs/chat`).readdir();
-		return listing.filter(file => /^[a-z0-9-]+$/.test(file));
+		return listing.filter(file => /^[a-z0-9-]+$/.test(file)) as RoomID[];
+	}
+
+	async listCategorized(user: User, includePersonal?: boolean) {
+		const list = await this.list();
+		const isUpperStaff = user.can('rangeban');
+		const isStaff = user.can('lock');
+
+		const official = [];
+		const normal = [];
+		const hidden = [];
+		const secret = [];
+		const deleted = [];
+		const personal: RoomID[] = [];
+		const deletedPersonal: RoomID[] = [];
+		let atLeastOne = false;
+
+		for (const roomid of list) {
+			const room = Rooms.get(roomid) as BasicChatRoom;
+			if (!isUpperStaff) {
+				if (!room) continue;
+				if (!room.checkModjoin(user)) continue;
+				if (!isStaff && !user.can('mute', null, room)) continue;
+			}
+
+			atLeastOne = true;
+			if (roomid.includes('-')) {
+				if (includePersonal) {
+					(room ? personal : deletedPersonal).push(roomid);
+				}
+			} else if (!room) {
+				deleted.push(roomid);
+			} else if (room.isOfficial) {
+				official.push(roomid);
+			} else if (!room.isPrivate) {
+				normal.push(roomid);
+			} else if (room.isPrivate === 'hidden') {
+				hidden.push(roomid);
+			} else {
+				secret.push(roomid);
+			}
+		}
+
+		if (!atLeastOne) return null;
+		return {official, normal, hidden, secret, deleted, personal, deletedPersonal};
 	}
 
 	getMonth(day: string) {
@@ -183,14 +227,45 @@ const LogViewer = new class {
 		buf += `</div>`;
 		return this.linkify(buf);
 	}
+	async list(user: User, includePersonal?: boolean) {
+		let buf = `<div class="pad"><p>` +
+			`<strong>All logs</strong></p>`;
+
+		const categories: {[k: string]: string} = {
+			'official': "Official",
+			'normal': "Public",
+			'hidden': "Hidden",
+			'secret': "Secret",
+			'deleted': "Deleted",
+			'personal': "Personal",
+			'deletedPersonal': "Deleted Personal",
+		};
+		const list = await LogReader.listCategorized(user, includePersonal) as {[k: string]: RoomID[]};
+
+		if (!list) {
+			buf += `<p class="message-error">You must be a staff member of a room, to view logs</p></div>`;
+			return buf;
+		}
+
+		for (const k in categories) {
+			if (!includePersonal && user.can('rangeban') && k === 'personal') {
+				buf += `<p>${categories[k]}</p>`;
+				buf += `- <a roomid="view-chatlog--personal">(show)</a>`;
+			}
+			if (!list[k].length) continue;
+			buf += `<p>${categories[k]}</p>`;
+			for (const roomid of list[k]) {
+				buf += `<p>- <a roomid="view-chatlog-${roomid}">${roomid}</a></p>`;
+			}
+		}
+		buf += `</div>`;
+		return this.linkify(buf);
+	}
 	error(message: string) {
 		return `<div class="pad"><p class="message-error">${message}</p></div>`;
 	}
 	linkify(buf: string) {
 		return buf.replace(/<a roomid="/g, `<a target="replace" href="/`);
-	}
-	list() {
-		return this.error(`Unimplemented.`);
 	}
 };
 
@@ -205,9 +280,9 @@ export const pages: PageTable = {
 
 		const [roomid, date, opts] = args.join('-').split('--') as [RoomID, string | undefined, string | undefined];
 
-		if (!roomid) {
+		if (!roomid || roomid === '-personal') {
 			this.title = '[Logs]';
-			return LogViewer.list();
+			return LogViewer.list(user, roomid === '-personal');
 		}
 
 		// permission check
@@ -222,7 +297,7 @@ export const pages: PageTable = {
 			if (!room.checkModjoin(user) && !user.can('bypassall')) {
 				return LogViewer.error("Access denied");
 			}
-			if (!this.can('lock', null, room as BasicChatRoom)) return;
+			if (!this.can('mute', null, room as BasicChatRoom)) return;
 		} else {
 			if (!this.can('lock')) return;
 		}
