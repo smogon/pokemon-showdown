@@ -230,7 +230,7 @@ let Formats = [
 			validate: [1, 6],
 			battle: 1,
 		},
-		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod', 'Dynamax Clause'],
 	},
 	{
 		name: "[Gen 8] Custom Game",
