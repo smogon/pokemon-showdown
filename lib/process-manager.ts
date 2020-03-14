@@ -143,6 +143,10 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	resolveRelease: (() => void) | null = null;
 	debug?: string;
 
+	setDebug(message: string) {
+		this.debug = (this.debug || '').slice(-32768) + '\n=====\n' + message;
+	}
+
 	constructor(file: string) {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
 
@@ -156,7 +160,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			}
 
 			if (message.slice(0, nlLoc) === 'DEBUG') {
-				this.debug = message.slice(nlLoc + 1);
+				this.setDebug(message.slice(nlLoc + 1));
 				return;
 			}
 
