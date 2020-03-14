@@ -310,7 +310,7 @@ export const pages: PageTable = {
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 
 		this.title = '[Logs] ' + roomid;
-		if (date && date.length === 10) {
+		if (date && date.length === 10 || date === 'today') {
 			return LogViewer.day(roomid, date, opts);
 		}
 		if (date) {
