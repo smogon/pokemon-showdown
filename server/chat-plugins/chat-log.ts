@@ -71,6 +71,7 @@ const LogReader = new class {
 				if (!room) continue;
 				if (!room.checkModjoin(user)) continue;
 				if (!isStaff && !user.can('mute', null, room)) continue;
+				if (room.isPrivate === true && !(user.id in room.auth)) continue;
 			}
 
 			atLeastOne = true;
