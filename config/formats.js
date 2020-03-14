@@ -278,11 +278,13 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
-
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3661142/">Doubles Ubers Metagame Discussion</a>`,
+		],
 		mod: 'gen8',
 		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Standard Doubles'],
+		searchShow: true,
+		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
 		banlist: [],
 	},
 	{
