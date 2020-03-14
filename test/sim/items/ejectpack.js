@@ -36,7 +36,7 @@ describe('Eject Pack', function () {
 		assert.equal(battle.p2.requestState, 'switch');
 	});
 
-	it("should not trigger until after all entrance abilities have resolved during simultaneous switches", function () {
+	it.skip("should not trigger until after all entrance abilities have resolved during simultaneous switches", function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Hydreigon', ability: 'intimidate', moves: ['sleeptalk']},
@@ -54,7 +54,7 @@ describe('Eject Pack', function () {
 		assert.equal(battle.p2.requestState, 'switch');
 	});
 
-	it("should only trigger the fastest Eject Pack when multiple targets with Eject Pack have stats lowered", function () {
+	it.skip("should only trigger the fastest Eject Pack when multiple targets with Eject Pack have stats lowered", function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Hydreigon', moves: ['leer']},
