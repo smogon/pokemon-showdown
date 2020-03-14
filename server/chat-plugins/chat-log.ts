@@ -71,7 +71,7 @@ const LogReader = new class {
 				if (!room) continue;
 				if (!room.checkModjoin(user)) continue;
 				if (!isStaff && !user.can('mute', null, room)) continue;
-				if (room.isPrivate === true && !(user.id in room.auth)) continue;
+				if (room.isPrivate === true && room.auth && !(user.id in room.auth)) continue;
 			}
 
 			atLeastOne = true;
@@ -115,10 +115,14 @@ const LogReader = new class {
 		const prevMonth = new Date(new Date(`${month}-15`).getTime() - 30 * DAY);
 		return prevMonth.toISOString().slice(0, 7);
 	}
+	today() {
+		return new Date().toISOString().slice(0, 10);
+	}
 };
 
 const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
+		if (day === 'today') day = LogReader.today();
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">← All logs</a> / ` +
@@ -313,5 +317,11 @@ export const pages: PageTable = {
 			return LogViewer.month(roomid, date);
 		}
 		return LogViewer.room(roomid);
+	},
+};
+
+export const commands: ChatCommands = {
+	chatlog(target, room, user) {
+		this.parse(`/join view-chatlog-${room.roomid}--today`);
 	},
 };

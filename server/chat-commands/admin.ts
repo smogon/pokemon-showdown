@@ -278,6 +278,7 @@ export const commands: ChatCommands = {
 				Chat.uncacheDir('./.server-dist/chat-commands');
 				Chat.uncacheDir('./server/chat-plugins');
 				Chat.uncacheDir('./.server-dist/chat-plugins');
+				Chat.uncacheDir('./server/chat-plugins/private');
 				Chat.uncacheDir('./translations');
 				global.Chat = require('../chat').Chat;
 
