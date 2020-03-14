@@ -1025,7 +1025,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	sunflora: {
-		randomBattleMoves: ["earthpower", "encore", "hiddenpowerrock", "solarbeam", "sunnyday"],
+		randomBattleMoves: ["earthpower", "encore", "gigadrain", "hiddenpowerrock", "solarbeam", "sunnyday"],
 		tier: "NU",
 		doublesTier: "DUU",
 	},
