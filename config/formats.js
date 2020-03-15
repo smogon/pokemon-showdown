@@ -231,6 +231,10 @@ let Formats = [
 			battle: 1,
 		},
 		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod', 'Dynamax Clause'],
+		banlist: [
+			'Mewtwo', 'Mew', 'Celebi', 'Jirachi', 'Reshiram', 'Zekrom', 'Kyurem', 'Keldeo', 'Cosmog', 'Cosmoem', 'Solgaleo',
+			'Lunala', 'Necrozma', 'Marshadow', 'Zeraora', 'Meltan', 'Melmetal', 'Zacian', 'Zamazenta', 'Eternatus',
+		],
 	},
 	{
 		name: "[Gen 8] Custom Game",
