@@ -360,13 +360,13 @@ function pokeUnclaimedTicketTimer(hasUnclaimed: boolean, hasAssistRequest: boole
 	}
 }
 function notifyUnclaimedTicket(hasAssistRequest: boolean) {
-	const room = Rooms.get('staff') as BasicChatRoom;
+	const room = Rooms.get('staff');
 	if (!room) return;
 	clearTimeout(unclaimedTicketTimer[room.roomid]!);
 	unclaimedTicketTimer[room.roomid] = null;
 	timerEnds[room.roomid] = 0;
 	for (const i in room.users) {
-		const user = room.users[i];
+		const user: User = room.users[i];
 		if (user.can('mute', null, room) && !user.ignoreTickets) {
 			user.sendTo(
 				room,
@@ -377,7 +377,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 }
 
 function notifyStaff() {
-	const room = Rooms.get('staff') as BasicChatRoom;
+	const room = Rooms.get('staff');
 	if (!room) return;
 	let buf = ``;
 	const keys = Object.keys(tickets).sort((aKey, bKey) => {
@@ -418,7 +418,7 @@ function notifyStaff() {
 		const creator = ticket.claimed ? Chat.html`${ticket.creator}` : Chat.html`<strong>${ticket.creator}</strong>`;
 		const notifying = ticket.claimed ? `` : ` notifying`;
 		// should always exist
-		const ticketRoom = Rooms.get(`help-${ticket.userid}`) as Room;
+		const ticketRoom = Rooms.get(`help-${ticket.userid}`) as ChatRoom;
 		const ticketGame = ticketRoom.getGame(HelpTicket)!;
 		if (!ticket.claimed) {
 			hasUnclaimed = true;
@@ -447,7 +447,8 @@ function notifyStaff() {
 		buf = `${buf}|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`;
 	}
 	for (const i in room.users) {
-		const user = room.users[i];
+		// FIXME: TypeScript bug: I have no clue why TypeScript can't figure out this type
+		const user: User = room.users[i];
 		if (user.can('mute', null, room)) user.sendTo(room, buf);
 	}
 	pokeUnclaimedTicketTimer(hasUnclaimed, hasAssistRequest);

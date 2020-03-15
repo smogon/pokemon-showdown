@@ -66,7 +66,7 @@ const LogReader = new class {
 		let atLeastOne = false;
 
 		for (const roomid of list) {
-			const room = Rooms.get(roomid) as BasicChatRoom;
+			const room = Rooms.get(roomid);
 			if (!isUpperStaff) {
 				if (!room) continue;
 				if (!room.checkModjoin(user)) continue;
@@ -302,7 +302,7 @@ export const pages: PageTable = {
 			if (!room.checkModjoin(user) && !user.can('bypassall')) {
 				return LogViewer.error("Access denied");
 			}
-			if (!this.can('mute', null, room as BasicChatRoom)) return;
+			if (!this.can('mute', null, room)) return;
 		} else {
 			if (!this.can('lock')) return;
 		}
