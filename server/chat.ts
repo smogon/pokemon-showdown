@@ -214,7 +214,7 @@ export class PageContext extends MessageContext {
 		this.title = 'Page';
 	}
 
-	can(permission: string, target: string | User | null = null, room: BasicChatRoom | null = null) {
+	can(permission: string, target: string | User | null = null, room: Room | null = null) {
 		if (!this.user.can(permission, target, room)) {
 			this.send(`<h2>Permission denied.</h2>`);
 			return false;
@@ -552,7 +552,7 @@ export class CommandContext extends MessageContext {
 		return true;
 	}
 
-	checkSlowchat(room: BasicChatRoom | null | undefined, user: User) {
+	checkSlowchat(room: Room | null | undefined, user: User) {
 		if (!room || !room.slowchat) return true;
 		if (user.can('broadcast', null, room)) return true;
 		const lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
@@ -723,7 +723,7 @@ export class CommandContext extends MessageContext {
 	statusfilter(status: string) {
 		return Chat.statusfilter(status, this.user);
 	}
-	can(permission: string, target: string | User | null = null, room: BasicChatRoom | null = null) {
+	can(permission: string, target: string | User | null = null, room: Room | null = null) {
 		if (!this.user.can(permission, target, room)) {
 			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
 			return false;

@@ -622,7 +622,7 @@ export class User extends Chat.MessageContext {
 		const status = statusMessage + (this.userMessage || '');
 		return status;
 	}
-	authAtLeast(minAuth: string, room: BasicChatRoom | null = null) {
+	authAtLeast(minAuth: string, room: Room | BasicChatRoom | null = null) {
 		if (!minAuth || minAuth === ' ') return true;
 		if (minAuth === 'unlocked') return !(this.locked || this.semilocked);
 		if (minAuth === 'trusted' && this.trusted) return true;
@@ -635,7 +635,7 @@ export class User extends Chat.MessageContext {
 		const auth = (room && !this.can('makeroom') ? room.getAuth(this) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
-	can(permission: string, target: string | User | null = null, room: BasicChatRoom | null = null): boolean {
+	can(permission: string, target: string | User | null = null, room: Room | BasicChatRoom | null = null): boolean {
 		if (this.hasSysopAccess()) return true;
 
 		let groupData = Config.groups[this.group];
@@ -1600,16 +1600,18 @@ export class User extends Chat.MessageContext {
 function pruneInactive(threshold: number) {
 	const now = Date.now();
 	for (const user of users.values()) {
-		const awayTimer = user.can('lock') ? STAFF_IDLE_TIMER : IDLE_TIMER;
-		const bypass = user.statusType !== 'online' ||
-			(!user.can('bypassall') &&
-				(user.can('bypassafktimer') ||
-				Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, Rooms.get(room) as BasicChatRoom))));
-		if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
-			user.setStatusType('idle');
+		if (user.statusType === 'online') {
+			// check if we should set status to idle
+			const awayTimer = user.can('lock') ? STAFF_IDLE_TIMER : IDLE_TIMER;
+			const bypass = !user.can('bypassall') && (
+				user.can('bypassafktimer') ||
+				Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, Rooms.get(room)))
+			);
+			if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
+				user.setStatusType('idle');
+			}
 		}
-		if (user.connected) continue;
-		if ((now - user.lastDisconnected) > threshold) {
+		if (user.connected && (now - user.lastDisconnected) > threshold) {
 			user.destroy();
 		}
 	}
