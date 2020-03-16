@@ -359,7 +359,7 @@ function toPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: Deep
 	const template = dex.getTemplate(pokemon);
 	const mega = ['Mega', 'Primal', 'Ultra'].some(f => template.forme.startsWith(f));
 	if (template.battleOnly || (mega && !format.id.includes('balancedhackmons'))) {
-		copy.species = template.inheritsFrom || template.baseSpecies;
+		copy.species = dex.getOutOfBattleSpecies(template);
 		copy.ability = dex.getTemplate(copy.species).abilities[0];
 	}
 	return copy;

@@ -21,7 +21,7 @@ class RandomLetsGoTeams extends RandomTeams {
 
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			species = (template.inheritsFrom ? this.dex.getTemplate(template.inheritsFrom).species : template.baseSpecies);
+			species = this.dex.getOutOfBattleSpecies(template);
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);

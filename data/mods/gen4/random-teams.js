@@ -21,7 +21,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		if (template.battleOnly) {
-			species = (template.inheritsFrom ? this.dex.getTemplate(template.inheritsFrom).species : template.baseSpecies);
+			species = this.dex.getOutOfBattleSpecies(template);
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);

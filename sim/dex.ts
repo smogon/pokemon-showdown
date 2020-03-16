@@ -449,6 +449,10 @@ export class ModdedDex {
 		return template;
 	}
 
+	getOutOfBattleSpecies(template: Template) {
+		return template.inheritsFrom ? this.getTemplate(template.inheritsFrom).species : template.baseSpecies;
+	}
+
 	getLearnset(template: string | AnyObject): AnyObject | null {
 		const id = toID(template);
 		if (!this.data.Learnsets[id]) return null;
