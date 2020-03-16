@@ -761,7 +761,7 @@ class RandomTeams {
 					break;
 
 				// Bad after setup
-				case 'bounce': case 'firstimpression': case 'glare':
+				case 'bounce': case 'firstimpression': case 'glare': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest']) rejected = true;
 					break;
 				case 'bulletpunch': case 'rockblast': case 'trickroom':
