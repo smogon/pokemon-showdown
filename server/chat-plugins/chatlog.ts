@@ -87,7 +87,7 @@ const LogReader = new class {
 					(room ? personal : deletedPersonal).push(roomid);
 				}
 			} else if (!room) {
-				deleted.push(roomid);
+				if (opts === 'all' || opts === 'deleted') deleted.push(roomid);
 			} else if (room.isOfficial) {
 				official.push(roomid);
 			} else if (!room.isPrivate) {
@@ -285,18 +285,21 @@ const LogViewer = new class {
 			return buf;
 		}
 
-		const showPersonalLink = !opts && user.can('rangeban');
+		const showPersonalLink = opts !== 'all' && user.can('rangeban');
 		for (const k in categories) {
-			if (!list[k].length && !(k === 'personal' && showPersonalLink)) {
+			if (!list[k].length && !(['personal', 'deleted'].includes(k) && showPersonalLink)) {
 				continue;
 			}
 			buf += `<p>${categories[k]}</p>`;
+			if (k === 'personal' && showPersonalLink) {
+				if (opts !== 'help') buf += `<p>- <a roomid="view-chatlog--help">(show all help)</a></p>`;
+				if (opts !== 'groupchat') buf += `<p>- <a roomid="view-chatlog--groupchat">(show all groupchat)</a></p>`;
+			}
+			if (k === 'deleted' && showPersonalLink) {
+				if (opts !== 'deleted') buf += `<p>- <a roomid="view-chatlog--deleted">(show deleted)</a></p>`;
+			}
 			for (const roomid of list[k]) {
 				buf += `<p>- <a roomid="view-chatlog-${roomid}">${roomid}</a></p>`;
-			}
-			if (k === 'personal' && opts !== 'all') {
-				buf += `<p>- <a roomid="view-chatlog--help">(show all help)</a></p>`;
-				buf += `<p>- <a roomid="view-chatlog--groupchat">(show all groupchat)</a></p>`;
 			}
 		}
 		buf += `</div>`;
