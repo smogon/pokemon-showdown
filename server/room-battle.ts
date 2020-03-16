@@ -606,7 +606,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to make a different move; the next turn has already started`);
 			return;
 		}
-		user.lastDecision = Date.now();
 		request.isWait = true;
 		request.choice = choice;
 
