@@ -4192,6 +4192,7 @@ let BattleFormatsData = {
 		isNonstandard: "Past",
 	},
 	kyogre: {
+		randomBattleMoves: ["calmmind", "icebeam", "surf", "thunder", "waterspout"],
 		eventPokemon: [
 			{"generation": 3, "level": 45, "shiny": 1, "moves": ["bodyslam", "calmmind", "icebeam", "hydropump"]},
 			{"generation": 3, "level": 70, "shiny": 1, "moves": ["hydropump", "rest", "sheercold", "doubleedge"]},
