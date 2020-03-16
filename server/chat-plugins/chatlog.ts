@@ -51,7 +51,7 @@ const LogReader = new class {
 		return listing.filter(file => /^[a-z0-9-]+$/.test(file)) as RoomID[];
 	}
 
-	async listCategorized(user: User, includePersonal?: boolean) {
+	async listCategorized(user: User, opts?: string) {
 		const list = await this.list();
 		const isUpperStaff = user.can('rangeban');
 		const isStaff = user.can('lock');
@@ -67,16 +67,23 @@ const LogReader = new class {
 
 		for (const roomid of list) {
 			const room = Rooms.get(roomid);
-			if (!isUpperStaff) {
+			const forceShow = room && (
+				// you are authed in the room
+				(room.auth && user.id in room.auth && user.can('mute', null, room)) ||
+				// you are staff and currently in the room
+				(isStaff && user.inRooms.has(room.roomid))
+			);
+			if (!isUpperStaff && !forceShow) {
+				if (!isStaff) continue;
 				if (!room) continue;
 				if (!room.checkModjoin(user)) continue;
-				if (!isStaff && !user.can('mute', null, room)) continue;
-				if (room.isPrivate === true && room.auth && !(user.id in room.auth)) continue;
+				if (room.isPrivate === true) continue;
 			}
 
 			atLeastOne = true;
 			if (roomid.includes('-')) {
-				if (includePersonal) {
+				const matchesOpts = opts && roomid.startsWith(`${opts}-`);
+				if (matchesOpts || opts === 'all' || forceShow) {
 					(room ? personal : deletedPersonal).push(roomid);
 				}
 			} else if (!room) {
@@ -232,7 +239,7 @@ const LogViewer = new class {
 		buf += `</div>`;
 		return this.linkify(buf);
 	}
-	async list(user: User, includePersonal?: boolean) {
+	async list(user: User, opts?: string) {
 		let buf = `<div class="pad"><p>` +
 			`<strong>All logs</strong></p>`;
 
@@ -245,22 +252,25 @@ const LogViewer = new class {
 			'personal': "Personal",
 			'deletedPersonal': "Deleted Personal",
 		};
-		const list = await LogReader.listCategorized(user, includePersonal) as {[k: string]: RoomID[]};
+		const list = await LogReader.listCategorized(user, opts) as {[k: string]: RoomID[]};
 
 		if (!list) {
 			buf += `<p class="message-error">You must be a staff member of a room, to view logs</p></div>`;
 			return buf;
 		}
 
+		const showPersonalLink = !opts && user.can('rangeban');
 		for (const k in categories) {
-			if (!includePersonal && user.can('rangeban') && k === 'personal') {
-				buf += `<p>${categories[k]}</p>`;
-				buf += `- <a roomid="view-chatlog--personal">(show)</a>`;
+			if (!list[k].length && !(k === 'personal' && showPersonalLink)) {
+				continue;
 			}
-			if (!list[k].length) continue;
 			buf += `<p>${categories[k]}</p>`;
 			for (const roomid of list[k]) {
 				buf += `<p>- <a roomid="view-chatlog-${roomid}">${roomid}</a></p>`;
+			}
+			if (k === 'personal' && opts !== 'all') {
+				buf += `<p>- <a roomid="view-chatlog--help">(show all help)</a></p>`;
+				buf += `<p>- <a roomid="view-chatlog--groupchat">(show all groupchat)</a></p>`;
 			}
 		}
 		buf += `</div>`;
@@ -285,9 +295,9 @@ export const pages: PageTable = {
 
 		const [roomid, date, opts] = args.join('-').split('--') as [RoomID, string | undefined, string | undefined];
 
-		if (!roomid || roomid === '-personal') {
+		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
-			return LogViewer.list(user, roomid === '-personal');
+			return LogViewer.list(user, roomid?.slice(1));
 		}
 
 		// permission check
@@ -302,7 +312,7 @@ export const pages: PageTable = {
 			if (!room.checkModjoin(user) && !user.can('bypassall')) {
 				return LogViewer.error("Access denied");
 			}
-			if (!this.can('mute', null, room)) return;
+			if (!user.can('lock') && !this.can('mute', null, room)) return;
 		} else {
 			if (!this.can('lock')) return;
 		}
