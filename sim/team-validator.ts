@@ -1118,7 +1118,7 @@ export class TeamValidator {
 			}
 			if (!template.isGigantamax) {
 				// Set to out-of-battle forme
-				set.species = template.inheritsFrom || template.baseSpecies;
+				set.species = dex.getOutOfBattleSpecies(template);
 			}
 		} else {
 			if (template.requiredAbility) {
