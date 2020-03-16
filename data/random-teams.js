@@ -1242,10 +1242,10 @@ class RandomTeams {
 			item = 'Leftovers';
 
 		// Better than Leftovers
-		} else if (counter.damagingMoves.length >= 4 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 235) {
-			item = 'Assault Vest';
 		} else if ((template.species === 'Necrozma-Dusk-Mane' && counter.setupType) || counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
+		} else if (counter.damagingMoves.length >= 4 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 235) {
+			item = 'Assault Vest';
 		} else if (isLead && !['Disguise', 'Sturdy'].includes(ability) && !hasMove['substitute'] && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 255 && !isDoubles) {
 			item = 'Focus Sash';
 		} else if (ability === 'Water Bubble') {
