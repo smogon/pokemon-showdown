@@ -873,6 +873,12 @@ let BattleFormats = {
 			const formeTable = new Set();
 			for (const set of team) {
 				let template = this.dex.getTemplate(set.species);
+				if (template.species !== template.baseSpecies) {
+					let baseSpecies = this.dex.getTemplate(template.baseSpecies);
+					if (template.types.join('/') === baseSpecies.types.join('/') && Object.values(template.baseStats).join('/') === Object.values(baseSpecies.baseStats).join('/')) {
+						template = baseSpecies;
+					}
+				}
 				if (formeTable.has(template.species)) {
 					return [`You are limited to one of each forme of a Pokémon by Forme Clause.`, `(You have more than one of ${template.species})`];
 				}
