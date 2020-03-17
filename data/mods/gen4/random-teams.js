@@ -14,11 +14,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 		let species = template.species;
 		const lsetData = this.dex.getLearnsetData(species);
 
-<<<<<<< HEAD
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
-=======
-		if (!template.exists || (!template.randomBattleMoves && !lsetData.learnset)) {
->>>>>>> Refactor learnsets.js
 			template = this.dex.getTemplate('unown');
 
 			const err = new Error('Template incompatible with random battles: ' + species);
@@ -27,11 +23,9 @@ class RandomGen4Teams extends RandomGen5Teams {
 
 		if (template.battleOnly) species = this.dex.getOutOfBattleSpecies(template);
 
-<<<<<<< HEAD
+		// @ts-ignore
 		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
-=======
-		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : lsetData.learnset ? Object.keys(lsetData.learnset) : []);
->>>>>>> Refactor learnsets.js
+		/** @type {string[]} */
 		let rejectedPool = [];
 		/**@type {string[]} */
 		let moves = [];
@@ -399,6 +393,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 				// Reject defensive status moves if a reliable recovery move is available but not selected.
 				// Toxic is only defensive if used with another status move other than Protect (Toxic + 3 attacks and Toxic + Protect are ok).
 				if ((defensiveStatusMoves.includes(moveid) || moveid === 'toxic' && ((counter.Status > 1 && !hasMove['protect']) || counter.Status > 2)) &&
+					// @ts-ignore
 					!moves.some(id => recoveryMoves.includes(id)) && movePool.some(id => recoveryMoves.includes(id))) {
 					rejected = true;
 				}

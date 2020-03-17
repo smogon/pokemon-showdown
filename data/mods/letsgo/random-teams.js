@@ -13,13 +13,8 @@ class RandomLetsGoTeams extends RandomTeams {
 		let lsetData = this.dex.getLearnsetData(template.speciesid);
 		let species = template.species;
 
-<<<<<<< HEAD
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
 			template = this.dex.getTemplate(this.sample(['Pikachu-Starter', 'Eevee-Starter']));
-=======
-		if (!template.exists || (!template.randomBattleMoves && !lsetData.learnset)) {
-			template = this.dex.getTemplate('bulbasaur');
->>>>>>> Refactor learnsets.js
 
 			const err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The Let\'s Go randbat set generator');
@@ -30,11 +25,8 @@ class RandomLetsGoTeams extends RandomTeams {
 			species = this.dex.getOutOfBattleSpecies(template);
 		}
 
-<<<<<<< HEAD
+		// @ts-ignore
 		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
-=======
-		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : lsetData.learnset ? Object.keys(lsetData.learnset) : []);
->>>>>>> Refactor learnsets.js
 		/**@type {string[]} */
 		let moves = [];
 		/**@type {{[k: string]: true}} */
