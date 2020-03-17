@@ -476,9 +476,9 @@ export class ModdedDex {
 			const template = dex.getTemplate(id);
 			const inheritedSpecies = toID(this.getOutOfBattleSpecies(template));
 			if (template.species !== inheritedSpecies && dex.data.Learnsets.hasOwnProperty(inheritedSpecies)) {
-				const lset: {[k: string]: MoveSource[]} = this.deepClone(dex.data.Learnsets[id].learnset);
-				const inheritedLset: {[k: string]: MoveSource[]} = this.deepClone(dex.data.Learnsets[inheritedSpecies].learnset);
-				const totalLset: {[k: string]: MoveSource[]} = Object.assign(lset, inheritedLset);
+				const lset: {[k: string]: MoveSource[]} = dex.data.Learnsets[id].learnset!;
+				const inheritedLset: {[k: string]: MoveSource[]} = dex.data.Learnsets[inheritedSpecies].learnset!;
+				const totalLset: {[k: string]: MoveSource[]} = Object.assign({}, lset, inheritedLset);
 				const {eventOnly, eventData} = dex.data.Learnsets[id];
 				learnsetData = new Data.Learnset({learnset: totalLset, eventOnly, eventData, exists: true});
 			}
