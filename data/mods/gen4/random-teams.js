@@ -12,8 +12,13 @@ class RandomGen4Teams extends RandomGen5Teams {
 	randomSet(template, teamDetails = {}, isLead = false) {
 		let baseTemplate = (template = this.dex.getTemplate(template));
 		let species = template.species;
+		const lsetData = this.dex.getLearnsetData(species);
 
+<<<<<<< HEAD
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
+=======
+		if (!template.exists || (!template.randomBattleMoves && !lsetData.learnset)) {
+>>>>>>> Refactor learnsets.js
 			template = this.dex.getTemplate('unown');
 
 			const err = new Error('Template incompatible with random battles: ' + species);
@@ -22,7 +27,11 @@ class RandomGen4Teams extends RandomGen5Teams {
 
 		if (template.battleOnly) species = this.dex.getOutOfBattleSpecies(template);
 
+<<<<<<< HEAD
 		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
+=======
+		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : lsetData.learnset ? Object.keys(lsetData.learnset) : []);
+>>>>>>> Refactor learnsets.js
 		let rejectedPool = [];
 		/**@type {string[]} */
 		let moves = [];

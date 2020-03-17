@@ -74,7 +74,7 @@ interface PokemonSet {
  * - T = tutor
  * - R = restricted (special moves like Rotom moves)
  * - E = egg
- * - S = event, 3rd char+ is the index in .eventPokemon
+ * - S = event, 3rd char+ is the index in .eventData
  * - D = Dream World, only 5D is valid
  * - V = Virtual Console or Let's Go transfer, only 7V/8V is valid
  * - C = NOT A REAL SOURCE, see note, only 3C/4C is valid
@@ -1093,8 +1093,6 @@ interface TemplateFormatsData {
 	doublesTier?: string;
 	encounters?: EventInfo[];
 	essentialMove?: string;
-	eventOnly?: boolean;
-	eventPokemon?: EventInfo[];
 	exclusiveMoves?: readonly string[];
 	gen?: number;
 	isGigantamax?: string;
@@ -1113,6 +1111,17 @@ interface TemplateFormatsData {
 }
 
 interface ModdedTemplateFormatsData extends Partial<TemplateFormatsData> {
+	inherit?: true;
+}
+
+interface LearnsetData {
+	learnset?: {[moveid: string]: MoveSource[]};
+	eventData?: EventInfo[];
+	eventOnly?: boolean;
+	exists: boolean;
+}
+
+interface ModdedLearnsetsData extends Partial<LearnsetData> {
 	inherit?: true;
 }
 

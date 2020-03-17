@@ -2926,21 +2926,18 @@ let BattleFormatsData = {
 	deoxysattack: {
 		randomBattleMoves: ["psychoboost", "superpower", "icebeam", "knockoff", "extremespeed", "firepunch", "stealthrock"],
 		randomDoubleBattleMoves: ["psychoboost", "superpower", "extremespeed", "icebeam", "thunderbolt", "firepunch", "protect", "knockoff"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
 	deoxysdefense: {
 		randomBattleMoves: ["spikes", "stealthrock", "recover", "taunt", "toxic", "seismictoss", "knockoff"],
 		randomDoubleBattleMoves: ["protect", "stealthrock", "recover", "taunt", "reflect", "seismictoss", "lightscreen", "trickroom", "psychic"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "(DUU)",
 	},
 	deoxysspeed: {
 		randomBattleMoves: ["spikes", "stealthrock", "superpower", "psychoboost", "taunt", "magiccoat", "knockoff"],
 		randomDoubleBattleMoves: ["superpower", "icebeam", "psychoboost", "taunt", "lightscreen", "reflect", "protect", "knockoff"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "(DUU)",
 	},
@@ -3424,7 +3421,6 @@ let BattleFormatsData = {
 	giratinaorigin: {
 		randomBattleMoves: ["dracometeor", "shadowsneak", "dragontail", "willowisp", "defog", "toxic", "shadowball", "earthquake"],
 		randomDoubleBattleMoves: ["dracometeor", "shadowsneak", "tailwind", "hiddenpowerfire", "willowisp", "calmmind", "substitute", "dragonpulse", "shadowball", "aurasphere", "protect", "earthquake"],
-		eventOnly: true,
 		requiredItem: "Griseous Orb",
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -3472,7 +3468,6 @@ let BattleFormatsData = {
 	shayminsky: {
 		randomBattleMoves: ["seedflare", "airslash", "earthpower", "hiddenpowerice", "substitute", "leechseed"],
 		randomDoubleBattleMoves: ["seedflare", "earthpower", "airslash", "rest", "substitute", "leechseed", "tailwind", "protect", "hiddenpowerice"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
@@ -3487,103 +3482,86 @@ let BattleFormatsData = {
 	arceusbug: {
 		randomBattleMoves: ["swordsdance", "xscissor", "stoneedge", "recover", "earthquake", "ironhead"],
 		randomDoubleBattleMoves: ["swordsdance", "xscissor", "stoneedge", "recover", "earthquake", "ironhead", "protect"],
-		eventOnly: true,
 		requiredItems: ["Insect Plate", "Buginium Z"],
 	},
 	arceusdark: {
 		randomBattleMoves: ["calmmind", "judgment", "recover", "fireblast", "toxic"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "recover", "focusblast", "safeguard", "snarl", "willowisp", "protect"],
-		eventOnly: true,
 		requiredItems: ["Dread Plate", "Darkinium Z"],
 	},
 	arceusdragon: {
 		randomBattleMoves: ["swordsdance", "outrage", "extremespeed", "earthquake", "recover", "judgment", "fireblast", "willowisp", "defog"],
 		randomDoubleBattleMoves: ["swordsdance", "dragonclaw", "extremespeed", "earthquake", "recover", "protect"],
-		eventOnly: true,
 		requiredItems: ["Draco Plate", "Dragonium Z"],
 	},
 	arceuselectric: {
 		randomBattleMoves: ["calmmind", "judgment", "recover", "icebeam", "earthpower"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "recover", "icebeam", "protect"],
-		eventOnly: true,
 		requiredItems: ["Zap Plate", "Electrium Z"],
 	},
 	arceusfairy: {
 		randomBattleMoves: ["calmmind", "judgment", "recover", "willowisp", "defog", "earthpower", "toxic"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "recover", "willowisp", "protect", "earthpower", "thunderbolt"],
-		eventOnly: true,
 		requiredItems: ["Pixie Plate", "Fairium Z"],
 	},
 	arceusfighting: {
 		randomBattleMoves: ["calmmind", "judgment", "stoneedge", "shadowball", "recover", "roar", "icebeam"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "icebeam", "shadowball", "recover", "willowisp", "protect"],
-		eventOnly: true,
 		requiredItems: ["Fist Plate", "Fightinium Z"],
 	},
 	arceusfire: {
 		randomBattleMoves: ["calmmind", "fireblast", "roar", "thunderbolt", "icebeam", "recover"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "thunderbolt", "recover", "heatwave", "protect", "willowisp"],
-		eventOnly: true,
 		requiredItems: ["Flame Plate", "Firium Z"],
 	},
 	arceusflying: {
 		randomBattleMoves: ["calmmind", "judgment", "earthpower", "fireblast", "toxic", "recover"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "safeguard", "recover", "substitute", "tailwind", "protect"],
-		eventOnly: true,
 		requiredItems: ["Sky Plate", "Flyinium Z"],
 	},
 	arceusghost: {
 		randomBattleMoves: ["swordsdance", "shadowforce", "shadowclaw", "brickbreak", "extremespeed", "recover", "judgment", "toxic", "defog"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "focusblast", "recover", "swordsdance", "shadowforce", "brickbreak", "willowisp", "protect"],
-		eventOnly: true,
 		requiredItems: ["Spooky Plate", "Ghostium Z"],
 	},
 	arceusgrass: {
 		randomBattleMoves: ["judgment", "recover", "calmmind", "icebeam", "fireblast"],
 		randomDoubleBattleMoves: ["calmmind", "icebeam", "judgment", "earthpower", "recover", "safeguard", "thunderwave", "protect"],
-		eventOnly: true,
 		requiredItems: ["Meadow Plate", "Grassium Z"],
 	},
 	arceusground: {
 		randomBattleMoves: ["swordsdance", "earthquake", "stoneedge", "recover", "judgment", "icebeam", "toxic", "stealthrock"],
 		randomDoubleBattleMoves: ["swordsdance", "earthquake", "stoneedge", "recover", "calmmind", "judgment", "icebeam", "rockslide", "protect"],
-		eventOnly: true,
 		requiredItems: ["Earth Plate", "Groundium Z"],
 	},
 	arceusice: {
 		randomBattleMoves: ["calmmind", "judgment", "thunderbolt", "fireblast", "recover"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "thunderbolt", "focusblast", "recover", "protect", "icywind"],
-		eventOnly: true,
 		requiredItems: ["Icicle Plate", "Icium Z"],
 	},
 	arceuspoison: {
 		randomBattleMoves: ["calmmind", "sludgebomb", "fireblast", "recover", "icebeam", "defog"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "sludgebomb", "heatwave", "recover", "willowisp", "protect", "earthpower"],
-		eventOnly: true,
 		requiredItems: ["Toxic Plate", "Poisonium Z"],
 	},
 	arceuspsychic: {
 		randomBattleMoves: ["judgment", "calmmind", "fireblast", "recover", "icebeam", "toxic"],
 		randomDoubleBattleMoves: ["calmmind", "psyshock", "focusblast", "recover", "willowisp", "judgment", "protect"],
-		eventOnly: true,
 		requiredItems: ["Mind Plate", "Psychium Z"],
 	},
 	arceusrock: {
 		randomBattleMoves: ["swordsdance", "earthquake", "stoneedge", "recover", "judgment", "willowisp", "stealthrock"],
 		randomDoubleBattleMoves: ["swordsdance", "stoneedge", "recover", "rockslide", "earthquake", "protect"],
-		eventOnly: true,
 		requiredItems: ["Stone Plate", "Rockium Z"],
 	},
 	arceussteel: {
 		randomBattleMoves: ["judgment", "recover", "willowisp", "defog", "roar", "swordsdance", "ironhead", "earthquake", "stoneedge"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "recover", "protect", "willowisp"],
-		eventOnly: true,
 		requiredItems: ["Iron Plate", "Steelium Z"],
 	},
 	arceuswater: {
 		randomBattleMoves: ["recover", "calmmind", "judgment", "icebeam", "toxic", "defog"],
 		randomDoubleBattleMoves: ["recover", "calmmind", "judgment", "icebeam", "fireblast", "icywind", "surf", "protect"],
-		eventOnly: true,
 		requiredItems: ["Splash Plate", "Waterium Z"],
 	},
 	victini: {
@@ -4442,7 +4420,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	keldeoresolute: {
-		eventOnly: true,
 		requiredMove: "Secret Sword",
 	},
 	meloetta: {
@@ -4468,19 +4445,15 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	genesectburn: {
-		eventOnly: true,
 		requiredItem: "Burn Drive",
 	},
 	genesectchill: {
-		eventOnly: true,
 		requiredItem: "Chill Drive",
 	},
 	genesectdouse: {
-		eventOnly: true,
 		requiredItem: "Douse Drive",
 	},
 	genesectshock: {
-		eventOnly: true,
 		requiredItem: "Shock Drive",
 	},
 	chespin: {
@@ -4930,7 +4903,6 @@ let BattleFormatsData = {
 	hoopaunbound: {
 		randomBattleMoves: ["nastyplot", "substitute", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "trick"],
 		randomDoubleBattleMoves: ["psychic", "darkpulse", "focusblast", "protect", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot"],
-		eventOnly: true,
 		tier: "UUBL",
 		doublesTier: "DOU",
 	},
@@ -5598,13 +5570,11 @@ let BattleFormatsData = {
 	necrozmaduskmane: {
 		randomBattleMoves: ["swordsdance", "sunsteelstrike", "photongeyser", "earthquake", "knockoff", "autotomize"],
 		randomDoubleBattleMoves: ["swordsdance", "sunsteelstrike", "photongeyser", "earthquake", "knockoff", "rockslide"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
 	necrozmadawnwings: {
 		randomBattleMoves: ["calmmind", "moongeistbeam", "photongeyser", "heatwave", "powergem", "trickroom"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUber",
 	},

@@ -93,7 +93,7 @@ interface DexTableData {
 	Formats: DexTable<Format>;
 	FormatsData: DexTable<ModdedTemplateFormatsData>;
 	Items: DexTable<Item>;
-	Learnsets: DexTable<{learnset: {[k: string]: MoveSource[]}}>;
+	Learnsets: DexTable<LearnsetData>;
 	Movedex: DexTable<Move>;
 	Natures: DexTable<Nature>;
 	Pokedex: DexTable<Template>;
@@ -146,6 +146,7 @@ export class ModdedDex {
 	readonly abilityCache: Map<ID, Ability>;
 	readonly effectCache: Map<ID, Effect | Move>;
 	readonly itemCache: Map<ID, Item>;
+	readonly learnsetCache: Map<ID, LearnsetData>;
 	readonly moveCache: Map<ID, Move>;
 	readonly templateCache: Map<ID, Template>;
 	readonly typeCache: Map<string, TypeInfo>;
@@ -172,6 +173,7 @@ export class ModdedDex {
 		this.effectCache = new Map();
 		this.itemCache = new Map();
 		this.moveCache = new Map();
+		this.learnsetCache = new Map();
 		this.templateCache = new Map();
 		this.typeCache = new Map();
 
@@ -191,6 +193,7 @@ export class ModdedDex {
 
 			this.abilityCache = original.abilityCache;
 			this.itemCache = original.itemCache;
+			this.learnsetCache = original.learnsetCache;
 			this.moveCache = original.moveCache;
 			this.templateCache = original.templateCache;
 
@@ -453,10 +456,42 @@ export class ModdedDex {
 		return template.inheritsFrom ? this.getTemplate(template.inheritsFrom).species : template.baseSpecies;
 	}
 
-	getLearnset(template: string | AnyObject): AnyObject | null {
-		const id = toID(template);
-		if (!this.data.Learnsets[id]) return null;
-		return this.data.Learnsets[id].learnset;
+	getLearnsetData(name?: string | LearnsetData): LearnsetData {
+		if (name && typeof name !== 'string') return name;
+
+		name = (name || '').trim();
+		let id = toID(name);
+		let learnsetData = this.learnsetCache.get(id);
+		if (learnsetData) return learnsetData;
+		if (this.data.Aliases.hasOwnProperty(id)) {
+			learnsetData = this.getLearnsetData(this.data.Aliases[id]);
+			if (learnsetData.exists) {
+				this.learnsetCache.set(id, learnsetData);
+			}
+			return learnsetData;
+		}
+		const dex = this.gen > 2 ? this : this.mod('gen2');
+		if (id && dex.data.Learnsets.hasOwnProperty(id)) {
+			learnsetData = new Data.Learnset(dex.data.Learnsets[id]);
+			const template = dex.getTemplate(id);
+			const inheritedSpecies = toID(this.getOutOfBattleSpecies(template));
+			if (template.species !== inheritedSpecies && dex.data.Learnsets.hasOwnProperty(inheritedSpecies)) {
+				const lset: {[k: string]: MoveSource[]} = this.deepClone(dex.data.Learnsets[id].learnset);
+				const inheritedLset: {[k: string]: MoveSource[]} = this.deepClone(dex.data.Learnsets[inheritedSpecies].learnset);
+				const totalLset: {[k: string]: MoveSource[]} = Object.assign(lset, inheritedLset);
+				const {eventOnly, eventData} = dex.data.Learnsets[id];
+				learnsetData = new Data.Learnset({learnset: totalLset, eventOnly, eventData, exists: true});
+			}
+		} else {
+			if (dex.getTemplate(id).species !== this.getOutOfBattleSpecies(dex.getTemplate(id))) {
+				id = toID(this.getOutOfBattleSpecies(dex.getTemplate(id)));
+				learnsetData = new Data.Learnset(dex.data.Learnsets[id]);
+			} else {
+				learnsetData = new Data.Learnset({exists: false});
+			}
+		}
+		if (learnsetData.exists) this.learnsetCache.set(id, learnsetData);
+		return learnsetData;
 	}
 
 	getMove(name?: string | Move): Move {
