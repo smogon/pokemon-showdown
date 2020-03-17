@@ -1157,7 +1157,6 @@ interface FormatsData extends EventMethods {
 	restricted?: string[];
 	ruleset?: string[];
 	searchShow?: boolean;
-	allowMultisearch?: boolean;
 	team?: string;
 	teamLength?: {validate?: [number, number], battle?: number};
 	threads?: string[];
