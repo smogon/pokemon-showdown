@@ -13,11 +13,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let baseTemplate = (template = this.dex.getTemplate(template));
 		let species = template.species;
 
-		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
+		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
 			template = this.dex.getTemplate('unown');
 
-			let err = new Error('Template incompatible with random battles: ' + species);
+			const err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The gen 5 randbat set generator');
 		}
 
@@ -26,7 +26,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			species = this.dex.getOutOfBattleSpecies(template);
 		}
 
-		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
+		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
 		let rejectedPool = [];
 		/**@type {string[]} */
 		let moves = [];
@@ -58,11 +58,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
-			// @ts-ignore
 			hasAbility[template.abilities[1]] = true;
 		}
 		if (template.abilities['H']) {
-			// @ts-ignore
 			hasAbility[template.abilities['H']] = true;
 		}
 		let availableHP = 0;

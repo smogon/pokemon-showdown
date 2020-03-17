@@ -13,18 +13,16 @@ class RandomGen4Teams extends RandomGen5Teams {
 		let baseTemplate = (template = this.dex.getTemplate(template));
 		let species = template.species;
 
-		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
+		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
 			template = this.dex.getTemplate('unown');
 
-			let err = new Error('Template incompatible with random battles: ' + species);
+			const err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The gen 4 randbat set generator');
 		}
 
-		if (template.battleOnly) {
-			species = this.dex.getOutOfBattleSpecies(template);
-		}
+		if (template.battleOnly) species = this.dex.getOutOfBattleSpecies(template);
 
-		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
+		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
 		let rejectedPool = [];
 		/**@type {string[]} */
 		let moves = [];
@@ -56,7 +54,6 @@ class RandomGen4Teams extends RandomGen5Teams {
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
-			// @ts-ignore
 			hasAbility[template.abilities[1]] = true;
 		}
 		let availableHP = 0;

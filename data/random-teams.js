@@ -616,10 +616,10 @@ class RandomTeams {
 		let baseTemplate = template;
 		let species = template.species;
 
-		if (!template.exists || ((!isDoubles || !template.randomDoubleBattleMoves) && !template.randomBattleMoves && !template.learnset)) {
+		if (!template.exists || (!template.randomBattleMoves && (!isDoubles || !template.randomDoubleBattleMoves) && !this.dex.data.Learnsets[template.id])) {
 			template = this.dex.getTemplate('pikachu');
 
-			let err = new Error('Template incompatible with random battles: ' + species);
+			const err = new Error('Template incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The randbat set generator');
 		}
 
@@ -629,7 +629,7 @@ class RandomTeams {
 		}
 
 		const randMoves = !isDoubles ? template.randomBattleMoves : (template.randomDoubleBattleMoves || template.randomBattleMoves);
-		let movePool = (randMoves ? randMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
+		let movePool = (randMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
 		let rejectedPool = [];
 		/**@type {string[]} */
 		let moves = [];
