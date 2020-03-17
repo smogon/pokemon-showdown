@@ -1283,10 +1283,6 @@ let BattleStatuses = {
 			this.add(`c|%Rage|/me quits`);
 		},
 	},
-	raid: {
-		noCopy: true,
-		// No messages provided
-	},
 	ransei: {
 		noCopy: true,
 		onStart() {
