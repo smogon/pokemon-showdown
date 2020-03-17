@@ -130,17 +130,18 @@ async function importGen(gen: Generation, index: string) {
 			}
 		}
 
-		const [u, count] = getStatisticsURL(index, format);
+		const stats = getStatisticsURL(index, format);
+		if (!stats) continue;
 		try {
-			const statistics = smogon.Statistics.process(await request(u));
-			const sets = importUsageBasedSets(gen, format, statistics, count);
+			const statistics = smogon.Statistics.process(await request(stats.url));
+			const sets = importUsageBasedSets(gen, format, statistics, stats.count);
 			if (Object.keys(sets).length) {
 				data[format.id] = data[format.id] || {};
 				data[format.id]['smogon.com/stats'] = sets;
 			}
 			data[format.id] = data[format.id] || {};
 		} catch (err) {
-			error(`${u} = ${err}`);
+			error(`${stats.url} = ${err}`);
 		}
 	}
 
@@ -434,10 +435,11 @@ function getLevel(format: Format, level = 0) {
 	return level > maxForcedLevel ? maxForcedLevel : level;
 }
 
-export function getStatisticsURL(index: string, format: Format): [string, number] {
+export function getStatisticsURL(index: string, format: Format): [string, number] | undefined {
 	const current = index.includes(format.id);
-	const {date, count} = smogon.Statistics.latestDate(format.id, !current)!;
-	return [smogon.Statistics.url(date, format.id, current || 1500), count];
+	const latest = smogon.Statistics.latestDate(format.id, !current);
+	if (!latest) return undefined;
+	return {url: smogon.Statistics.url(latest.date, format.id, current || 1500), count: latest.count};
 }
 
 // TODO: Use bigram matrix, bucketed spreads and generative validation logic for more realistic sets
@@ -450,6 +452,7 @@ function importUsageBasedSets(gen: Generation, format: Format, statistics: smogo
 		const stats = statistics.data[pokemon];
 		if (eligible(dex, toID(pokemon)) && stats.usage >= threshold) {
 			const set: DeepPartial<PokemonSet> = {
+				level: getLevel(format),
 				moves: (top(stats.Moves, 4) as string[]).map(m => dex.getMove(m).name).filter(m => m),
 			};
 			if (gen >= 2 && format.id !== 'gen7letsgoou') {
