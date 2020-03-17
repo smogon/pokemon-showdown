@@ -1,6 +1,6 @@
 'use strict';
 
-/** @type {{[k: string]: ModdedLearnsetsData}} */
+/** @type {{[k: string]: ModdedLearnsetData}} */
 let BattleLearnsets = {
 	fearow: {
 		inherit: true,

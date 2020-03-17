@@ -30,7 +30,6 @@ class RandomGen7Teams extends RandomTeams {
 		template = this.dex.getTemplate(template);
 		let baseTemplate = template;
 		let species = template.species;
-		let lsetData = this.dex.getLearnsetData(species);
 
 		if (!template.exists || (!template.randomBattleMoves && (!isDoubles || !template.randomDoubleBattleMoves) && !this.dex.data.Learnsets[template.id])) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS

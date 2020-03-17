@@ -12,7 +12,6 @@ class RandomGen4Teams extends RandomGen5Teams {
 	randomSet(template, teamDetails = {}, isLead = false) {
 		let baseTemplate = (template = this.dex.getTemplate(template));
 		let species = template.species;
-		const lsetData = this.dex.getLearnsetData(species);
 
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
 			template = this.dex.getTemplate('unown');

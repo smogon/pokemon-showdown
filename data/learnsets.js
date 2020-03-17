@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: {learnset?: {[k: string]: MoveSource[]}, eventData?: EventInfo[], eventOnly?: boolean}}} */
+/**@type {{[k: string]: LearnsetData}} */
 let BattleLearnsets = {
 	missingno: {
 		learnset: {
@@ -126,6 +126,9 @@ let BattleLearnsets = {
 			{"generation": 5, "level": 1, "shiny": 1, "ivs": {"def": 31}, "moves": ["falseswipe", "block", "frenzyplant", "weatherball"], "pokeball": "pokeball"},
 			{"generation": 6, "level": 5, "moves": ["growl", "leechseed", "vinewhip", "poisonpowder"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 5, "isHidden": true, "moves": ["tackle", "growl", "celebrate"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 5},
 		],
 	},
 	ivysaur: {
@@ -421,6 +424,9 @@ let BattleLearnsets = {
 			{"generation": 5, "level": 1, "shiny": 1, "ivs": {"spe": 31}, "moves": ["falseswipe", "block", "blastburn", "acrobatics"], "pokeball": "pokeball"},
 			{"generation": 6, "level": 5, "moves": ["growl", "ember", "smokescreen", "dragonrage"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 5, "isHidden": true, "moves": ["scratch", "growl", "celebrate"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 5},
 		],
 	},
 	charmeleon: {
@@ -769,6 +775,9 @@ let BattleLearnsets = {
 			{"generation": 6, "level": 5, "moves": ["tailwhip", "watergun", "withdraw", "bubble"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 5, "isHidden": true, "moves": ["tackle", "tailwhip", "celebrate"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 5},
+		],
 	},
 	wartortle: {
 		learnset: {
@@ -978,6 +987,11 @@ let BattleLearnsets = {
 			stringshot: ["8L1", "8V", "7L1", "7V", "6L1", "5L1", "4T", "4L1", "3L1"],
 			tackle: ["8L1", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 		},
+		encounters: [
+			{"generation": 1, "level": 3},
+			{"generation": 2, "level": 3},
+			{"generation": 3, "level": 3},
+		],
 	},
 	metapod: {
 		learnset: {
@@ -987,6 +1001,14 @@ let BattleLearnsets = {
 			irondefense: ["8M", "7T", "6T", "5T", "4T"],
 			stringshot: ["4T"],
 		},
+		encounters: [
+			{"generation": 1, "level": 4},
+			{"generation": 2, "level": 4},
+			{"generation": 3, "level": 4},
+			{"generation": 4, "level": 3},
+			{"generation": 6, "level": 4},
+			{"generation": 7, "level": 3},
+		],
 	},
 	butterfree: {
 		learnset: {
@@ -1080,6 +1102,11 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 30, "moves": ["morningsun", "psychic", "sleeppowder", "aerialace"]},
 		],
+		encounters: [
+			{"generation": 2, "level": 7},
+			{"generation": 4, "level": 6},
+			{"generation": 7, "level": 9},
+		],
 	},
 	weedle: {
 		learnset: {
@@ -1088,6 +1115,11 @@ let BattleLearnsets = {
 			poisonsting: ["8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			stringshot: ["8V", "7L1", "7V", "6L1", "5L1", "4T", "4L1", "3L1"],
 		},
+		encounters: [
+			{"generation": 1, "level": 3},
+			{"generation": 2, "level": 3},
+			{"generation": 3, "level": 3},
+		],
 	},
 	kakuna: {
 		learnset: {
@@ -1097,6 +1129,14 @@ let BattleLearnsets = {
 			irondefense: ["7T", "6T", "5T", "4T"],
 			stringshot: ["4T"],
 		},
+		encounters: [
+			{"generation": 1, "level": 4},
+			{"generation": 2, "level": 4},
+			{"generation": 3, "level": 4},
+			{"generation": 4, "level": 3},
+			{"generation": 6, "level": 4},
+			{"generation": 7, "level": 3},
+		],
 	},
 	beedrill: {
 		learnset: {
@@ -1185,6 +1225,10 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 30, "moves": ["batonpass", "sludgebomb", "twineedle", "swordsdance"]},
 		],
+		encounters: [
+			{"generation": 2, "level": 7},
+			{"generation": 4, "level": 6},
+		],
 	},
 	pidgey: {
 		learnset: {
@@ -1253,6 +1297,11 @@ let BattleLearnsets = {
 			wingattack: ["8V", "7L33", "7V", "6L33", "5L33", "4L33", "3L25"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 2},
+			{"generation": 2, "level": 2},
+			{"generation": 3, "level": 2},
+		],
 	},
 	pidgeotto: {
 		learnset: {
@@ -1320,6 +1369,12 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 30, "abilities": ["keeneye"], "moves": ["refresh", "wingattack", "steelwing", "featherdance"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 9},
+			{"generation": 2, "level": 7},
+			{"generation": 3, "level": 7},
+			{"generation": 4, "level": 7},
 		],
 	},
 	pidgeot: {
@@ -1390,6 +1445,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 5, "level": 61, "gender": "M", "nature": "Naughty", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "abilities": ["keeneye"], "moves": ["whirlwind", "wingattack", "skyattack", "mirrormove"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 7, "level": 29},
 		],
 	},
 	rattata: {
@@ -1475,6 +1533,11 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 1, "level": 2},
+			{"generation": 2, "level": 2},
+			{"generation": 3, "level": 2},
+		],
 	},
 	rattataalola: {
 		learnset: {
@@ -1642,6 +1705,11 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 34, "moves": ["refresh", "superfang", "scaryface", "hyperfang"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 6},
+			{"generation": 4, "level": 13},
+		],
 	},
 	raticatealola: {
 		learnset: {
@@ -1713,6 +1781,9 @@ let BattleLearnsets = {
 			venoshock: ["7M"],
 			zenheadbutt: ["7T"],
 		},
+		encounters: [
+			{"generation": 7, "level": 17},
+		],
 	},
 	raticatealolatotem: {
 		learnset: {
@@ -1860,6 +1931,11 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 22, "moves": ["batonpass", "falseswipe", "leer", "aerialace"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 3},
+			{"generation": 2, "level": 2},
+			{"generation": 3, "level": 3},
+		],
 	},
 	fearow: {
 		learnset: {
@@ -1932,6 +2008,11 @@ let BattleLearnsets = {
 			whirlwind: ["7V"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 19},
+			{"generation": 2, "level": 7},
+			{"generation": 4, "level": 7},
+		],
 	},
 	ekans: {
 		learnset: {
@@ -2021,6 +2102,10 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 14, "gender": "F", "nature": "Docile", "ivs": {"hp": 26, "atk": 28, "def": 6, "spa": 14, "spd": 30, "spe": 11}, "abilities": ["shedskin"], "moves": ["leer", "wrap", "poisonsting", "bite"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["wrap", "leer", "poisonsting"], "pokeball": "pokeball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 6},
+			{"generation": 2, "level": 4},
 		],
 	},
 	arbok: {
@@ -2112,6 +2197,10 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 33, "moves": ["refresh", "sludgebomb", "glare", "bite"]},
+		],
+		encounters: [
+			{"generation": 2, "level": 10},
+			{"generation": 4, "level": 10},
 		],
 	},
 	pichu: {
@@ -2425,6 +2514,11 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 40, "shiny": 1, "perfectIVs": 3, "moves": ["nuzzle", "discharge", "slam", "surf"], "pokeball": "pokeball"},
 			{"generation": 7, "level": 5, "moves": ["celebrate", "sweetscent", "counter", "refresh"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 10, "moves": ["fly", "surf", "thunderbolt", "quickattack"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 3},
+			{"generation": 2, "level": 4},
+			{"generation": 3, "level": 3},
 		],
 	},
 	pikachucosplay: {
@@ -3688,6 +3782,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 12, "gender": "M", "nature": "Docile", "ivs": {"hp": 4, "atk": 23, "def": 8, "spa": 31, "spd": 1, "spe": 25}, "moves": ["scratch", "defensecurl", "sandattack", "poisonsting"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 6},
+		],
 	},
 	sandshrewalola: {
 		learnset: {
@@ -3857,6 +3954,10 @@ let BattleLearnsets = {
 			toxic: ["8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			xscissor: ["8V", "7M", "6M", "5M", "4M"],
 		},
+		encounters: [
+			{"generation": 2, "level": 10},
+			{"generation": 4, "level": 10},
+		],
 	},
 	sandslashalola: {
 		learnset: {
@@ -4009,6 +4110,9 @@ let BattleLearnsets = {
 			venoshock: ["7M", "6M", "5M"],
 			waterpulse: ["7T", "6T", "4M", "3M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 2},
+		],
 	},
 	nidorina: {
 		learnset: {
@@ -4085,6 +4189,9 @@ let BattleLearnsets = {
 			watergun: ["7V"],
 			waterpulse: ["7T", "6T", "4M", "3M"],
 		},
+		encounters: [
+			{"generation": 4, "level": 15, "pokeball": "safariball"},
+		],
 	},
 	nidoqueen: {
 		learnset: {
@@ -4291,6 +4398,9 @@ let BattleLearnsets = {
 			venoshock: ["7M", "6M", "5M"],
 			waterpulse: ["7T", "6T", "4M", "3M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 2},
+		],
 	},
 	nidorino: {
 		learnset: {
@@ -4367,6 +4477,9 @@ let BattleLearnsets = {
 			watergun: ["7V"],
 			waterpulse: ["7T", "6T", "4M", "3M"],
 		},
+		encounters: [
+			{"generation": 4, "level": 15, "pokeball": "safariball"},
+		],
 	},
 	nidoking: {
 		learnset: {
@@ -4744,6 +4857,9 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 1, "level": 8},
+		],
 	},
 	clefable: {
 		learnset: {
@@ -4979,6 +5095,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 18, "gender": "F", "nature": "Quirky", "ivs": {"hp": 15, "atk": 6, "def": 3, "spa": 25, "spd": 13, "spe": 22}, "moves": ["tailwhip", "roar", "quickattack", "willowisp"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 18, "moves": ["charm", "heatwave", "ember", "dig"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 18},
 		],
 	},
 	vulpixalola: {
@@ -5442,6 +5561,11 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 3},
+			{"generation": 2, "level": 3},
+			{"generation": 3, "level": 3},
+		],
 	},
 	wigglytuff: {
 		learnset: {
@@ -5559,6 +5683,9 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 22},
+		],
 	},
 	zubat: {
 		learnset: {
@@ -5641,6 +5768,10 @@ let BattleLearnsets = {
 			wingattack: ["8V", "7L13", "7V", "6L13", "5L17", "4L17", "3L21"],
 			zenheadbutt: ["7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
+		encounters: [
+			{"generation": 1, "level": 6},
+			{"generation": 2, "level": 2},
+		],
 	},
 	golbat: {
 		learnset: {
@@ -5720,6 +5851,13 @@ let BattleLearnsets = {
 			wingattack: ["8V", "7L13", "7V", "6L13", "5L17", "4L17", "3L21"],
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 2, "level": 13},
+			{"generation": 3, "level": 5},
+			{"generation": 4, "level": 10},
+			{"generation": 6, "level": 19, "maxEggMoves": 1},
+			{"generation": 7, "level": 20},
+		],
 	},
 	crobat: {
 		learnset: {
@@ -5873,6 +6011,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 26, "gender": "M", "nature": "Quirky", "ivs": {"hp": 23, "atk": 24, "def": 20, "spa": 21, "spd": 9, "spe": 16}, "moves": ["poisonpowder", "stunspore", "sleeppowder", "acid"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["absorb", "leechseed"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 12},
+		],
 	},
 	gloom: {
 		learnset: {
@@ -5943,6 +6084,11 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 50, "moves": ["sleeppowder", "acid", "moonlight", "petaldance"], "pokeball": "pokeball"},
+		],
+		encounters: [
+			{"generation": 2, "level": 14},
+			{"generation": 4, "level": 14},
+			{"generation": 6, "level": 18, "maxEggMoves": 1},
 		],
 	},
 	vileplume: {
@@ -6184,6 +6330,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 28, "abilities": ["effectspore"], "moves": ["refresh", "spore", "slash", "falseswipe"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 8},
+		],
 	},
 	parasect: {
 		learnset: {
@@ -6268,6 +6417,10 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 			xscissor: ["8V", "7M", "7L66", "6M", "6L66", "5M", "5L66", "4M", "4L55"],
 		},
+		encounters: [
+			{"generation": 1, "level": 13},
+			{"generation": 2, "level": 5},
+		],
 	},
 	venonat: {
 		learnset: {
@@ -6335,6 +6488,9 @@ let BattleLearnsets = {
 			venoshock: ["7M", "6M", "5M"],
 			zenheadbutt: ["7T", "7L37", "6T", "6L37", "5T", "5L37", "4T", "4L37"],
 		},
+		encounters: [
+			{"generation": 1, "level": 13},
+		],
 	},
 	venomoth: {
 		learnset: {
@@ -6422,6 +6578,12 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 32, "abilities": ["shielddust"], "moves": ["refresh", "silverwind", "substitute", "psychic"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 30},
+			{"generation": 2, "level": 10},
+			{"generation": 4, "level": 8},
+			{"generation": 6, "level": 30},
+		],
 	},
 	diglett: {
 		learnset: {
@@ -6495,6 +6657,10 @@ let BattleLearnsets = {
 			uproar: ["8M", "7E", "6E", "5T", "5E", "4E", "3E"],
 			workup: ["8M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 2},
+		],
 	},
 	diglettalola: {
 		learnset: {
@@ -6647,6 +6813,11 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 40, "moves": ["charm", "earthquake", "sandstorm", "triattack"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 5},
+			{"generation": 4, "level": 19},
 		],
 	},
 	dugtrioalola: {
@@ -6829,6 +7000,10 @@ let BattleLearnsets = {
 			{"generation": 4, "level": 10, "gender": "M", "nature": "Jolly", "abilities": ["pickup"], "moves": ["fakeout", "payday", "assist", "scratch"], "pokeball": "cherishball"},
 			{"generation": 5, "level": 15, "gender": "M", "abilities": ["pickup"], "moves": ["furyswipes", "sing", "nastyplot", "snatch"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 20, "abilities": ["pickup"], "moves": ["happyhour", "screech", "bite", "fakeout"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 10},
+			{"generation": 3, "level": 3, "gender": "M", "nature": "Naive", "ivs": {"hp": 4, "atk": 5, "def": 4, "spa": 5, "spd": 4, "spe": 4}, "abilities": ["pickup"], "pokeball": "pokeball"},
 		],
 	},
 	meowthalola: {
@@ -7087,6 +7262,10 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 2, "level": 18},
+			{"generation": 4, "level": 19},
+		],
 	},
 	persianalola: {
 		learnset: {
@@ -7344,6 +7523,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 27, "gender": "M", "nature": "Lax", "ivs": {"hp": 31, "atk": 16, "def": 12, "spa": 29, "spd": 31, "spe": 14}, "abilities": ["damp"], "moves": ["tailwhip", "confusion", "disable", "screech"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["watersport", "scratch", "tailwhip", "mudsport"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 15},
+		],
 	},
 	golduck: {
 		learnset: {
@@ -7452,6 +7634,12 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 33, "moves": ["charm", "waterfall", "psychup", "brickbreak"]},
 			{"generation": 7, "level": 50, "gender": "M", "nature": "Timid", "ivs": {"hp": 31, "atk": 30, "def": 31, "spa": 31, "spd": 31, "spe": 31}, "isHidden": true, "moves": ["hydropump", "scald", "encore", "protect"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 10},
+			{"generation": 3, "level": 25, "pokeball": "safariball"},
+			{"generation": 4, "level": 10},
 		],
 	},
 	mankey: {
@@ -7568,6 +7756,10 @@ let BattleLearnsets = {
 			vacuumwave: ["4T"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 3},
+			{"generation": 3, "level": 2},
+		],
 	},
 	primeape: {
 		learnset: {
@@ -7683,6 +7875,10 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 34, "abilities": ["vitalspirit"], "moves": ["helpinghand", "crosschop", "focusenergy", "reversal"]},
 		],
+		encounters: [
+			{"generation": 2, "level": 15},
+			{"generation": 4, "level": 15},
+		],
 	},
 	growlithe: {
 		learnset: {
@@ -7767,6 +7963,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 32, "gender": "F", "nature": "Quiet", "ivs": {"hp": 11, "atk": 24, "def": 28, "spa": 1, "spd": 20, "spe": 2}, "abilities": ["intimidate"], "moves": ["leer", "odorsleuth", "takedown", "flamewheel"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["bite", "roar", "ember"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 28, "moves": ["charm", "flamethrower", "bite", "takedown"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 15},
 		],
 	},
 	arcanine: {
@@ -7936,6 +8135,10 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["bubble", "sweetkiss"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 5},
+			{"generation": 2, "level": 3},
+		],
 	},
 	poliwhirl: {
 		learnset: {
@@ -8018,6 +8221,14 @@ let BattleLearnsets = {
 			watersport: ["7L1", "6L1", "5L1", "4L1"],
 			whirlpool: ["7V", "4M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 10},
+			{"generation": 3, "level": 20},
+			{"generation": 4, "level": 10},
+			{"generation": 7, "level": 24},
+			{"generation": 7, "level": 22, "gender": "F", "nature": "Naughty", "abilities": ["damp"], "pokeball": "pokeball"},
+		],
 	},
 	poliwrath: {
 		learnset: {
@@ -8289,6 +8500,9 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 1, "level": 6},
+		],
 	},
 	kadabra: {
 		learnset: {
@@ -8388,6 +8602,11 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 2, "level": 15},
+			{"generation": 4, "level": 15},
+			{"generation": 7, "level": 11, "pokeball": "pokeball"},
+		],
 	},
 	alakazam: {
 		learnset: {
@@ -8595,6 +8814,9 @@ let BattleLearnsets = {
 			wakeupslap: ["7L27", "6L27", "5L37", "4L34"],
 			workup: ["8M", "7M", "5M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 15},
+		],
 	},
 	machoke: {
 		learnset: {
@@ -8690,6 +8912,10 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 5, "level": 30, "moves": ["lowsweep", "foresight", "seismictoss", "revenge"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 2, "level": 14},
+			{"generation": 4, "level": 14},
 		],
 	},
 	machamp: {
@@ -8801,6 +9027,10 @@ let BattleLearnsets = {
 			{"generation": 6, "level": 39, "gender": "M", "nature": "Hardy", "abilities": ["noguard"], "moves": ["seismictoss", "dynamicpunch", "dig", "focusenergy"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 34, "gender": "F", "nature": "Brave", "ivs": {"atk": 31}, "abilities": ["guts"], "moves": ["strength", "bulkup", "quickguard", "doubleedge"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 16},
+			{"generation": 2, "level": 5},
+		],
 	},
 	bellsprout: {
 		learnset: {
@@ -8882,6 +9112,10 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["vinewhip", "teeterdance"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["vinewhip", "growth"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 12},
+			{"generation": 2, "level": 3},
+		],
 	},
 	weepinbell: {
 		learnset: {
@@ -8952,6 +9186,10 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 32, "moves": ["morningsun", "magicalleaf", "sludgebomb", "sweetscent"]},
+		],
+		encounters: [
+			{"generation": 2, "level": 12},
+			{"generation": 4, "level": 10},
 		],
 	},
 	victreebel: {
@@ -9113,6 +9351,9 @@ let BattleLearnsets = {
 			wrap: ["8V", "7L19", "7V", "6L19", "5L22", "4L22", "3L30"],
 			wringout: ["7L49", "6L49", "5L54", "4L43"],
 		},
+		encounters: [
+			{"generation": 1, "level": 5},
+		],
 	},
 	tentacruel: {
 		learnset: {
@@ -9192,6 +9433,13 @@ let BattleLearnsets = {
 			wrap: ["8V", "7L19", "7V", "6L19", "5L22", "4L22", "3L30"],
 			wringout: ["7L1", "6L1", "5L61", "4L55"],
 		},
+		encounters: [
+			{"generation": 1, "level": 20},
+			{"generation": 2, "level": 20},
+			{"generation": 3, "level": 20},
+			{"generation": 4, "level": 15},
+			{"generation": 6, "level": 21, "maxEggMoves": 1},
+		],
 	},
 	geodude: {
 		learnset: {
@@ -9277,6 +9525,10 @@ let BattleLearnsets = {
 			toxic: ["8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			wideguard: ["7E", "6E"],
 		},
+		encounters: [
+			{"generation": 1, "level": 7},
+			{"generation": 2, "level": 2},
+		],
 	},
 	geodudealola: {
 		learnset: {
@@ -9434,6 +9686,11 @@ let BattleLearnsets = {
 			thunderpunch: ["8V", "7T", "6T", "5T", "4T"],
 			toxic: ["8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 		},
+		encounters: [
+			{"generation": 2, "level": 23},
+			{"generation": 4, "level": 16, "pokeball": "safariball"},
+			{"generation": 6, "level": 24},
+		],
 	},
 	graveleralola: {
 		learnset: {
@@ -9745,6 +10002,9 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "6M", "5M"],
 			willowisp: ["8M", "8V", "7M", "6M", "5M", "4M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 28},
+		],
 	},
 	ponytagalar: {
 		learnset: {
@@ -9875,6 +10135,10 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 40, "moves": ["batonpass", "solarbeam", "sunnyday", "flamethrower"]},
+		],
+		encounters: [
+			{"generation": 2, "level": 14, "gender": "M"},
+			{"generation": 3, "level": 37},
 		],
 	},
 	rapidashgalar: {
@@ -10047,6 +10311,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 31, "gender": "F", "nature": "Naive", "ivs": {"hp": 17, "atk": 11, "def": 19, "spa": 20, "spd": 5, "spe": 10}, "abilities": ["oblivious"], "moves": ["watergun", "confusion", "disable", "headbutt"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["curse", "yawn", "tackle", "growl"], "pokeball": "pokeball"},
 			{"generation": 5, "level": 30, "moves": ["confusion", "disable", "headbutt", "waterpulse"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 15},
 		],
 	},
 	slowpokegalar: {
@@ -10240,6 +10507,15 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 6, "level": 100, "nature": "Quiet", "abilities": ["oblivious"], "moves": ["scald", "trickroom", "slackoff", "irontail"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 1, "level": 23},
+			{"generation": 2, "level": 20},
+			{"generation": 3, "level": 32},
+			{"generation": 4, "level": 15},
+			{"generation": 5, "level": 35},
+			{"generation": 7, "level": 15},
+		],
 	},
 	slowking: {
 		learnset: {
@@ -10416,6 +10692,9 @@ let BattleLearnsets = {
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7L49", "7V", "6L49", "5L59", "4L54", "3L50"],
 		},
+		encounters: [
+			{"generation": 1, "level": 16},
+		],
 	},
 	magneton: {
 		learnset: {
@@ -10490,6 +10769,11 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 30, "moves": ["refresh", "doubleedge", "raindance", "thunder"]},
+		],
+		encounters: [
+			{"generation": 2, "level": 5},
+			{"generation": 3, "level": 26},
+			{"generation": 4, "level": 17, "pokeball": "safariball"},
 		],
 	},
 	magnezone: {
@@ -10663,6 +10947,10 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["yawn", "wish"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 36, "moves": ["batonpass", "slash", "swordsdance", "aerialace"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 3},
+			{"generation": 3, "level": 3, "gender": "M", "nature": "Adamant", "ivs": {"hp": 20, "atk": 25, "def": 21, "spa": 24, "spd": 15, "spe": 20}, "abilities": ["keeneye"], "pokeball": "pokeball"},
+		],
 	},
 	farfetchdgalar: {
 		learnset: {
@@ -10831,6 +11119,10 @@ let BattleLearnsets = {
 			whirlwind: ["7V"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 18},
+			{"generation": 2, "level": 4},
+		],
 	},
 	dodrio: {
 		learnset: {
@@ -10905,6 +11197,13 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 34, "moves": ["batonpass", "drillpeck", "agility", "triattack"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 29},
+			{"generation": 2, "level": 10, "gender": "F"},
+			{"generation": 2, "level": 30},
+			{"generation": 3, "level": 29, "pokeball": "safariball"},
+			{"generation": 4, "level": 15, "gender": "F", "nature": "Impish", "ivs": {"hp": 20, "atk": 20, "def": 20, "spa": 15, "spd": 15, "spe": 15}, "abilities": ["runaway"], "pokeball": "pokeball"},
 		],
 	},
 	seel: {
@@ -10987,6 +11286,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 23, "abilities": ["thickfat"], "moves": ["helpinghand", "surf", "safeguard", "icebeam"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 22},
+		],
 	},
 	dewgong: {
 		learnset: {
@@ -11059,6 +11361,13 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "6T", "4M", "3M"],
 			whirlpool: ["7V", "4M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 5},
+			{"generation": 3, "level": 32},
+			{"generation": 5, "level": 30},
+			{"generation": 6, "level": 30, "maxEggMoves": 1},
+		],
 	},
 	grimer: {
 		learnset: {
@@ -11149,6 +11458,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 23, "moves": ["helpinghand", "sludgebomb", "shadowpunch", "minimize"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 23},
 		],
 	},
 	grimeralola: {
@@ -11324,6 +11636,15 @@ let BattleLearnsets = {
 			venoshock: ["7M", "6M", "5M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 25},
+			{"generation": 2, "level": 5},
+			{"generation": 3, "level": 32},
+			{"generation": 4, "level": 15},
+			{"generation": 5, "level": 5},
+			{"generation": 5, "level": 35, "isHidden": true},
+			{"generation": 6, "level": 30},
+		],
 	},
 	mukalola: {
 		learnset: {
@@ -11483,6 +11804,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 24, "gender": "F", "nature": "Brave", "ivs": {"hp": 5, "atk": 19, "def": 18, "spa": 5, "spd": 11, "spe": 13}, "abilities": ["shellarmor"], "moves": ["withdraw", "iciclespear", "supersonic", "aurorabeam"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 10, "gender": "M", "abilities": ["shellarmor"], "moves": ["tackle", "withdraw", "iciclespear"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 29, "abilities": ["shellarmor"], "moves": ["refresh", "takedown", "surf", "aurorabeam"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 10},
 		],
 	},
 	cloyster: {
@@ -11661,6 +11985,9 @@ let BattleLearnsets = {
 			wonderroom: ["8M", "7T", "6T", "5T"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 18},
+		],
 	},
 	haunter: {
 		learnset: {
@@ -11752,6 +12079,12 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 5, "level": 30, "moves": ["confuseray", "suckerpunch", "shadowpunch", "payback"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 20},
+			{"generation": 2, "level": 15},
+			{"generation": 3, "level": 20},
+			{"generation": 4, "level": 16},
 		],
 	},
 	gengar: {
@@ -11972,6 +12305,9 @@ let BattleLearnsets = {
 			twister: ["4T"],
 			wideguard: ["8E", "7E"],
 		},
+		encounters: [
+			{"generation": 1, "level": 13},
+		],
 	},
 	steelix: {
 		learnset: {
@@ -12177,6 +12513,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["insomnia"], "moves": ["bellydrum", "wish"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 9},
+		],
 	},
 	hypno: {
 		learnset: {
@@ -12282,6 +12621,10 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 34, "abilities": ["insomnia"], "moves": ["batonpass", "psychic", "meditate", "shadowball"]},
 		],
+		encounters: [
+			{"generation": 2, "level": 16},
+			{"generation": 4, "level": 16},
+		],
 	},
 	krabby: {
 		learnset: {
@@ -12368,6 +12711,9 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "7V", "4M"],
 			xscissor: ["8M", "8V", "7M", "6M", "5M", "4M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 10},
+		],
 	},
 	kingler: {
 		learnset: {
@@ -12457,6 +12803,11 @@ let BattleLearnsets = {
 			wideguard: ["8L1", "7L1", "6L1", "5L1"],
 			xscissor: ["8M", "8V", "7M", "6M", "5M", "4M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 3, "level": 25},
+			{"generation": 4, "level": 22},
+		],
 	},
 	voltorb: {
 		learnset: {
@@ -12523,6 +12874,10 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 19, "moves": ["refresh", "mirrorcoat", "spark", "swift"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 14},
+			{"generation": 1, "level": 40},
 		],
 	},
 	electrode: {
@@ -12592,6 +12947,12 @@ let BattleLearnsets = {
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 3},
+			{"generation": 2, "level": 23},
+			{"generation": 3, "level": 3, "nature": "Hasty", "ivs": {"hp": 19, "atk": 16, "def": 18, "spa": 25, "spd": 25, "spe": 19}, "abilities": ["static"], "pokeball": "pokeball"},
+			{"generation": 4, "level": 23},
+		],
 	},
 	exeggcute: {
 		learnset: {
@@ -12678,6 +13039,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["sweetscent", "wish"], "pokeball": "pokeball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 20},
 		],
 	},
 	exeggutor: {
@@ -12940,6 +13304,9 @@ let BattleLearnsets = {
 			uproar: ["7T", "6T", "5T", "4T"],
 			watergun: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 16},
+		],
 	},
 	marowak: {
 		learnset: {
@@ -13043,6 +13410,11 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 44, "moves": ["sing", "earthquake", "swordsdance", "rockslide"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 24},
+			{"generation": 2, "level": 12},
+			{"generation": 4, "level": 14},
 		],
 	},
 	marowakalola: {
@@ -13383,6 +13755,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 38, "abilities": ["limber"], "moves": ["refresh", "highjumpkick", "mindreader", "megakick"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 30},
+		],
 	},
 	hitmonchan: {
 		learnset: {
@@ -13476,6 +13851,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 38, "abilities": ["keeneye"], "moves": ["helpinghand", "skyuppercut", "mindreader", "megapunch"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 30},
 		],
 	},
 	hitmontop: {
@@ -13683,6 +14061,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["healbell", "wish"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 38, "moves": ["helpinghand", "doubleedge", "defensecurl", "rollout"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 15},
+		],
 	},
 	lickilicky: {
 		learnset: {
@@ -13851,6 +14232,9 @@ let BattleLearnsets = {
 			willowisp: ["8M", "8V", "7M", "6M", "5M", "4M", "4E", "3E"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 30},
+		],
 	},
 	weezing: {
 		learnset: {
@@ -13926,6 +14310,11 @@ let BattleLearnsets = {
 			willowisp: ["8M", "8V", "7M", "6M", "5M", "4M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 2, "level": 16},
+			{"generation": 3, "level": 32},
+			{"generation": 4, "level": 15, "pokeball": "safariball"},
+		],
 	},
 	weezinggalar: {
 		learnset: {
@@ -14094,6 +14483,9 @@ let BattleLearnsets = {
 			uproar: ["8M", "7T", "6T", "5T", "4T"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 20},
+		],
 	},
 	rhydon: {
 		learnset: {
@@ -14230,6 +14622,12 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 46, "moves": ["helpinghand", "megahorn", "scaryface", "earthquake"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 10},
+			{"generation": 4, "level": 41},
+			{"generation": 6, "level": 30},
 		],
 	},
 	rhyperior: {
@@ -14558,6 +14956,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 10, "moves": ["pound", "growl", "tailwhip", "refresh"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 39, "moves": ["sweetkiss", "thunderbolt", "softboiled", "skillswap"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 7},
+		],
 	},
 	blissey: {
 		learnset: {
@@ -14765,6 +15166,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 30, "abilities": ["chlorophyll"], "moves": ["morningsun", "solarbeam", "sunnyday", "ingrain"]},
+		],
+		encounters: [
+			{"generation": 1, "level": 13},
 		],
 	},
 	tangrowth: {
@@ -14976,6 +15380,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 35, "abilities": ["earlybird"], "moves": ["sing", "earthquake", "tailwhip", "dizzypunch"]},
 			{"generation": 6, "level": 50, "abilities": ["scrappy"], "moves": ["fakeout", "return", "earthquake", "suckerpunch"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 25},
+		],
 	},
 	horsea: {
 		learnset: {
@@ -15048,6 +15455,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 5, "level": 1, "shiny": true, "moves": ["bubble"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 5},
+		],
 	},
 	seadra: {
 		learnset: {
@@ -15115,6 +15525,12 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 45, "abilities": ["poisonpoint"], "moves": ["leer", "watergun", "twister", "agility"], "pokeball": "pokeball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 20},
+			{"generation": 2, "level": 20},
+			{"generation": 3, "level": 25},
+			{"generation": 4, "level": 15},
 		],
 	},
 	kingdra: {
@@ -15262,6 +15678,9 @@ let BattleLearnsets = {
 			watersport: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			whirlpool: ["8M", "4M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 5},
+		],
 	},
 	seaking: {
 		learnset: {
@@ -15338,6 +15757,14 @@ let BattleLearnsets = {
 			watersport: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			whirlpool: ["8M", "4M"],
 		},
+		encounters: [
+			{"generation": 1, "level": 23},
+			{"generation": 2, "level": 10},
+			{"generation": 3, "level": 20},
+			{"generation": 4, "level": 10},
+			{"generation": 6, "level": 26, "maxEggMoves": 1},
+			{"generation": 7, "level": 10},
+		],
 	},
 	staryu: {
 		learnset: {
@@ -15419,6 +15846,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 50, "moves": ["minimize", "lightscreen", "cosmicpower", "hydropump"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 18, "nature": "Timid", "ivs": {"hp": 10, "atk": 3, "def": 22, "spa": 24, "spd": 3, "spe": 18}, "abilities": ["illuminate"], "moves": ["harden", "watergun", "rapidspin", "recover"], "pokeball": "pokeball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 5},
 		],
 	},
 	starmie: {
@@ -15739,6 +16169,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 42, "abilities": ["soundproof"], "moves": ["followme", "psychic", "encore", "thunderpunch"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 6},
+		],
 	},
 	mrmimegalar: {
 		learnset: {
@@ -16004,6 +16437,10 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 10, "gender": "M", "abilities": ["swarm"], "moves": ["quickattack", "leer", "focusenergy"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 40, "abilities": ["swarm"], "moves": ["morningsun", "razorwind", "silverwind", "slash"]},
 			{"generation": 5, "level": 30, "moves": ["agility", "wingattack", "furycutter", "slash"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 1, "level": 25},
 		],
 	},
 	scizor: {
@@ -16296,6 +16733,13 @@ let BattleLearnsets = {
 			wringout: ["7L49", "6L49", "5L49", "4L44"],
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 10},
+			{"generation": 3, "level": 20, "nature": "Mild", "ivs": {"hp": 18, "atk": 17, "def": 18, "spa": 22, "spd": 25, "spe": 21}, "abilities": ["oblivious"], "pokeball": "pokeball"},
+			{"generation": 4, "level": 22},
+			{"generation": 7, "level": 9},
+		],
 	},
 	elekid: {
 		learnset: {
@@ -16472,6 +16916,12 @@ let BattleLearnsets = {
 			{"generation": 4, "level": 30, "gender": "M", "nature": "Naughty", "moves": ["lowkick", "shockwave", "lightscreen", "thunderpunch"], "pokeball": "pokeball"},
 			{"generation": 5, "level": 30, "moves": ["lowkick", "swift", "shockwave", "lightscreen"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 30, "gender": "M", "isHidden": true, "moves": ["lowkick", "shockwave", "lightscreen", "thunderpunch"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 33},
+			{"generation": 2, "level": 15},
+			{"generation": 4, "level": 15},
+			{"generation": 7, "level": 25},
 		],
 	},
 	electivire: {
@@ -16723,6 +17173,12 @@ let BattleLearnsets = {
 			{"generation": 5, "level": 30, "moves": ["smokescreen", "feintattack", "firespin", "confuseray"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 30, "gender": "M", "isHidden": true, "moves": ["smokescreen", "firespin", "confuseray", "firepunch"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 34},
+			{"generation": 2, "level": 14},
+			{"generation": 4, "level": 14},
+			{"generation": 7, "level": 16},
+		],
 	},
 	magmortar: {
 		learnset: {
@@ -16891,6 +17347,10 @@ let BattleLearnsets = {
 			{"generation": 6, "level": 50, "gender": "F", "nature": "Adamant", "moves": ["xscissor", "earthquake", "stoneedge", "return"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "nature": "Jolly", "isHidden": true, "moves": ["earthquake", "swordsdance", "feint", "quickattack"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 1, "level": 20},
+		],
 	},
 	tauros: {
 		learnset: {
@@ -16982,6 +17442,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 10, "abilities": ["intimidate"], "moves": ["tackle", "tailwhip", "rage", "hornattack"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 46, "abilities": ["intimidate"], "moves": ["refresh", "earthquake", "tailwhip", "bodyslam"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 21},
+		],
 	},
 	magikarp: {
 		learnset: {
@@ -17002,6 +17465,9 @@ let BattleLearnsets = {
 			{"generation": 5, "level": 99, "shiny": true, "gender": "M", "moves": ["flail", "hydropump", "bounce", "splash"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 1, "shiny": 1, "moves": ["splash", "celebrate", "happyhour"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 19, "shiny": true, "moves": ["splash", "bounce"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 5},
 		],
 	},
 	gyarados: {
@@ -17102,6 +17568,14 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 6, "level": 50, "moves": ["waterfall", "earthquake", "icefang", "dragondance"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 20, "shiny": true, "moves": ["waterfall", "bite", "icefang", "ironhead"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 15},
+			{"generation": 3, "level": 5},
+			{"generation": 4, "level": 10},
+			{"generation": 5, "level": 1},
+			{"generation": 7, "level": 10},
 		],
 	},
 	lapras: {
@@ -17211,6 +17685,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 44, "moves": ["hydropump", "raindance", "blizzard", "healbell"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 15},
+		],
 	},
 	ditto: {
 		learnset: {
@@ -17218,6 +17695,15 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 7, "level": 10, "moves": ["transform"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 12},
+			{"generation": 2, "level": 10},
+			{"generation": 3, "level": 23},
+			{"generation": 4, "level": 10},
+			{"generation": 5, "level": 45},
+			{"generation": 6, "level": 30},
+			{"generation": 7, "level": 25},
 		],
 	},
 	eevee: {
@@ -17301,6 +17787,9 @@ let BattleLearnsets = {
 			{"generation": 6, "level": 10, "moves": ["celebrate", "sandattack", "babydolleyes", "swift"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 15, "shiny": true, "isHidden": true, "moves": ["swift", "quickattack", "babydolleyes", "helpinghand"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 10, "nature": "Jolly", "moves": ["celebrate", "sandattack", "babydolleyes"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 25},
 		],
 	},
 	eeveestarter: {
@@ -18105,6 +18594,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 5, "level": 10, "isHidden": true, "moves": ["tackle", "conversion", "sharpen", "psybeam"]},
 		],
+		encounters: [
+			{"generation": 1, "level": 18},
+		],
 	},
 	porygon2: {
 		learnset: {
@@ -18337,6 +18829,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 5, "level": 15, "gender": "M", "abilities": ["swiftswim"], "moves": ["bubblebeam", "supersonic", "withdraw", "bite"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 30},
+		],
 	},
 	omastar: {
 		learnset: {
@@ -18504,6 +18999,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 5, "level": 15, "gender": "M", "abilities": ["battlearmor"], "moves": ["confuseray", "dig", "scratch", "harden"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 30},
 		],
 	},
 	kabutops: {
@@ -18706,6 +19204,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 5, "level": 15, "gender": "M", "abilities": ["pressure"], "moves": ["steelwing", "icefang", "firefang", "thunderfang"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 50, "isHidden": true, "moves": ["ancientpower", "rockpolish", "wideguard", "celebrate"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 1, "level": 30},
 		],
 	},
 	munchlax: {
@@ -18951,6 +19452,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 43, "moves": ["refresh", "fissure", "curse", "bodyslam"]},
 			{"generation": 7, "level": 30, "abilities": ["thickfat"], "moves": ["sunnyday", "block", "bodyslam", "celebrate"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 1, "level": 30},
+		],
 	},
 	articuno: {
 		learnset: {
@@ -19044,6 +19548,9 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["ancientpower", "freezedry", "reflect", "hail"]},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 1, "level": 50},
+		],
 	},
 	zapdos: {
 		learnset: {
@@ -19134,6 +19641,9 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["ancientpower", "discharge", "pluck", "raindance"]},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 1, "level": 50},
+		],
 	},
 	moltres: {
 		learnset: {
@@ -19221,6 +19731,9 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["ancientpower", "flamethrower", "airslash", "sunnyday"]},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 1, "level": 50},
+		],
 	},
 	dratini: {
 		learnset: {
@@ -19301,6 +19814,9 @@ let BattleLearnsets = {
 			wrap: ["8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 10},
+		],
 	},
 	dragonair: {
 		learnset: {
@@ -19377,6 +19893,13 @@ let BattleLearnsets = {
 			wrap: ["8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 1, "level": 15},
+			{"generation": 2, "level": 10},
+			{"generation": 3, "level": 25, "pokeball": "safariball"},
+			{"generation": 4, "level": 15},
+			{"generation": 7, "level": 10},
+		],
 	},
 	dragonite: {
 		learnset: {
@@ -19508,6 +20031,10 @@ let BattleLearnsets = {
 			{"generation": 5, "level": 50, "gender": "M", "nature": "Brave", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "moves": ["fireblast", "safeguard", "outrage", "hyperbeam"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 55, "gender": "M", "isHidden": true, "moves": ["dragondance", "outrage", "hurricane", "extremespeed"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 62, "gender": "M", "ivs": {"hp": 31, "def": 31, "spa": 31, "spd": 31}, "moves": ["agility", "slam", "barrier", "hyperbeam"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 5, "level": 50},
+			{"generation": 7, "level": 10},
 		],
 	},
 	mewtwo: {
@@ -19672,6 +20199,9 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["psychic", "recover", "swift", "psychocut"]},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 1, "level": 70},
+		],
 	},
 	mew: {
 		learnset: {
@@ -20869,6 +21399,9 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 2, "level": 2},
+		],
 	},
 	furret: {
 		learnset: {
@@ -20963,6 +21496,10 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 2, "level": 6},
+			{"generation": 4, "level": 6},
+		],
 	},
 	hoothoot: {
 		learnset: {
@@ -21053,6 +21590,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "growl", "foresight"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 2, "level": 2},
+		],
 	},
 	noctowl: {
 		learnset: {
@@ -21136,6 +21676,11 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 			zenheadbutt: ["8M", "7T", "7L16", "6T", "6L42", "5T", "5L42", "4T", "4L37"],
 		},
+		encounters: [
+			{"generation": 2, "level": 7},
+			{"generation": 4, "level": 5},
+			{"generation": 7, "level": 19},
+		],
 	},
 	ledyba: {
 		learnset: {
@@ -21217,6 +21762,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 10, "moves": ["refresh", "psybeam", "aerialace", "supersonic"]},
 		],
+		encounters: [
+			{"generation": 2, "level": 3},
+		],
 	},
 	ledian: {
 		learnset: {
@@ -21294,6 +21842,10 @@ let BattleLearnsets = {
 			uproar: ["7T", "6T", "5T", "4T"],
 			uturn: ["7M", "6M", "5M", "4M"],
 		},
+		encounters: [
+			{"generation": 2, "level": 7},
+			{"generation": 4, "level": 5},
+		],
 	},
 	spinarak: {
 		learnset: {
@@ -21372,6 +21924,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 14, "moves": ["refresh", "dig", "signalbeam", "nightshade"]},
 		],
+		encounters: [
+			{"generation": 2, "level": 3},
+		],
 	},
 	ariados: {
 		learnset: {
@@ -21444,6 +21999,11 @@ let BattleLearnsets = {
 			venoshock: ["7M", "6M", "5M"],
 			xscissor: ["7M", "6M", "5M"],
 		},
+		encounters: [
+			{"generation": 2, "level": 7},
+			{"generation": 4, "level": 5},
+			{"generation": 6, "level": 19, "maxEggMoves": 1},
+		],
 	},
 	chinchou: {
 		learnset: {
@@ -21593,6 +22153,11 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "6M", "5M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 4, "level": 20},
+			{"generation": 6, "level": 26, "maxEggMoves": 1},
+			{"generation": 7, "level": 10},
+		],
 	},
 	togepi: {
 		learnset: {
@@ -22131,6 +22696,12 @@ let BattleLearnsets = {
 			wish: ["8L48", "7L29", "6L29", "5L30", "4L30", "3L35"],
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 2, "level": 15},
+			{"generation": 4, "level": 16, "gender": "M", "nature": "Modest", "ivs": {"hp": 15, "atk": 20, "def": 15, "spa": 20, "spd": 20, "spe": 20}, "abilities": ["synchronize"], "pokeball": "pokeball"},
+			{"generation": 6, "level": 24, "maxEggMoves": 1},
+			{"generation": 7, "level": 21},
+		],
 	},
 	mareep: {
 		learnset: {
@@ -22278,6 +22849,9 @@ let BattleLearnsets = {
 			wildcharge: ["7M", "6M", "5M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 7, "level": 11, "pokeball": "pokeball"},
+		],
 	},
 	ampharos: {
 		learnset: {
@@ -22595,6 +23169,10 @@ let BattleLearnsets = {
 			whirlpool: ["7V", "4M"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 5, "level": 5},
+			{"generation": 6, "level": 16, "maxEggMoves": 1},
+		],
 	},
 	bonsly: {
 		learnset: {
@@ -22822,6 +23400,9 @@ let BattleLearnsets = {
 			uturn: ["7M", "7L37", "6M", "6L37", "5M", "5L37", "4M", "4L31"],
 			worryseed: ["7T", "7L40", "7E", "6T", "6L40", "6E", "5T", "5L40", "5E", "4T", "4L34", "4E"],
 		},
+		encounters: [
+			{"generation": 2, "level": 3},
+		],
 	},
 	skiploom: {
 		learnset: {
@@ -22885,6 +23466,9 @@ let BattleLearnsets = {
 			uturn: ["7M", "7L44", "6M", "6L44", "5M", "5L44", "4M", "4L36"],
 			worryseed: ["7T", "7L48", "6T", "6L48", "5T", "5L48", "4T", "4L40"],
 		},
+		encounters: [
+			{"generation": 4, "level": 12},
+		],
 	},
 	jumpluff: {
 		learnset: {
@@ -23493,6 +24077,9 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "7V", "4M"],
 			yawn: ["8L21", "7L29", "6L29", "5L29", "4L29", "3L31"],
 		},
+		encounters: [
+			{"generation": 2, "level": 4},
+		],
 	},
 	quagsire: {
 		learnset: {
@@ -23586,6 +24173,10 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "7V", "4M"],
 			yawn: ["8L23", "7L31", "6L31", "5L31", "4L31", "3L35"],
 		},
+		encounters: [
+			{"generation": 2, "level": 15},
+			{"generation": 4, "level": 10},
+		],
 	},
 	murkrow: {
 		learnset: {
@@ -23923,6 +24514,12 @@ let BattleLearnsets = {
 		learnset: {
 			hiddenpower: ["7M", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 		},
+		encounters: [
+			{"generation": 2, "level": 5},
+			{"generation": 3, "level": 25},
+			{"generation": 4, "level": 5},
+			{"generation": 6, "level": 32},
+		],
 	},
 	wynaut: {
 		learnset: {
@@ -23956,6 +24553,10 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["counter", "mirrorcoat", "safeguard", "destinybond"], "pokeball": "pokeball"},
 			{"generation": 6, "level": 10, "gender": "M", "moves": ["counter"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 15, "gender": "M", "moves": ["counter", "mirrorcoat"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 2, "level": 5},
+			{"generation": 4, "level": 3},
 		],
 	},
 	girafarig: {
@@ -24213,6 +24814,9 @@ let BattleLearnsets = {
 			voltswitch: ["7M", "6M", "5M"],
 			zapcannon: ["7L1", "6L1", "5L64", "4L62", "3L31"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	dunsparce: {
 		learnset: {
@@ -24700,6 +25304,9 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 2, "level": 15},
+		],
 	},
 	qwilfish: {
 		learnset: {
@@ -25287,6 +25894,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 10, "gender": "M", "abilities": ["pickup"], "moves": ["scratch", "leer", "lick"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 11, "abilities": ["pickup"], "moves": ["refresh", "metalclaw", "lick", "return"]},
 		],
+		encounters: [
+			{"generation": 2, "level": 2},
+		],
 	},
 	ursaring: {
 		learnset: {
@@ -25386,6 +25996,9 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 			zapcannon: ["7V"],
 		},
+		encounters: [
+			{"generation": 2, "level": 25},
+		],
 	},
 	slugma: {
 		learnset: {
@@ -25534,6 +26147,10 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 38, "moves": ["refresh", "heatwave", "earthquake", "flamethrower"]},
+		],
+		encounters: [
+			{"generation": 3, "level": 25},
+			{"generation": 6, "level": 30},
 		],
 	},
 	swinub: {
@@ -25687,6 +26304,9 @@ let BattleLearnsets = {
 			thrash: ["8L65", "7L41", "6L41", "5L41"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	mamoswine: {
 		learnset: {
@@ -26174,6 +26794,10 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 4, "level": 50, "gender": "F", "nature": "Serious", "abilities": ["suctioncups"], "moves": ["octazooka", "icebeam", "signalbeam", "hyperbeam"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 4, "level": 19},
+			{"generation": 7, "level": 10},
 		],
 	},
 	delibird: {
@@ -26683,6 +27307,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 6, "level": 50, "nature": "Timid", "abilities": ["flashfire"], "moves": ["flamethrower", "darkpulse", "solarbeam", "sludgebomb"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 4, "level": 20},
+		],
 	},
 	phanpy: {
 		learnset: {
@@ -26751,6 +27378,9 @@ let BattleLearnsets = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			watergun: ["7V"],
 		},
+		encounters: [
+			{"generation": 2, "level": 2},
+		],
 	},
 	donphan: {
 		learnset: {
@@ -26827,6 +27457,9 @@ let BattleLearnsets = {
 			thunderfang: ["7L1", "6L1", "5L1", "4L1"],
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 		},
+		encounters: [
+			{"generation": 6, "level": 24, "maxEggMoves": 1},
+		],
 	},
 	stantler: {
 		learnset: {
@@ -27126,6 +27759,10 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 100, "moves": ["thunderbolt", "voltswitch", "extrasensory", "calmmind"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 2, "level": 40},
+			{"generation": 3, "level": 40},
+		],
 	},
 	entei: {
 		learnset: {
@@ -27212,6 +27849,10 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 100, "moves": ["sacredfire", "stoneedge", "ironhead", "flamecharge"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 2, "level": 40},
+			{"generation": 3, "level": 40},
+		],
 	},
 	suicune: {
 		learnset: {
@@ -27300,6 +27941,10 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["bubblebeam", "aurorabeam", "mist", "raindance"]},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 2, "level": 40},
+			{"generation": 3, "level": 40},
+		],
 	},
 	larvitar: {
 		learnset: {
@@ -27596,6 +28241,9 @@ let BattleLearnsets = {
 			{"generation": 6, "level": 55, "shiny": true, "nature": "Adamant", "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 14, "spd": 31, "spe": 0}, "moves": ["crunch", "rockslide", "lowkick", "protect"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 100, "moves": ["rockslide", "crunch", "icepunch", "lowkick"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 5, "level": 50},
+		],
 	},
 	lugia: {
 		learnset: {
@@ -27719,6 +28367,9 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 100, "moves": ["aeroblast", "earthpower", "psychic", "tailwind"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 2, "level": 40},
+		],
 	},
 	hooh: {
 		learnset: {
@@ -27826,6 +28477,9 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 100, "moves": ["sacredfire", "bravebird", "earthquake", "tailwind"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 2, "level": 40},
+		],
 	},
 	celebi: {
 		learnset: {
@@ -27943,6 +28597,9 @@ let BattleLearnsets = {
 			{"generation": 7, "level": 30, "moves": ["healbell", "safeguard", "ancientpower", "futuresight"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
+		encounters: [
+			{"generation": 2, "level": 30},
+		],
 	},
 	treecko: {
 		learnset: {
@@ -28833,6 +29490,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 10, "abilities": ["runaway"], "moves": ["healbell", "dig", "poisonfang", "howl"]},
 		],
+		encounters: [
+			{"generation": 3, "level": 2},
+		],
 	},
 	mightyena: {
 		learnset: {
@@ -28998,6 +29658,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 5, "shiny": true, "abilities": ["pickup"], "moves": ["tackle", "growl", "tailwhip"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["pickup"], "moves": ["tackle", "growl", "tailwhip", "extremespeed"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 3, "level": 2},
+		],
 	},
 	zigzagoongalar: {
 		learnset: {
@@ -29152,6 +29815,10 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 6, "level": 50, "moves": ["extremespeed", "helpinghand", "babydolleyes", "protect"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 4, "level": 3},
+			{"generation": 6, "level": 17, "maxEggMoves": 1},
 		],
 	},
 	linoonegalar: {
@@ -29313,6 +29980,9 @@ let BattleLearnsets = {
 			stringshot: ["7L1", "6L1", "5L1", "4T", "4L1", "3L1"],
 			tackle: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 		},
+		encounters: [
+			{"generation": 3, "level": 2},
+		],
 	},
 	silcoon: {
 		learnset: {
@@ -29322,6 +29992,11 @@ let BattleLearnsets = {
 			irondefense: ["7T", "6T", "5T", "4T"],
 			stringshot: ["4T"],
 		},
+		encounters: [
+			{"generation": 3, "level": 5},
+			{"generation": 4, "level": 5},
+			{"generation": 6, "level": 2, "maxEggMoves": 1},
+		],
 	},
 	beautifly: {
 		learnset: {
@@ -29395,6 +30070,11 @@ let BattleLearnsets = {
 			irondefense: ["7T", "6T", "5T", "4T"],
 			stringshot: ["4T"],
 		},
+		encounters: [
+			{"generation": 3, "level": 5},
+			{"generation": 4, "level": 5},
+			{"generation": 6, "level": 2, "maxEggMoves": 1},
+		],
 	},
 	dustox: {
 		learnset: {
@@ -29528,6 +30208,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["astonish", "growl", "absorb"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 3, "level": 3},
+		],
 	},
 	lombre: {
 		learnset: {
@@ -29614,6 +30297,9 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "4M"],
 			zenheadbutt: ["8M", "8L50", "7T", "7L40", "6T", "6L31", "5T", "5L31", "4T", "4L27"],
 		},
+		encounters: [
+			{"generation": 6, "level": 13, "maxEggMoves": 1},
+		],
 	},
 	ludicolo: {
 		learnset: {
@@ -29788,6 +30474,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["bide", "harden", "growth"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 17, "moves": ["refresh", "gigadrain", "bulletseed", "secretpower"]},
 		],
+		encounters: [
+			{"generation": 3, "level": 3},
+		],
 	},
 	nuzleaf: {
 		learnset: {
@@ -29882,6 +30571,9 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 6, "level": 13, "maxEggMoves": 1},
+		],
 	},
 	shiftry: {
 		learnset: {
@@ -30065,6 +30757,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["peck", "growl", "focusenergy", "featherdance"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 3, "level": 4},
+		],
 	},
 	swellow: {
 		learnset: {
@@ -30128,6 +30823,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 43, "moves": ["batonpass", "skyattack", "agility", "facade"]},
+		],
+		encounters: [
+			{"generation": 4, "level": 20},
 		],
 	},
 	wingull: {
@@ -30197,6 +30895,9 @@ let BattleLearnsets = {
 			wideguard: ["8E", "7E", "6E"],
 			wingattack: ["8L15", "7L8", "6L8", "5L11", "4L11", "3L13"],
 		},
+		encounters: [
+			{"generation": 3, "level": 2},
+		],
 	},
 	pelipper: {
 		learnset: {
@@ -30276,6 +30977,10 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "4M"],
 			wingattack: ["8L15", "7L1", "6L1", "5L1", "4L1", "3L1"],
 		},
+		encounters: [
+			{"generation": 4, "level": 15},
+			{"generation": 6, "level": 18, "maxEggMoves": 1},
+		],
 	},
 	ralts: {
 		learnset: {
@@ -30386,6 +31091,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 20, "moves": ["sing", "shockwave", "reflect", "confusion"]},
 			{"generation": 6, "level": 1, "isHidden": true, "moves": ["growl", "encore"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 3, "level": 4},
+		],
 	},
 	kirlia: {
 		learnset: {
@@ -30479,6 +31187,9 @@ let BattleLearnsets = {
 			wonderroom: ["8M", "7T", "6T", "5T"],
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 4, "level": 6},
+		],
 	},
 	gardevoir: {
 		learnset: {
@@ -30792,6 +31503,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["bubble", "mudsport"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["bubble", "quickattack"], "pokeball": "pokeball"},
 		],
+		encounters: [
+			{"generation": 3, "level": 3},
+		],
 	},
 	masquerain: {
 		learnset: {
@@ -30862,6 +31576,9 @@ let BattleLearnsets = {
 			watersport: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 			whirlwind: ["7L1", "6L1", "5L54", "4L54", "3L53"],
 		},
+		encounters: [
+			{"generation": 6, "level": 21, "maxEggMoves": 1},
+		],
 	},
 	shroomish: {
 		learnset: {
@@ -31641,6 +32358,9 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 6, "level": 16, "maxEggMoves": 1},
+		],
 	},
 	exploud: {
 		learnset: {
@@ -31921,6 +32641,9 @@ let BattleLearnsets = {
 			whirlwind: ["7L16", "6L16", "5L16", "4L16", "3L22"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 6, "level": 22},
+		],
 	},
 	nosepass: {
 		learnset: {
@@ -32168,6 +32891,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["cutecharm"], "moves": ["tackle", "growl", "tailwhip", "payday"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["cutecharm"], "moves": ["growl", "tackle", "tailwhip", "rollout"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 10, "gender": "M", "abilities": ["cutecharm"], "moves": ["growl", "tackle", "tailwhip", "attract"], "pokeball": "pokeball"},
+		],
+		encounters: [
+			{"generation": 3, "level": 3, "gender": "F", "ivs": {"hp": 5, "atk": 4, "def": 4, "spa": 5, "spd": 4, "spe": 4}, "abilities": ["cutecharm"], "pokeball": "pokeball"},
 		],
 	},
 	delcatty: {
@@ -32953,6 +33679,10 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 			zenheadbutt: ["7T", "7L1", "6T", "6L1", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 4, "level": 35},
+			{"generation": 6, "level": 34, "maxEggMoves": 1},
+		],
 	},
 	electrike: {
 		learnset: {
@@ -33978,6 +34708,9 @@ let BattleLearnsets = {
 			{"generation": 6, "level": 50, "nature": "Adamant", "isHidden": true, "moves": ["aquajet", "crunch", "icefang", "destinybond"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 43, "gender": "M", "perfectIVs": 2, "moves": ["scaryface", "slash", "poisonfang", "crunch"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 7, "level": 10},
+		],
 	},
 	wailmer: {
 		learnset: {
@@ -34123,6 +34856,12 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 100, "moves": ["rest", "waterspout", "amnesia", "hydropump"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 50, "moves": ["waterpulse", "mist", "rest", "waterspout"], "pokeball": "pokeball"},
+		],
+		encounters: [
+			{"generation": 3, "level": 25},
+			{"generation": 4, "level": 35},
+			{"generation": 5, "level": 30},
+			{"generation": 7, "level": 10},
 		],
 	},
 	numel: {
@@ -34279,6 +35018,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 6, "level": 43, "gender": "M", "perfectIVs": 2, "abilities": ["solidrock"], "moves": ["curse", "takedown", "rockslide", "yawn"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 6, "level": 30},
 		],
 	},
 	torkoal: {
@@ -34533,6 +35275,9 @@ let BattleLearnsets = {
 			trickroom: ["7M", "6M", "5M", "4M"],
 			zenheadbutt: ["7T", "7L26", "6T", "6L26", "5T", "5L26", "4T", "4L26"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	spinda: {
 		learnset: {
@@ -35075,6 +35820,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 3, "level": 45, "moves": ["ingrain", "feintattack", "spikes", "needlearm"], "pokeball": "pokeball"},
+		],
+		encounters: [
+			{"generation": 6, "level": 30},
 		],
 	},
 	swablu: {
@@ -35797,6 +36545,10 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 4, "level": 51, "gender": "F", "nature": "Gentle", "abilities": ["oblivious"], "moves": ["earthquake", "aquatail", "zenheadbutt", "gigaimpact"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 4, "level": 10},
+			{"generation": 7, "level": 10},
+		],
 	},
 	corphish: {
 		learnset: {
@@ -35979,6 +36731,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 3, "level": 100, "moves": ["taunt", "crabhammer", "swordsdance", "guillotine"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 50, "moves": ["knockoff", "taunt", "crabhammer", "swordsdance"], "pokeball": "pokeball"},
+		],
+		encounters: [
+			{"generation": 7, "level": 10},
 		],
 	},
 	baltoy: {
@@ -36964,6 +37719,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 37, "abilities": ["insomnia"], "moves": ["helpinghand", "feintattack", "shadowball", "curse"]},
 			{"generation": 5, "level": 37, "gender": "F", "isHidden": true, "moves": ["feintattack", "hex", "shadowball", "cottonguard"]},
 		],
+		encounters: [
+			{"generation": 5, "level": 32},
+		],
 	},
 	duskull: {
 		learnset: {
@@ -37148,6 +37906,10 @@ let BattleLearnsets = {
 			willowisp: ["8M", "8L24", "7M", "7L25", "6M", "6L25", "5M", "5L33", "4M", "4L33", "3L41"],
 			wonderroom: ["8M", "7T", "6T", "5T"],
 		},
+		encounters: [
+			{"generation": 4, "level": 16},
+			{"generation": 6, "level": 30},
+		],
 	},
 	dusknoir: {
 		learnset: {
@@ -37977,6 +38739,10 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "6T", "4M", "3M"],
 			whirlpool: ["4M"],
 		},
+		encounters: [
+			{"generation": 4, "level": 25},
+			{"generation": 6, "level": 28, "maxEggMoves": 1},
+		],
 	},
 	walrein: {
 		learnset: {
@@ -38049,6 +38815,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 5, "level": 50, "abilities": ["thickfat"], "moves": ["icebeam", "brine", "hail", "sheercold"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 5, "level": 30},
 		],
 	},
 	clamperl: {
@@ -38492,6 +39261,9 @@ let BattleLearnsets = {
 			twister: ["4T"],
 			zenheadbutt: ["7T", "7L35", "6T", "6L35", "5T", "5L37", "4T", "4L37"],
 		},
+		encounters: [
+			{"generation": 7, "level": 15},
+		],
 	},
 	salamence: {
 		learnset: {
@@ -38582,6 +39354,9 @@ let BattleLearnsets = {
 			{"generation": 3, "level": 50, "moves": ["refresh", "dragonclaw", "dragondance", "aerialace"]},
 			{"generation": 4, "level": 50, "gender": "M", "nature": "Naughty", "moves": ["hydropump", "stoneedge", "fireblast", "dragonclaw"], "pokeball": "cherishball"},
 			{"generation": 5, "level": 50, "shiny": 1, "moves": ["dragondance", "dragonclaw", "outrage", "aerialace"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 7, "level": 9},
 		],
 	},
 	beldum: {
@@ -40717,6 +41492,9 @@ let BattleLearnsets = {
 			wingattack: ["7L9", "6L9", "5L9", "5D", "4L9"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 4, "level": 4},
+		],
 	},
 	staraptor: {
 		learnset: {
@@ -40937,6 +41715,9 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 			yawn: ["7L23", "6L28", "5L28", "4L28"],
 		},
+		encounters: [
+			{"generation": 4, "level": 4},
+		],
 	},
 	kricketot: {
 		learnset: {
@@ -42108,6 +42889,10 @@ let BattleLearnsets = {
 			watersport: ["7L1", "6L1", "5L1", "4L1"],
 			whirlpool: ["7L35", "6L35", "5L39", "4M", "4L39"],
 		},
+		encounters: [
+			{"generation": 4, "level": 22},
+			{"generation": 5, "level": 10},
+		],
 	},
 	cherubi: {
 		learnset: {
@@ -42364,6 +43149,9 @@ let BattleLearnsets = {
 			weatherball: ["8M"],
 			whirlpool: ["8M", "4M"],
 		},
+		encounters: [
+			{"generation": 4, "level": 20},
+		],
 	},
 	drifloon: {
 		learnset: {
@@ -42535,6 +43323,9 @@ let BattleLearnsets = {
 			weatherball: ["8M"],
 			willowisp: ["8M", "7M", "6M", "5M", "4M"],
 		},
+		encounters: [
+			{"generation": 7, "level": 11, "pokeball": "pokeball"},
+		],
 	},
 	buneary: {
 		learnset: {
@@ -42862,6 +43653,9 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "6T", "4M"],
 			workup: ["7M", "5M"],
 		},
+		encounters: [
+			{"generation": 6, "level": 32, "maxEggMoves": 1},
+		],
 	},
 	stunky: {
 		learnset: {
@@ -43025,6 +43819,9 @@ let BattleLearnsets = {
 			venomdrench: ["8M", "8L48", "7L37"],
 			venoshock: ["8M", "8L21", "7M", "6M", "5M"],
 		},
+		encounters: [
+			{"generation": 4, "level": 29},
+		],
 	},
 	bronzor: {
 		learnset: {
@@ -43186,6 +43983,9 @@ let BattleLearnsets = {
 			wonderroom: ["8M", "7T", "6T", "5T"],
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	chatot: {
 		learnset: {
@@ -44064,6 +44864,10 @@ let BattleLearnsets = {
 			venoshock: ["8M", "8L21", "7M", "7L27", "6M", "6L27", "5M", "5L56"],
 			xscissor: ["8M", "8L44", "7M", "6M", "5M", "4M"],
 		},
+		encounters: [
+			{"generation": 4, "level": 22, "pokeball": "safariball"},
+			{"generation": 6, "level": 30},
+		],
 	},
 	croagunk: {
 		learnset: {
@@ -44267,6 +45071,10 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 			xscissor: ["8M", "7M", "6M", "5M", "4M"],
 		},
+		encounters: [
+			{"generation": 4, "level": 22, "pokeball": "safariball"},
+			{"generation": 6, "level": 30},
+		],
 	},
 	carnivine: {
 		learnset: {
@@ -44462,6 +45270,9 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "7L22", "6T", "6L22", "5L22", "4M", "4L22"],
 			whirlpool: ["7L42", "6L42", "5L42", "4M", "4L42"],
 		},
+		encounters: [
+			{"generation": 4, "level": 20},
+		],
 	},
 	snover: {
 		learnset: {
@@ -44612,6 +45423,9 @@ let BattleLearnsets = {
 			woodhammer: ["8L43", "7L36", "6L36", "5L36", "4L36"],
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
+		encounters: [
+			{"generation": 4, "level": 38},
+		],
 	},
 	rotom: {
 		learnset: {
@@ -47059,6 +47873,9 @@ let BattleLearnsets = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "7L20", "6L20", "5M", "5L20"],
 		},
+		encounters: [
+			{"generation": 5, "level": 20, "isHidden": true},
+		],
 	},
 	stoutland: {
 		learnset: {
@@ -47120,6 +47937,9 @@ let BattleLearnsets = {
 			wildcharge: ["7M", "6M", "5M"],
 			workup: ["7M", "7L20", "6L20", "5M", "5L20"],
 		},
+		encounters: [
+			{"generation": 5, "level": 23},
+		],
 	},
 	purrloin: {
 		learnset: {
@@ -48046,6 +48866,9 @@ let BattleLearnsets = {
 			uturn: ["8M", "7M", "6M", "5M"],
 			workup: ["8M", "7M", "5M"],
 		},
+		encounters: [
+			{"generation": 5, "level": 22},
+		],
 	},
 	blitzle: {
 		learnset: {
@@ -48257,6 +49080,9 @@ let BattleLearnsets = {
 			tackle: ["8L1", "7L1", "6L1", "5L1"],
 			toxic: ["7M", "6M", "5M"],
 		},
+		encounters: [
+			{"generation": 5, "level": 24},
+		],
 	},
 	gigalith: {
 		learnset: {
@@ -48624,6 +49450,9 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	audino: {
 		learnset: {
@@ -49151,6 +49980,9 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "6T"],
 			weatherball: ["8M"],
 		},
+		encounters: [
+			{"generation": 5, "level": 15},
+		],
 	},
 	throh: {
 		learnset: {
@@ -49400,6 +50232,9 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M"],
 			worryseed: ["7T", "6T", "5T"],
 		},
+		encounters: [
+			{"generation": 5, "level": 19},
+		],
 	},
 	leavanny: {
 		learnset: {
@@ -49467,6 +50302,9 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T"],
 			xscissor: ["7M", "7L39", "6M", "6L39", "5M", "5L39"],
 		},
+		encounters: [
+			{"generation": 5, "level": 20, "isHidden": true},
+		],
 	},
 	venipede: {
 		learnset: {
@@ -50392,6 +51230,9 @@ let BattleLearnsets = {
 			{"generation": 5, "level": 35, "isHidden": true, "moves": ["thrash", "bellydrum", "flareblitz", "hammerarm"]},
 			{"generation": 6, "level": 35, "gender": "M", "nature": "Calm", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "isHidden": true, "moves": ["thrash", "bellydrum", "flareblitz", "hammerarm"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 6, "level": 32, "maxEggMoves": 1},
+		],
 	},
 	darmanitangalar: {
 		learnset: {
@@ -50657,6 +51498,9 @@ let BattleLearnsets = {
 			withdraw: ["8L1", "7L1", "6L1", "5L1"],
 			xscissor: ["8M", "8L38", "7M", "7L38", "6M", "6L38", "5M", "5L38"],
 		},
+		encounters: [
+			{"generation": 6, "level": 33, "maxEggMoves": 1},
+		],
 	},
 	scraggy: {
 		learnset: {
@@ -51138,6 +51982,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 7, "level": 66, "gender": "M", "moves": ["willowisp", "shadowball", "powersplit", "darkpulse"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 6, "level": 32, "maxEggMoves": 1},
 		],
 	},
 	runerigus: {
@@ -51628,6 +52475,11 @@ let BattleLearnsets = {
 			venomdrench: ["8M"],
 			venoshock: ["8M", "7M", "6M", "5M"],
 		},
+		encounters: [
+			{"generation": 5, "level": 31},
+			{"generation": 6, "level": 30},
+			{"generation": 7, "level": 24},
+		],
 	},
 	zorua: {
 		learnset: {
@@ -51779,6 +52631,9 @@ let BattleLearnsets = {
 			{"generation": 5, "level": 50, "gender": "M", "nature": "Quirky", "moves": ["agility", "embargo", "punishment", "snarl"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "moves": ["sludgebomb", "darkpulse", "flamethrower", "suckerpunch"], "pokeball": "ultraball"},
 			{"generation": 6, "level": 45, "gender": "M", "nature": "Naughty", "moves": ["scaryface", "furyswipes", "nastyplot", "punishment"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 5, "level": 25},
 		],
 	},
 	minccino: {
@@ -52087,6 +52942,9 @@ let BattleLearnsets = {
 			{"generation": 5, "level": 32, "gender": "M", "isHidden": true, "moves": ["psyshock", "flatter", "futuresight", "mirrorcoat"]},
 			{"generation": 5, "level": 32, "gender": "M", "isHidden": true, "moves": ["psyshock", "flatter", "futuresight", "imprison"]},
 		],
+		encounters: [
+			{"generation": 5, "level": 31},
+		],
 	},
 	gothitelle: {
 		learnset: {
@@ -52176,6 +53034,9 @@ let BattleLearnsets = {
 			uproar: ["8M", "7T", "6T", "5T"],
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
+		encounters: [
+			{"generation": 5, "level": 34},
+		],
 	},
 	solosis: {
 		learnset: {
@@ -52328,6 +53189,9 @@ let BattleLearnsets = {
 			wonderroom: ["8M", "8L58", "7T", "7L53", "6T", "6L53", "5T", "5L53"],
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
+		encounters: [
+			{"generation": 5, "level": 31},
+		],
 	},
 	reuniclus: {
 		learnset: {
@@ -52421,6 +53285,9 @@ let BattleLearnsets = {
 			wonderroom: ["8M", "8L64", "7T", "7L59", "6T", "6L59", "5T", "5L59"],
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
+		encounters: [
+			{"generation": 5, "level": 34},
+		],
 	},
 	ducklett: {
 		learnset: {
@@ -52526,6 +53393,9 @@ let BattleLearnsets = {
 			watersport: ["7L1", "6L1", "5L1"],
 			wingattack: ["7L1", "6L1", "5L1"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	vanillite: {
 		learnset: {
@@ -52813,6 +53683,9 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 			worryseed: ["7T", "6T", "5T"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	emolga: {
 		learnset: {
@@ -53114,6 +53987,10 @@ let BattleLearnsets = {
 			venoshock: ["7M", "6M", "5M"],
 			worryseed: ["7T", "6T", "5T"],
 		},
+		encounters: [
+			{"generation": 5, "level": 37},
+			{"generation": 5, "level": 35, "isHidden": true},
+		],
 	},
 	frillish: {
 		learnset: {
@@ -53263,6 +54140,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 5, "level": 40, "isHidden": true, "moves": ["waterpulse", "ominouswind", "brine", "raindance"]},
+		],
+		encounters: [
+			{"generation": 5, "level": 5},
 		],
 	},
 	alomomola: {
@@ -53460,6 +54340,9 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "6M", "5M"],
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	ferroseed: {
 		learnset: {
@@ -53711,6 +54594,9 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "6M", "5M"],
 			zapcannon: ["8L48", "7L60", "6L60", "5L60"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	klinklang: {
 		learnset: {
@@ -54214,6 +55100,9 @@ let BattleLearnsets = {
 			trickroom: ["8M", "7M", "6M", "5M"],
 			willowisp: ["8M", "8L20", "7M", "7L16", "6M", "6L16", "5M", "5L16"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	chandelure: {
 		learnset: {
@@ -54428,6 +55317,9 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	haxorus: {
 		learnset: {
@@ -54665,6 +55557,9 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M"],
 			waterpulse: ["7T", "6T"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	cryogonal: {
 		learnset: {
@@ -55399,6 +56294,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 5, "level": 70, "shiny": true, "abilities": ["ironfist"], "moves": ["shadowpunch", "hyperbeam", "gyroball", "hammerarm"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	pawniard: {
 		learnset: {
@@ -55565,6 +56463,9 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M"],
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
+		encounters: [
+			{"generation": 7, "level": 33},
+		],
 	},
 	bouffalant: {
 		learnset: {
@@ -55766,6 +56667,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 5, "level": 25, "gender": "M", "isHidden": true, "moves": ["wingattack", "honeclaws", "scaryface", "aerialace"]},
+		],
+		encounters: [
+			{"generation": 6, "level": 45},
 		],
 	},
 	vullaby: {
@@ -56193,6 +57097,9 @@ let BattleLearnsets = {
 			workup: ["8M", "8L24", "7M", "7L38", "6L38", "5M", "5L38"],
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
+		encounters: [
+			{"generation": 5, "level": 49},
+		],
 	},
 	hydreigon: {
 		learnset: {
@@ -56296,6 +57203,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 5, "level": 70, "shiny": true, "gender": "M", "moves": ["hypervoice", "dragonbreath", "flamethrower", "focusblast"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 52, "gender": "M", "perfectIVs": 2, "moves": ["dragonrush", "crunch", "rockslide", "frustration"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 6, "level": 59},
 		],
 	},
 	larvesta: {
@@ -56422,6 +57332,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 5, "level": 35, "moves": ["stringshot", "leechlife", "gust", "firespin"]},
 			{"generation": 5, "level": 77, "gender": "M", "nature": "Calm", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "moves": ["bugbuzz", "overheat", "hyperbeam", "quiverdance"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 7, "level": 41},
 		],
 	},
 	cobalion: {
@@ -58672,6 +59585,9 @@ let BattleLearnsets = {
 			willowisp: ["7M", "6M"],
 			workup: ["7M"],
 		},
+		encounters: [
+			{"generation": 7, "level": 16},
+		],
 	},
 	talonflame: {
 		learnset: {
@@ -59062,6 +59978,9 @@ let BattleLearnsets = {
 		eventData: [
 			{"generation": 6, "level": 49, "gender": "M", "perfectIVs": 2, "abilities": ["unnerve"], "moves": ["hypervoice", "fireblast", "darkpulse"], "pokeball": "cherishball"},
 		],
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	flabebe: {
 		learnset: {
@@ -59415,6 +60334,9 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7L16", "6T", "6L16"],
 			zenheadbutt: ["7T", "6T"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	pancham: {
 		learnset: {
@@ -59625,6 +60547,9 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M"],
 			zenheadbutt: ["8M", "7T", "6T"],
 		},
+		encounters: [
+			{"generation": 7, "level": 24},
+		],
 	},
 	furfrou: {
 		learnset: {
@@ -60745,6 +61670,9 @@ let BattleLearnsets = {
 			withdraw: ["8L1", "7L7", "6L7"],
 			xscissor: ["8M", "7M", "6M"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	skrelp: {
 		learnset: {
@@ -60857,6 +61785,9 @@ let BattleLearnsets = {
 			watergun: ["7L1", "6L1"],
 			waterpulse: ["7T", "7L25", "6T", "6L25"],
 		},
+		encounters: [
+			{"generation": 6, "level": 35},
+		],
 	},
 	clauncher: {
 		learnset: {
@@ -60972,6 +61903,9 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "7L34", "6T", "6L34"],
 			watersport: ["7L1", "6L7"],
 		},
+		encounters: [
+			{"generation": 6, "level": 35},
+		],
 	},
 	helioptile: {
 		learnset: {
@@ -61810,6 +62744,9 @@ let BattleLearnsets = {
 			watergun: ["8L1"],
 			waterpulse: ["8L25", "7T", "6T"],
 		},
+		encounters: [
+			{"generation": 6, "level": 30},
+		],
 	},
 	goodra: {
 		learnset: {
@@ -63809,6 +64746,9 @@ let BattleLearnsets = {
 			uturn: ["7M"],
 			workup: ["7M"],
 		},
+		encounters: [
+			{"generation": 7, "level": 26},
+		],
 	},
 	yungoos: {
 		learnset: {
@@ -63923,6 +64863,9 @@ let BattleLearnsets = {
 			yawn: ["7L47"],
 			zenheadbutt: ["7T"],
 		},
+		encounters: [
+			{"generation": 7, "level": 17},
+		],
 	},
 	gumshoostotem: {
 		learnset: {
@@ -65191,6 +66134,9 @@ let BattleLearnsets = {
 			swagger: ["7M"],
 			toxic: ["7M"],
 		},
+		encounters: [
+			{"generation": 7, "level": 29},
+		],
 	},
 	dewpider: {
 		learnset: {
@@ -65808,6 +66754,9 @@ let BattleLearnsets = {
 		},
 		eventData: [
 			{"generation": 7, "level": 50, "moves": ["fakeout", "toxic", "sludgebomb", "flamethrower"], "pokeball": "cherishball"},
+		],
+		encounters: [
+			{"generation": 7, "level": 16},
 		],
 	},
 	salazzletotem: {
@@ -67869,6 +68818,9 @@ let BattleLearnsets = {
 			workup: ["8M", "8L20", "7M", "7L29"],
 			xscissor: ["8M", "7M"],
 		},
+		encounters: [
+			{"generation": 7, "level": 41},
+		],
 	},
 	kommoototem: {
 		learnset: {

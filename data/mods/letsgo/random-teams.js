@@ -10,7 +10,6 @@ class RandomLetsGoTeams extends RandomTeams {
 	 */
 	randomSet(template, teamDetails = {}) {
 		template = this.dex.getTemplate(template);
-		let lsetData = this.dex.getLearnsetData(template.speciesid);
 		let species = template.species;
 
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {

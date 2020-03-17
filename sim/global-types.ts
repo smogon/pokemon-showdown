@@ -1118,10 +1118,11 @@ interface LearnsetData {
 	learnset?: {[moveid: string]: MoveSource[]};
 	eventData?: EventInfo[];
 	eventOnly?: boolean;
-	exists: boolean;
+	encounters?: EventInfo[];
+	exists?: boolean;
 }
 
-interface ModdedLearnsetsData extends Partial<LearnsetData> {
+interface ModdedLearnsetData extends Partial<LearnsetData> {
 	inherit?: true;
 }
 
