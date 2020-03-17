@@ -595,12 +595,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Rageeeee',
 				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 			},
-			'Raid': {
-				species: 'Moltres', ability: 'Tempest', item: 'Life Orb', gender: 'N',
-				moves: ['Hurricane', 'Roost', 'U-Turn'],
-				signatureMove: 'Firestorm',
-				evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid',
-			},
 			'Ransei': {
 				species: 'Audino-Mega', ability: 'Superguarda', item: 'Safety Goggles', gender: 'M',
 				moves: ['Photon Geyser', 'Sacred Fire', 'Play Rough'],
