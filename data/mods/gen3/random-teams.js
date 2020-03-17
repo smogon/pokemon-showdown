@@ -22,6 +22,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 		if (template.battleOnly) species = this.dex.getOutOfBattleSpecies(template);
 
+		// @ts-ignore
 		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
 		/**@type {string[]} */
 		let moves = [];
