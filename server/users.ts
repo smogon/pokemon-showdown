@@ -448,8 +448,6 @@ export class User extends Chat.MessageContext {
 	permalocked: string | ID | null;
 	prevNames: {[id: /** ID */ string]: string};
 
-	/** Millisecond timestamp for last battle decision */
-	lastDecision: number;
 	lastChallenge: number;
 	lastPM: string;
 	team: string;
@@ -521,8 +519,6 @@ export class User extends Chat.MessageContext {
 		this.namelocked = null;
 		this.permalocked = null;
 		this.prevNames = Object.create(null);
-
-		this.lastDecision = 0;
 
 		// misc state
 		this.lastChallenge = 0;
