@@ -90,6 +90,7 @@ type MoveSource = string;
 interface EventInfo {
 	generation: number;
 	level?: number;
+	/** true: always shiny, 1: sometimes shiny, false | undefined: never shiny */
 	shiny?: boolean | 1;
 	gender?: GenderName;
 	nature?: string;
