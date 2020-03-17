@@ -1607,7 +1607,7 @@ function pruneInactive(threshold: number) {
 				user.setStatusType('idle');
 			}
 		}
-		if (user.connected && (now - user.lastDisconnected) > threshold) {
+		if (!user.connected && (now - user.lastDisconnected) > threshold) {
 			user.destroy();
 		}
 	}
