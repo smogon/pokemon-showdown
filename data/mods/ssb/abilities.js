@@ -887,23 +887,6 @@ let BattleAbilities = {
 			}
 		},
 	},
-	// Raid
-	tempest: {
-		desc: "This Pokemon's Flying-type moves have 1.3x Base Power and will always hit.",
-		shortDesc: "Flying type moves have 1.3x power and always hit.",
-		id: "tempest",
-		name: "Tempest",
-		isNonstandard: "Custom",
-		onBasePowerPriority: 8,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.type === 'Flying') {
-				return this.chainModify(1.3);
-			}
-		},
-		onModifyMove(move) {
-			if (move.type === 'Flying') move.accuracy = true;
-		},
-	},
 	// Ransei
 	superguarda: {
 		desc: "This user's Attack is doubled until it is hit by a super effective attack. If this Pokemon has a major status condition, its Attack is 1.5x; burn halving physical damage is ignored. This Pokemon can only be damaged by direct attacks.",

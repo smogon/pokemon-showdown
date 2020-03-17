@@ -3686,33 +3686,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Flying",
 	},
-	// Raid
-	firestorm: {
-		accuracy: 90,
-		basePower: 100,
-		category: "Special",
-		desc: "100% chance to burn the target.",
-		shortDesc: "100% chance to burn the target.",
-		id: "firestorm",
-		name: "Firestorm",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Fire Spin", target);
-			this.add('-anim', source, "Hurricane", target);
-		},
-		secondary: {
-			chance: 100,
-			status: 'brn',
-		},
-		target: "normal",
-		type: "Fire",
-	},
 	// Ransei
 	mashupmotive: {
 		accuracy: 100,
