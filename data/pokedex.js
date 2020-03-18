@@ -58,6 +58,7 @@ let BattlePokedex = {
 		weightkg: 155.5,
 		color: "Green",
 		eggGroups: ["Monster", "Grass"],
+		requiredItem: "Venusaurite",
 	},
 	charmander: {
 		num: 4,
@@ -115,6 +116,7 @@ let BattlePokedex = {
 		weightkg: 110.5,
 		color: "Black",
 		eggGroups: ["Monster", "Dragon"],
+		requiredItem: "Charizardite X",
 	},
 	charizardmegay: {
 		num: 6,
@@ -129,6 +131,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Red",
 		eggGroups: ["Monster", "Dragon"],
+		requiredItem: "Charizardite Y",
 	},
 	charizardgmax: {
 		num: 6,
@@ -143,7 +146,7 @@ let BattlePokedex = {
 		weightkg: 0,
 		color: "Red",
 		eggGroups: ["Monster", "Dragon"],
-		inheritsFrom: "charizard",
+		isGigantamax: "G-Max Wildfire",
 	},
 	squirtle: {
 		num: 7,
@@ -201,6 +204,7 @@ let BattlePokedex = {
 		weightkg: 101.1,
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
+		requiredItem: "Blastoisinite",
 	},
 	caterpie: {
 		num: 10,
@@ -254,7 +258,7 @@ let BattlePokedex = {
 		weightkg: 0,
 		color: "White",
 		eggGroups: ["Bug"],
-		inheritsFrom: "butterfree",
+		isGigantamax: "G-Max Befuddle",
 	},
 	weedle: {
 		num: 13,
@@ -308,6 +312,7 @@ let BattlePokedex = {
 		weightkg: 40.5,
 		color: "Yellow",
 		eggGroups: ["Bug"],
+		requiredItem: "Beedrillite",
 	},
 	pidgey: {
 		num: 16,
@@ -361,6 +366,7 @@ let BattlePokedex = {
 		weightkg: 50.5,
 		color: "Brown",
 		eggGroups: ["Flying"],
+		requiredItem: "Pidgeotite",
 	},
 	rattata: {
 		num: 19,
@@ -703,7 +709,7 @@ let BattlePokedex = {
 		weightkg: 0,
 		color: "Yellow",
 		eggGroups: ["Field", "Fairy"],
-		inheritsFrom: "pikachu",
+		isGigantamax: "G-Max Volt Crash",
 	},
 	raichu: {
 		num: 26,
@@ -1226,7 +1232,7 @@ let BattlePokedex = {
 		weightkg: 0,
 		color: "Yellow",
 		eggGroups: ["Field"],
-		inheritsFrom: "meowth",
+		isGigantamax: "G-Max Gold Rush",
 	},
 	persian: {
 		num: 53,
@@ -1431,6 +1437,7 @@ let BattlePokedex = {
 		weightkg: 48,
 		color: "Brown",
 		eggGroups: ["Human-Like"],
+		requiredItem: "Alakazite",
 	},
 	machop: {
 		num: 66,
@@ -1484,12 +1491,11 @@ let BattlePokedex = {
 		genderRatio: {M: 0.75, F: 0.25},
 		baseStats: {hp: 90, atk: 130, def: 80, spa: 65, spd: 85, spe: 55},
 		abilities: {0: "Guts", 1: "No Guard", H: "Steadfast"},
-		// TODO
-		heightm: 0,
+		heightm: 25,
 		weightkg: 0,
 		color: "Gray",
 		eggGroups: ["Human-Like"],
-		inheritsFrom: "machamp",
+		isGigantamax: "G-Max Chi Strike",
 	},
 	bellsprout: {
 		num: 69,
@@ -1751,6 +1757,7 @@ let BattlePokedex = {
 		weightkg: 120,
 		color: "Pink",
 		eggGroups: ["Monster", "Water 1"],
+		requiredItem: "Slowbronite",
 	},
 	magnemite: {
 		num: 81,
@@ -1990,6 +1997,7 @@ let BattlePokedex = {
 		weightkg: 40.5,
 		color: "Purple",
 		eggGroups: ["Amorphous"],
+		requiredItem: "Gengarite",
 	},
 	gengargmax: {
 		num: 94,
@@ -1999,12 +2007,11 @@ let BattlePokedex = {
 		types: ["Ghost", "Poison"],
 		baseStats: {hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110},
 		abilities: {0: "Cursed Body"},
-		// TODO
-		heightm: 0,
+		heightm: 20,
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "gengar",
+		isGigantamax: "G-Max Terror",
 	},
 	onix: {
 		num: 95,
@@ -2077,12 +2084,11 @@ let BattlePokedex = {
 		types: ["Water"],
 		baseStats: {hp: 55, atk: 130, def: 115, spa: 50, spd: 50, spe: 75},
 		abilities: {0: "Hyper Cutter", 1: "Shell Armor", H: "Sheer Force"},
-		// TODO
-		heightm: 0,
+		heightm: 19,
 		weightkg: 0,
 		color: "Red",
 		eggGroups: ["Water 3"],
-		inheritsFrom: "kingler",
+		isGigantamax: "G-Max Foam Burst",
 	},
 	voltorb: {
 		num: 100,
@@ -2371,6 +2377,7 @@ let BattlePokedex = {
 		weightkg: 100,
 		color: "Brown",
 		eggGroups: ["Monster"],
+		requiredItem: "Kangaskhanite",
 	},
 	horsea: {
 		num: 116,
@@ -2565,6 +2572,7 @@ let BattlePokedex = {
 		weightkg: 59,
 		color: "Brown",
 		eggGroups: ["Bug"],
+		requiredItem: "Pinsirite",
 	},
 	tauros: {
 		num: 128,
@@ -2616,6 +2624,7 @@ let BattlePokedex = {
 		weightkg: 305,
 		color: "Blue",
 		eggGroups: ["Water 2", "Dragon"],
+		requiredItem: "Gyaradosite",
 	},
 	lapras: {
 		num: 131,
@@ -2637,12 +2646,11 @@ let BattlePokedex = {
 		types: ["Water", "Ice"],
 		baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
 		abilities: {0: "Water Absorb", 1: "Shell Armor", H: "Hydration"},
-		// TODO
-		heightm: 0,
+		heightm: 24,
 		weightkg: 0,
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
-		inheritsFrom: "lapras",
+		isGigantamax: "G-Max Resonance",
 	},
 	ditto: {
 		num: 132,
@@ -2697,7 +2705,7 @@ let BattlePokedex = {
 		weightkg: 0,
 		color: "Brown",
 		eggGroups: ["Field"],
-		inheritsFrom: "eevee",
+		isGigantamax: "G-Max Cuddle",
 	},
 	vaporeon: {
 		num: 134,
@@ -2837,6 +2845,7 @@ let BattlePokedex = {
 		weightkg: 79,
 		color: "Purple",
 		eggGroups: ["Flying"],
+		requiredItem: "Aerodactylite",
 	},
 	snorlax: {
 		num: 143,
@@ -2863,12 +2872,11 @@ let BattlePokedex = {
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 160, atk: 110, def: 65, spa: 65, spd: 110, spe: 30},
 		abilities: {0: "Immunity", 1: "Thick Fat", H: "Gluttony"},
-		// TODO
-		heightm: 0,
+		heightm: 35,
 		weightkg: 0,
 		color: "Black",
 		eggGroups: ["Monster"],
-		inheritsFrom: "snorlax",
+		isGigantamax: "G-Max Replenish",
 	},
 	articuno: {
 		num: 144,
@@ -2971,6 +2979,7 @@ let BattlePokedex = {
 		weightkg: 127,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Mewtwonite X",
 	},
 	mewtwomegay: {
 		num: 150,
@@ -2985,6 +2994,7 @@ let BattlePokedex = {
 		weightkg: 33,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Mewtwonite Y",
 	},
 	mew: {
 		num: 151,
@@ -3423,6 +3433,7 @@ let BattlePokedex = {
 		weightkg: 61.5,
 		color: "Yellow",
 		eggGroups: ["Monster", "Field"],
+		requiredItem: "Ampharosite",
 	},
 	bellossom: {
 		num: 182,
@@ -3790,6 +3801,7 @@ let BattlePokedex = {
 		weightkg: 740,
 		color: "Gray",
 		eggGroups: ["Mineral"],
+		requiredItem: "Steelixite",
 	},
 	snubbull: {
 		num: 209,
@@ -3856,6 +3868,7 @@ let BattlePokedex = {
 		weightkg: 125,
 		color: "Red",
 		eggGroups: ["Bug"],
+		requiredItem: "Scizorite",
 	},
 	shuckle: {
 		num: 213,
@@ -3892,6 +3905,7 @@ let BattlePokedex = {
 		weightkg: 62.5,
 		color: "Blue",
 		eggGroups: ["Bug"],
+		requiredItem: "Heracronite",
 	},
 	sneasel: {
 		num: 215,
@@ -4109,6 +4123,7 @@ let BattlePokedex = {
 		weightkg: 49.5,
 		color: "Black",
 		eggGroups: ["Field"],
+		requiredItem: "Houndoominite",
 	},
 	kingdra: {
 		num: 230,
@@ -4371,6 +4386,7 @@ let BattlePokedex = {
 		weightkg: 255,
 		color: "Green",
 		eggGroups: ["Monster"],
+		requiredItem: "Tyranitarite",
 	},
 	lugia: {
 		num: 249,
@@ -4464,6 +4480,7 @@ let BattlePokedex = {
 		weightkg: 55.2,
 		color: "Green",
 		eggGroups: ["Monster", "Dragon"],
+		requiredItem: "Sceptilite",
 	},
 	torchic: {
 		num: 255,
@@ -4521,6 +4538,7 @@ let BattlePokedex = {
 		weightkg: 52,
 		color: "Red",
 		eggGroups: ["Field"],
+		requiredItem: "Blazikenite",
 	},
 	mudkip: {
 		num: 258,
@@ -4578,6 +4596,7 @@ let BattlePokedex = {
 		weightkg: 102,
 		color: "Blue",
 		eggGroups: ["Monster", "Water 1"],
+		requiredItem: "Swampertite",
 	},
 	poochyena: {
 		num: 261,
@@ -4909,6 +4928,7 @@ let BattlePokedex = {
 		weightkg: 48.4,
 		color: "White",
 		eggGroups: ["Amorphous"],
+		requiredItem: "Gardevoirite",
 	},
 	surskit: {
 		num: 283,
@@ -5183,6 +5203,7 @@ let BattlePokedex = {
 		weightkg: 161,
 		color: "Purple",
 		eggGroups: ["Human-Like"],
+		requiredItem: "Sablenite",
 	},
 	mawile: {
 		num: 303,
@@ -5208,6 +5229,7 @@ let BattlePokedex = {
 		weightkg: 23.5,
 		color: "Black",
 		eggGroups: ["Field", "Fairy"],
+		requiredItem: "Mawilite",
 	},
 	aron: {
 		num: 304,
@@ -5261,6 +5283,7 @@ let BattlePokedex = {
 		weightkg: 395,
 		color: "Gray",
 		eggGroups: ["Monster"],
+		requiredItem: "Aggronite",
 	},
 	meditite: {
 		num: 307,
@@ -5300,6 +5323,7 @@ let BattlePokedex = {
 		weightkg: 31.5,
 		color: "Red",
 		eggGroups: ["Human-Like"],
+		requiredItem: "Medichamite",
 	},
 	electrike: {
 		num: 309,
@@ -5339,6 +5363,7 @@ let BattlePokedex = {
 		weightkg: 44,
 		color: "Yellow",
 		eggGroups: ["Field"],
+		requiredItem: "Manectite",
 	},
 	plusle: {
 		num: 311,
@@ -5465,6 +5490,7 @@ let BattlePokedex = {
 		weightkg: 130.3,
 		color: "Blue",
 		eggGroups: ["Water 2"],
+		requiredItem: "Sharpedonite",
 	},
 	wailmer: {
 		num: 320,
@@ -5529,6 +5555,7 @@ let BattlePokedex = {
 		weightkg: 320.5,
 		color: "Red",
 		eggGroups: ["Field"],
+		requiredItem: "Cameruptite",
 	},
 	torkoal: {
 		num: 324,
@@ -5679,6 +5706,7 @@ let BattlePokedex = {
 		weightkg: 20.6,
 		color: "Blue",
 		eggGroups: ["Flying", "Dragon"],
+		requiredItem: "Altarianite",
 	},
 	zangoose: {
 		num: 335,
@@ -5907,7 +5935,7 @@ let BattlePokedex = {
 		weightkg: 0.8,
 		color: "Red",
 		eggGroups: ["Fairy", "Amorphous"],
-		inheritsFrom: "castform",
+		requiredAbility: "Forecast",
 	},
 	castformrainy: {
 		num: 351,
@@ -5921,7 +5949,7 @@ let BattlePokedex = {
 		weightkg: 0.8,
 		color: "Blue",
 		eggGroups: ["Fairy", "Amorphous"],
-		inheritsFrom: "castform",
+		requiredAbility: "Forecast",
 	},
 	castformsnowy: {
 		num: 351,
@@ -5935,7 +5963,7 @@ let BattlePokedex = {
 		weightkg: 0.8,
 		color: "White",
 		eggGroups: ["Fairy", "Amorphous"],
-		inheritsFrom: "castform",
+		requiredAbility: "Forecast",
 	},
 	kecleon: {
 		num: 352,
@@ -5986,6 +6014,7 @@ let BattlePokedex = {
 		weightkg: 13,
 		color: "Black",
 		eggGroups: ["Amorphous"],
+		requiredItem: "Banettite",
 	},
 	duskull: {
 		num: 355,
@@ -6063,6 +6092,7 @@ let BattlePokedex = {
 		weightkg: 49,
 		color: "White",
 		eggGroups: ["Field"],
+		requiredItem: "Absolite",
 	},
 	wynaut: {
 		num: 360,
@@ -6115,6 +6145,7 @@ let BattlePokedex = {
 		weightkg: 350.2,
 		color: "Gray",
 		eggGroups: ["Fairy", "Mineral"],
+		requiredItem: "Glalitite",
 	},
 	spheal: {
 		num: 363,
@@ -6271,6 +6302,7 @@ let BattlePokedex = {
 		weightkg: 112.6,
 		color: "Blue",
 		eggGroups: ["Dragon"],
+		requiredItem: "Salamencite",
 	},
 	beldum: {
 		num: 374,
@@ -6328,6 +6360,7 @@ let BattlePokedex = {
 		weightkg: 942.9,
 		color: "Blue",
 		eggGroups: ["Mineral"],
+		requiredItem: "Metagrossite",
 	},
 	regirock: {
 		num: 377,
@@ -6391,6 +6424,7 @@ let BattlePokedex = {
 		weightkg: 52,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Latiasite",
 	},
 	latios: {
 		num: 381,
@@ -6418,6 +6452,7 @@ let BattlePokedex = {
 		weightkg: 70,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Latiosite",
 	},
 	kyogre: {
 		num: 382,
@@ -6445,6 +6480,7 @@ let BattlePokedex = {
 		weightkg: 430,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Blue Orb",
 	},
 	groudon: {
 		num: 383,
@@ -6472,6 +6508,7 @@ let BattlePokedex = {
 		weightkg: 999.7,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Red Orb",
 	},
 	rayquaza: {
 		num: 384,
@@ -6499,6 +6536,7 @@ let BattlePokedex = {
 		weightkg: 392,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
+		requiredMove: "Dragon Ascent",
 	},
 	jirachi: {
 		num: 385,
@@ -7086,7 +7124,7 @@ let BattlePokedex = {
 		prevo: "cherubi",
 		evoLevel: 25,
 		eggGroups: ["Fairy", "Grass"],
-		inheritsFrom: "cherrim",
+		requiredAbility: "Flower Gift",
 	},
 	shellos: {
 		num: 422,
@@ -7194,6 +7232,7 @@ let BattlePokedex = {
 		weightkg: 28.3,
 		color: "Brown",
 		eggGroups: ["Field", "Human-Like"],
+		requiredItem: "Lopunnite",
 	},
 	mismagius: {
 		num: 429,
@@ -7429,6 +7468,7 @@ let BattlePokedex = {
 		weightkg: 95,
 		color: "Blue",
 		eggGroups: ["Monster", "Dragon"],
+		requiredItem: "Garchompite",
 	},
 	munchlax: {
 		num: 446,
@@ -7487,6 +7527,7 @@ let BattlePokedex = {
 		weightkg: 57.5,
 		color: "Blue",
 		eggGroups: ["Field", "Human-Like"],
+		requiredItem: "Lucarionite",
 	},
 	hippopotas: {
 		num: 449,
@@ -7650,6 +7691,7 @@ let BattlePokedex = {
 		weightkg: 185,
 		color: "White",
 		eggGroups: ["Monster", "Grass"],
+		requiredItem: "Abomasite",
 	},
 	weavile: {
 		num: 461,
@@ -7884,6 +7926,7 @@ let BattlePokedex = {
 		weightkg: 56.4,
 		color: "White",
 		eggGroups: ["Amorphous"],
+		requiredItem: "Galladite",
 	},
 	probopass: {
 		num: 476,
@@ -8126,7 +8169,7 @@ let BattlePokedex = {
 		weightkg: 650,
 		color: "Black",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "giratina",
+		requiredItem: "Griseous Orb",
 	},
 	cresselia: {
 		num: 488,
@@ -8204,7 +8247,6 @@ let BattlePokedex = {
 		weightkg: 5.2,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "shaymin",
 	},
 	arceus: {
 		num: 493,
@@ -8233,7 +8275,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Insect Plate", "Buginium Z"],
 	},
 	arceusdark: {
 		num: 493,
@@ -8248,7 +8290,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Dread Plate", "Darkinium Z"],
 	},
 	arceusdragon: {
 		num: 493,
@@ -8263,7 +8305,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Draco Plate", "Dragonium Z"],
 	},
 	arceuselectric: {
 		num: 493,
@@ -8278,7 +8320,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Zap Plate", "Electrium Z"],
 	},
 	arceusfairy: {
 		num: 493,
@@ -8293,7 +8335,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Pixie Plate", "Fairium Z"],
 	},
 	arceusfighting: {
 		num: 493,
@@ -8308,7 +8350,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Fist Plate", "Fightinium Z"],
 	},
 	arceusfire: {
 		num: 493,
@@ -8323,7 +8365,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Flame Plate", "Firium Z"],
 	},
 	arceusflying: {
 		num: 493,
@@ -8338,7 +8380,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Sky Plate", "Flyinium Z"],
 	},
 	arceusghost: {
 		num: 493,
@@ -8353,7 +8395,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Spooky Plate", "Ghostium Z"],
 	},
 	arceusgrass: {
 		num: 493,
@@ -8368,7 +8410,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Meadow Plate", "Grassium Z"],
 	},
 	arceusground: {
 		num: 493,
@@ -8383,7 +8425,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Earth Plate", "Groundium Z"],
 	},
 	arceusice: {
 		num: 493,
@@ -8398,7 +8440,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Icicle Plate", "Icium Z"],
 	},
 	arceuspoison: {
 		num: 493,
@@ -8413,7 +8455,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Toxic Plate", "Poisonium Z"],
 	},
 	arceuspsychic: {
 		num: 493,
@@ -8428,7 +8470,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Mind Plate", "Psychium Z"],
 	},
 	arceusrock: {
 		num: 493,
@@ -8443,7 +8485,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Stone Plate", "Rockium Z"],
 	},
 	arceussteel: {
 		num: 493,
@@ -8458,7 +8500,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Iron Plate", "Steelium Z"],
 	},
 	arceuswater: {
 		num: 493,
@@ -8473,7 +8515,7 @@ let BattlePokedex = {
 		weightkg: 320,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "arceus",
+		requiredItems: ["Splash Plate", "Waterium Z"],
 	},
 	victini: {
 		num: 494,
@@ -8989,6 +9031,7 @@ let BattlePokedex = {
 		weightkg: 32,
 		color: "White",
 		eggGroups: ["Fairy"],
+		requiredItem: "Audinite",
 	},
 	timburr: {
 		num: 532,
@@ -9252,7 +9295,6 @@ let BattlePokedex = {
 		weightkg: 18,
 		color: "Green",
 		eggGroups: ["Water 2"],
-		inheritsFrom: "basculin",
 	},
 	sandile: {
 		num: 551,
@@ -9349,7 +9391,7 @@ let BattlePokedex = {
 		prevo: "darumaka",
 		evoLevel: 35,
 		eggGroups: ["Field"],
-		inheritsFrom: "darmanitan",
+		requiredAbility: "Zen Mode",
 	},
 	darmanitangalar: {
 		num: 555,
@@ -9382,7 +9424,8 @@ let BattlePokedex = {
 		evoType: "useItem",
 		evoItem: "Ice Stone",
 		eggGroups: ["Field"],
-		inheritsFrom: "darmanitangalar",
+		requiredAbility: "Zen Mode",
+		battleOnly: "Darmanitan-Galar",
 	},
 	maractus: {
 		num: 556,
@@ -9584,12 +9627,11 @@ let BattlePokedex = {
 		types: ["Poison"],
 		baseStats: {hp: 80, atk: 95, def: 82, spa: 60, spd: 82, spe: 75},
 		abilities: {0: "Stench", 1: "Weak Armor", H: "Aftermath"},
-		// TODO
-		heightm: 0,
+		heightm: 21,
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Mineral"],
-		inheritsFrom: "garbodor",
+		isGigantamax: "G-Max Malodor",
 	},
 	zorua: {
 		num: 570,
@@ -10544,7 +10586,6 @@ let BattlePokedex = {
 		weightkg: 63,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "tornadus",
 	},
 	thundurus: {
 		num: 642,
@@ -10573,7 +10614,6 @@ let BattlePokedex = {
 		weightkg: 61,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "thundurus",
 	},
 	reshiram: {
 		num: 643,
@@ -10626,7 +10666,6 @@ let BattlePokedex = {
 		weightkg: 68,
 		color: "Brown",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "landorus",
 	},
 	kyurem: {
 		num: 646,
@@ -10696,7 +10735,7 @@ let BattlePokedex = {
 		weightkg: 48.5,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "keldeo",
+		requiredMove: "Secret Sword",
 	},
 	meloetta: {
 		num: 648,
@@ -10725,7 +10764,8 @@ let BattlePokedex = {
 		weightkg: 6.5,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "meloetta",
+		requiredMove: "Relic Song",
+		battleOnly: "Meloetta",
 	},
 	genesect: {
 		num: 649,
@@ -10753,7 +10793,7 @@ let BattlePokedex = {
 		weightkg: 82.5,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "genesect",
+		requiredItem: "Douse Drive",
 	},
 	genesectshock: {
 		num: 649,
@@ -10768,7 +10808,7 @@ let BattlePokedex = {
 		weightkg: 82.5,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "genesect",
+		requiredItem: "Shock Drive",
 	},
 	genesectburn: {
 		num: 649,
@@ -10783,7 +10823,7 @@ let BattlePokedex = {
 		weightkg: 82.5,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "genesect",
+		requiredItem: "Burn Drive",
 	},
 	genesectchill: {
 		num: 649,
@@ -10798,7 +10838,7 @@ let BattlePokedex = {
 		weightkg: 82.5,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "genesect",
+		requiredItem: "Chill Drive",
 	},
 	chespin: {
 		num: 650,
@@ -10940,7 +10980,7 @@ let BattlePokedex = {
 		weightkg: 40,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "greninja",
+		requiredAbility: "Battle Bond",
 	},
 	bunnelby: {
 		num: 659,
@@ -11327,7 +11367,7 @@ let BattlePokedex = {
 		evoType: "useItem",
 		evoItem: "Dusk Stone",
 		eggGroups: ["Mineral"],
-		inheritsFrom: "aegislash",
+		requiredAbility: "Stance Change",
 	},
 	spritzee: {
 		num: 682,
@@ -11712,7 +11752,6 @@ let BattlePokedex = {
 		color: "Brown",
 		evos: ["gourgeistsmall"],
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "pumpkaboo",
 	},
 	pumpkaboolarge: {
 		num: 710,
@@ -11727,7 +11766,6 @@ let BattlePokedex = {
 		color: "Brown",
 		evos: ["gourgeistlarge"],
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "pumpkaboo",
 	},
 	pumpkaboosuper: {
 		num: 710,
@@ -11742,7 +11780,6 @@ let BattlePokedex = {
 		color: "Brown",
 		evos: ["gourgeistsuper"],
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "pumpkaboo",
 	},
 	gourgeist: {
 		num: 711,
@@ -11773,7 +11810,6 @@ let BattlePokedex = {
 		prevo: "pumpkaboosmall",
 		evoType: "trade",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "gourgeist",
 	},
 	gourgeistlarge: {
 		num: 711,
@@ -11789,7 +11825,6 @@ let BattlePokedex = {
 		prevo: "pumpkaboolarge",
 		evoType: "trade",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "gourgeist",
 	},
 	gourgeistsuper: {
 		num: 711,
@@ -11805,7 +11840,6 @@ let BattlePokedex = {
 		prevo: "pumpkaboosuper",
 		evoType: "trade",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "gourgeist",
 	},
 	bergmite: {
 		num: 712,
@@ -11908,7 +11942,6 @@ let BattlePokedex = {
 		weightkg: 33.5,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "zygarde",
 	},
 	zygardecomplete: {
 		num: 718,
@@ -11923,7 +11956,7 @@ let BattlePokedex = {
 		weightkg: 610,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "zygarde",
+		requiredAbility: "Power Construct",
 	},
 	diancie: {
 		num: 719,
@@ -11951,6 +11984,7 @@ let BattlePokedex = {
 		weightkg: 27.8,
 		color: "Pink",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Diancite",
 	},
 	hoopa: {
 		num: 720,
@@ -11979,7 +12013,6 @@ let BattlePokedex = {
 		weightkg: 490,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "hoopa",
 	},
 	volcanion: {
 		num: 721,
@@ -12304,7 +12337,6 @@ let BattlePokedex = {
 		weightkg: 3.4,
 		color: "Yellow",
 		eggGroups: ["Flying"],
-		inheritsFrom: "oricorio",
 	},
 	oricoriopau: {
 		num: 741,
@@ -12319,7 +12351,6 @@ let BattlePokedex = {
 		weightkg: 3.4,
 		color: "Pink",
 		eggGroups: ["Flying"],
-		inheritsFrom: "oricorio",
 	},
 	oricoriosensu: {
 		num: 741,
@@ -12334,7 +12365,6 @@ let BattlePokedex = {
 		weightkg: 3.4,
 		color: "Purple",
 		eggGroups: ["Flying"],
-		inheritsFrom: "oricorio",
 	},
 	cutiefly: {
 		num: 742,
@@ -12458,7 +12488,7 @@ let BattlePokedex = {
 		weightkg: 78.6,
 		color: "Blue",
 		eggGroups: ["Water 2"],
-		inheritsFrom: "wishiwashi",
+		requiredAbility: "Schooling",
 	},
 	mareanie: {
 		num: 747,
@@ -12861,7 +12891,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Bug Memory",
 	},
 	silvallydark: {
 		num: 773,
@@ -12878,7 +12908,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Dark Memory",
 	},
 	silvallydragon: {
 		num: 773,
@@ -12895,7 +12925,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Dragon Memory",
 	},
 	silvallyelectric: {
 		num: 773,
@@ -12912,7 +12942,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Electric Memory",
 	},
 	silvallyfairy: {
 		num: 773,
@@ -12929,7 +12959,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Fairy Memory",
 	},
 	silvallyfighting: {
 		num: 773,
@@ -12946,7 +12976,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Fighting Memory",
 	},
 	silvallyfire: {
 		num: 773,
@@ -12963,7 +12993,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Fire Memory",
 	},
 	silvallyflying: {
 		num: 773,
@@ -12980,7 +13010,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Flying Memory",
 	},
 	silvallyghost: {
 		num: 773,
@@ -12997,7 +13027,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Ghost Memory",
 	},
 	silvallygrass: {
 		num: 773,
@@ -13014,7 +13044,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Grass Memory",
 	},
 	silvallyground: {
 		num: 773,
@@ -13031,7 +13061,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Ground Memory",
 	},
 	silvallyice: {
 		num: 773,
@@ -13048,7 +13078,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Ice Memory",
 	},
 	silvallypoison: {
 		num: 773,
@@ -13065,7 +13095,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Poison Memory",
 	},
 	silvallypsychic: {
 		num: 773,
@@ -13082,7 +13112,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Psychic Memory",
 	},
 	silvallyrock: {
 		num: 773,
@@ -13099,7 +13129,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Rock Memory",
 	},
 	silvallysteel: {
 		num: 773,
@@ -13116,7 +13146,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Steel Memory",
 	},
 	silvallywater: {
 		num: 773,
@@ -13133,7 +13163,7 @@ let BattlePokedex = {
 		prevo: "typenull",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "silvally",
+		requiredItem: "Water Memory",
 	},
 	minior: {
 		num: 774,
@@ -13163,7 +13193,7 @@ let BattlePokedex = {
 		weightkg: 40,
 		color: "Brown",
 		eggGroups: ["Mineral"],
-		inheritsFrom: "minior",
+		requiredAbility: "Shields Down",
 	},
 	komala: {
 		num: 775,
@@ -13236,7 +13266,7 @@ let BattlePokedex = {
 		weightkg: 0.7,
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "mimikyu",
+		requiredAbility: "Disguise",
 	},
 	mimikyutotem: {
 		num: 778,
@@ -13263,7 +13293,8 @@ let BattlePokedex = {
 		weightkg: 2.8,
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "mimikyutotem",
+		requiredAbility: "Disguise",
+		battleOnly: "Mimikyu-Totem",
 	},
 	bruxish: {
 		num: 779,
@@ -13596,7 +13627,8 @@ let BattlePokedex = {
 		weightkg: 230,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "necrozma",
+		requiredItem: "Ultranecrozium Z",
+		battleOnly: ["Necrozma-Dawn-Wings", "Necrozma-Dusk-Mane"],
 	},
 	magearna: {
 		num: 801,
@@ -13624,7 +13656,6 @@ let BattlePokedex = {
 		weightkg: 80.5,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "magearna",
 	},
 	marshadow: {
 		num: 802,
@@ -13736,12 +13767,11 @@ let BattlePokedex = {
 		gender: "N",
 		baseStats: {hp: 135, atk: 143, def: 143, spa: 80, spd: 65, spe: 34},
 		abilities: {0: "Iron Fist"},
-		// TODO
-		heightm: 0,
+		heightm: 25,
 		weightkg: 0,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "melmetal",
+		isGigantamax: "G-Max Meltdown",
 	},
 	grookey: {
 		num: 810,
@@ -13946,7 +13976,7 @@ let BattlePokedex = {
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Flying"],
-		inheritsFrom: "corviknight",
+		isGigantamax: "G-Max Wind Rage",
 	},
 	blipbug: {
 		num: 824,
@@ -13996,12 +14026,11 @@ let BattlePokedex = {
 		types: ["Bug", "Psychic"],
 		baseStats: {hp: 60, atk: 45, def: 110, spa: 80, spd: 120, spe: 90},
 		abilities: {0: "Swarm", 1: "Frisk", H: "Telepathy"},
-		// TODO
-		heightm: 0,
+		heightm: 14,
 		weightkg: 0,
 		color: "Red",
 		eggGroups: ["Bug"],
-		inheritsFrom: "orbeetle",
+		isGigantamax: "G-Max Gravitas",
 	},
 	nickit: {
 		num: 827,
@@ -14116,7 +14145,7 @@ let BattlePokedex = {
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Monster", "Water 1"],
-		inheritsFrom: "drednaw",
+		isGigantamax: "G-Max Stonesurge",
 	},
 	yamper: {
 		num: 835,
@@ -14191,12 +14220,11 @@ let BattlePokedex = {
 		types: ["Rock", "Fire"],
 		baseStats: {hp: 110, atk: 80, def: 120, spa: 80, spd: 90, spe: 30},
 		abilities: {0: "Steam Engine", 1: "Flame Body", H: "Flash Fire"},
-		// TODO
-		heightm: 0,
+		heightm: 42,
 		weightkg: 0,
 		color: "Black",
 		eggGroups: ["Mineral"],
-		inheritsFrom: "coalossal",
+		isGigantamax: "G-Max Volcalith",
 	},
 	applin: {
 		num: 840,
@@ -14233,12 +14261,11 @@ let BattlePokedex = {
 		types: ["Grass", "Dragon"],
 		baseStats: {hp: 70, atk: 110, def: 80, spa: 95, spd: 60, spe: 70},
 		abilities: {0: "Ripen", 1: "Gluttony", H: "Hustle"},
-		// TODO
-		heightm: 0,
+		heightm: 24,
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Grass", "Dragon"],
-		inheritsFrom: "flapple",
+		isGigantamax: "G-Max Tartness",
 	},
 	appletun: {
 		num: 842,
@@ -14263,12 +14290,11 @@ let BattlePokedex = {
 		types: ["Grass", "Dragon"],
 		baseStats: {hp: 110, atk: 85, def: 80, spa: 100, spd: 80, spe: 30},
 		abilities: {0: "Ripen", 1: "Gluttony", H: "Thick Fat"},
-		// TODO
-		heightm: 0,
+		heightm: 24,
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Grass", "Dragon"],
-		inheritsFrom: "appletun",
+		isGigantamax: "G-Max Sweetness",
 	},
 	silicobra: {
 		num: 843,
@@ -14304,12 +14330,11 @@ let BattlePokedex = {
 		types: ["Ground"],
 		baseStats: {hp: 72, atk: 107, def: 125, spa: 65, spd: 70, spe: 71},
 		abilities: {0: "Sand Spit", 1: "Shed Skin", H: "Sand Veil"},
-		// TODO
-		heightm: 0,
+		heightm: 22,
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Field", "Dragon"],
-		inheritsFrom: "sandaconda",
+		isGigantamax: "G-Max Sandblast",
 	},
 	cramorant: {
 		num: 845,
@@ -14335,7 +14360,7 @@ let BattlePokedex = {
 		weightkg: 18,
 		color: "Blue",
 		eggGroups: ["Water 1", "Flying"],
-		inheritsFrom: "cramorant",
+		requiredAbility: "Gulp Missile",
 	},
 	cramorantgorging: {
 		num: 845,
@@ -14349,7 +14374,7 @@ let BattlePokedex = {
 		weightkg: 18,
 		color: "Blue",
 		eggGroups: ["Water 1", "Flying"],
-		inheritsFrom: "cramorant",
+		requiredAbility: "Gulp Missile",
 	},
 	arrokuda: {
 		num: 846,
@@ -14427,25 +14452,26 @@ let BattlePokedex = {
 		types: ["Electric", "Poison"],
 		baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
 		abilities: {0: "Punk Rock", 1: "Plus", H: "Technician"},
-		heightm: 0,
+		heightm: 24,
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Human-Like"],
-		inheritsFrom: "toxtricity",
+		isGigantamax: "G-Max Stun Shock",
 	},
 	toxtricitylowkeygmax: {
 		num: 849,
 		species: "Toxtricity-Low-Key-Gmax",
-		baseSpecies: "Toxtricity-Low-Key",
+		baseSpecies: "Toxtricity",
 		forme: "Gmax",
 		types: ["Electric", "Poison"],
 		baseStats: {hp: 75, atk: 98, def: 70, spa: 114, spd: 70, spe: 75},
 		abilities: {0: "Punk Rock", 1: "Minus", H: "Technician"},
-		heightm: 0,
+		heightm: 24,
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Human-Like"],
-		inheritsFrom: "toxtricitylowkey",
+		isGigantamax: "G-Max Stun Shock",
+		battleOnly: "Toxtricity-Low-Key",
 	},
 	sizzlipede: {
 		num: 850,
@@ -14481,12 +14507,11 @@ let BattlePokedex = {
 		types: ["Fire", "Bug"],
 		baseStats: {hp: 100, atk: 115, def: 65, spa: 90, spd: 90, spe: 65},
 		abilities: {0: "Flash Fire", 1: "White Smoke", H: "Flame Body"},
-		// TODO
-		heightm: 0,
+		heightm: 75,
 		weightkg: 0,
 		color: "Red",
 		eggGroups: ["Bug"],
-		inheritsFrom: "centiskorch",
+		isGigantamax: "G-Max Centiferno",
 	},
 	clobbopus: {
 		num: 852,
@@ -14543,7 +14568,6 @@ let BattlePokedex = {
 		color: "Purple",
 		evos: ["polteageistantique"],
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "sinistea",
 	},
 	polteageist: {
 		num: 855,
@@ -14578,7 +14602,6 @@ let BattlePokedex = {
 		evoType: "useItem",
 		evoItem: "Chipped Pot",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "polteageist",
 	},
 	hatenna: {
 		num: 856,
@@ -14632,12 +14655,11 @@ let BattlePokedex = {
 		gender: "F",
 		baseStats: {hp: 57, atk: 90, def: 95, spa: 136, spd: 103, spe: 29},
 		abilities: {0: "Healer", 1: "Anticipation", H: "Magic Bounce"},
-		// TODO
-		heightm: 0,
+		heightm: 26,
 		weightkg: 0,
 		color: "Pink",
 		eggGroups: ["Fairy"],
-		inheritsFrom: "hatterene",
+		isGigantamax: "G-Max Smite",
 	},
 	impidimp: {
 		num: 859,
@@ -14691,12 +14713,11 @@ let BattlePokedex = {
 		gender: "M",
 		baseStats: {hp: 95, atk: 120, def: 65, spa: 95, spd: 75, spe: 60},
 		abilities: {0: "Prankster", 1: "Frisk", H: "Pickpocket"},
-		// TODO
-		heightm: 0,
+		heightm: 32,
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Fairy", "Human-Like"],
-		inheritsFrom: "grimmsnarl",
+		isGigantamax: "G-Max Snooze",
 	},
 	obstagoon: {
 		num: 862,
@@ -14824,7 +14845,7 @@ let BattlePokedex = {
 		weightkg: 0,
 		color: "White",
 		eggGroups: ["Fairy", "Amorphous"],
-		inheritsFrom: "alcremie",
+		isGigantamax: "G-Max Finale",
 	},
 	falinks: {
 		num: 870,
@@ -14910,7 +14931,7 @@ let BattlePokedex = {
 		weightkg: 89,
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
-		inheritsFrom: "eiscue",
+		requiredAbility: "Ice Face",
 	},
 	indeedee: {
 		num: 876,
@@ -14964,7 +14985,7 @@ let BattlePokedex = {
 		weightkg: 3,
 		color: "Yellow",
 		eggGroups: ["Field", "Fairy"],
-		inheritsFrom: "morpeko",
+		requiredAbility: "Hunger Switch",
 	},
 	cufant: {
 		num: 878,
@@ -15000,12 +15021,11 @@ let BattlePokedex = {
 		types: ["Steel"],
 		baseStats: {hp: 122, atk: 130, def: 69, spa: 80, spd: 69, spe: 30},
 		abilities: {0: "Sheer Force", H: "Heavy Metal"},
-		// TODO
-		heightm: 0,
+		heightm: 23,
 		weightkg: 0,
 		color: "Green",
 		eggGroups: ["Field", "Mineral"],
-		inheritsFrom: "copperajah",
+		isGigantamax: "G-Max Steelsurge",
 	},
 	dracozolt: {
 		num: 880,
@@ -15075,12 +15095,11 @@ let BattlePokedex = {
 		types: ["Steel", "Dragon"],
 		baseStats: {hp: 70, atk: 95, def: 115, spa: 120, spd: 50, spe: 85},
 		abilities: {0: "Light Metal", 1: "Heavy Metal", H: "Stalwart"},
-		// TODO
-		heightm: 0,
+		heightm: 43,
 		weightkg: 0,
 		color: "White",
 		eggGroups: ["Mineral", "Dragon"],
-		inheritsFrom: "duraludon",
+		isGigantamax: "G-Max Depletion",
 	},
 	dreepy: {
 		num: 885,
@@ -15147,7 +15166,7 @@ let BattlePokedex = {
 		weightkg: 355,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "zacian",
+		requiredItem: "Rusted Sword",
 	},
 	zamazenta: {
 		num: 889,
@@ -15175,7 +15194,7 @@ let BattlePokedex = {
 		weightkg: 785,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "zamazenta",
+		requiredItem: "Rusted Shield",
 	},
 	eternatus: {
 		num: 890,
@@ -15202,7 +15221,6 @@ let BattlePokedex = {
 		weightkg: 0,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "eternatus",
 	},
 	missingno: {
 		num: 0,
@@ -15718,6 +15736,7 @@ let BattlePokedex = {
 		weightkg: 22.5,
 		color: "Purple",
 		eggGroups: ["Amorphous", "Mineral"],
+		requiredItem: "Crucibellite",
 	},
 	pluffle: {
 		num: -40,

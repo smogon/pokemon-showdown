@@ -417,9 +417,9 @@ export class ModdedDex {
 				} else if (template.speciesid.endsWith('totem')) {
 					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
-				} else if (template.inheritsFrom) {
-					template.tier = this.data.FormatsData[template.inheritsFrom].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[template.inheritsFrom].doublesTier || 'Illegal';
+				} else if (template.battleOnly) {
+					template.tier = this.data.FormatsData[toID(template.battleOnly)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toID(template.battleOnly)].doublesTier || 'Illegal';
 				} else {
 					const baseFormatsData = this.data.FormatsData[toID(template.baseSpecies)];
 					if (!baseFormatsData) {

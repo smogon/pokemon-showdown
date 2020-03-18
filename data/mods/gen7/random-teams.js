@@ -41,7 +41,7 @@ class RandomGen7Teams extends RandomTeams {
 
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			species = this.dex.getOutOfBattleSpecies(template);
+			species = /** @type {string} */ (template.battleOnly);
 		}
 		let battleForme = this.checkBattleForme(template);
 		if (battleForme && battleForme.randomBattleMoves && template.otherFormes && (battleForme.isMega ? !teamDetails.megaStone : this.random(2))) {

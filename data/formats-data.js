@@ -14,7 +14,6 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	venusaurmega: {
-		requiredItem: "Venusaurite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -30,17 +29,14 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	charizardmegax: {
-		requiredItem: "Charizardite X",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	charizardmegay: {
-		requiredItem: "Charizardite Y",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	charizardgmax: {
-		isGigantamax: "G-Max Wildfire",
 		tier: "(Uber)",
 		doublesTier: "DOU",
 	},
@@ -56,7 +52,6 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	blastoisemega: {
-		requiredItem: "Blastoisinite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -73,7 +68,6 @@ let BattleFormatsData = {
 	},
 	butterfreegmax: {
 		randomBattleMoves: ["airslash", "bugbuzz", "quiverdance", "sleeppowder"],
-		isGigantamax: "G-Max Befuddle",
 		tier: "(Uber)",
 		doublesTier: "DOU",
 	},
@@ -90,7 +84,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	beedrillmega: {
-		requiredItem: "Beedrillite",
 		isNonstandard: "Past",
 	},
 	pidgey: {
@@ -106,7 +99,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	pidgeotmega: {
-		requiredItem: "Pidgeotite",
 		isNonstandard: "Past",
 	},
 	rattata: {
@@ -227,7 +219,6 @@ let BattleFormatsData = {
 	},
 	pikachugmax: {
 		unreleasedHidden: true,
-		isGigantamax: "G-Max Volt Crash",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -395,7 +386,6 @@ let BattleFormatsData = {
 	},
 	meowthgmax: {
 		unreleasedHidden: true,
-		isGigantamax: "G-Max Gold Rush",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -467,7 +457,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	alakazammega: {
-		requiredItem: "Alakazite",
 		isNonstandard: "Past",
 	},
 	machop: {
@@ -482,7 +471,6 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	machampgmax: {
-		isGigantamax: "G-Max Chi Strike",
 		tier: "(Uber)",
 		doublesTier: "DUU",
 	},
@@ -561,7 +549,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	slowbromega: {
-		requiredItem: "Slowbronite",
 		isNonstandard: "Past",
 	},
 	slowking: {
@@ -647,13 +634,11 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	gengarmega: {
-		requiredItem: "Gengarite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	gengargmax: {
 		randomBattleMoves: ["focusblast", "nastyplot", "shadowball", "sludgewave", "trick"],
-		isGigantamax: "G-Max Terror",
 		tier: "(Uber)",
 		doublesTier: "DUU",
 	},
@@ -666,7 +651,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	steelixmega: {
-		requiredItem: "Steelixite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -687,7 +671,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	kinglergmax: {
-		isGigantamax: "G-Max Foam Burst",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -804,7 +787,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	kangaskhanmega: {
-		requiredItem: "Kangaskhanite",
 		isNonstandard: "Past",
 	},
 	horsea: {
@@ -863,7 +845,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	scizormega: {
-		requiredItem: "Scizorite",
 		isNonstandard: "Past",
 	},
 	smoochum: {
@@ -903,7 +884,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	pinsirmega: {
-		requiredItem: "Pinsirite",
 		isNonstandard: "Past",
 	},
 	tauros: {
@@ -919,7 +899,6 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	gyaradosmega: {
-		requiredItem: "Gyaradosite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -929,7 +908,6 @@ let BattleFormatsData = {
 	},
 	laprasgmax: {
 		randomBattleMoves: ["freezedry", "icebeam", "sparklingaria", "substitute", "thunderbolt", "toxic"],
-		isGigantamax: "G-Max Resonance",
 		tier: "(Uber)",
 		doublesTier: "DOU",
 	},
@@ -947,7 +925,6 @@ let BattleFormatsData = {
 	},
 	eeveegmax: {
 		unreleasedHidden: true,
-		isGigantamax: "G-Max Cuddle",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -1024,7 +1001,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	aerodactylmega: {
-		requiredItem: "Aerodactylite",
 		isNonstandard: "Past",
 	},
 	munchlax: {
@@ -1036,7 +1012,6 @@ let BattleFormatsData = {
 	},
 	snorlaxgmax: {
 		randomBattleMoves: ["bodyslam", "curse", "darkestlariat", "earthquake", "firepunch", "rest"],
-		isGigantamax: "G-Max Replenish",
 		tier: "(Uber)",
 		doublesTier: "DOU",
 	},
@@ -1073,12 +1048,10 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	mewtwomegax: {
-		requiredItem: "Mewtwonite X",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	mewtwomegay: {
-		requiredItem: "Mewtwonite Y",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1195,7 +1168,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	ampharosmega: {
-		requiredItem: "Ampharosite",
 		isNonstandard: "Past",
 	},
 	azurill: {
@@ -1338,7 +1310,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	heracrossmega: {
-		requiredItem: "Heracronite",
 		isNonstandard: "Past",
 	},
 	sneasel: {
@@ -1427,7 +1398,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	houndoommega: {
-		requiredItem: "Houndoominite",
 		isNonstandard: "Past",
 	},
 	phanpy: {
@@ -1477,7 +1447,6 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	tyranitarmega: {
-		requiredItem: "Tyranitarite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1509,7 +1478,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	sceptilemega: {
-		requiredItem: "Sceptilite",
 		isNonstandard: "Past",
 	},
 	torchic: {
@@ -1525,7 +1493,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	blazikenmega: {
-		requiredItem: "Blazikenite",
 		isNonstandard: "Past",
 	},
 	mudkip: {
@@ -1541,7 +1508,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	swampertmega: {
-		requiredItem: "Swampertite",
 		isNonstandard: "Past",
 	},
 	poochyena: {
@@ -1641,7 +1607,6 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	gardevoirmega: {
-		requiredItem: "Gardevoirite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1651,7 +1616,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	gallademega: {
-		requiredItem: "Galladite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1738,7 +1702,6 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	sableyemega: {
-		requiredItem: "Sablenite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1748,7 +1711,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	mawilemega: {
-		requiredItem: "Mawilite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1765,7 +1727,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	aggronmega: {
-		requiredItem: "Aggronite",
 		isNonstandard: "Past",
 	},
 	meditite: {
@@ -1777,7 +1738,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	medichammega: {
-		requiredItem: "Medichamite",
 		isNonstandard: "Past",
 	},
 	electrike: {
@@ -1789,7 +1749,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	manectricmega: {
-		requiredItem: "Manectite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1837,7 +1796,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	sharpedomega: {
-		requiredItem: "Sharpedonite",
 		isNonstandard: "Past",
 	},
 	wailmer: {
@@ -1857,7 +1815,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	cameruptmega: {
-		requiredItem: "Cameruptite",
 		isNonstandard: "Past",
 	},
 	torkoal: {
@@ -1905,7 +1862,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	altariamega: {
-		requiredItem: "Altarianite",
 		isNonstandard: "Past",
 	},
 	zangoose: {
@@ -1979,18 +1935,12 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	castformsunny: {
-		requiredAbility: "Forecast",
-		battleOnly: true,
 		isNonstandard: "Past",
 	},
 	castformrainy: {
-		requiredAbility: "Forecast",
-		battleOnly: true,
 		isNonstandard: "Past",
 	},
 	castformsnowy: {
-		requiredAbility: "Forecast",
-		battleOnly: true,
 		isNonstandard: "Past",
 	},
 	kecleon: {
@@ -2006,7 +1956,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	banettemega: {
-		requiredItem: "Banettite",
 		isNonstandard: "Past",
 	},
 	duskull: {
@@ -2038,7 +1987,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	absolmega: {
-		requiredItem: "Absolite",
 		isNonstandard: "Past",
 	},
 	snorunt: {
@@ -2050,7 +1998,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	glaliemega: {
-		requiredItem: "Glalitite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -2105,7 +2052,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	salamencemega: {
-		requiredItem: "Salamencite",
 		isNonstandard: "Past",
 	},
 	beldum: {
@@ -2122,7 +2068,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	metagrossmega: {
-		requiredItem: "Metagrossite",
 		isNonstandard: "Past",
 	},
 	regirock: {
@@ -2146,7 +2091,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	latiasmega: {
-		requiredItem: "Latiasite",
 		isNonstandard: "Past",
 	},
 	latios: {
@@ -2155,7 +2099,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	latiosmega: {
-		requiredItem: "Latiosite",
 		isNonstandard: "Past",
 	},
 	kyogre: {
@@ -2164,7 +2107,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	kyogreprimal: {
-		requiredItem: "Blue Orb",
 		isNonstandard: "Past",
 	},
 	groudon: {
@@ -2173,7 +2115,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	groudonprimal: {
-		requiredItem: "Red Orb",
 		isNonstandard: "Past",
 	},
 	rayquaza: {
@@ -2182,7 +2123,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	rayquazamega: {
-		requiredMove: "Dragon Ascent",
 		isNonstandard: "Past",
 	},
 	jirachi: {
@@ -2348,8 +2288,6 @@ let BattleFormatsData = {
 	},
 	cherrimsunshine: {
 		randomBattleMoves: ["playrough", "solarblade", "sunnyday", "weatherball"],
-		requiredAbility: "Flower Gift",
-		battleOnly: true,
 	},
 	shellos: {
 		tier: "LC",
@@ -2376,7 +2314,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	lopunnymega: {
-		requiredItem: "Lopunnite",
 		isNonstandard: "Past",
 	},
 	glameow: {
@@ -2425,7 +2362,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	garchompmega: {
-		requiredItem: "Garchompite",
 		isNonstandard: "Past",
 	},
 	riolu: {
@@ -2437,7 +2373,6 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	lucariomega: {
-		requiredItem: "Lucarionite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -2486,7 +2421,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	abomasnowmega: {
-		requiredItem: "Abomasite",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -2561,7 +2495,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	giratinaorigin: {
-		requiredItem: "Griseous Orb",
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -2595,72 +2528,54 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	arceusbug: {
-		requiredItems: ["Insect Plate", "Buginium Z"],
 		isNonstandard: "Past",
 	},
 	arceusdark: {
-		requiredItems: ["Dread Plate", "Darkinium Z"],
 		isNonstandard: "Past",
 	},
 	arceusdragon: {
-		requiredItems: ["Draco Plate", "Dragonium Z"],
 		isNonstandard: "Past",
 	},
 	arceuselectric: {
-		requiredItems: ["Zap Plate", "Electrium Z"],
 		isNonstandard: "Past",
 	},
 	arceusfairy: {
-		requiredItems: ["Pixie Plate", "Fairium Z"],
 		isNonstandard: "Past",
 	},
 	arceusfighting: {
-		requiredItems: ["Fist Plate", "Fightinium Z"],
 		isNonstandard: "Past",
 	},
 	arceusfire: {
-		requiredItems: ["Flame Plate", "Firium Z"],
 		isNonstandard: "Past",
 	},
 	arceusflying: {
-		requiredItems: ["Sky Plate", "Flyinium Z"],
 		isNonstandard: "Past",
 	},
 	arceusghost: {
-		requiredItems: ["Spooky Plate", "Ghostium Z"],
 		isNonstandard: "Past",
 	},
 	arceusgrass: {
-		requiredItems: ["Meadow Plate", "Grassium Z"],
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	arceusground: {
-		requiredItems: ["Earth Plate", "Groundium Z"],
 		isNonstandard: "Past",
 	},
 	arceusice: {
-		requiredItems: ["Icicle Plate", "Icium Z"],
 		isNonstandard: "Past",
 	},
 	arceuspoison: {
-		requiredItems: ["Toxic Plate", "Poisonium Z"],
 		isNonstandard: "Past",
 	},
 	arceuspsychic: {
-		requiredItems: ["Mind Plate", "Psychium Z"],
 		isNonstandard: "Past",
 	},
 	arceusrock: {
-		requiredItems: ["Stone Plate", "Rockium Z"],
 		isNonstandard: "Past",
 	},
 	arceussteel: {
-		requiredItems: ["Iron Plate", "Steelium Z"],
 		isNonstandard: "Past",
 	},
 	arceuswater: {
-		requiredItems: ["Splash Plate", "Waterium Z"],
 		isNonstandard: "Past",
 	},
 	victini: {
@@ -2814,7 +2729,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	audinomega: {
-		requiredItem: "Audinite",
 		isNonstandard: "Past",
 	},
 	timburr: {
@@ -2922,10 +2836,6 @@ let BattleFormatsData = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
-	darmanitanzen: {
-		requiredAbility: "Zen Mode",
-		battleOnly: true,
-	},
 	darmanitangalar: {
 		randomBattleMoves: ["earthquake", "flareblitz", "iciclecrash", "superpower", "uturn"],
 		tier: "Uber",
@@ -2933,8 +2843,6 @@ let BattleFormatsData = {
 	},
 	darmanitangalarzen: {
 		randomBattleMoves: ["earthquake", "flareblitz", "iciclecrash", "superpower", "uturn"],
-		requiredAbility: "Zen Mode",
-		battleOnly: true,
 	},
 	maractus: {
 		randomBattleMoves: ["drainpunch", "energyball", "leechseed", "spikes", "spikyshield", "toxic"],
@@ -3003,7 +2911,6 @@ let BattleFormatsData = {
 	},
 	garbodorgmax: {
 		randomBattleMoves: ["drainpunch", "explosion", "gunkshot", "painsplit", "spikes", "toxicspikes"],
-		isGigantamax: "G-Max Malodor",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -3355,16 +3262,11 @@ let BattleFormatsData = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
-	keldeoresolute: {
-		requiredMove: "Secret Sword",
-	},
 	meloetta: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	meloettapirouette: {
-		requiredMove: "Relic Song",
-		battleOnly: true,
 		isNonstandard: "Past",
 	},
 	genesect: {
@@ -3372,19 +3274,15 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	genesectburn: {
-		requiredItem: "Burn Drive",
 		isNonstandard: "Past",
 	},
 	genesectchill: {
-		requiredItem: "Chill Drive",
 		isNonstandard: "Past",
 	},
 	genesectdouse: {
-		requiredItem: "Douse Drive",
 		isNonstandard: "Past",
 	},
 	genesectshock: {
-		requiredItem: "Shock Drive",
 		isNonstandard: "Past",
 	},
 	chespin: {
@@ -3424,8 +3322,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	greninjaash: {
-		requiredAbility: "Battle Bond",
-		battleOnly: true,
 		isNonstandard: "Past",
 		gen: 7,
 		tier: "Illegal",
@@ -3538,10 +3434,6 @@ let BattleFormatsData = {
 		randomBattleMoves: ["closecombat", "ironhead", "kingsshield", "shadowball", "shadowsneak", "swordsdance"],
 		tier: "OU",
 		doublesTier: "DUU",
-	},
-	aegislashblade: {
-		requiredAbility: "Stance Change",
-		battleOnly: true,
 	},
 	spritzee: {
 		tier: "LC",
@@ -3725,8 +3617,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	zygardecomplete: {
-		requiredAbility: "Power Construct",
-		battleOnly: true,
 		isNonstandard: "Past",
 		gen: 7,
 		tier: "Illegal",
@@ -3736,7 +3626,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	dianciemega: {
-		requiredItem: "Diancite",
 		isNonstandard: "Past",
 	},
 	hoopa: {
@@ -3885,8 +3774,6 @@ let BattleFormatsData = {
 	},
 	wishiwashischool: {
 		randomBattleMoves: ["earthquake", "hydropump", "icebeam", "scald", "uturn"],
-		requiredAbility: "Schooling",
-		battleOnly: true,
 	},
 	mareanie: {
 		tier: "LC",
@@ -4012,103 +3899,86 @@ let BattleFormatsData = {
 	},
 	silvallybug: {
 		randomBattleMoves: ["flamethrower", "multiattack", "partingshot", "psychicfangs", "thunderbolt"],
-		requiredItem: "Bug Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallydark: {
 		randomBattleMoves: ["ironhead", "multiattack", "partingshot", "psychicfangs", "swordsdance"],
-		requiredItem: "Dark Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallydragon: {
 		randomBattleMoves: ["firefang", "ironhead", "multiattack", "partingshot", "swordsdance"],
-		requiredItem: "Dragon Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallyelectric: {
 		randomBattleMoves: ["flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
-		requiredItem: "Electric Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallyfairy: {
 		randomBattleMoves: ["firefang", "multiattack", "psychicfangs", "swordsdance"],
-		requiredItem: "Fairy Memory",
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
 	silvallyfighting: {
 		randomBattleMoves: ["crunch", "ironhead", "multiattack", "swordsdance", "uturn"],
-		requiredItem: "Fighting Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallyfire: {
 		randomBattleMoves: ["crunch", "ironhead", "multiattack", "swordsdance"],
-		requiredItem: "Fire Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallyflying: {
 		randomBattleMoves: ["firefang", "ironhead", "multiattack", "rockslide", "swordsdance"],
-		requiredItem: "Flying Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallyghost: {
 		randomBattleMoves: ["multiattack", "partingshot", "swordsdance", "xscissor"],
-		requiredItem: "Ghost Memory",
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
 	silvallygrass: {
 		randomBattleMoves: ["defog", "flamethrower", "icebeam", "multiattack", "partingshot"],
-		requiredItem: "Grass Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallyground: {
 		randomBattleMoves: ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
-		requiredItem: "Ground Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallyice: {
 		randomBattleMoves: ["firefang", "multiattack", "psychicfangs", "swordsdance"],
-		requiredItem: "Ice Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallypoison: {
 		randomBattleMoves: ["defog", "flamethrower", "grasspledge", "multiattack", "partingshot", "toxic"],
-		requiredItem: "Poison Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallypsychic: {
 		randomBattleMoves: ["crunch", "multiattack", "swordsdance", "uturn"],
-		requiredItem: "Psychic Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallyrock: {
 		randomBattleMoves: ["firefang", "multiattack", "partingshot", "psychicfangs", "swordsdance"],
-		requiredItem: "Rock Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	silvallysteel: {
 		randomBattleMoves: ["defog", "flamethrower", "multiattack", "partingshot", "thunderbolt", "toxic"],
-		requiredItem: "Steel Memory",
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
 	silvallywater: {
 		randomBattleMoves: ["defog", "icebeam", "multiattack", "partingshot", "thunderbolt", "toxic"],
-		requiredItem: "Water Memory",
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -4117,8 +3987,6 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	miniormeteor: {
-		requiredAbility: "Shields Down",
-		battleOnly: true,
 		isNonstandard: "Past",
 	},
 	komala: {
@@ -4144,17 +4012,11 @@ let BattleFormatsData = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
-	mimikyubusted: {
-		requiredAbility: "Disguise",
-		battleOnly: true,
-	},
 	mimikyutotem: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	mimikyubustedtotem: {
-		requiredAbility: "Disguise",
-		battleOnly: true,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4267,8 +4129,6 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	necrozmaultra: {
-		requiredItem: "Ultranecrozium Z",
-		battleOnly: true,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4317,7 +4177,6 @@ let BattleFormatsData = {
 	},
 	melmetalgmax: {
 		isUnreleased: true,
-		isGigantamax: "G-Max Meltdown",
 		tier: "Unreleased",
 	},
 	grookey: {
@@ -4384,7 +4243,6 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	corviknightgmax: {
-		isGigantamax: "G-Max Wind Rage",
 		tier: "(Uber)",
 		doublesTier: "DOU",
 	},
@@ -4400,7 +4258,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	orbeetlegmax: {
-		isGigantamax: "G-Max Gravitas",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -4441,7 +4298,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	drednawgmax: {
-		isGigantamax: "G-Max Stonesurge",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -4467,7 +4323,6 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	coalossalgmax: {
-		isGigantamax: "G-Max Volcalith",
 		tier: "(Uber)",
 		doublesTier: "DUU",
 	},
@@ -4480,7 +4335,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	flapplegmax: {
-		isGigantamax: "G-Max Tartness",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -4491,7 +4345,6 @@ let BattleFormatsData = {
 	},
 	appletungmax: {
 		randomBattleMoves: ["appleacid", "dracometeor", "leechseed", "recover"],
-		isGigantamax: "G-Max Sweetness",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -4504,7 +4357,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	sandacondagmax: {
-		isGigantamax: "G-Max Sandblast",
 		tier: "(Uber)",
 		doublesTier: "(DUU)",
 	},
@@ -4512,14 +4364,6 @@ let BattleFormatsData = {
 		randomBattleMoves: ["bravebird", "defog", "roost", "superpower", "surf"],
 		tier: "RU",
 		doublesTier: "(DUU)",
-	},
-	cramorantgulping: {
-		requiredAbility: "Gulp Missile",
-		battleOnly: true,
-	},
-	cramorantgorging: {
-		requiredAbility: "Gulp Missile",
-		battleOnly: true,
 	},
 	arrokuda: {
 		tier: "LC",
@@ -4543,12 +4387,10 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	toxtricitygmax: {
-		isGigantamax: "G-Max Stun Shock",
 		tier: "(Uber)",
 		doublesTier: "DUU",
 	},
 	toxtricitylowkeygmax: {
-		isGigantamax: "G-Max Stun Shock",
 		tier: "(Uber)",
 		doublesTier: "DUU",
 	},
@@ -4561,7 +4403,6 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	centiskorchgmax: {
-		isGigantamax: "G-Max Centiferno",
 		tier: "(Uber)",
 		doublesTier: "DUU",
 	},
@@ -4602,7 +4443,6 @@ let BattleFormatsData = {
 	},
 	hatterenegmax: {
 		randomBattleMoves: ["calmmind", "darkpulse", "dazzlinggleam", "mysticalfire", "psychic", "trickroom"],
-		isGigantamax: "G-Max Smite",
 		tier: "(Uber)",
 		doublesTier: "DOU",
 	},
@@ -4619,7 +4459,6 @@ let BattleFormatsData = {
 	},
 	grimmsnarlgmax: {
 		randomBattleMoves: ["bulkup", "darkestlariat", "playrough", "substitute", "suckerpunch", "trick"],
-		isGigantamax: "G-Max Snooze",
 		tier: "(Uber)",
 		doublesTier: "DOU",
 	},
@@ -4632,7 +4471,6 @@ let BattleFormatsData = {
 	},
 	alcremiegmax: {
 		randomBattleMoves: ["calmmind", "dazzlinggleam", "mysticalfire", "psychic", "recover"],
-		isGigantamax: "G-Max Finale",
 		tier: "(Uber)",
 		doublesTier: "DUU",
 	},
@@ -4664,10 +4502,6 @@ let BattleFormatsData = {
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
-	eiscuenoice: {
-		requiredAbility: "Ice Face",
-		battleOnly: true,
-	},
 	indeedee: {
 		randomBattleMoves: ["calmmind", "hypervoice", "mysticalfire", "psychic", "trick"],
 		tier: "RU",
@@ -4683,10 +4517,6 @@ let BattleFormatsData = {
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
-	morpekohangry: {
-		requiredAbility: "Hunger Switch",
-		battleOnly: true,
-	},
 	cufant: {
 		tier: "LC",
 	},
@@ -4697,7 +4527,6 @@ let BattleFormatsData = {
 	},
 	copperajahgmax: {
 		randomBattleMoves: ["earthquake", "heatcrash", "heavyslam", "powerwhip", "stoneedge"],
-		isGigantamax: "G-Max Steelsurge",
 		tier: "(Uber)",
 		doublesTier: "DUU",
 	},
@@ -4731,7 +4560,6 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	duraludongmax: {
-		isGigantamax: "G-Max Depletion",
 		tier: "(Uber)",
 		doublesTier: "DOU",
 	},
@@ -4753,7 +4581,6 @@ let BattleFormatsData = {
 	},
 	zaciancrowned: {
 		randomBattleMoves: ["behemothblade", "closecombat", "crunch", "playrough", "psychicfangs", "swordsdance"],
-		requiredItem: "Rusted Sword",
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -4764,7 +4591,6 @@ let BattleFormatsData = {
 	},
 	zamazentacrowned: {
 		randomBattleMoves: ["behemothbash", "closecombat", "crunch", "psychicfangs"],
-		requiredItem: "Rusted Shield",
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -4977,7 +4803,6 @@ let BattleFormatsData = {
 		tier: "CAP",
 	},
 	crucibellemega: {
-		requiredItem: "Crucibellite",
 		isNonstandard: "CAP",
 		gen: 6,
 		tier: "CAP",

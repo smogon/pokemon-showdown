@@ -1080,6 +1080,12 @@ interface TemplateData {
 	otherForms?: string[];
 	otherFormes?: string[];
 	prevo?: string;
+	requiredAbility?: string;
+	requiredItem?: string;
+	requiredItems?: string[];
+	requiredMove?: string;
+	battleOnly?: string | string[];
+	isGigantamax?: string;
 	inheritsFrom?: string;
 }
 
@@ -1088,23 +1094,17 @@ interface ModdedTemplateData extends Partial<TemplateData> {
 }
 
 interface TemplateFormatsData {
-	battleOnly?: boolean;
 	comboMoves?: readonly string[];
 	doublesTier?: string;
 	essentialMove?: string;
 	exclusiveMoves?: readonly string[];
 	gen?: number;
-	isGigantamax?: string;
 	isNonstandard?: Nonstandard | null;
 	isUnreleased?: boolean | 'Past';
 	maleOnlyHidden?: boolean;
 	randomBattleMoves?: readonly string[];
 	randomDoubleBattleMoves?: readonly string[];
 	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
-	requiredAbility?: string;
-	requiredItem?: string;
-	requiredItems?: string[];
-	requiredMove?: string;
 	tier?: string;
 	unreleasedHidden?: boolean | 'Past';
 }

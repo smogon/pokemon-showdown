@@ -1415,15 +1415,12 @@ let BattleFormatsData = {
 		tier: "NU",
 	},
 	castformsunny: {
-		battleOnly: true,
 		randomBattleMoves: ["sunnyday", "thunderbolt", "icebeam", "flamethrower", "solarbeam"],
 	},
 	castformrainy: {
-		battleOnly: true,
 		randomBattleMoves: ["raindance", "thunder", "weatherball", "icebeam"],
 	},
 	castformsnowy: {
-		battleOnly: true,
 		randomBattleMoves: ["hail", "thunderbolt", "flamethrower", "blizzard"],
 	},
 	kecleon: {

@@ -1784,15 +1784,11 @@ let BattleFormatsData = {
 	},
 	castformsunny: {
 		randomBattleMoves: ["icebeam", "solarbeam", "sunnyday", "weatherball"],
-		battleOnly: true,
 	},
 	castformrainy: {
 		randomBattleMoves: ["icebeam", "raindance", "thunder", "weatherball"],
-		battleOnly: true,
 	},
-	castformsnowy: {
-		battleOnly: true,
-	},
+	castformsnowy: {},
 	kecleon: {
 		randomBattleMoves: ["foulplay", "recover", "stealthrock", "thunderwave", "toxic"],
 		tier: "NU",
@@ -2157,7 +2153,6 @@ let BattleFormatsData = {
 	},
 	cherrimsunshine: {
 		randomBattleMoves: ["naturepower", "solarbeam", "sunnyday", "weatherball"],
-		battleOnly: true,
 	},
 	shellos: {
 		tier: "LC",
@@ -2369,7 +2364,6 @@ let BattleFormatsData = {
 	},
 	giratinaorigin: {
 		randomBattleMoves: ["dracometeor", "dragontail", "earthquake", "hiddenpowerfire", "rest", "shadowsneak", "sleeptalk", "willowisp"],
-		requiredItem: "Griseous Orb",
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -2416,67 +2410,51 @@ let BattleFormatsData = {
 	},
 	arceusbug: {
 		randomBattleMoves: ["earthquake", "recover", "stoneedge", "swordsdance", "xscissor"],
-		requiredItem: "Insect Plate",
 	},
 	arceusdark: {
 		randomBattleMoves: ["calmmind", "judgment", "recover", "refresh"],
-		requiredItem: "Dread Plate",
 	},
 	arceusdragon: {
 		randomBattleMoves: ["earthquake", "extremespeed", "outrage", "recover", "swordsdance"],
-		requiredItem: "Draco Plate",
 	},
 	arceuselectric: {
 		randomBattleMoves: ["calmmind", "icebeam", "judgment", "recover", "substitute"],
-		requiredItem: "Zap Plate",
 	},
 	arceusfighting: {
 		randomBattleMoves: ["calmmind", "darkpulse", "icebeam", "judgment", "recover", "toxic"],
-		requiredItem: "Fist Plate",
 	},
 	arceusfire: {
 		randomBattleMoves: ["calmmind", "fireblast", "flamethrower", "recover", "thunderbolt"],
-		requiredItem: "Flame Plate",
 	},
 	arceusflying: {
 		randomBattleMoves: ["calmmind", "focusblast", "judgment", "recover", "substitute"],
-		requiredItem: "Sky Plate",
 	},
 	arceusghost: {
 		randomBattleMoves: ["calmmind", "focusblast", "judgment", "recover", "roar", "willowisp"],
-		requiredItem: "Spooky Plate",
 	},
 	arceusgrass: {
 		randomBattleMoves: ["calmmind", "earthpower", "icebeam", "judgment", "recover", "stealthrock", "thunderwave"],
-		requiredItem: "Meadow Plate",
 	},
 	arceusground: {
 		randomBattleMoves: ["earthquake", "recover", "stoneedge", "swordsdance", "willowisp"],
-		requiredItem: "Earth Plate",
 	},
 	arceusice: {
 		randomBattleMoves: ["calmmind", "focusblast", "icebeam", "judgment", "recover", "thunderbolt"],
-		requiredItem: "Icicle Plate",
 	},
 	arceuspoison: {
 		randomBattleMoves: ["calmmind", "focusblast", "icebeam", "recover", "sludgebomb", "stealthrock", "willowisp"],
-		requiredItem: "Toxic Plate",
 	},
 	arceuspsychic: {
 		randomBattleMoves: ["calmmind", "focusblast", "icebeam", "psyshock", "recover", "willowisp"],
-		requiredItem: "Mind Plate",
 	},
 	arceusrock: {
 		randomBattleMoves: ["earthquake", "stoneedge", "swordsdance", "recover"],
-		requiredItem: "Stone Plate",
 	},
 	arceussteel: {
 		randomBattleMoves: ["calmmind", "icebeam", "judgment", "recover", "roar", "willowisp"],
-		requiredItem: "Iron Plate",
 	},
 	arceuswater: {
 		randomBattleMoves: ["calmmind", "fireblast", "icebeam", "judgment", "recover"],
-		requiredItem: "Splash Plate",
 	},
 	victini: {
 		inherit: true,
@@ -3194,8 +3172,6 @@ let BattleFormatsData = {
 	},
 	meloettapirouette: {
 		randomBattleMoves: ["closecombat", "hiddenpowerice", "psychic", "relicsong", "shadowball"],
-		requiredMove: "Relic Song",
-		battleOnly: true,
 	},
 	genesect: {
 		inherit: true,
