@@ -20,7 +20,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			Monitor.crashlog(err, 'The gen 4 randbat set generator');
 		}
 
-		if (template.battleOnly) species = this.dex.getOutOfBattleSpecies(template);
+		if (template.battleOnly) species = /** @type {string} */ (template.battleOnly);
 
 		// @ts-ignore
 		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();

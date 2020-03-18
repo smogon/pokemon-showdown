@@ -625,7 +625,7 @@ class RandomTeams {
 
 		if (template.battleOnly && !template.isGigantamax) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			species = this.dex.getOutOfBattleSpecies(template);
+			species = /** @type {string} */ (template.battleOnly);
 		}
 
 		const randMoves = !isDoubles ? template.randomBattleMoves : (template.randomDoubleBattleMoves || template.randomBattleMoves);
@@ -1379,7 +1379,7 @@ class RandomTeams {
 			if (isMonotype) {
 				if (template.types.indexOf(type) < 0) continue;
 				if (template.battleOnly) {
-					template = this.dex.getTemplate(this.dex.getOutOfBattleSpecies(template));
+					template = this.dex.getTemplate(/** @type {string} */ (template.battleOnly));
 					if (template.types.indexOf(type) < 0) continue;
 				}
 			}
