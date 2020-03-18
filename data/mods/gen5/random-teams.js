@@ -26,6 +26,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			species = this.dex.getOutOfBattleSpecies(template);
 		}
 
+		// @ts-ignore
 		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
 		let rejectedPool = [];
 		/**@type {string[]} */

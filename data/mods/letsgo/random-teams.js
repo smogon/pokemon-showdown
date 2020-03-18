@@ -24,6 +24,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			species = this.dex.getOutOfBattleSpecies(template);
 		}
 
+		// @ts-ignore
 		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
 		/**@type {string[]} */
 		let moves = [];

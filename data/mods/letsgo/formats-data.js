@@ -4,9 +4,6 @@
 let BattleFormatsData = {
 	bulbasaur: {
 		inherit: true,
-		eventPokemon: [
-			{"generation": 7, "level": 12, "shiny": 1, "ivs": {hp: 31, atk: 25, def: 30, spa: 25, spd: 30, spe: 25}, "moves": ["leechseed", "vinewhip", "growl", "tackle"], "pokeball": "pokeball"},
-		],
 		tier: "LC",
 	},
 	ivysaur: {
@@ -27,9 +24,6 @@ let BattleFormatsData = {
 	},
 	charmander: {
 		inherit: true,
-		eventPokemon: [
-			{"generation": 7, "level": 14, "shiny": 1, "ivs": {hp: 25, atk: 30, def: 25, spa: 30, spd: 25, spe: 31}, "moves": ["ember", "smokescreen", "growl", "scratch"], "pokeball": "pokeball"},
-		],
 		tier: "LC",
 	},
 	charmeleon: {
@@ -56,9 +50,6 @@ let BattleFormatsData = {
 	},
 	squirtle: {
 		inherit: true,
-		eventPokemon: [
-			{"generation": 7, "level": 16, "shiny": 1, "ivs": {hp: 25, atk: 25, def: 30, spa: 31, spd: 30, spe: 25}, "moves": ["withdraw", "bubble", "tailwhip", "tackle"], "pokeball": "pokeball"},
-		],
 		tier: "LC",
 	},
 	wartortle: {
@@ -357,9 +348,6 @@ let BattleFormatsData = {
 	persian: {
 		inherit: true,
 		randomBattleMoves: ["fakeout", "uturn", "taunt", "headbutt", "playrough"],
-		eventPokemon: [
-			{"generation": 7, "level": 16, "shiny": 1, "ivs": {hp: 30, atk: 30, def: 25, spa: 25, spd: 25, spe: 31}, "moves": ["feint", "payday", "taunt", "fakeout"], "pokeball": "pokeball"},
-		],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
@@ -396,9 +384,6 @@ let BattleFormatsData = {
 	arcanine: {
 		inherit: true,
 		randomBattleMoves: ["flareblitz", "willowisp", "crunch", "playrough", "superpower"],
-		eventPokemon: [
-			{"generation": 7, "level": 16, "shiny": 1, "ivs": {hp: 25, atk: 30, def: 25, spa: 30, spd: 25, spe: 31}, "moves": ["roar", "leer", "ember", "doubleedge"], "pokeball": "pokeball"},
-		],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -642,17 +627,11 @@ let BattleFormatsData = {
 	},
 	voltorb: {
 		inherit: true,
-		eventPokemon: [
-			{"generation": 7, "level": 42, "shiny": 1, "perfectIVs": 3, "moves": ["mirrorcoat", "thunderbolt", "swift", "selfdestruct"]},
-		],
 		tier: "LC",
 	},
 	electrode: {
 		inherit: true,
 		randomBattleMoves: ["thunderbolt", "taunt", "thunderwave", "explosion", "reflect", "lightscreen"],
-		eventPokemon: [
-			{"generation": 7, "level": 42, "shiny": 1, "perfectIVs": 3, "moves": ["thunderbolt", "screech", "selfdestruct", "swift"]},
-		],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
@@ -691,18 +670,12 @@ let BattleFormatsData = {
 	hitmonlee: {
 		inherit: true,
 		randomBattleMoves: ["highjumpkick", "earthquake", "bulkup", "rockslide", "poisonjab"],
-		eventPokemon: [
-			{"generation": 7, "level": 30, "shiny": 1, "ivs": {hp: 25, atk: 30, def: 25, spa: 25, spd: 30, spe: 31}, "moves": ["jumpkick", "facade", "brickbreak", "feint"], "pokeball": "pokeball"},
-		],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
 	hitmonchan: {
 		inherit: true,
 		randomBattleMoves: ["icepunch", "thunderpunch", "brickbreak", "firepunch", "earthquake", "bulkup"],
-		eventPokemon: [
-			{"generation": 7, "level": 30, "shiny": 1, "ivs": {hp: 25, atk: 31, def: 30, spa: 25, spd: 30, spe: 25}, "moves": ["firepunch", "icepunch", "thunderpunch", "dizzypunch"], "pokeball": "pokeball"},
-		],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
@@ -735,9 +708,6 @@ let BattleFormatsData = {
 	chansey: {
 		inherit: true,
 		randomBattleMoves: ["softboiled", "seismictoss", "toxic", "stealthrock", "teleport"],
-		eventPokemon: [
-			{"generation": 7, "level": 1, "gender": "F", "nature": "Mild", "moves": ["celebrate", "pound"], "pokeball": "cherishball"},
-		],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -839,9 +809,6 @@ let BattleFormatsData = {
 	},
 	magikarp: {
 		inherit: true,
-		eventPokemon: [
-			{"generation": 7, "level": 5, "shiny": 1, "ivs": {hp: 30, atk: 31, def: 25, spa: 25, spd: 25, spe: 31}, "moves": ["splash"], "pokeball": "pokeball"},
-		],
 		tier: "LC",
 	},
 	gyarados: {
@@ -859,9 +826,6 @@ let BattleFormatsData = {
 	lapras: {
 		inherit: true,
 		randomBattleMoves: ["icebeam", "thunderbolt", "surf", "hydropump", "toxic"],
-		eventPokemon: [
-			{"generation": 7, "level": 34, "shiny": 1, "ivs": {hp: 31, atk: 25, def: 25, spa: 30, spd: 30, spe: 25}, "moves": ["bodyslam", "confuseray", "iceshard", "mist"], "pokeball": "pokeball"},
-		],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
@@ -903,17 +867,11 @@ let BattleFormatsData = {
 	porygon: {
 		inherit: true,
 		randomBattleMoves: ["triattack", "recover", "icebeam", "toxic", "psychic"],
-		eventPokemon: [
-			{"generation": 7, "level": 34, "shiny": 1, "ivs": {hp: 25, atk: 25, def: 30, spa: 31, spd: 30, spe: 25}, "moves": ["conversion", "thunderwave", "triattack", "barrier"], "pokeball": "pokeball"},
-		],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
 	omanyte: {
 		inherit: true,
-		eventPokemon: [
-			{"generation": 7, "level": 44, "shiny": 1, "perfectIVs": 3, "moves": ["hydropump", "rockslide", "protect", "rockthrow"], "pokeball": "pokeball"},
-		],
 		tier: "LC",
 	},
 	omastar: {
@@ -924,9 +882,6 @@ let BattleFormatsData = {
 	},
 	kabuto: {
 		inherit: true,
-		eventPokemon: [
-			{"generation": 7, "level": 44, "shiny": 1, "perfectIVs": 3, "moves": ["rockslide", "sandattack", "rockthrow", "aquajet"], "pokeball": "pokeball"},
-		],
 		tier: "LC",
 	},
 	kabutops: {
@@ -938,9 +893,6 @@ let BattleFormatsData = {
 	aerodactyl: {
 		inherit: true,
 		randomBattleMoves: [],
-		eventPokemon: [
-			{"generation": 7, "level": 44, "shiny": 1, "perfectIVs": 3, "moves": ["rockslide", "crunch", "rockthrow", "agility"], "pokeball": "pokeball"},
-		],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -953,40 +905,24 @@ let BattleFormatsData = {
 	snorlax: {
 		inherit: true,
 		randomBattleMoves: ["earthquake", "bodyslam", "rest", "crunch", "toxic"],
-		eventPokemon: [
-			{"generation": 7, "level": 34, "shiny": 1, "perfectIVs": 3, "moves": ["rest", "headbutt", "lick", "yawn"]},
-			{"generation": 7, "level": 34, "shiny": 1, "perfectIVs": 3, "moves": ["rest", "headbutt", "lick", "yawn"]},
-		],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	articuno: {
 		inherit: true,
 		randomBattleMoves: ["icebeam", "roost", "toxic", "uturn", "substitute"],
-		eventPokemon: [
-			{"generation": 7, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["reflect", "agility", "icebeam", "mirrorcoat"]},
-		],
-		eventOnly: false,
 		tier: "UU",
 		doublesTier: "DOU",
 	},
 	zapdos: {
 		inherit: true,
 		randomBattleMoves: ["thunderbolt", "roost", "uturn", "toxic", "drillpeck"],
-		eventPokemon: [
-			{"generation": 7, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["lightscreen", "agility", "thunderbolt", "drillpeck"]},
-		],
-		eventOnly: false,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
 	moltres: {
 		inherit: true,
 		randomBattleMoves: ["roost", "airslash", "flamethrower", "fireblast", "willowisp", "uturn"],
-		eventPokemon: [
-			{"generation": 7, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["heatwave", "agility", "flamethrower", "airslash"]},
-		],
-		eventOnly: false,
 		tier: "UU",
 		doublesTier: "DOU",
 	},
@@ -1007,9 +943,6 @@ let BattleFormatsData = {
 	mewtwo: {
 		inherit: true,
 		randomBattleMoves: [],
-		eventPokemon: [
-			{"generation": 7, "level": 70, "shiny": 1, "perfectIVs": 3, "moves": ["psychic", "recover", "amnesia", "swift"]},
-		],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -1028,9 +961,6 @@ let BattleFormatsData = {
 	mew: {
 		inherit: true,
 		randomBattleMoves: ["roost", "psychic", "willowisp", "flamethrower", "stealthrock", "nastyplot"],
-		eventPokemon: [
-			{"generation": 7, "level": 1, "perfectIVs": 3, "moves": ["pound"], "pokeball": "pokeball"},
-		],
 		tier: "OU",
 		doublesTier: "DOU",
 	},

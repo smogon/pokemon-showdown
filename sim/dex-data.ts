@@ -494,6 +494,30 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect & Abili
 	}
 }
 
+export class Learnset {
+	readonly effectType: 'Learnset';
+	/**
+	 * Keeps track of exactly how a pokemon might learn a move, in the
+	 * form moveid:sources[].
+	 */
+	readonly learnset?: {[moveid: string]: MoveSource[]};
+	/** True if the only way to get this Pokemon is from events. */
+	readonly eventOnly: boolean;
+	/** List of event data for each event. */
+	readonly eventData?: EventInfo[];
+	readonly encounters?: EventInfo[];
+	readonly exists: boolean;
+
+	constructor(data: AnyObject) {
+		this.exists = true;
+		this.effectType = 'Learnset';
+		this.learnset = data.learnset || undefined;
+		this.eventOnly = !!data.eventOnly;
+		this.eventData = data.eventData || undefined;
+		this.encounters = data.encounters || undefined;
+	}
+}
+
 export class Template extends BasicEffect implements Readonly<BasicEffect & TemplateData & TemplateFormatsData> {
 	readonly effectType: 'Pokemon';
 	/**
@@ -607,11 +631,6 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly requiredItems?: string[];
 
 	/**
-	 * Keeps track of exactly how a pokemon might learn a move, in the
-	 * form moveid:sources[].
-	 */
-	readonly learnset?: {[moveid: string]: MoveSource[]};
-	/**
 	 * Formes that can transform into this Pokemon, to inherit learnsets
 	 * from. (Like `prevo`, but for transformations that aren't
 	 * technically evolution. Includes in-battle transformations like
@@ -621,10 +640,6 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * for in-battle formes.
 	 */
 	readonly inheritsFrom: ID;
-	/** True if the only way to get this pokemon is from events. */
-	readonly eventOnly: boolean;
-	/** List of event data for each event. */
-	readonly eventPokemon?: EventInfo[];
 
 	/**
 	 * Singles Tier. The Pokemon's location in the Smogon tier system.
@@ -686,9 +701,6 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.unreleasedHidden = data.unreleasedHidden || false;
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
-		this.learnset = data.learnset || undefined;
-		this.eventOnly = !!data.eventOnly;
-		this.eventPokemon = data.eventPokemon || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 		this.isGigantamax = data.isGigantamax || undefined;
 		this.battleOnly = !!data.battleOnly || !!this.isMega || !!this.isGigantamax || undefined;

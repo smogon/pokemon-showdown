@@ -435,7 +435,7 @@ export const commands: ChatCommands = {
 		await FS('data/learnsets.js').write(`'use strict';\n\nexports.BattleLearnsets = {\n` +
 			Object.entries(Dex.data.Learnsets).map(([speciesid, entry]) => (
 				`\t${speciesid}: {learnset: {\n` +
-				Object.entries(entry.learnset).sort(
+				Object.entries(Dex.getLearnsetData(speciesid as ID)).sort(
 					(a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
 				).map(([moveid, sources]) => (
 					`\t\t${moveid}: ["` + sources.join(`", "`) + `"],\n`

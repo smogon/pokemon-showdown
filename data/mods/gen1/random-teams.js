@@ -25,7 +25,8 @@ class RandomGen1Teams extends RandomGen2Teams {
 		for (let id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
 			let template = this.dex.getTemplate(id);
-			if (!template.learnset || template.forme) continue;
+			let lsetData = this.dex.getLearnsetData(/** @type {ID} */ (id));
+			if (!lsetData.learnset || template.forme) continue;
 			formes[hasDexNumber[template.num]].push(template.species);
 			if (++formeCounter >= 6) {
 				// Gen 1 had no alternate formes, so we can break out of the loop already.
@@ -37,6 +38,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Choose forme.
 			let poke = this.sample(formes[i]);
 			let template = this.dex.getTemplate(poke);
+			let lsetData = this.dex.getLearnsetData(template.speciesid);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
 			let mbstmin = 1307;
@@ -88,10 +90,10 @@ class RandomGen1Teams extends RandomGen2Teams {
 			let moves;
 			/**@type {string[]} */
 			let pool = [];
-			if (template.learnset) {
-				for (let move in template.learnset) {
+			if (lsetData.learnset) {
+				for (let move in lsetData.learnset) {
 					if (this.dex.getMove(move).gen !== 1) continue;
-					if (template.learnset[move].some(learned => learned[0] === '1')) {
+					if (lsetData.learnset[move].some(learned => learned[0] === '1')) {
 						pool.push(move);
 					}
 				}

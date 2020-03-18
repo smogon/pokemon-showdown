@@ -1983,19 +1983,16 @@ let BattleFormatsData = {
 	},
 	deoxysattack: {
 		randomBattleMoves: ["extremespeed", "hiddenpowerfire", "icebeam", "psychoboost", "superpower", "stealthrock"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
 	deoxysdefense: {
 		randomBattleMoves: ["magiccoat", "recover", "seismictoss", "spikes", "taunt", "toxic"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
 	deoxysspeed: {
 		randomBattleMoves: ["icebeam", "lightscreen", "magiccoat", "psychoboost", "reflect", "spikes", "stealthrock", "superpower", "taunt"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
@@ -2372,7 +2369,6 @@ let BattleFormatsData = {
 	},
 	giratinaorigin: {
 		randomBattleMoves: ["dracometeor", "dragontail", "earthquake", "hiddenpowerfire", "rest", "shadowsneak", "sleeptalk", "willowisp"],
-		eventOnly: true,
 		requiredItem: "Griseous Orb",
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -2409,7 +2405,6 @@ let BattleFormatsData = {
 	},
 	shayminsky: {
 		randomBattleMoves: ["airslash", "earthpower", "hiddenpowerfire", "hiddenpowerice", "leechseed", "seedflare", "substitute"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DOU",
 	},
@@ -2421,82 +2416,66 @@ let BattleFormatsData = {
 	},
 	arceusbug: {
 		randomBattleMoves: ["earthquake", "recover", "stoneedge", "swordsdance", "xscissor"],
-		eventOnly: true,
 		requiredItem: "Insect Plate",
 	},
 	arceusdark: {
 		randomBattleMoves: ["calmmind", "judgment", "recover", "refresh"],
-		eventOnly: true,
 		requiredItem: "Dread Plate",
 	},
 	arceusdragon: {
 		randomBattleMoves: ["earthquake", "extremespeed", "outrage", "recover", "swordsdance"],
-		eventOnly: true,
 		requiredItem: "Draco Plate",
 	},
 	arceuselectric: {
 		randomBattleMoves: ["calmmind", "icebeam", "judgment", "recover", "substitute"],
-		eventOnly: true,
 		requiredItem: "Zap Plate",
 	},
 	arceusfighting: {
 		randomBattleMoves: ["calmmind", "darkpulse", "icebeam", "judgment", "recover", "toxic"],
-		eventOnly: true,
 		requiredItem: "Fist Plate",
 	},
 	arceusfire: {
 		randomBattleMoves: ["calmmind", "fireblast", "flamethrower", "recover", "thunderbolt"],
-		eventOnly: true,
 		requiredItem: "Flame Plate",
 	},
 	arceusflying: {
 		randomBattleMoves: ["calmmind", "focusblast", "judgment", "recover", "substitute"],
-		eventOnly: true,
 		requiredItem: "Sky Plate",
 	},
 	arceusghost: {
 		randomBattleMoves: ["calmmind", "focusblast", "judgment", "recover", "roar", "willowisp"],
-		eventOnly: true,
 		requiredItem: "Spooky Plate",
 	},
 	arceusgrass: {
 		randomBattleMoves: ["calmmind", "earthpower", "icebeam", "judgment", "recover", "stealthrock", "thunderwave"],
-		eventOnly: true,
 		requiredItem: "Meadow Plate",
 	},
 	arceusground: {
 		randomBattleMoves: ["earthquake", "recover", "stoneedge", "swordsdance", "willowisp"],
-		eventOnly: true,
 		requiredItem: "Earth Plate",
 	},
 	arceusice: {
 		randomBattleMoves: ["calmmind", "focusblast", "icebeam", "judgment", "recover", "thunderbolt"],
-		eventOnly: true,
 		requiredItem: "Icicle Plate",
 	},
 	arceuspoison: {
 		randomBattleMoves: ["calmmind", "focusblast", "icebeam", "recover", "sludgebomb", "stealthrock", "willowisp"],
-		eventOnly: true,
 		requiredItem: "Toxic Plate",
 	},
 	arceuspsychic: {
 		randomBattleMoves: ["calmmind", "focusblast", "icebeam", "psyshock", "recover", "willowisp"],
-		eventOnly: true,
 		requiredItem: "Mind Plate",
 	},
 	arceusrock: {
 		randomBattleMoves: ["earthquake", "stoneedge", "swordsdance", "recover"],
-		eventOnly: true,
 		requiredItem: "Stone Plate",
 	},
 	arceussteel: {
 		randomBattleMoves: ["calmmind", "icebeam", "judgment", "recover", "roar", "willowisp"],
-		eventOnly: true,
 		requiredItem: "Iron Plate",
 	},
 	arceuswater: {
 		randomBattleMoves: ["calmmind", "fireblast", "icebeam", "judgment", "recover"],
-		eventOnly: true,
 		requiredItem: "Splash Plate",
 	},
 	victini: {
@@ -3146,7 +3125,6 @@ let BattleFormatsData = {
 	},
 	tornadustherian: {
 		randomBattleMoves: ["focusblast", "heatwave", "hurricane", "superpower", "uturn"],
-		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
@@ -3158,7 +3136,6 @@ let BattleFormatsData = {
 	},
 	thundurustherian: {
 		randomBattleMoves: ["agility", "focusblast", "grassknot", "hiddenpowerice", "nastyplot", "thunderbolt"],
-		eventOnly: true,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -3182,7 +3159,6 @@ let BattleFormatsData = {
 	},
 	landorustherian: {
 		randomBattleMoves: ["earthquake", "hiddenpowerice", "rockpolish", "stealthrock", "stoneedge", "swordsdance", "superpower", "uturn"],
-		eventOnly: true,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
