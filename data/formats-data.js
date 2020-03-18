@@ -141,7 +141,6 @@ let BattleFormatsData = {
 	},
 	pichuspikyeared: {
 		isNonstandard: "Past",
-		gen: 4,
 		tier: "Illegal",
 	},
 	pikachu: {
@@ -150,66 +149,53 @@ let BattleFormatsData = {
 	},
 	pikachucosplay: {
 		isNonstandard: "Past",
-		gen: 6,
 		tier: "Illegal",
 	},
 	pikachurockstar: {
 		isNonstandard: "Past",
-		gen: 6,
 		tier: "Illegal",
 	},
 	pikachubelle: {
 		isNonstandard: "Past",
-		gen: 6,
 		tier: "Illegal",
 	},
 	pikachupopstar: {
 		isNonstandard: "Past",
-		gen: 6,
 		tier: "Illegal",
 	},
 	pikachuphd: {
 		isNonstandard: "Past",
-		gen: 6,
 		tier: "Illegal",
 	},
 	pikachulibre: {
 		isNonstandard: "Past",
-		gen: 6,
 		tier: "Illegal",
 	},
 	pikachuoriginal: {
-		gen: 7,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	pikachuhoenn: {
-		gen: 7,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	pikachusinnoh: {
-		gen: 7,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	pikachuunova: {
-		gen: 7,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	pikachukalos: {
-		gen: 7,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	pikachualola: {
-		gen: 7,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	pikachupartner: {
-		gen: 7,
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -3323,7 +3309,6 @@ let BattleFormatsData = {
 	},
 	greninjaash: {
 		isNonstandard: "Past",
-		gen: 7,
 		tier: "Illegal",
 	},
 	bunnelby: {
@@ -3613,12 +3598,10 @@ let BattleFormatsData = {
 	},
 	zygarde10: {
 		isNonstandard: "Past",
-		gen: 7,
 		tier: "Illegal",
 	},
 	zygardecomplete: {
 		isNonstandard: "Past",
-		gen: 7,
 		tier: "Illegal",
 	},
 	diancie: {
@@ -4609,372 +4592,298 @@ let BattleFormatsData = {
 	},
 	syclar: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP LC",
 	},
 	syclant: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	revenankh: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	embirch: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP LC",
 	},
 	flarelm: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP NFE",
 	},
 	pyroak: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	breezi: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP LC",
 	},
 	fidgit: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	rebble: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP LC",
 	},
 	tactite: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP NFE",
 	},
 	stratagem: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	privatyke: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP LC",
 	},
 	arghonaut: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	kitsunoh: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	cyclohm: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	colossoil: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	krilowatt: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	voodoll: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP LC",
 	},
 	voodoom: {
 		isNonstandard: "CAP",
-		gen: 4,
 		tier: "CAP",
 	},
 	scratchet: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP LC",
 	},
 	tomohawk: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP",
 	},
 	necturine: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP LC",
 	},
 	necturna: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP",
 	},
 	mollux: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP",
 	},
 	cupra: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP LC",
 	},
 	argalis: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP NFE",
 	},
 	aurumoth: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP",
 	},
 	brattler: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP LC",
 	},
 	malaconda: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP",
 	},
 	cawdet: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP LC",
 	},
 	cawmodore: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP",
 	},
 	volkritter: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP LC",
 	},
 	volkraken: {
 		isNonstandard: "CAP",
-		gen: 5,
 		tier: "CAP",
 	},
 	snugglow: {
 		isNonstandard: "CAP",
-		gen: 6,
 		tier: "CAP LC",
 	},
 	plasmanta: {
 		isNonstandard: "CAP",
-		gen: 6,
 		tier: "CAP",
 	},
 	floatoy: {
 		isNonstandard: "CAP",
-		gen: 6,
 		tier: "CAP LC",
 	},
 	caimanoe: {
 		isNonstandard: "CAP",
-		gen: 6,
 		tier: "CAP NFE",
 	},
 	naviathan: {
 		isNonstandard: "CAP",
-		gen: 6,
 		tier: "CAP",
 	},
 	crucibelle: {
 		isNonstandard: "CAP",
-		gen: 6,
 		tier: "CAP",
 	},
 	crucibellemega: {
 		isNonstandard: "CAP",
-		gen: 6,
 		tier: "CAP",
 	},
 	pluffle: {
 		isNonstandard: "CAP",
-		gen: 6,
 		tier: "CAP LC",
 	},
 	kerfluffle: {
 		isNonstandard: "CAP",
-		gen: 6,
 		tier: "CAP",
 	},
 	pajantom: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP",
 	},
 	mumbao: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP LC",
 	},
 	jumbao: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP",
 	},
 	fawnifer: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP LC",
 	},
 	electrelk: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP NFE",
 	},
 	caribolt: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP",
 	},
 	smogecko: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP LC",
 	},
 	smoguana: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP NFE",
 	},
 	smokomodo: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP",
 	},
 	swirlpool: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP LC",
 	},
 	coribalis: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP NFE",
 	},
 	snaelstrom: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP",
 	},
 	equilibra: {
 		isNonstandard: "CAP",
-		gen: 7,
 		tier: "CAP",
 	},
 	pokestarsmeargle: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarufo: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarufo2: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarbrycenman: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarmt: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarmt2: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestartransport: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestargiant: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestargiant2: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarhumanoid: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarmonster: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarf00: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarf002: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarspirit: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarblackdoor: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarwhitedoor: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarblackbelt: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestargiantpropo2: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 	pokestarufopropu2: {
 		isNonstandard: "Custom",
-		gen: 5,
 		tier: "Illegal",
 	},
 };

@@ -4779,7 +4779,6 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	zygardecomplete: {
-		gen: 7,
 		tier: "Uber",
 		doublesTier: "DUber",
 	},

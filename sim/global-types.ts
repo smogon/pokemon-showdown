@@ -1080,6 +1080,7 @@ interface TemplateData {
 	otherForms?: string[];
 	otherFormes?: string[];
 	prevo?: string;
+	gen?: number;
 	requiredAbility?: string;
 	requiredItem?: string;
 	requiredItems?: string[];
@@ -1098,7 +1099,6 @@ interface TemplateFormatsData {
 	doublesTier?: string;
 	essentialMove?: string;
 	exclusiveMoves?: readonly string[];
-	gen?: number;
 	isNonstandard?: Nonstandard | null;
 	isUnreleased?: boolean | 'Past';
 	maleOnlyHidden?: boolean;
