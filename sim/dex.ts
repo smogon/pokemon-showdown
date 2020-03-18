@@ -1414,10 +1414,10 @@ export class ModdedDex {
 			const dataObject = require(filePath);
 			const key = `Battle${dataType}`;
 			if (!dataObject || typeof dataObject !== 'object') {
-				return new TypeError(`${filePath}, if it exists, must export a non-null object`);
+				throw new TypeError(`${filePath}, if it exists, must export a non-null object`);
 			}
-			if (!dataObject[key] || typeof dataObject[key] !== 'object') {
-				return new TypeError(`${filePath}, if it exists, must export an object whose '${key}' property is a non-null object`);
+			if (dataObject[key]?.constructor?.name !== 'Object') {
+				throw new TypeError(`${filePath}, if it exists, must export an object whose '${key}' property is an Object`);
 			}
 			return dataObject[key];
 		} catch (e) {
@@ -1478,11 +1478,6 @@ export class ModdedDex {
 				continue;
 			}
 			const BattleData = this.loadDataFile(basePath, dataType);
-			if (!BattleData || typeof BattleData !== 'object') {
-				throw new TypeError(
-					`Exported property 'Battle${dataType}'from './data/${DATA_FILES[dataType]}' must be an object except 'null'.`
-				);
-			}
 			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
 			if (dataType === 'Formats' && !parentDex) Object.assign(BattleData, this.formats);
 		}
