@@ -54,7 +54,7 @@ export const State = new class {
 	// of simply initializing it as a const. See isReferable for where this
 	// gets lazily created on demand.
 	// tslint:disable-next-line: ban-types
-	private REFERABLE?: Set<Function>;
+	REFERABLE?: Set<Function>;
 
 	serializeBattle(battle: Battle): /* Battle */ AnyObject {
 		const state: /* Battle */ AnyObject = this.serialize(battle, BATTLE, battle);
@@ -158,7 +158,7 @@ export const State = new class {
 		return this.serialize(field, FIELD, field.battle);
 	}
 
-	private deserializeField(state: /* Field */ AnyObject, field: Field) {
+	deserializeField(state: /* Field */ AnyObject, field: Field) {
 		this.deserialize(state, field, FIELD, field.battle);
 	}
 
@@ -186,7 +186,7 @@ export const State = new class {
 		return state;
 	}
 
-	private deserializeSide(state: /* Side */ AnyObject, side: Side) {
+	deserializeSide(state: /* Side */ AnyObject, side: Side) {
 		this.deserialize(state, side, SIDE, side.battle);
 		for (const [i, pokemon] of state.pokemon.entries()) {
 			this.deserializePokemon(pokemon, side.pokemon[i]);
@@ -206,7 +206,7 @@ export const State = new class {
 		return state;
 	}
 
-	private deserializePokemon(state: /* Pokemon */ AnyObject, pokemon: Pokemon) {
+	deserializePokemon(state: /* Pokemon */ AnyObject, pokemon: Pokemon) {
 		this.deserialize(state, pokemon, POKEMON, pokemon.battle);
 		// @ts-ignore - readonly
 		pokemon.set = state.set;
@@ -230,13 +230,13 @@ export const State = new class {
 		if (state.showCure === undefined) pokemon.showCure = undefined;
 	}
 
-	private serializeChoice(choice: Choice, battle: Battle): /* Choice */ AnyObject {
+	serializeChoice(choice: Choice, battle: Battle): /* Choice */ AnyObject {
 		const state: /* Choice */ AnyObject = this.serialize(choice, CHOICE, battle);
 		state.switchIns = Array.from(choice.switchIns);
 		return state;
 	}
 
-	private deserializeChoice(state: /* Choice */ AnyObject, choice: Choice, battle: Battle) {
+	deserializeChoice(state: /* Choice */ AnyObject, choice: Choice, battle: Battle) {
 		this.deserialize(state, choice, CHOICE, battle);
 		choice.switchIns = new Set(state.switchIns);
 	}
@@ -244,7 +244,7 @@ export const State = new class {
 	// Simply looking for a 'hit' field to determine if an object is an ActiveMove or not seems
 	// pretty fragile, but its no different than what the simulator is doing. We go further and
 	// also check if the object has an 'id', as that's what we will intrepret as the Move.
-	private isActiveMove(obj: AnyObject): obj is ActiveMove {
+	isActiveMove(obj: AnyObject): obj is ActiveMove {
 		return obj.hasOwnProperty('hit') && (obj.hasOwnProperty('id') || obj.hasOwnProperty('move'));
 	}
 
@@ -257,7 +257,7 @@ export const State = new class {
 	// deserialize properly. This is unlikely to be the case, and would probably indicate
 	// a bug in the simulator if it ever happened, but if not, the isActiveMove check can
 	// be extended.
-	private serializeActiveMove(move: ActiveMove, battle: Battle): /* ActiveMove */ AnyObject {
+	serializeActiveMove(move: ActiveMove, battle: Battle): /* ActiveMove */ AnyObject {
 		const base = battle.dex.getMove(move.id);
 		const skip = new Set([...ACTIVE_MOVE]);
 		for (const [key, value] of Object.entries(base)) {
@@ -272,13 +272,13 @@ export const State = new class {
 		return state;
 	}
 
-	private deserializeActiveMove(state: /* ActiveMove */ AnyObject, battle: Battle): ActiveMove {
+	deserializeActiveMove(state: /* ActiveMove */ AnyObject, battle: Battle): ActiveMove {
 		const move = battle.dex.getActiveMove(this.fromRef(state.move, battle)! as Move);
 		this.deserialize(state, move, ACTIVE_MOVE, battle);
 		return move;
 	}
 
-	private serializeWithRefs(obj: unknown, battle: Battle): unknown {
+	serializeWithRefs(obj: unknown, battle: Battle): unknown {
 		switch (typeof obj) {
 		case 'function':
 			return undefined; // elide functions
@@ -319,7 +319,7 @@ export const State = new class {
 		}
 	}
 
-	private deserializeWithRefs(obj: unknown, battle: Battle) {
+	deserializeWithRefs(obj: unknown, battle: Battle) {
 		switch (typeof obj) {
 		case 'undefined':
 		case 'boolean':
@@ -350,7 +350,7 @@ export const State = new class {
 		}
 	}
 
-	private isReferable(obj: object): obj is Referable {
+	isReferable(obj: object): obj is Referable {
 		// NOTE: see explanation on the declaration above for why this must be defined lazily.
 		if (!this.REFERABLE) {
 			this.REFERABLE = new Set([
@@ -361,14 +361,14 @@ export const State = new class {
 		return this.REFERABLE.has(obj.constructor);
 	}
 
-	private toRef(obj: Referable): string {
+	toRef(obj: Referable): string {
 		// Pokemon's 'id' is not only more verbose than a position, it also isn't guaranteed
 		// to be uniquely identifying in custom games without Nickname/Species Clause.
 		const id = obj instanceof Pokemon ? `${obj.side.id}${POSITIONS[obj.position]}` : `${obj.id}`;
 		return `[${obj.constructor.name}${id ? ':' : ''}${id}]`;
 	}
 
-	private fromRef(ref: string, battle: Battle): Referable | undefined {
+	fromRef(ref: string, battle: Battle): Referable | undefined {
 		// References are sort of fragile - we're mostly just counting on there
 		// being a low chance that some string field in a simulator object will not
 		// 'look' like one. However, it also needs to match one of the Referable
@@ -395,7 +395,7 @@ export const State = new class {
 		}
 	}
 
-	private serialize(obj: object, skip: Set<string>, battle: Battle): AnyObject {
+	serialize(obj: object, skip: Set<string>, battle: Battle): AnyObject {
 		const state: AnyObject = {};
 		for (const [key, value] of Object.entries(obj)) {
 			if (skip.has(key)) continue;
@@ -407,7 +407,7 @@ export const State = new class {
 		return state;
 	}
 
-	private deserialize(state: AnyObject, obj: object, skip: Set<string>, battle: Battle) {
+	deserialize(state: AnyObject, obj: object, skip: Set<string>, battle: Battle) {
 		for (const [key, value] of Object.entries(state)) {
 			if (skip.has(key)) continue;
 			// @ts-ignore - index signature
