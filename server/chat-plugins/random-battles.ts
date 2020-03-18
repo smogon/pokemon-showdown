@@ -118,6 +118,17 @@ function getGSCMoves(template: string | Template) {
 	return buf;
 }
 
+function getLetsGoMoves(template: string | Template) {
+	template = Dex.getTemplate(template);
+	const isLetsGoLegal = (
+		(template.num <= 151 || ['Meltan', 'Melmetal'].includes(template.name)) &&
+		(!template.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme))
+	);
+	if (!isLetsGoLegal) return false;
+	if (!template.randomBattleMoves || !template.randomBattleMoves.length) return false;
+	return template.randomBattleMoves.map(formatMove).join(`, `);
+}
+
 function battleFactorySets(template: string | Template, tier: string | null, gen = 'gen7', isBSS = false) {
 	template = Dex.getTemplate(template);
 	if (template.battleOnly) template = Dex.getTemplate(Dex.getOutOfBattleSpecies(template));
@@ -240,20 +251,28 @@ export const commands: ChatCommands = {
 		if (!template.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		const formatName = dex.getFormat(`gen${dex.gen}randombattle`).name;
+		let formatName = dex.getFormat(`gen${dex.gen}randombattle`).name;
 		if (toID(args[1]) === 'gen1') {
 			const rbyMoves = getRBYMoves(template);
 			if (!rbyMoves) {
-				return this.errorReply(`${template.species} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
+				return this.errorReply(`Error: ${template.species} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${rbyMoves}`);
 		}
 		if (toID(args[1]) === 'gen2') {
 			const gscMoves = getGSCMoves(template);
 			if (!gscMoves) {
-				return this.errorReply(`${template.species} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
+				return this.errorReply(`Error: ${template.species} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${gscMoves}`);
+		}
+		if (toID(args[1]) === 'letsgo') {
+			formatName = `[Gen 7 Let's Go] Random Battle`;
+			const lgpeMoves = getLetsGoMoves(template);
+			if (!lgpeMoves) {
+				return this.errorReply(`Error: ${template.species} has no Random Battle data in [Gen 7 Let's Go]`);
+			}
+			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${lgpeMoves}`);
 		}
 		if (!template.randomBattleMoves) {
 			return this.errorReply(`Error: No moves data found for ${template.species}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
