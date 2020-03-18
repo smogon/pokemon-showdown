@@ -327,23 +327,6 @@ let Formats = [
 		minSourceGen: 8,
 	},
 	{
-		name: "[Gen 8] Battle Stadium Doubles",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658057/">BSD Discussion</a>`,
-		],
-
-		mod: 'gen8',
-		gameType: 'doubles',
-		forcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Standard GBU'],
-		banlist: ['Copperajah-Gmax', 'Duraludon-Gmax', 'Garbodor-Gmax', 'Gengar-Gmax', 'Machamp-Gmax'],
-		minSourceGen: 8,
-	},
-	{
 		name: "[Gen 8] Galar Newcomers",
 		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3658774">Galar Newcomers</a>`],
 
