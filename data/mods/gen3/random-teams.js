@@ -509,11 +509,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 			ability = ability0.name;
 		}
 
-		if (template.requiredItems) {
-			item = this.sample(template.requiredItems);
-
 		// First, the extra high-priority items
-		} else if (template.species === 'Farfetch\'d') {
+		if (template.species === 'Farfetch\'d') {
 			item = 'Stick';
 		} else if (template.species === 'Marowak') {
 			item = 'Thick Club';

@@ -490,8 +490,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		item = 'Leftovers';
-		if (template.requiredItems) {
-			item = this.sample(template.requiredItems);
+		if (template.requiredItem) {
+			item = template.requiredItem;
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Marowak') {
