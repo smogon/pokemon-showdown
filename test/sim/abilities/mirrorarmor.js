@@ -29,15 +29,13 @@ describe("Mirror Armor", function () {
 	});
 
 	it.skip("should reflect Parting Shot's stat drops, then the Parting Shot user should switch", function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
+		battle = common.createBattle([[
 			{species: 'Corviknight', ability: 'mirrorarmor', moves: ['sleeptalk']},
-		]});
-		battle.setPlayer('p2', {team: [
+		], [
 			{species: 'Drapion', moves: ['partingshot']},
 			{species: 'Pangoro', moves: ['sleeptalk']},
-		]});
-		battle.makeChoices('auto', 'auto');
+		]]);
+		battle.makeChoices();
 		const corv = battle.p1.active[0];
 		const drapion = battle.p2.active[0];
 		assert.statStage(corv, 'atk', 0);
