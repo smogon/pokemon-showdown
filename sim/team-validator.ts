@@ -19,7 +19,7 @@ import {Dex} from './dex';
  *
  * - E = egg, 3rd char+ is the father in gen 2-5, empty in gen 6-7
  *   because egg moves aren't restricted to fathers anymore
- * - S = event, 3rd char+ is the index in .eventPokemon
+ * - S = event, 3rd char+ is the index in .eventData
  * - D = Dream World, only 5D is valid
  * - V = Virtual Console or Let's Go transfer, only 7V/8V is valid
  *
@@ -397,12 +397,13 @@ export class TeamValidator {
 		item = dex.getItem(set.item);
 		ability = dex.getAbility(set.ability);
 
-		let learnsetTemplate = template;
+		let outOfBattleTemplate = template;
+		const learnsetTemplate = dex.getLearnsetData(outOfBattleTemplate.speciesid);
 		let tierTemplate = template;
 		if (ability.id === 'battlebond' && template.id === 'greninja') {
-			learnsetTemplate = dex.getTemplate('greninjaash');
+			outOfBattleTemplate = dex.getTemplate('greninjaash');
 			if (ruleTable.has('obtainableformes')) {
-				tierTemplate = learnsetTemplate;
+				tierTemplate = outOfBattleTemplate;
 			}
 			if (ruleTable.has('obtainablemisc')) {
 				if (set.gender && set.gender !== 'M') {
@@ -412,7 +413,7 @@ export class TeamValidator {
 			}
 		}
 		if (ability.id === 'owntempo' && template.id === 'rockruff') {
-			tierTemplate = learnsetTemplate = dex.getTemplate('rockruffdusk');
+			tierTemplate = outOfBattleTemplate = dex.getTemplate('rockruffdusk');
 		}
 		if (!template.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
@@ -553,7 +554,7 @@ export class TeamValidator {
 
 			if (ruleTable.has('obtainablemoves')) {
 				const checkLearnset = (ruleTable.checkLearnset && ruleTable.checkLearnset[0] || this.checkLearnset);
-				lsetProblem = checkLearnset.call(this, move, learnsetTemplate, setSources, set);
+				lsetProblem = checkLearnset.call(this, move, outOfBattleTemplate, setSources, set);
 				if (lsetProblem) {
 					lsetProblem.moveName = move.name;
 					break;
@@ -561,10 +562,10 @@ export class TeamValidator {
 			}
 		}
 
-		const lsetProblems = this.reconcileLearnset(learnsetTemplate, setSources, lsetProblem, name);
+		const lsetProblems = this.reconcileLearnset(outOfBattleTemplate, setSources, lsetProblem, name);
 		if (lsetProblems) problems.push(...lsetProblems);
 
-		if (ruleTable.has('obtainablemisc') && learnsetTemplate.forme?.includes('Gmax')) {
+		if (ruleTable.has('obtainablemisc') && outOfBattleTemplate.forme?.includes('Gmax')) {
 			if (!setSources.sourcesBefore) {
 				problems.push(`${name} has an exclusive move that it doesn't qualify for (because Gmax Pokemon can only be obtained from a Max Raid).`);
 			} else if (setSources.sourcesBefore < 8) {
@@ -573,7 +574,7 @@ export class TeamValidator {
 		} else if (!setSources.sourcesBefore && setSources.sources.length) {
 			let legal = false;
 			for (const source of setSources.sources) {
-				if (this.validateSource(set, source, setSources, learnsetTemplate)) continue;
+				if (this.validateSource(set, source, setSources, outOfBattleTemplate)) continue;
 				legal = true;
 				break;
 			}
@@ -595,19 +596,21 @@ export class TeamValidator {
 						problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
 					}
 					const eventProblems = this.validateSource(
-						set, nonEggSource, setSources, learnsetTemplate, ` because it has a move only available`
+						set, nonEggSource, setSources, outOfBattleTemplate, ` because it has a move only available`
 					);
 					if (eventProblems) problems.push(...eventProblems);
 				}
 			}
 		} else if (ruleTable.has('obtainablemisc') && learnsetTemplate.eventOnly) {
-			const eventTemplate = !learnsetTemplate.eventPokemon && learnsetTemplate.baseSpecies !== learnsetTemplate.species ?
-				 dex.getTemplate(learnsetTemplate.baseSpecies) : learnsetTemplate;
-			const eventPokemon = eventTemplate.eventPokemon;
-			if (!eventPokemon) throw new Error(`Event-only template ${template.species} has no eventPokemon table`);
+			const eventTemplate = !learnsetTemplate.eventData &&
+				outOfBattleTemplate.baseSpecies !== outOfBattleTemplate.species ?
+				dex.getTemplate(outOfBattleTemplate.baseSpecies) : outOfBattleTemplate;
+			const eventData = learnsetTemplate.eventData ||
+				dex.getLearnsetData(eventTemplate.id).eventData;
+			if (!eventData) throw new Error(`Event-only template ${template.species} has no eventData table`);
 			let legal = false;
-			for (const eventData of eventPokemon) {
-				if (this.validateEvent(set, eventData, eventTemplate)) continue;
+			for (const event of eventData) {
+				if (this.validateEvent(set, event, eventTemplate)) continue;
 				legal = true;
 				break;
 			}
@@ -615,21 +618,21 @@ export class TeamValidator {
 				legal = true;
 			}
 			if (!legal) {
-				if (eventPokemon.length === 1) {
+				if (eventData.length === 1) {
 					problems.push(`${template.species} is only obtainable from an event - it needs to match its event:`);
 				} else {
 					problems.push(`${template.species} is only obtainable from events - it needs to match one of its events, such as:`);
 				}
-				let eventInfo = eventPokemon[0];
+				let eventInfo = eventData[0];
 				let eventNum = 1;
-				for (const [i, eventData] of eventPokemon.entries()) {
-					if (eventData.generation <= dex.gen && eventData.generation >= this.minSourceGen) {
-						eventInfo = eventData;
+				for (const [i, event] of eventData.entries()) {
+					if (event.generation <= dex.gen && event.generation >= this.minSourceGen) {
+						eventInfo = event;
 						eventNum = i + 1;
 						break;
 					}
 				}
-				const eventName = eventPokemon.length > 1 ? ` #${eventNum}` : ``;
+				const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
 				const eventProblems = this.validateEvent(set, eventInfo, eventTemplate, ` to be`, `from its event${eventName}`);
 				if (eventProblems) problems.push(...eventProblems);
 			}
@@ -924,13 +927,14 @@ export class TeamValidator {
 	validateSource(
 		set: PokemonSet, source: PokemonSource, setSources: PokemonSources, template: Template, because?: string
 	) {
-		let eventData: EventInfo | null = null;
+		let eventData: EventInfo | undefined;
 		let eventTemplate = template;
 		if (source.charAt(1) === 'S') {
 			const splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
 			const dex = (this.dex.gen === 1 ? Dex.mod('gen2') : this.dex);
 			eventTemplate = dex.getTemplate(splitSource[1]);
-			if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0])];
+			const eventLsetData = this.dex.getLearnsetData(eventTemplate.speciesid);
+			eventData = eventLsetData.eventData?.[parseInt(splitSource[0])];
 			if (!eventData) {
 				throw new Error(`${eventTemplate.species} from ${template.species} doesn't have data for event ${source}`);
 			}
@@ -1011,6 +1015,7 @@ export class TeamValidator {
 		// try to find a father to inherit the egg move combination from
 		for (const fatherid in dex.data.Pokedex) {
 			const father = dex.getTemplate(fatherid);
+			const fatherLsetData = dex.getLearnsetData(fatherid as ID);
 			// can't inherit from CAP pokemon
 			if (father.isNonstandard) continue;
 			// can't breed mons from future gens
@@ -1018,7 +1023,7 @@ export class TeamValidator {
 			// father must be male
 			if (father.gender === 'N' || father.gender === 'F') continue;
 			// can't inherit from dex entries with no learnsets
-			if (!father.learnset) continue;
+			if (!fatherLsetData.exists || !fatherLsetData.learnset) continue;
 			// something is clearly wrong if its only possible father is itself
 			// (exceptions: ExtremeSpeed Dragonite, Self-destruct Snorlax)
 			if (template.speciesid === fatherid && !['dragonite', 'snorlax'].includes(fatherid)) continue;
@@ -1053,7 +1058,8 @@ export class TeamValidator {
 	 * function (the answer is always yes).
 	 */
 	fatherCanLearn(template: Template, moves: ID[], eggGen: number) {
-		if (!template.learnset) return false;
+		let lsetData = this.dex.getLearnsetData(template.speciesid);
+		if (!lsetData.learnset) return false;
 		if (template.id === 'smeargle') return true;
 		let eggMoveCount = 0;
 		const noEggIncompatibility = template.eggGroups.includes('Field');
@@ -1063,8 +1069,9 @@ export class TeamValidator {
 			let canLearn: 0 | 1 | 2 = 0;
 
 			while (curTemplate) {
-				if (curTemplate.learnset && curTemplate.learnset[move]) {
-					for (const moveSource of curTemplate.learnset[move]) {
+				lsetData = this.dex.getLearnsetData(curTemplate.id);
+				if (lsetData.learnset && lsetData.learnset[move]) {
+					for (const moveSource of lsetData.learnset[move]) {
 						if (parseInt(moveSource.charAt(0)) > eggGen) continue;
 						if (!'ESDV'.includes(moveSource.charAt(1)) || (
 							moveSource.charAt(1) === 'E' && noEggIncompatibility
@@ -1699,7 +1706,8 @@ export class TeamValidator {
 		while (template?.species && !alreadyChecked[template.speciesid]) {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen <= 2 && template.gen === 1) tradebackEligible = true;
-			if (!template.learnset) {
+			const lsetData = dex.getLearnsetData(template.speciesid);
+			if (!lsetData.learnset) {
 				if (template.baseSpecies !== template.species) {
 					// forme without its own learnset
 					template = dex.getTemplate(template.baseSpecies);
@@ -1717,12 +1725,12 @@ export class TeamValidator {
 				}
 			}
 
-			if (template.learnset[moveid] || template.learnset['sketch']) {
+			if (lsetData.learnset[moveid] || lsetData.learnset['sketch']) {
 				sometimesPossible = true;
-				let lset = template.learnset[moveid];
+				let lset = lsetData.learnset[moveid];
 				if (moveid === 'sketch' || !lset || template.speciesid === 'smeargle') {
 					if (move.noSketch || move.isZ) return {type: 'invalid'};
-					lset = template.learnset['sketch'];
+					lset = lsetData.learnset['sketch'];
 					sketch = true;
 				}
 				if (typeof lset === 'string') lset = [lset];
@@ -1849,7 +1857,7 @@ export class TeamValidator {
 				const glitchMoves = ['metronome', 'copycat', 'transform', 'mimic', 'assist'];
 				let getGlitch = false;
 				for (const i of glitchMoves) {
-					if (template.learnset[i]) {
+					if (lsetData.learnset[i]) {
 						if (!(i === 'mimic' && dex.getAbility(set.ability).gen === 4 && !template.prevo)) {
 							getGlitch = true;
 							break;
@@ -1929,9 +1937,6 @@ export class TeamValidator {
 			return template;
 		} else if (template.inheritsFrom) {
 			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
-			if (Array.isArray(template.inheritsFrom)) {
-				throw new Error(`Ambiguous template ${template.species} passed to learnsetParent`);
-			}
 			return this.dex.getTemplate(template.inheritsFrom);
 		}
 		return null;

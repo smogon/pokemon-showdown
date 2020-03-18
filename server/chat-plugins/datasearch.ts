@@ -807,9 +807,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					!format.banlist.includes(dex[mon].species) &&
 					!format.banlist.includes(dex[mon].species + "-Base")
 				) {
-					if (dex[mon].eventPokemon && dex[mon].eventOnly) {
+					const lsetData = Dex.getLearnsetData(dex[mon].speciesid);
+					if (lsetData.exists && lsetData.eventData && lsetData.eventOnly) {
 						let validEvents = 0;
-						for (const event of dex[mon].eventPokemon!) {
+						for (const event of lsetData.eventData) {
 							if (event.level && event.level <= 5) validEvents++;
 						}
 						if (validEvents > 0) continue;
