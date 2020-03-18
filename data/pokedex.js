@@ -5950,6 +5950,7 @@ let BattlePokedex = {
 		color: "Red",
 		eggGroups: ["Fairy", "Amorphous"],
 		requiredAbility: "Forecast",
+		battleOnly: "Castform",
 	},
 	castformrainy: {
 		num: 351,
@@ -5964,6 +5965,7 @@ let BattlePokedex = {
 		color: "Blue",
 		eggGroups: ["Fairy", "Amorphous"],
 		requiredAbility: "Forecast",
+		battleOnly: "Castform",
 	},
 	castformsnowy: {
 		num: 351,
@@ -5978,6 +5980,7 @@ let BattlePokedex = {
 		color: "White",
 		eggGroups: ["Fairy", "Amorphous"],
 		requiredAbility: "Forecast",
+		battleOnly: "Castform",
 	},
 	kecleon: {
 		num: 352,
@@ -7139,6 +7142,7 @@ let BattlePokedex = {
 		evoLevel: 25,
 		eggGroups: ["Fairy", "Grass"],
 		requiredAbility: "Flower Gift",
+		battleOnly: "Cherrim",
 	},
 	shellos: {
 		num: 422,
@@ -9407,6 +9411,7 @@ let BattlePokedex = {
 		evoLevel: 35,
 		eggGroups: ["Field"],
 		requiredAbility: "Zen Mode",
+		battleOnly: "Darmanitan",
 	},
 	darmanitangalar: {
 		num: 555,
@@ -10997,6 +11002,7 @@ let BattlePokedex = {
 		eggGroups: ["Undiscovered"],
 		gen: 7,
 		requiredAbility: "Battle Bond",
+		battleOnly: "Greninja",
 	},
 	bunnelby: {
 		num: 659,
@@ -11384,6 +11390,7 @@ let BattlePokedex = {
 		evoItem: "Dusk Stone",
 		eggGroups: ["Mineral"],
 		requiredAbility: "Stance Change",
+		battleOnly: "Aegislash",
 	},
 	spritzee: {
 		num: 682,
@@ -11975,6 +11982,7 @@ let BattlePokedex = {
 		eggGroups: ["Undiscovered"],
 		gen: 7,
 		requiredAbility: "Power Construct",
+		battleOnly: ["Zygarde", "Zygarde10"],
 	},
 	diancie: {
 		num: 719,
@@ -12507,6 +12515,7 @@ let BattlePokedex = {
 		color: "Blue",
 		eggGroups: ["Water 2"],
 		requiredAbility: "Schooling",
+		battleOnly: "Wishiwashi",
 	},
 	mareanie: {
 		num: 747,
@@ -13212,6 +13221,7 @@ let BattlePokedex = {
 		color: "Brown",
 		eggGroups: ["Mineral"],
 		requiredAbility: "Shields Down",
+		battleOnly: "Minior",
 	},
 	komala: {
 		num: 775,
@@ -13285,6 +13295,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		eggGroups: ["Amorphous"],
 		requiredAbility: "Disguise",
+		battleOnly: "Mimikyu",
 	},
 	mimikyutotem: {
 		num: 778,
@@ -14379,6 +14390,7 @@ let BattlePokedex = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Flying"],
 		requiredAbility: "Gulp Missile",
+		battleOnly: "Cramorant",
 	},
 	cramorantgorging: {
 		num: 845,
@@ -14393,6 +14405,7 @@ let BattlePokedex = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Flying"],
 		requiredAbility: "Gulp Missile",
+		battleOnly: "Cramorant",
 	},
 	arrokuda: {
 		num: 846,
@@ -14950,6 +14963,7 @@ let BattlePokedex = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Field"],
 		requiredAbility: "Ice Face",
+		battleOnly: "Eiscue",
 	},
 	indeedee: {
 		num: 876,
@@ -15004,6 +15018,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		eggGroups: ["Field", "Fairy"],
 		requiredAbility: "Hunger Switch",
+		battleOnly: "Morpeko",
 	},
 	cufant: {
 		num: 878,
