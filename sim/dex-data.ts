@@ -704,7 +704,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 		this.isGigantamax = data.isGigantamax || undefined;
 		this.battleOnly = data.battleOnly ||
-			(data.requiredAbility || !!this.isMega || !!this.isGigantamax ? this.baseSpecies : undefined);
+			(data.requiredAbility || this.isMega || this.isGigantamax ? this.baseSpecies : undefined);
 		this.inheritsFrom = data.inheritsFrom || (this.isGigantamax ? toID(this.baseSpecies) : undefined);
 
 		if (!this.gen && this.num >= 1) {

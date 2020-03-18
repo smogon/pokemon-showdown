@@ -2987,7 +2987,6 @@ let BattleFormatsData = {
 	arceusfairy: {
 		randomBattleMoves: ["calmmind", "judgment", "recover", "willowisp", "defog", "toxic", "earthpower"],
 		randomDoubleBattleMoves: ["calmmind", "judgment", "recover", "willowisp", "protect", "earthpower", "thunderbolt"],
-		gen: 6,
 	},
 	arceusfighting: {
 		randomBattleMoves: ["calmmind", "judgment", "stoneedge", "shadowball", "recover", "roar", "icebeam"],
