@@ -15167,6 +15167,7 @@ let BattlePokedex = {
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Rusted Sword",
+		inheritsFrom: "zacian",
 	},
 	zamazenta: {
 		num: 889,
@@ -15195,6 +15196,7 @@ let BattlePokedex = {
 		color: "Red",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Rusted Shield",
+		inheritsFrom: "zamazenta",
 	},
 	eternatus: {
 		num: 890,
