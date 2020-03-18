@@ -435,7 +435,7 @@ function getLevel(format: Format, level = 0) {
 	return level > maxForcedLevel ? maxForcedLevel : level;
 }
 
-export function getStatisticsURL(index: string, format: Format): [string, number] | undefined {
+export function getStatisticsURL(index: string, format: Format): {url: string, count: number} | undefined {
 	const current = index.includes(format.id);
 	const latest = smogon.Statistics.latestDate(format.id, !current);
 	if (!latest) return undefined;
