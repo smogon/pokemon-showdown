@@ -1,7 +1,7 @@
 'use strict';
 
 /**@type {{[k: string]: ModdedLearnsetData}} */
-let BattleLearnsetsData = {
+let BattleLearnsets = {
 	bulbasaur: {
 		learnset: {
 			ancientpower: ["2S0"],
@@ -12127,4 +12127,4 @@ let BattleLearnsetsData = {
 	},
 };
 
-exports.BattleLearnsetsData = BattleLearnsetsData;
+exports.BattleLearnsets = BattleLearnsets;
