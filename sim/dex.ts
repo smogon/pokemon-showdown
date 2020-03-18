@@ -401,7 +401,7 @@ export class ModdedDex {
 			}
 		}
 		if (id && this.data.Pokedex.hasOwnProperty(id)) {
-			template = new Data.Template({name}, this.data.Pokedex[id], this.data.FormatsData[id], this.data.Learnsets[id]);
+			template = new Data.Template({name}, this.data.Pokedex[id], this.data.FormatsData[id]);
 			// Inherit any statuses from the base species (Arceus, Silvally).
 			const baseSpeciesStatuses = this.data.Statuses[toID(template.baseSpecies)];
 			if (baseSpeciesStatuses !== undefined) {
@@ -453,44 +453,19 @@ export class ModdedDex {
 	}
 
 	getOutOfBattleSpecies(template: Template) {
-		return template.inheritsFrom ? this.getTemplate(template.inheritsFrom).species : template.baseSpecies;
+		return !template.battleOnly ? template.species :
+			template.inheritsFrom ? this.getTemplate(template.inheritsFrom).species :
+			template.baseSpecies;
 	}
 
-	getLearnsetData(name?: string | LearnsetData): LearnsetData {
-		if (name && typeof name !== 'string') return name;
-
-		name = (name || '').trim();
-		let id = toID(name);
+	getLearnsetData(id: ID): LearnsetData {
 		let learnsetData = this.learnsetCache.get(id);
 		if (learnsetData) return learnsetData;
-		if (this.data.Aliases.hasOwnProperty(id)) {
-			learnsetData = this.getLearnsetData(this.data.Aliases[id]);
-			if (learnsetData.exists) {
-				this.learnsetCache.set(id, learnsetData);
-			}
-			return learnsetData;
+		if (!this.data.Learnsets.hasOwnProperty(id)) {
+			return new Data.Learnset({exists: false});
 		}
-		const dex = this.gen > 2 ? this : this.mod('gen2');
-		if (id && dex.data.Learnsets.hasOwnProperty(id)) {
-			learnsetData = new Data.Learnset(dex.data.Learnsets[id]);
-			const template = dex.getTemplate(id);
-			const inheritedSpecies = toID(this.getOutOfBattleSpecies(template));
-			if (template.species !== inheritedSpecies && dex.data.Learnsets.hasOwnProperty(inheritedSpecies)) {
-				const lset: {[k: string]: MoveSource[]} = dex.data.Learnsets[id].learnset!;
-				const inheritedLset: {[k: string]: MoveSource[]} = dex.data.Learnsets[inheritedSpecies].learnset!;
-				const totalLset: {[k: string]: MoveSource[]} = Object.assign({}, lset, inheritedLset);
-				const {eventOnly, eventData} = dex.data.Learnsets[id];
-				learnsetData = new Data.Learnset({learnset: totalLset, eventOnly, eventData, exists: true});
-			}
-		} else {
-			if (dex.getTemplate(id).species !== this.getOutOfBattleSpecies(dex.getTemplate(id))) {
-				id = toID(this.getOutOfBattleSpecies(dex.getTemplate(id)));
-				learnsetData = new Data.Learnset(dex.data.Learnsets[id]);
-			} else {
-				learnsetData = new Data.Learnset({exists: false});
-			}
-		}
-		if (learnsetData.exists) this.learnsetCache.set(id, learnsetData);
+		learnsetData = new Data.Learnset(this.data.Learnsets[id]);
+		this.learnsetCache.set(id, learnsetData);
 		return learnsetData;
 	}
 

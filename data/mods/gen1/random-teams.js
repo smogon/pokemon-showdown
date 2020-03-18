@@ -25,7 +25,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 		for (let id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
 			let template = this.dex.getTemplate(id);
-			let lsetData = this.dex.getLearnsetData(id);
+			let lsetData = this.dex.getLearnsetData(/** @type {ID} */ (id));
 			if (!lsetData.learnset || template.forme) continue;
 			formes[hasDexNumber[template.num]].push(template.species);
 			if (++formeCounter >= 6) {

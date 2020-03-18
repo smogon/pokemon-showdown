@@ -605,9 +605,8 @@ export class TeamValidator {
 			const eventTemplate = !learnsetTemplate.eventData &&
 				outOfBattleTemplate.baseSpecies !== outOfBattleTemplate.species ?
 				dex.getTemplate(outOfBattleTemplate.baseSpecies) : outOfBattleTemplate;
-			const eventData = !learnsetTemplate.eventData &&
-				outOfBattleTemplate.baseSpecies !== outOfBattleTemplate.species ?
-				dex.getLearnsetData(outOfBattleTemplate.baseSpecies).eventData : learnsetTemplate.eventData;
+			const eventData = learnsetTemplate.eventData ||
+				dex.getLearnsetData(eventTemplate.id).eventData;
 			if (!eventData) throw new Error(`Event-only template ${template.species} has no eventData table`);
 			let legal = false;
 			for (const event of eventData) {
@@ -928,14 +927,14 @@ export class TeamValidator {
 	validateSource(
 		set: PokemonSet, source: PokemonSource, setSources: PokemonSources, template: Template, because?: string
 	) {
-		let eventData: EventInfo | null = null;
+		let eventData: EventInfo | undefined;
 		let eventTemplate = template;
-		const eventLsetData = this.dex.getLearnsetData(eventTemplate.speciesid);
 		if (source.charAt(1) === 'S') {
 			const splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
 			const dex = (this.dex.gen === 1 ? Dex.mod('gen2') : this.dex);
 			eventTemplate = dex.getTemplate(splitSource[1]);
-			if (eventLsetData.eventData) eventData = eventLsetData.eventData[parseInt(splitSource[0])];
+			const eventLsetData = this.dex.getLearnsetData(eventTemplate.speciesid);
+			eventData = eventLsetData.eventData?.[parseInt(splitSource[0])];
 			if (!eventData) {
 				throw new Error(`${eventTemplate.species} from ${template.species} doesn't have data for event ${source}`);
 			}
@@ -1016,7 +1015,7 @@ export class TeamValidator {
 		// try to find a father to inherit the egg move combination from
 		for (const fatherid in dex.data.Pokedex) {
 			const father = dex.getTemplate(fatherid);
-			const fatherLsetData = dex.getLearnsetData(fatherid);
+			const fatherLsetData = dex.getLearnsetData(fatherid as ID);
 			// can't inherit from CAP pokemon
 			if (father.isNonstandard) continue;
 			// can't breed mons from future gens
@@ -1070,7 +1069,7 @@ export class TeamValidator {
 			let canLearn: 0 | 1 | 2 = 0;
 
 			while (curTemplate) {
-				lsetData = this.dex.getLearnsetData(curTemplate.species);
+				lsetData = this.dex.getLearnsetData(curTemplate.id);
 				if (lsetData.learnset && lsetData.learnset[move]) {
 					for (const moveSource of lsetData.learnset[move]) {
 						if (parseInt(moveSource.charAt(0)) > eggGen) continue;
@@ -1707,7 +1706,7 @@ export class TeamValidator {
 		while (template?.species && !alreadyChecked[template.speciesid]) {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen <= 2 && template.gen === 1) tradebackEligible = true;
-			const lsetData = dex.getLearnsetData(template.species);
+			const lsetData = dex.getLearnsetData(template.speciesid);
 			if (!lsetData.learnset) {
 				if (template.baseSpecies !== template.species) {
 					// forme without its own learnset
