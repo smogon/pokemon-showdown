@@ -730,6 +730,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 					this.turn = parseInt(line.slice(6));
 				}
 				this.room.add(line);
+				if (line.startsWith(`|bigerror|You will auto-tie if `)) {
+					if (Config.allowrequestingties) this.room.add(`|-hint|If you want to tie earlier, consider using \`/offertie\`.`);
+				}
 			}
 			this.room.update();
 			if (!this.ended) this.timer.nextRequest();
