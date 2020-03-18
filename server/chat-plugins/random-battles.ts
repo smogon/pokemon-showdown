@@ -17,7 +17,7 @@ const TIERS: {[k: string]: string} = {
 
 function formatAbility(ability: Ability | string) {
 	ability = Dex.getAbility(ability);
-	return `<a href="${Config.routes.dex}/abilities/${ability.id}" target="_blank" class="subtle" style="white-space:nowrap">${ability.name}</a>`;
+	return `<a href="https://${Config.routes.dex}/abilities/${ability.id}" target="_blank" class="subtle" style="white-space:nowrap">${ability.name}</a>`;
 }
 function formatNature(n: string) {
 	const nature = Dex.getNature(n);
@@ -26,7 +26,7 @@ function formatNature(n: string) {
 
 function formatMove(move: Move | string) {
 	move = Dex.getMove(move);
-	return `<a href="${Config.routes.dex}/moves/${move.id}" target="_blank" class="subtle" style="white-space:nowrap">${move.name}</a>`;
+	return `<a href="https://${Config.routes.dex}/moves/${move.id}" target="_blank" class="subtle" style="white-space:nowrap">${move.name}</a>`;
 }
 
 function formatItem(item: Item | string) {
@@ -34,7 +34,7 @@ function formatItem(item: Item | string) {
 		return `No Item`;
 	} else {
 		item = Dex.getItem(item);
-		return `<a href="${Config.routes.dex}/items/${item.id}" target="_blank" class="subtle" style="white-space:nowrap">${item.name}</a>`;
+		return `<a href="https://${Config.routes.dex}/items/${item.id}" target="_blank" class="subtle" style="white-space:nowrap">${item.name}</a>`;
 	}
 }
 
