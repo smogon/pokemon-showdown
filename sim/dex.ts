@@ -80,7 +80,7 @@ const DATA_FILES = {
 
 const nullEffect: PureEffect = new Data.PureEffect({name: '', exists: false});
 
-interface Nature {
+export interface Nature {
 	name: string;
 	plus?: keyof StatsTable;
 	minus?: keyof StatsTable;
