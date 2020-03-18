@@ -1091,7 +1091,6 @@ interface TemplateFormatsData {
 	battleOnly?: boolean;
 	comboMoves?: readonly string[];
 	doublesTier?: string;
-	encounters?: EventInfo[];
 	essentialMove?: string;
 	exclusiveMoves?: readonly string[];
 	gen?: number;

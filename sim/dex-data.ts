@@ -505,6 +505,7 @@ export class Learnset {
 	readonly eventOnly: boolean;
 	/** List of event data for each event. */
 	readonly eventData?: EventInfo[];
+	readonly encounters?: EventInfo[];
 	readonly exists: boolean;
 
 	constructor(data: AnyObject) {
@@ -513,6 +514,7 @@ export class Learnset {
 		this.learnset = data.learnset || undefined;
 		this.eventOnly = !!data.eventOnly;
 		this.eventData = data.eventData || undefined;
+		this.encounters = data.encounters || undefined;
 	}
 }
 
