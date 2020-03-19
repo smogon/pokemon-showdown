@@ -4364,6 +4364,18 @@ let BattleFormatsData = {
 		tier: "Uber",
 		doublesTier: "DOU",
 	},
+	genesectburn: {
+		isNonstandard: null,
+	},
+	genesectchill: {
+		isNonstandard: null,
+	},
+	genesectdouse: {
+		isNonstandard: null,
+	},
+	genesectshock: {
+		isNonstandard: null,
+	},
 	chespin: {
 		tier: "LC",
 	},
