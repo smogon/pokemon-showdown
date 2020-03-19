@@ -1397,7 +1397,7 @@ exports.commands = {
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 		let lineCount = 0;
-		if (target.includes(',')) lineCount = Number(target.split(',')[1]);
+		if (target.includes(',')) lineCount = Math.abs(parseInt(target.split(',')[1]));
 		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${name} not found or has no roomlogs.`);
 		let userid = toID(this.inputUsername);
 
