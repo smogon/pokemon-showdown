@@ -731,6 +731,9 @@ let BattleStatuses = {
 				delete pokemon.volatiles['torment'];
 				this.add('-end', pokemon, 'Torment', '[silent]');
 			}
+			if (['cramorantgulping', 'cramorantgorging'].includes(pokemon.template.speciesid) && !pokemon.transformed) {
+				pokemon.formeChange('cramorant');
+			}
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.canGigantamax);
 			if (pokemon.species === 'Shedinja') return;
