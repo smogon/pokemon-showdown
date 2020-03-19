@@ -122,6 +122,17 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
+	it.skip(`should not request switch-out after taking poison damage and getting healed by berry`, function () {
+		battle = common.createBattle([
+			[{species: "Golisopod", ability: 'emergencyexit', moves: ['substitute', 'sleeptalk'], item: 'sitrusberry'}, {species: "Magikarp", moves: ['splash']}],
+			[{species: "Gengar", moves: ['toxic', 'nightshade', 'protect']}],
+		]);
+		battle.makeChoices('move substitute', 'move toxic');
+		battle.makeChoices('move sleeptalk', 'move nightshade');
+		battle.makeChoices('move sleeptalk', 'move protect');
+		assert.equal(battle.requestState, 'move');
+	});
+
 	it(`should not request switch-out on usage of Substitute`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['substitute'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
