@@ -1396,7 +1396,9 @@ exports.commands = {
 		this.splitTarget(target);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
-		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
+		let lineCount = 0;
+		if (target.includes(',')) lineCount = Number(target.split(',')[1]);
+		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${name} not found or has no roomlogs.`);
 		let userid = toID(this.inputUsername);
 
 		if (!this.can('mute', null, room)) return;
@@ -1411,11 +1413,11 @@ exports.commands = {
 				userid,
 				...Object.keys(targetUser.prevNames),
 				...targetUser.getAltUsers(true).map(user => user.getLastId()),
-			]);
+			], lineCount);
 		} else {
 			room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
-			room.hideText([userid]);
+			room.hideText([userid], lineCount);
 		}
 	},
 	hidetexthelp: [
