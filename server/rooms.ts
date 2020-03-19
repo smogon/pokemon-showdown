@@ -1159,10 +1159,10 @@ export class BasicChatRoom extends BasicRoom {
 		this.log.modlog(message);
 		return this;
 	}
-	hideText(userids: ID[]) {
+	hideText(userids: ID[], lineCount: number = 0) {
 		const cleared = this.log.clearText(userids);
 		for (const userid of cleared) {
-			this.send(`|unlink|hide|${userid}`);
+			this.send(`|unlink|hide|${userid}|${lineCount}`);
 		}
 		this.update();
 	}
