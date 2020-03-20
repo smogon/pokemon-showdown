@@ -13,7 +13,7 @@ import * as querystring from 'querystring';
 const SEARCH_PATH = '/api/v1/Search/List/';
 const DETAILS_PATH = '/api/v1/Articles/Details/';
 
-async function getFandom(site: string, pathName: string, search: string) {
+async function getFandom(site: string, pathName: string, search: any) {
 	const reqOpts = {
 		hostname: `${site}.fandom.com`,
 		method: 'GET',
@@ -26,10 +26,10 @@ async function getFandom(site: string, pathName: string, search: string) {
 	const body: any = await new Promise((resolve, reject) => {
 		https.request(reqOpts, res => {
 			if (!res.statusCode || !(res.statusCode >= 200 && res.statusCode < 300)) return reject(new Error(`Not found.`));
-			const body: string[] = [];
+			const data: string[] = [];
 			res.setEncoding('utf8');
-			res.on('data', chunk => body.push(chunk));
-			res.on('end', () => resolve(body.join('')));
+			res.on('data', chunk => data.push(chunk));
+			res.on('end', () => resolve(data.join('')));
 		}).on('error', reject).setTimeout(5000).end();
 	});
 
@@ -39,14 +39,14 @@ async function getFandom(site: string, pathName: string, search: string) {
 	return json;
 }
 
-async function searchFandom(site: string, query: Object) {
+async function searchFandom(site: string, query: any) {
 	const result = await getFandom(site, SEARCH_PATH, {query, limit: 1});
 	if (!Array.isArray(result.items) || !result.items.length) throw new Error(`Malformed data`);
 	if (!result.items[0] || typeof result.items[0] !== 'object') throw new Error(`Malformed data`);
 	return result.items[0];
 }
 
-async function getCardDetails(site: string, id: Object) {
+async function getCardDetails(site: string, id: string) {
 	const specifications = {
 		ids: id,
 		abstract: 0,
@@ -70,14 +70,14 @@ export const commands: ChatCommands = {
 		const query = target.trim();
 		if (!query) return this.parse('/help yugioh');
 
-		return searchFandom(subdomain, query).then((data: { url: any; title: any; id: any; }) => {
+		return searchFandom(subdomain, query).then((data: { url: any, title: any, id: any}) => {
 			if (!this.runBroadcast()) return;
 			const entryUrl = Dex.getString(data.url);
 			const entryTitle = Dex.getString(data.title);
 			const id = Dex.getString(data.id);
 			let htmlReply = Chat.html`<strong>Best result for ${query}:</strong><br /><a href="${entryUrl}">${entryTitle}</a>`;
 			if (id) {
-				getCardDetails(subdomain, id).then((card: { thumbnail: any; }) => {
+				getCardDetails(subdomain, id).then((card: { thumbnail: any }) => {
 					const thumb = Dex.getString(card.thumbnail);
 					if (thumb) {
 						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Chat.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
