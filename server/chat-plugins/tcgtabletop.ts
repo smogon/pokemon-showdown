@@ -13,7 +13,7 @@ import * as querystring from 'querystring';
 const SEARCH_PATH = '/api/v1/Search/List/';
 const DETAILS_PATH = '/api/v1/Articles/Details/';
 
-async function getFandom(site: string, pathName: string, search: any) {
+async function getFandom(site: string, pathName: string, search: AnyObject) {
 	const reqOpts = {
 		hostname: `${site}.fandom.com`,
 		method: 'GET',
@@ -39,7 +39,7 @@ async function getFandom(site: string, pathName: string, search: any) {
 	return json;
 }
 
-async function searchFandom(site: string, query: any) {
+async function searchFandom(site: string, query: string) {
 	const result = await getFandom(site, SEARCH_PATH, {query, limit: 1});
 	if (!Array.isArray(result.items) || !result.items.length) throw new Error(`Malformed data`);
 	if (!result.items[0] || typeof result.items[0] !== 'object') throw new Error(`Malformed data`);
@@ -92,7 +92,7 @@ export const commands: ChatCommands = {
 				if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 				room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 			}
-		}, err => {
+		}, (err: AnyObject) => {
 			if (!this.runBroadcast()) return;
 
 			if (err instanceof SyntaxError || err.message === 'Malformed data') {
