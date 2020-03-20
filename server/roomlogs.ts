@@ -199,8 +199,7 @@ export class Roomlog {
 				}
 			}
 			return true;
-		});
-		this.log = this.log.reverse();
+		}).reverse();
 		return cleared;
 	}
 	uhtmlchange(message: string) {
