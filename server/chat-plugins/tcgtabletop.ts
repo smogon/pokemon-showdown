@@ -17,7 +17,7 @@ async function getFandom(site: string, pathName: string, search: AnyObject) {
 	const reqOpts = {
 		hostname: `${site}.fandom.com`,
 		method: 'GET',
-		path: pathName + '?' + querystring.stringify(search),
+		path: `${pathName}?${querystring.stringify(search)}`,
 		headers: {
 			'Content-Type': 'application/json',
 		},
@@ -70,14 +70,14 @@ export const commands: ChatCommands = {
 		const query = target.trim();
 		if (!query) return this.parse('/help yugioh');
 
-		return searchFandom(subdomain, query).then((data: { url: any, title: any, id: any}) => {
+		return searchFandom(subdomain, query).then((data: {url: unknown, title: unknown, id: unknown}) => {
 			if (!this.runBroadcast()) return;
 			const entryUrl = Dex.getString(data.url);
 			const entryTitle = Dex.getString(data.title);
 			const id = Dex.getString(data.id);
 			let htmlReply = Chat.html`<strong>Best result for ${query}:</strong><br /><a href="${entryUrl}">${entryTitle}</a>`;
 			if (id) {
-				getCardDetails(subdomain, id).then((card: { thumbnail: any }) => {
+				getCardDetails(subdomain, id).then((card: {thumbnail: unknown}) => {
 					const thumb = Dex.getString(card.thumbnail);
 					if (thumb) {
 						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Chat.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
