@@ -280,6 +280,9 @@ let Formats = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles'],
 		banlist: ['DUber', 'Beat Up'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8doublesou') this.add('html', `<div class="broadcast-red"><strong>Doubles OU is currently suspecting Dynamax! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3661422/">suspect thread</a>.</strong></div>`);
+		},
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
