@@ -1393,7 +1393,7 @@ exports.commands = {
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 
-		this.splitTarget(target);
+		const lineCount = parseInt(this.splitTarget(target)) || 0;
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 		if (!targetUser && !room.log.hasUsername(name)) {
