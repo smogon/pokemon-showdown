@@ -1213,7 +1213,7 @@ let Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Standard', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Sand Veil', 'Soul Dew'],
+		banlist: ['Uber', 'Mamoswine ++ Snow Cloak', 'Piloswine ++ Snow Cloak', 'Sand Veil', 'Soul Dew', 'Swinub ++ Snow Cloak'],
 	},
 	{
 		name: "[Gen 3] OU",
