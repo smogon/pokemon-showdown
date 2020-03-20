@@ -285,6 +285,7 @@ let BattleMovedex = {
 	partingshot: {
 		inherit: true,
 		desc: "Lowers the target's Attack and Special Attack by 1 stage. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+		onHit() {},
 	},
 	payback: {
 		inherit: true,
