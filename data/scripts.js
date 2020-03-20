@@ -1006,9 +1006,7 @@ let BattleScripts = {
 				}
 			}
 			if (moveData.selfSwitch) {
-				// If the move is Parting Shot and it fails to change the target's stats in gen 7, didSomething will be null instead of undefined.
-				// Leaving didSomething as null will cause this function to return without setting the switch flag, preventing the switch.
-				if (this.canSwitch(pokemon.side) && (didSomething !== null || this.gen < 7)) {
+				if (this.canSwitch(pokemon.side)) {
 					didSomething = true;
 				} else {
 					didSomething = this.combineResults(didSomething, false);

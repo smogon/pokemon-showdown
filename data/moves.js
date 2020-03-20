@@ -13499,11 +13499,13 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		selfSwitch: true,
-		boosts: {
-			atk: -1,
-			spa: -1,
+		onHit(target, source, move) {
+			let success = this.boost({atk: -1, spa: -1}, target, source);
+			if (!success && !target.hasAbility('mirrorarmor')) {
+				delete move.selfSwitch;
+			}
 		},
+		selfSwitch: true,
 		secondary: null,
 		target: "normal",
 		type: "Dark",
