@@ -536,9 +536,13 @@ let BattleAbilities = {
 		desc: "When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.",
 		shortDesc: "Lowers Speed of all Pokémon except itself when hit by an attack.",
 		onDamagingHit(damage, target, source, move) {
-			this.add('-ability', target, 'Cotton Down');
+			let activated = false;
 			for (let pokemon of this.getAllActive()) {
-				if (pokemon === target) continue;
+				if (pokemon === target || !pokemon.hp) continue;
+				if (!activated) {
+					this.add('-ability', target, 'Cotton Down');
+					activated = true;
+				}
 				this.boost({spe: -1}, pokemon, target, null, true);
 			}
 		},
