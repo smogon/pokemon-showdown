@@ -182,7 +182,7 @@ export class Roomlog {
 		const messageStart = this.logTimes ? '|c:|' : '|c|';
 		const section = this.logTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		const cleared: ID[] = [];
-		const clearAll = (lineCount === 0 ? true : false);
+		const clearAll = (lineCount === 0);
 		this.log = this.log.reverse().filter(line => {
 			if (line.startsWith(messageStart)) {
 				const parts = Chat.splitFirst(line, '|', section);
