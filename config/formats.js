@@ -627,7 +627,10 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause'],
-		banlist: ['Darmanitan-Galar', 'Gastly', 'Arena Trap', 'Drizzle', 'Drought', 'Huge Power', 'Moody', 'Shadow Tag', 'Baton Pass', 'Rain Dance', 'Sunny Day', 'Eviolite', 'Light Ball'],
+		banlist: [
+			'Crawdaunt', 'Darmanitan', 'Darmanitan-Galar', 'Darumaka', 'Darumaka-Galar', 'Gastly',
+			'Arena Trap', 'Drizzle', 'Drought', 'Huge Power', 'Moody', 'Shadow Tag', 'Baton Pass', 'Rain Dance', 'Sunny Day', 'Eviolite', 'Light Ball',
+		],
 		onModifyTemplate(template, target, source) {
 			const newTemplate = this.dex.deepClone(template);
 			newTemplate.baseStats = this.dex.deepClone(newTemplate.baseStats);
