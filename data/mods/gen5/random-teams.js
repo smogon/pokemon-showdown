@@ -632,7 +632,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		return {
-			name: template.baseName,
+			name: template.baseSpecies,
 			species: species,
 			gender: template.gender,
 			moves: moves,
@@ -673,10 +673,10 @@ class RandomGen5Teams extends RandomGen6Teams {
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseName]) continue;
+			if (baseFormes[template.baseSpecies]) continue;
 
 			// Adjust rate for species with multiple formes
-			switch (template.baseName) {
+			switch (template.baseSpecies) {
 			case 'Arceus':
 				if (this.randomChance(16, 17)) continue;
 				break;
@@ -739,7 +739,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			}
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[template.baseName] = 1;
+			baseFormes[template.baseSpecies] = 1;
 
 			// Increment tier counter
 			if (tierCount[tier]) {

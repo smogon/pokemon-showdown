@@ -953,7 +953,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	for (const mon of Object.keys(dex).sort()) {
 		const isAlola = dex[mon].forme === "Alola" && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isAlola && dex[mon].baseName && results.includes(dex[mon].baseName)) continue;
+		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
 		if (dex[mon].isGigantamax && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
@@ -1371,7 +1371,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const getFullLearnsetOfPokemon = (template: Template) => {
 		let usedTemplate = Dex.deepClone(template);
 		if (!usedTemplate.learnset) {
-			usedTemplate = Dex.deepClone(mod.getTemplate(usedTemplate.baseName));
+			usedTemplate = Dex.deepClone(mod.getTemplate(usedTemplate.baseSpecies));
 			usedTemplate.learnset = Dex.deepClone(usedTemplate.learnset || {});
 		}
 		const lsetData = new Set(Object.keys(usedTemplate.learnset));
@@ -1925,7 +1925,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	const template = validator.dex.getTemplate(targets.shift());
 	const setSources = validator.allSources(template);
 	const set: Partial<PokemonSet> = {
-		name: template.baseName,
+		name: template.baseSpecies,
 		species: template.name,
 		level: cmd === 'learn5' ? 5 : 100,
 	};

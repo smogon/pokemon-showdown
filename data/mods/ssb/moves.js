@@ -383,7 +383,7 @@ let BattleMovedex = {
 			},
 			onModifyDefPriority: 1,
 			onModifyDef(def, pokemon) {
-				if (pokemon.baseTemplate.baseName === 'Quilava') {
+				if (pokemon.baseTemplate.baseSpecies === 'Quilava') {
 					return this.chainModify(2);
 				}
 			},
@@ -1066,7 +1066,7 @@ let BattleMovedex = {
 			this.field.setTerrain('grassyterrain');
 		},
 		onAfterMove(pokemon) {
-			if (pokemon.template.baseName !== 'Aegislash' || pokemon.transformed) return;
+			if (pokemon.template.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
 			if (pokemon.template.name !== 'Aegislash') pokemon.formeChange('Aegislash');
 		},
 		target: "normal",
@@ -2916,7 +2916,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Conversion", source);
 		},
 		onHit(target, source) {
-			if (source.baseTemplate.baseName !== 'Silvally') return false;
+			if (source.baseTemplate.baseSpecies !== 'Silvally') return false;
 			let targetTypes = target.getTypes(true).filter(type => type !== '???');
 			if (!targetTypes.length) {
 				if (target.addedType) {

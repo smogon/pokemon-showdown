@@ -149,7 +149,7 @@ describe(`Factory sets`, function () {
 						assert(template.name === set.species, `miscapitalized species "${set.species}" of ${species}`);
 
 						// currently failing due to a Piloswine labeled as a Mamoswine set
-						// assert(species.startsWith(toID(template.baseName)), `non-matching species "${set.species}" of ${species}`);
+						// assert(species.startsWith(toID(template.baseSpecies)), `non-matching species "${set.species}" of ${species}`);
 
 						assert(!template.battleOnly, `invalid battle-only forme "${set.species}" of ${species}`);
 

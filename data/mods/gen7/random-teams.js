@@ -775,7 +775,7 @@ class RandomGen7Teams extends RandomTeams {
 		item = !isDoubles ? 'Leftovers' : 'Sitrus Berry';
 		if (template.requiredItems) {
 			// @ts-ignore
-			if (template.baseName === 'Arceus' && (hasMove['judgment'] || !counter[template.types[0]] || teamDetails.zMove)) {
+			if (template.baseSpecies === 'Arceus' && (hasMove['judgment'] || !counter[template.types[0]] || teamDetails.zMove)) {
 				// Judgment doesn't change type with Z-Crystals
 				item = template.requiredItems[0];
 			} else {
@@ -783,7 +783,7 @@ class RandomGen7Teams extends RandomTeams {
 			}
 
 		// First, the extra high-priority items
-		} else if (template.baseName === 'Marowak') {
+		} else if (template.baseSpecies === 'Marowak') {
 			item = 'Thick Club';
 		} else if (template.name === 'Decidueye' && hasMove['spiritshackle'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Decidium Z';
@@ -909,13 +909,13 @@ class RandomGen7Teams extends RandomTeams {
 		} else if ((hasMove['hail'] || (hasMove['blizzard'] && ability !== 'Snow Warning')) && !teamDetails.zMove) {
 			item = 'Icium Z';
 		} else if (hasMove['raindance']) {
-			if (template.baseName === 'Castform' && !teamDetails.zMove) {
+			if (template.baseSpecies === 'Castform' && !teamDetails.zMove) {
 				item = 'Waterium Z';
 			} else {
 				item = (ability === 'Forecast') ? 'Damp Rock' : 'Life Orb';
 			}
 		} else if (hasMove['sunnyday']) {
-			if ((template.baseName === 'Castform' || template.baseName === 'Cherrim') && !teamDetails.zMove) {
+			if ((template.baseSpecies === 'Castform' || template.baseSpecies === 'Cherrim') && !teamDetails.zMove) {
 				item = 'Firium Z';
 			} else {
 				item = (ability === 'Forecast') ? 'Heat Rock' : 'Life Orb';
@@ -1026,7 +1026,7 @@ class RandomGen7Teams extends RandomTeams {
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
 			let baseStats = template.baseStats;
 			// If Wishiwashi, use the school-forme's much higher stats
-			if (template.baseName === 'Wishiwashi') baseStats = this.dex.getTemplate('wishiwashischool').baseStats;
+			if (template.baseSpecies === 'Wishiwashi') baseStats = this.dex.getTemplate('wishiwashischool').baseStats;
 
 			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
 			// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite
@@ -1091,7 +1091,7 @@ class RandomGen7Teams extends RandomTeams {
 		}
 
 		return {
-			name: template.baseName,
+			name: template.baseSpecies,
 			species: species,
 			gender: template.gender,
 			moves: moves,
@@ -1185,7 +1185,7 @@ class RandomGen7Teams extends RandomTeams {
 		let nature = Array.isArray(setData.set.nature) ? this.sample(setData.set.nature) : setData.set.nature;
 
 		return {
-			name: setData.set.name || template.baseName,
+			name: setData.set.name || template.baseSpecies,
 			species: setData.set.species,
 			gender: setData.set.gender || template.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
 			item: item || '',
@@ -1257,7 +1257,7 @@ class RandomGen7Teams extends RandomTeams {
 			let speciesFlags = this.randomFactorySets[chosenTier][template.id].flags;
 
 			// Limit to one of each species (Species Clause)
-			if (teamData.baseFormes[template.baseName]) continue;
+			if (teamData.baseFormes[template.baseSpecies]) continue;
 
 			// Limit the number of Megas to one
 			if (teamData.megaCount >= 1 && speciesFlags.megaOnly) continue;
@@ -1320,7 +1320,7 @@ class RandomGen7Teams extends RandomTeams {
 			}
 			teamData.typeComboCount[typeCombo] = 1;
 
-			teamData.baseFormes[template.baseName] = 1;
+			teamData.baseFormes[template.baseSpecies] = 1;
 
 			if (itemData.megaStone) teamData.megaCount++;
 			if (itemData.zMove) teamData.zCount++;
@@ -1454,7 +1454,7 @@ class RandomGen7Teams extends RandomTeams {
 		}
 
 		return {
-			name: setData.set.nickname || setData.set.name || template.baseName,
+			name: setData.set.nickname || setData.set.name || template.baseSpecies,
 			species: setData.set.species,
 			gender: setData.set.gender || template.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
 			item: setData.set.item || '',
@@ -1505,7 +1505,7 @@ class RandomGen7Teams extends RandomTeams {
 			let speciesFlags = this.randomBSSFactorySets[template.id].flags;
 
 			// Limit to one of each species (Species Clause)
-			if (teamData.baseFormes[template.baseName]) continue;
+			if (teamData.baseFormes[template.baseSpecies]) continue;
 
 			// Limit the number of Megas + Z-moves to 3
 			if (teamData.megaCount + teamData.zCount >= 3 && speciesFlags.megaOnly) continue;
@@ -1549,7 +1549,7 @@ class RandomGen7Teams extends RandomTeams {
 			}
 			teamData.typeComboCount[typeCombo] = 1;
 
-			teamData.baseFormes[template.baseName] = 1;
+			teamData.baseFormes[template.baseSpecies] = 1;
 
 			// Limit Mega and Z-move
 			let itemData = this.dex.getItem(set.item);

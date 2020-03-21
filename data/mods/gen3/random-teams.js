@@ -587,7 +587,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		return {
-			name: template.baseName,
+			name: template.baseSpecies,
 			species: species,
 			gender: template.gender,
 			moves: moves,
@@ -638,7 +638,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseName]) continue;
+			if (baseFormes[template.baseSpecies]) continue;
 
 			// Limit to one Wobbuffet per battle (not just per team)
 			if (template.name === 'Wobbuffet' && this.hasWobbuffet) continue;
@@ -655,7 +655,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 			}
 
 			// Adjust rate for castform
-			if (template.baseName === 'Castform' && this.randomChance(3, 4)) continue;
+			if (template.baseSpecies === 'Castform' && this.randomChance(3, 4)) continue;
 
 			// Limit 2 of any type
 			let skip = false;
@@ -687,7 +687,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 			if (template.name === 'Wobbuffet') this.hasWobbuffet = true;
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[template.baseName] = 1;
+			baseFormes[template.baseSpecies] = 1;
 
 			// Increment type counters
 			for (const type of template.types) {

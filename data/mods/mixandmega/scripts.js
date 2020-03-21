@@ -57,7 +57,7 @@ let BattleScripts = {
 	getMixedTemplate(originalSpecies, megaSpecies) {
 		let originalTemplate = this.dex.getTemplate(originalSpecies);
 		let megaTemplate = this.dex.getTemplate(megaSpecies);
-		if (originalTemplate.baseName === megaTemplate.baseName) return megaTemplate;
+		if (originalTemplate.baseSpecies === megaTemplate.baseSpecies) return megaTemplate;
 		// @ts-ignore
 		let deltas = this.getMegaDeltas(megaTemplate);
 		// @ts-ignore
@@ -65,7 +65,7 @@ let BattleScripts = {
 		return template;
 	},
 	getMegaDeltas(megaTemplate) {
-		let baseTemplate = this.dex.getTemplate(megaTemplate.baseName);
+		let baseTemplate = this.dex.getTemplate(megaTemplate.baseSpecies);
 		/**@type {{ability: string, baseStats: {[k: string]: number}, weighthg: number, originalMega: string, requiredItem: string | undefined, type?: string, isMega?: boolean}} */
 		let deltas = {
 			ability: megaTemplate.abilities['0'],

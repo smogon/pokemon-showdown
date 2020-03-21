@@ -417,7 +417,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					// @ts-ignore
 					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
-					(movePool.includes('spore') || (!moves.some(id => recoveryMoves.includes(id)) && (movePool.includes('softboiled') || (template.baseName === 'Arceus' && movePool.includes('recover'))))) ||
+					(movePool.includes('spore') || (!moves.some(id => recoveryMoves.includes(id)) && (movePool.includes('softboiled') || (template.baseSpecies === 'Arceus' && movePool.includes('recover'))))) ||
 					(template.requiredMove && movePool.includes(toID(template.requiredMove)))) &&
 					// @ts-ignore
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
@@ -704,7 +704,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		return {
-			name: template.baseName,
+			name: template.baseSpecies,
 			species: species,
 			gender: template.gender,
 			moves: moves,

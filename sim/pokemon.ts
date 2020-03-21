@@ -236,9 +236,9 @@ export class Pokemon {
 		let gMax: string | null = null;
 		if (this.baseTemplate.isGigantamax) {
 			gMax = this.baseTemplate.name;
-			if (set.species && toID(set.species) === this.baseTemplate.id) set.species = this.baseTemplate.baseName;
-			if (set.name && toID(set.name) === this.baseTemplate.id) set.name = this.baseTemplate.baseName;
-			this.baseTemplate = this.battle.dex.getTemplate(this.baseTemplate.baseName);
+			if (set.species && toID(set.species) === this.baseTemplate.id) set.species = this.baseTemplate.baseSpecies;
+			if (set.name && toID(set.name) === this.baseTemplate.id) set.name = this.baseTemplate.baseSpecies;
+			this.baseTemplate = this.battle.dex.getTemplate(this.baseTemplate.baseSpecies);
 		}
 		this.set = set as PokemonSet;
 
@@ -246,7 +246,7 @@ export class Pokemon {
 		this.species = this.battle.dex.getSpecies(set.species);
 		this.speciesid = toID(this.species);
 		if (set.name === set.species || !set.name) {
-			set.name = this.baseTemplate.baseName;
+			set.name = this.baseTemplate.baseSpecies;
 		}
 		this.speciesData = {id: this.speciesid};
 
@@ -1135,7 +1135,7 @@ export class Pokemon {
 
 		// The species the opponent sees
 		const apparentSpecies =
-			this.illusion ? this.illusion.template.name : template.baseName;
+			this.illusion ? this.illusion.template.name : template.baseSpecies;
 		if (isPermanent) {
 			this.baseTemplate = rawTemplate;
 			this.details = template.name + (this.level === 100 ? '' : ', L' + this.level) +

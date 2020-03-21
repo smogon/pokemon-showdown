@@ -180,11 +180,11 @@ class RandomTeams {
 
 			// Make sure that a base forme does not hold any forme-modifier items.
 			let itemData = this.dex.getItem(item);
-			if (itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseName) {
+			if (itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseSpecies) {
 				do {
 					item = this.sample(items);
 					itemData = this.dex.getItem(item);
-				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseName);
+				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseSpecies);
 			}
 
 			// Random legal ability
@@ -238,7 +238,7 @@ class RandomTeams {
 
 			let stats = template.baseStats;
 			// If Wishiwashi, use the school-forme's much higher stats
-			if (template.baseName === 'Wishiwashi') stats = Dex.getTemplate('wishiwashischool').baseStats;
+			if (template.baseSpecies === 'Wishiwashi') stats = Dex.getTemplate('wishiwashischool').baseStats;
 
 			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
 			let mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
@@ -269,7 +269,7 @@ class RandomTeams {
 			let shiny = this.randomChance(1, 1024);
 
 			team.push({
-				name: template.baseName,
+				name: template.baseSpecies,
 				species: template.name,
 				gender: template.gender,
 				item: item,
@@ -423,7 +423,7 @@ class RandomTeams {
 			let shiny = this.randomChance(1, 1024);
 
 			team.push({
-				name: template.baseName,
+				name: template.baseSpecies,
 				species: template.name,
 				gender: template.gender,
 				item: item,
@@ -1175,7 +1175,7 @@ class RandomTeams {
 			item = 'Leek';
 		} else if (template.name === 'Jolteon') {
 			item = hasMove['protect'] ? 'Magnet' : 'Choice Specs';
-		} else if (template.baseName === 'Pikachu') {
+		} else if (template.baseSpecies === 'Pikachu') {
 			species = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
 			item = 'Light Ball';
 		} else if (template.species === 'Shedinja') {
@@ -1287,7 +1287,7 @@ class RandomTeams {
 				Glalie: 72, 'Darmanitan-Galar-Zen': 80, Wobbuffet: 80, Zygarde: 80,
 				Delibird: 100, Shedinja: 100,
 			};
-			let tier = toID((template.isGigantamax ? this.dex.getTemplate(template.baseName) : template).tier).replace('bl', '');
+			let tier = toID((template.isGigantamax ? this.dex.getTemplate(template.baseSpecies) : template).tier).replace('bl', '');
 			// For future DLC Pokemon
 			if (tier === 'illegal') {
 				tier = toID(Dex.mod('gen7').getTemplate(template.name).tier);
@@ -1357,7 +1357,7 @@ class RandomTeams {
 		}
 
 		return {
-			name: template.baseName,
+			name: template.baseSpecies,
 			species: species,
 			gender: template.gender,
 			moves: moves,
@@ -1432,14 +1432,14 @@ class RandomTeams {
 				if (!template.exists) continue;
 
 				// Limit to one of each species (Species Clause)
-				if (baseFormes[template.baseName]) continue;
+				if (baseFormes[template.baseSpecies]) continue;
 
 				let tier = template.tier;
 				let types = template.types;
 				let typeCombo = types.slice().sort().join();
 
 				// Adjust rate for species with multiple formes
-				switch (template.baseName) {
+				switch (template.baseSpecies) {
 				case 'Arceus': case 'Silvally':
 					if (this.randomChance(17, 18)) continue;
 					break;
@@ -1512,7 +1512,7 @@ class RandomTeams {
 				if (pokemon.length === 6) break;
 
 				// Now that our Pokemon has passed all checks, we can increment our counters
-				baseFormes[template.baseName] = 1;
+				baseFormes[template.baseSpecies] = 1;
 
 				// Increment tier counter
 				if (tierCount[tier]) {

@@ -1026,7 +1026,7 @@ let BattleAbilities = {
 			delete this.effectData.forme;
 		},
 		onUpdate(pokemon) {
-			if (!pokemon.isActive || pokemon.baseTemplate.baseName !== 'Cherrim' || pokemon.transformed) return;
+			if (!pokemon.isActive || pokemon.baseTemplate.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				if (pokemon.template.id !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '[msg]');
@@ -1039,14 +1039,14 @@ let BattleAbilities = {
 		},
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
-			if (this.effectData.target.baseTemplate.baseName !== 'Cherrim') return;
+			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
-			if (this.effectData.target.baseTemplate.baseName !== 'Cherrim') return;
+			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
@@ -1116,7 +1116,7 @@ let BattleAbilities = {
 		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm. If this Pokemon is holding Utility Umbrella and the weather condition is Sunny Day, Desolate Land, Rain Dance, or Primordial Sea, it will not change types.",
 		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
 		onUpdate(pokemon) {
-			if (pokemon.baseTemplate.baseName !== 'Castform' || pokemon.transformed) return;
+			if (pokemon.baseTemplate.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
@@ -1490,7 +1490,7 @@ let BattleAbilities = {
 	"hungerswitch": {
 		shortDesc: "If Morpeko, it changes between Full Belly and Hangry Mode at the end of each turn.",
 		onResidual(pokemon) {
-			if (pokemon.template.baseName !== 'Morpeko' || pokemon.transformed) return;
+			if (pokemon.template.baseSpecies !== 'Morpeko' || pokemon.transformed) return;
 			let targetForme = pokemon.template.name === 'Morpeko' ? 'Morpeko-Hangry' : 'Morpeko';
 			pokemon.formeChange(targetForme);
 		},
@@ -2830,7 +2830,7 @@ let BattleAbilities = {
 		shortDesc: "If Zygarde 10%/50%, changes to Complete if at 1/2 max HP or less at end of turn.",
 		onResidualOrder: 27,
 		onResidual(pokemon) {
-			if (pokemon.baseTemplate.baseName !== 'Zygarde' || pokemon.transformed || !pokemon.hp) return;
+			if (pokemon.baseTemplate.baseSpecies !== 'Zygarde' || pokemon.transformed || !pokemon.hp) return;
 			if (pokemon.template.id === 'zygardecomplete' || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
 			pokemon.formeChange('Zygarde-Complete', this.effect, true);
@@ -3339,7 +3339,7 @@ let BattleAbilities = {
 		desc: "On switch-in, if this Pokemon is a Wishiwashi that is level 20 or above and has more than 1/4 of its maximum HP left, it changes to School Form. If it is in School Form and its HP drops to 1/4 of its maximum HP or less, it changes to Solo Form at the end of the turn. If it is in Solo Form and its HP is greater than 1/4 its maximum HP at the end of the turn, it changes to School Form.",
 		shortDesc: "If user is Wishiwashi, changes to School Form if it has > 1/4 max HP, else Solo Form.",
 		onStart(pokemon) {
-			if (pokemon.baseTemplate.baseName !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed) return;
+			if (pokemon.baseTemplate.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.template.id === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
@@ -3352,7 +3352,7 @@ let BattleAbilities = {
 		},
 		onResidualOrder: 27,
 		onResidual(pokemon) {
-			if (pokemon.baseTemplate.baseName !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed || !pokemon.hp) return;
+			if (pokemon.baseTemplate.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed || !pokemon.hp) return;
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.template.id === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
@@ -3522,7 +3522,7 @@ let BattleAbilities = {
 		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP, and changes to Meteor Form if it has more than 1/2 its maximum HP. This check is done on switch-in and at the end of each turn. While in its Meteor Form, it cannot become affected by major status conditions. Moongeist Beam, Sunsteel Strike, and the Mold Breaker, Teravolt, and Turboblaze Abilities cannot ignore this Ability.",
 		shortDesc: "If Minior, switch-in/end of turn it changes to Core at 1/2 max HP or less, else Meteor.",
 		onStart(pokemon) {
-			if (pokemon.baseTemplate.baseName !== 'Minior' || pokemon.transformed) return;
+			if (pokemon.baseTemplate.baseSpecies !== 'Minior' || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
 				if (pokemon.template.id === 'minior') {
 					pokemon.formeChange('Minior-Meteor');
@@ -3535,7 +3535,7 @@ let BattleAbilities = {
 		},
 		onResidualOrder: 27,
 		onResidual(pokemon) {
-			if (pokemon.baseTemplate.baseName !== 'Minior' || pokemon.transformed || !pokemon.hp) return;
+			if (pokemon.baseTemplate.baseSpecies !== 'Minior' || pokemon.transformed || !pokemon.hp) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
 				if (pokemon.template.id === 'minior') {
 					pokemon.formeChange('Minior-Meteor');
@@ -3813,7 +3813,7 @@ let BattleAbilities = {
 		shortDesc: "If Aegislash, changes Forme to Blade before attacks and Shield before King's Shield.",
 		onBeforeMovePriority: 0.5,
 		onBeforeMove(attacker, defender, move) {
-			if (attacker.template.baseName !== 'Aegislash' || attacker.transformed) return;
+			if (attacker.template.baseSpecies !== 'Aegislash' || attacker.transformed) return;
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
 			let targetSpecies = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.template.name !== targetSpecies) attacker.formeChange(targetSpecies);
@@ -4658,7 +4658,7 @@ let BattleAbilities = {
 		shortDesc: "If Darmanitan, at end of turn changes Mode to Standard if > 1/2 max HP, else Zen.",
 		onResidualOrder: 27,
 		onResidual(pokemon) {
-			if (pokemon.baseTemplate.baseName !== 'Darmanitan' || pokemon.transformed) {
+			if (pokemon.baseTemplate.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
 			if (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.template.forme)) {
@@ -4672,7 +4672,7 @@ let BattleAbilities = {
 			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
-			if (pokemon.template.baseName === 'Darmanitan' && pokemon.template.battleOnly) {
+			if (pokemon.template.baseSpecies === 'Darmanitan' && pokemon.template.battleOnly) {
 				pokemon.formeChange(/** @type {string} */ (pokemon.template.battleOnly), this.effect, false, '[silent]');
 			}
 		},

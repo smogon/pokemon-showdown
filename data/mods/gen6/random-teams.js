@@ -739,7 +739,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 			item = 'Stick';
 		} else if (template.name === 'Genesect' && hasMove['technoblast']) {
 			item = 'Douse Drive';
-		} else if (template.baseName === 'Pikachu') {
+		} else if (template.baseSpecies === 'Pikachu') {
 			item = 'Light Ball';
 		} else if (template.name === 'Shedinja' || template.name === 'Smeargle') {
 			item = 'Focus Sash';
@@ -920,7 +920,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		return {
-			name: template.baseName,
+			name: template.baseSpecies,
 			species: species,
 			gender: template.gender,
 			moves: moves,
@@ -1009,7 +1009,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		return {
-			name: setData.set.name || template.baseName,
+			name: setData.set.name || template.baseSpecies,
 			species: setData.set.species,
 			gender: setData.set.gender || template.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
 			item: setData.set.item || '',
@@ -1065,7 +1065,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 			let speciesFlags = this.randomFactorySets[chosenTier][template.id].flags;
 
 			// Limit to one of each species (Species Clause)
-			if (teamData.baseFormes[template.baseName]) continue;
+			if (teamData.baseFormes[template.baseSpecies]) continue;
 
 			// Limit the number of Megas to one
 			if (teamData.megaCount >= 1 && speciesFlags.megaOnly) continue;
@@ -1105,7 +1105,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 			}
 			teamData.typeComboCount[typeCombo] = 1;
 
-			teamData.baseFormes[template.baseName] = 1;
+			teamData.baseFormes[template.baseSpecies] = 1;
 
 			let itemData = this.dex.getItem(set.item);
 			if (itemData.megaStone) teamData.megaCount++;

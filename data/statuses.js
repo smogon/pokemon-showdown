@@ -92,7 +92,7 @@ let BattleStatuses = {
 			} else {
 				this.add('-status', target, 'frz');
 			}
-			if (target.template.name === 'Shaymin-Sky' && target.baseTemplate.baseName === 'Shaymin') {
+			if (target.template.name === 'Shaymin-Sky' && target.baseTemplate.baseSpecies === 'Shaymin') {
 				target.formeChange('Shaymin', this.effect, true);
 			}
 		},

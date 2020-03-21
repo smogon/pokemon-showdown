@@ -203,7 +203,7 @@ class RandomLetsGoTeams extends RandomTeams {
 		}
 
 		return {
-			name: template.baseName,
+			name: template.baseSpecies,
 			species: species,
 			level: 100,
 			gender: template.gender,
@@ -241,7 +241,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseName]) continue;
+			if (baseFormes[template.baseSpecies]) continue;
 
 			let types = template.types;
 
@@ -265,7 +265,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			pokemon.push(set);
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[template.baseName] = 1;
+			baseFormes[template.baseSpecies] = 1;
 
 			// Increment type counters
 			for (const type of types) {

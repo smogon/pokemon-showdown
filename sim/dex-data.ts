@@ -162,7 +162,7 @@ export type ComplexTeamBan = ComplexBan;
  * - '[ruleid]' the ID of a rule in effect
  * - '-[thing]' or '-[category]:[thing]' ban a thing
  * - '+[thing]' or '+[category]:[thing]' allow a thing (override a ban)
- * [category] is one of: item, move, ability, species, basename
+ * [category] is one of: item, move, ability, species, basespecies
  *
  * The value is the name of the parent rule (blank for the active format).
  */
@@ -523,25 +523,25 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/**
 	 * Species ID. Identical to ID. Note that this is the full ID, e.g.
 	 * 'basculinbluestriped'. To get the base species ID, you need to
-	 * manually read toID(template.baseName).
+	 * manually read toID(template.baseSpecies).
 	 */
 	readonly id: ID;
 	/**
 	 * Name. Note that this is the full name,
 	 * e.g. 'Basculin-Blue-Striped'. To get the base species name, see
-	 * template.baseName.
+	 * template.baseSpecies.
 	 */
 	readonly name: string;
 	/**
 	 * Base species. Species, but without the forme name.
 	 *
-	 * DO NOT ASSUME A POKEMON CAN TRANSFORM FROM `baseName` TO
+	 * DO NOT ASSUME A POKEMON CAN TRANSFORM FROM `baseSpecies` TO
 	 * `species`. USE `inheritsFrom` FOR THAT.
 	 */
-	readonly baseName: string;
+	readonly baseSpecies: string;
 	/**
 	 * Forme name. If the forme exists,
-	 * `template.name === template.baseName + '-' + template.forme`
+	 * `template.name === template.baseSpecies + '-' + template.forme`
 	 */
 	readonly forme: string;
 	/**
@@ -553,7 +553,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * `aliases.js` aliases to this entry, but not have their own
 	 * entry in `pokedex.js`.
 	 */
-	readonly otherForms?: string[];
+	readonly cosmeticFormes?: string[];
 	/**
 	 * Other formes. List of names of formes, appears only on the base
 	 * forme. Unlike forms, these have their own entry in `pokedex.js`.
@@ -635,7 +635,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * technically evolution. Includes in-battle transformations like
 	 * Zen Mode and out-of-battle transformations like Rotom.)
 	 *
-	 * Not filled out for megas/primals - fall back to baseName
+	 * Not filled out for megas/primals - fall back to baseSpecies
 	 * for in-battle formes.
 	 */
 	readonly inheritsFrom: ID;
@@ -665,13 +665,13 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.effectType = 'Pokemon';
 		this.id = data.id as ID;
 		this.name = data.name;
-		this.baseName = data.baseName || this.name;
+		this.baseSpecies = data.baseSpecies || this.name;
 		this.forme = data.forme || '';
 		this.baseForme = data.baseForme || '';
-		this.otherForms = data.otherForms || undefined;
+		this.cosmeticFormes = data.cosmeticFormes || undefined;
 		this.otherFormes = data.otherFormes || undefined;
 		this.spriteid = data.spriteid ||
-			(toID(this.baseName) + (this.baseName !== this.name ? `-${toID(this.forme)}` : ''));
+			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || {0: ""};
 		this.types = data.types || ['???'];
 		this.addedType = data.addedType || undefined;
@@ -701,8 +701,8 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.maxHP = data.maxHP || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 		this.isGigantamax = data.isGigantamax || undefined;
-		this.battleOnly = data.battleOnly || (this.isMega || this.isGigantamax ? this.baseName : undefined);
-		this.inheritsFrom = data.inheritsFrom || (this.isGigantamax ? toID(this.baseName) : undefined);
+		this.battleOnly = data.battleOnly || (this.isMega || this.isGigantamax ? this.baseSpecies : undefined);
+		this.inheritsFrom = data.inheritsFrom || (this.isGigantamax ? toID(this.baseSpecies) : undefined);
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {
@@ -712,7 +712,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 			} else if (this.forme === 'Primal') {
 				this.gen = 6;
 				this.isPrimal = true;
-				this.battleOnly = this.baseName;
+				this.battleOnly = this.baseSpecies;
 			} else if (this.num >= 650 || this.isMega) {
 				this.gen = 6;
 			} else if (this.num >= 494) {

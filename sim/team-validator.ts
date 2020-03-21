@@ -279,7 +279,7 @@ export class TeamValidator {
 				if (format.name === '[Gen 7] Cross Evolution' && (crossTemplate = dex.getTemplate(set.name)).exists) {
 					set.name = crossTemplate.name;
 				} else {
-					set.name = dex.getTemplate(set.species).baseName;
+					set.name = dex.getTemplate(set.species).baseSpecies;
 				}
 			}
 		}
@@ -362,9 +362,9 @@ export class TeamValidator {
 			// Name must not be the name of another pokemon
 			set.name = '';
 		}
-		set.name = set.name || template.baseName;
+		set.name = set.name || template.baseSpecies;
 		let name = set.species;
-		if (set.species !== set.name && template.baseName !== set.name) {
+		if (set.species !== set.name && template.baseSpecies !== set.name) {
 			name = `${set.name} (${set.species})`;
 		}
 
@@ -603,8 +603,8 @@ export class TeamValidator {
 			}
 		} else if (ruleTable.has('obtainablemisc') && learnsetTemplate.eventOnly) {
 			const eventTemplate = !learnsetTemplate.eventData &&
-				outOfBattleTemplate.baseName !== outOfBattleTemplate.name ?
-				dex.getTemplate(outOfBattleTemplate.baseName) : outOfBattleTemplate;
+				outOfBattleTemplate.baseSpecies !== outOfBattleTemplate.name ?
+				dex.getTemplate(outOfBattleTemplate.baseSpecies) : outOfBattleTemplate;
 			const eventData = learnsetTemplate.eventData ||
 				dex.getLearnsetData(eventTemplate.id).eventData;
 			if (!eventData) throw new Error(`Event-only template ${template.name} has no eventData table`);
@@ -752,9 +752,9 @@ export class TeamValidator {
 		const cantBreedNorEvolve = (template.eggGroups[0] === 'Undiscovered' && !template.prevo && !template.nfe);
 		const isLegendary = (cantBreedNorEvolve && ![
 			'Unown', 'Pikachu',
-		].includes(template.baseName)) || [
+		].includes(template.baseSpecies)) || [
 			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Manaphy', 'Meltan', 'Melmetal',
-		].includes(template.baseName);
+		].includes(template.baseSpecies);
 		const diancieException = template.name === 'Diancie' && set.shiny;
 		const has3PerfectIVs = setSources.minSourceGen() >= 6 && isLegendary && !diancieException;
 
@@ -1133,7 +1133,7 @@ export class TeamValidator {
 				throw new Error(`Species ${template.name} has a required ability despite not being a battle-only forme; it should just be in its abilities table.`);
 			}
 			if (template.requiredItems && !template.requiredItems.includes(item.name)) {
-				if (dex.gen >= 8 && (template.baseName === 'Arceus' || template.baseName === 'Silvally')) {
+				if (dex.gen >= 8 && (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally')) {
 					// Arceus/Silvally formes in gen 8 only require the item with Multitype/RKS System
 					if (set.ability === template.abilities[0]) {
 						problems.push(`${name} needs to hold ${template.requiredItems.join(' or ')}.`);
@@ -1146,7 +1146,7 @@ export class TeamValidator {
 
 			// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
 			// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally).
-			if (item.forcedForme && template.name === dex.getTemplate(item.forcedForme).baseName) {
+			if (item.forcedForme && template.name === dex.getTemplate(item.forcedForme).baseSpecies) {
 				set.species = item.forcedForme;
 			}
 		}
@@ -1185,7 +1185,7 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 
 		setHas['pokemon:' + template.id] = true;
-		setHas['basepokemon:' + toID(template.baseName)] = true;
+		setHas['basepokemon:' + toID(template.baseSpecies)] = true;
 
 		let isMega = false;
 		if (tierTemplate !== template) {
@@ -1225,14 +1225,14 @@ export class TeamValidator {
 			}
 		}
 
-		banReason = ruleTable.check('basepokemon:' + toID(template.baseName));
+		banReason = ruleTable.check('basepokemon:' + toID(template.baseSpecies));
 		if (banReason) {
 			return `${template.name} is ${banReason}.`;
 		}
 		if (banReason === '') {
 			// don't allow nonstandard templates when whitelisting standard base species
 			// i.e. unbanning Pichu doesn't mean allowing Pichu-Spiky-Eared outside of Gen 4
-			const baseTemplate = dex.getTemplate(template.baseName);
+			const baseTemplate = dex.getTemplate(template.baseSpecies);
 			if (baseTemplate.isNonstandard === template.isNonstandard) {
 				return null;
 			}
@@ -1426,7 +1426,7 @@ export class TeamValidator {
 		let name = set.species;
 		const template = dex.getTemplate(set.species);
 		if (!eventTemplate) eventTemplate = template;
-		if (set.name && set.species !== set.name && template.baseName !== set.name) name = `${set.name} (${set.species})`;
+		if (set.name && set.species !== set.name && template.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 
 		const fastReturn = !because;
 		if (eventData.from) from = `from ${eventData.from}`;
@@ -1708,9 +1708,9 @@ export class TeamValidator {
 			if (dex.gen <= 2 && template.gen === 1) tradebackEligible = true;
 			const lsetData = dex.getLearnsetData(template.id);
 			if (!lsetData.learnset) {
-				if (template.baseName !== template.name) {
+				if (template.baseSpecies !== template.name) {
 					// forme without its own learnset
-					template = dex.getTemplate(template.baseName);
+					template = dex.getTemplate(template.baseSpecies);
 					// warning: formes with their own learnset, like Wormadam, should NOT
 					// inherit from their base forme unless they're freely switchable
 					continue;
@@ -1718,7 +1718,7 @@ export class TeamValidator {
 				// should never happen
 				break;
 			}
-			const checkingPrevo = template.baseName !== species.baseName;
+			const checkingPrevo = template.baseSpecies !== species.baseSpecies;
 			if (checkingPrevo && !moveSources.size()) {
 				if (!setSources.babyOnly || !template.prevo) {
 					babyOnly = template.id;
@@ -1944,7 +1944,7 @@ export class TeamValidator {
 
 	static hasLegendaryIVs(template: Template) {
 		return ((template.eggGroups[0] === 'Undiscovered' || template.name === 'Manaphy') &&
-			!template.prevo && !template.nfe && template.name !== 'Unown' && template.baseName !== 'Pikachu');
+			!template.prevo && !template.nfe && template.name !== 'Unown' && template.baseSpecies !== 'Pikachu');
 	}
 
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {

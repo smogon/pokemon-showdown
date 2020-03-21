@@ -228,7 +228,7 @@ class TeamGenerator {
 			}
 
 			team.push({
-				name: template.baseName,
+				name: template.baseSpecies,
 				species: template.name,
 				gender: template.gender,
 				item,

@@ -1067,7 +1067,7 @@ interface TemplateData {
 	types: string[];
 	weightkg: number;
 	baseForme?: string;
-	baseName?: string;
+	baseSpecies?: string;
 	evoLevel?: number;
 	evoMove?: string;
 	evoCondition?: string;
@@ -1078,7 +1078,7 @@ interface TemplateData {
 	gender?: GenderName;
 	genderRatio?: {[k: string]: number};
 	maxHP?: number;
-	otherForms?: string[];
+	cosmeticFormes?: string[];
 	otherFormes?: string[];
 	prevo?: string;
 	gen?: number;

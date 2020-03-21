@@ -332,7 +332,7 @@ export class ModdedDex {
 	getSpecies(species: string | Template): string {
 		const id = toID(species || '');
 		const template = this.getTemplate(id);
-		if (template.otherForms && template.otherForms.includes(id)) {
+		if (template.cosmeticFormes && template.cosmeticFormes.includes(id)) {
 			const form = id.slice(template.name.length);
 			if (form) return template.name + '-' + form[0].toUpperCase() + form.slice(1);
 		}
@@ -403,17 +403,17 @@ export class ModdedDex {
 		if (id && this.data.Pokedex.hasOwnProperty(id)) {
 			template = new Data.Template({name}, this.data.Pokedex[id], this.data.FormatsData[id]);
 			// Inherit any statuses from the base species (Arceus, Silvally).
-			const baseSpeciesStatuses = this.data.Statuses[toID(template.baseName)];
+			const baseSpeciesStatuses = this.data.Statuses[toID(template.baseSpecies)];
 			if (baseSpeciesStatuses !== undefined) {
 				let key: keyof EffectData;
 				for (key in baseSpeciesStatuses) {
 					if (!(key in template)) template[key] = baseSpeciesStatuses[key];
 				}
 			}
-			if (!template.tier && !template.doublesTier && template.baseName !== template.name) {
-				if (template.baseName === 'Mimikyu') {
-					template.tier = this.data.FormatsData[toID(template.baseName)].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[toID(template.baseName)].doublesTier || 'Illegal';
+			if (!template.tier && !template.doublesTier && template.baseSpecies !== template.name) {
+				if (template.baseSpecies === 'Mimikyu') {
+					template.tier = this.data.FormatsData[toID(template.baseSpecies)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toID(template.baseSpecies)].doublesTier || 'Illegal';
 				} else if (template.id.endsWith('totem')) {
 					template.tier = this.data.FormatsData[template.id.slice(0, -5)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[template.id.slice(0, -5)].doublesTier || 'Illegal';
@@ -421,9 +421,9 @@ export class ModdedDex {
 					template.tier = this.data.FormatsData[toID(template.battleOnly)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[toID(template.battleOnly)].doublesTier || 'Illegal';
 				} else {
-					const baseFormatsData = this.data.FormatsData[toID(template.baseName)];
+					const baseFormatsData = this.data.FormatsData[toID(template.baseSpecies)];
 					if (!baseFormatsData) {
-						throw new Error(`${template.baseName} has no formats-data entry`);
+						throw new Error(`${template.baseSpecies} has no formats-data entry`);
 					}
 					template.tier = baseFormatsData.tier || 'Illegal';
 					template.doublesTier = baseFormatsData.doublesTier || 'Illegal';
@@ -455,7 +455,7 @@ export class ModdedDex {
 	getOutOfBattleSpecies(template: Template) {
 		return !template.battleOnly ? template.name :
 			template.inheritsFrom ? this.getTemplate(template.inheritsFrom).name :
-			template.baseName;
+			template.baseSpecies;
 	}
 
 	getLearnsetData(id: ID): LearnsetData {

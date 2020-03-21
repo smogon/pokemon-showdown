@@ -829,7 +829,7 @@ let BattleMovedex = {
 			},
 		},
 		onTryMove(pokemon, target, move) {
-			if (pokemon.template.baseName === 'Morpeko') {
+			if (pokemon.template.baseSpecies === 'Morpeko') {
 				return;
 			}
 			this.add('-fail', pokemon, 'move: Aura Wheel');
@@ -15321,7 +15321,7 @@ let BattleMovedex = {
 			status: 'slp',
 		},
 		onHit(target, pokemon, move) {
-			if (pokemon.baseTemplate.baseName === 'Meloetta' && !pokemon.transformed) {
+			if (pokemon.baseTemplate.baseSpecies === 'Meloetta' && !pokemon.transformed) {
 				move.willChangeForme = true;
 			}
 		},
@@ -19611,7 +19611,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart(target) {
-				if (['Diglett', 'Dugtrio', 'Palossand', 'Sandygast'].includes(target.baseTemplate.baseName) ||
+				if (['Diglett', 'Dugtrio', 'Palossand', 'Sandygast'].includes(target.baseTemplate.baseSpecies) ||
 						target.baseTemplate.name === 'Gengar-Mega') {
 					this.add('-immune', target);
 					return null;

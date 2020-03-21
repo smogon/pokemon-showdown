@@ -285,7 +285,7 @@ let BattleAbilities = {
 		},
 		onPrepareHit(source, target, move) {
 			if (!target || !move) return;
-			if (source.template.baseName !== 'Shaymin' || source.transformed) return;
+			if (source.template.baseSpecies !== 'Shaymin' || source.transformed) return;
 			if (move.category !== 'Status') return;
 			source.formeChange('Shaymin', this.effect);
 		},
@@ -690,7 +690,7 @@ let BattleAbilities = {
 			}
 		},
 		onUpdate(pokemon) {
-			if (pokemon.baseTemplate.baseName !== 'Castform' || pokemon.transformed) return;
+			if (pokemon.baseTemplate.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
 			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':

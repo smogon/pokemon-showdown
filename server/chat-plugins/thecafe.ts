@@ -46,7 +46,7 @@ function stringifyTeam(team: PokemonSet[], ingredients: string[]) {
 function generateTeam(generator = '') {
 	let potentialPokemon = Object.keys(Dex.data.Pokedex).filter(mon => {
 		const template = Dex.getTemplate(mon);
-		return template.baseName === template.name;
+		return template.baseSpecies === template.name;
 	});
 	let speciesClause = true;
 	switch (generator) {

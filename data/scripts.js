@@ -1197,7 +1197,7 @@ let BattleScripts = {
 		let altForme = pokemon.baseTemplate.otherFormes && this.dex.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		let item = pokemon.getItem();
 		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.name;
-		if (item.megaEvolves !== pokemon.baseTemplate.baseName || item.megaStone === pokemon.name) {
+		if (item.megaEvolves !== pokemon.baseTemplate.baseSpecies || item.megaStone === pokemon.name) {
 			return null;
 		}
 		return item.megaStone;
@@ -1242,7 +1242,7 @@ let BattleScripts = {
 			}
 			// Some pokemon species are unable to dynamax
 			const cannotDynamax = ['zacian', 'zamazenta', 'eternatus'];
-			if (cannotDynamax.includes(toID(pokemon.template.baseName))) {
+			if (cannotDynamax.includes(toID(pokemon.template.baseSpecies))) {
 				return;
 			}
 		}

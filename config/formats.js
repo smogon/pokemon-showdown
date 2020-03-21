@@ -329,7 +329,7 @@ let Formats = [
 		ruleset: ['Standard GBU'],
 		onValidateSet(set) {
 			let template = Dex.getTemplate(set.species);
-			if (template.gen < 8 || (template.isGigantamax && Dex.getTemplate(template.baseName).gen < 8)) {
+			if (template.gen < 8 || (template.isGigantamax && Dex.getTemplate(template.baseSpecies).gen < 8)) {
 				return [`Only Pokemon from Generation 8 are allowed.`, `(${set.species} is from Generation ${template.gen}.)`];
 			}
 		},
@@ -394,7 +394,7 @@ let Formats = [
 					// @ts-ignore
 					bstMega += megaTemplate.baseStats[stat];
 				}
-				if (template.baseName === item.megaEvolves && bstMega > 625) {
+				if (template.baseSpecies === item.megaEvolves && bstMega > 625) {
 					return [`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
 				}
 			}
@@ -691,7 +691,7 @@ let Formats = [
 				let item = this.dex.getItem(set.item);
 				if (!item || !item.megaStone) continue;
 				let template = this.dex.getTemplate(set.species);
-				if (template.isNonstandard) return [`${template.baseName} does not exist in gen 8.`];
+				if (template.isNonstandard) return [`${template.baseSpecies} does not exist in gen 8.`];
 				if (restrictedPokemon.includes(template.name)) {
 					return [`${template.name} is not allowed to hold ${item.name}.`];
 				}
@@ -708,7 +708,7 @@ let Formats = [
 		onSwitchIn(pokemon) {
 			// @ts-ignore
 			let oMegaTemplate = this.dex.getTemplate(pokemon.template.originalMega);
-			if (oMegaTemplate.exists && pokemon.m.originalSpecies !== oMegaTemplate.baseName) {
+			if (oMegaTemplate.exists && pokemon.m.originalSpecies !== oMegaTemplate.baseSpecies) {
 				// Place volatiles on the Pokémon to show its mega-evolved condition and details
 				this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
 				let oTemplate = this.dex.getTemplate(pokemon.m.originalSpecies);
@@ -720,7 +720,7 @@ let Formats = [
 		onSwitchOut(pokemon) {
 			// @ts-ignore
 			let oMegaTemplate = this.dex.getTemplate(pokemon.template.originalMega);
-			if (oMegaTemplate.exists && pokemon.m.originalSpecies !== oMegaTemplate.baseName) {
+			if (oMegaTemplate.exists && pokemon.m.originalSpecies !== oMegaTemplate.baseSpecies) {
 				this.add('-end', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
 			}
 		},
@@ -1504,8 +1504,8 @@ let Formats = [
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
 			let n = 0;
 			for (const set of team) {
-				const baseName = this.dex.getTemplate(set.species).baseName;
-				if (legends.includes(baseName)) n++;
+				const baseSpecies = this.dex.getTemplate(set.species).baseSpecies;
+				if (legends.includes(baseSpecies)) n++;
 				if (n > 2) return [`You can only use up to two legendary Pok\u00E9mon.`];
 			}
 		},
@@ -1811,8 +1811,8 @@ let Formats = [
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde'];
 			let n = 0;
 			for (const set of team) {
-				let baseName = this.dex.getTemplate(set.species).baseName;
-				if (legends.includes(baseName)) n++;
+				let baseSpecies = this.dex.getTemplate(set.species).baseSpecies;
+				if (legends.includes(baseSpecies)) n++;
 				if (n > 2) return ["You can only use up to two legendary Pok\u00E9mon."];
 			}
 		},

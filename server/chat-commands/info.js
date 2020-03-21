@@ -1857,10 +1857,10 @@ const commands = {
 		const processManagers = require(/** @type {any} */('../../.lib-dist/process-manager')).processManagers;
 		for (const manager of processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
-				buf += `<strong>${process.process.pid}</strong> - ${manager.basename} ${i} (load ${process.load})<br />`;
+				buf += `<strong>${process.process.pid}</strong> - ${manager.basespecies} ${i} (load ${process.load})<br />`;
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
-				buf += `<strong>${process.process.pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load})<br />`;
+				buf += `<strong>${process.process.pid}</strong> - PENDING RELEASE ${manager.basespecies} ${i} (load ${process.load})<br />`;
 			}
 		}
 
