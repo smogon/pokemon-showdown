@@ -527,9 +527,9 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 */
 	readonly id: ID;
 	/**
-	 * Name. Note that this is the full name,
-	 * e.g. 'Basculin-Blue-Striped'. To get the base species name, see
-	 * template.baseSpecies.
+	 * Name. Note that this is the full name with forme,
+	 * e.g. 'Basculin-Blue-Striped'. To get the name without forme, see
+	 * `template.baseSpecies`.
 	 */
 	readonly name: string;
 	/**
