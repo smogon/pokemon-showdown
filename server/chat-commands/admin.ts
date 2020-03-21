@@ -29,7 +29,11 @@ export const commands: ChatCommands = {
 
 		if (!this.runBroadcast(true, '!htmlbox')) return;
 
-		this.sendReplyBox(target);
+		if (this.broadcasting) {
+			return `/raw <div class="infobox">${target}</div>`;
+		} else {
+			this.sendReplyBox(target);
+		}
 	},
 	htmlboxhelp: [
 		`/htmlbox [message] - Displays a message, parsing HTML code contained.`,
@@ -46,7 +50,7 @@ export const commands: ChatCommands = {
 			target += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
-		this.addBox(target);
+		return `/raw <div class="infobox">${target}</div>`;
 	},
 	addhtmlboxhelp: [
 		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * & ~`,
@@ -84,8 +88,8 @@ export const commands: ChatCommands = {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
-		html = `|uhtml${(cmd === 'changeuhtml' ? 'change' : '')}|${name}|${html}`;
-		this.add(html);
+		html = `/uhtml${(cmd === 'changeuhtml' ? 'change' : '')} ${name},${html}`;
+		return html;
 	},
 	adduhtmlhelp: [
 		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.  Requires: * & ~`,
