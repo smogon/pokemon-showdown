@@ -1119,6 +1119,32 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ice",
 	},
+	// Celestial
+	hyperforcestrike: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Damages the target and restores user's HP by 15% of its total health.",
+		shortDesc: "Damages the target and heals 15% total HP.",
+		id: "hyperforcestrike",
+		name: "Hyperforce Strike",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Draco Meteor", target);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			this.heal(pokemon.maxhp * 0.15, pokemon, pokemon, move); // 15% health recovered
+		},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
 	// Ceteris
 	bringerofdarkness: {
 		accuracy: true,
@@ -1341,32 +1367,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Electric",
-	},
-	// Dragontite
-	hyperforcestrike: {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		desc: "Damages the target and restores user's HP by 15% of its total health.",
-		shortDesc: "Damages the target and heals 15% total HP.",
-		id: "hyperforcestrike",
-		name: "Hyperforce Strike",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Draco Meteor", target);
-		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			this.heal(pokemon.maxhp * 0.15, pokemon, pokemon, move); // 15% health recovered
-		},
-		secondary: null,
-		target: "normal",
-		type: "Flying",
 	},
 	// DragonWhale
 	earthsblessing: {

@@ -294,6 +294,22 @@ let BattleAbilities = {
 			pokemon.formeChange('Shaymin-Sky', this.effect);
 		},
 	},
+	// Celestial
+	iceabsorb: {
+		desc: "This Pokemon is immune to Ice-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Ice-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Ice moves; Ice immunity.",
+		id: "iceabsorb",
+		name: "Ice Absorb",
+		isNonstandard: "Custom",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Ice') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Ice Absorb');
+				}
+				return null;
+			}
+		},
+	},
 	// Darth
 	seraphicregeneration: {
 		desc: "When this Pokemon switches out, it regains 33% of its HP, then its replacement recovers 33% of its HP.",
@@ -367,22 +383,6 @@ let BattleAbilities = {
 			if (effect.id === 'psn' || effect.id === 'tox') {
 				this.heal(target.baseMaxhp / 8);
 				return false;
-			}
-		},
-	},
-	// Dragontite
-	iceabsorb: {
-		desc: "This Pokemon is immune to Ice-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Ice-type move.",
-		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Ice moves; Ice immunity.",
-		id: "iceabsorb",
-		name: "Ice Absorb",
-		isNonstandard: "Custom",
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Ice') {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Ice Absorb');
-				}
-				return null;
 			}
 		},
 	},

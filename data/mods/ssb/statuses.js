@@ -381,6 +381,18 @@ let BattleStatuses = {
 			this.add(`c|+Catalystic|The Birb is never lucky.`);
 		},
 	},
+	celestial: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Celestial|**Time to electrify you**`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Celestial|__I'll be coming back for you!__`);
+		},
+		onFaint() {
+			this.add(`c|%Celestial|I'm shocked that you mere mortal actually defeated __me__`);
+		},
+	},
 	ceteris: {
 		noCopy: true,
 		onStart() {
@@ -455,18 +467,6 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|+deetah|I have 8 lives left, you can't get rid of me that easily.`);
-		},
-	},
-	dragontite: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Dragontite|**Time to electrify you**`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Dragontite|__I'll be coming back for you!__`);
-		},
-		onFaint() {
-			this.add(`c|+Dragontite|I'm shocked that you mere mortal actually defeated __me__`);
 		},
 	},
 	dragonwhale: {
@@ -575,7 +575,7 @@ let BattleStatuses = {
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
 			let activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
-			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'dragontite'];
+			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'celestial'];
 			if (activeMon === 'hoeenhero' || activeMon === 'salamander') {
 				 this.add(`c|%fart|what song should I sing?`);
 			} else if (activeMon === 'lifeisdank' || activeMon === 'nui' || activeMon === 'grimauxiliatrix') {

@@ -204,6 +204,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Birb to the Rescue',
 				evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant',
 			},
+			'Celestial': {
+				species: 'Dragonite', ability: 'Ice Absorb', item: 'Sky Plate', gender: 'M',
+				moves: ['Dragon Dance', 'Extreme Speed', 'Thousand Arrows'],
+				signatureMove: 'Hyperforce Strike',
+				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
+			},
 			'Ceteris': {
 				species: 'Greninja', ability: 'Protean', item: 'Expert Belt', gender: 'M',
 				moves: ['Dark Pulse', 'Origin Pulse', 'Gunk Shot', 'Shadow Sneak'],
@@ -245,12 +251,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Extreme Speed', 'Icicle Crash', 'Thousand Arrows'],
 				signatureMove: 'Galvanized Strike',
 				evs: {hp: 28, atk: 244, def: 188, spe: 48}, nature: 'Adamant', shiny: true,
-			},
-			'Dragontite': {
-				species: 'Dragonite', ability: 'Ice Absorb', item: 'Sky Plate', gender: 'M',
-				moves: ['Dragon Dance', 'Extreme Speed', 'Thousand Arrows'],
-				signatureMove: 'Hyperforce Strike',
-				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 			},
 			'DragonWhale': {
 				species: 'Garchomp', ability: 'Hustle', item: 'Groundium Z', gender: 'M',
