@@ -1196,7 +1196,7 @@ export class TeamValidator {
 			}
 		}
 
-		const tier = tierTemplate.tier === '(PU)' ? 'ZU' : tierTemplate.tier;
+		const tier = tierTemplate.tier === '(PU)' ? 'ZU' : tierTemplate.tier === '(NU)' ? 'PU' : tierTemplate.tier;
 		const tierTag = 'pokemontag:' + toID(tier);
 		setHas[tierTag] = true;
 
