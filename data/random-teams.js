@@ -200,9 +200,15 @@ class RandomTeams {
 			} else {
 				let learnset = this.dex.data.Learnsets[template.id] && this.dex.data.Learnsets[template.id].learnset ? this.dex.data.Learnsets[template.id].learnset : this.dex.data.Learnsets[this.dex.getTemplate(template.baseSpecies).id].learnset;
 				// @ts-ignore
+<<<<<<< HEAD
 				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
 				if (template.inheritsFrom) {
 					learnset = this.dex.data.Learnsets[template.inheritsFrom].learnset;
+=======
+				if (lsetData.exists) pool = Object.keys(lsetData.learnset).filter(moveid => lsetData.learnset[moveid].find(learned => learned.startsWith(this.gen.toString())));
+				if (template.name.startsWith('Necrozma-') || template.name.startsWith('Rotom-')) {
+					lsetData = this.dex.getLearnsetData(toID(template.baseSpecies));
+>>>>>>> Update data/random-teams.js
 					// @ts-ignore
 					const basePool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
 					pool = [...new Set(pool.concat(basePool))];
