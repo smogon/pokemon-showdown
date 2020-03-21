@@ -135,8 +135,6 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Swagger Clause` - ban the move Swagger
 
-`NFE Clause` - ban Pokemon that are fully evolved or can't evolve
-
 `CFZ Clause` - ban the use of crystal-free Z-Moves (having moves like Devastating Drake hacked directly on the moveset in formats like Hackmons, instead of using Dragon Claw + Dragonium Z)
 
 `Z-Move Clause` - ban Pokémon from holding Z-Crystals
@@ -149,6 +147,10 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Same Type Clause` - force all Pokémon on a team to share a type with one another
 
+`No NFE Clause` - ban all Pokémon that are not fully evolved (Pokémon can be re-added manually by simply unbanning them)
+
+`Forme Clause` - limit one of each forme of a Pokémon on a team (a team can have Zamazenta + Zamazenta-Crowned, but not Zamazenta + Zamazenta)
+
 ### Miscellaneous
 
 `Allow AVs` - allow Pokémon to have their stats boosted by Awakening Values in Let's Go formats
@@ -159,6 +161,9 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Little Cup` - allow only Pokémon that can evolve and aren't evolved
 
+`Not Fully Evolved` - allow only Pokémon that aren't fully evolved
+
+`Mimic Glitch` - allow Pokémon with access to Assist, Copycat, Metronome, Mimic, or Transform to gain access to almost any other move
 
 In-battle rules
 ---------------
@@ -179,9 +184,9 @@ In-battle rules
 
 `Inverse Mod` - inverse type effectiveness (like in Gen 6 Inverse Battles)
 
-`Gen 8 Camomons` - Pokémon will change their typing to match their first two moveslots
+`[Gen 8] Camomons` - Pokémon will change their typing to match their first two moveslots
 
-`Gen 7 Tier Shift` - Pokémon will have higher base stats the lower their Gen 7 Smogon tier is
+`[Gen 7] Tier Shift` - Pokémon will have higher base stats the lower their Gen 7 Smogon tier is
 
 `Dynamax Clause` - prevent Pokémon from Dynamaxing during battle. Cannot be used to allow Dynamaxing in old gens
 
@@ -233,10 +238,10 @@ Any format (starting with `Gen [number]`) can be used as a rule, to add all rule
 
 For example:
 
-`Gen 8 OU` - add all clauses and bans from Gen 8 OU.
+`[Gen 8] OU` - add all clauses and bans from Gen 8 OU.
 
-`Gen 8 Almost Any Ability` - add all clauses and bans from Gen 8 Almost Any Ability, allowing Pokémon to use almost any ability in the game.
+`[Gen 8] Almost Any Ability` - add all clauses and bans from Gen 8 Almost Any Ability, allowing Pokémon to use almost any ability in the game.
 
 People often use "tier" to mean "format", but in rulesets, the difference is important. A format is a list of rules for a game you can play, such as "Gen 8 OU". A tier is a list of Pokémon which can be banned or unbanned, such as "OU".
 
-`-OU, +Ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
+`- OU, + Ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
