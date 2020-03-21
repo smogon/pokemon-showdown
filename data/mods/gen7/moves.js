@@ -184,6 +184,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	disable: {
+		inherit: true,
+		desc: "For 4 turns, the target's last move used becomes disabled. Fails if one of the target's moves is already disabled, if the target has not made a move, if the target no longer knows the move, or if the move was a Z-Move. Z-Powered moves can still be selected and executed during this effect.",
+	},
 	dizzypunch: {
 		inherit: true,
 		isNonstandard: null,
@@ -261,6 +265,10 @@ let BattleMovedex = {
 	embargo: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	encore: {
+		inherit: true,
+		desc: "For its next 3 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Assist, Copycat, Encore, Me First, Metronome, Mimic, Mirror Move, Nature Power, Sketch, Sleep Talk, Struggle, Transform, or any Z-Move. Z-Powered moves can still be selected and executed during this effect.",
 	},
 	endure: {
 		inherit: true,
@@ -379,6 +387,10 @@ let BattleMovedex = {
 			},
 		},
 	},
+	gravity: {
+		inherit: true,
+		desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect. Relevant Z-Powered moves can still be selected, but will be prevented at execution during this effect.",
+	},
 	growth: {
 		inherit: true,
 		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages.",
@@ -394,6 +406,7 @@ let BattleMovedex = {
 	healblock: {
 		inherit: true,
 		isNonstandard: null,
+		desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected. Relevant Z-Powered moves can still be selected and executed during this effect.",
 	},
 	"healingwish": {
 		inherit: true,
@@ -536,6 +549,10 @@ let BattleMovedex = {
 	icehammer: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	imprison: {
+		inherit: true,
+		desc: "The user prevents all opposing Pokemon from using any moves that the user also knows as long as the user remains active. Z-Powered moves can still be selected and executed during this effect.",
 	},
 	infernooverdrive: {
 		inherit: true,
@@ -1055,6 +1072,10 @@ let BattleMovedex = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	taunt: {
+		inherit: true,
+		desc: "Prevents the target from using non-damaging moves for its next three turns. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune. Z-Powered moves can still be selected and executed during this effect.",
+	},
 	technoblast: {
 		inherit: true,
 		isNonstandard: null,
@@ -1082,6 +1103,10 @@ let BattleMovedex = {
 	thousandwaves: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	throatchop: {
+		inherit: true,
+		desc: "For 2 turns, the target cannot use sound-based moves. Z-Powered sound moves can still be selected and executed during this effect.",
 	},
 	toxicthread: {
 		inherit: true,
