@@ -78,6 +78,28 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help dexsearch');
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, maxgen${targetGen}`;
+		if (targetGen && targetGen === 5) {
+			const targArray = target.split(',');
+			for (const [i, arg] of targArray.entries()) {
+				if (arg.includes('|')) {
+					const orArray = arg.split('|');
+					for (const [j, a] of orArray.entries()) {
+						if (toID(a) === 'pu') {
+							orArray.splice(j, 1);
+							orArray.push('untiered');
+							continue;
+						}
+					}
+					targArray[i] = orArray.join('|');
+				} else {
+					if (toID(arg) === 'pu') {
+						targArray.splice(i, 1);
+						targArray.push('untiered');
+					}
+				}
+			}
+			target = targArray.join(',');
+		}
 		if (cmd === 'nds') target += ', natdex';
 		return runSearch({
 			tar: target,
@@ -351,7 +373,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
 		uubl: 'UUBL', uu: 'UU',
 		rubl: 'RUBL', ru: 'RU',
-		nubl: 'NUBL', nu: 'NU',
+		nubl: 'NUBL', nu: 'NU', untiered: '(NU)',
 		publ: 'PUBL', pu: 'PU', zu: '(PU)',
 		nfe: 'NFE',
 		lcuber: 'LC Uber', lcubers: 'LC Uber', lc: 'LC',
@@ -792,7 +814,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				let tier = dex[mon].tier;
-				if (tier[0] === '(' && tier !== '(PU)') tier = tier.slice(1, -1);
+				if (tier[0] === '(' && tier !== '(PU)' && tier !== '(NU)') tier = tier.slice(1, -1);
 				if (tier === 'New') tier = 'OU';
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
