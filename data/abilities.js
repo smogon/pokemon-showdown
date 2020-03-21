@@ -538,7 +538,7 @@ let BattleAbilities = {
 		onDamagingHit(damage, target, source, move) {
 			let activated = false;
 			for (let pokemon of this.getAllActive()) {
-				if (pokemon === target || !pokemon.hp) continue;
+				if (pokemon === target || pokemon.fainted) continue;
 				if (!activated) {
 					this.add('-ability', target, 'Cotton Down');
 					activated = true;
