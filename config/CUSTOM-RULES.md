@@ -161,7 +161,7 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Same Type Clause` - force all Pokémon on a team to share a type with one another
 
-`No NFE Clause` - ban all Pokémon that are not fully evolved (Pokémon can be re-added manually by simply unbanning them)
+`NFE Clause` - ban all Pokémon that are not fully evolved (Pokémon can be re-added manually by simply unbanning them)
 
 `Forme Clause` - limit one of each forme of a Pokémon on a team (a team can have Zamazenta + Zamazenta-Crowned, but not Zamazenta + Zamazenta)
 

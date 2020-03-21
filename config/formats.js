@@ -2255,7 +2255,7 @@ let Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['Standard', 'No NFE Clause'],
+		ruleset: ['Standard', 'NFE Clause'],
 		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain'],
 		unbanlist: ['Scyther'],
 	},
@@ -2267,7 +2267,7 @@ let Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['[Gen 3] UU', '!No NFE Clause'],
+		ruleset: ['[Gen 3] UU', '!NFE Clause'],
 		banlist: ['UU'],
 	},
 	{

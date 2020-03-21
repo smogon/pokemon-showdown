@@ -839,16 +839,16 @@ let BattleFormats = {
 		desc: "Holds all custom Pet Mod ruleset validation",
 		// Implemented in mods/[petmod]/rulesets.js
 	},
-	nonfeclause: {
+	nfeclause: {
 		effectType: 'ValidatorRule',
-		name: 'No NFE Clause',
+		name: 'NFE Clause',
 		desc: "Bans all NFE Pokemon",
 		onValidateSet(set) {
 			const template = this.dex.getTemplate(set.species || set.name);
 			const feInCurrentGen = template.evos && this.dex.getTemplate(template.evos[0]).gen > this.gen;
 			if (template.nfe && !feInCurrentGen) {
 				if (this.ruleTable.has(`+pokemon:${template.id}`)) return;
-				return [`${set.species} is banned due to No NFE Clause.`];
+				return [`${set.species} is banned due to NFE Clause.`];
 			}
 		},
 	},
