@@ -71,6 +71,10 @@ let BattleMovedex = {
 			},
 		},
 	},
+	disable: {
+		inherit: true,
+		desc: "For 4 turns, the target's last move used becomes disabled. Fails if one of the target's moves is already disabled, if the target has not made a move, or if the target no longer knows the move.",
+	},
 	encore: {
 		inherit: true,
 		desc: "For 3 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Encore, Mimic, Mirror Move, Sketch, Struggle, or Transform.",
@@ -156,6 +160,14 @@ let BattleMovedex = {
 			}
 		},
 	},
+	gravity: {
+		inherit: true,
+		desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
+	},
+	healblock: {
+		inherit: true,
+		desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
+	},
 	heavyslam: {
 		inherit: true,
 		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less.",
@@ -171,6 +183,10 @@ let BattleMovedex = {
 	iceball: {
 		inherit: true,
 		desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn.",
+	},
+	imprison: {
+		inherit: true,
+		desc: "The user prevents all opposing Pokemon from using any moves that the user also knows as long as the user remains active.",
 	},
 	kingsshield: {
 		inherit: true,
@@ -443,6 +459,10 @@ let BattleMovedex = {
 	tackle: {
 		inherit: true,
 		basePower: 50,
+	},
+	taunt: {
+		inherit: true,
+		desc: "Prevents the target from using non-damaging moves for its next three turns. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune.",
 	},
 	telekinesis: {
 		inherit: true,
