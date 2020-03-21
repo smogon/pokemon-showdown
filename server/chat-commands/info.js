@@ -2440,7 +2440,11 @@ const commands = {
 		}
 
 		this.runBroadcast(true);
-		this.sendReplyBox(code);
+		if (this.broadcasting) {
+			return `/raw <div class="infobox">${code}</div>`;
+		} else {
+			this.sendReplyBox(code);
+		}
 	},
 	codehelp: [
 		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`,
