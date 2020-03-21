@@ -151,7 +151,7 @@ let BattleMovedex = {
 		desc: "Has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording.",
 		shortDesc: "For Chatot, 10% chance to confuse the target.",
 		onModifyMove(move, pokemon) {
-			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
+			if (pokemon.template.name !== 'Chatot') delete move.secondaries;
 		},
 		secondary: {
 			chance: 10,

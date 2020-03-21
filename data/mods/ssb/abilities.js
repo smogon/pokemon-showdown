@@ -259,8 +259,8 @@ let BattleAbilities = {
 				return;
 			}
 			let formes = ['oricorio', 'oricoriosensu', 'oricoriopompom', 'oricoriopau'];
-			if (formes.includes(toID(source.template.species))) {
-				formes.splice(formes.indexOf(toID(source.template.species)), 1);
+			if (formes.includes(toID(source.template.name))) {
+				formes.splice(formes.indexOf(toID(source.template.name)), 1);
 				this.add('-activate', source, 'ability: Arabesque');
 				source.m.hasTransformed = true;
 				source.formeChange(formes[this.random(formes.length)], this.effect, true);
@@ -275,22 +275,22 @@ let BattleAbilities = {
 		name: "Gracidea Mastery",
 		isNonstandard: "Custom",
 		onTryHit(target, source, move) {
-			if ((target === source || move.category === 'Status') && target.template.speciesid !== 'shayminsky' && target.transformed) return;
+			if ((target === source || move.category === 'Status') && target.template.id !== 'shayminsky' && target.transformed) return;
 			target.formeChange('Shaymin', this.effect);
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (target.template.speciesid === 'shaymin') {
+			if (target.template.id === 'shaymin') {
 				target.formeChange('Shaymin-Sky', this.effect);
 			}
 		},
 		onPrepareHit(source, target, move) {
 			if (!target || !move) return;
-			if (source.template.baseSpecies !== 'Shaymin' || source.transformed) return;
+			if (source.template.baseName !== 'Shaymin' || source.transformed) return;
 			if (move.category !== 'Status') return;
 			source.formeChange('Shaymin', this.effect);
 		},
 		onAfterMove(pokemon) {
-			if (pokemon.template.speciesid !== 'shaymin' || pokemon.transformed) return;
+			if (pokemon.template.id !== 'shaymin' || pokemon.transformed) return;
 			pokemon.formeChange('Shaymin-Sky', this.effect);
 		},
 	},
@@ -462,7 +462,7 @@ let BattleAbilities = {
 				this.debug('illusion cleared');
 				let disguisedAs = toID(pokemon.illusion.name);
 				pokemon.illusion = null;
-				let details = pokemon.template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				let details = pokemon.template.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
 				// Handle hippopotas
@@ -530,7 +530,7 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onCriticalHit: false,
 		onSetStatus(status, target, source, effect) {
-			if (target.template.speciesid !== 'miniormeteor' || target.transformed) return;
+			if (target.template.id !== 'miniormeteor' || target.transformed) return;
 			if (!effect || !effect.status) return false;
 			this.add('-immune', target, '[from] ability: Mystery Shell');
 			return false;
@@ -690,22 +690,22 @@ let BattleAbilities = {
 			}
 		},
 		onUpdate(pokemon) {
-			if (pokemon.baseTemplate.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			if (pokemon.baseTemplate.baseName !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
 			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
-				if (pokemon.template.speciesid !== 'castformsunny') forme = 'Castform-Sunny';
+				if (pokemon.template.id !== 'castformsunny') forme = 'Castform-Sunny';
 				break;
 			case 'raindance':
 			case 'primordialsea':
-				if (pokemon.template.speciesid !== 'castformrainy') forme = 'Castform-Rainy';
+				if (pokemon.template.id !== 'castformrainy') forme = 'Castform-Rainy';
 				break;
 			case 'hail':
-				if (pokemon.template.speciesid !== 'castformsnowy') forme = 'Castform-Snowy';
+				if (pokemon.template.id !== 'castformsnowy') forme = 'Castform-Snowy';
 				break;
 			default:
-				if (pokemon.template.speciesid !== 'castform') forme = 'Castform';
+				if (pokemon.template.id !== 'castform') forme = 'Castform';
 				break;
 			}
 			if (pokemon.isActive && forme) {
@@ -817,7 +817,7 @@ let BattleAbilities = {
 		onBeforeMove(pokemon, target, move) {
 			switch (move.id) {
 			case 'psychoboost':
-				if (pokemon.template.species === 'Deoxys-Attack') return;
+				if (pokemon.template.name === 'Deoxys-Attack') return;
 				pokemon.set.nature = 'Modest';
 				pokemon.set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 				pokemon.set.evs = {hp: 4, atk: 0, def: 0, spa: 252, spd: 0, spe: 252};
@@ -825,7 +825,7 @@ let BattleAbilities = {
 				pokemon.formeChange('Deoxys-Attack', this.effect);
 				break;
 			case 'recover':
-				if (pokemon.template.species === 'Deoxys-Defense') return;
+				if (pokemon.template.name === 'Deoxys-Defense') return;
 				pokemon.set.nature = 'Bold';
 				pokemon.set.ivs = {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31};
 				pokemon.set.evs = {hp: 252, atk: 0, def: 128, spa: 0, spd: 128, spe: 0};
@@ -833,7 +833,7 @@ let BattleAbilities = {
 				pokemon.formeChange('Deoxys-Defense', this.effect);
 				break;
 			case 'extremespeed':
-				if (pokemon.template.species === 'Deoxys-Speed') return;
+				if (pokemon.template.name === 'Deoxys-Speed') return;
 				pokemon.set.nature = 'Adamant';
 				pokemon.set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 				pokemon.set.evs = {hp: 4, atk: 252, def: 0, spa: 0, spd: 0, spe: 252};
@@ -841,7 +841,7 @@ let BattleAbilities = {
 				pokemon.formeChange('Deoxys-Speed', this.effect);
 				break;
 			case 'refactor':
-				if (pokemon.template.species === 'Deoxys') return;
+				if (pokemon.template.name === 'Deoxys') return;
 				pokemon.set.nature = 'Bold';
 				pokemon.set.ivs = {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31};
 				pokemon.set.evs = {hp: 252, atk: 0, def: 4, spa: 0, spd: 0, spe: 252};
@@ -860,7 +860,7 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onStart(source) {
 			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'kyogre') return;
+				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.id === 'kyogre') return;
 				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
 			}
 			this.field.setWeather('raindance');
@@ -1081,7 +1081,7 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onStart(source) {
 			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'groudon') return;
+				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.id === 'groudon') return;
 				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
 			}
 			this.field.setWeather('sunnyday');
@@ -1184,7 +1184,7 @@ let BattleAbilities = {
 				this.debug('illusion cleared');
 				let disguisedAs = toID(pokemon.illusion.name);
 				pokemon.illusion = null;
-				let details = pokemon.template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				let details = pokemon.template.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
 				// Handle hippopotas

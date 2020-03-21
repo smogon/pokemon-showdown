@@ -1063,11 +1063,11 @@ interface TemplateData {
 	eggGroups: string[];
 	heightm: number;
 	num: number;
-	species: string;
+	name: string;
 	types: string[];
 	weightkg: number;
 	baseForme?: string;
-	baseSpecies?: string;
+	baseName?: string;
 	evoLevel?: number;
 	evoMove?: string;
 	evoCondition?: string;

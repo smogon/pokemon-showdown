@@ -826,10 +826,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					alts.tiers.LC &&
 					!dex[mon].prevo &&
 					dex[mon].evos.some(evo => mod.getTemplate(evo).gen <= mod.gen) &&
-					!format.banlist.includes(dex[mon].species) &&
-					!format.banlist.includes(dex[mon].species + "-Base")
+					!format.banlist.includes(dex[mon].name) &&
+					!format.banlist.includes(dex[mon].name + "-Base")
 				) {
-					const lsetData = Dex.getLearnsetData(dex[mon].speciesid);
+					const lsetData = Dex.getLearnsetData(dex[mon].id);
 					if (lsetData.exists && lsetData.eventData && lsetData.eventOnly) {
 						let validEvents = 0;
 						for (const event of lsetData.eventData) {
@@ -951,11 +951,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
-		const isAlola = dex[mon].forme === "Alola" && dex[mon].species !== "Pikachu-Alola";
+		const isAlola = dex[mon].forme === "Alola" && dex[mon].name !== "Pikachu-Alola";
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
+		if (!isAlola && dex[mon].baseName && results.includes(dex[mon].baseName)) continue;
 		if (dex[mon].isGigantamax && !allowGmax) continue;
-		results.push(dex[mon].species);
+		results.push(dex[mon].name);
 	}
 
 	if (randomOutput && randomOutput < results.length) {
@@ -1371,7 +1371,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const getFullLearnsetOfPokemon = (template: Template) => {
 		let usedTemplate = Dex.deepClone(template);
 		if (!usedTemplate.learnset) {
-			usedTemplate = Dex.deepClone(mod.getTemplate(usedTemplate.baseSpecies));
+			usedTemplate = Dex.deepClone(mod.getTemplate(usedTemplate.baseName));
 			usedTemplate.learnset = Dex.deepClone(usedTemplate.learnset || {});
 		}
 		const lsetData = new Set(Object.keys(usedTemplate.learnset));
@@ -1925,8 +1925,8 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 	const template = validator.dex.getTemplate(targets.shift());
 	const setSources = validator.allSources(template);
 	const set: Partial<PokemonSet> = {
-		name: template.baseSpecies,
-		species: template.species,
+		name: template.baseName,
+		species: template.name,
 		level: cmd === 'learn5' ? 5 : 100,
 	};
 	const all = (cmd === 'learnall');
@@ -1969,7 +1969,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 		}
 	}
 	const lsetProblems = validator.reconcileLearnset(
-		template, setSources, lsetProblem ? lsetProblem : null, template.species
+		template, setSources, lsetProblem ? lsetProblem : null, template.name
 	);
 	const problems: string[] = [];
 	if (lsetProblems) problems.push(...lsetProblems);
@@ -2046,7 +2046,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, message: string)
 			}
 		}
 		if (setSources.babyOnly && sourcesBefore) {
-			buffer += `<li>must be obtained as ` + Dex.getTemplate(setSources.babyOnly).species;
+			buffer += `<li>must be obtained as ` + Dex.getTemplate(setSources.babyOnly).name;
 		}
 		buffer += "</ul>";
 	} else if (targets.length > 1 || problems.length > 1) {

@@ -1117,7 +1117,7 @@ let BattleScripts = {
 		if (!skipChecks) {
 			if (pokemon.side.zMoveUsed) return;
 			if (!item.zMove) return;
-			if (item.itemUser && !item.itemUser.includes(pokemon.template.species)) return;
+			if (item.itemUser && !item.itemUser.includes(pokemon.template.name)) return;
 			let moveData = pokemon.getMoveData(move);
 			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
 		}
@@ -1166,7 +1166,7 @@ let BattleScripts = {
 		if (pokemon.side.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
-		if (item.itemUser && !item.itemUser.includes(pokemon.template.species)) return;
+		if (item.itemUser && !item.itemUser.includes(pokemon.template.name)) return;
 		let atLeastOne = false;
 		let mustStruggle = true;
 		/**@type {ZMoveOptions} */
@@ -1196,15 +1196,15 @@ let BattleScripts = {
 	canMegaEvo(pokemon) {
 		let altForme = pokemon.baseTemplate.otherFormes && this.dex.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		let item = pokemon.getItem();
-		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.species;
-		if (item.megaEvolves !== pokemon.baseTemplate.baseSpecies || item.megaStone === pokemon.species) {
+		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.name;
+		if (item.megaEvolves !== pokemon.baseTemplate.baseName || item.megaStone === pokemon.name) {
 			return null;
 		}
 		return item.megaStone;
 	},
 
 	canUltraBurst(pokemon) {
-		if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseTemplate.species) &&
+		if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseTemplate.name) &&
 			pokemon.getItem().id === 'ultranecroziumz') {
 			return "Necrozma-Ultra";
 		}
@@ -1242,7 +1242,7 @@ let BattleScripts = {
 			}
 			// Some pokemon species are unable to dynamax
 			const cannotDynamax = ['zacian', 'zamazenta', 'eternatus'];
-			if (cannotDynamax.includes(toID(pokemon.template.baseSpecies))) {
+			if (cannotDynamax.includes(toID(pokemon.template.baseName))) {
 				return;
 			}
 		}

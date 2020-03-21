@@ -99,7 +99,7 @@ function getGSCMoves(template: string | Template) {
 	for (const [i, set] of template.randomSets.entries()) {
 		buf += `<details><summary>Set ${i + 1}</summary>`;
 		buf += `<ul style="list-style-type:none;">`;
-		buf += `<li>${template.species}`;
+		buf += `<li>${template.name}`;
 		if (set.item) {
 			const items = trimmedItemsArray(set.item).map(formatItem).join(" / ");
 			buf += ` @ ${items}`;
@@ -148,12 +148,12 @@ function battleFactorySets(template: string | Template, tier: string | null, gen
 		if (!tier) return {e: `Please provide a valid tier.`};
 		if (!(toID(tier) in TIERS)) return {e: `That tier isn't supported.`};
 		const t = statsFile[TIERS[toID(tier)]];
-		if (!(template.speciesid in t)) {
+		if (!(template.id in t)) {
 			const formatName = Dex.getFormat(`${gen}battlefactory`).name;
-			return {e: `${template.species} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`};
+			return {e: `${template.name} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`};
 		}
-		const setObj = t[template.speciesid];
-		buf += `<span style="color:#999999;">Sets for ${template.species} in${genNum === 8 ? `` : ` ${GEN_NAMES[gen]}`} ${TIERS[toID(tier)]}:</span><br />`;
+		const setObj = t[template.id];
+		buf += `<span style="color:#999999;">Sets for ${template.name} in${genNum === 8 ? `` : ` ${GEN_NAMES[gen]}`} ${TIERS[toID(tier)]}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
 			buf += `<details><summary>Set ${i + 1}</summary>`;
 			buf += `<ul style="list-style-type:none;">`;
@@ -191,9 +191,9 @@ function battleFactorySets(template: string | Template, tier: string | null, gen
 		}
 	} else {
 		const format = Dex.getFormat(`${gen}bssfactory`);
-		if (!(template.speciesid in statsFile)) return {e: `${template.species} doesn't have any sets in ${format.name}.`};
-		const setObj = statsFile[template.speciesid];
-		buf += `<span style="color:#999999;">Sets for ${template.species} in ${format.name}:</span><br />`;
+		if (!(template.id in statsFile)) return {e: `${template.name} doesn't have any sets in ${format.name}.`};
+		const setObj = statsFile[template.id];
+		buf += `<span style="color:#999999;">Sets for ${template.name} in ${format.name}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
 			buf += `<details><summary>Set ${i + 1}</summary>`;
 			buf += `<ul style="list-style-type:none;">`;
@@ -255,27 +255,27 @@ export const commands: ChatCommands = {
 		if (toID(args[1]) === 'gen1') {
 			const rbyMoves = getRBYMoves(template);
 			if (!rbyMoves) {
-				return this.errorReply(`Error: ${template.species} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
+				return this.errorReply(`Error: ${template.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${rbyMoves}`);
+			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.name} in ${formatName}:</span><br />${rbyMoves}`);
 		}
 		if (toID(args[1]) === 'gen2') {
 			const gscMoves = getGSCMoves(template);
 			if (!gscMoves) {
-				return this.errorReply(`Error: ${template.species} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
+				return this.errorReply(`Error: ${template.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${gscMoves}`);
+			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.name} in ${formatName}:</span><br />${gscMoves}`);
 		}
 		if (toID(args[1]) === 'letsgo') {
 			formatName = `[Gen 7 Let's Go] Random Battle`;
 			const lgpeMoves = getLetsGoMoves(template);
 			if (!lgpeMoves) {
-				return this.errorReply(`Error: ${template.species} has no Random Battle data in [Gen 7 Let's Go]`);
+				return this.errorReply(`Error: ${template.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${lgpeMoves}`);
+			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.name} in ${formatName}:</span><br />${lgpeMoves}`);
 		}
 		if (!template.randomBattleMoves) {
-			return this.errorReply(`Error: No moves data found for ${template.species}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+			return this.errorReply(`Error: No moves data found for ${template.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
 		}
 		const moves: string[] = [];
 		// Done because template.randomBattleMoves is readonly
@@ -283,7 +283,7 @@ export const commands: ChatCommands = {
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);
-		this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${m.join(`, `)}`);
+		this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.name} in ${formatName}:</span><br />${m.join(`, `)}`);
 	},
 	randombattleshelp: [
 		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8. If used in a battle, defaults to the gen of that battle.`,
@@ -317,7 +317,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
 		if (!template.randomDoubleBattleMoves) {
-			return this.errorReply(`Error: No doubles moves data found for ${template.species}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+			return this.errorReply(`Error: No doubles moves data found for ${template.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
 		}
 		const moves: string[] = [];
 		// Done because template.randomDoubleBattleMoves is readonly
@@ -325,7 +325,7 @@ export const commands: ChatCommands = {
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);
-		this.sendReplyBox(`<span style="color:#999999;">Doubles moves for ${template.species} in ${formatName}:</span><br />${m.join(`, `)}`);
+		this.sendReplyBox(`<span style="color:#999999;">Doubles moves for ${template.name} in ${formatName}:</span><br />${m.join(`, `)}`);
 	},
 	randomdoublesbattlehelp: [
 		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8. If used in a battle, defaults to that gen.`,

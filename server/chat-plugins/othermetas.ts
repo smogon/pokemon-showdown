@@ -401,8 +401,8 @@ export const commands: ChatCommands = {
 		if (!template.exists) return this.errorReply(`Error: Pokemon '${pokes[0]}' not found.`);
 		if (!crossTemplate.exists) return this.errorReply(`Error: Pokemon '${pokes[1]}' not found.`);
 
-		if (!template.evos.length) return this.errorReply(`Error: ${template.species} does not evolve.`);
-		if (!crossTemplate.prevo) return this.errorReply(`Error: ${crossTemplate.species} does not have a prevolution.`);
+		if (!template.evos.length) return this.errorReply(`Error: ${template.name} does not evolve.`);
+		if (!crossTemplate.prevo) return this.errorReply(`Error: ${crossTemplate.name} does not have a prevolution.`);
 
 		let setStage = 1;
 		let crossStage = 1;
@@ -420,7 +420,7 @@ export const commands: ChatCommands = {
 			}
 		}
 		if (setStage + 1 !== crossStage) {
-			return this.errorReply(`Error: Cross evolution must follow evolutionary stages. (${template.species} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
+			return this.errorReply(`Error: Cross evolution must follow evolutionary stages. (${template.name} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
 		}
 		const mixedTemplate = Dex.deepClone(template);
 		mixedTemplate.abilities = Dex.deepClone(crossTemplate.abilities);

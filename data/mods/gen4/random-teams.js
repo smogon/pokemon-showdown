@@ -11,7 +11,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 	 */
 	randomSet(template, teamDetails = {}, isLead = false) {
 		let baseTemplate = (template = this.dex.getTemplate(template));
-		let species = template.species;
+		let species = template.name;
 
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
 			template = this.dex.getTemplate('unown');
@@ -417,7 +417,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					// @ts-ignore
 					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
-					(movePool.includes('spore') || (!moves.some(id => recoveryMoves.includes(id)) && (movePool.includes('softboiled') || (template.baseSpecies === 'Arceus' && movePool.includes('recover'))))) ||
+					(movePool.includes('spore') || (!moves.some(id => recoveryMoves.includes(id)) && (movePool.includes('softboiled') || (template.baseName === 'Arceus' && movePool.includes('recover'))))) ||
 					(template.requiredMove && movePool.includes(toID(template.requiredMove)))) &&
 					// @ts-ignore
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
@@ -450,7 +450,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					break;
 				}
 			}
-			if (moves.length === 4 && !counter.stab && !hasMove['metalburst'] && (counter['physicalpool'] || counter['specialpool']) && template.species !== 'Shuckle' && template.species !== 'Smeargle') {
+			if (moves.length === 4 && !counter.stab && !hasMove['metalburst'] && (counter['physicalpool'] || counter['specialpool']) && template.name !== 'Shuckle' && template.name !== 'Smeargle') {
 				// Move post-processing:
 				if (counter.damagingMoves.length === 0) {
 					// A set shouldn't have no attacking moves
@@ -460,12 +460,12 @@ class RandomGen4Teams extends RandomGen5Teams {
 					let damagingid = counter.damagingMoves[0].id;
 					if (movePool.length - availableHP || availableHP && (damagingid === 'hiddenpower' || !hasMove['hiddenpower'])) {
 						let replace = false;
-						if (!counter.damagingMoves[0].damage && template.species !== 'Blissey' && template.species !== 'Porygon2') {
+						if (!counter.damagingMoves[0].damage && template.name !== 'Blissey' && template.name !== 'Porygon2') {
 							replace = true;
 						}
 						if (replace) moves.splice(counter.damagingMoveIndex[damagingid], 1);
 					}
-				} else if (!counter.damagingMoves[0].damage && !counter.damagingMoves[1].damage && template.species !== 'Blissey' && template.species !== 'Clefable' && template.species !== 'Porygon2') {
+				} else if (!counter.damagingMoves[0].damage && !counter.damagingMoves[1].damage && template.name !== 'Blissey' && template.name !== 'Clefable' && template.name !== 'Porygon2') {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
 					let rejectableMoves = [];
 					let baseDiff = movePool.length - availableHP;
@@ -574,15 +574,15 @@ class RandomGen4Teams extends RandomGen5Teams {
 			item = template.requiredItem;
 
 		// First, the extra high-priority items
-		} else if (template.species === 'Farfetch\'d') {
+		} else if (template.name === 'Farfetch\'d') {
 			item = 'Stick';
-		} else if (template.species === 'Marowak') {
+		} else if (template.name === 'Marowak') {
 			item = 'Thick Club';
-		} else if (template.species === 'Shedinja' || template.species === 'Smeargle') {
+		} else if (template.name === 'Shedinja' || template.name === 'Smeargle') {
 			item = 'Focus Sash';
-		} else if (template.species === 'Unown') {
+		} else if (template.name === 'Unown') {
 			item = 'Choice Specs';
-		} else if (template.species === 'Wobbuffet') {
+		} else if (template.name === 'Wobbuffet') {
 			item = hasMove['destinybond'] ? 'Custap Berry' : this.sample(['Leftovers', 'Sitrus Berry']);
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
 			if (template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3)) {
@@ -704,7 +704,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		return {
-			name: template.baseSpecies,
+			name: template.baseName,
 			species: species,
 			gender: template.gender,
 			moves: moves,

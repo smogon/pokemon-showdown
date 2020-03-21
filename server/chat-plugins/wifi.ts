@@ -129,13 +129,13 @@ class Giveaway {
 		const monIDs: Set<string> = new Set();
 		for (const i in Dex.data.Pokedex) {
 			let id = i;
-			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].species.includes(' '))) {
-				id = toPokemonId(Dex.data.Pokedex[i].species);
+			if (!Dex.data.Pokedex[i].baseName && (Dex.data.Pokedex[i].name.includes(' '))) {
+				id = toPokemonId(Dex.data.Pokedex[i].name);
 			}
 			const regexp = new RegExp(`\\b${id}\\b`);
 			if (regexp.test(text)) {
 				const mon = Dex.getTemplate(i);
-				mons.set(mon.baseSpecies, mon);
+				mons.set(mon.baseName, mon);
 			}
 		}
 		// the previous regex doesn't match "nidoran-m" or "nidoran male"
@@ -597,8 +597,8 @@ export class GTSGiveaway {
 
 		for (const i in Dex.data.Pokedex) {
 			let id = i;
-			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].species.includes(' '))) {
-				id = toPokemonId(Dex.data.Pokedex[i].species);
+			if (!Dex.data.Pokedex[i].baseName && (Dex.data.Pokedex[i].name.includes(' '))) {
+				id = toPokemonId(Dex.data.Pokedex[i].name);
 			}
 			const regexp = new RegExp(`\\b${id}\\b`, 'ig');
 			const res = regexp.exec(parsed);

@@ -92,7 +92,7 @@ let BattleStatuses = {
 			} else {
 				this.add('-status', target, 'frz');
 			}
-			if (target.template.species === 'Shaymin-Sky' && target.baseTemplate.baseSpecies === 'Shaymin') {
+			if (target.template.name === 'Shaymin-Sky' && target.baseTemplate.baseName === 'Shaymin') {
 				target.formeChange('Shaymin', this.effect, true);
 			}
 		},
@@ -731,7 +731,7 @@ let BattleStatuses = {
 				delete pokemon.volatiles['torment'];
 				this.add('-end', pokemon, 'Torment', '[silent]');
 			}
-			if (['cramorantgulping', 'cramorantgorging'].includes(pokemon.template.speciesid) && !pokemon.transformed) {
+			if (['cramorantgulping', 'cramorantgorging'].includes(pokemon.template.id) && !pokemon.transformed) {
 				pokemon.formeChange('cramorant');
 			}
 			this.add('-start', pokemon, 'Dynamax');
@@ -763,7 +763,7 @@ let BattleStatuses = {
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
-			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.template.species);
+			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.template.name);
 			if (pokemon.species === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
 			pokemon.maxhp = pokemon.baseMaxhp;

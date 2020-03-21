@@ -235,10 +235,10 @@ export class Pokemon {
 		// Change Gigantamax formes to their base formes
 		let gMax: string | null = null;
 		if (this.baseTemplate.isGigantamax) {
-			gMax = this.baseTemplate.species;
-			if (set.species && toID(set.species) === this.baseTemplate.id) set.species = this.baseTemplate.baseSpecies;
-			if (set.name && toID(set.name) === this.baseTemplate.id) set.name = this.baseTemplate.baseSpecies;
-			this.baseTemplate = this.battle.dex.getTemplate(this.baseTemplate.baseSpecies);
+			gMax = this.baseTemplate.name;
+			if (set.species && toID(set.species) === this.baseTemplate.id) set.species = this.baseTemplate.baseName;
+			if (set.name && toID(set.name) === this.baseTemplate.id) set.name = this.baseTemplate.baseName;
+			this.baseTemplate = this.battle.dex.getTemplate(this.baseTemplate.baseName);
 		}
 		this.set = set as PokemonSet;
 
@@ -246,7 +246,7 @@ export class Pokemon {
 		this.species = this.battle.dex.getSpecies(set.species);
 		this.speciesid = toID(this.species);
 		if (set.name === set.species || !set.name) {
-			set.name = this.baseTemplate.baseSpecies;
+			set.name = this.baseTemplate.baseName;
 		}
 		this.speciesData = {id: this.speciesid};
 
@@ -424,7 +424,7 @@ export class Pokemon {
 		const health = this.getHealth();
 		let details = this.details;
 		if (this.illusion) {
-			const illusionDetails = this.illusion.template.species + (this.level === 100 ? '' : ', L' + this.level) +
+			const illusionDetails = this.illusion.template.name + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
 			details = illusionDetails;
 		}
@@ -1001,7 +1001,7 @@ export class Pokemon {
 		const template = pokemon.template;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
-			template.species === 'Eternatus-Eternamax') {
+			template.name === 'Eternatus-Eternamax') {
 			return false;
 		}
 
@@ -1058,9 +1058,9 @@ export class Pokemon {
 		if (this.battle.gen === 4) {
 			if (this.template.num === 487) {
 				// Giratina formes
-				if (this.template.species === 'Giratina' && this.item === 'griseousorb') {
+				if (this.template.name === 'Giratina' && this.item === 'griseousorb') {
 					this.formeChange('Giratina-Origin');
-				} else if (this.template.species === 'Giratina-Origin' && this.item !== 'griseousorb') {
+				} else if (this.template.name === 'Giratina-Origin' && this.item !== 'griseousorb') {
 					this.formeChange('Giratina');
 				}
 			}
@@ -1068,7 +1068,7 @@ export class Pokemon {
 				// Arceus formes
 				const item = this.getItem();
 				const targetForme = (item?.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
-				if (this.template.species !== targetForme) {
+				if (this.template.name !== targetForme) {
 					this.formeChange(targetForme);
 				}
 			}
@@ -1135,10 +1135,10 @@ export class Pokemon {
 
 		// The species the opponent sees
 		const apparentSpecies =
-			this.illusion ? this.illusion.template.species : template.baseSpecies;
+			this.illusion ? this.illusion.template.name : template.baseName;
 		if (isPermanent) {
 			this.baseTemplate = rawTemplate;
-			this.details = template.species + (this.level === 100 ? '' : ', L' + this.level) +
+			this.details = template.name + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 			this.battle.add('detailschange', this, (this.illusion || this).details);
 			if (source.effectType === 'Item') {
@@ -1158,13 +1158,13 @@ export class Pokemon {
 				}
 			} else if (source.effectType === 'Status') {
 				// Shaymin-Sky -> Shaymin
-				this.battle.add('-formechange', this, template.species, message);
+				this.battle.add('-formechange', this, template.name, message);
 			}
 		} else {
 			if (source.effectType === 'Ability') {
-				this.battle.add('-formechange', this, template.species, message, `[from] ability: ${source.name}`);
+				this.battle.add('-formechange', this, template.name, message, `[from] ability: ${source.name}`);
 			} else {
-				this.battle.add('-formechange', this, this.illusion ? this.illusion.template.species : template.species, message);
+				this.battle.add('-formechange', this, this.illusion ? this.illusion.template.name : template.name, message);
 			}
 		}
 		if (isPermanent && !['disguise', 'iceface'].includes(source.id)) {

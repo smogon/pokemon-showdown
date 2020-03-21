@@ -27,7 +27,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			let template = this.dex.getTemplate(id);
 			let lsetData = this.dex.getLearnsetData(/** @type {ID} */ (id));
 			if (!lsetData.learnset || template.forme) continue;
-			formes[hasDexNumber[template.num]].push(template.species);
+			formes[hasDexNumber[template.num]].push(template.name);
 			if (++formeCounter >= 6) {
 				// Gen 1 had no alternate formes, so we can break out of the loop already.
 				break;
@@ -38,7 +38,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Choose forme.
 			let poke = this.sample(formes[i]);
 			let template = this.dex.getTemplate(poke);
-			let lsetData = this.dex.getLearnsetData(template.speciesid);
+			let lsetData = this.dex.getLearnsetData(template.id);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
 			let mbstmin = 1307;
@@ -106,7 +106,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 			team.push({
 				name: poke,
-				species: template.species,
+				species: template.name,
 				moves: moves,
 				gender: false,
 				ability: 'None',
@@ -156,7 +156,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
-			if (handicapMons.includes(template.speciesid) && hasShitmon) continue;
+			if (handicapMons.includes(template.id) && hasShitmon) continue;
 
 			let tier = template.tier;
 			switch (tier) {
@@ -231,7 +231,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			}
 
 			// Is it Magikarp or one of the useless bugs?
-			if (handicapMons.includes(template.speciesid)) hasShitmon = true;
+			if (handicapMons.includes(template.id)) hasShitmon = true;
 		}
 
 		return pokemon;
@@ -378,7 +378,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		return {
 			name: template.name,
-			species: template.species,
+			species: template.name,
 			moves: moves,
 			ability: 'None',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},

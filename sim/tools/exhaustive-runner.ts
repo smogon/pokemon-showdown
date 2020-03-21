@@ -228,8 +228,8 @@ class TeamGenerator {
 			}
 
 			team.push({
-				name: template.baseSpecies,
-				species: template.species,
+				name: template.baseName,
+				species: template.name,
 				gender: template.gender,
 				item,
 				ability: this.dex.gen >= 3 ? this.pools.abilities.next() : 'None',

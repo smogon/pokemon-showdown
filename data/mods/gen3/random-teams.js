@@ -10,7 +10,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 	 */
 	randomSet(template, teamDetails = {}) {
 		let baseTemplate = (template = this.dex.getTemplate(template));
-		let species = template.species;
+		let species = template.name;
 
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
 			template = this.dex.getTemplate('unown');
@@ -327,7 +327,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 					(movePool.includes('earthquake') && !counter['Ground'] && !counter['Fighting'] && counter.Physical > 1 && (hasType['Bug'] || hasType['Flying'] || hasType['Normal'] || hasType['Poison'] || hasType['Rock'] || hasType['Steel'])) ||
 					(movePool.includes('rockslide') && !counter['Rock'] && counter.Physical > 1 && hasType['Ground']) ||
 					(movePool.includes('thunderbolt') && !counter['Electric'] && counter.Special > 1 && (hasType['Ice'] || hasType['Water'])) ||
-					(requiresRecovery.includes(template.species) && !recoveryMoves.some(recoveryMove => hasMove[recoveryMove]) && recoveryMoves.some(recoveryMove => movePool.includes(recoveryMove)))) {
+					(requiresRecovery.includes(template.name) && !recoveryMoves.some(recoveryMove => hasMove[recoveryMove]) && recoveryMoves.some(recoveryMove => movePool.includes(recoveryMove)))) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !recoveryMoves.includes(moveid) && !['sleeptalk', 'substitute'].includes(moveid)) {
 						if (move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) rejected = true;
@@ -355,11 +355,11 @@ class RandomGen3Teams extends RandomGen4Teams {
 			if (species === 'Castform' && moves.length === 4) {
 				// Make sure castforms alternate formes have their required moves
 				let reqMove = '';
-				if (template.species === 'Castform-Sunny' && !hasMove['sunnyday']) {
+				if (template.name === 'Castform-Sunny' && !hasMove['sunnyday']) {
 					reqMove = 'sunnyday';
-				} else if (template.species === 'Castform-Rainy' && !hasMove['raindance']) {
+				} else if (template.name === 'Castform-Rainy' && !hasMove['raindance']) {
 					reqMove = 'raindance';
-				} else if (template.species === 'Castform-Snowy' && !hasMove['hail']) {
+				} else if (template.name === 'Castform-Snowy' && !hasMove['hail']) {
 					reqMove = 'hail';
 				}
 				if (reqMove) {
@@ -373,12 +373,12 @@ class RandomGen3Teams extends RandomGen4Teams {
 					}
 				}
 			}
-			if (moves.length === 4 && !noAttacks.includes(template.species) && (counter['physicalpool'] || counter['specialpool'])) {
+			if (moves.length === 4 && !noAttacks.includes(template.name) && (counter['physicalpool'] || counter['specialpool'])) {
 				// Move post-processing:
 				if (counter.damagingMoves.length === 0) {
 					// A set shouldn't have zero attacking moves
 					moves.splice(this.random(moves.length), 1);
-				} else if (!counter.stab && !noStab.includes(template.species) &&
+				} else if (!counter.stab && !noStab.includes(template.name) &&
 					!(hasType['Bug'] && moves.indexOf('hiddenpowerbug') > -1) &&
 					!(hasType['Flying'] && moves.indexOf('hiddenpowerflying') > -1) &&
 					!(hasType['Grass'] && moves.indexOf('hiddenpowergrass') > -1) &&
@@ -510,15 +510,15 @@ class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		// First, the extra high-priority items
-		if (template.species === 'Farfetch\'d') {
+		if (template.name === 'Farfetch\'d') {
 			item = 'Stick';
-		} else if (template.species === 'Marowak') {
+		} else if (template.name === 'Marowak') {
 			item = 'Thick Club';
-		} else if (template.species === 'Shedinja') {
+		} else if (template.name === 'Shedinja') {
 			item = 'Lum Berry';
-		} else if (template.species === 'Slaking') {
+		} else if (template.name === 'Slaking') {
 			item = 'Choice Band';
-		} else if (template.species === 'Unown') {
+		} else if (template.name === 'Unown') {
 			item = 'Twisted Spoon';
 		} else if (hasMove['trick']) {
 			item = 'Choice Band';
@@ -587,7 +587,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		return {
-			name: template.baseSpecies,
+			name: template.baseName,
 			species: species,
 			gender: template.gender,
 			moves: moves,
@@ -609,7 +609,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		for (let id in this.dex.data.FormatsData) {
 			let template = this.dex.getTemplate(id);
 			if (template.isNonstandard || !template.randomBattleMoves) continue;
-			if (template.evos && !allowedNFE.includes(template.species)) {
+			if (template.evos && !allowedNFE.includes(template.name)) {
 				let invalid = false;
 				for (const evo of template.evos) {
 					if (this.dex.getTemplate(evo).gen <= 3) {
@@ -638,10 +638,10 @@ class RandomGen3Teams extends RandomGen4Teams {
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseSpecies]) continue;
+			if (baseFormes[template.baseName]) continue;
 
 			// Limit to one Wobbuffet per battle (not just per team)
-			if (template.species === 'Wobbuffet' && this.hasWobbuffet) continue;
+			if (template.name === 'Wobbuffet' && this.hasWobbuffet) continue;
 
 			let tier = template.tier;
 			switch (tier) {
@@ -655,7 +655,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 			}
 
 			// Adjust rate for castform
-			if (template.baseSpecies === 'Castform' && this.randomChance(3, 4)) continue;
+			if (template.baseName === 'Castform' && this.randomChance(3, 4)) continue;
 
 			// Limit 2 of any type
 			let skip = false;
@@ -684,10 +684,10 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 			// In Gen 3, Shadow Tag users can prevent each other from switching out, possibly causing and endless battle or at least causing a long stall war
 			// To prevent this, we prevent more than one Wobbuffet in a single battle.
-			if (template.species === 'Wobbuffet') this.hasWobbuffet = true;
+			if (template.name === 'Wobbuffet') this.hasWobbuffet = true;
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[template.baseSpecies] = 1;
+			baseFormes[template.baseName] = 1;
 
 			// Increment type counters
 			for (const type of template.types) {

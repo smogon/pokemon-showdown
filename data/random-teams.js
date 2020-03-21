@@ -180,11 +180,11 @@ class RandomTeams {
 
 			// Make sure that a base forme does not hold any forme-modifier items.
 			let itemData = this.dex.getItem(item);
-			if (itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseSpecies) {
+			if (itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseName) {
 				do {
 					item = this.sample(items);
 					itemData = this.dex.getItem(item);
-				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseSpecies);
+				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.dex.getTemplate(itemData.forcedForme).baseName);
 			}
 
 			// Random legal ability
@@ -238,7 +238,7 @@ class RandomTeams {
 
 			let stats = template.baseStats;
 			// If Wishiwashi, use the school-forme's much higher stats
-			if (template.baseSpecies === 'Wishiwashi') stats = Dex.getTemplate('wishiwashischool').baseStats;
+			if (template.baseName === 'Wishiwashi') stats = Dex.getTemplate('wishiwashischool').baseStats;
 
 			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
 			let mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
@@ -269,8 +269,8 @@ class RandomTeams {
 			let shiny = this.randomChance(1, 1024);
 
 			team.push({
-				name: template.baseSpecies,
-				species: template.species,
+				name: template.baseName,
+				species: template.name,
 				gender: template.gender,
 				item: item,
 				ability: ability,
@@ -316,7 +316,7 @@ class RandomTeams {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
 			let template = this.dex.getTemplate(id);
 			if (template.gen <= this.gen && template.isNonstandard !== 'Past' && template.isNonstandard !== 'LGPE') {
-				formes[hasDexNumber[template.num]].push(template.species);
+				formes[hasDexNumber[template.num]].push(template.name);
 			}
 		}
 
@@ -423,8 +423,8 @@ class RandomTeams {
 			let shiny = this.randomChance(1, 1024);
 
 			team.push({
-				name: template.baseSpecies,
-				species: template.species,
+				name: template.baseName,
+				species: template.name,
 				gender: template.gender,
 				item: item,
 				ability: ability,
@@ -615,7 +615,7 @@ class RandomTeams {
 	randomSet(template, teamDetails = {}, isLead = false, isDoubles = false) {
 		template = this.dex.getTemplate(template);
 		let baseTemplate = template;
-		let species = template.species;
+		let species = template.name;
 
 		if (!template.exists || (!template.randomBattleMoves && (!isDoubles || !template.randomDoubleBattleMoves) && !this.dex.data.Learnsets[template.id])) {
 			template = this.dex.getTemplate('pikachu');
@@ -1088,7 +1088,7 @@ class RandomTeams {
 				} else if (ability === 'Mold Breaker') {
 					rejectAbility = (hasAbility['Adaptability'] || hasAbility['Scrappy'] || hasAbility['Unburden'] && counter.setupType);
 				} else if (ability === 'Moody') {
-					rejectAbility = (template.species === 'Octillery');
+					rejectAbility = (template.name === 'Octillery');
 				} else if (ability === 'Neutralizing Gas') {
 					rejectAbility = !hasMove['toxicspikes'];
 				} else if (ability === 'Overgrow') {
@@ -1108,7 +1108,7 @@ class RandomTeams {
 				} else if (ability === 'Sand Force' || ability === 'Sand Rush' || ability === 'Sand Veil') {
 					rejectAbility = !teamDetails['sand'];
 				} else if (ability === 'Shadow Tag') {
-					rejectAbility = (template.species === 'Gothitelle');
+					rejectAbility = (template.name === 'Gothitelle');
 				} else if (ability === 'Sheer Force') {
 					rejectAbility = (!counter['sheerforce'] || hasAbility['Guts']);
 				} else if (ability === 'Sniper') {
@@ -1150,7 +1150,7 @@ class RandomTeams {
 				}
 			} while (rejectAbility);
 
-			if (template.species === 'Copperajah-Gmax') {
+			if (template.name === 'Copperajah-Gmax') {
 				ability = 'Heavy Metal';
 			} else if (hasAbility['Guts'] && (hasMove['facade'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
 				ability = 'Guts';
@@ -1169,22 +1169,22 @@ class RandomTeams {
 			item = this.sample(template.requiredItems);
 
 		// First, the extra high-priority items
-		} else if (template.species === 'Eternatus' && counter.Status < 2) {
+		} else if (template.name === 'Eternatus' && counter.Status < 2) {
 			item = 'Metronome';
-		} else if (template.species === 'Farfetch\'d') {
+		} else if (template.name === 'Farfetch\'d') {
 			item = 'Leek';
-		} else if (template.species === 'Jolteon') {
+		} else if (template.name === 'Jolteon') {
 			item = hasMove['protect'] ? 'Magnet' : 'Choice Specs';
-		} else if (template.baseSpecies === 'Pikachu') {
+		} else if (template.baseName === 'Pikachu') {
 			species = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
 			item = 'Light Ball';
 		} else if (template.species === 'Shedinja') {
 			item = (!teamDetails.defog && !teamDetails.rapidSpin && !isDoubles) ? 'Heavy-Duty Boots' : 'Focus Sash';
 		} else if (template.species === 'Shuckle' && hasMove['stickyweb']) {
 			item = 'Mental Herb';
-		} else if (template.species === 'Unfezant') {
+		} else if (template.name === 'Unfezant') {
 			item = 'Scope Lens';
-		} else if (template.species === 'Wobbuffet' || (ability === 'Emergency Exit' && !!counter['Status']) || ability === 'Ripen' && isDoubles) {
+		} else if (template.name === 'Wobbuffet' || (ability === 'Emergency Exit' && !!counter['Status']) || ability === 'Ripen' && isDoubles) {
 			item = 'Sitrus Berry';
 		} else if (ability === 'Cheek Pouch') {
 			item = hasMove['recycle'] ? 'Petaya Berry' : 'Sitrus Berry';
@@ -1250,7 +1250,7 @@ class RandomTeams {
 			item = 'Leftovers';
 
 		// Better than Leftovers
-		} else if ((template.species === 'Necrozma-Dusk-Mane' && counter.setupType) || counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
+		} else if ((template.name === 'Necrozma-Dusk-Mane' && counter.setupType) || counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
 		} else if (counter.damagingMoves.length >= 4 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 235) {
 			item = 'Assault Vest';
@@ -1287,10 +1287,10 @@ class RandomTeams {
 				Glalie: 72, 'Darmanitan-Galar-Zen': 80, Wobbuffet: 80, Zygarde: 80,
 				Delibird: 100, Shedinja: 100,
 			};
-			let tier = toID((template.isGigantamax ? this.dex.getTemplate(template.baseSpecies) : template).tier).replace('bl', '');
+			let tier = toID((template.isGigantamax ? this.dex.getTemplate(template.baseName) : template).tier).replace('bl', '');
 			// For future DLC Pokemon
 			if (tier === 'illegal') {
-				tier = toID(Dex.mod('gen7').getTemplate(template.species).tier);
+				tier = toID(Dex.mod('gen7').getTemplate(template.name).tier);
 				switch (tier) {
 				case 'uubl': case 'uu':
 					tier = 'ou';
@@ -1304,7 +1304,7 @@ class RandomTeams {
 				}
 			}
 			level = levelScale[tier] || (template.nfe ? 90 : 80);
-			if (customScale[template.species]) level = customScale[template.species];
+			if (customScale[template.name]) level = customScale[template.name];
 		} else {
 			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored.
@@ -1357,7 +1357,7 @@ class RandomTeams {
 		}
 
 		return {
-			name: template.baseSpecies,
+			name: template.baseName,
 			species: species,
 			gender: template.gender,
 			moves: moves,
@@ -1432,14 +1432,14 @@ class RandomTeams {
 				if (!template.exists) continue;
 
 				// Limit to one of each species (Species Clause)
-				if (baseFormes[template.baseSpecies]) continue;
+				if (baseFormes[template.baseName]) continue;
 
 				let tier = template.tier;
 				let types = template.types;
 				let typeCombo = types.slice().sort().join();
 
 				// Adjust rate for species with multiple formes
-				switch (template.baseSpecies) {
+				switch (template.baseName) {
 				case 'Arceus': case 'Silvally':
 					if (this.randomChance(17, 18)) continue;
 					break;
@@ -1512,7 +1512,7 @@ class RandomTeams {
 				if (pokemon.length === 6) break;
 
 				// Now that our Pokemon has passed all checks, we can increment our counters
-				baseFormes[template.baseSpecies] = 1;
+				baseFormes[template.baseName] = 1;
 
 				// Increment tier counter
 				if (tierCount[tier]) {

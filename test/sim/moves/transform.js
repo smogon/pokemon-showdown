@@ -164,7 +164,7 @@ describe('Transform [Gen 4]', function () {
 			[{species: "Giratina-Origin", ability: 'levitate', item: 'griseousorb', moves: ['rest']}],
 		]);
 		battle.makeChoices('move transform', 'move rest');
-		assert.equal(battle.p1.active[0].template.species, 'Giratina');
+		assert.equal(battle.p1.active[0].template.name, 'Giratina');
 	});
 
 	it('should cause Pokemon transformed into Giratina-Alternate to become Giratina-Origin if holding a Griseous Orb', function () {
@@ -173,7 +173,7 @@ describe('Transform [Gen 4]', function () {
 			[{species: "Giratina", ability: 'pressure', moves: ['rest']}],
 		]);
 		battle.makeChoices('move transform', 'move rest');
-		assert.equal(battle.p1.active[0].template.species, 'Giratina-Origin');
+		assert.equal(battle.p1.active[0].template.name, 'Giratina-Origin');
 	});
 
 	it('should cause Pokemon transformed into Arceus to become an Arceus forme corresponding to its held Plate', function () {
@@ -182,7 +182,7 @@ describe('Transform [Gen 4]', function () {
 			[{species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest']}],
 		]);
 		battle.makeChoices('move transform', 'move rest');
-		assert.equal(battle.p1.active[0].template.species, 'Arceus-Fire');
+		assert.equal(battle.p1.active[0].template.name, 'Arceus-Fire');
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire"]);
 	});
 

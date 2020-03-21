@@ -754,7 +754,7 @@ let BattleMovedex = {
 		basePower: 60,
 		ignoreImmunity: true,
 		onHit(target, pokemon) {
-			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
+			if (pokemon.baseTemplate.name !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
 			/**@type {{[k: string]: string}} */
@@ -766,7 +766,7 @@ let BattleMovedex = {
 			};
 			let tmpAtkEVs;
 			let Atk2SpA;
-			if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta', this.effect, false, '[msg]')) {
+			if (pokemon.template.id === 'meloettapirouette' && pokemon.formeChange('Meloetta', this.effect, false, '[msg]')) {
 				tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
@@ -1107,7 +1107,7 @@ let BattleMovedex = {
 		basePower: 80,
 		onBasePower(power, user) {
 			let GossamerWingUsers = ["Butterfree", "Venomoth", "Masquerain", "Dustox", "Beautifly", "Mothim", "Lilligant", "Volcarona", "Vivillon"];
-			if (user.hasItem('stick') && GossamerWingUsers.includes(user.template.species)) {
+			if (user.hasItem('stick') && GossamerWingUsers.includes(user.template.name)) {
 				return power * 1.5;
 			}
 		},

@@ -383,7 +383,7 @@ let BattleMovedex = {
 			},
 			onModifyDefPriority: 1,
 			onModifyDef(def, pokemon) {
-				if (pokemon.baseTemplate.baseSpecies === 'Quilava') {
+				if (pokemon.baseTemplate.baseName === 'Quilava') {
 					return this.chainModify(2);
 				}
 			},
@@ -1066,8 +1066,8 @@ let BattleMovedex = {
 			this.field.setTerrain('grassyterrain');
 		},
 		onAfterMove(pokemon) {
-			if (pokemon.template.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
-			if (pokemon.template.species !== 'Aegislash') pokemon.formeChange('Aegislash');
+			if (pokemon.template.baseName !== 'Aegislash' || pokemon.transformed) return;
+			if (pokemon.template.name !== 'Aegislash') pokemon.formeChange('Aegislash');
 		},
 		target: "normal",
 		type: "Steel",
@@ -1824,7 +1824,7 @@ let BattleMovedex = {
 			// Set target to the foe, this is a self targeting move so it works even if the foe has a subsitute
 			target = source.side.foe.active[0];
 			this.boost({atk: 2, spa: 2, spe: 2, def: -1, spd: -1}, source);
-			if (source.template.speciesid !== 'miniormeteor' || source.transformed) return;
+			if (source.template.id !== 'miniormeteor' || source.transformed) return;
 
 			let rainbow = ['', '-Orange', '-Yellow', '-Green', '-Blue', '-Indigo', '-Violet'];
 			let color = rainbow[this.random(rainbow.length)];
@@ -2609,7 +2609,7 @@ let BattleMovedex = {
 			pokemon.set.level = pokemon.level;
 			pokemon.formeChange(template);
 
-			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+			pokemon.details = template.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
 
 			const newHP = Math.floor(Math.floor(2 * template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
@@ -2916,7 +2916,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Conversion", source);
 		},
 		onHit(target, source) {
-			if (source.baseTemplate.baseSpecies !== 'Silvally') return false;
+			if (source.baseTemplate.baseName !== 'Silvally') return false;
 			let targetTypes = target.getTypes(true).filter(type => type !== '???');
 			if (!targetTypes.length) {
 				if (target.addedType) {
@@ -4764,11 +4764,11 @@ let BattleMovedex = {
 				return null;
 			}
 			this.attrLastMove('[still]');
-			let move = pokemon.template.speciesid === 'meloettapirouette' ? 'Brick Break' : 'Relic Song';
+			let move = pokemon.template.id === 'meloettapirouette' ? 'Brick Break' : 'Relic Song';
 			this.add('-anim', pokemon, move, target);
 		},
 		onHit(target, pokemon, move) {
-			if (pokemon.template.speciesid === 'meloettapirouette') {
+			if (pokemon.template.id === 'meloettapirouette') {
 				pokemon.formeChange('Meloetta');
 			} else if (pokemon.formeChange('Meloetta-Pirouette')) {
 				move.category = 'Physical';
@@ -4777,7 +4777,7 @@ let BattleMovedex = {
 		},
 		onAfterMove(pokemon) {
 			// Ensure Meloetta goes back to standard form after using the move
-			if (pokemon.template.speciesid === 'meloettapirouette') {
+			if (pokemon.template.id === 'meloettapirouette') {
 				pokemon.formeChange('Meloetta');
 			}
 			this.hint("Zarel still has the Serene Grace ability.");
@@ -4785,7 +4785,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			onAfterMoveSecondarySelf(pokemon, target, move) {
-				if (pokemon.template.speciesid === 'meloettapirouette') {
+				if (pokemon.template.id === 'meloettapirouette') {
 					pokemon.formeChange('Meloetta');
 				} else {
 					pokemon.formeChange('Meloetta-Pirouette');

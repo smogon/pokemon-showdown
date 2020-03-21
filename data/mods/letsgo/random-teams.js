@@ -10,7 +10,7 @@ class RandomLetsGoTeams extends RandomTeams {
 	 */
 	randomSet(template, teamDetails = {}) {
 		template = this.dex.getTemplate(template);
-		let species = template.species;
+		let species = template.name;
 
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
 			template = this.dex.getTemplate(this.sample(['Pikachu-Starter', 'Eevee-Starter']));
@@ -203,7 +203,7 @@ class RandomLetsGoTeams extends RandomTeams {
 		}
 
 		return {
-			name: template.baseSpecies,
+			name: template.baseName,
 			species: species,
 			level: 100,
 			gender: template.gender,
@@ -241,7 +241,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseSpecies]) continue;
+			if (baseFormes[template.baseName]) continue;
 
 			let types = template.types;
 
@@ -265,7 +265,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			pokemon.push(set);
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[template.baseSpecies] = 1;
+			baseFormes[template.baseName] = 1;
 
 			// Increment type counters
 			for (const type of types) {

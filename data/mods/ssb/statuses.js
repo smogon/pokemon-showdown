@@ -194,7 +194,7 @@ let BattleStatuses = {
 			}
 		},
 		onFaint(pokemon) {
-			let activeMon = pokemon.side.foe.active[0].template.speciesid;
+			let activeMon = pokemon.side.foe.active[0].template.id;
 			if (activeMon === 'greninja') {
 				this.add(`c|%Arcticblast|FRIENDS DON’T LET FRIENDS PLAY FROGS`);
 			} else if (activeMon === 'pumpkaboosuper') {
@@ -204,7 +204,7 @@ let BattleStatuses = {
 			}
 		},
 		onSourceFaint(target) {
-			if (target.template.speciesid === 'greninja') {
+			if (target.template.id === 'greninja') {
 				this.add(`c|%Arcticblast|FRIENDS DON’T LET FRIENDS PLAY FROGS`);
 			}
 		},
@@ -480,7 +480,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart(target, source) {
 			this.add(`c|@E4 Flint|How many Fire-Types do I have now`);
-			if (source.template.speciesid !== 'steelixmega' || source.illusion) return;
+			if (source.template.id !== 'steelixmega' || source.illusion) return;
 			this.add('-start', source, 'typeadd', 'Fire');
 		},
 		onFaint() {
@@ -509,7 +509,7 @@ let BattleStatuses = {
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) && !target.transformed) {
+			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.template.id) && !target.transformed) {
 				this.add('-activate', target, 'ability: Disguise');
 				this.effectData.busted = true;
 				return 0;
@@ -517,13 +517,13 @@ let BattleStatuses = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (!['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (!['mimikyu', 'mimikyutotem'].includes(target.template.id) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
 			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
 		onUpdate(pokemon) {
-			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
-				let templateid = pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.id) && this.effectData.busted) {
+				let templateid = pokemon.template.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(templateid, this.effect, true);
 			}
 		},
@@ -780,7 +780,7 @@ let BattleStatuses = {
 		// Kaiju Rage Innate
 		// onUpdate so toxic orb can activate after. Code mainly copied from Power Construct.
 		onUpdate(pokemon) {
-			if (pokemon.template.speciesid !== 'gligar' || pokemon.transformed || pokemon.illusion || !pokemon.hp) return;
+			if (pokemon.template.id !== 'gligar' || pokemon.transformed || pokemon.illusion || !pokemon.hp) return;
 			if (pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Kaiju Rage');
 			pokemon.formeChange('Gliscor', this.effect, true);
@@ -1119,7 +1119,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart(source) {
 			this.add(`c|+Overneat|[muffled eurobeat playing in the distance]`);
-			if (source.template.speciesid !== 'absolmega' || source.illusion) return;
+			if (source.template.id !== 'absolmega' || source.illusion) return;
 			this.add('-start', source, 'typeadd', 'Fairy');
 		},
 		onSwitchOut() {

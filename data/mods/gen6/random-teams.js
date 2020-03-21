@@ -22,7 +22,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 	 */
 	randomSet(template, teamDetails = {}, isLead = false) {
 		let baseTemplate = (template = this.dex.getTemplate(template));
-		let species = template.species;
+		let species = template.name;
 
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
@@ -533,7 +533,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate'] && !hasMove['blizzard']) && !counter['Normal']) ||
 					(hasAbility['Bad Dreams'] && movePool.includes('darkvoid')) ||
-					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
+					(hasAbility['Contrary'] && !counter['contrary'] && template.name !== 'Shuckle') ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
 					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')) && (counter.Status > 1 || (template.nfe && !!counter['Status']))) ||
@@ -668,7 +668,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 				} else if (ability === 'Scrappy') {
 					rejectAbility = !template.types.includes('Normal');
 				} else if (ability === 'Serene Grace') {
-					rejectAbility = !counter['serenegrace'] || template.species === 'Blissey';
+					rejectAbility = !counter['serenegrace'] || template.name === 'Blissey';
 				} else if (ability === 'Sheer Force') {
 					rejectAbility = !counter['sheerforce'] || abilities.includes('Guts') || hasMove['doubleedge'] || template.isMega;
 				} else if (ability === 'Simple') {
@@ -714,10 +714,10 @@ class RandomGen6Teams extends RandomGen7Teams {
 			if (abilities.includes('Guts') && ability !== 'Quick Feet' && (hasMove['facade'] || hasMove['protect'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
 				ability = 'Guts';
 			}
-			if (template.species === 'Ambipom' && !counter['technician']) {
+			if (template.name === 'Ambipom' && !counter['technician']) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
 				ability = 'Pickup';
-			} else if (template.species === 'Lopunny' && hasMove['switcheroo'] && this.randomChance(2, 3)) {
+			} else if (template.name === 'Lopunny' && hasMove['switcheroo'] && this.randomChance(2, 3)) {
 				ability = 'Klutz';
 			}
 		} else {
@@ -729,25 +729,25 @@ class RandomGen6Teams extends RandomGen7Teams {
 			item = template.requiredItem;
 
 		// First, the extra high-priority items
-		} else if (template.species === 'Marowak') {
+		} else if (template.name === 'Marowak') {
 			item = 'Thick Club';
-		} else if (template.species === 'Dedenne') {
+		} else if (template.name === 'Dedenne') {
 			item = 'Petaya Berry';
-		} else if (template.species === 'Deoxys-Attack') {
+		} else if (template.name === 'Deoxys-Attack') {
 			item = (isLead && hasMove['stealthrock']) ? 'Focus Sash' : 'Life Orb';
-		} else if (template.species === 'Farfetch\'d') {
+		} else if (template.name === 'Farfetch\'d') {
 			item = 'Stick';
-		} else if (template.species === 'Genesect' && hasMove['technoblast']) {
+		} else if (template.name === 'Genesect' && hasMove['technoblast']) {
 			item = 'Douse Drive';
-		} else if (template.baseSpecies === 'Pikachu') {
+		} else if (template.baseName === 'Pikachu') {
 			item = 'Light Ball';
-		} else if (template.species === 'Shedinja' || template.species === 'Smeargle') {
+		} else if (template.name === 'Shedinja' || template.name === 'Smeargle') {
 			item = 'Focus Sash';
-		} else if (template.species === 'Unfezant' && counter['Physical'] >= 2) {
+		} else if (template.name === 'Unfezant' && counter['Physical'] >= 2) {
 			item = 'Scope Lens';
-		} else if (template.species === 'Unown') {
+		} else if (template.name === 'Unown') {
 			item = 'Choice Specs';
-		} else if (template.species === 'Wobbuffet') {
+		} else if (template.name === 'Wobbuffet') {
 			item = hasMove['destinybond'] ? 'Custap Berry' : this.sample(['Leftovers', 'Sitrus Berry']);
 		} else if (ability === 'Harvest') {
 			item = 'Sitrus Berry';
@@ -816,7 +816,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 			item = 'Choice Scarf';
 		} else if (counter.Special >= 3 && hasMove['uturn'] && !hasMove['acidspray']) {
 			item = 'Choice Specs';
-		} else if (ability === 'Slow Start' || hasMove['bite'] || hasMove['clearsmog'] || hasMove['curse'] || hasMove['protect'] || hasMove['sleeptalk'] || template.species.includes('Rotom-')) {
+		} else if (ability === 'Slow Start' || hasMove['bite'] || hasMove['clearsmog'] || hasMove['curse'] || hasMove['protect'] || hasMove['sleeptalk'] || template.name.includes('Rotom-')) {
 			item = 'Leftovers';
 		} else if ((hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']) && ability !== 'Sturdy') {
 			item = (ability === 'Defeatist') ? 'Expert Belt' : 'Focus Sash';
@@ -830,7 +830,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 			item = 'Rocky Helmet';
 		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.spd >= 50 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 235) {
 			item = 'Assault Vest';
-		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
+		} else if (template.name === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
 		} else if (counter.damagingMoves.length >= 4) {
 			item = (!!counter['Dragon'] || !!counter['Dark'] || !!counter['Normal']) ? 'Life Orb' : 'Expert Belt';
@@ -920,7 +920,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		return {
-			name: template.baseSpecies,
+			name: template.baseName,
 			species: species,
 			gender: template.gender,
 			moves: moves,
@@ -941,9 +941,9 @@ class RandomGen6Teams extends RandomGen7Teams {
 	 * @return {RandomTeamsTypes.RandomFactorySet | false}
 	 */
 	randomFactorySet(template, slot, teamData, tier) {
-		let speciesId = toID(template.species);
-		// let flags = this.randomFactorySets[tier][speciesId].flags;
-		let setList = this.randomFactorySets[tier][speciesId].sets;
+		let id = toID(template.name);
+		// let flags = this.randomFactorySets[tier][id].flags;
+		let setList = this.randomFactorySets[tier][id].sets;
 
 		/**@type {{[k: string]: number}} */
 		let itemsMax = {'choicespecs': 1, 'choiceband': 1, 'choicescarf': 1};
@@ -1009,7 +1009,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		return {
-			name: setData.set.name || template.baseSpecies,
+			name: setData.set.name || template.baseName,
 			species: setData.set.species,
 			gender: setData.set.gender || template.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
 			item: setData.set.item || '',
@@ -1062,10 +1062,10 @@ class RandomGen6Teams extends RandomGen7Teams {
 			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
-			let speciesFlags = this.randomFactorySets[chosenTier][template.speciesid].flags;
+			let speciesFlags = this.randomFactorySets[chosenTier][template.id].flags;
 
 			// Limit to one of each species (Species Clause)
-			if (teamData.baseFormes[template.baseSpecies]) continue;
+			if (teamData.baseFormes[template.baseName]) continue;
 
 			// Limit the number of Megas to one
 			if (teamData.megaCount >= 1 && speciesFlags.megaOnly) continue;
@@ -1105,7 +1105,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 			}
 			teamData.typeComboCount[typeCombo] = 1;
 
-			teamData.baseFormes[template.baseSpecies] = 1;
+			teamData.baseFormes[template.baseName] = 1;
 
 			let itemData = this.dex.getItem(set.item);
 			if (itemData.megaStone) teamData.megaCount++;

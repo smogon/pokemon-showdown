@@ -11,7 +11,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 	 */
 	randomSet(template, teamDetails = {}, isLead = false) {
 		let baseTemplate = (template = this.dex.getTemplate(template));
-		let species = template.species;
+		let species = template.name;
 
 		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
@@ -339,7 +339,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 					// @ts-ignore
 					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
 					(hasAbility['Bad Dreams'] && movePool.includes('darkvoid')) ||
-					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
+					(hasAbility['Contrary'] && !counter['contrary'] && template.name !== 'Shuckle') ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')) && (counter.Status > 1 || (template.nfe && !!counter['Status']))) ||
@@ -441,7 +441,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				} else if (ability === 'Sand Force' || ability === 'Sand Rush' || ability === 'Sand Veil') {
 					rejectAbility = !teamDetails['sand'];
 				} else if (ability === 'Serene Grace') {
-					rejectAbility = !counter['serenegrace'] || template.species === 'Blissey' || template.species === 'Togetic';
+					rejectAbility = !counter['serenegrace'] || template.name === 'Blissey' || template.name === 'Togetic';
 				} else if (ability === 'Sheer Force') {
 					rejectAbility = !counter['sheerforce'] || (abilities.includes('Iron Fist') && counter['ironfist'] > counter['sheerforce']);
 				} else if (ability === 'Simple') {
@@ -494,19 +494,19 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = template.requiredItem;
 
 		// First, the extra high-priority items
-		} else if (template.species === 'Marowak') {
+		} else if (template.name === 'Marowak') {
 			item = 'Thick Club';
-		} else if (template.species === 'Deoxys-Attack') {
+		} else if (template.name === 'Deoxys-Attack') {
 			item = (isLead && hasMove['stealthrock']) ? 'Focus Sash' : 'Life Orb';
-		} else if (template.species === 'Farfetch\'d') {
+		} else if (template.name === 'Farfetch\'d') {
 			item = 'Stick';
-		} else if (template.species === 'Pikachu') {
+		} else if (template.name === 'Pikachu') {
 			item = 'Light Ball';
-		} else if (template.species === 'Shedinja' || template.species === 'Smeargle') {
+		} else if (template.name === 'Shedinja' || template.name === 'Smeargle') {
 			item = 'Focus Sash';
-		} else if (template.species === 'Unown') {
+		} else if (template.name === 'Unown') {
 			item = 'Choice Specs';
-		} else if (template.species === 'Wobbuffet' && hasMove['destinybond'] && this.randomChance(1, 2)) {
+		} else if (template.name === 'Wobbuffet' && hasMove['destinybond'] && this.randomChance(1, 2)) {
 			item = 'Custap Berry';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
@@ -577,7 +577,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs') {
 			item = 'Rocky Helmet';
-		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
+		} else if (template.name === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
 		} else if (template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 275) {
 			item = 'Leftovers';
@@ -632,7 +632,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		return {
-			name: template.baseSpecies,
+			name: template.baseName,
 			species: species,
 			gender: template.gender,
 			moves: moves,
@@ -673,10 +673,10 @@ class RandomGen5Teams extends RandomGen6Teams {
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseSpecies]) continue;
+			if (baseFormes[template.baseName]) continue;
 
 			// Adjust rate for species with multiple formes
-			switch (template.baseSpecies) {
+			switch (template.baseName) {
 			case 'Arceus':
 				if (this.randomChance(16, 17)) continue;
 				break;
@@ -739,7 +739,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			}
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[template.baseSpecies] = 1;
+			baseFormes[template.baseName] = 1;
 
 			// Increment tier counter
 			if (tierCount[tier]) {

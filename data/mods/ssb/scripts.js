@@ -112,8 +112,8 @@ let BattleScripts = {
 	canMegaEvo(pokemon) {
 		let altForme = pokemon.baseTemplate.otherFormes && this.dex.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		let item = pokemon.getItem();
-		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.species;
-		if (item.megaEvolves !== pokemon.baseTemplate.species || (Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) || (typeof item.megaStone === 'string' && item.megaStone === pokemon.species)) {
+		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.name;
+		if (item.megaEvolves !== pokemon.baseTemplate.name || (Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) || (typeof item.megaStone === 'string' && item.megaStone === pokemon.species)) {
 			return null;
 		}
 		if (Array.isArray(item.megaStone)) {
@@ -152,7 +152,7 @@ let BattleScripts = {
 		let item = pokemon.getItem();
 		if (!skipChecks) {
 			if (!item.zMove) return;
-			if (item.itemUser && !item.itemUser.includes(pokemon.template.species)) return;
+			if (item.itemUser && !item.itemUser.includes(pokemon.template.name)) return;
 			let moveData = pokemon.getMoveData(move);
 			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
 		}
@@ -205,7 +205,7 @@ let BattleScripts = {
 		if ((pokemon.m && pokemon.m.zMoveUsed) || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
-		if (item.itemUser && !item.itemUser.includes(pokemon.template.species)) return;
+		if (item.itemUser && !item.itemUser.includes(pokemon.template.name)) return;
 		let atLeastOne = false;
 		let mustStruggle = true;
 		/**@type {ZMoveOptions} */

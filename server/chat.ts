@@ -1720,7 +1720,7 @@ export const Chat = new class {
 		let buf = '<li class="result">';
 		buf += '<span class="col numcol">' + (tier || template.tier) + '</span> ';
 		buf += `<span class="col iconcol"><psicon pokemon="${template.id}"/></span> `;
-		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${template.id}" target="_blank">${template.species}</a></span> `;
+		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${template.id}" target="_blank">${template.name}</a></span> `;
 		buf += '<span class="col typecol">';
 		if (template.types) {
 			for (const type of template.types) {

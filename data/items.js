@@ -10,7 +10,7 @@ let BattleItems = {
 		megaEvolves: "Abomasnow",
 		itemUser: ["Abomasnow"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 674,
@@ -26,7 +26,7 @@ let BattleItems = {
 		megaEvolves: "Absol",
 		itemUser: ["Absol"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 677,
@@ -62,7 +62,7 @@ let BattleItems = {
 		},
 		onBasePowerPriority: 6,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseTemplate.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
+			if (move && user.baseTemplate.name === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
@@ -98,7 +98,7 @@ let BattleItems = {
 		megaEvolves: "Aerodactyl",
 		itemUser: ["Aerodactyl"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 672,
@@ -114,7 +114,7 @@ let BattleItems = {
 		megaEvolves: "Aggron",
 		itemUser: ["Aggron"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 667,
@@ -189,7 +189,7 @@ let BattleItems = {
 		megaEvolves: "Alakazam",
 		itemUser: ["Alakazam"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 679,
@@ -218,7 +218,7 @@ let BattleItems = {
 		megaEvolves: "Altaria",
 		itemUser: ["Altaria"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 755,
@@ -234,7 +234,7 @@ let BattleItems = {
 		megaEvolves: "Ampharos",
 		itemUser: ["Ampharos"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 658,
@@ -328,7 +328,7 @@ let BattleItems = {
 		megaEvolves: "Audino",
 		itemUser: ["Audino"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 757,
@@ -367,7 +367,7 @@ let BattleItems = {
 		megaEvolves: "Banette",
 		itemUser: ["Banette"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 668,
@@ -392,7 +392,7 @@ let BattleItems = {
 		megaEvolves: "Beedrill",
 		itemUser: ["Beedrill"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 770,
@@ -546,7 +546,7 @@ let BattleItems = {
 		megaEvolves: "Blastoise",
 		itemUser: ["Blastoise"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 661,
@@ -562,7 +562,7 @@ let BattleItems = {
 		megaEvolves: "Blaziken",
 		itemUser: ["Blaziken"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 664,
@@ -575,7 +575,7 @@ let BattleItems = {
 		name: "Blue Orb",
 		spritenum: 41,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseTemplate.species === 'Kyogre') {
+			if (pokemon.isActive && pokemon.baseTemplate.name === 'Kyogre') {
 				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
 			}
 		},
@@ -583,7 +583,7 @@ let BattleItems = {
 			pokemon.formeChange('Kyogre-Primal', this.effect, true);
 		},
 		onTakeItem(item, source) {
-			if (source.baseTemplate.baseSpecies === 'Kyogre') return false;
+			if (source.baseTemplate.baseName === 'Kyogre') return false;
 			return true;
 		},
 		itemUser: ["Kyogre"],
@@ -718,7 +718,7 @@ let BattleItems = {
 		megaEvolves: "Camerupt",
 		itemUser: ["Camerupt"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 767,
@@ -770,7 +770,7 @@ let BattleItems = {
 		megaEvolves: "Charizard",
 		itemUser: ["Charizard"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 660,
@@ -786,7 +786,7 @@ let BattleItems = {
 		megaEvolves: "Charizard",
 		itemUser: ["Charizard"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 678,
@@ -1247,7 +1247,7 @@ let BattleItems = {
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseTemplate.species === 'Clamperl') {
+			if (pokemon.baseTemplate.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
@@ -1266,7 +1266,7 @@ let BattleItems = {
 		},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.baseTemplate.species === 'Clamperl') {
+			if (pokemon.baseTemplate.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
@@ -1301,7 +1301,7 @@ let BattleItems = {
 		megaEvolves: "Diancie",
 		itemUser: ["Diancie"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 764,
@@ -1739,14 +1739,14 @@ let BattleItems = {
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
 			// Temporary hardcode for Slowpoke-Galar since it's a special case
-			if (pokemon.baseTemplate.nfe || pokemon.baseTemplate.species === 'Slowpoke-Galar') {
+			if (pokemon.baseTemplate.nfe || pokemon.baseTemplate.name === 'Slowpoke-Galar') {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
 			// Temporary hardcode for Slowpoke-Galar since it's a special case
-			if (pokemon.baseTemplate.nfe || pokemon.baseTemplate.species === 'Slowpoke-Galar') {
+			if (pokemon.baseTemplate.nfe || pokemon.baseTemplate.name === 'Slowpoke-Galar') {
 				return this.chainModify(1.5);
 			}
 		},
@@ -2202,7 +2202,7 @@ let BattleItems = {
 		megaEvolves: "Gallade",
 		itemUser: ["Gallade"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 756,
@@ -2239,7 +2239,7 @@ let BattleItems = {
 		megaEvolves: "Garchomp",
 		itemUser: ["Garchomp"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 683,
@@ -2255,7 +2255,7 @@ let BattleItems = {
 		megaEvolves: "Gardevoir",
 		itemUser: ["Gardevoir"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 657,
@@ -2271,7 +2271,7 @@ let BattleItems = {
 		megaEvolves: "Gengar",
 		itemUser: ["Gengar"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 656,
@@ -2334,7 +2334,7 @@ let BattleItems = {
 		megaEvolves: "Glalie",
 		itemUser: ["Glalie"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 763,
@@ -2540,7 +2540,7 @@ let BattleItems = {
 		megaEvolves: "Gyarados",
 		itemUser: ["Gyarados"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 676,
@@ -2649,7 +2649,7 @@ let BattleItems = {
 		megaEvolves: "Heracross",
 		itemUser: ["Heracross"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 680,
@@ -2679,7 +2679,7 @@ let BattleItems = {
 		megaEvolves: "Houndoom",
 		itemUser: ["Houndoom"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 666,
@@ -3007,7 +3007,7 @@ let BattleItems = {
 		megaEvolves: "Kangaskhan",
 		itemUser: ["Kangaskhan"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 675,
@@ -3097,7 +3097,7 @@ let BattleItems = {
 		megaEvolves: "Latias",
 		itemUser: ["Latias"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 684,
@@ -3113,7 +3113,7 @@ let BattleItems = {
 		megaEvolves: "Latios",
 		itemUser: ["Latios"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 685,
@@ -3157,7 +3157,7 @@ let BattleItems = {
 		},
 		spritenum: 475,
 		onModifyCritRatio(critRatio, user) {
-			if (["Farfetch'd", "Sirfetch'd"].includes(user.baseTemplate.baseSpecies)) {
+			if (["Farfetch'd", "Sirfetch'd"].includes(user.baseTemplate.baseName)) {
 				return critRatio + 2;
 			}
 		},
@@ -3273,13 +3273,13 @@ let BattleItems = {
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.baseTemplate.baseSpecies === 'Pikachu') {
+			if (pokemon.baseTemplate.baseName === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.baseTemplate.baseSpecies === 'Pikachu') {
+			if (pokemon.baseTemplate.baseName === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
@@ -3308,7 +3308,7 @@ let BattleItems = {
 		megaEvolves: "Lopunny",
 		itemUser: ["Lopunny"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 768,
@@ -3344,7 +3344,7 @@ let BattleItems = {
 		megaEvolves: "Lucario",
 		itemUser: ["Lucario"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 673,
@@ -3360,7 +3360,7 @@ let BattleItems = {
 			basePower: 40,
 		},
 		onModifyCritRatio(critRatio, user) {
-			if (user.baseTemplate.species === 'Chansey') {
+			if (user.baseTemplate.name === 'Chansey') {
 				return critRatio + 2;
 			}
 		},
@@ -3444,7 +3444,7 @@ let BattleItems = {
 		},
 		onBasePowerPriority: 6,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseTemplate.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (move && user.baseTemplate.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
@@ -3581,7 +3581,7 @@ let BattleItems = {
 		megaEvolves: "Manectric",
 		itemUser: ["Manectric"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 682,
@@ -3640,7 +3640,7 @@ let BattleItems = {
 		megaEvolves: "Mawile",
 		itemUser: ["Mawile"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 681,
@@ -3678,7 +3678,7 @@ let BattleItems = {
 		megaEvolves: "Medicham",
 		itemUser: ["Medicham"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 665,
@@ -3734,7 +3734,7 @@ let BattleItems = {
 		megaEvolves: "Metagross",
 		itemUser: ["Metagross"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 758,
@@ -3769,7 +3769,7 @@ let BattleItems = {
 		spritenum: 287,
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
-			if (pokemon.template.species === 'Ditto' && !pokemon.transformed) {
+			if (pokemon.template.name === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
 			}
 		},
@@ -3837,7 +3837,7 @@ let BattleItems = {
 		megaEvolves: "Mewtwo",
 		itemUser: ["Mewtwo"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 662,
@@ -3853,7 +3853,7 @@ let BattleItems = {
 		megaEvolves: "Mewtwo",
 		itemUser: ["Mewtwo"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 663,
@@ -4347,7 +4347,7 @@ let BattleItems = {
 		megaEvolves: "Pidgeot",
 		itemUser: ["Pidgeot"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 762,
@@ -4403,7 +4403,7 @@ let BattleItems = {
 		megaEvolves: "Pinsir",
 		itemUser: ["Pinsir"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 671,
@@ -4854,7 +4854,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onModifySpe(spe, pokemon) {
-			if (pokemon.template.species === 'Ditto' && !pokemon.transformed) {
+			if (pokemon.template.name === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
 			}
 		},
@@ -5005,7 +5005,7 @@ let BattleItems = {
 		name: "Red Orb",
 		spritenum: 390,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseTemplate.species === 'Groudon') {
+			if (pokemon.isActive && pokemon.baseTemplate.name === 'Groudon') {
 				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
 			}
 		},
@@ -5013,7 +5013,7 @@ let BattleItems = {
 			pokemon.formeChange('Groudon-Primal', this.effect, true);
 		},
 		onTakeItem(item, source) {
-			if (source.baseTemplate.baseSpecies === 'Groudon') return false;
+			if (source.baseTemplate.baseName === 'Groudon') return false;
 			return true;
 		},
 		itemUser: ["Groudon"],
@@ -5291,7 +5291,7 @@ let BattleItems = {
 		megaEvolves: "Sableye",
 		itemUser: ["Sableye"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 754,
@@ -5380,7 +5380,7 @@ let BattleItems = {
 		megaEvolves: "Salamence",
 		itemUser: ["Salamence"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 769,
@@ -5396,7 +5396,7 @@ let BattleItems = {
 		megaEvolves: "Sceptile",
 		itemUser: ["Sceptile"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 753,
@@ -5412,7 +5412,7 @@ let BattleItems = {
 		megaEvolves: "Scizor",
 		itemUser: ["Scizor"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 670,
@@ -5476,7 +5476,7 @@ let BattleItems = {
 		megaEvolves: "Sharpedo",
 		itemUser: ["Sharpedo"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 759,
@@ -5669,7 +5669,7 @@ let BattleItems = {
 		megaEvolves: "Slowbro",
 		itemUser: ["Slowbro"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 760,
@@ -5906,7 +5906,7 @@ let BattleItems = {
 		megaEvolves: "Steelix",
 		itemUser: ["Steelix"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 761,
@@ -5969,7 +5969,7 @@ let BattleItems = {
 		},
 		spritenum: 475,
 		onModifyCritRatio(critRatio, user) {
-			if (user.baseTemplate.species === 'Farfetch\'d') {
+			if (user.baseTemplate.name === 'Farfetch\'d') {
 				return critRatio + 2;
 			}
 		},
@@ -6056,7 +6056,7 @@ let BattleItems = {
 		megaEvolves: "Swampert",
 		itemUser: ["Swampert"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 752,
@@ -6156,7 +6156,7 @@ let BattleItems = {
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.baseTemplate.baseSpecies === 'Cubone' || pokemon.baseTemplate.baseSpecies === 'Marowak') {
+			if (pokemon.baseTemplate.baseName === 'Cubone' || pokemon.baseTemplate.baseName === 'Marowak') {
 				return this.chainModify(2);
 			}
 		},
@@ -7369,7 +7369,7 @@ let BattleItems = {
 		megaEvolves: "Tyranitar",
 		itemUser: ["Tyranitar"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 669,
@@ -7431,7 +7431,7 @@ let BattleItems = {
 		megaEvolves: "Venusaur",
 		itemUser: ["Venusaur"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: 659,
@@ -8079,7 +8079,7 @@ let BattleItems = {
 		megaEvolves: "Crucibelle",
 		itemUser: ["Crucibelle"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseTemplate.baseName) return false;
 			return true;
 		},
 		num: -1,
