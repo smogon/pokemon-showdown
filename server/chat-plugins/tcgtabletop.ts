@@ -92,7 +92,7 @@ export const commands: ChatCommands = {
 				if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 				room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 			}
-		}, (err: AnyObject) => {
+		}, (err: Error & {code: string}) => {
 			if (!this.runBroadcast()) return;
 
 			if (err instanceof SyntaxError || err.message === 'Malformed data') {
