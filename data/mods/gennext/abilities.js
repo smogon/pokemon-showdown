@@ -332,7 +332,7 @@ let BattleAbilities = {
 	"download": {
 		inherit: true,
 		onStart(pokemon) {
-			if (pokemon.template.baseName === 'Genesect') {
+			if (pokemon.template.baseSpecies === 'Genesect') {
 				if (!pokemon.getItem().onDrive) return;
 			}
 			let totaldef = 0;
