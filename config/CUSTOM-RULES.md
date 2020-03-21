@@ -1,7 +1,15 @@
 Custom Rules
 ============
 
-Pokémon Showdown supports custom rules in tournaments, as well as by editing `formats.js`.
+Pokémon Showdown supports custom rules in three ways:
+
+- Challenging another user, using the command `/challenge USERNAME, FORMAT @@@ RULES`
+
+- Tournaments, using the command `/tour rules RULES` (see the [Tournament command help][tour-help])
+
+- Custom formats on your side server, by editing `config/formats.js`
+
+  [tour-help]: https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489
 
 
 Bans
@@ -46,6 +54,12 @@ Bans are just a `-` followed by the thing you want to ban.
 `- all items` - ban all items
 
 `- all abilities, + No Ability` - ban all abilities (No Ability needs to be specifically allowed to allow Pokemon with no abilities)
+
+### Complex bans
+
+`- Blaziken + Speed Boost` - ban a combination of things in a single Pokemon (you can have a Blaziken, and you can have Speed Boost on the same team, but the Blaziken can't have Speed Boost)
+
+`- Drizzle ++ Swift Swim` - ban a combination of things in a team (if any Pokémon on your team have Drizzle, no Pokémon can have Swift Swim)
 
 
 Unbans
@@ -224,6 +238,12 @@ Put `!` in front of a rule to remove it, like:
 You can use this to remove individual parts of rules, like:
 
 `Obtainable, !Obtainable Moves` - require pokemon to be obtained legitimately, except for moves, which they can use whatever
+
+
+Multiple rules
+--------------
+
+In case you haven't figured it out from the rest of this page, you combine rules with a `,` (comma).
 
 
 Tiers and Formats
