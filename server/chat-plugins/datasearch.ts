@@ -80,7 +80,7 @@ export const commands: ChatCommands = {
 		if (targetGen) target += `, maxgen${targetGen}`;
 		if (targetGen && targetGen === 5) {
 			const targArray = target.split(',');
-			for (let [i, arg] of targArray.entries()) {
+			for (const [i, arg] of targArray.entries()) {
 				if (arg.includes('|')) {
 					const orArray = arg.split('|');
 					for (const [j, a] of orArray.entries()) {
