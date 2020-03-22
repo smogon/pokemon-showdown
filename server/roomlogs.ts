@@ -178,22 +178,28 @@ export class Roomlog {
 		}
 		return false;
 	}
-	clearText(userids: ID[]) {
+	clearText(userids: ID[], lineCount = 0) {
 		const messageStart = this.logTimes ? '|c:|' : '|c|';
 		const section = this.logTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		const cleared: ID[] = [];
-		this.log = this.log.filter(line => {
+		const clearAll = (lineCount === 0);
+		this.log = this.log.reverse().filter(line => {
 			if (line.startsWith(messageStart)) {
 				const parts = Chat.splitFirst(line, '|', section);
 				const userid = toID(parts[section - 1]);
 				if (userids.includes(userid)) {
 					if (!cleared.includes(userid)) cleared.push(userid);
 					if (this.roomid.startsWith('battle-')) return true; // Don't remove messages in battle rooms to preserve evidence
-					return false;
+					if (clearAll) return false;
+					if (lineCount > 0) {
+						lineCount--;
+						return false;
+					}
+					return true;
 				}
 			}
 			return true;
-		});
+		}).reverse();
 		return cleared;
 	}
 	uhtmlchange(message: string) {
