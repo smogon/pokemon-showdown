@@ -171,7 +171,7 @@ describe('Choice parser', function () {
 					assert.throws(() => battle.choose('p1', choice));
 				}
 
-				assert(battle.choose('p1', `move 1 1 mega, move tackle 1`));
+				assert(battle.choose('p1', `move 1 +1 mega, move tackle 1`));
 				assert(battle.choose('p2', `move Blaze Kick zmove 1, move irondefense`));
 			});
 
