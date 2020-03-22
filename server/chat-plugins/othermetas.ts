@@ -336,7 +336,7 @@ export const commands: ChatCommands = {
 		if (!args.length || !toID(args[0])) return this.parse(`/help scalemons`);
 		let isGen1 = false;
 		if (cmd === 'scale1') isGen1 = true;
-		let template = Dex.deepClone(!isGen1 ? Dex.getTemplate(args[0]) : Dex.mod('gen1').getTemplate(args[0]));
+		const template = Dex.deepClone(!isGen1 ? Dex.getTemplate(args[0]) : Dex.mod('gen1').getTemplate(args[0]));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${target} not found.`);
 		if (isGen1 && template.gen > 1) return this.errorReply(`Error: Pokemon ${target} not found.`);
 		if (!args[1] || toID(args[1]) !== 'hp') {
@@ -357,8 +357,8 @@ export const commands: ChatCommands = {
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template, isGen1 ? 1 : 8)}`);
 	},
 	scalemonshelp: [
-		`/scale OR /scalemons <pokemon>[, "hp"] - Shows the base stats that a Pokemon would have in Scalemons.`,
-		`/scale1 <pokemon>[, hp] - Shows the base stats that a Pokemon would have in Gen 1.`,
+		`/scale OR /scalemons <pokemon> - Shows the base stats that a Pokemon would have in Scalemons.`,
+		`/scale1 <pokemon> - Shows the base stats that a Pokemon would have in Gen 1.`,
 		`You can add ", hp" to both of these commands to scale a Pokemon's stats with HP considered.`,
 	],
 
