@@ -626,23 +626,11 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause'],
+		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause', 'Scaled Stats Mod'],
 		banlist: [
 			'Crawdaunt', 'Darmanitan', 'Darmanitan-Galar', 'Darumaka', 'Darumaka-Galar', 'Gastly',
 			'Arena Trap', 'Drizzle', 'Drought', 'Huge Power', 'Moody', 'Shadow Tag', 'Baton Pass', 'Rain Dance', 'Sunny Day', 'Eviolite', 'Light Ball',
 		],
-		onModifyTemplate(template, target, source) {
-			const newTemplate = this.dex.deepClone(template);
-			newTemplate.baseStats = this.dex.deepClone(newTemplate.baseStats);
-			/** @type {StatName[]} */
-			let stats = ['atk', 'def', 'spa', 'spd', 'spe'];
-			let pst = stats.map(stat => newTemplate.baseStats[stat]).reduce((x, y) => x + y);
-			let scale = 600 - newTemplate.baseStats['hp'];
-			for (const stat of stats) {
-				newTemplate.baseStats[stat] = this.dex.clampIntRange(newTemplate.baseStats[stat] * scale / pst, 1, 255);
-			}
-			return newTemplate;
-		},
 	},
 
 	// Other Metagames
