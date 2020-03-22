@@ -189,7 +189,7 @@ In-battle rules
 
 `Freeze Clause Mod` - prevent Pokémon from getting frozen if they have frozen allies
 
-`Cancel Mod` - allow players to cancel their moves
+`Cancel Mod` - show the Cancel button and allow players to cancel their moves
 
 `Inverse Mod` - inverse type effectiveness (like in Gen 6 Inverse Battles)
 
