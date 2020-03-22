@@ -197,7 +197,7 @@ class RandomTeams {
 			if (species === 'Smeargle') {
 				pool = Object.keys(this.dex.data.Movedex).filter(moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || this.dex.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
 			} else {
-				let learnset = this.dex.data.Learnsets[template.id].learnset || this.dex.data.Learnsets[this.dex.getTemplate(template.baseSpecies).id].learnset;
+				let learnset = this.dex.data.Learnsets[template.id] && this.dex.data.Learnsets[template.id].learnset ? this.dex.data.Learnsets[template.id].learnset : this.dex.data.Learnsets[this.dex.getTemplate(template.baseSpecies).id].learnset;
 				// @ts-ignore
 				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
 				if (template.species.startsWith('Necrozma-') || template.species.startsWith('Rotom-')) {
