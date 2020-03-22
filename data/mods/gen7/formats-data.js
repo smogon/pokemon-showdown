@@ -903,8 +903,6 @@ let BattleFormatsData = {
 	eevee: {
 		tier: "LC",
 	},
-	eeveestarter: {
-	},
 	vaporeon: {
 		randomBattleMoves: ["wish", "protect", "scald", "roar", "icebeam", "healbell"],
 		randomDoubleBattleMoves: ["helpinghand", "wish", "protect", "scald", "muddywater", "icebeam", "toxic", "hydropump"],
@@ -1452,8 +1450,6 @@ let BattleFormatsData = {
 		randomDoubleBattleMoves: ["spore", "fakeout", "wideguard", "helpinghand", "followme", "tailwind", "kingsshield", "transform"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
-	},
-	pokestarsmeargle: {
 	},
 	miltank: {
 		randomBattleMoves: ["milkdrink", "stealthrock", "bodyslam", "healbell", "curse", "earthquake", "toxic"],
@@ -3704,8 +3700,12 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	vivillonfancy: {
+		tier: "NU",
+		doublesTier: "(DUU)",
 	},
 	vivillonpokeball: {
+		tier: "NU",
+		doublesTier: "(DUU)",
 	},
 	litleo: {
 		tier: "LC",
