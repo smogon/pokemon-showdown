@@ -1413,7 +1413,7 @@ exports.commands = {
 				userid,
 				...Object.keys(targetUser.prevNames),
 				...targetUser.getAltUsers(true).map(user => user.getLastId()),
-			], lineCount);
+			]);
 		} else {
 			room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
