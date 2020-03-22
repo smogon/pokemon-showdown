@@ -160,7 +160,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['NFE Clause', 'Standard', 'Dynamax Clause'],
+		ruleset: ['Not Fully Evolved', 'Standard', 'Dynamax Clause'],
 		banlist: [
 			'Doublade', 'Gurdurr', 'Ivysaur', 'Mr. Mime-Galar', 'Rhydon', 'Rufflet', 'Sneasel',
 			'Type: Null', 'Shadow Tag', 'Baton Pass',
@@ -2258,8 +2258,9 @@ let Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['Standard', 'UU NFE Clause'],
+		ruleset: ['Standard', 'NFE Clause'],
 		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain'],
+		unbanlist: ['Scyther'],
 	},
 	{
 		name: "[Gen 3] NU",
@@ -2269,7 +2270,7 @@ let Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['[Gen 3] UU', '!UU NFE Clause'],
+		ruleset: ['[Gen 3] UU', '!NFE Clause'],
 		banlist: ['UU'],
 	},
 	{
