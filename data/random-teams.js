@@ -162,6 +162,7 @@ class RandomTeams {
 		for (let i = 0; i < 6; i++) {
 			let species = random6[i];
 			let template = Dex.mod('gen' + this.gen).getTemplate(species);
+			if (template.isNonstandard) template = Dex.mod('gen' + this.gen).getTemplate(template.baseSpecies);
 
 			// Random legal item
 			let item = '';
@@ -200,8 +201,8 @@ class RandomTeams {
 				let learnset = this.dex.data.Learnsets[template.id] && this.dex.data.Learnsets[template.id].learnset ? this.dex.data.Learnsets[template.id].learnset : this.dex.data.Learnsets[this.dex.getTemplate(template.baseSpecies).id].learnset;
 				// @ts-ignore
 				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
-				if (template.species.startsWith('Necrozma-') || template.species.startsWith('Rotom-')) {
-					learnset = this.dex.data.Learnsets[toID(template.baseSpecies)].learnset;
+				if (template.inheritsFrom) {
+					learnset = this.dex.data.Learnsets[template.inheritsFrom].learnset;
 					// @ts-ignore
 					const basePool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
 					pool = [...new Set(pool.concat(basePool))];
