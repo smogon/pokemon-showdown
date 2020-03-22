@@ -1399,6 +1399,9 @@ exports.commands = {
 		if (!targetUser && !room.log.hasUsername(name)) {
 			return this.errorReply(`User ${name} not found or has no roomlogs.`);
 		}
+		if (lineCount && cmd.includes('alt')) {
+			return this.errorReply(`You can't specify a line count when using /hidealtstext.`);
+		}
 		let userid = toID(this.inputUsername);
 
 		if (!this.can('mute', null, room)) return;
