@@ -18,24 +18,15 @@ let BattleFormats = {
 		onModifyTemplate(template, target, source) {
 			const newTemplate = this.dex.deepClone(template);
 			newTemplate.baseStats = this.dex.deepClone(newTemplate.baseStats);
-			if (!this.ruleTable.has('scalehp')) {
-				/** @type {StatName[]} */
-				let stats = ['atk', 'def', 'spa', 'spe'];
-				let pst = stats.map(stat => newTemplate.baseStats[stat]).reduce((x, y) => x + y);
-				let scale = 500 - newTemplate.baseStats['hp'];
-				for (const stat of stats) {
-					newTemplate.baseStats[stat] = this.dex.clampIntRange(newTemplate.baseStats[stat] * scale / pst, 1, 255);
-				}
-				return newTemplate;
-			} else {
-				/** @type {number} */
-				let pst = ['hp', 'atk', 'def', 'spa', 'spe'].map(stat => newTemplate.baseStats[stat]).reduce((x, y) => x + y);
-				let scale = 500;
-				for (const stat in newTemplate.baseStats) {
-					newTemplate.baseStats[stat] = this.dex.clampIntRange(newTemplate.baseStats[stat] * scale / pst, 1, 255);
-				}
-				return newTemplate;
+			/** @type {StatName[]} */
+			let stats = ['atk', 'def', 'spa', 'spe'];
+			/** @type {number} */
+			let pst = stats.map(stat => newTemplate.baseStats[stat]).reduce((x, y) => x + y);
+			let scale = 500 - newTemplate.baseStats['hp'];
+			for (const stat of stats) {
+				newTemplate.baseStats[stat] = this.dex.clampIntRange(newTemplate.baseStats[stat] * scale / pst, 1, 255);
 			}
+			return newTemplate;
 		},
 	},
 };
