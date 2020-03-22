@@ -530,7 +530,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	slowbro: {
-		randomBattleMoves: ["calmmind", "icebeam", "psyshock", "scald", "slackoff", "toxic"],
+		randomBattleMoves: ["calmmind", "icebeam", "psyshock", "scald", "slackoff", "teleport"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -850,6 +850,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	electivire: {
+		randomBattleMoves: ["crosschop", "earthquake", "flamethrower", "icepunch", "voltswitch", "wildcharge"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1447,7 +1448,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	celebi: {
-		randomBattleMoves: ["aurasphere", "gigadrain", "leafstorm", "nastyplot", "psychic", "recover", "stealthrock", "uturn"],
+		randomBattleMoves: ["earthpower", "gigadrain", "leafstorm", "nastyplot", "psychic", "recover", "stealthrock", "uturn"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -2314,7 +2315,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	skuntank: {
-		randomBattleMoves: ["crunch", "defog", "fireblast", "poisonjab", "suckerpunch", "taunt", "toxic"],
+		randomBattleMoves: ["crunch", "defog", "fireblast", "poisonjab", "suckerpunch", "toxic"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -3187,7 +3188,7 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	virizion: {
-		randomBattleMoves: ["closecombat", "leafblade", "stoneedge", "substitute", "swordsdance"],
+		randomBattleMoves: ["closecombat", "leafblade", "stoneedge", "swordsdance", "taunt"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -3244,9 +3245,11 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	keldeo: {
-		randomBattleMoves: ["airslash", "calmmind", "hydropump", "icywind", "scald", "secretsword", "substitute"],
 		tier: "OU",
 		doublesTier: "DUU",
+	},
+	keldeoresolute: {
+		randomBattleMoves: ["airslash", "calmmind", "hydropump", "icywind", "scald", "secretsword", "substitute"],
 	},
 	meloetta: {
 		isNonstandard: "Past",
@@ -3593,6 +3596,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	zygarde: {
+		randomBattleMoves: ["dragondance", "earthquake", "extremespeed", "outrage", "stoneedge"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -3641,7 +3645,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	incineroar: {
-		randomBattleMoves: ["darkestlariat", "earthquake", "fakeout", "flareblitz", "partingshot", "uturn"],
+		randomBattleMoves: ["earthquake", "flareblitz", "knockoff", "partingshot", "uturn", "willowisp"],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
@@ -3739,7 +3743,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	lycanroc: {
-		randomBattleMoves: ["accelerock", "closecombat", "psychicfangs", "stealthrock", "stoneedge", "swordsdance"],
+		randomBattleMoves: ["accelerock", "closecombat", "psychicfangs", "stoneedge", "swordsdance"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4102,7 +4106,7 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	necrozmaduskmane: {
-		randomBattleMoves: ["dragondance", "earthquake", "photongeyser", "stealthrock", "sunsteelstrike"],
+		randomBattleMoves: ["dragondance", "earthquake", "morningsun", "photongeyser", "sunsteelstrike"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -4301,11 +4305,11 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	coalossal: {
-		randomBattleMoves: ["overheat", "rapidspin", "spikes", "stealthrock", "stoneedge", "willowisp"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
 	coalossalgmax: {
+		randomBattleMoves: ["overheat", "rapidspin", "spikes", "stealthrock", "stoneedge", "willowisp"],
 		tier: "(Uber)",
 		doublesTier: "DUU",
 	},
