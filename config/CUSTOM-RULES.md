@@ -194,7 +194,7 @@ In-battle rules
 
 `Freeze Clause Mod` - prevent Pokémon from getting frozen if they have frozen allies
 
-`Cancel Mod` - allow the Cancel button
+`Cancel Mod` - show the Cancel button and allow players to cancel their moves
 
 `Inverse Mod` - inverse type effectiveness (like in Gen 6 Inverse Battles)
 
@@ -210,9 +210,7 @@ In-battle rules
 
 `HP Percentage Mod` - Show the opposing Pokémon's HP rounded to the nearest percent, as opposed to a range of percentages based upon the health bar's size in-game
 
-`Exact HP Mod` - Show the opposing Pokémon's HP rounded to the nearest tenth of a percent
-
-`Cancel Mod` - allow players to cancel their moves
+`Exact HP Mod` - Show all Pokémon's exact HP and max HP in the battle log
 
 `Switch Priority Clause Mod` - make the fastest Pokémon switch first when more than one Pokémon switches out at once, unlike in Emerald link battles, where Player 1's Pokémon would switch first.
 
