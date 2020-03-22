@@ -616,7 +616,7 @@ let BattleItems = {
 		// Item activation located in scripts.js
 		num: 1121,
 		gen: 8,
-		desc: "If the holder misses because of accuracy, it raises Speed by 2 stages. Single use.",
+		desc: "If the holder misses due to accuracy, its Speed is raised by 2 stages. Single use.",
 	},
 	"bottlecap": {
 		id: "bottlecap",
@@ -1609,7 +1609,7 @@ let BattleItems = {
 		},
 		num: 1119,
 		gen: 8,
-		desc: "When the holder's stats are lowered, it will be switched out of battle.",
+		desc: "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
 	},
 	"electirizer": {
 		id: "electirizer",
@@ -2136,8 +2136,7 @@ let BattleItems = {
 		},
 		num: 1105,
 		gen: 8,
-		desc: "Can be revived into Arctovish with Fossilized Fish or Arctozolt with Fossilized Dino.",
-		shortDesc: "Can be combined with certain fossils.",
+		desc: "Can revive into Arctovish with Fossilized Fish or Arctozolt with Fossilized Dino.",
 	},
 	"fossilizeddino": {
 		id: "fossilizeddino",
@@ -2148,8 +2147,7 @@ let BattleItems = {
 		},
 		num: 1108,
 		gen: 8,
-		desc: "Can be revived into Dracozolt with Fossilized Drake or Arctozolt with Fossilized Bird.",
-		shortDesc: "Can be combined with certain fossils.",
+		desc: "Can revive into Dracozolt with Fossilized Drake or Arctozolt with Fossilized Bird.",
 	},
 	"fossilizeddrake": {
 		id: "fossilizeddrake",
@@ -2160,8 +2158,7 @@ let BattleItems = {
 		},
 		num: 1107,
 		gen: 8,
-		desc: "Can be revived into Dracozolt with Fossilized Dino or Dracovish with Fossilized Fish.",
-		shortDesc: "Can be combined with certain fossils.",
+		desc: "Can revive into Dracozolt with Fossilized Dino or Dracovish with Fossilized Fish.",
 	},
 	"fossilizedfish": {
 		id: "fossilizedfish",
@@ -2172,8 +2169,7 @@ let BattleItems = {
 		},
 		num: 1106,
 		gen: 8,
-		desc: "Can be revived into Dracovish with Fossilized Drake or Arctovish with Fossilized Bird.",
-		shortDesc: "Can be combined with certain fossils.",
+		desc: "Can revive into Dracovish with Fossilized Drake or Arctovish with Fossilized Bird.",
 	},
 	"friendball": {
 		id: "friendball",
@@ -2630,7 +2626,7 @@ let BattleItems = {
 		},
 		num: 1120,
 		gen: 8,
-		desc: "Prevents the effects of traps set on the battlefield.",
+		desc: "When switching in, the holder is unaffected by hazards on its side of the field.",
 		// Hazard Immunity implemented in moves.js
 	},
 	"helixfossil": {
@@ -5179,7 +5175,7 @@ let BattleItems = {
 		},
 		num: 1122,
 		gen: 8,
-		desc: "If Trick Room is active, lowers holder's Speed by 1 stage. Single use.",
+		desc: "If Trick Room is active, the holder's Speed is lowered by 1 stage. Single use.",
 	},
 	"rootfossil": {
 		id: "rootfossil",
@@ -5269,7 +5265,7 @@ let BattleItems = {
 		itemUser: ["Zamazenta-Crowned"],
 		num: 1104,
 		gen: 8,
-		desc: "If held by a Zamazenta, this item changes it to Crowned Forme.",
+		desc: "If held by a Zamazenta, this item changes its forme to Crowned Shield.",
 	},
 	"rustedsword": {
 		id: "rustedsword",
@@ -5285,7 +5281,7 @@ let BattleItems = {
 		itemUser: ["Zacian-Crowned"],
 		num: 1103,
 		gen: 8,
-		desc: "If held by a Zacian, this item changes it to Crowned Forme.",
+		desc: "If held by a Zacian, this item changes its forme to Crowned Sword.",
 	},
 	"sablenite": {
 		id: "sablenite",
@@ -6186,7 +6182,7 @@ let BattleItems = {
 		},
 		num: 1118,
 		gen: 8,
-		desc: "Raises holder's Special Attack by 1 stage after using a sound move. Single use.",
+		desc: "Raises holder's Special Attack by 1 stage after it uses a sound move. Single use.",
 	},
 	"thunderstone": {
 		id: "thunderstone",
@@ -7424,8 +7420,8 @@ let BattleItems = {
 		// Implemented in statuses.js, moves.js, and abilities.js
 		num: 1123,
 		gen: 8,
-		desc: "The holder is immune to the weather-based modifiers of the attacker's moves in the effects of Sunny Day and Rain Dance. However, the user's Weather Ball and own weather-based abilities will not activate.",
-		shortDesc: "Blocks the holder from the effects of sun/rain.",
+		desc: "The holder ignores rain- and sun-based effects. Damage and accuracy calculations from attacks used by the holder are affected by rain and sun, but not attacks used against the holder.",
+		shortDesc: "The holder ignores rain- and sun-based effects.",
 	},
 	"venusaurite": {
 		id: "venusaurite",
