@@ -197,13 +197,13 @@ class RandomTeams {
 			if (species === 'Smeargle') {
 				pool = Object.keys(this.dex.data.Movedex).filter(moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || this.dex.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
 			} else {
-				let lsetData = this.dex.getLearnsetData(template.speciesid);
+				let learnset = this.dex.data.Learnsets[template.id].learnset || this.dex.data.Learnsets[this.dex.getTemplate(template.baseSpecies).id].learnset;
 				// @ts-ignore
-				if (lsetData.exists) pool = Object.keys(lsetData.learnset).filter(moveid => lsetData.learnset[moveid].find(learned => learned.startsWith(this.gen.toString())));
-				if (template.species.substr(0, 9) === 'Necrozma-' || template.species.substr(0, 6) === 'Rotom-') {
-					lsetData = this.dex.getLearnsetData(toID(template.baseSpecies));
+				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
+				if (template.species.startsWith('Necrozma-') || template.species.startsWith('Rotom-')) {
+					learnset = this.dex.data.Learnsets[toID(template.baseSpecies)].learnset;
 					// @ts-ignore
-					const basePool = Object.keys(lsetData.learnset).filter(moveid => lsetData.learnset[moveid].find(learned => learned.startsWith(this.gen.toString())));
+					const basePool = Object.keys(learnset).filter(moveid => learnset[moveid].find(learned => learned.startsWith(this.gen)));
 					pool = [...new Set(pool.concat(basePool))];
 				}
 			}
