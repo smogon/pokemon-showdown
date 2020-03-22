@@ -1415,7 +1415,11 @@ exports.commands = {
 				...targetUser.getAltUsers(true).map(user => user.getLastId()),
 			]);
 		} else {
-			room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			if (lineCount > 0) {
+				room.send(`|c|~|${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			} else {
+				room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			}
 			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
 			room.hideText([userid], lineCount);
 		}
