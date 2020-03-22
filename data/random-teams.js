@@ -198,8 +198,7 @@ class RandomTeams {
 				pool = Object.keys(this.dex.data.Movedex).filter(moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || this.dex.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
 			} else {
 				let lsetData = this.dex.getLearnsetData(template.speciesid);
-				// @ts-ignore
-				if (lsetData.exists) pool = Object.keys(lsetData.learnset).filter(moveid => lsetData.learnset[moveid].find(learned => learned.startsWith(this.gen.toString())));
+				if (lsetData.exists && lsetData.learnset) pool = Object.keys(lsetData.learnset).filter(moveid => lsetData.learnset && lsetData.learnset[moveid].find(learned => learned.startsWith(this.gen.toString())));
 				if (template.species.substr(0, 9) === 'Necrozma-' || template.species.substr(0, 6) === 'Rotom-') {
 					lsetData = this.dex.getLearnsetData(toID(template.baseSpecies));
 					// @ts-ignore
