@@ -198,6 +198,8 @@ In-battle rules
 
 `Inverse Mod` - inverse type effectiveness (like in Gen 6 Inverse Battles)
 
+`Scalemons Mod` - Pokemon will have their base stats, barring HP, adjusted to make their BST as close to 600 as possible (in Gen 1, BSTs will be scaled to 500)
+
 `Gen 8 Camomons` - Pokémon will change their typing to match their first two moveslots
 
 `Gen 7 Tier Shift` - Pokémon will have higher base stats the lower their Gen 7 Smogon tier is

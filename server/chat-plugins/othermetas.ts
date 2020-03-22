@@ -329,20 +329,38 @@ export const commands: ChatCommands = {
 
 	'!scalemons': true,
 	scale: 'scalemons',
-	scalemons(target, room, user) {
+	scale1: 'scalemons',
+	scalemons(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
-		if (!toID(target)) return this.parse(`/help scalemons`);
-		const template = Dex.deepClone(Dex.getTemplate(target));
+		const args = target.split(',');
+		if (!args.length || !toID(args[0])) return this.parse(`/help scalemons`);
+		let isGen1 = false;
+		if (cmd === 'scale1') isGen1 = true;
+		const template = Dex.deepClone(!isGen1 ? Dex.getTemplate(args[0]) : Dex.mod('gen1').getTemplate(args[0]));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${target} not found.`);
-		const stats = ['atk', 'def', 'spa', 'spd', 'spe'];
-		const pst = stats.map(stat => template.baseStats[stat]).reduce((x, y) => x + y);
-		const scale = 600 - template.baseStats['hp'];
-		for (const stat of stats) {
-			template.baseStats[stat] = Dex.clampIntRange(template.baseStats[stat] * scale / pst, 1, 255);
+		if (isGen1 && template.gen > 1) return this.errorReply(`Error: Pokemon ${target} not found.`);
+		if (!args[1] || toID(args[1]) !== 'hp') {
+			const stats = !isGen1 ? ['atk', 'def', 'spa', 'spd', 'spe'] : ['atk', 'def', 'spa', 'spe'];
+			const pst = stats.map(stat => template.baseStats[stat]).reduce((x, y) => x + y);
+			const scale = (!isGen1 ? 600 : 500) - template.baseStats['hp'];
+			for (const stat of stats) {
+				template.baseStats[stat] = Dex.clampIntRange(template.baseStats[stat] * scale / pst, 1, 255);
+			}
+		} else {
+			const stats = !isGen1 ? ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] : ['hp', 'atk', 'def', 'spa', 'spe'];
+			const pst = stats.map(stat => template.baseStats[stat]).reduce((x, y) => x + y);
+			const scale = !isGen1 ? 600 : 500;
+			for (const stat of stats) {
+				template.baseStats[stat] = Dex.clampIntRange(template.baseStats[stat] * scale / pst, 1, 255);
+			}
 		}
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template, isGen1 ? 1 : 8)}`);
 	},
-	scalemonshelp: [`/scale OR /scalemons <pokemon> - Shows the base stats that a Pokemon would have in Scalemons.`],
+	scalemonshelp: [
+		`/scale OR /scalemons <pokemon> - Shows the base stats that a Pokemon would have in Scalemons.`,
+		`/scale1 <pokemon> - Shows the base stats that a Pokemon would have in Gen 1.`,
+		`You can add ", hp" to both of these commands to scale a Pokemon's stats with HP considered.`,
+	],
 
 	'!natureswap': true,
 	ns: 'natureswap',
