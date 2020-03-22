@@ -883,7 +883,7 @@ export class Pokemon {
 			if (this.canUltraBurst) data.canUltraBurst = true;
 			const canZMove = this.battle.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
-			// TODO interaction between dynamax and choice locked moves?
+
 			if (this.battle.canDynamax(this)) data.canDynamax = true;
 			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.battle.canDynamax(this, true);
 		}

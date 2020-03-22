@@ -175,6 +175,18 @@ describe('Choice parser', function () {
 				assert(battle.choose('p2', `move Blaze Kick zmove 1, move irondefense`));
 			});
 
+			it('should allow Dynamax use in multiple possible formats', function () {
+				battle = common.createBattle([[
+					{species: "Mew", moves: ['psychic']},
+				], [
+					{species: "Mew", moves: ['psychic']},
+				]]);
+
+				battle.makeChoices(`move max mindstorm`, `move psychic max`);
+				assert(battle.p1.active[0].volatiles['dynamax']);
+				assert(battle.p2.active[0].volatiles['dynamax']);
+			});
+
 			it('should handle Conversion 2', function () {
 				battle = common.createBattle({gameType: 'doubles'});
 				battle.setPlayer('p1', {team: [
