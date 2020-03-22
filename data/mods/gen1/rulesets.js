@@ -8,12 +8,12 @@ let BattleFormats = {
 		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Dig', 'Fly'],
 	},
-	scaledstatsmod: {
+	scalemonsmod: {
 		effectType: 'Rule',
-		name: 'Scaled Stats Mod',
+		name: 'Scalemons Mod',
 		desc: "Every Pok&eacute;mon's stats, barring HP, are scaled to give them a BST as close to 500 as possible",
 		onBegin() {
-			this.add('rule', 'Scaled Stats Mod: Every Pokemon\'s stats, barring HP, are scaled to come as close to a BST of 500 as possible');
+			this.add('rule', 'Scalemons Mod: Every Pokemon\'s stats, barring HP, are scaled to come as close to a BST of 500 as possible');
 		},
 		onModifyTemplate(template, target, source) {
 			const newTemplate = this.dex.deepClone(template);

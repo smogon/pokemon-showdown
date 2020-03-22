@@ -626,7 +626,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause', 'Scaled Stats Mod'],
+		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause', 'Scalemons Mod'],
 		banlist: [
 			'Crawdaunt', 'Darmanitan', 'Darmanitan-Galar', 'Darumaka', 'Darumaka-Galar', 'Gastly',
 			'Arena Trap', 'Drizzle', 'Drought', 'Huge Power', 'Moody', 'Shadow Tag', 'Baton Pass', 'Rain Dance', 'Sunny Day', 'Eviolite', 'Light Ball',

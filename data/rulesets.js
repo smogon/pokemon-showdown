@@ -883,12 +883,12 @@ let BattleFormats = {
 			}
 		},
 	},
-	scaledstatsmod: {
+	scalemonsmod: {
 		effectType: 'Rule',
-		name: 'Scaled Stats Mod',
+		name: 'Scalemons Mod',
 		desc: "Every Pok&eacute;mon's stats, barring HP, are scaled to give them a BST as close to 600 as possible",
 		onBegin() {
-			this.add('rule', 'Scaled Stats Mod: Every Pokemon\'s stats, barring HP, are scaled to come as close to a BST of 600 as possible');
+			this.add('rule', 'Scalemons Mod: Every Pokemon\'s stats, barring HP, are scaled to come as close to a BST of 600 as possible');
 		},
 		onModifyTemplate(template, target, source) {
 			const newTemplate = this.dex.deepClone(template);
