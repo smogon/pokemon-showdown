@@ -1393,10 +1393,15 @@ exports.commands = {
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 
-		this.splitTarget(target);
+		const lineCount = parseInt(this.splitTarget(target)) || 0;
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
-		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
+		if (!targetUser && !room.log.hasUsername(name)) {
+			return this.errorReply(`User ${name} not found or has no roomlogs.`);
+		}
+		if (lineCount && cmd.includes('alt')) {
+			return this.errorReply(`You can't specify a line count when using /hidealtstext.`);
+		}
 		let userid = toID(this.inputUsername);
 
 		if (!this.can('mute', null, room)) return;
@@ -1413,9 +1418,13 @@ exports.commands = {
 				...targetUser.getAltUsers(true).map(user => user.getLastId()),
 			]);
 		} else {
-			room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			if (lineCount > 0) {
+				room.send(`|c|~|${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			} else {
+				room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			}
 			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
-			room.hideText([userid]);
+			room.hideText([userid], lineCount);
 		}
 	},
 	hidetexthelp: [
