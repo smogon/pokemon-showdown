@@ -203,7 +203,7 @@ In-battle rules
 
 `HP Percentage Mod` - Show the opposing Pokémon's HP rounded to the nearest percent, as opposed to a range of percentages based upon the health bar's size in-game
 
-`Exact HP Mod` - Show all Pokémon's exact HP in the battle log
+`Exact HP Mod` - Show all Pokémon's exact HP and max HP in the battle log
 
 `Switch Priority Clause Mod` - make the fastest Pokémon switch first when more than one Pokémon switches out at once, unlike in Emerald link battles, where Player 1's Pokémon would switch first.
 
