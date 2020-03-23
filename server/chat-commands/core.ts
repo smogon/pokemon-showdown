@@ -676,7 +676,7 @@ export const commands: ChatCommands = {
 	},
 	busyhelp: [
 		`/busy - Marks you as busy, blocking private messages and challenges.`,
-	 	`Use /back to mark yourself as back.`,
+		`Use /back to mark yourself as back.`,
 	 ],
 
 	'!away': true,
@@ -817,7 +817,7 @@ export const commands: ChatCommands = {
 					battle.allowExtraction[user.id].add(user.id);
 				} else {
 					playerUser.sendTo(
-						room, 
+						room,
 						Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`
 					);
 				}
@@ -868,7 +868,7 @@ export const commands: ChatCommands = {
 				// timer to make sure this goes under the battle
 				battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
 			}, 500);
-		} else { 
+		} else {
 			 this.errorReply('Error in creating the battle room - check the input log?');
 		}
 	},
@@ -1325,7 +1325,7 @@ export const commands: ChatCommands = {
 		);
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
-		void TeamValidatorAsync.get(tier.id).validateTeam(user.team).then(result => {
+		void TeamValidatorAsync.get(format.id).validateTeam(user.team).then(result => {
 			const matchMessage = (originalFormat === format ? "" : `The format '${originalFormat.name}' was not found.`);
 			if (result.charAt(0) === '1') {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}Your team is valid for ${format.name}.`);
