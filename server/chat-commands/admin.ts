@@ -81,7 +81,7 @@ export const commands: ChatCommands = {
 		let [name, html] = this.splitOne(target);
 		name = toID(name);
 		html = this.canHTML(html)!;
-		if (!html) return;
+		if (!html) return this.parse(`/help ${cmd}`);
 		if (!this.can('addhtml', null, room)) return;
 		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
