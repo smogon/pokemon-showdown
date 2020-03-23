@@ -961,16 +961,16 @@ export const commands: ChatCommands = {
 		if (!room.game.forfeit) {
 			return this.errorReply("This kind of game can't be forfeited.");
 		}
-			if (!room.game.forfeit(user) {
-				return this.errorReply("Forfeit failed.");
-			}
+		if (!room.game.forfeit(user)) {
+			return this.errorReply("Forfeit failed.");
+		}
 	},
 
 	choose(target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
-		if (!room.game.choose(user, target) {
+		if (!room.game.choose(user, target)) {
 			 return this.errorReply("This game doesn't support /choose");
 		}
 	},
@@ -1205,15 +1205,14 @@ export const commands: ChatCommands = {
 			if (Config.laddermodchat) {
 				const userGroup = user.group;
 				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.laddermodchat)) {
-					const groupName = Config.groups[Config.laddermodchat as GroupSymbol].name || Config.laddermodchat;
+					const groupName = Config.groups[Config.laddermodchat as string].name || Config.laddermodchat;
 					this.popupReply(`On this server, you must be of rank ${groupName} or higher to search for a battle.`);
 					return false;
 				}
 			}
 			return Ladders(target).searchBattle(user, connection);
-		} else {
-			Ladders.cancelSearches(user);
 		}
+		return Ladders.cancelSearches(user);
 	},
 
 	'!cancelsearch': true,
@@ -1261,7 +1260,7 @@ export const commands: ChatCommands = {
 		this.sendReply(this.tr("You are now blocking all incoming challenge requests."));
 	},
 	blockchallengeshelp: [
-		`/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.`
+		`/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.`,
 	],
 
 	'!allowchallenges': true,
@@ -1275,8 +1274,8 @@ export const commands: ChatCommands = {
 		user.update('blockChallenges');
 		this.sendReply(this.tr("You are available for challenges from now on."));
 	},
-	allowchallengeshelp: [`
-		`/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.`
+	allowchallengeshelp: [
+		`/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.`,
 	],
 	'!cancelchallenge': true,
 	cchall: 'cancelChallenge',
@@ -1364,14 +1363,14 @@ export const commands: ChatCommands = {
 				}));
 				return false;
 			}
-			let roomList: {[roomid: string]: {p1: string, p2: string, isPrivate: boolean}} = {};
+			let roomList: {[roomid: string]: {p1: string, p2: string, isPrivate: string | boolean}} | boolean = {};
 			// has to be disabled because roomid is reassigned, but only in an if statement.
 			// eslint-disable-next-line prefer-const
 			for (let roomid of targetUser.inRooms) {
 				if (roomid === 'global') continue;
 				const targetRoom = Rooms.get(roomid);
 				if (!targetRoom) continue; // shouldn't happen
-				const roomData: Partial<{p1: string, p2: string, isPrivate: string}> = {};
+				const roomData: Partial<{p1: string | undefined, p2: string | undefined, isPrivate: string | boolean}> = {};
 				if (targetRoom.isPrivate) {
 					if (!user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
 					roomData.isPrivate = true;
@@ -1479,7 +1478,7 @@ export const commands: ChatCommands = {
 
 		let commaIndex = target.indexOf(',');
 		let targetName = target;
-		let targetRegistered: any = false;
+		let targetRegistered: boolean | string = false;
 		let targetToken = '';
 		if (commaIndex >= 0) {
 			targetName = target.substr(0, commaIndex);
