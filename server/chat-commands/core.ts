@@ -744,7 +744,7 @@ export const commands: ChatCommands = {
 	rank(target, room, user) {
 		if (!target) target = user.name;
 
-		void Ladders.visualizeAll(target).then(values => {
+		return Ladders.visualizeAll(target).then(values => {
 			let buffer = `<div class="ladder"><table>`;
 			buffer += Chat.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
 
@@ -1216,7 +1216,7 @@ export const commands: ChatCommands = {
 					return false;
 				}
 			}
-			void Ladders(target).searchBattle(user, connection);
+			return Ladders(target).searchBattle(user, connection);
 		} else {
 			Ladders.cancelSearches(user);
 		}
@@ -1253,7 +1253,7 @@ export const commands: ChatCommands = {
 				return false;
 			}
 		}
-		void Ladders(target).makeChallenge(connection, targetUser);
+		return Ladders(target).makeChallenge(connection, targetUser);
 	},
 
 	'!blockchallenges': true,
@@ -1266,8 +1266,9 @@ export const commands: ChatCommands = {
 		user.update('blockChallenges');
 		this.sendReply(this.tr("You are now blocking all incoming challenge requests."));
 	},
-	blockchallengeshelp: [`/blockchallenges - Blocks challenges so no one can challenge you.`,
-	 `Unblock them with /unblockchallenges.`],
+	blockchallengeshelp: [
+		`/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.`
+	],
 
 	'!allowchallenges': true,
 	unbch: 'allowchallenges',
@@ -1280,9 +1281,9 @@ export const commands: ChatCommands = {
 		user.update('blockChallenges');
 		this.sendReply(this.tr("You are available for challenges from now on."));
 	},
-	allowchallengeshelp: [`/unblockchallenges - Unblocks challenges so you can be challenged again.`,
-	 `Block them with /blockchallenges.`],
-
+	allowchallengeshelp: [`
+		`/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.`
+	],
 	'!cancelchallenge': true,
 	cchall: 'cancelChallenge',
 	cancelchallenge(target, room, user) {
@@ -1295,7 +1296,7 @@ export const commands: ChatCommands = {
 		if (target) return this.popupReply(`This command does not support specifying multiple users`);
 		const targetUser = this.targetUser || this.pmTarget;
 		if (!targetUser) return this.popupReply(`User "${this.targetUsername}" not found.`);
-		void Ladders.acceptChallenge(connection, targetUser);
+		return Ladders.acceptChallenge(connection, targetUser);
 	},
 
 	'!reject': true,
@@ -1325,7 +1326,7 @@ export const commands: ChatCommands = {
 		);
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
-		void TeamValidatorAsync.get(format.id).validateTeam(user.team).then(result => {
+		return TeamValidatorAsync.get(format.id).validateTeam(user.team).then(result => {
 			const matchMessage = (originalFormat === format ? "" : `The format '${originalFormat.name}' was not found.`);
 			if (result.charAt(0) === '1') {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}Your team is valid for ${format.name}.`);
@@ -1369,14 +1370,14 @@ export const commands: ChatCommands = {
 				}));
 				return false;
 			}
-			let roomList: any = {};
+			let roomList: {[roomid: string]: {p1: string, p2: string, isPrivate: boolean}} = {};
 			// has to be disabled because roomid is reassigned, but only in an if statement.
 			// eslint-disable-next-line prefer-const
 			for (let roomid of targetUser.inRooms) {
 				if (roomid === 'global') continue;
 				const targetRoom = Rooms.get(roomid);
 				if (!targetRoom) continue; // shouldn't happen
-				const roomData: AnyObject = {};
+				const roomData: Partial<{p1: string, p2: string, isPrivate: string}> = {};
 				if (targetRoom.isPrivate) {
 					if (!user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
 					roomData.isPrivate = true;
@@ -1417,7 +1418,7 @@ export const commands: ChatCommands = {
 		} else if (cmd === 'laddertop') {
 			if (!trustable) return false;
 			const [format, prefix] = target.split(',').map(x => x.trim());
-			void Ladders(toID(format)).getTop(prefix).then(result => {
+			return Ladders(toID(format)).getTop(prefix).then(result => {
 				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
 			});
 		} else if (cmd === 'roominfo') {
@@ -1496,7 +1497,7 @@ export const commands: ChatCommands = {
 				targetToken = target.substr(commaIndex + 1);
 			}
 		}
-		void user.rename(targetName, targetToken, targetRegistered, connection);
+		return user.rename(targetName, targetToken, targetRegistered, connection);
 	},
 
 	/*********************************************************
@@ -1546,7 +1547,7 @@ export const commands: ChatCommands = {
 			} else if (targets.length > 1 && typeof allCommands[targets[0]] === 'object') {
 				// Handle internal namespace commands
 				helpCmd = `${targets.pop()}help`;
-				let namespace = allCommands[targets.shift() as string];
+				let namespace = allCommands[targets.shift()!];
 				for (const t of targets) {
 					if (!namespace[t]) {
 						return this.errorReply(`Help for the command '${target}' was not found. Try /help for general help.`);
