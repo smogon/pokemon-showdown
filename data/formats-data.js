@@ -2849,7 +2849,7 @@ let BattleFormatsData = {
 	},
 	scrafty: {
 		randomBattleMoves: ["closecombat", "dragondance", "icepunch", "knockoff", "poisonjab"],
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 	},
 	sigilyph: {
