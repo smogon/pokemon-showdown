@@ -785,11 +785,14 @@ export const commands: ChatCommands = {
 		}
 		battle.allowExtraction[targetUser.id].add(user.id);
 		this.addModAction(`${user.name} consents to sharing battle team and choices with ${targetUser.name}.`);
-		if (battle.inputLog && Object.keys(battle.playerTable).length === battle.allowExtraction[targetUser.id].size) {
+		if (!battle.inputLog) return this.errorReply('No input log found.');
+		if (Object.keys(battle.playerTable).length === battle.allowExtraction[targetUser.id].size) {
 			this.addModAction(`${targetUser.name} has extracted the battle input log.`);
 			const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
-			const formatted = `<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`;
-			targetUser.sendTo(room, `|html|${formatted}`);
+			targetUser.sendTo(
+				room,
+				`|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`,
+			);
 		}
 	},
 
@@ -813,8 +816,10 @@ export const commands: ChatCommands = {
 				if (playerUser.id === user.id) {
 					battle.allowExtraction[user.id].add(user.id);
 				} else {
-					const msg = `${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`;
-					playerUser.sendTo(room, Chat.html`|html|${msg}`);
+					playerUser.sendTo(
+						room, 
+						Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`
+					);
 				}
 			}
 			this.addModAction(`${user.name} wants to extract the battle input log.`);
@@ -863,6 +868,8 @@ export const commands: ChatCommands = {
 				// timer to make sure this goes under the battle
 				battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
 			}, 500);
+		} else { 
+			 this.errorReply('Error in creating the battle room - check the input log?');
 		}
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ & ~`],
@@ -893,8 +900,9 @@ export const commands: ChatCommands = {
 			room.update();
 			for (const otherPlayer of battle.players) {
 				if (otherPlayer !== player) {
-					const html = `<button class="button" name="send" value="/accepttie"><strong>Accept tie</strong></button> <button class="button" name="send" value="/rejecttie">Reject</button>`;
-					otherPlayer.sendRoom(Chat.html`|uhtml|offertie|${html}`);
+					otherPlayer.sendRoom(
+						Chat.html`|uhtml|offertie|<button class="button" name="send" value="/accepttie"><strong>Accept tie</strong></button> <button class="button" name="send" value="/rejecttie">Reject</button>`
+					);
 				} else {
 					player.wantsTie = true;
 				}
@@ -1139,10 +1147,10 @@ export const commands: ChatCommands = {
 		}
 		if (this.meansNo(target) || target === 'stop') {
 			if (timer.timerRequesters.size) {
-				const staffForced: any = force ? undefined : user;
-				timer.stop(staffForced);
-				const msg = `Timer was turned off by staff. Please do not turn it back on until our staff say it's okay.`;
-				if (force) room.send(`|inactiveoff|${msg}`);
+				timer.stop(force ? undefined : user);
+				if (force) {
+					room.send(`|inactiveoff|Timer was turned off by staff. Please do not turn it back on until our staff say it's okay.`);
+				}
 			} else {
 				this.errorReply(`The timer is already off.`);
 			}
@@ -1203,7 +1211,7 @@ export const commands: ChatCommands = {
 			if (Config.laddermodchat) {
 				const userGroup = user.group;
 				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.laddermodchat)) {
-					const groupName = Config.groups[Config.laddermodchat as any].name || Config.laddermodchat;
+					const groupName = Config.groups[Config.laddermodchat as GroupSymbol].name || Config.laddermodchat;
 					this.popupReply(`On this server, you must be of rank ${groupName} or higher to search for a battle.`);
 					return false;
 				}
@@ -1311,14 +1319,16 @@ export const commands: ChatCommands = {
 		}
 		if (!target) return this.errorReply("Provide a valid format.");
 		const originalFormat = Dex.getFormat(target);
-		// Note: The default here of [Gen 7] Pokebank Anything Goes isn't normally hit; since the web client will send a default format
-		const tier = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat('[Gen 7] Pokebank Anything Goes');
-		if (tier.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
+		// Note: The default here of [Gen 8] Anything Goes isn't normally hit; since the web client will send a default format
+		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat(
+			'[Gen 7] Pokebank Anything Goes'
+		);
+		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
 		void TeamValidatorAsync.get(tier.id).validateTeam(user.team).then(result => {
-			const matchMessage = (originalFormat === tier ? "" : `The format '${originalFormat.name}' was not found.`);
+			const matchMessage = (originalFormat === format ? "" : `The format '${originalFormat.name}' was not found.`);
 			if (result.charAt(0) === '1') {
-				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}Your team is valid for ${tier.name}.`);
+				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}Your team is valid for ${format.name}.`);
 			} else {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}Your team was rejected for the following reasons:\n\n- ${result.slice(1).replace(/\n/g, '\n- ')}`);
 			}
@@ -1524,7 +1534,7 @@ export const commands: ChatCommands = {
 			let altCommandHelp;
 			let helpCmd;
 			const targets = target.split(' ');
-			const allCommands: AnyObject = Chat.commands;
+			const allCommands = Chat.commands;
 			if (typeof allCommands[target] === 'string') {
 				// If a function changes with command name, help for that command name will be searched first.
 				altCommandHelp = `${target}help`;
