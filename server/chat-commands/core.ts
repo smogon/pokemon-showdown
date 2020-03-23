@@ -741,7 +741,7 @@ export const commands: ChatCommands = {
 	rank(target, room, user) {
 		if (!target) target = user.name;
 
-		Ladders.visualizeAll(target).then(values => {
+		void Ladders.visualizeAll(target).then(values => {
 			let buffer = `<div class="ladder"><table>`;
 			buffer += Chat.html`<tr><td colspan="8">User: <strong>${target}</strong></td></tr>`;
 
@@ -998,7 +998,7 @@ export const commands: ChatCommands = {
 		}
 
 		const options = (target === 'forpunishment' || target === 'silent') ? target : undefined;
-		room.uploadReplay(user, connection, options);
+		await room.uploadReplay(user, connection, options);
 	},
 
 	hidereplay(target, room, user, connection) {
@@ -1206,7 +1206,7 @@ export const commands: ChatCommands = {
 					return false;
 				}
 			}
-			Ladders(target).searchBattle(user, connection);
+			void Ladders(target).searchBattle(user, connection);
 		} else {
 			Ladders.cancelSearches(user);
 		}
@@ -1243,7 +1243,7 @@ export const commands: ChatCommands = {
 				return false;
 			}
 		}
-		Ladders(target).makeChallenge(connection, targetUser);
+		void Ladders(target).makeChallenge(connection, targetUser);
 	},
 
 	'!blockchallenges': true,
@@ -1285,7 +1285,7 @@ export const commands: ChatCommands = {
 		if (target) return this.popupReply(`This command does not support specifying multiple users`);
 		const targetUser = this.targetUser || this.pmTarget;
 		if (!targetUser) return this.popupReply(`User "${this.targetUsername}" not found.`);
-		Ladders.acceptChallenge(connection, targetUser);
+		void Ladders.acceptChallenge(connection, targetUser);
 	},
 
 	'!reject': true,
@@ -1313,7 +1313,7 @@ export const commands: ChatCommands = {
 		const tier = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat('[Gen 7] Pokebank Anything Goes');
 		if (tier.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
-		TeamValidatorAsync.get(tier.id).validateTeam(user.team).then(result => {
+		void TeamValidatorAsync.get(tier.id).validateTeam(user.team).then(result => {
 			const matchMessage = (originalFormat === tier ? "" : `The format '${originalFormat.name}' was not found.`);
 			if (result.charAt(0) === '1') {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}Your team is valid for ${tier.name}.`);
@@ -1405,7 +1405,7 @@ export const commands: ChatCommands = {
 		} else if (cmd === 'laddertop') {
 			if (!trustable) return false;
 			const [format, prefix] = target.split(',').map(x => x.trim());
-			Ladders(toID(format)).getTop(prefix).then(result => {
+			void Ladders(toID(format)).getTop(prefix).then(result => {
 				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
 			});
 		} else if (cmd === 'roominfo') {
@@ -1446,7 +1446,7 @@ export const commands: ChatCommands = {
 
 			if (targetRoom.auth) {
 				for (const userid in targetRoom.auth) {
-					const rank = targetRoom.auth[userid] as GroupSymbol;
+					const rank = targetRoom.auth[userid];
 					if (!roominfo.auth[rank]) roominfo.auth[rank] = [];
 					roominfo.auth[rank].push(userid);
 				}
@@ -1484,7 +1484,7 @@ export const commands: ChatCommands = {
 				targetToken = target.substr(commaIndex + 1);
 			}
 		}
-		user.rename(targetName, targetToken, targetRegistered, connection);
+		void user.rename(targetName, targetToken, targetRegistered, connection);
 	},
 
 	/*********************************************************
