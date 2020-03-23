@@ -353,16 +353,15 @@ export const commands: ChatCommands = {
 			if (targetRoom && availableRoom) return this.parse(`/roomauth1 ${target}`);
 			return this.parse(`/userauth ${target}`);
 		}
-		/** @type {{[k: string]: string[]}} */
-		const rankLists: AnyObject = {};
+		const rankLists: {[k: string]: string[]} = {};
 		const ranks = Object.keys(Config.groups);
 		for (const u in Users.usergroups) {
 			const rank = Users.usergroups[u].charAt(0);
 			if (rank === ' ' || rank === '+') continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
 			if (ranks.includes(rank)) {
-				const name: string = Users.usergroups[u].substr(1);
-				const place: string[] = rankLists[rank];
+				const name = Users.usergroups[u].substr(1);
+				const place = rankLists[rank];
 				if (!place) rankLists[rank] = [];
 				if (name) rankLists[rank].push(name);
 			}
@@ -371,7 +370,7 @@ export const commands: ChatCommands = {
 		const buffer = Object.keys(rankLists).sort(
 			(a, b) => (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
 		).map(
-			r => `${(Config.groups[r] ? `**${Config.groups[r].name}s** (${r})` : r)}:\n${rankLists[r].sort((a: string, b: string) => toID(a).localeCompare(toID(b))).join(", ")}`
+			r => `${(Config.groups[r] ? `**${Config.groups[r].name}s** (${r})` : r)}:\n${rankLists[r].sort((a, b) => toID(a).localeCompare(toID(b))).join(", ")}`
 		);
 
 		if (!buffer.length) return connection.popup("This server has no global authority.");
@@ -386,8 +385,8 @@ export const commands: ChatCommands = {
 	userlist(target, room, user) {
 		const userList = [];
 
-		for (const i in room.users) {
-			const curUser = Users.get(room.users[i]);
+		for (const id in room.users) {
+			const curUser = Users.get(room.users[id]);
 			if (!curUser || !curUser.named) continue;
 			userList.push(Chat.escapeHTML(curUser.getIdentity(room.roomid)));
 		}
@@ -551,7 +550,7 @@ export const commands: ChatCommands = {
 			return;
 		} else {
 			this.pmTarget = targetUser;
-			(this.room as ChatRoom | GameRoom | null) = null;
+			this.room = null!;
 		}
 
 		if (targetUser && !targetUser.connected) {
@@ -660,8 +659,10 @@ export const commands: ChatCommands = {
 		user.setUserMessage(target);
 		this.sendReply(this.tr `Your status has been set to: ${target}.`);
 	},
-	statushelp: [`/status [note] - Sets a short note as your status, visible when users click your username.`,
-	 `Use /clearstatus to clear your status message.`],
+	statushelp: [
+		`/status [note] - Sets a short note as your status, visible when users click your username.`,
+		 `Use /clearstatus to clear your status message.`,
+	],
 
 	'!busy': true,
 	busy(target, room, user) {
@@ -673,8 +674,10 @@ export const commands: ChatCommands = {
 		this.parse('/blockchallenges');
 		this.sendReply(this.tr("You are now marked as busy."));
 	},
-	busyhelp: [`/busy - Marks you as busy, blocking private messages and challenges.`,
-	 `Use /back to mark yourself as back.`],
+	busyhelp: [
+		`/busy - Marks you as busy, blocking private messages and challenges.`,
+	 	`Use /back to mark yourself as back.`,
+	 ],
 
 	'!away': true,
 	idle: 'away',
@@ -749,8 +752,7 @@ export const commands: ChatCommands = {
 			if (!ratings) {
 				buffer += `<tr><td colspan="8"><em>This user has not played any ladder games yet.</em></td></tr>`;
 			} else {
-				const fail = `<tr><th>Format</th><th><abbr title="Elo rating">Elo</abbr></th><th>W</th><th>L</th><th>Total</th>`;
-				buffer += fail;
+				buffer += `<tr><th>Format</th><th><abbr title="Elo rating">Elo</abbr></th><th>W</th><th>L</th><th>Total</th>`;
 				buffer += ratings;
 			}
 			buffer += `</table></div>`;
