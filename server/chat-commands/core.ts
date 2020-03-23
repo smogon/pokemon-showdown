@@ -1375,12 +1375,12 @@ export const commands: ChatCommands = {
 					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
 				}
 				if (targetRoom.auth && targetUser.id in targetRoom.auth) {
-					(roomid as string) = targetRoom.auth[targetUser.id] + roomid;
+					roomid = (targetRoom.auth[targetUser.id] + roomid) as RoomID;
 				}
 				roomList[roomid] = roomData;
 			}
 			if (!targetUser.connected) roomList = false;
-			const userdetails: Record<string, any> = {
+			const userdetails: AnyObject = {
 				id: target,
 				userid: targetUser.id,
 				name: targetUser.name,
