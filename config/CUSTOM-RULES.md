@@ -19,9 +19,11 @@ Bans are just a `-` followed by the thing you want to ban.
 
 ### Individual bans
 
-`- Blaziken` - ban a Pokémon
+`- Arceus` - ban a Pokémon (including all formes)
 
-`- Blaziken-Mega` or `- Giratina-Altered` or `- Giratina-Base` - ban a specific Pokémon forme
+`- Arceus-Flying` or `- Giratina-Altered` - ban a specific Pokémon forme
+
+`- Giratina-Base` - ban only the base forme of a Pokémon (this always works, in case you forget it's called `- Giratina-Altered`)
 
 `- Baton Pass` - ban a move
 
@@ -264,4 +266,4 @@ For example:
 
 People often use "tier" to mean "format", but in rulesets, the difference is important. A format is a list of rules for a game you can play, such as "Gen 8 OU". A tier is a list of Pokémon which can be banned or unbanned, such as "OU".
 
-`-OU, +Ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
+`- OU, + Ubers` - ban all Pokémon currently in OU and unban all Pokémon currently in Ubers
