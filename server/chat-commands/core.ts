@@ -961,21 +961,17 @@ export const commands: ChatCommands = {
 		if (!room.game.forfeit) {
 			return this.errorReply("This kind of game can't be forfeited.");
 		}
-		try {
-			room.game.forfeit(user);
-		} catch (e) {
-			return this.errorReply("Forfeit failed.");
-		}
+			if (!room.game.forfeit(user) {
+				return this.errorReply("Forfeit failed.");
+			}
 	},
 
 	choose(target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
-		try {
-			room.game.choose(user, target);
-		} catch (e) {
-			return this.errorReply("This game doesn't support /choose");
+		if (!room.game.choose(user, target) {
+			 return this.errorReply("This game doesn't support /choose");
 		}
 	},
 
@@ -1111,11 +1107,10 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User ${this.targetUsername} not found.`);
 		}
 		if (!this.can('kick', targetUser)) return false;
-		try {
-			room.game.leaveGame!(targetUser);
+		if (room.game.leaveGame(targetUser)) {
 			this.addModAction(`${targetUser.name} was kicked from a battle by ${user.name} ${(target ? ` (${target})` : ``)}`);
 			this.modlog('KICKBATTLE', targetUser, target, {noip: 1, noalts: 1});
-		} catch (e) {
+		} else {
 			this.errorReply("/kickbattle - User isn't in battle.");
 		}
 	},
@@ -1127,8 +1122,7 @@ export const commands: ChatCommands = {
 
 	timer(target, room, user) {
 		target = toID(target);
-		// const game = room.getGame(require('../../.server-dist/room-battle').RoomBattle)
-		if (!room.battle || !room.battle.timer) {
+		if (!room.game || !room.game.timer) {
 			return this.errorReply(`You can only set the timer from inside a battle room.`);
 		}
 		const timer = room.battle.timer;
