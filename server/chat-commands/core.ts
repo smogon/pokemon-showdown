@@ -830,8 +830,10 @@ export const commands: ChatCommands = {
 				const playerUser = player.getUser();
 				if (!playerUser || battle.allowExtraction[user.id].has(playerUser.id)) continue;
 				logExported = false;
-				const share = `<button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`;
-				playerUser.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. ${share}`);
+				playerUser.sendTo(
+					room,
+					Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`,
+				);
 			}
 			if (logExported) return this.errorReply(`You already extracted the battle input log.`);
 			this.sendReply(`Battle input log re-requested.`);
