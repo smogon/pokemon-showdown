@@ -1504,11 +1504,9 @@ export const commands: ChatCommands = {
 	help(target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = target.toLowerCase();
+		if (target.startsWith('/') || target.startsWith('!')) target = target.slice(1);
 
-		// overall
-		if (target === 'help' || target === 'h' || target === '?' || target === 'commands') {
-			this.sendReply(this.tr("/help OR /h OR /? - Gives you help."));
-		} else if (!target) {
+		if (!target) {
 			const broadcastMsg = this.tr('(replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)');
 
 			this.sendReply(`${this.tr('COMMANDS')}: /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /report, /join, /leave, /makegroupchat, /userauth, /roomauth`);
@@ -1523,48 +1521,70 @@ export const commands: ChatCommands = {
 			}
 			this.sendReply(this.tr("For an overview of room commands, use /roomhelp"));
 			this.sendReply(this.tr("For details of a specific command, use something like: /help data"));
-		} else {
-			let altCommandHelp;
-			let helpCmd;
-			const targets = target.split(' ');
-			const allCommands = Chat.commands;
-			if (typeof allCommands[target] === 'string') {
-				// If a function changes with command name, help for that command name will be searched first.
-				altCommandHelp = `${target}help`;
-				if (altCommandHelp in allCommands) {
-					helpCmd = altCommandHelp;
-				} else {
-					helpCmd = `${allCommands[target]}help`;
+			return;
+		}
+
+		const targets = target.split(' ');
+
+		let namespace = Chat.commands;
+
+		let currentBestHelp: {help: string[] | Chat.ChatHandler, for: string[]} | null = null;
+
+		for (const [i, target] of targets.entries()) {
+			let nextNamespace = namespace[target];
+			if (typeof nextNamespace === 'string') {
+				let help = namespace[`${nextNamespace}help`];
+				if (Array.isArray(help) || typeof help === 'function') {
+					currentBestHelp = {
+						help, for: targets.slice(0, i + 1),
+					};
 				}
-			} else if (targets.length > 1 && typeof allCommands[targets[0]] === 'object') {
-				// Handle internal namespace commands
-				helpCmd = `${targets.pop()}help`;
-				let namespace = allCommands[targets.shift()!];
-				for (const t of targets) {
-					if (!namespace[t]) {
-						return this.errorReply(`Help for the command '${target}' was not found. Try /help for general help.`);
-					}
-					namespace = namespace[t];
-				}
-				if (typeof namespace[helpCmd] === 'object') return this.sendReply(namespace[helpCmd].join('\n'));
-				if (typeof namespace[helpCmd] === 'function') return this.run(namespace[helpCmd]);
-				return this.errorReply(`Help for the command '${target}' was not found. Try /help for general help.`);
-			} else {
-				helpCmd = `${target}help`;
+				nextNamespace = namespace[nextNamespace];
 			}
-			if (helpCmd in allCommands) {
-				if (typeof allCommands[helpCmd] === 'function') {
-					// If the help command is a function, parse it instead
-					this.run(allCommands[helpCmd]);
-				} else if (Array.isArray(allCommands[helpCmd])) {
-					this.sendReply(allCommands[helpCmd].join('\n'));
-				}
-			} else {
-				this.errorReply(`Help for the command '${target}' was not found. Try /help for general help.`);
+			if (typeof nextNamespace === 'string') {
+				throw new Error(`Recursive alias in "${target}"`);
 			}
+			if (Array.isArray(nextNamespace)) {
+				this.sendReply(`'/${targets.slice(0, i + 1).join(' ')}' is a help command.`);
+				return this.parse(`/${target}`);
+			}
+			if (!nextNamespace || typeof nextNamespace === 'boolean') {
+				return this.errorReply(`The command '/${target}' does not exist.`);
+			}
+
+			let help = namespace[`${target}help`];
+			if (Array.isArray(help) || typeof help === 'function') {
+				currentBestHelp = {
+					help, for: targets.slice(0, i + 1),
+				};
+			}
+
+			if (!nextNamespace) {
+				return this.errorReply(`The command '/${target}' does not exist.`);
+			}
+			if (typeof nextNamespace !== 'object') break;
+			namespace = nextNamespace;
+		}
+
+		if (!currentBestHelp) {
+			return this.errorReply(`Could not find help for '/${target}'. Try /help for general help.`);
+		}
+
+		if (currentBestHelp.for.length < targets.length) {
+			this.errorReply(`Could not find help for '/${target}' - displaying help for '/${currentBestHelp.for.join(' ')}' instead`);
+		}
+
+		if (typeof currentBestHelp.help === 'function') {
+			// If the help command is a function, parse it instead
+			this.run(currentBestHelp.help);
+		} else if (Array.isArray(currentBestHelp.help)) {
+			this.sendReply(currentBestHelp.help.map(line => this.tr(line)).join('\n'));
 		}
 	},
-
+	helphelp: [
+		`/help OR /h OR /? - Gives you help.`,
+		`/help [command] - Gives you help for a specific command.`,
+	],
 };
 
 process.nextTick(() => {
