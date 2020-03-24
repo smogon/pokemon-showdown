@@ -244,7 +244,7 @@ export class RoomBattleTimer {
 		this.nextRequest();
 		return true;
 	}
-	stop(requester: User) {
+	stop(requester?: User) {
 		if (requester) {
 			if (!this.timerRequesters.has(requester.id)) return false;
 			this.timerRequesters.delete(requester.id);
@@ -254,7 +254,7 @@ export class RoomBattleTimer {
 			this.timerRequesters.clear();
 		}
 		if (this.timerRequesters.size) {
-			this.battle.room.add(`|inactive|${requester.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`).update();
+			this.battle.room.add(`|inactive|${requester!.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`).update();
 			return false;
 		}
 		if (this.end()) {

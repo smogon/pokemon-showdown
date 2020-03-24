@@ -961,18 +961,14 @@ export const commands: ChatCommands = {
 		if (!room.game.forfeit) {
 			return this.errorReply("This kind of game can't be forfeited.");
 		}
-		if (!room.game.forfeit(user)) {
-			return this.errorReply("Forfeit failed.");
-		}
+		room.game.forfeit(user);
 	},
 
 	choose(target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
-		if (!room.game.choose(user, target)) {
-			 return this.errorReply("This game doesn't support /choose");
-		}
+		room.game.choose(user, target);
 	},
 
 	mv: 'move',
@@ -1125,7 +1121,7 @@ export const commands: ChatCommands = {
 		if (!room.game || !room.game.timer) {
 			return this.errorReply(`You can only set the timer from inside a battle room.`);
 		}
-		const timer = room.game.timer;
+		const timer = room.game.timer as any;
 		if (!timer.timerRequesters) {
 			return this.sendReply(`This game's timer is managed by a different command.`);
 		}
@@ -1524,19 +1520,19 @@ export const commands: ChatCommands = {
 			return;
 		}
 
-		const targets = target.split(' ');
+		const cmds = target.split(' ');
 
 		let namespace = Chat.commands;
 
 		let currentBestHelp: {help: string[] | Chat.ChatHandler, for: string[]} | null = null;
 
-		for (const [i, target] of targets.entries()) {
-			let nextNamespace = namespace[target];
+		for (const [i, cmd] of cmds.entries()) {
+			let nextNamespace = namespace[cmd];
 			if (typeof nextNamespace === 'string') {
-				let help = namespace[`${nextNamespace}help`];
+				const help = namespace[`${nextNamespace}help`];
 				if (Array.isArray(help) || typeof help === 'function') {
 					currentBestHelp = {
-						help, for: targets.slice(0, i + 1),
+						help, for: cmds.slice(0, i + 1),
 					};
 				}
 				nextNamespace = namespace[nextNamespace];
@@ -1545,17 +1541,17 @@ export const commands: ChatCommands = {
 				throw new Error(`Recursive alias in "${target}"`);
 			}
 			if (Array.isArray(nextNamespace)) {
-				this.sendReply(`'/${targets.slice(0, i + 1).join(' ')}' is a help command.`);
+				this.sendReply(`'/${cmds.slice(0, i + 1).join(' ')}' is a help command.`);
 				return this.parse(`/${target}`);
 			}
 			if (!nextNamespace || typeof nextNamespace === 'boolean') {
 				return this.errorReply(`The command '/${target}' does not exist.`);
 			}
 
-			let help = namespace[`${target}help`];
+			const help = namespace[`${cmd}help`];
 			if (Array.isArray(help) || typeof help === 'function') {
 				currentBestHelp = {
-					help, for: targets.slice(0, i + 1),
+					help, for: cmds.slice(0, i + 1),
 				};
 			}
 
@@ -1570,7 +1566,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Could not find help for '/${target}'. Try /help for general help.`);
 		}
 
-		if (currentBestHelp.for.length < targets.length) {
+		if (currentBestHelp.for.length < cmds.length) {
 			this.errorReply(`Could not find help for '/${target}' - displaying help for '/${currentBestHelp.for.join(' ')}' instead`);
 		}
 
