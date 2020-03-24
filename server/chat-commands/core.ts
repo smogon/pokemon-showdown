@@ -1107,7 +1107,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User ${this.targetUsername} not found.`);
 		}
 		if (!this.can('kick', targetUser)) return false;
-		if (room.game.leaveGame(targetUser)) {
+		if (room.battle.leaveGame(targetUser)) {
 			this.addModAction(`${targetUser.name} was kicked from a battle by ${user.name} ${(target ? ` (${target})` : ``)}`);
 			this.modlog('KICKBATTLE', targetUser, target, {noip: 1, noalts: 1});
 		} else {
@@ -1125,7 +1125,7 @@ export const commands: ChatCommands = {
 		if (!room.game || !room.game.timer) {
 			return this.errorReply(`You can only set the timer from inside a battle room.`);
 		}
-		const timer = room.battle.timer;
+		const timer = room.game.timer;
 		if (!timer.timerRequesters) {
 			return this.sendReply(`This game's timer is managed by a different command.`);
 		}
@@ -1205,7 +1205,7 @@ export const commands: ChatCommands = {
 			if (Config.laddermodchat) {
 				const userGroup = user.group;
 				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.laddermodchat)) {
-					const groupName = Config.groups[Config.laddermodchat as string].name || Config.laddermodchat;
+					const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
 					this.popupReply(`On this server, you must be of rank ${groupName} or higher to search for a battle.`);
 					return false;
 				}
@@ -1363,14 +1363,13 @@ export const commands: ChatCommands = {
 				}));
 				return false;
 			}
-			let roomList: {[roomid: string]: {p1: string, p2: string, isPrivate: string | boolean}} | boolean = {};
-			// has to be disabled because roomid is reassigned, but only in an if statement.
-			// eslint-disable-next-line prefer-const
-			for (let roomid of targetUser.inRooms) {
+			interface RoomData {p1?: string; p2?: string; isPrivate?: boolean | 'hidden' | 'voice'}
+			let roomList: {[roomid: string]: RoomData} | false = {};
+			for (const roomid of targetUser.inRooms) {
 				if (roomid === 'global') continue;
 				const targetRoom = Rooms.get(roomid);
 				if (!targetRoom) continue; // shouldn't happen
-				const roomData: Partial<{p1: string | undefined, p2: string | undefined, isPrivate: string | boolean}> = {};
+				const roomData: RoomData = {};
 				if (targetRoom.isPrivate) {
 					if (!user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
 					roomData.isPrivate = true;
@@ -1380,10 +1379,11 @@ export const commands: ChatCommands = {
 					roomData.p1 = battle.p1 ? ' ' + battle.p1.name : '';
 					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
 				}
+				let roomidWithAuth: string = roomid;
 				if (targetRoom.auth && targetUser.id in targetRoom.auth) {
-					roomid = (targetRoom.auth[targetUser.id] + roomid) as RoomID;
+					roomidWithAuth = targetRoom.auth[targetUser.id] + roomid;
 				}
-				roomList[roomid] = roomData;
+				roomList[roomidWithAuth] = roomData;
 			}
 			if (!targetUser.connected) roomList = false;
 			const userdetails: AnyObject = {
@@ -1394,7 +1394,6 @@ export const commands: ChatCommands = {
 				group: targetUser.group,
 				autoconfirmed: !!targetUser.autoconfirmed,
 				status: targetUser.getStatus(),
-				away: targetUser.away,
 				rooms: roomList,
 			};
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
@@ -1478,13 +1477,13 @@ export const commands: ChatCommands = {
 
 		let commaIndex = target.indexOf(',');
 		let targetName = target;
-		let targetRegistered: boolean | string = false;
+		let targetRegistered = false;
 		let targetToken = '';
 		if (commaIndex >= 0) {
 			targetName = target.substr(0, commaIndex);
 			target = target.substr(commaIndex + 1);
 			commaIndex = target.indexOf(',');
-			targetRegistered = target;
+			targetRegistered = !!target;
 			if (commaIndex >= 0) {
 				targetRegistered = !!parseInt(target.substr(0, commaIndex));
 				targetToken = target.substr(commaIndex + 1);

@@ -91,6 +91,7 @@ export class RoomGame {
 	playerCount: number;
 	playerCap: number;
 	ended: boolean;
+	timer?: {timerRequesters?: Set<ID>, start: (force?: User) => void, stop: (force?: User) => void};
 	constructor(room: ChatRoom | GameRoom) {
 		this.roomid = room.roomid;
 		this.room = room;
@@ -198,14 +199,14 @@ export class RoomGame {
 	 * extremely unlikely to keep playing after this function is
 	 * called.
 	 */
-	forfeit?(user: User) {}
+	forfeit?(user: User): boolean { return false; }
 
 	/**
 	 * Called when a user uses /choose [text]
 	 * If you have buttons, you are recommended to use this interface
 	 * instead of making your own commands.
 	 */
-	choose?(user: User, text: string) {}
+	choose?(user: User, text: string): boolean { return false; }
 
 	/**
 	 * Called when a user uses /undo [text]
