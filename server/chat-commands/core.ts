@@ -584,9 +584,6 @@ export const commands: ChatCommands = {
 		if (!targetRoom || targetRoom === Rooms.global) {
 			return this.errorReply(`The room "${target}" was not found.`);
 		}
-		if (targetRoom.staffRoom && (targetUser && !targetUser.isStaff)) {
-			return this.errorReply(`User "${targetUser.name}" requires global auth to join room "${targetRoom.roomid}".`);
-		}
 		if (!targetRoom.checkModjoin(targetUser)) {
 			this.room = targetRoom;
 			this.parse(`/roomvoice ${targetUser.name}`);
