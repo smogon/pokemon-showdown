@@ -851,26 +851,23 @@ export const commands: ChatCommands = {
 
 		const formatid = target.slice(formatIndex + 12, nextQuoteIndex);
 		const battleRoom = Rooms.createBattle(formatid, {inputLog: target});
+		if (!battleRoom) return; // createBattle will inform the user if creating the battle failed
 
 		const nameIndex1 = target.indexOf(`"name":"`);
 		const nameNextQuoteIndex1 = target.indexOf(`"`, nameIndex1 + 8);
 		const nameIndex2 = target.indexOf(`"name":"`, nameNextQuoteIndex1 + 1);
 		const nameNextQuoteIndex2 = target.indexOf(`"`, nameIndex2 + 8);
-		if (battleRoom?.battle && nameIndex1 >= 0 && nameNextQuoteIndex1 >= 0 && nameIndex2 >= 0 && nameNextQuoteIndex2 >= 0) {
-			const battle = battleRoom?.battle;
+		if (nameIndex1 >= 0 && nameNextQuoteIndex1 >= 0 && nameIndex2 >= 0 && nameNextQuoteIndex2 >= 0) {
+			const battle = battleRoom.battle!;
 			battle.p1.name = target.slice(nameIndex1 + 8, nameNextQuoteIndex1);
 			battle.p2.name = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
 		}
-		if (battleRoom) {
-			battleRoom.auth[user.id] = Users.HOST_SYMBOL;
-			this.parse(`/join ${battleRoom.roomid}`);
-			setTimeout(() => {
-				// timer to make sure this goes under the battle
-				battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
-			}, 500);
-		} else {
-			 this.errorReply('Error in creating the battle room - check the input log?');
-		}
+		battleRoom.auth[user.id] = Users.HOST_SYMBOL;
+		this.parse(`/join ${battleRoom.roomid}`);
+		setTimeout(() => {
+			// timer to make sure this goes under the battle
+			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
+		}, 500);
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ & ~`],
 
