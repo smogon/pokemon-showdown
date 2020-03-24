@@ -23,7 +23,7 @@
   "scripts": {
     "start": "node pokemon-showdown start",
     "build": "node build",
-    "tsc": "tsc --pretty",
+    "tsc": "tsc",
     "lint": "eslint . --config .eslintrc-no-types.json --cache --ext .js,.ts",
     "full-lint": "eslint . --config .eslintrc-types.json --cache --cache-location .eslintfullcache --ext .js,.ts",
     "pretest": "npm run lint && npm run build",
