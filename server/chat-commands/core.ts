@@ -579,20 +579,22 @@ export const commands: ChatCommands = {
 			return this.parse(`/pm ${this.targetUsername}, /invite ${targetRoom.roomid}`);
 		}
 
-		const targetUser = this.pmTarget;
+		const targetUser = this.pmTarget!; // not room means it's a PM
 
-		if (!targetRoom || targetRoom === Rooms.global) return this.errorReply(`The room "${target}" was not found.`);
+		if (!targetRoom || targetRoom === Rooms.global) {
+			return this.errorReply(`The room "${target}" was not found.`);
+		}
 		if (targetRoom.staffRoom && (targetUser && !targetUser.isStaff)) {
 			return this.errorReply(`User "${targetUser.name}" requires global auth to join room "${targetRoom.roomid}".`);
 		}
-		if (!targetRoom.checkModjoin(targetUser as User) && targetUser) {
+		if (!targetRoom.checkModjoin(targetUser)) {
 			this.room = targetRoom;
 			this.parse(`/roomvoice ${targetUser.name}`);
 			if (!targetRoom.checkModjoin(targetUser)) {
 				return this.errorReply(`You do not have permission to invite people into this room.`);
 			}
 		}
-		if (targetUser && targetUser.id in targetRoom.users) {
+		if (targetUser.id in targetRoom.users) {
 			return this.errorReply(`This user is already in "${targetRoom.title}".`);
 		}
 		return `/invite ${targetRoom.roomid}`;
