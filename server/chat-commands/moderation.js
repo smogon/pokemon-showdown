@@ -572,8 +572,10 @@ exports.commands = {
 	ipmute: 'lock',
 	wl: 'lock',
 	weeklock: 'lock',
+	monthlock: 'lock',
 	async lock(target, room, user, connection, cmd) {
-		let week = cmd === 'wl' || cmd === 'weeklock';
+		const week = cmd === 'wl' || cmd === 'weeklock';
+		const month = cmd === 'monthlock';
 
 		if (!target) {
 			if (week) return this.parse('/help weeklock');
@@ -589,6 +591,7 @@ exports.commands = {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
 		if (!this.can('lock', targetUser)) return false;
+		if (month && !this.can('rangeban')) return false;
 
 		let name, userid;
 
@@ -596,7 +599,7 @@ exports.commands = {
 			name = targetUser.getLastName();
 			userid = targetUser.getLastId();
 
-			if (targetUser.locked && !week) {
+			if (targetUser.locked && !week && !month) {
 				return this.privateModAction(`(${name} would be locked by ${user.name} but was already locked.)`);
 			}
 
@@ -628,7 +631,7 @@ exports.commands = {
 
 
 		// Use default time for locks.
-		let duration = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
+		let duration = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : (month ? Date.now() + 30 * 24 * 60 * 60 * 1000 : null);
 		let affected = [];
 
 		if (targetUser) {
@@ -639,10 +642,10 @@ exports.commands = {
 		}
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
-		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.id}${globalReason}`);
+		this.globalModlog((week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, ` by ${user.id}${globalReason}`);
 
-		let weekMsg = week ? ' for a week' : '';
-		let lockMessage = `${name} was locked from talking${weekMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
+		let durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
+		let lockMessage = `${name} was locked from talking${durationMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
 		this.addModAction(lockMessage);
 		// Notify staff room when a user is locked outside of it.
 		if (room.roomid !== 'staff' && Rooms.get('staff')) {
@@ -661,7 +664,7 @@ exports.commands = {
 		}
 
 		if (targetUser) {
-			let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users${weekMsg}`;
+			let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users${durationMsg}`;
 			if (userReason) message += `\n\nReason: ${userReason}`;
 
 			let appeal = '';
