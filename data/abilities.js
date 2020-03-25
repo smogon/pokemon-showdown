@@ -2691,8 +2691,8 @@ let BattleAbilities = {
 		num: 253,
 	},
 	"pickpocket": {
-		desc: "If this Pokemon has no item, it steals the item off a Pokemon that makes contact with it. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect.",
-		shortDesc: "If this Pokemon has no item, it steals the item off a Pokemon making contact with it.",
+		desc: "If this Pokemon has no item and is hit by a contact move, it steals the attacker's item. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect.",
+		shortDesc: "If this Pokemon has no item and is hit by a contact move, it steals the attacker's item.",
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
 				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
