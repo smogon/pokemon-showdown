@@ -491,7 +491,9 @@ let BattleScripts = {
 					if (!move.spreadHit) this.attrLastMove('[miss]');
 					this.add('-miss', pokemon, target);
 				}
-				if (pokemon.hasItem('blunderpolicy') && pokemon.useItem()) this.boost({spe: 2}, pokemon);
+				if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
+					this.boost({spe: 2}, pokemon);
+				}
 				hitResults[i] = false;
 				continue;
 			}
