@@ -336,6 +336,14 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should require Hidden Ability status to match event moves', function () {
+		let team = [
+			{species: 'raichu', ability: 'lightningrod', moves: ['extremespeed'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
+		assert(illegal);
+	});
+
 	it('should accept VC moves only with Hidden ability and correct IVs', function () {
 		let team = [
 			{species: 'machamp', ability: 'steadfast', moves: ['fissure'], evs: {hp: 1}},

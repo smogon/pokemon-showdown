@@ -1551,10 +1551,10 @@ export class TeamValidator {
 					}
 				}
 			}
-			if (eventData.isHidden !== undefined && template.abilities['H']) {
+			if (template.abilities['H']) {
 				const isHidden = (set.ability === template.abilities['H']);
 
-				if (isHidden !== eventData.isHidden) {
+				if (isHidden !== !!eventData.isHidden) {
 					if (fastReturn) return true;
 					problems.push(`${name} must ${eventData.isHidden ? 'have' : 'not have'} its Hidden Ability${etc}.`);
 				}
