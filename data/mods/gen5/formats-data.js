@@ -1161,7 +1161,7 @@ let BattleFormatsData = {
 	},
 	combusken: {
 		maleOnlyHidden: true,
-		tier: "(NU)",
+		tier: "NFE",
 		doublesTier: "DUU",
 	},
 	blaziken: {
