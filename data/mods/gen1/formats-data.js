@@ -704,7 +704,6 @@ let BattleFormatsData = {
 	omanyte: {
 		randomBattleMoves: ["hydropump", "surf", "bodyslam", "rest"],
 		essentialMove: "blizzard",
-		comboMoves: ["surf", "hydropump"],
 		tier: "LC",
 	},
 	omastar: {
