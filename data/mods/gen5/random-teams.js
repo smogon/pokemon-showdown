@@ -11,7 +11,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 	 */
 	randomSet(species, teamDetails = {}, isLead = false) {
 		let baseSpecies = (species = this.dex.getSpecies(species));
-		let speciesName = species.name;
+		let cosmeticFormeName = species.name;
 
 		if (!species.exists || !species.randomBattleMoves && !this.dex.data.Learnsets[species.id]) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
@@ -23,7 +23,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		if (species.battleOnly) {
 			// Only change the species. The species has custom moves, and may have different typing and requirements.
-			speciesName = /** @type {string} */ (species.battleOnly);
+			cosmeticFormeName = /** @type {string} */ (species.battleOnly);
 		}
 
 		// @ts-ignore
@@ -613,12 +613,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 			NUBL: 85,
 			NU: 86,
 		};
-		/** @type {{[speciesName: string]: number}} */
+		/** @type {{[cosmeticFormeName: string]: number}} */
 		let customScale = {
 			Blaziken: 79, 'Deoxys-Defense': 79, Landorus: 79, Manaphy: 79, Thundurus: 79, 'Tornadus-Therian': 79, Unown: 100,
 		};
 		let level = levelScale[species.tier] || 80;
-		if (customScale[speciesName]) level = customScale[speciesName];
+		if (customScale[cosmeticFormeName]) level = customScale[cosmeticFormeName];
 
 		// Minimize confusion damage
 		if (!counter['Physical'] && !hasMove['transform']) {
@@ -633,7 +633,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		return {
 			name: species.baseSpecies,
-			species: speciesName,
+			species: cosmeticFormeName,
 			gender: species.gender,
 			moves: moves,
 			ability: ability,

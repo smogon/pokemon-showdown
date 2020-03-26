@@ -736,7 +736,7 @@ let BattleStatuses = {
 			}
 			this.add('-start', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.canGigantamax);
-			if (pokemon.speciesName === 'Shedinja') return;
+			if (pokemon.cosmeticFormeName === 'Shedinja') return;
 
 			// Changes based on dynamax level, 2 is max (at LVL 10)
 			const ratio = 2;
@@ -764,7 +764,7 @@ let BattleStatuses = {
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.species.name);
-			if (pokemon.speciesName === 'Shedinja') return;
+			if (pokemon.cosmeticFormeName === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
 			pokemon.maxhp = pokemon.baseMaxhp;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');

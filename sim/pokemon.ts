@@ -32,7 +32,7 @@ export class Pokemon {
 	readonly name: string;
 	readonly fullname: string;
 	readonly id: string; // shouldn't really be used anywhere
-	readonly speciesName: string;
+	readonly cosmeticFormeName: string;
 	readonly speciesid: ID;
 	readonly level: number;
 	readonly gender: GenderName;
@@ -243,8 +243,8 @@ export class Pokemon {
 		this.set = set as PokemonSet;
 
 		this.species = this.baseSpecies;
-		this.speciesName = this.battle.dex.getSpeciesName(set.species);
-		this.speciesid = toID(this.speciesName);
+		this.cosmeticFormeName = this.battle.dex.getCosmeticFormeName(set.species);
+		this.speciesid = toID(this.cosmeticFormeName);
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseSpecies.baseSpecies;
 		}
@@ -286,7 +286,7 @@ export class Pokemon {
 		}
 
 		this.position = 0;
-		this.details = this.speciesName + (this.level === 100 ? '' : ', L' + this.level) +
+		this.details = this.cosmeticFormeName + (this.level === 100 ? '' : ', L' + this.level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 
 		this.status = '';
@@ -1206,7 +1206,7 @@ export class Pokemon {
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
 			}
 		}
-		if (this.speciesName === 'Eternatus-Eternamax' && this.volatiles.dynamax) {
+		if (this.cosmeticFormeName === 'Eternatus-Eternamax' && this.volatiles.dynamax) {
 			this.volatiles = {dynamax: this.volatiles.dynamax};
 		} else {
 			this.volatiles = {};

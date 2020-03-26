@@ -160,8 +160,8 @@ class RandomTeams {
 		let random6 = this.random6Pokemon();
 
 		for (let i = 0; i < 6; i++) {
-			let speciesName = random6[i];
-			let species = Dex.mod('gen' + this.gen).getSpecies(speciesName);
+			let cosmeticFormeName = random6[i];
+			let species = Dex.mod('gen' + this.gen).getSpecies(cosmeticFormeName);
 			if (species.isNonstandard) species = Dex.mod('gen' + this.gen).getSpecies(species.baseSpecies);
 
 			// Random legal item
@@ -175,16 +175,16 @@ class RandomTeams {
 			// Make sure forme is legal
 			if (species.battleOnly || species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
 				species = Dex.mod('gen' + this.gen).getSpecies(this.dex.getOutOfBattleSpecies(species));
-				speciesName = species.name;
+				cosmeticFormeName = species.name;
 			}
 
 			// Make sure that a base forme does not hold any forme-modifier items.
 			let itemData = this.dex.getItem(item);
-			if (itemData.forcedForme && speciesName === this.dex.getSpecies(itemData.forcedForme).baseSpecies) {
+			if (itemData.forcedForme && cosmeticFormeName === this.dex.getSpecies(itemData.forcedForme).baseSpecies) {
 				do {
 					item = this.sample(items);
 					itemData = this.dex.getItem(item);
-				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && speciesName === this.dex.getSpecies(itemData.forcedForme).baseSpecies);
+				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && cosmeticFormeName === this.dex.getSpecies(itemData.forcedForme).baseSpecies);
 			}
 
 			// Random legal ability
@@ -195,7 +195,7 @@ class RandomTeams {
 			// Four random unique moves from the movepool
 			let moves;
 			let pool = ['struggle'];
-			if (speciesName === 'Smeargle') {
+			if (cosmeticFormeName === 'Smeargle') {
 				pool = Object.keys(this.dex.data.Movedex).filter(moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || this.dex.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
 			} else {
 				let learnset = this.dex.data.Learnsets[species.id] && this.dex.data.Learnsets[species.id].learnset ? this.dex.data.Learnsets[species.id].learnset : this.dex.data.Learnsets[this.dex.getSpecies(species.baseSpecies).id].learnset;
@@ -615,7 +615,7 @@ class RandomTeams {
 	randomSet(species, teamDetails = {}, isLead = false, isDoubles = false) {
 		species = this.dex.getSpecies(species);
 		let baseSpecies = species;
-		let speciesName = species.name;
+		let cosmeticFormeName = species.name;
 
 		if (!species.exists || (!species.randomBattleMoves && (!isDoubles || !species.randomDoubleBattleMoves) && !this.dex.data.Learnsets[species.id])) {
 			species = this.dex.getSpecies('pikachu');
@@ -626,7 +626,7 @@ class RandomTeams {
 
 		if (species.battleOnly && !species.isGigantamax) {
 			// Only change the species. The species has custom moves, and may have different typing and requirements.
-			speciesName = /** @type {string} */ (species.battleOnly);
+			cosmeticFormeName = /** @type {string} */ (species.battleOnly);
 		}
 
 		const randMoves = !isDoubles ? species.randomBattleMoves : (species.randomDoubleBattleMoves || species.randomBattleMoves);
@@ -1176,7 +1176,7 @@ class RandomTeams {
 		} else if (species.name === 'Jolteon') {
 			item = hasMove['protect'] ? 'Magnet' : 'Choice Specs';
 		} else if (species.baseSpecies === 'Pikachu') {
-			speciesName = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
+			cosmeticFormeName = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
 			item = 'Light Ball';
 		} else if (species.name === 'Shedinja') {
 			item = (!teamDetails.defog && !teamDetails.rapidSpin && !isDoubles) ? 'Heavy-Duty Boots' : 'Focus Sash';
@@ -1358,7 +1358,7 @@ class RandomTeams {
 
 		return {
 			name: species.baseSpecies,
-			species: speciesName,
+			species: cosmeticFormeName,
 			gender: species.gender,
 			moves: moves,
 			ability: ability,

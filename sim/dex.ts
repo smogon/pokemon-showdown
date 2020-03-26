@@ -326,10 +326,10 @@ export class ModdedDex {
 
 	/**
 	 * Convert a pokemon name, ID, or species into its species name, preserving
-	 * form name (which is the main way Dex.getSpeciesName(id) differs from
-	 * Dex.getSpecies(id).species).
+	 * form name (which is the main way Dex.getCosmeticFormeName(id) differs from
+	 * Dex.getSpecies(id).name).
 	 */
-	getSpeciesName(speciesid: string | Species): string {
+	getCosmeticFormeName(speciesid: string | Species): string {
 		const id = toID(speciesid || '');
 		const species = this.getSpecies(id);
 		if (species.cosmeticFormes && species.cosmeticFormes.includes(id)) {
