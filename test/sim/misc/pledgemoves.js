@@ -29,7 +29,7 @@ describe('Pledge Moves', function () {
 	});
 
 	it.skip("should not start a Pledge combo for Z-moves", function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(7).createBattle({gameType: 'doubles'}, [[
 			{species: 'Weedle', ability: 'sapsipper', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
