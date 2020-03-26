@@ -29,7 +29,7 @@ class RandomGen7Teams extends RandomTeams {
 	randomSet(species, teamDetails = {}, isLead = false, isDoubles = false) {
 		species = this.dex.getSpecies(species);
 		let baseSpecies = species;
-		let cosmeticFormeName = species.name;
+		let forme = species.name;
 
 		if (!species.exists || (!species.randomBattleMoves && (!isDoubles || !species.randomDoubleBattleMoves) && !this.dex.data.Learnsets[species.id])) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
@@ -41,7 +41,7 @@ class RandomGen7Teams extends RandomTeams {
 
 		if (species.battleOnly) {
 			// Only change the species. The species has custom moves, and may have different typing and requirements.
-			cosmeticFormeName = /** @type {string} */ (species.battleOnly);
+			forme = /** @type {string} */ (species.battleOnly);
 		}
 		let battleForme = this.checkBattleForme(species);
 		if (battleForme && battleForme.randomBattleMoves && species.otherFormes && (battleForme.isMega ? !teamDetails.megaStone : this.random(2))) {
@@ -795,7 +795,7 @@ class RandomGen7Teams extends RandomTeams {
 			item = 'Stick';
 		} else if (species.name === 'Genesect' && hasMove['technoblast']) {
 			item = 'Douse Drive';
-			cosmeticFormeName = 'Genesect-Douse';
+			forme = 'Genesect-Douse';
 		} else if (species.name === 'Kommo-o' && !teamDetails.zMove) {
 			item = hasMove['clangingscales'] ? 'Kommonium Z' : 'Dragonium Z';
 		} else if (species.name === 'Lycanroc' && hasMove['stoneedge'] && counter.setupType && !teamDetails.zMove) {
@@ -821,8 +821,8 @@ class RandomGen7Teams extends RandomTeams {
 				}
 			}
 		} else if (species.name === 'Pikachu') {
-			if (!isDoubles) cosmeticFormeName = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
-			if (cosmeticFormeName !== 'Pikachu') ability = 'Static';
+			if (!isDoubles) forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
+			if (forme !== 'Pikachu') ability = 'Static';
 			item = 'Light Ball';
 		} else if (species.name === 'Porygon-Z' && hasMove['nastyplot'] && !hasMove['trick'] && !['nastyplot', 'icebeam', 'triattack'].includes(moves[0]) && !teamDetails.zMove && !isDoubles) {
 			moves[moves.indexOf('nastyplot')] = 'conversion';
@@ -1007,7 +1007,7 @@ class RandomGen7Teams extends RandomTeams {
 				OU: 80,
 				Uber: 78,
 			};
-			/** @type {{[cosmeticFormeName: string]: number}} */
+			/** @type {{[forme: string]: number}} */
 			let customScale = {
 				// Banned Ability
 				Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Politoed: 84, Wobbuffet: 82,
@@ -1017,7 +1017,7 @@ class RandomGen7Teams extends RandomTeams {
 				Castform: 100, Delibird: 100, Spinda: 100, Unown: 100,
 			};
 			level = levelScale[species.tier] || 90;
-			if (customScale[cosmeticFormeName]) level = customScale[cosmeticFormeName];
+			if (customScale[forme]) level = customScale[forme];
 
 			// Custom level based on moveset
 			if (species.name === 'Zygarde-10%' && ability === 'Power Construct') level = 80;
@@ -1092,7 +1092,7 @@ class RandomGen7Teams extends RandomTeams {
 
 		return {
 			name: species.baseSpecies,
-			species: cosmeticFormeName,
+			species: forme,
 			gender: species.gender,
 			moves: moves,
 			ability: ability,

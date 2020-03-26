@@ -10,7 +10,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 	 */
 	randomSet(species, teamDetails = {}) {
 		let baseSpecies = (species = this.dex.getSpecies(species));
-		let cosmeticFormeName = species.name;
+		let forme = species.name;
 
 		if (!species.exists || !species.randomBattleMoves && !this.dex.data.Learnsets[species.id]) {
 			species = this.dex.getSpecies('unown');
@@ -19,7 +19,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 			Monitor.crashlog(err, 'The gen 3 randbat set generator');
 		}
 
-		if (species.battleOnly) cosmeticFormeName = /** @type {string} */ (species.battleOnly);
+		if (species.battleOnly) forme = /** @type {string} */ (species.battleOnly);
 
 		// @ts-ignore
 		let movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id].learnset)).slice();
@@ -352,7 +352,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				}
 			}
-			if (cosmeticFormeName === 'Castform' && moves.length === 4) {
+			if (forme === 'Castform' && moves.length === 4) {
 				// Make sure castforms alternate formes have their required moves
 				let reqMove = '';
 				if (species.name === 'Castform-Sunny' && !hasMove['sunnyday']) {
@@ -588,7 +588,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 		return {
 			name: species.baseSpecies,
-			species: cosmeticFormeName,
+			species: forme,
 			gender: species.gender,
 			moves: moves,
 			ability: ability,

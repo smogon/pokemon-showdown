@@ -15,7 +15,7 @@ let BattleScripts = {
 
 		const item = pokemon.getItem();
 		if (item.megaStone) {
-			if (item.megaStone === pokemon.cosmeticFormeName) return null;
+			if (item.megaStone === pokemon.forme) return null;
 			return item.megaStone;
 		} else {
 			return null;
@@ -54,9 +54,9 @@ let BattleScripts = {
 		pokemon.canMegaEvo = null;
 		return true;
 	},
-	getMixedSpecies(originalCosmeticFormeName, megaCosmeticFormeName) {
-		let originalSpecies = this.dex.getSpecies(originalCosmeticFormeName);
-		let megaSpecies = this.dex.getSpecies(megaCosmeticFormeName);
+	getMixedSpecies(originalForme, megaForme) {
+		let originalSpecies = this.dex.getSpecies(originalForme);
+		let megaSpecies = this.dex.getSpecies(megaForme);
 		if (originalSpecies.baseSpecies === megaSpecies.baseSpecies) return megaSpecies;
 		// @ts-ignore
 		let deltas = this.getMegaDeltas(megaSpecies);
@@ -88,9 +88,9 @@ let BattleScripts = {
 		if (megaSpecies.isMega) deltas.isMega = true;
 		return deltas;
 	},
-	doGetMixedSpecies(speciesOrCosmeticFormeName, deltas) {
+	doGetMixedSpecies(speciesOrForme, deltas) {
 		if (!deltas) throw new TypeError("Must specify deltas!");
-		let species = this.dex.deepClone(this.dex.getSpecies(speciesOrCosmeticFormeName));
+		let species = this.dex.deepClone(this.dex.getSpecies(speciesOrForme));
 		species.abilities = {'0': deltas.ability};
 		if (species.types[0] === deltas.type) {
 			species.types = [deltas.type];
