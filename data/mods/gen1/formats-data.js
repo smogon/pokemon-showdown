@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: TemplateFormatsData}} */
+/**@type {{[k: string]: SpeciesFormatsData}} */
 let BattleFormatsData = {
 	bulbasaur: {
 		randomBattleMoves: ["sleeppowder", "bodyslam"],

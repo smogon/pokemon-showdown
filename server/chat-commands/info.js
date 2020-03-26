@@ -532,8 +532,8 @@ const commands = {
 				return this.sendReply(buffer);
 			case 'pokemon':
 				let pokemon = dex.getTemplate(newTarget.name);
-				if (format && format.onModifyTemplate) {
-					pokemon = format.onModifyTemplate.call({dex}, pokemon) || pokemon;
+				if (format && format.onModifySpecies) {
+					pokemon = format.onModifySpecies.call({dex}, pokemon) || pokemon;
 				}
 				let tier = pokemon.tier;
 				if (room && (room.roomid === 'smogondoubles' ||

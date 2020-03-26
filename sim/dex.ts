@@ -18,12 +18,12 @@
  *   containing formats.
  * - Dex.includeData() ~500ms
  *   As above, but will also preload all of Dex.data, giving access to
- *   the data access functions like Dex.getTemplate, Dex.getMove, etc.
+ *   the data access functions like Dex.getSpecies, Dex.getMove, etc.
  * - Dex.includeModData() ~1500ms
  *   As above, but will also preload Dex.dexes[...].data for all mods.
  *
  * Note that preloading is only necessary for iterating Dex.dexes. Getters
- * like Dex.getTemplate will automatically load this data as needed.
+ * like Dex.getSpecies will automatically load this data as needed.
  *
  * @license MIT license
  */
@@ -91,12 +91,12 @@ interface DexTableData {
 	Abilities: DexTable<Ability>;
 	Aliases: {[id: string]: string};
 	Formats: DexTable<Format>;
-	FormatsData: DexTable<ModdedTemplateFormatsData>;
+	FormatsData: DexTable<ModdedSpeciesFormatsData>;
 	Items: DexTable<Item>;
 	Learnsets: DexTable<LearnsetData>;
 	Movedex: DexTable<Move>;
 	Natures: DexTable<Nature>;
-	Pokedex: DexTable<Template>;
+	Pokedex: DexTable<Species>;
 	Scripts: DexTable<AnyObject>;
 	Statuses: DexTable<EffectData>;
 	TypeChart: DexTable<TypeData>;
@@ -148,7 +148,7 @@ export class ModdedDex {
 	readonly itemCache: Map<ID, Item>;
 	readonly learnsetCache: Map<ID, LearnsetData>;
 	readonly moveCache: Map<ID, Move>;
-	readonly templateCache: Map<ID, Template>;
+	readonly speciesCache: Map<ID, Species>;
 	readonly typeCache: Map<string, TypeInfo>;
 
 	gen: number;
@@ -174,7 +174,7 @@ export class ModdedDex {
 		this.itemCache = new Map();
 		this.moveCache = new Map();
 		this.learnsetCache = new Map();
-		this.templateCache = new Map();
+		this.speciesCache = new Map();
 		this.typeCache = new Map();
 
 		this.gen = 0;
@@ -195,7 +195,7 @@ export class ModdedDex {
 			this.itemCache = original.itemCache;
 			this.learnsetCache = original.learnsetCache;
 			this.moveCache = original.moveCache;
-			this.templateCache = original.templateCache;
+			this.speciesCache = original.speciesCache;
 
 			this.dataCache = original.dataCache;
 			this.formatsCache = original.formatsCache;
@@ -325,21 +325,21 @@ export class ModdedDex {
 	}
 
 	/**
-	 * Convert a pokemon name, ID, or template into its species name, preserving
-	 * form name (which is the main way Dex.getSpecies(id) differs from
-	 * Dex.getTemplate(id).species).
+	 * Convert a pokemon name, ID, or species into its species name, preserving
+	 * form name (which is the main way Dex.getSpeciesName(id) differs from
+	 * Dex.getSpecies(id).species).
 	 */
-	getSpecies(species: string | Template): string {
-		const id = toID(species || '');
-		const template = this.getTemplate(id);
-		if (template.cosmeticFormes && template.cosmeticFormes.includes(id)) {
-			const form = id.slice(template.name.length);
-			if (form) return template.name + '-' + form[0].toUpperCase() + form.slice(1);
+	getSpeciesName(speciesid: string | Species): string {
+		const id = toID(speciesid || '');
+		const species = this.getSpecies(id);
+		if (species.cosmeticFormes && species.cosmeticFormes.includes(id)) {
+			const form = id.slice(species.name.length);
+			if (form) return species.name + '-' + form[0].toUpperCase() + form.slice(1);
 		}
-		return template.name;
+		return species.name;
 	}
 
-	getTemplate(name?: string | Template): Template {
+	getSpecies(name?: string | Species): Species {
 		if (name && typeof name !== 'string') return name;
 
 		name = (name || '').trim();
@@ -349,24 +349,24 @@ export class ModdedDex {
 		} else if (id === 'nidoran' && name.slice(-1) === '♂') {
 			id = 'nidoranm' as ID;
 		}
-		let template: any = this.templateCache.get(id);
-		if (template) return template;
+		let species: any = this.speciesCache.get(id);
+		if (species) return species;
 		if (this.data.Aliases.hasOwnProperty(id)) {
 			if (this.data.FormatsData.hasOwnProperty(id)) {
 				// special event ID, like Rockruff-Dusk
 				const baseId = toID(this.data.Aliases[id]);
-				template = new Data.Template({name}, this.data.Pokedex[baseId], this.data.FormatsData[id], this.data.Learnsets[id]);
-				template.name = id;
-				template.name = id;
-				template.id = id;
-				template.abilities = {0: template.abilities['S']};
+				species = new Data.Species({name}, this.data.Pokedex[baseId], this.data.FormatsData[id]);
+				species.name = id;
+				species.name = id;
+				species.id = id;
+				species.abilities = {0: species.abilities['S']};
 			} else {
-				template = this.getTemplate(this.data.Aliases[id]);
+				species = this.getSpecies(this.data.Aliases[id]);
 			}
-			if (template) {
-				this.templateCache.set(id, template);
+			if (species) {
+				this.speciesCache.set(id, species);
 			}
-			return template;
+			return species;
 		}
 		if (!this.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
@@ -393,69 +393,69 @@ export class ModdedDex {
 				}
 			}
 			if (aliasTo) {
-				template = this.getTemplate(aliasTo);
-				if (template.exists) {
-					this.templateCache.set(id, template);
-					return template;
+				species = this.getSpecies(aliasTo);
+				if (species.exists) {
+					this.speciesCache.set(id, species);
+					return species;
 				}
 			}
 		}
 		if (id && this.data.Pokedex.hasOwnProperty(id)) {
-			template = new Data.Template({name}, this.data.Pokedex[id], this.data.FormatsData[id]);
+			species = new Data.Species({name}, this.data.Pokedex[id], this.data.FormatsData[id]);
 			// Inherit any statuses from the base species (Arceus, Silvally).
-			const baseSpeciesStatuses = this.data.Statuses[toID(template.baseSpecies)];
+			const baseSpeciesStatuses = this.data.Statuses[toID(species.baseSpecies)];
 			if (baseSpeciesStatuses !== undefined) {
 				let key: keyof EffectData;
 				for (key in baseSpeciesStatuses) {
-					if (!(key in template)) template[key] = baseSpeciesStatuses[key];
+					if (!(key in species)) species[key] = baseSpeciesStatuses[key];
 				}
 			}
-			if (!template.tier && !template.doublesTier && template.baseSpecies !== template.name) {
-				if (template.baseSpecies === 'Mimikyu') {
-					template.tier = this.data.FormatsData[toID(template.baseSpecies)].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[toID(template.baseSpecies)].doublesTier || 'Illegal';
-				} else if (template.id.endsWith('totem')) {
-					template.tier = this.data.FormatsData[template.id.slice(0, -5)].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[template.id.slice(0, -5)].doublesTier || 'Illegal';
-				} else if (template.battleOnly) {
-					template.tier = this.data.FormatsData[toID(template.battleOnly)].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[toID(template.battleOnly)].doublesTier || 'Illegal';
+			if (!species.tier && !species.doublesTier && species.baseSpecies !== species.name) {
+				if (species.baseSpecies === 'Mimikyu') {
+					species.tier = this.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
+					species.doublesTier = this.data.FormatsData[toID(species.baseSpecies)].doublesTier || 'Illegal';
+				} else if (species.id.endsWith('totem')) {
+					species.tier = this.data.FormatsData[species.id.slice(0, -5)].tier || 'Illegal';
+					species.doublesTier = this.data.FormatsData[species.id.slice(0, -5)].doublesTier || 'Illegal';
+				} else if (species.battleOnly) {
+					species.tier = this.data.FormatsData[toID(species.battleOnly)].tier || 'Illegal';
+					species.doublesTier = this.data.FormatsData[toID(species.battleOnly)].doublesTier || 'Illegal';
 				} else {
-					const baseFormatsData = this.data.FormatsData[toID(template.baseSpecies)];
+					const baseFormatsData = this.data.FormatsData[toID(species.baseSpecies)];
 					if (!baseFormatsData) {
-						throw new Error(`${template.baseSpecies} has no formats-data entry`);
+						throw new Error(`${species.baseSpecies} has no formats-data entry`);
 					}
-					template.tier = baseFormatsData.tier || 'Illegal';
-					template.doublesTier = baseFormatsData.doublesTier || 'Illegal';
+					species.tier = baseFormatsData.tier || 'Illegal';
+					species.doublesTier = baseFormatsData.doublesTier || 'Illegal';
 				}
 			}
-			if (!template.tier) template.tier = 'Illegal';
-			if (!template.doublesTier) template.doublesTier = template.tier;
-			if (template.gen > this.gen) {
-				template.tier = 'Illegal';
-				template.doublesTier = 'Illegal';
-				template.isNonstandard = 'Future';
+			if (!species.tier) species.tier = 'Illegal';
+			if (!species.doublesTier) species.doublesTier = species.tier;
+			if (species.gen > this.gen) {
+				species.tier = 'Illegal';
+				species.doublesTier = 'Illegal';
+				species.isNonstandard = 'Future';
 			}
-			if (this.currentMod === 'letsgo' && !template.isNonstandard) {
+			if (this.currentMod === 'letsgo' && !species.isNonstandard) {
 				const isLetsGo = (
-					(template.num <= 151 || ['Meltan', 'Melmetal'].includes(template.name)) &&
-					(!template.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme))
+					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
+					(!species.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme))
 				);
-				if (!isLetsGo) template.isNonstandard = 'Past';
+				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
 		} else {
-			template = new Data.Template({
+			species = new Data.Species({
 				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
 			});
 		}
-		if (template.exists) this.templateCache.set(id, template);
-		return template;
+		if (species.exists) this.speciesCache.set(id, species);
+		return species;
 	}
 
-	getOutOfBattleSpecies(template: Template) {
-		return !template.battleOnly ? template.name :
-			template.inheritsFrom ? this.getTemplate(template.inheritsFrom).name :
-			template.baseSpecies;
+	getOutOfBattleSpecies(species: Species) {
+		return !species.battleOnly ? species.name :
+			species.inheritsFrom ? this.getSpecies(species.inheritsFrom).name :
+			species.baseSpecies;
 	}
 
 	getLearnsetData(id: ID): LearnsetData {
@@ -1028,8 +1028,8 @@ export class ModdedDex {
 			}
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
-					const template: Template = table[id] as Template;
-					if (template.otherFormes && ruleid !== template.id + toID(template.baseForme)) {
+					const species: Species = table[id] as Species;
+					if (species.otherFormes && ruleid !== species.id + toID(species.baseForme)) {
 						matches.push('basepokemon:' + id);
 						continue;
 					}
@@ -1141,7 +1141,7 @@ export class ModdedDex {
 		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
 
 		const searchFunctions = {
-			Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature',
+			Pokedex: 'getSpecies', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature',
 		};
 		const searchTypes: {[k in DataType]?: string} = {
 			Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature',
@@ -1319,9 +1319,9 @@ export class ModdedDex {
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			const ability = buf.substring(i, j);
-			const template = dexes['base'].getTemplate(set.species);
+			const species = dexes['base'].getSpecies(set.species);
 			set.ability = ['', '0', '1', 'H', 'S'].includes(ability) ?
-				template.abilities[ability as '0' || '0'] || (ability === '' ? '' : '!!!ERROR!!!') :
+				species.abilities[ability as '0' || '0'] || (ability === '' ? '' : '!!!ERROR!!!') :
 				ability;
 			i = j + 1;
 

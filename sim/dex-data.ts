@@ -518,18 +518,18 @@ export class Learnset {
 	}
 }
 
-export class Template extends BasicEffect implements Readonly<BasicEffect & TemplateData & TemplateFormatsData> {
+export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesData & SpeciesFormatsData> {
 	readonly effectType: 'Pokemon';
 	/**
 	 * Species ID. Identical to ID. Note that this is the full ID, e.g.
 	 * 'basculinbluestriped'. To get the base species ID, you need to
-	 * manually read toID(template.baseSpecies).
+	 * manually read toID(species.baseSpecies).
 	 */
 	readonly id: ID;
 	/**
 	 * Name. Note that this is the full name with forme,
 	 * e.g. 'Basculin-Blue-Striped'. To get the name without forme, see
-	 * `template.baseSpecies`.
+	 * `species.baseSpecies`.
 	 */
 	readonly name: string;
 	/**
@@ -541,7 +541,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly baseSpecies: string;
 	/**
 	 * Forme name. If the forme exists,
-	 * `template.name === template.baseSpecies + '-' + template.forme`
+	 * `species.name === species.baseSpecies + '-' + species.forme`
 	 */
 	readonly forme: string;
 	/**
@@ -565,7 +565,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 */
 	readonly spriteid: string;
 	/** Abilities. */
-	readonly abilities: TemplateAbility;
+	readonly abilities: SpeciesAbility;
 	/** Types. */
 	readonly types: string[];
 	/** Added type (used in OMs). */

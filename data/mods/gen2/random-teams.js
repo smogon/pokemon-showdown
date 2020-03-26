@@ -11,8 +11,8 @@ class RandomGen2Teams extends RandomGen3Teams {
 		/** @type {string[]} */
 		let pokemonPool = [];
 		for (let id in this.dex.data.FormatsData) {
-			let template = this.dex.getTemplate(id);
-			if (!template.isNonstandard && this.dex.data.FormatsData[id].randomSets) {
+			let species = this.dex.getSpecies(id);
+			if (!species.isNonstandard && this.dex.data.FormatsData[id].randomSets) {
 				pokemonPool.push(id);
 			}
 		}
@@ -39,13 +39,13 @@ class RandomGen2Teams extends RandomGen3Teams {
 		};
 
 		while (pokemonPool.length && pokemonLeft > 0) {
-			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
-			if (!template.exists) continue;
+			let species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			if (!species.exists) continue;
 			let skip = false;
 
 			// Ensure 1 Uber at most
 			// Ensure 2 mons of same tier at most (this includes OU,UUBL,UU,NU; other tiers not supported yet)
-			let tier = template.tier;
+			let tier = species.tier;
 			switch (tier) {
 			case 'Uber':
 				if (tierCount['Uber']) skip = true;
@@ -57,7 +57,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			// Ensure the same type not more than twice
 			// 33% discard single-type mon if that type already exists
 			// 66% discard double-type mon if both types already exist
-			let types = template.types;
+			let types = species.types;
 			if (types.length === 1) {
 				if (typeCount[types[0]] > 1) skip = true;
 				if (typeCount[types[0]] && this.randomChance(1, 3)) skip = true;
@@ -70,7 +70,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			// but ensure no more than 3 pokemon weak to the same regardless.
 			let weaknesses = [];
 			for (let type in weaknessCount) {
-				let weak = this.dex.getImmunity(type, template) && this.dex.getEffectiveness(type, template) > 0;
+				let weak = this.dex.getImmunity(type, species) && this.dex.getEffectiveness(type, species) > 0;
 				if (!weak) continue;
 				if (weaknessCount[type] > 2 || weaknessCount[type] - resistanceCount[type] > 1) {
 					skip = true;
@@ -79,7 +79,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			}
 			let resistances = [];
 			for (let type in resistanceCount) {
-				let resist = !this.dex.getImmunity(type, template) || this.dex.getEffectiveness(type, template) < 0;
+				let resist = !this.dex.getImmunity(type, species) || this.dex.getEffectiveness(type, species) < 0;
 				if (resist) resistances.push(type);
 			}
 
@@ -87,7 +87,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			if (skip && pokemonPool.length + 1 > pokemonLeft) continue;
 
 			// The set passes the randomTeam limitations.
-			let set = this.randomSet(template, restrictMoves, pokemon.length);
+			let set = this.randomSet(species, restrictMoves, pokemon.length);
 			if (set.other && set.other.discard && pokemonPool.length + 1 > pokemonLeft) continue;
 
 			// The set also passes the randomSet limitations.
@@ -137,21 +137,21 @@ class RandomGen2Teams extends RandomGen3Teams {
 	}
 
 	/**
-	 * @param {string | Template} template
+	 * @param {string | Species} species
 	 * @param {{[k: string]: number}} restrictMoves
 	 * @param {number} [slot]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, restrictMoves, slot) {
+	randomSet(species, restrictMoves, slot) {
 		if (slot === undefined) slot = 1;
-		template = this.dex.getTemplate(template);
-		if (!template.exists) template = this.dex.getTemplate('unown');
-		if (!template.randomSets || !template.randomSets.length) template = this.dex.getTemplate('unown');
+		species = this.dex.getSpecies(species);
+		if (!species.exists) species = this.dex.getSpecies('unown');
+		if (!species.randomSets || !species.randomSets.length) species = this.dex.getSpecies('unown');
 
 		let randomSetNumber = 0;
 		/**@type {RandomTeamsTypes.Gen2RandomSet} */
 		// @ts-ignore
-		let set = template.randomSets[0];
+		let set = species.randomSets[0];
 		/**@type {string[]} */
 		let moves = [];
 		/**@type {{[k: string]: number}} */
@@ -178,10 +178,10 @@ class RandomGen2Teams extends RandomGen3Teams {
 			hasMove = {};
 
 			// @ts-ignore
-			if (template.randomSets.length > 1) {
+			if (species.randomSets.length > 1) {
 				randomSetNumber = 15;
 				// @ts-ignore
-				for (const s of template.randomSets) {
+				for (const s of species.randomSets) {
 					if (randomSetNumber < s.chance) {
 						set = s;
 					}
@@ -280,12 +280,12 @@ class RandomGen2Teams extends RandomGen3Teams {
 			Unown: 98, Wobbuffet: 82, Ditto: 82,
 			Snorlax: 66, Nidoqueen: 70,
 		};
-		let level = levelScale[template.tier] || 90;
-		if (customScale[template.name]) level = customScale[template.name];
+		let level = levelScale[species.tier] || 90;
+		if (customScale[species.name]) level = customScale[species.name];
 
 		return {
-			name: template.name,
-			species: template.name,
+			name: species.name,
+			species: species.name,
 			moves: moves,
 			ability: 'None',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
@@ -293,7 +293,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			item: item,
 			level: level,
 			shiny: false,
-			gender: template.gender ? template.gender : 'M',
+			gender: species.gender ? species.gender : 'M',
 			other: {
 				discard: discard,
 				restrictMoves: restrictMoves,

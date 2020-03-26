@@ -32,7 +32,7 @@ export class Pokemon {
 	readonly name: string;
 	readonly fullname: string;
 	readonly id: string; // shouldn't really be used anywhere
-	readonly species: string;
+	readonly speciesName: string;
 	readonly speciesid: ID;
 	readonly level: number;
 	readonly gender: GenderName;
@@ -52,8 +52,8 @@ export class Pokemon {
 	position: number;
 	details: string;
 
-	baseTemplate: Template;
-	template: Template;
+	baseSpecies: Species;
+	species: Species;
 	speciesData: EffectState;
 
 	status: ID;
@@ -228,25 +228,25 @@ export class Pokemon {
 
 		if (typeof set === 'string') set = {name: set};
 
-		this.baseTemplate = this.battle.dex.getTemplate(set.species || set.name);
-		if (!this.baseTemplate.exists) {
-			throw new Error(`Unidentified species: ${this.baseTemplate.name}`);
+		this.baseSpecies = this.battle.dex.getSpecies(set.species || set.name);
+		if (!this.baseSpecies.exists) {
+			throw new Error(`Unidentified species: ${this.baseSpecies.name}`);
 		}
 		// Change Gigantamax formes to their base formes
 		let gMax: string | null = null;
-		if (this.baseTemplate.isGigantamax) {
-			gMax = this.baseTemplate.name;
-			if (set.species && toID(set.species) === this.baseTemplate.id) set.species = this.baseTemplate.baseSpecies;
-			if (set.name && toID(set.name) === this.baseTemplate.id) set.name = this.baseTemplate.baseSpecies;
-			this.baseTemplate = this.battle.dex.getTemplate(this.baseTemplate.baseSpecies);
+		if (this.baseSpecies.isGigantamax) {
+			gMax = this.baseSpecies.name;
+			if (set.species && toID(set.species) === this.baseSpecies.id) set.species = this.baseSpecies.baseSpecies;
+			if (set.name && toID(set.name) === this.baseSpecies.id) set.name = this.baseSpecies.baseSpecies;
+			this.baseSpecies = this.battle.dex.getSpecies(this.baseSpecies.baseSpecies);
 		}
 		this.set = set as PokemonSet;
 
-		this.template = this.baseTemplate;
-		this.species = this.battle.dex.getSpecies(set.species);
-		this.speciesid = toID(this.species);
+		this.species = this.baseSpecies;
+		this.speciesName = this.battle.dex.getSpeciesName(set.species);
+		this.speciesid = toID(this.speciesName);
 		if (set.name === set.species || !set.name) {
-			set.name = this.baseTemplate.baseSpecies;
+			set.name = this.baseSpecies.baseSpecies;
 		}
 		this.speciesData = {id: this.speciesid};
 
@@ -257,7 +257,7 @@ export class Pokemon {
 		set.level = this.battle.dex.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
 		const genders: {[key: string]: GenderName} = {M: 'M', F: 'F', N: 'N'};
-		this.gender = genders[set.gender] || this.template.gender || (this.battle.random() * 2 < 1 ? 'M' : 'F');
+		this.gender = genders[set.gender] || this.species.gender || (this.battle.random() * 2 < 1 ? 'M' : 'F');
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.dex.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = this.set.pokeball || 'pokeball';
@@ -286,7 +286,7 @@ export class Pokemon {
 		}
 
 		this.position = 0;
-		this.details = this.species + (this.level === 100 ? '' : ', L' + this.level) +
+		this.details = this.speciesName + (this.level === 100 ? '' : ', L' + this.level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 
 		this.status = '';
@@ -326,7 +326,7 @@ export class Pokemon {
 		this.baseHpType = this.hpType;
 		this.baseHpPower = this.hpPower;
 
-		// initialized in this.setTemplate(this.baseTemplate)
+		// initialized in this.setSpecies(this.baseSpecies)
 		this.baseStoredStats = null!;
 		this.storedStats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
@@ -352,10 +352,10 @@ export class Pokemon {
 		this.faintQueued = false;
 		this.subFainted = null;
 
-		this.types = this.baseTemplate.types;
+		this.types = this.baseSpecies.types;
 		this.addedType = '';
 		this.knownType = true;
-		this.apparentType = this.baseTemplate.types.join('/');
+		this.apparentType = this.baseSpecies.types.join('/');
 
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;
@@ -424,7 +424,7 @@ export class Pokemon {
 		const health = this.getHealth();
 		let details = this.details;
 		if (this.illusion) {
-			const illusionDetails = this.illusion.template.name + (this.level === 100 ? '' : ', L' + this.level) +
+			const illusionDetails = this.illusion.species.name + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
 			details = illusionDetails;
 		}
@@ -998,14 +998,14 @@ export class Pokemon {
 	}
 
 	transformInto(pokemon: Pokemon, effect: Effect | null = null) {
-		const template = pokemon.template;
+		const species = pokemon.species;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
-			template.name === 'Eternatus-Eternamax') {
+			species.name === 'Eternatus-Eternamax') {
 			return false;
 		}
 
-		if (!this.setTemplate(template, null, true)) return false;
+		if (!this.setSpecies(species, null, true)) return false;
 
 		this.transformed = true;
 		this.weighthg = pokemon.weighthg;
@@ -1056,19 +1056,19 @@ export class Pokemon {
 		// Change formes based on held items (for Transform)
 		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
 		if (this.battle.gen === 4) {
-			if (this.template.num === 487) {
+			if (this.species.num === 487) {
 				// Giratina formes
-				if (this.template.name === 'Giratina' && this.item === 'griseousorb') {
+				if (this.species.name === 'Giratina' && this.item === 'griseousorb') {
 					this.formeChange('Giratina-Origin');
-				} else if (this.template.name === 'Giratina-Origin' && this.item !== 'griseousorb') {
+				} else if (this.species.name === 'Giratina-Origin' && this.item !== 'griseousorb') {
 					this.formeChange('Giratina');
 				}
 			}
-			if (this.template.num === 493) {
+			if (this.species.num === 493) {
 				// Arceus formes
 				const item = this.getItem();
 				const targetForme = (item?.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
-				if (this.template.name !== targetForme) {
+				if (this.species.name !== targetForme) {
 					this.formeChange(targetForme);
 				}
 			}
@@ -1078,23 +1078,23 @@ export class Pokemon {
 	}
 
 	/**
-	 * Changes this Pokemon's template to the given templateId (or template).
+	 * Changes this Pokemon's species to the given speciesId (or species).
 	 * This function only handles changes to stats and type.
 	 * Use formChange to handle changes to ability and sending client messages.
 	 */
-	setTemplate(rawTemplate: Template, source: Effect | null = this.battle.effect, isTransform = false) {
-		const template = this.battle.runEvent('ModifyTemplate', this, null, source, rawTemplate);
-		if (!template) return null;
-		this.template = template;
+	setSpecies(rawSpecies: Species, source: Effect | null = this.battle.effect, isTransform = false) {
+		const species = this.battle.runEvent('ModifySpecies', this, null, source, rawSpecies);
+		if (!species) return null;
+		this.species = species;
 
-		this.setType(template.types, true);
-		this.apparentType = rawTemplate.types.join('/');
-		this.addedType = template.addedType || '';
+		this.setType(species.types, true);
+		this.apparentType = rawSpecies.types.join('/');
+		this.addedType = species.addedType || '';
 		this.knownType = true;
-		this.weighthg = template.weighthg;
+		this.weighthg = species.weighthg;
 
-		const stats = this.battle.dex.spreadModify(this.template.baseStats, this.set);
-		if (this.template.maxHP) stats.hp = this.template.maxHP;
+		const stats = this.battle.dex.spreadModify(this.species.baseStats, this.set);
+		if (this.species.maxHP) stats.hp = this.species.maxHP;
 
 		if (!this.maxhp) {
 			this.baseMaxhp = stats.hp;
@@ -1114,36 +1114,36 @@ export class Pokemon {
 			if (this.status === 'brn') this.modifyStat!('atk', 0.5);
 		}
 		this.speed = this.storedStats.spe;
-		return template;
+		return species;
 	}
 
 	/**
-	 * Changes this Pokemon's forme to match the given templateId (or template).
-	 * This function handles all changes to stats, ability, type, template, etc.
+	 * Changes this Pokemon's forme to match the given speciesId (or species).
+	 * This function handles all changes to stats, ability, type, species, etc.
 	 * as well as sending all relevant messages sent to the client.
 	 */
 	formeChange(
-		templateId: string | Template, source: Effect = this.battle.effect,
+		speciesId: string | Species, source: Effect = this.battle.effect,
 		isPermanent?: boolean, message?: string
 	) {
-		const rawTemplate = this.battle.dex.getTemplate(templateId);
+		const rawSpecies = this.battle.dex.getSpecies(speciesId);
 
-		const template = this.setTemplate(rawTemplate, source);
-		if (!template) return false;
+		const species = this.setSpecies(rawSpecies, source);
+		if (!species) return false;
 
 		if (this.battle.gen <= 2) return true;
 
 		// The species the opponent sees
 		const apparentSpecies =
-			this.illusion ? this.illusion.template.name : template.baseSpecies;
+			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
-			this.baseTemplate = rawTemplate;
-			this.details = template.name + (this.level === 100 ? '' : ', L' + this.level) +
+			this.baseSpecies = rawSpecies;
+			this.details = species.name + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 			this.battle.add('detailschange', this, (this.illusion || this).details);
 			if (source.effectType === 'Item') {
 				if (source.zMove) {
-					this.battle.add('-burst', this, apparentSpecies, template.requiredItem);
+					this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
 				} else if (source.onPrimal) {
 					if (this.illusion) {
@@ -1153,25 +1153,25 @@ export class Pokemon {
 						this.battle.add('-primal', this);
 					}
 				} else {
-					this.battle.add('-mega', this, apparentSpecies, template.requiredItem);
+					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 				}
 			} else if (source.effectType === 'Status') {
 				// Shaymin-Sky -> Shaymin
-				this.battle.add('-formechange', this, template.name, message);
+				this.battle.add('-formechange', this, species.name, message);
 			}
 		} else {
 			if (source.effectType === 'Ability') {
-				this.battle.add('-formechange', this, template.name, message, `[from] ability: ${source.name}`);
+				this.battle.add('-formechange', this, species.name, message, `[from] ability: ${source.name}`);
 			} else {
-				this.battle.add('-formechange', this, this.illusion ? this.illusion.template.name : template.name, message);
+				this.battle.add('-formechange', this, this.illusion ? this.illusion.species.name : species.name, message);
 			}
 		}
 		if (isPermanent && !['disguise', 'iceface'].includes(source.id)) {
 			if (this.illusion) {
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
-			this.setAbility(template.abilities['0'], null, true);
+			this.setAbility(species.abilities['0'], null, true);
 			if (isPermanent) this.baseAbility = this.ability;
 		}
 		return true;
@@ -1206,7 +1206,7 @@ export class Pokemon {
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
 			}
 		}
-		if (this.species === 'Eternatus-Eternamax' && this.volatiles.dynamax) {
+		if (this.speciesName === 'Eternatus-Eternamax' && this.volatiles.dynamax) {
 			this.volatiles = {dynamax: this.volatiles.dynamax};
 		} else {
 			this.volatiles = {};
@@ -1225,7 +1225,7 @@ export class Pokemon {
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
-		this.setTemplate(this.baseTemplate);
+		this.setSpecies(this.baseSpecies);
 	}
 
 	hasType(type: string | string[]) {
@@ -1729,7 +1729,7 @@ export class Pokemon {
 	 */
 	setType(newType: string | string[], enforce = false) {
 		// First type of Arceus, Silvally cannot be normally changed
-		if (!enforce && (this.template.num === 493 || this.template.num === 773)) return false;
+		if (!enforce && (this.species.num === 493 || this.species.num === 773)) return false;
 
 		if (!newType) throw new Error("Must pass type to setType");
 		this.types = (typeof newType === 'string' ? [newType] : newType);
