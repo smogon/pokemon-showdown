@@ -263,6 +263,14 @@ describe('Team Validator', function () {
 		illegal = TeamValidator.get('gen1outradeback').validateTeam(team);
 		assert(illegal);
 
+		// tradeback: gen 2 event move from prevo with gen 1 tutor or TM moves
+		team = [
+			{species: 'pikachu', moves: ['sing', 'surf']},
+			{species: 'clefairy', moves: ['dizzypunch', 'bodyslam']},
+		];
+		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
+
 		// can't tradeback: gen 2 egg move
 		team = [
 			{species: 'marowak', moves: ['swordsdance', 'ancientpower', 'bodyslam']},
