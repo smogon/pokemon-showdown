@@ -1713,9 +1713,7 @@ export const commands: ChatCommands = {
 			} else {
 				Punishments.roomPunishName(this.room, targetUserid, punishment);
 			}
-			// eslint bug
-			room.getGame(Tournament)?.removeBannedUser(targetUserid); // eslint-disable-line no-unused-expressions
-
+			room.getGame(Tournament)?.removeBannedUser(targetUserid);
 
 			this.modlog('TOUR BAN', targetUser, reason);
 			if (reason) reason = ` (${reason})`;
