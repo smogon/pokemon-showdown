@@ -22,7 +22,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 	 */
 	randomSet(species, teamDetails = {}, isLead = false) {
 		let baseSpecies = (species = this.dex.getSpecies(species));
-		let cosmeticFormeName = species.name;
+		let forme = species.name;
 
 		if (!species.exists || !species.randomBattleMoves && !this.dex.data.Learnsets[species.id]) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
@@ -34,7 +34,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 
 		if (species.battleOnly) {
 			// Only change the species. The species has custom moves, and may have different typing and requirements.
-			cosmeticFormeName = /** @type {string} */ (species.battleOnly);
+			forme = /** @type {string} */ (species.battleOnly);
 		}
 		let battleForme = this.checkBattleForme(species);
 		if (battleForme && battleForme.randomBattleMoves && species.otherFormes && (battleForme.isMega ? !teamDetails.megaStone : this.random(2))) {
@@ -875,7 +875,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 			Unreleased: 80,
 			Uber: 78,
 		};
-		/** @type {{[cosmeticFormeName: string]: number}} */
+		/** @type {{[forme: string]: number}} */
 		let customScale = {
 			// Banned Ability
 			Dugtrio: 82, Gothitelle: 82, Ninetales: 84, Politoed: 84, Wobbuffet: 82,
@@ -885,7 +885,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 			Castform: 100, Delibird: 100, Spinda: 100, Unown: 100,
 		};
 		let level = levelScale[species.tier] || 90;
-		if (customScale[cosmeticFormeName]) level = customScale[cosmeticFormeName];
+		if (customScale[forme]) level = customScale[forme];
 
 		// Prepare optimal HP
 		let srWeakness = this.dex.getEffectiveness('Rock', species);
@@ -921,7 +921,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 
 		return {
 			name: species.baseSpecies,
-			species: cosmeticFormeName,
+			species: forme,
 			gender: species.gender,
 			moves: moves,
 			ability: ability,

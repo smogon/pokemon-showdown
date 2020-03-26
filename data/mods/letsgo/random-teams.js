@@ -10,7 +10,7 @@ class RandomLetsGoTeams extends RandomTeams {
 	 */
 	randomSet(species, teamDetails = {}) {
 		species = this.dex.getSpecies(species);
-		let cosmeticFormeName = species.name;
+		let forme = species.name;
 
 		if (!species.exists || !species.randomBattleMoves && !this.dex.data.Learnsets[species.id]) {
 			species = this.dex.getSpecies(this.sample(['Pikachu-Starter', 'Eevee-Starter']));
@@ -21,7 +21,7 @@ class RandomLetsGoTeams extends RandomTeams {
 
 		if (species.battleOnly) {
 			// Only change the species. The species has custom moves, and may have different typing and requirements.
-			cosmeticFormeName = /** @type {string} */ (species.battleOnly);
+			forme = /** @type {string} */ (species.battleOnly);
 		}
 
 		// @ts-ignore
@@ -204,7 +204,7 @@ class RandomLetsGoTeams extends RandomTeams {
 
 		return {
 			name: species.baseSpecies,
-			species: cosmeticFormeName,
+			species: forme,
 			level: 100,
 			gender: species.gender,
 			happiness: 70,

@@ -2390,7 +2390,7 @@ let BattleAbilities = {
 					// this.add('-message', "" + curPoke + " skipped: Natural Cure already known");
 					continue;
 				}
-				let species = this.dex.getSpecies(curPoke.cosmeticFormeName);
+				let species = this.dex.getSpecies(curPoke.forme);
 				// pokemon can't get Natural Cure
 				if (Object.values(species.abilities).indexOf('Natural Cure') < 0) {
 					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
@@ -3815,8 +3815,8 @@ let BattleAbilities = {
 		onBeforeMove(attacker, defender, move) {
 			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
-			let targetCosmeticFormeName = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
-			if (attacker.species.name !== targetCosmeticFormeName) attacker.formeChange(targetCosmeticFormeName);
+			let targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
+			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
 		id: "stancechange",
 		name: "Stance Change",
