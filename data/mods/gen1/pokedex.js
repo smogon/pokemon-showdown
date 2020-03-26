@@ -3,7 +3,7 @@
 exports.BattlePokedex = {
 	missingno: {
 		num: 0,
-		species: "Missingno.",
+		species: "MissingNo.",
 		types: ["Bird", "Normal"],
 		gender: "N",
 		baseStats: {hp: 33, atk: 136, def: 0, spa: 6, spd: 6, spe: 29},

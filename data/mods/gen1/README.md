@@ -6,7 +6,7 @@ Introduction
 Generation 1 includes the original japanese Green and Red, Blue, and Yellow games.
 It was very different than the game we get to know today, and it was, in fact, very different to Gen 2 as well.
 The mechanics were very different, and the game was quite glitched, but most glitches were important parts of the metagame.
-There were only 151 Pokémon plus Missingno, just a handful of moves, no abilities, no items, all stats were
+There were only 151 Pokémon plus MissingNo, just a handful of moves, no abilities, no items, all stats were
 EVd to the max and we had some kind of different IVs, which maxed at 15 and every point gave 2 to the stat, so in
 a similar fashion, Pokes used to have 30 IVs on each stat.
 
