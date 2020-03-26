@@ -1551,13 +1551,8 @@ export class TeamValidator {
 					}
 				}
 			}
-<<<<<<< HEAD
-			if (template.abilities['H']) {
-				const isHidden = (set.ability === template.abilities['H']);
-=======
-			if (eventData.isHidden !== undefined && species.abilities['H']) {
+			if (species.abilities['H']) {
 				const isHidden = (set.ability === species.abilities['H']);
->>>>>>> Rename some things (ik build will fail)
 
 				if (isHidden !== !!eventData.isHidden) {
 					if (fastReturn) return true;
@@ -1723,7 +1718,7 @@ export class TeamValidator {
 				// should never happen
 				break;
 			}
-			const checkingPrevo = species.baseSpecies !== species.baseSpecies;
+			const checkingPrevo = species.baseSpecies !== s.baseSpecies;
 			if (checkingPrevo && !moveSources.size()) {
 				if (!setSources.babyOnly || !species.prevo) {
 					babyOnly = species.id;

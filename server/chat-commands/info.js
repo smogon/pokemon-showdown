@@ -485,7 +485,7 @@ const commands = {
 		let targetNum = parseInt(target);
 		if (!isNaN(targetNum) && '' + targetNum === target) {
 			for (let p in Dex.data.Pokedex) {
-				let pokemon = Dex.getTemplate(p);
+				let pokemon = Dex.getSpecies(p);
 				if (pokemon.num === targetNum) {
 					target = pokemon.species;
 					break;
@@ -531,7 +531,7 @@ const commands = {
 				}
 				return this.sendReply(buffer);
 			case 'pokemon':
-				let pokemon = dex.getTemplate(newTarget.name);
+				let pokemon = dex.getSpecies(newTarget.name);
 				if (format && format.onModifySpecies) {
 					pokemon = format.onModifySpecies.call({dex}, pokemon) || pokemon;
 				}
@@ -565,7 +565,7 @@ const commands = {
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					let evos = /** @type {string[]} */ ([]);
 					for (const evoName of pokemon.evos) {
-						const evo = dex.getTemplate(evoName);
+						const evo = dex.getSpecies(evoName);
 						if (evo.gen <= dex.gen) {
 							let condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 							switch (evo.evoType) {
@@ -781,7 +781,7 @@ const commands = {
 		}
 		let targets = target.split(/ ?[,/] ?/);
 		/** @type {{types: string[], [k: string]: any}} */
-		let pokemon = mod.getTemplate(targets[0]);
+		let pokemon = mod.getSpecies(targets[0]);
 		let type1 = mod.getType(targets[0]);
 		let type2 = mod.getType(targets[1]);
 		let type3 = mod.getType(targets[2]);
@@ -861,9 +861,9 @@ const commands = {
 		let targets = target.split(/[,/]/).slice(0, 2);
 		if (targets.length !== 2) return this.errorReply("Attacker and defender must be separated with a comma.");
 
-		let searchMethods = ['getType', 'getMove', 'getTemplate'];
+		let searchMethods = ['getType', 'getMove', 'getSpecies'];
 		let sourceMethods = ['getType', 'getMove'];
-		let targetMethods = ['getType', 'getTemplate'];
+		let targetMethods = ['getType', 'getSpecies'];
 		let source, defender, foundData, atkName, defName;
 
 		for (let i = 0; i < 2; ++i) {
@@ -1272,7 +1272,7 @@ const commands = {
 			}
 
 			if (!pokemon) {
-				let testPoke = Dex.getTemplate(arg);
+				let testPoke = Dex.getSpecies(arg);
 				if (testPoke.exists) {
 					pokemon = testPoke.baseStats;
 					baseSet = true;
@@ -1961,7 +1961,7 @@ const commands = {
 		if (!this.runBroadcast()) return;
 
 		let targets = target.split(',');
-		let pokemon = Dex.getTemplate(targets[0]);
+		let pokemon = Dex.getSpecies(targets[0]);
 		let item = Dex.getItem(targets[0]);
 		let move = Dex.getMove(targets[0]);
 		let ability = Dex.getAbility(targets[0]);
@@ -2006,7 +2006,7 @@ const commands = {
 			}
 
 			if ((pokemon.battleOnly && pokemon.baseSpecies !== 'Greninja') || ['Keldeo', 'Genesect'].includes(pokemon.baseSpecies)) {
-				pokemon = Dex.getTemplate(pokemon.inheritsFrom || pokemon.baseSpecies);
+				pokemon = Dex.getSpecies(pokemon.inheritsFrom || pokemon.baseSpecies);
 			}
 
 			let formatName = extraFormat.name;
@@ -2126,7 +2126,7 @@ const commands = {
 
 		let baseLink = 'http://veekun.com/dex/';
 
-		let pokemon = Dex.getTemplate(target);
+		let pokemon = Dex.getSpecies(target);
 		let item = Dex.getItem(target);
 		let move = Dex.getMove(target);
 		let ability = Dex.getAbility(target);
@@ -2144,8 +2144,8 @@ const commands = {
 			// Showdown and Veekun have different names for various formes
 			if (baseSpecies === 'Meowstic' && forme === 'F') forme = 'Female';
 			if (baseSpecies === 'Zygarde' && forme === '10%') forme = '10';
-			if (baseSpecies === 'Necrozma' && !Dex.getTemplate(baseSpecies + forme).battleOnly) forme = forme.substr(0, 4);
-			if (baseSpecies === 'Pikachu' && Dex.getTemplate(baseSpecies + forme).gen === 7) forme += '-Cap';
+			if (baseSpecies === 'Necrozma' && !Dex.getSpecies(baseSpecies + forme).battleOnly) forme = forme.substr(0, 4);
+			if (baseSpecies === 'Pikachu' && Dex.getSpecies(baseSpecies + forme).gen === 7) forme += '-Cap';
 			if (forme.endsWith('Totem')) {
 				if (baseSpecies === 'Raticate') forme = 'Totem-Alola';
 				if (baseSpecies === 'Marowak') forme = 'Totem';

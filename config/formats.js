@@ -612,28 +612,11 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-<<<<<<< HEAD
 		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause', 'Scalemons Mod'],
 		banlist: [
 			'Crawdaunt', 'Darmanitan', 'Darmanitan-Galar', 'Darumaka', 'Darumaka-Galar', 'Gastly',
 			'Arena Trap', 'Drizzle', 'Drought', 'Huge Power', 'Moody', 'Shadow Tag', 'Baton Pass', 'Rain Dance', 'Sunny Day', 'Eviolite', 'Light Ball',
 		],
-=======
-		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause'],
-		banlist: ['Darmanitan-Galar', 'Gastly', 'Arena Trap', 'Drizzle', 'Drought', 'Huge Power', 'Moody', 'Shadow Tag', 'Baton Pass', 'Rain Dance', 'Sunny Day', 'Eviolite', 'Light Ball'],
-		onModifySpecies(species, target, source) {
-			const newSpecies = this.dex.deepClone(species);
-			newSpecies.baseStats = this.dex.deepClone(newSpecies.baseStats);
-			/** @type {StatName[]} */
-			let stats = ['atk', 'def', 'spa', 'spd', 'spe'];
-			let pst = stats.map(stat => newSpecies.baseStats[stat]).reduce((x, y) => x + y);
-			let scale = 600 - newSpecies.baseStats['hp'];
-			for (const stat of stats) {
-				newSpecies.baseStats[stat] = this.dex.clampIntRange(newSpecies.baseStats[stat] * scale / pst, 1, 255);
-			}
-			return newSpecies;
-		},
->>>>>>> Rename some things (ik build will fail)
 	},
 
 	// Other Metagames

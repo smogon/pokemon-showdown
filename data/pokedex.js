@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: TemplateData}} */
+/**@type {{[k: string]: SpeciesData}} */
 let BattlePokedex = {
 	bulbasaur: {
 		num: 1,
