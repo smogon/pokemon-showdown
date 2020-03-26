@@ -2,6 +2,36 @@
 
 /**@type {{[k: string]: ModdedLearnsetData}} */
 let BattleLearnsets = {
+	missingno: {
+		learnset: {
+			blizzard: ["1M"],
+			bubblebeam: ["1M"],
+			cut: ["1M"],
+			doubleedge: ["1M"],
+			earthquake: ["1M"],
+			fissure: ["1M"],
+			fly: ["1M"],
+			icebeam: ["1M"],
+			megakick: ["1M"],
+			megapunch: ["1M"],
+			psychic: ["1M"],
+			rage: ["1M"],
+			razorwind: ["1M"],
+			rest: ["1M"],
+			seismictoss: ["1M"],
+			skyattack: ["1L1"],
+			submission: ["1M"],
+			substitute: ["1M"],
+			swordsdance: ["1M"],
+			takedown: ["1M"],
+			teleport: ["1M"],
+			thunder: ["1M"],
+			thunderwave: ["1M"],
+			toxic: ["1M"],
+			triattack: ["1M"],
+			watergun: ["1L1", "1M"],
+		},
+	},
 	bulbasaur: {
 		learnset: {
 			ancientpower: ["2S0"],
