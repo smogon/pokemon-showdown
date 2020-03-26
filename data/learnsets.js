@@ -21,6 +21,7 @@ let BattleLearnsets = {
 			seismictoss: ["5L1"],
 			skyattack: ["5L1"],
 			submission: ["5L1"],
+			substitute: ["5L1"],
 			swordsdance: ["5L1"],
 			takedown: ["5L1"],
 			teleport: ["5L1"],
