@@ -12,8 +12,6 @@
  * @license MIT
  */
 
-'use strict';
-
 export class LadderStore {
 	formatid: string;
 	static readonly formatsListPrefix = '';
@@ -27,6 +25,8 @@ export class LadderStore {
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
 	 */
+	// This requires to be `async` because it must conform with the `LadderStore` interface
+	// eslint-disable-next-line @typescript-eslint/require-await
 	async getTop(prefix?: string): Promise<[string, string] | null> {
 		return null;
 	}
@@ -37,7 +37,7 @@ export class LadderStore {
 	async getRating(userid: string) {
 		const formatid = this.formatid;
 		const user = Users.getExact(userid);
-		if (user && user.mmrCache[formatid]) {
+		if (user?.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
 		const [data] = await LoginServer.request('mmr', {
@@ -86,17 +86,14 @@ export class LadderStore {
 				room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
 			}
 			problem = true;
-		}
-		if (!room.battle) {
+		} else if (!room.battle) {
 			Monitor.warn(`room expired before ladder update was received`);
 			problem = true;
-		}
-		if (!data) {
+		} else if (!data) {
 			room.add(`|error|Unexpected response ${data} from ladder server.`);
 			room.update();
 			problem = true;
-		}
-		if (data && data.errorip) {
+		} else if (data.errorip) {
 			room.add(`|error|This server's request IP ${data.errorip} is not a registered server.`);
 			room.add(`|error|You should be using ladders.js and not ladders-remote.js for ladder tracking.`);
 			room.update();
@@ -140,13 +137,14 @@ export class LadderStore {
 			room.addRaw(`There was an error calculating rating changes.`);
 			room.update();
 		}
-
 		return [p1score, p1rating, p2rating];
 	}
 
 	/**
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
 	 */
+	// This requires to be `async` because it must conform with the `LadderStore` interface
+	// eslint-disable-next-line @typescript-eslint/require-await
 	static async visualizeAll(username: string) {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}

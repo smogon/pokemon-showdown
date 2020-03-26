@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: ModdedTemplateData}} */
+/**@type {{[k: string]: ModdedSpeciesData}} */
 let BattlePokedex = {
 	charizardmegax: {
 		inherit: true,
@@ -163,6 +163,74 @@ let BattlePokedex = {
 	arceus: {
 		inherit: true,
 		color: "Gray",
+	},
+	arceusbug: {
+		inherit: true,
+		requiredItem: "Insect Plate",
+	},
+	arceusdark: {
+		inherit: true,
+		requiredItem: "Dread Plate",
+	},
+	arceusdragon: {
+		inherit: true,
+		requiredItem: "Draco Plate",
+	},
+	arceuselectric: {
+		inherit: true,
+		requiredItem: "Zap Plate",
+	},
+	arceusfairy: {
+		inherit: true,
+		requiredItem: "Pixie Plate",
+	},
+	arceusfighting: {
+		inherit: true,
+		requiredItem: "Fist Plate",
+	},
+	arceusfire: {
+		inherit: true,
+		requiredItem: "Flame Plate",
+	},
+	arceusflying: {
+		inherit: true,
+		requiredItem: "Sky Plate",
+	},
+	arceusghost: {
+		inherit: true,
+		requiredItem: "Spooky Plate",
+	},
+	arceusgrass: {
+		inherit: true,
+		requiredItem: "Meadow Plate",
+	},
+	arceusground: {
+		inherit: true,
+		requiredItem: "Earth Plate",
+	},
+	arceusice: {
+		inherit: true,
+		requiredItem: "Icicle Plate",
+	},
+	arceuspoison: {
+		inherit: true,
+		requiredItem: "Toxic Plate",
+	},
+	arceuspsychic: {
+		inherit: true,
+		requiredItem: "Mind Plate",
+	},
+	arceusrock: {
+		inherit: true,
+		requiredItem: "Stone Plate",
+	},
+	arceussteel: {
+		inherit: true,
+		requiredItem: "Iron Plate",
+	},
+	arceuswater: {
+		inherit: true,
+		requiredItem: "Splash Plate",
 	},
 	roggenrola: {
 		inherit: true,

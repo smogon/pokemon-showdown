@@ -152,6 +152,7 @@ Owner
 
 Staff
 
+- Andrew Werner [HoeenHero] - Development
 - Astrid Halberkamp [Asheviere, bumbadadabum] - Development
 - Chris Monsanto [chaos] - Sysadmin
 - Kirk Scheibelhut [pre] - Development, Sysadmin
@@ -168,7 +169,6 @@ Retired Staff
 
 Major Contributors
 
-- Andrew Werner [HoeenHero] - Development
 - Austin Couturier [Austin] - Development (damage calculator)
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development

@@ -35,6 +35,7 @@ export class ExhaustiveRunner {
 
 	// TODO: Add triple battles once supported by the AI.
 	static readonly FORMATS = [
+		'gen8customgame', 'gen8doublescustomgame',
 		'gen7customgame', 'gen7doublescustomgame',
 		'gen6customgame', 'gen6doublescustomgame',
 		'gen5customgame', 'gen5doublescustomgame',
@@ -97,7 +98,9 @@ export class ExhaustiveRunner {
 				this.failures++;
 				console.error(
 					`\n\nRun \`node tools/simulate exhaustive --cycles=${this.cycles} ` +
-					`--format=${this.format} --seed=${seed.join()}\`:\n`, err);
+						`--format=${this.format} --seed=${seed.join()}\`:\n`,
+					err
+				);
 			}
 		} while ((!this.maxGames || this.games < this.maxGames) &&
 					(!this.maxFailures || this.failures < this.maxFailures) &&
@@ -108,8 +111,8 @@ export class ExhaustiveRunner {
 
 	private createPools(dex: typeof Dex): Pools {
 		return {
-			pokemon: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Pokedex, p => dex.getTemplate(p),
-				(_, p) => (p.species !== 'Pichu-Spiky-eared' && p.species.substr(0, 8) !== 'Pikachu-')), this.prng),
+			pokemon: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Pokedex, p => dex.getSpecies(p),
+				(_, p) => (p.name !== 'Pichu-Spiky-eared' && p.name.substr(0, 8) !== 'Pikachu-')), this.prng),
 			items: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Items, i => dex.getItem(i)), this.prng),
 			abilities: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Abilities, a => dex.getAbility(a)), this.prng),
 			moves: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Movedex, m => dex.getMove(m),
@@ -123,7 +126,8 @@ export class ExhaustiveRunner {
 		if (this.games) process.stdout.write('\r\x1b[K');
 		// Deliberately don't print a `\n` character so that we can overwrite
 		process.stdout.write(
-			`[${this.format}] P:${p.pokemon} I:${p.items} A:${p.abilities} M:${p.moves} = ${this.games}`);
+			`[${this.format}] P:${p.pokemon} I:${p.items} A:${p.abilities} M:${p.moves} = ${this.games}`
+		);
 	}
 
 	private static getSignatures(dex: typeof Dex, pools: Pools): Map<string, {item: string, move?: string}[]> {
@@ -208,13 +212,13 @@ class TeamGenerator {
 	generate() {
 		const team: PokemonSet[] = [];
 		for (const pokemon of this.pools.pokemon.next(6)) {
-			const template = this.dex.getTemplate(pokemon);
+			const species = this.dex.getSpecies(pokemon);
 			const randomEVs = () => this.prng.next(253);
 			const randomIVs = () => this.prng.next(32);
 
 			let item;
 			const moves = [];
-			const combos = this.signatures.get(template.id);
+			const combos = this.signatures.get(species.id);
 			if (combos && this.prng.next() > TeamGenerator.COMBO) {
 				const combo = this.prng.sample(combos);
 				item = combo.item;
@@ -224,9 +228,9 @@ class TeamGenerator {
 			}
 
 			team.push({
-				name: template.baseSpecies,
-				species: template.species,
-				gender: template.gender,
+				name: species.baseSpecies,
+				species: species.name,
+				gender: species.gender,
 				item,
 				ability: this.dex.gen >= 3 ? this.pools.abilities.next() : 'None',
 				moves: moves.concat(...this.pools.moves.next(4 - moves.length)),
@@ -354,7 +358,7 @@ class Pool {
 		if (!this.unused.size) this.reset();
 
 		if (this.iter) {
-			if (!this.iter!.done) {
+			if (!this.iter.done) {
 				const next = this.iter.next();
 				this.iter.done = next.done;
 				if (!next.done) return next.value;
@@ -364,7 +368,7 @@ class Pool {
 
 		this.iter = this.unused.values();
 		const next = this.iter.next();
-		this.iter!.done = next.done;
+		this.iter.done = next.done;
 		// this.iter.next() must have a value (!this.iter.done) because this.unused.size > 0
 		// after this.reset(), and the only places that mutate this.unused clear this.iter.
 		return next.value;
@@ -406,7 +410,8 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		return `team ${this.choosePokemon(team.map((p, i) => ({slot: i + 1, pokemon: p}))) || 1}`;
 	}
 
-	protected chooseMove(moves: {choice: string, move: AnyObject}[]): string {
+	protected chooseMove(active: AnyObject, moves: {choice: string, move: AnyObject}[]): string {
+		this.markUsedIfGmax(active);
 		// Prefer to use a move which hasn't been used yet.
 		for (const {choice, move} of moves) {
 			const id = this.fixMove(move);
@@ -415,11 +420,12 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 				return choice;
 			}
 		}
-		return super.chooseMove(moves);
+		return super.chooseMove(active, moves);
 	}
 
-	protected chooseSwitch(switches: {slot: number, pokemon: AnyObject}[]): number {
-		return this.choosePokemon(switches) || super.chooseSwitch(switches);
+	protected chooseSwitch(active: AnyObject | undefined, switches: {slot: number, pokemon: AnyObject}[]): number {
+		this.markUsedIfGmax(active);
+		return this.choosePokemon(switches) || super.chooseSwitch(active, switches);
 	}
 
 	private choosePokemon(choices: {slot: number, pokemon: AnyObject}[]) {
@@ -439,12 +445,20 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 	}
 
 	// The move options provided by the simulator have been converted from the name
-	// which we're tracking, so we need to convert them back;
+	// which we're tracking, so we need to convert them back.
 	private fixMove(m: AnyObject) {
 		const id = toID(m.move);
 		if (id.startsWith('return')) return 'return';
 		if (id.startsWith('frustration')) return 'frustration';
 		if (id.startsWith('hiddenpower')) return 'hiddenpower';
 		return id;
+	}
+
+	// Gigantamax Pokemon need to be special cased for tracking because the current
+	// tracking only works if you can switch in a Pokemon.
+	private markUsedIfGmax(active: AnyObject | undefined) {
+		if (active && !active.canDynamax && active.maxMoves && active.maxMoves.gigantamax) {
+			this.pools.pokemon.markUsed(toID(active.maxMoves.gigantamax));
+		}
 	}
 }

@@ -24,7 +24,7 @@ describe('Disguise', function () {
 	});
 
 	it('should block a hit from confusion', function () {
-		battle = common.createBattle();
+		battle = common.gen(7).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: 'Sableye', ability: 'prankster', moves: ['confuseray']}]});
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());

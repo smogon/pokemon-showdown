@@ -25,7 +25,7 @@ describe('Roost', function () {
 		battle.setPlayer('p2', {team: [{species: "Dragonite", ability: 'multiscale', moves: ['roost', 'dragondance']}]});
 		battle.makeChoices('move hiddenpowergrass', 'move dragondance');
 		battle.makeChoices('move calmmind', 'move roost');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should suppress user\'s current Flying type if succesful', function () {
@@ -34,7 +34,7 @@ describe('Roost', function () {
 		battle.setPlayer('p2', {team: [{species: "Aerodactyl", item: 'focussash', ability: 'wonderguard', moves: ['roost', 'doubleedge']}]});
 
 		battle.makeChoices('move mudslap', 'move roost');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Immune to Mud Slap
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Immune to Mud Slap
 
 		// Ensure that Aerodactyl has some damage
 		battle.makeChoices('move mudslap', 'move doubleedge');
@@ -67,7 +67,7 @@ describe('Roost', function () {
 		};
 
 		battle.makeChoices('move aircutter, move earthquake', 'move roost, move earthquake');
-		assert.strictEqual(hitCount, 3);
+		assert.equal(hitCount, 3);
 	});
 
 	it('should treat a pure Flying pokémon as Normal type', function () {
@@ -76,7 +76,7 @@ describe('Roost', function () {
 		battle.setPlayer('p2', {team: [{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish']}]});
 		battle.makeChoices('move roost', 'move astonish');
 		battle.makeChoices('move roost', 'move astonish');
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Immune to Astonish
+		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Immune to Astonish
 	});
 });
 

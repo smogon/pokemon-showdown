@@ -73,13 +73,13 @@ let BattleMovedex = {
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
-				if (pokemon.template.weighthg > 1) {
+				if (pokemon.species.weighthg > 1) {
 					this.effectData.multiplier = 1;
 					this.add('-start', pokemon, 'Autotomize');
 				}
 			},
 			onRestart(pokemon) {
-				if (pokemon.template.weighthg - (this.effectData.multiplier * 1000) > 1) {
+				if (pokemon.species.weighthg - (this.effectData.multiplier * 1000) > 1) {
 					this.effectData.multiplier++;
 					this.add('-start', pokemon, 'Autotomize');
 				}
@@ -151,7 +151,7 @@ let BattleMovedex = {
 		desc: "Has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording.",
 		shortDesc: "For Chatot, 10% chance to confuse the target.",
 		onModifyMove(move, pokemon) {
-			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
+			if (pokemon.species.name !== 'Chatot') delete move.secondaries;
 		},
 		secondary: {
 			chance: 10,
@@ -253,6 +253,12 @@ let BattleMovedex = {
 	},
 	electroball: {
 		inherit: true,
+		basePowerCallback(pokemon, target) {
+			const ratio = Math.floor(pokemon.getStat('spe') / Math.max(1, target.getStat('spe')));
+			const bp = [40, 60, 80, 120, 150][Math.min(ratio, 4)];
+			this.debug(`${bp} bp`);
+			return bp;
+		},
 		desc: "The power of this move depends on (user's current Speed / target's current Speed), rounded down. Power is equal to 150 if the result is 4 or more, 120 if 3, 80 if 2, 60 if 1, 40 if less than 1. If the target's current Speed is 0, it is treated as 1 instead.",
 	},
 	endure: {
@@ -395,6 +401,7 @@ let BattleMovedex = {
 	},
 	growth: {
 		inherit: true,
+		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day, this move raises the user's Attack and Special Attack by 2 stages.",
 		pp: 40,
 	},
 	gunkshot: {
@@ -403,6 +410,12 @@ let BattleMovedex = {
 	},
 	gyroball: {
 		inherit: true,
+		basePowerCallback(pokemon, target) {
+			let power = Math.floor(25 * target.getStat('spe') / Math.max(1, pokemon.getStat('spe'))) + 1;
+			if (power > 150) power = 150;
+			this.debug(`${power} bp`);
+			return power;
+		},
 		desc: "Power is equal to (25 * target's current Speed / user's current Speed) + 1, rounded down, but not more than 150. If the user's current Speed is 0, it is treated as 1 instead.",
 	},
 	healbell: {
@@ -602,7 +615,7 @@ let BattleMovedex = {
 	},
 	magicroom: {
 		inherit: true,
-		priority: 0,
+		priority: -7,
 	},
 	magmastorm: {
 		inherit: true,
@@ -766,7 +779,7 @@ let BattleMovedex = {
 		desc: "The user and its party members are protected from attacks with original priority greater than 0 made by other Pokemon, including allies, during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		stallingMove: true,
 		onTryHitSide(side, source) {
-			return this.willAct() && this.runEvent('StallMove', source);
+			return this.queue.willAct() && this.runEvent('StallMove', source);
 		},
 		onHitSide(side, source) {
 			source.addVolatile('stall');
@@ -1064,6 +1077,7 @@ let BattleMovedex = {
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
 				}
+				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				return 0; // hit
 			},
@@ -1229,7 +1243,7 @@ let BattleMovedex = {
 		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		stallingMove: true,
 		onTryHitSide(side, source) {
-			return this.willAct() && this.runEvent('StallMove', source);
+			return this.queue.willAct() && this.runEvent('StallMove', source);
 		},
 		onHitSide(side, source) {
 			source.addVolatile('stall');

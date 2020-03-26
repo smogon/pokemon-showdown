@@ -34,7 +34,7 @@ let BattleItems = {
 	"zoomlens": {
 		inherit: true,
 		onSourceModifyAccuracy(accuracy, target) {
-			if (typeof accuracy === 'number' && !this.willMove(target)) {
+			if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
 				this.debug('Zoom Lens boosting accuracy');
 				return accuracy * 1.6;
 			}
@@ -52,7 +52,7 @@ let BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
 			if (pokemon.hasType('Grass')) {
-				this.heal(pokemon.maxhp / 16);
+				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
 		desc: "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap; If the user is a Grass type, the holder heals 1/16 of its max HP every turn, and for every damaging move the holder uses 1/8th of the damage dealt is restored.",
@@ -64,9 +64,9 @@ let BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
 			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.maxhp / (pokemon.getTypes().length === 1 ? 8 : 16));
+				this.heal(pokemon.baseMaxhp / (pokemon.getTypes().length === 1 ? 8 : 16));
 			} else {
-				this.damage(pokemon.maxhp / 8);
+				this.damage(pokemon.baseMaxhp / 8);
 			}
 		},
 		desc: "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not. Pure Poison types restore 1/8 max HP.",
@@ -121,36 +121,36 @@ let BattleItems = {
 		// The Stick is a stand-in for a number of pokemon-exclusive items
 		// introduced with Gen Next
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Farfetch\'d') {
+			if (user.species.name === 'Farfetch\'d') {
 				return critRatio + 2;
 			}
 		},
 		onModifyDef(def, pokemon) {
-			if (pokemon.template.species === 'Shuckle') {
+			if (pokemon.species.name === 'Shuckle') {
 				return def * 1.5;
 			}
 		},
 		onModifySpA(spa, pokemon) {
-			if (pokemon.template.species === 'Unown') {
+			if (pokemon.species.name === 'Unown') {
 				return spa * 2;
 			}
 		},
 		onModifySpD(spd, pokemon) {
-			if (pokemon.template.species === 'Unown') {
+			if (pokemon.species.name === 'Unown') {
 				return spd * 2;
 			}
-			if (pokemon.template.species === 'Shuckle') {
+			if (pokemon.species.name === 'Shuckle') {
 				return spd * 1.5;
 			}
 		},
 		onModifySpe(spe, pokemon) {
-			if (pokemon.template.species === 'Unown') {
+			if (pokemon.species.name === 'Unown') {
 				return spe * 2;
 			}
 		},
 		onFoeBasePower(basePower, attacker, defender, move) {
 			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
-			if (GossamerWingUsers.includes(defender.template.species)) {
+			if (GossamerWingUsers.includes(defender.species.name)) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
 					this.add('-message', "The attack was weakened by GoassamerWing!");
 					return basePower / 2;
@@ -159,7 +159,7 @@ let BattleItems = {
 		},
 		onDamage(damage, defender, attacker, effect) {
 			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
-			if (GossamerWingUsers.includes(defender.template.species)) {
+			if (GossamerWingUsers.includes(defender.species.name)) {
 				if (effect && effect.id === 'stealthrock') {
 					return damage / 2;
 				}
@@ -167,12 +167,12 @@ let BattleItems = {
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
-			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers.includes(source.template.species)) {
-				this.heal(source.maxhp / 16);
+			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers.includes(source.species.name)) {
+				this.heal(source.baseMaxhp / 16);
 			}
 		},
 		// onResidual(pokemon) {
-		// 	if (pokemon.template.species === 'Shuckle') {
+		// 	if (pokemon.species.name === 'Shuckle') {
 		// 		this.heal(this.dex.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}
 		// },

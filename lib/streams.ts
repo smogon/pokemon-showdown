@@ -148,7 +148,7 @@ export class ReadStream {
 
 	readError() {
 		if (this.errorBuf) {
-			const err = this.errorBuf.shift();
+			const err = this.errorBuf.shift()!;
 			if (!this.errorBuf.length) this.errorBuf = null;
 			throw err;
 		}
@@ -172,11 +172,11 @@ export class ReadStream {
 		});
 	}
 
-	_read(size: number = 0): void | Promise<void> {
+	_read(size = 0): void | Promise<void> {
 		throw new Error(`ReadStream needs to be subclassed and the _read function needs to be implemented.`);
 	}
 
-	_destroy() {}
+	_destroy(): void | Promise<void> {}
 	_pause() {}
 
 	/**
@@ -205,8 +205,8 @@ export class ReadStream {
 
 	async doLoad(chunkSize?: number | null, readError?: boolean) {
 		while (!this.errorBuf && !this.atEOF && this.bufSize < this.readSize) {
-			if (chunkSize) this._read(chunkSize);
-			else this._read();
+			if (chunkSize) void this._read(chunkSize);
+			else void this._read();
 			await this.nextPush;
 			this[readError ? 'readError' : 'peekError']();
 		}
@@ -301,11 +301,11 @@ export class ReadStream {
 	async readLine(encoding: BufferEncoding = this.encoding) {
 		if (!encoding) throw new Error(`readLine must have an encoding`);
 		let line = await this.readDelimitedBy('\n', encoding);
-		if (line && line.endsWith('\r')) line = line.slice(0, -1);
+		if (line?.endsWith('\r')) line = line.slice(0, -1);
 		return line;
 	}
 
-	async destroy() {
+	destroy() {
 		this.atEOF = true;
 		this.bufStart = 0;
 		this.bufEnd = 0;
@@ -319,12 +319,10 @@ export class ReadStream {
 	}
 
 	async pipeTo(outStream: WriteStream, options: {noEnd?: boolean} = {}) {
-		/* tslint:disable */
 		let value, done;
 		while (({value, done} = await this.next(), !done)) {
 			await outStream.write(value);
 		}
-		/* tslint:enable */
 		if (!options.noEnd) return outStream.end();
 	}
 }
@@ -534,7 +532,7 @@ export class ObjectReadStream<T> {
 
 	readError() {
 		if (this.errorBuf) {
-			const err = this.errorBuf.shift();
+			const err = this.errorBuf.shift()!;
 			if (!this.errorBuf.length) this.errorBuf = null;
 			throw err;
 		}
@@ -558,7 +556,7 @@ export class ObjectReadStream<T> {
 		});
 	}
 
-	_read(size: number = 0): void | Promise<void> {
+	_read(size = 0): void | Promise<void> {
 		throw new Error(`ReadStream needs to be subclassed and the _read function needs to be implemented.`);
 	}
 
@@ -572,7 +570,7 @@ export class ObjectReadStream<T> {
 		this.readSize = Math.max(count, this.readSize);
 		while (!this.errorBuf && !this.atEOF && this.buf.length < this.readSize) {
 			const readResult = this._read();
-			if (readResult && readResult.then) {
+			if (readResult) {
 				await readResult;
 			} else {
 				await this.nextPush;
@@ -618,7 +616,7 @@ export class ObjectReadStream<T> {
 		return this.buf.slice();
 	}
 
-	async destroy() {
+	destroy() {
 		this.atEOF = true;
 		this.buf = [];
 		this.resolvePush();

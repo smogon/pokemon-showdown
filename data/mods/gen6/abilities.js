@@ -13,9 +13,9 @@ let BattleAbilities = {
 	},
 	"aftermath": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
-				this.damage(source.maxhp / 4, source, target, null, true);
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact'] && !target.hp) {
+				this.damage(source.baseMaxhp / 4, source, target, null, true);
 			}
 		},
 	},
@@ -47,9 +47,9 @@ let BattleAbilities = {
 	},
 	"ironbarbs": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 8, source, target, null, true);
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
+				this.damage(source.baseMaxhp / 8, source, target, null, true);
 			}
 		},
 	},
@@ -63,6 +63,12 @@ let BattleAbilities = {
 				this.damage(damage, null, null, null, true);
 				return 0;
 			}
+		},
+	},
+	"magicguard": {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') return false;
 		},
 	},
 	"multitype": {
@@ -118,9 +124,9 @@ let BattleAbilities = {
 	},
 	"roughskin": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 8, source, target, null, true);
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
+				this.damage(source.baseMaxhp / 8, source, target, null, true);
 			}
 		},
 	},
@@ -136,7 +142,7 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 1 stage.",
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",
-		onAfterDamage(damage, target, source, move) {
+		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical') {
 				this.boost({def: -1, spe: 1}, target, target);
 			}

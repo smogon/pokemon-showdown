@@ -64,8 +64,8 @@ describe('Unburden', function () {
 		battle.setPlayer('p2', {team: [{species: 'Togekiss', ability: 'serenegrace', item: 'laggingtail', moves: ['bestow', 'followme']}]});
 		const originalSpeed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move machpunch', 'move followme');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), 2 * originalSpeed);
+		assert.equal(battle.p1.active[0].getStat('spe'), 2 * originalSpeed);
 		battle.makeChoices('move machpunch', 'move bestow');
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), originalSpeed);
+		assert.equal(battle.p1.active[0].getStat('spe'), originalSpeed);
 	});
 });

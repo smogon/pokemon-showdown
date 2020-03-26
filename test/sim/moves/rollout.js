@@ -25,7 +25,7 @@ for (const move of moves) {
 			let count = 0;
 			battle.onEvent('BasePower', battle.format, function (basePower) {
 				count++;
-				assert.strictEqual(basePower, ebp);
+				assert.equal(basePower, ebp);
 				if (count % 5 === 0) {
 					ebp = 30;
 				} else {
@@ -36,7 +36,7 @@ for (const move of moves) {
 			for (let i = 0; i < 8; i++) {
 				battle.makeChoices('move ' + id, 'move recover');
 			}
-			assert.strictEqual(count, 8);
+			assert.equal(count, 8);
 		});
 
 		it('should reset its Base Power if the move misses', function () {
@@ -59,14 +59,14 @@ for (const move of moves) {
 				}
 			});
 			battle.onEvent('BasePower', battle.format, function (basePower) {
-				assert.strictEqual(basePower, ebp);
+				assert.equal(basePower, ebp);
 				ebp *= 2;
 			});
 
 			for (let i = 0; i < 5; i++) {
 				battle.makeChoices('move ' + id, 'move recover');
 			}
-			assert.strictEqual(count, 5);
+			assert.equal(count, 5);
 		});
 
 		it('should reset its Base Power if the Pokemon is immobilized', function () {
@@ -87,14 +87,14 @@ for (const move of moves) {
 				}
 			});
 			battle.onEvent('BasePower', battle.format, function (basePower) {
-				assert.strictEqual(basePower, ebp);
+				assert.equal(basePower, ebp);
 				ebp *= 2;
 			});
 
 			for (let i = 0; i < 5; i++) {
 				battle.makeChoices('move ' + id, 'move recover');
 			}
-			assert.strictEqual(count, 5);
+			assert.equal(count, 5);
 		});
 
 		it('should have double Base Power if the Pokemon used Defense Curl earlier', function () {
@@ -105,13 +105,13 @@ for (const move of moves) {
 
 			let runCount = 0;
 			battle.onEvent('BasePower', battle.format, function (basePower) {
-				assert.strictEqual(basePower, 60);
+				assert.equal(basePower, 60);
 				runCount++;
 			});
 
 			battle.makeChoices('move defensecurl', 'move recover');
 			battle.makeChoices('move ' + id, 'move recover');
-			assert.strictEqual(runCount, 1);
+			assert.equal(runCount, 1);
 		});
 
 		it('should not be affected by Parental Bond', function () {
@@ -122,12 +122,12 @@ for (const move of moves) {
 
 			let hitCount = 0;
 			battle.onEvent('BasePower', battle.format, function (basePower) {
-				assert.strictEqual(basePower, 30);
+				assert.equal(basePower, 30);
 				hitCount++;
 			});
 
 			battle.makeChoices('move ' + id, 'move recover');
-			assert.strictEqual(hitCount, 1);
+			assert.equal(hitCount, 1);
 		});
 	});
 }

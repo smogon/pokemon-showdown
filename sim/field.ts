@@ -51,7 +51,7 @@ export class Field {
 			const result = this.battle.runEvent('SetWeather', source, source, status);
 			if (!result) {
 				if (result === false) {
-					if (sourceEffect && sourceEffect.weather) {
+					if (sourceEffect?.weather) {
 						this.battle.add('-fail', source, sourceEffect, '[from] ' + this.weather);
 					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
 						this.battle.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
@@ -193,7 +193,7 @@ export class Field {
 		effectData = this.pseudoWeather[status.id] = {
 			id: status.id,
 			source,
-			sourcePosition: source && source.position,
+			sourcePosition: source?.position,
 			duration: status.duration,
 		};
 		if (status.durationCallback) {

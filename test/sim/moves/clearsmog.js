@@ -17,8 +17,8 @@ describe('Clear Smog', function () {
 
 		battle.makeChoices('move clearsmog', 'move calmmind');
 
-		assert.strictEqual(battle.p2.pokemon[0].boosts['spa'], 0);
-		assert.strictEqual(battle.p2.pokemon[0].boosts['spd'], 0);
+		assert.equal(battle.p2.pokemon[0].boosts['spa'], 0);
+		assert.equal(battle.p2.pokemon[0].boosts['spd'], 0);
 	});
 
 	it('should not remove stat boosts from a target behind a substitute', function () {
@@ -29,8 +29,8 @@ describe('Clear Smog', function () {
 		battle.makeChoices('move toxic', 'move substitute');
 		battle.makeChoices('move clearsmog', 'move calmmind');
 
-		assert.strictEqual(battle.p2.pokemon[0].boosts['spa'], 1);
-		assert.strictEqual(battle.p2.pokemon[0].boosts['spd'], 1);
+		assert.equal(battle.p2.pokemon[0].boosts['spa'], 1);
+		assert.equal(battle.p2.pokemon[0].boosts['spd'], 1);
 	});
 
 	it('should not remove stat boosts if the target is immune to its attack type', function () {
@@ -40,7 +40,7 @@ describe('Clear Smog', function () {
 
 		battle.makeChoices('move clearsmog', 'move irondefense');
 
-		assert.strictEqual(battle.p2.pokemon[0].boosts['def'], 2);
+		assert.equal(battle.p2.pokemon[0].boosts['def'], 2);
 	});
 
 	it('should not remove stat boosts from the user', function () {
@@ -50,7 +50,7 @@ describe('Clear Smog', function () {
 
 		battle.makeChoices('move clearsmog', 'move morningsun');
 
-		assert.strictEqual(battle.p1.pokemon[0].boosts['atk'], -1);
+		assert.equal(battle.p1.pokemon[0].boosts['atk'], -1);
 	});
 
 	it('should trigger before Anger Point activates during critical hits', function () {
@@ -59,11 +59,11 @@ describe('Clear Smog', function () {
 		battle.setPlayer('p2', {team: [{species: "Primeape", ability: 'angerpoint', moves: ['bulkup']}]});
 
 		battle.makeChoices('move focusenergy', 'move bulkup');
-		assert.strictEqual(battle.p2.pokemon[0].boosts['atk'], 1);
-		assert.strictEqual(battle.p2.pokemon[0].boosts['def'], 1);
+		assert.equal(battle.p2.pokemon[0].boosts['atk'], 1);
+		assert.equal(battle.p2.pokemon[0].boosts['def'], 1);
 
 		battle.makeChoices('move clearsmog', 'move bulkup');
-		assert.strictEqual(battle.p2.pokemon[0].boosts['atk'], 6);
-		assert.strictEqual(battle.p2.pokemon[0].boosts['def'], 0);
+		assert.equal(battle.p2.pokemon[0].boosts['atk'], 6);
+		assert.equal(battle.p2.pokemon[0].boosts['def'], 0);
 	});
 });

@@ -121,10 +121,10 @@ let BattleAbilities = {
 		desc: "This Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail. There is a 30% chance a Pokemon making contact with this Pokemon will be frozen.",
 		shortDesc: "This Pokemon heals 1/16 of its max HP each turn; immunity to Hail; 30% chance a Pokemon making contact with this Pokemon will be frozen.",
 		onResidual(target, source, effect) {
-			this.heal(target.maxhp / 16);
+			this.heal(target.baseMaxhp / 16);
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact'] && this.field.isWeather('hail')) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact'] && this.field.isWeather('hail')) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('frz', target);
 				}
@@ -141,8 +141,8 @@ let BattleAbilities = {
 	},
 	"static": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				source.trySetStatus('par', target);
 			}
 		},
@@ -150,8 +150,8 @@ let BattleAbilities = {
 	},
 	"cutecharm": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				source.addVolatile('Attract', target);
 			}
 		},
@@ -160,8 +160,8 @@ let BattleAbilities = {
 	},
 	"poisonpoint": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				source.trySetStatus('psn', target);
 			}
 		},
@@ -185,12 +185,12 @@ let BattleAbilities = {
 		},
 		onUpdate(pokemon) {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
-				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
+				if (pokemon.isActive && pokemon.id === 'cherrim' && this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine', '[msg]');
 					this.boost({spd: 1});
 				}
-			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
+			} else if (pokemon.isActive && pokemon.id === 'cherrim' && this.effectData.forme) {
 				delete this.effectData.forme;
 				this.add('-formechange', pokemon, 'Cherrim', '[msg]');
 			}
@@ -332,7 +332,7 @@ let BattleAbilities = {
 	"download": {
 		inherit: true,
 		onStart(pokemon) {
-			if (pokemon.template.baseSpecies === 'Genesect') {
+			if (pokemon.species.baseSpecies === 'Genesect') {
 				if (!pokemon.getItem().onDrive) return;
 			}
 			let totaldef = 0;
@@ -416,7 +416,7 @@ let BattleAbilities = {
 				return damage;
 			}
 		},
-		onAfterDamage() {},
+		onDamagingHit() {},
 		desc: "This ability reduces incoming move damage by 1/10 of the user's max HP and increases the user's Speed for the first hit after switch-in (and does not activate again until the next switch-in).",
 		shortDesc: "Reduces incoming move damage by 1/10 of the user's max HP and increases the user's Spe for the 1st hit after switch-in (doesn't activate until next switch-in).",
 	},
@@ -482,9 +482,9 @@ let BattleAbilities = {
 	},
 	"aftermath": {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && !target.hp) {
-				this.damage(source.maxhp / 3, source, target, null, true);
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				this.damage(source.baseMaxhp / 3, source, target, null, true);
 			}
 		},
 		desc: "If this Pokemon is knocked out, that move's user loses 1/4 of its maximum HP, rounded down. If any active Pokemon has the Ability Damp, this effect is prevented.",
@@ -563,7 +563,7 @@ let BattleAbilities = {
 			onBeforeMove(pokemon, target, move) {
 				if (pokemon.removeVolatile('truant')) {
 					this.add('cant', pokemon, 'ability: Truant');
-					this.heal(pokemon.maxhp / 3);
+					this.heal(pokemon.baseMaxhp / 3);
 					return false;
 				}
 			},

@@ -55,7 +55,7 @@ describe('Mega Evolution', function () {
 		battle.setPlayer('p2', {team: [{species: 'Hoopa-Unbound', ability: 'magician', moves: ['darkpulse']}]});
 		const fastBase = battle.p2.active[0];
 		battle.makeChoices('move xscissor ultra', 'move darkpulse');
-		assert.strictEqual(fastBase.hp, 0);
+		assert.equal(fastBase.hp, 0);
 	});
 });
 
@@ -151,5 +151,24 @@ describe('Pokemon Speed', function () {
 
 		battle.makeChoices('move scald 1, switch 3', 'move bugbuzz 1, auto');
 		assert.fainted(battle.p1.pokemon[0]); // Ludicolo should be fainted
+	});
+});
+
+describe('Switching', function () {
+	it('should happen in order of switch-out\'s Speed stat', function () {
+		battle = common.createBattle();
+		const p1team = [
+			{species: 'Accelgor', ability: 'runaway', moves: ['sleeptalk']},
+			{species: 'Shuckle', ability: 'intimidate', moves: ['sleeptalk']},
+		];
+		const p2team = [
+			{species: 'Durant', ability: 'runaway', moves: ['sleeptalk']},
+			{species: 'Barraskewda', ability: 'runaway', moves: ['sleeptalk']},
+		];
+		battle.setPlayer('p1', {team: p1team});
+		battle.setPlayer('p2', {team: p2team});
+
+		battle.makeChoices('switch 2', 'switch 2');
+		assert.equal(battle.p2.pokemon[0].boosts.atk, 0);
 	});
 });

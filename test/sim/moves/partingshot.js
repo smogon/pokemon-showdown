@@ -22,23 +22,23 @@ describe(`Parting Shot`, function () {
 		const p1 = battle.p1;
 		const p2 = battle.p2;
 		battle.makeChoices('move partingshot', 'move splash');
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 		battle.makeChoices('move partingshot', 'switch 2'); // Solgaleo
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 		battle.makeChoices('move partingshot', 'switch 3'); // Torkoal
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 		battle.makeChoices('move partingshot', 'switch 4'); // Shaymin
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 		battle.makeChoices('move splash', 'switch 5'); // Kingler
 		p2.active[0].boostBy({spa: -6});
 		battle.makeChoices('move partingshot', 'move splash');
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 		battle.makeChoices('move splash', 'switch 6'); // Spinda
 		p2.active[0].boostBy({atk: 6, spa: 6});
 		battle.makeChoices('move partingshot', 'move splash');
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 		p1.active[0].boostBy({atk: -6, spa: -6});
 		battle.makeChoices('move splash', 'move partingshot'); // Parting Shot against Silvally this time
-		assert.strictEqual(battle.requestState, 'move');
+		assert.equal(battle.requestState, 'move');
 	});
 });

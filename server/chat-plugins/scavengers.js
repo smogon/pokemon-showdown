@@ -193,10 +193,10 @@ function formatQueue(queue = [], viewer, room, broadcasting) {
 			const queuedBy = item.hosts.every(h => h.id !== item.staffHostId) ? ` / ${item.staffHostId}` : '';
 			let questions;
 			if (!broadcasting && (item.hosts.some(h => h.id === viewer.id) || viewer.id === item.staffHostId)) {
-				questions = item.questions.map((q, i) => i % 2 ?
-					Chat.html`<span style="color: green"><em>[${q.join(' / ')}]</em></span><br />`
-					: // eslint-disable-line operator-linebreak
-					Chat.escapeHTML(q)
+				questions = item.questions.map(
+					(q, i) => i % 2 ?
+						Chat.html`<span style="color: green"><em>[${q.join(' / ')}]</em></span><br />` :
+						Chat.escapeHTML(q)
 				).join(" ");
 			} else {
 				questions = `[${item.questions.length / 2} hidden questions]`;
@@ -1039,10 +1039,10 @@ let commands = {
 					str += `<tr><td>${questionNum}</td><td>None</td>`;
 				} else {
 					str += `<tr><td>${questionNum}</td><td>`;
-					str += players.map(pl => pl.lastGuess > Date.now() - 1000 * 300 ?
-						Chat.html`<strong>${pl.name}</strong>`
-						: // eslint-disable-line operator-linebreak
-						Chat.escapeHTML(pl.name)
+					str += players.map(
+						pl => pl.lastGuess > Date.now() - 1000 * 300 ?
+							Chat.html`<strong>${pl.name}</strong>` :
+							Chat.escapeHTML(pl.name)
 					).join(", ");
 				}
 			}

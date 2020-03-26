@@ -21,10 +21,10 @@ describe('Leftovers [Gen 2]', function () {
 		]});
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move healbell', 'move seismictoss');
-		assert.strictEqual(holder.hp, 590);
+		assert.equal(holder.hp, 590);
 
 		battle.makeChoices('switch 2', 'move seismictoss');
 		battle.makeChoices('switch 2', '');
-		assert.strictEqual(holder.hp, 630);
+		assert.equal(holder.hp, 630);
 	});
 });

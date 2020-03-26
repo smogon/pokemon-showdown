@@ -22,7 +22,7 @@ describe('Levitate', function () {
 		battle.setPlayer('p1', {team: [{species: 'Unown', ability: 'levitate', moves: ['spore']}]});
 		battle.setPlayer('p2', {team: [{species: 'Espeon', ability: 'magicbounce', moves: ['electricterrain']}]});
 		battle.makeChoices('move spore', 'move electricterrain');
-		assert.strictEqual(battle.p1.active[0].status, 'slp', "Levitate Pokémon should not be awaken by Electric Terrain");
+		assert.equal(battle.p1.active[0].status, 'slp', "Levitate Pokémon should not be awaken by Electric Terrain");
 	});
 
 	it('should have its Ground immunity suppressed by Mold Breaker', function () {

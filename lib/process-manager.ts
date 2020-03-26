@@ -26,7 +26,11 @@ class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 		this.process.send(`${taskId}\nNEW`);
 	}
 	_write(message: string) {
-		if (!this.process.connected) return;
+		if (!this.process.connected) {
+			this.pushError(new Error(`Process disconnected (possibly crashed?)`));
+			this.push(null);
+			return;
+		}
 		this.process.send(`${this.taskId}\nWRITE\n${message}`);
 		// responses are handled in ProcessWrapper
 	}
@@ -38,16 +42,18 @@ class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 
 interface ProcessWrapper {
 	load: number;
+	process: ChildProcess;
 	release: () => Promise<void>;
 }
 
 /** Wraps the process object in the PARENT process. */
-export class QueryProcessWrapper {
+export class QueryProcessWrapper implements ProcessWrapper {
 	process: ChildProcess;
 	taskId: number;
 	pendingTasks: Map<number, (resp: string) => void>;
 	pendingRelease: Promise<void> | null;
 	resolveRelease: (() => void) | null;
+	debug?: string;
 
 	constructor(file: string) {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
@@ -65,7 +71,12 @@ export class QueryProcessWrapper {
 				throw error;
 			}
 
-			const taskId = parseInt(message.slice(0, nlLoc), 10);
+			if (message.slice(0, nlLoc) === 'DEBUG') {
+				this.debug = message.slice(nlLoc + 1);
+				return;
+			}
+
+			const taskId = parseInt(message.slice(0, nlLoc));
 			const resolve = this.pendingTasks.get(taskId);
 			if (!resolve) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
 			this.pendingTasks.delete(taskId);
@@ -124,19 +135,20 @@ export class QueryProcessWrapper {
 }
 
 /** Wraps the process object in the PARENT process. */
-export class StreamProcessWrapper {
+export class StreamProcessWrapper implements ProcessWrapper {
 	process: ChildProcess;
-	taskId: number;
-	activeStreams: Map<number, SubprocessStream>;
-	pendingRelease: Promise<void> | null;
-	resolveRelease: (() => void) | null;
+	taskId = 0;
+	activeStreams = new Map<number, SubprocessStream>();
+	pendingRelease: Promise<void> | null = null;
+	resolveRelease: (() => void) | null = null;
+	debug?: string;
+
+	setDebug(message: string) {
+		this.debug = (this.debug || '').slice(-32768) + '\n=====\n' + message;
+	}
 
 	constructor(file: string) {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
-		this.taskId = 0;
-		this.activeStreams = new Map();
-		this.pendingRelease = null;
-		this.resolveRelease = null;
 
 		this.process.on('message', (message: string) => {
 			let nlLoc = message.indexOf('\n');
@@ -147,7 +159,12 @@ export class StreamProcessWrapper {
 				throw error;
 			}
 
-			const taskId = parseInt(message.slice(0, nlLoc), 10);
+			if (message.slice(0, nlLoc) === 'DEBUG') {
+				this.setDebug(message.slice(nlLoc + 1));
+				return;
+			}
+
+			const taskId = parseInt(message.slice(0, nlLoc));
 			const stream = this.activeStreams.get(taskId);
 			if (!stream) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
 
@@ -158,9 +175,9 @@ export class StreamProcessWrapper {
 			message = message.slice(nlLoc + 1);
 
 			if (messageType === 'END') {
-				const end = stream.end();
+				void stream.end();
 				this.deleteStream(taskId);
-				return end;
+				return;
 			} else if (messageType === 'PUSH') {
 				stream.push(message);
 			} else if (messageType === 'THROW') {
@@ -172,14 +189,14 @@ export class StreamProcessWrapper {
 			}
 		});
 		this.process.on('disconnect', () => {
-			this.destroy();
+			void this.destroy();
 		});
 	}
 
 	deleteStream(taskId: number) {
 		this.activeStreams.delete(taskId);
 		// try to release
-		if (this.resolveRelease && !this.load) this.destroy();
+		if (this.resolveRelease && !this.load) void this.destroy();
 	}
 
 	get load() {
@@ -197,7 +214,7 @@ export class StreamProcessWrapper {
 	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
 		if (!this.load) {
-			this.destroy();
+			void this.destroy();
 		} else {
 			this.pendingRelease = new Promise(resolve => {
 				this.resolveRelease = resolve;
@@ -232,18 +249,17 @@ export class StreamProcessWrapper {
  * string and returns a string or Promise<string>.
  */
 export class ProcessManager {
-	processes: ProcessWrapper[];
-	releasingProcesses: ProcessWrapper[];
-	// @ts-ignore
-	module: NodeJs.Module;
-	filename: string;
-	basename: string;
-	isParentProcess: boolean;
+	processes: ProcessWrapper[] = [];
+	releasingProcesses: ProcessWrapper[] = [];
+	crashedProcesses: ProcessWrapper[] = [];
+	readonly module: NodeJS.Module;
+	readonly filename: string;
+	readonly basename: string;
+	readonly isParentProcess: boolean;
+	crashTime = 0;
+	crashRespawnCount = 0;
 
-	// @ts-ignore
-	constructor(module: NodeJs.Module) {
-		this.processes = [];
-		this.releasingProcesses = [];
+	constructor(module: NodeJS.Module) {
 		this.module = module;
 		this.filename = module.filename;
 		this.basename = path.basename(module.filename);
@@ -256,12 +272,57 @@ export class ProcessManager {
 			return null;
 		}
 		let lowestLoad = this.processes[0];
+		let crashed = false;
 		for (const process of this.processes) {
+			if (!process.process.connected) {
+				// process crashed
+				crashed = true;
+				continue;
+			}
 			if (process.load < lowestLoad.load) {
 				lowestLoad = process;
 			}
 		}
+		if (crashed) this.releaseCrashed();
 		return lowestLoad;
+	}
+	releaseCrashed() {
+		const count = this.processes.length;
+
+		const released = [];
+		const unreleased = [];
+		for (const process of this.processes) {
+			if (process.process.connected) {
+				unreleased.push(process);
+				continue;
+			}
+			released.push(process);
+			void process.release().then(() => {
+				const index = this.releasingProcesses.indexOf(process);
+				if (index >= 0) {
+					this.releasingProcesses.splice(index, 1);
+				}
+			});
+		}
+		const now = Date.now();
+		if (this.crashTime && now - this.crashTime > 30 * 60 * 1000) {
+			this.crashTime = 0;
+			this.crashRespawnCount = 0;
+		}
+		if (!this.crashTime) this.crashTime = now;
+		this.crashRespawnCount += released.length;
+		// Notify any global crash logger
+		void Promise.reject(
+			new Error(`Process ${this.basename} ${released.map(process => process.process.pid).join(', ')} crashed and had to be restarted`)
+		);
+		this.releasingProcesses = this.releasingProcesses.concat(released);
+		this.crashedProcesses = this.crashedProcesses.concat(released);
+		this.processes = unreleased;
+
+		// only respawn processes if there have been fewer than 5 crashes in 30 minutes
+		if (this.crashRespawnCount <= 5) {
+			this.spawn(count);
+		}
 	}
 	unspawn() {
 		const released = [];
@@ -293,7 +354,7 @@ export class ProcessManager {
 	createProcess(): ProcessWrapper {
 		throw new Error(`implemented by subclass`);
 	}
-	listen() {
+	listen(): void {
 		throw new Error(`implemented by subclass`);
 	}
 	destroy() {
@@ -303,17 +364,16 @@ export class ProcessManager {
 	}
 }
 
-export class QueryProcessManager extends ProcessManager {
-	// tslint:disable-next-line:variable-name
-	_query: (input: any) => any;
+export class QueryProcessManager<T = string, U = string> extends ProcessManager {
+	_query: (input: T) => U | Promise<U>;
 
-	constructor(module: NodeJS.Module, query: (input: any) => any) {
+	constructor(module: NodeJS.Module, query: (input: T) => U | Promise<U>) {
 		super(module);
 		this._query = query;
 
 		processManagers.push(this);
 	}
-	query(input: any) {
+	query(input: T) {
 		const process = this.acquire() as QueryProcessWrapper;
 		if (!process) return Promise.resolve(this._query(input));
 		return process.query(input);
@@ -324,21 +384,21 @@ export class QueryProcessManager extends ProcessManager {
 	listen() {
 		if (this.isParentProcess) return;
 		// child process
-		process.on('message', async (message: string) => {
+		process.on('message', (message: string) => {
 			const nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			const taskId = message.slice(0, nlLoc);
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
-				// tslint:disable-next-line: no-eval
+				// eslint-disable-next-line no-eval
 				process.send!(`${taskId}\n` + eval(message));
 				return;
 			}
 
-			const response = await this._query(JSON.parse(message));
-			// @ts-ignore guaranteed to be defined here
-			process.send(`${taskId}\n${JSON.stringify(response)}`);
+			void Promise.resolve(this._query(JSON.parse(message))).then(
+				response => process.send!(`${taskId}\n${JSON.stringify(response)}`)
+			);
 		});
 		process.on('disconnect', () => {
 			process.exit();
@@ -384,7 +444,7 @@ export class StreamProcessManager extends ProcessManager {
 	listen() {
 		if (this.isParentProcess) return;
 		// child process
-		process.on('message', async (message: string) => {
+		process.on('message', (message: string) => {
 			let nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid request ${message}`);
 			const taskId = message.slice(0, nlLoc);
@@ -397,7 +457,7 @@ export class StreamProcessManager extends ProcessManager {
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
-				// tslint:disable-next-line: no-eval
+				// eslint-disable-next-line no-eval
 				process.send!(`${taskId}\n` + eval(message));
 				return;
 			}
@@ -406,15 +466,14 @@ export class StreamProcessManager extends ProcessManager {
 				if (stream) throw new Error(`NEW: taskId ${taskId} already exists`);
 				const newStream = this._createStream();
 				this.activeStreams.set(taskId, newStream);
-				return this.pipeStream(taskId, newStream);
+				void this.pipeStream(taskId, newStream);
 			} else if (messageType === 'DESTROY') {
 				if (!stream) throw new Error(`DESTROY: Invalid taskId ${taskId}`);
-				const destroyed = stream.destroy();
+				void stream.destroy();
 				this.activeStreams.delete(taskId);
-				return destroyed;
 			} else if (messageType === 'WRITE') {
 				if (!stream) throw new Error(`WRITE: Invalid taskId ${taskId}`);
-				stream.write(message);
+				void stream.write(message);
 			} else {
 				throw new Error(`Unrecognized messageType ${messageType}`);
 			}

@@ -38,13 +38,13 @@ describe('Target Resolution', function () {
 			battle.makeChoices('move watergun -2, auto', 'auto');
 			const newHps = activePokemonList.map(pokemon => pokemon.hp);
 
-			assert.deepStrictEqual(prevHps, newHps);
+			assert.deepEqual(prevHps, newHps);
 			assert(battle.log.includes('|move|p1a: Wailord|Water Gun|p1: Latias|[notarget]'));
 			assert(battle.log.includes('|-fail|p1a: Wailord'));
 		});
 
 		it(`should support RedirectTarget event for a fainted foe and type 'any' `, function () {
-			battle = common.createBattle({gameType: 'triples'}, [[
+			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['waterpulse']}, // Water Pulse over Water Gun due to targeting in triples
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
@@ -60,7 +60,7 @@ describe('Target Resolution', function () {
 
 			// Do it again with swapped positions
 			battle.destroy();
-			battle = common.createBattle({gameType: 'triples'}, [[
+			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
@@ -135,7 +135,7 @@ describe('Target Resolution', function () {
 			battle.makeChoices('move watergun -2, pass', 'move watergun -2, pass');
 			const newHps = attackers.map(pokemon => pokemon.hp);
 
-			assert.deepStrictEqual(prevHps, newHps);
+			assert.deepEqual(prevHps, newHps);
 			assert(battle.log.includes('|move|p1a: Wailord|Water Gun|p1: Shedinja|[notarget]'));
 			assert(battle.log.includes('|-fail|p1a: Wailord'));
 			assert(battle.log.includes('|move|p2a: Wailord|Water Gun|p2: Shedinja|[notarget]'));
@@ -170,6 +170,32 @@ describe('Target Resolution', function () {
 			battle.makeChoices('auto', 'auto'); // Shedinjas faint
 			battle.makeChoices('move watergun -2, pass', 'auto');
 			assert.statStage(redirector, 'spa', 2);
+		});
+
+		it(`should smart-track targets for Stalwart`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
+				{species: 'Ninjask', ability: 'runaway', moves: ['splash']},
+			], [
+				{species: 'Gastrodon', ability: 'runaway', moves: ['splash']},
+				{species: 'Ninjask', ability: 'runaway', moves: ['allyswitch']},
+			]]);
+
+			battle.makeChoices('move watergun 1, move splash', 'auto');
+			assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+		});
+
+		it(`should smart-track targets for Snipe Shot`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: 'Duraludon', ability: 'runaway', moves: ['snipeshot']},
+				{species: 'Ninjask', ability: 'runaway', moves: ['splash']},
+			], [
+				{species: 'Gastrodon', ability: 'runaway', moves: ['splash']},
+				{species: 'Ninjask', ability: 'runaway', moves: ['allyswitch']},
+			]]);
+
+			battle.makeChoices('move snipeshot 1, move splash', 'auto');
+			assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 		});
 	});
 });

@@ -29,7 +29,7 @@ describe('Counter', function () {
 		});
 
 		battle.makeChoices();
-		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
+		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
 	it('should fail if user is not damaged by Physical attacks this turn', function () {
@@ -40,7 +40,7 @@ describe('Counter', function () {
 	});
 
 	it('should target the opposing Pokemon that hit the user with a Physical attack most recently that turn', function () {
-		battle = common.createBattle({gameType: 'triples'});
+		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Bastiodon', ability: 'sturdy', moves: ['counter']},
 			{species: 'Toucannon', ability: 'keeneye', moves: ['beakblast']},
@@ -97,7 +97,7 @@ describe('Mirror Coat', function () {
 		});
 
 		battle.makeChoices();
-		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
+		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
 	it('should fail if user is not damaged by Special attacks this turn', function () {

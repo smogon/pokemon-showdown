@@ -35,7 +35,7 @@ describe('Arena Trap', function () {
 
 		assert.species(p2active[0], 'Magnezone'); // Magnezone is trapped
 
-		assert.strictEqual(p2active[0].name, "Magnezone");
+		assert.equal(p2active[0].name, "Magnezone");
 		battle.makeChoices('default', 'move magnetrise');
 
 		battle.makeChoices('move snore', 'switch 6');

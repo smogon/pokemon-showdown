@@ -271,6 +271,7 @@ exports.battlemodchat = false;
 exports.pmmodchat = false;
 /**
  * ladder modchat - minimum group for laddering
+ * @type {false | GroupSymbol}
  */
 exports.laddermodchat = false;
 
@@ -415,6 +416,12 @@ exports.disablehotpatchall = false;
 exports.forcedpublicprefixes = [];
 
 /**
+ * startuphook - function to call when the server is fully initialized and ready
+ * to serve requests.
+ */
+exports.startuphook = function () {};
+
+/**
  * permissions and groups:
  *   Each entry in `grouplist` is a seperate group. Some of the members are "special"
  *     while the rest is just a normal permission.
@@ -543,7 +550,6 @@ exports.grouplist = [
 		inherit: '%',
 		jurisdiction: 'u',
 		ban: true,
-		modchat: true,
 		modchatall: true,
 		roomvoice: true,
 		forcerename: true,
@@ -573,6 +579,7 @@ exports.grouplist = [
 		jeopardy: true,
 		joinbattle: true,
 		minigame: true,
+		modchat: true,
 	},
 	{
 		symbol: '\u2606',

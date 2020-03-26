@@ -56,6 +56,8 @@ Chat.plural = function (num, plural = 's', singular = '') {
 	}
 	return (num !== 1 ? plural : singular);
 };
+// Sigh. Yay globals!
+global.toID = require('../../.sim-dist/dex').Dex.getId;
 
 const importer = require('./importer.js');
 
@@ -77,9 +79,9 @@ const SETS = path.resolve(__dirname, 'sets');
 			const current = require('./sets/package.json').version;
 			const [major, minor, patch] = current.split('.');
 			if (version === 'major' || version === 'breaking') {
-				version = `${Number(major) + 1}.${minor}.${patch}`;
+				version = `${Number(major) + 1}.0.0`;
 			} else if (version === 'minor' || version === 'monthly') {
-				version = `${major}.${Number(minor) + 1}.${patch}`;
+				version = `${major}.${Number(minor) + 1}.0`;
 			} else {
 				version = `${major}.${minor}.${Number(patch) + 1}`;
 			}
@@ -122,6 +124,7 @@ const SETS = path.resolve(__dirname, 'sets');
 		'	return Promise.resolve(require(path));',
 		'}',
 		'function forGen(gen) {',
+		// eslint-disable-next-line no-template-curly-in-string
 		'	return JSON[`gen${gen}`];',
 		'}',
 		'exports.forGen = forGen;',

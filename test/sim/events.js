@@ -28,9 +28,9 @@ describe('Battle#on', function () {
 			return 5;
 		});
 		battle.makeChoices('move bulkup', 'move peck');
-		assert.strictEqual(eventCount, 4);
-		assert.strictEqual(eventCount2, 2);
-		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 5);
+		assert.equal(eventCount, 4);
+		assert.equal(eventCount2, 2);
+		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 5);
 	});
 
 	it('should support and resolve priorities correctly', function () {
@@ -41,7 +41,7 @@ describe('Battle#on', function () {
 		let eventCount = 0;
 		let modHandler = function (count) {
 			return function () {
-				assert.strictEqual(eventCount, count);
+				assert.equal(eventCount, count);
 				eventCount++;
 			};
 		};
@@ -49,7 +49,7 @@ describe('Battle#on', function () {
 			battle.onEvent('ModifyDamage', battle.format, -i, modHandler(i));
 		}
 		battle.makeChoices('move bulkup', 'move peck');
-		assert.strictEqual(eventCount, 9);
+		assert.equal(eventCount, 9);
 	});
 
 	it('should throw if a callback is not given for the event handler', function () {
