@@ -60,46 +60,46 @@ function trimmedMovesArray(moves: string[]) {
 	return data.sort();
 }
 
-function getRBYMoves(template: string | Template) {
-	template = Dex.mod(`gen1`).getTemplate(template);
+function getRBYMoves(species: string | Species) {
+	species = Dex.mod(`gen1`).getSpecies(species);
 	let buf = ``;
-	if (template.randomBattleMoves) {
+	if (species.randomBattleMoves) {
 		buf += `<details><summary>Randomized moves</summary>`;
-		buf += template.randomBattleMoves.map(formatMove).join(", ");
+		buf += species.randomBattleMoves.map(formatMove).join(", ");
 		buf += `</details>`;
 	}
-	if (template.comboMoves) {
+	if (species.comboMoves) {
 		buf += `<details><summary>Combo moves</summary>`;
-		buf += template.comboMoves.map(formatMove).join(", ");
+		buf += species.comboMoves.map(formatMove).join(", ");
 		buf += `</details>`;
 	}
-	if (template.exclusiveMoves) {
+	if (species.exclusiveMoves) {
 		buf += `<details><summary>Exclusive moves</summary>`;
-		buf += template.exclusiveMoves.map(formatMove).join(", ");
+		buf += species.exclusiveMoves.map(formatMove).join(", ");
 		buf += `</details>`;
 	}
-	if (template.essentialMove) {
+	if (species.essentialMove) {
 		buf += `<details><summary>Essential move</summary>`;
-		buf += formatMove(template.essentialMove);
+		buf += formatMove(species.essentialMove);
 		buf += `</details>`;
 	}
 	if (
-		!template.randomBattleMoves && !template.comboMoves &&
-		!template.exclusiveMoves && !template.essentialMove
+		!species.randomBattleMoves && !species.comboMoves &&
+		!species.exclusiveMoves && !species.essentialMove
 	) {
 		return false;
 	}
 	return buf;
 }
 
-function getGSCMoves(template: string | Template) {
-	template = Dex.mod('gen2').getTemplate(template);
+function getGSCMoves(species: string | Species) {
+	species = Dex.mod('gen2').getSpecies(species);
 	let buf = ``;
-	if (!template.randomSets || !template.randomSets.length) return false;
-	for (const [i, set] of template.randomSets.entries()) {
+	if (!species.randomSets || !species.randomSets.length) return false;
+	for (const [i, set] of species.randomSets.entries()) {
 		buf += `<details><summary>Set ${i + 1}</summary>`;
 		buf += `<ul style="list-style-type:none;">`;
-		buf += `<li>${template.species}`;
+		buf += `<li>${species.name}`;
 		if (set.item) {
 			const items = trimmedItemsArray(set.item).map(formatItem).join(" / ");
 			buf += ` @ ${items}`;
@@ -118,20 +118,20 @@ function getGSCMoves(template: string | Template) {
 	return buf;
 }
 
-function getLetsGoMoves(template: string | Template) {
-	template = Dex.getTemplate(template);
+function getLetsGoMoves(species: string | Species) {
+	species = Dex.getSpecies(species);
 	const isLetsGoLegal = (
-		(template.num <= 151 || ['Meltan', 'Melmetal'].includes(template.name)) &&
-		(!template.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme))
+		(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
+		(!species.forme || ['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme))
 	);
 	if (!isLetsGoLegal) return false;
-	if (!template.randomBattleMoves || !template.randomBattleMoves.length) return false;
-	return template.randomBattleMoves.map(formatMove).join(`, `);
+	if (!species.randomBattleMoves || !species.randomBattleMoves.length) return false;
+	return species.randomBattleMoves.map(formatMove).join(`, `);
 }
 
-function battleFactorySets(template: string | Template, tier: string | null, gen = 'gen7', isBSS = false) {
-	template = Dex.getTemplate(template);
-	if (template.battleOnly) template = Dex.getTemplate(Dex.getOutOfBattleSpecies(template));
+function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen7', isBSS = false) {
+	species = Dex.getSpecies(species);
+	if (species.battleOnly) species = Dex.getSpecies(Dex.getOutOfBattleSpecies(species));
 	gen = toID(gen);
 	const genNum = parseInt(gen[3]);
 	if (isNaN(genNum) || genNum < 6 || (isBSS && genNum < 7)) return false;
@@ -148,12 +148,12 @@ function battleFactorySets(template: string | Template, tier: string | null, gen
 		if (!tier) return {e: `Please provide a valid tier.`};
 		if (!(toID(tier) in TIERS)) return {e: `That tier isn't supported.`};
 		const t = statsFile[TIERS[toID(tier)]];
-		if (!(template.speciesid in t)) {
+		if (!(species.id in t)) {
 			const formatName = Dex.getFormat(`${gen}battlefactory`).name;
-			return {e: `${template.species} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`};
+			return {e: `${species.name} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`};
 		}
-		const setObj = t[template.speciesid];
-		buf += `<span style="color:#999999;">Sets for ${template.species} in${genNum === 8 ? `` : ` ${GEN_NAMES[gen]}`} ${TIERS[toID(tier)]}:</span><br />`;
+		const setObj = t[species.id];
+		buf += `<span style="color:#999999;">Sets for ${species.name} in${genNum === 8 ? `` : ` ${GEN_NAMES[gen]}`} ${TIERS[toID(tier)]}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
 			buf += `<details><summary>Set ${i + 1}</summary>`;
 			buf += `<ul style="list-style-type:none;">`;
@@ -191,9 +191,9 @@ function battleFactorySets(template: string | Template, tier: string | null, gen
 		}
 	} else {
 		const format = Dex.getFormat(`${gen}bssfactory`);
-		if (!(template.speciesid in statsFile)) return {e: `${template.species} doesn't have any sets in ${format.name}.`};
-		const setObj = statsFile[template.speciesid];
-		buf += `<span style="color:#999999;">Sets for ${template.species} in ${format.name}:</span><br />`;
+		if (!(species.id in statsFile)) return {e: `${species.name} doesn't have any sets in ${format.name}.`};
+		const setObj = statsFile[species.id];
+		buf += `<span style="color:#999999;">Sets for ${species.name} in ${format.name}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
 			buf += `<details><summary>Set ${i + 1}</summary>`;
 			buf += `<ul style="list-style-type:none;">`;
@@ -247,43 +247,43 @@ export const commands: ChatCommands = {
 			const format = Dex.getFormat(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
-		const template = dex.getTemplate(args[0]);
-		if (!template.exists) {
+		const species = dex.getSpecies(args[0]);
+		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
 		let formatName = dex.getFormat(`gen${dex.gen}randombattle`).name;
 		if (toID(args[1]) === 'gen1') {
-			const rbyMoves = getRBYMoves(template);
+			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
-				return this.errorReply(`Error: ${template.species} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
+				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${rbyMoves}`);
+			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${rbyMoves}`);
 		}
 		if (toID(args[1]) === 'gen2') {
-			const gscMoves = getGSCMoves(template);
+			const gscMoves = getGSCMoves(species);
 			if (!gscMoves) {
-				return this.errorReply(`Error: ${template.species} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
+				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${gscMoves}`);
+			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${gscMoves}`);
 		}
 		if (toID(args[1]) === 'letsgo') {
 			formatName = `[Gen 7 Let's Go] Random Battle`;
-			const lgpeMoves = getLetsGoMoves(template);
+			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
-				return this.errorReply(`Error: ${template.species} has no Random Battle data in [Gen 7 Let's Go]`);
+				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
-			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${lgpeMoves}`);
+			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${lgpeMoves}`);
 		}
-		if (!template.randomBattleMoves) {
-			return this.errorReply(`Error: No moves data found for ${template.species}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+		if (!species.randomBattleMoves) {
+			return this.errorReply(`Error: No moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
 		}
 		const moves: string[] = [];
-		// Done because template.randomBattleMoves is readonly
-		for (const move of template.randomBattleMoves) {
+		// Done because species.randomBattleMoves is readonly
+		for (const move of species.randomBattleMoves) {
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);
-		this.sendReplyBox(`<span style="color:#999999;">Moves for ${template.species} in ${formatName}:</span><br />${m.join(`, `)}`);
+		this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${m.join(`, `)}`);
 	},
 	randombattleshelp: [
 		`/randombattles OR /randbats [pokemon], [gen] - Displays a Pok\u00e9mon's Random Battle Moves. Defaults to Gen 8. If used in a battle, defaults to the gen of that battle.`,
@@ -309,23 +309,23 @@ export const commands: ChatCommands = {
 				return this.parse(`/help randomdoublesbattle`);
 			}
 		}
-		const template = dex.getTemplate(args[0]);
+		const species = dex.getSpecies(args[0]);
 		const formatName = dex.gen > 6 ? dex.getFormat(`gen${dex.gen}randomdoublesbattle`).name : dex.gen === 6 ?
 			'[Gen 6] Random Doubles Battle' : dex.gen === 5 ?
 				'[Gen 5] Random Doubles Battle' : '[Gen 4] Random Doubles Battle';
-		if (!template.exists) {
+		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
-		if (!template.randomDoubleBattleMoves) {
-			return this.errorReply(`Error: No doubles moves data found for ${template.species}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
+		if (!species.randomDoubleBattleMoves) {
+			return this.errorReply(`Error: No doubles moves data found for ${species.name}${`gen${dex.gen}` in GEN_NAMES ? ` in ${GEN_NAMES[`gen${dex.gen}`]}` : ``}.`);
 		}
 		const moves: string[] = [];
-		// Done because template.randomDoubleBattleMoves is readonly
-		for (const move of template.randomDoubleBattleMoves) {
+		// Done because species.randomDoubleBattleMoves is readonly
+		for (const move of species.randomDoubleBattleMoves) {
 			moves.push(move);
 		}
 		const m = moves.sort().map(formatMove);
-		this.sendReplyBox(`<span style="color:#999999;">Doubles moves for ${template.species} in ${formatName}:</span><br />${m.join(`, `)}`);
+		this.sendReplyBox(`<span style="color:#999999;">Doubles moves for ${species.name} in ${formatName}:</span><br />${m.join(`, `)}`);
 	},
 	randomdoublesbattlehelp: [
 		`/randomdoublesbattle OR /randdubs [pokemon], [gen] - Displays a Pok\u00e9mon's Random Doubles Battle Moves. Supports Gens 4-8. Defaults to Gen 8. If used in a battle, defaults to that gen.`,
@@ -340,14 +340,14 @@ export const commands: ChatCommands = {
 		if (isBSS) {
 			const args = target.split(',');
 			if (!args[0]) return this.parse(`/help battlefactory`);
-			const template = Dex.getTemplate(args[0]);
-			if (!template.exists) {
+			const species = Dex.getSpecies(args[0]);
+			if (!species.exists) {
 				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
 			let mod = 'gen7';
 			// There is only [Gen 7] BSS Factory right now
 			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen === 7) mod = toID(args[1]);
-			const bssSets = battleFactorySets(template, null, mod, true);
+			const bssSets = battleFactorySets(species, null, mod, true);
 			if (!bssSets) return this.parse(`/help battlefactory`);
 			if (typeof bssSets !== 'string') {
 				return this.errorReply(`Error: ${bssSets.e}`);
@@ -356,8 +356,8 @@ export const commands: ChatCommands = {
 		} else {
 			const args = target.split(',');
 			if (!args[0]) return this.parse(`/help battlefactory`);
-			const template = Dex.getTemplate(args[0]);
-			if (!template.exists) {
+			const species = Dex.getSpecies(args[0]);
+			if (!species.exists) {
 				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
 			let tier = '';
@@ -367,7 +367,7 @@ export const commands: ChatCommands = {
 				tier = 'ou';
 			}
 			const mod = args[2] || 'gen7';
-			const bfSets = battleFactorySets(template, tier, mod);
+			const bfSets = battleFactorySets(species, tier, mod);
 			if (!bfSets) return this.parse(`/help battlefactory`);
 			if (typeof bfSets !== 'string') {
 				return this.errorReply(`Error: ${bfSets.e}`);

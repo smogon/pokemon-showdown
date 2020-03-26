@@ -36,7 +36,7 @@ declare global {
 	const Move: DataType.Move;
 	const PureEffect: DataType.PureEffect;
 	const RuleTable: DataType.RuleTable;
-	const Template: DataType.Template;
+	const Species: DataType.Species;
 	const Tools: DataType.Tools;
 	const TypeInfo: DataType.TypeInfo;
 	const toID: typeof DataType.Tools.getId;

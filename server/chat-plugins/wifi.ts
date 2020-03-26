@@ -129,28 +129,28 @@ class Giveaway {
 		const monIDs: Set<string> = new Set();
 		for (const i in Dex.data.Pokedex) {
 			let id = i;
-			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].species.includes(' '))) {
-				id = toPokemonId(Dex.data.Pokedex[i].species);
+			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].name.includes(' '))) {
+				id = toPokemonId(Dex.data.Pokedex[i].name);
 			}
 			const regexp = new RegExp(`\\b${id}\\b`);
 			if (regexp.test(text)) {
-				const mon = Dex.getTemplate(i);
+				const mon = Dex.getSpecies(i);
 				mons.set(mon.baseSpecies, mon);
 			}
 		}
 		// the previous regex doesn't match "nidoran-m" or "nidoran male"
 		if (/\bnidoran\W{0,1}m(ale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-M', Dex.getTemplate('nidoranm'));
+			mons.set('Nidoran-M', Dex.getSpecies('nidoranm'));
 		}
 		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-F', Dex.getTemplate('nidoranf'));
+			mons.set('Nidoran-F', Dex.getSpecies('nidoranf'));
 		}
 		text = toID(text);
 		if (mons.size) {
 			for (const [key, value] of mons) {
 				let spriteid = value.spriteid;
-				if (value.otherForms) {
-					for (const form of value.otherForms) {
+				if (value.cosmeticFormes) {
+					for (const form of value.cosmeticFormes) {
 						if (text.includes(form)) {
 							spriteid += '-' + form.substr(key.length);
 							break; // We don't want to end up with deerling-summer-spring
@@ -597,8 +597,8 @@ export class GTSGiveaway {
 
 		for (const i in Dex.data.Pokedex) {
 			let id = i;
-			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].species.includes(' '))) {
-				id = toPokemonId(Dex.data.Pokedex[i].species);
+			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].name.includes(' '))) {
+				id = toPokemonId(Dex.data.Pokedex[i].name);
 			}
 			const regexp = new RegExp(`\\b${id}\\b`, 'ig');
 			const res = regexp.exec(parsed);

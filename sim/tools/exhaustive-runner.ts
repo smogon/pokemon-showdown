@@ -111,8 +111,8 @@ export class ExhaustiveRunner {
 
 	private createPools(dex: typeof Dex): Pools {
 		return {
-			pokemon: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Pokedex, p => dex.getTemplate(p),
-				(_, p) => (p.species !== 'Pichu-Spiky-eared' && p.species.substr(0, 8) !== 'Pikachu-')), this.prng),
+			pokemon: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Pokedex, p => dex.getSpecies(p),
+				(_, p) => (p.name !== 'Pichu-Spiky-eared' && p.name.substr(0, 8) !== 'Pikachu-')), this.prng),
 			items: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Items, i => dex.getItem(i)), this.prng),
 			abilities: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Abilities, a => dex.getAbility(a)), this.prng),
 			moves: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Movedex, m => dex.getMove(m),
@@ -212,13 +212,13 @@ class TeamGenerator {
 	generate() {
 		const team: PokemonSet[] = [];
 		for (const pokemon of this.pools.pokemon.next(6)) {
-			const template = this.dex.getTemplate(pokemon);
+			const species = this.dex.getSpecies(pokemon);
 			const randomEVs = () => this.prng.next(253);
 			const randomIVs = () => this.prng.next(32);
 
 			let item;
 			const moves = [];
-			const combos = this.signatures.get(template.id);
+			const combos = this.signatures.get(species.id);
 			if (combos && this.prng.next() > TeamGenerator.COMBO) {
 				const combo = this.prng.sample(combos);
 				item = combo.item;
@@ -228,9 +228,9 @@ class TeamGenerator {
 			}
 
 			team.push({
-				name: template.baseSpecies,
-				species: template.species,
-				gender: template.gender,
+				name: species.baseSpecies,
+				species: species.name,
+				gender: species.gender,
 				item,
 				ability: this.dex.gen >= 3 ? this.pools.abilities.next() : 'None',
 				moves: moves.concat(...this.pools.moves.next(4 - moves.length)),

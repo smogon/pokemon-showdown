@@ -109,12 +109,12 @@ let BattleMovedex = {
 				this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies[0].name);
 				this.event.modifier = 1;
 				// @ts-ignore
-				return move.allies.shift().template.baseStats.atk;
+				return move.allies.shift().species.baseStats.atk;
 			},
 			onFoeModifyDefPriority: -101,
 			onFoeModifyDef(def, pokemon) {
 				this.event.modifier = 1;
-				return pokemon.template.baseStats.def;
+				return pokemon.species.baseStats.def;
 			},
 		},
 	},

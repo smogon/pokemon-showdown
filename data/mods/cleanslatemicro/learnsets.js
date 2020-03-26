@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: {learnset: {[k: string]: MoveSource[]}}}} */
+/**@type {{[k: string]: ModdedLearnsetData}} */
 let BattleLearnsets = {
 	typenull: {learnset: {
 		aerialace: ["7M", "7L20"],

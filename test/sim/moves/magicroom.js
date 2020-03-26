@@ -50,7 +50,7 @@ describe('Magic Room', function () {
 		battle.setPlayer('p2', {team: [{species: "Golem", ability: 'noguard', moves: ['magicroom', 'rest']}]});
 		battle.makeChoices('move bulkup', 'move magicroom');
 		battle.makeChoices('move bulkup mega', 'move rest');
-		assert.equal(battle.p1.active[0].template.speciesid, 'lopunnymega');
+		assert.equal(battle.p1.active[0].species.id, 'lopunnymega');
 	});
 
 	it('should not prevent Primal Reversion', function () {
@@ -62,6 +62,6 @@ describe('Magic Room', function () {
 		battle.setPlayer('p2', {team: [{species: "Meowstic", ability: 'prankster', moves: ['magicroom']}]});
 		battle.makeChoices('move voltswitch', 'move magicroom');
 		battle.makeChoices('switch groudon', '');
-		assert.equal(battle.p1.active[0].template.speciesid, 'groudonprimal');
+		assert.equal(battle.p1.active[0].species.id, 'groudonprimal');
 	});
 });

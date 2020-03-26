@@ -4,35 +4,35 @@ const RandomTeams = require('../../random-teams');
 
 class RandomLetsGoTeams extends RandomTeams {
 	/**
-	 * @param {string | Template} template
+	 * @param {string | Species} species
 	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, teamDetails = {}) {
-		template = this.dex.getTemplate(template);
-		let species = template.species;
+	randomSet(species, teamDetails = {}) {
+		species = this.dex.getSpecies(species);
+		let cosmeticFormeName = species.name;
 
-		if (!template.exists || !template.randomBattleMoves && !this.dex.data.Learnsets[template.id]) {
-			template = this.dex.getTemplate(this.sample(['Pikachu-Starter', 'Eevee-Starter']));
+		if (!species.exists || !species.randomBattleMoves && !this.dex.data.Learnsets[species.id]) {
+			species = this.dex.getSpecies(this.sample(['Pikachu-Starter', 'Eevee-Starter']));
 
-			const err = new Error('Template incompatible with random battles: ' + species);
+			const err = new Error('Species incompatible with random battles: ' + species);
 			Monitor.crashlog(err, 'The Let\'s Go randbat set generator');
 		}
 
-		if (template.battleOnly) {
-			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			species = /** @type {string} */ (template.battleOnly);
+		if (species.battleOnly) {
+			// Only change the species. The species has custom moves, and may have different typing and requirements.
+			cosmeticFormeName = /** @type {string} */ (species.battleOnly);
 		}
 
 		// @ts-ignore
-		let movePool = (template.randomBattleMoves || Object.keys(this.dex.data.Learnsets[template.id].learnset)).slice();
+		let movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id].learnset)).slice();
 		/**@type {string[]} */
 		let moves = [];
 		/**@type {{[k: string]: true}} */
 		let hasType = {};
-		hasType[template.types[0]] = true;
-		if (template.types[1]) {
-			hasType[template.types[1]] = true;
+		hasType[species.types[0]] = true;
+		if (species.types[1]) {
+			hasType[species.types[1]] = true;
 		}
 
 		/**@type {{[k: string]: boolean}} */
@@ -203,13 +203,13 @@ class RandomLetsGoTeams extends RandomTeams {
 		}
 
 		return {
-			name: template.baseSpecies,
-			species: species,
+			name: species.baseSpecies,
+			species: cosmeticFormeName,
 			level: 100,
-			gender: template.gender,
+			gender: species.gender,
 			happiness: 70,
 			shiny: this.randomChance(1, 1024),
-			item: (template.requiredItem || ''),
+			item: (species.requiredItem || ''),
 			ability: 'No Ability',
 			moves: moves,
 			evs: {hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20},
@@ -222,8 +222,8 @@ class RandomLetsGoTeams extends RandomTeams {
 
 		let pokemonPool = [];
 		for (let id in this.dex.data.FormatsData) {
-			let template = this.dex.getTemplate(id);
-			if (template.num < 1 || (template.num > 151 && ![808, 809].includes(template.num)) || template.gen > 7 || template.nfe || !template.randomBattleMoves || !template.randomBattleMoves.length) continue;
+			let species = this.dex.getSpecies(id);
+			if (species.num < 1 || (species.num > 151 && ![808, 809].includes(species.num)) || species.gen > 7 || species.nfe || !species.randomBattleMoves || !species.randomBattleMoves.length) continue;
 			pokemonPool.push(id);
 		}
 
@@ -237,17 +237,17 @@ class RandomLetsGoTeams extends RandomTeams {
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
-			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
-			if (!template.exists) continue;
+			let species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseSpecies]) continue;
+			if (baseFormes[species.baseSpecies]) continue;
 
-			let types = template.types;
+			let types = species.types;
 
 			// Limit 2 of any type
 			let skip = false;
-			for (const type of template.types) {
+			for (const type of species.types) {
 				if (typeCount[type] > 1 && this.randomChance(4, 5)) {
 					skip = true;
 					break;
@@ -255,7 +255,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			}
 			if (skip) continue;
 
-			let set = this.randomSet(template, teamDetails);
+			let set = this.randomSet(species, teamDetails);
 
 			// Limit 1 of any type combination
 			let typeCombo = types.slice().sort().join();
@@ -265,7 +265,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			pokemon.push(set);
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[template.baseSpecies] = 1;
+			baseFormes[species.baseSpecies] = 1;
 
 			// Increment type counters
 			for (const type of types) {

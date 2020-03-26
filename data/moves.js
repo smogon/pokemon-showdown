@@ -829,7 +829,7 @@ let BattleMovedex = {
 			},
 		},
 		onTryMove(pokemon, target, move) {
-			if (pokemon.template.baseSpecies === 'Morpeko') {
+			if (pokemon.species.baseSpecies === 'Morpeko') {
 				return;
 			}
 			this.add('-fail', pokemon, 'move: Aura Wheel');
@@ -837,7 +837,7 @@ let BattleMovedex = {
 			return null;
 		},
 		onModifyType(move, pokemon) {
-			if (pokemon.template.species === 'Morpeko-Hangry') {
+			if (pokemon.species.name === 'Morpeko-Hangry') {
 				move.type = 'Dark';
 			} else {
 				move.type = 'Electric';
@@ -1190,7 +1190,7 @@ let BattleMovedex = {
 		basePower: 0,
 		basePowerCallback(pokemon, target, move) {
 			// @ts-ignore
-			return 5 + Math.floor(move.allies.shift().template.baseStats.atk / 10);
+			return 5 + Math.floor(move.allies.shift().species.baseStats.atk / 10);
 		},
 		category: "Physical",
 		desc: "Hits one time for the user and one time for each unfainted Pokemon without a major status condition in the user's party. The power of each hit is equal to 5+(X/10), where X is each participating Pokemon's base Attack; each hit is considered to come from the user.",
@@ -3357,7 +3357,7 @@ let BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		status: 'slp',
 		onTryMove(pokemon, target, move) {
-			if (pokemon.template.species === 'Darkrai' || move.hasBounced) {
+			if (pokemon.species.name === 'Darkrai' || move.hasBounced) {
 				return;
 			}
 			this.add('-fail', pokemon, 'move: Dark Void');
@@ -3792,7 +3792,7 @@ let BattleMovedex = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			if (attacker.hasAbility('gulpmissile') && attacker.template.species === 'Cramorant' && !attacker.transformed) {
+			if (attacker.hasAbility('gulpmissile') && attacker.species.name === 'Cramorant' && !attacker.transformed) {
 				const forme = attacker.hp <= attacker.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
 				attacker.formeChange(forme, move);
 			}
@@ -9310,11 +9310,11 @@ let BattleMovedex = {
 		flags: {mirror: 1, authentic: 1},
 		breaksProtect: true,
 		onTry(pokemon) {
-			if (pokemon.template.species === 'Hoopa-Unbound') {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
 				return;
 			}
 			this.hint("Only a Pokemon whose form is Hoopa Unbound can use this move.");
-			if (pokemon.template.species === 'Hoopa') {
+			if (pokemon.species.name === 'Hoopa') {
 				this.add('-fail', pokemon, 'move: Hyperspace Fury', '[forme]');
 				return null;
 			}
@@ -10991,7 +10991,7 @@ let BattleMovedex = {
 		noSketch: true,
 		drain: [1, 2],
 		onTry(pokemon) {
-			if (pokemon.template.name !== 'Magikarp') {
+			if (pokemon.species.name !== 'Magikarp') {
 				this.add('-fail', pokemon, 'move: Magikarp\'s Revenge');
 				return null;
 			}
@@ -15259,7 +15259,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, authentic: 1, mystery: 1},
 		onHit(target, source) {
-			if (source.template && (source.template.num === 493 || source.template.num === 773)) return false;
+			if (source.species && (source.species.num === 493 || source.species.num === 773)) return false;
 			let newBaseTypes = target.getTypes(true).filter(type => type !== '???');
 			if (!newBaseTypes.length) {
 				if (target.addedType) {
@@ -15321,13 +15321,13 @@ let BattleMovedex = {
 			status: 'slp',
 		},
 		onHit(target, pokemon, move) {
-			if (pokemon.baseTemplate.baseSpecies === 'Meloetta' && !pokemon.transformed) {
+			if (pokemon.baseSpecies.baseSpecies === 'Meloetta' && !pokemon.transformed) {
 				move.willChangeForme = true;
 			}
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.willChangeForme) {
-				pokemon.formeChange(pokemon.template.speciesid === 'meloettapirouette' ? 'Meloetta' : 'Meloetta-Pirouette', this.effect, false, '[msg]');
+				pokemon.formeChange(pokemon.species.id === 'meloettapirouette' ? 'Meloetta' : 'Meloetta-Pirouette', this.effect, false, '[msg]');
 			}
 		},
 		target: "allAdjacentFoes",
@@ -19611,8 +19611,8 @@ let BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart(target) {
-				if (['Diglett', 'Dugtrio', 'Palossand', 'Sandygast'].includes(target.baseTemplate.baseSpecies) ||
-						target.baseTemplate.species === 'Gengar-Mega') {
+				if (['Diglett', 'Dugtrio', 'Palossand', 'Sandygast'].includes(target.baseSpecies.baseSpecies) ||
+						target.baseSpecies.name === 'Gengar-Mega') {
 					this.add('-immune', target);
 					return null;
 				}
@@ -19627,7 +19627,7 @@ let BattleMovedex = {
 				if (type === 'Ground') return false;
 			},
 			onUpdate(pokemon) {
-				if (pokemon.baseTemplate.species === 'Gengar-Mega') {
+				if (pokemon.baseSpecies.name === 'Gengar-Mega') {
 					delete pokemon.volatiles['telekinesis'];
 					this.add('-end', pokemon, 'Telekinesis', '[silent]');
 				}
@@ -20881,7 +20881,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 15,
 		basePowerCallback(pokemon, target, move) {
-			if (pokemon.template.species === 'Greninja-Ash' && pokemon.hasAbility('battlebond')) {
+			if (pokemon.species.name === 'Greninja-Ash' && pokemon.hasAbility('battlebond')) {
 				return move.basePower + 5;
 			}
 			return move.basePower;

@@ -185,12 +185,12 @@ let BattleAbilities = {
 		},
 		onUpdate(pokemon) {
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
-				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
+				if (pokemon.isActive && pokemon.id === 'cherrim' && this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine', '[msg]');
 					this.boost({spd: 1});
 				}
-			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
+			} else if (pokemon.isActive && pokemon.id === 'cherrim' && this.effectData.forme) {
 				delete this.effectData.forme;
 				this.add('-formechange', pokemon, 'Cherrim', '[msg]');
 			}
@@ -332,7 +332,7 @@ let BattleAbilities = {
 	"download": {
 		inherit: true,
 		onStart(pokemon) {
-			if (pokemon.template.baseSpecies === 'Genesect') {
+			if (pokemon.species.baseSpecies === 'Genesect') {
 				if (!pokemon.getItem().onDrive) return;
 			}
 			let totaldef = 0;

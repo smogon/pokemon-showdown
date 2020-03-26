@@ -23,9 +23,9 @@ const POSITIONS = 'abcdefghijklmnopqrstuvwx';
 // Several types we serialize as 'references' in the form '[Type]' because
 // they are either circular or they are (or at least, should be) immutable
 // and thus can simply be reconsituted as needed.
-// NOTE: Template is not strictly immutable as some OM formats rely on an
-// onModifyTemplate event - deserialization is not possible for such formats.
-type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item | Move | Template;
+// NOTE: Species is not strictly immutable as some OM formats rely on an
+// onModifySpecies event - deserialization is not possible for such formats.
+type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item | Move | Species;
 
 // Certain fields are either redundant (transient caches, constants, duplicate
 // information) or require special treatment. These sets contain the specific
@@ -42,7 +42,7 @@ const FIELD = new Set(['id', 'battle']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
 const POKEMON = new Set([
 	'side', 'battle', 'set', 'name', 'fullname', 'id', 'species',
-	'speciesid', 'happiness', 'level', 'pokeball', 'baseMoveSlots',
+	'id', 'happiness', 'level', 'pokeball', 'baseMoveSlots',
 ]);
 const CHOICE = new Set(['switchIns']);
 const ACTIVE_MOVE = new Set(['move']);
@@ -355,7 +355,7 @@ export const State = new class {
 		if (!this.REFERABLE) {
 			this.REFERABLE = new Set([
 				Battle, Field, Side, Pokemon, Data.PureEffect,
-				Data.Ability, Data.Item, Data.Move, Data.Template,
+				Data.Ability, Data.Item, Data.Move, Data.Species,
 			]);
 		}
 		return this.REFERABLE.has(obj.constructor);
@@ -390,7 +390,7 @@ export const State = new class {
 		case 'Item': return battle.dex.getItem(id);
 		case 'Move': return battle.dex.getMove(id);
 		case 'PureEffect': return battle.dex.getEffect(id);
-		case 'Template': return battle.dex.getTemplate(id);
+		case 'Species': return battle.dex.getSpecies(id);
 		default: return undefined; // maybe we actually got unlucky and its a string
 		}
 	}

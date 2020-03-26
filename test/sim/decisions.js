@@ -998,8 +998,8 @@ describe('Choice extensions', function () {
 				battle.makeChoices('switch 3', 'switch 2');
 
 				assert.equal(battle.turn, 2);
-				assert.equal(battle.p1.active[0].template.species, 'Chikorita');
-				assert.equal(battle.p2.active[0].template.species, 'Charmander');
+				assert.equal(battle.p1.active[0].species.name, 'Chikorita');
+				assert.equal(battle.p2.active[0].species.name, 'Charmander');
 			});
 
 			it(`should support to ${mode} pass decisions on double switch requests`, function () {

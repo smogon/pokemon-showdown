@@ -121,36 +121,36 @@ let BattleItems = {
 		// The Stick is a stand-in for a number of pokemon-exclusive items
 		// introduced with Gen Next
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Farfetch\'d') {
+			if (user.species.name === 'Farfetch\'d') {
 				return critRatio + 2;
 			}
 		},
 		onModifyDef(def, pokemon) {
-			if (pokemon.template.species === 'Shuckle') {
+			if (pokemon.species.name === 'Shuckle') {
 				return def * 1.5;
 			}
 		},
 		onModifySpA(spa, pokemon) {
-			if (pokemon.template.species === 'Unown') {
+			if (pokemon.species.name === 'Unown') {
 				return spa * 2;
 			}
 		},
 		onModifySpD(spd, pokemon) {
-			if (pokemon.template.species === 'Unown') {
+			if (pokemon.species.name === 'Unown') {
 				return spd * 2;
 			}
-			if (pokemon.template.species === 'Shuckle') {
+			if (pokemon.species.name === 'Shuckle') {
 				return spd * 1.5;
 			}
 		},
 		onModifySpe(spe, pokemon) {
-			if (pokemon.template.species === 'Unown') {
+			if (pokemon.species.name === 'Unown') {
 				return spe * 2;
 			}
 		},
 		onFoeBasePower(basePower, attacker, defender, move) {
 			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
-			if (GossamerWingUsers.includes(defender.template.species)) {
+			if (GossamerWingUsers.includes(defender.species.name)) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
 					this.add('-message', "The attack was weakened by GoassamerWing!");
 					return basePower / 2;
@@ -159,7 +159,7 @@ let BattleItems = {
 		},
 		onDamage(damage, defender, attacker, effect) {
 			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
-			if (GossamerWingUsers.includes(defender.template.species)) {
+			if (GossamerWingUsers.includes(defender.species.name)) {
 				if (effect && effect.id === 'stealthrock') {
 					return damage / 2;
 				}
@@ -167,12 +167,12 @@ let BattleItems = {
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
-			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers.includes(source.template.species)) {
+			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers.includes(source.species.name)) {
 				this.heal(source.baseMaxhp / 16);
 			}
 		},
 		// onResidual(pokemon) {
-		// 	if (pokemon.template.species === 'Shuckle') {
+		// 	if (pokemon.species.name === 'Shuckle') {
 		// 		this.heal(this.dex.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}
 		// },

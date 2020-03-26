@@ -73,13 +73,13 @@ let BattleMovedex = {
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
-				if (pokemon.template.weighthg > 1) {
+				if (pokemon.species.weighthg > 1) {
 					this.effectData.multiplier = 1;
 					this.add('-start', pokemon, 'Autotomize');
 				}
 			},
 			onRestart(pokemon) {
-				if (pokemon.template.weighthg - (this.effectData.multiplier * 1000) > 1) {
+				if (pokemon.species.weighthg - (this.effectData.multiplier * 1000) > 1) {
 					this.effectData.multiplier++;
 					this.add('-start', pokemon, 'Autotomize');
 				}
@@ -151,7 +151,7 @@ let BattleMovedex = {
 		desc: "Has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording.",
 		shortDesc: "For Chatot, 10% chance to confuse the target.",
 		onModifyMove(move, pokemon) {
-			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
+			if (pokemon.species.name !== 'Chatot') delete move.secondaries;
 		},
 		secondary: {
 			chance: 10,
