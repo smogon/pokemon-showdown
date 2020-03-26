@@ -225,6 +225,11 @@ export class ModdedDex {
 		return dexes[mod || 'base'];
 	}
 
+	forGen(gen: number) {
+		if (!gen) return this;
+		return this.mod(`gen${gen}`);
+	}
+
 	forFormat(format: Format | string): ModdedDex {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
