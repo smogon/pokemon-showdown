@@ -1369,16 +1369,18 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const mod = Dex.mod('gen' + maxGen);
 
 	const getFullLearnsetOfPokemon = (species: Species) => {
-		let usedSpecies = Dex.deepClone(species);
-		if (!usedSpecies.learnset) {
+		let usedSpecies: Species = Dex.deepClone(species);
+		let usedSpeciesLearnset: LearnsetData = Dex.deepClone(Dex.getLearnsetData(usedSpecies.id));
+		if (!usedSpeciesLearnset.learnset) {
 			usedSpecies = Dex.deepClone(mod.getSpecies(usedSpecies.baseSpecies));
-			usedSpecies.learnset = Dex.deepClone(usedSpecies.learnset || {});
+			usedSpeciesLearnset.learnset = Dex.deepClone(mod.getLearnsetData(usedSpecies.id).learnset || {});
 		}
-		const lsetData = new Set(Object.keys(usedSpecies.learnset));
+		const lsetData = new Set(Object.keys(usedSpeciesLearnset.learnset!));
 
 		while (usedSpecies.prevo) {
 			usedSpecies = Dex.deepClone(mod.getSpecies(usedSpecies.prevo));
-			for (const move in usedSpecies.learnset) {
+			usedSpeciesLearnset = Dex.deepClone(mod.getLearnsetData(usedSpecies.id));
+			for (const move in usedSpeciesLearnset.learnset) {
 				lsetData.add(move);
 			}
 		}
