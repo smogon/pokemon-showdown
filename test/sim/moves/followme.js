@@ -26,7 +26,7 @@ describe('Follow Me', function () {
 		]});
 		let hitCount = 0;
 		battle.onEvent('Damage', battle.format, function (damage, pokemon) {
-			if (pokemon.template.speciesid === 'clefable') {
+			if (pokemon.species.id === 'clefable') {
 				hitCount++;
 			}
 		});

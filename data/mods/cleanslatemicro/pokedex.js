@@ -1,10 +1,10 @@
 'use strict';
 
-/**@type {{[k: string]: ModdedTemplateData}} */
+/**@type {{[k: string]: ModdedSpeciesData}} */
 let BattlePokedex = {
 	typenull: {
 		num: 772,
-		species: "Type: Null",
+		name: "Type: Null",
 		types: ["Normal", "Steel"],
 		baseStats: {hp: 70, atk: 120, def: 80, spa: 70, spd: 60, spe: 85},
 		abilities: {0: "Battle Armor", 1: "Tinted Lens"},
@@ -15,7 +15,7 @@ let BattlePokedex = {
 	},
 	crobat: {
 		num: 169,
-		species: "Crobat",
+		name: "Crobat",
 		types: ["Poison", "Fighting"],
 		baseStats: {hp: 110, atk: 70, def: 100, spa: 60, spd: 65, spe: 80},
 		abilities: {0: "Big Pecks", 1: "Scrappy", H: "Magic Guard"},
@@ -26,7 +26,7 @@ let BattlePokedex = {
 	},
 	galvantula: {
 		num: 596,
-		species: "Galvantula",
+		name: "Galvantula",
 		types: ["Bug", "Electric"],
 		baseStats: {hp: 60, atk: 50, def: 65, spa: 104, spd: 79, spe: 107},
 		abilities: {0: "Static", 1: "Quick Feet", H: "Fluffy"},
@@ -37,7 +37,7 @@ let BattlePokedex = {
 	},
 	dugtrioalola: {
 		num: 51,
-		species: "Dugtrio-Alola",
+		name: "Dugtrio-Alola",
 		types: ["Ground", "Steel"],
 		baseStats: {hp: 55, atk: 90, def: 95, spa: 38, spd: 61, spe: 126},
 		abilities: {0: "Sand Force", H: "Intimidate"},
@@ -48,7 +48,7 @@ let BattlePokedex = {
 	},
 	rotom: {
 		num: 479,
-		species: "Rotom",
+		name: "Rotom",
 		types: ["Electric", "Ghost"],
 		gender: "N",
 		baseStats: {hp: 50, atk: 50, def: 77, spa: 95, spd: 77, spe: 91},
@@ -61,7 +61,7 @@ let BattlePokedex = {
 	},
 	torterra: {
 		num: 389,
-		species: "Torterra",
+		name: "Torterra",
 		types: ["Grass", "Dragon"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 95, atk: 87, def: 125, spa: 78, spd: 50, spe: 45},
@@ -73,7 +73,7 @@ let BattlePokedex = {
 	},
 	dragalge: {
 		num: 691,
-		species: "Dragalge",
+		name: "Dragalge",
 		types: ["Poison", "Dragon"],
 		baseStats: {hp: 71, atk: 85, def: 90, spa: 87, spd: 123, spe: 44},
 		abilities: {0: "Poison Point", 1: "Poison Touch", H: "Hydration"},
@@ -84,7 +84,7 @@ let BattlePokedex = {
 	},
 	ninetales: {
 		num: 38,
-		species: "Ninetales",
+		name: "Ninetales",
 		types: ["Fire", "Fairy"],
 		genderRatio: {M: 0.25, F: 0.75},
 		baseStats: {hp: 80, atk: 75, def: 65, spa: 100, spd: 85, spe: 100},
@@ -96,7 +96,7 @@ let BattlePokedex = {
 	},
 	pupitar: {
 		num: 247,
-		species: "Pupitar",
+		name: "Pupitar",
 		types: ["Rock", "Ground"],
 		baseStats: {hp: 90, atk: 110, def: 100, spa: 50, spd: 60, spe: 60},
 		abilities: {0: "Shed Skin", H: "Battle Armor"},
@@ -108,7 +108,7 @@ let BattlePokedex = {
 	},
 	farfetchd: {
 		num: 83,
-		species: "Farfetch'd",
+		name: "Farfetch'd",
 		types: ["Fighting", "Flying"],
 		baseStats: {hp: 75, atk: 115, def: 85, spa: 45, spd: 55, spe: 95},
 		abilities: {0: "Defiant", 1: "Big Pecks", H: "Sap Sipper"},
@@ -119,7 +119,7 @@ let BattlePokedex = {
 	},
 	purugly: {
 		num: 432,
-		species: "Purugly",
+		name: "Purugly",
 		types: ["Dark", "Fairy"],
 		genderRatio: {M: 0.25, F: 0.75},
 		baseStats: {hp: 74, atk: 80, def: 84, spa: 59, spd: 84, spe: 119},
@@ -131,7 +131,7 @@ let BattlePokedex = {
 	},
 	kyurem: {
 		num: 646,
-		species: "Kyurem",
+		name: "Kyurem",
 		types: ["Ice"],
 		gender: "N",
 		baseStats: {hp: 95, atk: 80, def: 90, spa: 110, spd: 90, spe: 85},
@@ -143,7 +143,7 @@ let BattlePokedex = {
 	},
 	rotomwash: {
 		num: 479,
-		species: "Rotom-Wash",
+		name: "Rotom-Wash",
 		types: ["Water", "Ghost"],
 		gender: "N",
 		baseStats: {hp: 50, atk: 50, def: 127, spa: 105, spd: 97, spe: 76},
@@ -155,7 +155,7 @@ let BattlePokedex = {
 	},
 	umbreon: {
 		num: 197,
-		species: "Umbreon",
+		name: "Umbreon",
 		types: ["Dark", "Ghost"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 85, atk: 65, def: 75, spa: 75, spd: 115, spe: 65},
@@ -167,7 +167,7 @@ let BattlePokedex = {
 	},
 	heracross: {
 		num: 214,
-		species: "Heracross",
+		name: "Heracross",
 		types: ["Bug", "Ghost"],
 		baseStats: {hp: 75, atk: 95, def: 105, spa: 44, spd: 73, spe: 75},
 		abilities: {0: "Poison Heal", 1: "Cursed Body"},
@@ -178,7 +178,7 @@ let BattlePokedex = {
 	},
 	magearna: {
 		num: 801,
-		species: "Magearna",
+		name: "Magearna",
 		types: ["Steel", "Fairy"],
 		gender: "N",
 		baseStats: {hp: 80, atk: 60, def: 90, spa: 85, spd: 100, spe: 50},
@@ -190,7 +190,7 @@ let BattlePokedex = {
 	},
 	rotommow: {
 		num: 479,
-		species: "Rotom-Mow",
+		name: "Rotom-Mow",
 		types: ["Grass", "Psychic"],
 		gender: "N",
 		baseStats: {hp: 50, atk: 105, def: 107, spa: 50, spd: 107, spe: 86},
@@ -202,7 +202,7 @@ let BattlePokedex = {
 	},
 	malamar: {
 		num: 687,
-		species: "Malamar",
+		name: "Malamar",
 		types: ["Steel", "Psychic"],
 		baseStats: {hp: 86, atk: 60, def: 78, spa: 100, spd: 75, spe: 73},
 		abilities: {0: "Contrary", 1: "Suction Cups", H: "Analytic"},
@@ -213,7 +213,7 @@ let BattlePokedex = {
 	},
 	wailord: {
 		num: 321,
-		species: "Wailord",
+		name: "Wailord",
 		types: ["Water", "Flying"],
 		abilities: {0: "Oblivious", 1: "Pressure"},
 		baseStats: {hp: 140, atk: 65, def: 70, spa: 88, spd: 82, spe: 55},
@@ -224,7 +224,7 @@ let BattlePokedex = {
 	},
 	ludicolo: {
 		num: 272,
-		species: "Ludicolo",
+		name: "Ludicolo",
 		types: ["Water", "Grass"],
 		baseStats: {hp: 80, atk: 60, def: 70, spa: 100, spd: 100, spe: 75},
 		abilities: {0: "Swift Swim", 1: "Rain Dish", H: "Thick Fat"},
@@ -235,7 +235,7 @@ let BattlePokedex = {
 	},
 	rotomheat: {
 		num: 479,
-		species: "Rotom-Heat",
+		name: "Rotom-Heat",
 		types: ["Fire", "Rock"],
 		gender: "N",
 		baseStats: {hp: 50, atk: 50, def: 97, spa: 105, spd: 127, spe: 76},

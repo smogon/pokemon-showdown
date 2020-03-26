@@ -206,7 +206,7 @@ let BattleStatuses = {
 	gengar: {
 		// Gengar: Cursed Body
 		onImmunity(type, pokemon) {
-			if (pokemon.template.id !== 'gengarmega' && type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (pokemon.species.id !== 'gengarmega' && type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {

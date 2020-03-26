@@ -29,7 +29,7 @@ describe('Sky Drop', function () {
 		]});
 		battle.makeChoices('move skydrop', 'move bulkup');
 		assert.trapped(() => battle.makeChoices('move skydrop', 'switch aggron'));
-		assert.equal(battle.p2.active[0].template.speciesid, 'lairon');
+		assert.equal(battle.p2.active[0].species.id, 'lairon');
 	});
 
 	it('should prevent both the user and the target from being forced out when caught by the effect', function () {
@@ -45,8 +45,8 @@ describe('Sky Drop', function () {
 			{species: "Omastar", ability: 'swiftswim', moves: ['shellsmash']},
 		]});
 		battle.makeChoices('move skydrop 1, move circlethrow 1', 'move bulkup, move dragontail 1');
-		assert.equal(battle.p1.active[0].template.speciesid, 'aerodactyl');
-		assert.equal(battle.p2.active[0].template.speciesid, 'armaldo');
+		assert.equal(battle.p1.active[0].species.id, 'aerodactyl');
+		assert.equal(battle.p2.active[0].species.id, 'armaldo');
 	});
 
 	it('should prevent its target from using Mega Evolution when it is caught by the effect', function () {
@@ -56,7 +56,7 @@ describe('Sky Drop', function () {
 		]);
 		battle.makeChoices('move skydrop', 'move charge');
 		battle.makeChoices('move skydrop', 'move charge mega');
-		assert.equal(battle.p2.active[0].template.speciesid, 'manectric');
+		assert.equal(battle.p2.active[0].species.id, 'manectric');
 	});
 
 	it('should prevent its target from activating Stance Change when it is caught by the effect', function () {
@@ -64,12 +64,12 @@ describe('Sky Drop', function () {
 		battle.setPlayer('p1', {team: [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]});
 		battle.setPlayer('p2', {team: [{species: "Aegislash", ability: 'stancechange', moves: ['tackle', 'kingsshield']}]});
 		battle.makeChoices('move skydrop', 'move tackle');
-		assert.equal(battle.p2.active[0].template.speciesid, 'aegislash');
+		assert.equal(battle.p2.active[0].species.id, 'aegislash');
 		battle.makeChoices('move skydrop', 'move tackle');
-		assert.equal(battle.p2.active[0].template.speciesid, 'aegislashblade');
+		assert.equal(battle.p2.active[0].species.id, 'aegislashblade');
 		battle.makeChoices('move skydrop', 'move tackle');
 		battle.makeChoices('move skydrop', 'move kingsshield');
-		assert.equal(battle.p2.active[0].template.speciesid, 'aegislashblade');
+		assert.equal(battle.p2.active[0].species.id, 'aegislashblade');
 	});
 
 	it('should free its target and allow it to move if the user faints', function () {
@@ -141,7 +141,7 @@ describe('Sky Drop', function () {
 		]);
 		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move bulkup');
 		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move allyswitch');
-		assert.equal(battle.p2.active[1].template.speciesid, 'lairon');
+		assert.equal(battle.p2.active[1].species.id, 'lairon');
 		assert.notStrictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
@@ -219,12 +219,12 @@ describe('Sky Drop [Gen 5]', function () {
 			battle.makeChoices('move rockpolish, move recover', 'move tackle 2, move nastyplot');
 			assert.equal(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
 			battle.makeChoices('move rockpolish, move recover', 'switch azurill, move nastyplot');
-			assert.equal(battle.p2.active[0].template.speciesid, 'magikarp');
+			assert.equal(battle.p2.active[0].species.id, 'magikarp');
 		});
 
 		it('should prevent the user from being forced out', function () {
 			battle.makeChoices('move rockpolish, move recover', 'move sleeptalk, move roar 1');
-			assert.equal(battle.p1.active[0].template.speciesid, 'aerodactyl');
+			assert.equal(battle.p1.active[0].species.id, 'aerodactyl');
 		});
 
 		it('should end when the user switches out', function () {

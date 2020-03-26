@@ -22,7 +22,7 @@ let BattleScripts = {
 			for (let statName in this.storedStats) {
 				/**@type {number} */
 				// @ts-ignore
-				let stat = this.template.baseStats[statName];
+				let stat = this.species.baseStats[statName];
 				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
 				// @ts-ignore
@@ -495,7 +495,7 @@ let BattleScripts = {
 		if (!isCrit) {
 			// In Stadium, the critical chance is based on speed.
 			// First, we get the base speed and store it. Then we add 76. This is our current crit chance.
-			let critChance = pokemon.template.baseStats['spe'] + 76;
+			let critChance = pokemon.species.baseStats['spe'] + 76;
 
 			// Now we right logical shift it two places, essentially dividing by 4 and flooring it.
 			critChance = critChance >> 2;

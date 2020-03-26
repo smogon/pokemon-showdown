@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: ModdedTemplateFormatsData}} */
+/**@type {{[k: string]: ModdedSpeciesFormatsData}} */
 let BattleFormatsData = {
 	aegislash: {
 		inherit: true,

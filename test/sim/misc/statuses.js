@@ -160,7 +160,7 @@ describe('Freeze', function () {
 		});
 		battle.makeChoices('move icebeam', 'move sleeptalk');
 		assert.equal(battle.p2.active[0].status, 'frz');
-		assert.equal(battle.p2.active[0].template.species, 'Shaymin');
+		assert.equal(battle.p2.active[0].species.name, 'Shaymin');
 	});
 
 	it('should not cause an afflicted Pokemon transformed into Shaymin-Sky to change to Shaymin', function () {
@@ -178,7 +178,7 @@ describe('Freeze', function () {
 		});
 		battle.makeChoices('move sleeptalk', 'move icebeam');
 		assert.equal(battle.p1.active[0].status, 'frz');
-		assert.equal(battle.p1.active[0].template.species, 'Shaymin-Sky');
+		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');
 	});
 });
 

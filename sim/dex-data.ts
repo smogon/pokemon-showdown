@@ -518,20 +518,19 @@ export class Learnset {
 	}
 }
 
-export class Template extends BasicEffect implements Readonly<BasicEffect & TemplateData & TemplateFormatsData> {
+export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesData & SpeciesFormatsData> {
 	readonly effectType: 'Pokemon';
 	/**
 	 * Species ID. Identical to ID. Note that this is the full ID, e.g.
 	 * 'basculinbluestriped'. To get the base species ID, you need to
-	 * manually read toID(template.baseSpecies).
+	 * manually read toID(species.baseSpecies).
 	 */
-	readonly speciesid: ID;
+	readonly id: ID;
 	/**
-	 * Species. Identical to name. Note that this is the full name,
-	 * e.g. 'Basculin-Blue-Striped'. To get the base species name, see
-	 * template.baseSpecies.
+	 * Name. Note that this is the full name with forme,
+	 * e.g. 'Basculin-Blue-Striped'. To get the name without forme, see
+	 * `species.baseSpecies`.
 	 */
-	readonly species: string;
 	readonly name: string;
 	/**
 	 * Base species. Species, but without the forme name.
@@ -542,7 +541,15 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly baseSpecies: string;
 	/**
 	 * Forme name. If the forme exists,
-	 * `template.species === template.baseSpecies + '-' + template.forme`
+	 * `species.name === species.baseSpecies + '-' + species.forme`
+	 *
+	 * The games make a distinction between Forme (foorumu) (legendary Pokémon)
+	 * and Form (sugata) (non-legendary Pokémon). PS does not use the same
+	 * distinction – they're all "Forme" to PS, reflecting current community
+	 * use of the term.
+	 *
+	 * This property only tracks non-cosmetic formes, and will be `''` for
+	 * cosmetic formes.
 	 */
 	readonly forme: string;
 	/**
@@ -554,7 +561,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * `aliases.js` aliases to this entry, but not have their own
 	 * entry in `pokedex.js`.
 	 */
-	readonly otherForms?: string[];
+	readonly cosmeticFormes?: string[];
 	/**
 	 * Other formes. List of names of formes, appears only on the base
 	 * forme. Unlike forms, these have their own entry in `pokedex.js`.
@@ -566,7 +573,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 */
 	readonly spriteid: string;
 	/** Abilities. */
-	readonly abilities: TemplateAbility;
+	readonly abilities: SpeciesAbility;
 	/** Types. */
 	readonly types: string[];
 	/** Added type (used in OMs). */
@@ -664,13 +671,12 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 
 		this.fullname = `pokemon: ${data.name}`;
 		this.effectType = 'Pokemon';
-		this.speciesid = data.speciesid as ID || this.id;
-		this.species = data.species || data.name;
-		this.name = data.species;
+		this.id = data.id as ID;
+		this.name = data.name;
 		this.baseSpecies = data.baseSpecies || this.name;
 		this.forme = data.forme || '';
 		this.baseForme = data.baseForme || '';
-		this.otherForms = data.otherForms || undefined;
+		this.cosmeticFormes = data.cosmeticFormes || undefined;
 		this.otherFormes = data.otherFormes || undefined;
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));

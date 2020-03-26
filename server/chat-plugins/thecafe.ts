@@ -45,36 +45,36 @@ function stringifyTeam(team: PokemonSet[], ingredients: string[]) {
 
 function generateTeam(generator = '') {
 	let potentialPokemon = Object.keys(Dex.data.Pokedex).filter(mon => {
-		const template = Dex.getTemplate(mon);
-		return template.baseSpecies === template.species;
+		const species = Dex.getSpecies(mon);
+		return species.baseSpecies === species.name;
 	});
 	let speciesClause = true;
 	switch (generator) {
 	case 'ou':
 		potentialPokemon = potentialPokemon.filter(mon => {
-			const template = Dex.getTemplate(mon);
-			return template.tier === 'OU';
+			const species = Dex.getSpecies(mon);
+			return species.tier === 'OU';
 		}).concat(potentialPokemon.filter(mon => {
 			// There is probably a better way to get the ratios right, oh well.
-			const template = Dex.getTemplate(mon);
-			return template.tier === 'OU' || template.tier === 'UU';
+			const species = Dex.getSpecies(mon);
+			return species.tier === 'OU' || species.tier === 'UU';
 		}));
 		break;
 	case 'ag':
 		potentialPokemon = potentialPokemon.filter(mon => {
-			const template = Dex.getTemplate(mon);
-			const unviable = template.tier === 'NFE' || template.tier === 'PU' ||
-				template.tier === '(PU)' || template.tier.startsWith("LC");
-			const illegal = template.tier === 'Unreleased' || template.tier === 'Illegal' || template.tier.startsWith("CAP");
+			const species = Dex.getSpecies(mon);
+			const unviable = species.tier === 'NFE' || species.tier === 'PU' ||
+				species.tier === '(PU)' || species.tier.startsWith("LC");
+			const illegal = species.tier === 'Unreleased' || species.tier === 'Illegal' || species.tier.startsWith("CAP");
 			return !(unviable || illegal);
 		});
 		speciesClause = false;
 		break;
 	default:
 		potentialPokemon = potentialPokemon.filter(mon => {
-			const template = Dex.getTemplate(mon);
-			const op = template.tier === 'AG' || template.tier === 'Uber' || template.tier.slice(1, -1) === 'Uber';
-			const unviable = template.tier === 'Illegal' || template.tier.includes("LC");
+			const species = Dex.getSpecies(mon);
+			const op = species.tier === 'AG' || species.tier === 'Uber' || species.tier.slice(1, -1) === 'Uber';
+			const unviable = species.tier === 'Illegal' || species.tier.includes("LC");
 			return !(op || unviable);
 		});
 		potentialPokemon.push('miltank', 'miltank', 'miltank', 'miltank'); // 5x chance for miltank for flavor purposes.
@@ -90,7 +90,7 @@ function generateTeam(generator = '') {
 		if (speciesClause) potentialPokemon.splice(randIndex, 1);
 	}
 
-	return team.map(mon => Dex.getTemplate(mon).species);
+	return team.map(mon => Dex.getSpecies(mon).name);
 }
 
 function generateDish(): [string, string[]] {

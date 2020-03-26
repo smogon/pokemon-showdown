@@ -51,6 +51,6 @@ describe('Embargo', function () {
 		battle.setPlayer('p2', {team: [{species: "Golem", ability: 'noguard', moves: ['embargo', 'rest']}]});
 		battle.makeChoices('move bulkup', 'move embargo');
 		battle.makeChoices('move bulkup mega', 'move rest');
-		assert.equal(battle.p1.active[0].template.speciesid, 'lopunnymega');
+		assert.equal(battle.p1.active[0].species.id, 'lopunnymega');
 	});
 });

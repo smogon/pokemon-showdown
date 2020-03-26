@@ -5,7 +5,7 @@ let BattleItems = {
 	"adamantorb": {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.template.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
+			if (move && user.species.name === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
 		},
@@ -75,7 +75,7 @@ let BattleItems = {
 	"deepseascale": {
 		inherit: true,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
+			if (pokemon.species.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
@@ -83,7 +83,7 @@ let BattleItems = {
 	"deepseatooth": {
 		inherit: true,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
+			if (pokemon.species.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
@@ -115,7 +115,7 @@ let BattleItems = {
 		inherit: true,
 		desc: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power.",
 		onBasePower(basePower, user, target, move) {
-			if (user.template.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
+			if (user.species.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
 		},
@@ -164,12 +164,12 @@ let BattleItems = {
 	"lightball": {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.template.species === 'Pikachu') {
+			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpA(spa, pokemon) {
-			if (pokemon.template.species === 'Pikachu') {
+			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
@@ -177,7 +177,7 @@ let BattleItems = {
 	"luckypunch": {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Chansey') {
+			if (user.species.name === 'Chansey') {
 				return critRatio + 2;
 			}
 		},
@@ -185,7 +185,7 @@ let BattleItems = {
 	"lustrousorb": {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.template.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (move && user.species.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
 		},
@@ -250,7 +250,7 @@ let BattleItems = {
 	"stick": {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Farfetch\'d') {
+			if (user.species.name === 'Farfetch\'d') {
 				return critRatio + 2;
 			}
 		},
@@ -258,7 +258,7 @@ let BattleItems = {
 	"thickclub": {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak') {
+			if (pokemon.species.name === 'Cubone' || pokemon.species.name === 'Marowak') {
 				return this.chainModify(2);
 			}
 		},

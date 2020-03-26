@@ -42,7 +42,7 @@ assert.atMost = function (value, threshold, message) {
 };
 
 assert.species = function (pokemon, species, message) {
-	const actual = pokemon.template.species;
+	const actual = pokemon.species.name;
 	if (actual === species) return;
 	throw new AssertionError({
 		message: message || `Expected ${pokemon} species to be ${species}, not ${actual}.`,

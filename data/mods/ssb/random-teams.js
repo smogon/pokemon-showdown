@@ -783,7 +783,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 
 			if (!this.allXfix) {
 				// Enforce typing limits
-				let types = this.dex.getTemplate(ssbSet.species).types;
+				let types = this.dex.getSpecies(ssbSet.species).types;
 				let rejected = false;
 				for (let type of types) {
 					if (typePool[type] === undefined) typePool[type] = 0;

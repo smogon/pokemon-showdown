@@ -24,10 +24,10 @@ class RandomGen1Teams extends RandomGen2Teams {
 		let formeCounter = 0;
 		for (let id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
-			let template = this.dex.getTemplate(id);
+			let species = this.dex.getSpecies(id);
 			let lsetData = this.dex.getLearnsetData(/** @type {ID} */ (id));
-			if (!lsetData.learnset || template.forme) continue;
-			formes[hasDexNumber[template.num]].push(template.species);
+			if (!lsetData.learnset || species.forme) continue;
+			formes[hasDexNumber[species.num]].push(species.name);
 			if (++formeCounter >= 6) {
 				// Gen 1 had no alternate formes, so we can break out of the loop already.
 				break;
@@ -37,12 +37,12 @@ class RandomGen1Teams extends RandomGen2Teams {
 		for (let i = 0; i < 6; i++) {
 			// Choose forme.
 			let poke = this.sample(formes[i]);
-			let template = this.dex.getTemplate(poke);
-			let lsetData = this.dex.getLearnsetData(template.speciesid);
+			let species = this.dex.getSpecies(poke);
+			let lsetData = this.dex.getLearnsetData(species.id);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
 			let mbstmin = 1307;
-			let stats = template.baseStats;
+			let stats = species.baseStats;
 
 			// Modified base stat total assumes 15 DVs, 255 EVs in every stat
 			let mbst = (stats["hp"] * 2 + 30 + 63 + 100) + 10;
@@ -106,7 +106,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 			team.push({
 				name: poke,
-				species: template.species,
+				species: species.name,
 				moves: moves,
 				gender: false,
 				ability: 'None',
@@ -135,8 +135,8 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		let pokemonPool = [];
 		for (let id in this.dex.data.FormatsData) {
-			let template = this.dex.getTemplate(id);
-			if (!template.isNonstandard && template.randomBattleMoves) {
+			let species = this.dex.getSpecies(id);
+			if (!species.isNonstandard && species.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
 		}
@@ -151,14 +151,14 @@ class RandomGen1Teams extends RandomGen2Teams {
 		let hasShitmon = false;
 
 		while (pokemonPool.length && pokemonLeft < 6) {
-			let template = this.dex.getTemplate(this.sampleNoReplace(pokemonPool));
-			if (!template.exists) continue;
+			let species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			if (!species.exists) continue;
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
-			if (handicapMons.includes(template.speciesid) && hasShitmon) continue;
+			if (handicapMons.includes(species.id) && hasShitmon) continue;
 
-			let tier = template.tier;
+			let tier = species.tier;
 			switch (tier) {
 			case 'LC':
 			case 'NFE':
@@ -179,7 +179,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 			// Limit 2 of any type as well. Diversity and minor weakness count.
 			// The second of a same type has halved chance of being added.
-			for (const type of template.types) {
+			for (const type of species.types) {
 				if (typeCount[type] > 1 || (typeCount[type] === 1 && this.randomChance(1, 2) && pokemonPool.length > 1)) {
 					skip = true;
 					break;
@@ -191,7 +191,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard, Earthquake.
 			let pokemonWeaknesses = [];
 			for (let type in weaknessCount) {
-				let increaseCount = this.dex.getImmunity(type, template) && this.dex.getEffectiveness(type, template) > 0;
+				let increaseCount = this.dex.getImmunity(type, species) && this.dex.getEffectiveness(type, species) > 0;
 				if (!increaseCount) continue;
 				if (weaknessCount[type] >= 2) {
 					skip = true;
@@ -203,14 +203,14 @@ class RandomGen1Teams extends RandomGen2Teams {
 			if (skip) continue;
 
 			// The set passes the limitations.
-			let set = this.randomSet(template);
+			let set = this.randomSet(species);
 			pokemon.push(set);
 
 			// Now let's increase the counters. First, the Pokémon left.
 			pokemonLeft++;
 
 			// Type counter.
-			for (const type of template.types) {
+			for (const type of species.types) {
 				if (typeCount[type]) {
 					typeCount[type]++;
 				} else {
@@ -231,7 +231,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			}
 
 			// Is it Magikarp or one of the useless bugs?
-			if (handicapMons.includes(template.speciesid)) hasShitmon = true;
+			if (handicapMons.includes(species.id)) hasShitmon = true;
 		}
 
 		return pokemon;
@@ -239,20 +239,20 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 	/**
 	 * Random set generation for Gen 1 Random Battles.
-	 * @param {string | Template} template
+	 * @param {string | Species} species
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template) {
-		template = this.dex.getTemplate(template);
-		if (!template.exists) template = this.dex.getTemplate('pikachu'); // Because Gen 1.
+	randomSet(species) {
+		species = this.dex.getSpecies(species);
+		if (!species.exists) species = this.dex.getSpecies('pikachu'); // Because Gen 1.
 
-		let movePool = template.randomBattleMoves ? template.randomBattleMoves.slice() : [];
+		let movePool = species.randomBattleMoves ? species.randomBattleMoves.slice() : [];
 		/**@type {string[]} */
 		let moves = [];
 		/**@type {{[k: string]: true}} */
 		let hasType = {};
-		hasType[template.types[0]] = true;
-		if (template.types[1]) hasType[template.types[1]] = true;
+		hasType[species.types[0]] = true;
+		if (species.types[1]) hasType[species.types[1]] = true;
 		/**@type {{[k: string]: true}} */
 		let hasMove = {};
 		/**@type {{[k: string]: number}} */
@@ -265,21 +265,21 @@ class RandomGen1Teams extends RandomGen2Teams {
 		let SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
-		if (template.comboMoves) {
+		if (species.comboMoves) {
 			if (this.randomChance(1, 2)) {
-				moves = moves.concat(template.comboMoves);
+				moves = moves.concat(species.comboMoves);
 			}
 		}
 
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
-		if (moves.length < 4 && template.exclusiveMoves) {
-			moves.push(this.sample(template.exclusiveMoves));
+		if (moves.length < 4 && species.exclusiveMoves) {
+			moves.push(this.sample(species.exclusiveMoves));
 		}
 
 		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
-		if (moves.length < 4 && template.essentialMove) {
-			moves.push(template.essentialMove);
+		if (moves.length < 4 && species.essentialMove) {
+			moves.push(species.essentialMove);
 		}
 
 		while (moves.length < 4 && movePool.length) {
@@ -315,10 +315,10 @@ class RandomGen1Teams extends RandomGen2Teams {
 				// }
 
 				for (const [i, moveid] of moves.entries()) {
-					if (moveid === template.essentialMove) continue;
+					if (moveid === species.essentialMove) continue;
 					let move = this.dex.getMove(moveid);
 					let rejected = false;
-					if (!template.essentialMove || moveid !== template.essentialMove) {
+					if (!species.essentialMove || moveid !== species.essentialMove) {
 						switch (moveid) {
 						// bit redundant to have both, but neither particularly better than the other
 						case 'hydropump':
@@ -372,13 +372,13 @@ class RandomGen1Teams extends RandomGen2Teams {
 			Ditto: 88,
 		};
 		// @ts-ignore
-		let level = levelScale[template.tier] || 80;
+		let level = levelScale[species.tier] || 80;
 		// @ts-ignore
-		if (customScale[template.name]) level = customScale[template.name];
+		if (customScale[species.name]) level = customScale[species.name];
 
 		return {
-			name: template.name,
-			species: template.species,
+			name: species.name,
+			species: species.name,
 			moves: moves,
 			ability: 'None',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},

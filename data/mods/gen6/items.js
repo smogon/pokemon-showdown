@@ -171,13 +171,13 @@ let BattleItems = {
 		onBasePower() {},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.baseTemplate.num === 380 || pokemon.baseTemplate.num === 381) {
+			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseTemplate.num === 380 || pokemon.baseTemplate.num === 381) {
+			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {
 				return this.chainModify(1.5);
 			}
 		},

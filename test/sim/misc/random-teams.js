@@ -8,8 +8,8 @@ const ALL_GENS = [1, 2, 3, 4, 5, 6, 7];
 
 function isValidSet(gen, set) {
 	const dex = Dex.mod(`gen${gen}`);
-	const template = dex.getTemplate(set.species || set.name);
-	if (!template.exists || template.gen > gen) return false;
+	const species = dex.getSpecies(set.species || set.name);
+	if (!species.exists || species.gen > gen) return false;
 	if (set.item) {
 		const item = dex.getItem(set.item);
 		if (!item.exists || item.gen > gen) {
@@ -29,8 +29,8 @@ function isValidSet(gen, set) {
 
 function validLearnset(move, set, tier) {
 	const validator = TeamValidator.get(`gen7${tier}`);
-	const template = validator.dex.getTemplate(set.species || set.name);
-	return !validator.checkLearnset(move, template);
+	const species = validator.dex.getSpecies(set.species || set.name);
+	return !validator.checkLearnset(move, species);
 }
 
 describe(`Random Team generator (slow)`, function () {
@@ -69,13 +69,13 @@ describe(`Random Team generator (slow)`, function () {
 				let types;
 				for (const set of team) {
 					if (!isValidSet(8, set)) throw new Error(`Invalid set: ${JSON.stringify(set)}`);
-					const template = Dex.getTemplate(set.species || set.name);
+					const species = Dex.getSpecies(set.species || set.name);
 					if (types) {
-						if (!types.filter(t => template.types.includes(t)).length) {
+						if (!types.filter(t => species.types.includes(t)).length) {
 							throw new Error(`Team is not monotype: ${JSON.stringify(team)}`);
 						}
 					} else {
-						types = template.types;
+						types = species.types;
 					}
 				}
 			} catch (err) {
@@ -144,14 +144,14 @@ describe(`Factory sets`, function () {
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
 					for (const set of speciesData.sets) {
-						const template = Dex.getTemplate(set.species);
-						assert(template.exists, `invalid species "${set.species}" of ${species}`);
-						assert(template.name === set.species, `miscapitalized species "${set.species}" of ${species}`);
+						const species = Dex.getSpecies(set.species);
+						assert(species.exists, `invalid species "${set.species}" of ${species}`);
+						assert(species.name === set.species, `miscapitalized species "${set.species}" of ${species}`);
 
 						// currently failing due to a Piloswine labeled as a Mamoswine set
-						// assert(species.startsWith(toID(template.baseSpecies)), `non-matching species "${set.species}" of ${species}`);
+						// assert(species.startsWith(toID(species.baseSpecies)), `non-matching species "${set.species}" of ${species}`);
 
-						assert(!template.battleOnly, `invalid battle-only forme "${set.species}" of ${species}`);
+						assert(!species.battleOnly, `invalid battle-only forme "${set.species}" of ${species}`);
 
 						for (const itemName of [].concat(set.item)) {
 							if (!itemName && [].concat(...set.moves).includes("Acrobatics")) continue;

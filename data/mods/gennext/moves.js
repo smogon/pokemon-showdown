@@ -689,7 +689,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 100,
 		onBasePower(power, user) {
-			if (user.template.id === 'snorlax') return power * 1.5;
+			if (user.species.id === 'snorlax') return power * 1.5;
 		},
 		ignoreImmunity: true,
 		desc: "Has a 30% chance to flinch the target. Fails if the user is not asleep. If the user is a Snorlax, this move does 1.5x more damage.",
@@ -754,7 +754,7 @@ let BattleMovedex = {
 		basePower: 60,
 		ignoreImmunity: true,
 		onHit(target, pokemon) {
-			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
+			if (pokemon.baseSpecies.name !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
 			/**@type {{[k: string]: string}} */
@@ -766,7 +766,7 @@ let BattleMovedex = {
 			};
 			let tmpAtkEVs;
 			let Atk2SpA;
-			if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta', this.effect, false, '[msg]')) {
+			if (pokemon.species.id === 'meloettapirouette' && pokemon.formeChange('Meloetta', this.effect, false, '[msg]')) {
 				tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
@@ -1107,7 +1107,7 @@ let BattleMovedex = {
 		basePower: 80,
 		onBasePower(power, user) {
 			let GossamerWingUsers = ["Butterfree", "Venomoth", "Masquerain", "Dustox", "Beautifly", "Mothim", "Lilligant", "Volcarona", "Vivillon"];
-			if (user.hasItem('stick') && GossamerWingUsers.includes(user.template.species)) {
+			if (user.hasItem('stick') && GossamerWingUsers.includes(user.species.name)) {
 				return power * 1.5;
 			}
 		},
@@ -1356,7 +1356,7 @@ let BattleMovedex = {
 	firefang: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'flareon') return this.chainModify(1.5);
+			if (user.species.id === 'flareon') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondaries: [
@@ -1369,7 +1369,7 @@ let BattleMovedex = {
 	icefang: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'walrein') return this.chainModify(1.5);
+			if (user.species.id === 'walrein') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondaries: [
@@ -1382,7 +1382,7 @@ let BattleMovedex = {
 	thunderfang: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'luxray') return this.chainModify(1.5);
+			if (user.species.id === 'luxray') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondaries: [
@@ -1395,7 +1395,7 @@ let BattleMovedex = {
 	poisonfang: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'drapion') return this.chainModify(1.5);
+			if (user.species.id === 'drapion') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondaries: [
@@ -1409,7 +1409,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower(power, user) {
-			if (user.template.id === 'seviper') return this.chainModify(1.5);
+			if (user.species.id === 'seviper') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondary: {
@@ -1423,7 +1423,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower(power, user) {
-			if (user.template.id === 'persian') return this.chainModify(1.5);
+			if (user.species.id === 'persian') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 30,
@@ -1438,7 +1438,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower(power, user) {
-			if (user.template.id === 'muk') return this.chainModify(1.5);
+			if (user.species.id === 'muk') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 100,
@@ -1452,7 +1452,7 @@ let BattleMovedex = {
 		basePower: 75,
 		accuracy: 100,
 		onBasePower(power, user) {
-			if (user.template.id === 'weezing') return this.chainModify(1.5);
+			if (user.species.id === 'weezing') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 100,
@@ -1465,28 +1465,28 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower(power, user) {
-			if (user.template.id === 'rapidash') return this.chainModify(1.5);
+			if (user.species.id === 'rapidash') return this.chainModify(1.5);
 		},
 		desc: "Has a 100% chance to raise the user's Speed by 1 stage. If the user is a Rapidash, this move does 1.5x more damage.",
 	},
 	flamewheel: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'darmanitan') return this.chainModify(1.5);
+			if (user.species.id === 'darmanitan') return this.chainModify(1.5);
 		},
 		desc: "Has a 10% chance to burn the target. If the user is a Darmanitan, this move does 1.5x more damage.",
 	},
 	spark: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'eelektross') return this.chainModify(1.5);
+			if (user.species.id === 'eelektross') return this.chainModify(1.5);
 		},
 		desc: "Has a 30% chance to paralyze the target. If the user is an Eelektross, this move does 1.5x more damage.",
 	},
 	triplekick: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'hitmontop') return this.chainModify(1.5);
+			if (user.species.id === 'hitmontop') return this.chainModify(1.5);
 		},
 		accuracy: true,
 		desc: "Hits three times. Power increases to 20 for the second hit and 30 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids any of the hits. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit three times. If the user is a Hitmontop, this move does 1.5x more damage.",
@@ -1494,7 +1494,7 @@ let BattleMovedex = {
 	bubblebeam: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'kingdra') return this.chainModify(1.5);
+			if (user.species.id === 'kingdra') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 30,
@@ -1509,7 +1509,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower(power, user) {
-			if (user.template.id === 'galvantula') return this.chainModify(1.5);
+			if (user.species.id === 'galvantula') return this.chainModify(1.5);
 		},
 		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Galvantula, this move does 1.5x more damage.",
 		accuracy: 100,
@@ -1518,7 +1518,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower(power, user) {
-			if (user.template.id === 'beautifly') return this.chainModify(1.5);
+			if (user.species.id === 'beautifly') return this.chainModify(1.5);
 		},
 		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If the user is a Beautifly, this move does 1.5x more damage.",
 		accuracy: 100,
@@ -1527,7 +1527,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower(power, user) {
-			if (user.template.id === 'glaceon') return this.chainModify(1.5);
+			if (user.species.id === 'glaceon') return this.chainModify(1.5);
 		},
 		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Glaceon, this move does 1.5x more damage.",
 		accuracy: 100,
@@ -1536,7 +1536,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower(power, user) {
-			if (user.template.id === 'swampert') return this.chainModify(1.5);
+			if (user.species.id === 'swampert') return this.chainModify(1.5);
 		},
 		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Swampert, this move does 1.5x more damage.",
 		accuracy: 100,
@@ -1545,7 +1545,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 80,
 		onBasePower(power, user) {
-			if (user.template.id === 'kyurem') return this.chainModify(1.5);
+			if (user.species.id === 'kyurem') return this.chainModify(1.5);
 		},
 		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Kyurem, this move does 1.5x more damage.",
 		accuracy: 100,
@@ -1554,7 +1554,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 75,
 		onBasePower(power, user) {
-			if (user.template.id === 'octillery') return this.chainModify(1.5);
+			if (user.species.id === 'octillery') return this.chainModify(1.5);
 		},
 		accuracy: 90,
 		secondary: {
@@ -1570,7 +1570,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 75,
 		onBasePower(power, user) {
-			if (user.template.id === 'serperior') return this.chainModify(1.5);
+			if (user.species.id === 'serperior') return this.chainModify(1.5);
 		},
 		accuracy: 90,
 		secondary: {
@@ -1585,28 +1585,28 @@ let BattleMovedex = {
 	iceshard: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'weavile') return this.chainModify(1.5);
+			if (user.species.id === 'weavile') return this.chainModify(1.5);
 		},
 		desc: "If the user is a Weavile, this move does 1.5x more damage.",
 	},
 	aquajet: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'sharpedo') return this.chainModify(1.5);
+			if (user.species.id === 'sharpedo') return this.chainModify(1.5);
 		},
 		desc: "If the user is a Sharpedo, this move does 1.5x more damage.",
 	},
 	machpunch: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'hitmonchan') return this.chainModify(1.5);
+			if (user.species.id === 'hitmonchan') return this.chainModify(1.5);
 		},
 		desc: "If the user is a Hitmonchan, this move does 1.5x more damage.",
 	},
 	shadowsneak: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'banette') return this.chainModify(1.5);
+			if (user.species.id === 'banette') return this.chainModify(1.5);
 		},
 		desc: "If the user is a Banette, this move does 1.5x more damage.",
 	},
@@ -1614,7 +1614,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower(power, user) {
-			if (user.template.id === 'skarmory') return this.chainModify(1.5);
+			if (user.species.id === 'skarmory') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondary: {
@@ -1631,7 +1631,7 @@ let BattleMovedex = {
 	surf: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'masquerain') return this.chainModify(1.5);
+			if (user.species.id === 'masquerain') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 10,
@@ -1645,7 +1645,7 @@ let BattleMovedex = {
 	hiddenpower: {
 		inherit: true,
 		onBasePower(power, user) {
-			if (user.template.id === 'unown') return this.chainModify(1.5);
+			if (user.species.id === 'unown') return this.chainModify(1.5);
 		},
 	},
 	/******************************************************************
