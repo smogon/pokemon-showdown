@@ -273,7 +273,7 @@ function cacheGroupData() {
 }
 cacheGroupData();
 
-function setOfflineGroup(name: string, group: GroupSymbol, forceTrusted: boolean) {
+function setOfflineGroup(name: string, group: GroupSymbol, forceTrusted?: boolean) {
 	if (!group) throw new Error(`Falsy value passed to setOfflineGroup`);
 	const userid = toID(name);
 	const user = getExactUser(userid);
@@ -442,10 +442,10 @@ export class User extends Chat.MessageContext {
 	latestHostType: string;
 	ips: {[k: string]: number};
 	latestIp: string;
-	locked: string | ID | null;
-	semilocked: string | null;
-	namelocked: string | ID | null;
-	permalocked: string | ID | null;
+	locked: IDOrMonitor | null;
+	semilocked: IDOrMonitor | null;
+	namelocked: IDOrMonitor | null;
+	permalocked: IDOrMonitor | null;
 	prevNames: {[id: /** ID */ string]: string};
 
 	lastChallenge: number;

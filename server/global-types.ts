@@ -4,6 +4,7 @@ type Config = typeof import('../config/config-example') & AnyObject;
 
 type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
 
+type IDOrMonitor = '' | string | string & { __isID: true} | string & {__isMonitor: true };
 
 // Chat
 type CommandContext = Chat.CommandContext;

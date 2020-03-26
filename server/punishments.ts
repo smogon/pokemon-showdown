@@ -622,7 +622,7 @@ export const Punishments = new class {
 	 * Specific punishments
 	 *********************************************************/
 
-	async ban(user: User, expireTime: number, id: ID, ignoreAlts: boolean, ...reason: string[]) {
+	async ban(user: User, expireTime: number | null, id: ID | null, ignoreAlts: boolean, ...reason: string[]) {
 		if (!id) id = user.getLastId();
 
 		if (!expireTime) expireTime = Date.now() + GLOBALBAN_DURATION;
@@ -639,7 +639,8 @@ export const Punishments = new class {
 	unban(name: string) {
 		return Punishments.unpunish(name, 'BAN');
 	}
-	async lock(userOrUsername: User | string, expireTime: number | null, id: ID, ignoreAlts: boolean, ...reason: string[]) {
+	async lock(userOrUsername: User | string | null, expireTime: number | null,
+		id: IDOrMonitor | null, ignoreAlts: boolean, ...reason: string[]) {
 		const user = (typeof userOrUsername === 'string' ? Users.get(userOrUsername) : userOrUsername);
 		if (!id) id = user ? user.getLastId() : toID(userOrUsername);
 
@@ -650,12 +651,15 @@ export const Punishments = new class {
 
 		if (user) {
 			affected = await Punishments.punish(user, punishment, ignoreAlts);
-		} else {
-			affected = await Punishments.punish(id, punishment, ignoreAlts);
+		 } else {
+			 if (id.startsWith('#')) {
+				 throw new Error(`Monitor tag "${id}" and no user "${userOrUsername}" passed to lock()`);
+			 }
+			 affected = await Punishments.punish(id as ID, punishment, ignoreAlts);
 		}
 
 		for (const curUser of affected) {
-			curUser.locked = id;
+			curUser.locked = curUser.id;
 			curUser.updateIdentity();
 		}
 
@@ -733,7 +737,7 @@ export const Punishments = new class {
 		}
 		return success;
 	}
-	async namelock(user: User | ID, expireTime: number | null, id: ID, ignoreAlts: boolean, ...reason: string[]) {
+	async namelock(user: User | ID, expireTime: number | null, id: ID | null, ignoreAlts: boolean, ...reason: string[]) {
 		if (!id) id = typeof user === 'string' ? toID(user) : (user as User).getLastId();
 
 		if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
@@ -780,7 +784,7 @@ export const Punishments = new class {
 		}
 		return success;
 	}
-	battleban(user: User, expireTime: number, id: ID, ...reason: string[]) {
+	battleban(user: User, expireTime: number | null, id: ID | null, ...reason: string[]) {
 		if (!id) id = user.getLastId();
 
 		if (!expireTime) expireTime = Date.now() + BATTLEBAN_DURATION;
@@ -836,7 +840,7 @@ export const Punishments = new class {
 		Punishments.ips.set(range, punishment);
 	}
 
-	roomBan(room: Room, user: User, expireTime: number, userId: string, ...reason: string[]) {
+	roomBan(room: Room, user: User, expireTime: number | null, userId: string | null, ...reason: string[]) {
 		if (!userId) userId = user.getLastId();
 
 		if (!expireTime) expireTime = Date.now() + ROOMBAN_DURATION;
@@ -864,7 +868,7 @@ export const Punishments = new class {
 		return affected;
 	}
 
-	roomBlacklist(room: Room, user: User | null, expireTime: number, userId: ID, ...reason: string[]) {
+	roomBlacklist(room: Room, user: User | null, expireTime: number | null, userId: ID | null, ...reason: string[]) {
 		if (!userId && user) userId = user.getLastId();
 		if (!user) user = Users.get(userId);
 
@@ -914,7 +918,7 @@ export const Punishments = new class {
 	/**
 	 * @param ignoreWrite Flag to skip persistent storage.
 	 */
-	roomUnblacklist(room: Room, userid: string, ignoreWrite: boolean) {
+	roomUnblacklist(room: Room, userid: string, ignoreWrite?: boolean) {
 		const user = Users.get(userid);
 		if (user) {
 			const punishment = Punishments.isRoomBanned(user, room.roomid);
