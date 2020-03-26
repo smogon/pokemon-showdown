@@ -542,6 +542,14 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/**
 	 * Forme name. If the forme exists,
 	 * `species.name === species.baseSpecies + '-' + species.forme`
+	 *
+	 * The games make a distinction between Forme (foorumu) (legendary Pokémon)
+	 * and Form (sugata) (non-legendary Pokémon). PS does not use the same
+	 * distinction – they're all "Forme" to PS, reflecting current community
+	 * use of the term.
+	 *
+	 * This property only tracks non-cosmetic formes, and will be `''` for
+	 * cosmetic formes.
 	 */
 	readonly forme: string;
 	/**
