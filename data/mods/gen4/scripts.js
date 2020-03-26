@@ -57,7 +57,7 @@ let BattleScripts = {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
-			// (On second thought, it might be easier to get a Missingno.)
+			// (On second thought, it might be easier to get a MissingNo.)
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types

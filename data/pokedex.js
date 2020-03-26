@@ -15259,7 +15259,7 @@ let BattlePokedex = {
 	},
 	missingno: {
 		num: 0,
-		name: "Missingno.",
+		name: "MissingNo.",
 		types: ["Bird", "Normal"],
 		baseStats: {hp: 33, atk: 136, def: 0, spa: 6, spd: 6, spe: 29},
 		abilities: {0: ""},
