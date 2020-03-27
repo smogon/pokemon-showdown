@@ -135,14 +135,19 @@ const LogViewer = new class {
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
 			`<a roomid="view-chatlog-${roomid}">${roomid}</a> /  ` +
 			`<a roomid="view-chatlog-${roomid}--${month}">${month}</a> / ` +
-			`<strong>${day}</strong></p><hr />`;
-
+			`<strong>${day}</strong></p>`;
+		if (opts!.includes('search-')) {
+			 buf += `<strong>Search query: "${opts!.slice(7)}"</strong><hr />`;
+		} else if (opts!.includes('hide-')) {
+			buf += `<strong>Hiding string: "${opts!.slice(5)}"</strong><hr />`;
+		} else {
+			buf += `<hr />`;
+		}
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't exist</p></div>`;
 			return this.linkify(buf);
 		}
-
 		const prevDay = LogReader.prevDay(day);
 		buf += `<p><a roomid="view-chatlog-${roomid}--${prevDay}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
 			`<div class="message-log" style="overflow-wrap: break-word">`;
@@ -169,6 +174,7 @@ const LogViewer = new class {
 	renderLine(fullLine: string, opts?: string) {
 		let timestamp = fullLine.slice(0, opts ? 8 : 5);
 		let line;
+		const [type, input] = opts!.split('-');
 		if (/^[0-9:]+$/.test(timestamp)) {
 			line = fullLine.charAt(9) === '|' ? fullLine.slice(10) : '|' + fullLine.slice(9);
 		} else {
@@ -178,6 +184,12 @@ const LogViewer = new class {
 		if (opts !== 'all' && (
 			line.startsWith(`userstats|`) ||
 			line.startsWith('J|') || line.startsWith('L|') || line.startsWith('N|')
+		)) return ``;
+
+		if (type === 'search' && (
+			!line.includes(input)
+		) || (
+			type === 'hide' && line.includes(input)
 		)) return ``;
 
 		const cmd = line.slice(0, line.indexOf('|'));
@@ -366,7 +378,38 @@ export const pages: PageTable = {
 };
 
 export const commands: ChatCommands = {
-	chatlog(target, room, user) {
-		this.parse(`/join view-chatlog-${room.roomid}--today`);
+	chatlog: {
+		search(target, room, user) {
+			const [search, date] = target.split(',');
+			if (!date && search) {
+				this.parse(`/join view-chatlog-${room.roomid}--today--search-${target}`);
+			} else if (search && date) {
+				this.parse(`/join view-chatlog-${room.roomid}--${date}--search-${search}`);
+			} else {
+				this.parse(`/help chatlog`);
+			}
+		},
+
+		filterview(target, room, user) {
+			const [hide, date] = target.split(',');
+			if (hide && !date) {
+				return this.parse(`/join view-chatlog-${room.roomid}--today--hide-${hide}`);
+			} else if (hide && date) {
+				return this.parse(`/join view-chatlog-${room.roomid}--${date}--hide-${hide}`);
+			} else {
+				return this.parse(`/help chatlog`);
+			}
+		},
+
+		''(target, room, user) {
+			if (target) room = Rooms.search(target) as ChatRoom | GameRoom;
+			if (!room) return this.errorReply(`Room ${target} does not exist.`);
+			return this.parse(`/join view-chatlog-${room.roomid}--today`);
+		},
 	},
+	chatloghelp: [
+		`/chatlog - returns logs of the room you are in. Requires: % @ # & ~`,
+		`/chatlog filterview [phrase], [date] - returns logs with [phrase] removed. (searches on [date] if provided).`,
+		`/chatlog search [phrase], [date] - returns logs matching [phrase]. (searches on [date] if provided).`,
+	],
 };
