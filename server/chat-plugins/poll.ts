@@ -124,7 +124,9 @@ export class Poll {
 				const selected = pendingVotes.includes(num);
 				output += `<div style="margin-top: 5px"><button style="text-align: left; border: none; background: none; color: inherit;" value="/poll ${selected ? 'de' : ''}select ${num}" name="send" title="${selected ? "Deselect" : "Select"} ${num}. ${Chat.escapeHTML(option.name)}">${selected ? "<strong>" : ''}${selected ? chosen : empty} ${num}. ${this.getOptionMarkup(option)}${selected ? "</strong>" : ''}</button></div>`;
 			}
-			output += `<div style="margin-top: 7px; padding-left: 12px"><button class="button" value="/poll submit" name="send" title="${pendingVotes.length ? "Submit your vote" : "View results - you will not be able to vote after viewing results"}">${pendingVotes.length ? "<strong>Submit</strong>" : "(View results)"}</button></div>`;
+			// eslint-disable-next-line max-len
+			const submitButton = pendingVotes.length ? `<button class="button" value="/poll submit" name="send" title="Submit your vote"><strong>Submit</strong></button>` : `<button class="button" value="/poll results" name="send" title="View results - you will not be able to vote after viewing results">(View results)</button`;
+			output += `<div style="margin-top: 7px; padding-left: 12px">${submitButton}</div>`;
 			output += `</div>`;
 		} else {
 			for (const [num, option] of this.options) {
@@ -445,7 +447,8 @@ export const commands: ChatCommands = {
 		`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		`Accepts the following commands:`,
 		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
-		`/poll htmlcreate [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~`,
+		`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # & ~`,
+		`/poll htmlcreate(multi) [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~`,
 		`/poll vote [number] - Votes for option [number].`,
 		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~`,
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
