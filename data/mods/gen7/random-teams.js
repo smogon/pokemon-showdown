@@ -31,16 +31,8 @@ class RandomGen7Teams extends RandomTeams {
 		let baseSpecies = species;
 		let forme = species.name;
 
-		if (!species.exists || (!species.randomBattleMoves && (!isDoubles || !species.randomDoubleBattleMoves) && !this.dex.data.Learnsets[species.id])) {
-			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
-			species = this.dex.getSpecies('unown');
-
-			const err = new Error('Species incompatible with random battles: ' + species);
-			Monitor.crashlog(err, 'The gen 7 randbat set generator');
-		}
-
 		if (species.battleOnly) {
-			// Only change the species. The species has custom moves, and may have different typing and requirements.
+			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			forme = /** @type {string} */ (species.battleOnly);
 		}
 		let battleForme = this.checkBattleForme(species);
@@ -186,9 +178,7 @@ class RandomGen7Teams extends RandomTeams {
 
 				// Set up once and only if we have the moves for it
 				case 'bellydrum': case 'bulkup': case 'coil': case 'curse': case 'dragondance': case 'honeclaws': case 'swordsdance':
-					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) {
-						if (!hasMove['growth'] || hasMove['sunnyday']) rejected = true;
-					}
+					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 					if (counter.Physical + counter['physicalpool'] < 2 && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
 					if (moveid === 'bellydrum' && !hasAbility['Unburden'] && !counter['priority']) rejected = true;
 					isSetup = true;
@@ -575,7 +565,6 @@ class RandomGen7Teams extends RandomTeams {
 					(hasAbility['Contrary'] && !counter['contrary'] && species.name !== 'Shuckle') ||
 					(hasAbility['Psychic Surge'] && !counter['Psychic']) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
-					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
 					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')) && (counter.Status > 1 || (species.nfe && !!counter['Status']))) ||
 					(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
 					(species.requiredMove && movePool.includes(toID(species.requiredMove)))))) {
@@ -993,30 +982,18 @@ class RandomGen7Teams extends RandomTeams {
 
 		if (!isDoubles) {
 			/** @type {{[tier: string]: number}} */
-			let levelScale = {
-				'(PU)': 89,
-				PU: 88,
-				PUBL: 87,
-				NU: 86,
-				NUBL: 85,
-				RU: 84,
-				RUBL: 83,
-				UU: 82,
-				UUBL: 81,
-				'(OU)': 80,
-				OU: 80,
-				Uber: 78,
+			const levelScale = {
+				uber: 78, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88,
 			};
 			/** @type {{[forme: string]: number}} */
-			let customScale = {
+			const customScale = {
 				// Banned Ability
 				Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Politoed: 84, Wobbuffet: 82,
-
 				// Holistic judgement
-				'Floette-Eternal': 80, 'Genesect-Douse': 80,
 				Castform: 100, Delibird: 100, Spinda: 100, Unown: 100,
 			};
-			level = levelScale[species.tier] || 90;
+			let tier = toID(species.tier).replace('bl', '');
+			level = levelScale[tier] || (species.nfe ? 90 : 80);
 			if (customScale[forme]) level = customScale[forme];
 
 			// Custom level based on moveset

@@ -1329,7 +1329,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	hariyama: {
-		randomBattleMoves: ["bulletpunch", "closecombat", "facade", "fakeout", "icepunch", "stoneedge"],
+		randomBattleMoves: ["bulletpunch", "closecombat", "facade", "fakeout", "stoneedge"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},

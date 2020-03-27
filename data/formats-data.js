@@ -921,7 +921,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	jolteon: {
-		randomBattleMoves: ["protect", "shadowball", "thunderbolt", "toxic", "voltswitch"],
+		randomBattleMoves: ["hypervoice", "shadowball", "thunderbolt", "voltswitch"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -2447,7 +2447,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	mesprit: {
-		randomBattleMoves: ["energyball", "healingwish", "icebeam", "nastyplot", "psyshock", "stealthrock", "thunderwave", "uturn"],
+		randomBattleMoves: ["energyball", "healingwish", "icebeam", "nastyplot", "psychic", "stealthrock", "thunderwave", "uturn"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -3419,9 +3419,12 @@ let BattleFormatsData = {
 		doublesTier: "NFE",
 	},
 	aegislash: {
-		randomBattleMoves: ["closecombat", "ironhead", "kingsshield", "shadowball", "shadowsneak", "swordsdance"],
+		randomBattleMoves: ["closecombat", "flashcannon", "kingsshield", "shadowball", "shadowsneak", "substitute", "toxic"],
 		tier: "OU",
 		doublesTier: "DUU",
+	},
+	aegislashblade: {
+		randomBattleMoves: ["closecombat", "ironhead", "shadowclaw", "shadowsneak", "swordsdance"],
 	},
 	spritzee: {
 		tier: "LC",
@@ -3475,7 +3478,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	heliolisk: {
-		randomBattleMoves: ["darkpulse", "grassknot", "hypervoice", "surf", "thunderbolt", "voltswitch"],
+		randomBattleMoves: ["focusblast", "grassknot", "hypervoice", "surf", "thunderbolt", "voltswitch"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
@@ -3502,7 +3505,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	dedenne: {
-		randomBattleMoves: ["grassknot", "recycle", "substitute", "thunderbolt", "toxic"],
+		randomBattleMoves: ["protect", "recycle", "thunderbolt", "toxic"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -3748,6 +3751,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	lycanrocmidnight: {
+		randomBattleMoves: ["closecombat", "irontail", "stealthrock", "stoneedge", "suckerpunch"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4262,7 +4266,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	eldegoss: {
-		randomBattleMoves: ["aromatherapy", "charm", "energyball", "pollenpuff", "rapidspin", "sleeppowder", "synthesis"],
+		randomBattleMoves: ["charm", "energyball", "leechseed", "pollenpuff", "rapidspin", "sleeppowder"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
