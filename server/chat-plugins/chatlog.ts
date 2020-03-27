@@ -5,6 +5,7 @@
  */
 
 import {FS} from "../../lib/fs";
+import * as Dashycode from "../../lib/dashycode";
 
 class LogReaderRoom {
 	roomid: RoomID;
@@ -130,7 +131,8 @@ const LogReader = new class {
 const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		if (day === 'today') day = LogReader.today();
-		const [type, input] = opts!.split('-');
+		if (!opts) opts = '';
+		const [type, input] = opts.split('-');
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
@@ -170,7 +172,7 @@ const LogViewer = new class {
 			const nextDay = LogReader.nextDay(day);
 			let next = `view-chatlog-${roomid}--${prevDay}`;
 			if (opts) next = `view-chatlog-${roomid}--${prevDay}--${opts}`;
-			buf += `<p><a roomid="view-chatlog-${roomid}--${next}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
+			buf += `<p><a roomid="${next}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
 		}
 
 		buf += `</div>`;
@@ -406,14 +408,15 @@ export const commands: ChatCommands = {
 			}
 		},
 
-		''(target, room, user) {
+		view(target, room, user) {
+			target = toID(target);
 			if (target) room = Rooms.search(target) as ChatRoom | GameRoom;
 			if (!room) return this.errorReply(`Room ${target} does not exist.`);
 			return this.parse(`/join view-chatlog-${room.roomid}--today`);
 		},
 	},
 	chatloghelp: [
-		`/chatlog - returns logs of the room you are in. Requires: % @ # & ~`,
+		`/chatlog view - returns logs of the room you are in. Requires: % @ # & ~`,
 		`/chatlog filterview [phrase], [date] - returns logs with [phrase] removed. (searches on [date] if provided).`,
 		`/chatlog search [phrase], [date] - returns logs matching [phrase]. (searches on [date] if provided).`,
 	],
