@@ -5,7 +5,6 @@
  */
 
 import {FS} from "../../lib/fs";
-import * as Dashycode from "../../lib/dashycode";
 
 class LogReaderRoom {
 	roomid: RoomID;
