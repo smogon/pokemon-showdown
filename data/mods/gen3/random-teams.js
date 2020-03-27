@@ -12,13 +12,6 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let baseSpecies = (species = this.dex.getSpecies(species));
 		let forme = species.name;
 
-		if (!species.exists || !species.randomBattleMoves && !this.dex.data.Learnsets[species.id]) {
-			species = this.dex.getSpecies('unown');
-
-			const err = new Error('Species incompatible with random battles: ' + species);
-			Monitor.crashlog(err, 'The gen 3 randbat set generator');
-		}
-
 		if (species.battleOnly) forme = /** @type {string} */ (species.battleOnly);
 
 		// @ts-ignore

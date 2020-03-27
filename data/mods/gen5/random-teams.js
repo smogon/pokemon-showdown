@@ -13,16 +13,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let baseSpecies = (species = this.dex.getSpecies(species));
 		let forme = species.name;
 
-		if (!species.exists || !species.randomBattleMoves && !this.dex.data.Learnsets[species.id]) {
-			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
-			species = this.dex.getSpecies('unown');
-
-			const err = new Error('Species incompatible with random battles: ' + species);
-			Monitor.crashlog(err, 'The gen 5 randbat set generator');
-		}
-
 		if (species.battleOnly) {
-			// Only change the species. The species has custom moves, and may have different typing and requirements.
+			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			forme = /** @type {string} */ (species.battleOnly);
 		}
 
