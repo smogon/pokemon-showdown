@@ -735,7 +735,7 @@ let BattleFormats = {
 		onBegin() {
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.id === 'rayquaza') pokemon.canMegaEvo = null;
+				if (pokemon.speciesid === 'rayquaza') pokemon.canMegaEvo = null;
 			}
 		},
 	},
