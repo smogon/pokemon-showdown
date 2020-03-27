@@ -150,7 +150,9 @@ const LogViewer = new class {
 			return this.linkify(buf);
 		}
 		const prevDay = LogReader.prevDay(day);
-		buf += `<p><a roomid="view-chatlog-${roomid}--${prevDay}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
+		let prev = `view-chatlog-${roomid}--${prevDay}`;
+		if (opts) prev = `view-chatlog-${roomid}--${prevDay}--${opts}`;
+		buf += `<p><a roomid="${prev}" class="blocklink" style="text-align:center">▲<br />${prevDay}</a></p>` +
 			`<div class="message-log" style="overflow-wrap: break-word">`;
 
 		const stream = await roomLog.getLog(day);
@@ -166,7 +168,9 @@ const LogViewer = new class {
 		buf += `</div>`;
 		if (day !== LogReader.today()) {
 			const nextDay = LogReader.nextDay(day);
-			buf += `<p><a roomid="view-chatlog-${roomid}--${nextDay}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
+			let next = `view-chatlog-${roomid}--${prevDay}`;
+			if (opts) next = `view-chatlog-${roomid}--${prevDay}--${opts}`;
+			buf += `<p><a roomid="view-chatlog-${roomid}--${next}" class="blocklink" style="text-align:center">${nextDay}<br />▼</a></p>`;
 		}
 
 		buf += `</div>`;
