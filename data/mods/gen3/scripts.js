@@ -29,7 +29,7 @@ let BattleScripts = {
 			move.priority = this.activeMove.priority;
 		}
 		const baseTarget = move.target;
-		if (target === undefined) target = this.resolveTarget(pokemon, move);
+		if (target === undefined) target = this.getRandomTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
@@ -46,12 +46,12 @@ let BattleScripts = {
 			// Target changed in ModifyMove, so we must adjust it here
 			// Adjust before the next event so the correct target is passed to the
 			// event
-			target = this.resolveTarget(pokemon, move);
+			target = this.getRandomTarget(pokemon, move);
 		}
 		move = this.runEvent('ModifyMove', pokemon, target, move, move);
 		if (baseTarget !== move.target) {
 			// Adjust again
-			target = this.resolveTarget(pokemon, move);
+			target = this.getRandomTarget(pokemon, move);
 		}
 		if (!move || pokemon.fainted) {
 			return false;

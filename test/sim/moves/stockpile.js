@@ -21,7 +21,7 @@ describe('Stockpile', function () {
 		battle.makeChoices('move stockpile', 'move sleeptalk');
 		battle.makeChoices('move spitup', 'move sleeptalk');
 
-		assert.strictEqual(battle.p1.active[0].boosts.def, 4);
-		assert.strictEqual(battle.p1.active[0].boosts.spd, 5);
+		assert.equal(battle.p1.active[0].boosts.def, 4);
+		assert.equal(battle.p1.active[0].boosts.spd, 5);
 	});
 });

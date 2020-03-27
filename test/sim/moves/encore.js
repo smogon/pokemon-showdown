@@ -30,11 +30,11 @@ describe('Encore', function () {
 		// If a user's previous move was Focus Punch and it is Encored into Focus Punch while attempting to
 		// execute the move, the regular "you can't be hit" effect for Focus Punch will be enforced.
 		battle.makeChoices('move focuspunch 1, move teleport', 'move encore 1, move extremespeed 1');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 
 		// During subsequent turns the normal Focus Punch behavior applies.
 		battle.makeChoices('move focuspunch 1, move teleport', 'move splash, move extremespeed 1');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 	});
 
 	it('should make Focus Punch always succeed if it changes the user\'s decision', function () {
@@ -62,7 +62,7 @@ describe('Encore', function () {
 
 		// During subsequent turns the normal Focus Punch behavior applies.
 		battle.makeChoices('move focuspunch 1, move teleport', 'move splash, move extremespeed 1');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 	});
 
 	it('should not affect Shell Trap if the user\'s decision is not changed', function () {
@@ -114,7 +114,7 @@ describe('Encore', function () {
 		// attack, and will always say "<Pokemon>'s shell trap didn't work. It doesn't matter in the case of Shell Trap if
 		// the user was hit before or after the Encore; Shell Trap will still always fail.
 		battle.makeChoices('move splash, move teleport', 'move encore 1, move quickattack 1');
-		assert.strictEqual(battle.p2.active[0].hp, hp);
+		assert.equal(battle.p2.active[0].hp, hp);
 
 		// During subsequent turns the normal Shell Trap behavior applies.
 		battle.makeChoices('move shelltrap, move teleport', 'move splash, move quickattack 1');

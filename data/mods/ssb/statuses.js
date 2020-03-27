@@ -60,13 +60,13 @@ let BattleStatuses = {
 	aeonic: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Aeonic|Guys the emoji movie wasn't __that__ bad`);
+			this.add(`c|@Aeonic|Guys the emoji movie wasn't __that__ bad`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Aeonic|Still better than kie btw`);
+			this.add(`c|@Aeonic|Still better than kie btw`);
 		},
 		onFaint() {
-			this.add(`c|%Aeonic|Don't forget me`);
+			this.add(`c|@Aeonic|Don't forget me`);
 		},
 	},
 	aethernum: {
@@ -194,7 +194,7 @@ let BattleStatuses = {
 			}
 		},
 		onFaint(pokemon) {
-			let activeMon = pokemon.side.foe.active[0].template.speciesid;
+			let activeMon = pokemon.side.foe.active[0].species.id;
 			if (activeMon === 'greninja') {
 				this.add(`c|%Arcticblast|FRIENDS DON’T LET FRIENDS PLAY FROGS`);
 			} else if (activeMon === 'pumpkaboosuper') {
@@ -204,7 +204,7 @@ let BattleStatuses = {
 			}
 		},
 		onSourceFaint(target) {
-			if (target.template.speciesid === 'greninja') {
+			if (target.species.id === 'greninja') {
 				this.add(`c|%Arcticblast|FRIENDS DON’T LET FRIENDS PLAY FROGS`);
 			}
 		},
@@ -212,13 +212,13 @@ let BattleStatuses = {
 	arsenal: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Arsenal|Wenger In`);
+			this.add(`c|%Arsenal|Wenger In`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Arsenal|Time to watch anime`);
+			this.add(`c|%Arsenal|Time to watch anime`);
 		},
 		onFaint() {
-			this.add(`c|+Arsenal|Wenger Out`);
+			this.add(`c|%Arsenal|Wenger Out`);
 		},
 	},
 	asheviere: {
@@ -480,7 +480,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart(target, source) {
 			this.add(`c|@E4 Flint|How many Fire-Types do I have now`);
-			if (source.template.speciesid !== 'steelixmega' || source.illusion) return;
+			if (source.species.id !== 'steelixmega' || source.illusion) return;
 			this.add('-start', source, 'typeadd', 'Fire');
 		},
 		onFaint() {
@@ -509,7 +509,7 @@ let BattleStatuses = {
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) && !target.transformed) {
+			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed) {
 				this.add('-activate', target, 'ability: Disguise');
 				this.effectData.busted = true;
 				return 0;
@@ -517,14 +517,14 @@ let BattleStatuses = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (!['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
 			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
 		onUpdate(pokemon) {
-			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
-				let templateid = pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
-				pokemon.formeChange(templateid, this.effect, true);
+			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectData.busted) {
+				let speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+				pokemon.formeChange(speciesid, this.effect, true);
 			}
 		},
 	},
@@ -780,11 +780,11 @@ let BattleStatuses = {
 		// Kaiju Rage Innate
 		// onUpdate so toxic orb can activate after. Code mainly copied from Power Construct.
 		onUpdate(pokemon) {
-			if (pokemon.template.speciesid !== 'gligar' || pokemon.transformed || pokemon.illusion || !pokemon.hp) return;
+			if (pokemon.species.id !== 'gligar' || pokemon.transformed || pokemon.illusion || !pokemon.hp) return;
 			if (pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Kaiju Rage');
 			pokemon.formeChange('Gliscor', this.effect, true);
-			let newHP = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+			let newHP = Math.floor(Math.floor(2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
 			pokemon.hp = newHP - (pokemon.maxhp - pokemon.hp);
 			pokemon.maxhp = newHP;
 			pokemon.heal(pokemon.baseMaxhp / 4);
@@ -1018,10 +1018,10 @@ let BattleStatuses = {
 	martha: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@martha|in to lose r1`);
+			this.add(`c|+martha|in to lose r1`);
 		},
 		onSwitchOut() {
-			this.add(`c|@martha|bad`);
+			this.add(`c|+martha|bad`);
 		},
 	},
 	marty: {
@@ -1119,7 +1119,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart(source) {
 			this.add(`c|+Overneat|[muffled eurobeat playing in the distance]`);
-			if (source.template.speciesid !== 'absolmega' || source.illusion) return;
+			if (source.species.id !== 'absolmega' || source.illusion) return;
 			this.add('-start', source, 'typeadd', 'Fairy');
 		},
 		onSwitchOut() {
@@ -1283,10 +1283,6 @@ let BattleStatuses = {
 			this.add(`c|%Rage|/me quits`);
 		},
 	},
-	raid: {
-		noCopy: true,
-		// No messages provided
-	},
 	ransei: {
 		noCopy: true,
 		onStart() {
@@ -1337,13 +1333,13 @@ let BattleStatuses = {
 	schiavetto: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Schiavetto|Aight, sis, guess I'm parking.`);
+			this.add(`c|%Schiavetto|Aight, sis, guess I'm parking.`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Schiavetto|Someone help me press this.`);
+			this.add(`c|%Schiavetto|Someone help me press this.`);
 		},
 		onFaint() {
-			this.add(`c|+Schiavetto|Read my ISOs when I'm dead`);
+			this.add(`c|%Schiavetto|Read my ISOs when I'm dead`);
 		},
 	},
 	scotteh: {
@@ -1404,12 +1400,12 @@ let BattleStatuses = {
 			// Prevent Snaquaza from fainting while using a fake claim to prevent visual bug
 			if (pokemon.hp - damage <= 0) return (pokemon.hp - 1);
 		},
-		onAfterDamage(damage, pokemon) {
+		onDamagingHit(damage, pokemon) {
 			// Hack for Snaquaza's Z move
 			if (!pokemon.m.claimHP || pokemon.hp > 1) return;
 			// Now we handle the fake claim "fainting"
 			pokemon.hp = pokemon.m.claimHP;
-			pokemon.formeChange(pokemon.baseTemplate.id);
+			pokemon.formeChange(pokemon.baseSpecies.id);
 			pokemon.moveSlots = pokemon.moveSlots.slice(0, 4);
 			this.add('message', `${pokemon.name}'s fake claim was uncovered!`);
 			pokemon.m.claimHP = null;
@@ -1627,13 +1623,13 @@ let BattleStatuses = {
 	xprienzo: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+XpRienzo ☑◡☑|Bleh`);
+			this.add(`c|%XpRienzo ☑◡☑|Bleh`);
 		},
 		onSwitchOut() {
-			this.add(`c|+XpRienzo ☑◡☑|>.>`);
+			this.add(`c|%XpRienzo ☑◡☑|>.>`);
 		},
 		onFaint() {
-			this.add(`c|+XpRienzo ☑◡☑|Wait what?`);
+			this.add(`c|%XpRienzo ☑◡☑|Wait what?`);
 		},
 	},
 	yuki: {

@@ -5,7 +5,7 @@ let BattleItems = {
 	"adamantorb": {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.template.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
+			if (move && user.species.name === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
 		},
@@ -50,9 +50,9 @@ let BattleItems = {
 		onModifyPriority() {},
 		onBeforeTurn(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
-				let action = this.willMove(pokemon);
+				let action = this.queue.willMove(pokemon);
 				if (!action) return;
-				this.insertQueue({
+				this.queue.insertChoice({
 					choice: 'event',
 					event: 'Custap',
 					priority: action.priority + 0.1,
@@ -63,10 +63,10 @@ let BattleItems = {
 			}
 		},
 		onCustap(pokemon) {
-			let action = this.willMove(pokemon);
+			let action = this.queue.willMove(pokemon);
 			this.debug('custap action: ' + action);
 			if (action && pokemon.eatItem()) {
-				this.cancelAction(pokemon);
+				this.queue.cancelAction(pokemon);
 				this.add('-message', "Custap Berry activated.");
 				this.runAction(action);
 			}
@@ -75,7 +75,7 @@ let BattleItems = {
 	"deepseascale": {
 		inherit: true,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
+			if (pokemon.species.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
@@ -83,7 +83,7 @@ let BattleItems = {
 	"deepseatooth": {
 		inherit: true,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
+			if (pokemon.species.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
@@ -115,7 +115,7 @@ let BattleItems = {
 		inherit: true,
 		desc: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power.",
 		onBasePower(basePower, user, target, move) {
-			if (user.template.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
+			if (user.species.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
 		},
@@ -124,17 +124,6 @@ let BattleItems = {
 		inherit: true,
 		onEffectiveness() {},
 		desc: "Holder's Speed is halved and it becomes grounded.",
-	},
-	"jabocaberry": {
-		inherit: true,
-		onAfterDamage() {},
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move && move.category === 'Physical') {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target, null, true);
-				}
-			}
-		},
 	},
 	"kingsrock": {
 		inherit: true,
@@ -175,12 +164,12 @@ let BattleItems = {
 	"lightball": {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.template.species === 'Pikachu') {
+			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpA(spa, pokemon) {
-			if (pokemon.template.species === 'Pikachu') {
+			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
@@ -188,7 +177,7 @@ let BattleItems = {
 	"luckypunch": {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Chansey') {
+			if (user.species.name === 'Chansey') {
 				return critRatio + 2;
 			}
 		},
@@ -196,7 +185,7 @@ let BattleItems = {
 	"lustrousorb": {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.template.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (move && user.species.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
 		},
@@ -233,7 +222,7 @@ let BattleItems = {
 					pokemon.removeVolatile('metronome');
 					return;
 				}
-				if (this.effectData.lastMove === move.id) {
+				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
 					this.effectData.numConsecutive++;
 				} else {
 					this.effectData.numConsecutive = 0;
@@ -258,21 +247,10 @@ let BattleItems = {
 			}
 		},
 	},
-	"rowapberry": {
-		inherit: true,
-		onAfterDamage() {},
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move && move.category === 'Special') {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target, null, true);
-				}
-			}
-		},
-	},
 	"stick": {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Farfetch\'d') {
+			if (user.species.name === 'Farfetch\'d') {
 				return critRatio + 2;
 			}
 		},
@@ -280,7 +258,7 @@ let BattleItems = {
 	"thickclub": {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak') {
+			if (pokemon.species.name === 'Cubone' || pokemon.species.name === 'Marowak') {
 				return this.chainModify(2);
 			}
 		},

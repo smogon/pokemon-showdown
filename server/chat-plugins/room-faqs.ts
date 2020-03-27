@@ -1,15 +1,11 @@
-'use strict';
-
-/** @type {typeof import('../../lib/fs').FS} */
-const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
+import {FS} from '../../lib/fs';
 
 const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
 
-/** @type {{[k: string]: {[k: string]: string}}} */
-let roomFaqs = {};
+let roomFaqs: {[k: string]: {[k: string]: string}} = {};
 try {
-	roomFaqs = require(`../../${ROOMFAQ_FILE}`);
+	roomFaqs = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
@@ -20,28 +16,25 @@ function saveRoomFaqs() {
 }
 
 /**
- * @param {RoomID} roomid
- * @param {string} key
- *
  * Aliases are implemented as a "regular" FAQ entry starting with a >. EX: {a: "text", b: ">a"}
- * This is done to allow easy checking whether a key is associated with a value or alias as well as preserve backwards compatibility.
+ * This is done to allow easy checking whether a key is associated with
+ * a value or alias as well as preserve backwards compatibility.
  */
-function getAlias(roomid, key) {
+function getAlias(roomid: RoomID, key: string) {
 	if (!roomFaqs[roomid]) return false;
-	let value = roomFaqs[roomid][key];
+	const value = roomFaqs[roomid][key];
 	if (value && value[0] === '>') return value.substr(1);
 	return false;
 }
 
-/** @type {ChatCommands} */
-const commands = {
+export const commands: ChatCommands = {
 	addfaq(target, room, user, connection) {
 		if (!this.can('ban', null, room)) return false;
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		if (!target) return this.parse('/help roomfaq');
 
 		target = target.trim();
-		let input = this.filter(target);
+		const input = this.filter(target);
 		if (target !== input) return this.errorReply("You are not allowed to use fitered words in roomfaq entries.");
 		let [topic, ...rest] = input.split(',');
 
@@ -49,7 +42,9 @@ const commands = {
 		if (!(topic && rest.length)) return this.parse('/help roomfaq');
 		let text = rest.join(',').trim();
 		if (topic.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
-		if (Chat.stripFormatting(text).length > MAX_ROOMFAQ_LENGTH) return this.errorReply(`FAQ entries should not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+		if (Chat.stripFormatting(text).length > MAX_ROOMFAQ_LENGTH) {
+			return this.errorReply(`FAQ entries should not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+		}
 
 		text = text.replace(/^>/, '&gt;');
 
@@ -64,12 +59,16 @@ const commands = {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('ban', null, room)) return false;
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-		let topic = toID(target);
+		const topic = toID(target);
 		if (!topic) return this.parse('/help roomfaq');
 
 		if (!(roomFaqs[room.roomid] && roomFaqs[room.roomid][topic])) return this.errorReply("Invalid topic.");
 		delete roomFaqs[room.roomid][topic];
-		Object.keys(roomFaqs[room.roomid]).filter(val => getAlias(room.roomid, val) === topic).map(val => delete roomFaqs[room.roomid][val]);
+		Object.keys(roomFaqs[room.roomid]).filter(
+			val => getAlias(room.roomid, val) === topic
+		).map(
+			val => delete roomFaqs[room.roomid][val]
+		);
 		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
 		this.privateModAction(`(${user.name} removed the FAQ for '${topic}')`);
@@ -79,13 +78,17 @@ const commands = {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('ban', null, room)) return false;
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-		let [alias, topic] = target.split(',').map(val => toID(val));
+		const [alias, topic] = target.split(',').map(val => toID(val));
 
 		if (!(alias && topic)) return this.parse('/help roomfaq');
 		if (alias.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
 
-		if (!(roomFaqs[room.roomid] && topic in roomFaqs[room.roomid])) return this.errorReply(`The topic ${topic} was not found in this room's faq list.`);
-		if (getAlias(room.roomid, topic)) return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
+		if (!(roomFaqs[room.roomid] && topic in roomFaqs[room.roomid])) {
+			return this.errorReply(`The topic ${topic} was not found in this room's faq list.`);
+		}
+		if (getAlias(room.roomid, topic)) {
+			return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
+		}
 		roomFaqs[room.roomid][alias] = `>${topic}`;
 		saveRoomFaqs();
 		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
@@ -95,10 +98,11 @@ const commands = {
 	rfaq: 'roomfaq',
 	roomfaq(target, room, user, connection, cmd) {
 		if (!roomFaqs[room.roomid]) return this.errorReply("This room has no FAQ topics.");
-		/** @type {string} */
-		let topic = toID(target);
+		let topic: string = toID(target);
 		if (topic === 'constructor') return false;
-		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.roomid]).filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b)).map(rfaq => `<button class="button" name="send" value="/viewfaq ${rfaq}">${rfaq}</button>`).join(', ')}`);
+		if (!topic) {
+			return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.roomid]).filter(val => !getAlias(room.roomid, val)).sort((a, b) => a.localeCompare(b)).map(rfaq => `<button class="button" name="send" value="/viewfaq ${rfaq}">${rfaq}</button>`).join(', ')}`);
+		}
 		if (!roomFaqs[room.roomid][topic]) return this.errorReply("Invalid topic.");
 		topic = getAlias(room.roomid, topic) || topic;
 
@@ -123,8 +127,6 @@ const commands = {
 		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: @ # & ~`,
 	],
 };
-
-exports.commands = commands;
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/addfaq ');

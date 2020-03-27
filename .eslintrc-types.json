@@ -1,0 +1,54 @@
+{
+  "extends": "./.eslintrc-no-types.json",
+  "rules": {
+    // test only (should never be committed, but useful when testing)
+    "no-debugger": "error",
+    "no-unused-vars": ["error", {"args": "none"}]
+},
+  "overrides": [
+    {
+      "files": ["./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts", "./tools/set-import/*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaVersion": 9,
+        "sourceType": "module",
+        "tsconfigRootDir": ".",
+        "project": ["./tsconfig.json"]
+      },
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "./.eslintrc-no-types.json"
+      ],
+      "rules": {
+        // TODO investigate
+        "@typescript-eslint/restrict-plus-operands": "off",
+        "@typescript-eslint/prefer-string-starts-ends-with": "off",
+        // "@typescript-eslint/switch-exhaustiveness-check": "error",
+
+        // test only (should never be committed, but useful when testing)
+        "max-len": ["error", {
+          "code": 120, "tabWidth": 0,
+          // see bottom of .eslintrc-no-types.json for source
+          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9$.]+ \\+?=>? |(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Chat\\.html|\\$\\()?['\"`/]"
+        }],
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],
+        "prefer-const": ["error", {"destructuring": "all"}],
+
+        // probably bugs
+        "@typescript-eslint/no-floating-promises": ["error", {"ignoreVoid": true}],
+        "@typescript-eslint/no-for-in-array": "error",
+        "@typescript-eslint/no-misused-promises": "error",
+        "@typescript-eslint/no-throw-literal": "error",
+        "@typescript-eslint/no-unnecessary-condition": "off", // sadly, we use not-null assertions so commonly that these are often necessary
+
+        // syntax style (local syntactical, usually autofixable formatting decisions)
+        "@typescript-eslint/no-unnecessary-qualifier": "off",
+        "@typescript-eslint/no-unnecessary-type-arguments": "error",
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
+        "@typescript-eslint/prefer-regexp-exec": "error"
+      }
+    }
+  ]
+}

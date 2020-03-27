@@ -67,7 +67,7 @@ let BattleScripts = {
 				changed = true;
 				// Recalculate the modified stat
 				// @ts-ignore
-				let stat = this.template.baseStats[i];
+				let stat = this.species.baseStats[i];
 				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
 				// @ts-ignore
@@ -176,7 +176,7 @@ let BattleScripts = {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		let baseMove = this.dex.getMove(moveOrMoveName);
 		let move = this.dex.getActiveMove(baseMove);
-		if (target === undefined) target = this.resolveTarget(pokemon, move);
+		if (target === undefined) target = this.getRandomTarget(pokemon, move);
 		if (move.target === 'self') {
 			target = pokemon;
 		}
@@ -187,12 +187,12 @@ let BattleScripts = {
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 		if (baseMove.target !== move.target) {
 			// Target changed in ModifyMove, so we must adjust it here
-			target = this.resolveTarget(pokemon, move);
+			target = this.getRandomTarget(pokemon, move);
 		}
 		move = this.runEvent('ModifyMove', pokemon, target, move, move);
 		if (baseMove.target !== move.target) {
 			// Check again, this shouldn't ever happen on Gen 1.
-			target = this.resolveTarget(pokemon, move);
+			target = this.getRandomTarget(pokemon, move);
 			this.debug('not a gen 1 mechanic');
 		}
 		if (!move) return false;
@@ -757,7 +757,7 @@ let BattleScripts = {
 		if (!isCrit) {
 			// In gen 1, the critical chance is based on speed.
 			// First, we get the base speed, divide it by 2 and floor it. This is our current crit chance.
-			let critChance = Math.floor(pokemon.template.baseStats['spe'] / 2);
+			let critChance = Math.floor(pokemon.species.baseStats['spe'] / 2);
 
 			// Now we check for focus energy volatile.
 			if (pokemon.volatiles['focusenergy']) {

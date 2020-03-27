@@ -16,7 +16,7 @@ describe('Bug Buzz', function () {
 		battle.setPlayer('p2', {team: [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]});
 		battle.makeChoices('move splash', 'move substitute');
 		battle.makeChoices('move bugbuzz', 'move rest');
-		assert.strictEqual(battle.p2.active[0].item, '');
+		assert.equal(battle.p2.active[0].item, '');
 	});
 });
 
@@ -32,6 +32,6 @@ describe('Bug Buzz [Gen 5]', function () {
 		]);
 		battle.makeChoices('move splash', 'move substitute');
 		battle.makeChoices('move bugbuzz', 'move rest');
-		assert.strictEqual(battle.p2.active[0].item, 'focussash');
+		assert.equal(battle.p2.active[0].item, 'focussash');
 	});
 });

@@ -15,7 +15,7 @@ import * as crypto from 'crypto';
 
 import {QueryProcessManager} from '../lib/process-manager';
 
-export const PM = new QueryProcessManager(module, async ({data, signature}) => {
+export const PM = new QueryProcessManager<{data: string, signature: string}, boolean>(module, ({data, signature}) => {
 	const verifier = crypto.createVerify(Config.loginserverkeyalgo);
 	verifier.update(data);
 	let success = false;
@@ -35,7 +35,7 @@ if (!PM.isParentProcess) {
 	global.Config = require('./config-loader').Config; // tslint:disable-line: no-var-requires
 
 	const Repl = require('../lib/repl').Repl; // tslint:disable-line: no-var-requires
-	// tslint:disable-next-line: no-eval
+	// eslint-disable-next-line no-eval
 	Repl.start('verifier', (cmd: string) => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.verifierprocesses : 1);

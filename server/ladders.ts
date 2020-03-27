@@ -8,9 +8,10 @@
  * @license MIT
  */
 
-const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.remoteladder
-	? require('./ladders-remote')
-	: require('./ladders-local')).LadderStore;
+// eslint-disable-next-line no-undef
+const LadderStore: typeof LadderStoreT = (typeof Config === 'object' && Config.remoteladder ?
+	require('./ladders-remote') :
+	require('./ladders-local')).LadderStore;
 
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
@@ -27,7 +28,7 @@ class BattleReady {
 	readonly rating: number;
 	readonly challengeType: ChallengeType;
 	readonly time: number;
-	constructor(userid: ID, formatid: string, team: string, rating: number = 0, challengeType: ChallengeType) {
+	constructor(userid: ID, formatid: string, team: string, rating = 0, challengeType: ChallengeType) {
 		this.userid = userid;
 		this.formatid = formatid;
 		this.team = team;
@@ -124,7 +125,7 @@ class Ladder extends LadderStore {
 		if (isRated && !Ladders.disabled) {
 			const uid = user.id;
 			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync.get(this.formatid).validateTeam(team, !!(user.locked || user.namelocked)),
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)}),
 				this.getRating(uid),
 			]);
 			if (uid !== user.id) {
@@ -137,7 +138,8 @@ class Ladder extends LadderStore {
 				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
 				rating = 1;
 			}
-			valResult = await TeamValidatorAsync.get(this.formatid).validateTeam(team, !!(user.locked || user.namelocked));
+			const validator = TeamValidatorAsync.get(this.formatid);
+			valResult = await validator.validateTeam(team, {removeNicknames: !!(user.locked || user.namelocked)});
 		}
 
 		if (valResult.charAt(0) !== '1') {
@@ -219,11 +221,11 @@ class Ladder extends LadderStore {
 				if (chall.from === targetUser.id &&
 					chall.to === user.id &&
 					chall.formatid === this.formatid) {
-						if (Ladder.removeChallenge(chall)) {
-							Ladders.match(chall.ready, ready);
-							return true;
-						}
+					if (Ladder.removeChallenge(chall)) {
+						Ladders.match(chall.ready, ready);
+						return true;
 					}
+				}
 			}
 		}
 		Ladder.addChallenge(new Challenge(ready, targetUser.id));
@@ -342,7 +344,7 @@ class Ladder extends LadderStore {
 		if (!user || !user.connected || user.id !== search.userid) {
 			const formatTable = Ladders.searches.get(formatid);
 			if (formatTable) formatTable.delete(search.userid);
-			if (user && user.connected) {
+			if (user?.connected) {
 				user.popup(`You changed your name and are no longer looking for a battle in ${formatid}`);
 				Ladder.updateSearch(user);
 			}
@@ -404,17 +406,6 @@ class Ladder extends LadderStore {
 			return;
 		}
 
-		const roomid = this.needsToMove(user);
-		if (roomid) {
-			connection.popup(`Error: You need to make a move in <<${roomid}>> before you can look for another battle.\n\n(This restriction doesn't apply in the first five turns of a battle.)`);
-			return;
-		}
-
-		if (roomid === null && Date.now() < user.lastDecision + 3 * SECONDS) {
-			connection.popup(`Error: You need to wait until after making a move before you can look for another battle.\n\n(This restriction doesn't apply in the first five turns of a battle.)`);
-			return;
-		}
-
 		const oldUserid = user.id;
 		const search = await this.prepBattle(connection, format.rated ? 'rated' : 'unrated', null, format.rated !== false);
 
@@ -422,31 +413,6 @@ class Ladder extends LadderStore {
 		if (!search) return;
 
 		this.addSearch(search, user);
-	}
-
-	/**
-	 * null = all battles ok
-	 * undefined = not in any battle
-	 */
-	needsToMove(user: User) {
-		let out;
-		for (const roomid of user.games) {
-			const room = Rooms.get(roomid);
-			if (!room || !room.battle || !room.battle.playerTable[user.id]) continue;
-			const battle: RoomBattle = room.battle;
-			if (battle.requestCount <= 16) {
-				// it's fine as long as it's before turn 5
-				// to be safe, we count off 8 requests for Team Preview, U-turn, and faints
-				continue;
-			}
-			if (Dex.getFormat(battle.format).allowMultisearch) {
-				continue;
-			}
-			const player = battle.playerTable[user.id];
-			if (!player.request.isWait) return roomid;
-			out = null;
-		}
-		return out;
 	}
 
 	/**

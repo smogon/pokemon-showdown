@@ -21,7 +21,7 @@ describe('Unaware', function () {
 		battle.makeChoices('move softboiled', 'move bellydrum');
 		battle.resetRNG();
 		battle.makeChoices('move softboiled', 'move vitalthrow');
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, damage);
+		assert.equal(pokemon.maxhp - pokemon.hp, damage);
 	});
 
 	it('should not ignore attack stage changes when Pokemon with it attack', function () {
@@ -49,7 +49,7 @@ describe('Unaware', function () {
 		pokemon.hp = pokemon.maxhp;
 		battle.resetRNG();
 		battle.makeChoices('move moonblast', 'move amnesia');
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, damage);
+		assert.equal(pokemon.maxhp - pokemon.hp, damage);
 	});
 
 	it('should not ignore defense stage changes when Pokemon with it are attacked', function () {

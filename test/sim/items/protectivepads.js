@@ -16,9 +16,9 @@ describe('Protective Pads', function () {
 		battle.setPlayer('p2', {team: [{species: "Hariyama", ability: 'thickfat', item: 'protectivepads', moves: ['bulletpunch']}]});
 		const attacker = battle.p2.active[0];
 		battle.makeChoices();
-		assert.strictEqual(attacker.ability, 'thickfat');
+		assert.equal(attacker.ability, 'thickfat');
 		const mummyActivationMessages = battle.log.filter(logStr => logStr.startsWith('|-activate|') && logStr.includes('Mummy'));
-		assert.strictEqual(mummyActivationMessages.length, 1, "Mummy should activate only once");
+		assert.equal(mummyActivationMessages.length, 1, "Mummy should activate only once");
 		assert.ok(mummyActivationMessages[0].includes('Cofagrigus'), "Source of Mummy activation should be included");
 		assert.false(mummyActivationMessages[0].includes('Thick Fat'), "Attacker's ability should not be revealed");
 	});
@@ -45,7 +45,7 @@ describe('Protective Pads', function () {
 		battle.setPlayer('p2', {team: [{species: "Liepard", ability: 'prankster', item: 'protectivepads', moves: ['scratch']}]});
 		battle.makeChoices();
 		assert.false(battle.p2.active[0].item, "Attacker should lose their item");
-		assert.strictEqual(battle.p1.active[0].item, 'protectivepads', "Target should receive stolen item");
+		assert.equal(battle.p1.active[0].item, 'protectivepads', "Target should receive stolen item");
 	});
 
 	it('should prevent item effects triggered by contact from acting', function () {

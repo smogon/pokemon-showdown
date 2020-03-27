@@ -1,15 +1,11 @@
-'use strict';
-
-/** @type {typeof import('../../lib/fs').FS} */
-const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
+import {FS} from '../../lib/fs';
 
 const DAY = 24 * 60 * 60 * 1000;
 const SPOTLIGHT_FILE = 'config/chat-plugins/spotlights.json';
 
-/** @type {{[k: string]: {[k: string]: {image: string?, description: string}[]}}} */
-let spotlights = {};
+let spotlights: {[k: string]: {[k: string]: {image?: string, description: string}[]}} = {};
 try {
-	spotlights = require(`../../${SPOTLIGHT_FILE}`);
+	spotlights = JSON.parse(FS(SPOTLIGHT_FILE).readIfExistsSync() || "{}");
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
@@ -36,11 +32,7 @@ const midnight = new Date();
 midnight.setHours(24, 0, 0, 0);
 let timeout = setTimeout(nextDaily, midnight.valueOf() - Date.now());
 
-/**
- * @param {string?} image
- * @param {string} description
- */
-async function renderSpotlight(image, description) {
+async function renderSpotlight(description: string, image?: string) {
 	let imgHTML = '';
 
 	if (image) {
@@ -51,12 +43,11 @@ async function renderSpotlight(image, description) {
 	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true).replace(/\n/g, `<br />`)}</td>${imgHTML}</tr></table>`;
 }
 
-exports.destroy = function () {
+export const destroy = () => {
 	clearTimeout(timeout);
 };
 
-/** @type {PageTable} */
-const pages = {
+export const pages: PageTable = {
 	async spotlights(query, user, connection) {
 		this.title = 'Daily Spotlights';
 		this.extractRoom();
@@ -64,10 +55,10 @@ const pages = {
 		if (!spotlights[this.room.roomid]) {
 			buf += `<p>This room has no daily spotlights.</p></div>`;
 		} else {
-			for (let key in spotlights[this.room.roomid]) {
+			for (const key in spotlights[this.room.roomid]) {
 				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
 				for (const [i, spotlight] of spotlights[this.room.roomid][key].entries()) {
-					const html = await renderSpotlight(spotlight.image, spotlight.description);
+					const html = await renderSpotlight(spotlight.description, spotlight.image);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
 					// @ts-ignore room is definitely a proper room here.
 					if (!user.can('announce', null, this.room)) break;
@@ -78,11 +69,9 @@ const pages = {
 		return buf;
 	},
 };
-exports.pages = pages;
 
-/** @type {ChatCommands} */
-const commands = {
-	async removedaily(target, room, user) {
+export const commands: ChatCommands = {
+	removedaily(target, room, user) {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, rest] = target.split(',');
 		key = toID(key);
@@ -122,27 +111,29 @@ const commands = {
 
 		if (!this.can('announce', null, room)) return false;
 		if (!rest.length) return this.parse('/help daily');
-		let image, description;
+		let img;
 		if (rest[0].trim().startsWith('http://') || rest[0].trim().startsWith('https://')) {
-			[image, ...rest] = rest;
-			image = image.trim();
-			const ret = await Chat.getImageDimensions(image);
-			if (ret.err) return this.errorReply(`Invalid image url: ${image}`);
+			[img, ...rest] = rest;
+			img = img.trim();
+			const ret = await Chat.getImageDimensions(img);
+			if (ret.err) return this.errorReply(`Invalid image url: ${img}`);
 		}
-		description = rest.join(',');
-		if (Chat.stripFormatting(description).length > 500) return this.errorReply("Descriptions can be at most 500 characters long.");
-		const obj = {image: image || null, description: description};
+		const desc = rest.join(',');
+		if (Chat.stripFormatting(desc).length > 500) {
+			return this.errorReply("Descriptions can be at most 500 characters long.");
+		}
+		const obj = {image: img, description: desc};
 		if (!spotlights[room.roomid]) spotlights[room.roomid] = {};
 		if (!spotlights[room.roomid][key]) spotlights[room.roomid][key] = [];
 		if (cmd === 'setdaily') {
 			spotlights[room.roomid][key].shift();
 			spotlights[room.roomid][key].unshift(obj);
 
-			this.modlog('SETDAILY', key, `${image ? `${image}, ` : ''}${description}`);
+			this.modlog('SETDAILY', key, `${img ? `${img}, ` : ''}${desc}`);
 			this.privateModAction(`${user.name} set the daily ${key}.`);
 		} else {
 			spotlights[room.roomid][key].push(obj);
-			this.modlog('QUEUEDAILY', key, `${image ? `${image}, ` : ''}${description}`);
+			this.modlog('QUEUEDAILY', key, `${img ? `${img}, ` : ''}${desc}`);
 			this.privateModAction(`${user.name} queued a daily ${key}.`);
 		}
 
@@ -150,7 +141,7 @@ const commands = {
 	},
 	async daily(target, room, user) {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-		let key = toID(target);
+		const key = toID(target);
 		if (!key) return this.parse('/help daily');
 
 		if (!spotlights[room.roomid] || !spotlights[room.roomid][key]) {
@@ -160,7 +151,7 @@ const commands = {
 		if (!this.runBroadcast()) return;
 
 		const {image, description} = spotlights[room.roomid][key][0];
-		const html = await renderSpotlight(image, description);
+		const html = await renderSpotlight(description, image);
 
 		this.sendReplyBox(html);
 		room.update();
@@ -180,8 +171,6 @@ const commands = {
 		`- /viewspotlights - Shows all current spotlights in the room. For staff, also shows queued spotlights.`,
 	],
 };
-
-exports.commands = commands;
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/(queue|set)daily ');

@@ -80,6 +80,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	burndrive: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	cameruptite: {
 		inherit: true,
 		isNonstandard: null,
@@ -89,6 +93,10 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	charizarditey: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	chilldrive: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -122,6 +130,10 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	domefossil: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	dousedrive: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -336,6 +348,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	machobrace: {
+		inherit: true,
+		isUnreleased: true,
+	},
 	magoberry: {
 		inherit: true,
 		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
@@ -345,6 +361,11 @@ let BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
+	},
+	mail: {
+		inherit: true,
+		isNonstandard: null,
+		isUnreleased: true,
 	},
 	manectite: {
 		inherit: true,
@@ -474,6 +495,10 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	sharpedonite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	shockdrive: {
 		inherit: true,
 		isNonstandard: null,
 	},

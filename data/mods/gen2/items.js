@@ -65,7 +65,7 @@ let BattleItems = {
 		desc: "If held by a Chansey, its critical hit ratio is always at stage 2. (25% crit rate)",
 		onModifyCritRatioPriority: -1,
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Chansey') {
+			if (user.species.name === 'Chansey') {
 				return 3;
 			}
 		},
@@ -91,7 +91,7 @@ let BattleItems = {
 		desc: "If held by a Farfetch'd, its critical hit ratio is always at stage 2. (25% crit rate)",
 		onModifyCritRatioPriority: -1,
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Farfetch\'d') {
+			if (user.species.name === 'Farfetch\'d') {
 				return 3;
 			}
 		},
