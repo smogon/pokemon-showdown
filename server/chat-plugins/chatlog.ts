@@ -130,16 +130,17 @@ const LogReader = new class {
 const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		if (day === 'today') day = LogReader.today();
+		const [type, input] = opts!.split('-');
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
 			`<a roomid="view-chatlog-${roomid}">${roomid}</a> /  ` +
 			`<a roomid="view-chatlog-${roomid}--${month}">${month}</a> / ` +
 			`<strong>${day}</strong></p>`;
-		if (opts!.includes('search-')) {
-			 buf += `<strong>Search query: "${opts!.slice(7)}"</strong><hr />`;
-		} else if (opts!.includes('hide-')) {
-			buf += `<strong>Hiding string: "${opts!.slice(5)}"</strong><hr />`;
+		if (type === 'search') {
+			 buf += `<strong>Search query: "${input}"</strong><hr />`;
+		} else if (type === 'hide') {
+			buf += `<strong>Hiding string: "${input}"</strong><hr />`;
 		} else {
 			buf += `<hr />`;
 		}
