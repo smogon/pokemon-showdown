@@ -43,9 +43,6 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Uber', 'Moody', 'Shadow Tag', 'Baton Pass'],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8ou') this.add('html', `<div class="broadcast-red"><strong>OU is currently suspecting Arena Trap! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3661134/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	/*{
 		name: "[Gen 8] OU (Blitz)",
