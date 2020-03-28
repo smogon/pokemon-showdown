@@ -781,13 +781,13 @@ const commands = {
 		}
 		let targets = target.split(/ ?[,/] ?/);
 		/** @type {{types: string[], [k: string]: any}} */
-		let pokemon = mod.getSpecies(targets[0]);
+		let species = mod.getSpecies(targets[0]);
 		let type1 = mod.getType(targets[0]);
 		let type2 = mod.getType(targets[1]);
 		let type3 = mod.getType(targets[2]);
 
-		if (pokemon.exists) {
-			target = pokemon.species;
+		if (species.exists) {
+			target = species.species;
 		} else {
 			let types = [];
 			if (type1.exists) {
@@ -801,9 +801,9 @@ const commands = {
 			}
 
 			if (types.length === 0) {
-				return this.sendReplyBox(Chat.html`${target} isn't a recognized type or pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
+				return this.sendReplyBox(Chat.html`${target} isn't a recognized type or Pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
 			}
-			pokemon = {types: types};
+			species = {types: types};
 			target = types.join("/");
 		}
 
@@ -811,9 +811,9 @@ const commands = {
 		let resistances = [];
 		let immunities = [];
 		for (let type in mod.data.TypeChart) {
-			let notImmune = mod.getImmunity(type, pokemon);
+			const notImmune = mod.getImmunity(type, species);
 			if (notImmune) {
-				let typeMod = mod.getEffectiveness(type, pokemon);
+				const typeMod = mod.getEffectiveness(type, species);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
@@ -840,7 +840,7 @@ const commands = {
 		}
 
 		let buffer = [];
-		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':');
+		buffer.push(species.exists ? "" + species.name + ' (ignoring abilities):' : '' + target + ':');
 		buffer.push('<span class="message-effect-weak">Weaknesses</span>: ' + (weaknesses.join(', ') || '<font color=#999999>None</font>'));
 		buffer.push('<span class="message-effect-resist">Resistances</span>: ' + (resistances.join(', ') || '<font color=#999999>None</font>'));
 		buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immunities.join(', ') || '<font color=#999999>None</font>'));
