@@ -840,7 +840,7 @@ const commands = {
 		}
 
 		let buffer = [];
-		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':');
+		buffer.push(pokemon.exists ? "" + pokemon.name + ' (ignoring abilities):' : '' + target + ':');
 		buffer.push('<span class="message-effect-weak">Weaknesses</span>: ' + (weaknesses.join(', ') || '<font color=#999999>None</font>'));
 		buffer.push('<span class="message-effect-resist">Resistances</span>: ' + (resistances.join(', ') || '<font color=#999999>None</font>'));
 		buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immunities.join(', ') || '<font color=#999999>None</font>'));
