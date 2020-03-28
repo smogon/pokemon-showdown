@@ -1043,7 +1043,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	mew: {
-		randomBattleMoves: ["bravebird", "closecombat", "powerwhip", "psychicfangs", "swordsdance", "uturn"],
+		randomBattleMoves: ["bravebird", "closecombat", "flareblitz", "psychicfangs", "swordsdance"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -1138,7 +1138,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	xatu: {
-		randomBattleMoves: ["defog", "heatwave", "psychic", "roost", "thunderwave", "uturn"],
+		randomBattleMoves: ["heatwave", "lightscreen", "psychic", "reflect", "roost", "teleport"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
@@ -3594,7 +3594,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	yveltal: {
-		randomBattleMoves: ["darkpulse", "foulplay", "heatwave", "hurricane", "roost", "suckerpunch", "taunt", "uturn"],
+		randomBattleMoves: ["defog", "heatwave", "hurricane", "knockoff", "roost", "suckerpunch"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
