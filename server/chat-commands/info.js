@@ -811,9 +811,9 @@ const commands = {
 		let resistances = [];
 		let immunities = [];
 		for (let type in mod.data.TypeChart) {
-			let notImmune = mod.getImmunity(type, species);
+			const notImmune = mod.getImmunity(type, species);
 			if (notImmune) {
-				let typeMod = mod.getEffectiveness(type, species);
+				const typeMod = mod.getEffectiveness(type, species);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
