@@ -1234,10 +1234,8 @@ export class Pokemon {
 			for (const typeid of type) {
 				if (this.hasType(typeid)) return true;
 			}
-		} else {
-			if (this.getTypes().includes(type)) {
-				return true;
-			}
+		} else if (this.getTypes().includes(type)) {
+			return true;
 		}
 		return false;
 	}
@@ -1474,17 +1472,12 @@ export class Pokemon {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		const item = this.getItem();
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
-			switch (item.id) {
-			case 'redcard':
+			if (item.id === 'redcard') {
 				this.battle.add('-enditem', this, item, '[of] ' + source);
-				break;
-			default:
-				if (item.isGem) {
-					this.battle.add('-enditem', this, item, '[from] gem');
-				} else {
-					this.battle.add('-enditem', this, item);
-				}
-				break;
+			} else if (item.isGem) {
+				this.battle.add('-enditem', this, item, '[from] gem');
+			} else {
+				this.battle.add('-enditem', this, item);
 			}
 			if (item.boosts) {
 				this.battle.boost(item.boosts, this, source, item);
