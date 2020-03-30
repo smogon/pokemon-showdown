@@ -963,6 +963,7 @@ export class TeamValidator {
 				generation: 5,
 				level: 10,
 				from: 'Gen 5 Dream World',
+				isHidden: true,
 			};
 		} else if (source.charAt(1) === 'E') {
 			if (this.findEggMoveFathers(source, species, setSources)) {

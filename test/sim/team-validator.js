@@ -437,10 +437,18 @@ describe('Team Validator', function () {
 
 	it('should reject Ultra Necrozma where ambiguous', function () {
 		let team = [
-			{species: 'necrozmaultra', ability: 'neuroforce', moves: ['confusion']},
+			{species: 'necrozmaultra', ability: 'neuroforce', moves: ['confusion'], evs: {hp: 1}},
 		];
 		let illegal = TeamValidator.get('gen7ubers').validateTeam(team);
 		assert(illegal);
+	});
+
+	it('should handle Dream World moves', function () {
+		let team = [
+			{species: 'garchomp', ability: 'roughskin', moves: ['endure'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen5ou').validateTeam(team);
+		assert.equal(illegal, null);
 	});
 
 	it('should reject newer Pokemon in older gens', function () {
