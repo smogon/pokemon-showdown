@@ -614,7 +614,7 @@ export class TeamValidator {
 				legal = true;
 				break;
 			}
-			if (!legal && species.id === 'celebi' && dex.gen >= 7 && !this.validateSource(set, '7V', setSources, species)) {
+			if (!legal && species.gen <= 2 && dex.gen >= 7 && !this.validateSource(set, '7V', setSources, species)) {
 				legal = true;
 			}
 			if (!legal) {
