@@ -42,7 +42,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
-		banlist: ['Uber', 'Moody', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
 	},
 	/*{
 		name: "[Gen 8] OU (Blitz)",
@@ -193,7 +193,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
-		banlist: ['Crucibelle-Mega', 'Arena Trap'],
+		banlist: ['Crucibelle-Mega'],
 		onValidateSet(set) {
 			if (Dex.getSpecies(set.species).isUnreleased === 'Past') {
 				return [`${set.species} is unreleased.`];
@@ -467,7 +467,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Shedinja', 'Assist', 'Shell Smash', 'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Water Bubble'],
+		banlist: ['Shedinja', 'Assist', 'Shell Smash', 'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Water Bubble'],
 		restricted: ['Dracovish', 'Dracozolt'],
 		// @ts-ignore
 		getEvoFamily(speciesid) {
