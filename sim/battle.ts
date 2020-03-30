@@ -1266,6 +1266,7 @@ export class Battle {
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
+		pokemon.activeMoveActions = 0;
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}
@@ -1325,6 +1326,7 @@ export class Battle {
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
+		pokemon.activeMoveActions = 0;
 		if (this.gen === 2) pokemon.draggedIn = this.turn;
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
@@ -2569,7 +2571,6 @@ export class Battle {
 		case 'shift': {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
-			action.pokemon.activeTurns--;
 			this.swapPosition(action.pokemon, 1);
 			break;
 		}

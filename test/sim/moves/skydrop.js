@@ -181,6 +181,16 @@ describe('Sky Drop', function () {
 		assert.equal(battle.p2.active[0].boosts['atk'], 1);
 		assert.equal(battle.p2.active[0].boosts['def'], 1);
 	});
+
+	it('should not suppress Speed Boost', function () {
+		battle = common.createBattle([[
+			{species: "Aerodactyl", moves: ['skydrop']},
+		], [
+			{species: "Mew", ability: 'speedboost', moves: ['splash']},
+		]]);
+		battle.makeChoices('move skydrop', 'move splash');
+		assert.statStage(battle.p2.active[0], 'spe', 1);
+	});
 });
 
 describe('Sky Drop [Gen 5]', function () {
