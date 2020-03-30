@@ -85,7 +85,7 @@ describe("Dynamax", function () {
 		assert.equal(pokemon.maxhp - pokemon.hp, expectedDamage, `${pokemon.name} should take ${expectedPercent * 100}%`);
 	});
 
-	it('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
+	it.skip('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'psychic']},
 		], [
