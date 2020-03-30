@@ -1273,6 +1273,7 @@ export class Battle {
 		}
 		this.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
+		pokemon.previouslySwitchedIn++;
 
 		this.queue.insertChoice({choice: 'runUnnerve', pokemon});
 		if (isDrag && this.gen >= 5) {
