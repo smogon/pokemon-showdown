@@ -99,6 +99,8 @@ export interface PokemonAction {
 	speed: number;
 	/** the pokemon doing action */
 	pokemon: Pokemon;
+	/** `runSwitch` only: the pokemon forcing this pokemon to switch in */
+	dragger?: Pokemon;
 }
 
 export type Action = MoveAction | SwitchAction | TeamAction | FieldAction | PokemonAction;
