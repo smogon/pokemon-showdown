@@ -203,6 +203,7 @@ export class Pokemon {
 	 * Out doesn't, meaning that Truant can't use this number.
 	 */
 	activeMoveActions: number;
+	previouslySwitchedIn: number;
 	truantTurn: boolean;
 	/** Have this pokemon's Start events run yet? */
 	isStarted: boolean;
@@ -385,6 +386,7 @@ export class Pokemon {
 		this.isActive = false;
 		this.activeTurns = 0;
 		this.activeMoveActions = 0;
+		this.previouslySwitchedIn = 0;
 		this.truantTurn = false;
 		this.isStarted = false;
 		this.duringMove = false;
