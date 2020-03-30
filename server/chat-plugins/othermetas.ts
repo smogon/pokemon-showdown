@@ -333,8 +333,6 @@ export const commands: ChatCommands = {
 			const format = Dex.getFormat(room.battle.format);
 			dex = Dex.mod(format.mod);
 		}
-		// Temporary until Gen 8 Tier Shift is released
-		if (!toID(args[1])) dex = Dex.mod('gen7');
 		const species = Dex.deepClone(dex.getSpecies(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
