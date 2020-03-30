@@ -365,6 +365,7 @@ describe('Team Validator', function () {
 		assert.equal(illegal, null);
 		team = [
 			{species: 'tauros', ability: 'intimidate', ivs: {hp: 31, atk: 31, def: 30, spa: 30, spd: 30, spe: 30}, moves: ['bodyslam'], evs: {hp: 1}},
+			{species: 'suicune', ability: 'innerfocus', moves: ['scald'], evs: {hp: 1}},
 		];
 		illegal = TeamValidator.get('gen7anythinggoes').validateTeam(team);
 		assert.equal(illegal, null);
