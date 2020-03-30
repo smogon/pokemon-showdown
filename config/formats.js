@@ -193,7 +193,7 @@ let Formats = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
-		banlist: ['Crucibelle-Mega', 'Arena Trap'],
+		banlist: ['Crucibelle-Mega'],
 		onValidateSet(set) {
 			if (Dex.getSpecies(set.species).isUnreleased === 'Past') {
 				return [`${set.species} is unreleased.`];
