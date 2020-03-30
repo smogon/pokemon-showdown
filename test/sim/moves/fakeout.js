@@ -11,17 +11,21 @@ describe('Fake Out', function () {
 	});
 
 	it('should flinch on the first turn out', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']}]});
-		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['swift']}]});
+		battle = common.createBattle([[
+			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
+		], [
+			{species: 'Venusaur', ability: 'overgrow', moves: ['swift']},
+		]]);
 		battle.makeChoices('move fakeout', 'move swift');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should not flinch on the second turn out', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']}]});
-		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['swift']}]});
+		battle = common.createBattle([[
+			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
+		], [
+			{species: 'Venusaur', ability: 'overgrow', moves: ['swift']},
+		]]);
 		battle.makeChoices('move fakeout', 'move swift');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		battle.makeChoices('move fakeout', 'move swift');
@@ -29,12 +33,12 @@ describe('Fake Out', function () {
 	});
 
 	it('should flinch after switching out and back in to refresh the move', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
+		battle = common.createBattle([[
 			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
 			{species: 'Blissey', ability: 'naturalcure', moves: ['fakeout']},
-		]});
-		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'sleeptalk']}]});
+		], [
+			{species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'sleeptalk']},
+		]]);
 		battle.makeChoices('move fakeout', 'move swift');
 		battle.makeChoices('switch 2', 'move sleeptalk');
 		battle.makeChoices('switch 2', 'move sleeptalk');
@@ -43,12 +47,12 @@ describe('Fake Out', function () {
 	});
 
 	it('should not flinch if the user has already used a Dancer move first', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
+		battle = common.createBattle([[
 			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
 			{species: 'Oricorio', ability: 'dancer', moves: ['fakeout']},
-		]});
-		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'quiverdance']}]});
+		], [
+			{species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'quiverdance']},
+		]]);
 		battle.makeChoices('switch 2', 'move quiverdance');
 		battle.makeChoices('move fakeout', 'move swift');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);

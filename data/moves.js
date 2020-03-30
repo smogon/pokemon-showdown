@@ -5102,7 +5102,7 @@ let BattleMovedex = {
 		priority: 3,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry(pokemon, target) {
-			if (pokemon.activeTurns > 1) {
+			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
 				this.hint("Fake Out only works on your first turn out.");
@@ -5492,7 +5492,7 @@ let BattleMovedex = {
 		priority: 2,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry(pokemon, target) {
-			if (pokemon.activeTurns > 1) {
+			if (pokemon.activeMoveActions > 1) {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
 				this.hint("First Impression only works on your first turn out.");
@@ -9822,8 +9822,6 @@ let BattleMovedex = {
 			) {
 				return false;
 			}
-			// Instructed Fake Out etc. should fail
-			target.activeTurns++;
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
 			this.runMove(target.lastMove.id, target, /** @type {number} */(target.lastMoveTargetLoc));
 		},
@@ -11202,7 +11200,7 @@ let BattleMovedex = {
 		stallingMove: true,
 		sideCondition: 'matblock',
 		onTryHitSide(side, source) {
-			if (source.activeTurns > 1) {
+			if (source.activeMoveActions > 1) {
 				this.hint("Mat Block only works on your first turn out.");
 				return false;
 			}
@@ -17092,7 +17090,7 @@ let BattleMovedex = {
 			onFoeBeforeMovePriority: 12,
 			onFoeBeforeMove(attacker, defender, move) {
 				if (attacker === this.effectData.source) {
-					this.effectData.source.activeTurns--;
+					attacker.activeMoveActions--;
 					this.debug('Sky drop nullifying.');
 					return null;
 				}

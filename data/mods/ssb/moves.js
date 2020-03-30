@@ -2638,7 +2638,7 @@ let BattleMovedex = {
 		priority: 3,
 		flags: {protect: 1, mirror: 1, contact: 1},
 		onTry(pokemon, target) {
-			if (pokemon.activeTurns > 1) {
+			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
 				this.hint("Bar Fight only works on your first turn out.");

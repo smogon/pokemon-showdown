@@ -17,6 +17,7 @@ let BattleScripts = {
 	 * Dancer.
 	 */
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove, originalTarget) {
+		pokemon.activeMoveActions++;
 		let target = this.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
 		const pranksterBoosted = baseMove.pranksterBoosted;
@@ -123,8 +124,6 @@ let BattleScripts = {
 				const dancersTarget = target.side !== dancer.side && pokemon.side === dancer.side ? target : pokemon;
 				// @ts-ignore
 				this.runMove(move.id, dancer, this.getTargetLoc(dancersTarget, dancer), this.dex.getAbility('dancer'), undefined, true);
-				// Using a Dancer move is enough to spoil Fake Out etc.
-				dancer.activeTurns++;
 			}
 		}
 		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
