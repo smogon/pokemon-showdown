@@ -282,8 +282,9 @@ export class Battle {
 		this.prng = new PRNG(this.prng.startingSeed);
 	}
 
-	suppressingAttackEvents() {
-		return this.activePokemon && this.activePokemon.isActive && this.activeMove && this.activeMove.ignoreAbility;
+	suppressingAttackEvents(target?: Pokemon) {
+		return this.activePokemon && this.activePokemon.isActive && this.activePokemon !== target &&
+			this.activeMove && this.activeMove.ignoreAbility;
 	}
 
 	setActiveMove(move?: ActiveMove | null, pokemon?: Pokemon | null, target?: Pokemon | null) {
@@ -668,7 +669,7 @@ export class Battle {
 				continue;
 			}
 			if (status.effectType === 'Ability' && !status.isUnbreakable &&
-					this.suppressingAttackEvents() && this.activePokemon !== thing) {
+					this.suppressingAttackEvents(thing as Pokemon)) {
 				// ignore attacking events
 				const AttackingEvents = {
 					BeforeMove: 1,
@@ -1227,7 +1228,7 @@ export class Battle {
 		return true;
 	}
 
-	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null) {
+	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag?: boolean) {
 		if (!pokemon || pokemon.isActive) {
 			this.hint("A switch failed because the Pokémon trying to switch in is already in.");
 			return false;
@@ -1270,10 +1271,39 @@ export class Battle {
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}
-		this.add('switch', pokemon, pokemon.getDetails);
+		this.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
+
 		this.queue.insertChoice({choice: 'runUnnerve', pokemon});
-		this.queue.insertChoice({choice: 'runSwitch', pokemon});
+		if (isDrag && this.gen >= 5) {
+			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
+			this.runSwitch(pokemon);
+		} else {
+			this.queue.insertChoice({choice: 'runSwitch', pokemon});
+		}
+
+		return true;
+	}
+	runSwitch(pokemon: Pokemon) {
+		this.runEvent('Swap', pokemon);
+		this.runEvent('SwitchIn', pokemon);
+		if (this.gen <= 2 && !pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.turn) {
+			this.runEvent('AfterSwitchInSelf', pokemon);
+		}
+		if (!pokemon.hp) return false;
+		pokemon.isStarted = true;
+		if (!pokemon.fainted) {
+			this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
+			pokemon.abilityOrder = this.abilityOrder++;
+			this.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
+		}
+		if (this.gen === 4) {
+			for (const foeActive of pokemon.side.foe.active) {
+				foeActive.removeVolatile('substitutebroken');
+			}
+		}
+		pokemon.draggedIn = null;
+		return true;
 	}
 
 	canSwitch(side: Side) {
@@ -1296,55 +1326,17 @@ export class Battle {
 		return canSwitchIn;
 	}
 
-	dragIn(side: Side, pos?: number) {
-		if (!pos) pos = 0;
-		if (pos >= side.active.length) return false;
+	dragIn(side: Side, pos: number) {
 		const pokemon = this.getRandomSwitchable(side);
 		if (!pokemon || pokemon.isActive) return false;
-		pokemon.isActive = true;
-		this.runEvent('BeforeSwitchIn', pokemon);
-		if (side.active[pos]) {
-			const oldActive = side.active[pos];
-			if (!oldActive.hp) {
-				return false;
-			}
-			if (!this.runEvent('DragOut', oldActive)) {
-				return false;
-			}
-			this.runEvent('SwitchOut', oldActive);
-			oldActive.illusion = null;
-			this.singleEvent('End', oldActive.getAbility(), oldActive.abilityData, oldActive);
-			oldActive.isActive = false;
-			oldActive.isStarted = false;
-			oldActive.usedItemThisTurn = false;
-			oldActive.position = pokemon.position;
-			pokemon.position = pos;
-			side.pokemon[pokemon.position] = pokemon;
-			side.pokemon[oldActive.position] = oldActive;
-			this.queue.cancelMove(oldActive);
-			oldActive.clearVolatile();
+		const oldActive = side.active[pos];
+		if (!oldActive) throw new Error(`nothing to drag out`);
+		if (!oldActive.hp) return false;
+
+		if (!this.runEvent('DragOut', oldActive)) {
+			return false;
 		}
-		side.active[pos] = pokemon;
-		pokemon.activeTurns = 0;
-		pokemon.activeMoveActions = 0;
-		if (this.gen === 2) pokemon.draggedIn = this.turn;
-		for (const moveSlot of pokemon.moveSlots) {
-			moveSlot.used = false;
-		}
-		this.add('drag', pokemon, pokemon.getDetails);
-		if (this.gen >= 5) {
-			this.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityData, pokemon);
-			this.runEvent('Swap', pokemon);
-			this.runEvent('SwitchIn', pokemon);
-			if (!pokemon.hp) return true;
-			pokemon.isStarted = true;
-			if (!pokemon.fainted) {
-				this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
-				this.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
-			}
-		} else {
-			this.queue.insertChoice({choice: 'runSwitch', pokemon});
-		}
+		if (!this.switchIn(pokemon, pos, null, true)) return false;
 		return true;
 	}
 
@@ -2544,24 +2536,7 @@ export class Battle {
 			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityData, action.pokemon);
 			break;
 		case 'runSwitch':
-			this.runEvent('Swap', action.pokemon);
-			this.runEvent('SwitchIn', action.pokemon);
-			if (this.gen <= 2 && !action.pokemon.side.faintedThisTurn && action.pokemon.draggedIn !== this.turn) {
-				this.runEvent('AfterSwitchInSelf', action.pokemon);
-			}
-			if (!action.pokemon.hp) break;
-			action.pokemon.isStarted = true;
-			if (!action.pokemon.fainted) {
-				this.singleEvent('Start', action.pokemon.getAbility(), action.pokemon.abilityData, action.pokemon);
-				action.pokemon.abilityOrder = this.abilityOrder++;
-				this.singleEvent('Start', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
-			}
-			if (this.gen === 4) {
-				for (const foeActive of action.pokemon.side.foe.active) {
-					foeActive.removeVolatile('substitutebroken');
-				}
-			}
-			action.pokemon.draggedIn = null;
+			this.runSwitch(action.pokemon);
 			break;
 		case 'runPrimal':
 			if (!action.pokemon.transformed) {
