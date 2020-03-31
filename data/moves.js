@@ -5391,7 +5391,9 @@ let BattleMovedex = {
 		onPrepareHit(target, source, move) {
 			for (const action of this.queue) {
 				// @ts-ignore
-				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted) continue;
+				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted || action.maxMove || action.zmove) {
+					continue;
+				}
 				// @ts-ignore
 				if (action.pokemon.side === source.side && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
 					// @ts-ignore
@@ -7629,7 +7631,9 @@ let BattleMovedex = {
 		onPrepareHit(target, source, move) {
 			for (const action of this.queue) {
 				// @ts-ignore
-				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted) continue;
+				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted || action.maxMove || action.zmove) {
+					continue;
+				}
 				// @ts-ignore
 				if (action.pokemon.side === source.side && ['waterpledge', 'firepledge'].includes(action.move.id)) {
 					// @ts-ignore
@@ -15904,7 +15908,7 @@ let BattleMovedex = {
 		onTry(target, source, move) {
 			for (const action of this.queue) {
 				// @ts-ignore
-				if (!action.pokemon || !action.move) continue;
+				if (!action.pokemon || !action.move || action.maxMove || action.zmove) continue;
 				// @ts-ignore
 				if (action.move.id === 'round') {
 					// @ts-ignore
@@ -20810,7 +20814,9 @@ let BattleMovedex = {
 		onPrepareHit(target, source, move) {
 			for (const action of this.queue) {
 				// @ts-ignore
-				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted) continue;
+				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted || action.maxMove || action.zmove) {
+					continue;
+				}
 				// @ts-ignore
 				if (action.pokemon.side === source.side && ['firepledge', 'grasspledge'].includes(action.move.id)) {
 					// @ts-ignore
