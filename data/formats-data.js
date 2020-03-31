@@ -3726,7 +3726,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	cutiefly: {
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	ribombee: {
 		randomBattleMoves: ["bugbuzz", "moonblast", "stickyweb", "stunspore", "uturn"],
