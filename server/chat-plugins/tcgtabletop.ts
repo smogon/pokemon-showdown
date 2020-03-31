@@ -1,18 +1,19 @@
 /**
 * TCG & Tabletop: Yugioh wiki plugin
-* This is a command that allows users to search the yugioh wiki for cards. It will display the closest match with a given query, or a separate message if there isn't anything found.
-* By bumbadadabum with help from ascriptmaster, codelegend and the PS development team.
+* This is a command that allows users to search the yugioh wiki for cards.
+* It will display the closest match with a given query, or a separate message if there isn't anything found.
+* By Asheviere with help from ascriptmaster, codelegend and the PS development team.
 */
 
-'use strict';
 
-const https = require('https');
-const querystring = require('querystring');
+import * as https from 'https';
+import * as querystring from 'querystring';
+
 
 const SEARCH_PATH = '/api/v1/Search/List/';
 const DETAILS_PATH = '/api/v1/Articles/Details/';
 
-async function getFandom(site, pathName, search) {
+async function getFandom(site: string, pathName: string, search: AnyObject) {
 	const reqOpts = {
 		hostname: `${site}.fandom.com`,
 		method: 'GET',
@@ -22,13 +23,13 @@ async function getFandom(site, pathName, search) {
 		},
 	};
 
-	const body = await new Promise((resolve, reject) => {
+	const body: any = await new Promise((resolve, reject) => {
 		https.request(reqOpts, res => {
-			if (!(res.statusCode >= 200 && res.statusCode < 300)) return reject(new Error(`Not found.`));
-			const body = [];
+			if (!res.statusCode || !(res.statusCode >= 200 && res.statusCode < 300)) return reject(new Error(`Not found.`));
+			const data: string[] = [];
 			res.setEncoding('utf8');
-			res.on('data', chunk => body.push(chunk));
-			res.on('end', () => resolve(body.join('')));
+			res.on('data', chunk => data.push(chunk));
+			res.on('end', () => resolve(data.join('')));
 		}).on('error', reject).setTimeout(5000).end();
 	});
 
@@ -38,39 +39,46 @@ async function getFandom(site, pathName, search) {
 	return json;
 }
 
-async function searchFandom(site, query) {
+async function searchFandom(site: string, query: string) {
 	const result = await getFandom(site, SEARCH_PATH, {query, limit: 1});
 	if (!Array.isArray(result.items) || !result.items.length) throw new Error(`Malformed data`);
 	if (!result.items[0] || typeof result.items[0] !== 'object') throw new Error(`Malformed data`);
 	return result.items[0];
 }
 
-async function getCardDetails(site, id) {
-	const result = await getFandom(site, DETAILS_PATH, {ids: id, abstract: 0, width: 80, height: 115});
+async function getCardDetails(site: string, id: string) {
+	const specifications = {
+		ids: id,
+		abstract: 0,
+		width: 80,
+		height: 115,
+	};
+
+	const result = await getFandom(site, DETAILS_PATH, specifications);
 	if (typeof result.items !== 'object' || !result.items[id] || typeof result.items[id] !== 'object') {
 		throw new Error(`Malformed data`);
 	}
 	return result.items[id];
 }
 
-exports.commands = {
+export const commands: ChatCommands = {
 	ygo: 'yugioh',
 	yugioh(target, room, user) {
 		if (!this.canBroadcast()) return;
 		if (room.roomid !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
-		let subdomain = 'yugioh';
-		let query = target.trim();
+		const subdomain = 'yugioh';
+		const query = target.trim();
 		if (!query) return this.parse('/help yugioh');
 
-		return searchFandom(subdomain, query).then(data => {
+		return searchFandom(subdomain, query).then((data: {url: unknown, title: unknown, id: unknown}) => {
 			if (!this.runBroadcast()) return;
-			let entryUrl = Dex.getString(data.url);
-			let entryTitle = Dex.getString(data.title);
-			let id = Dex.getString(data.id);
+			const entryUrl = Dex.getString(data.url);
+			const entryTitle = Dex.getString(data.title);
+			const id = Dex.getString(data.id);
 			let htmlReply = Chat.html`<strong>Best result for ${query}:</strong><br /><a href="${entryUrl}">${entryTitle}</a>`;
 			if (id) {
-				getCardDetails(subdomain, id).then(card => {
-					let thumb = Dex.getString(card.thumbnail);
+				getCardDetails(subdomain, id).then((card: {thumbnail: unknown}) => {
+					const thumb = Dex.getString(card.thumbnail);
 					if (thumb) {
 						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Chat.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
 					}
@@ -84,7 +92,7 @@ exports.commands = {
 				if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 				room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 			}
-		}, err => {
+		}, (err: Error & {code: string}) => {
 			if (!this.runBroadcast()) return;
 
 			if (err instanceof SyntaxError || err.message === 'Malformed data') {
