@@ -1244,15 +1244,13 @@ export class Pokemon {
 	}
 
 	hasType(type: string | string[]) {
-		if (!type) return false;
-		if (Array.isArray(type)) {
-			for (const typeid of type) {
-				if (this.hasType(typeid)) return true;
-			}
-		} else {
-			if (this.getTypes().includes(type)) {
-				return true;
-			}
+		const thisTypes = this.getTypes();
+		if (typeof type === 'string') {
+			return thisTypes.includes(type);
+		}
+
+		for (const typeName of type) {
+			if (thisTypes.includes(typeName)) return true;
 		}
 		return false;
 	}
