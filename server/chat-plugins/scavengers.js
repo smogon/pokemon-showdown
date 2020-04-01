@@ -580,7 +580,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			);
 
 			// give points for winning and blitzes in official games
-			if (this.runEvent('GivePoints')) {
+			if (!this.runEvent('GivePoints')) {
 				const winPoints = (this.room.winPoints && this.room.winPoints[this.gameType]) || DEFAULT_POINTS[this.gameType];
 				const blitzPoints = (this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || DEFAULT_BLITZ_POINTS[this.gameType];
 				// only regular hunts give host points
