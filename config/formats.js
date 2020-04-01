@@ -165,6 +165,17 @@ let Formats = [
 		],
 	},
 	{
+		name: "[Gen 8] ZU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3661968/">ZU Metagame Discussion</a>`,
+		],
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['[Gen 8] PU'],
+		banlist: ['PU'],
+	},
+	{
 		name: "[Gen 8] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
