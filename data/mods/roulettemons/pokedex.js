@@ -56,11 +56,11 @@ let BattlePokedex = {
 		name: "Chillyte-Mega",
 		baseSpecies: "Chillyte",
 		forme: "Mega",
-		formeLetter: "M",
 		types: ["Ice"],
 		baseStats: {hp: 95, atk: 101, def: 192, spa: 134, spd: 79, spe: 99},
-		abilities: {0: "Dauntless Shield", 1: "NA"},
+		abilities: {0: "Dauntless Shield"},
 		weightkg: 150,
+		requiredItem: "Chillyte",
 	},
 	eartharoo: {
 		num: 8.5,
