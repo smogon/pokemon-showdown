@@ -142,7 +142,7 @@ let BattleFormatsData = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
-		bellena: {
+	bellena: {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
