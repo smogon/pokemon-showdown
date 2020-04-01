@@ -422,7 +422,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-		return this.parse(`/join view-chatlog--${room.roomid}--${date ? date : currentMonth}--search-${search}`);
+		return this.parse(`/join view-chatlog-${room.roomid}--${date ? date : currentMonth}--search-${search}`);
 	},
 
 	searchlogshelp: ["/searchlogs [search], [month] - searches [month]'s logs for [search]. Requires: % @ & ~"],
