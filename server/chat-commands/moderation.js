@@ -1409,7 +1409,7 @@ exports.commands = {
 
 		if (!this.can('mute', null, room)) return;
 		if (targetUser && targetUser.trusted && targetUser !== user && !cmd.includes('force')) {
-			return this.errorReply(`${target} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
+			return this.errorReply(`${name} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
 		}
 
 		if (targetUser && cmd.includes('alt')) {
