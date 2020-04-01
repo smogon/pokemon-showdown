@@ -844,6 +844,7 @@ let Formats = [
 		threads: [
 			`<a href=https://www.smogon.com/forums/threads/.3649106/>Roulettemons</a>`,
 		],
+		
 		mod: 'roulettemons',
 		ruleset: [ 'Dynamax Clause', 'Obtainable Moves', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['All Pokemon'],
