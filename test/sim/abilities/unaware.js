@@ -88,7 +88,6 @@ describe('Unaware', function () {
 		]]);
 		battle.makeChoices('move tailglow, auto', 'auto');
 		battle.makeChoices('move surf, auto', 'auto');
-		console.log(battle.getDebugLog());
 		assert.equal(battle.p2.active[0].hp, 1);
 		assert.equal(battle.p2.active[1].hp, 1);
 	});
