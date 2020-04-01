@@ -270,6 +270,34 @@ describe('Choices', function () {
 			}
 		});
 
+		it.skip('should shift the Pokémon as a standard priority move action', function () {
+			battle = common.gen(5).createBattle({gameType: 'triples'});
+			battle.setPlayer('p1', {team: [
+				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
+				{species: "Geodude", ability: 'sturdy', moves: ['suckerpunch']},
+				{species: "Gastly", ability: 'levitate', moves: ['spite']},
+			]});
+			battle.setPlayer('p2', {team: [
+				{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+				{species: "Aggron", ability: 'sturdy', moves: ['earthquake']},
+				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
+			]});
+			battle.makeChoices('shift, move suckerpunch 2, shift', 'shift, move earthquake, shift');
+
+			for (const [index, species] of ['Gastly', 'Pineco', 'Geodude'].entries()) {
+				assert.species(battle.p1.active[index], species);
+			}
+			for (const [index, species] of ['Aggron', 'Golem', 'Skarmory'].entries()) {
+				assert.species(battle.p2.active[index], species);
+			}
+			// Geodude's sucker punch should have processed first,
+			// while Aggron was still in slot 2.
+			assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+			// Aggron's Earthquake should process after Skarmory shifted
+			// but before Golem shifted, so it didn't hit Golem.
+			assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+		});
+
 		it('should force Struggle usage on move attempt for no valid moves', function () {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['recover']}]});
