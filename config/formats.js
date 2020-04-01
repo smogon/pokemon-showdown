@@ -844,7 +844,7 @@ let Formats = [
 		threads: [
 			`<a href="https://www.smogon.com/forums/threads/3649106/">Roulettemons</a>`,
 		],
-		
+
 		mod: 'roulettemons',
 		ruleset: ['Standard Pet Mod'],
 		unbanlist: [
