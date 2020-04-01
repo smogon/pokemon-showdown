@@ -839,21 +839,19 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7 Pet Mod] Clean Slate: Micro",
-		desc: `A brand new "micrometagame" created from scratch, with the ultimate goal of creating a unique, compact metagame different from any other tier.`,
+		name: "[Gen 8] Roulettemons",
+		desc: `A competitive metagame made up of brand new Pokémon that are randomly generated on every competitive aspect (typing, moves, stats, abilities).`,
 		threads: [
-			`<a href="https://www.smogon.com/forums/threads/3652540/">Clean Slate: Micro</a>`,
+			`<a href=https://www.smogon.com/forums/threads/.3649106/>Roulettemons</a>`,
 		],
-
-		mod: 'cleanslatemicro',
-		ruleset: ['Standard Pet Mod'],
+		mod: 'roulettemons',
+		ruleset: [ 'Dynamax Clause', 'Obtainable Moves', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['All Pokemon'],
 		unbanlist: [
-			'Crobat', 'Dragalge', 'Dugtrio-Alola', 'Farfetch\'d', 'Galvantula', 'Heracross-Base', 'Kyurem-Base', 'Ludicolo',
-			'Magearna-Base', 'Malamar', 'Ninetales-Base', 'Pupitar', 'Purugly', 'Rotom-Base', 'Rotom-Heat', 'Rotom-Mow',
-			'Rotom-Wash', 'Torterra', 'Type: Null', 'Umbreon', 'Wailord',
+			'Koatric', 'Aquazelle', 'Salamalix', 'Brawnkey', 'Stuneleon', 'Chillyte', 'Chillyte-Mega', 'Eartharoo', 'Crazefly', 'Electritar', 'Aquatopus', 'Scorpita', 'Baloon', 'Kinesel', 'Glacida', 'Pidgeotine', 'Gorilax', 'Albatrygon', 'Chillvark', 'Komodith', 'Giranium', 'Flamyle', 'Voltecta', 'Ostria', 'Ninjoth', 'Herbigator', 'Anteros', 'Gladiaster', 'Hyperoach', 'Barracoth', 'Toados', 'Voltarak', 'Mosqung', 'Flamepion', 'Hyenix', 'Rhinolite', 'Bellena', 'Falcola', 'Beanium', 'Lemotic', 'Biceon', 'Skeleray', 'Specyte', 'Ramron', 'Panthee', 'Blastora', 'Balar', 'Dropacle',
 		],
 		onSwitchIn(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+			this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 		},
 	},
 	{
