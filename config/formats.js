@@ -840,7 +840,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8 Pet Mod] Roulettemons",
-		desc: `A competitive metagame made up of brand new Pokémon that are randomly generated on every competitive aspect (typing, moves, stats, abilities).`,
+		desc: `A metagame made up of brand new Pok&eacute;mon that have randomly generated moves, stats, abilities, and types.`,
 		threads: [
 			`<a href="https://www.smogon.com/forums/threads/3649106/">Roulettemons</a>`,
 		],
