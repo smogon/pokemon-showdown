@@ -1131,7 +1131,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	togekiss: {
-		randomBattleMoves: ["airslash", "aurasphere", "dazzlinggleam", "nastyplot", "roost", "trick"],
+		randomBattleMoves: ["airslash", "aurasphere", "fireblast", "nastyplot", "roost", "thunderwave", "trick"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -4503,7 +4503,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	indeedee: {
-		randomBattleMoves: ["calmmind", "hypervoice", "mysticalfire", "psychic", "trick"],
+		randomBattleMoves: ["calmmind", "hypervoice", "mysticalfire", "psyshock", "trick"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
