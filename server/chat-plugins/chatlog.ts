@@ -425,5 +425,8 @@ export const commands: ChatCommands = {
 		return this.parse(`/join view-chatlog-${room.roomid}--${date ? date : currentMonth}--search-${search}`);
 	},
 
-	searchlogshelp: ["/searchlogs [search], [month] - searches [month]'s logs for [search]. Requires: % @ & ~"],
+	searchlogshelp: [
+		"/searchlogs [search], [month] - searches [month]'s logs in the current room for [search].",
+		"If no [month] is given, defaults to current. Requires: % @ & ~",
+	],
 };
