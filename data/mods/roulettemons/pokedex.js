@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: TemplateData}} */
+/**@type {{[k: string]: ModdedSpeciesData}} */
 let BattlePokedex = {
 	koatric: {
 		num: 1.5,
