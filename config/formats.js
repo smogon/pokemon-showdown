@@ -171,6 +171,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
+		searchShow: false,
 		ruleset: ['[Gen 8] PU'],
 		banlist: ['PU'],
 	},
