@@ -61,6 +61,14 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['Standard'],
 		banlist: [],
+		restricted: ['Ditto', 'Kyurem-White', 'Lunala', 'Marshadow', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zekrom'],
+		onBegin() {
+			const cannotDynamax = this.format.restricted || [];
+			for (let pokemon of this.getAllPokemon()) {
+				if (cannotDynamax.includes(pokemon.forme)) pokemon.canDynamax = false;
+			}
+			if (this.format.id === 'gen8ubers') this.add('html', 'Ubers Dynamax Clause: Pokémon on the <a href="https://www.smogon.com/dex/ss/formats/uber/">Ubers Dynamax Banlist</a> cannot Dynamax.');
+		},
 	},
 	{
 		name: "[Gen 8] UU",
