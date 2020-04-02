@@ -750,6 +750,19 @@ let BattleFormats = {
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
 	},
+	ubersdynamaxclause: {
+		effectType: 'Rule',
+		name: 'Ubers Dynamax Clause',
+		desc: "Prevents certain Pok&eacute;mon from dynamaxing",
+		restricted: ['Ditto', 'Kyurem-White', 'Lunala', 'Marshadow', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zekrom'],
+		onBegin() {
+			const cannotDynamax = this.dex.getFormat('ubersdynamaxclause').restricted || [];
+			for (const pokemon of this.getAllPokemon()) {
+				if (cannotDynamax.includes(pokemon.forme)) pokemon.canDynamax = false;
+			}
+			this.add('rule', 'Ubers Dynamax Clause: You cannot dynamax certain Pokemon');
+		},
+	},
 	arceusevlimit: {
 		effectType: 'ValidatorRule',
 		name: 'Arceus EV Limit',
