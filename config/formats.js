@@ -61,6 +61,16 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['Standard'],
 		banlist: [],
+		restricted: ['Ditto', 'Kyurem-White', 'Lunala', 'Marshadow', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zekrom'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8ubers') {
+				this.add('html', `<div class="broadcast-red"><strong>Ubers is currently suspecting Dynamaxing on certain Pok&eacute;mon! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3661988/">suspect thread</a>.</strong></div>`);
+			}
+			const cannotDynamax = this.format.restricted || [];
+			for (const pokemon of this.getAllPokemon()) {
+				if (cannotDynamax.includes(pokemon.forme)) pokemon.canDynamax = false;
+			}
+		},
 	},
 	{
 		name: "[Gen 8] UU",
