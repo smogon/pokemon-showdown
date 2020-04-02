@@ -692,7 +692,6 @@ let Formats = [
 			}
 		},
 		onBegin() {
-			if (this.rated && this.format.id === 'gen8mixandmega') this.add('html', `<div class="broadcast-red"><strong>Mix and Mega is currently suspecting Gengar! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3661363/">suspect thread</a>.</strong></div>`);
 			for (const pokemon of this.getAllPokemon()) {
 				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
 			}
