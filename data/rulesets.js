@@ -750,6 +750,18 @@ let BattleFormats = {
 			this.add('rule', 'Dynamax Clause: You cannot dynamax');
 		},
 	},
+	dynamaxubersclause: {
+		effectType: 'Rule',
+		name: 'Dynamax Ubers Clause',
+		desc: "Prevents Pok&eacute;mon on the Ubers dynamax banlist from dynamaxing",
+		onBegin() {
+			const cannotDynamax = this.format.restricted || [];
+			for (let pokemon of this.getAllPokemon()) {
+				if (cannotDynamax.includes(pokemon.forme)) pokemon.canDynamax = false;
+			}
+			this.add('html', 'Ubers Dynamax Clause: Pokémon on the <a href="https://www.smogon.com/dex/ss/formats/uber/">Ubers Dynamax Banlist</a> cannot Dynamax.');
+		},
+	},
 	arceusevlimit: {
 		effectType: 'ValidatorRule',
 		name: 'Arceus EV Limit',
