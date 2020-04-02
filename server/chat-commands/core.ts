@@ -347,7 +347,7 @@ export const commands: ChatCommands = {
 	globalauth: 'authority',
 	authlist: 'authority',
 	authority(target, room, user, connection) {
-		if (target) {
+		if (target && target !== '+') {
 			const targetRoom = Rooms.search(target);
 			const availableRoom = targetRoom?.checkModjoin(user);
 			if (targetRoom && availableRoom) return this.parse(`/roomauth1 ${target}`);
@@ -357,7 +357,7 @@ export const commands: ChatCommands = {
 		const ranks = Object.keys(Config.groups);
 		for (const u in Users.usergroups) {
 			const rank = Users.usergroups[u].charAt(0);
-			if (rank === ' ' || rank === '+') continue;
+			if (rank === ' ' || (rank === '+' && !target)) continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
 			if (ranks.includes(rank)) {
 				const name = Users.usergroups[u].substr(1);
@@ -372,12 +372,14 @@ export const commands: ChatCommands = {
 		).map(
 			r => `${(Config.groups[r] ? `**${Config.groups[r].name}s** (${r})` : r)}:\n${rankLists[r].sort((a, b) => toID(a).localeCompare(toID(b))).join(", ")}`
 		);
+		if (!target) buffer.push(`(Use \`\`/auth +\`\` to show global voice users.)`);
 
 		if (!buffer.length) return connection.popup("This server has no global authority.");
 		connection.popup(buffer.join("\n\n"));
 	},
 	authhelp: [
 		`/auth - Show global staff for the server.`,
+		`/auth + - Show global staff for the server, including voices.`,
 		`/auth [room] - Show what roomauth a room has.`,
 		`/auth [user] - Show what global and roomauth a user has.`,
 	],
