@@ -452,158 +452,30 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 8] Inheritance",
-		desc: `Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.`,
+		name: "[Gen 8] Pacifistmons",
+		desc: `Pok&eacute;mon can only use status moves. Recovery moves are banned.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3656811/">Inheritance</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3658719/">Pacifistmons</a>`,
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU'],
-		banlist: ['Shedinja', 'Assist', 'Shell Smash', 'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Water Bubble'],
-		restricted: ['Dracovish', 'Dracozolt'],
-		// @ts-ignore
-		getEvoFamily(speciesid) {
-			let species = Dex.getSpecies(speciesid);
-			while (species.prevo) {
-				species = Dex.getSpecies(species.prevo);
-			}
-			return species.id;
-		},
-		validateSet(set, teamHas) {
-			const bannedDonors = this.format.restricted || [];
-			if (!teamHas.abilityMap) {
-				teamHas.abilityMap = Object.create(null);
-				for (const id in Dex.data.Pokedex) {
-					let pokemon = Dex.getSpecies(id);
-					if (pokemon.isNonstandard || pokemon.isUnreleased) continue;
-					if (pokemon.requiredAbility || pokemon.requiredItem || pokemon.requiredMove) continue;
-					if (pokemon.isGigantamax || bannedDonors.includes(pokemon.name)) continue;
-
-					for (const key of Object.values(pokemon.abilities)) {
-						let abilityId = toID(key);
-						if (abilityId in teamHas.abilityMap) {
-							teamHas.abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](id);
-						} else {
-							teamHas.abilityMap[abilityId] = [id];
-						}
+		ruleset: ['[Gen 8] Ubers'],
+		banlist: [
+			'Magic Bounce', 'Magic Guard', 'Regenerator',
+			'Ingrain', 'Life Dew', 'move:Metronome', 'Moonlight', 'Morning Sun', 'Nature Power', 'Purify', 'Recover',
+			'Rest', 'Roost', 'Slack Off', 'Soft-Boiled', 'Strength Sap', 'Swallow', 'Synthesis', 'Taunt', 'Wish',
+		],
+		onValidateSet(set) {
+			if (set.moves) {
+				for (const moveid of set.moves) {
+					const move = this.dex.getMove(moveid);
+					if (move.category !== "Status") {
+						return [`${set.species}'s move ${move.name} is banned.`, `(Non-Status moves are banned.)`];
 					}
 				}
 			}
-
-			const problem = this.validateForme(set);
-			if (problem.length) return problem;
-
-			let species = Dex.getSpecies(set.species);
-			if (!species.exists || species.num < 1) return [`The Pok\u00e9mon "${set.species}" does not exist.`];
-			if (species.isNonstandard || species.isUnreleased) return [`${species.name} is not obtainable in gen 8.`];
-			if (toID(species.tier) === 'uber' || this.format.banlist.includes(species.name)) {
-				return [`${species.name} is banned.`];
-			}
-
-			const name = set.name;
-
-			let ability = Dex.getAbility(set.ability);
-			if (!ability.exists || ability.isNonstandard) return [`${name} needs to have a valid ability.`];
-			let pokemonWithAbility = teamHas.abilityMap[ability.id];
-			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pok\u00e9mon.`];
-
-			// @ts-ignore
-			this.format.debug = true;
-
-			if (!teamHas.abilitySources) teamHas.abilitySources = Object.create(null);
-			/** @type {string[]} */
-			let validSources = teamHas.abilitySources[toID(set.species)] = []; // Evolution families
-
-			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
-
-			for (const donor of pokemonWithAbility) {
-				let donorSpecies = Dex.getSpecies(donor);
-				// @ts-ignore
-				let evoFamily = this.format.getEvoFamily(donorSpecies);
-				if (validSources.includes(evoFamily)) continue;
-
-				set.species = donorSpecies.name;
-				const problems = this.validateSet(set, teamHas) || [];
-				if (!problems.length) {
-					validSources.push(evoFamily);
-					canonicalSource = donorSpecies.name;
-				}
-				// Specific for the basic implementation of Donor Clause (see onValidateTeam).
-				if (validSources.length > 1) break;
-			}
-			// @ts-ignore
-			this.format.debug = false;
-
-			set.name = name;
-			set.species = species.name;
-			if (!validSources.length) {
-				if (pokemonWithAbility.length > 1) return [`${name}'s set is illegal.`];
-				return [`${name} has an illegal set with an ability from ${Dex.getSpecies(pokemonWithAbility[0]).name}.`];
-			}
-
-			// Protocol: Include the data of the donor species in the `ability` data slot.
-			// Afterwards, we are going to reset the name to what the user intended.
-			set.ability = `${set.ability}0${canonicalSource}`;
-			return null;
+			if (set.level !== 100) return [`${set.species} must be Level 100.`];
 		},
-		onValidateTeam(team, format, teamHas) {
-			// Donor Clause
-			let evoFamilyLists = [];
-			for (const set of team) {
-				let abilitySources = (teamHas.abilitySources && teamHas.abilitySources[toID(set.species)]);
-				if (!abilitySources) continue;
-				// @ts-ignore
-				evoFamilyLists.push(abilitySources.map(this.format.getEvoFamily));
-			}
-
-			// Checking actual full incompatibility would require expensive algebra.
-			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
-			let requiredFamilies = Object.create(null);
-			for (const evoFamilies of evoFamilyLists) {
-				if (evoFamilies.length !== 1) continue;
-				let [familyId] = evoFamilies;
-				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
-				requiredFamilies[familyId]++;
-				if (requiredFamilies[familyId] > 2) {
-					return [
-						`You are limited to up to two inheritances from each evolution family by the Donor Clause.`,
-						`(You inherit more than twice from ${this.dex.getSpecies(familyId).name}).`,
-					];
-				}
-			}
-		},
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.baseAbility.includes('0')) {
-					let donor = pokemon.baseAbility.split('0')[1];
-					pokemon.m.donor = toID(donor);
-					pokemon.baseAbility = toID(pokemon.baseAbility.split('0')[0]);
-					pokemon.ability = pokemon.baseAbility;
-				}
-			}
-		},
-		onSwitchIn(pokemon) {
-			if (!pokemon.m.donor) return;
-			let donorSpecies = this.dex.getSpecies(pokemon.m.donor);
-			if (!donorSpecies.exists) return;
-			// Place volatiles on the Pokémon to show the donor details.
-			this.add('-start', pokemon, donorSpecies.name, '[silent]');
-		},
-	},
-	{
-		name: "[Gen 8] Scalemons",
-		desc: `Every Pok&eacute;mon's stats, barring HP, are scaled to give them a BST as close to 600 as possible.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3658482/">Scalemons</a>`,
-		],
-
-		mod: 'gen8',
-		ruleset: ['[Gen 8] Ubers', 'Dynamax Clause', 'Scalemons Mod'],
-		banlist: [
-			'Crawdaunt', 'Darmanitan', 'Darmanitan-Galar', 'Darumaka', 'Darumaka-Galar', 'Gastly',
-			'Arena Trap', 'Drizzle', 'Drought', 'Huge Power', 'Moody', 'Shadow Tag', 'Baton Pass', 'Rain Dance', 'Sunny Day', 'Eviolite', 'Light Ball',
-		],
 	},
 
 	// Other Metagames
