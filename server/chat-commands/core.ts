@@ -32,7 +32,7 @@ const avatarTable = new Set([
 	'ariana',
 	'aromalady-gen3', 'aromalady-gen3rs', 'aromalady',
 	'artist-gen4', 'artist',
-	'ash',
+	'ash-alola', 'ash-hoenn', 'ash-kalos', 'ash-unova', 'ash-capbackward', 'ash-johto', 'ash-sinnoh', 'ash',
 	'backersf',
 	'backers',
 	'backpackerf',
