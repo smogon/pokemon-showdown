@@ -5,17 +5,17 @@
   "version": "0.11.2",
   "dependencies": {
     "probe-image-size": "^5.0.0",
-    "sockjs": "0.3.19",
-    "sucrase": "^3.12.1"
+    "sockjs": "0.3.20",
+    "sucrase": "^3.13.0"
   },
   "optionalDependencies": {
     "cloud-env": "^0.2.3",
     "node-oom-heapdump": "^1.2.0",
     "node-static": "^0.7.11",
-    "nodemailer": "^6.4.4",
+    "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
     "sql-template-strings": "^2.2.2",
-    "sqlite": "^3.0.3"
+    "sqlite": "^3.0.6"
   },
   "engines": {
     "node": ">=7.7.0"
@@ -63,17 +63,17 @@
   "license": "MIT",
   "devDependencies": {
     "@types/cloud-env": "^0.2.0",
-    "@types/node": "^13.7.7",
+    "@types/node": "^13.9.8",
     "@types/node-static": "^0.7.3",
     "@types/nodemailer": "^6.4.0",
     "@types/sockjs": "^0.3.31",
-    "@typescript-eslint/eslint-plugin": "^2.19.0",
-    "@typescript-eslint/parser": "^2.19.0",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
     "eslint": "^6.8.0",
-    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-import": "^2.20.2",
     "husky": "^4.2.3",
-    "mocha": "^7.1.0",
-    "smogon": "^0.3.0",
+    "mocha": "^7.1.1",
+    "smogon": "^0.4.2",
     "typescript": "^3.8.3"
   }
 }
