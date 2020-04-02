@@ -435,7 +435,10 @@ function getLevel(format: Format, level = 0) {
 	return level > maxForcedLevel ? maxForcedLevel : level;
 }
 
-export async function getStatisticsURL(index: string, format: Format): Promise<{url: string, count: number} | undefined> {
+export async function getStatisticsURL(
+	index: string,
+	format: Format
+): Promise<{url: string, count: number} | undefined> {
 	const current = index.includes(format.id);
 	const latest = await smogon.Statistics.latestDate(format.id, !current);
 	if (!latest) return undefined;
