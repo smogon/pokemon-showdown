@@ -130,7 +130,7 @@ async function importGen(gen: Generation, index: string) {
 			}
 		}
 
-		const stats = getStatisticsURL(index, format);
+		const stats = await getStatisticsURL(index, format);
 		if (!stats) continue;
 		try {
 			const statistics = smogon.Statistics.process(await request(stats.url));
@@ -435,9 +435,9 @@ function getLevel(format: Format, level = 0) {
 	return level > maxForcedLevel ? maxForcedLevel : level;
 }
 
-export function getStatisticsURL(index: string, format: Format): {url: string, count: number} | undefined {
+export async function getStatisticsURL(index: string, format: Format): Promise<{url: string, count: number} | undefined> {
 	const current = index.includes(format.id);
-	const latest = smogon.Statistics.latestDate(format.id, !current);
+	const latest = await smogon.Statistics.latestDate(format.id, !current);
 	if (!latest) return undefined;
 	return {url: smogon.Statistics.url(latest.date, format.id, current || 1500), count: latest.count};
 }
