@@ -180,9 +180,9 @@ const LogViewer = new class {
 		for (let day of files) {
 			matches = this.searchDay(roomid, day, search);
 			day = day.slice(0, -3);
-			buf += `<strong>Matches on ${day}: (${matches.length})</strong><br><hr>`;
-			buf += matches.join('<hr>');
-			buf += `<br><br><hr>`;
+			buf += `<details><summary>Matches on ${day}: (${matches.length})</summary><br><hr>`;
+			buf += `<p>${matches.join('<hr>')}</p>`;
+			buf += `</details><hr>`;
 		}
 		buf += `</div>`;
 		return buf;
@@ -429,15 +429,18 @@ export const commands: ChatCommands = {
 
 	searchlogs(target, room, user) {
 		target = target.trim();
-		const [date, search] = target.split(',');
+		const [search, date] = target.split(',');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
+		if (!FS(`logs/chat/${room.roomid}/${date}`).existsSync()) {
+			return this.errorReply(`No logs on for date "${date}" - check to be sure you didn't mistype?.`);
+		}
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		return this.parse(`/join view-chatlog-${room.roomid}--${date ? date : currentMonth}--search-${search}`);
 	},
 
 	searchlogshelp: [
-		"/searchlogs [month], [search] - searches [month]'s logs in the current room for [search].",
+		"/searchlogs [search], [date] - searches [month]'s logs in the current room for [search].",
 		"[search] can be used to search for multiple arguments in the same line, in the format [arg-arg2-etc].",
 		"If no [month] is given, defaults to current. Requires: % @ & ~",
 	],
