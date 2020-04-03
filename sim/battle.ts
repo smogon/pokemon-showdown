@@ -1256,9 +1256,11 @@ export class Battle {
 		pokemon.isActive = true;
 		this.runEvent('BeforeSwitchIn', pokemon);
 		if (oldActive) {
-			this.runEvent('SwitchOut', oldActive);
-			oldActive.illusion = null;
-			this.singleEvent('End', oldActive.getAbility(), oldActive.abilityData, oldActive);
+			if (isDrag) {
+				this.runEvent('SwitchOut', oldActive);
+				oldActive.illusion = null;
+				this.singleEvent('End', oldActive.getAbility(), oldActive.abilityData, oldActive);
+			}
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.usedItemThisTurn = false;
