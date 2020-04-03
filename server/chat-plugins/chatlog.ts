@@ -175,7 +175,7 @@ const LogViewer = new class {
 			query = search.split('-').join('", "');
 		}
 		const files = await FS(`logs/chat/${roomid}/${month}`).readdir();
-		let buf = `<div class="pad"<strong>Results for search ${Chat.plural(searches, 'queries', 'query')}: "${query}" on ${roomid}: </strong><hr>`;
+		let buf = `<div class="pad"<strong>Results for search ${Chat.plural(searches, 'queries', 'query')}: "${query ? query : search}" on ${roomid}: </strong><hr>`;
 		let matches;
 		for (let day of files) {
 			matches = this.searchDay(roomid, day, search);
