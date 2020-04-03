@@ -176,10 +176,9 @@ const LogViewer = new class {
 		}
 		const files = await FS(`logs/chat/${roomid}/${month}`).readdir();
 		let buf = `<div class="pad"<strong>Results for search ${Chat.plural(searches, 'queries', 'query')}: "${query ? query : search}" on ${roomid}: </strong><hr>`;
-		let matches;
 		for (let day of files) {
-			matches = this.searchDay(roomid, day, search);
-			day = day.slice(0, -3);
+			const matches = await this.searchDay(roomid, day, search);
+			day = day.slice(0, -4);
 			buf += `<details><summary>Matches on ${day}: (${matches.length})</summary><br><hr>`;
 			buf += `<p>${matches.join('<hr>')}</p>`;
 			buf += `</details><hr>`;
@@ -188,9 +187,9 @@ const LogViewer = new class {
 		return buf;
 	}
 
-	searchDay(roomid: RoomID, day: string, search: string) {
+	async searchDay(roomid: RoomID, day: string, search: string) {
 		const month = day.slice(0, -7);
-		const text = FS(`logs/chat/${roomid}/${month}/${day}`).readSync();
+		const text = await FS(`logs/chat/${roomid}/${month}/${day}`).read();
 		const lines = text.split('\n');
 		const matches: string[] = [];
 		const searches: string[] = search.split('-');
@@ -429,20 +428,20 @@ export const commands: ChatCommands = {
 
 	searchlogs(target, room, user) {
 		target = target.trim();
-		const [search, date] = target.split(',');
+		const [search, date] = target.split('|');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		if (!FS(`logs/chat/${room.roomid}/${date}`).existsSync() && date) {
 			return this.errorReply(`No logs on for date "${date}" - check to be sure you didn't mistype?.`);
 		}
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-		const input = search.includes('|') ? search.split('|').map(item => item.trim()).join('-') : search;
+		const input = search.includes(',') ? search.split(',').map(item => item.trim()).join('-') : search;
 		return this.parse(`/join view-chatlog-${room.roomid}--${date ? date : currentMonth}--search-${input}`);
 	},
 
 	searchlogshelp: [
-		"/searchlogs [search], [date] - searches [month]'s logs in the current room for [search].",
-		"| can be used to search for multiple words in a single line - in the format 'arg | arg1 |etc.",
+		"/searchlogs [search] | [date] - searches [month]'s logs in the current room for [search].",
+		"| can be used to search for multiple words in a single line - in the format 'arg, arg2, etc.",
 		"If no [month] is given, defaults to current. Requires: % @ & ~",
 	],
 };
