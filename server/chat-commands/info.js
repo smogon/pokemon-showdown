@@ -1860,7 +1860,7 @@ const commands = {
 				buf += `<strong>${process.process.pid}</strong> - ${manager.basename} ${i} (load ${process.load})<br />`;
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
-				buf += `<strong>${process.process.pid}</strong> - PENDING RELEASE ${manager.basesname} ${i} (load ${process.load})<br />`;
+				buf += `<strong>${process.process.pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load})<br />`;
 			}
 		}
 
