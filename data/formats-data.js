@@ -2703,7 +2703,7 @@ let BattleFormatsData = {
 	},
 	swoobat: {
 		randomBattleMoves: ["airslash", "heatwave", "nastyplot", "psyshock", "roost"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	drilbur: {
@@ -3892,7 +3892,7 @@ let BattleFormatsData = {
 	},
 	silvally: {
 		randomBattleMoves: ["crunch", "explosion", "flamecharge", "flamethrower", "multiattack", "swordsdance", "uturn"],
-		tier: "(PU)",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	silvallybug: {
@@ -4539,7 +4539,7 @@ let BattleFormatsData = {
 	arctozolt: {
 		randomBattleMoves: ["bodyslam", "boltbeak", "freezedry", "iciclecrash", "lowkick"],
 		unreleasedHidden: true,
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	dracovish: {
@@ -4551,7 +4551,7 @@ let BattleFormatsData = {
 	arctovish: {
 		randomBattleMoves: ["bodyslam", "fishiousrend", "freezedry", "iciclecrash", "psychicfangs"],
 		unreleasedHidden: true,
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	duraludon: {
