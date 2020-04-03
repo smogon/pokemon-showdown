@@ -65,17 +65,17 @@ function getRBYMoves(species: string | Species) {
 	let buf = ``;
 	if (species.randomBattleMoves) {
 		buf += `<details><summary>Randomized moves</summary>`;
-		buf += species.randomBattleMoves.map(formatMove).join(", ");
+		buf += species.randomBattleMoves.map(formatMove).sort().join(", ");
 		buf += `</details>`;
 	}
 	if (species.comboMoves) {
 		buf += `<details><summary>Combo moves</summary>`;
-		buf += species.comboMoves.map(formatMove).join(", ");
+		buf += species.comboMoves.map(formatMove).sort().join(", ");
 		buf += `</details>`;
 	}
 	if (species.exclusiveMoves) {
 		buf += `<details><summary>Exclusive moves</summary>`;
-		buf += species.exclusiveMoves.map(formatMove).join(", ");
+		buf += species.exclusiveMoves.map(formatMove).sort().join(", ");
 		buf += `</details>`;
 	}
 	if (species.essentialMove) {
@@ -126,7 +126,7 @@ function getLetsGoMoves(species: string | Species) {
 	);
 	if (!isLetsGoLegal) return false;
 	if (!species.randomBattleMoves || !species.randomBattleMoves.length) return false;
-	return species.randomBattleMoves.map(formatMove).join(`, `);
+	return species.randomBattleMoves.map(formatMove).sort().join(`, `);
 }
 
 function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen7', isBSS = false) {
@@ -241,32 +241,35 @@ export const commands: ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
 		let dex = Dex;
+		let isLetsGo = false;
 		if (args[1] && toID(args[1]) in Dex.dexes) {
 			dex = Dex.dexes[toID(args[1])];
+			if (toID(args[1]) === 'letsgo') isLetsGo = true;
 		} else if (room?.battle) {
 			const format = Dex.getFormat(room.battle.format);
 			dex = Dex.mod(format.mod);
+			if (format.mod === 'letsgo') isLetsGo = true;
 		}
 		const species = dex.getSpecies(args[0]);
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
 		let formatName = dex.getFormat(`gen${dex.gen}randombattle`).name;
-		if (toID(args[1]) === 'gen1') {
+		if (dex.gen === 1) {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${rbyMoves}`);
 		}
-		if (toID(args[1]) === 'gen2') {
+		if (dex.gen === 2) {
 			const gscMoves = getGSCMoves(species);
 			if (!gscMoves) {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${gscMoves}`);
 		}
-		if (toID(args[1]) === 'letsgo') {
+		if (isLetsGo) {
 			formatName = `[Gen 7 Let's Go] Random Battle`;
 			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
@@ -304,7 +307,8 @@ export const commands: ChatCommands = {
 		}
 		if (parseInt(toID(args[1])[3]) < 4) {
 			if (room?.battle) {
-				dex = Dex.mod('gen8');
+				const format = Dex.getFormat(room.battle.format);
+				dex = Dex.mod(format.mod);
 			} else {
 				return this.parse(`/help randomdoublesbattle`);
 			}
