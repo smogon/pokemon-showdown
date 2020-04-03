@@ -436,12 +436,13 @@ export const commands: ChatCommands = {
 			return this.errorReply(`No logs on for date "${date}" - check to be sure you didn't mistype?.`);
 		}
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-		return this.parse(`/join view-chatlog-${room.roomid}--${date ? date : currentMonth}--search-${search}`);
+		const input = search.includes('|') ? search.split('|').map(item => item.trim()).join('-') : search;
+		return this.parse(`/join view-chatlog-${room.roomid}--${date ? date : currentMonth}--search-${input}`);
 	},
 
 	searchlogshelp: [
 		"/searchlogs [search], [date] - searches [month]'s logs in the current room for [search].",
-		"[search] can be used to search for multiple arguments in the same line, in the format [arg-arg2-etc].",
+		"| can be used to search for multiple words in a single line - in the format 'arg | arg1 |etc.",
 		"If no [month] is given, defaults to current. Requires: % @ & ~",
 	],
 };
