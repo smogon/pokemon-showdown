@@ -424,7 +424,7 @@ export const pages: PageTable = {
 
 export const commands: ChatCommands = {
 	chatlog(target, room, user) {
-		return this.parse(`/join view-chatlog--${room.roomid}--today`);
+		return this.parse(`/join view-chatlog-${room.roomid}--today`);
 	},
 
 	searchlogs(target, room, user) {
@@ -432,7 +432,7 @@ export const commands: ChatCommands = {
 		const [search, date] = target.split(',');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
-		if (!FS(`logs/chat/${room.roomid}/${date}`).existsSync()) {
+		if (!FS(`logs/chat/${room.roomid}/${date}`).existsSync() && date) {
 			return this.errorReply(`No logs on for date "${date}" - check to be sure you didn't mistype?.`);
 		}
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
