@@ -169,8 +169,13 @@ const LogViewer = new class {
 
 	async search(roomid: RoomID, month: string, search: string) {
 		if (month.length < 7) month = month.slice(0, -3);
+		let query = '';
+		const searches = search.split('-').length;
+		if (searches > 1) {
+			query = search.split('-').join('", "');
+		}
 		const files = await FS(`logs/chat/${roomid}/${month}`).readdir();
-		let buf = `<div class="pad"<strong>Results for search query: "${search}" on ${roomid}: </strong><hr>`;
+		let buf = `<div class="pad"<strong>Results for search ${Chat.plural(searches, 'queries', 'query')}: "${query}" on ${roomid}: </strong><hr>`;
 		let matches;
 		for (let day of files) {
 			matches = this.searchDay(roomid, day, search);
@@ -188,8 +193,14 @@ const LogViewer = new class {
 		const text = FS(`logs/chat/${roomid}/${month}/${day}`).readSync();
 		const lines = text.split('\n');
 		const matches: string[] = [];
+		const searches: string[] = search.split('-');
+		const searchInputs = (phrase: string, terms: string[]) => (
+			terms.every((word) => {
+				return new RegExp(word, "i").exec(phrase);
+			})
+		);
 		for (const line of lines) {
-			if (line.includes(search)) {
+			if (searchInputs(line, searches)) {
 				const lineNum: number = lines.indexOf(line);
 				const up = this.renderLine(`${lines[lineNum + 1]}`);
 				const upTwo = this.renderLine(`${lines[lineNum + 2]}`);
@@ -418,7 +429,7 @@ export const commands: ChatCommands = {
 
 	searchlogs(target, room, user) {
 		target = target.trim();
-		const [search, date] = target.split(',');
+		const [date, search] = target.split(',');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
@@ -426,7 +437,8 @@ export const commands: ChatCommands = {
 	},
 
 	searchlogshelp: [
-		"/searchlogs [search], [month] - searches [month]'s logs in the current room for [search].",
+		"/searchlogs [month], [search] - searches [month]'s logs in the current room for [search].",
+		"[search] can be used to search for multiple arguments in the same line, in the format [arg-arg2-etc].",
 		"If no [month] is given, defaults to current. Requires: % @ & ~",
 	],
 };
