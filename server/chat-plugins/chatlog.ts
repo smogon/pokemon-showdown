@@ -457,16 +457,18 @@ export const commands: ChatCommands = {
 	chatlog(target, room, user) {
 		return this.parse(`/join view-chatlog-${room.roomid}--today`);
 	},
+
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',
 	searchlogs(target, room, user) {
 		target = target.trim();
-		const [search, date] = target.split('|');
+		const [search, date, tarRoom] = target.split('|');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const input = search.includes(',') ? search.split(',').map(item => item.trim()).join('-') : search;
-		return this.parse(`/join view-chatlog-${room.roomid}--${date ? date : currentMonth}--search-${input}`);
+		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
+		return this.parse(`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${input}`);
 	},
 
 	searchlogshelp: [
