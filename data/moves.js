@@ -3536,10 +3536,6 @@ let BattleMovedex = {
 			onMoveAborted(pokemon, target, move) {
 				pokemon.removeVolatile('destinybond');
 			},
-			onBeforeSwitchOutPriority: 1,
-			onBeforeSwitchOut(pokemon) {
-				pokemon.removeVolatile('destinybond');
-			},
 		},
 		secondary: null,
 		target: "self",
@@ -14779,6 +14775,7 @@ let BattleMovedex = {
 			onBeforeSwitchOut(pokemon) {
 				this.debug('Pursuit start');
 				let alreadyAdded = false;
+				pokemon.removeVolatile('destinybond');
 				for (const source of this.effectData.sources) {
 					if (!this.queue.cancelMove(source) || !source.hp) continue;
 					if (!alreadyAdded) {

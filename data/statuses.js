@@ -748,6 +748,7 @@ let BattleStatuses = {
 		onTryAddVolatile(status, pokemon) {
 			if (status.id === 'flinch') return null;
 		},
+		onBeforeSwitchOutPriority: -1,
 		onBeforeSwitchOut(pokemon) {
 			pokemon.removeVolatile('dynamax');
 		},
