@@ -103,6 +103,14 @@ const LogReader = new class {
 		return {official, normal, hidden, secret, deleted, personal, deletedPersonal};
 	}
 
+	async read(roomid: RoomID, day: string) {
+		const month = day.slice(0, -3);
+		const log = FS(`logs/chat/${roomid}/${month}/${day}.txt`);
+		if (!await log.exists()) return null;
+		const text = await FS(`logs/chat/${roomid}/${month}/${day}.txt`).read();
+		return text;
+	}
+
 	getMonth(day: string) {
 		return day.slice(0, 7);
 	}
@@ -122,12 +130,13 @@ const LogReader = new class {
 		const prevMonth = new Date(new Date(`${month}-15`).getTime() - 30 * DAY);
 		return prevMonth.toISOString().slice(0, 7);
 	}
+
 	today() {
 		return new Date().toISOString().slice(0, 10);
 	}
 };
 
-const LogViewer = new class {
+export const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		if (day === 'today') day = LogReader.today();
 		const month = LogReader.getMonth(day);
@@ -168,17 +177,20 @@ const LogViewer = new class {
 	}
 
 	async search(roomid: RoomID, month: string, search: string) {
-		if (month.length < 7) month = month.slice(0, -3);
+		const log = await LogReader.get(roomid);
 		let query = '';
 		const searches = search.split('-').length;
 		if (searches > 1) {
 			query = search.split('-').join('", "');
 		}
-		const files = await FS(`logs/chat/${roomid}/${month}`).readdir();
-		let buf = `<div class="pad"<strong>Results for search ${Chat.plural(searches, 'queries', 'query')}: "${query ? query : search}" on ${roomid}: </strong><hr>`;
-		for (let day of files) {
+		let buf = (
+			`<div class="pad"<strong>Results for search` +
+			` ${Chat.plural(searches, 'queries', 'query')}: "${query ? query : search}"` +
+			` on ${roomid}: (${month}): </strong><hr>`
+		);
+		const files = await log!.listDays(month);
+		for (const day of files) {
 			const matches = await this.searchDay(roomid, day, search);
-			day = day.slice(0, -4);
 			buf += `<details><summary>Matches on ${day}: (${matches.length})</summary><br><hr>`;
 			buf += `<p>${matches.join('<hr>')}</p>`;
 			buf += `</details><hr>`;
@@ -188,9 +200,8 @@ const LogViewer = new class {
 	}
 
 	async searchDay(roomid: RoomID, day: string, search: string) {
-		const month = day.slice(0, -7);
-		const text = await FS(`logs/chat/${roomid}/${month}/${day}`).read();
-		const lines = text.split('\n');
+		const text = await LogReader.read(roomid, day);
+		const lines = text!.split('\n');
 		const matches: string[] = [];
 		const searches: string[] = search.split('-');
 		const searchInputs = (phrase: string, terms: string[]) => (
@@ -213,6 +224,21 @@ const LogViewer = new class {
 			}
 		}
 		return matches;
+	}
+
+
+	async searchYear(roomid: RoomID, year: string, search: string) {
+		const log = await LogReader.get(roomid);
+		if (!log) return null;
+		let buf = `<center><strong><br>Searching year: ${year}: </strong></center><hr>`;
+		const files = await log.listMonths();
+		for (const month of files) {
+			if (!month.includes(year)) continue;
+			if (!FS(`logs/chat/lobby/${month}`).isDirectorySync()) continue;
+			buf += await this.search(roomid, month, search);
+			buf += '<br>';
+		}
+		return buf;
 	}
 
 	renderLine(fullLine: string, opts?: string) {
@@ -264,6 +290,7 @@ const LogViewer = new class {
 			return `<div class="chat"><small>[${timestamp}] </small><code>${'|' + Chat.escapeHTML(line)}</code></div>`;
 		}
 	}
+
 	async month(roomid: RoomID, month: string) {
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
@@ -408,11 +435,16 @@ export const pages: PageTable = {
 		}
 		if (date && !opts?.includes('search-')) {
 			return LogViewer.month(roomid, date);
+		} else if (opts?.includes('search-') && date?.length === 4) {
+			this.title = `[Search Logs] [${date}] ${opts.slice(7)}`;
+			return LogViewer.searchYear(roomid, date, opts.slice(7));
 		} else if (opts?.includes('search-') && date) {
 			if (date === 'today') {
 				const today = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
+				this.title = `[Search Logs] [${today}] ${opts.slice(7)}`;
 				return LogViewer.search(roomid, today, opts.slice(7));
 			} else {
+				this.title = `[Search Logs] [${date}] ${opts.slice(7)}`;
 				return LogViewer.search(roomid, date, opts.slice(7));
 			}
 		} else {
@@ -425,23 +457,21 @@ export const commands: ChatCommands = {
 	chatlog(target, room, user) {
 		return this.parse(`/join view-chatlog-${room.roomid}--today`);
 	},
-
+	sl: 'searchlogs',
+	searchlog: 'searchlogs',
 	searchlogs(target, room, user) {
 		target = target.trim();
 		const [search, date] = target.split('|');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
-		if (!FS(`logs/chat/${room.roomid}/${date}`).existsSync() && date) {
-			return this.errorReply(`No logs on for date "${date}" - check to be sure you didn't mistype?.`);
-		}
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const input = search.includes(',') ? search.split(',').map(item => item.trim()).join('-') : search;
 		return this.parse(`/join view-chatlog-${room.roomid}--${date ? date : currentMonth}--search-${input}`);
 	},
 
 	searchlogshelp: [
-		"/searchlogs [search] | [date] - searches [month]'s logs in the current room for [search].",
-		"| can be used to search for multiple words in a single line - in the format 'arg, arg2, etc.",
+		"/searchlogs [search] | [date] | [optional room]- searches [month]'s logs in the current room for [search].",
+		"a comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If no [month] is given, defaults to current. Requires: % @ & ~",
 	],
 };
