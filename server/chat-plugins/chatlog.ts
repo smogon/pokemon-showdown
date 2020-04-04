@@ -136,7 +136,7 @@ const LogReader = new class {
 	}
 };
 
-export const LogViewer = new class {
+const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		if (day === 'today') day = LogReader.today();
 		const month = LogReader.getMonth(day);
