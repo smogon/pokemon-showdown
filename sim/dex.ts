@@ -537,7 +537,8 @@ export class ModdedDex {
 		} else if (name.startsWith('item:')) {
 			effect = this.getItem(name.slice(5));
 		} else if (name.startsWith('ability:')) {
-			effect = this.getAbility(name.slice(8));
+			const ability = this.getAbility(name.slice(8));
+			effect = Object.assign(Object.create(ability), {id: 'ability:' + ability.id});
 		}
 		if (effect) {
 			this.effectCache.set(id, effect);

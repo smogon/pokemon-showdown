@@ -458,6 +458,70 @@ let Formats = [
 		column: 2,
 	},
 	{
+		name: "[Gen 8] Shared Power",
+		desc: `All of the team's abilities are active at once whenever a new Pok&eacute;mon switches in.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660877/">Shared Power</a>`,
+		],
+
+		mod: 'gen8',
+		ruleset: ['Standard', 'Dynamax Clause'],
+		banlist: [
+			'Darmanitan-Galar', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
+			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Guard', 'Mold Breaker', 'Moody', 'Neutralizing Gas', 'Shadow Tag', 'Water Bubble',
+		],
+		/** @param {Pokemon} pokemon */
+		// @ts-ignore
+		getSharedPower(pokemon) {
+			/** @type {Set<string>} */
+			let sharedPower = new Set();
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.previouslySwitchedIn > 0) {
+					sharedPower.add(ally.baseAbility);
+				}
+			}
+			sharedPower.delete(pokemon.baseAbility);
+			return sharedPower;
+		},
+		onBeforeSwitchIn(pokemon) {
+			// @ts-ignore
+			for (const ability of this.format.getSharedPower(pokemon)) {
+				let effect = 'ability:' + ability;
+				pokemon.volatiles[effect] = {id: toID(effect), target: pokemon};
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			// @ts-ignore
+			for (const ability of this.format.getSharedPower(pokemon)) {
+				let effect = 'ability:' + ability;
+				delete pokemon.volatiles[effect];
+				pokemon.addVolatile(effect);
+			}
+		},
+		battle: {
+			suppressingWeather() {
+				for (const side of this.sides) {
+					for (const pokemon of side.active) {
+						if (pokemon && !pokemon.ignoringAbility() && pokemon.hasAbility('Cloud Nine')) {
+							return true;
+						}
+					}
+				}
+				return false;
+			},
+		},
+		pokemon: {
+			hasAbility(ability) {
+				if (this.ignoringAbility()) return false;
+				if (Array.isArray(ability)) return ability.some(ability => this.hasAbility(ability));
+				let abilityid = toID(ability);
+				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
+			},
+		},
+	},
+	{
 		name: "[Gen 8] Pacifistmons",
 		desc: `Pok&eacute;mon can only use status moves. Recovery moves are banned.`,
 		threads: [
