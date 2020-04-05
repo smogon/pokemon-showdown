@@ -416,6 +416,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 					rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
 				} else if (ability === 'Ice Body' || ability === 'Snow Cloak') {
 					rejectAbility = !teamDetails['hail'];
+				} else if (ability === 'Immunity') {
+					rejectAbility = abilities.includes('Toxic Boost');
 				} else if (ability === 'Lightning Rod') {
 					rejectAbility = species.types.includes('Ground');
 				} else if (ability === 'Limber') {
@@ -468,13 +470,13 @@ class RandomGen5Teams extends RandomGen6Teams {
 				}
 			} while (rejectAbility);
 
-			if (abilities.indexOf('Guts') >= 0 && ability !== 'Quick Feet' && hasMove['facade']) {
+			if (abilities.includes('Guts') && ability !== 'Quick Feet' && hasMove['facade']) {
 				ability = 'Guts';
 			} else if (abilities.includes('Prankster') && counter.Status > 1) {
 				ability = 'Prankster';
 			} else if (abilities.includes('Quick Feet') && hasMove['facade']) {
 				ability = 'Quick Feet';
-			} else if (abilities.indexOf('Swift Swim') >= 0 && hasMove['raindance']) {
+			} else if (abilities.includes('Swift Swim') && hasMove['raindance']) {
 				ability = 'Swift Swim';
 			}
 		} else {
