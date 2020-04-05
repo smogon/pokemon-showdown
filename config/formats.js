@@ -459,7 +459,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 8] Shared Power",
-		desc: `All of the team's abilities are active at once whenever a new Pok&eacute;mon switches in.`,
+		desc: `Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3660877/">Shared Power</a>`,
 		],
@@ -471,6 +471,7 @@ let Formats = [
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magic Guard', 'Mold Breaker', 'Moody',
 			'Neutralizing Gas', 'Regenerator ++ Emergency Exit', 'Regenerator ++ Wimp Out', 'Shadow Tag', 'Trace', 'Water Bubble',
+			'Baton Pass',
 		],
 		/** @param {Pokemon} pokemon */
 		// @ts-ignore
