@@ -536,7 +536,7 @@ let Formats = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] Ubers'],
 		banlist: [
-			'Magic Bounce', 'Magic Guard', 'Regenerator',
+			'Magic Bounce', 'Magic Guard', 'Neutralizing Gas', 'Regenerator', 'Assault Vest',
 			'Ingrain', 'Life Dew', 'move:Metronome', 'Moonlight', 'Morning Sun', 'Nature Power', 'Purify', 'Recover',
 			'Rest', 'Roost', 'Slack Off', 'Soft-Boiled', 'Strength Sap', 'Swallow', 'Synthesis', 'Taunt', 'Wish',
 		],
