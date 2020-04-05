@@ -338,7 +338,7 @@ export class ModdedDex {
 		const id = toID(speciesid || '');
 		const species = this.getSpecies(id);
 		if (species.cosmeticFormes && species.cosmeticFormes.includes(id)) {
-			const form = id.slice(species.name.length);
+			const form = id.slice(species.id.length);
 			if (form) return species.name + '-' + form[0].toUpperCase() + form.slice(1);
 		}
 		return species.name;

@@ -31,3 +31,9 @@ describe('Dex#getEffect', function () {
 		assert.false(Dex.getEffect('constructor').exists);
 	});
 });
+
+describe('Dex#getForme', function () {
+	it('should handle Flabébé formes', function () {
+		assert.equal(Dex.getForme('Flabébé-yellow'), 'Flabébé-Yellow');
+	});
+});
