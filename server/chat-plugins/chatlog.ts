@@ -107,7 +107,7 @@ const LogReader = new class {
 		const month = day.slice(0, -3);
 		const log = FS(`logs/chat/${roomid}/${month}/${day}.txt`);
 		if (!await log.exists()) return null;
-		const text = await FS(`logs/chat/${roomid}/${month}/${day}.txt`).read();
+		const text = await log.read();
 		return text;
 	}
 
@@ -136,7 +136,7 @@ const LogReader = new class {
 	}
 };
 
-const LogViewer = new class {
+export const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		if (day === 'today') day = LogReader.today();
 		const month = LogReader.getMonth(day);
@@ -227,14 +227,19 @@ const LogViewer = new class {
 	}
 
 
-	async searchYear(roomid: RoomID, year: string, search: string) {
+	async searchYear(roomid: RoomID, year: string, search: string, alltime = false) {
 		const log = await LogReader.get(roomid);
 		if (!log) return null;
-		let buf = `<center><strong><br>Searching year: ${year}: </strong></center><hr>`;
+		let buf = '';
+		if (!alltime) {
+			buf += `<center><strong><br>Searching year: ${year}: </strong></center><hr>`;
+		}	else {
+			buf += `<center><strong><br>Searching all logs: </strong></center><hr>`;
+		}
 		const files = await log.listMonths();
 		for (const month of files) {
-			if (!month.includes(year)) continue;
-			if (!FS(`logs/chat/lobby/${month}`).isDirectorySync()) continue;
+			if (!month.includes(year) && !alltime) continue;
+			if (!FS(`logs/chat/${roomid}/${month}/`).isDirectorySync()) continue;
 			buf += await this.search(roomid, month, search);
 			buf += '<br>';
 		}
@@ -438,6 +443,9 @@ export const pages: PageTable = {
 		} else if (opts?.includes('search-') && date?.length === 4) {
 			this.title = `[Search Logs] [${date}] ${opts.slice(7)}`;
 			return LogViewer.searchYear(roomid, date, opts.slice(7));
+		} else if (opts?.includes('search-') && (date === 'all' || date === 'alltime')) {
+			this.title = `[Search Logs] [all] ${opts.slice(7)}`;
+			return LogViewer.searchYear(roomid, date, opts.slice(7), true);
 		} else if (opts?.includes('search-') && date) {
 			if (date === 'today') {
 				const today = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
@@ -472,8 +480,8 @@ export const commands: ChatCommands = {
 	},
 
 	searchlogshelp: [
-		"/searchlogs [search] | [date] | [optional room]- searches [month]'s logs in the current room for [search].",
+		"/searchlogs [search] | [date] | [optional room]- searches [date]'s logs in the current room for [search].",
 		"a comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
-		"If no [month] is given, defaults to current. Requires: % @ & ~",
+		"If no month, year, or 'all' param is given for the date, defaults to current month. Requires: % @ & ~",
 	],
 };
