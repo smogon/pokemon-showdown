@@ -613,7 +613,7 @@ let BattleFormatsData = {
 		tier: "LC Uber",
 	},
 	haunter: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "NFE",
 	},
 	gengar: {
@@ -1301,7 +1301,7 @@ let BattleFormatsData = {
 		isNonstandard: "Past",
 	},
 	sneasel: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "LC Uber",
 	},
 	weavile: {
