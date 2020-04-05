@@ -137,12 +137,20 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dracoplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	dragongem: {
 		inherit: true,
 		isNonstandard: null,
 		isUnreleased: true,
 	},
 	dragoniumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	dreadplate: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -154,6 +162,10 @@ let BattleItems = {
 		gen: 5,
 		isPokeball: true,
 		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
+	},
+	earthplate: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	eeviumz: {
 		inherit: true,
@@ -202,6 +214,14 @@ let BattleItems = {
 		isUnreleased: true,
 	},
 	firiumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	fistplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	flameplate: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -296,11 +316,23 @@ let BattleItems = {
 		inherit: true,
 		desc: "Evolves Alolan Sandshrew into Alolan Sandslash and Alolan Vulpix into Alolan Ninetales when used.",
 	},
+	icicleplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	iciumz: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	inciniumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	insectplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	ironplate: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -379,6 +411,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	meadowplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	medichamite: {
 		inherit: true,
 		isNonstandard: null,
@@ -404,6 +440,10 @@ let BattleItems = {
 		isUnreleased: undefined,
 	},
 	mimikiumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	mindplate: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -506,6 +546,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	skyplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	slowbronite: {
 		inherit: true,
 		isNonstandard: null,
@@ -515,6 +559,14 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 	solganiumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	splashplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	spookyplate: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -535,6 +587,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	stoneplate: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	swampertite: {
 		inherit: true,
 		isNonstandard: null,
@@ -546,6 +602,10 @@ let BattleItems = {
 	thunderstone: {
 		inherit: true,
 		desc: "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, and Eelektrik into Eelektross when used.",
+	},
+	toxicplate: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	tyranitarite: {
 		inherit: true,
@@ -578,6 +638,10 @@ let BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
+	},
+	zapplate: {
+		inherit: true,
+		isNonstandard: null,
 	},
 };
 exports.BattleItems = BattleItems;
