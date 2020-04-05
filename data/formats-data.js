@@ -2084,7 +2084,7 @@ let BattleFormatsData = {
 		isNonstandard: "Past",
 	},
 	latios: {
-		randomBattleMoves: ["aurasphere", "defog", "dracometeor", "psychic", "roost", "trick"],
+		randomBattleMoves: ["aurasphere", "defog", "dracometeor", "psyshock", "roost", "trick"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},

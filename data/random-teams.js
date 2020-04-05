@@ -854,8 +854,8 @@ class RandomTeams {
 					if (hasMove['hornleech'] && counter.Physical < 4) rejected = true;
 					if (hasMove['drumbeating'] || counter.Physical < 4 && movePool.includes('drumbeating')) rejected = true;
 					break;
-				case 'icebeam':
-					if (hasMove['freezedry']) rejected = true;
+				case 'freezedry':
+					if ((hasMove['blizzard'] && counter.setupType) || hasMove['icebeam'] && counter.Special < 4) rejected = true;
 					break;
 				case 'icywind':
 					if (hasMove['freezedry'] || hasMove['icebeam'] || counter.setupType) rejected = true;
