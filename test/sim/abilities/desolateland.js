@@ -133,4 +133,15 @@ describe('Desolate Land', function () {
 		battle.setPlayer('p2', {team: [{species: "Lugia", ability: 'pressure', moves: ['entrainment']}]});
 		assert.sets(() => battle.field.isWeather('desolateland'), false, () => battle.makeChoices('move helpinghand', 'move entrainment'));
 	});
+
+	it('should fade after being forced out via Roar', function () {
+		battle = common.createBattle([[
+			{species: 'Groudon', item: "Red Orb", moves: ['sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Wynaut', moves: ['roar']},
+		]]);
+		battle.makeChoices();
+		assert.false(battle.field.isWeather('desolateland'));
+	});
 });
