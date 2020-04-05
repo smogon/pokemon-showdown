@@ -469,7 +469,8 @@ let Formats = [
 		banlist: [
 			'Darmanitan-Galar', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo',
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
-			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Guard', 'Mold Breaker', 'Moody', 'Neutralizing Gas', 'Shadow Tag', 'Water Bubble',
+			'Arena Trap', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Guard', 'Mold Breaker', 'Moody', 'Neutralizing Gas',
+			'Regenerator ++ Emergency Exit', 'Regenerator ++ Wimp Out', 'Shadow Tag', 'Trace', 'Water Bubble',
 		],
 		/** @param {Pokemon} pokemon */
 		// @ts-ignore
@@ -486,6 +487,8 @@ let Formats = [
 		},
 		onBeforeSwitchIn(pokemon) {
 			// @ts-ignore
+			if (!this.format.getSharedPower) return;
+			// @ts-ignore
 			for (const ability of this.format.getSharedPower(pokemon)) {
 				let effect = 'ability:' + ability;
 				pokemon.volatiles[effect] = {id: toID(effect), target: pokemon};
@@ -493,6 +496,8 @@ let Formats = [
 		},
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
+			// @ts-ignore
+			if (!this.format.getSharedPower) return;
 			// @ts-ignore
 			for (const ability of this.format.getSharedPower(pokemon)) {
 				let effect = 'ability:' + ability;
