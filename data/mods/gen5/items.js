@@ -46,7 +46,7 @@ let BattleItems = {
 	},
 	buggem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Bug-type attack will have 1.5x power. Single use.",
 	},
 	chartiberry: {
@@ -107,7 +107,6 @@ let BattleItems = {
 	},
 	custapberry: {
 		inherit: true,
-		isUnreleased: false,
 		naturalGift: {
 			basePower: 80,
 			type: "Ghost",
@@ -115,12 +114,12 @@ let BattleItems = {
 	},
 	darkgem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Dark-type attack will have 1.5x power. Single use.",
 	},
 	dragongem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Dragon-type attack will have 1.5x power. Single use.",
 	},
 	durinberry: {
@@ -132,7 +131,7 @@ let BattleItems = {
 	},
 	electricgem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Electric-type attack will have 1.5x power. Single use.",
 	},
 	enigmaberry: {
@@ -144,7 +143,7 @@ let BattleItems = {
 	},
 	fightinggem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Fighting-type attack will have 1.5x power. Single use.",
 	},
 	figyberry: {
@@ -156,12 +155,12 @@ let BattleItems = {
 	},
 	firegem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Fire-type attack will have 1.5x power. Single use.",
 	},
 	flyinggem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Flying-type attack will have 1.5x power. Single use.",
 	},
 	ganlonberry: {
@@ -173,12 +172,12 @@ let BattleItems = {
 	},
 	ghostgem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Ghost-type attack will have 1.5x power. Single use.",
 	},
 	grassgem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Grass-type attack will have 1.5x power. Single use.",
 	},
 	grepaberry: {
@@ -190,7 +189,7 @@ let BattleItems = {
 	},
 	groundgem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Ground-type attack will have 1.5x power. Single use.",
 	},
 	habanberry: {
@@ -216,7 +215,7 @@ let BattleItems = {
 	},
 	icegem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Ice-type attack will have 1.5x power. Single use.",
 	},
 	jabocaberry: {
@@ -277,7 +276,7 @@ let BattleItems = {
 	},
 	mail: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	magoberry: {
 		inherit: true,
@@ -315,7 +314,7 @@ let BattleItems = {
 		},
 	},
 	normalgem: {
-		inherit: true,
+		isNonstandard: null,
 		desc: "Holder's first successful Normal-type attack will have 1.5x power. Single use.",
 	},
 	occaberry: {
@@ -383,7 +382,7 @@ let BattleItems = {
 	},
 	poisongem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Poison-type attack will have 1.5x power. Single use.",
 	},
 	pomegberry: {
@@ -395,7 +394,7 @@ let BattleItems = {
 	},
 	psychicgem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Psychic-type attack will have 1.5x power. Single use.",
 	},
 	qualotberry: {
@@ -435,7 +434,7 @@ let BattleItems = {
 	},
 	rockgem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Rock-type attack will have 1.5x power. Single use.",
 	},
 	rowapberry: {
@@ -466,10 +465,6 @@ let BattleItems = {
 			type: "Psychic",
 		},
 	},
-	souldew: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	spelonberry: {
 		inherit: true,
 		naturalGift: {
@@ -486,7 +481,7 @@ let BattleItems = {
 	},
 	steelgem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Steel-type attack will have 1.5x power. Single use.",
 	},
 	tamatoberry: {
@@ -512,7 +507,7 @@ let BattleItems = {
 	},
 	watergem: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 		desc: "Holder's first successful Water-type attack will have 1.5x power. Single use.",
 	},
 	watmelberry: {

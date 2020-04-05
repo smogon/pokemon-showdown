@@ -19,7 +19,7 @@ let BattleItems = {
 	},
 	belueberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	bigroot: {
 		inherit: true,
@@ -27,11 +27,11 @@ let BattleItems = {
 	},
 	cornnberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	durinberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	energypowder: {
 		id: "energypowder",
@@ -98,7 +98,7 @@ let BattleItems = {
 	},
 	machobrace: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	magoberry: {
 		inherit: true,
@@ -117,15 +117,15 @@ let BattleItems = {
 	},
 	magostberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	nanabberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	nomelberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	oldamber: {
 		inherit: true,
@@ -133,15 +133,15 @@ let BattleItems = {
 	},
 	pamtreberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	rabutaberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	razzberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	rockyhelmet: {
 		inherit: true,
@@ -163,7 +163,7 @@ let BattleItems = {
 	},
 	spelonberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	souldew: {
 		inherit: true,
@@ -184,11 +184,11 @@ let BattleItems = {
 	},
 	watmelberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	wepearberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	wikiberry: {
 		inherit: true,

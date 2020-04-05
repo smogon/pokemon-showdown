@@ -4,7 +4,7 @@
 let BattleItems = {
 	berryjuice: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	brightpowder: {
 		inherit: true,

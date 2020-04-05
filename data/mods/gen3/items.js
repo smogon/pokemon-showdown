@@ -2,7 +2,7 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
-	"aguavberry": {
+	aguavberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -12,7 +12,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"apicotberry": {
+	apicotberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -22,9 +22,8 @@ let BattleItems = {
 			}
 		},
 	},
-	"berryjuice": {
+	berryjuice: {
 		inherit: true,
-		isUnreleased: true,
 		onUpdate() {},
 		onResidualOrder: 5,
 		onResidual(pokemon) {
@@ -34,8 +33,9 @@ let BattleItems = {
 				}
 			}
 		},
+		isNonstandard: 'Unobtainable',
 	},
-	"blackbelt": {
+	blackbelt: {
 		inherit: true,
 		desc: "Holder's Fighting-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -44,7 +44,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"blackglasses": {
+	blackglasses: {
 		inherit: true,
 		desc: "Holder's Dark-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -53,7 +53,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"charcoal": {
+	charcoal: {
 		inherit: true,
 		desc: "Holder's Fire-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -62,7 +62,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"dragonfang": {
+	dragonfang: {
 		inherit: true,
 		desc: "Holder's Dragon-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -71,17 +71,17 @@ let BattleItems = {
 			}
 		},
 	},
-	"enigmaberry": {
+	enigmaberry: {
 		id: "enigmaberry",
 		name: "Enigma Berry",
 		desc: "No competitive use.",
-		isUnreleased: true,
 		spritenum: 124,
 		isBerry: true,
 		num: 208,
 		gen: 3,
+		isNonstandard: 'Unobtainable',
 	},
-	"figyberry": {
+	figyberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -91,7 +91,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"ganlonberry": {
+	ganlonberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -101,7 +101,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"hardstone": {
+	hardstone: {
 		inherit: true,
 		desc: "Holder's Rock-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -110,7 +110,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"iapapaberry": {
+	iapapaberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -120,7 +120,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"kingsrock": {
+	kingsrock: {
 		inherit: true,
 		onModifyMove(move) {
 			let affectedByKingsRock = ['aerialace', 'aeroblast', 'aircutter', 'armthrust', 'barrage', 'beatup', 'bide', 'bind', 'blastburn', 'bonerush', 'bonemerang', 'bounce', 'brickbreak', 'bulletseed', 'clamp', 'cometpunch', 'crabhammer', 'crosschop', 'cut', 'dig', 'dive', 'doublekick', 'doubleslap', 'doubleedge', 'dragonbreath', 'dragonclaw', 'dragonrage', 'drillpeck', 'earthquake', 'eggbomb', 'endeavor', 'eruption', 'explosion', 'extremespeed', 'falseswipe', 'feintattack', 'firespin', 'flail', 'fly', 'frenzyplant', 'frustration', 'furyattack', 'furycutter', 'furyswipes', 'gust', 'hiddenpower', 'highjumpkick', 'hornattack', 'hydrocannon', 'hydropump', 'hyperbeam', 'iceball', 'iciclespear', 'jumpkick', 'karatechop', 'leafblade', 'lowkick', 'machpunch', 'magicalleaf', 'magnitude', 'megakick', 'megapunch', 'megahorn', 'meteormash', 'mudshot', 'muddywater', 'nightshade', 'outrage', 'overheat', 'payday', 'peck', 'petaldance', 'pinmissile', 'poisontail', 'pound', 'psychoboost', 'psywave', 'quickattack', 'rage', 'rapidspin', 'razorleaf', 'razorwind', 'return', 'revenge', 'reversal', 'rockblast', 'rockthrow', 'rollingkick', 'rollout', 'sandtomb', 'scratch', 'seismictoss', 'selfdestruct', 'shadowpunch', 'shockwave', 'signalbeam', 'silverwind', 'skullbash', 'skyattack', 'skyuppercut', 'slam', 'slash', 'snore', 'solarbeam', 'sonicboom', 'spikecannon', 'spitup', 'steelwing', 'strength', 'struggle', 'submission', 'surf', 'swift', 'tackle', 'takedown', 'thrash', 'tickle', 'triplekick', 'twister', 'uproar', 'visegrip', 'vinewhip', 'vitalthrow', 'volttackle', 'watergun', 'waterpulse', 'waterfall', 'weatherball', 'whirlpool', 'wingattack', 'wrap'];
@@ -133,7 +133,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"lansatberry": {
+	lansatberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -143,7 +143,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"laxincense": {
+	laxincense: {
 		inherit: true,
 		desc: "The accuracy of attacks against the holder is 0.95x.",
 		onModifyAccuracy(accuracy) {
@@ -152,7 +152,7 @@ let BattleItems = {
 			return accuracy * 0.95;
 		},
 	},
-	"liechiberry": {
+	liechiberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -162,12 +162,12 @@ let BattleItems = {
 			}
 		},
 	},
-	"lightball": {
+	lightball: {
 		inherit: true,
 		desc: "If held by a Pikachu, its Special Attack is doubled.",
 		onModifyAtk() {},
 	},
-	"magnet": {
+	magnet: {
 		inherit: true,
 		desc: "Holder's Electric-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -176,7 +176,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"magoberry": {
+	magoberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -186,7 +186,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"metalcoat": {
+	metalcoat: {
 		inherit: true,
 		desc: "Holder's Steel-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -195,7 +195,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"miracleseed": {
+	miracleseed: {
 		inherit: true,
 		desc: "Holder's Grass-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -204,7 +204,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"mysticwater": {
+	mysticwater: {
 		inherit: true,
 		desc: "Holder's Water-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -213,7 +213,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"nevermeltice": {
+	nevermeltice: {
 		inherit: true,
 		desc: "Holder's Ice-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -222,7 +222,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"oranberry": {
+	oranberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -232,7 +232,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"petayaberry": {
+	petayaberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -242,7 +242,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"poisonbarb": {
+	poisonbarb: {
 		inherit: true,
 		desc: "Holder's Poison-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -251,7 +251,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"quickclaw": {
+	quickclaw: {
 		id: "quickclaw",
 		onModifyPriority(priority, pokemon) {
 			if (this.randomChance(1, 5)) {
@@ -267,7 +267,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Each turn, holder has a 20% chance to move first in its priority bracket (no message).",
 	},
-	"salacberry": {
+	salacberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -277,7 +277,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"seaincense": {
+	seaincense: {
 		inherit: true,
 		desc: "Holder's Water-type attacks have 1.05x power.",
 		onBasePower(basePower, user, target, move) {
@@ -286,7 +286,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"sharpbeak": {
+	sharpbeak: {
 		inherit: true,
 		desc: "Holder's Flying-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -295,7 +295,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"silkscarf": {
+	silkscarf: {
 		inherit: true,
 		desc: "Holder's Normal-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -304,7 +304,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"silverpowder": {
+	silverpowder: {
 		inherit: true,
 		desc: "Holder's Bug-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -313,7 +313,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"sitrusberry": {
+	sitrusberry: {
 		inherit: true,
 		desc: "Restores 30 HP when at 1/2 max HP or less. Single use.",
 		onUpdate() {},
@@ -327,7 +327,7 @@ let BattleItems = {
 			this.heal(30);
 		},
 	},
-	"softsand": {
+	softsand: {
 		inherit: true,
 		desc: "Holder's Ground-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -336,7 +336,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"spelltag": {
+	spelltag: {
 		inherit: true,
 		desc: "Holder's Ghost-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -345,7 +345,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"starfberry": {
+	starfberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
@@ -355,7 +355,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"twistedspoon": {
+	twistedspoon: {
 		inherit: true,
 		desc: "Holder's Psychic-type attacks have 1.1x power.",
 		onBasePower(basePower, user, target, move) {
@@ -364,7 +364,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"wikiberry": {
+	wikiberry: {
 		inherit: true,
 		onUpdate() {},
 		onResidualOrder: 5,
