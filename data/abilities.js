@@ -1687,12 +1687,17 @@ let BattleAbilities = {
 	"imposter": {
 		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it. If there is no Pokemon at that position, this Pokemon does not Transform.",
 		shortDesc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it.",
+		onSwitchIn(pokemon) {
+			this.effectData.switchingIn = true;
+		},
 		onStart(pokemon) {
-			if (this.activeMove && this.activeMove.id === 'skillswap') return;
+			// Imposter does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			if (!this.effectData.switchingIn) return;
 			let target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
 				pokemon.transformInto(target, this.dex.getAbility('imposter'));
 			}
+			this.effectData.switchingIn = false;
 		},
 		id: "imposter",
 		name: "Imposter",
