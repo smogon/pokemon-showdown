@@ -413,7 +413,7 @@ let BattleItems = {
 		onEat: false,
 		num: 183,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"berryjuice": {
@@ -659,7 +659,7 @@ let BattleItems = {
 		},
 		num: 558,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Bug-type attack will have 1.3x power. Single use.",
 	},
 	"bugmemory": {
@@ -1106,7 +1106,7 @@ let BattleItems = {
 		onEat: false,
 		num: 175,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"coverfossil": {
@@ -1153,7 +1153,7 @@ let BattleItems = {
 		onEat() { },
 		num: 210,
 		gen: 4,
-		isNonstandard: 'Unobtainable',
+		isNonstandard: "Unobtainable",
 		desc: "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use.",
 	},
 	"damprock": {
@@ -1180,7 +1180,7 @@ let BattleItems = {
 		},
 		num: 562,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Dark-type attack will have 1.3x power. Single use.",
 	},
 	"darkmemory": {
@@ -1402,7 +1402,7 @@ let BattleItems = {
 		},
 		num: 561,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Dragon-type attack will have 1.3x power. Single use.",
 	},
 	"dragonmemory": {
@@ -1502,7 +1502,7 @@ let BattleItems = {
 		onEat: false,
 		num: 182,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"duskball": {
@@ -1639,7 +1639,7 @@ let BattleItems = {
 		},
 		num: 550,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Electric-type attack will have 1.3x power. Single use.",
 	},
 	"electricmemory": {
@@ -1731,7 +1731,7 @@ let BattleItems = {
 		onEat() { },
 		num: 208,
 		gen: 3,
-		isNonstandard: 'Unobtainable',
+		isNonstandard: "Unobtainable",
 		desc: "Restores 1/4 max HP after holder is hit by a supereffective move. Single use.",
 	},
 	"eviolite": {
@@ -1802,7 +1802,7 @@ let BattleItems = {
 		},
 		num: 715,
 		gen: 6,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Fairy-type attack will have 1.3x power. Single use.",
 	},
 	"fairymemory": {
@@ -1844,7 +1844,7 @@ let BattleItems = {
 		},
 		num: 553,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Fighting-type attack will have 1.3x power. Single use.",
 	},
 	"fightingmemory": {
@@ -1918,7 +1918,7 @@ let BattleItems = {
 		},
 		num: 548,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Fire-type attack will have 1.3x power. Single use.",
 	},
 	"firememory": {
@@ -2065,7 +2065,7 @@ let BattleItems = {
 		},
 		num: 556,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Flying-type attack will have 1.3x power. Single use.",
 	},
 	"flyingmemory": {
@@ -2299,7 +2299,7 @@ let BattleItems = {
 		},
 		num: 560,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Ghost-type attack will have 1.3x power. Single use.",
 	},
 	"ghostmemory": {
@@ -2373,7 +2373,7 @@ let BattleItems = {
 		},
 		num: 551,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Grass-type attack will have 1.3x power. Single use.",
 	},
 	"grassmemory": {
@@ -2506,7 +2506,7 @@ let BattleItems = {
 		},
 		num: 555,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Ground-type attack will have 1.3x power. Single use.",
 	},
 	"groundmemory": {
@@ -2735,7 +2735,7 @@ let BattleItems = {
 		},
 		num: 552,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Ice-type attack will have 1.3x power. Single use.",
 	},
 	"icememory": {
@@ -2913,7 +2913,7 @@ let BattleItems = {
 		onEat() { },
 		num: 211,
 		gen: 4,
-		isNonstandard: 'Unobtainable',
+		isNonstandard: "Unobtainable",
 		desc: "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use.",
 	},
 	"jawfossil": {
@@ -3570,7 +3570,7 @@ let BattleItems = {
 		onEat: false,
 		num: 176,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"mail": {
@@ -3904,7 +3904,7 @@ let BattleItems = {
 		},
 		num: 209,
 		gen: 4,
-		isNonstandard: 'Unobtainable',
+		isNonstandard: "Unobtainable",
 		desc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use.",
 	},
 	"mimikiumz": {
@@ -4052,7 +4052,7 @@ let BattleItems = {
 		onEat: false,
 		num: 166,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"nestball": {
@@ -4102,7 +4102,7 @@ let BattleItems = {
 		onEat: false,
 		num: 178,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"normalgem": {
@@ -4231,7 +4231,7 @@ let BattleItems = {
 		onEat: false,
 		num: 180,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"parkball": {
@@ -4491,7 +4491,7 @@ let BattleItems = {
 		},
 		num: 554,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Poison-type attack will have 1.3x power. Single use.",
 	},
 	"poisonmemory": {
@@ -4761,7 +4761,7 @@ let BattleItems = {
 		},
 		num: 557,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Psychic-type attack will have 1.3x power. Single use.",
 	},
 	"psychicmemory": {
@@ -4890,7 +4890,7 @@ let BattleItems = {
 		onEat: false,
 		num: 177,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"rarebone": {
@@ -4981,7 +4981,7 @@ let BattleItems = {
 		onEat: false,
 		num: 164,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"reapercloth": {
@@ -5106,7 +5106,7 @@ let BattleItems = {
 		},
 		num: 559,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Rock-type attack will have 1.3x power. Single use.",
 	},
 	"rockincense": {
@@ -5264,7 +5264,7 @@ let BattleItems = {
 		onEat() { },
 		num: 212,
 		gen: 4,
-		isNonstandard: 'Unobtainable',
+		isNonstandard: "Unobtainable",
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use.",
 	},
 	"rustedshield": {
@@ -5815,7 +5815,7 @@ let BattleItems = {
 		onEat: false,
 		num: 179,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"splashplate": {
@@ -5947,7 +5947,7 @@ let BattleItems = {
 		},
 		num: 563,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Steel-type attack will have 1.3x power. Single use.",
 	},
 	"steelmemory": {
@@ -7497,7 +7497,7 @@ let BattleItems = {
 		},
 		num: 549,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Water-type attack will have 1.3x power. Single use.",
 	},
 	"watermemory": {
@@ -7555,7 +7555,7 @@ let BattleItems = {
 		onEat: false,
 		num: 181,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"waveincense": {
@@ -7608,7 +7608,7 @@ let BattleItems = {
 		onEat: false,
 		num: 167,
 		gen: 3,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"whippeddream": {

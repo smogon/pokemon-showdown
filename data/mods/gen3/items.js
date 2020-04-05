@@ -33,7 +33,7 @@ let BattleItems = {
 				}
 			}
 		},
-		isNonstandard: 'Unobtainable',
+		isNonstandard: "Unobtainable",
 	},
 	blackbelt: {
 		inherit: true,
@@ -79,7 +79,7 @@ let BattleItems = {
 		isBerry: true,
 		num: 208,
 		gen: 3,
-		isNonstandard: 'Unobtainable',
+		isNonstandard: "Unobtainable",
 	},
 	figyberry: {
 		inherit: true,
