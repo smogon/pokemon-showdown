@@ -514,7 +514,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Eviolite';
 		} else if (hasMove['shellsmash']) {
 			item = 'White Herb';
-		} else if (ability === 'Harvest') {
+		} else if (ability === 'Harvest' || hasMove['bellydrum']) {
 			item = 'Sitrus Berry';
 		} else if ((ability === 'Magic Guard' || ability === 'Sheer Force') && counter.damagingMoves.length > 1) {
 			item = 'Life Orb';
