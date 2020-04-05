@@ -2,7 +2,7 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
-	"adamantorb": {
+	adamantorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
 			if (move && user.species.name === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
@@ -10,7 +10,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"bigroot": {
+	bigroot: {
 		inherit: true,
 		onTryHeal(damage, target, source, effect) {
 			/**@type {{[k: string]: number}} */
@@ -20,19 +20,19 @@ let BattleItems = {
 			}
 		},
 	},
-	"choiceband": {
+	choiceband: {
 		inherit: true,
 		onStart() { },
 	},
-	"choicescarf": {
+	choicescarf: {
 		inherit: true,
 		onStart() { },
 	},
-	"choicespecs": {
+	choicespecs: {
 		inherit: true,
 		onStart() { },
 	},
-	"chopleberry": {
+	chopleberry: {
 		inherit: true,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.causedCrashDamage) return damage;
@@ -45,7 +45,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"custapberry": {
+	custapberry: {
 		inherit: true,
 		onModifyPriority() {},
 		onBeforeTurn(pokemon) {
@@ -72,7 +72,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"deepseascale": {
+	deepseascale: {
 		inherit: true,
 		onModifySpD(spd, pokemon) {
 			if (pokemon.species.name === 'Clamperl') {
@@ -80,7 +80,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"deepseatooth": {
+	deepseatooth: {
 		inherit: true,
 		onModifySpA(spa, pokemon) {
 			if (pokemon.species.name === 'Clamperl') {
@@ -88,7 +88,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"focussash": {
+	focussash: {
 		inherit: true,
 		desc: "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use.",
 		onDamage() { },
@@ -111,7 +111,7 @@ let BattleItems = {
 			},
 		},
 	},
-	"griseousorb": {
+	griseousorb: {
 		inherit: true,
 		desc: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power.",
 		onBasePower(basePower, user, target, move) {
@@ -120,12 +120,12 @@ let BattleItems = {
 			}
 		},
 	},
-	"ironball": {
+	ironball: {
 		inherit: true,
 		onEffectiveness() {},
 		desc: "Holder's Speed is halved and it becomes grounded.",
 	},
-	"kingsrock": {
+	kingsrock: {
 		inherit: true,
 		onModifyMove(move) {
 			let affectedByKingsRock = ['aerialace', 'aeroblast', 'aircutter', 'airslash', 'aquajet', 'aquatail', 'armthrust', 'assurance', 'attackorder', 'aurasphere', 'avalanche', 'barrage', 'beatup', 'bide', 'bind', 'blastburn', 'bonerush', 'bonemerang', 'bounce', 'bravebird', 'brickbreak', 'brine', 'bugbite', 'bulletpunch', 'bulletseed', 'chargebeam', 'clamp', 'closecombat', 'cometpunch', 'crabhammer', 'crosschop', 'crosspoison', 'crushgrip', 'cut', 'darkpulse', 'dig', 'discharge', 'dive', 'doublehit', 'doublekick', 'doubleslap', 'doubleedge', 'dracometeor', 'dragonbreath', 'dragonclaw', 'dragonpulse', 'dragonrage', 'dragonrush', 'drainpunch', 'drillpeck', 'earthpower', 'earthquake', 'eggbomb', 'endeavor', 'eruption', 'explosion', 'extremespeed', 'falseswipe', 'feintattack', 'firefang', 'firespin', 'flail', 'flashcannon', 'fly', 'forcepalm', 'frenzyplant', 'frustration', 'furyattack', 'furycutter', 'furyswipes', 'gigaimpact', 'grassknot', 'gunkshot', 'gust', 'gyroball', 'hammerarm', 'headsmash', 'hiddenpower', 'highjumpkick', 'hornattack', 'hydrocannon', 'hydropump', 'hyperbeam', 'iceball', 'icefang', 'iceshard', 'iciclespear', 'ironhead', 'judgment', 'jumpkick', 'karatechop', 'lastresort', 'lavaplume', 'leafblade', 'leafstorm', 'lowkick', 'machpunch', 'magicalleaf', 'magmastorm', 'magnetbomb', 'magnitude', 'megakick', 'megapunch', 'megahorn', 'meteormash', 'mirrorshot', 'mudbomb', 'mudshot', 'muddywater', 'nightshade', 'nightslash', 'ominouswind', 'outrage', 'overheat', 'payday', 'payback', 'peck', 'petaldance', 'pinmissile', 'pluck', 'poisonjab', 'poisontail', 'pound', 'powergem', 'powerwhip', 'psychoboost', 'psychocut', 'psywave', 'punishment', 'quickattack', 'rage', 'rapidspin', 'razorleaf', 'razorwind', 'return', 'revenge', 'reversal', 'roaroftime', 'rockblast', 'rockclimb', 'rockthrow', 'rockwrecker', 'rollingkick', 'rollout', 'sandtomb', 'scratch', 'seedbomb', 'seedflare', 'seismictoss', 'selfdestruct', 'shadowclaw', 'shadowforce', 'shadowpunch', 'shadowsneak', 'shockwave', 'signalbeam', 'silverwind', 'skullbash', 'skyattack', 'skyuppercut', 'slam', 'slash', 'snore', 'solarbeam', 'sonicboom', 'spacialrend', 'spikecannon', 'spitup', 'steelwing', 'stoneedge', 'strength', 'struggle', 'submission', 'suckerpunch', 'surf', 'swift', 'tackle', 'takedown', 'thrash', 'thunderfang', 'triplekick', 'trumpcard', 'twister', 'uturn', 'uproar', 'vacuumwave', 'visegrip', 'vinewhip', 'vitalthrow', 'volttackle', 'wakeupslap', 'watergun', 'waterpulse', 'waterfall', 'weatherball', 'whirlpool', 'wingattack', 'woodhammer', 'wrap', 'wringout', 'xscissor', 'zenheadbutt'];
@@ -138,7 +138,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"lifeorb": {
+	lifeorb: {
 		inherit: true,
 		onModifyDamage() {},
 		onAfterMoveSecondarySelf() {},
@@ -161,7 +161,7 @@ let BattleItems = {
 			},
 		},
 	},
-	"lightball": {
+	lightball: {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.species.name === 'Pikachu') {
@@ -174,7 +174,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"luckypunch": {
+	luckypunch: {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
 			if (user.species.name === 'Chansey') {
@@ -182,7 +182,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"lustrousorb": {
+	lustrousorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
 			if (move && user.species.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
@@ -190,7 +190,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"mentalherb": {
+	mentalherb: {
 		inherit: true,
 		desc: "Holder is cured if it is infatuated. Single use.",
 		fling: {
@@ -208,7 +208,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"metronome": {
+	metronome: {
 		inherit: true,
 		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns.",
 		effect: {
@@ -234,7 +234,7 @@ let BattleItems = {
 			},
 		},
 	},
-	"razorfang": {
+	razorfang: {
 		inherit: true,
 		onModifyMove(move) {
 			let affectedByRazorFang = ['aerialace', 'aeroblast', 'aircutter', 'airslash', 'aquajet', 'aquatail', 'armthrust', 'assurance', 'attackorder', 'aurasphere', 'avalanche', 'barrage', 'beatup', 'bide', 'bind', 'blastburn', 'bonerush', 'bonemerang', 'bounce', 'bravebird', 'brickbreak', 'brine', 'bugbite', 'bulletpunch', 'bulletseed', 'chargebeam', 'clamp', 'closecombat', 'cometpunch', 'crabhammer', 'crosschop', 'crosspoison', 'crushgrip', 'cut', 'darkpulse', 'dig', 'discharge', 'dive', 'doublehit', 'doublekick', 'doubleslap', 'doubleedge', 'dracometeor', 'dragonbreath', 'dragonclaw', 'dragonpulse', 'dragonrage', 'dragonrush', 'drainpunch', 'drillpeck', 'earthpower', 'earthquake', 'eggbomb', 'endeavor', 'eruption', 'explosion', 'extremespeed', 'falseswipe', 'feintattack', 'firefang', 'firespin', 'flail', 'flashcannon', 'fly', 'forcepalm', 'frenzyplant', 'frustration', 'furyattack', 'furycutter', 'furyswipes', 'gigaimpact', 'grassknot', 'gunkshot', 'gust', 'gyroball', 'hammerarm', 'headsmash', 'hiddenpower', 'highjumpkick', 'hornattack', 'hydrocannon', 'hydropump', 'hyperbeam', 'iceball', 'icefang', 'iceshard', 'iciclespear', 'ironhead', 'judgment', 'jumpkick', 'karatechop', 'lastresort', 'lavaplume', 'leafblade', 'leafstorm', 'lowkick', 'machpunch', 'magicalleaf', 'magmastorm', 'magnetbomb', 'magnitude', 'megakick', 'megapunch', 'megahorn', 'meteormash', 'mirrorshot', 'mudbomb', 'mudshot', 'muddywater', 'nightshade', 'nightslash', 'ominouswind', 'outrage', 'overheat', 'payday', 'payback', 'peck', 'petaldance', 'pinmissile', 'pluck', 'poisonjab', 'poisontail', 'pound', 'powergem', 'powerwhip', 'psychoboost', 'psychocut', 'psywave', 'punishment', 'quickattack', 'rage', 'rapidspin', 'razorleaf', 'razorwind', 'return', 'revenge', 'reversal', 'roaroftime', 'rockblast', 'rockclimb', 'rockthrow', 'rockwrecker', 'rollingkick', 'rollout', 'sandtomb', 'scratch', 'seedbomb', 'seedflare', 'seismictoss', 'selfdestruct', 'shadowclaw', 'shadowforce', 'shadowpunch', 'shadowsneak', 'shockwave', 'signalbeam', 'silverwind', 'skullbash', 'skyattack', 'skyuppercut', 'slam', 'slash', 'snore', 'solarbeam', 'sonicboom', 'spacialrend', 'spikecannon', 'spitup', 'steelwing', 'stoneedge', 'strength', 'struggle', 'submission', 'suckerpunch', 'surf', 'swift', 'tackle', 'takedown', 'thrash', 'thunderfang', 'triplekick', 'trumpcard', 'twister', 'uturn', 'uproar', 'vacuumwave', 'visegrip', 'vinewhip', 'vitalthrow', 'volttackle', 'wakeupslap', 'watergun', 'waterpulse', 'waterfall', 'weatherball', 'whirlpool', 'wingattack', 'woodhammer', 'wrap', 'wringout', 'xscissor', 'zenheadbutt'];
@@ -247,7 +247,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"stick": {
+	stick: {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
 			if (user.species.name === 'Farfetch\'d') {
@@ -255,7 +255,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"thickclub": {
+	thickclub: {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.species.name === 'Cubone' || pokemon.species.name === 'Marowak') {

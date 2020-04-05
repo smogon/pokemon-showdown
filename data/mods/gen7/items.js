@@ -9,6 +9,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	adamantorb: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	aerodactylite: {
 		inherit: true,
 		isNonstandard: null,
@@ -59,6 +63,10 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	belueberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
+	},
 	blastoisinite: {
 		inherit: true,
 		isNonstandard: null,
@@ -73,8 +81,7 @@ let BattleItems = {
 	},
 	buggem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	buginiumz: {
 		inherit: true,
@@ -104,18 +111,21 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	cornnberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
+	},
 	coverfossil: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	custapberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	darkgem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	darkiniumz: {
 		inherit: true,
@@ -143,8 +153,7 @@ let BattleItems = {
 	},
 	dragongem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	dragoniumz: {
 		inherit: true,
@@ -163,6 +172,10 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
 	},
+	durinberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
+	},
 	earthplate: {
 		inherit: true,
 		isNonstandard: null,
@@ -173,10 +186,13 @@ let BattleItems = {
 	},
 	electricgem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	electriumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	enigmaberry: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -186,13 +202,11 @@ let BattleItems = {
 	},
 	fairygem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	fightinggem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	fightiniumz: {
 		inherit: true,
@@ -210,8 +224,7 @@ let BattleItems = {
 	},
 	firegem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	firiumz: {
 		inherit: true,
@@ -227,8 +240,7 @@ let BattleItems = {
 	},
 	flyinggem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	flyiniumz: {
 		inherit: true,
@@ -252,8 +264,7 @@ let BattleItems = {
 	},
 	ghostgem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	ghostiumz: {
 		inherit: true,
@@ -265,17 +276,19 @@ let BattleItems = {
 	},
 	grassgem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	grassiumz: {
 		inherit: true,
 		isNonstandard: null,
 	},
-	groundgem: {
+	griseousorb: {
 		inherit: true,
 		isNonstandard: null,
-		isUnreleased: true,
+	},
+	groundgem: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
 	},
 	groundiumz: {
 		inherit: true,
@@ -309,8 +322,7 @@ let BattleItems = {
 	},
 	icegem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	icestone: {
 		inherit: true,
@@ -338,7 +350,7 @@ let BattleItems = {
 	},
 	jabocaberry: {
 		inherit: true,
-		isUnreleased: undefined,
+		isNonstandard: null,
 	},
 	jawfossil: {
 		inherit: true,
@@ -372,7 +384,15 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	luckypunch: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	lunaliumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	lustrousorb: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -382,7 +402,7 @@ let BattleItems = {
 	},
 	machobrace: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	magoberry: {
 		inherit: true,
@@ -394,10 +414,13 @@ let BattleItems = {
 			}
 		},
 	},
+	magostberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
+	},
 	mail: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	manectite: {
 		inherit: true,
@@ -437,7 +460,7 @@ let BattleItems = {
 	},
 	micleberry: {
 		inherit: true,
-		isUnreleased: undefined,
+		isNonstandard: null,
 	},
 	mimikiumz: {
 		inherit: true,
@@ -447,9 +470,21 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	nanabberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
+	},
+	nomelberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
+	},
 	normaliumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	pamtreberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
 	},
 	pidgeotite: {
 		inherit: true,
@@ -473,8 +508,7 @@ let BattleItems = {
 	},
 	poisongem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	poisoniumz: {
 		inherit: true,
@@ -486,12 +520,23 @@ let BattleItems = {
 	},
 	psychicgem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	psychiumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	rabutaberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
+	},
+	razorfang: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	razzberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
 	},
 	redorb: {
 		inherit: true,
@@ -499,8 +544,7 @@ let BattleItems = {
 	},
 	rockgem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	rockiumz: {
 		inherit: true,
@@ -512,7 +556,7 @@ let BattleItems = {
 	},
 	rowapberry: {
 		inherit: true,
-		isUnreleased: undefined,
+		isNonstandard: null,
 	},
 	sablenite: {
 		inherit: true,
@@ -562,6 +606,14 @@ let BattleItems = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	souldew: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	spelonberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
+	},
 	splashplate: {
 		inherit: true,
 		isNonstandard: null,
@@ -572,8 +624,7 @@ let BattleItems = {
 	},
 	steelgem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	steeliumz: {
 		inherit: true,
@@ -621,12 +672,19 @@ let BattleItems = {
 	},
 	watergem: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: 'Unobtainable',
 	},
 	wateriumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	watmelberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
+	},
+	wepearberry: {
+		inherit: true,
+		isNonstandard: 'Unobtainable',
 	},
 	wikiberry: {
 		inherit: true,

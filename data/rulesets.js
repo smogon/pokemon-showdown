@@ -74,11 +74,11 @@ let BattleFormats = {
 		name: 'Standard NatDex',
 		desc: "The standard ruleset for all National Dex tiers",
 		ruleset: ['Obtainable', 'Team Preview', '+Past', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
-		unbanlist: ['Melmetal', 'Meltan'],
+		unbanlist: ['Unobtainable', 'Melmetal', 'Meltan'],
 		onValidateSet(set) {
 			// These Pokemon are still unobtainable
 			const unobtainables = [
-				'Eevee-Starter', 'Floette-Eternal', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter', 'Magearna-Original',
+				'Eevee-Starter', 'Floette-Eternal', 'Pichu-Spiky-eared', 'Pikachu-Belle', 'Pikachu-Cosplay', 'Pikachu-Libre', 'Pikachu-PhD', 'Pikachu-Pop-Star', 'Pikachu-Rock-Star', 'Pikachu-Starter', 'Magearna-Original', 'Eternatus-Eternamax',
 			];
 			if (unobtainables.includes(set.species)) {
 				return [`${set.name || set.species} does not exist in the National Dex.`];

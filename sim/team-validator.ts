@@ -1309,22 +1309,21 @@ export class TeamValidator {
 		if (item.isNonstandard) {
 			banReason = ruleTable.check('pokemontag:' + toID(item.isNonstandard));
 			if (banReason) {
+				if (item.isNonstandard === 'Unobtainable') {
+					return `${item.name} is not obtainable without hacking or glitches.`;
+				}
 				return `${set.name}'s item ${item.name} is tagged ${item.isNonstandard}, which is ${banReason}.`;
 			}
 			if (banReason === '') return null;
+		}
 
+		if (item.isNonstandard && item.isNonstandard !== 'Unobtainable') {
 			banReason = ruleTable.check('nonexistent', setHas);
 			if (banReason) {
 				if (['Past', 'Future'].includes(item.isNonstandard)) {
 					return `${set.name}'s item ${item.name} does not exist in Gen ${dex.gen}.`;
 				}
 				return `${set.name}'s item ${item.name} does not exist in this game.`;
-			}
-			if (banReason === '') return null;
-		} else if (item.isUnreleased) {
-			banReason = ruleTable.check('unreleased', setHas);
-			if (banReason) {
-				return `${set.name}'s item ${item.name} is unreleased.`;
 			}
 			if (banReason === '') return null;
 		}
