@@ -419,7 +419,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
+		ruleset: ['Standard NatDex', '+Unobtainable', '+Past', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
 		banlist: [
 			'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Attack', 'Deoxys-Base', 'Deoxys-Speed', 'Dialga', 'Eternatus', 'Genesect', 'Gengar-Mega',
 			'Giratina', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lucario-Mega',
@@ -440,7 +440,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard NatDex'],
+		ruleset: ['Standard NatDex', '+Unobtainable', '+Past'],
 	},
 
 	// OM of the Month
