@@ -85,7 +85,7 @@ let BattleFormats = {
 			// Items other than Z-Crystals and Pokémon-specific items should be illegal
 			if (!set.item) return;
 			let item = this.dex.getItem(set.item);
-			if ((item.isNonstandard === 'Unobtainable' || item.isNonstandard === 'Past') && !item.zMove && !item.itemUser) {
+			if ((item.isNonstandard === 'Unobtainable' || item.isNonstandard === 'Past') && !item.zMove && !item.itemUser && !item.forcedForme) {
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}
 		},
