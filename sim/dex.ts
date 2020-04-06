@@ -527,31 +527,13 @@ export class ModdedDex {
 	getEffect(name?: string | Effect | null): PureEffect {
 		if (!name) return nullEffect;
 		if (typeof name !== 'string') return name as PureEffect;
-
-		const id = toID(name);
-		let effect = this.effectCache.get(id);
-		if (effect) return effect as PureEffect;
-
-		if (name.startsWith('move:')) {
-			effect = this.getMove(name.slice(5));
-		} else if (name.startsWith('item:')) {
-			effect = this.getItem(name.slice(5));
-		} else if (name.startsWith('ability:')) {
-			const ability = this.getAbility(name.slice(8));
-			effect = Object.assign(Object.create(ability), {id: 'ability:' + ability.id});
-		}
-		if (effect) {
-			this.effectCache.set(id, effect);
-			// @ts-ignore
-			return effect;
-		}
-		return this.getEffectByID(id, effect);
+		return this.getEffectByID(toID(name));
 	}
 
-	getEffectByID(id: ID, effect?: Effect | Move): PureEffect {
+	getEffectByID(id: ID): PureEffect {
 		if (!id) return nullEffect;
 
-		if (!effect) effect = this.effectCache.get(id);
+		let effect = this.effectCache.get(id);
 		if (effect) return effect as PureEffect;
 
 		let found;

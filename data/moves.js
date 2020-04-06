@@ -14179,7 +14179,7 @@ let BattleMovedex = {
 				pokemon.storedStats.def = newdef;
 			},
 			onRestart(pokemon) {
-				pokemon.removeVolatile('Power Trick');
+				pokemon.removeVolatile('powertrick');
 			},
 		},
 		secondary: null,

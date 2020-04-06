@@ -152,7 +152,7 @@ let BattleAbilities = {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
 			if (move.flags['contact']) {
-				source.addVolatile('Attract', target);
+				source.addVolatile('attract', target);
 			}
 		},
 		desc: "There is a 100% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",

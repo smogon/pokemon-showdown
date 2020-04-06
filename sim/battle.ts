@@ -282,6 +282,13 @@ export class Battle {
 		this.prng = new PRNG(this.prng.startingSeed);
 	}
 
+	getVolatile(volatile: string): Effect {
+		if (volatile.startsWith('move:')) return this.dex.getActiveMove(volatile.slice(5));
+		if (volatile.startsWith('item:')) return this.dex.getItem(volatile.slice(5));
+		if (volatile.startsWith('ability:')) return this.dex.getAbility(volatile.slice(8));
+		return this.dex.getEffect(volatile);
+	}
+
 	suppressingAttackEvents(target?: Pokemon) {
 		return this.activePokemon && this.activePokemon.isActive && this.activePokemon !== target &&
 			this.activeMove && this.activeMove.ignoreAbility;

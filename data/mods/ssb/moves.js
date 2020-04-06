@@ -1303,7 +1303,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Outrage', target);
 		},
 		onHit(target, source, move) {
-			target.addVolatile('Gooey', source, move);
+			target.addVolatile('gooey', source, move);
 		},
 		selfSwitch: true,
 		secondary: null,

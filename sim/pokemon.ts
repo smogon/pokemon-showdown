@@ -1614,11 +1614,11 @@ export class Pokemon {
 	}
 
 	addVolatile(
-		status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null,
-		linkedStatus: string | PureEffect | null = null
+		volatile: string, source: Pokemon | null = null, sourceEffect: Effect | null = null,
+		linkedStatus: string | null = null
 	): boolean | any {
 		let result;
-		status = this.battle.dex.getEffect(status);
+		const status = this.battle.getVolatile(volatile) as PureEffect;
 		if (!this.hp && !status.affectsFainted) return false;
 		if (linkedStatus && source && !source.hp) return false;
 		if (this.battle.event) {
@@ -1627,73 +1627,70 @@ export class Pokemon {
 		}
 		if (!source) source = this;
 
-		if (this.volatiles[status.id]) {
+		if (this.volatiles[volatile]) {
 			if (!status.onRestart) return false;
-			return this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
+			return this.battle.singleEvent('Restart', status, this.volatiles[volatile], this, source, sourceEffect);
 		}
-		if (!this.runStatusImmunity(status.id)) {
+		if (!this.runStatusImmunity(volatile)) {
 			this.battle.debug('immune to volatile status');
 			if (sourceEffect?.status) this.battle.add('-immune', this);
 			return false;
 		}
 		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
 		if (!result) {
-			this.battle.debug('add volatile [' + status.id + '] interrupted');
+			this.battle.debug('add volatile [' + volatile + '] interrupted');
 			return result;
 		}
-		this.volatiles[status.id] = {id: status.id};
-		this.volatiles[status.id].target = this;
+		this.volatiles[volatile] = {id: volatile};
+		this.volatiles[volatile].target = this;
 		if (source) {
-			this.volatiles[status.id].source = source;
-			this.volatiles[status.id].sourcePosition = source.position;
+			this.volatiles[volatile].source = source;
+			this.volatiles[volatile].sourcePosition = source.position;
 		}
-		if (sourceEffect) this.volatiles[status.id].sourceEffect = sourceEffect;
+		if (sourceEffect) this.volatiles[volatile].sourceEffect = sourceEffect;
 		if (status.duration) this.volatiles[status.id].duration = status.duration;
 		if (status.durationCallback) {
-			this.volatiles[status.id].duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
+			this.volatiles[volatile].duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
-		result = this.battle.singleEvent('Start', status, this.volatiles[status.id], this, source, sourceEffect);
+		result = this.battle.singleEvent('Start', status, this.volatiles[volatile], this, source, sourceEffect);
 		if (!result) {
 			// cancel
-			delete this.volatiles[status.id];
+			delete this.volatiles[volatile];
 			return result;
 		}
 		if (linkedStatus && source) {
-			if (!source.volatiles[linkedStatus.toString()]) {
+			if (!source.volatiles[linkedStatus]) {
 				source.addVolatile(linkedStatus, this, sourceEffect);
-				source.volatiles[linkedStatus.toString()].linkedPokemon = [this];
-				source.volatiles[linkedStatus.toString()].linkedStatus = status;
+				source.volatiles[linkedStatus].linkedPokemon = [this];
+				source.volatiles[linkedStatus].linkedStatus = volatile;
 			} else {
-				source.volatiles[linkedStatus.toString()].linkedPokemon.push(this);
+				source.volatiles[linkedStatus].linkedPokemon.push(this);
 			}
-			this.volatiles[status.toString()].linkedPokemon = [source];
-			this.volatiles[status.toString()].linkedStatus = linkedStatus;
+			this.volatiles[volatile].linkedPokemon = [source];
+			this.volatiles[volatile].linkedStatus = linkedStatus;
 		}
 		return true;
 	}
 
-	getVolatile(status: string | Effect) {
-		status = this.battle.dex.getEffect(status) as Effect;
-		if (!this.volatiles[status.id]) return null;
-		return status;
+	getVolatile(volatile: string) {
+		if (!this.volatiles[volatile]) return null;
+		return this.battle.getVolatile(volatile);
 	}
 
-	removeVolatile(status: string | Effect) {
+	removeVolatile(volatile: string) {
 		if (!this.hp) return false;
-		status = this.battle.dex.getEffect(status) as Effect;
-		if (!this.volatiles[status.id]) return false;
-		this.battle.singleEvent('End', status, this.volatiles[status.id], this);
-		const linkedPokemon = this.volatiles[status.id].linkedPokemon;
-		const linkedStatus = this.volatiles[status.id].linkedStatus;
-		delete this.volatiles[status.id];
+		if (!this.volatiles[volatile]) return false;
+		this.battle.singleEvent('End', this.battle.getVolatile(volatile), this.volatiles[volatile], this);
+		const linkedPokemon = this.volatiles[volatile].linkedPokemon;
+		const linkedStatus = this.volatiles[volatile].linkedStatus;
+		delete this.volatiles[volatile];
 		if (linkedPokemon) {
 			this.removeLinkedVolatiles(linkedStatus, linkedPokemon);
 		}
 		return true;
 	}
 
-	removeLinkedVolatiles(linkedStatus: string | Effect, linkedPokemon: Pokemon[]) {
-		linkedStatus = linkedStatus.toString();
+	removeLinkedVolatiles(linkedStatus: string, linkedPokemon: Pokemon[]) {
 		for (const linkedPoke of linkedPokemon) {
 			const volatileData = linkedPoke.volatiles[linkedStatus];
 			if (!volatileData) continue;

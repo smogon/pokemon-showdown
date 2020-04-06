@@ -389,8 +389,8 @@ let BattleStatuses = {
 			}
 
 			this.add('-end', target, 'move: ' + move.name);
-			target.removeVolatile('Protect');
-			target.removeVolatile('Endure');
+			target.removeVolatile('protect');
+			target.removeVolatile('endure');
 
 			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
 				data.moveData.infiltrates = true;
