@@ -909,7 +909,8 @@ export class ModdedDex {
 			const subRuleTable = this.getRuleTable(subformat, depth + 1, repeals);
 			for (const [k, v] of subRuleTable) {
 				// don't check for "already exists" here; multiple inheritance is allowed
-				if (!repeals?.has(k)) {
+				// don't inherit unbans
+				if (!repeals?.has(k) && !k.startsWith('+')) {
 					ruleTable.set(k, v || subformat.name);
 				}
 			}
