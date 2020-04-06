@@ -191,9 +191,6 @@ export const commands: ChatCommands = {
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
-		if (stone.isUnreleased) {
-			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
-		}
 		if (targetid === 'dragonascent') {
 			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits.`);
 		}

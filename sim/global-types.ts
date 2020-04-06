@@ -792,7 +792,6 @@ interface EffectData {
 	effectType?: string;
 	infiltrates?: boolean;
 	isNonstandard?: Nonstandard | null;
-	isUnreleased?: boolean | 'Past';
 	/**
 	 * `true` for generic Z-moves like Gigavolt Havoc.
 	 * Also `true` for Z-powered status moves like Z-Encore.
@@ -1101,7 +1100,6 @@ interface SpeciesFormatsData {
 	essentialMove?: string;
 	exclusiveMoves?: readonly string[];
 	isNonstandard?: Nonstandard | null;
-	isUnreleased?: boolean | 'Past';
 	maleOnlyHidden?: boolean;
 	randomBattleMoves?: readonly string[];
 	randomDoubleBattleMoves?: readonly string[];

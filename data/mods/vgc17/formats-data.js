@@ -4,67 +4,67 @@
 let BattleFormatsData = {
 	pikachupartner: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	marowakalolatotem: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	ribombeetotem: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	rockruffdusk: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	lycanrocdusk: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	araquanidtotem: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	necrozmaduskmane: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	necrozmadawnwings: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	necrozmaultra: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	poipole: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	naganadel: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	stakataka: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 	blacephalon: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
 	},
 };

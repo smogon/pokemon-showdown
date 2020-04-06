@@ -626,8 +626,8 @@ const commands = {
 						details["Natural Gift Type"] = item.naturalGift.type;
 						details["Natural Gift Base Power"] = item.naturalGift.basePower;
 					}
-					if (item.isUnreleased) {
-						details["Unreleased in Gen " + dex.gen] = "";
+					if (item.isNonstandard) {
+						details["Unobtainable in Gen " + dex.gen] = "";
 					}
 				}
 				break;
@@ -721,8 +721,8 @@ const commands = {
 					if (move.id === 'mirrormove') {
 						details[`<a href="https://${Config.routes.dex}/tags/nonmirror">Non-Mirrorable Moves</a>`] = '';
 					}
-					if (move.isUnreleased) {
-						details["Unreleased in Gen " + dex.gen] = "";
+					if (move.isNonstandard === 'Unobtainable') {
+						details["Unobtainable in Gen " + dex.gen] = "";
 					}
 				}
 				break;
