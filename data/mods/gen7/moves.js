@@ -635,8 +635,7 @@ let BattleMovedex = {
 	},
 	lightofruin: {
 		inherit: true,
-		isNonstandard: null,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	lightthatburnsthesky: {
 		inherit: true,

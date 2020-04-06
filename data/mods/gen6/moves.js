@@ -474,11 +474,11 @@ let BattleMovedex = {
 	},
 	thousandarrows: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	thousandwaves: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	thrash: {
 		inherit: true,
