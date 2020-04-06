@@ -3594,7 +3594,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	xerneas: {
-		randomBattleMoves: ["closecombat", "defog", "playrough", "rockslide", "zenheadbutt"],
+		randomBattleMoves: ["calmmind", "focusblast", "moonblast", "psyshock", "thunderbolt"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
