@@ -714,8 +714,7 @@ class RandomTeams {
 					if (counter.Physical + counter.Special < 3 || hasMove['rapidspin']) rejected = true;
 					break;
 				case 'zenheadbutt':
-					if (movePool.includes('bellydrum') || hasMove['bellydrum'] && hasMove['substitute']) rejected = true;
-					if (!hasType['Psychic'] && (movePool.includes('closecombat') || movePool.includes('highjumpkick'))) rejected = true;
+					if (movePool.includes('bellydrum') || movePool.includes('highjumpkick') || hasMove['bellydrum'] && hasMove['substitute']) rejected = true;
 					break;
 
 				// Set up once and only if we have the moves for it
