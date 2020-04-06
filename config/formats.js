@@ -269,7 +269,7 @@ let Formats = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles'],
+		ruleset: ['Standard Doubles', 'Dynamax Clause'],
 		banlist: ['DUber', 'Beat Up'],
 	},
 	{
