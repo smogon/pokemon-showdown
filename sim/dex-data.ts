@@ -96,11 +96,6 @@ export class BasicEffect implements EffectData {
 	 */
 	gen: number;
 	/**
-	 * Is this item/move/ability/pokemon unreleased? True if there's
-	 * no known way to get access to it without cheating.
-	 */
-	isUnreleased: boolean | 'Past';
-	/**
 	 * A shortened form of the description of this effect.
 	 * Not all effects have this.
 	 */
@@ -136,7 +131,6 @@ export class BasicEffect implements EffectData {
 		this.exists = !!(this.exists && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
-		this.isUnreleased = data.isUnreleased || false;
 		this.shortDesc = data.shortDesc || '';
 		this.desc = data.desc || '';
 		this.isNonstandard = data.isNonstandard || null;

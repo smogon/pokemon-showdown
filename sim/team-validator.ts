@@ -1272,17 +1272,6 @@ export class TeamValidator {
 				return `${tierSpecies.name} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
-		} else if (tierSpecies.isUnreleased) {
-			let isUnreleased: boolean | 'Past' = tierSpecies.isUnreleased;
-			if (isUnreleased === 'Past' && this.minSourceGen < dex.gen) isUnreleased = false;
-
-			if (isUnreleased) {
-				banReason = ruleTable.check('unreleased', setHas);
-				if (banReason) {
-					return `${tierSpecies.name} is unreleased.`;
-				}
-				if (banReason === '') return null;
-			}
 		}
 
 		banReason = ruleTable.check('pokemontag:allpokemon');
