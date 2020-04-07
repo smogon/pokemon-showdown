@@ -357,11 +357,6 @@ export class TeamValidator {
 			problems.push((set.name || set.species) + ' is higher than level 100.');
 		}
 
-		const nameSpecies = dex.getSpecies(set.name);
-		if (nameSpecies.exists && nameSpecies.name.toLowerCase() === set.name.toLowerCase()) {
-			// Name must not be the name of another pokemon
-			set.name = '';
-		}
 		set.name = set.name || species.baseSpecies;
 		let name = set.species;
 		if (set.species !== set.name && species.baseSpecies !== set.name) {
@@ -696,6 +691,16 @@ export class TeamValidator {
 		}
 		if (format.onValidateSet) {
 			problems = problems.concat(format.onValidateSet.call(this, set, format, setHas, teamHas) || []);
+		}
+
+		const nameSpecies = dex.getSpecies(set.name);
+		if (nameSpecies.exists && nameSpecies.name.toLowerCase() === set.name.toLowerCase()) {
+			// nickname is the name of a species
+			if (nameSpecies.name !== species.name && nameSpecies.name !== species.baseSpecies) {
+				// nickname species doesn't match actual species
+				// Nickname Clause
+				problems.push(`${name} must not be nicknamed a different Pokémon species than what it actually is.`);
+			}
 		}
 
 		if (!problems.length) {
