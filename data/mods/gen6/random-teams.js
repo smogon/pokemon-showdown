@@ -851,31 +851,18 @@ class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		/** @type {{[tier: string]: number}} */
-		let levelScale = {
-			'(PU)': 89,
-			PU: 88,
-			PUBL: 87,
-			NU: 86,
-			NUBL: 85,
-			RU: 84,
-			RUBL: 83,
-			UU: 82,
-			UUBL: 81,
-			'(OU)': 80,
-			OU: 80,
-			Unreleased: 80,
-			Uber: 78,
+		const levelScale = {
+			uber: 78, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88,
 		};
 		/** @type {{[forme: string]: number}} */
-		let customScale = {
+		const customScale = {
 			// Banned Ability
 			Dugtrio: 82, Gothitelle: 82, Ninetales: 84, Politoed: 84, Wobbuffet: 82,
-
 			// Holistic judgement
-			'Genesect-Douse': 80,
-			Castform: 100, Delibird: 100, Spinda: 100, Unown: 100,
+			Castform: 100, Delibird: 100, 'Genesect-Douse': 80, Spinda: 100, Unown: 100,
 		};
-		let level = levelScale[species.tier] || 90;
+		let tier = toID(species.tier).replace('bl', '');
+		let level = levelScale[tier] || (species.nfe ? 90 : 80);
 		if (customScale[forme]) level = customScale[forme];
 
 		// Prepare optimal HP

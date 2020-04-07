@@ -606,6 +606,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			RU: 84,
 			NUBL: 85,
 			NU: 86,
+			'(NU)': 87,
 		};
 		/** @type {{[forme: string]: number}} */
 		let customScale = {
