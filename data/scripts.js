@@ -435,6 +435,7 @@ let BattleScripts = {
 	hitStepAccuracy(targets, pokemon, move) {
 		const hitResults = [];
 		for (let [i, target] of targets.entries()) {
+			this.activeTarget = target;
 			// calculate true accuracy
 			/** @type {number | true} */ // TypeScript bug: incorrectly infers {number | true} as {number | boolean}
 			let accuracy = move.accuracy;
@@ -867,6 +868,7 @@ let BattleScripts = {
 		for (let i = 0; i < targets.length; i++) {
 			let target = targets[i];
 			if (!target) continue;
+			this.activeTarget = target;
 			damage[i] = undefined;
 			let curDamage = this.getDamage(pokemon, target, moveData);
 			// getDamage has several possible return values:

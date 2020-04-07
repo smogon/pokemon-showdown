@@ -78,7 +78,7 @@ describe('Unaware', function () {
 		battle.makeChoices('move splash', 'move shadowsneak');
 		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, damage);
 	});
-	it.skip('should only apply to targets with Unaware in battles with multiple Pokemon', function () {
+	it('should only apply to targets with Unaware in battles with multiple Pokemon', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'manaphy', moves: ['tailglow', 'surf']},
 			{species: 'slowbro', ability: 'unaware', moves: ['sleeptalk']},
