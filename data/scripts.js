@@ -1193,13 +1193,18 @@ let BattleScripts = {
 	},
 
 	canMegaEvo(pokemon) {
-		let altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
-		let item = pokemon.getItem();
-		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.name;
-		if (item.megaEvolves !== pokemon.baseSpecies.baseSpecies || item.megaStone === pokemon.name) {
-			return null;
+		const species = pokemon.baseSpecies;
+		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
+		const item = pokemon.getItem();
+		// Mega Rayquaza
+		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+			return altForme.name;
 		}
-		return item.megaStone;
+		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
+		if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
+			return item.megaStone;
+		}
+		return null;
 	},
 
 	canUltraBurst(pokemon) {
