@@ -182,6 +182,7 @@ Major Contributors
 Contributors
 
 - Alexander B. [mathfreak231] - Development
+- [Anubis, Lusamine] - Research (game mechanics)
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
 - Avery Zimmer [Lyren, SolarisFox] - Development
 - Ben Davies [Morfent] - Development
