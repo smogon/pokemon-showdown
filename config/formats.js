@@ -463,7 +463,8 @@ let Formats = [
 			'Darmanitan-Galar', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo',
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Arena Trap', 'Harvest', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magic Guard', 'Mold Breaker',
-			'Moody', 'Neutralizing Gas', 'Regenerator', 'Shadow Tag', 'Speed Boost', 'Trace', 'Water Bubble', 'Baton Pass',
+			'Moody', 'Neutralizing Gas', 'Regenerator', 'Shadow Tag', 'Simple', 'Speed Boost', 'Trace', 'Water Bubble',
+			'Baton Pass',
 		],
 		/** @param {Pokemon} pokemon */
 		// @ts-ignore
