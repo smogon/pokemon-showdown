@@ -1504,8 +1504,8 @@ let commands = {
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay} in <<${room.roomid}>>)`);
 		}
 	},
+
 	resettwist: 'settwist',
-	twist: 'settwist',
 	settwist(target, room, user) {
 		if (room.roomid !== 'scavengers' && !(room.parent && room.parent.roomid === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (this.cmd.includes('reset')) target = 'RESET';
@@ -1544,6 +1544,21 @@ let commands = {
 				scavsRoom.roomlog(`(${user.name} has reset the official twist in <<${room.roomid}>>)`);
 			}
 		}
+	},
+
+	twists(target, room, user) {
+		if (room.roomid !== 'scavengers' && !(room.parent && room.parent.roomid === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
+		if (!this.can('mute', null, room)) return false;
+		if (!this.runBroadcast()) return false;
+
+		let buffer = `<table><tr><th>Twist</th><th>Description</th></tr>`;
+		buffer += Object.keys(ScavMods.twists).map(twistid => {
+			let twist = ScavMods.twists[twistid];
+			return Chat.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`;
+		}).join('');
+		buffer += `</table>`;
+
+		this.sendReply(`|raw|<div class="ladder infobox-limited">${buffer}</div>`);
 	},
 
 	/**
@@ -1934,19 +1949,23 @@ exports.commands = {
 			"- /scav addpoints <em>[user], [amount]</em> - gives the user the amount of scavenger points towards the monthly ladder. (Requires: % @ * # & ~)",
 			"- /scav removepoints <em>[user], [amount]</em> - takes the amount of scavenger points from the user towards the monthly ladder. (Requires: % @ * # & ~)",
 			"- /scav resetladder - resets the monthly scavenger leaderboard. (Requires: # & ~)",
-			"- /scav setpoints [1st place], [2nd place], [3rd place], [4th place], [5th place], ... - sets the point values for the wins. Use `/scav setpoints` to view what the current point values are. (Requires: # & ~)",
-			"- /scav setblitz [value] ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: # & ~)",
+			"- /scav setpoints <em>[1st place], [2nd place], [3rd place], [4th place], [5th place], ...</em> - sets the point values for the wins. Use `/scav setpoints` to view what the current point values are. (Requires: # & ~)",
+			"- /scav setblitz <em>[value]</em> ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: # & ~)",
 			"- /scav queue(rated/unrated) <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # & ~)",
-			"- /scav queuerecycled [number] - queues a recycled hunt from the database. If number is left blank, then a random hunt is queued.",
+			"- /scav queuerecycled <em>[number]</em> - queues a recycled hunt from the database. If number is left blank, then a random hunt is queued.",
 			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # & ~)",
-			"- /scav defaulttimer [value] - sets the default timer applied to automatically started hunts from the queue.",
+			"- /scav defaulttimer <em>[value]</em> - sets the default timer applied to automatically started hunts from the queue.",
+			"- /scav twists - shows a list of all the twists that are available on the server.",
+			"- /scav settwist <em>[twist name]</em> - sets the default twist mode for all official hunts. (Requires: # & ~)",
+			"- /scav resettwist - resets the default twist mode for all official hunts to nothing. (Requires: # & ~)",
+			"- /starttwisthunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em>  - creates a new regular scavenger hunt that uses a twist mode.  This can be used inside a scavenger game mode.",
 			"- /nexthunt - starts the next hunt in the queue.",
 			"- /recycledhunts - Modify the database of recycled hunts and enable/disable autoqueing them. More detailed help can be found in /recycledhuntshelp",
 		].join('<br />');
 
 		const gamesCommands = [
 			"<strong>Game commands:</strong>",
-			"- /scav game <em>[kogames | jumpstart | pointrally | scavengergames]</em> - starts a new scripted scavenger game. (Requires: % @ * # & ~)",
+			"- /scav game create <em>[kogames | pointrally | scavengergames]</em> - starts a new scripted scavenger game. (Requires: % @ * # & ~)",
 			"- /scav game end - ends the current scavenger game. (Requires: % @ * # & ~)",
 			"- /scav game kick <em>[user]</em> - kicks the user from the current scavenger game. (Requires: % @ * # & ~)",
 			"- /scav game score - shows the current scoreboard for any game with a leaderboard.",
