@@ -270,7 +270,7 @@ describe('Choices', function () {
 			}
 		});
 
-		it.skip('should shift the Pokémon as a standard priority move action', function () {
+		it('should shift the Pokémon as a standard priority move action', function () {
 			battle = common.gen(5).createBattle({gameType: 'triples'});
 			battle.setPlayer('p1', {team: [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
