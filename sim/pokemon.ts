@@ -20,7 +20,9 @@ interface MoveSlot {
 	virtual?: boolean;
 }
 
-interface EffectState {
+export interface EffectState {
+	// TODO: set this to be an actual number after converting data/ to .ts
+	duration?: number | any;
 	[k: string]: any;
 }
 

@@ -6,16 +6,17 @@
  */
 
 import {State} from './state';
+import {EffectState} from './pokemon';
 
 export class Field {
 	readonly battle: Battle;
 	readonly id: ID;
 
 	weather: ID;
-	weatherData: AnyObject;
+	weatherData: EffectState;
 	terrain: ID;
-	terrainData: AnyObject;
-	pseudoWeather: AnyObject;
+	terrainData: EffectState;
+	pseudoWeather: {[id: string]: EffectState};
 
 	constructor(battle: Battle) {
 		this.battle = battle;

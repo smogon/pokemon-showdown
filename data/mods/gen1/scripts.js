@@ -585,14 +585,7 @@ let BattleScripts = {
 				return false;
 			}
 		}
-		let targetHasSub = false;
-		if (target) {
-			let targetSub = target.getVolatile('substitute');
-			if (targetSub !== null) {
-				// @ts-ignore
-				targetHasSub = (targetSub.hp > 0);
-			}
-		}
+		let targetHasSub = !!(target && target.volatiles['substitute']);
 
 		// Here's where self effects are applied.
 		let doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
