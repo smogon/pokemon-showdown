@@ -156,8 +156,7 @@ export class BattleQueue extends Array<Action> {
 				megaEvo: 104,
 				runDynamax: 105,
 
-				shift: 106,
-
+				shift: 200,
 				// default is 200 (for moves)
 
 				residual: 300,
