@@ -75,6 +75,7 @@ const TWISTS = {
 	'perfectscore': {
 		name: 'Perfect Score',
 		id: 'perfectscore',
+		desc: "Players who finish the hunt without submitting a single wrong answer get a shoutout!",
 
 		onLeave(player) {
 			if (!this.leftGame) this.leftGame = [];
@@ -106,6 +107,7 @@ const TWISTS = {
 	'incognito': {
 		name: 'Incognito',
 		id: 'incognito',
+		desc: "Upon answering the last question correctly, the player's finishing time will not be announced in the room!  Results will only be known at the end of the hunt.",
 
 		onCorrectAnswer(player, value) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
@@ -133,6 +135,7 @@ const TWISTS = {
 	'blindincognito': {
 		name: 'Blind Incognito',
 		id: 'blindincognito',
+		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct!  You may be in for a nasty surprise when the hunt ends!",
 
 		onAnySubmit(player, value) {
 			if (player.completed) {
