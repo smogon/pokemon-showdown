@@ -464,7 +464,7 @@ let Formats = [
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Arena Trap', 'Drizzle', 'Drought', 'Harvest', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Bounce',
 			'Magic Guard', 'Mold Breaker', 'Moody', 'Neutralizing Gas', 'Regenerator', 'Sand Stream', 'Shadow Tag',
-			'Simple', 'Snow Warning', 'Speed Boost', 'Trace', 'Water Bubble', 'Baton Pass',
+			'Simple', 'Snow Warning', 'Speed Boost', 'Steely Spirit', 'Tinted Lens', 'Trace', 'Water Bubble', 'Baton Pass',
 		],
 		/** @param {Pokemon} pokemon */
 		// @ts-ignore
