@@ -215,9 +215,9 @@ export const LogViewer = new class {
 				const lineNum: number = lines.indexOf(line);
 				const context = (up = true, num: number) => {
 					if (up) {
-						return this.renderLine(lines[lineNum + num]);
+						return this.renderLine(`${lines[lineNum + num]}`);
 					} else {
-						return this.renderLine(lines[lineNum - num]);
+						return this.renderLine(`${lines[lineNum - num]}`);
 					}
 				};
 				matches.push(
