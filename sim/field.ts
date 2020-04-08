@@ -20,6 +20,8 @@ export class Field {
 
 	constructor(battle: Battle) {
 		this.battle = battle;
+		const fieldScripts = this.battle.format.field || this.battle.dex.data.Scripts.field;
+		if (fieldScripts) Object.assign(this, fieldScripts);
 		this.id = '';
 
 		this.weather = '';
