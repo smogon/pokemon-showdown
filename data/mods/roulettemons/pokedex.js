@@ -392,7 +392,7 @@ let BattlePokedex = {
 	},
 	dolphena: {
 		num: 49.5,
-		species: "Dolphena",
+		name: "Dolphena",
 		types: ["Water", "Dragon"],
 		baseStats: {hp: 55, atk: 88, def: 103, spa: 128, spd: 121, spe: 105},
 		abilities: {0: "Psychic Surge", 1: "Competitive", H: "Anticipation"},
@@ -400,7 +400,7 @@ let BattlePokedex = {
 	},
 	catelax: {
 		num: 50.5,
-		species: "Catelax",
+		name: "Catelax",
 		types: ["Bug"],
 		baseStats: {hp: 101, atk: 93, def: 133, spa: 43, spd: 96, spe: 134},
 		abilities: {0: "Neutralizing Gas", 1: "No Guard", H: "Shed Skin"},
@@ -408,7 +408,7 @@ let BattlePokedex = {
 	},
 	fluffora: {
 		num: 51.5,
-		species: "Fluffora",
+		name: "Fluffora",
 		types: ["Grass"],
 		baseStats: {hp: 72, atk: 20, def: 110, spa: 68, spd: 163, spe: 167},
 		abilities: {0: "Snow Warning", 1: "Cursed Body", H: "Sap Sipper"},
@@ -416,7 +416,7 @@ let BattlePokedex = {
 	},
 	tigire: {
 		num: 52.5,
-		species: "Tigire",
+		name: "Tigire",
 		types: ["Fire"],
 		baseStats: {hp: 99, atk: 125, def: 66, spa: 70, spd: 111, spe: 129},
 		abilities: {0: "Turboblaze", 1: "Anger Point", H: "Gluttony"},
