@@ -462,9 +462,11 @@ let Formats = [
 		banlist: [
 			'Darmanitan-Galar', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo',
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
-			'Arena Trap', 'Drizzle', 'Drought', 'Harvest', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Bounce',
-			'Magic Guard', 'Mold Breaker', 'Moody', 'Neutralizing Gas', 'Regenerator', 'Sand Stream', 'Shadow Tag',
-			'Simple', 'Snow Warning', 'Speed Boost', 'Steely Spirit', 'Tinted Lens', 'Trace', 'Water Bubble', 'Baton Pass',
+			'Arena Trap', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Electric Surge ++ Surge Surfer', 'Harvest',
+			'Huge Power', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magic Guard', 'Mold Breaker', 'Moody', 'Neutralizing Gas',
+			'Sand Stream ++ Sand Rush', 'Sand Veil', 'Shadow Tag', 'Simple', 'Snow Cloak', 'Snow Warning ++ Slush Rush',
+			'Speed Boost', 'Steely Spirit', 'Tinted Lens', 'Trace', 'Unaware', 'Water Bubble', 'Baton Pass',
+			
 		],
 		/** @param {Pokemon} pokemon */
 		// @ts-ignore
