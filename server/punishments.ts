@@ -878,7 +878,7 @@ export const Punishments = new class {
 		let affected: User[] = [];
 
 		if (!user || userId && userId !== user.id) {
-			affected = Punishments.roomPunishName(room, userId, punishment);
+			affected = Punishments.roomPunishName(room, userId!, punishment);
 		}
 
 		if (user) {
