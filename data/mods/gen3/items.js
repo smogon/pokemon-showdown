@@ -253,7 +253,7 @@ let BattleItems = {
 	},
 	quickclaw: {
 		inherit: true,
-		onModifyPriority(priority, pokemon) {
+		onFractionalPriority(priority, pokemon) {
 			if (this.randomChance(1, 5)) {
 				return Math.round(priority) + 0.1;
 			}

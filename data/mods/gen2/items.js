@@ -80,7 +80,7 @@ let BattleItems = {
 	quickclaw: {
 		inherit: true,
 		desc: "Each turn, holder has a ~23.4% chance to move first in its priority bracket.",
-		onModifyPriority(priority, pokemon) {
+		onFractionalPriority(priority, pokemon) {
 			if (this.randomChance(60, 256)) {
 				return Math.round(priority) + 0.1;
 			}

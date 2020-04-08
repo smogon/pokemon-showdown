@@ -47,7 +47,7 @@ let BattleItems = {
 	},
 	custapberry: {
 		inherit: true,
-		onModifyPriority() {},
+		onFractionalPriority() {},
 		onBeforeTurn(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
 				let action = this.queue.willMove(pokemon);
