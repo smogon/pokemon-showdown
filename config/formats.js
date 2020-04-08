@@ -79,7 +79,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU'],
+		ruleset: ['[Gen 8] OU', '-Melmetal'],
 		banlist: ['OU', 'UUBL'],
 	},
 	{
@@ -208,7 +208,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU', '+CAP'],
+		ruleset: ['[Gen 8] OU', '-Melmetal', '+CAP'],
 		banlist: ['Crucibelle-Mega'],
 	},
 	{
@@ -735,7 +735,7 @@ let Formats = [
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['[Gen 8] OU'],
+		ruleset: ['[Gen 8] OU', '-Melmetal'],
 		banlist: ['Damp Rock', 'Heat Rock'],
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return false;
@@ -1209,7 +1209,7 @@ let Formats = [
 
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['[Gen 7] RU'],
+		ruleset: ['[Gen 7] RU', 'Drought'],
 		banlist: ['RU', 'NUBL'],
 	},
 	{
@@ -2028,7 +2028,6 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['[Gen 4] UU'],
 		banlist: ['UU', 'NUBL'],
-		unbanlist: ['Sand Veil'],
 	},
 	{
 		name: "[Gen 4] PU",
@@ -2046,7 +2045,6 @@ let Formats = [
 			'Ninetales', 'Piloswine', 'Poliwrath', 'Porygon2', 'Regice', 'Regirock', 'Roselia', 'Sandslash',
 			'Sharpedo', 'Shiftry', 'Skuntank', 'Slowking', 'Tauros', 'Typhlosion', 'Venomoth', 'Vileplume',
 		],
-		unbanlist: ['Sand Veil'],
 	},
 	{
 		name: "[Gen 4] LC",
