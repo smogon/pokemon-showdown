@@ -2153,7 +2153,8 @@ let BattleAbilities = {
 			} else {
 				let types = pokemon.baseSpecies.types;
 				if (pokemon.getTypes().join() === types.join() || !pokemon.setType(types)) return;
-				this.add('-start', pokemon, 'typechange', types, '[from] ability: Mimicry');
+				this.add('-start', pokemon, 'typechange', types.join('/'), '[from] ability: Mimicry');
+				this.hint("Transform Mimicry changes you to your original un-transformed types.");
 			}
 		},
 		onAnyTerrainStart() {

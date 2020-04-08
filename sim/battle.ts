@@ -57,7 +57,7 @@ interface EventListener extends EventListenerWithoutPriority {
 	speed?: number;
 }
 
-type Part = string | number | boolean | AnyObject | null | undefined;
+type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | undefined;
 
 // The current request state of the Battle:
 //
@@ -1373,7 +1373,7 @@ export class Battle {
 		return true;
 	}
 
-	swapPosition(pokemon: Pokemon, slot: number, attributes?: string | AnyObject) {
+	swapPosition(pokemon: Pokemon, slot: number, attributes?: string) {
 		if (slot >= pokemon.side.active.length) {
 			throw new Error("Invalid swap position");
 		}
