@@ -207,7 +207,7 @@ export const LogViewer = new class {
 		const searches: string[] = search.split('-');
 		const searchInputs = (phrase: string, terms: string[]) => (
 			terms.every((word) => {
-				return new RegExp(word, "i").exec(phrase);
+				return new RegExp(word, "i").test(phrase);
 			})
 		);
 		for (const line of lines) {
