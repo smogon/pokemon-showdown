@@ -501,9 +501,9 @@ let Formats = [
 				pokemon.addVolatile(effect);
 			}
 		},
-		battle: {
+		field: {
 			suppressingWeather() {
-				for (const side of this.sides) {
+				for (const side of this.battle.sides) {
 					for (const pokemon of side.active) {
 						if (pokemon && !pokemon.ignoringAbility() && pokemon.hasAbility('Cloud Nine')) {
 							return true;
