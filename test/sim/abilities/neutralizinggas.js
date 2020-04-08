@@ -59,7 +59,7 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices('move toxic', 'move uturn');
 		battle.makeChoices('', 'switch 2');
 		battle.makeChoices('switch 2', 'switch 2');
-		assert.strictEqual(battle.p2.active[0].status, 'tox');
+		assert.equal(battle.p2.active[0].status, 'tox');
 	});
 
 	it('should negate abilities that modify move type', function () {
@@ -67,6 +67,18 @@ describe('Neutralizing Gas', function () {
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'neutralizinggas', moves: ['laserfocus']}]});
 		battle.setPlayer('p2', {team: [{species: "Sylveon", ability: 'pixilate', moves: ['hypervoice']}]});
 		battle.makeChoices('move laserfocus', 'move hypervoice');
+		assert.fullHP(battle.p1.active[0]);
+	});
+
+	it("should negate abilities that damage the attacker", function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [
+			{species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['payback']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Ferrothorn', ability: 'ironbarbs', moves: ['rockpolish']},
+		]});
+		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0]);
 	});
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert');
+const assert = require('assert').strict;
 const common = require('./../../common');
 
 const unimportantPokemon = {species: 'magikarp', moves: ['splash']};
@@ -11,7 +11,7 @@ describe(`[Hackmons] Arceus`, function () {
 			[{species: 'arceus', ability: 'multitype', item: 'flameplate', moves: ['rest']}],
 			[unimportantPokemon],
 		]);
-		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Fire"]);
+		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire"]);
 	});
 
 	it(`in Steel forme should should be Water-typed to match the held Splash Plate`, function () {
@@ -19,7 +19,7 @@ describe(`[Hackmons] Arceus`, function () {
 			[{species: 'arceussteel', ability: 'multitype', item: 'splashplate', moves: ['rest']}],
 			[unimportantPokemon],
 		]);
-		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Water"]);
+		assert.deepEqual(battle.p1.active[0].getTypes(), ["Water"]);
 	});
 
 	it(`in a typed forme should be Normal-typed if no plate is held`, function () {
@@ -27,7 +27,7 @@ describe(`[Hackmons] Arceus`, function () {
 			[{species: 'Arceusfire', ability: 'multitype', item: 'leftovers', moves: ['rest']}],
 			[unimportantPokemon],
 		]);
-		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Normal"]);
+		assert.deepEqual(battle.p1.active[0].getTypes(), ["Normal"]);
 	});
 
 	it(`in a typed forme should be Normal-typed despite holding a plate if Arceus does not have the Multitype ability`, function () {
@@ -35,6 +35,6 @@ describe(`[Hackmons] Arceus`, function () {
 			[{species: 'arceusfire', ability: 'truant', item: 'flameplate', moves: ['rest']}],
 			[unimportantPokemon],
 		]);
-		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Normal"]);
+		assert.deepEqual(battle.p1.active[0].getTypes(), ["Normal"]);
 	});
 });

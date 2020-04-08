@@ -67,7 +67,7 @@ let BattleScripts = {
 				changed = true;
 				// Recalculate the modified stat
 				// @ts-ignore
-				let stat = this.template.baseStats[i];
+				let stat = this.species.baseStats[i];
 				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
 				// @ts-ignore
@@ -585,14 +585,7 @@ let BattleScripts = {
 				return false;
 			}
 		}
-		let targetHasSub = false;
-		if (target) {
-			let targetSub = target.getVolatile('substitute');
-			if (targetSub !== null) {
-				// @ts-ignore
-				targetHasSub = (targetSub.hp > 0);
-			}
-		}
+		let targetHasSub = !!(target && target.volatiles['substitute']);
 
 		// Here's where self effects are applied.
 		let doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
@@ -757,7 +750,7 @@ let BattleScripts = {
 		if (!isCrit) {
 			// In gen 1, the critical chance is based on speed.
 			// First, we get the base speed, divide it by 2 and floor it. This is our current crit chance.
-			let critChance = Math.floor(pokemon.template.baseStats['spe'] / 2);
+			let critChance = Math.floor(pokemon.species.baseStats['spe'] / 2);
 
 			// Now we check for focus energy volatile.
 			if (pokemon.volatiles['focusenergy']) {

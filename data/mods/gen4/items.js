@@ -2,15 +2,15 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
-	"adamantorb": {
+	adamantorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.template.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
+			if (move && user.species.name === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
 		},
 	},
-	"bigroot": {
+	bigroot: {
 		inherit: true,
 		onTryHeal(damage, target, source, effect) {
 			/**@type {{[k: string]: number}} */
@@ -20,19 +20,19 @@ let BattleItems = {
 			}
 		},
 	},
-	"choiceband": {
+	choiceband: {
 		inherit: true,
 		onStart() { },
 	},
-	"choicescarf": {
+	choicescarf: {
 		inherit: true,
 		onStart() { },
 	},
-	"choicespecs": {
+	choicespecs: {
 		inherit: true,
 		onStart() { },
 	},
-	"chopleberry": {
+	chopleberry: {
 		inherit: true,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.causedCrashDamage) return damage;
@@ -45,14 +45,14 @@ let BattleItems = {
 			}
 		},
 	},
-	"custapberry": {
+	custapberry: {
 		inherit: true,
 		onModifyPriority() {},
 		onBeforeTurn(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
-				let action = this.willMove(pokemon);
+				let action = this.queue.willMove(pokemon);
 				if (!action) return;
-				this.insertQueue({
+				this.queue.insertChoice({
 					choice: 'event',
 					event: 'Custap',
 					priority: action.priority + 0.1,
@@ -63,32 +63,32 @@ let BattleItems = {
 			}
 		},
 		onCustap(pokemon) {
-			let action = this.willMove(pokemon);
+			let action = this.queue.willMove(pokemon);
 			this.debug('custap action: ' + action);
 			if (action && pokemon.eatItem()) {
-				this.cancelAction(pokemon);
+				this.queue.cancelAction(pokemon);
 				this.add('-message', "Custap Berry activated.");
 				this.runAction(action);
 			}
 		},
 	},
-	"deepseascale": {
+	deepseascale: {
 		inherit: true,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
+			if (pokemon.species.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
 	},
-	"deepseatooth": {
+	deepseatooth: {
 		inherit: true,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
+			if (pokemon.species.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
 	},
-	"focussash": {
+	focussash: {
 		inherit: true,
 		desc: "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use.",
 		onDamage() { },
@@ -111,32 +111,21 @@ let BattleItems = {
 			},
 		},
 	},
-	"griseousorb": {
+	griseousorb: {
 		inherit: true,
 		desc: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power.",
 		onBasePower(basePower, user, target, move) {
-			if (user.template.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
+			if (user.species.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
 		},
 	},
-	"ironball": {
+	ironball: {
 		inherit: true,
 		onEffectiveness() {},
 		desc: "Holder's Speed is halved and it becomes grounded.",
 	},
-	"jabocaberry": {
-		inherit: true,
-		onAfterDamage() {},
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move && move.category === 'Physical') {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target, null, true);
-				}
-			}
-		},
-	},
-	"kingsrock": {
+	kingsrock: {
 		inherit: true,
 		onModifyMove(move) {
 			let affectedByKingsRock = ['aerialace', 'aeroblast', 'aircutter', 'airslash', 'aquajet', 'aquatail', 'armthrust', 'assurance', 'attackorder', 'aurasphere', 'avalanche', 'barrage', 'beatup', 'bide', 'bind', 'blastburn', 'bonerush', 'bonemerang', 'bounce', 'bravebird', 'brickbreak', 'brine', 'bugbite', 'bulletpunch', 'bulletseed', 'chargebeam', 'clamp', 'closecombat', 'cometpunch', 'crabhammer', 'crosschop', 'crosspoison', 'crushgrip', 'cut', 'darkpulse', 'dig', 'discharge', 'dive', 'doublehit', 'doublekick', 'doubleslap', 'doubleedge', 'dracometeor', 'dragonbreath', 'dragonclaw', 'dragonpulse', 'dragonrage', 'dragonrush', 'drainpunch', 'drillpeck', 'earthpower', 'earthquake', 'eggbomb', 'endeavor', 'eruption', 'explosion', 'extremespeed', 'falseswipe', 'feintattack', 'firefang', 'firespin', 'flail', 'flashcannon', 'fly', 'forcepalm', 'frenzyplant', 'frustration', 'furyattack', 'furycutter', 'furyswipes', 'gigaimpact', 'grassknot', 'gunkshot', 'gust', 'gyroball', 'hammerarm', 'headsmash', 'hiddenpower', 'highjumpkick', 'hornattack', 'hydrocannon', 'hydropump', 'hyperbeam', 'iceball', 'icefang', 'iceshard', 'iciclespear', 'ironhead', 'judgment', 'jumpkick', 'karatechop', 'lastresort', 'lavaplume', 'leafblade', 'leafstorm', 'lowkick', 'machpunch', 'magicalleaf', 'magmastorm', 'magnetbomb', 'magnitude', 'megakick', 'megapunch', 'megahorn', 'meteormash', 'mirrorshot', 'mudbomb', 'mudshot', 'muddywater', 'nightshade', 'nightslash', 'ominouswind', 'outrage', 'overheat', 'payday', 'payback', 'peck', 'petaldance', 'pinmissile', 'pluck', 'poisonjab', 'poisontail', 'pound', 'powergem', 'powerwhip', 'psychoboost', 'psychocut', 'psywave', 'punishment', 'quickattack', 'rage', 'rapidspin', 'razorleaf', 'razorwind', 'return', 'revenge', 'reversal', 'roaroftime', 'rockblast', 'rockclimb', 'rockthrow', 'rockwrecker', 'rollingkick', 'rollout', 'sandtomb', 'scratch', 'seedbomb', 'seedflare', 'seismictoss', 'selfdestruct', 'shadowclaw', 'shadowforce', 'shadowpunch', 'shadowsneak', 'shockwave', 'signalbeam', 'silverwind', 'skullbash', 'skyattack', 'skyuppercut', 'slam', 'slash', 'snore', 'solarbeam', 'sonicboom', 'spacialrend', 'spikecannon', 'spitup', 'steelwing', 'stoneedge', 'strength', 'struggle', 'submission', 'suckerpunch', 'surf', 'swift', 'tackle', 'takedown', 'thrash', 'thunderfang', 'triplekick', 'trumpcard', 'twister', 'uturn', 'uproar', 'vacuumwave', 'visegrip', 'vinewhip', 'vitalthrow', 'volttackle', 'wakeupslap', 'watergun', 'waterpulse', 'waterfall', 'weatherball', 'whirlpool', 'wingattack', 'woodhammer', 'wrap', 'wringout', 'xscissor', 'zenheadbutt'];
@@ -149,7 +138,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"lifeorb": {
+	lifeorb: {
 		inherit: true,
 		onModifyDamage() {},
 		onAfterMoveSecondarySelf() {},
@@ -172,36 +161,36 @@ let BattleItems = {
 			},
 		},
 	},
-	"lightball": {
+	lightball: {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.template.species === 'Pikachu') {
+			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpA(spa, pokemon) {
-			if (pokemon.template.species === 'Pikachu') {
+			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
 	},
-	"luckypunch": {
+	luckypunch: {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Chansey') {
+			if (user.species.name === 'Chansey') {
 				return critRatio + 2;
 			}
 		},
 	},
-	"lustrousorb": {
+	lustrousorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.template.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (move && user.species.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
 		},
 	},
-	"mentalherb": {
+	mentalherb: {
 		inherit: true,
 		desc: "Holder is cured if it is infatuated. Single use.",
 		fling: {
@@ -219,7 +208,7 @@ let BattleItems = {
 			}
 		},
 	},
-	"metronome": {
+	metronome: {
 		inherit: true,
 		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns.",
 		effect: {
@@ -233,7 +222,7 @@ let BattleItems = {
 					pokemon.removeVolatile('metronome');
 					return;
 				}
-				if (this.effectData.lastMove === move.id) {
+				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
 					this.effectData.numConsecutive++;
 				} else {
 					this.effectData.numConsecutive = 0;
@@ -245,7 +234,7 @@ let BattleItems = {
 			},
 		},
 	},
-	"razorfang": {
+	razorfang: {
 		inherit: true,
 		onModifyMove(move) {
 			let affectedByRazorFang = ['aerialace', 'aeroblast', 'aircutter', 'airslash', 'aquajet', 'aquatail', 'armthrust', 'assurance', 'attackorder', 'aurasphere', 'avalanche', 'barrage', 'beatup', 'bide', 'bind', 'blastburn', 'bonerush', 'bonemerang', 'bounce', 'bravebird', 'brickbreak', 'brine', 'bugbite', 'bulletpunch', 'bulletseed', 'chargebeam', 'clamp', 'closecombat', 'cometpunch', 'crabhammer', 'crosschop', 'crosspoison', 'crushgrip', 'cut', 'darkpulse', 'dig', 'discharge', 'dive', 'doublehit', 'doublekick', 'doubleslap', 'doubleedge', 'dracometeor', 'dragonbreath', 'dragonclaw', 'dragonpulse', 'dragonrage', 'dragonrush', 'drainpunch', 'drillpeck', 'earthpower', 'earthquake', 'eggbomb', 'endeavor', 'eruption', 'explosion', 'extremespeed', 'falseswipe', 'feintattack', 'firefang', 'firespin', 'flail', 'flashcannon', 'fly', 'forcepalm', 'frenzyplant', 'frustration', 'furyattack', 'furycutter', 'furyswipes', 'gigaimpact', 'grassknot', 'gunkshot', 'gust', 'gyroball', 'hammerarm', 'headsmash', 'hiddenpower', 'highjumpkick', 'hornattack', 'hydrocannon', 'hydropump', 'hyperbeam', 'iceball', 'icefang', 'iceshard', 'iciclespear', 'ironhead', 'judgment', 'jumpkick', 'karatechop', 'lastresort', 'lavaplume', 'leafblade', 'leafstorm', 'lowkick', 'machpunch', 'magicalleaf', 'magmastorm', 'magnetbomb', 'magnitude', 'megakick', 'megapunch', 'megahorn', 'meteormash', 'mirrorshot', 'mudbomb', 'mudshot', 'muddywater', 'nightshade', 'nightslash', 'ominouswind', 'outrage', 'overheat', 'payday', 'payback', 'peck', 'petaldance', 'pinmissile', 'pluck', 'poisonjab', 'poisontail', 'pound', 'powergem', 'powerwhip', 'psychoboost', 'psychocut', 'psywave', 'punishment', 'quickattack', 'rage', 'rapidspin', 'razorleaf', 'razorwind', 'return', 'revenge', 'reversal', 'roaroftime', 'rockblast', 'rockclimb', 'rockthrow', 'rockwrecker', 'rollingkick', 'rollout', 'sandtomb', 'scratch', 'seedbomb', 'seedflare', 'seismictoss', 'selfdestruct', 'shadowclaw', 'shadowforce', 'shadowpunch', 'shadowsneak', 'shockwave', 'signalbeam', 'silverwind', 'skullbash', 'skyattack', 'skyuppercut', 'slam', 'slash', 'snore', 'solarbeam', 'sonicboom', 'spacialrend', 'spikecannon', 'spitup', 'steelwing', 'stoneedge', 'strength', 'struggle', 'submission', 'suckerpunch', 'surf', 'swift', 'tackle', 'takedown', 'thrash', 'thunderfang', 'triplekick', 'trumpcard', 'twister', 'uturn', 'uproar', 'vacuumwave', 'visegrip', 'vinewhip', 'vitalthrow', 'volttackle', 'wakeupslap', 'watergun', 'waterpulse', 'waterfall', 'weatherball', 'whirlpool', 'wingattack', 'woodhammer', 'wrap', 'wringout', 'xscissor', 'zenheadbutt'];
@@ -258,29 +247,18 @@ let BattleItems = {
 			}
 		},
 	},
-	"rowapberry": {
-		inherit: true,
-		onAfterDamage() {},
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move && move.category === 'Special') {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target, null, true);
-				}
-			}
-		},
-	},
-	"stick": {
+	stick: {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
-			if (user.template.species === 'Farfetch\'d') {
+			if (user.species.name === 'Farfetch\'d') {
 				return critRatio + 2;
 			}
 		},
 	},
-	"thickclub": {
+	thickclub: {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak') {
+			if (pokemon.species.name === 'Cubone' || pokemon.species.name === 'Marowak') {
 				return this.chainModify(2);
 			}
 		},

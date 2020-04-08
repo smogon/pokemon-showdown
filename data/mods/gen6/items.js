@@ -19,7 +19,7 @@ let BattleItems = {
 	},
 	belueberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	bigroot: {
 		inherit: true,
@@ -27,11 +27,11 @@ let BattleItems = {
 	},
 	cornnberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	durinberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	energypowder: {
 		id: "energypowder",
@@ -76,8 +76,8 @@ let BattleItems = {
 	},
 	jabocaberry: {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.category === 'Physical') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Physical') {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
@@ -98,7 +98,7 @@ let BattleItems = {
 	},
 	machobrace: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	magoberry: {
 		inherit: true,
@@ -117,15 +117,15 @@ let BattleItems = {
 	},
 	magostberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	nanabberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	nomelberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	oldamber: {
 		inherit: true,
@@ -133,28 +133,28 @@ let BattleItems = {
 	},
 	pamtreberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	rabutaberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	razzberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	rockyhelmet: {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.damage(source.baseMaxhp / 6, source, target, null, true);
 			}
 		},
 	},
 	rowapberry: {
 		inherit: true,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.category === 'Special') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Special') {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target, null, true);
 				}
@@ -163,7 +163,7 @@ let BattleItems = {
 	},
 	spelonberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	souldew: {
 		inherit: true,
@@ -171,24 +171,24 @@ let BattleItems = {
 		onBasePower() {},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.baseTemplate.num === 380 || pokemon.baseTemplate.num === 381) {
+			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseTemplate.num === 380 || pokemon.baseTemplate.num === 381) {
+			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {
 				return this.chainModify(1.5);
 			}
 		},
 	},
 	watmelberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	wepearberry: {
 		inherit: true,
-		isUnreleased: false,
+		isNonstandard: null,
 	},
 	wikiberry: {
 		inherit: true,

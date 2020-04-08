@@ -25,7 +25,7 @@ describe('Wish', function () {
 		battle.makeChoices('move wish, move wish', 'move icebeam 1, move moonblast 2');
 		battle.makeChoices('switch 3, switch 4', 'move icebeam 1, move moonblast 2');
 		assert.fullHP(battle.p1.active[0]);
-		assert.strictEqual(battle.p1.active[1].hp, 321);
+		assert.equal(battle.p1.active[1].hp, 321);
 	});
 
 	it('should progress its duration whether or not the Pokemon in its slot is fainted', function () {

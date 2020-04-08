@@ -10,7 +10,7 @@ let BattleItems = {
 		megaEvolves: "Abomasnow",
 		itemUser: ["Abomasnow"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 674,
@@ -26,7 +26,7 @@ let BattleItems = {
 		megaEvolves: "Absol",
 		itemUser: ["Absol"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 677,
@@ -41,10 +41,13 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (move.type === 'Water' && target.useItem()) {
-				this.boost({spa: 1});
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Water') {
+				target.useItem();
 			}
+		},
+		boosts: {
+			spa: 1,
 		},
 		num: 545,
 		gen: 5,
@@ -59,13 +62,14 @@ let BattleItems = {
 		},
 		onBasePowerPriority: 6,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseTemplate.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
+			if (move && user.baseSpecies.name === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
 		itemUser: ["Dialga"],
 		num: 135,
 		gen: 4,
+		isNonstandard: "Past",
 		desc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
 	},
 	"adrenalineorb": {
@@ -76,9 +80,12 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onAfterBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate' && target.useItem()) {
-				this.boost({spe: 1});
+			if (effect.id === 'intimidate') {
+				target.useItem();
 			}
+		},
+		boosts: {
+			spe: 1,
 		},
 		num: 846,
 		gen: 7,
@@ -92,7 +99,7 @@ let BattleItems = {
 		megaEvolves: "Aerodactyl",
 		itemUser: ["Aerodactyl"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 672,
@@ -108,7 +115,7 @@ let BattleItems = {
 		megaEvolves: "Aggron",
 		itemUser: ["Aggron"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 667,
@@ -156,18 +163,15 @@ let BattleItems = {
 			}
 		},
 		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
-		onAfterDamage(damage, target, source, effect) {
-			this.debug('effect: ' + effect.id);
-			if (effect.effectType === 'Move' && effect.id !== 'confused') {
-				this.add('-enditem', target, 'Air Balloon');
-				target.item = '';
-				target.itemData = {id: '', target};
-				this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
-			}
+		onDamagingHit(damage, target, source, move) {
+			this.add('-enditem', target, 'Air Balloon');
+			target.item = '';
+			target.itemData = {id: '', target};
+			this.runEvent('AfterUseItem', target, null, null, this.dex.getItem('airballoon'));
 		},
 		onAfterSubDamage(damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
-			if (effect.effectType === 'Move' && effect.id !== 'confused') {
+			if (effect.effectType === 'Move') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				target.itemData = {id: '', target};
@@ -186,7 +190,7 @@ let BattleItems = {
 		megaEvolves: "Alakazam",
 		itemUser: ["Alakazam"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 679,
@@ -215,7 +219,7 @@ let BattleItems = {
 		megaEvolves: "Altaria",
 		itemUser: ["Altaria"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 755,
@@ -231,7 +235,7 @@ let BattleItems = {
 		megaEvolves: "Ampharos",
 		itemUser: ["Ampharos"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 658,
@@ -325,7 +329,7 @@ let BattleItems = {
 		megaEvolves: "Audino",
 		itemUser: ["Audino"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 757,
@@ -364,7 +368,7 @@ let BattleItems = {
 		megaEvolves: "Banette",
 		itemUser: ["Banette"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 668,
@@ -389,7 +393,7 @@ let BattleItems = {
 		megaEvolves: "Beedrill",
 		itemUser: ["Beedrill"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 770,
@@ -400,7 +404,6 @@ let BattleItems = {
 	"belueberry": {
 		id: "belueberry",
 		name: "Belue Berry",
-		isUnreleased: true,
 		spritenum: 21,
 		isBerry: true,
 		naturalGift: {
@@ -410,6 +413,7 @@ let BattleItems = {
 		onEat: false,
 		num: 183,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"berryjuice": {
@@ -543,7 +547,7 @@ let BattleItems = {
 		megaEvolves: "Blastoise",
 		itemUser: ["Blastoise"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 661,
@@ -559,7 +563,7 @@ let BattleItems = {
 		megaEvolves: "Blaziken",
 		itemUser: ["Blaziken"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 664,
@@ -572,15 +576,15 @@ let BattleItems = {
 		name: "Blue Orb",
 		spritenum: 41,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseTemplate.species === 'Kyogre') {
-				this.insertQueue({pokemon: pokemon, choice: 'runPrimal'});
+			if (pokemon.isActive && pokemon.baseSpecies.name === 'Kyogre') {
+				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
 			}
 		},
 		onPrimal(pokemon) {
 			pokemon.formeChange('Kyogre-Primal', this.effect, true);
 		},
 		onTakeItem(item, source) {
-			if (source.baseTemplate.baseSpecies === 'Kyogre') return false;
+			if (source.baseSpecies.baseSpecies === 'Kyogre') return false;
 			return true;
 		},
 		itemUser: ["Kyogre"],
@@ -613,7 +617,7 @@ let BattleItems = {
 		// Item activation located in scripts.js
 		num: 1121,
 		gen: 8,
-		desc: "If the holder misses because of accuracy, it raises Speed by 2 stages. Single use.",
+		desc: "If the holder misses due to accuracy, its Speed is raised by 2 stages. Single use.",
 	},
 	"bottlecap": {
 		id: "bottlecap",
@@ -649,16 +653,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Bug') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Bug Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Bug' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 558,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Bug-type attack will have 1.3x power. Single use.",
 	},
 	"bugmemory": {
@@ -667,7 +668,7 @@ let BattleItems = {
 		spritenum: 673,
 		onMemory: 'Bug',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -697,7 +698,7 @@ let BattleItems = {
 		name: "Burn Drive",
 		spritenum: 54,
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
 				return false;
 			}
 			return true;
@@ -718,7 +719,7 @@ let BattleItems = {
 		megaEvolves: "Camerupt",
 		itemUser: ["Camerupt"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 767,
@@ -733,10 +734,13 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (move.type === 'Electric' && target.useItem()) {
-				this.boost({atk: 1});
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Electric') {
+				target.useItem();
 			}
+		},
+		boosts: {
+			atk: 1,
 		},
 		num: 546,
 		gen: 5,
@@ -767,7 +771,7 @@ let BattleItems = {
 		megaEvolves: "Charizard",
 		itemUser: ["Charizard"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 660,
@@ -783,7 +787,7 @@ let BattleItems = {
 		megaEvolves: "Charizard",
 		itemUser: ["Charizard"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 678,
@@ -897,7 +901,7 @@ let BattleItems = {
 		name: "Chill Drive",
 		spritenum: 67,
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
 				return false;
 			}
 			return true;
@@ -919,7 +923,7 @@ let BattleItems = {
 		},
 		num: 1254,
 		gen: 8,
-		desc: "Evolves Sinistea into Polteageist when used.",
+		desc: "Evolves Sinistea-Antique into Polteageist-Antique when used.",
 	},
 	"choiceband": {
 		id: "choiceband",
@@ -1093,7 +1097,6 @@ let BattleItems = {
 	"cornnberry": {
 		id: "cornnberry",
 		name: "Cornn Berry",
-		isUnreleased: true,
 		spritenum: 81,
 		isBerry: true,
 		naturalGift: {
@@ -1103,6 +1106,7 @@ let BattleItems = {
 		onEat: false,
 		num: 175,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"coverfossil": {
@@ -1133,7 +1137,6 @@ let BattleItems = {
 		name: "Custap Berry",
 		spritenum: 86,
 		isBerry: true,
-		isUnreleased: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Ghost",
@@ -1150,6 +1153,7 @@ let BattleItems = {
 		onEat() { },
 		num: 210,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use.",
 	},
 	"damprock": {
@@ -1170,16 +1174,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Dark') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Dark Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Dark' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 562,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Dark-type attack will have 1.3x power. Single use.",
 	},
 	"darkmemory": {
@@ -1188,7 +1189,7 @@ let BattleItems = {
 		spritenum: 683,
 		onMemory: 'Dark',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1247,7 +1248,7 @@ let BattleItems = {
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseTemplate.species === 'Clamperl') {
+			if (pokemon.baseSpecies.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
@@ -1266,7 +1267,7 @@ let BattleItems = {
 		},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.baseTemplate.species === 'Clamperl') {
+			if (pokemon.baseSpecies.name === 'Clamperl') {
 				return this.chainModify(2);
 			}
 		},
@@ -1301,7 +1302,7 @@ let BattleItems = {
 		megaEvolves: "Diancie",
 		itemUser: ["Diancie"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 764,
@@ -1335,7 +1336,7 @@ let BattleItems = {
 		name: "Douse Drive",
 		spritenum: 103,
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
 				return false;
 			}
 			return true;
@@ -1360,7 +1361,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -1368,6 +1369,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Dragon",
 		num: 311,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon type.",
 	},
 	"dragonfang": {
@@ -1394,16 +1396,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Dragon') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Dragon Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Dragon' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 561,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Dragon-type attack will have 1.3x power. Single use.",
 	},
 	"dragonmemory": {
@@ -1412,7 +1411,7 @@ let BattleItems = {
 		spritenum: 682,
 		onMemory: 'Dragon',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1460,7 +1459,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -1468,6 +1467,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Dark",
 		num: 312,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark type.",
 	},
 	"dreamball": {
@@ -1493,7 +1493,6 @@ let BattleItems = {
 	"durinberry": {
 		id: "durinberry",
 		name: "Durin Berry",
-		isUnreleased: true,
 		spritenum: 114,
 		isBerry: true,
 		naturalGift: {
@@ -1503,6 +1502,7 @@ let BattleItems = {
 		onEat: false,
 		num: 182,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"duskball": {
@@ -1538,7 +1538,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -1546,6 +1546,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Ground",
 		num: 305,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type.",
 	},
 	"eeviumz": {
@@ -1601,7 +1602,7 @@ let BattleItems = {
 				}
 			}
 			if (eject) {
-				if (source && target.hp) {
+				if (target.hp) {
 					if (!this.canSwitch(target.side)) return;
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.switchFlag === true) return;
@@ -1612,7 +1613,7 @@ let BattleItems = {
 		},
 		num: 1119,
 		gen: 8,
-		desc: "When the holder's stats are lowered, it will be switched out of battle.",
+		desc: "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
 	},
 	"electirizer": {
 		id: "electirizer",
@@ -1632,16 +1633,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
-			if (move.type === 'Electric') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Electric Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Electric' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 550,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Electric-type attack will have 1.3x power. Single use.",
 	},
 	"electricmemory": {
@@ -1650,7 +1648,7 @@ let BattleItems = {
 		spritenum: 679,
 		onMemory: 'Electric',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1669,15 +1667,18 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain') && pokemon.useItem()) {
-				this.boost({def: 1});
+			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain')) {
+				pokemon.useItem();
 			}
 		},
 		onAnyTerrainStart() {
 			const pokemon = this.effectData.target;
-			if (this.field.isTerrain('electricterrain') && pokemon.useItem()) {
-				this.boost({def: 1}, pokemon);
+			if (this.field.isTerrain('electricterrain')) {
+				pokemon.useItem();
 			}
+		},
+		boosts: {
+			def: 1,
 		},
 		num: 881,
 		gen: 7,
@@ -1730,6 +1731,7 @@ let BattleItems = {
 		onEat() { },
 		num: 208,
 		gen: 3,
+		isNonstandard: "Unobtainable",
 		desc: "Restores 1/4 max HP after holder is hit by a supereffective move. Single use.",
 	},
 	"eviolite": {
@@ -1742,14 +1744,14 @@ let BattleItems = {
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
 			// Temporary hardcode for Slowpoke-Galar since it's a special case
-			if (pokemon.baseTemplate.nfe || pokemon.baseTemplate.species === 'Slowpoke-Galar') {
+			if (pokemon.baseSpecies.nfe || pokemon.baseSpecies.name === 'Slowpoke-Galar') {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
 			// Temporary hardcode for Slowpoke-Galar since it's a special case
-			if (pokemon.baseTemplate.nfe || pokemon.baseTemplate.species === 'Slowpoke-Galar') {
+			if (pokemon.baseSpecies.nfe || pokemon.baseSpecies.name === 'Slowpoke-Galar') {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1794,16 +1796,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Fairy') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Fairy Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Fairy' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 715,
 		gen: 6,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Fairy-type attack will have 1.3x power. Single use.",
 	},
 	"fairymemory": {
@@ -1812,7 +1811,7 @@ let BattleItems = {
 		spritenum: 684,
 		onMemory: 'Fairy',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1839,16 +1838,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Fighting') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Fighting Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Fighting' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 553,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Fighting-type attack will have 1.3x power. Single use.",
 	},
 	"fightingmemory": {
@@ -1857,7 +1853,7 @@ let BattleItems = {
 		spritenum: 668,
 		onMemory: 'Fighting',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1916,16 +1912,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
-			if (move.type === 'Fire') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Fire Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Fire' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 548,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Fire-type attack will have 1.3x power. Single use.",
 	},
 	"firememory": {
@@ -1934,7 +1927,7 @@ let BattleItems = {
 		spritenum: 676,
 		onMemory: 'Fire',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1983,7 +1976,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -1991,6 +1984,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Fighting",
 		num: 303,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting type.",
 	},
 	"flameorb": {
@@ -2022,7 +2016,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -2030,6 +2024,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Fire",
 		num: 298,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Fire-type attacks have 1.2x power. Judgment is Fire type.",
 	},
 	"floatstone": {
@@ -2064,16 +2059,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Flying') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Flying Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Flying' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 556,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Flying-type attack will have 1.3x power. Single use.",
 	},
 	"flyingmemory": {
@@ -2082,7 +2074,7 @@ let BattleItems = {
 		spritenum: 669,
 		onMemory: 'Flying',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2151,8 +2143,7 @@ let BattleItems = {
 		},
 		num: 1105,
 		gen: 8,
-		desc: "Can be revived into Arctovish with Fossilized Fish or Arctozolt with Fossilized Dino.",
-		shortDesc: "Can be combined with certain fossils.",
+		desc: "Can revive into Arctovish with Fossilized Fish or Arctozolt with Fossilized Dino.",
 	},
 	"fossilizeddino": {
 		id: "fossilizeddino",
@@ -2163,8 +2154,7 @@ let BattleItems = {
 		},
 		num: 1108,
 		gen: 8,
-		desc: "Can be revived into Dracozolt with Fossilized Drake or Arctozolt with Fossilized Bird.",
-		shortDesc: "Can be combined with certain fossils.",
+		desc: "Can revive into Dracozolt with Fossilized Drake or Arctozolt with Fossilized Bird.",
 	},
 	"fossilizeddrake": {
 		id: "fossilizeddrake",
@@ -2175,8 +2165,7 @@ let BattleItems = {
 		},
 		num: 1107,
 		gen: 8,
-		desc: "Can be revived into Dracozolt with Fossilized Dino or Dracovish with Fossilized Fish.",
-		shortDesc: "Can be combined with certain fossils.",
+		desc: "Can revive into Dracozolt with Fossilized Dino or Dracovish with Fossilized Fish.",
 	},
 	"fossilizedfish": {
 		id: "fossilizedfish",
@@ -2187,8 +2176,7 @@ let BattleItems = {
 		},
 		num: 1106,
 		gen: 8,
-		desc: "Can be revived into Dracovish with Fossilized Drake or Arctovish with Fossilized Bird.",
-		shortDesc: "Can be combined with certain fossils.",
+		desc: "Can revive into Dracovish with Fossilized Drake or Arctovish with Fossilized Bird.",
 	},
 	"friendball": {
 		id: "friendball",
@@ -2221,7 +2209,7 @@ let BattleItems = {
 		megaEvolves: "Gallade",
 		itemUser: ["Gallade"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 756,
@@ -2258,7 +2246,7 @@ let BattleItems = {
 		megaEvolves: "Garchomp",
 		itemUser: ["Garchomp"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 683,
@@ -2274,7 +2262,7 @@ let BattleItems = {
 		megaEvolves: "Gardevoir",
 		itemUser: ["Gardevoir"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 657,
@@ -2290,7 +2278,7 @@ let BattleItems = {
 		megaEvolves: "Gengar",
 		itemUser: ["Gengar"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 656,
@@ -2305,16 +2293,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Ghost') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Ghost Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Ghost' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 560,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Ghost-type attack will have 1.3x power. Single use.",
 	},
 	"ghostmemory": {
@@ -2323,7 +2308,7 @@ let BattleItems = {
 		spritenum: 674,
 		onMemory: 'Ghost',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2356,7 +2341,7 @@ let BattleItems = {
 		megaEvolves: "Glalie",
 		itemUser: ["Glalie"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 763,
@@ -2382,16 +2367,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
-			if (move.type === 'Grass') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Grass Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Grass' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 551,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Grass-type attack will have 1.3x power. Single use.",
 	},
 	"grassmemory": {
@@ -2400,7 +2382,7 @@ let BattleItems = {
 		spritenum: 678,
 		onMemory: 'Grass',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2433,15 +2415,18 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain') && pokemon.useItem()) {
-				this.boost({def: 1});
+			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain')) {
+				pokemon.useItem();
 			}
 		},
 		onAnyTerrainStart() {
 			const pokemon = this.effectData.target;
-			if (this.field.isTerrain('grassyterrain') && pokemon.useItem()) {
-				this.boost({def: 1}, pokemon);
+			if (this.field.isTerrain('grassyterrain')) {
+				pokemon.useItem();
 			}
+		},
+		boosts: {
+			def: 1,
 		},
 		num: 884,
 		gen: 7,
@@ -2491,12 +2476,12 @@ let BattleItems = {
 		},
 		onBasePowerPriority: 6,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseTemplate.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
+			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 487) || pokemon.baseTemplate.num === 487) {
+			if ((source && source.baseSpecies.num === 487) || pokemon.baseSpecies.num === 487) {
 				return false;
 			}
 			return true;
@@ -2505,6 +2490,7 @@ let BattleItems = {
 		itemUser: ["Giratina-Origin"],
 		num: 112,
 		gen: 4,
+		isNonstandard: "Past",
 		desc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
 	},
 	"groundgem": {
@@ -2514,16 +2500,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Ground') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Ground Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Ground' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 555,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Ground-type attack will have 1.3x power. Single use.",
 	},
 	"groundmemory": {
@@ -2532,7 +2515,7 @@ let BattleItems = {
 		spritenum: 671,
 		onMemory: 'Ground',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2565,7 +2548,7 @@ let BattleItems = {
 		megaEvolves: "Gyarados",
 		itemUser: ["Gyarados"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 676,
@@ -2651,7 +2634,7 @@ let BattleItems = {
 		},
 		num: 1120,
 		gen: 8,
-		desc: "Prevents the effects of traps set on the battlefield.",
+		desc: "When switching in, the holder is unaffected by hazards on its side of the field.",
 		// Hazard Immunity implemented in moves.js
 	},
 	"helixfossil": {
@@ -2674,7 +2657,7 @@ let BattleItems = {
 		megaEvolves: "Heracross",
 		itemUser: ["Heracross"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 680,
@@ -2704,7 +2687,7 @@ let BattleItems = {
 		megaEvolves: "Houndoom",
 		itemUser: ["Houndoom"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 666,
@@ -2746,16 +2729,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Ice') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Ice Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Ice' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 552,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Ice-type attack will have 1.3x power. Single use.",
 	},
 	"icememory": {
@@ -2764,7 +2744,7 @@ let BattleItems = {
 		spritenum: 681,
 		onMemory: 'Ice',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2799,7 +2779,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -2807,6 +2787,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Ice",
 		num: 302,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Ice-type attacks have 1.2x power. Judgment is Ice type.",
 	},
 	"iciumz": {
@@ -2859,7 +2840,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -2867,6 +2848,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Bug",
 		num: 308,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Bug-type attacks have 1.2x power. Judgment is Bug type.",
 	},
 	"ironball": {
@@ -2901,7 +2883,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -2909,6 +2891,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Steel",
 		num: 313,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Steel-type attacks have 1.2x power. Judgment is Steel type.",
 	},
 	"jabocaberry": {
@@ -2916,13 +2899,12 @@ let BattleItems = {
 		name: "Jaboca Berry",
 		spritenum: 230,
 		isBerry: true,
-		isUnreleased: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Dragon",
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (source && source.hp && source !== target && move && move.category === 'Physical') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Physical') {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target);
 				}
@@ -2931,6 +2913,7 @@ let BattleItems = {
 		onEat() { },
 		num: 211,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use.",
 	},
 	"jawfossil": {
@@ -3002,6 +2985,7 @@ let BattleItems = {
 		},
 		onAfterMoveSecondary(target, source, move) {
 			if (move.category === 'Physical') {
+				if (move.id === 'present' && move.heal) return;
 				target.eatItem();
 			}
 		},
@@ -3034,7 +3018,7 @@ let BattleItems = {
 		megaEvolves: "Kangaskhan",
 		itemUser: ["Kangaskhan"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 675,
@@ -3124,7 +3108,7 @@ let BattleItems = {
 		megaEvolves: "Latias",
 		itemUser: ["Latias"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 684,
@@ -3140,7 +3124,7 @@ let BattleItems = {
 		megaEvolves: "Latios",
 		itemUser: ["Latios"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 685,
@@ -3184,7 +3168,7 @@ let BattleItems = {
 		},
 		spritenum: 475,
 		onModifyCritRatio(critRatio, user) {
-			if (["Farfetch'd", "Sirfetch'd"].includes(user.baseTemplate.baseSpecies)) {
+			if (["Farfetch'd", "Sirfetch'd"].includes(user.baseSpecies.baseSpecies)) {
 				return critRatio + 2;
 			}
 		},
@@ -3300,13 +3284,13 @@ let BattleItems = {
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.baseTemplate.baseSpecies === 'Pikachu') {
+			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.baseTemplate.baseSpecies === 'Pikachu') {
+			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
@@ -3335,7 +3319,7 @@ let BattleItems = {
 		megaEvolves: "Lopunny",
 		itemUser: ["Lopunny"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 768,
@@ -3371,7 +3355,7 @@ let BattleItems = {
 		megaEvolves: "Lucario",
 		itemUser: ["Lucario"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 673,
@@ -3387,13 +3371,14 @@ let BattleItems = {
 			basePower: 40,
 		},
 		onModifyCritRatio(critRatio, user) {
-			if (user.baseTemplate.species === 'Chansey') {
+			if (user.baseSpecies.name === 'Chansey') {
 				return critRatio + 2;
 			}
 		},
 		itemUser: ["Chansey"],
 		num: 256,
 		gen: 2,
+		isNonstandard: "Past",
 		desc: "If held by a Chansey, its critical hit ratio is raised by 2 stages.",
 	},
 	"lumberry": {
@@ -3404,6 +3389,9 @@ let BattleItems = {
 		naturalGift: {
 			basePower: 80,
 			type: "Flying",
+		},
+		onAfterSetStatus(status, pokemon) {
+			pokemon.eatItem();
 		},
 		onUpdate(pokemon) {
 			if (pokemon.status || pokemon.volatiles['confusion']) {
@@ -3425,10 +3413,13 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (move.type === 'Water' && target.useItem()) {
-				this.boost({spd: 1});
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Water') {
+				target.useItem();
 			}
+		},
+		boosts: {
+			spd: 1,
 		},
 		num: 648,
 		gen: 6,
@@ -3465,13 +3456,14 @@ let BattleItems = {
 		},
 		onBasePowerPriority: 6,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseTemplate.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (move && user.baseSpecies.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
 		itemUser: ["Palkia"],
 		num: 136,
 		gen: 4,
+		isNonstandard: "Past",
 		desc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
 	},
 	"luxuryball": {
@@ -3499,7 +3491,6 @@ let BattleItems = {
 	"machobrace": {
 		id: "machobrace",
 		name: "Macho Brace",
-		isUnreleased: true,
 		spritenum: 269,
 		ignoreKlutz: true,
 		fling: {
@@ -3570,7 +3561,6 @@ let BattleItems = {
 	"magostberry": {
 		id: "magostberry",
 		name: "Magost Berry",
-		isUnreleased: true,
 		spritenum: 275,
 		isBerry: true,
 		naturalGift: {
@@ -3580,6 +3570,7 @@ let BattleItems = {
 		onEat: false,
 		num: 176,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"mail": {
@@ -3590,9 +3581,9 @@ let BattleItems = {
 			if (!this.activeMove) return false;
 			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
-		isUnreleased: true,
 		num: 0,
 		gen: 2,
+		isNonstandard: "Past",
 		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
 	},
 	"manectite": {
@@ -3603,7 +3594,7 @@ let BattleItems = {
 		megaEvolves: "Manectric",
 		itemUser: ["Manectric"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 682,
@@ -3662,7 +3653,7 @@ let BattleItems = {
 		megaEvolves: "Mawile",
 		itemUser: ["Mawile"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 681,
@@ -3682,7 +3673,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -3690,6 +3681,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Grass",
 		num: 301,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Grass-type attacks have 1.2x power. Judgment is Grass type.",
 	},
 	"medichamite": {
@@ -3700,7 +3692,7 @@ let BattleItems = {
 		megaEvolves: "Medicham",
 		itemUser: ["Medicham"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 665,
@@ -3756,7 +3748,7 @@ let BattleItems = {
 		megaEvolves: "Metagross",
 		itemUser: ["Metagross"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 758,
@@ -3791,7 +3783,7 @@ let BattleItems = {
 		spritenum: 287,
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
-			if (pokemon.template.species === 'Ditto' && !pokemon.transformed) {
+			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
 			}
 		},
@@ -3821,7 +3813,7 @@ let BattleItems = {
 					pokemon.removeVolatile('metronome');
 					return;
 				}
-				if (this.effectData.lastMove === move.id) {
+				if (this.effectData.lastMove === move.id && pokemon.moveLastTurnResult) {
 					this.effectData.numConsecutive++;
 				} else {
 					this.effectData.numConsecutive = 0;
@@ -3829,8 +3821,8 @@ let BattleItems = {
 				this.effectData.lastMove = move.id;
 			},
 			onModifyDamage(damage, source, target, move) {
+				const dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
 				let numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
-				let dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
 				return this.chainModify([dmgMod[numConsecutive], 0x1000]);
 			},
 		},
@@ -3859,7 +3851,7 @@ let BattleItems = {
 		megaEvolves: "Mewtwo",
 		itemUser: ["Mewtwo"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 662,
@@ -3875,7 +3867,7 @@ let BattleItems = {
 		megaEvolves: "Mewtwo",
 		itemUser: ["Mewtwo"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 663,
@@ -3888,7 +3880,6 @@ let BattleItems = {
 		name: "Micle Berry",
 		spritenum: 290,
 		isBerry: true,
-		isUnreleased: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Rock",
@@ -3913,6 +3904,7 @@ let BattleItems = {
 		},
 		num: 209,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use.",
 	},
 	"mimikiumz": {
@@ -3940,7 +3932,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -3948,6 +3940,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Psychic",
 		num: 307,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic type.",
 	},
 	"miracleseed": {
@@ -3975,15 +3968,18 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('mistyterrain') && pokemon.useItem()) {
-				this.boost({spd: 1});
+			if (!pokemon.ignoringItem() && this.field.isTerrain('mistyterrain')) {
+				pokemon.useItem();
 			}
 		},
 		onAnyTerrainStart() {
 			const pokemon = this.effectData.target;
-			if (this.field.isTerrain('mistyterrain') && pokemon.useItem()) {
-				this.boost({spd: 1}, pokemon);
+			if (this.field.isTerrain('mistyterrain')) {
+				pokemon.useItem();
 			}
+		},
+		boosts: {
+			spd: 1,
 		},
 		num: 883,
 		gen: 7,
@@ -4047,7 +4043,6 @@ let BattleItems = {
 	"nanabberry": {
 		id: "nanabberry",
 		name: "Nanab Berry",
-		isUnreleased: true,
 		spritenum: 302,
 		isBerry: true,
 		naturalGift: {
@@ -4057,6 +4052,7 @@ let BattleItems = {
 		onEat: false,
 		num: 166,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"nestball": {
@@ -4097,7 +4093,6 @@ let BattleItems = {
 	"nomelberry": {
 		id: "nomelberry",
 		name: "Nomel Berry",
-		isUnreleased: true,
 		spritenum: 306,
 		isBerry: true,
 		naturalGift: {
@@ -4107,6 +4102,7 @@ let BattleItems = {
 		onEat: false,
 		num: 178,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"normalgem": {
@@ -4116,11 +4112,8 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
-			if (move.type === 'Normal') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Normal Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Normal' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 564,
@@ -4229,7 +4222,6 @@ let BattleItems = {
 	"pamtreberry": {
 		id: "pamtreberry",
 		name: "Pamtre Berry",
-		isUnreleased: true,
 		spritenum: 323,
 		isBerry: true,
 		naturalGift: {
@@ -4239,6 +4231,7 @@ let BattleItems = {
 		onEat: false,
 		num: 180,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"parkball": {
@@ -4369,7 +4362,7 @@ let BattleItems = {
 		megaEvolves: "Pidgeot",
 		itemUser: ["Pidgeot"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 762,
@@ -4425,7 +4418,7 @@ let BattleItems = {
 		megaEvolves: "Pinsir",
 		itemUser: ["Pinsir"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 671,
@@ -4445,7 +4438,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -4492,16 +4485,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Poison') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Poison Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Poison' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 554,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Poison-type attack will have 1.3x power. Single use.",
 	},
 	"poisonmemory": {
@@ -4510,7 +4500,7 @@ let BattleItems = {
 		spritenum: 670,
 		onMemory: 'Poison',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -4765,16 +4755,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Psychic') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Psychic Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Psychic' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 557,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Psychic-type attack will have 1.3x power. Single use.",
 	},
 	"psychicmemory": {
@@ -4783,7 +4770,7 @@ let BattleItems = {
 		spritenum: 680,
 		onMemory: 'Psychic',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -4802,15 +4789,18 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('psychicterrain') && pokemon.useItem()) {
-				this.boost({spd: 1});
+			if (!pokemon.ignoringItem() && this.field.isTerrain('psychicterrain')) {
+				pokemon.useItem();
 			}
 		},
 		onAnyTerrainStart() {
 			const pokemon = this.effectData.target;
-			if (this.field.isTerrain('psychicterrain') && pokemon.useItem()) {
-				this.boost({spd: 1}, pokemon);
+			if (this.field.isTerrain('psychicterrain')) {
+				pokemon.useItem();
 			}
+		},
+		boosts: {
+			spd: 1,
 		},
 		num: 882,
 		gen: 7,
@@ -4879,7 +4869,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onModifySpe(spe, pokemon) {
-			if (pokemon.template.species === 'Ditto' && !pokemon.transformed) {
+			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
 			}
 		},
@@ -4891,7 +4881,6 @@ let BattleItems = {
 	"rabutaberry": {
 		id: "rabutaberry",
 		name: "Rabuta Berry",
-		isUnreleased: true,
 		spritenum: 375,
 		isBerry: true,
 		naturalGift: {
@@ -4901,6 +4890,7 @@ let BattleItems = {
 		onEat: false,
 		num: 177,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"rarebone": {
@@ -4975,13 +4965,13 @@ let BattleItems = {
 		},
 		num: 327,
 		gen: 4,
+		isNonstandard: "Past",
 		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch. Evolves Gligar into Gliscor when held and leveled up during the night.",
 		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
 	"razzberry": {
 		id: "razzberry",
 		name: "Razz Berry",
-		isUnreleased: true,
 		spritenum: 384,
 		isBerry: true,
 		naturalGift: {
@@ -4991,6 +4981,7 @@ let BattleItems = {
 		onEat: false,
 		num: 164,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"reapercloth": {
@@ -5030,15 +5021,15 @@ let BattleItems = {
 		name: "Red Orb",
 		spritenum: 390,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseTemplate.species === 'Groudon') {
-				this.insertQueue({pokemon: pokemon, choice: 'runPrimal'});
+			if (pokemon.isActive && pokemon.baseSpecies.name === 'Groudon') {
+				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
 			}
 		},
 		onPrimal(pokemon) {
 			pokemon.formeChange('Groudon-Primal', this.effect, true);
 		},
 		onTakeItem(item, source) {
-			if (source.baseTemplate.baseSpecies === 'Groudon') return false;
+			if (source.baseSpecies.baseSpecies === 'Groudon') return false;
 			return true;
 		},
 		itemUser: ["Groudon"],
@@ -5109,16 +5100,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Rock') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Rock Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Rock' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 559,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Rock-type attack will have 1.3x power. Single use.",
 	},
 	"rockincense": {
@@ -5144,7 +5132,7 @@ let BattleItems = {
 		spritenum: 672,
 		onMemory: 'Rock',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -5176,9 +5164,9 @@ let BattleItems = {
 		fling: {
 			basePower: 60,
 		},
-		onAfterDamageOrder: 2,
-		onAfterDamage(damage, target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
+		onDamagingHitOrder: 2,
+		onDamagingHit(damage, target, source, move) {
+			if (move.flags['contact']) {
 				this.damage(source.baseMaxhp / 6, source, target);
 			}
 		},
@@ -5194,13 +5182,16 @@ let BattleItems = {
 			basePower: 100,
 		},
 		onUpdate(pokemon) {
-			if (this.field.getPseudoWeather('trickroom') && pokemon.useItem()) {
-				this.boost({spe: -1}, pokemon, pokemon);
+			if (this.field.getPseudoWeather('trickroom')) {
+				pokemon.useItem();
 			}
+		},
+		boosts: {
+			spe: -1,
 		},
 		num: 1122,
 		gen: 8,
-		desc: "If Trick Room is active, lowers holder's Speed by 1 stage. Single use.",
+		desc: "If Trick Room is active, the holder's Speed is lowered by 1 stage. Single use.",
 	},
 	"rootfossil": {
 		id: "rootfossil",
@@ -5259,13 +5250,12 @@ let BattleItems = {
 		name: "Rowap Berry",
 		spritenum: 420,
 		isBerry: true,
-		isUnreleased: true,
 		naturalGift: {
 			basePower: 100,
 			type: "Dark",
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (source && source.hp && source !== target && move && move.category === 'Special') {
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === 'Special') {
 				if (target.eatItem()) {
 					this.damage(source.baseMaxhp / 8, source, target);
 				}
@@ -5274,6 +5264,7 @@ let BattleItems = {
 		onEat() { },
 		num: 212,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use.",
 	},
 	"rustedshield": {
@@ -5281,7 +5272,7 @@ let BattleItems = {
 		name: "Rusted Shield",
 		spritenum: 699,
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 889) || pokemon.baseTemplate.num === 889) {
+			if ((source && source.baseSpecies.num === 889) || pokemon.baseSpecies.num === 889) {
 				return false;
 			}
 			return true;
@@ -5290,14 +5281,14 @@ let BattleItems = {
 		itemUser: ["Zamazenta-Crowned"],
 		num: 1104,
 		gen: 8,
-		desc: "If held by a Zamazenta, this item changes it to Crowned Forme.",
+		desc: "If held by a Zamazenta, this item changes its forme to Crowned Shield.",
 	},
 	"rustedsword": {
 		id: "rustedsword",
 		name: "Rusted Sword",
 		spritenum: 698,
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 888) || pokemon.baseTemplate.num === 888) {
+			if ((source && source.baseSpecies.num === 888) || pokemon.baseSpecies.num === 888) {
 				return false;
 			}
 			return true;
@@ -5306,7 +5297,7 @@ let BattleItems = {
 		itemUser: ["Zacian-Crowned"],
 		num: 1103,
 		gen: 8,
-		desc: "If held by a Zacian, this item changes it to Crowned Forme.",
+		desc: "If held by a Zacian, this item changes its forme to Crowned Sword.",
 	},
 	"sablenite": {
 		id: "sablenite",
@@ -5316,7 +5307,7 @@ let BattleItems = {
 		megaEvolves: "Sableye",
 		itemUser: ["Sableye"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 754,
@@ -5405,7 +5396,7 @@ let BattleItems = {
 		megaEvolves: "Salamence",
 		itemUser: ["Salamence"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 769,
@@ -5421,7 +5412,7 @@ let BattleItems = {
 		megaEvolves: "Sceptile",
 		itemUser: ["Sceptile"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 753,
@@ -5437,7 +5428,7 @@ let BattleItems = {
 		megaEvolves: "Scizor",
 		itemUser: ["Scizor"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 670,
@@ -5501,7 +5492,7 @@ let BattleItems = {
 		megaEvolves: "Sharpedo",
 		itemUser: ["Sharpedo"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 759,
@@ -5558,7 +5549,7 @@ let BattleItems = {
 		name: "Shock Drive",
 		spritenum: 442,
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
 				return false;
 			}
 			return true;
@@ -5676,7 +5667,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -5684,6 +5675,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Flying",
 		num: 306,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying type.",
 	},
 	"slowbronite": {
@@ -5694,7 +5686,7 @@ let BattleItems = {
 		megaEvolves: "Slowbro",
 		itemUser: ["Slowbro"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 760,
@@ -5733,10 +5725,13 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterDamage(damage, target, source, move) {
-			if (move.type === 'Ice' && target.useItem()) {
-				this.boost({atk: 1});
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Ice') {
+				target.useItem();
 			}
+		},
+		boosts: {
+			atk: 1,
 		},
 		num: 649,
 		gen: 6,
@@ -5781,13 +5776,14 @@ let BattleItems = {
 		},
 		onBasePowerPriority: 6,
 		onBasePower(basePower, user, target, move) {
-			if (move && (user.baseTemplate.num === 380 || user.baseTemplate.num === 381) && (move.type === 'Psychic' || move.type === 'Dragon')) {
+			if (move && (user.baseSpecies.num === 380 || user.baseSpecies.num === 381) && (move.type === 'Psychic' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
 		itemUser: ["Latios", "Latias"],
 		num: 225,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
 	},
 	"spelltag": {
@@ -5810,7 +5806,6 @@ let BattleItems = {
 	"spelonberry": {
 		id: "spelonberry",
 		name: "Spelon Berry",
-		isUnreleased: true,
 		spritenum: 462,
 		isBerry: true,
 		naturalGift: {
@@ -5820,6 +5815,7 @@ let BattleItems = {
 		onEat: false,
 		num: 179,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"splashplate": {
@@ -5834,7 +5830,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -5842,6 +5838,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Water",
 		num: 299,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Water-type attacks have 1.2x power. Judgment is Water type.",
 	},
 	"spookyplate": {
@@ -5856,7 +5853,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -5864,6 +5861,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Ghost",
 		num: 310,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost type.",
 	},
 	"sportball": {
@@ -5928,7 +5926,7 @@ let BattleItems = {
 		megaEvolves: "Steelix",
 		itemUser: ["Steelix"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 761,
@@ -5943,16 +5941,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Steel') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Steel Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Steel' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 563,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Steel-type attack will have 1.3x power. Single use.",
 	},
 	"steelmemory": {
@@ -5961,7 +5956,7 @@ let BattleItems = {
 		spritenum: 675,
 		onMemory: 'Steel',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -5994,7 +5989,7 @@ let BattleItems = {
 		},
 		spritenum: 475,
 		onModifyCritRatio(critRatio, user) {
-			if (user.baseTemplate.species === 'Farfetch\'d') {
+			if (user.baseSpecies.name === 'Farfetch\'d') {
 				return critRatio + 2;
 			}
 		},
@@ -6040,7 +6035,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -6048,6 +6043,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Rock",
 		num: 309,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type.",
 	},
 	"strawberrysweet": {
@@ -6081,7 +6077,7 @@ let BattleItems = {
 		megaEvolves: "Swampert",
 		itemUser: ["Swampert"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 752,
@@ -6181,7 +6177,7 @@ let BattleItems = {
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.baseTemplate.baseSpecies === 'Cubone' || pokemon.baseTemplate.baseSpecies === 'Marowak') {
+			if (pokemon.baseSpecies.baseSpecies === 'Cubone' || pokemon.baseSpecies.baseSpecies === 'Marowak') {
 				return this.chainModify(2);
 			}
 		},
@@ -6198,13 +6194,16 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onAfterMoveSecondarySelf(target, source, move) {
-			if (move.flags['sound'] && target.useItem()) {
-				this.boost({spa: 1}); // TODO: Find exact value, and whether this activates before or after use
+			if (move.flags['sound']) {
+				target.useItem();
 			}
+		},
+		boosts: {
+			spa: 1,
 		},
 		num: 1118,
 		gen: 8,
-		desc: "Raises holder's Special Attack by 1 stage after using a sound move. Single use.",
+		desc: "Raises holder's Special Attack by 1 stage after it uses a sound move. Single use.",
 	},
 	"thunderstone": {
 		id: "thunderstone",
@@ -6256,7 +6255,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -6264,7 +6263,1108 @@ let BattleItems = {
 		forcedForme: "Arceus-Poison",
 		num: 304,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Poison-type attacks have 1.2x power. Judgment is Poison type.",
+	},
+	"tr00": {
+		id: "tr00",
+		name: "TR00",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 721,
+		num: 1130,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Swords Dance. One use.",
+	},
+	"tr01": {
+		id: "tr01",
+		name: "TR01",
+		fling: {
+			basePower: 85,
+		},
+		spritenum: 721,
+		num: 1131,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Body Slam. One use.",
+	},
+	"tr02": {
+		id: "tr02",
+		name: "TR02",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 730,
+		num: 1132,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Flamethrower. One use.",
+	},
+	"tr03": {
+		id: "tr03",
+		name: "TR03",
+		fling: {
+			basePower: 110,
+		},
+		spritenum: 731,
+		num: 1133,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Hydro Pump. One use.",
+	},
+	"tr04": {
+		id: "tr04",
+		name: "TR04",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 731,
+		num: 1134,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Surf. One use.",
+	},
+	"tr05": {
+		id: "tr05",
+		name: "TR05",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 735,
+		num: 1135,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Ice Beam. One use.",
+	},
+	"tr06": {
+		id: "tr06",
+		name: "TR06",
+		fling: {
+			basePower: 110,
+		},
+		spritenum: 735,
+		num: 1136,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Blizzard. One use.",
+	},
+	"tr07": {
+		id: "tr07",
+		name: "TR07",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 722,
+		num: 1137,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Low Kick. One use.",
+	},
+	"tr08": {
+		id: "tr08",
+		name: "TR08",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 733,
+		num: 1138,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Thunderbolt. One use.",
+	},
+	"tr09": {
+		id: "tr09",
+		name: "TR09",
+		fling: {
+			basePower: 110,
+		},
+		spritenum: 733,
+		num: 1139,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Thunder. One use.",
+	},
+	"tr10": {
+		id: "tr10",
+		name: "TR10",
+		fling: {
+			basePower: 100,
+		},
+		spritenum: 725,
+		num: 1140,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Earthquake. One use.",
+	},
+	"tr11": {
+		id: "tr11",
+		name: "TR11",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 734,
+		num: 1141,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Psychic. One use.",
+	},
+	"tr12": {
+		id: "tr12",
+		name: "TR12",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 734,
+		num: 1142,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Agility. One use.",
+	},
+	"tr13": {
+		id: "tr13",
+		name: "TR13",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 721,
+		num: 1143,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Focus Energy. One use.",
+	},
+	"tr14": {
+		id: "tr14",
+		name: "TR14",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 721,
+		num: 1144,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Metronome. One use.",
+	},
+	"tr15": {
+		id: "tr15",
+		name: "TR15",
+		fling: {
+			basePower: 110,
+		},
+		spritenum: 730,
+		num: 1145,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Fire Blast. One use.",
+	},
+	"tr16": {
+		id: "tr16",
+		name: "TR16",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 731,
+		num: 1146,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Waterfall. One use.",
+	},
+	"tr17": {
+		id: "tr17",
+		name: "TR17",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 734,
+		num: 1147,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Amnesia. One use.",
+	},
+	"tr18": {
+		id: "tr18",
+		name: "TR18",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 727,
+		num: 1148,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Leech Life. One use.",
+	},
+	"tr19": {
+		id: "tr19",
+		name: "TR19",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 721,
+		num: 1149,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Tri Attack. One use.",
+	},
+	"tr20": {
+		id: "tr20",
+		name: "TR20",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 721,
+		num: 1150,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Substitute. One use.",
+	},
+	"tr21": {
+		id: "tr21",
+		name: "TR21",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 722,
+		num: 1151,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Reversal. One use.",
+	},
+	"tr22": {
+		id: "tr22",
+		name: "TR22",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 724,
+		num: 1152,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Sludge Bomb. One use.",
+	},
+	"tr23": {
+		id: "tr23",
+		name: "TR23",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 725,
+		num: 1153,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Spikes. One use.",
+	},
+	"tr24": {
+		id: "tr24",
+		name: "TR24",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 736,
+		num: 1154,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Outrage. One use.",
+	},
+	"tr25": {
+		id: "tr25",
+		name: "TR25",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 734,
+		num: 1155,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Psyshock. One use.",
+	},
+	"tr26": {
+		id: "tr26",
+		name: "TR26",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 721,
+		num: 1156,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Endure. One use.",
+	},
+	"tr27": {
+		id: "tr27",
+		name: "TR27",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 721,
+		num: 1157,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Sleep Talk. One use.",
+	},
+	"tr28": {
+		id: "tr28",
+		name: "TR28",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 727,
+		num: 1158,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Megahorn. One use.",
+	},
+	"tr29": {
+		id: "tr29",
+		name: "TR29",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 721,
+		num: 1159,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Baton Pass. One use.",
+	},
+	"tr30": {
+		id: "tr30",
+		name: "TR30",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 721,
+		num: 1160,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Encore. One use.",
+	},
+	"tr31": {
+		id: "tr31",
+		name: "TR31",
+		fling: {
+			basePower: 100,
+		},
+		spritenum: 729,
+		num: 1161,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Iron Tail. One use.",
+	},
+	"tr32": {
+		id: "tr32",
+		name: "TR32",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 737,
+		num: 1162,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Crunch. One use.",
+	},
+	"tr33": {
+		id: "tr33",
+		name: "TR33",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 728,
+		num: 1163,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Shadow Ball. One use.",
+	},
+	"tr34": {
+		id: "tr34",
+		name: "TR34",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 734,
+		num: 1164,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Future Sight. One use.",
+	},
+	"tr35": {
+		id: "tr35",
+		name: "TR35",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 721,
+		num: 1165,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Uproar. One use.",
+	},
+	"tr36": {
+		id: "tr36",
+		name: "TR36",
+		fling: {
+			basePower: 95,
+		},
+		spritenum: 730,
+		num: 1166,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Heat Wave. One use.",
+	},
+	"tr37": {
+		id: "tr37",
+		name: "TR37",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 737,
+		num: 1167,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Taunt. One use.",
+	},
+	"tr38": {
+		id: "tr38",
+		name: "TR38",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 734,
+		num: 1168,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Trick. One use.",
+	},
+	"tr39": {
+		id: "tr39",
+		name: "TR39",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 722,
+		num: 1169,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Superpower. One use.",
+	},
+	"tr40": {
+		id: "tr40",
+		name: "TR40",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 734,
+		num: 1170,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Skill Swap. One use.",
+	},
+	"tr41": {
+		id: "tr41",
+		name: "TR41",
+		fling: {
+			basePower: 85,
+		},
+		spritenum: 730,
+		num: 1171,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Blaze Kick. One use.",
+	},
+	"tr42": {
+		id: "tr42",
+		name: "TR42",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 721,
+		num: 1172,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Hyper Voice. One use.",
+	},
+	"tr43": {
+		id: "tr43",
+		name: "TR43",
+		fling: {
+			basePower: 130,
+		},
+		spritenum: 730,
+		num: 1173,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Overheat. One use.",
+	},
+	"tr44": {
+		id: "tr44",
+		name: "TR44",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 734,
+		num: 1174,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Cosmic Power. One use.",
+	},
+	"tr45": {
+		id: "tr45",
+		name: "TR45",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 731,
+		num: 1175,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Muddy Water. One use.",
+	},
+	"tr46": {
+		id: "tr46",
+		name: "TR46",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 729,
+		num: 1176,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Iron Defense. One use.",
+	},
+	"tr47": {
+		id: "tr47",
+		name: "TR47",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 736,
+		num: 1177,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Dragon Claw. One use.",
+	},
+	"tr48": {
+		id: "tr48",
+		name: "TR48",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 722,
+		num: 1178,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Bulk Up. One use.",
+	},
+	"tr49": {
+		id: "tr49",
+		name: "TR49",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 734,
+		num: 1179,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Calm Mind. One use.",
+	},
+	"tr50": {
+		id: "tr50",
+		name: "TR50",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 732,
+		num: 1180,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Leaf Blade. One use.",
+	},
+	"tr51": {
+		id: "tr51",
+		name: "TR51",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 736,
+		num: 1181,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Dragon Dance. One use.",
+	},
+	"tr52": {
+		id: "tr52",
+		name: "TR52",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 729,
+		num: 1182,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Gyro Ball. One use.",
+	},
+	"tr53": {
+		id: "tr53",
+		name: "TR53",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 722,
+		num: 1183,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Close Combat. One use.",
+	},
+	"tr54": {
+		id: "tr54",
+		name: "TR54",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 724,
+		num: 1184,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Toxic Spikes. One use.",
+	},
+	"tr55": {
+		id: "tr55",
+		name: "TR55",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 730,
+		num: 1185,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Flare Blitz. One use.",
+	},
+	"tr56": {
+		id: "tr56",
+		name: "TR56",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 722,
+		num: 1186,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Aura Sphere. One use.",
+	},
+	"tr57": {
+		id: "tr57",
+		name: "TR57",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 724,
+		num: 1187,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Poison Jab. One use.",
+	},
+	"tr58": {
+		id: "tr58",
+		name: "TR58",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 737,
+		num: 1188,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Dark Pulse. One use.",
+	},
+	"tr59": {
+		id: "tr59",
+		name: "TR59",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 732,
+		num: 1189,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Seed Bomb. One use.",
+	},
+	"tr60": {
+		id: "tr60",
+		name: "TR60",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 727,
+		num: 1190,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move X-Scissor. One use.",
+	},
+	"tr61": {
+		id: "tr61",
+		name: "TR61",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 727,
+		num: 1191,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Bug Buzz. One use.",
+	},
+	"tr62": {
+		id: "tr62",
+		name: "TR62",
+		fling: {
+			basePower: 85,
+		},
+		spritenum: 736,
+		num: 1192,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Dragon Pulse. One use.",
+	},
+	"tr63": {
+		id: "tr63",
+		name: "TR63",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 726,
+		num: 1193,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Power Gem. One use.",
+	},
+	"tr64": {
+		id: "tr64",
+		name: "TR64",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 722,
+		num: 1194,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Focus Blast. One use.",
+	},
+	"tr65": {
+		id: "tr65",
+		name: "TR65",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 732,
+		num: 1195,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Energy Ball. One use.",
+	},
+	"tr66": {
+		id: "tr66",
+		name: "TR66",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 723,
+		num: 1196,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Brave Bird. One use.",
+	},
+	"tr67": {
+		id: "tr67",
+		name: "TR67",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 725,
+		num: 1197,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Earth Power. One use.",
+	},
+	"tr68": {
+		id: "tr68",
+		name: "TR68",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 737,
+		num: 1198,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Nasty Plot. One use.",
+	},
+	"tr69": {
+		id: "tr69",
+		name: "TR69",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 734,
+		num: 1199,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Zen Headbutt. One use.",
+	},
+	"tr70": {
+		id: "tr70",
+		name: "TR70",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 729,
+		num: 1200,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Flash Cannon. One use.",
+	},
+	"tr71": {
+		id: "tr71",
+		name: "TR71",
+		fling: {
+			basePower: 130,
+		},
+		spritenum: 732,
+		num: 1201,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Leaf Storm. One use.",
+	},
+	"tr72": {
+		id: "tr72",
+		name: "TR72",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 732,
+		num: 1202,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Power Whip. One use.",
+	},
+	"tr73": {
+		id: "tr73",
+		name: "TR73",
+		fling: {
+			basePower: 120,
+		},
+		spritenum: 724,
+		num: 1203,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Gunk Shot. One use.",
+	},
+	"tr74": {
+		id: "tr74",
+		name: "TR74",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 729,
+		num: 1204,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Iron Head. One use.",
+	},
+	"tr75": {
+		id: "tr75",
+		name: "TR75",
+		fling: {
+			basePower: 100,
+		},
+		spritenum: 726,
+		num: 1205,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Stone Edge. One use.",
+	},
+	"tr76": {
+		id: "tr76",
+		name: "TR76",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 726,
+		num: 1206,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Stealth Rock. One use.",
+	},
+	"tr77": {
+		id: "tr77",
+		name: "TR77",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 732,
+		num: 1207,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Grass Knot. One use.",
+	},
+	"tr78": {
+		id: "tr78",
+		name: "TR78",
+		fling: {
+			basePower: 95,
+		},
+		spritenum: 724,
+		num: 1208,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Sludge Wave. One use.",
+	},
+	"tr79": {
+		id: "tr79",
+		name: "TR79",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 729,
+		num: 1209,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Heavy Slam. One use.",
+	},
+	"tr80": {
+		id: "tr80",
+		name: "TR80",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 733,
+		num: 1210,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Electro Ball. One use.",
+	},
+	"tr81": {
+		id: "tr81",
+		name: "TR81",
+		fling: {
+			basePower: 95,
+		},
+		spritenum: 737,
+		num: 1211,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Foul Play. One use.",
+	},
+	"tr82": {
+		id: "tr82",
+		name: "TR82",
+		fling: {
+			basePower: 20,
+		},
+		spritenum: 734,
+		num: 1212,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Stored Power. One use.",
+	},
+	"tr83": {
+		id: "tr83",
+		name: "TR83",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 734,
+		num: 1213,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Ally Switch. One use.",
+	},
+	"tr84": {
+		id: "tr84",
+		name: "TR84",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 731,
+		num: 1214,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Scald. One use.",
+	},
+	"tr85": {
+		id: "tr85",
+		name: "TR85",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 721,
+		num: 1215,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Work Up. One use.",
+	},
+	"tr86": {
+		id: "tr86",
+		name: "TR86",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 733,
+		num: 1216,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Wild Charge. One use.",
+	},
+	"tr87": {
+		id: "tr87",
+		name: "TR87",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 725,
+		num: 1217,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Drill Run. One use.",
+	},
+	"tr88": {
+		id: "tr88",
+		name: "TR88",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 730,
+		num: 1218,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Heat Crash. One use.",
+	},
+	"tr89": {
+		id: "tr89",
+		name: "TR89",
+		fling: {
+			basePower: 110,
+		},
+		spritenum: 723,
+		num: 1219,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Hurricane. One use.",
+	},
+	"tr90": {
+		id: "tr90",
+		name: "TR90",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 738,
+		num: 1220,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Play Rough. One use.",
+	},
+	"tr91": {
+		id: "tr91",
+		name: "TR91",
+		fling: {
+			basePower: 10,
+		},
+		spritenum: 724,
+		num: 1221,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Venom Drench. One use.",
+	},
+	"tr92": {
+		id: "tr92",
+		name: "TR92",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 738,
+		num: 1222,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Dazzling Gleam. One use.",
+	},
+	"tr93": {
+		id: "tr93",
+		name: "TR93",
+		fling: {
+			basePower: 85,
+		},
+		spritenum: 737,
+		num: 1223,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Darkest Lariat. One use.",
+	},
+	"tr94": {
+		id: "tr94",
+		name: "TR94",
+		fling: {
+			basePower: 95,
+		},
+		spritenum: 725,
+		num: 1224,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move High Horsepower. One use.",
+	},
+	"tr95": {
+		id: "tr95",
+		name: "TR95",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 737,
+		num: 1225,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Throat Chop. One use.",
+	},
+	"tr96": {
+		id: "tr96",
+		name: "TR96",
+		fling: {
+			basePower: 90,
+		},
+		spritenum: 727,
+		num: 1226,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Pollen Puff. One use.",
+	},
+	"tr97": {
+		id: "tr97",
+		name: "TR97",
+		fling: {
+			basePower: 85,
+		},
+		spritenum: 734,
+		num: 1227,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Psychic Fangs. One use.",
+	},
+	"tr98": {
+		id: "tr98",
+		name: "TR98",
+		fling: {
+			basePower: 85,
+		},
+		spritenum: 731,
+		num: 1228,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Liquidation. One use.",
+	},
+	"tr99": {
+		id: "tr99",
+		name: "TR99",
+		fling: {
+			basePower: 80,
+		},
+		spritenum: 722,
+		num: 1229,
+		gen: 8,
+		desc: "Teaches certain Pokemon the move Body Press. One use.",
 	},
 	"twistedspoon": {
 		id: "twistedspoon",
@@ -6291,7 +7391,7 @@ let BattleItems = {
 		megaEvolves: "Tyranitar",
 		itemUser: ["Tyranitar"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 669,
@@ -6342,8 +7442,8 @@ let BattleItems = {
 		// Implemented in statuses.js, moves.js, and abilities.js
 		num: 1123,
 		gen: 8,
-		desc: "The holder is immune to the weather-based modifiers of the attacker's moves in the effects of Sunny Day and Rain Dance. However, the user's Weather Ball and own weather-based abilities will not activate.",
-		shortDesc: "Blocks the holder from the effects of sun/rain.",
+		desc: "The holder ignores rain- and sun-based effects. Damage and accuracy calculations from attacks used by the holder are affected by rain and sun, but not attacks used against the holder.",
+		shortDesc: "The holder ignores rain- and sun-based effects.",
 	},
 	"venusaurite": {
 		id: "venusaurite",
@@ -6353,7 +7453,7 @@ let BattleItems = {
 		megaEvolves: "Venusaur",
 		itemUser: ["Venusaur"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 659,
@@ -6391,16 +7491,13 @@ let BattleItems = {
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
-			if (move.type === 'Water') {
-				if (source.useItem()) {
-					this.add('-enditem', source, 'Water Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
-				}
+			if (move.type === 'Water' && source.useItem()) {
+				source.addVolatile('gem');
 			}
 		},
 		num: 549,
 		gen: 5,
-		isNonstandard: 'Past',
+		isNonstandard: "Past",
 		desc: "Holder's first successful Water-type attack will have 1.3x power. Single use.",
 	},
 	"watermemory": {
@@ -6409,7 +7506,7 @@ let BattleItems = {
 		spritenum: 677,
 		onMemory: 'Water',
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -6449,7 +7546,6 @@ let BattleItems = {
 	"watmelberry": {
 		id: "watmelberry",
 		name: "Watmel Berry",
-		isUnreleased: true,
 		spritenum: 530,
 		isBerry: true,
 		naturalGift: {
@@ -6459,6 +7555,7 @@ let BattleItems = {
 		onEat: false,
 		num: 181,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"waveincense": {
@@ -6487,9 +7584,13 @@ let BattleItems = {
 		},
 		onHitPriority: 1,
 		onHit(target, source, move) {
-			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0 && target.useItem()) {
-				this.boost({atk: 2, spa: 2});
+			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0) {
+				target.useItem();
 			}
+		},
+		boosts: {
+			atk: 2,
+			spa: 2,
 		},
 		num: 639,
 		gen: 6,
@@ -6498,7 +7599,6 @@ let BattleItems = {
 	"wepearberry": {
 		id: "wepearberry",
 		name: "Wepear Berry",
-		isUnreleased: true,
 		spritenum: 533,
 		isBerry: true,
 		naturalGift: {
@@ -6508,6 +7608,7 @@ let BattleItems = {
 		onEat: false,
 		num: 167,
 		gen: 3,
+		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
 	"whippeddream": {
@@ -6659,7 +7760,7 @@ let BattleItems = {
 			}
 		},
 		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -6667,6 +7768,7 @@ let BattleItems = {
 		forcedForme: "Arceus-Electric",
 		num: 300,
 		gen: 4,
+		isNonstandard: "Unobtainable",
 		desc: "Holder's Electric-type attacks have 1.2x power. Judgment is Electric type.",
 	},
 	"zoomlens": {
@@ -6677,7 +7779,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onSourceModifyAccuracy(accuracy, target) {
-			if (typeof accuracy === 'number' && !this.willMove(target)) {
+			if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
 				this.debug('Zoom Lens boosting accuracy');
 				return accuracy * 1.2;
 			}
@@ -7000,7 +8102,7 @@ let BattleItems = {
 		megaEvolves: "Crucibelle",
 		itemUser: ["Crucibelle"],
 		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: -1,

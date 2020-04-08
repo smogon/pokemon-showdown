@@ -485,9 +485,9 @@ const commands = {
 		let targetNum = parseInt(target);
 		if (!isNaN(targetNum) && '' + targetNum === target) {
 			for (let p in Dex.data.Pokedex) {
-				let pokemon = Dex.getTemplate(p);
+				let pokemon = Dex.getSpecies(p);
 				if (pokemon.num === targetNum) {
-					target = pokemon.species;
+					target = pokemon.baseSpecies;
 					break;
 				}
 			}
@@ -531,9 +531,9 @@ const commands = {
 				}
 				return this.sendReply(buffer);
 			case 'pokemon':
-				let pokemon = dex.getTemplate(newTarget.name);
-				if (format && format.onModifyTemplate) {
-					pokemon = format.onModifyTemplate.call({dex}, pokemon) || pokemon;
+				let pokemon = dex.getSpecies(newTarget.name);
+				if (format && format.onModifySpecies) {
+					pokemon = format.onModifySpecies.call({dex}, pokemon) || pokemon;
 				}
 				let tier = pokemon.tier;
 				if (room && (room.roomid === 'smogondoubles' ||
@@ -565,7 +565,7 @@ const commands = {
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					let evos = /** @type {string[]} */ ([]);
 					for (const evoName of pokemon.evos) {
-						const evo = dex.getTemplate(evoName);
+						const evo = dex.getSpecies(evoName);
 						if (evo.gen <= dex.gen) {
 							let condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 							switch (evo.evoType) {
@@ -626,8 +626,8 @@ const commands = {
 						details["Natural Gift Type"] = item.naturalGift.type;
 						details["Natural Gift Base Power"] = item.naturalGift.basePower;
 					}
-					if (item.isUnreleased) {
-						details["Unreleased in Gen " + dex.gen] = "";
+					if (item.isNonstandard) {
+						details["Unobtainable in Gen " + dex.gen] = "";
 					}
 				}
 				break;
@@ -721,8 +721,8 @@ const commands = {
 					if (move.id === 'mirrormove') {
 						details[`<a href="https://${Config.routes.dex}/tags/nonmirror">Non-Mirrorable Moves</a>`] = '';
 					}
-					if (move.isUnreleased) {
-						details["Unreleased in Gen " + dex.gen] = "";
+					if (move.isNonstandard === 'Unobtainable') {
+						details["Unobtainable in Gen " + dex.gen] = "";
 					}
 				}
 				break;
@@ -781,13 +781,13 @@ const commands = {
 		}
 		let targets = target.split(/ ?[,/] ?/);
 		/** @type {{types: string[], [k: string]: any}} */
-		let pokemon = mod.getTemplate(targets[0]);
+		let species = mod.getSpecies(targets[0]);
 		let type1 = mod.getType(targets[0]);
 		let type2 = mod.getType(targets[1]);
 		let type3 = mod.getType(targets[2]);
 
-		if (pokemon.exists) {
-			target = pokemon.species;
+		if (species.exists) {
+			target = species.species;
 		} else {
 			let types = [];
 			if (type1.exists) {
@@ -801,9 +801,9 @@ const commands = {
 			}
 
 			if (types.length === 0) {
-				return this.sendReplyBox(Chat.html`${target} isn't a recognized type or pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
+				return this.sendReplyBox(Chat.html`${target} isn't a recognized type or Pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
 			}
-			pokemon = {types: types};
+			species = {types: types};
 			target = types.join("/");
 		}
 
@@ -811,9 +811,9 @@ const commands = {
 		let resistances = [];
 		let immunities = [];
 		for (let type in mod.data.TypeChart) {
-			let notImmune = mod.getImmunity(type, pokemon);
+			const notImmune = mod.getImmunity(type, species);
 			if (notImmune) {
-				let typeMod = mod.getEffectiveness(type, pokemon);
+				const typeMod = mod.getEffectiveness(type, species);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
@@ -840,7 +840,7 @@ const commands = {
 		}
 
 		let buffer = [];
-		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':');
+		buffer.push(species.exists ? "" + species.name + ' (ignoring abilities):' : '' + target + ':');
 		buffer.push('<span class="message-effect-weak">Weaknesses</span>: ' + (weaknesses.join(', ') || '<font color=#999999>None</font>'));
 		buffer.push('<span class="message-effect-resist">Resistances</span>: ' + (resistances.join(', ') || '<font color=#999999>None</font>'));
 		buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immunities.join(', ') || '<font color=#999999>None</font>'));
@@ -861,9 +861,9 @@ const commands = {
 		let targets = target.split(/[,/]/).slice(0, 2);
 		if (targets.length !== 2) return this.errorReply("Attacker and defender must be separated with a comma.");
 
-		let searchMethods = ['getType', 'getMove', 'getTemplate'];
+		let searchMethods = ['getType', 'getMove', 'getSpecies'];
 		let sourceMethods = ['getType', 'getMove'];
-		let targetMethods = ['getType', 'getTemplate'];
+		let targetMethods = ['getType', 'getSpecies'];
 		let source, defender, foundData, atkName, defName;
 
 		for (let i = 0; i < 2; ++i) {
@@ -1272,7 +1272,7 @@ const commands = {
 			}
 
 			if (!pokemon) {
-				let testPoke = Dex.getTemplate(arg);
+				let testPoke = Dex.getSpecies(arg);
 				if (testPoke.exists) {
 					pokemon = testPoke.baseStats;
 					baseSet = true;
@@ -1607,14 +1607,14 @@ const commands = {
 		const DEFAULT_CALC_COMMANDS = ['honkalculator', 'honkocalc'];
 		const RANDOMS_CALC_COMMANDS = ['randomscalc', 'randbatscalc', 'rcalc'];
 		const BATTLESPOT_CALC_COMMANDS = ['bsscalc', 'cantsaycalc'];
-		const SUPPORTED_RANDOM_FORMATS = ['gen7randombattle', 'gen7unratedrandombattle'];
+		const SUPPORTED_RANDOM_FORMATS = ['gen8randombattle', 'gen8unratedrandombattle', 'gen7randombattle', 'gen6randombattle', 'gen5randombattle', 'gen4randombattle', 'gen3randombattle', 'gen2randombattle', 'gen1randombattle'];
 		const SUPPORTED_BATTLESPOT_FORMATS = ['gen5gbusingles', 'gen5gbudoubles', 'gen6battlespotsingles', 'gen6battlespotdoubles', 'gen6battlespottriples', 'gen7battlespotsingles', 'gen7battlespotdoubles', 'gen7bssfactory'];
 		const isRandomBattle = (room && room.battle && SUPPORTED_RANDOM_FORMATS.includes(room.battle.format));
 		const isBattleSpotBattle = (room && room.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) || room.battle.format.includes("battlespotspecial")));
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) || (isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
-				`Random Battles damage calculator. (Courtesy of LegoFigure11 &amp; Wiggleetuff)<br />` +
-				`- <a href="https://randbatscalc.github.io/">Random Battles Damage Calculator</a>`
+				`Random Battles damage calculator. (Courtesy of Austin &amp; pre)<br />` +
+				`- <a href="https://calc.pokemonshowdown.com/randoms.html">Random Battles Damage Calculator</a>`
 			);
 		}
 		if (BATTLESPOT_CALC_COMMANDS.includes(cmd) || (isBattleSpotBattle && !DEFAULT_CALC_COMMANDS.includes(cmd))) {
@@ -1625,7 +1625,7 @@ const commands = {
 		}
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko &amp; Austin)<br />` +
-			`- <a href="https://${Config.routes.root}/damagecalc/">Damage Calculator</a>`
+			`- <a href="https://calc.pokemonshowdown.com/index.html">Damage Calculator</a>`
 		);
 	},
 	calchelp: [
@@ -1726,10 +1726,7 @@ const commands = {
 				if (format.removedRules && format.removedRules.length) rules.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", ")));
 				if (format.banlist && format.banlist.length) rules.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
 				if (format.unbanlist && format.unbanlist.length) rules.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
-				if (format.restrictedStones && format.restrictedStones.length) rules.push("<b>Restricted Mega Stones</b> - " + Chat.escapeHTML(format.restrictedStones.join(", ")));
-				if (format.cannotMega && format.cannotMega.length) rules.push("<b>Can't Mega Evolve non-natively</b> - " + Chat.escapeHTML(format.cannotMega.join(", ")));
-				if (format.restrictedAbilities && format.restrictedAbilities.length) rules.push("<b>Restricted abilities</b> - " + Chat.escapeHTML(format.restrictedAbilities.join(", ")));
-				if (format.restrictedMoves && format.restrictedMoves.length) rules.push("<b>Restricted moves</b> - " + Chat.escapeHTML(format.restrictedMoves.join(", ")));
+				if (format.restricted && format.restricted.length) rules.push("<b>Restricted</b> - " + Chat.escapeHTML(format.restricted.join(", ")));
 				if (rules.length > 0) {
 					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
 				} else {
@@ -1964,7 +1961,7 @@ const commands = {
 		if (!this.runBroadcast()) return;
 
 		let targets = target.split(',');
-		let pokemon = Dex.getTemplate(targets[0]);
+		let pokemon = Dex.getSpecies(targets[0]);
 		let item = Dex.getItem(targets[0]);
 		let move = Dex.getMove(targets[0]);
 		let ability = Dex.getAbility(targets[0]);
@@ -2008,8 +2005,8 @@ const commands = {
 				return this.sendReplyBox(`${pokemon.name} did not exist in ${generation.toUpperCase()}!`);
 			}
 
-			if ((pokemon.battleOnly && pokemon.baseSpecies !== 'Greninja') || pokemon.baseSpecies === 'Keldeo' || pokemon.baseSpecies === 'Genesect') {
-				pokemon = Dex.getTemplate(pokemon.baseSpecies);
+			if ((pokemon.battleOnly && pokemon.baseSpecies !== 'Greninja') || ['Keldeo', 'Genesect'].includes(pokemon.baseSpecies)) {
+				pokemon = Dex.getSpecies(pokemon.inheritsFrom || pokemon.baseSpecies);
 			}
 
 			let formatName = extraFormat.name;
@@ -2046,20 +2043,21 @@ const commands = {
 				german: 'de',
 				portuguese: 'pt',
 			};
-			let speciesid = pokemon.speciesid;
+			let id = pokemon.id;
 			// Special case for Meowstic-M
-			if (speciesid === 'meowstic') speciesid = 'meowsticm';
+			if (id === 'meowstic') id = 'meowsticm';
 			if (['ou', 'uu'].includes(formatId) && generation === 'sm' && room && room.language in supportedLanguages) {
 				// Limited support for translated analysis
-				// Translated analysis do not support automatic redirects from a speciesid to the proper page
-				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				// Translated analysis do not support automatic redirects from a id to the proper page
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			} else if (['ou', 'uu'].includes(formatId) && generation === 'sm') {
-				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
-					`Other languages: <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=es">Español</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=fr">Français</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=it">Italiano</a>, ` +
-					`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=de">Deutsch</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=pt">Português</a>`
+				this.sendReplyBox(
+					Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
+					`Other languages: <a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=es">Español</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=fr">Français</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=it">Italiano</a>, ` +
+					`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=de">Deutsch</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=pt">Português</a>`
 				);
 			} else {
-				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
@@ -2128,7 +2126,7 @@ const commands = {
 
 		let baseLink = 'http://veekun.com/dex/';
 
-		let pokemon = Dex.getTemplate(target);
+		let pokemon = Dex.getSpecies(target);
 		let item = Dex.getItem(target);
 		let move = Dex.getMove(target);
 		let ability = Dex.getAbility(target);
@@ -2146,8 +2144,8 @@ const commands = {
 			// Showdown and Veekun have different names for various formes
 			if (baseSpecies === 'Meowstic' && forme === 'F') forme = 'Female';
 			if (baseSpecies === 'Zygarde' && forme === '10%') forme = '10';
-			if (baseSpecies === 'Necrozma' && !Dex.getTemplate(baseSpecies + forme).battleOnly) forme = forme.substr(0, 4);
-			if (baseSpecies === 'Pikachu' && Dex.getTemplate(baseSpecies + forme).gen === 7) forme += '-Cap';
+			if (baseSpecies === 'Necrozma' && !Dex.getSpecies(baseSpecies + forme).battleOnly) forme = forme.substr(0, 4);
+			if (baseSpecies === 'Pikachu' && Dex.getSpecies(baseSpecies + forme).gen === 7) forme += '-Cap';
 			if (forme.endsWith('Totem')) {
 				if (baseSpecies === 'Raticate') forme = 'Totem-Alola';
 				if (baseSpecies === 'Marowak') forme = 'Totem';
@@ -2231,7 +2229,7 @@ const commands = {
 	'!dice': true,
 	roll: 'dice',
 	dice(target, room, user) {
-		if (!target || target.match(/[^\d\sdHL+-]/i)) return this.parse('/help dice');
+		if (!target || /[^\d\sdHL+-]/i.test(target)) return this.parse('/help dice');
 		if (!this.runBroadcast(true)) return;
 
 		// ~30 is widely regarded as the sample size required for sum to be a Gaussian distribution.
@@ -2342,6 +2340,18 @@ const commands = {
 	},
 	pickrandomhelp: [`/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.`],
 
+	'!shuffle': true,
+	shuffle(target, room, user) {
+		if (!target || !target.includes(',')) return this.parse('/help shuffle');
+		const args = target.split(',');
+		if (!this.runBroadcast(true)) return false;
+		const results = Dex.shuffle(args.map(arg => arg.trim()));
+		return this.sendReplyBox(Chat.html`<em>Shuffled:</em><br> ${results.join(', ')}`);
+	},
+	shufflehelp: [
+		`/shuffle [option], [option], [option], ... - Randomly shuffles a list of 2 or more elements.`,
+	],
+
 	showimage(target, room, user) {
 		if (!target) return this.parse('/help showimage');
 		if (!this.can('declare', null, room)) return false;
@@ -2395,17 +2405,20 @@ const commands = {
 			'Did you mean: 1. 3.1415926535897932384626... (Decimal)<br />' +
 			'2. 3.184809493B91866... (Duodecimal)<br />' +
 			'3. 3.243F6A8885A308D... (Hexadecimal)<br /><br />' +
-			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!');
+			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!'
+		);
 	},
 
 	'!code': true,
 	code(target, room, user) {
+		// XXX: target is trimmed by Chat#splitMessage. Let's not add another
+		// awful hack like ! or help command keys for whether or not the target
+		// is raw for now.
+		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimEnd();
 		if (!target) return this.parse('/help code');
 		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
 
-		const params = target.split('\n');
-		if (!params[0]) params.unshift();
-		if (!params[params.length - 1]) params.pop();
+		const params = target.substr(+target.startsWith('\n')).split('\n');
 		if (params.length === 1 && params[0].length < 80 && !params[0].includes('```') && this.shouldBroadcast()) {
 			return this.canTalk(`\`\`\`${params[0]}\`\`\``);
 		}
@@ -2427,7 +2440,11 @@ const commands = {
 		}
 
 		this.runBroadcast(true);
-		this.sendReplyBox(code);
+		if (this.broadcasting) {
+			return `/raw <div class="infobox">${code}</div>`;
+		} else {
+			this.sendReplyBox(code);
+		}
 	},
 	codehelp: [
 		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`,

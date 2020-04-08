@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: ModdedTemplateData}} */
+/**@type {{[k: string]: ModdedSpeciesData}} */
 let BattlePokedex = {
 	butterfree: {
 		inherit: true,

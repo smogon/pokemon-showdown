@@ -252,7 +252,7 @@ let BattleMovedex = {
 				}
 				this.effectData.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
-				if (!this.willMove(target)) {
+				if (!this.queue.willMove(target)) {
 					this.effectData.duration++;
 				}
 			},
@@ -956,7 +956,7 @@ let BattleMovedex = {
 		onAfterHit() {},
 		secondary: {
 			chance: 100,
-			onAfterHit(target, source) {
+			onHit(target, source) {
 				if (source.item || source.volatiles['gem']) {
 					return;
 				}

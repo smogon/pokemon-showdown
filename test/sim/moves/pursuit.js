@@ -54,7 +54,7 @@ describe(`Pursuit`, function () {
 		let clefable = battle.p2.pokemon[0];
 		let hpBeforeSwitch = clefable.hp;
 		battle.makeChoices('switch 2', 'switch 2');
-		assert.strictEqual(hpBeforeSwitch, clefable.hp);
+		assert.equal(hpBeforeSwitch, clefable.hp);
 	});
 
 	it(`should not double in power or activate before a switch if targeting an ally`, function () {

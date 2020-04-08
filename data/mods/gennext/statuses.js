@@ -132,7 +132,7 @@ let BattleStatuses = {
 	unown: {
 		// Unown: Shadow Tag
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -146,7 +146,7 @@ let BattleStatuses = {
 	bronzong: {
 		// Bronzong: Heatproof
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -158,7 +158,7 @@ let BattleStatuses = {
 	weezing: {
 		// Weezing: Aftermath
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -170,7 +170,7 @@ let BattleStatuses = {
 	flygon: {
 		// Flygon: Compoundeyes
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -182,7 +182,7 @@ let BattleStatuses = {
 	eelektross: {
 		// Eelektross: Poison Heal
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -194,7 +194,7 @@ let BattleStatuses = {
 	claydol: {
 		// Claydol: Filter
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -206,7 +206,7 @@ let BattleStatuses = {
 	gengar: {
 		// Gengar: Cursed Body
 		onImmunity(type, pokemon) {
-			if (pokemon.template.id !== 'gengarmega' && type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (pokemon.species.id !== 'gengarmega' && type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -218,7 +218,7 @@ let BattleStatuses = {
 	mismagius: {
 		// Mismagius: Cursed Body
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -230,7 +230,7 @@ let BattleStatuses = {
 	mesprit: {
 		// Mesprit: Serene Grace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -242,7 +242,7 @@ let BattleStatuses = {
 	uxie: {
 		// Uxie: Synchronize
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -254,7 +254,7 @@ let BattleStatuses = {
 	azelf: {
 		// Azelf: Steadfast
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -266,7 +266,7 @@ let BattleStatuses = {
 	hydreigon: {
 		// Hydreigon: Sheer Force
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -278,7 +278,7 @@ let BattleStatuses = {
 	rotom: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -290,7 +290,7 @@ let BattleStatuses = {
 	rotomheat: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -302,7 +302,7 @@ let BattleStatuses = {
 	rotomwash: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -314,7 +314,7 @@ let BattleStatuses = {
 	rotomfan: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -326,7 +326,7 @@ let BattleStatuses = {
 	rotomfrost: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -338,7 +338,7 @@ let BattleStatuses = {
 	rotommow: {
 		// All Rotoms: Trace
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
@@ -363,7 +363,7 @@ let BattleStatuses = {
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+			if (type === 'Ground' && !this.suppressingAttackEvents(pokemon)) return false;
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {

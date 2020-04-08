@@ -20,21 +20,21 @@ describe('Ingrain', function () {
 			{species: 'Miltank', ability: 'thickfat', moves: ['seismictoss', 'protect']},
 		]});
 		battle.makeChoices('move ingrain', 'move seismictoss');
-		assert.strictEqual(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 100);
+		assert.equal(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 100);
 
 		// should be passed by Baton Pass
 		battle.makeChoices('move batonpass', 'move seismictoss');
 		battle.makeChoices('switch 2', '');
-		assert.strictEqual(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 100);
+		assert.equal(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 100);
 
 		// should not be passed by U-turn
 		battle.makeChoices('move uturn', 'move seismictoss');
 		battle.makeChoices('switch 2', '');
-		assert.strictEqual(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 100);
+		assert.equal(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 100);
 
 		// should be gone after switching out and back in
 		battle.makeChoices('switch 2', 'move protect');
-		assert.strictEqual(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 200);
+		assert.equal(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 200);
 	});
 
 	it('should prevent the user from being forced out or switching out', function () {
@@ -45,9 +45,9 @@ describe('Ingrain', function () {
 		]});
 		battle.setPlayer('p2', {team: [{species: 'Arcanine', ability: 'flashfire', moves: ['sleeptalk', 'roar']}]});
 		battle.makeChoices('move ingrain', 'move roar');
-		assert.strictEqual(battle.p1.active[0].speciesid, 'cradily');
+		assert.equal(battle.p1.active[0].speciesid, 'cradily');
 		assert.trapped(() => battle.makeChoices('switch pikachu', 'move sleeptalk'));
-		assert.strictEqual(battle.p1.active[0].speciesid, 'cradily');
+		assert.equal(battle.p1.active[0].speciesid, 'cradily');
 	});
 
 	it('should remove the users\' Ground immunities', function () {

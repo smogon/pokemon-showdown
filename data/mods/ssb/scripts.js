@@ -24,7 +24,7 @@ let BattleScripts = {
 		/* if (pokemon.moveThisTurn) {
 			// THIS IS PURELY A SANITY CHECK
 			// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
-			// USE this.cancelMove INSTEAD
+			// USE this.queue.cancelMove INSTEAD
 			this.debug('' + pokemon.id + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
 			this.clearActiveMove(true);
 			return;
@@ -95,25 +95,23 @@ let BattleScripts = {
 			// Note that the speed stat used is after any volatile replacements like Speed Swap,
 			// but before any multipliers like Agility or Choice Scarf
 			// Ties go to whichever Pokemon has had the ability for the least amount of time
-			dancers.sort((a, b) =>
-				-(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder
+			dancers.sort(
+				(a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder
 			);
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
 				this.runMove(move.id, dancer, 0, this.dex.getAbility('dancer'), undefined, true);
-				// Using a Dancer move is enough to spoil Fake Out etc.
-				dancer.activeTurns++;
 			}
 		}
 		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
 	},
 	// Modded to allow arrays as Mega Stone options
 	canMegaEvo(pokemon) {
-		let altForme = pokemon.baseTemplate.otherFormes && this.dex.getTemplate(pokemon.baseTemplate.otherFormes[0]);
+		let altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
 		let item = pokemon.getItem();
-		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.species;
-		if (item.megaEvolves !== pokemon.baseTemplate.species || (Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) || (typeof item.megaStone === 'string' && item.megaStone === pokemon.species)) {
+		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.name;
+		if (item.megaEvolves !== pokemon.baseSpecies.name || (Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) || (typeof item.megaStone === 'string' && item.megaStone === pokemon.forme)) {
 			return null;
 		}
 		if (Array.isArray(item.megaStone)) {
@@ -123,8 +121,8 @@ let BattleScripts = {
 	},
 	// Modded to allow unlimited mega evos
 	runMegaEvo(pokemon) {
-		const templateid = pokemon.canMegaEvo || pokemon.canUltraBurst;
-		if (!templateid) return false;
+		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+		if (!speciesid) return false;
 		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
@@ -134,7 +132,7 @@ let BattleScripts = {
 			}
 		}
 
-		pokemon.formeChange(templateid, pokemon.getItem(), true);
+		pokemon.formeChange(speciesid, pokemon.getItem(), true);
 
 		// Limit mega evolution to once-per-Pokemon
 		pokemon.canMegaEvo = null;
@@ -152,7 +150,7 @@ let BattleScripts = {
 		let item = pokemon.getItem();
 		if (!skipChecks) {
 			if (!item.zMove) return;
-			if (item.itemUser && !item.itemUser.includes(pokemon.template.species)) return;
+			if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
 			let moveData = pokemon.getMoveData(move);
 			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
 		}
@@ -202,10 +200,10 @@ let BattleScripts = {
 	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle
 	canZMove(pokemon) {
-		if ((pokemon.m && pokemon.m.zMoveUsed) || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
+		if ((pokemon.m && pokemon.m.zMoveUsed) || (pokemon.transformed && (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))) return;
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
-		if (item.itemUser && !item.itemUser.includes(pokemon.template.species)) return;
+		if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
 		let atLeastOne = false;
 		let mustStruggle = true;
 		/**@type {ZMoveOptions} */
@@ -312,7 +310,7 @@ let BattleScripts = {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
-			// (On second thought, it might be easier to get a Missingno.)
+			// (On second thought, it might be easier to get a MissingNo.)
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types

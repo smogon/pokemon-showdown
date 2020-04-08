@@ -4,27 +4,27 @@
 let BattleItems = {
 	"kommoniumz": {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	"lunaliumz": {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	"lycaniumz": {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	"mimikiumz": {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	"solganiumz": {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	"ultranecroziumz": {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 };
 

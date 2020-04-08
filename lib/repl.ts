@@ -20,7 +20,7 @@ export const Repl = new class {
 	 */
 	socketPathnames: Set<string> = new Set();
 
-	listenersSetup: boolean = false;
+	listenersSetup = false;
 
 	setupListeners() {
 		if (Repl.listenersSetup) return;
@@ -79,7 +79,6 @@ export const Repl = new class {
 			repl.start({
 				input: socket,
 				output: socket,
-				// tslint:disable-next-line:ban-types
 				eval(cmd: string, context: any, unusedFilename: string, callback: Function): any {
 					try {
 						return callback(null, evalFunction(cmd));
@@ -99,7 +98,6 @@ export const Repl = new class {
 
 		server.once('error', (err: NodeJS.ErrnoException) => {
 			if (err.code === "EADDRINUSE") {
-				// tslint:disable-next-line:variable-name
 				fs.unlink(pathname, _err => {
 					if (_err && _err.code !== "ENOENT") {
 						crashlogger(_err, `REPL: ${filename}`);

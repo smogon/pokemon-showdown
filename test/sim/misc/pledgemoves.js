@@ -27,4 +27,30 @@ describe('Pledge Moves', function () {
 		assert(!battle.p2.active[0].side.sideConditions['firepledge'], "Fire Pledge should not be active on the opponent's side of the field.");
 		assert(!battle.p1.active[1].moveThisTurn, "Charizard should not have moved this turn.");
 	});
+
+	it("should not start a Pledge combo for Z-moves", function () {
+		battle = common.gen(7).createBattle({gameType: 'doubles'}, [[
+			{species: 'Weedle', ability: 'sapsipper', moves: ['sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Venusaur', moves: ['grasspledge']},
+			{species: 'Charizard', level: 1, item: 'firiumz', moves: ['firepledge']},
+		]]);
+		battle.makeChoices('auto', 'move grasspledge +1, move firepledge +1 zmove');
+		const weedle = battle.p1.active[0];
+		assert.statStage(weedle, 'atk', +1);
+	});
+
+	it("should not start a Pledge combo for Max Moves", function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Weedle', ability: 'sapsipper', moves: ['sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Venusaur', moves: ['grasspledge']},
+			{species: 'Charizard-Gmax', level: 1, moves: ['firepledge']},
+		]]);
+		battle.makeChoices('auto', 'move grasspledge +1, move firepledge +1 dynamax');
+		const weedle = battle.p1.active[0];
+		assert.statStage(weedle, 'atk', +1);
+	});
 });

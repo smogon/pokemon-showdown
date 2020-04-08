@@ -21,7 +21,7 @@ describe('Unaware', function () {
 		battle.makeChoices('move softboiled', 'move bellydrum');
 		battle.resetRNG();
 		battle.makeChoices('move softboiled', 'move vitalthrow');
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, damage);
+		assert.equal(pokemon.maxhp - pokemon.hp, damage);
 	});
 
 	it('should not ignore attack stage changes when Pokemon with it attack', function () {
@@ -49,7 +49,7 @@ describe('Unaware', function () {
 		pokemon.hp = pokemon.maxhp;
 		battle.resetRNG();
 		battle.makeChoices('move moonblast', 'move amnesia');
-		assert.strictEqual(pokemon.maxhp - pokemon.hp, damage);
+		assert.equal(pokemon.maxhp - pokemon.hp, damage);
 	});
 
 	it('should not ignore defense stage changes when Pokemon with it are attacked', function () {
@@ -77,5 +77,18 @@ describe('Unaware', function () {
 		battle.resetRNG();
 		battle.makeChoices('move splash', 'move shadowsneak');
 		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, damage);
+	});
+	it('should only apply to targets with Unaware in battles with multiple Pokemon', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'manaphy', moves: ['tailglow', 'surf']},
+			{species: 'slowbro', ability: 'unaware', moves: ['sleeptalk']},
+		], [
+			{species: 'clobbopus', ability: 'sturdy', moves: ['sleeptalk']},
+			{species: 'clobbopus', ability: 'sturdy', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move tailglow, auto', 'auto');
+		battle.makeChoices('move surf, auto', 'auto');
+		assert.equal(battle.p2.active[0].hp, 1);
+		assert.equal(battle.p2.active[1].hp, 1);
 	});
 });

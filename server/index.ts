@@ -55,6 +55,14 @@ try {
 
 try {
 	require.resolve('../.sim-dist/index');
+	// tslint:disable-next-line
+	const sucraseVersion = require('sucrase').getVersion().split('.');
+	if (
+		parseInt(sucraseVersion[0]) < 3 ||
+		(parseInt(sucraseVersion[0]) === 3 && parseInt(sucraseVersion[1]) < 12)
+	) {
+		throw new Error("Sucrase version too old");
+	}
 } catch (e) {
 	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
@@ -173,5 +181,13 @@ TeamValidatorAsync.PM.spawn();
  *********************************************************/
 
 import {Repl} from '../lib/repl';
-// tslint:disable-next-line: no-eval
+// eslint-disable-next-line no-eval
 Repl.start('app', cmd => eval(cmd));
+
+/*********************************************************
+ * Fully initialized, run startup hook
+ *********************************************************/
+
+if (Config.startuphook) {
+	process.nextTick(Config.startuphook);
+}

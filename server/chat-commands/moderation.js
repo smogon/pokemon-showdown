@@ -183,8 +183,8 @@ exports.commands = {
 			rankLists[targetRoom.auth[u]].push(u);
 		}
 
-		let buffer = Object.keys(rankLists).sort((a, b) =>
-			(Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
+		let buffer = Object.keys(rankLists).sort(
+			(a, b) => (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
 		).map(r => {
 			let roomRankList = rankLists[r].sort();
 			roomRankList = roomRankList.map(s => {
@@ -283,8 +283,8 @@ exports.commands = {
 		Rooms.global.autojoinRooms(user, connection);
 		let autojoins = [];
 
-		const promises = targets.map(target =>
-			user.tryJoinRoom(target, connection).then(ret => {
+		const promises = targets.map(
+			target => user.tryJoinRoom(target, connection).then(ret => {
 				if (ret === Rooms.RETRY_AFTER_LOGIN) {
 					autojoins.push(target);
 				}
@@ -572,8 +572,10 @@ exports.commands = {
 	ipmute: 'lock',
 	wl: 'lock',
 	weeklock: 'lock',
-	lock(target, room, user, connection, cmd) {
-		let week = cmd === 'wl' || cmd === 'weeklock';
+	monthlock: 'lock',
+	async lock(target, room, user, connection, cmd) {
+		const week = cmd === 'wl' || cmd === 'weeklock';
+		const month = cmd === 'monthlock';
 
 		if (!target) {
 			if (week) return this.parse('/help weeklock');
@@ -589,6 +591,7 @@ exports.commands = {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
 		if (!this.can('lock', targetUser)) return false;
+		if (month && !this.can('rangeban')) return false;
 
 		let name, userid;
 
@@ -596,7 +599,7 @@ exports.commands = {
 			name = targetUser.getLastName();
 			userid = targetUser.getLastId();
 
-			if (targetUser.locked && !week) {
+			if (targetUser.locked && !week && !month) {
 				return this.privateModAction(`(${name} would be locked by ${user.name} but was already locked.)`);
 			}
 
@@ -628,21 +631,21 @@ exports.commands = {
 
 
 		// Use default time for locks.
-		let duration = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
+		let duration = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : (month ? Date.now() + 30 * 24 * 60 * 60 * 1000 : null);
 		let affected = [];
 
 		if (targetUser) {
 			const ignoreAlts = Punishments.sharedIps.has(targetUser.latestIP);
-			affected = Punishments.lock(targetUser, duration, targetUser.locked, ignoreAlts, userReason);
+			affected = await Punishments.lock(targetUser, duration, targetUser.locked, ignoreAlts, userReason);
 		} else {
-			affected = Punishments.lock(null, duration, userid, false, userReason);
+			affected = await Punishments.lock(null, duration, userid, false, userReason);
 		}
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
-		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.id}${globalReason}`);
+		this.globalModlog((week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, ` by ${user.id}${globalReason}`);
 
-		let weekMsg = week ? ' for a week' : '';
-		let lockMessage = `${name} was locked from talking${weekMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
+		let durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
+		let lockMessage = `${name} was locked from talking${durationMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
 		this.addModAction(lockMessage);
 		// Notify staff room when a user is locked outside of it.
 		if (room.roomid !== 'staff' && Rooms.get('staff')) {
@@ -661,7 +664,7 @@ exports.commands = {
 		}
 
 		if (targetUser) {
-			let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users${weekMsg}`;
+			let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users${durationMsg}`;
 			if (userReason) message += `\n\nReason: ${userReason}`;
 
 			let appeal = '';
@@ -782,7 +785,7 @@ exports.commands = {
 
 	forceglobalban: 'globalban',
 	gban: 'globalban',
-	globalban(target, room, user, connection, cmd) {
+	async globalban(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help globalban');
 
 		target = this.splitTarget(target);
@@ -833,7 +836,7 @@ exports.commands = {
 			Rooms.get('staff').addByUser(user, `<<${room.roomid}>> ${banMessage}`);
 		}
 
-		let affected = Punishments.ban(targetUser, null, null, false, userReason);
+		let affected = await Punishments.ban(targetUser, null, null, false, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		let displayMessage = '';
 		if (affected.length > 1) {
@@ -1081,33 +1084,38 @@ exports.commands = {
 	untrustuser: 'trustuser',
 	unconfirmuser: 'trustuser',
 	confirmuser: 'trustuser',
+	forceconfirmuser: 'trustuser',
+	forcetrustuser: 'trustuser',
 	trustuser(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help trustuser');
 		if (!this.can('promote')) return;
 
+		const force = cmd.includes('force');
+		const untrust = cmd.includes('un');
 		target = this.splitTarget(target, true);
 		if (target) return this.errorReply(`This command does not support specifying a reason.`);
 		let targetUser = this.targetUser;
 		let userid = toID(this.targetUsername);
 		let name = targetUser ? targetUser.name : this.targetUsername;
 
-		if (!userid) return this.parse('/help trustuser');
-		if (!targetUser) return this.errorReply(`User '${name}' is not online.`);
+		let currentGroup = Users.usergroups[userid];
+		currentGroup = currentGroup ? currentGroup.charAt(0) : '';
 
-		if (cmd.startsWith('un')) {
-			if (!targetUser.trusted) return this.errorReply(`User '${name}' is not trusted.`);
-			if (targetUser.group !== Config.groupsranking[0]) {
-				return this.errorReply(`User '${name}' has a global rank higher than trusted.`);
-			}
+		if (untrust) {
+			if (currentGroup !== Config.groupsranking[0]) return this.errorReply(`User '${name}' is not trusted.`);
 
-			targetUser.setGroup(' ');
+			Users.setOfflineGroup(userid, Config.groupsranking[0]);
 			this.sendReply(`User '${name}' is no longer trusted.`);
 			this.privateModAction(`${name} was set to no longer be a trusted user by ${user.name}.`);
 			this.modlog('UNTRUSTUSER', userid);
 		} else {
-			if (targetUser.trusted) return this.errorReply(`User '${name}' is already trusted.`);
+			if (!targetUser && !force) return this.errorReply(`User '${name}' is offline. Use /force${cmd} if you're sure.`);
+			if (currentGroup) {
+				if (currentGroup === Config.groupsranking[0]) return this.errorReply(`User '${name}' is already trusted.`);
+				return this.errorReply(`User '${name}' has a global rank higher than trusted.`);
+			}
 
-			targetUser.setGroup(Config.groupsranking[0], true);
+			Users.setOfflineGroup(userid, Config.groupsranking[0], true);
 			this.sendReply(`User '${name}' is now trusted.`);
 			this.privateModAction(`${name} was set as a trusted user by ${user.name}.`);
 			this.modlog('TRUSTUSER', userid);
@@ -1318,7 +1326,7 @@ exports.commands = {
 
 	nl: 'namelock',
 	forcenamelock: 'namelock',
-	namelock(target, room, user, connection, cmd) {
+	async namelock(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help namelock');
 
 		let reason = this.splitTarget(target);
@@ -1347,7 +1355,7 @@ exports.commands = {
 
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.id}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
-		Punishments.namelock(targetUser, null, null, false, reason);
+		await Punishments.namelock(targetUser, null, null, false, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room.battle) this.parse('/savereplay forpunishment');
@@ -1388,15 +1396,20 @@ exports.commands = {
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 
-		this.splitTarget(target);
+		const lineCount = parseInt(this.splitTarget(target)) || 0;
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
-		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
+		if (!targetUser && !room.log.hasUsername(name)) {
+			return this.errorReply(`User ${name} not found or has no roomlogs.`);
+		}
+		if (lineCount && cmd.includes('alt')) {
+			return this.errorReply(`You can't specify a line count when using /hidealtstext.`);
+		}
 		let userid = toID(this.inputUsername);
 
 		if (!this.can('mute', null, room)) return;
 		if (targetUser && targetUser.trusted && targetUser !== user && !cmd.includes('force')) {
-			return this.errorReply(`${target} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
+			return this.errorReply(`${name} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
 		}
 
 		if (targetUser && cmd.includes('alt')) {
@@ -1408,9 +1421,13 @@ exports.commands = {
 				...targetUser.getAltUsers(true).map(user => user.getLastId()),
 			]);
 		} else {
-			room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			if (lineCount > 0) {
+				room.send(`|c|~|${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			} else {
+				room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			}
 			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
-			room.hideText([userid]);
+			room.hideText([userid], lineCount);
 		}
 	},
 	hidetexthelp: [

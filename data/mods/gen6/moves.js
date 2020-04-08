@@ -71,6 +71,10 @@ let BattleMovedex = {
 			},
 		},
 	},
+	disable: {
+		inherit: true,
+		desc: "For 4 turns, the target's last move used becomes disabled. Fails if one of the target's moves is already disabled, if the target has not made a move, or if the target no longer knows the move.",
+	},
 	encore: {
 		inherit: true,
 		desc: "For 3 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Encore, Mimic, Mirror Move, Sketch, Struggle, or Transform.",
@@ -85,7 +89,7 @@ let BattleMovedex = {
 				}
 				this.effectData.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
-				if (!this.willMove(target)) {
+				if (!this.queue.willMove(target)) {
 					this.effectData.duration++;
 				}
 			},
@@ -156,6 +160,14 @@ let BattleMovedex = {
 			}
 		},
 	},
+	gravity: {
+		inherit: true,
+		desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
+	},
+	healblock: {
+		inherit: true,
+		desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
+	},
 	heavyslam: {
 		inherit: true,
 		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less.",
@@ -171,6 +183,10 @@ let BattleMovedex = {
 	iceball: {
 		inherit: true,
 		desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn.",
+	},
+	imprison: {
+		inherit: true,
+		desc: "The user prevents all opposing Pokemon from using any moves that the user also knows as long as the user remains active.",
 	},
 	kingsshield: {
 		inherit: true,
@@ -241,7 +257,7 @@ let BattleMovedex = {
 			},
 			onSetStatus(status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+				if (effect && (effect.status || effect.id === 'yawn')) {
 					this.add('-activate', target, 'move: Misty Terrain');
 				}
 				return false;
@@ -285,6 +301,9 @@ let BattleMovedex = {
 	partingshot: {
 		inherit: true,
 		desc: "Lowers the target's Attack and Special Attack by 1 stage. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+		onHit(target, source) {
+			this.boost({atk: -1, spa: -1}, target, source);
+		},
 	},
 	payback: {
 		inherit: true,
@@ -441,6 +460,10 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 	},
+	taunt: {
+		inherit: true,
+		desc: "Prevents the target from using non-damaging moves for its next three turns. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune.",
+	},
 	telekinesis: {
 		inherit: true,
 		desc: "For 3 turns, the target cannot avoid any attacks made against it, other than OHKO moves, as long as it remains active. During the effect, the target is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability as long as it remains active. If the target uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, Thousand Arrows, and Iron Ball override this move if the target is under any of their effects. Fails if the target is already under this effect or the effects of Ingrain, Smack Down, or Thousand Arrows. The target is immune to this move on use if its species is Diglett, Dugtrio, or Gengar while Mega-Evolved. Mega Gengar cannot be under this effect by any means.",
@@ -451,11 +474,11 @@ let BattleMovedex = {
 	},
 	thousandarrows: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	thousandwaves: {
 		inherit: true,
-		isUnreleased: true,
+		isNonstandard: "Unobtainable",
 	},
 	thrash: {
 		inherit: true,
@@ -489,7 +512,7 @@ let BattleMovedex = {
 	wideguard: {
 		inherit: true,
 		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails, if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
-		shortDesc: "Protects allies from multi-target hits this turn.",
+		shortDesc: "Protects allies from multi-target damage this turn.",
 		effect: {
 			duration: 1,
 			onStart(target, source) {

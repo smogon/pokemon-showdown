@@ -4,25 +4,20 @@ const RandomGen5Teams = require('../gen5/random-teams');
 
 class RandomGen4Teams extends RandomGen5Teams {
 	/**
-	 * @param {string | Template} template
+	 * @param {string | Species} species
 	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
 	 * @param {boolean} [isLead]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, teamDetails = {}, isLead = false) {
-		let baseTemplate = (template = this.dex.getTemplate(template));
-		let species = template.species;
+	randomSet(species, teamDetails = {}, isLead = false) {
+		let baseSpecies = (species = this.dex.getSpecies(species));
+		let forme = species.name;
 
-		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
-			template = this.dex.getTemplate('unown');
+		if (species.battleOnly) forme = /** @type {string} */ (species.battleOnly);
 
-			let err = new Error('Template incompatible with random battles: ' + species);
-			Monitor.crashlog(err, 'The gen 4 randbat set generator');
-		}
-
-		if (template.battleOnly) species = template.baseSpecies;
-
-		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
+		// @ts-ignore
+		let movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id].learnset)).slice();
+		/** @type {string[]} */
 		let rejectedPool = [];
 		/**@type {string[]} */
 		let moves = [];
@@ -46,16 +41,15 @@ class RandomGen4Teams extends RandomGen5Teams {
 		};
 		/**@type {{[k: string]: true}} */
 		let hasType = {};
-		hasType[template.types[0]] = true;
-		if (template.types[1]) {
-			hasType[template.types[1]] = true;
+		hasType[species.types[0]] = true;
+		if (species.types[1]) {
+			hasType[species.types[1]] = true;
 		}
 		/**@type {{[k: string]: true}} */
 		let hasAbility = {};
-		hasAbility[template.abilities[0]] = true;
-		if (template.abilities[1]) {
-			// @ts-ignore
-			hasAbility[template.abilities[1]] = true;
+		hasAbility[species.abilities[0]] = true;
+		if (species.abilities[1]) {
+			hasAbility[species.abilities[1]] = true;
 		}
 		let availableHP = 0;
 		for (const setMoveid of movePool) {
@@ -104,7 +98,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			}
 
 			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
-			if (hasType['Dark'] && hasMove['suckerpunch'] && template.types.length === 1) {
+			if (hasType['Dark'] && hasMove['suckerpunch'] && species.types.length === 1) {
 				counter['stab']++;
 			}
 
@@ -383,7 +377,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 						if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
 					}
 				}
-				if (counter.setupType === 'Special' && moveid === 'hiddenpower' && template.types.length > 1 && counter['Special'] <= 2 && !hasType[move.type] && !counter['Physical'] && counter['specialpool']) {
+				if (counter.setupType === 'Special' && moveid === 'hiddenpower' && species.types.length > 1 && counter['Special'] <= 2 && !hasType[move.type] && !counter['Physical'] && counter['specialpool']) {
 					// Hidden Power isn't good enough
 					if (!(hasType['Ghost'] && move.type === 'Fighting' || hasType['Electric'] && move.type === 'Ice')) rejected = true;
 				}
@@ -391,6 +385,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 				// Reject defensive status moves if a reliable recovery move is available but not selected.
 				// Toxic is only defensive if used with another status move other than Protect (Toxic + 3 attacks and Toxic + Protect are ok).
 				if ((defensiveStatusMoves.includes(moveid) || moveid === 'toxic' && ((counter.Status > 1 && !hasMove['protect']) || counter.Status > 2)) &&
+					// @ts-ignore
 					!moves.some(id => recoveryMoves.includes(id)) && movePool.some(id => recoveryMoves.includes(id))) {
 					rejected = true;
 				}
@@ -410,13 +405,13 @@ class RandomGen4Teams extends RandomGen5Teams {
 					(hasType['Steel'] && !counter['Steel'] && movePool.includes('meteormash')) ||
 					(hasType['Water'] && !counter['Water'] && (hasMove['raindance'] || !hasType['Ice'] || !counter['Ice'])) ||
 					// @ts-ignore
-					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
+					((hasAbility['Adaptability'] && !counter.setupType && species.types.length > 1 && (!counter[species.types[0]] || !counter[species.types[1]])) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					// @ts-ignore
 					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
-					(movePool.includes('spore') || (!moves.some(id => recoveryMoves.includes(id)) && (movePool.includes('softboiled') || (template.baseSpecies === 'Arceus' && movePool.includes('recover'))))) ||
-					(template.requiredMove && movePool.includes(toID(template.requiredMove)))) &&
+					(movePool.includes('spore') || (!moves.some(id => recoveryMoves.includes(id)) && (movePool.includes('softboiled') || (species.baseSpecies === 'Arceus' && movePool.includes('recover'))))) ||
+					(species.requiredMove && movePool.includes(toID(species.requiredMove)))) &&
 					// @ts-ignore
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
@@ -448,7 +443,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					break;
 				}
 			}
-			if (moves.length === 4 && !counter.stab && !hasMove['metalburst'] && (counter['physicalpool'] || counter['specialpool']) && template.species !== 'Shuckle' && template.species !== 'Smeargle') {
+			if (moves.length === 4 && !counter.stab && !hasMove['metalburst'] && (counter['physicalpool'] || counter['specialpool']) && species.name !== 'Shuckle' && species.name !== 'Smeargle') {
 				// Move post-processing:
 				if (counter.damagingMoves.length === 0) {
 					// A set shouldn't have no attacking moves
@@ -458,12 +453,12 @@ class RandomGen4Teams extends RandomGen5Teams {
 					let damagingid = counter.damagingMoves[0].id;
 					if (movePool.length - availableHP || availableHP && (damagingid === 'hiddenpower' || !hasMove['hiddenpower'])) {
 						let replace = false;
-						if (!counter.damagingMoves[0].damage && template.species !== 'Blissey' && template.species !== 'Porygon2') {
+						if (!counter.damagingMoves[0].damage && species.name !== 'Blissey' && species.name !== 'Porygon2') {
 							replace = true;
 						}
 						if (replace) moves.splice(counter.damagingMoveIndex[damagingid], 1);
 					}
-				} else if (!counter.damagingMoves[0].damage && !counter.damagingMoves[1].damage && template.species !== 'Blissey' && template.species !== 'Clefable' && template.species !== 'Porygon2') {
+				} else if (!counter.damagingMoves[0].damage && !counter.damagingMoves[1].damage && species.name !== 'Blissey' && species.name !== 'Clefable' && species.name !== 'Porygon2') {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
 					let rejectableMoves = [];
 					let baseDiff = movePool.length - availableHP;
@@ -484,7 +479,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 
-		let abilities = Object.values(baseTemplate.abilities);
+		let abilities = Object.values(baseSpecies.abilities);
 		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
 		let ability0 = this.dex.getAbility(abilities[0]);
 		let ability1 = this.dex.getAbility(abilities[1]);
@@ -522,7 +517,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 				} else if (ability === 'Sand Veil') {
 					rejectAbility = !teamDetails['sand'];
 				} else if (ability === 'Serene Grace') {
-					rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
+					rejectAbility = !counter['serenegrace'] || species.id === 'chansey' || species.id === 'blissey';
 				} else if (ability === 'Simple') {
 					rejectAbility = !counter.setupType && !hasMove['cosmicpower'];
 				} else if (ability === 'Snow Cloak') {
@@ -568,22 +563,22 @@ class RandomGen4Teams extends RandomGen5Teams {
 			ability = ability0.name;
 		}
 
-		if (template.requiredItems) {
-			item = this.sample(template.requiredItems);
+		if (species.requiredItem) {
+			item = species.requiredItem;
 
 		// First, the extra high-priority items
-		} else if (template.species === 'Farfetch\'d') {
+		} else if (species.name === 'Farfetch\'d') {
 			item = 'Stick';
-		} else if (template.species === 'Marowak') {
+		} else if (species.name === 'Marowak') {
 			item = 'Thick Club';
-		} else if (template.species === 'Shedinja' || template.species === 'Smeargle') {
+		} else if (species.name === 'Shedinja' || species.name === 'Smeargle') {
 			item = 'Focus Sash';
-		} else if (template.species === 'Unown') {
+		} else if (species.name === 'Unown') {
 			item = 'Choice Specs';
-		} else if (template.species === 'Wobbuffet') {
+		} else if (species.name === 'Wobbuffet') {
 			item = hasMove['destinybond'] ? 'Custap Berry' : this.sample(['Leftovers', 'Sitrus Berry']);
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
-			if (template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3)) {
+			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3)) {
 				item = 'Choice Scarf';
 			} else {
 				item = (counter.Physical > counter.Special) ? 'Choice Band' : 'Choice Specs';
@@ -606,7 +601,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Toxic Orb';
 		} else if (ability === 'Unburden') {
 			item = 'Sitrus Berry';
-		} else if (template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 150) {
+		} else if (species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 150) {
 			item = isLead ? 'Focus Sash' : 'Life Orb';
 		} else if (hasMove['endeavor']) {
 			item = 'Focus Sash';
@@ -616,29 +611,29 @@ class RandomGen4Teams extends RandomGen5Teams {
 			(ability === 'Serene Grace' && (hasMove['bodyslam'] || hasMove['headbutt'] || hasMove['ironhead']))) {
 			item = 'Leftovers';
 		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']) {
-			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && !hasMove['bodyslam'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
+			item = species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && !hasMove['bodyslam'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
 		} else if ((counter.Special >= 4 || (counter.Special >= 3 && (hasMove['batonpass'] || hasMove['uturn'] || hasMove['waterspout'] && hasMove['selfdestruct']))) && !hasMove['chargebeam']) {
-			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && ability !== 'Speed Boost' && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Specs';
+			item = species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && ability !== 'Speed Boost' && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (hasMove['outrage'] && counter.setupType) {
 			item = 'Lum Berry';
 		} else if (hasMove['substitute']) {
 			item = counter.damagingMoves.length < 2 ||
-				!counter['drain'] && (counter.damagingMoves.length < 3 || template.baseStats.hp >= 60 || template.baseStats.def + template.baseStats.spd >= 180) ? 'Leftovers' : 'Life Orb';
+				!counter['drain'] && (counter.damagingMoves.length < 3 || species.baseStats.hp >= 60 || species.baseStats.def + species.baseStats.spd >= 180) ? 'Leftovers' : 'Life Orb';
 		} else if (ability === 'Guts') {
 			item = 'Toxic Orb';
-		} else if (isLead && !counter['recoil'] && !moves.some(id => !!recoveryMoves.includes(id)) && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 225) {
+		} else if (isLead && !counter['recoil'] && !moves.some(id => !!recoveryMoves.includes(id)) && species.baseStats.hp + species.baseStats.def + species.baseStats.spd < 225) {
 			item = 'Focus Sash';
 		} else if (counter.damagingMoves.length >= 4) {
 			item = (!!counter['Normal'] || counter['Dragon'] > 1 || hasMove['chargebeam'] || hasMove['suckerpunch']) ? 'Life Orb' : 'Expert Belt';
 		} else if (counter.damagingMoves.length >= 3 && !hasMove['superfang'] && !hasMove['metalburst']) {
-			let totalBulk = template.baseStats.hp + template.baseStats.def + template.baseStats.spd;
+			let totalBulk = species.baseStats.hp + species.baseStats.def + species.baseStats.spd;
 			item = (!!counter['speedsetup'] || !!counter['priority'] || hasMove['dragondance'] || hasMove['trickroom'] ||
-				totalBulk < 235 || (template.baseStats.spe >= 70 && (totalBulk < 260 || (!!counter['recovery'] && totalBulk < 285)))) ? 'Life Orb' : 'Leftovers';
+				totalBulk < 235 || (species.baseStats.spe >= 70 && (totalBulk < 260 || (!!counter['recovery'] && totalBulk < 285)))) ? 'Life Orb' : 'Leftovers';
 
 		// This is the "REALLY can't think of a good item" cutoff
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
-		} else if (this.dex.getEffectiveness('Rock', template) >= 1 || hasMove['roar']) {
+		} else if (this.dex.getEffectiveness('Rock', species) >= 1 || hasMove['roar']) {
 			item = 'Leftovers';
 		} else if (counter.Status <= 1 && !hasMove['metalburst'] && !hasMove['rapidspin'] && !hasMove['superfang']) {
 			item = 'Life Orb';
@@ -664,19 +659,19 @@ class RandomGen4Teams extends RandomGen5Teams {
 		let customScale = {
 			Delibird: 99, Ditto: 99, 'Farfetch\'d': 99, Unown: 99,
 		};
-		let tier = template.tier;
+		let tier = species.tier;
 		// @ts-ignore
 		let level = levelScale[tier] || 75;
 		// @ts-ignore
-		if (customScale[template.name]) level = customScale[template.name];
+		if (customScale[species.name]) level = customScale[species.name];
 
 		// Prepare optimal HP
-		let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 		if (hasMove['substitute'] && item === 'Sitrus Berry') {
 			// Two Substitutes should activate Sitrus Berry
 			while (hp % 4 > 0) {
 				evs.hp -= 4;
-				hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+				hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			}
 		} else if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
 			// Belly Drum should activate Sitrus Berry
@@ -686,7 +681,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			if (hp % 4 === 0) evs.hp -= 4;
 		} else {
 			// Maximize number of Stealth Rock switch-ins
-			let srWeakness = this.dex.getEffectiveness('Rock', template);
+			let srWeakness = this.dex.getEffectiveness('Rock', species);
 			if (srWeakness > 0 && hp % (4 / srWeakness) === 0) evs.hp -= 4;
 		}
 
@@ -702,9 +697,9 @@ class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		return {
-			name: template.baseSpecies,
-			species: species,
-			gender: template.gender,
+			name: species.baseSpecies,
+			species: forme,
+			gender: species.gender,
 			moves: moves,
 			ability: ability,
 			evs: evs,

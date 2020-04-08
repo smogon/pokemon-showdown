@@ -9,7 +9,7 @@
 
 import {crashlogger} from '../lib/crashlogger';
 
-declare var global: any;
+declare let global: any;
 
 export class TeamValidatorAsync {
 	format: Format;
@@ -18,10 +18,10 @@ export class TeamValidatorAsync {
 		this.format = Dex.getFormat(format);
 	}
 
-	validateTeam(team: string, removeNicknames: boolean = false) {
+	validateTeam(team: string, options?: {removeNicknames?: boolean}) {
 		let formatid = this.format.id;
 		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
-		return PM.query({formatid, removeNicknames, team});
+		return PM.query({formatid, options, team});
 	}
 
 	static get(format: string) {
@@ -37,22 +37,27 @@ export const get = TeamValidatorAsync.get;
 
 import {QueryProcessManager} from '../lib/process-manager';
 
-export const PM = new QueryProcessManager(module, async message => {
-	const {formatid, removeNicknames, team} = message;
+export const PM = new QueryProcessManager<{
+	formatid: string, options?: {removeNicknames?: boolean}, team: string,
+}>(module, message => {
+	const {formatid, options, team} = message;
 	const parsedTeam = Dex.fastUnpackTeam(team);
 
 	let problems;
 	try {
-		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, removeNicknames);
+		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, options);
 	} catch (err) {
 		crashlogger(err, 'A team validation', {
 			formatid,
 			team,
 		});
-		problems = [`Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now.`];
+		problems = [
+			`Your team crashed the team validator. We've been automatically notified and will fix this crash,` +
+			` but you should use a different team for now.`,
+		];
 	}
 
-	if (problems && problems.length) {
+	if (problems?.length) {
 		return '0' + problems.join('\n');
 	}
 	const packedTeam = Dex.packTeam(parsedTeam);
@@ -64,7 +69,6 @@ export const PM = new QueryProcessManager(module, async message => {
 import {Repl} from '../lib/repl';
 import {Dex as importedDex} from '../sim/dex';
 import {TeamValidator} from '../sim/team-validator';
-import {Chat} from './chat';
 import {Config} from './config-loader';
 
 if (!PM.isParentProcess) {
@@ -75,7 +79,7 @@ if (!PM.isParentProcess) {
 
 	// @ts-ignore ???
 	global.Monitor = {
-		crashlog(error: Error, source: string = 'A team validator process', details: any = null) {
+		crashlog(error: Error, source = 'A team validator process', details: any = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
@@ -98,7 +102,7 @@ if (!PM.isParentProcess) {
 	global.Dex = importedDex.includeData();
 	global.toID = Dex.getId;
 
-	// tslint:disable-next-line: no-eval
+	// eslint-disable-next-line no-eval
 	Repl.start(`team-validator-${process.pid}`, cmd => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.validatorprocesses : 1);

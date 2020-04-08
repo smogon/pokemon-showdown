@@ -163,10 +163,10 @@ let BattleMovedex = {
 			let koed;
 			if (Math.round(this.random())) {
 				koed = target;
-				this.add(`c|%Aeonic|What a buncha jokers`);
+				this.add(`c|@Aeonic|What a buncha jokers`);
 			} else {
 				koed = source;
-				this.add(`c|%Aeonic|haha yeah`);
+				this.add(`c|@Aeonic|haha yeah`);
 			}
 
 			this.add('-anim', koed, "Explosion", koed);
@@ -324,7 +324,7 @@ let BattleMovedex = {
 		stallingMove: true,
 		volatileStatus: 'backoffgrrr',
 		onTryHit(target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
+			return !!this.queue.willAct() && this.runEvent('StallMove', target);
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
@@ -383,15 +383,14 @@ let BattleMovedex = {
 			},
 			onModifyDefPriority: 1,
 			onModifyDef(def, pokemon) {
-				if (pokemon.baseTemplate.baseSpecies === 'Quilava') {
+				if (pokemon.baseSpecies.baseSpecies === 'Quilava') {
 					return this.chainModify(2);
 				}
 			},
-			onAnyModifyDamage(basePower, attacker, defender, move) {
+			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Fire') {
 					return this.chainModify(1.5);
-				}
-				if (move.type === 'Water') {
+				} else if (move.type === 'Water') {
 					return this.chainModify(0.5);
 				}
 			},
@@ -448,7 +447,7 @@ let BattleMovedex = {
 			this.add('-anim', target, 'Dark Void', target);
 		},
 		onHit(target, source, move) {
-			let wouldMove = this.cancelMove(target);
+			let wouldMove = this.queue.cancelMove(target);
 			// Generate a new team
 			let team = this.teamGenerator.getTeam({name: target.side.name, inBattle: true});
 			let set = team.shift();
@@ -1067,8 +1066,8 @@ let BattleMovedex = {
 			this.field.setTerrain('grassyterrain');
 		},
 		onAfterMove(pokemon) {
-			if (pokemon.template.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
-			if (pokemon.template.species !== 'Aegislash') pokemon.formeChange('Aegislash');
+			if (pokemon.species.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
+			if (pokemon.species.name !== 'Aegislash') pokemon.formeChange('Aegislash');
 		},
 		target: "normal",
 		type: "Steel",
@@ -1452,7 +1451,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		onHit(target, source, move) {
-			let baseForme = source.template.id;
+			let baseForme = source.species.id;
 			/** @type {{[forme: string]: string[]}} */
 			let formes = {
 				celebi: ['Future Sight', 'Recover'],
@@ -1495,7 +1494,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Let\'s Snuggle Forever', target);
 		},
 		onBasePower(basePower, pokemon, target) {
-			if (target.template.evos.length) {
+			if (target.species.evos.length) {
 				return this.chainModify(2);
 			}
 		},
@@ -1825,7 +1824,7 @@ let BattleMovedex = {
 			// Set target to the foe, this is a self targeting move so it works even if the foe has a subsitute
 			target = source.side.foe.active[0];
 			this.boost({atk: 2, spa: 2, spe: 2, def: -1, spd: -1}, source);
-			if (source.template.speciesid !== 'miniormeteor' || source.transformed) return;
+			if (source.species.id !== 'miniormeteor' || source.transformed) return;
 
 			let rainbow = ['', '-Orange', '-Yellow', '-Green', '-Blue', '-Indigo', '-Violet'];
 			let color = rainbow[this.random(rainbow.length)];
@@ -2002,7 +2001,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Sets Scripted Terrain for 5 turns. The power of Bug-type moves is boosted by 1.5, and there is a 5% chance for every move used to become Glitch Out instead. At the end of a turn, every Pokemon has a 5% chance to transform into a Missingno. with 3 random moves and Glitch Out. Switching out will restore the Pokemon to its normal state. This terrain affects floating Pokemon.",
+		desc: "Sets Scripted Terrain for 5 turns. The power of Bug-type moves is boosted by 1.5, and there is a 5% chance for every move used to become Glitch Out instead. At the end of a turn, every Pokemon has a 5% chance to transform into a MissingNo. with 3 random moves and Glitch Out. Switching out will restore the Pokemon to its normal state. This terrain affects floating Pokemon.",
 		shortDesc: "5 turns: +Bug power, glitchy effects.",
 		id: "scriptedterrain",
 		name: "Scripted Terrain",
@@ -2055,7 +2054,7 @@ let BattleMovedex = {
 				this.eachEvent('Terrain');
 			},
 			onTerrain(pokemon) {
-				if (pokemon.template.id === 'missingno') return;
+				if (pokemon.species.id === 'missingno') return;
 				if (pokemon.fainted || !pokemon.hp) return;
 				if (this.random(20) === 1) {
 					this.debug('Scripted terrain corrupt');
@@ -2496,7 +2495,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		onTryHit(pokemon) {
-			return !!this.willAct() && this.runEvent('StallMove', pokemon);
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "King's Shield", source);
@@ -2604,16 +2603,16 @@ let BattleMovedex = {
 			this.add('-anim', source, "Nasty Plot", target);
 		},
 		onHit(pokemon) {
-			const template = pokemon.template;
+			const species = pokemon.species;
 			// @ts-ignore
 			pokemon.level += 5;
 			pokemon.set.level = pokemon.level;
-			pokemon.formeChange(template);
+			pokemon.formeChange(species);
 
-			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+			pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
 
-			const newHP = Math.floor(Math.floor(2 * template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+			const newHP = Math.floor(Math.floor(2 * species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
 			pokemon.hp = newHP - (pokemon.maxhp - pokemon.hp);
 			pokemon.maxhp = newHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
@@ -2639,7 +2638,7 @@ let BattleMovedex = {
 		priority: 3,
 		flags: {protect: 1, mirror: 1, contact: 1},
 		onTry(pokemon, target) {
-			if (pokemon.activeTurns > 1) {
+			if (pokemon.activeMoveActions > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
 				this.hint("Bar Fight only works on your first turn out.");
@@ -2840,7 +2839,7 @@ let BattleMovedex = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Protect", source);
 			this.add('-anim', source, "Quiver Dance", source);
-			let result = !!this.willAct() && this.runEvent('StallMove', source);
+			let result = !!this.queue.willAct() && this.runEvent('StallMove', source);
 			return result;
 		},
 		onHit(target, source) {
@@ -2917,7 +2916,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Conversion", source);
 		},
 		onHit(target, source) {
-			if (source.baseTemplate.baseSpecies !== 'Silvally') return false;
+			if (source.baseSpecies.baseSpecies !== 'Silvally') return false;
 			let targetTypes = target.getTypes(true).filter(type => type !== '???');
 			if (!targetTypes.length) {
 				if (target.addedType) {
@@ -2937,8 +2936,8 @@ let BattleMovedex = {
 			let randomType = this.sample(weaknesses);
 			source.setItem(randomType + 'memory');
 			this.add('-item', source, source.getItem(), '[from] move: Type Analysis');
-			let template = this.dex.getTemplate('Silvally-' + randomType);
-			source.formeChange(template, this.dex.getAbility('rkssystem'), true);
+			let species = this.dex.getSpecies('Silvally-' + randomType);
+			source.formeChange(species, this.dex.getAbility('rkssystem'), true);
 			let move = this.dex.getActiveMove('multiattack');
 			move.basePower = 80;
 			this.useMove(move, source, target);
@@ -3494,7 +3493,7 @@ let BattleMovedex = {
 		stallingMove: true,
 		volatileStatus: 'lilypadshield',
 		onTryHit(target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
+			return !!this.queue.willAct() && this.runEvent('StallMove', target);
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
@@ -3676,7 +3675,7 @@ let BattleMovedex = {
 		},
 		onHit(target, source) {
 			source.addVolatile('rage', source);
-			if (this.willAct() && this.runEvent('StallMove', source)) {
+			if (this.queue.willAct() && this.runEvent('StallMove', source)) {
 				this.debug('Rageeeee endure');
 				source.addVolatile('endure', source);
 				source.addVolatile('stall');
@@ -3686,33 +3685,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
-	},
-	// Raid
-	firestorm: {
-		accuracy: 90,
-		basePower: 100,
-		category: "Special",
-		desc: "100% chance to burn the target.",
-		shortDesc: "100% chance to burn the target.",
-		id: "firestorm",
-		name: "Firestorm",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Fire Spin", target);
-			this.add('-anim', source, "Hurricane", target);
-		},
-		secondary: {
-			chance: 100,
-			status: 'brn',
-		},
-		target: "normal",
-		type: "Fire",
 	},
 	// Ransei
 	mashupmotive: {
@@ -4029,7 +4001,7 @@ let BattleMovedex = {
 		accuracy: true,
 		category: "Physical",
 		basePower: 1,
-		desc: "The user creates a substitute to take its place in battle. This substitute is a Pokemon selected from a broad set of Random Battle-eligible Pokemon able to learn the move chosen as this move's base move. Upon the substitute's creation, this Pokemon's ability is suppressed until it switches out. The substitute Pokemon is generated with a Random Battle moveset with maximum PP that is added (except for duplicates) to the user's moveset; these additions are removed when this substitute is no longer active. The substitute uses its species's base stats, types, Ability, and weight but retains the user's max HP, stat stages, gender, level, status conditions, trapping, binding, and pseudo-statuses such as confusion. Its HP is 100% of the user's maximum HP. When this substitute falls to zero HP, it breaks, and the user reverts to the state in which it used this move. This substitute absorbs indirect damage and authentic moves but does not reset the counter of Toxic poison when broken and cannot be transfered through Baton Pass. Transforming into this substitute will not fail. If the user switches out while the substitute is up, the substitute will be removed and the user will revert to the state in which it used this move. This move's properties are based on the move Fake Claim is inheriting from.",
+		desc: "The user creates a substitute to take its place in battle. This substitute is a Pokemon selected from a broad set of Random Battle-eligible Pokemon able to learn the move chosen as this move's base move. Upon the substitute's creation, this Pokemon's ability is suppressed until it switches out. The substitute Pokemon is generated with a Random Battle moveset with maximum PP that is added (except for duplicates) to the user's moveset; these additions are removed when this substitute is no longer active. The substitute uses its species's base stats, types, Ability, and weight but retains the user's max HP, stat stages, gender, level, status conditions, trapping, binding, and pseudo-statuses such as confusion. Its HP is 100% of the user's maximum HP. When this substitute falls to zero HP, it breaks, and the user reverts to the state in which it used this move. This substitute absorbs indirect damage and authentic moves but does not reset the counter of Toxic poison when broken and cannot be transferred through Baton Pass. Transforming into this substitute will not fail. If the user switches out while the substitute is up, the substitute will be removed and the user will revert to the state in which it used this move. This move's properties are based on the move Fake Claim is inheriting from.",
 		shortDesc: "Uses a Random Battle Pokemon as a Substitute.",
 		id: "fakeclaim",
 		name: "Fake Claim",
@@ -4078,14 +4050,14 @@ let BattleMovedex = {
 			// Tranform into it
 			pokemon.formeChange(set.species);
 			for (let newMove of set.moves) {
-				let moveTemplate = this.dex.getMove(newMove);
-				if (pokemon.moves.includes(moveTemplate.id)) continue;
+				let moveSpecies = this.dex.getMove(newMove);
+				if (pokemon.moves.includes(moveSpecies.id)) continue;
 				pokemon.moveSlots.push({
-					move: moveTemplate.name,
-					id: moveTemplate.id,
-					pp: ((moveTemplate.noPPBoosts || moveTemplate.isZ) ? moveTemplate.pp : moveTemplate.pp * 8 / 5),
-					maxpp: ((moveTemplate.noPPBoosts || moveTemplate.isZ) ? moveTemplate.pp : moveTemplate.pp * 8 / 5),
-					target: moveTemplate.target,
+					move: moveSpecies.name,
+					id: moveSpecies.id,
+					pp: ((moveSpecies.noPPBoosts || moveSpecies.isZ) ? moveSpecies.pp : moveSpecies.pp * 8 / 5),
+					maxpp: ((moveSpecies.noPPBoosts || moveSpecies.isZ) ? moveSpecies.pp : moveSpecies.pp * 8 / 5),
+					target: moveSpecies.target,
 					disabled: false,
 					disabledSource: '',
 					used: false,
@@ -4282,7 +4254,7 @@ let BattleMovedex = {
 				this.add('-message', `${source.active[0].name}'s replacement is going to switch out next turn!`);
 			},
 			onBeforeTurn(pokemon) {
-				this.insertQueue({choice: 'event', event: 'SSBRotate', pokemon: pokemon, priority: -69});
+				this.queue.insertChoice({choice: 'event', event: 'SSBRotate', pokemon: pokemon, priority: -69});
 			},
 			// @ts-ignore unsupported custom event
 			onSSBRotate(/** @type {Pokemon} */ pokemon) {
@@ -4792,11 +4764,11 @@ let BattleMovedex = {
 				return null;
 			}
 			this.attrLastMove('[still]');
-			let move = pokemon.template.speciesid === 'meloettapirouette' ? 'Brick Break' : 'Relic Song';
+			let move = pokemon.species.id === 'meloettapirouette' ? 'Brick Break' : 'Relic Song';
 			this.add('-anim', pokemon, move, target);
 		},
 		onHit(target, pokemon, move) {
-			if (pokemon.template.speciesid === 'meloettapirouette') {
+			if (pokemon.species.id === 'meloettapirouette') {
 				pokemon.formeChange('Meloetta');
 			} else if (pokemon.formeChange('Meloetta-Pirouette')) {
 				move.category = 'Physical';
@@ -4805,7 +4777,7 @@ let BattleMovedex = {
 		},
 		onAfterMove(pokemon) {
 			// Ensure Meloetta goes back to standard form after using the move
-			if (pokemon.template.speciesid === 'meloettapirouette') {
+			if (pokemon.species.id === 'meloettapirouette') {
 				pokemon.formeChange('Meloetta');
 			}
 			this.hint("Zarel still has the Serene Grace ability.");
@@ -4813,7 +4785,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			onAfterMoveSecondarySelf(pokemon, target, move) {
-				if (pokemon.template.speciesid === 'meloettapirouette') {
+				if (pokemon.species.id === 'meloettapirouette') {
 					pokemon.formeChange('Meloetta');
 				} else {
 					pokemon.formeChange('Meloetta-Pirouette');

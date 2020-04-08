@@ -21,6 +21,7 @@ namespace Chat {
 	export type SettingsHandler = import('./chat').SettingsHandler;
 	export type PageTable = import('./chat').PageTable;
 	export type ChatCommands = import('./chat').ChatCommands;
+	export type ChatHandler = import('./chat').ChatHandler;
 	export type ChatFilter = import('./chat').ChatFilter;
 	export type NameFilter = import('./chat').NameFilter;
 	export type StatusFilter = import('./chat').StatusFilter;
@@ -37,20 +38,22 @@ type RoomGame = Rooms.RoomGame;
 type RoomBattle = Rooms.RoomBattle;
 type Roomlog = Rooms.Roomlog;
 type Room = Rooms.Room;
-type RoomID = string & {__isRoomID: true};
+type RoomID = "" | "global" | "lobby" | "staff" | "upperstaff" | "development" | "battle" | string & {__isRoomID: true};
 namespace Rooms {
-	export type GlobalRoom = import('./rooms').GlobalRoom
-	export type ChatRoom = import('./rooms').ChatRoom
-	export type GameRoom = import('./rooms').GameRoom
-	export type BasicRoom = import('./rooms').BasicRoom
-	export type BasicChatRoom = import('./rooms').BasicChatRoom
+	export type GlobalRoom = import('./rooms').GlobalRoom;
+	export type ChatRoom = import('./rooms').ChatRoom;
+	export type GameRoom = import('./rooms').GameRoom;
+	export type BasicRoom = import('./rooms').BasicRoom;
+	export type BasicChatRoom = import('./rooms').BasicChatRoom;
 	export type RoomGame = import('./room-game').RoomGame;
-	export type RoomBattle = import('./room-battle').RoomBattle
+	export type RoomBattle = import('./room-battle').RoomBattle;
 	export type Roomlog = import('./roomlogs').Roomlog;
-	export type Room = import('./rooms').Room
+	export type Room = import('./rooms').Room;
 }
 
 // Streams
+// (I don't understand why eslint only has a problem with this - it's used in room-battle)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace Streams {
 	export type WriteStream = import('../lib/streams').WriteStream;
 	export type ReadStream = import('../lib/streams').ReadStream;

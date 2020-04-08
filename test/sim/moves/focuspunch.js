@@ -15,7 +15,7 @@ describe('Focus Punch', function () {
 		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]});
 		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf']}]});
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should not cause the user to lose focus if hit by a status move', function () {
@@ -40,7 +40,7 @@ describe('Focus Punch', function () {
 		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]});
 		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['naturepower']}]});
 		battle.makeChoices('move focuspunch', 'move naturepower');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should not cause the user to lose focus on later uses of Focus Punch if hit', function () {
@@ -48,7 +48,7 @@ describe('Focus Punch', function () {
 		battle.setPlayer('p1', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]});
 		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf', 'toxic']}]});
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move focuspunch', 'move toxic');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
@@ -59,8 +59,8 @@ describe('Focus Punch', function () {
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf']}, {species: 'Ivysaur', ability: 'overgrow', moves: ['toxic']}],
 		]);
 		battle.makeChoices('move focuspunch 1, move softboiled', 'move magicalleaf 1, move toxic 1');
-		assert.strictEqual(battle.p1.active[0].status, 'tox');
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p1.active[0].status, 'tox');
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should not deduct PP if the user lost focus', function () {
@@ -70,9 +70,9 @@ describe('Focus Punch', function () {
 
 		const move = battle.p1.active[0].getMoveData(Dex.getMove('focuspunch'));
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
-		assert.strictEqual(move.pp, move.maxpp);
+		assert.equal(move.pp, move.maxpp);
 		battle.makeChoices('move focuspunch', 'move toxic');
-		assert.strictEqual(move.pp, move.maxpp - 1);
+		assert.equal(move.pp, move.maxpp - 1);
 	});
 
 	it('should deduct PP if the user lost focus before Gen 5', function () {
@@ -82,9 +82,9 @@ describe('Focus Punch', function () {
 
 		const move = battle.p1.active[0].getMoveData(Dex.getMove('focuspunch'));
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
-		assert.strictEqual(move.pp, move.maxpp - 1);
+		assert.equal(move.pp, move.maxpp - 1);
 		battle.makeChoices('move focuspunch', 'move toxic');
-		assert.strictEqual(move.pp, move.maxpp - 2);
+		assert.equal(move.pp, move.maxpp - 2);
 	});
 
 	it('should not tighten the pokemon\'s focus when Dynamaxing', function () {
@@ -95,7 +95,7 @@ describe('Focus Punch', function () {
 		battle.makeChoices('move focuspunch dynamax', 'move magicalleaf');
 		const tighteningFocusMessage = battle.log.filter(str => str === '|-singleturn|p1a: Chansey|move: Focus Punch');
 
-		assert.strictEqual(tighteningFocusMessage.length, 0);
+		assert.equal(tighteningFocusMessage.length, 0);
 	});
 
 	it('should not tighten the pokemon\'s focus when already Dynamaxed', function () {
@@ -106,7 +106,7 @@ describe('Focus Punch', function () {
 		battle.makeChoices('move focuspunch dynamax', 'move magicalleaf');
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
 		const tighteningFocusMessage = battle.log.filter(str => str === '|-singleturn|p1a: Chansey|move: Focus Punch');
-		assert.strictEqual(tighteningFocusMessage.length, 0);
+		assert.equal(tighteningFocusMessage.length, 0);
 	});
 
 	it('should tighten the pokemon\'s focus when not Dynamaxed', function () {
@@ -116,6 +116,6 @@ describe('Focus Punch', function () {
 
 		battle.makeChoices('move focuspunch', 'move magicalleaf');
 		const tighteningFocusMessage = battle.log.filter(str => str === '|-singleturn|p1a: Chansey|move: Focus Punch');
-		assert.strictEqual(tighteningFocusMessage.length, 1);
+		assert.equal(tighteningFocusMessage.length, 1);
 	});
 });

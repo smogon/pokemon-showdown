@@ -19,6 +19,21 @@ describe('Storm Drain', function () {
 		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
+	it('should redirect Max Geyser', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleep talk']},
+			{species: 'Manaphy', ability: 'hydration', moves: ['scald']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Igglybuff', ability: 'cute charm', moves: ['sleep talk']},
+			{species: 'Igglybuff', ability: 'cute charm', moves: ['sleep talk']},
+		]});
+		battle.makeChoices('move sleeptalk, move scald dynamax 1', 'move sleep talk, move sleep talk');
+		assert.fullHP(battle.p1.active[0]);
+		assert.statStage(battle.p1.active[0], 'spa', 1);
+	});
+
 	it('should redirect single-target Water-type attacks to the user if it is a valid target', function () {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [

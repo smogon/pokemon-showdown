@@ -5,17 +5,17 @@
   "version": "0.11.2",
   "dependencies": {
     "probe-image-size": "^5.0.0",
-    "sockjs": "0.3.19",
-    "sucrase": "^3.10.1"
+    "sockjs": "0.3.20",
+    "sucrase": "^3.13.0"
   },
   "optionalDependencies": {
     "cloud-env": "^0.2.3",
-    "node-oom-heapdump": "^1.1.4",
+    "node-oom-heapdump": "^1.2.0",
     "node-static": "^0.7.11",
-    "nodemailer": "^6.3.0",
+    "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
     "sql-template-strings": "^2.2.2",
-    "sqlite": "^3.0.3"
+    "sqlite": "^3.0.6"
   },
   "engines": {
     "node": ">=7.7.0"
@@ -24,15 +24,16 @@
     "start": "node pokemon-showdown start",
     "build": "node build",
     "tsc": "tsc",
-    "lint": "eslint --cache . && tslint --project .",
+    "lint": "eslint . --config .eslintrc-no-types.json --cache --ext .js,.ts",
+    "full-lint": "eslint . --config .eslintrc-types.json --cache --cache-location .eslintfullcache --ext .js,.ts",
     "pretest": "npm run lint && npm run build",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "fulltest": "npm run pretest && npm run tsc && mocha -R spec -g \".*\""
+    "full-test": "npm run full-lint && npm run build && npm run tsc && mocha --forbid-only -g \".*\""
   },
   "husky": {
     "hooks": {
-      "pre-push": "eslint --cache ."
+      "pre-push": "npm run lint"
     }
   },
   "bin": "./pokemon-showdown",
@@ -62,15 +63,17 @@
   "license": "MIT",
   "devDependencies": {
     "@types/cloud-env": "^0.2.0",
-    "@types/node": "^12.12.6",
+    "@types/node": "^13.9.8",
     "@types/node-static": "^0.7.3",
-    "@types/nodemailer": "^6.2.1",
+    "@types/nodemailer": "^6.4.0",
     "@types/sockjs": "^0.3.31",
-    "eslint": "^6.5.1",
-    "husky": "^3.0.8",
-    "mocha": "^6.2.1",
-    "smogon": "^0.0.5",
-    "tslint": "^5.20.0",
-    "typescript": "^3.7.2"
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.2",
+    "husky": "^4.2.3",
+    "mocha": "^7.1.1",
+    "smogon": "^0.4.2",
+    "typescript": "^3.8.3"
   }
 }

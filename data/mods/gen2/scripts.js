@@ -56,9 +56,9 @@ let BattleScripts = {
 			}
 
 			// Treat here the items.
-			if ((['Cubone', 'Marowak'].includes(this.template.species) && this.item === 'thickclub' && statName === 'atk') || (this.template.species === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
+			if ((['Cubone', 'Marowak'].includes(this.species.name) && this.item === 'thickclub' && statName === 'atk') || (this.species.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
 				stat *= 2;
-			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
+			} else if (this.forme === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
 				stat *= 1.5;
 			}
 
@@ -112,7 +112,7 @@ let BattleScripts = {
 		if (pokemon.moveThisTurn) {
 			// THIS IS PURELY A SANITY CHECK
 			// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
-			// USE this.cancelMove INSTEAD
+			// USE this.queue.cancelMove INSTEAD
 			this.debug('' + pokemon.id + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
 			this.clearActiveMove(true);
 			return;
@@ -612,9 +612,9 @@ let BattleScripts = {
 
 		// Using Beat Up
 		if (move.allies) {
-			attack = move.allies[0].template.baseStats.atk;
+			attack = move.allies[0].species.baseStats.atk;
 			move.allies.shift();
-			defense = defender.template.baseStats.def;
+			defense = defender.species.baseStats.def;
 		}
 
 		// Moves that ignore offense and defense respectively.

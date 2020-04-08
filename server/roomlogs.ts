@@ -28,7 +28,6 @@ import {FS} from '../lib/fs';
  * It contains (nearly) everything.
  */
 export class Roomlog {
-	readonly roomid: RoomID;
 	/**
 	 * Battle rooms are multichannel, which means their logs are split
 	 * into four channels, public, p1, p2, full.
@@ -43,6 +42,7 @@ export class Roomlog {
 	 * Chat rooms include timestamps.
 	 */
 	readonly logTimes: boolean;
+	roomid: RoomID;
 	/**
 	 * Scrollback log
 	 */
@@ -178,22 +178,28 @@ export class Roomlog {
 		}
 		return false;
 	}
-	clearText(userids: ID[]) {
+	clearText(userids: ID[], lineCount = 0) {
 		const messageStart = this.logTimes ? '|c:|' : '|c|';
 		const section = this.logTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		const cleared: ID[] = [];
-		this.log = this.log.filter(line => {
+		const clearAll = (lineCount === 0);
+		this.log = this.log.reverse().filter(line => {
 			if (line.startsWith(messageStart)) {
 				const parts = Chat.splitFirst(line, '|', section);
 				const userid = toID(parts[section - 1]);
 				if (userids.includes(userid)) {
 					if (!cleared.includes(userid)) cleared.push(userid);
 					if (this.roomid.startsWith('battle-')) return true; // Don't remove messages in battle rooms to preserve evidence
-					return false;
+					if (clearAll) return false;
+					if (lineCount > 0) {
+						lineCount--;
+						return false;
+					}
+					return true;
 				}
 			}
 			return true;
-		});
+		}).reverse();
 		return cleared;
 	}
 	uhtmlchange(message: string) {
@@ -212,11 +218,45 @@ export class Roomlog {
 		if (!this.roomlogStream) return;
 		const timestamp = Chat.toTimestamp(date).split(' ')[1] + ' ';
 		message = message.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
-		this.roomlogStream.write(timestamp + message + '\n');
+		void this.roomlogStream.write(timestamp + message + '\n');
 	}
 	modlog(message: string) {
 		if (!this.modlogStream) return;
-		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
+		void this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
+	}
+	async rename(newID: RoomID): Promise<true> {
+		const modlogPath = `logs/modlog`;
+		const roomlogPath = `logs/chat`;
+		const modlogStreamExisted = this.modlogStream !== null;
+		const roomlogStreamExisted = this.roomlogStream !== null;
+		await this.destroy();
+		await Promise.all([
+			FS(modlogPath + `/modlog_${this.roomid}.txt`).exists(),
+			FS(roomlogPath + `/${this.roomid}`).exists(),
+			FS(modlogPath + `/modlog_${newID}.txt`).exists(),
+			FS(roomlogPath + `/${newID}`).exists(),
+		]).then(([modlogExists, roomlogExists, newModlogExists, newRoomlogExists]) => {
+			return Promise.all([
+				modlogExists && !newModlogExists ?
+					FS(modlogPath + `/modlog_${this.roomid}.txt`).rename(modlogPath + `/modlog_${newID}.txt`) :
+					undefined,
+				roomlogExists && !newRoomlogExists ?
+					FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`) :
+					undefined,
+			]);
+		});
+		this.roomid = newID;
+		Roomlogs.roomlogs.set(newID, this);
+		if (modlogStreamExisted) {
+			// set modlogStream to undefined (uninitialized) instead of null (disabled)
+			this.modlogStream = undefined;
+			this.setupModlogStream();
+		}
+		if (roomlogStreamExisted) {
+			this.roomlogStream = undefined;
+			await this.setupRoomlogStream(true);
+		}
+		return true;
 	}
 	static async rollLogs() {
 		if (Roomlogs.rollLogTimer === true) return;
@@ -230,7 +270,7 @@ export class Roomlog {
 		const time = Date.now();
 		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
 		nextMidnight.setHours(0, 0, 1);
-		Roomlogs.rollLogTimer = setTimeout(() => Roomlog.rollLogs(), nextMidnight.getTime() - time);
+		Roomlogs.rollLogTimer = setTimeout(() => void Roomlog.rollLogs(), nextMidnight.getTime() - time);
 	}
 	truncate() {
 		if (!this.autoTruncate) return;

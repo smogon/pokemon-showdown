@@ -19,7 +19,7 @@ describe('Magic Guard', function () {
 		battle.setPlayer('p2', {team: [{species: 'Crobat', ability: 'roughskin', moves: ['spikes', 'toxic', 'protect']}]});
 		battle.makeChoices('move splash', 'move spikes');
 		battle.makeChoices('switch 2', 'move toxic');
-		assert.strictEqual(battle.p1.active[0].status, 'tox');
+		assert.equal(battle.p1.active[0].status, 'tox');
 		assert.fullHP(battle.p1.active[0]);
 		battle.makeChoices('move mindblown', 'move toxic');
 		battle.makeChoices('move doubleedge', 'move spikes');
