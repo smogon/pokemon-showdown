@@ -505,7 +505,7 @@ function checkTicketBanned(user: User) {
 for (const room of Rooms.rooms.values()) {
 	if (!room.isHelp || !room.game) continue;
 	const game = room.getGame(HelpTicket)!;
-	game.ticket = tickets[game.ticket.userid];
+	if (game.ticket) game.ticket = tickets[game.ticket.userid];
 }
 
 const ticketTitles: {[k: string]: string} = Object.assign(Object.create(null), {
