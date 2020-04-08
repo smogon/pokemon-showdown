@@ -466,7 +466,6 @@ let Formats = [
 			'Huge Power', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magic Guard', 'Mold Breaker', 'Moody', 'Neutralizing Gas',
 			'Sand Stream ++ Sand Rush', 'Sand Veil', 'Shadow Tag', 'Simple', 'Snow Cloak', 'Snow Warning ++ Slush Rush',
 			'Speed Boost', 'Steely Spirit', 'Tinted Lens', 'Trace', 'Unaware', 'Water Bubble', 'Baton Pass',
-			
 		],
 		/** @param {Pokemon} pokemon */
 		// @ts-ignore
@@ -669,9 +668,6 @@ let Formats = [
 			'Libero', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard',
 			'Baton Pass',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8almostanyability') this.add('html', `<div class="broadcast-red"><strong>Almost Any Ability is currently suspecting Zeraora! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3661684/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 8] STABmons",
