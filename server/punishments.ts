@@ -652,7 +652,7 @@ export const Punishments = new class {
 
 		const affected = await Punishments.punish(user, punishment, ignoreAlts);
 		for (const curUser of affected) {
-			curUser.locked = id;
+			curUser.locked = punishment[1];
 			curUser.disconnectAll();
 		}
 
@@ -670,7 +670,7 @@ export const Punishments = new class {
 		const affected = await Punishments.punish(user, punishment, ignoreAlts);
 
 		for (const curUser of affected) {
-			curUser.locked = id;
+			curUser.locked = punishment[1];
 			curUser.updateIdentity();
 		}
 
@@ -756,8 +756,8 @@ export const Punishments = new class {
 
 		const affected = await Punishments.punish(user, punishment, ignoreAlts);
 		for (const curUser of affected) {
-			curUser.locked = id;
-			curUser.namelocked = id;
+			curUser.locked = punishment[1];
+			curUser.namelocked = punishment[1];
 			curUser.resetName(true);
 			curUser.updateIdentity();
 		}
