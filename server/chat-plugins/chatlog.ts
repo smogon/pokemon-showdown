@@ -213,14 +213,17 @@ export const LogViewer = new class {
 		for (const line of lines) {
 			if (searchInputs(line, searches)) {
 				const lineNum: number = lines.indexOf(line);
-				const up = this.renderLine(`${lines[lineNum + 1]}`);
-				const upTwo = this.renderLine(`${lines[lineNum + 2]}`);
-				const down = this.renderLine(`${lines[lineNum - 1]}`);
-				const downTwo = this.renderLine(`${lines[lineNum - 2]}`);
+				const context = (up = true, num: number) => {
+					if (up) {
+						return this.renderLine(lines[lineNum + num]);
+					} else {
+						return this.renderLine(lines[lineNum - num]);
+					}
+				};
 				matches.push(
-					`${down ? down : ''} ${downTwo ? downTwo : ''}` +
+					`${context(false, 1)} ${context(false, 2)}` +
 					`<div class="chat chatmessage highlighted">${this.renderLine(line)}</div>` +
-					`${up ? up : ''} ${upTwo ? upTwo : ''}`
+					`${context(true, 1)} ${context(true, 2)}`
 				);
 			}
 		}
@@ -436,27 +439,29 @@ export const pages: PageTable = {
 
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 		this.title = '[Logs] ' + roomid;
+
 		const hasSearch = opts?.includes('search-');
+		const search = opts?.slice(0, -7);
 
 		if (date && date.length === 10 || date === 'today') {
 			return LogViewer.day(roomid, date, opts);
 		}
-		if (date && hasSearch) {
+		if (date && !hasSearch) {
 			return LogViewer.month(roomid, date);
 		} else if (hasSearch && date?.length === 4) {
-			this.title = `[Search Logs] [${date}] ${opts!.slice(7)}`;
-			return LogViewer.searchYear(roomid, date, opts!.slice(7));
+			this.title = `[Search Logs] [${date}] ${search}`;
+			return LogViewer.searchYear(roomid, date, search!);
 		} else if (hasSearch && (date === 'all' || date === 'alltime')) {
-			this.title = `[Search Logs] [all] ${opts!.slice(7)}`;
-			return LogViewer.searchYear(roomid, date, opts!.slice(7), true);
+			this.title = `[Search Logs] [all] ${search}`;
+			return LogViewer.searchYear(roomid, date, search!, true);
 		} else if (hasSearch && date) {
 			if (date === 'today') {
 				const today = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-				this.title = `[Search Logs] [${today}] ${opts!.slice(7)}`;
-				return LogViewer.searchMonth(roomid, today, opts!.slice(7));
+				this.title = `[Search Logs] [${today}] ${search}`;
+				return LogViewer.searchMonth(roomid, today, search!);
 			} else {
-				this.title = `[Search Logs] [${date}] ${opts!.slice(7)}`;
-				return LogViewer.searchMonth(roomid, date, opts!.slice(7));
+				this.title = `[Search Logs] [${date}] ${search}`;
+				return LogViewer.searchMonth(roomid, date, search!);
 			}
 		} else {
 			return LogViewer.room(roomid);
