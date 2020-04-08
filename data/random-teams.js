@@ -951,7 +951,7 @@ class RandomTeams {
 					if (hasMove['rest'] || hasMove['selfdestruct'] || hasMove['wish']) rejected = true;
 					break;
 				case 'substitute':
-					if (hasMove['uturn'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['rest'] || hasMove['uturn']) rejected = true;
 					if (movePool.includes('painsplit') || movePool.includes('roost') || movePool.includes('calmmind') && !counter['recovery']) rejected = true;
 					break;
 				case 'wideguard':
