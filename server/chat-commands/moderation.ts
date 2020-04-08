@@ -186,22 +186,23 @@ export const commands: ChatCommands = {
 			return this.sendReply(`/roomauth - The room '${targetRoom.title || target}' isn't designed for per-room moderation and therefore has no auth list.${userLookup}`);
 		}
 
-		const rankLists: {[room: string]: string[]} = {};
-		for (const u in targetRoom.auth) {
-			if (!rankLists[targetRoom.auth[u]]) rankLists[targetRoom.auth[u]] = [];
-			rankLists[targetRoom.auth[u]].push(u);
+		const rankLists: {[groupSymbol: string]: ID[]} = {};
+		for (const userid in targetRoom.auth) {
+			if (!rankLists[targetRoom.auth[userid]]) rankLists[targetRoom.auth[userid]] = [];
+			rankLists[targetRoom.auth[userid]].push(userid as ID);
 		}
 
 		const buffer = Object.keys(rankLists).sort(
 			(a, b) => (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
-		).map(r => {
-			let roomRankList = rankLists[r].sort();
-			roomRankList = roomRankList.map((s: string) => {
-				const u = Users.get(s);
-				const isAway = u?.statusType !== 'online';
-				return s in targetRoom.users && !isAway ? `**${s}**` : s;
+		).map(groupSymbol => {
+			let roomRankList: string[] = rankLists[groupSymbol].sort();
+			roomRankList = roomRankList.map(userid => {
+				const curUser = Users.get(userid);
+				const isAway = curUser?.statusType !== 'online';
+				return userid in targetRoom.users && !isAway ? `**${userid}**` : userid;
 			});
-			return `${Config.groups[r] ? `${Config.groups[r].name}s (${r})` : r}:\n${roomRankList.join(", ")}`;
+			const group = Config.groups[groupSymbol] ? `${Config.groups[groupSymbol].name}s (${groupSymbol})` : groupSymbol;
+			return `${group}:\n${roomRankList.join(", ")}`;
 		});
 
 		let curRoom = targetRoom;
@@ -1224,8 +1225,8 @@ export const commands: ChatCommands = {
 		if (!this.canTalk()) return;
 		if (target.length > 2000) return this.errorReply("Declares should not exceed 2000 characters.");
 
-		for (const u in room.users) {
-			room.users[u].sendTo(room, `|notify|${room.title} announcement!|${target}`);
+		for (const id in room.users) {
+			room.users[id].sendTo(room, `|notify|${room.title} announcement!|${target}`);
 		}
 		this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
 		this.modlog('DECLARE', null, target);
@@ -1403,16 +1404,12 @@ export const commands: ChatCommands = {
 
 		const roomauth = Rooms.global.destroyPersonalRooms(targetUser.id);
 		if (roomauth.length) {
-			Monitor.log(
-				`[CrisisMonitor] Namelocked user ${targetUser.name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`
-			);
+			Monitor.log(`[CrisisMonitor] Namelocked user ${targetUser.name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		}
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.id}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
 		await Punishments.namelock(targetUser, null, null, false, reason);
-		targetUser.popup(
-			`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`
-		);
+		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room.battle) this.parse('/savereplay forpunishment');
 
@@ -1614,7 +1611,8 @@ export const commands: ChatCommands = {
 		if (room.battle) this.parse('/savereplay forpunishment');
 		return true;
 	},
-	battlebanhelp: [`/battleban [username], [reason] - [DEPRECATED]`,
+	battlebanhelp: [
+		`/battleban [username], [reason] - [DEPRECATED]`,
 		`Prevents the user from starting new battles for 2 days and shows them the [reason]. Requires: & ~`,
 	],
 
@@ -1737,31 +1735,31 @@ export const commands: ChatCommands = {
 
 		if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
 
-		const subMap = Punishments.roomUserids.get(room.roomid);
-		if (!subMap || subMap.size === 0) {
+		const roomUserids = Punishments.roomUserids.get(room.roomid);
+		if (!roomUserids || roomUserids.size === 0) {
 			return this.sendReply("This room has no blacklisted users.");
 		}
-		const blMap = new Map();
+		const blMap = new Map<ID | PunishType, any[]>();
 		let ips = '';
 
-		for (const [userid, punishment] of subMap) {
+		for (const [userid, punishment] of roomUserids) {
 			const [punishType, id, expireTime] = punishment;
 			if (punishType === 'BLACKLIST') {
 				if (!blMap.has(id)) blMap.set(id, [expireTime]);
-				if (id !== userid) blMap.get(id).push(userid);
+				if (id !== userid) blMap.get(id)!.push(userid);
 			}
 		}
 
 		if (user.can('ban')) {
-			const sMap = Punishments.roomIps.get(room.roomid);
+			const roomIps = Punishments.roomIps.get(room.roomid);
 
-			if (sMap) {
+			if (roomIps) {
 				ips = '/ips';
-				for (const [ip, punishment] of sMap) {
+				for (const [ip, punishment] of roomIps) {
 					const [punishType, id] = punishment;
 					if (punishType === 'BLACKLIST') {
 						if (!blMap.has(id)) blMap.set(id, []);
-						blMap.get(id).push(ip);
+						blMap.get(id)!.push(ip);
 					}
 				}
 			}
