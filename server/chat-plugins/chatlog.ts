@@ -2,6 +2,7 @@
  * Pokemon Showdown log viewer
  *
  * by Zarel
+ * @license MIT
  */
 
 import {FS} from "../../lib/fs";
@@ -123,7 +124,7 @@ const LogReader = new class {
 		return prevMonth.toISOString().slice(0, 7);
 	}
 	today() {
-		return new Date().toISOString().slice(0, 10);
+		return Chat.toTimestamp(new Date()).slice(0, 10);
 	}
 };
 
@@ -367,6 +368,8 @@ export const pages: PageTable = {
 
 export const commands: ChatCommands = {
 	chatlog(target, room, user) {
-		this.parse(`/join view-chatlog-${room.roomid}--today`);
+		const targetRoom = target ? Rooms.search(target) : room;
+		const roomid = targetRoom ? targetRoom.roomid : target;
+		this.parse(`/join view-chatlog-${roomid}--today`);
 	},
 };
