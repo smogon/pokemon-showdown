@@ -73,7 +73,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard NatDex',
 		desc: "The standard ruleset for all National Dex tiers",
-		ruleset: ['Obtainable', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+		ruleset: ['Obtainable', '+Unobtainable', '+Past', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 		onValidateSet(set) {
 			// These Pokemon are still unobtainable
 			const unobtainables = [
