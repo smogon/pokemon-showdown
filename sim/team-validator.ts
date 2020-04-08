@@ -696,7 +696,9 @@ export class TeamValidator {
 		const nameSpecies = dex.getSpecies(set.name);
 		if (nameSpecies.exists && nameSpecies.name.toLowerCase() === set.name.toLowerCase()) {
 			// nickname is the name of a species
-			if (nameSpecies.name !== species.name && nameSpecies.name !== species.baseSpecies) {
+			if (nameSpecies.baseSpecies === species.baseSpecies) {
+				set.name = species.baseSpecies;
+			} else if (nameSpecies.name !== species.name && nameSpecies.name !== species.baseSpecies) {
 				// nickname species doesn't match actual species
 				// Nickname Clause
 				problems.push(`${name} must not be nicknamed a different Pokémon species than what it actually is.`);
