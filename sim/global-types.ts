@@ -1147,7 +1147,7 @@ interface FormatsData extends EventMethods {
 	banlist?: string[];
 	battle?: ModdedBattleScriptsData;
 	pokemon?: ModdedBattlePokemon;
-	queue?: ModdedBattleQueue;
+	// queue?: ModdedBattleQueue;
 	field?: ModdedField;
 	cannotMega?: string[];
 	challengeShow?: boolean;
@@ -1336,7 +1336,7 @@ interface ModdedBattlePokemon {
 	ignoringAbility?: (this: Pokemon) => boolean;
 }
 
-interface ModdedBattleQueue extends Partial<BattleQueue> {}
+// interface ModdedBattleQueue extends Partial<BattleQueue> {}
 
 interface ModdedField extends Partial<Field> {
 	suppressingWeather?: (this: Field) => boolean;
