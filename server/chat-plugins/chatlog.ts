@@ -2,6 +2,7 @@
  * Pokemon Showdown log viewer
  *
  * by Zarel
+ * @license MIT
  */
 
 import {FS} from "../../lib/fs";
@@ -132,7 +133,7 @@ const LogReader = new class {
 	}
 
 	today() {
-		return new Date().toISOString().slice(0, 10);
+		return Chat.toTimestamp(new Date()).slice(0, 10);
 	}
 };
 
@@ -176,7 +177,7 @@ export const LogViewer = new class {
 		return this.linkify(buf);
 	}
 
-	async search(roomid: RoomID, month: string, search: string) {
+	async searchMonth(roomid: RoomID, month: string, search: string) {
 		const log = await LogReader.get(roomid);
 		let query = '';
 		const searches = search.split('-').length;
@@ -240,7 +241,7 @@ export const LogViewer = new class {
 		for (const month of files) {
 			if (!month.includes(year) && !alltime) continue;
 			if (!FS(`logs/chat/${roomid}/${month}/`).isDirectorySync()) continue;
-			buf += await this.search(roomid, month, search);
+			buf += await this.searchMonth(roomid, month, search);
 			buf += '<br>';
 		}
 		return buf;
@@ -435,25 +436,27 @@ export const pages: PageTable = {
 
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 		this.title = '[Logs] ' + roomid;
+		const hasSearch = opts?.includes('search-');
+
 		if (date && date.length === 10 || date === 'today') {
 			return LogViewer.day(roomid, date, opts);
 		}
-		if (date && !opts?.includes('search-')) {
+		if (date && hasSearch) {
 			return LogViewer.month(roomid, date);
-		} else if (opts?.includes('search-') && date?.length === 4) {
-			this.title = `[Search Logs] [${date}] ${opts.slice(7)}`;
-			return LogViewer.searchYear(roomid, date, opts.slice(7));
-		} else if (opts?.includes('search-') && (date === 'all' || date === 'alltime')) {
-			this.title = `[Search Logs] [all] ${opts.slice(7)}`;
-			return LogViewer.searchYear(roomid, date, opts.slice(7), true);
-		} else if (opts?.includes('search-') && date) {
+		} else if (hasSearch && date?.length === 4) {
+			this.title = `[Search Logs] [${date}] ${opts!.slice(7)}`;
+			return LogViewer.searchYear(roomid, date, opts!.slice(7));
+		} else if (hasSearch && (date === 'all' || date === 'alltime')) {
+			this.title = `[Search Logs] [all] ${opts!.slice(7)}`;
+			return LogViewer.searchYear(roomid, date, opts!.slice(7), true);
+		} else if (hasSearch && date) {
 			if (date === 'today') {
 				const today = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-				this.title = `[Search Logs] [${today}] ${opts.slice(7)}`;
-				return LogViewer.search(roomid, today, opts.slice(7));
+				this.title = `[Search Logs] [${today}] ${opts!.slice(7)}`;
+				return LogViewer.searchMonth(roomid, today, opts!.slice(7));
 			} else {
-				this.title = `[Search Logs] [${date}] ${opts.slice(7)}`;
-				return LogViewer.search(roomid, date, opts.slice(7));
+				this.title = `[Search Logs] [${date}] ${opts!.slice(7)}`;
+				return LogViewer.searchMonth(roomid, date, opts!.slice(7));
 			}
 		} else {
 			return LogViewer.room(roomid);
@@ -463,7 +466,9 @@ export const pages: PageTable = {
 
 export const commands: ChatCommands = {
 	chatlog(target, room, user) {
-		return this.parse(`/join view-chatlog-${room.roomid}--today`);
+		const targetRoom = target ? Rooms.search(target) : room;
+		const roomid = targetRoom ? targetRoom.roomid : target;
+		this.parse(`/join view-chatlog-${roomid}--today`);
 	},
 
 	sl: 'searchlogs',
