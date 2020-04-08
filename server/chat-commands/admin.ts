@@ -272,7 +272,10 @@ export const commands: ChatCommands = {
 
 				const processManagers = require('../../lib/process-manager').processManagers;
 				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
+					if (
+						manager.filename.startsWith(FS('server/chat-plugins').path) ||
+						manager.filename.startsWith(FS('.server-dist/chat-plugins').path)
+					) {
 						manager.destroy();
 					}
 				}
