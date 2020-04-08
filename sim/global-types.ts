@@ -1,4 +1,5 @@
 type Battle = import('./battle').Battle;
+type BattleQueue = import('./battle-queue').BattleQueue;
 type Field = import('./field').Field;
 type Action = import('./battle-queue').Action;
 type ModdedDex = import('./dex').ModdedDex;
@@ -1146,6 +1147,8 @@ interface FormatsData extends EventMethods {
 	banlist?: string[];
 	battle?: ModdedBattleScriptsData;
 	pokemon?: ModdedBattlePokemon;
+	// queue?: ModdedBattleQueue;
+	field?: ModdedField;
 	cannotMega?: string[];
 	challengeShow?: boolean;
 	debug?: boolean;
@@ -1331,6 +1334,12 @@ interface ModdedBattlePokemon {
 		sourceEffect: Effect | null, ignoreImmunities: boolean
 	) => boolean;
 	ignoringAbility?: (this: Pokemon) => boolean;
+}
+
+// interface ModdedBattleQueue extends Partial<BattleQueue> {}
+
+interface ModdedField extends Partial<Field> {
+	suppressingWeather?: (this: Field) => boolean;
 }
 
 interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
