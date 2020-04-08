@@ -441,7 +441,7 @@ export const pages: PageTable = {
 		this.title = '[Logs] ' + roomid;
 
 		const hasSearch = opts?.includes('search-');
-		const search = opts?.slice(0, -7);
+		const search = opts?.slice(7);
 
 		if (date && date.length === 10 || date === 'today') {
 			return LogViewer.day(roomid, date, opts);
