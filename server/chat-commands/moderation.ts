@@ -392,7 +392,8 @@ export const commands: ChatCommands = {
 		// Automatically upload replays as evidence/reference to the punishment
 		if (globalWarn && room.battle) this.parse('/savereplay forpunishment');
 	},
-	warnhelp: [`/warn OR /k [username], [reason] - Warns a user showing them the site rules and [reason] in an overlay.`,
+	warnhelp: [
+		`/warn OR /k [username], [reason] - Warns a user showing them the site rules and [reason] in an overlay.`,
 		`Requires: % @ # & ~`,
 	],
 
@@ -434,7 +435,8 @@ export const commands: ChatCommands = {
 		this.modlog('REDIRECT', targetUser, `to ${targetRoom.title}`, {noip: 1, noalts: 1});
 		targetUser.leaveRoom(room);
 	},
-	redirhelp: [`/redirect OR /redir [username], [roomname] - [DEPRECATED]`,
+	redirhelp: [
+		`/redirect OR /redir [username], [roomname] - [DEPRECATED]`,
 		`Attempts to redirect the [username] to the [roomname]. Requires: & ~`,
 	],
 
@@ -550,7 +552,7 @@ export const commands: ChatCommands = {
 		const reason = (target ? ` (${target})` : ``);
 		this.addModAction(`${name} was banned from ${room.title} by ${user.name}.${reason}`);
 
-		const affected = Punishments.roomBan(room, targetUser, null, null, target);
+		const affected = Punishments.roomBan(room, targetUser, null, target);
 
 		if (!room.isPrivate && room.chatRoomData) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
@@ -663,9 +665,9 @@ export const commands: ChatCommands = {
 
 		if (targetUser) {
 			const ignoreAlts = Punishments.sharedIps.has(targetUser.latestIp);
-			affected = await Punishments.lock(targetUser, duration, targetUser.locked as ID, ignoreAlts, userReason);
+			affected = await Punishments.lock(targetUser, duration, null, ignoreAlts, userReason);
 		} else {
-			affected = await Punishments.lock(null, duration, userid, false, userReason);
+			affected = await Punishments.lock(userid, duration, null, false, userReason);
 		}
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
@@ -990,7 +992,8 @@ export const commands: ChatCommands = {
 		this.addModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
 		this.modlog('RANGEBAN', null, reason);
 	},
-	baniphelp: [`/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
+	baniphelp: [
+		`/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
 		`Existing users on the IP will not be banned. Requires: & ~`,
 	],
 
@@ -1029,7 +1032,8 @@ export const commands: ChatCommands = {
 		this.addModAction(`${user.name} hour-locked the ${ipDesc}: ${reason}`);
 		this.modlog('RANGELOCK', null, reason);
 	},
-	lockiphelp: [`/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
+	lockiphelp: [
+		`/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
 		`Existing users on the IP will not be banned. Requires: & ~`,
 	],
 
@@ -1657,12 +1661,12 @@ export const commands: ChatCommands = {
 		const userRank = Config.groupsranking.indexOf(room.getAuth(user));
 		for (const userid of targets) {
 			if (!userid) return this.errorReply(`User '${userid}' is not a valid userid.`);
-			const targetRank = Config.groupsranking.indexOf(room.getAuth({id: userid}));
+			const targetRank = Config.groupsranking.indexOf(room.getAuth({id: userid, group: ' '}));
 			if (targetRank >= userRank) {
 				return this.errorReply(`/blacklistname - Access denied: ${userid} is of equal or higher authority than you.`);
 			}
 
-			Punishments.roomBlacklist(room, null, null, userid, reason);
+			Punishments.roomBlacklist(room, userid, null, null, reason);
 
 			const trusted = Users.isTrusted(userid);
 			if (trusted && room.isPrivate !== true) {
@@ -1806,7 +1810,8 @@ export const commands: ChatCommands = {
 
 		return this.addModAction(message);
 	},
-	marksharedhelp: [`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared.`,
+	marksharedhelp: [
+		`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared.`,
 		`Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @, &, ~`,
 	],
 

@@ -442,10 +442,10 @@ export class User extends Chat.MessageContext {
 	latestHostType: string;
 	ips: {[k: string]: number};
 	latestIp: string;
-	locked: IDOrMonitor | null;
-	semilocked: IDOrMonitor | null;
-	namelocked: IDOrMonitor | null;
-	permalocked: IDOrMonitor | null;
+	locked: ID | PunishType | null;
+	semilocked: ID | PunishType | null;
+	namelocked: ID | PunishType | null;
+	permalocked: ID | PunishType | null;
 	prevNames: {[id: /** ID */ string]: string};
 
 	lastChallenge: number;
@@ -1184,7 +1184,7 @@ export class User extends Chat.MessageContext {
 				this.semilocked = null;
 			} else if (this.semilocked === '#dnsbl') {
 				this.popup(`You are locked because someone using your IP has spammed/hacked other websites. This usually means either you're using a proxy, you're in a country where other people commonly hack, or you have a virus on your computer that's spamming websites.`);
-				this.semilocked = '#dnsbl.';
+				this.semilocked = '#dnsbl.' as PunishType;
 			}
 		}
 		if (this.blockPMs && this.can('lock') && !this.can('bypassall')) this.blockPMs = false;

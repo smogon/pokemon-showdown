@@ -327,7 +327,7 @@ export abstract class BasicRoom {
 	/**
 	 * Gets the group symbol of a user in the room.
 	 */
-	getAuth(user: {id: ID, group?: GroupSymbol | undefined} | User): GroupSymbol {
+	getAuth(user: {id: ID, group: GroupSymbol} | User): GroupSymbol {
 		if (this.auth && user.id in this.auth) {
 			return this.auth[user.id];
 		}
@@ -337,7 +337,7 @@ export abstract class BasicRoom {
 		if (this.auth && this.isPrivate === true) {
 			return ' ';
 		}
-		return user.group!;
+		return user.group;
 	}
 	checkModjoin(user: User) {
 		if (this.staffRoom && !user.isStaff && (!this.auth || (this.auth[user.id] || ' ') === ' ')) return false;
