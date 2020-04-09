@@ -357,10 +357,18 @@ export const pages: PageTable = {
 
 		this.title = '[Logs] ' + roomid;
 		if (date && date.length === 10 || date === 'today') {
-			return LogViewer.day(roomid, date, opts);
+			if (date === 'today') {
+				return LogViewer.day(roomid, 'today', opts);
+			}
+			const parsedDate = new Date(date);
+			// this is apparently the best way to tell if a date is invalid
+			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
+			return LogViewer.day(roomid, Chat.toTimestamp(parsedDate).slice(0, 10), opts);
 		}
 		if (date) {
-			return LogViewer.month(roomid, date);
+			const parsedDate = new Date(date);
+			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
+			return LogViewer.month(roomid, Chat.toTimestamp(parsedDate).slice(0, 7));
 		}
 		return LogViewer.room(roomid);
 	},
