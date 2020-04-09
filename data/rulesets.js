@@ -73,7 +73,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard NatDex',
 		desc: "The standard ruleset for all National Dex tiers",
-		ruleset: ['Obtainable', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+		ruleset: ['Obtainable', '+Unobtainable', '+Past', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 		onValidateSet(set) {
 			// These Pokemon are still unobtainable
 			const unobtainables = [
@@ -843,12 +843,6 @@ let BattleFormats = {
 		name: 'Allow AVs',
 		desc: "Tells formats with the 'letsgo' mod to take Awakening Values into consideration when calculating stats",
 		// Implemented in mods/letsgo/rulesets.js
-	},
-	standardpetmod: {
-		effectType: 'ValidatorRule',
-		name: 'Standard Pet Mod',
-		desc: "Holds all custom Pet Mod ruleset validation",
-		// Implemented in mods/[petmod]/rulesets.js
 	},
 	nfeclause: {
 		effectType: 'ValidatorRule',

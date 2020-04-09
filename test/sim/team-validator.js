@@ -652,4 +652,12 @@ describe('Team Validator', function () {
 		let illegal = TeamValidator.get('gen7ou@@@!Standard').validateTeam(team);
 		assert.equal(illegal, null);
 	});
+
+	it('should allow rule bundles to be overridden', function () {
+		let team = [
+			{species: 'charizard-mega-y', ability: 'drought', item: 'charizarditey', moves: ['wingattack'], evs: {hp: 1}},
+		];
+		let illegal = TeamValidator.get('gen8customgame@@@Standard NatDex').validateTeam(team);
+		assert.equal(illegal, null);
+	});
 });

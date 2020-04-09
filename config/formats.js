@@ -79,7 +79,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU'],
+		ruleset: ['[Gen 8] OU', '-Melmetal'],
 		banlist: ['OU', 'UUBL'],
 	},
 	{
@@ -208,7 +208,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU', '+CAP'],
+		ruleset: ['[Gen 8] OU', '-Melmetal', '+CAP'],
 		banlist: ['Crucibelle-Mega'],
 	},
 	{
@@ -419,7 +419,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard NatDex', '+Unobtainable', '+Past', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Dynamax Clause', 'Sleep Clause Mod'],
 		banlist: [
 			'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Attack', 'Deoxys-Base', 'Deoxys-Speed', 'Dialga', 'Eternatus', 'Genesect', 'Gengar-Mega',
 			'Giratina', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lucario-Mega',
@@ -440,7 +440,7 @@ let Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['Standard NatDex', '+Unobtainable', '+Past'],
+		ruleset: ['Standard NatDex'],
 	},
 
 	// OM of the Month
@@ -462,9 +462,11 @@ let Formats = [
 		banlist: [
 			'Darmanitan-Galar', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo',
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
-			'Arena Trap', 'Drizzle', 'Drought', 'Harvest', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Bounce',
-			'Magic Guard', 'Mold Breaker', 'Moody', 'Neutralizing Gas', 'Regenerator', 'Sand Stream', 'Shadow Tag',
-			'Simple', 'Snow Warning', 'Speed Boost', 'Steely Spirit', 'Tinted Lens', 'Trace', 'Water Bubble', 'Baton Pass',
+			'Arena Trap', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Electric Surge ++ Surge Surfer',
+			'Fluffy ++ Fur Coat', 'Harvest', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magic Guard',
+			'Mirror Armor', 'Mold Breaker', 'Moody', 'Neutralizing Gas', 'Regenerator ++ Emergency Exit', 'Regenerator ++ Wimp Out',
+			'Sand Stream ++ Sand Rush', 'Sand Veil', 'Shadow Tag', 'Simple', 'Snow Cloak', 'Snow Warning ++ Slush Rush',
+			'Speed Boost', 'Steelworker ++ Steely Spirit', 'Tinted Lens', 'Trace', 'Unaware', 'Water Bubble', 'Baton Pass',
 		],
 		/** @param {Pokemon} pokemon */
 		// @ts-ignore
@@ -499,9 +501,9 @@ let Formats = [
 				pokemon.addVolatile(effect);
 			}
 		},
-		battle: {
+		field: {
 			suppressingWeather() {
-				for (const side of this.sides) {
+				for (const side of this.battle.sides) {
 					for (const pokemon of side.active) {
 						if (pokemon && !pokemon.ignoringAbility() && pokemon.hasAbility('Cloud Nine')) {
 							return true;
@@ -667,9 +669,6 @@ let Formats = [
 			'Libero', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Water Bubble', 'Wonder Guard',
 			'Baton Pass',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8almostanyability') this.add('html', `<div class="broadcast-red"><strong>Almost Any Ability is currently suspecting Zeraora! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3661684/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 8] STABmons",
@@ -736,7 +735,7 @@ let Formats = [
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['[Gen 8] OU'],
+		ruleset: ['[Gen 8] OU', '-Melmetal'],
 		banlist: ['Damp Rock', 'Heat Rock'],
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return false;
@@ -791,18 +790,17 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7 Pet Mod] Clean Slate: Micro",
-		desc: `A brand new "micrometagame" created from scratch, with the ultimate goal of creating a unique, compact metagame different from any other tier.`,
+		name: "[Gen 8 Pet Mod] Roulettemons",
+		desc: `A metagame made up of brand new Pok&eacute;mon that have randomly generated moves, stats, abilities, and types.`,
 		threads: [
-			`<a href="https://www.smogon.com/forums/threads/3652540/">Clean Slate: Micro</a>`,
+			`<a href="https://www.smogon.com/forums/threads/3649106/">Roulettemons</a>`,
 		],
 
-		mod: 'cleanslatemicro',
-		ruleset: ['Standard Pet Mod'],
+		mod: 'roulettemons',
+		ruleset: ['Standard NatDex', 'Dynamax Clause', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Baton Pass Clause', 'OHKO Clause'],
+		banlist: ['All Pokemon'],
 		unbanlist: [
-			'Crobat', 'Dragalge', 'Dugtrio-Alola', 'Farfetch\'d', 'Galvantula', 'Heracross-Base', 'Kyurem-Base', 'Ludicolo',
-			'Magearna-Base', 'Malamar', 'Ninetales-Base', 'Pupitar', 'Purugly', 'Rotom-Base', 'Rotom-Heat', 'Rotom-Mow',
-			'Rotom-Wash', 'Torterra', 'Type: Null', 'Umbreon', 'Wailord',
+			'Koatric', 'Aquazelle', 'Salamalix', 'Brawnkey', 'Stuneleon', 'Chillyte', 'Eartharoo', 'Crazefly', 'Electritar', 'Aquatopus', 'Scorpita', 'Baloon', 'Kinesel', 'Glacida', 'Pidgeotine', 'Gorilax', 'Albatrygon', 'Chillvark', 'Komodith', 'Giranium', 'Flamyle', 'Voltecta', 'Ostria', 'Ninjoth', 'Herbigator', 'Anteros', 'Gladiaster', 'Hyperoach', 'Barracoth', 'Toados', 'Voltarak', 'Mosqung', 'Flamepion', 'Hyenix', 'Rhinolite', 'Bellena', 'Falcola', 'Beanium', 'Lemotic', 'Biceon', 'Skeleray', 'Specyte', 'Ramron', 'Panthee', 'Blastora', 'Balar', 'Dropacle', 'Fluffora', 'Dolphena', 'Tigire', 'Catelax',
 		],
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
@@ -1213,7 +1211,7 @@ let Formats = [
 		mod: 'gen7',
 		searchShow: false,
 		ruleset: ['[Gen 7] RU'],
-		banlist: ['RU', 'NUBL'],
+		banlist: ['RU', 'NUBL', 'Drought'],
 	},
 	{
 		name: "[Gen 7] PU",
@@ -2031,7 +2029,6 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['[Gen 4] UU'],
 		banlist: ['UU', 'NUBL'],
-		unbanlist: ['Sand Veil'],
 	},
 	{
 		name: "[Gen 4] PU",
@@ -2049,7 +2046,6 @@ let Formats = [
 			'Ninetales', 'Piloswine', 'Poliwrath', 'Porygon2', 'Regice', 'Regirock', 'Roselia', 'Sandslash',
 			'Sharpedo', 'Shiftry', 'Skuntank', 'Slowking', 'Tauros', 'Typhlosion', 'Venomoth', 'Vileplume',
 		],
-		unbanlist: ['Sand Veil'],
 	},
 	{
 		name: "[Gen 4] LC",
