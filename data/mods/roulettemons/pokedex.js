@@ -283,7 +283,7 @@ let BattlePokedex = {
 		name: "Hyenix",
 		types: ["Dark"],
 		baseStats: {hp: 60, atk: 147, def: 27, spa: 160, spd: 140, spe: 66},
-		abilities: {0: "Skill Link", 1: "SoulHeart", H: "Vital Spirit"},
+		abilities: {0: "Skill Link", 1: "Soul-Heart", H: "Vital Spirit"},
 		weightkg: 17,
 	},
 	rhinolite: {
