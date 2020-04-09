@@ -65,6 +65,7 @@ export const IPTools = new class {
 		'frootvpn.com',
 		'galaxyhostplus.com',
 		'gigenet.com',
+		'gthost.com',
 		'h2dns.net',
 		'hide.me',
 		'hkserverworks.com',
@@ -97,6 +98,7 @@ export const IPTools = new class {
 		'primegraf.com.br',
 		'privacyfoundation.ch',
 		'protectedgroup.com',
+		'psychz.net',
 		'quadranet.com',
 		'ra4wvpn.com',
 		'redstation.co.uk',
@@ -116,6 +118,7 @@ export const IPTools = new class {
 		'time4vps.eu',
 		'trance.fm',
 		'tunnelbear.com',
+		'tzulo.com',
 		'ubiquityservers.com',
 		'uaservers.net',
 		'ukservers.com',
@@ -656,7 +659,8 @@ export const IPTools = new class {
 			'80.59.233.178', '88.146.204.165', '158.58.197.227', '185.41.76.35', '212.170.49.70', '91.139.202.50',
 			'92.115.247.61', '95.65.89.96', '61.221.12.80', '210.217.18.70', '211.197.11.17', '178.20.137.178',
 			'137.63.71.51', '78.60.203.75', '188.186.4.177', '87.92.64.0', '88.119.43.142', '24.135.56.196',
-			'31.168.98.68', '78.60.203.75', '78.62.214.242', '83.238.39.241', '84.22.63.122', '87.255.79.223',
+			'31.168.98.68', '78.62.214.242', '83.238.39.241', '84.22.63.122', '87.255.79.223', '46.55.25.191',
+			'91.181.235.31', '188.124.93.166', '84.236.2.166', '82.200.233.4',
 		].includes(ip)) {
 			// single-IP open proxies
 			return 'proxy';
