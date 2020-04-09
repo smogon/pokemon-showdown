@@ -1982,7 +1982,7 @@ export class Battle {
 				type: '???',
 				category: 'Physical',
 				willCrit: false,
-			}) as ActiveMove;
+			}) as unknown as ActiveMove;
 			move.hit = 0;
 		}
 
