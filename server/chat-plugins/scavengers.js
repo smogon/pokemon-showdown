@@ -1522,7 +1522,7 @@ let commands = {
 
 			room.officialtwist = twist;
 			if (room.chatRoomData) {
-				room.chatRoomData.twist = room.officialtwist;
+				room.chatRoomData.officialtwist = room.officialtwist;
 				Rooms.global.writeChatRoomData();
 			}
 		}
