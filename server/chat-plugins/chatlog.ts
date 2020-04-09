@@ -185,9 +185,9 @@ export const LogViewer = new class {
 			query = search.split('-').join('", "');
 		}
 		let buf = (
-			`<div class="pad"<strong>Results for search` +
+			`<br><div class="pad"><strong><center>Results for search` +
 			` ${Chat.plural(searches, 'queries', 'query')}: "${query ? query : search}"` +
-			` on ${roomid}: (${month}): </strong><hr>`
+			` on ${roomid}: (${month}): </center></strong><hr>`
 		);
 		const files = await log!.listDays(month);
 		for (const day of files) {
@@ -444,10 +444,18 @@ export const pages: PageTable = {
 		const search = opts?.slice(7);
 
 		if (date && date.length === 10 || date === 'today') {
-			return LogViewer.day(roomid, date, opts);
+			if (date === 'today') {
+				return LogViewer.day(roomid, 'today', opts);
+			}
+			const parsedDate = new Date(date);
+			// this is apparently the best way to tell if a date is invalid
+			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
+			return LogViewer.day(roomid, Chat.toTimestamp(parsedDate).slice(0, 10), opts);
 		}
 		if (date && !hasSearch) {
-			return LogViewer.month(roomid, date);
+			const parsedDate = new Date(date);
+			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
+			return LogViewer.month(roomid, Chat.toTimestamp(parsedDate).slice(0, 7));
 		} else if (hasSearch && date?.length === 4) {
 			this.title = `[Search Logs] [${date}] ${search}`;
 			return LogViewer.searchYear(roomid, date, search!);
