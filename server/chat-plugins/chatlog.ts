@@ -41,7 +41,7 @@ class LogReaderRoom {
 
 const DAY = 24 * 60 * 60 * 1000;
 
-const LogReader = new class {
+export const LogReader = new class {
 	async get(roomid: RoomID) {
 		if (!await FS(`logs/chat/${roomid}`).exists()) return null;
 		return new LogReaderRoom(roomid);
@@ -442,34 +442,36 @@ export const pages: PageTable = {
 
 		const hasSearch = opts?.includes('search-');
 		const search = opts?.slice(7);
+		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
 
-		if (date && date.length === 10 || date === 'today') {
-			if (date === 'today') {
-				return LogViewer.day(roomid, 'today', opts);
-			}
-			const parsedDate = new Date(date);
-			// this is apparently the best way to tell if a date is invalid
-			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
-			return LogViewer.day(roomid, Chat.toTimestamp(parsedDate).slice(0, 10), opts);
+		const parsedDate = new Date(date as string);
+		// this is apparently the best way to tell if a date is invalid
+		if (isNaN(parsedDate.getTime()) && !isAll) {
+			return LogViewer.error(`Invalid date.`);
 		}
+
 		if (date && !hasSearch) {
-			const parsedDate = new Date(date);
-			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
-			return LogViewer.month(roomid, Chat.toTimestamp(parsedDate).slice(0, 7));
-		} else if (hasSearch && date?.length === 4) {
-			this.title = `[Search Logs] [${date}] ${search}`;
-			return LogViewer.searchYear(roomid, date, search!);
-		} else if (hasSearch && (date === 'all' || date === 'alltime')) {
-			this.title = `[Search Logs] [all] ${search}`;
-			return LogViewer.searchYear(roomid, date, search!, true);
-		} else if (hasSearch && date) {
-			if (date === 'today') {
-				const today = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-				this.title = `[Search Logs] [${today}] ${search}`;
-				return LogViewer.searchMonth(roomid, today, search!);
+			if (date.split('-').length === 3) {
+				return LogViewer.day(roomid, parsedDate.toISOString().slice(0, 10), opts);
 			} else {
+				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
+			}
+		} else if (date && hasSearch) {
+			if (date?.length === 4 || date.split('-').length === 3) {
 				this.title = `[Search Logs] [${date}] ${search}`;
-				return LogViewer.searchMonth(roomid, date, search!);
+				return LogViewer.searchYear(roomid, date, search!);
+			} else if (date === 'all' || date === 'alltime') {
+				this.title = `[Search Logs] [all] ${search}`;
+				return LogViewer.searchYear(roomid, date, search!, true);
+			} else if (date) {
+				if (date === 'today') {
+					const today = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
+					this.title = `[Search Logs] [${today}] ${search}`;
+					return LogViewer.searchMonth(roomid, today, search!);
+				} else {
+					this.title = `[Search Logs] [${date}] ${search}`;
+					return LogViewer.searchMonth(roomid, date, search!);
+				}
 			}
 		} else {
 			return LogViewer.room(roomid);
@@ -498,7 +500,7 @@ export const commands: ChatCommands = {
 	},
 
 	searchlogshelp: [
-		"/searchlogs [search] | [date] | [optional room]- searches [date]'s logs in the current room for [search].",
+		"/searchlogs [search] | [optional room] | [optional date]- searches [date]'s logs in the current room for [search].",
 		"a comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If no month, year, or 'all' param is given for the date, defaults to current month. Requires: % @ & ~",
 	],
