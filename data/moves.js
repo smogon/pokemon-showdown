@@ -9179,7 +9179,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, distance: 1},
 		onModifyMove(move, pokemon, target) {
-			switch (pokemon.effectiveWeather()) {
+			switch (target.effectiveWeather()) {
 			case 'raindance':
 			case 'primordialsea':
 				move.accuracy = true;
@@ -19832,7 +19832,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move, pokemon, target) {
-			switch (pokemon.effectiveWeather()) {
+			switch (target.effectiveWeather()) {
 			case 'raindance':
 			case 'primordialsea':
 				move.accuracy = true;
