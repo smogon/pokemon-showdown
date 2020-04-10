@@ -553,7 +553,7 @@ export const commands: ChatCommands = {
 		const reason = (target ? ` (${target})` : ``);
 		this.addModAction(`${name} was banned from ${room.title} by ${user.name}.${reason}`);
 
-		const affected = Punishments.roomBan(room, targetUser, null, target);
+		const affected = Punishments.roomBan(room, targetUser, null, null, target);
 
 		if (!room.isPrivate && room.chatRoomData) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
