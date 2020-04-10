@@ -363,12 +363,14 @@ export const pages: PageTable = {
 			const parsedDate = new Date(date);
 			// this is apparently the best way to tell if a date is invalid
 			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
-			return LogViewer.day(roomid, Chat.toTimestamp(parsedDate).slice(0, 10), opts);
+			// is a valid date, return logs
+			return LogViewer.day(roomid, date, opts);
 		}
 		if (date) {
 			const parsedDate = new Date(date);
 			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
-			return LogViewer.month(roomid, Chat.toTimestamp(parsedDate).slice(0, 7));
+			// date is valid, return logs
+			return LogViewer.month(roomid, date);
 		}
 		return LogViewer.room(roomid);
 	},
