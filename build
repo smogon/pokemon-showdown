@@ -61,11 +61,15 @@ try {
 	shell('npm install --production');
 }
 
+sucrase('./data', './.data-dist');
 sucrase('./sim', './.sim-dist');
 sucrase('./lib', './.lib-dist');
 sucrase('./server', './.server-dist');
 sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets');
 // NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
+replace(path.join(__dirname, '.data-dist'), [
+	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.lib-dist$3`},
+]);
 replace(path.join(__dirname, '.sim-dist'), [
 	{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`, 'g'), replace: `$1.lib-dist$3`},
 ]);
