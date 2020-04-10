@@ -1,8 +1,6 @@
-'use strict';
-
 import {RandomTeams} from '../../random-teams';
 
-class RandomLetsGoTeams extends RandomTeams {
+export class RandomLetsGoTeams extends RandomTeams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.getSpecies(species);
 		let forme = species.name;

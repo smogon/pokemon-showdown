@@ -1,6 +1,4 @@
-'use strict';
-/**@type {{[k: string]: ModdedItemData}} */
-let BattleItems = {
+export const BattleItems: {[k: string]: ModdedItemData} = {
 	abomasite: {
 		inherit: true,
 		isNonstandard: null,
@@ -702,4 +700,3 @@ let BattleItems = {
 		isNonstandard: null,
 	},
 };
-exports.BattleItems = BattleItems;

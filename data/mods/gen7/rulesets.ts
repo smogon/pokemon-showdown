@@ -1,7 +1,4 @@
-'use strict';
-
-/**@type {{[k: string]: ModdedFormatsData}} */
-let BattleFormats = {
+export const BattleFormats: {[k: string]: ModdedFormatsData} = {
 	standard: {
 		inherit: true,
 		ruleset: ['Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
@@ -30,5 +27,3 @@ let BattleFormats = {
 		},
 	},
 };
-
-exports.BattleFormats = BattleFormats;

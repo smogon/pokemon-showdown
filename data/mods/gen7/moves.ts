@@ -1,7 +1,4 @@
-'use strict';
-
-/**@type {{[k: string]: ModdedMoveData}} */
-let BattleMovedex = {
+export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	"10000000voltthunderbolt": {
 		inherit: true,
 		isNonstandard: null,
@@ -162,8 +159,8 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
-			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
@@ -357,7 +354,7 @@ let BattleMovedex = {
 				return 5;
 			},
 			onBasePower(basePower, attacker, defender, move) {
-				let weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
+				const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
 				if (weakenedMoves.includes(move.id)) {
 					this.debug('move weakened by grassy terrain');
 					return this.chainModify(0.5);
@@ -602,7 +599,7 @@ let BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
-				let lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
 					if (source.volatiles['lockedmove'].duration === 2) {
@@ -854,7 +851,7 @@ let BattleMovedex = {
 		inherit: true,
 		onHit(target) {
 			if (target.side.active.length < 2) return false; // fails in singles
-			let action = this.queue.willMove(target);
+			const action = this.queue.willMove(target);
 			if (!action) return false;
 
 			action.priority = -7.1;
@@ -1170,5 +1167,3 @@ let BattleMovedex = {
 		secondary: null,
 	},
 };
-
-exports.BattleMovedex = BattleMovedex;

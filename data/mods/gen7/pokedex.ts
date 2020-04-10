@@ -1,7 +1,4 @@
-'use strict';
-
-/**@type {{[k: string]: ModdedSpeciesData}} */
-let BattlePokedex = {
+export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	charizard: {
 		inherit: true,
 		otherFormes: ["charizardmegax", "charizardmegay"],
@@ -194,5 +191,3 @@ let BattlePokedex = {
 		otherFormes: undefined,
 	},
 };
-
-exports.BattlePokedex = BattlePokedex;

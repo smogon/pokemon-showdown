@@ -1,7 +1,7 @@
 import {Dex} from '../sim/dex';
 import {PRNG, PRNGSeed} from '../sim/prng';
 
-interface TeamData {
+export interface TeamData {
 	typeCount: {[k: string]: number};
 	typeComboCount: {[k: string]: number};
 	baseFormes: {[k: string]: number};
