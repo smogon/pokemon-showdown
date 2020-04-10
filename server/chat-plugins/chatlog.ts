@@ -139,7 +139,6 @@ export const LogReader = new class {
 
 export const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
-		if (day === 'today') day = LogReader.today();
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
