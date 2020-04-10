@@ -384,13 +384,13 @@ let BattleStatuses = {
 	ceteris: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Ceteris|Your loss is inevitable, you best forfeit the battle if you know what's good for you. ╰(⇀︿⇀)つ-]═───`);
+			this.add(`c|+Ceteris|Your loss is inevitable, you best forfeit the battle if you know what's good for you. ╰(⇀︿⇀)つ-]═───`);
 		},
 		onSwitchOut(source) {
-			this.add(`c|@Ceteris|Saving the best for last, ${source.side.name}, a wise choice my friend.`);
+			this.add(`c|+Ceteris|Saving the best for last, ${source.side.name}, a wise choice my friend.`);
 		},
 		onFaint() {
-			this.add(`c|@Ceteris|IMPOSSIBLE!! THIS IS AN OUTRAGE!! I WILL EXACT MY REVENGE ON YOU ONE DAY (◣_◢)`);
+			this.add(`c|+Ceteris|IMPOSSIBLE!! THIS IS AN OUTRAGE!! I WILL EXACT MY REVENGE ON YOU ONE DAY (◣_◢)`);
 		},
 	},
 	chaos: {
@@ -436,13 +436,13 @@ let BattleStatuses = {
 	decem: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Decem|:D`);
+			this.add(`c|%Decem|:D`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Decem|bye`);
+			this.add(`c|%Decem|bye`);
 		},
 		onFaint() {
-			this.add(`c|+Decem|>:(`);
+			this.add(`c|%Decem|>:(`);
 		},
 	},
 	deetah: {
@@ -472,7 +472,7 @@ let BattleStatuses = {
 	dragonwhale: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@DragonWhale|i would switch to chomper here`);
+			this.add(`c|+DragonWhale|i would switch to chomper here`);
 		},
 	},
 	e4flint: {
@@ -490,10 +490,10 @@ let BattleStatuses = {
 	eien: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&Eien|umu!`);
+			this.add(`c|+Eien|umu!`);
 		},
 		onFaint() {
-			this.add(`c|&Eien|This game is Bad Civilization...`);
+			this.add(`c|+Eien|This game is Bad Civilization...`);
 		},
 	},
 	elgino: {
@@ -561,13 +561,13 @@ let BattleStatuses = {
 	'false': {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
+			this.add(`c|+false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
 		},
 		onSwitchOut() {
-			this.add(`c|&false|٩(๑•◡-๑)۶ⒽⓤⒼ❤`);
+			this.add(`c|+false|٩(๑•◡-๑)۶ⒽⓤⒼ❤`);
 		},
 		onFaint() {
-			this.add(`c|&false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
+			this.add(`c|+false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
 		},
 	},
 	fart: {
@@ -661,15 +661,15 @@ let BattleStatuses = {
 	gmars: {
 		noCopy: true,
 		onStart(target) {
-			this.add(`c|%GMars|It's ya boy GEEEEEEEEMARS`);
+			this.add(`c|@GMars|It's ya boy GEEEEEEEEMARS`);
 			if (target.illusion || !target.m.miniorColor) return;
 			this.add('-formechange', target, `Minior${target.m.miniorColor}`);
 		},
 		onSwitchOut() {
-			this.add(`c|%GMars|I like 'em crisp`);
+			this.add(`c|@GMars|I like 'em crisp`);
 		},
 		onFaint() {
-			this.add(`c|%GMars|Don't forget to check out my bandcamp`);
+			this.add(`c|@GMars|Don't forget to check out my bandcamp`);
 		},
 	},
 	grimauxiliatrix: {
@@ -892,7 +892,7 @@ let BattleStatuses = {
 	kris: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c|+Kris|wjat poppin ;)))))`);
+			this.add(`c|%Kris|wjat poppin ;)))))`);
 			if (pokemon.illusion) return;
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
@@ -907,10 +907,10 @@ let BattleStatuses = {
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|+Kris|vbye`);
+			this.add(`c|%Kris|vbye`);
 		},
 		onFaint() {
-			this.add(`c|+Kris|thats weird but ok`);
+			this.add(`c|%Kris|thats weird but ok`);
 		},
 	},
 	level51: {
@@ -1092,13 +1092,13 @@ let BattleStatuses = {
 	nui: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@nui|（*＾3＾）`);
+			this.add(`c|&nui|（*＾3＾）`);
 		},
 		onSwitchOut() {
-			this.add(`c|@nui|(´◔‸◔\`) **??+ !`);
+			this.add(`c|&nui|(´◔‸◔\`) **??+ !`);
 		},
 		onFaint() {
-			this.add(`c|@nui|(◕︿◕✿)`);
+			this.add(`c|&nui|(◕︿◕✿)`);
 		},
 	},
 	om: {
@@ -1212,13 +1212,13 @@ let BattleStatuses = {
 	ptoad: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%ptoad⚬|Make it rain!`);
+			this.add(`c|+ptoad⚬|Make it rain!`);
 		},
 		onSwitchOut() {
-			this.add(`c|%ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
+			this.add(`c|+ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
 		},
 		onFaint() {
-			this.add(`c|%ptoad⚬|Wow. Way to rain on my parade.`);
+			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
 		},
 	},
 	psynergy: {
@@ -1361,10 +1361,10 @@ let BattleStatuses = {
 	shiba: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Shiba|LINDA IS INDA`);
+			this.add(`c|+Shiba|LINDA IS INDA`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Shiba|gotta buy an alt rq brb`);
+			this.add(`c|+Shiba|gotta buy an alt rq brb`);
 		},
 	},
 	slowbroth: {
