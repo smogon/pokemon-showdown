@@ -264,7 +264,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	battlebond: {
 		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times.",
 		shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
-		onSourceFaint(target, source, effect) {
+		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType !== 'Move') {
 				return;
 			}
@@ -287,7 +287,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	beastboost: {
 		desc: "This Pokemon's highest stat is raised by 1 stage if it attacks and knocks out another Pokemon.",
 		shortDesc: "This Pokemon's highest stat is raised by 1 if it attacks and KOes another Pokemon.",
-		onSourceFaint(target, source, effect) {
+		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				let statName = 'atk';
 				let bestStat = 0;
@@ -298,7 +298,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 						bestStat = source.storedStats[s];
 					}
 				}
-				this.boost({[statName]: 1}, source);
+				this.boost({[statName]: length}, source);
 			}
 		},
 		id: "beastboost",
@@ -2364,9 +2364,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	moxie: {
 		desc: "This Pokemon's Attack is raised by 1 stage if it attacks and knocks out another Pokemon.",
 		shortDesc: "This Pokemon's Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
-		onSourceFaint(target, source, effect) {
+		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.boost({atk: 1}, source);
+				this.boost({atk: length}, source);
 			}
 		},
 		id: "moxie",
