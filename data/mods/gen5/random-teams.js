@@ -438,8 +438,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 					rejectAbility = !counter['serenegrace'] || species.name === 'Blissey' || species.name === 'Togetic';
 				} else if (ability === 'Sheer Force') {
 					rejectAbility = !counter['sheerforce'] || (abilities.includes('Iron Fist') && counter['ironfist'] > counter['sheerforce']);
-				} else if (ability === 'Simple') {
-					rejectAbility = !counter.setupType && !hasMove['flamecharge'] && !hasMove['stockpile'];
+				} else if (ability === 'Simple' || ability === 'Weak Armor') {
+					rejectAbility = !counter.setupType;
 				} else if (ability === 'Sturdy') {
 					rejectAbility = !!counter['recoil'] && !counter['recovery'];
 				} else if (ability === 'Swarm') {
