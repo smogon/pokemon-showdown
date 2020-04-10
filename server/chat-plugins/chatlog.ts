@@ -130,7 +130,6 @@ const LogReader = new class {
 
 const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
-		if (day === 'today') day = LogReader.today();
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
@@ -356,19 +355,20 @@ export const pages: PageTable = {
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 
 		this.title = '[Logs] ' + roomid;
-		if (date && date.length === 10 || date === 'today') {
+
+		if (date) {
 			if (date === 'today') {
-				return LogViewer.day(roomid, 'today', opts);
+				return LogViewer.day(roomid, LogReader.today(), opts);
 			}
 			const parsedDate = new Date(date);
 			// this is apparently the best way to tell if a date is invalid
 			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
-			return LogViewer.day(roomid, Chat.toTimestamp(parsedDate).slice(0, 10), opts);
-		}
-		if (date) {
-			const parsedDate = new Date(date);
-			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
-			return LogViewer.month(roomid, Chat.toTimestamp(parsedDate).slice(0, 7));
+
+			if (date.split('-').length === 3) {
+				return LogViewer.day(roomid, parsedDate.toISOString().slice(0, 10), opts);
+			} else {
+				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
+			}
 		}
 		return LogViewer.room(roomid);
 	},
