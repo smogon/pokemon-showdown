@@ -988,39 +988,30 @@ export class GlobalRoom extends BasicRoom {
 		}
 		this.lastReportedCrash = time;
 		// @ts-ignore
-		let stackLines = (err ? Chat.escapeHTML(err.stack).split(`\n`) : []);
-		if (stackLines.length > 2) {
-			for (let i = 1; i < stackLines.length; i++) {
-				if (stackLines[i].includes('&#x2f;') || stackLines[i].includes('\\')) {
-					if (!stackLines[i].includes('node_modules')) {
-						stackLines = [stackLines[0], stackLines[i]];
-						break;
-					}
-				}
-			}
-		}
-		if (stackLines.length > 2) {
-			for (let i = 1; i < stackLines.length; i++) {
-				if (stackLines[i].includes('&#x2f;') || stackLines[i].includes('\\')) {
-					stackLines = [stackLines[0], stackLines[i]];
-					break;
-				}
-			}
-		}
-		const stack = stackLines.slice(0, 2).join(`<br />`);
-		let crashMessage;
+		const stackLines = (err ? Chat.escapeHTML(err.stack).split(`\n`) : []);
+		const stack = stackLines.slice(1).join(`<br />`);
+
+		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} has crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
+		let privateCrashMessage = null;
+
+		const upperStaffRoom = Rooms.get('upperstaff');
 		if (stack.includes("private")) {
-			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
-		} else {
-			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
+			if (upperStaffRoom) {
+				privateCrashMessage = crashMessage;
+				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b> <a href="/upperstaff">Read more</a></div>`;
+			} else {
+				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
+			}
 		}
 		const devRoom = Rooms.get('development');
 		if (devRoom) {
 			devRoom.add(crashMessage).update();
 		} else {
-			if (Rooms.lobby) Rooms.lobby.add(crashMessage).update();
-			const staffRoom = Rooms.get('staff');
-			if (staffRoom) staffRoom.add(crashMessage).update();
+			Rooms.lobby?.add(crashMessage).update();
+			Rooms.get('staff')?.add(crashMessage).update();
+		}
+		if (privateCrashMessage) {
+			upperStaffRoom!.add(privateCrashMessage);
 		}
 	}
 	/**
