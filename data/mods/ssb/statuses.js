@@ -224,10 +224,10 @@ let BattleStatuses = {
 	asheviere: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~Asheviere|The Light shall bring victory!`);
+			this.add(`c|~Asheviere|Blessings to you.`);
 		},
 		onSwitchOut() {
-			this.add(`c|~Asheviere|Regenerator is very fair and balanced`);
+			this.add(`c|~Asheviere|Don't trade me for someone else :(`);
 		},
 		onFaint() {
 			this.add(`c|~Asheviere|Who will lead my kingdom now?`);
@@ -381,6 +381,18 @@ let BattleStatuses = {
 			this.add(`c|+Catalystic|The Birb is never lucky.`);
 		},
 	},
+	celestial: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Celestial|**Time to electrify you**`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Celestial|__I'll be coming back for you!__`);
+		},
+		onFaint() {
+			this.add(`c|%Celestial|I'm shocked that you mere mortal actually defeated __me__`);
+		},
+	},
 	ceteris: {
 		noCopy: true,
 		onStart() {
@@ -455,18 +467,6 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|+deetah|I have 8 lives left, you can't get rid of me that easily.`);
-		},
-	},
-	dragontite: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Dragontite|**Time to electrify you**`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Dragontite|__I'll be coming back for you!__`);
-		},
-		onFaint() {
-			this.add(`c|+Dragontite|I'm shocked that you mere mortal actually defeated __me__`);
 		},
 	},
 	dragonwhale: {
