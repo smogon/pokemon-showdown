@@ -321,15 +321,26 @@ class ScavengerHunt extends Rooms.RoomGame {
 		this.scavGame = true;
 
 		if (this.room.scavgame) {
-			this.loadMod(this.room.scavgame.mod);
+			this.loadMods(this.room.scavgame.mod);
+		}
+		if (mod) {
+			this.loadMods(mod);
 		} else if (this.gameType === 'official' && this.room.officialtwist) {
 			this.loadMod(this.room.officialtwist);
 		}
-		if (mod) {
-			this.loadMod(mod);
-		}
+
 		this.runEvent('Load');
 		this.onLoad(questions);
+	}
+
+	loadMods(modInformation) {
+		if (Array.isArray(modInformation)) {
+			for (let mod of modInformation) {
+				this.loadMod(mod);
+			}
+		} else {
+			this.loadMod(modInformation);
+		}
 	}
 
 	loadMod(modId) {
@@ -539,7 +550,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		let blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || DEFAULT_BLITZ_POINTS[this.gameType]) && now - this.startTime <= 60000);
 
 		player.completed = true;
-		let result = this.runEvent('Complete', player);
+		let result = this.runEvent('Complete', player, time, blitz);
 		if (result === false) return;
 		result = result || {name: player.name, time: time, blitz: blitz};
 		this.completed.push(result);
@@ -951,6 +962,10 @@ let commands = {
 	 * Creation / Moderation commands
 	 */
 	createtwist: 'create',
+	createtwistofficial: 'create',
+	createtwistmini: 'create',
+	createtwistpractice: 'create',
+	createtwistunrated: 'create',
 	createpractice: 'create',
 	createofficial: 'create',
 	createunrated: 'create',
@@ -979,10 +994,11 @@ let commands = {
 		if (cmd.includes('twist')) {
 			[mod, ...target] = target.split('|');
 			target = target.join('|');
+			mod = mod.split(',');
 		}
 
 		// mini and officials can be started anytime
-		if (!cmd.includes('force') && ['regular', 'unrated', 'recycled'].includes(gameType) && room.scavQueue && room.scavQueue.length && !room.scavgame) return this.errorReply(`There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestart${gameType === 'regular' ? 'hunt' : gameType}.`);
+		if (!cmd.includes('force') && ['regular', 'unrated', 'recycled'].includes(gameType) && !mod && room.scavQueue && room.scavQueue.length && !room.scavgame) return this.errorReply(`There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestart${gameType === 'regular' ? 'hunt' : gameType}.`);
 
 		if (gameType === 'recycled') {
 			if (ScavengerHuntDatabase.isEmpty()) {
@@ -1881,6 +1897,10 @@ exports.commands = {
 	startunratedhunt: 'starthunt',
 	startrecycledhunt: 'starthunt',
 	starttwisthunt: 'starthunt',
+	starttwistofficial: 'starthunt',
+	starttwistpractice: 'starthunt',
+	starttwistmini: 'starthunt',
+	startwistunrated: 'starthunt',
 
 	forcestarthunt: 'starthunt',
 	forcestartunrated: 'starthunt',
@@ -1958,7 +1978,7 @@ exports.commands = {
 			"- /scav twists - shows a list of all the twists that are available on the server.",
 			"- /scav settwist <em>[twist name]</em> - sets the default twist mode for all official hunts. (Requires: # & ~)",
 			"- /scav resettwist - resets the default twist mode for all official hunts to nothing. (Requires: # & ~)",
-			"- /starttwisthunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em>  - creates a new regular scavenger hunt that uses a twist mode.  This can be used inside a scavenger game mode.",
+			"- /starttwist(hunt/practice/official/mini/unrated) <em>[twist] | [host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em>  - creates a new regular scavenger hunt that uses a twist mode in the specified game type.  This can be used inside a scavenger game mode.",
 			"- /nexthunt - starts the next hunt in the queue.",
 			"- /recycledhunts - Modify the database of recycled hunts and enable/disable autoqueing them. More detailed help can be found in /recycledhuntshelp",
 		].join('<br />');
