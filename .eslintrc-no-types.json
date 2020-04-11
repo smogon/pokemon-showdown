@@ -217,7 +217,7 @@
         "max-len": ["warn", {
           "code": 120, "tabWidth": 0,
           // see bottom of file for source
-          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9$.]+ \\+?=>? |(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Chat\\.html|\\$\\()?['\"`/]"
+          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9$.]+(?: \\+?=>? |: )|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Chat\\.html|\\$\\()?['\"`/]"
         }],
         "prefer-const": ["warn", {"destructuring": "all"}],
 
@@ -307,8 +307,8 @@ REGEXFREE SOURCE FOR IGNOREPATTERN
   ^\s*(\/\/\ \s*)?
 
   (
-    # define a variable, append to a variable, or define a single-arg arrow function
-    (export\ )?(let\ |const\ )?[a-zA-Z0-9$.]+\ \+?=>?\ 
+    # define a variable, append to a variable, or define a single-arg arrow function or property
+    (export\ )? (let\ |const\ )? [a-zA-Z0-9$.]+ (\ \+?=>?\ |:\ )
   |
     # optionally return or throw
     (return\ |throw\ )?
