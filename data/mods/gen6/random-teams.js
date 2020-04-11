@@ -156,7 +156,7 @@ class RandomGen6Teams extends RandomGen7Teams {
 					if (!counter.setupType) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
-					if (counter.Physical + counter.Special < 3 || hasMove['suckerpunch']) rejected = true;
+					if (counter.Physical + counter.Special < 3 || !!counter['priority']) rejected = true;
 					break;
 
 				// Set up once and only if we have the moves for it
@@ -474,11 +474,6 @@ class RandomGen6Teams extends RandomGen7Teams {
 					if (hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch'] || hasMove['whirlwind']) rejected = true;
 					if (movePool.includes('copycat')) rejected = true;
 					break;
-				}
-
-				// Increased/decreased priority moves are unneeded with moves that boost only speed
-				if (move.priority !== 0 && !!counter['speedsetup']) {
-					rejected = true;
 				}
 
 				// This move doesn't satisfy our setup requirements:
