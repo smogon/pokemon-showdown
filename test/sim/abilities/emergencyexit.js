@@ -116,7 +116,6 @@ describe(`Emergency Exit`, function () {
 			{species: "stufful", ability: 'compoundeyes', moves: ['superfang']},
 		]]);
 		battle.makeChoices();
-		console.log(battle.getDebugLog());
 		assert.equal(battle.requestState, 'switch');
 	});
 
