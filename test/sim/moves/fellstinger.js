@@ -10,7 +10,7 @@ describe('Fell Stringer', function () {
 		battle.destroy();
 	});
 
-	it('should get a boost when KOing a Pokemon after redirection', function () {
+	it.skip('should get a boost when KOing a Pokemon after redirection', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'joltik', moves: ['fellstinger']},
 			{species: 'wynaut', moves: ['sleeptalk']},
