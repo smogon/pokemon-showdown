@@ -70,7 +70,9 @@ export const BattleScripts: BattleScriptsData = {
 			if (!lockedMove) {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.add('cant', pokemon, 'nopp', move);
-					const gameConsole = [null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS'][this.gen] || 'Switch';
+					const gameConsole = [
+						null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS'
+					][this.gen] || 'Switch';
 					this.hint(`This is not a bug, this is really how it works on the ${gameConsole}; try it yourself if you don't believe us.`);
 					this.clearActiveMove(true);
 					pokemon.moveThisTurnResult = false;
@@ -290,7 +292,8 @@ export const BattleScripts: BattleScriptsData = {
 	trySpreadMoveHit(targets, pokemon, move) {
 		if (targets.length > 1 && !move.smartTarget) move.spreadHit = true;
 
-		const moveSteps: ((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (number | boolean | "" | undefined)[] | undefined)[] = [
+		const moveSteps: ((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) =>
+			(number | boolean | "" | undefined)[] | undefined)[] = [
 			// 0. check for semi invulnerability
 			this.hitStepInvulnerabilityEvent,
 
@@ -361,7 +364,7 @@ export const BattleScripts: BattleScriptsData = {
 
 		const moveResult = !!targets.length;
 		if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
-		const hitSlot = targets.map(pokemon => pokemon.getSlot());
+		const hitSlot = targets.map(p => p.getSlot());
 		if (move.spreadHit) this.attrLastMove('[spread] ' + hitSlot.join(','));
 		return moveResult;
 	},
@@ -417,7 +420,8 @@ export const BattleScripts: BattleScriptsData = {
 			} else if (!this.singleEvent('TryImmunity', move, {}, target, pokemon, move)) {
 				this.add('-immune', target);
 				hitResults[i] = false;
-			} else if (this.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') && targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)) {
+			} else if (this.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') &&
+				targets[i].side !== pokemon.side && !this.dex.getImmunity('prankster', target)) {
 				this.debug('natural prankster immunity');
 				if (!target.illusion) this.hint("Since gen 7, Dark is immune to Prankster moves.");
 				this.add('-immune', target);
@@ -440,7 +444,8 @@ export const BattleScripts: BattleScriptsData = {
 					if (move.ohko === 'Ice' && this.gen >= 7 && !pokemon.hasType('Ice')) {
 						accuracy = 20;
 					}
-					if (!target.volatiles['dynamax'] && pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
+					if (!target.volatiles['dynamax'] && pokemon.level >= target.level &&
+						(move.ohko === true || !target.hasType(move.ohko))) {
 						accuracy += (pokemon.level - target.level);
 					} else {
 						this.add('-immune', target, '[ohko]');
@@ -539,9 +544,9 @@ export const BattleScripts: BattleScriptsData = {
 				this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
 				this.boost(boosts, pokemon, pokemon);
 
-				let statName: BoostName;
-				for (statName in boosts) {
-					boosts[statName] = 0;
+				let statName2: BoostName;
+				for (statName2 in boosts) {
+					boosts[statName2] = 0;
 				}
 				target.setBoost(boosts);
 				this.addMove('-anim', pokemon, "Spectral Thief", target);
@@ -776,39 +781,42 @@ export const BattleScripts: BattleScriptsData = {
 			}
 		}
 
-		for (let [i, target] of targets.entries()) {
+		for (let [i, t] of targets.entries()) {
 			if (damage[i] === 0) {
 				// special substitute flag
 				damage[i] = true;
-				target = null;
+				t = null;
 			}
-			if (target && isSecondary && !moveData.self) {
+			if (t && isSecondary && !moveData.self) {
 				damage[i] = true;
 			}
-			if (!damage[i]) target = false;
+			if (!damage[i]) t = false;
 		}
 		// 1. call to this.getDamage
 		damage = this.getSpreadDamage(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
 
-		for (let [i, target] of targets.entries()) {
-			if (damage[i] === false) target = false;
+		// tslint:disable-next-line: no-unused-vars
+		for (let [i, t] of targets.entries()) {
+			if (damage[i] === false) t = false;
 		}
 
 		// 2. call to this.spreadDamage
 		damage = this.spreadDamage(damage, targets, pokemon, move);
 
-		for (let target of targets) {
+		// tslint:disable-next-line: no-unused-vars
+		for (let t of targets) {
 			if (!damage && damage !== 0) {
 				this.debug('damage interrupted');
-				target = false;
+				t = false;
 			}
 		}
 
 		// 3. onHit event happens here
 		damage = this.runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
 
-		for (let [i, target] of targets.entries()) {
-			if (!damage[i] && damage[i] !== 0) target = false;
+		// tslint:disable-next-line: no-unused-vars
+		for (let [i, t] of targets.entries()) {
+			if (!damage[i] && damage[i] !== 0) t = false;
 		}
 
 		// 4. self drops (start checking for targets[i] === false here)
@@ -820,15 +828,16 @@ export const BattleScripts: BattleScriptsData = {
 		// 6. force switch
 		if (moveData.forceSwitch) damage = this.forceSwitch(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
 
-		for (let [j, target] of targets.entries()) {
-			if (!damage[j] && damage[j] !== 0) target = false;
+		// tslint:disable-next-line: no-unused-vars
+		for (let [j, t] of targets.entries()) {
+			if (!damage[j] && damage[j] !== 0) t = false;
 		}
 
 		const damagedTargets: Pokemon[] = [];
 		const damagedDamage = [];
-		for (const [i, target] of targets.entries()) {
-			if (typeof damage[i] === 'number' && target) {
-				damagedTargets.push(target);
+		for (const [i, t] of targets.entries()) {
+			if (typeof damage[i] === 'number' && t) {
+				damagedTargets.push(t);
 				damagedDamage.push(damage[i]);
 			}
 		}
@@ -836,8 +845,8 @@ export const BattleScripts: BattleScriptsData = {
 		if (damagedDamage.length && !isSecondary && !isSelf) {
 			this.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 			if (moveData.onAfterHit) {
-				for (const target of damagedTargets) {
-					this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
+				for (const t of damagedTargets) {
+					this.singleEvent('AfterHit', moveData, {}, t, pokemon, move);
 				}
 			}
 			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
@@ -1043,7 +1052,8 @@ export const BattleScripts: BattleScriptsData = {
 		if (!moveData.secondaries) return;
 		for (const target of targets) {
 			if (target === false) continue;
-			const secondaries: SecondaryEffect[] = this.runEvent('ModifySecondaries', target, pokemon, moveData, moveData.secondaries.slice());
+			const secondaries: SecondaryEffect[] =
+				this.runEvent('ModifySecondaries', target, pokemon, moveData, moveData.secondaries.slice());
 			for (const secondary of secondaries) {
 				const secondaryRoll = this.random(100);
 				if (typeof secondary.chance === 'undefined' || secondaryRoll < secondary.chance) {
@@ -1105,7 +1115,8 @@ export const BattleScripts: BattleScriptsData = {
 			if (!item.zMove) return;
 			if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
 			const moveData = pokemon.getMoveData(move);
-			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
+			// Draining the PP of the base move prevents the corresponding Z-move from being used.
+			if (!moveData || !moveData.pp) return;
 		}
 
 		if (item.zMoveFrom) {
@@ -1149,7 +1160,10 @@ export const BattleScripts: BattleScriptsData = {
 	},
 
 	canZMove(pokemon) {
-		if (pokemon.side.zMoveUsed || (pokemon.transformed && (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))) return;
+		if (pokemon.side.zMoveUsed ||
+			(pokemon.transformed &&
+				(pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))
+		) return;
 		const item = pokemon.getItem();
 		if (!item.zMove) return;
 		if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
@@ -1183,7 +1197,8 @@ export const BattleScripts: BattleScriptsData = {
 		const altForme = species.otherFormes && this.dex.getSpecies(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
-		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+		if (altForme?.isMega && altForme?.requiredMove &&
+			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
@@ -1227,7 +1242,10 @@ export const BattleScripts: BattleScriptsData = {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
 			if (!pokemon.canDynamax) return;
-			if (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" || pokemon.getItem().zMove || this.canMegaEvo(pokemon)) {
+			if (
+				pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
+				pokemon.getItem().zMove || this.canMegaEvo(pokemon)
+			) {
 				return;
 			}
 			// Some pokemon species are unable to dynamax

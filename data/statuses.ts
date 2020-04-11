@@ -229,7 +229,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		num: 0,
 		duration: 5,
 		durationCallback(target, source) {
-			if (source && source.hasItem('gripclaw')) return 8;
+			if (source?.hasItem('gripclaw')) return 8;
 			return this.random(5, 7);
 		},
 		onStart(pokemon, source) {
@@ -325,7 +325,10 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 				pokemon.removeVolatile('choicelock');
 				return;
 			}
-			if (!pokemon.ignoringItem() && !pokemon.volatiles['dynamax'] && move.id !== this.effectData.move && move.id !== 'struggle') {
+			if (
+				!pokemon.ignoringItem() && !pokemon.volatiles['dynamax'] &&
+				move.id !== this.effectData.move && move.id !== 'struggle'
+			) {
 				// Fails unless the Choice item is being ignored, and no PP is lost
 				this.addMove('move', pokemon, move.name);
 				this.attrLastMove('[still]');
@@ -468,7 +471,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source && source.hasItem('damprock')) {
+			if (source?.hasItem('damprock')) {
 				return 8;
 			}
 			return 5;
@@ -485,7 +488,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 			}
 		},
 		onStart(battle, source, effect) {
-			if (effect && effect.effectType === 'Ability') {
+			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
@@ -542,7 +545,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source && source.hasItem('heatrock')) {
+			if (source?.hasItem('heatrock')) {
 				return 8;
 			}
 			return 5;
@@ -559,7 +562,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 			}
 		},
 		onStart(battle, source, effect) {
-			if (effect && effect.effectType === 'Ability') {
+			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
@@ -624,7 +627,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source && source.hasItem('smoothrock')) {
+			if (source?.hasItem('smoothrock')) {
 				return 8;
 			}
 			return 5;
@@ -638,7 +641,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 			}
 		},
 		onStart(battle, source, effect) {
-			if (effect && effect.effectType === 'Ability') {
+			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
@@ -664,13 +667,13 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source && source.hasItem('icyrock')) {
+			if (source?.hasItem('icyrock')) {
 				return 8;
 			}
 			return 5;
 		},
 		onStart(battle, source, effect) {
-			if (effect && effect.effectType === 'Ability') {
+			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			} else {

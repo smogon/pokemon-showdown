@@ -9,7 +9,9 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	pikachu: {
 		inherit: true,
-		otherFormes: ["pikachucosplay", "pikachurockstar", "pikachubelle", "pikachupopstar", "pikachuphd", "pikachulibre", "pikachuoriginal", "pikachuhoenn", "pikachusinnoh", "pikachuunova", "pikachukalos", "pikachualola", "pikachupartner", "pikachustarter"],
+		otherFormes: [
+			"pikachucosplay", "pikachurockstar", "pikachubelle", "pikachupopstar", "pikachuphd", "pikachulibre", "pikachuoriginal", "pikachuhoenn", "pikachusinnoh", "pikachuunova", "pikachukalos", "pikachualola", "pikachupartner", "pikachustarter",
+		],
 	},
 	pikachuoriginal: {
 		inherit: true,
