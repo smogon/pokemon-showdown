@@ -659,8 +659,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 	switchpriorityclausemod: {
 		effectType: 'Rule',
 		name: 'Switch Priority Clause Mod',
-		desc: "Makes a faster Pokémon switch first when double-switching," +
-			" unlike in Emerald link battles, where player 1's Pokémon would switch first",
+		desc: "Makes a faster Pokémon switch first when double-switching, unlike in Emerald link battles, where player 1's Pokémon would switch first",
 		onBegin() {
 			this.add('rule', 'Switch Priority Clause Mod: Faster Pokémon switch first');
 		},
@@ -784,8 +783,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 	inversemod: {
 		effectType: 'Rule',
 		name: 'Inverse Mod',
-		desc: "The mod for Inverse Battle which inverts the type effectiveness chart;" +
-			" weaknesses become resistances, while resistances and immunities become weaknesses",
+		desc: "The mod for Inverse Battle which inverts the type effectiveness chart; weaknesses become resistances, while resistances and immunities become weaknesses",
 		onNegateImmunity: false,
 		onBegin() {
 			this.add('rule', 'Inverse Mod: Weaknesses become resistances, while resistances and immunities become weaknesses.');
@@ -854,8 +852,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 	mimicglitch: {
 		effectType: 'ValidatorRule',
 		name: 'Mimic Glitch',
-		desc: "Allows any Pokemon with access to Assist, Copycat, Metronome, Mimic, " +
-			"or Transform to gain access to almost any other move.",
+		desc: "Allows any Pokemon with access to Assist, Copycat, Metronome, Mimic, or Transform to gain access to almost any other move.",
 		// Implemented in sim/team-validator.ts
 	},
 	formeclause: {

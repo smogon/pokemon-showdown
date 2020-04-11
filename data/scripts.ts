@@ -71,7 +71,7 @@ export const BattleScripts: BattleScriptsData = {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.add('cant', pokemon, 'nopp', move);
 					const gameConsole = [
-						null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS'
+						null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS',
 					][this.gen] || 'Switch';
 					this.hint(`This is not a bug, this is really how it works on the ${gameConsole}; try it yourself if you don't believe us.`);
 					this.clearActiveMove(true);
@@ -293,7 +293,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (targets.length > 1 && !move.smartTarget) move.spreadHit = true;
 
 		const moveSteps: ((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) =>
-			(number | boolean | "" | undefined)[] | undefined)[] = [
+		(number | boolean | "" | undefined)[] | undefined)[] = [
 			// 0. check for semi invulnerability
 			this.hitStepInvulnerabilityEvent,
 
@@ -795,7 +795,7 @@ export const BattleScripts: BattleScriptsData = {
 		// 1. call to this.getDamage
 		damage = this.getSpreadDamage(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
 
-		// tslint:disable-next-line: no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		for (let [i, t] of targets.entries()) {
 			if (damage[i] === false) t = false;
 		}
@@ -803,7 +803,7 @@ export const BattleScripts: BattleScriptsData = {
 		// 2. call to this.spreadDamage
 		damage = this.spreadDamage(damage, targets, pokemon, move);
 
-		// tslint:disable-next-line: no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		for (let t of targets) {
 			if (!damage && damage !== 0) {
 				this.debug('damage interrupted');
@@ -814,7 +814,7 @@ export const BattleScripts: BattleScriptsData = {
 		// 3. onHit event happens here
 		damage = this.runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
 
-		// tslint:disable-next-line: no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		for (let [i, t] of targets.entries()) {
 			if (!damage[i] && damage[i] !== 0) t = false;
 		}
@@ -828,7 +828,7 @@ export const BattleScripts: BattleScriptsData = {
 		// 6. force switch
 		if (moveData.forceSwitch) damage = this.forceSwitch(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
 
-		// tslint:disable-next-line: no-unused-vars
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		for (let [j, t] of targets.entries()) {
 			if (!damage[j] && damage[j] !== 0) t = false;
 		}
