@@ -94,13 +94,15 @@ const TWISTS = {
 			player.answers[currentQuestion].push(value);
 		},
 
+		onComplete(player, time, blitz) {
+			let isPerfect = Object.keys(player.answers).map(q => player.answers[q].length).every(attempts => attempts <= 1);
+			return {name: player.name, time, blitz, isPerfect};
+		},
+
 		onAfterEndPriority: 1,
 		onAfterEnd() {
-			for (const player of this.players) {
-				if (!player.answers || (this.leftGame && this.leftGame.includes(player.id))) continue; // didn't guess at all!
-				let isPerfect = Object.keys(player.answers).map(q => player.answers[q].length).every(attempts => attempts <= 1);
-				if (isPerfect) this.announce(player.name + ' has completed the hunt without a single wrong answer!');
-			}
+			let perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
+			if (perfect.length) this.announce(Chat.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
 		},
 	},
 
@@ -123,8 +125,13 @@ const TWISTS = {
 			let now = Date.now();
 			let time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-			this.preCompleted = this.preCompleted ? [...this.preCompleted, {name: player.name, time}] : [{name: player.name, time}];
+			let blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || this.gameType === 'official') && now - this.startTime <= 60000);
+
+			let result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
+
+			this.preCompleted = this.preCompleted ? [...this.preCompleted, result] : [result];
 			player.completed = true;
+			player.destroy();
 		},
 
 		onEnd() {
@@ -164,7 +171,11 @@ const TWISTS = {
 			let now = Date.now();
 			let time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-			this.preCompleted = this.preCompleted ? [...this.preCompleted, {name: player.name, time}] : [{name: player.name, time}];
+			let blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || this.gameType === 'official') && now - this.startTime <= 60000);
+
+			let result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
+
+			this.preCompleted = this.preCompleted ? [...this.preCompleted, result] : [result];
 			player.completed = true;
 		},
 
