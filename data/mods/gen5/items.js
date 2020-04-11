@@ -314,6 +314,7 @@ let BattleItems = {
 		},
 	},
 	normalgem: {
+		inherit: true,
 		isNonstandard: null,
 		desc: "Holder's first successful Normal-type attack will have 1.5x power. Single use.",
 	},
