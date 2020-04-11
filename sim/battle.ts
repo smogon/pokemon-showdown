@@ -1622,6 +1622,10 @@ export class Battle {
 			throw new Error('Battle not started: A player has an empty team.');
 		}
 
+		if (this.debugMode) {
+			this.checkEVBalance();
+		}
+
 		this.residualEvent('TeamPreview');
 
 		this.queue.addChoice({choice: 'start'});
@@ -1636,6 +1640,20 @@ export class Battle {
 
 		// @ts-ignore - readonly
 		this.send = send;
+	}
+
+	checkEVBalance() {
+		let limitedEVs: boolean | null = null;
+		for (const side of this.sides) {
+			const sideLimitedEVs = !side.pokemon.some(
+				pokemon => Object.values(pokemon.set.evs).reduce((a, b) => a + b, 0) > 510
+			);
+			if (limitedEVs === null) {
+				limitedEVs = sideLimitedEVs;
+			} else if (limitedEVs !== sideLimitedEVs) {
+				this.add('bigerror', "Warning: One player isn't adhering to a 510 EV limit, and the other player is.");
+			}
+		}
 	}
 
 	boost(
