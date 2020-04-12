@@ -1943,7 +1943,7 @@ const commands = {
 		if (showAll || target === 'rng') {
 			buffer.push(`<a href="https://${Config.routes.root}/pages/rng">How Pokémon Showdown's RNG works</a>`);
 		}
-		if (showAll || target === 'tournaments' || target === 'tournament' || target === 'tours' || target === 'tour') {
+		if (showAll || ['tournaments', 'tournament', 'tours', 'tour'].includes(target)) {
 			buffer.push(`To join a room tournament, click the <b>Join!</b> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <b>Validate</b> button once you've joined and selected a team. To battle your opponent in the tournament, click the <b>Ready!</b> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`);
 		}
 		if (showAll || !buffer.length) {
