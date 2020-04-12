@@ -1704,7 +1704,9 @@ const commands = {
 	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~`],
 
 	move(target, room, user) {
-		if (room.roomid !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
+		if (room.roomid !== 'questionworkshop') {
+			return this.errorReply('This command can only be used in Question Workshop.');
+		}
 		if (!this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
 
@@ -1753,7 +1755,9 @@ const commands = {
 			}
 		}
 	},
-	movehelp: [`/trivia move [category] | [question] - Change the category of question in the trivia databse. Requires: % @ # & ~`],
+	movehelp: [
+		`/trivia move [category] | [question] - Change the category of question in the trivia databse. Requires: % @ # & ~`
+	],
 
 	qs(target, room, user) {
 		if (room.roomid !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
