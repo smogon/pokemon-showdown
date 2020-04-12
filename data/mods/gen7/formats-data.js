@@ -4439,6 +4439,7 @@ let BattleFormatsData = {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
+	miniormeteor: {},
 	komala: {
 		randomBattleMoves: ["return", "suckerpunch", "woodhammer", "earthquake", "playrough", "uturn"],
 		randomDoubleBattleMoves: ["protect", "return", "uturn", "suckerpunch", "woodhammer", "shadowclaw", "playrough", "swordsdance"],
