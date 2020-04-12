@@ -4,7 +4,7 @@
     // test only (should never be committed, but useful when testing)
     "no-debugger": "error",
     "no-unused-vars": ["error", {"args": "none"}]
-},
+  },
   "overrides": [
     {
       "files": ["./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts", "./tools/set-import/*.ts"],
