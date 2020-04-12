@@ -7431,7 +7431,7 @@ let BattleMovedex = {
 				this.add('-sidestart', targetSide, 'G-Max Volcalith');
 			},
 			onResidualOrder: 5,
-			onResidualSubOrder: 1,
+			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
 					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
@@ -7500,7 +7500,7 @@ let BattleMovedex = {
 				this.add('-sidestart', targetSide, 'G-Max Wildfire');
 			},
 			onResidualOrder: 5,
-			onResidualSubOrder: 1,
+			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
 					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
