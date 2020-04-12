@@ -931,7 +931,7 @@ let BattleFormatsData = {
 	},
 	misdreavus: {
 		tier: "NU",
-		doublesTier: "LC",
+		doublesTier: "LC Uber",
 	},
 	mismagius: {
 		randomBattleMoves: ["hiddenpowerfighting", "nastyplot", "shadowball", "taunt", "thunderbolt"],
