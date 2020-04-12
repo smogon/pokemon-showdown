@@ -150,7 +150,7 @@ represented by a space), and the rest of the string being their username.
 
 > Changes the HTML display of the `|uhtml|` message named (NAME).
 
-`|join|USER`, |j|USER`, or `|J|USER`
+`|join|USER`, `|j|USER`, or `|J|USER`
 
 > `USER` joined the room. Optionally, `USER` may be appended with `@!` to
 > indicate that the user is away or busy.
