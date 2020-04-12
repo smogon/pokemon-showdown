@@ -5424,6 +5424,8 @@ let BattleMovedex = {
 				}
 				this.add('-sideend', targetSide, 'Fire Pledge');
 			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1,
 			onResidual(side) {
 				for (const pokemon of side.active) {
 					if (pokemon && !pokemon.hasType('Fire')) {
@@ -7428,6 +7430,8 @@ let BattleMovedex = {
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'G-Max Volcalith');
 			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1,
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
 					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
@@ -7495,6 +7499,8 @@ let BattleMovedex = {
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'G-Max Wildfire');
 			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1,
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
 					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);
