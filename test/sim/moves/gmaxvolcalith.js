@@ -53,7 +53,7 @@ describe('G-Max Volcalith', function () {
 			{species: 'Boldore', ability: 'Receiver', item: 'Sitrus Berry', evs: {hp: 28}, moves: ['sleeptalk']},
 			{species: 'Torracat', ability: 'Cheek Pouch', item: 'Focus Sash', level: 1, moves: ['sleeptalk']},
 		]});
-		//Set up Volcalith first, then Sea of Fire
+		// Set up Volcalith first, then Sea of Fire
 		battle.makeChoices('move rockthrow 1 dynamax, move sleeptalk', 'move tackle 1, move sleeptalk');
 		battle.makeChoices('switch 3');
 		battle.makeChoices('move grasspledge 1, move firepledge 1', 'move sleeptalk, move sleeptalk');
@@ -66,8 +66,8 @@ describe('G-Max Volcalith', function () {
 		/* TODO: this passes when it shouldn't because Sitrus Berry isn't triggering between Sea of Fire and G-Max Volcalith like it should;
 		 * Sitrus Berry should be able to activate in between those damaging effects. */
 
-		//If Sea of Fire triggered first, Sitrus Berry would activate without Cheek Pouch, missing the timing for extra health
-		//Failure HP should be 216
+		// If Sea of Fire triggered first, Sitrus Berry would activate without Cheek Pouch, missing the timing for extra health
+		// Failure HP should be 216
 		assert.strictEqual(battle.p2.active[1].hp, expectedHP);
 	});
 });
