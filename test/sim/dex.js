@@ -37,3 +37,10 @@ describe('Dex#getForme', function () {
 		assert.equal(Dex.getForme('Flabébé-yellow'), 'Flabébé-Yellow');
 	});
 });
+
+describe('Dex#getSpecies', function () {
+	it('should handle Minior-Meteor formes', function () {
+		assert(Dex.getSpecies('Minior-Meteor').isNonstandard);
+		assert(!Dex.forGen(7).getSpecies('Minior-Meteor').isNonstandard);
+	});
+});
