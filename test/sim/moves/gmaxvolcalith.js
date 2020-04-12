@@ -59,7 +59,7 @@ describe('G-Max Volcalith', function () {
 		battle.makeChoices('move grasspledge 1, move firepledge 1', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('', 'switch 3');
 
-		//Bring Cheek Pouch down to Sash so it will faint and set Receiver's HP to exactly 5/8 of max
+		// Bring Cheek Pouch down to Sash so it will faint and set Receiver's HP to exactly 5/8 of max
 		battle.makeChoices('move nightshade 2, move firepledge 1', 'move sleeptalk, move sleeptalk');
 		let expectedHP = battle.p2.active[1].maxhp;
 
