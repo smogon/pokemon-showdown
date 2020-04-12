@@ -1756,7 +1756,7 @@ const commands = {
 		}
 	},
 	movehelp: [
-		`/trivia move [category] | [question] - Change the category of question in the trivia databse. Requires: % @ # & ~`
+		`/trivia move [category] | [question] - Change the category of question in the trivia databse. Requires: % @ # & ~`,
 	],
 
 	qs(target, room, user) {
