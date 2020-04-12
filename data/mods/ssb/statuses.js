@@ -649,13 +649,13 @@ let BattleStatuses = {
 	gimm1ck: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Gimm1ck|Давай!`);
+			this.add(`c|%Gimm1ck|Давай!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Gimm1ck|Must get more semechki`);
+			this.add(`c|%Gimm1ck|Must get more semechki`);
 		},
 		onFaint() {
-			this.add(`c|+Gimm1ck|Ran out of vodka`);
+			this.add(`c|%Gimm1ck|Ran out of vodka`);
 		},
 	},
 	gmars: {
