@@ -651,7 +651,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					pokemon.removeVolatile('bidestall');
 				}
 			},
-			onBeforeMove(pokemon, target, move) {
+			onBeforeMove(pokemon, t, move) {
 				if (this.effectData.duration === 1) {
 					if (!this.effectData.totalDamage) {
 						this.add('-end', pokemon, 'Bide');
@@ -753,7 +753,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (pokemon.baseSpecies.name !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
-			/**@type {{[k: string]: string}} */
 			const natureChange: {[k: string]: string} = {
 				Modest: 'Adamant',
 				Adamant: 'Modest',
@@ -2013,7 +2012,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		onModifyMove(move, user) {
 			if (user.illusion) {
-				const illusionMoves = user.illusion.moves.filter(move => this.dex.getMove(move).category !== 'Status');
+				const illusionMoves = user.illusion.moves.filter(m => this.dex.getMove(m).category !== 'Status');
 				if (!illusionMoves.length) return;
 				move.name = this.dex.getMove(this.sample(illusionMoves)).name;
 			}

@@ -124,7 +124,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "If this Pokemon (not its substitute) takes a critical hit, its Attack is raised 12 stages.",
 		onHit(target, source, move) {
 			if (!target.hp) return;
-			if (move && move.effectType === 'Move' && target.getMoveHitData(move).crit) {
+			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
 				target.setBoost({atk: 6});
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
@@ -1242,7 +1242,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	galewings: {
 		shortDesc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move && move.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
+			if (move?.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 		id: "galewings",
 		name: "Gale Wings",
@@ -1430,7 +1430,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				return;
 			}
 			for (const allyActive of pokemon.side.active) {
-				if (allyActive && allyActive.hp && this.isAdjacent(pokemon, allyActive) && allyActive.status && this.randomChance(3, 10)) {
+				if (allyActive && (allyActive.hp && this.isAdjacent(pokemon, allyActive) && allyActive.status) && this.randomChance(3, 10)) {
 					this.add('-activate', pokemon, 'ability: Healer');
 					allyActive.cureStatus();
 				}
@@ -1868,7 +1868,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
 		onSetStatus(status, target, source, effect) {
 			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
-				if (effect && effect.status) this.add('-immune', target, '[from] ability: Leaf Guard');
+				if (effect?.status) this.add('-immune', target, '[from] ability: Leaf Guard');
 				return false;
 			}
 		},
@@ -2393,7 +2393,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				}
 				const species = this.dex.getSpecies(curPoke.forme);
 				// pokemon can't get Natural Cure
-				if (Object.values(species.abilities).indexOf('Natural Cure') < 0) {
+				if (!Object.values(species.abilities).includes('Natural Cure')) {
 					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
 					continue;
 				}
@@ -2419,8 +2419,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 
 			if (!cureList.length || !noCureCount) {
 				// It's possible to know what pokemon were cured
-				for (const pokemon of cureList) {
-					pokemon.showCure = true;
+				for (const pkmn of cureList) {
+					pkmn.showCure = true;
 				}
 			} else {
 				// It's not possible to know what pokemon were cured
@@ -2428,8 +2428,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				// Unlike a -hint, this is real information that battlers need, so we use a -message
 				this.add('-message', "(" + cureList.length + " of " + pokemon.side.name + "'s pokemon " + (cureList.length === 1 ? "was" : "were") + " cured by Natural Cure.)");
 
-				for (const pokemon of cureList) {
-					pokemon.showCure = false;
+				for (const pkmn of cureList) {
+					pkmn.showCure = false;
 				}
 			}
 		},
@@ -2610,7 +2610,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (status.id === 'confusion') return null;
 		},
 		onHit(target, source, move) {
-			if (move && move.volatileStatus === 'confusion') {
+			if (move?.volatileStatus === 'confusion') {
 				this.add('-immune', target, 'confusion', '[from] ability: Own Tempo');
 			}
 		},
@@ -2709,7 +2709,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		desc: "If this Pokemon has no item and is hit by a contact move, it steals the attacker's item. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect.",
 		shortDesc: "If this Pokemon has no item and is hit by a contact move, it steals the attacker's item.",
 		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move && move.flags['contact']) {
+			if (source && source !== target && move?.flags['contact']) {
 				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
 					return;
 				}
@@ -2893,7 +2893,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	prankster: {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1, but Dark types are immune.",
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move && move.category === 'Status') {
+			if (move?.category === 'Status') {
 				move.pranksterBoosted = true;
 				return priority + 1;
 			}
@@ -4148,7 +4148,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "This Pokemon's evasiveness is doubled as long as it is confused.",
 		onModifyAccuracy(accuracy, target) {
 			if (typeof accuracy !== 'number') return;
-			if (target && target.volatiles['confusion']) {
+			if (target?.volatiles['confusion']) {
 				this.debug('Tangled Feet - decreasing accuracy');
 				return accuracy * 0.5;
 			}
@@ -4332,7 +4332,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 	triage: {
 		shortDesc: "This Pokemon's healing moves have their priority increased by 3.",
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move && move.flags['heal']) return priority + 3;
+			if (move?.flags['heal']) return priority + 3;
 		},
 		id: "triage",
 		name: "Triage",

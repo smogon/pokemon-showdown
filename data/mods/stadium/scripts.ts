@@ -60,7 +60,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
 		const move = this.dex.getActiveMove(moveOrMoveName);
 		const target = this.getTarget(pokemon, move, targetLoc);
-		if (target && target.subFainted) target.subFainted = null;
+		if (target?.subFainted) target.subFainted = null;
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -518,7 +518,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		const defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		let atkType: StatNameExceptHP = (move.category === 'Physical') ? 'atk' : 'spa';
-		let defType: StatNameExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
+		const defType: StatNameExceptHP = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		if (move.useSourceDefensiveAsOffensive) atkType = defType;
 		let attack = attacker.getStat(atkType);
 		let defense = defender.getStat(defType);

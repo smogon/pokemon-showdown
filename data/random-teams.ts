@@ -117,7 +117,7 @@ export class RandomTeams {
 		const team = [];
 
 		const natures = Object.keys(this.dex.data.Natures);
-		let items = Object.keys(this.dex.data.Items);
+		const items = Object.keys(this.dex.data.Items);
 
 		const random6 = this.random6Pokemon();
 

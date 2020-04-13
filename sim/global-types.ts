@@ -1369,7 +1369,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	getMegaDeltas?: (this: Battle, megaSpecies: Species) => AnyObject;
 	getMixedSpecies?: (this: Battle, originalName: string, megaName: string) => Species;
 	getAbility?: (this: Battle, name: string | Ability) => Ability;
-	getZMove?: (this: Battle, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | undefined;
+	getZMove?: (this: Battle, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | true | undefined;
 	getActiveZMove?: (this: Battle, move: Move, pokemon: Pokemon) => ActiveMove;
 	canZMove?: (this: Battle, pokemon: Pokemon) => ZMoveOptions | void;
 }

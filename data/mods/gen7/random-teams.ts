@@ -330,7 +330,7 @@ export class RandomGen7Teams extends RandomTeams {
 				case 'closecombat': case 'highjumpkick':
 					if (
 						(
-							hasMove['aurasphere'] || hasMove['focusblast'] || movePool.includes('aurasphere') ||movePool.includes('focusblast')
+							hasMove['aurasphere'] || hasMove['focusblast'] || movePool.includes('aurasphere') || movePool.includes('focusblast')
 						) && counter.setupType === 'Special'
 					) rejected = true;
 					if (hasMove['bulkup'] && hasMove['drainpunch']) rejected = true;
@@ -584,8 +584,10 @@ export class RandomGen7Teams extends RandomTeams {
 								!hasMove['icebeam'] || species.baseStats.spa >= species.baseStats.spd
 							)
 						) ||
-						(hasType['Bug'] && (movePool.includes('megahorn') || movePool.includes('pinmissile'))
-					) ||
+						(
+							hasType['Bug'] &&
+							(movePool.includes('megahorn') || movePool.includes('pinmissile'))
+						) ||
 					(
 						(hasType['Dark'] && !counter['Dark'] && !hasAbility['Protean']) ||
 						hasMove['suckerpunch'] && !hasAbility['Contrary'] && counter.stab < species.types.length
@@ -623,7 +625,7 @@ export class RandomGen7Teams extends RandomTeams {
 					(
 						hasType['Psychic'] && !!counter['Psychic'] &&
 						(
-							movePool.includes('psychicfangs') ||!hasType['Flying'] &&
+							movePool.includes('psychicfangs') || !hasType['Flying'] &&
 							!hasAbility['Pixilate'] && counter.stab < species.types.length
 						)
 					) ||
@@ -633,8 +635,9 @@ export class RandomGen7Teams extends RandomTeams {
 					) ||
 					(
 						(
-							(hasType['Steel'] && (hasAbility['Technician'] || hasMove['trickroom'])
-						) || hasAbility['Steelworker']) && !counter['Steel']
+							(hasType['Steel'] && (hasAbility['Technician'] || hasMove['trickroom'])) ||
+							hasAbility['Steelworker']
+						) && !counter['Steel']
 					) ||
 					(hasType['Water'] && (!counter['Water'] || !counter.stab) && !hasAbility['Protean']) ||
 					(
@@ -1417,8 +1420,8 @@ export class RandomGen7Teams extends RandomTeams {
 			} else {
 				// If not Monotype, limit to two of each type
 				let skip = false;
-				for (const type of types) {
-					if (teamData.typeCount[type] > 1 && this.randomChance(4, 5)) {
+				for (const typeName of types) {
+					if (teamData.typeCount[typeName] > 1 && this.randomChance(4, 5)) {
 						skip = true;
 						break;
 					}

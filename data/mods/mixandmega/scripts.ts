@@ -1,9 +1,9 @@
 export const BattleScripts: ModdedBattleScriptsData = {
 	init() {
-		for (let i in this.data.Items) {
+		for (const i in this.data.Items) {
 			if (!this.data.Items[i].megaStone) continue;
 			this.modData('Items', i).onTakeItem = false;
-			let id = toID(this.data.Items[i].megaStone);
+			const id = toID(this.data.Items[i].megaStone);
 			this.modData('FormatsData', id).isNonstandard = null;
 		}
 	},
@@ -36,9 +36,9 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		if (this.dex.getSpecies(pokemon.canMegaEvo!).baseSpecies === pokemon.m.originalSpecies) {
 			pokemon.formeChange(species, pokemon.getItem(), true);
 		} else {
-			let oSpecies = this.dex.getSpecies(pokemon.m.originalSpecies);
+			const oSpecies = this.dex.getSpecies(pokemon.m.originalSpecies);
 			// @ts-ignore
-			let oMegaSpecies = this.dex.getSpecies(species.originalMega);
+			const oMegaSpecies = this.dex.getSpecies(species.originalMega);
 			pokemon.formeChange(species, pokemon.getItem(), true);
 			this.add('-start', pokemon, oMegaSpecies.requiredItem, '[silent]');
 			if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
@@ -50,18 +50,18 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		return true;
 	},
 	getMixedSpecies(originalForme, megaForme) {
-		let originalSpecies = this.dex.getSpecies(originalForme);
-		let megaSpecies = this.dex.getSpecies(megaForme);
+		const originalSpecies = this.dex.getSpecies(originalForme);
+		const megaSpecies = this.dex.getSpecies(megaForme);
 		if (originalSpecies.baseSpecies === megaSpecies.baseSpecies) return megaSpecies;
 		// @ts-ignore
-		let deltas = this.getMegaDeltas(megaSpecies);
+		const deltas = this.getMegaDeltas(megaSpecies);
 		// @ts-ignore
-		let species = this.doGetMixedSpecies(originalSpecies, deltas);
+		const species = this.doGetMixedSpecies(originalSpecies, deltas);
 		return species;
 	},
 	getMegaDeltas(megaSpecies) {
-		let baseSpecies = this.dex.getSpecies(megaSpecies.baseSpecies);
-		let deltas: {
+		const baseSpecies = this.dex.getSpecies(megaSpecies.baseSpecies);
+		const deltas: {
 			ability: string,
 			baseStats: SparseStatsTable,
 			weighthg: number,
@@ -92,8 +92,8 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	},
 	doGetMixedSpecies(speciesOrForme, deltas) {
 		if (!deltas) throw new TypeError("Must specify deltas!");
-		let species = this.dex.deepClone(this.dex.getSpecies(speciesOrForme));
-		species.abilities = {0: deltas.ability};
+		const species = this.dex.deepClone(this.dex.getSpecies(speciesOrForme));
+		species.abilities = {'0': deltas.ability};
 		if (species.types[0] === deltas.type) {
 			species.types = [deltas.type];
 		} else if (deltas.type === 'mono') {
@@ -101,8 +101,8 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		} else if (deltas.type) {
 			species.types = [species.types[0], deltas.type];
 		}
-		let baseStats = species.baseStats;
-		for (let statName in baseStats) {
+		const baseStats = species.baseStats;
+		for (const statName in baseStats) {
 			baseStats[statName] = this.dex.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		species.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
