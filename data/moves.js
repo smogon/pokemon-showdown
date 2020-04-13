@@ -3120,6 +3120,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (move && (move.target === 'self' || move.category !== 'Status')) return;
+				if (move.id === 'perishsong') return;
 				this.add('-activate', target, 'move: Crafty Shield');
 				return this.NOT_FAIL;
 			},
