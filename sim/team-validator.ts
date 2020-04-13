@@ -1362,6 +1362,9 @@ export class TeamValidator {
 				if (['Past', 'Future'].includes(move.isNonstandard)) {
 					return `${set.name}'s move ${move.name} does not exist in Gen ${dex.gen}.`;
 				}
+				if (move.isNonstandard === 'G-Max') {
+					return `${set.name}'s move ${move.name} is not obtainable without Gigantamaxing.`;
+				}
 				return `${set.name}'s move ${move.name} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
