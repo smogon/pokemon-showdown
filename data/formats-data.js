@@ -4369,7 +4369,7 @@ let BattleFormatsData = {
 	},
 	barraskewda: {
 		randomBattleMoves: ["closecombat", "crunch", "drillrun", "liquidation", "poisonjab"],
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "(DUU)",
 	},
 	toxel: {
@@ -4398,7 +4398,7 @@ let BattleFormatsData = {
 	},
 	centiskorch: {
 		randomBattleMoves: ["coil", "firelash", "knockoff", "leechlife", "powerwhip"],
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 	},
 	centiskorchgmax: {
