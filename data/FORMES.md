@@ -78,7 +78,7 @@ Learnset-based visual formes include:
 Item-based visual formes include:
 
 - Genesect
-- Areceus
+- Arceus
 
 Arceus formes are listed as having the type enforced by Multitype. For instance, Arceus-Flying is listed to have Flying type, rather than Normal type. This is purely a convenience to display the type a user would expect: its actual type is still Normal type because it's a visual forme of Arceus-Normal (it having Flying-type in-game is an effect of the Multitype ability, not a property of the forme).
 
@@ -111,6 +111,7 @@ Some Pokémon change forme in the middle of a battle. These include:
 
 - Meloetta (Pirouette forme)
 - Darmanitan (Zen Mode)
+- Eiscue
 - all Mega evolutions, Primal reversion, Ultra Burst
 
 PS treats these identically to regular formes, but gives them a `battleOnly` property noting what forme they would be in at the start of battle:
@@ -128,12 +129,20 @@ Some Pokémon change their appearance mid-battle, but not in a way that changes 
 - Cherrim
 - Cramorant
 - Mimikyu
-- Eiscue
+
+PS treats these like regular in-battle formes.
+
+
+"Fake" visual in-battle formes
+------------------------------
+
+Dynamax/Gigantamax can be thought of as visual in-battle formes, but they're different in one major way: They're not considered "real" forme changes, so the change doesn't reset types and stats changed by Reflect Type, Power Swap, etc.
+
+These include:
+
 - all Dynamax and Gigantamax changes
 
-These changes usually mark a change of some sort that isn't a "real" forme change.
-
-PS treats these like regular in-battle formes, except for Dynamax, which is implemented purely as a volatile status.
+PS treats Gigantamax formes as regular in-battle formes, but Dynamax is implemented purely as a volatile status.
 
 
 Event-only Ability formes
@@ -149,12 +158,6 @@ These include:
 - Zygarde (50% Forme) (with Power Construct)
 
 PS's current implementation of this is weird and will be changed in a few days; do not rely on its current implementation.
-
-
-Note on visual in-battle formes
--------------------------------
-
-Some visual in-battle formes are "real" (forme-changing into them will reset your stats), and some visual formes aren't. Dynamax/Gigantamax definitely aren't real formes, but we don't actually know about the others. If you're a researcher, please get in touch with us about this!
 
 
 `pokedex.js`
