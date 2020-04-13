@@ -1703,6 +1703,62 @@ const commands = {
 	},
 	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~`],
 
+	move(target, room, user) {
+		if (room.roomid !== 'questionworkshop') {
+			return this.errorReply('This command can only be used in Question Workshop.');
+		}
+		if (!this.can('mute', null, room)) return false;
+		if (!this.canTalk()) return;
+
+		target = target.trim();
+		if (!target) return false;
+
+		const params = target.split('\n');
+		for (let param of params) {
+			param = param.split('|');
+			if (param.length !== 2) {
+				this.errorReply(`Invalid arguments specified in "${param}". View /trivia help for more information.`);
+				continue;
+			}
+
+			let category = toID(param[0]);
+			if (!ALL_CATEGORIES[category]) {
+				this.errorReply(`'${param[0].trim()}' is not a valid category. View /trivia help for more information.`);
+				continue;
+			}
+			if (this.message.startsWith("/wlink") && category === 'pokemon') {
+				this.errorReply("Pokemon questions are not allowed for the Weakest Link.");
+				continue;
+			}
+
+			let questionID = toID(Chat.escapeHTML(param[1].trim()));
+			if (!questionID) {
+				this.errorReply(`'${param[1].trim()}' is not a valid question.`);
+				continue;
+			}
+
+			let questions = triviaData.questions;
+
+			for (const [i, question] of questions.entries()) {
+				if (toID(question.question) === questionID) {
+					if (question.category === category) {
+						this.errorReply(`'${param[1].trim()}' is already in the category '${param[0].trim()}'.`);
+						break;
+					}
+					questions.splice(i, 1);
+					question.category = category;
+					questions.splice(findEndOfCategory(category, false), 0, question);
+					writeTriviaData();
+					this.modlog('TRIVIAQUESTION', null, `changed category for '${param[1].trim()}' to '${param[0]}'`);
+					return this.privateModAction(`(${user.name} changed question category to '${param[0]}' for '${param[1].trim()}' from the question database.)`);
+				}
+			}
+		}
+	},
+	movehelp: [
+		`/trivia move [category] | [question] - Change the category of question in the trivia databse. Requires: % @ # & ~`,
+	],
+
 	qs(target, room, user) {
 		if (room.roomid !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
 
