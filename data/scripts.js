@@ -226,6 +226,9 @@ let BattleScripts = {
 		}
 
 		const {targets, pressureTargets} = pokemon.getMoveTargets(move, target);
+		if (targets.length) {
+			target = targets[targets.length - 1]; // in case of redirection
+		}
 
 		if (!sourceEffect || sourceEffect.id === 'pursuit') {
 			let extraPP = 0;
