@@ -349,7 +349,8 @@ export class RandomTeams {
 				def: this.random(32),
 				spa: this.random(32),
 				spd: this.random(32),
-				spe: this.random(32)};
+				spe: this.random(32),
+			};
 
 			// Random nature
 			const nature = this.sample(naturePool);
