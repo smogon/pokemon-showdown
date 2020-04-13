@@ -2651,6 +2651,20 @@ let BattleAbilities = {
 	},
 	"pastelveil": {
 		shortDesc: "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned allies.",
+		onStart(pokemon) {
+			for (const ally of pokemon.allies()) {
+				if (['psn', 'tox'].includes(ally.status)) {
+					this.add('-activate', pokemon, 'ability: Pastel Veil');
+					ally.cureStatus();
+				}
+			}
+		},
+		onUpdate(pokemon) {
+			if (['psn', 'tox'].includes(pokemon.status)) {
+				this.add('-activate', pokemon, 'ability: Pastel Veil');
+				pokemon.cureStatus();
+			}
+		},
 		onAllySwitchIn(pokemon) {
 			if (['psn', 'tox'].includes(pokemon.status)) {
 				this.add('-activate', this.effectData.target, 'ability: Pastel Veil');

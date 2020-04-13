@@ -23,7 +23,7 @@ describe('Pastel Veil', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it.skip('should remove poison on itself and allies when switched in', function () {
+	it('should remove poison on itself and allies when switched in', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'ponyta', ability: 'pastelveil', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},
@@ -39,7 +39,7 @@ describe('Pastel Veil', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it.skip('should remove poison on itself and allies when the ability is acquired via Skill Swap', function () {
+	it('should remove poison on itself and allies when the ability is acquired via Skill Swap', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'ponyta', ability: 'pastelveil', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},
@@ -66,7 +66,7 @@ describe('Pastel Veil', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it.skip('should be bypassed by Mold Breaker and cured afterwards, but not for the ally', function () {
+	it('should be bypassed by Mold Breaker and cured afterwards, but not for the ally', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'ponyta', ability: 'pastelveil', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},
