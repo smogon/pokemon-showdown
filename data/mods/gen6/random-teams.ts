@@ -758,8 +758,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				item = 'Sitrus Berry';
 			} else {
 				item = 'Red Card';
-				for (const m in moves) {
-					const move = this.dex.getMove(moves[m]);
+				for (const moveid of moves) {
+					const move = this.dex.getMove(moveid);
 					if (hasType[move.type] && move.basePower >= 90) {
 						item = move.type + ' Gem';
 						break;
