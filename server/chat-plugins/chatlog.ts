@@ -180,18 +180,19 @@ export const LogViewer = new class {
 		const text = await LogReader.read(roomid, day);
 		const lines = text!.split('\n');
 		const matches: string[] = [];
-		const all = [];
+		const all: string[] = [];
 		const searches: string[] = search.split('-');
+
+		if (prevResults) {
+			// add previous results to all, to track all matches relative to the cap
+			for (const p of prevResults) all.push(p);
+		}
+
 		const searchInputs = (phrase: string, terms: string[]) => (
 			terms.every((word) => {
 				return new RegExp(word, "i").test(phrase);
 			})
 		);
-
-		if (prevResults) {
-			// add previous results to all so we can see when it'll reach cap
-			for (const p of prevResults) all.push(p);
-		}
 
 		for (const line of lines) {
 			if (searchInputs(line, searches)) {
@@ -208,7 +209,9 @@ export const LogViewer = new class {
 					`<div class="chat chatmessage highlighted">${this.renderLine(line)}</div>` +
 					`${context(true, 1)} ${context(true, 2)}`
 				);
-				if (all.push(full) > cap!) break;
+				// there's a cap and the total has been met
+				if (cap && all.push(full) > cap) break;
+				// there's a cap and it is met with this push
 				if (matches.push(full) === cap) break;
 			}
 		}
@@ -217,16 +220,18 @@ export const LogViewer = new class {
 
 	async searchMonth(roomid: RoomID, month: string, search: string, cap?: number | string, year = false) {
 		const log = await LogReader.get(roomid);
+		const days = await log!.listDays(month);
 		const results = [];
 		const searches = search.split('-').length;
 
 		if (typeof cap === 'string') cap = parseInt(cap);
+
 		let buf = (
 			`<br><div class="pad"><strong><center>Results for search` +
-			` ${Chat.plural(searches, 'queries', 'query')}: "${searches > 1 ? search.split('-').join('", "') : search}"` +
+			` ${Chat.plural(searches, 'queries', 'query')}:` +
+			`"${searches > 1 ? search.split('-').join('", "') : search}"` +
 			` on ${roomid}: (${month}):</center></strong><hr>`
 		);
-		const days = await log!.listDays(month);
 		for (const day of days) {
 			const matches: string[] = await this.searchDay(roomid, day, search, cap, results);
 			for (const match of matches) results.push(match);
@@ -234,10 +239,10 @@ export const LogViewer = new class {
 			buf += `<p>${matches.join('<hr>')}</p>`;
 			buf += `</details><hr>`;
 			if (cap && results.length >= cap && !year) {
+				// cap is met & is not being used in a year read
 				buf += `<center><br/ ><strong>Max results reached, capped at ${cap}</strong></center>`;
-				const next = cap + 100;
 				buf += `<br /><div style="text-align:center">`;
-				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${next}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${cap + 100}">View 100 more<br />&#x25bc;</button>`;
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|all">View all<br />&#x25bc;</button></div>`;
 				break;
 			}
@@ -248,7 +253,7 @@ export const LogViewer = new class {
 
 	async searchYear(roomid: RoomID, year: string, search: string, alltime = false, cap?: string | number) {
 		const log = await LogReader.get(roomid);
-		if (!log) return null;
+		if (!log) return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
 		let buf = '';
 		if (!alltime) {
 			buf += `<center><strong><br>Searching year: ${year}: </strong></center><hr>`;
@@ -259,10 +264,9 @@ export const LogViewer = new class {
 		const months = await log.listMonths();
 		for (const month of months) {
 			if (buf.includes('capped')) {
-				// cap has been met previously, add the buttons and break.
-				const next = cap! + 100;
+				// cap has been met in a previous loop, add the buttons and break.
 				buf += `<br /><div style="text-align:center">`;
-				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${next}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${cap! + 100}">View 100 more<br />&#x25bc;</button>`;
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
 				break;
 			}
@@ -487,18 +491,18 @@ export const pages: PageTable = {
 			}
 		} else if (date && hasSearch && search) {
 			if (date?.length === 4 || date.split('-').length === 3) {
-				this.title = `[Search Logs] [${date}] ${search}`;
+				this.title = `[Search] [${date}] ${search}`;
 				return LogViewer.searchYear(roomid, date, search, false, parsedCap);
 			} else if (isAll) {
-				this.title = `[Search Logs] [all] ${search}`;
+				this.title = `[Search] [all] ${search}`;
 				return LogViewer.searchYear(roomid, date, search, true, parsedCap);
 			} else if (date) {
 				if (date === 'today') {
 					const curMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-					this.title = `[Search Logs] [${curMonth}] ${search}`;
+					this.title = `[Search] [${curMonth}] ${search}`;
 					return LogViewer.searchMonth(roomid, curMonth, search, parsedCap);
 				} else {
-					this.title = `[Search Logs] [${date}] ${search}`;
+					this.title = `[Search] [${date}] ${search}`;
 					return LogViewer.searchMonth(roomid, date, search, parsedCap);
 				}
 			}
