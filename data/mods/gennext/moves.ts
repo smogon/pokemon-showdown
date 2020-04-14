@@ -1306,7 +1306,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				doubled = true;
 			}
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock'];
-			for (const condition in sideConditions) {
+			for (const condition of sideConditions) {
 				if (user.side.removeSideCondition(condition)) {
 					this.add('-sideend', user.side, this.dex.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + user);
 					doubled = true;
