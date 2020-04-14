@@ -348,13 +348,13 @@ let BattleStatuses = {
 	ckilgannon: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+c.kilgannon|Hope you're not afraid of the dark!`);
+			this.add(`c|%c.kilgannon|Hope you're not afraid of the dark!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+c.kilgannon|/me growls`);
+			this.add(`c|%c.kilgannon|/me growls`);
 		},
 		onFaint() {
-			this.add(`c|+c.kilgannon|Your time will come.`);
+			this.add(`c|%c.kilgannon|Your time will come.`);
 		},
 	},
 	cantsay: {
@@ -436,13 +436,13 @@ let BattleStatuses = {
 	dawoblefet: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@DaWoblefet|What's going on guys? This is DaWoblefet, and welcome to Mechanics Monday.`);
+			this.add(`c|&DaWoblefet|What's going on guys? This is DaWoblefet, and welcome to Mechanics Monday.`);
 		},
 		onSwitchOut() {
-			this.add(`c|@DaWoblefet|Until next time, have a good one.`);
+			this.add(`c|&DaWoblefet|Until next time, have a good one.`);
 		},
 		onFaint() {
-			this.add(`c|@DaWoblefet|mished`);
+			this.add(`c|&DaWoblefet|mished`);
 		},
 	},
 	decem: {
