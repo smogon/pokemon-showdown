@@ -38,7 +38,7 @@ declare global {
 	const LoginServer: typeof LoginServerType;
 	const Monitor: typeof MonitorType;
 	const Punishments: typeof PunishmentsType;
-	const Sockets: typeof SocketsType;
+	const Sockets: typeof SocketsType.Sockets;
 	const TeamValidatorAsync: typeof TeamValidatorAsyncType;
 	const Rooms: typeof RoomsType.Rooms;
 	const Tournaments: typeof TournamentsType;

@@ -10,8 +10,12 @@
  */
 
 import * as child_process from 'child_process';
+import * as cluster from 'cluster';
 import * as path from 'path';
 import * as Streams from './streams';
+
+type ChildProcess = child_process.ChildProcess;
+type Worker = cluster.Worker;
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 
@@ -19,7 +23,9 @@ export const processManagers: ProcessManager[] = [];
 export const disabled = false;
 
 class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
-	constructor(public process: ChildProcess, public taskId: number) {
+	process: ChildProcess;
+	taskId: number;
+	constructor(process: ChildProcess, taskId: number) {
 		super();
 		this.process = process;
 		this.taskId = taskId;
@@ -40,10 +46,29 @@ class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	}
 }
 
+class RawSubprocessStream extends Streams.ObjectReadWriteStream<string> {
+	process: ChildProcess & {process: undefined} | Worker;
+	constructor(process: ChildProcess | Worker) {
+		super();
+		this.process = process as any;
+	}
+	_write(message: string) {
+		const isConnected = (this.process.process ? this.process.process : this.process).connected;
+		if (!isConnected) {
+			this.pushError(new Error(`Process disconnected (possibly crashed?)`));
+			this.push(null);
+			return;
+		}
+		this.process.send(message);
+		// responses are handled in ProcessWrapper
+	}
+}
+
 interface ProcessWrapper {
 	load: number;
-	process: ChildProcess;
+	process: ChildProcess | Worker;
 	release: () => Promise<void>;
+	getProcess: () => ChildProcess;
 }
 
 /** Wraps the process object in the PARENT process. */
@@ -87,6 +112,10 @@ export class QueryProcessWrapper implements ProcessWrapper {
 		this.process.on('disconnect', () => {
 			this.destroy();
 		});
+	}
+
+	getProcess() {
+		return this.process;
 	}
 
 	get load() {
@@ -193,6 +222,10 @@ export class StreamProcessWrapper implements ProcessWrapper {
 		});
 	}
 
+	getProcess() {
+		return this.process;
+	}
+
 	deleteStream(taskId: number) {
 		this.activeStreams.delete(taskId);
 		// try to release
@@ -244,6 +277,66 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	}
 }
 
+/** Wraps the process object in the PARENT process. */
+export class RawProcessWrapper implements ProcessWrapper {
+	process: ChildProcess & {process: undefined} | Worker;
+	taskId = 0;
+	stream: RawSubprocessStream;
+	pendingRelease: Promise<void> | null = null;
+	resolveRelease: (() => void) | null = null;
+	debug?: string;
+
+	/** Not managed by RawProcessWrapper itself */
+	load = 0;
+
+	setDebug(message: string) {
+		this.debug = (this.debug || '').slice(-32768) + '\n=====\n' + message;
+	}
+
+	constructor(file: string, isCluster?: boolean) {
+		if (isCluster) {
+			this.process = cluster.fork();
+		} else {
+			this.process = child_process.fork(file, [], {cwd: ROOT_DIR}) as any;
+		}
+
+		this.process.on('message', (message: string) => {
+			this.stream.push(message);
+		});
+		this.process.on('disconnect', () => {
+			void this.destroy();
+		});
+
+		this.stream = new RawSubprocessStream(this.process);
+	}
+
+	getProcess() {
+		return this.process.process ? this.process.process : this.process;
+	}
+
+	release(): Promise<void> {
+		if (this.pendingRelease) return this.pendingRelease;
+		if (!this.load) {
+			void this.destroy();
+		} else {
+			this.pendingRelease = new Promise(resolve => {
+				this.resolveRelease = resolve;
+			});
+		}
+		return this.pendingRelease as Promise<void>;
+	}
+
+	destroy() {
+		if (this.pendingRelease && !this.resolveRelease) {
+			// already destroyed
+			return;
+		}
+		this.stream.destroy();
+		this.process.disconnect();
+		return;
+	}
+}
+
 /**
  * A ProcessManager wraps a query function: A function that takes a
  * string and returns a string or Promise<string>.
@@ -274,7 +367,7 @@ export class ProcessManager {
 		let lowestLoad = this.processes[0];
 		let crashed = false;
 		for (const process of this.processes) {
-			if (!process.process.connected) {
+			if (!process.getProcess().connected) {
 				// process crashed
 				crashed = true;
 				continue;
@@ -292,7 +385,7 @@ export class ProcessManager {
 		const released = [];
 		const unreleased = [];
 		for (const process of this.processes) {
-			if (process.process.connected) {
+			if (process.getProcess().connected) {
 				unreleased.push(process);
 				continue;
 			}
@@ -313,7 +406,7 @@ export class ProcessManager {
 		this.crashRespawnCount += released.length;
 		// Notify any global crash logger
 		void Promise.reject(
-			new Error(`Process ${this.basename} ${released.map(process => process.process.pid).join(', ')} crashed and had to be restarted`)
+			new Error(`Process ${this.basename} ${released.map(process => process.getProcess().pid).join(', ')} crashed and had to be restarted`)
 		);
 		this.releasingProcesses = this.releasingProcesses.concat(released);
 		this.crashedProcesses = this.crashedProcesses.concat(released);
@@ -477,6 +570,77 @@ export class StreamProcessManager extends ProcessManager {
 			} else {
 				throw new Error(`Unrecognized messageType ${messageType}`);
 			}
+		});
+		process.on('disconnect', () => {
+			process.exit();
+		});
+	}
+}
+
+export class RawProcessManager extends ProcessManager {
+	/** full list of streams - parent process only */
+	streams: Streams.ObjectReadWriteStream<string>[] = [];
+
+	masterStream: Streams.ObjectReadWriteStream<string> | null = null;
+	/** stream used only in the child process */
+	activeStream: Streams.ObjectReadWriteStream<string> | null = null;
+	isCluster: boolean;
+	_setupChild: () => Streams.ObjectReadWriteStream<string>;
+	readonly workerid = cluster.worker?.id || 0;
+
+	constructor(options: {
+		module: NodeJS.Module,
+		setupChild: () => Streams.ObjectReadWriteStream<string>,
+		isCluster?: boolean,
+	}) {
+		super(options.module);
+		this.isCluster = !!options.isCluster;
+		this._setupChild = options.setupChild;
+
+		if (this.isCluster && this.isParentProcess) {
+			cluster.setupMaster({
+				exec: this.filename,
+				// @ts-ignore TODO: update type definition
+				cwd: ROOT_DIR,
+			});
+		}
+
+		processManagers.push(this);
+	}
+	spawn(count?: number) {
+		super.spawn(count);
+		if (!this.streams.length) {
+			this.streams.push(this._setupChild());
+		}
+	}
+	createProcess() {
+		const process = new RawProcessWrapper(this.filename, this.isCluster);
+		this.streams.push(process.stream);
+		return process;
+	}
+	async pipeStream(stream: Streams.ObjectReadStream<string>) {
+		let done = false;
+		while (!done) {
+			try {
+				let value;
+				({value, done} = await stream.next());
+				process.send!(value);
+			} catch (err) {
+				process.send!(`THROW\n${err.stack}`);
+			}
+		}
+	}
+	listen() {
+		if (this.isParentProcess) return;
+
+		setImmediate(() => {
+			this.activeStream = this._setupChild();
+			void this.pipeStream(this.activeStream);
+		});
+
+		// child process
+		process.on('message', (message: string) => {
+			void this.activeStream!.write(message);
 		});
 		process.on('disconnect', () => {
 			process.exit();
