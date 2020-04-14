@@ -553,6 +553,12 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen7ubers@@@-allpokemon,+giratinaaltered').validateTeam(team);
 		assert(illegal);
+
+		team = [
+			{species: 'tyrantrum', ability: 'strongjaw', moves: ['protect'], evs: {hp: 1}},
+		];
+		illegal = TeamValidator.get('gen8nationaldex@@@-allpokemon').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should allow moves to be banned', function () {

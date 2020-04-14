@@ -1258,6 +1258,11 @@ export class TeamValidator {
 		}
 		if (banReason === '') return null;
 
+		banReason = ruleTable.check('pokemontag:allpokemon');
+		if (banReason) {
+			return `${species.name} is not in the list of allowed pokemon.`;
+		}
+
 		// obtainability
 		if (tierSpecies.isNonstandard) {
 			banReason = ruleTable.check('pokemontag:' + toID(tierSpecies.isNonstandard));
@@ -1281,11 +1286,6 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		banReason = ruleTable.check('pokemontag:allpokemon');
-		if (banReason) {
-			return `${species.name} is not in the list of allowed pokemon.`;
-		}
-
 		return null;
 	}
 
@@ -1300,6 +1300,11 @@ export class TeamValidator {
 			return `${set.name}'s item ${item.name} is ${banReason}.`;
 		}
 		if (banReason === '') return null;
+
+		banReason = ruleTable.check('pokemontag:allitems');
+		if (banReason) {
+			return `${set.name}'s item ${item.name} is not in the list of allowed items.`;
+		}
 
 		// obtainability
 		if (item.isNonstandard) {
@@ -1324,11 +1329,6 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		banReason = ruleTable.check('pokemontag:allitems');
-		if (banReason) {
-			return `${set.name}'s item ${item.name} is not in the list of allowed items.`;
-		}
-
 		return null;
 	}
 
@@ -1343,6 +1343,11 @@ export class TeamValidator {
 			return `${set.name}'s move ${move.name} is ${banReason}.`;
 		}
 		if (banReason === '') return null;
+
+		banReason = ruleTable.check('pokemontag:allmoves');
+		if (banReason) {
+			return `${set.name}'s move ${move.name} is not in the list of allowed moves.`;
+		}
 
 		// obtainability
 		if (move.isNonstandard) {
@@ -1370,11 +1375,6 @@ export class TeamValidator {
 			if (banReason === '') return null;
 		}
 
-		banReason = ruleTable.check('pokemontag:allmoves');
-		if (banReason) {
-			return `${set.name}'s move ${move.name} is not in the list of allowed moves.`;
-		}
-
 		return null;
 	}
 
@@ -1389,6 +1389,11 @@ export class TeamValidator {
 			return `${set.name}'s ability ${ability.name} is ${banReason}.`;
 		}
 		if (banReason === '') return null;
+
+		banReason = ruleTable.check('pokemontag:allabilities');
+		if (banReason) {
+			return `${set.name}'s ability ${ability.name} is not in the list of allowed abilities.`;
+		}
 
 		// obtainability
 		if (ability.isNonstandard) {
@@ -1406,11 +1411,6 @@ export class TeamValidator {
 				return `${set.name}'s ability ${ability.name} does not exist in this game.`;
 			}
 			if (banReason === '') return null;
-		}
-
-		banReason = ruleTable.check('pokemontag:allabilities');
-		if (banReason) {
-			return `${set.name}'s ability ${ability.name} is not in the list of allowed abilities.`;
 		}
 
 		return null;
