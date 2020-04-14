@@ -254,7 +254,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 				moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
 				if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
-				damage = ((moveDamage as number | undefined) || 0);
+				damage = (moveDamage || 0);
 				move.totalDamage += damage;
 				this.eachEvent('Update');
 			}
