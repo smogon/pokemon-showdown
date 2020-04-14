@@ -3,7 +3,7 @@
 /**@type {{[k: string]: ModdedSpeciesData}} */
 let BattlePokedex = {
 	koatric: {
-		num: 1.5,
+		num: -1.5,
 		name: "Koatric",
 		types: ["Electric"],
 		baseStats: {hp: 24, atk: 147, def: 63, spa: 133, spd: 86, spe: 147},
@@ -11,7 +11,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	aquazelle: {
-		num: 2.5,
+		num: -2.5,
 		name: "Aquazelle",
 		types: ["Normal", "Water"],
 		baseStats: {hp: 107, atk: 53, def: 83, spa: 123, spd: 97, spe: 137},
@@ -19,7 +19,7 @@ let BattlePokedex = {
 		weightkg: 5,
 	},
 	salamalix: {
-		num: 3.5,
+		num: -3.5,
 		name: "Salamalix",
 		types: ["Rock", "Dark"],
 		baseStats: {hp: 119, atk: 99, def: 122, spa: 49, spd: 76, spe: 135},
@@ -27,7 +27,7 @@ let BattlePokedex = {
 		weightkg: 75,
 	},
 	brawnkey: {
-		num: 4.5,
+		num: -4.5,
 		name: "Brawnkey",
 		types: ["Fighting"],
 		baseStats: {hp: 143, atk: 86, def: 144, spa: 76, spd: 37, spe: 114},
@@ -35,7 +35,7 @@ let BattlePokedex = {
 		weightkg: 150,
 	},
 	stuneleon: {
-		num: 5.5,
+		num: -5.5,
 		name: "Stuneleon",
 		types: ["Electric", "Poison"],
 		baseStats: {hp: 70, atk: 145, def: 100, spa: 122, spd: 77, spe: 86},
@@ -43,7 +43,7 @@ let BattlePokedex = {
 		weightkg: 5,
 	},
 	chillyte: {
-		num: 6.5,
+		num: -6.5,
 		name: "Chillyte",
 		types: ["Ice"],
 		baseStats: {hp: 95, atk: 110, def: 135, spa: 101, spd: 75, spe: 84},
@@ -52,7 +52,7 @@ let BattlePokedex = {
 		otherFormes: ["megachillyte"],
 	},
 	chillytemega: {
-		num: 7.5,
+		num: -7.5,
 		name: "Chillyte-Mega",
 		baseSpecies: "Chillyte",
 		forme: "Mega",
@@ -63,7 +63,7 @@ let BattlePokedex = {
 		requiredItem: "Chillyte",
 	},
 	eartharoo: {
-		num: 8.5,
+		num: -8.5,
 		name: "Eartharoo",
 		types: ["Ground", "Normal"],
 		baseStats: {hp: 102, atk: 77, def: 37, spa: 138, spd: 110, spe: 136},
@@ -71,7 +71,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	crazefly: {
-		num: 9.5,
+		num: -9.5,
 		name: "Crazefly",
 		types: ["Bug", "Psychic"],
 		baseStats: {hp: 115, atk: 115, def: 31, spa: 112, spd: 137, spe: 90},
@@ -79,7 +79,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	electritar: {
-		num: 10.5,
+		num: -10.5,
 		name: "Electritar",
 		types: ["Steel", "Electric"],
 		baseStats: {hp: 70, atk: 49, def: 145, spa: 130, spd: 33, spe: 173},
@@ -87,7 +87,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	aquatopus: {
-		num: 11.5,
+		num: -11.5,
 		name: "Aquatopus",
 		types: ["Water"],
 		baseStats: {hp: 48, atk: 103, def: 185, spa: 54, spd: 90, spe: 120},
@@ -95,7 +95,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	scorpita: {
-		num: 12.5,
+		num: -12.5,
 		name: "Scorpita",
 		types: ["Poison"],
 		baseStats: {hp: 118, atk: 78, def: 98, spa: 122, spd: 66, spe: 118},
@@ -103,7 +103,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	baloon: {
-		num: 13.5,
+		num: -13.5,
 		name: "Baloon",
 		types: ["Fairy"],
 		baseStats: {hp: 137, atk: 124, def: 142, spa: 102, spd: 12, spe: 83},
@@ -111,7 +111,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	kinesel: {
-		num: 14.5,
+		num: -14.5,
 		name: "Kinesel",
 		types: ["Psychic", "Fairy"],
 		baseStats: {hp: 48, atk: 146, def: 111, spa: 165, spd: 78, spe: 52},
@@ -119,7 +119,7 @@ let BattlePokedex = {
 		weightkg: 150,
 	},
 	glacida: {
-		num: 15.5,
+		num: -15.5,
 		name: "Glacida",
 		types: ["Fighting", "Ice"],
 		baseStats: {hp: 100, atk: 115, def: 157, spa: 46, spd: 146, spe: 36},
@@ -127,7 +127,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	pidgeotine: {
-		num: 16.5,
+		num: -16.5,
 		name: "Pidgeotine",
 		types: ["Normal", "Flying"],
 		baseStats: {hp: 71, atk: 124, def: 56, spa: 48, spd: 194, spe: 107},
@@ -135,7 +135,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	gorilax: {
-		num: 17.5,
+		num: -17.5,
 		name: "Gorilax",
 		types: ["Psychic", "Fighting"],
 		baseStats: {hp: 116, atk: 61, def: 101, spa: 83, spd: 117, spe: 122},
@@ -143,7 +143,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	albatrygon: {
-		num: 18.5,
+		num: -18.5,
 		name: "Albatrygon",
 		types: ["Flying"],
 		baseStats: {hp: 61, atk: 121, def: 57, spa: 100, spd: 110, spe: 151},
@@ -151,7 +151,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	chillvark: {
-		num: 19.5,
+		num: -19.5,
 		name: "Chillvark",
 		types: ["Ice", "Fighting"],
 		baseStats: {hp: 131, atk: 117, def: 51, spa: 133, spd: 78, spe: 90},
@@ -159,7 +159,7 @@ let BattlePokedex = {
 		weightkg: 75,
 	},
 	komodith: {
-		num: 20.5,
+		num: -20.5,
 		name: "Komodith",
 		types: ["Steel", "Dragon"],
 		baseStats: {hp: 70, atk: 134, def: 101, spa: 123, spd: 103, spe: 69},
@@ -167,7 +167,7 @@ let BattlePokedex = {
 		weightkg: 150,
 	},
 	giranium: {
-		num: 21.5,
+		num: -21.5,
 		name: "Giranium",
 		types: ["Steel", "Rock"],
 		baseStats: {hp: 66, atk: 40, def: 146, spa: 161, spd: 148, spe: 39},
@@ -175,7 +175,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	flamyle: {
-		num: 22.5,
+		num: -22.5,
 		name: "Flamyle",
 		types: ["Fire"],
 		baseStats: {hp: 103, atk: 99, def: 79, spa: 75, spd: 116, spe: 128},
@@ -183,7 +183,7 @@ let BattlePokedex = {
 		weightkg: 150,
 	},
 	voltecta: {
-		num: 23.5,
+		num: -23.5,
 		name: "Voltecta",
 		types: ["Ghost", "Electric"],
 		baseStats: {hp: 149, atk: 40, def: 131, spa: 100, spd: 80, spe: 100},
@@ -191,7 +191,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	ostria: {
-		num: 24.5,
+		num: -24.5,
 		name: "Ostria",
 		types: ["Flying", "Grass"],
 		baseStats: {hp: 74, atk: 141, def: 74, spa: 101, spd: 160, spe: 50},
@@ -199,7 +199,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	ninjoth: {
-		num: 25.5,
+		num: -25.5,
 		name: "Ninjoth",
 		types: ["Ice", "Dark"],
 		baseStats: {hp: 88, atk: 132, def: 56, spa: 66, spd: 159, spe: 99},
@@ -207,7 +207,7 @@ let BattlePokedex = {
 		weightkg: 75,
 	},
 	herbigator: {
-		num: 26.5,
+		num: -26.5,
 		name: "Herbigator",
 		types: ["Grass", "Water"],
 		baseStats: {hp: 42, atk: 159, def: 131, spa: 92, spd: 101, spe: 75},
@@ -215,7 +215,7 @@ let BattlePokedex = {
 		weightkg: 37,
 	},
 	anteros: {
-		num: 27.5,
+		num: -27.5,
 		name: "Anteros",
 		types: ["Steel", "Bug"],
 		baseStats: {hp: 98, atk: 96, def: 113, spa: 65, spd: 105, spe: 123},
@@ -223,7 +223,7 @@ let BattlePokedex = {
 		weightkg: 37,
 	},
 	gladiaster: {
-		num: 28.5,
+		num: -28.5,
 		name: "Gladiaster",
 		types: ["Steel", "Ice"],
 		baseStats: {hp: 118, atk: 110, def: 79, spa: 119, spd: 69, spe: 105},
@@ -231,7 +231,7 @@ let BattlePokedex = {
 		weightkg: 5,
 	},
 	hyperoach: {
-		num: 29.5,
+		num: -29.5,
 		name: "Hyperoach",
 		types: ["Bug", "Normal"],
 		baseStats: {hp: 136, atk: 114, def: 56, spa: 102, spd: 104, spe: 88},
@@ -239,7 +239,7 @@ let BattlePokedex = {
 		weightkg: 75,
 	},
 	barracoth: {
-		num: 30.5,
+		num: -30.5,
 		name: "Barracoth",
 		types: ["Water", "Ice"],
 		baseStats: {hp: 75, atk: 85, def: 146, spa: 70, spd: 139, spe: 85},
@@ -247,7 +247,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	toados: {
-		num: 31.5,
+		num: -31.5,
 		name: "Toados",
 		types: ["Poison"],
 		baseStats: {hp: 151, atk: 119, def: 11, spa: 154, spd: 68, spe: 97},
@@ -255,7 +255,7 @@ let BattlePokedex = {
 		weightkg: 5,
 	},
 	voltarak: {
-		num: 32.5,
+		num: -32.5,
 		name: "Voltarak",
 		types: ["Electric", "Ice"],
 		baseStats: {hp: 100, atk: 75, def: 87, spa: 130, spd: 128, spe: 80},
@@ -263,7 +263,7 @@ let BattlePokedex = {
 		weightkg: 150,
 	},
 	mosqung: {
-		num: 33.5,
+		num: -33.5,
 		name: "Mosqung",
 		types: ["Bug", "Flying"],
 		baseStats: {hp: 149, atk: 37, def: 100, spa: 106, spd: 148, spe: 60},
@@ -271,7 +271,7 @@ let BattlePokedex = {
 		weightkg: 37,
 	},
 	flamepion: {
-		num: 34.5,
+		num: -34.5,
 		name: "Flamepion",
 		types: ["Fire", "Ghost"],
 		baseStats: {hp: 81, atk: 169, def: 134, spa: 98, spd: 70, spe: 48},
@@ -279,7 +279,7 @@ let BattlePokedex = {
 		weightkg: 150,
 	},
 	hyenix: {
-		num: 35.5,
+		num: -35.5,
 		name: "Hyenix",
 		types: ["Dark"],
 		baseStats: {hp: 60, atk: 147, def: 27, spa: 160, spd: 140, spe: 66},
@@ -287,7 +287,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	rhinolite: {
-		num: 36.5,
+		num: -36.5,
 		name: "Rhinolite",
 		types: ["Rock", "Ground"],
 		baseStats: {hp: 113, atk: 126, def: 67, spa: 82, spd: 76, spe: 136},
@@ -295,7 +295,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	bellena: {
-		num: 37.5,
+		num: -37.5,
 		name: "Bellena",
 		types: ["Fairy", "Dragon"],
 		baseStats: {hp: 96, atk: 147, def: 101, spa: 90, spd: 112, spe: 54},
@@ -303,7 +303,7 @@ let BattlePokedex = {
 		weightkg: 75,
 	},
 	falcola: {
-		num: 38.5,
+		num: -38.5,
 		name: "Falcola",
 		types: ["Water"],
 		baseStats: {hp: 116, atk: 52, def: 92, spa: 114, spd: 119, spe: 107},
@@ -311,7 +311,7 @@ let BattlePokedex = {
 		weightkg: 75,
 	},
 	beanium: {
-		num: 39.5,
+		num: -39.5,
 		name: "Beanium",
 		types: ["Rock", "Normal"],
 		baseStats: {hp: 116, atk: 92, def: 90, spa: 123, spd: 138, spe: 41},
@@ -319,7 +319,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	lemotic: {
-		num: 40.5,
+		num: -40.5,
 		name: "Lemotic",
 		types: ["Grass", "Ground"],
 		baseStats: {hp: 139, atk: 146, def: 57, spa: 115, spd: 71, spe: 72},
@@ -327,7 +327,7 @@ let BattlePokedex = {
 		weightkg: 150,
 	},
 	biceon: {
-		num: 41.5,
+		num: -41.5,
 		name: "Biceon",
 		types: ["Ground", "Fairy"],
 		baseStats: {hp: 95, atk: 122, def: 139, spa: 43, spd: 120, spe: 81},
@@ -335,7 +335,7 @@ let BattlePokedex = {
 		weightkg: 37,
 	},
 	skeleray: {
-		num: 42.5,
+		num: -42.5,
 		name: "Skeleray",
 		types: ["Dragon", "Ghost"],
 		baseStats: {hp: 78, atk: 108, def: 127, spa: 103, spd: 151, spe: 33},
@@ -343,7 +343,7 @@ let BattlePokedex = {
 		weightkg: 150,
 	},
 	specyte: {
-		num: 43.5,
+		num: -43.5,
 		name: "Specyte",
 		types: ["Ghost"],
 		baseStats: {hp: 119, atk: 150, def: 45, spa: 124, spd: 45, spe: 117},
@@ -351,7 +351,7 @@ let BattlePokedex = {
 		weightkg: 37,
 	},
 	ramron: {
-		num: 44.5,
+		num: -44.5,
 		name: "Ramron",
 		types: ["Normal"],
 		baseStats: {hp: 113, atk: 44, def: 148, spa: 26, spd: 142, spe: 127},
@@ -359,7 +359,7 @@ let BattlePokedex = {
 		weightkg: 75,
 	},
 	balar: {
-		num: 45.5,
+		num: -45.5,
 		name: "Balar",
 		types: ["Rock", "Flying"],
 		baseStats: {hp: 123, atk: 132, def: 84, spa: 74, spd: 111, spe: 76},
@@ -367,7 +367,7 @@ let BattlePokedex = {
 		weightkg: 37,
 	},
 	panthee: {
-		num: 46.5,
+		num: -46.5,
 		name: "Panthee",
 		types: ["Steel", "Fighting"],
 		baseStats: {hp: 78, atk: 83, def: 95, spa: 118, spd: 121, spe: 105},
@@ -375,7 +375,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	blastora: {
-		num: 47.5,
+		num: -47.5,
 		name: "Blastora",
 		types: ["Fire"],
 		baseStats: {hp: 63, atk: 126, def: 102, spa: 99, spd: 131, spe: 79},
@@ -383,7 +383,7 @@ let BattlePokedex = {
 		weightkg: 5,
 	},
 	dropacle: {
-		num: 48.5,
+		num: -48.5,
 		name: "Dropacle",
 		types: ["Ghost", "Water"],
 		baseStats: {hp: 170, atk: 125, def: 22, spa: 57, spd: 113, spe: 113},
@@ -391,7 +391,7 @@ let BattlePokedex = {
 		weightkg: 300,
 	},
 	dolphena: {
-		num: 49.5,
+		num: -49.5,
 		name: "Dolphena",
 		types: ["Water", "Dragon"],
 		baseStats: {hp: 55, atk: 88, def: 103, spa: 128, spd: 121, spe: 105},
@@ -399,7 +399,7 @@ let BattlePokedex = {
 		weightkg: 17,
 	},
 	catelax: {
-		num: 50.5,
+		num: -50.5,
 		name: "Catelax",
 		types: ["Bug"],
 		baseStats: {hp: 101, atk: 93, def: 133, spa: 43, spd: 96, spe: 134},
@@ -407,7 +407,7 @@ let BattlePokedex = {
 		weightkg: 5,
 	},
 	fluffora: {
-		num: 51.5,
+		num: -51.5,
 		name: "Fluffora",
 		types: ["Grass"],
 		baseStats: {hp: 72, atk: 20, def: 110, spa: 68, spd: 163, spe: 167},
@@ -415,7 +415,7 @@ let BattlePokedex = {
 		weightkg: 75,
 	},
 	tigire: {
-		num: 52.5,
+		num: -52.5,
 		name: "Tigire",
 		types: ["Fire"],
 		baseStats: {hp: 99, atk: 125, def: 66, spa: 70, spd: 111, spe: 129},
