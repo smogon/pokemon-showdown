@@ -596,6 +596,10 @@ export const IPTools = new class {
 			return 'shared';
 		}
 		if (host === 'he.net.proxy-nohost') {
+			// Known to only be VPN services
+			if (['74.82.60.', '72.52.87.', '65.49.126.'].some(range => ip.startsWith(range))) {
+				return 'proxy';
+			}
 			// Hurricane Electric has an annoying habit of having residential
 			// internet and datacenters on the same IP ranges - we get a lot of
 			// legitimate users as well as spammers on VPNs from HE.
