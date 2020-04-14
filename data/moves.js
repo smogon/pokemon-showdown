@@ -3119,7 +3119,7 @@ let BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (move && (move.target === 'self' || move.category !== 'Status')) return;
+				if (['self', 'all'].includes(move.target) || move.category !== 'Status') return;
 				this.add('-activate', target, 'move: Crafty Shield');
 				return this.NOT_FAIL;
 			},
