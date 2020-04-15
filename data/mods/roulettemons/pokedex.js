@@ -12,6 +12,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	aquazelle: {
 		num: -2.5,
 		name: "Aquazelle",
@@ -22,6 +23,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	salamalix: {
 		num: -3.5,
 		name: "Salamalix",
@@ -32,6 +34,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	brawnkey: {
 		num: -4.5,
 		name: "Brawnkey",
@@ -42,6 +45,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	stuneleon: {
 		num: -5.5,
 		name: "Stuneleon",
@@ -52,6 +56,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	chillyte: {
 		num: -6.5,
 		name: "Chillyte",
@@ -63,6 +68,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	chillytemega: {
 		num: -7.5,
 		name: "Chillyte-Mega",
@@ -76,6 +82,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	eartharoo: {
 		num: -8.5,
 		name: "Eartharoo",
@@ -86,6 +93,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	crazefly: {
 		num: -9.5,
 		name: "Crazefly",
@@ -96,6 +104,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	electritar: {
 		num: -10.5,
 		name: "Electritar",
@@ -106,6 +115,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	aquatopus: {
 		num: -11.5,
 		name: "Aquatopus",
@@ -116,6 +126,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	scorpita: {
 		num: -12.5,
 		name: "Scorpita",
@@ -126,6 +137,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	baloon: {
 		num: -13.5,
 		name: "Baloon",
@@ -136,6 +148,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	kinesel: {
 		num: -14.5,
 		name: "Kinesel",
@@ -146,6 +159,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	glacida: {
 		num: -15.5,
 		name: "Glacida",
@@ -156,6 +170,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	pidgeotine: {
 		num: -16.5,
 		name: "Pidgeotine",
@@ -166,6 +181,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	gorilax: {
 		num: -17.5,
 		name: "Gorilax",
@@ -176,6 +192,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	albatrygon: {
 		num: -18.5,
 		name: "Albatrygon",
@@ -186,6 +203,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	chillvark: {
 		num: -19.5,
 		name: "Chillvark",
@@ -196,6 +214,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	komodith: {
 		num: -20.5,
 		name: "Komodith",
@@ -206,6 +225,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	giranium: {
 		num: -21.5,
 		name: "Giranium",
@@ -216,6 +236,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	flamyle: {
 		num: -22.5,
 		name: "Flamyle",
@@ -226,6 +247,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	voltecta: {
 		num: -23.5,
 		name: "Voltecta",
@@ -236,6 +258,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	ostria: {
 		num: -24.5,
 		name: "Ostria",
@@ -246,6 +269,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	ninjoth: {
 		num: -25.5,
 		name: "Ninjoth",
@@ -256,6 +280,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	herbigator: {
 		num: -26.5,
 		name: "Herbigator",
@@ -266,6 +291,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	anteros: {
 		num: -27.5,
 		name: "Anteros",
@@ -276,6 +302,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	gladiaster: {
 		num: -28.5,
 		name: "Gladiaster",
@@ -286,6 +313,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	hyperoach: {
 		num: -29.5,
 		name: "Hyperoach",
@@ -296,6 +324,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	barracoth: {
 		num: -30.5,
 		name: "Barracoth",
@@ -306,6 +335,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	toados: {
 		num: -31.5,
 		name: "Toados",
@@ -316,6 +346,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	voltarak: {
 		num: -32.5,
 		name: "Voltarak",
@@ -326,6 +357,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	mosqung: {
 		num: -33.5,
 		name: "Mosqung",
@@ -336,6 +368,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	flamepion: {
 		num: -34.5,
 		name: "Flamepion",
@@ -346,6 +379,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	hyenix: {
 		num: -35.5,
 		name: "Hyenix",
@@ -356,6 +390,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	rhinolite: {
 		num: -36.5,
 		name: "Rhinolite",
@@ -366,6 +401,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	bellena: {
 		num: -37.5,
 		name: "Bellena",
@@ -376,6 +412,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	falcola: {
 		num: -38.5,
 		name: "Falcola",
@@ -386,6 +423,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	beanium: {
 		num: -39.5,
 		name: "Beanium",
@@ -396,6 +434,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	lemotic: {
 		num: -40.5,
 		name: "Lemotic",
@@ -406,6 +445,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	biceon: {
 		num: -41.5,
 		name: "Biceon",
@@ -416,6 +456,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	skeleray: {
 		num: -42.5,
 		name: "Skeleray",
@@ -426,6 +467,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	specyte: {
 		num: -43.5,
 		name: "Specyte",
@@ -436,6 +478,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	ramron: {
 		num: -44.5,
 		name: "Ramron",
@@ -446,6 +489,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	balar: {
 		num: -45.5,
 		name: "Balar",
@@ -456,6 +500,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	panthee: {
 		num: -46.5,
 		name: "Panthee",
@@ -466,6 +511,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	blastora: {
 		num: -47.5,
 		name: "Blastora",
@@ -476,6 +522,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	dropacle: {
 		num: -48.5,
 		name: "Dropacle",
@@ -486,6 +533,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	dolphena: {
 		num: -49.5,
 		name: "Dolphena",
@@ -496,6 +544,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	catelax: {
 		num: -50.5,
 		name: "Catelax",
@@ -506,6 +555,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	fluffora: {
 		num: -51.5,
 		name: "Fluffora",
@@ -516,6 +566,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 	tigire: {
 		num: -52.5,
 		name: "Tigire",
@@ -526,6 +577,7 @@ let BattlePokedex = {
 		heightm: null,
 		color: null,
 		eggGroups: [null],
+	},
 };
 
 exports.BattlePokedex = BattlePokedex;
