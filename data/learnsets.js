@@ -78412,7 +78412,7 @@ let BattleLearnsets = {
 			{"generation": 5, "level": 47, "moves": ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
 		],
 	},
-		koatric: {learnset: {
+	koatric: {learnset: {
 		barrage: ["7L1"],
 		boomburst: ["7L1"],
 		charge: ["7L1"],
