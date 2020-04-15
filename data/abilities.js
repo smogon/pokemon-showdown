@@ -1424,7 +1424,7 @@ let BattleAbilities = {
 		id: "healer",
 		name: "Healer",
 		onResidualOrder: 5,
-		onResidualSubOrder: 1,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.side.active.length === 1) {
 				return;
@@ -1522,7 +1522,7 @@ let BattleAbilities = {
 		desc: "This Pokemon has its major status condition cured at the end of each turn if Rain Dance is active. If this Pokemon is holding Utility Umbrella, its major status condition will not be cured.",
 		shortDesc: "This Pokemon has its status cured at the end of each turn if Rain Dance is active.",
 		onResidualOrder: 5,
-		onResidualSubOrder: 1,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.status && ['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
 				this.debug('hydration');
@@ -3485,7 +3485,7 @@ let BattleAbilities = {
 		desc: "This Pokemon has a 33% chance to have its major status condition cured at the end of each turn.",
 		shortDesc: "This Pokemon has a 33% chance to have its status cured at the end of each turn.",
 		onResidualOrder: 5,
-		onResidualSubOrder: 1,
+		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hp && pokemon.status && this.randomChance(1, 3)) {
 				this.debug('shed skin');

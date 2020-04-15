@@ -501,7 +501,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onResidualOrder: 5,
-		onResidualSubOrder: 2,
+		onResidualSubOrder: 5,
 		onResidual(pokemon) {
 			if (this.field.isTerrain('grassyterrain')) return;
 			if (pokemon.hasType('Poison')) {
@@ -3185,7 +3185,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onResidualOrder: 5,
-		onResidualSubOrder: 2,
+		onResidualSubOrder: 5,
 		onResidual(pokemon) {
 			if (this.field.isTerrain('grassyterrain')) return;
 			this.heal(pokemon.baseMaxhp / 16);
