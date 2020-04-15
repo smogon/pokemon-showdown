@@ -229,9 +229,8 @@ export const LogViewer = new class {
 		if (typeof cap === 'string') cap = parseInt(cap);
 
 		let buf = (
-			`<br><div class="pad"><strong><center>Results for search` +
-			` ${Chat.plural(searches, 'queries', 'query')}:` +
-			`"${searches > 1 ? search.split('-').join('", "') : search}"` +
+			`<br><div class="pad"><strong><center>Results for search (es) ` +
+			`"${searches > 1 ? search.split('-').join(' ') : search}"` +
 			` on ${roomid}: (${month}):</center></strong><hr>`
 		);
 		for (const day of days) {
@@ -491,7 +490,7 @@ export const LogSearcher = new class {
 						.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
 				);
 				const date = path.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
-				const addDate = rebuilt.includes(date) ? `<small><strong>${date}</strong>` : '';
+				const addDate = rebuilt.join(' ').includes(date) ? '' : `<small><strong>${date}</strong>`;
 				rebuilt.push(`${addDate}</small>${matched}`);
 			}
 			matches.push(rebuilt.join(' '));
