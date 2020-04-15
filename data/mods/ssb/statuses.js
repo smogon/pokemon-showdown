@@ -140,15 +140,15 @@ let BattleStatuses = {
 	anubis: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&Anubis|hi ur qt`);
+			this.add(`c|+Anubis|hi ur qt`);
 			// In loving memory of the SSB programming team's sanity.
 			if (this.random(300) === 272) this.add(`c|~HoeenHero|Anubis's set is OP against programmer sanity.`);
 		},
 		onSwitchOut() {
-			this.add(`c|&Anubis|brb making coffee`);
+			this.add(`c|+Anubis|brb making coffee`);
 		},
 		onFaint() {
-			this.add(`c|&Anubis|worthless evildoer :(`);
+			this.add(`c|+Anubis|worthless evildoer :(`);
 		},
 	},
 	aquagtothepast: {
@@ -1196,8 +1196,8 @@ let BattleStatuses = {
 			// Easter Egg
 			let activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
 			if (activeMon === 'anubis') {
-				this.add(`c|&Anubis|ohey it's pre`);
-				this.add(`c|&Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
+				this.add(`c|+Anubis|ohey it's pre`);
+				this.add(`c|+Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
 				this.add(`raw|<img src="https://pokemonshowdown.com/images/ssbkitten.jpg" style="width: 300px; height: 400px" />`);
 				this.add(`c|~pre|<3`);
 			}
