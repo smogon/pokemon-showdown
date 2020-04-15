@@ -6,6 +6,7 @@
  */
 
 import {FS} from "../../lib/fs";
+import * as child_process from 'child_process';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -175,6 +176,7 @@ export const LogViewer = new class {
 		buf += `</div>`;
 		return this.linkify(buf);
 	}
+
 
 	async searchDay(roomid: RoomID, day: string, search: string, cap?: number, prevResults?: string[]) {
 		const text = await LogReader.read(roomid, day);
@@ -432,6 +434,62 @@ export const LogViewer = new class {
 	}
 };
 
+export const LogSearcher = new class {
+	async search(roomid: RoomID, search: string): Promise<[string[], string]> {
+		return new Promise((resolve, reject) => {
+			child_process.exec(`grep -r '${search}' ${__dirname}/../../logs/chat/${roomid} --exclude=today.txt`, {
+				cwd: __dirname,
+			}, (error, stdout, stderr) => {
+				resolve([stdout.split('\n').reverse(), stderr]);
+			});
+		});
+	}
+
+	FSSearch(roomid: RoomID, search: string, date: string, cap?: string) {
+		const isAll = (date === 'all');
+		const isYear = (date.length < 0 && date.length > 7);
+		const isMonth = (date.length === 7);
+
+		if (isAll) {
+			return LogViewer.searchYear(roomid, date, search, true, cap);
+		} else if (isYear) {
+			date = date.substr(0, 4);
+			return LogViewer.searchYear(roomid, date, search, false, cap);
+		} else if (isMonth) {
+			date = date.substr(0, 7);
+			return LogViewer.searchMonth(roomid, date, search, cap);
+		} else {
+			return LogViewer.error("Invalid date.");
+		}
+	}
+
+	async grepSearch(roomid: RoomID, search: string, cap: number | string) {
+		if (typeof cap === 'string' && cap !== 'all') cap = parseInt(cap);
+		const matches: string[] = [];
+		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:`;
+		const [stdout, stderr] = await this.search(roomid, search);
+		if (stderr) return LogViewer.error(`Error in search. <br>Please report this as a bug. <br> ${stderr}`);
+		buf += ` ${stdout.length} </strong><hr/ >`;
+		if (cap) buf += `(capped at ${cap})`;
+		for (const line of stdout) {
+			if (!toID(line)) continue;
+			const [path, text] = line.split('.txt:');
+			const rendered = LogViewer.renderLine(text);
+			const date = path.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
+			const full = `<strong><small>${date}</strong></small><br>${rendered}`;
+			if (cap !== 'all' && matches.push(full) >= cap) break;
+			if (cap === 'all') matches.push(full);
+		}
+		buf += matches.join('<hr/ >');
+		if (cap && cap !== 'all') {
+			buf += `<hr/ ><strong>Capped at ${cap}.</strong><br>`;
+			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${cap + 200}">View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|all">View all<br />&#x25bc;</button></div>`;
+		}
+		return buf;
+	}
+};
+
 const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
 
 export const pages: PageTable = {
@@ -443,7 +501,7 @@ export const pages: PageTable = {
 
 		const [roomid, date, opts, cap] = args
 			.join('-')
-			.split('--') as [RoomID, string | undefined, string | undefined, number | undefined];
+			.split('--') as [RoomID, string | undefined, string | undefined, number];
 
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
@@ -470,10 +528,10 @@ export const pages: PageTable = {
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 		this.title = '[Logs] ' + roomid;
 
-		const hasSearch = opts?.includes('search-');
+		const hasSearch = opts?.includes('search-') || opts?.includes('csearch-');
+		const context = opts?.includes('csearch-');
 		const search = opts?.slice(7);
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
-		const parsedCap = toID(cap).includes('all') ? Infinity : cap;
 
 		const parsedDate = new Date(date as string);
 		// this is apparently the best way to tell if a date is invalid
@@ -490,21 +548,10 @@ export const pages: PageTable = {
 				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
 			}
 		} else if (date && hasSearch && search) {
-			if (date?.length === 4 || date.split('-').length === 3) {
-				this.title = `[Search] [${date}] ${search}`;
-				return LogViewer.searchYear(roomid, date, search, false, parsedCap);
-			} else if (isAll) {
-				this.title = `[Search] [all] ${search}`;
-				return LogViewer.searchYear(roomid, date, search, true, parsedCap);
-			} else if (date) {
-				if (date === 'today') {
-					const curMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
-					this.title = `[Search] [${curMonth}] ${search}`;
-					return LogViewer.searchMonth(roomid, curMonth, search, parsedCap);
-				} else {
-					this.title = `[Search] [${date}] ${search}`;
-					return LogViewer.searchMonth(roomid, date, search, parsedCap);
-				}
+			if (context) {
+				return LogSearcher.FSSearch(roomid, search, date, toID(cap));
+			} else {
+				return LogSearcher.grepSearch(roomid, search, cap);
 			}
 		} else {
 			return LogViewer.room(roomid);
@@ -521,23 +568,30 @@ export const commands: ChatCommands = {
 
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',
-	searchlogs(target, room, user) {
+	contextsearch: 'searchlogs',
+	csl: 'searchlogs',
+	searchlogs(target, room, user, connection, cmd) {
 		target = target.trim();
 		const [search, tarRoom, date, cap] = target.split('|') as [string, string, number, number];
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
-		if (cap && isNaN(cap) && toID(cap) !== 'all') return this.errorReply(`Cap must be a number.`);
+		if (cap && isNaN(cap) && toID(cap) !== 'all') return this.errorReply(`Cap must be a number or [all].`);
 		const input = search.includes(',') ? search.split(',').map(item => item.trim()).join('-') : search;
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		const limit = cap ? `--${cap}` : `--500`;
-		return this.parse(`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${input}${limit}`);
+		if (cmd === 'contextsearch' || cmd === 'csl') {
+			return this.parse(`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--csearch-${input}${limit}`);
+		} else {
+			return this.parse(`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${input}${limit}`);
+		}
 	},
 
 	searchlogshelp: [
 		"/searchlogs [search] | [room] | [date] | [cap] - searches [date]'s logs in the current room for [search].",
 		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
+		"/csl or /contextsearch can be used to get context for lines, at a loss in performance.",
 		"If no month, year, or 'all' param is given for the date, defaults to current month. Requires: % @ & ~",
 	],
 };
