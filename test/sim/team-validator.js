@@ -492,6 +492,8 @@ describe('Team Validator', function () {
 		];
 		let illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
 		assert(illegal);
+		illegal = TeamValidator.get('gen8customgame@@@-nonexistent').validateTeam(team);
+		assert(illegal);
 	});
 
 	/*********************************************************
