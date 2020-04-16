@@ -484,7 +484,7 @@ export const LogSearcher = new class {
 				if (line.includes('.txt:')) sep = ':';
 				const [path, text] = line.split(`.txt${sep}`);
 				const rendered = LogViewer.renderLine(text, 'all');
-				if (!rendered) continue;
+				if (!rendered) continue; // gets rid of some weird blank lines
 				const matched = (
 					new RegExp(search, "i")
 						.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
@@ -493,12 +493,16 @@ export const LogSearcher = new class {
 				const addDate = rebuilt.join(' ').includes(date) ? '' : `<small><strong>${date}</strong>`;
 				rebuilt.push(`${addDate}</small>${matched}`);
 			}
-			matches.push(rebuilt.join(' '));
+			if (cap && matches.push(rebuilt.join(' ')) >= cap) {
+				break;
+			} else {
+				matches.push(rebuilt.join(' '));
+			}
 		}
 		buf += matches.join('<hr/ >');
 		if (cap && cap !== 'all') {
 			buf += `<hr/ ><strong>Capped at ${cap}.</strong><br>`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${cap + 200}">View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}||${cap + 200}">View 200 more<br />&#x25bc;</button>`;
 			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|all">View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
