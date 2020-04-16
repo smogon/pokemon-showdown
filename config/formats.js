@@ -22,9 +22,6 @@ let Formats = [
 		mod: 'gen8',
 		team: 'random',
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8randombattle') this.add('html', `<div class="broadcast-red"><strong>Random Battle is currently suspecting Dynamax! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3662006/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 8] Unrated Random Battle",
