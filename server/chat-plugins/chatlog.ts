@@ -483,7 +483,7 @@ export const LogSearcher = new class {
 				if (line.includes('.txt-')) sep = '-';
 				if (line.includes('.txt:')) sep = ':';
 				const [path, text] = line.split(`.txt${sep}`);
-				const rendered = LogViewer.renderLine(text);
+				const rendered = LogViewer.renderLine(text, 'all');
 				if (!rendered) continue;
 				const matched = (
 					new RegExp(search, "i")
