@@ -2,7 +2,7 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
-	"chillytite": {
+	chillytite: {
 		id: "chillytite",
 		name: "Chillytite",
 		spritenum: 594,

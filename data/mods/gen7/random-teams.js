@@ -1084,15 +1084,15 @@ class RandomGen7Teams extends RandomTeams {
 		let setList = this.randomFactorySets[tier][id].sets;
 
 		/**@type {{[k: string]: number}} */
-		let itemsMax = {'choicespecs': 1, 'choiceband': 1, 'choicescarf': 1};
+		let itemsMax = {choicespecs: 1, choiceband: 1, choicescarf: 1};
 		/**@type {{[k: string]: number}} */
-		let movesMax = {'rapidspin': 1, 'batonpass': 1, 'stealthrock': 1, 'defog': 1, 'spikes': 1, 'toxicspikes': 1};
-		let requiredMoves = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
+		let movesMax = {rapidspin: 1, batonpass: 1, stealthrock: 1, defog: 1, spikes: 1, toxicspikes: 1};
+		let requiredMoves = {stealthrock: 'hazardSet', rapidspin: 'hazardClear', defog: 'hazardClear'};
 		let weatherAbilitiesRequire = {
-			'hydration': 'raindance', 'swiftswim': 'raindance',
-			'leafguard': 'sunnyday', 'solarpower': 'sunnyday', 'chlorophyll': 'sunnyday',
-			'sandforce': 'sandstorm', 'sandrush': 'sandstorm', 'sandveil': 'sandstorm',
-			'slushrush': 'hail', 'snowcloak': 'hail',
+			hydration: 'raindance', swiftswim: 'raindance',
+			leafguard: 'sunnyday', solarpower: 'sunnyday', chlorophyll: 'sunnyday',
+			sandforce: 'sandstorm', sandrush: 'sandstorm', sandveil: 'sandstorm',
+			slushrush: 'hail', snowcloak: 'hail',
 		};
 		let weatherAbilities = ['drizzle', 'drought', 'snowwarning', 'sandstream'];
 
@@ -1183,12 +1183,12 @@ class RandomGen7Teams extends RandomTeams {
 
 		/**@type {{[k: string]: number}} */
 		const tierValues = {
-			'Uber': 5,
-			'OU': 4, 'UUBL': 4,
-			'UU': 3, 'RUBL': 3,
-			'RU': 2, 'NUBL': 2,
-			'NU': 1, 'PUBL': 1,
-			'PU': 0,
+			Uber: 5,
+			OU: 4, UUBL: 4,
+			UU: 3, RUBL: 3,
+			RU: 2, NUBL: 2,
+			NU: 1, PUBL: 1,
+			PU: 0,
 		};
 
 		let pokemon = [];
@@ -1201,17 +1201,17 @@ class RandomGen7Teams extends RandomTeams {
 		let teamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
 		let requiredMoveFamilies = ['hazardSet', 'hazardClear'];
 		/**@type {{[k: string]: string}} */
-		let requiredMoves = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
+		let requiredMoves = {stealthrock: 'hazardSet', rapidspin: 'hazardClear', defog: 'hazardClear'};
 		/**@type {{[k: string]: string}} */
-		let weatherAbilitiesSet = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
+		let weatherAbilitiesSet = {drizzle: 'raindance', drought: 'sunnyday', snowwarning: 'hail', sandstream: 'sandstorm'};
 		/**@type {{[k: string]: string[]}} */
 		let resistanceAbilities = {
-			'dryskin': ['Water'], 'waterabsorb': ['Water'], 'stormdrain': ['Water'],
-			'flashfire': ['Fire'], 'heatproof': ['Fire'],
-			'lightningrod': ['Electric'], 'motordrive': ['Electric'], 'voltabsorb': ['Electric'],
-			'sapsipper': ['Grass'],
-			'thickfat': ['Ice', 'Fire'],
-			'levitate': ['Ground'],
+			dryskin: ['Water'], waterabsorb: ['Water'], stormdrain: ['Water'],
+			flashfire: ['Fire'], heatproof: ['Fire'],
+			lightningrod: ['Electric'], motordrive: ['Electric'], voltabsorb: ['Electric'],
+			sapsipper: ['Grass'],
+			thickfat: ['Ice', 'Fire'],
+			levitate: ['Ground'],
 		};
 
 		while (pokemonPool.length && pokemon.length < 6) {
@@ -1359,13 +1359,13 @@ class RandomGen7Teams extends RandomTeams {
 		let setList = this.randomBSSFactorySets[id].sets;
 
 		/**@type {{[k: string]: number}} */
-		let movesMax = {'batonpass': 1, 'stealthrock': 1, 'spikes': 1, 'toxicspikes': 1, 'doubleedge': 1, 'trickroom': 1};
+		let movesMax = {batonpass: 1, stealthrock: 1, spikes: 1, toxicspikes: 1, doubleedge: 1, trickroom: 1};
 		/**@type {{[k: string]: string}} */
 		let requiredMoves = {};
 		/**@type {{[k: string]: string}} */
 		let weatherAbilitiesRequire = {
-			'swiftswim': 'raindance',
-			'sandrush': 'sandstorm', 'sandveil': 'sandstorm',
+			swiftswim: 'raindance',
+			sandrush: 'sandstorm', sandveil: 'sandstorm',
 		};
 		let weatherAbilities = ['drizzle', 'drought', 'snowwarning', 'sandstream'];
 
@@ -1455,14 +1455,14 @@ class RandomGen7Teams extends RandomTeams {
 		/**@type {{[k: string]: string}} */
 		let requiredMoves = {};
 		/**@type {{[k: string]: string}} */
-		let weatherAbilitiesSet = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
+		let weatherAbilitiesSet = {drizzle: 'raindance', drought: 'sunnyday', snowwarning: 'hail', sandstream: 'sandstorm'};
 		/**@type {{[k: string]: string[]}} */
 		let resistanceAbilities = {
-			'waterabsorb': ['Water'],
-			'flashfire': ['Fire'],
-			'lightningrod': ['Electric'], 'voltabsorb': ['Electric'],
-			'thickfat': ['Ice', 'Fire'],
-			'levitate': ['Ground'],
+			waterabsorb: ['Water'],
+			flashfire: ['Fire'],
+			lightningrod: ['Electric'], voltabsorb: ['Electric'],
+			thickfat: ['Ice', 'Fire'],
+			levitate: ['Ground'],
 		};
 
 		while (pokemonPool.length && pokemon.length < 6) {

@@ -2,27 +2,27 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
-	"burndrive": {
+	burndrive: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {},
 		desc: "Changes Genesect to Genesect-Burn.",
 	},
-	"chilldrive": {
+	chilldrive: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {},
 		desc: "Changes Genesect to Genesect-Chill.",
 	},
-	"dousedrive": {
+	dousedrive: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {},
 		desc: "Changes Genesect to Genesect-Douse.",
 	},
-	"shockdrive": {
+	shockdrive: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {},
 		desc: "Changes Genesect to Genesect-Shock.",
 	},
-	"widelens": {
+	widelens: {
 		inherit: true,
 		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy === 'number') {
@@ -31,7 +31,7 @@ let BattleItems = {
 		},
 		desc: "The accuracy of attacks by the holder is 1.6x.",
 	},
-	"zoomlens": {
+	zoomlens: {
 		inherit: true,
 		onSourceModifyAccuracy(accuracy, target) {
 			if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
@@ -41,7 +41,7 @@ let BattleItems = {
 		},
 		desc: "The accuracy of attacks by the holder is 1.6x if it moves after its target.",
 	},
-	"bigroot": {
+	bigroot: {
 		inherit: true,
 		onAfterMoveSecondarySelf(source, target) {
 			if (source.hasType('Grass')) {
@@ -58,7 +58,7 @@ let BattleItems = {
 		desc: "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap; If the user is a Grass type, the holder heals 1/16 of its max HP every turn, and for every damaging move the holder uses 1/8th of the damage dealt is restored.",
 		shortDesc: "Holder gains 1.3x from most healing moves; if the user is a Grass type, Leftovers & Shell Bell effects occur.",
 	},
-	"blacksludge": {
+	blacksludge: {
 		inherit: true,
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
@@ -71,7 +71,7 @@ let BattleItems = {
 		},
 		desc: "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not. Pure Poison types restore 1/8 max HP.",
 	},
-	"focusband": {
+	focusband: {
 		inherit: true,
 		onDamage(damage, target, source, effect) {
 			let types = target.getTypes();
@@ -88,7 +88,7 @@ let BattleItems = {
 		},
 		desc: "Breaks on first hit, but allows pure Fighting types to survive that hit with 1 HP.",
 	},
-	"wiseglasses": {
+	wiseglasses: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
 			if (move.category === 'Special') {
@@ -102,7 +102,7 @@ let BattleItems = {
 		desc: "Holder's special attacks have 1.1x power. Pure Psychic types special attacks have 1.2x power.",
 		shortDesc: "Holder's SpA have 1.1x power. Pure Psychic types SpA have 1.2x power.",
 	},
-	"muscleband": {
+	muscleband: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
 			if (move.category === 'Physical') {
@@ -116,7 +116,7 @@ let BattleItems = {
 		desc: "Holder's physical attacks have 1.1x power. Pure Fighting types physical attacks have 1.2x power.",
 		shortDesc: "Holder's Atk have 1.1x power. Pure Fighting types Atk have 1.2x power.",
 	},
-	"stick": {
+	stick: {
 		inherit: true,
 		// The Stick is a stand-in for a number of pokemon-exclusive items
 		// introduced with Gen Next

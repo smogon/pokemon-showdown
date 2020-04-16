@@ -91,7 +91,7 @@ let BattleScripts = {
 	doGetMixedSpecies(speciesOrForme, deltas) {
 		if (!deltas) throw new TypeError("Must specify deltas!");
 		let species = this.dex.deepClone(this.dex.getSpecies(speciesOrForme));
-		species.abilities = {'0': deltas.ability};
+		species.abilities = {0: deltas.ability};
 		if (species.types[0] === deltas.type) {
 			species.types = [deltas.type];
 		} else if (deltas.type === 'mono') {

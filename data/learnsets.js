@@ -121,15 +121,15 @@ let BattleLearnsets = {
 			worryseed: ["8L30", "7T", "7L31", "6T", "6L31", "5T", "5L31", "4T", "4L31"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["sweetscent", "growth", "solarbeam", "synthesis"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "growl", "leechseed", "vinewhip"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tackle", "growl", "leechseed", "vinewhip"]},
-			{"generation": 5, "level": 1, "shiny": 1, "ivs": {"def": 31}, "moves": ["falseswipe", "block", "frenzyplant", "weatherball"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 5, "moves": ["growl", "leechseed", "vinewhip", "poisonpowder"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 5, "isHidden": true, "moves": ["tackle", "growl", "celebrate"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, moves: ["sweetscent", "growth", "solarbeam", "synthesis"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "growl", "leechseed", "vinewhip"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tackle", "growl", "leechseed", "vinewhip"]},
+			{generation: 5, level: 1, shiny: 1, ivs: {def: 31}, moves: ["falseswipe", "block", "frenzyplant", "weatherball"], pokeball: "pokeball"},
+			{generation: 6, level: 5, moves: ["growl", "leechseed", "vinewhip", "poisonpowder"], pokeball: "cherishball"},
+			{generation: 6, level: 5, isHidden: true, moves: ["tackle", "growl", "celebrate"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 5},
+			{generation: 1, level: 5},
 		],
 	},
 	ivysaur: {
@@ -304,7 +304,7 @@ let BattleLearnsets = {
 			worryseed: ["8L44", "7T", "7L39", "6T", "6L39", "5T", "5L39", "4T", "4L39"],
 		},
 		eventData: [
-			{"generation": 6, "level": 100, "isHidden": true, "moves": ["solarbeam", "frenzyplant", "synthesis", "grasspledge"], "pokeball": "cherishball"},
+			{generation: 6, level: 100, isHidden: true, moves: ["solarbeam", "frenzyplant", "synthesis", "grasspledge"], pokeball: "cherishball"},
 		],
 	},
 	charmander: {
@@ -416,18 +416,18 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["scratch", "growl", "ember"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 40, "gender": "M", "nature": "Mild", "moves": ["return", "hiddenpower", "quickattack", "howl"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 40, "gender": "M", "nature": "Naive", "moves": ["return", "hiddenpower", "quickattack", "howl"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 40, "gender": "M", "nature": "Naughty", "moves": ["return", "hiddenpower", "quickattack", "howl"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["scratch", "growl", "ember", "smokescreen"]},
-			{"generation": 4, "level": 40, "gender": "M", "nature": "Hardy", "moves": ["return", "hiddenpower", "quickattack", "howl"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 1, "shiny": 1, "ivs": {"spe": 31}, "moves": ["falseswipe", "block", "blastburn", "acrobatics"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 5, "moves": ["growl", "ember", "smokescreen", "dragonrage"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 5, "isHidden": true, "moves": ["scratch", "growl", "celebrate"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["scratch", "growl", "ember"], pokeball: "pokeball"},
+			{generation: 4, level: 40, gender: "M", nature: "Mild", moves: ["return", "hiddenpower", "quickattack", "howl"], pokeball: "cherishball"},
+			{generation: 4, level: 40, gender: "M", nature: "Naive", moves: ["return", "hiddenpower", "quickattack", "howl"], pokeball: "cherishball"},
+			{generation: 4, level: 40, gender: "M", nature: "Naughty", moves: ["return", "hiddenpower", "quickattack", "howl"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["scratch", "growl", "ember", "smokescreen"]},
+			{generation: 4, level: 40, gender: "M", nature: "Hardy", moves: ["return", "hiddenpower", "quickattack", "howl"], pokeball: "cherishball"},
+			{generation: 5, level: 1, shiny: 1, ivs: {spe: 31}, moves: ["falseswipe", "block", "blastburn", "acrobatics"], pokeball: "pokeball"},
+			{generation: 6, level: 5, moves: ["growl", "ember", "smokescreen", "dragonrage"], pokeball: "cherishball"},
+			{generation: 6, level: 5, isHidden: true, moves: ["scratch", "growl", "celebrate"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 5},
+			{generation: 1, level: 5},
 		],
 	},
 	charmeleon: {
@@ -653,15 +653,15 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["wingattack", "slash", "dragonrage", "firespin"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 36, "gender": "M", "moves": ["firefang", "flameburst", "airslash", "inferno"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 36, "gender": "M", "moves": ["firefang", "airslash", "dragonclaw", "dragonrage"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 36, "shiny": true, "gender": "M", "moves": ["overheat", "solarbeam", "focusblast", "holdhands"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "isHidden": true, "moves": ["flareblitz", "blastburn", "scaryface", "firepledge"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 36, "gender": "M", "nature": "Serious", "moves": ["flamethrower", "ember", "firespin", "flameburst"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 40, "gender": "M", "nature": "Jolly", "moves": ["flareblitz", "dragonclaw", "fly", "dragonrage"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 40, "gender": "M", "nature": "Adamant", "moves": ["flamethrower", "dragonrage", "slash", "seismictoss"], "pokeball": "pokeball"},
-			{"generation": 7, "level": 50, "moves": ["dragondance", "flareblitz", "fly", "earthquake"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, moves: ["wingattack", "slash", "dragonrage", "firespin"], pokeball: "pokeball"},
+			{generation: 6, level: 36, gender: "M", moves: ["firefang", "flameburst", "airslash", "inferno"], pokeball: "cherishball"},
+			{generation: 6, level: 36, gender: "M", moves: ["firefang", "airslash", "dragonclaw", "dragonrage"], pokeball: "cherishball"},
+			{generation: 6, level: 36, shiny: true, gender: "M", moves: ["overheat", "solarbeam", "focusblast", "holdhands"], pokeball: "cherishball"},
+			{generation: 6, level: 100, isHidden: true, moves: ["flareblitz", "blastburn", "scaryface", "firepledge"], pokeball: "cherishball"},
+			{generation: 6, level: 36, gender: "M", nature: "Serious", moves: ["flamethrower", "ember", "firespin", "flameburst"], pokeball: "cherishball"},
+			{generation: 7, level: 40, gender: "M", nature: "Jolly", moves: ["flareblitz", "dragonclaw", "fly", "dragonrage"], pokeball: "cherishball"},
+			{generation: 7, level: 40, gender: "M", nature: "Adamant", moves: ["flamethrower", "dragonrage", "slash", "seismictoss"], pokeball: "pokeball"},
+			{generation: 7, level: 50, moves: ["dragondance", "flareblitz", "fly", "earthquake"], pokeball: "cherishball"},
 		],
 	},
 	squirtle: {
@@ -770,14 +770,14 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "tailwhip", "bubble", "withdraw"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tackle", "tailwhip", "bubble", "withdraw"]},
-			{"generation": 5, "level": 1, "shiny": 1, "ivs": {"hp": 31}, "moves": ["falseswipe", "block", "hydrocannon", "followme"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 5, "moves": ["tailwhip", "watergun", "withdraw", "bubble"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 5, "isHidden": true, "moves": ["tackle", "tailwhip", "celebrate"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "tailwhip", "bubble", "withdraw"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tackle", "tailwhip", "bubble", "withdraw"]},
+			{generation: 5, level: 1, shiny: 1, ivs: {hp: 31}, moves: ["falseswipe", "block", "hydrocannon", "followme"], pokeball: "pokeball"},
+			{generation: 6, level: 5, moves: ["tailwhip", "watergun", "withdraw", "bubble"], pokeball: "cherishball"},
+			{generation: 6, level: 5, isHidden: true, moves: ["tackle", "tailwhip", "celebrate"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 5},
+			{generation: 1, level: 5},
 		],
 	},
 	wartortle: {
@@ -976,8 +976,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["protect", "raindance", "skullbash", "hydropump"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 100, "isHidden": true, "moves": ["hydropump", "hydrocannon", "irondefense", "waterpledge"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, moves: ["protect", "raindance", "skullbash", "hydropump"], pokeball: "pokeball"},
+			{generation: 6, level: 100, isHidden: true, moves: ["hydropump", "hydrocannon", "irondefense", "waterpledge"], pokeball: "cherishball"},
 		],
 	},
 	caterpie: {
@@ -989,9 +989,9 @@ let BattleLearnsets = {
 			tackle: ["8L1", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 		},
 		encounters: [
-			{"generation": 1, "level": 3},
-			{"generation": 2, "level": 3},
-			{"generation": 3, "level": 3},
+			{generation: 1, level: 3},
+			{generation: 2, level: 3},
+			{generation: 3, level: 3},
 		],
 	},
 	metapod: {
@@ -1003,12 +1003,12 @@ let BattleLearnsets = {
 			stringshot: ["4T"],
 		},
 		encounters: [
-			{"generation": 1, "level": 4},
-			{"generation": 2, "level": 4},
-			{"generation": 3, "level": 4},
-			{"generation": 4, "level": 3},
-			{"generation": 6, "level": 4},
-			{"generation": 7, "level": 3},
+			{generation: 1, level: 4},
+			{generation: 2, level: 4},
+			{generation: 3, level: 4},
+			{generation: 4, level: 3},
+			{generation: 6, level: 4},
+			{generation: 7, level: 3},
 		],
 	},
 	butterfree: {
@@ -1101,12 +1101,12 @@ let BattleLearnsets = {
 			whirlwind: ["8L20", "8V", "7L29", "7V", "6L22", "5L22", "4L22", "3L23"],
 		},
 		eventData: [
-			{"generation": 3, "level": 30, "moves": ["morningsun", "psychic", "sleeppowder", "aerialace"]},
+			{generation: 3, level: 30, moves: ["morningsun", "psychic", "sleeppowder", "aerialace"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 7},
-			{"generation": 4, "level": 6},
-			{"generation": 7, "level": 9},
+			{generation: 2, level: 7},
+			{generation: 4, level: 6},
+			{generation: 7, level: 9},
 		],
 	},
 	weedle: {
@@ -1117,9 +1117,9 @@ let BattleLearnsets = {
 			stringshot: ["8V", "7L1", "7V", "6L1", "5L1", "4T", "4L1", "3L1"],
 		},
 		encounters: [
-			{"generation": 1, "level": 3},
-			{"generation": 2, "level": 3},
-			{"generation": 3, "level": 3},
+			{generation: 1, level: 3},
+			{generation: 2, level: 3},
+			{generation: 3, level: 3},
 		],
 	},
 	kakuna: {
@@ -1131,12 +1131,12 @@ let BattleLearnsets = {
 			stringshot: ["4T"],
 		},
 		encounters: [
-			{"generation": 1, "level": 4},
-			{"generation": 2, "level": 4},
-			{"generation": 3, "level": 4},
-			{"generation": 4, "level": 3},
-			{"generation": 6, "level": 4},
-			{"generation": 7, "level": 3},
+			{generation: 1, level: 4},
+			{generation: 2, level: 4},
+			{generation: 3, level: 4},
+			{generation: 4, level: 3},
+			{generation: 6, level: 4},
+			{generation: 7, level: 3},
 		],
 	},
 	beedrill: {
@@ -1224,11 +1224,11 @@ let BattleLearnsets = {
 			xscissor: ["8V", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 30, "moves": ["batonpass", "sludgebomb", "twineedle", "swordsdance"]},
+			{generation: 3, level: 30, moves: ["batonpass", "sludgebomb", "twineedle", "swordsdance"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 7},
-			{"generation": 4, "level": 6},
+			{generation: 2, level: 7},
+			{generation: 4, level: 6},
 		],
 	},
 	pidgey: {
@@ -1299,9 +1299,9 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 2},
-			{"generation": 2, "level": 2},
-			{"generation": 3, "level": 2},
+			{generation: 1, level: 2},
+			{generation: 2, level: 2},
+			{generation: 3, level: 2},
 		],
 	},
 	pidgeotto: {
@@ -1369,13 +1369,13 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 30, "abilities": ["keeneye"], "moves": ["refresh", "wingattack", "steelwing", "featherdance"]},
+			{generation: 3, level: 30, abilities: ["keeneye"], moves: ["refresh", "wingattack", "steelwing", "featherdance"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 9},
-			{"generation": 2, "level": 7},
-			{"generation": 3, "level": 7},
-			{"generation": 4, "level": 7},
+			{generation: 1, level: 9},
+			{generation: 2, level: 7},
+			{generation: 3, level: 7},
+			{generation: 4, level: 7},
 		],
 	},
 	pidgeot: {
@@ -1445,10 +1445,10 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 61, "gender": "M", "nature": "Naughty", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "abilities": ["keeneye"], "moves": ["whirlwind", "wingattack", "skyattack", "mirrormove"], "pokeball": "cherishball"},
+			{generation: 5, level: 61, gender: "M", nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, abilities: ["keeneye"], moves: ["whirlwind", "wingattack", "skyattack", "mirrormove"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 7, "level": 29},
+			{generation: 7, level: 29},
 		],
 	},
 	rattata: {
@@ -1535,9 +1535,9 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 1, "level": 2},
-			{"generation": 2, "level": 2},
-			{"generation": 3, "level": 2},
+			{generation: 1, level: 2},
+			{generation: 2, level: 2},
+			{generation: 3, level: 2},
 		],
 	},
 	rattataalola: {
@@ -1704,12 +1704,12 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 34, "moves": ["refresh", "superfang", "scaryface", "hyperfang"]},
+			{generation: 3, level: 34, moves: ["refresh", "superfang", "scaryface", "hyperfang"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 6},
-			{"generation": 4, "level": 13},
+			{generation: 1, level: 15},
+			{generation: 2, level: 6},
+			{generation: 4, level: 13},
 		],
 	},
 	raticatealola: {
@@ -1783,7 +1783,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		encounters: [
-			{"generation": 7, "level": 17},
+			{generation: 7, level: 17},
 		],
 	},
 	raticatealolatotem: {
@@ -1853,7 +1853,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 20, "perfectIVs": 3, "moves": ["bite", "pursuit", "hyperfang", "assurance"], "pokeball": "pokeball"},
+			{generation: 7, level: 20, perfectIVs: 3, moves: ["bite", "pursuit", "hyperfang", "assurance"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -1930,12 +1930,12 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 22, "moves": ["batonpass", "falseswipe", "leer", "aerialace"]},
+			{generation: 3, level: 22, moves: ["batonpass", "falseswipe", "leer", "aerialace"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 3},
-			{"generation": 2, "level": 2},
-			{"generation": 3, "level": 3},
+			{generation: 1, level: 3},
+			{generation: 2, level: 2},
+			{generation: 3, level: 3},
 		],
 	},
 	fearow: {
@@ -2010,9 +2010,9 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 19},
-			{"generation": 2, "level": 7},
-			{"generation": 4, "level": 7},
+			{generation: 1, level: 19},
+			{generation: 2, level: 7},
+			{generation: 4, level: 7},
 		],
 	},
 	ekans: {
@@ -2101,12 +2101,12 @@ let BattleLearnsets = {
 			wrap: ["8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1", "3S1", "3S0"],
 		},
 		eventData: [
-			{"generation": 3, "level": 14, "gender": "F", "nature": "Docile", "ivs": {"hp": 26, "atk": 28, "def": 6, "spa": 14, "spd": 30, "spe": 11}, "abilities": ["shedskin"], "moves": ["leer", "wrap", "poisonsting", "bite"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["wrap", "leer", "poisonsting"], "pokeball": "pokeball"},
+			{generation: 3, level: 14, gender: "F", nature: "Docile", ivs: {hp: 26, atk: 28, def: 6, spa: 14, spd: 30, spe: 11}, abilities: ["shedskin"], moves: ["leer", "wrap", "poisonsting", "bite"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["wrap", "leer", "poisonsting"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 6},
-			{"generation": 2, "level": 4},
+			{generation: 1, level: 6},
+			{generation: 2, level: 4},
 		],
 	},
 	arbok: {
@@ -2197,11 +2197,11 @@ let BattleLearnsets = {
 			wrap: ["8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 		},
 		eventData: [
-			{"generation": 3, "level": 33, "moves": ["refresh", "sludgebomb", "glare", "bite"]},
+			{generation: 3, level: 33, moves: ["refresh", "sludgebomb", "glare", "bite"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 10},
-			{"generation": 4, "level": 10},
+			{generation: 2, level: 10},
+			{generation: 4, level: 10},
 		],
 	},
 	pichu: {
@@ -2291,12 +2291,12 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["thundershock", "charm", "surf"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["thundershock", "charm", "wish"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["thundershock", "charm", "teeterdance"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["thundershock", "charm", "followme"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 1, "moves": ["volttackle", "thunderbolt", "grassknot", "return"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 30, "shiny": true, "gender": "M", "nature": "Jolly", "moves": ["charge", "volttackle", "endeavor", "endure"], "pokeball": "cherishball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "surf"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "wish"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "teeterdance"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "followme"], pokeball: "pokeball"},
+			{generation: 4, level: 1, moves: ["volttackle", "thunderbolt", "grassknot", "return"], pokeball: "pokeball"},
+			{generation: 4, level: 30, shiny: true, gender: "M", nature: "Jolly", moves: ["charge", "volttackle", "endeavor", "endure"], pokeball: "cherishball"},
 		],
 	},
 	pichuspikyeared: {
@@ -2346,7 +2346,7 @@ let BattleLearnsets = {
 			volttackle: ["4S0"],
 		},
 		eventData: [
-			{"generation": 4, "level": 30, "gender": "F", "nature": "Naughty", "moves": ["helpinghand", "volttackle", "swagger", "painsplit"], "pokeball": "pokeball"},
+			{generation: 4, level: 30, gender: "F", nature: "Naughty", moves: ["helpinghand", "volttackle", "swagger", "painsplit"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -2465,61 +2465,61 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "moves": ["thunderbolt", "agility", "thunder", "lightscreen"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "moves": ["thundershock", "growl", "tailwhip", "thunderwave"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "moves": ["fly", "tailwhip", "growl", "thunderwave"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "moves": ["surf", "growl", "tailwhip", "thunderwave"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "moves": ["fly", "growl", "tailwhip", "thunderwave"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "moves": ["thundershock", "growl", "thunderwave", "surf"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 70, "moves": ["thunderbolt", "thunder", "lightscreen", "fly"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 70, "moves": ["thunderbolt", "thunder", "lightscreen", "surf"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 70, "moves": ["thunderbolt", "thunder", "lightscreen", "agility"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 10, "gender": "F", "nature": "Hardy", "moves": ["surf", "volttackle", "tailwhip", "thunderwave"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["thundershock", "growl", "tailwhip", "thunderwave"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Hardy", "moves": ["surf", "thunderbolt", "lightscreen", "quickattack"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 20, "gender": "F", "nature": "Bashful", "moves": ["present", "quickattack", "thundershock", "tailwhip"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 20, "gender": "M", "nature": "Jolly", "moves": ["grassknot", "thunderbolt", "flash", "doubleteam"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 40, "gender": "M", "nature": "Modest", "moves": ["surf", "thunder", "protect"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 20, "gender": "F", "nature": "Bashful", "moves": ["quickattack", "thundershock", "tailwhip", "present"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 40, "gender": "M", "nature": "Mild", "moves": ["surf", "thunder", "protect"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 20, "gender": "F", "nature": "Bashful", "moves": ["present", "quickattack", "thunderwave", "tailwhip"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 30, "gender": "M", "nature": "Naughty", "moves": ["lastresort", "present", "thunderbolt", "quickattack"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Relaxed", "moves": ["rest", "sleeptalk", "yawn", "snore"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 20, "gender": "M", "nature": "Docile", "moves": ["present", "quickattack", "thundershock", "tailwhip"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Naughty", "moves": ["volttackle", "irontail", "quickattack", "thunderbolt"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 20, "gender": "M", "nature": "Bashful", "moves": ["present", "quickattack", "thundershock", "tailwhip"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 30, "gender": "F", "isHidden": true, "moves": ["sing", "teeterdance", "encore", "electroball"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "moves": ["fly", "irontail", "electroball", "quickattack"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "shiny": 1, "gender": "F", "moves": ["thunder", "volttackle", "grassknot", "quickattack"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "shiny": 1, "gender": "F", "moves": ["extremespeed", "thunderbolt", "grassknot", "brickbreak"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "gender": "F", "nature": "Timid", "isHidden": true, "moves": ["fly", "thunderbolt", "grassknot", "protect"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["thundershock", "tailwhip", "thunderwave", "headbutt"]},
-			{"generation": 5, "level": 100, "gender": "M", "isHidden": true, "moves": ["volttackle", "quickattack", "feint", "voltswitch"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "gender": "M", "nature": "Brave", "moves": ["thunderbolt", "quickattack", "irontail", "electroball"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "moves": ["celebrate", "growl", "playnice", "quickattack"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 22, "moves": ["quickattack", "electroball", "doubleteam", "megakick"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "moves": ["thunderbolt", "quickattack", "surf", "holdhands"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "gender": "F", "moves": ["thunderbolt", "quickattack", "heartstamp", "holdhands"], "pokeball": "healball"},
-			{"generation": 6, "level": 36, "shiny": true, "isHidden": true, "moves": ["thunder", "substitute", "playnice", "holdhands"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "gender": "F", "moves": ["playnice", "charm", "nuzzle", "sweetkiss"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "gender": "M", "nature": "Naughty", "moves": ["thunderbolt", "quickattack", "irontail", "electroball"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "shiny": true, "moves": ["teeterdance", "playnice", "tailwhip", "nuzzle"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "perfectIVs": 2, "isHidden": true, "moves": ["fakeout", "encore", "volttackle", "endeavor"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 99, "moves": ["happyhour", "playnice", "holdhands", "flash"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "moves": ["fly", "surf", "agility", "celebrate"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "moves": ["bestow", "holdhands", "return", "playnice"], "pokeball": "healball"},
-			{"generation": 7, "level": 10, "nature": "Jolly", "moves": ["celebrate", "growl", "playnice", "quickattack"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 10, "moves": ["bestow", "holdhands", "return", "playnice"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 10, "moves": ["holdhands", "playnice", "teeterdance", "happyhour"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 10, "moves": ["growl", "quickattack", "thundershock", "happyhour"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 40, "shiny": 1, "perfectIVs": 3, "moves": ["nuzzle", "discharge", "slam", "surf"], "pokeball": "pokeball"},
-			{"generation": 7, "level": 5, "moves": ["celebrate", "sweetscent", "counter", "refresh"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 10, "moves": ["fly", "surf", "thunderbolt", "quickattack"], "pokeball": "cherishball"},
+			{generation: 3, level: 50, moves: ["thunderbolt", "agility", "thunder", "lightscreen"], pokeball: "pokeball"},
+			{generation: 3, level: 10, moves: ["thundershock", "growl", "tailwhip", "thunderwave"], pokeball: "pokeball"},
+			{generation: 3, level: 10, moves: ["fly", "tailwhip", "growl", "thunderwave"], pokeball: "pokeball"},
+			{generation: 3, level: 5, moves: ["surf", "growl", "tailwhip", "thunderwave"], pokeball: "pokeball"},
+			{generation: 3, level: 10, moves: ["fly", "growl", "tailwhip", "thunderwave"], pokeball: "pokeball"},
+			{generation: 3, level: 10, moves: ["thundershock", "growl", "thunderwave", "surf"], pokeball: "pokeball"},
+			{generation: 3, level: 70, moves: ["thunderbolt", "thunder", "lightscreen", "fly"], pokeball: "pokeball"},
+			{generation: 3, level: 70, moves: ["thunderbolt", "thunder", "lightscreen", "surf"], pokeball: "pokeball"},
+			{generation: 3, level: 70, moves: ["thunderbolt", "thunder", "lightscreen", "agility"], pokeball: "pokeball"},
+			{generation: 4, level: 10, gender: "F", nature: "Hardy", moves: ["surf", "volttackle", "tailwhip", "thunderwave"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["thundershock", "growl", "tailwhip", "thunderwave"], pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Hardy", moves: ["surf", "thunderbolt", "lightscreen", "quickattack"], pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "F", nature: "Bashful", moves: ["present", "quickattack", "thundershock", "tailwhip"], pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "M", nature: "Jolly", moves: ["grassknot", "thunderbolt", "flash", "doubleteam"], pokeball: "pokeball"},
+			{generation: 4, level: 40, gender: "M", nature: "Modest", moves: ["surf", "thunder", "protect"], pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "F", nature: "Bashful", moves: ["quickattack", "thundershock", "tailwhip", "present"], pokeball: "cherishball"},
+			{generation: 4, level: 40, gender: "M", nature: "Mild", moves: ["surf", "thunder", "protect"], pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "F", nature: "Bashful", moves: ["present", "quickattack", "thunderwave", "tailwhip"], pokeball: "cherishball"},
+			{generation: 4, level: 30, gender: "M", nature: "Naughty", moves: ["lastresort", "present", "thunderbolt", "quickattack"], pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Relaxed", moves: ["rest", "sleeptalk", "yawn", "snore"], pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "M", nature: "Docile", moves: ["present", "quickattack", "thundershock", "tailwhip"], pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Naughty", moves: ["volttackle", "irontail", "quickattack", "thunderbolt"], pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "M", nature: "Bashful", moves: ["present", "quickattack", "thundershock", "tailwhip"], pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "F", isHidden: true, moves: ["sing", "teeterdance", "encore", "electroball"], pokeball: "cherishball"},
+			{generation: 5, level: 50, moves: ["fly", "irontail", "electroball", "quickattack"], pokeball: "cherishball"},
+			{generation: 5, level: 100, shiny: 1, gender: "F", moves: ["thunder", "volttackle", "grassknot", "quickattack"], pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, gender: "F", moves: ["extremespeed", "thunderbolt", "grassknot", "brickbreak"], pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "F", nature: "Timid", isHidden: true, moves: ["fly", "thunderbolt", "grassknot", "protect"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["thundershock", "tailwhip", "thunderwave", "headbutt"]},
+			{generation: 5, level: 100, gender: "M", isHidden: true, moves: ["volttackle", "quickattack", "feint", "voltswitch"], pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Brave", moves: ["thunderbolt", "quickattack", "irontail", "electroball"], pokeball: "cherishball"},
+			{generation: 6, level: 10, moves: ["celebrate", "growl", "playnice", "quickattack"], pokeball: "cherishball"},
+			{generation: 6, level: 22, moves: ["quickattack", "electroball", "doubleteam", "megakick"], pokeball: "cherishball"},
+			{generation: 6, level: 10, moves: ["thunderbolt", "quickattack", "surf", "holdhands"], pokeball: "cherishball"},
+			{generation: 6, level: 10, gender: "F", moves: ["thunderbolt", "quickattack", "heartstamp", "holdhands"], pokeball: "healball"},
+			{generation: 6, level: 36, shiny: true, isHidden: true, moves: ["thunder", "substitute", "playnice", "holdhands"], pokeball: "cherishball"},
+			{generation: 6, level: 10, gender: "F", moves: ["playnice", "charm", "nuzzle", "sweetkiss"], pokeball: "cherishball"},
+			{generation: 6, level: 50, gender: "M", nature: "Naughty", moves: ["thunderbolt", "quickattack", "irontail", "electroball"], pokeball: "cherishball"},
+			{generation: 6, level: 10, shiny: true, moves: ["teeterdance", "playnice", "tailwhip", "nuzzle"], pokeball: "cherishball"},
+			{generation: 6, level: 10, perfectIVs: 2, isHidden: true, moves: ["fakeout", "encore", "volttackle", "endeavor"], pokeball: "cherishball"},
+			{generation: 6, level: 99, moves: ["happyhour", "playnice", "holdhands", "flash"], pokeball: "cherishball"},
+			{generation: 6, level: 10, moves: ["fly", "surf", "agility", "celebrate"], pokeball: "cherishball"},
+			{generation: 6, level: 10, moves: ["bestow", "holdhands", "return", "playnice"], pokeball: "healball"},
+			{generation: 7, level: 10, nature: "Jolly", moves: ["celebrate", "growl", "playnice", "quickattack"], pokeball: "cherishball"},
+			{generation: 7, level: 10, moves: ["bestow", "holdhands", "return", "playnice"], pokeball: "cherishball"},
+			{generation: 7, level: 10, moves: ["holdhands", "playnice", "teeterdance", "happyhour"], pokeball: "cherishball"},
+			{generation: 7, level: 10, moves: ["growl", "quickattack", "thundershock", "happyhour"], pokeball: "cherishball"},
+			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, moves: ["nuzzle", "discharge", "slam", "surf"], pokeball: "pokeball"},
+			{generation: 7, level: 5, moves: ["celebrate", "sweetscent", "counter", "refresh"], pokeball: "cherishball"},
+			{generation: 7, level: 10, moves: ["fly", "surf", "thunderbolt", "quickattack"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 3},
-			{"generation": 2, "level": 4},
-			{"generation": 3, "level": 3},
+			{generation: 1, level: 3},
+			{generation: 2, level: 4},
+			{generation: 3, level: 3},
 		],
 	},
 	pikachucosplay: {
@@ -2580,7 +2580,7 @@ let BattleLearnsets = {
 			wildcharge: ["6M", "6L50"],
 		},
 		eventData: [
-			{"generation": 6, "level": 20, "perfectIVs": 3, "moves": ["quickattack", "electroball", "thunderwave", "thundershock"], "pokeball": "pokeball"},
+			{generation: 6, level: 20, perfectIVs: 3, moves: ["quickattack", "electroball", "thunderwave", "thundershock"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -2643,7 +2643,7 @@ let BattleLearnsets = {
 			wildcharge: ["6M", "6L50"],
 		},
 		eventData: [
-			{"generation": 6, "level": 20, "perfectIVs": 3, "moves": ["quickattack", "electroball", "thunderwave", "meteormash"], "pokeball": "pokeball"},
+			{generation: 6, level: 20, perfectIVs: 3, moves: ["quickattack", "electroball", "thunderwave", "meteormash"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -2706,7 +2706,7 @@ let BattleLearnsets = {
 			wildcharge: ["6M", "6L50"],
 		},
 		eventData: [
-			{"generation": 6, "level": 20, "perfectIVs": 3, "moves": ["quickattack", "electroball", "thunderwave", "iciclecrash"], "pokeball": "pokeball"},
+			{generation: 6, level: 20, perfectIVs: 3, moves: ["quickattack", "electroball", "thunderwave", "iciclecrash"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -2769,7 +2769,7 @@ let BattleLearnsets = {
 			wildcharge: ["6M", "6L50"],
 		},
 		eventData: [
-			{"generation": 6, "level": 20, "perfectIVs": 3, "moves": ["quickattack", "electroball", "thunderwave", "drainingkiss"], "pokeball": "pokeball"},
+			{generation: 6, level: 20, perfectIVs: 3, moves: ["quickattack", "electroball", "thunderwave", "drainingkiss"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -2832,7 +2832,7 @@ let BattleLearnsets = {
 			wildcharge: ["6M", "6L50"],
 		},
 		eventData: [
-			{"generation": 6, "level": 20, "perfectIVs": 3, "moves": ["quickattack", "electroball", "thunderwave", "electricterrain"], "pokeball": "pokeball"},
+			{generation: 6, level: 20, perfectIVs: 3, moves: ["quickattack", "electroball", "thunderwave", "electricterrain"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -2895,7 +2895,7 @@ let BattleLearnsets = {
 			wildcharge: ["6M", "6L50"],
 		},
 		eventData: [
-			{"generation": 6, "level": 20, "perfectIVs": 3, "moves": ["quickattack", "electroball", "thunderwave", "flyingpress"], "pokeball": "pokeball"},
+			{generation: 6, level: 20, perfectIVs: 3, moves: ["quickattack", "electroball", "thunderwave", "flyingpress"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -2973,7 +2973,7 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "7L50"],
 		},
 		eventData: [
-			{"generation": 7, "level": 1, "nature": "Hardy", "moves": ["thunderbolt", "quickattack", "thunder", "agility"], "pokeball": "pokeball"},
+			{generation: 7, level: 1, nature: "Hardy", moves: ["thunderbolt", "quickattack", "thunder", "agility"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -3051,7 +3051,7 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "7L50"],
 		},
 		eventData: [
-			{"generation": 7, "level": 6, "nature": "Hardy", "moves": ["thunderbolt", "quickattack", "thunder", "irontail"], "pokeball": "pokeball"},
+			{generation: 7, level: 6, nature: "Hardy", moves: ["thunderbolt", "quickattack", "thunder", "irontail"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -3129,7 +3129,7 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "7L50"],
 		},
 		eventData: [
-			{"generation": 7, "level": 10, "nature": "Hardy", "moves": ["thunderbolt", "quickattack", "irontail", "volttackle"], "pokeball": "pokeball"},
+			{generation: 7, level: 10, nature: "Hardy", moves: ["thunderbolt", "quickattack", "irontail", "volttackle"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -3207,7 +3207,7 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "7L50"],
 		},
 		eventData: [
-			{"generation": 7, "level": 14, "nature": "Hardy", "moves": ["thunderbolt", "quickattack", "irontail", "volttackle"], "pokeball": "pokeball"},
+			{generation: 7, level: 14, nature: "Hardy", moves: ["thunderbolt", "quickattack", "irontail", "volttackle"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -3285,7 +3285,7 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "7L50"],
 		},
 		eventData: [
-			{"generation": 7, "level": 17, "nature": "Hardy", "moves": ["thunderbolt", "quickattack", "irontail", "electroball"], "pokeball": "pokeball"},
+			{generation: 7, level: 17, nature: "Hardy", moves: ["thunderbolt", "quickattack", "irontail", "electroball"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -3363,7 +3363,7 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "7L50"],
 		},
 		eventData: [
-			{"generation": 7, "level": 20, "nature": "Hardy", "moves": ["thunderbolt", "quickattack", "irontail", "electroball"], "pokeball": "pokeball"},
+			{generation: 7, level: 20, nature: "Hardy", moves: ["thunderbolt", "quickattack", "irontail", "electroball"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -3441,7 +3441,7 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "7M", "7L50"],
 		},
 		eventData: [
-			{"generation": 7, "level": 21, "shiny": 1, "nature": "Hardy", "moves": ["thunderbolt", "quickattack", "thunder", "irontail"], "pokeball": "pokeball"},
+			{generation: 7, level: 21, shiny: 1, nature: "Hardy", moves: ["thunderbolt", "quickattack", "thunder", "irontail"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -3480,7 +3480,7 @@ let BattleLearnsets = {
 			zippyzap: ["8V", "7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 5, "perfectIVs": 6, "moves": ["thundershock", "tailwhip", "growl"], "pokeball": "pokeball"},
+			{generation: 7, level: 5, perfectIVs: 6, moves: ["thundershock", "tailwhip", "growl"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -3492,7 +3492,7 @@ let BattleLearnsets = {
 			thunderwave: ["8S0"],
 		},
 		eventData: [
-			{"generation": 8, "level": 10, "perfectIVs": 6, "moves": ["growl", "quickattack", "thunderwave", "doubleteam"], "pokeball": "pokeball"},
+			{generation: 8, level: 10, perfectIVs: 6, moves: ["growl", "quickattack", "thunderwave", "doubleteam"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -3781,10 +3781,10 @@ let BattleLearnsets = {
 			xscissor: ["8V", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 12, "gender": "M", "nature": "Docile", "ivs": {"hp": 4, "atk": 23, "def": 8, "spa": 31, "spd": 1, "spe": 25}, "moves": ["scratch", "defensecurl", "sandattack", "poisonsting"], "pokeball": "pokeball"},
+			{generation: 3, level: 12, gender: "M", nature: "Docile", ivs: {hp: 4, atk: 23, def: 8, spa: 31, spd: 1, spe: 25}, moves: ["scratch", "defensecurl", "sandattack", "poisonsting"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 6},
+			{generation: 1, level: 6},
 		],
 	},
 	sandshrewalola: {
@@ -3866,7 +3866,7 @@ let BattleLearnsets = {
 			xscissor: ["8V", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 10, "moves": ["rapidspin", "iceball", "powdersnow", "bide"], "pokeball": "cherishball"},
+			{generation: 7, level: 10, moves: ["rapidspin", "iceball", "powdersnow", "bide"], pokeball: "cherishball"},
 		],
 	},
 	sandslash: {
@@ -3956,8 +3956,8 @@ let BattleLearnsets = {
 			xscissor: ["8V", "7M", "6M", "5M", "4M"],
 		},
 		encounters: [
-			{"generation": 2, "level": 10},
-			{"generation": 4, "level": 10},
+			{generation: 2, level: 10},
+			{generation: 4, level: 10},
 		],
 	},
 	sandslashalola: {
@@ -4112,7 +4112,7 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "6T", "4M", "3M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 2},
+			{generation: 1, level: 2},
 		],
 	},
 	nidorina: {
@@ -4191,7 +4191,7 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "6T", "4M", "3M"],
 		},
 		encounters: [
-			{"generation": 4, "level": 15, "pokeball": "safariball"},
+			{generation: 4, level: 15, pokeball: "safariball"},
 		],
 	},
 	nidoqueen: {
@@ -4315,7 +4315,7 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 41, "perfectIVs": 2, "abilities": ["poisonpoint"], "moves": ["tailwhip", "doublekick", "poisonsting", "bodyslam"], "pokeball": "cherishball"},
+			{generation: 6, level: 41, perfectIVs: 2, abilities: ["poisonpoint"], moves: ["tailwhip", "doublekick", "poisonsting", "bodyslam"], pokeball: "cherishball"},
 		],
 	},
 	nidoranm: {
@@ -4400,7 +4400,7 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "6T", "4M", "3M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 2},
+			{generation: 1, level: 2},
 		],
 	},
 	nidorino: {
@@ -4479,7 +4479,7 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "6T", "4M", "3M"],
 		},
 		encounters: [
-			{"generation": 4, "level": 15, "pokeball": "safariball"},
+			{generation: 4, level: 15, pokeball: "safariball"},
 		],
 	},
 	nidoking: {
@@ -4607,7 +4607,7 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 68, "abilities": ["poisonpoint"], "moves": ["earthquake", "poisonjab", "throatchop", "aquatail"], "pokeball": "cherishball"},
+			{generation: 7, level: 68, abilities: ["poisonpoint"], moves: ["earthquake", "poisonjab", "throatchop", "aquatail"], pokeball: "cherishball"},
 		],
 	},
 	cleffa: {
@@ -4859,7 +4859,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 1, "level": 8},
+			{generation: 1, level: 8},
 		],
 	},
 	clefable: {
@@ -5094,11 +5094,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 18, "gender": "F", "nature": "Quirky", "ivs": {"hp": 15, "atk": 6, "def": 3, "spa": 25, "spd": 13, "spe": 22}, "moves": ["tailwhip", "roar", "quickattack", "willowisp"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 18, "moves": ["charm", "heatwave", "ember", "dig"]},
+			{generation: 3, level: 18, gender: "F", nature: "Quirky", ivs: {hp: 15, atk: 6, def: 3, spa: 25, spd: 13, spe: 22}, moves: ["tailwhip", "roar", "quickattack", "willowisp"], pokeball: "pokeball"},
+			{generation: 3, level: 18, moves: ["charm", "heatwave", "ember", "dig"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 18},
+			{generation: 1, level: 18},
 		],
 	},
 	vulpixalola: {
@@ -5178,8 +5178,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 10, "moves": ["celebrate", "tailwhip", "babydolleyes", "iceshard"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 10, "gender": "F", "nature": "Modest", "moves": ["powdersnow"], "pokeball": "cherishball"},
+			{generation: 7, level: 10, moves: ["celebrate", "tailwhip", "babydolleyes", "iceshard"], pokeball: "cherishball"},
+			{generation: 7, level: 10, gender: "F", nature: "Modest", moves: ["powdersnow"], pokeball: "cherishball"},
 		],
 	},
 	ninetales: {
@@ -5270,7 +5270,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "gender": "M", "nature": "Bold", "ivs": {"def": 31}, "isHidden": true, "moves": ["heatwave", "solarbeam", "psyshock", "willowisp"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Bold", ivs: {def: 31}, isHidden: true, moves: ["heatwave", "solarbeam", "psyshock", "willowisp"], pokeball: "cherishball"},
 		],
 	},
 	ninetalesalola: {
@@ -5443,7 +5443,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["cutecharm"], "moves": ["sing", "charm", "defensecurl", "tickle"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["cutecharm"], moves: ["sing", "charm", "defensecurl", "tickle"], pokeball: "pokeball"},
 		],
 	},
 	jigglypuff: {
@@ -5563,9 +5563,9 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 3},
-			{"generation": 2, "level": 3},
-			{"generation": 3, "level": 3},
+			{generation: 1, level: 3},
+			{generation: 2, level: 3},
+			{generation: 3, level: 3},
 		],
 	},
 	wigglytuff: {
@@ -5685,7 +5685,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 22},
+			{generation: 1, level: 22},
 		],
 	},
 	zubat: {
@@ -5770,8 +5770,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
 		encounters: [
-			{"generation": 1, "level": 6},
-			{"generation": 2, "level": 2},
+			{generation: 1, level: 6},
+			{generation: 2, level: 2},
 		],
 	},
 	golbat: {
@@ -5853,11 +5853,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 2, "level": 13},
-			{"generation": 3, "level": 5},
-			{"generation": 4, "level": 10},
-			{"generation": 6, "level": 19, "maxEggMoves": 1},
-			{"generation": 7, "level": 20},
+			{generation: 2, level: 13},
+			{generation: 3, level: 5},
+			{generation: 4, level: 10},
+			{generation: 6, level: 19, maxEggMoves: 1},
+			{generation: 7, level: 20},
 		],
 	},
 	crobat: {
@@ -5934,8 +5934,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 30, "gender": "M", "nature": "Timid", "moves": ["heatwave", "airslash", "sludgebomb", "superfang"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 64, "gender": "M", "moves": ["airslash", "toxic", "darkpulse", "sludgebomb"], "pokeball": "cherishball"},
+			{generation: 4, level: 30, gender: "M", nature: "Timid", moves: ["heatwave", "airslash", "sludgebomb", "superfang"], pokeball: "cherishball"},
+			{generation: 7, level: 64, gender: "M", moves: ["airslash", "toxic", "darkpulse", "sludgebomb"], pokeball: "cherishball"},
 		],
 	},
 	oddish: {
@@ -6009,11 +6009,11 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 26, "gender": "M", "nature": "Quirky", "ivs": {"hp": 23, "atk": 24, "def": 20, "spa": 21, "spd": 9, "spe": 16}, "moves": ["poisonpowder", "stunspore", "sleeppowder", "acid"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["absorb", "leechseed"], "pokeball": "pokeball"},
+			{generation: 3, level: 26, gender: "M", nature: "Quirky", ivs: {hp: 23, atk: 24, def: 20, spa: 21, spd: 9, spe: 16}, moves: ["poisonpowder", "stunspore", "sleeppowder", "acid"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["absorb", "leechseed"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 12},
+			{generation: 1, level: 12},
 		],
 	},
 	gloom: {
@@ -6084,12 +6084,12 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "moves": ["sleeppowder", "acid", "moonlight", "petaldance"], "pokeball": "pokeball"},
+			{generation: 3, level: 50, moves: ["sleeppowder", "acid", "moonlight", "petaldance"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 2, "level": 14},
-			{"generation": 4, "level": 14},
-			{"generation": 6, "level": 18, "maxEggMoves": 1},
+			{generation: 2, level: 14},
+			{generation: 4, level: 14},
+			{generation: 6, level: 18, maxEggMoves: 1},
 		],
 	},
 	vileplume: {
@@ -6329,10 +6329,10 @@ let BattleLearnsets = {
 			xscissor: ["8V", "7M", "7L54", "6M", "6L54", "5M", "5L54", "4M", "4L43"],
 		},
 		eventData: [
-			{"generation": 3, "level": 28, "abilities": ["effectspore"], "moves": ["refresh", "spore", "slash", "falseswipe"]},
+			{generation: 3, level: 28, abilities: ["effectspore"], moves: ["refresh", "spore", "slash", "falseswipe"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 8},
+			{generation: 1, level: 8},
 		],
 	},
 	parasect: {
@@ -6419,8 +6419,8 @@ let BattleLearnsets = {
 			xscissor: ["8V", "7M", "7L66", "6M", "6L66", "5M", "5L66", "4M", "4L55"],
 		},
 		encounters: [
-			{"generation": 1, "level": 13},
-			{"generation": 2, "level": 5},
+			{generation: 1, level: 13},
+			{generation: 2, level: 5},
 		],
 	},
 	venonat: {
@@ -6490,7 +6490,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L37", "6T", "6L37", "5T", "5L37", "4T", "4L37"],
 		},
 		encounters: [
-			{"generation": 1, "level": 13},
+			{generation: 1, level: 13},
 		],
 	},
 	venomoth: {
@@ -6577,13 +6577,13 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L41", "6T", "6L41", "5T", "5L41", "4T", "4L41"],
 		},
 		eventData: [
-			{"generation": 3, "level": 32, "abilities": ["shielddust"], "moves": ["refresh", "silverwind", "substitute", "psychic"]},
+			{generation: 3, level: 32, abilities: ["shielddust"], moves: ["refresh", "silverwind", "substitute", "psychic"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 30},
-			{"generation": 2, "level": 10},
-			{"generation": 4, "level": 8},
-			{"generation": 6, "level": 30},
+			{generation: 1, level: 30},
+			{generation: 2, level: 10},
+			{generation: 4, level: 8},
+			{generation: 6, level: 30},
 		],
 	},
 	diglett: {
@@ -6659,8 +6659,8 @@ let BattleLearnsets = {
 			workup: ["8M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 2},
+			{generation: 1, level: 15},
+			{generation: 2, level: 2},
 		],
 	},
 	diglettalola: {
@@ -6732,7 +6732,7 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 10, "abilities": ["tanglinghair"], "moves": ["mudslap", "astonish", "growl", "metalclaw"], "pokeball": "cherishball"},
+			{generation: 7, level: 10, abilities: ["tanglinghair"], moves: ["mudslap", "astonish", "growl", "metalclaw"], pokeball: "cherishball"},
 		],
 	},
 	dugtrio: {
@@ -6813,12 +6813,12 @@ let BattleLearnsets = {
 			workup: ["8M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 40, "moves": ["charm", "earthquake", "sandstorm", "triattack"]},
+			{generation: 3, level: 40, moves: ["charm", "earthquake", "sandstorm", "triattack"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 5},
-			{"generation": 4, "level": 19},
+			{generation: 1, level: 15},
+			{generation: 2, level: 5},
+			{generation: 4, level: 19},
 		],
 	},
 	dugtrioalola: {
@@ -6993,18 +6993,18 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["scratch", "growl", "petaldance"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "moves": ["scratch", "growl"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["scratch", "growl", "bite"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 22, "moves": ["sing", "slash", "payday", "bite"]},
-			{"generation": 4, "level": 21, "gender": "F", "nature": "Jolly", "abilities": ["pickup"], "moves": ["bite", "fakeout", "furyswipes", "screech"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 10, "gender": "M", "nature": "Jolly", "abilities": ["pickup"], "moves": ["fakeout", "payday", "assist", "scratch"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 15, "gender": "M", "abilities": ["pickup"], "moves": ["furyswipes", "sing", "nastyplot", "snatch"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 20, "abilities": ["pickup"], "moves": ["happyhour", "screech", "bite", "fakeout"], "pokeball": "cherishball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["scratch", "growl", "petaldance"], pokeball: "pokeball"},
+			{generation: 3, level: 5, moves: ["scratch", "growl"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["scratch", "growl", "bite"], pokeball: "pokeball"},
+			{generation: 3, level: 22, moves: ["sing", "slash", "payday", "bite"]},
+			{generation: 4, level: 21, gender: "F", nature: "Jolly", abilities: ["pickup"], moves: ["bite", "fakeout", "furyswipes", "screech"], pokeball: "cherishball"},
+			{generation: 4, level: 10, gender: "M", nature: "Jolly", abilities: ["pickup"], moves: ["fakeout", "payday", "assist", "scratch"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", abilities: ["pickup"], moves: ["furyswipes", "sing", "nastyplot", "snatch"], pokeball: "cherishball"},
+			{generation: 6, level: 20, abilities: ["pickup"], moves: ["happyhour", "screech", "bite", "fakeout"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 10},
-			{"generation": 3, "level": 3, "gender": "M", "nature": "Naive", "ivs": {"hp": 4, "atk": 5, "def": 4, "spa": 5, "spd": 4, "spe": 4}, "abilities": ["pickup"], "pokeball": "pokeball"},
+			{generation: 1, level: 10},
+			{generation: 3, level: 3, gender: "M", nature: "Naive", ivs: {hp: 4, atk: 5, def: 4, spa: 5, spd: 4, spe: 4}, abilities: ["pickup"], pokeball: "pokeball"},
 		],
 	},
 	meowthalola: {
@@ -7160,7 +7160,7 @@ let BattleLearnsets = {
 			slash: ["8S0"],
 		},
 		eventData: [
-			{"generation": 8, "level": 5, "perfectIVs": 3, "moves": ["fakeout", "growl", "slash", "payday"], "pokeball": "cherishball"},
+			{generation: 8, level: 5, perfectIVs: 3, moves: ["fakeout", "growl", "slash", "payday"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -7264,8 +7264,8 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 2, "level": 18},
-			{"generation": 4, "level": 19},
+			{generation: 2, level: 18},
+			{generation: 4, level: 19},
 		],
 	},
 	persianalola: {
@@ -7521,11 +7521,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L25", "6T", "6L29", "5T", "5L44", "4T", "4L40"],
 		},
 		eventData: [
-			{"generation": 3, "level": 27, "gender": "M", "nature": "Lax", "ivs": {"hp": 31, "atk": 16, "def": 12, "spa": 29, "spd": 31, "spe": 14}, "abilities": ["damp"], "moves": ["tailwhip", "confusion", "disable", "screech"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["watersport", "scratch", "tailwhip", "mudsport"], "pokeball": "pokeball"},
+			{generation: 3, level: 27, gender: "M", nature: "Lax", ivs: {hp: 31, atk: 16, def: 12, spa: 29, spd: 31, spe: 14}, abilities: ["damp"], moves: ["tailwhip", "confusion", "disable", "screech"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["watersport", "scratch", "tailwhip", "mudsport"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
+			{generation: 1, level: 15},
 		],
 	},
 	golduck: {
@@ -7633,14 +7633,14 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L25", "6T", "6L25", "5T", "5L50", "4T", "4L44"],
 		},
 		eventData: [
-			{"generation": 3, "level": 33, "moves": ["charm", "waterfall", "psychup", "brickbreak"]},
-			{"generation": 7, "level": 50, "gender": "M", "nature": "Timid", "ivs": {"hp": 31, "atk": 30, "def": 31, "spa": 31, "spd": 31, "spe": 31}, "isHidden": true, "moves": ["hydropump", "scald", "encore", "protect"], "pokeball": "cherishball"},
+			{generation: 3, level: 33, moves: ["charm", "waterfall", "psychup", "brickbreak"]},
+			{generation: 7, level: 50, gender: "M", nature: "Timid", ivs: {hp: 31, atk: 30, def: 31, spa: 31, spd: 31, spe: 31}, isHidden: true, moves: ["hydropump", "scald", "encore", "protect"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 10},
-			{"generation": 3, "level": 25, "pokeball": "safariball"},
-			{"generation": 4, "level": 10},
+			{generation: 1, level: 15},
+			{generation: 2, level: 10},
+			{generation: 3, level: 25, pokeball: "safariball"},
+			{generation: 4, level: 10},
 		],
 	},
 	mankey: {
@@ -7758,8 +7758,8 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 3},
-			{"generation": 3, "level": 2},
+			{generation: 1, level: 3},
+			{generation: 3, level: 2},
 		],
 	},
 	primeape: {
@@ -7874,11 +7874,11 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 34, "abilities": ["vitalspirit"], "moves": ["helpinghand", "crosschop", "focusenergy", "reversal"]},
+			{generation: 3, level: 34, abilities: ["vitalspirit"], moves: ["helpinghand", "crosschop", "focusenergy", "reversal"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 15},
-			{"generation": 4, "level": 15},
+			{generation: 2, level: 15},
+			{generation: 4, level: 15},
 		],
 	},
 	growlithe: {
@@ -7961,12 +7961,12 @@ let BattleLearnsets = {
 			willowisp: ["8M", "8V", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 32, "gender": "F", "nature": "Quiet", "ivs": {"hp": 11, "atk": 24, "def": 28, "spa": 1, "spd": 20, "spe": 2}, "abilities": ["intimidate"], "moves": ["leer", "odorsleuth", "takedown", "flamewheel"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["bite", "roar", "ember"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 28, "moves": ["charm", "flamethrower", "bite", "takedown"]},
+			{generation: 3, level: 32, gender: "F", nature: "Quiet", ivs: {hp: 11, atk: 24, def: 28, spa: 1, spd: 20, spe: 2}, abilities: ["intimidate"], moves: ["leer", "odorsleuth", "takedown", "flamewheel"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["bite", "roar", "ember"], pokeball: "pokeball"},
+			{generation: 3, level: 28, moves: ["charm", "flamethrower", "bite", "takedown"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
+			{generation: 1, level: 15},
 		],
 	},
 	arcanine: {
@@ -8058,8 +8058,8 @@ let BattleLearnsets = {
 			willowisp: ["8M", "8V", "7M", "7S1", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "abilities": ["intimidate"], "moves": ["flareblitz", "thunderfang", "crunch", "extremespeed"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "abilities": ["intimidate"], "moves": ["flareblitz", "extremespeed", "willowisp", "protect"], "pokeball": "cherishball"},
+			{generation: 4, level: 50, abilities: ["intimidate"], moves: ["flareblitz", "thunderfang", "crunch", "extremespeed"], pokeball: "cherishball"},
+			{generation: 7, level: 50, abilities: ["intimidate"], moves: ["flareblitz", "extremespeed", "willowisp", "protect"], pokeball: "cherishball"},
 		],
 	},
 	poliwag: {
@@ -8134,11 +8134,11 @@ let BattleLearnsets = {
 			whirlpool: ["7V", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["bubble", "sweetkiss"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["bubble", "sweetkiss"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 5},
-			{"generation": 2, "level": 3},
+			{generation: 1, level: 5},
+			{generation: 2, level: 3},
 		],
 	},
 	poliwhirl: {
@@ -8223,12 +8223,12 @@ let BattleLearnsets = {
 			whirlpool: ["7V", "4M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 10},
-			{"generation": 3, "level": 20},
-			{"generation": 4, "level": 10},
-			{"generation": 7, "level": 24},
-			{"generation": 7, "level": 22, "gender": "F", "nature": "Naughty", "abilities": ["damp"], "pokeball": "pokeball"},
+			{generation: 1, level: 15},
+			{generation: 2, level: 10},
+			{generation: 3, level: 20},
+			{generation: 4, level: 10},
+			{generation: 7, level: 24},
+			{generation: 7, level: 22, gender: "F", nature: "Naughty", abilities: ["damp"], pokeball: "pokeball"},
 		],
 	},
 	poliwrath: {
@@ -8326,7 +8326,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 42, "moves": ["helpinghand", "hydropump", "raindance", "brickbreak"]},
+			{generation: 3, level: 42, moves: ["helpinghand", "hydropump", "raindance", "brickbreak"]},
 		],
 	},
 	politoed: {
@@ -8403,7 +8403,7 @@ let BattleLearnsets = {
 			whirlpool: ["7V", "4M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "gender": "M", "nature": "Calm", "ivs": {"hp": 31, "atk": 13, "def": 31, "spa": 5, "spd": 31, "spe": 5}, "isHidden": true, "moves": ["scald", "icebeam", "perishsong", "protect"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Calm", ivs: {hp: 31, atk: 13, def: 31, spa: 5, spd: 31, spe: 5}, isHidden: true, moves: ["scald", "icebeam", "perishsong", "protect"], pokeball: "cherishball"},
 		],
 	},
 	abra: {
@@ -8502,7 +8502,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 1, "level": 6},
+			{generation: 1, level: 6},
 		],
 	},
 	kadabra: {
@@ -8604,9 +8604,9 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 2, "level": 15},
-			{"generation": 4, "level": 15},
-			{"generation": 7, "level": 11, "pokeball": "pokeball"},
+			{generation: 2, level: 15},
+			{generation: 4, level: 15},
+			{generation: 7, level: 11, pokeball: "pokeball"},
 		],
 	},
 	alakazam: {
@@ -8714,7 +8714,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["futuresight", "calmmind", "psychic", "trick"], "pokeball": "pokeball"},
+			{generation: 3, level: 70, moves: ["futuresight", "calmmind", "psychic", "trick"], pokeball: "pokeball"},
 		],
 	},
 	machop: {
@@ -8816,7 +8816,7 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 15},
+			{generation: 1, level: 15},
 		],
 	},
 	machoke: {
@@ -8912,11 +8912,11 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 30, "moves": ["lowsweep", "foresight", "seismictoss", "revenge"], "pokeball": "cherishball"},
+			{generation: 5, level: 30, moves: ["lowsweep", "foresight", "seismictoss", "revenge"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 2, "level": 14},
-			{"generation": 4, "level": 14},
+			{generation: 2, level: 14},
+			{generation: 4, level: 14},
 		],
 	},
 	machamp: {
@@ -9023,14 +9023,14 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 38, "gender": "M", "nature": "Quiet", "ivs": {"hp": 9, "atk": 23, "def": 25, "spa": 20, "spd": 15, "spe": 10}, "abilities": ["guts"], "moves": ["seismictoss", "foresight", "revenge", "vitalthrow"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 50, "shiny": true, "gender": "M", "nature": "Adamant", "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31}, "abilities": ["noguard"], "moves": ["dynamicpunch", "stoneedge", "wideguard", "knockoff"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 39, "gender": "M", "nature": "Hardy", "abilities": ["noguard"], "moves": ["seismictoss", "dynamicpunch", "dig", "focusenergy"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 34, "gender": "F", "nature": "Brave", "ivs": {"atk": 31}, "abilities": ["guts"], "moves": ["strength", "bulkup", "quickguard", "doubleedge"], "pokeball": "cherishball"},
+			{generation: 3, level: 38, gender: "M", nature: "Quiet", ivs: {hp: 9, atk: 23, def: 25, spa: 20, spd: 15, spe: 10}, abilities: ["guts"], moves: ["seismictoss", "foresight", "revenge", "vitalthrow"], pokeball: "pokeball"},
+			{generation: 6, level: 50, shiny: true, gender: "M", nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, abilities: ["noguard"], moves: ["dynamicpunch", "stoneedge", "wideguard", "knockoff"], pokeball: "cherishball"},
+			{generation: 6, level: 39, gender: "M", nature: "Hardy", abilities: ["noguard"], moves: ["seismictoss", "dynamicpunch", "dig", "focusenergy"], pokeball: "cherishball"},
+			{generation: 7, level: 34, gender: "F", nature: "Brave", ivs: {atk: 31}, abilities: ["guts"], moves: ["strength", "bulkup", "quickguard", "doubleedge"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 16},
-			{"generation": 2, "level": 5},
+			{generation: 1, level: 16},
+			{generation: 2, level: 5},
 		],
 	},
 	bellsprout: {
@@ -9110,12 +9110,12 @@ let BattleLearnsets = {
 			wringout: ["7L50", "6L47", "5L47", "4L47"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["vinewhip", "teeterdance"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["vinewhip", "growth"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["vinewhip", "teeterdance"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["vinewhip", "growth"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 12},
-			{"generation": 2, "level": 3},
+			{generation: 1, level: 12},
+			{generation: 2, level: 3},
 		],
 	},
 	weepinbell: {
@@ -9186,11 +9186,11 @@ let BattleLearnsets = {
 			wringout: ["7L58", "6L47", "5L47", "4L47"],
 		},
 		eventData: [
-			{"generation": 3, "level": 32, "moves": ["morningsun", "magicalleaf", "sludgebomb", "sweetscent"]},
+			{generation: 3, level: 32, moves: ["morningsun", "magicalleaf", "sludgebomb", "sweetscent"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 12},
-			{"generation": 4, "level": 10},
+			{generation: 2, level: 12},
+			{generation: 4, level: 10},
 		],
 	},
 	victreebel: {
@@ -9353,7 +9353,7 @@ let BattleLearnsets = {
 			wringout: ["7L49", "6L49", "5L54", "4L43"],
 		},
 		encounters: [
-			{"generation": 1, "level": 5},
+			{generation: 1, level: 5},
 		],
 	},
 	tentacruel: {
@@ -9435,11 +9435,11 @@ let BattleLearnsets = {
 			wringout: ["7L1", "6L1", "5L61", "4L55"],
 		},
 		encounters: [
-			{"generation": 1, "level": 20},
-			{"generation": 2, "level": 20},
-			{"generation": 3, "level": 20},
-			{"generation": 4, "level": 15},
-			{"generation": 6, "level": 21, "maxEggMoves": 1},
+			{generation: 1, level: 20},
+			{generation: 2, level: 20},
+			{generation: 3, level: 20},
+			{generation: 4, level: 15},
+			{generation: 6, level: 21, maxEggMoves: 1},
 		],
 	},
 	geodude: {
@@ -9527,8 +9527,8 @@ let BattleLearnsets = {
 			wideguard: ["7E", "6E"],
 		},
 		encounters: [
-			{"generation": 1, "level": 7},
-			{"generation": 2, "level": 2},
+			{generation: 1, level: 7},
+			{generation: 2, level: 2},
 		],
 	},
 	geodudealola: {
@@ -9688,9 +9688,9 @@ let BattleLearnsets = {
 			toxic: ["8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 		},
 		encounters: [
-			{"generation": 2, "level": 23},
-			{"generation": 4, "level": 16, "pokeball": "safariball"},
-			{"generation": 6, "level": 24},
+			{generation: 2, level: 23},
+			{generation: 4, level: 16, pokeball: "safariball"},
+			{generation: 6, level: 24},
 		],
 	},
 	graveleralola: {
@@ -10004,7 +10004,7 @@ let BattleLearnsets = {
 			willowisp: ["8M", "8V", "7M", "6M", "5M", "4M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 28},
+			{generation: 1, level: 28},
 		],
 	},
 	ponytagalar: {
@@ -10135,11 +10135,11 @@ let BattleLearnsets = {
 			willowisp: ["8M", "8V", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 40, "moves": ["batonpass", "solarbeam", "sunnyday", "flamethrower"]},
+			{generation: 3, level: 40, moves: ["batonpass", "solarbeam", "sunnyday", "flamethrower"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 14, "gender": "M"},
-			{"generation": 3, "level": 37},
+			{generation: 2, level: 14, gender: "M"},
+			{generation: 3, level: 37},
 		],
 	},
 	rapidashgalar: {
@@ -10309,12 +10309,12 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L24", "7T", "7L32", "7E", "6T", "6L32", "6E", "5T", "5L32", "5E", "4T", "4L34", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 31, "gender": "F", "nature": "Naive", "ivs": {"hp": 17, "atk": 11, "def": 19, "spa": 20, "spd": 5, "spe": 10}, "abilities": ["oblivious"], "moves": ["watergun", "confusion", "disable", "headbutt"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["curse", "yawn", "tackle", "growl"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 30, "moves": ["confusion", "disable", "headbutt", "waterpulse"], "pokeball": "cherishball"},
+			{generation: 3, level: 31, gender: "F", nature: "Naive", ivs: {hp: 17, atk: 11, def: 19, spa: 20, spd: 5, spe: 10}, abilities: ["oblivious"], moves: ["watergun", "confusion", "disable", "headbutt"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["curse", "yawn", "tackle", "growl"], pokeball: "pokeball"},
+			{generation: 5, level: 30, moves: ["confusion", "disable", "headbutt", "waterpulse"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
+			{generation: 1, level: 15},
 		],
 	},
 	slowpokegalar: {
@@ -10506,16 +10506,16 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L32", "6T", "6L32", "5T", "5L32", "4T", "4L34"],
 		},
 		eventData: [
-			{"generation": 6, "level": 100, "nature": "Quiet", "abilities": ["oblivious"], "moves": ["scald", "trickroom", "slackoff", "irontail"], "pokeball": "cherishball"},
+			{generation: 6, level: 100, nature: "Quiet", abilities: ["oblivious"], moves: ["scald", "trickroom", "slackoff", "irontail"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 1, "level": 23},
-			{"generation": 2, "level": 20},
-			{"generation": 3, "level": 32},
-			{"generation": 4, "level": 15},
-			{"generation": 5, "level": 35},
-			{"generation": 7, "level": 15},
+			{generation: 1, level: 15},
+			{generation: 1, level: 23},
+			{generation: 2, level: 20},
+			{generation: 3, level: 32},
+			{generation: 4, level: 15},
+			{generation: 5, level: 35},
+			{generation: 7, level: 15},
 		],
 	},
 	slowking: {
@@ -10694,7 +10694,7 @@ let BattleLearnsets = {
 			zapcannon: ["7L49", "7V", "6L49", "5L59", "4L54", "3L50"],
 		},
 		encounters: [
-			{"generation": 1, "level": 16},
+			{generation: 1, level: 16},
 		],
 	},
 	magneton: {
@@ -10769,12 +10769,12 @@ let BattleLearnsets = {
 			zapcannon: ["7L1", "7V", "6L1", "5L66", "4L60", "3L62"],
 		},
 		eventData: [
-			{"generation": 3, "level": 30, "moves": ["refresh", "doubleedge", "raindance", "thunder"]},
+			{generation: 3, level: 30, moves: ["refresh", "doubleedge", "raindance", "thunder"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 5},
-			{"generation": 3, "level": 26},
-			{"generation": 4, "level": 17, "pokeball": "safariball"},
+			{generation: 2, level: 5},
+			{generation: 3, level: 26},
+			{generation: 4, level: 17, pokeball: "safariball"},
 		],
 	},
 	magnezone: {
@@ -10945,12 +10945,12 @@ let BattleLearnsets = {
 			yawn: ["3S0"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["yawn", "wish"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 36, "moves": ["batonpass", "slash", "swordsdance", "aerialace"]},
+			{generation: 3, level: 5, shiny: 1, moves: ["yawn", "wish"], pokeball: "pokeball"},
+			{generation: 3, level: 36, moves: ["batonpass", "slash", "swordsdance", "aerialace"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 3},
-			{"generation": 3, "level": 3, "gender": "M", "nature": "Adamant", "ivs": {"hp": 20, "atk": 25, "def": 21, "spa": 24, "spd": 15, "spe": 20}, "abilities": ["keeneye"], "pokeball": "pokeball"},
+			{generation: 1, level: 3},
+			{generation: 3, level: 3, gender: "M", nature: "Adamant", ivs: {hp: 20, atk: 25, def: 21, spa: 24, spd: 15, spe: 20}, abilities: ["keeneye"], pokeball: "pokeball"},
 		],
 	},
 	farfetchdgalar: {
@@ -11121,8 +11121,8 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 18},
-			{"generation": 2, "level": 4},
+			{generation: 1, level: 18},
+			{generation: 2, level: 4},
 		],
 	},
 	dodrio: {
@@ -11197,14 +11197,14 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 34, "moves": ["batonpass", "drillpeck", "agility", "triattack"]},
+			{generation: 3, level: 34, moves: ["batonpass", "drillpeck", "agility", "triattack"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 29},
-			{"generation": 2, "level": 10, "gender": "F"},
-			{"generation": 2, "level": 30},
-			{"generation": 3, "level": 29, "pokeball": "safariball"},
-			{"generation": 4, "level": 15, "gender": "F", "nature": "Impish", "ivs": {"hp": 20, "atk": 20, "def": 20, "spa": 15, "spd": 15, "spe": 15}, "abilities": ["runaway"], "pokeball": "pokeball"},
+			{generation: 1, level: 29},
+			{generation: 2, level: 10, gender: "F"},
+			{generation: 2, level: 30},
+			{generation: 3, level: 29, pokeball: "safariball"},
+			{generation: 4, level: 15, gender: "F", nature: "Impish", ivs: {hp: 20, atk: 20, def: 20, spa: 15, spd: 15, spe: 15}, abilities: ["runaway"], pokeball: "pokeball"},
 		],
 	},
 	seel: {
@@ -11285,10 +11285,10 @@ let BattleLearnsets = {
 			whirlpool: ["7V", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 23, "abilities": ["thickfat"], "moves": ["helpinghand", "surf", "safeguard", "icebeam"]},
+			{generation: 3, level: 23, abilities: ["thickfat"], moves: ["helpinghand", "surf", "safeguard", "icebeam"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 22},
+			{generation: 1, level: 22},
 		],
 	},
 	dewgong: {
@@ -11363,11 +11363,11 @@ let BattleLearnsets = {
 			whirlpool: ["7V", "4M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 5},
-			{"generation": 3, "level": 32},
-			{"generation": 5, "level": 30},
-			{"generation": 6, "level": 30, "maxEggMoves": 1},
+			{generation: 1, level: 15},
+			{generation: 2, level: 5},
+			{generation: 3, level: 32},
+			{generation: 5, level: 30},
+			{generation: 6, level: 30, maxEggMoves: 1},
 		],
 	},
 	grimer: {
@@ -11458,10 +11458,10 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 23, "moves": ["helpinghand", "sludgebomb", "shadowpunch", "minimize"]},
+			{generation: 3, level: 23, moves: ["helpinghand", "sludgebomb", "shadowpunch", "minimize"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 23},
+			{generation: 1, level: 23},
 		],
 	},
 	grimeralola: {
@@ -11547,7 +11547,7 @@ let BattleLearnsets = {
 			venoshock: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 10, "abilities": ["poisontouch"], "moves": ["bite", "harden", "poisongas", "pound"], "pokeball": "cherishball"},
+			{generation: 7, level: 10, abilities: ["poisontouch"], moves: ["bite", "harden", "poisongas", "pound"], pokeball: "cherishball"},
 		],
 	},
 	muk: {
@@ -11638,13 +11638,13 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 25},
-			{"generation": 2, "level": 5},
-			{"generation": 3, "level": 32},
-			{"generation": 4, "level": 15},
-			{"generation": 5, "level": 5},
-			{"generation": 5, "level": 35, "isHidden": true},
-			{"generation": 6, "level": 30},
+			{generation: 1, level: 25},
+			{generation: 2, level: 5},
+			{generation: 3, level: 32},
+			{generation: 4, level: 15},
+			{generation: 5, level: 5},
+			{generation: 5, level: 35, isHidden: true},
+			{generation: 6, level: 30},
 		],
 	},
 	mukalola: {
@@ -11802,12 +11802,12 @@ let BattleLearnsets = {
 			withdraw: ["8L4", "8V", "7L4", "7V", "6L4", "5L4", "5D", "4L4", "3L1", "3S1", "3S0"],
 		},
 		eventData: [
-			{"generation": 3, "level": 24, "gender": "F", "nature": "Brave", "ivs": {"hp": 5, "atk": 19, "def": 18, "spa": 5, "spd": 11, "spe": 13}, "abilities": ["shellarmor"], "moves": ["withdraw", "iciclespear", "supersonic", "aurorabeam"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["shellarmor"], "moves": ["tackle", "withdraw", "iciclespear"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 29, "abilities": ["shellarmor"], "moves": ["refresh", "takedown", "surf", "aurorabeam"]},
+			{generation: 3, level: 24, gender: "F", nature: "Brave", ivs: {hp: 5, atk: 19, def: 18, spa: 5, spd: 11, spe: 13}, abilities: ["shellarmor"], moves: ["withdraw", "iciclespear", "supersonic", "aurorabeam"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", abilities: ["shellarmor"], moves: ["tackle", "withdraw", "iciclespear"], pokeball: "pokeball"},
+			{generation: 3, level: 29, abilities: ["shellarmor"], moves: ["refresh", "takedown", "surf", "aurorabeam"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 10},
+			{generation: 1, level: 10},
 		],
 	},
 	cloyster: {
@@ -11892,7 +11892,7 @@ let BattleLearnsets = {
 			withdraw: ["8L1", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 		},
 		eventData: [
-			{"generation": 5, "level": 30, "gender": "M", "nature": "Naughty", "abilities": ["skilllink"], "moves": ["iciclespear", "rockblast", "hiddenpower", "razorshell"], "pokeball": "pokeball"},
+			{generation: 5, level: 30, gender: "M", nature: "Naughty", abilities: ["skilllink"], moves: ["iciclespear", "rockblast", "hiddenpower", "razorshell"], pokeball: "pokeball"},
 		],
 	},
 	gastly: {
@@ -11987,7 +11987,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 18},
+			{generation: 1, level: 18},
 		],
 	},
 	haunter: {
@@ -12079,13 +12079,13 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 5, "level": 30, "moves": ["confuseray", "suckerpunch", "shadowpunch", "payback"], "pokeball": "cherishball"},
+			{generation: 5, level: 30, moves: ["confuseray", "suckerpunch", "shadowpunch", "payback"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 20},
-			{"generation": 2, "level": 15},
-			{"generation": 3, "level": 20},
-			{"generation": 4, "level": 16},
+			{generation: 1, level: 20},
+			{generation: 2, level: 15},
+			{generation: 3, level: 20},
+			{generation: 4, level: 16},
 		],
 	},
 	gengar: {
@@ -12207,13 +12207,13 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 23, "gender": "F", "nature": "Hardy", "ivs": {"hp": 19, "atk": 14, "def": 0, "spa": 14, "spd": 17, "spe": 27}, "moves": ["spite", "curse", "nightshade", "confuseray"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 25, "nature": "Timid", "moves": ["psychic", "confuseray", "suckerpunch", "shadowpunch"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 25, "moves": ["nightshade", "confuseray", "suckerpunch", "shadowpunch"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "moves": ["shadowball", "sludgebomb", "willowisp", "destinybond"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 25, "shiny": true, "moves": ["shadowball", "sludgewave", "confuseray", "astonish"], "pokeball": "duskball"},
-			{"generation": 6, "level": 50, "shiny": true, "gender": "M", "moves": ["meanlook", "hypnosis", "psychic", "hyperbeam"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["meanlook", "hypnosis", "psychic", "hyperbeam"], "pokeball": "cherishball"},
+			{generation: 3, level: 23, gender: "F", nature: "Hardy", ivs: {hp: 19, atk: 14, def: 0, spa: 14, spd: 17, spe: 27}, moves: ["spite", "curse", "nightshade", "confuseray"], pokeball: "pokeball"},
+			{generation: 6, level: 25, nature: "Timid", moves: ["psychic", "confuseray", "suckerpunch", "shadowpunch"], pokeball: "cherishball"},
+			{generation: 6, level: 25, moves: ["nightshade", "confuseray", "suckerpunch", "shadowpunch"], pokeball: "cherishball"},
+			{generation: 6, level: 50, moves: ["shadowball", "sludgebomb", "willowisp", "destinybond"], pokeball: "cherishball"},
+			{generation: 6, level: 25, shiny: true, moves: ["shadowball", "sludgewave", "confuseray", "astonish"], pokeball: "duskball"},
+			{generation: 6, level: 50, shiny: true, gender: "M", moves: ["meanlook", "hypnosis", "psychic", "hyperbeam"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["meanlook", "hypnosis", "psychic", "hyperbeam"], pokeball: "cherishball"},
 		],
 	},
 	onix: {
@@ -12307,7 +12307,7 @@ let BattleLearnsets = {
 			wideguard: ["8E", "7E"],
 		},
 		encounters: [
-			{"generation": 1, "level": 13},
+			{generation: 1, level: 13},
 		],
 	},
 	steelix: {
@@ -12512,10 +12512,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L41", "6T", "6L41", "5T", "5L41", "4T", "4L50"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["insomnia"], "moves": ["bellydrum", "wish"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["insomnia"], moves: ["bellydrum", "wish"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 9},
+			{generation: 1, level: 9},
 		],
 	},
 	hypno: {
@@ -12620,11 +12620,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L41", "6T", "6L41", "5T", "5L41", "4T", "4L64"],
 		},
 		eventData: [
-			{"generation": 3, "level": 34, "abilities": ["insomnia"], "moves": ["batonpass", "psychic", "meditate", "shadowball"]},
+			{generation: 3, level: 34, abilities: ["insomnia"], moves: ["batonpass", "psychic", "meditate", "shadowball"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 16},
-			{"generation": 4, "level": 16},
+			{generation: 2, level: 16},
+			{generation: 4, level: 16},
 		],
 	},
 	krabby: {
@@ -12713,7 +12713,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "8V", "7M", "6M", "5M", "4M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 10},
+			{generation: 1, level: 10},
 		],
 	},
 	kingler: {
@@ -12805,9 +12805,9 @@ let BattleLearnsets = {
 			xscissor: ["8M", "8V", "7M", "6M", "5M", "4M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 3, "level": 25},
-			{"generation": 4, "level": 22},
+			{generation: 1, level: 15},
+			{generation: 3, level: 25},
+			{generation: 4, level: 22},
 		],
 	},
 	voltorb: {
@@ -12874,11 +12874,11 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 19, "moves": ["refresh", "mirrorcoat", "spark", "swift"]},
+			{generation: 3, level: 19, moves: ["refresh", "mirrorcoat", "spark", "swift"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 14},
-			{"generation": 1, "level": 40},
+			{generation: 1, level: 14},
+			{generation: 1, level: 40},
 		],
 	},
 	electrode: {
@@ -12949,10 +12949,10 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 3},
-			{"generation": 2, "level": 23},
-			{"generation": 3, "level": 3, "nature": "Hasty", "ivs": {"hp": 19, "atk": 16, "def": 18, "spa": 25, "spd": 25, "spe": 19}, "abilities": ["static"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 23},
+			{generation: 1, level: 3},
+			{generation: 2, level: 23},
+			{generation: 3, level: 3, nature: "Hasty", ivs: {hp: 19, atk: 16, def: 18, spa: 25, spd: 25, spe: 19}, abilities: ["static"], pokeball: "pokeball"},
+			{generation: 4, level: 23},
 		],
 	},
 	exeggcute: {
@@ -13039,10 +13039,10 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7L33", "6T", "6L33", "5T", "5L33", "4T", "4L33"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["sweetscent", "wish"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["sweetscent", "wish"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 20},
+			{generation: 1, level: 20},
 		],
 	},
 	exeggutor: {
@@ -13125,7 +13125,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 46, "moves": ["refresh", "psychic", "hypnosis", "ancientpower"]},
+			{generation: 3, level: 46, moves: ["refresh", "psychic", "hypnosis", "ancientpower"]},
 		],
 	},
 	exeggutoralola: {
@@ -13205,7 +13205,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "gender": "M", "nature": "Modest", "isHidden": true, "moves": ["powerswap", "celebrate", "leafstorm", "dracometeor"], "pokeball": "cherishball"},
+			{generation: 7, level: 50, gender: "M", nature: "Modest", isHidden: true, moves: ["powerswap", "celebrate", "leafstorm", "dracometeor"], pokeball: "cherishball"},
 		],
 	},
 	cubone: {
@@ -13306,7 +13306,7 @@ let BattleLearnsets = {
 			watergun: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 16},
+			{generation: 1, level: 16},
 		],
 	},
 	marowak: {
@@ -13410,12 +13410,12 @@ let BattleLearnsets = {
 			watergun: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 44, "moves": ["sing", "earthquake", "swordsdance", "rockslide"]},
+			{generation: 3, level: 44, moves: ["sing", "earthquake", "swordsdance", "rockslide"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 24},
-			{"generation": 2, "level": 12},
-			{"generation": 4, "level": 14},
+			{generation: 1, level: 24},
+			{generation: 2, level: 12},
+			{generation: 4, level: 14},
 		],
 	},
 	marowakalola: {
@@ -13590,7 +13590,7 @@ let BattleLearnsets = {
 			willowisp: ["7M", "7L23", "7S0"],
 		},
 		eventData: [
-			{"generation": 7, "level": 25, "perfectIVs": 3, "moves": ["leer", "hex", "bonemerang", "willowisp"], "pokeball": "pokeball"},
+			{generation: 7, level: 25, perfectIVs: 3, moves: ["leer", "hex", "bonemerang", "willowisp"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -13754,10 +13754,10 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 38, "abilities": ["limber"], "moves": ["refresh", "highjumpkick", "mindreader", "megakick"]},
+			{generation: 3, level: 38, abilities: ["limber"], moves: ["refresh", "highjumpkick", "mindreader", "megakick"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 30},
+			{generation: 1, level: 30},
 		],
 	},
 	hitmonchan: {
@@ -13851,10 +13851,10 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 38, "abilities": ["keeneye"], "moves": ["helpinghand", "skyuppercut", "mindreader", "megapunch"]},
+			{generation: 3, level: 38, abilities: ["keeneye"], moves: ["helpinghand", "skyuppercut", "mindreader", "megapunch"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 30},
+			{generation: 1, level: 30},
 		],
 	},
 	hitmontop: {
@@ -13938,7 +13938,7 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 55, "gender": "M", "nature": "Adamant", "abilities": ["intimidate"], "moves": ["fakeout", "closecombat", "suckerpunch", "helpinghand"]},
+			{generation: 5, level: 55, gender: "M", nature: "Adamant", abilities: ["intimidate"], moves: ["fakeout", "closecombat", "suckerpunch", "helpinghand"]},
 		],
 	},
 	lickitung: {
@@ -14059,11 +14059,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7E", "6T", "6E", "5T", "5E", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["healbell", "wish"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 38, "moves": ["helpinghand", "doubleedge", "defensecurl", "rollout"]},
+			{generation: 3, level: 5, shiny: 1, moves: ["healbell", "wish"], pokeball: "pokeball"},
+			{generation: 3, level: 38, moves: ["helpinghand", "doubleedge", "defensecurl", "rollout"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
+			{generation: 1, level: 15},
 		],
 	},
 	lickilicky: {
@@ -14234,7 +14234,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 30},
+			{generation: 1, level: 30},
 		],
 	},
 	weezing: {
@@ -14312,9 +14312,9 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 2, "level": 16},
-			{"generation": 3, "level": 32},
-			{"generation": 4, "level": 15, "pokeball": "safariball"},
+			{generation: 2, level: 16},
+			{generation: 3, level: 32},
+			{generation: 4, level: 15, pokeball: "safariball"},
 		],
 	},
 	weezinggalar: {
@@ -14485,7 +14485,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 20},
+			{generation: 1, level: 20},
 		],
 	},
 	rhydon: {
@@ -14622,13 +14622,13 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 46, "moves": ["helpinghand", "megahorn", "scaryface", "earthquake"]},
+			{generation: 3, level: 46, moves: ["helpinghand", "megahorn", "scaryface", "earthquake"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 10},
-			{"generation": 4, "level": 41},
-			{"generation": 6, "level": 30},
+			{generation: 1, level: 15},
+			{generation: 2, level: 10},
+			{generation: 4, level: 41},
+			{generation: 6, level: 30},
 		],
 	},
 	rhyperior: {
@@ -14953,12 +14953,12 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["sweetscent", "wish"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "moves": ["pound", "growl", "tailwhip", "refresh"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 39, "moves": ["sweetkiss", "thunderbolt", "softboiled", "skillswap"]},
+			{generation: 3, level: 5, shiny: 1, moves: ["sweetscent", "wish"], pokeball: "pokeball"},
+			{generation: 3, level: 10, moves: ["pound", "growl", "tailwhip", "refresh"], pokeball: "pokeball"},
+			{generation: 3, level: 39, moves: ["sweetkiss", "thunderbolt", "softboiled", "skillswap"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 7},
+			{generation: 1, level: 7},
 		],
 	},
 	blissey: {
@@ -15080,7 +15080,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "isHidden": true, "moves": ["pound", "growl", "tailwhip", "refresh"]},
+			{generation: 5, level: 10, isHidden: true, moves: ["pound", "growl", "tailwhip", "refresh"]},
 		],
 	},
 	tangela: {
@@ -15166,10 +15166,10 @@ let BattleLearnsets = {
 			wringout: ["7L46", "6L46", "5L50", "4L50"],
 		},
 		eventData: [
-			{"generation": 3, "level": 30, "abilities": ["chlorophyll"], "moves": ["morningsun", "solarbeam", "sunnyday", "ingrain"]},
+			{generation: 3, level: 30, abilities: ["chlorophyll"], moves: ["morningsun", "solarbeam", "sunnyday", "ingrain"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 13},
+			{generation: 1, level: 13},
 		],
 	},
 	tangrowth: {
@@ -15252,7 +15252,7 @@ let BattleLearnsets = {
 			wringout: ["7L49", "6L49", "5L50", "4L50"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Brave", "moves": ["sunnyday", "morningsun", "ancientpower", "naturalgift"], "pokeball": "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Brave", moves: ["sunnyday", "morningsun", "ancientpower", "naturalgift"], pokeball: "cherishball"},
 		],
 	},
 	kangaskhan: {
@@ -15376,13 +15376,13 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["earlybird"], "moves": ["yawn", "wish"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "abilities": ["earlybird"], "moves": ["cometpunch", "leer", "bite"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 35, "abilities": ["earlybird"], "moves": ["sing", "earthquake", "tailwhip", "dizzypunch"]},
-			{"generation": 6, "level": 50, "abilities": ["scrappy"], "moves": ["fakeout", "return", "earthquake", "suckerpunch"], "pokeball": "cherishball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["earlybird"], moves: ["yawn", "wish"], pokeball: "pokeball"},
+			{generation: 3, level: 10, abilities: ["earlybird"], moves: ["cometpunch", "leer", "bite"], pokeball: "pokeball"},
+			{generation: 3, level: 35, abilities: ["earlybird"], moves: ["sing", "earthquake", "tailwhip", "dizzypunch"]},
+			{generation: 6, level: 50, abilities: ["scrappy"], moves: ["fakeout", "return", "earthquake", "suckerpunch"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 25},
+			{generation: 1, level: 25},
 		],
 	},
 	horsea: {
@@ -15454,10 +15454,10 @@ let BattleLearnsets = {
 			whirlpool: ["7V", "4M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 1, "shiny": true, "moves": ["bubble"], "pokeball": "pokeball"},
+			{generation: 5, level: 1, shiny: true, moves: ["bubble"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 5},
+			{generation: 1, level: 5},
 		],
 	},
 	seadra: {
@@ -15525,13 +15525,13 @@ let BattleLearnsets = {
 			whirlpool: ["7V", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 45, "abilities": ["poisonpoint"], "moves": ["leer", "watergun", "twister", "agility"], "pokeball": "pokeball"},
+			{generation: 3, level: 45, abilities: ["poisonpoint"], moves: ["leer", "watergun", "twister", "agility"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 20},
-			{"generation": 2, "level": 20},
-			{"generation": 3, "level": 25},
-			{"generation": 4, "level": 15},
+			{generation: 1, level: 20},
+			{generation: 2, level: 20},
+			{generation: 3, level: 25},
+			{generation: 4, level: 15},
 		],
 	},
 	kingdra: {
@@ -15599,8 +15599,8 @@ let BattleLearnsets = {
 			yawn: ["7L1", "6L1", "5L1", "4L1"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "abilities": ["swiftswim"], "moves": ["leer", "watergun", "twister", "agility"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 50, "gender": "M", "nature": "Timid", "ivs": {"hp": 31, "atk": 17, "def": 8, "spa": 31, "spd": 11, "spe": 31}, "abilities": ["swiftswim"], "moves": ["dracometeor", "muddywater", "dragonpulse", "protect"], "pokeball": "cherishball"},
+			{generation: 3, level: 50, abilities: ["swiftswim"], moves: ["leer", "watergun", "twister", "agility"], pokeball: "pokeball"},
+			{generation: 5, level: 50, gender: "M", nature: "Timid", ivs: {hp: 31, atk: 17, def: 8, spa: 31, spd: 11, spe: 31}, abilities: ["swiftswim"], moves: ["dracometeor", "muddywater", "dragonpulse", "protect"], pokeball: "cherishball"},
 		],
 	},
 	goldeen: {
@@ -15680,7 +15680,7 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "4M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 5},
+			{generation: 1, level: 5},
 		],
 	},
 	seaking: {
@@ -15759,12 +15759,12 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "4M"],
 		},
 		encounters: [
-			{"generation": 1, "level": 23},
-			{"generation": 2, "level": 10},
-			{"generation": 3, "level": 20},
-			{"generation": 4, "level": 10},
-			{"generation": 6, "level": 26, "maxEggMoves": 1},
-			{"generation": 7, "level": 10},
+			{generation: 1, level: 23},
+			{generation: 2, level: 10},
+			{generation: 3, level: 20},
+			{generation: 4, level: 10},
+			{generation: 6, level: 26, maxEggMoves: 1},
+			{generation: 7, level: 10},
 		],
 	},
 	staryu: {
@@ -15845,11 +15845,11 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "moves": ["minimize", "lightscreen", "cosmicpower", "hydropump"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 18, "nature": "Timid", "ivs": {"hp": 10, "atk": 3, "def": 22, "spa": 24, "spd": 3, "spe": 18}, "abilities": ["illuminate"], "moves": ["harden", "watergun", "rapidspin", "recover"], "pokeball": "pokeball"},
+			{generation: 3, level: 50, moves: ["minimize", "lightscreen", "cosmicpower", "hydropump"], pokeball: "pokeball"},
+			{generation: 3, level: 18, nature: "Timid", ivs: {hp: 10, atk: 3, def: 22, spa: 24, spd: 3, spe: 18}, abilities: ["illuminate"], moves: ["harden", "watergun", "rapidspin", "recover"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 5},
+			{generation: 1, level: 5},
 		],
 	},
 	starmie: {
@@ -15940,7 +15940,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 41, "moves": ["refresh", "waterfall", "icebeam", "recover"]},
+			{generation: 3, level: 41, moves: ["refresh", "waterfall", "icebeam", "recover"]},
 		],
 	},
 	mimejr: {
@@ -16168,10 +16168,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 42, "abilities": ["soundproof"], "moves": ["followme", "psychic", "encore", "thunderpunch"]},
+			{generation: 3, level: 42, abilities: ["soundproof"], moves: ["followme", "psychic", "encore", "thunderpunch"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 6},
+			{generation: 1, level: 6},
 		],
 	},
 	mrmimegalar: {
@@ -16435,13 +16435,13 @@ let BattleLearnsets = {
 			xscissor: ["8V", "7M", "7L41", "6M", "6L41", "5M", "5L41", "4M", "4L41"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["swarm"], "moves": ["quickattack", "leer", "focusenergy"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 40, "abilities": ["swarm"], "moves": ["morningsun", "razorwind", "silverwind", "slash"]},
-			{"generation": 5, "level": 30, "moves": ["agility", "wingattack", "furycutter", "slash"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", abilities: ["swarm"], moves: ["quickattack", "leer", "focusenergy"], pokeball: "pokeball"},
+			{generation: 3, level: 40, abilities: ["swarm"], moves: ["morningsun", "razorwind", "silverwind", "slash"]},
+			{generation: 5, level: 30, moves: ["agility", "wingattack", "furycutter", "slash"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 1, "level": 25},
+			{generation: 1, level: 15},
+			{generation: 1, level: 25},
 		],
 	},
 	scizor: {
@@ -16522,14 +16522,14 @@ let BattleLearnsets = {
 			xscissor: ["7M", "7L41", "6M", "6L41", "6S4", "5M", "5L41", "4M", "4L41", "4S1"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "gender": "M", "abilities": ["swarm"], "moves": ["furycutter", "metalclaw", "swordsdance", "slash"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Adamant", "abilities": ["swarm"], "moves": ["xscissor", "swordsdance", "irondefense", "agility"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "gender": "M", "abilities": ["technician"], "moves": ["bulletpunch", "bugbite", "roost", "swordsdance"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["leer", "focusenergy", "pursuit", "steelwing"]},
-			{"generation": 6, "level": 50, "gender": "M", "moves": ["xscissor", "nightslash", "doublehit", "ironhead"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 25, "nature": "Adamant", "abilities": ["technician"], "moves": ["aerialace", "falseswipe", "agility", "furycutter"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 25, "moves": ["metalclaw", "falseswipe", "agility", "furycutter"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "abilities": ["technician"], "moves": ["bulletpunch", "swordsdance", "roost", "uturn"], "pokeball": "cherishball"},
+			{generation: 3, level: 50, gender: "M", abilities: ["swarm"], moves: ["furycutter", "metalclaw", "swordsdance", "slash"], pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Adamant", abilities: ["swarm"], moves: ["xscissor", "swordsdance", "irondefense", "agility"], pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", abilities: ["technician"], moves: ["bulletpunch", "bugbite", "roost", "swordsdance"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["leer", "focusenergy", "pursuit", "steelwing"]},
+			{generation: 6, level: 50, gender: "M", moves: ["xscissor", "nightslash", "doublehit", "ironhead"], pokeball: "cherishball"},
+			{generation: 6, level: 25, nature: "Adamant", abilities: ["technician"], moves: ["aerialace", "falseswipe", "agility", "furycutter"], pokeball: "cherishball"},
+			{generation: 6, level: 25, moves: ["metalclaw", "falseswipe", "agility", "furycutter"], pokeball: "cherishball"},
+			{generation: 6, level: 50, abilities: ["technician"], moves: ["bulletpunch", "swordsdance", "roost", "uturn"], pokeball: "cherishball"},
 		],
 	},
 	smoochum: {
@@ -16735,11 +16735,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 10},
-			{"generation": 3, "level": 20, "nature": "Mild", "ivs": {"hp": 18, "atk": 17, "def": 18, "spa": 22, "spd": 25, "spe": 21}, "abilities": ["oblivious"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 22},
-			{"generation": 7, "level": 9},
+			{generation: 1, level: 15},
+			{generation: 2, level: 10},
+			{generation: 3, level: 20, nature: "Mild", ivs: {hp: 18, atk: 17, def: 18, spa: 22, spd: 25, spe: 21}, abilities: ["oblivious"], pokeball: "pokeball"},
+			{generation: 4, level: 22},
+			{generation: 7, level: 9},
 		],
 	},
 	elekid: {
@@ -16820,7 +16820,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 20, "moves": ["icepunch", "firepunch", "thunderpunch", "crosschop"], "pokeball": "pokeball"},
+			{generation: 3, level: 20, moves: ["icepunch", "firepunch", "thunderpunch", "crosschop"], pokeball: "pokeball"},
 		],
 	},
 	electabuzz: {
@@ -16912,17 +16912,17 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["quickattack", "leer", "thunderpunch"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 43, "moves": ["followme", "crosschop", "thunderwave", "thunderbolt"]},
-			{"generation": 4, "level": 30, "gender": "M", "nature": "Naughty", "moves": ["lowkick", "shockwave", "lightscreen", "thunderpunch"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 30, "moves": ["lowkick", "swift", "shockwave", "lightscreen"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 30, "gender": "M", "isHidden": true, "moves": ["lowkick", "shockwave", "lightscreen", "thunderpunch"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["quickattack", "leer", "thunderpunch"], pokeball: "pokeball"},
+			{generation: 3, level: 43, moves: ["followme", "crosschop", "thunderwave", "thunderbolt"]},
+			{generation: 4, level: 30, gender: "M", nature: "Naughty", moves: ["lowkick", "shockwave", "lightscreen", "thunderpunch"], pokeball: "pokeball"},
+			{generation: 5, level: 30, moves: ["lowkick", "swift", "shockwave", "lightscreen"], pokeball: "cherishball"},
+			{generation: 6, level: 30, gender: "M", isHidden: true, moves: ["lowkick", "shockwave", "lightscreen", "thunderpunch"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 33},
-			{"generation": 2, "level": 15},
-			{"generation": 4, "level": 15},
-			{"generation": 7, "level": 25},
+			{generation: 1, level: 33},
+			{generation: 2, level: 15},
+			{generation: 4, level: 15},
+			{generation: 7, level: 25},
 		],
 	},
 	electivire: {
@@ -17003,8 +17003,8 @@ let BattleLearnsets = {
 			wildcharge: ["7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Adamant", "moves": ["thunderpunch", "icepunch", "crosschop", "earthquake"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Serious", "moves": ["lightscreen", "thunderpunch", "discharge", "thunderbolt"], "pokeball": "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Adamant", moves: ["thunderpunch", "icepunch", "crosschop", "earthquake"], pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Serious", moves: ["lightscreen", "thunderpunch", "discharge", "thunderbolt"], pokeball: "cherishball"},
 		],
 	},
 	magby: {
@@ -17168,17 +17168,17 @@ let BattleLearnsets = {
 			willowisp: ["8V", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["leer", "smog", "firepunch", "ember"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 36, "moves": ["followme", "fireblast", "crosschop", "thunderpunch"]},
-			{"generation": 4, "level": 30, "gender": "M", "nature": "Quiet", "moves": ["smokescreen", "firespin", "confuseray", "firepunch"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 30, "moves": ["smokescreen", "feintattack", "firespin", "confuseray"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 30, "gender": "M", "isHidden": true, "moves": ["smokescreen", "firespin", "confuseray", "firepunch"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["leer", "smog", "firepunch", "ember"], pokeball: "pokeball"},
+			{generation: 3, level: 36, moves: ["followme", "fireblast", "crosschop", "thunderpunch"]},
+			{generation: 4, level: 30, gender: "M", nature: "Quiet", moves: ["smokescreen", "firespin", "confuseray", "firepunch"], pokeball: "pokeball"},
+			{generation: 5, level: 30, moves: ["smokescreen", "feintattack", "firespin", "confuseray"], pokeball: "cherishball"},
+			{generation: 6, level: 30, gender: "M", isHidden: true, moves: ["smokescreen", "firespin", "confuseray", "firepunch"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 34},
-			{"generation": 2, "level": 14},
-			{"generation": 4, "level": 14},
-			{"generation": 7, "level": 16},
+			{generation: 1, level: 34},
+			{generation: 2, level: 14},
+			{generation: 4, level: 14},
+			{generation: 7, level: 16},
 		],
 	},
 	magmortar: {
@@ -17253,8 +17253,8 @@ let BattleLearnsets = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "gender": "F", "nature": "Modest", "moves": ["flamethrower", "psychic", "hyperbeam", "solarbeam"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Hardy", "moves": ["confuseray", "firepunch", "lavaplume", "flamethrower"], "pokeball": "cherishball"},
+			{generation: 4, level: 50, gender: "F", nature: "Modest", moves: ["flamethrower", "psychic", "hyperbeam", "solarbeam"], pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Hardy", moves: ["confuseray", "firepunch", "lavaplume", "flamethrower"], pokeball: "cherishball"},
 		],
 	},
 	pinsir: {
@@ -17344,13 +17344,13 @@ let BattleLearnsets = {
 			xscissor: ["8V", "7M", "7L29", "6M", "6L29", "6S1", "5M", "5L30", "4M", "4L30"],
 		},
 		eventData: [
-			{"generation": 3, "level": 35, "abilities": ["hypercutter"], "moves": ["helpinghand", "guillotine", "falseswipe", "submission"]},
-			{"generation": 6, "level": 50, "gender": "F", "nature": "Adamant", "moves": ["xscissor", "earthquake", "stoneedge", "return"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "nature": "Jolly", "isHidden": true, "moves": ["earthquake", "swordsdance", "feint", "quickattack"], "pokeball": "cherishball"},
+			{generation: 3, level: 35, abilities: ["hypercutter"], moves: ["helpinghand", "guillotine", "falseswipe", "submission"]},
+			{generation: 6, level: 50, gender: "F", nature: "Adamant", moves: ["xscissor", "earthquake", "stoneedge", "return"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Jolly", isHidden: true, moves: ["earthquake", "swordsdance", "feint", "quickattack"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 1, "level": 20},
+			{generation: 1, level: 15},
+			{generation: 1, level: 20},
 		],
 	},
 	tauros: {
@@ -17439,12 +17439,12 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L35", "6T", "6L35", "5T", "5L35", "4T", "4L29"],
 		},
 		eventData: [
-			{"generation": 3, "level": 25, "nature": "Docile", "ivs": {"hp": 14, "atk": 19, "def": 12, "spa": 17, "spd": 5, "spe": 26}, "abilities": ["intimidate"], "moves": ["rage", "hornattack", "scaryface", "pursuit"], "pokeball": "safariball"},
-			{"generation": 3, "level": 10, "abilities": ["intimidate"], "moves": ["tackle", "tailwhip", "rage", "hornattack"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 46, "abilities": ["intimidate"], "moves": ["refresh", "earthquake", "tailwhip", "bodyslam"]},
+			{generation: 3, level: 25, nature: "Docile", ivs: {hp: 14, atk: 19, def: 12, spa: 17, spd: 5, spe: 26}, abilities: ["intimidate"], moves: ["rage", "hornattack", "scaryface", "pursuit"], pokeball: "safariball"},
+			{generation: 3, level: 10, abilities: ["intimidate"], moves: ["tackle", "tailwhip", "rage", "hornattack"], pokeball: "pokeball"},
+			{generation: 3, level: 46, abilities: ["intimidate"], moves: ["refresh", "earthquake", "tailwhip", "bodyslam"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 21},
+			{generation: 1, level: 21},
 		],
 	},
 	magikarp: {
@@ -17458,17 +17458,17 @@ let BattleLearnsets = {
 			tackle: ["8L15", "8V", "7L15", "7V", "6L15", "5L15", "4L15", "3L15"],
 		},
 		eventData: [
-			{"generation": 4, "level": 5, "gender": "M", "nature": "Relaxed", "moves": ["splash"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 6, "gender": "F", "nature": "Rash", "moves": ["splash"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 7, "gender": "F", "nature": "Hardy", "moves": ["splash"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 5, "gender": "F", "nature": "Lonely", "moves": ["splash"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 4, "gender": "M", "nature": "Modest", "moves": ["splash"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 99, "shiny": true, "gender": "M", "moves": ["flail", "hydropump", "bounce", "splash"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 1, "shiny": 1, "moves": ["splash", "celebrate", "happyhour"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 19, "shiny": true, "moves": ["splash", "bounce"], "pokeball": "cherishball"},
+			{generation: 4, level: 5, gender: "M", nature: "Relaxed", moves: ["splash"], pokeball: "pokeball"},
+			{generation: 4, level: 6, gender: "F", nature: "Rash", moves: ["splash"], pokeball: "pokeball"},
+			{generation: 4, level: 7, gender: "F", nature: "Hardy", moves: ["splash"], pokeball: "pokeball"},
+			{generation: 4, level: 5, gender: "F", nature: "Lonely", moves: ["splash"], pokeball: "pokeball"},
+			{generation: 4, level: 4, gender: "M", nature: "Modest", moves: ["splash"], pokeball: "pokeball"},
+			{generation: 5, level: 99, shiny: true, gender: "M", moves: ["flail", "hydropump", "bounce", "splash"], pokeball: "cherishball"},
+			{generation: 6, level: 1, shiny: 1, moves: ["splash", "celebrate", "happyhour"], pokeball: "cherishball"},
+			{generation: 7, level: 19, shiny: true, moves: ["splash", "bounce"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 5},
+			{generation: 1, level: 5},
 		],
 	},
 	gyarados: {
@@ -17567,16 +17567,16 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "moves": ["waterfall", "earthquake", "icefang", "dragondance"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 20, "shiny": true, "moves": ["waterfall", "bite", "icefang", "ironhead"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, moves: ["waterfall", "earthquake", "icefang", "dragondance"], pokeball: "cherishball"},
+			{generation: 6, level: 20, shiny: true, moves: ["waterfall", "bite", "icefang", "ironhead"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 15},
-			{"generation": 3, "level": 5},
-			{"generation": 4, "level": 10},
-			{"generation": 5, "level": 1},
-			{"generation": 7, "level": 10},
+			{generation: 1, level: 15},
+			{generation: 2, level: 15},
+			{generation: 3, level: 5},
+			{generation: 4, level: 10},
+			{generation: 5, level: 1},
+			{generation: 7, level: 10},
 		],
 	},
 	lapras: {
@@ -17684,10 +17684,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 44, "moves": ["hydropump", "raindance", "blizzard", "healbell"]},
+			{generation: 3, level: 44, moves: ["hydropump", "raindance", "blizzard", "healbell"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 15},
+			{generation: 1, level: 15},
 		],
 	},
 	ditto: {
@@ -17695,16 +17695,16 @@ let BattleLearnsets = {
 			transform: ["8L1", "8V", "7L1", "7S0", "7V", "6L1", "5L1", "4L1", "3L1"],
 		},
 		eventData: [
-			{"generation": 7, "level": 10, "moves": ["transform"], "pokeball": "cherishball"},
+			{generation: 7, level: 10, moves: ["transform"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 12},
-			{"generation": 2, "level": 10},
-			{"generation": 3, "level": 23},
-			{"generation": 4, "level": 10},
-			{"generation": 5, "level": 45},
-			{"generation": 6, "level": 30},
-			{"generation": 7, "level": 25},
+			{generation: 1, level: 12},
+			{generation: 2, level: 10},
+			{generation: 3, level: 23},
+			{generation: 4, level: 10},
+			{generation: 5, level: 45},
+			{generation: 6, level: 30},
+			{generation: 7, level: 25},
 		],
 	},
 	eevee: {
@@ -17782,15 +17782,15 @@ let BattleLearnsets = {
 			yawn: ["8E", "7E", "6E", "5E", "4E"],
 		},
 		eventData: [
-			{"generation": 4, "level": 10, "gender": "F", "nature": "Lonely", "abilities": ["adaptability"], "moves": ["covet", "bite", "helpinghand", "attract"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "shiny": true, "gender": "M", "nature": "Hardy", "abilities": ["adaptability"], "moves": ["irontail", "trumpcard", "flail", "quickattack"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "gender": "F", "nature": "Hardy", "abilities": ["adaptability"], "moves": ["sing", "return", "echoedvoice", "attract"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "moves": ["celebrate", "sandattack", "babydolleyes", "swift"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 15, "shiny": true, "isHidden": true, "moves": ["swift", "quickattack", "babydolleyes", "helpinghand"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 10, "nature": "Jolly", "moves": ["celebrate", "sandattack", "babydolleyes"], "pokeball": "cherishball"},
+			{generation: 4, level: 10, gender: "F", nature: "Lonely", abilities: ["adaptability"], moves: ["covet", "bite", "helpinghand", "attract"], pokeball: "cherishball"},
+			{generation: 4, level: 50, shiny: true, gender: "M", nature: "Hardy", abilities: ["adaptability"], moves: ["irontail", "trumpcard", "flail", "quickattack"], pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "F", nature: "Hardy", abilities: ["adaptability"], moves: ["sing", "return", "echoedvoice", "attract"], pokeball: "cherishball"},
+			{generation: 6, level: 10, moves: ["celebrate", "sandattack", "babydolleyes", "swift"], pokeball: "cherishball"},
+			{generation: 6, level: 15, shiny: true, isHidden: true, moves: ["swift", "quickattack", "babydolleyes", "helpinghand"], pokeball: "cherishball"},
+			{generation: 7, level: 10, nature: "Jolly", moves: ["celebrate", "sandattack", "babydolleyes"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 25},
+			{generation: 1, level: 25},
 		],
 	},
 	eeveestarter: {
@@ -17828,7 +17828,7 @@ let BattleLearnsets = {
 			veeveevolley: ["8V", "7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 5, "perfectIVs": 6, "moves": ["tackle", "tailwhip", "growl"], "pokeball": "pokeball"},
+			{generation: 7, level: 5, perfectIVs: 6, moves: ["tackle", "tailwhip", "growl"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -17840,7 +17840,7 @@ let BattleLearnsets = {
 			tailwhip: ["8S0"],
 		},
 		eventData: [
-			{"generation": 8, "level": 10, "perfectIVs": 6, "moves": ["growl", "tailwhip", "sandattack", "quickattack"], "pokeball": "pokeball"},
+			{generation: 8, level: 10, perfectIVs: 6, moves: ["growl", "tailwhip", "sandattack", "quickattack"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -17940,9 +17940,9 @@ let BattleLearnsets = {
 			yawn: ["8V"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
-			{"generation": 6, "level": 10, "moves": ["celebrate", "tailwhip", "sandattack", "watergun"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves": ["scald", "icebeam", "raindance", "rest"], "pokeball": "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tailwhip", "tackle", "helpinghand", "sandattack"]},
+			{generation: 6, level: 10, moves: ["celebrate", "tailwhip", "sandattack", "watergun"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["scald", "icebeam", "raindance", "rest"], pokeball: "cherishball"},
 		],
 	},
 	jolteon: {
@@ -18036,9 +18036,9 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
-			{"generation": 6, "level": 10, "moves": ["celebrate", "tailwhip", "sandattack", "thundershock"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "gender": "F", "moves": ["thunderbolt", "shadowball", "lightscreen", "voltswitch"], "pokeball": "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tailwhip", "tackle", "helpinghand", "sandattack"]},
+			{generation: 6, level: 10, moves: ["celebrate", "tailwhip", "sandattack", "thundershock"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", moves: ["thunderbolt", "shadowball", "lightscreen", "voltswitch"], pokeball: "cherishball"},
 		],
 	},
 	flareon: {
@@ -18132,9 +18132,9 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
-			{"generation": 6, "level": 10, "moves": ["celebrate", "tailwhip", "sandattack", "ember"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves": ["flareblitz", "facade", "willowisp", "quickattack"], "pokeball": "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tailwhip", "tackle", "helpinghand", "sandattack"]},
+			{generation: 6, level: 10, moves: ["celebrate", "tailwhip", "sandattack", "ember"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["flareblitz", "facade", "willowisp", "quickattack"], pokeball: "cherishball"},
 		],
 	},
 	espeon: {
@@ -18229,10 +18229,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["psybeam", "psychup", "psychic", "morningsun"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
-			{"generation": 6, "level": 10, "moves": ["celebrate", "tailwhip", "sandattack", "confusion"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves": ["psychic", "dazzlinggleam", "shadowball", "reflect"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, moves: ["psybeam", "psychup", "psychic", "morningsun"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tailwhip", "tackle", "helpinghand", "sandattack"]},
+			{generation: 6, level: 10, moves: ["celebrate", "tailwhip", "sandattack", "confusion"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["psychic", "dazzlinggleam", "shadowball", "reflect"], pokeball: "cherishball"},
 		],
 	},
 	umbreon: {
@@ -18327,10 +18327,10 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["feintattack", "meanlook", "screech", "moonlight"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
-			{"generation": 6, "level": 10, "moves": ["celebrate", "tailwhip", "sandattack", "pursuit"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "gender": "F", "moves": ["snarl", "toxic", "protect", "moonlight"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, moves: ["feintattack", "meanlook", "screech", "moonlight"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tailwhip", "tackle", "helpinghand", "sandattack"]},
+			{generation: 6, level: 10, moves: ["celebrate", "tailwhip", "sandattack", "pursuit"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", moves: ["snarl", "toxic", "protect", "moonlight"], pokeball: "cherishball"},
 		],
 	},
 	leafeon: {
@@ -18419,9 +18419,9 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
-			{"generation": 6, "level": 10, "moves": ["celebrate", "tailwhip", "sandattack", "razorleaf"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves": ["leafblade", "swordsdance", "sunnyday", "synthesis"], "pokeball": "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tailwhip", "tackle", "helpinghand", "sandattack"]},
+			{generation: 6, level: 10, moves: ["celebrate", "tailwhip", "sandattack", "razorleaf"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["leafblade", "swordsdance", "sunnyday", "synthesis"], pokeball: "cherishball"},
 		],
 	},
 	glaceon: {
@@ -18504,9 +18504,9 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
-			{"generation": 6, "level": 10, "moves": ["celebrate", "tailwhip", "sandattack", "icywind"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "gender": "F", "moves": ["blizzard", "shadowball", "hail", "auroraveil"], "pokeball": "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tailwhip", "tackle", "helpinghand", "sandattack"]},
+			{generation: 6, level: 10, moves: ["celebrate", "tailwhip", "sandattack", "icywind"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", moves: ["blizzard", "shadowball", "hail", "auroraveil"], pokeball: "cherishball"},
 		],
 	},
 	porygon: {
@@ -18593,10 +18593,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "isHidden": true, "moves": ["tackle", "conversion", "sharpen", "psybeam"]},
+			{generation: 5, level: 10, isHidden: true, moves: ["tackle", "conversion", "sharpen", "psybeam"]},
 		],
 		encounters: [
-			{"generation": 1, "level": 18},
+			{generation: 1, level: 18},
 		],
 	},
 	porygon2: {
@@ -18828,10 +18828,10 @@ let BattleLearnsets = {
 			wringout: ["7E", "6E", "5E", "4E"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "gender": "M", "abilities": ["swiftswim"], "moves": ["bubblebeam", "supersonic", "withdraw", "bite"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, gender: "M", abilities: ["swiftswim"], moves: ["bubblebeam", "supersonic", "withdraw", "bite"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 30},
+			{generation: 1, level: 30},
 		],
 	},
 	omastar: {
@@ -18999,10 +18999,10 @@ let BattleLearnsets = {
 			wringout: ["7L50", "6L50", "5L51", "4L51"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "gender": "M", "abilities": ["battlearmor"], "moves": ["confuseray", "dig", "scratch", "harden"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, gender: "M", abilities: ["battlearmor"], moves: ["confuseray", "dig", "scratch", "harden"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 30},
+			{generation: 1, level: 30},
 		],
 	},
 	kabutops: {
@@ -19203,11 +19203,11 @@ let BattleLearnsets = {
 			wingattack: ["8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "gender": "M", "abilities": ["pressure"], "moves": ["steelwing", "icefang", "firefang", "thunderfang"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "isHidden": true, "moves": ["ancientpower", "rockpolish", "wideguard", "celebrate"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, gender: "M", abilities: ["pressure"], moves: ["steelwing", "icefang", "firefang", "thunderfang"], pokeball: "cherishball"},
+			{generation: 7, level: 50, isHidden: true, moves: ["ancientpower", "rockpolish", "wideguard", "celebrate"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 30},
+			{generation: 1, level: 30},
 		],
 	},
 	munchlax: {
@@ -19312,9 +19312,9 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
 		eventData: [
-			{"generation": 4, "level": 5, "moves": ["metronome", "tackle", "defensecurl", "selfdestruct"]},
-			{"generation": 4, "level": 5, "gender": "F", "nature": "Relaxed", "abilities": ["thickfat"], "moves": ["metronome", "odorsleuth", "tackle", "curse"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 5, "abilities": ["thickfat"], "moves": ["tackle", "metronome", "holdback", "happyhour"], "pokeball": "cherishball"},
+			{generation: 4, level: 5, moves: ["metronome", "tackle", "defensecurl", "selfdestruct"]},
+			{generation: 4, level: 5, gender: "F", nature: "Relaxed", abilities: ["thickfat"], moves: ["metronome", "odorsleuth", "tackle", "curse"], pokeball: "cherishball"},
+			{generation: 7, level: 5, abilities: ["thickfat"], moves: ["tackle", "metronome", "holdback", "happyhour"], pokeball: "cherishball"},
 		],
 	},
 	snorlax: {
@@ -19450,11 +19450,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 43, "moves": ["refresh", "fissure", "curse", "bodyslam"]},
-			{"generation": 7, "level": 30, "abilities": ["thickfat"], "moves": ["sunnyday", "block", "bodyslam", "celebrate"], "pokeball": "cherishball"},
+			{generation: 3, level: 43, moves: ["refresh", "fissure", "curse", "bodyslam"]},
+			{generation: 7, level: 30, abilities: ["thickfat"], moves: ["sunnyday", "block", "bodyslam", "celebrate"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 1, "level": 30},
+			{generation: 1, level: 30},
 		],
 	},
 	articuno: {
@@ -19539,18 +19539,18 @@ let BattleLearnsets = {
 			whirlwind: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "shiny": 1, "moves": ["mist", "agility", "mindreader", "icebeam"]},
-			{"generation": 3, "level": 70, "moves": ["agility", "mindreader", "icebeam", "reflect"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 50, "moves": ["icebeam", "healbell", "extrasensory", "haze"]},
-			{"generation": 4, "level": 60, "shiny": 1, "moves": ["agility", "icebeam", "reflect", "roost"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["mist", "agility", "mindreader", "icebeam"]},
-			{"generation": 6, "level": 70, "moves": ["icebeam", "reflect", "hail", "tailwind"]},
-			{"generation": 6, "level": 70, "isHidden": true, "moves": ["freezedry", "icebeam", "hail", "reflect"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["ancientpower", "freezedry", "reflect", "hail"]},
+			{generation: 3, level: 50, shiny: 1, moves: ["mist", "agility", "mindreader", "icebeam"]},
+			{generation: 3, level: 70, moves: ["agility", "mindreader", "icebeam", "reflect"], pokeball: "pokeball"},
+			{generation: 3, level: 50, moves: ["icebeam", "healbell", "extrasensory", "haze"]},
+			{generation: 4, level: 60, shiny: 1, moves: ["agility", "icebeam", "reflect", "roost"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["mist", "agility", "mindreader", "icebeam"]},
+			{generation: 6, level: 70, moves: ["icebeam", "reflect", "hail", "tailwind"]},
+			{generation: 6, level: 70, isHidden: true, moves: ["freezedry", "icebeam", "hail", "reflect"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["ancientpower", "freezedry", "reflect", "hail"]},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 1, "level": 50},
+			{generation: 1, level: 50},
 		],
 	},
 	zapdos: {
@@ -19632,18 +19632,18 @@ let BattleLearnsets = {
 			zapcannon: ["7L99", "7V", "6L1", "5L92"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "shiny": 1, "moves": ["thunderwave", "agility", "detect", "drillpeck"]},
-			{"generation": 3, "level": 70, "moves": ["agility", "detect", "drillpeck", "charge"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 50, "moves": ["thunderbolt", "extrasensory", "batonpass", "metalsound"]},
-			{"generation": 4, "level": 60, "shiny": 1, "moves": ["charge", "agility", "discharge", "roost"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["thunderwave", "agility", "detect", "drillpeck"]},
-			{"generation": 6, "level": 70, "moves": ["agility", "discharge", "raindance", "lightscreen"]},
-			{"generation": 6, "level": 70, "isHidden": true, "moves": ["discharge", "thundershock", "raindance", "agility"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["ancientpower", "discharge", "pluck", "raindance"]},
+			{generation: 3, level: 50, shiny: 1, moves: ["thunderwave", "agility", "detect", "drillpeck"]},
+			{generation: 3, level: 70, moves: ["agility", "detect", "drillpeck", "charge"], pokeball: "pokeball"},
+			{generation: 3, level: 50, moves: ["thunderbolt", "extrasensory", "batonpass", "metalsound"]},
+			{generation: 4, level: 60, shiny: 1, moves: ["charge", "agility", "discharge", "roost"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["thunderwave", "agility", "detect", "drillpeck"]},
+			{generation: 6, level: 70, moves: ["agility", "discharge", "raindance", "lightscreen"]},
+			{generation: 6, level: 70, isHidden: true, moves: ["discharge", "thundershock", "raindance", "agility"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["ancientpower", "discharge", "pluck", "raindance"]},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 1, "level": 50},
+			{generation: 1, level: 50},
 		],
 	},
 	moltres: {
@@ -19722,18 +19722,18 @@ let BattleLearnsets = {
 			wingattack: ["8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "shiny": 1, "moves": ["firespin", "agility", "endure", "flamethrower"]},
-			{"generation": 3, "level": 70, "moves": ["agility", "endure", "flamethrower", "safeguard"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 50, "moves": ["extrasensory", "morningsun", "willowisp", "flamethrower"]},
-			{"generation": 4, "level": 60, "shiny": 1, "moves": ["flamethrower", "safeguard", "airslash", "roost"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["firespin", "agility", "endure", "flamethrower"]},
-			{"generation": 6, "level": 70, "moves": ["safeguard", "airslash", "sunnyday", "heatwave"]},
-			{"generation": 6, "level": 70, "isHidden": true, "moves": ["skyattack", "heatwave", "sunnyday", "safeguard"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["ancientpower", "flamethrower", "airslash", "sunnyday"]},
+			{generation: 3, level: 50, shiny: 1, moves: ["firespin", "agility", "endure", "flamethrower"]},
+			{generation: 3, level: 70, moves: ["agility", "endure", "flamethrower", "safeguard"], pokeball: "pokeball"},
+			{generation: 3, level: 50, moves: ["extrasensory", "morningsun", "willowisp", "flamethrower"]},
+			{generation: 4, level: 60, shiny: 1, moves: ["flamethrower", "safeguard", "airslash", "roost"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["firespin", "agility", "endure", "flamethrower"]},
+			{generation: 6, level: 70, moves: ["safeguard", "airslash", "sunnyday", "heatwave"]},
+			{generation: 6, level: 70, isHidden: true, moves: ["skyattack", "heatwave", "sunnyday", "safeguard"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["ancientpower", "flamethrower", "airslash", "sunnyday"]},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 1, "level": 50},
+			{generation: 1, level: 50},
 		],
 	},
 	dratini: {
@@ -19816,7 +19816,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 10},
+			{generation: 1, level: 10},
 		],
 	},
 	dragonair: {
@@ -19895,11 +19895,11 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 1, "level": 15},
-			{"generation": 2, "level": 10},
-			{"generation": 3, "level": 25, "pokeball": "safariball"},
-			{"generation": 4, "level": 15},
-			{"generation": 7, "level": 10},
+			{generation: 1, level: 15},
+			{generation: 2, level: 10},
+			{generation: 3, level: 25, pokeball: "safariball"},
+			{generation: 4, level: 15},
+			{generation: 7, level: 10},
 		],
 	},
 	dragonite: {
@@ -20023,19 +20023,19 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["agility", "safeguard", "wingattack", "outrage"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 55, "moves": ["healbell", "hyperbeam", "dragondance", "earthquake"]},
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Mild", "moves": ["dracometeor", "thunderbolt", "outrage", "dragondance"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "gender": "M", "isHidden": true, "moves": ["extremespeed", "firepunch", "dragondance", "outrage"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 55, "gender": "M", "isHidden": true, "moves": ["dragonrush", "safeguard", "wingattack", "thunderpunch"]},
-			{"generation": 5, "level": 55, "gender": "M", "isHidden": true, "moves": ["dragonrush", "safeguard", "wingattack", "extremespeed"]},
-			{"generation": 5, "level": 50, "gender": "M", "nature": "Brave", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "moves": ["fireblast", "safeguard", "outrage", "hyperbeam"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 55, "gender": "M", "isHidden": true, "moves": ["dragondance", "outrage", "hurricane", "extremespeed"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 62, "gender": "M", "ivs": {"hp": 31, "def": 31, "spa": 31, "spd": 31}, "moves": ["agility", "slam", "barrier", "hyperbeam"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, moves: ["agility", "safeguard", "wingattack", "outrage"], pokeball: "pokeball"},
+			{generation: 3, level: 55, moves: ["healbell", "hyperbeam", "dragondance", "earthquake"]},
+			{generation: 4, level: 50, gender: "M", nature: "Mild", moves: ["dracometeor", "thunderbolt", "outrage", "dragondance"], pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", isHidden: true, moves: ["extremespeed", "firepunch", "dragondance", "outrage"], pokeball: "cherishball"},
+			{generation: 5, level: 55, gender: "M", isHidden: true, moves: ["dragonrush", "safeguard", "wingattack", "thunderpunch"]},
+			{generation: 5, level: 55, gender: "M", isHidden: true, moves: ["dragonrush", "safeguard", "wingattack", "extremespeed"]},
+			{generation: 5, level: 50, gender: "M", nature: "Brave", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["fireblast", "safeguard", "outrage", "hyperbeam"], pokeball: "cherishball"},
+			{generation: 6, level: 55, gender: "M", isHidden: true, moves: ["dragondance", "outrage", "hurricane", "extremespeed"], pokeball: "cherishball"},
+			{generation: 6, level: 62, gender: "M", ivs: {hp: 31, def: 31, spa: 31, spd: 31}, moves: ["agility", "slam", "barrier", "hyperbeam"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 5, "level": 50},
-			{"generation": 7, "level": 10},
+			{generation: 5, level: 50},
+			{generation: 7, level: 10},
 		],
 	},
 	mewtwo: {
@@ -20191,17 +20191,17 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "shiny": 1, "moves": ["swift", "recover", "safeguard", "psychic"]},
-			{"generation": 4, "level": 70, "shiny": 1, "moves": ["psychocut", "amnesia", "powerswap", "guardswap"]},
-			{"generation": 5, "level": 70, "moves": ["psystrike", "shadowball", "aurasphere", "electroball"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "nature": "Timid", "ivs": {"spa": 31, "spe": 31}, "isHidden": true, "moves": ["psystrike", "icebeam", "healpulse", "hurricane"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 70, "moves": ["recover", "psychic", "barrier", "aurasphere"]},
-			{"generation": 6, "level": 100, "shiny": true, "isHidden": true, "moves": ["psystrike", "psychic", "recover", "aurasphere"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["psychic", "recover", "swift", "psychocut"]},
+			{generation: 3, level: 70, shiny: 1, moves: ["swift", "recover", "safeguard", "psychic"]},
+			{generation: 4, level: 70, shiny: 1, moves: ["psychocut", "amnesia", "powerswap", "guardswap"]},
+			{generation: 5, level: 70, moves: ["psystrike", "shadowball", "aurasphere", "electroball"], pokeball: "cherishball"},
+			{generation: 5, level: 100, nature: "Timid", ivs: {spa: 31, spe: 31}, isHidden: true, moves: ["psystrike", "icebeam", "healpulse", "hurricane"], pokeball: "cherishball"},
+			{generation: 6, level: 70, moves: ["recover", "psychic", "barrier", "aurasphere"]},
+			{generation: 6, level: 100, shiny: true, isHidden: true, moves: ["psystrike", "psychic", "recover", "aurasphere"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["psychic", "recover", "swift", "psychocut"]},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 1, "level": 70},
+			{generation: 1, level: 70},
 		],
 	},
 	mew: {
@@ -20532,32 +20532,32 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["pound", "transform", "megapunch", "metronome"]},
-			{"generation": 3, "level": 10, "moves": ["pound", "transform"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["fakeout"]},
-			{"generation": 3, "level": 10, "moves": ["fakeout"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["feintattack"]},
-			{"generation": 3, "level": 10, "moves": ["feintattack"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["hypnosis"]},
-			{"generation": 3, "level": 10, "moves": ["hypnosis"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["nightshade"]},
-			{"generation": 3, "level": 10, "moves": ["nightshade"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["roleplay"]},
-			{"generation": 3, "level": 10, "moves": ["roleplay"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["zapcannon"]},
-			{"generation": 3, "level": 10, "moves": ["zapcannon"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "moves": ["ancientpower", "metronome", "teleport", "aurasphere"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "moves": ["barrier", "metronome", "teleport", "aurasphere"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "moves": ["megapunch", "metronome", "teleport", "aurasphere"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "moves": ["amnesia", "metronome", "teleport", "aurasphere"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "moves": ["transform", "metronome", "teleport", "aurasphere"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "moves": ["psychic", "metronome", "teleport", "aurasphere"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "moves": ["synthesis", "return", "hypnosis", "teleport"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 5, "moves": ["pound"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["pound"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 5, "perfectIVs": 5, "moves": ["pound"], "pokeball": "pokeball"},
-			{"generation": 7, "level": 50, "moves": ["psychic", "barrier", "metronome", "transform"], "pokeball": "cherishball"},
-			{"generation": 8, "level": 1, "moves": ["pound"], "pokeball": "pokeball"},
+			{generation: 3, level: 30, shiny: 1, moves: ["pound", "transform", "megapunch", "metronome"]},
+			{generation: 3, level: 10, moves: ["pound", "transform"], pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1, moves: ["fakeout"]},
+			{generation: 3, level: 10, moves: ["fakeout"], pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1, moves: ["feintattack"]},
+			{generation: 3, level: 10, moves: ["feintattack"], pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1, moves: ["hypnosis"]},
+			{generation: 3, level: 10, moves: ["hypnosis"], pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1, moves: ["nightshade"]},
+			{generation: 3, level: 10, moves: ["nightshade"], pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1, moves: ["roleplay"]},
+			{generation: 3, level: 10, moves: ["roleplay"], pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1, moves: ["zapcannon"]},
+			{generation: 3, level: 10, moves: ["zapcannon"], pokeball: "pokeball"},
+			{generation: 4, level: 50, moves: ["ancientpower", "metronome", "teleport", "aurasphere"], pokeball: "cherishball"},
+			{generation: 4, level: 50, moves: ["barrier", "metronome", "teleport", "aurasphere"], pokeball: "cherishball"},
+			{generation: 4, level: 50, moves: ["megapunch", "metronome", "teleport", "aurasphere"], pokeball: "cherishball"},
+			{generation: 4, level: 50, moves: ["amnesia", "metronome", "teleport", "aurasphere"], pokeball: "cherishball"},
+			{generation: 4, level: 50, moves: ["transform", "metronome", "teleport", "aurasphere"], pokeball: "cherishball"},
+			{generation: 4, level: 50, moves: ["psychic", "metronome", "teleport", "aurasphere"], pokeball: "cherishball"},
+			{generation: 4, level: 50, moves: ["synthesis", "return", "hypnosis", "teleport"], pokeball: "cherishball"},
+			{generation: 4, level: 5, moves: ["pound"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["pound"], pokeball: "cherishball"},
+			{generation: 7, level: 5, perfectIVs: 5, moves: ["pound"], pokeball: "pokeball"},
+			{generation: 7, level: 50, moves: ["psychic", "barrier", "metronome", "transform"], pokeball: "cherishball"},
+			{generation: 8, level: 1, moves: ["pound"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -20633,9 +20633,9 @@ let BattleLearnsets = {
 			wringout: ["7E", "6E", "5E", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "growl", "razorleaf"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "moves": ["tackle", "growl", "ancientpower", "frenzyplant"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 5, "moves": ["tackle", "growl"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "growl", "razorleaf"], pokeball: "pokeball"},
+			{generation: 3, level: 5, moves: ["tackle", "growl", "ancientpower", "frenzyplant"], pokeball: "pokeball"},
+			{generation: 6, level: 5, moves: ["tackle", "growl"], pokeball: "cherishball"},
 		],
 	},
 	bayleef: {
@@ -20777,7 +20777,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "isHidden": true, "moves": ["solarbeam", "sunnyday", "synthesis", "bodyslam"], "pokeball": "pokeball"},
+			{generation: 6, level: 50, isHidden: true, moves: ["solarbeam", "sunnyday", "synthesis", "bodyslam"], pokeball: "pokeball"},
 		],
 	},
 	cyndaquil: {
@@ -20852,9 +20852,9 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "leer", "smokescreen"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "moves": ["tackle", "leer", "reversal", "blastburn"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 5, "moves": ["tackle", "leer"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "leer", "smokescreen"], pokeball: "pokeball"},
+			{generation: 3, level: 5, moves: ["tackle", "leer", "reversal", "blastburn"], pokeball: "pokeball"},
+			{generation: 6, level: 5, moves: ["tackle", "leer"], pokeball: "cherishball"},
 		],
 	},
 	quilava: {
@@ -21014,8 +21014,8 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["quickattack", "flamewheel", "swift", "flamethrower"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 50, "isHidden": true, "moves": ["overheat", "flamewheel", "flamecharge", "swift"], "pokeball": "pokeball"},
+			{generation: 3, level: 70, moves: ["quickattack", "flamewheel", "swift", "flamethrower"], pokeball: "pokeball"},
+			{generation: 6, level: 50, isHidden: true, moves: ["overheat", "flamewheel", "flamecharge", "swift"], pokeball: "pokeball"},
 		],
 	},
 	totodile: {
@@ -21111,9 +21111,9 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["scratch", "leer", "rage"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "moves": ["scratch", "leer", "crunch", "hydrocannon"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 5, "moves": ["scratch", "leer"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["scratch", "leer", "rage"], pokeball: "pokeball"},
+			{generation: 3, level: 5, moves: ["scratch", "leer", "crunch", "hydrocannon"], pokeball: "pokeball"},
+			{generation: 6, level: 5, moves: ["scratch", "leer"], pokeball: "cherishball"},
 		],
 	},
 	croconaw: {
@@ -21305,7 +21305,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "isHidden": true, "moves": ["icepunch", "crunch", "waterfall", "screech"], "pokeball": "pokeball"},
+			{generation: 6, level: 50, isHidden: true, moves: ["icepunch", "crunch", "waterfall", "screech"], pokeball: "pokeball"},
 		],
 	},
 	sentret: {
@@ -21401,7 +21401,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 2, "level": 2},
+			{generation: 2, level: 2},
 		],
 	},
 	furret: {
@@ -21498,8 +21498,8 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 2, "level": 6},
-			{"generation": 4, "level": 6},
+			{generation: 2, level: 6},
+			{generation: 4, level: 6},
 		],
 	},
 	hoothoot: {
@@ -21589,10 +21589,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "7L16", "6T", "6L37", "5T", "5L37", "4T", "4L33"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "growl", "foresight"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "growl", "foresight"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 2, "level": 2},
+			{generation: 2, level: 2},
 		],
 	},
 	noctowl: {
@@ -21678,9 +21678,9 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "7L16", "6T", "6L42", "5T", "5L42", "4T", "4L37"],
 		},
 		encounters: [
-			{"generation": 2, "level": 7},
-			{"generation": 4, "level": 5},
-			{"generation": 7, "level": 19},
+			{generation: 2, level: 7},
+			{generation: 4, level: 5},
+			{generation: 7, level: 19},
 		],
 	},
 	ledyba: {
@@ -21761,10 +21761,10 @@ let BattleLearnsets = {
 			uturn: ["7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "moves": ["refresh", "psybeam", "aerialace", "supersonic"]},
+			{generation: 3, level: 10, moves: ["refresh", "psybeam", "aerialace", "supersonic"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 3},
+			{generation: 2, level: 3},
 		],
 	},
 	ledian: {
@@ -21844,8 +21844,8 @@ let BattleLearnsets = {
 			uturn: ["7M", "6M", "5M", "4M"],
 		},
 		encounters: [
-			{"generation": 2, "level": 7},
-			{"generation": 4, "level": 5},
+			{generation: 2, level: 7},
+			{generation: 4, level: 5},
 		],
 	},
 	spinarak: {
@@ -21923,10 +21923,10 @@ let BattleLearnsets = {
 			xscissor: ["7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 14, "moves": ["refresh", "dig", "signalbeam", "nightshade"]},
+			{generation: 3, level: 14, moves: ["refresh", "dig", "signalbeam", "nightshade"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 3},
+			{generation: 2, level: 3},
 		],
 	},
 	ariados: {
@@ -22001,9 +22001,9 @@ let BattleLearnsets = {
 			xscissor: ["7M", "6M", "5M"],
 		},
 		encounters: [
-			{"generation": 2, "level": 7},
-			{"generation": 4, "level": 5},
-			{"generation": 6, "level": 19, "maxEggMoves": 1},
+			{generation: 2, level: 7},
+			{generation: 4, level: 5},
+			{generation: 6, level: 19, maxEggMoves: 1},
 		],
 	},
 	chinchou: {
@@ -22155,9 +22155,9 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 4, "level": 20},
-			{"generation": 6, "level": 26, "maxEggMoves": 1},
-			{"generation": 7, "level": 10},
+			{generation: 4, level: 20},
+			{generation: 6, level: 26, maxEggMoves: 1},
+			{generation: 7, level: 10},
 		],
 	},
 	togepi: {
@@ -22265,8 +22265,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 20, "gender": "F", "abilities": ["serenegrace"], "moves": ["metronome", "charm", "sweetkiss", "yawn"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 25, "moves": ["triattack", "followme", "ancientpower", "helpinghand"]},
+			{generation: 3, level: 20, gender: "F", abilities: ["serenegrace"], moves: ["metronome", "charm", "sweetkiss", "yawn"], pokeball: "pokeball"},
+			{generation: 3, level: 25, moves: ["triattack", "followme", "ancientpower", "helpinghand"]},
 		],
 	},
 	togetic: {
@@ -22504,7 +22504,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["extremespeed", "aurasphere", "airslash", "present"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["extremespeed", "aurasphere", "airslash", "present"]},
 		],
 	},
 	natu: {
@@ -22602,7 +22602,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 22, "moves": ["batonpass", "futuresight", "nightshade", "aerialace"]},
+			{generation: 3, level: 22, moves: ["batonpass", "futuresight", "nightshade", "aerialace"]},
 		],
 	},
 	xatu: {
@@ -22698,10 +22698,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 2, "level": 15},
-			{"generation": 4, "level": 16, "gender": "M", "nature": "Modest", "ivs": {"hp": 15, "atk": 20, "def": 15, "spa": 20, "spd": 20, "spe": 20}, "abilities": ["synchronize"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 24, "maxEggMoves": 1},
-			{"generation": 7, "level": 21},
+			{generation: 2, level: 15},
+			{generation: 4, level: 16, gender: "M", nature: "Modest", ivs: {hp: 15, atk: 20, def: 15, spa: 20, spd: 20, spe: 20}, abilities: ["synchronize"], pokeball: "pokeball"},
+			{generation: 6, level: 24, maxEggMoves: 1},
+			{generation: 7, level: 21},
 		],
 	},
 	mareep: {
@@ -22772,10 +22772,10 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 37, "gender": "F", "moves": ["thunder", "thundershock", "thunderwave", "cottonspore"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "growl", "thundershock"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 17, "moves": ["healbell", "thundershock", "thunderwave", "bodyslam"]},
-			{"generation": 6, "level": 10, "moves": ["holdback", "tackle", "thunderwave", "thundershock"], "pokeball": "cherishball"},
+			{generation: 3, level: 37, gender: "F", moves: ["thunder", "thundershock", "thunderwave", "cottonspore"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "growl", "thundershock"], pokeball: "pokeball"},
+			{generation: 3, level: 17, moves: ["healbell", "thundershock", "thunderwave", "bodyslam"]},
+			{generation: 6, level: 10, moves: ["holdback", "tackle", "thunderwave", "thundershock"], pokeball: "cherishball"},
 		],
 	},
 	flaaffy: {
@@ -22851,7 +22851,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 7, "level": 11, "pokeball": "pokeball"},
+			{generation: 7, level: 11, pokeball: "pokeball"},
 		],
 	},
 	ampharos: {
@@ -23171,8 +23171,8 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 5, "level": 5},
-			{"generation": 6, "level": 16, "maxEggMoves": 1},
+			{generation: 5, level: 5},
+			{generation: 6, level: 16, maxEggMoves: 1},
 		],
 	},
 	bonsly: {
@@ -23402,7 +23402,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7L40", "7E", "6T", "6L40", "6E", "5T", "5L40", "5E", "4T", "4L34", "4E"],
 		},
 		encounters: [
-			{"generation": 2, "level": 3},
+			{generation: 2, level: 3},
 		],
 	},
 	skiploom: {
@@ -23468,7 +23468,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7L48", "6T", "6L48", "5T", "5L48", "4T", "4L40"],
 		},
 		encounters: [
-			{"generation": 4, "level": 12},
+			{generation: 4, level: 12},
 		],
 	},
 	jumpluff: {
@@ -23537,7 +23537,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7L54", "6T", "6L54", "5T", "5L54", "4T", "4L40"],
 		},
 		eventData: [
-			{"generation": 5, "level": 27, "gender": "M", "isHidden": true, "moves": ["falseswipe", "sleeppowder", "bulletseed", "leechseed"]},
+			{generation: 5, level: 27, gender: "M", isHidden: true, moves: ["falseswipe", "sleeppowder", "bulletseed", "leechseed"]},
 		],
 	},
 	aipom: {
@@ -23647,7 +23647,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["scratch", "tailwhip", "sandattack"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["scratch", "tailwhip", "sandattack"], pokeball: "pokeball"},
 		],
 	},
 	ambipom: {
@@ -23797,7 +23797,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7L19", "6T", "6L19", "5T", "5L25", "4T", "4L25"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["chlorophyll"], "moves": ["absorb", "growth"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", abilities: ["chlorophyll"], moves: ["absorb", "growth"], pokeball: "pokeball"},
 		],
 	},
 	sunflora: {
@@ -24079,7 +24079,7 @@ let BattleLearnsets = {
 			yawn: ["8L21", "7L29", "6L29", "5L29", "4L29", "3L31"],
 		},
 		encounters: [
-			{"generation": 2, "level": 4},
+			{generation: 2, level: 4},
 		],
 	},
 	quagsire: {
@@ -24175,8 +24175,8 @@ let BattleLearnsets = {
 			yawn: ["8L23", "7L31", "6L31", "5L31", "4L31", "3L35"],
 		},
 		encounters: [
-			{"generation": 2, "level": 15},
-			{"generation": 4, "level": 10},
+			{generation: 2, level: 15},
+			{generation: 4, level: 10},
 		],
 	},
 	murkrow: {
@@ -24264,7 +24264,7 @@ let BattleLearnsets = {
 			wingattack: ["7L15", "7E", "7V", "6L15", "6E", "5L15", "5E", "4L15", "4E", "3E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["insomnia"], "moves": ["peck", "astonish"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", abilities: ["insomnia"], moves: ["peck", "astonish"], pokeball: "pokeball"},
 		],
 	},
 	honchkrow: {
@@ -24337,7 +24337,7 @@ let BattleLearnsets = {
 			wingattack: ["7L1", "6L1", "5L1", "4L1"],
 		},
 		eventData: [
-			{"generation": 7, "level": 65, "gender": "M", "abilities": ["superluck"], "moves": ["nightslash", "skyattack", "heatwave", "icywind"], "pokeball": "cherishball"},
+			{generation: 7, level: 65, gender: "M", abilities: ["superluck"], moves: ["nightslash", "skyattack", "heatwave", "icywind"], pokeball: "cherishball"},
 		],
 	},
 	misdreavus: {
@@ -24430,7 +24430,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["growl", "psywave", "spite"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["growl", "psywave", "spite"], pokeball: "pokeball"},
 		],
 	},
 	mismagius: {
@@ -24516,10 +24516,10 @@ let BattleLearnsets = {
 			hiddenpower: ["7M", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 		},
 		encounters: [
-			{"generation": 2, "level": 5},
-			{"generation": 3, "level": 25},
-			{"generation": 4, "level": 5},
-			{"generation": 6, "level": 32},
+			{generation: 2, level: 5},
+			{generation: 3, level: 25},
+			{generation: 4, level: 5},
+			{generation: 6, level: 32},
 		],
 	},
 	wynaut: {
@@ -24535,7 +24535,7 @@ let BattleLearnsets = {
 			tickle: ["3S0"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["splash", "charm", "encore", "tickle"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["splash", "charm", "encore", "tickle"], pokeball: "pokeball"},
 		],
 	},
 	wobbuffet: {
@@ -24550,14 +24550,14 @@ let BattleLearnsets = {
 			splash: ["8L1"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "moves": ["counter", "mirrorcoat", "safeguard", "destinybond"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["counter", "mirrorcoat", "safeguard", "destinybond"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 10, "gender": "M", "moves": ["counter"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 15, "gender": "M", "moves": ["counter", "mirrorcoat"], "pokeball": "cherishball"},
+			{generation: 3, level: 5, moves: ["counter", "mirrorcoat", "safeguard", "destinybond"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["counter", "mirrorcoat", "safeguard", "destinybond"], pokeball: "pokeball"},
+			{generation: 6, level: 10, gender: "M", moves: ["counter"], pokeball: "cherishball"},
+			{generation: 6, level: 15, gender: "M", moves: ["counter", "mirrorcoat"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 2, "level": 5},
-			{"generation": 4, "level": 3},
+			{generation: 2, level: 5},
+			{generation: 4, level: 3},
 		],
 	},
 	girafarig: {
@@ -24733,8 +24733,8 @@ let BattleLearnsets = {
 			venoshock: ["7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "protect", "selfdestruct"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 20, "moves": ["refresh", "pinmissile", "spikes", "counter"]},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "protect", "selfdestruct"], pokeball: "pokeball"},
+			{generation: 3, level: 20, moves: ["refresh", "pinmissile", "spikes", "counter"]},
 		],
 	},
 	forretress: {
@@ -24816,7 +24816,7 @@ let BattleLearnsets = {
 			zapcannon: ["7L1", "6L1", "5L64", "4L62", "3L31"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	dunsparce: {
@@ -25008,7 +25008,7 @@ let BattleLearnsets = {
 			xscissor: ["7M", "7L40", "6M", "6L40", "5M", "5L45", "4M", "4L42"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["poisonsting", "sandattack"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["poisonsting", "sandattack"], pokeball: "pokeball"},
 		],
 	},
 	gliscor: {
@@ -25197,7 +25197,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "scaryface", "tailwhip", "charm"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "scaryface", "tailwhip", "charm"], pokeball: "pokeball"},
 		],
 	},
 	granbull: {
@@ -25306,7 +25306,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 2, "level": 15},
+			{generation: 2, level: 15},
 		],
 	},
 	qwilfish: {
@@ -25399,7 +25399,7 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "7V", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "poisonsting", "harden", "minimize"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "poisonsting", "harden", "minimize"], pokeball: "pokeball"},
 		],
 	},
 	shuckle: {
@@ -25484,8 +25484,8 @@ let BattleLearnsets = {
 			wrap: ["8L1", "7L9", "7V", "6L9", "5L13", "4L22", "3L9", "3S0"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["sturdy"], "moves": ["constrict", "withdraw", "wrap"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 20, "abilities": ["sturdy"], "moves": ["substitute", "toxic", "sludgebomb", "encore"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", abilities: ["sturdy"], moves: ["constrict", "withdraw", "wrap"], pokeball: "pokeball"},
+			{generation: 3, level: 20, abilities: ["sturdy"], moves: ["substitute", "toxic", "sludgebomb", "encore"], pokeball: "pokeball"},
 		],
 	},
 	heracross: {
@@ -25576,8 +25576,8 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "gender": "F", "nature": "Adamant", "moves": ["bulletseed", "pinmissile", "closecombat", "megahorn"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "nature": "Adamant", "abilities": ["guts"], "moves": ["pinmissile", "bulletseed", "earthquake", "rockblast"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, gender: "F", nature: "Adamant", moves: ["bulletseed", "pinmissile", "closecombat", "megahorn"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Adamant", abilities: ["guts"], moves: ["pinmissile", "bulletseed", "earthquake", "rockblast"], pokeball: "cherishball"},
 		],
 	},
 	sneasel: {
@@ -25687,7 +25687,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["scratch", "leer", "taunt", "quickattack"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["scratch", "leer", "taunt", "quickattack"], pokeball: "pokeball"},
 		],
 	},
 	weavile: {
@@ -25789,8 +25789,8 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "6S1", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 30, "gender": "M", "nature": "Jolly", "moves": ["fakeout", "iceshard", "nightslash", "brickbreak"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 48, "gender": "M", "perfectIVs": 2, "moves": ["nightslash", "icepunch", "brickbreak", "xscissor"], "pokeball": "cherishball"},
+			{generation: 4, level: 30, gender: "M", nature: "Jolly", moves: ["fakeout", "iceshard", "nightslash", "brickbreak"], pokeball: "cherishball"},
+			{generation: 6, level: 48, gender: "M", perfectIVs: 2, moves: ["nightslash", "icepunch", "brickbreak", "xscissor"], pokeball: "cherishball"},
 		],
 	},
 	teddiursa: {
@@ -25892,11 +25892,11 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["pickup"], "moves": ["scratch", "leer", "lick"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 11, "abilities": ["pickup"], "moves": ["refresh", "metalclaw", "lick", "return"]},
+			{generation: 3, level: 10, gender: "M", abilities: ["pickup"], moves: ["scratch", "leer", "lick"], pokeball: "pokeball"},
+			{generation: 3, level: 11, abilities: ["pickup"], moves: ["refresh", "metalclaw", "lick", "return"]},
 		],
 		encounters: [
-			{"generation": 2, "level": 2},
+			{generation: 2, level: 2},
 		],
 	},
 	ursaring: {
@@ -25998,7 +25998,7 @@ let BattleLearnsets = {
 			zapcannon: ["7V"],
 		},
 		encounters: [
-			{"generation": 2, "level": 25},
+			{generation: 2, level: 25},
 		],
 	},
 	slugma: {
@@ -26147,11 +26147,11 @@ let BattleLearnsets = {
 			yawn: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 		},
 		eventData: [
-			{"generation": 3, "level": 38, "moves": ["refresh", "heatwave", "earthquake", "flamethrower"]},
+			{generation: 3, level: 38, moves: ["refresh", "heatwave", "earthquake", "flamethrower"]},
 		],
 		encounters: [
-			{"generation": 3, "level": 25},
-			{"generation": 6, "level": 30},
+			{generation: 3, level: 25},
+			{generation: 6, level: 30},
 		],
 	},
 	swinub: {
@@ -26226,7 +26226,7 @@ let BattleLearnsets = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 22, "abilities": ["oblivious"], "moves": ["charm", "ancientpower", "mist", "mudshot"]},
+			{generation: 3, level: 22, abilities: ["oblivious"], moves: ["charm", "ancientpower", "mist", "mudshot"]},
 		],
 	},
 	piloswine: {
@@ -26306,7 +26306,7 @@ let BattleLearnsets = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	mamoswine: {
@@ -26390,8 +26390,8 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 34, "gender": "M", "isHidden": true, "moves": ["hail", "icefang", "takedown", "doublehit"]},
-			{"generation": 6, "level": 50, "shiny": true, "gender": "M", "nature": "Adamant", "isHidden": true, "moves": ["iciclespear", "earthquake", "iciclecrash", "rockslide"], "pokeball": "pokeball"},
+			{generation: 5, level: 34, gender: "M", isHidden: true, moves: ["hail", "icefang", "takedown", "doublehit"]},
+			{generation: 6, level: 50, shiny: true, gender: "M", nature: "Adamant", isHidden: true, moves: ["iciclespear", "earthquake", "iciclecrash", "rockslide"], pokeball: "pokeball"},
 		],
 	},
 	corsola: {
@@ -26492,8 +26492,8 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "7V", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["tackle", "mudsport"], "pokeball": "pokeball"},
-			{"generation": 7, "level": 50, "gender": "F", "nature": "Serious", "abilities": ["hustle"], "moves": ["tackle", "powergem"], "pokeball": "ultraball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["tackle", "mudsport"], pokeball: "pokeball"},
+			{generation: 7, level: 50, gender: "F", nature: "Serious", abilities: ["hustle"], moves: ["tackle", "powergem"], pokeball: "ultraball"},
 		],
 	},
 	corsolagalar: {
@@ -26794,11 +26794,11 @@ let BattleLearnsets = {
 			wringout: ["7L28", "6L28", "5L36", "4L36"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "gender": "F", "nature": "Serious", "abilities": ["suctioncups"], "moves": ["octazooka", "icebeam", "signalbeam", "hyperbeam"], "pokeball": "cherishball"},
+			{generation: 4, level: 50, gender: "F", nature: "Serious", abilities: ["suctioncups"], moves: ["octazooka", "icebeam", "signalbeam", "hyperbeam"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 4, "level": 19},
-			{"generation": 7, "level": 10},
+			{generation: 4, level: 19},
+			{generation: 7, level: 10},
 		],
 	},
 	delibird: {
@@ -26888,8 +26888,8 @@ let BattleLearnsets = {
 			weatherball: ["8M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["present"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 10, "abilities": ["vitalspirit"], "moves": ["present", "happyhour"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["present"], pokeball: "pokeball"},
+			{generation: 6, level: 10, abilities: ["vitalspirit"], moves: ["present", "happyhour"], pokeball: "cherishball"},
 		],
 	},
 	mantyke: {
@@ -27050,7 +27050,7 @@ let BattleLearnsets = {
 			wingattack: ["8L1", "7L14", "7V", "6L14", "5L22", "4L22", "3L36"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "bubble", "supersonic"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "bubble", "supersonic"], pokeball: "pokeball"},
 		],
 	},
 	skarmory: {
@@ -27220,8 +27220,8 @@ let BattleLearnsets = {
 			willowisp: ["7M", "6M", "5M", "4M", "4E", "3E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["leer", "ember", "howl"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 17, "moves": ["charm", "feintattack", "ember", "roar"]},
+			{generation: 3, level: 10, gender: "M", moves: ["leer", "ember", "howl"], pokeball: "pokeball"},
+			{generation: 3, level: 17, moves: ["charm", "feintattack", "ember", "roar"]},
 		],
 	},
 	houndoom: {
@@ -27306,10 +27306,10 @@ let BattleLearnsets = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "nature": "Timid", "abilities": ["flashfire"], "moves": ["flamethrower", "darkpulse", "solarbeam", "sludgebomb"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, nature: "Timid", abilities: ["flashfire"], moves: ["flamethrower", "darkpulse", "solarbeam", "sludgebomb"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 4, "level": 20},
+			{generation: 4, level: 20},
 		],
 	},
 	phanpy: {
@@ -27380,7 +27380,7 @@ let BattleLearnsets = {
 			watergun: ["7V"],
 		},
 		encounters: [
-			{"generation": 2, "level": 2},
+			{generation: 2, level: 2},
 		],
 	},
 	donphan: {
@@ -27459,7 +27459,7 @@ let BattleLearnsets = {
 			toxic: ["7M", "7V", "6M", "5M", "4M", "3M"],
 		},
 		encounters: [
-			{"generation": 6, "level": 24, "maxEggMoves": 1},
+			{generation: 6, level: 24, maxEggMoves: 1},
 		],
 	},
 	stantler: {
@@ -27553,7 +27553,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L38", "7E", "6T", "6L38", "6E", "5T", "5L38", "5E", "4T", "4L38", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["intimidate"], "moves": ["tackle", "leer"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", abilities: ["intimidate"], moves: ["tackle", "leer"], pokeball: "pokeball"},
 		],
 	},
 	smeargle: {
@@ -27570,9 +27570,9 @@ let BattleLearnsets = {
 			spore: ["5S1"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["owntempo"], "moves": ["sketch"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 50, "gender": "F", "nature": "Jolly", "ivs": {"atk": 31, "spe": 31}, "abilities": ["technician"], "moves": ["falseswipe", "spore", "odorsleuth", "meanlook"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 40, "gender": "M", "nature": "Jolly", "abilities": ["owntempo"], "moves": ["sketch", "furyswipes", "seismictoss", "flamethrower"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", abilities: ["owntempo"], moves: ["sketch"], pokeball: "pokeball"},
+			{generation: 5, level: 50, gender: "F", nature: "Jolly", ivs: {atk: 31, spe: 31}, abilities: ["technician"], moves: ["falseswipe", "spore", "odorsleuth", "meanlook"], pokeball: "cherishball"},
+			{generation: 6, level: 40, gender: "M", nature: "Jolly", abilities: ["owntempo"], moves: ["sketch", "furyswipes", "seismictoss", "flamethrower"], pokeball: "cherishball"},
 		],
 	},
 	miltank: {
@@ -27672,7 +27672,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L29", "6T", "6L29", "5T", "5L29", "4T", "4L29"],
 		},
 		eventData: [
-			{"generation": 6, "level": 20, "perfectIVs": 3, "abilities": ["scrappy"], "moves": ["rollout", "attract", "stomp", "milkdrink"], "pokeball": "cherishball"},
+			{generation: 6, level: 20, perfectIVs: 3, abilities: ["scrappy"], moves: ["rollout", "attract", "stomp", "milkdrink"], pokeball: "cherishball"},
 		],
 	},
 	raikou: {
@@ -27750,19 +27750,19 @@ let BattleLearnsets = {
 			zapcannon: ["7V", "4S3"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "shiny": 1, "moves": ["thundershock", "roar", "quickattack", "spark"]},
-			{"generation": 3, "level": 70, "moves": ["quickattack", "spark", "reflect", "crunch"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 40, "shiny": 1, "moves": ["roar", "quickattack", "spark", "reflect"]},
-			{"generation": 4, "level": 30, "shiny": true, "nature": "Rash", "moves": ["zapcannon", "aurasphere", "extremespeed", "weatherball"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["spark", "reflect", "crunch", "thunderfang"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["reflect", "crunch", "thunderfang", "discharge"]},
-			{"generation": 7, "level": 60, "moves": ["reflect", "crunch", "thunderfang", "discharge"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["thunderbolt", "voltswitch", "extrasensory", "calmmind"], "pokeball": "cherishball"},
+			{generation: 3, level: 50, shiny: 1, moves: ["thundershock", "roar", "quickattack", "spark"]},
+			{generation: 3, level: 70, moves: ["quickattack", "spark", "reflect", "crunch"], pokeball: "pokeball"},
+			{generation: 4, level: 40, shiny: 1, moves: ["roar", "quickattack", "spark", "reflect"]},
+			{generation: 4, level: 30, shiny: true, nature: "Rash", moves: ["zapcannon", "aurasphere", "extremespeed", "weatherball"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["spark", "reflect", "crunch", "thunderfang"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["reflect", "crunch", "thunderfang", "discharge"]},
+			{generation: 7, level: 60, moves: ["reflect", "crunch", "thunderfang", "discharge"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["thunderbolt", "voltswitch", "extrasensory", "calmmind"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 2, "level": 40},
-			{"generation": 3, "level": 40},
+			{generation: 2, level: 40},
+			{generation: 3, level: 40},
 		],
 	},
 	entei: {
@@ -27840,19 +27840,19 @@ let BattleLearnsets = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "shiny": 1, "moves": ["ember", "roar", "firespin", "stomp"]},
-			{"generation": 3, "level": 70, "moves": ["firespin", "stomp", "flamethrower", "swagger"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 40, "shiny": 1, "moves": ["roar", "firespin", "stomp", "flamethrower"]},
-			{"generation": 4, "level": 30, "shiny": true, "nature": "Adamant", "moves": ["flareblitz", "howl", "extremespeed", "crushclaw"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["stomp", "flamethrower", "swagger", "firefang"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["stomp", "bite", "swagger", "lavaplume"]},
-			{"generation": 7, "level": 60, "moves": ["stomp", "bite", "swagger", "lavaplume"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["sacredfire", "stoneedge", "ironhead", "flamecharge"], "pokeball": "cherishball"},
+			{generation: 3, level: 50, shiny: 1, moves: ["ember", "roar", "firespin", "stomp"]},
+			{generation: 3, level: 70, moves: ["firespin", "stomp", "flamethrower", "swagger"], pokeball: "pokeball"},
+			{generation: 4, level: 40, shiny: 1, moves: ["roar", "firespin", "stomp", "flamethrower"]},
+			{generation: 4, level: 30, shiny: true, nature: "Adamant", moves: ["flareblitz", "howl", "extremespeed", "crushclaw"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["stomp", "flamethrower", "swagger", "firefang"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["stomp", "bite", "swagger", "lavaplume"]},
+			{generation: 7, level: 60, moves: ["stomp", "bite", "swagger", "lavaplume"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["sacredfire", "stoneedge", "ironhead", "flamecharge"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 2, "level": 40},
-			{"generation": 3, "level": 40},
+			{generation: 2, level: 40},
+			{generation: 3, level: 40},
 		],
 	},
 	suicune: {
@@ -27934,17 +27934,17 @@ let BattleLearnsets = {
 			whirlpool: ["7V", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "shiny": 1, "moves": ["bubblebeam", "raindance", "gust", "aurorabeam"]},
-			{"generation": 3, "level": 70, "moves": ["gust", "aurorabeam", "mist", "mirrorcoat"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 40, "shiny": 1, "moves": ["raindance", "gust", "aurorabeam", "mist"]},
-			{"generation": 4, "level": 30, "shiny": true, "nature": "Relaxed", "moves": ["sheercold", "airslash", "extremespeed", "aquaring"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["aurorabeam", "mist", "mirrorcoat", "icefang"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["bubblebeam", "aurorabeam", "mist", "raindance"]},
+			{generation: 3, level: 50, shiny: 1, moves: ["bubblebeam", "raindance", "gust", "aurorabeam"]},
+			{generation: 3, level: 70, moves: ["gust", "aurorabeam", "mist", "mirrorcoat"], pokeball: "pokeball"},
+			{generation: 4, level: 40, shiny: 1, moves: ["raindance", "gust", "aurorabeam", "mist"]},
+			{generation: 4, level: 30, shiny: true, nature: "Relaxed", moves: ["sheercold", "airslash", "extremespeed", "aquaring"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["aurorabeam", "mist", "mirrorcoat", "icefang"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["bubblebeam", "aurorabeam", "mist", "raindance"]},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 2, "level": 40},
-			{"generation": 3, "level": 40},
+			{generation: 2, level: 40},
+			{generation: 3, level: 40},
 		],
 	},
 	larvitar: {
@@ -28025,8 +28025,8 @@ let BattleLearnsets = {
 			uproar: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 20, "moves": ["sandstorm", "dragondance", "bite", "outrage"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 5, "shiny": true, "gender": "M", "moves": ["bite", "leer", "sandstorm", "superpower"], "pokeball": "cherishball"},
+			{generation: 3, level: 20, moves: ["sandstorm", "dragondance", "bite", "outrage"], pokeball: "pokeball"},
+			{generation: 5, level: 5, shiny: true, gender: "M", moves: ["bite", "leer", "sandstorm", "superpower"], pokeball: "cherishball"},
 		],
 	},
 	pupitar: {
@@ -28234,16 +28234,16 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["thrash", "scaryface", "crunch", "earthquake"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 100, "gender": "M", "moves": ["fireblast", "icebeam", "stoneedge", "crunch"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 55, "gender": "M", "isHidden": true, "moves": ["payback", "crunch", "earthquake", "seismictoss"]},
-			{"generation": 6, "level": 50, "moves": ["stoneedge", "crunch", "earthquake", "icepunch"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "nature": "Jolly", "moves": ["rockslide", "earthquake", "crunch", "stoneedge"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 55, "shiny": true, "nature": "Adamant", "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 14, "spd": 31, "spe": 0}, "moves": ["crunch", "rockslide", "lowkick", "protect"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["rockslide", "crunch", "icepunch", "lowkick"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, moves: ["thrash", "scaryface", "crunch", "earthquake"], pokeball: "pokeball"},
+			{generation: 5, level: 100, gender: "M", moves: ["fireblast", "icebeam", "stoneedge", "crunch"], pokeball: "cherishball"},
+			{generation: 5, level: 55, gender: "M", isHidden: true, moves: ["payback", "crunch", "earthquake", "seismictoss"]},
+			{generation: 6, level: 50, moves: ["stoneedge", "crunch", "earthquake", "icepunch"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Jolly", moves: ["rockslide", "earthquake", "crunch", "stoneedge"], pokeball: "cherishball"},
+			{generation: 6, level: 55, shiny: true, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 14, spd: 31, spe: 0}, moves: ["crunch", "rockslide", "lowkick", "protect"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["rockslide", "crunch", "icepunch", "lowkick"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 5, "level": 50},
+			{generation: 5, level: 50},
 		],
 	},
 	lugia: {
@@ -28355,21 +28355,21 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "shiny": 1, "moves": ["recover", "hydropump", "raindance", "swift"]},
-			{"generation": 3, "level": 50, "moves": ["psychoboost", "earthquake", "hydropump", "featherdance"]},
-			{"generation": 4, "level": 45, "shiny": 1, "moves": ["extrasensory", "raindance", "hydropump", "aeroblast"]},
-			{"generation": 4, "level": 70, "shiny": 1, "moves": ["aeroblast", "punishment", "ancientpower", "safeguard"]},
-			{"generation": 5, "level": 5, "isHidden": true, "moves": ["whirlwind", "weatherball"], "pokeball": "dreamball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["raindance", "hydropump", "aeroblast", "punishment"]},
-			{"generation": 6, "level": 50, "nature": "Timid", "moves": ["aeroblast", "hydropump", "dragonrush", "icebeam"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["skillswap", "aeroblast", "extrasensory", "ancientpower"]},
-			{"generation": 7, "level": 100, "isHidden": true, "moves": ["aeroblast", "hurricane", "defog", "tailwind"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "moves": ["skillswap", "aeroblast", "extrasensory", "ancientpower"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["aeroblast", "earthpower", "psychic", "tailwind"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, shiny: 1, moves: ["recover", "hydropump", "raindance", "swift"]},
+			{generation: 3, level: 50, moves: ["psychoboost", "earthquake", "hydropump", "featherdance"]},
+			{generation: 4, level: 45, shiny: 1, moves: ["extrasensory", "raindance", "hydropump", "aeroblast"]},
+			{generation: 4, level: 70, shiny: 1, moves: ["aeroblast", "punishment", "ancientpower", "safeguard"]},
+			{generation: 5, level: 5, isHidden: true, moves: ["whirlwind", "weatherball"], pokeball: "dreamball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["raindance", "hydropump", "aeroblast", "punishment"]},
+			{generation: 6, level: 50, nature: "Timid", moves: ["aeroblast", "hydropump", "dragonrush", "icebeam"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["skillswap", "aeroblast", "extrasensory", "ancientpower"]},
+			{generation: 7, level: 100, isHidden: true, moves: ["aeroblast", "hurricane", "defog", "tailwind"], pokeball: "cherishball"},
+			{generation: 7, level: 60, moves: ["skillswap", "aeroblast", "extrasensory", "ancientpower"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["aeroblast", "earthpower", "psychic", "tailwind"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 2, "level": 40},
+			{generation: 2, level: 40},
 		],
 	},
 	hooh: {
@@ -28466,20 +28466,20 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "shiny": 1, "moves": ["recover", "fireblast", "sunnyday", "swift"]},
-			{"generation": 4, "level": 45, "shiny": 1, "moves": ["extrasensory", "sunnyday", "fireblast", "sacredfire"]},
-			{"generation": 4, "level": 70, "shiny": 1, "moves": ["sacredfire", "punishment", "ancientpower", "safeguard"]},
-			{"generation": 5, "level": 5, "isHidden": true, "moves": ["whirlwind", "weatherball"], "pokeball": "dreamball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["sunnyday", "fireblast", "sacredfire", "punishment"]},
-			{"generation": 6, "level": 50, "shiny": true, "moves": ["sacredfire", "bravebird", "recover", "celebrate"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["sacredfire", "bravebird", "recover", "safeguard"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["burnup", "sacredfire", "extrasensory", "ancientpower"]},
-			{"generation": 7, "level": 60, "moves": ["burnup", "sacredfire", "extrasensory", "ancientpower"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["sacredfire", "bravebird", "earthquake", "tailwind"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, shiny: 1, moves: ["recover", "fireblast", "sunnyday", "swift"]},
+			{generation: 4, level: 45, shiny: 1, moves: ["extrasensory", "sunnyday", "fireblast", "sacredfire"]},
+			{generation: 4, level: 70, shiny: 1, moves: ["sacredfire", "punishment", "ancientpower", "safeguard"]},
+			{generation: 5, level: 5, isHidden: true, moves: ["whirlwind", "weatherball"], pokeball: "dreamball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["sunnyday", "fireblast", "sacredfire", "punishment"]},
+			{generation: 6, level: 50, shiny: true, moves: ["sacredfire", "bravebird", "recover", "celebrate"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["sacredfire", "bravebird", "recover", "safeguard"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["burnup", "sacredfire", "extrasensory", "ancientpower"]},
+			{generation: 7, level: 60, moves: ["burnup", "sacredfire", "extrasensory", "ancientpower"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["sacredfire", "bravebird", "earthquake", "tailwind"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 2, "level": 40},
+			{generation: 2, level: 40},
 		],
 	},
 	celebi: {
@@ -28588,18 +28588,18 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "moves": ["confusion", "recover", "healbell", "safeguard"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 70, "moves": ["ancientpower", "futuresight", "batonpass", "perishsong"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "moves": ["leechseed", "recover", "healbell", "safeguard"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 30, "moves": ["healbell", "safeguard", "ancientpower", "futuresight"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "moves": ["leafstorm", "recover", "nastyplot", "healingwish"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "moves": ["recover", "healbell", "safeguard", "holdback"], "pokeball": "luxuryball"},
-			{"generation": 6, "level": 100, "moves": ["confusion", "recover", "healbell", "safeguard"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 30, "moves": ["healbell", "safeguard", "ancientpower", "futuresight"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, moves: ["confusion", "recover", "healbell", "safeguard"], pokeball: "pokeball"},
+			{generation: 3, level: 70, moves: ["ancientpower", "futuresight", "batonpass", "perishsong"], pokeball: "pokeball"},
+			{generation: 3, level: 10, moves: ["leechseed", "recover", "healbell", "safeguard"], pokeball: "pokeball"},
+			{generation: 3, level: 30, moves: ["healbell", "safeguard", "ancientpower", "futuresight"], pokeball: "pokeball"},
+			{generation: 4, level: 50, moves: ["leafstorm", "recover", "nastyplot", "healingwish"], pokeball: "cherishball"},
+			{generation: 6, level: 10, moves: ["recover", "healbell", "safeguard", "holdback"], pokeball: "luxuryball"},
+			{generation: 6, level: 100, moves: ["confusion", "recover", "healbell", "safeguard"], pokeball: "cherishball"},
+			{generation: 7, level: 30, moves: ["healbell", "safeguard", "ancientpower", "futuresight"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 		encounters: [
-			{"generation": 2, "level": 30},
+			{generation: 2, level: 30},
 		],
 	},
 	treecko: {
@@ -28691,8 +28691,8 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["pound", "leer", "absorb"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["pound", "leer", "absorb"]},
+			{generation: 3, level: 10, gender: "M", moves: ["pound", "leer", "absorb"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["pound", "leer", "absorb"]},
 		],
 	},
 	grovyle: {
@@ -28878,7 +28878,7 @@ let BattleLearnsets = {
 			xscissor: ["7M", "7L45", "6M", "6L16", "5M", "5L16", "4M", "4L16"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "shiny": 1, "moves": ["leafstorm", "dragonpulse", "focusblast", "rockslide"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, shiny: 1, moves: ["leafstorm", "dragonpulse", "focusblast", "rockslide"], pokeball: "cherishball"},
 		],
 	},
 	torchic: {
@@ -28960,9 +28960,9 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["scratch", "growl", "focusenergy", "ember"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["scratch", "growl", "focusenergy", "ember"]},
-			{"generation": 6, "level": 10, "gender": "M", "isHidden": true, "moves": ["scratch", "growl", "focusenergy", "ember"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["scratch", "growl", "focusenergy", "ember"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["scratch", "growl", "focusenergy", "ember"]},
+			{generation: 6, level: 10, gender: "M", isHidden: true, moves: ["scratch", "growl", "focusenergy", "ember"], pokeball: "cherishball"},
 		],
 	},
 	combusken: {
@@ -29152,8 +29152,8 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "moves": ["blazekick", "slash", "mirrormove", "skyuppercut"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 50, "shiny": 1, "moves": ["flareblitz", "highjumpkick", "thunderpunch", "stoneedge"], "pokeball": "cherishball"},
+			{generation: 3, level: 70, moves: ["blazekick", "slash", "mirrormove", "skyuppercut"], pokeball: "pokeball"},
+			{generation: 5, level: 50, shiny: 1, moves: ["flareblitz", "highjumpkick", "thunderpunch", "stoneedge"], pokeball: "cherishball"},
 		],
 	},
 	mudkip: {
@@ -29236,8 +29236,8 @@ let BattleLearnsets = {
 			yawn: ["7E", "6E", "5E", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "growl", "mudslap", "watergun"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tackle", "growl", "mudslap", "watergun"]},
+			{generation: 3, level: 10, gender: "M", moves: ["tackle", "growl", "mudslap", "watergun"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tackle", "growl", "mudslap", "watergun"]},
 		],
 	},
 	marshtomp: {
@@ -29413,7 +29413,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "shiny": 1, "moves": ["earthquake", "icebeam", "hydropump", "hammerarm"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, shiny: 1, moves: ["earthquake", "icebeam", "hydropump", "hammerarm"], pokeball: "cherishball"},
 		],
 	},
 	poochyena: {
@@ -29489,10 +29489,10 @@ let BattleLearnsets = {
 			yawn: ["7L37", "7E", "6E", "5E", "4E", "3E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "abilities": ["runaway"], "moves": ["healbell", "dig", "poisonfang", "howl"]},
+			{generation: 3, level: 10, abilities: ["runaway"], moves: ["healbell", "dig", "poisonfang", "howl"]},
 		],
 		encounters: [
-			{"generation": 3, "level": 2},
+			{generation: 3, level: 2},
 		],
 	},
 	mightyena: {
@@ -29568,7 +29568,7 @@ let BattleLearnsets = {
 			yawn: ["7L44"],
 		},
 		eventData: [
-			{"generation": 7, "level": 64, "gender": "M", "abilities": ["intimidate"], "moves": ["crunch", "firefang", "icefang", "thunderfang"], "pokeball": "cherishball"},
+			{generation: 7, level: 64, gender: "M", abilities: ["intimidate"], moves: ["crunch", "firefang", "icefang", "thunderfang"], pokeball: "cherishball"},
 		],
 	},
 	zigzagoon: {
@@ -29656,11 +29656,11 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": true, "abilities": ["pickup"], "moves": ["tackle", "growl", "tailwhip"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["pickup"], "moves": ["tackle", "growl", "tailwhip", "extremespeed"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: true, abilities: ["pickup"], moves: ["tackle", "growl", "tailwhip"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["pickup"], moves: ["tackle", "growl", "tailwhip", "extremespeed"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 3, "level": 2},
+			{generation: 3, level: 2},
 		],
 	},
 	zigzagoongalar: {
@@ -29815,11 +29815,11 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "moves": ["extremespeed", "helpinghand", "babydolleyes", "protect"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, moves: ["extremespeed", "helpinghand", "babydolleyes", "protect"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 4, "level": 3},
-			{"generation": 6, "level": 17, "maxEggMoves": 1},
+			{generation: 4, level: 3},
+			{generation: 6, level: 17, maxEggMoves: 1},
 		],
 	},
 	linoonegalar: {
@@ -29982,7 +29982,7 @@ let BattleLearnsets = {
 			tackle: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 		},
 		encounters: [
-			{"generation": 3, "level": 2},
+			{generation: 3, level: 2},
 		],
 	},
 	silcoon: {
@@ -29994,9 +29994,9 @@ let BattleLearnsets = {
 			stringshot: ["4T"],
 		},
 		encounters: [
-			{"generation": 3, "level": 5},
-			{"generation": 4, "level": 5},
-			{"generation": 6, "level": 2, "maxEggMoves": 1},
+			{generation: 3, level: 5},
+			{generation: 4, level: 5},
+			{generation: 6, level: 2, maxEggMoves: 1},
 		],
 	},
 	beautifly: {
@@ -30072,9 +30072,9 @@ let BattleLearnsets = {
 			stringshot: ["4T"],
 		},
 		encounters: [
-			{"generation": 3, "level": 5},
-			{"generation": 4, "level": 5},
-			{"generation": 6, "level": 2, "maxEggMoves": 1},
+			{generation: 3, level: 5},
+			{generation: 4, level: 5},
+			{generation: 6, level: 2, maxEggMoves: 1},
 		],
 	},
 	dustox: {
@@ -30207,10 +30207,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L38", "7T", "7L33", "6T", "6L31", "5T", "5L31", "4T", "4L27"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["astonish", "growl", "absorb"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["astonish", "growl", "absorb"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 3, "level": 3},
+			{generation: 3, level: 3},
 		],
 	},
 	lombre: {
@@ -30299,7 +30299,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L50", "7T", "7L40", "6T", "6L31", "5T", "5L31", "4T", "4L27"],
 		},
 		encounters: [
-			{"generation": 6, "level": 13, "maxEggMoves": 1},
+			{generation: 6, level: 13, maxEggMoves: 1},
 		],
 	},
 	ludicolo: {
@@ -30397,8 +30397,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L1", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "shiny": 1, "abilities": ["swiftswim"], "moves": ["fakeout", "hydropump", "icebeam", "gigadrain"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 30, "gender": "M", "nature": "Calm", "abilities": ["swiftswim"], "moves": ["scald", "gigadrain", "icebeam", "sunnyday"], "pokeball": "pokeball"},
+			{generation: 5, level: 50, shiny: 1, abilities: ["swiftswim"], moves: ["fakeout", "hydropump", "icebeam", "gigadrain"], pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "M", nature: "Calm", abilities: ["swiftswim"], moves: ["scald", "gigadrain", "icebeam", "sunnyday"], pokeball: "pokeball"},
 		],
 	},
 	seedot: {
@@ -30472,11 +30472,11 @@ let BattleLearnsets = {
 			worryseed: ["8E", "7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["bide", "harden", "growth"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 17, "moves": ["refresh", "gigadrain", "bulletseed", "secretpower"]},
+			{generation: 3, level: 10, gender: "M", moves: ["bide", "harden", "growth"], pokeball: "pokeball"},
+			{generation: 3, level: 17, moves: ["refresh", "gigadrain", "bulletseed", "secretpower"]},
 		],
 		encounters: [
-			{"generation": 3, "level": 3},
+			{generation: 3, level: 3},
 		],
 	},
 	nuzleaf: {
@@ -30573,7 +30573,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 6, "level": 13, "maxEggMoves": 1},
+			{generation: 6, level: 13, maxEggMoves: 1},
 		],
 	},
 	shiftry: {
@@ -30756,10 +30756,10 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["peck", "growl", "focusenergy", "featherdance"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["peck", "growl", "focusenergy", "featherdance"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 3, "level": 4},
+			{generation: 3, level: 4},
 		],
 	},
 	swellow: {
@@ -30823,10 +30823,10 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 43, "moves": ["batonpass", "skyattack", "agility", "facade"]},
+			{generation: 3, level: 43, moves: ["batonpass", "skyattack", "agility", "facade"]},
 		],
 		encounters: [
-			{"generation": 4, "level": 20},
+			{generation: 4, level: 20},
 		],
 	},
 	wingull: {
@@ -30897,7 +30897,7 @@ let BattleLearnsets = {
 			wingattack: ["8L15", "7L8", "6L8", "5L11", "4L11", "3L13"],
 		},
 		encounters: [
-			{"generation": 3, "level": 2},
+			{generation: 3, level: 2},
 		],
 	},
 	pelipper: {
@@ -30979,8 +30979,8 @@ let BattleLearnsets = {
 			wingattack: ["8L15", "7L1", "6L1", "5L1", "4L1", "3L1"],
 		},
 		encounters: [
-			{"generation": 4, "level": 15},
-			{"generation": 6, "level": 18, "maxEggMoves": 1},
+			{generation: 4, level: 15},
+			{generation: 6, level: 18, maxEggMoves: 1},
 		],
 	},
 	ralts: {
@@ -31087,13 +31087,13 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["growl", "wish"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["growl", "charm"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 20, "moves": ["sing", "shockwave", "reflect", "confusion"]},
-			{"generation": 6, "level": 1, "isHidden": true, "moves": ["growl", "encore"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["growl", "wish"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["growl", "charm"], pokeball: "pokeball"},
+			{generation: 3, level: 20, moves: ["sing", "shockwave", "reflect", "confusion"]},
+			{generation: 6, level: 1, isHidden: true, moves: ["growl", "encore"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 3, "level": 4},
+			{generation: 3, level: 4},
 		],
 	},
 	kirlia: {
@@ -31189,7 +31189,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 4, "level": 6},
+			{generation: 4, level: 6},
 		],
 	},
 	gardevoir: {
@@ -31297,8 +31297,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "shiny": 1, "abilities": ["trace"], "moves": ["hypnosis", "thunderbolt", "focusblast", "psychic"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": true, "gender": "F", "abilities": ["synchronize"], "moves": ["dazzlinggleam", "moonblast", "storedpower", "calmmind"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, shiny: 1, abilities: ["trace"], moves: ["hypnosis", "thunderbolt", "focusblast", "psychic"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: true, gender: "F", abilities: ["synchronize"], moves: ["dazzlinggleam", "moonblast", "storedpower", "calmmind"], pokeball: "cherishball"},
 		],
 	},
 	gallade: {
@@ -31501,11 +31501,11 @@ let BattleLearnsets = {
 			watersport: ["7L14", "6L14", "5L19", "4L19", "3L19"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["bubble", "mudsport"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["bubble", "quickattack"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["bubble", "mudsport"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["bubble", "quickattack"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 3, "level": 3},
+			{generation: 3, level: 3},
 		],
 	},
 	masquerain: {
@@ -31578,7 +31578,7 @@ let BattleLearnsets = {
 			whirlwind: ["7L1", "6L1", "5L54", "4L54", "3L53"],
 		},
 		encounters: [
-			{"generation": 6, "level": 21, "maxEggMoves": 1},
+			{generation: 6, level: 21, maxEggMoves: 1},
 		],
 	},
 	shroomish: {
@@ -31639,7 +31639,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7L22", "7E", "6T", "6L22", "6E", "5T", "5L29", "5E", "4T", "4L29", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 15, "abilities": ["effectspore"], "moves": ["refresh", "falseswipe", "megadrain", "stunspore"]},
+			{generation: 3, level: 15, abilities: ["effectspore"], moves: ["refresh", "falseswipe", "megadrain", "stunspore"]},
 		],
 	},
 	breloom: {
@@ -31992,7 +31992,7 @@ let BattleLearnsets = {
 			yawn: ["7L1", "6L1", "5L1", "4L1", "3L1"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Adamant", "moves": ["gigaimpact", "return", "shadowclaw", "aerialace"], "pokeball": "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Adamant", moves: ["gigaimpact", "return", "shadowclaw", "aerialace"], pokeball: "cherishball"},
 		],
 	},
 	nincada: {
@@ -32195,7 +32195,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "moves": ["spite", "confuseray", "shadowball", "grudge"], "pokeball": "pokeball"},
+			{generation: 3, level: 50, moves: ["spite", "confuseray", "shadowball", "grudge"], pokeball: "pokeball"},
 		],
 	},
 	whismur: {
@@ -32275,7 +32275,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "5D", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["pound", "uproar", "teeterdance"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["pound", "uproar", "teeterdance"], pokeball: "pokeball"},
 		],
 	},
 	loudred: {
@@ -32360,7 +32360,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 6, "level": 16, "maxEggMoves": 1},
+			{generation: 6, level: 16, maxEggMoves: 1},
 		],
 	},
 	exploud: {
@@ -32458,8 +32458,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 100, "moves": ["roar", "rest", "sleeptalk", "hypervoice"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 50, "moves": ["stomp", "screech", "hyperbeam", "roar"], "pokeball": "pokeball"},
+			{generation: 3, level: 100, moves: ["roar", "rest", "sleeptalk", "hypervoice"], pokeball: "pokeball"},
+			{generation: 3, level: 50, moves: ["stomp", "screech", "hyperbeam", "roar"], pokeball: "pokeball"},
 		],
 	},
 	makuhita: {
@@ -32552,7 +32552,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 18, "moves": ["refresh", "brickbreak", "armthrust", "rocktomb"]},
+			{generation: 3, level: 18, moves: ["refresh", "brickbreak", "armthrust", "rocktomb"]},
 		],
 	},
 	hariyama: {
@@ -32643,7 +32643,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 6, "level": 22},
+			{generation: 6, level: 22},
 		],
 	},
 	nosepass: {
@@ -32723,7 +32723,7 @@ let BattleLearnsets = {
 			zapcannon: ["7L43", "6L43", "5L67", "4L61", "3L43"],
 		},
 		eventData: [
-			{"generation": 3, "level": 26, "moves": ["helpinghand", "thunderbolt", "thunderwave", "rockslide"]},
+			{generation: 3, level: 26, moves: ["helpinghand", "thunderbolt", "thunderwave", "rockslide"]},
 		],
 	},
 	probopass: {
@@ -32889,12 +32889,12 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["cutecharm"], "moves": ["tackle", "growl", "tailwhip", "payday"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["cutecharm"], "moves": ["growl", "tackle", "tailwhip", "rollout"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["cutecharm"], "moves": ["growl", "tackle", "tailwhip", "attract"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["cutecharm"], moves: ["tackle", "growl", "tailwhip", "payday"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["cutecharm"], moves: ["growl", "tackle", "tailwhip", "rollout"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", abilities: ["cutecharm"], moves: ["growl", "tackle", "tailwhip", "attract"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 3, "level": 3, "gender": "F", "ivs": {"hp": 5, "atk": 4, "def": 4, "spa": 5, "spd": 4, "spe": 4}, "abilities": ["cutecharm"], "pokeball": "pokeball"},
+			{generation: 3, level: 3, gender: "F", ivs: {hp: 5, atk: 4, def: 4, spa: 5, spd: 4, spe: 4}, abilities: ["cutecharm"], pokeball: "pokeball"},
 		],
 	},
 	delcatty: {
@@ -32973,7 +32973,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 18, "abilities": ["cutecharm"], "moves": ["sweetkiss", "secretpower", "attract", "shockwave"]},
+			{generation: 3, level: 18, abilities: ["cutecharm"], moves: ["sweetkiss", "secretpower", "attract", "shockwave"]},
 		],
 	},
 	sableye: {
@@ -33097,11 +33097,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L42", "7T", "7L34", "6T", "6L1", "5T", "5L53", "4T", "4L50"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "abilities": ["keeneye"], "moves": ["leer", "scratch", "foresight", "nightshade"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 33, "abilities": ["keeneye"], "moves": ["helpinghand", "shadowball", "feintattack", "recover"]},
-			{"generation": 5, "level": 50, "gender": "M", "isHidden": true, "moves": ["foulplay", "octazooka", "tickle", "trick"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "nature": "Relaxed", "ivs": {"hp": 31, "spa": 31}, "isHidden": true, "moves": ["calmmind", "willowisp", "recover", "shadowball"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "nature": "Bold", "isHidden": true, "moves": ["willowisp", "recover", "taunt", "shockwave"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", abilities: ["keeneye"], moves: ["leer", "scratch", "foresight", "nightshade"], pokeball: "pokeball"},
+			{generation: 3, level: 33, abilities: ["keeneye"], moves: ["helpinghand", "shadowball", "feintattack", "recover"]},
+			{generation: 5, level: 50, gender: "M", isHidden: true, moves: ["foulplay", "octazooka", "tickle", "trick"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Relaxed", ivs: {hp: 31, spa: 31}, isHidden: true, moves: ["calmmind", "willowisp", "recover", "shadowball"], pokeball: "cherishball"},
+			{generation: 6, level: 100, nature: "Bold", isHidden: true, moves: ["willowisp", "recover", "taunt", "shockwave"], pokeball: "cherishball"},
 		],
 	},
 	mawile: {
@@ -33217,10 +33217,10 @@ let BattleLearnsets = {
 			visegrip: ["7L17", "6L17", "5L21", "4L21", "3L21", "3S1"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["astonish", "faketears"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 22, "moves": ["sing", "falseswipe", "visegrip", "irondefense"]},
-			{"generation": 6, "level": 50, "abilities": ["intimidate"], "moves": ["ironhead", "playrough", "firefang", "suckerpunch"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "abilities": ["intimidate"], "moves": ["suckerpunch", "protect", "playrough", "ironhead"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, gender: "M", moves: ["astonish", "faketears"], pokeball: "pokeball"},
+			{generation: 3, level: 22, moves: ["sing", "falseswipe", "visegrip", "irondefense"]},
+			{generation: 6, level: 50, abilities: ["intimidate"], moves: ["ironhead", "playrough", "firefang", "suckerpunch"], pokeball: "cherishball"},
+			{generation: 6, level: 100, abilities: ["intimidate"], moves: ["suckerpunch", "protect", "playrough", "ironhead"], pokeball: "cherishball"},
 		],
 	},
 	aron: {
@@ -33482,9 +33482,9 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 100, "moves": ["irontail", "protect", "metalsound", "doubleedge"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 50, "moves": ["takedown", "irontail", "protect", "metalsound"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 50, "nature": "Brave", "abilities": ["rockhead"], "moves": ["ironhead", "earthquake", "headsmash", "rockslide"], "pokeball": "cherishball"},
+			{generation: 3, level: 100, moves: ["irontail", "protect", "metalsound", "doubleedge"], pokeball: "pokeball"},
+			{generation: 3, level: 50, moves: ["takedown", "irontail", "protect", "metalsound"], pokeball: "pokeball"},
+			{generation: 6, level: 50, nature: "Brave", abilities: ["rockhead"], moves: ["ironhead", "earthquake", "headsmash", "rockslide"], pokeball: "cherishball"},
 		],
 	},
 	meditite: {
@@ -33584,8 +33584,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["bide", "meditate", "confusion"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 20, "moves": ["dynamicpunch", "confusion", "shadowball", "detect"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["bide", "meditate", "confusion"], pokeball: "pokeball"},
+			{generation: 3, level: 20, moves: ["dynamicpunch", "confusion", "shadowball", "detect"], pokeball: "pokeball"},
 		],
 	},
 	medicham: {
@@ -33681,8 +33681,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L1", "6T", "6L1", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 4, "level": 35},
-			{"generation": 6, "level": 34, "maxEggMoves": 1},
+			{generation: 4, level: 35},
+			{generation: 6, level: 34, maxEggMoves: 1},
 		],
 	},
 	electrike: {
@@ -33826,8 +33826,8 @@ let BattleLearnsets = {
 			wildcharge: ["8M", "8L48", "7M", "7L42", "6M", "6L42", "5M", "5L61"],
 		},
 		eventData: [
-			{"generation": 3, "level": 44, "moves": ["refresh", "thunder", "raindance", "bite"]},
-			{"generation": 6, "level": 50, "nature": "Timid", "abilities": ["lightningrod"], "moves": ["overheat", "thunderbolt", "voltswitch", "protect"], "pokeball": "cherishball"},
+			{generation: 3, level: 44, moves: ["refresh", "thunder", "raindance", "bite"]},
+			{generation: 6, level: 50, nature: "Timid", abilities: ["lightningrod"], moves: ["overheat", "thunderbolt", "voltswitch", "protect"], pokeball: "cherishball"},
 		],
 	},
 	plusle: {
@@ -33912,8 +33912,8 @@ let BattleLearnsets = {
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["growl", "thunderwave", "mudsport"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["growl", "thunderwave", "quickattack"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["growl", "thunderwave", "mudsport"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["growl", "thunderwave", "quickattack"], pokeball: "pokeball"},
 		],
 	},
 	minun: {
@@ -33999,8 +33999,8 @@ let BattleLearnsets = {
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["growl", "thunderwave", "watersport"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["growl", "thunderwave", "quickattack"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["growl", "thunderwave", "watersport"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["growl", "thunderwave", "quickattack"], pokeball: "pokeball"},
 		],
 	},
 	volbeat: {
@@ -34315,8 +34315,8 @@ let BattleLearnsets = {
 			worryseed: ["8L1", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["absorb", "growth", "poisonsting"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 22, "moves": ["sweetkiss", "magicalleaf", "leechseed", "grasswhistle"]},
+			{generation: 3, level: 10, gender: "M", moves: ["absorb", "growth", "poisonsting"], pokeball: "pokeball"},
+			{generation: 3, level: 22, moves: ["sweetkiss", "magicalleaf", "leechseed", "grasswhistle"]},
 		],
 	},
 	roserade: {
@@ -34469,7 +34469,7 @@ let BattleLearnsets = {
 			yawn: ["7L5", "6L5", "5L6", "4L6", "3L6"],
 		},
 		eventData: [
-			{"generation": 3, "level": 17, "moves": ["sing", "shockwave", "sludge", "toxic"]},
+			{generation: 3, level: 17, moves: ["sing", "shockwave", "sludge", "toxic"]},
 		],
 	},
 	swalot: {
@@ -34621,8 +34621,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 15, "moves": ["refresh", "waterpulse", "bite", "scaryface"]},
-			{"generation": 6, "level": 1, "isHidden": true, "moves": ["leer", "bite", "hydropump"], "pokeball": "pokeball"},
+			{generation: 3, level: 15, moves: ["refresh", "waterpulse", "bite", "scaryface"]},
+			{generation: 6, level: 1, isHidden: true, moves: ["leer", "bite", "hydropump"], pokeball: "pokeball"},
 		],
 	},
 	sharpedo: {
@@ -34706,11 +34706,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "nature": "Adamant", "isHidden": true, "moves": ["aquajet", "crunch", "icefang", "destinybond"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 43, "gender": "M", "perfectIVs": 2, "moves": ["scaryface", "slash", "poisonfang", "crunch"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, nature: "Adamant", isHidden: true, moves: ["aquajet", "crunch", "icefang", "destinybond"], pokeball: "cherishball"},
+			{generation: 6, level: 43, gender: "M", perfectIVs: 2, moves: ["scaryface", "slash", "poisonfang", "crunch"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 7, "level": 10},
+			{generation: 7, level: 10},
 		],
 	},
 	wailmer: {
@@ -34855,14 +34855,14 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 100, "moves": ["rest", "waterspout", "amnesia", "hydropump"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 50, "moves": ["waterpulse", "mist", "rest", "waterspout"], "pokeball": "pokeball"},
+			{generation: 3, level: 100, moves: ["rest", "waterspout", "amnesia", "hydropump"], pokeball: "pokeball"},
+			{generation: 3, level: 50, moves: ["waterpulse", "mist", "rest", "waterspout"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 3, "level": 25},
-			{"generation": 4, "level": 35},
-			{"generation": 5, "level": 30},
-			{"generation": 7, "level": 10},
+			{generation: 3, level: 25},
+			{generation: 4, level: 35},
+			{generation: 5, level: 30},
+			{generation: 7, level: 10},
 		],
 	},
 	numel: {
@@ -34939,8 +34939,8 @@ let BattleLearnsets = {
 			yawn: ["7L36", "7E", "6L36", "6E", "5L36", "5E", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 14, "abilities": ["oblivious"], "moves": ["charm", "takedown", "dig", "ember"]},
-			{"generation": 6, "level": 1, "moves": ["growl", "tackle", "ironhead"], "pokeball": "pokeball"},
+			{generation: 3, level: 14, abilities: ["oblivious"], moves: ["charm", "takedown", "dig", "ember"]},
+			{generation: 6, level: 1, moves: ["growl", "tackle", "ironhead"], pokeball: "pokeball"},
 		],
 	},
 	camerupt: {
@@ -35018,10 +35018,10 @@ let BattleLearnsets = {
 			yawn: ["7L39", "6L39", "6S0", "5L39"],
 		},
 		eventData: [
-			{"generation": 6, "level": 43, "gender": "M", "perfectIVs": 2, "abilities": ["solidrock"], "moves": ["curse", "takedown", "rockslide", "yawn"], "pokeball": "cherishball"},
+			{generation: 6, level: 43, gender: "M", perfectIVs: 2, abilities: ["solidrock"], moves: ["curse", "takedown", "rockslide", "yawn"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	torkoal: {
@@ -35183,7 +35183,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L26", "7E", "6T", "6L26", "6E", "5T", "5L26", "5E", "4T", "4L26", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["owntempo"], "moves": ["splash", "uproar"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["owntempo"], moves: ["splash", "uproar"], pokeball: "pokeball"},
 		],
 	},
 	grumpig: {
@@ -35277,7 +35277,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L26", "6T", "6L26", "5T", "5L26", "4T", "4L26"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	spinda: {
@@ -35386,7 +35386,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["tackle", "uproar", "sing"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["tackle", "uproar", "sing"], pokeball: "pokeball"},
 		],
 	},
 	trapinch: {
@@ -35451,7 +35451,7 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 1, "shiny": true, "moves": ["bite"], "pokeball": "pokeball"},
+			{generation: 5, level: 1, shiny: true, moves: ["bite"], pokeball: "pokeball"},
 		],
 	},
 	vibrava: {
@@ -35639,8 +35639,8 @@ let BattleLearnsets = {
 			uturn: ["8M", "7M", "6M", "5M", "4M", "4S1"],
 		},
 		eventData: [
-			{"generation": 3, "level": 45, "moves": ["sandtomb", "crunch", "dragonbreath", "screech"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Naive", "moves": ["dracometeor", "uturn", "earthquake", "dragonclaw"], "pokeball": "cherishball"},
+			{generation: 3, level: 45, moves: ["sandtomb", "crunch", "dragonbreath", "screech"], pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Naive", moves: ["dracometeor", "uturn", "earthquake", "dragonclaw"], pokeball: "cherishball"},
 		],
 	},
 	cacnea: {
@@ -35730,7 +35730,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7E", "6T", "6E", "5T", "5E", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["poisonsting", "leer", "absorb", "encore"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["poisonsting", "leer", "absorb", "encore"], pokeball: "pokeball"},
 		],
 	},
 	cacturne: {
@@ -35820,10 +35820,10 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 45, "moves": ["ingrain", "feintattack", "spikes", "needlearm"], "pokeball": "pokeball"},
+			{generation: 3, level: 45, moves: ["ingrain", "feintattack", "spikes", "needlearm"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	swablu: {
@@ -35903,9 +35903,9 @@ let BattleLearnsets = {
 			uproar: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["peck", "growl", "falseswipe"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 1, "shiny": true, "moves": ["peck", "growl"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 1, "isHidden": true, "moves": ["peck", "growl", "hypervoice"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["peck", "growl", "falseswipe"], pokeball: "pokeball"},
+			{generation: 5, level: 1, shiny: true, moves: ["peck", "growl"], pokeball: "pokeball"},
+			{generation: 6, level: 1, isHidden: true, moves: ["peck", "growl", "hypervoice"], pokeball: "pokeball"},
 		],
 	},
 	altaria: {
@@ -35993,10 +35993,10 @@ let BattleLearnsets = {
 			wonderroom: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 45, "moves": ["takedown", "dragonbreath", "dragondance", "refresh"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 36, "moves": ["healbell", "dragonbreath", "solarbeam", "aerialace"]},
-			{"generation": 5, "level": 35, "gender": "M", "isHidden": true, "moves": ["takedown", "naturalgift", "dragonbreath", "falseswipe"]},
-			{"generation": 6, "level": 100, "nature": "Modest", "isHidden": true, "moves": ["hypervoice", "fireblast", "protect", "agility"], "pokeball": "cherishball"},
+			{generation: 3, level: 45, moves: ["takedown", "dragonbreath", "dragondance", "refresh"], pokeball: "pokeball"},
+			{generation: 3, level: 36, moves: ["healbell", "dragonbreath", "solarbeam", "aerialace"]},
+			{generation: 5, level: 35, gender: "M", isHidden: true, moves: ["takedown", "naturalgift", "dragonbreath", "falseswipe"]},
+			{generation: 6, level: 100, nature: "Modest", isHidden: true, moves: ["hypervoice", "fireblast", "protect", "agility"], pokeball: "cherishball"},
 		],
 	},
 	zangoose: {
@@ -36109,9 +36109,9 @@ let BattleLearnsets = {
 			xscissor: ["7M", "7L40", "6M", "6L36", "5M", "5L48", "4M", "4L48"],
 		},
 		eventData: [
-			{"generation": 3, "level": 18, "moves": ["leer", "quickattack", "swordsdance", "furycutter"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["scratch", "leer", "quickattack", "swordsdance"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 28, "moves": ["refresh", "brickbreak", "counter", "crushclaw"]},
+			{generation: 3, level: 18, moves: ["leer", "quickattack", "swordsdance", "furycutter"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["scratch", "leer", "quickattack", "swordsdance"], pokeball: "pokeball"},
+			{generation: 3, level: 28, moves: ["refresh", "brickbreak", "counter", "crushclaw"]},
 		],
 	},
 	seviper: {
@@ -36198,9 +36198,9 @@ let BattleLearnsets = {
 			xscissor: ["7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 18, "moves": ["wrap", "lick", "bite", "poisontail"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 30, "moves": ["poisontail", "screech", "glare", "crunch"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["wrap", "lick", "bite"], "pokeball": "pokeball"},
+			{generation: 3, level: 18, moves: ["wrap", "lick", "bite", "poisontail"], pokeball: "pokeball"},
+			{generation: 3, level: 30, moves: ["poisontail", "screech", "glare", "crunch"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["wrap", "lick", "bite"], pokeball: "pokeball"},
 		],
 	},
 	lunatone: {
@@ -36300,9 +36300,9 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "moves": ["tackle", "harden", "confusion"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 25, "moves": ["batonpass", "psychic", "raindance", "rocktomb"]},
-			{"generation": 7, "level": 30, "moves": ["cosmicpower", "hiddenpower", "moonblast", "powergem"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, moves: ["tackle", "harden", "confusion"], pokeball: "pokeball"},
+			{generation: 3, level: 25, moves: ["batonpass", "psychic", "raindance", "rocktomb"]},
+			{generation: 7, level: 30, moves: ["cosmicpower", "hiddenpower", "moonblast", "powergem"], pokeball: "cherishball"},
 		],
 	},
 	solrock: {
@@ -36406,9 +36406,9 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L20", "7T", "6T", "5T", "5D", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "moves": ["tackle", "harden", "confusion"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 41, "moves": ["batonpass", "psychic", "sunnyday", "cosmicpower"]},
-			{"generation": 7, "level": 30, "moves": ["cosmicpower", "hiddenpower", "solarbeam", "stoneedge"], "pokeball": "cherishball"},
+			{generation: 3, level: 10, moves: ["tackle", "harden", "confusion"], pokeball: "pokeball"},
+			{generation: 3, level: 41, moves: ["batonpass", "psychic", "sunnyday", "cosmicpower"]},
+			{generation: 7, level: 30, moves: ["cosmicpower", "hiddenpower", "solarbeam", "stoneedge"], pokeball: "cherishball"},
 		],
 	},
 	barboach: {
@@ -36544,11 +36544,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L1", "7T", "7L1", "6T", "6L1", "5T", "5L1", "4T", "4L1", "4S0"],
 		},
 		eventData: [
-			{"generation": 4, "level": 51, "gender": "F", "nature": "Gentle", "abilities": ["oblivious"], "moves": ["earthquake", "aquatail", "zenheadbutt", "gigaimpact"], "pokeball": "cherishball"},
+			{generation: 4, level: 51, gender: "F", nature: "Gentle", abilities: ["oblivious"], moves: ["earthquake", "aquatail", "zenheadbutt", "gigaimpact"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 4, "level": 10},
-			{"generation": 7, "level": 10},
+			{generation: 4, level: 10},
+			{generation: 7, level: 10},
 		],
 	},
 	corphish: {
@@ -36636,7 +36636,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["bubble", "watersport"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["bubble", "watersport"], pokeball: "pokeball"},
 		],
 	},
 	crawdaunt: {
@@ -36730,11 +36730,11 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 100, "moves": ["taunt", "crabhammer", "swordsdance", "guillotine"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 50, "moves": ["knockoff", "taunt", "crabhammer", "swordsdance"], "pokeball": "pokeball"},
+			{generation: 3, level: 100, moves: ["taunt", "crabhammer", "swordsdance", "guillotine"], pokeball: "pokeball"},
+			{generation: 3, level: 50, moves: ["knockoff", "taunt", "crabhammer", "swordsdance"], pokeball: "pokeball"},
 		],
 		encounters: [
-			{"generation": 7, "level": 10},
+			{generation: 7, level: 10},
 		],
 	},
 	baltoy: {
@@ -36823,7 +36823,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "5D", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 17, "moves": ["refresh", "rocktomb", "mudslap", "psybeam"]},
+			{generation: 3, level: 17, moves: ["refresh", "rocktomb", "mudslap", "psybeam"]},
 		],
 	},
 	claydol: {
@@ -36992,7 +36992,7 @@ let BattleLearnsets = {
 			wringout: ["7L52", "7E", "6L52", "6E", "5L64", "5E", "4L64", "4E"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "gender": "M", "moves": ["recover", "rockslide", "constrict", "acid"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, gender: "M", moves: ["recover", "rockslide", "constrict", "acid"], pokeball: "cherishball"},
 		],
 	},
 	cradily: {
@@ -37137,7 +37137,7 @@ let BattleLearnsets = {
 			xscissor: ["7M", "7L44", "6M", "6L44", "5M", "5L61", "4M", "4L61"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "gender": "M", "moves": ["harden", "mudsport", "watergun", "crosspoison"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, gender: "M", moves: ["harden", "mudsport", "watergun", "crosspoison"], pokeball: "cherishball"},
 		],
 	},
 	armaldo: {
@@ -37272,7 +37272,7 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "4M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 5, "gender": "F", "nature": "Calm", "moves": ["splash", "mirrorcoat"], "pokeball": "cherishball"},
+			{generation: 4, level: 5, gender: "F", nature: "Calm", moves: ["splash", "mirrorcoat"], pokeball: "cherishball"},
 		],
 	},
 	milotic: {
@@ -37353,11 +37353,11 @@ let BattleLearnsets = {
 			wrap: ["8L1", "7L1", "6L1", "5L1", "4L1", "3L5"],
 		},
 		eventData: [
-			{"generation": 3, "level": 35, "moves": ["waterpulse", "twister", "recover", "raindance"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "gender": "F", "nature": "Bold", "moves": ["recover", "raindance", "icebeam", "hydropump"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "shiny": true, "gender": "M", "nature": "Timid", "moves": ["raindance", "recover", "hydropump", "icywind"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "shiny": 1, "moves": ["recover", "hydropump", "icebeam", "mirrorcoat"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 58, "gender": "M", "nature": "Lax", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "moves": ["recover", "surf", "icebeam", "toxic"], "pokeball": "cherishball"},
+			{generation: 3, level: 35, moves: ["waterpulse", "twister", "recover", "raindance"], pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "F", nature: "Bold", moves: ["recover", "raindance", "icebeam", "hydropump"], pokeball: "cherishball"},
+			{generation: 4, level: 50, shiny: true, gender: "M", nature: "Timid", moves: ["raindance", "recover", "hydropump", "icywind"], pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, moves: ["recover", "hydropump", "icebeam", "mirrorcoat"], pokeball: "cherishball"},
+			{generation: 5, level: 58, gender: "M", nature: "Lax", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["recover", "surf", "icebeam", "toxic"], pokeball: "cherishball"},
 		],
 	},
 	castform: {
@@ -37630,7 +37630,7 @@ let BattleLearnsets = {
 			willowisp: ["7M", "7L16", "6M", "6L13", "5M", "5L23", "4M", "4L23", "3L32", "3S0"],
 		},
 		eventData: [
-			{"generation": 3, "level": 45, "abilities": ["insomnia"], "moves": ["spite", "willowisp", "feintattack", "shadowball"], "pokeball": "pokeball"},
+			{generation: 3, level: 45, abilities: ["insomnia"], moves: ["spite", "willowisp", "feintattack", "shadowball"], pokeball: "pokeball"},
 		],
 	},
 	banette: {
@@ -37717,11 +37717,11 @@ let BattleLearnsets = {
 			willowisp: ["7M", "7L16", "6M", "6L13", "5M", "5L23", "4M", "4L23", "3L32"],
 		},
 		eventData: [
-			{"generation": 3, "level": 37, "abilities": ["insomnia"], "moves": ["helpinghand", "feintattack", "shadowball", "curse"]},
-			{"generation": 5, "level": 37, "gender": "F", "isHidden": true, "moves": ["feintattack", "hex", "shadowball", "cottonguard"]},
+			{generation: 3, level: 37, abilities: ["insomnia"], moves: ["helpinghand", "feintattack", "shadowball", "curse"]},
+			{generation: 5, level: 37, gender: "F", isHidden: true, moves: ["feintattack", "hex", "shadowball", "cottonguard"]},
 		],
 		encounters: [
-			{"generation": 5, "level": 32},
+			{generation: 5, level: 32},
 		],
 	},
 	duskull: {
@@ -37805,8 +37805,8 @@ let BattleLearnsets = {
 			wonderroom: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 45, "moves": ["pursuit", "curse", "willowisp", "meanlook"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 19, "moves": ["helpinghand", "shadowball", "astonish", "confuseray"]},
+			{generation: 3, level: 45, moves: ["pursuit", "curse", "willowisp", "meanlook"], pokeball: "pokeball"},
+			{generation: 3, level: 19, moves: ["helpinghand", "shadowball", "astonish", "confuseray"]},
 		],
 	},
 	dusclops: {
@@ -37908,8 +37908,8 @@ let BattleLearnsets = {
 			wonderroom: ["8M", "7T", "6T", "5T"],
 		},
 		encounters: [
-			{"generation": 4, "level": 16},
-			{"generation": 6, "level": 30},
+			{generation: 4, level: 16},
+			{generation: 6, level: 30},
 		],
 	},
 	dusknoir: {
@@ -38092,7 +38092,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 53, "gender": "F", "nature": "Jolly", "abilities": ["chlorophyll"], "moves": ["airslash", "synthesis", "sunnyday", "solarbeam"], "pokeball": "cherishball"},
+			{generation: 4, level: 53, gender: "F", nature: "Jolly", abilities: ["chlorophyll"], moves: ["airslash", "synthesis", "sunnyday", "solarbeam"], pokeball: "cherishball"},
 		],
 	},
 	chingling: {
@@ -38264,7 +38264,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 10, "gender": "M", "moves": ["wrap", "growl", "astonish"], "pokeball": "pokeball"},
+			{generation: 3, level: 10, gender: "M", moves: ["wrap", "growl", "astonish"], pokeball: "pokeball"},
 		],
 	},
 	absol: {
@@ -38381,10 +38381,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["pressure"], "moves": ["scratch", "leer", "wish"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "abilities": ["pressure"], "moves": ["scratch", "leer", "spite"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 35, "abilities": ["pressure"], "moves": ["razorwind", "bite", "swordsdance", "spite"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 70, "abilities": ["pressure"], "moves": ["doubleteam", "slash", "futuresight", "perishsong"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["pressure"], moves: ["scratch", "leer", "wish"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["pressure"], moves: ["scratch", "leer", "spite"], pokeball: "pokeball"},
+			{generation: 3, level: 35, abilities: ["pressure"], moves: ["razorwind", "bite", "swordsdance", "spite"], pokeball: "pokeball"},
+			{generation: 3, level: 70, abilities: ["pressure"], moves: ["doubleteam", "slash", "futuresight", "perishsong"], pokeball: "pokeball"},
 		],
 	},
 	snorunt: {
@@ -38445,7 +38445,7 @@ let BattleLearnsets = {
 			weatherball: ["8M", "7E", "6E", "5E", "5D", "4E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 20, "abilities": ["innerfocus"], "moves": ["sing", "waterpulse", "bite", "icywind"]},
+			{generation: 3, level: 20, abilities: ["innerfocus"], moves: ["sing", "waterpulse", "bite", "icywind"]},
 		],
 	},
 	glalie: {
@@ -38677,7 +38677,7 @@ let BattleLearnsets = {
 			yawn: ["7E", "6E", "5E", "4E", "3E"],
 		},
 		eventData: [
-			{"generation": 3, "level": 17, "abilities": ["thickfat"], "moves": ["charm", "aurorabeam", "watergun", "mudslap"]},
+			{generation: 3, level: 17, abilities: ["thickfat"], moves: ["charm", "aurorabeam", "watergun", "mudslap"]},
 		],
 	},
 	sealeo: {
@@ -38741,8 +38741,8 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 		},
 		encounters: [
-			{"generation": 4, "level": 25},
-			{"generation": 6, "level": 28, "maxEggMoves": 1},
+			{generation: 4, level: 25},
+			{generation: 6, level: 28, maxEggMoves: 1},
 		],
 	},
 	walrein: {
@@ -38815,10 +38815,10 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "abilities": ["thickfat"], "moves": ["icebeam", "brine", "hail", "sheercold"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, abilities: ["thickfat"], moves: ["icebeam", "brine", "hail", "sheercold"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 5, "level": 30},
+			{generation: 5, level: 30},
 		],
 	},
 	clamperl: {
@@ -39195,10 +39195,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L34", "6T", "6L34", "5T", "5L35", "4T", "4L35"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["rage", "bite", "wish"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": 1, "moves": ["rage", "bite", "irondefense"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 1, "shiny": true, "moves": ["rage"], "pokeball": "pokeball"},
-			{"generation": 6, "level": 1, "moves": ["rage", "thrash"], "pokeball": "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["rage", "bite", "wish"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["rage", "bite", "irondefense"], pokeball: "pokeball"},
+			{generation: 5, level: 1, shiny: true, moves: ["rage"], pokeball: "pokeball"},
+			{generation: 6, level: 1, moves: ["rage", "thrash"], pokeball: "pokeball"},
 		],
 	},
 	shelgon: {
@@ -39263,7 +39263,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L35", "6T", "6L35", "5T", "5L37", "4T", "4L37"],
 		},
 		encounters: [
-			{"generation": 7, "level": 15},
+			{generation: 7, level: 15},
 		],
 	},
 	salamence: {
@@ -39351,13 +39351,13 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L35", "6T", "6L35", "5T", "5L37", "4T", "4L37"],
 		},
 		eventData: [
-			{"generation": 3, "level": 50, "moves": ["protect", "dragonbreath", "scaryface", "fly"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 50, "moves": ["refresh", "dragonclaw", "dragondance", "aerialace"]},
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Naughty", "moves": ["hydropump", "stoneedge", "fireblast", "dragonclaw"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "shiny": 1, "moves": ["dragondance", "dragonclaw", "outrage", "aerialace"], "pokeball": "cherishball"},
+			{generation: 3, level: 50, moves: ["protect", "dragonbreath", "scaryface", "fly"], pokeball: "pokeball"},
+			{generation: 3, level: 50, moves: ["refresh", "dragonclaw", "dragondance", "aerialace"]},
+			{generation: 4, level: 50, gender: "M", nature: "Naughty", moves: ["hydropump", "stoneedge", "fireblast", "dragonclaw"], pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, moves: ["dragondance", "dragonclaw", "outrage", "aerialace"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 7, "level": 9},
+			{generation: 7, level: 9},
 		],
 	},
 	beldum: {
@@ -39370,7 +39370,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "6S0", "5T", "5D", "4T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 5, "shiny": true, "moves": ["holdback", "ironhead", "zenheadbutt", "irondefense"], "pokeball": "cherishball"},
+			{generation: 6, level: 5, shiny: true, moves: ["holdback", "ironhead", "zenheadbutt", "irondefense"], pokeball: "cherishball"},
 		],
 	},
 	metang: {
@@ -39456,7 +39456,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L32", "6T", "6L29", "5T", "5L52", "4T", "4L52"],
 		},
 		eventData: [
-			{"generation": 3, "level": 30, "moves": ["takedown", "confusion", "metalclaw", "refresh"], "pokeball": "pokeball"},
+			{generation: 3, level: 30, moves: ["takedown", "confusion", "metalclaw", "refresh"], pokeball: "pokeball"},
 		],
 	},
 	metagross: {
@@ -39546,14 +39546,14 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L32", "6T", "6L29", "5T", "5L62", "5S3", "5S2", "4T", "4L62", "4S0"],
 		},
 		eventData: [
-			{"generation": 4, "level": 62, "nature": "Brave", "moves": ["bulletpunch", "meteormash", "hammerarm", "zenheadbutt"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "shiny": 1, "moves": ["meteormash", "earthquake", "bulletpunch", "hammerarm"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "moves": ["bulletpunch", "zenheadbutt", "hammerarm", "icepunch"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 45, "shiny": true, "moves": ["meteormash", "zenheadbutt", "earthquake", "protect"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 45, "isHidden": true, "moves": ["irondefense", "agility", "hammerarm", "doubleedge"]},
-			{"generation": 5, "level": 45, "isHidden": true, "moves": ["psychic", "meteormash", "hammerarm", "doubleedge"]},
-			{"generation": 5, "level": 58, "nature": "Serious", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "moves": ["earthquake", "hyperbeam", "psychic", "meteormash"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "nature": "Jolly", "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31}, "moves": ["ironhead", "icepunch", "bulletpunch", "stompingtantrum"], "pokeball": "cherishball"},
+			{generation: 4, level: 62, nature: "Brave", moves: ["bulletpunch", "meteormash", "hammerarm", "zenheadbutt"], pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, moves: ["meteormash", "earthquake", "bulletpunch", "hammerarm"], pokeball: "cherishball"},
+			{generation: 5, level: 100, moves: ["bulletpunch", "zenheadbutt", "hammerarm", "icepunch"], pokeball: "cherishball"},
+			{generation: 5, level: 45, shiny: true, moves: ["meteormash", "zenheadbutt", "earthquake", "protect"], pokeball: "pokeball"},
+			{generation: 5, level: 45, isHidden: true, moves: ["irondefense", "agility", "hammerarm", "doubleedge"]},
+			{generation: 5, level: 45, isHidden: true, moves: ["psychic", "meteormash", "hammerarm", "doubleedge"]},
+			{generation: 5, level: 58, nature: "Serious", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["earthquake", "hyperbeam", "psychic", "meteormash"], pokeball: "cherishball"},
+			{generation: 7, level: 50, nature: "Jolly", ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, moves: ["ironhead", "icepunch", "bulletpunch", "stompingtantrum"], pokeball: "cherishball"},
 		],
 	},
 	regirock: {
@@ -39637,13 +39637,13 @@ let BattleLearnsets = {
 			zapcannon: ["7L55", "7S6", "6L1", "5L65", "5S3", "4L65", "3L49"],
 		},
 		eventData: [
-			{"generation": 3, "level": 40, "shiny": 1, "moves": ["rockthrow", "curse", "superpower", "ancientpower"]},
-			{"generation": 3, "level": 40, "moves": ["curse", "superpower", "ancientpower", "hyperbeam"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 30, "shiny": 1, "moves": ["stomp", "rockthrow", "curse", "superpower"]},
-			{"generation": 5, "level": 65, "shiny": 1, "moves": ["irondefense", "chargebeam", "lockon", "zapcannon"]},
-			{"generation": 6, "level": 40, "shiny": 1, "moves": ["bulldoze", "curse", "ancientpower", "irondefense"]},
-			{"generation": 6, "level": 50, "isHidden": true, "moves": ["explosion", "icepunch", "stoneedge", "hammerarm"], "pokeball": "pokeball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["stoneedge", "hammerarm", "lockon", "zapcannon"]},
+			{generation: 3, level: 40, shiny: 1, moves: ["rockthrow", "curse", "superpower", "ancientpower"]},
+			{generation: 3, level: 40, moves: ["curse", "superpower", "ancientpower", "hyperbeam"], pokeball: "pokeball"},
+			{generation: 4, level: 30, shiny: 1, moves: ["stomp", "rockthrow", "curse", "superpower"]},
+			{generation: 5, level: 65, shiny: 1, moves: ["irondefense", "chargebeam", "lockon", "zapcannon"]},
+			{generation: 6, level: 40, shiny: 1, moves: ["bulldoze", "curse", "ancientpower", "irondefense"]},
+			{generation: 6, level: 50, isHidden: true, moves: ["explosion", "icepunch", "stoneedge", "hammerarm"], pokeball: "pokeball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["stoneedge", "hammerarm", "lockon", "zapcannon"]},
 		],
 		eventOnly: true,
 	},
@@ -39728,13 +39728,13 @@ let BattleLearnsets = {
 			zapcannon: ["7L55", "7S6", "6L1", "5L65", "5S3", "4L65", "3L49"],
 		},
 		eventData: [
-			{"generation": 3, "level": 40, "shiny": 1, "moves": ["icywind", "curse", "superpower", "ancientpower"]},
-			{"generation": 3, "level": 40, "moves": ["curse", "superpower", "ancientpower", "hyperbeam"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 30, "shiny": 1, "moves": ["stomp", "icywind", "curse", "superpower"]},
-			{"generation": 5, "level": 65, "shiny": 1, "moves": ["amnesia", "chargebeam", "lockon", "zapcannon"]},
-			{"generation": 6, "level": 40, "shiny": 1, "moves": ["bulldoze", "curse", "ancientpower", "amnesia"]},
-			{"generation": 6, "level": 50, "isHidden": true, "moves": ["thunderbolt", "amnesia", "icebeam", "hail"], "pokeball": "pokeball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["icebeam", "hammerarm", "lockon", "zapcannon"]},
+			{generation: 3, level: 40, shiny: 1, moves: ["icywind", "curse", "superpower", "ancientpower"]},
+			{generation: 3, level: 40, moves: ["curse", "superpower", "ancientpower", "hyperbeam"], pokeball: "pokeball"},
+			{generation: 4, level: 30, shiny: 1, moves: ["stomp", "icywind", "curse", "superpower"]},
+			{generation: 5, level: 65, shiny: 1, moves: ["amnesia", "chargebeam", "lockon", "zapcannon"]},
+			{generation: 6, level: 40, shiny: 1, moves: ["bulldoze", "curse", "ancientpower", "amnesia"]},
+			{generation: 6, level: 50, isHidden: true, moves: ["thunderbolt", "amnesia", "icebeam", "hail"], pokeball: "pokeball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["icebeam", "hammerarm", "lockon", "zapcannon"]},
 		],
 		eventOnly: true,
 	},
@@ -39820,13 +39820,13 @@ let BattleLearnsets = {
 			zapcannon: ["7L55", "7S6", "6L1", "5L65", "5S3", "4L65", "3L49"],
 		},
 		eventData: [
-			{"generation": 3, "level": 40, "shiny": 1, "moves": ["metalclaw", "curse", "superpower", "ancientpower"]},
-			{"generation": 3, "level": 40, "moves": ["curse", "superpower", "ancientpower", "hyperbeam"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 30, "shiny": 1, "moves": ["stomp", "metalclaw", "curse", "superpower"]},
-			{"generation": 5, "level": 65, "shiny": 1, "moves": ["amnesia", "chargebeam", "lockon", "zapcannon"]},
-			{"generation": 6, "level": 40, "shiny": 1, "moves": ["curse", "ancientpower", "irondefense", "amnesia"]},
-			{"generation": 6, "level": 50, "isHidden": true, "moves": ["ironhead", "rockslide", "gravity", "irondefense"], "pokeball": "pokeball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["flashcannon", "hammerarm", "lockon", "zapcannon"]},
+			{generation: 3, level: 40, shiny: 1, moves: ["metalclaw", "curse", "superpower", "ancientpower"]},
+			{generation: 3, level: 40, moves: ["curse", "superpower", "ancientpower", "hyperbeam"], pokeball: "pokeball"},
+			{generation: 4, level: 30, shiny: 1, moves: ["stomp", "metalclaw", "curse", "superpower"]},
+			{generation: 5, level: 65, shiny: 1, moves: ["amnesia", "chargebeam", "lockon", "zapcannon"]},
+			{generation: 6, level: 40, shiny: 1, moves: ["curse", "ancientpower", "irondefense", "amnesia"]},
+			{generation: 6, level: 50, isHidden: true, moves: ["ironhead", "rockslide", "gravity", "irondefense"], pokeball: "pokeball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["flashcannon", "hammerarm", "lockon", "zapcannon"]},
 		],
 		eventOnly: true,
 	},
@@ -39933,16 +39933,16 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L41", "6T", "6L40", "5T", "5L40", "4T", "4L40", "4S4"],
 		},
 		eventData: [
-			{"generation": 3, "level": 40, "shiny": 1, "moves": ["watersport", "refresh", "mistball", "psychic"]},
-			{"generation": 3, "level": 50, "shiny": 1, "moves": ["mistball", "psychic", "recover", "charm"]},
-			{"generation": 3, "level": 70, "moves": ["mistball", "psychic", "recover", "charm"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 35, "shiny": 1, "moves": ["dragonbreath", "watersport", "refresh", "mistball"]},
-			{"generation": 4, "level": 40, "shiny": 1, "moves": ["watersport", "refresh", "mistball", "zenheadbutt"]},
-			{"generation": 5, "level": 68, "shiny": 1, "moves": ["psychoshift", "charm", "psychic", "healpulse"]},
-			{"generation": 6, "level": 30, "shiny": 1, "moves": ["healpulse", "dragonbreath", "mistball", "psychoshift"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["mistball", "dragonpulse", "psychoshift", "wish"]},
-			{"generation": 7, "level": 60, "moves": ["mistball", "dragonpulse", "psychoshift", "wish"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["mistball", "psychic", "dracometeor", "tailwind"], "pokeball": "cherishball"},
+			{generation: 3, level: 40, shiny: 1, moves: ["watersport", "refresh", "mistball", "psychic"]},
+			{generation: 3, level: 50, shiny: 1, moves: ["mistball", "psychic", "recover", "charm"]},
+			{generation: 3, level: 70, moves: ["mistball", "psychic", "recover", "charm"], pokeball: "pokeball"},
+			{generation: 4, level: 35, shiny: 1, moves: ["dragonbreath", "watersport", "refresh", "mistball"]},
+			{generation: 4, level: 40, shiny: 1, moves: ["watersport", "refresh", "mistball", "zenheadbutt"]},
+			{generation: 5, level: 68, shiny: 1, moves: ["psychoshift", "charm", "psychic", "healpulse"]},
+			{generation: 6, level: 30, shiny: 1, moves: ["healpulse", "dragonbreath", "mistball", "psychoshift"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["mistball", "dragonpulse", "psychoshift", "wish"]},
+			{generation: 7, level: 60, moves: ["mistball", "dragonpulse", "psychoshift", "wish"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["mistball", "psychic", "dracometeor", "tailwind"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -40044,17 +40044,17 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L41", "6T", "6L40", "5T", "5L40", "4T", "4L40", "4S4"],
 		},
 		eventData: [
-			{"generation": 3, "level": 40, "shiny": 1, "moves": ["protect", "refresh", "lusterpurge", "psychic"]},
-			{"generation": 3, "level": 50, "shiny": 1, "moves": ["lusterpurge", "psychic", "recover", "dragondance"]},
-			{"generation": 3, "level": 70, "moves": ["lusterpurge", "psychic", "recover", "dragondance"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 35, "shiny": 1, "moves": ["dragonbreath", "protect", "refresh", "lusterpurge"]},
-			{"generation": 4, "level": 40, "shiny": 1, "moves": ["protect", "refresh", "lusterpurge", "zenheadbutt"]},
-			{"generation": 5, "level": 68, "shiny": 1, "moves": ["psychoshift", "dragondance", "psychic", "healpulse"]},
-			{"generation": 6, "level": 30, "shiny": 1, "moves": ["healpulse", "dragonbreath", "lusterpurge", "psychoshift"]},
-			{"generation": 6, "level": 50, "nature": "Modest", "moves": ["dragonpulse", "lusterpurge", "psychic", "healpulse"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["lusterpurge", "dragonpulse", "psychoshift", "dragonbreath"]},
-			{"generation": 7, "level": 60, "moves": ["lusterpurge", "dragonpulse", "psychoshift", "dragonbreath"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["lusterpurge", "psychic", "dracometeor", "tailwind"], "pokeball": "cherishball"},
+			{generation: 3, level: 40, shiny: 1, moves: ["protect", "refresh", "lusterpurge", "psychic"]},
+			{generation: 3, level: 50, shiny: 1, moves: ["lusterpurge", "psychic", "recover", "dragondance"]},
+			{generation: 3, level: 70, moves: ["lusterpurge", "psychic", "recover", "dragondance"], pokeball: "pokeball"},
+			{generation: 4, level: 35, shiny: 1, moves: ["dragonbreath", "protect", "refresh", "lusterpurge"]},
+			{generation: 4, level: 40, shiny: 1, moves: ["protect", "refresh", "lusterpurge", "zenheadbutt"]},
+			{generation: 5, level: 68, shiny: 1, moves: ["psychoshift", "dragondance", "psychic", "healpulse"]},
+			{generation: 6, level: 30, shiny: 1, moves: ["healpulse", "dragonbreath", "lusterpurge", "psychoshift"]},
+			{generation: 6, level: 50, nature: "Modest", moves: ["dragonpulse", "lusterpurge", "psychic", "healpulse"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["lusterpurge", "dragonpulse", "psychoshift", "dragonbreath"]},
+			{generation: 7, level: 60, moves: ["lusterpurge", "dragonpulse", "psychoshift", "dragonbreath"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["lusterpurge", "psychic", "dracometeor", "tailwind"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -40130,17 +40130,17 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 45, "shiny": 1, "moves": ["bodyslam", "calmmind", "icebeam", "hydropump"]},
-			{"generation": 3, "level": 70, "shiny": 1, "moves": ["hydropump", "rest", "sheercold", "doubleedge"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["aquaring", "icebeam", "ancientpower", "waterspout"]},
-			{"generation": 5, "level": 80, "shiny": 1, "moves": ["icebeam", "ancientpower", "waterspout", "thunder"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "moves": ["waterspout", "thunder", "icebeam", "sheercold"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 45, "moves": ["bodyslam", "aquaring", "icebeam", "originpulse"]},
-			{"generation": 6, "level": 100, "nature": "Timid", "moves": ["waterspout", "thunder", "sheercold", "icebeam"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["icebeam", "originpulse", "calmmind", "muddywater"]},
-			{"generation": 7, "level": 60, "shiny": true, "moves": ["icebeam", "originpulse", "calmmind", "muddywater"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "moves": ["icebeam", "originpulse", "calmmind", "muddywater"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["originpulse", "icebeam", "waterspout", "calmmind"], "pokeball": "cherishball"},
+			{generation: 3, level: 45, shiny: 1, moves: ["bodyslam", "calmmind", "icebeam", "hydropump"]},
+			{generation: 3, level: 70, shiny: 1, moves: ["hydropump", "rest", "sheercold", "doubleedge"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["aquaring", "icebeam", "ancientpower", "waterspout"]},
+			{generation: 5, level: 80, shiny: 1, moves: ["icebeam", "ancientpower", "waterspout", "thunder"], pokeball: "cherishball"},
+			{generation: 5, level: 100, moves: ["waterspout", "thunder", "icebeam", "sheercold"], pokeball: "cherishball"},
+			{generation: 6, level: 45, moves: ["bodyslam", "aquaring", "icebeam", "originpulse"]},
+			{generation: 6, level: 100, nature: "Timid", moves: ["waterspout", "thunder", "sheercold", "icebeam"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["icebeam", "originpulse", "calmmind", "muddywater"]},
+			{generation: 7, level: 60, shiny: true, moves: ["icebeam", "originpulse", "calmmind", "muddywater"], pokeball: "cherishball"},
+			{generation: 7, level: 60, moves: ["icebeam", "originpulse", "calmmind", "muddywater"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["originpulse", "icebeam", "waterspout", "calmmind"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -40238,17 +40238,17 @@ let BattleLearnsets = {
 			uproar: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 3, "level": 45, "shiny": 1, "moves": ["slash", "bulkup", "earthquake", "fireblast"]},
-			{"generation": 3, "level": 70, "shiny": 1, "moves": ["fireblast", "rest", "fissure", "solarbeam"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["rest", "earthquake", "ancientpower", "eruption"]},
-			{"generation": 5, "level": 80, "shiny": 1, "moves": ["earthquake", "ancientpower", "eruption", "solarbeam"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "moves": ["eruption", "hammerarm", "earthpower", "solarbeam"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 45, "moves": ["lavaplume", "rest", "earthquake", "precipiceblades"]},
-			{"generation": 6, "level": 100, "nature": "Adamant", "moves": ["firepunch", "solarbeam", "hammerarm", "rockslide"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["earthquake", "precipiceblades", "bulkup", "solarbeam"]},
-			{"generation": 7, "level": 60, "shiny": true, "moves": ["earthquake", "precipiceblades", "bulkup", "solarbeam"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "moves": ["earthquake", "precipiceblades", "bulkup", "solarbeam"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["precipiceblades", "earthpower", "firepunch", "swordsdance"], "pokeball": "cherishball"},
+			{generation: 3, level: 45, shiny: 1, moves: ["slash", "bulkup", "earthquake", "fireblast"]},
+			{generation: 3, level: 70, shiny: 1, moves: ["fireblast", "rest", "fissure", "solarbeam"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["rest", "earthquake", "ancientpower", "eruption"]},
+			{generation: 5, level: 80, shiny: 1, moves: ["earthquake", "ancientpower", "eruption", "solarbeam"], pokeball: "cherishball"},
+			{generation: 5, level: 100, moves: ["eruption", "hammerarm", "earthpower", "solarbeam"], pokeball: "cherishball"},
+			{generation: 6, level: 45, moves: ["lavaplume", "rest", "earthquake", "precipiceblades"]},
+			{generation: 6, level: 100, nature: "Adamant", moves: ["firepunch", "solarbeam", "hammerarm", "rockslide"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["earthquake", "precipiceblades", "bulkup", "solarbeam"]},
+			{generation: 7, level: 60, shiny: true, moves: ["earthquake", "precipiceblades", "bulkup", "solarbeam"], pokeball: "cherishball"},
+			{generation: 7, level: 60, moves: ["earthquake", "precipiceblades", "bulkup", "solarbeam"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["precipiceblades", "earthpower", "firepunch", "swordsdance"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -40350,15 +40350,15 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 		},
 		eventData: [
-			{"generation": 3, "level": 70, "shiny": 1, "moves": ["fly", "rest", "extremespeed", "outrage"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["rest", "airslash", "ancientpower", "outrage"]},
-			{"generation": 5, "level": 70, "shiny": true, "moves": ["dragonpulse", "ancientpower", "outrage", "dragondance"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "moves": ["extremespeed", "hyperbeam", "dragonpulse", "vcreate"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 70, "moves": ["extremespeed", "dragonpulse", "dragondance", "dragonascent"]},
-			{"generation": 6, "level": 70, "shiny": true, "moves": ["dragonpulse", "thunder", "twister", "extremespeed"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 70, "shiny": true, "moves": ["dragonascent", "dragonclaw", "extremespeed", "dragondance"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "shiny": true, "moves": ["dragonascent", "dracometeor", "fly", "celebrate"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["rest", "extremespeed", "dragonpulse", "dragondance"]},
+			{generation: 3, level: 70, shiny: 1, moves: ["fly", "rest", "extremespeed", "outrage"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["rest", "airslash", "ancientpower", "outrage"]},
+			{generation: 5, level: 70, shiny: true, moves: ["dragonpulse", "ancientpower", "outrage", "dragondance"], pokeball: "cherishball"},
+			{generation: 5, level: 100, moves: ["extremespeed", "hyperbeam", "dragonpulse", "vcreate"], pokeball: "cherishball"},
+			{generation: 6, level: 70, moves: ["extremespeed", "dragonpulse", "dragondance", "dragonascent"]},
+			{generation: 6, level: 70, shiny: true, moves: ["dragonpulse", "thunder", "twister", "extremespeed"], pokeball: "cherishball"},
+			{generation: 6, level: 70, shiny: true, moves: ["dragonascent", "dragonclaw", "extremespeed", "dragondance"], pokeball: "cherishball"},
+			{generation: 6, level: 100, shiny: true, moves: ["dragonascent", "dracometeor", "fly", "celebrate"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["rest", "extremespeed", "dragonpulse", "dragondance"]},
 		],
 		eventOnly: true,
 	},
@@ -40471,29 +40471,29 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L28", "7T", "7L35", "6T", "6L35", "5T", "5L35", "4T", "4L35"],
 		},
 		eventData: [
-			{"generation": 3, "level": 5, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": true, "nature": "Bashful", "ivs": {"hp": 24, "atk": 3, "def": 30, "spa": 12, "spd": 16, "spe": 11}, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": true, "nature": "Careful", "ivs": {"hp": 10, "atk": 0, "def": 10, "spa": 10, "spd": 26, "spe": 12}, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": true, "nature": "Docile", "ivs": {"hp": 19, "atk": 7, "def": 10, "spa": 19, "spd": 10, "spe": 16}, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": true, "nature": "Hasty", "ivs": {"hp": 3, "atk": 12, "def": 12, "spa": 7, "spd": 11, "spe": 9}, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": true, "nature": "Jolly", "ivs": {"hp": 11, "atk": 8, "def": 6, "spa": 14, "spd": 5, "spe": 20}, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": true, "nature": "Lonely", "ivs": {"hp": 31, "atk": 23, "def": 26, "spa": 29, "spd": 18, "spe": 5}, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": true, "nature": "Naughty", "ivs": {"hp": 21, "atk": 31, "def": 31, "spa": 18, "spd": 24, "spe": 19}, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": true, "nature": "Serious", "ivs": {"hp": 29, "atk": 10, "def": 31, "spa": 25, "spd": 23, "spe": 21}, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 5, "shiny": true, "nature": "Timid", "ivs": {"hp": 15, "atk": 28, "def": 29, "spa": 3, "spd": 0, "spe": 7}, "moves": ["wish", "confusion", "rest"], "pokeball": "pokeball"},
-			{"generation": 3, "level": 30, "moves": ["helpinghand", "psychic", "refresh", "rest"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 5, "moves": ["wish", "confusion", "rest"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 5, "moves": ["wish", "confusion", "rest", "dracometeor"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "moves": ["healingwish", "psychic", "swift", "meteormash"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "moves": ["dracometeor", "meteormash", "wish", "followme"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "moves": ["wish", "healingwish", "cosmicpower", "meteormash"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "moves": ["wish", "healingwish", "swift", "return"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "shiny": true, "moves": ["wish", "swift", "healingwish", "moonblast"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 15, "shiny": true, "moves": ["wish", "confusion", "helpinghand", "return"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["heartstamp", "playrough", "wish", "cosmicpower"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 25, "shiny": true, "moves": ["wish", "confusion", "swift", "happyhour"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["wish", "confusion", "rest"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 15, "moves": ["swift", "wish", "healingwish", "rest"], "pokeball": "cherishball"},
+			{generation: 3, level: 5, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Bashful", ivs: {hp: 24, atk: 3, def: 30, spa: 12, spd: 16, spe: 11}, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Careful", ivs: {hp: 10, atk: 0, def: 10, spa: 10, spd: 26, spe: 12}, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Docile", ivs: {hp: 19, atk: 7, def: 10, spa: 19, spd: 10, spe: 16}, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Hasty", ivs: {hp: 3, atk: 12, def: 12, spa: 7, spd: 11, spe: 9}, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Jolly", ivs: {hp: 11, atk: 8, def: 6, spa: 14, spd: 5, spe: 20}, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Lonely", ivs: {hp: 31, atk: 23, def: 26, spa: 29, spd: 18, spe: 5}, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Naughty", ivs: {hp: 21, atk: 31, def: 31, spa: 18, spd: 24, spe: 19}, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Serious", ivs: {hp: 29, atk: 10, def: 31, spa: 25, spd: 23, spe: 21}, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Timid", ivs: {hp: 15, atk: 28, def: 29, spa: 3, spd: 0, spe: 7}, moves: ["wish", "confusion", "rest"], pokeball: "pokeball"},
+			{generation: 3, level: 30, moves: ["helpinghand", "psychic", "refresh", "rest"], pokeball: "pokeball"},
+			{generation: 4, level: 5, moves: ["wish", "confusion", "rest"], pokeball: "cherishball"},
+			{generation: 4, level: 5, moves: ["wish", "confusion", "rest", "dracometeor"], pokeball: "cherishball"},
+			{generation: 5, level: 50, moves: ["healingwish", "psychic", "swift", "meteormash"], pokeball: "cherishball"},
+			{generation: 5, level: 50, moves: ["dracometeor", "meteormash", "wish", "followme"], pokeball: "cherishball"},
+			{generation: 5, level: 50, moves: ["wish", "healingwish", "cosmicpower", "meteormash"], pokeball: "cherishball"},
+			{generation: 5, level: 50, moves: ["wish", "healingwish", "swift", "return"], pokeball: "cherishball"},
+			{generation: 6, level: 10, shiny: true, moves: ["wish", "swift", "healingwish", "moonblast"], pokeball: "cherishball"},
+			{generation: 6, level: 15, shiny: true, moves: ["wish", "confusion", "helpinghand", "return"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["heartstamp", "playrough", "wish", "cosmicpower"], pokeball: "cherishball"},
+			{generation: 6, level: 25, shiny: true, moves: ["wish", "confusion", "swift", "happyhour"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["wish", "confusion", "rest"], pokeball: "cherishball"},
+			{generation: 7, level: 15, moves: ["swift", "wish", "healingwish", "rest"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -40618,17 +40618,17 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L49", "6T", "6L49", "5T", "5L65", "4T", "4L65"],
 		},
 		eventData: [
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["taunt", "pursuit", "psychic", "superpower"]},
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["knockoff", "spikes", "psychic", "snatch"]},
-			{"generation": 3, "level": 30, "shiny": 1, "moves": ["knockoff", "pursuit", "psychic", "swift"]},
-			{"generation": 3, "level": 70, "moves": ["cosmicpower", "recover", "psychoboost", "hyperbeam"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "moves": ["psychoboost", "zapcannon", "irondefense", "extremespeed"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "moves": ["psychoboost", "swift", "doubleteam", "extremespeed"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "moves": ["psychoboost", "detect", "counter", "mirrorcoat"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "moves": ["psychoboost", "meteormash", "superpower", "hyperbeam"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "moves": ["psychoboost", "leer", "wrap", "nightshade"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 100, "moves": ["nastyplot", "darkpulse", "recover", "psychoboost"], "pokeball": "duskball"},
-			{"generation": 6, "level": 80, "moves": ["cosmicpower", "recover", "psychoboost", "hyperbeam"]},
+			{generation: 3, level: 30, shiny: 1, moves: ["taunt", "pursuit", "psychic", "superpower"]},
+			{generation: 3, level: 30, shiny: 1, moves: ["knockoff", "spikes", "psychic", "snatch"]},
+			{generation: 3, level: 30, shiny: 1, moves: ["knockoff", "pursuit", "psychic", "swift"]},
+			{generation: 3, level: 70, moves: ["cosmicpower", "recover", "psychoboost", "hyperbeam"], pokeball: "pokeball"},
+			{generation: 4, level: 50, moves: ["psychoboost", "zapcannon", "irondefense", "extremespeed"], pokeball: "cherishball"},
+			{generation: 4, level: 50, moves: ["psychoboost", "swift", "doubleteam", "extremespeed"], pokeball: "pokeball"},
+			{generation: 4, level: 50, moves: ["psychoboost", "detect", "counter", "mirrorcoat"], pokeball: "pokeball"},
+			{generation: 4, level: 50, moves: ["psychoboost", "meteormash", "superpower", "hyperbeam"], pokeball: "pokeball"},
+			{generation: 4, level: 50, moves: ["psychoboost", "leer", "wrap", "nightshade"], pokeball: "pokeball"},
+			{generation: 5, level: 100, moves: ["nastyplot", "darkpulse", "recover", "psychoboost"], pokeball: "duskball"},
+			{generation: 6, level: 80, moves: ["cosmicpower", "recover", "psychoboost", "hyperbeam"]},
 		],
 		eventOnly: true,
 	},
@@ -40714,8 +40714,8 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tackle", "withdraw", "absorb"]},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tackle", "withdraw", "absorb", "stockpile"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tackle", "withdraw", "absorb"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["tackle", "withdraw", "absorb", "stockpile"]},
 		],
 	},
 	grotle: {
@@ -40854,7 +40854,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 100, "gender": "M", "moves": ["woodhammer", "earthquake", "outrage", "stoneedge"], "pokeball": "cherishball"},
+			{generation: 5, level: 100, gender: "M", moves: ["woodhammer", "earthquake", "outrage", "stoneedge"], pokeball: "cherishball"},
 		],
 	},
 	chimchar: {
@@ -40943,10 +40943,10 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 40, "gender": "M", "nature": "Mild", "moves": ["flamethrower", "thunderpunch", "grassknot", "helpinghand"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["scratch", "leer", "ember", "taunt"]},
-			{"generation": 4, "level": 40, "gender": "M", "nature": "Hardy", "moves": ["flamethrower", "thunderpunch", "grassknot", "helpinghand"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["leer", "ember", "taunt", "fakeout"]},
+			{generation: 4, level: 40, gender: "M", nature: "Mild", moves: ["flamethrower", "thunderpunch", "grassknot", "helpinghand"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["scratch", "leer", "ember", "taunt"]},
+			{generation: 4, level: 40, gender: "M", nature: "Hardy", moves: ["flamethrower", "thunderpunch", "grassknot", "helpinghand"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["leer", "ember", "taunt", "fakeout"]},
 		],
 	},
 	monferno: {
@@ -41129,8 +41129,8 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 100, "gender": "M", "moves": ["fireblast", "closecombat", "uturn", "grassknot"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 88, "isHidden": true, "moves": ["fireblast", "closecombat", "firepunch", "focuspunch"], "pokeball": "cherishball"},
+			{generation: 5, level: 100, gender: "M", moves: ["fireblast", "closecombat", "uturn", "grassknot"], pokeball: "cherishball"},
+			{generation: 6, level: 88, isHidden: true, moves: ["fireblast", "closecombat", "firepunch", "focuspunch"], pokeball: "cherishball"},
 		],
 	},
 	piplup: {
@@ -41207,12 +41207,12 @@ let BattleLearnsets = {
 			yawn: ["7E", "6E", "5E", "4E"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["pound", "growl", "bubble"]},
-			{"generation": 5, "level": 15, "shiny": 1, "moves": ["hydropump", "featherdance", "watersport", "peck"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 15, "gender": "M", "moves": ["sing", "round", "featherdance", "peck"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["pound", "growl", "bubble", "featherdance"]},
-			{"generation": 6, "level": 7, "moves": ["pound", "growl", "return"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 30, "gender": "M", "nature": "Hardy", "moves": ["hydropump", "bubblebeam", "whirlpool", "drillpeck"], "pokeball": "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["pound", "growl", "bubble"]},
+			{generation: 5, level: 15, shiny: 1, moves: ["hydropump", "featherdance", "watersport", "peck"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", moves: ["sing", "round", "featherdance", "peck"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["pound", "growl", "bubble", "featherdance"]},
+			{generation: 6, level: 7, moves: ["pound", "growl", "return"], pokeball: "cherishball"},
+			{generation: 7, level: 30, gender: "M", nature: "Hardy", moves: ["hydropump", "bubblebeam", "whirlpool", "drillpeck"], pokeball: "pokeball"},
 		],
 	},
 	prinplup: {
@@ -41370,7 +41370,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 100, "gender": "M", "moves": ["hydropump", "icebeam", "aquajet", "grassknot"], "pokeball": "cherishball"},
+			{generation: 5, level: 100, gender: "M", moves: ["hydropump", "icebeam", "aquajet", "grassknot"], pokeball: "cherishball"},
 		],
 	},
 	starly: {
@@ -41436,7 +41436,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 1, "gender": "M", "nature": "Mild", "moves": ["tackle", "growl"], "pokeball": "pokeball"},
+			{generation: 4, level: 1, gender: "M", nature: "Mild", moves: ["tackle", "growl"], pokeball: "pokeball"},
 		],
 	},
 	staravia: {
@@ -41494,7 +41494,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 4, "level": 4},
+			{generation: 4, level: 4},
 		],
 	},
 	staraptor: {
@@ -41630,7 +41630,7 @@ let BattleLearnsets = {
 			yawn: ["7L21", "6L25", "5L25", "4L25"],
 		},
 		eventData: [
-			{"generation": 4, "level": 1, "gender": "M", "nature": "Lonely", "abilities": ["simple"], "moves": ["tackle"], "pokeball": "pokeball"},
+			{generation: 4, level: 1, gender: "M", nature: "Lonely", abilities: ["simple"], moves: ["tackle"], pokeball: "pokeball"},
 		],
 	},
 	bibarel: {
@@ -41717,7 +41717,7 @@ let BattleLearnsets = {
 			yawn: ["7L23", "6L28", "5L28", "4L28"],
 		},
 		encounters: [
-			{"generation": 4, "level": 4},
+			{generation: 4, level: 4},
 		],
 	},
 	kricketot: {
@@ -42061,7 +42061,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L37", "6T", "6L37", "5T", "5L37", "4T", "4L33"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "gender": "M", "moves": ["pursuit", "takedown", "crunch", "headbutt"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, gender: "M", moves: ["pursuit", "takedown", "crunch", "headbutt"], pokeball: "cherishball"},
 		],
 	},
 	rampardos: {
@@ -42226,7 +42226,7 @@ let BattleLearnsets = {
 			wideguard: ["7E", "6E", "5E"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "gender": "M", "moves": ["metalsound", "takedown", "bodyslam", "protect"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, gender: "M", moves: ["metalsound", "takedown", "bodyslam", "protect"], pokeball: "cherishball"},
 		],
 	},
 	bastiodon: {
@@ -42742,7 +42742,7 @@ let BattleLearnsets = {
 			voltswitch: ["7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "nature": "Impish", "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 14, "spd": 31, "spe": 31}, "isHidden": true, "moves": ["nuzzle", "superfang", "followme", "protect"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, nature: "Impish", ivs: {hp: 31, atk: 31, def: 31, spa: 14, spd: 31, spe: 31}, isHidden: true, moves: ["nuzzle", "superfang", "followme", "protect"], pokeball: "cherishball"},
 		],
 	},
 	buizel: {
@@ -42891,8 +42891,8 @@ let BattleLearnsets = {
 			whirlpool: ["7L35", "6L35", "5L39", "4M", "4L39"],
 		},
 		encounters: [
-			{"generation": 4, "level": 22},
-			{"generation": 5, "level": 10},
+			{generation: 4, level: 22},
+			{generation: 5, level: 10},
 		],
 	},
 	cherubi: {
@@ -43151,7 +43151,7 @@ let BattleLearnsets = {
 			whirlpool: ["8M", "4M"],
 		},
 		encounters: [
-			{"generation": 4, "level": 20},
+			{generation: 4, level: 20},
 		],
 	},
 	drifloon: {
@@ -43325,7 +43325,7 @@ let BattleLearnsets = {
 			willowisp: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		encounters: [
-			{"generation": 7, "level": 11, "pokeball": "pokeball"},
+			{generation: 7, level: 11, pokeball: "pokeball"},
 		],
 	},
 	buneary: {
@@ -43655,7 +43655,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		encounters: [
-			{"generation": 6, "level": 32, "maxEggMoves": 1},
+			{generation: 6, level: 32, maxEggMoves: 1},
 		],
 	},
 	stunky: {
@@ -43821,7 +43821,7 @@ let BattleLearnsets = {
 			venoshock: ["8M", "8L21", "7M", "6M", "5M"],
 		},
 		encounters: [
-			{"generation": 4, "level": 29},
+			{generation: 4, level: 29},
 		],
 	},
 	bronzor: {
@@ -43985,7 +43985,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	chatot: {
@@ -44051,7 +44051,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 25, "gender": "M", "nature": "Jolly", "abilities": ["keeneye"], "moves": ["mirrormove", "furyattack", "chatter", "taunt"]},
+			{generation: 4, level: 25, gender: "M", nature: "Jolly", abilities: ["keeneye"], moves: ["mirrormove", "furyattack", "chatter", "taunt"]},
 		],
 	},
 	spiritomb: {
@@ -44127,7 +44127,7 @@ let BattleLearnsets = {
 			wonderroom: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 61, "gender": "F", "nature": "Quiet", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "moves": ["darkpulse", "psychic", "silverwind", "embargo"], "pokeball": "cherishball"},
+			{generation: 5, level: 61, gender: "F", nature: "Quiet", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["darkpulse", "psychic", "silverwind", "embargo"], pokeball: "cherishball"},
 		],
 	},
 	gible: {
@@ -44345,11 +44345,11 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 100, "gender": "M", "moves": ["outrage", "earthquake", "swordsdance", "stoneedge"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 48, "gender": "M", "isHidden": true, "moves": ["dragonclaw", "dig", "crunch", "outrage"]},
-			{"generation": 6, "level": 48, "gender": "M", "moves": ["dracometeor", "dragonclaw", "dig", "crunch"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "gender": "M", "moves": ["slash", "dragonclaw", "dig", "crunch"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 66, "gender": "F", "perfectIVs": 3, "moves": ["dragonrush", "earthquake", "brickbreak", "gigaimpact"], "pokeball": "cherishball"},
+			{generation: 5, level: 100, gender: "M", moves: ["outrage", "earthquake", "swordsdance", "stoneedge"], pokeball: "cherishball"},
+			{generation: 5, level: 48, gender: "M", isHidden: true, moves: ["dragonclaw", "dig", "crunch", "outrage"]},
+			{generation: 6, level: 48, gender: "M", moves: ["dracometeor", "dragonclaw", "dig", "crunch"], pokeball: "cherishball"},
+			{generation: 6, level: 50, gender: "M", moves: ["slash", "dragonclaw", "dig", "crunch"], pokeball: "cherishball"},
+			{generation: 6, level: 66, gender: "F", perfectIVs: 3, moves: ["dragonrush", "earthquake", "brickbreak", "gigaimpact"], pokeball: "cherishball"},
 		],
 	},
 	riolu: {
@@ -44445,7 +44445,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 30, "gender": "M", "nature": "Serious", "abilities": ["steadfast"], "moves": ["aurasphere", "shadowclaw", "bulletpunch", "drainpunch"], "pokeball": "pokeball"},
+			{generation: 4, level: 30, gender: "M", nature: "Serious", abilities: ["steadfast"], moves: ["aurasphere", "shadowclaw", "bulletpunch", "drainpunch"], pokeball: "pokeball"},
 		],
 	},
 	lucario: {
@@ -44556,12 +44556,12 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "gender": "M", "nature": "Modest", "abilities": ["steadfast"], "moves": ["aurasphere", "darkpulse", "dragonpulse", "waterpulse"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 30, "gender": "M", "nature": "Adamant", "abilities": ["innerfocus"], "moves": ["forcepalm", "bonerush", "sunnyday", "blazekick"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["detect", "metalclaw", "counter", "bulletpunch"]},
-			{"generation": 5, "level": 50, "gender": "M", "nature": "Naughty", "ivs": {"atk": 31}, "isHidden": true, "moves": ["bulletpunch", "closecombat", "stoneedge", "shadowclaw"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "nature": "Jolly", "abilities": ["innerfocus"], "moves": ["closecombat", "aurasphere", "flashcannon", "quickattack"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 40, "gender": "M", "nature": "Serious", "abilities": ["steadfast"], "moves": ["aurasphere", "highjumpkick", "dragonpulse", "extremespeed"], "pokeball": "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Modest", abilities: ["steadfast"], moves: ["aurasphere", "darkpulse", "dragonpulse", "waterpulse"], pokeball: "cherishball"},
+			{generation: 4, level: 30, gender: "M", nature: "Adamant", abilities: ["innerfocus"], moves: ["forcepalm", "bonerush", "sunnyday", "blazekick"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["detect", "metalclaw", "counter", "bulletpunch"]},
+			{generation: 5, level: 50, gender: "M", nature: "Naughty", ivs: {atk: 31}, isHidden: true, moves: ["bulletpunch", "closecombat", "stoneedge", "shadowclaw"], pokeball: "cherishball"},
+			{generation: 6, level: 100, nature: "Jolly", abilities: ["innerfocus"], moves: ["closecombat", "aurasphere", "flashcannon", "quickattack"], pokeball: "cherishball"},
+			{generation: 7, level: 40, gender: "M", nature: "Serious", abilities: ["steadfast"], moves: ["aurasphere", "highjumpkick", "dragonpulse", "extremespeed"], pokeball: "pokeball"},
 		],
 	},
 	hippopotas: {
@@ -44866,8 +44866,8 @@ let BattleLearnsets = {
 			xscissor: ["8M", "8L44", "7M", "6M", "5M", "4M"],
 		},
 		encounters: [
-			{"generation": 4, "level": 22, "pokeball": "safariball"},
-			{"generation": 6, "level": 30},
+			{generation: 4, level: 22, pokeball: "safariball"},
+			{generation: 6, level: 30},
 		],
 	},
 	croagunk: {
@@ -44972,8 +44972,8 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["astonish", "mudslap", "poisonsting", "taunt"]},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["mudslap", "poisonsting", "taunt", "poisonjab"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["astonish", "mudslap", "poisonsting", "taunt"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["mudslap", "poisonsting", "taunt", "poisonjab"]},
 		],
 	},
 	toxicroak: {
@@ -45073,8 +45073,8 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		encounters: [
-			{"generation": 4, "level": 22, "pokeball": "safariball"},
-			{"generation": 6, "level": 30},
+			{generation: 4, level: 22, pokeball: "safariball"},
+			{generation: 6, level: 30},
 		],
 	},
 	carnivine: {
@@ -45272,7 +45272,7 @@ let BattleLearnsets = {
 			whirlpool: ["7L42", "6L42", "5L42", "4M", "4L42"],
 		},
 		encounters: [
-			{"generation": 4, "level": 20},
+			{generation: 4, level: 20},
 		],
 	},
 	snover: {
@@ -45425,7 +45425,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
 		encounters: [
-			{"generation": 4, "level": 38},
+			{generation: 4, level: 38},
 		],
 	},
 	rotom: {
@@ -45495,9 +45495,9 @@ let BattleLearnsets = {
 			willowisp: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "nature": "Naughty", "moves": ["uproar", "astonish", "trick", "thundershock"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "nature": "Quirky", "moves": ["shockwave", "astonish", "trick", "thunderwave"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 10, "moves": ["uproar", "confide", "disarmingvoice"], "pokeball": "cherishball"},
+			{generation: 5, level: 10, nature: "Naughty", moves: ["uproar", "astonish", "trick", "thundershock"], pokeball: "cherishball"},
+			{generation: 6, level: 10, nature: "Quirky", moves: ["shockwave", "astonish", "trick", "thunderwave"], pokeball: "cherishball"},
+			{generation: 7, level: 10, moves: ["uproar", "confide", "disarmingvoice"], pokeball: "cherishball"},
 		],
 	},
 	rotomheat: {
@@ -45609,11 +45609,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["confusion", "yawn", "futuresight", "amnesia"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["swift", "yawn", "futuresight", "amnesia"]},
-			{"generation": 5, "level": 65, "shiny": 1, "moves": ["futuresight", "amnesia", "extrasensory", "flail"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["yawn", "futuresight", "amnesia", "extrasensory"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["extrasensory", "yawn", "amnesia", "swift"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["confusion", "yawn", "futuresight", "amnesia"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["swift", "yawn", "futuresight", "amnesia"]},
+			{generation: 5, level: 65, shiny: 1, moves: ["futuresight", "amnesia", "extrasensory", "flail"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["yawn", "futuresight", "amnesia", "extrasensory"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["extrasensory", "yawn", "amnesia", "swift"]},
 		],
 		eventOnly: true,
 	},
@@ -45699,11 +45699,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["confusion", "luckychant", "futuresight", "charm"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["swift", "luckychant", "futuresight", "charm"]},
-			{"generation": 5, "level": 50, "shiny": 1, "moves": ["futuresight", "charm", "extrasensory", "copycat"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["luckychant", "futuresight", "charm", "extrasensory"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["extrasensory", "charm", "futuresight", "swift"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["confusion", "luckychant", "futuresight", "charm"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["swift", "luckychant", "futuresight", "charm"]},
+			{generation: 5, level: 50, shiny: 1, moves: ["futuresight", "charm", "extrasensory", "copycat"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["luckychant", "futuresight", "charm", "extrasensory"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["extrasensory", "charm", "futuresight", "swift"]},
 		],
 		eventOnly: true,
 	},
@@ -45794,11 +45794,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["confusion", "uproar", "futuresight", "nastyplot"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["swift", "uproar", "futuresight", "nastyplot"]},
-			{"generation": 5, "level": 50, "shiny": 1, "moves": ["futuresight", "nastyplot", "extrasensory", "lastresort"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["uproar", "futuresight", "nastyplot", "extrasensory"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["extrasensory", "nastyplot", "uproar", "swift"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["confusion", "uproar", "futuresight", "nastyplot"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["swift", "uproar", "futuresight", "nastyplot"]},
+			{generation: 5, level: 50, shiny: 1, moves: ["futuresight", "nastyplot", "extrasensory", "lastresort"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["uproar", "futuresight", "nastyplot", "extrasensory"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["extrasensory", "nastyplot", "uproar", "swift"]},
 		],
 		eventOnly: true,
 	},
@@ -45887,17 +45887,17 @@ let BattleLearnsets = {
 			twister: ["4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 47, "shiny": 1, "moves": ["metalclaw", "ancientpower", "dragonclaw", "roaroftime"]},
-			{"generation": 4, "level": 70, "shiny": 1, "moves": ["roaroftime", "healblock", "earthpower", "slash"]},
-			{"generation": 4, "level": 1, "shiny": 1, "moves": ["dragonbreath", "scaryface"]},
-			{"generation": 5, "level": 5, "isHidden": true, "moves": ["dragonbreath", "scaryface"], "pokeball": "dreamball"},
-			{"generation": 5, "level": 100, "shiny": true, "moves": ["dragonpulse", "dracometeor", "aurasphere", "roaroftime"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["aurasphere", "irontail", "roaroftime", "flashcannon"]},
-			{"generation": 6, "level": 100, "nature": "Modest", "isHidden": true, "moves": ["metalburst", "overheat", "roaroftime", "flashcannon"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["aurasphere", "irontail", "roaroftime", "flashcannon"]},
-			{"generation": 7, "level": 60, "moves": ["aurasphere", "irontail", "roaroftime", "flashcannon"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["roaroftime", "aurasphere", "dracometeor", "flashcannon"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "moves": ["flashcannon", "dracometeor", "roaroftime", "aurasphere"], "pokeball": "cherishball"},
+			{generation: 4, level: 47, shiny: 1, moves: ["metalclaw", "ancientpower", "dragonclaw", "roaroftime"]},
+			{generation: 4, level: 70, shiny: 1, moves: ["roaroftime", "healblock", "earthpower", "slash"]},
+			{generation: 4, level: 1, shiny: 1, moves: ["dragonbreath", "scaryface"]},
+			{generation: 5, level: 5, isHidden: true, moves: ["dragonbreath", "scaryface"], pokeball: "dreamball"},
+			{generation: 5, level: 100, shiny: true, moves: ["dragonpulse", "dracometeor", "aurasphere", "roaroftime"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["aurasphere", "irontail", "roaroftime", "flashcannon"]},
+			{generation: 6, level: 100, nature: "Modest", isHidden: true, moves: ["metalburst", "overheat", "roaroftime", "flashcannon"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["aurasphere", "irontail", "roaroftime", "flashcannon"]},
+			{generation: 7, level: 60, moves: ["aurasphere", "irontail", "roaroftime", "flashcannon"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["roaroftime", "aurasphere", "dracometeor", "flashcannon"], pokeball: "cherishball"},
+			{generation: 7, level: 50, moves: ["flashcannon", "dracometeor", "roaroftime", "aurasphere"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -45990,17 +45990,17 @@ let BattleLearnsets = {
 			whirlpool: ["4M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 47, "shiny": 1, "moves": ["waterpulse", "ancientpower", "dragonclaw", "spacialrend"]},
-			{"generation": 4, "level": 70, "shiny": 1, "moves": ["spacialrend", "healblock", "earthpower", "slash"]},
-			{"generation": 4, "level": 1, "shiny": 1, "moves": ["dragonbreath", "scaryface"]},
-			{"generation": 5, "level": 5, "isHidden": true, "moves": ["dragonbreath", "scaryface"], "pokeball": "dreamball"},
-			{"generation": 5, "level": 100, "shiny": true, "moves": ["hydropump", "dracometeor", "spacialrend", "aurasphere"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["earthpower", "aurasphere", "spacialrend", "hydropump"]},
-			{"generation": 6, "level": 100, "nature": "Timid", "isHidden": true, "moves": ["earthpower", "aurasphere", "spacialrend", "hydropump"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["aurasphere", "aquatail", "spacialrend", "hydropump"]},
-			{"generation": 7, "level": 60, "moves": ["aurasphere", "aquatail", "spacialrend", "hydropump"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["spacialrend", "aurasphere", "dracometeor", "hydropump"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "moves": ["hydropump", "dracometeor", "spacialrend", "aurasphere"], "pokeball": "cherishball"},
+			{generation: 4, level: 47, shiny: 1, moves: ["waterpulse", "ancientpower", "dragonclaw", "spacialrend"]},
+			{generation: 4, level: 70, shiny: 1, moves: ["spacialrend", "healblock", "earthpower", "slash"]},
+			{generation: 4, level: 1, shiny: 1, moves: ["dragonbreath", "scaryface"]},
+			{generation: 5, level: 5, isHidden: true, moves: ["dragonbreath", "scaryface"], pokeball: "dreamball"},
+			{generation: 5, level: 100, shiny: true, moves: ["hydropump", "dracometeor", "spacialrend", "aurasphere"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["earthpower", "aurasphere", "spacialrend", "hydropump"]},
+			{generation: 6, level: 100, nature: "Timid", isHidden: true, moves: ["earthpower", "aurasphere", "spacialrend", "hydropump"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["aurasphere", "aquatail", "spacialrend", "hydropump"]},
+			{generation: 7, level: 60, moves: ["aurasphere", "aquatail", "spacialrend", "hydropump"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["spacialrend", "aurasphere", "dracometeor", "hydropump"], pokeball: "cherishball"},
+			{generation: 7, level: 50, moves: ["hydropump", "dracometeor", "spacialrend", "aurasphere"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -46075,14 +46075,14 @@ let BattleLearnsets = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 70, "shiny": 1, "moves": ["scaryface", "lavaplume", "firespin", "ironhead"]},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["metalsound", "crunch", "scaryface", "lavaplume"]},
-			{"generation": 4, "level": 50, "nature": "Quiet", "moves": ["eruption", "magmastorm", "earthpower", "ancientpower"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 68, "shiny": 1, "moves": ["scaryface", "lavaplume", "firespin", "ironhead"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["metalsound", "crunch", "scaryface", "lavaplume"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["crunch", "scaryface", "lavaplume", "firespin"]},
-			{"generation": 7, "level": 60, "moves": ["crunch", "scaryface", "lavaplume", "firespin"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["magmastorm", "heatwave", "earthpower", "flashcannon"], "pokeball": "cherishball"},
+			{generation: 4, level: 70, shiny: 1, moves: ["scaryface", "lavaplume", "firespin", "ironhead"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["metalsound", "crunch", "scaryface", "lavaplume"]},
+			{generation: 4, level: 50, nature: "Quiet", moves: ["eruption", "magmastorm", "earthpower", "ancientpower"], pokeball: "pokeball"},
+			{generation: 5, level: 68, shiny: 1, moves: ["scaryface", "lavaplume", "firespin", "ironhead"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["metalsound", "crunch", "scaryface", "lavaplume"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["crunch", "scaryface", "lavaplume", "firespin"]},
+			{generation: 7, level: 60, moves: ["crunch", "scaryface", "lavaplume", "firespin"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["magmastorm", "heatwave", "earthpower", "flashcannon"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -46160,14 +46160,14 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L50", "7S7", "7S6", "7S5", "6T", "6L50", "6S4", "5T", "5L50", "5S3", "4T", "4L50", "4S0"],
 		},
 		eventData: [
-			{"generation": 4, "level": 70, "shiny": 1, "moves": ["confuseray", "stomp", "superpower", "zenheadbutt"]},
-			{"generation": 4, "level": 1, "shiny": 1, "moves": ["dizzypunch", "knockoff", "foresight", "confuseray"]},
-			{"generation": 4, "level": 100, "moves": ["ironhead", "rockslide", "icywind", "crushgrip"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 68, "shiny": 1, "moves": ["revenge", "wideguard", "zenheadbutt", "payback"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["foresight", "revenge", "wideguard", "zenheadbutt"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["zenheadbutt", "revenge", "dizzypunch", "confuseray"]},
-			{"generation": 7, "level": 60, "moves": ["zenheadbutt", "revenge", "dizzypunch", "confuseray"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["crushgrip", "drainpunch", "zenheadbutt", "heavyslam"], "pokeball": "cherishball"},
+			{generation: 4, level: 70, shiny: 1, moves: ["confuseray", "stomp", "superpower", "zenheadbutt"]},
+			{generation: 4, level: 1, shiny: 1, moves: ["dizzypunch", "knockoff", "foresight", "confuseray"]},
+			{generation: 4, level: 100, moves: ["ironhead", "rockslide", "icywind", "crushgrip"], pokeball: "cherishball"},
+			{generation: 5, level: 68, shiny: 1, moves: ["revenge", "wideguard", "zenheadbutt", "payback"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["foresight", "revenge", "wideguard", "zenheadbutt"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["zenheadbutt", "revenge", "dizzypunch", "confuseray"]},
+			{generation: 7, level: 60, moves: ["zenheadbutt", "revenge", "dizzypunch", "confuseray"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["crushgrip", "drainpunch", "zenheadbutt", "heavyslam"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -46262,14 +46262,14 @@ let BattleLearnsets = {
 			willowisp: ["7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 70, "shiny": 1, "moves": ["shadowforce", "healblock", "earthpower", "slash"]},
-			{"generation": 4, "level": 47, "shiny": 1, "moves": ["ominouswind", "ancientpower", "dragonclaw", "shadowforce"]},
-			{"generation": 4, "level": 1, "shiny": 1, "moves": ["dragonbreath", "scaryface"]},
-			{"generation": 5, "level": 5, "isHidden": true, "moves": ["dragonbreath", "scaryface"], "pokeball": "dreamball"},
-			{"generation": 5, "level": 100, "shiny": true, "moves": ["dragonpulse", "dragonclaw", "aurasphere", "shadowforce"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["aurasphere", "shadowclaw", "shadowforce", "hex"]},
-			{"generation": 6, "level": 100, "nature": "Brave", "isHidden": true, "moves": ["aurasphere", "dracometeor", "shadowforce", "ironhead"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["shadowforce", "aurasphere", "earthpower", "dragonclaw"]},
+			{generation: 4, level: 70, shiny: 1, moves: ["shadowforce", "healblock", "earthpower", "slash"]},
+			{generation: 4, level: 47, shiny: 1, moves: ["ominouswind", "ancientpower", "dragonclaw", "shadowforce"]},
+			{generation: 4, level: 1, shiny: 1, moves: ["dragonbreath", "scaryface"]},
+			{generation: 5, level: 5, isHidden: true, moves: ["dragonbreath", "scaryface"], pokeball: "dreamball"},
+			{generation: 5, level: 100, shiny: true, moves: ["dragonpulse", "dragonclaw", "aurasphere", "shadowforce"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["aurasphere", "shadowclaw", "shadowforce", "hex"]},
+			{generation: 6, level: 100, nature: "Brave", isHidden: true, moves: ["aurasphere", "dracometeor", "shadowforce", "ironhead"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["shadowforce", "aurasphere", "earthpower", "dragonclaw"]},
 		],
 		eventOnly: true,
 	},
@@ -46345,11 +46345,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["mist", "aurorabeam", "futuresight", "slash"]},
-			{"generation": 5, "level": 68, "shiny": 1, "moves": ["futuresight", "slash", "moonlight", "psychocut"]},
-			{"generation": 5, "level": 68, "nature": "Modest", "moves": ["icebeam", "psyshock", "energyball", "hiddenpower"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["mist", "aurorabeam", "futuresight", "slash"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["aurorabeam", "futuresight", "slash", "moonlight"]},
+			{generation: 4, level: 50, shiny: 1, moves: ["mist", "aurorabeam", "futuresight", "slash"]},
+			{generation: 5, level: 68, shiny: 1, moves: ["futuresight", "slash", "moonlight", "psychocut"]},
+			{generation: 5, level: 68, nature: "Modest", moves: ["icebeam", "psyshock", "energyball", "hiddenpower"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["mist", "aurorabeam", "futuresight", "slash"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["aurorabeam", "futuresight", "slash", "moonlight"]},
 		],
 		eventOnly: true,
 	},
@@ -46411,7 +46411,7 @@ let BattleLearnsets = {
 			whirlpool: ["7L39", "6L39", "5L39", "4M", "4L39"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "moves": ["grassknot", "raindance", "rest", "surf"], "pokeball": "cherishball"},
+			{generation: 4, level: 50, moves: ["grassknot", "raindance", "rest", "surf"], pokeball: "cherishball"},
 		],
 	},
 	manaphy: {
@@ -46484,13 +46484,13 @@ let BattleLearnsets = {
 			whirlpool: ["7L39", "6L39", "5L39", "4M", "4L39", "4S2"],
 		},
 		eventData: [
-			{"generation": 4, "level": 5, "moves": ["tailglow", "bubble", "watersport"]},
-			{"generation": 4, "level": 1, "shiny": 1, "moves": ["tailglow", "bubble", "watersport"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "moves": ["heartswap", "waterpulse", "whirlpool", "acidarmor"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "nature": "Impish", "moves": ["aquaring", "waterpulse", "watersport", "heartswap"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 1, "moves": ["tailglow", "bubble", "watersport", "heartswap"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["tailglow", "bubble", "watersport"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 15, "moves": ["tailglow", "waterpulse", "aquaring", "heartswap"], "pokeball": "cherishball"},
+			{generation: 4, level: 5, moves: ["tailglow", "bubble", "watersport"]},
+			{generation: 4, level: 1, shiny: 1, moves: ["tailglow", "bubble", "watersport"], pokeball: "pokeball"},
+			{generation: 4, level: 50, moves: ["heartswap", "waterpulse", "whirlpool", "acidarmor"], pokeball: "cherishball"},
+			{generation: 4, level: 50, nature: "Impish", moves: ["aquaring", "waterpulse", "watersport", "heartswap"], pokeball: "cherishball"},
+			{generation: 6, level: 1, moves: ["tailglow", "bubble", "watersport", "heartswap"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["tailglow", "bubble", "watersport"], pokeball: "cherishball"},
+			{generation: 7, level: 15, moves: ["tailglow", "waterpulse", "aquaring", "heartswap"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -46587,14 +46587,14 @@ let BattleLearnsets = {
 			xscissor: ["7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{"generation": 4, "level": 40, "shiny": 1, "moves": ["quickattack", "hypnosis", "pursuit", "nightmare"]},
-			{"generation": 4, "level": 50, "moves": ["roaroftime", "spacialrend", "nightmare", "hypnosis"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 50, "moves": ["darkvoid", "darkpulse", "shadowball", "doubleteam"], "pokeball": "pokeball"},
-			{"generation": 4, "level": 50, "shiny": 1, "moves": ["hypnosis", "feintattack", "nightmare", "doubleteam"]},
-			{"generation": 5, "level": 50, "moves": ["darkvoid", "ominouswind", "feintattack", "nightmare"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "moves": ["darkvoid", "darkpulse", "phantomforce", "dreameater"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["darkvoid", "ominouswind", "nightmare", "feintattack"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "moves": ["darkvoid", "feintattack", "nightmare", "ominouswind"], "pokeball": "cherishball"},
+			{generation: 4, level: 40, shiny: 1, moves: ["quickattack", "hypnosis", "pursuit", "nightmare"]},
+			{generation: 4, level: 50, moves: ["roaroftime", "spacialrend", "nightmare", "hypnosis"], pokeball: "cherishball"},
+			{generation: 4, level: 50, moves: ["darkvoid", "darkpulse", "shadowball", "doubleteam"], pokeball: "pokeball"},
+			{generation: 4, level: 50, shiny: 1, moves: ["hypnosis", "feintattack", "nightmare", "doubleteam"]},
+			{generation: 5, level: 50, moves: ["darkvoid", "ominouswind", "feintattack", "nightmare"], pokeball: "cherishball"},
+			{generation: 6, level: 50, moves: ["darkvoid", "darkpulse", "phantomforce", "dreameater"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["darkvoid", "ominouswind", "nightmare", "feintattack"], pokeball: "cherishball"},
+			{generation: 7, level: 50, moves: ["darkvoid", "feintattack", "nightmare", "ominouswind"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -46664,12 +46664,12 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 50, "moves": ["seedflare", "aromatherapy", "substitute", "energyball"], "pokeball": "cherishball"},
-			{"generation": 4, "level": 30, "shiny": 1, "moves": ["growth", "magicalleaf", "leechseed", "synthesis"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 50, "moves": ["seedflare", "leechseed", "synthesis", "sweetscent"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 15, "moves": ["growth", "magicalleaf", "seedflare", "airslash"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["seedflare", "aromatherapy", "substitute", "energyball"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 20, "moves": ["return", "growth", "seedflare", "celebrate"], "pokeball": "cherishball"},
+			{generation: 4, level: 50, moves: ["seedflare", "aromatherapy", "substitute", "energyball"], pokeball: "cherishball"},
+			{generation: 4, level: 30, shiny: 1, moves: ["growth", "magicalleaf", "leechseed", "synthesis"], pokeball: "pokeball"},
+			{generation: 5, level: 50, moves: ["seedflare", "leechseed", "synthesis", "sweetscent"], pokeball: "cherishball"},
+			{generation: 6, level: 15, moves: ["growth", "magicalleaf", "seedflare", "airslash"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["seedflare", "aromatherapy", "substitute", "energyball"], pokeball: "cherishball"},
+			{generation: 7, level: 20, moves: ["return", "growth", "seedflare", "celebrate"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -46813,11 +46813,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{"generation": 4, "level": 100, "moves": ["judgment", "roaroftime", "spacialrend", "shadowforce"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "moves": ["recover", "hyperbeam", "perishsong", "judgment"]},
-			{"generation": 6, "level": 100, "shiny": 1, "moves": ["judgment", "blastburn", "hydrocannon", "earthpower"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["judgment", "perishsong", "hyperbeam", "recover"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["judgment", "extremespeed", "recover", "hyperbeam"], "pokeball": "cherishball"},
+			{generation: 4, level: 100, moves: ["judgment", "roaroftime", "spacialrend", "shadowforce"], pokeball: "cherishball"},
+			{generation: 5, level: 100, moves: ["recover", "hyperbeam", "perishsong", "judgment"]},
+			{generation: 6, level: 100, shiny: 1, moves: ["judgment", "blastburn", "hydrocannon", "earthpower"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["judgment", "perishsong", "hyperbeam", "recover"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["judgment", "extremespeed", "recover", "hyperbeam"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -46962,13 +46962,13 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L49", "6T", "6L49", "5T", "5L49"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "moves": ["quickattack", "incinerate", "confusion", "endure"]},
-			{"generation": 5, "level": 50, "moves": ["vcreate", "fusionflare", "fusionbolt", "searingshot"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "moves": ["vcreate", "blueflare", "boltstrike", "glaciate"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 15, "moves": ["confusion", "quickattack", "vcreate", "searingshot"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["incinerate", "quickattack", "endure", "confusion"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 15, "moves": ["quickattack", "swagger", "vcreate"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 15, "moves": ["vcreate", "reversal", "storedpower", "celebrate"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, moves: ["quickattack", "incinerate", "confusion", "endure"]},
+			{generation: 5, level: 50, moves: ["vcreate", "fusionflare", "fusionbolt", "searingshot"], pokeball: "cherishball"},
+			{generation: 5, level: 100, moves: ["vcreate", "blueflare", "boltstrike", "glaciate"], pokeball: "cherishball"},
+			{generation: 6, level: 15, moves: ["confusion", "quickattack", "vcreate", "searingshot"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["incinerate", "quickattack", "endure", "confusion"], pokeball: "cherishball"},
+			{generation: 6, level: 15, moves: ["quickattack", "swagger", "vcreate"], pokeball: "cherishball"},
+			{generation: 7, level: 15, moves: ["vcreate", "reversal", "storedpower", "celebrate"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -47044,7 +47044,7 @@ let BattleLearnsets = {
 			wringout: ["7L37", "6L37", "5L37"],
 		},
 		eventData: [
-			{"generation": 5, "level": 5, "gender": "M", "nature": "Hardy", "moves": ["growth", "synthesis", "energyball", "aromatherapy"], "pokeball": "cherishball"},
+			{generation: 5, level: 5, gender: "M", nature: "Hardy", moves: ["growth", "synthesis", "energyball", "aromatherapy"], pokeball: "cherishball"},
 		],
 	},
 	servine: {
@@ -47179,8 +47179,8 @@ let BattleLearnsets = {
 			wringout: ["7L50", "6L50", "6S1", "5L50"],
 		},
 		eventData: [
-			{"generation": 5, "level": 100, "gender": "M", "moves": ["leafstorm", "substitute", "gigadrain", "leechseed"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "isHidden": true, "moves": ["leafstorm", "holdback", "wringout", "gigadrain"], "pokeball": "cherishball"},
+			{generation: 5, level: 100, gender: "M", moves: ["leafstorm", "substitute", "gigadrain", "leechseed"], pokeball: "cherishball"},
+			{generation: 6, level: 50, isHidden: true, moves: ["leafstorm", "holdback", "wringout", "gigadrain"], pokeball: "cherishball"},
 		],
 	},
 	tepig: {
@@ -47407,8 +47407,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 100, "gender": "M", "moves": ["flareblitz", "hammerarm", "wildcharge", "headsmash"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "isHidden": true, "moves": ["flareblitz", "holdback", "headsmash", "takedown"], "pokeball": "cherishball"},
+			{generation: 5, level: 100, gender: "M", moves: ["flareblitz", "hammerarm", "wildcharge", "headsmash"], pokeball: "cherishball"},
+			{generation: 6, level: 50, isHidden: true, moves: ["flareblitz", "holdback", "headsmash", "takedown"], pokeball: "cherishball"},
 		],
 	},
 	oshawott: {
@@ -47607,8 +47607,8 @@ let BattleLearnsets = {
 			xscissor: ["7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 100, "gender": "M", "moves": ["hydropump", "icebeam", "megahorn", "superpower"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "isHidden": true, "moves": ["razorshell", "holdback", "confide", "hydropump"], "pokeball": "cherishball"},
+			{generation: 5, level: 100, gender: "M", moves: ["hydropump", "icebeam", "megahorn", "superpower"], pokeball: "cherishball"},
+			{generation: 6, level: 50, isHidden: true, moves: ["razorshell", "holdback", "confide", "hydropump"], pokeball: "cherishball"},
 		],
 	},
 	patrat: {
@@ -47875,7 +47875,7 @@ let BattleLearnsets = {
 			workup: ["7M", "7L20", "6L20", "5M", "5L20"],
 		},
 		encounters: [
-			{"generation": 5, "level": 20, "isHidden": true},
+			{generation: 5, level: 20, isHidden: true},
 		],
 	},
 	stoutland: {
@@ -47939,7 +47939,7 @@ let BattleLearnsets = {
 			workup: ["7M", "7L20", "6L20", "5M", "5L20"],
 		},
 		encounters: [
-			{"generation": 5, "level": 23},
+			{generation: 5, level: 23},
 		],
 	},
 	purrloin: {
@@ -48097,7 +48097,7 @@ let BattleLearnsets = {
 			uturn: ["8M", "7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 20, "gender": "F", "nature": "Jolly", "isHidden": true, "moves": ["fakeout", "foulplay", "encore", "swagger"]},
+			{generation: 5, level: 20, gender: "F", nature: "Jolly", isHidden: true, moves: ["fakeout", "foulplay", "encore", "swagger"]},
 		],
 	},
 	pansage: {
@@ -48176,9 +48176,9 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 1, "shiny": 1, "gender": "M", "nature": "Brave", "ivs": {"spa": 31}, "moves": ["bulletseed", "bite", "solarbeam", "dig"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["leer", "lick", "vinewhip", "leafstorm"]},
-			{"generation": 5, "level": 30, "gender": "M", "nature": "Serious", "moves": ["seedbomb", "solarbeam", "rocktomb", "dig"], "pokeball": "cherishball"},
+			{generation: 5, level: 1, shiny: 1, gender: "M", nature: "Brave", ivs: {spa: 31}, moves: ["bulletseed", "bite", "solarbeam", "dig"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["leer", "lick", "vinewhip", "leafstorm"]},
+			{generation: 5, level: 30, gender: "M", nature: "Serious", moves: ["seedbomb", "solarbeam", "rocktomb", "dig"], pokeball: "cherishball"},
 		],
 	},
 	simisage: {
@@ -48325,7 +48325,7 @@ let BattleLearnsets = {
 			yawn: ["7L16", "6L16", "5L16"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["leer", "lick", "incinerate", "heatwave"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["leer", "lick", "incinerate", "heatwave"]},
 		],
 	},
 	simisear: {
@@ -48398,7 +48398,7 @@ let BattleLearnsets = {
 			workup: ["7M", "6S0", "5M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 5, "perfectIVs": 2, "moves": ["workup", "honeclaws", "poweruppunch", "gigaimpact"], "pokeball": "cherishball"},
+			{generation: 6, level: 5, perfectIVs: 2, moves: ["workup", "honeclaws", "poweruppunch", "gigaimpact"], pokeball: "cherishball"},
 		],
 	},
 	panpour: {
@@ -48479,7 +48479,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["leer", "lick", "watergun", "hydropump"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["leer", "lick", "watergun", "hydropump"]},
 		],
 	},
 	simipour: {
@@ -48704,7 +48704,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L1", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "isHidden": true, "moves": ["defensecurl", "luckychant", "psybeam", "hypnosis"]},
+			{generation: 5, level: 50, isHidden: true, moves: ["defensecurl", "luckychant", "psybeam", "hypnosis"]},
 		],
 	},
 	pidove: {
@@ -48762,7 +48762,7 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 1, "shiny": 1, "gender": "F", "nature": "Hardy", "ivs": {"atk": 31}, "abilities": ["superluck"], "moves": ["gust", "quickattack", "aircutter"], "pokeball": "pokeball"},
+			{generation: 5, level: 1, shiny: 1, gender: "F", nature: "Hardy", ivs: {atk: 31}, abilities: ["superluck"], moves: ["gust", "quickattack", "aircutter"], pokeball: "pokeball"},
 		],
 	},
 	tranquill: {
@@ -48868,7 +48868,7 @@ let BattleLearnsets = {
 			workup: ["8M", "7M", "5M"],
 		},
 		encounters: [
-			{"generation": 5, "level": 22},
+			{generation: 5, level: 22},
 		],
 	},
 	blitzle: {
@@ -49082,7 +49082,7 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M"],
 		},
 		encounters: [
-			{"generation": 5, "level": 24},
+			{generation: 5, level: 24},
 		],
 	},
 	gigalith: {
@@ -49452,7 +49452,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	audino: {
@@ -49561,10 +49561,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 30, "gender": "F", "nature": "Calm", "abilities": ["healer"], "moves": ["healpulse", "helpinghand", "refresh", "doubleslap"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 30, "gender": "F", "nature": "Serious", "abilities": ["healer"], "moves": ["healpulse", "helpinghand", "refresh", "present"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 30, "gender": "F", "nature": "Jolly", "abilities": ["healer"], "moves": ["healpulse", "helpinghand", "refresh", "present"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "nature": "Relaxed", "abilities": ["regenerator"], "moves": ["trickroom", "healpulse", "simplebeam", "thunderbolt"], "pokeball": "cherishball"},
+			{generation: 5, level: 30, gender: "F", nature: "Calm", abilities: ["healer"], moves: ["healpulse", "helpinghand", "refresh", "doubleslap"], pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "F", nature: "Serious", abilities: ["healer"], moves: ["healpulse", "helpinghand", "refresh", "present"], pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "F", nature: "Jolly", abilities: ["healer"], moves: ["healpulse", "helpinghand", "refresh", "present"], pokeball: "cherishball"},
+			{generation: 6, level: 100, nature: "Relaxed", abilities: ["regenerator"], moves: ["trickroom", "healpulse", "simplebeam", "thunderbolt"], pokeball: "cherishball"},
 		],
 	},
 	timburr: {
@@ -49982,7 +49982,7 @@ let BattleLearnsets = {
 			weatherball: ["8M"],
 		},
 		encounters: [
-			{"generation": 5, "level": 15},
+			{generation: 5, level: 15},
 		],
 	},
 	throh: {
@@ -50234,7 +50234,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T"],
 		},
 		encounters: [
-			{"generation": 5, "level": 19},
+			{generation: 5, level: 19},
 		],
 	},
 	leavanny: {
@@ -50304,7 +50304,7 @@ let BattleLearnsets = {
 			xscissor: ["7M", "7L39", "6M", "6L39", "5M", "5L39"],
 		},
 		encounters: [
-			{"generation": 5, "level": 20, "isHidden": true},
+			{generation: 5, level: 20, isHidden: true},
 		],
 	},
 	venipede: {
@@ -50602,7 +50602,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "gender": "F", "nature": "Timid", "ivs": {"spe": 31}, "abilities": ["prankster"], "moves": ["swagger", "gigadrain", "beatup", "helpinghand"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, gender: "F", nature: "Timid", ivs: {spe: 31}, abilities: ["prankster"], moves: ["swagger", "gigadrain", "beatup", "helpinghand"], pokeball: "cherishball"},
 		],
 	},
 	petilil: {
@@ -51228,11 +51228,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 35, "isHidden": true, "moves": ["thrash", "bellydrum", "flareblitz", "hammerarm"]},
-			{"generation": 6, "level": 35, "gender": "M", "nature": "Calm", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "isHidden": true, "moves": ["thrash", "bellydrum", "flareblitz", "hammerarm"], "pokeball": "cherishball"},
+			{generation: 5, level: 35, isHidden: true, moves: ["thrash", "bellydrum", "flareblitz", "hammerarm"]},
+			{generation: 6, level: 35, gender: "M", nature: "Calm", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, isHidden: true, moves: ["thrash", "bellydrum", "flareblitz", "hammerarm"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 6, "level": 32, "maxEggMoves": 1},
+			{generation: 6, level: 32, maxEggMoves: 1},
 		],
 	},
 	darmanitangalar: {
@@ -51500,7 +51500,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "8L38", "7M", "7L38", "6M", "6L38", "5M", "5L38"],
 		},
 		encounters: [
-			{"generation": 6, "level": 33, "maxEggMoves": 1},
+			{generation: 6, level: 33, maxEggMoves: 1},
 		],
 	},
 	scraggy: {
@@ -51594,7 +51594,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "7E", "6T", "6E", "5T", "5E"],
 		},
 		eventData: [
-			{"generation": 5, "level": 1, "gender": "M", "nature": "Adamant", "abilities": ["moxie"], "moves": ["headbutt", "leer", "highjumpkick", "lowkick"], "pokeball": "cherishball"},
+			{generation: 5, level: 1, gender: "M", nature: "Adamant", abilities: ["moxie"], moves: ["headbutt", "leer", "highjumpkick", "lowkick"], pokeball: "cherishball"},
 		],
 	},
 	scrafty: {
@@ -51688,7 +51688,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "gender": "M", "nature": "Brave", "abilities": ["moxie"], "moves": ["firepunch", "payback", "drainpunch", "substitute"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Brave", abilities: ["moxie"], moves: ["firepunch", "payback", "drainpunch", "substitute"], pokeball: "cherishball"},
 		],
 	},
 	sigilyph: {
@@ -51982,10 +51982,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 66, "gender": "M", "moves": ["willowisp", "shadowball", "powersplit", "darkpulse"], "pokeball": "cherishball"},
+			{generation: 7, level: 66, gender: "M", moves: ["willowisp", "shadowball", "powersplit", "darkpulse"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 6, "level": 32, "maxEggMoves": 1},
+			{generation: 6, level: 32, maxEggMoves: 1},
 		],
 	},
 	runerigus: {
@@ -52126,7 +52126,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "gender": "M", "abilities": ["sturdy"], "moves": ["bite", "protect", "aquajet", "bodyslam"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, gender: "M", abilities: ["sturdy"], moves: ["bite", "protect", "aquajet", "bodyslam"], pokeball: "cherishball"},
 		],
 	},
 	carracosta: {
@@ -52269,7 +52269,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "gender": "M", "moves": ["headsmash", "wingattack", "doubleteam", "scaryface"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, gender: "M", moves: ["headsmash", "wingattack", "doubleteam", "scaryface"], pokeball: "cherishball"},
 		],
 	},
 	archeops: {
@@ -52477,9 +52477,9 @@ let BattleLearnsets = {
 			venoshock: ["8M", "7M", "6M", "5M"],
 		},
 		encounters: [
-			{"generation": 5, "level": 31},
-			{"generation": 6, "level": 30},
-			{"generation": 7, "level": 24},
+			{generation: 5, level: 31},
+			{generation: 6, level: 30},
+			{generation: 7, level: 24},
 		],
 	},
 	zorua: {
@@ -52629,12 +52629,12 @@ let BattleLearnsets = {
 			uturn: ["7M", "7L1", "6M", "6L1", "5M", "5L1"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "gender": "M", "nature": "Quirky", "moves": ["agility", "embargo", "punishment", "snarl"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "moves": ["sludgebomb", "darkpulse", "flamethrower", "suckerpunch"], "pokeball": "ultraball"},
-			{"generation": 6, "level": 45, "gender": "M", "nature": "Naughty", "moves": ["scaryface", "furyswipes", "nastyplot", "punishment"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Quirky", moves: ["agility", "embargo", "punishment", "snarl"], pokeball: "cherishball"},
+			{generation: 6, level: 50, moves: ["sludgebomb", "darkpulse", "flamethrower", "suckerpunch"], pokeball: "ultraball"},
+			{generation: 6, level: 45, gender: "M", nature: "Naughty", moves: ["scaryface", "furyswipes", "nastyplot", "punishment"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 5, "level": 25},
+			{generation: 5, level: 25},
 		],
 	},
 	minccino: {
@@ -52940,11 +52940,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 32, "gender": "M", "isHidden": true, "moves": ["psyshock", "flatter", "futuresight", "mirrorcoat"]},
-			{"generation": 5, "level": 32, "gender": "M", "isHidden": true, "moves": ["psyshock", "flatter", "futuresight", "imprison"]},
+			{generation: 5, level: 32, gender: "M", isHidden: true, moves: ["psyshock", "flatter", "futuresight", "mirrorcoat"]},
+			{generation: 5, level: 32, gender: "M", isHidden: true, moves: ["psyshock", "flatter", "futuresight", "imprison"]},
 		],
 		encounters: [
-			{"generation": 5, "level": 31},
+			{generation: 5, level: 31},
 		],
 	},
 	gothitelle: {
@@ -53036,7 +53036,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		encounters: [
-			{"generation": 5, "level": 34},
+			{generation: 5, level: 34},
 		],
 	},
 	solosis: {
@@ -53191,7 +53191,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		encounters: [
-			{"generation": 5, "level": 31},
+			{generation: 5, level: 31},
 		],
 	},
 	reuniclus: {
@@ -53287,7 +53287,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		encounters: [
-			{"generation": 5, "level": 34},
+			{generation: 5, level: 34},
 		],
 	},
 	ducklett: {
@@ -53395,7 +53395,7 @@ let BattleLearnsets = {
 			wingattack: ["7L1", "6L1", "5L1"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	vanillite: {
@@ -53621,7 +53621,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "7E", "6T", "6E", "5T", "5E"],
 		},
 		eventData: [
-			{"generation": 5, "level": 30, "gender": "F", "isHidden": true, "moves": ["feintattack", "takedown", "jumpkick", "aromatherapy"]},
+			{generation: 5, level: 30, gender: "F", isHidden: true, moves: ["feintattack", "takedown", "jumpkick", "aromatherapy"]},
 		],
 	},
 	sawsbuck: {
@@ -53685,7 +53685,7 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	emolga: {
@@ -53809,8 +53809,8 @@ let BattleLearnsets = {
 			xscissor: ["8M", "8L32", "7M", "7L44", "6M", "6L44", "5M", "5L44", "5S1"],
 		},
 		eventData: [
-			{"generation": 5, "level": 30, "moves": ["furyattack", "headbutt", "falseswipe", "bugbuzz"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "moves": ["megahorn", "takedown", "xscissor", "flail"], "pokeball": "cherishball"},
+			{generation: 5, level: 30, moves: ["furyattack", "headbutt", "falseswipe", "bugbuzz"], pokeball: "cherishball"},
+			{generation: 5, level: 50, moves: ["megahorn", "takedown", "xscissor", "flail"], pokeball: "cherishball"},
 		],
 	},
 	escavalier: {
@@ -53989,8 +53989,8 @@ let BattleLearnsets = {
 			worryseed: ["7T", "6T", "5T"],
 		},
 		encounters: [
-			{"generation": 5, "level": 37},
-			{"generation": 5, "level": 35, "isHidden": true},
+			{generation: 5, level: 37},
+			{generation: 5, level: 35, isHidden: true},
 		],
 	},
 	frillish: {
@@ -54140,10 +54140,10 @@ let BattleLearnsets = {
 			wringout: ["7L1", "6L1", "5L61"],
 		},
 		eventData: [
-			{"generation": 5, "level": 40, "isHidden": true, "moves": ["waterpulse", "ominouswind", "brine", "raindance"]},
+			{generation: 5, level: 40, isHidden: true, moves: ["waterpulse", "ominouswind", "brine", "raindance"]},
 		],
 		encounters: [
-			{"generation": 5, "level": 5},
+			{generation: 5, level: 5},
 		],
 	},
 	alomomola: {
@@ -54342,7 +54342,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	ferroseed: {
@@ -54596,7 +54596,7 @@ let BattleLearnsets = {
 			zapcannon: ["8L48", "7L60", "6L60", "5L60"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	klinklang: {
@@ -55102,7 +55102,7 @@ let BattleLearnsets = {
 			willowisp: ["8M", "8L20", "7M", "7L16", "6M", "6L16", "5M", "5L16"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	chandelure: {
@@ -55172,7 +55172,7 @@ let BattleLearnsets = {
 			willowisp: ["8M", "8L1", "7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "gender": "F", "nature": "Modest", "ivs": {"spa": 31}, "abilities": ["flashfire"], "moves": ["heatwave", "shadowball", "energyball", "psychic"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, gender: "F", nature: "Modest", ivs: {spa: 31}, abilities: ["flashfire"], moves: ["heatwave", "shadowball", "energyball", "psychic"], pokeball: "cherishball"},
 		],
 	},
 	axew: {
@@ -55245,9 +55245,9 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 1, "shiny": 1, "gender": "M", "nature": "Naive", "ivs": {"spe": 31}, "abilities": ["moldbreaker"], "moves": ["scratch", "dragonrage"], "pokeball": "pokeball"},
-			{"generation": 5, "level": 10, "gender": "F", "abilities": ["moldbreaker"], "moves": ["dragonrage", "return", "endure", "dragonclaw"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 30, "gender": "M", "nature": "Naive", "abilities": ["rivalry"], "moves": ["dragonrage", "scratch", "outrage", "gigaimpact"], "pokeball": "cherishball"},
+			{generation: 5, level: 1, shiny: 1, gender: "M", nature: "Naive", ivs: {spe: 31}, abilities: ["moldbreaker"], moves: ["scratch", "dragonrage"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "F", abilities: ["moldbreaker"], moves: ["dragonrage", "return", "endure", "dragonclaw"], pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "M", nature: "Naive", abilities: ["rivalry"], moves: ["dragonrage", "scratch", "outrage", "gigaimpact"], pokeball: "cherishball"},
 		],
 	},
 	fraxure: {
@@ -55319,7 +55319,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	haxorus: {
@@ -55403,7 +55403,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M", "5S0"],
 		},
 		eventData: [
-			{"generation": 5, "level": 59, "gender": "F", "nature": "Naive", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "abilities": ["moldbreaker"], "moves": ["earthquake", "dualchop", "xscissor", "dragondance"], "pokeball": "cherishball"},
+			{generation: 5, level: 59, gender: "F", nature: "Naive", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, abilities: ["moldbreaker"], moves: ["earthquake", "dualchop", "xscissor", "dragondance"], pokeball: "cherishball"},
 		],
 	},
 	cubchoo: {
@@ -55472,7 +55472,7 @@ let BattleLearnsets = {
 			yawn: ["8E", "7E", "6E", "5E"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "moves": ["powdersnow", "growl", "bide", "icywind"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, moves: ["powdersnow", "growl", "bide", "icywind"], pokeball: "cherishball"},
 		],
 	},
 	beartic: {
@@ -55559,7 +55559,7 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "6T"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	cryogonal: {
@@ -55674,8 +55674,8 @@ let BattleLearnsets = {
 			yawn: ["8L20", "7L25", "6L25", "5L25", "5S0"],
 		},
 		eventData: [
-			{"generation": 5, "level": 30, "moves": ["strugglebug", "megadrain", "yawn", "protect"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "moves": ["encore", "gigadrain", "bodyslam", "bugbuzz"], "pokeball": "cherishball"},
+			{generation: 5, level: 30, moves: ["strugglebug", "megadrain", "yawn", "protect"], pokeball: "cherishball"},
+			{generation: 5, level: 50, moves: ["encore", "gigadrain", "bodyslam", "bugbuzz"], pokeball: "cherishball"},
 		],
 	},
 	accelgor: {
@@ -56024,7 +56024,7 @@ let BattleLearnsets = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 65, "gender": "M", "abilities": ["innerfocus"], "moves": ["fakeout", "dualchop", "highjumpkick", "uturn"], "pokeball": "cherishball"},
+			{generation: 7, level: 65, gender: "M", abilities: ["innerfocus"], moves: ["fakeout", "dualchop", "highjumpkick", "uturn"], pokeball: "cherishball"},
 		],
 	},
 	druddigon: {
@@ -56116,7 +56116,7 @@ let BattleLearnsets = {
 			toxic: ["7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 1, "shiny": true, "moves": ["leer", "scratch"], "pokeball": "pokeball"},
+			{generation: 5, level: 1, shiny: true, moves: ["leer", "scratch"], pokeball: "pokeball"},
 		],
 	},
 	golett: {
@@ -56293,10 +56293,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 70, "shiny": true, "abilities": ["ironfist"], "moves": ["shadowpunch", "hyperbeam", "gyroball", "hammerarm"], "pokeball": "cherishball"},
+			{generation: 5, level: 70, shiny: true, abilities: ["ironfist"], moves: ["shadowpunch", "hyperbeam", "gyroball", "hammerarm"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	pawniard: {
@@ -56465,7 +56465,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
 		encounters: [
-			{"generation": 7, "level": 33},
+			{generation: 7, level: 33},
 		],
 	},
 	bouffalant: {
@@ -56537,7 +56537,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "nature": "Adamant", "ivs": {"hp": 31, "atk": 31}, "isHidden": true, "moves": ["headcharge", "facade", "earthquake", "rockslide"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, nature: "Adamant", ivs: {hp: 31, atk: 31}, isHidden: true, moves: ["headcharge", "facade", "earthquake", "rockslide"], pokeball: "cherishball"},
 		],
 	},
 	rufflet: {
@@ -56667,10 +56667,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 25, "gender": "M", "isHidden": true, "moves": ["wingattack", "honeclaws", "scaryface", "aerialace"]},
+			{generation: 5, level: 25, gender: "M", isHidden: true, moves: ["wingattack", "honeclaws", "scaryface", "aerialace"]},
 		],
 		encounters: [
-			{"generation": 6, "level": 45},
+			{generation: 6, level: 45},
 		],
 	},
 	vullaby: {
@@ -56810,7 +56810,7 @@ let BattleLearnsets = {
 			whirlwind: ["8L36", "7L1", "6L1", "5L57"],
 		},
 		eventData: [
-			{"generation": 5, "level": 25, "gender": "F", "isHidden": true, "moves": ["pluck", "nastyplot", "flatter", "feintattack"]},
+			{generation: 5, level: 25, gender: "F", isHidden: true, moves: ["pluck", "nastyplot", "flatter", "feintattack"]},
 		],
 	},
 	heatmor: {
@@ -57030,7 +57030,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 1, "shiny": true, "moves": ["tackle", "dragonrage"], "pokeball": "pokeball"},
+			{generation: 5, level: 1, shiny: true, moves: ["tackle", "dragonrage"], pokeball: "pokeball"},
 		],
 	},
 	zweilous: {
@@ -57099,7 +57099,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		encounters: [
-			{"generation": 5, "level": 49},
+			{generation: 5, level: 49},
 		],
 	},
 	hydreigon: {
@@ -57202,11 +57202,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 70, "shiny": true, "gender": "M", "moves": ["hypervoice", "dragonbreath", "flamethrower", "focusblast"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 52, "gender": "M", "perfectIVs": 2, "moves": ["dragonrush", "crunch", "rockslide", "frustration"], "pokeball": "cherishball"},
+			{generation: 5, level: 70, shiny: true, gender: "M", moves: ["hypervoice", "dragonbreath", "flamethrower", "focusblast"], pokeball: "cherishball"},
+			{generation: 6, level: 52, gender: "M", perfectIVs: 2, moves: ["dragonrush", "crunch", "rockslide", "frustration"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 6, "level": 59},
+			{generation: 6, level: 59},
 		],
 	},
 	larvesta: {
@@ -57331,11 +57331,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 35, "moves": ["stringshot", "leechlife", "gust", "firespin"]},
-			{"generation": 5, "level": 77, "gender": "M", "nature": "Calm", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "moves": ["bugbuzz", "overheat", "hyperbeam", "quiverdance"], "pokeball": "cherishball"},
+			{generation: 5, level: 35, moves: ["stringshot", "leechlife", "gust", "firespin"]},
+			{generation: 5, level: 77, gender: "M", nature: "Calm", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["bugbuzz", "overheat", "hyperbeam", "quiverdance"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 7, "level": 41},
+			{generation: 7, level: 41},
 		],
 	},
 	cobalion: {
@@ -57412,11 +57412,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 42, "shiny": 1, "moves": ["helpinghand", "retaliate", "ironhead", "sacredsword"]},
-			{"generation": 5, "level": 45, "shiny": 1, "moves": ["helpinghand", "retaliate", "ironhead", "sacredsword"]},
-			{"generation": 5, "level": 65, "shiny": 1, "moves": ["sacredsword", "swordsdance", "quickguard", "workup"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["retaliate", "ironhead", "sacredsword", "swordsdance"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["sacredsword", "swordsdance", "quickattack", "ironhead"]},
+			{generation: 5, level: 42, shiny: 1, moves: ["helpinghand", "retaliate", "ironhead", "sacredsword"]},
+			{generation: 5, level: 45, shiny: 1, moves: ["helpinghand", "retaliate", "ironhead", "sacredsword"]},
+			{generation: 5, level: 65, shiny: 1, moves: ["sacredsword", "swordsdance", "quickguard", "workup"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["retaliate", "ironhead", "sacredsword", "swordsdance"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["sacredsword", "swordsdance", "quickattack", "ironhead"]},
 		],
 		eventOnly: true,
 	},
@@ -57492,11 +57492,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 42, "shiny": 1, "moves": ["helpinghand", "retaliate", "rockslide", "sacredsword"]},
-			{"generation": 5, "level": 45, "shiny": 1, "moves": ["helpinghand", "retaliate", "rockslide", "sacredsword"]},
-			{"generation": 5, "level": 65, "shiny": 1, "moves": ["sacredsword", "swordsdance", "quickguard", "workup"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["retaliate", "rockslide", "sacredsword", "swordsdance"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["sacredsword", "swordsdance", "rockslide", "stoneedge"]},
+			{generation: 5, level: 42, shiny: 1, moves: ["helpinghand", "retaliate", "rockslide", "sacredsword"]},
+			{generation: 5, level: 45, shiny: 1, moves: ["helpinghand", "retaliate", "rockslide", "sacredsword"]},
+			{generation: 5, level: 65, shiny: 1, moves: ["sacredsword", "swordsdance", "quickguard", "workup"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["retaliate", "rockslide", "sacredsword", "swordsdance"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["sacredsword", "swordsdance", "rockslide", "stoneedge"]},
 		],
 		eventOnly: true,
 	},
@@ -57574,11 +57574,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 42, "shiny": 1, "moves": ["helpinghand", "retaliate", "gigadrain", "sacredsword"]},
-			{"generation": 5, "level": 45, "shiny": 1, "moves": ["helpinghand", "retaliate", "gigadrain", "sacredsword"]},
-			{"generation": 5, "level": 65, "shiny": 1, "moves": ["sacredsword", "swordsdance", "quickguard", "workup"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["retaliate", "gigadrain", "sacredsword", "swordsdance"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["sacredsword", "swordsdance", "gigadrain", "leafblade"]},
+			{generation: 5, level: 42, shiny: 1, moves: ["helpinghand", "retaliate", "gigadrain", "sacredsword"]},
+			{generation: 5, level: 45, shiny: 1, moves: ["helpinghand", "retaliate", "gigadrain", "sacredsword"]},
+			{generation: 5, level: 65, shiny: 1, moves: ["sacredsword", "swordsdance", "quickguard", "workup"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["retaliate", "gigadrain", "sacredsword", "swordsdance"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["sacredsword", "swordsdance", "gigadrain", "leafblade"]},
 		],
 		eventOnly: true,
 	},
@@ -57651,13 +57651,13 @@ let BattleLearnsets = {
 			uturn: ["7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 40, "shiny": 1, "moves": ["revenge", "aircutter", "extrasensory", "agility"]},
-			{"generation": 5, "level": 5, "isHidden": true, "moves": ["uproar", "astonish", "gust"], "pokeball": "dreamball"},
-			{"generation": 5, "level": 70, "moves": ["hurricane", "hammerarm", "airslash", "hiddenpower"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["extrasensory", "agility", "airslash", "crunch"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["airslash", "crunch", "tailwind", "raindance"]},
-			{"generation": 7, "level": 60, "moves": ["airslash", "crunch", "tailwind", "raindance"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["hurricane", "heatwave", "grassknot", "tailwind"], "pokeball": "cherishball"},
+			{generation: 5, level: 40, shiny: 1, moves: ["revenge", "aircutter", "extrasensory", "agility"]},
+			{generation: 5, level: 5, isHidden: true, moves: ["uproar", "astonish", "gust"], pokeball: "dreamball"},
+			{generation: 5, level: 70, moves: ["hurricane", "hammerarm", "airslash", "hiddenpower"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["extrasensory", "agility", "airslash", "crunch"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["airslash", "crunch", "tailwind", "raindance"]},
+			{generation: 7, level: 60, moves: ["airslash", "crunch", "tailwind", "raindance"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["hurricane", "heatwave", "grassknot", "tailwind"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -57739,13 +57739,13 @@ let BattleLearnsets = {
 			wildcharge: ["7M", "6M", "5M", "5S2"],
 		},
 		eventData: [
-			{"generation": 5, "level": 40, "shiny": 1, "moves": ["revenge", "shockwave", "healblock", "agility"]},
-			{"generation": 5, "level": 5, "isHidden": true, "moves": ["uproar", "astonish", "thundershock"], "pokeball": "dreamball"},
-			{"generation": 5, "level": 70, "moves": ["thunder", "hammerarm", "focusblast", "wildcharge"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["healblock", "agility", "discharge", "crunch"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["discharge", "crunch", "charge", "nastyplot"]},
-			{"generation": 7, "level": 60, "moves": ["discharge", "crunch", "charge", "nastyplot"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["thunderbolt", "focusblast", "grassknot", "nastyplot"], "pokeball": "cherishball"},
+			{generation: 5, level: 40, shiny: 1, moves: ["revenge", "shockwave", "healblock", "agility"]},
+			{generation: 5, level: 5, isHidden: true, moves: ["uproar", "astonish", "thundershock"], pokeball: "dreamball"},
+			{generation: 5, level: 70, moves: ["thunder", "hammerarm", "focusblast", "wildcharge"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["healblock", "agility", "discharge", "crunch"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["discharge", "crunch", "charge", "nastyplot"]},
+			{generation: 7, level: 60, moves: ["discharge", "crunch", "charge", "nastyplot"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["thunderbolt", "focusblast", "grassknot", "nastyplot"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -57837,13 +57837,13 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "moves": ["dragonbreath", "slash", "extrasensory", "fusionflare"]},
-			{"generation": 5, "level": 70, "moves": ["extrasensory", "fusionflare", "dragonpulse", "imprison"]},
-			{"generation": 5, "level": 100, "moves": ["blueflare", "fusionflare", "mist", "dracometeor"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["dragonbreath", "slash", "extrasensory", "fusionflare"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["slash", "extrasensory", "fusionflare", "dragonpulse"]},
-			{"generation": 7, "level": 60, "moves": ["slash", "extrasensory", "fusionflare", "dragonpulse"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["fusionflare", "blueflare", "dracometeor", "earthpower"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, moves: ["dragonbreath", "slash", "extrasensory", "fusionflare"]},
+			{generation: 5, level: 70, moves: ["extrasensory", "fusionflare", "dragonpulse", "imprison"]},
+			{generation: 5, level: 100, moves: ["blueflare", "fusionflare", "mist", "dracometeor"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["dragonbreath", "slash", "extrasensory", "fusionflare"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["slash", "extrasensory", "fusionflare", "dragonpulse"]},
+			{generation: 7, level: 60, moves: ["slash", "extrasensory", "fusionflare", "dragonpulse"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["fusionflare", "blueflare", "dracometeor", "earthpower"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -57932,13 +57932,13 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L24", "7T", "7L43", "7S5", "7S4", "6T", "6L43", "6S3", "5T", "5L43", "5S1", "5S0"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "moves": ["dragonbreath", "slash", "zenheadbutt", "fusionbolt"]},
-			{"generation": 5, "level": 70, "moves": ["zenheadbutt", "fusionbolt", "dragonclaw", "imprison"]},
-			{"generation": 5, "level": 100, "moves": ["boltstrike", "fusionbolt", "haze", "outrage"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["dragonbreath", "slash", "zenheadbutt", "fusionbolt"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["slash", "zenheadbutt", "fusionbolt", "dragonclaw"]},
-			{"generation": 7, "level": 60, "moves": ["slash", "zenheadbutt", "fusionbolt", "dragonclaw"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["fusionbolt", "boltstrike", "outrage", "stoneedge"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, moves: ["dragonbreath", "slash", "zenheadbutt", "fusionbolt"]},
+			{generation: 5, level: 70, moves: ["zenheadbutt", "fusionbolt", "dragonclaw", "imprison"]},
+			{generation: 5, level: 100, moves: ["boltstrike", "fusionbolt", "haze", "outrage"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1, moves: ["dragonbreath", "slash", "zenheadbutt", "fusionbolt"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["slash", "zenheadbutt", "fusionbolt", "dragonclaw"]},
+			{generation: 7, level: 60, moves: ["slash", "zenheadbutt", "fusionbolt", "dragonclaw"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["fusionbolt", "boltstrike", "outrage", "stoneedge"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -58007,11 +58007,11 @@ let BattleLearnsets = {
 			uturn: ["7M", "6M", "6S3", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 70, "shiny": 1, "moves": ["rockslide", "earthquake", "sandstorm", "fissure"]},
-			{"generation": 5, "level": 5, "isHidden": true, "moves": ["block", "mudshot", "rocktomb"], "pokeball": "dreamball"},
-			{"generation": 6, "level": 65, "shiny": 1, "moves": ["extrasensory", "swordsdance", "earthpower", "rockslide"]},
-			{"generation": 6, "level": 50, "nature": "Adamant", "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 1, "spd": 31, "spe": 24}, "moves": ["earthquake", "knockoff", "uturn", "rocktomb"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["earthpower", "rockslide", "earthquake", "sandstorm"]},
+			{generation: 5, level: 70, shiny: 1, moves: ["rockslide", "earthquake", "sandstorm", "fissure"]},
+			{generation: 5, level: 5, isHidden: true, moves: ["block", "mudshot", "rocktomb"], pokeball: "dreamball"},
+			{generation: 6, level: 65, shiny: 1, moves: ["extrasensory", "swordsdance", "earthpower", "rockslide"]},
+			{generation: 6, level: 50, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 1, spd: 31, spe: 24}, moves: ["earthquake", "knockoff", "uturn", "rocktomb"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["earthpower", "rockslide", "earthquake", "sandstorm"]},
 		],
 		eventOnly: true,
 	},
@@ -58097,11 +58097,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 75, "shiny": 1, "moves": ["glaciate", "dragonpulse", "imprison", "endeavor"]},
-			{"generation": 5, "level": 70, "shiny": 1, "moves": ["scaryface", "glaciate", "dragonpulse", "imprison"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["dragonbreath", "slash", "scaryface", "glaciate"]},
-			{"generation": 6, "level": 100, "moves": ["glaciate", "scaryface", "dracometeor", "ironhead"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["slash", "scaryface", "glaciate", "dragonpulse"]},
+			{generation: 5, level: 75, shiny: 1, moves: ["glaciate", "dragonpulse", "imprison", "endeavor"]},
+			{generation: 5, level: 70, shiny: 1, moves: ["scaryface", "glaciate", "dragonpulse", "imprison"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["dragonbreath", "slash", "scaryface", "glaciate"]},
+			{generation: 6, level: 100, moves: ["glaciate", "scaryface", "dracometeor", "ironhead"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["slash", "scaryface", "glaciate", "dragonpulse"]},
 		],
 		eventOnly: true,
 	},
@@ -58185,11 +58185,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 75, "shiny": 1, "moves": ["freezeshock", "dragonpulse", "imprison", "endeavor"]},
-			{"generation": 5, "level": 70, "shiny": 1, "moves": ["fusionbolt", "freezeshock", "dragonpulse", "imprison"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["dragonbreath", "slash", "fusionbolt", "freezeshock"]},
-			{"generation": 6, "level": 100, "moves": ["freezeshock", "fusionbolt", "dracometeor", "ironhead"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["slash", "fusionbolt", "freezeshock", "dragonpulse"]},
+			{generation: 5, level: 75, shiny: 1, moves: ["freezeshock", "dragonpulse", "imprison", "endeavor"]},
+			{generation: 5, level: 70, shiny: 1, moves: ["fusionbolt", "freezeshock", "dragonpulse", "imprison"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["dragonbreath", "slash", "fusionbolt", "freezeshock"]},
+			{generation: 6, level: 100, moves: ["freezeshock", "fusionbolt", "dracometeor", "ironhead"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["slash", "fusionbolt", "freezeshock", "dragonpulse"]},
 		],
 		eventOnly: true,
 	},
@@ -58273,11 +58273,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 75, "shiny": 1, "moves": ["iceburn", "dragonpulse", "imprison", "endeavor"]},
-			{"generation": 5, "level": 70, "shiny": 1, "moves": ["fusionflare", "iceburn", "dragonpulse", "imprison"]},
-			{"generation": 6, "level": 50, "shiny": 1, "moves": ["dragonbreath", "slash", "fusionflare", "iceburn"]},
-			{"generation": 6, "level": 100, "moves": ["iceburn", "fusionflare", "dracometeor", "ironhead"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["slash", "fusionflare", "iceburn", "dragonpulse"]},
+			{generation: 5, level: 75, shiny: 1, moves: ["iceburn", "dragonpulse", "imprison", "endeavor"]},
+			{generation: 5, level: 70, shiny: 1, moves: ["fusionflare", "iceburn", "dragonpulse", "imprison"]},
+			{generation: 6, level: 50, shiny: 1, moves: ["dragonbreath", "slash", "fusionflare", "iceburn"]},
+			{generation: 6, level: 100, moves: ["iceburn", "fusionflare", "dracometeor", "ironhead"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["slash", "fusionflare", "iceburn", "dragonpulse"]},
 		],
 		eventOnly: true,
 	},
@@ -58356,10 +58356,10 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M", "5M"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "moves": ["aquajet", "leer", "doublekick", "bubblebeam"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "moves": ["sacredsword", "hydropump", "aquajet", "swordsdance"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 15, "moves": ["aquajet", "leer", "doublekick", "hydropump"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["aquajet", "leer", "doublekick", "bubblebeam"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, moves: ["aquajet", "leer", "doublekick", "bubblebeam"], pokeball: "cherishball"},
+			{generation: 5, level: 50, moves: ["sacredsword", "hydropump", "aquajet", "swordsdance"], pokeball: "cherishball"},
+			{generation: 6, level: 15, moves: ["aquajet", "leer", "doublekick", "hydropump"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["aquajet", "leer", "doublekick", "bubblebeam"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -58462,10 +58462,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 15, "moves": ["quickattack", "confusion", "round"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 50, "moves": ["round", "teeterdance", "psychic", "closecombat"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 15, "moves": ["sing", "psychic", "closecombat"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "moves": ["sing", "celebrate", "round", "relicsong"], "pokeball": "cherishball"},
+			{generation: 5, level: 15, moves: ["quickattack", "confusion", "round"], pokeball: "cherishball"},
+			{generation: 5, level: 50, moves: ["round", "teeterdance", "psychic", "closecombat"], pokeball: "cherishball"},
+			{generation: 7, level: 15, moves: ["sing", "psychic", "closecombat"], pokeball: "cherishball"},
+			{generation: 7, level: 50, moves: ["sing", "celebrate", "round", "relicsong"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -58550,10 +58550,10 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T", "5T"],
 		},
 		eventData: [
-			{"generation": 5, "level": 50, "moves": ["technoblast", "magnetbomb", "solarbeam", "signalbeam"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 15, "moves": ["technoblast", "magnetbomb", "solarbeam", "signalbeam"], "pokeball": "cherishball"},
-			{"generation": 5, "level": 100, "shiny": true, "nature": "Hasty", "ivs": {"atk": 31, "spe": 31}, "moves": ["extremespeed", "technoblast", "blazekick", "shiftgear"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "moves": ["technoblast", "magnetbomb", "solarbeam", "signalbeam"], "pokeball": "cherishball"},
+			{generation: 5, level: 50, moves: ["technoblast", "magnetbomb", "solarbeam", "signalbeam"], pokeball: "cherishball"},
+			{generation: 5, level: 15, moves: ["technoblast", "magnetbomb", "solarbeam", "signalbeam"], pokeball: "cherishball"},
+			{generation: 5, level: 100, shiny: true, nature: "Hasty", ivs: {atk: 31, spe: 31}, moves: ["extremespeed", "technoblast", "blazekick", "shiftgear"], pokeball: "cherishball"},
+			{generation: 6, level: 100, moves: ["technoblast", "magnetbomb", "solarbeam", "signalbeam"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -58897,7 +58897,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 15, "gender": "F", "nature": "Hardy", "moves": ["scratch", "flamethrower", "hiddenpower"], "pokeball": "cherishball"},
+			{generation: 6, level: 15, gender: "F", nature: "Hardy", moves: ["scratch", "flamethrower", "hiddenpower"], pokeball: "cherishball"},
 		],
 	},
 	braixen: {
@@ -59114,7 +59114,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 7, "moves": ["pound", "growl", "bubble", "return"], "pokeball": "cherishball"},
+			{generation: 6, level: 7, moves: ["pound", "growl", "bubble", "return"], pokeball: "cherishball"},
 		],
 	},
 	frogadier: {
@@ -59254,8 +59254,8 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 36, "ivs": {"spe": 31}, "isHidden": true, "moves": ["watershuriken", "shadowsneak", "hydropump", "substitute"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 100, "isHidden": true, "moves": ["hydrocannon", "gunkshot", "matblock", "happyhour"], "pokeball": "cherishball"},
+			{generation: 6, level: 36, ivs: {spe: 31}, isHidden: true, moves: ["watershuriken", "shadowsneak", "hydropump", "substitute"], pokeball: "cherishball"},
+			{generation: 6, level: 100, isHidden: true, moves: ["hydrocannon", "gunkshot", "matblock", "happyhour"], pokeball: "cherishball"},
 		],
 	},
 	greninjaash: {
@@ -59325,7 +59325,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 36, "ivs": {"hp": 20, "atk": 31, "def": 20, "spa": 31, "spd": 20, "spe": 31}, "moves": ["watershuriken", "aerialace", "doubleteam", "nightslash"], "pokeball": "pokeball"},
+			{generation: 7, level: 36, ivs: {hp: 20, atk: 31, def: 20, spa: 31, spd: 20, spe: 31}, moves: ["watershuriken", "aerialace", "doubleteam", "nightslash"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -59587,7 +59587,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		encounters: [
-			{"generation": 7, "level": 16},
+			{generation: 7, level: 16},
 		],
 	},
 	talonflame: {
@@ -59788,7 +59788,7 @@ let BattleLearnsets = {
 			uturn: ["7M", "6M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 12, "moves": ["gust", "lightscreen", "strugglebug", "holdhands"], "pokeball": "cherishball"},
+			{generation: 6, level: 12, moves: ["gust", "lightscreen", "strugglebug", "holdhands"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -59852,7 +59852,7 @@ let BattleLearnsets = {
 			uturn: ["7M", "6M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 12, "moves": ["stunspore", "gust", "lightscreen", "strugglebug"], "pokeball": "pokeball"},
+			{generation: 6, level: 12, moves: ["stunspore", "gust", "lightscreen", "strugglebug"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -59977,10 +59977,10 @@ let BattleLearnsets = {
 			workup: ["7M", "7L1", "6L8"],
 		},
 		eventData: [
-			{"generation": 6, "level": 49, "gender": "M", "perfectIVs": 2, "abilities": ["unnerve"], "moves": ["hypervoice", "fireblast", "darkpulse"], "pokeball": "cherishball"},
+			{generation: 6, level: 49, gender: "M", perfectIVs: 2, abilities: ["unnerve"], moves: ["hypervoice", "fireblast", "darkpulse"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	flabebe: {
@@ -60336,7 +60336,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	pancham: {
@@ -60432,7 +60432,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 30, "gender": "M", "nature": "Adamant", "abilities": ["moldbreaker"], "moves": ["armthrust", "stoneedge", "darkpulse"], "pokeball": "cherishball"},
+			{generation: 6, level: 30, gender: "M", nature: "Adamant", abilities: ["moldbreaker"], moves: ["armthrust", "stoneedge", "darkpulse"], pokeball: "cherishball"},
 		],
 	},
 	pangoro: {
@@ -60549,7 +60549,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T", "6T"],
 		},
 		encounters: [
-			{"generation": 7, "level": 24},
+			{generation: 7, level: 24},
 		],
 	},
 	furfrou: {
@@ -61047,7 +61047,7 @@ let BattleLearnsets = {
 			wideguard: ["6S0"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "gender": "F", "nature": "Quiet", "moves": ["wideguard", "kingsshield", "shadowball", "flashcannon"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, gender: "F", nature: "Quiet", moves: ["wideguard", "kingsshield", "shadowball", "flashcannon"], pokeball: "cherishball"},
 		],
 	},
 	spritzee: {
@@ -61187,7 +61187,7 @@ let BattleLearnsets = {
 			trickroom: ["8M", "7M", "6M", "6S0"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "nature": "Relaxed", "isHidden": true, "moves": ["trickroom", "healpulse", "disable", "moonblast"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, nature: "Relaxed", isHidden: true, moves: ["trickroom", "healpulse", "disable", "moonblast"], pokeball: "cherishball"},
 		],
 	},
 	swirlix: {
@@ -61394,7 +61394,7 @@ let BattleLearnsets = {
 			wrap: ["8L6"],
 		},
 		eventData: [
-			{"generation": 6, "level": 10, "moves": ["happyhour", "foulplay", "hypnosis", "topsyturvy"], "pokeball": "cherishball"},
+			{generation: 6, level: 10, moves: ["happyhour", "foulplay", "hypnosis", "topsyturvy"], pokeball: "cherishball"},
 		],
 	},
 	malamar: {
@@ -61478,7 +61478,7 @@ let BattleLearnsets = {
 			wrap: ["8L1"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "nature": "Adamant", "ivs": {"hp": 31, "atk": 31}, "abilities": ["contrary"], "moves": ["superpower", "knockoff", "facade", "rockslide"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, nature: "Adamant", ivs: {hp: 31, atk: 31}, abilities: ["contrary"], moves: ["superpower", "knockoff", "facade", "rockslide"], pokeball: "cherishball"},
 		],
 	},
 	binacle: {
@@ -61672,7 +61672,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M", "6M"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	skrelp: {
@@ -61787,7 +61787,7 @@ let BattleLearnsets = {
 			waterpulse: ["7T", "7L25", "6T", "6L25"],
 		},
 		encounters: [
-			{"generation": 6, "level": 35},
+			{generation: 6, level: 35},
 		],
 	},
 	clauncher: {
@@ -61905,7 +61905,7 @@ let BattleLearnsets = {
 			watersport: ["7L1", "6L7"],
 		},
 		encounters: [
-			{"generation": 6, "level": 35},
+			{generation: 6, level: 35},
 		],
 	},
 	helioptile: {
@@ -62119,7 +62119,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 10, "isHidden": true, "moves": ["tailwhip", "tackle", "roar", "stomp"], "pokeball": "cherishball"},
+			{generation: 6, level: 10, isHidden: true, moves: ["tailwhip", "tackle", "roar", "stomp"], pokeball: "cherishball"},
 		],
 	},
 	tyrantrum: {
@@ -62261,7 +62261,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 10, "isHidden": true, "moves": ["growl", "powdersnow", "thunderwave", "rockthrow"], "pokeball": "cherishball"},
+			{generation: 6, level: 10, isHidden: true, moves: ["growl", "powdersnow", "thunderwave", "rockthrow"], pokeball: "cherishball"},
 		],
 	},
 	aurorus: {
@@ -62416,9 +62416,9 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 10, "moves": ["celebrate", "helpinghand", "sandattack", "fairywind"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "gender": "F", "moves": ["disarmingvoice", "babydolleyes", "quickattack", "drainingkiss"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves": ["hyperbeam", "drainingkiss", "psyshock", "calmmind"], "pokeball": "cherishball"},
+			{generation: 6, level: 10, moves: ["celebrate", "helpinghand", "sandattack", "fairywind"], pokeball: "cherishball"},
+			{generation: 6, level: 10, gender: "F", moves: ["disarmingvoice", "babydolleyes", "quickattack", "drainingkiss"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["hyperbeam", "drainingkiss", "psyshock", "calmmind"], pokeball: "cherishball"},
 		],
 	},
 	hawlucha: {
@@ -62695,7 +62695,7 @@ let BattleLearnsets = {
 			waterpulse: ["8L25", "7T", "6T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 1, "shiny": 1, "isHidden": true, "moves": ["bodyslam", "dragonpulse", "counter"], "pokeball": "cherishball"},
+			{generation: 7, level: 1, shiny: 1, isHidden: true, moves: ["bodyslam", "dragonpulse", "counter"], pokeball: "cherishball"},
 		],
 	},
 	sliggoo: {
@@ -62746,7 +62746,7 @@ let BattleLearnsets = {
 			waterpulse: ["8L25", "7T", "6T"],
 		},
 		encounters: [
-			{"generation": 6, "level": 30},
+			{generation: 6, level: 30},
 		],
 	},
 	goodra: {
@@ -63129,7 +63129,7 @@ let BattleLearnsets = {
 	},
 	pumpkaboosuper: {
 		eventData: [
-			{"generation": 6, "level": 50, "moves": ["trickortreat", "astonish", "scaryface", "shadowsneak"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, moves: ["trickortreat", "astonish", "scaryface", "shadowsneak"], pokeball: "cherishball"},
 		],
 	},
 	gourgeist: {
@@ -63558,11 +63558,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "moves": ["gravity", "geomancy", "moonblast", "megahorn"]},
-			{"generation": 6, "level": 100, "shiny": true, "moves": ["geomancy", "moonblast", "aromatherapy", "focusblast"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["geomancy", "hornleech", "nightslash", "moonblast"]},
-			{"generation": 7, "level": 60, "moves": ["geomancy", "hornleech", "nightslash", "moonblast"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["geomancy", "focusblast", "grassknot", "moonblast"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, moves: ["gravity", "geomancy", "moonblast", "megahorn"]},
+			{generation: 6, level: 100, shiny: true, moves: ["geomancy", "moonblast", "aromatherapy", "focusblast"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["geomancy", "hornleech", "nightslash", "moonblast"]},
+			{generation: 7, level: 60, moves: ["geomancy", "hornleech", "nightslash", "moonblast"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["geomancy", "focusblast", "grassknot", "moonblast"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -63629,11 +63629,11 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "moves": ["snarl", "oblivionwing", "disable", "darkpulse"]},
-			{"generation": 6, "level": 100, "shiny": true, "moves": ["oblivionwing", "suckerpunch", "darkpulse", "foulplay"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["oblivionwing", "darkpulse", "phantomforce", "psychic"]},
-			{"generation": 7, "level": 60, "moves": ["oblivionwing", "darkpulse", "phantomforce", "psychic"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "moves": ["oblivionwing", "darkpulse", "heatwave", "tailwind"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, moves: ["snarl", "oblivionwing", "disable", "darkpulse"]},
+			{generation: 6, level: 100, shiny: true, moves: ["oblivionwing", "suckerpunch", "darkpulse", "foulplay"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1, moves: ["oblivionwing", "darkpulse", "phantomforce", "psychic"]},
+			{generation: 7, level: 60, moves: ["oblivionwing", "darkpulse", "phantomforce", "psychic"], pokeball: "cherishball"},
+			{generation: 7, level: 100, moves: ["oblivionwing", "darkpulse", "heatwave", "tailwind"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -63700,24 +63700,24 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "6T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 70, "moves": ["crunch", "earthquake", "camouflage", "dragonpulse"]},
-			{"generation": 6, "level": 100, "moves": ["landswrath", "extremespeed", "glare", "outrage"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 30, "moves": ["safeguard", "dig", "bind", "landswrath"]},
-			{"generation": 7, "level": 50, "moves": ["bind", "landswrath", "sandstorm", "haze"]},
-			{"generation": 7, "level": 50, "isHidden": true, "moves": ["bind", "landswrath", "sandstorm", "haze"]},
-			{"generation": 7, "level": 60, "shiny": true, "moves": ["landswrath", "glare", "safeguard", "dragonbreath"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": true, "isHidden": true, "moves": ["landswrath", "glare", "safeguard", "dragonbreath"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "shiny": true, "moves": ["thousandarrows", "outrage", "extremespeed", "dragondance"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "shiny": true, "isHidden": true, "moves": ["thousandarrows", "outrage", "extremespeed", "dragondance"], "pokeball": "cherishball"},
+			{generation: 6, level: 70, moves: ["crunch", "earthquake", "camouflage", "dragonpulse"]},
+			{generation: 6, level: 100, moves: ["landswrath", "extremespeed", "glare", "outrage"], pokeball: "cherishball"},
+			{generation: 7, level: 30, moves: ["safeguard", "dig", "bind", "landswrath"]},
+			{generation: 7, level: 50, moves: ["bind", "landswrath", "sandstorm", "haze"]},
+			{generation: 7, level: 50, isHidden: true, moves: ["bind", "landswrath", "sandstorm", "haze"]},
+			{generation: 7, level: 60, shiny: true, moves: ["landswrath", "glare", "safeguard", "dragonbreath"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: true, isHidden: true, moves: ["landswrath", "glare", "safeguard", "dragonbreath"], pokeball: "cherishball"},
+			{generation: 7, level: 100, shiny: true, moves: ["thousandarrows", "outrage", "extremespeed", "dragondance"], pokeball: "cherishball"},
+			{generation: 7, level: 100, shiny: true, isHidden: true, moves: ["thousandarrows", "outrage", "extremespeed", "dragondance"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
 	zygarde10: {
 		eventData: [
-			{"generation": 7, "level": 30, "moves": ["safeguard", "dig", "bind", "landswrath"]},
-			{"generation": 7, "level": 50, "isHidden": true, "moves": ["safeguard", "dig", "bind", "landswrath"]},
-			{"generation": 7, "level": 60, "shiny": true, "isHidden": true, "moves": ["landswrath", "glare", "safeguard", "dragonbreath"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 100, "shiny": true, "isHidden": true, "moves": ["thousandarrows", "outrage", "extremespeed", "dragondance"], "pokeball": "cherishball"},
+			{generation: 7, level: 30, moves: ["safeguard", "dig", "bind", "landswrath"]},
+			{generation: 7, level: 50, isHidden: true, moves: ["safeguard", "dig", "bind", "landswrath"]},
+			{generation: 7, level: 60, shiny: true, isHidden: true, moves: ["landswrath", "glare", "safeguard", "dragonbreath"], pokeball: "cherishball"},
+			{generation: 7, level: 100, shiny: true, isHidden: true, moves: ["thousandarrows", "outrage", "extremespeed", "dragondance"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -63787,8 +63787,8 @@ let BattleLearnsets = {
 			wonderroom: ["7T", "6T"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "moves": ["diamondstorm", "reflect", "return", "moonblast"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 50, "shiny": true, "moves": ["diamondstorm", "moonblast", "reflect", "return"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, moves: ["diamondstorm", "reflect", "return", "moonblast"], pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: true, moves: ["diamondstorm", "moonblast", "reflect", "return"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -63880,8 +63880,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L46", "6T", "6L46"],
 		},
 		eventData: [
-			{"generation": 6, "level": 50, "moves": ["hyperspacehole", "nastyplot", "psychic", "astonish"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 15, "moves": ["shadowball", "nastyplot", "psychic", "hyperspacehole"], "pokeball": "cherishball"},
+			{generation: 6, level: 50, moves: ["hyperspacehole", "nastyplot", "psychic", "astonish"], pokeball: "cherishball"},
+			{generation: 7, level: 15, moves: ["shadowball", "nastyplot", "psychic", "hyperspacehole"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -63952,8 +63952,8 @@ let BattleLearnsets = {
 			willowisp: ["7M", "6M"],
 		},
 		eventData: [
-			{"generation": 6, "level": 70, "moves": ["steameruption", "overheat", "hydropump", "mist"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 70, "moves": ["steameruption", "flamethrower", "hydropump", "explosion"], "pokeball": "cherishball"},
+			{generation: 6, level: 70, moves: ["steameruption", "overheat", "hydropump", "mist"], pokeball: "cherishball"},
+			{generation: 6, level: 70, moves: ["steameruption", "flamethrower", "hydropump", "explosion"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -64161,7 +64161,7 @@ let BattleLearnsets = {
 			worryseed: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "isHidden": true, "moves": ["leafblade", "phantomforce", "shadowsneak", "bravebird"], "pokeball": "pokeball"},
+			{generation: 7, level: 50, isHidden: true, moves: ["leafblade", "phantomforce", "shadowsneak", "bravebird"], pokeball: "pokeball"},
 		],
 	},
 	litten: {
@@ -64382,7 +64382,7 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "isHidden": true, "moves": ["fakeout", "uturn", "darkestlariat", "flareblitz"], "pokeball": "pokeball"},
+			{generation: 7, level: 50, isHidden: true, moves: ["fakeout", "uturn", "darkestlariat", "flareblitz"], pokeball: "pokeball"},
 		],
 	},
 	popplio: {
@@ -64589,7 +64589,7 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "isHidden": true, "moves": ["hypervoice", "moonblast", "icywind", "perishsong"], "pokeball": "pokeball"},
+			{generation: 7, level: 50, isHidden: true, moves: ["hypervoice", "moonblast", "icywind", "perishsong"], pokeball: "pokeball"},
 		],
 	},
 	pikipek: {
@@ -64748,7 +64748,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		encounters: [
-			{"generation": 7, "level": 26},
+			{generation: 7, level: 26},
 		],
 	},
 	yungoos: {
@@ -64865,7 +64865,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		encounters: [
-			{"generation": 7, "level": 17},
+			{generation: 7, level: 17},
 		],
 	},
 	gumshoostotem: {
@@ -64928,7 +64928,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 20, "perfectIVs": 3, "moves": ["sandattack", "odorsleuth", "bide", "bite"], "pokeball": "pokeball"},
+			{generation: 7, level: 20, perfectIVs: 3, moves: ["sandattack", "odorsleuth", "bide", "bite"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -65148,7 +65148,7 @@ let BattleLearnsets = {
 			zapcannon: ["7L41"],
 		},
 		eventData: [
-			{"generation": 7, "level": 35, "perfectIVs": 3, "moves": ["spark", "acrobatics", "guillotine", "bugbuzz"], "pokeball": "pokeball"},
+			{generation: 7, level: 35, perfectIVs: 3, moves: ["spark", "acrobatics", "guillotine", "bugbuzz"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -65542,7 +65542,7 @@ let BattleLearnsets = {
 			wonderroom: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "perfectIVs": 3, "moves": ["bugbuzz", "dazzlinggleam", "aromatherapy", "quiverdance"], "pokeball": "pokeball"},
+			{generation: 7, level: 50, perfectIVs: 3, moves: ["bugbuzz", "dazzlinggleam", "aromatherapy", "quiverdance"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -65653,8 +65653,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 10, "moves": ["tackle", "bite", "firefang", "happyhour"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 10, "moves": ["tackle", "bite", "thunderfang", "happyhour"], "pokeball": "cherishball"},
+			{generation: 7, level: 10, moves: ["tackle", "bite", "firefang", "happyhour"], pokeball: "cherishball"},
+			{generation: 7, level: 10, moves: ["tackle", "bite", "thunderfang", "happyhour"], pokeball: "cherishball"},
 		],
 	},
 	lycanroc: {
@@ -65776,7 +65776,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "isHidden": true, "moves": ["stoneedge", "firefang", "suckerpunch", "swordsdance"], "pokeball": "cherishball"},
+			{generation: 7, level: 50, isHidden: true, moves: ["stoneedge", "firefang", "suckerpunch", "swordsdance"], pokeball: "cherishball"},
 		],
 	},
 	lycanrocdusk: {
@@ -65953,7 +65953,7 @@ let BattleLearnsets = {
 			wideguard: ["8L5", "7L17"],
 		},
 		eventData: [
-			{"generation": 7, "level": 1, "shiny": 1, "isHidden": true, "moves": ["toxic", "stockpile", "swallow"], "pokeball": "cherishball"},
+			{generation: 7, level: 1, shiny: 1, isHidden: true, moves: ["toxic", "stockpile", "swallow"], pokeball: "cherishball"},
 		],
 	},
 	toxapex: {
@@ -66136,7 +66136,7 @@ let BattleLearnsets = {
 			toxic: ["7M"],
 		},
 		encounters: [
-			{"generation": 7, "level": 29},
+			{generation: 7, level: 29},
 		],
 	},
 	dewpider: {
@@ -66313,7 +66313,7 @@ let BattleLearnsets = {
 			xscissor: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 25, "perfectIVs": 3, "moves": ["spiderweb", "bugbite", "bubblebeam", "bite"], "pokeball": "pokeball"},
+			{generation: 7, level: 25, perfectIVs: 3, moves: ["spiderweb", "bugbite", "bubblebeam", "bite"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -66486,7 +66486,7 @@ let BattleLearnsets = {
 			xscissor: ["7M", "7L1"],
 		},
 		eventData: [
-			{"generation": 7, "level": 30, "perfectIVs": 3, "moves": ["growth", "ingrain", "leafblade", "synthesis"], "pokeball": "pokeball"},
+			{generation: 7, level: 30, perfectIVs: 3, moves: ["growth", "ingrain", "leafblade", "synthesis"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -66754,10 +66754,10 @@ let BattleLearnsets = {
 			willowisp: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "moves": ["fakeout", "toxic", "sludgebomb", "flamethrower"], "pokeball": "cherishball"},
+			{generation: 7, level: 50, moves: ["fakeout", "toxic", "sludgebomb", "flamethrower"], pokeball: "cherishball"},
 		],
 		encounters: [
-			{"generation": 7, "level": 16},
+			{generation: 7, level: 16},
 		],
 	},
 	salazzletotem: {
@@ -66821,7 +66821,7 @@ let BattleLearnsets = {
 			willowisp: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 30, "perfectIVs": 3, "moves": ["smog", "doubleslap", "flameburst", "toxic"], "pokeball": "pokeball"},
+			{generation: 7, level: 30, perfectIVs: 3, moves: ["smog", "doubleslap", "flameburst", "toxic"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -66963,7 +66963,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves": ["babydolleyes", "brutalswing", "superpower", "bind"], "pokeball": "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["babydolleyes", "brutalswing", "superpower", "bind"], pokeball: "cherishball"},
 		],
 	},
 	bounsweet: {
@@ -67079,7 +67079,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 20, "nature": "Naive", "abilities": ["leafguard"], "moves": ["magicalleaf", "doubleslap", "sweetscent"], "pokeball": "cherishball"},
+			{generation: 7, level: 20, nature: "Naive", abilities: ["leafguard"], moves: ["magicalleaf", "doubleslap", "sweetscent"], pokeball: "cherishball"},
 		],
 	},
 	tsareena: {
@@ -67228,7 +67228,7 @@ let BattleLearnsets = {
 			wrap: ["7L16"],
 		},
 		eventData: [
-			{"generation": 7, "level": 10, "nature": "Jolly", "moves": ["celebrate", "leechseed", "drainingkiss", "magicalleaf"], "pokeball": "cherishball"},
+			{generation: 7, level: 10, nature: "Jolly", moves: ["celebrate", "leechseed", "drainingkiss", "magicalleaf"], pokeball: "cherishball"},
 		],
 	},
 	oranguru: {
@@ -67312,8 +67312,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L35", "7T", "7L29"],
 		},
 		eventData: [
-			{"generation": 7, "level": 1, "shiny": 1, "abilities": ["telepathy"], "moves": ["instruct", "psychic", "psychicterrain"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "isHidden": true, "moves": ["instruct", "foulplay", "trickroom", "allyswitch"], "pokeball": "pokeball"},
+			{generation: 7, level: 1, shiny: 1, abilities: ["telepathy"], moves: ["instruct", "psychic", "psychicterrain"], pokeball: "cherishball"},
+			{generation: 7, level: 50, isHidden: true, moves: ["instruct", "foulplay", "trickroom", "allyswitch"], pokeball: "pokeball"},
 		],
 	},
 	passimian: {
@@ -67400,8 +67400,8 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 1, "shiny": 1, "moves": ["bestow", "fling", "feint"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 50, "isHidden": true, "moves": ["closecombat", "uturn", "knockoff", "gunkshot"], "pokeball": "pokeball"},
+			{generation: 7, level: 1, shiny: 1, moves: ["bestow", "fling", "feint"], pokeball: "cherishball"},
+			{generation: 7, level: 50, isHidden: true, moves: ["closecombat", "uturn", "knockoff", "gunkshot"], pokeball: "pokeball"},
 		],
 	},
 	wimpod: {
@@ -67746,9 +67746,9 @@ let BattleLearnsets = {
 			xscissor: ["8M", "8L40", "8S2", "7M", "7L35", "7S0"],
 		},
 		eventData: [
-			{"generation": 7, "level": 40, "shiny": 1, "perfectIVs": 3, "moves": ["crushclaw", "scaryface", "xscissor", "takedown"], "pokeball": "pokeball"},
-			{"generation": 7, "level": 60, "shiny": 1, "perfectIVs": 3, "moves": ["metalsound", "ironhead", "doublehit", "airslash"], "pokeball": "pokeball"},
-			{"generation": 8, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["triattack", "xscissor", "ironhead", "takedown"], "pokeball": "pokeball"},
+			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, moves: ["crushclaw", "scaryface", "xscissor", "takedown"], pokeball: "pokeball"},
+			{generation: 7, level: 60, shiny: 1, perfectIVs: 3, moves: ["metalsound", "ironhead", "doublehit", "airslash"], pokeball: "pokeball"},
+			{generation: 8, level: 50, shiny: 1, perfectIVs: 3, moves: ["triattack", "xscissor", "ironhead", "takedown"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -67841,7 +67841,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 100, "shiny": true, "moves": ["multiattack", "partingshot", "punishment", "scaryface"], "pokeball": "cherishball"},
+			{generation: 7, level: 100, shiny: true, moves: ["multiattack", "partingshot", "punishment", "scaryface"], pokeball: "cherishball"},
 		],
 	},
 	minior: {
@@ -68043,8 +68043,8 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 1, "shiny": 1, "moves": ["flamethrower", "bodyslam", "wideguard"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 30, "gender": "M", "nature": "Brave", "moves": ["flamethrower", "shelltrap", "dragontail"], "pokeball": "cherishball"},
+			{generation: 7, level: 1, shiny: 1, moves: ["flamethrower", "bodyslam", "wideguard"], pokeball: "cherishball"},
+			{generation: 7, level: 30, gender: "M", nature: "Brave", moves: ["flamethrower", "shelltrap", "dragontail"], pokeball: "cherishball"},
 		],
 	},
 	togedemaru: {
@@ -68190,7 +68190,7 @@ let BattleLearnsets = {
 			zingzap: ["7L33", "7S0"],
 		},
 		eventData: [
-			{"generation": 7, "level": 30, "perfectIVs": 3, "moves": ["nuzzle", "magnetrise", "discharge", "zingzap"], "pokeball": "pokeball"},
+			{generation: 7, level: 30, perfectIVs: 3, moves: ["nuzzle", "magnetrise", "discharge", "zingzap"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -68275,8 +68275,8 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 10, "moves": ["copycat", "babydolleyes", "splash", "astonish"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 10, "shiny": true, "moves": ["astonish", "playrough", "copycat", "substitute"], "pokeball": "cherishball"},
+			{generation: 7, level: 10, moves: ["copycat", "babydolleyes", "splash", "astonish"], pokeball: "cherishball"},
+			{generation: 7, level: 10, shiny: true, moves: ["astonish", "playrough", "copycat", "substitute"], pokeball: "cherishball"},
 		],
 	},
 	mimikyutotem: {
@@ -68349,7 +68349,7 @@ let BattleLearnsets = {
 			xscissor: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 40, "perfectIVs": 3, "moves": ["feintattack", "charm", "slash", "shadowclaw"], "pokeball": "pokeball"},
+			{generation: 7, level: 40, perfectIVs: 3, moves: ["feintattack", "charm", "slash", "shadowclaw"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -68514,7 +68514,7 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 1, "shiny": 1, "isHidden": true, "moves": ["playnice", "echoedvoice", "hurricane"], "pokeball": "cherishball"},
+			{generation: 7, level: 1, shiny: 1, isHidden: true, moves: ["playnice", "echoedvoice", "hurricane"], pokeball: "cherishball"},
 		],
 	},
 	dhelmise: {
@@ -68820,7 +68820,7 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M"],
 		},
 		encounters: [
-			{"generation": 7, "level": 41},
+			{generation: 7, level: 41},
 		],
 	},
 	kommoototem: {
@@ -68907,7 +68907,7 @@ let BattleLearnsets = {
 			xscissor: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "perfectIVs": 3, "moves": ["workup", "screech", "irondefense", "dragonclaw"], "pokeball": "pokeball"},
+			{generation: 7, level: 50, perfectIVs: 3, moves: ["workup", "screech", "irondefense", "dragonclaw"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -68982,9 +68982,9 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 60, "moves": ["naturesmadness", "discharge", "agility", "electroball"]},
-			{"generation": 7, "level": 60, "shiny": true, "nature": "Timid", "moves": ["naturesmadness", "discharge", "agility", "electroball"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 60, "shiny": true, "moves": ["thunderbolt", "dazzlinggleam", "voltswitch", "naturesmadness"], "pokeball": "cherishball"},
+			{generation: 7, level: 60, moves: ["naturesmadness", "discharge", "agility", "electroball"]},
+			{generation: 7, level: 60, shiny: true, nature: "Timid", moves: ["naturesmadness", "discharge", "agility", "electroball"], pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: true, moves: ["thunderbolt", "dazzlinggleam", "voltswitch", "naturesmadness"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -69053,8 +69053,8 @@ let BattleLearnsets = {
 			wonderroom: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 60, "moves": ["naturesmadness", "extrasensory", "flatter", "moonblast"]},
-			{"generation": 7, "level": 60, "shiny": true, "moves": ["naturesmadness", "extrasensory", "flatter", "moonblast"], "pokeball": "cherishball"},
+			{generation: 7, level: 60, moves: ["naturesmadness", "extrasensory", "flatter", "moonblast"]},
+			{generation: 7, level: 60, shiny: true, moves: ["naturesmadness", "extrasensory", "flatter", "moonblast"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -69130,8 +69130,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T", "7L48", "7S1", "7S0"],
 		},
 		eventData: [
-			{"generation": 7, "level": 60, "moves": ["naturesmadness", "zenheadbutt", "megahorn", "skullbash"]},
-			{"generation": 7, "level": 60, "shiny": true, "moves": ["naturesmadness", "zenheadbutt", "megahorn", "skullbash"], "pokeball": "cherishball"},
+			{generation: 7, level: 60, moves: ["naturesmadness", "zenheadbutt", "megahorn", "skullbash"]},
+			{generation: 7, level: 60, shiny: true, moves: ["naturesmadness", "zenheadbutt", "megahorn", "skullbash"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -69202,8 +69202,8 @@ let BattleLearnsets = {
 			wonderroom: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 60, "moves": ["naturesmadness", "muddywater", "aquaring", "hydropump"]},
-			{"generation": 7, "level": 60, "shiny": true, "moves": ["naturesmadness", "muddywater", "aquaring", "hydropump"], "pokeball": "cherishball"},
+			{generation: 7, level: 60, moves: ["naturesmadness", "muddywater", "aquaring", "hydropump"]},
+			{generation: 7, level: 60, shiny: true, moves: ["naturesmadness", "muddywater", "aquaring", "hydropump"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -69213,7 +69213,7 @@ let BattleLearnsets = {
 			teleport: ["8L1", "7L23"],
 		},
 		eventData: [
-			{"generation": 7, "level": 5, "moves": ["splash"]},
+			{generation: 7, level: 5, moves: ["splash"]},
 		],
 		eventOnly: true,
 	},
@@ -69307,9 +69307,9 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "8L21", "7T", "7L19", "7S2", "7S1", "7S0"],
 		},
 		eventData: [
-			{"generation": 7, "level": 55, "moves": ["sunsteelstrike", "cosmicpower", "crunch", "zenheadbutt"]},
-			{"generation": 7, "level": 60, "moves": ["sunsteelstrike", "cosmicpower", "crunch", "zenheadbutt"]},
-			{"generation": 7, "level": 60, "shiny": true, "moves": ["sunsteelstrike", "zenheadbutt", "nobleroar", "morningsun"], "pokeball": "cherishball"},
+			{generation: 7, level: 55, moves: ["sunsteelstrike", "cosmicpower", "crunch", "zenheadbutt"]},
+			{generation: 7, level: 60, moves: ["sunsteelstrike", "cosmicpower", "crunch", "zenheadbutt"]},
+			{generation: 7, level: 60, shiny: true, moves: ["sunsteelstrike", "zenheadbutt", "nobleroar", "morningsun"], pokeball: "cherishball"},
 		],
 	},
 	lunala: {
@@ -69395,9 +69395,9 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 55, "moves": ["moongeistbeam", "cosmicpower", "nightdaze", "shadowball"]},
-			{"generation": 7, "level": 60, "moves": ["moongeistbeam", "cosmicpower", "nightdaze", "shadowball"]},
-			{"generation": 7, "level": 60, "shiny": true, "moves": ["moongeistbeam", "psyshock", "moonblast", "moonlight"], "pokeball": "cherishball"},
+			{generation: 7, level: 55, moves: ["moongeistbeam", "cosmicpower", "nightdaze", "shadowball"]},
+			{generation: 7, level: 60, moves: ["moongeistbeam", "cosmicpower", "nightdaze", "shadowball"]},
+			{generation: 7, level: 60, shiny: true, moves: ["moongeistbeam", "psyshock", "moonblast", "moonlight"], pokeball: "cherishball"},
 		],
 	},
 	nihilego: {
@@ -69467,8 +69467,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 55, "moves": ["powergem", "mirrorcoat", "acidspray", "venomdrench"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["powergem", "acidspray", "stealthrock", "mirrorcoat"]},
+			{generation: 7, level: 55, moves: ["powergem", "mirrorcoat", "acidspray", "venomdrench"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["powergem", "acidspray", "stealthrock", "mirrorcoat"]},
 		],
 		eventOnly: true,
 	},
@@ -69534,8 +69534,8 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 65, "moves": ["counter", "hammerarm", "lunge", "dynamicpunch"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["counter", "hammerarm", "lunge", "dynamicpunch"]},
+			{generation: 7, level: 65, moves: ["counter", "hammerarm", "lunge", "dynamicpunch"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["counter", "hammerarm", "lunge", "dynamicpunch"]},
 		],
 		eventOnly: true,
 	},
@@ -69603,8 +69603,8 @@ let BattleLearnsets = {
 			uturn: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 60, "moves": ["triplekick", "lunge", "bugbuzz", "mefirst"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["triplekick", "lunge", "bugbuzz", "mefirst"]},
+			{generation: 7, level: 60, moves: ["triplekick", "lunge", "bugbuzz", "mefirst"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["triplekick", "lunge", "bugbuzz", "mefirst"]},
 		],
 		eventOnly: true,
 	},
@@ -69667,8 +69667,8 @@ let BattleLearnsets = {
 			zapcannon: ["7L73"],
 		},
 		eventData: [
-			{"generation": 7, "level": 65, "moves": ["hypnosis", "discharge", "electricterrain", "powerwhip"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["hypnosis", "discharge", "electricterrain", "powerwhip"]},
+			{generation: 7, level: 65, moves: ["hypnosis", "discharge", "electricterrain", "powerwhip"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["hypnosis", "discharge", "electricterrain", "powerwhip"]},
 		],
 		eventOnly: true,
 	},
@@ -69734,8 +69734,8 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 65, "moves": ["autotomize", "seedbomb", "skullbash", "irondefense"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["autotomize", "seedbomb", "skullbash", "irondefense"]},
+			{generation: 7, level: 65, moves: ["autotomize", "seedbomb", "skullbash", "irondefense"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["autotomize", "seedbomb", "skullbash", "irondefense"]},
 		],
 		eventOnly: true,
 	},
@@ -69784,8 +69784,8 @@ let BattleLearnsets = {
 			xscissor: ["7M", "7L47", "7S1", "7S0"],
 		},
 		eventData: [
-			{"generation": 7, "level": 60, "moves": ["leafblade", "xscissor", "detect", "airslash"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["leafblade", "xscissor", "detect", "airslash"]},
+			{generation: 7, level: 60, moves: ["leafblade", "xscissor", "detect", "airslash"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["leafblade", "xscissor", "detect", "airslash"]},
 		],
 		eventOnly: true,
 	},
@@ -69858,8 +69858,8 @@ let BattleLearnsets = {
 			wringout: ["7L67", "7S0"],
 		},
 		eventData: [
-			{"generation": 7, "level": 70, "moves": ["thrash", "gastroacid", "heavyslam", "wringout"]},
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["hammerarm", "thrash", "gastroacid", "heavyslam"]},
+			{generation: 7, level: 70, moves: ["thrash", "gastroacid", "heavyslam", "wringout"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["hammerarm", "thrash", "gastroacid", "heavyslam"]},
 		],
 		eventOnly: true,
 	},
@@ -69950,9 +69950,9 @@ let BattleLearnsets = {
 			xscissor: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 75, "moves": ["stealthrock", "irondefense", "wringout", "prismaticlaser"]},
-			{"generation": 7, "level": 65, "moves": ["photongeyser", "irondefense", "powergem", "nightslash"]},
-			{"generation": 7, "level": 75, "shiny": true, "moves": ["lightscreen", "substitute", "moonlight"], "pokeball": "cherishball"},
+			{generation: 7, level: 75, moves: ["stealthrock", "irondefense", "wringout", "prismaticlaser"]},
+			{generation: 7, level: 65, moves: ["photongeyser", "irondefense", "powergem", "nightslash"]},
+			{generation: 7, level: 75, shiny: true, moves: ["lightscreen", "substitute", "moonlight"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -70038,7 +70038,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "moves": ["fleurcannon", "flashcannon", "luckychant", "helpinghand"], "pokeball": "cherishball"},
+			{generation: 7, level: 50, moves: ["fleurcannon", "flashcannon", "luckychant", "helpinghand"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -70191,7 +70191,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M", "7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "moves": ["spectralthief", "closecombat", "forcepalm", "shadowball"], "pokeball": "cherishball"},
+			{generation: 7, level: 50, moves: ["spectralthief", "closecombat", "forcepalm", "shadowball"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -70233,8 +70233,8 @@ let BattleLearnsets = {
 			venoshock: ["7M", "7L13"],
 		},
 		eventData: [
-			{"generation": 7, "level": 40, "shiny": 1, "perfectIVs": 3, "moves": ["charm", "venomdrench", "nastyplot", "poisonjab"], "pokeball": "pokeball"},
-			{"generation": 7, "level": 40, "shiny": true, "nature": "Modest", "perfectIVs": 3, "moves": ["venomdrench", "nastyplot", "poisonjab", "dragonpulse"], "pokeball": "cherishball"},
+			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, moves: ["charm", "venomdrench", "nastyplot", "poisonjab"], pokeball: "pokeball"},
+			{generation: 7, level: 40, shiny: true, nature: "Modest", perfectIVs: 3, moves: ["venomdrench", "nastyplot", "poisonjab", "dragonpulse"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
@@ -70363,7 +70363,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["7T"],
 		},
 		eventData: [
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["irondefense", "ironhead", "rockblast", "wideguard"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["irondefense", "ironhead", "rockblast", "wideguard"]},
 		],
 		eventOnly: true,
 	},
@@ -70424,7 +70424,7 @@ let BattleLearnsets = {
 			willowisp: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 60, "shiny": 1, "moves": ["fireblast", "shadowball", "trick", "mindblown"]},
+			{generation: 7, level: 60, shiny: 1, moves: ["fireblast", "shadowball", "trick", "mindblown"]},
 		],
 		eventOnly: true,
 	},
@@ -70513,7 +70513,7 @@ let BattleLearnsets = {
 			workup: ["8M", "7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "moves": ["plasmafists", "thunderpunch", "closecombat", "thunder"]},
+			{generation: 7, level: 50, moves: ["plasmafists", "thunderpunch", "closecombat", "thunder"]},
 		],
 		eventOnly: true,
 	},
@@ -73712,7 +73712,7 @@ let BattleLearnsets = {
 			wildcharge: ["8M"],
 		},
 		eventData: [
-			{"generation": 8, "level": 10, "shiny": 1, "perfectIVs": 3, "moves": ["tackle", "thundershock", "charge"], "pokeball": "pokeball"},
+			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, moves: ["tackle", "thundershock", "charge"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -73772,7 +73772,7 @@ let BattleLearnsets = {
 			wildcharge: ["8M"],
 		},
 		eventData: [
-			{"generation": 8, "level": 10, "shiny": 1, "perfectIVs": 3, "moves": ["powdersnow", "thundershock", "charge"], "pokeball": "pokeball"},
+			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, moves: ["powdersnow", "thundershock", "charge"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -73829,7 +73829,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M"],
 		},
 		eventData: [
-			{"generation": 8, "level": 10, "shiny": 1, "perfectIVs": 3, "moves": ["tackle", "watergun", "protect"], "pokeball": "pokeball"},
+			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, moves: ["tackle", "watergun", "protect"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -73881,7 +73881,7 @@ let BattleLearnsets = {
 			zenheadbutt: ["8M"],
 		},
 		eventData: [
-			{"generation": 8, "level": 10, "shiny": 1, "perfectIVs": 3, "moves": ["powdersnow", "watergun", "protect"], "pokeball": "pokeball"},
+			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, moves: ["powdersnow", "watergun", "protect"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},
@@ -74148,7 +74148,7 @@ let BattleLearnsets = {
 			workup: ["8M"],
 		},
 		eventData: [
-			{"generation": 8, "level": 70, "perfectIVs": 3, "moves": ["sacredsword", "swordsdance", "ironhead", "crunch"]},
+			{generation: 8, level: 70, perfectIVs: 3, moves: ["sacredsword", "swordsdance", "ironhead", "crunch"]},
 		],
 		eventOnly: true,
 	},
@@ -74217,7 +74217,7 @@ let BattleLearnsets = {
 			workup: ["8M"],
 		},
 		eventData: [
-			{"generation": 8, "level": 70, "perfectIVs": 3, "moves": ["slash", "crunch", "ironhead", "irondefense"]},
+			{generation: 8, level: 70, perfectIVs: 3, moves: ["slash", "crunch", "ironhead", "irondefense"]},
 		],
 		eventOnly: true,
 	},
@@ -74273,7 +74273,7 @@ let BattleLearnsets = {
 			venoshock: ["8M", "8L16"],
 		},
 		eventData: [
-			{"generation": 8, "level": 60, "perfectIVs": 3, "moves": ["crosspoison", "dragonpulse", "flamethrower", "dynamaxcannon"]},
+			{generation: 8, level: 60, perfectIVs: 3, moves: ["crosspoison", "dragonpulse", "flamethrower", "dynamaxcannon"]},
 		],
 		eventOnly: true,
 	},
@@ -75092,7 +75092,7 @@ let BattleLearnsets = {
 			yawn: ["7L9", "6L9"],
 		},
 		eventData: [
-			{"generation": 6, "level": 16, "abilities": ["naturalcure"], "moves": ["celebrate", "holdhands", "fly", "metronome"], "pokeball": "cherishball"},
+			{generation: 6, level: 16, abilities: ["naturalcure"], moves: ["celebrate", "holdhands", "fly", "metronome"], pokeball: "cherishball"},
 		],
 	},
 	pajantom: {
@@ -75323,7 +75323,7 @@ let BattleLearnsets = {
 			zapcannon: ["7L57"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "moves": ["celebrate", "hornleech", "wildcharge", "metronome"], "pokeball": "cherishball"},
+			{generation: 7, level: 50, moves: ["celebrate", "hornleech", "wildcharge", "metronome"], pokeball: "cherishball"},
 		],
 	},
 	smokomodo: {
@@ -75406,7 +75406,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "moves": ["celebrate", "eruption", "magnitude", "camouflage"], "pokeball": "cherishball"},
+			{generation: 7, level: 50, moves: ["celebrate", "eruption", "magnitude", "camouflage"], pokeball: "cherishball"},
 		],
 	},
 	snaelstrom: {
@@ -75484,7 +75484,7 @@ let BattleLearnsets = {
 			workup: ["7M"],
 		},
 		eventData: [
-			{"generation": 7, "level": 50, "moves": ["celebrate", "liquidation", "leechlife", "metronome"], "pokeball": "cherishball"},
+			{generation: 7, level: 50, moves: ["celebrate", "liquidation", "leechlife", "metronome"], pokeball: "cherishball"},
 		],
 	},
 	equilibra: {
@@ -78301,115 +78301,115 @@ let BattleLearnsets = {
 	},
 	pokestarsmeargle: {
 		eventData: [
-			{"generation": 5, "level": 60, "gender": "M", "abilities": ["owntempo"], "moves": ["mindreader", "guillotine", "tailwhip", "gastroacid"]},
-			{"generation": 5, "level": 30, "gender": "M", "abilities": ["owntempo"], "moves": ["outrage", "magiccoat"]},
-			{"generation": 5, "level": 99, "gender": "M", "abilities": ["owntempo"], "moves": ["nastyplot", "sheercold", "attract", "shadowball"]},
+			{generation: 5, level: 60, gender: "M", abilities: ["owntempo"], moves: ["mindreader", "guillotine", "tailwhip", "gastroacid"]},
+			{generation: 5, level: 30, gender: "M", abilities: ["owntempo"], moves: ["outrage", "magiccoat"]},
+			{generation: 5, level: 99, gender: "M", abilities: ["owntempo"], moves: ["nastyplot", "sheercold", "attract", "shadowball"]},
 		],
 	},
 	pokestarufo: {
 		eventData: [
-			{"generation": 5, "level": 38, "moves": ["bubblebeam", "counter", "recover", "signalbeam"]},
+			{generation: 5, level: 38, moves: ["bubblebeam", "counter", "recover", "signalbeam"]},
 		],
 	},
 	pokestarufo2: {
 		eventData: [
-			{"generation": 5, "level": 47, "moves": ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
+			{generation: 5, level: 47, moves: ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
 		],
 	},
 	pokestarbrycenman: {
 		eventData: [
-			{"generation": 5, "level": 56, "moves": ["icebeam", "nightshade", "psychic", "uturn"]},
+			{generation: 5, level: 56, moves: ["icebeam", "nightshade", "psychic", "uturn"]},
 		],
 	},
 	pokestarmt: {
 		eventData: [
-			{"generation": 5, "level": 63, "moves": ["earthquake", "ironhead", "spark", "surf"]},
+			{generation: 5, level: 63, moves: ["earthquake", "ironhead", "spark", "surf"]},
 		],
 	},
 	pokestarmt2: {
 		eventData: [
-			{"generation": 5, "level": 72, "moves": ["dragonpulse", "flamethrower", "metalburst", "thunderbolt"]},
+			{generation: 5, level: 72, moves: ["dragonpulse", "flamethrower", "metalburst", "thunderbolt"]},
 		],
 	},
 	pokestartransport: {
 		eventData: [
-			{"generation": 5, "level": 20, "moves": ["clearsmog", "flameburst", "discharge"]},
-			{"generation": 5, "level": 50, "moves": ["iciclecrash", "overheat", "signalbeam"]},
+			{generation: 5, level: 20, moves: ["clearsmog", "flameburst", "discharge"]},
+			{generation: 5, level: 50, moves: ["iciclecrash", "overheat", "signalbeam"]},
 		],
 	},
 	pokestargiant: {
 		eventData: [
-			{"generation": 5, "level": 99, "moves": ["crushgrip", "focuspunch", "growl", "rage"]},
+			{generation: 5, level: 99, moves: ["crushgrip", "focuspunch", "growl", "rage"]},
 		],
 	},
 	pokestargiant2: {
 		eventData: [
-			{"generation": 5, "level": 99, "moves": ["crushgrip", "doubleslap", "teeterdance", "stomp"]},
+			{generation: 5, level: 99, moves: ["crushgrip", "doubleslap", "teeterdance", "stomp"]},
 		],
 	},
 	pokestarhumanoid: {
 		eventData: [
-			{"generation": 5, "level": 20, "gender": "M", "moves": ["scratch", "shadowclaw", "acid"]},
-			{"generation": 5, "level": 30, "gender": "M", "moves": ["darkpulse", "shadowclaw", "slash"]},
-			{"generation": 5, "level": 20, "gender": "F", "moves": ["acid", "nightslash"]},
-			{"generation": 5, "level": 20, "gender": "M", "moves": ["acid", "doubleedge"]},
-			{"generation": 5, "level": 20, "gender": "F", "moves": ["acid", "rockslide"]},
-			{"generation": 5, "level": 20, "gender": "M", "moves": ["acid", "thudnerpunch"]},
-			{"generation": 5, "level": 20, "gender": "F", "moves": ["acid", "icepunch"]},
-			{"generation": 5, "level": 40, "gender": "F", "moves": ["explosion", "selfdestruct"]},
-			{"generation": 5, "level": 40, "gender": "F", "moves": ["shadowclaw", "scratch"]},
-			{"generation": 5, "level": 40, "gender": "M", "moves": ["nightslash", "scratch"]},
-			{"generation": 5, "level": 40, "gender": "M", "moves": ["doubleedge", "scratch"]},
-			{"generation": 5, "level": 40, "gender": "F", "moves": ["rockslide", "scratch"]},
+			{generation: 5, level: 20, gender: "M", moves: ["scratch", "shadowclaw", "acid"]},
+			{generation: 5, level: 30, gender: "M", moves: ["darkpulse", "shadowclaw", "slash"]},
+			{generation: 5, level: 20, gender: "F", moves: ["acid", "nightslash"]},
+			{generation: 5, level: 20, gender: "M", moves: ["acid", "doubleedge"]},
+			{generation: 5, level: 20, gender: "F", moves: ["acid", "rockslide"]},
+			{generation: 5, level: 20, gender: "M", moves: ["acid", "thudnerpunch"]},
+			{generation: 5, level: 20, gender: "F", moves: ["acid", "icepunch"]},
+			{generation: 5, level: 40, gender: "F", moves: ["explosion", "selfdestruct"]},
+			{generation: 5, level: 40, gender: "F", moves: ["shadowclaw", "scratch"]},
+			{generation: 5, level: 40, gender: "M", moves: ["nightslash", "scratch"]},
+			{generation: 5, level: 40, gender: "M", moves: ["doubleedge", "scratch"]},
+			{generation: 5, level: 40, gender: "F", moves: ["rockslide", "scratch"]},
 		],
 	},
 	pokestarmonster: {
 		eventData: [
-			{"generation": 5, "level": 50, "moves": ["darkpulse", "confusion"]},
+			{generation: 5, level: 50, moves: ["darkpulse", "confusion"]},
 		],
 	},
 	pokestarf00: {
 		eventData: [
-			{"generation": 5, "level": 10, "moves": ["teeterdance", "growl", "flail", "chatter"]},
-			{"generation": 5, "level": 58, "moves": ["needlearm", "headsmash", "headbutt", "defensecurl"]},
-			{"generation": 5, "level": 60, "moves": ["hammerarm", "perishsong", "ironhead", "thrash"]},
+			{generation: 5, level: 10, moves: ["teeterdance", "growl", "flail", "chatter"]},
+			{generation: 5, level: 58, moves: ["needlearm", "headsmash", "headbutt", "defensecurl"]},
+			{generation: 5, level: 60, moves: ["hammerarm", "perishsong", "ironhead", "thrash"]},
 		],
 	},
 	pokestarf002: {
 		eventData: [
-			{"generation": 5, "level": 52, "moves": ["flareblitz", "ironhead", "psychic", "wildcharge"]},
+			{generation: 5, level: 52, moves: ["flareblitz", "ironhead", "psychic", "wildcharge"]},
 		],
 	},
 	pokestarspirit: {
 		eventData: [
-			{"generation": 5, "level": 99, "moves": ["crunch", "dualchop", "slackoff", "swordsdance"]},
+			{generation: 5, level: 99, moves: ["crunch", "dualchop", "slackoff", "swordsdance"]},
 		],
 	},
 	pokestarblackdoor: {
 		eventData: [
-			{"generation": 5, "level": 53, "moves": ["luckychant", "amnesia", "ingrain", "rest"]},
-			{"generation": 5, "level": 70, "moves": ["batonpass", "counter", "flamecharge", "toxic"]},
+			{generation: 5, level: 53, moves: ["luckychant", "amnesia", "ingrain", "rest"]},
+			{generation: 5, level: 70, moves: ["batonpass", "counter", "flamecharge", "toxic"]},
 		],
 	},
 	pokestarwhitedoor: {
 		eventData: [
-			{"generation": 5, "level": 7, "moves": ["batonpass", "inferno", "mirrorcoat", "toxic"]},
+			{generation: 5, level: 7, moves: ["batonpass", "inferno", "mirrorcoat", "toxic"]},
 		],
 	},
 	pokestarblackbelt: {
 		eventData: [
-			{"generation": 5, "level": 30, "moves": ["focuspunch", "machpunch", "taunt"]},
-			{"generation": 5, "level": 40, "moves": ["machpunch", "hammerarm", "jumpkick"]},
+			{generation: 5, level: 30, moves: ["focuspunch", "machpunch", "taunt"]},
+			{generation: 5, level: 40, moves: ["machpunch", "hammerarm", "jumpkick"]},
 		],
 	},
 	pokestargiantpropo2: {
 		eventData: [
-			{"generation": 5, "level": 99, "moves": ["crushgrip", "doubleslap", "teeterdance", "stomp"]},
+			{generation: 5, level: 99, moves: ["crushgrip", "doubleslap", "teeterdance", "stomp"]},
 		],
 	},
 	pokestarufopropu2: {
 		eventData: [
-			{"generation": 5, "level": 47, "moves": ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
+			{generation: 5, level: 47, moves: ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
 		],
 	},
 };

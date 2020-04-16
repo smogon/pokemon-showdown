@@ -2,7 +2,7 @@
 
 /**@type {{[k: string]: ModdedAbilityData}} */
 let BattleAbilities = {
-	"cutecharm": {
+	cutecharm: {
 		inherit: true,
 		desc: "There is a 1/3 chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
 		shortDesc: "1/3 chance of infatuating Pokemon of the opposite gender if they make contact.",
@@ -14,7 +14,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"effectspore": {
+	effectspore: {
 		inherit: true,
 		desc: "10% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep.",
 		shortDesc: "10% chance of poison/paralysis/sleep on others making contact with this Pokemon.",
@@ -31,7 +31,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"flamebody": {
+	flamebody: {
 		inherit: true,
 		shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be burned.",
 		onDamagingHit(damage, target, source, move) {
@@ -42,7 +42,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"flashfire": {
+	flashfire: {
 		inherit: true,
 		desc: "This Pokemon is immune to Fire-type moves, as long as it is not frozen. The first time it is hit by a Fire-type move, damage from its Fire-type attacks will be multiplied by 1.5 as long as it remains active and has this Ability. If this Pokemon has a major status condition, is a Fire type, or has a substitute, Will-O-Wisp will not activate this Ability.",
 		onTryHit(target, source, move) {
@@ -60,7 +60,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"intimidate": {
+	intimidate: {
 		inherit: true,
 		onStart(pokemon) {
 			let activated = false;
@@ -88,7 +88,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"lightningrod": {
+	lightningrod: {
 		desc: "If this Pokemon is not the target of a single-target Electric-type move used by an opposing Pokemon, this Pokemon redirects that move to itself. This effect considers Hidden Power a Normal-type move.",
 		shortDesc: "This Pokemon draws single-target Electric moves used by opponents to itself.",
 		onFoeRedirectTarget(target, source, source2, move) {
@@ -102,7 +102,7 @@ let BattleAbilities = {
 		rating: 3.5,
 		num: 32,
 	},
-	"minus": {
+	minus: {
 		inherit: true,
 		desc: "If an active Pokemon has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
 		shortDesc: "If an active Pokemon has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
@@ -114,7 +114,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"plus": {
+	plus: {
 		inherit: true,
 		desc: "If an active Pokemon has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
 		shortDesc: "If an active Pokemon has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
@@ -126,7 +126,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"poisonpoint": {
+	poisonpoint: {
 		inherit: true,
 		shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be poisoned.",
 		onDamagingHit(damage, target, source, move) {
@@ -137,13 +137,13 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"pressure": {
+	pressure: {
 		inherit: true,
 		onStart(pokemon) {
 			this.addSplit(pokemon.side.id, ['-ability', pokemon, 'Pressure', '[silent]']);
 		},
 	},
-	"roughskin": {
+	roughskin: {
 		inherit: true,
 		desc: "Pokemon making contact with this Pokemon lose 1/16 of their maximum HP, rounded down.",
 		shortDesc: "Pokemon making contact with this Pokemon lose 1/16 of their max HP.",
@@ -153,7 +153,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"shadowtag": {
+	shadowtag: {
 		inherit: true,
 		desc: "Prevents opposing Pokemon from choosing to switch out.",
 		shortDesc: "Prevents opposing Pokemon from choosing to switch out.",
@@ -161,7 +161,7 @@ let BattleAbilities = {
 			pokemon.trapped = true;
 		},
 	},
-	"static": {
+	static: {
 		inherit: true,
 		shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be paralyzed.",
 		onDamagingHit(damage, target, source, move) {
@@ -172,7 +172,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"trace": {
+	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted) return;
@@ -188,7 +188,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"truant": {
+	truant: {
 		inherit: true,
 		onStart() {},
 		onSwitchIn(pokemon) {
@@ -205,7 +205,7 @@ let BattleAbilities = {
 			pokemon.truantTurn = !pokemon.truantTurn;
 		},
 	},
-	"voltabsorb": {
+	voltabsorb: {
 		inherit: true,
 		desc: "This Pokemon is immune to damaging Electric-type moves and restores 1/4 of its maximum HP, rounded down, when hit by one.",
 		shortDesc: "This Pokemon heals 1/4 its max HP when hit by a damaging Electric move; immunity.",
@@ -218,7 +218,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"wonderguard": {
+	wonderguard: {
 		inherit: true,
 		shortDesc: "This Pokemon is only damaged by supereffective moves and indirect damage.",
 	},
