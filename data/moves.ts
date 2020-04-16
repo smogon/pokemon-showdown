@@ -3112,7 +3112,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (move && (move.target === 'self' || move.category !== 'Status')) return;
+				if (['self', 'all'].includes(move.target) || move.category !== 'Status') return;
 				this.add('-activate', target, 'move: Crafty Shield');
 				return this.NOT_FAIL;
 			},
@@ -5416,6 +5416,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				}
 				this.add('-sideend', targetSide, 'Fire Pledge');
 			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1,
 			onResidual(side) {
 				for (const pokemon of side.active) {
 					if (pokemon && !pokemon.hasType('Fire')) {
@@ -7420,6 +7422,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'G-Max Volcalith');
 			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
 					if (!pokemon.hasType('Rock')) this.damage(pokemon.baseMaxhp / 6, pokemon);
@@ -7487,6 +7491,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onStart(targetSide) {
 				this.add('-sidestart', targetSide, 'G-Max Wildfire');
 			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1.1,
 			onResidual(targetSide) {
 				for (const pokemon of targetSide.active) {
 					if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 6, pokemon);

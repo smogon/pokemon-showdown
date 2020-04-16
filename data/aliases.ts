@@ -705,6 +705,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	sable: "Sableye",
 	scept: "Sceptile",
 	scoli: "Scolipede",
+	seejong: "Sealeo",
 	serp: "Serperior",
 	shao: "Mienshao",
 	skarm: "Skarmory",
