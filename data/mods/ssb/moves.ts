@@ -4395,7 +4395,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source) {
 			const sideConditions = {spikes: 1, toxicspikes: 1, stealthrock: 1, stickyweb: 1};
-			for (let i in sideConditions) {
+			for (const i in sideConditions) {
 				let layers = source.side.sideConditions[i] ? (source.side.sideConditions[i].layers || 1) : 1;
 				if (source.side.removeSideCondition(i)) {
 					this.add('-sideend', source.side, this.dex.getEffect(i).name, '[from] move: Smoke Bomb', '[of] ' + source);
