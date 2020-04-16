@@ -3758,7 +3758,7 @@ export const commands: ChatCommands = {
 			`/mafia shifthammer [hammer] - sets the hammer count to [hammer] without resetting lynches`,
 			`/mafia resethammer - sets the hammer to the default, resetting lynches`,
 			`/mafia playerroles - View all the player's roles in chat. Requires host`,
-			`/mafia end - End the current game of mafia. Requires host % @ # & ~`,
+			`/mafia end - End the current game of mafia. Requires host + % @ # & ~`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">IDEA Module Commands</summary>`;
 		buf += [
@@ -3775,7 +3775,7 @@ export const commands: ChatCommands = {
 		buf += `</details><details><summary class="button">Mafia Room Specific Commands</summary>`;
 		buf += [
 			`<br/><strong>Commands that are only useable in the Mafia Room</strong>:<br/>`,
-			`/mafia queue add, [user] - Adds the user to the host queue. Requires % @ # & ~.`,
+			`/mafia queue add, [user] - Adds the user to the host queue. Requires + % @ # & ~, voices can only add themselves.`,
 			`/mafia queue remove, [user] - Removes the user from the queue. You can remove yourself regardless of rank. Requires % @ # & ~.`,
 			`/mafia queue - Shows the list of users who are in queue to host.`,
 			`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
