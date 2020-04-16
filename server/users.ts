@@ -1256,15 +1256,15 @@ export class User extends Chat.MessageContext {
 	onDisconnect(connection: Connection) {
 		for (const [i, connected] of this.connections.entries()) {
 			if (connected === connection) {
+				this.connections.splice(i, 1);
 				// console.log('DISCONNECT: ' + this.id);
-				if (this.connections.length <= 1) {
+				if (!this.connections.length) {
 					this.markDisconnected();
 				}
 				for (const roomid of connection.inRooms) {
 					this.leaveRoom(Rooms.get(roomid)!, connection, true);
 				}
 				--this.ips[connection.ip];
-				this.connections.splice(i, 1);
 				break;
 			}
 		}
@@ -1685,6 +1685,13 @@ function socketDisconnect(worker: Worker, workerid: number, socketid: string) {
 	if (!connection) return;
 	connection.onDisconnect();
 }
+function socketDisconnectAll(worker: Worker, workerid: number) {
+	for (const connection of connections.values()) {
+		if (connection.worker === worker) {
+			connection.onDisconnect();
+		}
+	}
+}
 function socketReceive(worker: Worker, workerid: number, socketid: string, message: string) {
 	const id = `${workerid}-${socketid}`;
 
@@ -1768,6 +1775,7 @@ export const Users = {
 	User,
 	Connection,
 	socketDisconnect,
+	socketDisconnectAll,
 	socketReceive,
 	pruneInactive,
 	pruneInactiveTimer: setInterval(() => {

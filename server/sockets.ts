@@ -26,8 +26,8 @@ type ChannelID = 0 | 1 | 2 | 3 | 4;
 export type Worker = StreamWorker;
 
 export const Sockets = new class {
-	async pipeWorker(worker: Worker) {
-		const id = PM.workerid;
+	async onSpawn(worker: Worker) {
+		const id = worker.workerid;
 		let data;
 		while ((data = await worker.stream.read())) {
 			switch (data.charAt(0)) {
@@ -64,6 +64,9 @@ export const Sockets = new class {
 			}
 		}
 	}
+	onUnspawn(worker: Worker) {
+		Users.socketDisconnectAll(worker, worker.workerid);
+	}
 
 	listen(port?: number, bindAddress?: string, workerCount?: number) {
 		if (port !== undefined && !isNaN(port)) {
@@ -89,11 +92,10 @@ export const Sockets = new class {
 			workerCount = (Config.workers !== undefined ? Config.workers : 1);
 		}
 
-		PM.spawn(workerCount);
+		PM.subscribeSpawn(worker => void this.onSpawn(worker));
+		PM.subscribeUnspawn(this.onUnspawn);
 
-		for (const worker of PM.workers) {
-			void this.pipeWorker(worker);
-		}
+		PM.spawn(workerCount);
 	}
 
 	socketSend(worker: Worker, socketid: string, message: string) {
