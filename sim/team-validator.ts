@@ -1344,6 +1344,10 @@ export class TeamValidator {
 		}
 		if (banReason === '') return null;
 
+		if (ruleTable.isBanned('nonexistent') && typeof move.isMax === 'string') {
+			return `${set.name}'s move ${move.name} is not obtainable without Gigantamaxing ${move.isMax}.`;
+		}
+
 		banReason = ruleTable.check('pokemontag:allmoves');
 		if (banReason) {
 			return `${set.name}'s move ${move.name} is not in the list of allowed moves.`;
@@ -1366,9 +1370,6 @@ export class TeamValidator {
 			if (banReason) {
 				if (['Past', 'Future'].includes(move.isNonstandard)) {
 					return `${set.name}'s move ${move.name} does not exist in Gen ${dex.gen}.`;
-				}
-				if (typeof move.isMax === 'string') {
-					return `${set.name}'s move ${move.name} is not obtainable without Gigantamaxing.`;
 				}
 				return `${set.name}'s move ${move.name} does not exist in this game.`;
 			}
