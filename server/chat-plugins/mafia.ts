@@ -3644,6 +3644,23 @@ export const commands: ChatCommands = {
 			this.sendReply(`The entry ${entry} was deleted from the ${source} database.`);
 		},
 		deletedatahelp: [`/mafia deletedata source,entry - Removes an entry from the database. Requires % @ # & ~`],
+		listdata(target, room, user) {
+			if (!(target in MafiaData)) {
+				return this.errorReply(`Invalid source. Valid sources are ${Object.keys(MafiaData).join(', ')}`);
+			}
+			const dataSource = MafiaData[target as keyof MafiaData];
+			if (dataSource === MafiaData.aliases) {
+				const aliases = Object.entries(MafiaData.aliases)
+					.map(([from, to]) => `${from}: ${to}`)
+					.join('<br/>');
+				return this.sendReplyBox(`Mafia aliases:<br/>${aliases}`);
+			} else {
+				const entries = Object.entries(dataSource)
+					.map(([key, data]) => `<button class="button" name="send" value="/mafia dt ${key}">${data.name}</button>`)
+					.join('');
+				return this.sendReplyBox(`Mafia ${target}:<br/>${entries}`);
+			}
+		},
 
 		disable(target, room, user) {
 			if (!room || !this.can('gamemanagement', null, room)) return;
