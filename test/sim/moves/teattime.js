@@ -74,4 +74,14 @@ describe('Teatime', function () {
 		battle.makeChoices();
 		assert.equal(battle.p1.pokemon[0].item, 'sitrusberry');
 	});
+
+	it('should not cause Recycle to fail to restore the Berry', function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', item: 'sitrusberry', moves: ['recycle']},
+		], [
+			{species: 'wynaut', evs: {spe: 252}, moves: ['teatime']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.pokemon[0].item, 'sitrusberry');
+	});
 });
