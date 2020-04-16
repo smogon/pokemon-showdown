@@ -44,7 +44,7 @@ const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
 const STAFF_IDLE_TIMER = 30 * MINUTES;
 
-type Worker = import('./sockets').WorkerStream;
+type Worker = import('./sockets').Worker;
 
 /*********************************************************
  * Utility functions

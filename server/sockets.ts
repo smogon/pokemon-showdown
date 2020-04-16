@@ -16,24 +16,25 @@ import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
 import {crashlogger} from '../lib/crashlogger';
-import {RawProcessManager} from '../lib/process-manager';
+import {RawProcessManager, StreamWorker} from '../lib/process-manager';
 import {IPTools} from './ip-tools';
 import {Repl} from '../lib/repl';
 import * as Streams from './../lib/streams';
 
 type ChannelID = 0 | 1 | 2 | 3 | 4;
 
-export type WorkerStream = Streams.ObjectReadWriteStream<string>;
+export type Worker = StreamWorker;
 
 export const Sockets = new class {
-	async pipeWorker(worker: WorkerStream) {
+	async pipeWorker(worker: Worker) {
 		const id = PM.workerid;
 		let data;
-		while ((data = await worker.read())) {
+		while ((data = await worker.stream.read())) {
 			switch (data.charAt(0)) {
 			case '*': {
 				// *socketid, ip, protocol
 				// connect
+				worker.load++;
 				const [socketid, ip, protocol] = data.substr(1).split('\n');
 				Users.socketConnect(worker, id, socketid, ip, protocol);
 				break;
@@ -42,6 +43,7 @@ export const Sockets = new class {
 			case '!': {
 				// !socketid
 				// disconnect
+				worker.load--;
 				const socketid = data.substr(1);
 				Users.socketDisconnect(worker, id, socketid);
 				break;
@@ -89,45 +91,45 @@ export const Sockets = new class {
 
 		PM.spawn(workerCount);
 
-		for (const worker of PM.streams) {
+		for (const worker of PM.workers) {
 			void this.pipeWorker(worker);
 		}
 	}
 
-	socketSend(worker: WorkerStream, socketid: string, message: string) {
-		void worker.write(`>${socketid}\n${message}`);
+	socketSend(worker: Worker, socketid: string, message: string) {
+		void worker.stream.write(`>${socketid}\n${message}`);
 	}
 
-	socketDisconnect(worker: WorkerStream, socketid: string) {
-		void worker.write(`!${socketid}`);
+	socketDisconnect(worker: Worker, socketid: string) {
+		void worker.stream.write(`!${socketid}`);
 	}
 
 	roomBroadcast(roomid: RoomID, message: string) {
-		for (const worker of PM.streams) {
-			void worker.write(`#${roomid}\n${message}`);
+		for (const worker of PM.workers) {
+			void worker.stream.write(`#${roomid}\n${message}`);
 		}
 	}
 
-	roomAdd(worker: WorkerStream, roomid: RoomID, socketid: string) {
-		void worker.write(`+${roomid}\n${socketid}`);
+	roomAdd(worker: Worker, roomid: RoomID, socketid: string) {
+		void worker.stream.write(`+${roomid}\n${socketid}`);
 	}
 
-	roomRemove(worker: WorkerStream, roomid: RoomID, socketid: string) {
-		void worker.write(`-${roomid}\n${socketid}`);
+	roomRemove(worker: Worker, roomid: RoomID, socketid: string) {
+		void worker.stream.write(`-${roomid}\n${socketid}`);
 	}
 
 	channelBroadcast(roomid: RoomID, message: string) {
-		for (const worker of PM.streams) {
-			void worker.write(`:${roomid}\n${message}`);
+		for (const worker of PM.workers) {
+			void worker.stream.write(`:${roomid}\n${message}`);
 		}
 	}
 
-	channelMove(worker: WorkerStream, roomid: RoomID, channelid: ChannelID, socketid: string) {
-		void worker.write(`.${roomid}\n${channelid}\n${socketid}`);
+	channelMove(worker: Worker, roomid: RoomID, channelid: ChannelID, socketid: string) {
+		void worker.stream.write(`.${roomid}\n${channelid}\n${socketid}`);
 	}
 
-	eval(worker: WorkerStream, query: string) {
-		void worker.write(`$${query}`);
+	eval(worker: Worker, query: string) {
+		void worker.stream.write(`$${query}`);
 	}
 };
 

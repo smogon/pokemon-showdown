@@ -130,7 +130,14 @@ class WorkerStream extends ObjectReadWriteStream {
 	}
 }
 
-const worker = new WorkerStream('1');
+class Worker {
+	constructor(id) {
+		this.id = id;
+		this.stream = new WorkerStream(id);
+	}
+}
+
+const worker = new Worker(1);
 
 function createConnection(ip, workerid, socketid) {
 	if (workerid || socketid) {
@@ -144,7 +151,7 @@ function createConnection(ip, workerid, socketid) {
 			socketid++;
 		}
 	}
-	worker.addSocket(socketid);
+	worker.stream.addSocket(socketid);
 
 	let connectionid = `${workerid}-${socketid}`;
 	let connection = new Users.Connection(connectionid, worker, socketid, null, ip || '127.0.0.1');

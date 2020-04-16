@@ -277,8 +277,16 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	}
 }
 
+export class StreamWorker {
+	load = 0;
+	stream: Streams.ObjectReadWriteStream<string>;
+	constructor(stream: Streams.ObjectReadWriteStream<string>) {
+		this.stream = stream;
+	}
+}
+
 /** Wraps the process object in the PARENT process. */
-export class RawProcessWrapper implements ProcessWrapper {
+export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 	process: ChildProcess & {process: undefined} | Worker;
 	taskId = 0;
 	stream: RawSubprocessStream;
@@ -578,14 +586,15 @@ export class StreamProcessManager extends ProcessManager {
 }
 
 export class RawProcessManager extends ProcessManager {
-	/** full list of streams - parent process only */
-	streams: Streams.ObjectReadWriteStream<string>[] = [];
+	/** full list of processes - parent process only */
+	workers: StreamWorker[] = [];
 
-	masterStream: Streams.ObjectReadWriteStream<string> | null = null;
+	masterWorker: StreamWorker | null = null;
 	/** stream used only in the child process */
 	activeStream: Streams.ObjectReadWriteStream<string> | null = null;
 	isCluster: boolean;
 	_setupChild: () => Streams.ObjectReadWriteStream<string>;
+	/** worker ID of cluster worker - cluster child process only (0 otherwise) */
 	readonly workerid = cluster.worker?.id || 0;
 
 	constructor(options: {
@@ -609,13 +618,14 @@ export class RawProcessManager extends ProcessManager {
 	}
 	spawn(count?: number) {
 		super.spawn(count);
-		if (!this.streams.length) {
-			this.streams.push(this._setupChild());
+		if (!this.workers.length) {
+			this.masterWorker = new StreamWorker(this._setupChild());
+			this.workers.push(this.masterWorker);
 		}
 	}
 	createProcess() {
 		const process = new RawProcessWrapper(this.filename, this.isCluster);
-		this.streams.push(process.stream);
+		this.workers.push(process);
 		return process;
 	}
 	async pipeStream(stream: Streams.ObjectReadStream<string>) {
