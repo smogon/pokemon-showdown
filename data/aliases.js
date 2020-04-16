@@ -708,6 +708,7 @@ let BattleAliases = {
 	"sable": "Sableye",
 	"scept": "Sceptile",
 	"scoli": "Scolipede",
+	"seejong": "Sealeo",
 	"serp": "Serperior",
 	"shao": "Mienshao",
 	"skarm": "Skarmory",
