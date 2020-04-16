@@ -2014,6 +2014,7 @@ export const commands: ChatCommands = {
 			case 'forceadd':
 			case 'add':
 				if (!this.canTalk()) return;
+				if (!toID(args[1])) return this.parse(`/help mafia queue`);
 				const targetUser = Users.get(args[1]);
 				if ((!targetUser || !targetUser.connected) && args[0] !== 'forceadd') {
 					return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1]}`);
