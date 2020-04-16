@@ -642,10 +642,16 @@ let BattleAbilities = {
 	dazzling: {
 		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
-		onFoeTryMove(target, source, effect) {
-			if ((source.side === this.effectData.target.side || effect.id === 'perishsong') && effect.priority > 0.1 && effect.target !== 'foeSide') {
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const dazzlingHolder = this.effectData.target;
+			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', this.effectData.target, 'ability: Dazzling', effect, '[of] ' + target);
+				this.add('cant', dazzlingHolder, 'ability: Dazzling', move, '[of] ' + target);
 				return false;
 			}
 		},
@@ -3036,10 +3042,16 @@ let BattleAbilities = {
 	queenlymajesty: {
 		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
-		onFoeTryMove(target, source, effect) {
-			if ((source.side === this.effectData.target.side || effect.id === 'perishsong') && effect.priority > 0.1 && effect.target !== 'foeSide') {
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const dazzlingHolder = this.effectData.target;
+			if ((source.side === dazzlingHolder.side || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', this.effectData.target, 'ability: Queenly Majesty', effect, '[of] ' + target);
+				this.add('cant', dazzlingHolder, 'ability: Queenly Majesty', move, '[of] ' + target);
 				return false;
 			}
 		},
