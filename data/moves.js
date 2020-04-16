@@ -51,7 +51,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"absorb": {
+	absorb: {
 		num: 71,
 		accuracy: 100,
 		basePower: 20,
@@ -69,7 +69,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Clever",
 	},
-	"accelerock": {
+	accelerock: {
 		num: 709,
 		accuracy: 100,
 		basePower: 40,
@@ -87,7 +87,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Cool",
 	},
-	"acid": {
+	acid: {
 		num: 51,
 		accuracy: 100,
 		basePower: 40,
@@ -109,7 +109,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Clever",
 	},
-	"acidarmor": {
+	acidarmor: {
 		num: 151,
 		accuracy: true,
 		basePower: 0,
@@ -130,7 +130,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Tough",
 	},
-	"aciddownpour": {
+	aciddownpour: {
 		num: 628,
 		accuracy: true,
 		basePower: 1,
@@ -148,7 +148,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Cool",
 	},
-	"acidspray": {
+	acidspray: {
 		num: 491,
 		accuracy: 100,
 		basePower: 40,
@@ -170,7 +170,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Beautiful",
 	},
-	"acrobatics": {
+	acrobatics: {
 		num: 512,
 		accuracy: 100,
 		basePower: 55,
@@ -194,7 +194,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"acupressure": {
+	acupressure: {
 		num: 367,
 		accuracy: true,
 		basePower: 0,
@@ -230,7 +230,7 @@ let BattleMovedex = {
 		zMoveEffect: 'crit2',
 		contestType: "Tough",
 	},
-	"aerialace": {
+	aerialace: {
 		num: 332,
 		accuracy: true,
 		basePower: 60,
@@ -247,7 +247,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"aeroblast": {
+	aeroblast: {
 		num: 177,
 		accuracy: 95,
 		basePower: 100,
@@ -267,7 +267,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"afteryou": {
+	afteryou: {
 		num: 495,
 		accuracy: true,
 		basePower: 0,
@@ -295,7 +295,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Cute",
 	},
-	"agility": {
+	agility: {
 		num: 97,
 		accuracy: true,
 		basePower: 0,
@@ -317,7 +317,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cool",
 	},
-	"aircutter": {
+	aircutter: {
 		num: 314,
 		accuracy: 95,
 		basePower: 60,
@@ -335,7 +335,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"airslash": {
+	airslash: {
 		num: 403,
 		accuracy: 95,
 		basePower: 75,
@@ -356,7 +356,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"alloutpummeling": {
+	alloutpummeling: {
 		num: 624,
 		accuracy: true,
 		basePower: 1,
@@ -374,7 +374,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"allyswitch": {
+	allyswitch: {
 		num: 502,
 		accuracy: true,
 		basePower: 0,
@@ -402,7 +402,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 2},
 		contestType: "Clever",
 	},
-	"amnesia": {
+	amnesia: {
 		num: 133,
 		accuracy: true,
 		basePower: 0,
@@ -423,7 +423,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"anchorshot": {
+	anchorshot: {
 		num: 677,
 		accuracy: 100,
 		basePower: 80,
@@ -446,7 +446,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Tough",
 	},
-	"ancientpower": {
+	ancientpower: {
 		num: 246,
 		accuracy: 100,
 		basePower: 60,
@@ -474,7 +474,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Tough",
 	},
-	"appleacid": {
+	appleacid: {
 		num: 787,
 		accuracy: 100,
 		basePower: 80,
@@ -495,7 +495,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 	},
-	"aquajet": {
+	aquajet: {
 		num: 453,
 		accuracy: 100,
 		basePower: 40,
@@ -513,7 +513,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"aquaring": {
+	aquaring: {
 		num: 392,
 		accuracy: true,
 		basePower: 0,
@@ -541,7 +541,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Beautiful",
 	},
-	"aquatail": {
+	aquatail: {
 		num: 401,
 		accuracy: 90,
 		basePower: 90,
@@ -558,7 +558,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"armthrust": {
+	armthrust: {
 		num: 292,
 		accuracy: 100,
 		basePower: 15,
@@ -576,7 +576,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"aromatherapy": {
+	aromatherapy: {
 		num: 312,
 		accuracy: true,
 		basePower: 0,
@@ -606,7 +606,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Clever",
 	},
-	"aromaticmist": {
+	aromaticmist: {
 		num: 597,
 		accuracy: true,
 		basePower: 0,
@@ -627,7 +627,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 2},
 		contestType: "Beautiful",
 	},
-	"assist": {
+	assist: {
 		num: 274,
 		accuracy: true,
 		basePower: 0,
@@ -670,7 +670,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"assurance": {
+	assurance: {
 		num: 372,
 		accuracy: 100,
 		basePower: 60,
@@ -694,7 +694,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"astonish": {
+	astonish: {
 		num: 310,
 		accuracy: 100,
 		basePower: 30,
@@ -714,7 +714,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cute",
 	},
-	"attackorder": {
+	attackorder: {
 		num: 454,
 		accuracy: 100,
 		basePower: 90,
@@ -733,7 +733,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Clever",
 	},
-	"attract": {
+	attract: {
 		num: 213,
 		accuracy: 100,
 		basePower: 0,
@@ -790,7 +790,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"aurasphere": {
+	aurasphere: {
 		num: 396,
 		accuracy: true,
 		basePower: 80,
@@ -807,7 +807,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Beautiful",
 	},
-	"aurawheel": {
+	aurawheel: {
 		num: 783,
 		accuracy: 100,
 		basePower: 110,
@@ -846,7 +846,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Electric",
 	},
-	"aurorabeam": {
+	aurorabeam: {
 		num: 62,
 		accuracy: 100,
 		basePower: 65,
@@ -868,7 +868,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"auroraveil": {
+	auroraveil: {
 		num: 694,
 		accuracy: true,
 		basePower: 0,
@@ -921,7 +921,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Beautiful",
 	},
-	"autotomize": {
+	autotomize: {
 		num: 475,
 		accuracy: true,
 		basePower: 0,
@@ -955,7 +955,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"avalanche": {
+	avalanche: {
 		num: 419,
 		accuracy: 100,
 		basePower: 60,
@@ -983,7 +983,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"babydolleyes": {
+	babydolleyes: {
 		num: 608,
 		accuracy: 100,
 		basePower: 0,
@@ -1004,7 +1004,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cute",
 	},
-	"baddybad": {
+	baddybad: {
 		num: 737,
 		accuracy: 95,
 		basePower: 80,
@@ -1026,7 +1026,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"banefulbunker": {
+	banefulbunker: {
 		num: 661,
 		accuracy: true,
 		basePower: 0,
@@ -1087,7 +1087,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Tough",
 	},
-	"barrage": {
+	barrage: {
 		num: 140,
 		accuracy: 85,
 		basePower: 15,
@@ -1106,7 +1106,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"barrier": {
+	barrier: {
 		num: 112,
 		accuracy: true,
 		basePower: 0,
@@ -1128,7 +1128,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cool",
 	},
-	"batonpass": {
+	batonpass: {
 		num: 226,
 		accuracy: true,
 		basePower: 0,
@@ -1148,7 +1148,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"beakblast": {
+	beakblast: {
 		num: 690,
 		accuracy: 100,
 		basePower: 100,
@@ -1184,7 +1184,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Tough",
 	},
-	"beatup": {
+	beatup: {
 		num: 251,
 		accuracy: 100,
 		basePower: 0,
@@ -1209,7 +1209,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"behemothbash": {
+	behemothbash: {
 		num: 782,
 		accuracy: 100,
 		basePower: 100,
@@ -1225,7 +1225,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 	},
-	"behemothblade": {
+	behemothblade: {
 		num: 781,
 		accuracy: 100,
 		basePower: 100,
@@ -1241,7 +1241,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 	},
-	"belch": {
+	belch: {
 		num: 562,
 		accuracy: 90,
 		basePower: 120,
@@ -1259,7 +1259,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Tough",
 	},
-	"bellydrum": {
+	bellydrum: {
 		num: 187,
 		accuracy: true,
 		basePower: 0,
@@ -1284,7 +1284,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Cute",
 	},
-	"bestow": {
+	bestow: {
 		num: 516,
 		accuracy: true,
 		basePower: 0,
@@ -1315,7 +1315,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 2},
 		contestType: "Cute",
 	},
-	"bide": {
+	bide: {
 		num: 117,
 		accuracy: true,
 		basePower: 0,
@@ -1392,7 +1392,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"bind": {
+	bind: {
 		num: 20,
 		accuracy: 85,
 		basePower: 15,
@@ -1410,7 +1410,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"bite": {
+	bite: {
 		num: 44,
 		accuracy: 100,
 		basePower: 60,
@@ -1430,7 +1430,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Tough",
 	},
-	"blackholeeclipse": {
+	blackholeeclipse: {
 		num: 654,
 		accuracy: true,
 		basePower: 1,
@@ -1448,7 +1448,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Cool",
 	},
-	"blastburn": {
+	blastburn: {
 		num: 307,
 		accuracy: 90,
 		basePower: 150,
@@ -1468,7 +1468,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"blazekick": {
+	blazekick: {
 		num: 299,
 		accuracy: 90,
 		basePower: 85,
@@ -1490,7 +1490,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"blizzard": {
+	blizzard: {
 		num: 59,
 		accuracy: 70,
 		basePower: 110,
@@ -1514,7 +1514,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"block": {
+	block: {
 		num: 335,
 		accuracy: true,
 		basePower: 0,
@@ -1535,7 +1535,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cute",
 	},
-	"bloomdoom": {
+	bloomdoom: {
 		num: 644,
 		accuracy: true,
 		basePower: 1,
@@ -1553,7 +1553,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"blueflare": {
+	blueflare: {
 		num: 551,
 		accuracy: 85,
 		basePower: 130,
@@ -1574,7 +1574,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"bodypress": {
+	bodypress: {
 		num: 776,
 		accuracy: 100,
 		basePower: 80,
@@ -1592,7 +1592,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fighting",
 	},
-	"bodyslam": {
+	bodyslam: {
 		num: 34,
 		accuracy: 100,
 		basePower: 85,
@@ -1613,7 +1613,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"boltbeak": {
+	boltbeak: {
 		num: 754,
 		accuracy: 100,
 		basePower: 85,
@@ -1638,7 +1638,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Electric",
 	},
-	"boltstrike": {
+	boltstrike: {
 		num: 550,
 		accuracy: 85,
 		basePower: 130,
@@ -1659,7 +1659,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Beautiful",
 	},
-	"boneclub": {
+	boneclub: {
 		num: 125,
 		accuracy: 85,
 		basePower: 65,
@@ -1680,7 +1680,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	"bonemerang": {
+	bonemerang: {
 		num: 155,
 		accuracy: 90,
 		basePower: 50,
@@ -1701,7 +1701,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
-	"bonerush": {
+	bonerush: {
 		num: 198,
 		accuracy: 90,
 		basePower: 25,
@@ -1721,7 +1721,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
-	"boomburst": {
+	boomburst: {
 		num: 586,
 		accuracy: 100,
 		basePower: 140,
@@ -1739,7 +1739,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"bounce": {
+	bounce: {
 		num: 340,
 		accuracy: 85,
 		basePower: 85,
@@ -1784,7 +1784,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cute",
 	},
-	"bouncybubble": {
+	bouncybubble: {
 		num: 733,
 		accuracy: 100,
 		basePower: 60,
@@ -1804,7 +1804,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Clever",
 	},
-	"branchpoke": {
+	branchpoke: {
 		num: 785,
 		accuracy: 100,
 		basePower: 40,
@@ -1820,7 +1820,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 	},
-	"bravebird": {
+	bravebird: {
 		num: 413,
 		accuracy: 100,
 		basePower: 120,
@@ -1839,7 +1839,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"breakingswipe": {
+	breakingswipe: {
 		num: 784,
 		accuracy: 100,
 		basePower: 60,
@@ -1860,7 +1860,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		type: "Dragon",
 	},
-	"breakneckblitz": {
+	breakneckblitz: {
 		num: 622,
 		accuracy: true,
 		basePower: 1,
@@ -1878,7 +1878,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"brickbreak": {
+	brickbreak: {
 		num: 280,
 		accuracy: 100,
 		basePower: 75,
@@ -1904,7 +1904,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"brine": {
+	brine: {
 		num: 362,
 		accuracy: 100,
 		basePower: 65,
@@ -1926,7 +1926,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Tough",
 	},
-	"brutalswing": {
+	brutalswing: {
 		num: 693,
 		accuracy: 100,
 		basePower: 60,
@@ -1943,7 +1943,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Tough",
 	},
-	"bubble": {
+	bubble: {
 		num: 145,
 		accuracy: 100,
 		basePower: 40,
@@ -1966,7 +1966,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cute",
 	},
-	"bubblebeam": {
+	bubblebeam: {
 		num: 61,
 		accuracy: 100,
 		basePower: 65,
@@ -1988,7 +1988,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"bugbite": {
+	bugbite: {
 		num: 450,
 		accuracy: 100,
 		basePower: 60,
@@ -2016,7 +2016,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cute",
 	},
-	"bugbuzz": {
+	bugbuzz: {
 		num: 405,
 		accuracy: 100,
 		basePower: 90,
@@ -2039,7 +2039,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Beautiful",
 	},
-	"bulkup": {
+	bulkup: {
 		num: 339,
 		accuracy: true,
 		basePower: 0,
@@ -2062,7 +2062,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Cool",
 	},
-	"bulldoze": {
+	bulldoze: {
 		num: 523,
 		accuracy: 100,
 		basePower: 60,
@@ -2084,7 +2084,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	"bulletpunch": {
+	bulletpunch: {
 		num: 418,
 		accuracy: 100,
 		basePower: 40,
@@ -2102,7 +2102,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Tough",
 	},
-	"bulletseed": {
+	bulletseed: {
 		num: 331,
 		accuracy: 100,
 		basePower: 25,
@@ -2123,7 +2123,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cool",
 	},
-	"burnup": {
+	burnup: {
 		num: 682,
 		accuracy: 100,
 		basePower: 130,
@@ -2152,7 +2152,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Clever",
 	},
-	"buzzybuzz": {
+	buzzybuzz: {
 		num: 734,
 		accuracy: 100,
 		basePower: 60,
@@ -2174,7 +2174,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Clever",
 	},
-	"calmmind": {
+	calmmind: {
 		num: 347,
 		accuracy: true,
 		basePower: 0,
@@ -2197,7 +2197,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"camouflage": {
+	camouflage: {
 		num: 293,
 		accuracy: true,
 		basePower: 0,
@@ -2231,7 +2231,7 @@ let BattleMovedex = {
 		zMoveBoost: {evasion: 1},
 		contestType: "Clever",
 	},
-	"captivate": {
+	captivate: {
 		num: 445,
 		accuracy: 100,
 		basePower: 0,
@@ -2256,7 +2256,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 2},
 		contestType: "Cute",
 	},
-	"catastropika": {
+	catastropika: {
 		num: 658,
 		accuracy: true,
 		basePower: 210,
@@ -2275,7 +2275,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"celebrate": {
+	celebrate: {
 		num: 606,
 		accuracy: true,
 		basePower: 0,
@@ -2295,7 +2295,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
 		contestType: "Cute",
 	},
-	"charge": {
+	charge: {
 		num: 268,
 		accuracy: true,
 		basePower: 0,
@@ -2333,7 +2333,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"chargebeam": {
+	chargebeam: {
 		num: 451,
 		accuracy: 90,
 		basePower: 50,
@@ -2357,7 +2357,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Beautiful",
 	},
-	"charm": {
+	charm: {
 		num: 204,
 		accuracy: 100,
 		basePower: 0,
@@ -2378,7 +2378,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cute",
 	},
-	"chatter": {
+	chatter: {
 		num: 448,
 		accuracy: 100,
 		basePower: 65,
@@ -2400,7 +2400,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cute",
 	},
-	"chipaway": {
+	chipaway: {
 		num: 498,
 		accuracy: 100,
 		basePower: 70,
@@ -2420,7 +2420,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"circlethrow": {
+	circlethrow: {
 		num: 509,
 		accuracy: 90,
 		basePower: 60,
@@ -2438,7 +2438,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"clamp": {
+	clamp: {
 		num: 128,
 		accuracy: 85,
 		basePower: 35,
@@ -2457,7 +2457,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Tough",
 	},
-	"clangingscales": {
+	clangingscales: {
 		num: 691,
 		accuracy: 100,
 		basePower: 110,
@@ -2480,7 +2480,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Tough",
 	},
-	"clangoroussoul": {
+	clangoroussoul: {
 		num: 775,
 		accuracy: true,
 		basePower: 0,
@@ -2515,7 +2515,7 @@ let BattleMovedex = {
 		target: "self",
 		type: "Dragon",
 	},
-	"clangoroussoulblaze": {
+	clangoroussoulblaze: {
 		num: 728,
 		accuracy: true,
 		basePower: 185,
@@ -2546,7 +2546,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	"clearsmog": {
+	clearsmog: {
 		num: 499,
 		accuracy: true,
 		basePower: 50,
@@ -2567,7 +2567,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Beautiful",
 	},
-	"closecombat": {
+	closecombat: {
 		num: 370,
 		accuracy: 100,
 		basePower: 120,
@@ -2591,7 +2591,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"coil": {
+	coil: {
 		num: 489,
 		accuracy: true,
 		basePower: 0,
@@ -2615,7 +2615,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Tough",
 	},
-	"cometpunch": {
+	cometpunch: {
 		num: 4,
 		accuracy: 85,
 		basePower: 18,
@@ -2635,7 +2635,7 @@ let BattleMovedex = {
 		gmaxPower: 100,
 		contestType: "Tough",
 	},
-	"confide": {
+	confide: {
 		num: 590,
 		accuracy: true,
 		basePower: 0,
@@ -2656,7 +2656,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Cute",
 	},
-	"confuseray": {
+	confuseray: {
 		num: 109,
 		accuracy: 100,
 		basePower: 0,
@@ -2675,7 +2675,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"confusion": {
+	confusion: {
 		num: 93,
 		accuracy: 100,
 		basePower: 50,
@@ -2695,7 +2695,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"constrict": {
+	constrict: {
 		num: 132,
 		accuracy: 100,
 		basePower: 10,
@@ -2718,7 +2718,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"continentalcrush": {
+	continentalcrush: {
 		num: 632,
 		accuracy: true,
 		basePower: 1,
@@ -2736,7 +2736,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Cool",
 	},
-	"conversion": {
+	conversion: {
 		num: 160,
 		accuracy: true,
 		basePower: 0,
@@ -2760,7 +2760,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
 		contestType: "Beautiful",
 	},
-	"conversion2": {
+	conversion2: {
 		num: 176,
 		accuracy: true,
 		basePower: 0,
@@ -2800,7 +2800,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Beautiful",
 	},
-	"copycat": {
+	copycat: {
 		num: 383,
 		accuracy: true,
 		basePower: 0,
@@ -2831,7 +2831,7 @@ let BattleMovedex = {
 		zMoveBoost: {accuracy: 1},
 		contestType: "Cute",
 	},
-	"coreenforcer": {
+	coreenforcer: {
 		num: 687,
 		accuracy: 100,
 		basePower: 100,
@@ -2861,7 +2861,7 @@ let BattleMovedex = {
 		zMovePower: 140,
 		contestType: "Tough",
 	},
-	"corkscrewcrash": {
+	corkscrewcrash: {
 		num: 638,
 		accuracy: true,
 		basePower: 1,
@@ -2879,7 +2879,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"cosmicpower": {
+	cosmicpower: {
 		num: 322,
 		accuracy: true,
 		basePower: 0,
@@ -2901,7 +2901,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Beautiful",
 	},
-	"cottonguard": {
+	cottonguard: {
 		num: 538,
 		accuracy: true,
 		basePower: 0,
@@ -2923,7 +2923,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"cottonspore": {
+	cottonspore: {
 		num: 178,
 		accuracy: 100,
 		basePower: 0,
@@ -2944,7 +2944,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"counter": {
+	counter: {
 		num: 68,
 		accuracy: 100,
 		basePower: 0,
@@ -2992,7 +2992,7 @@ let BattleMovedex = {
 		gmaxPower: 75,
 		contestType: "Tough",
 	},
-	"courtchange": {
+	courtchange: {
 		num: 756,
 		accuracy: 100,
 		basePower: 0,
@@ -3046,7 +3046,7 @@ let BattleMovedex = {
 		target: "all",
 		type: "Normal",
 	},
-	"covet": {
+	covet: {
 		num: 343,
 		accuracy: 100,
 		basePower: 60,
@@ -3077,7 +3077,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"crabhammer": {
+	crabhammer: {
 		num: 152,
 		accuracy: 90,
 		basePower: 100,
@@ -3096,7 +3096,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Tough",
 	},
-	"craftyshield": {
+	craftyshield: {
 		num: 578,
 		accuracy: true,
 		basePower: 0,
@@ -3130,7 +3130,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"crosschop": {
+	crosschop: {
 		num: 238,
 		accuracy: 80,
 		basePower: 100,
@@ -3149,7 +3149,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"crosspoison": {
+	crosspoison: {
 		num: 440,
 		accuracy: 100,
 		basePower: 70,
@@ -3170,7 +3170,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Cool",
 	},
-	"crunch": {
+	crunch: {
 		num: 242,
 		accuracy: 100,
 		basePower: 80,
@@ -3193,7 +3193,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Tough",
 	},
-	"crushclaw": {
+	crushclaw: {
 		num: 306,
 		accuracy: 95,
 		basePower: 75,
@@ -3215,7 +3215,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"crushgrip": {
+	crushgrip: {
 		num: 462,
 		accuracy: 100,
 		basePower: 0,
@@ -3238,7 +3238,7 @@ let BattleMovedex = {
 		gmaxPower: 140,
 		contestType: "Tough",
 	},
-	"curse": {
+	curse: {
 		num: 174,
 		accuracy: true,
 		basePower: 0,
@@ -3285,7 +3285,7 @@ let BattleMovedex = {
 		zMoveEffect: 'curse',
 		contestType: "Tough",
 	},
-	"cut": {
+	cut: {
 		num: 15,
 		accuracy: 95,
 		basePower: 50,
@@ -3301,7 +3301,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"darkestlariat": {
+	darkestlariat: {
 		num: 663,
 		accuracy: 100,
 		basePower: 85,
@@ -3321,7 +3321,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Cool",
 	},
-	"darkpulse": {
+	darkpulse: {
 		num: 399,
 		accuracy: 100,
 		basePower: 80,
@@ -3342,7 +3342,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Cool",
 	},
-	"darkvoid": {
+	darkvoid: {
 		num: 464,
 		accuracy: 50,
 		basePower: 0,
@@ -3370,7 +3370,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"dazzlinggleam": {
+	dazzlinggleam: {
 		num: 605,
 		accuracy: 100,
 		basePower: 80,
@@ -3388,7 +3388,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
-	"decorate": {
+	decorate: {
 		num: 777,
 		accuracy: true,
 		basePower: 0,
@@ -3408,7 +3408,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fairy",
 	},
-	"defendorder": {
+	defendorder: {
 		num: 455,
 		accuracy: true,
 		basePower: 0,
@@ -3430,7 +3430,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"defensecurl": {
+	defensecurl: {
 		num: 111,
 		accuracy: true,
 		basePower: 0,
@@ -3455,7 +3455,7 @@ let BattleMovedex = {
 		zMoveBoost: {accuracy: 1},
 		contestType: "Cute",
 	},
-	"defog": {
+	defog: {
 		num: 432,
 		accuracy: true,
 		basePower: 0,
@@ -3495,7 +3495,7 @@ let BattleMovedex = {
 		zMoveBoost: {accuracy: 1},
 		contestType: "Cool",
 	},
-	"destinybond": {
+	destinybond: {
 		num: 194,
 		accuracy: true,
 		basePower: 0,
@@ -3543,7 +3543,7 @@ let BattleMovedex = {
 		zMoveEffect: 'redirect',
 		contestType: "Clever",
 	},
-	"detect": {
+	detect: {
 		num: 197,
 		accuracy: true,
 		basePower: 0,
@@ -3570,7 +3570,7 @@ let BattleMovedex = {
 		zMoveBoost: {evasion: 1},
 		contestType: "Cool",
 	},
-	"devastatingdrake": {
+	devastatingdrake: {
 		num: 652,
 		accuracy: true,
 		basePower: 1,
@@ -3588,7 +3588,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	"diamondstorm": {
+	diamondstorm: {
 		num: 591,
 		accuracy: 95,
 		basePower: 100,
@@ -3614,7 +3614,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Beautiful",
 	},
-	"dig": {
+	dig: {
 		num: 91,
 		accuracy: 100,
 		basePower: 80,
@@ -3659,7 +3659,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	"disable": {
+	disable: {
 		num: 50,
 		accuracy: 100,
 		basePower: 0,
@@ -3734,7 +3734,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"disarmingvoice": {
+	disarmingvoice: {
 		num: 574,
 		accuracy: true,
 		basePower: 40,
@@ -3751,7 +3751,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Cute",
 	},
-	"discharge": {
+	discharge: {
 		num: 435,
 		accuracy: 100,
 		basePower: 80,
@@ -3772,7 +3772,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Beautiful",
 	},
-	"dive": {
+	dive: {
 		num: 291,
 		accuracy: 100,
 		basePower: 80,
@@ -3821,7 +3821,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"dizzypunch": {
+	dizzypunch: {
 		num: 146,
 		accuracy: 100,
 		basePower: 70,
@@ -3842,7 +3842,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"doomdesire": {
+	doomdesire: {
 		num: 353,
 		accuracy: 100,
 		basePower: 140,
@@ -3881,7 +3881,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
-	"doubleedge": {
+	doubleedge: {
 		num: 38,
 		accuracy: 100,
 		basePower: 120,
@@ -3900,7 +3900,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"doublehit": {
+	doublehit: {
 		num: 458,
 		accuracy: 90,
 		basePower: 35,
@@ -3920,7 +3920,7 @@ let BattleMovedex = {
 		gmaxPower: 120,
 		contestType: "Cool",
 	},
-	"doubleironbash": {
+	doubleironbash: {
 		num: 742,
 		accuracy: 100,
 		basePower: 60,
@@ -3944,7 +3944,7 @@ let BattleMovedex = {
 		gmaxPower: 140,
 		contestType: "Clever",
 	},
-	"doublekick": {
+	doublekick: {
 		num: 24,
 		accuracy: 100,
 		basePower: 30,
@@ -3963,7 +3963,7 @@ let BattleMovedex = {
 		gmaxPower: 80,
 		contestType: "Cool",
 	},
-	"doubleslap": {
+	doubleslap: {
 		num: 3,
 		accuracy: 85,
 		basePower: 15,
@@ -3982,7 +3982,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"doubleteam": {
+	doubleteam: {
 		num: 104,
 		accuracy: true,
 		basePower: 0,
@@ -4003,7 +4003,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cool",
 	},
-	"dracometeor": {
+	dracometeor: {
 		num: 434,
 		accuracy: 90,
 		basePower: 130,
@@ -4026,7 +4026,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Beautiful",
 	},
-	"dragonascent": {
+	dragonascent: {
 		num: 620,
 		accuracy: 100,
 		basePower: 120,
@@ -4050,7 +4050,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Beautiful",
 	},
-	"dragonbreath": {
+	dragonbreath: {
 		num: 225,
 		accuracy: 100,
 		basePower: 60,
@@ -4070,7 +4070,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	"dragonclaw": {
+	dragonclaw: {
 		num: 337,
 		accuracy: 100,
 		basePower: 80,
@@ -4087,7 +4087,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	"dragondance": {
+	dragondance: {
 		num: 349,
 		accuracy: true,
 		basePower: 0,
@@ -4110,7 +4110,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cool",
 	},
-	"dragondarts": {
+	dragondarts: {
 		num: 751,
 		accuracy: 100,
 		basePower: 50,
@@ -4129,7 +4129,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		gmaxPower: 130,
 	},
-	"dragonhammer": {
+	dragonhammer: {
 		num: 692,
 		accuracy: 100,
 		basePower: 90,
@@ -4147,7 +4147,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Tough",
 	},
-	"dragonpulse": {
+	dragonpulse: {
 		num: 406,
 		accuracy: 100,
 		basePower: 85,
@@ -4164,7 +4164,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Beautiful",
 	},
-	"dragonrage": {
+	dragonrage: {
 		num: 82,
 		accuracy: 100,
 		basePower: 0,
@@ -4182,7 +4182,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	"dragonrush": {
+	dragonrush: {
 		num: 407,
 		accuracy: 75,
 		basePower: 100,
@@ -4202,7 +4202,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Tough",
 	},
-	"dragontail": {
+	dragontail: {
 		num: 525,
 		accuracy: 90,
 		basePower: 60,
@@ -4220,7 +4220,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Tough",
 	},
-	"drainingkiss": {
+	drainingkiss: {
 		num: 577,
 		accuracy: 100,
 		basePower: 50,
@@ -4238,7 +4238,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Cute",
 	},
-	"drainpunch": {
+	drainpunch: {
 		num: 409,
 		accuracy: 100,
 		basePower: 75,
@@ -4257,7 +4257,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"dreameater": {
+	dreameater: {
 		num: 138,
 		accuracy: 100,
 		basePower: 100,
@@ -4278,7 +4278,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"drillpeck": {
+	drillpeck: {
 		num: 65,
 		accuracy: 100,
 		basePower: 80,
@@ -4294,7 +4294,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"drillrun": {
+	drillrun: {
 		num: 529,
 		accuracy: 95,
 		basePower: 80,
@@ -4313,7 +4313,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	"drumbeating": {
+	drumbeating: {
 		num: 778,
 		accuracy: 100,
 		basePower: 80,
@@ -4335,7 +4335,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 	},
-	"dualchop": {
+	dualchop: {
 		num: 530,
 		accuracy: 90,
 		basePower: 40,
@@ -4354,7 +4354,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
-	"dynamaxcannon": {
+	dynamaxcannon: {
 		num: 744,
 		accuracy: 100,
 		basePower: 100,
@@ -4370,7 +4370,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
-	"dynamicpunch": {
+	dynamicpunch: {
 		num: 223,
 		accuracy: 50,
 		basePower: 100,
@@ -4390,7 +4390,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"earthpower": {
+	earthpower: {
 		num: 414,
 		accuracy: 100,
 		basePower: 90,
@@ -4413,7 +4413,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Beautiful",
 	},
-	"earthquake": {
+	earthquake: {
 		num: 89,
 		accuracy: 100,
 		basePower: 100,
@@ -4431,7 +4431,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	"echoedvoice": {
+	echoedvoice: {
 		num: 497,
 		accuracy: 100,
 		basePower: 40,
@@ -4471,7 +4471,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"eerieimpulse": {
+	eerieimpulse: {
 		num: 598,
 		accuracy: 100,
 		basePower: 0,
@@ -4492,7 +4492,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"eggbomb": {
+	eggbomb: {
 		num: 121,
 		accuracy: 75,
 		basePower: 100,
@@ -4509,7 +4509,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"electricterrain": {
+	electricterrain: {
 		num: 604,
 		accuracy: true,
 		basePower: 0,
@@ -4570,7 +4570,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"electrify": {
+	electrify: {
 		num: 582,
 		accuracy: true,
 		basePower: 0,
@@ -4605,7 +4605,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"electroball": {
+	electroball: {
 		num: 486,
 		accuracy: 100,
 		basePower: 0,
@@ -4631,7 +4631,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cool",
 	},
-	"electroweb": {
+	electroweb: {
 		num: 527,
 		accuracy: 95,
 		basePower: 55,
@@ -4653,7 +4653,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Beautiful",
 	},
-	"embargo": {
+	embargo: {
 		num: 373,
 		accuracy: 100,
 		basePower: 0,
@@ -4684,7 +4684,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"ember": {
+	ember: {
 		num: 52,
 		accuracy: 100,
 		basePower: 40,
@@ -4704,7 +4704,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cute",
 	},
-	"encore": {
+	encore: {
 		num: 227,
 		accuracy: 100,
 		basePower: 0,
@@ -4770,7 +4770,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Cute",
 	},
-	"endeavor": {
+	endeavor: {
 		num: 283,
 		accuracy: 100,
 		basePower: 0,
@@ -4796,7 +4796,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
-	"endure": {
+	endure: {
 		num: 203,
 		accuracy: true,
 		basePower: 0,
@@ -4835,7 +4835,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Tough",
 	},
-	"energyball": {
+	energyball: {
 		num: 412,
 		accuracy: 100,
 		basePower: 90,
@@ -4858,7 +4858,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
-	"entrainment": {
+	entrainment: {
 		num: 494,
 		accuracy: 100,
 		basePower: 0,
@@ -4892,7 +4892,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Cute",
 	},
-	"eruption": {
+	eruption: {
 		num: 284,
 		accuracy: 100,
 		basePower: 150,
@@ -4913,7 +4913,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"eternabeam": {
+	eternabeam: {
 		num: 795,
 		accuracy: 90,
 		basePower: 160,
@@ -4932,7 +4932,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
-	"explosion": {
+	explosion: {
 		num: 153,
 		accuracy: 100,
 		basePower: 250,
@@ -4951,7 +4951,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"extrasensory": {
+	extrasensory: {
 		num: 326,
 		accuracy: 100,
 		basePower: 80,
@@ -4972,7 +4972,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"extremeevoboost": {
+	extremeevoboost: {
 		num: 702,
 		accuracy: true,
 		basePower: 0,
@@ -4999,7 +4999,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"extremespeed": {
+	extremespeed: {
 		num: 245,
 		accuracy: 100,
 		basePower: 80,
@@ -5017,7 +5017,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"facade": {
+	facade: {
 		num: 263,
 		accuracy: 100,
 		basePower: 70,
@@ -5040,7 +5040,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"fairylock": {
+	fairylock: {
 		num: 587,
 		accuracy: true,
 		basePower: 0,
@@ -5068,7 +5068,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"fairywind": {
+	fairywind: {
 		num: 584,
 		accuracy: 100,
 		basePower: 40,
@@ -5084,7 +5084,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
-	"fakeout": {
+	fakeout: {
 		num: 252,
 		accuracy: 100,
 		basePower: 40,
@@ -5113,7 +5113,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"faketears": {
+	faketears: {
 		num: 313,
 		accuracy: 100,
 		basePower: 0,
@@ -5134,7 +5134,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Cute",
 	},
-	"falsesurrender": {
+	falsesurrender: {
 		num: 793,
 		accuracy: true,
 		basePower: 80,
@@ -5150,7 +5150,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 	},
-	"falseswipe": {
+	falseswipe: {
 		num: 206,
 		accuracy: 100,
 		basePower: 40,
@@ -5168,7 +5168,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"featherdance": {
+	featherdance: {
 		num: 297,
 		accuracy: 100,
 		basePower: 0,
@@ -5189,7 +5189,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Beautiful",
 	},
-	"feint": {
+	feint: {
 		num: 364,
 		accuracy: 100,
 		basePower: 30,
@@ -5208,7 +5208,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Clever",
 	},
-	"feintattack": {
+	feintattack: {
 		num: 185,
 		accuracy: true,
 		basePower: 60,
@@ -5225,7 +5225,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"fellstinger": {
+	fellstinger: {
 		num: 565,
 		accuracy: 100,
 		basePower: 50,
@@ -5245,7 +5245,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cool",
 	},
-	"fierydance": {
+	fierydance: {
 		num: 552,
 		accuracy: 100,
 		basePower: 80,
@@ -5271,7 +5271,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"finalgambit": {
+	finalgambit: {
 		num: 515,
 		accuracy: 100,
 		basePower: 0,
@@ -5295,7 +5295,7 @@ let BattleMovedex = {
 		zMovePower: 180,
 		contestType: "Tough",
 	},
-	"fireblast": {
+	fireblast: {
 		num: 126,
 		accuracy: 85,
 		basePower: 110,
@@ -5316,7 +5316,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"firefang": {
+	firefang: {
 		num: 424,
 		accuracy: 95,
 		basePower: 65,
@@ -5342,7 +5342,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"firelash": {
+	firelash: {
 		num: 680,
 		accuracy: 100,
 		basePower: 80,
@@ -5365,7 +5365,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cute",
 	},
-	"firepledge": {
+	firepledge: {
 		num: 519,
 		accuracy: 100,
 		basePower: 80,
@@ -5439,7 +5439,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"firepunch": {
+	firepunch: {
 		num: 7,
 		accuracy: 100,
 		basePower: 75,
@@ -5460,7 +5460,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Tough",
 	},
-	"firespin": {
+	firespin: {
 		num: 83,
 		accuracy: 85,
 		basePower: 35,
@@ -5478,7 +5478,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"firstimpression": {
+	firstimpression: {
 		num: 660,
 		accuracy: 100,
 		basePower: 90,
@@ -5504,7 +5504,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cute",
 	},
-	"fishiousrend": {
+	fishiousrend: {
 		num: 755,
 		accuracy: 100,
 		basePower: 85,
@@ -5529,7 +5529,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Water",
 	},
-	"fissure": {
+	fissure: {
 		num: 90,
 		accuracy: 30,
 		basePower: 0,
@@ -5549,7 +5549,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
-	"flail": {
+	flail: {
 		num: 175,
 		accuracy: 100,
 		basePower: 0,
@@ -5587,7 +5587,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cute",
 	},
-	"flameburst": {
+	flameburst: {
 		num: 481,
 		accuracy: 100,
 		basePower: 70,
@@ -5625,7 +5625,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"flamecharge": {
+	flamecharge: {
 		num: 488,
 		accuracy: 100,
 		basePower: 50,
@@ -5650,7 +5650,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"flamewheel": {
+	flamewheel: {
 		num: 172,
 		accuracy: 100,
 		basePower: 60,
@@ -5670,7 +5670,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"flamethrower": {
+	flamethrower: {
 		num: 53,
 		accuracy: 100,
 		basePower: 90,
@@ -5691,7 +5691,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"flareblitz": {
+	flareblitz: {
 		num: 394,
 		accuracy: 100,
 		basePower: 120,
@@ -5713,7 +5713,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"flash": {
+	flash: {
 		num: 148,
 		accuracy: 100,
 		basePower: 0,
@@ -5735,7 +5735,7 @@ let BattleMovedex = {
 		zMoveBoost: {evasion: 1},
 		contestType: "Beautiful",
 	},
-	"flashcannon": {
+	flashcannon: {
 		num: 430,
 		accuracy: 100,
 		basePower: 80,
@@ -5758,7 +5758,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
-	"flatter": {
+	flatter: {
 		num: 260,
 		accuracy: 100,
 		basePower: 0,
@@ -5780,7 +5780,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"fleurcannon": {
+	fleurcannon: {
 		num: 705,
 		accuracy: 90,
 		basePower: 130,
@@ -5804,7 +5804,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
-	"fling": {
+	fling: {
 		num: 374,
 		accuracy: 100,
 		basePower: 0,
@@ -5851,7 +5851,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Cute",
 	},
-	"floatyfall": {
+	floatyfall: {
 		num: 731,
 		accuracy: 95,
 		basePower: 90,
@@ -5873,7 +5873,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"floralhealing": {
+	floralhealing: {
 		num: 666,
 		accuracy: true,
 		basePower: 0,
@@ -5904,7 +5904,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"flowershield": {
+	flowershield: {
 		num: 579,
 		accuracy: true,
 		basePower: 0,
@@ -5936,7 +5936,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Beautiful",
 	},
-	"fly": {
+	fly: {
 		num: 19,
 		accuracy: 95,
 		basePower: 90,
@@ -5978,7 +5978,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Clever",
 	},
-	"flyingpress": {
+	flyingpress: {
 		num: 560,
 		accuracy: 95,
 		basePower: 100,
@@ -5999,7 +5999,7 @@ let BattleMovedex = {
 		zMovePower: 170,
 		contestType: "Tough",
 	},
-	"focusblast": {
+	focusblast: {
 		num: 411,
 		accuracy: 70,
 		basePower: 120,
@@ -6022,7 +6022,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"focusenergy": {
+	focusenergy: {
 		num: 116,
 		accuracy: true,
 		basePower: 0,
@@ -6055,7 +6055,7 @@ let BattleMovedex = {
 		zMoveBoost: {accuracy: 1},
 		contestType: "Cool",
 	},
-	"focuspunch": {
+	focuspunch: {
 		num: 264,
 		accuracy: 100,
 		basePower: 150,
@@ -6093,7 +6093,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"followme": {
+	followme: {
 		num: 266,
 		accuracy: true,
 		basePower: 0,
@@ -6133,7 +6133,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"forcepalm": {
+	forcepalm: {
 		num: 395,
 		accuracy: 100,
 		basePower: 60,
@@ -6153,7 +6153,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"foresight": {
+	foresight: {
 		num: 193,
 		accuracy: true,
 		basePower: 0,
@@ -6190,7 +6190,7 @@ let BattleMovedex = {
 		zMoveEffect: 'crit2',
 		contestType: "Clever",
 	},
-	"forestscurse": {
+	forestscurse: {
 		num: 571,
 		accuracy: 100,
 		basePower: 0,
@@ -6213,7 +6213,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
 		contestType: "Clever",
 	},
-	"foulplay": {
+	foulplay: {
 		num: 492,
 		accuracy: 100,
 		basePower: 95,
@@ -6232,7 +6232,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"freezedry": {
+	freezedry: {
 		num: 573,
 		accuracy: 100,
 		basePower: 70,
@@ -6256,7 +6256,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"freezeshock": {
+	freezeshock: {
 		num: 553,
 		accuracy: 90,
 		basePower: 140,
@@ -6287,7 +6287,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"freezyfrost": {
+	freezyfrost: {
 		num: 739,
 		accuracy: 90,
 		basePower: 100,
@@ -6312,7 +6312,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Clever",
 	},
-	"frenzyplant": {
+	frenzyplant: {
 		num: 338,
 		accuracy: 90,
 		basePower: 150,
@@ -6332,7 +6332,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"frostbreath": {
+	frostbreath: {
 		num: 524,
 		accuracy: 90,
 		basePower: 60,
@@ -6350,7 +6350,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"frustration": {
+	frustration: {
 		num: 218,
 		accuracy: 100,
 		basePower: 0,
@@ -6374,7 +6374,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cute",
 	},
-	"furyattack": {
+	furyattack: {
 		num: 31,
 		accuracy: 85,
 		basePower: 15,
@@ -6392,7 +6392,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"furycutter": {
+	furycutter: {
 		num: 210,
 		accuracy: 95,
 		basePower: 40,
@@ -6427,7 +6427,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cool",
 	},
-	"furyswipes": {
+	furyswipes: {
 		num: 154,
 		accuracy: 80,
 		basePower: 18,
@@ -6446,7 +6446,7 @@ let BattleMovedex = {
 		gmaxPower: 100,
 		contestType: "Tough",
 	},
-	"fusionbolt": {
+	fusionbolt: {
 		num: 559,
 		accuracy: 100,
 		basePower: 100,
@@ -6470,7 +6470,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"fusionflare": {
+	fusionflare: {
 		num: 558,
 		accuracy: 100,
 		basePower: 100,
@@ -6494,7 +6494,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"futuresight": {
+	futuresight: {
 		num: 248,
 		accuracy: 100,
 		basePower: 120,
@@ -6536,7 +6536,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"gastroacid": {
+	gastroacid: {
 		num: 380,
 		accuracy: 100,
 		basePower: 0,
@@ -6568,7 +6568,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Tough",
 	},
-	"geargrind": {
+	geargrind: {
 		num: 544,
 		accuracy: 85,
 		basePower: 50,
@@ -6589,7 +6589,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Clever",
 	},
-	"gearup": {
+	gearup: {
 		num: 674,
 		accuracy: true,
 		basePower: 0,
@@ -6621,7 +6621,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"genesissupernova": {
+	genesissupernova: {
 		num: 703,
 		accuracy: true,
 		basePower: 185,
@@ -6648,7 +6648,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"geomancy": {
+	geomancy: {
 		num: 601,
 		accuracy: true,
 		basePower: 0,
@@ -6683,7 +6683,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
 		contestType: "Beautiful",
 	},
-	"gigadrain": {
+	gigadrain: {
 		num: 202,
 		accuracy: 100,
 		basePower: 75,
@@ -6702,7 +6702,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Clever",
 	},
-	"gigaimpact": {
+	gigaimpact: {
 		num: 416,
 		accuracy: 90,
 		basePower: 150,
@@ -6722,7 +6722,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"gigavolthavoc": {
+	gigavolthavoc: {
 		num: 646,
 		accuracy: true,
 		basePower: 1,
@@ -6740,7 +6740,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"glaciate": {
+	glaciate: {
 		num: 549,
 		accuracy: 95,
 		basePower: 65,
@@ -6762,7 +6762,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"glare": {
+	glare: {
 		num: 137,
 		accuracy: 100,
 		basePower: 0,
@@ -6782,7 +6782,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Tough",
 	},
-	"glitzyglow": {
+	glitzyglow: {
 		num: 736,
 		accuracy: 95,
 		basePower: 80,
@@ -6804,7 +6804,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"gmaxbefuddle": {
+	gmaxbefuddle: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -6835,7 +6835,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cool",
 	},
-	"gmaxcentiferno": {
+	gmaxcentiferno: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -6860,7 +6860,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"gmaxchistrike": {
+	gmaxchistrike: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -6885,7 +6885,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"gmaxcuddle": {
+	gmaxcuddle: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -6910,7 +6910,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"gmaxdepletion": {
+	gmaxdepletion: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -6943,7 +6943,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	"gmaxfinale": {
+	gmaxfinale: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -6968,7 +6968,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
-	"gmaxfoamburst": {
+	gmaxfoamburst: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -6993,7 +6993,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"gmaxgoldrush": {
+	gmaxgoldrush: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7018,7 +7018,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"gmaxgravitas": {
+	gmaxgravitas: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7038,7 +7038,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"gmaxmalodor": {
+	gmaxmalodor: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7062,7 +7062,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Cool",
 	},
-	"gmaxmeltdown": {
+	gmaxmeltdown: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7087,7 +7087,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"gmaxreplenish": {
+	gmaxreplenish: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7118,7 +7118,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"gmaxresonance": {
+	gmaxresonance: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7139,7 +7139,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Cool",
 	},
-	"gmaxsandblast": {
+	gmaxsandblast: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7164,7 +7164,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Cool",
 	},
-	"gmaxsmite": {
+	gmaxsmite: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7189,7 +7189,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
-	"gmaxsnooze": {
+	gmaxsnooze: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7217,7 +7217,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Cool",
 	},
-	"gmaxsteelsurge": {
+	gmaxsteelsurge: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7256,7 +7256,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"gmaxstonesurge": {
+	gmaxstonesurge: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7279,7 +7279,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"gmaxstunshock": {
+	gmaxstunshock: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7309,7 +7309,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"gmaxsweetness": {
+	gmaxsweetness: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7334,7 +7334,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"gmaxtartness": {
+	gmaxtartness: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7359,7 +7359,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"gmaxterror": {
+	gmaxterror: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7384,7 +7384,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"gmaxvolcalith": {
+	gmaxvolcalith: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7426,7 +7426,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Cool",
 	},
-	"gmaxvoltcrash": {
+	gmaxvoltcrash: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7451,7 +7451,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"gmaxwildfire": {
+	gmaxwildfire: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7493,7 +7493,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"gmaxwindrage": {
+	gmaxwindrage: {
 		num: 1000,
 		accuracy: true,
 		basePower: 10,
@@ -7533,7 +7533,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"grassknot": {
+	grassknot: {
 		num: 447,
 		accuracy: 100,
 		basePower: 0,
@@ -7585,7 +7585,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cute",
 	},
-	"grasspledge": {
+	grasspledge: {
 		num: 520,
 		accuracy: 100,
 		basePower: 80,
@@ -7648,7 +7648,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
-	"grasswhistle": {
+	grasswhistle: {
 		num: 320,
 		accuracy: 55,
 		basePower: 0,
@@ -7667,7 +7667,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"grassyterrain": {
+	grassyterrain: {
 		num: 580,
 		accuracy: true,
 		basePower: 0,
@@ -7728,7 +7728,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Beautiful",
 	},
-	"gravapple": {
+	gravapple: {
 		num: 788,
 		accuracy: 100,
 		basePower: 80,
@@ -7754,7 +7754,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 	},
-	"gravity": {
+	gravity: {
 		num: 356,
 		accuracy: true,
 		basePower: 0,
@@ -7836,7 +7836,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"growl": {
+	growl: {
 		num: 45,
 		accuracy: 100,
 		basePower: 0,
@@ -7857,7 +7857,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cute",
 	},
-	"growth": {
+	growth: {
 		num: 74,
 		accuracy: true,
 		basePower: 0,
@@ -7882,7 +7882,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Beautiful",
 	},
-	"grudge": {
+	grudge: {
 		num: 288,
 		accuracy: true,
 		basePower: 0,
@@ -7922,7 +7922,7 @@ let BattleMovedex = {
 		zMoveEffect: 'redirect',
 		contestType: "Tough",
 	},
-	"guardianofalola": {
+	guardianofalola: {
 		num: 698,
 		accuracy: true,
 		basePower: 0,
@@ -7949,7 +7949,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Tough",
 	},
-	"guardsplit": {
+	guardsplit: {
 		num: 470,
 		accuracy: true,
 		basePower: 0,
@@ -7976,7 +7976,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"guardswap": {
+	guardswap: {
 		num: 385,
 		accuracy: true,
 		basePower: 0,
@@ -8010,7 +8010,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"guillotine": {
+	guillotine: {
 		num: 12,
 		accuracy: 30,
 		basePower: 0,
@@ -8030,7 +8030,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cool",
 	},
-	"gunkshot": {
+	gunkshot: {
 		num: 441,
 		accuracy: 80,
 		basePower: 120,
@@ -8051,7 +8051,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Tough",
 	},
-	"gust": {
+	gust: {
 		num: 16,
 		accuracy: 100,
 		basePower: 40,
@@ -8068,7 +8068,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Clever",
 	},
-	"gyroball": {
+	gyroball: {
 		num: 360,
 		accuracy: 100,
 		basePower: 0,
@@ -8095,7 +8095,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cool",
 	},
-	"hail": {
+	hail: {
 		num: 258,
 		accuracy: true,
 		basePower: 0,
@@ -8114,7 +8114,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Beautiful",
 	},
-	"hammerarm": {
+	hammerarm: {
 		num: 359,
 		accuracy: 90,
 		basePower: 100,
@@ -8137,7 +8137,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"happyhour": {
+	happyhour: {
 		num: 603,
 		accuracy: true,
 		basePower: 0,
@@ -8157,7 +8157,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
 		contestType: "Cute",
 	},
-	"harden": {
+	harden: {
 		num: 106,
 		accuracy: true,
 		basePower: 0,
@@ -8178,7 +8178,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Tough",
 	},
-	"haze": {
+	haze: {
 		num: 114,
 		accuracy: true,
 		basePower: 0,
@@ -8203,7 +8203,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Beautiful",
 	},
-	"headbutt": {
+	headbutt: {
 		num: 29,
 		accuracy: 100,
 		basePower: 70,
@@ -8223,7 +8223,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"headcharge": {
+	headcharge: {
 		num: 543,
 		accuracy: 100,
 		basePower: 120,
@@ -8243,7 +8243,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"headsmash": {
+	headsmash: {
 		num: 457,
 		accuracy: 80,
 		basePower: 150,
@@ -8262,7 +8262,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Tough",
 	},
-	"healbell": {
+	healbell: {
 		num: 215,
 		accuracy: true,
 		basePower: 0,
@@ -8290,7 +8290,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Beautiful",
 	},
-	"healblock": {
+	healblock: {
 		num: 377,
 		accuracy: 100,
 		basePower: 0,
@@ -8345,7 +8345,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 2},
 		contestType: "Clever",
 	},
-	"healingwish": {
+	healingwish: {
 		num: 361,
 		accuracy: true,
 		basePower: 0,
@@ -8381,7 +8381,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
-	"healorder": {
+	healorder: {
 		num: 456,
 		accuracy: true,
 		basePower: 0,
@@ -8402,7 +8402,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"healpulse": {
+	healpulse: {
 		num: 505,
 		accuracy: true,
 		basePower: 0,
@@ -8432,7 +8432,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"heartstamp": {
+	heartstamp: {
 		num: 531,
 		accuracy: 100,
 		basePower: 60,
@@ -8453,7 +8453,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cute",
 	},
-	"heartswap": {
+	heartswap: {
 		num: 391,
 		accuracy: true,
 		basePower: 0,
@@ -8488,7 +8488,7 @@ let BattleMovedex = {
 		zMoveEffect: 'crit2',
 		contestType: "Clever",
 	},
-	"heatcrash": {
+	heatcrash: {
 		num: 535,
 		accuracy: 100,
 		basePower: 0,
@@ -8531,7 +8531,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
-	"heatwave": {
+	heatwave: {
 		num: 257,
 		accuracy: 90,
 		basePower: 95,
@@ -8552,7 +8552,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"heavyslam": {
+	heavyslam: {
 		num: 484,
 		accuracy: 100,
 		basePower: 0,
@@ -8596,7 +8596,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
-	"helpinghand": {
+	helpinghand: {
 		num: 270,
 		accuracy: true,
 		basePower: 0,
@@ -8634,7 +8634,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"hex": {
+	hex: {
 		num: 506,
 		accuracy: 100,
 		basePower: 65,
@@ -8657,7 +8657,7 @@ let BattleMovedex = {
 		zMovePower: 160,
 		contestType: "Clever",
 	},
-	"hiddenpower": {
+	hiddenpower: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8678,7 +8678,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Clever",
 	},
-	"hiddenpowerbug": {
+	hiddenpowerbug: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8696,7 +8696,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Clever",
 	},
-	"hiddenpowerdark": {
+	hiddenpowerdark: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8714,7 +8714,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"hiddenpowerdragon": {
+	hiddenpowerdragon: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8732,7 +8732,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Clever",
 	},
-	"hiddenpowerelectric": {
+	hiddenpowerelectric: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8751,7 +8751,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Clever",
 	},
-	"hiddenpowerfighting": {
+	hiddenpowerfighting: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8770,7 +8770,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Clever",
 	},
-	"hiddenpowerfire": {
+	hiddenpowerfire: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8789,7 +8789,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Clever",
 	},
-	"hiddenpowerflying": {
+	hiddenpowerflying: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8807,7 +8807,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Clever",
 	},
-	"hiddenpowerghost": {
+	hiddenpowerghost: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8825,7 +8825,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
-	"hiddenpowergrass": {
+	hiddenpowergrass: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8844,7 +8844,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Clever",
 	},
-	"hiddenpowerground": {
+	hiddenpowerground: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8862,7 +8862,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Clever",
 	},
-	"hiddenpowerice": {
+	hiddenpowerice: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8881,7 +8881,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Clever",
 	},
-	"hiddenpowerpoison": {
+	hiddenpowerpoison: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8899,7 +8899,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Clever",
 	},
-	"hiddenpowerpsychic": {
+	hiddenpowerpsychic: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8917,7 +8917,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"hiddenpowerrock": {
+	hiddenpowerrock: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8935,7 +8935,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Clever",
 	},
-	"hiddenpowersteel": {
+	hiddenpowersteel: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8953,7 +8953,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Clever",
 	},
-	"hiddenpowerwater": {
+	hiddenpowerwater: {
 		num: 237,
 		accuracy: 100,
 		basePower: 60,
@@ -8971,7 +8971,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Clever",
 	},
-	"highhorsepower": {
+	highhorsepower: {
 		num: 667,
 		accuracy: 95,
 		basePower: 95,
@@ -8988,7 +8988,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	"highjumpkick": {
+	highjumpkick: {
 		num: 136,
 		accuracy: 90,
 		basePower: 130,
@@ -9010,7 +9010,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"holdback": {
+	holdback: {
 		num: 610,
 		accuracy: 100,
 		basePower: 40,
@@ -9028,7 +9028,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"holdhands": {
+	holdhands: {
 		num: 615,
 		accuracy: true,
 		basePower: 0,
@@ -9046,7 +9046,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
 		contestType: "Cute",
 	},
-	"honeclaws": {
+	honeclaws: {
 		num: 468,
 		accuracy: true,
 		basePower: 0,
@@ -9069,7 +9069,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Cute",
 	},
-	"hornattack": {
+	hornattack: {
 		num: 30,
 		accuracy: 100,
 		basePower: 65,
@@ -9085,7 +9085,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"horndrill": {
+	horndrill: {
 		num: 32,
 		accuracy: 30,
 		basePower: 0,
@@ -9105,7 +9105,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cool",
 	},
-	"hornleech": {
+	hornleech: {
 		num: 532,
 		accuracy: 100,
 		basePower: 75,
@@ -9124,7 +9124,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Tough",
 	},
-	"howl": {
+	howl: {
 		num: 336,
 		accuracy: true,
 		basePower: 0,
@@ -9145,7 +9145,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Cool",
 	},
-	"hurricane": {
+	hurricane: {
 		num: 542,
 		accuracy: 70,
 		basePower: 110,
@@ -9178,7 +9178,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Tough",
 	},
-	"hydrocannon": {
+	hydrocannon: {
 		num: 308,
 		accuracy: 90,
 		basePower: 150,
@@ -9198,7 +9198,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"hydropump": {
+	hydropump: {
 		num: 56,
 		accuracy: 80,
 		basePower: 110,
@@ -9215,7 +9215,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"hydrovortex": {
+	hydrovortex: {
 		num: 642,
 		accuracy: true,
 		basePower: 1,
@@ -9233,7 +9233,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"hyperbeam": {
+	hyperbeam: {
 		num: 63,
 		accuracy: 90,
 		basePower: 150,
@@ -9253,7 +9253,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"hyperfang": {
+	hyperfang: {
 		num: 158,
 		accuracy: 90,
 		basePower: 80,
@@ -9274,7 +9274,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"hyperspacefury": {
+	hyperspacefury: {
 		num: 621,
 		accuracy: true,
 		basePower: 100,
@@ -9311,7 +9311,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Tough",
 	},
-	"hyperspacehole": {
+	hyperspacehole: {
 		num: 593,
 		accuracy: true,
 		basePower: 80,
@@ -9330,7 +9330,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"hypervoice": {
+	hypervoice: {
 		num: 304,
 		accuracy: 100,
 		basePower: 90,
@@ -9348,7 +9348,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"hypnosis": {
+	hypnosis: {
 		num: 95,
 		accuracy: 60,
 		basePower: 0,
@@ -9366,7 +9366,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"iceball": {
+	iceball: {
 		num: 301,
 		accuracy: 90,
 		basePower: 30,
@@ -9415,7 +9415,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"icebeam": {
+	icebeam: {
 		num: 58,
 		accuracy: 100,
 		basePower: 90,
@@ -9436,7 +9436,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"iceburn": {
+	iceburn: {
 		num: 554,
 		accuracy: 90,
 		basePower: 140,
@@ -9467,7 +9467,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"icefang": {
+	icefang: {
 		num: 423,
 		accuracy: 95,
 		basePower: 65,
@@ -9493,7 +9493,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Cool",
 	},
-	"icehammer": {
+	icehammer: {
 		num: 665,
 		accuracy: 90,
 		basePower: 100,
@@ -9517,7 +9517,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Tough",
 	},
-	"icepunch": {
+	icepunch: {
 		num: 8,
 		accuracy: 100,
 		basePower: 75,
@@ -9538,7 +9538,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"iceshard": {
+	iceshard: {
 		num: 420,
 		accuracy: 100,
 		basePower: 40,
@@ -9556,7 +9556,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"iciclecrash": {
+	iciclecrash: {
 		num: 556,
 		accuracy: 90,
 		basePower: 85,
@@ -9577,7 +9577,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"iciclespear": {
+	iciclespear: {
 		num: 333,
 		accuracy: 100,
 		basePower: 25,
@@ -9598,7 +9598,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Beautiful",
 	},
-	"icywind": {
+	icywind: {
 		num: 196,
 		accuracy: 95,
 		basePower: 55,
@@ -9620,7 +9620,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"imprison": {
+	imprison: {
 		num: 286,
 		accuracy: true,
 		basePower: 0,
@@ -9660,7 +9660,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 2},
 		contestType: "Clever",
 	},
-	"incinerate": {
+	incinerate: {
 		num: 510,
 		accuracy: 100,
 		basePower: 60,
@@ -9683,7 +9683,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Tough",
 	},
-	"inferno": {
+	inferno: {
 		num: 517,
 		accuracy: 50,
 		basePower: 100,
@@ -9703,7 +9703,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"infernooverdrive": {
+	infernooverdrive: {
 		num: 640,
 		accuracy: true,
 		basePower: 1,
@@ -9721,7 +9721,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"infestation": {
+	infestation: {
 		num: 611,
 		accuracy: 100,
 		basePower: 20,
@@ -9739,7 +9739,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cute",
 	},
-	"ingrain": {
+	ingrain: {
 		num: 275,
 		accuracy: true,
 		basePower: 0,
@@ -9775,7 +9775,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"instruct": {
+	instruct: {
 		num: 689,
 		accuracy: true,
 		basePower: 0,
@@ -9811,7 +9811,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"iondeluge": {
+	iondeluge: {
 		num: 569,
 		accuracy: true,
 		basePower: 0,
@@ -9844,7 +9844,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Beautiful",
 	},
-	"irondefense": {
+	irondefense: {
 		num: 334,
 		accuracy: true,
 		basePower: 0,
@@ -9865,7 +9865,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Tough",
 	},
-	"ironhead": {
+	ironhead: {
 		num: 442,
 		accuracy: 100,
 		basePower: 80,
@@ -9886,7 +9886,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Tough",
 	},
-	"irontail": {
+	irontail: {
 		num: 231,
 		accuracy: 75,
 		basePower: 100,
@@ -9908,7 +9908,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"jawlock": {
+	jawlock: {
 		num: 746,
 		accuracy: 100,
 		basePower: 80,
@@ -9928,7 +9928,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 	},
-	"judgment": {
+	judgment: {
 		num: 449,
 		accuracy: 100,
 		basePower: 100,
@@ -9954,7 +9954,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"jumpkick": {
+	jumpkick: {
 		num: 26,
 		accuracy: 95,
 		basePower: 100,
@@ -9977,7 +9977,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"karatechop": {
+	karatechop: {
 		num: 2,
 		accuracy: 100,
 		basePower: 50,
@@ -9996,7 +9996,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"kinesis": {
+	kinesis: {
 		num: 134,
 		accuracy: 80,
 		basePower: 0,
@@ -10018,7 +10018,7 @@ let BattleMovedex = {
 		zMoveBoost: {evasion: 1},
 		contestType: "Clever",
 	},
-	"kingsshield": {
+	kingsshield: {
 		num: 588,
 		accuracy: true,
 		basePower: 0,
@@ -10079,7 +10079,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cool",
 	},
-	"knockoff": {
+	knockoff: {
 		num: 282,
 		accuracy: 100,
 		basePower: 65,
@@ -10112,7 +10112,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"landswrath": {
+	landswrath: {
 		num: 616,
 		accuracy: 100,
 		basePower: 90,
@@ -10131,7 +10131,7 @@ let BattleMovedex = {
 		zMovePower: 185,
 		contestType: "Beautiful",
 	},
-	"laserfocus": {
+	laserfocus: {
 		num: 673,
 		accuracy: true,
 		basePower: 0,
@@ -10170,7 +10170,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Cool",
 	},
-	"lastresort": {
+	lastresort: {
 		num: 387,
 		accuracy: 100,
 		basePower: 140,
@@ -10199,7 +10199,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"lavaplume": {
+	lavaplume: {
 		num: 436,
 		accuracy: 100,
 		basePower: 80,
@@ -10220,7 +10220,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Tough",
 	},
-	"leafage": {
+	leafage: {
 		num: 670,
 		accuracy: 100,
 		basePower: 40,
@@ -10236,7 +10236,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Tough",
 	},
-	"leafblade": {
+	leafblade: {
 		num: 348,
 		accuracy: 100,
 		basePower: 90,
@@ -10255,7 +10255,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"leafstorm": {
+	leafstorm: {
 		num: 437,
 		accuracy: 90,
 		basePower: 130,
@@ -10278,7 +10278,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
-	"leaftornado": {
+	leaftornado: {
 		num: 536,
 		accuracy: 90,
 		basePower: 65,
@@ -10300,7 +10300,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"leechlife": {
+	leechlife: {
 		num: 141,
 		accuracy: 100,
 		basePower: 80,
@@ -10319,7 +10319,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Clever",
 	},
-	"leechseed": {
+	leechseed: {
 		num: 73,
 		accuracy: 90,
 		basePower: 0,
@@ -10359,7 +10359,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"leer": {
+	leer: {
 		num: 43,
 		accuracy: 100,
 		basePower: 0,
@@ -10380,7 +10380,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Cool",
 	},
-	"letssnuggleforever": {
+	letssnuggleforever: {
 		num: 726,
 		accuracy: true,
 		basePower: 190,
@@ -10399,7 +10399,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
-	"lick": {
+	lick: {
 		num: 122,
 		accuracy: 100,
 		basePower: 30,
@@ -10419,7 +10419,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cute",
 	},
-	"lifedew": {
+	lifedew: {
 		num: 791,
 		accuracy: true,
 		basePower: 0,
@@ -10437,7 +10437,7 @@ let BattleMovedex = {
 		target: "allies",
 		type: "Water",
 	},
-	"lightofruin": {
+	lightofruin: {
 		num: 617,
 		accuracy: 90,
 		basePower: 140,
@@ -10457,7 +10457,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
-	"lightscreen": {
+	lightscreen: {
 		num: 113,
 		accuracy: true,
 		basePower: 0,
@@ -10503,7 +10503,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Beautiful",
 	},
-	"lightthatburnsthesky": {
+	lightthatburnsthesky: {
 		num: 723,
 		accuracy: true,
 		basePower: 200,
@@ -10526,7 +10526,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"liquidation": {
+	liquidation: {
 		num: 710,
 		accuracy: 100,
 		basePower: 85,
@@ -10549,7 +10549,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"lockon": {
+	lockon: {
 		num: 199,
 		accuracy: true,
 		basePower: 0,
@@ -10585,7 +10585,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"lovelykiss": {
+	lovelykiss: {
 		num: 142,
 		accuracy: 75,
 		basePower: 0,
@@ -10605,7 +10605,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Beautiful",
 	},
-	"lowkick": {
+	lowkick: {
 		num: 67,
 		accuracy: 100,
 		basePower: 0,
@@ -10650,7 +10650,7 @@ let BattleMovedex = {
 		zMovePower: 160,
 		contestType: "Tough",
 	},
-	"lowsweep": {
+	lowsweep: {
 		num: 490,
 		accuracy: 100,
 		basePower: 65,
@@ -10672,7 +10672,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Clever",
 	},
-	"luckychant": {
+	luckychant: {
 		num: 381,
 		accuracy: true,
 		basePower: 0,
@@ -10704,7 +10704,7 @@ let BattleMovedex = {
 		zMoveBoost: {evasion: 1},
 		contestType: "Cute",
 	},
-	"lunardance": {
+	lunardance: {
 		num: 461,
 		accuracy: true,
 		basePower: 0,
@@ -10763,7 +10763,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
-	"lunge": {
+	lunge: {
 		num: 679,
 		accuracy: 100,
 		basePower: 80,
@@ -10786,7 +10786,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cute",
 	},
-	"lusterpurge": {
+	lusterpurge: {
 		num: 295,
 		accuracy: 100,
 		basePower: 70,
@@ -10809,7 +10809,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"machpunch": {
+	machpunch: {
 		num: 183,
 		accuracy: 100,
 		basePower: 40,
@@ -10827,7 +10827,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"magicalleaf": {
+	magicalleaf: {
 		num: 345,
 		accuracy: true,
 		basePower: 60,
@@ -10843,7 +10843,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
-	"magiccoat": {
+	magiccoat: {
 		num: 277,
 		accuracy: true,
 		basePower: 0,
@@ -10893,7 +10893,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 2},
 		contestType: "Beautiful",
 	},
-	"magicpowder": {
+	magicpowder: {
 		num: 750,
 		accuracy: 100,
 		basePower: 0,
@@ -10913,7 +10913,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Psychic",
 	},
-	"magicroom": {
+	magicroom: {
 		num: 478,
 		accuracy: true,
 		basePower: 0,
@@ -10953,7 +10953,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"magikarpsrevenge": {
+	magikarpsrevenge: {
 		num: 0,
 		accuracy: true,
 		basePower: 120,
@@ -10995,7 +10995,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cute",
 	},
-	"magmastorm": {
+	magmastorm: {
 		num: 463,
 		accuracy: 75,
 		basePower: 100,
@@ -11015,7 +11015,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Tough",
 	},
-	"magnetbomb": {
+	magnetbomb: {
 		num: 443,
 		accuracy: true,
 		basePower: 60,
@@ -11032,7 +11032,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"magneticflux": {
+	magneticflux: {
 		num: 602,
 		accuracy: true,
 		basePower: 0,
@@ -11064,7 +11064,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"magnetrise": {
+	magnetrise: {
 		num: 393,
 		accuracy: true,
 		basePower: 0,
@@ -11097,7 +11097,7 @@ let BattleMovedex = {
 		zMoveBoost: {evasion: 1},
 		contestType: "Clever",
 	},
-	"magnitude": {
+	magnitude: {
 		num: 222,
 		accuracy: 100,
 		basePower: 0,
@@ -11145,7 +11145,7 @@ let BattleMovedex = {
 		gmaxPower: 140,
 		contestType: "Tough",
 	},
-	"maliciousmoonsault": {
+	maliciousmoonsault: {
 		num: 696,
 		accuracy: true,
 		basePower: 180,
@@ -11165,7 +11165,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Cool",
 	},
-	"matblock": {
+	matblock: {
 		num: 561,
 		accuracy: true,
 		basePower: 0,
@@ -11214,7 +11214,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cool",
 	},
-	"maxairstream": {
+	maxairstream: {
 		num: 766,
 		accuracy: true,
 		basePower: 10,
@@ -11239,7 +11239,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"maxdarkness": {
+	maxdarkness: {
 		num: 772,
 		accuracy: true,
 		basePower: 10,
@@ -11264,7 +11264,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Cool",
 	},
-	"maxflare": {
+	maxflare: {
 		num: 757,
 		accuracy: true,
 		basePower: 100,
@@ -11288,7 +11288,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"maxflutterby": {
+	maxflutterby: {
 		num: 758,
 		accuracy: true,
 		basePower: 10,
@@ -11313,7 +11313,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cool",
 	},
-	"maxgeyser": {
+	maxgeyser: {
 		num: 765,
 		accuracy: true,
 		basePower: 10,
@@ -11336,7 +11336,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"maxguard": {
+	maxguard: {
 		num: 743,
 		accuracy: true,
 		basePower: 0,
@@ -11393,7 +11393,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"maxhailstorm": {
+	maxhailstorm: {
 		num: 763,
 		accuracy: true,
 		basePower: 10,
@@ -11416,7 +11416,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Cool",
 	},
-	"maxknuckle": {
+	maxknuckle: {
 		num: 761,
 		accuracy: true,
 		basePower: 10,
@@ -11441,7 +11441,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"maxlightning": {
+	maxlightning: {
 		num: 759,
 		accuracy: true,
 		basePower: 10,
@@ -11464,7 +11464,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"maxmindstorm": {
+	maxmindstorm: {
 		num: 769,
 		accuracy: true,
 		basePower: 10,
@@ -11487,7 +11487,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"maxooze": {
+	maxooze: {
 		num: 764,
 		accuracy: true,
 		basePower: 10,
@@ -11512,7 +11512,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Cool",
 	},
-	"maxovergrowth": {
+	maxovergrowth: {
 		num: 773,
 		accuracy: true,
 		basePower: 10,
@@ -11535,7 +11535,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"maxphantasm": {
+	maxphantasm: {
 		num: 762,
 		accuracy: true,
 		basePower: 10,
@@ -11560,7 +11560,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"maxquake": {
+	maxquake: {
 		num: 771,
 		accuracy: true,
 		basePower: 10,
@@ -11585,7 +11585,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Cool",
 	},
-	"maxrockfall": {
+	maxrockfall: {
 		num: 770,
 		accuracy: true,
 		basePower: 10,
@@ -11608,7 +11608,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Cool",
 	},
-	"maxstarfall": {
+	maxstarfall: {
 		num: 767,
 		accuracy: true,
 		basePower: 10,
@@ -11631,7 +11631,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
-	"maxsteelspike": {
+	maxsteelspike: {
 		num: 774,
 		accuracy: true,
 		basePower: 10,
@@ -11656,7 +11656,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"maxstrike": {
+	maxstrike: {
 		num: 760,
 		accuracy: true,
 		basePower: 10,
@@ -11681,7 +11681,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"maxwyrmwind": {
+	maxwyrmwind: {
 		num: 768,
 		accuracy: true,
 		basePower: 10,
@@ -11706,7 +11706,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	"meanlook": {
+	meanlook: {
 		num: 212,
 		accuracy: true,
 		basePower: 0,
@@ -11727,7 +11727,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Beautiful",
 	},
-	"meditate": {
+	meditate: {
 		num: 96,
 		accuracy: true,
 		basePower: 0,
@@ -11749,7 +11749,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Beautiful",
 	},
-	"mefirst": {
+	mefirst: {
 		num: 382,
 		accuracy: true,
 		basePower: 0,
@@ -11790,7 +11790,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 2},
 		contestType: "Clever",
 	},
-	"megadrain": {
+	megadrain: {
 		num: 72,
 		accuracy: 100,
 		basePower: 40,
@@ -11809,7 +11809,7 @@ let BattleMovedex = {
 		zMovePower: 120,
 		contestType: "Clever",
 	},
-	"megahorn": {
+	megahorn: {
 		num: 224,
 		accuracy: 85,
 		basePower: 120,
@@ -11826,7 +11826,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cool",
 	},
-	"megakick": {
+	megakick: {
 		num: 25,
 		accuracy: 75,
 		basePower: 120,
@@ -11842,7 +11842,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"megapunch": {
+	megapunch: {
 		num: 5,
 		accuracy: 85,
 		basePower: 80,
@@ -11858,7 +11858,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"memento": {
+	memento: {
 		num: 262,
 		accuracy: 100,
 		basePower: 0,
@@ -11882,7 +11882,7 @@ let BattleMovedex = {
 		zMoveEffect: 'healreplacement',
 		contestType: "Tough",
 	},
-	"menacingmoonrazemaelstrom": {
+	menacingmoonrazemaelstrom: {
 		num: 725,
 		accuracy: true,
 		basePower: 200,
@@ -11903,7 +11903,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"metalburst": {
+	metalburst: {
 		num: 368,
 		accuracy: 100,
 		basePower: 0,
@@ -11950,7 +11950,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"metalclaw": {
+	metalclaw: {
 		num: 232,
 		accuracy: 95,
 		basePower: 50,
@@ -11974,7 +11974,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"metalsound": {
+	metalsound: {
 		num: 319,
 		accuracy: 85,
 		basePower: 0,
@@ -11995,7 +11995,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"meteorassault": {
+	meteorassault: {
 		num: 794,
 		accuracy: 100,
 		basePower: 150,
@@ -12014,7 +12014,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fighting",
 	},
-	"meteormash": {
+	meteormash: {
 		num: 309,
 		accuracy: 90,
 		basePower: 90,
@@ -12039,7 +12039,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"metronome": {
+	metronome: {
 		num: 118,
 		accuracy: true,
 		basePower: 0,
@@ -12078,7 +12078,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"milkdrink": {
+	milkdrink: {
 		num: 208,
 		accuracy: true,
 		basePower: 0,
@@ -12099,7 +12099,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"mimic": {
+	mimic: {
 		num: 102,
 		accuracy: true,
 		basePower: 0,
@@ -12139,7 +12139,7 @@ let BattleMovedex = {
 		zMoveBoost: {accuracy: 1},
 		contestType: "Cute",
 	},
-	"mindblown": {
+	mindblown: {
 		num: 720,
 		accuracy: 100,
 		basePower: 150,
@@ -12164,7 +12164,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"mindreader": {
+	mindreader: {
 		num: 170,
 		accuracy: true,
 		basePower: 0,
@@ -12189,7 +12189,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"minimize": {
+	minimize: {
 		num: 107,
 		accuracy: true,
 		basePower: 0,
@@ -12225,7 +12225,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"miracleeye": {
+	miracleeye: {
 		num: 357,
 		accuracy: true,
 		basePower: 0,
@@ -12262,7 +12262,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"mirrorcoat": {
+	mirrorcoat: {
 		num: 243,
 		accuracy: 100,
 		basePower: 0,
@@ -12309,7 +12309,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
-	"mirrormove": {
+	mirrormove: {
 		num: 119,
 		accuracy: true,
 		basePower: 0,
@@ -12336,7 +12336,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 2},
 		contestType: "Clever",
 	},
-	"mirrorshot": {
+	mirrorshot: {
 		num: 429,
 		accuracy: 85,
 		basePower: 65,
@@ -12359,7 +12359,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
-	"mist": {
+	mist: {
 		num: 54,
 		accuracy: true,
 		basePower: 0,
@@ -12406,7 +12406,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Beautiful",
 	},
-	"mistball": {
+	mistball: {
 		num: 296,
 		accuracy: 100,
 		basePower: 70,
@@ -12429,7 +12429,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"mistyterrain": {
+	mistyterrain: {
 		num: 581,
 		accuracy: true,
 		basePower: 0,
@@ -12489,7 +12489,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Beautiful",
 	},
-	"moonblast": {
+	moonblast: {
 		num: 585,
 		accuracy: 100,
 		basePower: 95,
@@ -12512,7 +12512,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Beautiful",
 	},
-	"moongeistbeam": {
+	moongeistbeam: {
 		num: 714,
 		accuracy: 100,
 		basePower: 100,
@@ -12531,7 +12531,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"moonlight": {
+	moonlight: {
 		num: 236,
 		accuracy: true,
 		basePower: 0,
@@ -12566,7 +12566,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"morningsun": {
+	morningsun: {
 		num: 234,
 		accuracy: true,
 		basePower: 0,
@@ -12601,7 +12601,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"mudbomb": {
+	mudbomb: {
 		num: 426,
 		accuracy: 85,
 		basePower: 65,
@@ -12624,7 +12624,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Cute",
 	},
-	"mudshot": {
+	mudshot: {
 		num: 341,
 		accuracy: 95,
 		basePower: 55,
@@ -12646,7 +12646,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	"mudslap": {
+	mudslap: {
 		num: 189,
 		accuracy: 100,
 		basePower: 20,
@@ -12668,7 +12668,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Cute",
 	},
-	"mudsport": {
+	mudsport: {
 		num: 300,
 		accuracy: true,
 		basePower: 0,
@@ -12705,7 +12705,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Cute",
 	},
-	"muddywater": {
+	muddywater: {
 		num: 330,
 		accuracy: 85,
 		basePower: 90,
@@ -12727,7 +12727,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Tough",
 	},
-	"multiattack": {
+	multiattack: {
 		num: 718,
 		accuracy: 100,
 		basePower: 120,
@@ -12750,7 +12750,7 @@ let BattleMovedex = {
 		zMovePower: 185,
 		contestType: "Tough",
 	},
-	"mysticalfire": {
+	mysticalfire: {
 		num: 595,
 		accuracy: 100,
 		basePower: 75,
@@ -12772,7 +12772,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"nastyplot": {
+	nastyplot: {
 		num: 417,
 		accuracy: true,
 		basePower: 0,
@@ -12794,7 +12794,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"naturalgift": {
+	naturalgift: {
 		num: 363,
 		accuracy: 100,
 		basePower: 0,
@@ -12830,7 +12830,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Clever",
 	},
-	"naturepower": {
+	naturepower: {
 		num: 267,
 		accuracy: true,
 		basePower: 0,
@@ -12862,7 +12862,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"naturesmadness": {
+	naturesmadness: {
 		num: 717,
 		accuracy: 90,
 		basePower: 0,
@@ -12883,7 +12883,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Tough",
 	},
-	"needlearm": {
+	needlearm: {
 		num: 302,
 		accuracy: 100,
 		basePower: 60,
@@ -12904,7 +12904,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Clever",
 	},
-	"neverendingnightmare": {
+	neverendingnightmare: {
 		num: 636,
 		accuracy: true,
 		basePower: 1,
@@ -12922,7 +12922,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"nightdaze": {
+	nightdaze: {
 		num: 539,
 		accuracy: 95,
 		basePower: 85,
@@ -12944,7 +12944,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Cool",
 	},
-	"nightmare": {
+	nightmare: {
 		num: 171,
 		accuracy: 100,
 		basePower: 0,
@@ -12977,7 +12977,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"nightshade": {
+	nightshade: {
 		num: 101,
 		accuracy: 100,
 		basePower: 0,
@@ -12996,7 +12996,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
-	"nightslash": {
+	nightslash: {
 		num: 400,
 		accuracy: 100,
 		basePower: 70,
@@ -13015,7 +13015,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Cool",
 	},
-	"nobleroar": {
+	nobleroar: {
 		num: 568,
 		accuracy: 100,
 		basePower: 0,
@@ -13037,7 +13037,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Tough",
 	},
-	"noretreat": {
+	noretreat: {
 		num: 748,
 		accuracy: true,
 		basePower: 0,
@@ -13076,7 +13076,7 @@ let BattleMovedex = {
 		target: "self",
 		type: "Fighting",
 	},
-	"nuzzle": {
+	nuzzle: {
 		num: 609,
 		accuracy: 100,
 		basePower: 20,
@@ -13097,7 +13097,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cute",
 	},
-	"oblivionwing": {
+	oblivionwing: {
 		num: 613,
 		accuracy: 100,
 		basePower: 80,
@@ -13117,7 +13117,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"obstruct": {
+	obstruct: {
 		num: 792,
 		accuracy: true,
 		basePower: 0,
@@ -13176,7 +13176,7 @@ let BattleMovedex = {
 		target: "self",
 		type: "Dark",
 	},
-	"oceanicoperetta": {
+	oceanicoperetta: {
 		num: 697,
 		accuracy: true,
 		basePower: 195,
@@ -13195,7 +13195,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"octazooka": {
+	octazooka: {
 		num: 190,
 		accuracy: 85,
 		basePower: 65,
@@ -13217,7 +13217,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Tough",
 	},
-	"octolock": {
+	octolock: {
 		num: 753,
 		accuracy: 100,
 		basePower: 0,
@@ -13255,7 +13255,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fighting",
 	},
-	"odorsleuth": {
+	odorsleuth: {
 		num: 316,
 		accuracy: true,
 		basePower: 0,
@@ -13278,7 +13278,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Clever",
 	},
-	"ominouswind": {
+	ominouswind: {
 		num: 466,
 		accuracy: 100,
 		basePower: 60,
@@ -13307,7 +13307,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Beautiful",
 	},
-	"originpulse": {
+	originpulse: {
 		num: 618,
 		accuracy: 85,
 		basePower: 110,
@@ -13325,7 +13325,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"outrage": {
+	outrage: {
 		num: 200,
 		accuracy: 100,
 		basePower: 120,
@@ -13351,7 +13351,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	"overdrive": {
+	overdrive: {
 		num: 786,
 		accuracy: 100,
 		basePower: 80,
@@ -13368,7 +13368,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		type: "Electric",
 	},
-	"overheat": {
+	overheat: {
 		num: 315,
 		accuracy: 90,
 		basePower: 130,
@@ -13391,7 +13391,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"painsplit": {
+	painsplit: {
 		num: 220,
 		accuracy: true,
 		basePower: 0,
@@ -13419,7 +13419,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"paleowave": {
+	paleowave: {
 		num: 0,
 		accuracy: 100,
 		basePower: 85,
@@ -13443,7 +13443,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Beautiful",
 	},
-	"paraboliccharge": {
+	paraboliccharge: {
 		num: 570,
 		accuracy: 100,
 		basePower: 65,
@@ -13461,7 +13461,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Clever",
 	},
-	"partingshot": {
+	partingshot: {
 		num: 575,
 		accuracy: 100,
 		basePower: 0,
@@ -13487,7 +13487,7 @@ let BattleMovedex = {
 		zMoveEffect: 'healreplacement',
 		contestType: "Cool",
 	},
-	"payback": {
+	payback: {
 		num: 371,
 		accuracy: 100,
 		basePower: 50,
@@ -13512,7 +13512,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Tough",
 	},
-	"payday": {
+	payday: {
 		num: 6,
 		accuracy: 100,
 		basePower: 40,
@@ -13532,7 +13532,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Clever",
 	},
-	"peck": {
+	peck: {
 		num: 64,
 		accuracy: 100,
 		basePower: 35,
@@ -13548,7 +13548,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"perishsong": {
+	perishsong: {
 		num: 195,
 		accuracy: true,
 		basePower: 0,
@@ -13598,7 +13598,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"petalblizzard": {
+	petalblizzard: {
 		num: 572,
 		accuracy: 100,
 		basePower: 90,
@@ -13616,7 +13616,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
-	"petaldance": {
+	petaldance: {
 		num: 80,
 		accuracy: 100,
 		basePower: 120,
@@ -13641,7 +13641,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
-	"phantomforce": {
+	phantomforce: {
 		num: 566,
 		accuracy: 100,
 		basePower: 90,
@@ -13674,7 +13674,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"photongeyser": {
+	photongeyser: {
 		num: 722,
 		accuracy: 100,
 		basePower: 100,
@@ -13696,7 +13696,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"pikapapow": {
+	pikapapow: {
 		num: 732,
 		accuracy: true,
 		basePower: 0,
@@ -13718,7 +13718,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cute",
 	},
-	"pinmissile": {
+	pinmissile: {
 		num: 42,
 		accuracy: 95,
 		basePower: 25,
@@ -13738,7 +13738,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cool",
 	},
-	"plasmafists": {
+	plasmafists: {
 		num: 721,
 		accuracy: 100,
 		basePower: 100,
@@ -13757,7 +13757,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"playnice": {
+	playnice: {
 		num: 589,
 		accuracy: true,
 		basePower: 0,
@@ -13778,7 +13778,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cute",
 	},
-	"playrough": {
+	playrough: {
 		num: 583,
 		accuracy: 90,
 		basePower: 90,
@@ -13801,7 +13801,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Cute",
 	},
-	"pluck": {
+	pluck: {
 		num: 365,
 		accuracy: 100,
 		basePower: 60,
@@ -13829,7 +13829,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cute",
 	},
-	"poisonfang": {
+	poisonfang: {
 		num: 305,
 		accuracy: 100,
 		basePower: 50,
@@ -13849,7 +13849,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Clever",
 	},
-	"poisongas": {
+	poisongas: {
 		num: 139,
 		accuracy: 90,
 		basePower: 0,
@@ -13868,7 +13868,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"poisonjab": {
+	poisonjab: {
 		num: 398,
 		accuracy: 100,
 		basePower: 80,
@@ -13889,7 +13889,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Tough",
 	},
-	"poisonpowder": {
+	poisonpowder: {
 		num: 77,
 		accuracy: 75,
 		basePower: 0,
@@ -13908,7 +13908,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"poisonsting": {
+	poisonsting: {
 		num: 40,
 		accuracy: 100,
 		basePower: 15,
@@ -13928,7 +13928,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Clever",
 	},
-	"poisontail": {
+	poisontail: {
 		num: 342,
 		accuracy: 100,
 		basePower: 50,
@@ -13949,7 +13949,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Clever",
 	},
-	"pollenpuff": {
+	pollenpuff: {
 		num: 676,
 		accuracy: 100,
 		basePower: 90,
@@ -13976,7 +13976,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cute",
 	},
-	"pound": {
+	pound: {
 		num: 1,
 		accuracy: 100,
 		basePower: 40,
@@ -13992,7 +13992,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"powder": {
+	powder: {
 		num: 600,
 		accuracy: 100,
 		basePower: 0,
@@ -14026,7 +14026,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 2},
 		contestType: "Clever",
 	},
-	"powdersnow": {
+	powdersnow: {
 		num: 181,
 		accuracy: 100,
 		basePower: 40,
@@ -14046,7 +14046,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"powergem": {
+	powergem: {
 		num: 408,
 		accuracy: 100,
 		basePower: 80,
@@ -14063,7 +14063,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Beautiful",
 	},
-	"powersplit": {
+	powersplit: {
 		num: 471,
 		accuracy: true,
 		basePower: 0,
@@ -14090,7 +14090,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"powerswap": {
+	powerswap: {
 		num: 384,
 		accuracy: true,
 		basePower: 0,
@@ -14124,7 +14124,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"powertrick": {
+	powertrick: {
 		num: 379,
 		accuracy: true,
 		basePower: 0,
@@ -14168,7 +14168,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Clever",
 	},
-	"powertrip": {
+	powertrip: {
 		num: 681,
 		accuracy: 100,
 		basePower: 20,
@@ -14190,7 +14190,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Clever",
 	},
-	"poweruppunch": {
+	poweruppunch: {
 		num: 612,
 		accuracy: 100,
 		basePower: 40,
@@ -14215,7 +14215,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"powerwhip": {
+	powerwhip: {
 		num: 438,
 		accuracy: 85,
 		basePower: 120,
@@ -14232,7 +14232,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Tough",
 	},
-	"precipiceblades": {
+	precipiceblades: {
 		num: 619,
 		accuracy: 85,
 		basePower: 120,
@@ -14250,7 +14250,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Cool",
 	},
-	"present": {
+	present: {
 		num: 217,
 		accuracy: 90,
 		basePower: 0,
@@ -14279,7 +14279,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"prismaticlaser": {
+	prismaticlaser: {
 		num: 711,
 		accuracy: 100,
 		basePower: 160,
@@ -14299,7 +14299,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"protect": {
+	protect: {
 		num: 182,
 		accuracy: true,
 		basePower: 0,
@@ -14352,7 +14352,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"psybeam": {
+	psybeam: {
 		num: 60,
 		accuracy: 100,
 		basePower: 65,
@@ -14372,7 +14372,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
-	"psychup": {
+	psychup: {
 		num: 244,
 		accuracy: true,
 		basePower: 0,
@@ -14405,7 +14405,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Clever",
 	},
-	"psychic": {
+	psychic: {
 		num: 94,
 		accuracy: 100,
 		basePower: 90,
@@ -14428,7 +14428,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"psychicfangs": {
+	psychicfangs: {
 		num: 706,
 		accuracy: 100,
 		basePower: 85,
@@ -14454,7 +14454,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"psychicterrain": {
+	psychicterrain: {
 		num: 678,
 		accuracy: true,
 		basePower: 0,
@@ -14516,7 +14516,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"psychoboost": {
+	psychoboost: {
 		num: 354,
 		accuracy: 90,
 		basePower: 140,
@@ -14540,7 +14540,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"psychocut": {
+	psychocut: {
 		num: 427,
 		accuracy: 100,
 		basePower: 70,
@@ -14559,7 +14559,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"psychoshift": {
+	psychoshift: {
 		num: 375,
 		accuracy: 100,
 		basePower: 0,
@@ -14586,7 +14586,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 2},
 		contestType: "Clever",
 	},
-	"psyshock": {
+	psyshock: {
 		num: 473,
 		accuracy: 100,
 		basePower: 80,
@@ -14605,7 +14605,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Beautiful",
 	},
-	"psystrike": {
+	psystrike: {
 		num: 540,
 		accuracy: 100,
 		basePower: 100,
@@ -14624,7 +14624,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"psywave": {
+	psywave: {
 		num: 149,
 		accuracy: 100,
 		basePower: 0,
@@ -14645,7 +14645,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"pulverizingpancake": {
+	pulverizingpancake: {
 		num: 701,
 		accuracy: true,
 		basePower: 210,
@@ -14664,7 +14664,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"punishment": {
+	punishment: {
 		num: 386,
 		accuracy: 100,
 		basePower: 0,
@@ -14689,7 +14689,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cool",
 	},
-	"purify": {
+	purify: {
 		num: 685,
 		accuracy: true,
 		basePower: 0,
@@ -14711,7 +14711,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
 		contestType: "Beautiful",
 	},
-	"pursuit": {
+	pursuit: {
 		num: 228,
 		accuracy: 100,
 		basePower: 40,
@@ -14782,7 +14782,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"pyroball": {
+	pyroball: {
 		num: 780,
 		accuracy: 90,
 		basePower: 120,
@@ -14802,7 +14802,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
-	"quash": {
+	quash: {
 		num: 511,
 		accuracy: 100,
 		basePower: 0,
@@ -14828,7 +14828,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"quickattack": {
+	quickattack: {
 		num: 98,
 		accuracy: 100,
 		basePower: 40,
@@ -14846,7 +14846,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"quickguard": {
+	quickguard: {
 		num: 501,
 		accuracy: true,
 		basePower: 0,
@@ -14896,7 +14896,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cool",
 	},
-	"quiverdance": {
+	quiverdance: {
 		num: 483,
 		accuracy: true,
 		basePower: 0,
@@ -14920,7 +14920,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"rage": {
+	rage: {
 		num: 99,
 		accuracy: 100,
 		basePower: 20,
@@ -14956,7 +14956,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"ragepowder": {
+	ragepowder: {
 		num: 476,
 		accuracy: true,
 		basePower: 0,
@@ -14992,7 +14992,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"raindance": {
+	raindance: {
 		num: 240,
 		accuracy: true,
 		basePower: 0,
@@ -15011,7 +15011,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Beautiful",
 	},
-	"rapidspin": {
+	rapidspin: {
 		num: 229,
 		accuracy: 100,
 		basePower: 50,
@@ -15064,7 +15064,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"razorleaf": {
+	razorleaf: {
 		num: 75,
 		accuracy: 95,
 		basePower: 55,
@@ -15082,7 +15082,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"razorshell": {
+	razorshell: {
 		num: 534,
 		accuracy: 95,
 		basePower: 75,
@@ -15105,7 +15105,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"razorwind": {
+	razorwind: {
 		num: 13,
 		accuracy: 100,
 		basePower: 80,
@@ -15135,7 +15135,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"recover": {
+	recover: {
 		num: 105,
 		accuracy: true,
 		basePower: 0,
@@ -15155,7 +15155,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"recycle": {
+	recycle: {
 		num: 278,
 		accuracy: true,
 		basePower: 0,
@@ -15180,7 +15180,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 2},
 		contestType: "Clever",
 	},
-	"reflect": {
+	reflect: {
 		num: 115,
 		accuracy: true,
 		basePower: 0,
@@ -15225,7 +15225,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"reflecttype": {
+	reflecttype: {
 		num: 513,
 		accuracy: true,
 		basePower: 0,
@@ -15258,7 +15258,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"refresh": {
+	refresh: {
 		num: 287,
 		accuracy: true,
 		basePower: 0,
@@ -15282,7 +15282,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Cute",
 	},
-	"relicsong": {
+	relicsong: {
 		num: 547,
 		accuracy: 100,
 		basePower: 75,
@@ -15313,7 +15313,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"rest": {
+	rest: {
 		num: 156,
 		accuracy: true,
 		basePower: 0,
@@ -15348,7 +15348,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"retaliate": {
+	retaliate: {
 		num: 514,
 		accuracy: 100,
 		basePower: 70,
@@ -15371,7 +15371,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"return": {
+	return: {
 		num: 216,
 		accuracy: 100,
 		basePower: 0,
@@ -15395,7 +15395,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cute",
 	},
-	"revelationdance": {
+	revelationdance: {
 		num: 686,
 		accuracy: 100,
 		basePower: 90,
@@ -15419,7 +15419,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"revenge": {
+	revenge: {
 		num: 279,
 		accuracy: 100,
 		basePower: 60,
@@ -15446,7 +15446,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"reversal": {
+	reversal: {
 		num: 179,
 		accuracy: 100,
 		basePower: 0,
@@ -15483,7 +15483,7 @@ let BattleMovedex = {
 		zMovePower: 160,
 		contestType: "Cool",
 	},
-	"roar": {
+	roar: {
 		num: 46,
 		accuracy: true,
 		basePower: 0,
@@ -15503,7 +15503,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cool",
 	},
-	"roaroftime": {
+	roaroftime: {
 		num: 459,
 		accuracy: 90,
 		basePower: 150,
@@ -15524,7 +15524,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Beautiful",
 	},
-	"rockblast": {
+	rockblast: {
 		num: 350,
 		accuracy: 90,
 		basePower: 25,
@@ -15545,7 +15545,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Tough",
 	},
-	"rockclimb": {
+	rockclimb: {
 		num: 431,
 		accuracy: 85,
 		basePower: 90,
@@ -15566,7 +15566,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"rockpolish": {
+	rockpolish: {
 		num: 397,
 		accuracy: true,
 		basePower: 0,
@@ -15588,7 +15588,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Tough",
 	},
-	"rockslide": {
+	rockslide: {
 		num: 157,
 		accuracy: 90,
 		basePower: 75,
@@ -15609,7 +15609,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Tough",
 	},
-	"rocksmash": {
+	rocksmash: {
 		num: 249,
 		accuracy: 100,
 		basePower: 40,
@@ -15631,7 +15631,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"rockthrow": {
+	rockthrow: {
 		num: 88,
 		accuracy: 90,
 		basePower: 50,
@@ -15647,7 +15647,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Tough",
 	},
-	"rocktomb": {
+	rocktomb: {
 		num: 317,
 		accuracy: 95,
 		basePower: 60,
@@ -15669,7 +15669,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Clever",
 	},
-	"rockwrecker": {
+	rockwrecker: {
 		num: 439,
 		accuracy: 90,
 		basePower: 150,
@@ -15689,7 +15689,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Tough",
 	},
-	"roleplay": {
+	roleplay: {
 		num: 272,
 		accuracy: true,
 		basePower: 0,
@@ -15722,7 +15722,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Cute",
 	},
-	"rollingkick": {
+	rollingkick: {
 		num: 27,
 		accuracy: 85,
 		basePower: 60,
@@ -15743,7 +15743,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"rollout": {
+	rollout: {
 		num: 205,
 		accuracy: 90,
 		basePower: 30,
@@ -15791,7 +15791,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Cute",
 	},
-	"roost": {
+	roost: {
 		num: 355,
 		accuracy: true,
 		basePower: 0,
@@ -15826,7 +15826,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"rototiller": {
+	rototiller: {
 		num: 563,
 		accuracy: true,
 		basePower: 0,
@@ -15864,7 +15864,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Tough",
 	},
-	"round": {
+	round: {
 		num: 496,
 		accuracy: 100,
 		basePower: 60,
@@ -15899,7 +15899,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"sacredfire": {
+	sacredfire: {
 		num: 221,
 		accuracy: 95,
 		basePower: 100,
@@ -15921,7 +15921,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Beautiful",
 	},
-	"sacredsword": {
+	sacredsword: {
 		num: 533,
 		accuracy: 100,
 		basePower: 90,
@@ -15941,7 +15941,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"safeguard": {
+	safeguard: {
 		num: 219,
 		accuracy: true,
 		basePower: 0,
@@ -15998,7 +15998,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Beautiful",
 	},
-	"sandattack": {
+	sandattack: {
 		num: 28,
 		accuracy: 100,
 		basePower: 0,
@@ -16019,7 +16019,7 @@ let BattleMovedex = {
 		zMoveBoost: {evasion: 1},
 		contestType: "Cute",
 	},
-	"sandstorm": {
+	sandstorm: {
 		num: 201,
 		accuracy: true,
 		basePower: 0,
@@ -16038,7 +16038,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Tough",
 	},
-	"sandtomb": {
+	sandtomb: {
 		num: 328,
 		accuracy: 85,
 		basePower: 35,
@@ -16056,7 +16056,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Clever",
 	},
-	"sappyseed": {
+	sappyseed: {
 		num: 738,
 		accuracy: 90,
 		basePower: 100,
@@ -16079,7 +16079,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Clever",
 	},
-	"savagespinout": {
+	savagespinout: {
 		num: 634,
 		accuracy: true,
 		basePower: 1,
@@ -16097,7 +16097,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cool",
 	},
-	"scald": {
+	scald: {
 		num: 503,
 		accuracy: 100,
 		basePower: 80,
@@ -16119,7 +16119,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Tough",
 	},
-	"scaryface": {
+	scaryface: {
 		num: 184,
 		accuracy: 100,
 		basePower: 0,
@@ -16140,7 +16140,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Tough",
 	},
-	"scratch": {
+	scratch: {
 		num: 10,
 		accuracy: 100,
 		basePower: 40,
@@ -16156,7 +16156,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"screech": {
+	screech: {
 		num: 103,
 		accuracy: 85,
 		basePower: 0,
@@ -16177,7 +16177,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Clever",
 	},
-	"searingshot": {
+	searingshot: {
 		num: 545,
 		accuracy: 100,
 		basePower: 100,
@@ -16199,7 +16199,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"searingsunrazesmash": {
+	searingsunrazesmash: {
 		num: 724,
 		accuracy: true,
 		basePower: 200,
@@ -16220,7 +16220,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"secretpower": {
+	secretpower: {
 		num: 290,
 		accuracy: 100,
 		basePower: 70,
@@ -16270,7 +16270,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Clever",
 	},
-	"secretsword": {
+	secretsword: {
 		num: 548,
 		accuracy: 100,
 		basePower: 85,
@@ -16289,7 +16289,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Beautiful",
 	},
-	"seedbomb": {
+	seedbomb: {
 		num: 402,
 		accuracy: 100,
 		basePower: 80,
@@ -16306,7 +16306,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Tough",
 	},
-	"seedflare": {
+	seedflare: {
 		num: 465,
 		accuracy: 85,
 		basePower: 120,
@@ -16329,7 +16329,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Beautiful",
 	},
-	"seismictoss": {
+	seismictoss: {
 		num: 69,
 		accuracy: 100,
 		basePower: 0,
@@ -16349,7 +16349,7 @@ let BattleMovedex = {
 		gmaxPower: 75,
 		contestType: "Tough",
 	},
-	"selfdestruct": {
+	selfdestruct: {
 		num: 120,
 		accuracy: 100,
 		basePower: 200,
@@ -16367,7 +16367,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"shadowball": {
+	shadowball: {
 		num: 247,
 		accuracy: 100,
 		basePower: 80,
@@ -16390,7 +16390,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
-	"shadowbone": {
+	shadowbone: {
 		num: 708,
 		accuracy: 100,
 		basePower: 85,
@@ -16414,7 +16414,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"shadowclaw": {
+	shadowclaw: {
 		num: 421,
 		accuracy: 100,
 		basePower: 70,
@@ -16433,7 +16433,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"shadowforce": {
+	shadowforce: {
 		num: 467,
 		accuracy: 100,
 		basePower: 120,
@@ -16468,7 +16468,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"shadowpunch": {
+	shadowpunch: {
 		num: 325,
 		accuracy: true,
 		basePower: 60,
@@ -16485,7 +16485,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
-	"shadowsneak": {
+	shadowsneak: {
 		num: 425,
 		accuracy: 100,
 		basePower: 40,
@@ -16503,7 +16503,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
-	"shadowstrike": {
+	shadowstrike: {
 		num: 0,
 		accuracy: 95,
 		basePower: 80,
@@ -16527,7 +16527,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
-	"sharpen": {
+	sharpen: {
 		num: 159,
 		accuracy: true,
 		basePower: 0,
@@ -16549,7 +16549,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Cute",
 	},
-	"shatteredpsyche": {
+	shatteredpsyche: {
 		num: 648,
 		accuracy: true,
 		basePower: 1,
@@ -16567,7 +16567,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Cool",
 	},
-	"sheercold": {
+	sheercold: {
 		num: 329,
 		accuracy: 30,
 		basePower: 0,
@@ -16587,7 +16587,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Beautiful",
 	},
-	"shellsmash": {
+	shellsmash: {
 		num: 504,
 		accuracy: true,
 		basePower: 0,
@@ -16613,7 +16613,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Tough",
 	},
-	"shelltrap": {
+	shelltrap: {
 		num: 704,
 		accuracy: 100,
 		basePower: 150,
@@ -16655,7 +16655,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Tough",
 	},
-	"shiftgear": {
+	shiftgear: {
 		num: 508,
 		accuracy: true,
 		basePower: 0,
@@ -16678,7 +16678,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"shockwave": {
+	shockwave: {
 		num: 351,
 		accuracy: true,
 		basePower: 60,
@@ -16694,7 +16694,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"shoreup": {
+	shoreup: {
 		num: 659,
 		accuracy: true,
 		basePower: 0,
@@ -16720,7 +16720,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"signalbeam": {
+	signalbeam: {
 		num: 324,
 		accuracy: 100,
 		basePower: 75,
@@ -16742,7 +16742,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Beautiful",
 	},
-	"silverwind": {
+	silverwind: {
 		num: 318,
 		accuracy: 100,
 		basePower: 60,
@@ -16771,7 +16771,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Beautiful",
 	},
-	"simplebeam": {
+	simplebeam: {
 		num: 493,
 		accuracy: 100,
 		basePower: 0,
@@ -16803,7 +16803,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Cute",
 	},
-	"sing": {
+	sing: {
 		num: 47,
 		accuracy: 55,
 		basePower: 0,
@@ -16821,7 +16821,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Cute",
 	},
-	"sinisterarrowraid": {
+	sinisterarrowraid: {
 		num: 695,
 		accuracy: true,
 		basePower: 180,
@@ -16840,7 +16840,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"sizzlyslide": {
+	sizzlyslide: {
 		num: 735,
 		accuracy: 100,
 		basePower: 60,
@@ -16862,7 +16862,7 @@ let BattleMovedex = {
 		type: "Fire",
 		contestType: "Clever",
 	},
-	"sketch": {
+	sketch: {
 		num: 166,
 		accuracy: true,
 		basePower: 0,
@@ -16902,7 +16902,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
 		contestType: "Clever",
 	},
-	"skillswap": {
+	skillswap: {
 		num: 285,
 		accuracy: true,
 		basePower: 0,
@@ -16945,7 +16945,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"skullbash": {
+	skullbash: {
 		num: 130,
 		accuracy: 100,
 		basePower: 130,
@@ -16974,7 +16974,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"skyattack": {
+	skyattack: {
 		num: 143,
 		accuracy: 90,
 		basePower: 140,
@@ -17006,7 +17006,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"skydrop": {
+	skydrop: {
 		num: 507,
 		accuracy: 100,
 		basePower: 60,
@@ -17116,7 +17116,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Tough",
 	},
-	"skyuppercut": {
+	skyuppercut: {
 		num: 327,
 		accuracy: 90,
 		basePower: 85,
@@ -17134,7 +17134,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"slackoff": {
+	slackoff: {
 		num: 303,
 		accuracy: true,
 		basePower: 0,
@@ -17154,7 +17154,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"slam": {
+	slam: {
 		num: 21,
 		accuracy: 75,
 		basePower: 80,
@@ -17170,7 +17170,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"slash": {
+	slash: {
 		num: 163,
 		accuracy: 100,
 		basePower: 70,
@@ -17188,7 +17188,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"sleeppowder": {
+	sleeppowder: {
 		num: 79,
 		accuracy: 75,
 		basePower: 0,
@@ -17207,7 +17207,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"sleeptalk": {
+	sleeptalk: {
 		num: 214,
 		accuracy: true,
 		basePower: 0,
@@ -17251,7 +17251,7 @@ let BattleMovedex = {
 		zMoveEffect: 'crit2',
 		contestType: "Cute",
 	},
-	"sludge": {
+	sludge: {
 		num: 124,
 		accuracy: 100,
 		basePower: 65,
@@ -17271,7 +17271,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Tough",
 	},
-	"sludgebomb": {
+	sludgebomb: {
 		num: 188,
 		accuracy: 100,
 		basePower: 90,
@@ -17292,7 +17292,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Tough",
 	},
-	"sludgewave": {
+	sludgewave: {
 		num: 482,
 		accuracy: 100,
 		basePower: 95,
@@ -17313,7 +17313,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Tough",
 	},
-	"smackdown": {
+	smackdown: {
 		num: 479,
 		accuracy: 100,
 		basePower: 50,
@@ -17361,7 +17361,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Tough",
 	},
-	"smartstrike": {
+	smartstrike: {
 		num: 684,
 		accuracy: true,
 		basePower: 70,
@@ -17377,7 +17377,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"smellingsalts": {
+	smellingsalts: {
 		num: 265,
 		accuracy: 100,
 		basePower: 70,
@@ -17402,7 +17402,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"smog": {
+	smog: {
 		num: 123,
 		accuracy: 70,
 		basePower: 30,
@@ -17422,7 +17422,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Tough",
 	},
-	"smokescreen": {
+	smokescreen: {
 		num: 108,
 		accuracy: 100,
 		basePower: 0,
@@ -17443,7 +17443,7 @@ let BattleMovedex = {
 		zMoveBoost: {evasion: 1},
 		contestType: "Clever",
 	},
-	"snaptrap": {
+	snaptrap: {
 		num: 779,
 		accuracy: 100,
 		basePower: 35,
@@ -17460,7 +17460,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 	},
-	"snarl": {
+	snarl: {
 		num: 555,
 		accuracy: 95,
 		basePower: 55,
@@ -17482,7 +17482,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Tough",
 	},
-	"snatch": {
+	snatch: {
 		num: 289,
 		accuracy: true,
 		basePower: 0,
@@ -17520,7 +17520,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 2},
 		contestType: "Clever",
 	},
-	"snipeshot": {
+	snipeshot: {
 		num: 745,
 		accuracy: 100,
 		basePower: 80,
@@ -17538,7 +17538,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Water",
 	},
-	"snore": {
+	snore: {
 		num: 173,
 		accuracy: 100,
 		basePower: 50,
@@ -17562,7 +17562,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"soak": {
+	soak: {
 		num: 487,
 		accuracy: 100,
 		basePower: 0,
@@ -17589,7 +17589,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Cute",
 	},
-	"softboiled": {
+	softboiled: {
 		num: 135,
 		accuracy: true,
 		basePower: 0,
@@ -17609,7 +17609,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"solarbeam": {
+	solarbeam: {
 		num: 76,
 		accuracy: 100,
 		basePower: 120,
@@ -17648,7 +17648,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"solarblade": {
+	solarblade: {
 		num: 669,
 		accuracy: 100,
 		basePower: 125,
@@ -17687,7 +17687,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"sonicboom": {
+	sonicboom: {
 		num: 49,
 		accuracy: 90,
 		basePower: 0,
@@ -17706,7 +17706,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"soulstealing7starstrike": {
+	soulstealing7starstrike: {
 		num: 699,
 		accuracy: true,
 		basePower: 195,
@@ -17725,7 +17725,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"spacialrend": {
+	spacialrend: {
 		num: 460,
 		accuracy: 95,
 		basePower: 100,
@@ -17745,7 +17745,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Beautiful",
 	},
-	"spark": {
+	spark: {
 		num: 209,
 		accuracy: 100,
 		basePower: 65,
@@ -17765,7 +17765,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"sparklingaria": {
+	sparklingaria: {
 		num: 664,
 		accuracy: 100,
 		basePower: 90,
@@ -17788,7 +17788,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Tough",
 	},
-	"sparklyswirl": {
+	sparklyswirl: {
 		num: 740,
 		accuracy: 85,
 		basePower: 120,
@@ -17818,7 +17818,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Clever",
 	},
-	"spectralthief": {
+	spectralthief: {
 		num: 712,
 		accuracy: 100,
 		basePower: 90,
@@ -17838,7 +17838,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
-	"speedswap": {
+	speedswap: {
 		num: 683,
 		accuracy: true,
 		basePower: 0,
@@ -17862,7 +17862,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"spiderweb": {
+	spiderweb: {
 		num: 169,
 		accuracy: true,
 		basePower: 0,
@@ -17884,7 +17884,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"spikecannon": {
+	spikecannon: {
 		num: 131,
 		accuracy: 100,
 		basePower: 20,
@@ -17904,7 +17904,7 @@ let BattleMovedex = {
 		gmaxPower: 120,
 		contestType: "Cool",
 	},
-	"spikes": {
+	spikes: {
 		num: 191,
 		accuracy: true,
 		basePower: 0,
@@ -17942,7 +17942,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"spikyshield": {
+	spikyshield: {
 		num: 596,
 		accuracy: true,
 		basePower: 0,
@@ -18003,7 +18003,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Tough",
 	},
-	"spiritbreak": {
+	spiritbreak: {
 		num: 789,
 		accuracy: 100,
 		basePower: 75,
@@ -18025,7 +18025,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fairy",
 	},
-	"spiritshackle": {
+	spiritshackle: {
 		num: 662,
 		accuracy: 100,
 		basePower: 80,
@@ -18048,7 +18048,7 @@ let BattleMovedex = {
 		type: "Ghost",
 		contestType: "Tough",
 	},
-	"spitup": {
+	spitup: {
 		num: 255,
 		accuracy: 100,
 		basePower: 0,
@@ -18077,7 +18077,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"spite": {
+	spite: {
 		num: 180,
 		accuracy: 100,
 		basePower: 0,
@@ -18104,7 +18104,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Tough",
 	},
-	"splash": {
+	splash: {
 		num: 150,
 		accuracy: true,
 		basePower: 0,
@@ -18124,7 +18124,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 3},
 		contestType: "Cute",
 	},
-	"splinteredstormshards": {
+	splinteredstormshards: {
 		num: 727,
 		accuracy: true,
 		basePower: 190,
@@ -18147,7 +18147,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Cool",
 	},
-	"splishysplash": {
+	splishysplash: {
 		num: 730,
 		accuracy: 100,
 		basePower: 90,
@@ -18169,7 +18169,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"spore": {
+	spore: {
 		num: 147,
 		accuracy: 100,
 		basePower: 0,
@@ -18188,7 +18188,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"spotlight": {
+	spotlight: {
 		num: 671,
 		accuracy: true,
 		basePower: 0,
@@ -18223,7 +18223,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Cute",
 	},
-	"stealthrock": {
+	stealthrock: {
 		num: 446,
 		accuracy: true,
 		basePower: 0,
@@ -18254,7 +18254,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cool",
 	},
-	"steameruption": {
+	steameruption: {
 		num: 592,
 		accuracy: 95,
 		basePower: 110,
@@ -18277,7 +18277,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"steamroller": {
+	steamroller: {
 		num: 537,
 		accuracy: 100,
 		basePower: 65,
@@ -18298,7 +18298,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Tough",
 	},
-	"steelbeam": {
+	steelbeam: {
 		num: 796,
 		accuracy: 95,
 		basePower: 140,
@@ -18321,7 +18321,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 	},
-	"steelwing": {
+	steelwing: {
 		num: 211,
 		accuracy: 90,
 		basePower: 70,
@@ -18345,7 +18345,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"stickyweb": {
+	stickyweb: {
 		num: 564,
 		accuracy: true,
 		basePower: 0,
@@ -18376,7 +18376,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Tough",
 	},
-	"stockpile": {
+	stockpile: {
 		num: 254,
 		accuracy: true,
 		basePower: 0,
@@ -18434,7 +18434,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Tough",
 	},
-	"stokedsparksurfer": {
+	stokedsparksurfer: {
 		num: 700,
 		accuracy: true,
 		basePower: 175,
@@ -18457,7 +18457,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"stomp": {
+	stomp: {
 		num: 23,
 		accuracy: 100,
 		basePower: 65,
@@ -18477,7 +18477,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"stompingtantrum": {
+	stompingtantrum: {
 		num: 707,
 		accuracy: 100,
 		basePower: 75,
@@ -18498,7 +18498,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	"stoneedge": {
+	stoneedge: {
 		num: 444,
 		accuracy: 80,
 		basePower: 100,
@@ -18517,7 +18517,7 @@ let BattleMovedex = {
 		type: "Rock",
 		contestType: "Tough",
 	},
-	"storedpower": {
+	storedpower: {
 		num: 500,
 		accuracy: 100,
 		basePower: 20,
@@ -18539,7 +18539,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Clever",
 	},
-	"stormthrow": {
+	stormthrow: {
 		num: 480,
 		accuracy: 100,
 		basePower: 60,
@@ -18558,7 +18558,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"strangesteam": {
+	strangesteam: {
 		num: 790,
 		accuracy: 95,
 		basePower: 90,
@@ -18578,7 +18578,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fairy",
 	},
-	"strength": {
+	strength: {
 		num: 70,
 		accuracy: 100,
 		basePower: 80,
@@ -18594,7 +18594,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"strengthsap": {
+	strengthsap: {
 		num: 668,
 		accuracy: 100,
 		basePower: 0,
@@ -18619,7 +18619,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cute",
 	},
-	"stringshot": {
+	stringshot: {
 		num: 81,
 		accuracy: 95,
 		basePower: 0,
@@ -18640,7 +18640,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"struggle": {
+	struggle: {
 		num: 165,
 		accuracy: true,
 		basePower: 50,
@@ -18665,7 +18665,7 @@ let BattleMovedex = {
 		zMovePower: 1,
 		contestType: "Tough",
 	},
-	"strugglebug": {
+	strugglebug: {
 		num: 522,
 		accuracy: 100,
 		basePower: 50,
@@ -18687,7 +18687,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cute",
 	},
-	"stuffcheeks": {
+	stuffcheeks: {
 		num: 747,
 		accuracy: true,
 		basePower: 0,
@@ -18711,7 +18711,7 @@ let BattleMovedex = {
 		target: "self",
 		type: "Normal",
 	},
-	"stunspore": {
+	stunspore: {
 		num: 78,
 		accuracy: 75,
 		basePower: 0,
@@ -18730,7 +18730,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"submission": {
+	submission: {
 		num: 66,
 		accuracy: 80,
 		basePower: 80,
@@ -18748,7 +18748,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"substitute": {
+	substitute: {
 		num: 164,
 		accuracy: true,
 		basePower: 0,
@@ -18829,7 +18829,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"subzeroslammer": {
+	subzeroslammer: {
 		num: 650,
 		accuracy: true,
 		basePower: 1,
@@ -18847,7 +18847,7 @@ let BattleMovedex = {
 		type: "Ice",
 		contestType: "Cool",
 	},
-	"suckerpunch": {
+	suckerpunch: {
 		num: 389,
 		accuracy: 100,
 		basePower: 70,
@@ -18873,7 +18873,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"sunnyday": {
+	sunnyday: {
 		num: 241,
 		accuracy: true,
 		basePower: 0,
@@ -18892,7 +18892,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Beautiful",
 	},
-	"sunsteelstrike": {
+	sunsteelstrike: {
 		num: 713,
 		accuracy: 100,
 		basePower: 100,
@@ -18911,7 +18911,7 @@ let BattleMovedex = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	"superfang": {
+	superfang: {
 		num: 162,
 		accuracy: 90,
 		basePower: 0,
@@ -18931,7 +18931,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"superpower": {
+	superpower: {
 		num: 276,
 		accuracy: 100,
 		basePower: 120,
@@ -18955,7 +18955,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"supersonic": {
+	supersonic: {
 		num: 48,
 		accuracy: 55,
 		basePower: 0,
@@ -18973,7 +18973,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"supersonicskystrike": {
+	supersonicskystrike: {
 		num: 626,
 		accuracy: true,
 		basePower: 1,
@@ -18991,7 +18991,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"surf": {
+	surf: {
 		num: 57,
 		accuracy: 100,
 		basePower: 90,
@@ -19009,7 +19009,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"swagger": {
+	swagger: {
 		num: 207,
 		accuracy: 85,
 		basePower: 0,
@@ -19031,7 +19031,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Cute",
 	},
-	"swallow": {
+	swallow: {
 		num: 256,
 		accuracy: true,
 		basePower: 0,
@@ -19058,7 +19058,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Tough",
 	},
-	"sweetkiss": {
+	sweetkiss: {
 		num: 186,
 		accuracy: 75,
 		basePower: 0,
@@ -19076,7 +19076,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Cute",
 	},
-	"sweetscent": {
+	sweetscent: {
 		num: 230,
 		accuracy: 100,
 		basePower: 0,
@@ -19097,7 +19097,7 @@ let BattleMovedex = {
 		zMoveBoost: {accuracy: 1},
 		contestType: "Cute",
 	},
-	"swift": {
+	swift: {
 		num: 129,
 		accuracy: true,
 		basePower: 60,
@@ -19114,7 +19114,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"switcheroo": {
+	switcheroo: {
 		num: 415,
 		accuracy: 100,
 		basePower: 0,
@@ -19163,7 +19163,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 2},
 		contestType: "Clever",
 	},
-	"swordsdance": {
+	swordsdance: {
 		num: 14,
 		accuracy: true,
 		basePower: 0,
@@ -19185,7 +19185,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"synchronoise": {
+	synchronoise: {
 		num: 485,
 		accuracy: 100,
 		basePower: 120,
@@ -19206,7 +19206,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"synthesis": {
+	synthesis: {
 		num: 235,
 		accuracy: true,
 		basePower: 0,
@@ -19241,7 +19241,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Clever",
 	},
-	"tackle": {
+	tackle: {
 		num: 33,
 		accuracy: 100,
 		basePower: 40,
@@ -19257,7 +19257,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"tailglow": {
+	tailglow: {
 		num: 294,
 		accuracy: true,
 		basePower: 0,
@@ -19280,7 +19280,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
 	},
-	"tailslap": {
+	tailslap: {
 		num: 541,
 		accuracy: 85,
 		basePower: 25,
@@ -19301,7 +19301,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cute",
 	},
-	"tailwhip": {
+	tailwhip: {
 		num: 39,
 		accuracy: 100,
 		basePower: 0,
@@ -19322,7 +19322,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Cute",
 	},
-	"tailwind": {
+	tailwind: {
 		num: 366,
 		accuracy: true,
 		basePower: 0,
@@ -19363,7 +19363,7 @@ let BattleMovedex = {
 		zMoveEffect: 'crit2',
 		contestType: "Cool",
 	},
-	"takedown": {
+	takedown: {
 		num: 36,
 		accuracy: 85,
 		basePower: 90,
@@ -19381,7 +19381,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"tarshot": {
+	tarshot: {
 		num: 749,
 		accuracy: 100,
 		basePower: 0,
@@ -19412,7 +19412,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Rock",
 	},
-	"taunt": {
+	taunt: {
 		num: 269,
 		accuracy: 100,
 		basePower: 0,
@@ -19459,7 +19459,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Clever",
 	},
-	"tearfullook": {
+	tearfullook: {
 		num: 715,
 		accuracy: true,
 		basePower: 0,
@@ -19481,7 +19481,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cute",
 	},
-	"teatime": {
+	teatime: {
 		num: 752,
 		accuracy: true,
 		basePower: 0,
@@ -19514,7 +19514,7 @@ let BattleMovedex = {
 		target: "all",
 		type: "Normal",
 	},
-	"technoblast": {
+	technoblast: {
 		num: 546,
 		accuracy: 100,
 		basePower: 120,
@@ -19536,7 +19536,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cool",
 	},
-	"tectonicrage": {
+	tectonicrage: {
 		num: 630,
 		accuracy: true,
 		basePower: 1,
@@ -19554,7 +19554,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Cool",
 	},
-	"teeterdance": {
+	teeterdance: {
 		num: 298,
 		accuracy: 100,
 		basePower: 0,
@@ -19573,7 +19573,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Cute",
 	},
-	"telekinesis": {
+	telekinesis: {
 		num: 477,
 		accuracy: true,
 		basePower: 0,
@@ -19622,7 +19622,7 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 1},
 		contestType: "Clever",
 	},
-	"teleport": {
+	teleport: {
 		num: 100,
 		accuracy: true,
 		basePower: 0,
@@ -19642,7 +19642,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Cool",
 	},
-	"thief": {
+	thief: {
 		num: 168,
 		accuracy: 100,
 		basePower: 60,
@@ -19674,7 +19674,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Tough",
 	},
-	"thousandarrows": {
+	thousandarrows: {
 		num: 614,
 		accuracy: 100,
 		basePower: 90,
@@ -19697,14 +19697,14 @@ let BattleMovedex = {
 			}
 		},
 		volatileStatus: 'smackdown',
-		ignoreImmunity: {'Ground': true},
+		ignoreImmunity: {Ground: true},
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Ground",
 		zMovePower: 180,
 		contestType: "Beautiful",
 	},
-	"thousandwaves": {
+	thousandwaves: {
 		num: 615,
 		accuracy: 100,
 		basePower: 90,
@@ -19726,7 +19726,7 @@ let BattleMovedex = {
 		type: "Ground",
 		contestType: "Tough",
 	},
-	"thrash": {
+	thrash: {
 		num: 37,
 		accuracy: 100,
 		basePower: 120,
@@ -19751,7 +19751,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"throatchop": {
+	throatchop: {
 		num: 675,
 		accuracy: 100,
 		basePower: 80,
@@ -19798,7 +19798,7 @@ let BattleMovedex = {
 		type: "Dark",
 		contestType: "Clever",
 	},
-	"thunder": {
+	thunder: {
 		num: 87,
 		accuracy: 70,
 		basePower: 110,
@@ -19831,7 +19831,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"thunderbolt": {
+	thunderbolt: {
 		num: 85,
 		accuracy: 100,
 		basePower: 90,
@@ -19852,7 +19852,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"thunderfang": {
+	thunderfang: {
 		num: 422,
 		accuracy: 95,
 		basePower: 65,
@@ -19877,7 +19877,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"thunderpunch": {
+	thunderpunch: {
 		num: 9,
 		accuracy: 100,
 		basePower: 75,
@@ -19898,7 +19898,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"thundershock": {
+	thundershock: {
 		num: 84,
 		accuracy: 100,
 		basePower: 40,
@@ -19918,7 +19918,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"thunderwave": {
+	thunderwave: {
 		num: 86,
 		accuracy: 90,
 		basePower: 0,
@@ -19939,7 +19939,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Cool",
 	},
-	"tickle": {
+	tickle: {
 		num: 321,
 		accuracy: 100,
 		basePower: 0,
@@ -19961,7 +19961,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cute",
 	},
-	"topsyturvy": {
+	topsyturvy: {
 		num: 576,
 		accuracy: true,
 		basePower: 0,
@@ -19991,7 +19991,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Clever",
 	},
-	"torment": {
+	torment: {
 		num: 259,
 		accuracy: 100,
 		basePower: 0,
@@ -20026,7 +20026,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Tough",
 	},
-	"toxic": {
+	toxic: {
 		num: 92,
 		accuracy: 90,
 		basePower: 0,
@@ -20047,7 +20047,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"toxicspikes": {
+	toxicspikes: {
 		num: 390,
 		accuracy: true,
 		basePower: 0,
@@ -20092,7 +20092,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"toxicthread": {
+	toxicthread: {
 		num: 672,
 		accuracy: 100,
 		basePower: 0,
@@ -20115,7 +20115,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Tough",
 	},
-	"transform": {
+	transform: {
 		num: 144,
 		accuracy: true,
 		basePower: 0,
@@ -20138,7 +20138,7 @@ let BattleMovedex = {
 		zMoveEffect: 'heal',
 		contestType: "Clever",
 	},
-	"triattack": {
+	triattack: {
 		num: 161,
 		accuracy: 100,
 		basePower: 80,
@@ -20168,7 +20168,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Beautiful",
 	},
-	"trick": {
+	trick: {
 		num: 271,
 		accuracy: 100,
 		basePower: 0,
@@ -20217,7 +20217,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 2},
 		contestType: "Clever",
 	},
-	"trickortreat": {
+	trickortreat: {
 		num: 567,
 		accuracy: 100,
 		basePower: 0,
@@ -20248,7 +20248,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
 		contestType: "Cute",
 	},
-	"trickroom": {
+	trickroom: {
 		num: 433,
 		accuracy: true,
 		basePower: 0,
@@ -20288,7 +20288,7 @@ let BattleMovedex = {
 		zMoveBoost: {accuracy: 1},
 		contestType: "Clever",
 	},
-	"triplekick": {
+	triplekick: {
 		num: 167,
 		accuracy: 90,
 		basePower: 10,
@@ -20312,7 +20312,7 @@ let BattleMovedex = {
 		gmaxPower: 80,
 		contestType: "Cool",
 	},
-	"tropkick": {
+	tropkick: {
 		num: 688,
 		accuracy: 100,
 		basePower: 70,
@@ -20334,7 +20334,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cute",
 	},
-	"trumpcard": {
+	trumpcard: {
 		num: 376,
 		accuracy: true,
 		basePower: 0,
@@ -20372,7 +20372,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Cool",
 	},
-	"twineedle": {
+	twineedle: {
 		num: 41,
 		accuracy: 100,
 		basePower: 25,
@@ -20395,7 +20395,7 @@ let BattleMovedex = {
 		gmaxPower: 100,
 		contestType: "Cool",
 	},
-	"twinkletackle": {
+	twinkletackle: {
 		num: 656,
 		accuracy: true,
 		basePower: 1,
@@ -20413,7 +20413,7 @@ let BattleMovedex = {
 		type: "Fairy",
 		contestType: "Cool",
 	},
-	"twister": {
+	twister: {
 		num: 239,
 		accuracy: 100,
 		basePower: 40,
@@ -20433,7 +20433,7 @@ let BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
-	"uturn": {
+	uturn: {
 		num: 369,
 		accuracy: 100,
 		basePower: 70,
@@ -20452,7 +20452,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cute",
 	},
-	"uproar": {
+	uproar: {
 		num: 253,
 		accuracy: 100,
 		basePower: 90,
@@ -20506,7 +20506,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"vacuumwave": {
+	vacuumwave: {
 		num: 410,
 		accuracy: 100,
 		basePower: 40,
@@ -20523,7 +20523,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"vcreate": {
+	vcreate: {
 		num: 557,
 		accuracy: 95,
 		basePower: 180,
@@ -20549,7 +20549,7 @@ let BattleMovedex = {
 		zMovePower: 220,
 		contestType: "Cool",
 	},
-	"veeveevolley": {
+	veeveevolley: {
 		num: 741,
 		accuracy: true,
 		basePower: 0,
@@ -20571,7 +20571,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	"venomdrench": {
+	venomdrench: {
 		num: 599,
 		accuracy: 100,
 		basePower: 0,
@@ -20595,7 +20595,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
-	"venoshock": {
+	venoshock: {
 		num: 474,
 		accuracy: 100,
 		basePower: 65,
@@ -20617,7 +20617,7 @@ let BattleMovedex = {
 		type: "Poison",
 		contestType: "Beautiful",
 	},
-	"vinewhip": {
+	vinewhip: {
 		num: 22,
 		accuracy: 100,
 		basePower: 45,
@@ -20633,7 +20633,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Cool",
 	},
-	"visegrip": {
+	visegrip: {
 		num: 11,
 		accuracy: 100,
 		basePower: 55,
@@ -20649,7 +20649,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"vitalthrow": {
+	vitalthrow: {
 		num: 233,
 		accuracy: true,
 		basePower: 70,
@@ -20666,7 +20666,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Cool",
 	},
-	"voltswitch": {
+	voltswitch: {
 		num: 521,
 		accuracy: 100,
 		basePower: 70,
@@ -20685,7 +20685,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"volttackle": {
+	volttackle: {
 		num: 344,
 		accuracy: 100,
 		basePower: 120,
@@ -20707,7 +20707,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"wakeupslap": {
+	wakeupslap: {
 		num: 358,
 		accuracy: 100,
 		basePower: 70,
@@ -20732,7 +20732,7 @@ let BattleMovedex = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
-	"waterfall": {
+	waterfall: {
 		num: 127,
 		accuracy: 100,
 		basePower: 80,
@@ -20753,7 +20753,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Tough",
 	},
-	"watergun": {
+	watergun: {
 		num: 55,
 		accuracy: 100,
 		basePower: 40,
@@ -20769,7 +20769,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cute",
 	},
-	"waterpledge": {
+	waterpledge: {
 		num: 518,
 		accuracy: 100,
 		basePower: 80,
@@ -20837,7 +20837,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"waterpulse": {
+	waterpulse: {
 		num: 352,
 		accuracy: 100,
 		basePower: 60,
@@ -20857,7 +20857,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"watershuriken": {
+	watershuriken: {
 		num: 594,
 		accuracy: 100,
 		basePower: 15,
@@ -20882,7 +20882,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Cool",
 	},
-	"watersport": {
+	watersport: {
 		num: 346,
 		accuracy: true,
 		basePower: 0,
@@ -20919,7 +20919,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Cute",
 	},
-	"waterspout": {
+	waterspout: {
 		num: 323,
 		accuracy: 100,
 		basePower: 150,
@@ -20940,7 +20940,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"weatherball": {
+	weatherball: {
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
@@ -20995,7 +20995,7 @@ let BattleMovedex = {
 		gmaxPower: 130,
 		contestType: "Beautiful",
 	},
-	"whirlpool": {
+	whirlpool: {
 		num: 250,
 		accuracy: 85,
 		basePower: 35,
@@ -21013,7 +21013,7 @@ let BattleMovedex = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	"whirlwind": {
+	whirlwind: {
 		num: 18,
 		accuracy: true,
 		basePower: 0,
@@ -21033,7 +21033,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"wideguard": {
+	wideguard: {
 		num: 469,
 		accuracy: true,
 		basePower: 0,
@@ -21084,7 +21084,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Tough",
 	},
-	"wildcharge": {
+	wildcharge: {
 		num: 528,
 		accuracy: 100,
 		basePower: 90,
@@ -21103,7 +21103,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Tough",
 	},
-	"willowisp": {
+	willowisp: {
 		num: 261,
 		accuracy: 85,
 		basePower: 0,
@@ -21123,7 +21123,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Beautiful",
 	},
-	"wingattack": {
+	wingattack: {
 		num: 17,
 		accuracy: 100,
 		basePower: 60,
@@ -21139,7 +21139,7 @@ let BattleMovedex = {
 		type: "Flying",
 		contestType: "Cool",
 	},
-	"wish": {
+	wish: {
 		num: 273,
 		accuracy: true,
 		basePower: 0,
@@ -21172,7 +21172,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Cute",
 	},
-	"withdraw": {
+	withdraw: {
 		num: 110,
 		accuracy: true,
 		basePower: 0,
@@ -21193,7 +21193,7 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cute",
 	},
-	"wonderroom": {
+	wonderroom: {
 		num: 472,
 		accuracy: true,
 		basePower: 0,
@@ -21233,7 +21233,7 @@ let BattleMovedex = {
 		zMoveBoost: {spd: 1},
 		contestType: "Clever",
 	},
-	"woodhammer": {
+	woodhammer: {
 		num: 452,
 		accuracy: 100,
 		basePower: 120,
@@ -21252,7 +21252,7 @@ let BattleMovedex = {
 		type: "Grass",
 		contestType: "Tough",
 	},
-	"workup": {
+	workup: {
 		num: 526,
 		accuracy: true,
 		basePower: 0,
@@ -21274,7 +21274,7 @@ let BattleMovedex = {
 		zMoveBoost: {atk: 1},
 		contestType: "Tough",
 	},
-	"worryseed": {
+	worryseed: {
 		num: 388,
 		accuracy: 100,
 		basePower: 0,
@@ -21309,7 +21309,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
-	"wrap": {
+	wrap: {
 		num: 35,
 		accuracy: 90,
 		basePower: 15,
@@ -21327,7 +21327,7 @@ let BattleMovedex = {
 		type: "Normal",
 		contestType: "Tough",
 	},
-	"wringout": {
+	wringout: {
 		num: 378,
 		accuracy: 100,
 		basePower: 0,
@@ -21350,7 +21350,7 @@ let BattleMovedex = {
 		gmaxPower: 140,
 		contestType: "Tough",
 	},
-	"xscissor": {
+	xscissor: {
 		num: 404,
 		accuracy: 100,
 		basePower: 80,
@@ -21367,7 +21367,7 @@ let BattleMovedex = {
 		type: "Bug",
 		contestType: "Cool",
 	},
-	"yawn": {
+	yawn: {
 		num: 281,
 		accuracy: true,
 		basePower: 0,
@@ -21403,7 +21403,7 @@ let BattleMovedex = {
 		zMoveBoost: {spe: 1},
 		contestType: "Cute",
 	},
-	"zapcannon": {
+	zapcannon: {
 		num: 192,
 		accuracy: 50,
 		basePower: 120,
@@ -21423,7 +21423,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"zenheadbutt": {
+	zenheadbutt: {
 		num: 428,
 		accuracy: 90,
 		basePower: 80,
@@ -21444,7 +21444,7 @@ let BattleMovedex = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	"zingzap": {
+	zingzap: {
 		num: 716,
 		accuracy: 100,
 		basePower: 80,
@@ -21465,7 +21465,7 @@ let BattleMovedex = {
 		type: "Electric",
 		contestType: "Cool",
 	},
-	"zippyzap": {
+	zippyzap: {
 		num: 729,
 		accuracy: 100,
 		basePower: 80,

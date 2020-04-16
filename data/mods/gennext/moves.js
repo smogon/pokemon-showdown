@@ -188,7 +188,7 @@ let BattleMovedex = {
 			},
 		},
 	},
-	"protect": {
+	protect: {
 		inherit: true,
 		effect: {
 			duration: 1,
@@ -210,7 +210,7 @@ let BattleMovedex = {
 			},
 		},
 	},
-	"kingsshield": {
+	kingsshield: {
 		inherit: true,
 		effect: {
 			duration: 1,
@@ -235,7 +235,7 @@ let BattleMovedex = {
 			},
 		},
 	},
-	"spikyshield": {
+	spikyshield: {
 		inherit: true,
 		effect: {
 			duration: 1,
@@ -759,10 +759,10 @@ let BattleMovedex = {
 			}
 			/**@type {{[k: string]: string}} */
 			let natureChange = {
-				'Modest': 'Adamant',
-				'Adamant': 'Modest',
-				'Timid': 'Jolly',
-				'Jolly': 'Timid',
+				Modest: 'Adamant',
+				Adamant: 'Modest',
+				Timid: 'Jolly',
+				Jolly: 'Timid',
 			};
 			let tmpAtkEVs;
 			let Atk2SpA;

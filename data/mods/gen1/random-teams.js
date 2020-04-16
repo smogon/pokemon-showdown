@@ -145,7 +145,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 		/**@type {{[k: string]: number}} */
 		let typeCount = {};
 		/**@type {{[k: string]: number}} */
-		let weaknessCount = {'Electric': 0, 'Psychic': 0, 'Water': 0, 'Ice': 0, 'Ground': 0};
+		let weaknessCount = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0};
 		let uberCount = 0;
 		let nuCount = 0;
 		let hasShitmon = false;

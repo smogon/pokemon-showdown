@@ -150,7 +150,7 @@ let BattleItems = {
 		desc: "If held by a Darkrai with Dark Void, it can use Absolute Configuration.",
 	},
 	// XpRienzo
-	"charcoal": {
+	charcoal: {
 		inherit: true,
 		zMove: "Bleh Flame",
 		zMoveFrom: "Blue Flare",

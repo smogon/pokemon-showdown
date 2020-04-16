@@ -2,7 +2,7 @@
 
 /**@type {{[k: string]: ModdedAbilityData}} */
 let BattleAbilities = {
-	"anticipation": {
+	anticipation: {
 		inherit: true,
 		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective on this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, while Hidden Power, Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
 		onStart(pokemon) {
@@ -18,7 +18,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"frisk": {
+	frisk: {
 		inherit: true,
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart(pokemon) {
@@ -28,19 +28,19 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"infiltrator": {
+	infiltrator: {
 		inherit: true,
 		desc: "This Pokemon's moves ignore the opposing side's Reflect, Light Screen, Safeguard, and Mist.",
 		shortDesc: "This Pokemon's moves ignore the foe's Reflect, Light Screen, Safeguard, and Mist.",
 		rating: 1.5,
 	},
-	"keeneye": {
+	keeneye: {
 		inherit: true,
 		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
 		onModifyMove() {},
 	},
-	"oblivious": {
+	oblivious: {
 		inherit: true,
 		desc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 		shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
@@ -58,17 +58,17 @@ let BattleAbilities = {
 		},
 		rating: 0.5,
 	},
-	"overcoat": {
+	overcoat: {
 		inherit: true,
 		shortDesc: "This Pokemon is immune to damage from Sandstorm or Hail.",
 		onTryHit() {},
 		rating: 0.5,
 	},
-	"sapsipper": {
+	sapsipper: {
 		inherit: true,
 		onAllyTryHitSide() {},
 	},
-	"serenegrace": {
+	serenegrace: {
 		inherit: true,
 		onModifyMove(move) {
 			if (move.secondaries && move.id !== 'secretpower') {
@@ -79,7 +79,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"soundproof": {
+	soundproof: {
 		inherit: true,
 		shortDesc: "This Pokemon is immune to sound-based moves, except Heal Bell.",
 		onAllyTryHitSide() {},

@@ -15251,7 +15251,7 @@ let BattlePokedex = {
 		types: ["Poison", "Dragon"],
 		gender: "N",
 		baseStats: {hp: 255, atk: 115, def: 250, spa: 125, spd: 250, spe: 130},
-		abilities: {"0": "Pressure"},
+		abilities: {0: "Pressure"},
 		heightm: 100,
 		weightkg: 0,
 		color: "Purple",

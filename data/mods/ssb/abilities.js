@@ -502,7 +502,7 @@ let BattleAbilities = {
 		},
 	},
 	// Gimm1ck
-	"russianrush": {
+	russianrush: {
 		desc: "If Hail is active, this Pokemon's Speed and accuracy are doubled.",
 		shortDesc: "If Hail is active, this Pokemon's Speed and accuracy are doubled.",
 		onModifySpe(spe, pokemon) {
@@ -714,7 +714,7 @@ let BattleAbilities = {
 					'Castform-Sunny': ['Fire Blast', 'Solar Beam', 'Synthesis', 'Weather Forecast'],
 					'Castform-Rainy': ['Hydro Pump', 'Hurricane', 'Thunder', 'Weather Forecast'],
 					'Castform-Snowy': ['Blizzard', 'Thunder', 'Earth Power', 'Weather Forecast'],
-					'Castform': ['Rain Dance', 'Sunny Day', 'Hail', 'Weather Forecast'],
+					Castform: ['Rain Dance', 'Sunny Day', 'Hail', 'Weather Forecast'],
 				};
 				// Store percentage of PP left for each moveSlot
 				const carryOver = pokemon.moveSlots.slice().map(m => {

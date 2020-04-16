@@ -598,7 +598,7 @@ let BattleMovedex = {
 				}
 			},
 		},
-		ignoreImmunity: {'Ground': true},
+		ignoreImmunity: {Ground: true},
 		target: "normal",
 		type: "Ground",
 	},
@@ -945,7 +945,7 @@ let BattleMovedex = {
 				if (pokemon.hasType('Ground') && type === 'Electric') return false;
 			},
 		},
-		ignoreImmunity: {'Electric': true},
+		ignoreImmunity: {Electric: true},
 		secondary: null,
 		target: "normal",
 		type: "Electric",
@@ -1771,7 +1771,7 @@ let BattleMovedex = {
 		type: "Fire",
 	},
 	// Gimm1ck
-	"slavsquat": {
+	slavsquat: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -2477,7 +2477,7 @@ let BattleMovedex = {
 		type: "Fighting",
 	},
 	// Kipkluif
-	"salutethecolonel": {
+	salutethecolonel: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -2751,7 +2751,7 @@ let BattleMovedex = {
 		zMoveEffect: 'clearnegativeboosts',
 	},
 	// Mad Monty ¾°
-	"llamacide": {
+	llamacide: {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
@@ -3419,7 +3419,7 @@ let BattleMovedex = {
 		type: "Ground",
 	},
 	// pre
-	"refactor": {
+	refactor: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -4220,7 +4220,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Thunder", target);
 			this.add('-anim', source, "Fissure", target);
 		},
-		ignoreImmunity: {'Electric': true},
+		ignoreImmunity: {Electric: true},
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Ground') return 1;
 		},
@@ -4393,7 +4393,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Parting Shot", target);
 		},
 		onHit(target, source) {
-			const sideConditions = {'spikes': 1, 'toxicspikes': 1, 'stealthrock': 1, 'stickyweb': 1};
+			const sideConditions = {spikes: 1, toxicspikes: 1, stealthrock: 1, stickyweb: 1};
 			for (let i in sideConditions) {
 				let layers = source.side.sideConditions[i] ? (source.side.sideConditions[i].layers || 1) : 1;
 				if (source.side.removeSideCondition(i)) {

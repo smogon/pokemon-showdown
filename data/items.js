@@ -2,7 +2,7 @@
 
 /**@type {{[k: string]: ItemData}} */
 let BattleItems = {
-	"abomasite": {
+	abomasite: {
 		id: "abomasite",
 		name: "Abomasite",
 		spritenum: 575,
@@ -18,7 +18,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Abomasnow, this item allows it to Mega Evolve in battle.",
 	},
-	"absolite": {
+	absolite: {
 		id: "absolite",
 		name: "Absolite",
 		spritenum: 576,
@@ -34,7 +34,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Absol, this item allows it to Mega Evolve in battle.",
 	},
-	"absorbbulb": {
+	absorbbulb: {
 		id: "absorbbulb",
 		name: "Absorb Bulb",
 		spritenum: 2,
@@ -53,7 +53,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "Raises holder's Sp. Atk by 1 stage if hit by a Water-type attack. Single use.",
 	},
-	"adamantorb": {
+	adamantorb: {
 		id: "adamantorb",
 		name: "Adamant Orb",
 		spritenum: 4,
@@ -72,7 +72,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
 	},
-	"adrenalineorb": {
+	adrenalineorb: {
 		id: "adrenalineorb",
 		name: "Adrenaline Orb",
 		spritenum: 660,
@@ -91,7 +91,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Raises holder's Speed by 1 stage if it gets affected by Intimidate. Single use.",
 	},
-	"aerodactylite": {
+	aerodactylite: {
 		id: "aerodactylite",
 		name: "Aerodactylite",
 		spritenum: 577,
@@ -107,7 +107,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Aerodactyl, this item allows it to Mega Evolve in battle.",
 	},
-	"aggronite": {
+	aggronite: {
 		id: "aggronite",
 		name: "Aggronite",
 		spritenum: 578,
@@ -123,7 +123,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Aggron, this item allows it to Mega Evolve in battle.",
 	},
-	"aguavberry": {
+	aguavberry: {
 		id: "aguavberry",
 		name: "Aguav Berry",
 		spritenum: 5,
@@ -150,7 +150,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
 	},
-	"airballoon": {
+	airballoon: {
 		id: "airballoon",
 		name: "Air Balloon",
 		spritenum: 6,
@@ -182,7 +182,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "Holder is immune to Ground-type attacks. Pops when holder is hit.",
 	},
-	"alakazite": {
+	alakazite: {
 		id: "alakazite",
 		name: "Alakazite",
 		spritenum: 579,
@@ -198,7 +198,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Alakazam, this item allows it to Mega Evolve in battle.",
 	},
-	"aloraichiumz": {
+	aloraichiumz: {
 		id: "aloraichiumz",
 		name: "Aloraichium Z",
 		spritenum: 655,
@@ -211,7 +211,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Alolan Raichu with Thunderbolt, it can use Stoked Sparksurfer.",
 	},
-	"altarianite": {
+	altarianite: {
 		id: "altarianite",
 		name: "Altarianite",
 		spritenum: 615,
@@ -227,7 +227,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Altaria, this item allows it to Mega Evolve in battle.",
 	},
-	"ampharosite": {
+	ampharosite: {
 		id: "ampharosite",
 		name: "Ampharosite",
 		spritenum: 580,
@@ -243,7 +243,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Ampharos, this item allows it to Mega Evolve in battle.",
 	},
-	"apicotberry": {
+	apicotberry: {
 		id: "apicotberry",
 		name: "Apicot Berry",
 		spritenum: 10,
@@ -264,7 +264,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Raises holder's Sp. Def by 1 stage when at 1/4 max HP or less. Single use.",
 	},
-	"armorfossil": {
+	armorfossil: {
 		id: "armorfossil",
 		name: "Armor Fossil",
 		spritenum: 12,
@@ -276,7 +276,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Shieldon.",
 	},
-	"aspearberry": {
+	aspearberry: {
 		id: "aspearberry",
 		name: "Aspear Berry",
 		spritenum: 13,
@@ -299,7 +299,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder is cured if it is frozen. Single use.",
 	},
-	"assaultvest": {
+	assaultvest: {
 		id: "assaultvest",
 		name: "Assault Vest",
 		spritenum: 581,
@@ -321,7 +321,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Holder's Sp. Def is 1.5x, but it can only select damaging moves.",
 	},
-	"audinite": {
+	audinite: {
 		id: "audinite",
 		name: "Audinite",
 		spritenum: 617,
@@ -337,7 +337,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Audino, this item allows it to Mega Evolve in battle.",
 	},
-	"babiriberry": {
+	babiriberry: {
 		id: "babiriberry",
 		name: "Babiri Berry",
 		spritenum: 17,
@@ -360,7 +360,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Steel-type attack. Single use.",
 	},
-	"banettite": {
+	banettite: {
 		id: "banettite",
 		name: "Banettite",
 		spritenum: 582,
@@ -376,7 +376,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Banette, this item allows it to Mega Evolve in battle.",
 	},
-	"beastball": {
+	beastball: {
 		id: "beastball",
 		name: "Beast Ball",
 		spritenum: 661,
@@ -385,7 +385,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A special Poke Ball designed to catch Ultra Beasts.",
 	},
-	"beedrillite": {
+	beedrillite: {
 		id: "beedrillite",
 		name: "Beedrillite",
 		spritenum: 628,
@@ -401,7 +401,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Beedrill, this item allows it to Mega Evolve in battle.",
 	},
-	"belueberry": {
+	belueberry: {
 		id: "belueberry",
 		name: "Belue Berry",
 		spritenum: 21,
@@ -416,7 +416,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"berryjuice": {
+	berryjuice: {
 		id: "berryjuice",
 		name: "Berry Juice",
 		spritenum: 22,
@@ -434,7 +434,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Restores 20 HP when at 1/2 max HP or less. Single use.",
 	},
-	"berrysweet": {
+	berrysweet: {
 		id: "berrysweet",
 		name: "Berry Sweet",
 		spritenum: 706,
@@ -445,7 +445,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
-	"bigroot": {
+	bigroot: {
 		id: "bigroot",
 		name: "Big Root",
 		spritenum: 29,
@@ -464,7 +464,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
 	},
-	"bindingband": {
+	bindingband: {
 		id: "bindingband",
 		name: "Binding Band",
 		spritenum: 31,
@@ -476,7 +476,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "Holder's partial-trapping moves deal 1/6 max HP per turn instead of 1/8.",
 	},
-	"blackbelt": {
+	blackbelt: {
 		id: "blackbelt",
 		name: "Black Belt",
 		spritenum: 32,
@@ -493,7 +493,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Fighting-type attacks have 1.2x power.",
 	},
-	"blacksludge": {
+	blacksludge: {
 		id: "blacksludge",
 		name: "Black Sludge",
 		spritenum: 34,
@@ -522,7 +522,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not.",
 	},
-	"blackglasses": {
+	blackglasses: {
 		id: "blackglasses",
 		name: "Black Glasses",
 		spritenum: 35,
@@ -539,7 +539,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Dark-type attacks have 1.2x power.",
 	},
-	"blastoisinite": {
+	blastoisinite: {
 		id: "blastoisinite",
 		name: "Blastoisinite",
 		spritenum: 583,
@@ -555,7 +555,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Blastoise, this item allows it to Mega Evolve in battle.",
 	},
-	"blazikenite": {
+	blazikenite: {
 		id: "blazikenite",
 		name: "Blazikenite",
 		spritenum: 584,
@@ -571,7 +571,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Blaziken, this item allows it to Mega Evolve in battle.",
 	},
-	"blueorb": {
+	blueorb: {
 		id: "blueorb",
 		name: "Blue Orb",
 		spritenum: 41,
@@ -593,7 +593,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Kyogre, this item triggers its Primal Reversion in battle.",
 	},
-	"blukberry": {
+	blukberry: {
 		id: "blukberry",
 		name: "Bluk Berry",
 		spritenum: 44,
@@ -607,7 +607,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"blunderpolicy": {
+	blunderpolicy: {
 		id: "blunderpolicy",
 		name: "Blunder Policy",
 		spritenum: 716,
@@ -619,7 +619,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "If the holder misses due to accuracy, its Speed is raised by 2 stages. Single use.",
 	},
-	"bottlecap": {
+	bottlecap: {
 		id: "bottlecap",
 		name: "Bottle Cap",
 		spritenum: 696,
@@ -630,7 +630,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Used for Hyper Training. One of a Pokemon's stats is calculated with an IV of 31.",
 	},
-	"brightpowder": {
+	brightpowder: {
 		id: "brightpowder",
 		name: "Bright Powder",
 		spritenum: 51,
@@ -646,7 +646,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "The accuracy of attacks against the holder is 0.9x.",
 	},
-	"buggem": {
+	buggem: {
 		id: "buggem",
 		name: "Bug Gem",
 		spritenum: 53,
@@ -662,7 +662,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Bug-type attack will have 1.3x power. Single use.",
 	},
-	"bugmemory": {
+	bugmemory: {
 		id: "bugmemory",
 		name: "Bug Memory",
 		spritenum: 673,
@@ -679,7 +679,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Bug type.",
 	},
-	"buginiumz": {
+	buginiumz: {
 		id: "buginiumz",
 		name: "Buginium Z",
 		spritenum: 642,
@@ -693,7 +693,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Bug move, this item allows it to use a Bug Z-Move.",
 	},
-	"burndrive": {
+	burndrive: {
 		id: "burndrive",
 		name: "Burn Drive",
 		spritenum: 54,
@@ -711,7 +711,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's Techno Blast is Fire type.",
 	},
-	"cameruptite": {
+	cameruptite: {
 		id: "cameruptite",
 		name: "Cameruptite",
 		spritenum: 625,
@@ -727,7 +727,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Camerupt, this item allows it to Mega Evolve in battle.",
 	},
-	"cellbattery": {
+	cellbattery: {
 		id: "cellbattery",
 		name: "Cell Battery",
 		spritenum: 60,
@@ -746,7 +746,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "Raises holder's Attack by 1 if hit by an Electric-type attack. Single use.",
 	},
-	"charcoal": {
+	charcoal: {
 		id: "charcoal",
 		name: "Charcoal",
 		spritenum: 61,
@@ -763,7 +763,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Fire-type attacks have 1.2x power.",
 	},
-	"charizarditex": {
+	charizarditex: {
 		id: "charizarditex",
 		name: "Charizardite X",
 		spritenum: 585,
@@ -779,7 +779,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
 	},
-	"charizarditey": {
+	charizarditey: {
 		id: "charizarditey",
 		name: "Charizardite Y",
 		spritenum: 586,
@@ -795,7 +795,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
 	},
-	"chartiberry": {
+	chartiberry: {
 		id: "chartiberry",
 		name: "Charti Berry",
 		spritenum: 62,
@@ -818,7 +818,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Rock-type attack. Single use.",
 	},
-	"cheriberry": {
+	cheriberry: {
 		id: "cheriberry",
 		name: "Cheri Berry",
 		spritenum: 63,
@@ -841,7 +841,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder cures itself if it is paralyzed. Single use.",
 	},
-	"cherishball": {
+	cherishball: {
 		id: "cherishball",
 		name: "Cherish Ball",
 		spritenum: 64,
@@ -850,7 +850,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A rare Poke Ball that has been crafted to commemorate an occasion.",
 	},
-	"chestoberry": {
+	chestoberry: {
 		id: "chestoberry",
 		name: "Chesto Berry",
 		spritenum: 65,
@@ -873,7 +873,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder wakes up if it is asleep. Single use.",
 	},
-	"chilanberry": {
+	chilanberry: {
 		id: "chilanberry",
 		name: "Chilan Berry",
 		spritenum: 66,
@@ -896,7 +896,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a Normal-type attack. Single use.",
 	},
-	"chilldrive": {
+	chilldrive: {
 		id: "chilldrive",
 		name: "Chill Drive",
 		spritenum: 67,
@@ -914,7 +914,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's Techno Blast is Ice type.",
 	},
-	"chippedpot": {
+	chippedpot: {
 		id: "chippedpot",
 		name: "Chipped Pot",
 		spritenum: 720,
@@ -925,7 +925,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Sinistea-Antique into Polteageist-Antique when used.",
 	},
-	"choiceband": {
+	choiceband: {
 		id: "choiceband",
 		name: "Choice Band",
 		spritenum: 68,
@@ -951,7 +951,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder's Attack is 1.5x, but it can only select the first move it executes.",
 	},
-	"choicescarf": {
+	choicescarf: {
 		id: "choicescarf",
 		name: "Choice Scarf",
 		spritenum: 69,
@@ -976,7 +976,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Speed is 1.5x, but it can only select the first move it executes.",
 	},
-	"choicespecs": {
+	choicespecs: {
 		id: "choicespecs",
 		name: "Choice Specs",
 		spritenum: 70,
@@ -1002,7 +1002,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Sp. Atk is 1.5x, but it can only select the first move it executes.",
 	},
-	"chopleberry": {
+	chopleberry: {
 		id: "chopleberry",
 		name: "Chople Berry",
 		spritenum: 71,
@@ -1025,7 +1025,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Fighting-type attack. Single use.",
 	},
-	"clawfossil": {
+	clawfossil: {
 		id: "clawfossil",
 		name: "Claw Fossil",
 		spritenum: 72,
@@ -1037,7 +1037,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Anorith.",
 	},
-	"cloversweet": {
+	cloversweet: {
 		id: "cloversweet",
 		name: "Clover Sweet",
 		spritenum: 707,
@@ -1048,7 +1048,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
-	"cobaberry": {
+	cobaberry: {
 		id: "cobaberry",
 		name: "Coba Berry",
 		spritenum: 76,
@@ -1071,7 +1071,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Flying-type attack. Single use.",
 	},
-	"colburberry": {
+	colburberry: {
 		id: "colburberry",
 		name: "Colbur Berry",
 		spritenum: 78,
@@ -1094,7 +1094,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Dark-type attack. Single use.",
 	},
-	"cornnberry": {
+	cornnberry: {
 		id: "cornnberry",
 		name: "Cornn Berry",
 		spritenum: 81,
@@ -1109,7 +1109,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"coverfossil": {
+	coverfossil: {
 		id: "coverfossil",
 		name: "Cover Fossil",
 		spritenum: 85,
@@ -1121,7 +1121,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Tirtouga.",
 	},
-	"crackedpot": {
+	crackedpot: {
 		id: "crackedpot",
 		name: "Cracked Pot",
 		spritenum: 719,
@@ -1132,7 +1132,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Sinistea into Polteageist when used.",
 	},
-	"custapberry": {
+	custapberry: {
 		id: "custapberry",
 		name: "Custap Berry",
 		spritenum: 86,
@@ -1156,7 +1156,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use.",
 	},
-	"damprock": {
+	damprock: {
 		id: "damprock",
 		name: "Damp Rock",
 		spritenum: 88,
@@ -1167,7 +1167,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's use of Rain Dance lasts 8 turns instead of 5.",
 	},
-	"darkgem": {
+	darkgem: {
 		id: "darkgem",
 		name: "Dark Gem",
 		spritenum: 89,
@@ -1183,7 +1183,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Dark-type attack will have 1.3x power. Single use.",
 	},
-	"darkmemory": {
+	darkmemory: {
 		id: "darkmemory",
 		name: "Dark Memory",
 		spritenum: 683,
@@ -1200,7 +1200,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Dark type.",
 	},
-	"darkiniumz": {
+	darkiniumz: {
 		id: "darkiniumz",
 		name: "Darkinium Z",
 		spritenum: 646,
@@ -1214,7 +1214,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Dark move, this item allows it to use a Dark Z-Move.",
 	},
-	"dawnstone": {
+	dawnstone: {
 		id: "dawnstone",
 		name: "Dawn Stone",
 		spritenum: 92,
@@ -1226,7 +1226,7 @@ let BattleItems = {
 		desc: "Evolves male Kirlia into Gallade and female Snorunt into Froslass when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"decidiumz": {
+	decidiumz: {
 		id: "decidiumz",
 		name: "Decidium Z",
 		spritenum: 650,
@@ -1239,7 +1239,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Decidueye with Spirit Shackle, it can use Sinister Arrow Raid.",
 	},
-	"deepseascale": {
+	deepseascale: {
 		id: "deepseascale",
 		name: "Deep Sea Scale",
 		spritenum: 93,
@@ -1258,7 +1258,7 @@ let BattleItems = {
 		desc: "If held by a Clamperl, its Sp. Def is doubled. Evolves Clamperl into Gorebyss when traded.",
 		shortDesc: "If held by a Clamperl, its Sp. Def is doubled.",
 	},
-	"deepseatooth": {
+	deepseatooth: {
 		id: "deepseatooth",
 		name: "Deep Sea Tooth",
 		spritenum: 94,
@@ -1277,7 +1277,7 @@ let BattleItems = {
 		desc: "If held by a Clamperl, its Sp. Atk is doubled. Evolves Clamperl into Huntail when traded.",
 		shortDesc: "If held by a Clamperl, its Sp. Atk is doubled.",
 	},
-	"destinyknot": {
+	destinyknot: {
 		id: "destinyknot",
 		name: "Destiny Knot",
 		spritenum: 95,
@@ -1294,7 +1294,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "If holder becomes infatuated, the other Pokemon also becomes infatuated.",
 	},
-	"diancite": {
+	diancite: {
 		id: "diancite",
 		name: "Diancite",
 		spritenum: 624,
@@ -1310,7 +1310,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Diancie, this item allows it to Mega Evolve in battle.",
 	},
-	"diveball": {
+	diveball: {
 		id: "diveball",
 		name: "Dive Ball",
 		spritenum: 101,
@@ -1319,7 +1319,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that works especially well on Pokemon that live underwater.",
 	},
-	"domefossil": {
+	domefossil: {
 		id: "domefossil",
 		name: "Dome Fossil",
 		spritenum: 102,
@@ -1331,7 +1331,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Kabuto.",
 	},
-	"dousedrive": {
+	dousedrive: {
 		id: "dousedrive",
 		name: "Douse Drive",
 		spritenum: 103,
@@ -1349,7 +1349,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's Techno Blast is Water type.",
 	},
-	"dracoplate": {
+	dracoplate: {
 		id: "dracoplate",
 		name: "Draco Plate",
 		spritenum: 105,
@@ -1372,7 +1372,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon type.",
 	},
-	"dragonfang": {
+	dragonfang: {
 		id: "dragonfang",
 		name: "Dragon Fang",
 		spritenum: 106,
@@ -1389,7 +1389,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Dragon-type attacks have 1.2x power.",
 	},
-	"dragongem": {
+	dragongem: {
 		id: "dragongem",
 		name: "Dragon Gem",
 		spritenum: 107,
@@ -1405,7 +1405,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Dragon-type attack will have 1.3x power. Single use.",
 	},
-	"dragonmemory": {
+	dragonmemory: {
 		id: "dragonmemory",
 		name: "Dragon Memory",
 		spritenum: 682,
@@ -1422,7 +1422,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Dragon type.",
 	},
-	"dragonscale": {
+	dragonscale: {
 		id: "dragonscale",
 		name: "Dragon Scale",
 		spritenum: 108,
@@ -1433,7 +1433,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Evolves Seadra into Kingdra when traded.",
 	},
-	"dragoniumz": {
+	dragoniumz: {
 		id: "dragoniumz",
 		name: "Dragonium Z",
 		spritenum: 645,
@@ -1447,7 +1447,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Dragon move, this item allows it to use a Dragon Z-Move.",
 	},
-	"dreadplate": {
+	dreadplate: {
 		id: "dreadplate",
 		name: "Dread Plate",
 		spritenum: 110,
@@ -1470,7 +1470,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark type.",
 	},
-	"dreamball": {
+	dreamball: {
 		id: "dreamball",
 		name: "Dream Ball",
 		spritenum: 111,
@@ -1479,7 +1479,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that makes it easier to catch wild Pokémon while they're asleep.",
 	},
-	"dubiousdisc": {
+	dubiousdisc: {
 		id: "dubiousdisc",
 		name: "Dubious Disc",
 		spritenum: 113,
@@ -1490,7 +1490,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Evolves Porygon2 into Porygon-Z when traded.",
 	},
-	"durinberry": {
+	durinberry: {
 		id: "durinberry",
 		name: "Durin Berry",
 		spritenum: 114,
@@ -1505,7 +1505,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"duskball": {
+	duskball: {
 		id: "duskball",
 		name: "Dusk Ball",
 		spritenum: 115,
@@ -1514,7 +1514,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that makes it easier to catch wild Pokemon at night or in caves.",
 	},
-	"duskstone": {
+	duskstone: {
 		id: "duskstone",
 		name: "Dusk Stone",
 		spritenum: 116,
@@ -1526,7 +1526,7 @@ let BattleItems = {
 		desc: "Evolves Murkrow into Honchkrow, Misdreavus into Mismagius, Lampent into Chandelure, and Doublade into Aegislash when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"earthplate": {
+	earthplate: {
 		id: "earthplate",
 		name: "Earth Plate",
 		spritenum: 117,
@@ -1549,7 +1549,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type.",
 	},
-	"eeviumz": {
+	eeviumz: {
 		id: "eeviumz",
 		name: "Eevium Z",
 		spritenum: 657,
@@ -1562,7 +1562,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Eevee with Last Resort, it can use Extreme Evoboost.",
 	},
-	"ejectbutton": {
+	ejectbutton: {
 		id: "ejectbutton",
 		name: "Eject Button",
 		spritenum: 118,
@@ -1586,7 +1586,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "If holder survives a hit, it immediately switches out to a chosen ally. Single use.",
 	},
-	"ejectpack": {
+	ejectpack: {
 		id: "ejectpack",
 		name: "Eject Pack",
 		spritenum: 714,
@@ -1615,7 +1615,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
 	},
-	"electirizer": {
+	electirizer: {
 		id: "electirizer",
 		name: "Electirizer",
 		spritenum: 119,
@@ -1626,7 +1626,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Evolves Electabuzz into Electivire when traded.",
 	},
-	"electricgem": {
+	electricgem: {
 		id: "electricgem",
 		name: "Electric Gem",
 		spritenum: 120,
@@ -1642,7 +1642,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Electric-type attack will have 1.3x power. Single use.",
 	},
-	"electricmemory": {
+	electricmemory: {
 		id: "electricmemory",
 		name: "Electric Memory",
 		spritenum: 679,
@@ -1659,7 +1659,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Electric type.",
 	},
-	"electricseed": {
+	electricseed: {
 		id: "electricseed",
 		name: "Electric Seed",
 		spritenum: 664,
@@ -1684,7 +1684,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "If the terrain is Electric Terrain, raises holder's Defense by 1 stage. Single use.",
 	},
-	"electriumz": {
+	electriumz: {
 		id: "electriumz",
 		name: "Electrium Z",
 		spritenum: 634,
@@ -1698,7 +1698,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has an Electric move, this item allows it to use an Electric Z-Move.",
 	},
-	"energypowder": {
+	energypowder: {
 		id: "energypowder",
 		name: "Energy Powder",
 		spritenum: 123,
@@ -1709,7 +1709,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Restores 60 HP to one Pokemon.",
 	},
-	"enigmaberry": {
+	enigmaberry: {
 		id: "enigmaberry",
 		name: "Enigma Berry",
 		spritenum: 124,
@@ -1734,7 +1734,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Restores 1/4 max HP after holder is hit by a supereffective move. Single use.",
 	},
-	"eviolite": {
+	eviolite: {
 		id: "eviolite",
 		name: "Eviolite",
 		spritenum: 130,
@@ -1759,7 +1759,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "If holder's species can evolve, its Defense and Sp. Def are 1.5x.",
 	},
-	"expertbelt": {
+	expertbelt: {
 		id: "expertbelt",
 		name: "Expert Belt",
 		spritenum: 132,
@@ -1775,7 +1775,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's attacks that are super effective against the target do 1.2x damage.",
 	},
-	"fairiumz": {
+	fairiumz: {
 		id: "fairiumz",
 		name: "Fairium Z",
 		spritenum: 648,
@@ -1789,7 +1789,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Fairy move, this item allows it to use a Fairy Z-Move.",
 	},
-	"fairygem": {
+	fairygem: {
 		id: "fairygem",
 		name: "Fairy Gem",
 		spritenum: 611,
@@ -1805,7 +1805,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Fairy-type attack will have 1.3x power. Single use.",
 	},
-	"fairymemory": {
+	fairymemory: {
 		id: "fairymemory",
 		name: "Fairy Memory",
 		spritenum: 684,
@@ -1822,7 +1822,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Fairy type.",
 	},
-	"fastball": {
+	fastball: {
 		id: "fastball",
 		name: "Fast Ball",
 		spritenum: 137,
@@ -1831,7 +1831,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that makes it easier to catch Pokemon which are quick to run away.",
 	},
-	"fightinggem": {
+	fightinggem: {
 		id: "fightinggem",
 		name: "Fighting Gem",
 		spritenum: 139,
@@ -1847,7 +1847,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Fighting-type attack will have 1.3x power. Single use.",
 	},
-	"fightingmemory": {
+	fightingmemory: {
 		id: "fightingmemory",
 		name: "Fighting Memory",
 		spritenum: 668,
@@ -1864,7 +1864,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Fighting type.",
 	},
-	"fightiniumz": {
+	fightiniumz: {
 		id: "fightiniumz",
 		name: "Fightinium Z",
 		spritenum: 637,
@@ -1878,7 +1878,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Fighting move, this item allows it to use a Fighting Z-Move.",
 	},
-	"figyberry": {
+	figyberry: {
 		id: "figyberry",
 		name: "Figy Berry",
 		spritenum: 140,
@@ -1905,7 +1905,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
 	},
-	"firegem": {
+	firegem: {
 		id: "firegem",
 		name: "Fire Gem",
 		spritenum: 141,
@@ -1921,7 +1921,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Fire-type attack will have 1.3x power. Single use.",
 	},
-	"firememory": {
+	firememory: {
 		id: "firememory",
 		name: "Fire Memory",
 		spritenum: 676,
@@ -1938,7 +1938,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Fire type.",
 	},
-	"firestone": {
+	firestone: {
 		id: "firestone",
 		name: "Fire Stone",
 		spritenum: 142,
@@ -1950,7 +1950,7 @@ let BattleItems = {
 		desc: "Evolves Vulpix into Ninetales, Growlithe into Arcanine, Eevee into Flareon, and Pansear into Simisear when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"firiumz": {
+	firiumz: {
 		id: "firiumz",
 		name: "Firium Z",
 		spritenum: 632,
@@ -1964,7 +1964,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Fire move, this item allows it to use a Fire Z-Move.",
 	},
-	"fistplate": {
+	fistplate: {
 		id: "fistplate",
 		name: "Fist Plate",
 		spritenum: 143,
@@ -1987,7 +1987,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting type.",
 	},
-	"flameorb": {
+	flameorb: {
 		id: "flameorb",
 		name: "Flame Orb",
 		spritenum: 145,
@@ -2004,7 +2004,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "At the end of every turn, this item attempts to burn the holder.",
 	},
-	"flameplate": {
+	flameplate: {
 		id: "flameplate",
 		name: "Flame Plate",
 		spritenum: 146,
@@ -2027,7 +2027,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Fire-type attacks have 1.2x power. Judgment is Fire type.",
 	},
-	"floatstone": {
+	floatstone: {
 		id: "floatstone",
 		name: "Float Stone",
 		spritenum: 147,
@@ -2041,7 +2041,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "Holder's weight is halved.",
 	},
-	"flowersweet": {
+	flowersweet: {
 		id: "flowersweet",
 		name: "Flower Sweet",
 		spritenum: 708,
@@ -2052,7 +2052,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
-	"flyinggem": {
+	flyinggem: {
 		id: "flyinggem",
 		name: "Flying Gem",
 		spritenum: 149,
@@ -2068,7 +2068,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Flying-type attack will have 1.3x power. Single use.",
 	},
-	"flyingmemory": {
+	flyingmemory: {
 		id: "flyingmemory",
 		name: "Flying Memory",
 		spritenum: 669,
@@ -2085,7 +2085,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Flying type.",
 	},
-	"flyiniumz": {
+	flyiniumz: {
 		id: "flyiniumz",
 		name: "Flyinium Z",
 		spritenum: 640,
@@ -2099,7 +2099,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Flying move, this item allows it to use a Flying Z-Move.",
 	},
-	"focusband": {
+	focusband: {
 		id: "focusband",
 		name: "Focus Band",
 		spritenum: 150,
@@ -2116,7 +2116,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder has a 10% chance to survive an attack that would KO it with 1 HP.",
 	},
-	"focussash": {
+	focussash: {
 		id: "focussash",
 		name: "Focus Sash",
 		spritenum: 151,
@@ -2134,7 +2134,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "If holder's HP is full, will survive an attack that would KO it with 1 HP. Single use.",
 	},
-	"fossilizedbird": {
+	fossilizedbird: {
 		id: "fossilizedbird",
 		name: "Fossilized Bird",
 		spritenum: 700,
@@ -2145,7 +2145,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Can revive into Arctovish with Fossilized Fish or Arctozolt with Fossilized Dino.",
 	},
-	"fossilizeddino": {
+	fossilizeddino: {
 		id: "fossilizeddino",
 		name: "Fossilized Dino",
 		spritenum: 703,
@@ -2156,7 +2156,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Can revive into Dracozolt with Fossilized Drake or Arctozolt with Fossilized Bird.",
 	},
-	"fossilizeddrake": {
+	fossilizeddrake: {
 		id: "fossilizeddrake",
 		name: "Fossilized Drake",
 		spritenum: 702,
@@ -2167,7 +2167,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Can revive into Dracozolt with Fossilized Dino or Dracovish with Fossilized Fish.",
 	},
-	"fossilizedfish": {
+	fossilizedfish: {
 		id: "fossilizedfish",
 		name: "Fossilized Fish",
 		spritenum: 701,
@@ -2178,7 +2178,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Can revive into Dracovish with Fossilized Drake or Arctovish with Fossilized Bird.",
 	},
-	"friendball": {
+	friendball: {
 		id: "friendball",
 		name: "Friend Ball",
 		spritenum: 153,
@@ -2187,7 +2187,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that makes caught Pokemon more friendly.",
 	},
-	"fullincense": {
+	fullincense: {
 		id: "fullincense",
 		name: "Full Incense",
 		spritenum: 155,
@@ -2201,7 +2201,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder moves last in its priority bracket.",
 	},
-	"galladite": {
+	galladite: {
 		id: "galladite",
 		name: "Galladite",
 		spritenum: 616,
@@ -2217,7 +2217,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Gallade, this item allows it to Mega Evolve in battle.",
 	},
-	"ganlonberry": {
+	ganlonberry: {
 		id: "ganlonberry",
 		name: "Ganlon Berry",
 		spritenum: 158,
@@ -2238,7 +2238,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Raises holder's Defense by 1 stage when at 1/4 max HP or less. Single use.",
 	},
-	"garchompite": {
+	garchompite: {
 		id: "garchompite",
 		name: "Garchompite",
 		spritenum: 589,
@@ -2254,7 +2254,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Garchomp, this item allows it to Mega Evolve in battle.",
 	},
-	"gardevoirite": {
+	gardevoirite: {
 		id: "gardevoirite",
 		name: "Gardevoirite",
 		spritenum: 587,
@@ -2270,7 +2270,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Gardevoir, this item allows it to Mega Evolve in battle.",
 	},
-	"gengarite": {
+	gengarite: {
 		id: "gengarite",
 		name: "Gengarite",
 		spritenum: 588,
@@ -2286,7 +2286,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Gengar, this item allows it to Mega Evolve in battle.",
 	},
-	"ghostgem": {
+	ghostgem: {
 		id: "ghostgem",
 		name: "Ghost Gem",
 		spritenum: 161,
@@ -2302,7 +2302,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Ghost-type attack will have 1.3x power. Single use.",
 	},
-	"ghostmemory": {
+	ghostmemory: {
 		id: "ghostmemory",
 		name: "Ghost Memory",
 		spritenum: 674,
@@ -2319,7 +2319,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Ghost type.",
 	},
-	"ghostiumz": {
+	ghostiumz: {
 		id: "ghostiumz",
 		name: "Ghostium Z",
 		spritenum: 644,
@@ -2333,7 +2333,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Ghost move, this item allows it to use a Ghost Z-Move.",
 	},
-	"glalitite": {
+	glalitite: {
 		id: "glalitite",
 		name: "Glalitite",
 		spritenum: 623,
@@ -2349,7 +2349,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Glalie, this item allows it to Mega Evolve in battle.",
 	},
-	"goldbottlecap": {
+	goldbottlecap: {
 		id: "goldbottlecap",
 		name: "Gold Bottle Cap",
 		spritenum: 697,
@@ -2360,7 +2360,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Used for Hyper Training. All of a Pokemon's stats are calculated with an IV of 31.",
 	},
-	"grassgem": {
+	grassgem: {
 		id: "grassgem",
 		name: "Grass Gem",
 		spritenum: 172,
@@ -2376,7 +2376,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Grass-type attack will have 1.3x power. Single use.",
 	},
-	"grassmemory": {
+	grassmemory: {
 		id: "grassmemory",
 		name: "Grass Memory",
 		spritenum: 678,
@@ -2393,7 +2393,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Grass type.",
 	},
-	"grassiumz": {
+	grassiumz: {
 		id: "grassiumz",
 		name: "Grassium Z",
 		spritenum: 635,
@@ -2407,7 +2407,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Grass move, this item allows it to use a Grass Z-Move.",
 	},
-	"grassyseed": {
+	grassyseed: {
 		id: "grassyseed",
 		name: "Grassy Seed",
 		spritenum: 667,
@@ -2432,7 +2432,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "If the terrain is Grassy Terrain, raises holder's Defense by 1 stage. Single use.",
 	},
-	"greatball": {
+	greatball: {
 		id: "greatball",
 		name: "Great Ball",
 		spritenum: 174,
@@ -2441,7 +2441,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A high-performance Ball that provides a higher catch rate than a Poke Ball.",
 	},
-	"grepaberry": {
+	grepaberry: {
 		id: "grepaberry",
 		name: "Grepa Berry",
 		spritenum: 178,
@@ -2455,7 +2455,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"gripclaw": {
+	gripclaw: {
 		id: "gripclaw",
 		name: "Grip Claw",
 		spritenum: 179,
@@ -2467,7 +2467,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's partial-trapping moves always last 7 turns.",
 	},
-	"griseousorb": {
+	griseousorb: {
 		id: "griseousorb",
 		name: "Griseous Orb",
 		spritenum: 180,
@@ -2493,7 +2493,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
 	},
-	"groundgem": {
+	groundgem: {
 		id: "groundgem",
 		name: "Ground Gem",
 		spritenum: 182,
@@ -2509,7 +2509,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Ground-type attack will have 1.3x power. Single use.",
 	},
-	"groundmemory": {
+	groundmemory: {
 		id: "groundmemory",
 		name: "Ground Memory",
 		spritenum: 671,
@@ -2526,7 +2526,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Ground type.",
 	},
-	"groundiumz": {
+	groundiumz: {
 		id: "groundiumz",
 		name: "Groundium Z",
 		spritenum: 639,
@@ -2540,7 +2540,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Ground move, this item allows it to use a Ground Z-Move.",
 	},
-	"gyaradosite": {
+	gyaradosite: {
 		id: "gyaradosite",
 		name: "Gyaradosite",
 		spritenum: 589,
@@ -2556,7 +2556,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Gyarados, this item allows it to Mega Evolve in battle.",
 	},
-	"habanberry": {
+	habanberry: {
 		id: "habanberry",
 		name: "Haban Berry",
 		spritenum: 185,
@@ -2579,7 +2579,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Dragon-type attack. Single use.",
 	},
-	"hardstone": {
+	hardstone: {
 		id: "hardstone",
 		name: "Hard Stone",
 		spritenum: 187,
@@ -2596,7 +2596,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Rock-type attacks have 1.2x power.",
 	},
-	"healball": {
+	healball: {
 		id: "healball",
 		name: "Heal Ball",
 		spritenum: 188,
@@ -2605,7 +2605,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A remedial Poke Ball that restores the caught Pokemon's HP and status problem.",
 	},
-	"heatrock": {
+	heatrock: {
 		id: "heatrock",
 		name: "Heat Rock",
 		spritenum: 193,
@@ -2616,7 +2616,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's use of Sunny Day lasts 8 turns instead of 5.",
 	},
-	"heavyball": {
+	heavyball: {
 		id: "heavyball",
 		name: "Heavy Ball",
 		spritenum: 194,
@@ -2625,7 +2625,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball for catching very heavy Pokemon.",
 	},
-	"heavydutyboots": {
+	heavydutyboots: {
 		id: "heavydutyboots",
 		name: "Heavy-Duty Boots",
 		spritenum: 715,
@@ -2637,7 +2637,7 @@ let BattleItems = {
 		desc: "When switching in, the holder is unaffected by hazards on its side of the field.",
 		// Hazard Immunity implemented in moves.js
 	},
-	"helixfossil": {
+	helixfossil: {
 		id: "helixfossil",
 		name: "Helix Fossil",
 		spritenum: 195,
@@ -2649,7 +2649,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Omanyte.",
 	},
-	"heracronite": {
+	heracronite: {
 		id: "heracronite",
 		name: "Heracronite",
 		spritenum: 590,
@@ -2665,7 +2665,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Heracross, this item allows it to Mega Evolve in battle.",
 	},
-	"hondewberry": {
+	hondewberry: {
 		id: "hondewberry",
 		name: "Hondew Berry",
 		spritenum: 213,
@@ -2679,7 +2679,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"houndoominite": {
+	houndoominite: {
 		id: "houndoominite",
 		name: "Houndoominite",
 		spritenum: 591,
@@ -2695,7 +2695,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Houndoom, this item allows it to Mega Evolve in battle.",
 	},
-	"iapapaberry": {
+	iapapaberry: {
 		id: "iapapaberry",
 		name: "Iapapa Berry",
 		spritenum: 217,
@@ -2722,7 +2722,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
 	},
-	"icegem": {
+	icegem: {
 		id: "icegem",
 		name: "Ice Gem",
 		spritenum: 218,
@@ -2738,7 +2738,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Ice-type attack will have 1.3x power. Single use.",
 	},
-	"icememory": {
+	icememory: {
 		id: "icememory",
 		name: "Ice Memory",
 		spritenum: 681,
@@ -2755,7 +2755,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Ice type.",
 	},
-	"icestone": {
+	icestone: {
 		id: "icestone",
 		name: "Ice Stone",
 		spritenum: 693,
@@ -2767,7 +2767,7 @@ let BattleItems = {
 		desc: "Evolves Alolan Sandshrew into Alolan Sandslash, Alolan Vulpix into Alolan Ninetales, Eevee into Glaceon, and Galarian Darumaka into Galarian Darmanitan when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"icicleplate": {
+	icicleplate: {
 		id: "icicleplate",
 		name: "Icicle Plate",
 		spritenum: 220,
@@ -2790,7 +2790,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Ice-type attacks have 1.2x power. Judgment is Ice type.",
 	},
-	"iciumz": {
+	iciumz: {
 		id: "iciumz",
 		name: "Icium Z",
 		spritenum: 636,
@@ -2804,7 +2804,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has an Ice move, this item allows it to use an Ice Z-Move.",
 	},
-	"icyrock": {
+	icyrock: {
 		id: "icyrock",
 		name: "Icy Rock",
 		spritenum: 221,
@@ -2815,7 +2815,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's use of Hail lasts 8 turns instead of 5.",
 	},
-	"inciniumz": {
+	inciniumz: {
 		id: "inciniumz",
 		name: "Incinium Z",
 		spritenum: 651,
@@ -2828,7 +2828,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by an Incineroar with Darkest Lariat, it can use Malicious Moonsault.",
 	},
-	"insectplate": {
+	insectplate: {
 		id: "insectplate",
 		name: "Insect Plate",
 		spritenum: 223,
@@ -2851,7 +2851,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Bug-type attacks have 1.2x power. Judgment is Bug type.",
 	},
-	"ironball": {
+	ironball: {
 		id: "ironball",
 		name: "Iron Ball",
 		spritenum: 224,
@@ -2871,7 +2871,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder is grounded, Speed halved. If Flying type, takes neutral Ground damage.",
 	},
-	"ironplate": {
+	ironplate: {
 		id: "ironplate",
 		name: "Iron Plate",
 		spritenum: 225,
@@ -2894,7 +2894,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Steel-type attacks have 1.2x power. Judgment is Steel type.",
 	},
-	"jabocaberry": {
+	jabocaberry: {
 		id: "jabocaberry",
 		name: "Jaboca Berry",
 		spritenum: 230,
@@ -2916,7 +2916,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use.",
 	},
-	"jawfossil": {
+	jawfossil: {
 		id: "jawfossil",
 		name: "Jaw Fossil",
 		spritenum: 694,
@@ -2928,7 +2928,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Tyrunt.",
 	},
-	"kasibberry": {
+	kasibberry: {
 		id: "kasibberry",
 		name: "Kasib Berry",
 		spritenum: 233,
@@ -2951,7 +2951,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Ghost-type attack. Single use.",
 	},
-	"kebiaberry": {
+	kebiaberry: {
 		id: "kebiaberry",
 		name: "Kebia Berry",
 		spritenum: 234,
@@ -2974,7 +2974,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Poison-type attack. Single use.",
 	},
-	"keeberry": {
+	keeberry: {
 		id: "keeberry",
 		name: "Kee Berry",
 		spritenum: 593,
@@ -2996,7 +2996,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Raises holder's Defense by 1 stage after it is hit by a physical attack. Single use.",
 	},
-	"kelpsyberry": {
+	kelpsyberry: {
 		id: "kelpsyberry",
 		name: "Kelpsy Berry",
 		spritenum: 235,
@@ -3010,7 +3010,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"kangaskhanite": {
+	kangaskhanite: {
 		id: "kangaskhanite",
 		name: "Kangaskhanite",
 		spritenum: 592,
@@ -3026,7 +3026,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Kangaskhan, this item allows it to Mega Evolve in battle.",
 	},
-	"kingsrock": {
+	kingsrock: {
 		id: "kingsrock",
 		name: "King's Rock",
 		spritenum: 236,
@@ -3052,7 +3052,7 @@ let BattleItems = {
 		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
 		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
-	"kommoniumz": {
+	kommoniumz: {
 		id: "kommoniumz",
 		name: "Kommonium Z",
 		spritenum: 690,
@@ -3065,7 +3065,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Kommo-o with Clanging Scales, it can use Clangorous Soulblaze.",
 	},
-	"laggingtail": {
+	laggingtail: {
 		id: "laggingtail",
 		name: "Lagging Tail",
 		spritenum: 237,
@@ -3079,7 +3079,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder moves last in its priority bracket.",
 	},
-	"lansatberry": {
+	lansatberry: {
 		id: "lansatberry",
 		name: "Lansat Berry",
 		spritenum: 238,
@@ -3100,7 +3100,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder gains the Focus Energy effect when at 1/4 max HP or less. Single use.",
 	},
-	"latiasite": {
+	latiasite: {
 		id: "latiasite",
 		name: "Latiasite",
 		spritenum: 629,
@@ -3116,7 +3116,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Latias, this item allows it to Mega Evolve in battle.",
 	},
-	"latiosite": {
+	latiosite: {
 		id: "latiosite",
 		name: "Latiosite",
 		spritenum: 630,
@@ -3132,7 +3132,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Latios, this item allows it to Mega Evolve in battle.",
 	},
-	"laxincense": {
+	laxincense: {
 		id: "laxincense",
 		name: "Lax Incense",
 		spritenum: 240,
@@ -3148,7 +3148,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "The accuracy of attacks against the holder is 0.9x.",
 	},
-	"leafstone": {
+	leafstone: {
 		id: "leafstone",
 		name: "Leaf Stone",
 		spritenum: 241,
@@ -3160,7 +3160,7 @@ let BattleItems = {
 		desc: "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Eevee into Leafeon, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"leek": {
+	leek: {
 		id: "leek",
 		name: "Leek",
 		fling: {
@@ -3177,7 +3177,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "If held by a Farfetch'd or Sirfetch'd, its critical hit ratio is raised by 2 stages.",
 	},
-	"leftovers": {
+	leftovers: {
 		id: "leftovers",
 		name: "Leftovers",
 		spritenum: 242,
@@ -3198,7 +3198,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "At the end of every turn, holder restores 1/16 of its max HP.",
 	},
-	"leppaberry": {
+	leppaberry: {
 		id: "leppaberry",
 		name: "Leppa Berry",
 		spritenum: 244,
@@ -3225,7 +3225,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Restores 10 PP to the first of the holder's moves to reach 0 PP. Single use.",
 	},
-	"levelball": {
+	levelball: {
 		id: "levelball",
 		name: "Level Ball",
 		spritenum: 246,
@@ -3234,7 +3234,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball for catching Pokemon that are a lower level than your own.",
 	},
-	"liechiberry": {
+	liechiberry: {
 		id: "liechiberry",
 		name: "Liechi Berry",
 		spritenum: 248,
@@ -3255,7 +3255,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Raises holder's Attack by 1 stage when at 1/4 max HP or less. Single use.",
 	},
-	"lifeorb": {
+	lifeorb: {
 		id: "lifeorb",
 		name: "Life Orb",
 		spritenum: 249,
@@ -3274,7 +3274,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack.",
 	},
-	"lightball": {
+	lightball: {
 		id: "lightball",
 		name: "Light Ball",
 		spritenum: 251,
@@ -3299,7 +3299,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
 	},
-	"lightclay": {
+	lightclay: {
 		id: "lightclay",
 		name: "Light Clay",
 		spritenum: 252,
@@ -3311,7 +3311,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's use of Aurora Veil, Light Screen, or Reflect lasts 8 turns instead of 5.",
 	},
-	"lopunnite": {
+	lopunnite: {
 		id: "lopunnite",
 		name: "Lopunnite",
 		spritenum: 626,
@@ -3327,7 +3327,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Lopunny, this item allows it to Mega Evolve in battle.",
 	},
-	"loveball": {
+	loveball: {
 		id: "loveball",
 		name: "Love Ball",
 		spritenum: 258,
@@ -3336,7 +3336,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "Poke Ball for catching Pokemon that are the opposite gender of your Pokemon.",
 	},
-	"lovesweet": {
+	lovesweet: {
 		id: "lovesweet",
 		name: "Love Sweet",
 		spritenum: 705,
@@ -3347,7 +3347,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
-	"lucarionite": {
+	lucarionite: {
 		id: "lucarionite",
 		name: "Lucarionite",
 		spritenum: 594,
@@ -3363,7 +3363,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Lucario, this item allows it to Mega Evolve in battle.",
 	},
-	"luckypunch": {
+	luckypunch: {
 		id: "luckypunch",
 		name: "Lucky Punch",
 		spritenum: 261,
@@ -3381,7 +3381,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Chansey, its critical hit ratio is raised by 2 stages.",
 	},
-	"lumberry": {
+	lumberry: {
 		id: "lumberry",
 		name: "Lum Berry",
 		spritenum: 262,
@@ -3406,7 +3406,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder cures itself if it is confused or has a major status condition. Single use.",
 	},
-	"luminousmoss": {
+	luminousmoss: {
 		id: "luminousmoss",
 		name: "Luminous Moss",
 		spritenum: 595,
@@ -3425,7 +3425,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Raises holder's Sp. Def by 1 stage if hit by a Water-type attack. Single use.",
 	},
-	"lunaliumz": {
+	lunaliumz: {
 		id: "lunaliumz",
 		name: "Lunalium Z",
 		spritenum: 686,
@@ -3438,7 +3438,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Lunala or Dawn Wings Necrozma with Moongeist Beam can use a special Z-Move.",
 	},
-	"lureball": {
+	lureball: {
 		id: "lureball",
 		name: "Lure Ball",
 		spritenum: 264,
@@ -3447,7 +3447,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball for catching Pokemon hooked by a Rod when fishing.",
 	},
-	"lustrousorb": {
+	lustrousorb: {
 		id: "lustrousorb",
 		name: "Lustrous Orb",
 		spritenum: 265,
@@ -3466,7 +3466,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
 	},
-	"luxuryball": {
+	luxuryball: {
 		id: "luxuryball",
 		name: "Luxury Ball",
 		spritenum: 266,
@@ -3475,7 +3475,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A comfortable Poke Ball that makes a caught wild Pokemon quickly grow friendly.",
 	},
-	"lycaniumz": {
+	lycaniumz: {
 		id: "lycaniumz",
 		name: "Lycanium Z",
 		spritenum: 689,
@@ -3488,7 +3488,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Lycanroc forme with Stone Edge, it can use Splintered Stormshards.",
 	},
-	"machobrace": {
+	machobrace: {
 		id: "machobrace",
 		name: "Macho Brace",
 		spritenum: 269,
@@ -3503,7 +3503,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
-	"magmarizer": {
+	magmarizer: {
 		id: "magmarizer",
 		name: "Magmarizer",
 		spritenum: 272,
@@ -3514,7 +3514,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Evolves Magmar into Magmortar when traded.",
 	},
-	"magnet": {
+	magnet: {
 		id: "magnet",
 		name: "Magnet",
 		spritenum: 273,
@@ -3531,7 +3531,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Electric-type attacks have 1.2x power.",
 	},
-	"magoberry": {
+	magoberry: {
 		id: "magoberry",
 		name: "Mago Berry",
 		spritenum: 274,
@@ -3558,7 +3558,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
 	},
-	"magostberry": {
+	magostberry: {
 		id: "magostberry",
 		name: "Magost Berry",
 		spritenum: 275,
@@ -3573,7 +3573,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"mail": {
+	mail: {
 		id: "mail",
 		name: "Mail",
 		spritenum: 403,
@@ -3586,7 +3586,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
 	},
-	"manectite": {
+	manectite: {
 		id: "manectite",
 		name: "Manectite",
 		spritenum: 596,
@@ -3602,7 +3602,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Manectric, this item allows it to Mega Evolve in battle.",
 	},
-	"marangaberry": {
+	marangaberry: {
 		id: "marangaberry",
 		name: "Maranga Berry",
 		spritenum: 597,
@@ -3623,7 +3623,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Raises holder's Sp. Def by 1 stage after it is hit by a special attack. Single use.",
 	},
-	"marshadiumz": {
+	marshadiumz: {
 		id: "marshadiumz",
 		name: "Marshadium Z",
 		spritenum: 654,
@@ -3636,7 +3636,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by Marshadow with Spectral Thief, it can use Soul-Stealing 7-Star Strike.",
 	},
-	"masterball": {
+	masterball: {
 		id: "masterball",
 		name: "Master Ball",
 		spritenum: 276,
@@ -3645,7 +3645,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "The best Ball with the ultimate performance. It will catch any wild Pokemon.",
 	},
-	"mawilite": {
+	mawilite: {
 		id: "mawilite",
 		name: "Mawilite",
 		spritenum: 598,
@@ -3661,7 +3661,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Mawile, this item allows it to Mega Evolve in battle.",
 	},
-	"meadowplate": {
+	meadowplate: {
 		id: "meadowplate",
 		name: "Meadow Plate",
 		spritenum: 282,
@@ -3684,7 +3684,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Grass-type attacks have 1.2x power. Judgment is Grass type.",
 	},
-	"medichamite": {
+	medichamite: {
 		id: "medichamite",
 		name: "Medichamite",
 		spritenum: 599,
@@ -3700,7 +3700,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Medicham, this item allows it to Mega Evolve in battle.",
 	},
-	"mentalherb": {
+	mentalherb: {
 		id: "mentalherb",
 		name: "Mental Herb",
 		spritenum: 285,
@@ -3740,7 +3740,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cures holder of Attract, Disable, Encore, Heal Block, Taunt, Torment. Single use.",
 	},
-	"metagrossite": {
+	metagrossite: {
 		id: "metagrossite",
 		name: "Metagrossite",
 		spritenum: 618,
@@ -3756,7 +3756,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Metagross, this item allows it to Mega Evolve in battle.",
 	},
-	"metalcoat": {
+	metalcoat: {
 		id: "metalcoat",
 		name: "Metal Coat",
 		spritenum: 286,
@@ -3774,7 +3774,7 @@ let BattleItems = {
 		desc: "Holder's Steel-type attacks have 1.2x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
 		shortDesc: "Holder's Steel-type attacks have 1.2x power.",
 	},
-	"metalpowder": {
+	metalpowder: {
 		id: "metalpowder",
 		name: "Metal Powder",
 		fling: {
@@ -3792,7 +3792,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "If held by a Ditto that hasn't Transformed, its Defense is doubled.",
 	},
-	"metronome": {
+	metronome: {
 		id: "metronome",
 		name: "Metronome",
 		spritenum: 289,
@@ -3830,7 +3830,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
 	},
-	"mewniumz": {
+	mewniumz: {
 		id: "mewniumz",
 		name: "Mewnium Z",
 		spritenum: 658,
@@ -3843,7 +3843,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Mew with Psychic, it can use Genesis Supernova.",
 	},
-	"mewtwonitex": {
+	mewtwonitex: {
 		id: "mewtwonitex",
 		name: "Mewtwonite X",
 		spritenum: 600,
@@ -3859,7 +3859,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
 	},
-	"mewtwonitey": {
+	mewtwonitey: {
 		id: "mewtwonitey",
 		name: "Mewtwonite Y",
 		spritenum: 601,
@@ -3875,7 +3875,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
 	},
-	"micleberry": {
+	micleberry: {
 		id: "micleberry",
 		name: "Micle Berry",
 		spritenum: 290,
@@ -3907,7 +3907,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use.",
 	},
-	"mimikiumz": {
+	mimikiumz: {
 		id: "mimikiumz",
 		name: "Mimikium Z",
 		spritenum: 688,
@@ -3920,7 +3920,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Mimikyu with Play Rough, it can use Let's Snuggle Forever.",
 	},
-	"mindplate": {
+	mindplate: {
 		id: "mindplate",
 		name: "Mind Plate",
 		spritenum: 291,
@@ -3943,7 +3943,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic type.",
 	},
-	"miracleseed": {
+	miracleseed: {
 		id: "miracleseed",
 		name: "Miracle Seed",
 		fling: {
@@ -3960,7 +3960,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Grass-type attacks have 1.2x power.",
 	},
-	"mistyseed": {
+	mistyseed: {
 		id: "mistyseed",
 		name: "Misty Seed",
 		spritenum: 666,
@@ -3985,7 +3985,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "If the terrain is Misty Terrain, raises holder's Sp. Def by 1 stage. Single use.",
 	},
-	"moonball": {
+	moonball: {
 		id: "moonball",
 		name: "Moon Ball",
 		spritenum: 294,
@@ -3994,7 +3994,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball for catching Pokemon that evolve using the Moon Stone.",
 	},
-	"moonstone": {
+	moonstone: {
 		id: "moonstone",
 		name: "Moon Stone",
 		spritenum: 295,
@@ -4006,7 +4006,7 @@ let BattleItems = {
 		desc: "Evolves Nidorina into Nidoqueen, Nidorino into Nidoking, Clefairy into Clefable, Jigglypuff into Wigglytuff, Skitty into Delcatty, and Munna into Musharna when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"muscleband": {
+	muscleband: {
 		id: "muscleband",
 		name: "Muscle Band",
 		spritenum: 297,
@@ -4023,7 +4023,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's physical attacks have 1.1x power.",
 	},
-	"mysticwater": {
+	mysticwater: {
 		id: "mysticwater",
 		name: "Mystic Water",
 		spritenum: 300,
@@ -4040,7 +4040,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Water-type attacks have 1.2x power.",
 	},
-	"nanabberry": {
+	nanabberry: {
 		id: "nanabberry",
 		name: "Nanab Berry",
 		spritenum: 302,
@@ -4055,7 +4055,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"nestball": {
+	nestball: {
 		id: "nestball",
 		name: "Nest Ball",
 		spritenum: 303,
@@ -4064,7 +4064,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that works especially well on weaker Pokemon in the wild.",
 	},
-	"netball": {
+	netball: {
 		id: "netball",
 		name: "Net Ball",
 		spritenum: 304,
@@ -4073,7 +4073,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that works especially well on Water- and Bug-type Pokemon.",
 	},
-	"nevermeltice": {
+	nevermeltice: {
 		id: "nevermeltice",
 		name: "Never-Melt Ice",
 		spritenum: 305,
@@ -4090,7 +4090,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Ice-type attacks have 1.2x power.",
 	},
-	"nomelberry": {
+	nomelberry: {
 		id: "nomelberry",
 		name: "Nomel Berry",
 		spritenum: 306,
@@ -4105,7 +4105,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"normalgem": {
+	normalgem: {
 		id: "normalgem",
 		name: "Normal Gem",
 		spritenum: 307,
@@ -4120,7 +4120,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "Holder's first successful Normal-type attack will have 1.3x power. Single use.",
 	},
-	"normaliumz": {
+	normaliumz: {
 		id: "normaliumz",
 		name: "Normalium Z",
 		spritenum: 631,
@@ -4132,7 +4132,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Normal move, this item allows it to use a Normal Z-Move.",
 	},
-	"occaberry": {
+	occaberry: {
 		id: "occaberry",
 		name: "Occa Berry",
 		spritenum: 311,
@@ -4155,7 +4155,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Fire-type attack. Single use.",
 	},
-	"oddincense": {
+	oddincense: {
 		id: "oddincense",
 		name: "Odd Incense",
 		spritenum: 312,
@@ -4172,7 +4172,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Psychic-type attacks have 1.2x power.",
 	},
-	"oldamber": {
+	oldamber: {
 		id: "oldamber",
 		name: "Old Amber",
 		spritenum: 314,
@@ -4184,7 +4184,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Aerodactyl.",
 	},
-	"oranberry": {
+	oranberry: {
 		id: "oranberry",
 		name: "Oran Berry",
 		spritenum: 319,
@@ -4208,7 +4208,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Restores 10 HP when at 1/2 max HP or less. Single use.",
 	},
-	"ovalstone": {
+	ovalstone: {
 		id: "ovalstone",
 		name: "Oval Stone",
 		spritenum: 321,
@@ -4219,7 +4219,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Evolves Happiny into Chansey when held and leveled up during the day.",
 	},
-	"pamtreberry": {
+	pamtreberry: {
 		id: "pamtreberry",
 		name: "Pamtre Berry",
 		spritenum: 323,
@@ -4234,7 +4234,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"parkball": {
+	parkball: {
 		id: "parkball",
 		name: "Park Ball",
 		spritenum: 325,
@@ -4243,7 +4243,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A special Poke Ball for the Pal Park.",
 	},
-	"passhoberry": {
+	passhoberry: {
 		id: "passhoberry",
 		name: "Passho Berry",
 		spritenum: 329,
@@ -4266,7 +4266,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Water-type attack. Single use.",
 	},
-	"payapaberry": {
+	payapaberry: {
 		id: "payapaberry",
 		name: "Payapa Berry",
 		spritenum: 330,
@@ -4289,7 +4289,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Psychic-type attack. Single use.",
 	},
-	"pechaberry": {
+	pechaberry: {
 		id: "pechaberry",
 		name: "Pecha Berry",
 		spritenum: 333,
@@ -4312,7 +4312,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder is cured if it is poisoned. Single use.",
 	},
-	"persimberry": {
+	persimberry: {
 		id: "persimberry",
 		name: "Persim Berry",
 		spritenum: 334,
@@ -4333,7 +4333,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder is cured if it is confused. Single use.",
 	},
-	"petayaberry": {
+	petayaberry: {
 		id: "petayaberry",
 		name: "Petaya Berry",
 		spritenum: 335,
@@ -4354,7 +4354,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Raises holder's Sp. Atk by 1 stage when at 1/4 max HP or less. Single use.",
 	},
-	"pidgeotite": {
+	pidgeotite: {
 		id: "pidgeotite",
 		name: "Pidgeotite",
 		spritenum: 622,
@@ -4370,7 +4370,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Pidgeot, this item allows it to Mega Evolve in battle.",
 	},
-	"pikaniumz": {
+	pikaniumz: {
 		id: "pikaniumz",
 		name: "Pikanium Z",
 		spritenum: 649,
@@ -4383,7 +4383,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Pikachu with Volt Tackle, it can use Catastropika.",
 	},
-	"pikashuniumz": {
+	pikashuniumz: {
 		id: "pikashuniumz",
 		name: "Pikashunium Z",
 		spritenum: 659,
@@ -4396,7 +4396,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by cap Pikachu with Thunderbolt, it can use 10,000,000 Volt Thunderbolt.",
 	},
-	"pinapberry": {
+	pinapberry: {
 		id: "pinapberry",
 		name: "Pinap Berry",
 		spritenum: 337,
@@ -4410,7 +4410,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"pinsirite": {
+	pinsirite: {
 		id: "pinsirite",
 		name: "Pinsirite",
 		spritenum: 602,
@@ -4426,7 +4426,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Pinsir, this item allows it to Mega Evolve in battle.",
 	},
-	"pixieplate": {
+	pixieplate: {
 		id: "pixieplate",
 		name: "Pixie Plate",
 		spritenum: 610,
@@ -4448,7 +4448,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy type.",
 	},
-	"plumefossil": {
+	plumefossil: {
 		id: "plumefossil",
 		name: "Plume Fossil",
 		spritenum: 339,
@@ -4460,7 +4460,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Archen.",
 	},
-	"poisonbarb": {
+	poisonbarb: {
 		id: "poisonbarb",
 		name: "Poison Barb",
 		spritenum: 343,
@@ -4478,7 +4478,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Poison-type attacks have 1.2x power.",
 	},
-	"poisongem": {
+	poisongem: {
 		id: "poisongem",
 		name: "Poison Gem",
 		spritenum: 344,
@@ -4494,7 +4494,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Poison-type attack will have 1.3x power. Single use.",
 	},
-	"poisonmemory": {
+	poisonmemory: {
 		id: "poisonmemory",
 		name: "Poison Memory",
 		spritenum: 670,
@@ -4511,7 +4511,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Poison type.",
 	},
-	"poisoniumz": {
+	poisoniumz: {
 		id: "poisoniumz",
 		name: "Poisonium Z",
 		spritenum: 638,
@@ -4525,7 +4525,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Poison move, this item allows it to use a Poison Z-Move.",
 	},
-	"pokeball": {
+	pokeball: {
 		id: "pokeball",
 		name: "Poke Ball",
 		spritenum: 345,
@@ -4534,7 +4534,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A device for catching wild Pokemon. It is designed as a capsule system.",
 	},
-	"pomegberry": {
+	pomegberry: {
 		id: "pomegberry",
 		name: "Pomeg Berry",
 		spritenum: 351,
@@ -4548,7 +4548,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"poweranklet": {
+	poweranklet: {
 		id: "poweranklet",
 		name: "Power Anklet",
 		spritenum: 354,
@@ -4563,7 +4563,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
-	"powerband": {
+	powerband: {
 		id: "powerband",
 		name: "Power Band",
 		spritenum: 355,
@@ -4578,7 +4578,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
-	"powerbelt": {
+	powerbelt: {
 		id: "powerbelt",
 		name: "Power Belt",
 		spritenum: 356,
@@ -4593,7 +4593,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
-	"powerbracer": {
+	powerbracer: {
 		id: "powerbracer",
 		name: "Power Bracer",
 		spritenum: 357,
@@ -4608,7 +4608,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
-	"powerherb": {
+	powerherb: {
 		id: "powerherb",
 		onChargeMove(pokemon, target, move) {
 			if (pokemon.useItem()) {
@@ -4627,7 +4627,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's two-turn moves complete in one turn (except Sky Drop). Single use.",
 	},
-	"powerlens": {
+	powerlens: {
 		id: "powerlens",
 		name: "Power Lens",
 		spritenum: 359,
@@ -4642,7 +4642,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
-	"powerweight": {
+	powerweight: {
 		id: "powerweight",
 		name: "Power Weight",
 		spritenum: 360,
@@ -4657,7 +4657,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
-	"premierball": {
+	premierball: {
 		id: "premierball",
 		name: "Premier Ball",
 		spritenum: 363,
@@ -4666,7 +4666,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A rare Poke Ball that has been crafted to commemorate an event.",
 	},
-	"primariumz": {
+	primariumz: {
 		id: "primariumz",
 		name: "Primarium Z",
 		spritenum: 652,
@@ -4679,7 +4679,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
 	},
-	"prismscale": {
+	prismscale: {
 		id: "prismscale",
 		name: "Prism Scale",
 		spritenum: 365,
@@ -4690,7 +4690,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "Evolves Feebas into Milotic when traded.",
 	},
-	"protectivepads": {
+	protectivepads: {
 		id: "protectivepads",
 		name: "Protective Pads",
 		spritenum: 663,
@@ -4737,7 +4737,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's moves are protected from adverse contact effects, except Pickpocket.",
 	},
-	"protector": {
+	protector: {
 		id: "protector",
 		name: "Protector",
 		spritenum: 367,
@@ -4748,7 +4748,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Evolves Rhydon into Rhyperior when traded.",
 	},
-	"psychicgem": {
+	psychicgem: {
 		id: "psychicgem",
 		name: "Psychic Gem",
 		spritenum: 369,
@@ -4764,7 +4764,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Psychic-type attack will have 1.3x power. Single use.",
 	},
-	"psychicmemory": {
+	psychicmemory: {
 		id: "psychicmemory",
 		name: "Psychic Memory",
 		spritenum: 680,
@@ -4781,7 +4781,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Psychic type.",
 	},
-	"psychicseed": {
+	psychicseed: {
 		id: "psychicseed",
 		name: "Psychic Seed",
 		spritenum: 665,
@@ -4806,7 +4806,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "If the terrain is Psychic Terrain, raises holder's Sp. Def by 1 stage. Single use.",
 	},
-	"psychiumz": {
+	psychiumz: {
 		id: "psychiumz",
 		name: "Psychium Z",
 		spritenum: 641,
@@ -4820,7 +4820,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Psychic move, this item allows it to use a Psychic Z-Move.",
 	},
-	"qualotberry": {
+	qualotberry: {
 		id: "qualotberry",
 		name: "Qualot Berry",
 		spritenum: 371,
@@ -4834,7 +4834,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"quickball": {
+	quickball: {
 		id: "quickball",
 		name: "Quick Ball",
 		spritenum: 372,
@@ -4843,7 +4843,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that provides a better catch rate at the start of a wild encounter.",
 	},
-	"quickclaw": {
+	quickclaw: {
 		id: "quickclaw",
 		onFractionalPriorityPriority: -1,
 		onFractionalPriority(priority, pokemon) {
@@ -4861,7 +4861,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Each turn, holder has a 20% chance to move first in its priority bracket.",
 	},
-	"quickpowder": {
+	quickpowder: {
 		id: "quickpowder",
 		name: "Quick Powder",
 		spritenum: 374,
@@ -4878,7 +4878,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "If held by a Ditto that hasn't Transformed, its Speed is doubled.",
 	},
-	"rabutaberry": {
+	rabutaberry: {
 		id: "rabutaberry",
 		name: "Rabuta Berry",
 		spritenum: 375,
@@ -4893,7 +4893,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"rarebone": {
+	rarebone: {
 		id: "rarebone",
 		name: "Rare Bone",
 		spritenum: 379,
@@ -4904,7 +4904,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "No competitive use other than when used with Fling.",
 	},
-	"rawstberry": {
+	rawstberry: {
 		id: "rawstberry",
 		name: "Rawst Berry",
 		spritenum: 381,
@@ -4927,7 +4927,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder is cured if it is burned. Single use.",
 	},
-	"razorclaw": {
+	razorclaw: {
 		id: "razorclaw",
 		name: "Razor Claw",
 		spritenum: 382,
@@ -4942,7 +4942,7 @@ let BattleItems = {
 		desc: "Holder's critical hit ratio is raised by 1 stage. Evolves Sneasel into Weavile when held and leveled up during the night.",
 		shortDesc: "Holder's critical hit ratio is raised by 1 stage.",
 	},
-	"razorfang": {
+	razorfang: {
 		id: "razorfang",
 		name: "Razor Fang",
 		spritenum: 383,
@@ -4969,7 +4969,7 @@ let BattleItems = {
 		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch. Evolves Gligar into Gliscor when held and leveled up during the night.",
 		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
-	"razzberry": {
+	razzberry: {
 		id: "razzberry",
 		name: "Razz Berry",
 		spritenum: 384,
@@ -4984,7 +4984,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"reapercloth": {
+	reapercloth: {
 		id: "reapercloth",
 		name: "Reaper Cloth",
 		spritenum: 385,
@@ -4995,7 +4995,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Evolves Dusclops into Dusknoir when traded.",
 	},
-	"redcard": {
+	redcard: {
 		id: "redcard",
 		name: "Red Card",
 		spritenum: 387,
@@ -5016,7 +5016,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "If holder survives a hit, attacker is forced to switch to a random ally. Single use.",
 	},
-	"redorb": {
+	redorb: {
 		id: "redorb",
 		name: "Red Orb",
 		spritenum: 390,
@@ -5038,7 +5038,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Groudon, this item triggers its Primal Reversion in battle.",
 	},
-	"repeatball": {
+	repeatball: {
 		id: "repeatball",
 		name: "Repeat Ball",
 		spritenum: 401,
@@ -5047,7 +5047,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that works well on Pokemon species that were previously caught.",
 	},
-	"ribbonsweet": {
+	ribbonsweet: {
 		id: "ribbonsweet",
 		name: "Ribbon Sweet",
 		spritenum: 710,
@@ -5058,7 +5058,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
-	"rindoberry": {
+	rindoberry: {
 		id: "rindoberry",
 		name: "Rindo Berry",
 		spritenum: 409,
@@ -5081,7 +5081,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Grass-type attack. Single use.",
 	},
-	"ringtarget": {
+	ringtarget: {
 		id: "ringtarget",
 		name: "Ring Target",
 		spritenum: 410,
@@ -5093,7 +5093,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "The holder's type immunities granted solely by its typing are negated.",
 	},
-	"rockgem": {
+	rockgem: {
 		id: "rockgem",
 		name: "Rock Gem",
 		spritenum: 415,
@@ -5109,7 +5109,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Rock-type attack will have 1.3x power. Single use.",
 	},
-	"rockincense": {
+	rockincense: {
 		id: "rockincense",
 		name: "Rock Incense",
 		spritenum: 416,
@@ -5126,7 +5126,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Rock-type attacks have 1.2x power.",
 	},
-	"rockmemory": {
+	rockmemory: {
 		id: "rockmemory",
 		name: "Rock Memory",
 		spritenum: 672,
@@ -5143,7 +5143,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Rock type.",
 	},
-	"rockiumz": {
+	rockiumz: {
 		id: "rockiumz",
 		name: "Rockium Z",
 		spritenum: 643,
@@ -5157,7 +5157,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Rock move, this item allows it to use a Rock Z-Move.",
 	},
-	"rockyhelmet": {
+	rockyhelmet: {
 		id: "rockyhelmet",
 		name: "Rocky Helmet",
 		spritenum: 417,
@@ -5174,7 +5174,7 @@ let BattleItems = {
 		gen: 5,
 		desc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP.",
 	},
-	"roomservice": {
+	roomservice: {
 		id: "roomservice",
 		name: "Room Service",
 		spritenum: 717,
@@ -5193,7 +5193,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "If Trick Room is active, the holder's Speed is lowered by 1 stage. Single use.",
 	},
-	"rootfossil": {
+	rootfossil: {
 		id: "rootfossil",
 		name: "Root Fossil",
 		spritenum: 418,
@@ -5205,7 +5205,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Lileep.",
 	},
-	"roseincense": {
+	roseincense: {
 		id: "roseincense",
 		name: "Rose Incense",
 		spritenum: 419,
@@ -5222,7 +5222,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Grass-type attacks have 1.2x power.",
 	},
-	"roseliberry": {
+	roseliberry: {
 		id: "roseliberry",
 		name: "Roseli Berry",
 		spritenum: 603,
@@ -5245,7 +5245,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Halves damage taken from a supereffective Fairy-type attack. Single use.",
 	},
-	"rowapberry": {
+	rowapberry: {
 		id: "rowapberry",
 		name: "Rowap Berry",
 		spritenum: 420,
@@ -5267,7 +5267,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use.",
 	},
-	"rustedshield": {
+	rustedshield: {
 		id: "rustedshield",
 		name: "Rusted Shield",
 		spritenum: 699,
@@ -5283,7 +5283,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "If held by a Zamazenta, this item changes its forme to Crowned Shield.",
 	},
-	"rustedsword": {
+	rustedsword: {
 		id: "rustedsword",
 		name: "Rusted Sword",
 		spritenum: 698,
@@ -5299,7 +5299,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "If held by a Zacian, this item changes its forme to Crowned Sword.",
 	},
-	"sablenite": {
+	sablenite: {
 		id: "sablenite",
 		name: "Sablenite",
 		spritenum: 614,
@@ -5315,7 +5315,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Sableye, this item allows it to Mega Evolve in battle.",
 	},
-	"sachet": {
+	sachet: {
 		id: "sachet",
 		name: "Sachet",
 		spritenum: 691,
@@ -5326,7 +5326,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Evolves Spritzee into Aromatisse when traded.",
 	},
-	"safariball": {
+	safariball: {
 		id: "safariball",
 		name: "Safari Ball",
 		spritenum: 425,
@@ -5335,7 +5335,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A special Poke Ball that is used only in the Safari Zone and Great Marsh.",
 	},
-	"safetygoggles": {
+	safetygoggles: {
 		id: "safetygoggles",
 		name: "Safety Goggles",
 		spritenum: 604,
@@ -5355,7 +5355,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Holder is immune to powder moves and damage from Sandstorm or Hail.",
 	},
-	"sailfossil": {
+	sailfossil: {
 		id: "sailfossil",
 		name: "Sail Fossil",
 		spritenum: 695,
@@ -5367,7 +5367,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Amaura.",
 	},
-	"salacberry": {
+	salacberry: {
 		id: "salacberry",
 		name: "Salac Berry",
 		spritenum: 426,
@@ -5388,7 +5388,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Raises holder's Speed by 1 stage when at 1/4 max HP or less. Single use.",
 	},
-	"salamencite": {
+	salamencite: {
 		id: "salamencite",
 		name: "Salamencite",
 		spritenum: 627,
@@ -5404,7 +5404,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Salamence, this item allows it to Mega Evolve in battle.",
 	},
-	"sceptilite": {
+	sceptilite: {
 		id: "sceptilite",
 		name: "Sceptilite",
 		spritenum: 613,
@@ -5420,7 +5420,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Sceptile, this item allows it to Mega Evolve in battle.",
 	},
-	"scizorite": {
+	scizorite: {
 		id: "scizorite",
 		name: "Scizorite",
 		spritenum: 605,
@@ -5436,7 +5436,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Scizor, this item allows it to Mega Evolve in battle.",
 	},
-	"scopelens": {
+	scopelens: {
 		id: "scopelens",
 		name: "Scope Lens",
 		spritenum: 429,
@@ -5450,7 +5450,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's critical hit ratio is raised by 1 stage.",
 	},
-	"seaincense": {
+	seaincense: {
 		id: "seaincense",
 		name: "Sea Incense",
 		spritenum: 430,
@@ -5467,7 +5467,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder's Water-type attacks have 1.2x power.",
 	},
-	"sharpbeak": {
+	sharpbeak: {
 		id: "sharpbeak",
 		name: "Sharp Beak",
 		spritenum: 436,
@@ -5484,7 +5484,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Flying-type attacks have 1.2x power.",
 	},
-	"sharpedonite": {
+	sharpedonite: {
 		id: "sharpedonite",
 		name: "Sharpedonite",
 		spritenum: 619,
@@ -5500,7 +5500,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Sharpedo, this item allows it to Mega Evolve in battle.",
 	},
-	"shedshell": {
+	shedshell: {
 		id: "shedshell",
 		name: "Shed Shell",
 		spritenum: 437,
@@ -5515,7 +5515,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder may switch out even when trapped by another Pokemon, or by Ingrain.",
 	},
-	"shellbell": {
+	shellbell: {
 		id: "shellbell",
 		name: "Shell Bell",
 		spritenum: 438,
@@ -5532,7 +5532,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon.",
 	},
-	"shinystone": {
+	shinystone: {
 		id: "shinystone",
 		name: "Shiny Stone",
 		spritenum: 439,
@@ -5544,7 +5544,7 @@ let BattleItems = {
 		desc: "Evolves Togetic into Togekiss, Roselia into Roserade, Minccino into Cinccino, and Floette into Florges when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"shockdrive": {
+	shockdrive: {
 		id: "shockdrive",
 		name: "Shock Drive",
 		spritenum: 442,
@@ -5562,7 +5562,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's Techno Blast is Electric type.",
 	},
-	"shucaberry": {
+	shucaberry: {
 		id: "shucaberry",
 		name: "Shuca Berry",
 		spritenum: 443,
@@ -5585,7 +5585,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Ground-type attack. Single use.",
 	},
-	"silkscarf": {
+	silkscarf: {
 		id: "silkscarf",
 		name: "Silk Scarf",
 		spritenum: 444,
@@ -5602,7 +5602,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Holder's Normal-type attacks have 1.2x power.",
 	},
-	"silverpowder": {
+	silverpowder: {
 		id: "silverpowder",
 		name: "SilverPowder",
 		spritenum: 447,
@@ -5619,7 +5619,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Bug-type attacks have 1.2x power.",
 	},
-	"sitrusberry": {
+	sitrusberry: {
 		id: "sitrusberry",
 		name: "Sitrus Berry",
 		spritenum: 448,
@@ -5643,7 +5643,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Restores 1/4 max HP when at 1/2 max HP or less. Single use.",
 	},
-	"skullfossil": {
+	skullfossil: {
 		id: "skullfossil",
 		name: "Skull Fossil",
 		spritenum: 449,
@@ -5655,7 +5655,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Can be revived into Cranidos.",
 	},
-	"skyplate": {
+	skyplate: {
 		id: "skyplate",
 		name: "Sky Plate",
 		spritenum: 450,
@@ -5678,7 +5678,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying type.",
 	},
-	"slowbronite": {
+	slowbronite: {
 		id: "slowbronite",
 		name: "Slowbronite",
 		spritenum: 620,
@@ -5694,7 +5694,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
 	},
-	"smoothrock": {
+	smoothrock: {
 		id: "smoothrock",
 		name: "Smooth Rock",
 		spritenum: 453,
@@ -5705,7 +5705,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's use of Sandstorm lasts 8 turns instead of 5.",
 	},
-	"snorliumz": {
+	snorliumz: {
 		id: "snorliumz",
 		name: "Snorlium Z",
 		spritenum: 656,
@@ -5718,7 +5718,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Snorlax with Giga Impact, it can use Pulverizing Pancake.",
 	},
-	"snowball": {
+	snowball: {
 		id: "snowball",
 		name: "Snowball",
 		spritenum: 606,
@@ -5737,7 +5737,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Raises holder's Attack by 1 if hit by an Ice-type attack. Single use.",
 	},
-	"softsand": {
+	softsand: {
 		id: "softsand",
 		name: "Soft Sand",
 		spritenum: 456,
@@ -5754,7 +5754,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Ground-type attacks have 1.2x power.",
 	},
-	"solganiumz": {
+	solganiumz: {
 		id: "solganiumz",
 		name: "Solganium Z",
 		spritenum: 685,
@@ -5767,7 +5767,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Solgaleo or Dusk Mane Necrozma with Sunsteel Strike can use a special Z-Move.",
 	},
-	"souldew": {
+	souldew: {
 		id: "souldew",
 		name: "Soul Dew",
 		spritenum: 459,
@@ -5786,7 +5786,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
 	},
-	"spelltag": {
+	spelltag: {
 		id: "spelltag",
 		name: "Spell Tag",
 		spritenum: 461,
@@ -5803,7 +5803,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Ghost-type attacks have 1.2x power.",
 	},
-	"spelonberry": {
+	spelonberry: {
 		id: "spelonberry",
 		name: "Spelon Berry",
 		spritenum: 462,
@@ -5818,7 +5818,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"splashplate": {
+	splashplate: {
 		id: "splashplate",
 		name: "Splash Plate",
 		spritenum: 463,
@@ -5841,7 +5841,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Water-type attacks have 1.2x power. Judgment is Water type.",
 	},
-	"spookyplate": {
+	spookyplate: {
 		id: "spookyplate",
 		name: "Spooky Plate",
 		spritenum: 464,
@@ -5864,7 +5864,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost type.",
 	},
-	"sportball": {
+	sportball: {
 		id: "sportball",
 		name: "Sport Ball",
 		spritenum: 465,
@@ -5873,7 +5873,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A special Poke Ball for the Bug-Catching Contest.",
 	},
-	"starfberry": {
+	starfberry: {
 		id: "starfberry",
 		name: "Starf Berry",
 		spritenum: 472,
@@ -5907,7 +5907,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Raises a random stat by 2 when at 1/4 max HP or less (not acc/eva). Single use.",
 	},
-	"starsweet": {
+	starsweet: {
 		id: "starsweet",
 		name: "Star Sweet",
 		spritenum: 709,
@@ -5918,7 +5918,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
-	"steelixite": {
+	steelixite: {
 		id: "steelixite",
 		name: "Steelixite",
 		spritenum: 621,
@@ -5934,7 +5934,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Steelix, this item allows it to Mega Evolve in battle.",
 	},
-	"steelgem": {
+	steelgem: {
 		id: "steelgem",
 		name: "Steel Gem",
 		spritenum: 473,
@@ -5950,7 +5950,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Steel-type attack will have 1.3x power. Single use.",
 	},
-	"steelmemory": {
+	steelmemory: {
 		id: "steelmemory",
 		name: "Steel Memory",
 		spritenum: 675,
@@ -5967,7 +5967,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Steel type.",
 	},
-	"steeliumz": {
+	steeliumz: {
 		id: "steeliumz",
 		name: "Steelium Z",
 		spritenum: 647,
@@ -5981,7 +5981,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Steel move, this item allows it to use a Steel Z-Move.",
 	},
-	"stick": {
+	stick: {
 		id: "stick",
 		name: "Stick",
 		fling: {
@@ -5999,7 +5999,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Farfetch'd, its critical hit ratio is raised by 2 stages.",
 	},
-	"stickybarb": {
+	stickybarb: {
 		id: "stickybarb",
 		name: "Sticky Barb",
 		spritenum: 476,
@@ -6023,7 +6023,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Each turn, holder loses 1/8 max HP. An attacker making contact can receive it.",
 	},
-	"stoneplate": {
+	stoneplate: {
 		id: "stoneplate",
 		name: "Stone Plate",
 		spritenum: 477,
@@ -6046,7 +6046,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type.",
 	},
-	"strawberrysweet": {
+	strawberrysweet: {
 		id: "strawberrysweet",
 		name: "Strawberry Sweet",
 		spritenum: 704,
@@ -6057,7 +6057,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
-	"sunstone": {
+	sunstone: {
 		id: "sunstone",
 		name: "Sun Stone",
 		spritenum: 480,
@@ -6069,7 +6069,7 @@ let BattleItems = {
 		desc: "Evolves Gloom into Bellossom, Sunkern into Sunflora, Cottonee into Whimsicott, Petilil into Lilligant, and Helioptile into Heliolisk when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"swampertite": {
+	swampertite: {
 		id: "swampertite",
 		name: "Swampertite",
 		spritenum: 612,
@@ -6085,7 +6085,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Swampert, this item allows it to Mega Evolve in battle.",
 	},
-	"sweetapple": {
+	sweetapple: {
 		id: "sweetapple",
 		name: "Sweet Apple",
 		spritenum: 711,
@@ -6096,7 +6096,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Applin into Appletun when used.",
 	},
-	"tamatoberry": {
+	tamatoberry: {
 		id: "tamatoberry",
 		name: "Tamato Berry",
 		spritenum: 486,
@@ -6110,7 +6110,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"tangaberry": {
+	tangaberry: {
 		id: "tangaberry",
 		name: "Tanga Berry",
 		spritenum: 487,
@@ -6133,7 +6133,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Bug-type attack. Single use.",
 	},
-	"tapuniumz": {
+	tapuniumz: {
 		id: "tapuniumz",
 		name: "Tapunium Z",
 		spritenum: 653,
@@ -6146,7 +6146,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Tapu with Nature's Madness, it can use Guardian of Alola.",
 	},
-	"tartapple": {
+	tartapple: {
 		id: "tartapple",
 		name: "Tart Apple",
 		spritenum: 712,
@@ -6157,7 +6157,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Evolves Applin into Flapple when used.",
 	},
-	"terrainextender": {
+	terrainextender: {
 		id: "terrainextender",
 		name: "Terrain Extender",
 		spritenum: 662,
@@ -6168,7 +6168,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's use of Electric/Grassy/Misty/Psychic Terrain lasts 8 turns instead of 5.",
 	},
-	"thickclub": {
+	thickclub: {
 		id: "thickclub",
 		name: "Thick Club",
 		spritenum: 491,
@@ -6186,7 +6186,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "If held by a Cubone or a Marowak, its Attack is doubled.",
 	},
-	"throatspray": {
+	throatspray: {
 		id: "throatspray",
 		name: "Throat Spray",
 		spritenum: 713,
@@ -6205,7 +6205,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Raises holder's Special Attack by 1 stage after it uses a sound move. Single use.",
 	},
-	"thunderstone": {
+	thunderstone: {
 		id: "thunderstone",
 		name: "Thunder Stone",
 		spritenum: 492,
@@ -6217,7 +6217,7 @@ let BattleItems = {
 		desc: "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, Eelektrik into Eelektross, and Charjabug into Vikavolt when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"timerball": {
+	timerball: {
 		id: "timerball",
 		name: "Timer Ball",
 		spritenum: 494,
@@ -6226,7 +6226,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "A Poke Ball that becomes better the more turns there are in a battle.",
 	},
-	"toxicorb": {
+	toxicorb: {
 		id: "toxicorb",
 		name: "Toxic Orb",
 		spritenum: 515,
@@ -6243,7 +6243,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "At the end of every turn, this item attempts to badly poison the holder.",
 	},
-	"toxicplate": {
+	toxicplate: {
 		id: "toxicplate",
 		name: "Toxic Plate",
 		spritenum: 516,
@@ -6266,7 +6266,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Poison-type attacks have 1.2x power. Judgment is Poison type.",
 	},
-	"tr00": {
+	tr00: {
 		id: "tr00",
 		name: "TR00",
 		fling: {
@@ -6277,7 +6277,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Swords Dance. One use.",
 	},
-	"tr01": {
+	tr01: {
 		id: "tr01",
 		name: "TR01",
 		fling: {
@@ -6288,7 +6288,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Body Slam. One use.",
 	},
-	"tr02": {
+	tr02: {
 		id: "tr02",
 		name: "TR02",
 		fling: {
@@ -6299,7 +6299,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Flamethrower. One use.",
 	},
-	"tr03": {
+	tr03: {
 		id: "tr03",
 		name: "TR03",
 		fling: {
@@ -6310,7 +6310,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Hydro Pump. One use.",
 	},
-	"tr04": {
+	tr04: {
 		id: "tr04",
 		name: "TR04",
 		fling: {
@@ -6321,7 +6321,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Surf. One use.",
 	},
-	"tr05": {
+	tr05: {
 		id: "tr05",
 		name: "TR05",
 		fling: {
@@ -6332,7 +6332,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Ice Beam. One use.",
 	},
-	"tr06": {
+	tr06: {
 		id: "tr06",
 		name: "TR06",
 		fling: {
@@ -6343,7 +6343,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Blizzard. One use.",
 	},
-	"tr07": {
+	tr07: {
 		id: "tr07",
 		name: "TR07",
 		fling: {
@@ -6354,7 +6354,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Low Kick. One use.",
 	},
-	"tr08": {
+	tr08: {
 		id: "tr08",
 		name: "TR08",
 		fling: {
@@ -6365,7 +6365,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Thunderbolt. One use.",
 	},
-	"tr09": {
+	tr09: {
 		id: "tr09",
 		name: "TR09",
 		fling: {
@@ -6376,7 +6376,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Thunder. One use.",
 	},
-	"tr10": {
+	tr10: {
 		id: "tr10",
 		name: "TR10",
 		fling: {
@@ -6387,7 +6387,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Earthquake. One use.",
 	},
-	"tr11": {
+	tr11: {
 		id: "tr11",
 		name: "TR11",
 		fling: {
@@ -6398,7 +6398,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Psychic. One use.",
 	},
-	"tr12": {
+	tr12: {
 		id: "tr12",
 		name: "TR12",
 		fling: {
@@ -6409,7 +6409,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Agility. One use.",
 	},
-	"tr13": {
+	tr13: {
 		id: "tr13",
 		name: "TR13",
 		fling: {
@@ -6420,7 +6420,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Focus Energy. One use.",
 	},
-	"tr14": {
+	tr14: {
 		id: "tr14",
 		name: "TR14",
 		fling: {
@@ -6431,7 +6431,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Metronome. One use.",
 	},
-	"tr15": {
+	tr15: {
 		id: "tr15",
 		name: "TR15",
 		fling: {
@@ -6442,7 +6442,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Fire Blast. One use.",
 	},
-	"tr16": {
+	tr16: {
 		id: "tr16",
 		name: "TR16",
 		fling: {
@@ -6453,7 +6453,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Waterfall. One use.",
 	},
-	"tr17": {
+	tr17: {
 		id: "tr17",
 		name: "TR17",
 		fling: {
@@ -6464,7 +6464,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Amnesia. One use.",
 	},
-	"tr18": {
+	tr18: {
 		id: "tr18",
 		name: "TR18",
 		fling: {
@@ -6475,7 +6475,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Leech Life. One use.",
 	},
-	"tr19": {
+	tr19: {
 		id: "tr19",
 		name: "TR19",
 		fling: {
@@ -6486,7 +6486,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Tri Attack. One use.",
 	},
-	"tr20": {
+	tr20: {
 		id: "tr20",
 		name: "TR20",
 		fling: {
@@ -6497,7 +6497,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Substitute. One use.",
 	},
-	"tr21": {
+	tr21: {
 		id: "tr21",
 		name: "TR21",
 		fling: {
@@ -6508,7 +6508,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Reversal. One use.",
 	},
-	"tr22": {
+	tr22: {
 		id: "tr22",
 		name: "TR22",
 		fling: {
@@ -6519,7 +6519,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Sludge Bomb. One use.",
 	},
-	"tr23": {
+	tr23: {
 		id: "tr23",
 		name: "TR23",
 		fling: {
@@ -6530,7 +6530,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Spikes. One use.",
 	},
-	"tr24": {
+	tr24: {
 		id: "tr24",
 		name: "TR24",
 		fling: {
@@ -6541,7 +6541,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Outrage. One use.",
 	},
-	"tr25": {
+	tr25: {
 		id: "tr25",
 		name: "TR25",
 		fling: {
@@ -6552,7 +6552,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Psyshock. One use.",
 	},
-	"tr26": {
+	tr26: {
 		id: "tr26",
 		name: "TR26",
 		fling: {
@@ -6563,7 +6563,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Endure. One use.",
 	},
-	"tr27": {
+	tr27: {
 		id: "tr27",
 		name: "TR27",
 		fling: {
@@ -6574,7 +6574,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Sleep Talk. One use.",
 	},
-	"tr28": {
+	tr28: {
 		id: "tr28",
 		name: "TR28",
 		fling: {
@@ -6585,7 +6585,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Megahorn. One use.",
 	},
-	"tr29": {
+	tr29: {
 		id: "tr29",
 		name: "TR29",
 		fling: {
@@ -6596,7 +6596,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Baton Pass. One use.",
 	},
-	"tr30": {
+	tr30: {
 		id: "tr30",
 		name: "TR30",
 		fling: {
@@ -6607,7 +6607,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Encore. One use.",
 	},
-	"tr31": {
+	tr31: {
 		id: "tr31",
 		name: "TR31",
 		fling: {
@@ -6618,7 +6618,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Iron Tail. One use.",
 	},
-	"tr32": {
+	tr32: {
 		id: "tr32",
 		name: "TR32",
 		fling: {
@@ -6629,7 +6629,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Crunch. One use.",
 	},
-	"tr33": {
+	tr33: {
 		id: "tr33",
 		name: "TR33",
 		fling: {
@@ -6640,7 +6640,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Shadow Ball. One use.",
 	},
-	"tr34": {
+	tr34: {
 		id: "tr34",
 		name: "TR34",
 		fling: {
@@ -6651,7 +6651,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Future Sight. One use.",
 	},
-	"tr35": {
+	tr35: {
 		id: "tr35",
 		name: "TR35",
 		fling: {
@@ -6662,7 +6662,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Uproar. One use.",
 	},
-	"tr36": {
+	tr36: {
 		id: "tr36",
 		name: "TR36",
 		fling: {
@@ -6673,7 +6673,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Heat Wave. One use.",
 	},
-	"tr37": {
+	tr37: {
 		id: "tr37",
 		name: "TR37",
 		fling: {
@@ -6684,7 +6684,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Taunt. One use.",
 	},
-	"tr38": {
+	tr38: {
 		id: "tr38",
 		name: "TR38",
 		fling: {
@@ -6695,7 +6695,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Trick. One use.",
 	},
-	"tr39": {
+	tr39: {
 		id: "tr39",
 		name: "TR39",
 		fling: {
@@ -6706,7 +6706,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Superpower. One use.",
 	},
-	"tr40": {
+	tr40: {
 		id: "tr40",
 		name: "TR40",
 		fling: {
@@ -6717,7 +6717,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Skill Swap. One use.",
 	},
-	"tr41": {
+	tr41: {
 		id: "tr41",
 		name: "TR41",
 		fling: {
@@ -6728,7 +6728,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Blaze Kick. One use.",
 	},
-	"tr42": {
+	tr42: {
 		id: "tr42",
 		name: "TR42",
 		fling: {
@@ -6739,7 +6739,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Hyper Voice. One use.",
 	},
-	"tr43": {
+	tr43: {
 		id: "tr43",
 		name: "TR43",
 		fling: {
@@ -6750,7 +6750,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Overheat. One use.",
 	},
-	"tr44": {
+	tr44: {
 		id: "tr44",
 		name: "TR44",
 		fling: {
@@ -6761,7 +6761,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Cosmic Power. One use.",
 	},
-	"tr45": {
+	tr45: {
 		id: "tr45",
 		name: "TR45",
 		fling: {
@@ -6772,7 +6772,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Muddy Water. One use.",
 	},
-	"tr46": {
+	tr46: {
 		id: "tr46",
 		name: "TR46",
 		fling: {
@@ -6783,7 +6783,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Iron Defense. One use.",
 	},
-	"tr47": {
+	tr47: {
 		id: "tr47",
 		name: "TR47",
 		fling: {
@@ -6794,7 +6794,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dragon Claw. One use.",
 	},
-	"tr48": {
+	tr48: {
 		id: "tr48",
 		name: "TR48",
 		fling: {
@@ -6805,7 +6805,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Bulk Up. One use.",
 	},
-	"tr49": {
+	tr49: {
 		id: "tr49",
 		name: "TR49",
 		fling: {
@@ -6816,7 +6816,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Calm Mind. One use.",
 	},
-	"tr50": {
+	tr50: {
 		id: "tr50",
 		name: "TR50",
 		fling: {
@@ -6827,7 +6827,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Leaf Blade. One use.",
 	},
-	"tr51": {
+	tr51: {
 		id: "tr51",
 		name: "TR51",
 		fling: {
@@ -6838,7 +6838,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dragon Dance. One use.",
 	},
-	"tr52": {
+	tr52: {
 		id: "tr52",
 		name: "TR52",
 		fling: {
@@ -6849,7 +6849,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Gyro Ball. One use.",
 	},
-	"tr53": {
+	tr53: {
 		id: "tr53",
 		name: "TR53",
 		fling: {
@@ -6860,7 +6860,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Close Combat. One use.",
 	},
-	"tr54": {
+	tr54: {
 		id: "tr54",
 		name: "TR54",
 		fling: {
@@ -6871,7 +6871,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Toxic Spikes. One use.",
 	},
-	"tr55": {
+	tr55: {
 		id: "tr55",
 		name: "TR55",
 		fling: {
@@ -6882,7 +6882,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Flare Blitz. One use.",
 	},
-	"tr56": {
+	tr56: {
 		id: "tr56",
 		name: "TR56",
 		fling: {
@@ -6893,7 +6893,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Aura Sphere. One use.",
 	},
-	"tr57": {
+	tr57: {
 		id: "tr57",
 		name: "TR57",
 		fling: {
@@ -6904,7 +6904,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Poison Jab. One use.",
 	},
-	"tr58": {
+	tr58: {
 		id: "tr58",
 		name: "TR58",
 		fling: {
@@ -6915,7 +6915,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dark Pulse. One use.",
 	},
-	"tr59": {
+	tr59: {
 		id: "tr59",
 		name: "TR59",
 		fling: {
@@ -6926,7 +6926,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Seed Bomb. One use.",
 	},
-	"tr60": {
+	tr60: {
 		id: "tr60",
 		name: "TR60",
 		fling: {
@@ -6937,7 +6937,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move X-Scissor. One use.",
 	},
-	"tr61": {
+	tr61: {
 		id: "tr61",
 		name: "TR61",
 		fling: {
@@ -6948,7 +6948,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Bug Buzz. One use.",
 	},
-	"tr62": {
+	tr62: {
 		id: "tr62",
 		name: "TR62",
 		fling: {
@@ -6959,7 +6959,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dragon Pulse. One use.",
 	},
-	"tr63": {
+	tr63: {
 		id: "tr63",
 		name: "TR63",
 		fling: {
@@ -6970,7 +6970,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Power Gem. One use.",
 	},
-	"tr64": {
+	tr64: {
 		id: "tr64",
 		name: "TR64",
 		fling: {
@@ -6981,7 +6981,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Focus Blast. One use.",
 	},
-	"tr65": {
+	tr65: {
 		id: "tr65",
 		name: "TR65",
 		fling: {
@@ -6992,7 +6992,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Energy Ball. One use.",
 	},
-	"tr66": {
+	tr66: {
 		id: "tr66",
 		name: "TR66",
 		fling: {
@@ -7003,7 +7003,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Brave Bird. One use.",
 	},
-	"tr67": {
+	tr67: {
 		id: "tr67",
 		name: "TR67",
 		fling: {
@@ -7014,7 +7014,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Earth Power. One use.",
 	},
-	"tr68": {
+	tr68: {
 		id: "tr68",
 		name: "TR68",
 		fling: {
@@ -7025,7 +7025,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Nasty Plot. One use.",
 	},
-	"tr69": {
+	tr69: {
 		id: "tr69",
 		name: "TR69",
 		fling: {
@@ -7036,7 +7036,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Zen Headbutt. One use.",
 	},
-	"tr70": {
+	tr70: {
 		id: "tr70",
 		name: "TR70",
 		fling: {
@@ -7047,7 +7047,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Flash Cannon. One use.",
 	},
-	"tr71": {
+	tr71: {
 		id: "tr71",
 		name: "TR71",
 		fling: {
@@ -7058,7 +7058,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Leaf Storm. One use.",
 	},
-	"tr72": {
+	tr72: {
 		id: "tr72",
 		name: "TR72",
 		fling: {
@@ -7069,7 +7069,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Power Whip. One use.",
 	},
-	"tr73": {
+	tr73: {
 		id: "tr73",
 		name: "TR73",
 		fling: {
@@ -7080,7 +7080,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Gunk Shot. One use.",
 	},
-	"tr74": {
+	tr74: {
 		id: "tr74",
 		name: "TR74",
 		fling: {
@@ -7091,7 +7091,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Iron Head. One use.",
 	},
-	"tr75": {
+	tr75: {
 		id: "tr75",
 		name: "TR75",
 		fling: {
@@ -7102,7 +7102,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Stone Edge. One use.",
 	},
-	"tr76": {
+	tr76: {
 		id: "tr76",
 		name: "TR76",
 		fling: {
@@ -7113,7 +7113,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Stealth Rock. One use.",
 	},
-	"tr77": {
+	tr77: {
 		id: "tr77",
 		name: "TR77",
 		fling: {
@@ -7124,7 +7124,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Grass Knot. One use.",
 	},
-	"tr78": {
+	tr78: {
 		id: "tr78",
 		name: "TR78",
 		fling: {
@@ -7135,7 +7135,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Sludge Wave. One use.",
 	},
-	"tr79": {
+	tr79: {
 		id: "tr79",
 		name: "TR79",
 		fling: {
@@ -7146,7 +7146,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Heavy Slam. One use.",
 	},
-	"tr80": {
+	tr80: {
 		id: "tr80",
 		name: "TR80",
 		fling: {
@@ -7157,7 +7157,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Electro Ball. One use.",
 	},
-	"tr81": {
+	tr81: {
 		id: "tr81",
 		name: "TR81",
 		fling: {
@@ -7168,7 +7168,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Foul Play. One use.",
 	},
-	"tr82": {
+	tr82: {
 		id: "tr82",
 		name: "TR82",
 		fling: {
@@ -7179,7 +7179,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Stored Power. One use.",
 	},
-	"tr83": {
+	tr83: {
 		id: "tr83",
 		name: "TR83",
 		fling: {
@@ -7190,7 +7190,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Ally Switch. One use.",
 	},
-	"tr84": {
+	tr84: {
 		id: "tr84",
 		name: "TR84",
 		fling: {
@@ -7201,7 +7201,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Scald. One use.",
 	},
-	"tr85": {
+	tr85: {
 		id: "tr85",
 		name: "TR85",
 		fling: {
@@ -7212,7 +7212,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Work Up. One use.",
 	},
-	"tr86": {
+	tr86: {
 		id: "tr86",
 		name: "TR86",
 		fling: {
@@ -7223,7 +7223,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Wild Charge. One use.",
 	},
-	"tr87": {
+	tr87: {
 		id: "tr87",
 		name: "TR87",
 		fling: {
@@ -7234,7 +7234,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Drill Run. One use.",
 	},
-	"tr88": {
+	tr88: {
 		id: "tr88",
 		name: "TR88",
 		fling: {
@@ -7245,7 +7245,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Heat Crash. One use.",
 	},
-	"tr89": {
+	tr89: {
 		id: "tr89",
 		name: "TR89",
 		fling: {
@@ -7256,7 +7256,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Hurricane. One use.",
 	},
-	"tr90": {
+	tr90: {
 		id: "tr90",
 		name: "TR90",
 		fling: {
@@ -7267,7 +7267,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Play Rough. One use.",
 	},
-	"tr91": {
+	tr91: {
 		id: "tr91",
 		name: "TR91",
 		fling: {
@@ -7278,7 +7278,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Venom Drench. One use.",
 	},
-	"tr92": {
+	tr92: {
 		id: "tr92",
 		name: "TR92",
 		fling: {
@@ -7289,7 +7289,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Dazzling Gleam. One use.",
 	},
-	"tr93": {
+	tr93: {
 		id: "tr93",
 		name: "TR93",
 		fling: {
@@ -7300,7 +7300,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Darkest Lariat. One use.",
 	},
-	"tr94": {
+	tr94: {
 		id: "tr94",
 		name: "TR94",
 		fling: {
@@ -7311,7 +7311,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move High Horsepower. One use.",
 	},
-	"tr95": {
+	tr95: {
 		id: "tr95",
 		name: "TR95",
 		fling: {
@@ -7322,7 +7322,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Throat Chop. One use.",
 	},
-	"tr96": {
+	tr96: {
 		id: "tr96",
 		name: "TR96",
 		fling: {
@@ -7333,7 +7333,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Pollen Puff. One use.",
 	},
-	"tr97": {
+	tr97: {
 		id: "tr97",
 		name: "TR97",
 		fling: {
@@ -7344,7 +7344,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Psychic Fangs. One use.",
 	},
-	"tr98": {
+	tr98: {
 		id: "tr98",
 		name: "TR98",
 		fling: {
@@ -7355,7 +7355,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Liquidation. One use.",
 	},
-	"tr99": {
+	tr99: {
 		id: "tr99",
 		name: "TR99",
 		fling: {
@@ -7366,7 +7366,7 @@ let BattleItems = {
 		gen: 8,
 		desc: "Teaches certain Pokemon the move Body Press. One use.",
 	},
-	"twistedspoon": {
+	twistedspoon: {
 		id: "twistedspoon",
 		name: "Twisted Spoon",
 		spritenum: 520,
@@ -7383,7 +7383,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Holder's Psychic-type attacks have 1.2x power.",
 	},
-	"tyranitarite": {
+	tyranitarite: {
 		id: "tyranitarite",
 		name: "Tyranitarite",
 		spritenum: 607,
@@ -7399,7 +7399,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Tyranitar, this item allows it to Mega Evolve in battle.",
 	},
-	"ultraball": {
+	ultraball: {
 		id: "ultraball",
 		name: "Ultra Ball",
 		spritenum: 521,
@@ -7408,7 +7408,7 @@ let BattleItems = {
 		isPokeball: true,
 		desc: "An ultra-performance Ball that provides a higher catch rate than a Great Ball.",
 	},
-	"ultranecroziumz": {
+	ultranecroziumz: {
 		id: "ultranecroziumz",
 		name: "Ultranecrozium Z",
 		spritenum: 687,
@@ -7421,7 +7421,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
 	},
-	"upgrade": {
+	upgrade: {
 		id: "upgrade",
 		name: "Up-Grade",
 		spritenum: 523,
@@ -7432,7 +7432,7 @@ let BattleItems = {
 		gen: 2,
 		desc: "Evolves Porygon into Porygon2 when traded.",
 	},
-	"utilityumbrella": {
+	utilityumbrella: {
 		id: "utilityumbrella",
 		name: "Utility Umbrella",
 		spritenum: 718,
@@ -7445,7 +7445,7 @@ let BattleItems = {
 		desc: "The holder ignores rain- and sun-based effects. Damage and accuracy calculations from attacks used by the holder are affected by rain and sun, but not attacks used against the holder.",
 		shortDesc: "The holder ignores rain- and sun-based effects.",
 	},
-	"venusaurite": {
+	venusaurite: {
 		id: "venusaurite",
 		name: "Venusaurite",
 		spritenum: 608,
@@ -7461,7 +7461,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
 	},
-	"wacanberry": {
+	wacanberry: {
 		id: "wacanberry",
 		name: "Wacan Berry",
 		spritenum: 526,
@@ -7484,7 +7484,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Electric-type attack. Single use.",
 	},
-	"watergem": {
+	watergem: {
 		id: "watergem",
 		name: "Water Gem",
 		spritenum: 528,
@@ -7500,7 +7500,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Holder's first successful Water-type attack will have 1.3x power. Single use.",
 	},
-	"watermemory": {
+	watermemory: {
 		id: "watermemory",
 		name: "Water Memory",
 		spritenum: 677,
@@ -7517,7 +7517,7 @@ let BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Water type.",
 	},
-	"waterstone": {
+	waterstone: {
 		id: "waterstone",
 		name: "Water Stone",
 		spritenum: 529,
@@ -7529,7 +7529,7 @@ let BattleItems = {
 		desc: "Evolves Poliwhirl into Poliwrath, Shellder into Cloyster, Staryu into Starmie, Eevee into Vaporeon, Lombre into Ludicolo, and Panpour into Simipour when used.",
 		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
-	"wateriumz": {
+	wateriumz: {
 		id: "wateriumz",
 		name: "Waterium Z",
 		spritenum: 633,
@@ -7543,7 +7543,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "If holder has a Water move, this item allows it to use a Water Z-Move.",
 	},
-	"watmelberry": {
+	watmelberry: {
 		id: "watmelberry",
 		name: "Watmel Berry",
 		spritenum: 530,
@@ -7558,7 +7558,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"waveincense": {
+	waveincense: {
 		id: "waveincense",
 		name: "Wave Incense",
 		spritenum: 531,
@@ -7575,7 +7575,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's Water-type attacks have 1.2x power.",
 	},
-	"weaknesspolicy": {
+	weaknesspolicy: {
 		id: "weaknesspolicy",
 		name: "Weakness Policy",
 		spritenum: 609,
@@ -7596,7 +7596,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "If holder is hit super effectively, raises Attack, Sp. Atk by 2 stages. Single use.",
 	},
-	"wepearberry": {
+	wepearberry: {
 		id: "wepearberry",
 		name: "Wepear Berry",
 		spritenum: 533,
@@ -7611,7 +7611,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
-	"whippeddream": {
+	whippeddream: {
 		id: "whippeddream",
 		name: "Whipped Dream",
 		spritenum: 692,
@@ -7622,7 +7622,7 @@ let BattleItems = {
 		gen: 6,
 		desc: "Evolves Swirlix into Slurpuff when traded.",
 	},
-	"whiteherb": {
+	whiteherb: {
 		id: "whiteherb",
 		name: "White Herb",
 		spritenum: 535,
@@ -7665,7 +7665,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Restores all lowered stat stages to 0 when one is less than 0. Single use.",
 	},
-	"widelens": {
+	widelens: {
 		id: "widelens",
 		name: "Wide Lens",
 		spritenum: 537,
@@ -7681,7 +7681,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "The accuracy of attacks by the holder is 1.1x.",
 	},
-	"wikiberry": {
+	wikiberry: {
 		id: "wikiberry",
 		name: "Wiki Berry",
 		spritenum: 538,
@@ -7708,7 +7708,7 @@ let BattleItems = {
 		gen: 3,
 		desc: "Restores 33% max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
 	},
-	"wiseglasses": {
+	wiseglasses: {
 		id: "wiseglasses",
 		name: "Wise Glasses",
 		spritenum: 539,
@@ -7725,7 +7725,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Holder's special attacks have 1.1x power.",
 	},
-	"yacheberry": {
+	yacheberry: {
 		id: "yacheberry",
 		name: "Yache Berry",
 		spritenum: 567,
@@ -7748,7 +7748,7 @@ let BattleItems = {
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Ice-type attack. Single use.",
 	},
-	"zapplate": {
+	zapplate: {
 		id: "zapplate",
 		name: "Zap Plate",
 		spritenum: 572,
@@ -7771,7 +7771,7 @@ let BattleItems = {
 		isNonstandard: "Unobtainable",
 		desc: "Holder's Electric-type attacks have 1.2x power. Judgment is Electric type.",
 	},
-	"zoomlens": {
+	zoomlens: {
 		id: "zoomlens",
 		name: "Zoom Lens",
 		spritenum: 574,
@@ -7791,7 +7791,7 @@ let BattleItems = {
 
 	// Gen 2 items
 
-	"berserkgene": {
+	berserkgene: {
 		id: "berserkgene",
 		name: "Berserk Gene",
 		spritenum: 388,
@@ -7805,7 +7805,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use.",
 	},
-	"berry": {
+	berry: {
 		id: "berry",
 		name: "Berry",
 		spritenum: 319,
@@ -7831,7 +7831,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 10 HP when at 1/2 max HP or less. Single use.",
 	},
-	"bitterberry": {
+	bitterberry: {
 		id: "bitterberry",
 		name: "Bitter Berry",
 		spritenum: 334,
@@ -7853,7 +7853,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is confused. Single use.",
 	},
-	"burntberry": {
+	burntberry: {
 		id: "burntberry",
 		name: "Burnt Berry",
 		spritenum: 13,
@@ -7877,7 +7877,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is frozen. Single use.",
 	},
-	"goldberry": {
+	goldberry: {
 		id: "goldberry",
 		name: "Gold Berry",
 		spritenum: 448,
@@ -7903,7 +7903,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 30 HP when at 1/2 max HP or less. Single use.",
 	},
-	"iceberry": {
+	iceberry: {
 		id: "iceberry",
 		name: "Ice Berry",
 		spritenum: 381,
@@ -7927,7 +7927,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is burned. Single use.",
 	},
-	"mintberry": {
+	mintberry: {
 		id: "mintberry",
 		name: "Mint Berry",
 		spritenum: 65,
@@ -7951,7 +7951,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Holder wakes up if it is asleep. Single use.",
 	},
-	"miracleberry": {
+	miracleberry: {
 		id: "miracleberry",
 		name: "Miracle Berry",
 		spritenum: 262,
@@ -7974,7 +7974,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Holder cures itself if it is confused or has a status condition. Single use.",
 	},
-	"mysteryberry": {
+	mysteryberry: {
 		id: "mysteryberry",
 		name: "Mystery Berry",
 		spritenum: 244,
@@ -8015,7 +8015,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use.",
 	},
-	"pinkbow": {
+	pinkbow: {
 		id: "pinkbow",
 		name: "Pink Bow",
 		spritenum: 444,
@@ -8029,7 +8029,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
 	},
-	"polkadotbow": {
+	polkadotbow: {
 		id: "polkadotbow",
 		name: "Polkadot Bow",
 		spritenum: 444,
@@ -8043,7 +8043,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
 	},
-	"przcureberry": {
+	przcureberry: {
 		id: "przcureberry",
 		name: "PRZ Cure Berry",
 		spritenum: 63,
@@ -8067,7 +8067,7 @@ let BattleItems = {
 		isNonstandard: "Past",
 		desc: "(Gen 2) Holder cures itself if it is paralyzed. Single use.",
 	},
-	"psncureberry": {
+	psncureberry: {
 		id: "psncureberry",
 		name: "PSN Cure Berry",
 		spritenum: 333,
@@ -8094,7 +8094,7 @@ let BattleItems = {
 
 	// CAP items
 
-	"crucibellite": {
+	crucibellite: {
 		id: "crucibellite",
 		name: "Crucibellite",
 		spritenum: 577,

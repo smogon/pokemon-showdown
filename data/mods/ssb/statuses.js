@@ -558,7 +558,7 @@ let BattleStatuses = {
 			this.add(`c|%explodingdaisies|MY PEOPLE NEED ME!`);
 		},
 	},
-	'false': {
+	false: {
 		noCopy: true,
 		onStart() {
 			this.add(`c|&false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);

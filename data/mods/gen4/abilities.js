@@ -2,7 +2,7 @@
 
 /**@type {{[k: string]: ModdedAbilityData}} */
 let BattleAbilities = {
-	"angerpoint": {
+	angerpoint: {
 		inherit: true,
 		desc: "If this Pokemon, or its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
 		shortDesc: "If this Pokemon or its substitute takes a critical hit, its Attack is raised 12 stages.",
@@ -15,7 +15,7 @@ let BattleAbilities = {
 		},
 		rating: 1.5,
 	},
-	"blaze": {
+	blaze: {
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Fire-type attacks have their power multiplied by 1.5.",
 		shortDesc: "At 1/3 or less of its max HP, this Pokemon's Fire-type attacks have 1.5x power.",
 		onBasePowerPriority: 2,
@@ -30,7 +30,7 @@ let BattleAbilities = {
 		rating: 2,
 		num: 66,
 	},
-	"colorchange": {
+	colorchange: {
 		inherit: true,
 		desc: "This Pokemon's type changes to match the type of the last move that hit it, unless that type is already one of its types. This effect applies after each hit from a multi-hit move.",
 		onDamagingHit(damage, target, source, move) {
@@ -43,7 +43,7 @@ let BattleAbilities = {
 		},
 		onAfterMoveSecondary() {},
 	},
-	"effectspore": {
+	effectspore: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
 			if (move.flags['contact'] && !source.status) {
@@ -58,7 +58,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"flashfire": {
+	flashfire: {
 		inherit: true,
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Fire') {
@@ -87,7 +87,7 @@ let BattleAbilities = {
 			},
 		},
 	},
-	"flowergift": {
+	flowergift: {
 		inherit: true,
 		desc: "If Sunny Day is active, the Attack and Special Defense of this Pokemon and its allies are multiplied by 1.5.",
 		shortDesc: "If Sunny Day is active, Attack and Sp. Def of this Pokemon and its allies are 1.5x.",
@@ -102,7 +102,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"forewarn": {
+	forewarn: {
 		inherit: true,
 		onStart(pokemon) {
 			/**@type {Move[]} */
@@ -129,11 +129,11 @@ let BattleAbilities = {
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
 		},
 	},
-	"insomnia": {
+	insomnia: {
 		inherit: true,
 		rating: 2.5,
 	},
-	"intimidate": {
+	intimidate: {
 		inherit: true,
 		onStart(pokemon) {
 			let activated = false;
@@ -165,7 +165,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"leafguard": {
+	leafguard: {
 		inherit: true,
 		desc: "If Sunny Day is active, this Pokemon cannot gain a major status condition, but can use Rest normally.",
 		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused, but Rest works normally.",
@@ -177,14 +177,14 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"lightningrod": {
+	lightningrod: {
 		inherit: true,
 		desc: "If this Pokemon is not the target of a single-target Electric-type move used by another Pokemon, this Pokemon redirects that move to itself.",
 		shortDesc: "This Pokemon draws single-target Electric moves to itself.",
 		onTryHit() {},
 		rating: 0,
 	},
-	"magicguard": {
+	magicguard: {
 		desc: "This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage. This Pokemon cannot lose its turn because of paralysis, and is unaffected by Toxic Spikes on switch-in.",
 		shortDesc: "This Pokemon can only be damaged by direct attacks, and can't be fully paralyzed.",
 		onDamage(damage, target, source, effect) {
@@ -202,7 +202,7 @@ let BattleAbilities = {
 		rating: 4.5,
 		num: 98,
 	},
-	"minus": {
+	minus: {
 		desc: "If an active ally has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
 		shortDesc: "If an active ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA(spa, pokemon) {
@@ -221,7 +221,7 @@ let BattleAbilities = {
 		rating: 0,
 		num: 58,
 	},
-	"naturalcure": {
+	naturalcure: {
 		inherit: true,
 		onCheckShow(pokemon) {},
 		onSwitchOut(pokemon) {
@@ -234,7 +234,7 @@ let BattleAbilities = {
 			pokemon.setStatus('');
 		},
 	},
-	"normalize": {
+	normalize: {
 		inherit: true,
 		onModifyMove(move) {
 			if (move.id !== 'struggle') {
@@ -242,7 +242,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"overgrow": {
+	overgrow: {
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Grass-type attacks have their power multiplied by 1.5.",
 		shortDesc: "At 1/3 or less of its max HP, this Pokemon's Grass-type attacks have 1.5x power.",
 		onBasePowerPriority: 2,
@@ -257,7 +257,7 @@ let BattleAbilities = {
 		rating: 2,
 		num: 65,
 	},
-	"pickup": {
+	pickup: {
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
 		id: "pickup",
@@ -265,7 +265,7 @@ let BattleAbilities = {
 		rating: 0,
 		num: 53,
 	},
-	"plus": {
+	plus: {
 		desc: "If an active ally has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
 		shortDesc: "If an active ally has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA(spa, pokemon) {
@@ -284,7 +284,7 @@ let BattleAbilities = {
 		rating: 0,
 		num: 57,
 	},
-	"pressure": {
+	pressure: {
 		desc: "If this Pokemon is the target of another Pokemon's move, that move loses one additional PP.",
 		shortDesc: "If this Pokemon is the target of a move, that move loses one additional PP.",
 		onStart(pokemon) {
@@ -299,7 +299,7 @@ let BattleAbilities = {
 		rating: 1.5,
 		num: 46,
 	},
-	"serenegrace": {
+	serenegrace: {
 		inherit: true,
 		onModifyMove(move) {
 			if (move.secondaries) {
@@ -310,7 +310,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"simple": {
+	simple: {
 		shortDesc: "This Pokemon's stat stages are considered doubled during stat calculations.",
 		onModifyBoost(boosts) {
 			for (let key in boosts) {
@@ -323,11 +323,11 @@ let BattleAbilities = {
 		rating: 4,
 		num: 86,
 	},
-	"soundproof": {
+	soundproof: {
 		inherit: true,
 		shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
 	},
-	"stench": {
+	stench: {
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
 		id: "stench",
@@ -335,7 +335,7 @@ let BattleAbilities = {
 		rating: 0,
 		num: 1,
 	},
-	"stickyhold": {
+	stickyhold: {
 		inherit: true,
 		onTakeItem(item, pokemon, source) {
 			if (this.suppressingAttackEvents(pokemon)) return;
@@ -345,21 +345,21 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"stormdrain": {
+	stormdrain: {
 		inherit: true,
 		desc: "If this Pokemon is not the target of a single-target Water-type move used by another Pokemon, this Pokemon redirects that move to itself.",
 		shortDesc: "This Pokemon draws single-target Water moves to itself.",
 		onTryHit() {},
 		rating: 0,
 	},
-	"sturdy": {
+	sturdy: {
 		inherit: true,
 		desc: "OHKO moves fail when used against this Pokemon.",
 		shortDesc: "OHKO moves fail when used against this Pokemon.",
 		onDamage() {},
 		rating: 0,
 	},
-	"swarm": {
+	swarm: {
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Bug-type attacks have their power multiplied by 1.5.",
 		shortDesc: "At 1/3 or less of its max HP, this Pokemon's Bug-type attacks have 1.5x power.",
 		onBasePowerPriority: 2,
@@ -374,7 +374,7 @@ let BattleAbilities = {
 		rating: 2,
 		num: 68,
 	},
-	"synchronize": {
+	synchronize: {
 		inherit: true,
 		desc: "If another Pokemon burns, paralyzes, or poisons this Pokemon, that Pokemon receives the same major status condition. If another Pokemon badly poisons this Pokemon, that Pokemon becomes poisoned.",
 		onAfterSetStatus(status, target, source, effect) {
@@ -386,7 +386,7 @@ let BattleAbilities = {
 			source.trySetStatus(id, target);
 		},
 	},
-	"thickfat": {
+	thickfat: {
 		shortDesc: "The power of Fire- and Ice-type attacks against this Pokemon is halved.",
 		onBasePowerPriority: 1,
 		onSourceBasePower(basePower, attacker, defender, move) {
@@ -399,7 +399,7 @@ let BattleAbilities = {
 		rating: 3.5,
 		num: 47,
 	},
-	"torrent": {
+	torrent: {
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Water-type attacks have their power multiplied by 1.5.",
 		shortDesc: "At 1/3 or less of its max HP, this Pokemon's Water-type attacks have 1.5x power.",
 		onBasePowerPriority: 2,
@@ -414,7 +414,7 @@ let BattleAbilities = {
 		rating: 2,
 		num: 67,
 	},
-	"trace": {
+	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted) return;
@@ -430,11 +430,11 @@ let BattleAbilities = {
 			}
 		},
 	},
-	"vitalspirit": {
+	vitalspirit: {
 		inherit: true,
 		rating: 2.5,
 	},
-	"wonderguard": {
+	wonderguard: {
 		inherit: true,
 		shortDesc: "This Pokemon is only damaged by Fire Fang, supereffective moves, indirect damage.",
 		onTryHit(target, source, move) {
