@@ -193,86 +193,6 @@ function exportUsergroups() {
 }
 void importUsergroups();
 
-function cacheGroupData() {
-	if (Config.groups) {
-		// Support for old config groups format.
-		// Should be removed soon.
-		console.error(
-			`You are using a deprecated version of user group specification in config.\n` +
-			`Support for this will be removed soon.\n` +
-			`Please ensure that you update your config.js to the new format (see config-example.js, line 220).\n`
-		);
-	} else {
-		Config.punishgroups = Object.create(null);
-		Config.groups = Object.create(null);
-		Config.groupsranking = [];
-	}
-
-	const groups = Config.groups;
-	const punishgroups = Config.punishgroups;
-	const cachedGroups: {[k: string]: 'processing' | true} = {};
-
-	function cacheGroup(sym: string, groupData: AnyObject) {
-		if (cachedGroups[sym] === 'processing') return false; // cyclic inheritance.
-
-		if (cachedGroups[sym] !== true && groupData['inherit']) {
-			cachedGroups[sym] = 'processing';
-			const inheritGroup = groups[groupData['inherit']];
-			if (cacheGroup(groupData['inherit'], inheritGroup)) {
-				// Add lower group permissions to higher ranked groups,
-				// preserving permissions specifically declared for the higher group.
-				for (const key in inheritGroup) {
-					if (key in groupData) continue;
-					groupData[key] = inheritGroup[key];
-				}
-			}
-			delete groupData['inherit'];
-		}
-		return (cachedGroups[sym] = true);
-	}
-
-	if (Config.grouplist) { // Using new groups format.
-		const grouplist = Config.grouplist;
-		const numGroups = grouplist.length;
-		for (let i = 0; i < numGroups; i++) {
-			const groupData = grouplist[i];
-
-			// punish groups
-			if (groupData.punishgroup) {
-				punishgroups[groupData.id] = groupData;
-				continue;
-			}
-
-			// @ts-ignore - dyanmically assigned property
-			groupData.rank = numGroups - i - 1;
-			groups[groupData.symbol] = groupData;
-			Config.groupsranking.unshift(groupData.symbol);
-		}
-	}
-
-	for (const sym in groups) {
-		const groupData = groups[sym];
-		cacheGroup(sym, groupData);
-	}
-
-	// hardcode default punishgroups.
-	if (!punishgroups.locked) {
-		punishgroups.locked = {
-			name: 'Locked',
-			id: 'locked',
-			symbol: '\u203d',
-		};
-	}
-	if (!punishgroups.muted) {
-		punishgroups.muted = {
-			name: 'Muted',
-			id: 'muted',
-			symbol: '!',
-		};
-	}
-}
-cacheGroupData();
-
 function setOfflineGroup(name: string, group: GroupSymbol, forceTrusted?: boolean) {
 	if (!group) throw new Error(`Falsy value passed to setOfflineGroup`);
 	const userid = toID(name);
@@ -641,11 +561,11 @@ export class User extends Chat.MessageContext {
 		}
 
 		let group: GroupSymbol;
-		let targetGroup = '';
+		let targetGroup: GroupSymbol | '' = '';
 		let targetUser = null;
 
 		if (typeof target === 'string') {
-			targetGroup = target;
+			targetGroup = target as GroupSymbol;
 		} else {
 			targetUser = target;
 		}
@@ -686,7 +606,8 @@ export class User extends Chat.MessageContext {
 			if (jurisdiction.includes('s') && targetUser === this) {
 				return true;
 			}
-			if (jurisdiction.includes('u') && Config.groupsranking.indexOf(group) > Config.groupsranking.indexOf(targetGroup)) {
+			if (jurisdiction.includes('u') &&
+				Config.groupsranking.indexOf(group) > Config.groupsranking.indexOf(targetGroup as GroupSymbol)) {
 				return true;
 			}
 		}
@@ -1167,7 +1088,8 @@ export class User extends Chat.MessageContext {
 			this.avatar = Config.customavatars[this.id];
 		}
 
-		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
+		const groupInfo = Config.groups[this.group];
+		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
 			this.isStaff = !!staffRoom?.auth?.[this.id];
@@ -1198,7 +1120,8 @@ export class User extends Chat.MessageContext {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
 		this.group = group;
 		const wasStaff = this.isStaff;
-		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
+		const groupInfo = Config.groups[this.group];
+		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
 			this.isStaff = !!(staffRoom?.auth?.[this.id]);
@@ -1761,7 +1684,6 @@ export const Users = {
 	isUsernameKnown,
 	isTrusted,
 	importUsergroups,
-	cacheGroupData,
 	PLAYER_SYMBOL,
 	HOST_SYMBOL,
 	connections,
