@@ -42,7 +42,7 @@ class LogReaderRoom {
 	}
 }
 
-export const LogReader = new class {
+const LogReader = new class {
 	async get(roomid: RoomID) {
 		if (!await FS(`logs/chat/${roomid}`).exists()) return null;
 		return new LogReaderRoom(roomid);
@@ -138,7 +138,7 @@ export const LogReader = new class {
 	}
 };
 
-export const LogViewer = new class {
+const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
@@ -180,10 +180,11 @@ export const LogViewer = new class {
 
 	async searchDay(roomid: RoomID, day: string, search: string, cap?: number, prevResults?: string[]) {
 		const text = await LogReader.read(roomid, day);
-		const lines = text!.split('\n');
+		if (!text) return [];
+		const lines = text.split('\n');
 		const matches: string[] = [];
 		const all: string[] = [];
-		const searches: string[] = search.split('-');
+		const searches = search.split('-');
 
 		if (prevResults) {
 			// add previous results to all, to track all matches relative to the cap
@@ -222,16 +223,17 @@ export const LogViewer = new class {
 
 	async searchMonth(roomid: RoomID, month: string, search: string, cap?: number | string, year = false) {
 		const log = await LogReader.get(roomid);
-		const days = await log!.listDays(month);
+		if (!log) return LogViewer.error(`No logs on ${roomid}.`);
+		const days = await log.listDays(month);
 		const results = [];
 		const searches = search.split('-').length;
 
 		if (typeof cap === 'string') cap = parseInt(cap);
 
 		let buf = (
-			`<br><div class="pad"><strong><center>Results for search (es) ` +
+			`<br><div class="pad"><strong>Results for search (es) ` +
 			`"${searches > 1 ? search.split('-').join(' ') : search}"` +
-			` on ${roomid}: (${month}):</center></strong><hr>`
+			` on ${roomid}: (${month}):</strong><hr>`
 		);
 		for (const day of days) {
 			const matches: string[] = await this.searchDay(roomid, day, search, cap, results);
@@ -241,7 +243,7 @@ export const LogViewer = new class {
 			buf += `</details><hr>`;
 			if (cap && results.length >= cap && !year) {
 				// cap is met & is not being used in a year read
-				buf += `<center><br/ ><strong>Max results reached, capped at ${cap}</strong></center>`;
+				buf += `<br/ ><strong>Max results reached, capped at ${cap}</strong>`;
 				buf += `<br /><div style="text-align:center">`;
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${cap + 100}">View 100 more<br />&#x25bc;</button>`;
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|all">View all<br />&#x25bc;</button></div>`;
@@ -257,9 +259,9 @@ export const LogViewer = new class {
 		if (!log) return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
 		let buf = '';
 		if (!alltime) {
-			buf += `<center><strong><br>Searching year: ${year}: </strong></center><hr>`;
+			buf += `<strong><br>Searching year: ${year}: </strong><hr>`;
 		}	else {
-			buf += `<center><strong><br>Searching all logs: </strong></center><hr>`;
+			buf += `<strong><br>Searching all logs: </strong><hr>`;
 		}
 		if (typeof cap === 'string') cap = parseInt(cap);
 		const months = await log.listMonths();
@@ -433,10 +435,10 @@ export const LogViewer = new class {
 	}
 };
 
-export const LogSearcher = new class {
+const LogSearcher = new class {
 	async search(roomid: RoomID, search: string, cap?: number): Promise<[string[], string]> {
 		return new Promise((resolve, reject) => {
-			child_process.exec(`grep -r '${search}' ${__dirname}/../../logs/chat/${roomid} --exclude=today.txt --context`, {
+			child_process.exec(`grep -r '${search}' ${__dirname}/../../logs/chat/${roomid} --exclude=today.txt --context 3`, {
 				cwd: __dirname,
 			}, (error, stdout, stderr) => {
 				resolve([stdout.split('--\n--').reverse(), stderr]);
@@ -444,7 +446,7 @@ export const LogSearcher = new class {
 		});
 	}
 
-	FSSearch(roomid: RoomID, search: string, date: string, cap?: number | string) {
+	fsSearch(roomid: RoomID, search: string, date: string, cap?: number | string) {
 		const isAll = (date === 'all');
 		const isYear = (date.length < 0 && date.length > 7);
 		const isMonth = (date.length === 7);
@@ -542,7 +544,7 @@ export const pages: PageTable = {
 		if (roomid.startsWith('spl') && roomid !== 'splatoon' && !user.can('rangeban')) {
 			return LogViewer.error("SPL team discussions are super secret.");
 		}
-		if (roomid.startsWith('wcop') &&	 !user.can('rangeban')) {
+		if (roomid.startsWith('wcop') &&	!user.can('rangeban')) {
 			return LogViewer.error("WCOP team discussions are super secret.");
 		}
 		if (room) {
@@ -578,7 +580,7 @@ export const pages: PageTable = {
 			}
 		} else if (date && hasSearch && search) {
 			if (context) {
-				return LogSearcher.FSSearch(roomid, search, date, toID(cap));
+				return LogSearcher.fsSearch(roomid, search, date, toID(cap));
 			} else {
 				return LogSearcher.grepSearch(roomid, search, cap);
 			}
@@ -617,8 +619,8 @@ export const commands: ChatCommands = {
 	},
 
 	searchlogshelp: [
-		"/searchlogs [search], [room], [date], [cap] - searches [date]'s logs in the current room for [search].",
-		"A | can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
+		"/searchlogs [search] | [room] | [date] | [cap] - searches [date]'s logs in the current room for [search].",
+		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
 		"/csl or /contextsearch can be used to get context for lines, at a loss in performance.",
 		"If no month, year, or 'all' param is given for the date, defaults to current month. Requires: % @ & ~",
