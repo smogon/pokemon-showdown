@@ -465,9 +465,10 @@ export const LogSearcher = new class {
 	async grepSearch(roomid: RoomID, search: string, cap?: number | string) {
 		if (cap !== 'all' && typeof cap === 'string') cap = parseInt(cap);
 		const matches: string[] = [];
-		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:</strong>`;
 		const parsedCap = isNaN(cap as number) ? '' : cap;
+		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:</strong>`;
 		const [stdout, stderr] = await this.search(roomid, search, parsedCap as number);
+
 		if (stderr) return LogViewer.error(`Error in search. <br>Please report this as a bug. <br> ${stderr}`);
 		buf += ` ${stdout.length}`;
 		if (cap) {
@@ -477,12 +478,17 @@ export const LogSearcher = new class {
 		}
 		for (const chunk of stdout) {
 			const rebuilt: string[] = [];
+			const exacts = [];
+			exacts.push(chunk.split('\n').filter((item: string) => new RegExp(search, "i").test(item)).map(item => {
+				item = item.split(item.includes('.txt-') ? '.txt-' : '.txt:')[1];
+				item = LogViewer.renderLine(item);
+				return item;
+			})[0]); // get exact match for display
+
 			for (const line of chunk.split('\n')) {
 				if (!toID(line)) continue;
-				let sep;
-				if (line.includes('.txt-')) sep = '-';
-				if (line.includes('.txt:')) sep = ':';
-				const [path, text] = line.split(`.txt${sep}`);
+				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
+				const [path, text] = line.split(sep);
 				const rendered = LogViewer.renderLine(text, 'all');
 				if (!rendered) continue; // gets rid of some weird blank lines
 				const matched = (
@@ -490,8 +496,10 @@ export const LogSearcher = new class {
 						.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
 				);
 				const date = path.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
-				const addDate = rebuilt.join(' ').includes(date) ? '' : `<small><strong>${date}</strong>`;
-				rebuilt.push(`${addDate}</small>${matched}`);
+				if (!rebuilt.join(' ').includes(date)) {
+					rebuilt.push(`<details><summary>Match on ${date}: ${exacts[exacts.length - 1]}</summary><br>`);
+				}
+				rebuilt.push(`${matched}`);
 			}
 			if (cap && matches.push(rebuilt.join(' ')) >= cap) {
 				break;
@@ -499,7 +507,7 @@ export const LogSearcher = new class {
 				matches.push(rebuilt.join(' '));
 			}
 		}
-		buf += matches.join('<hr/ >');
+		buf += matches.join('</details><hr/ >');
 		if (cap && cap !== 'all') {
 			buf += `<hr/ ><strong>Capped at ${cap}.</strong><br>`;
 			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}||${cap + 200}">View 200 more<br />&#x25bc;</button>`;
