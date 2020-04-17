@@ -967,8 +967,6 @@ export class GlobalRoom extends BasicRoom {
 				return;
 			}
 
-			for (const worker of Sockets.workers.values()) worker.kill();
-
 			// final warning
 			this.notifyRooms(
 				notifyPlaces,

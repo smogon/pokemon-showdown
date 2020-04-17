@@ -44,7 +44,7 @@ const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
 const STAFF_IDLE_TIMER = 30 * MINUTES;
 
-type Worker = import('cluster').Worker;
+type StreamWorker = import('../lib/process-manager').StreamWorker;
 
 /*********************************************************
  * Utility functions
@@ -243,7 +243,7 @@ const connections = new Map<string, Connection>();
 export class Connection {
 	readonly id: string;
 	readonly socketid: string;
-	readonly worker: Worker;
+	readonly worker: StreamWorker;
 	readonly inRooms: Set<RoomID>;
 	readonly ip: string;
 	readonly protocol: string;
@@ -260,7 +260,7 @@ export class Connection {
 	lastActiveTime: number;
 	constructor(
 		id: string,
-		worker: Worker,
+		worker: StreamWorker,
 		socketid: string,
 		user: User | null,
 		ip: string | null,
@@ -1179,15 +1179,15 @@ export class User extends Chat.MessageContext {
 	onDisconnect(connection: Connection) {
 		for (const [i, connected] of this.connections.entries()) {
 			if (connected === connection) {
+				this.connections.splice(i, 1);
 				// console.log('DISCONNECT: ' + this.id);
-				if (this.connections.length <= 1) {
+				if (!this.connections.length) {
 					this.markDisconnected();
 				}
 				for (const roomid of connection.inRooms) {
 					this.leaveRoom(Rooms.get(roomid)!, connection, true);
 				}
 				--this.ips[connection.ip];
-				this.connections.splice(i, 1);
 				break;
 			}
 		}
@@ -1560,7 +1560,7 @@ function logGhostConnections(threshold: number): Promise<unknown> {
  *********************************************************/
 
 function socketConnect(
-	worker: Worker,
+	worker: StreamWorker,
 	workerid: number,
 	socketid: string,
 	ip: string,
@@ -1601,14 +1601,21 @@ function socketConnect(
 
 	user.joinRoom('global', connection);
 }
-function socketDisconnect(worker: Worker, workerid: number, socketid: string) {
+function socketDisconnect(worker: StreamWorker, workerid: number, socketid: string) {
 	const id = '' + workerid + '-' + socketid;
 
 	const connection = connections.get(id);
 	if (!connection) return;
 	connection.onDisconnect();
 }
-function socketReceive(worker: Worker, workerid: number, socketid: string, message: string) {
+function socketDisconnectAll(worker: StreamWorker, workerid: number) {
+	for (const connection of connections.values()) {
+		if (connection.worker === worker) {
+			connection.onDisconnect();
+		}
+	}
+}
+function socketReceive(worker: StreamWorker, workerid: number, socketid: string, message: string) {
 	const id = `${workerid}-${socketid}`;
 
 	const connection = connections.get(id);
@@ -1690,6 +1697,7 @@ export const Users = {
 	User,
 	Connection,
 	socketDisconnect,
+	socketDisconnectAll,
 	socketReceive,
 	pruneInactive,
 	pruneInactiveTimer: setInterval(() => {

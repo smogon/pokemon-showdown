@@ -1,8 +1,10 @@
 'use strict';
 
-const EventEmitter = require('events').EventEmitter;
+/** @type {typeof import('../lib/streams').ObjectReadWriteStream} */
+const ObjectReadWriteStream = require('../.lib-dist/streams').ObjectReadWriteStream;
 
-class Worker extends EventEmitter {
+/** @extends {ObjectReadWriteStream<string>} */
+class WorkerStream extends ObjectReadWriteStream {
 	constructor(id) {
 		super();
 		this.id = id;
@@ -10,12 +12,9 @@ class Worker extends EventEmitter {
 		this.sockets = new Set();
 		this.rooms = new Map();
 		this.roomChannels = new Map();
-		Sockets.workers.set(this.id, this);
 	}
 
-	kill() {}
-
-	send(msg) {
+	_write(msg) {
 		let cmd = msg.charAt(0);
 		let params = msg.substr(1).split('\n');
 		switch (cmd) {
@@ -131,23 +130,28 @@ class Worker extends EventEmitter {
 	}
 }
 
+class Worker {
+	constructor(id) {
+		this.id = id;
+		this.stream = new WorkerStream(id);
+	}
+}
+
+const worker = new Worker(1);
+
 function createConnection(ip, workerid, socketid) {
-	let worker;
-	if (workerid) {
-		workerid = +workerid;
-		worker = Sockets.workers.get(workerid) || new Worker(workerid);
-	} else {
-		worker = Sockets.workers.get(1) || new Worker(1);
-		workerid = worker.id;
+	if (workerid || socketid) {
+		throw new Error("deprecated");
 	}
 
+	workerid = 1;
 	if (!socketid) {
 		socketid = 1;
 		while (Users.connections.has(`${workerid}-${socketid}`)) {
 			socketid++;
 		}
 	}
-	worker.addSocket(socketid);
+	worker.stream.addSocket(socketid);
 
 	let connectionid = `${workerid}-${socketid}`;
 	let connection = new Users.Connection(connectionid, worker, socketid, null, ip || '127.0.0.1');

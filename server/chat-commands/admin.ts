@@ -13,6 +13,8 @@
 import * as child_process from 'child_process';
 import {FS} from '../../lib/fs';
 
+import * as ProcessManager from '../../lib/process-manager';
+
 export const commands: ChatCommands = {
 
 	/*********************************************************
@@ -436,6 +438,23 @@ export const commands: ChatCommands = {
 		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: & ~`,
 	],
 
+	'!processes': true,
+	processes(target, room, user) {
+		if (!this.can('lockdown')) return false;
+
+		let buf = `<strong>${process.pid}</strong> - Main<br />`;
+		for (const manager of ProcessManager.processManagers) {
+			for (const [i, process] of manager.processes.entries()) {
+				buf += `<strong>${process.getProcess().pid}</strong> - ${manager.basename} ${i} (load ${process.load})<br />`;
+			}
+			for (const [i, process] of manager.releasingProcesses.entries()) {
+				buf += `<strong>${process.getProcess().pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load})<br />`;
+			}
+		}
+
+		this.sendReplyBox(buf);
+	},
+
 	async savelearnsets(target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		this.sendReply("saving...");
@@ -742,10 +761,6 @@ export const commands: ChatCommands = {
 
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
-		}
-
-		for (const worker of Sockets.workers.values()) {
-			worker.kill();
 		}
 
 		const logRoom = Rooms.get('staff') || room;

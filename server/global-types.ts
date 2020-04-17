@@ -1,5 +1,3 @@
-type ChildProcess = import('child_process').ChildProcess;
-
 type Config = typeof import('../config/config-example') & AnyObject;
 
 type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
