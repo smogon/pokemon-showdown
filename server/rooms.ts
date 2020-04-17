@@ -328,16 +328,31 @@ export abstract class BasicRoom {
 	 * Gets the group symbol of a user in the room.
 	 */
 	getAuth(user: {id: ID, group: GroupSymbol} | User): GroupSymbol {
+		const globalGroup = this.auth && this.isPrivate === true ? ' ' : user.group;
+
 		if (this.auth && user.id in this.auth) {
-			return this.auth[user.id];
+			// room has roomauth
+			// authority is whichever is higher between roomauth and global auth
+			const roomGroup = this.auth[user.id];
+			let greaterGroup = Config.greatergroupscache[`${roomGroup}${globalGroup}`];
+			if (!greaterGroup) {
+				const roomRank = (Config.groups[roomGroup] || {rank: 0}).rank;
+				const globalRank = (Config.groups[globalGroup] || {rank: 0}).rank;
+				if (roomGroup === Users.PLAYER_SYMBOL || roomGroup === Users.HOST_SYMBOL || roomGroup === '#') {
+					// Player, Host, and Room Owner always trump higher global rank
+					greaterGroup = roomGroup;
+				} else {
+					greaterGroup = (roomRank > globalRank ? roomGroup : globalGroup);
+				}
+				Config.greatergroupscache[`${roomGroup}${globalGroup}`] = greaterGroup;
+			}
+			return greaterGroup;
 		}
+
 		if (this.parent) {
 			return this.parent.getAuth(user);
 		}
-		if (this.auth && this.isPrivate === true) {
-			return ' ';
-		}
-		return user.group;
+		return globalGroup;
 	}
 	checkModjoin(user: User) {
 		if (this.staffRoom && !user.isStaff && (!this.auth || (this.auth[user.id] || ' ') === ' ')) return false;
