@@ -489,6 +489,7 @@ export const LogSearcher = new class {
 				if (!toID(line)) continue;
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
 				const [path, text] = line.split(sep);
+				if (path.includes('today')) continue; // get rid of duplicates
 				const rendered = LogViewer.renderLine(text, 'all');
 				if (!rendered) continue; // gets rid of some weird blank lines
 				const matched = (
@@ -497,7 +498,8 @@ export const LogSearcher = new class {
 				);
 				const date = path.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
 				if (!rebuilt.join(' ').includes(date)) {
-					rebuilt.push(`<details><summary>Match on ${date}: ${exacts[exacts.length - 1]}</summary><br>`);
+					const link = `<a href ="view-chatlog-${roomid}--${date}">${date}</a>`;
+					rebuilt.push(`<details><summary>Match on ${link}: ${exacts[exacts.length - 1]}</summary><br>`);
 				}
 				rebuilt.push(`${matched}`);
 			}
@@ -599,11 +601,11 @@ export const commands: ChatCommands = {
 	csl: 'searchlogs',
 	searchlogs(target, room, user, connection, cmd) {
 		target = target.trim();
-		const [search, tarRoom, date, cap] = target.split('|') as [string, string, number, number];
+		const [search, tarRoom, date, cap] = target.split(',') as [string, string, number, number];
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		if (cap && isNaN(cap) && toID(cap) !== 'all') return this.errorReply(`Cap must be a number or [all].`);
-		const input = search.includes(',') ? search.split(',').map(item => item.trim()).join('-') : search;
+		const input = search.includes('|') ? search.split('|').map(item => item.trim()).join('-') : search;
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		const limit = cap ? `--${cap}` : `--500`;
@@ -615,8 +617,8 @@ export const commands: ChatCommands = {
 	},
 
 	searchlogshelp: [
-		"/searchlogs [search] | [room] | [date] | [cap] - searches [date]'s logs in the current room for [search].",
-		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
+		"/searchlogs [search], [room], [date], [cap] - searches [date]'s logs in the current room for [search].",
+		"A | can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
 		"/csl or /contextsearch can be used to get context for lines, at a loss in performance.",
 		"If no month, year, or 'all' param is given for the date, defaults to current month. Requires: % @ & ~",
