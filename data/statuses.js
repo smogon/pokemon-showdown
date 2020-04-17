@@ -762,7 +762,7 @@ let BattleStatuses = {
 			this.add('-block', pokemon, 'Dynamax');
 			return null;
 		},
-		onResidualOrder: 30,
+		onResidualPriority: -100,
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
 			if (pokemon.canGigantamax) this.add('-formechange', pokemon, pokemon.species.name);
