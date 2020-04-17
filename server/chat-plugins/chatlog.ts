@@ -46,7 +46,7 @@ class LogReaderRoom {
 	}
 }
 
-const LogReader = new class {
+export const LogReader = new class {
 	async get(roomid: RoomID) {
 		if (!await FS(`logs/chat/${roomid}`).exists()) return null;
 		return new LogReaderRoom(roomid);
@@ -142,7 +142,7 @@ const LogReader = new class {
 	}
 };
 
-const LogViewer = new class {
+export const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
@@ -440,7 +440,7 @@ const LogViewer = new class {
 	}
 };
 
-const LogSearcher = new class {
+export const LogSearcher = new class {
 	fsSearch(roomid: RoomID, search: string, date: string, cap?: number | string) {
 		const isAll = (date === 'all');
 		const isYear = (date.length < 0 && date.length > 7);
@@ -633,7 +633,7 @@ export const commands: ChatCommands = {
 	csl: 'searchlogs',
 	searchlogs(target, room, user, connection, cmd) {
 		target = target.trim();
-		const [search, tarRoom, date, cap] = target.split(',') as [string, string, number, number];
+		const [search, tarRoom, cap, date] = target.split(',') as [string, string, number, number];
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		if (cap && isNaN(cap) && toID(cap) !== 'all') return this.errorReply(`Cap must be a number or [all].`);
@@ -649,10 +649,10 @@ export const commands: ChatCommands = {
 	},
 
 	searchlogshelp: [
-		"/searchlogs [search] | [room] | [date] | [cap] - searches [date]'s logs in the current room for [search].",
+		"/searchlogs [search], [room], [cap], [date] - searches logs in the current room for [search].",
 		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
-		"/csl or /contextsearch can be used to get context for lines, at a loss in performance.",
-		"If no month, year, or 'all' param is given for the date, defaults to current month. Requires: % @ & ~",
+		"/csl or /contextsearch can be used to get context for lines and more specific dates, at a loss in performance.",
+		"Requires: % @ & ~",
 	],
 };
