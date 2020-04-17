@@ -7,7 +7,11 @@
 
 import {FS} from "../../lib/fs";
 import * as child_process from 'child_process';
+import * as path from 'path';
+import * as util from 'util';
 
+
+const execFile = util.promisify(child_process.execFile);
 const DAY = 24 * 60 * 60 * 1000;
 
 class LogReaderRoom {
@@ -282,6 +286,7 @@ const LogViewer = new class {
 	}
 
 	renderLine(fullLine: string, opts?: string) {
+		if (!fullLine) return ``;
 		let timestamp = fullLine.slice(0, opts ? 8 : 5);
 		let line;
 		if (/^[0-9:]+$/.test(timestamp)) {
@@ -436,16 +441,6 @@ const LogViewer = new class {
 };
 
 const LogSearcher = new class {
-	async search(roomid: RoomID, search: string, cap?: number): Promise<[string[], string]> {
-		return new Promise((resolve, reject) => {
-			child_process.exec(`grep -r '${search}' ${__dirname}/../../logs/chat/${roomid} --exclude=today.txt --context 3`, {
-				cwd: __dirname,
-			}, (error, stdout, stderr) => {
-				resolve([stdout.split('--\n--').reverse(), stderr]);
-			});
-		});
-	}
-
 	fsSearch(roomid: RoomID, search: string, date: string, cap?: number | string) {
 		const isAll = (date === 'all');
 		const isYear = (date.length < 0 && date.length > 7);
@@ -464,21 +459,9 @@ const LogSearcher = new class {
 		}
 	}
 
-	async grepSearch(roomid: RoomID, search: string, cap?: number | string) {
-		if (cap !== 'all' && typeof cap === 'string') cap = parseInt(cap);
-		const matches: string[] = [];
-		const parsedCap = isNaN(cap as number) ? '' : cap;
-		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:</strong>`;
-		const [stdout, stderr] = await this.search(roomid, search, parsedCap as number);
-
-		if (stderr) return LogViewer.error(`Error in search. <br>Please report this as a bug. <br> ${stderr}`);
-		buf += ` ${stdout.length}`;
-		if (cap) {
-			buf += ` (capped at ${cap})<hr/ >`;
-		} else {
-			buf += `<hr/ >`;
-		}
-		for (const chunk of stdout) {
+	render(results: string[], roomid: RoomID, search: string, cap?: number) {
+		const matches = [];
+		for (const chunk of results) {
 			const rebuilt: string[] = [];
 			const exacts = [];
 			exacts.push(chunk.split('\n').filter((item: string) => new RegExp(search, "i").test(item)).map(item => {
@@ -490,34 +473,78 @@ const LogSearcher = new class {
 			for (const line of chunk.split('\n')) {
 				if (!toID(line)) continue;
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
-				const [path, text] = line.split(sep);
-				if (path.includes('today')) continue; // get rid of duplicates
+				const [dir, text] = line.split(sep);
+				if (dir.includes('today')) continue; // get rid of duplicates
 				const rendered = LogViewer.renderLine(text, 'all');
 				if (!rendered) continue; // gets rid of some weird blank lines
 				const matched = (
 					new RegExp(search, "i")
 						.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
 				);
-				const date = path.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
+				const date = dir.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
 				if (!rebuilt.join(' ').includes(date)) {
 					const link = `<a href ="view-chatlog-${roomid}--${date}">${date}</a>`;
 					rebuilt.push(`<details><summary>Match on ${link}: ${exacts[exacts.length - 1]}</summary><br>`);
 				}
 				rebuilt.push(`${matched}`);
 			}
+			const isIn = matches.join(' ').includes(rebuilt.join(' '));
 			if (cap && matches.push(rebuilt.join(' ')) >= cap) {
 				break;
 			} else {
-				matches.push(rebuilt.join(' '));
+				// `in` resolves a duplication bug
+				if (isIn) matches.push(rebuilt.join(' '));
 			}
 		}
-		buf += matches.join('</details><hr/ >');
-		if (cap && cap !== 'all') {
-			buf += `<hr/ ><strong>Capped at ${cap}.</strong><br>`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}||${cap + 200}">View 200 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|all">View all<br />&#x25bc;</button></div>`;
+		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:</strong>`;
+		const total = matches.join('</details><hr/ >').split('<div class="chat chatmessage highlighted">').length;
+		buf += ` ${total}`;
+		if (cap) {
+			buf += ` (capped at ${cap})<hr/ >`;
+		} else {
+			buf += `<hr/ >`;
 		}
+		buf += matches.join('</details><hr/ >');
+		if (cap) {
+			buf += `<hr/ ><strong>Capped at ${cap}.</strong><br>`;
+			buf += `<button class="button" name="send" value="/sl ${search}, ${roomid},,${cap + 200}">View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${search},${roomid},,all">View all<br />&#x25bc;</button></div>`;
+		}
+
 		return buf;
+	}
+
+	async ripgrepSearch(roomid: RoomID, search: string, cap: number) {
+		let output;
+		try {
+			const options = [
+				search,
+				`${__dirname}/../../logs/chat/${roomid}`,
+				'-C', '2',
+			];
+			output = await execFile('rg', options, {cwd: path.normalize(`${__dirname}/../../`)});
+		} catch (error) {
+			return LogViewer.error(
+				`There was an error in ripgrep search:<br>${error}<br>Please report this as a bug.`
+			);
+		}
+		const matches = [];
+		for (const result of output.stdout.split('--').reverse()) {
+			matches.push(result);
+		}
+		return this.render(matches, roomid, search, cap);
+	}
+
+	async grepSearch(roomid: RoomID, search: string, cap?: number): Promise<string> {
+		return new Promise((resolve, reject) => {
+			child_process.exec(`grep -r '${search}' ${__dirname}/../../logs/chat/${roomid} --exclude=today.txt -C 2`, {
+				cwd: __dirname,
+			}, (error, stdout, stderr) => {
+				const results = stdout.split('--\n--').reverse();
+				const html = this.render(results, roomid, search, cap);
+				resolve(html);
+			});
+		});
 	}
 };
 
@@ -582,6 +609,9 @@ export const pages: PageTable = {
 			if (context) {
 				return LogSearcher.fsSearch(roomid, search, date, toID(cap));
 			} else {
+				if (Config.ripgrepmodlog) {
+					return LogSearcher.ripgrepSearch(roomid, search, cap);
+				}
 				return LogSearcher.grepSearch(roomid, search, cap);
 			}
 		} else {
