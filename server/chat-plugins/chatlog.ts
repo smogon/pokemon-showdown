@@ -46,7 +46,7 @@ class LogReaderRoom {
 	}
 }
 
-export const LogReader = new class {
+const LogReader = new class {
 	async get(roomid: RoomID) {
 		if (!await FS(`logs/chat/${roomid}`).exists()) return null;
 		return new LogReaderRoom(roomid);
@@ -142,7 +142,7 @@ export const LogReader = new class {
 	}
 };
 
-export const LogViewer = new class {
+const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
@@ -440,7 +440,7 @@ export const LogViewer = new class {
 	}
 };
 
-export const LogSearcher = new class {
+const LogSearcher = new class {
 	fsSearch(roomid: RoomID, search: string, date: string, cap?: number | string) {
 		const isAll = (date === 'all');
 		const isYear = (date.length < 0 && date.length > 7);
