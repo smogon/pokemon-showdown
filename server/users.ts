@@ -44,7 +44,7 @@ const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
 const STAFF_IDLE_TIMER = 30 * MINUTES;
 
-type Worker = import('./sockets').Worker;
+type StreamWorker = import('../lib/process-manager').StreamWorker;
 
 /*********************************************************
  * Utility functions
@@ -323,7 +323,7 @@ const connections = new Map<string, Connection>();
 export class Connection {
 	readonly id: string;
 	readonly socketid: string;
-	readonly worker: Worker;
+	readonly worker: StreamWorker;
 	readonly inRooms: Set<RoomID>;
 	readonly ip: string;
 	readonly protocol: string;
@@ -340,7 +340,7 @@ export class Connection {
 	lastActiveTime: number;
 	constructor(
 		id: string,
-		worker: Worker,
+		worker: StreamWorker,
 		socketid: string,
 		user: User | null,
 		ip: string | null,
@@ -1637,7 +1637,7 @@ function logGhostConnections(threshold: number): Promise<unknown> {
  *********************************************************/
 
 function socketConnect(
-	worker: Worker,
+	worker: StreamWorker,
 	workerid: number,
 	socketid: string,
 	ip: string,
@@ -1678,21 +1678,21 @@ function socketConnect(
 
 	user.joinRoom('global', connection);
 }
-function socketDisconnect(worker: Worker, workerid: number, socketid: string) {
+function socketDisconnect(worker: StreamWorker, workerid: number, socketid: string) {
 	const id = '' + workerid + '-' + socketid;
 
 	const connection = connections.get(id);
 	if (!connection) return;
 	connection.onDisconnect();
 }
-function socketDisconnectAll(worker: Worker, workerid: number) {
+function socketDisconnectAll(worker: StreamWorker, workerid: number) {
 	for (const connection of connections.values()) {
 		if (connection.worker === worker) {
 			connection.onDisconnect();
 		}
 	}
 }
-function socketReceive(worker: Worker, workerid: number, socketid: string, message: string) {
+function socketReceive(worker: StreamWorker, workerid: number, socketid: string, message: string) {
 	const id = `${workerid}-${socketid}`;
 
 	const connection = connections.get(id);

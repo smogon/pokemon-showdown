@@ -23,10 +23,8 @@ import * as Streams from './../lib/streams';
 
 type ChannelID = 0 | 1 | 2 | 3 | 4;
 
-export type Worker = StreamWorker;
-
 export const Sockets = new class {
-	async onSpawn(worker: Worker) {
+	async onSpawn(worker: StreamWorker) {
 		const id = worker.workerid;
 		let data;
 		while ((data = await worker.stream.read())) {
@@ -64,7 +62,7 @@ export const Sockets = new class {
 			}
 		}
 	}
-	onUnspawn(worker: Worker) {
+	onUnspawn(worker: StreamWorker) {
 		Users.socketDisconnectAll(worker, worker.workerid);
 	}
 
@@ -98,11 +96,11 @@ export const Sockets = new class {
 		PM.spawn(workerCount);
 	}
 
-	socketSend(worker: Worker, socketid: string, message: string) {
+	socketSend(worker: StreamWorker, socketid: string, message: string) {
 		void worker.stream.write(`>${socketid}\n${message}`);
 	}
 
-	socketDisconnect(worker: Worker, socketid: string) {
+	socketDisconnect(worker: StreamWorker, socketid: string) {
 		void worker.stream.write(`!${socketid}`);
 	}
 
@@ -112,11 +110,11 @@ export const Sockets = new class {
 		}
 	}
 
-	roomAdd(worker: Worker, roomid: RoomID, socketid: string) {
+	roomAdd(worker: StreamWorker, roomid: RoomID, socketid: string) {
 		void worker.stream.write(`+${roomid}\n${socketid}`);
 	}
 
-	roomRemove(worker: Worker, roomid: RoomID, socketid: string) {
+	roomRemove(worker: StreamWorker, roomid: RoomID, socketid: string) {
 		void worker.stream.write(`-${roomid}\n${socketid}`);
 	}
 
@@ -126,11 +124,11 @@ export const Sockets = new class {
 		}
 	}
 
-	channelMove(worker: Worker, roomid: RoomID, channelid: ChannelID, socketid: string) {
+	channelMove(worker: StreamWorker, roomid: RoomID, channelid: ChannelID, socketid: string) {
 		void worker.stream.write(`.${roomid}\n${channelid}\n${socketid}`);
 	}
 
-	eval(worker: Worker, query: string) {
+	eval(worker: StreamWorker, query: string) {
 		void worker.stream.write(`$${query}`);
 	}
 };

@@ -271,6 +271,11 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	}
 }
 
+/**
+ * A container for a RawProcessManager stream. This is usually the
+ * RawProcessWrapper, but it can also be a fake RawProcessWrapper if the PM is
+ * told to spawn 0 worker processes.
+ */
 export class StreamWorker {
 	load = 0;
 	workerid = 0;
