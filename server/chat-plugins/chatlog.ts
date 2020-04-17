@@ -492,12 +492,15 @@ const LogSearcher = new class {
 			if (cap && matches.push(rebuilt.join(' ')) >= cap) {
 				break;
 			} else {
-				// `in` resolves a duplication bug
+				// `isIn` resolves a duplication bug
 				if (isIn) matches.push(rebuilt.join(' '));
 			}
 		}
 		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:</strong>`;
-		const total = matches.join('</details><hr/ >').split('<div class="chat chatmessage highlighted">').length;
+		let total = 0;
+		for (const match of matches.join(' ').split(' ')) {
+			if (new RegExp(search, "i").test(match)) total++;
+		}
 		buf += ` ${total}`;
 		if (cap) {
 			buf += ` (capped at ${cap})<hr/ >`;
@@ -510,7 +513,6 @@ const LogSearcher = new class {
 			buf += `<button class="button" name="send" value="/sl ${search}, ${roomid},,${cap + 200}">View 200 more<br />&#x25bc;</button>`;
 			buf += `<button class="button" name="send" value="/sl ${search},${roomid},,all">View all<br />&#x25bc;</button></div>`;
 		}
-
 		return buf;
 	}
 
@@ -520,12 +522,12 @@ const LogSearcher = new class {
 			const options = [
 				search,
 				`${__dirname}/../../logs/chat/${roomid}`,
-				'-C', '2',
+				'-C', '3',
 			];
 			output = await execFile('rg', options, {cwd: path.normalize(`${__dirname}/../../`)});
 		} catch (error) {
 			return LogViewer.error(
-				`There was an error in ripgrep search:<br>${error}<br>Please report this as a bug.`
+				`No results found.`
 			);
 		}
 		const matches = [];
