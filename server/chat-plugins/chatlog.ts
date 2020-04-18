@@ -541,7 +541,7 @@ const LogSearcher = new class {
 		}
 		return buf;
 	}
-}
+};
 
 const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
 
