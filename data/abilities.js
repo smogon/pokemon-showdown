@@ -2635,7 +2635,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage quartered.",
 		onPrepareHit(source, target, move) {
 			if (['iceball', 'rollout'].includes(move.id)) return;
-			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && !move.flags['charge'] && !move.spreadHit && !move.isZ) {
+			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && !move.flags['charge'] && !move.spreadHit && !move.isZ && !move.isMax) {
 				move.multihit = 2;
 				move.multihitType = 'parentalbond';
 			}
