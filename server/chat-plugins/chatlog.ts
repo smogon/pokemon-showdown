@@ -460,7 +460,7 @@ const LogSearcher = new class {
 	}
 
 	render(results: string[], roomid: RoomID, search: string, cap?: number) {
-		const matches = [];
+		const matches: string[] = [];
 		let curDate = '';
 		for (const chunk of results) {
 			const rebuilt: string[] = [];
@@ -480,7 +480,7 @@ const LogSearcher = new class {
 				let date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
 				if (curDate !== date) {
 					curDate = date;
-					date = `[<a href="view-chatlog-${roomid}--${date}">${date}</a>] &#x25bc;`;
+					date = `</details><details><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
 					rendered = `${date} ${rendered}`;
 				} else {
 					date = '';
@@ -510,11 +510,11 @@ const LogSearcher = new class {
 		} else {
 			buf += `<hr/ >`;
 		}
-		buf += matches.join('</details><hr/ >');
-		if (cap) {
+		buf += matches.sort().join('<hr/ >');
+		if (cap && toID(cap) !== 'all') {
 			buf += `<hr/ ><strong>Capped at ${cap}.</strong><br>`;
-			buf += `<button class="button" name="send" value="/sl ${search}, ${roomid},,${cap + 200}">View 200 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search},${roomid},,all">View all<br />&#x25bc;</button></div>`;
+			buf += `<button class="button" name="send" value="/sl ${search}, ${roomid},${cap + 200}">View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${search},${roomid},all">View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
 	}
