@@ -140,15 +140,15 @@ let BattleStatuses = {
 	anubis: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&Anubis|hi ur qt`);
+			this.add(`c|+Anubis|hi ur qt`);
 			// In loving memory of the SSB programming team's sanity.
 			if (this.random(300) === 272) this.add(`c|~HoeenHero|Anubis's set is OP against programmer sanity.`);
 		},
 		onSwitchOut() {
-			this.add(`c|&Anubis|brb making coffee`);
+			this.add(`c|+Anubis|brb making coffee`);
 		},
 		onFaint() {
-			this.add(`c|&Anubis|worthless evildoer :(`);
+			this.add(`c|+Anubis|worthless evildoer :(`);
 		},
 	},
 	aquagtothepast: {
@@ -490,10 +490,10 @@ let BattleStatuses = {
 	eien: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&Eien|umu!`);
+			this.add(`c|+Eien|umu!`);
 		},
 		onFaint() {
-			this.add(`c|&Eien|This game is Bad Civilization...`);
+			this.add(`c|+Eien|This game is Bad Civilization...`);
 		},
 	},
 	elgino: {
@@ -1212,13 +1212,13 @@ let BattleStatuses = {
 	ptoad: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%ptoad⚬|Make it rain!`);
+			this.add(`c|+ptoad⚬|Make it rain!`);
 		},
 		onSwitchOut() {
-			this.add(`c|%ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
+			this.add(`c|+ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
 		},
 		onFaint() {
-			this.add(`c|%ptoad⚬|Wow. Way to rain on my parade.`);
+			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
 		},
 	},
 	psynergy: {
@@ -1623,13 +1623,13 @@ let BattleStatuses = {
 	xprienzo: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%XpRienzo ☑◡☑|Bleh`);
+			this.add(`c|+XpRienzo ☑◡☑|Bleh`);
 		},
 		onSwitchOut() {
-			this.add(`c|%XpRienzo ☑◡☑|>.>`);
+			this.add(`c|+XpRienzo ☑◡☑|>.>`);
 		},
 		onFaint() {
-			this.add(`c|%XpRienzo ☑◡☑|Wait what?`);
+			this.add(`c|+XpRienzo ☑◡☑|Wait what?`);
 		},
 	},
 	yuki: {
