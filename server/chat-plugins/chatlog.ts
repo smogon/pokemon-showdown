@@ -638,6 +638,6 @@ export const commands: ChatCommands = {
 		"/searchlogs [search], [room], [cap], [date] - searches logs in the current room for [search].",
 		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
-		"Requires: % @ & ~",
+		"Requires: % @ # & ~",
 	],
 };
