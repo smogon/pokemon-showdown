@@ -459,6 +459,27 @@ const LogSearcher = new class {
 		}
 	}
 
+	async ripgrepSearch(roomid: RoomID, search: string, cap: number) {
+		let output;
+		try {
+			const options = [
+				search,
+				`${__dirname}/../../logs/chat/${roomid}`,
+				'-C', '3',
+			];
+			output = await execFile('rg', options, {cwd: path.normalize(`${__dirname}/../../`)});
+		} catch (error) {
+			return LogViewer.error(
+				`No results found.`
+			);
+		}
+		const matches = [];
+		for (const result of output.stdout.split('--').reverse()) {
+			matches.push(result);
+		}
+		return this.render(matches, roomid, search, cap);
+	}
+
 	render(results: string[], roomid: RoomID, search: string, cap?: number) {
 		const matches = [];
 		let curDate = '';
@@ -520,40 +541,7 @@ const LogSearcher = new class {
 		}
 		return buf;
 	}
-
-	async ripgrepSearch(roomid: RoomID, search: string, cap: number) {
-		let output;
-		try {
-			const options = [
-				search,
-				`${__dirname}/../../logs/chat/${roomid}`,
-				'-C', '3',
-			];
-			output = await execFile('rg', options, {cwd: path.normalize(`${__dirname}/../../`)});
-		} catch (error) {
-			return LogViewer.error(
-				`No results found.`
-			);
-		}
-		const matches = [];
-		for (const result of output.stdout.split('--').reverse()) {
-			matches.push(result);
-		}
-		return this.render(matches, roomid, search, cap);
-	}
-
-	async grepSearch(roomid: RoomID, search: string, cap?: number): Promise<string> {
-		return new Promise((resolve, reject) => {
-			child_process.exec(`grep -r '${search}' ${__dirname}/../../logs/chat/${roomid} --exclude=today.txt -C 2`, {
-				cwd: __dirname,
-			}, (error, stdout, stderr) => {
-				const results = stdout.split('--\n--').reverse();
-				const html = this.render(results, roomid, search, cap);
-				resolve(html);
-			});
-		});
-	}
-};
+}
 
 const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
 
@@ -594,8 +582,7 @@ export const pages: PageTable = {
 		this.title = '[Logs] ' + roomid;
 
 		const hasSearch = opts?.includes('search-') || opts?.includes('csearch-');
-		const context = opts?.includes('csearch-');
-		const search = opts?.slice(7);
+		const search = opts?.slice(7).replace('-', '');
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
 
 		const parsedDate = new Date(date as string);
@@ -613,13 +600,11 @@ export const pages: PageTable = {
 				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
 			}
 		} else if (date && hasSearch && search) {
-			if (context) {
+			this.title = `[Search] [${room}] ${search}`;
+			if (Config.chatlogreader === 'fs') {
 				return LogSearcher.fsSearch(roomid, search, date, toID(cap));
-			} else {
-				if (Config.ripgrepmodlog) {
-					return LogSearcher.ripgrepSearch(roomid, search, cap);
-				}
-				return LogSearcher.grepSearch(roomid, search, cap);
+			} else if (Config.chatlogreader === 'ripgrep') {
+				return LogSearcher.ripgrepSearch(roomid, search, cap);
 			}
 		} else {
 			return LogViewer.room(roomid);
@@ -636,8 +621,6 @@ export const commands: ChatCommands = {
 
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',
-	contextsearch: 'searchlogs',
-	csl: 'searchlogs',
 	searchlogs(target, room, user, connection, cmd) {
 		target = target.trim();
 		const [search, tarRoom, cap, date] = target.split(',') as [string, string, number, number];
@@ -648,18 +631,13 @@ export const commands: ChatCommands = {
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		const limit = cap ? `--${cap}` : `--500`;
-		if (cmd === 'contextsearch' || cmd === 'csl') {
-			return this.parse(`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--csearch-${input}${limit}`);
-		} else {
-			return this.parse(`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${input}${limit}`);
-		}
+		return this.parse(`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${input}${limit}`);
 	},
 
 	searchlogshelp: [
 		"/searchlogs [search], [room], [cap], [date] - searches logs in the current room for [search].",
 		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
-		"/csl or /contextsearch can be used to get context for lines and more specific dates, at a loss in performance.",
 		"Requires: % @ & ~",
 	],
 };
