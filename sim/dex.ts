@@ -1017,13 +1017,13 @@ export class ModdedDex {
 				// valid pokemontags
 				const validTags = [
 					// singles tiers
-					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe', 'ag', 'pet mod',
+					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe', 'ag',
 					// doubles tiers
 					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags
 					'mega',
 					// illegal/nonstandard reasons
-					'past', 'future', 'unobtainable', 'lgpe', 'custom',
+					'past', 'future', 'unobtainable', 'lgpe', 'custom', 'pet mod',
 					// all
 					'allpokemon', 'allitems', 'allmoves', 'allabilities',
 				];
