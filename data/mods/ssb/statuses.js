@@ -348,13 +348,13 @@ let BattleStatuses = {
 	ckilgannon: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+c.kilgannon|Hope you're not afraid of the dark!`);
+			this.add(`c|%c.kilgannon|Hope you're not afraid of the dark!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+c.kilgannon|/me growls`);
+			this.add(`c|%c.kilgannon|/me growls`);
 		},
 		onFaint() {
-			this.add(`c|+c.kilgannon|Your time will come.`);
+			this.add(`c|%c.kilgannon|Your time will come.`);
 		},
 	},
 	cantsay: {
@@ -424,25 +424,25 @@ let BattleStatuses = {
 	dawoblefet: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@DaWoblefet|What's going on guys? This is DaWoblefet, and welcome to Mechanics Monday.`);
+			this.add(`c|&DaWoblefet|What's going on guys? This is DaWoblefet, and welcome to Mechanics Monday.`);
 		},
 		onSwitchOut() {
-			this.add(`c|@DaWoblefet|Until next time, have a good one.`);
+			this.add(`c|&DaWoblefet|Until next time, have a good one.`);
 		},
 		onFaint() {
-			this.add(`c|@DaWoblefet|mished`);
+			this.add(`c|&DaWoblefet|mished`);
 		},
 	},
 	decem: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Decem|:D`);
+			this.add(`c|%Decem|:D`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Decem|bye`);
+			this.add(`c|%Decem|bye`);
 		},
 		onFaint() {
-			this.add(`c|+Decem|>:(`);
+			this.add(`c|%Decem|>:(`);
 		},
 	},
 	deetah: {
@@ -661,15 +661,15 @@ let BattleStatuses = {
 	gmars: {
 		noCopy: true,
 		onStart(target) {
-			this.add(`c|%GMars|It's ya boy GEEEEEEEEMARS`);
+			this.add(`c|@GMars|It's ya boy GEEEEEEEEMARS`);
 			if (target.illusion || !target.m.miniorColor) return;
 			this.add('-formechange', target, `Minior${target.m.miniorColor}`);
 		},
 		onSwitchOut() {
-			this.add(`c|%GMars|I like 'em crisp`);
+			this.add(`c|@GMars|I like 'em crisp`);
 		},
 		onFaint() {
-			this.add(`c|%GMars|Don't forget to check out my bandcamp`);
+			this.add(`c|@GMars|Don't forget to check out my bandcamp`);
 		},
 	},
 	grimauxiliatrix: {
@@ -892,7 +892,7 @@ let BattleStatuses = {
 	kris: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c|+Kris|wjat poppin ;)))))`);
+			this.add(`c|%Kris|wjat poppin ;)))))`);
 			if (pokemon.illusion) return;
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
@@ -907,10 +907,10 @@ let BattleStatuses = {
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|+Kris|vbye`);
+			this.add(`c|%Kris|vbye`);
 		},
 		onFaint() {
-			this.add(`c|+Kris|thats weird but ok`);
+			this.add(`c|%Kris|thats weird but ok`);
 		},
 	},
 	level51: {
@@ -1092,13 +1092,13 @@ let BattleStatuses = {
 	nui: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@nui|（*＾3＾）`);
+			this.add(`c|&nui|（*＾3＾）`);
 		},
 		onSwitchOut() {
-			this.add(`c|@nui|(´◔‸◔\`) **??+ !`);
+			this.add(`c|&nui|(´◔‸◔\`) **??+ !`);
 		},
 		onFaint() {
-			this.add(`c|@nui|(◕︿◕✿)`);
+			this.add(`c|&nui|(◕︿◕✿)`);
 		},
 	},
 	om: {
