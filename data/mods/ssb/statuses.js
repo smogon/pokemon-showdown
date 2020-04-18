@@ -248,13 +248,13 @@ let BattleStatuses = {
 	beowulf: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Beowulf|/me BUZZES LOUDLY`);
+			this.add(`c|%Beowulf|/me BUZZES LOUDLY`);
 		},
 		onSwitchOut() {
-			this.add(`c|@Beowulf|/me BUZZES LOUDLY`);
+			this.add(`c|%Beowulf|/me BUZZES LOUDLY`);
 		},
 		onFaint() {
-			this.add(`c|@Beowulf|BUZZ BUZZ BUZZ BUZZ`);
+			this.add(`c|%Beowulf|BUZZ BUZZ BUZZ BUZZ`);
 		},
 	},
 	biggie: {
@@ -697,15 +697,15 @@ let BattleStatuses = {
 	hippopotasuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
 			this.add(`c|~HoeenHero|No, its not a bug Hippopotas, stop telling people to PM staff, its annoying.`);
 		},
 		onSwitchOut() {
-			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
 			this.add(`c|~HoeenHero|There's still no bug!`);
 		},
 		onFaint() {
-			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
 			this.add(`c|~HoeenHero|My PMs are flooded with bug reports :(`);
 		},
 	},
@@ -1623,13 +1623,13 @@ let BattleStatuses = {
 	xprienzo: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%XpRienzo ☑◡☑|Bleh`);
+			this.add(`c|+XpRienzo ☑◡☑|Bleh`);
 		},
 		onSwitchOut() {
-			this.add(`c|%XpRienzo ☑◡☑|>.>`);
+			this.add(`c|+XpRienzo ☑◡☑|>.>`);
 		},
 		onFaint() {
-			this.add(`c|%XpRienzo ☑◡☑|Wait what?`);
+			this.add(`c|+XpRienzo ☑◡☑|Wait what?`);
 		},
 	},
 	yuki: {
