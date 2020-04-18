@@ -572,6 +572,7 @@ export class User extends Chat.MessageContext {
 
 		if (room && (room.auth || room.parent)) {
 			group = room.getAuth(this);
+			if (!Config.groups[group]) group = this.group;
 			if (targetUser) targetGroup = room.getAuth(targetUser);
 			if (room.isPrivate === true && this.can('makeroom')) group = this.group;
 		} else {
@@ -580,6 +581,7 @@ export class User extends Chat.MessageContext {
 		}
 
 		groupData = Config.groups[group];
+		if (!groupData) return false;
 
 		const roomIsTemporary = room && (room.isPersonal || room.battle);
 		if (roomIsTemporary && group === this.group && groupData.globalGroupInPersonalRoom) {
@@ -589,7 +591,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 
-		if (groupData?.[permission]) {
+		if (groupData[permission]) {
 			const jurisdiction = groupData[permission];
 			if (!targetUser && !targetGroup) {
 				return !!jurisdiction;

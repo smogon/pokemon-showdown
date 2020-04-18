@@ -336,7 +336,8 @@ export abstract class BasicRoom {
 			const roomGroup = this.auth[user.id];
 			let greaterGroup = Config.greatergroupscache[`${roomGroup}${globalGroup}`];
 			if (!greaterGroup) {
-				const roomRank = (Config.groups[roomGroup] || {rank: 0}).rank;
+				// unrecognized groups always trump higher global rank
+				const roomRank = (Config.groups[roomGroup] || {rank: Infinity}).rank;
 				const globalRank = (Config.groups[globalGroup] || {rank: 0}).rank;
 				if (roomGroup === Users.PLAYER_SYMBOL || roomGroup === Users.HOST_SYMBOL || roomGroup === '#') {
 					// Player, Host, and Room Owner always trump higher global rank
