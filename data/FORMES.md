@@ -97,7 +97,7 @@ Some Pokémon can change forme out-of-battle. These include:
 
 If a held item is required for a Pokémon to start battle with that forme, the `requiredItem` property will track this.
 
-`{name: "Giratina-Origin", forme: "Origin", baseSpecies: "Wormadam", requiredItem: "Griseous Orb"}`
+`{name: "Giratina-Origin", forme: "Origin", baseSpecies: "Giratina", requiredItem: "Griseous Orb"}`
 
 Some changeable formes (like Arceus) are visual formes. See "Visual formes" above for more information.
 
@@ -107,12 +107,27 @@ Changeable formes are otherwise treated identically to regular formes.
 In-battle formes
 ----------------
 
-Some Pokémon change forme in the middle of a battle. These include:
+Some Pokémon change forme in the middle of a battle. These forme changes do reset stats and type.
 
-- Meloetta (Pirouette forme)
+List of all in-battle forme changes:
+
+- Ash Greninja (Battle Bond)
+- Mimikyu (Disguise)
+- Cherrim (Flower Gift)
+- Castform (Forecast)
+- Cramorant (Gulp Missile)
+- Morpeko (Hunger Switch)
+- Eiscue (Ice Face)
+- Zygarde (Power Construct)
+- Wishiwashi (Schooling)
+- Minior (Shields Down)
+- Aegislash (Stance Change)
 - Darmanitan (Zen Mode)
-- Eiscue
-- all Mega evolutions, Primal reversion, Ultra Burst
+- Meloetta (Relic Song)
+- Shaymin-Sky (Frozen status)
+- Mega evolutions
+- Primal reversions
+- Ultra Burst
 
 PS treats these identically to regular formes, but gives them a `battleOnly` property noting what forme they would be in at the start of battle:
 
@@ -136,7 +151,7 @@ PS treats these like regular in-battle formes.
 "Fake" visual in-battle formes
 ------------------------------
 
-Dynamax/Gigantamax can be thought of as visual in-battle formes, but they're different in one major way: They're not considered "real" forme changes, so the change doesn't reset types and stats changed by Reflect Type, Power Swap, etc.
+Dynamax/Gigantamax can be thought of as visual in-battle formes, but they're different in one major way: They're not considered "real" forme changes, so the change doesn't reset types and stats changed by Reflect Type, Power Split, Power Trick, etc.
 
 These include:
 
