@@ -461,6 +461,7 @@ const LogSearcher = new class {
 
 	render(results: string[], roomid: RoomID, search: string, cap?: number) {
 		const matches = [];
+		let curDate = '';
 		for (const chunk of results) {
 			const rebuilt: string[] = [];
 			const exacts = [];
@@ -471,22 +472,24 @@ const LogSearcher = new class {
 			})[0]); // get exact match for display
 
 			for (const line of chunk.split('\n')) {
-				if (!toID(line)) continue;
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
-				const [dir, text] = line.split(sep);
-				if (dir.includes('today')) continue; // get rid of duplicates
-				const rendered = LogViewer.renderLine(text, 'all');
-				if (!rendered) continue; // gets rid of some weird blank lines
+				const [name, text] = line.split(sep);
+				let rendered = LogViewer.renderLine(text, 'all');
+				if (!rendered || name.includes('today') || !toID(line)) continue;
+				 // gets rid of some edge cases / duplicates
+				let date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
+				if (curDate !== date) {
+					curDate = date;
+					date = `[<a href="view-chatlog-${roomid}--${date}">${date}</a>] &#x25bc;`;
+					rendered = `${date} ${rendered}`;
+				} else {
+					date = '';
+				}
 				const matched = (
 					new RegExp(search, "i")
 						.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
 				);
-				const date = dir.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
-				if (!rebuilt.join(' ').includes(date)) {
-					const link = `<a href ="view-chatlog-${roomid}--${date}">${date}</a>`;
-					rebuilt.push(`<details><summary>Match on ${link}: ${exacts[exacts.length - 1]}</summary><br>`);
-				}
-				rebuilt.push(`${matched}`);
+				rebuilt.push(matched);
 			}
 			const isIn = matches.join(' ').includes(rebuilt.join(' '));
 			if (cap && matches.push(rebuilt.join(' ')) >= cap) {
