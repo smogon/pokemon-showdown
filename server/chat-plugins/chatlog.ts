@@ -605,6 +605,11 @@ export const pages: PageTable = {
 				return LogSearcher.fsSearch(roomid, search, date, toID(cap));
 			} else if (Config.chatlogreader === 'ripgrep') {
 				return LogSearcher.ripgrepSearch(roomid, search, cap);
+			} else {
+				return LogViewer.error(
+					`<strong>Log searching has been configured incorrectly.<br>` +
+					`Please set Config.chatlogreader to 'fs' or 'ripgrep'.</strong>	`
+				);
 			}
 		} else {
 			return LogViewer.room(roomid);
