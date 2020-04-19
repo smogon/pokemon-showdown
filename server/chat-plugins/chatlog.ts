@@ -247,8 +247,8 @@ const LogViewer = new class {
 			buf += `</details><hr>`;
 			if (cap && results.length >= cap && !year) {
 				// cap is met & is not being used in a year read
-				buf += `<br/ ><strong>Max results reached, capped at ${cap}</strong>`;
-				buf += `<br /><div style="text-align:center">`;
+				buf += `<br><strong>Max results reached, capped at ${cap}</strong>`;
+				buf += `<br><div style="text-align:center">`;
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${cap + 100}">View 100 more<br />&#x25bc;</button>`;
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|all">View all<br />&#x25bc;</button></div>`;
 				break;
@@ -469,6 +469,7 @@ export const LogSearcher = new class {
 			];
 			output = await execFile('rg', options, {maxBuffer: Infinity, cwd: path.normalize(`${__dirname}/../`)});
 		} catch (error) {
+			if (error.message.includes('Command failed')) return LogViewer.error(`No results found.`);
 			return LogViewer.error(`${error.message}`);
 		}
 		const matches = [];
@@ -479,21 +480,20 @@ export const LogSearcher = new class {
 	}
 
 	render(results: string[], roomid: RoomID, search: string, cap?: number) {
-		const matches = [];
+		const matches: string[] = [];
 		let curDate = '';
-		const dates = [];
+		const dates: string[] = [];
 		for (const chunk of results.sort()) {
-			const rebuilt: string[] = [];
-			for (const line of chunk.split('\n')) {
+			const section = chunk.split('\n').map(line => {
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
 				const [name, text] = line.split(sep);
 				let rendered = LogViewer.renderLine(text, 'all');
-				if (!rendered || name.includes('today') || !toID(line)) continue;
+				if (!rendered || name.includes('today') || !toID(line)) return '';
 				 // gets rid of some edge cases / duplicates
 				let date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
 				if (curDate !== date) {
 					curDate = date;
-					dates.push(curDate);
+					if (!(curDate in dates)) dates.push(curDate);
 					date = `</details><details><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
 					rendered = `${date} ${rendered}`;
 				} else {
@@ -503,14 +503,12 @@ export const LogSearcher = new class {
 					new RegExp(search, "i")
 						.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
 				);
-				rebuilt.push(matched);
-			}
-			const isIn = matches.join(' ').includes(rebuilt.join(' '));
-			if (cap && matches.push(rebuilt.join(' ')) >= cap) {
+				return matched;
+			}).join(' ');
+			if (cap && matches.push(section) >= cap) {
 				break;
-			} else {
-				// `isIn` resolves a duplication bug
-				if (isIn) matches.push(rebuilt.join(' '));
+			} else if (!matches.includes(section)) {
+				matches.push(section);
 			}
 		}
 		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:</strong>`;
@@ -519,16 +517,12 @@ export const LogSearcher = new class {
 			if (new RegExp(search, "i").test(match)) total++;
 		}
 		buf += ` ${total}`;
+		buf += cap ? ` (capped at ${cap})<hr>` : `<hr>`;
+		buf += matches.join('<hr>');
 		if (cap) {
-			buf += ` (capped at ${cap})<hr/ >`;
-		} else {
-			buf += `<hr/ >`;
-		}
-		buf += matches.join('<hr/ >');
-		if (cap) {
-			buf += `<hr/ ><strong>Capped at ${cap}.</strong><br>`;
-			buf += `<button class="button" name="send" value="/sl ${search}, ${roomid},,${cap + 200}">View 200 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search},${roomid},,all">View all<br />&#x25bc;</button></div>`;
+			buf += `<hr><strong>Capped at ${cap}.</strong><br>`;
+			buf += `<button class="button" name="send" value="/sl ${search}, ${roomid},${cap + 200}">View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${search},${roomid},all">View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
 	}
