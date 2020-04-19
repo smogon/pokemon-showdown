@@ -7,8 +7,8 @@
 
 import {FS} from "../../lib/fs";
 import * as child_process from 'child_process';
-import * as path from 'path';
 import * as util from 'util';
+import * as path from 'path';
 
 
 export const execFile = util.promisify(child_process.execFile);
@@ -440,7 +440,7 @@ const LogViewer = new class {
 	}
 };
 
-const LogSearcher = new class {
+export const LogSearcher = new class {
 	fsSearch(roomid: RoomID, search: string, date: string, cap?: number | string) {
 		const isAll = (date === 'all');
 		const isYear = (date.length < 0 && date.length > 7);
@@ -467,11 +467,9 @@ const LogSearcher = new class {
 				`${__dirname}/../../logs/chat/${roomid}`,
 				'-C', '3',
 			];
-			output = await execFile('rg', options, {maxBuffer: Infinity});
+			output = await execFile('rg', options, {maxBuffer: Infinity, cwd: path.normalize(`${__dirname}/../`)});
 		} catch (error) {
-			return LogViewer.error(
-				`Error in search:<br>${error}.`
-			);
+			return LogViewer.error(`${error.message}`);
 		}
 		const matches = [];
 		for (const result of output.stdout.split('--').reverse()) {
@@ -486,13 +484,6 @@ const LogSearcher = new class {
 		const dates = [];
 		for (const chunk of results.sort()) {
 			const rebuilt: string[] = [];
-			const exacts = [];
-			exacts.push(chunk.split('\n').filter((item: string) => new RegExp(search, "i").test(item)).map(item => {
-				item = item.split(item.includes('.txt-') ? '.txt-' : '.txt:')[1];
-				item = LogViewer.renderLine(item);
-				return item;
-			})[0]); // get exact match for display
-
 			for (const line of chunk.split('\n')) {
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
 				const [name, text] = line.split(sep);
