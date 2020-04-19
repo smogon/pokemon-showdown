@@ -11,7 +11,7 @@ import * as path from 'path';
 import * as util from 'util';
 
 
-const execFile = util.promisify(child_process.execFile);
+export const execFile = util.promisify(child_process.execFile);
 const DAY = 24 * 60 * 60 * 1000;
 
 class LogReaderRoom {
@@ -467,10 +467,10 @@ const LogSearcher = new class {
 				`${__dirname}/../../logs/chat/${roomid}`,
 				'-C', '3',
 			];
-			output = await execFile('rg', options, {cwd: path.normalize(`${__dirname}/../../`)});
+			output = await execFile('rg', options, {maxBuffer: Infinity});
 		} catch (error) {
 			return LogViewer.error(
-				`No results found.`
+				`Error in search:<br>${error}.`
 			);
 		}
 		const matches = [];
