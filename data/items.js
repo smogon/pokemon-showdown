@@ -60,7 +60,7 @@ let BattleItems = {
 		fling: {
 			basePower: 60,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && user.baseSpecies.name === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
@@ -483,7 +483,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -529,7 +529,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -753,7 +753,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -1354,7 +1354,7 @@ let BattleItems = {
 		name: "Draco Plate",
 		spritenum: 105,
 		onPlate: 'Dragon',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -1379,7 +1379,7 @@ let BattleItems = {
 		fling: {
 			basePower: 70,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -1452,7 +1452,7 @@ let BattleItems = {
 		name: "Dread Plate",
 		spritenum: 110,
 		onPlate: 'Dark',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -1531,7 +1531,7 @@ let BattleItems = {
 		name: "Earth Plate",
 		spritenum: 117,
 		onPlate: 'Ground',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Ground') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -1969,7 +1969,7 @@ let BattleItems = {
 		name: "Fist Plate",
 		spritenum: 143,
 		onPlate: 'Fighting',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -2009,7 +2009,7 @@ let BattleItems = {
 		name: "Flame Plate",
 		spritenum: 146,
 		onPlate: 'Fire',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -2474,7 +2474,7 @@ let BattleItems = {
 		fling: {
 			basePower: 60,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
@@ -2586,7 +2586,7 @@ let BattleItems = {
 		fling: {
 			basePower: 100,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Rock') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -2772,7 +2772,7 @@ let BattleItems = {
 		name: "Icicle Plate",
 		spritenum: 220,
 		onPlate: 'Ice',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ice') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -2833,7 +2833,7 @@ let BattleItems = {
 		name: "Insect Plate",
 		spritenum: 223,
 		onPlate: 'Bug',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Bug') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -2876,7 +2876,7 @@ let BattleItems = {
 		name: "Iron Plate",
 		spritenum: 225,
 		onPlate: 'Steel',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -3454,7 +3454,7 @@ let BattleItems = {
 		fling: {
 			basePower: 60,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && user.baseSpecies.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
@@ -3521,7 +3521,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -3666,7 +3666,7 @@ let BattleItems = {
 		name: "Meadow Plate",
 		spritenum: 282,
 		onPlate: 'Grass',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -3763,7 +3763,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -3925,7 +3925,7 @@ let BattleItems = {
 		name: "Mind Plate",
 		spritenum: 291,
 		onPlate: 'Psychic',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -3950,7 +3950,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		spritenum: 292,
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -4013,7 +4013,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 16,
 		onBasePower(basePower, user, target, move) {
 			if (move.category === 'Physical') {
 				return this.chainModify([0x1199, 0x1000]);
@@ -4030,7 +4030,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -4080,7 +4080,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ice') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -4162,7 +4162,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -4431,7 +4431,7 @@ let BattleItems = {
 		name: "Pixie Plate",
 		spritenum: 610,
 		onPlate: 'Fairy',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fairy') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -4468,7 +4468,7 @@ let BattleItems = {
 			basePower: 70,
 			status: 'psn',
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Poison') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5116,7 +5116,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Rock') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5212,7 +5212,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5457,7 +5457,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Water') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5474,7 +5474,7 @@ let BattleItems = {
 		fling: {
 			basePower: 50,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Flying') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5592,7 +5592,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Normal') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5609,7 +5609,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Bug') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5660,7 +5660,7 @@ let BattleItems = {
 		name: "Sky Plate",
 		spritenum: 450,
 		onPlate: 'Flying',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Flying') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5744,7 +5744,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ground') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5774,7 +5774,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && (user.baseSpecies.num === 380 || user.baseSpecies.num === 381) && (move.type === 'Psychic' || move.type === 'Dragon')) {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5793,7 +5793,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ghost') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5823,7 +5823,7 @@ let BattleItems = {
 		name: "Splash Plate",
 		spritenum: 463,
 		onPlate: 'Water',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -5846,7 +5846,7 @@ let BattleItems = {
 		name: "Spooky Plate",
 		spritenum: 464,
 		onPlate: 'Ghost',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ghost') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -6028,7 +6028,7 @@ let BattleItems = {
 		name: "Stone Plate",
 		spritenum: 477,
 		onPlate: 'Rock',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Rock') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -6248,7 +6248,7 @@ let BattleItems = {
 		name: "Toxic Plate",
 		spritenum: 516,
 		onPlate: 'Poison',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Poison') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -7373,7 +7373,7 @@ let BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -7565,7 +7565,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([0x1333, 0x1000]);
@@ -7715,7 +7715,7 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 16,
 		onBasePower(basePower, user, target, move) {
 			if (move.category === 'Special') {
 				return this.chainModify([0x1199, 0x1000]);
@@ -7753,7 +7753,7 @@ let BattleItems = {
 		name: "Zap Plate",
 		spritenum: 572,
 		onPlate: 'Electric',
-		onBasePowerPriority: 6,
+		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return this.chainModify([0x1333, 0x1000]);

@@ -65,7 +65,7 @@ let BattleAbilities = {
 				move.aerilateBoosted = true;
 			}
 		},
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.aerilateBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
@@ -102,7 +102,7 @@ let BattleAbilities = {
 	analytic: {
 		desc: "The power of this Pokemon's move is multiplied by 1.3 if it is the last to move in a turn. Does not affect Doom Desire and Future Sight.",
 		shortDesc: "This Pokemon's attacks have 1.3x power if it is the last to move in a turn.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon) {
 			let boosted = true;
 			for (const target of this.getAllActive()) {
@@ -239,7 +239,7 @@ let BattleAbilities = {
 	},
 	battery: {
 		shortDesc: "This Pokemon's allies have the power of their special attacks multiplied by 1.3.",
-		onAllyBasePowerPriority: 9,
+		onAllyBasePowerPriority: 22,
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (attacker !== this.effectData.target && move.category === 'Special') {
 				this.debug('Battery boost');
@@ -617,7 +617,7 @@ let BattleAbilities = {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
-		onAnyBasePowerPriority: 9,
+		onAnyBasePowerPriority: 20,
 		onAnyBasePower(basePower, source, target, move) {
 			if (target === source || move.category === 'Status' || move.type !== 'Dark') return;
 			if (!move.auraBooster) move.auraBooster = this.effectData.target;
@@ -848,7 +848,7 @@ let BattleAbilities = {
 				return null;
 			}
 		},
-		onFoeBasePowerPriority: 7,
+		onFoeBasePowerPriority: 17,
 		onFoeBasePower(basePower, attacker, defender, move) {
 			if (this.effectData.target !== defender) return;
 			if (move.type === 'Fire') {
@@ -930,7 +930,7 @@ let BattleAbilities = {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
-		onAnyBasePowerPriority: 9,
+		onAnyBasePowerPriority: 20,
 		onAnyBasePower(basePower, source, target, move) {
 			if (target === source || move.category === 'Status' || move.type !== 'Fairy') return;
 			if (!move.auraBooster) move.auraBooster = this.effectData.target;
@@ -973,7 +973,7 @@ let BattleAbilities = {
 	flareboost: {
 		desc: "While this Pokemon is burned, the power of its special attacks is multiplied by 1.5.",
 		shortDesc: "While this Pokemon is burned, its special attacks have 1.5x power.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (attacker.status === 'brn' && move.category === 'Special') {
 				return this.chainModify(1.5);
@@ -1267,7 +1267,7 @@ let BattleAbilities = {
 				move.galvanizeBoosted = true;
 			}
 		},
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.galvanizeBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
@@ -1450,7 +1450,7 @@ let BattleAbilities = {
 	heatproof: {
 		desc: "The power of Fire-type attacks against this Pokemon is halved, and burn damage taken is halved.",
 		shortDesc: "The power of Fire-type attacks against this Pokemon is halved; burn damage halved.",
-		onSourceBasePowerPriority: 7,
+		onSourceBasePowerPriority: 18,
 		onSourceBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return this.chainModify(0.5);
@@ -1818,7 +1818,7 @@ let BattleAbilities = {
 	ironfist: {
 		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2.",
 		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. Sucker Punch is not boosted.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Iron Fist boost');
@@ -2132,7 +2132,7 @@ let BattleAbilities = {
 	megalauncher: {
 		desc: "This Pokemon's pulse moves have their power multiplied by 1.5. Heal Pulse restores 3/4 of a target's maximum HP, rounded half down.",
 		shortDesc: "This Pokemon's pulse moves have 1.5x power. Heal Pulse heals 3/4 target's max HP.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['pulse']) {
 				return this.chainModify(1.5);
@@ -2533,7 +2533,7 @@ let BattleAbilities = {
 				move.normalizeBoosted = true;
 			}
 		},
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.normalizeBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
@@ -2777,7 +2777,7 @@ let BattleAbilities = {
 				move.pixilateBoosted = true;
 			}
 		},
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.pixilateBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
@@ -2891,7 +2891,7 @@ let BattleAbilities = {
 	},
 	powerspot: {
 		shortDesc: "This Pokemon's allies have the power of their moves multiplied by 1.3.",
-		onAllyBasePowerPriority: 9,
+		onAllyBasePowerPriority: 22,
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (attacker !== this.effectData.target) {
 				this.debug('Power Spot boost');
@@ -3126,7 +3126,7 @@ let BattleAbilities = {
 	reckless: {
 		desc: "This Pokemon's attacks with recoil or crash damage have their power multiplied by 1.2. Does not affect Struggle.",
 		shortDesc: "This Pokemon's attacks with recoil or crash damage have 1.2x power; not Struggle.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.recoil || move.hasCustomRecoil) {
 				this.debug('Reckless boost');
@@ -3148,7 +3148,7 @@ let BattleAbilities = {
 				move.refrigerateBoosted = true;
 			}
 		},
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.refrigerateBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
@@ -3209,7 +3209,7 @@ let BattleAbilities = {
 	rivalry: {
 		desc: "This Pokemon's attacks have their power multiplied by 1.25 against targets of the same gender or multiplied by 0.75 against targets of the opposite gender. There is no modifier if either this Pokemon or the target is genderless.",
 		shortDesc: "This Pokemon's attacks do 1.25x on same gender targets; 0.75x on opposite gender.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 24,
 		onBasePower(basePower, attacker, defender, move) {
 			if (attacker.gender && defender.gender) {
 				if (attacker.gender === defender.gender) {
@@ -3272,7 +3272,7 @@ let BattleAbilities = {
 	sandforce: {
 		desc: "If Sandstorm is active, this Pokemon's Ground-, Rock-, and Steel-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Sandstorm.",
 		shortDesc: "This Pokemon's Ground/Rock/Steel attacks do 1.3x in Sandstorm; immunity to it.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.field.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
@@ -3524,7 +3524,7 @@ let BattleAbilities = {
 				move.hasSheerForce = true;
 			}
 		},
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.hasSheerForce) return this.chainModify([0x14CD, 0x1000]);
 		},
@@ -3916,7 +3916,7 @@ let BattleAbilities = {
 	},
 	steelyspirit: {
 		shortDesc: "This Pokemon and its allies' Steel-type moves have their power multiplied by 1.5.",
-		onAllyBasePowerPriority: 7,
+		onAllyBasePowerPriority: 22,
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Steel') {
 				this.debug('Steely Spirit boost');
@@ -3994,7 +3994,7 @@ let BattleAbilities = {
 	strongjaw: {
 		desc: "This Pokemon's bite-based attacks have their power multiplied by 1.5.",
 		shortDesc: "This Pokemon's bite-based attacks have 1.5x power. Bug Bite is not boosted.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['bite']) {
 				return this.chainModify(1.5);
@@ -4185,7 +4185,7 @@ let BattleAbilities = {
 	technician: {
 		desc: "This Pokemon's moves of 60 power or less have their power multiplied by 1.5. Does affect Struggle.",
 		shortDesc: "This Pokemon's moves of 60 power or less have 1.5x power. Includes Struggle.",
-		onBasePowerPriority: 8,
+		onBasePowerPriority: 30,
 		onBasePower(basePower, attacker, defender, move) {
 			let basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
 			this.debug('Base Power: ' + basePowerAfterMultiplier);
@@ -4284,7 +4284,7 @@ let BattleAbilities = {
 	},
 	toughclaws: {
 		shortDesc: "This Pokemon's contact moves have their power multiplied by 1.3.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['contact']) {
 				return this.chainModify([0x14CD, 0x1000]);
@@ -4298,7 +4298,7 @@ let BattleAbilities = {
 	toxicboost: {
 		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5.",
 		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power.",
-		onBasePowerPriority: 7,
+		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if ((attacker.status === 'psn' || attacker.status === 'tox') && move.category === 'Physical') {
 				return this.chainModify(1.5);

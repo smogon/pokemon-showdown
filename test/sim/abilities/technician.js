@@ -10,12 +10,11 @@ describe('Technician', function () {
 		battle.destroy();
 	});
 
-	it('should not apply boost on a move boosted over 60 BP by Battery/Power Spot', function () {
-		battle = common.createBattle({gameType: 'doubles'});
+	it('should not apply boost on a move boosted over 60 BP by Battery in Gen 7', function () {
+		battle = common.gen(7).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Toxtricity', ability: 'technician', moves: ['shockwave']},
 			{species: 'Charjabug', ability: 'battery', moves: ['sleeptalk']},
-			{species: 'Stonjourner', ability: 'powerspot', moves: ['sleeptalk']},
 		]});
 		battle.setPlayer('p2', {team: [
 			{species: 'Marshadow', ability: 'technician', moves: ['sleeptalk']},
@@ -25,9 +24,6 @@ describe('Technician', function () {
 		const mew = battle.p2.active[1];
 		let damage = mew.maxhp - mew.hp;
 		assert.bounded(damage, [94, 112]);
-		battle.makeChoices('move shockwave 2, switch 3', 'move sleeptalk, move sleeptalk');
-		let damage2 = mew.maxhp - mew.hp - damage;
-		assert.bounded(damage2, [94, 112]);
 	});
 
 	it('should apply boost on a move boosted over 60 BP by Steely Spirit', function () {
@@ -46,7 +42,7 @@ describe('Technician', function () {
 		assert.bounded(damage, [151, 178]);
 	});
 
-	it("should consider the BP after Aura boosts have been applied", function () {
+	it('should consider the BP before Aura boosts have been applied in Gen 8', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Smeargle', ability: 'technician', moves: ['drainingkiss', 'knockoff']},
@@ -63,13 +59,13 @@ describe('Technician', function () {
 		const yveltal = battle.p2.active[1];
 		const xerneas = battle.p2.active[0];
 		let damage_xern = xerneas.maxhp - xerneas.hp;
-		assert.bounded(damage_xern, [38, 45]);
+		assert.bounded(damage_xern, [56, 67]);
 		let damage_yvel = yveltal.maxhp - yveltal.hp;
-		assert.bounded(damage_yvel, [34, 40]);
-		// Smeargle attacks Zygarde on the switch with Knock Off, which should be at a <60 BP after Aura Break and thus boosted by Technician.
+		assert.bounded(damage_yvel, [48, 58]);
+		// Smeargle attacks Zygarde on the switch with Knock Off
 		battle.makeChoices('move knockoff 1, move sleeptalk', 'switch 3, move sleeptalk');
 		const zygarde = battle.p2.active[0];
 		let damage_zyg = zygarde.maxhp - zygarde.hp;
-		assert.bounded(damage_zyg, [15, 18]);
+		assert.bounded(damage_zyg, [11, 13]);
 	});
 });
