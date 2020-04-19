@@ -1,14 +1,13 @@
 import {RandomTeams, TeamData} from '../../random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import {FS} from '../../../lib/fs';
 
 export class RandomGen7Teams extends RandomTeams {
 	randomFactorySets: AnyObject;
 	randomBSSFactorySets: AnyObject;
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
-		this.randomFactorySets = JSON.parse(FS('./factory-sets.json').readIfExistsSync() || "{}");
-		this.randomBSSFactorySets = JSON.parse(FS('./bss-factory-sets.json').readIfExistsSync() || "{}");
+		this.randomFactorySets = require('./factory-sets.json');
+		this.randomBSSFactorySets = require('./bss-factory-sets.json');
 	}
 	randomSet(
 		species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false, isDoubles = false
