@@ -781,42 +781,39 @@ export const BattleScripts: BattleScriptsData = {
 			}
 		}
 
-		for (let [i, t] of targets.entries()) {
+		for (const i of targets.keys()) {
 			if (damage[i] === 0) {
 				// special substitute flag
 				damage[i] = true;
 				targets[i] = null;
 			}
-			if (t && isSecondary && !moveData.self) {
+			if (targets[i] && isSecondary && !moveData.self) {
 				damage[i] = true;
 			}
-			if (!damage[i]) t = false;
+			if (!damage[i]) targets[i] = false;
 		}
 		// 1. call to this.getDamage
 		damage = this.getSpreadDamage(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		for (let [i, t] of targets.entries()) {
-			if (damage[i] === false) t = false;
+		for (const i of targets.keys()) {
+			if (damage[i] === false) targets[i] = false;
 		}
 
 		// 2. call to this.spreadDamage
 		damage = this.spreadDamage(damage, targets, pokemon, move);
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		for (let t of targets) {
+		for (const i of targets.keys()) {
 			if (!damage && damage !== 0) {
 				this.debug('damage interrupted');
-				t = false;
+				targets[i] = false;
 			}
 		}
 
 		// 3. onHit event happens here
 		damage = this.runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		for (let [i, t] of targets.entries()) {
-			if (!damage[i] && damage[i] !== 0) t = false;
+		for (const i of targets.keys()) {
+			if (!damage[i] && damage[i] !== 0) targets[i] = false;
 		}
 
 		// 4. self drops (start checking for targets[i] === false here)
@@ -828,9 +825,8 @@ export const BattleScripts: BattleScriptsData = {
 		// 6. force switch
 		if (moveData.forceSwitch) damage = this.forceSwitch(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		for (let [j, t] of targets.entries()) {
-			if (!damage[j] && damage[j] !== 0) t = false;
+		for (const i of targets.keys()) {
+			if (!damage[i] && damage[i] !== 0) targets[i] = false;
 		}
 
 		const damagedTargets: Pokemon[] = [];
