@@ -409,7 +409,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			},
 			KingSwordYT: {
 				species: 'Pangoro', ability: 'Kung Fu Panda', item: 'Life Orb', gender: 'M',
-				moves: ['Ice Punch', 'Bulconst Punch', 'Knock Off'],
+				moves: ['Ice Punch', 'Bullet Punch', 'Knock Off'],
 				signatureMove: 'Dragon Warrior Touch',
 				evs: {atk: 252, hp: 4, spe: 252}, nature: 'Jolly',
 			},

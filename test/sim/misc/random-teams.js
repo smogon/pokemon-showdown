@@ -176,7 +176,7 @@ describe(`Factory sets`, function () {
 							for (const moveName of [].concat(moveSpec)) {
 								const move = Dex.getMove(moveName);
 								assert(move.exists, `invalid move "${moveName}" of ${species}`);
-								assert(move.name === moveName, `miscapitalized move "${moveName}" of ${species}`);
+								assert(move.name === moveName, `miscapitalized move "${moveName}" ≠ "${move.name}" of ${species}`);
 								assert(validLearnset(move, set, vType), `illegal move "${moveName}" of ${species}`);
 							}
 						}

@@ -1746,7 +1746,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Bulconst Seed', target);
+			this.add('-anim', source, 'Bullet Seed', target);
 			this.add('-anim', source, 'Magma Storm', target);
 		},
 		secondaries: [
@@ -1799,7 +1799,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Increases this Pokemon's Attack, Special Attack, and Speed by two stages while also decreasing this Pokemon's Defense and Special Defense by one stage. If this Pokemon is a Minior in its Meteor forme, it will permanently transform into one of the Minior colors and have a special effect based on that color. Red burns the foe, orange confuses it, yellow paralyzes it, green applies Leech Seed, blue gives the user Aqua Ring status, indigo poisons the foe, and vioconst badly poisons it.",
+		desc: "Increases this Pokemon's Attack, Special Attack, and Speed by two stages while also decreasing this Pokemon's Defense and Special Defense by one stage. If this Pokemon is a Minior in its Meteor forme, it will permanently transform into one of the Minior colors and have a special effect based on that color. Red burns the foe, orange confuses it, yellow paralyzes it, green applies Leech Seed, blue gives the user Aqua Ring status, indigo poisons the foe, and violet badly poisons it.",
 		shortDesc: "+2 Atk, SpA, Spe. -1 Def, SpD. Meteor -> Core.",
 		id: "tastetherainbow",
 		name: "Taste the Rainbow",
