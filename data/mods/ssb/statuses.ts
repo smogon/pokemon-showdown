@@ -221,13 +221,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	asheviere: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~Asheviere|Blessings to you.`);
+			this.add(`c|+Asheviere|Blessings to you.`);
 		},
 		onSwitchOut() {
-			this.add(`c|~Asheviere|Don't trade me for someone else :(`);
+			this.add(`c|+Asheviere|Don't trade me for someone else :(`);
 		},
 		onFaint() {
-			this.add(`c|~Asheviere|Who will lead my kingdom now?`);
+			this.add(`c|+Asheviere|Who will lead my kingdom now?`);
 		},
 	},
 	averardo: {
@@ -753,6 +753,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|+inactive|/me turns to stone and crumbles`);
 		},
 	},
+	instruct: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Instruct|I am here to bully Aroma Electra`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Instruct|Remember these two things: Lucario•1582 will always be cute, and Swagn will never be able to dab`);
+		},
+		onFaint() {
+			this.add(`c|+Instruct|Noctrine help this isn't working as well as we planned`);
+		},
+	},
 	irritated: {
 		noCopy: true,
 		onStart() {
@@ -1229,13 +1241,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	ptoad: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+ptoad⚬|Make it rain!`);
+			this.add(`c|%ptoad⚬|Make it rain!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
+			this.add(`c|%ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
 		},
 		onFaint() {
-			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
+			this.add(`c|%ptoad⚬|Wow. Way to rain on my parade.`);
 		},
 	},
 	psynergy: {
@@ -1333,18 +1345,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint() {
 			this.add(`c|+SamJo|Oof, gotta get thiccer……. ;(`);
-		},
-	},
-	instruct: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Instruct|I am here to bully Aroma Electra`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Instruct|Remember these two things: Lucario•1582 will always be cute, and Swagn will never be able to dab`);
-		},
-		onFaint() {
-			this.add(`c|+Instruct|Noctrine help this isn't working as well as we planned`);
 		},
 	},
 	schiavetto: {
