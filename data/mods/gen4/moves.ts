@@ -1524,7 +1524,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);
-				return 0; // hit
+				return this.HIT_SUBSTITUTE;
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Substitute');

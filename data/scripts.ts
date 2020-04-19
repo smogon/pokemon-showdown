@@ -782,8 +782,7 @@ export const BattleScripts: BattleScriptsData = {
 		}
 
 		for (const i of targets.keys()) {
-			if (damage[i] === 0) {
-				// special substitute flag
+			if (damage[i] === this.HIT_SUBSTITUTE) {
 				damage[i] = true;
 				targets[i] = null;
 			}

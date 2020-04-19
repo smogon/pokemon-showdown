@@ -1078,7 +1078,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				}
 				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
 				this.runEvent('AfterSubDamage', target, source, move, damage);
-				return 0; // hit
+				return this.HIT_SUBSTITUTE;
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Substitute');
