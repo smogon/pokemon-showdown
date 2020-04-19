@@ -1750,4 +1750,4 @@ export class RandomGen7Teams extends RandomTeams {
 	}
 }
 
-module.exports = RandomGen7Teams;
+export default RandomGen7Teams;

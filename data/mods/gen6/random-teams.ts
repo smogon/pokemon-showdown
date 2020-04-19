@@ -1,5 +1,5 @@
 import {TeamData} from '../../random-teams';
-import {RandomGen7Teams} from '../gen7/random-teams';
+import RandomGen7Teams from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {FS} from '../../../lib/fs';
 
@@ -1099,3 +1099,5 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		return pokemon;
 	}
 }
+
+export default RandomGen6Teams;

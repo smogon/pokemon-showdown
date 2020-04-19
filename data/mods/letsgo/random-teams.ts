@@ -1,4 +1,4 @@
-import {RandomTeams} from '../../random-teams';
+import RandomTeams from '../../random-teams';
 
 export class RandomLetsGoTeams extends RandomTeams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
@@ -266,3 +266,5 @@ export class RandomLetsGoTeams extends RandomTeams {
 		return pokemon;
 	}
 }
+
+export default RandomLetsGoTeams;

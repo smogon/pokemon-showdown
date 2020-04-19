@@ -1,4 +1,4 @@
-import {RandomGen2Teams} from '../gen2/random-teams';
+import RandomGen2Teams from '../gen2/random-teams';
 
 export class RandomGen1Teams extends RandomGen2Teams {
 	// Challenge Cup or CC teams are basically fully random teams.
@@ -375,3 +375,5 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		};
 	}
 }
+
+export default RandomGen1Teams;

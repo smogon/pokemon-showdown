@@ -1,4 +1,4 @@
-import {RandomTeams} from '../../random-teams';
+import RandomTeams from '../../random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 
 interface SSBSet {
@@ -842,3 +842,5 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		return team;
 	}
 }
+
+export default RandomStaffBrosTeams;

@@ -1,4 +1,4 @@
-import {RandomGen4Teams} from '../gen4/random-teams';
+import RandomGen4Teams from '../gen4/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 
 export class RandomGen3Teams extends RandomGen4Teams {
@@ -701,3 +701,5 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		return pokemon;
 	}
 }
+
+export default RandomGen3Teams;

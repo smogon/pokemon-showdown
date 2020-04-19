@@ -1,4 +1,4 @@
-import {RandomGen3Teams} from '../gen3/random-teams';
+import RandomGen3Teams from '../gen3/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 
 export class RandomGen2Teams extends RandomGen3Teams {
@@ -304,3 +304,5 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		} while (!done);
 	}
 }
+
+export default RandomGen2Teams;

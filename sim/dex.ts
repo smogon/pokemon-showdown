@@ -1133,7 +1133,7 @@ export class ModdedDex {
 
 	getTeamGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const TeamGenerator = require(dexes['base'].forFormat(format).dataDir + '/random-teams');
+		const TeamGenerator = require(dexes['base'].forFormat(format).dataDir + '/random-teams').default;
 		return new TeamGenerator(format, seed);
 	}
 

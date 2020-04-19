@@ -1,4 +1,4 @@
-import {RandomGen5Teams} from '../gen5/random-teams';
+import RandomGen5Teams from '../gen5/random-teams';
 
 export class RandomGen4Teams extends RandomGen5Teams {
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false): RandomTeamsTypes.RandomSet {
@@ -686,3 +686,5 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		};
 	}
 }
+
+export default RandomGen4Teams;
