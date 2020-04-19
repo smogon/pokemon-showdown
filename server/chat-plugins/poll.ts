@@ -264,6 +264,7 @@ export const commands: ChatCommands = {
 		create: 'new',
 		createmulti: 'new',
 		htmlcreatemulti: 'new',
+		queue: 'new',
 		new(target, room, user, connection, cmd, message) {
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
@@ -291,7 +292,9 @@ export const commands: ChatCommands = {
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (room.minorActivity) return this.errorReply("There is already a poll or announcement in progress in this room.");
+			if (room.minorActivity && room.queuedActivity) {
+				return this.errorReply("There is already a poll or announcement in progress in this room, and a queued poll.");
+			}
 			if (params.length < 3) return this.errorReply("Not enough arguments for /poll new.");
 
 			// @ts-ignore In the case that any of these are null, the function is terminated, and the result never used.
@@ -306,7 +309,15 @@ export const commands: ChatCommands = {
 			if (new Set(options).size !== options.length) {
 				return this.errorReply("There are duplicate options in the poll.");
 			}
-
+			// if there's a poll in place, queue instead.
+			if ((cmd === 'queue' || room.minorActivity) && !room.queuedActivity && room.minorActivity) {
+				room.queuedActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
+				this.modlog('QUEUEPOLL');
+				return this.privateModAction(`${user.name} queued a poll.`);
+			}
+			if (room.queuedActivity && room.minorActivity) {
+				return this.errorReply("There is already a queued activity.");
+			}
 			room.minorActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
 			room.minorActivity.display();
 
@@ -317,6 +328,7 @@ export const commands: ChatCommands = {
 		newhelp: [
 			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
 			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # & ~`,
+			`/poll queue [question], [option1], [option2], [...] - Queues a poll to be started upon end of next poll.`,
 			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		],
 
@@ -376,6 +388,13 @@ export const commands: ChatCommands = {
 				poll.timeout = setTimeout(() => {
 					if (poll) poll.end();
 					room.minorActivity = null;
+					if (room.queuedActivity) {
+						room.minorActivity = room.queuedActivity;
+						this.addModAction(`The queued poll was started.`);
+						this.modlog(`POLL`, null, `queued`);
+						room.minorActivity.display();
+						room.queuedActivity = null;
+					}
 				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
 				this.modlog('POLL TIMER', null, `${timeout} minutes`);
@@ -419,6 +438,13 @@ export const commands: ChatCommands = {
 
 			poll.end();
 			room.minorActivity = null;
+			if (room.queuedActivity) {
+				room.minorActivity = room.queuedActivity;
+				this.addModAction(`The queued poll was started.`);
+				this.modlog(`POLL`, null, `queued`);
+				room.minorActivity.display();
+				room.queuedActivity = null;
+			}
 			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
 		},
