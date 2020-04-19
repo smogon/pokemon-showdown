@@ -785,7 +785,7 @@ export const BattleScripts: BattleScriptsData = {
 			if (damage[i] === 0) {
 				// special substitute flag
 				damage[i] = true;
-				t = null;
+				targets[i] = null;
 			}
 			if (t && isSecondary && !moveData.self) {
 				damage[i] = true;
