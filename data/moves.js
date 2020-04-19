@@ -2316,7 +2316,7 @@ let BattleMovedex = {
 			onRestart(pokemon) {
 				this.effectData.duration = 2;
 			},
-			onBasePowerPriority: 3,
+			onBasePowerPriority: 9,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Electric') {
 					this.debug('charge boost');
@@ -4545,6 +4545,7 @@ let BattleMovedex = {
 					return null;
 				}
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
@@ -7688,6 +7689,7 @@ let BattleMovedex = {
 				}
 				return 5;
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				let weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
 				if (weakenedMoves.includes(move.id)) {
@@ -8622,7 +8624,7 @@ let BattleMovedex = {
 				this.effectData.multiplier *= 1.5;
 				this.add('-singleturn', target, 'Helping Hand', '[of] ' + source);
 			},
-			onBasePowerPriority: 3,
+			onBasePowerPriority: 10,
 			onBasePower(basePower) {
 				this.debug('Boosting from Helping Hand: ' + this.effectData.multiplier);
 				return this.chainModify(this.effectData.multiplier);
@@ -11779,7 +11781,7 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
-			onBasePowerPriority: 4,
+			onBasePowerPriority: 12,
 			onBasePower(basePower) {
 				return this.chainModify(1.5);
 			},
@@ -12464,6 +12466,7 @@ let BattleMovedex = {
 					return null;
 				}
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
 					this.debug('misty terrain weaken');
@@ -14491,6 +14494,7 @@ let BattleMovedex = {
 				this.add('-activate', target, 'move: Psychic Terrain');
 				return null;
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');

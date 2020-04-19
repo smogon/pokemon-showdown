@@ -133,6 +133,10 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
 	},
+	technician: {
+		inherit: true,
+		onBasePowerPriority: 19,
+	},
 };
 
 exports.BattleAbilities = BattleAbilities;
