@@ -47,6 +47,16 @@ function replace(file, replacements) {
 		}
 	});
 }
+function copyOverData(file) {
+	var source = './data/' + file;
+	var dest = './.data-dist/' + file;
+	fs.readFile(source, function (err, text) {
+		if (err) throw err;
+		fs.writeFile(dest, text, function (err) {
+			if (err) throw err;
+		});
+	});
+}
 
 try {
 	var sucraseVersion = require('sucrase').getVersion().split('.');
@@ -66,6 +76,12 @@ sucrase('./sim', './.sim-dist');
 sucrase('./lib', './.lib-dist');
 sucrase('./server', './.server-dist');
 sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets');
+
+// sucrase doesn't copy JSON over, so we'll have to do it ourselves
+copyOverData('mods/gen7/factory-sets.json');
+copyOverData('mods/gen7/bss-factory-sets.json');
+copyOverData('mods/gen6/factory-sets.json');
+
 // NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
 replace(path.join(__dirname, '.data-dist'), [
 	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
