@@ -1502,8 +1502,8 @@ export class ModdedDex {
 			this.includeFormats();
 		} else {
 			for (const dataType of DATA_TYPES) {
-				const parentTypedData = parentDex.data[dataType];
-				const childTypedData = dataCache[dataType] || (dataCache[dataType] = {});
+				const parentTypedData: DexTable<any> = parentDex.data[dataType];
+				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
 				for (const entryId in parentTypedData) {
 					if (childTypedData[entryId] === null) {
 						// null means don't inherit
@@ -1523,10 +1523,8 @@ export class ModdedDex {
 						delete childTypedData[entryId].inherit;
 
 						// Merge parent into children entry, preserving existing childs' properties.
-						// @ts-ignore
 						for (const key in parentTypedData[entryId]) {
 							if (key in childTypedData[entryId]) continue;
-							// @ts-ignore
 							childTypedData[entryId][key] = parentTypedData[entryId][key];
 						}
 					}

@@ -7,12 +7,6 @@
 export const BattleScripts: ModdedBattleScriptsData = {
 	inherit: 'gen2',
 	gen: 1,
-	init() {
-		for (const i in this.data.Pokedex) {
-			this.modData('Pokedex', i).gender = "N";
-			delete this.modData('Pokedex', i).eggGroups;
-		}
-	},
 	debug(activity) {
 		if (this.format.debug) {
 			this.add('debug', activity);
