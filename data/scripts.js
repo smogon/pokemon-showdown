@@ -161,11 +161,9 @@ let BattleScripts = {
 			move = this.getActiveZMove(move, pokemon);
 		}
 		if (maxMove && move.category !== 'Status') {
-			let moveType = move.type;
 			// Max move outcome is dependent on the move type after type modifications from ability and the move itself
 			this.singleEvent('ModifyType', move, null, pokemon, target, move, move);
 			this.runEvent('ModifyType', pokemon, target, move, move);
-			if (move.type !== moveType) sourceEffect = move;
 		}
 		if (maxMove || (move.category !== 'Status' && sourceEffect && /** @type {ActiveMove} */(sourceEffect).isMax)) {
 			move = this.getActiveMaxMove(move, pokemon);
