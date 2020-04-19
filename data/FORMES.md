@@ -172,6 +172,10 @@ These include:
 - Zygarde (10% Forme) (with Power Construct)
 - Zygarde (50% Forme) (with Power Construct)
 
+Greninja in the game code has three formes: regular, Battle Bond, and Ash-Greninja. Battle Bond is an event-only ability forme, and Ash-Greninja is an in-battle forme of the the event-only ability forme.
+
+Zygarde works the same way, with five formes: regular 50% Zygarde, event-only Power Construct 50% Zygarde, regular 10% Zygarde, event-only Power Construct 10% Zygarde, Zygarde Complete being an in-battle only forme of either event-only Power Construct 10% Zygarde or event-only Power Construct 50% Zygarde.
+
 PS's current implementation of this is weird and will be changed in a few days; do not rely on its current implementation.
 
 
