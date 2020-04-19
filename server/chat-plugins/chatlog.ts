@@ -524,7 +524,7 @@ const LogSearcher = new class {
 		}
 		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:</strong>`;
 		let total = 0;
-		for (const match of matches.join(' ').split(' ')) {
+		for (const match of results.join(' ').split(' ')) {
 			if (new RegExp(search, "i").test(match)) total++;
 		}
 		buf += ` ${total}`;
