@@ -60,13 +60,13 @@ let BattleStatuses = {
 	aeonic: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Aeonic|Guys the emoji movie wasn't __that__ bad`);
+			this.add(`c|&Aeonic|Guys the emoji movie wasn't __that__ bad`);
 		},
 		onSwitchOut() {
-			this.add(`c|@Aeonic|Still better than kie btw`);
+			this.add(`c|&Aeonic|Still better than kie btw`);
 		},
 		onFaint() {
-			this.add(`c|@Aeonic|Don't forget me`);
+			this.add(`c|&Aeonic|Don't forget me`);
 		},
 	},
 	aethernum: {
@@ -140,15 +140,15 @@ let BattleStatuses = {
 	anubis: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&Anubis|hi ur qt`);
+			this.add(`c|+Anubis|hi ur qt`);
 			// In loving memory of the SSB programming team's sanity.
 			if (this.random(300) === 272) this.add(`c|~HoeenHero|Anubis's set is OP against programmer sanity.`);
 		},
 		onSwitchOut() {
-			this.add(`c|&Anubis|brb making coffee`);
+			this.add(`c|+Anubis|brb making coffee`);
 		},
 		onFaint() {
-			this.add(`c|&Anubis|worthless evildoer :(`);
+			this.add(`c|+Anubis|worthless evildoer :(`);
 		},
 	},
 	aquagtothepast: {
@@ -224,10 +224,10 @@ let BattleStatuses = {
 	asheviere: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~Asheviere|The Light shall bring victory!`);
+			this.add(`c|~Asheviere|Blessings to you.`);
 		},
 		onSwitchOut() {
-			this.add(`c|~Asheviere|Regenerator is very fair and balanced`);
+			this.add(`c|~Asheviere|Don't trade me for someone else :(`);
 		},
 		onFaint() {
 			this.add(`c|~Asheviere|Who will lead my kingdom now?`);
@@ -248,13 +248,13 @@ let BattleStatuses = {
 	beowulf: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Beowulf|/me BUZZES LOUDLY`);
+			this.add(`c|%Beowulf|/me BUZZES LOUDLY`);
 		},
 		onSwitchOut() {
-			this.add(`c|@Beowulf|/me BUZZES LOUDLY`);
+			this.add(`c|%Beowulf|/me BUZZES LOUDLY`);
 		},
 		onFaint() {
-			this.add(`c|@Beowulf|BUZZ BUZZ BUZZ BUZZ`);
+			this.add(`c|%Beowulf|BUZZ BUZZ BUZZ BUZZ`);
 		},
 	},
 	biggie: {
@@ -348,13 +348,13 @@ let BattleStatuses = {
 	ckilgannon: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+c.kilgannon|Hope you're not afraid of the dark!`);
+			this.add(`c|%c.kilgannon|Hope you're not afraid of the dark!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+c.kilgannon|/me growls`);
+			this.add(`c|%c.kilgannon|/me growls`);
 		},
 		onFaint() {
-			this.add(`c|+c.kilgannon|Your time will come.`);
+			this.add(`c|%c.kilgannon|Your time will come.`);
 		},
 	},
 	cantsay: {
@@ -381,16 +381,28 @@ let BattleStatuses = {
 			this.add(`c|+Catalystic|The Birb is never lucky.`);
 		},
 	},
+	celestial: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Celestial|**Time to electrify you**`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Celestial|__I'll be coming back for you!__`);
+		},
+		onFaint() {
+			this.add(`c|%Celestial|I'm shocked that you mere mortal actually defeated __me__`);
+		},
+	},
 	ceteris: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Ceteris|Your loss is inevitable, you best forfeit the battle if you know what's good for you. ╰(⇀︿⇀)つ-]═───`);
+			this.add(`c|+Ceteris|Your loss is inevitable, you best forfeit the battle if you know what's good for you. ╰(⇀︿⇀)つ-]═───`);
 		},
 		onSwitchOut(source) {
-			this.add(`c|@Ceteris|Saving the best for last, ${source.side.name}, a wise choice my friend.`);
+			this.add(`c|+Ceteris|Saving the best for last, ${source.side.name}, a wise choice my friend.`);
 		},
 		onFaint() {
-			this.add(`c|@Ceteris|IMPOSSIBLE!! THIS IS AN OUTRAGE!! I WILL EXACT MY REVENGE ON YOU ONE DAY (◣_◢)`);
+			this.add(`c|+Ceteris|IMPOSSIBLE!! THIS IS AN OUTRAGE!! I WILL EXACT MY REVENGE ON YOU ONE DAY (◣_◢)`);
 		},
 	},
 	chaos: {
@@ -424,25 +436,25 @@ let BattleStatuses = {
 	dawoblefet: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@DaWoblefet|What's going on guys? This is DaWoblefet, and welcome to Mechanics Monday.`);
+			this.add(`c|&DaWoblefet|What's going on guys? This is DaWoblefet, and welcome to Mechanics Monday.`);
 		},
 		onSwitchOut() {
-			this.add(`c|@DaWoblefet|Until next time, have a good one.`);
+			this.add(`c|&DaWoblefet|Until next time, have a good one.`);
 		},
 		onFaint() {
-			this.add(`c|@DaWoblefet|mished`);
+			this.add(`c|&DaWoblefet|mished`);
 		},
 	},
 	decem: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Decem|:D`);
+			this.add(`c|%Decem|:D`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Decem|bye`);
+			this.add(`c|%Decem|bye`);
 		},
 		onFaint() {
-			this.add(`c|+Decem|>:(`);
+			this.add(`c|%Decem|>:(`);
 		},
 	},
 	deetah: {
@@ -457,22 +469,10 @@ let BattleStatuses = {
 			this.add(`c|+deetah|I have 8 lives left, you can't get rid of me that easily.`);
 		},
 	},
-	dragontite: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Dragontite|**Time to electrify you**`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Dragontite|__I'll be coming back for you!__`);
-		},
-		onFaint() {
-			this.add(`c|+Dragontite|I'm shocked that you mere mortal actually defeated __me__`);
-		},
-	},
 	dragonwhale: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@DragonWhale|i would switch to chomper here`);
+			this.add(`c|+DragonWhale|i would switch to chomper here`);
 		},
 	},
 	e4flint: {
@@ -490,10 +490,10 @@ let BattleStatuses = {
 	eien: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&Eien|umu!`);
+			this.add(`c|+Eien|umu!`);
 		},
 		onFaint() {
-			this.add(`c|&Eien|This game is Bad Civilization...`);
+			this.add(`c|+Eien|This game is Bad Civilization...`);
 		},
 	},
 	elgino: {
@@ -561,13 +561,13 @@ let BattleStatuses = {
 	false: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
+			this.add(`c|+false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
 		},
 		onSwitchOut() {
-			this.add(`c|&false|٩(๑•◡-๑)۶ⒽⓤⒼ❤`);
+			this.add(`c|+false|٩(๑•◡-๑)۶ⒽⓤⒼ❤`);
 		},
 		onFaint() {
-			this.add(`c|&false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
+			this.add(`c|+false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
 		},
 	},
 	fart: {
@@ -575,7 +575,7 @@ let BattleStatuses = {
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
 			let activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
-			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'dragontite'];
+			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'celestial'];
 			if (activeMon === 'hoeenhero' || activeMon === 'salamander') {
 				 this.add(`c|%fart|what song should I sing?`);
 			} else if (activeMon === 'lifeisdank' || activeMon === 'nui' || activeMon === 'grimauxiliatrix') {
@@ -649,27 +649,27 @@ let BattleStatuses = {
 	gimm1ck: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Gimm1ck|Давай!`);
+			this.add(`c|%Gimm1ck|Давай!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Gimm1ck|Must get more semechki`);
+			this.add(`c|%Gimm1ck|Must get more semechki`);
 		},
 		onFaint() {
-			this.add(`c|+Gimm1ck|Ran out of vodka`);
+			this.add(`c|%Gimm1ck|Ran out of vodka`);
 		},
 	},
 	gmars: {
 		noCopy: true,
 		onStart(target) {
-			this.add(`c|%GMars|It's ya boy GEEEEEEEEMARS`);
+			this.add(`c|@GMars|It's ya boy GEEEEEEEEMARS`);
 			if (target.illusion || !target.m.miniorColor) return;
 			this.add('-formechange', target, `Minior${target.m.miniorColor}`);
 		},
 		onSwitchOut() {
-			this.add(`c|%GMars|I like 'em crisp`);
+			this.add(`c|@GMars|I like 'em crisp`);
 		},
 		onFaint() {
-			this.add(`c|%GMars|Don't forget to check out my bandcamp`);
+			this.add(`c|@GMars|Don't forget to check out my bandcamp`);
 		},
 	},
 	grimauxiliatrix: {
@@ -697,15 +697,15 @@ let BattleStatuses = {
 	hippopotasuser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
 			this.add(`c|~HoeenHero|No, its not a bug Hippopotas, stop telling people to PM staff, its annoying.`);
 		},
 		onSwitchOut() {
-			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
 			this.add(`c|~HoeenHero|There's still no bug!`);
 		},
 		onFaint() {
-			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
 			this.add(`c|~HoeenHero|My PMs are flooded with bug reports :(`);
 		},
 	},
@@ -892,7 +892,7 @@ let BattleStatuses = {
 	kris: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c|+Kris|wjat poppin ;)))))`);
+			this.add(`c|%Kris|wjat poppin ;)))))`);
 			if (pokemon.illusion) return;
 			for (const target of pokemon.side.foe.active) {
 				if (!target || target.fainted) continue;
@@ -907,10 +907,10 @@ let BattleStatuses = {
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|+Kris|vbye`);
+			this.add(`c|%Kris|vbye`);
 		},
 		onFaint() {
-			this.add(`c|+Kris|thats weird but ok`);
+			this.add(`c|%Kris|thats weird but ok`);
 		},
 	},
 	level51: {
@@ -1092,13 +1092,13 @@ let BattleStatuses = {
 	nui: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@nui|（*＾3＾）`);
+			this.add(`c|&nui|（*＾3＾）`);
 		},
 		onSwitchOut() {
-			this.add(`c|@nui|(´◔‸◔\`) **??+ !`);
+			this.add(`c|&nui|(´◔‸◔\`) **??+ !`);
 		},
 		onFaint() {
-			this.add(`c|@nui|(◕︿◕✿)`);
+			this.add(`c|&nui|(◕︿◕✿)`);
 		},
 	},
 	om: {
@@ -1196,8 +1196,8 @@ let BattleStatuses = {
 			// Easter Egg
 			let activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
 			if (activeMon === 'anubis') {
-				this.add(`c|&Anubis|ohey it's pre`);
-				this.add(`c|&Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
+				this.add(`c|+Anubis|ohey it's pre`);
+				this.add(`c|+Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
 				this.add(`raw|<img src="https://pokemonshowdown.com/images/ssbkitten.jpg" style="width: 300px; height: 400px" />`);
 				this.add(`c|~pre|<3`);
 			}
@@ -1212,13 +1212,13 @@ let BattleStatuses = {
 	ptoad: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%ptoad⚬|Make it rain!`);
+			this.add(`c|+ptoad⚬|Make it rain!`);
 		},
 		onSwitchOut() {
-			this.add(`c|%ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
+			this.add(`c|+ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
 		},
 		onFaint() {
-			this.add(`c|%ptoad⚬|Wow. Way to rain on my parade.`);
+			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
 		},
 	},
 	psynergy: {
@@ -1361,10 +1361,10 @@ let BattleStatuses = {
 	shiba: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Shiba|LINDA IS INDA`);
+			this.add(`c|+Shiba|LINDA IS INDA`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Shiba|gotta buy an alt rq brb`);
+			this.add(`c|+Shiba|gotta buy an alt rq brb`);
 		},
 	},
 	slowbroth: {
@@ -1623,13 +1623,13 @@ let BattleStatuses = {
 	xprienzo: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%XpRienzo ☑◡☑|Bleh`);
+			this.add(`c|+XpRienzo ☑◡☑|Bleh`);
 		},
 		onSwitchOut() {
-			this.add(`c|%XpRienzo ☑◡☑|>.>`);
+			this.add(`c|+XpRienzo ☑◡☑|>.>`);
 		},
 		onFaint() {
-			this.add(`c|%XpRienzo ☑◡☑|Wait what?`);
+			this.add(`c|+XpRienzo ☑◡☑|Wait what?`);
 		},
 	},
 	yuki: {
