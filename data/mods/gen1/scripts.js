@@ -252,7 +252,6 @@ let BattleScripts = {
 	// This function attempts a move hit and returns the attempt result before the actual hit happens.
 	// It deals with partial trapping weirdness and accuracy bugs as well.
 	tryMoveHit(target, pokemon, move) {
-		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		/** @type {number | false | undefined} */
 		let damage = 0;
 
@@ -300,22 +299,16 @@ let BattleScripts = {
 		}
 
 		// Calculate true accuracy for gen 1, which uses 0-255.
+		// Gen 1 uses the same boost table for accuracy and evasiveness as every other stat
+		const boostTable = [25, 28, 33, 40, 50, 66, 100, 150, 200, 250, 300, 350, 400];
 		if (accuracy !== true) {
 			accuracy = Math.floor(accuracy * 255 / 100);
 			// Check also for accuracy modifiers.
 			if (!move.ignoreAccuracy) {
-				if (pokemon.boosts.accuracy > 0) {
-					accuracy *= boostTable[pokemon.boosts.accuracy];
-				} else {
-					accuracy = Math.floor(accuracy / boostTable[-pokemon.boosts.accuracy]);
-				}
+				accuracy = Math.floor(accuracy * (boostTable[pokemon.boosts.accuracy + 6] / 100));
 			}
 			if (!move.ignoreEvasion) {
-				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-					accuracy = Math.floor(accuracy / boostTable[target.boosts.evasion]);
-				} else if (target.boosts.evasion < 0) {
-					accuracy *= boostTable[-target.boosts.evasion];
-				}
+				accuracy = Math.floor(accuracy * (boostTable[-target.boosts.evasion + 6] / 100));
 			}
 			accuracy = Math.min(accuracy, 255);
 		}
