@@ -3137,7 +3137,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	rufflet: {
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	braviary: {
 		randomBattleMoves: ["bravebird", "bulkup", "closecombat", "facade", "roost", "uturn"],
