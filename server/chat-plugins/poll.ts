@@ -292,7 +292,7 @@ export const commands: ChatCommands = {
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (room.minorActivity) {
+			if (room.minorActivity && cmd !== 'queue') {
 				return this.errorReply("There is already a poll or announcement in progress in this room.");
 			}
 			if (params.length < 3) return this.errorReply("Not enough arguments for /poll new.");
