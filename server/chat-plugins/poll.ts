@@ -265,6 +265,9 @@ export const commands: ChatCommands = {
 		createmulti: 'new',
 		htmlcreatemulti: 'new',
 		queue: 'new',
+		queuehtml: 'new',
+		queuemulti: 'new',
+		htmlqueuemulti: 'new',
 		new(target, room, user, connection, cmd, message) {
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
@@ -276,6 +279,7 @@ export const commands: ChatCommands = {
 
 			const supportHTML = cmd.includes('html');
 			const multi = cmd.includes('multi');
+			const queue = cmd.includes('queue');
 			let separator = '';
 			if (text.includes('\n')) {
 				separator = '\n';
@@ -286,15 +290,12 @@ export const commands: ChatCommands = {
 			} else {
 				return this.errorReply("Not enough arguments for /poll new.");
 			}
-
 			let params = text.split(separator).map(param => param.trim());
 
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;
 			if (!this.canTalk()) return;
-			if (room.minorActivity && cmd !== 'queue') {
-				return this.errorReply("There is already a poll or announcement in progress in this room.");
-			}
+
 			if (params.length < 3) return this.errorReply("Not enough arguments for /poll new.");
 
 			// @ts-ignore In the case that any of these are null, the function is terminated, and the result never used.
@@ -309,12 +310,14 @@ export const commands: ChatCommands = {
 			if (new Set(options).size !== options.length) {
 				return this.errorReply("There are duplicate options in the poll.");
 			}
-			if (cmd === 'queue' && !room.queuedActivity && room.minorActivity) {
+
+			if (room.minorActivity && !queue) {
+				return this.errorReply("There is already a poll or announcement in progress in this room.");
+			} else if (queue && !room.queuedActivity && room.minorActivity) {
 				room.queuedActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(`${user.name} queued a poll.`);
-			}
-			if (room.queuedActivity && room.minorActivity) {
+			} else if (room.queuedActivity && room.minorActivity) {
 				return this.errorReply("There is already a queued activity.");
 			}
 			room.minorActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
@@ -327,7 +330,7 @@ export const commands: ChatCommands = {
 		newhelp: [
 			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
 			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # & ~`,
-			`/poll queue [question], [option1], [option2], [...] - Queues a poll to be started upon end of next poll.`,
+			`To queue a poll, use [queue], [queuemulti], or [htmlqueuemulti].`,
 			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		],
 
