@@ -17060,9 +17060,7 @@ let BattleMovedex = {
 			}
 		},
 		onHit(target, source) {
-			if (target.hp > 0) {
-				this.add('-end', target, 'Sky Drop');
-			}
+			if (target.hp) this.add('-end', target, 'Sky Drop');
 		},
 		effect: {
 			duration: 2,
