@@ -295,6 +295,13 @@ export const commands: ChatCommands = {
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;
 			if (!this.canTalk()) return;
+			if (room.minorActivity) {
+				if (!queue) {
+					return this.errorReply("There is already a poll or announcement in progress in this room.");
+				} else if (room.queuedActivity) {
+					return this.errorReply("There is already a queued activity.");
+				}
+			}
 
 			if (params.length < 3) return this.errorReply("Not enough arguments for /poll new.");
 
@@ -311,14 +318,10 @@ export const commands: ChatCommands = {
 				return this.errorReply("There are duplicate options in the poll.");
 			}
 
-			if (room.minorActivity && !queue) {
-				return this.errorReply("There is already a poll or announcement in progress in this room.");
-			} else if (queue && !room.queuedActivity && room.minorActivity) {
+			if (room.minorActivity) {
 				room.queuedActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(`${user.name} queued a poll.`);
-			} else if (room.queuedActivity && room.minorActivity) {
-				return this.errorReply("There is already a queued activity.");
 			}
 			room.minorActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
 			room.minorActivity.display();
