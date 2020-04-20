@@ -817,9 +817,7 @@ export class TeamValidator {
 			if (dex.gen > 1 && !species.gender) {
 				// Gen 2 gender is calculated from the Atk DV.
 				// High Atk DV <-> M. The meaning of "high" depends on the gender ratio.
-				let genderThreshold = species.genderRatio.F * 16;
-				if (genderThreshold === 4) genderThreshold = 5;
-				if (genderThreshold === 8) genderThreshold = 7;
+				const genderThreshold = species.genderRatio.F * 16;
 
 				const expectedGender = (atkDV >= genderThreshold ? 'M' : 'F');
 				if (set.gender && set.gender !== expectedGender) {
