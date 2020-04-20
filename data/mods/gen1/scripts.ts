@@ -232,8 +232,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	// This function attempts a move hit and returns the attempt result before the actual hit happens.
 	// It deals with partial trapping weirdness and accuracy bugs as well.
 	tryMoveHit(target, pokemon, move) {
-		/** @type {number | false | undefined} */
-		let damage = 0;
+		let damage: number | false | undefined = 0;
 
 		// First, check if the target is semi-invulnerable
 		let hitResult = this.runEvent('Invulnerability', target, pokemon, move);
