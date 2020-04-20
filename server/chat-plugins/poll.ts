@@ -310,7 +310,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("There are duplicate options in the poll.");
 			}
 			// if there's a poll in place, queue instead.
-			if (cmd === 'queue'  && !room.queuedActivity && room.minorActivity) {
+			if (cmd === 'queue' && !room.queuedActivity && room.minorActivity) {
 				room.queuedActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(`${user.name} queued a poll.`);
