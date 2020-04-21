@@ -1058,7 +1058,7 @@ export class BasicChatRoom extends BasicRoom {
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
 	minorActivity: Poll | Announcement | null;
-	queuedActivity: Poll | Announcement | null;
+	queuedActivity: Poll[] | null;
 	desc: string;
 	modchat: string | null;
 	filterStretching: boolean;
@@ -1112,7 +1112,7 @@ export class BasicChatRoom extends BasicRoom {
 
 		this.chatRoomData = (options.isPersonal ? null : options);
 		this.minorActivity = null;
-		this.queuedActivity = null;
+		this.queuedActivity = [];
 		Object.assign(this, options);
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
 		this.parent = null;
