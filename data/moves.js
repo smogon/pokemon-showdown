@@ -8278,7 +8278,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, sound: 1, distance: 1, authentic: 1},
 		onHit(pokemon, source) {
-			this.add('-activate', source, 'move: Heal Bell');
+			if (!source.volatiles['snatch']) {
+				this.add('-activate', source, 'move: Heal Bell');
+			}
 			let side = pokemon.side;
 			let success = false;
 			for (const ally of side.pokemon) {
@@ -17511,9 +17513,14 @@ let BattleMovedex = {
 				if (!move || move.isZ || move.isMax || !move.flags['snatch'] || move.sourceEffect === 'snatch') {
 					return;
 				}
-				snatchUser.removeVolatile('snatch');
+				if (move.id === 'healbell') this.add('-activate', snatchUser, 'move: Heal Bell');
 				this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
+				if (snatchUser.volatiles['throatchop'] && move.flags['sound']) {
+					this.add('cant', snatchUser, 'move: Throat Chop');
+					return null;
+				}
 				this.useMove(move.id, snatchUser);
+				snatchUser.removeVolatile('snatch');
 				return null;
 			},
 		},
