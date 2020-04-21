@@ -11,7 +11,7 @@ import * as util from 'util';
 import * as path from 'path';
 
 
-export const execFile = util.promisify(child_process.execFile);
+const execFile = util.promisify(child_process.execFile);
 const DAY = 24 * 60 * 60 * 1000;
 
 class LogReaderRoom {
@@ -440,7 +440,7 @@ const LogViewer = new class {
 	}
 };
 
-export const LogSearcher = new class {
+const LogSearcher = new class {
 	fsSearch(roomid: RoomID, search: string, date: string, cap?: number | string) {
 		const isAll = (date === 'all');
 		const isYear = (date.length < 0 && date.length > 7);
@@ -480,10 +480,10 @@ export const LogSearcher = new class {
 	}
 
 	render(results: string[], roomid: RoomID, search: string, cap?: number) {
-		const matches: string[] = [];
-		let curDate = '';
 		const dates: string[] = [];
-		for (const chunk of results.sort()) {
+		let count = 0;
+		let curDate = '';
+		const sorted = results.sort().map(chunk => {
 			const section = chunk.split('\n').map(line => {
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
 				const [name, text] = line.split(sep);
@@ -503,14 +503,14 @@ export const LogSearcher = new class {
 					new RegExp(search, "i")
 						.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
 				);
+				if (matched.includes('chat chatmessage highlighted')) {
+					count++;
+				}
+				if (cap && count > cap) return null;
 				return matched;
-			}).join(' ');
-			if (cap && matches.push(section) >= cap) {
-				break;
-			} else if (!matches.includes(section)) {
-				matches.push(section);
-			}
-		}
+			}).filter(item => item).join(' ');
+			return section;
+		});
 		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:</strong>`;
 		let total = 0;
 		for (const match of results.join(' ').split(' ')) {
@@ -518,10 +518,10 @@ export const LogSearcher = new class {
 		}
 		buf += ` ${total}`;
 		buf += cap ? ` (capped at ${cap})<hr>` : `<hr>`;
-		buf += matches.join('<hr>');
-		if (cap) {
+		buf += sorted.filter(item => item).join('<hr>');
+		if (cap && cap !== Infinity) {
 			buf += `<hr><strong>Capped at ${cap}.</strong><br>`;
-			buf += `<button class="button" name="send" value="/sl ${search}, ${roomid},${cap + 200}">View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${search},${roomid},${Number(cap) + 200}">View 200 more<br />&#x25bc;</button>`;
 			buf += `<button class="button" name="send" value="/sl ${search},${roomid},all">View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
