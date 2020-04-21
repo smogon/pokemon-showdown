@@ -298,8 +298,6 @@ export const commands: ChatCommands = {
 			if (room.minorActivity) {
 				if (!queue) {
 					return this.errorReply("There is already a poll or announcement in progress in this room.");
-				} else if (room.queuedActivity) {
-					return this.errorReply("There is already a queued activity.");
 				}
 			}
 
@@ -319,7 +317,7 @@ export const commands: ChatCommands = {
 			}
 
 			if (room.minorActivity) {
-				room.queuedActivity = new Poll(room, {source: params[0], supportHTML}, options, multi);
+				room.queuedActivity!.push(new Poll(room, {source: params[0], supportHTML}, options, multi));
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(`${user.name} queued a poll.`);
 			}
@@ -335,6 +333,34 @@ export const commands: ChatCommands = {
 			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # & ~`,
 			`To queue a poll, use [queue], [queuemulti], or [htmlqueuemulti].`,
 			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
+		],
+
+		viewqueue(target, room, user) {
+			if (!this.can('mute', null, room)) return false;
+			this.parse(`/join view-pollqueue-${room.roomid}`);
+		},
+		viewqueuehelp: [`/viewqueue - view the queue of polls in the room. Requires: % @ # & ~`],
+
+		clearqueue: 'deletequeue',
+		deletequeue(target, room, user, connection, cmd) {
+			if (!this.can('mute', null, room)) return false;
+			const queue = room.queuedActivity;
+			if (cmd === 'clearqueue') {
+				queue?.splice(0, queue.length);
+				this.modlog('CLEARQUEUE');
+				this.sendReply(`Cleared poll queue.`);
+			} else {
+				const parsed = parseInt(target);
+				if (isNaN(parsed)) return this.errorReply(`Must be a number.`);
+				if (!queue![parsed]) return this.errorReply(`There is no poll in queue matching ${parsed}.`);
+				queue?.splice(parsed, 1);
+				this.modlog('DELETEQUEUE', null, target);
+				return this.privateModAction(`${user.name} deleted the poll in queue with number ${parsed}.`);
+			}
+		},
+		deletequeuehelp: [
+			`/deletequeue [number] - deletes poll with corresponding number from the queue. Requires: % @ # & ~`,
+			`/clearqueue - deletes the queue of polls. Requires: % @ # & ~`,
 		],
 
 		deselect: 'select',
@@ -393,12 +419,12 @@ export const commands: ChatCommands = {
 				poll.timeout = setTimeout(() => {
 					if (poll) poll.end();
 					room.minorActivity = null;
-					if (room.queuedActivity) {
-						room.minorActivity = room.queuedActivity;
+					if (room.queuedActivity?.length) {
+						room.minorActivity = room?.queuedActivity[0];
 						this.addModAction(`The queued poll was started.`);
 						this.modlog(`POLL`, null, `queued`);
 						room.minorActivity.display();
-						room.queuedActivity = null;
+						room.queuedActivity.splice(0, 1);
 					}
 				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
@@ -443,12 +469,12 @@ export const commands: ChatCommands = {
 
 			poll.end();
 			room.minorActivity = null;
-			if (room.queuedActivity) {
-				room.minorActivity = room.queuedActivity;
+			if (room.queuedActivity?.length) {
+				room.minorActivity = room.queuedActivity[0];
+				room.queuedActivity.splice(0, 1);
 				this.addModAction(`The queued poll was started.`);
 				this.modlog(`POLL`, null, `queued`);
 				room.minorActivity.display();
-				room.queuedActivity = null;
 			}
 			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
@@ -485,9 +511,30 @@ export const commands: ChatCommands = {
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
 		`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`,
+		`/deletequeue [number] - deletes poll with corresponding number from the queue.`,
+		`/clearqueue - deletes the queue of polls. Requires: % @ # & ~`,
+		`/viewqueue - view the queue of polls in the room. Requires: % @ # & ~`,
 	],
 };
 
+export const pages: PageTable = {
+	pollqueue(args, user) {
+		this.extractRoom();
+		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
+		let buf = `<div class = "pad"><strong>Queued polls</strong>`;
+		if (!room.queuedActivity!.length) {
+			buf += `<hr/ ><strong>No polls queued.</strong></div>`;
+			return buf;
+		}
+		for (const poll of room.queuedActivity!) {
+			const pollNumber = room.queuedActivity?.indexOf(poll);
+			buf += `<hr/ ><strong>${pollNumber} in queue:</strong>`;
+			buf += `<br> ${poll.generateResults()}`;
+		}
+		buf += `<hr/ >`;
+		return buf;
+	},
+};
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/poll (new|create|createmulti|htmlcreate|htmlcreatemulti) ');
+	Chat.multiLinePattern.register('/poll (new|create|createmulti|htmlcreate|htmlcreatemulti|queue|queuemulti|htmlqueuemulti) ');
 });
