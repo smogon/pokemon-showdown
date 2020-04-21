@@ -302,12 +302,12 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 		this.debug = (this.debug || '').slice(-32768) + '\n=====\n' + message;
 	}
 
-	constructor(file: string, isCluster?: boolean) {
+	constructor(file: string, isCluster?: boolean, env?: AnyObject) {
 		if (isCluster) {
-			this.process = cluster.fork();
+			this.process = cluster.fork(env);
 			this.workerid = this.process.id;
 		} else {
-			this.process = child_process.fork(file, [], {cwd: ROOT_DIR}) as any;
+			this.process = child_process.fork(file, [], {cwd: ROOT_DIR, env}) as any;
 		}
 
 		this.process.on('message', (message: string) => {
@@ -588,15 +588,18 @@ export class RawProcessManager extends ProcessManager {
 	_setupChild: () => Streams.ObjectReadWriteStream<string>;
 	/** worker ID of cluster worker - cluster child process only (0 otherwise) */
 	readonly workerid = cluster.worker?.id || 0;
+	env: AnyObject | undefined;
 
 	constructor(options: {
 		module: NodeJS.Module,
 		setupChild: () => Streams.ObjectReadWriteStream<string>,
 		isCluster?: boolean,
+		env?: AnyObject,
 	}) {
 		super(options.module);
 		this.isCluster = !!options.isCluster;
 		this._setupChild = options.setupChild;
+		this.env = options.env;
 
 		if (this.isCluster && this.isParentProcess) {
 			cluster.setupMaster({
@@ -623,7 +626,7 @@ export class RawProcessManager extends ProcessManager {
 		}
 	}
 	createProcess() {
-		const process = new RawProcessWrapper(this.filename, this.isCluster);
+		const process = new RawProcessWrapper(this.filename, this.isCluster, this.env);
 		this.workers.push(process);
 		this.spawnSubscription?.(process);
 		return process;

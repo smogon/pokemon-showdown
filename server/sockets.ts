@@ -90,6 +90,7 @@ export const Sockets = new class {
 			workerCount = (Config.workers !== undefined ? Config.workers : 1);
 		}
 
+		PM.env = {PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '0.0.0.0', PSNOSSL: Config.ssl ? 0 : 1};
 		PM.subscribeSpawn(worker => void this.onSpawn(worker));
 		PM.subscribeUnspawn(this.onUnspawn);
 
