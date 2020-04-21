@@ -344,13 +344,17 @@ export const commands: ChatCommands = {
 		clearqueue: 'deletequeue',
 		deletequeue(target, room, user, connection, cmd) {
 			if (!this.can('mute', null, room)) return false;
-			const queue = room.queuedActivity;
 			if (cmd === 'clearqueue') {
+				const queue = room.queuedActivity;
 				queue?.splice(0, queue.length);
 				this.modlog('CLEARQUEUE');
 				this.sendReply(`Cleared poll queue.`);
 			} else {
-				const parsed = parseInt(target);
+				const [num, roomid] = target.split(',');
+				const parsed = parseInt(num);
+				if (!Rooms.search(roomid)) return this.errorReply(`No such room.`);
+				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
+				const queue = curRoom.queuedActivity;
 				if (isNaN(parsed)) return this.errorReply(`Must be a number.`);
 				if (!queue![parsed]) return this.errorReply(`There is no poll in queue matching ${parsed}.`);
 				queue?.splice(parsed, 1);
@@ -522,14 +526,20 @@ export const pages: PageTable = {
 		this.extractRoom();
 		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
 		let buf = `<div class = "pad"><strong>Queued polls</strong>`;
+		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
+		buf += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		if (!room.queuedActivity!.length) {
 			buf += `<hr/ ><strong>No polls queued.</strong></div>`;
 			return buf;
 		}
 		for (const poll of room.queuedActivity!) {
-			const pollNumber = room.queuedActivity?.indexOf(poll);
-			buf += `<hr/ ><strong>${pollNumber} in queue:</strong>`;
-			buf += `<br> ${poll.generateResults()}`;
+			const num = room.queuedActivity?.indexOf(poll);
+			const button = (
+				`<button class="button" name="send" value="/poll deletequeue ${num},${room.roomid}">` +
+				`${num} in queue (press to delete)</button>`
+			);
+			buf += `<hr/ >`;
+			buf += `${button}<br/ >${poll.generateResults()}`;
 		}
 		buf += `<hr/ >`;
 		return buf;
