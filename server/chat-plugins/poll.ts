@@ -535,8 +535,9 @@ export const pages: PageTable = {
 		for (const poll of room.queuedActivity!) {
 			const num = room.queuedActivity?.indexOf(poll);
 			const button = (
+				`<strong>#${num} in queue</strong>` +
 				`<button class="button" name="send" value="/poll deletequeue ${num},${room.roomid}">` +
-				`${num} in queue (press to delete)</button>`
+				`(delete)</button>`
 			);
 			buf += `<hr/ >`;
 			buf += `${button}<br/ >${poll.generateResults()}`;
