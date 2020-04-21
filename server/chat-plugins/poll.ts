@@ -1,6 +1,6 @@
 /*
  * Poll chat plugin
- * By bumbadadabum and Zarel.
+ * By Asheviere and Zarel.
  */
 
 interface QuestionData {
@@ -350,7 +350,7 @@ export const commands: ChatCommands = {
 				this.modlog('CLEARQUEUE');
 				this.sendReply(`Cleared poll queue.`);
 			} else {
-				const [num, roomid] = target.split(',');
+				const [num, roomid, update] = target.split(',');
 				const parsed = parseInt(num);
 				if (!Rooms.search(roomid)) return this.errorReply(`No such room.`);
 				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
@@ -359,7 +359,12 @@ export const commands: ChatCommands = {
 				if (!queue![parsed]) return this.errorReply(`There is no poll in queue matching ${parsed}.`);
 				queue?.splice(parsed, 1);
 				this.modlog('DELETEQUEUE', null, target);
-				return this.privateModAction(`${user.name} deleted the poll in queue with number ${parsed}.`);
+				if (!update) {
+					return this.privateModAction(`${user.name} deleted the poll in queue with number ${parsed}.`);
+				} else {
+					this.privateModAction(`${user.name} deleted the poll in queue with number ${parsed}.`);
+					return this.parse(`/j view-pollqueue-${curRoom}`);
+				}
 			}
 		},
 		deletequeuehelp: [
@@ -525,7 +530,7 @@ export const pages: PageTable = {
 	pollqueue(args, user) {
 		this.extractRoom();
 		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
-		let buf = `<div class = "pad"><strong>Queued polls</strong>`;
+		let buf = `<div class = "pad"><strong>Queued polls:</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
 		if (!room.queuedActivity!.length) {
@@ -535,8 +540,8 @@ export const pages: PageTable = {
 		for (const poll of room.queuedActivity!) {
 			const num = room.queuedActivity?.indexOf(poll);
 			const button = (
-				`<strong>#${num} in queue</strong>` +
-				`<button class="button" name="send" value="/poll deletequeue ${num},${room.roomid}">` +
+				`<strong>#${num} in queue </strong>` +
+				`<button class="button" name="send" value="/poll deletequeue ${num},${room.roomid},updatelist">` +
 				`(delete)</button>`
 			);
 			buf += `<hr/ >`;
