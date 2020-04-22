@@ -361,11 +361,13 @@ export const commands: ChatCommands = {
 				if (isNaN(parsed)) return this.errorReply(`Must be a number.`);
 				if (!queue[parsed]) return this.errorReply(`There is no poll in queue matching ${parsed}.`);
 				queue.splice(parsed, 1);
-				this.modlog('DELETEQUEUE', null, num);
+				curRoom.modlog(`(${curRoom.roomid}) DELETEQUEUE: by ${user}: ${num}`);
 				if (!update) {
-					return this.privateModAction(`${user.name} deleted the poll in queue with number ${parsed}.`);
+					curRoom.sendMods(`(${user.name} deleted the poll in queue with number ${parsed}.)`)
+					return curRoom.update();
 				} else {
-					this.privateModAction(`${user.name} deleted the poll in queue with number ${parsed}.`);
+					curRoom.sendMods(`(${user.name} deleted the poll in queue with number ${parsed}.)`);
+					curRoom.update();
 					return this.parse(`/j view-pollqueue-${curRoom}`);
 				}
 			}
