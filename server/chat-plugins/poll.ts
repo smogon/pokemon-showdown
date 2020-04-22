@@ -317,7 +317,7 @@ export const commands: ChatCommands = {
 			}
 
 			if (room.minorActivity) {
-				room.queuedActivity!.push(new Poll(room, {source: params[0], supportHTML}, options, multi));
+				room.queuedActivity.push(new Poll(room, {source: params[0], supportHTML}, options, multi));
 				this.modlog('QUEUEPOLL');
 				return this.privateModAction(`${user.name} queued a poll.`);
 			}
@@ -346,7 +346,10 @@ export const commands: ChatCommands = {
 			if (!this.can('mute', null, room)) return false;
 			if (cmd === 'clearqueue') {
 				const queue = room.queuedActivity;
-				queue?.splice(0, queue.length);
+				queue.splice(0, queue.length);
+				if (!queue.length){
+					return this.errorReply("No polls in queue.");
+				}
 				this.modlog('CLEARQUEUE');
 				this.sendReply(`Cleared poll queue.`);
 			} else {
@@ -356,9 +359,9 @@ export const commands: ChatCommands = {
 				const curRoom = roomid ? (Rooms.search(roomid) as ChatRoom | GameRoom) : room;
 				const queue = curRoom.queuedActivity;
 				if (isNaN(parsed)) return this.errorReply(`Must be a number.`);
-				if (!queue![parsed]) return this.errorReply(`There is no poll in queue matching ${parsed}.`);
-				queue?.splice(parsed, 1);
-				this.modlog('DELETEQUEUE', null, target);
+				if (!queue[parsed]) return this.errorReply(`There is no poll in queue matching ${parsed}.`);
+				queue.splice(parsed, 1);
+				this.modlog('DELETEQUEUE', null, num);
 				if (!update) {
 					return this.privateModAction(`${user.name} deleted the poll in queue with number ${parsed}.`);
 				} else {
@@ -428,8 +431,8 @@ export const commands: ChatCommands = {
 				poll.timeout = setTimeout(() => {
 					if (poll) poll.end();
 					room.minorActivity = null;
-					if (room.queuedActivity?.length) {
-						room.minorActivity = room?.queuedActivity[0];
+					if (room.queuedActivity.length) {
+						room.minorActivity = room.queuedActivity[0];
 						this.addModAction(`The queued poll was started.`);
 						this.modlog(`POLL`, null, `queued`);
 						room.minorActivity.display();
@@ -533,12 +536,12 @@ export const pages: PageTable = {
 		let buf = `<div class = "pad"><strong>Queued polls:</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
 		buf += `<i class="fa fa-refresh"></i> Refresh</button><br />`;
-		if (!room.queuedActivity!.length) {
+		if (!room.queuedActivity.length) {
 			buf += `<hr/ ><strong>No polls queued.</strong></div>`;
 			return buf;
 		}
 		for (const poll of room.queuedActivity!) {
-			const num = room.queuedActivity?.indexOf(poll);
+			const num = room.queuedActivity.indexOf(poll);
 			const button = (
 				`<strong>#${num} in queue </strong>` +
 				`<button class="button" name="send" value="/poll deletequeue ${num},${room.roomid},updatelist">` +
