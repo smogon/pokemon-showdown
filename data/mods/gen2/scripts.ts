@@ -45,13 +45,19 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 			// Screens
 			if (!unboosted) {
-				if ((this.side.sideConditions['reflect'] && statName === 'def') || (this.side.sideConditions['lightscreen'] && statName === 'spd')) {
+				if (
+					(statName === 'def' && this.side.sideConditions['reflect']) ||
+					(statName === 'spd' && this.side.sideConditions['lightscreen'])
+				) {
 					stat *= 2;
 				}
 			}
 
-			// Treat here the items.
-			if ((['Cubone', 'Marowak'].includes(this.species.name) && this.item === 'thickclub' && statName === 'atk') || (this.species.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
+			// Handle boosting items
+			if (
+				(['Cubone', 'Marowak'].includes(this.species.name) && this.item === 'thickclub' && statName === 'atk') ||
+				(this.species.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')
+			) {
 				stat *= 2;
 			} else if (this.forme === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
 				stat *= 1.5;
@@ -650,7 +656,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		// Weather modifiers
 		if ((this.field.isWeather('raindance') && type === 'Water') || (this.field.isWeather('sunnyday') && type === 'Fire')) {
 			damage = Math.floor(damage * 1.5);
-		} else if ((this.field.isWeather('raindance') && (type === 'Fire' || move.id === 'solarbeam')) || (this.field.isWeather('sunnyday') && type === 'Water')) {
+		} else if (
+			(this.field.isWeather('raindance') && (type === 'Fire' || move.id === 'solarbeam')) ||
+			(this.field.isWeather('sunnyday') && type === 'Water')
+		) {
 			damage = Math.floor(damage / 2);
 		}
 

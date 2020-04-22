@@ -157,7 +157,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 			this.add('-activate', pokemon, 'confusion');
 			if (!this.randomChance(128, 256)) {
-				const damage = Math.floor(Math.floor(((Math.floor(2 * pokemon.level / 5) + 2) * pokemon.getStat('atk') * 40) / pokemon.getStat('def', false)) / 50) + 2;
+				const damage = Math.floor(Math.floor((
+					(Math.floor(2 * pokemon.level / 5) + 2) * pokemon.getStat('atk') * 40
+				) / pokemon.getStat('def', false)) / 50) + 2;
 				this.directDamage(damage, pokemon, target);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');

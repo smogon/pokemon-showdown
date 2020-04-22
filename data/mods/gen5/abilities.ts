@@ -7,7 +7,10 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				if (!target || target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
-					if (move.category !== 'Status' && (this.dex.getImmunity(move.type, pokemon) && this.dex.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
+					if (move.category !== 'Status' && (
+						this.dex.getImmunity(move.type, pokemon) && this.dex.getEffectiveness(move.type, pokemon) > 0 ||
+						move.ohko
+					)) {
 						this.add('-ability', pokemon, 'Anticipation');
 						return;
 					}

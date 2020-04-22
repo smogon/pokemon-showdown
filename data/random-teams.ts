@@ -1,3 +1,5 @@
+/* eslint max-len: ["error", 240] */
+
 import {Dex} from '../sim/dex';
 import {PRNG, PRNGSeed} from '../sim/prng';
 
@@ -157,15 +159,23 @@ export class RandomTeams {
 			let moves;
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
-				pool = Object.keys(this.dex.data.Movedex).filter(moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || this.dex.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower'));
+				pool = Object.keys(this.dex.data.Movedex).filter(
+					moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || this.dex.data.Movedex[moveid].id === 'hiddenpower' && moveid !== 'hiddenpower')
+				);
 			} else {
 				let learnset = this.dex.data.Learnsets[species.id] && this.dex.data.Learnsets[species.id].learnset ?
 					this.dex.data.Learnsets[species.id].learnset :
 					this.dex.data.Learnsets[this.dex.getSpecies(species.baseSpecies).id].learnset;
-				if (learnset) pool = Object.keys(learnset).filter(moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen))));
+				if (learnset) {
+					pool = Object.keys(learnset).filter(
+						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
+					);
+				}
 				if (species.inheritsFrom) {
 					learnset = this.dex.data.Learnsets[species.inheritsFrom].learnset;
-					const basePool = Object.keys(learnset!).filter(moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen))));
+					const basePool = Object.keys(learnset!).filter(
+						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
+					);
 					pool = [...new Set(pool.concat(basePool))];
 				}
 			}
@@ -906,8 +916,11 @@ export class RandomTeams {
 				}
 
 				// Pokemon should have moves that benefit their types, stats, or ability
-				if (!rejected && !['sleeptalk', 'teleport'].includes(moveid) && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || (counter[counter.setupType] + counter.Status > 3 && !counter.hazards))) &&
-					((!counter.stab && counter['physicalpool'] + counter['specialpool'] > 0) ||
+				if (!rejected && !['sleeptalk', 'teleport'].includes(moveid) && (
+					counter['physicalsetup'] + counter['specialsetup'] < 2 &&
+					(!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || (counter[counter.setupType] + counter.Status > 3 && !counter.hazards))
+				) && (
+					(!counter.stab && counter['physicalpool'] + counter['specialpool'] > 0) ||
 					(hasType['Bug'] && movePool.includes('megahorn')) ||
 					(hasType['Dark'] && !counter['Dark']) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !(hasMove['rest'] && hasMove['sleeptalk'])) ||
@@ -928,11 +941,16 @@ export class RandomTeams {
 					(hasType['Water'] && !counter['Water']) ||
 					((hasAbility['Moody'] || hasMove['wish']) && movePool.includes('protect')) ||
 					(((hasMove['lightscreen'] && movePool.includes('reflect')) || (hasMove['reflect'] && movePool.includes('lightscreen'))) && move.id !== 'teleport') ||
-					(!counter['recovery'] && !counter.setupType && !hasMove['trick'] && !hasMove['trickroom'] && (movePool.includes('recover') || movePool.includes('roost') || movePool.includes('slackoff') || movePool.includes('softboiled')) && !!counter.Status) ||
-					(movePool.includes('quiverdance') || movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb))) {
+					(!counter['recovery'] && !counter.setupType && !hasMove['trick'] && !hasMove['trickroom'] && (
+						movePool.includes('recover') || movePool.includes('roost') || movePool.includes('slackoff') || movePool.includes('softboiled')
+					) && !!counter.Status) ||
+					(movePool.includes('quiverdance') || movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb)
+				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !move.sideCondition && !move.stallingMove && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
-						if (move.category === 'Status' || move.selfSwitch || !hasType[move.type] || move.basePower && move.basePower < 50 && !move.multihit) rejected = true;
+						if (move.category === 'Status' || move.selfSwitch || !hasType[move.type] || move.basePower && move.basePower < 50 && !move.multihit) {
+							rejected = true;
+						}
 					}
 				}
 
@@ -1201,8 +1219,14 @@ export class RandomTeams {
 			item = 'Air Balloon';
 		} else if (counter.damagingMoves.length >= 4 && !counter['Dark'] && !counter['Dragon'] && !counter['Normal']) {
 			item = 'Expert Belt';
-		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['substitute'] && !hasMove['uturn']) {
-			if (!!counter['speedsetup'] || hasMove['trickroom'] || !!counter['drain'] || hasMove['psystrike'] || species.baseStats.spe > 40 && species.baseStats.hp + species.baseStats.def + species.baseStats.spd < 275) item = 'Life Orb';
+		} else if (
+			counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['dragontail'] && !hasMove['foulplay'] &&
+			!hasMove['rapidspin'] && !hasMove['substitute'] && !hasMove['uturn']
+		) {
+			if (!!counter['speedsetup'] || hasMove['trickroom'] || !!counter['drain'] || hasMove['psystrike'] ||
+				species.baseStats.spe > 40 && species.baseStats.hp + species.baseStats.def + species.baseStats.spd < 275) {
+				item = 'Life Orb';
+			}
 		}
 
 		// For Trick / Switcheroo
@@ -1375,17 +1399,20 @@ export class RandomTeams {
 				case 'Castform': case 'Kyurem': case 'Lycanroc': case 'Necrozma': case 'Wormadam':
 					if (this.randomChance(2, 3)) continue;
 					break;
-				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Hoopa': case 'Landorus': case 'Meloetta': case 'Meowstic': case 'Shaymin': case 'Thundurus': case 'Tornadus':
+				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Hoopa':
+				case 'Landorus': case 'Meloetta': case 'Meowstic': case 'Shaymin': case 'Thundurus': case 'Tornadus':
 					if (this.randomChance(1, 2)) continue;
 					break;
-				case 'Dugtrio': case 'Exeggutor': case 'Golem': case 'Greninja': case 'Marowak': case 'Muk': case 'Ninetales': case 'Persian': case 'Raichu': case 'Sandslash': case 'Zygarde':
+				case 'Dugtrio': case 'Exeggutor': case 'Golem': case 'Greninja': case 'Marowak': case 'Muk':
+				case 'Ninetales': case 'Persian': case 'Raichu': case 'Sandslash': case 'Zygarde':
 					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
 					break;
 				case 'Darmanitan':
 					if (this.gen >= 8 && this.randomChance(2, 3)) continue;
 					break;
-				case 'Corsola': case 'Indeedee': case 'Mr. Mime': case 'Rapidash': case 'Stunfisk': case 'Toxtricity': case 'Weezing': case 'Zacian': case 'Zamazenta':
-				case 'Appletun': case 'Butterfree': case 'Copperajah': case 'Grimmsnarl':
+				case 'Corsola': case 'Indeedee': case 'Mr. Mime': case 'Rapidash': case 'Stunfisk': case 'Toxtricity':
+				case 'Weezing': case 'Zacian': case 'Zamazenta': case 'Appletun': case 'Butterfree': case 'Copperajah':
+				case 'Grimmsnarl':
 					if (this.gen >= 8 && this.randomChance(1, 2)) continue;
 					break;
 				}

@@ -1,3 +1,5 @@
+/* eslint max-len: ["error", 240] */
+
 import RandomTeams from '../../random-teams';
 
 export class RandomLetsGoTeams extends RandomTeams {
@@ -138,12 +140,18 @@ export class RandomLetsGoTeams extends RandomTeams {
 				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2) {
 					// Mono-attacking with setup and RestTalk is allowed
 					// Reject Status moves only if there is nothing else to reject
-					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
+					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) {
+						rejected = true;
+					}
 				}
 
 				// Pokemon should have moves that benefit their Type, as well as moves required by its forme
-				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)) &&
-					(((counter.damagingMoves.length === 0 || !counter.stab) && (counter['physicalpool'] || counter['specialpool'])) ||
+				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (
+					!counter.setupType || counter.setupType === 'Mixed' ||
+					(move.category !== counter.setupType && move.category !== 'Status') ||
+					counter[counter.setupType] + counter.Status > 3)
+				) && (
+					((counter.damagingMoves.length === 0 || !counter.stab) && (counter['physicalpool'] || counter['specialpool'])) ||
 					(hasType['Dark'] && !counter['Dark']) ||
 					(hasType['Dragon'] && !counter['Dragon']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
@@ -152,7 +160,8 @@ export class RandomLetsGoTeams extends RandomTeams {
 					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Ice'] && !counter['Ice']) ||
-					(hasType['Water'] && (!counter['Water'] || !counter.stab)))) {
+					(hasType['Water'] && (!counter['Water'] || !counter.stab))
+				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;

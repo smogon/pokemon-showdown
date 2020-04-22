@@ -1,3 +1,5 @@
+/* eslint max-len: ["error", 240] */
+
 import {TeamData} from '../../random-teams';
 import RandomGen7Teams from '../gen7/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
@@ -466,12 +468,16 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					const stabs = counter[species.types[0]] + (counter[species.types[1]] || 0);
 					if (!SetupException.includes(moveid) && (!hasType[move.type] || stabs > 1 || counter[move.category] < 2)) rejected = true;
 				}
-				// @ts-ignore
-				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'sleeptalk' && !hasType['Dark'] && !hasMove['darkpulse']) {
+				if (
+					counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType &&
+					counter[counter.setupType] < 2 && (move.category !== 'Status' || !move.flags.heal) &&
+					moveid !== 'sleeptalk' && !hasType['Dark'] && !hasMove['darkpulse']
+				) {
 					// Mono-attacking with setup and RestTalk is allowed
 					// Reject Status moves only if there is nothing else to reject
-					// @ts-ignore
-					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
+					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) {
+						rejected = true;
+					}
 				}
 				if (counter.setupType === 'Special' && moveid === 'hiddenpower' && species.types.length > 1 && counter['Special'] <= 2 && !hasType[move.type] && !counter['Physical'] && counter['specialpool']) {
 					// Hidden Power isn't good enough
@@ -479,9 +485,13 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				}
 
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
-				// @ts-ignore
-				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)) &&
-					((!counter.stab && !hasMove['nightshade'] && !hasMove['seismictoss'] && (species.types.length > 1 || (species.types[0] !== 'Normal' && species.types[0] !== 'Psychic') || !hasMove['icebeam'] || species.baseStats.spa >= species.baseStats.spd)) ||
+				if (!rejected && (
+					counter['physicalsetup'] + counter['specialsetup'] < 2 &&
+					(!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)
+				) && (
+					(!counter.stab && !hasMove['nightshade'] && !hasMove['seismictoss'] && (
+						species.types.length > 1 || (species.types[0] !== 'Normal' && species.types[0] !== 'Psychic') || !hasMove['icebeam'] || species.baseStats.spa >= species.baseStats.spd
+					)) ||
 					(hasType['Bug'] && (movePool.includes('megahorn') || movePool.includes('pinmissile'))) ||
 					((hasType['Dark'] && !counter['Dark'] && !hasAbility['Protean']) || hasMove['suckerpunch'] && counter.stab < species.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
@@ -505,9 +515,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 					(hasAbility['Bad Dreams'] && movePool.includes('darkvoid')) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && species.name !== 'Shuckle') ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
-					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')) && (counter.Status > 1 || (species.nfe && !!counter['Status']))) ||
+					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (
+						movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')
+					) && (counter.Status > 1 || (species.nfe && !!counter['Status']))) ||
 					(movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb) ||
-					(species.requiredMove && movePool.includes(toID(species.requiredMove)))))) {
+					(species.requiredMove && movePool.includes(toID(species.requiredMove))))
+				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !move.damage && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'judgment' && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;

@@ -95,7 +95,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
-				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) { // early termination if you run out of PP
+				const lockedMoveIndex = target.moves.indexOf(this.effectData.move);
+				if (lockedMoveIndex >= 0 && target.moveSlots[lockedMoveIndex].pp <= 0) {
+					// Encore ends early if you run out of PP
 					target.removeVolatile('encore');
 				}
 			},

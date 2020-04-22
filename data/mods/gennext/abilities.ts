@@ -607,7 +607,9 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	parentalbond: {
 		inherit: true,
 		onModifyMove(move, pokemon, target) {
-			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && ((target.side && target.side.active.length < 2) || ['any', 'normal', 'randomNormal'].includes(move.target))) {
+			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
+			// singles, or single-target move
+			if (target.side.active.length < 2 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
 				move.multihit = 2;
 				move.accuracy = true;
 				pokemon.addVolatile('parentalbond');

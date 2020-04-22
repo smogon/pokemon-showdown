@@ -211,8 +211,14 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		// Store 0 damage for last damage if move failed or dealt 0 damage.
 		// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
-		if (!damage && (move.category !== 'Status' || (move.status && move.category === 'Status' && !['psn', 'tox', 'par'].includes(move.status))) &&
-		!['conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest'].includes(move.id)) {
+		const neverDamageMoves = [
+			'conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest',
+		];
+		if (
+			!damage &&
+			(move.category !== 'Status' || (move.status && !['psn', 'tox', 'par'].includes(move.status))) &&
+			!neverDamageMoves.includes(move.id)
+		) {
 			this.lastDamage = 0;
 		}
 
@@ -259,7 +265,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		let accuracy = move.accuracy;
 
 		// Partial trapping moves: true accuracy while it lasts
-		if (move.volatileStatus === 'partiallytrapped' && pokemon.volatiles['partialtrappinglock'] && target === pokemon.volatiles['partialtrappinglock'].locked) {
+		if (move.volatileStatus === 'partiallytrapped' && target === pokemon.volatiles['partialtrappinglock']?.locked) {
 			accuracy = true;
 		}
 

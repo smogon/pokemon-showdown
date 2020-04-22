@@ -252,7 +252,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			// If both are true, counter will deal twice the last damage dealt in battle, no matter what was the move.
 			// That means that, if opponent switches, counter will use last counter damage * 2.
 			const lastUsedMove = target.side.lastMove && this.dex.getMove(target.side.lastMove.id);
-			if (lastUsedMove && lastUsedMove.basePower > 0 && ['Normal', 'Fighting'].includes(lastUsedMove.type) && this.lastDamage > 0 && !this.queue.willMove(target)) {
+			if (
+				lastUsedMove && lastUsedMove.basePower > 0 && ['Normal', 'Fighting'].includes(lastUsedMove.type) &&
+				this.lastDamage > 0 && !this.queue.willMove(target)
+			) {
 				return 2 * this.lastDamage;
 			}
 			this.debug("Gen 1 Counter failed due to conditions not met");
@@ -933,7 +936,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					// In gen 1 it only blocks:
 					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
 					const SubBlocked = ['lockon', 'meanlook', 'mindreader', 'nightmare'];
-					if (move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) || move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)) {
+					if (
+						move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) ||
+						move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)
+					) {
 						return false;
 					}
 					return;

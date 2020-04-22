@@ -41,7 +41,8 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	frz: {
 		inherit: true,
 		onHit(target, source, move) {
-			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status' && move.id !== 'hiddenpower' && move.id !== 'weatherball') {
+			// don't count Hidden Power or Weather Ball as Fire-type
+			if (move.thawsTarget || this.dex.getMove(move.id).type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
 		},

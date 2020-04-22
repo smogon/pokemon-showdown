@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
 	bulbasaur: {
 		learnset: {

@@ -210,10 +210,15 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		if (!discard && this.slot > 3) {
 			discourage = true;
 			for (const moveid of moves) {
-				if (moveid === "sleeptalk" && restrictMoves['sleeptalk'] > 1) { discourage = false; break; }
-				if (moveid !== "bellydrum" && moveid !== "haze" && moveid !== "thief" && restrictMoves[moveid] > 0) { discourage = false; break; }
-				if (isPhazingMove(moveid) && restrictMoves['phazing'] > 0) { discourage = false; break; }
-				if (isSleepMove(moveid) && restrictMoves['sleeping'] > 1) { discourage = false; break; }
+				if (
+					(moveid === "sleeptalk" && restrictMoves['sleeptalk'] > 1) ||
+					(moveid !== "bellydrum" && moveid !== "haze" && moveid !== "thief" && restrictMoves[moveid] > 0) ||
+					(isPhazingMove(moveid) && restrictMoves['phazing'] > 0) ||
+					(isSleepMove(moveid) && restrictMoves['sleeping'] > 1)
+				) {
+					discourage = false;
+					break;
+				}
 			}
 		}
 		if (discourage && this.randomChance(1, 2)) discard = true;

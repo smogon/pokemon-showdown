@@ -457,7 +457,8 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				this.debug('illusion cleared');
 				let disguisedAs = toID(pokemon.illusion.name);
 				pokemon.illusion = null;
-				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
 				// Handle hippopotas
@@ -726,7 +727,11 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.moveSlots.push({
 						move: moveSpecies.name,
 						id: moveSpecies.id,
-						pp: ((moveSpecies.noPPBoosts || moveSpecies.isZ) ? Math.floor(moveSpecies.pp * carryOver[i]) : Math.floor((moveSpecies.pp * 8 / 5) * carryOver[i])),
+						pp: (
+							(moveSpecies.noPPBoosts || moveSpecies.isZ) ?
+								Math.floor(moveSpecies.pp * carryOver[i]) :
+								Math.floor((moveSpecies.pp * 8 / 5) * carryOver[i])
+						),
 						maxpp: ((moveSpecies.noPPBoosts || moveSpecies.isZ) ? moveSpecies.pp : moveSpecies.pp * 8 / 5),
 						target: moveSpecies.target,
 						disabled: false,
@@ -772,7 +777,8 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		isNonstandard: "Custom",
 		onModifyMovePriority: -1,
 		onModifyMove(move, pokemon) {
-			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			const noTypeChange = ['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'];
+			if (move.type === 'Normal' && !noTypeChange.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Electric';
 				move.galvanizeBoosted = true;
 			}
@@ -1175,7 +1181,8 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				this.debug('illusion cleared');
 				let disguisedAs = toID(pokemon.illusion.name);
 				pokemon.illusion = null;
-				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
 				// Handle hippopotas

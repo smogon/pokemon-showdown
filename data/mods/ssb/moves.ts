@@ -890,7 +890,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			this.heal(source.baseMaxhp / 3, source);
-			const dancemoves = ['dragondance', 'featherdance', 'fierydance', 'petaldance', 'quiverdance', 'revelationdance', 'swordsdance', 'teeterdance'];
+			const dancemoves = [
+				'dragondance', 'featherdance', 'fierydance', 'petaldance', 'quiverdance', 'revelationdance', 'swordsdance', 'teeterdance',
+			];
 			const randomMove = dancemoves[this.random(dancemoves.length)];
 			this.useMove(randomMove, target);
 			this.useMove(randomMove, target);
@@ -968,10 +970,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+					}
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+					}
 				}
 			}
 			this.field.clearWeather();
@@ -2065,7 +2071,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 						if (moves.length >= 3) break;
 					}
 					moves.push('glitchout');
-					if (toID(pokemon.ability).includes('illusion') && pokemon.illusion) this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon, pokemon);
+					if (toID(pokemon.ability).includes('illusion') && pokemon.illusion) {
+						this.singleEvent('End', this.dex.getAbility('Illusion'), pokemon.abilityData, pokemon, pokemon);
+					}
 					pokemon.formeChange('missingno');
 					pokemon.moveSlots = [];
 					for (const moveid of moves) {
@@ -2603,10 +2611,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			pokemon.set.level = level;
 			pokemon.formeChange(species);
 
-			pokemon.details = species.name + (level === 100 ? '' : ', L' + level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+			pokemon.details = species.name + (level === 100 ? '' : ', L' + level) +
+				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
 
-			const newHP = Math.floor(Math.floor(2 * species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * level / 100 + 10);
+			const newHP = Math.floor(Math.floor(
+				2 * species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
+			) * level / 100 + 10);
 			pokemon.hp = newHP - (pokemon.maxhp - pokemon.hp);
 			pokemon.maxhp = newHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
@@ -2785,7 +2796,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		damageCallback(pokemon, target) {
 			const damage = pokemon.hp;
 			pokemon.faint();
-			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield'] || target.volatiles['backoffgrrr']) {
+			if (
+				target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] ||
+				target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] ||
+				target.volatiles['lilypadshield'] || target.volatiles['backoffgrrr']
+			) {
 				this.add('-zbroken', target);
 				return Math.floor(damage / 4);
 			}
@@ -4455,7 +4470,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Flash", target);
 
 			// Really feel like this could be done better (blocked by protect and alike moves.)
-			if (!(target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield'] || target.volatiles['backoffgrrr'])) {
+			if (!(
+				target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] ||
+				target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] ||
+				target.volatiles['lilypadshield'] || target.volatiles['backoffgrrr']
+			)) {
 				target.addVolatile('weightdoubler', source);
 				const item = target.takeItem();
 				if (!target.item) {
@@ -4831,14 +4850,15 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
-				const move = moveSlot.id;
+				const move = this.dex.getMove(moveSlot.id);
 				const noSleepTalk = [
 					'assist', 'beakblast', 'belch', 'bide', 'celebrate', 'chatter', 'copycat', 'focuspunch', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'shelltrap', 'sketch', 'sleeptalk', 'uproar',
 					'teabreak', 'glitzerpopping', // Modded banlist
 				];
-				if (move && !(noSleepTalk.includes(move) || this.dex.getMove(move).flags['charge'] || (this.dex.getMove(move).isZ && this.dex.getMove(move).basePower !== 1))) {
-					moves.push(move);
+				if (noSleepTalk.includes(move.id) || move.flags['charge'] || (move.isZ && move.basePower !== 1)) {
+					continue;
 				}
+				moves.push(move.id);
 			}
 			let randomMove = '';
 			if (moves.length) randomMove = this.sample(moves);

@@ -1098,7 +1098,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 80,
 		onBasePower(power, user) {
-			const GossamerWingUsers = ["Butterfree", "Venomoth", "Masquerain", "Dustox", "Beautifly", "Mothim", "Lilligant", "Volcarona", "Vivillon"];
+			const GossamerWingUsers = [
+				"Butterfree", "Venomoth", "Masquerain", "Dustox", "Beautifly", "Mothim", "Lilligant", "Volcarona", "Vivillon",
+			];
 			if (user.hasItem('stick') && GossamerWingUsers.includes(user.species.name)) {
 				return power * 1.5;
 			}

@@ -1,3 +1,5 @@
+/* eslint max-len: ["error", 240] */
+
 import RandomGen6Teams from '../gen6/random-teams';
 
 export class RandomGen5Teams extends RandomGen6Teams {
@@ -281,7 +283,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					const stabs = counter[species.types[0]] + (counter[species.types[1]] || 0);
 					if (!SetupException.includes(moveid) && (!hasType[move.type] || stabs > 1 || counter[move.category] < 2)) rejected = true;
 				}
-				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass'] && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'sleeptalk') {
+				if (
+					counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType &&
+					counter[counter.setupType] < 2 && !hasMove['batonpass'] &&
+					(move.category !== 'Status' || !move.flags.heal) && moveid !== 'sleeptalk'
+				) {
 					// Mono-attacking with setup and RestTalk is allowed
 					// Reject Status moves only if there is nothing else to reject
 					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
@@ -292,8 +298,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				}
 
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
-				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)) &&
-					((!counter.stab && !counter['damage'] && (species.types.length > 1 || (species.types[0] !== 'Normal' && species.types[0] !== 'Psychic') || !hasMove['icebeam'] || species.baseStats.spa >= species.baseStats.spd)) ||
+				if (!rejected && (
+					counter['physicalsetup'] + counter['specialsetup'] < 2 &&
+					(!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)
+				) && (
+					(!counter.stab && !counter['damage'] && (species.types.length > 1 || (species.types[0] !== 'Normal' && species.types[0] !== 'Psychic') || !hasMove['icebeam'] || species.baseStats.spa >= species.baseStats.spd)) ||
 					(hasType['Dark'] && !counter['Dark']) ||
 					(hasType['Dragon'] && !counter['Dragon']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
@@ -310,11 +319,16 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					(hasAbility['Contrary'] && !counter['contrary'] && species.name !== 'Shuckle') ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
-					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')) && (counter.Status > 1 || (species.nfe && !!counter['Status']))) ||
-					(species.requiredMove && movePool.includes(toID(species.requiredMove)))))) {
+					(!counter.recovery && !counter.setupType && !hasMove['healingwish'] && (
+						movePool.includes('recover') || movePool.includes('roost') || movePool.includes('softboiled')
+					) && (counter.Status > 1 || (species.nfe && !!counter['Status']))) ||
+					(species.requiredMove && movePool.includes(toID(species.requiredMove))))
+				)) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !move.damage && (move.category !== 'Status' || !move.flags.heal) && moveid !== 'judgment' && moveid !== 'sleeptalk') {
-						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
+						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) {
+							rejected = true;
+						}
 					}
 				}
 

@@ -1,3 +1,5 @@
+/* eslint max-len: ["error", 240] */
+
 import RandomGen4Teams from '../gen4/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 
@@ -303,7 +305,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				}
 
 				// Pokemon should have moves that benefit their type
-				if ((hasType['Bug'] && !counter['Bug'] && movePool.includes('megahorn')) ||
+				if (
+					(hasType['Bug'] && !counter['Bug'] && movePool.includes('megahorn')) ||
 					(hasType['Fighting'] && !counter['Fighting']) ||
 					(hasType['Fire'] && !counter['Fire'] && counter.setupType !== 'Physical') ||
 					(hasType['Ground'] && !counter['Ground']) ||
@@ -311,10 +314,16 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					(hasType['Steel'] && !counter['Steel'] && movePool.includes('meteormash')) ||
 					(hasType['Water'] && !counter['Water'] && (movePool.includes('surf') || movePool.includes('hydropump')) && counter.setupType !== 'Physical' && !hasAbility['Huge Power'] && (!hasType['Ice'] || !counter['Ice'])) ||
 					(movePool.includes('spore')) ||
-					(movePool.includes('earthquake') && !counter['Ground'] && !counter['Fighting'] && counter.Physical > 1 && (hasType['Bug'] || hasType['Flying'] || hasType['Normal'] || hasType['Poison'] || hasType['Rock'] || hasType['Steel'])) ||
+					(movePool.includes('earthquake') && !counter['Ground'] && !counter['Fighting'] && counter.Physical > 1 && (
+						hasType['Bug'] || hasType['Flying'] || hasType['Normal'] || hasType['Poison'] || hasType['Rock'] || hasType['Steel']
+					)) ||
 					(movePool.includes('rockslide') && !counter['Rock'] && counter.Physical > 1 && hasType['Ground']) ||
 					(movePool.includes('thunderbolt') && !counter['Electric'] && counter.Special > 1 && (hasType['Ice'] || hasType['Water'])) ||
-					(requiresRecovery.includes(species.name) && !recoveryMoves.some(recoveryMove => hasMove[recoveryMove]) && recoveryMoves.some(recoveryMove => movePool.includes(recoveryMove)))) {
+					(
+						requiresRecovery.includes(species.name) && !recoveryMoves.some(recoveryMove => hasMove[recoveryMove]) &&
+						recoveryMoves.some(recoveryMove => movePool.includes(recoveryMove))
+					)
+				) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !recoveryMoves.includes(moveid) && !['sleeptalk', 'substitute'].includes(moveid)) {
 						if (move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) rejected = true;

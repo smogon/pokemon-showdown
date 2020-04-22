@@ -1,3 +1,5 @@
+/* eslint max-len: ["error", 240] */
+
 import RandomGen5Teams from '../gen5/random-teams';
 
 export class RandomGen4Teams extends RandomGen5Teams {

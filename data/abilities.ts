@@ -57,7 +57,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.2x power.",
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
-			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			const noModifyType = ['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Flying';
 				move.aerilateBoosted = true;
 			}
@@ -142,8 +143,12 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				if (!target || target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
+					if (move.category === 'Status') continue;
 					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
-					if (move.category !== 'Status' && (this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 || move.ohko)) {
+					if (
+						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
+						move.ohko
+					) {
 						this.add('-ability', pokemon, 'Anticipation');
 						return;
 					}
@@ -260,7 +265,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times.",
 		shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
 		onSourceFaint(target, source, effect) {
-			if (effect && effect.effectType === 'Move' && source.species.id === 'greninja' && source.hp && !source.transformed && source.side.foe.pokemonLeft) {
+			if (effect?.effectType !== 'Move') {
+				return;
+			}
+			if (source.species.id === 'greninja' && source.hp && !source.transformed && source.side.foe.pokemonLeft) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Greninja-Ash', this.effect, true);
 			}
@@ -766,7 +774,12 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
+				return;
+			}
+			const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
 			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
@@ -1254,7 +1267,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power.",
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
-			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			const noModifyType = ['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Electric';
 				move.galvanizeBoosted = true;
 			}
@@ -1357,7 +1371,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		desc: "If this Pokemon is a Cramorant, it changes forme when it hits a target with Surf or uses the first turn of Dive successfully. It becomes Gulping Form with an Arrokuda in its mouth if it has more than 1/2 of its maximum HP remaining, or Gorging Form with a Pikachu in its mouth if it has 1/2 or less of its maximum HP remaining. If Cramorant gets hit in Gulping or Gorging Form, it spits the Arrokuda or Pikachu at its attacker, even if it has no HP remaining. The projectile deals damage equal to 1/4 of the target's maximum HP, rounded down; this damage is blocked by the Magic Guard Ability but not by a substitute. An Arrokuda also lowers the target's Defense by 1 stage, and a Pikachu paralyzes the target. Cramorant will return to normal if it spits out a projectile, switches out, or Dynamaxes.",
 		shortDesc: "When hit after Surf/Dive, attacker takes 1/4 max HP and -1 Defense or paralysis.",
 		onDamagingHit(damage, target, source, move) {
-			if (move.effectType === 'Move' && ['cramorantgulping', 'cramorantgorging'].includes(target.species.id) && !target.transformed && !target.isSemiInvulnerable()) {
+			if (target.transformed || target.isSemiInvulnerable()) return;
+			if (['cramorantgulping', 'cramorantgorging'].includes(target.species.id)) {
 				this.damage(source.baseMaxhp / 4, source, target);
 				if (target.species.id === 'cramorantgulping') {
 					this.boost({def: -1}, source, target, null, true);
@@ -1587,7 +1602,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.transformed) return;
+			if (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates)) return;
 			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
@@ -1651,7 +1667,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.illusion) {
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
-				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
 			}
@@ -2515,7 +2532,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "This Pokemon's moves are changed to be Normal type and have 1.2x power.",
 		onModifyTypePriority: 1,
 		onModifyType(move, pokemon) {
-			if (!(move.isZ && move.category !== 'Status') && !['hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'weatherball'].includes(move.id)) {
+			const noModifyType = ['hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'weatherball'];
+			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id)) {
 				move.type = 'Normal';
 				move.normalizeBoosted = true;
 			}
@@ -2623,8 +2641,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect multi-hit moves or moves that have multiple targets.",
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage quartered.",
 		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
 			if (['iceball', 'rollout'].includes(move.id)) return;
-			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && !move.flags['charge'] && !move.spreadHit && !move.isZ && !move.isMax) {
+			if (!move.flags['charge'] && !move.spreadHit && !move.isZ && !move.isMax) {
 				move.multihit = 2;
 				move.multihitType = 'parentalbond';
 			}
@@ -2759,7 +2778,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.2x power.",
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
-			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			const noModifyType = ['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Fairy';
 				move.pixilateBoosted = true;
 			}
@@ -2849,7 +2869,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.species.id === 'zygardecomplete' || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
 			pokemon.formeChange('Zygarde-Complete', this.effect, true);
-			pokemon.baseMaxhp = Math.floor(Math.floor(2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+			pokemon.baseMaxhp = Math.floor(Math.floor(
+				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
+			) * pokemon.level / 100 + 10);
 			const newMaxHP = pokemon.volatiles['dynamax'] ? (2 * pokemon.baseMaxhp) : pokemon.baseMaxhp;
 			pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
 			pokemon.maxhp = newMaxHP;
@@ -2866,7 +2888,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
-			const bannedAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode'];
+			const bannedAbilities = [
+				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+			];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
@@ -3100,7 +3124,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onAllyFaint(target) {
 			if (!this.effectData.target.hp) return;
 			const ability = target.getAbility();
-			const bannedAbilities = ['battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode'];
+			const bannedAbilities = [
+				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+			];
 			if (bannedAbilities.includes(target.ability)) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
@@ -3130,7 +3156,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.2x power.",
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
-			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+			const noModifyType = ['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Ice';
 				move.refrigerateBoosted = true;
 			}
@@ -3184,7 +3211,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onEatItem(item, pokemon) {
-			const weakenBerries = ['Babiri Berry', 'Charti Berry', 'Chilan Berry', 'Chople Berry', 'Coba Berry', 'Colbur Berry', 'Haban Berry', 'Kasib Berry', 'Kebia Berry', 'Occa Berry', 'Passho Berry', 'Payapa Berry', 'Rindo Berry', 'Roseli Berry', 'Shuca Berry', 'Tanga Berry', 'Wacan Berry', 'Yache Berry'];
+			const weakenBerries = [
+				'Babiri Berry', 'Charti Berry', 'Chilan Berry', 'Chople Berry', 'Coba Berry', 'Colbur Berry', 'Haban Berry', 'Kasib Berry', 'Kebia Berry', 'Occa Berry', 'Passho Berry', 'Payapa Berry', 'Rindo Berry', 'Roseli Berry', 'Shuca Berry', 'Tanga Berry', 'Wacan Berry', 'Yache Berry',
+			];
 			if (weakenBerries.includes(item.name)) {
 				// Record that the pokemon ate a berry to resist an attack
 				pokemon.abilityData.berryWeaken = "true";
@@ -4114,8 +4143,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			const source = this.effectData.target;
 			const myItem = source.takeItem();
 			if (!myItem) return;
-			// @ts-ignore
-			if (!this.singleEvent('TakeItem', myItem, source.itemData, pokemon, source, this.effectData, myItem) || !pokemon.setItem(myItem)) {
+			if (
+				!this.singleEvent('TakeItem', myItem, source.itemData, pokemon, source, this.effect, myItem) ||
+				!pokemon.setItem(myItem)
+			) {
 				source.item = myItem.id;
 				return;
 			}
@@ -4302,7 +4333,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		desc: "On switch-in, or when this Pokemon acquires this ability, this Pokemon copies a random adjacent opposing Pokemon's Ability. However, if one or more adjacent Pokemon has the Ability \"No Ability\", Trace won't copy anything even if there is another valid Ability it could normally copy. Otherwise, if there is no Ability that can be copied at that time, this Ability will activate as soon as an Ability can be copied. Abilities that cannot be copied are the previously mentioned \"No Ability\", as well as Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Schooling, Stance Change, Trace, and Zen Mode.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onStart(pokemon) {
-			if (pokemon.side.foe.active.some(foeActive => foeActive && this.isAdjacent(pokemon, foeActive) && foeActive.ability === 'noability')) {
+			if (pokemon.side.foe.active.some(
+				foeActive => foeActive && this.isAdjacent(pokemon, foeActive) && foeActive.ability === 'noability'
+			)) {
 				this.effectData.gaveUp = true;
 			}
 		},
@@ -4314,7 +4347,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 				const target = possibleTargets[rand];
 				const ability = target.getAbility();
-				const bannedAbilities = ['noability', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode'];
+				const bannedAbilities = [
+					'noability', 'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
+				];
 				if (bannedAbilities.includes(target.ability)) {
 					possibleTargets.splice(rand, 1);
 					continue;

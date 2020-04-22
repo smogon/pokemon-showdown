@@ -108,8 +108,14 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	canMegaEvo(pokemon) {
 		const altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
 		const item = pokemon.getItem();
-		if (altForme?.isMega && altForme?.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.name;
-		if (item.megaEvolves !== pokemon.baseSpecies.name || (Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) || (typeof item.megaStone === 'string' && item.megaStone === pokemon.forme)) {
+		if (altForme?.isMega && altForme?.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+			return altForme.name;
+		}
+		if (
+			item.megaEvolves !== pokemon.baseSpecies.name ||
+			(Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) ||
+			(typeof item.megaStone === 'string' && item.megaStone === pokemon.forme)
+		) {
 			return null;
 		}
 		if (Array.isArray(item.megaStone)) {
@@ -173,7 +179,8 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		let zMove;
 		if (pokemon) {
 			const item = pokemon.getItem();
-			if (item.zMoveFrom && Array.isArray(item.zMoveFrom) ? item.zMoveFrom.includes(move.name) : item.zMoveFrom === move.name) {
+			const zMoveFrom = Array.isArray(item.zMoveFrom) ? item.zMoveFrom : item.zMoveFrom ? [item.zMoveFrom] : null;
+			if (zMoveFrom?.includes(move.name)) {
 				zMove = this.dex.getActiveMove(item.zMove as string);
 				// Hack for Snaquaza's Z move
 				zMove.baseMove = move.id;
@@ -197,7 +204,12 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle
 	canZMove(pokemon) {
-		if ((pokemon.m && pokemon.m.zMoveUsed) || (pokemon.transformed && (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))) return;
+		if (
+			pokemon.m?.zMoveUsed ||
+			(pokemon.transformed && (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))
+		) {
+			return;
+		}
 		const item = pokemon.getItem();
 		if (!item.zMove) return;
 		if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
@@ -329,7 +341,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		if (isCrit && !suppressMessages) this.add('-crit', target);
 
-		if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts') && !pokemon.hasAbility('superguarda') && !pokemon.hasAbility('radioactive')) {
+		if (
+			pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts') &&
+			!pokemon.hasAbility('superguarda') && !pokemon.hasAbility('radioactive')
+		) {
 			if (this.gen < 6 || move.id !== 'facade') {
 				baseDamage = this.modify(baseDamage, 0.5);
 			}

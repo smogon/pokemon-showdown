@@ -692,7 +692,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 			onAnyBasePowerPriority: 1,
 			onAnyBasePower(basePower, user, target, move) {
-				if (move.type === 'Electric') return this.chainModify([0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+				// The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+				if (move.type === 'Electric') return this.chainModify([0x548, 0x1000]);
 			},
 		},
 		secondary: null,
@@ -1217,7 +1218,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 			onAnyBasePowerPriority: 1,
 			onAnyBasePower(basePower, user, target, move) {
-				if (move.type === 'Fire') return this.chainModify([0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+				// The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+				if (move.type === 'Fire') return this.chainModify([0x548, 0x1000]);
 			},
 		},
 		secondary: null,

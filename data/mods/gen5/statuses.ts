@@ -8,11 +8,12 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	partiallytrapped: {
 		inherit: true,
 		onResidual(pokemon) {
-			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0 || !this.effectData.source.activeTurns)) {
+			const trapper = this.effectData.source;
+			if (trapper && (!trapper.isActive || trapper.hp <= 0 || !trapper.activeTurns)) {
 				delete pokemon.volatiles['partiallytrapped'];
 				return;
 			}
-			if (this.effectData.source.hasItem('bindingband')) {
+			if (trapper.hasItem('bindingband')) {
 				this.damage(pokemon.baseMaxhp / 8);
 			} else {
 				this.damage(pokemon.baseMaxhp / 16);

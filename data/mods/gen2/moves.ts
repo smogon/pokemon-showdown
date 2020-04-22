@@ -143,7 +143,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "Deals damage to the opposing Pokemon equal to twice the HP lost by the user from a physical attack this turn. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user moves first, if the user was not hit by a physical attack this turn, or if the user did not lose HP from the attack. If the opposing Pokemon used Fissure or Horn Drill and missed, this move deals 65535 damage.",
 		damageCallback(pokemon, target) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (lastAttackedBy?.move && lastAttackedBy.thisTurn && (this.getCategory(lastAttackedBy.move) === 'Physical' || this.dex.getMove(lastAttackedBy.move).id === 'hiddenpower') && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
+			if (!lastAttackedBy || !lastAttackedBy.move || !lastAttackedBy.thisTurn) return false;
+
+			// Hidden Power counts as physical
+			if (this.getCategory(lastAttackedBy.move) === 'Physical' && target.lastMove?.id !== 'sleeptalk') {
 				return 2 * lastAttackedBy.damage;
 			}
 			return false;
@@ -239,13 +242,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 			onStart(target) {
 				const noEncore = ['encore', 'metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'struggle', 'transform'];
-				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
-				if (!target.lastMove || noEncore.includes(target.lastMove.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
+				const lockedMove = target.lastMove?.id || '';
+				const moveIndex = lockedMove ? target.moves.indexOf(lockedMove) : -1;
+				if (moveIndex < 0 || noEncore.includes(lockedMove) || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					this.add('-fail', target);
 					return false;
 				}
-				this.effectData.move = target.lastMove.id;
+				this.effectData.move = lockedMove;
 				this.add('-start', target, 'Encore');
 				if (!this.queue.willMove(target)) {
 					this.effectData.duration++;
@@ -256,7 +260,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
-				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
+				const lockedMoveIndex = target.moves.indexOf(this.effectData.move);
+				if (lockedMoveIndex >= 0 && target.moveSlots[lockedMoveIndex].pp <= 0) {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}
@@ -500,7 +505,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "Deals damage to the opposing Pokemon equal to twice the HP lost by the user from a special attack this turn. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user moves first, if the user was not hit by a special attack this turn, or if the user did not lose HP from the attack.",
 		damageCallback(pokemon, target) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (lastAttackedBy?.move && lastAttackedBy?.thisTurn && this.getCategory(lastAttackedBy.move) === 'Special' && this.dex.getMove(lastAttackedBy.move).id !== 'hiddenpower' && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
+			if (!lastAttackedBy || !lastAttackedBy.move || !lastAttackedBy.thisTurn) return false;
+
+			// Hidden Power counts as physical
+			if (this.getCategory(lastAttackedBy.move) === 'Special' && target.lastMove?.id !== 'sleeptalk') {
 				return 2 * lastAttackedBy.damage;
 			}
 			return false;
@@ -517,7 +525,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
 			const target = pokemon.side.foe.active[0];
 			const lastMove = target?.lastMove && target?.lastMove.id;
-			if (!lastMove || (!pokemon.activeTurns && !target.moveThisTurn) || noMirror.includes(lastMove) || pokemon.moves.includes(lastMove)) {
+			if (!lastMove || (!pokemon.activeTurns && !target.moveThisTurn)) {
+				return false;
+			}
+			if (noMirror.includes(lastMove) || pokemon.moves.includes(lastMove)) {
 				return false;
 			}
 			this.useMove(lastMove, pokemon);

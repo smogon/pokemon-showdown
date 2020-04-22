@@ -608,7 +608,9 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			damage *= this.random(217, 256);
 			damage = Math.floor(damage / 255);
 			if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
-			if (target.volatiles['substitute'] && damage > target.volatiles['substitute'].hp) damage = target.volatiles['substitute'].hp;
+			if (target.volatiles['substitute'] && damage > target.volatiles['substitute'].hp) {
+				damage = target.volatiles['substitute'].hp;
+			}
 		}
 
 		// We are done, this is the final damage.

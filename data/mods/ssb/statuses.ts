@@ -514,7 +514,12 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (
+				!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed ||
+				(target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))
+			) {
+				return;
+			}
 			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
@@ -572,7 +577,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
 			const activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
-			const family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'celestial'];
+			const family = [
+				'aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'celestial',
+			];
 			if (activeMon === 'hoeenhero' || activeMon === 'salamander') {
 				 this.add(`c|%fart|what song should I sing?`);
 			} else if (activeMon === 'lifeisdank' || activeMon === 'nui' || activeMon === 'grimauxiliatrix') {
@@ -781,7 +788,12 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			if (pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Kaiju Rage');
 			pokemon.formeChange('Gliscor', this.effect, true);
-			const newHP = Math.floor(Math.floor(2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+			const newHP = Math.floor(
+				Math.floor(
+					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
+				) * pokemon.level / 100 +
+				10
+			);
 			pokemon.hp = newHP - (pokemon.maxhp - pokemon.hp);
 			pokemon.maxhp = newHP;
 			pokemon.heal(pokemon.baseMaxhp / 4);
@@ -896,7 +908,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.getMove(moveSlot.move);
 					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
-					if (move.category !== 'Status' && (this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 || move.ohko)) {
+					if (move.category !== 'Status' && (
+						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 || move.ohko
+					)) {
 						this.add('-ability', pokemon, 'Anticipation');
 						return;
 					}
@@ -1468,10 +1482,14 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', target.side, this.dex.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
+					}
 				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
+					if (!(silentRemove.includes(sideCondition))) {
+						this.add('-sideend', source.side, this.dex.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
+					}
 				}
 			}
 			this.add('-clearallboost');

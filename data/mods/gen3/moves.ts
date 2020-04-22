@@ -186,7 +186,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "Deals damage to the last opposing Pokemon to hit the user with a physical attack this turn equal to twice the HP lost by the user from that attack. If that opposing Pokemon's position is no longer in use and there is another opposing Pokemon on the field, the damage is done to it instead. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user was not hit by an opposing Pokemon's physical attack this turn, or if the user did not lose HP from the attack.",
 		damageCallback(pokemon) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (lastAttackedBy?.move && lastAttackedBy?.thisTurn && (this.getCategory(lastAttackedBy.move) === 'Physical' || this.dex.getMove(lastAttackedBy.move).id === 'hiddenpower')) {
+			if (!lastAttackedBy || !lastAttackedBy.move || !lastAttackedBy.thisTurn) return false;
+
+			if (this.getCategory(lastAttackedBy.move) === 'Physical') {
 				return 2 * lastAttackedBy.damage;
 			}
 			return false;
@@ -205,7 +207,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
-				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Physical') {
+				if (effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Physical') {
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}
@@ -577,7 +579,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
-				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Special') {
+				if (effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Special') {
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}
@@ -589,9 +591,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "The user uses the last move that successfully targeted the user. The copied move is used with no specific target. Fails if no move has targeted the user, if the move missed, failed, or had no effect on the user, or if the move cannot be copied by this move.",
 		onTryHit() { },
 		onHit(pokemon) {
-			const noMirror = ['assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform'];
+			const noMirror = [
+				'assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform',
+			];
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.source.lastMove || !lastAttackedBy.move || noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
+			if (!lastAttackedBy || !lastAttackedBy.source.lastMove || !lastAttackedBy.move) {
+				return false;
+			}
+			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
 				return false;
 			}
 			this.useMove(lastAttackedBy.move, pokemon);

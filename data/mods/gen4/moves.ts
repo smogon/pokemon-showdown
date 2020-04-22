@@ -279,7 +279,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, or Trick.",
 		onHit(pokemon) {
-			const noCopycat = ['assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick'];
+			const noCopycat = [
+				'assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick',
+			];
 			if (!this.lastMove || noCopycat.includes(this.lastMove.id)) {
 				return false;
 			}
@@ -1053,7 +1055,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "While the user remains active, this move is replaced by the last move used by the target. The copied move has 5 PP. Fails if the target has not made a move, if the user has Transformed, if the user already knows the move, or if the move is Chatter, Metronome, Mimic, Sketch, or Struggle.",
 		onHit(target, source) {
 			const disallowedMoves = ['chatter', 'metronome', 'mimic', 'sketch', 'struggle', 'transform'];
-			if (source.transformed || !target.lastMove || disallowedMoves.includes(target.lastMove.id) || source.moves.includes(target.lastMove.id) || target.volatiles['substitute']) return false;
+			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
+				return false;
+			}
+			if (disallowedMoves.includes(target.lastMove.id) || source.moves.includes(target.lastMove.id)) {
+				return false;
+			}
 			const mimicIndex = source.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;
 			const move = this.dex.getMove(target.lastMove.id);
@@ -1095,12 +1102,15 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "The user uses the last move that successfully targeted the user. The copied move is used with no specific target. Fails if no move has targeted the user, if the move was called by another move, if the move is Encore, or if the move cannot be copied by this move.",
 		onTryHit() {},
 		onHit(pokemon) {
+			const lastAttackedBy = pokemon.getLastAttackedBy();
+			if (!lastAttackedBy || !lastAttackedBy.source.lastMove || !lastAttackedBy.move) {
+				 return false;
+			}
 			const noMirror = [
 				'acupressure', 'aromatherapy', 'assist', 'chatter', 'copycat', 'counter', 'curse', 'doomdesire', 'feint', 'focuspunch', 'futuresight', 'gravity', 'hail', 'haze', 'healbell', 'helpinghand', 'lightscreen', 'luckychant', 'magiccoat', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'mist', 'mudsport', 'naturepower', 'perishsong', 'psychup', 'raindance', 'reflect', 'roleplay', 'safeguard', 'sandstorm', 'sketch', 'sleeptalk', 'snatch', 'spikes', 'spitup', 'stealthrock', 'struggle', 'sunnyday', 'tailwind', 'toxicspikes', 'transform', 'watersport',
 			];
-			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy || !lastAttackedBy.source.lastMove || !lastAttackedBy.move || noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
-				 return false;
+			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
+				return false;
 			}
 			this.useMove(lastAttackedBy.move, pokemon);
 		},
@@ -1376,7 +1386,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source) {
 			const disallowedMoves = ['chatter', 'sketch', 'struggle'];
-			if (source.transformed || !target.lastMove || disallowedMoves.includes(target.lastMove.id) || source.moves.includes(target.lastMove.id) || target.volatiles['substitute']) return false;
+			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
+				return false;
+			}
+			if (disallowedMoves.includes(target.lastMove.id) || source.moves.includes(target.lastMove.id)) {
+				 return false;
+			}
 			const sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
 			const move = this.dex.getMove(target.lastMove.id);
