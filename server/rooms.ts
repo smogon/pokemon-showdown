@@ -1058,7 +1058,7 @@ export class BasicChatRoom extends BasicRoom {
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
 	minorActivity: Poll | Announcement | null;
-	queuedActivity: Poll[] | null;
+	queuedActivity: Poll[];
 	desc: string;
 	modchat: string | null;
 	filterStretching: boolean;
