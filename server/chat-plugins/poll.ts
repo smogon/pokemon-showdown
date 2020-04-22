@@ -347,7 +347,7 @@ export const commands: ChatCommands = {
 			if (cmd === 'clearqueue') {
 				const queue = room.queuedActivity;
 				queue.splice(0, queue.length);
-				if (!queue.length){
+				if (!queue.length) {
 					return this.errorReply("No polls in queue.");
 				}
 				this.modlog('CLEARQUEUE');
@@ -540,7 +540,7 @@ export const pages: PageTable = {
 			buf += `<hr/ ><strong>No polls queued.</strong></div>`;
 			return buf;
 		}
-		for (const poll of room.queuedActivity!) {
+		for (const poll of room.queuedActivity) {
 			const num = room.queuedActivity.indexOf(poll);
 			const button = (
 				`<strong>#${num} in queue </strong>` +
