@@ -1409,7 +1409,7 @@ let BattleFormatsData = {
 		tier: "Illegal",
 	},
 	raikou: {
-		randomBattleMoves: ["aurasphere", "calmmind", "scald", "substitute", "thunderbolt", "voltswitch"],
+		randomBattleMoves: ["aurasphere", "calmmind", "substitute", "thunderbolt", "voltswitch"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
