@@ -363,7 +363,7 @@ export const commands: ChatCommands = {
 				queue.splice(parsed, 1);
 				curRoom.modlog(`(${curRoom.roomid}) DELETEQUEUE: by ${user}: ${num}`);
 				if (!update) {
-					curRoom.sendMods(`(${user.name} deleted the poll in queue with number ${parsed}.)`)
+					curRoom.sendMods(`(${user.name} deleted the poll in queue with number ${parsed}.)`);
 					return curRoom.update();
 				} else {
 					curRoom.sendMods(`(${user.name} deleted the poll in queue with number ${parsed}.)`);
