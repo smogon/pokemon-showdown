@@ -35,7 +35,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	charizardgmax: {
 		tier: "(Uber)",
-		doublesTier: "DOU",
+		doublesTier: "(DUber)",
 	},
 	squirtle: {
 		tier: "LC",
@@ -66,7 +66,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	butterfreegmax: {
 		randomBattleMoves: ["airslash", "bugbuzz", "quiverdance", "sleeppowder"],
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	weedle: {
 		isNonstandard: "Past",
@@ -204,7 +204,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	pikachugmax: {
 		unreleasedHidden: true,
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	raichu: {
 		randomBattleMoves: ["encore", "focusblast", "grassknot", "nastyplot", "thunderbolt", "voltswitch"],
@@ -371,7 +371,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	meowthgmax: {
 		unreleasedHidden: true,
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	persian: {
 		randomBattleMoves: ["doubleedge", "fakeout", "knockoff", "playrough", "uturn"],
@@ -456,7 +456,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	machampgmax: {
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	bellsprout: {
 		isNonstandard: "Past",
@@ -624,7 +624,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	gengargmax: {
 		randomBattleMoves: ["focusblast", "nastyplot", "shadowball", "sludgewave", "trick"],
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	onix: {
 		tier: "LC",
@@ -656,7 +656,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	kinglergmax: {
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	voltorb: {
 		isNonstandard: "Past",
@@ -894,7 +894,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	laprasgmax: {
 		randomBattleMoves: ["freezedry", "icebeam", "sparklingaria", "substitute", "thunderbolt", "toxic"],
 		tier: "(Uber)",
-		doublesTier: "DOU",
+		doublesTier: "(DUber)",
 	},
 	ditto: {
 		randomBattleMoves: ["transform"],
@@ -911,7 +911,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	eeveegmax: {
 		unreleasedHidden: true,
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	vaporeon: {
 		randomBattleMoves: ["healbell", "icebeam", "protect", "scald", "toxic", "wish"],
@@ -998,7 +998,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	snorlaxgmax: {
 		randomBattleMoves: ["bodyslam", "curse", "darkestlariat", "earthquake", "firepunch", "rest"],
 		tier: "(Uber)",
-		doublesTier: "DOU",
+		doublesTier: "(DUber)",
 	},
 	articuno: {
 		randomBattleMoves: ["defog", "freezedry", "healbell", "roost", "toxic"],
@@ -2899,7 +2899,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	garbodorgmax: {
 		randomBattleMoves: ["drainpunch", "explosion", "gunkshot", "painsplit", "spikes", "toxicspikes"],
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	zorua: {
 		isNonstandard: "Past",
@@ -4239,7 +4239,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	corviknightgmax: {
 		tier: "(Uber)",
-		doublesTier: "DOU",
+		doublesTier: "(DUber)",
 	},
 	blipbug: {
 		tier: "LC",
@@ -4254,7 +4254,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	orbeetlegmax: {
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	nickit: {
 		unreleasedHidden: true,
@@ -4294,7 +4294,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	drednawgmax: {
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	yamper: {
 		unreleasedHidden: true,
@@ -4320,7 +4320,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	coalossalgmax: {
 		randomBattleMoves: ["overheat", "rapidspin", "spikes", "stealthrock", "stoneedge", "willowisp"],
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	applin: {
 		tier: "LC",
@@ -4332,7 +4332,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	flapplegmax: {
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	appletun: {
 		randomBattleMoves: ["appleacid", "dragonpulse", "leechseed", "recover"],
@@ -4342,7 +4342,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	appletungmax: {
 		randomBattleMoves: ["appleacid", "dracometeor", "leechseed", "recover"],
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	silicobra: {
 		tier: "LC",
@@ -4354,7 +4354,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	sandacondagmax: {
 		tier: "(Uber)",
-		doublesTier: "(DUU)",
+		doublesTier: "(DUber)",
 	},
 	cramorant: {
 		randomBattleMoves: ["bravebird", "defog", "roost", "superpower", "surf"],
@@ -4384,11 +4384,11 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	toxtricitygmax: {
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	toxtricitylowkeygmax: {
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	sizzlipede: {
 		tier: "LC",
@@ -4400,7 +4400,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	centiskorchgmax: {
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	clobbopus: {
 		tier: "LC",
@@ -4441,7 +4441,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	hatterenegmax: {
 		randomBattleMoves: ["calmmind", "darkpulse", "dazzlinggleam", "mysticalfire", "psychic", "trickroom"],
 		tier: "(Uber)",
-		doublesTier: "DOU",
+		doublesTier: "(DUber)",
 	},
 	impidimp: {
 		tier: "LC",
@@ -4457,7 +4457,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	grimmsnarlgmax: {
 		randomBattleMoves: ["bulkup", "darkestlariat", "playrough", "substitute", "suckerpunch", "trick"],
 		tier: "(Uber)",
-		doublesTier: "DOU",
+		doublesTier: "(DUber)",
 	},
 	milcery: {
 		tier: "LC",
@@ -4469,7 +4469,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	alcremiegmax: {
 		randomBattleMoves: ["calmmind", "dazzlinggleam", "mysticalfire", "psychic", "recover"],
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	falinks: {
 		randomBattleMoves: ["closecombat", "noretreat", "poisonjab", "rockslide", "throatchop"],
@@ -4525,7 +4525,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	copperajahgmax: {
 		randomBattleMoves: ["earthquake", "heatcrash", "heavyslam", "powerwhip", "stoneedge"],
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	dracozolt: {
 		randomBattleMoves: ["aerialace", "boltbeak", "earthquake", "lowkick", "outrage"],
@@ -4558,7 +4558,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	duraludongmax: {
 		tier: "(Uber)",
-		doublesTier: "DUU",
+		doublesTier: "(DUber)",
 	},
 	dreepy: {
 		tier: "LC",
