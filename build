@@ -48,8 +48,8 @@ function replace(file, replacements) {
 	});
 }
 function copyOverData(file) {
-	var source = './data/' + file;
-	var dest = './.data-dist/' + file;
+	var source = path.join(__dirname, './data/' + file);
+	var dest = path.join(__dirname, './.data-dist/' + file);
 	fs.readFile(source, function (err, text) {
 		if (err) throw err;
 		fs.writeFile(dest, text, function (err) {
@@ -77,14 +77,14 @@ sucrase('./lib', './.lib-dist');
 sucrase('./server', './.server-dist');
 sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets');
 
-if (!fs.existsSync('./.data-dist/README.md')) {
+if (!fs.existsSync(path.join(__dirname, './.data-dist/README.md'))) {
 	const text = '**NOTE**: This folder contains the compiled output of the `data/` directory.\n' +
 		'You should be editing the `.ts` files there and then running `npm run build` or\n' +
 		'`./pokemon-showdown` to force these `.js` files to be recreated.\n';
-	fs.writeFile('./.data-dist/README.md', text, function () {});
-	fs.writeFile('./.sim-dist/README.md', text.replace('data/', 'sim/'), function () {});
-	fs.writeFile('./.server-dist/README.md', text.replace('data/', 'server/'), function () {});
-	fs.writeFile('./.lib-dist/README.md', text.replace('data/', 'lib/'), function () {});
+	fs.writeFile(path.join(__dirname, './.data-dist/README.md'), text, function () {});
+	fs.writeFile(path.join(__dirname, './.sim-dist/README.md'), text.replace('data/', 'sim/'), function () {});
+	fs.writeFile(path.join(__dirname, './.server-dist/README.md'), text.replace('data/', 'server/'), function () {});
+	fs.writeFile(path.join(__dirname, './.lib-dist/README.md'), text.replace('data/', 'lib/'), function () {});
 }
 
 // sucrase doesn't copy JSON over, so we'll have to do it ourselves
