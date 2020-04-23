@@ -37,7 +37,7 @@ interface PendingUpdate {
 
 const pendingUpdates = new Map<string, PendingUpdate>();
 
-class FSPath {
+export class FSPath {
 	path: string;
 
 	constructor(path: string) {
@@ -471,3 +471,4 @@ function getFs(path: string) {
 export const FS = Object.assign(getFs, {
 	FileReadStream,
 });
+
