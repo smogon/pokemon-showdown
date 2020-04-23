@@ -1013,7 +1013,7 @@ export class TeamValidator {
 		}
 		if (eggGroups[0] === 'Undiscovered') eggGroups = dex.getSpecies(species.evos[0]).eggGroups;
 		if (eggGroups[0] === 'Undiscovered' || !eggGroups.length) {
-			throw new Error(`${species.name} has no egg groups`);
+			throw new Error(`${species.name} has no egg groups for source ${source}`);
 		}
 		// no chainbreeding necessary if the father can be Smeargle
 		if (!getAll && eggGroups.includes('Field')) return true;
