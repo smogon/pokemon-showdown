@@ -167,9 +167,9 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		if (item.zMoveFrom) {
 			if (Array.isArray(item.zMoveFrom)) {
-				if (item.zMoveFrom.includes(move.name)) return item.zMove;
+				if (item.zMoveFrom.includes(move.name)) return item.zMove as string;
 			} else {
-				if (move.name === item.zMoveFrom) return /** @type {string} */ (item.zMove);
+				if (move.name === item.zMoveFrom) return item.zMove as string;
 			}
 		} else if (item.zMove === true) {
 			if (move.type === item.zMoveType) {

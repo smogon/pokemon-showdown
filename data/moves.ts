@@ -2310,7 +2310,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onRestart(pokemon) {
 				this.effectData.duration = 2;
 			},
-			onBasePowerPriority: 3,
+			onBasePowerPriority: 9,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Electric') {
 					this.debug('charge boost');
@@ -4555,6 +4555,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 					return null;
 				}
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
@@ -4874,7 +4875,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target's Ability to become the same as the user's. Fails if the target's Ability is Battle Bond, Comatose, Disguise, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Truant, or the same Ability as the user, or if the user's Ability is Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, or Zen Mode.",
+		desc: "Causes the target's Ability to become the same as the user's. Fails if the target's Ability is Battle Bond, Comatose, Disguise, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Truant, or the same Ability as the user, or if the user's Ability is Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, or Zen Mode.",
 		shortDesc: "The target's Ability changes to match the user's.",
 		id: "entrainment",
 		name: "Entrainment",
@@ -4887,7 +4888,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'truant',
 			];
 			const bannedSourceAbilities = [
-				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
+				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
 			];
 			if (
 				bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability) ||
@@ -6836,7 +6837,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side either falls asleep, becomes poisoned, or becomes paralyzed, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: slp or psn or par.",
 		id: "gmaxbefuddle",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Befuddle",
 		pp: 5,
 		priority: 0,
@@ -6868,7 +6868,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Base move affects power. Foes: bound 4-5 turns.",
 		id: "gmaxcentiferno",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Centiferno",
 		pp: 5,
 		priority: 0,
@@ -6894,7 +6893,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side gains the Focus Energy effect, even if they have a substitute.",
 		shortDesc: "Base move affects power. Allies: Focus Energy.",
 		id: "gmaxchistrike",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Chi Strike",
 		pp: 5,
 		priority: 0,
@@ -6920,7 +6918,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes infatuated, even if they have a substitute. This effect does not happen for a target if both it and the user are the same gender, if either is genderless, or if the target is already infatuated.",
 		shortDesc: "Base move affects power. Foes: infatuated.",
 		id: "gmaxcuddle",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Cuddle",
 		pp: 5,
 		priority: 0,
@@ -6946,7 +6943,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side loses 2 PP from its last move used, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: last move -2 PP.",
 		id: "gmaxdepletion",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Depletion",
 		pp: 5,
 		priority: 0,
@@ -6980,7 +6976,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side restores 1/6 of its current maximum HP, even if they have a substitute.",
 		shortDesc: "Base move affects power. Allies: +1/6 max HP.",
 		id: "gmaxfinale",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Finale",
 		pp: 5,
 		priority: 0,
@@ -7006,7 +7001,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the Speed of each Pokemon on the opposing side is lowered by 2 stages, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: -2 Speed.",
 		id: "gmaxfoamburst",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Foam Burst",
 		pp: 5,
 		priority: 0,
@@ -7032,7 +7026,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes confused, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: confused.",
 		id: "gmaxgoldrush",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Gold Rush",
 		pp: 5,
 		priority: 0,
@@ -7058,7 +7051,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Gravity begins.",
 		shortDesc: "Base move affects power. Starts Gravity.",
 		id: "gmaxgravitas",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Gravitas",
 		pp: 5,
 		priority: 0,
@@ -7079,7 +7071,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes poisoned, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: poisoned.",
 		id: "gmaxmalodor",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Malodor",
 		pp: 5,
 		priority: 0,
@@ -7104,7 +7095,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Torment begins for each Pokemon on the opposing side, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: Tormented.",
 		id: "gmaxmeltdown",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Meltdown",
 		pp: 5,
 		priority: 0,
@@ -7130,7 +7120,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, there is a 50% chance every Pokemon on the user's side has its Berry restored, even if they have a substitute.",
 		shortDesc: "Base move affects power. 50% restores Berries.",
 		id: "gmaxreplenish",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Replenish",
 		pp: 5,
 		priority: 0,
@@ -7162,7 +7151,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Aurora Veil begins on the user's side.",
 		shortDesc: "Base move affects power. Allies: Aurora Veil.",
 		id: "gmaxresonance",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Resonance",
 		pp: 5,
 		priority: 0,
@@ -7184,7 +7172,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "Base move affects power. Foes: bound 4-5 turns.",
 		id: "gmaxsandblast",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Sandblast",
 		pp: 5,
 		priority: 0,
@@ -7210,7 +7197,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes confused, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: confused.",
 		id: "gmaxsmite",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Smite",
 		pp: 5,
 		priority: 0,
@@ -7236,7 +7222,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, there is a 50% chance the effect of Yawn begins on the target, even if it has a substitute.",
 		shortDesc: "Base move affects power. Target: 50% Yawn.",
 		id: "gmaxsnooze",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Snooze",
 		pp: 5,
 		priority: 0,
@@ -7265,7 +7250,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		shortDesc: "Base move affects power. Foes: Steel hazard.",
 		id: "gmaxsteelsurge",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Steelsurge",
 		pp: 5,
 		priority: 0,
@@ -7305,7 +7289,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		shortDesc: "Base move affects power. Foes: Stealth Rock.",
 		id: "gmaxstonesurge",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Stonesurge",
 		pp: 5,
 		priority: 0,
@@ -7329,7 +7312,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side either becomes poisoned or paralyzed, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: psn or par.",
 		id: "gmaxstunshock",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Stun Shock",
 		pp: 10,
 		priority: 0,
@@ -7360,7 +7342,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side has its status condition cured, even if they have a substitute.",
 		shortDesc: "Base move affects power. Allies: status cured.",
 		id: "gmaxsweetness",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Sweetness",
 		pp: 10,
 		priority: 0,
@@ -7386,7 +7367,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the evasiveness of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: -1 evasiveness.",
 		id: "gmaxtartness",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Tartness",
 		pp: 10,
 		priority: 0,
@@ -7412,7 +7392,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Parting Shot, U-turn, or Volt Switch. If a target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		shortDesc: "Base move affects power. Foes: trapped.",
 		id: "gmaxterror",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Terror",
 		pp: 10,
 		priority: 0,
@@ -7438,7 +7417,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Rock-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
 		id: "gmaxvolcalith",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Volcalith",
 		pp: 10,
 		priority: 0,
@@ -7481,7 +7459,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes paralyzed, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: paralyzed.",
 		id: "gmaxvoltcrash",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Volt Crash",
 		pp: 10,
 		priority: 0,
@@ -7507,7 +7484,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Fire-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
 		id: "gmaxwildfire",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Wildfire",
 		pp: 10,
 		priority: 0,
@@ -7550,7 +7526,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effects of Electric Terrain, Grassy Terrain, Misty Terrain, and Psychic Terrain end, the effects of Reflect, Light Screen, Aurora Veil, Safeguard, Mist, G-Max Steelsurge, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the target's side, and the effects of G-Max Steelsurge, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the user's side.",
 		shortDesc: "Base move affects power. Ends Terrain, hazards.",
 		id: "gmaxwindrage",
-		isNonstandard: "Unobtainable",
 		name: "G-Max Wind Rage",
 		pp: 10,
 		priority: 0,
@@ -7744,6 +7719,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
 				if (weakenedMoves.includes(move.id)) {
@@ -8679,7 +8655,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				this.effectData.multiplier *= 1.5;
 				this.add('-singleturn', target, 'Helping Hand', '[of] ' + source);
 			},
-			onBasePowerPriority: 3,
+			onBasePowerPriority: 10,
 			onBasePower(basePower) {
 				this.debug('Boosting from Helping Hand: ' + this.effectData.multiplier);
 				return this.chainModify(this.effectData.multiplier);
@@ -9216,7 +9192,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, distance: 1},
 		onModifyMove(move, pokemon, target) {
-			switch (pokemon.effectiveWeather()) {
+			switch (target.effectiveWeather()) {
 			case 'raindance':
 			case 'primordialsea':
 				move.accuracy = true;
@@ -11836,7 +11812,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		effect: {
 			duration: 1,
-			onBasePowerPriority: 4,
+			onBasePowerPriority: 12,
 			onBasePower(basePower) {
 				return this.chainModify(1.5);
 			},
@@ -12527,6 +12503,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 					return null;
 				}
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
 					this.debug('misty terrain weaken');
@@ -14553,6 +14530,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				this.add('-activate', target, 'move: Psychic Terrain');
 				return null;
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');
@@ -15760,7 +15738,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user's Ability changes to match the target's Ability. Fails if the user's Ability is Battle Bond, Comatose, Disguise, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or already matches the target, or if the target's Ability is Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, or Zen Mode.",
+		desc: "The user's Ability changes to match the target's Ability. Fails if the user's Ability is Battle Bond, Comatose, Disguise, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or already matches the target, or if the target's Ability is Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, or Zen Mode.",
 		shortDesc: "User replaces its Ability with the target's.",
 		id: "roleplay",
 		name: "Role Play",
@@ -15771,7 +15749,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (target.ability === source.ability) return false;
 
 			const bannedTargetAbilities = [
-				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
+				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'neutralizinggas', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'wonderguard', 'zenmode',
 			];
 			const bannedSourceAbilities = [
 				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
@@ -16981,7 +16959,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Battle Bond, Comatose, Disguise, Gulp Missile, Hunger Switch, Ice Face, Illusion, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Wonder Guard, or Zen Mode.",
+		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Battle Bond, Comatose, Disguise, Gulp Missile, Hunger Switch, Ice Face, Illusion, Multitype, Neutralizing Gas, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Wonder Guard, or Zen Mode.",
 		shortDesc: "The user and the target trade Abilities.",
 		id: "skillswap",
 		name: "Skill Swap",
@@ -16990,7 +16968,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1},
 		onTryHit(target, source) {
 			const bannedAbilities = [
-				'battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode',
+				'battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'multitype', 'neutralizinggas', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode',
 			];
 			if (
 				target.volatiles['dynamax'] || bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)
@@ -17134,7 +17112,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			}
 		},
 		onHit(target, source) {
-			this.add('-end', target, 'Sky Drop');
+			if (target.hp) this.add('-end', target, 'Sky Drop');
 		},
 		effect: {
 			duration: 2,
@@ -19895,7 +19873,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move, pokemon, target) {
-			switch (pokemon.effectiveWeather()) {
+			switch (target.effectiveWeather()) {
 			case 'raindance':
 			case 'primordialsea':
 				move.accuracy = true;
