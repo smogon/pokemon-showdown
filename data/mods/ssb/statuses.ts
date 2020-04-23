@@ -576,11 +576,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		noCopy: true,
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
-			const activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
+			const activeMon = toID(
+				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
+			);
 			const family = [
 				'aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'gimm1ck', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sundar', 'celestial',
 			];
-			if (activeMon === 'hoeenhero' || activeMon === 'salamander') {
+			if (activeMon === 'hoeenhero' || activeMon === 'instruct') {
 				 this.add(`c|%fart|what song should I sing?`);
 			} else if (activeMon === 'lifeisdank' || activeMon === 'nui' || activeMon === 'grimauxiliatrix') {
 				this.add(`c|%fart|the gang's all here!`);
@@ -594,7 +596,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|%fart|this boy is not correct. he is **flawed.**`);
 		},
 		onFaint(pokemon) {
-			const activeMon = toID(pokemon.side.foe.active[0].illusion ? pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name);
+			const activeMon = toID(
+				pokemon.side.foe.active[0].illusion ? pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name
+			);
 			if (activeMon === 'felucia') {
 				this.add(`c|%fart|Felucia I'm deleting your mon`);
 			} else {
@@ -1205,7 +1209,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart(source) {
 			this.add(`c|~pre|let's go, in and out, 20 minute adventure`);
 			// Easter Egg
-			const activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name);
+			const activeMon = toID(
+				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
+			);
 			if (activeMon === 'anubis') {
 				this.add(`c|+Anubis|ohey it's pre`);
 				this.add(`c|+Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
@@ -1329,16 +1335,16 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|+SamJo|Oof, gotta get thiccer……. ;(`);
 		},
 	},
-	salamander: {
+	instruct: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Salamander|I am here to bully Aroma Electra`);
+			this.add(`c|+Instruct|I am here to bully Aroma Electra`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Salamander|Remember these two things: Lucario•1582 will always be cute, and Swagn will never be able to dab`);
+			this.add(`c|+Instruct|Remember these two things: Lucario•1582 will always be cute, and Swagn will never be able to dab`);
 		},
 		onFaint() {
-			this.add(`c|+Salamander|Noctrine help this isn't working as well as we planned`);
+			this.add(`c|+Instruct|Noctrine help this isn't working as well as we planned`);
 		},
 	},
 	schiavetto: {
@@ -1478,7 +1484,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			if (source.illusion) return;
 			const target = source.side.foe.active[0];
 
-			const removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			const removeAll = [
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {

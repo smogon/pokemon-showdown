@@ -52,7 +52,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			while (level < 100) {
 				mbst = Math.floor((stats["hp"] * 2 + 30 + 63 + 100) * level / 100 + 10);
-				mbst += Math.floor(((stats["atk"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100); // Since damage is roughly proportional to lvl
+				// Since damage is roughly proportional to lvl
+				mbst += Math.floor(((stats["atk"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100);
 				mbst += Math.floor((stats["def"] * 2 + 30 + 63 + 100) * level / 100 + 5);
 				mbst += Math.floor(((stats["spa"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100);
 				mbst += Math.floor((stats["spd"] * 2 + 30 + 63 + 100) * level / 100 + 5);
@@ -96,7 +97,10 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			if (pool.length <= 4) {
 				moves = pool;
 			} else {
-				moves = [this.sampleNoReplace(pool), this.sampleNoReplace(pool), this.sampleNoReplace(pool), this.sampleNoReplace(pool)];
+				moves = [
+					this.sampleNoReplace(pool), this.sampleNoReplace(pool),
+					this.sampleNoReplace(pool), this.sampleNoReplace(pool),
+				];
 			}
 
 			team.push({

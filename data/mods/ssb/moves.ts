@@ -59,7 +59,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (!(['', 'slp', 'frz'].includes(source.status))) {
 				source.cureStatus();
 			}
-			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			const removeTarget = [
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+			];
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
@@ -461,7 +463,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			delete target.volatiles[target.name];
 			if (target.statusData) pokemon.statusData = target.statusData;
 			for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
-				moveSlot.pp = Math.floor(moveSlot.maxpp * (target.moveSlots[j] ? (target.moveSlots[j].pp / target.moveSlots[j].maxpp) : 1));
+				moveSlot.pp = Math.floor(
+					moveSlot.maxpp * (target.moveSlots[j] ? (target.moveSlots[j].pp / target.moveSlots[j].maxpp) : 1)
+				);
 			}
 			this.add('faint', target);
 			pokemon.position = target.position;
@@ -966,7 +970,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Defog", target);
 		},
 		onHit(target, source, move) {
-			const removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			const removeAll = [
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+			];
 			const silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
@@ -1091,7 +1097,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			}
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
-			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			const removeTarget = [
+				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+			];
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
@@ -3131,7 +3139,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.add('-fieldstart', 'move: Prismatic Terrain');
 				}
 				this.add('-message', 'The battlefield suddenly got a refractive high poly count!');
-				const removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				const removeAll = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+				];
 				for (const sideCondition of removeAll) {
 					if (source.side.foe.removeSideCondition(sideCondition)) {
 						this.add('-sideend', source.side.foe, this.dex.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
@@ -4056,7 +4066,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			// @ts-ignore Hack for Snaquaza's Z move
 			const baseMove = this.claimMove.id;
 			const pool = claims[baseMove];
-			if (!pool) throw new Error(`SSB: Unable to find fake claim movepool for the move: "${baseMove}".`); // Should never happen
+			if (!pool) {
+				// Should never happen
+				throw new Error(`SSB: Unable to find fake claim movepool for the move: "${baseMove}".`);
+			}
 			const claim = claims[baseMove][this.random(pool.length)];
 			// Generate new set
 			const generator = new RandomStaffBrosTeams('gen7randombattle', this.prng);

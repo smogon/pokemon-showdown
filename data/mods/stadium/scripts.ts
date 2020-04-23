@@ -18,7 +18,11 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			let statName: StatNameExceptHP;
 			for (statName in this.storedStats) {
 				let stat = this.species.baseStats[statName];
-				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
+				stat = Math.floor(
+					Math.floor(
+						2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)
+					) * this.level / 100 + 5
+				);
 				this.baseStoredStats[statName] = this.storedStats[statName] = Math.floor(stat);
 				this.modifiedStats![statName] = Math.floor(stat);
 				// Re-apply drops, if necessary.
@@ -80,7 +84,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		pokemon.lastDamage = 0;
 		let lockedMove = this.runEvent('LockMove', pokemon);
 		if (lockedMove === true) lockedMove = false;
-		if (!lockedMove && (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)) {
+		if (
+			!lockedMove &&
+			(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
+		) {
 			pokemon.deductPP(move, null, target);
 			pokemon.side.lastMove = move;
 			pokemon.lastMove = move;
@@ -118,7 +125,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		let damage: number | false | undefined = 0;
 
 		// First, check if the Pokémon is immune to this move.
-		if ((!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) {
+		if (
+			(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
+			!target.runImmunity(move.type, true)
+		) {
 			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);
 			}

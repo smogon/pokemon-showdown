@@ -876,7 +876,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 						// this is safe, move is a copy
 						delete move.volatileStatus;
 					}
-					if (move.status || (move.boosts && move.id !== 'swagger') || move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)) {
+					if (
+						move.status || (move.boosts && move.id !== 'swagger') ||
+						move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)
+					) {
 						this.add('-activate', target, 'Substitute', '[block] ' + move.name);
 						return null;
 					}

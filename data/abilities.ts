@@ -437,7 +437,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onAfterMoveSecondary(target, source, move) {
 			if (!target.hp) return;
 			const type = move.type;
-			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
+			if (
+				target.isActive && move.effectType === 'Move' && move.category !== 'Status' &&
+				type !== '???' && !target.hasType(type)
+			) {
 				if (!target.setType(type)) return false;
 				this.add('-start', target, 'typechange', type, '[from] ability: Color Change');
 
@@ -718,7 +721,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.field.setWeather('deltastream');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'deltastream' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			if (this.field.getWeather().id === 'deltastream' && !strongWeathers.includes(weather.id)) return false;
 		},
 		onEnd(pokemon) {
 			if (this.field.weatherData.source !== pokemon) return;
@@ -743,7 +747,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.field.setWeather('desolateland');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'desolateland' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			if (this.field.getWeather().id === 'desolateland' && !strongWeathers.includes(weather.id)) return false;
 		},
 		onEnd(pokemon) {
 			if (this.field.weatherData.source !== pokemon) return;
@@ -766,7 +771,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "(Mimikyu only) The first hit it takes is blocked, and it takes 1/8 HP damage instead.",
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed) {
+			if (
+				effect && effect.effectType === 'Move' &&
+				['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed
+			) {
 				this.add('-activate', target, 'ability: Disguise');
 				this.effectData.busted = true;
 				return 0;
@@ -1384,13 +1392,19 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.js
 		onAnyDamage(damage, target, source, effect) {
-			if (effect && effect.id === 'surf' && source.hasAbility('gulpmissile') && source.species.name === 'Cramorant' && !source.transformed) {
+			if (
+				effect && effect.id === 'surf' && source.hasAbility('gulpmissile') &&
+				source.species.name === 'Cramorant' && !source.transformed
+			) {
 				const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
 				source.formeChange(forme, effect);
 			}
 		},
 		onAnyAfterSubDamage(damage, target, source, effect) {
-			if (effect && effect.id === 'surf' && source.hasAbility('gulpmissile') && source.species.name === 'Cramorant' && !source.transformed) {
+			if (
+				effect && effect.id === 'surf' && source.hasAbility('gulpmissile') &&
+				source.species.name === 'Cramorant' && !source.transformed
+			) {
 				const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
 				source.formeChange(forme, effect);
 			}
@@ -1445,7 +1459,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				return;
 			}
 			for (const allyActive of pokemon.side.active) {
-				if (allyActive && (allyActive.hp && this.isAdjacent(pokemon, allyActive) && allyActive.status) && this.randomChance(3, 10)) {
+				if (
+					allyActive &&
+					(allyActive.hp && this.isAdjacent(pokemon, allyActive) && allyActive.status) && this.randomChance(3, 10)
+				) {
 					this.add('-activate', pokemon, 'ability: Healer');
 					allyActive.cureStatus();
 				}
@@ -1594,7 +1611,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.category === 'Physical' && target.species.id === 'eiscue' && !target.transformed) {
+			if (
+				effect && effect.effectType === 'Move' && effect.category === 'Physical' &&
+				target.species.id === 'eiscue' && !target.transformed
+			) {
 				this.add('-activate', target, 'ability: Ice Face');
 				this.effectData.busted = true;
 				return 0;
@@ -2225,7 +2245,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				return;
 			}
 			for (const allyActive of pokemon.side.active) {
-				if (allyActive && allyActive.position !== pokemon.position && !allyActive.fainted && allyActive.hasAbility(['minus', 'plus'])) {
+				if (
+					allyActive && allyActive.position !== pokemon.position &&
+					!allyActive.fainted && allyActive.hasAbility(['minus', 'plus'])
+				) {
 					return this.chainModify(1.5);
 				}
 			}
@@ -2532,7 +2555,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "This Pokemon's moves are changed to be Normal type and have 1.2x power.",
 		onModifyTypePriority: 1,
 		onModifyType(move, pokemon) {
-			const noModifyType = ['hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'weatherball'];
+			const noModifyType = [
+				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'weatherball',
+			];
 			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id)) {
 				move.type = 'Normal';
 				move.normalizeBoosted = true;
@@ -2802,7 +2827,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				return;
 			}
 			for (const allyActive of pokemon.side.active) {
-				if (allyActive && allyActive.position !== pokemon.position && !allyActive.fainted && allyActive.hasAbility(['minus', 'plus'])) {
+				if (
+					allyActive && allyActive.position !== pokemon.position &&
+					!allyActive.fainted && allyActive.hasAbility(['minus', 'plus'])
+				) {
 					return this.chainModify(1.5);
 				}
 			}
@@ -2949,7 +2977,8 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.field.setWeather('primordialsea');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'primordialsea' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			if (this.field.getWeather().id === 'primordialsea' && !strongWeathers.includes(weather.id)) return false;
 		},
 		onEnd(pokemon) {
 			if (this.field.weatherData.source !== pokemon) return;
@@ -3404,7 +3433,10 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onResidualOrder: 27,
 		onResidual(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed || !pokemon.hp) return;
+			if (
+				pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 ||
+				pokemon.transformed || !pokemon.hp
+			) return;
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.species.id === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');

@@ -511,7 +511,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			onStart(target, source) {
 				const noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
-				if (!target.lastMove || noEncore.includes(target.lastMove.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
+				if (
+					!target.lastMove || noEncore.includes(target.lastMove.id) ||
+					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
+				) {
 					// it failed
 					this.add('-fail', source);
 					this.attrLastMove('[still]');
@@ -528,7 +531,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
-				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
+				if (
+					target.moves.includes(this.effectData.move) &&
+					target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0
+				) {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}

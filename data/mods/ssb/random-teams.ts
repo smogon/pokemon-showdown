@@ -191,10 +191,16 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 32, atk: 252, spd: 4, spe: 220}, nature: 'Jolly',
 			},
 			Catalystic: {
-				species: 'Ho-oh', ability: 'Magic Guard', item: ['Toxic Orb'], gender: 'M',
+				species: 'Ho-Oh', ability: 'Magic Guard', item: ['Toxic Orb'], gender: 'M',
 				moves: ['Sacred Fire', 'Brave Bird', 'Strength Sap'],
 				signatureMove: 'Birb to the Rescue',
 				evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant',
+			},
+			Celestial: {
+				species: 'Dragonite', ability: 'Ice Absorb', item: 'Sky Plate', gender: 'M',
+				moves: ['Dragon Dance', 'Extreme Speed', 'Thousand Arrows'],
+				signatureMove: 'Hyperforce Strike',
+				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 			},
 			Ceteris: {
 				species: 'Greninja', ability: 'Protean', item: 'Expert Belt', gender: 'M',
@@ -237,12 +243,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Extreme Speed', 'Icicle Crash', 'Thousand Arrows'],
 				signatureMove: 'Galvanized Strike',
 				evs: {hp: 28, atk: 244, def: 188, spe: 48}, nature: 'Adamant', shiny: true,
-			},
-			Dragontite: {
-				species: 'Dragonite', ability: 'Ice Absorb', item: 'Sky Plate', gender: 'M',
-				moves: ['Dragon Dance', 'Extreme Speed', 'Thousand Arrows'],
-				signatureMove: 'Hyperforce Strike',
-				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 			},
 			DragonWhale: {
 				species: 'Garchomp', ability: 'Hustle', item: 'Groundium Z', gender: 'M',
@@ -364,6 +364,12 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Earthquake', 'Shadow Force', 'Shadow Sneak'],
 				signatureMove: 'Mean Look',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+			},
+			Instruct: {
+				species: 'Magearna-Original', ability: 'Numb Numb Juice', item: 'Leftovers', gender: 'N',
+				moves: ['Sparkly Swirl', 'Defog', ['Toxic', 'Thunder Wave']],
+				signatureMove: 'Express Yourself',
+				evs: {hp: 252, def: 164, spd: 92}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
 			},
 			irritated: {
 				species: 'Jirachi', ability: 'Serene Grace', item: 'Leftovers', gender: 'F',
@@ -604,12 +610,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Icicle Crash', 'Precipice Blades', ['Ice Shard', 'Superpower', 'Stone Edge', 'Knock Off']],
 				signatureMove: 'Thicc',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
-			},
-			Salamander: {
-				species: 'Magearna-Original', ability: 'Numb Numb Juice', item: 'Leftovers', gender: 'N',
-				moves: ['Sparkly Swirl', 'Defog', ['Toxic', 'Thunder Wave']],
-				signatureMove: 'Express Yourself',
-				evs: {hp: 252, def: 164, spd: 92}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
 			},
 			Schiavetto: {
 				species: 'Scolipede', ability: 'RVS', item: 'Mariahcarium Z', gender: 'M',

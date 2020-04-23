@@ -80,7 +80,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			onStart(target) {
 				const noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
-				if (!target.lastMove || noEncore.includes(target.lastMove.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
+				if (
+					!target.lastMove || noEncore.includes(target.lastMove.id) ||
+					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
+				) {
 					// it failed
 					return false;
 				}
@@ -227,12 +230,18 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		effect: {
 			noCopy: true,
 			onSourceModifyDamage(damage, source, target, move) {
-				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce'].includes(move.id)) {
+				const boostedMoves = [
+					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce',
+				];
+				if (boostedMoves.includes(move.id)) {
 					return this.chainModify(2);
 				}
 			},
 			onAccuracy(accuracy, target, source, move) {
-				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce'].includes(move.id)) {
+				const boostedMoves = [
+					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce',
+				];
+				if (boostedMoves.includes(move.id)) {
 					return true;
 				}
 				return accuracy;
@@ -520,7 +529,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			onTryHitPriority: 4,
 			onTryHit(target, source, effect) {
 				// Wide Guard blocks damaging spread moves
-				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))) {
+				if (
+					effect &&
+					(effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))
+				) {
 					return;
 				}
 				this.add('-activate', target, 'move: Wide Guard');

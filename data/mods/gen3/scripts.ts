@@ -129,7 +129,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			target = targets[0];
 			let lacksTarget = !target || target.fainted;
 			if (!lacksTarget) {
-				if (move.target === 'adjacentFoe' || move.target === 'adjacentAlly' || move.target === 'normal' || move.target === 'randomNormal') {
+				if (['adjacentFoe', 'adjacentAlly', 'normal', 'randomNormal'].includes(move.target)) {
 					lacksTarget = !this.isAdjacent(target, pokemon);
 				}
 			}
@@ -204,7 +204,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		if ((!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type)) {
+		if (
+			(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
+			!target.runImmunity(move.type)
+		) {
 			naturalImmunity = true;
 		} else {
 			hitResult = this.singleEvent('TryImmunity', move, {}, target, pokemon, move);

@@ -33,7 +33,8 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		modifyStat(statName, modifier) {
 			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
-			this.modifiedStats![statName] = this.battle.dex.clampIntRange(Math.floor(this.modifiedStats![statName] * modifier), 1, 999);
+			const modifiedStats = this.battle.dex.clampIntRange(Math.floor(this.modifiedStats![statName] * modifier), 1, 999);
+			this.modifiedStats![statName] = modifiedStats;
 		},
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
 		boostBy(boost) {
@@ -97,7 +98,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		pokemon.lastDamage = 0;
 		let lockedMove = this.runEvent('LockMove', pokemon);
 		if (lockedMove === true) lockedMove = false;
-		if (!lockedMove && (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)) {
+		if (
+			!lockedMove &&
+			(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
+		) {
 			pokemon.deductPP(move, null, target);
 			// On gen 1 moves are stored when they are chosen and a PP is deducted.
 			pokemon.side.lastMove = move;
@@ -249,7 +253,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 
 		// Then, check if the Pokémon is immune to this move.
-		if ((!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) {
+		if (
+			(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
+			!target.runImmunity(move.type, true)
+		) {
 			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);
 			}

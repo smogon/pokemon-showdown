@@ -52,7 +52,9 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (!lockedMove) {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.add('cant', pokemon, 'nopp', move);
-					const gameConsole = [null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS'][this.gen] || 'Switch';
+					const gameConsole = [
+						null, 'Game Boy', 'Game Boy Color', 'Game Boy Advance', 'DS', 'DS', '3DS', '3DS',
+					][this.gen] || 'Switch';
 					this.hint(`This is not a bug, this is really how it works on the ${gameConsole}; try it yourself if you don't believe us.`);
 					this.clearActiveMove(true);
 					pokemon.moveThisTurnResult = false;
@@ -108,7 +110,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	canMegaEvo(pokemon) {
 		const altForme = pokemon.baseSpecies.otherFormes && this.dex.getSpecies(pokemon.baseSpecies.otherFormes[0]);
 		const item = pokemon.getItem();
-		if (altForme?.isMega && altForme?.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+		if (
+			altForme?.isMega && altForme?.requiredMove &&
+			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove
+		) {
 			return altForme.name;
 		}
 		if (
@@ -156,7 +161,8 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (!item.zMove) return;
 			if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
 			const moveData = pokemon.getMoveData(move);
-			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
+			// Draining the PP of the base move prevents the corresponding Z-move from being used.
+			if (!moveData || !moveData.pp) return;
 		}
 
 		if (item.zMoveFrom) {

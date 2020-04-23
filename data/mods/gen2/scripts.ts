@@ -170,7 +170,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		if ((!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) {
+		if (
+			(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
+			!target.runImmunity(move.type, true)
+		) {
 			return false;
 		}
 
@@ -344,7 +347,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			}
 
 			if (moveData.boosts && !target.fainted) {
-				if (pokemon.volatiles['lockon'] && target === pokemon.volatiles['lockon'].source && target.isSemiInvulnerable() && !isSelf) {
+				if (
+					pokemon.volatiles['lockon'] && target === pokemon.volatiles['lockon'].source &&
+					target.isSemiInvulnerable() && !isSelf
+				) {
 					if (!isSecondary) this.add('-fail', target);
 					return false;
 				}

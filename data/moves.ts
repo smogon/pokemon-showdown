@@ -3014,7 +3014,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			for (const id of sideConditions) {
 				const effectName = this.dex.getEffect(id).name;
 				if (sourceSide.sideConditions[id] && targetSide.sideConditions[id]) {
-					[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [targetSide.sideConditions[id], sourceSide.sideConditions[id]];
+					[sourceSide.sideConditions[id], targetSide.sideConditions[id]] = [
+						targetSide.sideConditions[id], sourceSide.sideConditions[id],
+					];
 					this.add('-sideend', sourceSide, effectName, '[silent]');
 					this.add('-sideend', targetSide, effectName, '[silent]');
 				} else if (sourceSide.sideConditions[id] && !targetSide.sideConditions[id]) {
@@ -3065,7 +3067,10 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (!yourItem) {
 				return;
 			}
-			if (!this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem) || !source.setItem(yourItem)) {
+			if (
+				!this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem) ||
+				!source.setItem(yourItem)
+			) {
 				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 				return;
 			}
@@ -3685,7 +3690,10 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
 				// The target hasn't taken its turn, or Cursed Body activated and the move was not used through Dancer or Instruct
-				if (this.queue.willMove(pokemon) || (pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)) {
+				if (
+					this.queue.willMove(pokemon) ||
+					(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
+				) {
 					this.effectData.duration--;
 				}
 				if (!pokemon.lastMove) {
@@ -4747,7 +4755,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
-				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
+				if (target.moves.includes(this.effectData.move) &&
+					target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}
@@ -4880,7 +4889,10 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			const bannedSourceAbilities = [
 				'battlebond', 'comatose', 'disguise', 'flowergift', 'forecast', 'illusion', 'imposter', 'multitype', 'powerconstruct', 'powerofalchemy', 'receiver', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'trace', 'zenmode',
 			];
-			if (bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability) || target.ability === source.ability) {
+			if (
+				bannedTargetAbilities.includes(target.ability) || bannedSourceAbilities.includes(source.ability) ||
+				target.ability === source.ability
+			) {
 				return false;
 			}
 		},
@@ -5392,8 +5404,12 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		onPrepareHit(target, source, move) {
 			for (const action of this.queue) {
-				// @ts-ignore
-				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted || action.maxMove || action.zmove) {
+				if (
+					// @ts-ignore
+					!action.move || !action.pokemon || !action.pokemon.isActive ||
+					// @ts-ignore
+					action.pokemon.fainted || action.maxMove || action.zmove
+				) {
 					continue;
 				}
 				// @ts-ignore
@@ -7543,7 +7559,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				let success = false;
-				const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				const removeTarget = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
+				];
 				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 				for (const targetCondition of removeTarget) {
 					if (source.side.foe.removeSideCondition(targetCondition)) {
@@ -7640,8 +7658,12 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		onPrepareHit(target, source, move) {
 			for (const action of this.queue) {
-				// @ts-ignore
-				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted || action.maxMove || action.zmove) {
+				if (
+					// @ts-ignore
+					!action.move || !action.pokemon || !action.pokemon.isActive ||
+					// @ts-ignore
+					action.pokemon.fainted || action.maxMove || action.zmove
+				) {
 					continue;
 				}
 				// @ts-ignore
@@ -12241,12 +12263,18 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		effect: {
 			noCopy: true,
 			onSourceModifyDamage(damage, source, target, move) {
-				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault'].includes(move.id)) {
+				const boostedMoves = [
+					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
+				];
+				if (boostedMoves.includes(move.id)) {
 					return this.chainModify(2);
 				}
 			},
 			onAccuracy(accuracy, target, source, move) {
-				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault'].includes(move.id)) {
+				const boostedMoves = [
+					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault',
+				];
+				if (boostedMoves.includes(move.id)) {
 					return true;
 				}
 				return accuracy;
@@ -15343,7 +15371,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.willChangeForme) {
-				pokemon.formeChange(pokemon.species.id === 'meloettapirouette' ? 'Meloetta' : 'Meloetta-Pirouette', this.effect, false, '[msg]');
+				const meloettaForme = pokemon.species.id === 'meloettapirouette' ? '' : '-Pirouette';
+				pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '[msg]');
 			}
 		},
 		target: "allAdjacentFoes",
@@ -16963,7 +16992,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			const bannedAbilities = [
 				'battlebond', 'comatose', 'disguise', 'gulpmissile', 'hungerswitch', 'iceface', 'illusion', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard', 'zenmode',
 			];
-			if (target.volatiles['dynamax'] || bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)) {
+			if (
+				target.volatiles['dynamax'] || bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)
+			) {
 				return false;
 			}
 		},
@@ -17378,7 +17409,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				let applies = false;
 				if (pokemon.hasType('Flying') || pokemon.hasAbility('levitate')) applies = true;
-				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] || this.field.getPseudoWeather('gravity')) applies = false;
+				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] ||
+					this.field.getPseudoWeather('gravity')) applies = false;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
 					this.queue.cancelMove(pokemon);
@@ -19712,7 +19744,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			if (!yourItem) {
 				return;
 			}
-			if (!this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem) || !source.setItem(yourItem)) {
+			if (!this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem) ||
+				!source.setItem(yourItem)) {
 				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 				return;
 			}
@@ -20845,7 +20878,10 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				if (action.choice !== 'move') continue;
 				const otherMove = action.move;
 				const otherMoveUser = action.pokemon;
-				if (!otherMove || !action.pokemon || !otherMoveUser.isActive || otherMoveUser.fainted || action.maxMove || action.zmove) {
+				if (
+					!otherMove || !action.pokemon || !otherMoveUser.isActive ||
+					otherMoveUser.fainted || action.maxMove || action.zmove
+				) {
 					continue;
 				}
 				if (otherMoveUser.side === source.side && ['firepledge', 'grasspledge'].includes(otherMove.id)) {

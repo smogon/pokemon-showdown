@@ -885,7 +885,10 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 			type: "Normal",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Normal' && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (
+				move.type === 'Normal' &&
+				(!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))
+			) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -1643,7 +1646,8 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		spritenum: 120,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
+			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
 			if (move.type === 'Electric' && source.useItem()) {
 				source.addVolatile('gem');
 			}
@@ -1922,7 +1926,8 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		spritenum: 141,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
+			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
 			if (move.type === 'Fire' && source.useItem()) {
 				source.addVolatile('gem');
 			}
@@ -2377,7 +2382,8 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		spritenum: 172,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
+			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
 			if (move.type === 'Grass' && source.useItem()) {
 				source.addVolatile('gem');
 			}
@@ -4131,7 +4137,8 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		spritenum: 307,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
+			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
 			if (move.type === 'Normal' && source.useItem()) {
 				source.addVolatile('gem');
 			}
@@ -4728,7 +4735,10 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		},
 		onAttractPriority: -1,
 		onAttract(target, source) {
-			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) return false;
+			if (
+				target !== source && target === this.activePokemon &&
+				this.activeMove && this.activeMove.flags['contact']
+			) return false;
 		},
 		onBoostPriority: -1,
 		onBoost(boost, target, source, effect) {
@@ -4760,7 +4770,10 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 			}
 		},
 		onSetStatus(status, target, source, effect) {
-			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) return false;
+			if (
+				target !== source && target === this.activePokemon &&
+				this.activeMove && this.activeMove.flags['contact']
+			) return false;
 		},
 		num: 880,
 		gen: 7,
@@ -5817,7 +5830,10 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && (user.baseSpecies.num === 380 || user.baseSpecies.num === 381) && (move.type === 'Psychic' || move.type === 'Dragon')) {
+			if (
+				move && (user.baseSpecies.num === 380 || user.baseSpecies.num === 381) &&
+				(move.type === 'Psychic' || move.type === 'Dragon')
+			) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
@@ -7535,7 +7551,8 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		spritenum: 528,
 		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			const pledges = ['firepledge', 'grasspledge', 'waterpledge'];
+			if (target === source || move.category === 'Status' || pledges.includes(move.id)) return;
 			if (move.type === 'Water' && source.useItem()) {
 				source.addVolatile('gem');
 			}
@@ -7629,7 +7646,10 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		},
 		onHitPriority: 1,
 		onHit(target, source, move) {
-			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0) {
+			if (
+				target.hp && move.category !== 'Status' && !move.damage &&
+				!move.damageCallback && target.getMoveHitData(move).typeMod > 0
+			) {
 				target.useItem();
 			}
 		},
