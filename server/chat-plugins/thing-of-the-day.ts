@@ -75,7 +75,7 @@ class OtdHandler {
 
 		this.winners = [];
 
-		this.file.read().then((content: string) => {
+		this.file.read().then(content => {
 			const data = ('' + content).split("\n");
 			for (const arg of data) {
 				if (!arg || arg === '\r') continue;
@@ -186,7 +186,6 @@ class OtdHandler {
 			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Pre-noms for ${this.name} of the ${this.timeLabel}. Use <code>/${this.id} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}:</p>`;
 		}
 
-		/** @type {string[]} */
 		const entries = [];
 
 		for (const value of this.nominations.values()) {
@@ -419,7 +418,7 @@ function selectHandler(message: string) {
 	return handler;
 }
 
-const commands: ChatCommands = {
+export const commands: ChatCommands = {
 	start(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
 
@@ -683,13 +682,12 @@ const help = [
 	`- /-otd winners - Displays a list of previous things of the day.`,
 ];
 
-/** @type {PageTable} */
-exports.pages = {};
-/** @type {ChatCommands} */
-exports.commands = {};
+export const pages: PageTable = {};
 
 for (const [k, v] of otds) {
-	exports.pages[k] = function () { return v.generateWinnerList(this); };
-	exports.commands[k] = commands;
-	exports.commands[`${k}help`] = help;
+	pages[k] = function () {
+		return v.generateWinnerList(this);
+	};
+	commands[k] = commands;
+	commands[`${k}help`] = help;
 }
