@@ -1006,7 +1006,7 @@ export class RandomTeams {
 			let rejectAbility: boolean;
 			do {
 				rejectAbility = false;
-				if (['Flare Boost', 'Hydration', 'Ice Body', 'Inner Focus', 'Insomnia', 'Liquid Voice', 'Misty Surge', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Weak Armor'].includes(ability)) {
+				if (['Flare Boost', 'Hydration', 'Ice Body', 'Inner Focus', 'Insomnia', 'Liquid Voice', 'Misty Surge', 'Quick Feet', 'Rain Dish', 'Snow Cloak', 'Steadfast', 'Weak Armor'].includes(ability)) {
 					rejectAbility = true;
 				} else if (['Adaptability', 'Contrary', 'Serene Grace', 'Skill Link', 'Strong Jaw'].includes(ability)) {
 					rejectAbility = !counter[toID(ability)];
