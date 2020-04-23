@@ -1094,7 +1094,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	noctowl: {
 		randomBattleMoves: ["airslash", "defog", "heatwave", "hurricane", "nastyplot", "roost"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	ledyba: {
@@ -3924,7 +3924,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	silvallyfire: {
 		randomBattleMoves: ["crunch", "ironhead", "multiattack", "swordsdance"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	silvallyflying: {
@@ -3944,7 +3944,7 @@ export const BattleFormatsData: {[speciesid: string]: SpeciesFormatsData} = {
 	},
 	silvallyground: {
 		randomBattleMoves: ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	silvallyice: {
