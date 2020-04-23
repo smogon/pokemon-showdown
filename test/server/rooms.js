@@ -47,10 +47,10 @@ describe('Rooms features', function () {
 		});
 
 		it('should allow two users to join the battle', function () {
-			let p1 = new User();
-			let p2 = new User();
-			let options = [{rated: false, tour: false}, {rated: false, tour: {onBattleWin() {}}}, {rated: true, tour: false}, {rated: true, tour: {onBattleWin() {}}}];
-			for (let option of options) {
+			const p1 = new User();
+			const p2 = new User();
+			const options = [{rated: false, tour: false}, {rated: false, tour: {onBattleWin() {}}}, {rated: true, tour: false}, {rated: true, tour: {onBattleWin() {}}}];
+			for (const option of options) {
 				room = Rooms.createBattle('customgame', Object.assign({
 					p1,
 					p2,

@@ -15,7 +15,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
 		battle.makeChoices('move substitute', 'move recover');
-		let pokemon = battle.p1.active[0];
+		const pokemon = battle.p1.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
@@ -34,7 +34,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['psystrike']}]});
 		battle.makeChoices('move substitute', 'move psystrike');
-		let pokemon = battle.p1.active[0];
+		const pokemon = battle.p1.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
@@ -44,7 +44,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['nastyplot']}]});
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move doubleedge', 'move nastyplot');
-		let pokemon = battle.p1.active[0];
+		const pokemon = battle.p1.active[0];
 		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
@@ -54,7 +54,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p2', {team: [{species: 'Hitmonchan', moves: ['substitute', 'agility']}]});
 		battle.makeChoices('move substitute', 'move substitute');
 
-		let subhp = battle.p1.active[0].volatiles['substitute'].hp;
+		const subhp = battle.p1.active[0].volatiles['substitute'].hp;
 		assert.equal(subhp, battle.p2.active[0].volatiles['substitute'].hp);
 
 		battle.resetRNG(); // Make Hi Jump Kick miss and cause recoil.
@@ -87,7 +87,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'noguard', moves: ['nastyplot', 'lightofruin']}]});
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move substitute', 'move lightofruin');
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.ceil(Math.floor(battle.p1.active[0].maxhp / 4) / 2));
 	});
 
@@ -96,7 +96,7 @@ describe('Substitute', function () {
 		battle.setPlayer('p1', {team: [{species: 'Zangoose', ability: 'pressure', moves: ['substitute']}]});
 		battle.setPlayer('p2', {team: [{species: 'Zangoose', ability: 'noguard', moves: ['bellydrum', 'drainpunch']}]});
 		battle.makeChoices('move substitute', 'move bellydrum');
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move substitute', 'move drainpunch');
 		assert.equal(battle.p2.active[0].hp - hp, Math.ceil(Math.floor(battle.p1.active[0].maxhp / 4) / 2));
 	});

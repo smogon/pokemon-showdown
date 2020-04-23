@@ -46,7 +46,7 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p2', {team: [{species: "Ho-Oh", ability: 'shellarmor', item: 'ironball', moves: ['recover', 'trick']}]});
 		battle.makeChoices('move thousandarrows', 'move recover');
 		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('move mudslap', 'move trick');
 		assert.equal(hp, battle.p2.active[0].hp);

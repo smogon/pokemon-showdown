@@ -53,7 +53,7 @@ describe('Disguise', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: 'Ariados', ability: 'swarm', moves: ['toxicthread']}]});
-		let pokemon = battle.p1.active[0];
+		const pokemon = battle.p1.active[0];
 		assert.sets(() => pokemon.status, 'psn', () => battle.makeChoices());
 		assert.statStage(pokemon, 'spe', -1);
 		assert.false.fullHP(pokemon);
@@ -63,7 +63,7 @@ describe('Disguise', function () {
 		battle = common.gen(7).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: 'Pikachu', ability: 'lightningrod', moves: ['nuzzle']}]});
-		let pokemon = battle.p1.active[0];
+		const pokemon = battle.p1.active[0];
 		assert.sets(() => pokemon.status, 'par', () => battle.makeChoices());
 		assert.fullHP(pokemon);
 	});

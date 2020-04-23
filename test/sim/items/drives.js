@@ -10,7 +10,7 @@ let battle;
 describe('Drives', function () {
 	for (const drive of drives) {
 		describe(drive, function () {
-			let id = drive.replace(/\W+/g, '').toLowerCase();
+			const id = drive.replace(/\W+/g, '').toLowerCase();
 
 			afterEach(function () {
 				battle.destroy();

@@ -48,7 +48,7 @@ describe('Heal Block', function () {
 		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', moves: ['healblock', 'surf']}]});
 		battle.setPlayer('p2', {team: [{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}]});
 		battle.makeChoices('move healblock', 'move bellydrum');
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move surf', 'move calmmind');
 		assert.equal(battle.p2.active[0].hp, hp);
 	});
@@ -58,7 +58,7 @@ describe('Heal Block', function () {
 		battle.setPlayer('p1', {team: [{species: 'Starmie', ability: 'noguard', moves: ['healblock']}]});
 		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}]});
 		battle.makeChoices('move healblock', 'move substitute');
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move leechseed');
 		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -115,7 +115,7 @@ describe('Heal Block [Gen 5]', function () {
 			[{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}],
 		]);
 		battle.makeChoices('move healblock', 'move bellydrum');
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move surf', 'move calmmind');
 		assert.equal(battle.p2.active[0].hp, hp);
 	});
@@ -126,7 +126,7 @@ describe('Heal Block [Gen 5]', function () {
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'gigadrain']}],
 		]);
 		battle.makeChoices('move healblock', 'move substitute');
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move gigadrain');
 		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -137,7 +137,7 @@ describe('Heal Block [Gen 5]', function () {
 			[{species: 'Starmie', ability: 'noguard', moves: ['healblock']}],
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}],
 		]);
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move leechseed');
 		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -173,7 +173,7 @@ describe('Heal Block [Gen 4]', function () {
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'gigadrain']}],
 		]);
 		battle.makeChoices('move healblock', 'move substitute');
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move gigadrain');
 		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -199,7 +199,7 @@ describe('Heal Block [Gen 4]', function () {
 			[{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}],
 		]);
 		battle.makeChoices('move healblock', 'move bellydrum');
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move surf', 'move calmmind');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 	});
@@ -210,7 +210,7 @@ describe('Heal Block [Gen 4]', function () {
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}],
 		]);
 		battle.makeChoices('move healblock', 'move substitute');
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move leechseed');
 		assert.equal(battle.p2.active[0].hp, hp);
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);

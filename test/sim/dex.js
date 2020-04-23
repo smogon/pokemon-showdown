@@ -6,13 +6,13 @@ describe('Mod loader', function () {
 	it.skip('should work fine in any order', function () {
 		{
 			Chat.uncacheTree('./.sim-dist/dex');
-			let Dex = require('./../../../.sim-dist/dex').Dex;
+			const Dex = require('./../../../.sim-dist/dex').Dex;
 			assert.equal(Dex.mod('gen2').getSpecies('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
 		}
 		{
 			Chat.uncacheTree('./.sim-dist/dex');
-			let Dex = require('./../../../.sim-dist/dex').Dex;
+			const Dex = require('./../../../.sim-dist/dex').Dex;
 			Dex.mod('gen2').getSpecies('nidoking');
 			Dex.mod('gen4').getMove('crunch');
 			assert.equal(Dex.mod('gen2').getSpecies('nidoking').learnset.bubblebeam.join(','), '1M');

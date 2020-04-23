@@ -17,7 +17,7 @@ describe('Flash Fire', function () {
 		const [flashMon, foePokemon] = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices('move incinerate', 'move flareblitz');
 		assert.fullHP(flashMon);
-		let damage = foePokemon.maxhp - foePokemon.hp;
+		const damage = foePokemon.maxhp - foePokemon.hp;
 		assert.bounded(damage, [82, 97]);
 	});
 
@@ -44,7 +44,7 @@ describe('Flash Fire', function () {
 		battle.makeChoices('move sleeptalk', 'move incinerate');
 		battle.resetRNG();
 		battle.makeChoices('move incinerate', 'move worryseed');
-		let damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
+		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 		assert.bounded(damage, [54, 65]);
 	});
 });
