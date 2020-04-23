@@ -246,7 +246,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 
 function residualdmg(battle: Battle, pokemon: Pokemon) {
 	if (pokemon.volatiles['residualdmg']) {
-		const residualDmg = battle.dex.clampIntRange(Math.floor(pokemon.maxhp / 16) * pokemon.volatiles['residualdmg'].counter, 1);
+		const residualDmg = battle.dex.clampIntRange(
+			Math.floor(pokemon.maxhp / 16) * pokemon.volatiles['residualdmg'].counter, 1
+		);
 		battle.damage(residualDmg, pokemon);
 		battle.hint("In Gen 2, Toxic's counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.", true);
 	} else {

@@ -270,7 +270,10 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		name: "Gracidea Mastery",
 		isNonstandard: "Custom",
 		onTryHit(target, source, move) {
-			if ((target === source || move.category === 'Status') && target.species.id !== 'shayminsky' && target.transformed) return;
+			if (
+				(target === source || move.category === 'Status') &&
+				target.species.id !== 'shayminsky' && target.transformed
+			) return;
 			target.formeChange('Shaymin', this.effect);
 		},
 		onDamagingHit(damage, target, source, move) {
@@ -316,7 +319,10 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		id: "shadowartifice",
 		name: "Shadow Artifice",
 		onFoeTrapPokemon(pokemon) {
-			if (!pokemon.hasAbility('shadowartifice') && !pokemon.hasAbility('shadowtag') && this.isAdjacent(pokemon, this.effectData.target)) {
+			if (
+				!pokemon.hasAbility('shadowartifice') && !pokemon.hasAbility('shadowtag') &&
+				this.isAdjacent(pokemon, this.effectData.target)
+			) {
 				pokemon.tryTrap(true);
 			}
 		},
@@ -589,7 +595,8 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			this.field.setWeather('primordialsea');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'primordialsea' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			if (this.field.getWeather().id === 'primordialsea' && !strongWeathers.includes(weather.id)) return false;
 		},
 		onEnd(pokemon) {
 			if (this.field.weatherData.source !== pokemon) return;
