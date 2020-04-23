@@ -176,7 +176,7 @@ assert.false = function (value, message) {
 		stackStartFunction: assert.false,
 	});
 };
-for (let methodName of assertMethods) {
+for (const methodName of assertMethods) {
 	const lastArgIndex = assert[methodName].length - 1;
 	assert.false[methodName] = function (...args) {
 		try {

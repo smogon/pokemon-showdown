@@ -16,7 +16,7 @@ describe('Pressure', function () {
 			[{species: "Giratina", ability: 'defiant', moves: ['rest']}, {species: "Talonflame", ability: 'galewings', moves: ['peck']}],
 		]);
 		battle.makeChoices('move rest, move peck -1', 'move rest, move peck 1');
-		let move = Dex.getMove('peck');
+		const move = Dex.getMove('peck');
 		assert.equal(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.equal(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -30,7 +30,7 @@ describe('Pressure', function () {
 			{species: "Ho-Oh", ability: 'pressure', moves: ['peck']},
 		]]);
 		battle.makeChoices('move followme, move peck 2', 'move followme, move peck 2');
-		let move = Dex.getMove('peck');
+		const move = Dex.getMove('peck');
 		assert.equal(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.equal(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -98,7 +98,7 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Giratina", ability: 'pressure', moves: ['rest']}, {species: "Aerodactyl", ability: 'quickfeet', moves: ['peck']}],
 		]);
 		battle.makeChoices('move rest, move peck -1', 'move rest, move peck 1');
-		let move = Dex.getMove('peck');
+		const move = Dex.getMove('peck');
 		assert.equal(battle.p1.active[1].getMoveData(move).pp, 54);
 		assert.equal(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -109,7 +109,7 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Clefable", ability: 'magicguard', moves: ['followme']}, {species: "Ho-Oh", ability: 'pressure', moves: ['peck']}],
 		]);
 		battle.makeChoices('move followme, move peck 2', 'move followme, move peck 2');
-		let move = Dex.getMove('peck');
+		const move = Dex.getMove('peck');
 		assert.equal(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.equal(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -142,7 +142,7 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Dialga", ability: 'pressure', moves: ['calmmind']}],
 		]);
 		battle.makeChoices('move calmmind', 'move calmmind');
-		let move = Dex.getMove('calmmind');
+		const move = Dex.getMove('calmmind');
 		assert.equal(battle.p1.active[0].getMoveData(move).pp, 31);
 		assert.equal(battle.p1.active[0].getMoveData(move).pp, 31);
 	});

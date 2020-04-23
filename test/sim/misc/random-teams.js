@@ -42,10 +42,10 @@ describe(`Random Team generator (slow)`, function () {
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = generator.prng.seed;
+				const seed = generator.prng.seed;
 				try {
-					let team = generator.getTeam();
-					let invalidSet = team.find(set => !isValidSet(gen, set));
+					const team = generator.getTeam();
+					const invalidSet = team.find(set => !isValidSet(gen, set));
 					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
 					err.message += ` (seed ${seed})`;
@@ -61,9 +61,9 @@ describe(`Random Team generator (slow)`, function () {
 
 		let teamCount = 1000;
 		while (teamCount--) {
-			let seed = generator.prng.seed;
+			const seed = generator.prng.seed;
 			try {
-				let team = generator.getTeam();
+				const team = generator.getTeam();
 				if (team.length < 6) throw new Error(`Team with less than 6 Pokemon: ${JSON.stringify(team)}`);
 
 				let types;
@@ -95,10 +95,10 @@ describe(`Challenge Cup Team generator`, function () {
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = generator.prng.seed;
+				const seed = generator.prng.seed;
 				try {
-					let team = generator.getTeam();
-					let invalidSet = team.find(set => !isValidSet(gen, set));
+					const team = generator.getTeam();
+					const invalidSet = team.find(set => !isValidSet(gen, set));
 					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
 					err.message += ` (seed ${seed})`;
@@ -118,10 +118,10 @@ describe(`Hackmons Cup Team generator`, function () {
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = generator.prng.seed;
+				const seed = generator.prng.seed;
 				try {
-					let team = generator.getTeam();
-					let invalidSet = team.find(set => !isValidSet(gen, set));
+					const team = generator.getTeam();
+					const invalidSet = team.find(set => !isValidSet(gen, set));
 					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
 					err.message += ` (seed ${seed})`;

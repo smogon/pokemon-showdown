@@ -3,7 +3,8 @@
   "rules": {
     // test only (should never be committed, but useful when testing)
     "no-debugger": "error",
-    "no-unused-vars": ["error", {"args": "none"}]
+    "no-unused-vars": ["error", {"args": "none"}],
+    "prefer-const": ["error", {"destructuring": "all"}]
   },
   "overrides": [
     {
@@ -34,7 +35,6 @@
         }],
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],
-        "prefer-const": ["error", {"destructuring": "all"}],
 
         // probably bugs
         "@typescript-eslint/no-floating-promises": ["error", {"ignoreVoid": true}],

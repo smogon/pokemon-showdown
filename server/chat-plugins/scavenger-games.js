@@ -16,7 +16,7 @@ class Leaderboard {
 	}
 
 	addPoints(name, aspect, points, noUpdate) {
-		let userid = toID(name);
+		const userid = toID(name);
 
 		if (!userid || userid === 'constructor' || !points) return this;
 		if (!this.data[userid]) this.data[userid] = {name: name};
@@ -35,7 +35,7 @@ class Leaderboard {
 			let lowestScore = Infinity;
 			let lastPlacement = 1;
 
-			let ladder = Object.keys(this.data)
+			const ladder = Object.keys(this.data)
 				.filter(k => sortBy in this.data[k])
 				.sort((a, b) => this.data[b][sortBy] - this.data[a][sortBy])
 				.map((u, i) => {
@@ -50,7 +50,7 @@ class Leaderboard {
 					);
 				}); // identify ties
 			if (userid) {
-				let rank = ladder.find(entry => toID(entry.name) === userid);
+				const rank = ladder.find(entry => toID(entry.name) === userid);
 				resolve(rank);
 			} else {
 				resolve(ladder);
@@ -61,7 +61,7 @@ class Leaderboard {
 	htmlLadder() {
 		return new Promise((resolve, reject) => {
 			this.visualize('points').then(data => {
-				let display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%">` +
+				const display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%">` +
 					`<tr><th>Rank</th><th>Name</th><th>Points</th></tr>` +
 					data.map(line => `<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`).join('') +
 					`</table></div>`;
@@ -84,7 +84,7 @@ const TWISTS = {
 
 		onSubmitPriority: 1,
 		onSubmit(player, value) {
-			let currentQuestion = player.currentQuestion;
+			const currentQuestion = player.currentQuestion;
 
 			if (!player.answers) player.answers = {};
 			if (!player.answers[currentQuestion]) player.answers[currentQuestion] = [];
@@ -95,13 +95,13 @@ const TWISTS = {
 		},
 
 		onComplete(player, time, blitz) {
-			let isPerfect = Object.keys(player.answers).map(q => player.answers[q].length).every(attempts => attempts <= 1);
+			const isPerfect = Object.keys(player.answers).map(q => player.answers[q].length).every(attempts => attempts <= 1);
 			return {name: player.name, time, blitz, isPerfect};
 		},
 
 		onAfterEndPriority: 1,
 		onAfterEnd() {
-			let perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
+			const perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
 			if (perfect.length) this.announce(Chat.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
 		},
 	},
@@ -122,12 +122,12 @@ const TWISTS = {
 		},
 
 		onPreComplete(player) {
-			let now = Date.now();
-			let time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
+			const now = Date.now();
+			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-			let blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || this.gameType === 'official') && now - this.startTime <= 60000);
+			const blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || this.gameType === 'official') && now - this.startTime <= 60000);
 
-			let result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
+			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
 
 			this.preCompleted = this.preCompleted ? [...this.preCompleted, result] : [result];
 			player.completed = true;
@@ -168,12 +168,12 @@ const TWISTS = {
 		},
 
 		onPreComplete(player) {
-			let now = Date.now();
-			let time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
+			const now = Date.now();
+			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-			let blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || this.gameType === 'official') && now - this.startTime <= 60000);
+			const blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || this.gameType === 'official') && now - this.startTime <= 60000);
 
-			let result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
+			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
 
 			this.preCompleted = this.preCompleted ? [...this.preCompleted, result] : [result];
 			player.completed = true;
@@ -221,14 +221,14 @@ const MODES = {
 					this.announce(`Round ${this.room.scavgame.round} - ${Chat.toListString(this.players.map(p => `<em>${p.name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 				} else {
 					let eliminated = [];
-					let completed = this.completed.map(entry => toID(entry.name));
+					const completed = this.completed.map(entry => toID(entry.name));
 					if (completed.length === this.room.scavgame.playerlist.length) {
 						eliminated.push(completed.pop()); // eliminate one
 						this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(userid => completed.includes(userid));
 					} else {
 						eliminated = this.room.scavgame.playerlist.filter(userid => !completed.includes(userid));
 						for (const username of eliminated) {
-							let userid = toID(username);
+							const userid = toID(username);
 							this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(pid => pid !== userid);
 						}
 					}
@@ -286,10 +286,10 @@ const MODES = {
 				if (!this.room.scavgame.playerlist) {
 					this.room.scavgame.playerlist = this.completed.map(entry => toID(entry.name));
 				} else {
-					let completed = this.completed.map(entry => toID(entry.name));
+					const completed = this.completed.map(entry => toID(entry.name));
 					eliminated = this.room.scavgame.playerlist.filter(userid => !completed.includes(userid));
 					for (const username of eliminated) {
-						let userid = toID(username);
+						const userid = toID(username);
 						this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(pid => pid !== userid);
 					}
 				}
@@ -330,7 +330,7 @@ const MODES = {
 
 			onAfterEnd() {
 				for (const [i, completed] of this.completed.map(e => e.name).entries()) {
-					let points = this.room.scavgame.pointDistribution[i] || this.room.scavgame.pointDistribution[this.room.scavgame.pointDistribution.length - 1];
+					const points = this.room.scavgame.pointDistribution[i] || this.room.scavgame.pointDistribution[this.room.scavgame.pointDistribution.length - 1];
 					this.room.scavgame.leaderboard.addPoints(completed, 'points', points);
 				}
 				// post leaderboard
@@ -376,9 +376,9 @@ const LoadGame = function (room, gameid) {
 	if (!game) return false; // invalid id
 	if (typeof game === 'string') game = MODES[game];
 
-	let base = new GameTemplate(room);
+	const base = new GameTemplate(room);
 
-	let scavgame = Object.assign(base, game);
+	const scavgame = Object.assign(base, game);
 
 	// initialize leaderboard if required
 	if (scavgame.leaderboard) {

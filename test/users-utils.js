@@ -15,8 +15,8 @@ class WorkerStream extends ObjectReadWriteStream {
 	}
 
 	_write(msg) {
-		let cmd = msg.charAt(0);
-		let params = msg.substr(1).split('\n');
+		const cmd = msg.charAt(0);
+		const params = msg.substr(1).split('\n');
 		switch (cmd) {
 		case '!':
 			return this.removeSocket(...params);
@@ -70,7 +70,7 @@ class WorkerStream extends ObjectReadWriteStream {
 			return;
 		}
 
-		let room = this.rooms.get(roomid);
+		const room = this.rooms.get(roomid);
 		if (room.has(socketid)) {
 			throw new Error(`Attempted to redundantly add socket ${socketid} to room ${roomid}`);
 		}
@@ -83,7 +83,7 @@ class WorkerStream extends ObjectReadWriteStream {
 			throw new Error(`Attempted to remove socket ${socketid} from nonexistent room ${roomid}`);
 		}
 
-		let room = this.rooms.get(roomid);
+		const room = this.rooms.get(roomid);
 		if (!room.has(socketid)) {
 			throw new Error(`Attempted to remove nonexistent socket ${socketid} from room ${roomid}`);
 		}
@@ -107,7 +107,7 @@ class WorkerStream extends ObjectReadWriteStream {
 			return;
 		}
 
-		let channel = this.roomChannels.get(roomid);
+		const channel = this.roomChannels.get(roomid);
 		if (!channel.has(socketid)) {
 			if (channelid !== '0') channel.set(socketid, channelid);
 			return;
@@ -153,8 +153,8 @@ function createConnection(ip, workerid, socketid) {
 	}
 	worker.stream.addSocket(socketid);
 
-	let connectionid = `${workerid}-${socketid}`;
-	let connection = new Users.Connection(connectionid, worker, socketid, null, ip || '127.0.0.1');
+	const connectionid = `${workerid}-${socketid}`;
+	const connection = new Users.Connection(connectionid, worker, socketid, null, ip || '127.0.0.1');
 	Users.connections.set(connectionid, connection);
 
 	return connection;
@@ -163,7 +163,7 @@ function createConnection(ip, workerid, socketid) {
 function createUser(connection) {
 	if (!connection) connection = createConnection();
 
-	let user = new Users.User(connection);
+	const user = new Users.User(connection);
 	user.joinRoom('global', connection);
 	connection.user = user;
 
