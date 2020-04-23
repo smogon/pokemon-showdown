@@ -49,8 +49,8 @@ import {PRNG, PRNGSeed} from './prng';
 
 const BASE_MOD = 'gen8' as ID;
 const DEFAULT_MOD = BASE_MOD;
-const DATA_DIR = path.resolve(__dirname, '../data');
-const MODS_DIR = path.resolve(__dirname, '../data/mods');
+const DATA_DIR = path.resolve(__dirname, '../.data-dist');
+const MODS_DIR = path.resolve(__dirname, '../.data-dist/mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
@@ -1133,7 +1133,7 @@ export class ModdedDex {
 
 	getTeamGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const TeamGenerator = require(dexes['base'].forFormat(format).dataDir + '/random-teams');
+		const TeamGenerator = require(dexes['base'].forFormat(format).dataDir + '/random-teams').default;
 		return new TeamGenerator(format, seed);
 	}
 
@@ -1502,8 +1502,8 @@ export class ModdedDex {
 			this.includeFormats();
 		} else {
 			for (const dataType of DATA_TYPES) {
-				const parentTypedData = parentDex.data[dataType];
-				const childTypedData = dataCache[dataType] || (dataCache[dataType] = {});
+				const parentTypedData: DexTable<any> = parentDex.data[dataType];
+				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
 				for (const entryId in parentTypedData) {
 					if (childTypedData[entryId] === null) {
 						// null means don't inherit
@@ -1523,10 +1523,8 @@ export class ModdedDex {
 						delete childTypedData[entryId].inherit;
 
 						// Merge parent into children entry, preserving existing childs' properties.
-						// @ts-ignore
 						for (const key in parentTypedData[entryId]) {
 							if (key in childTypedData[entryId]) continue;
-							// @ts-ignore
 							childTypedData[entryId][key] = parentTypedData[entryId][key];
 						}
 					}
