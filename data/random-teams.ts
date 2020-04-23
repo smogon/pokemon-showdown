@@ -330,7 +330,8 @@ export class RandomTeams {
 			const m = [];
 			do {
 				const moveid = this.sampleNoReplace(movePool);
-				if (this.dex.getMove(moveid).gen <= this.gen && !this.dex.data.Movedex[moveid].isNonstandard && (moveid === 'hiddenpower' || moveid.substr(0, 11) !== 'hiddenpower')) {
+				const move = this.dex.getMove(moveid);
+				if (move.gen <= this.gen && !move.isNonstandard && !move.name.startsWith('Hidden Power ') && (!move.isMax || typeof move.isMax !== 'string')) {
 					m.push(moveid);
 				}
 			} while (m.length < 4);
