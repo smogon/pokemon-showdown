@@ -772,7 +772,7 @@ export const commands: ChatCommands = {
 	 * Battle management commands
 	 *********************************************************/
 
-	allowexportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
+	allowexportinputlog(target, room, user) {
 		const battle = room.battle;
 		if (!battle) {
 			return this.errorReply(`Must be in a battle.`);

@@ -2078,7 +2078,7 @@ export const commands: ChatCommands = {
 
 		'!leave': true,
 		leave(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2111,7 +2111,7 @@ export const commands: ChatCommands = {
 
 		'!close': true,
 		close(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2132,7 +2132,7 @@ export const commands: ChatCommands = {
 		cs: 'closedsetup',
 		closedsetup(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2164,7 +2164,7 @@ export const commands: ChatCommands = {
 		'!reveal': true,
 		reveal(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2263,7 +2263,7 @@ export const commands: ChatCommands = {
 		'!ideapick': true,
 		ideapick(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2285,7 +2285,7 @@ export const commands: ChatCommands = {
 
 		'!ideareroll': true,
 		ideareroll(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2331,7 +2331,7 @@ export const commands: ChatCommands = {
 		'!start': true,
 		nightstart: 'start',
 		start(target, room, user, connection, cmd) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2357,7 +2357,7 @@ export const commands: ChatCommands = {
 		night: 'day',
 		day(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2391,7 +2391,7 @@ export const commands: ChatCommands = {
 		l: 'lynch',
 		lynch(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2414,7 +2414,7 @@ export const commands: ChatCommands = {
 		unl: 'unlynch',
 		unnolynch: 'unlynch',
 		unlynch(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2439,7 +2439,7 @@ export const commands: ChatCommands = {
 		enableself: 'selflynch',
 		selflynch(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2473,7 +2473,7 @@ export const commands: ChatCommands = {
 		kick: 'kill',
 		kill(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2503,7 +2503,7 @@ export const commands: ChatCommands = {
 		add: 'revive',
 		revive(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2748,7 +2748,7 @@ export const commands: ChatCommands = {
 		'!enablenl': true,
 		disablenl: 'enablenl',
 		enablenl(target, room, user, connection, cmd) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2868,7 +2868,7 @@ export const commands: ChatCommands = {
 
 		'!refreshlynches': true,
 		refreshlynches(target, room, user, connection) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -2882,7 +2882,7 @@ export const commands: ChatCommands = {
 		forcesub: 'sub',
 		sub(target, room, user, connection, cmd) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -3013,7 +3013,7 @@ export const commands: ChatCommands = {
 		"!autosub": true,
 		autosub(target, room, user) {
 			const args = target.split(',');
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(args[0]));
+			let targetRoom = Rooms.get(args[0]);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
@@ -3117,7 +3117,7 @@ export const commands: ChatCommands = {
 
 		'!end': true,
 		end(target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms.get(target));
+			let targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;

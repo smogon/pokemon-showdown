@@ -609,7 +609,6 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let i: BoostName;
 		for (i in boost) {
-			/** @type {SparseBoostsTable} */
 			const currentBoost: SparseBoostsTable = {};
 			currentBoost[i] = boost[i];
 			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
