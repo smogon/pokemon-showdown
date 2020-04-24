@@ -954,7 +954,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				if (!uncappedDamage) return uncappedDamage;
 				source.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
-					/** @type {number} */(target.volatiles['substitute'].hp) : uncappedDamage;
+					target.volatiles['substitute'].hp : uncappedDamage;
 				if (target.volatiles['substitute'].hp <= 0) {
 					target.removeVolatile('substitute');
 					target.subFainted = true;

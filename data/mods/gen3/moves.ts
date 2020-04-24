@@ -86,7 +86,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 						target = possibleTarget;
 					}
 					const moveData = {
-						id: /** @type {ID} */('bide'),
+						id: 'bide' as ID,
 						name: "Bide",
 						accuracy: 100,
 						damage: this.effectData.totalDamage * 2,

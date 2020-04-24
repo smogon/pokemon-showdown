@@ -25,7 +25,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 	}
 
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
-		/** @type {PokemonSet[]} */
 		const team: PokemonSet[] = [];
 		const sets: SSBSets = {
 			/*
