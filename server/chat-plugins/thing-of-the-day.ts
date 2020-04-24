@@ -424,7 +424,7 @@ function selectHandler(message: string) {
 	return handler;
 }
 
-export const commands: ChatCommands = {
+export const otdCommands: ChatCommands = {
 	start(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
 
@@ -689,11 +689,12 @@ const help = [
 ];
 
 export const pages: PageTable = {};
+export const commands: ChatCommands = {};
 
 for (const [k, v] of otds) {
 	pages[k] = function () {
 		return v.generateWinnerList(this);
 	};
-	commands[k] = commands;
+	commands[k] = otdCommands;
 	commands[`${k}help`] = help;
 }
