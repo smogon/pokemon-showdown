@@ -105,7 +105,7 @@ const Formats = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] NU'],
-		banlist: ['NU', 'PUBL'],
+		banlist: ['NU', 'PUBL', 'Drought', 'Heat Rock'],
 	},
 	{
 		name: "[Gen 8] LC",
