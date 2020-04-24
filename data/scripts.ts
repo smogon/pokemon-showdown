@@ -241,7 +241,7 @@ export const BattleScripts: BattleScriptsData = {
 
 		if (!this.singleEvent('TryMove', move, null, pokemon, target, move) ||
 			!this.runEvent('TryMove', pokemon, target, move)) {
-			move.mindBlownRecoil = false;
+			if (move.recoil === 'mindblown') move.recoil = undefined;
 			return false;
 		}
 
@@ -689,9 +689,9 @@ export const BattleScripts: BattleScriptsData = {
 				// @ts-ignore
 				move.totalDamage += damage[i];
 			}
-			if (move.mindBlownRecoil) {
+			if (move.recoil === 'mindblown') {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Mind Blown'), true);
-				move.mindBlownRecoil = false;
+				move.recoil = undefined;
 			}
 			this.eachEvent('Update');
 			if (!pokemon.hp && targets.length === 1) {
@@ -706,11 +706,11 @@ export const BattleScripts: BattleScriptsData = {
 			this.add('-hitcount', targets[0], hit - 1);
 		}
 
-		if (move.recoil && move.totalDamage) {
-			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
+		if (Array.isArray(move.recoil) && move.totalDamage) {
+			this.damage(this.calcRecoilDamage(move.totalDamage, move.recoil), pokemon, pokemon, 'recoil');
 		}
 
-		if (move.struggleRecoil) {
+		if (move.recoil === 'struggle') {
 			// @ts-ignore
 			this.directDamage(this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
 		}
@@ -1077,9 +1077,8 @@ export const BattleScripts: BattleScriptsData = {
 		return retVal === true ? undefined : retVal;
 	},
 
-	calcRecoilDamage(damageDealt, move) {
-		// @ts-ignore
-		return this.dex.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+	calcRecoilDamage(damageDealt, recoil) {
+		return this.dex.clampIntRange(Math.round(damageDealt * recoil[0] / recoil[1]), 1);
 	},
 
 	zMoveTable: {

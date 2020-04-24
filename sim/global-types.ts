@@ -779,6 +779,7 @@ interface EventMethods {
 	onTypePriority?: number;
 }
 
+// FIXME: half of these fields do not belong here
 interface EffectData {
 	id: string;
 	name: string;
@@ -806,7 +807,6 @@ interface EffectData {
 	 */
 	isMax?: boolean | string;
 	noCopy?: boolean;
-	recoil?: [number, number];
 	secondary?: SecondaryEffect | null;
 	secondaries?: SecondaryEffect[] | null;
 	self?: SelfEffect | null;
@@ -918,7 +918,6 @@ interface MoveData extends EffectData, MoveEventMethods {
 	damage?: number | 'level' | false | null;
 	defensiveCategory?: 'Physical' | 'Special' | 'Status';
 	forceSwitch?: boolean;
-	hasCustomRecoil?: boolean;
 	heal?: number[] | null;
 	ignoreAbility?: boolean;
 	ignoreAccuracy?: boolean;
@@ -933,7 +932,6 @@ interface MoveData extends EffectData, MoveEventMethods {
 	isFutureMove?: boolean;
 	isViable?: boolean;
 	isMax?: boolean | string;
-	mindBlownRecoil?: boolean;
 	multiaccuracy?: boolean;
 	multihit?: number | number[];
 	multihitType?: string;
@@ -955,7 +953,8 @@ interface MoveData extends EffectData, MoveEventMethods {
 	spreadModifier?: number;
 	stallingMove?: boolean;
 	stealsBoosts?: boolean;
-	struggleRecoil?: boolean;
+	recoil?: [number, number] | 'crash' | 'struggle' | 'mindblown';
+
 	terrain?: string;
 	thawsTarget?: boolean;
 	/**
@@ -1232,7 +1231,7 @@ interface BattleScriptsData {
 	zMoveTable?: {[k: string]: string};
 	maxMoveTable?: {[k: string]: string};
 	afterMoveSecondaryEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined;
-	calcRecoilDamage?: (this: Battle, damageDealt: number, move: Move) => number;
+	calcRecoilDamage?: (this: Battle, damageDealt: number, recoil: [number, number]) => number;
 	canMegaEvo?: (this: Battle, pokemon: Pokemon) => string | undefined | null;
 	canUltraBurst?: (this: Battle, pokemon: Pokemon) => string | null;
 	canZMove?: (this: Battle, pokemon: Pokemon) => ZMoveOptions | void;

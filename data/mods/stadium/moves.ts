@@ -148,7 +148,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				}
 				// Drain/recoil does not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
-					if (move.recoil) {
+					if (Array.isArray(move.recoil)) {
 						this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
 					}
 				}

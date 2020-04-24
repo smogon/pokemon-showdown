@@ -1795,7 +1795,7 @@ export class Battle {
 			}
 
 			if (targetDamage && effect.effectType === 'Move') {
-				if (this.gen <= 1 && effect.recoil && source) {
+				if (this.gen <= 1 && Array.isArray(effect.recoil) && source) {
 					const amount = this.dex.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
 					this.damage(amount, source, target, 'recoil');
 				}
@@ -3023,7 +3023,7 @@ export class Battle {
 		throw new UnimplementedError('afterMoveSecondary');
 	}
 
-	calcRecoilDamage(damageDealt: number, move: Move): number {
+	calcRecoilDamage(damageDealt: number, recoil: [number, number]): number {
 		throw new UnimplementedError('calcRecoilDamage');
 	}
 

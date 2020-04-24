@@ -3170,7 +3170,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "This Pokemon's attacks with recoil or crash damage have 1.2x power; not Struggle.",
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.recoil || move.hasCustomRecoil) {
+			if (Array.isArray(move.recoil) || move.recoil === 'crash') {
 				this.debug('Reckless boost');
 				return this.chainModify([0x1333, 0x1000]);
 			}

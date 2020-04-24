@@ -838,7 +838,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "Deals typeless damage to a random opposing Pokemon. If this move was successful, the user takes damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP, and the Rock Head Ability does not prevent this. This move is automatically used if none of the user's known moves can be selected.",
 		shortDesc: "User loses 1/4 the HP lost by the target.",
 		recoil: [1, 4],
-		struggleRecoil: false,
 	},
 	stunspore: {
 		inherit: true,

@@ -1071,8 +1071,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
-				if (move.recoil && damage) {
-					this.damage(this.calcRecoilDamage(damage, move), source, target, 'recoil');
+				if (Array.isArray(move.recoil) && damage) {
+					this.damage(this.calcRecoilDamage(damage, move.recoil), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
