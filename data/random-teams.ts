@@ -1096,7 +1096,7 @@ export class RandomTeams {
 				} else if (ability === 'Synchronize') {
 					rejectAbility = (counter.setupType || counter.Status < 2);
 				} else if (ability === 'Technician') {
-					rejectAbility = (!counter['technician'] || hasMove['tailslap'] || (hasAbility['Punk Rock'] && isDoubles));
+					rejectAbility = (!counter['technician'] || hasMove['tailslap'] || hasAbility['Punk Rock']);
 				} else if (ability === 'Tinted Lens') {
 					rejectAbility = (hasMove['defog'] || hasMove['hurricane'] || counter.Status > 2 && !counter.setupType);
 				} else if (ability === 'Unaware') {
