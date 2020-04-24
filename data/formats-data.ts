@@ -221,7 +221,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	raichualola: {
-		randomBattleMoves: ["focusblast", "nastyplot", "psychic", "surf", "thunderbolt", "voltswitch"],
+		randomBattleMoves: ["focusblast", "grassknot", "nastyplot", "psyshock", "thunderbolt", "voltswitch"],
 		randomDoubleBattleMoves: ["focusblast", "nastyplot", "protect", "psychic", "psyshock", "surf", "thunderbolt"],
 		tier: "RU",
 		doublesTier: "(DUU)",
