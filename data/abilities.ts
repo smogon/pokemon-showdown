@@ -3067,7 +3067,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		id: "punkrock",
 		name: "Punk Rock",
-		rating: 3,
+		rating: 3.5,
 		num: 244,
 	},
 	purepower: {
