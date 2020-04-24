@@ -18360,7 +18360,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: 95,
 		basePower: 140,
 		category: "Special",
-		desc: "If this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
+		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
 		shortDesc: "User loses 50% max HP.",
 		id: "steelbeam",
 		isViable: true,
