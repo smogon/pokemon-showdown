@@ -1225,7 +1225,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			source.side.addSideCondition('reflect', source);
 			source.side.addSideCondition('safeguard', source);
 		},
-		selfdestruct: "ifHit",
+		selfDamage: "KO (unless failed)",
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -2831,7 +2831,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.heal(source.maxhp, source, source, this.dex.getActiveMove('Blaze of Glory'));
 			this.add('-anim', source, "Final Gambit", target);
 		},
-		selfdestruct: "ifHit",
+		selfDamage: "KO (unless failed)",
 		isZ: "victiniumz",
 		secondary: null,
 		target: "normal",
@@ -4125,7 +4125,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Searing Shot", target);
 			this.add('-anim', target, "Poison Gas", target);
 		},
-		selfdestruct: "always",
+		selfDamage: "KO",
 		secondary: {
 			chance: 10,
 			status: 'par',

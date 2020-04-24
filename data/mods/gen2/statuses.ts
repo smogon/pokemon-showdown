@@ -153,7 +153,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 				isSelfHit: true,
 				noDamageVariance: true,
 				flags: {},
-				selfdestruct: move.selfdestruct,
+				selfDamage: move.selfDamage,
 			} as unknown as ActiveMove;
 			const damage = this.getDamage(pokemon, pokemon, move);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");

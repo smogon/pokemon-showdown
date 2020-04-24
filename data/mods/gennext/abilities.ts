@@ -280,7 +280,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	reckless: {
 		inherit: true,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.recoil || attacker.item === 'lifeorb') {
+			if (['Recoil', 'Crash'].includes(move.selfDamage!) || attacker.item === 'lifeorb') {
 				this.debug('Reckless boost');
 				return basePower * 12 / 10;
 			}
@@ -607,7 +607,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	parentalbond: {
 		inherit: true,
 		onModifyMove(move, pokemon, target) {
-			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
+			if (move.category === 'Status' || move.selfDamage?.startsWith('KO') || move.multihit) return;
 			// singles, or single-target move
 			if (target.side.active.length < 2 || ['any', 'normal', 'randomNormal'].includes(move.target)) {
 				move.multihit = 2;

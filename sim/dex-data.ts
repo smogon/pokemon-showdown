@@ -861,6 +861,9 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	/** STAB multiplier (can be modified by other effects) (default 1.5). */
 	readonly stab?: number;
 
+	readonly selfDamage?: MoveData['selfDamage'];
+	readonly recoil?: [number, number];
+
 	readonly volatileStatus?: ID;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
@@ -900,6 +903,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.forceSTAB = !!data.forceSTAB;
 		this.noSketch = !!data.noSketch;
 		this.stab = data.stab || undefined;
+		if (this.recoil) this.selfDamage = 'Recoil';
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (this.category !== 'Status' && !this.gmaxPower) {

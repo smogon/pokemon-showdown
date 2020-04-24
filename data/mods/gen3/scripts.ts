@@ -84,7 +84,6 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		if (!this.singleEvent('TryMove', move, null, pokemon, target, move) ||
 			!this.runEvent('TryMove', pokemon, target, move)) {
-			if (move.recoil === 'mindblown') move.recoil = undefined; // TODO: ???
 			return false;
 		}
 
@@ -94,7 +93,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		if (move.selfdestruct === 'always') {
+		if (move.selfDamage === "KO") {
 			this.faint(pokemon, pokemon, move);
 		}
 
@@ -355,8 +354,8 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			move.totalDamage = damage;
 		}
 
-		if (Array.isArray(move.recoil) && move.totalDamage) {
-			this.damage(this.calcRecoilDamage(move.totalDamage, move.recoil), pokemon, target, 'recoil');
+		if (move.recoil && move.totalDamage) {
+			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
 		}
 
 		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
@@ -375,7 +374,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		return damage;
 	},
 
-	calcRecoilDamage(damageDealt, recoil) {
-		return this.dex.clampIntRange(Math.floor(damageDealt * recoil[0] / recoil[1]), 1);
+	calcRecoilDamage(damageDealt, move) {
+		return this.dex.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 	},
 };

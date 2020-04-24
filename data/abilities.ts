@@ -2666,7 +2666,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect multi-hit moves or moves that have multiple targets.",
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage quartered.",
 		onPrepareHit(source, target, move) {
-			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
+			if (move.category === 'Status' || move.selfDamage?.startsWith("KO") || move.multihit) return;
 			if (['iceball', 'rollout'].includes(move.id)) return;
 			if (!move.flags['charge'] && !move.spreadHit && !move.isZ && !move.isMax) {
 				move.multihit = 2;
@@ -3170,7 +3170,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "This Pokemon's attacks with recoil or crash damage have 1.2x power; not Struggle.",
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
-			if (Array.isArray(move.recoil) || move.recoil === 'crash') {
+			if ((move.recoil || move.selfDamage === "Crash")) {
 				this.debug('Reckless boost');
 				return this.chainModify([0x1333, 0x1000]);
 			}

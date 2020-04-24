@@ -1273,6 +1273,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			this.directDamage(target.maxhp / 2);
 			this.boost({atk: 12}, target);
 		},
+		selfDamage: "50% (can't KO)",
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -2481,6 +2482,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		category: "Status",
 		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage in exchange for the user losing 1/3 of its maximum HP, rounded down. Fails if the user would faint or if its Attack, Defense, Special Attack, Special Defense, and Speed stat stages would not change.",
 		shortDesc: "User loses 1/3 its max HP. Raises all stats by 1.",
+		selfDamage: "33% (can't KO)",
 		id: "clangoroussoul",
 		isViable: true,
 		name: "Clangorous Soul",
@@ -3283,6 +3285,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "normal",
+		selfDamage: "50% (if Ghost)",
 		nonGhostTarget: "self",
 		type: "Ghost",
 		zMoveEffect: 'curse',
@@ -4964,7 +4967,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		selfdestruct: "always",
+		selfDamage: "KO",
 		secondary: null,
 		target: "allAdjacent",
 		type: "Normal",
@@ -5307,7 +5310,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		selfdestruct: "ifHit",
+		selfDamage: "KO (unless failed)",
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -8394,11 +8397,11 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onTryHit(pokemon, target, move) {
 			if (!this.canSwitch(pokemon.side)) {
-				delete move.selfdestruct;
+				delete move.selfDamage;
 				return false;
 			}
 		},
-		selfdestruct: "ifHit",
+		selfDamage: "KO (unless failed)",
 		slotCondition: 'healingwish',
 		effect: {
 			onSwap(target) {
@@ -9034,7 +9037,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
-		recoil: 'crash',
+		selfDamage: "Crash",
 		onMoveFail(target, source, move) {
 			this.damage(source.baseMaxhp / 2, source, source, this.dex.getEffect('High Jump Kick'));
 		},
@@ -10001,7 +10004,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
-		recoil: 'crash',
+		selfDamage: "Crash",
 		onMoveFail(target, source, move) {
 			this.damage(source.baseMaxhp / 2, source, source, this.dex.getEffect('Jump Kick'));
 		},
@@ -10752,11 +10755,11 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1, dance: 1},
 		onTryHit(pokemon, target, move) {
 			if (!this.canSwitch(pokemon.side)) {
-				delete move.selfdestruct;
+				delete move.selfDamage;
 				return false;
 			}
 		},
-		selfdestruct: "ifHit",
+		selfDamage: "KO (unless failed)",
 		sideCondition: 'lunardance',
 		effect: {
 			duration: 2,
@@ -11908,7 +11911,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			atk: -2,
 			spa: -2,
 		},
-		selfdestruct: "ifHit",
+		selfDamage: "KO (unless failed)",
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -12187,9 +12190,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		recoil: 'mindblown',
+		selfDamage: "50% (residual)",
 		onAfterMove(pokemon, target, move) {
-			if (move.recoil === 'mindblown' && !move.multihit) {
+			if (move.selfDamage === "50% (residual)" && !move.multihit) {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Mind Blown'), true);
 			}
 		},
@@ -16411,7 +16414,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		selfdestruct: "always",
+		selfDamage: "KO",
 		secondary: null,
 		target: "allAdjacent",
 		type: "Normal",
@@ -18368,9 +18371,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		recoil: 'mindblown',
+		selfDamage: "50% (residual)",
 		onAfterMove(pokemon, target, move) {
-			if (move.recoil === 'mindblown' && !move.multihit) {
+			if (move.selfDamage === '50% (residual)' && !move.multihit) {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Steel Beam'), true);
 			}
 		},
@@ -18714,7 +18717,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			move.type = '???';
 			this.add('-activate', pokemon, 'move: Struggle');
 		},
-		recoil: 'struggle',
+		selfDamage: "Struggle",
 		secondary: null,
 		target: "randomNormal",
 		type: "Normal",
@@ -18817,6 +18820,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
+		selfDamage: "25% (can't KO)",
 		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
@@ -18865,8 +18869,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				} else {
 					this.add('-activate', target, 'move: Substitute', '[damage]');
 				}
-				if (Array.isArray(move.recoil)) {
-					this.damage(this.calcRecoilDamage(damage, move.recoil), source, target, 'recoil');
+				if (move.selfDamage === "Recoil") {
+					this.damage(this.calcRecoilDamage(damage, move), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');

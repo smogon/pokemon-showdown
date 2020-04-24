@@ -98,7 +98,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		return hitResults;
 	},
 
-	calcRecoilDamage(damageDealt, recoil) {
-		return this.dex.clampIntRange(Math.floor(damageDealt * recoil[0] / recoil[1]), 1);
+	calcRecoilDamage(damageDealt, move) {
+		return this.dex.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 	},
 };

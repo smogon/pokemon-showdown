@@ -129,7 +129,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
 			!target.runImmunity(move.type, true)
 		) {
-			if (move.selfdestruct) {
+			if (move.selfDamage?.startsWith("KO")) {
 				this.faint(pokemon, pokemon, move);
 			}
 			return false;
@@ -221,7 +221,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		// Checking if substitute fainted
 		if (target.subFainted) doSelfDestruct = false;
-		if (move.selfdestruct && doSelfDestruct) {
+		if (move.selfDamage?.startsWith("KO") && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
 
@@ -566,7 +566,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 
 		// Self destruct moves halve defense at this point.
-		if (move.selfdestruct && defType === 'def') {
+		if (move.selfDamage?.startsWith("KO") && defType === 'def') {
 			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
 		}
 

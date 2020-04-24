@@ -881,6 +881,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Deals Normal-type damage. If this move was successful, the user takes damage equal to 1/2 the HP lost by the target, rounded down, but not less than 1 HP. This move is automatically used if none of the user's known moves can be selected.",
 		shortDesc: "User loses 1/2 the HP lost by the target.",
+		selfDamage: "Recoil",
 		recoil: [1, 2],
 		onModifyMove() {},
 	},
@@ -904,6 +905,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
+		selfDamage: "25% (can't KO)",
 		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
@@ -963,7 +965,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				}
 				// Drain/recoil does not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
-					if (Array.isArray(move.recoil)) {
+					if (move.recoil) {
 						this.damage(Math.round(uncappedDamage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
 					}
 					if (move.drain) {

@@ -241,7 +241,7 @@ export const BattleScripts: BattleScriptsData = {
 
 		if (!this.singleEvent('TryMove', move, null, pokemon, target, move) ||
 			!this.runEvent('TryMove', pokemon, target, move)) {
-			if (move.recoil === 'mindblown') move.recoil = undefined;
+			if (move.selfDamage === "50% (residual)") move.selfDamage = undefined;
 			return false;
 		}
 
@@ -251,7 +251,7 @@ export const BattleScripts: BattleScriptsData = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		if (this.gen !== 4 && move.selfdestruct === 'always') {
+		if (this.gen !== 4 && move.selfDamage === "KO") {
 			this.faint(pokemon, pokemon, move);
 		}
 
@@ -266,7 +266,7 @@ export const BattleScripts: BattleScriptsData = {
 				this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
 				return false;
 			}
-			if (this.gen === 4 && move.selfdestruct === 'always') {
+			if (this.gen === 4 && move.selfDamage === "KO") {
 				this.faint(pokemon, pokemon, move);
 			}
 			moveResult = this.trySpreadMoveHit(targets, pokemon, move);
@@ -689,9 +689,9 @@ export const BattleScripts: BattleScriptsData = {
 				// @ts-ignore
 				move.totalDamage += damage[i];
 			}
-			if (move.recoil === 'mindblown') {
+			if (move.selfDamage === "50% (residual)") {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.getEffect('Mind Blown'), true);
-				move.recoil = undefined;
+				move.selfDamage = undefined;
 			}
 			this.eachEvent('Update');
 			if (!pokemon.hp && targets.length === 1) {
@@ -706,11 +706,11 @@ export const BattleScripts: BattleScriptsData = {
 			this.add('-hitcount', targets[0], hit - 1);
 		}
 
-		if (Array.isArray(move.recoil) && move.totalDamage) {
-			this.damage(this.calcRecoilDamage(move.totalDamage, move.recoil), pokemon, pokemon, 'recoil');
+		if (move.recoil && move.totalDamage) {
+			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
 		}
 
-		if (move.recoil === 'struggle') {
+		if (move.selfDamage === "Struggle") {
 			// @ts-ignore
 			this.directDamage(this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
 		}
@@ -890,7 +890,7 @@ export const BattleScripts: BattleScriptsData = {
 				continue;
 			}
 			damage[i] = curDamage;
-			if (move.selfdestruct === 'ifHit') {
+			if (move.selfDamage === "KO (unless failed)") {
 				this.faint(pokemon, pokemon, move);
 			}
 			if ((damage[i] || damage[i] === 0) && !target.fainted) {
@@ -1013,7 +1013,7 @@ export const BattleScripts: BattleScriptsData = {
 		}
 
 
-		if (!didAnything && didAnything !== 0 && !moveData.self && !moveData.selfdestruct) {
+		if (!didAnything && didAnything !== 0 && !moveData.self && !moveData.selfDamage?.startsWith('ko')) {
 			if (!isSelf && !isSecondary) {
 				if (didAnything === false) {
 					this.add('-fail', pokemon);
@@ -1077,8 +1077,8 @@ export const BattleScripts: BattleScriptsData = {
 		return retVal === true ? undefined : retVal;
 	},
 
-	calcRecoilDamage(damageDealt, recoil) {
-		return this.dex.clampIntRange(Math.round(damageDealt * recoil[0] / recoil[1]), 1);
+	calcRecoilDamage(damageDealt, move) {
+		return this.dex.clampIntRange(Math.round(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 	},
 
 	zMoveTable: {

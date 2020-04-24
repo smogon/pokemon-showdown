@@ -945,7 +945,10 @@ interface MoveData extends EffectData, MoveEventMethods {
 	pressureTarget?: string;
 	pseudoWeather?: string;
 	selfBoost?: {boosts?: SparseBoostsTable};
-	selfdestruct?: string | boolean;
+	selfDamage?:
+	"Recoil" | "Crash" | "Struggle" | "25% (can't KO)" | "33% (can't KO)" |
+	"50% (if Ghost)" | "50% (residual)" | "50% (can't KO)" | "KO" | "KO (unless failed)";
+	recoil?: [number, number];
 	selfSwitch?: string | boolean;
 	sideCondition?: string;
 	sleepUsable?: boolean;
@@ -953,8 +956,6 @@ interface MoveData extends EffectData, MoveEventMethods {
 	spreadModifier?: number;
 	stallingMove?: boolean;
 	stealsBoosts?: boolean;
-	recoil?: [number, number] | 'crash' | 'struggle' | 'mindblown';
-
 	terrain?: string;
 	thawsTarget?: boolean;
 	/**
@@ -1231,7 +1232,7 @@ interface BattleScriptsData {
 	zMoveTable?: {[k: string]: string};
 	maxMoveTable?: {[k: string]: string};
 	afterMoveSecondaryEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined;
-	calcRecoilDamage?: (this: Battle, damageDealt: number, recoil: [number, number]) => number;
+	calcRecoilDamage?: (this: Battle, damageDealt: number, mvoe: Move) => number;
 	canMegaEvo?: (this: Battle, pokemon: Pokemon) => string | undefined | null;
 	canUltraBurst?: (this: Battle, pokemon: Pokemon) => string | null;
 	canZMove?: (this: Battle, pokemon: Pokemon) => ZMoveOptions | void;

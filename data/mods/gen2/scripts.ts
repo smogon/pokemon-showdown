@@ -144,7 +144,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		const doSelfDestruct = true;
 		let damage: number | false | undefined = 0;
 
-		if (move.selfdestruct && doSelfDestruct) {
+		if (move.selfDamage?.startsWith("KO") && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
 
@@ -284,8 +284,8 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			this.runEvent('AfterMoveSecondary', target, pokemon, move);
 		}
 
-		if (Array.isArray(move.recoil) && move.totalDamage) {
-			this.damage(this.calcRecoilDamage(move.totalDamage, move.recoil), pokemon, target, 'recoil');
+		if (move.recoil && move.totalDamage) {
+			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
 		}
 		return damage;
 	},
@@ -414,7 +414,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
 			}
 
-			if (!hitResult && !didSomething && !moveData.self && !moveData.selfdestruct) {
+			if (!hitResult && !didSomething && !moveData.self && !moveData.selfDamage?.startsWith("KO")) {
 				if (!isSelf && !isSecondary) {
 					if (hitResult === false || didSomething === false) this.add('-fail', target);
 				}
@@ -644,7 +644,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 
 		// Self destruct moves halve defense at this point.
-		if (move.selfdestruct && defType === 'def') {
+		if (move.selfDamage?.startsWith("KO") && defType === 'def') {
 			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
