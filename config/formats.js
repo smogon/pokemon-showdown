@@ -1843,7 +1843,7 @@ const Formats = [
 		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['[Gen 5] NU'],
-		banlist: ['NU', 'Combusken', 'Riolu', 'Rotom-Frost', 'Vigoroth'],
+		banlist: ['NU', 'Combusken', 'Linoone', 'Riolu', 'Rotom-Frost', 'Vigoroth'],
 	},
 	{
 		name: "[Gen 5] LC",
