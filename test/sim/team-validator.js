@@ -59,6 +59,20 @@ describe('Team Validator', function () {
 		team = Dex.fastUnpackTeam('|raikou|||hiddenpowerwater||||16,28,26,,,|||');
 		illegal = TeamValidator.get('gen2ou').validateTeam(team);
 		assert(illegal);
+
+		team = Dex.fastUnpackTeam('|raikou|||thunderbolt||||,,,28,30,|||');
+		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should validate Gen 2 EVs', function () {
+		let team = Dex.fastUnpackTeam('|gengar|||thunderbolt||,,,200,200,|||||');
+		let illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert.equal(illegal, null);
+
+		team = Dex.fastUnpackTeam('|gengar|||thunderbolt||,,,248,252,|||||');
+		illegal = TeamValidator.get('gen2ou').validateTeam(team);
+		assert(illegal);
 	});
 
 	it('should validate Gen 7 IVs', function () {
