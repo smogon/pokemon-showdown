@@ -465,8 +465,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Comatose');
 		},
 		onSetStatus(status, target, source, effect) {
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Comatose');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Comatose');
+			}
 			return false;
 		},
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
@@ -1712,8 +1713,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'psn' && status.id !== 'tox') return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Immunity');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Immunity');
+			}
 			return false;
 		},
 		id: "immunity",
@@ -1786,8 +1788,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'slp') return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Insomnia');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Insomnia');
+			}
 			return false;
 		},
 		id: "insomnia",
@@ -1905,7 +1908,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
 		onSetStatus(status, target, source, effect) {
 			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
-				if (effect?.status) this.add('-immune', target, '[from] ability: Leaf Guard');
+				if ((effect as Move)?.status) {
+					this.add('-immune', target, '[from] ability: Leaf Guard');
+				}
 				return false;
 			}
 		},
@@ -1992,8 +1997,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'par') return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Limber');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Limber');
+			}
 			return false;
 		},
 		id: "limber",
@@ -2712,15 +2718,17 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (!['psn', 'tox'].includes(status.id)) return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Pastel Veil');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Pastel Veil');
+			}
 			return false;
 		},
 		onAllySetStatus(status, target, source, effect) {
 			if (!['psn', 'tox'].includes(status.id)) return;
-			if (!effect || !effect.status) return false;
-			const effectHolder = this.effectData.target;
-			this.add('-block', target, 'ability: Pastel Veil', '[of] ' + effectHolder);
+			if ((effect as Move)?.status) {
+				const effectHolder = this.effectData.target;
+				this.add('-block', target, 'ability: Pastel Veil', '[of] ' + effectHolder);
+			}
 			return false;
 		},
 		id: "pastelveil",
@@ -3632,8 +3640,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (target.species.id !== 'miniormeteor' || target.transformed) return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Shields Down');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Shields Down');
+			}
 			return false;
 		},
 		onTryAddVolatile(status, target) {
@@ -4523,8 +4532,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'slp') return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Vital Spirit');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Vital Spirit');
+			}
 			return false;
 		},
 		id: "vitalspirit",
@@ -4618,8 +4628,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'brn') return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Water Bubble');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Water Bubble');
+			}
 			return false;
 		},
 		id: "waterbubble",
@@ -4649,8 +4660,9 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'brn') return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Water Veil');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Water Veil');
+			}
 			return false;
 		},
 		id: "waterveil",
