@@ -109,6 +109,14 @@ describe('Dancer', function () {
 		assert.hurts(dancer, () => battle.makeChoices('move fierydance', 'move meanlook'));
 	});
 
+	it('should not activate if the holder fainted', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Oricoriopompom', ability: 'dancer', moves: ['revelationdance']}]});
+		battle.setPlayer('p2', {team: [{species: 'oricorio', ability: 'dancer', level: 1, moves: ['sleeptalk']}, {species: 'oricorio', ability: 'dancer', level: 1, moves: ['sleeptalk']}]});
+		battle.makeChoices();
+		assert.ok(!battle.log.includes('|-activate|p2: Oricorio|ability: Dancer'));
+	});
+
 	it('should target the user of a Dance move unless it was an ally attacking an opponent', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
