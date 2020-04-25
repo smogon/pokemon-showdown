@@ -782,8 +782,6 @@ type EffectType =
 
 interface BasicEffect extends EffectData {
 	id: ID;
-	weather?: ID;
-	status?: ID;
 	effectType: EffectType;
 	exists: boolean;
 	fullname: string;

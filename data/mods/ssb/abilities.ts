@@ -533,8 +533,9 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		onCriticalHit: false,
 		onSetStatus(status, target, source, effect) {
 			if (target.species.id !== 'miniormeteor' || target.transformed) return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Mystery Shell');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Mystery Shell');
+			}
 			return false;
 		},
 	},
@@ -976,8 +977,9 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'brn') return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Thiccer Fat');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Thiccer Fat');
+			}
 			return false;
 		},
 	},
@@ -1147,8 +1149,9 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'brn') return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Water Bubble');
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Water Bubble');
+			}
 			return false;
 		},
 		id: "trashvivwebs",
