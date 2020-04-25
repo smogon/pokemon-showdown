@@ -118,6 +118,7 @@ export const BattleScripts: BattleScriptsData = {
 			);
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
+				if (dancer.fainted) continue;
 				this.add('-activate', dancer, 'ability: Dancer');
 				// @ts-ignore - the Dancer ability can't trigger on a move where target is null because it does not copy failed moves.
 				const dancersTarget = target.side !== dancer.side && pokemon.side === dancer.side ? target : pokemon;
