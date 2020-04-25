@@ -423,12 +423,9 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			}
 		}
 		if (moveData.self) {
-			let selfRoll = 0;
-			if (!isSecondary && moveData.self.boosts) selfRoll = this.random(100);
 			// This is done solely to mimic in-game RNG behaviour. All self drops have a 100% chance of happening but still grab a random number.
-			if (moveData.self.chance === undefined || selfRoll < moveData.self.chance) {
-				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
-			}
+			if (!isSecondary && moveData.self.boosts) this.random(100);
+			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
 		if (moveData.secondaries && this.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
 			for (const secondary of moveData.secondaries) {
@@ -549,7 +546,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		// Happens after crit calculation
 		if (basePower) {
 			// confusion damage
-			if (move.isSelfHit) {
+			if (move.isConfusionSelfHit) {
 				move.type = move.baseMoveType!;
 				basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 				move.type = '???';

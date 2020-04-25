@@ -1032,15 +1032,12 @@ export const BattleScripts: BattleScriptsData = {
 		for (const target of targets) {
 			if (target === false) continue;
 			if (moveData.self && !move.selfDropped) {
-				let selfRoll = 0;
 				if (!isSecondary && moveData.self.boosts) {
-					selfRoll = this.random(100);
+					// This is done solely to mimic in-game RNG behaviour. All self drops have a 100% chance of happening but still grab a random number.
+					this.random(100);
 					if (!move.multihit) move.selfDropped = true;
 				}
-				// This is done solely to mimic in-game RNG behaviour. All self drops have a 100% chance of happening but still grab a random number.
-				if (moveData.self.chance === undefined || selfRoll < moveData.self.chance) {
-					this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
-				}
+				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 		}
 	},

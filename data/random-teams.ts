@@ -482,7 +482,7 @@ export class RandomTeams {
 			if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60 && moveid !== 'rapidspin')) counter['technician']++;
 			// Moves that hit up to 5 times:
 			if (move.multihit && Array.isArray(move.multihit) && move.multihit[1] === 5) counter['skilllink']++;
-			if (move.recoil || move.hasCustomRecoil) counter['recoil']++;
+			if (move.recoil || move.hasCrashDamage) counter['recoil']++;
 			if (move.drain) counter['drain']++;
 			// Moves which have a base power, but aren't super-weak like Rapid Spin:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback || moveid === 'infestation' || moveid === 'naturepower') {

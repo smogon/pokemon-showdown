@@ -150,7 +150,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 				baseMoveType: move.type,
 				category: 'Physical',
 				willCrit: false,
-				isSelfHit: true,
+				isConfusionSelfHit: true,
 				noDamageVariance: true,
 				flags: {},
 				selfdestruct: move.selfdestruct,
