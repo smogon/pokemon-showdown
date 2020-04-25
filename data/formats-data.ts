@@ -766,7 +766,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	weezing: {
 		randomBattleMoves: ["fireblast", "painsplit", "sludgebomb", "toxicspikes", "willowisp"],
 		randomDoubleBattleMoves: ["clearsmog", "fireblast", "painsplit", "sludgebomb", "willowisp"],
-		unreleasedHidden: true,
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
