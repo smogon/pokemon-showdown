@@ -1088,7 +1088,7 @@ interface SpeciesData {
 	requiredMove?: string;
 	battleOnly?: string | string[];
 	isGigantamax?: string;
-	inheritsFrom?: string;
+	changesFrom?: string;
 }
 
 interface ModdedSpeciesData extends Partial<SpeciesData> {

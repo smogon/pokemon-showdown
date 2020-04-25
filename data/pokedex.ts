@@ -527,6 +527,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Pikachu-Cosplay",
 		gen: 6,
 	},
 	pikachubelle: {
@@ -542,6 +543,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Pikachu-Cosplay",
 		gen: 6,
 	},
 	pikachupopstar: {
@@ -557,6 +559,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Pikachu-Cosplay",
 		gen: 6,
 	},
 	pikachuphd: {
@@ -572,6 +575,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Pikachu-Cosplay",
 		gen: 6,
 	},
 	pikachulibre: {
@@ -587,6 +591,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 6,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Pikachu-Cosplay",
 		gen: 6,
 	},
 	pikachuoriginal: {
@@ -6591,7 +6596,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 60.8,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "deoxys",
+		changesFrom: "Deoxys",
 	},
 	deoxysdefense: {
 		num: 386,
@@ -6606,7 +6611,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 60.8,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "deoxys",
+		changesFrom: "Deoxys",
 	},
 	deoxysspeed: {
 		num: 386,
@@ -6621,7 +6626,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 60.8,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "deoxys",
+		changesFrom: "Deoxys",
 	},
 	turtwig: {
 		num: 387,
@@ -8012,7 +8017,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "rotom",
+		changesFrom: "Rotom",
 	},
 	rotomwash: {
 		num: 479,
@@ -8027,7 +8032,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "rotom",
+		changesFrom: "Rotom",
 	},
 	rotomfrost: {
 		num: 479,
@@ -8042,7 +8047,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "rotom",
+		changesFrom: "Rotom",
 	},
 	rotomfan: {
 		num: 479,
@@ -8057,7 +8062,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "rotom",
+		changesFrom: "Rotom",
 	},
 	rotommow: {
 		num: 479,
@@ -8072,7 +8077,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 0.3,
 		color: "Red",
 		eggGroups: ["Amorphous"],
-		inheritsFrom: "rotom",
+		changesFrom: "Rotom",
 	},
 	uxie: {
 		num: 480,
@@ -8184,6 +8189,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 650,
 		color: "Black",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Giratina",
 		requiredItem: "Griseous Orb",
 	},
 	cresselia: {
@@ -8262,6 +8268,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 5.2,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Shaymin",
 	},
 	arceus: {
 		num: 493,
@@ -8291,6 +8298,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Insect Plate", "Buginium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusdark: {
 		num: 493,
@@ -8306,6 +8314,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Dread Plate", "Darkinium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusdragon: {
 		num: 493,
@@ -8321,6 +8330,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Draco Plate", "Dragonium Z"],
+		changesFrom: "Arceus",
 	},
 	arceuselectric: {
 		num: 493,
@@ -8336,6 +8346,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Zap Plate", "Electrium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusfairy: {
 		num: 493,
@@ -8352,6 +8363,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		gen: 6,
 		requiredItems: ["Pixie Plate", "Fairium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusfighting: {
 		num: 493,
@@ -8367,6 +8379,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Fist Plate", "Fightinium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusfire: {
 		num: 493,
@@ -8382,6 +8395,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Flame Plate", "Firium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusflying: {
 		num: 493,
@@ -8397,6 +8411,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Sky Plate", "Flyinium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusghost: {
 		num: 493,
@@ -8412,6 +8427,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Spooky Plate", "Ghostium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusgrass: {
 		num: 493,
@@ -8427,6 +8443,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Meadow Plate", "Grassium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusground: {
 		num: 493,
@@ -8442,6 +8459,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Earth Plate", "Groundium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusice: {
 		num: 493,
@@ -8457,6 +8475,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Icicle Plate", "Icium Z"],
+		changesFrom: "Arceus",
 	},
 	arceuspoison: {
 		num: 493,
@@ -8472,6 +8491,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Toxic Plate", "Poisonium Z"],
+		changesFrom: "Arceus",
 	},
 	arceuspsychic: {
 		num: 493,
@@ -8487,6 +8507,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Mind Plate", "Psychium Z"],
+		changesFrom: "Arceus",
 	},
 	arceusrock: {
 		num: 493,
@@ -8502,6 +8523,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Stone Plate", "Rockium Z"],
+		changesFrom: "Arceus",
 	},
 	arceussteel: {
 		num: 493,
@@ -8517,6 +8539,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Iron Plate", "Steelium Z"],
+		changesFrom: "Arceus",
 	},
 	arceuswater: {
 		num: 493,
@@ -8532,6 +8555,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItems: ["Splash Plate", "Waterium Z"],
+		changesFrom: "Arceus",
 	},
 	victini: {
 		num: 494,
@@ -10603,6 +10627,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 63,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Tornadus",
 	},
 	thundurus: {
 		num: 642,
@@ -10631,6 +10656,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 61,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Thundurus",
 	},
 	reshiram: {
 		num: 643,
@@ -10683,6 +10709,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 68,
 		color: "Brown",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Landorus",
 	},
 	kyurem: {
 		num: 646,
@@ -10710,6 +10737,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 325,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Kyurem",
 	},
 	kyuremwhite: {
 		num: 646,
@@ -10724,6 +10752,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 325,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Kyurem",
 	},
 	keldeo: {
 		num: 647,
@@ -10738,6 +10767,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["keldeoresolute"],
+		changesFrom: "Keldeo",
 	},
 	keldeoresolute: {
 		num: 647,
@@ -10811,6 +10841,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Douse Drive",
+		changesFrom: "Genesect",
 	},
 	genesectshock: {
 		num: 649,
@@ -10826,6 +10857,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Shock Drive",
+		changesFrom: "Genesect",
 	},
 	genesectburn: {
 		num: 649,
@@ -10841,6 +10873,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Burn Drive",
+		changesFrom: "Genesect",
 	},
 	genesectchill: {
 		num: 649,
@@ -10856,6 +10889,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Chill Drive",
+		changesFrom: "Genesect",
 	},
 	chespin: {
 		num: 650,
@@ -11963,6 +11997,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Undiscovered"],
 		gen: 7,
+		changesFrom: "Zygarde",
 	},
 	zygardecomplete: {
 		num: 718,
@@ -12036,6 +12071,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 490,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		changesFrom: "Hoopa",
 	},
 	volcanion: {
 		num: 721,
@@ -12360,6 +12396,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 3.4,
 		color: "Yellow",
 		eggGroups: ["Flying"],
+		changesFrom: "Oricorio",
 	},
 	oricoriopau: {
 		num: 741,
@@ -12374,6 +12411,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 3.4,
 		color: "Pink",
 		eggGroups: ["Flying"],
+		changesFrom: "Oricorio",
 	},
 	oricoriosensu: {
 		num: 741,
@@ -12388,6 +12426,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 3.4,
 		color: "Purple",
 		eggGroups: ["Flying"],
+		changesFrom: "Oricorio",
 	},
 	cutiefly: {
 		num: 742,
@@ -12916,6 +12955,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Bug Memory",
+		changesFrom: "Silvally",
 	},
 	silvallydark: {
 		num: 773,
@@ -12933,6 +12973,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Dark Memory",
+		changesFrom: "Silvally",
 	},
 	silvallydragon: {
 		num: 773,
@@ -12950,6 +12991,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Dragon Memory",
+		changesFrom: "Silvally",
 	},
 	silvallyelectric: {
 		num: 773,
@@ -12967,6 +13009,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Electric Memory",
+		changesFrom: "Silvally",
 	},
 	silvallyfairy: {
 		num: 773,
@@ -12984,6 +13027,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Fairy Memory",
+		changesFrom: "Silvally",
 	},
 	silvallyfighting: {
 		num: 773,
@@ -13001,6 +13045,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Fighting Memory",
+		changesFrom: "Silvally",
 	},
 	silvallyfire: {
 		num: 773,
@@ -13018,6 +13063,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Fire Memory",
+		changesFrom: "Silvally",
 	},
 	silvallyflying: {
 		num: 773,
@@ -13035,6 +13081,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Flying Memory",
+		changesFrom: "Silvally",
 	},
 	silvallyghost: {
 		num: 773,
@@ -13052,6 +13099,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Ghost Memory",
+		changesFrom: "Silvally",
 	},
 	silvallygrass: {
 		num: 773,
@@ -13069,6 +13117,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Grass Memory",
+		changesFrom: "Silvally",
 	},
 	silvallyground: {
 		num: 773,
@@ -13086,6 +13135,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Ground Memory",
+		changesFrom: "Silvally",
 	},
 	silvallyice: {
 		num: 773,
@@ -13103,6 +13153,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Ice Memory",
+		changesFrom: "Silvally",
 	},
 	silvallypoison: {
 		num: 773,
@@ -13120,6 +13171,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Poison Memory",
+		changesFrom: "Silvally",
 	},
 	silvallypsychic: {
 		num: 773,
@@ -13137,6 +13189,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Psychic Memory",
+		changesFrom: "Silvally",
 	},
 	silvallyrock: {
 		num: 773,
@@ -13154,6 +13207,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Rock Memory",
+		changesFrom: "Silvally",
 	},
 	silvallysteel: {
 		num: 773,
@@ -13171,6 +13225,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Steel Memory",
+		changesFrom: "Silvally",
 	},
 	silvallywater: {
 		num: 773,
@@ -13188,6 +13243,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Water Memory",
+		changesFrom: "Silvally",
 	},
 	minior: {
 		num: 774,
@@ -13623,7 +13679,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 460,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "necrozma",
+		changesFrom: "Necrozma",
 	},
 	necrozmadawnwings: {
 		num: 800,
@@ -13638,7 +13694,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 350,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
-		inheritsFrom: "necrozma",
+		changesFrom: "Necrozma",
 	},
 	necrozmaultra: {
 		num: 800,
@@ -15197,7 +15253,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Rusted Sword",
-		inheritsFrom: "zacian",
+		changesFrom: "Zacian",
 	},
 	zamazenta: {
 		num: 889,
@@ -15226,7 +15282,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Rusted Shield",
-		inheritsFrom: "zamazenta",
+		changesFrom: "Zamazenta",
 	},
 	eternatus: {
 		num: 890,

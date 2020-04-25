@@ -862,11 +862,8 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 				if (baseSpecies.otherFormes) {
 					for (const formeid of baseSpecies.otherFormes) {
 						const forme = dex.getSpecies(formeid);
-						if (!forme.battleOnly) {
-							if (!forme.forme.includes('Alola') && forme.forme !== 'Galar' && forme.baseSpecies !== 'Wormadam') {
-								types = types.concat(forme.types).concat(baseSpecies.types);
-							}
-						}
+						if (!forme.changesFrom) continue;
+						types = types.concat(forme.types).concat(baseSpecies.types);
 					}
 				}
 				if (types.includes(move.type)) return null;

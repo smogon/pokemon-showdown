@@ -459,7 +459,7 @@ export class ModdedDex {
 
 	getOutOfBattleSpecies(species: Species) {
 		return !species.battleOnly ? species.name :
-			species.inheritsFrom ? this.getSpecies(species.inheritsFrom).name :
+			species.changesFrom ? this.getSpecies(species.changesFrom).name :
 			species.baseSpecies;
 	}
 
