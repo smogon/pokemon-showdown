@@ -853,9 +853,11 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 				const dex = this.dex;
 				let types = species.types;
 				const baseSpecies = dex.getSpecies(species.baseSpecies);
-				while (species.prevo) {
-					const prevoSpecies = dex.getSpecies(species.prevo);
+				let prevo = species.prevo;
+				while (prevo) {
+					const prevoSpecies = dex.getSpecies(prevo);
 					types = types.concat(prevoSpecies.types);
+					prevo = prevoSpecies.prevo;
 				}
 				if (baseSpecies.otherFormes) {
 					for (const formeid of baseSpecies.otherFormes) {
