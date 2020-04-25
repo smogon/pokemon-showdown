@@ -99,4 +99,32 @@ describe("Dynamax", function () {
 		assert.equal(battle.requestState, 'switch');
 		assert.equal(battle.p1.active[0].hp, dynamaxedHP);
 	});
+
+	it('should be impossible to Dynamax when all the base moves are disabled', function () {
+		battle = common.createBattle([[
+			{species: "Feebas", moves: ['splash']},
+		], [
+			{species: "Wynaut", moves: ['taunt', 'splash']},
+		]]);
+		battle.makeChoices();
+		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'), 'Feebas', 'Max Guard', true);
+
+		battle = common.createBattle([[
+			{species: "Feebas", moves: ['splash']},
+		], [
+			{species: "Wynaut", moves: ['imprison', 'splash']},
+		]]);
+		battle.makeChoices();
+		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'), 'Feebas', 'Max Guard', true);
+	});
+
+	it('Max Guard should be disallowed by Taunt', function () {
+		battle = common.createBattle([[
+			{species: "Feebas", moves: ['splash']},
+		], [
+			{species: "Wynaut", moves: ['taunt', 'splash']},
+		]]);
+		battle.makeChoices('move splash dynamax', 'auto');
+		assert.cantMove(() => battle.choose('p1', 'move splash'), 'Feebas', 'Max Guard', true);
+	});
 });
