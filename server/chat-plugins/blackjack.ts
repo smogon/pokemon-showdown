@@ -114,7 +114,7 @@ export class Blackjack extends Rooms.RoomGame {
 	 */
 	makeGame(autostartMinutes = 0) {
 		if (autostartMinutes > 0) {
-			this.autostart = setTimeout(() => this.start(), (autostartMinutes * 60000));
+			this.autostart = setTimeout(() => this.start(), autostartMinutes * 60000);
 		}
 
 		this.sendInvite();
@@ -670,7 +670,7 @@ export const commands: ChatCommands = {
 
 			this.privateModAction(`(A game of blackjack was created by ${user.name}.)`);
 			this.modlog(`BLACKJACK CREATE`);
-			room.game = new Blackjack(room, user, parseFloat(target));
+			room.game = new Blackjack(room, user, autostartMinutes);
 		},
 		start(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
