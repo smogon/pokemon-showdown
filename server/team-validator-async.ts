@@ -43,6 +43,10 @@ export const PM = new QueryProcessManager<{
 	const {formatid, options, team} = message;
 	const parsedTeam = Dex.fastUnpackTeam(team);
 
+	if (Config.debugvalidatorprocesses && process.send) {
+		process.send('DEBUG\n' + JSON.stringify(message));
+	}
+
 	let problems;
 	try {
 		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, options);
