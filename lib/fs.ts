@@ -421,6 +421,18 @@ export class FSPath {
 	isDirectorySync() {
 		return fs.statSync(this.path).isDirectory();
 	}
+
+	async realpath() {
+		return new Promise<string>((resolve, reject) => {
+			fs.realpath(this.path, (err, path) => {
+				err ? reject(err) : resolve(path);
+			});
+		});
+	}
+
+	realpathSync() {
+		return fs.realpathSync(this.path);
+	}
 }
 
 class FileReadStream extends ReadStream {
