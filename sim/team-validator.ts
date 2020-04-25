@@ -864,8 +864,17 @@ export class TeamValidator {
 			}
 		} else { // EVs
 			for (const stat in set.evs) {
-				if (set.evs[stat as 'hp'] > 255) {
+				if (set.evs[stat as StatName] > 255) {
 					problems.push(`${name} has more than 255 EVs in ${statTable[stat as 'hp']}.`);
+				}
+			}
+			if (dex.gen <= 2) {
+				if (set.evs.spa !== set.evs.spd) {
+					if (dex.gen === 2) {
+						problems.push(`${name} has different SpA and SpD EVs, which is not possible in Gen 2.`);
+					} else {
+						set.evs.spd = set.evs.spa;
+					}
 				}
 			}
 		}
