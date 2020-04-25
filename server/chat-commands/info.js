@@ -1674,8 +1674,7 @@ const commands = {
 	formatshelp: 'formathelp',
 	viewbanlist: 'formathelp',
 	formathelp(target, room, user, connection, cmd) {
-		if (!this.runBroadcast()) return;
-		if (!target) {
+		if (!target && this.runBroadcast()) {
 			return this.sendReplyBox(
 				`- <a href="https://www.smogon.com/tiers/">Smogon Tiers</a><br />` +
 				`- <a href="https://www.smogon.com/forums/threads/3498332/">Tiering FAQ</a><br />` +
@@ -1718,6 +1717,7 @@ const commands = {
 		}
 
 		if (!totalMatches) return this.errorReply("No matched formats found.");
+		if (!this.runBroadcast()) return;
 		if (totalMatches === 1) {
 			const rules = [];
 			let rulesetHtml = '';
