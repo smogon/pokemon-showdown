@@ -1287,8 +1287,8 @@ export class RandomTeams {
 			level = levelScale[tier] || (species.nfe ? 90 : 80);
 			if (customScale[species.name]) level = customScale[species.name];
 		} else {
-			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
-			// Every 10.34 BST adds a level from 70 up to 99. Results are floored.
+			// We choose level based on BST. Min level is 66, max level is 99. 680+ BST is 66, 330 or lower is 99. Calculate with those values.
+			// Every 10.3 BST adds a level from 66 up to 99. Results are floored.
 			const baseStats = species.baseStats;
 
 			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
@@ -1305,7 +1305,7 @@ export class RandomTeams {
 			} else if (speciesAbility === 'Slow Start') {
 				bst -= 0.5 * (baseStats.atk + baseStats.spe);
 			}
-			level = 63 + Math.floor(((680 - this.dex.clampIntRange(bst, 300, 680)) / 10.34));
+			level = 66 + Math.floor(((680 - this.dex.clampIntRange(bst, 330, 680)) / 10.3));
 		}
 
 		// Prepare optimal HP
@@ -1408,7 +1408,7 @@ export class RandomTeams {
 				if (baseFormes[species.baseSpecies]) continue;
 
 				// Prevent unwanted formes in doubles
-				if (this.format.gameType !== 'singles' && !species.randomDoubleBattleMoves) continue;
+				if (this.format.gameType === 'doubles' && !species.randomDoubleBattleMoves) continue;
 
 				const tier = species.tier;
 				const types = species.types;
