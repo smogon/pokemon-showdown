@@ -459,7 +459,7 @@ export class RandomTeams {
 		// Moves that shouldn't be the only STAB moves:
 		const NoStab = [
 			'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'explosion', 'fakeout', 'firstimpression', 'flamecharge',
-			'iceshard', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'selfdestruct', 'suckerpunch', 'watershuriken',
+			'iceshard', 'incinerate', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'selfdestruct', 'suckerpunch', 'watershuriken',
 			'clearsmog', 'eruption', 'icywind', 'snarl', 'vacuumwave', 'waterspout',
 		];
 
@@ -1100,11 +1100,11 @@ export class RandomTeams {
 				} else if (ability === 'Technician') {
 					rejectAbility = (!counter['technician'] || hasMove['tailslap'] || hasAbility['Punk Rock']);
 				} else if (ability === 'Tinted Lens') {
-					rejectAbility = (hasMove['defog'] || hasMove['hurricane'] || counter.Status > 2 && !counter.setupType);
+					rejectAbility = ((hasMove['defog'] || hasMove['hurricane'] || counter.Status > 2 && !counter.setupType) || (isDoubles && hasAbility['Magic Guard']));
 				} else if (ability === 'Unaware') {
 					rejectAbility = (counter.setupType || hasMove['stealthrock']);
 				} else if (ability === 'Unburden') {
-					rejectAbility = (hasAbility['Prankster'] || !counter.setupType && !hasMove['acrobatics']);
+					rejectAbility = (hasAbility['Prankster'] || (isDoubles && hasAbility['Reckless']) || (!isDoubles && !counter.setupType && !hasMove['acrobatics']));
 				} else if (ability === 'Volt Absorb') {
 					rejectAbility = (this.dex.getEffectiveness('Electric', species) < -1);
 				} else if (ability === 'Water Absorb') {
@@ -1194,7 +1194,7 @@ export class RandomTeams {
 			item = 'Liechi Berry';
 		} else if (isDoubles && (hasMove['eruption'] || hasMove['waterspout']) && counter.damagingMoves.length >= 4) {
 			item = 'Choice Scarf';
-		} else if (isDoubles && hasMove['blizzard'] && !teamDetails['hail']) {
+		} else if (isDoubles && hasMove['blizzard'] && !teamDetails['hail'] && ability !== 'Snow Warning') {
 			item = 'Blunder Policy';
 
 		// Medium priority
