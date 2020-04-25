@@ -280,7 +280,7 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	reckless: {
 		inherit: true,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.recoil || move.hasCustomRecoil || attacker.item === 'lifeorb') {
+			if (move.recoil || move.hasCrashDamage || attacker.item === 'lifeorb') {
 				this.debug('Reckless boost');
 				return basePower * 12 / 10;
 			}

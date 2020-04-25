@@ -1509,7 +1509,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			if (alts.recoil) {
-				if (dex[move].recoil || dex[move].hasCustomRecoil) matched = true;
+				if (dex[move].recoil || dex[move].hasCrashDamage) matched = true;
 			}
 			if (matched) continue;
 			for (const prop in alts.property) {

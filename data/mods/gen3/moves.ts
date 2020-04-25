@@ -147,7 +147,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "If the user uses an Electric-type attack on the next turn, its power will be doubled.",
 		shortDesc: "The user's Electric attack next turn has 2x power.",
-		boosts: false,
+		boosts: null,
 	},
 	clamp: {
 		inherit: true,
