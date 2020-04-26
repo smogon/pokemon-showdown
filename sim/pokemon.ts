@@ -1014,7 +1014,7 @@ export class Pokemon {
 		}
 	}
 
-	transformInto(pokemon: Pokemon, effect: Effect | null = null) {
+	transformInto(pokemon: Pokemon, effect?: Effect) {
 		const species = pokemon.species;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
@@ -1022,7 +1022,7 @@ export class Pokemon {
 			return false;
 		}
 
-		if (!this.setSpecies(species, null, true)) return false;
+		if (!this.setSpecies(species, effect, true)) return false;
 
 		this.transformed = true;
 		this.weighthg = pokemon.weighthg;
