@@ -10,7 +10,7 @@ describe(`Photon Geyser`, function () {
 
 	it('should become physical when Attack stat is higher than Special Attack stat', function () {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Necrozma-Dusk-Mane", ability: 'prismarmor', moves: ['photongeyser']}]});
+		battle.setPlayer('p1', {team: [{species: "Necrozma-Dusk Mane", ability: 'prismarmor', moves: ['photongeyser']}]});
 		battle.setPlayer('p2', {team: [{species: "Mew", ability: 'synchronize', item: 'keeberry', moves: ['counter']}]});
 		battle.makeChoices('move photongeyser', 'move counter');
 		assert.statStage(battle.p2.active[0], 'def', 1, "Physical Photon Geyser should trigger Kee Berry");

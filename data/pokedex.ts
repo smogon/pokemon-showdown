@@ -516,7 +516,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	pikachurockstar: {
 		num: 25,
-		name: "Pikachu-Rock-Star",
+		name: "Pikachu-Rock Star",
 		baseSpecies: "Pikachu",
 		forme: "Rock-Star",
 		types: ["Electric"],
@@ -546,7 +546,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	pikachupopstar: {
 		num: 25,
-		name: "Pikachu-Pop-Star",
+		name: "Pikachu-Pop Star",
 		baseSpecies: "Pikachu",
 		forme: "Pop-Star",
 		types: ["Electric"],
@@ -13612,7 +13612,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	necrozmaduskmane: {
 		num: 800,
-		name: "Necrozma-Dusk-Mane",
+		name: "Necrozma-Dusk Mane",
 		baseSpecies: "Necrozma",
 		forme: "Dusk-Mane",
 		types: ["Psychic", "Steel"],
@@ -13627,7 +13627,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	necrozmadawnwings: {
 		num: 800,
-		name: "Necrozma-Dawn-Wings",
+		name: "Necrozma-Dawn Wings",
 		baseSpecies: "Necrozma",
 		forme: "Dawn-Wings",
 		types: ["Psychic", "Ghost"],
@@ -13654,7 +13654,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Ultranecrozium Z",
-		battleOnly: ["Necrozma-Dawn-Wings", "Necrozma-Dusk-Mane"],
+		battleOnly: ["Necrozma-Dawn Wings", "Necrozma-Dusk Mane"],
 	},
 	magearna: {
 		num: 801,
@@ -14458,7 +14458,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	toxtricitylowkey: {
 		num: 849,
-		name: "Toxtricity-Low-Key",
+		name: "Toxtricity-Low Key",
 		baseSpecies: "Toxtricity",
 		forme: "Low-Key",
 		types: ["Electric", "Poison"],
@@ -14488,7 +14488,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	},
 	toxtricitylowkeygmax: {
 		num: 849,
-		name: "Toxtricity-Low-Key-Gmax",
+		name: "Toxtricity-Low Key-Gmax",
 		baseSpecies: "Toxtricity",
 		forme: "Gmax",
 		types: ["Electric", "Poison"],
@@ -14499,7 +14499,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Human-Like"],
 		isGigantamax: "G-Max Stun Shock",
-		battleOnly: "Toxtricity-Low-Key",
+		battleOnly: "Toxtricity-Low Key",
 	},
 	sizzlipede: {
 		num: 850,

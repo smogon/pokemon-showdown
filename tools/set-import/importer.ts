@@ -210,9 +210,9 @@ async function importSmogonSets(
 				// Smogon chose to redirect to Necroza-Dawn-Wings. Furthermore, the same set name has been used
 				// for both base species, so we also need to add a disambiguating suffix  to avoid overwrites.
 				if (pokemon === 'Necrozma-Ultra') {
-					addSmogonSet(dex, format, pokemon, `${name} - Dawn-Wings`, set, setsForPokemon, numByFormat);
-				} else if (pokemon === 'Necrozma-Dusk-Mane') {
-					addSmogonSet(dex, format, 'Necrozma-Ultra', `${name} - Dusk-Mane`, set, setsForPokemon, numByFormat);
+					addSmogonSet(dex, format, pokemon, `${name} - Dawn Wings`, set, setsForPokemon, numByFormat);
+				} else if (pokemon === 'Necrozma-Dusk Mane') {
+					addSmogonSet(dex, format, 'Necrozma-Ultra', `${name} - Dusk Mane`, set, setsForPokemon, numByFormat);
 					addSmogonSet(dex, format, pokemon, name, set, setsForPokemon, numByFormat);
 				} else {
 					addSmogonSet(dex, format, pokemon, name, set, setsForPokemon, numByFormat);

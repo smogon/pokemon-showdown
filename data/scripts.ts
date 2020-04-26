@@ -1202,7 +1202,7 @@ export const BattleScripts: BattleScriptsData = {
 	},
 
 	canUltraBurst(pokemon) {
-		if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseSpecies.name) &&
+		if (['Necrozma-Dawn Wings', 'Necrozma-Dusk Mane'].includes(pokemon.baseSpecies.name) &&
 			pokemon.getItem().id === 'ultranecroziumz') {
 			return "Necrozma-Ultra";
 		}

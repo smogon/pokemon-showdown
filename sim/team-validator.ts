@@ -1128,7 +1128,7 @@ export class TeamValidator {
 			if (species.requiredItems) {
 				if (species.name === 'Necrozma-Ultra') {
 					// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
-					problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dawn-Wings or Necrozma-Dusk-Mane holding Ultranecrozium Z.`);
+					problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dawn Wings or Necrozma-Dusk Mane holding Ultranecrozium Z.`);
 				} else if (!species.requiredItems.includes(item.name)) {
 					// Mega or Primal
 					problems.push(`${species.name} transforms in-battle with ${species.requiredItem}.`);
@@ -1168,7 +1168,7 @@ export class TeamValidator {
 
 		if (species.name === 'Pikachu-Cosplay') {
 			const cosplay: {[k: string]: string} = {
-				meteormash: 'Pikachu-Rock-Star', iciclecrash: 'Pikachu-Belle', drainingkiss: 'Pikachu-Pop-Star',
+				meteormash: 'Pikachu-Rock Star', iciclecrash: 'Pikachu-Belle', drainingkiss: 'Pikachu-Pop Star',
 				electricterrain: 'Pikachu-PhD', flyingpress: 'Pikachu-Libre',
 			};
 			for (const moveid of set.moves) {

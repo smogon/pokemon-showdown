@@ -901,7 +901,7 @@ export class RandomGen7Teams extends RandomTeams {
 			item = 'Marshadium Z';
 		} else if (species.name === 'Mimikyu' && hasMove['playrough'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Mimikium Z';
-		} else if ((species.name === 'Necrozma-Dusk-Mane' || species.name === 'Necrozma-Dawn-Wings') && !teamDetails.zMove) {
+		} else if ((species.name === 'Necrozma-Dusk Mane' || species.name === 'Necrozma-Dawn Wings') && !teamDetails.zMove) {
 			if (hasMove['autotomize'] && hasMove['sunsteelstrike']) {
 				item = 'Solganium Z';
 			} else if (hasMove['trickroom'] && hasMove['moongeistbeam']) {

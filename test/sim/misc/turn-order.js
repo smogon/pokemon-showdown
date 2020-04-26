@@ -51,7 +51,7 @@ describe('Mega Evolution', function () {
 
 	it('should cause ultra forme speed to decide turn order', function () {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Necrozma-Dusk-Mane', ability: 'swarm', item: 'ultranecroziumz', moves: ['xscissor']}]});
+		battle.setPlayer('p1', {team: [{species: 'Necrozma-Dusk Mane', ability: 'swarm', item: 'ultranecroziumz', moves: ['xscissor']}]});
 		battle.setPlayer('p2', {team: [{species: 'Hoopa-Unbound', ability: 'magician', moves: ['darkpulse']}]});
 		const fastBase = battle.p2.active[0];
 		battle.makeChoices('move xscissor ultra', 'move darkpulse');
