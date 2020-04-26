@@ -460,7 +460,7 @@ export class RandomTeams {
 		const NoStab = [
 			'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'explosion', 'fakeout', 'firstimpression', 'flamecharge',
 			'iceshard', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'selfdestruct', 'suckerpunch', 'watershuriken',
-			'clearsmog', 'eruption', 'icywind', 'snarl', 'vacuumwave', 'waterspout',
+			'clearsmog', 'eruption', 'icywind', 'incinerate', 'snarl', 'vacuumwave', 'waterspout',
 		];
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
@@ -787,6 +787,9 @@ export class RandomTeams {
 					if (hasMove['stoneedge'] || hasMove['throatchop']) rejected = true;
 					if ((hasMove['lightscreen'] || hasMove['reflect']) && (hasMove['teleport'] || movePool.includes('teleport'))) rejected = true;
 					break;
+				case 'overheat':
+					if (hasMove['flareblitz']) rejected = true;
+					break;
 				case 'hydropump':
 					if (hasMove['scald'] && ((counter.Special < 4 && !hasMove['uturn']) || (species.types.length > 1 && counter.stab < 3))) rejected = true;
 					break;
@@ -1104,7 +1107,7 @@ export class RandomTeams {
 				} else if (ability === 'Unaware') {
 					rejectAbility = (counter.setupType || hasMove['stealthrock']);
 				} else if (ability === 'Unburden') {
-					rejectAbility = (hasAbility['Prankster'] || !counter.setupType && !hasMove['acrobatics']);
+					rejectAbility = (hasAbility['Prankster'] || (!counter.setupType && !hasMove['acrobatics'] && !isDoubles) || (isDoubles && hasAbility['Reckless']));
 				} else if (ability === 'Volt Absorb') {
 					rejectAbility = (this.dex.getEffectiveness('Electric', species) < -1);
 				} else if (ability === 'Water Absorb') {
@@ -1132,6 +1135,7 @@ export class RandomTeams {
 				if (hasAbility['Gluttony'] && hasMove['recycle']) ability = 'Gluttony';
 				if (hasAbility['Guts']) ability = 'Guts';
 				if (hasAbility['Intimidate']) ability = 'Intimidate';
+				if (hasAbility['Magic Guard'] && ability !== 'Unaware') ability = 'Magic Guard';
 				if (hasAbility['Ripen']) ability = 'Ripen';
 				if (hasAbility['Stalwart']) ability = 'Stalwart';
 				if (hasAbility['Telepathy'] && ability === 'Pressure') ability = 'Telepathy';
@@ -1194,7 +1198,7 @@ export class RandomTeams {
 			item = 'Liechi Berry';
 		} else if (isDoubles && (hasMove['eruption'] || hasMove['waterspout']) && counter.damagingMoves.length >= 4) {
 			item = 'Choice Scarf';
-		} else if (isDoubles && hasMove['blizzard'] && !teamDetails['hail']) {
+		} else if (isDoubles && hasMove['blizzard'] && ability !== 'Snow Warning' && !teamDetails['hail']) {
 			item = 'Blunder Policy';
 
 		// Medium priority
