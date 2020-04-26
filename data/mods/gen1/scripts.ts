@@ -7,9 +7,9 @@
 export const BattleScripts: ModdedBattleScriptsData = {
 	inherit: 'gen2',
 	gen: 1,
-	debug(activity) {
-		if (this.format.debug) {
-			this.add('debug', activity);
+	init() {
+		for (const i in this.data.Pokedex) {
+			(this.data.Pokedex[i] as any).gender = 'N';
 		}
 	},
 	// Gen 1 stores the last damage dealt by a move in the battle.
