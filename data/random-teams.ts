@@ -171,8 +171,8 @@ export class RandomTeams {
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
 					);
 				}
-				if (species.inheritsFrom) {
-					learnset = this.dex.data.Learnsets[species.inheritsFrom].learnset;
+				if (species.changesFrom) {
+					learnset = this.dex.data.Learnsets[toID(species.changesFrom)].learnset;
 					const basePool = Object.keys(learnset!).filter(
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
 					);

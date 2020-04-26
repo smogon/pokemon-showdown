@@ -530,7 +530,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Base species. Species, but without the forme name.
 	 *
 	 * DO NOT ASSUME A POKEMON CAN TRANSFORM FROM `baseSpecies` TO
-	 * `species`. USE `inheritsFrom` FOR THAT.
+	 * `species`. USE `changesFrom` FOR THAT.
 	 */
 	readonly baseSpecies: string;
 	/**
@@ -640,7 +640,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Not filled out for megas/primals - fall back to baseSpecies
 	 * for in-battle formes.
 	 */
-	readonly inheritsFrom: ID;
+	readonly changesFrom?: string;
 
 	/**
 	 * Singles Tier. The Pokemon's location in the Smogon tier system.
@@ -704,7 +704,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 		this.isGigantamax = data.isGigantamax || undefined;
 		this.battleOnly = data.battleOnly || (this.isMega || this.isGigantamax ? this.baseSpecies : undefined);
-		this.inheritsFrom = data.inheritsFrom || (this.isGigantamax ? toID(this.baseSpecies) : undefined);
+		this.changesFrom = data.changesFrom || (this.isGigantamax ? this.baseSpecies : undefined);
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {

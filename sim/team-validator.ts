@@ -1720,15 +1720,15 @@ export class TeamValidator {
 			if (dex.gen <= 2 && species.gen === 1) tradebackEligible = true;
 			const lsetData = dex.getLearnsetData(species.id);
 			if (!lsetData.learnset) {
-				if (species.baseSpecies !== species.name) {
+				if ((species.changesFrom || species.baseSpecies) !== species.name) {
 					// forme without its own learnset
-					species = dex.getSpecies(species.baseSpecies);
+					species = dex.getSpecies(species.changesFrom || species.baseSpecies);
 					// warning: formes with their own learnset, like Wormadam, should NOT
 					// inherit from their base forme unless they're freely switchable
 					continue;
 				}
 				// should never happen
-				break;
+				throw new Error(`Species with no learnset data: ${species.id}`);
 			}
 			const checkingPrevo = species.baseSpecies !== s.baseSpecies;
 			if (checkingPrevo && !moveSources.size()) {
@@ -1947,9 +1947,9 @@ export class TeamValidator {
 			species = this.dex.getSpecies(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
-		} else if (species.inheritsFrom) {
+		} else if (species.changesFrom) {
 			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
-			return this.dex.getSpecies(species.inheritsFrom);
+			return this.dex.getSpecies(species.changesFrom);
 		}
 		return null;
 	}
