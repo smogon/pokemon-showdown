@@ -918,7 +918,6 @@ interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	zMovePower?: number;
 	zMoveEffect?: string;
 	zMoveBoost?: SparseBoostsTable;
-	gmaxPower?: number;
 	/**
 	 * Has this move been boosted by a Z-crystal? Usually the same as
 	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
@@ -928,6 +927,7 @@ interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 
 	// Max move data
 	// -------------
+	gmaxPower?: number;
 	/**
 	 * `true` for Max moves like Max Airstream. If its a G-Max moves, this is
 	 * the species ID of the Gigantamax Pokemon that can use this G-Max move.
