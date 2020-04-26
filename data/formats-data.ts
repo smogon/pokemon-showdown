@@ -1743,7 +1743,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	shedinja: {
 		randomBattleMoves: ["shadowclaw", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
-		randomDoubleBattleMoves: ["batonpass", "protect", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
+		randomDoubleBattleMoves: ["allyswitch", "protect", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
@@ -2216,7 +2216,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	kyogre: {
 		randomBattleMoves: ["calmmind", "icebeam", "surf", "thunder", "waterspout"],
-		randomDoubleBattleMoves: ["blizzard", "hydropump", "icebeam", "protect", "thunder", "waterspout"],
+		randomDoubleBattleMoves: ["hydropump", "icebeam", "protect", "thunder", "waterspout"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -3048,7 +3048,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	runerigus: {
 		randomBattleMoves: ["earthquake", "haze", "shadowclaw", "stealthrock", "toxicspikes", "willowisp"],
-		randomDoubleBattleMoves: ["earthquake", "nightshade", "protect", "trickroom", "willowisp"],
+		randomDoubleBattleMoves: ["allyswitch", "earthquake", "nightshade", "protect", "trickroom", "willowisp"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
@@ -3351,7 +3351,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	heatmor: {
 		randomBattleMoves: ["firelash", "gigadrain", "knockoff", "substitute", "suckerpunch", "superpower"],
-		randomDoubleBattleMoves: ["gigadrain", "heatwave", "protect", "rocktomb", "suckerpunch", "superpower", "willowisp"],
+		randomDoubleBattleMoves: ["firelash", "gigadrain", "incinerate", "protect", "rocktomb", "suckerpunch", "superpower", "willowisp"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -3844,6 +3844,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	zygarde: {
 		randomBattleMoves: ["dragondance", "earthquake", "extremespeed", "outrage", "stoneedge"],
+		randomDoubleBattleMoves: ["coil", "earthquake", "extremespeed", "glare", "irontail", "protect", "stoneedge"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4003,6 +4004,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	lycanrocmidnight: {
 		randomBattleMoves: ["closecombat", "irontail", "stealthrock", "stoneedge", "suckerpunch"],
+		randomDoubleBattleMoves: ["closecombat", "irontail", "protect", "stoneedge", "suckerpunch", "swordsdance"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4348,7 +4350,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	tapufini: {
 		randomBattleMoves: ["calmmind", "defog", "moonblast", "surf", "taunt"],
-		randomDoubleBattleMoves: ["healpulse", "hydropump", "icywind", "moonblast", "muddywater", "naturesmadness", "taunt"],
+		randomDoubleBattleMoves: ["healpulse", "hydropump", "icywind", "moonblast", "muddywater", "naturesmadness", "swagger"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4621,12 +4623,12 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "NFE",
 	},
 	coalossal: {
-		randomDoubleBattleMoves: ["heatwave", "protect", "scald", "stealthrock", "stoneedge", "willowisp"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
 	coalossalgmax: {
 		randomBattleMoves: ["overheat", "rapidspin", "spikes", "stealthrock", "stoneedge", "willowisp"],
+		randomDoubleBattleMoves: ["fireblast", "incinerate", "protect", "stealthrock", "stoneedge", "willowisp"],
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
 	},
