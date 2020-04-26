@@ -799,6 +799,9 @@ export class RandomTeams {
 				case 'grassknot':
 					if (hasMove['surf']) rejected = true;
 					break;
+				case 'overheat':
+					if (hasMove['flareblitz']) rejected = true;
+					break;
 				case 'powerwhip':
 					if (hasMove['leechlife'] || !hasType['Grass'] && counter.Physical > 3 && movePool.includes('uturn')) rejected = true;
 					break;
