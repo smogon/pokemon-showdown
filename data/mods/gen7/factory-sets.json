@@ -1054,21 +1054,21 @@
 		"necrozmaduskmane": {
 			"flags": {},
 			"sets": [{
-				"species": "Necrozma-Dusk-Mane",
+				"species": "Necrozma-Dusk Mane",
 				"item": ["Solganium Z"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 4, "atk": 252, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Rock Polish"], ["Swords Dance"], ["Earthquake"], ["Sunsteel Strike"]]
 			}, {
-				"species": "Necrozma-Dusk-Mane",
+				"species": "Necrozma-Dusk Mane",
 				"item": ["Leftovers"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 252, "def": 4, "spd": 252},
 				"nature": "Careful",
 				"moves": [["Stealth Rock"], ["Toxic"], ["Moonlight"], ["Sunsteel Strike"]]
 			}, {
-				"species": "Necrozma-Dusk-Mane",
+				"species": "Necrozma-Dusk Mane",
 				"item": ["Solganium Z"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 252, "atk": 252, "spd": 4},
@@ -1076,21 +1076,21 @@
 				"nature": "Brave",
 				"moves": [["Swords Dance"], ["Trick Room"], ["Sunsteel Strike"], ["Earthquake"]]
 			}, {
-				"species": "Necrozma-Dusk-Mane",
+				"species": "Necrozma-Dusk Mane",
 				"item": ["Life Orb"],
 				"ability": ["Prism Armor"],
 				"evs": {"hp": 108, "atk": 252, "spe": 148},
 				"nature": "Adamant",
 				"moves": [["Swords Dance"], ["Morning Sun"], ["Sunsteel Strike"], ["Earthquake", "Photon Geyser"]]
 			}, {
-				"species": "Necrozma-Dusk-Mane",
+				"species": "Necrozma-Dusk Mane",
 				"item": ["Ultranecrozium Z"],
 				"ability": ["Prism Armor"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Swords Dance"], ["Photon Geyser"], ["Earthquake"], ["Stone Edge", "Sunsteel Strike"]]
 			}, {
-				"species": "Necrozma-Dusk-Mane",
+				"species": "Necrozma-Dusk Mane",
 				"item": ["Ultranecrozium Z"],
 				"ability": ["Prism Armor"],
 				"evs": {"def": 4, "spa": 252, "spe": 252},
@@ -1113,7 +1113,7 @@
 		"necrozmadawnwings": {
 			"flags": {},
 			"sets": [{
-				"species": "Necrozma-Dawn-Wings",
+				"species": "Necrozma-Dawn Wings",
 				"item": ["Ultranecrozium Z"],
 				"ability": ["Prism Armor"],
 				"evs": {"atk": 252, "def": 32, "spe": 224},
