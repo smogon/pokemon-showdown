@@ -849,25 +849,30 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		checkLearnset(move, species, setSources, set) {
 			const restrictedMoves = this.format.restricted || [];
-			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.isMax) {
+			if (!restrictedMoves.includes(move.name) && !move.isNonstandard && !move.isZ && !move.isMax) {
 				const dex = this.dex;
-				let types = species.types;
-				const baseSpecies = dex.getSpecies(species.baseSpecies);
+				let types: string[];
+				if (species.forme || species.otherFormes) {
+					const baseSpecies = dex.getSpecies(species.baseSpecies);
+					const originalForme = dex.getSpecies(species.changesFrom || species.name);
+					types = originalForme.types;
+					if (baseSpecies.otherFormes) {
+						for (const formeid of baseSpecies.otherFormes) {
+							const forme = dex.getSpecies(formeid);
+							if (forme.changesFrom === originalForme.name) {
+								types = types.concat(forme.types);
+							}
+						}
+					}
+				} else {
+					types = species.types;
+				}
+
 				let prevo = species.prevo;
 				while (prevo) {
 					const prevoSpecies = dex.getSpecies(prevo);
 					types = types.concat(prevoSpecies.types);
 					prevo = prevoSpecies.prevo;
-				}
-				if (baseSpecies.otherFormes) {
-					for (const formeid of baseSpecies.otherFormes) {
-						const forme = dex.getSpecies(formeid);
-						if (!forme.battleOnly) {
-							if (!forme.forme.includes('Alola') && forme.forme !== 'Galar' && forme.baseSpecies !== 'Wormadam') {
-								types = types.concat(forme.types).concat(baseSpecies.types);
-							}
-						}
-					}
 				}
 				if (types.includes(move.type)) return null;
 			}
