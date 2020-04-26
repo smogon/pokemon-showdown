@@ -3844,7 +3844,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	zygarde: {
 		randomBattleMoves: ["dragondance", "earthquake", "extremespeed", "outrage", "stoneedge"],
-		randomDoubleBattleMoves: ["coil", "earthquake", "extremespeed", "irontail", "glare", "protect", "stoneedge"],
+		randomDoubleBattleMoves: ["coil", "earthquake", "extremespeed", "glare", "irontail", "protect", "stoneedge"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
