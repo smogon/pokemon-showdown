@@ -8,7 +8,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	venusaur: {
 		randomBattleMoves: ["gigadrain", "leechseed", "sleeppowder", "sludgebomb", "substitute"],
 		randomDoubleBattleMoves: ["earthpower", "gigadrain", "leechseed", "protect", "sleeppowder", "sludgebomb"],
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 	},
 	venusaurmega: {
