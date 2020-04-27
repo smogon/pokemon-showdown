@@ -2358,7 +2358,8 @@ export class Battle {
 
 	faintMessages(lastFirst = false) {
 		if (this.ended) return;
-		if (!this.faintQueue.length) return false;
+		const length = this.faintQueue.length;
+		if (!length) return false;
 		if (lastFirst) {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
@@ -2426,6 +2427,10 @@ export class Battle {
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft) {
 			this.win(this.sides[3]);
 			return true;
+		}
+
+		if (faintData) {
+			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
 		}
 		return false;
 	}
