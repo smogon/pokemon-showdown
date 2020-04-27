@@ -1231,38 +1231,6 @@ export const BattleScripts: BattleScriptsData = {
 		Dragon: 'Max Wyrmwind',
 	},
 
-	canDynamax(pokemon, skipChecks) {
-		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
-		if (!skipChecks) {
-			if (!pokemon.canDynamax) return;
-			if (
-				pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
-				pokemon.getItem().zMove || this.canMegaEvo(pokemon)
-			) {
-				return;
-			}
-			// Some pokemon species are unable to dynamax
-			const cannotDynamax = ['zacian', 'zamazenta', 'eternatus'];
-			if (cannotDynamax.includes(toID(pokemon.species.baseSpecies))) {
-				return;
-			}
-		}
-		const result: DynamaxOptions = {maxMoves: []};
-		for (const moveSlot of pokemon.moveSlots) {
-			const move = this.dex.getMove(moveSlot.id);
-			const maxMove = this.getMaxMove(move, pokemon);
-			if (maxMove) {
-				if (pokemon.maxMoveDisabled(maxMove)) {
-					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
-				} else {
-					result.maxMoves.push({move: maxMove.id, target: maxMove.target});
-				}
-			}
-		}
-		if (pokemon.canGigantamax) result.gigantamax = pokemon.canGigantamax;
-		return result;
-	},
-
 	getMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getMove(move);
 		if (pokemon.canGigantamax && move.category !== 'Status') {

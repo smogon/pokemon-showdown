@@ -771,6 +771,11 @@ export class Pokemon {
 		return this.attackedBy[this.attackedBy.length - 1];
 	}
 
+	/**
+	 * This refers to multi-turn moves like SolarBeam and Outrage and
+	 * Sky Drop, which remove all choice (no dynamax, switching, etc).
+	 * Don't use it for "soft locks" like Choice Band.
+	 */
 	getLockedMove(): string | null {
 		const lockedMove = this.battle.runEvent('LockMove', this);
 		return (lockedMove === true) ? null : lockedMove;
@@ -811,10 +816,10 @@ export class Pokemon {
 				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
 			} else if (moveSlot.id === 'return') {
 				// @ts-ignore - Return's basePowerCallback only takes one parameter
-				moveName = 'Return ' + this.battle.dex.getMove('return')!.basePowerCallback(this);
+				moveName = 'Return ' + this.battle.dex.getMove('return').basePowerCallback(this);
 			} else if (moveSlot.id === 'frustration') {
 				// @ts-ignore - Frustration's basePowerCallback only takes one parameter
-				moveName = 'Frustration ' + this.battle.dex.getMove('frustration')!.basePowerCallback(this);
+				moveName = 'Frustration ' + this.battle.dex.getMove('frustration').basePowerCallback(this);
 			}
 			let target = moveSlot.target;
 			if (moveSlot.id === 'curse') {
@@ -830,12 +835,14 @@ export class Pokemon {
 				this.side.active.length >= 2 && this.battle.targetTypeChoices(target!)
 			) {
 				disabled = true;
+			}
+
+			if (!disabled) {
+				hasValidMove = true;
 			} else if (disabled === 'hidden' && restrictData) {
 				disabled = false;
 			}
-			if (!disabled) {
-				hasValidMove = true;
-			}
+
 			moves.push({
 				move: moveName,
 				id: moveSlot.id,
@@ -850,6 +857,41 @@ export class Pokemon {
 
 	maxMoveDisabled(move: Move) {
 		return !!(move.category === 'Status' && (this.hasItem('assaultvest') || this.volatiles['taunt']));
+	}
+
+	getDynamaxRequest(skipChecks?: boolean) {
+		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
+		if (!skipChecks) {
+			if (!this.canDynamax) return;
+			if (
+				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
+				this.getItem().zMove || this.battle.canMegaEvo(this)
+			) {
+				return;
+			}
+			// Some pokemon species are unable to dynamax
+			const cannotDynamax = ['Zacian', 'Zamazenta', 'Eternatus'];
+			if (cannotDynamax.includes(this.species.baseSpecies)) {
+				return;
+			}
+		}
+		const result: DynamaxOptions = {maxMoves: []};
+		let atLeastOne = false;
+		for (const moveSlot of this.moveSlots) {
+			const move = this.battle.dex.getMove(moveSlot.id);
+			const maxMove = this.battle.getMaxMove(move, this);
+			if (maxMove) {
+				if (this.maxMoveDisabled(maxMove)) {
+					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
+				} else {
+					result.maxMoves.push({move: maxMove.id, target: maxMove.target});
+					atLeastOne = true;
+				}
+			}
+		}
+		if (!atLeastOne) return;
+		if (this.canGigantamax) result.gigantamax = this.canGigantamax;
+		return result;
 	}
 
 	getMoveRequestData() {
@@ -901,8 +943,8 @@ export class Pokemon {
 			const canZMove = this.battle.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
 
-			if (this.battle.canDynamax(this)) data.canDynamax = true;
-			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.battle.canDynamax(this, true);
+			if (this.getDynamaxRequest()) data.canDynamax = true;
+			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.getDynamaxRequest(true);
 		}
 
 		return data;

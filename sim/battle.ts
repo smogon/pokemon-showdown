@@ -3039,10 +3039,6 @@ export class Battle {
 		throw new UnimplementedError('canZMove');
 	}
 
-	canDynamax(pokemon: Pokemon, skipChecks?: boolean): DynamaxOptions | undefined {
-		throw new UnimplementedError('canDynamax');
-	}
-
 	forceSwitch(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
