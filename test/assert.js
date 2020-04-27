@@ -83,14 +83,26 @@ assert.trapped = function (fn, unavailable, message) {
 };
 
 assert.cantMove = function (fn, pokemon, move, unavailable, message) {
-	message = message || `Expected ${pokemon} to not be able to use ${move}.`;
+	message = message ? `${message}; ` : ``;
 	if (pokemon && move) {
-		assert.throws(
-			fn, new RegExp(`\\[${unavailable ? 'Unavailable' : 'Invalid'} choice\\] Can't move:.*${pokemon}.*${move}`, 'i'), message
-		);
+		try {
+			fn();
+		} catch (e) {
+			const lcMessage = e.message.toLowerCase();
+			const choiceErrorTag = `[${unavailable ? 'Unavailable' : 'Invalid'} choice]`;
+			assert(e.message.includes(choiceErrorTag), `${message}Error "${e.message}" should contain "${choiceErrorTag}"`);
+			assert(lcMessage.includes(pokemon.toLowerCase()), `${message}Error "${e.message}" should contain "${pokemon}"`);
+			assert(lcMessage.includes(move.toLowerCase()), `${message}Error "${e.message}" should contain "${move}"`);
+			return;
+		}
 	} else {
-		assert.throws(fn, /\[Invalid choice\] Can't move:/, message);
+		try {
+			fn();
+		} catch (e) {
+			return;
+		}
 	}
+	assert(false, `${message}${pokemon} should not be able to use ${move}.`);
 };
 
 assert.cantUndo = function (fn, message) {
