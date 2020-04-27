@@ -16695,7 +16695,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 					pokemon.volatiles['shelltrap'].gotHit = true;
 					const action = this.queue.willMove(pokemon);
 					if (action) {
-						this.queue.prioritizeAction(action, move);
+						this.queue.prioritizeAction(action);
 					}
 				}
 			},

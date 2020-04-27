@@ -32,4 +32,22 @@ describe('Shell Trap', function () {
 		battle.makeChoices('move shelltrap, move splash', 'move tackle, move splash');
 		assert.equal(move.pp, move.maxpp - 2);
 	});
+
+	it('should not Z-power if hit by a Z-move', function () {
+		battle = common.createBattle({}, [
+			[{species: 'Turtonator', moves: ['shelltrap']}],
+			[{species: 'Magikarp', item: 'normaliumz', moves: ['flail']}],
+		]);
+		battle.makeChoices('move shelltrap', 'move flail zmove');
+		assert(battle.log.some(line => line.includes('|Shell Trap|')));
+	});
+
+	it('should not Max if hit by a Max move', function () {
+		battle = common.createBattle({}, [
+			[{species: 'Turtonator', moves: ['shelltrap']}],
+			[{species: 'Magikarp', moves: ['flail']}],
+		]);
+		battle.makeChoices('move shelltrap', 'move flail dynamax');
+		assert(battle.log.some(line => line.includes('|Shell Trap|')));
+	});
 });
