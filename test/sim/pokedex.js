@@ -44,7 +44,7 @@ describe('Pokedex', function () {
 			}
 			if (entry.cosmeticFormes) {
 				for (const forme of entry.cosmeticFormes) {
-					assert(forme.startsWith(entry.name + "-"), `Misspelled/nonexistent beginning of cosmetic forme name "${forme}" of ${entry.name}`);
+					assert(forme.startsWith(`${entry.name}-`) && !forme.endsWith("-"), `Misspelled/nonexistent beginning of cosmetic forme name "${forme}" of ${entry.name}`);
 				}
 			}
 		}
