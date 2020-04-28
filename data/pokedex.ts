@@ -12012,7 +12012,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Undiscovered"],
 		requiredAbility: "Power Construct",
-		battleOnly: ["Zygarde", "Zygarde10"],
+		battleOnly: ["Zygarde", "Zygarde-10%"],
 		gen: 7,
 	},
 	diancie: {
