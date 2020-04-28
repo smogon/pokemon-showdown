@@ -10759,7 +10759,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Keldeo-Resolute"],
-		changesFrom: "Keldeo",
 	},
 	keldeoresolute: {
 		num: 647,
@@ -10775,6 +10774,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
 		requiredMove: "Secret Sword",
+		changesFrom: "Keldeo",
 	},
 	meloetta: {
 		num: 648,
@@ -14465,7 +14465,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Toxel",
 		evoLevel: 30,
 		eggGroups: ["Human-Like"],
-		otherFormes: ["Toxtricity-Low-Key", "Toxtricity-Gmax"],
+		otherFormes: ["Toxtricity-Low-Key", "Toxtricity-Gmax", "Toxtricity-Low-Key-Gmax"],
 	},
 	toxtricitylowkey: {
 		num: 849,
@@ -14481,7 +14481,6 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		prevo: "Toxel",
 		evoLevel: 30,
 		eggGroups: ["Human-Like"],
-		otherFormes: ["Toxtricity-Low-Key-Gmax"],
 	},
 	toxtricitygmax: {
 		num: 849,
@@ -15250,6 +15249,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 950,
 		color: "Purple",
 		eggGroups: ["Undiscovered"],
+		otherFormes: ["Eternatus-Eternamax"],
 	},
 	eternatuseternamax: {
 		num: 890,
@@ -16257,7 +16257,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	pokestarufopropu2: {
 		num: -5001,
 		name: "Pokestar UFO-PropU2",
-		baseForme: "Pokestar UFO",
+		baseSpecies: "Pokestar UFO",
 		forme: "PropU2",
 		types: ["Psychic", "Electric"],
 		gender: "N",
