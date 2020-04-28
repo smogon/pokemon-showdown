@@ -32,11 +32,20 @@ describe('Pokedex', function () {
 			if (entry.battleOnly) {
 				const battleOnly = Array.isArray(entry.battleOnly) ? entry.battleOnly : [entry.battleOnly];
 				for (const battleForme of battleOnly) {
-					assert.equal(battleForme, (Pokedex[toID(battleForme)] || {}).name, `Misspelled/nonexistent battle-only forme "${battleForme}" of ${entry.name}`);
+					const battleEntry = Pokedex[toID(battleForme)] || {};
+					assert.equal(battleForme, battleEntry.name, `Misspelled/nonexistent battle-only forme "${battleForme}" of ${entry.name}`);
+					assert.equal(entry.num, battleEntry.num, `Battle-only forme ${battleEntry.name} of ${entry.name} should have the same dex number`);
 				}
 			}
 			if (entry.changesFrom) {
-				assert.equal(entry.changesFrom, (Pokedex[toID(entry.changesFrom)] || {}).name, `Mismatched changesFrom value "${entry.changesFrom}" of ${entry.name}`);
+				const formeEntry = Pokedex[toID(entry.changesFrom)] || {};
+				assert.equal(entry.changesFrom, formeEntry.name, `Misspelled/nonexistent changesFrom value "${entry.changesFrom}" of ${entry.name}`);
+				assert.equal(entry.num, formeEntry.num, `changesFrom value ${formeEntry.name} of ${entry.name} should have the same dex number`);
+			}
+			if (entry.cosmeticFormes) {
+				for (const forme of entry.cosmeticFormes) {
+					assert(forme.startsWith(entry.name), `Misspelled/nonexistent beginning of cosmetic forme name "${forme}" of ${entry.name}`);
+				}
 			}
 		}
 	});
