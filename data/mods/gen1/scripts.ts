@@ -10,6 +10,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 	init() {
 		for (const i in this.data.Pokedex) {
 			(this.data.Pokedex[i] as any).gender = 'N';
+			(this.data.Pokedex[i] as any).eggGroups = null;
 		}
 	},
 	// Gen 1 stores the last damage dealt by a move in the battle.

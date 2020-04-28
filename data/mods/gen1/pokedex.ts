@@ -7,7 +7,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 3,
 		weightkg: 1590.8,
 		color: "Gray",
-		eggGroups: ["Undiscovered"],
 	},
 	bulbasaur: {
 		inherit: true,
@@ -18,7 +17,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 6.9,
 		color: "Green",
 		evos: ["ivysaur"],
-		eggGroups: ["Monster", "Grass"],
 	},
 	ivysaur: {
 		inherit: true,
@@ -31,7 +29,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "bulbasaur",
 		evos: ["venusaur"],
 		evoLevel: 16,
-		eggGroups: ["Monster", "Grass"],
 	},
 	venusaur: {
 		inherit: true,
@@ -43,7 +40,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Green",
 		prevo: "ivysaur",
 		evoLevel: 32,
-		eggGroups: ["Monster", "Grass"],
 	},
 	charmander: {
 		inherit: true,
@@ -54,7 +50,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 8.5,
 		color: "Red",
 		evos: ["charmeleon"],
-		eggGroups: ["Monster", "Dragon"],
 	},
 	charmeleon: {
 		inherit: true,
@@ -67,7 +62,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "charmander",
 		evos: ["charizard"],
 		evoLevel: 16,
-		eggGroups: ["Monster", "Dragon"],
 	},
 	charizard: {
 		inherit: true,
@@ -79,7 +73,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Red",
 		prevo: "charmeleon",
 		evoLevel: 36,
-		eggGroups: ["Monster", "Dragon"],
 	},
 	squirtle: {
 		inherit: true,
@@ -90,7 +83,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 9,
 		color: "Blue",
 		evos: ["wartortle"],
-		eggGroups: ["Monster", "Water 1"],
 	},
 	wartortle: {
 		inherit: true,
@@ -103,7 +95,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "squirtle",
 		evos: ["blastoise"],
 		evoLevel: 16,
-		eggGroups: ["Monster", "Water 1"],
 	},
 	blastoise: {
 		inherit: true,
@@ -115,7 +106,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Blue",
 		prevo: "wartortle",
 		evoLevel: 36,
-		eggGroups: ["Monster", "Water 1"],
 	},
 	caterpie: {
 		inherit: true,
@@ -126,7 +116,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 2.9,
 		color: "Green",
 		evos: ["metapod"],
-		eggGroups: ["Bug"],
 	},
 	metapod: {
 		inherit: true,
@@ -139,7 +128,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "caterpie",
 		evos: ["butterfree"],
 		evoLevel: 7,
-		eggGroups: ["Bug"],
 	},
 	butterfree: {
 		inherit: true,
@@ -151,7 +139,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "White",
 		prevo: "metapod",
 		evoLevel: 10,
-		eggGroups: ["Bug"],
 	},
 	weedle: {
 		inherit: true,
@@ -162,7 +149,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 3.2,
 		color: "Brown",
 		evos: ["kakuna"],
-		eggGroups: ["Bug"],
 	},
 	kakuna: {
 		inherit: true,
@@ -175,7 +161,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "weedle",
 		evos: ["beedrill"],
 		evoLevel: 7,
-		eggGroups: ["Bug"],
 	},
 	beedrill: {
 		inherit: true,
@@ -187,7 +172,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Yellow",
 		prevo: "kakuna",
 		evoLevel: 10,
-		eggGroups: ["Bug"],
 	},
 	pidgey: {
 		inherit: true,
@@ -198,7 +182,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 1.8,
 		color: "Brown",
 		evos: ["pidgeotto"],
-		eggGroups: ["Flying"],
 	},
 	pidgeotto: {
 		inherit: true,
@@ -211,7 +194,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "pidgey",
 		evos: ["pidgeot"],
 		evoLevel: 18,
-		eggGroups: ["Flying"],
 	},
 	pidgeot: {
 		inherit: true,
@@ -223,7 +205,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "pidgeotto",
 		evoLevel: 36,
-		eggGroups: ["Flying"],
 	},
 	rattata: {
 		inherit: true,
@@ -234,7 +215,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 3.5,
 		color: "Purple",
 		evos: ["raticate"],
-		eggGroups: ["Field"],
 	},
 	raticate: {
 		inherit: true,
@@ -246,7 +226,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "rattata",
 		evoLevel: 20,
-		eggGroups: ["Field"],
 	},
 	spearow: {
 		inherit: true,
@@ -257,7 +236,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 2,
 		color: "Brown",
 		evos: ["fearow"],
-		eggGroups: ["Flying"],
 	},
 	fearow: {
 		inherit: true,
@@ -269,7 +247,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "spearow",
 		evoLevel: 20,
-		eggGroups: ["Flying"],
 	},
 	ekans: {
 		inherit: true,
@@ -280,7 +257,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 6.9,
 		color: "Purple",
 		evos: ["arbok"],
-		eggGroups: ["Field", "Dragon"],
 	},
 	arbok: {
 		inherit: true,
@@ -292,7 +268,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Purple",
 		prevo: "ekans",
 		evoLevel: 22,
-		eggGroups: ["Field", "Dragon"],
 	},
 	pikachu: {
 		inherit: true,
@@ -303,7 +278,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 6,
 		color: "Yellow",
 		evos: ["raichu"],
-		eggGroups: ["Field", "Fairy"],
 	},
 	raichu: {
 		inherit: true,
@@ -316,7 +290,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "pikachu",
 		evoType: "useItem",
 		evoItem: "Thunder Stone",
-		eggGroups: ["Field", "Fairy"],
 	},
 	sandshrew: {
 		inherit: true,
@@ -327,7 +300,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 12,
 		color: "Yellow",
 		evos: ["sandslash"],
-		eggGroups: ["Field"],
 	},
 	sandslash: {
 		inherit: true,
@@ -339,7 +311,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Yellow",
 		prevo: "sandshrew",
 		evoLevel: 22,
-		eggGroups: ["Field"],
 	},
 	nidoranf: {
 		inherit: true,
@@ -350,7 +321,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 7,
 		color: "Blue",
 		evos: ["nidorina"],
-		eggGroups: ["Monster", "Field"],
 	},
 	nidorina: {
 		inherit: true,
@@ -363,7 +333,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "nidoranf",
 		evos: ["nidoqueen"],
 		evoLevel: 16,
-		eggGroups: ["Undiscovered"],
 	},
 	nidoqueen: {
 		inherit: true,
@@ -376,7 +345,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "nidorina",
 		evoType: "useItem",
 		evoItem: "Moon Stone",
-		eggGroups: ["Undiscovered"],
 	},
 	nidoranm: {
 		inherit: true,
@@ -387,7 +355,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 9,
 		color: "Purple",
 		evos: ["nidorino"],
-		eggGroups: ["Monster", "Field"],
 	},
 	nidorino: {
 		inherit: true,
@@ -400,7 +367,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "nidoranm",
 		evos: ["nidoking"],
 		evoLevel: 16,
-		eggGroups: ["Monster", "Field"],
 	},
 	nidoking: {
 		inherit: true,
@@ -413,7 +379,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "nidorino",
 		evoType: "useItem",
 		evoItem: "Moon Stone",
-		eggGroups: ["Monster", "Field"],
 	},
 	clefairy: {
 		inherit: true,
@@ -425,7 +390,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Pink",
 		prevo: "cleffa",
 		evos: ["clefable"],
-		eggGroups: ["Fairy"],
 	},
 	clefable: {
 		inherit: true,
@@ -438,7 +402,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "clefairy",
 		evoType: "useItem",
 		evoItem: "Moon Stone",
-		eggGroups: ["Fairy"],
 	},
 	vulpix: {
 		inherit: true,
@@ -449,7 +412,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 9.9,
 		color: "Brown",
 		evos: ["ninetales"],
-		eggGroups: ["Field"],
 	},
 	ninetales: {
 		inherit: true,
@@ -462,7 +424,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "vulpix",
 		evoType: "useItem",
 		evoItem: "Fire Stone",
-		eggGroups: ["Field"],
 	},
 	jigglypuff: {
 		inherit: true,
@@ -473,7 +434,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 5.5,
 		color: "Pink",
 		evos: ["wigglytuff"],
-		eggGroups: ["Fairy"],
 	},
 	wigglytuff: {
 		inherit: true,
@@ -486,7 +446,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "jigglypuff",
 		evoType: "useItem",
 		evoItem: "Moon Stone",
-		eggGroups: ["Fairy"],
 	},
 	zubat: {
 		inherit: true,
@@ -497,7 +456,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 7.5,
 		color: "Purple",
 		evos: ["golbat"],
-		eggGroups: ["Flying"],
 	},
 	golbat: {
 		inherit: true,
@@ -509,7 +467,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Purple",
 		prevo: "zubat",
 		evoLevel: 22,
-		eggGroups: ["Flying"],
 	},
 	oddish: {
 		inherit: true,
@@ -520,7 +477,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 5.4,
 		color: "Blue",
 		evos: ["gloom"],
-		eggGroups: ["Grass"],
 	},
 	gloom: {
 		inherit: true,
@@ -533,7 +489,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "oddish",
 		evos: ["vileplume"],
 		evoLevel: 21,
-		eggGroups: ["Grass"],
 	},
 	vileplume: {
 		inherit: true,
@@ -546,7 +501,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "gloom",
 		evoType: "useItem",
 		evoItem: "Leaf Stone",
-		eggGroups: ["Grass"],
 	},
 	paras: {
 		inherit: true,
@@ -557,7 +511,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 5.4,
 		color: "Red",
 		evos: ["parasect"],
-		eggGroups: ["Bug", "Grass"],
 	},
 	parasect: {
 		inherit: true,
@@ -569,7 +522,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Red",
 		prevo: "paras",
 		evoLevel: 24,
-		eggGroups: ["Bug", "Grass"],
 	},
 	venonat: {
 		inherit: true,
@@ -580,7 +532,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 30,
 		color: "Purple",
 		evos: ["venomoth"],
-		eggGroups: ["Bug"],
 	},
 	venomoth: {
 		inherit: true,
@@ -592,7 +543,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Purple",
 		prevo: "venonat",
 		evoLevel: 31,
-		eggGroups: ["Bug"],
 	},
 	diglett: {
 		inherit: true,
@@ -603,7 +553,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 0.8,
 		color: "Brown",
 		evos: ["dugtrio"],
-		eggGroups: ["Field"],
 	},
 	dugtrio: {
 		inherit: true,
@@ -615,7 +564,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "diglett",
 		evoLevel: 26,
-		eggGroups: ["Field"],
 	},
 	meowth: {
 		inherit: true,
@@ -626,7 +574,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 4.2,
 		color: "Yellow",
 		evos: ["persian"],
-		eggGroups: ["Field"],
 	},
 	persian: {
 		inherit: true,
@@ -638,7 +585,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Yellow",
 		prevo: "meowth",
 		evoLevel: 28,
-		eggGroups: ["Field"],
 	},
 	psyduck: {
 		inherit: true,
@@ -649,7 +595,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 19.6,
 		color: "Yellow",
 		evos: ["golduck"],
-		eggGroups: ["Water 1", "Field"],
 	},
 	golduck: {
 		inherit: true,
@@ -661,7 +606,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Blue",
 		prevo: "psyduck",
 		evoLevel: 33,
-		eggGroups: ["Water 1", "Field"],
 	},
 	mankey: {
 		inherit: true,
@@ -672,7 +616,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 28,
 		color: "Brown",
 		evos: ["primeape"],
-		eggGroups: ["Field"],
 	},
 	primeape: {
 		inherit: true,
@@ -684,7 +627,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "mankey",
 		evoLevel: 28,
-		eggGroups: ["Field"],
 	},
 	growlithe: {
 		inherit: true,
@@ -695,7 +637,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 19,
 		color: "Brown",
 		evos: ["arcanine"],
-		eggGroups: ["Field"],
 	},
 	arcanine: {
 		inherit: true,
@@ -708,7 +649,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "growlithe",
 		evoType: "useItem",
 		evoItem: "Fire Stone",
-		eggGroups: ["Field"],
 	},
 	poliwag: {
 		inherit: true,
@@ -719,7 +659,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 12.4,
 		color: "Blue",
 		evos: ["poliwhirl"],
-		eggGroups: ["Water 1"],
 	},
 	poliwhirl: {
 		inherit: true,
@@ -732,7 +671,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "poliwag",
 		evos: ["poliwrath"],
 		evoLevel: 25,
-		eggGroups: ["Water 1"],
 	},
 	poliwrath: {
 		inherit: true,
@@ -745,7 +683,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "poliwhirl",
 		evoType: "useItem",
 		evoItem: "Water Stone",
-		eggGroups: ["Water 1"],
 	},
 	abra: {
 		inherit: true,
@@ -756,7 +693,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 19.5,
 		color: "Brown",
 		evos: ["kadabra"],
-		eggGroups: ["Human-Like"],
 	},
 	kadabra: {
 		inherit: true,
@@ -769,7 +705,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "abra",
 		evos: ["alakazam"],
 		evoLevel: 16,
-		eggGroups: ["Human-Like"],
 	},
 	alakazam: {
 		inherit: true,
@@ -781,7 +716,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "kadabra",
 		evoType: "trade",
-		eggGroups: ["Human-Like"],
 	},
 	machop: {
 		inherit: true,
@@ -792,7 +726,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 19.5,
 		color: "Gray",
 		evos: ["machoke"],
-		eggGroups: ["Human-Like"],
 	},
 	machoke: {
 		inherit: true,
@@ -805,7 +738,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "machop",
 		evos: ["machamp"],
 		evoLevel: 28,
-		eggGroups: ["Human-Like"],
 	},
 	machamp: {
 		inherit: true,
@@ -817,7 +749,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Gray",
 		prevo: "machoke",
 		evoType: "trade",
-		eggGroups: ["Human-Like"],
 	},
 	bellsprout: {
 		inherit: true,
@@ -828,7 +759,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 4,
 		color: "Green",
 		evos: ["weepinbell"],
-		eggGroups: ["Grass"],
 	},
 	weepinbell: {
 		inherit: true,
@@ -841,7 +771,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "bellsprout",
 		evos: ["victreebel"],
 		evoLevel: 21,
-		eggGroups: ["Grass"],
 	},
 	victreebel: {
 		inherit: true,
@@ -854,7 +783,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "weepinbell",
 		evoType: "useItem",
 		evoItem: "Leaf Stone",
-		eggGroups: ["Grass"],
 	},
 	tentacool: {
 		inherit: true,
@@ -865,7 +793,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 45.5,
 		color: "Blue",
 		evos: ["tentacruel"],
-		eggGroups: ["Water 3"],
 	},
 	tentacruel: {
 		inherit: true,
@@ -877,7 +804,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Blue",
 		prevo: "tentacool",
 		evoLevel: 30,
-		eggGroups: ["Water 3"],
 	},
 	geodude: {
 		inherit: true,
@@ -888,7 +814,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 20,
 		color: "Brown",
 		evos: ["graveler"],
-		eggGroups: ["Mineral"],
 	},
 	graveler: {
 		inherit: true,
@@ -901,7 +826,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "geodude",
 		evos: ["golem"],
 		evoLevel: 25,
-		eggGroups: ["Mineral"],
 	},
 	golem: {
 		inherit: true,
@@ -913,7 +837,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "graveler",
 		evoType: "trade",
-		eggGroups: ["Mineral"],
 	},
 	ponyta: {
 		inherit: true,
@@ -924,7 +847,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 30,
 		color: "Yellow",
 		evos: ["rapidash"],
-		eggGroups: ["Field"],
 	},
 	rapidash: {
 		inherit: true,
@@ -936,7 +858,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Yellow",
 		prevo: "ponyta",
 		evoLevel: 40,
-		eggGroups: ["Field"],
 	},
 	slowpoke: {
 		inherit: true,
@@ -947,7 +868,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 36,
 		color: "Pink",
 		evos: ["slowbro"],
-		eggGroups: ["Monster", "Water 1"],
 	},
 	slowbro: {
 		inherit: true,
@@ -959,7 +879,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Pink",
 		prevo: "slowpoke",
 		evoLevel: 37,
-		eggGroups: ["Monster", "Water 1"],
 	},
 	magnemite: {
 		inherit: true,
@@ -970,7 +889,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 6,
 		color: "Gray",
 		evos: ["magneton"],
-		eggGroups: ["Mineral"],
 	},
 	magneton: {
 		inherit: true,
@@ -982,7 +900,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Gray",
 		prevo: "magnemite",
 		evoLevel: 30,
-		eggGroups: ["Mineral"],
 	},
 	farfetchd: {
 		inherit: true,
@@ -992,7 +909,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 0.8,
 		weightkg: 15,
 		color: "Brown",
-		eggGroups: ["Flying", "Field"],
 	},
 	doduo: {
 		inherit: true,
@@ -1003,7 +919,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 39.2,
 		color: "Brown",
 		evos: ["dodrio"],
-		eggGroups: ["Flying"],
 	},
 	dodrio: {
 		inherit: true,
@@ -1015,7 +930,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "doduo",
 		evoLevel: 31,
-		eggGroups: ["Flying"],
 	},
 	seel: {
 		inherit: true,
@@ -1026,7 +940,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 90,
 		color: "White",
 		evos: ["dewgong"],
-		eggGroups: ["Water 1", "Field"],
 	},
 	dewgong: {
 		inherit: true,
@@ -1038,7 +951,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "White",
 		prevo: "seel",
 		evoLevel: 34,
-		eggGroups: ["Water 1", "Field"],
 	},
 	grimer: {
 		inherit: true,
@@ -1049,7 +961,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 30,
 		color: "Purple",
 		evos: ["muk"],
-		eggGroups: ["Amorphous"],
 	},
 	muk: {
 		inherit: true,
@@ -1061,7 +972,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Purple",
 		prevo: "grimer",
 		evoLevel: 38,
-		eggGroups: ["Amorphous"],
 	},
 	shellder: {
 		inherit: true,
@@ -1072,7 +982,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 4,
 		color: "Purple",
 		evos: ["cloyster"],
-		eggGroups: ["Water 3"],
 	},
 	cloyster: {
 		inherit: true,
@@ -1085,7 +994,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "shellder",
 		evoType: "useItem",
 		evoItem: "Water Stone",
-		eggGroups: ["Water 3"],
 	},
 	gastly: {
 		inherit: true,
@@ -1096,7 +1004,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 0.1,
 		color: "Purple",
 		evos: ["haunter"],
-		eggGroups: ["Amorphous"],
 	},
 	haunter: {
 		inherit: true,
@@ -1109,7 +1016,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "gastly",
 		evos: ["gengar"],
 		evoLevel: 25,
-		eggGroups: ["Amorphous"],
 	},
 	gengar: {
 		inherit: true,
@@ -1121,7 +1027,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Purple",
 		prevo: "haunter",
 		evoType: "trade",
-		eggGroups: ["Amorphous"],
 	},
 	onix: {
 		inherit: true,
@@ -1131,7 +1036,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 8.8,
 		weightkg: 210,
 		color: "Gray",
-		eggGroups: ["Mineral"],
 	},
 	drowzee: {
 		inherit: true,
@@ -1142,7 +1046,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 32.4,
 		color: "Yellow",
 		evos: ["hypno"],
-		eggGroups: ["Human-Like"],
 	},
 	hypno: {
 		inherit: true,
@@ -1154,7 +1057,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Yellow",
 		prevo: "drowzee",
 		evoLevel: 26,
-		eggGroups: ["Human-Like"],
 	},
 	krabby: {
 		inherit: true,
@@ -1165,7 +1067,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 6.5,
 		color: "Red",
 		evos: ["kingler"],
-		eggGroups: ["Water 3"],
 	},
 	kingler: {
 		inherit: true,
@@ -1177,7 +1078,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Red",
 		prevo: "krabby",
 		evoLevel: 28,
-		eggGroups: ["Water 3"],
 	},
 	voltorb: {
 		inherit: true,
@@ -1188,7 +1088,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 10.4,
 		color: "Red",
 		evos: ["electrode"],
-		eggGroups: ["Mineral"],
 	},
 	electrode: {
 		inherit: true,
@@ -1200,7 +1099,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Red",
 		prevo: "voltorb",
 		evoLevel: 30,
-		eggGroups: ["Mineral"],
 	},
 	exeggcute: {
 		inherit: true,
@@ -1211,7 +1109,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 2.5,
 		color: "Pink",
 		evos: ["exeggutor"],
-		eggGroups: ["Grass"],
 	},
 	exeggutor: {
 		inherit: true,
@@ -1224,7 +1121,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "exeggcute",
 		evoType: "useItem",
 		evoItem: "Leaf Stone",
-		eggGroups: ["Grass"],
 	},
 	cubone: {
 		inherit: true,
@@ -1235,7 +1131,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 6.5,
 		color: "Brown",
 		evos: ["marowak"],
-		eggGroups: ["Monster"],
 	},
 	marowak: {
 		inherit: true,
@@ -1247,7 +1142,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "cubone",
 		evoLevel: 28,
-		eggGroups: ["Monster"],
 	},
 	hitmonlee: {
 		inherit: true,
@@ -1257,7 +1151,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.5,
 		weightkg: 49.8,
 		color: "Brown",
-		eggGroups: ["Human-Like"],
 	},
 	hitmonchan: {
 		inherit: true,
@@ -1267,7 +1160,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.4,
 		weightkg: 50.2,
 		color: "Brown",
-		eggGroups: ["Human-Like"],
 	},
 	lickitung: {
 		inherit: true,
@@ -1277,7 +1169,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.2,
 		weightkg: 65.5,
 		color: "Pink",
-		eggGroups: ["Monster"],
 	},
 	koffing: {
 		inherit: true,
@@ -1288,7 +1179,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 1,
 		color: "Purple",
 		evos: ["weezing"],
-		eggGroups: ["Amorphous"],
 	},
 	weezing: {
 		inherit: true,
@@ -1300,7 +1190,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Purple",
 		prevo: "koffing",
 		evoLevel: 35,
-		eggGroups: ["Amorphous"],
 	},
 	rhyhorn: {
 		inherit: true,
@@ -1311,7 +1200,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 115,
 		color: "Gray",
 		evos: ["rhydon"],
-		eggGroups: ["Monster", "Field"],
 	},
 	rhydon: {
 		inherit: true,
@@ -1323,7 +1211,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Gray",
 		prevo: "rhyhorn",
 		evoLevel: 42,
-		eggGroups: ["Monster", "Field"],
 	},
 	chansey: {
 		inherit: true,
@@ -1333,7 +1220,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.1,
 		weightkg: 34.6,
 		color: "Pink",
-		eggGroups: ["Fairy"],
 	},
 	tangela: {
 		inherit: true,
@@ -1343,7 +1229,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1,
 		weightkg: 35,
 		color: "Blue",
-		eggGroups: ["Grass"],
 	},
 	kangaskhan: {
 		inherit: true,
@@ -1353,7 +1238,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 2.2,
 		weightkg: 80,
 		color: "Brown",
-		eggGroups: ["Monster"],
 	},
 	horsea: {
 		inherit: true,
@@ -1364,7 +1248,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 8,
 		color: "Blue",
 		evos: ["seadra"],
-		eggGroups: ["Water 1", "Dragon"],
 	},
 	seadra: {
 		inherit: true,
@@ -1376,7 +1259,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Blue",
 		prevo: "horsea",
 		evoLevel: 32,
-		eggGroups: ["Water 1", "Dragon"],
 	},
 	goldeen: {
 		inherit: true,
@@ -1387,7 +1269,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 15,
 		color: "Red",
 		evos: ["seaking"],
-		eggGroups: ["Water 2"],
 	},
 	seaking: {
 		inherit: true,
@@ -1399,7 +1280,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Red",
 		prevo: "goldeen",
 		evoLevel: 33,
-		eggGroups: ["Water 2"],
 	},
 	staryu: {
 		inherit: true,
@@ -1410,7 +1290,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 34.5,
 		color: "Brown",
 		evos: ["starmie"],
-		eggGroups: ["Water 3"],
 	},
 	starmie: {
 		inherit: true,
@@ -1423,7 +1302,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "staryu",
 		evoType: "useItem",
 		evoItem: "Water Stone",
-		eggGroups: ["Water 3"],
 	},
 	mrmime: {
 		inherit: true,
@@ -1433,7 +1311,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.3,
 		weightkg: 54.5,
 		color: "Pink",
-		eggGroups: ["Human-Like"],
 	},
 	scyther: {
 		inherit: true,
@@ -1443,7 +1320,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.5,
 		weightkg: 56,
 		color: "Green",
-		eggGroups: ["Bug"],
 	},
 	jynx: {
 		inherit: true,
@@ -1453,7 +1329,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.4,
 		weightkg: 40.6,
 		color: "Red",
-		eggGroups: ["Human-Like"],
 	},
 	electabuzz: {
 		inherit: true,
@@ -1463,7 +1338,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.1,
 		weightkg: 30,
 		color: "Yellow",
-		eggGroups: ["Human-Like"],
 	},
 	magmar: {
 		inherit: true,
@@ -1473,7 +1347,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.3,
 		weightkg: 44.5,
 		color: "Red",
-		eggGroups: ["Human-Like"],
 	},
 	pinsir: {
 		inherit: true,
@@ -1483,7 +1356,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.5,
 		weightkg: 55,
 		color: "Brown",
-		eggGroups: ["Bug"],
 	},
 	tauros: {
 		inherit: true,
@@ -1493,7 +1365,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.4,
 		weightkg: 88.4,
 		color: "Brown",
-		eggGroups: ["Field"],
 	},
 	magikarp: {
 		inherit: true,
@@ -1504,7 +1375,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 10,
 		color: "Red",
 		evos: ["gyarados"],
-		eggGroups: ["Water 2", "Dragon"],
 	},
 	gyarados: {
 		inherit: true,
@@ -1516,7 +1386,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Blue",
 		prevo: "magikarp",
 		evoLevel: 20,
-		eggGroups: ["Water 2", "Dragon"],
 	},
 	lapras: {
 		inherit: true,
@@ -1526,7 +1395,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 2.5,
 		weightkg: 220,
 		color: "Blue",
-		eggGroups: ["Monster", "Water 1"],
 	},
 	ditto: {
 		inherit: true,
@@ -1536,7 +1404,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 0.3,
 		weightkg: 4,
 		color: "Purple",
-		eggGroups: ["Ditto"],
 	},
 	eevee: {
 		inherit: true,
@@ -1547,7 +1414,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 6.5,
 		color: "Brown",
 		evos: ["vaporeon", "jolteon", "flareon"],
-		eggGroups: ["Field"],
 	},
 	vaporeon: {
 		inherit: true,
@@ -1560,7 +1426,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "eevee",
 		evoType: "useItem",
 		evoItem: "Water Stone",
-		eggGroups: ["Field"],
 	},
 	jolteon: {
 		inherit: true,
@@ -1573,7 +1438,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "eevee",
 		evoType: "useItem",
 		evoItem: "Thunder Stone",
-		eggGroups: ["Field"],
 	},
 	flareon: {
 		inherit: true,
@@ -1586,7 +1450,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "eevee",
 		evoType: "useItem",
 		evoItem: "Fire Stone",
-		eggGroups: ["Field"],
 	},
 	porygon: {
 		inherit: true,
@@ -1596,7 +1459,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 0.8,
 		weightkg: 36.5,
 		color: "Pink",
-		eggGroups: ["Mineral"],
 	},
 	omanyte: {
 		inherit: true,
@@ -1607,7 +1469,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 7.5,
 		color: "Blue",
 		evos: ["omastar"],
-		eggGroups: ["Water 1", "Water 3"],
 	},
 	omastar: {
 		inherit: true,
@@ -1619,7 +1480,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Blue",
 		prevo: "omanyte",
 		evoLevel: 40,
-		eggGroups: ["Water 1", "Water 3"],
 	},
 	kabuto: {
 		inherit: true,
@@ -1630,7 +1490,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 11.5,
 		color: "Brown",
 		evos: ["kabutops"],
-		eggGroups: ["Water 1", "Water 3"],
 	},
 	kabutops: {
 		inherit: true,
@@ -1642,7 +1501,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "kabuto",
 		evoLevel: 40,
-		eggGroups: ["Water 1", "Water 3"],
 	},
 	aerodactyl: {
 		inherit: true,
@@ -1652,7 +1510,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.8,
 		weightkg: 59,
 		color: "Purple",
-		eggGroups: ["Flying"],
 	},
 	snorlax: {
 		inherit: true,
@@ -1662,7 +1519,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 2.1,
 		weightkg: 460,
 		color: "Black",
-		eggGroups: ["Monster"],
 	},
 	articuno: {
 		inherit: true,
@@ -1672,7 +1528,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.7,
 		weightkg: 55.4,
 		color: "Blue",
-		eggGroups: ["Undiscovered"],
 	},
 	zapdos: {
 		inherit: true,
@@ -1682,7 +1537,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 1.6,
 		weightkg: 52.6,
 		color: "Yellow",
-		eggGroups: ["Undiscovered"],
 	},
 	moltres: {
 		inherit: true,
@@ -1692,7 +1546,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 2,
 		weightkg: 60,
 		color: "Yellow",
-		eggGroups: ["Undiscovered"],
 	},
 	dratini: {
 		inherit: true,
@@ -1703,7 +1556,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 3.3,
 		color: "Blue",
 		evos: ["dragonair"],
-		eggGroups: ["Water 1", "Dragon"],
 	},
 	dragonair: {
 		inherit: true,
@@ -1716,7 +1568,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		prevo: "dratini",
 		evos: ["dragonite"],
 		evoLevel: 30,
-		eggGroups: ["Water 1", "Dragon"],
 	},
 	dragonite: {
 		inherit: true,
@@ -1728,7 +1579,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		prevo: "dragonair",
 		evoLevel: 55,
-		eggGroups: ["Water 1", "Dragon"],
 	},
 	mewtwo: {
 		inherit: true,
@@ -1738,7 +1588,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 2,
 		weightkg: 122,
 		color: "Purple",
-		eggGroups: ["Undiscovered"],
 	},
 	mew: {
 		inherit: true,
@@ -1748,6 +1597,5 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		heightm: 0.4,
 		weightkg: 4,
 		color: "Pink",
-		eggGroups: ["Undiscovered"],
 	},
 };

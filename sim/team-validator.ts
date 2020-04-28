@@ -1019,6 +1019,9 @@ export class TeamValidator {
 		let eggGroups = species.eggGroups;
 		if (species.id === 'nidoqueen' || species.id === 'nidorina') {
 			eggGroups = dex.getSpecies('nidoranf').eggGroups;
+		} else if (dex !== this.dex) {
+			// Gen 1 tradeback; grab the egg groups from Gen 2
+			eggGroups = dex.getSpecies(species.id).eggGroups;
 		}
 		if (eggGroups[0] === 'Undiscovered') eggGroups = dex.getSpecies(species.evos[0]).eggGroups;
 		if (eggGroups[0] === 'Undiscovered' || !eggGroups.length) {
