@@ -8,6 +8,8 @@ describe('Pokedex', function () {
 		for (const pokemonid in Pokedex) {
 			const entry = Pokedex[pokemonid];
 			assert.equal(toID(entry.name), pokemonid, `Mismatched Pokemon key "${pokemonid}" of ${entry.name}`);
+			assert(!entry.name.startsWith("-") && !entry.name.endsWith("-"), `Pokemon name "${entry.name}" should not start or end with a hyphen`);
+			assert.equal(entry.name, entry.name.trim(), `Pokemon name "${entry.name}" should not start or end with whitespace`);
 			if (entry.prevo) {
 				const prevoEntry = Pokedex[toID(entry.prevo)] || {};
 				assert.equal(entry.prevo, prevoEntry.name, `Misspelled/nonexistent prevo "${entry.prevo}" of ${entry.name}`);
@@ -44,7 +46,9 @@ describe('Pokedex', function () {
 			}
 			if (entry.cosmeticFormes) {
 				for (const forme of entry.cosmeticFormes) {
-					assert(forme.startsWith(`${entry.name}-`) && !forme.endsWith("-"), `Misspelled/nonexistent beginning of cosmetic forme name "${forme}" of ${entry.name}`);
+					assert(forme.startsWith(`${entry.name}-`), `Misspelled/nonexistent beginning of cosmetic forme name "${forme}" of ${entry.name}`);
+					assert(!forme.startsWith("-") && !forme.endsWith("-"), `Cosmetic forme name "${forme}" of ${entry.name} should not start or end with a hyphen`);
+					assert.equal(forme, forme.trim(), `Cosmetic forme name "${forme}" of ${entry.name} should not start or end with whitespace`);
 				}
 			}
 		}
