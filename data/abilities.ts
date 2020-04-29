@@ -2437,7 +2437,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 					// this.add('-message', "" + curPoke + " skipped: Natural Cure already known");
 					continue;
 				}
-				const species = this.dex.getSpecies(curPoke.forme);
+				const species = curPoke.species;
 				// pokemon can't get Natural Cure
 				if (!Object.values(species.abilities).includes('Natural Cure')) {
 					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");

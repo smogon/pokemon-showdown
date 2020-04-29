@@ -1033,11 +1033,11 @@ export class Battle {
 		}
 	}
 
-	getPokemon(id: string | Pokemon) {
-		if (typeof id !== 'string') id = id.id;
+	getPokemon(fullname: string | Pokemon) {
+		if (typeof fullname !== 'string') fullname = fullname.fullname;
 		for (const side of this.sides) {
 			for (const pokemon of side.pokemon) {
-				if (pokemon.id === id) return pokemon;
+				if (pokemon.fullname === fullname) return pokemon;
 			}
 		}
 		return null;
@@ -2500,7 +2500,7 @@ export class Battle {
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.getEffectByID(pokemon.speciesid), pokemon.speciesData, pokemon);
+				this.singleEvent('Start', this.dex.getEffectByID(pokemon.species.id), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
