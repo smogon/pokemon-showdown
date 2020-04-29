@@ -1482,7 +1482,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.ended) return `<div class="infobox">The game of ${this.title} has ended.</div>`;
 		let output = `<div class="broadcast-blue">`;
 		if (this.phase === 'signups') {
-			output += `<h2 style="text-align: center">A game of ${this.title} was created</h2><p style="text-align: center"><button class="button" name="send" value="/mafia join">Join the game</button> <button class="button" name="send" value="/join view-mafia-${this.room.roomid}">Spectate the game</button> <button class="button" name="send" value="/help mafia">Mafia Commands</button></p>`;
+			output += `<h1 style="text-align: center">A game of ${this.title} was created</h2><p style="text-align: center"><button class="button" name="send" value="/mafia join">Join the game</button> <button class="button" name="send" value="/join view-mafia-${this.room.roomid}">Spectate the game</button> <button class="button" name="send" value="/help mafia">Mafia Commands</button></p>`;
 		} else {
 			output += `<p style="font-weight: bold">A game of ${this.title} is in progress.</p><p><button class="button" name="send" value="/mafia sub ${this.room.roomid}, in">Become a substitute</button> <button class="button" name="send" value="/join view-mafia-${this.room.roomid}">Spectate the game</button> <button class="button" name="send" value="/help mafia">Mafia Commands</button></p>`;
 		}
@@ -1493,10 +1493,12 @@ class MafiaTracker extends Rooms.RoomGame {
 	canJoin(user: User, self = false, force = false) {
 		if (!user || !user.connected) return `User not found.`;
 		const targetString = self ? `You are` : `${user.id} is`;
-		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
-		if (this.playerTable[user.id]) return `${targetString} already in the game.`;
-		if (this.hostid === user.id) return `${targetString} the host.`;
-		if (this.cohosts.includes(user.id)) return `${targetString} a cohost.`;
+		for (const id of [user.id, ...Object.keys(user.prevNames) as ID[]]) {
+			if (!this.room.users[id]) return `${targetString} not in the room.`;
+			if (this.playerTable[id]) return `${targetString} already in the game.`;
+			if (this.hostid === id) return `${targetString} the host.`;
+			if (this.cohosts.includes(id)) return `${targetString} a cohost.`;
+		}
 		if (!force) {
 			for (const alt of user.getAltUsers(true)) {
 				if (this.playerTable[alt.id] || this.played.includes(alt.id)) {
@@ -2122,7 +2124,7 @@ export const commands: ChatCommands = {
 			if (game.phase !== 'signups') return user.sendTo(targetRoom, `|error|Signups are already closed.`);
 			if (game.playerCount < 2) return user.sendTo(targetRoom, `|error|You need at least 2 players to start.`);
 			game.phase = 'locked';
-			game.sendDeclare(game.roomWindow());
+			game.sendHTML(game.roomWindow());
 			game.updatePlayers();
 			game.logAction(user, `closed signups`);
 		},
