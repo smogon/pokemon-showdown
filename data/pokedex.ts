@@ -11120,6 +11120,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	vivillon: {
 		num: 666,
 		name: "Vivillon",
+		baseForme: "Meadow",
 		types: ["Bug", "Flying"],
 		baseStats: {hp: 80, atk: 52, def: 50, spa: 90, spd: 50, spe: 89},
 		abilities: {0: "Shield Dust", 1: "Compound Eyes", H: "Friend Guard"},
@@ -11302,6 +11303,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	furfrou: {
 		num: 676,
 		name: "Furfrou",
+		baseForme: "Natural",
 		types: ["Normal"],
 		baseStats: {hp: 75, atk: 80, def: 60, spa: 65, spd: 90, spe: 102},
 		abilities: {0: "Fur Coat"},
@@ -13281,6 +13283,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 	mimikyu: {
 		num: 778,
 		name: "Mimikyu",
+		baseForme: "Disguised",
 		types: ["Ghost", "Fairy"],
 		baseStats: {hp: 55, atk: 90, def: 80, spa: 50, spd: 105, spe: 96},
 		abilities: {0: "Disguise"},

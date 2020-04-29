@@ -118,8 +118,8 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 		if (
 			item.megaEvolves !== pokemon.baseSpecies.name ||
-			(Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) ||
-			(typeof item.megaStone === 'string' && item.megaStone === pokemon.forme)
+			(Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species.name)) ||
+			(typeof item.megaStone === 'string' && item.megaStone === pokemon.species.name)
 		) {
 			return null;
 		}

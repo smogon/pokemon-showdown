@@ -59,7 +59,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 				(this.species.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')
 			) {
 				stat *= 2;
-			} else if (this.forme === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
+			} else if (this.species.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
 				stat *= 1.5;
 			}
 
@@ -106,7 +106,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			// THIS IS PURELY A SANITY CHECK
 			// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
 			// USE this.queue.cancelMove INSTEAD
-			this.debug('' + pokemon.id + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
+			this.debug('' + pokemon.fullname + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
 			this.clearActiveMove(true);
 			return;
 		}

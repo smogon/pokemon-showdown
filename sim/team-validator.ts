@@ -326,7 +326,7 @@ export class TeamValidator {
 		}
 
 		let species = dex.getSpecies(set.species);
-		set.species = Dex.getForme(set.species);
+		set.species = species.name;
 		set.name = dex.getName(set.name);
 		let item = dex.getItem(Dex.getString(set.item));
 		set.item = item.name;

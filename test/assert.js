@@ -1,12 +1,17 @@
+/**
+ * Assert extensions
+ *
+ * WARNING: These extensions are added directly to Node's `assert.strict`,
+ * modifying built-ins. We don't personally consider this a problem because
+ * it only happens in tests, but you should be aware in case you care.
+ *
+ * by Slayer95 and Zarel
+ */
+
 'use strict';
 
-const baseAssert = require('assert').strict;
-const AssertionError = baseAssert.AssertionError;
-
-const assert = exports = module.exports = function assert(value, message) {
-	return baseAssert(value, message);
-};
-Object.assign(assert, baseAssert);
+const assert = require('assert').strict;
+const AssertionError = assert.AssertionError;
 
 assert.bounded = function (value, range, message) {
 	if (value >= range[0] && value <= range[1]) return;
@@ -175,9 +180,9 @@ assert.sets = function (getter, value, fn, message) {
 	});
 };
 
-const assertMethods = Object.getOwnPropertyNames(assert).concat(Object.getOwnPropertyNames(baseAssert)).filter(methodName => {
-	return methodName !== 'constructor' && methodName !== 'AssertionError' && typeof assert[methodName] === 'function';
-});
+const assertMethods = Object.getOwnPropertyNames(assert).filter(methodName => (
+	methodName !== 'constructor' && methodName !== 'AssertionError' && typeof assert[methodName] === 'function'
+));
 assert.false = function (value, message) {
 	if (!value) return;
 	throw new AssertionError({
@@ -202,3 +207,5 @@ for (const methodName of assertMethods) {
 		});
 	};
 }
+
+module.exports = assert;

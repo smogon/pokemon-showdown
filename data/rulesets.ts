@@ -772,7 +772,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		onBegin() {
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.speciesid === 'rayquaza') pokemon.canMegaEvo = null;
+				if (pokemon.species.id === 'rayquaza') pokemon.canMegaEvo = null;
 			}
 		},
 	},
@@ -794,7 +794,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		onBegin() {
 			const cannotDynamax = this.format.restricted || [];
 			for (const pokemon of this.getAllPokemon()) {
-				if (cannotDynamax.includes(pokemon.forme)) pokemon.canDynamax = false;
+				if (cannotDynamax.includes(pokemon.species.name)) pokemon.canDynamax = false;
 			}
 			this.add('html', 'Ubers Dynamax Clause: Pokémon on the <a href="https://www.smogon.com/dex/ss/formats/uber/">Ubers Dynamax Banlist</a> cannot Dynamax.');
 		},

@@ -69,7 +69,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		this.setActiveMove(move, pokemon, target);
 
 		if (pokemon.moveThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
-			this.debug('' + pokemon.id + ' move interrupted; movedThisTurn: ' + pokemon.moveThisTurn);
+			this.debug('' + pokemon.fullname + ' move interrupted; movedThisTurn: ' + pokemon.moveThisTurn);
 			this.clearActiveMove(true);
 			// This is only run for sleep
 			this.runEvent('AfterMoveSelf', pokemon, target, move);

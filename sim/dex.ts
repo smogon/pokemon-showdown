@@ -329,21 +329,6 @@ export class ModdedDex {
 		}
 	}
 
-	/**
-	 * Convert a pokemon name, ID, or species into its species name, preserving
-	 * form name (which is the main way Dex.getForme(id) differs from
-	 * Dex.getSpecies(id).name).
-	 */
-	getForme(speciesid: string | Species): string {
-		const id = toID(speciesid || '');
-		const species = this.getSpecies(id);
-		if (species.cosmeticFormes?.map(toID).includes(id)) {
-			const form = id.slice(species.id.length);
-			if (form) return species.name + '-' + form[0].toUpperCase() + form.slice(1);
-		}
-		return species.name;
-	}
-
 	getSpecies(name?: string | Species): Species {
 		if (name && typeof name !== 'string') return name;
 
@@ -367,6 +352,22 @@ export class ModdedDex {
 				species.abilities = {0: species.abilities['S']};
 			} else {
 				species = this.getSpecies(this.data.Aliases[id]);
+				if (species.cosmeticFormes) {
+					for (const forme of species.cosmeticFormes) {
+						if (toID(forme) === id) {
+							species = new Data.Species(species, {
+								name: forme,
+								id,
+								forme: forme.slice(species.name.length + 1),
+								baseForme: "",
+								baseSpecies: species.name,
+								otherFormes: null,
+								cosmeticFormes: null,
+							});
+							break;
+						}
+					}
+				}
 			}
 			if (species) {
 				this.speciesCache.set(id, species);

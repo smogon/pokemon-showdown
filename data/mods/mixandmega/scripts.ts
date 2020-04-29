@@ -12,7 +12,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 
 		const item = pokemon.getItem();
 		if (item.megaStone) {
-			if (item.megaStone === pokemon.forme) return null;
+			if (item.megaStone === pokemon.baseSpecies.name) return null;
 			return item.megaStone;
 		} else {
 			return null;

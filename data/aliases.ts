@@ -251,6 +251,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	wormadamplantcloak: "Wormadam",
 	cherrimo: "Cherrim",
 	cherrimovercast: "Cherrim",
+	furfrounatural: "Furfrou",
 	giratinaa: "Giratina",
 	giratinaaltered: "Giratina",
 	shayminl: "Shaymin",
@@ -278,6 +279,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	meloettavoice: "Meloetta",
 	meowsticm: "Meowstic",
 	meowsticmale: "Meowstic",
+	mimikyudisguised: "Mimikyu",
 	aegislashs: "Aegislash",
 	aegislashshield: "Aegislash",
 	pumpkabooaverage: "Pumpkaboo",
@@ -291,6 +293,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	toxtricityamped: "Toxtricity",
 	ufof: "Pokestar UFO",
 	ufoflying: "Pokestar UFO",
+	vivillonmeadow: "Vivillon",
 
 	// event formes
 	rockruffdusk: "Rockruff",
