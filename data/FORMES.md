@@ -95,9 +95,11 @@ Some Pokémon can change forme out-of-battle. These include:
 - Genesect
 - Giratina
 
+PS establishes one of their formes as the "original forme", and gives the others a `changesFrom` property pointing to the original forme.
+
 If a held item is required for a Pokémon to start battle with that forme, the `requiredItem` property will track this.
 
-`{name: "Giratina-Origin", forme: "Origin", baseSpecies: "Giratina", requiredItem: "Griseous Orb"}`
+`{name: "Giratina-Origin", forme: "Origin", baseSpecies: "Giratina", changesFrom: "Giratina", requiredItem: "Griseous Orb"}`
 
 Some changeable formes (like Arceus) are visual formes. See "Visual formes" above for more information.
 
@@ -157,7 +159,7 @@ These include:
 
 - all Dynamax and Gigantamax changes
 
-PS treats Gigantamax formes as regular in-battle formes, but Dynamax is implemented purely as a volatile status.
+PS has dex entries for Gigantamax Pokémon (to make their sprites easier to access) but not Dynamax Pokémon.
 
 
 Event-only Ability formes
@@ -177,6 +179,14 @@ Greninja in the game code has three formes: regular, Battle Bond, and Ash-Grenin
 Zygarde works the same way, with five formes: regular 50% Zygarde, event-only Power Construct 50% Zygarde, regular 10% Zygarde, event-only Power Construct 10% Zygarde, Zygarde Complete being an in-battle only forme of either event-only Power Construct 10% Zygarde or event-only Power Construct 50% Zygarde.
 
 PS's current implementation of this is weird and will be changed in a few days; do not rely on its current implementation.
+
+
+Not formes
+----------
+
+Alcremie garnishes and Spinda spot patterns aren't considered formes by the games themselves. PS doesn't support them at all.
+
+Dynamax and Gigantamax are not considered formes by the games themselves. PS implements them correctly in the simulator as volatile statuses, but does have dex entries for Gigantamax Pokémon (treating them as in-battle formes) to make their sprites easier to access, and to make Gigantamax-capable Pokémon easier to select in the teambuilder.
 
 
 `pokedex.js`
