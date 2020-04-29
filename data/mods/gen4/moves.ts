@@ -570,7 +570,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	explosion: {
 		inherit: true,
 		desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		basePower: 500,
+		shortDesc: "Deals double damage. The user faints.",
 	},
 	extremespeed: {
 		inherit: true,
@@ -1386,7 +1386,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	selfdestruct: {
 		inherit: true,
 		desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		basePower: 400,
+		shortDesc: "Deals double damage. The user faints.",
 	},
 	sketch: {
 		inherit: true,

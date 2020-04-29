@@ -289,8 +289,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	explosion: {
 		inherit: true,
 		desc: "The user faints after using this move. The target's Defense is halved during damage calculation.",
-		shortDesc: "The user faints.",
-		basePower: 250,
 		noSketch: true,
 	},
 	fissure: {
@@ -738,8 +736,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	selfdestruct: {
 		inherit: true,
 		desc: "The user faints after using this move. The target's Defense is halved during damage calculation.",
-		shortDesc: "The user faints.",
-		basePower: 200,
 		noSketch: true,
 	},
 	sketch: {
