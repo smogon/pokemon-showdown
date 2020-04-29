@@ -14871,7 +14871,7 @@ export const BattlePokedex: {[speciesid: string]: SpeciesData} = {
 		evoCondition: "spin while holding a Sweet",
 		eggGroups: ["Fairy", "Amorphous"],
 		otherFormes: ["Alcremie-Gmax"],
-		cosmeticFormes: ["Alcremie-Ruby Cream", "Alcremie-Matcha Cream", "Alcremie-Mint Cream", "Alcremie-Lemon Cream", "Alcremie-Salted Cream", "Alcremie-Ruby Swirl", "Alcremie-Caramel Swirl", "Alcremie-Rainbow Swirl"],
+		cosmeticFormes: ["Alcremie-Ruby-Cream", "Alcremie-Matcha-Cream", "Alcremie-Mint-Cream", "Alcremie-Lemon-Cream", "Alcremie-Salted-Cream", "Alcremie-Ruby-Swirl", "Alcremie-Caramel-Swirl", "Alcremie-Rainbow-Swirl"],
 	},
 	alcremiegmax: {
 		num: 869,
