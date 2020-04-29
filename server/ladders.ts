@@ -103,10 +103,15 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		const regex = /(?:^|])([^|]*)\|/g;
+		const regex = /(?:^|])([^|]*)\|([^|]*)\|/g;
 		let match = regex.exec(team);
+		let unownWord = '';
 		while (match) {
 			let nickname = match[1];
+			const speciesid = toID(match[2] || match[1]);
+			if (speciesid.length <= 6 && speciesid.startsWith('unown')) {
+				unownWord += speciesid.charAt(5) || 'a';
+			}
 			if (nickname) {
 				nickname = Chat.nicknamefilter(nickname, user);
 				if (!nickname || nickname !== match[1]) {
@@ -118,6 +123,16 @@ class Ladder extends LadderStore {
 				}
 			}
 			match = regex.exec(team);
+		}
+		if (unownWord) {
+			const filtered = Chat.nicknamefilter(unownWord, user);
+			if (!filtered || filtered !== unownWord) {
+				connection.popup(
+					`Your team was rejected for the following reason:\n\n` +
+					`- Your Unowns spell out a banned word: ${unownWord.toUpperCase()}`
+				);
+				return null;
+			}
 		}
 
 		let rating = 0;
