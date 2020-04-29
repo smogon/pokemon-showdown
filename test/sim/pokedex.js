@@ -18,7 +18,7 @@ describe('Pokedex', function () {
 				assert((baseEntry.otherFormes || []).includes(entry.name), `Base species ${entry.baseSpecies} should have ${entry.name} listed as an otherForme`);
 				assert(!entry.otherFormes, `Forme ${entry.baseSpecies} should not have a forme list (the list goes in baseSpecies).`);
 				assert(!entry.cosmeticFormes, `Forme ${entry.baseSpecies} should not have a cosmetic forme list (the list goes in baseSpecies).`);
-				assert(!entry.baseForme, `Forme ${entry.baseSpecies} should not have a baseForme (did you mean baseSpecies?).`);
+				assert(!entry.baseForme, `Forme ${entry.baseSpecies} should not have a baseForme (its forme name goes in forme) (did you mean baseSpecies?).`);
 			} else {
 				// entry should be a base species
 				assert(!entry.baseSpecies, `Base species ${entry.name} should not have its own baseSpecies.`);
@@ -52,12 +52,15 @@ describe('Pokedex', function () {
 					const battleEntry = Pokedex[toID(battleForme)] || {};
 					assert.equal(battleForme, battleEntry.name, `Misspelled/nonexistent battle-only forme "${battleForme}" of ${entry.name}`);
 					assert.equal(battleEntry.baseSpecies || battleEntry.name, entry.baseSpecies, `Battle-only forme ${entry.name} of ${battleEntry.name} should have the same baseSpecies`);
+					assert(!battleEntry.battleOnly, `Out-of-battle forme ${battleEntry.name} of ${entry.name} should not be battle-only`);
 				}
 			}
 			if (entry.changesFrom) {
 				const formeEntry = Pokedex[toID(entry.changesFrom)] || {};
 				assert.equal(entry.changesFrom, formeEntry.name, `Misspelled/nonexistent changesFrom value "${entry.changesFrom}" of ${entry.name}`);
 				assert.equal(formeEntry.baseSpecies || formeEntry.name, entry.baseSpecies, `Original forme ${formeEntry.name} of ${entry.name} should have the same baseSpecies`);
+				assert(!formeEntry.changesFrom, `Original forme ${formeEntry.name} of ${entry.name} should not also have chagesFrom`);
+				assert(!formeEntry.battleOnly, `Original forme ${formeEntry.name} of ${entry.name} should not also have battleOnly`);
 			}
 			if (entry.cosmeticFormes) {
 				for (const forme of entry.cosmeticFormes) {
