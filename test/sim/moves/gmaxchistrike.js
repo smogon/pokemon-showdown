@@ -87,7 +87,6 @@ describe('G-Max Chi Strike', function () {
 		battle.makeChoices('move batonpass, move sleeptalk', 'auto');
 		battle.makeChoices('switch 3');
 		battle.makeChoices('move tackle 2, move sleeptalk', 'auto');
-		console.log(battle.getDebugLog());
 
 		// Magikarp is only +0 so it probably will not crit
 		assert(battle.log.every(line => !line.startsWith('|-crit')));
