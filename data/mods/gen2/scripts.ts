@@ -427,19 +427,20 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (!isSecondary && moveData.self.boosts) this.random(100);
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
-		if (moveData.secondaries && this.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
+		// Secondary effects don't happen if the target faints from the attack
+		if (target?.hp && moveData.secondaries && this.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
 			for (const secondary of moveData.secondaries) {
 				// We check here whether to negate the probable secondary status if it's burn or freeze.
 				// In the game, this is checked and if true, the random number generator is not called.
 				// That means that a move that does not share the type of the target can status it.
 				// This means tri-attack can burn fire-types and freeze ice-types.
 				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
-				if (secondary.status && ['brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type)) {
+				if (secondary.status && ['brn', 'frz'].includes(secondary.status) && target.hasType(move.type)) {
 					this.debug('Target immune to [' + secondary.status + ']');
 					continue;
 				}
 				// A sleeping or frozen target cannot be flinched in Gen 2; King's Rock is exempt
-				if (secondary.volatileStatus === 'flinch' && target && ['slp', 'frz'].includes(target.status) && !secondary.kingsrock) {
+				if (secondary.volatileStatus === 'flinch' && ['slp', 'frz'].includes(target.status) && !secondary.kingsrock) {
 					this.debug('Cannot flinch a sleeping or frozen target');
 					continue;
 				}
