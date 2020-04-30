@@ -2414,7 +2414,7 @@ export class Battle {
 			team2PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 1 ? side.pokemonLeft : 0), 0);
 		}
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
-			this.win(faintData ? faintData.target.side : null);
+			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
 			return true;
 		}
 		if (!team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
