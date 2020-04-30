@@ -1,7 +1,7 @@
 export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	charizard: {
 		inherit: true,
-		otherFormes: ["charizardmegax", "charizardmegay"],
+		otherFormes: ["Charizard-Mega-X", "Charizard-Mega-Y"],
 	},
 	butterfree: {
 		inherit: true,
@@ -10,7 +10,7 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	pikachu: {
 		inherit: true,
 		otherFormes: [
-			"pikachucosplay", "pikachurockstar", "pikachubelle", "pikachupopstar", "pikachuphd", "pikachulibre", "pikachuoriginal", "pikachuhoenn", "pikachusinnoh", "pikachuunova", "pikachukalos", "pikachualola", "pikachupartner", "pikachustarter",
+			"Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter",
 		],
 	},
 	pikachuoriginal: {
@@ -43,7 +43,7 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	meowth: {
 		inherit: true,
-		otherFormes: ["meowthalola"],
+		otherFormes: ["Meowth-Alola"],
 	},
 	machamp: {
 		inherit: true,
@@ -51,7 +51,7 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	gengar: {
 		inherit: true,
-		otherFormes: ['gengarmega'],
+		otherFormes: ['Gengar-Mega'],
 	},
 	kingler: {
 		inherit: true,
@@ -71,7 +71,7 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	eevee: {
 		inherit: true,
-		otherFormes: ['eeveestarter'],
+		otherFormes: ['Eevee-Starter'],
 	},
 	snorlax: {
 		inherit: true,
