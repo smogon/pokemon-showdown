@@ -316,6 +316,28 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		},
 		timer: {starting: 15, addPerTurn: 5, maxPerTurn: 15, maxFirstTurn: 40, grace: 30},
 	},
+	onevsone: {
+		name: '1v1',
+		teamLength: {
+			validate: [1, 3],
+			battle: 1,
+		},
+		desc: "Bring 3 Pokemon and select 1 to battle.",
+		onBegin() {
+			this.add('rule', '1v1: Bring 3, pick 1');
+		},
+	},
+	twovstwo: {
+		name: '2v2',
+		teamLength: {
+			validate: [2, 4],
+			battle: 2,
+		},
+		desc: "Bring 4 Pokemon and select 2 to battle.",
+		onBegin() {
+			this.add('rule', '2v2: Bring 4, pick 2');
+		},
+	},
 	vgctimer: {
 		effectType: 'Rule',
 		name: 'VGC Timer',
