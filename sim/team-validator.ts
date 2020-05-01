@@ -1743,6 +1743,13 @@ export class TeamValidator {
 					// inherit from their base forme unless they're freely switchable
 					continue;
 				}
+				if (species.isNonstandard) {
+					// It's normal for a nonstandard species not to have learnset data
+
+					// Formats should replace the `Obtainable Moves` rule if they want to
+					// allow pokemon without learnsets.
+					return {type: 'invalid'};
+				}
 				// should never happen
 				throw new Error(`Species with no learnset data: ${species.id}`);
 			}
