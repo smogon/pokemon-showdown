@@ -379,6 +379,11 @@ export const commands: ChatCommands = {
 				if (typeof bfSets === 'string') {
 					bfSets += battleFactorySets(Dex.getSpecies('necrozma-duskmane'), tier, mod);
 				}
+			} else if (species.name === 'Zygarde-Complete') {
+				bfSets = battleFactorySets(Dex.getSpecies('zygarde'), tier, mod);
+				if (typeof bfSets === 'string') {
+					bfSets += battleFactorySets(Dex.getSpecies('zygarde-10'), tier, mod);
+				}
 			} else {
 				bfSets = battleFactorySets(species, tier, mod);
 			}

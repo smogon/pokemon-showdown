@@ -360,7 +360,7 @@ function toPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: Deep
 	const species = dex.getSpecies(pokemon);
 	if (species.battleOnly && !format.id.includes('balancedhackmons')) {
 		if (typeof species.battleOnly !== 'string') {
-			throw new Error(`Got an Ultra Necrozma outside of BH`);
+			throw new Error(`Got an Ultra Necrozma or Complete Zygarde outside of BH`);
 		}
 		copy.species = species.battleOnly;
 		copy.ability = dex.getSpecies(copy.species).abilities[0];

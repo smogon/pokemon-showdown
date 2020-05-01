@@ -1125,34 +1125,38 @@ export class TeamValidator {
 		const species = dex.getSpecies(set.species);
 
 		if (species.name === 'Necrozma-Ultra') {
+			const whichMoves = (set.moves.includes('Sunsteel Strike') ? 1 : 0) +
+				(set.moves.includes('Moongeist Beam') ? 2 : 0);
 			if (item.name !== 'Ultranecrozium Z') {
 				// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
 				problems.push(`Necrozma-Ultra must start the battle holding Ultranecrozium Z.`);
-			} else if (set.moves.includes('Sunsteel Strike')) {
+			} else if (whichMoves === 1) {
 				set.species = 'Necrozma-Dusk-Mane';
-			} else if (set.moves.includes('Moongeist Beam')) {
+			} else if (whichMoves === 2) {
 				set.species = 'Necrozma-Dawn-Wings';
 			} else {
-				problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dusk-Mane or Necrozma-Dawn-Wings holding Ultranecrozium Z.`);
+				problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dusk-Mane or Necrozma-Dawn-Wings holding Ultranecrozium Z. Please specify which Necrozma it should start as.`);
 			}
+		} else if (species.name === 'Zygarde-Complete') {
+			problems.push(`Zygarde-Complete must start the battle as Zygarde or Zygarde-10% with Power Construct. Please specify which Zygarde it should start as.`);
 		} else if (species.battleOnly) {
 			if (species.requiredAbility && set.ability !== species.requiredAbility) {
-				// Darmanitan-Zen, Zygarde-Complete
-				problems.push(`${species.name} transforms in-battle with ${species.requiredAbility}.`);
+				// Darmanitan-Zen
+				problems.push(`${species.name} transforms in-battle with ${species.requiredAbility}, please fix its ability.`);
 			}
 			if (species.requiredItems) {
 				if (!species.requiredItems.includes(item.name)) {
 					// Mega or Primal
-					problems.push(`${species.name} transforms in-battle with ${species.requiredItem}.`);
+					problems.push(`${species.name} transforms in-battle with ${species.requiredItem}, please fix its item.`);
 				}
 			}
 			if (species.requiredMove && !set.moves.includes(toID(species.requiredMove))) {
 				// Meloetta-Pirouette, Rayquaza-Mega
-				problems.push(`${species.name} transforms in-battle with ${species.requiredMove}.`);
+				problems.push(`${species.name} transforms in-battle with ${species.requiredMove}, please fix its moves.`);
 			}
 			if (!species.isGigantamax) {
 				if (typeof species.battleOnly !== 'string') {
-					// Ultra Necrozma is already checked above
+					// Ultra Necrozma and Complete Zygarde are already checked above
 					throw new Error(`${species.name} should have a string battleOnly`);
 				}
 				// Set to out-of-battle forme
