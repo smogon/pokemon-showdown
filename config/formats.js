@@ -686,6 +686,80 @@ const Formats = [
 		},
 	},
 	{
+		name: "[Gen 8] Shared Power",
+		desc: `Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3660877/">Shared Power</a>`,
+		],
+
+		mod: 'gen8',
+		searchShow: false,
+		ruleset: ['Standard', 'Dynamax Clause'],
+		banlist: [
+			'Darmanitan-Galar', 'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal',
+			'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Shedinja', 'Solgaleo', 'Toxapex',
+			'Zacian', 'Zamazenta', 'Zekrom', 'Leppa Berry', 'Baton Pass',
+			'Arena Trap', 'Contrary', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Electric Surge ++ Surge Surfer',
+			'Flare Boost', 'Fur Coat', 'Guts', 'Huge Power', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magic Guard',
+			'Mirror Armor', 'Mold Breaker', 'Moody', 'Neutralizing Gas', 'Regenerator ++ Emergency Exit',
+			'Regenerator ++ Wimp Out', 'Sand Rush', 'Sand Veil', 'Shadow Tag', 'Simple', 'Slush Rush', 'Snow Cloak',
+			'Speed Boost', 'Steelworker ++ Steely Spirit', 'Tinted Lens', 'Trace', 'Unaware', 'Unburden', 'Water Bubble',
+		],
+		/** @param {Pokemon} pokemon */
+		// @ts-ignore
+		getSharedPower(pokemon) {
+			/** @type {Set<string>} */
+			const sharedPower = new Set();
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.previouslySwitchedIn > 0) {
+					sharedPower.add(ally.baseAbility);
+				}
+			}
+			sharedPower.delete(pokemon.baseAbility);
+			return sharedPower;
+		},
+		onBeforeSwitchIn(pokemon) {
+			// @ts-ignore
+			if (!this.format.getSharedPower) return;
+			// @ts-ignore
+			for (const ability of this.format.getSharedPower(pokemon)) {
+				const effect = 'ability:' + ability;
+				pokemon.volatiles[effect] = {id: toID(effect), target: pokemon};
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			// @ts-ignore
+			if (!this.format.getSharedPower) return;
+			// @ts-ignore
+			for (const ability of this.format.getSharedPower(pokemon)) {
+				const effect = 'ability:' + ability;
+				delete pokemon.volatiles[effect];
+				pokemon.addVolatile(effect);
+			}
+		},
+		field: {
+			suppressingWeather() {
+				for (const side of this.battle.sides) {
+					for (const pokemon of side.active) {
+						if (pokemon && !pokemon.ignoringAbility() && pokemon.hasAbility('Cloud Nine')) {
+							return true;
+						}
+					}
+				}
+				return false;
+			},
+		},
+		pokemon: {
+			hasAbility(ability) {
+				if (this.ignoringAbility()) return false;
+				if (Array.isArray(ability)) return ability.some(ability => this.hasAbility(ability));
+				const abilityid = toID(ability);
+				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
+			},
+		},
+	},
+	{
 		name: "[Gen 7] Balanced Hackmons",
 		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		threads: [
