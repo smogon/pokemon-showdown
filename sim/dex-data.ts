@@ -828,6 +828,8 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly isZ: boolean | string;
 	/** How many times does this move hit? */
 	readonly multihit?: number | number[];
+	/** Is this move a Max move? */
+	readonly isMax: boolean | string;
 	/** Max/G-Max move power */
 	readonly gmaxPower?: number;
 	/** Z-move power */
@@ -890,6 +892,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.pp = Number(data.pp!);
 		this.noPPBoosts = !!data.noPPBoosts;
 		this.isZ = data.isZ || false;
+		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
 		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
 		this.pressureTarget = data.pressureTarget || '';
@@ -903,7 +906,9 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (this.category !== 'Status' && !this.gmaxPower) {
-			if (!this.basePower) {
+			if (this.isMax || this.isZ) {
+				this.gmaxPower = 1;
+			} else if (!this.basePower) {
 				this.gmaxPower = 100;
 			} else if (['Fighting', 'Poison'].includes(this.type)) {
 				if (this.basePower >= 150) {
@@ -939,7 +944,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 				}
 			}
 		}
-		if (this.category !== 'Status' && !this.zMovePower) {
+		if (this.category !== 'Status' && !this.zMovePower && !this.isZ && !this.isMax) {
 			let basePower = this.basePower;
 			if (Array.isArray(this.multihit)) basePower *= 3;
 			if (!basePower) {
