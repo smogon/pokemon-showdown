@@ -72,6 +72,17 @@ describe('Dex data', function () {
 					assert.equal(forme, forme.trim(), `Cosmetic forme name "${forme}" of ${entry.name} should not start or end with whitespace`);
 				}
 			}
+
+			const battleOnly = ['Mega', 'Mega-X', 'Mega-Y', 'Primal'].includes(entry.forme) ? entry.baseSpecies : entry.battleOnly;
+			if (entry.requiredAbility) {
+				assert(entry.battleOnly, `Forme ${entry.name} with requiredAbility must have battleOnly`);
+			}
+			if (entry.requiredItem) {
+				assert(battleOnly || entry.changesFrom, `Forme ${entry.name} with requiredAbility must have battleOnly or changesFrom`);
+			}
+			if (entry.requiredMove) {
+				assert(battleOnly || entry.changesFrom, `Forme ${entry.name} with requiredAbility must have battleOnly or changesFrom`);
+			}
 		}
 	});
 

@@ -358,9 +358,11 @@ function toPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: Deep
 
 	// The validator is picky about megas having already evolved or battle only formes
 	const species = dex.getSpecies(pokemon);
-	const mega = ['Mega', 'Primal', 'Ultra'].some(f => species.forme.startsWith(f));
-	if (species.battleOnly || (mega && !format.id.includes('balancedhackmons'))) {
-		copy.species = dex.getOutOfBattleSpecies(species);
+	if (species.battleOnly && !format.id.includes('balancedhackmons')) {
+		if (typeof species.battleOnly !== 'string') {
+			throw new Error(`Got an Ultra Necrozma outside of BH`);
+		}
+		copy.species = species.battleOnly;
 		copy.ability = dex.getSpecies(copy.species).abilities[0];
 	}
 	return copy;
