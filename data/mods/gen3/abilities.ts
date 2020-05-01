@@ -94,7 +94,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.effectData.target;
 			}
 		},
-		id: "lightningrod",
 		name: "Lightning Rod",
 		rating: 3.5,
 		num: 32,

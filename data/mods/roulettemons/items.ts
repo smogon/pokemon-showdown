@@ -1,6 +1,5 @@
 export const BattleItems: {[k: string]: ModdedItemData} = {
 	chillytite: {
-		id: "chillytite",
 		name: "Chillytite",
 		spritenum: 594,
 		megaStone: "Chillyte-Mega",

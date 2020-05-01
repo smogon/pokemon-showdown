@@ -11,8 +11,6 @@
 export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	brn: {
 		name: 'brn',
-		id: 'brn',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'brn');
@@ -35,8 +33,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	par: {
 		name: 'par',
-		id: 'par',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'par');
@@ -62,8 +58,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	slp: {
 		name: 'slp',
-		id: 'slp',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {
@@ -90,8 +84,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	frz: {
 		name: 'frz',
-		id: 'frz',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'frz');
@@ -110,8 +102,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	psn: {
 		name: 'psn',
-		id: 'psn',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'psn');
@@ -134,8 +124,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	confusion: {
 		name: 'confusion',
-		id: 'confusion',
-		num: 0,
 		// this is a volatile status
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'lockedmove') {
@@ -175,8 +163,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	flinch: {
 		name: 'flinch',
-		id: 'flinch',
-		num: 0,
 		duration: 1,
 		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon) {
@@ -189,8 +175,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	trapped: {
 		name: 'trapped',
-		id: 'trapped',
-		num: 0,
 		noCopy: true,
 		onTrapPokemon(pokemon) {
 			if (!this.effectData.source || !this.effectData.source.isActive) {
@@ -202,8 +186,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
-		id: 'partiallytrapped',
-		num: 0,
 		duration: 2,
 		onBeforeMovePriority: 4,
 		onBeforeMove(pokemon) {
@@ -213,8 +195,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	partialtrappinglock: {
 		name: 'partialtrappinglock',
-		id: 'partialtrappinglock',
-		num: 0,
 		durationCallback() {
 			const duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 			return duration;
@@ -251,8 +231,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	stall: {
 		name: 'stall',
-		id: 'stall',
-		num: 0,
 		// Protect, Detect, Endure counter
 		duration: 2,
 		counterMax: 256,

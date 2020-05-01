@@ -125,7 +125,7 @@ export class BasicEffect implements EffectData {
 		data = combine(this, data, ...moreData);
 
 		this.name = Tools.getString(data.name).trim();
-		this.id = data.id as ID || toID(this.name); // Hidden Power hack
+		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Tools.getString(data.fullname) || this.name;
 		this.effectType = Tools.getString(data.effectType) as EffectType || 'Effect';
 		this.exists = !!(this.exists && this.id);
@@ -468,7 +468,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect & Abili
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
 		this.suppressWeather = !!data.suppressWeather;
-		this.rating = data.rating!;
+		this.rating = data.rating || 0;
 
 		if (!this.gen) {
 			if (this.num >= 234) {
