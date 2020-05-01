@@ -2,14 +2,17 @@
 
 const assert = require('./../assert');
 
-describe('Pokedex', function () {
-	it('should make sure every Pokemon name is correct', function () {
+describe('Dex data', function () {
+	it('should have valid Pokedex entries', function () {
 		const Pokedex = Dex.data.Pokedex;
 		for (const pokemonid in Pokedex) {
 			const entry = Pokedex[pokemonid];
 			assert.equal(toID(entry.name), pokemonid, `Mismatched Pokemon key "${pokemonid}" of ${entry.name}`);
 			assert(!entry.name.startsWith("-") && !entry.name.endsWith("-"), `Pokemon name "${entry.name}" should not start or end with a hyphen`);
 			assert.equal(entry.name, entry.name.trim(), `Pokemon name "${entry.name}" should not start or end with whitespace`);
+
+			assert(entry.color, `Pokemon ${entry.name} must have a color.`);
+			assert(entry.heightm, `Pokemon ${entry.name} must have a heightm.`);
 
 			if (entry.forme) {
 				// entry is a forme of a base species
@@ -69,6 +72,42 @@ describe('Pokedex', function () {
 					assert.equal(forme, forme.trim(), `Cosmetic forme name "${forme}" of ${entry.name} should not start or end with whitespace`);
 				}
 			}
+		}
+	});
+
+	it('should have valid Items entries', function () {
+		const Items = Dex.data.Items;
+		for (const itemid in Items) {
+			const entry = Items[itemid];
+			assert.equal(toID(entry.name), itemid, `Mismatched Item key "${itemid}" of "${entry.name}"`);
+			assert.equal(typeof entry.num, 'number', `Item ${entry.name} should have a number`);
+		}
+	});
+
+	it('should have valid Movedex entries', function () {
+		const Movedex = Dex.data.Movedex;
+		for (const moveid in Movedex) {
+			const entry = Movedex[moveid];
+			assert.equal(toID(entry.name), moveid, `Mismatched Move key "${moveid}" of "${entry.name}"`);
+			assert.equal(typeof entry.num, 'number', `Move ${entry.name} should have a number`);
+		}
+	});
+
+	it('should have valid Abilities entries', function () {
+		const Abilities = Dex.data.Abilities;
+		for (const abilityid in Abilities) {
+			const entry = Abilities[abilityid];
+			assert.equal(toID(entry.name), abilityid, `Mismatched Ability key "${abilityid}" of "${entry.name}"`);
+			assert.equal(typeof entry.num, 'number', `Ability ${entry.name} should have a number`);
+			assert.equal(typeof entry.rating, 'number', `Ability ${entry.name} should have a rating`);
+		}
+	});
+
+	it('should have valid Formats entries', function () {
+		const Formats = Dex.data.Formats;
+		for (const formatid in Formats) {
+			const entry = Formats[formatid];
+			assert.equal(toID(entry.name), formatid, `Mismatched Format/Ruleset key "${formatid}" of "${entry.name}"`);
 		}
 	});
 });

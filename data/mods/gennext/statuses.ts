@@ -1,8 +1,6 @@
 export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	frz: {
 		name: 'frz',
-		id: 'frz',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'frz');
@@ -29,8 +27,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		name: 'lockedmove',
-		id: 'lockedmove',
-		num: 0,
 		durationCallback() {
 			return this.random(2, 4);
 		},
@@ -54,8 +50,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	confusion: {
 		// this is a volatile status
 		name: 'confusion',
-		id: 'confusion',
-		num: 0,
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[fatigue]');
@@ -118,8 +112,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 
 	bidestall: {
 		name: 'bidestall',
-		id: 'bidestall',
-		num: 0,
 		duration: 3,
 	},
 

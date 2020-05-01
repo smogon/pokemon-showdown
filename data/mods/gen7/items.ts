@@ -162,7 +162,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	dreamball: {
-		id: "dreamball",
 		name: "Dream Ball",
 		spritenum: 111,
 		num: 576,

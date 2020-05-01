@@ -1,8 +1,6 @@
 export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	brn: {
 		name: 'brn',
-		id: 'brn',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'brn');
@@ -17,8 +15,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	par: {
 		name: 'par',
-		id: 'par',
-		num: 0,
 		inherit: true,
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
@@ -30,8 +26,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	slp: {
 		name: 'slp',
-		id: 'slp',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {
@@ -58,8 +52,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	frz: {
 		name: 'frz',
-		id: 'frz',
-		num: 0,
 		inherit: true,
 		onBeforeMove(pokemon, target, move) {
 			if (move.flags['defrost']) return;
@@ -82,8 +74,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	psn: {
 		name: 'psn',
-		id: 'psn',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'psn');
@@ -98,8 +88,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	tox: {
 		name: 'tox',
-		id: 'tox',
-		num: 0,
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'tox');
@@ -169,8 +157,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	lockedmove: {
 		name: 'lockedmove',
-		id: 'lockedmove',
-		num: 0,
 		// Outrage, Thrash, Petal Dance...
 		durationCallback() {
 			return this.random(2, 4);
@@ -211,8 +197,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	stall: {
 		name: 'stall',
-		id: 'stall',
-		num: 0,
 		duration: 2,
 		onStart() {
 			this.effectData.counter = 127;
@@ -229,8 +213,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	residualdmg: {
 		name: 'residualdmg',
-		id: 'residualdmg',
-		num: 0,
 		onStart(target) {
 			target.volatiles['residualdmg'].counter = 0;
 		},

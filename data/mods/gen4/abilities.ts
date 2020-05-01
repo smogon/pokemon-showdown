@@ -22,7 +22,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		id: "blaze",
 		name: "Blaze",
 		rating: 2,
 		num: 66,
@@ -193,7 +192,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
-		id: "magicguard",
 		name: "Magic Guard",
 		rating: 4.5,
 		num: 98,
@@ -212,7 +210,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		id: "minus",
 		name: "Minus",
 		rating: 0,
 		num: 58,
@@ -248,7 +245,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		id: "overgrow",
 		name: "Overgrow",
 		rating: 2,
 		num: 65,
@@ -256,7 +252,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	pickup: {
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
-		id: "pickup",
 		name: "Pickup",
 		rating: 0,
 		num: 53,
@@ -275,7 +270,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		id: "plus",
 		name: "Plus",
 		rating: 0,
 		num: 57,
@@ -290,7 +284,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			if (target === source) return;
 			return 1;
 		},
-		id: "pressure",
 		name: "Pressure",
 		rating: 1.5,
 		num: 46,
@@ -314,7 +307,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				boosts[key]! *= 2;
 			}
 		},
-		id: "simple",
 		name: "Simple",
 		rating: 4,
 		num: 86,
@@ -326,7 +318,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	stench: {
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
-		id: "stench",
 		name: "Stench",
 		rating: 0,
 		num: 1,
@@ -365,7 +356,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		id: "swarm",
 		name: "Swarm",
 		rating: 2,
 		num: 68,
@@ -390,7 +380,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		id: "thickfat",
 		name: "Thick Fat",
 		rating: 3.5,
 		num: 47,
@@ -405,7 +394,6 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		id: "torrent",
 		name: "Torrent",
 		rating: 2,
 		num: 67,

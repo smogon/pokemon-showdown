@@ -69,7 +69,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		},
 	},
 	enigmaberry: {
-		id: "enigmaberry",
 		name: "Enigma Berry",
 		desc: "No competitive use.",
 		spritenum: 124,

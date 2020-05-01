@@ -1,8 +1,6 @@
 export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	slp: {
 		name: 'slp',
-		id: 'slp',
-		num: 0,
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {

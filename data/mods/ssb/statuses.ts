@@ -1706,7 +1706,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	boostreplacement: {
 		// this is a side condition
 		name: 'boostreplacement',
-		id: 'boostreplacement',
 		onStart(side, source) {
 			this.effectData.position = source.position;
 		},
@@ -1720,6 +1719,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	// Prevents glitch out from running more than once per turn per pokemon & boosts base power
 	glitchout: {
+		name: "Glitch Out",
 		duration: 1,
 		onTryHit(target, source, move) {
 			if (move.basePower) {
@@ -1745,6 +1745,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	// weight doubling volatile for trickster
 	weightdoubler: {
+		name: "Weight Doubler",
 		noCopy: true,
 		onStart(pokemon) {
 			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name}'s weight has doubled.`);
@@ -1753,6 +1754,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	// Gooey volatile for Decem's move
 	gooey: {
+		name: "Gooey",
 		onStart(pokemon, source) {
 			this.add('-start', pokemon, 'Gooey', '[of] ' + source);
 			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name} was covered in corrosive goo!`);
@@ -1766,8 +1768,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	// Custom Acid Rain weather for Pirate Princess
 	acidrain: {
 		name: 'Acid Rain',
-		id: 'acidrain',
-		num: 0,
 		effectType: 'Weather',
 		duration: 5,
 		onModifySpDPriority: 10,
@@ -1808,6 +1808,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	// Custom effect for Rage's multihit
 	enrageeeeed: {
+		name: "Enrageeeeed",
 		onStart(pokemon, source) {
 			this.add('-message', `${pokemon.illusion ? pokemon.illusion.name : pokemon.name}'s next attack will hit multiple times!`);
 		},
@@ -1825,6 +1826,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	// Custom effect for Yuki
 	cutietrap: {
+		name: "Cutie Trap",
 		duration: 5,
 		noCopy: true,
 		onStart(pokemon, source) {
@@ -1865,6 +1867,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	// Special volatile that is applied to pokemon using a custom move with the effects of baton pass so that boosts/volatiles are shown on client.
 	batonpasshelper: {
+		name: "Baton Pass Helper",
 		duration: 1,
 		onSwitchInPriority: 1000,
 		onSwitchIn(target) {
@@ -1879,6 +1882,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	},
 	// Modded hazard moves to fail when Prismatic terrain is active
 	auroraveil: {
+		name: "Aurora Veil",
 		duration: 5,
 		durationCallback(target, source, effect) {
 			if (source?.hasItem('lightclay')) {
@@ -1913,6 +1917,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 	lightscreen: {
+		name: "Light Screen",
 		duration: 5,
 		durationCallback(target, source, effect) {
 			if (source?.hasItem('lightclay')) {
@@ -1943,6 +1948,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 	mist: {
+		name: "Mist",
 		duration: 5,
 		onBoost(boost, target, source, effect) {
 			if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
@@ -1974,6 +1980,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 	reflect: {
+		name: "Reflect",
 		duration: 5,
 		durationCallback(target, source, effect) {
 			if (source?.hasItem('lightclay')) {
@@ -2003,6 +2010,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 	safeguard: {
+		name: "Safeguard",
 		duration: 5,
 		durationCallback(target, source, effect) {
 			if (source?.hasAbility('persistent')) {
@@ -2044,6 +2052,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 	spikes: {
+		name: "Spikes",
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Spikes from starting!`);
@@ -2064,6 +2073,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 	stealthrock: {
+		name: "Stealth Rock",
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Stealth Rock from starting!`);
@@ -2077,6 +2087,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 	stickyweb: {
+		name: "Sticky Web",
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Sticky Web from starting!`);
@@ -2091,6 +2102,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 	},
 	toxicspikes: {
+		name: "Toxic Spikes",
 		onStart(side) {
 			if (this.field.isTerrain('prismaticterrain')) {
 				this.add('-message', `Prismatic Terrain prevented Toxic Spikes from starting!`);

@@ -1683,8 +1683,8 @@ export class TeamValidator {
 		const dex = this.dex;
 		if (!setSources.size()) throw new Error(`Bad sources passed to checkLearnset`);
 
-		const moveid = toID(move);
-		move = dex.getMove(moveid);
+		move = dex.getMove(move);
+		const moveid = move.id;
 		const baseSpecies = dex.getSpecies(s);
 		let species: Species | null = baseSpecies;
 
