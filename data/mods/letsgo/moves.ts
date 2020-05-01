@@ -41,9 +41,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const i in exports.BattleMovedex) {
-				const move = this.dex.getMove(i);
-				if (i !== move.id) continue;
+			for (const id in exports.BattleMovedex) {
+				const move = this.dex.getMove(id);
+				if (move.realMove) continue;
 				if (move.gen !== 1) continue;
 				if (effect.noMetronome!.includes(move.id)) continue;
 				moves.push(move);
