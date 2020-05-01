@@ -2020,12 +2020,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					const moves = [];
 					const pool = this.dex.shuffle(Object.keys(this.dex.data.Movedex));
 					const metronome = this.dex.getMove('metronome');
-					for (const i of pool) {
-						const move = this.dex.getMove(i);
-						if (i !== move.id) continue;
+					for (const id of pool) {
+						const move = this.dex.getMove(id);
+						if (move.realMove) continue;
 						if (move.isZ || move.isNonstandard) continue;
 						if (metronome.noMetronome && metronome.noMetronome.includes(move.id)) continue;
-						if (this.dex.getMove(i).gen > this.gen) continue;
+						if (this.dex.getMove(id).gen > this.gen) continue;
 						moves.push(move);
 						if (moves.length >= 3) break;
 					}
@@ -2085,12 +2085,12 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const i in this.dex.data.Movedex) {
-				const move = this.dex.data.Movedex[i];
-				if (i !== move.id) continue;
+			for (const id in this.dex.data.Movedex) {
+				const move = this.dex.data.Movedex[id];
+				if (move.realMove) continue;
 				if (move.isZ || move.isNonstandard) continue;
 				if (effect.noMetronome && effect.noMetronome.includes(move.id)) continue;
-				if (this.dex.getMove(i).gen > this.gen) continue;
+				if (this.dex.getMove(id).gen > this.gen) continue;
 				moves.push(move);
 			}
 			let randomMove = '';
@@ -4505,13 +4505,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const i in exports.BattleMovedex) {
-				const move = exports.BattleMovedex[i];
-				if (i !== move.id || move.id === 'glitzerpopping') continue;
+			for (const id in exports.BattleMovedex) {
+				const move = exports.BattleMovedex[id];
+				if (move.realMove || move.id === 'glitzerpopping') continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;
-				if (this.dex.getMove(i).gen > this.gen) continue;
+				if (this.dex.getMove(id).gen > this.gen) continue;
 				moves.push(move);
 			}
 			let randomMove: string;
