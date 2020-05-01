@@ -763,7 +763,6 @@ interface EventMethods {
 
 interface EffectData {
 	name?: string;
-	affectsFainted?: boolean;
 	desc?: string;
 	duration?: number;
 	durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
@@ -793,6 +792,7 @@ interface BasicEffect extends EffectData {
 
 interface PureEffectData extends EffectData, PureEffectEventMethods, EventMethods {
 	noCopy?: boolean;
+	affectsFainted?: boolean;
 	counterMax?: number;
 }
 
