@@ -486,7 +486,7 @@ const Formats = [
 			/** @type {number[]} */
 			const reversedNums = Object.values(newSpecies.baseStats).reverse();
 			newSpecies.baseStats = this.dex.deepClone(newSpecies.baseStats);
-			for (const  [i, statName] of Object.keys(newSpecies.baseStats).entries()) {
+			for (const [i, statName] of Object.keys(newSpecies.baseStats).entries()) {
 				newSpecies.baseStats[statName] = reversedNums[i];
 			}
 			return newSpecies;
