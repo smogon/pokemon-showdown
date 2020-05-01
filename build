@@ -11,8 +11,10 @@ var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
 
+process.chmod(__dirname);
+
 function shell(cmd) {
-	child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
+	child_process.execSync(cmd, {stdio: 'inherit'});
 }
 
 function sucrase(src, out, opts) {
@@ -48,8 +50,8 @@ function replace(file, replacements) {
 	});
 }
 function copyOverData(file) {
-	var source = path.join(__dirname, './data/' + file);
-	var dest = path.join(__dirname, './.data-dist/' + file);
+	var source = './data/' + file;
+	var dest = './.data-dist/' + file;
 	fs.readFile(source, function (err, text) {
 		if (err) throw err;
 		fs.writeFile(dest, text, function (err) {
@@ -77,14 +79,14 @@ sucrase('./lib', './.lib-dist');
 sucrase('./server', './.server-dist');
 sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets');
 
-if (!fs.existsSync(path.join(__dirname, './.data-dist/README.md'))) {
+if (!fs.existsSync('./.data-dist/README.md')) {
 	const text = '**NOTE**: This folder contains the compiled output of the `data/` directory.\n' +
 		'You should be editing the `.ts` files there and then running `npm run build` or\n' +
 		'`./pokemon-showdown` to force these `.js` files to be recreated.\n';
-	fs.writeFile(path.join(__dirname, './.data-dist/README.md'), text, function () {});
-	fs.writeFile(path.join(__dirname, './.sim-dist/README.md'), text.replace('data/', 'sim/'), function () {});
-	fs.writeFile(path.join(__dirname, './.server-dist/README.md'), text.replace('data/', 'server/'), function () {});
-	fs.writeFile(path.join(__dirname, './.lib-dist/README.md'), text.replace('data/', 'lib/'), function () {});
+	fs.writeFile('./.data-dist/README.md', text, function () {});
+	fs.writeFile('./.sim-dist/README.md', text.replace('data/', 'sim/'), function () {});
+	fs.writeFile('./.server-dist/README.md', text.replace('data/', 'server/'), function () {});
+	fs.writeFile('./.lib-dist/README.md', text.replace('data/', 'lib/'), function () {});
 }
 
 // sucrase doesn't copy JSON over, so we'll have to do it ourselves
@@ -93,16 +95,16 @@ copyOverData('mods/gen7/bss-factory-sets.json');
 copyOverData('mods/gen6/factory-sets.json');
 
 // NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
-replace(path.join(__dirname, '.data-dist'), [
+replace('.data-dist', [
 	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
 ]);
-replace(path.join(__dirname, '.sim-dist'), [
+replace('.sim-dist', [
 	{regex: /(require\(.*?)(lib)/g, replace: `$1.lib-dist`},
 ]);
-replace(path.join(__dirname, '.server-dist'), [
+replace('.server-dist', [
 	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
 ]);
-replace(path.join(__dirname, './tools/set-import/importer.js'), [
+replace('./tools/set-import/importer.js', [
 	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
 ]);
 
@@ -115,7 +117,7 @@ try {
 
 	console.log('config.js does not exist. Creating one with default settings...');
 	fs.writeFileSync(
-		path.resolve(__dirname, 'config/config.js'),
-		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
+		'config/config.js',
+		fs.readFileSync('config/config-example.js')
 	);
 }
