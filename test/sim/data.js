@@ -101,6 +101,7 @@ describe('Dex data', function () {
 			const entry = Movedex[moveid];
 			assert.equal(toID(entry.name), moveid, `Mismatched Move key "${moveid}" of "${entry.name}"`);
 			assert.equal(typeof entry.num, 'number', `Move ${entry.name} should have a number`);
+			assert.false(typeof entry.infiltrates, `Move ${entry.name} should not have an 'infiltrates' property (no real move has it)`);
 		}
 	});
 
