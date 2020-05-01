@@ -4290,7 +4290,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["playrough", "shadowclaw", "shadowsneak", "swordsdance", "taunt"],
 		randomDoubleBattleMoves: ["playrough", "protect", "shadowclaw", "shadowsneak", "swordsdance", "woodhammer"],
 		tier: "OU",
-		doublesTier: "(DUU)",
+		doublesTier: "DUU",
 	},
 	mimikyutotem: {
 		isNonstandard: "Past",
