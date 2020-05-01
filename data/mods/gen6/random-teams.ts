@@ -11,7 +11,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 	}
 
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}, isLead = false): RandomTeamsTypes.RandomSet {
-		const baseSpecies = (species = this.dex.getSpecies(species));
+		species = this.dex.getSpecies(species);
 		let forme = species.name;
 
 		if (species.battleOnly && typeof species.battleOnly === 'string') {
@@ -573,6 +573,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 
+		const baseSpecies: Species = species.battleOnly && !species.requiredAbility ? this.dex.getSpecies(species.battleOnly as string) : species;
 		const abilities = Object.values(baseSpecies.abilities);
 		abilities.sort((a, b) => this.dex.getAbility(b).rating - this.dex.getAbility(a).rating);
 		let ability0 = this.dex.getAbility(abilities[0]);
