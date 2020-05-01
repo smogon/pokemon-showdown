@@ -20,19 +20,13 @@ export class RandomGen7Teams extends RandomTeams {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			forme = species.battleOnly;
 		}
-		const battleForme = this.checkBattleForme(species);
-		if (
-			battleForme?.randomBattleMoves && species.otherFormes &&
-			(battleForme.isMega ? !teamDetails.megaStone : this.random(2))
-		) {
-			species = this.dex.getSpecies(
-				species.otherFormes.length >= 2 ? this.sample(species.otherFormes) : species.otherFormes[0]
-			);
+		if (species.cosmeticFormes) {
+			species = this.dex.getSpecies(this.sample([species.name].concat(species.cosmeticFormes)));
 		}
 
 		const randMoves = !isDoubles ?
 			species.randomBattleMoves : (species.randomDoubleBattleMoves || species.randomBattleMoves);
-		const movePool = (randMoves || Object.keys(this.dex.data.Learnsets[species.id]!.learnset!)).slice();
+		const movePool = (randMoves || Object.keys(Dex.getLearnsetData(species.id).learnset!)).slice();
 		const rejectedPool = [];
 		const moves: string[] = [];
 		let ability = '';

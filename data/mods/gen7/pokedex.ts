@@ -1,18 +1,4 @@
 export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
-	charizard: {
-		inherit: true,
-		otherFormes: ["Charizard-Mega-X", "Charizard-Mega-Y"],
-	},
-	butterfree: {
-		inherit: true,
-		otherFormes: undefined,
-	},
-	pikachu: {
-		inherit: true,
-		otherFormes: [
-			"Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter",
-		],
-	},
 	pikachuoriginal: {
 		inherit: true,
 		abilities: {0: "Static"},
@@ -41,22 +27,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Static"},
 	},
-	meowth: {
-		inherit: true,
-		otherFormes: ["Meowth-Alola"],
-	},
-	machamp: {
-		inherit: true,
-		otherFormes: undefined,
-	},
-	gengar: {
-		inherit: true,
-		otherFormes: ['Gengar-Mega'],
-	},
-	kingler: {
-		inherit: true,
-		otherFormes: undefined,
-	},
 	koffing: {
 		inherit: true,
 		abilities: {0: "Levitate"},
@@ -64,18 +34,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	weezing: {
 		inherit: true,
 		abilities: {0: "Levitate"},
-	},
-	lapras: {
-		inherit: true,
-		otherFormes: undefined,
-	},
-	eevee: {
-		inherit: true,
-		otherFormes: ['Eevee-Starter'],
-	},
-	snorlax: {
-		inherit: true,
-		otherFormes: undefined,
 	},
 	ralts: {
 		inherit: true,
@@ -118,10 +76,6 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	heatran: {
 		inherit: true,
 		abilities: {0: "Flash Fire"},
-	},
-	garbodor: {
-		inherit: true,
-		otherFormes: undefined,
 	},
 	aegislash: {
 		inherit: true,
@@ -187,9 +141,5 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 	tapufini: {
 		inherit: true,
 		abilities: {0: "Misty Surge"},
-	},
-	melmetal: {
-		inherit: true,
-		otherFormes: undefined,
 	},
 };

@@ -83,16 +83,6 @@ export class RandomTeams {
 		return this.fastPop(list, index);
 	}
 
-	checkBattleForme(species: Species) {
-		// If the Pokémon has a Mega or Primal alt forme, that's its preferred battle forme.
-		// No randomization, no choice. We are just checking its existence.
-		// Returns a Pokémon species for further details.
-		if (!species.otherFormes) return null;
-		const firstForme = this.dex.getSpecies(species.otherFormes[0]);
-		if (firstForme.isMega || firstForme.isPrimal) return firstForme;
-		return null;
-	}
-
 	// checkAbilities(selectedAbilities, defaultAbilities) {
 	// 	if (!selectedAbilities.length) return true;
 	// 	const selectedAbility = selectedAbilities.pop();
@@ -580,6 +570,9 @@ export class RandomTeams {
 		if (species.battleOnly && !species.isGigantamax && typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			forme = species.battleOnly;
+		}
+		if (species.cosmeticFormes) {
+			species = this.dex.getSpecies(this.sample([species.name].concat(species.cosmeticFormes)));
 		}
 
 		const randMoves = !isDoubles ? species.randomBattleMoves : (species.randomDoubleBattleMoves || species.randomBattleMoves);
