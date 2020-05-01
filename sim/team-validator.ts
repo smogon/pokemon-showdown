@@ -1123,18 +1123,25 @@ export class TeamValidator {
 		const problems = [];
 		const item = dex.getItem(set.item);
 		const species = dex.getSpecies(set.species);
-		const battleForme = species.battleOnly && species.name;
 
-		if (battleForme) {
+		if (species.name === 'Necrozma-Ultra') {
+			if (item.name !== 'Ultranecrozium Z') {
+				// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
+				problems.push(`Necrozma-Ultra must start the battle holding Ultranecrozium Z.`);
+			} else if (set.moves.includes('Sunsteel Strike')) {
+				set.species = 'Necrozma-Dusk-Mane';
+			} else if (set.moves.includes('Moongeist Beam')) {
+				set.species = 'Necrozma-Dawn-Wings';
+			} else {
+				problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dusk-Mane or Necrozma-Dawn-Wings holding Ultranecrozium Z.`);
+			}
+		} else if (species.battleOnly) {
 			if (species.requiredAbility && set.ability !== species.requiredAbility) {
 				// Darmanitan-Zen, Zygarde-Complete
 				problems.push(`${species.name} transforms in-battle with ${species.requiredAbility}.`);
 			}
 			if (species.requiredItems) {
-				if (species.name === 'Necrozma-Ultra') {
-					// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
-					problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dawn-Wings or Necrozma-Dusk-Mane holding Ultranecrozium Z.`);
-				} else if (!species.requiredItems.includes(item.name)) {
+				if (!species.requiredItems.includes(item.name)) {
 					// Mega or Primal
 					problems.push(`${species.name} transforms in-battle with ${species.requiredItem}.`);
 				}
@@ -1144,8 +1151,12 @@ export class TeamValidator {
 				problems.push(`${species.name} transforms in-battle with ${species.requiredMove}.`);
 			}
 			if (!species.isGigantamax) {
+				if (typeof species.battleOnly !== 'string') {
+					// Ultra Necrozma is already checked above
+					throw new Error(`${species.name} should have a string battleOnly`);
+				}
 				// Set to out-of-battle forme
-				set.species = dex.getOutOfBattleSpecies(species);
+				set.species = species.battleOnly;
 			}
 		} else {
 			if (species.requiredAbility) {

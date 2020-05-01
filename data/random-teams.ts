@@ -106,6 +106,7 @@ export class RandomTeams {
 	// 	return !!firstForme.isMega;
 	// }
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
+		const dex = this.dex;
 		const team = [];
 
 		const natures = Object.keys(this.dex.data.Natures);
@@ -115,8 +116,8 @@ export class RandomTeams {
 
 		for (let i = 0; i < 6; i++) {
 			let forme = random6[i];
-			let species = Dex.mod('gen' + this.gen).getSpecies(forme);
-			if (species.isNonstandard) species = Dex.mod('gen' + this.gen).getSpecies(species.baseSpecies);
+			let species = dex.getSpecies(forme);
+			if (species.isNonstandard) species = dex.getSpecies(species.baseSpecies);
 
 			// Random legal item
 			let item = '';
@@ -127,8 +128,16 @@ export class RandomTeams {
 			}
 
 			// Make sure forme is legal
-			if (species.battleOnly || species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
-				species = Dex.mod('gen' + this.gen).getSpecies(this.dex.getOutOfBattleSpecies(species));
+			if (species.battleOnly) {
+				if (typeof species.battleOnly === 'string') {
+					species = dex.getSpecies(species.battleOnly);
+				} else {
+					species = dex.getSpecies(this.sample(species.battleOnly));
+				}
+				forme = species.name;
+			} else if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
+				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
+				species = dex.getSpecies(species.changesFrom);
 				forme = species.name;
 			}
 

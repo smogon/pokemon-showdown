@@ -458,12 +458,6 @@ export class ModdedDex {
 		return species;
 	}
 
-	getOutOfBattleSpecies(species: Species) {
-		return !species.battleOnly ? species.name :
-			species.changesFrom ? this.getSpecies(species.changesFrom).name :
-			species.baseSpecies;
-	}
-
 	getLearnsetData(id: ID): LearnsetData {
 		let learnsetData = this.learnsetCache.get(id);
 		if (learnsetData) return learnsetData;
