@@ -190,7 +190,7 @@ interface PureEffectEventMethods {
 	durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
 	onCopy?: (this: Battle, pokemon: Pokemon) => void;
 	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
-	onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon) => void;
+	onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
 	onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void;
 }
 
@@ -770,8 +770,6 @@ interface EffectData {
 	infiltrates?: boolean;
 	isNonstandard?: Nonstandard | null;
 	shortDesc?: string;
-
-	onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon) => void;
 }
 
 type ModdedEffectData = EffectData | Partial<EffectData> & {inherit: true};
