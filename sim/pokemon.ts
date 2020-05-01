@@ -1098,8 +1098,16 @@ export class Pokemon {
 		for (boostName in pokemon.boosts) {
 			this.boosts[boostName] = pokemon.boosts[boostName]!;
 		}
-		if (this.battle.gen >= 6 && pokemon.volatiles['focusenergy']) this.addVolatile('focusenergy');
-		if (pokemon.volatiles['laserfocus']) this.addVolatile('laserfocus');
+		if (this.battle.gen >= 6) {
+			const volatilesToCopy = ['focusenergy', 'laserfocus'];
+			for (const volatile of volatilesToCopy) {
+				if (pokemon.volatiles[volatile]) {
+					this.addVolatile(volatile);
+				} else {
+					this.removeVolatile(volatile);
+				}
+			}
+		}
 		if (effect) {
 			this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
 		} else {
