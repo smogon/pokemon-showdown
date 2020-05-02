@@ -1425,34 +1425,25 @@ export class RandomTeams {
 				const types = species.types;
 				const typeCombo = types.slice().sort().join();
 
-				// Adjust rate for species with multiple formes
+				// Adjust rate for species with multiple sets
 				switch (species.baseSpecies) {
 				case 'Arceus': case 'Silvally':
 					if (this.randomChance(17, 18)) continue;
 					break;
-				case 'Rotom':
-					if (this.randomChance(5, 6)) continue;
-					break;
-				case 'Deoxys': case 'Gourgeist': case 'Oricorio':
-					if (this.randomChance(3, 4)) continue;
-					break;
-				case 'Castform': case 'Kyurem': case 'Lycanroc': case 'Necrozma': case 'Wormadam':
+				case 'Castform':
 					if (this.randomChance(2, 3)) continue;
 					break;
-				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Groudon': case 'Hoopa':
-				case 'Kyogre': case 'Landorus': case 'Meloetta': case 'Meowstic': case 'Shaymin': case 'Thundurus': case 'Tornadus':
+				case 'Aegislash': case 'Basculin': case 'Cherrim': case 'Giratina': case 'Groudon': case 'Kyogre': case 'Meloetta':
 					if (this.randomChance(1, 2)) continue;
 					break;
-				case 'Dugtrio': case 'Exeggutor': case 'Golem': case 'Greninja': case 'Marowak': case 'Muk':
-				case 'Ninetales': case 'Persian': case 'Raichu': case 'Sandslash': case 'Zygarde':
+				case 'Greninja':
 					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
 					break;
 				case 'Darmanitan':
-					if (this.gen >= 8 && this.randomChance(2, 3)) continue;
+					if (species.gen === 8 && this.randomChance(1, 2)) continue;
 					break;
-				case 'Corsola': case 'Indeedee': case 'Mr. Mime': case 'Rapidash': case 'Stunfisk':
-				case 'Toxtricity': case 'Weezing': case 'Zacian': case 'Zamazenta':
 				case 'Appletun': case 'Butterfree': case 'Copperajah': case 'Grimmsnarl': case 'Snorlax':
+				case 'Toxtricity': case 'Zacian': case 'Zamazenta':
 					if (this.gen >= 8 && this.randomChance(1, 2)) continue;
 					break;
 				}
