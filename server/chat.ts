@@ -1907,16 +1907,16 @@ export const Chat = new class {
 	 * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
 	 */
 	maybeNotifyBlocked(blocked: 'pm' | 'challenge', targetUser: User, user: User) {
-		const prefix = `|pm|~|${this.escapeHTML(targetUser.getIdentity())}|/nonotify `;
+		const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
 			if (!targetUser.blockPMsNotified) {
-				targetUser.send(`${prefix}The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
+				targetUser.send(`${prefix}The user '${this.escapeHTML(user.name)}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
 				targetUser.blockPMsNotified = true;
 			}
 		} else if (blocked === 'challenge') {
 			if (!targetUser.blockChallengesNotified) {
-				targetUser.send(`${prefix}The user '${user.name}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
+				targetUser.send(`${prefix}The user '${this.escapeHTML(user.name)}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
 				targetUser.blockChallengesNotified = true;
 			}
 		}
