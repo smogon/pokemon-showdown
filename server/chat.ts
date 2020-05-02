@@ -1907,7 +1907,7 @@ export const Chat = new class {
 	 * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
 	 */
 	maybeNotifyBlocked(blocked: 'pm' | 'challenge', targetUser: User, user: User) {
-		const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
+		const prefix = `|pm|~|${this.escapeHTML(targetUser.getIdentity())}|/nonotify `;
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
 			if (!targetUser.blockPMsNotified) {
