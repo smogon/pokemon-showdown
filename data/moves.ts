@@ -6620,8 +6620,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side gains the Focus Energy effect, even if they have a substitute.",
-		shortDesc: "Base move affects power. Allies: Focus Energy.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side has their critical hit ratio raised by 1 stage, even if they have a substitute.",
+		shortDesc: "Base move affects power. Allies: Crit Ratio +1.",
 		name: "G-Max Chi Strike",
 		pp: 5,
 		priority: 0,
@@ -6630,8 +6630,27 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.side.active) {
-					pokemon.addVolatile('focusenergy');
+					pokemon.addVolatile('gmaxchistrike');
 				}
+			},
+		},
+		effect: {
+			noCopy: true,
+			onStart(target, source, effect) {
+				this.effectData.layers = 1;
+				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
+					this.add('-start', target, 'move: G-Max Chi Strike');
+				}
+			},
+			onRestart(target, source, effect) {
+				if (this.effectData.layers >= 3) return false;
+				this.effectData.layers++;
+				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
+					this.add('-start', target, 'move: G-Max Chi Strike');
+				}
+			},
+			onModifyCritRatio(critRatio) {
+				return critRatio + this.effectData.layers;
 			},
 		},
 		secondary: null,
@@ -13889,10 +13908,11 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			for (i in target.boosts) {
 				source.boosts[i] = target.boosts[i];
 			}
-			const volatilesToCopy = ['focusenergy', 'laserfocus'];
+			const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
 			for (const volatile of volatilesToCopy) {
 				if (target.volatiles[volatile]) {
 					source.addVolatile(volatile);
+					if (volatile === 'gmaxchistrike') source.volatiles[volatile].layers = target.volatiles[volatile].layers;
 				} else {
 					source.removeVolatile(volatile);
 				}
