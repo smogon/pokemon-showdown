@@ -11642,7 +11642,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				const move = exports.BattleMovedex[id];
 				if (move.realMove) continue;
 				if (move.isZ || move.isMax || move.isNonstandard) continue;
-				if (effect.noMetronome!.includes(move.id)) continue;
+				if (effect.noMetronome.includes(move.id)) continue;
 				if (this.dex.getMove(id).gen > this.gen) continue;
 				moves.push(move);
 			}
