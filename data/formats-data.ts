@@ -3632,7 +3632,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	meowsticf: {
 		randomBattleMoves: ["energyball", "nastyplot", "psychic", "shadowball", "thunderbolt"],
 		randomDoubleBattleMoves: ["fakeout", "nastyplot", "psychic", "shadowball", "thunderbolt"],
-		tier: "(PU)",
+		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	honedge: {
