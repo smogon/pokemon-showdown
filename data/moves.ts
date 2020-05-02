@@ -11653,15 +11653,15 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		noMetronome: [
-			'afteryou', 'appleacid', 'assist', 'aurawheel', 'banefulbunker', 'beakblast', 'behemothbash', 'behemothblade', 'belch', 'bestow', 'bodypress', 'branchpoke', 'breakingswipe', 'celebrate', 'chatter', 'clangoroussoul', 'copycat', 'counter', 'covet', 'craftyshield', 'decorate', 'destinybond', 'detect', 'diamondstorm', 'doubleironbash', 'dragonascent', 'drumbeating', 'dynamaxcannon', 'endure', 'eternabeam', 'falsesurrender', 'feint', 'fleurcannon', 'focuspunch', 'followme', 'freezeshock', 'gravapple', 'helpinghand', 'holdhands', 'hyperspacefury', 'hyperspacehole', 'iceburn', 'instruct', 'kingsshield', 'lifedew', 'lightofruin', 'matblock', 'mefirst', 'meteorassault', 'metronome', 'mimic', 'mindblown', 'mirrorcoat', 'mirrormove', 'moongeistbeam', 'naturepower', 'naturesmadness', 'obstruct', 'originpulse', 'overdrive', 'photongeyser', 'plasmafists', 'precipiceblades', 'protect', 'pyroball', 'quash', 'quickguard', 'ragepowder', 'relicsong', 'secretsword', 'shelltrap', 'sketch', 'sleeptalk', 'snaptrap', 'snarl', 'snatch', 'snore', 'spectralthief', 'spikyshield', 'spiritbreak', 'spotlight', 'steameruption', 'steelbeam', 'strangesteam', 'struggle', 'sunsteelstrike', 'switcheroo', 'technoblast', 'thief', 'thousandarrows', 'thousandwaves', 'transform', 'trick', 'vcreate', 'wideguard',
+			"After You", "Apple Acid", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Behemoth Bash", "Behemoth Blade", "Belch", "Bestow", "Body Press", "Branch Poke", "Breaking Swipe", "Celebrate", "Chatter", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Diamond Storm", "Double Iron Bash", "Dragon Ascent", "Drum Beating", "Dynamax Cannon", "Endure", "Eternabeam", "False Surrender", "Feint", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Grav Apple", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Life Dew", "Light of Ruin", "Mat Block", "Me First", "Meteor Assault", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Moongeist Beam", "Nature Power", "Nature's Madness", "Obstruct", "Origin Pulse", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Steam Eruption", "Steel Beam", "Strange Steam", "Struggle", "Sunsteel Strike", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Transform", "Trick", "V-create", "Wide Guard",
 		],
 		onHit(target, source, effect) {
 			const moves: MoveData[] = [];
-			for (const id in exports.BattleMovedex) {
-				const move = exports.BattleMovedex[id];
+			for (const id in BattleMovedex) {
+				const move = BattleMovedex[id];
 				if (move.realMove) continue;
 				if (move.isZ || move.isMax || move.isNonstandard) continue;
-				if (effect.noMetronome!.includes(move.id)) continue;
+				if (effect.noMetronome!.includes(move.name)) continue;
 				if (this.dex.getMove(id).gen > this.gen) continue;
 				moves.push(move);
 			}
