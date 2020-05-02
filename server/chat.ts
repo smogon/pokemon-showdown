@@ -1411,7 +1411,7 @@ export const Chat = new class {
 			for (const target of toUncache) {
 				if (require.cache[target]) {
 					// cachedModule
-					const children: {id: string}[] = require.cache[target].children;
+					const children: {id: string}[] = require.cache[target]!.children;
 					newuncache.push(
 						...(children
 							.filter(cachedModule => !cachedModule.id.endsWith('.node'))
@@ -1424,8 +1424,8 @@ export const Chat = new class {
 		} while (toUncache.length > 0);
 	}
 
-	uncacheDir(root: string) {
-		const absoluteRoot = FS(root).path;
+	uncacheDir(root: string, followSymlink?: boolean) {
+		const absoluteRoot = followSymlink ? FS(root).realpathSync() : FS(root).path;
 		for (const key in require.cache) {
 			if (key.startsWith(absoluteRoot)) {
 				delete require.cache[key];

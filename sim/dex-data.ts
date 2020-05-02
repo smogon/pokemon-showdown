@@ -96,11 +96,6 @@ export class BasicEffect implements EffectData {
 	 */
 	gen: number;
 	/**
-	 * Is this item/move/ability/pokemon unreleased? True if there's
-	 * no known way to get access to it without cheating.
-	 */
-	isUnreleased: boolean | 'Past';
-	/**
 	 * A shortened form of the description of this effect.
 	 * Not all effects have this.
 	 */
@@ -130,13 +125,12 @@ export class BasicEffect implements EffectData {
 		data = combine(this, data, ...moreData);
 
 		this.name = Tools.getString(data.name).trim();
-		this.id = data.id as ID || toID(this.name); // Hidden Power hack
+		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Tools.getString(data.fullname) || this.name;
 		this.effectType = Tools.getString(data.effectType) as EffectType || 'Effect';
 		this.exists = !!(this.exists && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
-		this.isUnreleased = data.isUnreleased || false;
 		this.shortDesc = data.shortDesc || '';
 		this.desc = data.desc || '';
 		this.isNonstandard = data.isNonstandard || null;
@@ -474,7 +468,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect & Abili
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
 		this.suppressWeather = !!data.suppressWeather;
-		this.rating = data.rating!;
+		this.rating = data.rating || 0;
 
 		if (!this.gen) {
 			if (this.num >= 234) {
@@ -536,7 +530,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Base species. Species, but without the forme name.
 	 *
 	 * DO NOT ASSUME A POKEMON CAN TRANSFORM FROM `baseSpecies` TO
-	 * `species`. USE `inheritsFrom` FOR THAT.
+	 * `species`. USE `changesFrom` FOR THAT.
 	 */
 	readonly baseSpecies: string;
 	/**
@@ -646,7 +640,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Not filled out for megas/primals - fall back to baseSpecies
 	 * for in-battle formes.
 	 */
-	readonly inheritsFrom: ID;
+	readonly changesFrom?: string;
 
 	/**
 	 * Singles Tier. The Pokemon's location in the Smogon tier system.
@@ -710,7 +704,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 		this.isGigantamax = data.isGigantamax || undefined;
 		this.battleOnly = data.battleOnly || (this.isMega || this.isGigantamax ? this.baseSpecies : undefined);
-		this.inheritsFrom = data.inheritsFrom || (this.isGigantamax ? toID(this.baseSpecies) : undefined);
+		this.changesFrom = data.changesFrom || (this.isGigantamax ? this.baseSpecies : undefined);
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen'].includes(this.forme)) {
@@ -834,6 +828,8 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly isZ: boolean | string;
 	/** How many times does this move hit? */
 	readonly multihit?: number | number[];
+	/** Is this move a Max move? */
+	readonly isMax: boolean | string;
 	/** Max/G-Max move power */
 	readonly gmaxPower?: number;
 	/** Z-move power */
@@ -896,6 +892,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.pp = Number(data.pp!);
 		this.noPPBoosts = !!data.noPPBoosts;
 		this.isZ = data.isZ || false;
+		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
 		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
 		this.pressureTarget = data.pressureTarget || '';
@@ -909,7 +906,9 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (this.category !== 'Status' && !this.gmaxPower) {
-			if (!this.basePower) {
+			if (this.isMax || this.isZ) {
+				this.gmaxPower = 1;
+			} else if (!this.basePower) {
 				this.gmaxPower = 100;
 			} else if (['Fighting', 'Poison'].includes(this.type)) {
 				if (this.basePower >= 150) {
@@ -945,7 +944,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 				}
 			}
 		}
-		if (this.category !== 'Status' && !this.zMovePower) {
+		if (this.category !== 'Status' && !this.zMovePower && !this.isZ && !this.isMax) {
 			let basePower = this.basePower;
 			if (Array.isArray(this.multihit)) basePower *= 3;
 			if (!basePower) {

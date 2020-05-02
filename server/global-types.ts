@@ -1,9 +1,9 @@
-type ChildProcess = import('child_process').ChildProcess;
-
 type Config = typeof import('../config/config-example') & AnyObject;
 
 type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '+' | ' ' | '‽' | '!';
 
+/** not actually guaranteed to be one of these */
+type PunishType = '#chatfilter' | '#hostfilter' | '#dnsbl' | '#ipban';
 
 // Chat
 type CommandContext = Chat.CommandContext;

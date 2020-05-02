@@ -7,7 +7,7 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex
   [2]: https://github.com/smogon/pokemon-showdown-client
   [3]: https://github.com/Zarel/Pokemon-Showdown-Dex
 
-[![Build Status](https://travis-ci.com/smogon/pokemon-showdown.svg?branch=master)](https://travis-ci.com/smogon/pokemon-showdown)
+[![Build Status](https://github.com/smogon/pokemon-showdown/workflows/Node.js%20CI/badge.svg)](https://github.com/smogon/pokemon-showdown/actions?query=workflow%3A%22Node.js+CI%22)
 [![Dependency Status](https://david-dm.org/zarel/Pokemon-Showdown.svg)](https://david-dm.org/zarel/Pokemon-Showdown)
 [![devDependency Status](https://david-dm.org/zarel/Pokemon-Showdown/dev-status.svg)](https://david-dm.org/zarel/Pokemon-Showdown?type=dev)
 [![Total Alerts](https://img.shields.io/lgtm/alerts/g/Zarel/Pokemon-Showdown.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Zarel/Pokemon-Showdown/alerts)
@@ -182,6 +182,7 @@ Major Contributors
 Contributors
 
 - Alexander B. [mathfreak231] - Development
+- [Anubis, Lusamine] - Research (game mechanics)
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
 - Avery Zimmer [Lyren, SolarisFox] - Development
 - Ben Davies [Morfent] - Development

@@ -23,6 +23,20 @@ describe('Mega Evolution', function () {
 		assert.equal(megaMon.ability, 'toughclaws');
 	});
 
+	it('[Hackmons] should be able to override different formes but not same forme', function () {
+		battle = common.createBattle([[
+			{species: "Charizard-Mega-Y", item: 'charizarditex', moves: ['protect']},
+		], [
+			{species: "Kangaskhan-Mega", item: 'kangaskhanite', moves: ['protect']},
+		]]);
+		assert.equal(battle.p1.active[0].species.name, 'Charizard-Mega-Y');
+		assert.throws(() => {
+			battle.makeChoices('move protect mega', 'move protect mega');
+		});
+		battle.makeChoices('move protect mega', 'move protect');
+		assert.equal(battle.p1.active[0].species.name, 'Charizard-Mega-X');
+	});
+
 	it('should modify speed/priority in gen 7+', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [

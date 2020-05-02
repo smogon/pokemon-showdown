@@ -327,17 +327,33 @@ export abstract class BasicRoom {
 	/**
 	 * Gets the group symbol of a user in the room.
 	 */
-	getAuth(user: User): GroupSymbol {
+	getAuth(user: {id: ID, group: GroupSymbol} | User): GroupSymbol {
+		const globalGroup = this.auth && this.isPrivate === true ? ' ' : user.group;
+
 		if (this.auth && user.id in this.auth) {
-			return this.auth[user.id];
+			// room has roomauth
+			// authority is whichever is higher between roomauth and global auth
+			const roomGroup = this.auth[user.id];
+			let greaterGroup = Config.greatergroupscache[`${roomGroup}${globalGroup}`];
+			if (!greaterGroup) {
+				// unrecognized groups always trump higher global rank
+				const roomRank = (Config.groups[roomGroup] || {rank: Infinity}).rank;
+				const globalRank = (Config.groups[globalGroup] || {rank: 0}).rank;
+				if (roomGroup === Users.PLAYER_SYMBOL || roomGroup === Users.HOST_SYMBOL || roomGroup === '#') {
+					// Player, Host, and Room Owner always trump higher global rank
+					greaterGroup = roomGroup;
+				} else {
+					greaterGroup = (roomRank > globalRank ? roomGroup : globalGroup);
+				}
+				Config.greatergroupscache[`${roomGroup}${globalGroup}`] = greaterGroup;
+			}
+			return greaterGroup;
 		}
+
 		if (this.parent) {
 			return this.parent.getAuth(user);
 		}
-		if (this.auth && this.isPrivate === true) {
-			return ' ';
-		}
-		return user.group;
+		return globalGroup;
 	}
 	checkModjoin(user: User) {
 		if (this.staffRoom && !user.isStaff && (!this.auth || (this.auth[user.id] || ' ') === ' ')) return false;
@@ -952,8 +968,6 @@ export class GlobalRoom extends BasicRoom {
 				return;
 			}
 
-			for (const worker of Sockets.workers.values()) worker.kill();
-
 			// final warning
 			this.notifyRooms(
 				notifyPlaces,
@@ -988,39 +1002,30 @@ export class GlobalRoom extends BasicRoom {
 		}
 		this.lastReportedCrash = time;
 		// @ts-ignore
-		let stackLines = (err ? Chat.escapeHTML(err.stack).split(`\n`) : []);
-		if (stackLines.length > 2) {
-			for (let i = 1; i < stackLines.length; i++) {
-				if (stackLines[i].includes('&#x2f;') || stackLines[i].includes('\\')) {
-					if (!stackLines[i].includes('node_modules')) {
-						stackLines = [stackLines[0], stackLines[i]];
-						break;
-					}
-				}
-			}
-		}
-		if (stackLines.length > 2) {
-			for (let i = 1; i < stackLines.length; i++) {
-				if (stackLines[i].includes('&#x2f;') || stackLines[i].includes('\\')) {
-					stackLines = [stackLines[0], stackLines[i]];
-					break;
-				}
-			}
-		}
-		const stack = stackLines.slice(0, 2).join(`<br />`);
-		let crashMessage;
+		const stackLines = (err ? Chat.escapeHTML(err.stack).split(`\n`) : []);
+		const stack = stackLines.slice(1).join(`<br />`);
+
+		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} has crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
+		let privateCrashMessage = null;
+
+		const upperStaffRoom = Rooms.get('upperstaff');
 		if (stack.includes("private")) {
-			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
-		} else {
-			crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
+			if (upperStaffRoom) {
+				privateCrashMessage = crashMessage;
+				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b> <a href="/upperstaff">Read more</a></div>`;
+			} else {
+				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
+			}
 		}
 		const devRoom = Rooms.get('development');
 		if (devRoom) {
 			devRoom.add(crashMessage).update();
 		} else {
-			if (Rooms.lobby) Rooms.lobby.add(crashMessage).update();
-			const staffRoom = Rooms.get('staff');
-			if (staffRoom) staffRoom.add(crashMessage).update();
+			Rooms.lobby?.add(crashMessage).update();
+			Rooms.get('staff')?.add(crashMessage).update();
+		}
+		if (privateCrashMessage) {
+			upperStaffRoom!.add(privateCrashMessage);
 		}
 	}
 	/**
@@ -1070,6 +1075,7 @@ export class BasicChatRoom extends BasicRoom {
 	logUserStatsInterval: NodeJS.Timer | null;
 	expireTimer: NodeJS.Timer | null;
 	userList: string;
+	rulesLink: string | null;
 	reportJoinsInterval: NodeJS.Timer | null;
 	game: RoomGame | null;
 	battle: RoomBattle | null;
@@ -1136,6 +1142,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
+		this.rulesLink = null;
 		this.reportJoinsInterval = null;
 		this.tour = null;
 		this.game = null;

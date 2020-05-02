@@ -64,10 +64,10 @@ const importer = require('./importer.js');
 const SETS = path.resolve(__dirname, 'sets');
 (async () => {
 	const imports = [];
-	for (let [i, generationData] of (await importer.importAll()).entries()) {
+	for (const [i, generationData] of (await importer.importAll()).entries()) {
 		fs.writeFileSync(path.resolve(SETS, `gen${i + 1}.json`), JSON.stringify(generationData));
 		imports.push(`gen${i + 1}`);
-		for (let format in generationData) {
+		for (const format in generationData) {
 			fs.writeFileSync(path.resolve(SETS, `${format}.json`), JSON.stringify(generationData[format]));
 			imports.push(format);
 		}
