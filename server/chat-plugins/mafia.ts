@@ -1493,9 +1493,9 @@ class MafiaTracker extends Rooms.RoomGame {
 	canJoin(user: User, self = false, force = false) {
 		if (!user || !user.connected) return `User not found.`;
 		const targetString = self ? `You are` : `${user.id} is`;
+		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
 		for (const id of [user.id, ...Object.keys(user.prevNames) as ID[]]) {
-			if (!this.room.users[id]) return `${targetString} not in the room.`;
-			if (this.playerTable[id]) return `${targetString} already in the game.`;
+			if (this.playerTable[id] || this.played.includes(id)) return `${targetString} already in the game.`;
 			if (this.hostid === id) return `${targetString} the host.`;
 			if (this.cohosts.includes(id)) return `${targetString} a cohost.`;
 		}
