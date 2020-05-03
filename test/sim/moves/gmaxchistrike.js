@@ -43,6 +43,7 @@ describe('G-Max Chi Strike', function () {
 	});
 
 	it('should be copied by Psych Up', function () {
+		// hardcoded RNG seed ensures Magikarp will not crit at +0
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'Machamp-Gmax', moves: ['rocksmash', 'sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -64,6 +65,7 @@ describe('G-Max Chi Strike', function () {
 	});
 
 	it('should not be passed by Baton Pass', function () {
+		// hardcoded RNG seed ensures Magikarp will not crit at +0
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'Machamp-Gmax', moves: ['rocksmash', 'batonpass']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -80,7 +82,7 @@ describe('G-Max Chi Strike', function () {
 		battle.makeChoices('switch 3');
 		battle.makeChoices('move tackle 2, move sleeptalk', 'auto');
 
-		// Magikarp is only +0 for crit rate, so it probably will not crit
+		// Magikarp is only +0 for crit rate, so it will not crit
 		assert(battle.log.every(line => !line.startsWith('|-crit')));
 	});
 });
