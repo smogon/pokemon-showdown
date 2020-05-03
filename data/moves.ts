@@ -18038,7 +18038,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Normal",
-		zMovePower: 1,
 		contestType: "Tough",
 	},
 	strugglebug: {
