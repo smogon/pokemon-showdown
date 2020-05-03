@@ -712,8 +712,13 @@ export const BattleScripts: BattleScriptsData = {
 		}
 
 		if (move.struggleRecoil) {
-			// @ts-ignore
-			this.directDamage(this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
+			let recoilDamage;
+			if (this.dex.gen >= 5) {
+				recoilDamage = this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1);
+			} else {
+				recoilDamage = this.trunc(pokemon.maxhp / 4);
+			}
+			this.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as PureEffect);
 		}
 
 		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
