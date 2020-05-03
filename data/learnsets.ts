@@ -75578,7 +75578,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			mindreader: ["8L35", "7L35"],
 			mirrorshot: ["7L30"],
 			mudshot: ["8L15", "7L15"],
-			mudslap: ["8L5", "8L1", "7L1"],
+			mudslap: ["8L1", "7L1"],
 			mudsport: ["7L1"],
 			painsplit: ["8L78", "7T", "7L78"],
 			perishsong: ["8L85", "7L85"],
