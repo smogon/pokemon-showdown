@@ -398,7 +398,9 @@ const MODES = {
 			},
 
 			onViewHunt(user) {
-				if (this.answerLock && !(this.hosts.some(h => h.id === user.id) || user.id === this.staffHostId)) return true;
+				if (this.answerLock && !(this.hosts.some(h => h.id === user.id) || user.id === this.staffHostId)) {
+					return true;
+				}
 			},
 
 			onCreateCallback() {
