@@ -43,7 +43,7 @@ describe('G-Max Chi Strike', function () {
 	});
 
 	it('should be copied by Psych Up', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'Machamp-Gmax', moves: ['rocksmash', 'sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 			{species: 'Magikarp', moves: ['psychup', 'tackle']},
@@ -64,7 +64,7 @@ describe('G-Max Chi Strike', function () {
 	});
 
 	it('should not be passed by Baton Pass', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'Machamp-Gmax', moves: ['rocksmash', 'batonpass']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 			{species: 'Magikarp', moves: ['tackle']},
