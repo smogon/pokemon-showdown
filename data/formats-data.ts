@@ -1606,7 +1606,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	linoone: {
 		randomBattleMoves: ["bellydrum", "extremespeed", "stompingtantrum", "throatchop"],
 		randomDoubleBattleMoves: ["bellydrum", "extremespeed", "protect", "throatchop"],
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
 	linoonegalar: {
