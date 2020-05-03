@@ -152,7 +152,7 @@ class Giveaway {
 				if (value.cosmeticFormes) {
 					for (const forme of value.cosmeticFormes.map(toID)) {
 						if (text.includes(forme)) {
-							spriteid += '-' + forme.substr(key.length);
+							spriteid += '-' + forme.slice(key.length);
 							break; // We don't want to end up with deerling-summer-spring
 						}
 					}
