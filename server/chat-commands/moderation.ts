@@ -1489,6 +1489,7 @@ export const commands: ChatCommands = {
 	],
 
 	ab: 'blacklist',
+	bl: 'blacklist',
 	blacklist(target, room, user) {
 		if (!target) return this.parse('/help blacklist');
 		if (!this.canTalk()) return;
