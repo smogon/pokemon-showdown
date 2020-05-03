@@ -150,15 +150,15 @@ class Giveaway {
 			for (const [key, value] of mons) {
 				let spriteid = value.spriteid;
 				if (value.cosmeticFormes) {
-					for (const form of value.cosmeticFormes) {
-						if (text.includes(form)) {
-							spriteid += '-' + form.substr(key.length);
+					for (const forme of value.cosmeticFormes.map(toID)) {
+						if (text.includes(forme)) {
+							spriteid += '-' + forme.slice(key.length);
 							break; // We don't want to end up with deerling-summer-spring
 						}
 					}
 				}
 				if (value.otherFormes) {
-					for (const forme of value.otherFormes) {
+					for (const forme of value.otherFormes.map(toID)) {
 						// Allow "alolan <name>" to match as well.
 						if (forme.endsWith('alola')) {
 							if (/alolan?/.test(text)) {
