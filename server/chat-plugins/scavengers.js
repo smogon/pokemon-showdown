@@ -422,7 +422,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.questions.push({hint: hint, answer: answer, spoilers: []});
 		}
 
-		let message = this.getCreationMessage(true);
+		const message = this.getCreationMessage(true);
 		this.room.add(message).update();
 	}
 
