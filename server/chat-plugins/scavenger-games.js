@@ -72,7 +72,7 @@ class Leaderboard {
 }
 
 const TWISTS = {
-	'perfectscore': {
+	perfectscore: {
 		name: 'Perfect Score',
 		id: 'perfectscore',
 		desc: "Players who finish the hunt without submitting a single wrong answer get a shoutout!",
@@ -106,7 +106,7 @@ const TWISTS = {
 		},
 	},
 
-	'incognito': {
+	incognito: {
 		name: 'Incognito',
 		id: 'incognito',
 		desc: "Upon answering the last question correctly, the player's finishing time will not be announced in the room!  Results will only be known at the end of the hunt.",
@@ -139,7 +139,7 @@ const TWISTS = {
 		},
 	},
 
-	'blindincognito': {
+	blindincognito: {
 		name: 'Blind Incognito',
 		id: 'blindincognito',
 		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct!  You may be in for a nasty surprise when the hunt ends!",
@@ -186,7 +186,7 @@ const TWISTS = {
 };
 
 const MODES = {
-	'ko': 'kogames',
+	ko: 'kogames',
 	kogames: {
 		name: 'KO Games',
 		id: 'kogames',
@@ -252,8 +252,9 @@ const MODES = {
 		round: 0,
 		playerlist: null,
 	},
-	'scav': 'scavengergames',
-	'scavgames': 'scavengergames',
+
+	scav: 'scavengergames',
+	scavgames: 'scavengergames',
 	scavengergames: {
 		name: 'Scavenger Games',
 		id: 'scavengergames',
@@ -401,7 +402,12 @@ const MODES = {
 			},
 
 			onCreateCallback() {
-				if (this.answerLock) return `|raw|<div class="broadcast-blue"><strong>${['official', 'unrated'].includes(this.gameType) ? 'An' : 'A'} ${this.gameType} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.id === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is currently being handed out to early finishers.`;
+				if (this.answerLock) {
+					return `|raw|<div class="broadcast-blue"><strong>${['official', 'unrated'].includes(this.gameType) ? 'An' : 'A'} ${this.gameType} ` +
+						`Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> `
+						`has been started${(this.hosts.some(h => h.id === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.` +
+						`<br />The first hint is currently being handed out to early finishers.`;
+				}
 			},
 
 			onEnd(reset) {
