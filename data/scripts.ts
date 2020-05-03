@@ -1233,6 +1233,7 @@ export const BattleScripts: BattleScriptsData = {
 
 	getMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getMove(move);
+		if (move.name === 'Struggle') return move;
 		if (pokemon.canGigantamax && move.category !== 'Status') {
 			const gMaxSpecies = this.dex.getSpecies(pokemon.canGigantamax);
 			const gMaxMove = this.dex.getMove(gMaxSpecies.isGigantamax);
@@ -1244,6 +1245,7 @@ export const BattleScripts: BattleScriptsData = {
 
 	getActiveMaxMove(move, pokemon) {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
+		if (move.name === 'Struggle') return this.dex.getActiveMove(move);
 		let maxMove = this.dex.getActiveMove(this.maxMoveTable[move.category === 'Status' ? move.category : move.type]);
 		if (move.category !== 'Status') {
 			if (pokemon.canGigantamax) {
