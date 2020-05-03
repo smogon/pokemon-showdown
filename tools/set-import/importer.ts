@@ -10,6 +10,7 @@ import * as smogon from 'smogon';
 
 import * as Streams from '../../lib/streams';
 import {Dex} from '../../sim/dex';
+import {Species} from '../../sim/dex-data';
 import {TeamValidator} from '../../sim/team-validator';
 Dex.includeModData();
 const toID = Dex.getId;
@@ -358,14 +359,18 @@ function toPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: Deep
 
 	// The validator is picky about megas having already evolved or battle only formes
 	const species = dex.getSpecies(pokemon);
-	if (species.battleOnly && !format.id.includes('balancedhackmons')) {
-		if (typeof species.battleOnly !== 'string') {
-			throw new Error(`Got an Ultra Necrozma or Complete Zygarde outside of BH`);
-		}
-		copy.species = species.battleOnly;
+	const mega = ['Mega', 'Primal', 'Ultra'].some(f => species.forme.startsWith(f));
+	if (species.battleOnly || (mega && !format.id.includes('balancedhackmons'))) {
+		copy.species = getOutOfBattleSpecies(dex, species);
 		copy.ability = dex.getSpecies(copy.species).abilities[0];
 	}
 	return copy;
+}
+
+function getOutOfBattleSpecies(dex: ModdedDex, species: Species) {
+	return !species.battleOnly ? species.name :
+		species.changesFrom ? dex.getSpecies(species.changesFrom).name :
+		species.baseSpecies;
 }
 
 function expectedHP(ivs: Partial<StatsTable>) {
