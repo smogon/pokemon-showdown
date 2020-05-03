@@ -186,15 +186,14 @@ const TWISTS = {
 };
 
 const MODES = {
-	'scav': 'scavengergames',
-	'scavgames': 'scavengergames',
-	scavengergames: {
-		name: 'Scavenger Games',
-		id: 'scavengergames',
+	'ko': 'kogames',
+	kogames: {
+		name: 'KO Games',
+		id: 'kogames',
 
 		mod: {
-			name: 'Scavenger Games',
-			id: 'scavengergames',
+			name: 'KO Games',
+			id: 'KO Games',
 
 			onLoad() {
 				this.allowRenames = false; // don't let people change their name in the middle of the hunt.
@@ -253,15 +252,15 @@ const MODES = {
 		round: 0,
 		playerlist: null,
 	},
-
-	'ko': 'kogames',
-	kogames: {
-		name: 'KO Games',
-		id: 'kogames',
+	'scav': 'scavengergames',
+	'scavgames': 'scavengergames',
+	scavengergames: {
+		name: 'Scavenger Games',
+		id: 'scavengergames',
 
 		mod: {
-			name: 'KO Games',
-			id: 'kogames',
+			name: 'Scavenger Games',
+			id: 'scavengergames',
 
 			onLoad() {
 				this.allowRenames = false; // don't let people change their name in the middle of the hunt.
@@ -344,12 +343,91 @@ const MODES = {
 		round: 0,
 		leaderboard: true,
 	},
+
+	jumpstart: {
+		name: 'Jump Start',
+		id: 'jumpstart',
+
+		jumpstart: [60, 40, 30, 20, 10],
+		round: 0,
+		mod: {
+			name: 'Jump Start',
+			id: 'jumpstart',
+
+			onLoad() {
+				if (this.room.scavgame.round === 0) return;
+				const maxTime = this.room.scavgame.jumpstart.sort((a, b) => b - a)[0];
+
+				this.jumpstartTimers = [];
+				this.answerLock = true;
+
+				for (const [i, time] of this.room.scavgame.jumpstart.entries()) {
+					if (!this.room.scavgame.completed[i]) break;
+
+					this.jumpstartTimers[i] = setTimeout(() => {
+						const target = this.room.scavgame.completed.shift();
+						if (!target) return;
+
+						const staffHost = Users.get(this.staffHostId);
+						const targetUser = Users.get(target);
+
+						if (targetUser) {
+							if (staffHost) staffHost.sendTo(this.room, `${targetUser.name} has received their first hint early.`);
+							targetUser.sendTo(this.room, `|raw|<strong>The first hint to the next hunt is:</strong> ${Chat.formatText(this.questions[0].hint)}`);
+							targetUser.sendTo(this.room, `|notify|Early Hint|The first hint to the next hunt is: ${Chat.formatText(this.questions[0].hint)}`);
+						}
+					}, (maxTime - time) * 1000 + 5000);
+				}
+
+				// when the jump starts are all given to eligible players
+				this.jumpstartTimers[this.jumpstartTimers.length] = setTimeout(() => {
+					this.answerLock = false;
+					const message = this.getCreationMessage(true);
+					this.room.add(message).update();
+					this.announce('You may start guessing!');
+					this.startTime = Date.now();
+				}, 1000 * (maxTime + 5));
+			},
+
+			onJoin(user) {
+				if (this.answerLock) {
+					user.sendTo(this.room, `The hunt is not open for guesses yet!`);
+					return true;
+				}
+			},
+
+			onViewHunt(user) {
+				if (this.answerLock && !(this.hosts.some(h => h.id === user.id) || user.id === this.staffHostId)) return true;
+			},
+
+			onCreateCallback() {
+				if (this.answerLock) return `|raw|<div class="broadcast-blue"><strong>${['official', 'unrated'].includes(this.gameType) ? 'An' : 'A'} ${this.gameType} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.id === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is currently being handed out to early finishers.`;
+			},
+
+			onEnd(reset) {
+				if (this.jumpstartTimers) {
+					for (const timer of this.jumpstartTimers) {
+						clearTimeout(timer);
+					}
+				}
+				if (!reset) {
+					if (this.room.scavgame.round === 0) {
+						this.room.scavgame.completed = this.completed.map(entry => toID(entry.name));
+						this.room.scavgame.round++;
+					} else {
+						this.room.scavgame.destroy();
+					}
+				}
+			},
+		},
+	},
 };
 
 class GameTemplate {
-	constructor(room) {
+	constructor(room, details) {
 		this.room = room;
 		this.playerlist = null;
+		this.details = details;
 	}
 
 	destroy(force) {
