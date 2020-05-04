@@ -10,6 +10,7 @@ import * as smogon from 'smogon';
 
 import * as Streams from '../../lib/streams';
 import {Dex} from '../../sim/dex';
+import {Species} from '../../sim/dex-data';
 import {TeamValidator} from '../../sim/team-validator';
 Dex.includeModData();
 const toID = Dex.getId;
@@ -106,6 +107,8 @@ async function importGen(gen: Generation, index: string) {
 	const dex = Dex.forFormat(`gen${gen}ou`);
 	for (const id in dex.data.Pokedex) {
 		if (!eligible(dex, id as ID)) continue;
+		const species = dex.getSpecies(id);
+		if (species.battleOnly) continue;// Smogon collapses these into their out of battle species
 		imports.push(importSmogonSets(dex.getSpecies(id).name, gen, smogonSetsByFormat, numByFormat));
 	}
 	for (const source in THIRD_PARTY_SOURCES) {
@@ -202,20 +205,35 @@ async function importSmogonSets(
 			setsByFormat[format.id] = setsForPokemon;
 		}
 
+		let baseSpecies = dex.getSpecies(pokemon);
+		if (baseSpecies.baseSpecies !== baseSpecies.name) baseSpecies = dex.getSpecies(baseSpecies.baseSpecies);
+		const battleOnlyFormes: Species[] = [];
+		if (baseSpecies.otherFormes) {
+			for (const forme of baseSpecies.otherFormes) {
+				const formeSpecies = dex.getSpecies(forme);
+				if (formeSpecies.battleOnly && eligible(dex, toID(formeSpecies))) {
+					battleOnlyFormes.push(formeSpecies);
+				}
+			}
+		}
+
 		for (const analysis of analyses) {
 			for (const moveset of analysis.movesets) {
 				const set = movesetToPokemonSet(dex, format, pokemon, moveset);
 				const name = cleanName(moveset.name);
-				// Smogon redirects megas back to a base species, but because Necrozma-Ultra has two bases,
-				// Smogon chose to redirect to Necroza-Dawn-Wings. Furthermore, the same set name has been used
-				// for both base species, so we also need to add a disambiguating suffix  to avoid overwrites.
-				if (pokemon === 'Necrozma-Ultra') {
-					addSmogonSet(dex, format, pokemon, `${name} - Dawn-Wings`, set, setsForPokemon, numByFormat);
-				} else if (pokemon === 'Necrozma-Dusk-Mane') {
-					addSmogonSet(dex, format, 'Necrozma-Ultra', `${name} - Dusk-Mane`, set, setsForPokemon, numByFormat);
-					addSmogonSet(dex, format, pokemon, name, set, setsForPokemon, numByFormat);
-				} else {
-					addSmogonSet(dex, format, pokemon, name, set, setsForPokemon, numByFormat);
+				addSmogonSet(dex, format, pokemon, name, set, setsForPokemon, numByFormat);
+				for (const battleOnlyForme of battleOnlyFormes) {
+					// Note: this is just a shallow copy which is fine because we're just modifying the ability
+					const s = Object.assign({}, set);
+					if (!format.id.includes('balancedhackmons')) s.ability = battleOnlyForme.abilities[0];
+					if (typeof battleOnlyForme.battleOnly !== 'string') {
+						if (!battleOnlyForme.battleOnly!.includes(pokemon)) continue;
+						const species = dex.getSpecies(pokemon);
+						const disambiguated = `${name} - ${species.baseForme || species.forme}`;
+						addSmogonSet(dex, format, battleOnlyForme.name, disambiguated, s, setsForPokemon, numByFormat, pokemon);
+					} else if (battleOnlyForme.battleOnly === pokemon) {
+						addSmogonSet(dex, format, battleOnlyForme.name, name, s, setsForPokemon, numByFormat);
+					}
 				}
 			}
 		}
@@ -229,9 +247,10 @@ function addSmogonSet(
 	name: string,
 	set: DeepPartial<PokemonSet>,
 	setsForPokemon: PokemonSets,
-	numByFormat: {[format: string]: number}
+	numByFormat: {[format: string]: number},
+	outOfBattleSpeciesName?: string
 ) {
-	if (validSet('smogon.com/dex', dex, format, pokemon, name, set)) {
+	if (validSet('smogon.com/dex', dex, format, pokemon, name, set, outOfBattleSpeciesName)) {
 		setsForPokemon[pokemon] = setsForPokemon[pokemon] || {};
 		setsForPokemon[pokemon][name] = set;
 		numByFormat[format.id] = (numByFormat[format.id] || 0) + 1;
@@ -275,11 +294,17 @@ function fixedAbility(dex: ModdedDex, pokemon: string, ability?: string) {
 }
 
 function validSet(
-	source: string, dex: ModdedDex, format: Format, pokemon: string, name: string, set: DeepPartial<PokemonSet>
+	source: string,
+	dex: ModdedDex,
+	format: Format,
+	pokemon: string,
+	name: string,
+	set: DeepPartial<PokemonSet>,
+	outOfBattleSpeciesName?: string
 ) {
 	if (skip(dex, format, pokemon, set)) return false;
 
-	const pset = toPokemonSet(dex, format, pokemon, set);
+	const pset = toPokemonSet(dex, format, pokemon, set, outOfBattleSpeciesName);
 	let invalid = VALIDATORS.get(format.id)!.validateSet(pset, {});
 	if (!invalid) return true;
 	// Correct invalidations where set is required to be shiny due to an event
@@ -324,7 +349,13 @@ function skip(dex: ModdedDex, format: Format, pokemon: string, set: DeepPartial<
 	return false;
 }
 
-function toPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: DeepPartial<PokemonSet>): PokemonSet {
+function toPokemonSet(
+	dex: ModdedDex,
+	format: Format,
+	pokemon: string,
+	set: DeepPartial<PokemonSet>,
+	outOfBattleSpeciesName?: string
+): PokemonSet {
 	// To simplify things, during validation we mutate the input set to correct for HP mismatches
 	const hp = set.moves && set.moves.find(m => m.startsWith('Hidden Power'));
 	let fill = dex.gen === 2 ? 30 : 31;
@@ -356,17 +387,20 @@ function toPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: Deep
 	// The validator wants an ability even when Gen < 3
 	copy.ability = copy.ability || 'None';
 
-	// The validator is picky about megas having already evolved or battle only formes
 	const species = dex.getSpecies(pokemon);
 	if (species.battleOnly && !format.id.includes('balancedhackmons')) {
-		if (typeof species.battleOnly !== 'string') {
-			throw new Error(`Got an Ultra Necrozma or Complete Zygarde outside of BH`);
+		if (outOfBattleSpeciesName) {
+			copy.species = outOfBattleSpeciesName;
+		} else if (typeof species.battleOnly === 'string') {
+			copy.species = species.battleOnly;
+		} else {
+			throw new Error(`Unable to disambiguate out of battle species for ${species.name} in ${format.id}`);
 		}
-		copy.species = species.battleOnly;
 		copy.ability = dex.getSpecies(copy.species).abilities[0];
 	}
 	return copy;
 }
+
 
 function expectedHP(ivs: Partial<StatsTable>) {
 	ivs = fillStats(ivs, 31);

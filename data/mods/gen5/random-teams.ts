@@ -655,21 +655,18 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
-			// Adjust rate for species with multiple formes
+			// Adjust rate for species with multiple sets
 			switch (species.baseSpecies) {
 			case 'Arceus':
 				if (this.randomChance(16, 17)) continue;
 				break;
 			case 'Rotom':
-				if (this.randomChance(5, 6)) continue;
+				if (this.gen < 5 && this.randomChance(5, 6)) continue;
 				break;
-			case 'Deoxys':
-				if (this.randomChance(3, 4)) continue;
-				break;
-			case 'Castform': case 'Kyurem': case 'Wormadam':
+			case 'Castform':
 				if (this.randomChance(2, 3)) continue;
 				break;
-			case 'Basculin': case 'Cherrim': case 'Giratina': case 'Landorus': case 'Meloetta': case 'Shaymin': case 'Thundurus': case 'Tornadus':
+			case 'Basculin': case 'Cherrim': case 'Giratina': case 'Meloetta':
 				if (this.randomChance(1, 2)) continue;
 				break;
 			}

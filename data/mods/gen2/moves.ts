@@ -481,7 +481,9 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	metronome: {
 		inherit: true,
 		desc: "A random move is selected for use, other than Counter, Destiny Bond, Detect, Endure, Metronome, Mimic, Mirror Coat, Protect, Sketch, Sleep Talk, Struggle, or Thief.",
-		noMetronome: ['counter', 'destinybond', 'detect', 'endure', 'metronome', 'mimic', 'mirrorcoat', 'protect', 'sketch', 'sleeptalk', 'struggle', 'thief'],
+		noMetronome: [
+			"Counter", "Destiny Bond", "Detect", "Endure", "Metronome", "Mimic", "Mirror Coat", "Protect", "Sketch", "Sleep Talk", "Struggle", "Thief",
+		],
 		noSketch: true,
 	},
 	mimic: {

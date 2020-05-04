@@ -331,6 +331,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		this.runEvent('Load');
 		this.onLoad(questions);
+		this.runEvent('AfterLoad');
 	}
 
 	loadMods(modInformation) {
@@ -368,9 +369,9 @@ class ScavengerHunt extends Rooms.RoomGame {
 		connection.sendTo(this.room, this.getCreationMessage());
 	}
 
-	getCreationMessage() {
+	getCreationMessage(newHunt) {
 		const message = this.runEvent('CreateCallback');
-		return message || `|raw|<div class="broadcast-blue"><strong>${['official', 'unrated'].includes(this.gameType) ? 'An' : 'A'} ${this.gameType} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.id === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.formatText(this.questions[0].hint)}</strong></div>`;
+		return message || `|raw|<div class="broadcast-blue"><strong>${['official', 'unrated'].includes(this.gameType) && !newHunt ? 'An' : 'A'} ${newHunt ? 'new ' : ''}${this.gameType} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.id === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.formatText(this.questions[0].hint)}</strong></div>`;
 	}
 
 	joinGame(user) {
@@ -421,7 +422,8 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.questions.push({hint: hint, answer: answer, spoilers: []});
 		}
 
-		this.announce(`A new ${this.gameType} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.id === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.formatText(this.questions[0].hint)}`);
+		const message = this.getCreationMessage(true);
+		this.room.add(message).update();
 	}
 
 	runEvent(event_id, ...args) {
@@ -528,7 +530,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	onViewHunt(user) {
-		if (this.runEvent('onViewHunt', user)) return;
+		if (this.runEvent('ViewHunt', user)) return;
 
 		let qLimit = 1;
 		if (this.hosts.some(h => h.id === user.id) || user.id === this.staffHostId)	{
@@ -565,7 +567,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			reset = true;
 		}
 
-		this.runEvent('End');
+		this.runEvent('End', reset);
 		if (!ScavengerHuntDatabase.isEmpty() && this.room.addRecycledHuntsToQueueAutomatically) {
 			if (!this.room.scavQueue) {
 				this.room.scavQueue = [];
@@ -1545,7 +1547,7 @@ const commands = {
 		if (room.officialtwist) {
 			this.privateModAction(`(${user.name} has set the official twist to ${room.officialtwist})`);
 		} else {
-			this.privateModAction(`(${user.name} has removed the official twist.`);
+			this.privateModAction(`(${user.name} has removed the official twist.)`);
 		}
 		this.modlog('SCAV TWIST', null, room.officialtwist);
 

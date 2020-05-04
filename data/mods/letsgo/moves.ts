@@ -45,7 +45,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				const move = this.dex.getMove(id);
 				if (move.realMove) continue;
 				if (move.gen !== 1) continue;
-				if (effect.noMetronome!.includes(move.id)) continue;
+				if (effect.noMetronome!.includes(move.name)) continue;
 				moves.push(move);
 			}
 			let randomMove = '';

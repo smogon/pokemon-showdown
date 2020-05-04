@@ -599,7 +599,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	metronome: {
 		inherit: true,
 		desc: "A random move is selected for use, other than Metronome or Struggle.",
-		noMetronome: ['metronome', 'struggle'],
+		noMetronome: ["Metronome", "Struggle"],
 		secondary: null,
 		target: "self",
 		type: "Normal",

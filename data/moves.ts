@@ -6620,8 +6620,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side gains the Focus Energy effect, even if they have a substitute.",
-		shortDesc: "Base move affects power. Allies: Focus Energy.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side has their critical hit ratio raised by 1 stage, even if they have a substitute.",
+		shortDesc: "Base move affects power. Allies: Crit Ratio +1.",
 		name: "G-Max Chi Strike",
 		pp: 5,
 		priority: 0,
@@ -6630,8 +6630,27 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.side.active) {
-					pokemon.addVolatile('focusenergy');
+					pokemon.addVolatile('gmaxchistrike');
 				}
+			},
+		},
+		effect: {
+			noCopy: true,
+			onStart(target, source, effect) {
+				this.effectData.layers = 1;
+				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
+					this.add('-start', target, 'move: G-Max Chi Strike');
+				}
+			},
+			onRestart(target, source, effect) {
+				if (this.effectData.layers >= 3) return false;
+				this.effectData.layers++;
+				if (!['imposter', 'psychup', 'transform'].includes(effect?.id)) {
+					this.add('-start', target, 'move: G-Max Chi Strike');
+				}
+			},
+			onModifyCritRatio(critRatio) {
+				return critRatio + this.effectData.layers;
 			},
 		},
 		secondary: null,
@@ -11634,15 +11653,15 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		noMetronome: [
-			'afteryou', 'appleacid', 'assist', 'aurawheel', 'banefulbunker', 'beakblast', 'behemothbash', 'behemothblade', 'belch', 'bestow', 'bodypress', 'branchpoke', 'breakingswipe', 'celebrate', 'chatter', 'clangoroussoul', 'copycat', 'counter', 'covet', 'craftyshield', 'decorate', 'destinybond', 'detect', 'diamondstorm', 'doubleironbash', 'dragonascent', 'drumbeating', 'dynamaxcannon', 'endure', 'eternabeam', 'falsesurrender', 'feint', 'fleurcannon', 'focuspunch', 'followme', 'freezeshock', 'gravapple', 'helpinghand', 'holdhands', 'hyperspacefury', 'hyperspacehole', 'iceburn', 'instruct', 'kingsshield', 'lifedew', 'lightofruin', 'matblock', 'mefirst', 'meteorassault', 'metronome', 'mimic', 'mindblown', 'mirrorcoat', 'mirrormove', 'moongeistbeam', 'naturepower', 'naturesmadness', 'obstruct', 'originpulse', 'overdrive', 'photongeyser', 'plasmafists', 'precipiceblades', 'protect', 'pyroball', 'quash', 'quickguard', 'ragepowder', 'relicsong', 'secretsword', 'shelltrap', 'sketch', 'sleeptalk', 'snaptrap', 'snarl', 'snatch', 'snore', 'spectralthief', 'spikyshield', 'spiritbreak', 'spotlight', 'steameruption', 'steelbeam', 'strangesteam', 'struggle', 'sunsteelstrike', 'switcheroo', 'technoblast', 'thief', 'thousandarrows', 'thousandwaves', 'transform', 'trick', 'vcreate', 'wideguard',
+			"After You", "Apple Acid", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Behemoth Bash", "Behemoth Blade", "Belch", "Bestow", "Body Press", "Branch Poke", "Breaking Swipe", "Celebrate", "Chatter", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Diamond Storm", "Double Iron Bash", "Dragon Ascent", "Drum Beating", "Dynamax Cannon", "Endure", "Eternabeam", "False Surrender", "Feint", "Fleur Cannon", "Focus Punch", "Follow Me", "Freeze Shock", "Grav Apple", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Life Dew", "Light of Ruin", "Mat Block", "Me First", "Meteor Assault", "Metronome", "Mimic", "Mind Blown", "Mirror Coat", "Mirror Move", "Moongeist Beam", "Nature Power", "Nature's Madness", "Obstruct", "Origin Pulse", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Steam Eruption", "Steel Beam", "Strange Steam", "Struggle", "Sunsteel Strike", "Switcheroo", "Techno Blast", "Thief", "Thousand Arrows", "Thousand Waves", "Transform", "Trick", "V-create", "Wide Guard",
 		],
 		onHit(target, source, effect) {
 			const moves: MoveData[] = [];
-			for (const id in exports.BattleMovedex) {
-				const move = exports.BattleMovedex[id];
+			for (const id in BattleMovedex) {
+				const move = BattleMovedex[id];
 				if (move.realMove) continue;
 				if (move.isZ || move.isMax || move.isNonstandard) continue;
-				if (effect.noMetronome!.includes(move.id)) continue;
+				if (effect.noMetronome!.includes(move.name)) continue;
 				if (this.dex.getMove(id).gen > this.gen) continue;
 				moves.push(move);
 			}
@@ -13889,10 +13908,11 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			for (i in target.boosts) {
 				source.boosts[i] = target.boosts[i];
 			}
-			const volatilesToCopy = ['focusenergy', 'laserfocus'];
+			const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
 			for (const volatile of volatilesToCopy) {
 				if (target.volatiles[volatile]) {
 					source.addVolatile(volatile);
+					if (volatile === 'gmaxchistrike') source.volatiles[volatile].layers = target.volatiles[volatile].layers;
 				} else {
 					source.removeVolatile(volatile);
 				}
@@ -18018,7 +18038,6 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "randomNormal",
 		type: "Normal",
-		zMovePower: 1,
 		contestType: "Tough",
 	},
 	strugglebug: {

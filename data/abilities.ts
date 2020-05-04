@@ -3424,11 +3424,11 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Minior' || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
-				if (pokemon.species.id === 'minior') {
+				if (pokemon.species.forme !== 'Meteor') {
 					pokemon.formeChange('Minior-Meteor');
 				}
 			} else {
-				if (pokemon.species.id !== 'minior') {
+				if (pokemon.species.forme === 'Meteor') {
 					pokemon.formeChange(pokemon.set.species);
 				}
 			}
@@ -3437,11 +3437,11 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		onResidual(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Minior' || pokemon.transformed || !pokemon.hp) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
-				if (pokemon.species.id === 'minior') {
+				if (pokemon.species.forme !== 'Meteor') {
 					pokemon.formeChange('Minior-Meteor');
 				}
 			} else {
-				if (pokemon.species.id !== 'minior') {
+				if (pokemon.species.forme === 'Meteor') {
 					pokemon.formeChange(pokemon.set.species);
 				}
 			}

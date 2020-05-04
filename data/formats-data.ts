@@ -1606,7 +1606,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	linoone: {
 		randomBattleMoves: ["bellydrum", "extremespeed", "stompingtantrum", "throatchop"],
 		randomDoubleBattleMoves: ["bellydrum", "extremespeed", "protect", "throatchop"],
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
 	linoonegalar: {
@@ -3234,7 +3234,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	beheeyem: {
 		randomBattleMoves: ["psychic", "shadowball", "thunderbolt", "trick", "trickroom"],
-		randomDoubleBattleMoves: ["nastyplot", "protect", "psychic", "shadowball", "thunderbolt", "thunderwave", "trickroom"],
+		randomDoubleBattleMoves: ["nastyplot", "protect", "psychic", "shadowball", "thunderbolt", "trickroom"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -3283,7 +3283,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	accelgor: {
 		randomBattleMoves: ["bugbuzz", "energyball", "focusblast", "spikes", "toxic", "yawn"],
-		randomDoubleBattleMoves: ["acidspray", "bugbuzz", "encore", "energyball", "finalgambit", "focusblast"],
+		randomDoubleBattleMoves: ["acidspray", "bugbuzz", "encore", "energyball", "focusblast"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
@@ -3453,7 +3453,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	kyuremblack: {
 		randomBattleMoves: ["dragondance", "fusionbolt", "iciclespear", "outrage"],
-		randomDoubleBattleMoves: ["dragonclaw", "dragondance", "freezeshock", "fusionbolt", "protect", "roost"],
+		randomDoubleBattleMoves: ["dragonclaw", "dragondance", "fusionbolt", "iciclespear", "protect", "roost"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
@@ -3632,7 +3632,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	meowsticf: {
 		randomBattleMoves: ["energyball", "nastyplot", "psychic", "shadowball", "thunderbolt"],
 		randomDoubleBattleMoves: ["fakeout", "nastyplot", "psychic", "shadowball", "thunderbolt"],
-		tier: "(PU)",
+		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	honedge: {
@@ -4598,7 +4598,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	drednaw: {
 		randomBattleMoves: ["liquidation", "stealthrock", "stoneedge", "superpower", "swordsdance"],
-		randomDoubleBattleMoves: ["highhorsepower", "liquidation", "poisonjab", "protect", "rockslide", "superpower"],
+		randomDoubleBattleMoves: ["highhorsepower", "liquidation", "protect", "rockslide", "superpower"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -4814,7 +4814,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	frosmoth: {
 		randomBattleMoves: ["bugbuzz", "gigadrain", "hurricane", "icebeam", "quiverdance"],
-		randomDoubleBattleMoves: ["bugbuzz", "gigadrain", "hurricane", "icebeam", "quiverdance", "tailwind", "wideguard"],
+		randomDoubleBattleMoves: ["bugbuzz", "gigadrain", "hurricane", "icebeam", "quiverdance", "wideguard"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
