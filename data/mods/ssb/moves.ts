@@ -25,8 +25,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		// Other useful things
 		noPPBoosts: true, // add this to not boost the PP of a move, not needed for Z moves, dont include it otherwise
 		isZ: "crystalname", // marks a move as a z move, list the crystal name inside
-		zMoveEffect: '', // for status moves, what happens when this is used as a Z move? check data/moves.js for examples
-		zMoveBoost: {atk: 2}, // for status moves, stat boost given when used as a z move
+		zMove: {effect: '', // for status moves}, what happens when this is used as a Z move? check data/moves.js for examples
+		zMove: {boost: {atk: 2}, // for status moves}, stat boost given when used as a z move
 		critRatio: 2, // The higher the number (above 1) the higher the ratio, lowering it lowers the crit ratio
 		drain: [1, 2], // recover first num / second num % of the damage dealt
 		heal: [1, 2], // recover first num / second num % of the target's HP
@@ -132,7 +132,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 200,
+		zMove: {basePower: 200},
 	},
 	// Aeonic
 	shitpost: {
@@ -1372,7 +1372,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Ground",
-		zMoveEffect: 'healhalf',
+		zMove: {effect: 'healhalf'},
 	},
 	// E4 Flint
 	fangofthefireking: {
@@ -1471,7 +1471,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 175,
+		zMove: {basePower: 175},
 	},
 	// eternally
 	quack: {
@@ -1952,7 +1952,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "foeSide",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 	},
 	// HoeenHero
 	scriptedterrain: {
@@ -2641,7 +2641,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 160,
+		zMove: {basePower: 160},
 	},
 	// MacChaeger
 	naptime: {
@@ -2697,7 +2697,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		target: "self",
 		type: "Fairy",
-		zMoveEffect: 'clearnegativeboosts',
+		zMove: {effect: 'clearnegativeboosts'},
 	},
 	// Mad Monty ¾°
 	llamacide: {
@@ -2894,7 +2894,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 	},
 	// Meicoo
 	scavengesu: {
@@ -3126,7 +3126,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMoveEffect: "boostreplacement",
+		zMove: {effect: "boostreplacement"},
 	},
 	// OM
 	omboom: {
@@ -4256,7 +4256,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 160,
+		zMove: {basePower: 160},
 		contestType: "Cool",
 	},
 	// Tony
@@ -4475,7 +4475,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				status: 'par',
 			},
 		],
-		zMovePower: 175,
+		zMove: {basePower: 175},
 		target: "normal",
 		type: "Flying",
 	},

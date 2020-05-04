@@ -175,7 +175,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
 					return move.name;
-				} else if (move.zMovePower) {
+				} else if (move.zMove?.basePower) {
 					return this.zMoveTable[move.type];
 				}
 			}
@@ -203,7 +203,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 		zMove = this.dex.getActiveMove(this.zMoveTable[move.type]);
 		// @ts-ignore
-		zMove.basePower = move.zMovePower;
+		zMove.basePower = move.zMove?.basePower;
 		zMove.category = move.category;
 		zMove.isZPowered = true;
 		return zMove;
@@ -247,10 +247,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		const zPower = this.dex.getEffect('zpower');
 		if (move.category !== 'Status') {
 			this.attrLastMove('[zeffect]');
-		} else if (move.zMoveBoost) {
-			this.boost(move.zMoveBoost, pokemon, pokemon, zPower);
+		} else if (move.zMove?.boost) {
+			this.boost(move.zMove.boost, pokemon, pokemon, zPower);
 		} else {
-			switch (move.zMoveEffect) {
+			switch (move.zMove?.effect) {
 			case 'heal':
 				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				break;
