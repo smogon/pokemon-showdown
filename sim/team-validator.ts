@@ -1768,7 +1768,11 @@ export class TeamValidator {
 				sometimesPossible = true;
 				let lset = lsetData.learnset[moveid];
 				if (moveid === 'sketch' || !lset || species.id === 'smeargle') {
-					if (move.noSketch || move.isZ) return {type: 'invalid'};
+					// The logic behind this comes from the idea that a Pokemon that learns Sketch
+					// should be able to Sketch any move before transferring into Generation 8.
+					if (move.noSketch || move.isZ || move.isMax || (move.gen > 7 && !this.format.id.includes('nationaldex'))) {
+						return {type: 'invalid'};
+					}
 					lset = lsetData.learnset['sketch'];
 					sketch = true;
 				}
