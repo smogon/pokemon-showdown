@@ -25,8 +25,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		// Other useful things
 		noPPBoosts: true, // add this to not boost the PP of a move, not needed for Z moves, dont include it otherwise
 		isZ: "crystalname", // marks a move as a z move, list the crystal name inside
-		zMove: {effect: '', // for status moves}, what happens when this is used as a Z move? check data/moves.js for examples
-		zMove: {boost: {atk: 2}, // for status moves}, stat boost given when used as a z move
+		zMove: {effect: ''}, // for status moves, what happens when this is used as a Z move? check data/moves.js for examples
+		zMove: {boost: {atk: 2}}, // for status moves, stat boost given when used as a z move
 		critRatio: 2, // The higher the number (above 1) the higher the ratio, lowering it lowers the crit ratio
 		drain: [1, 2], // recover first num / second num % of the damage dealt
 		heal: [1, 2], // recover first num / second num % of the target's HP
