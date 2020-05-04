@@ -202,7 +202,6 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			return zMove;
 		}
 		zMove = this.dex.getActiveMove(this.zMoveTable[move.type]);
-		// @ts-ignore
 		zMove.basePower = move.zMove?.basePower;
 		zMove.category = move.category;
 		zMove.isZPowered = true;
