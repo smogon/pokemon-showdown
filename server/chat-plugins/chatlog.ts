@@ -479,7 +479,7 @@ const LogSearcher = new class {
 		return this.render(matches, roomid, search, cap);
 	}
 
-render(results: string[], roomid: RoomID, search: string, cap?: number) {
+	render(results: string[], roomid: RoomID, search: string, cap?: number) {
 		const dates: string[] = [];
 		let count = 0;
 		let curDate = '';
@@ -526,7 +526,6 @@ render(results: string[], roomid: RoomID, search: string, cap?: number) {
 		}
 		return buf;
 	}
-
 };
 
 const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
