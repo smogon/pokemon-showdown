@@ -914,7 +914,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		if (this.category !== 'Status' && !this.maxMove && this.id !== 'struggle') {
 			this.maxMove = {basePower: 1};
 			if (this.isMax || this.isZ) {
-				this.maxMove.basePower = 1;
+				// already initialized to 1
 			} else if (!this.basePower) {
 				this.maxMove.basePower = 100;
 			} else if (['Fighting', 'Poison'].includes(this.type)) {
