@@ -563,8 +563,8 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 					(move.boosts.spa && move.boosts.spa > 0) || (move.boosts.spd && move.boosts.spd > 0))) {
 					nonSpeedBoosted = true;
 				}
-				if (item.zMove && move.type === item.zMoveType && move.zMoveBoost) {
-					const boosts = move.zMoveBoost;
+				if (item.zMove && move.type === item.zMoveType && move.zMove?.boost) {
+					const boosts = move.zMove.boost;
 					if (boosts.spe && boosts.spe > 0) {
 						if (!speedBoosted) speedBoosted = move.name;
 					}

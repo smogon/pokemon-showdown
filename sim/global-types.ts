@@ -925,29 +925,22 @@ interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	 * Sparksurfer.
 	 */
 	isZ?: boolean | string;
-	zMovePower?: number;
-	zMoveEffect?: string;
-	zMoveBoost?: SparseBoostsTable;
-	/**
-	 * Has this move been boosted by a Z-crystal? Usually the same as
-	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
-	 * truthy.
-	 */
-	isZPowered?: boolean;
+	zMove?: {
+		basePower?: number,
+		effect?: string,
+		boost?: SparseBoostsTable,
+	};
 
 	// Max move data
 	// -------------
-	gmaxPower?: number;
 	/**
 	 * `true` for Max moves like Max Airstream. If its a G-Max moves, this is
 	 * the species ID of the Gigantamax Pokemon that can use this G-Max move.
 	 */
 	isMax?: boolean | string;
-	/**
-	 * Same idea has `isZPowered`. Hacked Max moves will have this be
-	 * `false` and `isMax` be truthy.
-	 */
-	maxPowered?: boolean;
+	maxMove?: {
+		basePower: number,
+	};
 
 	// Hit effects
 	// -----------
@@ -1082,6 +1075,12 @@ interface ActiveMove extends BasicEffect, MoveData {
 	totalDamage?: number | false;
 	willChangeForme?: boolean;
 	infiltrates?: boolean;
+
+	/**
+	 * Has this move been boosted by a Z-crystal or used by a Dynamax Pokemon? Usually the same as
+	 * `isZ` or `isMax`, but hacked moves will have this be `false` and `isZ` / `isMax` be truthy.
+	 */
+	isZOrMaxPowered?: boolean;
 }
 
 interface SpeciesAbility {

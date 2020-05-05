@@ -1500,7 +1500,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (recoveryType === "recovery") {
 					hasRecovery = !!dex[move].drain || !!dex[move].flags.heal;
 				} else if (recoveryType === "zrecovery") {
-					hasRecovery = (dex[move].zMoveEffect === 'heal');
+					hasRecovery = (dex[move].zMove?.effect === 'heal');
 				}
 				if (hasRecovery === alts.recovery[recoveryType]) {
 					matched = true;
@@ -1573,8 +1573,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			for (const boost in alts.zboost) {
-				if (dex[move].zMoveBoost) {
-					if ((dex[move].zMoveBoost![boost as BoostName]! > 0) === alts.zboost[boost]) {
+				const zMove = dex[move].zMove;
+				if (zMove?.boost) {
+					if ((zMove.boost[boost as BoostName]! > 0) === alts.zboost[boost]) {
 						matched = true;
 						break;
 					}

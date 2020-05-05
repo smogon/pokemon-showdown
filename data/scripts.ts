@@ -1123,7 +1123,7 @@ export const BattleScripts: BattleScriptsData = {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
 					return move.name;
-				} else if (move.zMovePower) {
+				} else if (move.zMove?.basePower) {
 					return this.zMoveTable[move.type];
 				}
 			}
@@ -1136,7 +1136,7 @@ export const BattleScripts: BattleScriptsData = {
 			if (move.name === item.zMoveFrom) {
 				// @ts-ignore
 				const zMove = this.dex.getActiveMove(item.zMove);
-				zMove.isZPowered = true;
+				zMove.isZOrMaxPowered = true;
 				return zMove;
 			}
 		}
@@ -1144,16 +1144,15 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.category === 'Status') {
 			const zMove = this.dex.getActiveMove(move);
 			zMove.isZ = true;
-			zMove.isZPowered = true;
+			zMove.isZOrMaxPowered = true;
 			return zMove;
 		}
 		const zMove = this.dex.getActiveMove(this.zMoveTable[move.type]);
-		// @ts-ignore
-		zMove.basePower = move.zMovePower;
+		zMove.basePower = move.zMove!.basePower!;
 		zMove.category = move.category;
 		// copy the priority for Quick Guard
 		zMove.priority = move.priority;
-		zMove.isZPowered = true;
+		zMove.isZOrMaxPowered = true;
 		return zMove;
 	},
 
@@ -1258,12 +1257,12 @@ export const BattleScripts: BattleScriptsData = {
 				const gMaxMove = this.dex.getActiveMove(gMaxSpecies.isGigantamax ? gMaxSpecies.isGigantamax : '');
 				if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
 			}
-			if (!move.gmaxPower) throw new Error(`${move.name} doesn't have a gmaxPower`);
-			maxMove.basePower = move.gmaxPower;
+			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
+			maxMove.basePower = move.maxMove.basePower;
 			maxMove.category = move.category;
 		}
 		maxMove.baseMove = move.id;
-		maxMove.maxPowered = true;
+		maxMove.isZOrMaxPowered = true;
 		return maxMove;
 	},
 
@@ -1299,10 +1298,10 @@ export const BattleScripts: BattleScriptsData = {
 		const zPower = this.dex.getEffect('zpower');
 		if (move.category !== 'Status') {
 			this.attrLastMove('[zeffect]');
-		} else if (move.zMoveBoost) {
-			this.boost(move.zMoveBoost, pokemon, pokemon, zPower);
-		} else {
-			switch (move.zMoveEffect) {
+		} else if (move.zMove?.boost) {
+			this.boost(move.zMove.boost, pokemon, pokemon, zPower);
+		} else if (move.zMove?.effect) {
+			switch (move.zMove.effect) {
 			case 'heal':
 				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				break;

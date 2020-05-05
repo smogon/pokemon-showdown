@@ -175,7 +175,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
 					return move.name;
-				} else if (move.zMovePower) {
+				} else if (move.zMove?.basePower) {
 					return this.zMoveTable[move.type];
 				}
 			}
@@ -190,7 +190,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 				zMove = this.dex.getActiveMove(item.zMove as string);
 				// Hack for Snaquaza's Z move
 				zMove.baseMove = move.id;
-				zMove.isZPowered = true;
+				zMove.isZOrMaxPowered = true;
 				return zMove;
 			}
 		}
@@ -198,14 +198,13 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		if (move.category === 'Status') {
 			zMove = this.dex.getActiveMove(move);
 			zMove.isZ = true;
-			zMove.isZPowered = true;
+			zMove.isZOrMaxPowered = true;
 			return zMove;
 		}
 		zMove = this.dex.getActiveMove(this.zMoveTable[move.type]);
-		// @ts-ignore
-		zMove.basePower = move.zMovePower;
+		zMove.basePower = move.zMove!.basePower!;
 		zMove.category = move.category;
-		zMove.isZPowered = true;
+		zMove.isZOrMaxPowered = true;
 		return zMove;
 	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle
@@ -247,10 +246,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		const zPower = this.dex.getEffect('zpower');
 		if (move.category !== 'Status') {
 			this.attrLastMove('[zeffect]');
-		} else if (move.zMoveBoost) {
-			this.boost(move.zMoveBoost, pokemon, pokemon, zPower);
+		} else if (move.zMove?.boost) {
+			this.boost(move.zMove.boost, pokemon, pokemon, zPower);
 		} else {
-			switch (move.zMoveEffect) {
+			switch (move.zMove?.effect) {
 			case 'heal':
 				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				break;
@@ -362,7 +361,7 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if ((move.isZPowered || move.isMax) && target.getMoveHitData(move).zBrokeProtect) {
+		if ((move.isZOrMaxPowered || move.isMax) && target.getMoveHitData(move).zBrokeProtect) {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}

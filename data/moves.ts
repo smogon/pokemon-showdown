@@ -119,7 +119,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Poison",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
 	aciddownpour: {
@@ -214,7 +214,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "adjacentAllyOrSelf",
 		type: "Normal",
-		zMoveEffect: 'crit2',
+		zMove: {effect: 'crit2'},
 		contestType: "Tough",
 	},
 	aerialace: {
@@ -276,7 +276,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
 	agility: {
@@ -297,7 +297,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
 	aircutter: {
@@ -378,7 +378,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveBoost: {spe: 2},
+		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
 	amnesia: {
@@ -398,7 +398,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	anchorshot: {
@@ -511,7 +511,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Water",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
 	},
 	aquatail: {
@@ -573,7 +573,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		target: "allyTeam",
 		type: "Grass",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Clever",
 	},
 	aromaticmist: {
@@ -593,7 +593,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "adjacentAlly",
 		type: "Fairy",
-		zMoveBoost: {spd: 2},
+		zMove: {boost: {spd: 2}},
 		contestType: "Beautiful",
 	},
 	assist: {
@@ -751,7 +751,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	aurasphere: {
@@ -878,7 +878,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Ice",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
 	autotomize: {
@@ -911,7 +911,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Steel",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	avalanche: {
@@ -958,7 +958,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
 	baddybad: {
@@ -1031,7 +1031,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					source.trySetStatus('psn', target);
 				}
 			},
@@ -1039,7 +1039,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Poison",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
 	barrage: {
@@ -1078,7 +1078,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
 	batonpass: {
@@ -1097,7 +1097,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	beakblast: {
@@ -1226,7 +1226,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Cute",
 	},
 	bestow: {
@@ -1256,7 +1256,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spe: 2},
+		zMove: {boost: {spe: 2}},
 		contestType: "Cute",
 	},
 	bide: {
@@ -1467,7 +1467,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
 	bloomdoom: {
@@ -1625,7 +1625,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		gmaxPower: 130,
+		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
 	bonerush: {
@@ -1643,8 +1643,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		zMovePower: 140,
-		gmaxPower: 130,
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
 	boomburst: {
@@ -1970,7 +1970,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Fighting",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Cool",
 	},
 	bulldoze: {
@@ -2027,8 +2027,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 140,
-		gmaxPower: 130,
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
 	burnup: {
@@ -2099,7 +2099,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	camouflage: {
@@ -2132,7 +2132,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {evasion: 1},
+		zMove: {boost: {evasion: 1}},
 		contestType: "Clever",
 	},
 	captivate: {
@@ -2156,7 +2156,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Normal",
-		zMoveBoost: {spd: 2},
+		zMove: {boost: {spd: 2}},
 		contestType: "Cute",
 	},
 	catastropika: {
@@ -2193,7 +2193,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
 	},
 	charge: {
@@ -2230,7 +2230,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Electric",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	chargebeam: {
@@ -2273,7 +2273,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
 	chatter: {
@@ -2499,7 +2499,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Poison",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
 	cometpunch: {
@@ -2518,7 +2518,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		gmaxPower: 100,
+		maxMove: {basePower: 100},
 		contestType: "Tough",
 	},
 	confide: {
@@ -2538,7 +2538,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
 	confuseray: {
@@ -2556,7 +2556,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	confusion: {
@@ -2637,7 +2637,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Beautiful",
 	},
 	conversion2: {
@@ -2676,7 +2676,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Beautiful",
 	},
 	copycat: {
@@ -2694,10 +2694,10 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			const noCopycat = [
 				'assist', 'banefulbunker', 'beakblast', 'belch', 'bestow', 'celebrate', 'chatter', 'circlethrow', 'copycat', 'counter', 'covet', 'craftyshield', 'destinybond', 'detect', 'dragontail', 'dynamaxcannon', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'holdhands', 'kingsshield', 'matblock', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'naturepower', 'obstruct', 'protect', 'ragepowder', 'roar', 'shelltrap', 'sketch', 'sleeptalk', 'snatch', 'spikyshield', 'spotlight', 'struggle', 'switcheroo', 'thief', 'transform', 'trick', 'whirlwind',
 			];
-			let move = this.lastMove;
+			let move: Move | ActiveMove | null = this.lastMove;
 			if (!move) return;
 
-			if (move.maxPowered) move = this.dex.getMove(move.baseMove);
+			if ((move as ActiveMove).isZOrMaxPowered) move = this.dex.getMove(move.baseMove);
 			if (noCopycat.includes(move.id) || move.isZ || move.isMax) {
 				return false;
 			}
@@ -2706,7 +2706,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {accuracy: 1},
+		zMove: {boost: {accuracy: 1}},
 		contestType: "Cute",
 	},
 	coreenforcer: {
@@ -2741,7 +2741,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Dragon",
-		zMovePower: 140,
+		zMove: {basePower: 140},
 		contestType: "Tough",
 	},
 	corkscrewcrash: {
@@ -2779,7 +2779,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Beautiful",
 	},
 	cottonguard: {
@@ -2800,7 +2800,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Grass",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	cottonspore: {
@@ -2820,7 +2820,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Grass",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	counter: {
@@ -2867,7 +2867,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "scripted",
 		type: "Fighting",
-		gmaxPower: 75,
+		maxMove: {basePower: 75},
 		contestType: "Tough",
 	},
 	courtchange: {
@@ -3006,7 +3006,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Fairy",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	crosschop: {
@@ -3108,8 +3108,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 190,
-		gmaxPower: 140,
+		zMove: {basePower: 190},
+		maxMove: {basePower: 140},
 		contestType: "Tough",
 	},
 	curse: {
@@ -3154,7 +3154,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		target: "normal",
 		nonGhostTarget: "self",
 		type: "Ghost",
-		zMoveEffect: 'curse',
+		zMove: {effect: 'curse'},
 		contestType: "Tough",
 	},
 	cut: {
@@ -3235,7 +3235,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Dark",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	dazzlinggleam: {
@@ -3292,7 +3292,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Bug",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	defensecurl: {
@@ -3316,7 +3316,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {accuracy: 1},
+		zMove: {boost: {accuracy: 1}},
 		contestType: "Cute",
 	},
 	defog: {
@@ -3359,7 +3359,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
-		zMoveBoost: {accuracy: 1},
+		zMove: {boost: {accuracy: 1}},
 		contestType: "Cool",
 	},
 	destinybond: {
@@ -3406,7 +3406,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Ghost",
-		zMoveEffect: 'redirect',
+		zMove: {effect: 'redirect'},
 		contestType: "Clever",
 	},
 	detect: {
@@ -3432,7 +3432,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Fighting",
-		zMoveBoost: {evasion: 1},
+		zMove: {boost: {evasion: 1}},
 		contestType: "Cool",
 	},
 	devastatingdrake: {
@@ -3595,7 +3595,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	disarmingvoice: {
@@ -3773,8 +3773,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
-		gmaxPower: 120,
+		zMove: {basePower: 140},
+		maxMove: {basePower: 120},
 		contestType: "Cool",
 	},
 	doubleironbash: {
@@ -3796,8 +3796,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		target: "normal",
 		type: "Steel",
-		zMovePower: 180,
-		gmaxPower: 140,
+		zMove: {basePower: 180},
+		maxMove: {basePower: 140},
 		contestType: "Clever",
 	},
 	doublekick: {
@@ -3815,7 +3815,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		gmaxPower: 80,
+		maxMove: {basePower: 80},
 		contestType: "Cool",
 	},
 	doubleslap: {
@@ -3853,7 +3853,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
 	dracometeor: {
@@ -3955,7 +3955,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Dragon",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
 	dragondarts: {
@@ -3974,7 +3974,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		gmaxPower: 130,
+		maxMove: {basePower: 130},
 	},
 	dragonhammer: {
 		num: 692,
@@ -4186,7 +4186,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
-		gmaxPower: 130,
+		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
 	dynamaxcannon: {
@@ -4318,7 +4318,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	eggbomb: {
@@ -4395,7 +4395,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Electric",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	electrify: {
@@ -4429,7 +4429,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	electroball: {
@@ -4453,8 +4453,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
 	electroweb: {
@@ -4505,7 +4505,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	ember: {
@@ -4547,10 +4547,10 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				const noEncore = [
 					'assist', 'copycat', 'encore', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform',
 				];
-				let move = target.lastMove;
+				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
 
-				if (move.maxPowered) move = this.dex.getMove(move.baseMove);
+				if ((move as ActiveMove).isZOrMaxPowered) move = this.dex.getMove(move.baseMove);
 				const moveIndex = target.moves.indexOf(move.id);
 				if (move.isZ || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
@@ -4590,7 +4590,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
 	endeavor: {
@@ -4614,8 +4614,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
 	endure: {
@@ -4653,7 +4653,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
 	energyball: {
@@ -4715,7 +4715,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
 	eruption: {
@@ -4883,7 +4883,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Fairy",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	fairywind: {
@@ -4946,7 +4946,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
 	falsesurrender: {
@@ -4998,7 +4998,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
 	},
 	feint: {
@@ -5099,7 +5099,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 180,
+		zMove: {basePower: 180},
 		contestType: "Tough",
 	},
 	fireblast: {
@@ -5347,8 +5347,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		zMovePower: 180,
-		gmaxPower: 130,
+		zMove: {basePower: 180},
+		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
 	flail: {
@@ -5384,8 +5384,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
 	flameburst: {
@@ -5527,7 +5527,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {evasion: 1},
+		zMove: {boost: {evasion: 1}},
 		contestType: "Beautiful",
 	},
 	flashcannon: {
@@ -5570,7 +5570,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	fleurcannon: {
@@ -5690,7 +5690,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	flowershield: {
@@ -5721,7 +5721,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Fairy",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
 	},
 	fly: {
@@ -5782,7 +5782,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "any",
 		type: "Fighting",
-		zMovePower: 170,
+		zMove: {basePower: 170},
 		contestType: "Tough",
 	},
 	focusblast: {
@@ -5836,7 +5836,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {accuracy: 1},
+		zMove: {boost: {accuracy: 1}},
 		contestType: "Cool",
 	},
 	focuspunch: {
@@ -5912,7 +5912,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	forcepalm: {
@@ -5967,7 +5967,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'crit2',
+		zMove: {effect: 'crit2'},
 		contestType: "Clever",
 	},
 	forestscurse: {
@@ -5989,7 +5989,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Clever",
 	},
 	foulplay: {
@@ -6142,8 +6142,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
 	furyattack: {
@@ -6212,7 +6212,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		gmaxPower: 100,
+		maxMove: {basePower: 100},
 		contestType: "Tough",
 	},
 	fusionbolt: {
@@ -6332,7 +6332,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
 	geargrind: {
@@ -6351,8 +6351,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 180,
-		gmaxPower: 130,
+		zMove: {basePower: 180},
+		maxMove: {basePower: 130},
 		contestType: "Clever",
 	},
 	gearup: {
@@ -6383,7 +6383,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Steel",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	genesissupernova: {
@@ -6443,7 +6443,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Fairy",
-		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Beautiful",
 	},
 	gigadrain: {
@@ -6537,7 +6537,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Tough",
 	},
 	glitzyglow: {
@@ -7332,8 +7332,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
 	grasspledge: {
@@ -7417,7 +7417,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	grassyterrain: {
@@ -7478,7 +7478,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Grass",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
 	},
 	gravapple: {
@@ -7584,7 +7584,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Psychic",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	growl: {
@@ -7604,7 +7604,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
 	growth: {
@@ -7628,7 +7628,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Beautiful",
 	},
 	grudge: {
@@ -7667,7 +7667,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Ghost",
-		zMoveEffect: 'redirect',
+		zMove: {effect: 'redirect'},
 		contestType: "Tough",
 	},
 	guardianofalola: {
@@ -7722,7 +7722,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	guardswap: {
@@ -7754,7 +7754,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	guillotine: {
@@ -7772,8 +7772,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 180,
-		gmaxPower: 130,
+		zMove: {basePower: 180},
+		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
 	gunkshot: {
@@ -7834,8 +7834,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
 	hail: {
@@ -7853,7 +7853,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Ice",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
 	hammerarm: {
@@ -7894,7 +7894,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Normal",
-		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
 	},
 	harden: {
@@ -7914,7 +7914,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
 	haze: {
@@ -7938,7 +7938,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Ice",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Beautiful",
 	},
 	headbutt: {
@@ -8021,7 +8021,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		target: "allyTeam",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Beautiful",
 	},
 	healblock: {
@@ -8075,7 +8075,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Psychic",
-		zMoveBoost: {spa: 2},
+		zMove: {boost: {spa: 2}},
 		contestType: "Clever",
 	},
 	healingwish: {
@@ -8130,7 +8130,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Bug",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	healpulse: {
@@ -8159,7 +8159,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "any",
 		type: "Psychic",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	heartstamp: {
@@ -8212,7 +8212,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveEffect: 'crit2',
+		zMove: {effect: 'crit2'},
 		contestType: "Clever",
 	},
 	heatcrash: {
@@ -8253,8 +8253,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
 	heatwave: {
@@ -8316,8 +8316,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
 	helpinghand: {
@@ -8354,7 +8354,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "adjacentAlly",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	hex: {
@@ -8376,7 +8376,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMovePower: 160,
+		zMove: {basePower: 160},
 		contestType: "Clever",
 	},
 	hiddenpower: {
@@ -8760,7 +8760,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "adjacentAlly",
 		type: "Normal",
-		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
 	},
 	honeclaws: {
@@ -8782,7 +8782,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Dark",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Cute",
 	},
 	hornattack: {
@@ -8815,8 +8815,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 180,
-		gmaxPower: 130,
+		zMove: {basePower: 180},
+		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
 	hornleech: {
@@ -8854,7 +8854,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allies",
 		type: "Normal",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Cool",
 	},
 	hurricane: {
@@ -9065,7 +9065,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	iceball: {
@@ -9287,8 +9287,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ice",
-		zMovePower: 140,
-		gmaxPower: 130,
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
 		contestType: "Beautiful",
 	},
 	icywind: {
@@ -9348,7 +9348,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pressureTarget: "foeSide",
 		target: "self",
 		type: "Psychic",
-		zMoveBoost: {spd: 2},
+		zMove: {boost: {spd: 2}},
 		contestType: "Clever",
 	},
 	incinerate: {
@@ -9458,7 +9458,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Grass",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	instruct: {
@@ -9493,7 +9493,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	iondeluge: {
@@ -9525,7 +9525,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Electric",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Beautiful",
 	},
 	irondefense: {
@@ -9545,7 +9545,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Steel",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
 	ironhead: {
@@ -9691,7 +9691,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {evasion: 1},
+		zMove: {boost: {evasion: 1}},
 		contestType: "Clever",
 	},
 	kingsshield: {
@@ -9743,7 +9743,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					this.boost({atk: -1}, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 			},
@@ -9751,7 +9751,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Steel",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cool",
 	},
 	knockoff: {
@@ -9801,7 +9801,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Ground",
-		zMovePower: 185,
+		zMove: {basePower: 185},
 		contestType: "Beautiful",
 	},
 	laserfocus: {
@@ -9839,7 +9839,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Cool",
 	},
 	lastresort: {
@@ -10020,7 +10020,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	leer: {
@@ -10040,7 +10040,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Normal",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Cool",
 	},
 	letssnuggleforever: {
@@ -10158,7 +10158,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Psychic",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Beautiful",
 	},
 	lightthatburnsthesky: {
@@ -10237,7 +10237,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	lovelykiss: {
@@ -10256,7 +10256,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
 	lowkick: {
@@ -10300,7 +10300,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 160,
+		zMove: {basePower: 160},
 		contestType: "Tough",
 	},
 	lowsweep: {
@@ -10352,7 +10352,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Normal",
-		zMoveBoost: {evasion: 1},
+		zMove: {boost: {evasion: 1}},
 		contestType: "Cute",
 	},
 	lunardance: {
@@ -10535,7 +10535,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveBoost: {spd: 2},
+		zMove: {boost: {spd: 2}},
 		contestType: "Beautiful",
 	},
 	magicpowder: {
@@ -10593,7 +10593,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Psychic",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	magikarpsrevenge: {
@@ -10700,7 +10700,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Electric",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	magnetrise: {
@@ -10732,7 +10732,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Electric",
-		zMoveBoost: {evasion: 1},
+		zMove: {boost: {evasion: 1}},
 		contestType: "Clever",
 	},
 	magnitude: {
@@ -10778,8 +10778,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Ground",
-		zMovePower: 140,
-		gmaxPower: 140,
+		zMove: {basePower: 140},
+		maxMove: {basePower: 140},
 		contestType: "Tough",
 	},
 	maliciousmoonsault: {
@@ -10846,7 +10846,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Fighting",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cool",
 	},
 	maxairstream: {
@@ -11339,7 +11339,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Beautiful",
 	},
 	meditate: {
@@ -11360,7 +11360,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Beautiful",
 	},
 	mefirst: {
@@ -11400,7 +11400,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Normal",
-		zMoveBoost: {spe: 2},
+		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
 	megadrain: {
@@ -11418,7 +11418,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMovePower: 120,
+		zMove: {basePower: 120},
 		contestType: "Clever",
 	},
 	megahorn: {
@@ -11487,7 +11487,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveEffect: 'healreplacement',
+		zMove: {effect: 'healreplacement'},
 		contestType: "Tough",
 	},
 	menacingmoonrazemaelstrom: {
@@ -11596,7 +11596,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	meteorassault: {
@@ -11697,7 +11697,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	mimic: {
@@ -11736,7 +11736,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {accuracy: 1},
+		zMove: {boost: {accuracy: 1}},
 		contestType: "Cute",
 	},
 	mindblown: {
@@ -11784,7 +11784,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	minimize: {
@@ -11825,7 +11825,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	miracleeye: {
@@ -11861,7 +11861,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	mirrorcoat: {
@@ -11933,7 +11933,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
-		zMoveBoost: {atk: 2},
+		zMove: {boost: {atk: 2}},
 		contestType: "Clever",
 	},
 	mirrorshot: {
@@ -12000,7 +12000,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Ice",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Beautiful",
 	},
 	mistball: {
@@ -12082,7 +12082,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Fairy",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Beautiful",
 	},
 	moonblast: {
@@ -12156,7 +12156,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Fairy",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	morningsun: {
@@ -12190,7 +12190,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	mudbomb: {
@@ -12290,7 +12290,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Ground",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
 	muddywater: {
@@ -12333,7 +12333,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 185,
+		zMove: {basePower: 185},
 		contestType: "Tough",
 	},
 	mysticalfire: {
@@ -12375,7 +12375,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Dark",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	naturalgift: {
@@ -12409,8 +12409,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Clever",
 	},
 	naturepower: {
@@ -12551,7 +12551,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	nightshade: {
@@ -12608,7 +12608,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
 	noretreat: {
@@ -12737,7 +12737,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					this.boost({def: -2}, source, target, this.dex.getActiveMove("Obstruct"));
 				}
 			},
@@ -12841,7 +12841,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
 	ominouswind: {
@@ -12976,7 +12976,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	paleowave: {
@@ -13041,7 +13041,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveEffect: 'healreplacement',
+		zMove: {effect: 'healreplacement'},
 		contestType: "Cool",
 	},
 	payback: {
@@ -13148,7 +13148,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	petalblizzard: {
@@ -13281,8 +13281,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMovePower: 140,
-		gmaxPower: 130,
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
 	plasmafists: {
@@ -13320,7 +13320,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
 	playrough: {
@@ -13406,7 +13406,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Poison",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	poisonjab: {
@@ -13444,7 +13444,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	poisonsting: {
@@ -13557,7 +13557,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMoveBoost: {spd: 2},
+		zMove: {boost: {spd: 2}},
 		contestType: "Clever",
 	},
 	powdersnow: {
@@ -13618,7 +13618,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	powerswap: {
@@ -13650,7 +13650,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	powertrick: {
@@ -13693,7 +13693,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
 	powertrip: {
@@ -13713,8 +13713,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Clever",
 	},
 	poweruppunch: {
@@ -13870,7 +13870,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	psybeam: {
@@ -13922,7 +13922,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Clever",
 	},
 	psychic: {
@@ -14031,7 +14031,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Psychic",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	psychoboost: {
@@ -14098,7 +14098,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spa: 2},
+		zMove: {boost: {spa: 2}},
 		contestType: "Clever",
 	},
 	psyshock: {
@@ -14195,8 +14195,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
 	purify: {
@@ -14217,7 +14217,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Beautiful",
 	},
 	pursuit: {
@@ -14331,7 +14331,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	quickattack: {
@@ -14397,7 +14397,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Fighting",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cool",
 	},
 	quiverdance: {
@@ -14420,7 +14420,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Bug",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	rage: {
@@ -14493,7 +14493,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Bug",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	raindance: {
@@ -14511,7 +14511,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Water",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
 	rapidspin: {
@@ -14650,7 +14650,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	recycle: {
@@ -14674,7 +14674,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {spe: 2},
+		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
 	reflect: {
@@ -14718,7 +14718,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Psychic",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	reflecttype: {
@@ -14750,7 +14750,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	refresh: {
@@ -14773,7 +14773,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Cute",
 	},
 	relicsong: {
@@ -14838,7 +14838,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	retaliate: {
@@ -14882,8 +14882,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
 	revelationdance: {
@@ -14968,7 +14968,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 160,
+		zMove: {basePower: 160},
 		contestType: "Cool",
 	},
 	roar: {
@@ -14987,7 +14987,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cool",
 	},
 	roaroftime: {
@@ -15026,8 +15026,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Rock",
-		zMovePower: 140,
-		gmaxPower: 130,
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
 		contestType: "Tough",
 	},
 	rockclimb: {
@@ -15068,7 +15068,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Rock",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
 	rockslide: {
@@ -15202,7 +15202,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
 	rollingkick: {
@@ -15303,7 +15303,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Flying",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	rototiller: {
@@ -15340,7 +15340,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Ground",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Tough",
 	},
 	round: {
@@ -15470,7 +15470,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Normal",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
 	sandattack: {
@@ -15490,7 +15490,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ground",
-		zMoveBoost: {evasion: 1},
+		zMove: {boost: {evasion: 1}},
 		contestType: "Cute",
 	},
 	sandstorm: {
@@ -15508,7 +15508,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Rock",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
 	sandtomb: {
@@ -15605,7 +15605,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
 	scratch: {
@@ -15640,7 +15640,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
 	searingshot: {
@@ -15805,7 +15805,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		gmaxPower: 75,
+		maxMove: {basePower: 75},
 		contestType: "Tough",
 	},
 	selfdestruct: {
@@ -15996,7 +15996,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Cute",
 	},
 	shatteredpsyche: {
@@ -16031,8 +16031,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		ohko: 'Ice',
 		target: "normal",
 		type: "Ice",
-		zMovePower: 180,
-		gmaxPower: 130,
+		zMove: {basePower: 180},
+		maxMove: {basePower: 130},
 		contestType: "Beautiful",
 	},
 	shellsmash: {
@@ -16057,7 +16057,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
 	shelltrap: {
@@ -16120,7 +16120,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Steel",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	shockwave: {
@@ -16160,7 +16160,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Ground",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	signalbeam: {
@@ -16242,7 +16242,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
 	sing: {
@@ -16259,7 +16259,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
 	sinisterarrowraid: {
@@ -16337,7 +16337,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Clever",
 	},
 	skillswap: {
@@ -16383,7 +16383,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	skullbash: {
@@ -16587,7 +16587,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	slam: {
@@ -16637,7 +16637,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	sleeptalk: {
@@ -16680,7 +16680,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'crit2',
+		zMove: {effect: 'crit2'},
 		contestType: "Cute",
 	},
 	sludge: {
@@ -16865,7 +16865,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {evasion: 1},
+		zMove: {boost: {evasion: 1}},
 		contestType: "Clever",
 	},
 	snaptrap: {
@@ -16939,7 +16939,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pressureTarget: "foeSide",
 		target: "self",
 		type: "Dark",
-		zMoveBoost: {spe: 2},
+		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
 	snipeshot: {
@@ -17005,7 +17005,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
 	softboiled: {
@@ -17024,7 +17024,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	solarbeam: {
@@ -17267,7 +17267,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	spiderweb: {
@@ -17288,7 +17288,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Bug",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	spikecannon: {
@@ -17307,7 +17307,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		gmaxPower: 120,
+		maxMove: {basePower: 120},
 		contestType: "Cool",
 	},
 	spikes: {
@@ -17344,7 +17344,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "foeSide",
 		type: "Ground",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	spikyshield: {
@@ -17396,7 +17396,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					this.damage(source.baseMaxhp / 8, source, target);
 				}
 			},
@@ -17404,7 +17404,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Grass",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
 	spiritbreak: {
@@ -17501,7 +17501,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Tough",
 	},
 	splash: {
@@ -17520,7 +17520,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {atk: 3},
+		zMove: {boost: {atk: 3}},
 		contestType: "Cute",
 	},
 	splinteredstormshards: {
@@ -17581,7 +17581,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	spotlight: {
@@ -17615,7 +17615,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
 	stealthrock: {
@@ -17645,7 +17645,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "foeSide",
 		type: "Rock",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cool",
 	},
 	steameruption: {
@@ -17762,7 +17762,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "foeSide",
 		type: "Bug",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
 	stockpile: {
@@ -17818,7 +17818,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Tough",
 	},
 	stokedsparksurfer: {
@@ -17917,8 +17917,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Clever",
 	},
 	stormthrow: {
@@ -17994,7 +17994,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
 	stringshot: {
@@ -18014,7 +18014,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Bug",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	struggle: {
@@ -18099,7 +18099,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	submission: {
@@ -18196,7 +18196,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	subzeroslammer: {
@@ -18257,7 +18257,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Fire",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Beautiful",
 	},
 	sunsteelstrike: {
@@ -18334,7 +18334,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	supersonicskystrike: {
@@ -18389,7 +18389,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Cute",
 	},
 	swallow: {
@@ -18415,7 +18415,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
 	sweetkiss: {
@@ -18432,7 +18432,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
 	sweetscent: {
@@ -18452,7 +18452,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Normal",
-		zMoveBoost: {accuracy: 1},
+		zMove: {boost: {accuracy: 1}},
 		contestType: "Cute",
 	},
 	swift: {
@@ -18519,7 +18519,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveBoost: {spe: 2},
+		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
 	swordsdance: {
@@ -18540,7 +18540,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	synchronoise: {
@@ -18594,7 +18594,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Grass",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
 	},
 	tackle: {
@@ -18631,7 +18631,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Bug",
-		zMoveEffect: 'clearnegativeboost',
+		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
 	},
 	tailslap: {
@@ -18650,8 +18650,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 140,
-		gmaxPower: 130,
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
 		contestType: "Cute",
 	},
 	tailwhip: {
@@ -18671,7 +18671,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Normal",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Cute",
 	},
 	tailwind: {
@@ -18711,7 +18711,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Flying",
-		zMoveEffect: 'crit2',
+		zMove: {effect: 'crit2'},
 		contestType: "Cool",
 	},
 	takedown: {
@@ -18804,7 +18804,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
 	tearfullook: {
@@ -18825,7 +18825,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
 	teatime: {
@@ -18913,7 +18913,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacent",
 		type: "Normal",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Cute",
 	},
 	telekinesis: {
@@ -18961,7 +18961,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spa: 1},
+		zMove: {boost: {spa: 1}},
 		contestType: "Clever",
 	},
 	teleport: {
@@ -18980,7 +18980,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Psychic",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Cool",
 	},
 	thief: {
@@ -19041,7 +19041,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Ground",
-		zMovePower: 180,
+		zMove: {basePower: 180},
 		contestType: "Beautiful",
 	},
 	thousandwaves: {
@@ -19267,7 +19267,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Electric",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Cool",
 	},
 	tickle: {
@@ -19288,7 +19288,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
 	topsyturvy: {
@@ -19316,7 +19316,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Clever",
 	},
 	torment: {
@@ -19350,7 +19350,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Dark",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
 	toxic: {
@@ -19370,7 +19370,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	toxicspikes: {
@@ -19414,7 +19414,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "foeSide",
 		type: "Poison",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	toxicthread: {
@@ -19436,7 +19436,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Tough",
 	},
 	transform: {
@@ -19458,7 +19458,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 		contestType: "Clever",
 	},
 	triattack: {
@@ -19538,7 +19538,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
-		zMoveBoost: {spe: 2},
+		zMove: {boost: {spe: 2}},
 		contestType: "Clever",
 	},
 	trickortreat: {
@@ -19568,7 +19568,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-		zMoveBoost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1},
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
 	},
 	trickroom: {
@@ -19607,7 +19607,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Psychic",
-		zMoveBoost: {accuracy: 1},
+		zMove: {boost: {accuracy: 1}},
 		contestType: "Clever",
 	},
 	triplekick: {
@@ -19629,8 +19629,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 120,
-		gmaxPower: 80,
+		zMove: {basePower: 120},
+		maxMove: {basePower: 80},
 		contestType: "Cool",
 	},
 	tropkick: {
@@ -19687,8 +19687,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
 	twineedle: {
@@ -19710,7 +19710,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		},
 		target: "normal",
 		type: "Bug",
-		gmaxPower: 100,
+		maxMove: {basePower: 100},
 		contestType: "Cool",
 	},
 	twinkletackle: {
@@ -19858,7 +19858,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMovePower: 220,
+		zMove: {basePower: 220},
 		contestType: "Cool",
 	},
 	veeveevolley: {
@@ -19902,7 +19902,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Poison",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
 	venoshock: {
@@ -20216,7 +20216,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Water",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
 	waterspout: {
@@ -20289,8 +20289,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 160,
-		gmaxPower: 130,
+		zMove: {basePower: 160},
+		maxMove: {basePower: 130},
 		contestType: "Beautiful",
 	},
 	whirlpool: {
@@ -20326,7 +20326,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	wideguard: {
@@ -20376,7 +20376,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Rock",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
 	wildcharge: {
@@ -20413,7 +20413,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Beautiful",
 	},
 	wingattack: {
@@ -20460,7 +20460,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
 	withdraw: {
@@ -20480,7 +20480,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Water",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
 	wonderroom: {
@@ -20519,7 +20519,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Psychic",
-		zMoveBoost: {spd: 1},
+		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
 	},
 	woodhammer: {
@@ -20558,7 +20558,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		zMoveBoost: {atk: 1},
+		zMove: {boost: {atk: 1}},
 		contestType: "Tough",
 	},
 	worryseed: {
@@ -20594,7 +20594,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Clever",
 	},
 	wrap: {
@@ -20632,8 +20632,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMovePower: 190,
-		gmaxPower: 140,
+		zMove: {basePower: 190},
+		maxMove: {basePower: 140},
 		contestType: "Tough",
 	},
 	xscissor: {
@@ -20684,7 +20684,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveBoost: {spe: 1},
+		zMove: {boost: {spe: 1}},
 		contestType: "Cute",
 	},
 	zapcannon: {
