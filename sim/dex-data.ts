@@ -912,7 +912,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (this.category !== 'Status' && !this.maxMove && this.id !== 'struggle') {
-			this.maxMove = {} as {basePower: number};
+			this.maxMove = {basePower: 1};
 			if (this.isMax || this.isZ) {
 				this.maxMove.basePower = 1;
 			} else if (!this.basePower) {
