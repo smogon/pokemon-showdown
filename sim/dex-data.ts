@@ -951,7 +951,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 				}
 			}
 		}
-		if (this.category !== 'Status' && !this.zMove && !this.isZ && !this.isMax) {
+		if (this.category !== 'Status' && !this.zMove && !this.isZ && !this.isMax && this.id !== 'struggle') {
 			let basePower = this.basePower;
 			this.zMove = {};
 			if (Array.isArray(this.multihit)) basePower *= 3;
