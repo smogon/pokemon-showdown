@@ -279,7 +279,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	clefable: {
 		randomBattleMoves: ["calmmind", "fireblast", "moonblast", "softboiled", "stealthrock", "thunderwave"],
-		randomDoubleBattleMoves: ["fireblast", "followme", "healpulse", "helpinghand", "moonblast", "protect", "thunderbolt", "thunderwave"],
+		randomDoubleBattleMoves: ["fireblast", "followme", "healpulse", "helpinghand", "moonblast", "protect", "thunderwave"],
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
