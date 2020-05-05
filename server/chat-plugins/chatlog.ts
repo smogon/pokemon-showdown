@@ -479,7 +479,7 @@ const LogSearcher = new class {
 		return this.render(matches, roomid, search, cap);
 	}
 
-	render(results: string[], roomid: RoomID, search: string, cap?: number) {
+render(results: string[], roomid: RoomID, search: string, cap?: number) {
 		const dates: string[] = [];
 		let count = 0;
 		let curDate = '';
@@ -494,7 +494,7 @@ const LogSearcher = new class {
 				if (curDate !== date) {
 					curDate = date;
 					if (!(curDate in dates)) dates.push(curDate);
-					date = `</details><details><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
+					date = `</div></details><details><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
 					rendered = `${date} ${rendered}`;
 				} else {
 					date = '';
@@ -511,13 +511,13 @@ const LogSearcher = new class {
 			}).filter(item => item).join(' ');
 			return section;
 		});
-		let buf = `<div class="pad"><p><strong>Results on ${roomid} for ${search}:</strong>`;
+		let buf = `<h3><div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
 		let total = 0;
 		for (const match of results.join(' ').split(' ')) {
 			if (new RegExp(search, "i").test(match)) total++;
 		}
 		buf += ` ${total}`;
-		buf += cap ? ` (capped at ${cap})<hr>` : `<hr>`;
+		buf += cap ? ` (capped at ${cap})<hr></div><blockquote>` : `<hr></div><blockquote>`;
 		buf += sorted.filter(item => item).join('<hr>');
 		if (cap && cap !== Infinity) {
 			buf += `<hr><strong>Capped at ${cap}.</strong><br>`;
@@ -526,6 +526,7 @@ const LogSearcher = new class {
 		}
 		return buf;
 	}
+
 };
 
 const accessLog = FS(`logs/chatlog-access.txt`).createAppendStream();
