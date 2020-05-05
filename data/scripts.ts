@@ -1136,7 +1136,7 @@ export const BattleScripts: BattleScriptsData = {
 			if (move.name === item.zMoveFrom) {
 				// @ts-ignore
 				const zMove = this.dex.getActiveMove(item.zMove);
-				zMove.isZPowered = true;
+				zMove.isZOrMaxPowered = true;
 				return zMove;
 			}
 		}
@@ -1144,7 +1144,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.category === 'Status') {
 			const zMove = this.dex.getActiveMove(move);
 			zMove.isZ = true;
-			zMove.isZPowered = true;
+			zMove.isZOrMaxPowered = true;
 			return zMove;
 		}
 		const zMove = this.dex.getActiveMove(this.zMoveTable[move.type]);
@@ -1152,7 +1152,7 @@ export const BattleScripts: BattleScriptsData = {
 		zMove.category = move.category;
 		// copy the priority for Quick Guard
 		zMove.priority = move.priority;
-		zMove.isZPowered = true;
+		zMove.isZOrMaxPowered = true;
 		return zMove;
 	},
 
@@ -1262,7 +1262,7 @@ export const BattleScripts: BattleScriptsData = {
 			maxMove.category = move.category;
 		}
 		maxMove.baseMove = move.id;
-		maxMove.isMaxPowered = true;
+		maxMove.isZOrMaxPowered = true;
 		return maxMove;
 	},
 

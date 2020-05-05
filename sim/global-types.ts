@@ -1077,16 +1077,10 @@ interface ActiveMove extends BasicEffect, MoveData {
 	infiltrates?: boolean;
 
 	/**
-	 * Has this move been boosted by a Z-crystal? Usually the same as
-	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
-	 * truthy.
+	 * Has this move been boosted by a Z-crystal or used by a Dynamax Pokemon? Usually the same as
+	 * `isZ` or `isMax`, but hacked moves will have this be `false` and `isZ` / `isMax` be truthy.
 	 */
-	isZPowered?: boolean;
-	/**
-	 * Same idea has `isZPowered`. Hacked Max moves will have this be
-	 * `false` and `isMax` be truthy.
-	 */
-	isMaxPowered?: boolean;
+	isZOrMaxPowered?: boolean;
 }
 
 interface SpeciesAbility {

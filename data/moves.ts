@@ -1031,7 +1031,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					source.trySetStatus('psn', target);
 				}
 			},
@@ -2697,7 +2697,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			let move: Move | ActiveMove | null = this.lastMove;
 			if (!move) return;
 
-			if ((move as ActiveMove).isMaxPowered) move = this.dex.getMove(move.baseMove);
+			if ((move as ActiveMove).isZOrMaxPowered) move = this.dex.getMove(move.baseMove);
 			if (noCopycat.includes(move.id) || move.isZ || move.isMax) {
 				return false;
 			}
@@ -4550,7 +4550,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				let move: Move | ActiveMove | null = target.lastMove;
 				if (!move || target.volatiles['dynamax']) return false;
 
-				if ((move as ActiveMove).isMaxPowered) move = this.dex.getMove(move.baseMove);
+				if ((move as ActiveMove).isZOrMaxPowered) move = this.dex.getMove(move.baseMove);
 				const moveIndex = target.moves.indexOf(move.id);
 				if (move.isZ || noEncore.includes(move.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
@@ -9743,7 +9743,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					this.boost({atk: -1}, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 			},
@@ -12737,7 +12737,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					this.boost({def: -2}, source, target, this.dex.getActiveMove("Obstruct"));
 				}
 			},
@@ -17396,7 +17396,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					this.damage(source.baseMaxhp / 8, source, target);
 				}
 			},
