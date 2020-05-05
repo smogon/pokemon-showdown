@@ -126,7 +126,7 @@ export class Pokemon {
 	newlySwitched: boolean;
 	beingCalledBack: boolean;
 
-	lastMove: Move | null;
+	lastMove: ActiveMove | null;
 	lastMoveTargetLoc?: number;
 	moveThisTurn: string | boolean;
 	/**
@@ -744,7 +744,7 @@ export class Pokemon {
 		return amount;
 	}
 
-	moveUsed(move: Move, targetLoc?: number) {
+	moveUsed(move: ActiveMove, targetLoc?: number) {
 		this.lastMove = move;
 		this.lastMoveTargetLoc = targetLoc;
 		this.moveThisTurn = move.id;

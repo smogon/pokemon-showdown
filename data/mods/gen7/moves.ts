@@ -616,7 +616,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 			},

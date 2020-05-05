@@ -1247,7 +1247,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			pokemon.abilityData.choiceLock = "";
 		},
 		onBeforeMove(pokemon, target, move) {
-			if (move.isZPowered || move.maxPowered || move.id === 'struggle') return;
+			if (move.isZOrMaxPowered || move.id === 'struggle') return;
 			if (pokemon.abilityData.choiceLock && pokemon.abilityData.choiceLock !== move.id) {
 				// Fails unless ability is being ignored (these events will not run), no PP lost.
 				this.addMove('move', pokemon, move.name);
@@ -1258,7 +1258,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			if (pokemon.abilityData.choiceLock || move.isZPowered || move.maxPowered || move.id === 'struggle') return;
+			if (pokemon.abilityData.choiceLock || move.isZOrMaxPowered || move.id === 'struggle') return;
 			pokemon.abilityData.choiceLock = move.id;
 		},
 		onModifyAtkPriority: 1,
