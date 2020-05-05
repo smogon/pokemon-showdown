@@ -962,7 +962,7 @@ export class RandomTeams {
 					(movePool.includes('quiverdance') || movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb)
 				)) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && !move.sideCondition && !move.stallingMove && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
+					if (!isSetup && !move.weather && !move.sideCondition && !move.stallingMove && !move.damage && (move.category !== 'Status' || (!move.flags.heal && !isDoubles))) {
 						if (move.category === 'Status' || move.selfSwitch || !hasType[move.type] || move.basePower && move.basePower < 50 && !move.multihit) {
 							rejected = true;
 						}
@@ -1144,7 +1144,7 @@ export class RandomTeams {
 			ability = ability0.name;
 		}
 
-		item = !isDoubles ? 'Leftovers' : 'Sitrus Berry';
+		item = (!isDoubles || (isDoubles && ability === 'Moody' && hasMove['protect'])) ? 'Leftovers' : 'Sitrus Berry';
 		if (species.requiredItems) {
 			item = this.sample(species.requiredItems);
 
@@ -1292,12 +1292,12 @@ export class RandomTeams {
 			level = levelScale[tier] || (species.nfe ? 90 : 80);
 			if (customScale[species.name]) level = customScale[species.name];
 		} else {
-			// We choose level based on BST. Min level is 66, max level is 99. 680+ BST is 66, 330 or lower is 99. Calculate with those values.
-			// Every 10.3 BST adds a level from 66 up to 99. Results are floored.
+			// We choose level based on BST. Min level is 70, max level is 100. 640+ BST is 70, 330 or lower is 100. Calculate with those values.
+			// Every 10.3 BST adds a level from 70 up to 100. Results are floored.
 			const baseStats = species.baseStats;
 
 			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
-			// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite
+			// Adjust levels of mons based on abilities (Pure Power, Slow Start, etc.) and also Eviolite and Light Ball
 			// For the stat boosted, treat the Pokemon's base stat as if it were multiplied by the boost. (Actual effective base stats are higher.)
 			const speciesAbility = (baseSpecies === species ? ability : species.abilities[0]);
 			if (speciesAbility === 'Huge Power' || speciesAbility === 'Pure Power') {
@@ -1309,8 +1309,10 @@ export class RandomTeams {
 				bst += baseStats.atk + baseStats.spa;
 			} else if (speciesAbility === 'Slow Start') {
 				bst -= 0.5 * (baseStats.atk + baseStats.spe);
+			} else if (ability === 'Gorilla Tactics') {
+				bst += 0.5 * (baseStats.atk);
 			}
-			level = 66 + Math.floor(((680 - this.dex.clampIntRange(bst, 330, 680)) / 10.3));
+			level = 70 + Math.floor(((640 - this.dex.clampIntRange(bst, 330, 640)) / 10.3));
 		}
 
 		// Prepare optimal HP
