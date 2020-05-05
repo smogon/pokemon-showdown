@@ -4516,7 +4516,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			}
 			let randomMove: string;
 			if (moves.length) {
-				randomMove = this.sample(moves).id;
+				randomMove = this.sample(moves).name;
 			} else {
 				return false;
 			}
