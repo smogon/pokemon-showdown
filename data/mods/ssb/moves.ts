@@ -2096,7 +2096,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => (a.num || 0) - (b.num || 0));
-				randomMove = this.sample(moves).id;
+				randomMove = this.sample(moves).name;
 			}
 			if (!randomMove) {
 				return false;
