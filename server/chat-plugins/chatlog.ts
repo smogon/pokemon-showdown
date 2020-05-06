@@ -511,7 +511,7 @@ const LogSearcher = new class {
 			}).filter(item => item).join(' ');
 			return section;
 		});
-		let buf = `<h3><div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
+		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
 		let total = 0;
 		for (const match of results.join(' ').split(' ')) {
 			if (new RegExp(search, "i").test(match)) total++;
@@ -520,7 +520,7 @@ const LogSearcher = new class {
 		buf += cap ? ` (capped at ${cap})<hr></div><blockquote>` : `<hr></div><blockquote>`;
 		buf += sorted.filter(item => item).join('<hr>');
 		if (cap && cap !== Infinity) {
-			buf += `<hr><strong>Capped at ${cap}.</strong><br>`;
+			buf += `</details></blockquote><div class="pad"><hr><strong>Capped at ${cap}.</strong><br>`;
 			buf += `<button class="button" name="send" value="/sl ${search},${roomid},${Number(cap) + 200}">View 200 more<br />&#x25bc;</button>`;
 			buf += `<button class="button" name="send" value="/sl ${search},${roomid},all">View all<br />&#x25bc;</button></div>`;
 		}
