@@ -898,13 +898,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	kipkluif: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Kipkluif|I like bacon.`);
+			this.add(`c|%Kipkluif|I like bacon.`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Kipkluif|Run away da, run run away da`);
+			this.add(`c|%Kipkluif|Run away da, run run away da`);
 		},
 		onFaint() {
-			this.add(`c|+Kipkluif|Aah! Well, at least I have chicken.`);
+			this.add(`c|%Kipkluif|Aah! Well, at least I have chicken.`);
 		},
 		// Footballer innate
 		onBasePowerPriority: 8,
@@ -1238,6 +1238,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|~pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
 		},
 	},
+	psynergy: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Psynergy|oh`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Psynergy|Joe doesn't pay me enough for this`);
+		},
+		onFaint() {
+			this.add(`c|%Psynergy|I'm going to be late...`);
+		},
+	},
 	ptoad: {
 		noCopy: true,
 		onStart() {
@@ -1248,18 +1260,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint() {
 			this.add(`c|%ptoad⚬|Wow. Way to rain on my parade.`);
-		},
-	},
-	psynergy: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Psynergy|oh`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Psynergy|Joe doesn't pay me enough for this`);
-		},
-		onFaint() {
-			this.add(`c|+Psynergy|I'm going to be late...`);
 		},
 	},
 	quitequiet: {
