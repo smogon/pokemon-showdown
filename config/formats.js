@@ -407,6 +407,11 @@ const Formats = [
 			'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base',
 			'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nationaldex') {
+				this.add('html', `<div class="broadcast-red"><strong>National Dex is currently suspecting Mega Metagross! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3663780/">suspect thread</a>.</strong></div>`);
+			}
+		},
 	},
 	{
 		name: "[Gen 8] National Dex AG",
