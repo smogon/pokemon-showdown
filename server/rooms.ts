@@ -60,7 +60,7 @@ export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').Poll;
 type Announcement = import('./chat-plugins/announcements').Announcement;
 type Tournament = import('./tournaments/index').Tournament;
-type RoomCategory = 'language' | 'competitive' | 'casual' | 'other';
+type RoomCategory = 'activity' | 'casual' | 'competitive' | 'language' | 'social';
 
 export abstract class BasicRoom {
 	readonly type: 'chat' | 'battle' | 'global';
@@ -726,10 +726,11 @@ export class GlobalRoom extends BasicRoom {
 			official: [],
 			pspl: [],
 			chat: {
+				activity: [],
 				casual: [],
 				competitive: [],
 				language: [],
-				other: [],
+				social: [],
 			},
 			userCount: this.userCount,
 			battleCount: this.battleCount,
@@ -753,14 +754,16 @@ export class GlobalRoom extends BasicRoom {
 			} else if (room.pspl) {
 				roomsData.pspl.push(roomData);
 			} else {
-				if (room.category === 'casual') {
+				if (room.category === 'activity') {
+					roomsData.chat.activity.push(roomData);
+				} else if (room.category === 'casual') {
 					roomsData.chat.casual.push(roomData);
 				} else if (room.category === 'competitive') {
 					roomsData.chat.competitive.push(roomData);
 				} else if (room.category === 'language') {
 					roomsData.chat.language.push(roomData);
 				} else {
-					roomsData.chat.other.push(roomData);
+					roomsData.chat.social.push(roomData);
 				}
 			}
 		}
@@ -1304,7 +1307,7 @@ export class BasicChatRoom extends BasicRoom {
 		);
 	}
 	sanitizeRoomCategory(category: string) {
-		if (!['casual', 'competitive', 'language', 'other'].includes(toID(category))) {
+		if (!['activity', 'casual', 'competitive', 'language', 'social'].includes(toID(category))) {
 			return false;
 		}
 		return toID(category) as RoomCategory;

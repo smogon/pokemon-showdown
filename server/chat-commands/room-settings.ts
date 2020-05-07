@@ -1093,13 +1093,13 @@ export const commands: ChatCommands = {
 	roomcategory(target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			this.sendReplyBox(Chat.html`This is a ${room.category !== 'other' ? `${room.category} ` : ``}room.`);
+			this.sendReplyBox(Chat.html`This is a ${room.category} room.`);
 			return;
 		}
 		if (!this.can('editprivacy')) return false;
 		const category = room.sanitizeRoomCategory(target);
 		if (!category) {
-			return this.errorReply(`Error: Room categories must be casual, competitive, language, or other.`);
+			return this.errorReply(`Error: Room categories must be activity, casual, competitive, language, or social.`);
 		}
 		room.category = category;
 		this.sendReply(`(The room category is now: ${category})`);
