@@ -151,7 +151,6 @@ Owner
 Staff
 
 - Andrew Werner [HoeenHero] - Development
-- Astrid Halberkamp [Asheviere, bumbadadabum] - Development
 - Chris Monsanto [chaos] - Sysadmin
 - Kirk Scheibelhut [pre] - Development, Sysadmin
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
@@ -159,6 +158,7 @@ Staff
 
 Retired Staff
 
+- Astrid Halberkamp [Asheviere, bumbadadabum] - Development
 - Bill Meltsner [bmelts] - Development, Sysadmin
 - Cathy J. Fitzpatrick [cathyjf] - Development, Sysadmin
 - Hugh Gordon [V4] - Research (game mechanics), Development
