@@ -1072,6 +1072,7 @@ class MafiaTracker extends Rooms.RoomGame {
 					memo: [`You were added to the game after it had started. To learn about your role, PM the host (${this.host}).`],
 				};
 				this.roles.push(player.role);
+				this.played.push(targetUser.id);
 			} else {
 				this.originalRoles = [];
 				this.originalRoleString = '';
@@ -1079,7 +1080,6 @@ class MafiaTracker extends Rooms.RoomGame {
 				this.roleString = '';
 			}
 			if (this.subs.includes(targetUser.id)) this.subs.splice(this.subs.indexOf(targetUser.id), 1);
-			this.played.push(targetUser.id);
 			this.playerTable[targetUser.id] = player;
 			this.sendDeclare(Chat.html`${targetUser.name} has been added to the game by ${user.name}!`);
 		}
@@ -2516,9 +2516,10 @@ export const commands: ChatCommands = {
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
 			if (!toID(args.join(''))) return this.parse('/help mafia revive');
-			const didSomething = !args.every(targetUser => (
-				!game.revive(user, toID(targetUser), cmd === 'forceadd')
-			));
+			let didSomething = false;
+			for (const targetUsername of args) {
+				if (game.revive(user, toID(targetUsername), cmd === 'forceadd')) didSomething = true;
+			}
 			if (didSomething) game.logAction(user, `added players`);
 		},
 		revivehelp: [
