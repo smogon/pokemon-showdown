@@ -424,25 +424,16 @@ const Formats = [
 		mod: 'gen8',
 		ruleset: ['Standard NatDex'],
 	},
-{
-   "name":"[Gen 8] National Dex Monotype",
-   "threads":[
-      "`&bullet; <a href=\"https://www.smogon.com/forums/threads/monotype-om-mega-thread.3660464/#post-8376523\">National Dex Monotype</a>`"
-   ],
-   "mod":"gen8",
-   "ruleset":[
-      "Standard NatDex",
-      "Same Type Clause"
-   ],
-   "banlist":[
-
-   ],
-   "unbanlist":[
-      "Kyurem-Black",
-      "Deoxys-Speed",
-      "Landorus"
-   ]
-},
+	{
+		"name": "[Gen 8] National Dex Monotype",
+		"threads": [
+			"`&bullet; <a href=\"https://www.smogon.com/forums/threads/monotype-om-mega-thread.3660464/#post-8376523\">National Dex Monotype</a>`",
+		],
+		"mod":"gen8",
+		"ruleset": ["Standard NatDex", "Same Type Clause"],
+		"banlist": [],
+		"unbanlist":["Kyurem-Black", "Deoxys-Speed", "Landorus"],
+	},
 	// OM of the Month
 	///////////////////////////////////////////////////////////////////
 
