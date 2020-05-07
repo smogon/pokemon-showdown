@@ -11,7 +11,7 @@ import * as http from 'http';
 import * as url from 'url';
 
 
-const avatarManager = new class {
+export const avatarManager = new class {
 	dir: string;
 	constructor() {
 		this.dir = 'config/avatars/';
@@ -23,17 +23,21 @@ const avatarManager = new class {
 		};
 		const secure = toID(url.parse(image_url).protocol) === 'https';
 		return new Promise((resolve) => {
-			request(secure).get(image_url, (response: http.IncomingMessage) => {
-				if (response.statusCode !== 200 || response.headers['content-type']!.split('/')[0] !== 'image') {
-					return resolve(false);
-				}
-				// weird bug with FSPath that doesn't like this, so normal fs is required.
-				const stream = fs.createWriteStream(`${this.dir}${name}.png`);
-				response.pipe(stream);
-				stream.on('finish', () => {
-					resolve(true);
+			try {
+				request(secure).get(image_url, (response: http.IncomingMessage) => {
+					if (response.statusCode !== 200 || response.headers['content-type']!.split('/')[0] !== 'image') {
+						return resolve(false);
+					}
+					// weird bug with FSPath that doesn't like this, so normal fs is required.
+					const stream = fs.createWriteStream(`${this.dir}${name}.png`);
+					response.pipe(stream);
+					stream.on('finish', () => {
+						resolve(true);
+					});
 				});
-			});
+			} catch (error) {
+				return resolve(false);
+			}
 		});
 	}
 
@@ -42,7 +46,7 @@ const avatarManager = new class {
 		if (!avatar) return new Error(`Error in downloading image.`);
 		const ext = path.extname(image);
 		Config.customavatars[user] = user + ext;
-		return;
+		return true;
 	}
 
 	remove(user: string) {
@@ -80,7 +84,7 @@ export const commands: ChatCommands = {
 	ca: 'customavatar',
 	customavatar: {
 		set: 'add',
-		add(target, room, user, connection) {
+	 		async add(target, room, user, connection) {
 			if (!user.hasConsoleAccess(connection)) return false;
 			let [name, avatarUrl] = target.split(',');
 			const targetUser = Users.get(name);
@@ -92,10 +96,7 @@ export const commands: ChatCommands = {
 			if (!ext.includes('.png')) {
 				return this.errorReply("Image url must be a .png extension.");
 			}
-
-			try {
-				void avatarManager.add(avatarUrl, name);
-			} catch (e) {
+			if (!(await avatarManager.add(avatarUrl, name))) {
 				return this.errorReply(
 					`There was an error in downloading the image. Please try another link.`
 				);
