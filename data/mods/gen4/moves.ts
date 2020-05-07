@@ -1359,7 +1359,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	roleplay: {
 		inherit: true,
-		desc: "The user's Ability changes to match the target's Ability. Fails if the user's Ability is Multitype or already matches the target, or if the target's Ability is Multitype or Wonder Guard.",
+		desc: "The user's Ability changes to match the target's Ability. Fails if the user's Ability is Multitype or already matches the target, if the target's Ability is Multitype or Wonder Guard, or if the user is holding a Griseous Orb.",
+		onTryHit(target, source) {
+			if (target.ability === source.ability || source.hasItem('griseousorb')) return false;
+			const bannedTargetAbilities = ['multitype', 'wonderguard'];
+			if (bannedTargetAbilities.includes(target.ability) || source.ability === 'multitype') {
+				return false;
+			}
+		},
 	},
 	roost: {
 		inherit: true,
@@ -1418,11 +1425,11 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	skillswap: {
 		inherit: true,
-		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Multitype or Wonder Guard, or if both have the same Ability.",
+		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Multitype or Wonder Guard, if both have the same Ability, or if either is holding a Griseous Orb.",
 		onHit(target, source) {
 			const targetAbility = target.ability;
 			const sourceAbility = source.ability;
-			if (targetAbility === sourceAbility) {
+			if (targetAbility === sourceAbility || source.hasItem('griseousorb') || target.hasItem('griseousorb')) {
 				return false;
 			}
 			this.add('-activate', source, 'move: Skill Swap');
@@ -1817,10 +1824,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	worryseed: {
 		inherit: true,
-		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is Multitype or Truant.",
+		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is Multitype or Truant, or if the target is holding a Griseous Orb.",
 		onTryHit(pokemon) {
 			const bannedAbilities = ['multitype', 'truant'];
-			if (bannedAbilities.includes(pokemon.ability)) {
+			if (bannedAbilities.includes(pokemon.ability) || pokemon.hasItem('griseousorb')) {
 				return false;
 			}
 		},
