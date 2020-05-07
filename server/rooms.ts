@@ -720,7 +720,8 @@ export class GlobalRoom extends BasicRoom {
 	}
 	getRooms(user: User) {
 		const roomsData: {
-			official: ChatRoomTable[], pspl: ChatRoomTable[], chat: {[k in RoomCategory]: ChatRoomTable[]}, userCount: number, battleCount: number,
+			official: ChatRoomTable[], pspl: ChatRoomTable[], chat: {[k in RoomCategory]: ChatRoomTable[]},
+			userCount: number, battleCount: number,
 		} = {
 			official: [],
 			pspl: [],
