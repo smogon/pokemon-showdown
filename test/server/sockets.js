@@ -3,6 +3,7 @@
 const assert = require('assert').strict;
 const cluster = require('cluster');
 
+// These tests are failing due to syntax errors, not necessarily failing tests
 describe.skip('Sockets', function () {
 	const spawnWorker = () => (
 		new Promise(resolve => {
