@@ -1089,6 +1089,30 @@ export const commands: ChatCommands = {
 		`/parentroom - Displays the current room's parent room.`,
 	],
 
+	setroomcategory: 'roomcategory',
+	roomcategory(target, room, user) {
+		if (!target) {
+			if (!this.runBroadcast()) return;
+			this.sendReplyBox(Chat.html`This is a ${room.category !== 'other' ? `${room.category} ` : ``}room.`);
+			return;
+		}
+		if (!this.can('editprivacy')) return false;
+		const category = room.sanitizeRoomCategory(target);
+		if (!category) {
+			return this.errorReply(`Error: Room categories must be casual, competitive, language, or other.`);
+		}
+		room.category = category;
+		this.sendReply(`(The room category is now: ${category})`);
+
+		this.privateModAction(`(${user.name} changed the room category to: "${category}".)`);
+		this.modlog('ROOMCATEGORY', null, `to "${category}"`);
+
+		if (room.chatRoomData) {
+			room.chatRoomData.category = room.category;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
 	roomdesc(target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;

@@ -43,6 +43,7 @@ interface ChatRoomTable {
 	desc: string;
 	userCount: number;
 	subRooms?: string[];
+	category: RoomCategory;
 }
 
 interface BattleRoomTable {
@@ -59,6 +60,7 @@ export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').Poll;
 type Announcement = import('./chat-plugins/announcements').Announcement;
 type Tournament = import('./tournaments/index').Tournament;
+type RoomCategory = 'language' | 'competitive' | 'casual' | 'other';
 
 export abstract class BasicRoom {
 	readonly type: 'chat' | 'battle' | 'global';
@@ -113,6 +115,7 @@ export abstract class BasicRoom {
 	tourAnnouncements: boolean;
 	privacySetter: Set<ID> | null;
 	subRooms: Map<string, ChatRoom> | null;
+	category: RoomCategory;
 	gameNumber: number;
 	highTraffic: boolean;
 	constructor(roomid: RoomID, title?: string) {
@@ -173,6 +176,7 @@ export abstract class BasicRoom {
 		this.tourAnnouncements = false;
 		this.privacySetter = null;
 		this.subRooms = null;
+		this.category = 'casual';
 		this.gameNumber = 0;
 		this.highTraffic = false;
 	}
@@ -716,11 +720,16 @@ export class GlobalRoom extends BasicRoom {
 	}
 	getRooms(user: User) {
 		const roomsData: {
-			official: ChatRoomTable[], pspl: ChatRoomTable[], chat: ChatRoomTable[], userCount: number, battleCount: number,
+			official: ChatRoomTable[], pspl: ChatRoomTable[], chat: {[k in RoomCategory]: ChatRoomTable[]}, userCount: number, battleCount: number,
 		} = {
 			official: [],
 			pspl: [],
-			chat: [],
+			chat: {
+				casual: [],
+				competitive: [],
+				language: [],
+				other: [],
+			},
 			userCount: this.userCount,
 			battleCount: this.battleCount,
 		};
@@ -732,6 +741,7 @@ export class GlobalRoom extends BasicRoom {
 				title: room.title,
 				desc: room.desc,
 				userCount: room.userCount,
+				category: room.category,
 			};
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
@@ -742,7 +752,15 @@ export class GlobalRoom extends BasicRoom {
 			} else if (room.pspl) {
 				roomsData.pspl.push(roomData);
 			} else {
-				roomsData.chat.push(roomData);
+				if (room.category === 'casual') {
+					roomsData.chat.casual.push(roomData);
+				} else if (room.category === 'competitive') {
+					roomsData.chat.competitive.push(roomData);
+				} else if (room.category === 'language') {
+					roomsData.chat.language.push(roomData);
+				} else {
+					roomsData.chat.other.push(roomData);
+				}
 			}
 		}
 		return roomsData;
@@ -1283,6 +1301,12 @@ export class BasicChatRoom extends BasicRoom {
 		return [...this.subRooms.values()].filter(
 			room => !room.isPrivate || includeSecret
 		);
+	}
+	sanitizeRoomCategory(category: string) {
+		if (!['casual', 'competitive', 'language', 'other'].includes(toID(category))) {
+			return false;
+		}
+		return toID(category) as RoomCategory;
 	}
 	onConnect(user: User, connection: Connection) {
 		const userList = this.userList ? this.userList : this.getUserList();
