@@ -76,17 +76,12 @@ describe('Disguise', function () {
 	});
 
 	it.skip('should not trigger critical hits while active', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Mimikyu', ability: 'disguise', moves: ['counter']}]});
-		battle.setPlayer('p2', {team: [{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']}]});
-		let successfulEvent = false;
-		battle.onEvent('Damage', battle.format, function (damage, attacker, defender, move) {
-			if (move.id === 'frostbreath') {
-				successfulEvent = true;
-				assert.ok(!defender.getMoveHitData(move).crit);
-			}
-		});
+		battle = common.createBattle([[
+			{species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk']},
+		], [
+			{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']},
+		]]);
 		battle.makeChoices();
-		assert.ok(successfulEvent);
+		assert(battle.log.every(line => !line.startsWith('|-crit')));
 	});
 });

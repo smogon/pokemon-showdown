@@ -49,18 +49,32 @@ describe('Flash Fire', function () {
 	});
 });
 
-describe('Flash Fire [Gen 4]', function () {
+describe('Flash Fire [Gen 3-4]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
 
-	// TODO: Check if this is actually a behavior in Gen 3-4
-	it.skip('should grant Fire-type immunity even if the user is frozen', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk']}]});
-		battle.setPlayer('p2', {team: [{species: 'Charizard', ability: 'blaze', moves: ['flamethrower']}]});
-		const flashMon = battle.p1.active[0];
-		flashMon.setStatus('frz');
-		assert.false.hurts(flashMon, () => battle.makeChoices('move sleeptalk', 'move flamethrower'));
+	it('should activate and grant Fire-type immunity even if the user is frozen in Gen 3', function () {
+		battle = common.gen(3).createBattle([[
+			{species: 'Arcanine', ability: 'flashfire', moves: ['sleeptalk']},
+		], [
+			{species: 'Charizard', ability: 'blaze', moves: ['flamethrower']},
+		]]);
+		const flashFireMon = battle.p1.active[0];
+		flashFireMon.setStatus('frz');
+		battle.makeChoices();
+		assert(flashFireMon.hp !== flashFireMon.maxhp);
+	});
+
+	it('should activate and grant Fire-type immunity even if the user is frozen in Gen 4', function () {
+		battle = common.gen(4).createBattle([[
+			{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk']},
+		], [
+			{species: 'Charizard', ability: 'blaze', moves: ['flamethrower']},
+		]]);
+		const flashFireMon = battle.p1.active[0];
+		flashFireMon.setStatus('frz');
+		battle.makeChoices();
+		assert(flashFireMon.hp !== flashFireMon.maxhp);
 	});
 });

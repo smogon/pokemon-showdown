@@ -3,6 +3,7 @@
 const assert = require('./../assert');
 
 describe('Mod loader', function () {
+	// This fails due to relative path being wrong, not necessarily failing tests
 	it.skip('should work fine in any order', function () {
 		{
 			Chat.uncacheTree('./.sim-dist/dex');
