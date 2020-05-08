@@ -1615,13 +1615,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	xfix: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&xfix|destroy the world!`);
+			this.add(`c|+xfix|destroy the world!`);
 		},
 		onSwitchOut() {
-			this.add(`c|&xfix|brb i need to rethink my plan`);
+			this.add(`c|+xfix|brb i need to rethink my plan`);
 		},
 		onFaint() {
-			this.add(`c|&xfix|but the world refused`);
+			this.add(`c|+xfix|but the world refused`);
 		},
 	},
 	xjoelituh: {
