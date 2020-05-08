@@ -30,8 +30,7 @@ export const avatarManager = new class {
 					}
 					// weird bug with FSPath that doesn't like this, so normal fs is required.
 					const stream = fs.createWriteStream(`${this.dir}${name}.png`);
-					response.pipe(stream);
-					stream.on('finish', () => {
+					response.pipe(stream).on('finish', () => {
 						resolve(true);
 					});
 				});
