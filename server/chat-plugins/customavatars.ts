@@ -83,7 +83,7 @@ export const commands: ChatCommands = {
 	ca: 'customavatar',
 	customavatar: {
 		set: 'add',
-	 		async add(target, room, user, connection) {
+		async add(target, room, user, connection) {
 			if (!user.hasConsoleAccess(connection)) return false;
 			let [name, avatarUrl] = target.split(',');
 			const targetUser = Users.get(name);
