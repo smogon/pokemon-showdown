@@ -3,20 +3,19 @@
 const assert = require('./../assert');
 
 describe('Mod loader', function () {
-	// This fails due to relative path being wrong, not necessarily failing tests
-	it.skip('should work fine in any order', function () {
+	it('should work fine in any order', function () {
 		{
 			Chat.uncacheTree('./.sim-dist/dex');
-			const Dex = require('./../../../.sim-dist/dex').Dex;
-			assert.equal(Dex.mod('gen2').getSpecies('nidoking').learnset.bubblebeam.join(','), '1M');
+			const Dex = require('./../../.sim-dist/dex').Dex;
+			assert.equal(Dex.mod('gen2').getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
 		}
 		{
 			Chat.uncacheTree('./.sim-dist/dex');
-			const Dex = require('./../../../.sim-dist/dex').Dex;
-			Dex.mod('gen2').getSpecies('nidoking');
+			const Dex = require('./../../.sim-dist/dex').Dex;
+			Dex.mod('gen2').getLearnsetData('nidoking');
 			Dex.mod('gen4').getMove('crunch');
-			assert.equal(Dex.mod('gen2').getSpecies('nidoking').learnset.bubblebeam.join(','), '1M');
+			assert.equal(Dex.mod('gen2').getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').getMove('crunch').secondaries[0].boosts.def, undefined);
 		}
 	});
