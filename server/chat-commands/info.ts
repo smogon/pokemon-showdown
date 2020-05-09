@@ -2326,7 +2326,7 @@ export const commands: ChatCommands = {
 		let offset = 0;
 		let removeOutlier = 0;
 
-		const modifierData = new RegExp(/[+-]/).exec(target);
+		const modifierData = /[+-]/.exec(target);
 		if (modifierData) {
 			switch (target.slice(modifierData.index).trim().toLowerCase()) {
 			case '-l':
