@@ -354,7 +354,7 @@ export const commands: ChatCommands = {
 		if (!this.can('ip')) return;
 		target = target.trim();
 		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
-		IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
+		void IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
 			const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
 			this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 		});
@@ -2326,7 +2326,7 @@ export const commands: ChatCommands = {
 		let offset = 0;
 		let removeOutlier = 0;
 
-		const modifierData = target.match(/[+-]/);
+		const modifierData = new RegExp(/[+-]/).exec(target);
 		if (modifierData) {
 			switch (target.slice(modifierData.index).trim().toLowerCase()) {
 			case '-l':
@@ -2476,7 +2476,7 @@ export const commands: ChatCommands = {
 			return this.sendReply(Chat.html`|raw|<img src="${image}" style="width: ${width}; height: ${height}" />`);
 		}
 
-		Chat.fitImage(image).then(([width, height]) => {
+		void Chat.fitImage(image).then(([width, height]) => {
 			this.sendReply(Chat.html`|raw|<img src="${image}" style="width: ${width}px; height: ${height}px" />`);
 			room.update();
 		});
