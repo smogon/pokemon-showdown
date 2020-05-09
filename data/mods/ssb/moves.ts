@@ -2553,8 +2553,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			const species = pokemon.species;
-			let level = pokemon.level;
-			level += 5;
+			const level = pokemon.level + 5;
+			(pokemon as any).level = level;
 			pokemon.set.level = level;
 			pokemon.formeChange(species);
 
