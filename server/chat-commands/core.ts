@@ -815,7 +815,15 @@ export const commands: ChatCommands = {
 			return;
 		}
 		if (!this.can('exportinputlog', null, room)) return;
-		if (!battle.allowExtraction[user.id]) {
+		if (user.can('forcewin')) {
+			if (!battle.inputLog) return this.errorReply('No input log found.');
+			this.addModAction(`${user.name} has extracted the battle input log.`);
+			const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
+			user.sendTo(
+				room,
+				`|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`,
+			);
+		} else if (!battle.allowExtraction[user.id]) {
 			battle.allowExtraction[user.id] = new Set();
 			for (const player of battle.players) {
 				const playerUser = player.getUser();
