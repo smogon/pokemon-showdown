@@ -562,6 +562,20 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 */
 	readonly otherFormes?: string[];
 	/**
+	 * List of forme speciesNames in the order they appear in the game data -
+	 * the union of baseSpecies, otherFormes and cosmeticFormes. Appears only on
+	 * the base species forme.
+	 *
+	 * A species's alternate formeindex may change from generation to generation -
+	 * the forme with index N in Gen A is not guaranteed to be the same forme as the
+	 * forme with index in Gen B.
+	 *
+	 * Gigantamaxes are not considered formes by the game (see data/FORMES.md - PS
+	 * labels them as such for convenience) - Gigantamax "formes" are instead included at
+	 * the end of the formeOrder list so as not to interfere with the correct index numbers.
+	 */
+	readonly formeOrder?: string[];
+	/**
 	 * Sprite ID. Basically the same as ID, but with a dash between
 	 * species and forme.
 	 */
@@ -672,6 +686,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.baseForme = data.baseForme || '';
 		this.cosmeticFormes = data.cosmeticFormes || undefined;
 		this.otherFormes = data.otherFormes || undefined;
+		this.formeOrder = data.formeOrder || undefined;
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || {0: ""};
