@@ -110,6 +110,7 @@ export abstract class BasicRoom {
 	giveaway: QuestionGiveaway | LotteryGiveaway | null;
 	gtsga: GTSGiveaway | null;
 	toursEnabled: '%' | boolean;
+	tierDisplay: string;
 	tourAnnouncements: boolean;
 	privacySetter: Set<ID> | null;
 	subRooms: Map<string, ChatRoom> | null;
@@ -171,6 +172,7 @@ export abstract class BasicRoom {
 		this.gtsga = null;
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
+		this.tierDisplay = 'tiers';
 		this.privacySetter = null;
 		this.subRooms = null;
 		this.gameNumber = 0;
