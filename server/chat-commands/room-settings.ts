@@ -1428,8 +1428,8 @@ export const roomSettings: SettingsHandler[] = [
 		permission: 'editroom',
 		options: [
 			[`tiers`, room.tierDisplay === 'tiers' || `roomtierdisplay tiers`],
-			[`doubles tiers`, room.tierDisplay === 'doubles tiers' ||  `roomtierdisplay doubles tiers`],
-			[`numbers`, room.tierDisplay === 'numbers' ||  `roomtierdisplay numbers`],
+			[`doubles tiers`, room.tierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
+			[`numbers`, room.tierDisplay === 'numbers' || `roomtierdisplay numbers`],
 		],
 	}),
 ];

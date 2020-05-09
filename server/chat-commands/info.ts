@@ -543,7 +543,7 @@ export const commands: ChatCommands = {
 				}
 				let displayedTier = room?.tierDisplay === 'tiers' ? pokemon.tier :
 					room.tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
-						pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
+					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
 				if (room?.battle) {
 					if (room.battle.format.includes('doubles') || room.battle.format.includes('vgc')) {
 						displayedTier = pokemon.doublesTier;
