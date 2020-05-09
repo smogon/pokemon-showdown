@@ -913,7 +913,6 @@ interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 
 	damage?: number | 'level' | false | null;
 	contestType?: string;
-	isViable?: boolean;
 	noPPBoosts?: boolean;
 
 	// Z-move data

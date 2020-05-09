@@ -1259,7 +1259,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		basePowerCallback() {
 			return 80;
 		},
-		isViable: true,
 		ignoreImmunity: true,
 		onHit(target, source) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
