@@ -1463,7 +1463,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 						break;
 					}
 				} else if (flag === 'maxmove') {
-					if (!(typeof dex[move].isMax === 'boolean') === !alts.flags[flag]) {
+					if (!(typeof dex[move].isMax === 'boolean' && dex[move].isMax) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
