@@ -1299,52 +1299,6 @@ export const commands: ChatCommands = {
 	removeroomaliashelp: [
 		`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`,
 	],
-
-	resettierdisplay: 'roomtierdisplay',
-	roomtierdisplay(target, room, user, connection, cmd) {
-		const resetTier = cmd === 'resettierdisplay';
-		if (!target) {
-			if (!this.runBroadcast()) return;
-			if (!room.aliases || !room.aliases.length) return this.sendReplyBox("This room does not have any aliases.");
-			return this.sendReplyBox(`This room is currently displaying ${room.tierDisplay} as the tier when using /data.`);
-		}
-		if (!this.can('declare')) return false;
-
-		const displayIDToName: {[k: string]: string} = {
-			tiers: 'tiers',
-			doublestiers: 'doubles tiers',
-			numbers: 'numbers',
-		};
-
-		if (!resetTier) {
-			if (!(toID(target) in displayIDToName)) {
-				this.errorReply(`Invalid tier display: ${target.trim()}`);
-				return this.parse(`/help roomtierdisplay`);
-			}
-
-			room.tierDisplay = displayIDToName[toID(target)];
-			this.sendReply(`(The room's tier display is now: ${displayIDToName[toID(target)]})`);
-
-			this.privateModAction(`(${user.name} changed the room's tier display to: ${displayIDToName[toID(target)]}.)`);
-			this.modlog('ROOMTIERDISPLAY', null, `to ${displayIDToName[toID(target)]}`);
-		} else {
-			room.tierDisplay = 'tiers';
-			this.sendReply(`(The room's tier display is now: tiers)`);
-
-			this.privateModAction(`(${user.name} reset the room's tier display.)`);
-			this.modlog('RESETTIERDISPLAY', null, `to tiers`);
-		}
-
-		if (room.chatRoomData) {
-			room.chatRoomData.tierDisplay = room.tierDisplay;
-			Rooms.global.writeChatRoomData();
-		}
-	},
-	roomtierdisplayhelp: [
-		`/roomtierdisplay - displays the current room's display.`,
-		`/roomtierdisplay [option] - changes the current room's tier display. Valid options are: tiers, doubles tiers, numbers. Requires: # & ~`,
-		`/resettierdisplay - resets the current room's tier display. Requires: # & ~`,
-	],
 };
 
 export const roomSettings: SettingsHandler[] = [
@@ -1422,14 +1376,5 @@ export const roomSettings: SettingsHandler[] = [
 		options: ['off', 5, 10, 20, 30, 60].map(
 			time => [`${time}`, (time === 'off' ? !room.slowchat : time === room.slowchat) || `slowchat ${time || 'false'}`]
 		),
-	}),
-	room => ({
-		label: "Tier display",
-		permission: 'editroom',
-		options: [
-			[`tiers`, room.tierDisplay === 'tiers' || `roomtierdisplay tiers`],
-			[`doubles tiers`, room.tierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
-			[`numbers`, room.tierDisplay === 'numbers' || `roomtierdisplay numbers`],
-		],
 	}),
 ];

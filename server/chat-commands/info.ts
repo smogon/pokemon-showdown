@@ -190,14 +190,14 @@ export const commands: ChatCommands = {
 		}
 
 		const gameRooms = [];
-		for (const r of Rooms.rooms.values()) {
-			if (!r.game) continue;
-			if ((targetUser.id in r.game.playerTable && !targetUser.inRooms.has(r.roomid)) ||
-				(r.auth && r.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
-				if (r.isPrivate && !canViewAlts) {
+		for (const curRoom of Rooms.rooms.values()) {
+			if (!curRoom.game) continue;
+			if ((targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid)) ||
+				(curRoom.auth && curRoom.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
+				if (curRoom.isPrivate && !canViewAlts) {
 					continue;
 				}
-				gameRooms.push(r.roomid);
+				gameRooms.push(curRoom.roomid);
 			}
 		}
 		if (gameRooms.length) {
@@ -213,8 +213,8 @@ export const commands: ChatCommands = {
 			if (punishments.length) {
 				buf += `<br />Room punishments: `;
 
-				buf += punishments.map(([r, p]) => {
-					const [punishType, punishUserid, expireTime, reason] = p;
+				buf += punishments.map(([curRoom, curPunishment]) => {
+					const [punishType, punishUserid, expireTime, reason] = curPunishment;
 					let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
 					if (!punishDesc) punishDesc = `punished`;
 					if (punishUserid !== targetUser.id) punishDesc += ` as ${punishUserid}`;
@@ -223,7 +223,7 @@ export const commands: ChatCommands = {
 					punishDesc += ` for ${expireString}`;
 
 					if (reason) punishDesc += `: ${reason}`;
-					return `<a href="/${r}">${r}</a> (${punishDesc})`;
+					return `<a href="/${curRoom}">${curRoom}</a> (${punishDesc})`;
 				}).join(', ');
 			}
 		}
@@ -284,8 +284,8 @@ export const commands: ChatCommands = {
 		if (punishments?.length) {
 			buf += `<br />Room punishments: `;
 
-			buf += punishments.map(([r, p]) => {
-				const [punishType, punishUserid, expireTime, reason] = p;
+			buf += punishments.map(([curRoom, curPunishment]) => {
+				const [punishType, punishUserid, expireTime, reason] = curPunishment;
 				let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
 				if (!punishDesc) punishDesc = `punished`;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
@@ -294,7 +294,7 @@ export const commands: ChatCommands = {
 				punishDesc += ` for ${expireString}`;
 
 				if (reason) punishDesc += `: ${reason}`;
-				return `<a href="/${r}">${r}</a> (${punishDesc})`;
+				return `<a href="/${curRoom}">${curRoom}</a> (${punishDesc})`;
 			}).join(', ');
 			atLeastOne = true;
 		}
@@ -315,11 +315,11 @@ export const commands: ChatCommands = {
 		const userID2 = toID(targetUsername2);
 
 		const battles = [];
-		for (const r of Rooms.rooms.values()) {
-			if (!r.battle) continue;
-			if ((user1?.inRooms.has(r.roomid) || (r.auth && r.auth[userID1])) &&
-				(user2?.inRooms.has(r.roomid) || (r.auth && r.auth[userID2]))) {
-				battles.push(r.roomid);
+		for (const curRoom of Rooms.rooms.values()) {
+			if (!curRoom.battle) continue;
+			if ((user1?.inRooms.has(curRoom.roomid) || (curRoom.auth && curRoom.auth[userID1])) &&
+				(user2?.inRooms.has(curRoom.roomid) || (curRoom.auth && curRoom.auth[userID2]))) {
+				battles.push(curRoom.roomid);
 			}
 		}
 
@@ -489,7 +489,7 @@ export const commands: ChatCommands = {
 		const targetId = toID(target);
 		if (!targetId) return this.parse('/help data');
 		const targetNum = parseInt(target);
-		if (!isNaN(targetNum) && String(targetNum) === target) {
+		if (!isNaN(targetNum) && `${targetNum}` === target) {
 			for (const p in Dex.data.Pokedex) {
 				const pokemon = Dex.getSpecies(p);
 				if (pokemon.num === targetNum) {
@@ -528,7 +528,7 @@ export const commands: ChatCommands = {
 				const nature = Dex.getNature(newTarget.name);
 				buffer += `${nature.name} nature: `;
 				if (nature.plus) {
-					const statNames: {[k in StatNameExceptHP]: string} = {
+					const statNames = {
 						atk: "Attack", def: "Defense", spa: "Special Attack", spd: "Special Defense", spe: "Speed",
 					};
 					buffer += `+10% ${statNames[nature.plus]}, -10% ${statNames[nature.minus!]}.`;
@@ -541,9 +541,7 @@ export const commands: ChatCommands = {
 				if (format?.onModifySpecies) {
 					pokemon = format.onModifySpecies.call({dex} as Battle, pokemon) || pokemon;
 				}
-				let displayedTier = room?.tierDisplay === 'tiers' ? pokemon.tier :
-					room.tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
-					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
+				let displayedTier = pokemon.tier;
 				if (room?.battle) {
 					if (room.battle.format.includes('doubles') || room.battle.format.includes('vgc')) {
 						displayedTier = pokemon.doublesTier;
