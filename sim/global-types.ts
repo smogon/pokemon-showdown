@@ -1117,6 +1117,7 @@ interface SpeciesData {
 	maxHP?: number;
 	cosmeticFormes?: string[];
 	otherFormes?: string[];
+	formeOrder?: string[];
 	prevo?: string;
 	gen?: number;
 	requiredAbility?: string;
