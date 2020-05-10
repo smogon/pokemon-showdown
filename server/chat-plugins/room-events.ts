@@ -122,8 +122,10 @@ export const commands: ChatCommands = {
 			const oldID = toID(oldName);
 			if (!room.events[oldID]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			const newID = toID(newName);
-			if (room.events[newID] && oldID !== newID) return this.errorReply(`An event named ${room.events[newID].eventName} already exists.`);
-			let eventData = room.events[oldID];
+			if (room.events[newID] && oldID !== newID) {
+				return this.errorReply(`An event named ${room.events[newID].eventName} already exists.`);
+			}
+			const eventData = room.events[oldID];
 			eventData.eventName = newName;
 			delete room.events[oldID];
 			room.events[newID] = eventData;
