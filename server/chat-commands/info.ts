@@ -2288,7 +2288,7 @@ export const commands: ChatCommands = {
 
 		Config.potd = target;
 		// TODO: support eval in new PM
-		(Rooms.PM as any).eval('Config.potd = \'' + toID(target) + '\'');
+		// (Rooms.PM as any).eval('Config.potd = \'' + toID(target) + '\'');
 		if (target) {
 			if (Rooms.lobby) {
 				Rooms.lobby.addRaw(`<div class="broadcast-blue"><b>The Pok&eacute;mon of the Day is now ${target}!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>`);
