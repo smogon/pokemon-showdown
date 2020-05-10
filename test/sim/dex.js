@@ -43,7 +43,18 @@ describe('Dex#getSpecies', function () {
 	});
 
 	it.skip('should handle Rockruff-Dusk', function () {
-		assert.equal(Dex.getSpecies('Rockruff-Dusk').name, 'Rockruff-Dusk');
+		assert.equal(Dex.getSpecies('rockruffdusk').name, 'Rockruff-Dusk');
+	});
+
+	it('should handle Pikachu forme numbering', function () {
+		assert.deepEqual(
+			Dex.forGen(6).getSpecies('Pikachu').formeOrder.slice(0, 7),
+			["Pikachu", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay"]
+		);
+		assert.deepEqual(
+			Dex.forGen(7).getSpecies('Pikachu').formeOrder.slice(0, 9),
+			["Pikachu", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter"]
+		);
 	});
 });
 

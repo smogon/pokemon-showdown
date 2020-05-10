@@ -7,6 +7,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 60, atk: 85, def: 69, spa: 65, spd: 79, spe: 80},
 	},
+	pikachu: {
+		inherit: true,
+		formeOrder: ["Pikachu", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay"],
+	},
 	dugtrio: {
 		inherit: true,
 		baseStats: {hp: 35, atk: 80, def: 50, spa: 50, spd: 70, spe: 120},

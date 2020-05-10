@@ -47,6 +47,10 @@ describe('Dex data', function () {
 					assert.equal(forme, formeEntry.name, `Misspelled/nonexistent forme "${forme}" of ${entry.name}`);
 					assert.equal(entry.num, formeEntry.num, `Forme ${formeEntry.name} of ${entry.name} should have the same dex number`);
 					assert.equal(formeEntry.baseSpecies, entry.name, `Forme ${forme} of ${entry.name} should have it as a baseSpecies`);
+					if (!forme.startsWith('Pokestar')) {
+						assert(entry.formeOrder !== undefined, `${entry.name} has an otherForme "${forme}" but no formeOrder field`);
+						assert(entry.formeOrder.includes(forme), `Forme "${forme}" of ${entry.name} is not included in its formeOrder`);
+					}
 				}
 			}
 			if (entry.battleOnly) {
@@ -70,6 +74,18 @@ describe('Dex data', function () {
 					assert(forme.startsWith(`${entry.name}-`), `Misspelled/nonexistent beginning of cosmetic forme name "${forme}" of ${entry.name}`);
 					assert(!forme.endsWith("-"), `Cosmetic forme name "${forme}" of ${entry.name} should not end with a hyphen`);
 					assert.equal(forme, forme.trim(), `Cosmetic forme name "${forme}" of ${entry.name} should not start or end with whitespace`);
+					if (!forme.startsWith('Pokestar')) {
+						assert(entry.formeOrder !== undefined, `${entry.name} has a cosmetic forme "${forme}" but no formeOrder field`);
+						assert(entry.formeOrder.includes(forme), `Cosmetic forme name "${forme}" of ${entry.name} is not included in its formeOrder`);
+					}
+				}
+			}
+			if (entry.formeOrder) {
+				for (const forme of entry.formeOrder) {
+					 // formeOrder contains other formes and 'cosmetic' formes which do not have entries in Pokedex but should have aliases
+					const formeEntry = Dex.getSpecies(toID(forme));
+					assert.equal(forme, formeEntry.name, `Misspelled/nonexistent forme "${forme}" of ${entry.name}`);
+					assert(entry.formeOrder.includes(formeEntry.baseSpecies), `${entry.name}'s formeOrder does not contain its base species ${formeEntry.baseSpecies}`);
 				}
 			}
 
