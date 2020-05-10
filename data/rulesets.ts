@@ -783,7 +783,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		onValidateSet(set) {
 			const species = this.dex.getSpecies(set.species);
 			if (species.isGigantamax) {
-				return [`Gigantamaxing is banned.`, `(Change ${species.isGigantamax} to its base species, ${species.baseSpecies}.)`];
+				return [`Gigantamaxing is banned.`, `(Change ${species.name} to its base species, ${species.baseSpecies}.)`];
 			}
 		},
 		onBegin() {
