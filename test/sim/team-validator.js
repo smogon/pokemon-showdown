@@ -510,6 +510,14 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
+	it('should reject Gmax Pokemon from formats with Dynamax Clause', function () {
+		const team = [
+			{species: 'gengar-gmax', ability: 'cursedbody', moves: ['shadowball'], evs: {hp: 1}},
+		];
+		const illegal = TeamValidator.get('gen8customgame@@@dynamaxclause').validateTeam(team);
+		assert(illegal);
+	});
+
 	/*********************************************************
  	* Custom rules
  	*********************************************************/
