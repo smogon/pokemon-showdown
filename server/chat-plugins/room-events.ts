@@ -111,6 +111,29 @@ export const commands: ChatCommands = {
 			Rooms.global.writeChatRoomData();
 		},
 
+		rename(target, room, user) {
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!this.can('ban', null, room)) return false;
+			if (!room.events || Object.keys(room.events).length === 0) {
+				return this.errorReply("There are currently no planned upcoming events for this room to rename.");
+			}
+			if (!target) return this.errorReply("Usage: /roomevents rename [event name], [new name]");
+			const [oldName, newName] = target.split(',');
+			const oldID = toID(oldName);
+			if (!room.events[oldID]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			const newID = toID(newName);
+			if (room.events[newID] && oldID !== newID) return this.errorReply(`An event named ${room.events[newID].eventName} already exists.`);
+			let eventData = room.events[oldID];
+			eventData.eventName = newName;
+			delete room.events[oldID];
+			room.events[newID] = eventData;
+			this.privateModAction(`(${user.name} renamed a roomevent titled "${oldID}" to "${newName}".)`);
+			this.modlog('ROOMEVENT', null, `renamed "${oldID}" to "${newName}"`);
+
+			room.chatRoomData.events = room.events;
+			Rooms.global.writeChatRoomData();
+		},
+
 		delete: 'remove',
 		remove(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
@@ -128,6 +151,7 @@ export const commands: ChatCommands = {
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
 		},
+
 		view(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.events || !Object.keys(room.events).length) {
@@ -227,6 +251,7 @@ export const commands: ChatCommands = {
 		`/roomevents - Displays a list of upcoming room-specific events.`,
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. A timestamp in event date/time field like YYYY-MM-DD HH:MM±hh:mm will be displayed in user's timezone. Requires: @ # & ~`,
 		`/roomevents start [event name] - Declares to the room that the event has started. Requires: @ # & ~`,
+		`/roomevents rename [event name], [new name] - Changes the name of an event. Requires: @ # & ~`,
 		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
 		`/roomevents sortby [column name] | [asc/desc (optional)] - Sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
