@@ -494,7 +494,7 @@ export class CommandContext extends MessageContext {
 
 		if (typeof commandHandler === 'function' && requireGlobalCommand) {
 			const baseCmd = typeof curCommands[cmd] === 'string' ? curCommands[cmd] : cmd;
-			if (!curCommands['!' + baseCmd]) {
+			if (!curCommands['!' + baseCmd] && !this.user.can('bypassall')) {
 				return '!';
 			}
 		}
