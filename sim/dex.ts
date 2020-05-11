@@ -82,8 +82,8 @@ const nullEffect: PureEffect = new Data.PureEffect({name: '', exists: false});
 
 export interface Nature {
 	name: string;
-	plus?: keyof StatsTable;
-	minus?: keyof StatsTable;
+	plus?: StatNameExceptHP;
+	minus?: StatNameExceptHP;
 	[k: string]: any;
 }
 
