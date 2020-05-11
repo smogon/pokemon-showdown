@@ -1309,32 +1309,32 @@ export const commands: ChatCommands = {
 			return this.sendReplyBox(`This room is currently displaying ${room.tierDisplay} as the tier when using /data.`);
 		}
 		if (!this.can('declare')) return false;
- 
+
 		const displayIDToName: {[k: string]: string} = {
 			tiers: 'tiers',
 			doublestiers: 'doubles tiers',
 			numbers: 'numbers',
 		};
- 
+
 		if (!resetTier) {
 			if (!(toID(target) in displayIDToName)) {
 				this.errorReply(`Invalid tier display: ${target.trim()}`);
 				return this.parse(`/help roomtierdisplay`);
 			}
- 
+
 			room.tierDisplay = displayIDToName[toID(target)];
 			this.sendReply(`(The room's tier display is now: ${displayIDToName[toID(target)]})`);
- 
+
 			this.privateModAction(`(${user.name} changed the room's tier display to: ${displayIDToName[toID(target)]}.)`);
 			this.modlog('ROOMTIERDISPLAY', null, `to ${displayIDToName[toID(target)]}`);
 		} else {
 			room.tierDisplay = 'tiers';
 			this.sendReply(`(The room's tier display is now: tiers)`);
- 
+
 			this.privateModAction(`(${user.name} reset the room's tier display.)`);
 			this.modlog('RESETTIERDISPLAY', null, `to tiers`);
 		}
- 
+
 		if (room.chatRoomData) {
 			room.chatRoomData.tierDisplay = room.tierDisplay;
 			Rooms.global.writeChatRoomData();
