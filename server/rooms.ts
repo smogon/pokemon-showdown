@@ -1559,9 +1559,9 @@ export class GameRoom extends BasicChatRoom {
 		this.auth = Object.create(null);
 	}
 	/**
-	 * - logNum = 0		  : spectator log (no exact HP)
+	 * - logNum = 0          : spectator log (no exact HP)
 	 * - logNum = 1, 2, 3, 4 : player log (exact HP for that player)
-	 * - logNum = -1		 : debug log (exact HP for all players)
+	 * - logNum = -1         : debug log (exact HP for all players)
 	 */
 	getLog(channel: -1 | 0 | 1 | 2 | 3 | 4 = 0) {
 		return this.log.getScrollback(channel);
