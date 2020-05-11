@@ -1305,7 +1305,6 @@ export const commands: ChatCommands = {
 		const resetTier = cmd === 'resettierdisplay';
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			if (!room.aliases || !room.aliases.length) return this.sendReplyBox("This room does not have any aliases.");
 			return this.sendReplyBox(`This room is currently displaying ${room.tierDisplay} as the tier when using /data.`);
 		}
 		if (!this.can('declare')) return false;
