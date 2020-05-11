@@ -395,7 +395,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	persian: {
 		randomBattleMoves: ["doubleedge", "fakeout", "knockoff", "playrough", "uturn"],
-		randomDoubleBattleMoves: ["fakeout", "foulplay", "hypnosis", "icywind", "taunt"],
+		randomDoubleBattleMoves: ["doubleedge", "fakeout", "foulplay", "hypnosis", "icywind", "taunt"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -416,6 +416,8 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	golduck: {
+		randomBattleMoves: ["calmmind", "focusblast", "icebeam", "psyshock", "scald", "substitute"],
+		randomDoubleBattleMoves: ["calmmind", "encore", "icebeam", "muddywater", "protect", "psyshock"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -4598,7 +4600,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	drednaw: {
 		randomBattleMoves: ["liquidation", "stealthrock", "stoneedge", "superpower", "swordsdance"],
-		randomDoubleBattleMoves: ["liquidation", "protect", "rockslide", "superpower", "swordsdance"],
+		randomDoubleBattleMoves: ["highhorsepower", "liquidation", "protect", "rockslide", "superpower", "swordsdance"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
