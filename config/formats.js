@@ -158,7 +158,7 @@ const Formats = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] PU'],
-		banlist: ['PU'],
+		banlist: ['PU', 'Silvally-Electric'],
 	},
 	{
 		name: "[Gen 8] 1v1",
