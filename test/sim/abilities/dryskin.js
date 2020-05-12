@@ -40,7 +40,7 @@ describe('Dry Skin', function () {
 		battle.setPlayer('p1', {team: [{species: 'Toxicroak', ability: 'dryskin', moves: ['bulkup']}]});
 		battle.setPlayer('p2', {team: [{species: 'Haxorus', ability: 'unnerve', moves: ['incinerate']}]});
 		battle.makeChoices('move bulkup', 'move incinerate');
-		let damage = battle.p1.active[0].maxhp - battle.p1.active[0].hp;
+		const damage = battle.p1.active[0].maxhp - battle.p1.active[0].hp;
 		assert.bounded(damage, [51, 61]);
 	});
 

@@ -28,7 +28,7 @@ describe('Lansat Berry', function () {
 		const holder = battle.p1.active[0];
 
 		let i = 0;
-		let expectedRatio = [1, 1, 1, 1, 1, 3];
+		const expectedRatio = [1, 1, 1, 1, 1, 3];
 		battle.onEvent('ModifyCritRatio', battle.format, -99, function (critRatio, pokemon) {
 			assert.equal(critRatio, expectedRatio[i++]);
 		});

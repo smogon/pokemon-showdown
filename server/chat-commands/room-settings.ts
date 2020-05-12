@@ -68,7 +68,7 @@ export const commands: ChatCommands = {
 			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.getAuth(user)) :
 			1;
 
-		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > threshold) {
+		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat as GroupSymbol) > threshold) {
 			return this.errorReply(`/modchat - Access denied for changing a setting higher than ${Config.groupsranking[threshold]}.`);
 		}
 		if ((room as GameRoom).requestModchat) {
@@ -100,7 +100,7 @@ export const commands: ChatCommands = {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
-			if (Config.groupsranking.indexOf(target) > threshold) {
+			if (Config.groupsranking.indexOf(target as GroupSymbol) > threshold) {
 				return this.errorReply(`/modchat - Access denied for setting higher than ${Config.groupsranking[threshold]}.`);
 			}
 			room.modchat = target;
@@ -625,12 +625,8 @@ export const commands: ChatCommands = {
 			return this.errorReply("Title must be under 32 characters long.");
 		} else if (!title) {
 			title = (`${Math.floor(Math.random() * 100000000)}`);
-		} else if (Config.chatfilter) {
-			const filterResult = Config.chatfilter.call(this, title, user, null, connection);
-			if (!filterResult) return;
-			if (title !== filterResult) {
-				return this.errorReply("Invalid title.");
-			}
+		} else if (this.filter(title) !== title) {
+			return this.errorReply("Invalid title.");
 		}
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
@@ -1321,7 +1317,7 @@ export const roomSettings: SettingsHandler[] = [
 				'off',
 				'autoconfirmed',
 				'trusted',
-				...RANKS.slice(1, threshold + 1),
+				...RANKS.slice(1, threshold! + 1),
 			].map(rank => [rank, (rank === 'off' ? !room.modchat : rank === room.modchat) || `modchat ${rank || 'off'}`]);
 
 		return {

@@ -54,7 +54,7 @@ export class Blackjack extends Rooms.RoomGame {
 	deck: Deck[];
 	playerTable: {[k: string]: BlackjackPlayer};
 
-	constructor(room: ChatRoom | GameRoom, user: User, target = 0) {
+	constructor(room: ChatRoom | GameRoom, user: User, autostartMinutes = 0) {
 		super(room);
 		this.room = room;
 
@@ -103,7 +103,7 @@ export class Blackjack extends Rooms.RoomGame {
 		this.dqTimer = null;
 		this.timerTick = null;
 
-		this.makeGame(target);
+		this.makeGame(autostartMinutes);
 	}
 
 	/**
@@ -112,9 +112,9 @@ export class Blackjack extends Rooms.RoomGame {
 	 * makePlayer - adds blackjack-specific properties to player object
 	 * sendInvite - called when a game is created, or when a player joins/leaves
 	 */
-	makeGame(target = 0) {
-		if (target > 0) {
-			this.autostart = setTimeout(() => this.start(), (target * 60000));
+	makeGame(autostartMinutes = 0) {
+		if (autostartMinutes > 0) {
+			this.autostart = setTimeout(() => this.start(), autostartMinutes * 60000);
 		}
 
 		this.sendInvite();
@@ -663,11 +663,14 @@ export const commands: ChatCommands = {
 			if (!this.can('minigame', null, room)) return;
 			if (room.game) return this.errorReply("There is already a game running in this room.");
 			if (room.blackjackDisabled) return this.errorReply("Blackjack is currently disabled in this room.");
+			const autostartMinutes = target ? parseFloat(target) : 0;
+			if (isNaN(autostartMinutes)) {
+				return this.errorReply("Usage: /blackjack create [autostart] - where autostart is an integer");
+			}
 
 			this.privateModAction(`(A game of blackjack was created by ${user.name}.)`);
 			this.modlog(`BLACKJACK CREATE`);
-			if (isNaN(parseFloat(target))) return this.parse('/help blackjack');
-			room.game = new Blackjack(room, user, parseFloat(target));
+			room.game = new Blackjack(room, user, autostartMinutes);
 		},
 		start(target, room, user) {
 			if (!this.can('minigame', null, room)) return;

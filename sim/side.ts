@@ -5,7 +5,7 @@
  * @license MIT license
  */
 import {RequestState} from './battle';
-import {Pokemon} from './pokemon';
+import {Pokemon, EffectState} from './pokemon';
 import {State} from './state';
 
 /** A single action that can be chosen. */
@@ -56,8 +56,8 @@ export class Side {
 	faintedThisTurn: boolean;
 	zMoveUsed: boolean;
 
-	sideConditions: AnyObject;
-	slotConditions: AnyObject[];
+	sideConditions: {[id: string]: EffectState};
+	slotConditions: {[id: string]: EffectState}[];
 
 	activeRequest: AnyObject | null;
 	choice: Choice;
@@ -519,7 +519,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
 		let dynamax = (megaDynaOrZ === 'dynamax');
-		if (dynamax && (this.choice.dynamax || !this.battle.canDynamax(pokemon))) {
+		if (dynamax && (this.choice.dynamax || !pokemon.getDynamaxRequest())) {
 			if (pokemon.volatiles['dynamax']) {
 				dynamax = false;
 			} else {
@@ -586,7 +586,7 @@ export class Side {
 			// maybe it's a name/species id!
 			slot = -1;
 			for (const [i, mon] of this.pokemon.entries()) {
-				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toID(slotText) === mon.id) {
+				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toID(slotText) === mon.species.id) {
 					slot = i;
 					break;
 				}

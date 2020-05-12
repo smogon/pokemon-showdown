@@ -150,15 +150,15 @@ class Giveaway {
 			for (const [key, value] of mons) {
 				let spriteid = value.spriteid;
 				if (value.cosmeticFormes) {
-					for (const form of value.cosmeticFormes) {
-						if (text.includes(form)) {
-							spriteid += '-' + form.substr(key.length);
+					for (const forme of value.cosmeticFormes.map(toID)) {
+						if (text.includes(forme)) {
+							spriteid += '-' + forme.slice(key.length);
 							break; // We don't want to end up with deerling-summer-spring
 						}
 					}
 				}
 				if (value.otherFormes) {
-					for (const forme of value.otherFormes) {
+					for (const forme of value.otherFormes.map(toID)) {
 						// Allow "alolan <name>" to match as well.
 						if (forme.endsWith('alola')) {
 							if (/alolan?/.test(text)) {
@@ -205,7 +205,7 @@ class Giveaway {
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">It's giveaway time!</p>` +
 			`<p style="text-align:center;font-size:7pt;">Giveaway started by ${Chat.escapeHTML(this.host.name)}</p>` +
 			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${Chat.formatText(this.prize, true)}<br />OT: ${Chat.escapeHTML(this.ot)}, TID: ${this.tid}</td>` +
-			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> Unless otherwise stated, you must have a Switch and Pokémon Sword/Shield to receive the prize. Do not join if you are currently unable to trade.</p>`;
+			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> You must have a Switch and Pokémon Sword/Shield to receive the prize. Do not join if you are currently unable to trade.</p>`;
 	}
 }
 
@@ -460,7 +460,7 @@ export class LotteryGiveaway extends Giveaway {
 			this.send(this.generateWindow(
 				`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p>` +
 				`<p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />` +
-				`Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b>Congratulations!</p>`
+				`Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b><br />Congratulations!</p>`
 			));
 			for (const winner of this.winners) {
 				winner.sendTo(

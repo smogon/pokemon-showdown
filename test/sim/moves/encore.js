@@ -107,7 +107,7 @@ describe('Encore', function () {
 
 		// If the Shell Trap user is hit the attack is expected to be successful.
 		battle.makeChoices('move shelltrap, move knockoff 1', 'move splash, move quickattack 1');
-		let hp = battle.p2.active[0].hp;
+		const hp = battle.p2.active[0].hp;
 		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
 
 		// Shell Trap which has been encored will never be successful - even if it is hit with contact moves, it will never

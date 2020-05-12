@@ -4,8 +4,8 @@ const assert = require('./../../assert');
 const common = require('./../../common');
 
 let battle;
-let trappers = ['Block', 'Mean Look', 'Spider Web', 'Thousand Waves', 'Anchor Shot', 'Spirit Shackle'];
-let partialtrappers = ['Bind', 'Clamp', 'Fire Spin', 'Infestation', 'Magma Storm', 'Sand Tomb', 'Whirlpool', 'Wrap'];
+const trappers = ['Block', 'Mean Look', 'Spider Web', 'Thousand Waves', 'Anchor Shot', 'Spirit Shackle'];
+const partialtrappers = ['Bind', 'Clamp', 'Fire Spin', 'Infestation', 'Magma Storm', 'Sand Tomb', 'Whirlpool', 'Wrap'];
 
 describe('Trapping Moves', function () {
 	afterEach(function () {
@@ -122,7 +122,7 @@ describe('Partial Trapping Moves', function () {
 			battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'noguard', moves: [toID(move), 'rest']}]});
 			battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', moves: ['healbell']}]});
 			battle.makeChoices('move ' + toID(move), 'move healbell');
-			let pokemon = battle.p2.active[0];
+			const pokemon = battle.p2.active[0];
 			pokemon.heal(pokemon.maxhp);
 			battle.makeChoices('move rest', 'move healbell');
 			assert.equal(pokemon.maxhp - pokemon.hp, battle.modify(pokemon.maxhp, 1 / 8));
