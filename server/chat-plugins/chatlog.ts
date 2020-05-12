@@ -2,6 +2,7 @@
  * Pokemon Showdown log viewer
  *
  * by Zarel
+ * @license MIT
  */
 
 import {FS} from "../../lib/fs";
@@ -123,13 +124,12 @@ const LogReader = new class {
 		return prevMonth.toISOString().slice(0, 7);
 	}
 	today() {
-		return new Date().toISOString().slice(0, 10);
+		return Chat.toTimestamp(new Date()).slice(0, 10);
 	}
 };
 
 const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
-		if (day === 'today') day = LogReader.today();
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
@@ -355,11 +355,20 @@ export const pages: PageTable = {
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 
 		this.title = '[Logs] ' + roomid;
-		if (date && date.length === 10 || date === 'today') {
-			return LogViewer.day(roomid, date, opts);
-		}
+
 		if (date) {
-			return LogViewer.month(roomid, date);
+			if (date === 'today') {
+				return LogViewer.day(roomid, LogReader.today(), opts);
+			}
+			const parsedDate = new Date(date);
+			// this is apparently the best way to tell if a date is invalid
+			if (isNaN(parsedDate.getTime())) return LogViewer.error(`Invalid date.`);
+
+			if (date.split('-').length === 3) {
+				return LogViewer.day(roomid, parsedDate.toISOString().slice(0, 10), opts);
+			} else {
+				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
+			}
 		}
 		return LogViewer.room(roomid);
 	},
@@ -367,6 +376,8 @@ export const pages: PageTable = {
 
 export const commands: ChatCommands = {
 	chatlog(target, room, user) {
-		this.parse(`/join view-chatlog-${room.roomid}--today`);
+		const targetRoom = target ? Rooms.search(target) : room;
+		const roomid = targetRoom ? targetRoom.roomid : target;
+		this.parse(`/join view-chatlog-${roomid}--today`);
 	},
 };

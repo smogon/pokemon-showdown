@@ -48,7 +48,7 @@ describe('Paralysis', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
-		let speed = battle.p1.active[0].getStat('spe');
+		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
 	});
@@ -57,7 +57,7 @@ describe('Paralysis', function () {
 		battle = common.gen(6).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
-		let speed = battle.p1.active[0].getStat('spe');
+		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
@@ -66,7 +66,7 @@ describe('Paralysis', function () {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
-		let speed = battle.p1.active[0].getStat('spe');
+		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
@@ -76,7 +76,7 @@ describe('Paralysis', function () {
 			[{species: 'Vaporeon', moves: ['growl']}],
 			[{species: 'Jolteon', moves: ['thunderwave']}],
 		]);
-		let speed = battle.p1.active[0].getStat('spe');
+		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move growl', 'move thunderwave');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
@@ -87,7 +87,7 @@ describe('Paralysis', function () {
 			[{species: 'Slowpoke', moves: ['amnesia', 'thunderwave']}],
 		]);
 		battle.makeChoices('move rest', 'move thunderwave');
-		let speed = battle.p1.active[0].getStat('spe');
+		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move rest', 'move amnesia');
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
@@ -101,7 +101,7 @@ describe('Paralysis', function () {
 		battle.makeChoices('move rest', 'move amnesia');
 		battle.makeChoices('move rest', 'move amnesia');
 		battle.makeChoices('move rest', 'move thunderwave');
-		let speed = battle.p1.active[0].getStat('spe');
+		const speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move rest', 'move amnesia');
 		assert.equal(battle.p1.active[0].getStat('spe'), speed);
 	});
@@ -132,7 +132,7 @@ describe('Toxic Poison', function () {
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices('move counter', 'move toxic');
 		}
-		let pokemon = battle.p1.active[0];
+		const pokemon = battle.p1.active[0];
 		pokemon.hp = pokemon.maxhp;
 		battle.makeChoices('switch 2', 'move whirlwind');
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
@@ -208,7 +208,7 @@ describe('Toxic Poison [Gen 1]', function () {
 			[{species: 'Chansey', moves: ['splash']}],
 		]);
 		battle.makeChoices('move toxic', 'move splash');
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
 		battle.makeChoices('move leechseed', 'move splash');
 		// (1/16) + (2/16) + (3/16) = (6/16)
@@ -228,7 +228,7 @@ describe('Toxic Poison [Gen 2]', function () {
 			[{species: 'Chansey', moves: ['splash']}],
 		]);
 		battle.makeChoices('move toxic', 'move splash');
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
 		battle.makeChoices('move leechseed', 'move splash');
 		// (1/16) + (2/16) + (1/8) = (5/16)
@@ -245,7 +245,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		]);
 		battle.resetRNG(); // Guarantee Sacred Fire burns
 		battle.makeChoices('move sacredfire', 'move splash');
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 		battle.resetRNG(); // Guarantee Toxic hits.
 		battle.makeChoices('move toxic', 'switch 2');
 		battle.makeChoices('move splash', 'move splash');
@@ -289,7 +289,7 @@ describe('Toxic Poison [Gen 2]', function () {
 			[{species: 'Chansey', moves: ['splash', 'healbell']}],
 		]);
 		battle.makeChoices('move toxic', 'move splash');
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 		battle.makeChoices('move splash', 'move healbell');
 		battle.resetRNG(); // Guarantee Sacred Fire burns
 		battle.makeChoices('move sacredfire', 'move splash');

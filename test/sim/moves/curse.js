@@ -63,7 +63,7 @@ describe('Curse', function () {
 		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 
 		battle.makeChoices('auto', 'auto');
-		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
+		const hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
 		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down + residual damage
 		assert.equal(hps[1], battle.p2.active[0].maxhp); // Foe unaffected
 
@@ -78,7 +78,7 @@ describe('Curse', function () {
 		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 
 		battle.makeChoices('auto', 'auto');
-		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
+		const hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
 		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down
 		assert.notStrictEqual(hps[1], battle.p2.active[0].maxhp); // Curse residual damage
 
@@ -94,7 +94,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		battle.destroy();
 	});
 
-	let doublesTeams = [[
+	const doublesTeams = [[
 		{species: "Kecleon", ability: 'colorchange', item: 'laggingtail', moves: ['curse', 'calmmind']},
 		{species: "Sableye", ability: 'prankster', item: '', moves: ['lightscreen', 'mudsport']},
 	], [
@@ -102,14 +102,14 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		{species: "Gastly", ability: 'levitate', item: '', moves: ['lick', 'calmmind']},
 	]];
 
-	let triplesTeams = [
+	const triplesTeams = [
 		doublesTeams[0].concat({species: "Metapod", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']}),
 		doublesTeams[1].concat({species: "Kakuna", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']}),
 	];
 
 	function runDoublesTest(battle, curseUser) {
-		let p2active = battle.p2.active;
-		let cursePartner = curseUser.side.active[1 - curseUser.position];
+		const p2active = battle.p2.active;
+		const cursePartner = curseUser.side.active[1 - curseUser.position];
 
 		battle.makeChoices(
 			// p1: Kecleon uses Curse last in the turn.
@@ -121,7 +121,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
 
-		let foeHP = [p2active[0].hp, p2active[1].hp];
+		const foeHP = [p2active[0].hp, p2active[1].hp];
 		battle.makeChoices(`move 2, move 2`, `move 2, move 2`);
 
 		assert.notStrictEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
@@ -137,8 +137,8 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 	}
 
 	function runTriplesTest(battle, curseUser) {
-		let p1active = battle.p1.active;
-		let p2active = battle.p2.active;
+		const p1active = battle.p1.active;
+		const p2active = battle.p2.active;
 
 		battle.makeChoices(
 			// p1: Kecleon uses Curse last in the turn.
@@ -152,14 +152,14 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 
 		let cursedFoe = false;
 		for (let i = 0; i < 3; i++) {
-			let allyPokemon = p1active[i];
+			const allyPokemon = p1active[i];
 			if (allyPokemon === curseUser) {
 				assert.notStrictEqual(allyPokemon.hp, allyPokemon.maxhp); // Curse user cut its HP down
 			} else {
 				assert.equal(allyPokemon.hp, allyPokemon.maxhp); // Partners unaffected by Curse
 			}
 
-			let foePokemon = p2active[i];
+			const foePokemon = p2active[i];
 			if (foePokemon.hp !== foePokemon.maxhp) {
 				cursedFoe = true;
 			}
@@ -180,11 +180,11 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		runDoublesTest(battle, battle.p1.active[1]);
 	});
 
-	for (let cursePos of [0, 1, 2]) {
+	for (const cursePos of [0, 1, 2]) {
 		it('should target an opponent in Triples even if the user is on position ' + cursePos, function () {
-			let p1team = triplesTeams[0].slice(1);
+			const p1team = triplesTeams[0].slice(1);
 			p1team.splice(cursePos, 0, triplesTeams[0][0]);
-			let p2team = triplesTeams[1].slice();
+			const p2team = triplesTeams[1].slice();
 
 			battle = common.gen(5).createBattle({gameType: 'triples'}, [p1team, p2team]);
 			runTriplesTest(battle, battle.p1.active[cursePos]);

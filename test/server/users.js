@@ -2,9 +2,9 @@
 
 const assert = require('assert').strict;
 
-let userUtils = require('../users-utils');
-let Connection = userUtils.Connection;
-let User = userUtils.User;
+const userUtils = require('../users-utils');
+const Connection = userUtils.Connection;
+const User = userUtils.User;
 
 describe('Users features', function () {
 	describe('Users', function () {
@@ -30,14 +30,14 @@ describe('Users features', function () {
 				});
 
 				it('should remove the connection from Users.connections', function () {
-					let connectionid = this.connection.id;
+					const connectionid = this.connection.id;
 					this.connection.destroy();
 					assert.equal(Users.connections.has(connectionid), false);
 				});
 
 				it('should destroy any user on the connection as well', function () {
-					let user = new User(this.connection);
-					let userid = user.id;
+					const user = new User(this.connection);
+					const userid = user.id;
 					assert.equal(Users.users.has(userid), true, 'before disconnecting');
 					user.disconnectAll();
 					user.destroy();
@@ -79,9 +79,9 @@ describe('Users features', function () {
 		});
 		describe('User', function () {
 			describe('#disconnectAll', function () {
-				for (let totalConnections of [1, 2]) {
+				for (const totalConnections of [1, 2]) {
 					it('should drop all ' + totalConnections + ' connection(s) and mark as inactive', function () {
-						let user = new User();
+						const user = new User();
 						let iterations = totalConnections;
 						while (--iterations) user.mergeConnection(new Connection());
 
@@ -91,11 +91,11 @@ describe('Users features', function () {
 					});
 
 					it('should unref all ' + totalConnections + ' connection(s)', function () {
-						let user = new User();
+						const user = new User();
 						let iterations = totalConnections;
 						while (--iterations) user.mergeConnection(new Connection());
 
-						let connections = user.connections.slice();
+						const connections = user.connections.slice();
 
 						user.disconnectAll();
 						for (let i = 0; i < totalConnections; i++) {
@@ -104,10 +104,10 @@ describe('Users features', function () {
 					});
 
 					it('should clear `user` property for all ' + totalConnections + ' connection(s)', function () {
-						let user = new User();
+						const user = new User();
 						let iterations = totalConnections;
 						while (--iterations) user.mergeConnection(new Connection());
-						let connections = user.connections.slice();
+						const connections = user.connections.slice();
 
 						user.disconnectAll();
 						for (let i = 0; i < totalConnections; i++) {
@@ -118,29 +118,29 @@ describe('Users features', function () {
 			});
 			describe('#ban', function () {
 				afterEach(function () {
-					for (let ip in Users.bannedIps) {
+					for (const ip in Users.bannedIps) {
 						delete Users.bannedIps[ip];
 					}
 				});
 
 				it('should disconnect every user at that IP', async function () {
 					Punishments.sharedIps = new Map();
-					let users = ['127.0.0.1', '127.0.0.1'].map(ip => new User(new Connection(ip)));
+					const users = ['127.0.0.1', '127.0.0.1'].map(ip => new User(new Connection(ip)));
 					await Punishments.ban(users[0]);
 					assert.equal(users[0].connected, false);
 					assert.equal(users[1].connected, false);
 				});
 
 				it('should not disconnect users at other IPs', async function () {
-					let users = ['127.0.0.1', '127.0.0.2'].map(ip => new User(new Connection(ip)));
+					const users = ['127.0.0.1', '127.0.0.2'].map(ip => new User(new Connection(ip)));
 					await Punishments.ban(users[0]);
 					assert.equal(users[1].connected, true);
 				});
 
 				it('should update IP count properly', async function () {
-					let user = new User();
+					const user = new User();
 					await Punishments.ban(user);
-					for (let ip in user.ips) {
+					for (const ip in user.ips) {
 						assert.equal(user.ips[ip], 0);
 					}
 				});
