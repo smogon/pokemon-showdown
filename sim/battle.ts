@@ -116,7 +116,7 @@ export class Battle {
 	activePokemon: Pokemon | null;
 	activeTarget: Pokemon | null;
 
-	lastMove: Move | null;
+	lastMove: ActiveMove | null;
 	lastMoveThisTurn: Move | null;
 	lastMoveLine: number;
 	lastDamage: number;
@@ -130,6 +130,7 @@ export class Battle {
 	readonly maxMoveTable: {[k: string]: string};
 
 	readonly NOT_FAIL: '';
+	readonly HIT_SUBSTITUTE: 0;
 	readonly FAIL: false;
 	readonly SILENT_FAIL: null;
 
@@ -204,6 +205,7 @@ export class Battle {
 		this.hints = new Set();
 
 		this.NOT_FAIL = '';
+		this.HIT_SUBSTITUTE = 0;
 		this.FAIL = false;
 		this.SILENT_FAIL = null;
 
@@ -1031,11 +1033,11 @@ export class Battle {
 		}
 	}
 
-	getPokemon(id: string | Pokemon) {
-		if (typeof id !== 'string') id = id.id;
+	getPokemon(fullname: string | Pokemon) {
+		if (typeof fullname !== 'string') fullname = fullname.fullname;
 		for (const side of this.sides) {
 			for (const pokemon of side.pokemon) {
-				if (pokemon.id === id) return pokemon;
+				if (pokemon.fullname === fullname) return pokemon;
 			}
 		}
 		return null;
@@ -2122,6 +2124,10 @@ export class Battle {
 		attack = this.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
 		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
+		if (this.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
+			defense = this.dex.clampIntRange(Math.floor(defense / 2), 1);
+		}
+
 		const tr = this.trunc;
 
 		// int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
@@ -2200,7 +2206,7 @@ export class Battle {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if ((move.isZPowered || move.maxPowered) && target.getMoveHitData(move).zBrokeProtect) {
+		if ((move.isZOrMaxPowered || move.isZOrMaxPowered) && target.getMoveHitData(move).zBrokeProtect) {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}
@@ -2356,7 +2362,8 @@ export class Battle {
 
 	faintMessages(lastFirst = false) {
 		if (this.ended) return;
-		if (!this.faintQueue.length) return false;
+		const length = this.faintQueue.length;
+		if (!length) return false;
 		if (lastFirst) {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
@@ -2406,7 +2413,7 @@ export class Battle {
 			team2PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 1 ? side.pokemonLeft : 0), 0);
 		}
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
-			this.win(faintData ? faintData.target.side : null);
+			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
 			return true;
 		}
 		if (!team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
@@ -2424,6 +2431,10 @@ export class Battle {
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft) {
 			this.win(this.sides[3]);
 			return true;
+		}
+
+		if (faintData) {
+			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
 		}
 		return false;
 	}
@@ -2493,7 +2504,7 @@ export class Battle {
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.getEffectByID(pokemon.speciesid), pokemon.speciesData, pokemon);
+				this.singleEvent('Start', this.dex.getEffectByID(pokemon.species.id), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -3037,10 +3048,6 @@ export class Battle {
 		throw new UnimplementedError('canZMove');
 	}
 
-	canDynamax(pokemon: Pokemon, skipChecks?: boolean): DynamaxOptions | undefined {
-		throw new UnimplementedError('canDynamax');
-	}
-
 	forceSwitch(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
@@ -3109,7 +3116,7 @@ export class Battle {
 
 	moveHit(
 		target: Pokemon | null, pokemon: Pokemon, move: ActiveMove,
-		moveData?: ActiveMove | SelfEffect | SecondaryEffect,
+		moveData?: HitEffect,
 		isSecondary?: boolean, isSelf?: boolean
 	): number | undefined | false {
 		throw new UnimplementedError('moveHit');

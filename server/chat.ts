@@ -1424,8 +1424,8 @@ export const Chat = new class {
 		} while (toUncache.length > 0);
 	}
 
-	uncacheDir(root: string) {
-		const absoluteRoot = FS(root).path;
+	uncacheDir(root: string, followSymlink?: boolean) {
+		const absoluteRoot = followSymlink ? FS(root).realpathSync() : FS(root).path;
 		for (const key in require.cache) {
 			if (key.startsWith(absoluteRoot)) {
 				delete require.cache[key];
@@ -1911,12 +1911,12 @@ export const Chat = new class {
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
 			if (!targetUser.blockPMsNotified) {
-				targetUser.send(`${prefix}The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
+				targetUser.send(`${prefix}The user '${this.escapeHTML(user.name)}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
 				targetUser.blockPMsNotified = true;
 			}
 		} else if (blocked === 'challenge') {
 			if (!targetUser.blockChallengesNotified) {
-				targetUser.send(`${prefix}The user '${user.name}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
+				targetUser.send(`${prefix}The user '${this.escapeHTML(user.name)}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
 				targetUser.blockChallengesNotified = true;
 			}
 		}

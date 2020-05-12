@@ -131,15 +131,17 @@ function getLetsGoMoves(species: string | Species) {
 
 function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen7', isBSS = false) {
 	species = Dex.getSpecies(species);
-	if (species.battleOnly) species = Dex.getSpecies(Dex.getOutOfBattleSpecies(species));
+	if (typeof species.battleOnly === 'string') {
+		species = Dex.getSpecies(species.battleOnly);
+	}
 	gen = toID(gen);
 	const genNum = parseInt(gen[3]);
-	if (isNaN(genNum) || genNum < 6 || (isBSS && genNum < 7)) return false;
+	if (isNaN(genNum) || genNum < 6 || (isBSS && genNum < 7)) return null;
 	const statsFile = JSON.parse(
 		FS(`data${gen === 'gen8' ? '/' : `/mods/${gen}`}/${isBSS ? `bss-` : ``}factory-sets.json`).readIfExistsSync() ||
 		"{}"
 	);
-	if (!Object.keys(statsFile).length) return false;
+	if (!Object.keys(statsFile).length) return null;
 	let buf = ``;
 	const statNames: {[k: string]: string} = {
 		hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
@@ -371,7 +373,20 @@ export const commands: ChatCommands = {
 				tier = 'ou';
 			}
 			const mod = args[2] || 'gen7';
-			const bfSets = battleFactorySets(species, tier, mod);
+			let bfSets;
+			if (species.name === 'Necrozma-Ultra') {
+				bfSets = battleFactorySets(Dex.getSpecies('necrozma-dawnwings'), tier, mod);
+				if (typeof bfSets === 'string') {
+					bfSets += battleFactorySets(Dex.getSpecies('necrozma-duskmane'), tier, mod);
+				}
+			} else if (species.name === 'Zygarde-Complete') {
+				bfSets = battleFactorySets(Dex.getSpecies('zygarde'), tier, mod);
+				if (typeof bfSets === 'string') {
+					bfSets += battleFactorySets(Dex.getSpecies('zygarde-10'), tier, mod);
+				}
+			} else {
+				bfSets = battleFactorySets(species, tier, mod);
+			}
 			if (!bfSets) return this.parse(`/help battlefactory`);
 			if (typeof bfSets !== 'string') {
 				return this.errorReply(`Error: ${bfSets.e}`);

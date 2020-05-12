@@ -625,12 +625,8 @@ export const commands: ChatCommands = {
 			return this.errorReply("Title must be under 32 characters long.");
 		} else if (!title) {
 			title = (`${Math.floor(Math.random() * 100000000)}`);
-		} else if (Config.chatfilter) {
-			const filterResult = Config.chatfilter.call(this, title, user, null, connection);
-			if (!filterResult) return;
-			if (title !== filterResult) {
-				return this.errorReply("Invalid title.");
-			}
+		} else if (this.filter(title) !== title) {
+			return this.errorReply("Invalid title.");
 		}
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol

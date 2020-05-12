@@ -287,13 +287,17 @@ export const commands: ChatCommands = {
 				Chat.uncacheDir('./.server-dist/chat-commands');
 				Chat.uncacheDir('./server/chat-plugins');
 				Chat.uncacheDir('./.server-dist/chat-plugins');
-				Chat.uncacheDir('./server/chat-plugins/private');
+				if (await FS('./server/chat-plugins/private').exists()) {
+					Chat.uncacheDir('./server/chat-plugins/private', true);
+				}
 				Chat.uncacheDir('./translations');
 				global.Chat = require('../chat').Chat;
 
 				Chat.uncacheDir('./.server-dist/tournaments');
 				global.Tournaments = require('../tournaments').Tournaments;
 				this.sendReply("Chat commands have been hot-patched.");
+				Chat.loadPlugins();
+				this.sendReply("Chat plugins have been loaded.");
 			} else if (target === 'tournaments') {
 				if (lock['tournaments']) {
 					return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
@@ -319,7 +323,7 @@ export const commands: ChatCommands = {
 
 				// uncache the .sim-dist/dex.js dependency tree
 				Chat.uncacheDir('./.sim-dist');
-				Chat.uncacheDir('./data');
+				Chat.uncacheDir('./.data-dist');
 				Chat.uncache('./config/formats');
 				// reload .sim-dist/dex.js
 				global.Dex = require('../../sim/dex').Dex;
