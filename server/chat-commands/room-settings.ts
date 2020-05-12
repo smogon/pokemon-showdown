@@ -1305,7 +1305,7 @@ export const commands: ChatCommands = {
 		const resetTier = cmd === 'resettierdisplay';
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			return this.sendReplyBox(`This room is currently displaying ${room.tierDisplay} as the tier when using /data.`);
+			return this.sendReplyBox(`This room is currently displaying ${room.dataCommandTierDisplay} as the tier when using /data.`);
 		}
 		if (!this.can('declare')) return false;
 
@@ -1321,13 +1321,13 @@ export const commands: ChatCommands = {
 				return this.parse(`/help roomtierdisplay`);
 			}
 
-			room.tierDisplay = displayIDToName[toID(target)];
+			room.dataCommandTierDisplay = displayIDToName[toID(target)];
 			this.sendReply(`(The room's tier display is now: ${displayIDToName[toID(target)]})`);
 
 			this.privateModAction(`(${user.name} changed the room's tier display to: ${displayIDToName[toID(target)]}.)`);
 			this.modlog('ROOMTIERDISPLAY', null, `to ${displayIDToName[toID(target)]}`);
 		} else {
-			room.tierDisplay = 'tiers';
+			room.dataCommandTierDisplay = 'tiers';
 			this.sendReply(`(The room's tier display is now: tiers)`);
 
 			this.privateModAction(`(${user.name} reset the room's tier display.)`);
@@ -1335,7 +1335,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (room.chatRoomData) {
-			room.chatRoomData.tierDisplay = room.tierDisplay;
+			room.chatRoomData.dataCommandTierDisplay = room.dataCommandTierDisplay;
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -1426,9 +1426,9 @@ export const roomSettings: SettingsHandler[] = [
 		label: "Tier display",
 		permission: 'editroom',
 		options: [
-			[`tiers`, room.tierDisplay === 'tiers' || `roomtierdisplay tiers`],
-			[`doubles tiers`, room.tierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
-			[`numbers`, room.tierDisplay === 'numbers' || `roomtierdisplay numbers`],
+			[`tiers`, room.dataCommandTierDisplay === 'tiers' || `roomtierdisplay tiers`],
+			[`doubles tiers`, room.dataCommandTierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
+			[`numbers`, room.dataCommandTierDisplay === 'numbers' || `roomtierdisplay numbers`],
 		],
 	}),
 ];
