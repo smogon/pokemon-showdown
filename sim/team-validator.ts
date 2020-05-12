@@ -329,6 +329,13 @@ export class TeamValidator {
 
 		let species = dex.getSpecies(set.species);
 		set.species = species.name;
+		if (set.name && set.name.length > 18) {
+			if (set.name === set.species) {
+				set.name = species.baseSpecies;
+			} else {
+				problems.push(`Nickname "${set.name}" too long (should be 18 characters or fewer)`);
+			}
+		}
 		set.name = dex.getName(set.name);
 		let item = dex.getItem(Dex.getString(set.item));
 		set.item = item.name;
