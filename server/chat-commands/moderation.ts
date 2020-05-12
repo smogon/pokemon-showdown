@@ -515,9 +515,11 @@ export const commands: ChatCommands = {
 	unmutehelp: [`/unmute [username] - Removes mute from user. Requires: % @ # & ~`],
 
 	rb: 'ban',
+	forceroomban: 'ban',
+	forcerb: 'ban',
 	roomban: 'ban',
 	b: 'ban',
-	ban(target, room, user, connection) {
+	ban(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ban');
 		if (!this.canTalk()) return;
 
@@ -534,7 +536,16 @@ export const commands: ChatCommands = {
 		}
 		const name = targetUser.getLastName();
 		const userid = targetUser.getLastId();
-
+		const force = cmd === 'forcerb' || cmd === 'forceroomban';
+		if (targetUser.trusted) {
+			if (!force) {
+				return this.sendReply(
+					`${name} is a trusted user. If you are sure you would like to ban them use /forceroomban.`
+				);
+			}
+		} else if (force) {
+			return this.errorReply(`Use /roomban; ${name} is not a trusted user.`);
+		}
 		if (Punishments.isRoomBanned(targetUser, room.roomid) && !target) {
 			const problem = " but was already banned";
 			return this.privateModAction(`(${name} would be banned by ${user.name} ${problem}.)`);
@@ -1490,7 +1501,9 @@ export const commands: ChatCommands = {
 
 	ab: 'blacklist',
 	bl: 'blacklist',
-	blacklist(target, room, user) {
+	forceblacklist: 'blacklist',
+	forcebl: 'blacklist',
+	blacklist(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help blacklist');
 		if (!this.canTalk()) return;
 		if (toID(target) === 'show') return this.errorReply(`You're looking for /showbl`);
@@ -1509,7 +1522,16 @@ export const commands: ChatCommands = {
 		if (punishment && punishment[0] === 'BLACKLIST') {
 			return this.errorReply(`This user is already blacklisted from this room.`);
 		}
-
+		const force = cmd === 'forceblacklist' || cmd === 'forcebl';
+		if (targetUser.trusted) {
+			if (!force) {
+				return this.sendReply(
+					`${targetUser.name} is a trusted user. If you are sure you would like to blacklist them use /forceblacklist.`
+				);
+			}
+		} else if (force) {
+			return this.errorReply(`Use /blacklist; ${targetUser.name} is not a trusted user.`);
+		}
 		if (!target && REQUIRE_REASONS) {
 			return this.errorReply(`Blacklists require a reason.`);
 		}
