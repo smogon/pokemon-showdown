@@ -1851,10 +1851,6 @@ export class TeamValidator {
 						// past-gen level-up, TM, or tutor moves:
 						//   available as long as the source gen was or was before this gen
 						if (learned.charAt(1) === 'R') {
-							if (baseSpecies.name === 'Pikachu-Gmax') {
-								// Volt Tackle is weird (from egg, but not an egg move), and Pikachu-Gmax can't learn it
-								continue;
-							}
 							moveSources.restrictedMove = moveid;
 						}
 						limit1 = false;

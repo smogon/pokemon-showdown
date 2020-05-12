@@ -210,7 +210,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	pikachugmax: {
 		randomDoubleBattleMoves: ["extremespeed", "fakeout", "knockoff", "surf", "volttackle"],
-		unreleasedHidden: true,
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
 	},
