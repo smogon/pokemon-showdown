@@ -492,12 +492,6 @@ describe('Team Validator', function () {
 		];
 		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
 		assert.equal(illegal, null);
-
-		team = [
-			{species: 'pikachu-gmax', ability: 'static', moves: ['volttackle'], evs: {hp: 1}},
-		];
-		illegal = TeamValidator.get('gen8anythinggoes').validateTeam(team);
-		assert(illegal);
 	});
 
 	it('should reject exclusive G-Max moves added directly to a Pokemon\'s moveset', function () {
