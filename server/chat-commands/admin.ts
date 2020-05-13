@@ -86,6 +86,7 @@ export const commands: ChatCommands = {
 		if (!html) return this.parse(`/help ${cmd}`);
 		if (!this.can('addhtml', null, room)) return;
 		html = Chat.collapseLineBreaksHTML(html);
+		if (!/^[^<>]*(?:<[^<>]*?>[^<>]*)*$/.test(html)) return this.errorReply('Found unmatched < or >. If you wish to use them as text, please use `&lt;` or `&gt;` respectively.');
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
