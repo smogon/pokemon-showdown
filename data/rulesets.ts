@@ -289,13 +289,19 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 	onevsone: {
 		effectType: 'Rule',
 		name: 'One vs One',
-		desc: "Allows each player to bring three Pok&eacute;mon to team preview and choose one for battle",
-		onValidateTeam(team) {
-			if (team.length > 3) return [`You may only bring up to 3 Pok\u00E9mon.`];
-		},
+		desc: "Only allows one Pok&eacute;mon in battle",
 		onStart() {
 			// @ts-ignore
 			this.format.teamLength = {battle: 1};
+		},
+	},
+	twovstwo: {
+		effectType: 'Rule',
+		name: 'Two vs Two',
+		desc: "Only allows two Pok&eacute;mon in battle",
+		onStart() {
+			// @ts-ignore
+			this.format.teamLength = {battle: 2};
 		},
 	},
 	littlecup: {
