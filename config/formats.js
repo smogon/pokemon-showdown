@@ -44,12 +44,12 @@ const Formats = [
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
 	},
-	/*{
+	{
 		name: "[Gen 8] OU (Blitz)",
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', 'Blitz'],
-	},*/
+	},
 	{
 		name: "[Gen 8] Ubers",
 		threads: [
