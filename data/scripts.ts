@@ -714,7 +714,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.struggleRecoil) {
 			let recoilDamage;
 			if (this.dex.gen >= 5) {
-				recoilDamage = this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1);
+				recoilDamage = this.dex.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
 			} else {
 				recoilDamage = this.trunc(pokemon.maxhp / 4);
 			}
