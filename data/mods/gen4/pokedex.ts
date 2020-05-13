@@ -1,8 +1,4 @@
 export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
-	farfetchd: {
-		inherit: true,
-		name: "Farfetch\u2019d",
-	},
 	milotic: {
 		inherit: true,
 		evoType: 'levelExtra',
