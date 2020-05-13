@@ -67,6 +67,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 80, atk: 110, def: 130, spa: 55, spd: 65, spe: 45},
 	},
+	farfetchd: {
+		inherit: true,
+		name: "Farfetch'd",
+	},
 	mrmime: {
 		inherit: true,
 		types: ["Psychic"],
