@@ -1146,7 +1146,7 @@ export class RandomTeams {
 			ability = ability0.name;
 		}
 
-		item = (!isDoubles || (isDoubles && ability === 'Moody' && hasMove['protect'])) ? 'Leftovers' : 'Sitrus Berry';
+		item = !isDoubles ? 'Leftovers' : 'Sitrus Berry';
 		if (species.requiredItems) {
 			item = this.sample(species.requiredItems);
 
@@ -1230,7 +1230,7 @@ export class RandomTeams {
 			item = 'Chople Berry';
 		} else if (this.dex.getEffectiveness('Rock', species) >= 2 || (this.dex.getEffectiveness('Rock', species) >= 1 && (hasMove['courtchange'] || hasMove['defog'] || hasMove['rapidspin'])) && !isDoubles) {
 			item = 'Heavy-Duty Boots';
-		} else if ((hasMove['clearsmog'] || hasMove['coil'] || hasMove['curse'] || hasMove['healbell'] || hasMove['protect'] || hasMove['sleeptalk']) && !isDoubles) {
+		} else if ((hasMove['clearsmog'] || hasMove['coil'] || hasMove['curse'] || hasMove['healbell'] || hasMove['protect'] || hasMove['sleeptalk']) && (hasAbility['Moody'] || !isDoubles)) {
 			item = 'Leftovers';
 
 		// Better than Leftovers
@@ -1309,10 +1309,10 @@ export class RandomTeams {
 				bst += 0.5 * (baseStats.def + baseStats.spd);
 			} else if (item === 'Light Ball') {
 				bst += baseStats.atk + baseStats.spa;
-			} else if (speciesAbility === 'Slow Start') {
-				bst -= 0.5 * (baseStats.atk + baseStats.spe);
 			} else if (ability === 'Gorilla Tactics') {
 				bst += 0.5 * (baseStats.atk);
+			} else if (ability === 'Slow Start') {
+				bst -= 0.5 * (baseStats.atk + baseStats.spe);
 			}
 			level = 70 + Math.floor(((640 - this.dex.clampIntRange(bst, 330, 640)) / 10.3));
 		}
