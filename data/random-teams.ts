@@ -1230,7 +1230,7 @@ export class RandomTeams {
 			item = 'Chople Berry';
 		} else if (this.dex.getEffectiveness('Rock', species) >= 2 || (this.dex.getEffectiveness('Rock', species) >= 1 && (hasMove['courtchange'] || hasMove['defog'] || hasMove['rapidspin'])) && !isDoubles) {
 			item = 'Heavy-Duty Boots';
-		} else if ((hasMove['clearsmog'] || hasMove['coil'] || hasMove['curse'] || hasMove['healbell'] || hasMove['protect'] || hasMove['sleeptalk']) && (hasAbility['Moody'] || !isDoubles)) {
+		} else if ((hasMove['clearsmog'] || hasMove['coil'] || hasMove['curse'] || hasMove['healbell'] || hasMove['protect'] || hasMove['sleeptalk']) && (ability === 'Moody' || !isDoubles)) {
 			item = 'Leftovers';
 
 		// Better than Leftovers
