@@ -31,6 +31,13 @@ const OPERATORS: {[k in Operator]: Operators} = {
 	},
 };
 
+const BASE_PREFIXES: {[base: number]: string} = {
+	2: "0b",
+	8: "0o",
+	10: "",
+	16: "0x",
+};
+
 function parseMathematicalExpression(infix: string) {
 	// Shunting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 	const outputQueue: string[] = [];
@@ -132,17 +139,26 @@ export const commands: ChatCommands = {
 	math: "calculate",
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');
+		const targets = target.split(',');
+		const expression = targets[0];
+		let base = parseInt(targets[1]);
+		if (isNaN(base)) base = 10;
+		if (targets.length > 1 && !(base in BASE_PREFIXES)) {
+			return this.errorReply("Invalid base. Valid options are: 2 8 10 16");
+		}
+
 		if (!this.runBroadcast()) return;
 		try {
-			const result = solveRPN(parseMathematicalExpression(target));
-			this.sendReplyBox(Chat.html`${target}<br />= <strong>${Chat.stringify(result)}</strong>`);
+			const result = solveRPN(parseMathematicalExpression(expression));
+			this.sendReplyBox(Chat.html`${expression}<br />= <strong>${BASE_PREFIXES[base] + result?.toString(base)}</strong>`);
 		} catch (e) {
 			this.sendReplyBox(
-				Chat.html`${target}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`
+				Chat.html`${expression}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`
 			);
 		}
 	},
 	calculatehelp: [
-		`/calculate [arithmetical question] - Calculates an arithmetical question. Supports PEMDAS (Parenthesis, Exponents, Multiplication, Division, Addition and Subtraction), pi and e.`,
+		`/calculate [arithmetical question], [result base] - Calculates an arithmetical question. Supports PEMDAS (Parenthesis, Exponents, Multiplication, Division, Addition and Subtraction), pi and e. Possible bases for the result are 2, 8, 10 and 16.
+		`,
 	],
 };
