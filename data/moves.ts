@@ -3097,7 +3097,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "randomNormal",
 		nonGhostTarget: "self",
 		type: "Ghost",
 		zMove: {effect: 'curse'},
