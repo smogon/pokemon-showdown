@@ -608,6 +608,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				const role = roles.shift()!;
 				this.playerTable[p].role = role;
 				const u = Users.get(p);
+				this.playerTable[p].revealed = false;
 				if (u?.connected) {
 					u.send(`>${this.room.roomid}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PM.`);
 				}
@@ -802,7 +803,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		const plur = this.getPlurality();
 		for (const key of Object.keys(this.playerTable).concat((this.enableNL ? ['nolynch'] : [])) as ID[]) {
 			if (this.lynches[key]) {
-				buf += `<p style="font-weight:bold">${this.lynches[key].count}${plur === key ? '*' : ''} ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Lynch'} (${this.lynches[key].lynchers.map(a => this.playerTable[a] ? this.playerTable[a].safeName : a).join(', ')}) `;
+				buf += `<p style="font-weight:bold">${this.lynches[key].count}${plur === key ? '*' : ''} ${this.playerTable[key] ? `${this.playerTable[key].safeName} ${this.playerTable[key].revealed ? `[${this.playerTable[key].getRole()}]` : ''}` : 'No Lynch'} (${this.lynches[key].lynchers.map(a => this.playerTable[a] ? this.playerTable[a].safeName : a).join(', ')}) `;
 			} else {
 				buf += `<p style="font-weight:bold">0 ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Lynch'} `;
 			}
@@ -1734,7 +1735,7 @@ export const pages: PageTable = {
 				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.revealed ? '(' + dead.getRole() + ')' : ''}`;
 				if (dead.treestump) buf += ` (is a Treestump)`;
 				if (dead.restless) buf += ` (is a Restless Spirit)`;
-				if (isHost) buf += `<button class="button" name="send" value="/mafia revealrole ${room.roomid}, ${dead.id}";">Reveal</button>`;
+				if (isHost && !dead.revealed) buf += `<button class="button" name="send" value="/mafia revealrole ${room.roomid}, ${dead.id}";">Reveal</button>`;
 				buf += `</p>`;
 			}
 			buf += `</details></p>`;
