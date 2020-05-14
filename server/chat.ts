@@ -1076,6 +1076,10 @@ export class CommandContext extends MessageContext {
 			this.errorReply('Do not use "click here"');
 			return null;
 		}
+		if (!/^[^<>]*(?:<[^<>]*?>[^<>]*)*$/.test(html)) {
+			this.errorReply('Found unmatched < or >. If you wish to use them, please use `&lt;` or `&gt;`.');
+			return null;
+		}
 
 		// check for mismatched tags
 		const tags = htmlContent
