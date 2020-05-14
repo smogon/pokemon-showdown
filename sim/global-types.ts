@@ -1446,6 +1446,7 @@ namespace RandomTeamsTypes {
 		rapidSpin?: number;
 		defog?: number;
 		illusion?: number;
+		statusCure?: number;
 	}
 	export interface FactoryTeamDetails {
 		megaCount: number;
