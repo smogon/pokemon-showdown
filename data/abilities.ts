@@ -1877,7 +1877,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Lightning Rod",
 		rating: 3,
-		num: 32,
+		num: 31,
 	},
 	limber: {
 		shortDesc: "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it.",
