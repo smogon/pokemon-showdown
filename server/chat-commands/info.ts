@@ -1176,14 +1176,7 @@ export const commands: ChatCommands = {
 		let modSet = false;
 		let realSet = false;
 
-		let pokemon: StatsTable = {
-			hp: 0,
-			atk: 0,
-			def: 0,
-			spa: 0,
-			spd: 0,
-			spe: 0,
-		};
+		let pokemon: StatsTable | undefined;
 		let useStat: StatName | '' = '';
 
 		let level = 100;
