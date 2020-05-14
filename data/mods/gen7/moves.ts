@@ -159,6 +159,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	curse: {
+		inherit: true,
+		target: "normal",
+	},
 	darkvoid: {
 		inherit: true,
 		isNonstandard: null,
