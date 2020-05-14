@@ -209,6 +209,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 	restless: boolean;
 	silenced: boolean;
 	nighttalk: boolean;
+	revealed: boolean;
 	IDEA: MafiaIDEAPlayerData | null;
 	constructor(user: User, game: MafiaTracker) {
 		super(user, game);
@@ -222,6 +223,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		this.restless = false;
 		this.silenced = false;
 		this.nighttalk = false;
+		this.revealed = false;
 		this.IDEA = null;
 	}
 
@@ -998,6 +1000,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (player.lynching) this.unlynch(player.id, true);
 		this.sendDeclare(`${msg}! ${!this.noReveal && toID(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`);
+		if(player.role && !this.noReveal && toID(ability) === 'kill') player.revealed = true;
 		const targetRole = player.role;
 		if (targetRole) {
 			for (const [roleIndex, role] of this.roles.entries()) {
@@ -1019,6 +1022,21 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.updatePlayers();
 		player.updateHtmlRoom();
 	}
+
+	revealrole(user: User, toReveal: MafiaPlayer) {
+		if(!this.started) {
+		    return user.sendTo(this.room, `|error|You may only reveal roles once the game has started.`)
+		}
+		if(!(toReveal.id in this.playerTable) && !(toReveal.id in this.dead)) {
+		    return user.sendTo(this.room, `|error|The user ${toReveal.id} is not a player.`)
+		}
+		if(!toReveal.role) {
+		    return user.sendTo(this.room, `|error|The user ${toReveal.id} is not assigned a role.`)
+		}
+		toReveal.revealed = true;
+		this.sendDeclare(`${toReveal.safeName}'s role ${toReveal.id in this.playerTable ? `is` : `was`} ${toReveal.getRole()}.`);
+	}
+
 
 	revive(user: User, toRevive: string, force = false) {
 		if (this.phase === 'IDEApicking') {
@@ -1712,13 +1730,14 @@ export const pages: PageTable = {
 		buf += `<button class="button" name="send" value="/join view-mafia-${room.roomid}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<br/><br/><h1 style="text-align:center;">${game.title}</h1><h3>Host: ${game.host}</h3>`;
 		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.keys(game.playerTable).sort().map(p => game.playerTable[p].safeName).join(', ')}</p>`;
-		if (!isHost && game.started && Object.keys(game.dead).length > 0) {
+		if (game.started && Object.keys(game.dead).length > 0) {
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Dead Players</summary>`;
 			for (const d in game.dead) {
 				const dead = game.dead[d];
-				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.role && !game.noReveal ? '(' + dead.getRole() + ')' : ''}`;
+				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.revealed ? '(' + dead.getRole() + ')' : ''}`;
 				if (dead.treestump) buf += ` (is a Treestump)`;
 				if (dead.restless) buf += ` (is a Restless Spirit)`;
+				if (!isHost) buf += `<button class="button" name="send" value="/mafia revealrole ${room.roomid}, ${dead.id}";">Reveal</button>`;
 				buf += `</p>`;
 			}
 			buf += `</details></p>`;
@@ -2499,6 +2518,23 @@ export const commands: ChatCommands = {
 			`/mafia spirit [player] - Kills a player, but allows them to vote on the lynch still.`,
 			`/mafia spiritstump [player] Kills a player, but allows them to talk during the day, and vote on the lynch.`,
 		],
+
+		revealrole(target, room, user) {
+			const args = target.split(',');
+			let targetRoom = Rooms.get(args[0]);
+			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.id]) {
+			    if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
+			    targetRoom = room;
+			} else {
+			    args.shift();
+			}
+			const game = targetRoom.getGame(MafiaTracker);
+			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
+			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
+			const player = game.playerTable[toID(args.join(''))];
+			game.revealrole(user, player);
+			game.logAction(user, `killed ${player.name}`);
+		},
 
 		'!revive': true,
 		forceadd: 'revive',
@@ -3745,6 +3781,7 @@ export const commands: ChatCommands = {
 			`/mafia spiritstump [player] - Kills a player, but allows them to talk during the day, and vote on the lynch. Requires host % @ # & ~`,
 			`/mafia kick [player] - Kicks a player from the game without revealing their role. Requires host % @ # & ~`,
 			`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ # & ~`,
+			`/mafia revealrole [player] - Reveals the role of a player. Requires host % @ # & ~`,
 			`/mafia (un)silence [player] - Silences [player], preventing them from talking at all. Requires host % @ # & ~`,
 			`/mafia (un)nighttalk [player] - Allows [player] to talk freely during the night. Requires host % @ # & ~`,
 			`/mafia (un)[priest|actor] [player] - Makes [player] a priest (can't hammer) or actor (can only hammer). Requires host % @ # & ~`,
