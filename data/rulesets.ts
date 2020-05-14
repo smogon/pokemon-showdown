@@ -290,6 +290,11 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		effectType: 'Rule',
 		name: 'One vs One',
 		desc: "Only allows one Pok&eacute;mon in battle",
+		onValidateTeam(team, format) {
+			if (format.gameType !== 'singles') {
+				return [`One vs One is for singles formats.`, `(Use Two vs Two in doubles)`];
+			}
+		},
 		onStart() {
 			// @ts-ignore
 			this.format.teamLength = {battle: 1};
