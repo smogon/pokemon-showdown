@@ -1027,9 +1027,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		if(!this.started) {
 		    return user.sendTo(this.room, `|error|You may only reveal roles once the game has started.`)
 		}
-		if(!(toReveal.id in this.playerTable) && !(toReveal.id in this.dead)) {
-		    return user.sendTo(this.room, `|error|The user ${toReveal.id} is not a player.`)
-		}
 		if(!toReveal.role) {
 		    return user.sendTo(this.room, `|error|The user ${toReveal.id} is not assigned a role.`)
 		}
@@ -1737,7 +1734,7 @@ export const pages: PageTable = {
 				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.revealed ? '(' + dead.getRole() + ')' : ''}`;
 				if (dead.treestump) buf += ` (is a Treestump)`;
 				if (dead.restless) buf += ` (is a Restless Spirit)`;
-				if (!isHost) buf += `<button class="button" name="send" value="/mafia revealrole ${room.roomid}, ${dead.id}";">Reveal</button>`;
+				if (isHost) buf += `<button class="button" name="send" value="/mafia revealrole ${room.roomid}, ${dead.id}";">Reveal</button>`;
 				buf += `</p>`;
 			}
 			buf += `</details></p>`;
@@ -2531,9 +2528,11 @@ export const commands: ChatCommands = {
 			const game = targetRoom.getGame(MafiaTracker);
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
-			const player = game.playerTable[toID(args.join(''))];
+			let player = game.playerTable[toID(args.join(''))];
+			if(!player) player = game.dead[toID(args.join(''))];
+			if(!player) return user.sendTo(this.room, `|error|${args.join(',')} is not a player.`);
 			game.revealrole(user, player);
-			game.logAction(user, `killed ${player.name}`);
+			game.logAction(user, `revealed ${player.name}`);
 		},
 
 		'!revive': true,
