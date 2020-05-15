@@ -1423,7 +1423,7 @@ export const roomSettings: SettingsHandler[] = [
 		),
 	}),
 	room => ({
-		label: "Tier display",
+		label: "/data Tier display",
 		permission: 'editroom',
 		options: [
 			[`tiers`, room.dataCommandTierDisplay === 'tiers' || `roomtierdisplay tiers`],
