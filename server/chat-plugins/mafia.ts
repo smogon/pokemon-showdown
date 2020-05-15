@@ -807,7 +807,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (this.lynches[key]) {
 				buf += `<p style="font-weight:bold">${this.lynches[key].count}${plur === key ? '*' : ''} ${this.playerTable[key] ? `${this.playerTable[key].safeName} ${this.playerTable[key].revealed ? `[${this.playerTable[key].getRole()}]` : ''}` : 'No Lynch'} (${this.lynches[key].lynchers.map(a => this.playerTable[a] ? this.playerTable[a].safeName : a).join(', ')}) `;
 			} else {
-				buf += `<p style="font-weight:bold">0 ${this.playerTable[key] ? `${this.playerTable[key].safeName} ${this.playerTable[key].revealed ? `[${this.playerTable[key].getRole()}]` : ''}`  : 'No Lynch'} `;
+				buf += `<p style="font-weight:bold">0 ${this.playerTable[key] ? `${this.playerTable[key].safeName} ${this.playerTable[key].revealed ? `[${this.playerTable[key].getRole()}]` : ''}` : 'No Lynch'} `;
 			}
 			const isPlayer = (this.playerTable[userid]);
 			const isSpirit = (this.dead[userid] && this.dead[userid].restless);
@@ -1003,7 +1003,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (player.lynching) this.unlynch(player.id, true);
 		this.sendDeclare(`${msg}! ${!this.noReveal && toID(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`);
-		if(player.role && !this.noReveal && toID(ability) === 'kill') player.revealed = true;
+		if (player.role && !this.noReveal && toID(ability) === 'kill') player.revealed = true;
 		const targetRole = player.role;
 		if (targetRole) {
 			for (const [roleIndex, role] of this.roles.entries()) {
@@ -1027,11 +1027,11 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	revealrole(user: User, toReveal: MafiaPlayer) {
-		if(!this.started) {
-		    return user.sendTo(this.room, `|error|You may only reveal roles once the game has started.`)
+		if (!this.started) {
+		    return user.sendTo(this.room, `|error|You may only reveal roles once the game has started.`);
 		}
-		if(!toReveal.role) {
-		    return user.sendTo(this.room, `|error|The user ${toReveal.id} is not assigned a role.`)
+		if (!toReveal.role) {
+		    return user.sendTo(this.room, `|error|The user ${toReveal.id} is not assigned a role.`);
 		}
 		toReveal.revealed = true;
 		this.sendDeclare(`${toReveal.safeName}'s role ${toReveal.id in this.playerTable ? `is` : `was`} ${toReveal.getRole()}.`);
@@ -1738,7 +1738,9 @@ export const pages: PageTable = {
 				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.revealed ? '(' + dead.getRole() + ')' : ''}`;
 				if (dead.treestump) buf += ` (is a Treestump)`;
 				if (dead.restless) buf += ` (is a Restless Spirit)`;
-				if (isHost && !dead.revealed) buf += `<button class="button" name="send" value="/mafia revealrole ${room.roomid}, ${dead.id}";">Reveal</button>`;
+				if (isHost && !dead.revealed) {
+					buf += `<button class="button" name="send" value="/mafia revealrole ${room.roomid}, ${dead.id}";">Reveal</button>`;
+				}
 				buf += `</p>`;
 			}
 			buf += `</details></p>`;
@@ -2533,8 +2535,8 @@ export const commands: ChatCommands = {
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
 			let player = game.playerTable[toID(args.join(''))];
-			if(!player) player = game.dead[toID(args.join(''))];
-			if(!player) return user.sendTo(this.room, `|error|${args.join(',')} is not a player.`);
+			if (!player) player = game.dead[toID(args.join(''))];
+			if (!player) return user.sendTo(this.room, `|error|${args.join(',')} is not a player.`);
 			game.revealrole(user, player);
 			game.logAction(user, `revealed ${player.name}`);
 		},
