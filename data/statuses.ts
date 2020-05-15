@@ -212,6 +212,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		},
 		onStart(pokemon, source) {
 			this.add('-activate', pokemon, 'move: ' + this.effectData.sourceEffect, '[of] ' + source);
+			this.effectData.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
 		},
 		onResidualOrder: 11,
 		onResidual(pokemon) {
@@ -223,11 +224,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 				this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]', '[silent]');
 				return;
 			}
-			if (source.hasItem('bindingband')) {
-				this.damage(pokemon.baseMaxhp / 6);
-			} else {
-				this.damage(pokemon.baseMaxhp / 8);
-			}
+			this.damage(pokemon.baseMaxhp / this.effectData.boundDivisor);
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
