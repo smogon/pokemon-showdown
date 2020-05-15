@@ -437,6 +437,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
 			).join(', ');
 			this.roleString = this.originalRoleString;
+			if (reset) this.distributeRoles();
 			return this.sendRoom(`The roles have been set.`);
 		}
 
