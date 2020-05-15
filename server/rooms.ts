@@ -1108,6 +1108,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.introMessage = '';
 		this.staffMessage = '';
 		this.banwordRegex = null;
+		this.rulesLink = null;
 
 		this.chatRoomData = (options.isPersonal ? null : options);
 		this.minorActivity = null;
@@ -1142,7 +1143,6 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
-		this.rulesLink = null;
 		this.reportJoinsInterval = null;
 		this.tour = null;
 		this.game = null;
