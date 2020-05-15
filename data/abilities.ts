@@ -2151,6 +2151,7 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 			let b: BoostName;
 			for (b in boost) {
 				if (boost[b]! < 0) {
+					if (target.boosts[b] === -6) continue;
 					const negativeBoost: SparseBoostsTable = {};
 					negativeBoost[b] = boost[b];
 					delete boost[b];

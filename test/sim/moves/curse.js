@@ -14,7 +14,7 @@ describe('Curse', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'randomNormal');
 	});
 
 	it('should request the Ghost target after the user becomes Ghost', function () {
@@ -24,7 +24,7 @@ describe('Curse', function () {
 
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 		battle.makeChoices('auto', 'auto');
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'randomNormal');
 	});
 
 	it('should not request a target after the user stops being Ghost', function () {
@@ -32,7 +32,7 @@ describe('Curse', function () {
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Jellicent", ability: 'waterabsorb', item: '', moves: ['soak']}]});
 
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'randomNormal');
 		battle.makeChoices('auto', 'auto');
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
@@ -168,12 +168,12 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 	}
 
 	it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', function () {
-		battle = common.createBattle({gameType: 'doubles'}, doublesTeams.slice());
+		battle = common.gen(6).createBattle({gameType: 'doubles'}, doublesTeams.slice());
 		runDoublesTest(battle, battle.p1.active[0]);
 	});
 
 	it('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
+		battle = common.gen(6).createBattle({gameType: 'doubles'}, [
 			[doublesTeams[0][1], doublesTeams[0][0]],
 			doublesTeams[1],
 		]);

@@ -1180,6 +1180,48 @@ const commands = {
 		room.addByUser(user, `Question #${question + 1} hint - spoiler: ${hint}`);
 	},
 
+	deletehint: 'removehint',
+	removehint(target, room, user) {
+		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
+		const game = room.game;
+		if ((!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) && game.staffHostId !== user.id) return this.errorReply("You cannot remove hints if you are not the host.");
+
+		const elapsedTime = Date.now() - game.startTime;
+		if (elapsedTime < 600000 /* 10 minutes */) return this.errorReply("You can only use this command 10 minutes after the hunt starts.");
+
+		let [question, hint] = target.split(',');
+		question = parseInt(question) - 1;
+		hint = parseInt(hint) - 1;
+
+		if (!game.questions[question]) return this.errorReply(`Invalid question number.`);
+		if (!game.questions[question].spoilers[hint]) return this.errorReply('Invalid hint number.');
+		game.questions[question].spoilers.splice(hint, 1);
+
+		return this.sendReply("Hint has been removed.");
+	},
+
+	modifyhint: 'edithint',
+	edithint(target, room, user) {
+		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
+		const game = room.game;
+		if ((!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) && game.staffHostId !== user.id) return this.errorReply("You cannot edit hints if you are not the host.");
+
+		const elapsedTime = Date.now() - game.startTime;
+		if (elapsedTime < 600000 /* 10 minutes */) return this.errorReply("You can only use this command 10 minutes after the hunt starts.");
+
+		let [question, hint, ...value] = target.split(',');
+		question = parseInt(question) - 1;
+		hint = parseInt(hint) - 1;
+		value = value.join(',');
+
+		if (!game.questions[question]) return this.errorReply(`Invalid question number.`);
+		if (!game.questions[question].spoilers[hint]) return this.errorReply('Invalid hint number.');
+		if (!value) return this.errorReply('The hint cannot be left empty.');
+		game.questions[question].spoilers[hint] = value;
+
+		room.addByUser(user, `Question #${question + 1} hint - spoiler: ${value}`);
+		return this.sendReply("Hint has been modified.");
+	},
 
 	kick(target, room, user) {
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
@@ -1962,6 +2004,8 @@ exports.commands = {
 			"- /starthunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt. (Requires: % @ * # & ~)",
 			"- /start(official/practice/mini/unrated)hunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt, giving points if assigned.  Blitz and wins will count towards the leaderboard. (Requires: % @ * # & ~)",
 			"- /scav addhint <em>[question number], [value]</em> - adds a hint to a question in the current scavenger hunt. Can only be used after 10 minutes have passed since the start of the hunt. Only the host(s) can add a hint.",
+			"- /scav removehint <em>[question number], [hint number]</em> - removes a hint from a question in the current scavenger hunt. Can only be used after 10 minutes have passed since the start of the hunt. Only the host(s) can remove a hint.",
+			"- /scav edithint <em>[question number], [hint number], [value]</em> - edits a hint to a question in the current scavenger hunt. Can only be used after 10 minutes have passed since the start of the hunt. Only the host(s) can edit a hint.",
 			"- /edithunt <em>[question number], [hint | answer], [value]</em> - edits the current scavenger hunt. Only the host(s) can edit the hunt.",
 			"- /resethunt - resets the current scavenger hunt without revealing the hints and answers. (Requires: % @ * # & ~)",
 			"- /endhunt - ends the current scavenger hunt and announces the winners and the answers. (Requires: % @ * # & ~)",
