@@ -439,8 +439,9 @@ class MafiaTracker extends Rooms.RoomGame {
 				r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
 			).join(', ');
 			this.roleString = this.originalRoleString;
+			this.sendRoom(`The roles have been ${reset ? 're' : ''}set.`);
 			if (reset) this.distributeRoles();
-			return this.sendRoom(`The roles have been set.`);
+			return;
 		}
 
 		const newRoles: MafiaRole[] = [];
@@ -1034,6 +1035,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		toReveal.revealed = true;
 		this.sendDeclare(`${toReveal.safeName}'s role ${toReveal.id in this.playerTable ? `is` : `was`} ${toReveal.getRole()}.`);
+		this.updatePlayers();
 	}
 
 
