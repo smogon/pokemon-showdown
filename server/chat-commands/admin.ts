@@ -126,8 +126,10 @@ export const commands: ChatCommands = {
 		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * & ~`,
 	],
 
-	addline(target, room, user) {
-		if (!this.can('rawpacket')) return false;
+	addline(target, room, user, connection) {
+		if (!user.hasConsoleAccess(connection)) {
+			return this.errorReply("/addline - Access denied.");
+		}
 		// secret sysop command
 		room.add(target);
 	},
