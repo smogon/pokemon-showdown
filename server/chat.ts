@@ -1100,7 +1100,7 @@ export class CommandContext extends MessageContext {
 				}
 			}
 			if (stack.length) {
-				this.errorReply("Missing </" + stack.pop() + ">.");
+				this.errorReply(`Missing </${stack.pop()}>.`);
 				return null;
 			}
 		}
