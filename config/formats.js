@@ -863,7 +863,7 @@ const Formats = [
 		name: "[Gen 8] CAP 1v1",
 		desc: `Randomly generated 1v1-style teams only including Pok&eacute;mon made by the Create-A-Pok&eacute;mon Project.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3591157/">CAP 1v1</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3663533/">CAP 1v1</a>`,
 		],
 
 		mod: 'gen8',
