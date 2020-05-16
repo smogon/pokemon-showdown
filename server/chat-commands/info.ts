@@ -541,7 +541,8 @@ export const commands: ChatCommands = {
 				if (format?.onModifySpecies) {
 					pokemon = format.onModifySpecies.call({dex} as Battle, pokemon) || pokemon;
 				}
-				let displayedTier = room?.dataCommandTierDisplay === 'numbers' ? (pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier) :
+				let displayedTier = room?.dataCommandTierDisplay === 'numbers' ?
+					(pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier) :
 					room?.dataCommandTierDisplay === 'doubles tiers' ? pokemon.doublesTier : pokemon.tier;
 				if (room?.battle) {
 					if (room.battle.format.includes('doubles') || room.battle.format.includes('vgc')) {
