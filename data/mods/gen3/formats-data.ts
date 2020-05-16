@@ -465,7 +465,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	scyther: {
-		randomBattleMoves: ["aerialace", "batonpass", "hiddenpowerrock", "quickattack", "silverwind", "swordsdance"],
+		randomBattleMoves: ["aerialace", "batonpass", "hiddenpowerground", "hiddenpowerrock", "quickattack", "silverwind", "swordsdance"],
 		tier: "UU",
 	},
 	scizor: {
@@ -605,7 +605,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	meganium: {
-		randomBattleMoves: ["counter", "hiddenpowergrass", "leechseed", "lightscreen", "reflect", "synthesis", "toxic"],
+		randomBattleMoves: ["counter", "hiddenpowergrass", "leechseed", "lightscreen", "synthesis", "toxic"],
 		tier: "UU",
 	},
 	cyndaquil: {
@@ -1272,7 +1272,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dusclops: {
-		randomBattleMoves: ["focuspunch", "icebeam", "painsplit", "rest", "shadowball", "sleeptalk", "willowisp"],
+		randomBattleMoves: ["focuspunch", "icebeam", "painsplit", "rest", "shadowball", "sleeptalk", "substitute", "willowisp"],
 		tier: "UUBL",
 	},
 	tropius: {
@@ -1372,7 +1372,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	rayquaza: {
-		randomBattleMoves: ["dragondance", "earthquake", "extremespeed", "hiddenpowerflying", "overheat", "rockslide"],
+		randomBattleMoves: ["dragondance", "earthquake", "extremespeed", "hiddenpowerghost", "overheat", "rockslide"],
 		tier: "Uber",
 	},
 	jirachi: {
