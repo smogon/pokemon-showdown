@@ -1160,6 +1160,12 @@ export class BasicChatRoom extends BasicRoom {
 		this.log.add(message);
 		return this;
 	}
+	uhtmlchange(name: string, message: string) {
+		this.log.uhtmlchange(name, message);
+	}
+	attributedUhtmlchange(user: User, name: string, message: string) {
+		this.log.attributedUhtmlchange(user, name, message);
+	}
 	roomlog(message: string) {
 		this.log.roomlog(message);
 		return this;

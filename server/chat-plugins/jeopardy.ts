@@ -186,9 +186,9 @@ export class Jeopardy extends Rooms.RoomGame {
 
 	update(dontMove = false) {
 		if (dontMove) {
-			this.room.add(`|uhtmlchange|jeopardy${this.room.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+			this.room.uhtmlchange(`jeopardy${this.room.gameNumber}-${this.numUpdates}`, this.getGrid());
 		} else {
-			this.room.add(`|uhtmlchange|jeopardy${this.room.gameNumber}-${this.numUpdates}|`);
+			this.room.uhtmlchange(`jeopardy${this.room.gameNumber}-${this.numUpdates}`, '');
 			this.numUpdates++;
 			this.room.add(`|uhtml|jeopardy${this.room.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		}
