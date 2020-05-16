@@ -1076,30 +1076,25 @@ export class CommandContext extends MessageContext {
 			this.errorReply('Do not use "click here"');
 			return null;
 		}
-		if (!/^[^<>]*(?:<[^<>]*?>[^<>]*)*$/.test(htmlContent)) {
-			this.errorReply('Found unmatched < or >. If you wish to use them, please use `&lt;` or `&gt;`.');
-			return null;
-		}
 
 		// check for mismatched tags
 		const tags = htmlContent
-			.toLowerCase()
 			// eslint-ignore-next-line @typescript-eslint/prefer-regexp-exec
-			.match(/<\/?(?:div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr|style|script)\b/g);
+			.match(/<\/?[a-z0-9]*/gi);
 		if (tags) {
 			const stack = [];
 			for (const tag of tags) {
 				if (tag.charAt(1) === '/') {
 					if (!stack.length) {
-						this.errorReply("Extraneous </" + tag.substr(2) + "> without an opening tag.");
+						this.errorReply(`Extraneous </${tag.substr(2)}> without an opening tag.`);
 						return null;
 					}
 					if (tag.substr(2) !== stack.pop()) {
-						this.errorReply("Missing </" + tag.substr(2) + "> or it's in the wrong place.");
+						this.errorReply(`Missing </${tag.substr(2)}> or it's in the wrong place.`);
 						return null;
 					}
-				} else {
-					stack.push(tag.substr(1));
+				} else if (/<(?:div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr|th|style|script|h\d)\b/.test(tag.toLowerCase())) {
+					this.errorReply(`Unrecognized tag \`${match.slice(1)}\` (often caused by using an unmatched <). If you meant to use the character, use a \`&lt;\` instead.`);
 				}
 			}
 			if (stack.length) {
