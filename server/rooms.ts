@@ -111,7 +111,7 @@ export abstract class BasicRoom {
 	gtsga: GTSGiveaway | null;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
-	dataCommandTierDisplay: string;
+	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
 	privacySetter: Set<ID> | null;
 	subRooms: Map<string, ChatRoom> | null;
 	gameNumber: number;

@@ -1309,7 +1309,7 @@ export const commands: ChatCommands = {
 		}
 		if (!this.can('declare')) return false;
 
-		const displayIDToName: {[k: string]: string} = {
+		const displayIDToName: {[k: string]: typeof room.dataCommandTierDisplay} = {
 			tiers: 'tiers',
 			doublestiers: 'doubles tiers',
 			numbers: 'numbers',
