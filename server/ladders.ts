@@ -451,23 +451,23 @@ class Ladder extends LadderStore {
 		}
 
 		// users must have different IPs
-		if (user1.latestIp === user2.latestIp) return false;
+		// if (user1.latestIp === user2.latestIp) return false;
 
 		// users must not have been matched immediately previously
-		if (user1.lastMatch === user2.id || user2.lastMatch === user1.id) return false;
+		// if (user1.lastMatch === user2.id || user2.lastMatch === user1.id) return false;
 
 		// search must be within range
-		let searchRange = 100;
-		const elapsed = Date.now() - Math.min(search1.time, search2.time);
-		if (formatid === 'gen8ou' || formatid === 'gen8oucurrent' ||
-				formatid === 'gen8oususpecttest' || formatid === 'gen8randombattle') {
-			searchRange = 50;
-		}
+		// let searchRange = 100;
+		// const elapsed = Date.now() - Math.min(search1.time, search2.time);
+		// if (formatid === 'gen8ou' || formatid === 'gen8oucurrent' ||
+		// 		formatid === 'gen8oususpecttest' || formatid === 'gen8randombattle') {
+		// 	searchRange = 50;
+		// }
 
-		searchRange += elapsed / 300; // +1 every .3 seconds
-		if (searchRange > 300) searchRange = 300 + (searchRange - 300) / 10; // +1 every 3 sec after 300
-		if (searchRange > 600) searchRange = 600;
-		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
+		// searchRange += elapsed / 300; // +1 every .3 seconds
+		// if (searchRange > 300) searchRange = 300 + (searchRange - 300) / 10; // +1 every 3 sec after 300
+		// if (searchRange > 600) searchRange = 600;
+		// if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
 
 		user1.lastMatch = user2.id;
 		user2.lastMatch = user1.id;
@@ -503,6 +503,7 @@ class Ladder extends LadderStore {
 
 		formatTable.set(newSearch.userid, newSearch);
 		Ladder.updateSearch(user);
+		Ladder.periodicMatch()
 	}
 
 	/**
