@@ -206,7 +206,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (counter.setupType || hasMove['rest'] || teamDetails.rapidSpin) rejected = true;
 					break;
 				case 'reflect':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['counter']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup']) rejected = true;
 					break;
 				case 'seismictoss':
 					if (counter.setupType || hasMove['thunderbolt']) rejected = true;
@@ -290,7 +290,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Normal'] && !counter['Normal'] && counter.setupType === 'Physical') ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk >= 100) ||
-					(hasType['Water'] && !counter['Water'] && (counter.setupType !== 'Physical' || !hasMove['icebeam'])) ||
+					(hasType['Water'] && !counter['Water'] && !hasMove['icebeam'] && counter.setupType !== 'Physical' && species.baseStats.spa >= 60) ||
 					(movePool.includes('meteormash') || movePool.includes('spore')) ||
 					(hasMove['protect'] && movePool.includes('wish')) ||
 					(hasMove['substitute'] && movePool.includes('morningsun')) ||
