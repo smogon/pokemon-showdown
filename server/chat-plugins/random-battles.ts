@@ -245,6 +245,7 @@ function CAP1v1Sets(species: string | Species) {
 	if (species.isNonstandard !== "CAP") {
 		return {
 			e: `[Gen 8] CAP 1v1 only allows Pok\u00e9mon created by the Create-A-Pok\u00e9mon Project.`,
+			parse: `/cap`,
 		};
 	}
 	if (species.isNonstandard === "CAP" && !(species.name in statsFile)) {
@@ -466,7 +467,7 @@ export const commands: ChatCommands = {
 		if (!cap1v1Set) return this.parse(`/help cap1v1`);
 		if (typeof cap1v1Set !== 'string') {
 			this.errorReply(`Error: ${cap1v1Set.e}`);
-			this.parse(`/cap`);
+			if (cap1v1Set.parse) this.parse(cap1v1Set.parse);
 			return;
 		}
 		return this.sendReplyBox(cap1v1Set);
