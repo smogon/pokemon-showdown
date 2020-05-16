@@ -183,7 +183,7 @@ export class Hangman extends Rooms.RoomGame {
 	}
 
 	update() {
-		this.room.add(`|uhtmlchange|hangman${this.gameNumber}|${this.generateWindow()}`);
+		this.room.uhtmlchange(`hangman${this.gameNumber}`, this.generateWindow());
 
 		if (this.incorrectGuesses === maxMistakes) {
 			this.finish();
@@ -191,13 +191,13 @@ export class Hangman extends Rooms.RoomGame {
 	}
 
 	end() {
-		this.room.add(`|uhtmlchange|hangman${this.gameNumber}|<div class="infobox">(The game of hangman was ended.)</div>`);
+		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman was ended.)</div>');
 		this.room.add("The game of hangman was ended.");
 		delete this.room.game;
 	}
 
 	finish() {
-		this.room.add(`|uhtmlchange|hangman${this.gameNumber}|<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>`);
+		this.room.uhtmlchange(`hangman${this.gameNumber}`, '<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>');
 		this.room.add(`|html|${this.generateWindow()}`);
 		delete this.room.game;
 	}

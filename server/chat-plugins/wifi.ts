@@ -74,7 +74,7 @@ class Giveaway {
 	}
 
 	changeUhtml(content: string) {
-		this.room.add(`|uhtmlchange|giveaway${this.gaNumber}${this.phase}|<div class="broadcast-blue">${content}</div>`);
+		this.room.uhtmlchange(`giveaway${this.gaNumber}${this.phase}`, `<div class="broadcast-blue">${content}</div>`);
 		this.room.update();
 	}
 
@@ -521,7 +521,7 @@ export class GTSGiveaway {
 	}
 
 	changeUhtml(content: string) {
-		this.room.add(`|uhtmlchange|gtsga${this.gtsNumber}|<div class="broadcast-blue">${content}</div>`);
+		this.room.uhtmlchange(`gtsga${this.gtsNumber}`, `<div class="broadcast-blue">${content}</div>`);
 		this.room.update();
 	}
 

@@ -212,7 +212,11 @@ class OtdHandler {
 	}
 
 	display(update = false) {
-		this.room.add(`|uhtml${update ? 'change' : ''}|otd|${this.generateNomWindow()}`);
+		if (update) {
+			this.room.uhtmlchange('otd', this.generateNomWindow());
+		} else {
+			this.room.add(`|uhtml|otd|${this.generateNomWindow()}`);
+		}
 	}
 
 	displayTo(connection: Connection) {
