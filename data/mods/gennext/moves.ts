@@ -1,4 +1,4 @@
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const DexMoves: {[k: string]: ModdedMoveData} = {
 	/******************************************************************
 	Perfect accuracy moves:
 	- base power increased to 90
@@ -2077,4 +2077,4 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 };
 
-exports.BattleMovedex = BattleMovedex;
+exports.DexMoves = DexMoves;

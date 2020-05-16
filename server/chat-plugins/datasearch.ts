@@ -290,7 +290,7 @@ export const commands: ChatCommands = {
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
 		`If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.`,
 		`You can search for info in a specific generation by appending the generation to ms, e.g. '/ms1 normal' searches for all moves that were normal type in Generation I.`,
-		`/ms will search the Galar Movedex; You can search the National Movedex by using '/nms' or by adding 'natdex' as a parameter.`,
+		`/ms will search the Galar Moves; You can search the National Moves by using '/nms' or by adding 'natdex' as a parameter.`,
 		`The order of the parameters does not matter.`,
 	],
 
@@ -387,7 +387,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		doublesnu: '(DUU)', dnu: '(DUU)',
 	});
 	const allTypes = Object.create(null);
-	for (const i in Dex.data.TypeChart) {
+	for (const i in Dex.data.Types) {
 		allTypes[toID(i)] = i;
 	}
 	const allColors = ['green', 'red', 'blue', 'white', 'brown', 'yellow', 'purple', 'pink', 'gray', 'black'];
@@ -661,7 +661,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target === 'priority') {
 				if (parameters.length > 1) return {error: "The parameter 'priority' cannot have alternative parameters"};
-				for (const move in Dex.data.Movedex) {
+				for (const move in Dex.data.Moves) {
 					const moveData = Dex.getMove(move);
 					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) {
@@ -682,7 +682,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.substr(0, 8) === 'resists ') {
 				const targetResist = target.substr(8, 1).toUpperCase() + target.substr(9);
-				if (targetResist in Dex.data.TypeChart) {
+				if (targetResist in Dex.data.Types) {
 					const invalid = validParameter("resists", targetResist, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.resists[targetResist] = !isNotSearch;
@@ -694,7 +694,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			if (target.substr(0, 5) === 'weak ') {
 				const targetWeak = target.substr(5, 1).toUpperCase() + target.substr(6);
-				if (targetWeak in Dex.data.TypeChart) {
+				if (targetWeak in Dex.data.Types) {
 					const invalid = validParameter("weak", targetWeak, isNotSearch, target);
 					if (invalid) return {error: invalid};
 					orGroup.weak[targetWeak] = !isNotSearch;
@@ -1027,7 +1027,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	const allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
 	const allTypes: {[k: string]: string} = Object.create(null);
-	for (const i in Dex.data.TypeChart) {
+	for (const i in Dex.data.Types) {
 		allTypes[toID(i)] = i;
 	}
 	let showAll = false;
@@ -1390,7 +1390,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
-	const validMoves = new Set(Object.keys(Dex.data.Movedex));
+	const validMoves = new Set(Object.keys(Dex.data.Moves));
 	validMoves.delete('magikarpsrevenge');
 	for (const mon of targetMons) {
 		const species = mod.getSpecies(mon.name);
@@ -1803,7 +1803,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 
 		for (let word of searchedWords) {
 			word = word.charAt(0).toUpperCase() + word.slice(1);
-			if (word in Dex.data.TypeChart) {
+			if (word in Dex.data.Types) {
 				if (type) return {error: "Only specify natural gift type once."};
 				type = word;
 			} else {

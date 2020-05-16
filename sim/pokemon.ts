@@ -1885,7 +1885,7 @@ export class Pokemon {
 	/** false = immune, true = not immune */
 	runImmunity(type: string, message?: string | boolean) {
 		if (!type || type === '???') return true;
-		if (!(type in this.battle.dex.data.TypeChart)) {
+		if (!(type in this.battle.dex.data.Types)) {
 			if (type === 'Fairy' || type === 'Dark' || type === 'Steel') return true;
 			throw new Error("Use runStatusImmunity for " + type);
 		}

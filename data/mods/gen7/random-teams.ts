@@ -1162,7 +1162,7 @@ export class RandomGen7Teams extends RandomTeams {
 		const pokemon = [];
 		const pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
-		const typePool = Object.keys(this.dex.data.TypeChart);
+		const typePool = Object.keys(this.dex.data.Types);
 		const type = this.sample(typePool);
 
 		const teamData: TeamData = {
@@ -1296,7 +1296,7 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 			}
 
-			for (const typeName in this.dex.data.TypeChart) {
+			for (const typeName in this.dex.data.Types) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
 				if (
@@ -1529,7 +1529,7 @@ export class RandomGen7Teams extends RandomTeams {
 				}
 			}
 
-			for (const typeName in this.dex.data.TypeChart) {
+			for (const typeName in this.dex.data.Types) {
 				// Cover any major weakness (3+) with at least one resistance
 				if (teamData.resistances[typeName] >= 1) continue;
 				if (

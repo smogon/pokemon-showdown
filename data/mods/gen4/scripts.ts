@@ -1,4 +1,4 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const DexScripts: ModdedBattleScriptsData = {
 	inherit: 'gen5',
 	gen: 4,
 	init() {

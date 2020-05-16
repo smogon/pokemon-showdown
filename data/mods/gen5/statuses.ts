@@ -1,4 +1,4 @@
-export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
+export const DexStatuses: {[k: string]: ModdedPureEffectData} = {
 	slp: {
 		inherit: true,
 		onSwitchIn(target) {

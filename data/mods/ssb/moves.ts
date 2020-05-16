@@ -2,7 +2,7 @@
 import {RandomStaffBrosTeams} from './random-teams';
 import {Pokemon, EffectState} from '../../../sim/pokemon';
 
-export const BattleMovedex: {[k: string]: ModdedMoveData} = {
+export const DexMoves: {[k: string]: ModdedMoveData} = {
 	/*
 	// Example
 	"moveid": {
@@ -2018,7 +2018,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 					this.add('message', `${pokemon.name} was corrupted by a bug in the Scripted Terrain!`);
 					// generate a movepool
 					const moves = [];
-					const pool = this.dex.shuffle(Object.keys(this.dex.data.Movedex));
+					const pool = this.dex.shuffle(Object.keys(this.dex.data.Moves));
 					const metronome = this.dex.getMove('metronome');
 					for (const id of pool) {
 						const move = this.dex.getMove(id);
@@ -2085,8 +2085,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const id in this.dex.data.Movedex) {
-				const move = this.dex.data.Movedex[id];
+			for (const id in this.dex.data.Moves) {
+				const move = this.dex.data.Moves[id];
 				if (move.realMove) continue;
 				if (move.isZ || move.isNonstandard) continue;
 				if (effect.noMetronome && effect.noMetronome.includes(move.name)) continue;
@@ -2875,7 +2875,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				}
 			}
 			const weaknesses = [];
-			for (const type in this.dex.data.TypeChart) {
+			for (const type in this.dex.data.Types) {
 				const typeMod = this.dex.getEffectiveness(type, targetTypes);
 				if (typeMod > 0 && this.dex.getImmunity(type, target)) weaknesses.push(type);
 			}
@@ -3248,7 +3248,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Toxic", target);
 		},
-		// Innate corrosive implemented in BattleScripts#setStatus
+		// Innate corrosive implemented in DexScripts#setStatus
 		status: 'tox',
 		secondary: null,
 		target: "normal",
@@ -4505,8 +4505,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, effect) {
 			const moves = [];
-			for (const id in exports.BattleMovedex) {
-				const move = exports.BattleMovedex[id];
+			for (const id in exports.DexMoves) {
+				const move = exports.DexMoves[id];
 				if (move.realMove || move.id === 'glitzerpopping') continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.

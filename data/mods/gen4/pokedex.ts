@@ -1,4 +1,4 @@
-export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
+export const DexPokedex: {[k: string]: ModdedSpeciesData} = {
 	milotic: {
 		inherit: true,
 		evoType: 'levelExtra',

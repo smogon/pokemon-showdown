@@ -1,4 +1,4 @@
-export const BattleTypeChart: {[k: string]: ModdedTypeData | null} = {
+export const DexTypes: {[k: string]: ModdedTypeData | null} = {
 	Electric: {
 		inherit: true,
 		damageTaken: {

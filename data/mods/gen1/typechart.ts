@@ -6,7 +6,7 @@
  * Psychic was immune to ghost
  */
 
-export const BattleTypeChart: {[k: string]: ModdedTypeData | null} = {
+export const DexTypes: {[k: string]: ModdedTypeData | null} = {
 	Bug: {
 		damageTaken: {
 			Bug: 0,

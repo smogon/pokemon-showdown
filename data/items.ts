@@ -1,4 +1,4 @@
-export const BattleItems: {[itemid: string]: ItemData} = {
+export const DexItems: {[itemid: string]: ItemData} = {
 	abomasite: {
 		name: "Abomasite",
 		spritenum: 575,

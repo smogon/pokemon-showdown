@@ -1,4 +1,4 @@
-export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const DexFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	koatric: {
 		tier: "OU",
 		doublesTier: "DOU",

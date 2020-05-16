@@ -161,8 +161,8 @@ export class RandomTeams {
 			let moves;
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
-				pool = Object.keys(this.dex.data.Movedex).filter(
-					moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || moveid.startsWith('hiddenpower') && moveid !== 'hiddenpower')
+				pool = Object.keys(this.dex.data.Moves).filter(
+					moveid => !(this.dex.data.Moves[moveid].isNonstandard || this.dex.data.Moves[moveid].isZ || moveid.startsWith('hiddenpower') && moveid !== 'hiddenpower')
 				);
 			} else {
 				let learnset = this.dex.data.Learnsets[species.id] && this.dex.data.Learnsets[species.id].learnset ?
@@ -303,7 +303,7 @@ export class RandomTeams {
 
 		const itemPool = Object.keys(this.dex.data.Items);
 		const abilityPool = Object.keys(this.dex.data.Abilities);
-		const movePool = Object.keys(this.dex.data.Movedex);
+		const movePool = Object.keys(this.dex.data.Moves);
 		const naturePool = Object.keys(this.dex.data.Natures);
 
 		const random6 = this.random6Pokemon();
@@ -428,7 +428,7 @@ export class RandomTeams {
 		};
 
 		let typeDef: string;
-		for (typeDef in this.dex.data.TypeChart) {
+		for (typeDef in this.dex.data.Types) {
 			counter[typeDef] = 0;
 		}
 
@@ -1391,7 +1391,7 @@ export class RandomTeams {
 
 		// For Monotype
 		const isMonotype = ruleTable.has('sametypeclause');
-		const typePool = Object.keys(this.dex.data.TypeChart);
+		const typePool = Object.keys(this.dex.data.Types);
 		const type = this.sample(typePool);
 
 		// PotD stuff

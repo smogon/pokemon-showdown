@@ -462,7 +462,7 @@ export const commands: ChatCommands = {
 	async savelearnsets(target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		this.sendReply("saving...");
-		await FS('data/learnsets.js').write(`'use strict';\n\nexports.BattleLearnsets = {\n` +
+		await FS('data/learnsets.js').write(`'use strict';\n\nexports.DexLearnsets = {\n` +
 			Object.entries(Dex.data.Learnsets).map(([id, entry]) => (
 				`\t${id}: {learnset: {\n` +
 				Object.entries(Dex.getLearnsetData(id as ID)).sort(

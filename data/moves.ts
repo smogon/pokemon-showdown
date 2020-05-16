@@ -26,7 +26,7 @@ sound: Has no effect on Pokemon with the Soundproof Ability.
 
 */
 
-export const BattleMovedex: {[moveid: string]: MoveData} = {
+export const DexMoves: {[moveid: string]: MoveData} = {
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,
@@ -2610,9 +2610,9 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			}
 			const possibleTypes = [];
 			const attackType = target.lastMove.type;
-			for (const type in this.dex.data.TypeChart) {
+			for (const type in this.dex.data.Types) {
 				if (source.hasType(type)) continue;
-				const typeCheck = this.dex.data.TypeChart[type].damageTaken[attackType];
+				const typeCheck = this.dex.data.Types[type].damageTaken[attackType];
 				if (typeCheck === 2 || typeCheck === 3) {
 					possibleTypes.push(type);
 				}
@@ -11481,8 +11481,8 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		],
 		onHit(target, source, effect) {
 			const moves: MoveData[] = [];
-			for (const id in BattleMovedex) {
-				const move = BattleMovedex[id];
+			for (const id in DexMoves) {
+				const move = DexMoves[id];
 				if (move.realMove) continue;
 				if (move.isZ || move.isMax || move.isNonstandard) continue;
 				if (effect.noMetronome!.includes(move.name)) continue;
@@ -19064,7 +19064,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		// No Guard-like effect for Poison-type users implemented in BattleScripts#tryMoveHit
+		// No Guard-like effect for Poison-type users implemented in DexScripts#tryMoveHit
 		status: 'tox',
 		secondary: null,
 		target: "normal",

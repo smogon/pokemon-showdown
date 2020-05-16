@@ -837,7 +837,7 @@ export const commands: ChatCommands = {
 		const weaknesses = [];
 		const resistances = [];
 		const immunities = [];
-		for (const type in mod.data.TypeChart) {
+		for (const type in mod.data.Types) {
 			const notImmune = mod.getImmunity(type, species);
 			if (notImmune) {
 				const typeMod = mod.getEffectiveness(type, species);
@@ -975,7 +975,7 @@ export const commands: ChatCommands = {
 		const bestCoverage: {[k: string]: number} = {};
 		let hasThousandArrows = false;
 
-		for (const type in dex.data.TypeChart) {
+		for (const type in dex.data.Types) {
 			// This command uses -5 to designate immunity
 			bestCoverage[type] = -5;
 		}
@@ -996,7 +996,7 @@ export const commands: ChatCommands = {
 			// arg is a type?
 			const argType = arg.charAt(0).toUpperCase() + arg.slice(1);
 			let eff;
-			if (argType in dex.data.TypeChart) {
+			if (argType in dex.data.Types) {
 				sources.push(argType);
 				for (const type in bestCoverage) {
 					if (!dex.getImmunity(argType, type)) continue;
@@ -1077,16 +1077,16 @@ export const commands: ChatCommands = {
 		} else {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			const icon: {[k: string]: string} = {};
-			for (const type in dex.data.TypeChart) {
+			for (const type in dex.data.Types) {
 				icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
 				// row of icons at top
 				buffer += `<th>${icon[type]}</th>`;
 			}
 			buffer += '</tr>';
-			for (const type1 in dex.data.TypeChart) {
+			for (const type1 in dex.data.Types) {
 				// assembles the rest of the rows
 				buffer += `<tr><th>${icon[type1]}</th>`;
-				for (const type2 in dex.data.TypeChart) {
+				for (const type2 in dex.data.Types) {
 					let typing: string;
 					let cell = '<th ';
 					let bestEff = -5;

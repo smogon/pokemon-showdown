@@ -1,4 +1,4 @@
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const DexAbilities: {[k: string]: ModdedAbilityData} = {
 	/*
 	// Example
 	"abilityid": {

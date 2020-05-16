@@ -1,4 +1,4 @@
-export const BattleLearnsets: {[k: string]: ModdedLearnsetData} = {
+export const DexLearnsets: {[k: string]: ModdedLearnsetData} = {
 	koatric: {
 		learnset: {
 			barrage: ["7L1"],

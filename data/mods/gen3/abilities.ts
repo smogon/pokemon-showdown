@@ -1,4 +1,4 @@
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const DexAbilities: {[k: string]: ModdedAbilityData} = {
 	cutecharm: {
 		inherit: true,
 		desc: "There is a 1/3 chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",

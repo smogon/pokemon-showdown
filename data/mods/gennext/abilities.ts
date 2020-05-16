@@ -1,4 +1,4 @@
-export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
+export const DexAbilities: {[k: string]: ModdedAbilityData} = {
 	swiftswim: {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
@@ -685,4 +685,4 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 };
 
-exports.BattleAbilities = BattleAbilities;
+exports.DexAbilities = DexAbilities;

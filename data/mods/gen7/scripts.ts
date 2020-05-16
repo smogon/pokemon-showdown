@@ -1,3 +1,3 @@
-export const BattleScripts: ModdedBattleScriptsData = {
+export const DexScripts: ModdedBattleScriptsData = {
 	gen: 7,
 };

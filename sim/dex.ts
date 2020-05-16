@@ -56,11 +56,11 @@ const FORMATS = path.resolve(__dirname, '../config/formats');
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
 type DataType =
-	'Abilities' | 'Formats' | 'FormatsData' | 'Items' | 'Learnsets' | 'Movedex' |
-	'Natures' | 'Pokedex' | 'Scripts' | 'Statuses' | 'TypeChart';
+	'Abilities' | 'Formats' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
+	'Natures' | 'Pokedex' | 'Scripts' | 'Statuses' | 'Types';
 const DATA_TYPES: (DataType | 'Aliases')[] = [
-	'Abilities', 'Formats', 'FormatsData', 'Items', 'Learnsets', 'Movedex',
-	'Natures', 'Pokedex', 'Scripts', 'Statuses', 'TypeChart',
+	'Abilities', 'Formats', 'FormatsData', 'Items', 'Learnsets', 'Moves',
+	'Natures', 'Pokedex', 'Scripts', 'Statuses', 'Types',
 ];
 
 const DATA_FILES = {
@@ -70,12 +70,12 @@ const DATA_FILES = {
 	FormatsData: 'formats-data',
 	Items: 'items',
 	Learnsets: 'learnsets',
-	Movedex: 'moves',
+	Moves: 'moves',
 	Natures: 'natures',
 	Pokedex: 'pokedex',
 	Scripts: 'scripts',
 	Statuses: 'statuses',
-	TypeChart: 'typechart',
+	Types: 'typechart',
 };
 
 const nullEffect: PureEffect = new Data.PureEffect({name: '', exists: false});
@@ -94,15 +94,15 @@ interface DexTableData {
 	FormatsData: DexTable<ModdedSpeciesFormatsData>;
 	Items: DexTable<Item>;
 	Learnsets: DexTable<LearnsetData>;
-	Movedex: DexTable<Move>;
+	Moves: DexTable<Move>;
 	Natures: DexTable<Nature>;
 	Pokedex: DexTable<Species>;
 	Scripts: DexTable<AnyObject>;
 	Statuses: DexTable<EffectData>;
-	TypeChart: DexTable<TypeData>;
+	Types: DexTable<TypeData>;
 }
 
-const BattleNatures: {[k: string]: Nature} = {
+const DexNatures: {[k: string]: Nature} = {
 	adamant: {name: "Adamant", plus: 'atk', minus: 'spa'},
 	bashful: {name: "Bashful"},
 	bold: {name: "Bold", plus: 'def', minus: 'atk'},
@@ -300,7 +300,7 @@ export class ModdedDex {
 			}
 			return true;
 		}
-		const typeData = this.data.TypeChart[targetTyping];
+		const typeData = this.data.Types[targetTyping];
 		if (typeData && typeData.damageTaken[sourceType] === 3) return false;
 		return true;
 	}
@@ -319,7 +319,7 @@ export class ModdedDex {
 			}
 			return totalTypeMod;
 		}
-		const typeData = this.data.TypeChart[targetTyping];
+		const typeData = this.data.Types[targetTyping];
 		if (!typeData) return 0;
 		switch (typeData.damageTaken[sourceType]) {
 		case 1: return 1; // super-effective
@@ -486,8 +486,8 @@ export class ModdedDex {
 		if (id.substr(0, 11) === 'hiddenpower') {
 			id = /([a-z]*)([0-9]*)/.exec(id)![1] as ID;
 		}
-		if (id && this.data.Movedex.hasOwnProperty(id)) {
-			move = new Data.Move({name}, this.data.Movedex[id]);
+		if (id && this.data.Moves.hasOwnProperty(id)) {
+			move = new Data.Move({name}, this.data.Moves[id]);
 			if (move.gen > this.gen) {
 				(move as any).isNonstandard = 'Future';
 			}
@@ -554,7 +554,7 @@ export class ModdedDex {
 			effect = new Data.Format({name: id}, this.data.Formats[id]);
 		} else if (this.data.Statuses.hasOwnProperty(id)) {
 			effect = new Data.PureEffect({name: id}, this.data.Statuses[id]);
-		} else if ((this.data.Movedex.hasOwnProperty(id) && (found = this.data.Movedex[id]).effect) ||
+		} else if ((this.data.Moves.hasOwnProperty(id) && (found = this.data.Moves[id]).effect) ||
 							 (this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).effect) ||
 							 (this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).effect)) {
 			effect = new Data.PureEffect({name: found.name || id}, found.effect!);
@@ -705,8 +705,8 @@ export class ModdedDex {
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
 		let type = this.typeCache.get(typeName);
 		if (type) return type;
-		if (typeName && this.data.TypeChart.hasOwnProperty(typeName)) {
-			type = new Data.TypeInfo({id, name: typeName}, this.data.TypeChart[typeName]);
+		if (typeName && this.data.Types.hasOwnProperty(typeName)) {
+			type = new Data.TypeInfo({id, name: typeName}, this.data.Types[typeName]);
 		} else {
 			type = new Data.TypeInfo({id, name, exists: false, effectType: 'EffectType'});
 		}
@@ -1005,7 +1005,7 @@ export class ModdedDex {
 			let table;
 			switch (matchType) {
 			case 'pokemon': table = this.data.Pokedex; break;
-			case 'move': table = this.data.Movedex; break;
+			case 'move': table = this.data.Moves; break;
 			case 'item': table = this.data.Items; break;
 			case 'ability': table = this.data.Abilities; break;
 			case 'pokemontag':
@@ -1139,13 +1139,13 @@ export class ModdedDex {
 	dataSearch(target: string, searchIn?: DataType[] | null, isInexact?: boolean): AnyObject[] | false {
 		if (!target) return false;
 
-		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
+		searchIn = searchIn || ['Pokedex', 'Moves', 'Abilities', 'Items', 'Natures'];
 
 		const searchFunctions = {
-			Pokedex: 'getSpecies', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature',
+			Pokedex: 'getSpecies', Moves: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature',
 		};
 		const searchTypes: {[k in DataType]?: string} = {
-			Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature',
+			Pokedex: 'pokemon', Moves: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature',
 		};
 		let searchResults: AnyObject[] | false = [];
 		for (const table of searchIn) {
@@ -1423,7 +1423,7 @@ export class ModdedDex {
 			const filePath = basePath + DATA_FILES[dataType];
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const dataObject = require(filePath);
-			const key = `Battle${dataType}`;
+			const key = `Dex${dataType}`;
 			if (!dataObject || typeof dataObject !== 'object') {
 				throw new TypeError(`${filePath}, if it exists, must export a non-null object`);
 			}
@@ -1470,8 +1470,8 @@ export class ModdedDex {
 
 		const basePath = this.dataDir + '/';
 
-		const BattleScripts = this.loadDataFile(basePath, 'Scripts');
-		this.parentMod = this.isBase ? '' : (BattleScripts.inherit || 'base');
+		const DexScripts = this.loadDataFile(basePath, 'Scripts');
+		this.parentMod = this.isBase ? '' : (DexScripts.inherit || 'base');
 
 		let parentDex;
 		if (this.parentMod) {
@@ -1485,7 +1485,7 @@ export class ModdedDex {
 
 		for (const dataType of DATA_TYPES.concat('Aliases')) {
 			if (dataType === 'Natures' && this.isBase) {
-				dataCache[dataType] = BattleNatures;
+				dataCache[dataType] = DexNatures;
 				continue;
 			}
 			const BattleData = this.loadDataFile(basePath, dataType);
@@ -1534,7 +1534,7 @@ export class ModdedDex {
 		this.dataCache = dataCache as DexTableData;
 
 		// Execute initialization script.
-		if (BattleScripts.init) BattleScripts.init.call(this);
+		if (DexScripts.init) DexScripts.init.call(this);
 
 		return this.dataCache;
 	}

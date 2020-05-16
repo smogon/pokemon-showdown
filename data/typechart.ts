@@ -1,4 +1,4 @@
-export const BattleTypeChart: {[k: string]: TypeData} = {
+export const DexTypes: {[k: string]: TypeData} = {
 	Bug: {
 		damageTaken: {
 			Bug: 0,
