@@ -323,7 +323,7 @@
 		"ability": "Forewarn",
 		"evs": {"hp": 248, "atk": 92, "def": 156, "spd": 12},
 		"nature": "Adamant",
-		"moves": ["Power Whip", "Shadow Sneak", "Stone Edge", "V-Create"]
+		"moves": ["Power Whip", "Shadow Sneak", "Stone Edge", "Brave Bird"]
 	}],
 	"Pajantom": [{
 		"item": "Assault Vest",
@@ -437,14 +437,14 @@
 	"Syclant": [{
 		"item": "Choice Specs",
 		"ability": "Compound Eyes",
-		"evs": {"hp": 16, "spa": 252, "spd": 240},
+		"evs": {"hp": 16, "spa": 252, "spe": 240},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
 		"moves": ["Blizzard", "Focus Blast", "Bug Buzz", "Hyper Beam"]
 	}, {
 		"item": "Life Orb",
 		"ability": "Compound Eyes",
-		"evs": {"hp": 16, "spa": 252, "spd": 240},
+		"evs": {"hp": 16, "spa": 252, "spe": 240},
 		"nature": "Timid",
 		"ivs": {"atk": 0},
 		"moves": ["Blizzard", "Focus Blast", "Bug Buzz", "Taunt"]
