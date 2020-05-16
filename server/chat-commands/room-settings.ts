@@ -1307,7 +1307,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			return this.sendReplyBox(`This room is currently displaying ${room.dataCommandTierDisplay} as the tier when using /data.`);
 		}
-		if (!this.can('declare')) return false;
+		if (!this.can('declare', null, room)) return false;
 
 		const displayIDToName: {[k: string]: typeof room.dataCommandTierDisplay} = {
 			tiers: 'tiers',
