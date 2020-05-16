@@ -490,7 +490,7 @@
 		"evs": {"hp": 252, "def": 4, "spa": 252},
 		"nature": "Quiet",
 		"ivs": {"atk": 0, "spe": 0},
-		"moves": ["Overheat", ["Hydro Pump"], ["Hyper Beam"], ["Power Gem"]]
+		"moves": [["Overheat"], ["Hydro Pump"], ["Hyper Beam"], ["Power Gem"]]
 	}, {
 		"item": "Air Balloon",
 		"ability": "Analytic",
