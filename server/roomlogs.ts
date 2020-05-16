@@ -156,14 +156,10 @@ export class Roomlog {
 		if (!Roomlogs.rollLogTimer) void Roomlogs.rollLogs();
 	}
 	add(message: string) {
-		if (message.startsWith('|uhtmlchange|')) {
-			this.uhtmlchange(message);
-		} else {
-			this.roomlog(message);
-			message = this.withTimestamp(message);
-			this.log.push(message);
-			this.broadcastBuffer += message + '\n';
-		}
+		this.roomlog(message);
+		message = this.withTimestamp(message);
+		this.log.push(message);
+		this.broadcastBuffer += message + '\n';
 		return this;
 	}
 	private withTimestamp(message: string) {
@@ -208,16 +204,16 @@ export class Roomlog {
 		}).reverse();
 		return cleared;
 	}
-	private uhtmlchange(message: string) {
-		const thirdPipe = message.indexOf('|', 13);
-		const originalStart = '|uhtml|' + message.slice(13, thirdPipe + 1);
+	uhtmlchange(name: string, message: string) {
+		const originalStart = '|uhtml|' + name + '|';
+		const fullMessage = originalStart + message;
 		for (const [i, line] of this.log.entries()) {
 			if (line.startsWith(originalStart)) {
-				this.log[i] = originalStart + message.slice(thirdPipe + 1);
+				this.log[i] = fullMessage;
 				break;
 			}
 		}
-		this.broadcastBuffer += message + '\n';
+		this.broadcastBuffer += fullMessage + '\n';
 	}
 	attributedUhtmlchange(user: User, name: string, message: string) {
 		const start = `/uhtml ${name},`;
