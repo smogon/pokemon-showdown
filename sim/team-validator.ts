@@ -1132,8 +1132,8 @@ export class TeamValidator {
 		const species = dex.getSpecies(set.species);
 
 		if (species.name === 'Necrozma-Ultra') {
-			const whichMoves = (set.moves.includes('Sunsteel Strike') ? 1 : 0) +
-				(set.moves.includes('Moongeist Beam') ? 2 : 0);
+			const whichMoves = (set.moves.includes('sunsteelstrike') ? 1 : 0) +
+				(set.moves.includes('moongeistbeam') ? 2 : 0);
 			if (item.name !== 'Ultranecrozium Z') {
 				// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
 				problems.push(`Necrozma-Ultra must start the battle holding Ultranecrozium Z.`);
@@ -1178,12 +1178,26 @@ export class TeamValidator {
 				if (dex.gen >= 8 && (species.baseSpecies === 'Arceus' || species.baseSpecies === 'Silvally')) {
 					// Arceus/Silvally formes in gen 8 only require the item with Multitype/RKS System
 					if (set.ability === species.abilities[0]) {
-						problems.push(`${name} needs to hold ${species.requiredItems.join(' or ')}.`);
+						problems.push(
+							`${name} needs to hold ${species.requiredItems.join(' or ')}.`,
+							`(It will revert to its Normal forme if you remove the item or give it a different item.)`
+						);
 					}
 				} else {
 					// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
-					problems.push(`${name} needs to hold ${species.requiredItems.join(' or ')}.`);
+					const baseSpecies = Dex.getSpecies(species.changesFrom);
+					problems.push(
+						`${name} needs to hold ${species.requiredItems.join(' or ')} to be in its ${species.forme} forme.`,
+						`(It will revert to its ${baseSpecies.baseForme} forme if you remove the item or give it a different item.)`
+					);
 				}
+			}
+			if (species.requiredMove && !set.moves.includes(toID(species.requiredMove))) {
+				const baseSpecies = Dex.getSpecies(species.changesFrom);
+				problems.push(
+					`${name} needs to know the move ${species.requiredMove} to be in its ${species.forme} forme.`,
+					`(It will revert to its ${baseSpecies.baseForme} forme if it forgets the move.)`
+				);
 			}
 
 			// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.

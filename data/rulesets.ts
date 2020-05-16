@@ -110,24 +110,28 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 			for (const set of team) {
 				if (set.species === 'Kyurem-White' || set.species === 'Kyurem-Black') {
 					if (kyuremCount > 0) {
-						return ['You cannot have more than one Kyurem-Black/Kyurem-White.'];
+						return [
+							`You cannot have more than one Kyurem-Black/Kyurem-White.`,
+							`(It's untradeable and you can only make one with the DNA Splicers.)`,
+						];
 					}
 					kyuremCount++;
 				}
-				if (set.species === 'Keldeo-Resolute') {
-					if (!set.moves.includes('secretsword')) {
-						return ['Keldeo-Resolute needs to have the move Secret Sword.'];
-					}
-				}
 				if (set.species === 'Necrozma-Dusk-Mane') {
 					if (necrozmaDMCount > 0) {
-						return ['You cannot have more than one Necrozma-Dusk-Mane.'];
+						return [
+							`You cannot have more than one Necrozma-Dusk-Mane`,
+							`(It's untradeable and you can only make one with the N-Solarizer.)`,
+						];
 					}
 					necrozmaDMCount++;
 				}
 				if (set.species === 'Necrozma-Dawn-Wings') {
 					if (necrozmaDWCount > 0) {
-						return ['You cannot have more than one Necrozma-Dawn-Wings.'];
+						return [
+							`You cannot have more than one Necrozma-Dawn-Wings`,
+							`(It's untradeable and you can only make one with the N-Lunarizer.)`,
+						];
 					}
 					necrozmaDWCount++;
 				}
