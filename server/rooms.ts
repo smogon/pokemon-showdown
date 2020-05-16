@@ -111,6 +111,7 @@ export abstract class BasicRoom {
 	gtsga: GTSGiveaway | null;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
+	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
 	privacySetter: Set<ID> | null;
 	subRooms: Map<string, ChatRoom> | null;
 	gameNumber: number;
@@ -171,6 +172,7 @@ export abstract class BasicRoom {
 		this.gtsga = null;
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
+		this.dataCommandTierDisplay = 'tiers';
 		this.privacySetter = null;
 		this.subRooms = null;
 		this.gameNumber = 0;
