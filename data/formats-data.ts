@@ -3840,7 +3840,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	xerneasneutral: {
-		isNonstandard: "Unobtainable", // can't be used in battle
+		isNonstandard: "Custom", // can't be used in battle
 		tier: "Illegal",
 	},
 	yveltal: {
