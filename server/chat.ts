@@ -1079,8 +1079,9 @@ export class CommandContext extends MessageContext {
 
 		// check for mismatched tags
 		const tags = htmlContent
+			.toLowerCase()
 			// eslint-ignore-next-line @typescript-eslint/prefer-regexp-exec
-			.match(/<\/?[a-z0-9]*/gi);
+			.match(/<\/?[a-z0-9]*/g);
 		if (tags) {
 			const stack = [];
 			for (const tag of tags) {
