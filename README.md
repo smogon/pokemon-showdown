@@ -1,4 +1,9 @@
-This fork slightly modifies the server to remove constraints and facilitate the training of RL agents.
+This fork slightly modifies [Pokemon-Showdown](https://github.com/smogon/pokemon-showdown) to remove constraints and facilitate the training of RL agents as well as quick experimentation with battling bots. It is designed to be used with [poke-env](https://poke-env.readthedocs.io/en/stable/).
+
+In particular, this fork includes the following modifications:
+
+- Optimized battle speed, by removing all battle delays, including in-battle throttling and between-games rate limiting
+- Optimized laddering, by auto-matching players for every search command instead of periodically as well as removing rating and IP constratins during matchmaking
 
 Pokémon Showdown
 ========================================================================
