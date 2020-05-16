@@ -541,16 +541,18 @@ export const commands: ChatCommands = {
 				if (format?.onModifySpecies) {
 					pokemon = format.onModifySpecies.call({dex} as Battle, pokemon) || pokemon;
 				}
-				let displayedTier = room?.dataCommandTierDisplay === 'tiers' ? pokemon.tier :
-					room?.dataCommandTierDisplay === 'doubles tiers' ? pokemon.doublesTier :
-					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
-				if (room?.battle) {
+				let tierDisplay = room?.dataCommandTierDisplay;
+				if (!tierDisplay && room?.battle) {
 					if (room.battle.format.includes('doubles') || room.battle.format.includes('vgc')) {
-						displayedTier = pokemon.doublesTier;
+						tierDisplay = 'doubles tiers';
 					} else if (room.battle.format.includes('nationaldex')) {
-						displayedTier = pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
+						tierDisplay = 'numbers';
 					}
 				}
+				if (!tierDisplay) tierDisplay = 'tiers';
+				const displayedTier = tierDisplay === 'tiers' ? pokemon.tier :
+					tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
+					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
 				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
