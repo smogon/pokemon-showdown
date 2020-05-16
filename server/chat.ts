@@ -1097,6 +1097,7 @@ export class CommandContext extends MessageContext {
 					stack.push(tag.substr(1));
 				} else if (!["br", "area", "embed", "hr", "img", "link", "source", "track"].includes(tag.slice(1).toLowerCase())) {
 					this.errorReply(`Unrecognized tag \`${tag.slice(1)}\` (often caused by using an unmatched <). If you meant to use the character, use a \`&lt;\` instead.`);
+					return null;
 				}
 			}
 			if (stack.length) {
