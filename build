@@ -90,6 +90,7 @@ if (!fs.existsSync('./.data-dist/README.md')) {
 }
 
 // sucrase doesn't copy JSON over, so we'll have to do it ourselves
+copyOverData('cap-1v1-sets.json');
 copyOverData('mods/gen7/factory-sets.json');
 copyOverData('mods/gen7/bss-factory-sets.json');
 copyOverData('mods/gen6/factory-sets.json');
