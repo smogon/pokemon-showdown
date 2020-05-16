@@ -24,12 +24,15 @@ export class RandomTeams {
 	format: Format;
 	prng: PRNG;
 
+	randomCAP1v1Sets: AnyObject;
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		// this.randomFactorySets = randomFactorySets;
 		// this.randomBSSFactorySets = randomBSSFactorySets;
+		this.randomCAP1v1Sets = require('./cap-1v1-sets.json');
 
 		this.factoryTier = '';
 		this.format = format;
@@ -1535,6 +1538,32 @@ export class RandomTeams {
 		}
 		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 
+		return pokemon;
+	}
+
+	randomCAP1v1Team() {
+		const pokemon = [];
+		const pokemonPool = Object.keys(this.randomCAP1v1Sets);
+
+		while (pokemonPool.length && pokemon.length < 3) {
+			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			if (!species.exists) throw new Error(`Invalid Pokemon "${species}" in ${this.format}`);
+
+			const setData: AnyObject = this.sample(this.randomCAP1v1Sets[species.name]);
+			const set = {
+				name: species.baseSpecies,
+				species: species.name,
+				gender: species.gender,
+				item: (Array.isArray(setData.item) ? this.sample(setData.item) : setData.item) || '',
+				ability: (Array.isArray(setData.ability) ? this.sample(setData.ability) : setData.ability),
+				shiny: this.randomChance(1, 1024),
+				evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, setData.evs),
+				nature: setData.nature,
+				ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.ivs || {}),
+				moves: setData.moves.map((move: any) => this.sample(move)),
+			};
+			pokemon.push(set);
+		}
 		return pokemon;
 	}
 }
