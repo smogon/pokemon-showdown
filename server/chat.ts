@@ -1051,13 +1051,13 @@ export class CommandContext extends MessageContext {
 		const tags = htmlContent.match(/<\/?[^<>]*/g);
 		if (tags) {
 			const ILLEGAL_TAGS = [
-				'script', 'head', 'body', 'html', 'canvas', 'base', 'meta', 'link', '!doctype',
+				'script', 'head', 'body', 'html', 'canvas', 'base', 'meta', 'link',
 			];
 			const LEGAL_AUTOCLOSE_TAGS = [
-				// no-close tags
+				// void elements (no-close tags)
 				'br', 'area', 'embed', 'hr', 'img', 'source', 'track', 'input', 'wbr', 'col',
 				// autoclose tags
-				'li', 'p',
+				'p', 'li', 'dt', 'dd', 'option', 'tr', 'th', 'td', 'thead', 'tbody', 'tfoot', 'colgroup',
 				// PS custom element
 				'psicon',
 			];
@@ -1081,7 +1081,7 @@ export class CommandContext extends MessageContext {
 					continue;
 				}
 
-				if (ILLEGAL_TAGS.includes(tagName) || !/^[a-z]+$/.test(tagName)) {
+				if (ILLEGAL_TAGS.includes(tagName) || !/^[a-z]+[0-9]?$/.test(tagName)) {
 					this.errorReply(`Illegal tag <${tagName}> can't be used here.`);
 					return null;
 				}
