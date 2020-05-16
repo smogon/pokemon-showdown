@@ -56,7 +56,7 @@
 	"Cawmodore": [{
 		"item": "Sitrus Berry",
 		"ability": "Intimidate",
-		"evs": {"atk": 252, "def": 4, "spe": 252},
+		"evs": {"hp": 4, "atk": 252, "spe": 252},
 		"nature": "Jolly",
 		"moves": ["Belly Drum", "Bullet Punch", "Iron Head", "Acrobatics"]
 	}, {
