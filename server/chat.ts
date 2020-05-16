@@ -1094,7 +1094,9 @@ export class CommandContext extends MessageContext {
 						return null;
 					}
 				} else if (/<(?:div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr|th|style|script|h\d)\b/.test(tag.toLowerCase())) {
-					this.errorReply(`Unrecognized tag \`${match.slice(1)}\` (often caused by using an unmatched <). If you meant to use the character, use a \`&lt;\` instead.`);
+					stack.push(tag.substr(1));
+				} else if (!["br", "area", "embed", "hr", "img", "link", "source", "track"].includes(tag.slice(1).toLowerCase())) {
+					this.errorReply(`Unrecognized tag \`${tag.slice(1)}\` (often caused by using an unmatched <). If you meant to use the character, use a \`&lt;\` instead.`);
 				}
 			}
 			if (stack.length) {
