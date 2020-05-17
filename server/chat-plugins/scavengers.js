@@ -1166,9 +1166,6 @@ const commands = {
 		const game = room.game;
 		if ((!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) && game.staffHostId !== user.id) return this.errorReply("You cannot add more hints if you are not the host.");
 
-		const elapsedTime = Date.now() - game.startTime;
-		if (elapsedTime < 600000 /* 10 minutes */) return this.errorReply("You can only use this command 10 minutes after the hunt starts.");
-
 		let [question, ...hint] = target.split(',');
 		question = parseInt(question) - 1;
 		hint = hint.join(',');
@@ -1186,9 +1183,6 @@ const commands = {
 		const game = room.game;
 		if ((!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) && game.staffHostId !== user.id) return this.errorReply("You cannot remove hints if you are not the host.");
 
-		const elapsedTime = Date.now() - game.startTime;
-		if (elapsedTime < 600000 /* 10 minutes */) return this.errorReply("You can only use this command 10 minutes after the hunt starts.");
-
 		let [question, hint] = target.split(',');
 		question = parseInt(question) - 1;
 		hint = parseInt(hint) - 1;
@@ -1205,9 +1199,6 @@ const commands = {
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
 		const game = room.game;
 		if ((!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) && game.staffHostId !== user.id) return this.errorReply("You cannot edit hints if you are not the host.");
-
-		const elapsedTime = Date.now() - game.startTime;
-		if (elapsedTime < 600000 /* 10 minutes */) return this.errorReply("You can only use this command 10 minutes after the hunt starts.");
 
 		let [question, hint, ...value] = target.split(',');
 		question = parseInt(question) - 1;
