@@ -809,6 +809,7 @@ export const commands: ChatCommands = {
 		const oldTitle = room.title;
 		const roomid = toID(target) as RoomID;
 		const roomtitle = target;
+		if (!roomid.length) return this.errorReply("The new room needs a title.");
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
 		// `-` has special meaning in roomids
@@ -821,6 +822,8 @@ export const commands: ChatCommands = {
 			return this.errorReply(`An error occured while renaming the room.`);
 		}
 		this.modlog(`RENAMEROOM`, null, `from ${oldTitle}`);
+		room.log.roomlogFilename = "";
+		room.log.setupRoomlogStream(true);
 		const privacy = room.isPrivate === true ? "Private" :
 			room.isPrivate === false ? "Public" :
 			`${room.isPrivate.charAt(0).toUpperCase()}${room.isPrivate.slice(1)}`;
