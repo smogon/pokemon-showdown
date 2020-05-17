@@ -529,10 +529,9 @@ export const pages: PageTable = {
 			return LogViewer.error("Access denied");
 		}
 
-		const [roomid, date, ...rest] = args
-			.join('-')
-			.split('--') as [RoomID, string | undefined, string | undefined];
-		const opts = rest.join('');
+		const [roomid, date, opts] = Chat.splitFirst(
+			args.join('-'), '--', 2
+		) as [RoomID, string | undefined, string | undefined];
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
 			return LogViewer.list(user, roomid?.slice(1));
@@ -559,10 +558,11 @@ export const pages: PageTable = {
 		this.title = '[Logs] ' + roomid;
 		let cap = 'all';
 		let search;
-		const [, term] = opts.includes('search-') ? Chat.splitFirst(opts, 'search-') : [];
+		const [, term] = opts?.includes('search-') ? Chat.splitFirst(opts, 'search-') : [];
 		if (term) {
-			search = Dashycode.decode(term.split('&')[0]);
-			cap = term.split('&')[1] ? term.split('&')[1] : cap;
+			const [input, num] = term.split('&');
+			search = Dashycode.decode(input);
+			cap = num ? num : cap;
 		}
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
 
@@ -610,12 +610,11 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		if (cap && isNaN(cap) && toID(cap) !== 'all') return this.errorReply(`Cap must be a number or [all].`);
-		const input = search.includes('|') ? search.split('|').map(item => item.trim()).join('-') : search;
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		const limit = cap ? `&${cap}` : `&500`;
 		return this.parse(
-			`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${Dashycode.encode(input)}${limit}`
+			`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${Dashycode.encode(search)}${limit}`
 		);
 	},
 
