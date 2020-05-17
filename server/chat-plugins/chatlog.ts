@@ -480,9 +480,9 @@ const LogSearcher = new class {
 	}
 
 	render(results: string[], roomid: RoomID, search: string, cap?: number) {
-		const dates: string[] = [];
-		let count = 0;
 		let curDate = '';
+		const exactMatches = [];
+		const isAll = toID(cap) === 'all' || cap === Infinity;
 		const sorted = results.sort().map(chunk => {
 			const section = chunk.split('\n').map(line => {
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
@@ -493,33 +493,26 @@ const LogSearcher = new class {
 				let date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
 				if (curDate !== date) {
 					curDate = date;
-					if (!(curDate in dates)) dates.push(curDate);
 					date = `</div></details><details><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
 					rendered = `${date} ${rendered}`;
 				} else {
 					date = '';
 				}
-				const matched = (
-					new RegExp(search, "i")
-						.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
-				);
-				if (matched.includes('chat chatmessage highlighted')) {
-					count++;
+				const exact = new RegExp(search, "i").test(rendered);
+				if (exact) {
+					exactMatches.push(rendered);
+					rendered = `<div class="chat chatmessage highlighted">${rendered}</div>`;
 				}
-				if (cap && count > cap) return null;
-				return matched;
+				if (!isAll && exactMatches.length > cap!) return null;
+				return rendered;
 			}).filter(item => item).join(' ');
 			return section;
 		});
 		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
-		let total = 0;
-		for (const match of results.join(' ').split(' ')) {
-			if (new RegExp(search, "i").test(match)) total++;
-		}
-		buf += ` ${total}`;
-		buf += cap ? ` (capped at ${cap})<hr></div><blockquote>` : `<hr></div><blockquote>`;
+		buf += isAll ? ` ${exactMatches.length}` : '';
+		buf += isAll ? `<hr></div><blockquote>` : ` (capped at ${cap})<hr></div><blockquote>`;
 		buf += sorted.filter(item => item).join('<hr>');
-		if (cap && cap !== Infinity) {
+		if (!isAll) {
 			buf += `</details></blockquote><div class="pad"><hr><strong>Capped at ${cap}.</strong><br>`;
 			buf += `<button class="button" name="send" value="/sl ${search},${roomid},${Number(cap) + 200}">View 200 more<br />&#x25bc;</button>`;
 			buf += `<button class="button" name="send" value="/sl ${search},${roomid},all">View all<br />&#x25bc;</button></div>`;
