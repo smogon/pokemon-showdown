@@ -529,10 +529,10 @@ export const pages: PageTable = {
 			return LogViewer.error("Access denied");
 		}
 
-		const [roomid, date, opts] = args
+		const [roomid, date, ...rest] = args
 			.join('-')
-			.split('--') as [RoomID, string | undefined, string | undefined, number];
-
+			.split('--') as [RoomID, string | undefined, string | undefined];
+		const opts = rest.join('');
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
 			return LogViewer.list(user, roomid?.slice(1));
@@ -559,10 +559,10 @@ export const pages: PageTable = {
 		this.title = '[Logs] ' + roomid;
 		let cap = 'all';
 		let search;
-		const [hasSearch, term] = opts!.includes('search-') ? Chat.splitFirst(opts as string, '-') : [];
-		if (hasSearch) {
+		const [, term] = opts.includes('search-') ? Chat.splitFirst(opts, 'search-') : [];
+		if (term) {
 			search = Dashycode.decode(term.split('&')[0]);
-			cap = term.split('&')[1];
+			cap = term.split('&')[1] ? term.split('&')[1] : cap;
 		}
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
 
@@ -572,7 +572,7 @@ export const pages: PageTable = {
 			return LogViewer.error(`Invalid date.`);
 		}
 
-		if (date && !hasSearch) {
+		if (date && !term) {
 			if (date === 'today') {
 				return LogViewer.day(roomid, LogReader.today(), opts);
 			} else if (date.split('-').length === 3) {
@@ -580,7 +580,7 @@ export const pages: PageTable = {
 			} else {
 				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
 			}
-		} else if (date && hasSearch && search) {
+		} else if (date && term && search) {
 			this.title = `[Search] [${room}] ${search}`;
 			if (Config.chatlogreader === 'fs' || !Config.chatlogreader) {
 				return LogSearcher.fsSearch(roomid, search, date, toID(cap));
