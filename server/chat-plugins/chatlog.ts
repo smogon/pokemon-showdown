@@ -9,7 +9,7 @@ import {FS} from "../../lib/fs";
 import * as child_process from 'child_process';
 import * as util from 'util';
 import * as path from 'path';
-
+import * as Dashycode from '../../lib/dashycode';
 
 const execFile = util.promisify(child_process.execFile);
 const DAY = 24 * 60 * 60 * 1000;
@@ -459,7 +459,7 @@ const LogSearcher = new class {
 		}
 	}
 
-	async ripgrepSearch(roomid: RoomID, search: string, cap: number) {
+	async ripgrepSearch(roomid: RoomID, search: string, cap: number | string) {
 		let output;
 		try {
 			const options = [
@@ -479,14 +479,13 @@ const LogSearcher = new class {
 		return this.render(matches, roomid, search, cap);
 	}
 
-	render(results: string[], roomid: RoomID, search: string, cap?: number) {
+	render(results: string[], roomid: RoomID, search: string, cap: number | string) {
 		let curDate = '';
 		const exactMatches = [];
-		const isAll = toID(cap) === 'all' || cap === Infinity;
+		const isAll = toID(cap) === 'all';
 		const sorted = results.sort().map(chunk => {
 			const section = chunk.split('\n').map(line => {
-				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
-				const [name, text] = line.split(sep);
+				const [name, text] = line.split('.txt:');
 				let rendered = LogViewer.renderLine(text, 'all');
 				if (!rendered || name.includes('today') || !toID(line)) return '';
 				 // gets rid of some edge cases / duplicates
@@ -503,7 +502,7 @@ const LogSearcher = new class {
 					exactMatches.push(rendered);
 					rendered = `<div class="chat chatmessage highlighted">${rendered}</div>`;
 				}
-				if (!isAll && exactMatches.length > cap!) return null;
+				if (!isAll && exactMatches.length > cap) return null;
 				return rendered;
 			}).filter(item => item).join(' ');
 			return section;
@@ -530,7 +529,7 @@ export const pages: PageTable = {
 			return LogViewer.error("Access denied");
 		}
 
-		const [roomid, date, opts, cap] = args
+		const [roomid, date, opts] = args
 			.join('-')
 			.split('--') as [RoomID, string | undefined, string | undefined, number];
 
@@ -558,9 +557,13 @@ export const pages: PageTable = {
 
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 		this.title = '[Logs] ' + roomid;
-
-		const hasSearch = opts?.includes('search-') || opts?.includes('csearch-');
-		const search = opts?.slice(7).replace('-', '');
+		let cap = 'all';
+		let search;
+		const [hasSearch, term] = opts!.includes('search-') ? Chat.splitFirst(opts as string, '-') : [];
+		if (hasSearch) {
+			search = Dashycode.decode(term.split('&')[0]);
+			cap = term.split('&')[1];
+		}
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
 
 		const parsedDate = new Date(date as string);
@@ -579,15 +582,12 @@ export const pages: PageTable = {
 			}
 		} else if (date && hasSearch && search) {
 			this.title = `[Search] [${room}] ${search}`;
-			if (Config.chatlogreader === 'fs') {
+			if (Config.chatlogreader === 'fs' || !Config.chatlogreader) {
 				return LogSearcher.fsSearch(roomid, search, date, toID(cap));
 			} else if (Config.chatlogreader === 'ripgrep') {
 				return LogSearcher.ripgrepSearch(roomid, search, cap);
 			} else {
-				return LogViewer.error(
-					`<strong>Log searching has been configured incorrectly.<br>` +
-					`Please set Config.chatlogreader to 'fs' or 'ripgrep'.</strong>	`
-				);
+				throw new Error(`Config.chatlogreader must be 'fs' or 'ripgrep'.`);
 			}
 		} else {
 			return LogViewer.room(roomid);
@@ -604,7 +604,7 @@ export const commands: ChatCommands = {
 
 	sl: 'searchlogs',
 	searchlog: 'searchlogs',
-	searchlogs(target, room, user, connection, cmd) {
+	searchlogs(target, room) {
 		target = target.trim();
 		const [search, tarRoom, cap, date] = target.split(',') as [string, string, number, number];
 		if (!target) return this.parse('/help searchlogs');
@@ -613,8 +613,10 @@ export const commands: ChatCommands = {
 		const input = search.includes('|') ? search.split('|').map(item => item.trim()).join('-') : search;
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
-		const limit = cap ? `--${cap}` : `--500`;
-		return this.parse(`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${input}${limit}`);
+		const limit = cap ? `&${cap}` : `&500`;
+		return this.parse(
+			`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${Dashycode.encode(input)}${limit}`
+		);
 	},
 
 	searchlogshelp: [
