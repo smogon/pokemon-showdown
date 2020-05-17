@@ -823,7 +823,7 @@ export const commands: ChatCommands = {
 		}
 		this.modlog(`RENAMEROOM`, null, `from ${oldTitle}`);
 		room.log.roomlogFilename = "";
-		room.log.setupRoomlogStream(true);
+		await room.log.setupRoomlogStream(true);
 		const privacy = room.isPrivate === true ? "Private" :
 			room.isPrivate === false ? "Public" :
 			`${room.isPrivate.charAt(0).toUpperCase()}${room.isPrivate.slice(1)}`;
