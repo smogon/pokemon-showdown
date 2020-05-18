@@ -54,7 +54,7 @@ class TestTools {
 		].filter(Boolean);
 		const customRulesID = customRules.length ? `@@@${customRules.join(',')}` : ``;
 
-		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
+		const basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
 		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType) + ' ';
 		const formatName = `${this.modPrefix}${gameTypePrefix}${basicFormat}${customRulesID}`;
 

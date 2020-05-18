@@ -86,7 +86,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
 
-		const currentGroup = room.getAuth({id: userid, group: (Users.usergroups[userid] || ' ').charAt(0)});
+		const currentGroup = room.auth[userid] || Config.groupsranking[0];
 		let nextGroup = target as GroupSymbol;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {
@@ -106,7 +106,7 @@ export const commands: ChatCommands = {
 		}
 		if (!user.can('makeroom')) {
 			if (currentGroup !== ' ' && !user.can(`room${Config.groups[currentGroup]?.id || 'voice'}`, null, room)) {
-				return this.errorReply(`/${cmd} - Access denied for promoting/demoting from ${(Config.groups[currentGroup] ? Config.groups[currentGroup].name : "an undefined group")}.`);
+				return this.errorReply(`/${cmd} - Access denied for promoting/demoting from ${Config.groups[currentGroup]?.name || currentGroup}.`);
 			}
 			if (nextGroup !== ' ' && !user.can('room' + Config.groups[nextGroup].id, null, room)) {
 				return this.errorReply(`/${cmd} - Access denied for promoting/demoting to ${Config.groups[nextGroup].name}.`);
@@ -515,9 +515,11 @@ export const commands: ChatCommands = {
 	unmutehelp: [`/unmute [username] - Removes mute from user. Requires: % @ # & ~`],
 
 	rb: 'ban',
+	forceroomban: 'ban',
+	forcerb: 'ban',
 	roomban: 'ban',
 	b: 'ban',
-	ban(target, room, user, connection) {
+	ban(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ban');
 		if (!this.canTalk()) return;
 
@@ -534,7 +536,16 @@ export const commands: ChatCommands = {
 		}
 		const name = targetUser.getLastName();
 		const userid = targetUser.getLastId();
-
+		const force = cmd === 'forcerb' || cmd === 'forceroomban';
+		if (targetUser.trusted) {
+			if (!force) {
+				return this.sendReply(
+					`${name} is a trusted user. If you are sure you would like to ban them use /forceroomban.`
+				);
+			}
+		} else if (force) {
+			return this.errorReply(`Use /roomban; ${name} is not a trusted user.`);
+		}
 		if (Punishments.isRoomBanned(targetUser, room.roomid) && !target) {
 			const problem = " but was already banned";
 			return this.privateModAction(`(${name} would be banned by ${user.name} ${problem}.)`);
@@ -1087,7 +1098,7 @@ export const commands: ChatCommands = {
 		}
 		if (!cmd.startsWith('global')) {
 			let groupid = Config.groups[nextGroup].id;
-			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth';
+			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth' as ID;
 			if (Config.groups[nextGroup].globalonly) return this.errorReply(`Did you mean "/global${groupid}"?`);
 			if (Config.groups[nextGroup].roomonly) return this.errorReply(`Did you mean "/room${groupid}"?`);
 			return this.errorReply(`Did you mean "/room${groupid}" or "/global${groupid}"?`);
@@ -1489,7 +1500,10 @@ export const commands: ChatCommands = {
 	],
 
 	ab: 'blacklist',
-	blacklist(target, room, user) {
+	bl: 'blacklist',
+	forceblacklist: 'blacklist',
+	forcebl: 'blacklist',
+	blacklist(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help blacklist');
 		if (!this.canTalk()) return;
 		if (toID(target) === 'show') return this.errorReply(`You're looking for /showbl`);
@@ -1508,7 +1522,16 @@ export const commands: ChatCommands = {
 		if (punishment && punishment[0] === 'BLACKLIST') {
 			return this.errorReply(`This user is already blacklisted from this room.`);
 		}
-
+		const force = cmd === 'forceblacklist' || cmd === 'forcebl';
+		if (targetUser.trusted) {
+			if (!force) {
+				return this.sendReply(
+					`${targetUser.name} is a trusted user. If you are sure you would like to blacklist them use /forceblacklist.`
+				);
+			}
+		} else if (force) {
+			return this.errorReply(`Use /blacklist; ${targetUser.name} is not a trusted user.`);
+		}
 		if (!target && REQUIRE_REASONS) {
 			return this.errorReply(`Blacklists require a reason.`);
 		}

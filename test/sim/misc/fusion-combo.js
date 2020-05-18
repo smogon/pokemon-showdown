@@ -21,7 +21,7 @@ describe('Fusion Bolt + Fusion Flare', function () {
 
 		battle.makeChoices();
 
-		let bpModifiers = new Map();
+		const bpModifiers = new Map();
 		battle.onEvent('BasePower', battle.format, -100, function (bp, attacker, defender, move) {
 			bpModifiers.set(move.id, this.event.modifier);
 		});
@@ -39,7 +39,7 @@ describe('Fusion Bolt + Fusion Flare', function () {
 
 		battle.makeChoices();
 
-		let bpModifiers = new Map();
+		const bpModifiers = new Map();
 		battle.onEvent('BasePower', battle.format, -100, function (bp, attacker, defender, move) {
 			bpModifiers.set(move.id, this.event.modifier);
 		});
@@ -57,7 +57,7 @@ describe('Fusion Bolt + Fusion Flare', function () {
 
 		battle.makeChoices();
 
-		let bpModifiers = new Map();
+		const bpModifiers = new Map();
 		battle.onEvent('BasePower', battle.format, -100, function (bp, attacker, defender, move) {
 			bpModifiers.set(move.id, this.event.modifier);
 		});

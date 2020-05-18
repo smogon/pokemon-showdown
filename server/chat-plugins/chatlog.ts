@@ -309,6 +309,8 @@ export const LogViewer = new class {
 				return `<div class="notice">${message.slice(5)}</div>`;
 			}
 			if (message.startsWith(`/uhtml `) || message.startsWith(`/uhtmlchange `)) {
+				if (message.startsWith(`/uhtmlchange `)) return ``;
+				if (opts !== 'all') return `<div class="notice">[uhtml box hidden]</div>`;
 				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
 			const group = name.charAt(0) !== ' ' ? `<small>${name.charAt(0)}</small>` : ``;
@@ -318,7 +320,8 @@ export const LogViewer = new class {
 			const [, html] = Chat.splitFirst(line, '|', 1);
 			return `<div class="notice">${html}</div>`;
 		}
-		case 'uhtml': {
+		case 'uhtml': case 'uhtmlchange': {
+			if (cmd !== 'uhtml') return ``;
 			const [, , html] = Chat.splitFirst(line, '|', 2);
 			return `<div class="notice">${html}</div>`;
 		}

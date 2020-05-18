@@ -25,6 +25,7 @@ export const IPTools = new class {
 	]);
 
 	readonly proxyHosts = new Set([
+		'ablenetvps.ne.jp',
 		'alexhost.md',
 		'amazonaws.com',
 		'anchorfree.com',
@@ -596,6 +597,10 @@ export const IPTools = new class {
 			return 'shared';
 		}
 		if (host === 'he.net.proxy-nohost') {
+			// Known to only be VPN services
+			if (['74.82.60.', '72.52.87.', '65.49.126.'].some(range => ip.startsWith(range))) {
+				return 'proxy';
+			}
 			// Hurricane Electric has an annoying habit of having residential
 			// internet and datacenters on the same IP ranges - we get a lot of
 			// legitimate users as well as spammers on VPNs from HE.
@@ -660,7 +665,7 @@ export const IPTools = new class {
 			'92.115.247.61', '95.65.89.96', '61.221.12.80', '210.217.18.70', '211.197.11.17', '178.20.137.178',
 			'137.63.71.51', '78.60.203.75', '188.186.4.177', '87.92.64.0', '88.119.43.142', '24.135.56.196',
 			'31.168.98.68', '78.62.214.242', '83.238.39.241', '84.22.63.122', '87.255.79.223', '46.55.25.191',
-			'91.181.235.31', '188.124.93.166', '84.236.2.166', '82.200.233.4',
+			'91.181.235.31', '188.124.93.166', '84.236.2.166', '82.200.233.4', '60.68.175.196', '158.181.227.63',
 		].includes(ip)) {
 			// single-IP open proxies
 			return 'proxy';
