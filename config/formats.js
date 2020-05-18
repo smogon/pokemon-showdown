@@ -43,6 +43,11 @@ const Formats = [
 		mod: 'gen8',
 		ruleset: ['Standard', 'Dynamax Clause'],
 		banlist: ['Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8ou') {
+				this.add('html', `<div class="broadcast-blue"><strong>OU is currently suspecting Dracovish! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3664521/">suspect thread</a>.</strong></div>`);
+			}
+		},
 	},
 	{
 		name: "[Gen 8] OU (Blitz)",
@@ -74,6 +79,11 @@ const Formats = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['OU', 'UUBL'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8uu') {
+				this.add('html', `<div class="broadcast-blue"><strong>UU is currently suspecting Haxorus! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3664575/">suspect thread</a>.</strong></div>`);
+			}
+		},
 	},
 	{
 		name: "[Gen 8] RU",
