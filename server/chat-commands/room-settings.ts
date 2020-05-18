@@ -809,6 +809,7 @@ export const commands: ChatCommands = {
 		const oldTitle = room.title;
 		const roomid = toID(target) as RoomID;
 		const roomtitle = target;
+		if (!roomid.length) return this.errorReply("The new room needs a title.");
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
 		// `-` has special meaning in roomids

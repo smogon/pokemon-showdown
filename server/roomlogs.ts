@@ -274,6 +274,7 @@ export class Roomlog {
 		}
 		if (roomlogStreamExisted) {
 			this.roomlogStream = undefined;
+			this.roomlogFilename = "";
 			await this.setupRoomlogStream(true);
 		}
 		return true;
