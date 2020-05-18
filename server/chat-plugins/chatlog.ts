@@ -142,7 +142,7 @@ const LogReader = new class {
 	}
 };
 
-const LogViewer = new class {
+export const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
@@ -179,7 +179,6 @@ const LogViewer = new class {
 		buf += `</div>`;
 		return this.linkify(buf);
 	}
-
 
 	async searchDay(roomid: RoomID, day: string, search: string, cap?: number, prevResults?: string[]) {
 		const text = await LogReader.read(roomid, day);
@@ -323,10 +322,6 @@ const LogViewer = new class {
 			return `<div class="notice">${html}</div>`;
 		}
 		case 'uhtml': {
-			const [, , html] = Chat.splitFirst(line, '|', 2);
-			return `<div class="notice">${html}</div>`;
-		}
-		case 'uhtmlchange': {
 			const [, , html] = Chat.splitFirst(line, '|', 2);
 			return `<div class="notice">${html}</div>`;
 		}
