@@ -198,4 +198,19 @@ describe('Target Resolution', function () {
 			assert.notEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 		});
 	});
+
+	it.skip('should not force charge moves called by another move to target an ally after Ally Switch', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'purrloin', ability: 'prankster', moves: ['copycat', 'sleeptalk']},
+			{species: 'wynaut', moves: ['allyswitch', 'solarbeam']},
+		], [
+			{species: 'swablu', moves: ['sleeptalk']},
+			{species: 'swablu', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move sleeptalk, move solarbeam 1', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.fullHP(battle.p1.active[0]);
+	});
 });
