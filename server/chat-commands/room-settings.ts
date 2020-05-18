@@ -822,8 +822,6 @@ export const commands: ChatCommands = {
 			return this.errorReply(`An error occured while renaming the room.`);
 		}
 		this.modlog(`RENAMEROOM`, null, `from ${oldTitle}`);
-		room.log.roomlogFilename = "";
-		await room.log.setupRoomlogStream(true);
 		const privacy = room.isPrivate === true ? "Private" :
 			room.isPrivate === false ? "Public" :
 			`${room.isPrivate.charAt(0).toUpperCase()}${room.isPrivate.slice(1)}`;
