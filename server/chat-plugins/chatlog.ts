@@ -180,7 +180,7 @@ export const LogViewer = new class {
 		return this.linkify(buf);
 	}
 
-	async searchDay(roomid: RoomID, day: string, search: string, cap?: number, prevResults?: string[]) {
+	async searchDay(roomid: RoomID, day: string, search: string, limit?: number | null, prevResults?: string[]) {
 		const text = await LogReader.read(roomid, day);
 		if (!text) return [];
 		const lines = text.split('\n');
@@ -215,22 +215,20 @@ export const LogViewer = new class {
 					`${context(true, 1)} ${context(true, 2)}`
 				);
 				// there's a cap and the total has been met
-				if (cap && all.push(full) > cap) break;
+				if (limit && all.push(full) > limit) break;
 				// there's a cap and it is met with this push
-				if (matches.push(full) === cap) break;
+				if (matches.push(full) === limit) break;
 			}
 		}
 		return matches;
 	}
 
-	async searchMonth(roomid: RoomID, month: string, search: string, cap?: number | string, year = false) {
+	async searchMonth(roomid: RoomID, month: string, search: string, limit?: number | null, year = false) {
 		const log = await LogReader.get(roomid);
 		if (!log) return LogViewer.error(`No logs on ${roomid}.`);
 		const days = await log.listDays(month);
 		const results = [];
 		const searches = search.split('-').length;
-
-		if (typeof cap === 'string') cap = parseInt(cap);
 
 		let buf = (
 			`<br><div class="pad"><strong>Results for search (es) ` +
@@ -238,16 +236,16 @@ export const LogViewer = new class {
 			` on ${roomid}: (${month}):</strong><hr>`
 		);
 		for (const day of days) {
-			const matches: string[] = await this.searchDay(roomid, day, search, cap, results);
+			const matches: string[] = await this.searchDay(roomid, day, search, limit, results);
 			for (const match of matches) results.push(match);
 			buf += `<details><summary>Matches on ${day}: (${matches.length})</summary><br><hr>`;
 			buf += `<p>${matches.join('<hr>')}</p>`;
 			buf += `</details><hr>`;
-			if (cap && results.length >= cap && !year) {
+			if (limit && results.length >= limit && !year) {
 				// cap is met & is not being used in a year read
-				buf += `<br><strong>Max results reached, capped at ${cap}</strong>`;
+				buf += `<br><strong>Max results reached, capped at ${limit}</strong>`;
 				buf += `<br><div style="text-align:center">`;
-				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${cap + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|all">View all<br />&#x25bc;</button></div>`;
 				break;
 			}
@@ -256,7 +254,7 @@ export const LogViewer = new class {
 		return buf;
 	}
 
-	async searchYear(roomid: RoomID, year: string, search: string, alltime = false, cap?: string | number) {
+	async searchYear(roomid: RoomID, year: string, search: string, alltime = false, limit?: number | null) {
 		const log = await LogReader.get(roomid);
 		if (!log) return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
 		let buf = '';
@@ -265,19 +263,18 @@ export const LogViewer = new class {
 		}	else {
 			buf += `<strong><br>Searching all logs: </strong><hr>`;
 		}
-		if (typeof cap === 'string') cap = parseInt(cap);
 		const months = await log.listMonths();
 		for (const month of months) {
 			if (buf.includes('capped')) {
 				// cap has been met in a previous loop, add the buttons and break.
 				buf += `<br /><div style="text-align:center">`;
-				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${cap! + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${limit! + 100}">View 100 more<br />&#x25bc;</button>`;
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
 				break;
 			}
 			if (!month.includes(year) && !alltime) continue;
 			if (!FS(`logs/chat/${roomid}/${month}/`).isDirectorySync()) continue;
-			buf += await this.searchMonth(roomid, month, search, cap, true);
+			buf += await this.searchMonth(roomid, month, search, limit, true);
 			buf += '<br>';
 		}
 		return buf;
@@ -439,25 +436,25 @@ export const LogViewer = new class {
 };
 
 const LogSearcher = new class {
-	fsSearch(roomid: RoomID, search: string, date: string, cap?: number | string) {
+	fsSearch(roomid: RoomID, search: string, date: string, limit?: number | null) {
 		const isAll = (date === 'all');
 		const isYear = (date.length < 0 && date.length > 7);
 		const isMonth = (date.length === 7);
 
 		if (isAll) {
-			return LogViewer.searchYear(roomid, date, search, true, cap);
+			return LogViewer.searchYear(roomid, date, search, true, limit);
 		} else if (isYear) {
 			date = date.substr(0, 4);
-			return LogViewer.searchYear(roomid, date, search, false, cap);
+			return LogViewer.searchYear(roomid, date, search, false, limit);
 		} else if (isMonth) {
 			date = date.substr(0, 7);
-			return LogViewer.searchMonth(roomid, date, search, cap);
+			return LogViewer.searchMonth(roomid, date, search, limit);
 		} else {
 			return LogViewer.error("Invalid date.");
 		}
 	}
 
-	async ripgrepSearch(roomid: RoomID, search: string, cap: number | string) {
+	async ripgrepSearch(roomid: RoomID, search: string, limit?: number | null) {
 		let output;
 		try {
 			const options = [
@@ -470,13 +467,13 @@ const LogSearcher = new class {
 			if (error.message.includes('Command failed')) return LogViewer.error(`No results found.`);
 			return LogViewer.error(`${error.message}`);
 		}
-		return this.render(output.stdout.split('--'), roomid, search, cap);
+		return this.render(output.stdout.split('--'), roomid, search, limit);
 	}
 
-	render(results: string[], roomid: RoomID, search: string, cap: number | string) {
-		const isAll = toID(cap) === 'all';
+	render(results: string[], roomid: RoomID, search: string, limit?: number | null) {
 		const exactMatches = [];
 		let curDate = '';
+		const searchRegex = new RegExp(search, "i");
 		const sorted = results.sort().map(chunk => {
 			const section = chunk.split('\n').map(line => {
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
@@ -486,7 +483,7 @@ const LogSearcher = new class {
 				 // gets rid of some edge cases / duplicates
 				let date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
 				let matched = (
-					new RegExp(search, "i").test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
+					searchRegex.test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
 				);
 				if (curDate !== date) {
 					curDate = date;
@@ -500,18 +497,18 @@ const LogSearcher = new class {
 				if (matched.includes('chat chatmessage highlighted')) {
 					exactMatches.push(matched);
 				}
-				if (cap && exactMatches.length > cap) return null;
+				if (limit && exactMatches.length > limit) return null;
 				return matched;
 			}).filter(Boolean).join(' ');
 			return section;
 		});
 		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
-		buf += isAll ? ` ${exactMatches.length}` : '';
-		buf += isAll ? `<hr></div><blockquote>` : ` (capped at ${cap})<hr></div><blockquote>`;
+		buf += !limit ? ` ${exactMatches.length}` : '';
+		buf += !limit ? `<hr></div><blockquote>` : ` (capped at ${limit})<hr></div><blockquote>`;
 		buf += sorted.filter(Boolean).join('<hr>');
-		if (!isAll) {
-			buf += `</details></blockquote><div class="pad"><hr><strong>Capped at ${cap}.</strong><br>`;
-			buf += `<button class="button" name="send" value="/sl ${search},${roomid},${Number(cap) + 200}">View 200 more<br />&#x25bc;</button>`;
+		if (limit) {
+			buf += `</details></blockquote><div class="pad"><hr><strong>Capped at ${limit}.</strong><br>`;
+			buf += `<button class="button" name="send" value="/sl ${search},${roomid},${limit + 200}">View 200 more<br />&#x25bc;</button>`;
 			buf += `<button class="button" name="send" value="/sl ${search},${roomid},all">View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
@@ -527,9 +524,8 @@ export const pages: PageTable = {
 			return LogViewer.error("Access denied");
 		}
 
-		const [roomid, date, opts] = Chat.splitFirst(
-			args.join('-'), '--', 2
-		) as [RoomID, string | undefined, string | undefined];
+		let [roomid, date, opts] = Chat.splitFirst(args.join('-'), '--', 2) as
+			[RoomID, string | undefined, string | undefined];
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
 			return LogViewer.list(user, roomid?.slice(1));
@@ -540,7 +536,7 @@ export const pages: PageTable = {
 		if (roomid.startsWith('spl') && roomid !== 'splatoon' && !user.can('rangeban')) {
 			return LogViewer.error("SPL team discussions are super secret.");
 		}
-		if (roomid.startsWith('wcop') &&	!user.can('rangeban')) {
+		if (roomid.startsWith('wcop') && !user.can('rangeban')) {
 			return LogViewer.error("WCOP team discussions are super secret.");
 		}
 		if (room) {
@@ -554,13 +550,13 @@ export const pages: PageTable = {
 
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 		this.title = '[Logs] ' + roomid;
-		let cap = 'all';
+		let limit = null;
 		let search;
-		const [, term] = opts?.includes('search-') ? Chat.splitFirst(opts, 'search-') : [];
-		if (term) {
-			const [input, num] = term.split('&');
+		if (opts?.startsWith('search-')) {
+			const [input, limitString] = opts.split('--limit-');
 			search = Dashycode.decode(input);
-			cap = num ? num : cap;
+			if (limitString) limit = parseInt(limitString);
+			opts = '';
 		}
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
 
@@ -570,22 +566,22 @@ export const pages: PageTable = {
 			return LogViewer.error(`Invalid date.`);
 		}
 
-		if (date && !term) {
+		if (date && search) {
+			this.title = `[Search] [${room}] ${search}`;
+			if (Config.chatlogreader === 'fs' || !Config.chatlogreader) {
+				return LogSearcher.fsSearch(roomid, search, date, limit);
+			} else if (Config.chatlogreader === 'ripgrep') {
+				return LogSearcher.ripgrepSearch(roomid, search, limit);
+			} else {
+				throw new Error(`Config.chatlogreader must be 'fs' or 'ripgrep'.`);
+			}
+		} else if (date) {
 			if (date === 'today') {
 				return LogViewer.day(roomid, LogReader.today(), opts);
 			} else if (date.split('-').length === 3) {
 				return LogViewer.day(roomid, parsedDate.toISOString().slice(0, 10), opts);
 			} else {
 				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
-			}
-		} else if (date && term && search) {
-			this.title = `[Search] [${room}] ${search}`;
-			if (Config.chatlogreader === 'fs' || !Config.chatlogreader) {
-				return LogSearcher.fsSearch(roomid, search, date, toID(cap));
-			} else if (Config.chatlogreader === 'ripgrep') {
-				return LogSearcher.ripgrepSearch(roomid, search, cap);
-			} else {
-				throw new Error(`Config.chatlogreader must be 'fs' or 'ripgrep'.`);
 			}
 		} else {
 			return LogViewer.room(roomid);
@@ -604,15 +600,21 @@ export const commands: ChatCommands = {
 	searchlog: 'searchlogs',
 	searchlogs(target, room) {
 		target = target.trim();
-		const [search, tarRoom, cap, date] = target.split(',') as [string, string, number, number];
+		const [search, tarRoom, limit, date] = target.split(',');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
-		if (cap && isNaN(cap) && toID(cap) !== 'all') return this.errorReply(`Cap must be a number or [all].`);
+		let limitString = `--limit-500`;
+		if (toID(limit) === 'all') {
+			limitString = `--all`;
+		} else if (/^[0-9]+%/.test(limit)) {
+			limitString = `--limit-${limit}`;
+		} else {
+			return this.errorReply(`Cap must be a number or [all].`);
+		}
 		const currentMonth = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 		const curRoom = tarRoom ? Rooms.search(tarRoom) : room;
-		const limit = cap ? `&${cap}` : `&500`;
 		return this.parse(
-			`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${Dashycode.encode(search)}${limit}`
+			`/join view-chatlog-${curRoom}--${date ? date : currentMonth}--search-${Dashycode.encode(search)}${limitString}`
 		);
 	},
 
