@@ -142,7 +142,7 @@ const LogReader = new class {
 	}
 };
 
-export const LogViewer = new class {
+const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
@@ -167,7 +167,7 @@ export const LogViewer = new class {
 		} else {
 			let line;
 			while ((line = await stream.readLine()) !== null) {
-					buf += this.renderLine(line, opts);
+				buf += this.renderLine(line, opts);
 			}
 		}
 		buf += `</div>`;
