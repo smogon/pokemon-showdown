@@ -162,18 +162,13 @@ export const LogViewer = new class {
 			`<div class="message-log" style="overflow-wrap: break-word">`;
 
 		const stream = await roomLog.getLog(day);
-		const strings = [];
 		if (!stream) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
 			let line;
 			while ((line = await stream.readLine()) !== null) {
 					buf += this.renderLine(line, opts);
-					strings.push(this.renderLine(line, opts));
 			}
-		}
-		if (strings.length > (Config.maxlenlog)) {
-			buf = strings.filter(item => !item.includes('<div class="notice"')).join(' ');
 		}
 		buf += `</div>`;
 		if (day !== LogReader.today()) {
@@ -317,7 +312,7 @@ export const LogViewer = new class {
 			if (message.startsWith(`/raw `)) {
 				return `<div class="notice">${message.slice(5)}</div>`;
 			}
-			if (message.startsWith(`/uhtml `) || (message.startsWith(`/uhtmlchange `) && opts === 'all')) {
+			if (message.startsWith(`/uhtml `) || message.startsWith(`/uhtmlchange `)) {
 				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
 			const group = name.charAt(0) !== ' ' ? `<small>${name.charAt(0)}</small>` : ``;
@@ -332,7 +327,6 @@ export const LogViewer = new class {
 			return `<div class="notice">${html}</div>`;
 		}
 		case 'uhtmlchange': {
-			if (opts !== 'all') return ``;
 			const [, , html] = Chat.splitFirst(line, '|', 2);
 			return `<div class="notice">${html}</div>`;
 		}
@@ -492,7 +486,7 @@ const LogSearcher = new class {
 			const section = chunk.split('\n').map(line => {
 				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
 				const [name, text] = line.split(sep);
-				let rendered = LogViewer.renderLine(text, 'all');
+				const rendered = LogViewer.renderLine(text, 'all');
 				if (!rendered || name.includes('today') || !toID(line)) return '';
 				 // gets rid of some edge cases / duplicates
 				let date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
