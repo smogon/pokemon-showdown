@@ -142,7 +142,7 @@ const LogReader = new class {
 	}
 };
 
-const LogViewer = new class {
+export const LogViewer = new class {
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
@@ -162,15 +162,19 @@ const LogViewer = new class {
 			`<div class="message-log" style="overflow-wrap: break-word">`;
 
 		const stream = await roomLog.getLog(day);
+		const strings = [];
 		if (!stream) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
 			let line;
 			while ((line = await stream.readLine()) !== null) {
-				buf += this.renderLine(line, opts);
+					buf += this.renderLine(line, opts);
+					strings.push(this.renderLine(line, opts));
 			}
 		}
-
+		if (strings.length > (Config.maxlenlog)) {
+			buf = strings.filter(item => !item.includes('<div class="notice"')).join(' ');
+		}
 		buf += `</div>`;
 		if (day !== LogReader.today()) {
 			const nextDay = LogReader.nextDay(day);
@@ -313,7 +317,7 @@ const LogViewer = new class {
 			if (message.startsWith(`/raw `)) {
 				return `<div class="notice">${message.slice(5)}</div>`;
 			}
-			if (message.startsWith(`/uhtml `) || message.startsWith(`/uhtmlchange `)) {
+			if (message.startsWith(`/uhtml `) || (message.startsWith(`/uhtmlchange `) && opts === 'all')) {
 				return `<div class="notice">${message.slice(message.indexOf(',') + 1)}</div>`;
 			}
 			const group = name.charAt(0) !== ' ' ? `<small>${name.charAt(0)}</small>` : ``;
@@ -323,7 +327,12 @@ const LogViewer = new class {
 			const [, html] = Chat.splitFirst(line, '|', 1);
 			return `<div class="notice">${html}</div>`;
 		}
-		case 'uhtml': case 'uhtmlchange': {
+		case 'uhtml': {
+			const [, , html] = Chat.splitFirst(line, '|', 2);
+			return `<div class="notice">${html}</div>`;
+		}
+		case 'uhtmlchange': {
+			if (opts !== 'all') return ``;
 			const [, , html] = Chat.splitFirst(line, '|', 2);
 			return `<div class="notice">${html}</div>`;
 		}
@@ -472,45 +481,45 @@ const LogSearcher = new class {
 			if (error.message.includes('Command failed')) return LogViewer.error(`No results found.`);
 			return LogViewer.error(`${error.message}`);
 		}
-		const matches = [];
-		for (const result of output.stdout.split('--').reverse()) {
-			matches.push(result);
-		}
-		return this.render(matches, roomid, search, cap);
+		return this.render(output.stdout.split('--'), roomid, search, cap);
 	}
 
 	render(results: string[], roomid: RoomID, search: string, cap: number | string) {
-		let curDate = '';
-		const exactMatches = [];
 		const isAll = toID(cap) === 'all';
+		const exactMatches = [];
+		let curDate = '';
 		const sorted = results.sort().map(chunk => {
 			const section = chunk.split('\n').map(line => {
-				const [name, text] = line.split('.txt:');
+				const sep = line.includes('.txt-') ? '.txt-' : '.txt:';
+				const [name, text] = line.split(sep);
 				let rendered = LogViewer.renderLine(text, 'all');
 				if (!rendered || name.includes('today') || !toID(line)) return '';
 				 // gets rid of some edge cases / duplicates
 				let date = name.replace(`${__dirname}/../../logs/chat/${roomid}`, '').slice(9);
+				let matched = (
+					new RegExp(search, "i").test(rendered) ? `<div class="chat chatmessage highlighted">${rendered}</div>` : rendered
+				);
 				if (curDate !== date) {
 					curDate = date;
-					date = `</div></details><details><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
-					rendered = `${date} ${rendered}`;
+
+					date = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${date}">${date}</a>]</summary>`;
+					matched = `${date} ${matched}`;
 				} else {
 					date = '';
 				}
-				const exact = new RegExp(search, "i").test(rendered);
-				if (exact) {
-					exactMatches.push(rendered);
-					rendered = `<div class="chat chatmessage highlighted">${rendered}</div>`;
+
+				if (matched.includes('chat chatmessage highlighted')) {
+					exactMatches.push(matched);
 				}
-				if (!isAll && exactMatches.length > cap) return null;
-				return rendered;
-			}).filter(item => item).join(' ');
+				if (cap && exactMatches.length > cap) return null;
+				return matched;
+			}).filter(Boolean).join(' ');
 			return section;
 		});
 		let buf = `<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
 		buf += isAll ? ` ${exactMatches.length}` : '';
 		buf += isAll ? `<hr></div><blockquote>` : ` (capped at ${cap})<hr></div><blockquote>`;
-		buf += sorted.filter(item => item).join('<hr>');
+		buf += sorted.filter(Boolean).join('<hr>');
 		if (!isAll) {
 			buf += `</details></blockquote><div class="pad"><hr><strong>Capped at ${cap}.</strong><br>`;
 			buf += `<button class="button" name="send" value="/sl ${search},${roomid},${Number(cap) + 200}">View 200 more<br />&#x25bc;</button>`;
