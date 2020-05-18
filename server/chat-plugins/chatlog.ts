@@ -553,9 +553,14 @@ export const pages: PageTable = {
 		let limit = null;
 		let search;
 		if (opts?.startsWith('search-')) {
-			const [input, limitString] = opts.split('--limit-');
+			let [input, limitString] = opts.split('--limit-');
+			input = input.slice(7);
 			search = Dashycode.decode(input);
-			if (limitString) limit = parseInt(limitString);
+			if (limitString) {
+				limit = parseInt(limitString);
+			} else {
+				limit = null;
+			}
 			opts = '';
 		}
 		const isAll = (toID(date) === 'all' || toID(date) === 'alltime');
@@ -603,11 +608,13 @@ export const commands: ChatCommands = {
 		const [search, tarRoom, limit, date] = target.split(',');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
-		let limitString = `--limit-500`;
+		let limitString = '';
 		if (toID(limit) === 'all') {
 			limitString = `--all`;
-		} else if (/^[0-9]+%/.test(limit)) {
+		} else if (!isNaN(parseInt(limit))) {
 			limitString = `--limit-${limit}`;
+		} else if (!toID(limit)) {
+			limitString = `--limit-500`;
 		} else {
 			return this.errorReply(`Cap must be a number or [all].`);
 		}
