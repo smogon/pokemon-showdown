@@ -458,7 +458,7 @@ const LogSearcher = new class {
 		let output;
 		try {
 			const options = [
-				search,
+				'-e', `[^a-zA-Z0-9]${search.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`,
 				`${__dirname}/../../logs/chat/${roomid}`,
 				'-C', '3',
 			];
@@ -523,7 +523,6 @@ export const pages: PageTable = {
 		if (!user.trusted) {
 			return LogViewer.error("Access denied");
 		}
-
 		let [roomid, date, opts] = Chat.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
 		if (!roomid || roomid.startsWith('-')) {
@@ -609,11 +608,11 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		let limitString = '';
-		if (toID(limit) === 'all') {
-			limitString = `--all`;
-		} else if (!isNaN(parseInt(limit))) {
+		if (/^[0-9]+$/.test(limit)) {
 			limitString = `--limit-${limit}`;
-		} else if (!toID(limit)) {
+		} else if (toID(limit) === 'all') {
+			limitString = `--limit-all`;
+		} else if (!limit) {
 			limitString = `--limit-500`;
 		} else {
 			return this.errorReply(`Cap must be a number or [all].`);
