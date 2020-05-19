@@ -17842,7 +17842,6 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 		eventData: [
 			{generation: 8, level: 10, perfectIVs: 6, moves: ["growl", "tailwhip", "sandattack", "quickattack"], pokeball: "pokeball"},
 		],
-		eventOnly: true,
 	},
 	vaporeon: {
 		learnset: {
