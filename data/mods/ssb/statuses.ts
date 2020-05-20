@@ -221,13 +221,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	asheviere: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~Asheviere|Blessings to you.`);
+			this.add(`c|+Asheviere|Blessings to you.`);
 		},
 		onSwitchOut() {
-			this.add(`c|~Asheviere|Don't trade me for someone else :(`);
+			this.add(`c|+Asheviere|Don't trade me for someone else :(`);
 		},
 		onFaint() {
-			this.add(`c|~Asheviere|Who will lead my kingdom now?`);
+			this.add(`c|+Asheviere|Who will lead my kingdom now?`);
 		},
 	},
 	averardo: {
@@ -342,18 +342,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
-	ckilgannon: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|%c.kilgannon|Hope you're not afraid of the dark!`);
-		},
-		onSwitchOut() {
-			this.add(`c|%c.kilgannon|/me growls`);
-		},
-		onFaint() {
-			this.add(`c|%c.kilgannon|Your time will come.`);
-		},
-	},
 	cantsay: {
 		noCopy: true,
 		onStart() {
@@ -416,6 +404,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint() {
 			this.add(`c|@Chloe|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`);
+		},
+	},
+	ckilgannon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%c.kilgannon|Hope you're not afraid of the dark!`);
+		},
+		onSwitchOut() {
+			this.add(`c|%c.kilgannon|/me growls`);
+		},
+		onFaint() {
+			this.add(`c|%c.kilgannon|Your time will come.`);
 		},
 	},
 	darth: {
@@ -753,6 +753,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|+inactive|/me turns to stone and crumbles`);
 		},
 	},
+	instruct: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Instruct|I am here to bully Aroma Electra`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Instruct|Remember these two things: Lucario•1582 will always be cute, and Swagn will never be able to dab`);
+		},
+		onFaint() {
+			this.add(`c|+Instruct|Noctrine help this isn't working as well as we planned`);
+		},
+	},
 	irritated: {
 		noCopy: true,
 		onStart() {
@@ -886,13 +898,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	kipkluif: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Kipkluif|I like bacon.`);
+			this.add(`c|%Kipkluif|I like bacon.`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Kipkluif|Run away da, run run away da`);
+			this.add(`c|%Kipkluif|Run away da, run run away da`);
 		},
 		onFaint() {
-			this.add(`c|+Kipkluif|Aah! Well, at least I have chicken.`);
+			this.add(`c|%Kipkluif|Aah! Well, at least I have chicken.`);
 		},
 		// Footballer innate
 		onBasePowerPriority: 8,
@@ -1183,13 +1195,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	pluviometer: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@pluviometer|${["Need a GP check?", "I'm a switch-in and I'm switching in #hyphenation"][this.random(2)]}`);
+			this.add(`c|+pluviometer|${["Need a GP check?", "I'm a switch-in and I'm switching in #hyphenation"][this.random(2)]}`);
 		},
 		onSwitchOut() {
-			this.add(`c|@pluviometer|${["I wish this were a better matchup #subjunctive", "GP 1/2", "GP 2/2"][this.random(3)]}`);
+			this.add(`c|+pluviometer|${["I wish this were a better matchup #subjunctive", "GP 1/2", "GP 2/2"][this.random(3)]}`);
 		},
 		onFaint() {
-			this.add(`c|@pluviometer|${["Follow SmogonU on Facebook! https://www.facebook.com/SmogonU", "Follow SmogonU on Twitter! https://twitter.com/SmogonU"][this.random(2)]}`);
+			this.add(`c|+pluviometer|${["Follow SmogonU on Facebook! https://www.facebook.com/SmogonU", "Follow SmogonU on Twitter! https://twitter.com/SmogonU"][this.random(2)]}`);
 		},
 	},
 	pohjis: {
@@ -1226,28 +1238,28 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|~pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
 		},
 	},
-	ptoad: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+ptoad⚬|Make it rain!`);
-		},
-		onSwitchOut() {
-			this.add(`c|+ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
-		},
-		onFaint() {
-			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
-		},
-	},
 	psynergy: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Psynergy|oh`);
+			this.add(`c|%Psynergy|oh`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Psynergy|Joe doesn't pay me enough for this`);
+			this.add(`c|%Psynergy|Joe doesn't pay me enough for this`);
 		},
 		onFaint() {
-			this.add(`c|+Psynergy|I'm going to be late...`);
+			this.add(`c|%Psynergy|I'm going to be late...`);
+		},
+	},
+	ptoad: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%ptoad⚬|Make it rain!`);
+		},
+		onSwitchOut() {
+			this.add(`c|%ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
+		},
+		onFaint() {
+			this.add(`c|%ptoad⚬|Wow. Way to rain on my parade.`);
 		},
 	},
 	quitequiet: {
@@ -1333,18 +1345,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint() {
 			this.add(`c|+SamJo|Oof, gotta get thiccer……. ;(`);
-		},
-	},
-	instruct: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Instruct|I am here to bully Aroma Electra`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Instruct|Remember these two things: Lucario•1582 will always be cute, and Swagn will never be able to dab`);
-		},
-		onFaint() {
-			this.add(`c|+Instruct|Noctrine help this isn't working as well as we planned`);
 		},
 	},
 	schiavetto: {
@@ -1615,13 +1615,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	xfix: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&xfix|destroy the world!`);
+			this.add(`c|+xfix|destroy the world!`);
 		},
 		onSwitchOut() {
-			this.add(`c|&xfix|brb i need to rethink my plan`);
+			this.add(`c|+xfix|brb i need to rethink my plan`);
 		},
 		onFaint() {
-			this.add(`c|&xfix|but the world refused`);
+			this.add(`c|+xfix|but the world refused`);
 		},
 	},
 	xjoelituh: {
