@@ -173,6 +173,6 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		// 		this.heal(this.dex.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}
 		// },
-		desc: "Raises Farfetchd's critical hit rate two stages.",
+		desc: "Raises Farfetch\u2019d's critical hit rate two stages.",
 	},
 };
