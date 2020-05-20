@@ -118,7 +118,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		// The Stick is a stand-in for a number of pokemon-exclusive items
 		// introduced with Gen Next
 		onModifyCritRatio(critRatio, user) {
-			if (toID(user.species.name) === 'farfetchd') {
+			if (user.species.id === 'farfetchd') {
 				return critRatio + 2;
 			}
 		},
