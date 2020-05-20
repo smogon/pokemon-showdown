@@ -342,18 +342,6 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			}
 		},
 	},
-	ckilgannon: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|%c.kilgannon|Hope you're not afraid of the dark!`);
-		},
-		onSwitchOut() {
-			this.add(`c|%c.kilgannon|/me growls`);
-		},
-		onFaint() {
-			this.add(`c|%c.kilgannon|Your time will come.`);
-		},
-	},
 	cantsay: {
 		noCopy: true,
 		onStart() {
@@ -416,6 +404,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint() {
 			this.add(`c|@Chloe|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`);
+		},
+	},
+	ckilgannon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%c.kilgannon|Hope you're not afraid of the dark!`);
+		},
+		onSwitchOut() {
+			this.add(`c|%c.kilgannon|/me growls`);
+		},
+		onFaint() {
+			this.add(`c|%c.kilgannon|Your time will come.`);
 		},
 	},
 	darth: {
@@ -1195,13 +1195,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	pluviometer: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@pluviometer|${["Need a GP check?", "I'm a switch-in and I'm switching in #hyphenation"][this.random(2)]}`);
+			this.add(`c|+pluviometer|${["Need a GP check?", "I'm a switch-in and I'm switching in #hyphenation"][this.random(2)]}`);
 		},
 		onSwitchOut() {
-			this.add(`c|@pluviometer|${["I wish this were a better matchup #subjunctive", "GP 1/2", "GP 2/2"][this.random(3)]}`);
+			this.add(`c|+pluviometer|${["I wish this were a better matchup #subjunctive", "GP 1/2", "GP 2/2"][this.random(3)]}`);
 		},
 		onFaint() {
-			this.add(`c|@pluviometer|${["Follow SmogonU on Facebook! https://www.facebook.com/SmogonU", "Follow SmogonU on Twitter! https://twitter.com/SmogonU"][this.random(2)]}`);
+			this.add(`c|+pluviometer|${["Follow SmogonU on Facebook! https://www.facebook.com/SmogonU", "Follow SmogonU on Twitter! https://twitter.com/SmogonU"][this.random(2)]}`);
 		},
 	},
 	pohjis: {
