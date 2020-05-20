@@ -1116,7 +1116,7 @@ export class CommandContext extends MessageContext {
 						}
 					}
 					if (/name\s*=\s*"\s*whisper\s*"/i.test(tagContent)) {
-						if (/value\s*=\s*"\s*[\/!]/i.test(tagContent)) {
+						if (/value\s*=\s*"\s*[/!]/i.test(tagContent)) {
 							this.errorReply(`You cannot use commands with the whisper tag.`);
 							this.errorReply(`If you have permission to use scripted buttons and wish to use commands, use the send tag instead.`);
 							return null;
@@ -1130,7 +1130,9 @@ export class CommandContext extends MessageContext {
 			}
 		}
 
-		htmlContent = htmlContent.replace(/button[^>]*?name\s*=\s*"\s*whisper\s*"/gi, match => match.replace(/whisper/i, `whisper-${this.user.id}`));
+		htmlContent = htmlContent.replace(/button[^>]*?name\s*=\s*"\s*whisper\s*"/gi, match => {
+				return match.replace(/whisper/i, `whisper-${this.user.id}`);
+			});
 
 		return htmlContent;
 	}
