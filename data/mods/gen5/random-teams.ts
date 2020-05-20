@@ -483,7 +483,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Thick Club';
 		} else if (species.name === 'Deoxys-Attack') {
 			item = (isLead && hasMove['stealthrock']) ? 'Focus Sash' : 'Life Orb';
-		} else if (species.name === 'Farfetch\'d') {
+		} else if (toID(species.name) === 'farfetchd') {
 			item = 'Stick';
 		} else if (species.name === 'Pikachu') {
 			item = 'Light Ball';

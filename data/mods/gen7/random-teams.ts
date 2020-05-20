@@ -741,7 +741,7 @@ export class RandomGen7Teams extends RandomTeams {
 			item = 'Petaya Berry';
 		} else if (species.name === 'Deoxys-Attack') {
 			item = (isLead && hasMove['stealthrock']) ? 'Focus Sash' : 'Life Orb';
-		} else if (species.name === 'Farfetch\'d') {
+		} else if (toID(species.name) === 'farfetchd') {
 			item = 'Stick';
 		} else if (species.name === 'Genesect' && hasMove['technoblast']) {
 			item = 'Douse Drive';
