@@ -87,10 +87,10 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	},
 	stick: {
 		inherit: true,
-		desc: "If held by a Farfetch'd, its critical hit ratio is always at stage 2. (25% crit rate)",
+		desc: "If held by a Farfetch\u2019d, its critical hit ratio is always at stage 2. (25% crit rate)",
 		onModifyCritRatioPriority: -1,
 		onModifyCritRatio(critRatio, user) {
-			if (user.species.name === 'Farfetch\'d') {
+			if (user.species.id === 'farfetchd') {
 				return 3;
 			}
 		},
