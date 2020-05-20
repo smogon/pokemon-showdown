@@ -1131,8 +1131,8 @@ export class CommandContext extends MessageContext {
 		}
 
 		htmlContent = htmlContent.replace(/button[^>]*?name\s*=\s*"\s*whisper\s*"/gi, match => {
-				return match.replace(/whisper/i, `whisper-${this.user.id}`);
-			});
+			return match.replace(/whisper/i, `whisper-${this.user.id}`);
+		});
 
 		return htmlContent;
 	}
