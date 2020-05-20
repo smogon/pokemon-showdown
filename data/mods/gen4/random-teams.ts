@@ -547,7 +547,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			item = species.requiredItem;
 
 		// First, the extra high-priority items
-		} else if (toID(species.name) === 'farfetchd') {
+		} else if (species.name === 'Farfetch\u2019d') {
 			item = 'Stick';
 		} else if (species.name === 'Marowak') {
 			item = 'Thick Club';
