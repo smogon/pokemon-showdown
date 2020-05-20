@@ -625,7 +625,7 @@ const cmds: ChatCommands = {
 			param => param.trim()
 		);
 		if (!(giver && ot && tid && prize && question && answers.length)) {
-			return this.errorReply("Invalid arguments specified - /question giver | ot | tid | prize | question | answer(s)");
+			return this.errorReply("Invalid arguments specified - /qg giver | ot | tid | prize | question | answer(s)");
 		}
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
@@ -863,7 +863,7 @@ const cmds: ChatCommands = {
 	end(target, room, user) {
 		if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (!this.can('warn', null, room) && user.id !== room.giveaway.host.id) return false;
+		if (user.id !== room.giveaway.host.id && !this.can('warn', null, room)) return false;
 
 		if (target && target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
