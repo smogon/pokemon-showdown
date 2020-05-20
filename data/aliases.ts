@@ -1032,7 +1032,7 @@ export const BattleAliases: {[alias: string]: string} = {
 	yadoran: "Slowbro",
 	koiru: "Magnemite",
 	reakoiru: "Magneton",
-	kamonegi: "Farfetch\u2019d",
+	kamonegi: "Farfetch'd",
 	doodoo: "Doduo",
 	doodorio: "Dodrio",
 	pauwau: "Seel",
