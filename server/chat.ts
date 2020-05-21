@@ -1110,10 +1110,11 @@ export class CommandContext extends MessageContext {
 				if (tagName === 'button') {
 					if (tagContent.replace(/\s*\bstyle\s*=\s*"[^"]*"\s*/i, '').trim() !== "button" &&
 						(this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock')) {
-						if ((tagContent.replace(/\s*\bstyle\s*=\s*"[^"]*"\s*/i, '').replace(/\s*\bname\s*=\s*"\s*send\s*"/i, '')
-							.replace(new RegExp("\\s*\\bvalue\\s*=\\s*\"/(?:msg|pm|w|whisper)\\s+" +
-							this.user.id.split('').join('[^a-z0-9]*') +
-							"\\s*,[^\"]*\"\\s*", 'i'))) !== 'button') {
+						if (tagContent.replace(/\s*\bstyle\s*=\s*"[^"]*"\s*/i, '').replace(/\s*\bname\s*=\s*"\s*send\s*"/i, '')
+							.replace(new RegExp(
+								("\\s*\\bvalue\\s*=\\s*\"/(?:msg|pm|w|whisper)\\s+" +
+								this.user.id.split('').join('[^a-z0-9]*') +
+								"\\s*,[^\"]*\"\\s*"), 'i')) !== 'button') {
 							this.errorReply(`You do not have permission to use scripted buttons (buttons with attributes other than style="...") in HTML.`);
 							this.errorReply(`If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>`);
 							return null;
