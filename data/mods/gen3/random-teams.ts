@@ -216,6 +216,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				case 'substitute':
 					if (hasMove['rest'] || hasMove['dragondance'] && !hasMove['bellydrum']) rejected = true;
+					if (!hasMove['batonpass'] && movePool.includes('calmmind')) rejected = true;
 					break;
 				case 'thunderwave':
 					if (counter.setupType || hasMove['bodyslam'] || hasMove['substitute'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -405,16 +406,14 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			item = 'Lum Berry';
 		} else if (species.name === 'Unown') {
 			item = 'Twisted Spoon';
-		} else if (hasMove['bellydrum'] && (counter.Physical - counter['priority'] > 1)) {
-			item = 'Salac Berry';
-		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && !['Early Bird', 'Natural Cure', 'Shed Skin'].includes(ability)) {
-			item = 'Chesto Berry';
 		} else if (hasMove['trick']) {
 			item = 'Choice Band';
+		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && !['Early Bird', 'Natural Cure', 'Shed Skin'].includes(ability)) {
+			item = 'Chesto Berry';
 
 		// Medium priority
-		} else if (hasMove['leechseed']) {
-			item = 'Leftovers';
+		} else if ((hasMove['bellydrum'] && counter.Physical - counter['priority'] > 1) || (hasMove['swordsdance'] && counter.Status < 2)) {
+			item = 'Salac Berry';
 		} else if (hasMove['endure'] || (hasMove['substitute'] && (hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']))) {
 			item = (species.baseStats.spe < 100 && ability !== 'Speed Boost' && !counter['speedsetup'] && !hasMove['focuspunch']) ? 'Salac Berry' : 'Liechi Berry';
 		} else if ((hasMove['substitute'] || hasMove['raindance']) && counter.Special >= 3) {
