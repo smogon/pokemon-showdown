@@ -1114,7 +1114,8 @@ export class CommandContext extends MessageContext {
 							.replace(new RegExp(
 								("\\s*\\bvalue\\s*=\\s*\"/(?:msg|pm|w|whisper)\\s+" +
 								this.user.id.split('').join('[^a-z0-9]*') +
-								"\\s*,[^\"]*\"\\s*"), 'i')) !== 'button') {
+								"\\s*,[^\"]*\"\\s*"), 'i')
+							) !== 'button') {
 							this.errorReply(`You do not have permission to use scripted buttons (buttons with attributes other than style="...") in HTML.`);
 							this.errorReply(`If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>`);
 							return null;
