@@ -1114,7 +1114,7 @@ export class CommandContext extends MessageContext {
 						let legalButton = !buttonName;
 						if (buttonName === 'send' && buttonValue?.startsWith('/msg ')) {
 							const [pmTarget] = buttonValue.slice(5).split(',');
-							if (room.auth[toID(pmTarget)] === '*') {
+							if (this.room.auth?.[toID(pmTarget)] === '*') {
 								legalButton = true;
 							}
 						}
