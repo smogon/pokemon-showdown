@@ -1108,7 +1108,7 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				if (tagName === 'button') {
-					if (tagContent.replace(/\s*(?:name\s*=\s*"\s*msg\s*"|(?:value|style)\s*=\s*"[^"]*")/gi, '') !== "button") {
+					if (tagContent.replace(/\b(?:name\s*=\s*"msg"|(?:value|style)\s*=\s*"[^"]*")/gi, '').trim() !== "button") {
 						if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock')) {
 							this.errorReply(`You do not have permission to use scripted buttons (buttons with attributes other than style="...") in HTML.`);
 							this.errorReply(`If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>`);
