@@ -1108,16 +1108,20 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				if (tagName === 'button') {
-					if (tagContent.replace(/\s*\bstyle\s*=\s*"[^"]*"\s*/i, '').trim() !== "button" &&
-						(this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock')) {
-						if (tagContent.replace(/\s*\bstyle\s*=\s*"[^"]*"\s*/i, '').replace(/\s*\bname\s*=\s*"\s*send\s*"/i, '')
-							.replace(new RegExp(
-								("\\s*\\bvalue\\s*=\\s*\"/(?:msg|pm|w|whisper)\\s+" +
-								this.user.id.split('').join('[^a-z0-9]*') +
-								"\\s*,[^\"]*\"\\s*"), 'i')
-							) !== 'button') {
-							this.errorReply(`You do not have permission to use scripted buttons (buttons with attributes other than style="...") in HTML.`);
-							this.errorReply(`If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>`);
+					if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock')) {
+						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
+						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
+						let legalButton = !buttonName;
+						if (buttonName === 'send' && buttonValue?.startsWith('/msg ')) {
+							const [pmTarget] = buttonValue.slice(5).split(',');
+							if (room.auth[toID(pmTarget)] === '*') {
+								legalButton = true;
+							}
+						}
+						if (!legalButton) {
+							this.errorReply(`You do not have permission to use most buttons. Here are the two types you're allowed can use:`);
+							this.errorReply(`1. Linking to a room: <a href="/roomid"><button>go to a place</button></a>`);
+							this.errorReply(`2. Sending a message to a bot: <button name="send" value="/msg, BOT_USERNAME, MESSAGE">send the thing</button>`);
 							return null;
 						}
 					}
