@@ -1108,17 +1108,13 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				if (tagName === 'button') {
-					if (tagContent.replace(/\b(?:name\s*=\s*"msg"|(?:value|style)\s*=\s*"[^"]*")/gi, '').trim() !== "button") {
-						if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock')) {
+					if (tagContent.replace(/\s*\bstyle\s*=\s*"[^"]*"\s*/i, '').trim() !== "button" && 
+						(this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock')) {
+						if ((tagContent.replace(/\s*\bstyle\s*=\s*"[^"]*"\s*/i, '')
+							.replace(/\s*\bname\s*=\s*"\s*send\s*"/i, '')
+							.replace(new RegExp(`\\s*\\bvalue\\s*=\\s*"/(?:msg|pm|w|whisper)\\s+${by}\\s*,[^"]*"\s*`, 'i'), '')) !== 'button') {
 							this.errorReply(`You do not have permission to use scripted buttons (buttons with attributes other than style="...") in HTML.`);
 							this.errorReply(`If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>`);
-							return null;
-						}
-					}
-					if (/name\s*=\s*"\s*msg\s*"/i.test(tagContent)) {
-						if (/value\s*=\s*"\s*[/!]/i.test(tagContent)) {
-							this.errorReply(`You cannot use commands with the msg tag.`);
-							this.errorReply(`If you have permission to use scripted buttons and wish to use commands, use the send tag instead.`);
 							return null;
 						}
 					}
@@ -1129,10 +1125,6 @@ export class CommandContext extends MessageContext {
 				return null;
 			}
 		}
-
-		htmlContent = htmlContent.replace(/<button\s[^>]*\bname\s*=\s*"msg"[^>]*>/gi, match => (
-			match.replace(/\bname\s*=\s*"msg"/i, `name="send"`).replace(/\bvalue\s*=\s*"\s*/i, `value="/msg ${this.user.id}, `)
-		));
 
 		return htmlContent;
 	}
