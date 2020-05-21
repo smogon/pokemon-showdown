@@ -1130,9 +1130,9 @@ export class CommandContext extends MessageContext {
 			}
 		}
 
-		htmlContent = htmlContent.replace(/button[^>]*?name\s*=\s*"\s*msg\s*"[^>]*>/gi, match => {
-			return match.replace(/name\s*=\s*"msg"/i, `name="send"`).replace(/value\s*=\s*"\s*/i, `value="/msg ${this.user.id}, `);
-		});
+		htmlContent = htmlContent.replace(/<button\s[^>]*\bname\s*=\s*"msg"[^>]*>/gi, match => (
+			match.replace(/\bname\s*=\s*"msg"/i, `name="send"`).replace(/\bvalue\s*=\s*"\s*/i, `value="/msg ${this.user.id}, `)
+		));
 
 		return htmlContent;
 	}
