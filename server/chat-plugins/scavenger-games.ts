@@ -78,7 +78,7 @@ class Leaderboard {
 		});
 	}
 
-	async htmlLadder() {
+	async htmlLadder(): Promise<string> {
 		const data = await this.visualize('points') as AnyObject[];
 		const display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${data.map(line =>
 			`<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`).join('')
@@ -249,7 +249,7 @@ const MODES: {[k: string]: GameMode | string} = {
 					this.announce(`Round ${this.room.scavgame.round} - ${Chat.toListString(this.players.map(p => `<em>${p.name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 				} else {
 					let eliminated = [];
-					const completed = this.completed.map(entry => toID(entry.name));
+					const completed = this.completed.map(entry => toID(entry.name)) as string[];
 					if (completed.length === this.room.scavgame.playerlist.length) {
 						eliminated.push(completed.pop()); // eliminate one
 						this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(userid => completed.includes(userid));
@@ -368,9 +368,8 @@ const MODES: {[k: string]: GameMode | string} = {
 				}
 				// post leaderboard
 				const room = this.room;
-				this.room.scavgame.leaderboard.htmlLadder().then(html => {
-					room.add(`|raw|${html}`).update();
-				});
+				const html = this.room.scavgame.leaderboard.htmlLadder() as string;
+				room.add(`|raw|${html}`).update();
 			},
 		},
 		round: 0,
@@ -389,7 +388,7 @@ const MODES: {[k: string]: GameMode | string} = {
 
 			onLoad() {
 				if (!this.room.scavgame || this.room.scavgame.round === 0) return;
-				const maxTime = this.room.scavgame.jumpstart.sort((a, b) => b - a)[0];
+				const maxTime = (this.room.scavgame.jumpstart as number[]).sort((a, b) => b - a)[0];
 
 				this.jumpstartTimers = [];
 				this.answerLock = true;
