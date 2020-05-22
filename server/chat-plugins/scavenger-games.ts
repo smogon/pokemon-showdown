@@ -143,12 +143,8 @@ const TWISTS: {[k: string]: Twist} = {
 			const now = Date.now();
 			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-			const blitz = (
-				(
-					(this.room.scavSettings.hostPoints && this.room.scavSettings.hostPoints[this.gameType]) ||
-					this.gameType === 'official'
-				) && now - this.startTime <= 60000
-			);
+			const blitz = now - this.startTime <= 60000 &&
+				(this.room.scavSettings.hostPoints?.[this.gameType] || this.gameType === 'official');
 
 			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
 
@@ -194,12 +190,8 @@ const TWISTS: {[k: string]: Twist} = {
 			const now = Date.now();
 			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-			const blitz = (
-				(
-					(this.room.scavSettings.hostPoints && this.room.scavSettings.hostPoints[this.gameType]) ||
-					this.gameType === 'official'
-				) && now - this.startTime <= 60000
-			);
+			const blitz = now - this.startTime <= 60000 &&
+				(this.room.scavSettings.hostPoints?.[this.gameType] || this.gameType === 'official');
 
 			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
 
