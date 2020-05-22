@@ -1038,6 +1038,11 @@ export class CommandContext extends MessageContext {
 		// unknown URI, allow HTTP to be safe
 		return uri;
 	}
+	/**
+	 * This is a quick and dirty first-pass "is this good HTML" check. The full
+	 * sanitization is done on the client by Caja in `src/battle-log.ts`
+	 * `BattleLog.sanitizeHTML`.
+	 */
 	canHTML(htmlContent: string | null) {
 		htmlContent = ('' + (htmlContent || '')).trim();
 		if (!htmlContent) return '';
@@ -1064,9 +1069,9 @@ export class CommandContext extends MessageContext {
 			const stack = [];
 			for (const tag of tags) {
 				const isClosingTag = tag.charAt(1) === '/';
-				const tagContent = tag.slice(isClosingTag ? 2 : 1).toLowerCase();
-				const tagNameEndIndex = tagContent.search(/[\s/]/);
-				const tagName = tagContent.slice(0, tagNameEndIndex >= 0 ? tagNameEndIndex : undefined);
+				const tagContent = tag.slice(isClosingTag ? 2 : 1).replace(/\s+/, ' ').trim();
+				const tagNameEndIndex = tagContent.indexOf(' ');
+				const tagName = tagContent.slice(0, tagNameEndIndex >= 0 ? tagNameEndIndex : undefined).toLowerCase();
 				if (isClosingTag) {
 					if (LEGAL_AUTOCLOSE_TAGS.includes(tagName)) continue;
 					if (!stack.length) {
@@ -1094,17 +1099,22 @@ export class CommandContext extends MessageContext {
 						this.errorReply(`Images are not allowed in personal rooms.`);
 						return null;
 					}
-					if (!/width=([0-9]+|"[0-9]+")/i.test(tagContent) || !/height=([0-9]+|"[0-9]+")/i.test(tagContent)) {
+					if (!/width ?= ?(?:[0-9]+|"[0-9]+")/i.test(tagContent) || !/height ?= ?(?:[0-9]+|"[0-9]+")/i.test(tagContent)) {
 						// Width and height are required because most browsers insert the
 						// <img> element before width and height are known, and when the
 						// image is loaded, this changes the height of the chat area, which
 						// messes up autoscrolling.
 						this.errorReply(`All images must have a width and height attribute`);
+						this.errorReply(`This image doesn't: <${tagContent}>`);
 						return null;
 					}
-					const srcMatch = /src\s*=\s*"?([^ "]+)(\s*")?/i.exec(tagContent);
+					const srcMatch = / src ?= ?"?([^ "]+)(?: ?")?/i.exec(tagContent);
 					if (srcMatch) {
 						if (!this.canEmbedURI(srcMatch[1])) return null;
+					} else {
+						this.errorReply(`All images must have a src attribute with no spaces in the URL`);
+						this.errorReply(`This image doesn't: <${tagContent}>`);
+						return null;
 					}
 				}
 				if (tagName === 'button') {
