@@ -47,7 +47,9 @@ const HOST_DATA_FILE = 'config/chat-plugins/scavhostdata.json';
 const PLAYER_DATA_FILE = 'config/chat-plugins/scavplayerdata.json';
 const DATABASE_FILE = 'config/chat-plugins/scavhunts.json';
 
+/* eslint-disable max-len */
 const ACCIDENTAL_LEAKS = /^((?:\s)?(?:\/{2,}|[^\w/]+)|\s\/)?(?:\s)?(?:s\W?cavenge|s\W?cav(?:engers)? guess|d\W?t|d\W?ata|d\W?etails|g\W?(?:uess)?|v)\b/i; // a regex of some of all the possible slips for leaks.
+/* eslint-enable max-len */
 
 const FILTER_LENIENCY = 7;
 
@@ -571,7 +573,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		number--; // indexOf starts at 0
 
 		const aspect = question_answer as 'hint' | 'answer';
-		const newValue = answer ? answer as string[] : value as string;
+		const newValue = answer ? answer : value;
 
 		this.questions[number][aspect] = newValue;
 		this.announce(`The ${question_answer} for question ${number + 1} has been edited.`);
@@ -1965,16 +1967,12 @@ const ScavengerCommands: ChatCommands = {
 		if (!sortingFields.includes(sortMethod)) sortMethod = 'finish'; // default sort method
 
 		const data = await PlayerLeaderboard.visualize(sortMethod) as AnyObject[];
-		const formattedData = await new Promise((resolve, reject) => {
-			// apply ratio
-			const raw = data.map(d => {
-				// always have at least one for join to get a value of 0 if both are 0 or non-existent
-				d.ratio = (((d.finish || 0) / (d.join || 1)) * 100).toFixed(2);
-				d['cumulative-ratio'] = (((d['cumulative-finish'] || 0) / (d['cumulative-join'] || 1)) * 100).toFixed(2);
-				return d;
-			});
-			resolve(raw);
-		}) as AnyObject[];
+		const formattedData = data.map(d => {
+			// always have at least one for join to get a value of 0 if both are 0 or non-existent
+			d.ratio = (((d.finish || 0) / (d.join || 1)) * 100).toFixed(2);
+			d['cumulative-ratio'] = (((d['cumulative-finish'] || 0) / (d['cumulative-join'] || 1)) * 100).toFixed(2);
+			return d;
+		});
 
 		this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-playlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Finished Hunts</th><th>Joined Hunts</th><th>Ratio</th><th>Infractions</th></tr>${
 			formattedData.map(entry => {
