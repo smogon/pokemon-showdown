@@ -42,7 +42,7 @@ class Leaderboard {
 		if (!this.data[userid]) this.data[userid] = {name: name};
 
 		if (!this.data[userid][aspect]) this.data[userid][aspect] = 0;
-		this.data[userid][aspect] = this.data[userid][aspect] = points;
+		this.data[userid][aspect] += points;
 
 		if (!noUpdate) this.data[userid].name = name; // always keep the last used name
 
