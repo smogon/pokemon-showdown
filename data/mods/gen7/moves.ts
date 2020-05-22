@@ -547,6 +547,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Raises the user's Attack by 1 stage.",
 		shortDesc: "Raises the user's Attack by 1.",
+		flags: {snatch: 1},
 		boosts: {
 			atk: 1,
 		},

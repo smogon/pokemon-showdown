@@ -8710,7 +8710,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		name: "Howl",
 		pp: 40,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, sound: 1},
 		boosts: {
 			atk: 1,
 		},
