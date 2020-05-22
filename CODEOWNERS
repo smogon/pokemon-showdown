@@ -1,6 +1,6 @@
 server/chat-plugins/scavenger*.js @xfix @sparkychildcharlie
 server/chat-plugins/trivia.js @xfix
-server/chat-plugins/mafia*.js @HoeenCoder @whalemer
+server/chat-plugins/mafia*.ts @HoeenCoder @whalemer
 data/mods/ssb/ @HoeenCoder
 data/random-teams.ts @TheImmortal
 data/mods/*/random-teams.ts @TheImmortal
