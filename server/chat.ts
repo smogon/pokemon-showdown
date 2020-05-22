@@ -1131,7 +1131,7 @@ export class CommandContext extends MessageContext {
 						if (!legalButton) {
 							this.errorReply(`You do not have permission to use most buttons. Here are the two types you're allowed can use:`);
 							this.errorReply(`1. Linking to a room: <a href="/roomid"><button>go to a place</button></a>`);
-							this.errorReply(`2. Sending a message to a bot: <button name="send" value="/msg, BOT_USERNAME, MESSAGE">send the thing</button>`);
+							this.errorReply(`2. Sending a message to a Bot: <button name="send" value="/msg, BOT_USERNAME, MESSAGE">send the thing</button>`);
 							return null;
 						}
 					}
