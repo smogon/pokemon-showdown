@@ -166,7 +166,7 @@ class PlayerLadder extends Ladder {
 
 					userData[a] = 0; // set it back to 0
 					// clean up if history is all 0's
-					if (!userData[historyKey].some(p => !!p)) {
+					if (!userData[historyKey].some((p: any) => !!p)) {
 						delete userData[a];
 						delete userData[historyKey];
 					}
@@ -562,7 +562,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		if (question_answer === 'question') question_answer = 'hint';
 		if (!['hint', 'answer'].includes(question_answer)) return false;
 
-		let answer;
+		let answer: string[] = [];
 		if (question_answer === 'answer') {
 			if (value.includes(',')) return false;
 			answer = value.split(';').map(p => p.trim());
@@ -572,10 +572,12 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		number--; // indexOf starts at 0
 
-		const aspect = question_answer as 'hint' | 'answer';
-		const newValue = answer ? answer : value;
+		if (question_answer === 'answer') {
+			this.questions[number].answer = answer;
+		} else {
+			this.questions[number].hint = value;
+		}
 
-		this.questions[number][aspect] = newValue;
 		this.announce(`The ${question_answer} for question ${number + 1} has been edited.`);
 		if (question_answer === 'hint') {
 			for (const p in this.playerTable) {
@@ -1257,7 +1259,7 @@ const ScavengerCommands: ChatCommands = {
 					).join(", ");
 				}
 			}
-			const completed = game.preCompleted ? game.preCompleted : game.completed;
+			const completed: AnyObject[] = game.preCompleted ? game.preCompleted : game.completed;
 			str += Chat.html`<tr><td>Completed</td><td>${completed.length ? completed.map(pl => pl.name).join(", ") : 'None'}`;
 			return this.sendReply(`|raw|${str}</table></div>${buffer}`);
 		}
@@ -1479,7 +1481,7 @@ const ScavengerCommands: ChatCommands = {
 			} else {
 				next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			}
-			const correctlyFormattedQuestions = next.questions.flatMap(question => [question.text, question.answers]);
+			const correctlyFormattedQuestions = next.questions.flatMap((question: AnyObject) => [question.text, question.answers]);
 			room.scavQueue.push({
 				hosts: next.hosts,
 				questions: correctlyFormattedQuestions,
