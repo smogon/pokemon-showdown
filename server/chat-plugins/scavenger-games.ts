@@ -228,52 +228,53 @@ const MODES: {[k: string]: GameMode | string} = {
 			},
 
 			onJoin(user: User) {
-				if (this.room.scavgame && this.room.scavgame.playerlist && !this.room.scavgame.playerlist.includes(user.id)) {
+				const game = this.room.scavgame!;
+				if (game.playerlist && game.playerlist.includes(user.id)) {
 					user.sendTo(this.room, 'You are not allowed to join this scavenger hunt.');
 					return true;
 				}
 			},
 
 			onAfterEnd() {
-				if (!this.room.scavgame) return;
+				const game = this.room.scavgame!;
 				if (!this.completed.length) {
 					this.announce('No one has completd the hunt - the round has been void.');
 					return;
 				}
 
-				this.room.scavgame.round++;
+				game.round++;
 
 				// elimination
-				if (!this.room.scavgame.playerlist) {
-					this.room.scavgame.playerlist = this.completed.map(entry => toID(entry.name));
-					this.announce(`Round ${this.room.scavgame.round} - ${Chat.toListString(this.players.map(p => `<em>${p.name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+				if (!game.playerlist) {
+					game.playerlist = this.completed.map(entry => toID(entry.name));
+					this.announce(`Round ${game.round} - ${Chat.toListString(this.players.map(p => `<em>${p.name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 				} else {
 					let eliminated = [];
 					const completed = this.completed.map(entry => toID(entry.name)) as string[];
-					if (completed.length === this.room.scavgame.playerlist.length) {
+					if (completed.length === game.playerlist.length) {
 						eliminated.push(completed.pop()); // eliminate one
-						this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(userid => completed.includes(userid));
+						game.playerlist = game.playerlist.filter(userid => completed.includes(userid));
 					} else {
-						eliminated = this.room.scavgame.playerlist.filter(userid => !completed.includes(userid));
+						eliminated = game.playerlist.filter(userid => !completed.includes(userid));
 						for (const username of eliminated) {
 							const userid = toID(username);
-							this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(pid => pid !== userid);
+							game.playerlist = game.playerlist.filter(pid => pid !== userid);
 						}
 					}
 
-					this.announce(`Round ${this.room.scavgame.round} - ${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(this.room.scavgame.playerlist.map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+					this.announce(`Round ${game.round} - ${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(game.playerlist.map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 				}
 
 				// process end of game
-				if (this.room.scavgame.playerlist.length === 1) {
-					const winningUser = Users.get(this.room.scavgame.playerlist[0]);
-					const winner = winningUser ? winningUser.name : this.room.scavgame.playerlist[0];
+				if (game.playerlist.length === 1) {
+					const winningUser = Users.get(game.playerlist[0]);
+					const winner = winningUser ? winningUser.name : game.playerlist[0];
 
 					this.announce(`Congratulations to the winner - ${winner}!`);
-					this.room.scavgame.destroy();
-				} else if (!this.room.scavgame.playerlist.length) {
+					game.destroy();
+				} else if (!game.playerlist.length) {
 					this.announce('Everyone has been eliminated!  Better luck next time!');
-					this.room.scavgame.destroy();
+					game.destroy();
 				}
 			},
 		},
@@ -298,44 +299,45 @@ const MODES: {[k: string]: GameMode | string} = {
 			},
 
 			onJoin(user) {
-				if (this.room.scavgame && this.room.scavgame.playerlist && !this.room.scavgame.playerlist.includes(user.id)) {
+				const game = this.room.scavgame!;
+				if (game.playerlist && !game.playerlist.includes(user.id)) {
 					user.sendTo(this.room, 'You are not allowed to join this scavenger hunt.');
 					return true;
 				}
 			},
 
 			onAfterEnd() {
-				if (!this.room.scavgame) return; // should never happen, but typescript is happy
+				const game = this.room.scavgame!;
 				if (!this.completed.length) {
 					this.announce('No one has completed the hunt - the round has been void.');
 					return;
 				}
-				this.room.scavgame.round++;
+				game.round++;
 
 				let eliminated: string[] = [];
-				if (!this.room.scavgame.playerlist) {
-					this.room.scavgame.playerlist = this.completed.map(entry => toID(entry.name) as string);
+				if (!game.playerlist) {
+					game.playerlist = this.completed.map(entry => toID(entry.name) as string);
 				} else {
 					const completed = this.completed.map(entry => toID(entry.name) as string);
-					eliminated = this.room.scavgame.playerlist.filter(userid => !completed.includes(userid));
+					eliminated = game.playerlist.filter(userid => !completed.includes(userid));
 					for (const username of eliminated) {
 						const userid = toID(username);
-						this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(pid => pid !== userid);
+						game.playerlist = game.playerlist.filter(pid => pid !== userid);
 					}
 				}
 
-				this.announce(`Round ${this.room.scavgame.round} - ${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${eliminated.length ? `${Chat.plural(eliminated, 'have', 'has')} been eliminated!` : ''} ${Chat.toListString(this.room.scavgame.playerlist.map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+				this.announce(`Round ${game.round} - ${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${eliminated.length ? `${Chat.plural(eliminated, 'have', 'has')} been eliminated!` : ''} ${Chat.toListString(game.playerlist.map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 
 				// process end of game
-				if (this.room.scavgame.playerlist.length === 1) {
-					const winningUser = Users.get(this.room.scavgame.playerlist[0]);
-					const winner = winningUser ? winningUser.name : this.room.scavgame.playerlist[0];
+				if (game.playerlist.length === 1) {
+					const winningUser = Users.get(game.playerlist[0]);
+					const winner = winningUser ? winningUser.name : game.playerlist[0];
 
 					this.announce(`Congratulations to the winner - ${winner}!`);
-					this.room.scavgame.destroy();
-				} else if (!this.room.scavgame.playerlist.length) {
+					game.destroy();
+				} else if (!game.playerlist.length) {
 					this.announce('Everyone has been eliminated!  Better luck next time!');
-					this.room.scavgame.destroy();
+					game.destroy();
 				}
 			},
 		},
@@ -355,20 +357,20 @@ const MODES: {[k: string]: GameMode | string} = {
 			id: 'pointrally',
 
 			onLoad() {
-				if (!this.room.scavgame) return;
-				this.announce(`Round ${++this.room.scavgame.round}`);
+				const game = this.room.scavgame!;
+				this.announce(`Round ${++game.round}`);
 			},
 
-			onAfterEnd() {
-				if (!this.room.scavgame) return;
+			async onAfterEnd() {
+				const game = this.room.scavgame!;
 				for (const [i, completed] of this.completed.map(e => e.name).entries()) {
-					const points = (this.room.scavgame.pointDistribution[i] ||
-						this.room.scavgame.pointDistribution[this.room.scavgame.pointDistribution.length - 1]);
-					this.room.scavgame.leaderboard.addPoints(completed, 'points', points);
+					const points = (game.pointDistribution[i] ||
+						game.pointDistribution[game.pointDistribution.length - 1]);
+					game.leaderboard.addPoints(completed, 'points', points);
 				}
 				// post leaderboard
 				const room = this.room;
-				const html = this.room.scavgame.leaderboard.htmlLadder() as string;
+				const html = await game.leaderboard.htmlLadder() as string;
 				room.add(`|raw|${html}`).update();
 			},
 		},
@@ -387,18 +389,18 @@ const MODES: {[k: string]: GameMode | string} = {
 			id: 'jumpstart',
 
 			onLoad() {
-				if (!this.room.scavgame || this.room.scavgame.round === 0) return;
-				const maxTime = (this.room.scavgame.jumpstart as number[]).sort((a, b) => b - a)[0];
+				const game = this.room.scavgame!;
+				if (game.round === 0) return;
+				const maxTime = (game.jumpstart as number[]).sort((a, b) => b - a)[0];
 
 				this.jumpstartTimers = [];
 				this.answerLock = true;
 
-				for (const [i, time] of this.room.scavgame.jumpstart.entries()) {
-					if (!this.room.scavgame.completed[i]) break;
+				for (const [i, time] of game.jumpstart.entries()) {
+					if (!game.completed[i]) break;
 
 					this.jumpstartTimers[i] = setTimeout(() => {
-						if (!this.room.scavgame) return; // should never happen, but makes typescript happy
-						const target = this.room.scavgame.completed.shift();
+						const target = game.completed.shift();
 						if (!target) return;
 
 						const staffHost = Users.get(this.staffHostId);
@@ -456,12 +458,13 @@ const MODES: {[k: string]: GameMode | string} = {
 						clearTimeout(timer);
 					}
 				}
-				if (!reset && this.room.scavgame) {
-					if (this.room.scavgame.round === 0) {
-						this.room.scavgame.completed = this.completed.map(entry => toID(entry.name));
-						this.room.scavgame.round++;
+				const game = this.room.scavgame!;
+				if (!reset) {
+					if (game.round === 0) {
+						game.completed = this.completed.map(entry => toID(entry.name));
+						game.round++;
 					} else {
-						this.room.scavgame.destroy();
+						game.destroy();
 					}
 				}
 			},
