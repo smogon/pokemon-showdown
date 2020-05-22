@@ -47,9 +47,8 @@ const HOST_DATA_FILE = 'config/chat-plugins/scavhostdata.json';
 const PLAYER_DATA_FILE = 'config/chat-plugins/scavplayerdata.json';
 const DATABASE_FILE = 'config/chat-plugins/scavhunts.json';
 
-const SCAV_REGEX_STRING = "^((?:\\s)?(?:[^\\w]+)|\\s\\/)?(?:\\s)?" +
-	"(?:s\\W?cavenge|s\\W?cav(?:engers)? guess|d\\W?t|d\\W?ata|d\\W?etails|g\\W?(?:uess)?|v)\\b";
-const SCAVENGE_REGEX = new RegExp(SCAV_REGEX_STRING, 'i');
+const ACCIDENTAL_LEAKS = /^((?:\s)?(?:\/{2,}|[^\w/]+)|\s\/)?(?:\s)?(?:s\W?cavenge|s\W?cav(?:engers)? guess|d\W?t|d\W?ata|d\W?etails|g\W?(?:uess)?|v)\b/i; // a regex of some of all the possible slips for leaks.
+
 const FILTER_LENIENCY = 7;
 
 const HISTORY_PERIOD = 6; // months
@@ -350,7 +349,7 @@ class ScavengerHuntDatabase {
 		return !isNaN(hunt_number) && hunt_number > 0 && hunt_number <= scavengersData.recycledHunts.length;
 	}
 
-	static getFullTextOfHunt(hunt: ScavengerHunt) {
+	static getFullTextOfHunt(hunt: {hosts: FakeUser[], questions: {text: string, answers: string[], hints?: string[]}[]}) {
 		return `${hunt.hosts.map(host => host.name).join(',')} | ${hunt.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
 	}
 }
@@ -360,7 +359,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	gameType: GameTypes;
 	joinedIps: string[];
 	startTime: number;
-	questions: AnyObject[];
+	questions: {hint: string, answer: string[], spoilers: string[]}[];
 	completed: AnyObject[];
 	leftHunt: {[userid: string]: 1 | undefined};
 	hosts: FakeUser[];
@@ -529,8 +528,8 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 	onLoad(q: (string | string[])[]) {
 		for (let i = 0; i < q.length; i += 2) {
-			const hint = q[i];
-			const answer = q[i + 1];
+			const hint = q[i] as string;
+			const answer = q[i + 1] as string[];
 
 			this.questions.push({hint: hint, answer: answer, spoilers: []});
 		}
@@ -543,7 +542,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		let events = this.mods['on' + event_id];
 		if (!events) return;
 
-		events = events.sort((a: any, b: any) => b.priority - a.priority);
+		events = events.sort((a, b) => b.priority - a.priority);
 		let result = undefined;
 
 		if (events) {
@@ -571,7 +570,10 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		number--; // indexOf starts at 0
 
-		this.questions[number][question_answer] = value;
+		const aspect = question_answer as 'hint' | 'answer';
+		const newValue = answer ? answer as string[] : value as string;
+
+		this.questions[number][aspect] = newValue;
 		this.announce(`The ${question_answer} for question ${number + 1} has been edited.`);
 		if (question_answer === 'hint') {
 			for (const p in this.playerTable) {
@@ -894,11 +896,13 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	onChatMessage(msg: string) {
 		let msgId = toID(msg) as string;
 
-		const commandMatch = msg.match(SCAVENGE_REGEX);
+		// idenitfy if there is a bot/dt command that failed
+		// remove it and then match the rest of the post for leaks.
+		const commandMatch = ACCIDENTAL_LEAKS.exec(msg);
 		if (commandMatch) msgId = msgId.slice(toID(commandMatch[0]).length);
 
 		const filtered = this.questions.some(q => {
-			return q.answer.some((a: string) => {
+			return q.answer.some(a => {
 				a = toID(a);
 				const md = Math.ceil((a.length - 5) / FILTER_LENIENCY);
 				if (Dex.levenshtein(msgId, a, md) <= md) return true;
@@ -1110,30 +1114,28 @@ const ScavengerCommands: ChatCommands = {
 		points: 'leaderboard',
 		score: 'leaderboard',
 		scoreboard: 'leaderboard',
-		leaderboard(target, room, user) {
+		async leaderboard(target, room, user) {
 			if (!room.scavgame) return this.errorReply(`There is no scavenger game currently running.`);
 			if (!room.scavgame.leaderboard) return this.errorReply("This scavenger game does not have a leaderboard.");
 			if (!this.runBroadcast()) return false;
 
-			room.scavgame.leaderboard.htmlLadder().then((html: string) => {
-				this.sendReply(`|raw|${html}`);
-				// make sure the room updates for broadcasting since this is async.
-				if (this.broadcasting) setImmediate(() => room.update());
-			});
+			const html = await room.scavgame.leaderboard.htmlLadder();
+			this.sendReply(`|raw|${html}`);
+			if (this.broadcasting) room.update();
 		},
 
-		rank(target, room, user) {
+		async rank(target, room, user) {
 			if (!room.scavgame) return this.errorReply(`There is no scavenger game currently running.`);
 			if (!room.scavgame.leaderboard) return this.errorReply("This scavenger game does not have a leaderboard.");
 			if (!this.runBroadcast()) return false;
 
 			const targetId = toID(target) || user.id;
 
-			room.scavgame.leaderboard.visualize('points', targetId).then((rank: AnyObject) => {
-				if (!rank) return this.sendReplyBox(`User '${targetId}' does not have any points on the scavenger games leaderboard.`);
+			const rank = await room.scavgame.leaderboard.visualize('points', targetId) as AnyObject;
 
-				this.sendReplyBox(Chat.html`User '${rank.name}' is #${rank.rank} on the scavenger games leaderboard with ${rank.points} points.`);
-			});
+			if (!rank) return this.sendReplyBox(`User '${targetId}' does not have any points on the scavenger games leaderboard.`);
+			this.sendReplyBox(Chat.html`User '${rank.name}' is #${rank.rank} on the scavenger games leaderboard with ${rank.points} points.`);
+			if (this.broadcasting) room.update();
 		},
 	},
 
@@ -1664,7 +1666,7 @@ const ScavengerCommands: ChatCommands = {
 		this.modlog('SCAV RESETLADDER');
 	},
 	top: 'ladder',
-	ladder(target, room, user) {
+	async ladder(target, room, user) {
 		if (room.roomid !== 'scavengers' && !(room.parent && room.parent.roomid === 'scavengers')) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1673,27 +1675,23 @@ const ScavengerCommands: ChatCommands = {
 		const isChange = (!this.broadcasting && target);
 		const hideStaff = (!this.broadcasting && this.meansNo(target));
 
-		Leaderboard.visualize('points').then(l => {
-			const ladder = l as AnyObject[];
-			this.sendReply(
-				`|uhtml${isChange ? 'change' : ''}|scavladder|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
-					const isStaff = room.auth && room.auth[toID(entry.name)];
-					if (isStaff && hideStaff) return '';
-					return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Chat.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Chat.escapeHTML(entry.name)}</strong>` : Chat.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
-				}).join('')}</table></div>` +
-				`<div style="text-align: center"><button class="button" name="send" value="/scav top ${hideStaff ?
-					'yes' :
-					'no'}">${hideStaff ?
-					"Show" :
-					"Hide"} Auth</button></div>`
-			);
-
-			// make sure the room updates for broadcasting since this is async.
-			if (this.broadcasting) setImmediate(() => room.update());
-		});
+		const ladder = await Leaderboard.visualize('points') as AnyObject[];
+		this.sendReply(
+			`|uhtml${isChange ? 'change' : ''}|scavladder|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
+				const isStaff = room.auth && room.auth[toID(entry.name)];
+				if (isStaff && hideStaff) return '';
+				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Chat.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Chat.escapeHTML(entry.name)}</strong>` : Chat.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
+			}).join('')}</table></div>` +
+			`<div style="text-align: center"><button class="button" name="send" value="/scav top ${hideStaff ?
+				'yes' :
+				'no'}">${hideStaff ?
+				"Show" :
+				"Hide"} Auth</button></div>`
+		);
+		if (this.broadcasting) room.update();
 	},
 
-	rank(target, room, user) {
+	async rank(target, room, user) {
 		if (room.roomid !== 'scavengers' && !(room.parent && room.parent.roomid === 'scavengers')) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
@@ -1701,14 +1699,10 @@ const ScavengerCommands: ChatCommands = {
 
 		const targetId = toID(target) || user.id;
 
-		Leaderboard.visualize('points', targetId).then((rank: AnyObject) => {
-			if (!rank) return this.sendReplyBox(`User '${targetId}' does not have any points on the scavengers leaderboard.`);
-
-			this.sendReplyBox(Chat.html`User '${rank.name}' is #${rank.rank} on the scavengers leaderboard with ${rank.points} points.`);
-
-			// make sure the room updates for broadcasting since this is async.
-			if (this.broadcasting) setImmediate(() => room.update());
-		});
+		const rank = await Leaderboard.visualize('points', targetId) as AnyObject;
+		if (!rank) return this.sendReplyBox(`User '${targetId}' does not have any points on the scavengers leaderboard.`);
+		this.sendReplyBox(Chat.html`User '${rank.name}' is #${rank.rank} on the scavengers leaderboard with ${rank.points} points.`);
+		if (this.broadcasting) room.update();
 	},
 
 	/**
@@ -1899,7 +1893,7 @@ const ScavengerCommands: ChatCommands = {
 	 * Scavenger statistic tracking
 	 */
 	huntcount: 'huntlogs',
-	huntlogs(target, room, user) {
+	async huntlogs(target, room, user) {
 		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -1925,28 +1919,26 @@ const ScavengerCommands: ChatCommands = {
 
 		if (!sortingFields.includes(sortMethod)) sortMethod = 'points'; // default sort method
 
-		HostLeaderboard.visualize(sortMethod).then(d => {
-			const data = d as AnyObject[];
-			this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-huntlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Hunts Created</th><th>Total Hunts Created</th><th>History</th></tr>${
-				data.map((entry: AnyObject) => {
-					const userid = toID(entry.name);
+		const data = await HostLeaderboard.visualize(sortMethod) as AnyObject[];
+		this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-huntlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Hunts Created</th><th>Total Hunts Created</th><th>History</th></tr>${
+			data.map((entry: AnyObject) => {
+				const userid = toID(entry.name);
 
-					const auth = room.auth && room.auth[userid] ? room.auth[userid] :
-						Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
-					const color = room.auth && userid in room.auth ? 'inherit' : 'gray';
+				const auth = room.auth && room.auth[userid] ? room.auth[userid] :
+					Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
+				const color = room.auth && userid in room.auth ? 'inherit' : 'gray';
 
-					return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
-						`<td style="text-align: right;">${(entry.points || 0)}</td>` +
-						`<td style="text-align: right;">${(entry['cumulative-points'] || 0)}</td>` +
-						`<td style="text-align: left;">${entry['history-points'] ? `<span style="color: gray">{ ${entry['history-points'].join(', ')} }</span>` : ''}</td>` +
-						`</tr>`;
-				}).join('')}</table></div><div style="text-align: center">${sortingFields.map(f => {
-				return `<button class="button${f === sortMethod ? ' disabled' : ''}" name="send" value="/scav huntlogs ${f}, 1">${f}</button>`;
-			}).join(' ')}</div>`);
-		});
+				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
+					`<td style="text-align: right;">${(entry.points || 0)}</td>` +
+					`<td style="text-align: right;">${(entry['cumulative-points'] || 0)}</td>` +
+					`<td style="text-align: left;">${entry['history-points'] ? `<span style="color: gray">{ ${entry['history-points'].join(', ')} }</span>` : ''}</td>` +
+					`</tr>`;
+			}).join('')}</table></div><div style="text-align: center">${sortingFields.map(f => {
+			return `<button class="button${f === sortMethod ? ' disabled' : ''}" name="send" value="/scav huntlogs ${f}, 1">${f}</button>`;
+		}).join(' ')}</div>`);
 	},
 
-	playlogs(target, room, user) {
+	async playlogs(target, room, user) {
 		if (room.roomid !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -1972,38 +1964,35 @@ const ScavengerCommands: ChatCommands = {
 
 		if (!sortingFields.includes(sortMethod)) sortMethod = 'finish'; // default sort method
 
-		PlayerLeaderboard.visualize(sortMethod).then(data => {
-			new Promise((resolve, reject) => {
-				// apply ratio
-				let raw = data as AnyObject[];
-				raw = raw.map(d => {
-					// always have at least one for join to get a value of 0 if both are 0 or non-existent
-					d.ratio = (((d.finish || 0) / (d.join || 1)) * 100).toFixed(2);
-					d['cumulative-ratio'] = (((d['cumulative-finish'] || 0) / (d['cumulative-join'] || 1)) * 100).toFixed(2);
-					return d;
-				});
-				resolve(raw);
-			}).then(d => {
-				const formattedData = d as AnyObject[];
-				this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-playlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Finished Hunts</th><th>Joined Hunts</th><th>Ratio</th><th>Infractions</th></tr>${
-					formattedData.map(entry => {
-						const userid = toID(entry.name);
-
-						const auth = room.auth && room.auth[userid] ? room.auth[userid] :
-							Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
-						const color = room.auth && userid in room.auth ? 'inherit' : 'gray';
-
-						return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
-							`<td style="text-align: right;">${(entry.finish || 0)} <span style="color: blue">(${(entry['cumulative-finish'] || 0)})</span>${(entry['history-finish'] ? `<br /><span style="color: gray">(History: ${entry['history-finish'].join(', ')})</span>` : '')}</td>` +
-							`<td style="text-align: right;">${(entry.join || 0)} <span style="color: blue">(${(entry['cumulative-join'] || 0)})</span>${(entry['history-join'] ? `<br /><span style="color: gray">(History: ${entry['history-join'].join(', ')})</span>` : '')}</td>` +
-							`<td style="text-align: right;">${entry.ratio}%<br /><span style="color: blue">(${(entry['cumulative-ratio'] || "0.00")}%)</span></td>` +
-							`<td style="text-align: right;">${(entry.infraction || 0)} <span style="color: blue">(${(entry['cumulative-infraction'] || 0)})</span>${(entry['history-infraction'] ? `<br /><span style="color: gray">(History: ${entry['history-infraction'].join(', ')})</span>` : '')}</td>` +
-							`</tr>`;
-					}).join('')}</table></div><div style="text-align: center">${sortingFields.map(f => {
-					return `<button class="button${f === sortMethod ? ' disabled' : ''}" name="send" value="/scav playlogs ${f}, 1">${f}</button>`;
-				}).join(' ')}</div>`);
+		const data = await PlayerLeaderboard.visualize(sortMethod) as AnyObject[];
+		const formattedData = await new Promise((resolve, reject) => {
+			// apply ratio
+			const raw = data.map(d => {
+				// always have at least one for join to get a value of 0 if both are 0 or non-existent
+				d.ratio = (((d.finish || 0) / (d.join || 1)) * 100).toFixed(2);
+				d['cumulative-ratio'] = (((d['cumulative-finish'] || 0) / (d['cumulative-join'] || 1)) * 100).toFixed(2);
+				return d;
 			});
-		});
+			resolve(raw);
+		}) as AnyObject[];
+
+		this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-playlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Finished Hunts</th><th>Joined Hunts</th><th>Ratio</th><th>Infractions</th></tr>${
+			formattedData.map(entry => {
+				const userid = toID(entry.name);
+
+				const auth = room.auth && room.auth[userid] ? room.auth[userid] :
+					Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
+				const color = room.auth && userid in room.auth ? 'inherit' : 'gray';
+
+				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
+					`<td style="text-align: right;">${(entry.finish || 0)} <span style="color: blue">(${(entry['cumulative-finish'] || 0)})</span>${(entry['history-finish'] ? `<br /><span style="color: gray">(History: ${entry['history-finish'].join(', ')})</span>` : '')}</td>` +
+					`<td style="text-align: right;">${(entry.join || 0)} <span style="color: blue">(${(entry['cumulative-join'] || 0)})</span>${(entry['history-join'] ? `<br /><span style="color: gray">(History: ${entry['history-join'].join(', ')})</span>` : '')}</td>` +
+					`<td style="text-align: right;">${entry.ratio}%<br /><span style="color: blue">(${(entry['cumulative-ratio'] || "0.00")}%)</span></td>` +
+					`<td style="text-align: right;">${(entry.infraction || 0)} <span style="color: blue">(${(entry['cumulative-infraction'] || 0)})</span>${(entry['history-infraction'] ? `<br /><span style="color: gray">(History: ${entry['history-infraction'].join(', ')})</span>` : '')}</td>` +
+					`</tr>`;
+			}).join('')}</table></div><div style="text-align: center">${sortingFields.map(f => {
+			return `<button class="button${f === sortMethod ? ' disabled' : ''}" name="send" value="/scav playlogs ${f}, 1">${f}</button>`;
+		}).join(' ')}</div>`);
 	},
 
 	uninfract: "infract",
