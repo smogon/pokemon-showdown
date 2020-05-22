@@ -685,7 +685,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
 		const blitz = now - this.startTime <= 60000 &&
-			(this.room.scavSettings.hostPoints?.[this.gameType] || this.gameType === 'official');
+			(this.room.scavSettings.hostPoints?.[this.gameType] || DEFAULT_BLITZ_POINTS[this.gameType]);
 
 		player.completed = true;
 		let result = this.runEvent('Complete', player, time, blitz);
