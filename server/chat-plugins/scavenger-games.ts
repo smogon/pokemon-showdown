@@ -78,16 +78,12 @@ class Leaderboard {
 		});
 	}
 
-	htmlLadder(): Promise<string> {
-		return new Promise((resolve, reject) => {
-			this.visualize('points').then(d => {
-				const data = d as AnyObject[];
-				const display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${data.map(line =>
-					`<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`).join('')
-				}</table></div>`;
-				resolve(display);
-			});
-		});
+	async htmlLadder() {
+		const data = await this.visualize('points') as AnyObject[];
+		const display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${data.map(line =>
+			`<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`).join('')
+		}</table></div>`;
+		return display;
 	}
 }
 
