@@ -1112,8 +1112,8 @@ export class CommandContext extends MessageContext {
 					if (srcMatch) {
 						if (!this.canEmbedURI(srcMatch[1])) return null;
 					} else {
-						this.errorReply(`All images must have a src attribute with no spaces in the URL`);
-						this.errorReply(`This image doesn't: <${tagContent}>`);
+						this.errorReply(`This image has a broken src attribute: <${tagContent}>`);
+						this.errorReply(`The src attribute must exist and have no spaces in the URL`);
 						return null;
 					}
 				}
