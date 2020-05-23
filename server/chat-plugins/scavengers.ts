@@ -802,8 +802,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				const room = Rooms.get(roomid) as ChatRoom;
 				if (!room || room.game || !room.scavQueue?.length) return;
 
-				const next = room.scavQueue.shift();
-				if (!next) return; // shouldn't happen, but it makes typescript happy.
+				const next = room.scavQueue.shift()!;
 				const duration = room.scavSettings?.defaultScavTimer || DEFAULT_TIMER_DURATION;
 				room.game = new ScavengerHunt(
 					room,
