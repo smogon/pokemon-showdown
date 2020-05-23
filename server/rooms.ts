@@ -111,10 +111,10 @@ export abstract class BasicRoom {
 	hangmanDisabled: boolean;
 	giveaway: QuestionGiveaway | LotteryGiveaway | null;
 	gtsga: GTSGiveaway | null;
-	scavgame: ScavengerGameTemplate | null;
-	scavSettings: AnyObject;
-	scavQueue: QueuedHunt[];
-	scavLeaderboard: AnyObject;
+	scavgame: null | ScavengerGameTemplate;
+	scavSettings: null | AnyObject;
+	scavQueue: null | QueuedHunt[];
+	scavLeaderboard: null | AnyObject;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
 	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
@@ -178,9 +178,9 @@ export abstract class BasicRoom {
 		this.giveaway = null;
 		this.gtsga = null;
 		this.scavgame = null;
-		this.scavSettings = {};
-		this.scavQueue = [];
-		this.scavLeaderboard = {};
+		this.scavSettings = null;
+		this.scavQueue = null;
+		this.scavLeaderboard = null;
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
 		this.dataCommandTierDisplay = 'tiers';
