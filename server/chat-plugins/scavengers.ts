@@ -216,6 +216,7 @@ if (LeaderboardRoom) {
 			'hostPoints',
 		];
 
+		if (!targetRoom.scavSettings) targetRoom.scavSettings = {};
 		for (const prop of scav_settings_properties) {
 			targetRoom.scavSettings[prop] = targetRoom[prop];
 			delete targetRoom[prop];
