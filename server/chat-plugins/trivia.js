@@ -1307,9 +1307,9 @@ const commands = {
 		if (tars.length < 2) return this.errorReply("Invalid arguments specified.");
 
 		let mode = toID(tars[0]);
-		const isRandomMode = (mode === 'random')
+		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
-			mode = ['first', 'number', 'timer'][Math.floor(Math.random() * 3)]
+			mode = ['first', 'number', 'timer'][Math.floor(Math.random() * 3)];
 		}
 		if (!MODES[mode]) return this.errorReply(`"${mode}" is an invalid mode.`);
 
