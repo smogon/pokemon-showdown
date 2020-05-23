@@ -22,6 +22,8 @@ const RETRY_AFTER_LOGIN = null;
 import {FS} from '../lib/fs';
 import {WriteStream} from '../lib/streams';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
+import {QueuedHunt} from './chat-plugins/scavengers';
+import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
@@ -109,6 +111,10 @@ export abstract class BasicRoom {
 	hangmanDisabled: boolean;
 	giveaway: QuestionGiveaway | LotteryGiveaway | null;
 	gtsga: GTSGiveaway | null;
+	scavgame: ScavengerGameTemplate | null;
+	scavSettings: AnyObject;
+	scavQueue: QueuedHunt[];
+	scavLeaderboard: AnyObject;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
 	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
@@ -116,6 +122,7 @@ export abstract class BasicRoom {
 	subRooms: Map<string, ChatRoom> | null;
 	gameNumber: number;
 	highTraffic: boolean;
+
 	constructor(roomid: RoomID, title?: string) {
 		this.users = Object.create(null);
 		this.type = 'chat';
@@ -170,6 +177,10 @@ export abstract class BasicRoom {
 		this.hangmanDisabled = false;
 		this.giveaway = null;
 		this.gtsga = null;
+		this.scavgame = null;
+		this.scavSettings = {};
+		this.scavQueue = [];
+		this.scavLeaderboard = {};
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
 		this.dataCommandTierDisplay = 'tiers';

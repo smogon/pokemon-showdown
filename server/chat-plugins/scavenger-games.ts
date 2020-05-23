@@ -7,16 +7,36 @@
  * @license MIT license
  */
 
-'use strict';
+import {ScavengerHunt} from './scavengers';
+
+export type TwistEvent = (
+	this: ScavengerHunt,
+	...args: any[]
+) => void;
+interface Twist {
+	name: string;
+	id: string;
+	desc?: string;
+	[eventid: string]: string | number | TwistEvent | undefined;
+}
+interface GameMode {
+	name: string;
+	id: string;
+	mod: Twist;
+	round?: number;
+	leaderboard?: true;
+	[k: string]: any;
+}
 
 class Leaderboard {
-	constructor(game) {
-		this.game = game;
+	data: AnyObject;
+
+	constructor() {
 		this.data = {};
 	}
 
-	addPoints(name, aspect, points, noUpdate) {
-		const userid = toID(name);
+	addPoints(name: string, aspect: string, points: number, noUpdate?: boolean) {
+		const userid: string = toID(name);
 
 		if (!userid || userid === 'constructor' || !points) return this;
 		if (!this.data[userid]) this.data[userid] = {name: name};
@@ -29,7 +49,7 @@ class Leaderboard {
 		return this; // allow chaining
 	}
 
-	visualize(sortBy, userid) {
+	visualize(sortBy: string, userid?: string) {
 		// return a promise for async sorting - make this less exploitable
 		return new Promise((resolve, reject) => {
 			let lowestScore = Infinity;
@@ -39,14 +59,14 @@ class Leaderboard {
 				.filter(k => sortBy in this.data[k])
 				.sort((a, b) => this.data[b][sortBy] - this.data[a][sortBy])
 				.map((u, i) => {
-					u = this.data[u];
-					if (u[sortBy] !== lowestScore) {
-						lowestScore = u[sortBy];
+					const bit = this.data[u];
+					if (bit[sortBy] !== lowestScore) {
+						lowestScore = bit[sortBy];
 						lastPlacement = i + 1;
 					}
 					return Object.assign(
 						{rank: lastPlacement},
-						u
+						bit
 					);
 				}); // identify ties
 			if (userid) {
@@ -58,20 +78,16 @@ class Leaderboard {
 		});
 	}
 
-	htmlLadder() {
-		return new Promise((resolve, reject) => {
-			this.visualize('points').then(data => {
-				const display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%">` +
-					`<tr><th>Rank</th><th>Name</th><th>Points</th></tr>` +
-					data.map(line => `<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`).join('') +
-					`</table></div>`;
-				resolve(display);
-			});
-		});
+	async htmlLadder(): Promise<string> {
+		const data = await this.visualize('points') as AnyObject[];
+		const display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${data.map(line =>
+			`<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`).join('')
+		}</table></div>`;
+		return display;
 	}
 }
 
-const TWISTS = {
+const TWISTS: {[k: string]: Twist} = {
 	perfectscore: {
 		name: 'Perfect Score',
 		id: 'perfectscore',
@@ -102,7 +118,9 @@ const TWISTS = {
 		onAfterEndPriority: 1,
 		onAfterEnd() {
 			const perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
-			if (perfect.length) this.announce(Chat.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
+			if (perfect.length) {
+				this.announce(Chat.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
+			}
 		},
 	},
 
@@ -125,7 +143,8 @@ const TWISTS = {
 			const now = Date.now();
 			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-			const blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || this.gameType === 'official') && now - this.startTime <= 60000);
+			const blitz = now - this.startTime <= 60000 &&
+				(this.room.scavSettings.hostPoints?.[this.gameType] || this.gameType === 'official');
 
 			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
 
@@ -171,7 +190,8 @@ const TWISTS = {
 			const now = Date.now();
 			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-			const blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || this.gameType === 'official') && now - this.startTime <= 60000);
+			const blitz = now - this.startTime <= 60000 &&
+				(this.room.scavSettings.hostPoints?.[this.gameType] || this.gameType === 'official');
 
 			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
 
@@ -185,7 +205,7 @@ const TWISTS = {
 	},
 };
 
-const MODES = {
+const MODES: {[k: string]: GameMode | string} = {
 	ko: 'kogames',
 	kogames: {
 		name: 'KO Games',
@@ -199,52 +219,54 @@ const MODES = {
 				this.allowRenames = false; // don't let people change their name in the middle of the hunt.
 			},
 
-			onJoin(user) {
-				if (this.room.scavgame.playerlist && !this.room.scavgame.playerlist.includes(user.id)) {
+			onJoin(user: User) {
+				const game = this.room.scavgame!;
+				if (game.playerlist && game.playerlist.includes(user.id)) {
 					user.sendTo(this.room, 'You are not allowed to join this scavenger hunt.');
 					return true;
 				}
 			},
 
 			onAfterEnd() {
+				const game = this.room.scavgame!;
 				if (!this.completed.length) {
 					this.announce('No one has completd the hunt - the round has been void.');
 					return;
 				}
 
-				this.room.scavgame.round++;
+				game.round++;
 
 				// elimination
-				if (!this.room.scavgame.playerlist) {
-					this.room.scavgame.playerlist = this.completed.map(entry => toID(entry.name));
-					this.announce(`Round ${this.room.scavgame.round} - ${Chat.toListString(this.players.map(p => `<em>${p.name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+				if (!game.playerlist) {
+					game.playerlist = this.completed.map(entry => toID(entry.name));
+					this.announce(`Round ${game.round} - ${Chat.toListString(this.players.map(p => `<em>${p.name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 				} else {
 					let eliminated = [];
-					const completed = this.completed.map(entry => toID(entry.name));
-					if (completed.length === this.room.scavgame.playerlist.length) {
+					const completed = this.completed.map(entry => toID(entry.name)) as string[];
+					if (completed.length === game.playerlist.length) {
 						eliminated.push(completed.pop()); // eliminate one
-						this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(userid => completed.includes(userid));
+						game.playerlist = game.playerlist.filter(userid => completed.includes(userid));
 					} else {
-						eliminated = this.room.scavgame.playerlist.filter(userid => !completed.includes(userid));
+						eliminated = game.playerlist.filter(userid => !completed.includes(userid));
 						for (const username of eliminated) {
 							const userid = toID(username);
-							this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(pid => pid !== userid);
+							game.playerlist = game.playerlist.filter(pid => pid !== userid);
 						}
 					}
 
-					this.announce(`Round ${this.room.scavgame.round} - ${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(this.room.scavgame.playerlist.map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+					this.announce(`Round ${game.round} - ${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(game.playerlist.map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 				}
 
 				// process end of game
-				if (this.room.scavgame.playerlist.length === 1) {
-					let winner = Users.get(this.room.scavgame.playerlist[0]);
-					winner = winner ? winner.name : this.room.scavgame.playerlist[0];
+				if (game.playerlist.length === 1) {
+					const winningUser = Users.get(game.playerlist[0]);
+					const winner = winningUser ? winningUser.name : game.playerlist[0];
 
 					this.announce(`Congratulations to the winner - ${winner}!`);
-					this.room.scavgame.destroy();
-				} else if (!this.room.scavgame.playerlist.length) {
+					game.destroy();
+				} else if (!game.playerlist.length) {
 					this.announce('Everyone has been eliminated!  Better luck next time!');
-					this.room.scavgame.destroy();
+					game.destroy();
 				}
 			},
 		},
@@ -269,43 +291,45 @@ const MODES = {
 			},
 
 			onJoin(user) {
-				if (this.room.scavgame.playerlist && !this.room.scavgame.playerlist.includes(user.id)) {
+				const game = this.room.scavgame!;
+				if (game.playerlist && !game.playerlist.includes(user.id)) {
 					user.sendTo(this.room, 'You are not allowed to join this scavenger hunt.');
 					return true;
 				}
 			},
 
 			onAfterEnd() {
+				const game = this.room.scavgame!;
 				if (!this.completed.length) {
 					this.announce('No one has completed the hunt - the round has been void.');
 					return;
 				}
-				this.room.scavgame.round++;
+				game.round++;
 
-				let eliminated = [];
-				if (!this.room.scavgame.playerlist) {
-					this.room.scavgame.playerlist = this.completed.map(entry => toID(entry.name));
+				let eliminated: string[] = [];
+				if (!game.playerlist) {
+					game.playerlist = this.completed.map(entry => toID(entry.name) as string);
 				} else {
-					const completed = this.completed.map(entry => toID(entry.name));
-					eliminated = this.room.scavgame.playerlist.filter(userid => !completed.includes(userid));
+					const completed = this.completed.map(entry => toID(entry.name) as string);
+					eliminated = game.playerlist.filter(userid => !completed.includes(userid));
 					for (const username of eliminated) {
 						const userid = toID(username);
-						this.room.scavgame.playerlist = this.room.scavgame.playerlist.filter(pid => pid !== userid);
+						game.playerlist = game.playerlist.filter(pid => pid !== userid);
 					}
 				}
 
-				this.announce(`Round ${this.room.scavgame.round} - ${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${eliminated.length ? `${Chat.plural(eliminated, 'have', 'has')} been eliminated!` : ''} ${Chat.toListString(this.room.scavgame.playerlist.map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+				this.announce(`Round ${game.round} - ${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${eliminated.length ? `${Chat.plural(eliminated, 'have', 'has')} been eliminated!` : ''} ${Chat.toListString(game.playerlist.map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 
 				// process end of game
-				if (this.room.scavgame.playerlist.length === 1) {
-					let winner = Users.get(this.room.scavgame.playerlist[0]);
-					winner = winner ? winner.name : this.room.scavgame.playerlist[0];
+				if (game.playerlist.length === 1) {
+					const winningUser = Users.get(game.playerlist[0]);
+					const winner = winningUser ? winningUser.name : game.playerlist[0];
 
 					this.announce(`Congratulations to the winner - ${winner}!`);
-					this.room.scavgame.destroy();
-				} else if (!this.room.scavgame.playerlist.length) {
+					game.destroy();
+				} else if (!game.playerlist.length) {
 					this.announce('Everyone has been eliminated!  Better luck next time!');
-					this.room.scavgame.destroy();
+					game.destroy();
 				}
 			},
 		},
@@ -325,20 +349,21 @@ const MODES = {
 			id: 'pointrally',
 
 			onLoad() {
-				this.announce(`Round ${++this.room.scavgame.round}`);
+				const game = this.room.scavgame!;
+				this.announce(`Round ${++game.round}`);
 			},
 
-			onAfterEnd() {
+			async onAfterEnd() {
+				const game = this.room.scavgame!;
 				for (const [i, completed] of this.completed.map(e => e.name).entries()) {
-					const points = this.room.scavgame.pointDistribution[i] || this.room.scavgame.pointDistribution[this.room.scavgame.pointDistribution.length - 1];
-					this.room.scavgame.leaderboard.addPoints(completed, 'points', points);
+					const points = (game.pointDistribution[i] ||
+						game.pointDistribution[game.pointDistribution.length - 1]);
+					game.leaderboard.addPoints(completed, 'points', points);
 				}
 				// post leaderboard
-				let room = this.room;
-				this.room.scavgame.leaderboard.htmlLadder().then(html => {
-					room.add(`|raw|${html}`).update();
-					room = null;
-				});
+				const room = this.room;
+				const html = await game.leaderboard.htmlLadder() as string;
+				room.add(`|raw|${html}`).update();
 			},
 		},
 		round: 0,
@@ -356,17 +381,18 @@ const MODES = {
 			id: 'jumpstart',
 
 			onLoad() {
-				if (this.room.scavgame.round === 0) return;
-				const maxTime = this.room.scavgame.jumpstart.sort((a, b) => b - a)[0];
+				const game = this.room.scavgame!;
+				if (game.round === 0) return;
+				const maxTime = (game.jumpstart as number[]).sort((a, b) => b - a)[0];
 
 				this.jumpstartTimers = [];
 				this.answerLock = true;
 
-				for (const [i, time] of this.room.scavgame.jumpstart.entries()) {
-					if (!this.room.scavgame.completed[i]) break;
+				for (const [i, time] of game.jumpstart.entries()) {
+					if (!game.completed[i]) break;
 
 					this.jumpstartTimers[i] = setTimeout(() => {
-						const target = this.room.scavgame.completed.shift();
+						const target = game.completed.shift();
 						if (!target) return;
 
 						const staffHost = Users.get(this.staffHostId);
@@ -374,8 +400,14 @@ const MODES = {
 
 						if (targetUser) {
 							if (staffHost) staffHost.sendTo(this.room, `${targetUser.name} has received their first hint early.`);
-							targetUser.sendTo(this.room, `|raw|<strong>The first hint to the next hunt is:</strong> ${Chat.formatText(this.questions[0].hint)}`);
-							targetUser.sendTo(this.room, `|notify|Early Hint|The first hint to the next hunt is: ${Chat.formatText(this.questions[0].hint)}`);
+							targetUser.sendTo(
+								this.room,
+								`|raw|<strong>The first hint to the next hunt is:</strong> ${Chat.formatText(this.questions[0].hint)}`
+							);
+							targetUser.sendTo(
+								this.room,
+								`|notify|Early Hint|The first hint to the next hunt is: ${Chat.formatText(this.questions[0].hint)}`
+							);
 						}
 					}, (maxTime - time) * 1000 + 5000);
 				}
@@ -418,12 +450,13 @@ const MODES = {
 						clearTimeout(timer);
 					}
 				}
+				const game = this.room.scavgame!;
 				if (!reset) {
-					if (this.room.scavgame.round === 0) {
-						this.room.scavgame.completed = this.completed.map(entry => toID(entry.name));
-						this.room.scavgame.round++;
+					if (game.round === 0) {
+						game.completed = this.completed.map(entry => toID(entry.name));
+						game.round++;
 					} else {
-						this.room.scavgame.destroy();
+						game.destroy();
 					}
 				}
 			},
@@ -431,20 +464,26 @@ const MODES = {
 	},
 };
 
-class GameTemplate {
-	constructor(room, details) {
+export class ScavengerGameTemplate {
+	room: ChatRoom | GameRoom;
+	playerlist: null | string[];
+	timer: NodeJS.Timer | null;
+
+	[k: string]: any;
+	constructor(room: GameRoom | ChatRoom) {
 		this.room = room;
 		this.playerlist = null;
-		this.details = details;
+		this.timer = null;
 	}
 
-	destroy(force) {
+	destroy(force?: boolean) {
 		if (this.timer) clearTimeout(this.timer);
-		if (force && this.room.game && this.room.game.gameid === 'scavengerhunt') this.room.game.onEnd(null);
+		const game = this.room.getGame(ScavengerHunt);
+		if (force && game) game.onEnd(false);
 		delete this.room.scavgame;
 	}
 
-	eliminate(userid) {
+	eliminate(userid: string) {
 		if (!this.playerlist || !this.playerlist.includes(userid)) return false;
 		this.playerlist = this.playerlist.filter(pid => pid !== userid);
 
@@ -452,17 +491,17 @@ class GameTemplate {
 		return true;
 	}
 
-	announce(msg) {
+	announce(msg: string) {
 		this.room.add(`|raw|<div class="broadcast-blue"><strong>${msg}</strong></div>`).update();
 	}
 }
 
-const LoadGame = function (room, gameid) {
+const LoadGame = function (room: ChatRoom | GameRoom, gameid: string) {
 	let game = MODES[gameid];
 	if (!game) return false; // invalid id
 	if (typeof game === 'string') game = MODES[game];
 
-	const base = new GameTemplate(room);
+	const base = new ScavengerGameTemplate(room);
 
 	const scavgame = Object.assign(base, game);
 
@@ -473,7 +512,7 @@ const LoadGame = function (room, gameid) {
 	return scavgame;
 };
 
-module.exports = {
+export const ScavMods = {
 	LoadGame,
 	twists: TWISTS,
 	modes: MODES,
