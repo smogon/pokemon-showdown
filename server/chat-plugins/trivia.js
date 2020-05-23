@@ -290,8 +290,9 @@ class Trivia extends Rooms.RoomGame {
 	 * @param {string} category
 	 * @param {string} length
 	 * @param {TriviaQuestion[]} questions
+	 * @param {boolean} [isRandomMode]
 	 */
-	constructor(room, mode, category, length, questions, isRandomMode) {
+	constructor(room, mode, category, length, questions, isRandomMode = false) {
 		super(room);
 		this.gameid = /** @type {ID} */ ('trivia');
 		this.title = 'Trivia';
