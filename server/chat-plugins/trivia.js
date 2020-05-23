@@ -1309,7 +1309,7 @@ const commands = {
 		let mode = toID(tars[0]);
 		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
-			mode = ['first', 'number', 'timer'][Math.floor(Math.random() * 3)];
+			mode = Dex.shuffle(['first', 'number', 'timer'])[0];
 		}
 		if (!MODES[mode]) return this.errorReply(`"${mode}" is an invalid mode.`);
 
