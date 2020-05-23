@@ -1104,8 +1104,8 @@ export class CommandContext extends MessageContext {
 						// <img> element before width and height are known, and when the
 						// image is loaded, this changes the height of the chat area, which
 						// messes up autoscrolling.
-						this.errorReply(`All images must have a width and height attribute`);
-						this.errorReply(`This image doesn't: <${tagContent}>`);
+						this.errorReply(`This image is missing a width/height attribute: <${tagContent}>`);
+						this.errorReply(`Images without predefined width/height cause problems with scrolling because loading them changes their height.`);
 						return null;
 					}
 					const srcMatch = / src ?= ?"?([^ "]+)(?: ?")?/i.exec(tagContent);
