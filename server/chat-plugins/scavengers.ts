@@ -2026,7 +2026,7 @@ const ScavengerCommands: ChatCommands = {
 		'': 'update',
 		'update'(target, room, user) {
 			if (!this.can('declare', null, room) || !getScavsRoom(room)) return false;
-			const settings = room.scavSettings.scavmod || {};
+			const settings = room.scavSettings?.scavmod || {};
 
 			this.sendReply(`|uhtml${this.cmd === 'update' ? 'change' : ''}|scav-modsettings|<div class=infobox><strong>Scavenger Moderation Settings:</strong><br /><br />` +
 				`<button name=send value='/scav modsettings ipcheck toggle'><i class="fa fa-power-off"></i></button> Multiple connection verification: ${settings.ipcheck ? 'ON' : 'OFF'}` +
