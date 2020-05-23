@@ -28,7 +28,7 @@ describe('Pledge Moves', function () {
 		assert(!battle.p1.active[1].moveThisTurn, "Charizard should not have moved this turn.");
 	});
 
-	it.skip("should not start a Pledge combo for Z-moves", function () {
+	it("should not start a Pledge combo for Z-moves", function () {
 		battle = common.gen(7).createBattle({gameType: 'doubles'}, [[
 			{species: 'Weedle', ability: 'sapsipper', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -41,7 +41,7 @@ describe('Pledge Moves', function () {
 		assert.statStage(weedle, 'atk', +1);
 	});
 
-	it.skip("should not start a Pledge combo for Max Moves", function () {
+	it("should not start a Pledge combo for Max Moves", function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Weedle', ability: 'sapsipper', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},

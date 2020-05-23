@@ -5,11 +5,11 @@ const common = require('./../../common');
 
 let battle;
 
-let moves = ['Ice Ball', 'Rollout'];
+const moves = ['Ice Ball', 'Rollout'];
 
 for (const move of moves) {
 	describe(move, function () {
-		let id = move.toLowerCase().replace(/\W+/g, '');
+		const id = move.toLowerCase().replace(/\W+/g, '');
 
 		afterEach(function () {
 			battle.destroy();

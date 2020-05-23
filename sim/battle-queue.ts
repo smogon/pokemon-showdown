@@ -99,6 +99,8 @@ export interface PokemonAction {
 	speed: number;
 	/** the pokemon doing action */
 	pokemon: Pokemon;
+	/** `runSwitch` only: the pokemon forcing this pokemon to switch in */
+	dragger?: Pokemon;
 }
 
 export type Action = MoveAction | SwitchAction | TeamAction | FieldAction | PokemonAction;
@@ -154,8 +156,7 @@ export class BattleQueue extends Array<Action> {
 				megaEvo: 104,
 				runDynamax: 105,
 
-				shift: 106,
-
+				shift: 200,
 				// default is 200 (for moves)
 
 				residual: 300,
@@ -260,7 +261,7 @@ export class BattleQueue extends Array<Action> {
 	}
 
 	willMove(pokemon: Pokemon) {
-		if (pokemon.fainted) return false;
+		if (pokemon.fainted) return null;
 		for (const action of this) {
 			if (action.choice === 'move' && action.pokemon === pokemon) {
 				return action;
@@ -296,7 +297,7 @@ export class BattleQueue extends Array<Action> {
 				return action;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**

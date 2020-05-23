@@ -235,11 +235,11 @@ export const commands: ChatCommands = {
 			}
 			const canSeeIps = user.can('ban');
 			const participants = Object.entries(lottery.participants).map(([ip, participant]) => {
-				return `${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
+				return `- ${participant}${canSeeIps ? ' (IP: ' + ip + ')' : ''}`;
 			});
 			let buf = '';
 			if (user.can('declare', null, room)) {
-				buf += `<b>List of participants (${participants.length}):</b><p>${participants.join(', ')}</p>`;
+				buf += `<details class="readmore"><summary><b>List of participants (${participants.length}):</b></summary><p>${participants.join('\n')}</p></details>`;
 			} else {
 				buf += `${participants.length} participant(s) joined this lottery.`;
 			}

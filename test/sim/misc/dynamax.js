@@ -84,4 +84,38 @@ describe("Dynamax", function () {
 		const expectedDamage = Math.floor(pokemon.maxhp * expectedPercent);
 		assert.equal(pokemon.maxhp - pokemon.hp, expectedDamage, `${pokemon.name} should take ${expectedPercent * 100}%`);
 	});
+
+	it.skip('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['sleeptalk', 'psychic']},
+		], [
+			{species: 'weedle', level: 1, moves: ['sleeptalk']},
+			{species: 'weedle', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move sleep talk dynamax');
+		const dynamaxedHP = battle.p1.active[0].hp;
+		battle.makeChoices();
+		battle.makeChoices('move psychic');
+		assert.equal(battle.requestState, 'switch');
+		assert.equal(battle.p1.active[0].hp, dynamaxedHP);
+	});
+
+	it('should be impossible to Dynamax when all the base moves are disabled', function () {
+		battle = common.createBattle([[
+			{species: "Feebas", moves: ['splash']},
+		], [
+			{species: "Wynaut", moves: ['taunt', 'splash']},
+		]]);
+		battle.makeChoices();
+		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
+
+		battle = common.createBattle([[
+			{species: "Feebas", moves: ['splash']},
+		], [
+			{species: "Wynaut", moves: ['imprison', 'splash']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move 1', 'auto');
+		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
+	});
 });

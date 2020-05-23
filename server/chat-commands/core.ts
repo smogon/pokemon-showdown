@@ -32,7 +32,7 @@ const avatarTable = new Set([
 	'ariana',
 	'aromalady-gen3', 'aromalady-gen3rs', 'aromalady',
 	'artist-gen4', 'artist',
-	'ash',
+	'ash-alola', 'ash-hoenn', 'ash-kalos', 'ash-unova', 'ash-capbackward', 'ash-johto', 'ash-sinnoh', 'ash',
 	'backersf',
 	'backers',
 	'backpackerf',
@@ -316,22 +316,28 @@ const avatarTable = new Set([
 	'yellow',
 	'youngcouple-gen3', 'youngcouple-gen3rs', 'youngcouple-gen4dp', 'youngcouple',
 	'youngster-gen1', 'youngster-gen1rb', 'youngster-gen2', 'youngster-gen3', 'youngster-gen3rs', 'youngster-gen4', 'youngster',
-	'zinnia',
 	'zinzolin',
 ]);
 
 const avatarTableBeliot419 = new Set([
-	'acerola', 'aetheremployee', 'aetheremployeef', 'aetherfoundation', 'aetherfoundationf',
-	'anabel', 'beauty-gen7', 'blue-gen7', 'burnet', 'colress-gen7', 'dexio', 'elio', 'faba',
-	'gladion-stance', 'gladion', 'grimsley-gen7', 'guzma', 'hala', 'hapu', 'hau-stance', 'hau',
-	'hiker-gen7', 'ilima', 'kahili', 'kiawe', 'kukui-stand', 'kukui', 'lana', 'lass-gen7',
-	'lillie-z', 'lillie', 'lusamine-nihilego', 'lusamine', 'mallow', 'mina', 'molayne', 'nanu',
-	'officeworker', 'olivia', 'plumeria', 'pokemonbreeder-gen7', 'pokemonbreederf-gen7',
-	'preschoolers', 'red-gen7', 'risingstar', 'risingstarf', 'ryuki', 'samsonoak', 'selene',
-	'sightseer', 'sina', 'sophocles', 'teacher-gen7', 'theroyal', 'wally', 'wicke',
-	'youngathlete', 'youngathletef', 'youngster-gen7',
+	'acerola', 'aetheremployee', 'aetheremployeef', 'aetherfoundation', 'aetherfoundationf', 'anabel',
+	'beauty-gen7', 'blue-gen7', 'burnet', 'colress-gen7', 'dexio', 'elio', 'faba', 'gladion-stance',
+	'gladion', 'grimsley-gen7', 'hapu', 'hau-stance', 'hau', 'hiker-gen7', 'ilima', 'kahili', 'kiawe',
+	'kukui-stand', 'kukui', 'lana', 'lass-gen7', 'lillie-z', 'lillie', 'lusamine-nihilego', 'lusamine',
+	'mallow', 'mina', 'molayne', 'nanu', 'officeworker', 'olivia', 'plumeria', 'pokemonbreeder-gen7',
+	'pokemonbreederf-gen7', 'preschoolers', 'red-gen7', 'risingstar', 'risingstarf', 'ryuki',
+	'samsonoak', 'selene', 'sightseer', 'sina', 'sophocles', 'teacher-gen7', 'theroyal', 'wally',
+	'wicke', 'youngathlete', 'youngathletef', 'youngster-gen7',
 ]);
+
+const avatarTableGnomowladny = new Set([
+	'az', 'brawly-gen6', 'bryony', 'drasna', 'evelyn', 'furisodegirl-black', 'furisodegirl-pink', 'guzma',
+	'hala', 'korrina', 'malva', 'nita', 'olympia', 'ramos', 'shelly', 'sidney', 'siebold', 'tierno',
+	'valerie', 'viola', 'wallace-gen6', 'wikstrom', 'winona-gen6', 'wulfric', 'xerosic', 'youngn', 'zinnia',
+]);
+
 for (const avatar of avatarTableBeliot419) avatarTable.add(avatar);
+for (const avatar of avatarTableGnomowladny) avatarTable.add(avatar);
 
 export const commands: ChatCommands = {
 
@@ -347,7 +353,7 @@ export const commands: ChatCommands = {
 	globalauth: 'authority',
 	authlist: 'authority',
 	authority(target, room, user, connection) {
-		if (target) {
+		if (target && target !== '+') {
 			const targetRoom = Rooms.search(target);
 			const availableRoom = targetRoom?.checkModjoin(user);
 			if (targetRoom && availableRoom) return this.parse(`/roomauth1 ${target}`);
@@ -357,7 +363,7 @@ export const commands: ChatCommands = {
 		const ranks = Object.keys(Config.groups);
 		for (const u in Users.usergroups) {
 			const rank = Users.usergroups[u].charAt(0);
-			if (rank === ' ' || rank === '+') continue;
+			if (rank === ' ' || (rank === '+' && !target)) continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
 			if (ranks.includes(rank)) {
 				const name = Users.usergroups[u].substr(1);
@@ -372,12 +378,14 @@ export const commands: ChatCommands = {
 		).map(
 			r => `${(Config.groups[r] ? `**${Config.groups[r].name}s** (${r})` : r)}:\n${rankLists[r].sort((a, b) => toID(a).localeCompare(toID(b))).join(", ")}`
 		);
+		if (!target) buffer.push(`(Use \`\`/auth +\`\` to show global voice users.)`);
 
 		if (!buffer.length) return connection.popup("This server has no global authority.");
 		connection.popup(buffer.join("\n\n"));
 	},
 	authhelp: [
 		`/auth - Show global staff for the server.`,
+		`/auth + - Show global staff for the server, including voices.`,
 		`/auth [room] - Show what roomauth a room has.`,
 		`/auth [user] - Show what global and roomauth a user has.`,
 	],
@@ -764,7 +772,7 @@ export const commands: ChatCommands = {
 	 * Battle management commands
 	 *********************************************************/
 
-	allowexportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
+	allowexportinputlog(target, room, user) {
 		const battle = room.battle;
 		if (!battle) {
 			return this.errorReply(`Must be in a battle.`);
@@ -807,7 +815,15 @@ export const commands: ChatCommands = {
 			return;
 		}
 		if (!this.can('exportinputlog', null, room)) return;
-		if (!battle.allowExtraction[user.id]) {
+		if (user.can('forcewin')) {
+			if (!battle.inputLog) return this.errorReply('No input log found.');
+			this.addModAction(`${user.name} has extracted the battle input log.`);
+			const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
+			user.sendTo(
+				room,
+				`|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`,
+			);
+		} else if (!battle.allowExtraction[user.id]) {
 			battle.allowExtraction[user.id] = new Set();
 			for (const player of battle.players) {
 				const playerUser = player.getUser();
@@ -1234,7 +1250,7 @@ export const commands: ChatCommands = {
 		}
 		if (Config.pmmodchat) {
 			const userGroup = user.group;
-			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
+			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat as GroupSymbol)) {
 				const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 				this.popupReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to challenge users.`);
 				return false;

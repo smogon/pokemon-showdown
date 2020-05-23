@@ -108,6 +108,17 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
+	it.skip('should request switch-out after taking Life Orb recoil', function () {
+		battle = common.createBattle([[
+			{species: "Golisopod", item: "lifeorb", ability: 'emergencyexit', moves: ['peck']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "stufful", ability: 'compoundeyes', moves: ['superfang']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.requestState, 'switch');
+	});
+
 	it(`should not request switch-out after taking residual damage and getting healed by berry`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk'], item: 'sitrusberry'}, {species: "Magikarp", ability: 'swiftswim', moves: ['splash']}],

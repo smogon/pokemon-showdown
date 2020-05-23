@@ -63,11 +63,17 @@ const importer = require('./importer.js');
 
 const SETS = path.resolve(__dirname, 'sets');
 (async () => {
+	// Clean up old artifacts
+	for (const file of fs.readdirSync(SETS)) {
+		if (file.startsWith('gen') && file.endsWith('json')) {
+			fs.unlinkSync(path.join(SETS, file));
+		}
+	}
 	const imports = [];
-	for (let [i, generationData] of (await importer.importAll()).entries()) {
+	for (const [i, generationData] of (await importer.importAll()).entries()) {
 		fs.writeFileSync(path.resolve(SETS, `gen${i + 1}.json`), JSON.stringify(generationData));
 		imports.push(`gen${i + 1}`);
-		for (let format in generationData) {
+		for (const format in generationData) {
 			fs.writeFileSync(path.resolve(SETS, `${format}.json`), JSON.stringify(generationData[format]));
 			imports.push(format);
 		}

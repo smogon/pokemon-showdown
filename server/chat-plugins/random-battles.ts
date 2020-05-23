@@ -65,17 +65,17 @@ function getRBYMoves(species: string | Species) {
 	let buf = ``;
 	if (species.randomBattleMoves) {
 		buf += `<details><summary>Randomized moves</summary>`;
-		buf += species.randomBattleMoves.map(formatMove).join(", ");
+		buf += species.randomBattleMoves.map(formatMove).sort().join(", ");
 		buf += `</details>`;
 	}
 	if (species.comboMoves) {
 		buf += `<details><summary>Combo moves</summary>`;
-		buf += species.comboMoves.map(formatMove).join(", ");
+		buf += species.comboMoves.map(formatMove).sort().join(", ");
 		buf += `</details>`;
 	}
 	if (species.exclusiveMoves) {
 		buf += `<details><summary>Exclusive moves</summary>`;
-		buf += species.exclusiveMoves.map(formatMove).join(", ");
+		buf += species.exclusiveMoves.map(formatMove).sort().join(", ");
 		buf += `</details>`;
 	}
 	if (species.essentialMove) {
@@ -126,20 +126,22 @@ function getLetsGoMoves(species: string | Species) {
 	);
 	if (!isLetsGoLegal) return false;
 	if (!species.randomBattleMoves || !species.randomBattleMoves.length) return false;
-	return species.randomBattleMoves.map(formatMove).join(`, `);
+	return species.randomBattleMoves.map(formatMove).sort().join(`, `);
 }
 
 function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen7', isBSS = false) {
 	species = Dex.getSpecies(species);
-	if (species.battleOnly) species = Dex.getSpecies(Dex.getOutOfBattleSpecies(species));
+	if (typeof species.battleOnly === 'string') {
+		species = Dex.getSpecies(species.battleOnly);
+	}
 	gen = toID(gen);
 	const genNum = parseInt(gen[3]);
-	if (isNaN(genNum) || genNum < 6 || (isBSS && genNum < 7)) return false;
+	if (isNaN(genNum) || genNum < 6 || (isBSS && genNum < 7)) return null;
 	const statsFile = JSON.parse(
 		FS(`data${gen === 'gen8' ? '/' : `/mods/${gen}`}/${isBSS ? `bss-` : ``}factory-sets.json`).readIfExistsSync() ||
 		"{}"
 	);
-	if (!Object.keys(statsFile).length) return false;
+	if (!Object.keys(statsFile).length) return null;
 	let buf = ``;
 	const statNames: {[k: string]: string} = {
 		hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
@@ -233,6 +235,63 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 	return buf;
 }
 
+function CAP1v1Sets(species: string | Species) {
+	species = Dex.getSpecies(species);
+	const statsFile = JSON.parse(
+		FS(`data/cap-1v1-sets.json`).readIfExistsSync() ||
+		"{}"
+	);
+	if (!Object.keys(statsFile).length) return null;
+	if (species.isNonstandard !== "CAP") {
+		return {
+			e: `[Gen 8] CAP 1v1 only allows Pok\u00e9mon created by the Create-A-Pok\u00e9mon Project.`,
+			parse: `/cap`,
+		};
+	}
+	if (species.isNonstandard === "CAP" && !(species.name in statsFile)) {
+		return {e: `${species.name} doesn't have any sets in [Gen 8] CAP 1v1.`};
+	}
+	let buf = `<span style="color:#999999;">Sets for ${species.name} in [Gen 8] CAP 1v1:</span><br />`;
+	const statNames: {[k: string]: string} = {
+		hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
+	};
+	for (const [i, set] of statsFile[species.name].entries()) {
+		buf += `<details><summary>Set ${i + 1}</summary>`;
+		buf += `<ul style="list-style-type:none;">`;
+		buf += `<li>${set.species || species.name}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
+		buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(formatAbility).join(" / ") : formatAbility(set.ability)}</li>`;
+		if (set.level && set.level < 100) buf += `<li>Level: ${set.level}</li>`;
+		if (set.shiny) buf += `<li>Shiny: Yes</li>`;
+		if (set.happiness) buf += `<li>Happiness: ${set.happiness}</li>`;
+		if (set.evs) {
+			buf += `<li>EVs: `;
+			const evs: string[] = [];
+			let ev: string;
+			for (ev in set.evs) {
+				if (set.evs[ev] === 0) continue;
+				evs.push(`${set.evs[ev]} ${statNames[ev]}`);
+			}
+			buf += `${evs.join(" / ")}</li>`;
+		}
+		buf += `<li>${Array.isArray(set.nature) ? set.nature.map(formatNature).join(" / ") : formatNature(set.nature)} Nature</li>`;
+		if (set.ivs) {
+			buf += `<li>IVs: `;
+			const ivs: string[] = [];
+			let iv: string;
+			for (iv in set.ivs) {
+				if (set.ivs[iv] === 31) continue;
+				ivs.push(`${set.ivs[iv]} ${statNames[iv]}`);
+			}
+			buf += `${ivs.join(" / ")}</li>`;
+		}
+		for (const moveid of set.moves) {
+			buf += `<li>- ${Array.isArray(moveid) ? moveid.map(formatMove).join(" / ") : formatMove(moveid)}</li>`;
+		}
+		buf += `</ul></details>`;
+	}
+	return buf;
+}
+
 export const commands: ChatCommands = {
 	'!randombattles': true,
 	randbats: 'randombattles',
@@ -241,32 +300,35 @@ export const commands: ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
 		let dex = Dex;
+		let isLetsGo = false;
 		if (args[1] && toID(args[1]) in Dex.dexes) {
 			dex = Dex.dexes[toID(args[1])];
+			if (toID(args[1]) === 'letsgo') isLetsGo = true;
 		} else if (room?.battle) {
 			const format = Dex.getFormat(room.battle.format);
 			dex = Dex.mod(format.mod);
+			if (format.mod === 'letsgo') isLetsGo = true;
 		}
 		const species = dex.getSpecies(args[0]);
 		if (!species.exists) {
 			return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' does not exist.`);
 		}
 		let formatName = dex.getFormat(`gen${dex.gen}randombattle`).name;
-		if (toID(args[1]) === 'gen1') {
+		if (dex.gen === 1) {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${rbyMoves}`);
 		}
-		if (toID(args[1]) === 'gen2') {
+		if (dex.gen === 2) {
 			const gscMoves = getGSCMoves(species);
 			if (!gscMoves) {
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			return this.sendReplyBox(`<span style="color:#999999;">Moves for ${species.name} in ${formatName}:</span><br />${gscMoves}`);
 		}
-		if (toID(args[1]) === 'letsgo') {
+		if (isLetsGo) {
 			formatName = `[Gen 7 Let's Go] Random Battle`;
 			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
@@ -304,7 +366,8 @@ export const commands: ChatCommands = {
 		}
 		if (parseInt(toID(args[1])[3]) < 4) {
 			if (room?.battle) {
-				dex = Dex.mod('gen8');
+				const format = Dex.getFormat(room.battle.format);
+				dex = Dex.mod(format.mod);
 			} else {
 				return this.parse(`/help randomdoublesbattle`);
 			}
@@ -367,7 +430,20 @@ export const commands: ChatCommands = {
 				tier = 'ou';
 			}
 			const mod = args[2] || 'gen7';
-			const bfSets = battleFactorySets(species, tier, mod);
+			let bfSets;
+			if (species.name === 'Necrozma-Ultra') {
+				bfSets = battleFactorySets(Dex.getSpecies('necrozma-dawnwings'), tier, mod);
+				if (typeof bfSets === 'string') {
+					bfSets += battleFactorySets(Dex.getSpecies('necrozma-duskmane'), tier, mod);
+				}
+			} else if (species.name === 'Zygarde-Complete') {
+				bfSets = battleFactorySets(Dex.getSpecies('zygarde'), tier, mod);
+				if (typeof bfSets === 'string') {
+					bfSets += battleFactorySets(Dex.getSpecies('zygarde-10'), tier, mod);
+				}
+			} else {
+				bfSets = battleFactorySets(species, tier, mod);
+			}
 			if (!bfSets) return this.parse(`/help battlefactory`);
 			if (typeof bfSets !== 'string') {
 				return this.errorReply(`Error: ${bfSets.e}`);
@@ -379,5 +455,24 @@ export const commands: ChatCommands = {
 		`/battlefactory [pokemon], [tier], [gen] - Displays a Pok\u00e9mon's Battle Factory sets. Supports Gens 6-7. Defaults to Gen 7. If no tier is provided, defaults to OU.`,
 		`- Supported tiers: OU, Ubers, UU, RU, NU, PU, Monotype (Gen 7 only), LC (Gen 7 only)`,
 		`/bssfactory [pokemon], [gen] - Displays a Pok\u00e9mon's BSS Factory sets. Supports Gen 7. Defaults to Gen 7.`,
+	],
+
+	'!cap1v1': true,
+	cap1v1(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.parse(`/help cap1v1`);
+		const species = Dex.getSpecies(target);
+		if (!species.exists) return this.errorReply(`Error: Pok\u00e9mon '${target.trim()}' not found.`);
+		const cap1v1Set = CAP1v1Sets(species);
+		if (!cap1v1Set) return this.parse(`/help cap1v1`);
+		if (typeof cap1v1Set !== 'string') {
+			this.errorReply(`Error: ${cap1v1Set.e}`);
+			if (cap1v1Set.parse) this.parse(cap1v1Set.parse);
+			return;
+		}
+		return this.sendReplyBox(cap1v1Set);
+	},
+	cap1v1help: [
+		`/cap1v1 [pokemon] - Displays a Pok\u00e9mon's CAP 1v1 sets.`,
 	],
 };

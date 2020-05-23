@@ -49,7 +49,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (!target || target === 'all') {
-			buffer += `- <a href="https://www.smogon.com/forums/forums/394/">Other Metagames Forum</a><br />`;
+			buffer += `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
 			if (!target) return this.sendReplyBox(buffer);
 		}
 		const showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
@@ -191,9 +191,6 @@ export const commands: ChatCommands = {
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
-		if (stone.isUnreleased) {
-			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
-		}
 		if (targetid === 'dragonascent') {
 			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits.`);
 		}
@@ -282,9 +279,21 @@ export const commands: ChatCommands = {
 	350: '350cup',
 	'350cup'(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!toID(target)) return this.parse('/help 350cup');
-		const species = Dex.deepClone(Dex.getSpecies(target));
-		if (!species.exists) return this.errorReply("Error: Pokemon not found.");
+		const args = target.split(',');
+		if (!toID(args[0])) return this.parse('/help 350cup');
+		let dex = Dex;
+		if (args[1] && toID(args[1]) in Dex.dexes) {
+			dex = Dex.dexes[toID(args[1])];
+		} else if (room?.battle) {
+			const format = Dex.getFormat(room.battle.format);
+			dex = Dex.mod(format.mod);
+		}
+		const species = Dex.deepClone(dex.getSpecies(args[0]));
+		if (!species.exists || species.gen > dex.gen) {
+			const monName = species.gen > dex.gen ? species.name : args[0].trim();
+			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		}
 		let bst = 0;
 		for (const i in species.baseStats) {
 			bst += species.baseStats[i];
@@ -292,17 +301,41 @@ export const commands: ChatCommands = {
 		for (const i in species.baseStats) {
 			species.baseStats[i] = species.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
-		this.sendReply(`|html|${Chat.getDataPokemonHTML(species)}`);
+		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
-	'350cuphelp': [`/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 Cup.`],
+	'350cuphelp': [
+		`/350 OR /350cup <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in 350 Cup.`,
+	],
 
 	'!tiershift': true,
 	ts: 'tiershift',
-	tiershift(target, room, user) {
+	ts1: 'tiershift',
+	ts2: 'tiershift',
+	ts3: 'tiershift',
+	ts4: 'tiershift',
+	ts5: 'tiershift',
+	ts6: 'tiershift',
+	ts7: 'tiershift',
+	ts8: 'tiershift',
+	tiershift(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
-		if (!toID(target)) return this.parse('/help tiershift');
-		const species = Dex.deepClone(Dex.mod('gen7').getSpecies(target));
-		if (!species.exists) return this.errorReply("Error: Pokemon not found.");
+		const args = target.split(',');
+		if (!toID(args[0])) return this.parse('/help tiershift');
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen && !args[1]) args[1] = `gen${targetGen}`;
+		let dex = Dex;
+		if (args[1] && toID(args[1]) in Dex.dexes) {
+			dex = Dex.dexes[toID(args[1])];
+		} else if (room?.battle) {
+			const format = Dex.getFormat(room.battle.format);
+			dex = Dex.mod(format.mod);
+		}
+		const species = Dex.deepClone(dex.getSpecies(args[0]));
+		if (!species.exists || species.gen > dex.gen) {
+			const monName = species.gen > dex.gen ? species.name : args[0].trim();
+			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		}
 		const boosts: {[tier in TierShiftTiers]: number} = {
 			UU: 10,
 			RUBL: 10,
@@ -317,74 +350,109 @@ export const commands: ChatCommands = {
 		};
 		let tier = species.tier;
 		if (tier[0] === '(') tier = tier.slice(1, -1);
-		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species)}`);
+		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 		const boost = boosts[tier as TierShiftTiers];
 		for (const statName in species.baseStats) {
 			if (statName === 'hp') continue;
 			species.baseStats[statName] = Dex.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 		}
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
-	tiershifthelp: [`/ts OR /tiershift <pokemon> - Shows the base stats that a Pokemon would have in Tier Shift.`],
+	tiershifthelp: [
+		`/ts OR /tiershift <pokemon>[, generation] - Shows the base stats that a Pok\u00e9mon would have in Tier Shift.`,
+		`Alternatively, you can use /ts[gen number] to see a Pokemon's stats in that generation.`,
+	],
 
 	'!scalemons': true,
 	scale: 'scalemons',
 	scale1: 'scalemons',
+	scale2: 'scalemons',
+	scale3: 'scalemons',
+	scale4: 'scalemons',
+	scale5: 'scalemons',
+	scale6: 'scalemons',
+	scale7: 'scalemons',
+	scale8: 'scalemons',
 	scalemons(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		const args = target.split(',');
 		if (!args.length || !toID(args[0])) return this.parse(`/help scalemons`);
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen && !args[1]) args[1] = `gen${targetGen}`;
 		let isGen1 = false;
-		if (cmd === 'scale1') isGen1 = true;
-		const species = Dex.deepClone(!isGen1 ? Dex.getSpecies(args[0]) : Dex.mod('gen1').getSpecies(args[0]));
-		if (!species.exists) return this.errorReply(`Error: Pokemon ${target} not found.`);
-		if (isGen1 && species.gen > 1) return this.errorReply(`Error: Pokemon ${target} not found.`);
-		if (!args[1] || toID(args[1]) !== 'hp') {
-			const stats = !isGen1 ? ['atk', 'def', 'spa', 'spd', 'spe'] : ['atk', 'def', 'spa', 'spe'];
-			const pst = stats.map(stat => species.baseStats[stat]).reduce((x, y) => x + y);
-			const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
-			for (const stat of stats) {
-				species.baseStats[stat] = Dex.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
-			}
-		} else {
-			const stats = !isGen1 ? ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] : ['hp', 'atk', 'def', 'spa', 'spe'];
-			const pst = stats.map(stat => species.baseStats[stat]).reduce((x, y) => x + y);
-			const scale = !isGen1 ? 600 : 500;
-			for (const stat of stats) {
-				species.baseStats[stat] = Dex.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
-			}
+		let dex = Dex;
+		if (args[1] && toID(args[1]) in Dex.dexes) {
+			dex = Dex.dexes[toID(args[1])];
+		} else if (room?.battle) {
+			const format = Dex.getFormat(room.battle.format);
+			dex = Dex.mod(format.mod);
 		}
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, isGen1 ? 1 : 8)}`);
+		if (dex.gen === 1) isGen1 = true;
+		const species = Dex.deepClone(dex.getSpecies(args[0]));
+		if (!species.exists || species.gen > dex.gen) {
+			const monName = species.gen > dex.gen ? species.name : args[0].trim();
+			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		}
+		if (isGen1 && species.gen > 1) return this.errorReply(`Error: Pok\u00e9mon ${target} not found.`);
+		const stats = !isGen1 ? ['atk', 'def', 'spa', 'spd', 'spe'] : ['atk', 'def', 'spa', 'spe'];
+		const pst = stats.map(stat => species.baseStats[stat]).reduce((x, y) => x + y);
+		const scale = (!isGen1 ? 600 : 500) - species.baseStats['hp'];
+		for (const stat of stats) {
+			species.baseStats[stat] = Dex.clampIntRange(species.baseStats[stat] * scale / pst, 1, 255);
+		}
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
 	scalemonshelp: [
-		`/scale OR /scalemons <pokemon> - Shows the base stats that a Pokemon would have in Scalemons.`,
-		`/scale1 <pokemon> - Shows the base stats that a Pokemon would have in Gen 1.`,
-		`You can add ", hp" to both of these commands to scale a Pokemon's stats with HP considered.`,
+		`/scale OR /scalemons <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in Scalemons.`,
+		`Alternatively, you can use /scale[gen number] to see a Pokemon's scaled stats in that generation.`,
 	],
 
 	'!natureswap': true,
 	ns: 'natureswap',
-	natureswap(target, room, user) {
+	ns3: 'natureswap',
+	ns4: 'natureswap',
+	ns5: 'natureswap',
+	ns6: 'natureswap',
+	ns7: 'natureswap',
+	ns8: 'natureswap',
+	natureswap(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
-		const nature = target.trim().split(' ')[0];
-		const pokemon = target.trim().split(' ')[1];
+		const args = target.split(',');
+		const nature = args[0];
+		const pokemon = args[1];
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen && !args[2]) args[2] = `gen${targetGen}`;
+		let dex = Dex;
+		if (args[2] && toID(args[2]) in Dex.dexes) {
+			dex = Dex.dexes[toID(args[2])];
+		} else if (room?.battle) {
+			const format = Dex.getFormat(room.battle.format);
+			dex = Dex.mod(format.mod);
+		}
 		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
 		const natureObj: {
 			name: string, plus?: string | undefined, minus?: string | undefined, exists?: boolean,
-		} = Dex.getNature(nature);
+		} = dex.getNature(nature);
+		if (dex.gen < 3) return this.errorReply(`Error: Natures don't exist prior to Generation 3.`);
 		if (!natureObj.exists) return this.errorReply(`Error: Nature ${nature} not found.`);
-		const species = Dex.deepClone(Dex.getSpecies(pokemon));
-		if (!species.exists) return this.errorReply(`Error: Pokemon ${pokemon} not found.`);
+		const species = Dex.deepClone(dex.getSpecies(pokemon));
+		if (!species.exists || species.gen > dex.gen) {
+			const monName = species.gen > dex.gen ? species.name : args[0].trim();
+			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+			return this.errorReply(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		}
 		if (natureObj.minus && natureObj.plus) {
 			const swap = species.baseStats[natureObj.minus];
 			species.baseStats[natureObj.minus] = species.baseStats[natureObj.plus];
 			species.baseStats[natureObj.plus] = swap;
 			species.tier = 'NS';
 		}
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
 	},
-	natureswapshelp: [
-		`/ns OR /natureswap <pokemon> - Shows the base stats that a Pokemon would have in Nature Swap. Usage: /ns <Nature> <Pokemon>.`,
+	natureswaphelp: [
+		`/ns OR /natureswap <nature>, <pokemon>[, gen] - Shows the base stats that a Pokemon would have in Nature Swap.`,
+		`Alternatively, you can use /ns[gen number] to see a Pokemon's stats in that generation.`,
 	],
 
 	'!crossevolve': true,

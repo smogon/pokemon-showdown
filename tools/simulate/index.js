@@ -136,7 +136,7 @@ case 'exhaustive':
 		(async () => {
 			let failures = 0;
 			do {
-				for (let format of formats) {
+				for (const format of formats) {
 					failures += await new ExhaustiveRunner({
 						format, cycles, prng, maxFailures, log: true, dual: argv.dual,
 					}).run();

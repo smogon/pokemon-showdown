@@ -90,7 +90,6 @@ if (Config.watchconfig) {
 	FS(require.resolve('../config/config')).onModify(() => {
 		try {
 			global.Config = ConfigLoader.load(true);
-			if (global.Users) Users.cacheGroupData();
 			Monitor.notice('Reloaded ../config/config.js');
 		} catch (e) {
 			Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
@@ -152,7 +151,7 @@ if (Config.crashguard) {
  * Start networking processes to be connected to
  *********************************************************/
 
-import * as Sockets from '../server/sockets';
+import {Sockets} from './sockets';
 global.Sockets = Sockets;
 
 export function listen(port: number, bindAddress: string, workerCount: number) {

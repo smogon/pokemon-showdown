@@ -45,9 +45,9 @@ describe('Ingrain', function () {
 		]});
 		battle.setPlayer('p2', {team: [{species: 'Arcanine', ability: 'flashfire', moves: ['sleeptalk', 'roar']}]});
 		battle.makeChoices('move ingrain', 'move roar');
-		assert.equal(battle.p1.active[0].speciesid, 'cradily');
+		assert.equal(battle.p1.active[0].species.id, 'cradily');
 		assert.trapped(() => battle.makeChoices('switch pikachu', 'move sleeptalk'));
-		assert.equal(battle.p1.active[0].speciesid, 'cradily');
+		assert.equal(battle.p1.active[0].species.id, 'cradily');
 	});
 
 	it('should remove the users\' Ground immunities', function () {

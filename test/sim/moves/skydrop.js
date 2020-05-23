@@ -93,6 +93,21 @@ describe('Sky Drop', function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
+	it('should pick up non-Flying weak Wonder Guard Pokemon but do no damage', function () {
+		battle = common.createBattle([
+			[{species: "Braviary", ability: 'keeneye', moves: ['skydrop']}],
+			[{species: "Shuckle", ability: 'wonderguard', moves: ['tackle']},
+			 {species: "Shedinja", ability: 'wonderguard', moves: ['sleeptalk']},
+			],
+		]);
+		battle.makeChoices('move skydrop', 'move tackle');
+		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		battle.makeChoices('move skydrop', 'move tackle');
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		battle.makeChoices('move skydrop', 'switch 2');
+		assert.hurts(battle.p2.active[0], () => battle.makeChoices('move skydrop', 'move sleeptalk'));
+	});
+
 	it('should only make contact on the way down', function () {
 		battle = common.createBattle([[
 			{species: "Aerodactyl", moves: ['skydrop']},
@@ -180,6 +195,16 @@ describe('Sky Drop', function () {
 		battle.makeChoices('move skydrop 1, move gravity', 'move bulkup, move bulkup');
 		assert.equal(battle.p2.active[0].boosts['atk'], 1);
 		assert.equal(battle.p2.active[0].boosts['def'], 1);
+	});
+
+	it('should not suppress Speed Boost', function () {
+		battle = common.createBattle([[
+			{species: "Aerodactyl", moves: ['skydrop']},
+		], [
+			{species: "Mew", ability: 'speedboost', moves: ['splash']},
+		]]);
+		battle.makeChoices('move skydrop', 'move splash');
+		assert.statStage(battle.p2.active[0], 'spe', 1);
 	});
 });
 

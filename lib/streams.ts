@@ -749,3 +749,22 @@ export class ObjectReadWriteStream<T> extends ObjectReadStream<T> implements Obj
 export function readAll(nodeStream: NodeJS.ReadableStream, encoding?: any) {
 	return new ReadStream(nodeStream).readAll(encoding);
 }
+
+export function stdin() {
+	return new ReadStream(process.stdin);
+}
+
+export function stdout() {
+	return new WriteStream(process.stdout);
+}
+
+export function stdpipe(stream: WriteStream | ReadStream | ReadWriteStream) {
+	const promises = [];
+	if ('pipeTo' in stream) {
+		promises.push(stream.pipeTo(stdout()));
+	}
+	if ('write' in stream) {
+		promises.push(stdin().pipeTo(stream));
+	}
+	return Promise.all(promises);
+}

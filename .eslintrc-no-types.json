@@ -35,6 +35,7 @@
     "no-debugger": "warn",
     "no-unused-vars": ["warn", {"args": "none"}],
     "no-warning-comments": "off",
+    "prefer-const": ["warn", {"destructuring": "all"}],
 
     // PS code (code specific to PS)
     "consistent-return": "off", // sim event handlers mix them for ergonomics
@@ -188,7 +189,7 @@
   },
   "overrides": [
     {
-      "files": ["./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts", "./tools/set-import/*.ts"],
+      "files": ["./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts", "./tools/set-import/*.ts"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "ecmaVersion": 9,
@@ -217,9 +218,8 @@
         "max-len": ["warn", {
           "code": 120, "tabWidth": 0,
           // see bottom of file for source
-          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9$.]+ \\+?=>? |(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Chat\\.html|\\$\\()?['\"`/]"
+          "ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const )?[a-zA-Z0-9_$.]+(?: \\+?=>? )|[a-zA-Z0-9$]+: \\[?|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Chat\\.html|\\$\\()?['\"`/]"
         }],
-        "prefer-const": ["warn", {"destructuring": "all"}],
 
         // PS code (code specific to PS)
         "@typescript-eslint/no-namespace": "off",
@@ -301,14 +301,19 @@
 }
 
 /*
-REGEXFREE SOURCE FOR IGNOREPATTERN
+REGEXFREE SOURCE FOR IGNOREPATTERN: https://zarel.github.io/regexfree/
 
   # indentation
-  ^\s*(\/\/\ \s*)?
+  ^\s*
+  # possibly commented out
+  (\/\/\ \s*)?
 
   (
     # define a variable, append to a variable, or define a single-arg arrow function
-    (export\ )?(let\ |const\ )?[a-zA-Z0-9$.]+\ \+?=>?\ 
+    (export\ )? (let\ |const\ )? [a-zA-Z0-9_$.]+ (\ \+?=>?\ )
+  |
+    # define a property (oversize arrays are only allowed in properties)
+    [a-zA-Z0-9$]+:\ \[?
   |
     # optionally return or throw
     (return\ |throw\ )?

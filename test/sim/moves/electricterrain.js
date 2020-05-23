@@ -32,7 +32,7 @@ describe('Electric Terrain', function () {
 		battle.setPlayer('p2', {team: [{species: "Thundurus", ability: 'defiant', moves: ['thunderwave']}]});
 		battle.makeChoices('move electricterrain', 'move thunderwave');
 		let basePower;
-		let move = Dex.getMove('thunderbolt');
+		const move = Dex.getMove('thunderbolt');
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);
 		assert.equal(basePower, battle.modify(move.basePower, 1.5));
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
@@ -92,7 +92,7 @@ describe('Electric Terrain', function () {
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]});
 		battle.makeChoices('move electricterrain', 'move naturepower');
-		let resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
+		const resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.equal(resultMove, 'thunderbolt');
 	});
 });
