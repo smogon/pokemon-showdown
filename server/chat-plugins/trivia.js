@@ -290,8 +290,9 @@ class Trivia extends Rooms.RoomGame {
 	 * @param {string} category
 	 * @param {string} length
 	 * @param {TriviaQuestion[]} questions
+	 * @param {boolean} [isRandomMode]
 	 */
-	constructor(room, mode, category, length, questions) {
+	constructor(room, mode, category, length, questions, isRandomMode = false) {
 		super(room);
 		this.gameid = /** @type {ID} */ ('trivia');
 		this.title = 'Trivia';
@@ -305,7 +306,7 @@ class Trivia extends Rooms.RoomGame {
 		/** @type {boolean} */
 		this.canLateJoin = true;
 		/** @type {string} */
-		this.mode = MODES[mode];
+		this.mode = (isRandomMode ? `Random (${MODES[mode]})` : MODES[mode]);
 		/** @type {string} */
 		this.length = length;
 		/** @type {string} */
@@ -1306,14 +1307,18 @@ const commands = {
 		const tars = target.split(',');
 		if (tars.length < 2) return this.errorReply("Invalid arguments specified.");
 
-		const mode = toID(tars[0]);
+		let mode = toID(tars[0]);
+		const isRandomMode = (mode === 'random');
+		if (isRandomMode) {
+			mode = Dex.shuffle(['first', 'number', 'timer'])[0];
+		}
 		if (!MODES[mode]) return this.errorReply(`"${mode}" is an invalid mode.`);
 
 		const category = toID(tars[1]);
-		const isRandom = (category === 'random');
+		const isRandomCategory = (category === 'random');
 		const isAll = (category === 'all');
 		let questions;
-		if (isRandom) {
+		if (isRandomCategory) {
 			const categories = Object.keys(MAIN_CATEGORIES);
 			const randCategory = categories[Math.floor(Math.random() * categories.length)];
 			questions = sliceCategory(randCategory);
@@ -1338,7 +1343,7 @@ const commands = {
 
 			questions = questions.filter(q => q.type === 'trivia');
 			if (questions.length < LENGTHS[length].cap / 5) {
-				if (isRandom) return this.errorReply("There are not enough questions in the randomly chosen category to finish a trivia game.");
+				if (isRandomCategory) return this.errorReply("There are not enough questions in the randomly chosen category to finish a trivia game.");
 				if (isAll) return this.errorReply("There are not enough questions in the trivia database to finish a trivia game.");
 				return this.errorReply(`There are not enough questions under the category "${ALL_CATEGORIES[category]}" to finish a trivia game.`);
 			}
@@ -1356,7 +1361,7 @@ const commands = {
 		}
 
 		questions = Dex.shuffle(questions);
-		room.game = new _Trivia(room, mode, category, length, questions);
+		room.game = new _Trivia(room, mode, category, length, questions, isRandomMode);
 	},
 	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # & ~`],
 
@@ -1999,6 +2004,7 @@ module.exports = {
 			`- First: the first correct responder gains 5 points.`,
 			`- Timer: each correct responder gains up to 5 points based on how quickly they answer.`,
 			`- Number: each correct responder gains up to 5 points based on how many participants are correct.`,
+			`- Random: randomly chooses one of First, Timer, or Number.`,
 			`Categories: Arts & Entertainment, Pok\u00e9mon, Science & Geography, Society & Humanities, Random, and All.`,
 			`Game lengths:`,
 			`- Short: 20 point score cap. The winner gains 3 leaderboard points.`,
