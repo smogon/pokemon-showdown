@@ -1121,14 +1121,15 @@ export class CommandContext extends MessageContext {
 					if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock')) {
 						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
-						let legalButton = !buttonName;
 						if (buttonName === 'send' && buttonValue?.startsWith('/msg ')) {
 							const [pmTarget] = buttonValue.slice(5).split(',');
-							if (this.room.auth?.[toID(pmTarget)] === '*') {
-								legalButton = true;
+							if (this.room.auth?.[toID(pmTarget)] !== '*') {
+								this.errorReply(`This button is not allowed: <${tagContent}>`);
+								this.errorReply(`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`);
+								return null;
 							}
-						}
-						if (!legalButton) {
+						} else if (buttonName) {
+							this.errorReply(`This button is not allowed: <${tagContent}>`);
 							this.errorReply(`You do not have permission to use most buttons. Here are the two types you're allowed can use:`);
 							this.errorReply(`1. Linking to a room: <a href="/roomid"><button>go to a place</button></a>`);
 							this.errorReply(`2. Sending a message to a Bot: <button name="send" value="/msg, BOT_USERNAME, MESSAGE">send the thing</button>`);
