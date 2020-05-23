@@ -922,7 +922,7 @@ export const commands: ChatCommands = {
 			} else if (!defender && targetMethods.includes(method)) {
 				if (foundData.types) {
 					defender = foundData;
-					defName = `${foundData.species} (not counting abilities)`;
+					defName = `${foundData.name} (not counting abilities)`;
 				} else {
 					defender = {types: [foundData.name]};
 					defName = foundData.name;
