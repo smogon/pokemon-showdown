@@ -1096,6 +1096,7 @@ export class CommandContext extends MessageContext {
 
 				if (tagName === 'img') {
 					if (this.room.isPersonal && !this.user.can('announce')) {
+						this.errorReply(`This tag is not allowed: <${tagContent}>`);
 						this.errorReply(`Images are not allowed in personal rooms.`);
 						return null;
 					}
