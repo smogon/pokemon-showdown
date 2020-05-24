@@ -77,10 +77,10 @@ class LoginServerInstance {
 			'&nocache=' + new Date().getTime() + dataString).href as string;
 
 		return new Promise((resolve) => {
-			Net(actionUrl).getFullResponse().then(res => {
-				res!.stream.read().then(data => {
-					data = parseJSON(data as string).json;
-					resolve([data, res!.statusCode as number, null]);
+			void Net(actionUrl).getFullResponse().then(res => {
+				void res!.stream.read().then(data => {
+					const json = data = parseJSON(data as string).json;
+					resolve([json, res!.statusCode as number, null]);
 				});
 			});
 		});
