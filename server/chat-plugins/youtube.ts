@@ -14,12 +14,12 @@ const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 let channelData: AnyObject;
 
 try {
-	channelData = JSON.parse(FS(STORAGE_PATH).readSync()) || {};
+	channelData = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
 } catch (e) {
 	channelData = {};
 }
 
-export const YouTube = new class {
+export class Youtube {
 	interval: NodeJS.Timeout | null;
 	constructor() {
 		this.interval = null;
@@ -76,7 +76,7 @@ export const YouTube = new class {
 	}
 	randChannel() {
 		const keys = Object.keys(channelData);
-		const id = keys[Math.floor(Math.random() * keys.length)].trim();
+		const id = Dex.shuffle(keys)[0].trim();
 		return this.generateChannelDisplay(id);
 	}
 	get(id: string, username?: string) {
