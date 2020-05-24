@@ -10,12 +10,10 @@
 const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-// tslint:disable-next-line no-var-requires
-const http = Config.loginserver.startsWith('http:') ? require('http') : require('https');
+import {Net} from '../lib/net';
 import * as url from 'url';
 
 import {FS} from '../lib/fs';
-import * as Streams from '../lib/streams';
 
 /**
  * A custom error type used when requests to the login server take too long.
@@ -76,23 +74,15 @@ class LoginServerInstance {
 		const actionUrl = url.parse(this.uri + 'action.php' +
 			'?act=' + action + '&serverid=' + Config.serverid +
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
-			'&nocache=' + new Date().getTime() + dataString);
+			'&nocache=' + new Date().getTime() + dataString).href as string;
 
-		return new Promise((resolve, reject) => {
-			const req = http.get(actionUrl, (res: IncomingMessage) => {
-				void Streams.readAll(res).then((buffer: string) => {
-					const result = parseJSON(buffer).json || null;
-					resolve([result, res.statusCode || 0, null]);
-					this.openRequests--;
+		return new Promise((resolve) => {
+			Net(actionUrl).getFullResponse().then(res => {
+				res!.stream.read().then(data => {
+					data = parseJSON(data as string).json;
+					resolve([data, res!.statusCode as number, null]);
 				});
 			});
-
-			req.on('error', (error: Error) => {
-				resolve([null, 0, error]);
-				this.openRequests--;
-			});
-
-			req.end();
 		});
 	}
 
@@ -155,46 +145,16 @@ class LoginServerInstance {
 		};
 
 		let response: AnyObject | null = null;
-
-		const req = http.request(requestOptions, (res: IncomingMessage) => {
-			response = res;
-			void Streams.readAll(res).then((buffer: string) => {
-				// console.log('RESPONSE: ' + buffer);
-				const data = parseJSON(buffer).json;
-				if (buffer.startsWith(`[{"actionsuccess":true,`)) {
-					buffer = 'stream interrupt';
-				}
-				for (const [i, resolve] of resolvers.entries()) {
-					if (data) {
-						resolve([data[i], res.statusCode || 0, null]);
-					} else {
-						if (buffer.includes('<')) buffer = 'invalid response';
-						resolve([null, res.statusCode || 0, new Error(buffer)]);
-					}
-				}
-				this.requestEnd();
-			});
-		});
-
-		req.on('close', () => {
+		try {
+			response = Net(this.uri).getFullResponse(requestOptions, postData, LOGIN_SERVER_TIMEOUT);
+		} catch (e) {
 			if (response) return;
 			const error = new TimeoutError("Response not received");
 			for (const resolve of resolvers) {
 				resolve([null, 0, error]);
 			}
 			this.requestEnd(error);
-		});
-
-		req.on('error', (error: Error) => {
-			// ignore; will be handled by the 'close' handler
-		});
-
-		req.setTimeout(LOGIN_SERVER_TIMEOUT, () => {
-			req.abort();
-		});
-
-		req.write(postData);
-		req.end();
+		}
 	}
 	requestStart(size: number) {
 		this.lastRequest = Date.now();
