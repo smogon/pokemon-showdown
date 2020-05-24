@@ -153,9 +153,27 @@ class LoginServerInstance {
 			'Content-Length': postData.length,
 		};
 
-		let response: AnyObject | null = null;
+		let response: AnyObject | undefined;
+
 		try {
-			response = Net(this.uri).getFullResponse(requestOptions, postData, LOGIN_SERVER_TIMEOUT);
+			response = void Net(this.uri).getFullResponse(requestOptions, postData, LOGIN_SERVER_TIMEOUT).then(res => {
+				res?.stream.read().then(buffer => {
+					// console.log('RESPONSE: ' + buffer);
+					const data = parseJSON(buffer!).json;
+					if (buffer!.startsWith(`[{"actionsuccess":true,`)) {
+						buffer = 'stream interrupt';
+					}
+					for (const [i, resolve] of resolvers.entries()) {
+						if (data) {
+							resolve([data[i], res.statusCode || 0, null]);
+						} else {
+							if (buffer!.includes('<')) buffer = 'invalid response';
+							resolve([null, res.statusCode || 0, new Error(buffer!)]);
+						}
+					}
+					this.requestEnd();
+				});
+			});
 		} catch (e) {
 			if (response) return;
 			const error = new TimeoutError("Response not received");
