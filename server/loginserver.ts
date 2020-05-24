@@ -79,8 +79,11 @@ class LoginServerInstance {
 		return new Promise((resolve) => {
 			void Net(actionUrl).getFullResponse().then(res => {
 				void res!.stream.read().then(data => {
-					const json = data = parseJSON(data as string).json;
-					resolve([json, res!.statusCode as number, null]);
+					const json = parseJSON(data as string);
+					if (json.error) {
+						resolve([null, 0, new Error(json.error!)]);
+					}
+					resolve([json.json, res!.statusCode as number, null]);
 				});
 			});
 		});
