@@ -753,6 +753,7 @@ export class RandomTeams {
 					break;
 				case 'thunderwave': case 'voltswitch':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['raindance']) rejected = true;
+					if (isDoubles && hasMove['nuzzle'] || hasMove['electroweb']) rejected = true;
 					break;
 				case 'toxic':
 					if (counter.setupType || hasMove['sludgewave'] || hasMove['thunderwave'] || hasMove['trickroom'] || hasMove['willowisp']) rejected = true;
@@ -802,9 +803,6 @@ export class RandomTeams {
 					break;
 				case 'thunderbolt':
 					if (hasMove['powerwhip']) rejected = true;
-					break;
-				case 'voltswitch':
-					if (isDoubles && hasMove['nuzzle'] || hasMove['electroweb']) rejected = true;
 					break;
 				case 'gigadrain':
 					if (hasMove['leafstorm'] || hasType['Poison'] && !counter['Poison']) rejected = true;
