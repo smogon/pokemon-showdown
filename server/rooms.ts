@@ -1080,6 +1080,8 @@ export class BasicChatRoom extends BasicRoom {
 	game: RoomGame | null;
 	battle: RoomBattle | null;
 	tour: Tournament | null;
+	pendingApprovals: Map<string, string>;
+	whitelist: AnyObject;
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
 
@@ -1111,6 +1113,7 @@ export class BasicChatRoom extends BasicRoom {
 
 		this.chatRoomData = (options.isPersonal ? null : options);
 		this.minorActivity = null;
+		this.whitelist = {};
 		Object.assign(this, options);
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
 		this.parent = null;
@@ -1147,6 +1150,8 @@ export class BasicChatRoom extends BasicRoom {
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
+		this.pendingApprovals = new Map();
+		this.whitelist = this.chatRoomData!.whitelist || {};
 	}
 
 	/**
@@ -1427,6 +1432,20 @@ export class BasicChatRoom extends BasicRoom {
 		}
 
 		return this.log.rename(newID);
+	}
+	whitelistUser(userid: string) {
+		if (userid in this.whitelist) return false;
+		this.whitelist[userid] = true;
+		this.chatRoomData!.whitelist = this.whitelist;
+		Rooms.global.writeChatRoomData();
+		return true;
+	}
+	unwhitelistUser(userid: string) {
+		if (!(userid in this.whitelist)) return false;
+		delete this.whitelist[userid];
+		this.chatRoomData!.whitelist = this.whitelist;
+		Rooms.global.writeChatRoomData();
+		return true;
 	}
 	destroy() {
 		// deallocate ourself
