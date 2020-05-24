@@ -730,9 +730,6 @@ export class RandomTeams {
 				case 'leechseed': case 'roar': case 'teleport': case 'whirlwind':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['dragontail']) rejected = true;
 					break;
-				case 'overheat':
-					if (isDoubles && hasMove['calmmind']) rejected = true;
-					break;
 				case 'partingshot':
 					if (!!counter['speedsetup'] || hasMove['bulkup'] || hasMove['uturn']) rejected = true;
 					break;
@@ -797,6 +794,7 @@ export class RandomTeams {
 					break;
 				case 'overheat':
 					if (hasMove['flareblitz']) rejected = true;
+					if (isDoubles && hasMove['calmmind']) rejected = true;
 					break;
 				case 'hydropump':
 					if (hasMove['scald'] && ((counter.Special < 4 && !hasMove['uturn']) || (species.types.length > 1 && counter.stab < 3))) rejected = true;
