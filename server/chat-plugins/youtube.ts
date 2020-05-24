@@ -240,22 +240,9 @@ export const commands: ChatCommands = {
 			return this.parse(`/j view-channels${all ? '-all' : ''}`);
 		},
 		help(target, room, user) {
-			const buf = (
-				`YouTube plugin commands:<br>` +
-				`/randchannel - View data of a random channel from the YouTube database.<br>` +
-				`/youtube addchannel [channel[- Add channel data to the Youtube database. Requires: % @ # ~<br>` +
-				`/youtube removechannel [channel]- Delete channel data from the YouTube database. Requires: % @ # ~<br>` +
-				`/youtube channel [channel] - View the data of a specified channel. Can be either channel ID or channel name.<br>` +
-				`/youtube video [video] - View data of a specified video. Can be either channel ID or channel name.<br>` +
-				`/youtube update [channel], [name] - sets a channel's PS username to [name]. Requires: % @ # ~<br>` +
-				`/youtube repeat [time] - Sets an interval for [time] minutes, showing a random channel each time. Requires: # & ~<br>`
-			);
-			this.runBroadcast();
-			if (this.broadcasting) {
-				return this.add(`|html|<div class="infobox">${buf}</div>`);
-			}
-			return this.sendReplyBox(buf);
+			return this.parse('/help youtube')
 		},
+
 		update(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			if (!this.can('ban', null, room)) return false;
@@ -286,6 +273,18 @@ export const commands: ChatCommands = {
 			return this.modlog(`CHANNELINTERVAL`, null, `${target} minutes`);
 		},
 	},
+
+	youtubehelp: [
+		`YouTube commands:`,
+		`/randchannel - View data of a random channel from the YouTube database.`,
+		`/youtube addchannel [channel[- Add channel data to the Youtube database. Requires: % @ # ~`,
+		`/youtube removechannel [channel]- Delete channel data from the YouTube database. Requires: % @ # ~`,
+		`/youtube channel [channel] - View the data of a specified channel. Can be either channel ID or channel name.`,
+		`/youtube video [video] - View data of a specified video. Can be either channel ID or channel name.`,
+		`/youtube update [channel], [name] - sets a channel's PS username to [name]. Requires: % @ # ~`,
+		`/youtube repeat [time] - Sets an interval for [time] minutes, showing a random channel each time. Requires: # & ~`,
+	],
+
 	requestapproval(target, room, user) {
 		if (!this.canTalk()) return false;
 		if (this.can('mute', null, room)) return this.errorReply(`Use !link instead.`);
@@ -383,7 +382,7 @@ export const commands: ChatCommands = {
 	whitelisthelp: [`/whitelist [user] - Whitelists [user] to post media in the room. Requires: % @ & # ~`],
 
 	unwhitelist(target, room, user) {
-		if (!this.can('mute', null, room)) return false;
+		if (!this.can('ban', null, room)) return false;
 		target = toID(target);
 		if (Users.get(target)) Users.get(target)?.popup(`You have been removed from the link whitelist in ${room}.`);
 		if (!target) return this.parse(`/help unwhitelist`);
