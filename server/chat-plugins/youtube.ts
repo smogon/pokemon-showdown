@@ -20,7 +20,7 @@ try {
 }
 
 export class YoutubeInterface {
-	interval: NodeJS.Timeout | null;
+	interval: NodeJS.Timer | null;
 	constructor() {
 		this.interval = null;
 	}
@@ -157,9 +157,10 @@ export class YoutubeInterface {
 		}
 		return rearranged;
 	}
-};
+}
 
 const YouTube = new YoutubeInterface();
+
 export const commands: ChatCommands = {
 	randchannel(target, room, user) {
 		if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
