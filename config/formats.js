@@ -149,11 +149,6 @@ const Formats = [
 			'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Damp Rock', 'Smooth Rock', 'Moody', 'Shadow Tag', 'Baton Pass',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8monotype') {
-				this.add('html', `<div class="broadcast-blue"><strong>Monotype is currently suspecting Kyurem-Black! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3663863/">suspect thread</a>.</strong></div>`);
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Anything Goes",
