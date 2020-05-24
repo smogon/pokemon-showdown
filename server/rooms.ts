@@ -1081,7 +1081,7 @@ export class BasicChatRoom extends BasicRoom {
 	battle: RoomBattle | null;
 	tour: Tournament | null;
 	pendingApprovals: Map<string, string>;
-	whitelist: AnyObject;
+	whitelist: {[k: string]: boolean};
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
 
