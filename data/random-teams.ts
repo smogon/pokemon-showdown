@@ -731,7 +731,7 @@ export class RandomTeams {
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['dragontail']) rejected = true;
 					break;
 				case 'overheat':
-					if (isDoubles && hasMove['calmmind'] ) rejected = true; // in theory, prevents double fire move cm protect chandelure.
+					if (isDoubles && hasMove['calmmind']) rejected = true;
 					break;
 				case 'partingshot':
 					if (!!counter['speedsetup'] || hasMove['bulkup'] || hasMove['uturn']) rejected = true;
