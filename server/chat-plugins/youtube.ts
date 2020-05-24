@@ -240,7 +240,7 @@ export const commands: ChatCommands = {
 			return this.parse(`/j view-channels${all ? '-all' : ''}`);
 		},
 		help(target, room, user) {
-			return this.parse('/help youtube')
+			return this.parse('/help youtube');
 		},
 
 		update(target, room, user) {
