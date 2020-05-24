@@ -3096,7 +3096,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	cinccino: {
 		randomBattleMoves: ["bulletseed", "knockoff", "rockblast", "tailslap", "uturn"],
-		randomDoubleBattleMoves: ["bulletseed", ="knockoff", "protect", "rockblast", "tailslap", "uturn"],
+		randomDoubleBattleMoves: ["bulletseed", "knockoff", "protect", "rockblast", "tailslap", "uturn"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
