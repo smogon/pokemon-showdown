@@ -154,25 +154,23 @@ class LoginServerInstance {
 		};
 
 		let response: AnyObject | undefined;
-
 		try {
-			response = void Net(this.uri).getFullResponse(requestOptions, postData, LOGIN_SERVER_TIMEOUT).then(res => {
-				res?.stream.read().then(buffer => {
-					// console.log('RESPONSE: ' + buffer);
-					const data = parseJSON(buffer!).json;
-					if (buffer!.startsWith(`[{"actionsuccess":true,`)) {
-						buffer = 'stream interrupt';
+			const net = Net(this.uri);
+			response = void net.request(requestOptions, postData, LOGIN_SERVER_TIMEOUT).then(buffer => {
+				// console.log('RESPONSE: ' + buffer);
+				const data = parseJSON(buffer).json;
+				if (buffer.startsWith(`[{"actionsuccess":true,`)) {
+					buffer = 'stream interrupt';
+				}
+				for (const [i, resolve] of resolvers.entries()) {
+					if (data) {
+						resolve([data[i], net.statusCode || 0, null]);
+					} else {
+						if (buffer.includes('<')) buffer = 'invalid response';
+						resolve([null, net.statusCode || 0, new Error(buffer)]);
 					}
-					for (const [i, resolve] of resolvers.entries()) {
-						if (data) {
-							resolve([data[i], res.statusCode || 0, null]);
-						} else {
-							if (buffer!.includes('<')) buffer = 'invalid response';
-							resolve([null, res.statusCode || 0, new Error(buffer!)]);
-						}
-					}
-					this.requestEnd();
-				});
+				}
+				this.requestEnd();
 			});
 		} catch (e) {
 			if (response) return;
