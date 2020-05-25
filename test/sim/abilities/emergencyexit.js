@@ -108,7 +108,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it.skip('should request switch-out after taking Life Orb recoil', function () {
+	it('should request switch-out after taking Life Orb recoil', function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", item: "lifeorb", ability: 'emergencyexit', moves: ['peck']},
 			{species: "Wynaut", moves: ['sleeptalk']},
