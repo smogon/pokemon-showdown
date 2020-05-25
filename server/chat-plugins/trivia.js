@@ -33,6 +33,9 @@ const MODES = {
 	first: 'First',
 	number: 'Number',
 	timer: 'Timer',
+	triumvirate: 'Triumvirate',
+	tri: 'Triumvirate',
+	triforce: 'Triumvirate',
 	wl: "Weakest Link",
 	weakestlink: "Weakest Link",
 };
@@ -1044,6 +1047,76 @@ class NumberModeTrivia extends Trivia {
 }
 
 /**
+ * Triumvirate mode rewards points to the top three users to answer the question correctly.
+ */
+class TriumvirateModeTrivia extends Trivia {
+	/**
+	 * @param {string} answer
+	 * @param {User} user
+	 * @return {string | undefined}
+	 */
+	answerQuestion(answer, user) {
+		const player = this.playerTable[user.id];
+		if (!player) return 'You are not a player in the current trivia game.';
+		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
+		if (player.answer) return 'You have already attempted to answer the current question.';
+		player.setAnswer(answer, this.verifyAnswer(answer));
+		const correctAnswers = Object.keys(this.playerTable).filter(id => this.playerTable[id].isCorrect).length;
+		if (correctAnswers === 3) {
+			clearTimeout(this.phaseTimeout);
+			this.tallyAnswers();
+		}
+	}
+
+	/**
+	 * @param {number} answerNumber
+	 * @return {number}
+	 */
+	calculatePoints(answerNumber) {
+		return 5 - answerNumber * 2; // 5 points to 1st, 3 points to 2nd, 1 point to 1st
+	}
+
+	tallyAnswers() {
+		this.phase = INTERMISSION_PHASE;
+		const correctPlayers = Object.keys(this.playerTable)
+			.filter(id => this.playerTable[id].isCorrect)
+			.map(id => this.playerTable[id]);
+		correctPlayers.sort((a, b) =>
+			(hrtimeToNanoseconds(this.playerTable[a].currentAnsweredAt) > hrtimeToNanoseconds(this.playerTable[b].currentAnsweredAt) ? 1 : -1));
+
+		let winner = false;
+		const playersWithPoints = [];
+		for (const player of correctPlayers) {
+			const points = this.calculatePoints(correctPlayers.indexOf(player));
+			player.incrementPoints(points, this.questionNumber);
+			playersWithPoints.push(`${player.name} (${points})`);
+			if (player.points >= this.getCap()) {
+				winner = true;
+			}
+		}
+		for (const i in this.playerTable) {
+			this.playerTable[i].clearAnswer();
+		}
+
+		let buffer = ``;
+		if (playersWithPoints.length) {
+			buffer = `Correct: ${playersWithPoints.join(", ")}<br />` +
+			`Answers: ${this.curAnswers.join(', ')}<br />` +
+			`The top 5 players are: ${this.formatPlayerList({max: 5})}`;
+		} else {
+			buffer = 'Correct: no one...<br />' +
+			`Answers: ${this.curAnswers.join(', ')}<br />` +
+			'Nobody gained any points.<br />' +
+			`The top 5 players are: ${this.formatPlayerList({max: 5})}`;
+		}
+
+		if (winner) return this.win(buffer);
+		this.broadcast('The answering period has ended!', buffer);
+		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
+	}
+}
+
+/**
  * This is based on the format of the Weakest Link game show.
  */
 class WeakestLink extends Trivia {
@@ -1310,7 +1383,7 @@ const commands = {
 		let mode = toID(tars[0]);
 		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
-			mode = Dex.shuffle(['first', 'number', 'timer'])[0];
+			mode = Dex.shuffle(['first', 'number', 'timer', 'triumvirate'])[0];
 		}
 		if (!MODES[mode]) return this.errorReply(`"${mode}" is an invalid mode.`);
 
@@ -1356,6 +1429,8 @@ const commands = {
 			_Trivia = TimerModeTrivia;
 		} else if (mode === 'number') {
 			_Trivia = NumberModeTrivia;
+		} else if (mode === 'triumvirate' || mode === 'tri' || mode === 'triforce') {
+			_Trivia = TriumvirateModeTrivia;
 		} else {
 			_Trivia = WeakestLink;
 		}
@@ -1994,6 +2069,7 @@ module.exports = {
 	FirstModeTrivia,
 	TimerModeTrivia,
 	NumberModeTrivia,
+	TriumvirateModeTrivia,
 
 	commands: {
 		trivia: commands,
@@ -2004,7 +2080,8 @@ module.exports = {
 			`- First: the first correct responder gains 5 points.`,
 			`- Timer: each correct responder gains up to 5 points based on how quickly they answer.`,
 			`- Number: each correct responder gains up to 5 points based on how many participants are correct.`,
-			`- Random: randomly chooses one of First, Timer, or Number.`,
+			`- Triumvirate: The first correct responder gains 5 points, the second 3 points, and the third 1 point.`,
+			`- Random: randomly chooses one of First, Timer, Number, or Triumvirate.`,
 			`Categories: Arts & Entertainment, Pok\u00e9mon, Science & Geography, Society & Humanities, Random, and All.`,
 			`Game lengths:`,
 			`- Short: 20 point score cap. The winner gains 3 leaderboard points.`,
