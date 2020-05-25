@@ -9,6 +9,7 @@
  * @license MIT
  */
 import * as net from 'net';
+import {YoutubeInterface} from '../chat-plugins/youtube';
 
 export const commands: ChatCommands = {
 	'!whois': true,
@@ -2487,6 +2488,7 @@ export const commands: ChatCommands = {
 		if (!id) return this.errorReply(`${target} has no pending request.`);
 		this.privateModAction(`(${user.name} approved ${target}'s media display request.)`);
 		this.modlog(`APPROVELINK`, null, `${target} (${id})`);
+		const YouTube = new YoutubeInterface();
 		room.pendingApprovals.delete(target);
 		if (id.includes('youtu')) {
 			return YouTube.generateVideoDisplay(id).then(res => {
@@ -2523,6 +2525,7 @@ export const commands: ChatCommands = {
 		if (!toID(target).trim()) return this.parse(`/help link`);
 		const [link, comment] = target.split(',');
 		this.runBroadcast();
+		const YouTube = new YoutubeInterface();
 		if (target.includes('youtu')) {
 			return YouTube.generateVideoDisplay(link).then(res => {
 				let buf = res;
