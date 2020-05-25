@@ -610,13 +610,13 @@ export const commands: ChatCommands = {
 		const [search, tarRoom, limit, date] = target.split(',');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
-		let limitString = '';
+		let limitString;
 		if (/^[0-9]+$/.test(limit)) {
 			limitString = `--limit-${limit}`;
 		} else if (toID(limit) === 'all') {
 			limitString = `--limit-all`;
 		} else if (!limit) {
-			limitString = `--limit-500`;
+			limitString = ``;
 		} else {
 			return this.errorReply(`Cap must be a number or [all].`);
 		}
