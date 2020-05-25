@@ -12,8 +12,10 @@ import * as Streams from './streams';
 
 export class URIRequest {
 	uri: string;
+	statusCode?: number;
 	constructor(uri: string) {
 		this.uri = uri;
+		this.statusCode = undefined;
 	}
 	/**
 	 * Makes a basic http/https request to the URI.
@@ -22,18 +24,16 @@ export class URIRequest {
 	 * @param chunk data to be written to request (mostly for loginserver.)
 	 * @param timeout time to wait before cancelling request.
 	 */
-	async get(opts?: AnyObject, chunk?: string, timeout?: number): Promise<string | null> {
+	async get(opts?: AnyObject): Promise<string | null> {
 		if (Config.noURIRequests) return null;
 		const protocol = url.parse(this.uri).protocol as string;
-		const net = protocol!.includes('https:') ? https : http;
+		const net = protocol.includes('https:') ? https : http;
 		return new Promise((resolve) => {
 			const req = net.get(opts ? opts : this.uri, res => {
-				void Streams.readAll(res).then(buffer => {
-					resolve(buffer);
-				});
+				res.setEncoding('utf-8');
+				this.statusCode = res.statusCode;
+				void Streams.readAll(res).then(buffer => resolve(buffer));
 			});
-			if (chunk) req.write(chunk);
-			if (timeout) if (timeout) req.setTimeout(timeout, () => req.abort());
 			req.on('error', (err) => {
 				throw err;
 			});
@@ -47,7 +47,7 @@ export class URIRequest {
 	 * @param chunk data to be written to request (mostly for loginserver)
 	 * @param timeout time to wait before cancelling request.
 	 */
-	async getFullResponse(opts?: AnyObject, chunk?: string, timeout?: number): Promise<{
+	async getFullResponse(opts?: AnyObject): Promise<{
 		statusCode: number | undefined, statusMessage: string | undefined,
 		headers: http.IncomingHttpHeaders | undefined, stream: Streams.ReadStream,
 	} | null> {
@@ -55,7 +55,7 @@ export class URIRequest {
 		return new Promise(resolve => {
 			const protocol = url.parse(this.uri).protocol as string;
 			const net = protocol.includes('https:') ? https : http;
-			const req = net.get(opts? opts : this.uri, response => {
+			const req = net.get(opts ? opts : this.uri, response => {
 				response.setEncoding('utf-8');
 				const stream = new Streams.ReadStream({nodeStream: response});
 				resolve({
@@ -64,6 +64,23 @@ export class URIRequest {
 					headers: response.headers,
 					stream: stream,
 				});
+			});
+			req.on('err', err => {
+				throw err;
+			})
+		});
+	}
+	request(opts?: AnyObject, chunk?: string, timeout?: number): Promise<string> {
+		return new Promise(resolve => {
+			const protocol = url.parse(this.uri).protocol as string;
+			const net = protocol.includes('https:') ? https : http;
+			const req = net.request(opts ? opts : this.uri, res => {
+				res.setEncoding('utf-8');
+				this.statusCode = res.statusCode;
+				void Streams.readAll(res).then(buffer => resolve(buffer));
+			});
+			req.on('err', err => {
+				throw err;
 			});
 			if (chunk) req.write(chunk);
 			if (timeout) req.setTimeout(timeout, () => req.abort());
