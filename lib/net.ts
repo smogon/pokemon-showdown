@@ -71,6 +71,7 @@ export class URIRequest {
 		});
 	}
 	request(opts?: AnyObject, chunk?: string, timeout?: number): Promise<string> {
+		if (Config.noURIRequests) return null;
 		return new Promise(resolve => {
 			const protocol = url.parse(this.uri).protocol as string;
 			const net = protocol.includes('https:') ? https : http;
