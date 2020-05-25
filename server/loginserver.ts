@@ -91,6 +91,7 @@ class LoginServerInstance {
 				});
 			} catch (error) {
 				resolve([null, 0, error]);
+				this.openRequests--;
 			}
 		});
 	}
