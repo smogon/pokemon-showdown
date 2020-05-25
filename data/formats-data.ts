@@ -946,7 +946,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	laprasgmax: {
 		randomBattleMoves: ["freezedry", "icebeam", "sparklingaria", "substitute", "thunderbolt", "toxic"],
-		randomDoubleBattleMoves: ["freezedry", "helpinghand", "hydropump", "protect", "scald"],
+		randomDoubleBattleMoves: ["freezedry", "helpinghand", "hydropump", "icywind", "protect"],
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
 	},
