@@ -129,12 +129,13 @@ export class YoutubeInterface {
 		buf += `<a href="${ROOT}channel/${id}"><img src="${info.thumbnail}" width=100px height=100px/></a>`;
 		buf += `</div><p style="margin:5px 0px 4px 0px;word-wrap:break-word;">`;
 		buf += `<a style="font-weight:bold;color:#c70000;font-size:12pt;" href="https://www.youtube.com/watch?v=${id}">${info.title}</a>`;
-		buf += `</p></td><td style="padding: 0px 25px;font-size:10pt;background:#white;width:100%;border-bottom:0px;vertical-align:top;">`;
+		buf += `</p></td><td style="padding: 0px 25px;font-size:10pt;max-width:100px;background:`;
+		buf += `#white;width:100%;border-bottom:0px;vertical-align:top;">`;
 		buf += `<p style="background: #e22828; padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
 		buf += `${info.likes} likes | ${info.dislikes} dislikes | ${info.views} video views<br><br>`;
 		buf += `<small>Published on ${info.date} | ID: ${id}</small></p>`;
 		buf += `<br><details><summary>Video Description</p></summary>`;
-		buf += `<p style="background: #e22828; padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
+		buf += `<p style="background: #e22828;max-width:500px;padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
 		buf += `<i>${info.description.slice(0, 400).replace(/\n/g, ' ')}${info.description.length > 400 ? '(...)' : ''}</p><i></details></td>`;
 		return buf;
 	}
@@ -286,114 +287,6 @@ export const commands: ChatCommands = {
 		`/youtube update [channel], [name] - sets a channel's PS username to [name]. Requires: % @ # ~`,
 		`/youtube repeat [time] - Sets an interval for [time] minutes, showing a random channel each time. Requires: # & ~`,
 	],
-
-	requestapproval(target, room, user) {
-		if (!this.canTalk()) return false;
-		if (this.can('mute', null, room)) return this.errorReply(`Use !link instead.`);
-		if (room.pendingApprovals.has(user.id)) return this.errorReply('You have a request pending already.');
-		if (!toID(target)) return this.parse(`/help requestapproval`);
-		if (!/^https?:\/\//.test(target)) target = `http://${target}`;
-		room.pendingApprovals.set(user.id, target);
-		this.sendReply(`You have requested for the link ${target} to be displayed.`);
-		room.sendMods(
-			`|uhtml|request-${user.id}|<div class="infobox">${user.name} has requested approval to show <a href="${target}">media.</a><br>` +
-			`<button class="button" name="send" value="/approvelink ${user.id}">Approve</button><br>` +
-			`<button class="button" name="send" value="/denylink ${user.id}">Deny</button></div>`
-		);
-		return room.update();
-	},
-	requestapprovalhelp: [`/requestapproval [link], [comment] - Requests permission to show media in the room.`],
-
-	approvelink(target, room, user) {
-		if (!this.can('mute', null, room)) return false;
-		target = toID(target);
-		if (!target) return this.parse(`/help approvelink`);
-		const id = room.pendingApprovals.get(target);
-		if (!id) return this.errorReply(`${target} has no pending request.`);
-		this.privateModAction(`(${user.name} approved ${target}'s media display request.)`);
-		this.modlog(`APPROVELINK`, null, `${target} (${id})`);
-		room.pendingApprovals.delete(target);
-		if (id.includes('youtu')) {
-			return YouTube.generateVideoDisplay(id).then(res => {
-				room.add(`|uhtmlchange|request-${target}|`).update();
-				res += `<br><p style="margin-left: 5px; font-size:9pt;color:white;">(Suggested by ${target})</p>`;
-				this.addBox(res as string);
-				room.update();
-			});
-		} else {
-			void Chat.fitImage(id).then(([width, height]) => {
-				this.addBox(Chat.html`<img src="${id}" style="width: ${width}px; height: ${height}px" />`);
-				room.add(`|uhtmlchange|request-${target}|`);
-				room.update();
-			});
-		}
-	},
-	approvelinkhelp: [`/approvelink [user] - Approves the media display request of [user]. Requires: % @ # & ~`],
-
-	denylink(target, room, user) {
-		if (!this.can('mute', null, room)) return false;
-		target = toID(target);
-		if (!target) return this.parse(`/help denylink`);
-		const id = room.pendingApprovals.get(target);
-		if (!id) return this.errorReply(`${target} has no pending request.`);
-		room.pendingApprovals.delete(target);
-		room.add(`|uhtmlchange|request-${target}|`).update();
-		this.privateModAction(`(${user.name} denied ${target}'s media display request.)`);
-		this.modlog(`DENYLINK`, null, `${target} (${id})`);
-	},
-	denylinkhelp: [`/denylink [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
-
-	link(target, room, user) {
-		if (!this.can('mute', null, room) && !(user.id in room.chatRoomData!.whitelist)) return false;
-		if (!toID(target).trim()) return this.parse(`/help link`);
-		const [link, comment] = target.split(',');
-		this.runBroadcast();
-		if (target.includes('youtu')) {
-			return YouTube.generateVideoDisplay(link).then(res => {
-				let buf = res;
-				buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">(Suggested by ${user.name})</p></small>`;
-				if (comment) buf += `<br>(${comment})</div>`;
-				this.addBox(buf as string);
-				room.update();
-			});
-		} else {
-			void Chat.fitImage(link).then(([width, height]) => {
-				let buf = Chat.html`<img src="${link}" style="width: ${width}px; height: ${height}px" />`;
-				if (comment) buf += `<br>(${comment})</div>`;
-				if (!this.broadcasting) return this.sendReplyBox(buf);
-				this.addBox(buf);
-				room.update();
-			});
-		}
-	},
-	linkhelp: [`/link [url] - shows an image or video url in chat. Requires: whitelist % @ # & ~`],
-
-	whitelist(target, room, user) {
-		if (!this.can('ban', null, room)) return false;
-		target = toID(target);
-		if (!target) return this.parse(`/help whitelist`);
-		if (!Users.get(target)) return this.errorReply(`User not found.`);
-		if (target in room.auth! && room.auth![target] !== '+' || Users.get(target)!.isStaff) {
-			return this.errorReply(`You don't need to whitelist staff - they can just use !link.`);
-		}
-		if (!room.whitelistUser(target)) return this.errorReply(`${target} is already whitelisted.`);
-		if (Users.get(target)) Users.get(target)?.popup(`You have been whitelisted for linking in ${room}.`);
-		this.privateModAction(`(${user.name} whitelisted ${target} for links.)`);
-		this.modlog(`WHITELIST`, target);
-	},
-	whitelisthelp: [`/whitelist [user] - Whitelists [user] to post media in the room. Requires: % @ & # ~`],
-
-	unwhitelist(target, room, user) {
-		if (!this.can('ban', null, room)) return false;
-		target = toID(target);
-		if (Users.get(target)) Users.get(target)?.popup(`You have been removed from the link whitelist in ${room}.`);
-		if (!target) return this.parse(`/help unwhitelist`);
-		if (!room.unwhitelistUser(target)) return this.errorReply(`${target} is not whitelisted.`);
-		this.sendReply(`Unwhitelisted ${target} for linking.`);
-		this.modlog(`UNWHITELIST`, target);
-		this.privateModAction(`(${user} removed ${target} from the link whitelist.)`);
-		return Rooms.global.writeChatRoomData();
-	},
 };
 
 export const pages: PageTable = {
