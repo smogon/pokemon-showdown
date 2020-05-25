@@ -552,16 +552,17 @@ export const pages: PageTable = {
 
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
 		this.title = '[Logs] ' + roomid;
-		let limit = null;
+		/** null = no limit */
+		let limit: number | null = null;
 		let search;
 		if (opts?.startsWith('search-')) {
 			let [input, limitString] = opts.split('--limit-');
 			input = input.slice(7);
 			search = Dashycode.decode(input);
 			if (limitString) {
-				limit = parseInt(limitString);
+				limit = parseInt(limitString) || null;
 			} else {
-				limit = null;
+				limit = 500;
 			}
 			opts = '';
 		}
