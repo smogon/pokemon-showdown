@@ -21,8 +21,6 @@ export class URIRequest {
 	 * Makes a basic http/https request to the URI.
 	 * Returns the response data.
 	 * @param opts request opts - headers, etc.
-	 * @param chunk data to be written to request (mostly for loginserver.)
-	 * @param timeout time to wait before cancelling request.
 	 */
 	async get(opts?: AnyObject): Promise<string | null> {
 		if (Config.noURIRequests) return null;
@@ -41,11 +39,9 @@ export class URIRequest {
 		});
 	}
 	/**
-	 * Makes a http/https request to the given link and returns the status, headers, and a stream.
+	 * Makes a http/https get request to the given link and returns the status, headers, and a stream.
 	 * The request data itself can be read with ReadStream#read().
 	 * @param opts request opts - headers, etc.
-	 * @param chunk data to be written to request (mostly for loginserver)
-	 * @param timeout time to wait before cancelling request.
 	 */
 	async getFullResponse(opts?: AnyObject): Promise<{
 		statusCode: number | undefined, statusMessage: string | undefined,
@@ -70,8 +66,13 @@ export class URIRequest {
 			})
 		});
 	}
+	/**
+	 * Makes a http/https request to the given link.
+	 * @param opts request opts - headers, etc.
+	 * @param chunk data to be written to request (mostly for loginserver.)
+	 * @param timeout time to wait before cancelling request.
+	 */
 	request(opts?: AnyObject, chunk?: string, timeout?: number): Promise<string> {
-		if (Config.noURIRequests) return null;
 		return new Promise(resolve => {
 			const protocol = url.parse(this.uri).protocol as string;
 			const net = protocol.includes('https:') ? https : http;
