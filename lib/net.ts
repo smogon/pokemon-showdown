@@ -63,7 +63,7 @@ export class URIRequest {
 			});
 			req.on('err', err => {
 				throw err;
-			})
+			});
 		});
 	}
 	/**
@@ -72,7 +72,7 @@ export class URIRequest {
 	 * @param chunk data to be written to request (mostly for loginserver.)
 	 * @param timeout time to wait before cancelling request.
 	 */
-	request(opts?: AnyObject, chunk?: string, timeout?: number): Promise<string> {
+	async request(opts?: AnyObject, chunk?: string, timeout?: number): Promise<string> {
 		return new Promise(resolve => {
 			const protocol = url.parse(this.uri).protocol as string;
 			const net = protocol.includes('https:') ? https : http;
