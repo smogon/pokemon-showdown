@@ -289,7 +289,9 @@ export const commands: ChatCommands = {
 	'!autojoin': true,
 	autojoin(target, room, user, connection) {
 		const targets = target.split(',');
-		if (targets.length > 11 || connection.inRooms.size > 1) return;
+		if (targets.length > 16 || connection.inRooms.size > 1) {
+			return connection.popup("To prevent DoS attacks, you can only use /autojoin for 16 or fewer rooms, when you haven't joined any rooms yet. Please use /join for each room separately.");
+		}
 		Rooms.global.autojoinRooms(user, connection);
 		const autojoins: string[] = [];
 
