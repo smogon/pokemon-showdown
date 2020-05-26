@@ -10,7 +10,7 @@ import * as http from 'http';
 import * as url from 'url';
 import * as Streams from './streams';
 
-export class URIRequest {
+export class NetRequest {
 	uri: string;
 	statusCode?: number;
 	constructor(uri: string) {
@@ -23,7 +23,7 @@ export class URIRequest {
 	 * @param opts request opts - headers, etc.
 	 */
 	async get(opts?: AnyObject): Promise<string | null> {
-		if (Config.noURIRequests) return null;
+		if (Config.noNetRequests) throw new Error(`Net requests are disabled.`);
 		const protocol = url.parse(this.uri).protocol as string;
 		const net = protocol.includes('https:') ? https : http;
 		return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ export class URIRequest {
 		statusCode: number | undefined, statusMessage: string | undefined,
 		headers: http.IncomingHttpHeaders | undefined, stream: Streams.ReadStream,
 	} | null> {
-		if (Config.noURIRequests) return null;
+		if (Config.noNetRequests) throw new Error(`Net requests are disabled.`);
 		return new Promise(resolve => {
 			const protocol = url.parse(this.uri).protocol as string;
 			const net = protocol.includes('https:') ? https : http;
@@ -73,6 +73,7 @@ export class URIRequest {
 	 * @param timeout time to wait before cancelling request.
 	 */
 	async request(opts?: AnyObject, chunk?: string, timeout?: number): Promise<string> {
+		if (Config.noNetRequests) throw new Error(`Net requests are disabled.`);
 		return new Promise(resolve => {
 			const protocol = url.parse(this.uri).protocol as string;
 			const net = protocol.includes('https:') ? https : http;
@@ -91,5 +92,5 @@ export class URIRequest {
 }
 
 export function Net(uri: string) {
-	return new URIRequest(uri);
+	return new NetRequest(uri);
 }
