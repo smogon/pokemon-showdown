@@ -1048,7 +1048,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			};
 			void this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 
-			for (const battler of this.room.battle.players) {
+			for (const battler of this.room.battle.?players ?? []) {
 				if (battler.id === player.id) battler.id = '';
 			}
 
