@@ -1268,11 +1268,9 @@ export class RandomTeams {
 			item = 'Black Sludge';
 		}
 
-		let level: number;
+		let level: number = species.randomBattleLevel || 80;
 
-		if (!isDoubles) {
-			level = species.randomBattleLevel; 
-		} else {
+		if (isDoubles) {
 			// We choose level based on BST. Min level is 70, max level is 100. 640+ BST is 70, 330 or lower is 100. Calculate with those values.
 			// Every 10.3 BST adds a level from 70 up to 100. Results are floored.
 			const baseStats = species.baseStats;
