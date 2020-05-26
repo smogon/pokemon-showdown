@@ -79,6 +79,30 @@ export const commands: ChatCommands = {
 			Rooms.global.writeChatRoomData();
 		},
 
+		rename(target, room, user) {
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!this.can('ban', null, room)) return false;
+			let [oldName, newName] = target.split(target.includes('|') ? '|' : ',');
+			if (!(oldName && newName)) return this.errorReply("Usage: /roomevents rename [old name], [new name]");
+
+			newName = newName.trim();
+			const newID = toID(newName);
+			const oldID = toID(oldName);
+			if (newID === oldID) return this.errorReply("The new name must be different from the old one.");
+			if (!newID) return this.errorReply("Event names must contain at least one alphanumerical character.");
+			if (newName.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
+
+			const eventData = room.events?.[oldID];
+			if (!eventData) return this.errorReply(`There is no event named '${oldName}'.`);
+			const originalName = eventData.eventName;
+			eventData.eventName = newName;
+			room.events[newID] = eventData;
+			delete room.events[oldID];
+
+			this.privateModAction(`(${user.name} renamed the roomevent titled "${originalName}" to "${newName}".)`);
+			this.modlog('ROOMEVENT', null, `renamed "${originalName}" to "${newName}"`);
+		},
+
 		begin: 'start',
 		start(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
@@ -228,6 +252,7 @@ export const commands: ChatCommands = {
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. A timestamp in event date/time field like YYYY-MM-DD HH:MM±hh:mm will be displayed in user's timezone. Requires: @ # & ~`,
 		`/roomevents start [event name] - Declares to the room that the event has started. Requires: @ # & ~`,
 		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
+		`/roomevents rename [old event name], [new name] - Renames an event. Requires: @ # & ~`,
 		`/roomevents sortby [column name] | [asc/desc (optional)] - Sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
 	],
