@@ -388,7 +388,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	meowthgmax: {
-		unreleasedHidden: true,
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
 	},

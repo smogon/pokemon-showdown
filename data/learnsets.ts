@@ -7161,7 +7161,6 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 		eventData: [
 			{generation: 8, level: 5, perfectIVs: 3, moves: ["fakeout", "growl", "slash", "payday"], pokeball: "cherishball"},
 		],
-		eventOnly: true,
 	},
 	persian: {
 		learnset: {
