@@ -218,7 +218,7 @@ function prettifyResults(
 	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
 ) {
 	if (resultArray === null) {
-		return "|popup|The modlog query has crashed.";
+		return "|popup|The modlog query crashed.";
 	}
 	let roomName;
 	switch (roomid) {

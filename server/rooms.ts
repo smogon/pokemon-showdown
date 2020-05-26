@@ -1018,16 +1018,16 @@ export class GlobalRoom extends BasicRoom {
 		const stackLines = (err ? Chat.escapeHTML(err.stack).split(`\n`) : []);
 		const stack = stackLines.slice(1).join(`<br />`);
 
-		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} has crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
+		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
 		let privateCrashMessage = null;
 
 		const upperStaffRoom = Rooms.get('upperstaff');
 		if (stack.includes("private")) {
 			if (upperStaffRoom) {
 				privateCrashMessage = crashMessage;
-				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b> <a href="/upperstaff">Read more</a></div>`;
+				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} crashed in private code</b> <a href="/upperstaff">Read more</a></div>`;
 			} else {
-				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
+				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} crashed in private code</b></div>`;
 			}
 		}
 		const devRoom = Rooms.get('development');
