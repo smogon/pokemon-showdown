@@ -2414,7 +2414,11 @@ export const commands: ChatCommands = {
 	shufflehelp: [
 		`/shuffle [option], [option], [option], ... - Randomly shuffles a list of 2 or more elements.`,
 	],
-														 
+
+	showimage(target, room, user) {
+		return this.errorReply(`/showimage has been deprecated - use /link instead.`);
+	},
+
 	requestapproval(target, room, user) {
 		if (!this.canTalk()) return false;
 		if (this.can('mute', null, room)) return this.errorReply(`Use !link instead.`);
@@ -2524,6 +2528,7 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user} removed ${target} from the link whitelist.)`);
 		return Rooms.global.writeChatRoomData();
 	},
+
 	'!pi': true,
 	pi(target, room, user) {
 		return this.sendReplyBox(
