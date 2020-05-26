@@ -71,21 +71,23 @@ class LoginServerInstance {
 			}
 		}
 
-		const actionUrl = url.parse(this.uri + 'action.php' +
+		const actionUrl = url.parse(
+			this.uri + 'action.php' +
 			'?act=' + action + '&serverid=' + Config.serverid +
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
-			'&nocache=' + new Date().getTime() + dataString).href;
+			'&nocache=' + new Date().getTime() + dataString
+		).href;
 
 		try {
-			const request = await Net(actionUrl).getFullResponse();
-			const buffer = await request!.stream.read();
-			const json = parseJSON(buffer as string);
+			const request = Net(actionUrl);
+			const buffer = await request.get();
+			const json = parseJSON(buffer);
 			if (json.error) {
 				this.openRequests--;
 				return [null, 0, new Error(json.error!)];
 			}
 			this.openRequests--;
-			return [json.json, request!.statusCode as number, null];
+			return [json.json, request.statusCode as number, null];
 		} catch (error) {
 			return [null, 0, error];
 		}
@@ -137,45 +139,37 @@ class LoginServerInstance {
 		}
 
 		this.requestStart(requests.length);
-		const postData = 'serverid=' + Config.serverid +
-			'&servertoken=' + encodeURIComponent(Config.servertoken) +
-			'&nocache=' + new Date().getTime() +
-			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
 
-		const requestOptions: AnyObject = url.parse(`${this.uri}action.php`);
-		requestOptions.method = 'post';
-		requestOptions.headers = {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Content-Length': postData.length,
-		};
-
-		let response: AnyObject | undefined;
-		try {
-			const net = Net(this.uri);
-			response = void net.request(requestOptions, postData, LOGIN_SERVER_TIMEOUT).then(buffer => {
-				// console.log('RESPONSE: ' + buffer);
-				const data = parseJSON(buffer).json;
-				if (buffer.startsWith(`[{"actionsuccess":true,`)) {
-					buffer = 'stream interrupt';
+		const request = Net(`${this.uri}action.php`);
+		request.post({
+			serverid: Config.serverid,
+			servertoken: Config.servertoken,
+			nocache: new Date().getTime(),
+			json: JSON.stringify(dataList),
+		}, {
+			timeout: LOGIN_SERVER_TIMEOUT,
+		}).then(buffer => {
+			// console.log('RESPONSE: ' + buffer);
+			const data = parseJSON(buffer).json;
+			if (buffer.startsWith(`[{"actionsuccess":true,`)) {
+				buffer = 'stream interrupt';
+			}
+			for (const [i, resolve] of resolvers.entries()) {
+				if (data) {
+					resolve([data[i], request.statusCode || 0, null]);
+				} else {
+					if (buffer.includes('<')) buffer = 'invalid response';
+					resolve([null, request.statusCode || 0, new Error(buffer)]);
 				}
-				for (const [i, resolve] of resolvers.entries()) {
-					if (data) {
-						resolve([data[i], net.statusCode || 0, null]);
-					} else {
-						if (buffer.includes('<')) buffer = 'invalid response';
-						resolve([null, net.statusCode || 0, new Error(buffer)]);
-					}
-				}
-				this.requestEnd();
-			});
-		} catch (e) {
-			if (response) return;
+			}
+			this.requestEnd();
+		}).catch(e => {
 			const error = new TimeoutError("Response not received");
 			for (const resolve of resolvers) {
 				resolve([null, 0, error]);
 			}
 			this.requestEnd(error);
-		}
+		});
 	}
 	requestStart(size: number) {
 		this.lastRequest = Date.now();

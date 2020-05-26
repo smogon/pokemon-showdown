@@ -10,6 +10,11 @@ import * as http from 'http';
 import * as url from 'url';
 import * as Streams from './streams';
 
+export type PostData = string | {[key: string]: string | number};
+export interface NetRequestOptions extends https.RequestOptions {
+	body?: PostData;
+}
+
 export class NetRequest {
 	uri: string;
 	statusCode?: number;
@@ -18,41 +23,44 @@ export class NetRequest {
 		this.statusCode = undefined;
 	}
 	/**
-	 * Makes a basic http/https request to the URI.
-	 * Returns the response data.
-	 * @param opts request opts - headers, etc.
-	 */
-	async get(opts?: AnyObject): Promise<string | null> {
-		if (Config.noNetRequests) throw new Error(`Net requests are disabled.`);
-		const protocol = url.parse(this.uri).protocol as string;
-		const net = protocol.includes('https:') ? https : http;
-		return new Promise((resolve, reject) => {
-			const req = net.get(opts ? opts : this.uri, res => {
-				res.setEncoding('utf-8');
-				this.statusCode = res.statusCode;
-				void Streams.readAll(res).then(buffer => resolve(buffer));
-			});
-			req.on('error', err => {
-				reject(err);
-			});
-			req.end();
-		});
-	}
-	/**
 	 * Makes a http/https get request to the given link and returns the status, headers, and a stream.
 	 * The request data itself can be read with ReadStream#read().
 	 * @param opts request opts - headers, etc.
+	 * @param body POST body
 	 */
-	async getFullResponse(opts?: AnyObject): Promise<{
-		statusCode: number | undefined, statusMessage: string | undefined,
-		headers: http.IncomingHttpHeaders | undefined, stream: Streams.ReadStream,
-	} | null> {
-		if (Config.noNetRequests) throw new Error(`Net requests are disabled.`);
-		return new Promise(resolve => {
+	getFullResponse(opts: NetRequestOptions = {}, body?: PostData): Promise<{
+		statusCode: number | undefined,
+		statusMessage: string | undefined,
+		headers: http.IncomingHttpHeaders | undefined,
+		stream: Streams.ReadStream,
+	}> {
+		if (opts.body) {
+			if (body) throw new Error(`must not pass both body and opts.body`);
+			body = opts.body;
+		}
+
+		if (body && typeof body !== 'string') {
+			let out = '';
+			for (const key in body) {
+				if (out) out += `&`;
+				out += `${key}=${encodeURIComponent('' + body[key])}`;
+			}
+			body = out;
+		}
+
+		const postBody = body;
+		if (postBody) {
+			if (!opts.headers) opts.headers = {};
+			opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+			opts.headers['Content-Length'] = postBody.length;
+		}
+
+		return new Promise((resolve, reject) => {
+			if (Config.noNetRequests) return reject(new Error(`Net requests are disabled.`));
+
 			const protocol = url.parse(this.uri).protocol as string;
 			const net = protocol.includes('https:') ? https : http;
-			const req = net.get(opts ? opts : this.uri, response => {
-				response.setEncoding('utf-8');
+			const req = net.request(opts ? opts : this.uri, response => {
 				const stream = new Streams.ReadStream({nodeStream: response});
 				resolve({
 					statusCode: response.statusCode,
@@ -62,31 +70,35 @@ export class NetRequest {
 				});
 			});
 			req.on('err', err => {
-				throw err;
+				reject(err);
 			});
+			if (postBody) {
+				req.write(postBody);
+			}
+			if (opts.timeout) req.setTimeout(opts.timeout, () => req.abort());
 		});
 	}
+
 	/**
-	 * Makes a http/https request to the given link.
+	 * Makes a basic http/https request to the URI.
+	 * Returns the response data.
 	 * @param opts request opts - headers, etc.
-	 * @param chunk data to be written to request (mostly for loginserver.)
-	 * @param timeout time to wait before cancelling request.
 	 */
-	async request(opts?: AnyObject, chunk?: string, timeout?: number): Promise<string> {
-		if (Config.noNetRequests) throw new Error(`Net requests are disabled.`);
-		return new Promise(resolve => {
-			const protocol = url.parse(this.uri).protocol as string;
-			const net = protocol.includes('https:') ? https : http;
-			const req = net.request(opts ? opts : this.uri, res => {
-				res.setEncoding('utf-8');
-				this.statusCode = res.statusCode;
-				void Streams.readAll(res).then(buffer => resolve(buffer));
-			});
-			req.on('err', err => {
-				throw err;
-			});
-			if (chunk) req.write(chunk);
-			if (timeout) req.setTimeout(timeout, () => req.abort());
+	async get(opts: NetRequestOptions = {}): Promise<string> {
+		const response = await this.getFullResponse(opts);
+		return response.stream.readAll();
+	}
+
+	/**
+	 * Makes a http/https POST request to the given link.
+	 * @param opts request opts - headers, etc.
+	 * @param body POST body
+	 */
+	post(body: PostData, opts: Omit<NetRequestOptions, 'method' | 'body'> = {}): Promise<string> {
+		return this.get({
+			...opts,
+			method: 'POST',
+			body,
 		});
 	}
 }
