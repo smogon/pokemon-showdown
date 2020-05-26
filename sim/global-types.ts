@@ -1137,6 +1137,7 @@ interface SpeciesFormatsData {
 	isNonstandard?: Nonstandard | null;
 	maleOnlyHidden?: boolean;
 	randomBattleMoves?: readonly string[];
+	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
 	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 	tier?: string;
