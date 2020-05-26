@@ -26,14 +26,14 @@ export class URIRequest {
 		if (Config.noURIRequests) return null;
 		const protocol = url.parse(this.uri).protocol as string;
 		const net = protocol.includes('https:') ? https : http;
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			const req = net.get(opts ? opts : this.uri, res => {
 				res.setEncoding('utf-8');
 				this.statusCode = res.statusCode;
 				void Streams.readAll(res).then(buffer => resolve(buffer));
 			});
-			req.on('error', (err) => {
-				throw err;
+			req.on('error', err => {
+				reject(err);
 			});
 			req.end();
 		});
