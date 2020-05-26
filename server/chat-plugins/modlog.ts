@@ -305,7 +305,7 @@ async function getModlog(
 
 	const hideIps = !user.can('lock');
 	const addModlogLinks = !!(
-		Config.modloglink && (user.group !== ' ' || (targetRoom && targetRoom.isPrivate !== true))
+		Config.modloglink && (user.group !== ' ' || (targetRoom && targetRoom.settings?.isPrivate !== true))
 	);
 
 	if (searchString.length > MAX_QUERY_LENGTH) {
@@ -323,7 +323,7 @@ async function getModlog(
 	// handle this here so the child process doesn't have to load rooms data
 	if (roomid === 'public') {
 		roomidList = [...Rooms.rooms.values()].filter(
-			room => !(room.isPrivate || room.battle || room.isPersonal || room.roomid === 'global')
+			room => !(room.settings!.isPrivate || room.battle || room.isPersonal || room.roomid === 'global')
 		).map(room => room.roomid);
 	} else {
 		roomidList = [roomid];

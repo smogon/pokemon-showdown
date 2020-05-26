@@ -185,12 +185,12 @@ describe('Users features', function () {
 				});
 				it(`should not allow users to demote themselves`, function () {
 					room = Rooms.createChatRoom("test");
-					if (!room.auth) room.auth = {};
+					if (!room.settings.auth) room.settings.auth = {};
 					const user = new User();
 					user.forceRename("User", true);
 					user.joinRoom(room);
 					for (const group of [' ', '+', '@']) {
-						room.auth[user.id] = group;
+						room.settings.auth[user.id] = group;
 						assert.equal(room.getAuth(user), group, 'before demotion attempt');
 						Chat.parse("/roomdeauth User", room, user, user.connections[0]);
 						assert.equal(room.getAuth(user), group, 'after demotion attempt');

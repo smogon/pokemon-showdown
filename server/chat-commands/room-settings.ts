@@ -56,7 +56,7 @@ export const commands: ChatCommands = {
 
 	modchat(target, room, user) {
 		if (!target) {
-			const modchatSetting = (room.modchat || "OFF");
+			const modchatSetting = (room.settings!.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
 		}
 		if (!this.can('modchat', null, room)) return false;
@@ -68,7 +68,10 @@ export const commands: ChatCommands = {
 			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.getAuth(user)) :
 			1;
 
-		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat as GroupSymbol) > threshold) {
+		if (room.settings!.modchat &&
+				room.settings!.modchat.length <= 1 &&
+				Config.groupsranking.indexOf(room.settings!.modchat as GroupSymbol) > threshold
+		) {
 			return this.errorReply(`/modchat - Access denied for changing a setting higher than ${Config.groupsranking[threshold]}.`);
 		}
 		if ('requestModchat' in room) {
@@ -77,20 +80,20 @@ export const commands: ChatCommands = {
 		}
 
 		target = target.toLowerCase().trim();
-		const currentModchat = room.modchat;
+		const currentModchat = room.settings!.modchat;
 		switch (target) {
 		case 'off':
 		case 'false':
 		case 'no':
 		case 'disable':
-			room.modchat = null;
+			room.settings!.modchat = null;
 			break;
 		case 'ac':
 		case 'autoconfirmed':
-			room.modchat = 'autoconfirmed';
+			room.settings!.modchat = 'autoconfirmed';
 			break;
 		case 'trusted':
-			room.modchat = 'trusted';
+			room.settings!.modchat = 'trusted';
 			break;
 		case 'player':
 			target = Users.PLAYER_SYMBOL;
@@ -103,24 +106,23 @@ export const commands: ChatCommands = {
 			if (Config.groupsranking.indexOf(target as GroupSymbol) > threshold) {
 				return this.errorReply(`/modchat - Access denied for setting higher than ${Config.groupsranking[threshold]}.`);
 			}
-			room.modchat = target;
+			room.settings!.modchat = target;
 			break;
 		}
-		if (currentModchat === room.modchat) {
+		if (currentModchat === room.settings!.modchat) {
 			return this.errorReply(`Modchat is already set to ${currentModchat || 'off'}.`);
 		}
-		if (!room.modchat) {
+		if (!room.settings!.modchat) {
 			this.add("|raw|<div class=\"broadcast-blue\"><strong>Moderated chat was disabled!</strong><br />Anyone may talk now.</div>");
 		} else {
-			const modchatSetting = Chat.escapeHTML(room.modchat);
+			const modchatSetting = Chat.escapeHTML(room.settings!.modchat);
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
 		}
-		if ((room as GameRoom).requestModchat && !room.modchat) (room as GameRoom).requestModchat(null);
-		this.privateModAction(`(${user.name} set modchat to ${room.modchat || "off"})`);
-		this.modlog('MODCHAT', null, `to ${room.modchat || "false"}`);
+		if ((room as GameRoom).requestModchat && !room.settings!.modchat) (room as GameRoom).requestModchat(null);
+		this.privateModAction(`(${user.name} set modchat to ${room.settings!.modchat || "off"})`);
+		this.modlog('MODCHAT', null, `to ${room.settings!.modchat || "false"}`);
 
-		if (room.chatRoomData) {
-			room.chatRoomData.modchat = room.modchat;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -171,7 +173,7 @@ export const commands: ChatCommands = {
 
 	modjoin(target, room, user) {
 		if (!target) {
-			const modjoinSetting = room.modjoin === true ? "SYNC" : room.modjoin || "OFF";
+			const modjoinSetting = room.settings!.modjoin === true ? "SYNC" : room.settings!.modjoin || "OFF";
 			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
 		}
 		if (room.isPersonal) {
@@ -190,25 +192,25 @@ export const commands: ChatCommands = {
 		}
 		if (target === 'player') target = Users.PLAYER_SYMBOL;
 		if (this.meansNo(target)) {
-			if (!room.modjoin) return this.errorReply(`Modjoin is already turned off in this room.`);
-			room.modjoin = null;
+			if (!room.settings!.modjoin) return this.errorReply(`Modjoin is already turned off in this room.`);
+			room.settings!.modjoin = null;
 			this.add(`|raw|<div class="broadcast-blue"><strong>This room is no longer invite only!</strong><br />Anyone may now join.</div>`);
 			this.addModAction(`${user.name} turned off modjoin.`);
 			this.modlog('MODJOIN', null, 'OFF');
-			if (room.chatRoomData) {
-				room.chatRoomData.modjoin = null;
+			if (room.settings?.persistSettings) {
+				room.settings.modjoin = null;
 				Rooms.global.writeChatRoomData();
 			}
 			return;
 		} else if (target === 'sync') {
-			if (room.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
-			room.modjoin = true;
+			if (room.settings!.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
+			room.settings!.modjoin = true;
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to sync with modchat!</strong><br />Only users who can speak in modchat can join.</div>`);
 			this.addModAction(`${user.name} set modjoin to sync with modchat.`);
 			this.modlog('MODJOIN SYNC');
 		} else if (target === 'ac' || target === 'autoconfirmed') {
-			if (room.modjoin === 'autoconfirmed') return this.errorReply(`Modjoin is already set to autoconfirmed.`);
-			room.modjoin = 'autoconfirmed';
+			if (room.settings!.modjoin === 'autoconfirmed') return this.errorReply(`Modjoin is already set to autoconfirmed.`);
+			room.settings!.modjoin = 'autoconfirmed';
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to autoconfirmed!</strong><br />Users must be rank autoconfirmed or invited with <code>/invite</code> to join</div>`);
 			this.addModAction(`${user.name} set modjoin to autoconfirmed.`);
 			this.modlog('MODJOIN', null, 'autoconfirmed');
@@ -219,8 +221,8 @@ export const commands: ChatCommands = {
 			if (room.isPersonal && !user.can('makeroom') && !'+%'.includes(target)) {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in group chats.`);
 			}
-			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
-			room.modjoin = target;
+			if (room.settings?.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
+			room.settings!.modjoin = target;
 			this.add(`|raw|<div class="broadcast-red"><strong>This room is now invite only!</strong><br />Users must be rank ${target} or invited with <code>/invite</code> to join</div>`);
 			this.addModAction(`${user.name} set modjoin to ${target}.`);
 			this.modlog('MODJOIN', null, target);
@@ -229,12 +231,11 @@ export const commands: ChatCommands = {
 			this.parse('/help modjoin');
 			return false;
 		}
-		if (room.chatRoomData) {
-			room.chatRoomData.modjoin = room.modjoin;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
-		if (target === 'sync' && !room.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
-		if (!room.isPrivate) this.parse('/hiddenroom');
+		if (target === 'sync' && !room.settings!.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
+		if (!room.settings!.isPrivate) this.parse('/hiddenroom');
 	},
 	modjoinhelp: [
 		`/modjoin [+|%|@|*|player|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room unless they have a room rank. Requires: \u2606 # & ~`,
@@ -243,17 +244,16 @@ export const commands: ChatCommands = {
 
 	roomlanguage(target, room, user) {
 		if (!target) {
-			return this.sendReply(`This room's primary language is ${Chat.languages.get(room.language || '') || 'English'}`);
+			return this.sendReply(`This room's primary language is ${Chat.languages.get(room.settings?.language || '') || 'English'}`);
 		}
 		if (!this.can('editroom', null, room)) return false;
 
 		const targetLanguage = toID(target);
 		if (!Chat.languages.has(targetLanguage)) return this.errorReply(`"${target}" is not a supported language.`);
 
-		room.language = targetLanguage === 'english' ? false : targetLanguage;
+		room.settings!.language = targetLanguage === 'english' ? false : targetLanguage;
 
-		if (room.chatRoomData) {
-			room.chatRoomData.language = room.language;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 		this.modlog(`LANGUAGE`, null, Chat.languages.get(targetLanguage));
@@ -266,7 +266,7 @@ export const commands: ChatCommands = {
 
 	slowchat(target, room, user) {
 		if (!target) {
-			const slowchatSetting = (room.slowchat || "OFF");
+			const slowchatSetting = (room.settings!.slowchat || "OFF");
 			return this.sendReply(`Slow chat is currently set to: ${slowchatSetting}`);
 		}
 		if (!this.canTalk()) return;
@@ -274,27 +274,26 @@ export const commands: ChatCommands = {
 
 		let targetInt = parseInt(target);
 		if (this.meansNo(target)) {
-			if (!room.slowchat) return this.errorReply(`Slow chat is already disabled in this room.`);
-			room.slowchat = false;
+			if (!room.settings!.slowchat) return this.errorReply(`Slow chat is already disabled in this room.`);
+			room.settings!.slowchat = false;
 		} else if (targetInt) {
 			if (!user.can('bypassall') && room.userCount < SLOWCHAT_USER_REQUIREMENT) {
 				return this.errorReply(`This room must have at least ${SLOWCHAT_USER_REQUIREMENT} users to set slowchat; it only has ${room.userCount} right now.`);
 			}
-			if (room.slowchat === targetInt) {
-				return this.errorReply(`Slow chat is already set to ${room.slowchat} seconds in this room.`);
+			if (room.settings!.slowchat === targetInt) {
+				return this.errorReply(`Slow chat is already set to ${room.settings!.slowchat} seconds in this room.`);
 			}
 			if (targetInt < SLOWCHAT_MINIMUM) targetInt = SLOWCHAT_MINIMUM;
 			if (targetInt > SLOWCHAT_MAXIMUM) targetInt = SLOWCHAT_MAXIMUM;
-			room.slowchat = targetInt;
+			room.settings!.slowchat = targetInt;
 		} else {
 			return this.parse("/help slowchat");
 		}
-		const slowchatSetting = (room.slowchat || "OFF");
+		const slowchatSetting = (room.settings!.slowchat || "OFF");
 		this.privateModAction(`(${user.name} set slowchat to ${slowchatSetting})`);
 		this.modlog('SLOWCHAT', null, '' + slowchatSetting);
 
-		if (room.chatRoomData) {
-			room.chatRoomData.slowchat = room.slowchat;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -307,27 +306,26 @@ export const commands: ChatCommands = {
 	stretchingfilter: 'stretchfilter',
 	stretchfilter(target, room, user) {
 		if (!target) {
-			const stretchSetting = (room.filterStretching ? "ON" : "OFF");
+			const stretchSetting = (room.settings!.filterStretching ? "ON" : "OFF");
 			return this.sendReply(`This room's stretch filter is currently: ${stretchSetting}`);
 		}
 		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
 
 		if (this.meansYes(target)) {
-			if (room.filterStretching) return this.errorReply(`This room's stretch filter is already ON`);
-			room.filterStretching = true;
+			if (room.settings!.filterStretching) return this.errorReply(`This room's stretch filter is already ON`);
+			room.settings!.filterStretching = true;
 		} else if (this.meansNo(target)) {
-			if (!room.filterStretching) return this.errorReply(`This room's stretch filter is already OFF`);
-			room.filterStretching = false;
+			if (!room.settings!.filterStretching) return this.errorReply(`This room's stretch filter is already OFF`);
+			room.settings!.filterStretching = false;
 		} else {
 			return this.parse("/help stretchfilter");
 		}
-		const stretchSetting = (room.filterStretching ? "ON" : "OFF");
+		const stretchSetting = (room.settings!.filterStretching ? "ON" : "OFF");
 		this.privateModAction(`(${user.name} turned the stretch filter ${stretchSetting})`);
 		this.modlog('STRETCH FILTER', null, stretchSetting);
 
-		if (room.chatRoomData) {
-			room.chatRoomData.filterStretching = room.filterStretching;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -339,27 +337,26 @@ export const commands: ChatCommands = {
 	capitalsfilter: 'capsfilter',
 	capsfilter(target, room, user) {
 		if (!target) {
-			const capsSetting = (room.filterCaps ? "ON" : "OFF");
+			const capsSetting = (room.settings!.filterCaps ? "ON" : "OFF");
 			return this.sendReply(`This room's caps filter is currently: ${capsSetting}`);
 		}
 		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
 
 		if (this.meansYes(target)) {
-			if (room.filterCaps) return this.errorReply(`This room's caps filter is already ON`);
-			room.filterCaps = true;
+			if (room.settings!.filterCaps) return this.errorReply(`This room's caps filter is already ON`);
+			room.settings!.filterCaps = true;
 		} else if (this.meansNo(target)) {
-			if (!room.filterCaps) return this.errorReply(`This room's caps filter is already OFF`);
-			room.filterCaps = false;
+			if (!room.settings!.filterCaps) return this.errorReply(`This room's caps filter is already OFF`);
+			room.settings!.filterCaps = false;
 		} else {
 			return this.parse("/help capsfilter");
 		}
-		const capsSetting = (room.filterCaps ? "ON" : "OFF");
+		const capsSetting = (room.settings!.filterCaps ? "ON" : "OFF");
 		this.privateModAction(`(${user.name} turned the caps filter ${capsSetting})`);
 		this.modlog('CAPS FILTER', null, capsSetting);
 
-		if (room.chatRoomData) {
-			room.chatRoomData.filterCaps = room.filterCaps;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -369,27 +366,26 @@ export const commands: ChatCommands = {
 	emoji: 'emojifilter',
 	emojifilter(target, room, user) {
 		if (!target) {
-			const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
+			const emojiSetting = (room.settings!.filterEmojis ? "ON" : "OFF");
 			return this.sendReply(`This room's emoji filter is currently: ${emojiSetting}`);
 		}
 		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
 
 		if (this.meansYes(target)) {
-			if (room.filterEmojis) return this.errorReply(`This room's emoji filter is already ON`);
-			room.filterEmojis = true;
+			if (room.settings!.filterEmojis) return this.errorReply(`This room's emoji filter is already ON`);
+			room.settings!.filterEmojis = true;
 		} else if (this.meansNo(target)) {
-			if (!room.filterEmojis) return this.errorReply(`This room's emoji filter is already OFF`);
-			room.filterEmojis = false;
+			if (!room.settings!.filterEmojis) return this.errorReply(`This room's emoji filter is already OFF`);
+			room.settings!.filterEmojis = false;
 		} else {
 			return this.parse("/help emojifilter");
 		}
-		const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
+		const emojiSetting = (room.settings!.filterEmojis ? "ON" : "OFF");
 		this.privateModAction(`(${user.name} turned the emoji filter ${emojiSetting})`);
 		this.modlog('EMOJI FILTER', null, emojiSetting);
 
-		if (room.chatRoomData) {
-			room.chatRoomData.filterEmojis = room.filterEmojis;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -405,7 +401,7 @@ export const commands: ChatCommands = {
 
 			const regex = cmd.includes('regex');
 			if (regex && !user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
-
+			if (!room.settings?.banwords) room.settings!.banwords = [];
 			// Most of the regex code is copied from the client. TODO: unify them?
 			// Regex banwords can have commas in the {1,5} pattern
 			let words = (regex ? target.match(/[^,]+(,\d*}[^,]*)?/g)! : target.split(','))
@@ -434,7 +430,7 @@ export const commands: ChatCommands = {
 							`Invalid regular expression: /${word}/: ${e.message}`
 					);
 				}
-				if (room.banwords.includes(word)) return this.errorReply(`${word} is already a banned phrase.`);
+				if (room.settings!.banwords.includes(word)) return this.errorReply(`${word} is already a banned phrase.`);
 
 				// Banword strings are joined, so account for the first string not having the prefix
 				banwordRegexLen += (banwordRegexLen === 32) ? word.length : `|${word}`.length;
@@ -448,7 +444,7 @@ export const commands: ChatCommands = {
 			}
 
 			for (const word of words) {
-				room.banwords.push(word);
+				room.settings!.banwords.push(word);
 			}
 			room.banwordRegex = null;
 			if (words.length > 1) {
@@ -460,10 +456,9 @@ export const commands: ChatCommands = {
 				this.modlog('BANWORD', null, words[0]);
 				this.sendReply(`Banned phrase successfully added.`);
 			}
-			this.sendReply(`The list is currently: ${room.banwords.join(', ')}`);
+			this.sendReply(`The list is currently: ${room.settings!.banwords.join(', ')}`);
 
-			if (room.chatRoomData) {
-				room.chatRoomData.banwords = room.banwords;
+			if (room.settings?.persistSettings) {
 				Rooms.global.writeChatRoomData();
 			}
 		},
@@ -472,7 +467,7 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help banword');
 			if (!this.can('declare', null, room)) return false;
 
-			if (!room.banwords.length) return this.errorReply("This room has no banned phrases.");
+			if (!room.settings!.banwords.length) return this.errorReply("This room has no banned phrases.");
 
 			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
 			if (!words) return this.parse('/help banword');
@@ -480,11 +475,11 @@ export const commands: ChatCommands = {
 			words = words.map(word => word.replace(/\n/g, '').trim());
 
 			for (const word of words) {
-				if (!room.banwords.includes(word)) return this.errorReply(`${word} is not a banned phrase in this room.`);
+				if (!room.settings!.banwords.includes(word)) return this.errorReply(`${word} is not a banned phrase in this room.`);
 			}
 
 			// ts bug? `words` guaranteed non-null by above falsey check
-			room.banwords = room.banwords.filter(w => !words!.includes(w));
+			room.settings!.banwords = room.settings!.banwords.filter(w => !words!.includes(w));
 			room.banwordRegex = null;
 			if (words.length > 1) {
 				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.)`);
@@ -496,14 +491,13 @@ export const commands: ChatCommands = {
 				this.sendReply(`Banned phrase successfully deleted.`);
 			}
 			this.sendReply(
-				room.banwords && room.banwords.length ?
-					`The list is currently: ${room.banwords.join(', ')}` :
+				room.settings?.banwords.length ?
+					`The list is currently: ${room.settings.banwords.join(', ')}` :
 					`The list is now empty.`
 			);
 
-			if (room.chatRoomData) {
-				room.chatRoomData.banwords = room.banwords;
-				if (!room.banwords) delete room.chatRoomData.banwords;
+			if (room.settings?.persistSettings) {
+				if (!room.settings.banwords) delete room.settings.banwords;
 				Rooms.global.writeChatRoomData();
 			}
 		},
@@ -511,9 +505,10 @@ export const commands: ChatCommands = {
 		list(target, room, user) {
 			if (!this.can('mute', null, room)) return false;
 
-			if (!room.banwords || !room.banwords.length) return this.sendReply("This room has no banned phrases.");
-
-			return this.sendReply(`Banned phrases in room ${room.roomid}: ${room.banwords.join(', ')}`);
+			if (!room.settings?.banwords || !room.settings.banwords.length) {
+				return this.sendReply("This room has no banned phrases.");
+			}
+			return this.sendReply(`Banned phrases in room ${room.roomid}: ${room.settings.banwords.join(', ')}`);
 		},
 
 		""(target, room, user) {
@@ -529,23 +524,22 @@ export const commands: ChatCommands = {
 
 	hightraffic(target, room, user) {
 		if (!target) {
-			return this.sendReply(`This room is${!room.highTraffic ? ' not' : ''} currently marked as high traffic.`);
+			return this.sendReply(`This room is${!room.settings!.highTraffic ? ' not' : ''} currently marked as high traffic.`);
 		}
 		if (!this.can('makeroom')) return false;
 
 		if (this.meansYes(target)) {
-			room.highTraffic = true;
+			room.settings!.highTraffic = true;
 		} else if (this.meansNo(target)) {
-			room.highTraffic = false;
+			room.settings!.highTraffic = false;
 		} else {
 			return this.parse('/help hightraffic');
 		}
 
-		if (room.chatRoomData) {
-			room.chatRoomData.highTraffic = room.highTraffic;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
-		this.modlog(`HIGHTRAFFIC`, null, '' + room.highTraffic);
+		this.modlog(`HIGHTRAFFIC`, null, '' + room.settings!.highTraffic);
 		this.addModAction(`This room was marked as high traffic by ${user.name}.`);
 	},
 	hightraffichelp: [
@@ -580,9 +574,9 @@ export const commands: ChatCommands = {
 		const targetRoom = Rooms.search(target);
 		if (!targetRoom) throw new Error(`Error in room creation.`);
 		if (cmd === 'makeprivatechatroom') {
-			targetRoom.isPrivate = true;
-			if (!targetRoom.chatRoomData) throw new Error(`Private chat room created without chatRoomData.`);
-			targetRoom.chatRoomData.isPrivate = true;
+			targetRoom.settings!.isPrivate = true;
+			if (!targetRoom.settings) throw new Error(`Private chat room created without settings.`);
+			targetRoom.settings.isPrivate = true;
 			Rooms.global.writeChatRoomData();
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
@@ -638,7 +632,7 @@ export const commands: ChatCommands = {
 		// Even though they're different namespaces, to cut down on confusion, you
 		// can't share names with registered chatrooms.
 		const existingRoom = Rooms.search(toID(title));
-		if (existingRoom && !existingRoom.modjoin) return this.errorReply(`The room '${title}' already exists.`);
+		if (existingRoom && !existingRoom.settings!.modjoin) return this.errorReply(`The room '${title}' already exists.`);
 		// Room IDs for groupchats are groupchat-TITLEID
 		let titleid = toID(title);
 		if (!titleid) {
@@ -671,7 +665,7 @@ export const commands: ChatCommands = {
 		});
 		if (targetRoom) {
 			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
-			targetRoom.auth![user.id] = parent ? '#' : Users.HOST_SYMBOL;
+			targetRoom.settings!.auth![user.id] = parent ? '#' : Users.HOST_SYMBOL;
 			// Join after creating room. No other response is given.
 			user.joinRoom(targetRoom.roomid);
 			user.popup(`You've just made a groupchat; it is now your responsibility, regardless of whether or not you actively partake in the room. For more info, read your groupchat's staff intro.`);
@@ -702,7 +696,7 @@ export const commands: ChatCommands = {
 		const targetRoom = Rooms.search(id);
 		if (!targetRoom) return this.errorReply(`The room '${target}' doesn't exist.`);
 		target = targetRoom.title || targetRoom.roomid;
-		const isPrivate = targetRoom.isPrivate;
+		const isPrivate = targetRoom.settings!.isPrivate;
 		const staffRoom = Rooms.get('staff');
 		const upperStaffRoom = Rooms.get('upperstaff');
 		if (Rooms.global.deregisterChatRoom(id)) {
@@ -757,8 +751,8 @@ export const commands: ChatCommands = {
 			return this.errorReply(`This room can't be deleted.`);
 		}
 
-		if (room.chatRoomData) {
-			if (room.isPrivate) {
+		if (room.settings?.persistSettings) {
+			if (room.settings.isPrivate) {
 				const upperStaffRoom = Rooms.get('upperstaff');
 				if (upperStaffRoom) {
 					upperStaffRoom.add(
@@ -826,15 +820,15 @@ export const commands: ChatCommands = {
 			return this.errorReply(`An error occured while renaming the room.`);
 		}
 		this.modlog(`RENAMEROOM`, null, `from ${oldTitle}`);
-		const privacy = room.isPrivate === true ? "Private" :
-			room.isPrivate === false ? "Public" :
-			`${room.isPrivate.charAt(0).toUpperCase()}${room.isPrivate.slice(1)}`;
+		const privacy = room.settings!.isPrivate === true ? "Private" :
+			room.settings!.isPrivate === false ? "Public" :
+			`${room.settings!.isPrivate.charAt(0).toUpperCase()}${room.settings!.isPrivate.slice(1)}`;
 		const message = Chat.html`
 			|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>
 		`;
 
 		const toNotify: RoomID[] = ['upperstaff'];
-		if (room.isPrivate !== true) toNotify.push('staff');
+		if (room.settings!.isPrivate !== true) toNotify.push('staff');
 		Rooms.global.notifyRooms(toNotify, message);
 		room.add(Chat.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
@@ -869,42 +863,42 @@ export const commands: ChatCommands = {
 			setting = true;
 			break;
 		default:
-			if (room.isPrivate === true && target !== 'force') {
+			if (room.settings!.isPrivate === true && target !== 'force') {
 				return this.sendReply(`This room is a secret room. Use "/publicroom" to make it public, or "/hiddenroom force" to force it hidden.`);
 			}
 			setting = 'hidden';
 			break;
 		}
 
-		if ((setting === true || room.isPrivate === true) && !room.isPersonal) {
+		if ((setting === true || room.settings!.isPrivate === true) && !room.isPersonal) {
 			if (!this.can('makeroom')) return;
 		}
 
 		if (this.meansNo(target) || !setting) {
-			if (!room.isPrivate) {
+			if (!room.settings!.isPrivate) {
 				return this.errorReply(`This room is already public.`);
 			}
-			if (room.parent && room.parent.isPrivate) {
+			if (room.parent && room.parent.settings!.isPrivate) {
 				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
 			}
 			if (room.isPersonal) return this.errorReply(`This room can't be made public.`);
-			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
-				if (!room.privacySetter.has(user.id)) {
-					const privacySetters = [...room.privacySetter].join(', ');
+			if (room.settings!.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
+				if (!room.settings!.privacySetter.has(user.id)) {
+					const privacySetters = [...room.settings!.privacySetter].join(', ');
 					return this.errorReply(`You can't make the room public since you didn't make it private - only ${privacySetters} can.`);
 				}
-				room.privacySetter.delete(user.id);
-				if (room.privacySetter.size) {
-					const privacySetters = [...room.privacySetter].join(', ');
-					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Chat.plural(room.privacySetter, "", "s")} to use /publicroom to make the room public.`);
+				room.settings!.privacySetter.delete(user.id);
+				if (room.settings!.privacySetter.size) {
+					const privacySetters = [...room.settings!.privacySetter].join(', ');
+					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Chat.plural(room.settings!.privacySetter, "", "s")} to use /publicroom to make the room public.`);
 				}
 			}
-			delete room.isPrivate;
-			room.privacySetter = null;
+			delete room.settings!.isPrivate;
+			room.settings!.privacySetter = null;
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
-			if (room.chatRoomData) {
-				delete room.chatRoomData.isPrivate;
+			if (room.settings?.persistSettings) {
+				delete room.settings.isPrivate;
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
@@ -912,26 +906,26 @@ export const commands: ChatCommands = {
 			if (room.subRooms) {
 				if (settingName === 'secret') return this.errorReply("Secret rooms cannot have subrooms.");
 				for (const subRoom of room.subRooms.values()) {
-					if (!subRoom.isPrivate) {
+					if (!subRoom.settings!.isPrivate) {
 						return this.errorReply(`Subroom ${subRoom.title} must be private to make this room private.`);
 					}
 				}
 			}
-			if (room.isPrivate === setting) {
-				if (room.privacySetter && !room.privacySetter.has(user.id)) {
-					room.privacySetter.add(user.id);
+			if (room.settings!.isPrivate === setting) {
+				if (room.settings!.privacySetter && !room.settings!.privacySetter.has(user.id)) {
+					room.settings!.privacySetter.add(user.id);
 					return this.sendReply(`This room is already ${settingName}, but is now forced to stay that way until you use /publicroom.`);
 				}
 				return this.errorReply(`This room is already ${settingName}.`);
 			}
-			room.isPrivate = setting;
+			room.settings!.isPrivate = setting;
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			if (room.chatRoomData) {
-				room.chatRoomData.isPrivate = setting;
+			if (room.settings?.persistSettings) {
+				room.settings.isPrivate = setting;
 				Rooms.global.writeChatRoomData();
 			}
-			room.privacySetter = new Set([user.id]);
+			room.settings!.privacySetter = new Set([user.id]);
 		}
 	},
 	privateroomhelp: [
@@ -943,48 +937,45 @@ export const commands: ChatCommands = {
 	officialchatroom: 'officialroom',
 	officialroom(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (!room.chatRoomData) {
+		if (!room.settings) {
 			return this.errorReply(`/officialroom - This room can't be made official`);
 		}
 		if (this.meansNo(target)) {
-			if (!room.isOfficial) return this.errorReply(`This chat room is already unofficial.`);
-			delete room.isOfficial;
+			if (!room.settings?.isOfficial) return this.errorReply(`This chat room is already unofficial.`);
+			delete room.settings.isOfficial;
 			this.addModAction(`${user.name} made this chat room unofficial.`);
 			this.modlog('UNOFFICIALROOM');
-			delete room.chatRoomData.isOfficial;
+			delete room.settings.isOfficial;
 			Rooms.global.writeChatRoomData();
 		} else {
-			if (room.isOfficial) return this.errorReply(`This chat room is already official.`);
-			room.isOfficial = true;
+			if (room.settings?.isOfficial) return this.errorReply(`This chat room is already official.`);
+			room.settings.isOfficial = true;
 			this.addModAction(`${user.name} made this chat room official.`);
 			this.modlog('OFFICIALROOM');
-			room.chatRoomData.isOfficial = true;
+			room.settings.isOfficial = true;
 			Rooms.global.writeChatRoomData();
 		}
 	},
 
 	psplwinnerroom(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (!room.chatRoomData) {
+		if (!room.settings) {
 			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room`);
 		}
 		if (this.meansNo(target)) {
-			// @ts-ignore
-			if (!room.pspl) return this.errorReply(`This chat room is already not a PSPL Winner room.`);
-			// @ts-ignore
-			delete room.pspl;
+			if (!room.settings?.pspl) return this.errorReply(`This chat room is already not a PSPL Winner room.`);
+			delete room.settings.pspl;
 			this.addModAction(`${user.name} made this chat room no longer a PSPL Winner room.`);
 			this.modlog('PSPLROOM');
-			delete room.chatRoomData.pspl;
+			//
+			delete room.settings.pspl;
 			Rooms.global.writeChatRoomData();
 		} else {
-			// @ts-ignore
-			if (room.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
-			// @ts-ignore
-			room.pspl = true;
+			if (room.settings?.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
+			room.settings.pspl = true;
 			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
 			this.modlog('UNPSPLROOM');
-			room.chatRoomData.pspl = true;
+			room.settings.pspl = true;
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -994,7 +985,7 @@ export const commands: ChatCommands = {
 		if (!user.can('makeroom')) return this.errorReply(`/subroom - Access denied. Did you mean /subrooms?`);
 		if (!target) return this.parse('/help subroom');
 
-		if (!room.chatRoomData) return this.errorReply(`Temporary rooms cannot be subrooms.`);
+		if (!room.settings) return this.errorReply(`Temporary rooms cannot be subrooms.`);
 		if (room.parent) {
 			return this.errorReply(`This room is already a subroom. To change which room this subroom belongs to, remove the subroom first.`);
 		}
@@ -1006,26 +997,28 @@ export const commands: ChatCommands = {
 
 		if (!main) return this.errorReply(`The room '${target}' does not exist.`);
 		if (main.parent) return this.errorReply(`Subrooms cannot have subrooms.`);
-		if (main.isPrivate === true) return this.errorReply(`Only public and hidden rooms can have subrooms.`);
-		if (main.isPrivate && !room.isPrivate) return this.errorReply(`Private rooms cannot have public subrooms.`);
-		if (!main.chatRoomData) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
+		if (main.settings?.isPrivate === true) return this.errorReply(`Only public and hidden rooms can have subrooms.`);
+		if (main.settings?.isPrivate && !room.settings.isPrivate) {
+			return this.errorReply(`Private rooms cannot have public subrooms.`);
+		}
+		if (!main.settings) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
 		if (room === main) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
 
 		room.parent = main;
 		if (!main.subRooms) main.subRooms = new Map();
 		main.subRooms.set(room.roomid, room as ChatRoom);
 
-		const mainIdx = Rooms.global.chatRoomDataList.findIndex(r => r.title === main.title);
-		const subIdx = Rooms.global.chatRoomDataList.findIndex(r => r.title === room.title);
+		const mainIdx = Rooms.global.settingsList.findIndex(r => r.title === main.title);
+		const subIdx = Rooms.global.settingsList.findIndex(r => r.title === room.title);
 
 		// This is needed to ensure that the main room gets loaded before the subroom.
 		if (mainIdx > subIdx) {
-			const tmp = Rooms.global.chatRoomDataList[mainIdx];
-			Rooms.global.chatRoomDataList[mainIdx] = Rooms.global.chatRoomDataList[subIdx];
-			Rooms.global.chatRoomDataList[subIdx] = tmp;
+			const tmp = Rooms.global.settingsList[mainIdx];
+			Rooms.global.settingsList[mainIdx] = Rooms.global.settingsList[subIdx];
+			Rooms.global.settingsList[subIdx] = tmp;
 		}
 
-		room.chatRoomData.parentid = main.roomid;
+		room.settings.parentid = main.roomid;
 		Rooms.global.writeChatRoomData();
 
 		for (const userid in room.users) {
@@ -1040,7 +1033,7 @@ export const commands: ChatCommands = {
 	desubroom: 'unsubroom',
 	unsubroom(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (!room.parent || !room.chatRoomData) {
+		if (!room.parent || !room.settings) {
 			return this.errorReply(`This room is not currently a subroom of a public room.`);
 		}
 
@@ -1052,7 +1045,7 @@ export const commands: ChatCommands = {
 
 		room.parent = null;
 
-		delete room.chatRoomData.parentid;
+		delete room.settings.parentid;
 		Rooms.global.writeChatRoomData();
 
 		for (const userid in room.users) {
@@ -1069,7 +1062,7 @@ export const commands: ChatCommands = {
 			if (!room.parent) return this.errorReply(`This room is not a subroom.`);
 			return this.sendReply(`This is a subroom of ${room.parent.title}.`);
 		}
-		if (!room.chatRoomData) return this.errorReply(`Temporary rooms cannot have subrooms.`);
+		if (!room.settings) return this.errorReply(`Temporary rooms cannot have subrooms.`);
 
 		if (!this.runBroadcast()) return;
 
@@ -1123,8 +1116,8 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user.name} changed the roomdesc to: "${target}".)`);
 		this.modlog('ROOMDESC', null, `to "${target}"`);
 
-		if (room.chatRoomData) {
-			room.chatRoomData.desc = room.desc;
+		if (room.settings?.persistSettings) {
+			room.settings.desc = room.desc;
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -1161,8 +1154,7 @@ export const commands: ChatCommands = {
 		this.modlog('ROOMINTRO');
 		this.roomlog(room.introMessage.replace(/\n/g, ''));
 
-		if (room.chatRoomData) {
-			room.chatRoomData.introMessage = room.introMessage;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -1177,8 +1169,8 @@ export const commands: ChatCommands = {
 		this.roomlog(target);
 
 		delete room.introMessage;
-		if (room.chatRoomData) {
-			delete room.chatRoomData.introMessage;
+		if (room.settings?.persistSettings) {
+			delete room.settings.introMessage;
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -1216,8 +1208,7 @@ export const commands: ChatCommands = {
 		this.modlog('STAFFINTRO');
 		this.roomlog(room.staffMessage.replace(/\n/g, ``));
 
-		if (room.chatRoomData) {
-			room.chatRoomData.staffMessage = room.staffMessage;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -1232,8 +1223,8 @@ export const commands: ChatCommands = {
 		this.roomlog(target);
 
 		delete room.staffMessage;
-		if (room.chatRoomData) {
-			delete room.chatRoomData.staffMessage;
+		if (room.settings?.persistSettings) {
+			delete room.settings.staffMessage;
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -1263,8 +1254,8 @@ export const commands: ChatCommands = {
 
 		if (!room.aliases) room.aliases = [];
 		room.aliases.push(alias);
-		if (room.chatRoomData) {
-			room.chatRoomData.aliases = room.aliases;
+		if (room.settings?.persistSettings) {
+			room.settings.aliases = room.aliases;
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -1310,11 +1301,13 @@ export const commands: ChatCommands = {
 		const resetTier = cmd === 'resettierdisplay';
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			return this.sendReplyBox(`This room is currently displaying ${room.dataCommandTierDisplay} as the tier when using /data.`);
+			return this.sendReplyBox(
+				`This room is currently displaying ${room.settings!.dataCommandTierDisplay} as the tier when using /data.`
+			);
 		}
 		if (!this.can('declare', null, room)) return false;
 
-		const displayIDToName: {[k: string]: typeof room.dataCommandTierDisplay} = {
+		const displayIDToName: {[k: string]: "tiers" | "doubles tiers" | "numbers"} = {
 			tiers: 'tiers',
 			doublestiers: 'doubles tiers',
 			numbers: 'numbers',
@@ -1326,21 +1319,20 @@ export const commands: ChatCommands = {
 				return this.parse(`/help roomtierdisplay`);
 			}
 
-			room.dataCommandTierDisplay = displayIDToName[toID(target)];
+			room.settings!.dataCommandTierDisplay = displayIDToName[toID(target)];
 			this.sendReply(`(The room's tier display is now: ${displayIDToName[toID(target)]})`);
 
 			this.privateModAction(`(${user.name} changed the room's tier display to: ${displayIDToName[toID(target)]}.)`);
 			this.modlog('ROOMTIERDISPLAY', null, `to ${displayIDToName[toID(target)]}`);
 		} else {
-			room.dataCommandTierDisplay = 'tiers';
+			room.settings!.dataCommandTierDisplay = 'tiers';
 			this.sendReply(`(The room's tier display is now: tiers)`);
 
 			this.privateModAction(`(${user.name} reset the room's tier display.)`);
 			this.modlog('RESETTIERDISPLAY', null, `to tiers`);
 		}
 
-		if (room.chatRoomData) {
-			room.chatRoomData.dataCommandTierDisplay = room.dataCommandTierDisplay;
+		if (room.settings?.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -1362,13 +1354,16 @@ export const roomSettings: SettingsHandler[] = [
 		const permission = !!threshold;
 
 		// typescript seems to think that [prop, true] is of type [prop, boolean] unless we tell it explicitly
-		const options: [string, string | true][] = !permission ? [[room.modchat || 'off', true]] :
+		const options: [string, string | true][] = !permission ? [[room.settings!.modchat || 'off', true]] :
 			[
 				'off',
 				'autoconfirmed',
 				'trusted',
 				...RANKS.slice(1, threshold! + 1),
-			].map(rank => [rank, (rank === 'off' ? !room.modchat : rank === room.modchat) || `modchat ${rank || 'off'}`]);
+			].map(
+				rank =>
+					[rank, (rank === 'off' ? !room.settings!.modchat : rank === room.settings!.modchat) || `modchat ${rank || 'off'}`]
+			);
 
 		return {
 			label: "Modchat",
@@ -1386,54 +1381,57 @@ export const roomSettings: SettingsHandler[] = [
 			// first rank is for modjoin off
 			...RANKS.slice(1, room.isPersonal && !user.can('makeroom') ? 2 : undefined),
 		].map(
-			rank => [rank, (rank === 'off' ? !room.modjoin : rank === room.modjoin) || `modjoin ${rank || 'off'}`]
+			rank =>
+				[rank, (rank === 'off' ? !room.settings!.modjoin : rank === room.settings!.modjoin) || `modjoin ${rank || 'off'}`]
 		),
 	}),
 	room => ({
 		label: "Language",
 		permission: 'editroom',
 		options: [...Chat.languages].map(
-			([id, name]) => [name, (id === 'english' ? !room.language : id === room.language) || `roomlanguage ${id}`]
+			([id, name]) =>
+				[name, (id === 'english' ? !room.settings!.language : id === room.settings!.language) || `roomlanguage ${id}`]
 		),
 	}),
 	room => ({
 		label: "Stretch filter",
 		permission: 'editroom',
 		options: [
-			[`off`, !room.filterStretching || 'stretchfilter off'],
-			[`on`, room.filterStretching || 'stretchfilter on'],
+			[`off`, !room.settings!.filterStretching || 'stretchfilter off'],
+			[`on`, room.settings!.filterStretching || 'stretchfilter on'],
 		],
 	}),
 	room => ({
 		label: "Caps filter",
 		permission: 'editroom',
 		options: [
-			[`off`, !room.filterCaps || 'capsfilter off'],
-			[`on`, room.filterCaps || 'capsfilter on'],
+			[`off`, !room.settings!.filterCaps || 'capsfilter off'],
+			[`on`, room.settings!.filterCaps || 'capsfilter on'],
 		],
 	}),
 	room => ({
 		label: "Emoji filter",
 		permission: 'editroom',
 		options: [
-			[`off`, !room.filterEmojis || 'emojifilter off'],
-			[`on`, room.filterEmojis || 'emojifilter on'],
+			[`off`, !room.settings!.filterEmojis || 'emojifilter off'],
+			[`on`, room.settings!.filterEmojis || 'emojifilter on'],
 		],
 	}),
 	room => ({
 		label: "Slowchat",
 		permission: room.userCount < SLOWCHAT_USER_REQUIREMENT ? 'bypassall' : 'editroom',
 		options: ['off', 5, 10, 20, 30, 60].map(
-			time => [`${time}`, (time === 'off' ? !room.slowchat : time === room.slowchat) || `slowchat ${time || 'false'}`]
+			time => [`${time}`, (time === 'off' ?
+				!room.settings!.slowchat : time === room.settings!.slowchat) || `slowchat ${time || 'false'}`]
 		),
 	}),
 	room => ({
 		label: "/data Tier display",
 		permission: 'editroom',
 		options: [
-			[`tiers`, room.dataCommandTierDisplay === 'tiers' || `roomtierdisplay tiers`],
-			[`doubles tiers`, room.dataCommandTierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
-			[`numbers`, room.dataCommandTierDisplay === 'numbers' || `roomtierdisplay numbers`],
+			[`tiers`, room.settings!.dataCommandTierDisplay === 'tiers' || `roomtierdisplay tiers`],
+			[`doubles tiers`, room.settings!.dataCommandTierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
+			[`numbers`, room.settings!.dataCommandTierDisplay === 'numbers' || `roomtierdisplay numbers`],
 		],
 	}),
 ];

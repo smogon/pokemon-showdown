@@ -295,7 +295,10 @@ export class CommandContext extends MessageContext {
 		{message: string, room: Room, user: User, connection: Connection} &
 		Partial<{pmTarget: User | null, cmd: string, cmdToken: string, target: string, fullCmd: string}>
 	) {
-		super(options.user, options.room && options.room.language ? options.room.language : options.user.language);
+		super(
+			options.user, options.room && options.room.settings!.language ?
+				options.room.settings!.language : options.user.language
+		);
 
 		this.message = options.message || ``;
 
@@ -524,28 +527,28 @@ export class CommandContext extends MessageContext {
 
 	checkFormat(room: BasicChatRoom | null | undefined, user: User, message: string) {
 		if (!room) return true;
-		if (!room.filterStretching && !room.filterCaps && !room.filterEmojis) return true;
+		if (!room.settings!.filterStretching && !room.settings!.filterCaps && !room.settings!.filterEmojis) return true;
 		if (user.can('bypassall')) return true;
 
-		if (room.filterStretching && /(.+?)\1{5,}/i.test(user.name)) {
+		if (room.settings!.filterStretching && /(.+?)\1{5,}/i.test(user.name)) {
 			return this.errorReply(`Your username contains too much stretching, which this room doesn't allow.`);
 		}
-		if (room.filterCaps && /[A-Z\s]{6,}/.test(user.name)) {
+		if (room.settings!.filterCaps && /[A-Z\s]{6,}/.test(user.name)) {
 			return this.errorReply(`Your username contains too many capital letters, which this room doesn't allow.`);
 		}
-		if (room.filterEmojis && EMOJI_REGEX.test(user.name)) {
+		if (room.settings!.filterEmojis && EMOJI_REGEX.test(user.name)) {
 			return this.errorReply(`Your username contains emojis, which this room doesn't allow.`);
 		}
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
-		if (room.filterStretching && /(.+?)\1{7,}/i.test(message)) {
+		if (room.settings!.filterStretching && /(.+?)\1{7,}/i.test(message)) {
 			return this.errorReply(`Your message contains too much stretching, which this room doesn't allow.`);
 		}
-		if (room.filterCaps && /[A-Z\s]{18,}/.test(message)) {
+		if (room.settings!.filterCaps && /[A-Z\s]{18,}/.test(message)) {
 			return this.errorReply(`Your message contains too many capital letters, which this room doesn't allow.`);
 		}
-		if (room.filterEmojis && EMOJI_REGEX.test(message)) {
+		if (room.settings!.filterEmojis && EMOJI_REGEX.test(message)) {
 			return this.errorReply(`Your message contains emojis, which this room doesn't allow.`);
 		}
 
@@ -553,18 +556,18 @@ export class CommandContext extends MessageContext {
 	}
 
 	checkSlowchat(room: Room | null | undefined, user: User) {
-		if (!room || !room.slowchat) return true;
+		if (!room || !room.settings!.slowchat) return true;
 		if (user.can('broadcast', null, room)) return true;
 		const lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
-		if (lastActiveSeconds < room.slowchat) return false;
+		if (lastActiveSeconds < room.settings!.slowchat) return false;
 		return true;
 	}
 
 	checkBanwords(room: BasicChatRoom | null | undefined, message: string): boolean {
 		if (!room) return true;
 		if (!room.banwordRegex) {
-			if (room.banwords && room.banwords.length) {
-				room.banwordRegex = new RegExp('(?:\\b|(?!\\w))(?:' + room.banwords.join('|') + ')(?:\\b|\\B(?!\\w))', 'i');
+			if (room.settings!.banwords && room.settings!.banwords.length) {
+				room.banwordRegex = new RegExp('(?:\\b|(?!\\w))(?:' + room.settings!.banwords.join('|') + ')(?:\\b|\\B(?!\\w))', 'i');
 			} else {
 				room.banwordRegex = true;
 			}
@@ -828,8 +831,8 @@ export class CommandContext extends MessageContext {
 					this.errorReply(this.tr(`You are muted and cannot talk in this room.`));
 					return null;
 				}
-				if (room.modchat && !user.authAtLeast(room.modchat, room)) {
-					if (room.modchat === 'autoconfirmed') {
+				if (room.settings!.modchat && !user.authAtLeast(room.settings!.modchat, room)) {
+					if (room.settings!.modchat === 'autoconfirmed') {
 						this.errorReply(
 							this.tr(
 								`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
@@ -837,7 +840,7 @@ export class CommandContext extends MessageContext {
 						);
 						return null;
 					}
-					if (room.modchat === 'trusted') {
+					if (room.settings!.modchat === 'trusted') {
 						this.errorReply(
 							this.tr(
 								`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`
@@ -845,7 +848,8 @@ export class CommandContext extends MessageContext {
 						);
 						return null;
 					}
-					const groupName = Config.groups[room.modchat] && Config.groups[room.modchat].name || room.modchat;
+					const groupName = Config.groups[room.settings!.modchat] && Config.groups[room.settings!.modchat].name ||
+						room.settings!.modchat;
 					this.errorReply(
 						this.tr `Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
 					);
@@ -978,7 +982,7 @@ export class CommandContext extends MessageContext {
 			user.lastMessageTime = Date.now();
 		}
 
-		if (room?.highTraffic &&
+		if (room?.settings?.highTraffic &&
 			toID(message).replace(/[^a-z]+/, '').length < 2 &&
 			!user.can('broadcast', null, room)) {
 			this.errorReply(
@@ -1046,7 +1050,6 @@ export class CommandContext extends MessageContext {
 	canHTML(htmlContent: string | null) {
 		htmlContent = ('' + (htmlContent || '')).trim();
 		if (!htmlContent) return '';
-
 		if (/>here.?</i.test(htmlContent) || /click here/i.test(htmlContent)) {
 			this.errorReply('Do not use "click here"');
 			return null;
@@ -1119,12 +1122,12 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				if (tagName === 'button') {
-					if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock')) {
+					if ((this.room.isPersonal || this.room.settings!.isPrivate === true) && !this.user.can('lock')) {
 						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						if (buttonName === 'send' && buttonValue?.startsWith('/msg ')) {
 							const [pmTarget] = buttonValue.slice(5).split(',');
-							if (this.room.auth?.[toID(pmTarget)] !== '*') {
+							if (this.room.settings!.auth?.[toID(pmTarget)] !== '*') {
 								this.errorReply(`This button is not allowed: <${tagContent}>`);
 								this.errorReply(`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`);
 								return null;

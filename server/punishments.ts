@@ -535,7 +535,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.isPrivate === true || room.isPersonal || room.battle)) {
+			if (!(room.settings!.isPrivate === true || room.isPersonal || room.battle)) {
 				Punishments.monitorRoomPunishments(user);
 			}
 		}
@@ -595,7 +595,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.isPrivate === true || room.isPersonal || room.battle)) {
+			if (!(room.settings!.isPrivate === true || room.isPersonal || room.battle)) {
 				Punishments.monitorRoomPunishments(userid);
 			}
 		}
@@ -1325,7 +1325,7 @@ export const Punishments = new class {
 
 		for (const curRoom of Rooms.global.chatRooms) {
 			if (
-				!curRoom || curRoom.isPrivate === true ||
+				!curRoom || curRoom.settings?.isPrivate === true ||
 				(options.publicOnly && (curRoom.isPersonal || curRoom.battle))
 			) continue;
 			let punishment = Punishments.roomUserids.nestedGet(curRoom.roomid, userid);

@@ -2,7 +2,7 @@
  * Room Events Plugin
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This is a room-management system to keep track of upcoming room events.
+ * This is a room-management system to keep track of upcoming room.settings!.events.
  *
  * @license MIT license
  */
@@ -28,15 +28,15 @@ export const commands: ChatCommands = {
 	roomevent: 'roomevents',
 	roomevents: {
 		''(target, room, user) {
-			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!room.events || !Object.keys(room.events).length) {
+			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings?.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 			if (!this.runBroadcast()) return;
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
 			buff += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
-			for (const i in room.events) {
-				buff += formatEvent(room.events[i]);
+			for (const i in room.settings.events) {
+				buff += formatEvent(room.settings.events[i]);
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
@@ -46,9 +46,9 @@ export const commands: ChatCommands = {
 		create: 'add',
 		edit: 'add',
 		add(target, room, user) {
-			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
-			if (!room.events) room.events = Object.create(null);
+			if (!room.settings.events) room.settings.events = Object.create(null);
 			const [eventName, date, ...desc] = target.split(target.includes('|') ? '|' : ',');
 
 			if (!(eventName && date && desc)) {
@@ -66,31 +66,29 @@ export const commands: ChatCommands = {
 			const eventId = toID(eventName);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
-			this.privateModAction(`(${user.name} ${room.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
-			this.modlog('ROOMEVENT', null, `${room.events[eventId] ? "edited" : "added"} "${eventNameActual}"`);
-			room.events[eventId] = {
+			this.privateModAction(`(${user.name} ${room.settings.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
+			this.modlog('ROOMEVENT', null, `${room.settings.events[eventId] ? "edited" : "added"} "${eventNameActual}"`);
+			room.settings.events[eventId] = {
 				eventName: eventNameActual,
 				date: dateActual,
 				desc: descString,
 				started: false,
 			};
-
-			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
 		},
 
 		begin: 'start',
 		start(target, room, user) {
-			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
-			if (!room.events || !Object.keys(room.events).length) {
+			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room to start.");
 			}
 			if (!target) return this.errorReply("Usage: /roomevents start [event name]");
 			target = toID(target);
-			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
-			if (room.events[target].started) {
-				return this.errorReply(`The event ${room.events[target].eventName} has already started.`);
+			if (!room.settings.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			if (room.settings.events[target].started) {
+				return this.errorReply(`The event ${room.settings.events[target].eventName} has already started.`);
 			}
 			for (const u in room.users) {
 				const activeUser = Users.get(u);
@@ -98,53 +96,51 @@ export const commands: ChatCommands = {
 					activeUser.sendTo(
 						room,
 						Chat.html`|notify|A new roomevent in ${room.title} has started!|` +
-						`The "${room.events[target].eventName}" roomevent has started!`
+						`The "${room.settings.events[target].eventName}" roomevent has started!`
 					);
 				}
 			}
 			this.add(
-				Chat.html`|raw|<div class="broadcast-blue"><b>The "${room.events[target].eventName}" roomevent has started!</b></div>`
+				Chat.html`|raw|<div class="broadcast-blue"><b>The "${room.settings.events[target].eventName}" roomevent has started!</b></div>`
 			);
 			this.modlog('ROOMEVENT', null, `started "${target}"`);
-			room.events[target].started = true;
-			room.chatRoomData.events = room.events;
+			room.settings.events[target].started = true;
 			Rooms.global.writeChatRoomData();
 		},
 
 		delete: 'remove',
 		remove(target, room, user) {
-			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
-			if (!room.events || Object.keys(room.events).length === 0) {
+			if (!room.settings.events || Object.keys(room.settings.events).length === 0) {
 				return this.errorReply("There are currently no planned upcoming events for this room to remove.");
 			}
 			if (!target) return this.errorReply("Usage: /roomevents remove [event name]");
 			target = toID(target);
-			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
-			delete room.events[target];
+			if (!room.settings.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			delete room.settings.events[target];
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
 			this.modlog('ROOMEVENT', null, `removed "${target}"`);
 
-			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
 		},
 		view(target, room, user) {
-			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!room.events || !Object.keys(room.events).length) {
+			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 
 			if (!target) return this.errorReply("Usage: /roomevents view [event name]");
 			target = toID(target);
-			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			if (!room.settings.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 
 			if (!this.runBroadcast()) return;
-			const buff = `<table border="1" cellspacing="0" cellpadding="3">${formatEvent(room.events[target])}</table>`;
+			const buff = `<table border="1" cellspacing="0" cellpadding="3">${formatEvent(room.settings.events[target])}</table>`;
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
 			if (!this.broadcasting && user.can('ban', null, room)) {
 				this.sendReplyBox(
-					Chat.html`<code>/roomevents add ${room.events[target].eventName} |` +
-					Chat.html`${room.events[target].date} | ${room.events[target].desc}</code>`
+					Chat.html`<code>/roomevents add ${room.settings.events[target].eventName} |` +
+					Chat.html`${room.settings.events[target].date} | ${room.settings.events[target].desc}</code>`
 				);
 			}
 		},
@@ -153,8 +149,8 @@ export const commands: ChatCommands = {
 		},
 		sortby(target, room, user) {
 			// preconditions
-			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!room.events || !Object.keys(room.events).length) {
+			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 			if (!this.can('ban', null, room)) return false;
@@ -163,7 +159,7 @@ export const commands: ChatCommands = {
 			let multiplier = 1;
 			let columnName = "";
 			const delimited = target.split(target.includes('|') ? '|' : ',');
-			const sortable = Object.values(room.events);
+			const sortable = Object.values(room.settings.events);
 
 			// id tokens
 			if (delimited.length === 1) {
@@ -207,13 +203,12 @@ export const commands: ChatCommands = {
 				return this.errorReply("No or invalid column name specified. Please use one of: date, eventdate, desc, description, eventdescription, eventname, name.");
 			}
 
-			// rebuild the room.events object
-			room.events = {};
+			// rebuild the room.settings!.events object
+			room.settings.events = {};
 			for (const sortedObj of sortable) {
 				const eventId = toID(sortedObj.eventName);
-				room.events[eventId] = sortedObj;
+				room.settings.events[eventId] = sortedObj;
 			}
-			room.chatRoomData.events = room.events;
 
 			// build communication string
 			const resultString = `sorted by column:` + columnName +

@@ -879,7 +879,7 @@ export const commands: ChatCommands = {
 			battle.p1.name = target.slice(nameIndex1 + 8, nameNextQuoteIndex1);
 			battle.p2.name = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
 		}
-		battleRoom.auth[user.id] = Users.HOST_SYMBOL;
+		battleRoom.settings!.auth![user.id] = Users.HOST_SYMBOL;
 		this.parse(`/join ${battleRoom.roomid}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
@@ -1052,10 +1052,10 @@ export const commands: ChatCommands = {
 			return this.errorReply(`${targetUser.name} is already a player in this battle.`);
 		}
 
-		room.auth[targetUser.id] = Users.PLAYER_SYMBOL;
+		room.settings!.auth![targetUser.id] = Users.PLAYER_SYMBOL;
 		const success = room.battle.joinGame(targetUser, target);
 		if (!success) {
-			delete room.auth[targetUser.id];
+			delete room.settings!.auth![targetUser.id];
 			return;
 		}
 		this.addModAction(`${name} was added to the battle as Player ${target.slice(1)} by ${user.name}.`);
@@ -1380,7 +1380,7 @@ export const commands: ChatCommands = {
 				const targetRoom = Rooms.get(roomid);
 				if (!targetRoom) continue; // shouldn't happen
 				const roomData: RoomData = {};
-				if (targetRoom.isPrivate) {
+				if (targetRoom.settings!.isPrivate) {
 					if (!user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
 					roomData.isPrivate = true;
 				}
@@ -1390,8 +1390,8 @@ export const commands: ChatCommands = {
 					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
 				}
 				let roomidWithAuth: string = roomid;
-				if (targetRoom.auth && targetUser.id in targetRoom.auth) {
-					roomidWithAuth = targetRoom.auth[targetUser.id] + roomid;
+				if (targetRoom.settings?.auth && targetUser.id in targetRoom.settings.auth) {
+					roomidWithAuth = targetRoom.settings.auth[targetUser.id] + roomid;
 				}
 				roomList[roomidWithAuth] = roomData;
 			}
@@ -1433,7 +1433,7 @@ export const commands: ChatCommands = {
 
 			const targetRoom = Rooms.get(target);
 			if (!targetRoom || targetRoom === Rooms.global || (
-				targetRoom.isPrivate && !user.inRooms.has(targetRoom.roomid) && !user.games.has(targetRoom.roomid)
+				targetRoom.settings?.isPrivate && !user.inRooms.has(targetRoom.roomid) && !user.games.has(targetRoom.roomid)
 			)) {
 				const roominfo = {id: target, error: 'not found or access denied'};
 				connection.send(`|queryresponse|roominfo|${JSON.stringify(roominfo)}`);
@@ -1441,8 +1441,8 @@ export const commands: ChatCommands = {
 			}
 
 			let visibility;
-			if (targetRoom.isPrivate) {
-				visibility = (targetRoom.isPrivate === 'hidden') ? 'hidden' : 'secret';
+			if (targetRoom.settings?.isPrivate) {
+				visibility = (targetRoom.settings.isPrivate === 'hidden') ? 'hidden' : 'secret';
 			} else {
 				visibility = 'public';
 			}
@@ -1453,15 +1453,15 @@ export const commands: ChatCommands = {
 				title: targetRoom.title,
 				type: targetRoom.type,
 				visibility: visibility,
-				modchat: targetRoom.modchat,
-				modjoin: targetRoom.modjoin,
+				modchat: targetRoom.settings!.modchat,
+				modjoin: targetRoom.settings!.modjoin,
 				auth: {},
 				users: [],
 			};
 
-			if (targetRoom.auth) {
-				for (const userid in targetRoom.auth) {
-					const rank = targetRoom.auth[userid];
+			if (targetRoom.settings?.auth) {
+				for (const userid in targetRoom.settings.auth) {
+					const rank = targetRoom.settings.auth[userid];
 					if (!roominfo.auth[rank]) roominfo.auth[rank] = [];
 					roominfo.auth[rank].push(userid);
 				}

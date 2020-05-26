@@ -578,10 +578,10 @@ export const pages: PageTable = {
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
-					if (!helpRoom.auth) {
-						helpRoom.auth = {};
+					if (!helpRoom.settings?.auth) {
+						helpRoom.settings!.auth = {};
 					}
-					if (!helpRoom.auth[user.id]) helpRoom.auth[user.id] = '+';
+					if (!helpRoom.settings?.auth[user.id]) helpRoom.settings!.auth[user.id] = '+';
 					connection.popup(`You already have a Help ticket.`);
 					user.joinRoom(`help-${ticket.userid}` as RoomID);
 					return this.close();
@@ -1095,10 +1095,10 @@ export const commands: ChatCommands = {
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
-					if (!helpRoom.auth) {
-						helpRoom.auth = {};
+					if (!helpRoom.settings!.auth) {
+						helpRoom.settings!.auth = {};
 					}
-					if (!helpRoom.auth[user.id]) helpRoom.auth[user.id] = '+';
+					if (!helpRoom.settings!.auth[user.id]) helpRoom.settings!.auth[user.id] = '+';
 					this.parse(`/join help-${ticket.userid}`);
 					return this.popupReply(`You already have an open ticket; please wait for global staff to respond.`);
 				}

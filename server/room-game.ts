@@ -149,10 +149,10 @@ export class RoomGame {
 			player.id = user.id;
 			player.name = user.name;
 			this.playerTable[player.id] = player;
-			if (!this.room.auth) {
-				this.room.auth = {};
+			if (!this.room.settings!.auth) {
+				this.room.settings!.auth = {};
 			}
-			this.room.auth[player.id] = Users.PLAYER_SYMBOL;
+			this.room.settings!.auth[player.id] = Users.PLAYER_SYMBOL;
 		} else {
 			player.unlinkUser();
 		}

@@ -954,7 +954,7 @@ export class Tournament extends Rooms.RoomGame {
 		if (!player.pendingChallenge) return;
 
 		const room = Rooms.createBattle(this.fullFormat, {
-			isPrivate: this.room.isPrivate,
+			isPrivate: this.room.settings!.isPrivate,
 			p1: from,
 			p1team: challenge.team,
 			p2: user,
@@ -1071,7 +1071,7 @@ export class Tournament extends Rooms.RoomGame {
 		this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|success|${room.roomid}`);
 
 		if (this.generator.isTournamentEnded()) {
-			if (!this.room.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
+			if (!this.room.settings!.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
 				const uploader = Users.get(winnerid);
 				if (uploader?.connections[0]) {
 					Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
@@ -1560,7 +1560,7 @@ export const commands: ChatCommands = {
 			for (const tourRoom of Rooms.rooms.values()) {
 				const tournament = tourRoom.getGame(Tournament);
 				if (!tournament) continue;
-				if (tourRoom.isPrivate || tourRoom.isPersonal || tourRoom.staffRoom) continue;
+				if (tourRoom.settings?.isPrivate || tourRoom.isPersonal || tourRoom.settings?.staffRoom) continue;
 				update.push({
 					room: tourRoom.roomid, title: room.title, format: tournament.name,
 					generator: tournament.generator.name, isStarted: tournament.isTournamentStarted,
@@ -1573,22 +1573,22 @@ export const commands: ChatCommands = {
 			if (!this.can('gamemanagement', null, room)) return;
 			const rank = params[0];
 			if (rank === '@') {
-				if (room.toursEnabled === true) {
+				if (room.settings!.toursEnabled === true) {
 					return this.errorReply("Tournaments are already enabled for @ and above in this room.");
 				}
-				room.toursEnabled = true;
-				if (room.chatRoomData) {
-					room.chatRoomData.toursEnabled = true;
+				room.settings!.toursEnabled = true;
+				if (room.settings) {
+					room.settings.toursEnabled = true;
 					Rooms.global.writeChatRoomData();
 				}
 				return this.sendReply("Tournaments are now enabled for @ and up.");
 			} else if (rank === '%') {
-				if (room.toursEnabled === rank) {
+				if (room.settings!.toursEnabled === rank) {
 					return this.errorReply("Tournaments are already enabled for % and above in this room.");
 				}
-				room.toursEnabled = rank;
-				if (room.chatRoomData) {
-					room.chatRoomData.toursEnabled = rank;
+				room.settings!.toursEnabled = rank;
+				if (room.settings) {
+					room.settings.toursEnabled = rank;
 					Rooms.global.writeChatRoomData();
 				}
 				return this.sendReply("Tournaments are now enabled for % and up.");
@@ -1597,12 +1597,12 @@ export const commands: ChatCommands = {
 			}
 		} else if (this.meansNo(cmd)) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (!room.toursEnabled) {
+			if (!room.settings!.toursEnabled) {
 				return this.errorReply("Tournaments are already disabled.");
 			}
-			room.toursEnabled = false;
-			if (room.chatRoomData) {
-				room.chatRoomData.toursEnabled = false;
+			room.settings!.toursEnabled = false;
+			if (room.settings) {
+				room.settings.toursEnabled = false;
 				Rooms.global.writeChatRoomData();
 			}
 			return this.sendReply("Tournaments are now disabled.");
@@ -1612,7 +1612,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Tournaments in this room cannot be announced.");
 			}
 			if (params.length < 1) {
-				if (room.tourAnnouncements) {
+				if (room.settings!.tourAnnouncements) {
 					return this.sendReply("Tournament announcements are enabled.");
 				} else {
 					return this.sendReply("Tournament announcements are disabled.");
@@ -1621,27 +1621,26 @@ export const commands: ChatCommands = {
 
 			const option = params[0].toLowerCase();
 			if (this.meansYes(option)) {
-				if (room.tourAnnouncements) return this.errorReply("Tournament announcements are already enabled.");
-				room.tourAnnouncements = true;
+				if (room.settings!.tourAnnouncements) return this.errorReply("Tournament announcements are already enabled.");
+				room.settings!.tourAnnouncements = true;
 				this.privateModAction(`(Tournament announcements were enabled by ${user.name})`);
 				this.modlog('TOUR ANNOUNCEMENTS', null, 'ON');
 			} else if (this.meansNo(option)) {
-				if (!room.tourAnnouncements) return this.errorReply("Tournament announcements are already disabled.");
-				room.tourAnnouncements = false;
+				if (!room.settings!.tourAnnouncements) return this.errorReply("Tournament announcements are already disabled.");
+				room.settings!.tourAnnouncements = false;
 				this.privateModAction(`(Tournament announcements were disabled by ${user.name})`);
 				this.modlog('TOUR ANNOUNCEMENTS', null, 'OFF');
 			} else {
 				return this.sendReply(`Usage: ${cmd} <on|off>`);
 			}
 
-			if (room.chatRoomData) {
-				room.chatRoomData.tourAnnouncements = room.tourAnnouncements;
+			if (room.settings?.persistSettings) {
 				Rooms.global.writeChatRoomData();
 			}
 		} else if (cmd === 'create' || cmd === 'new') {
-			if (room.toursEnabled === true) {
+			if (room.settings!.toursEnabled === true) {
 				if (!this.can('tournaments', null, room)) return;
-			} else if (room.toursEnabled === '%') {
+			} else if (room.settings!.toursEnabled === '%') {
 				if (!this.can('gamemoderation', null, room)) return;
 			} else {
 				if (!user.can('gamemanagement', null, room)) {
@@ -1658,7 +1657,7 @@ export const commands: ChatCommands = {
 			if (tour) {
 				this.privateModAction(`(${user.name} created a tournament in ${tour.baseFormat} format.)`);
 				this.modlog('TOUR CREATE', null, tour.baseFormat);
-				if (room.tourAnnouncements) {
+				if (room.settings!.tourAnnouncements) {
 					const tourRoom = Rooms.search(Config.tourroom || 'tournaments');
 					if (tourRoom && tourRoom !== room) {
 						tourRoom.addRaw(
@@ -1742,9 +1741,9 @@ export const commands: ChatCommands = {
 			if (commandHandler) {
 				if (typeof commandHandler === 'string') commandHandler = tourCommands.basic[commandHandler];
 			} else if (tourCommands.creation[cmd]) {
-				if (room.toursEnabled === true) {
+				if (room.settings!.toursEnabled === true) {
 					if (!this.can('tournaments', null, room)) return;
-				} else if (room.toursEnabled === '%') {
+				} else if (room.settings!.toursEnabled === '%') {
 					if (!this.can('gamemoderation', null, room)) return;
 				} else {
 					if (!user.can('gamemanagement', null, room)) {
@@ -1803,9 +1802,9 @@ const roomSettings: SettingsHandler = room => ({
 	label: "Tournaments",
 	permission: 'gamemanagement',
 	options: [
-		['%', room.toursEnabled === '%' || 'tournament enable %'],
-		['@', room.toursEnabled === true || 'tournament enable @'],
-		['#', room.toursEnabled === false || 'tournament disable'],
+		['%', room.settings!.toursEnabled === '%' || 'tournament enable %'],
+		['@', room.settings!.toursEnabled === true || 'tournament enable @'],
+		['#', room.settings!.toursEnabled === false || 'tournament disable'],
 	],
 });
 

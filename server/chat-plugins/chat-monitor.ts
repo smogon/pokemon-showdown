@@ -305,7 +305,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 		.replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
-	const isStaffRoom = room && ((room.chatRoomData && room.roomid.endsWith('staff')) || room.roomid.startsWith('help-'));
+	const isStaffRoom = room && ((room.settings && room.roomid.endsWith('staff')) || room.roomid.startsWith('help-'));
 	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
 
 	for (const list in Chat.monitors) {
@@ -313,7 +313,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 		if (!monitor) continue;
 		// Ignore challenge games, which are unrated and not part of roomtours.
 		if (location === 'BATTLES' && !(room && room.battle && room.battle.challengeType !== 'challenge')) continue;
-		if (location === 'PUBLIC' && room && room.isPrivate === true) continue;
+		if (location === 'PUBLIC' && room && room.settings!.isPrivate === true) continue;
 
 		switch (condition) {
 		case 'notTrusted':

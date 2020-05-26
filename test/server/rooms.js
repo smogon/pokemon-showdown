@@ -82,7 +82,7 @@ describe('Rooms features', function () {
 			assert.equal(room.getAuth(new User()), '%');
 		});
 
-		it('should prevent overriding tournament room auth by a tournament player', function () {
+		it('should prevent overriding tournament room.settings!.auth by a tournament player', function () {
 			parent = Rooms.createChatRoom('parentroom2', '', {});
 			parent.getAuth = () => '%';
 			const p1 = new User();

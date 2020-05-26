@@ -96,7 +96,7 @@ export const commands: ChatCommands = {
 		edit: 'create',
 		create(target, room, user, connection, cmd) {
 			if (!this.can('declare', null, room)) return;
-			if (room.battle || !room.chatRoomData) {
+			if (room.battle || !room.settings) {
 				return this.errorReply('This room does not support the creation of lotteries.');
 			}
 			const lottery = lotteries[room.roomid];

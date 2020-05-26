@@ -75,7 +75,7 @@ const LogReader = new class {
 			const room = Rooms.get(roomid);
 			const forceShow = room && (
 				// you are authed in the room
-				(room.auth && user.id in room.auth && user.can('mute', null, room)) ||
+				(room.settings!.auth && user.id in room.settings!.auth && user.can('mute', null, room)) ||
 				// you are staff and currently in the room
 				(isStaff && user.inRooms.has(room.roomid))
 			);
@@ -83,7 +83,7 @@ const LogReader = new class {
 				if (!isStaff) continue;
 				if (!room) continue;
 				if (!room.checkModjoin(user)) continue;
-				if (room.isPrivate === true) continue;
+				if (room.settings!.isPrivate === true) continue;
 			}
 
 			atLeastOne = true;
@@ -94,11 +94,11 @@ const LogReader = new class {
 				}
 			} else if (!room) {
 				if (opts === 'all' || opts === 'deleted') deleted.push(roomid);
-			} else if (room.isOfficial) {
+			} else if (room.settings?.isOfficial) {
 				official.push(roomid);
-			} else if (!room.isPrivate) {
+			} else if (!room.settings!.isPrivate) {
 				normal.push(roomid);
-			} else if (room.isPrivate === 'hidden') {
+			} else if (room.settings!.isPrivate === 'hidden') {
 				hidden.push(roomid);
 			} else {
 				secret.push(roomid);

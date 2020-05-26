@@ -27,7 +27,7 @@ export class Poll {
 	options: Map<number, Option>;
 	constructor(room: ChatRoom | GameRoom, questionData: QuestionData, options: string[], multi: boolean) {
 		this.activityId = 'poll';
-		this.pollNumber = ++room.gameNumber;
+		this.pollNumber = ++room.settings!.gameNumber;
 		this.room = room;
 		this.question = questionData.source;
 		this.supportHTML = questionData.supportHTML;

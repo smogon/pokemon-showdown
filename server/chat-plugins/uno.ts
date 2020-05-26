@@ -104,10 +104,10 @@ export class UnoGame extends Rooms.RoomGame {
 		this.playerTable = Object.create(null);
 		this.players = [];
 
-		if (room.gameNumber) {
-			room.gameNumber++;
+		if (room.settings!.gameNumber) {
+			room.settings!.gameNumber++;
 		} else {
-			room.gameNumber = 1;
+			room.settings!.gameNumber = 1;
 		}
 
 		this.playerCap = cap;
@@ -133,7 +133,7 @@ export class UnoGame extends Rooms.RoomGame {
 		this.suppressMessages = suppressMessages || false;
 		this.spectators = Object.create(null);
 
-		this.sendToRoom(`|uhtml|uno-${this.room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button name="send" value="/uno join">Join</button><br />Or use <strong>/uno join</strong> to join the game.</p>${(this.suppressMessages ? `<p style="font-size: 6pt; text-align: center">Game messages will be shown to only players.  If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`, true);
+		this.sendToRoom(`|uhtml|uno-${this.room.settings!.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button name="send" value="/uno join">Join</button><br />Or use <strong>/uno join</strong> to join the game.</p>${(this.suppressMessages ? `<p style="font-size: 6pt; text-align: center">Game messages will be shown to only players.  If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`, true);
 	}
 
 	onUpdateConnection() {}
@@ -142,7 +142,7 @@ export class UnoGame extends Rooms.RoomGame {
 		if (this.state === 'signups') {
 			connection.sendTo(
 				this.room,
-				`|uhtml|uno-${this.room.gameNumber}|<div class="broadcast-green">` +
+				`|uhtml|uno-${this.room.settings!.gameNumber}|<div class="broadcast-green">` +
 				`<p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p>` +
 				`<p style="font-size: 9pt; text-align: center"><button name="send" value="/uno join">Join</button>` +
 				`<br />Or use <strong>/uno join</strong> to join the game.</p>` +
@@ -153,7 +153,7 @@ export class UnoGame extends Rooms.RoomGame {
 		} else if (this.onSendHand(user) === false) {
 			connection.sendTo(
 				this.room,
-				`|uhtml|uno-${this.room.gameNumber}|<div class="infobox"><p>A UNO game is currently in progress.</p>` +
+				`|uhtml|uno-${this.room.settings!.gameNumber}|<div class="infobox"><p>A UNO game is currently in progress.</p>` +
 				`${(this.suppressMessages ? `<p style="font-size: 6pt">Game messages will be shown to only players. ` +
 				`If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`
 			);
@@ -163,7 +163,7 @@ export class UnoGame extends Rooms.RoomGame {
 	onStart() {
 		if (this.playerCount < 2) return false;
 		if (this.autostartTimer) clearTimeout(this.autostartTimer);
-		this.sendToRoom(`|uhtmlchange|uno-${this.room.gameNumber}|<div class="infobox"><p>The game of UNO has started.</p>${(this.suppressMessages ? `<p style="font-size: 6pt">Game messages will be shown to only players.  If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`, true);
+		this.sendToRoom(`|uhtmlchange|uno-${this.room.settings!.gameNumber}|<div class="infobox"><p>The game of UNO has started.</p>${(this.suppressMessages ? `<p style="font-size: 6pt">Game messages will be shown to only players.  If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`, true);
 		this.state = 'play';
 
 		this.onNextPlayer(); // determines the first player
@@ -555,7 +555,7 @@ export class UnoGame extends Rooms.RoomGame {
 	destroy() {
 		if (this.timer) clearTimeout(this.timer);
 		if (this.autostartTimer) clearTimeout(this.autostartTimer);
-		this.sendToRoom(`|uhtmlchange|uno-${this.room.gameNumber}|<div class="infobox">The game of UNO has ended.</div>`, true);
+		this.sendToRoom(`|uhtmlchange|uno-${this.room.settings!.gameNumber}|<div class="infobox">The game of UNO has ended.</div>`, true);
 
 		// deallocate games for each player.
 		for (const i in this.playerTable) {
@@ -635,12 +635,12 @@ export const commands: ChatCommands = {
 		off: 'disable',
 		disable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (room.unoDisabled) {
+			if (room.settings!.unoDisabled) {
 				return this.errorReply("UNO is already disabled in this room.");
 			}
-			room.unoDisabled = true;
-			if (room.chatRoomData) {
-				room.chatRoomData.unoDisabled = true;
+			room.settings!.unoDisabled = true;
+			if (room.settings) {
+				room.settings.unoDisabled = true;
 				Rooms.global.writeChatRoomData();
 			}
 			return this.sendReply("UNO has been disabled for this room.");
@@ -649,12 +649,12 @@ export const commands: ChatCommands = {
 		on: 'enable',
 		enable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (!room.unoDisabled) {
+			if (!room.settings!.unoDisabled) {
 				return this.errorReply("UNO is already enabled in this room.");
 			}
-			delete room.unoDisabled;
-			if (room.chatRoomData) {
-				delete room.chatRoomData.unoDisabled;
+			delete room.settings!.unoDisabled;
+			if (room.settings) {
+				delete room.settings.unoDisabled;
 				Rooms.global.writeChatRoomData();
 			}
 			return this.sendReply("UNO has been enabled for this room.");
@@ -669,7 +669,7 @@ export const commands: ChatCommands = {
 		makeprivate: 'create',
 		create(target, room, user, connection, cmd) {
 			if (!this.can('minigame', null, room)) return;
-			if (room.unoDisabled) return this.errorReply("UNO is currently disabled for this room.");
+			if (room.settings!.unoDisabled) return this.errorReply("UNO is currently disabled for this room.");
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
 			const suppressMessages = cmd.includes('private') || !(cmd.includes('public') || room.roomid === 'gamecorner');
@@ -914,7 +914,7 @@ export const roomSettings: SettingsHandler = room => ({
 	label: "UNO",
 	permission: 'editroom',
 	options: [
-		[`disabled`, room.unoDisabled || 'uno disable'],
-		[`enabled`, !room.unoDisabled || 'uno enable'],
+		[`disabled`, room.settings!.unoDisabled || 'uno disable'],
+		[`enabled`, !room.settings!.unoDisabled || 'uno enable'],
 	],
 });
