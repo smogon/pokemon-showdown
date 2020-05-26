@@ -2416,12 +2416,12 @@ export const commands: ChatCommands = {
 	],
 
 	showimage(target, room, user) {
-		return this.errorReply(`/showimage has been deprecated - use /link instead.`);
+		return this.errorReply(`/showimage has been deprecated - use /view instead.`);
 	},
 
 	requestapproval(target, room, user) {
 		if (!this.canTalk()) return false;
-		if (this.can('mute', null, room)) return this.errorReply(`Use !link instead.`);
+		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestapproval`);
 		if (!/^https?:\/\//.test(target)) target = `http://${target}`;
@@ -2476,7 +2476,7 @@ export const commands: ChatCommands = {
 	},
 	denylinkhelp: [`/denylink [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
 
-	link(target, room, user) {
+	show(target, room, user) {
 		if (!this.can('mute', null, room) && !(user.id in room.chatRoomData!.whitelist)) return false;
 		if (!toID(target).trim()) return this.parse(`/help link`);
 		const [link, comment] = target.split(',');
@@ -2500,7 +2500,7 @@ export const commands: ChatCommands = {
 			});
 		}
 	},
-	linkhelp: [`/link [url] - shows an image or video url in chat. Requires: whitelist % @ # & ~`],
+	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # & ~`],
 
 	whitelist(target, room, user) {
 		if (!this.can('ban', null, room)) return false;
@@ -2508,7 +2508,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse(`/help whitelist`);
 		if (!Users.get(target)) return this.errorReply(`User not found.`);
 		if (target in room.auth! && room.auth![target] !== '+' || Users.get(target)!.isStaff) {
-			return this.errorReply(`You don't need to whitelist staff - they can just use !link.`);
+			return this.errorReply(`You don't need to whitelist staff - they can just use !show.`);
 		}
 		if (!room.whitelistUser(target)) return this.errorReply(`${target} is already whitelisted.`);
 		if (Users.get(target)) Users.get(target)?.popup(`You have been whitelisted for linking in ${room}.`);
