@@ -57,7 +57,7 @@ class LoginServerInstance {
 		this.disabled = false;
 	}
 
-	instantRequest(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
+	async instantRequest(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
 		if (this.openRequests > 5) {
 			return Promise.resolve(
 				[null, 0, new RangeError("Request overflow")]
@@ -76,24 +76,19 @@ class LoginServerInstance {
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
 			'&nocache=' + new Date().getTime() + dataString).href;
 
-		return new Promise((resolve) => {
-			try {
-				void Net(actionUrl).getFullResponse().then(res => {
-					void res!.stream.read().then(buffer => {
-						const json = parseJSON(buffer as string);
-						if (json.error) {
-							resolve([null, 0, new Error(json.error!)]);
-							this.openRequests--;
-						}
-						resolve([json.json, res!.statusCode as number, null]);
-						this.openRequests--;
-					});
-				});
-			} catch (error) {
-				resolve([null, 0, error]);
+		try {
+			const request = await Net(actionUrl).getFullResponse();
+			const buffer = await request!.stream.read();
+			const json = parseJSON(buffer as string);
+			if (json.error) {
 				this.openRequests--;
+				return [null, 0, new Error(json.error!)];
 			}
-		});
+			this.openRequests--;
+			return [json.json, request!.statusCode as number, null];
+		} catch (error) {
+			return [null, 0, error];
+		}
 	}
 
 	request(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
