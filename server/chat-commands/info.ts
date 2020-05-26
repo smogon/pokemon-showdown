@@ -1890,7 +1890,6 @@ export const commands: ChatCommands = {
 				`- /roomdeauth <em>username</em>: remove all room auth from a user`,
 				`- /declare <em>message</em>: make a large blue declaration to the room`,
 				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
-				`- !showimage <em>[url], [width], [height]</em>: show an image to the room`,
 				`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
 			],
 			[
@@ -2415,54 +2414,7 @@ export const commands: ChatCommands = {
 	shufflehelp: [
 		`/shuffle [option], [option], [option], ... - Randomly shuffles a list of 2 or more elements.`,
 	],
-
-	showimage(target, room, user) {
-		if (!target) return this.parse('/help showimage');
-		if (!this.can('declare', null, room)) return false;
-		if (!this.runBroadcast()) return;
-		if (this.room.isPersonal && !this.user.can('announce')) {
-			return this.errorReply(`Images are not allowed in personal rooms.`);
-		}
-
-		const targets = target.split(',');
-
-		if (targets.length !== 1 && targets.length !== 3) {
-			return this.parse('/help showimage');
-		}
-
-		let image: string | null = targets[0].trim();
-		if (!image) return this.errorReply(`No image URL was provided!`);
-		image = this.canEmbedURI(image);
-
-		if (!image) return false;
-
-		if (targets.length === 3) {
-			let width = targets[1].trim();
-			if (!width) return this.errorReply(`No width for the image was provided!`);
-			if (!isNaN(parseInt(width))) width += `px`;
-
-			let height = targets[2].trim();
-			if (!height) return this.errorReply(`No height for the image was provided!`);
-			if (!isNaN(parseInt(height))) height += `px`;
-
-			const unitRegex = /^\d+(?:p[xtc]|%|[ecm]m|ex|in)$/;
-			if (!unitRegex.test(width)) {
-				return this.errorReply(`"${width}" is not a valid width value!`);
-			}
-			if (!unitRegex.test(height)) {
-				return this.errorReply(`"${height}" is not a valid height value!`);
-			}
-
-			return this.sendReply(Chat.html`|raw|<img src="${image}" style="width: ${width}; height: ${height}" />`);
-		}
-
-		void Chat.fitImage(image).then(([width, height]) => {
-			this.sendReply(Chat.html`|raw|<img src="${image}" style="width: ${width}px; height: ${height}px" />`);
-			room.update();
-		});
-	},
-	showimagehelp: [`/showimage [url], [width], [height] - Show an image. Any CSS units may be used for the width or height (default: px). If width and height aren't provided, automatically scale the image to fit in chat. Requires: # & ~`],
-
+														 
 	requestapproval(target, room, user) {
 		if (!this.canTalk()) return false;
 		if (this.can('mute', null, room)) return this.errorReply(`Use !link instead.`);
