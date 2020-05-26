@@ -465,7 +465,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	scyther: {
-		randomBattleMoves: ["aerialace", "batonpass", "hiddenpowerrock", "quickattack", "silverwind", "swordsdance"],
+		randomBattleMoves: ["aerialace", "batonpass", "hiddenpowerground", "hiddenpowerrock", "quickattack", "silverwind", "swordsdance"],
 		tier: "UU",
 	},
 	scizor: {
@@ -605,7 +605,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	meganium: {
-		randomBattleMoves: ["counter", "hiddenpowergrass", "leechseed", "lightscreen", "reflect", "synthesis", "toxic"],
+		randomBattleMoves: ["counter", "hiddenpowergrass", "leechseed", "lightscreen", "synthesis", "toxic"],
 		tier: "UU",
 	},
 	cyndaquil: {
@@ -835,7 +835,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	skarmory: {
-		randomBattleMoves: ["drillpeck", "protect", "rest", "sleeptalk", "spikes", "toxic", "whirlwind"],
+		randomBattleMoves: ["drillpeck", "protect", "rest", "roar", "sleeptalk", "spikes", "toxic"],
 		tier: "OU",
 	},
 	houndour: {
@@ -915,7 +915,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	blaziken: {
-		randomBattleMoves: ["endure", "fireblast", "hiddenpowerice", "rockslide", "skyuppercut", "swordsdance", "thunderpunch"],
+		randomBattleMoves: ["endure", "fireblast", "hiddenpowerice", "reversal", "rockslide", "skyuppercut", "swordsdance", "thunderpunch"],
 		tier: "UUBL",
 	},
 	mudkip: {
@@ -1130,7 +1130,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	sharpedo: {
-		randomBattleMoves: ["crunch", "earthquake", "endure", "frustration", "hiddenpowerflying", "hydropump", "icebeam"],
+		randomBattleMoves: ["crunch", "earthquake", "endure", "hiddenpowerflying", "hydropump", "icebeam", "return"],
 		tier: "UU",
 	},
 	wailmer: {
@@ -1272,7 +1272,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	dusclops: {
-		randomBattleMoves: ["focuspunch", "icebeam", "painsplit", "rest", "shadowball", "sleeptalk", "willowisp"],
+		randomBattleMoves: ["focuspunch", "icebeam", "painsplit", "rest", "shadowball", "sleeptalk", "substitute", "willowisp"],
 		tier: "UUBL",
 	},
 	tropius: {
@@ -1372,7 +1372,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	rayquaza: {
-		randomBattleMoves: ["dragondance", "earthquake", "extremespeed", "hiddenpowerghost", "overheat"],
+		randomBattleMoves: ["dragondance", "earthquake", "extremespeed", "hiddenpowerghost", "overheat", "rockslide"],
 		tier: "Uber",
 	},
 	jirachi: {
@@ -1384,7 +1384,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	deoxysattack: {
-		randomBattleMoves: ["extremespeed", "firepunch", "shadowball", "superpower"],
+		randomBattleMoves: ["extremespeed", "firepunch", "psychoboost", "shadowball", "superpower"],
 		tier: "Uber",
 	},
 	deoxysdefense: {

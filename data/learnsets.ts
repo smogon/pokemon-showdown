@@ -10651,7 +10651,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			lightscreen: ["8V", "7M", "7L13", "6M", "5M", "4M"],
 			lockon: ["7L41", "7V", "6L41", "5L30", "4L27", "3L32"],
 			magiccoat: ["7T", "6T", "5T", "4T"],
-			magnetbomb: ["7L11", "6L17", "5L33", "4L30"],
+			magnetbomb: ["7L11", "6L17", "5L18", "4L30"],
 			magnetrise: ["7T", "7L43", "6T", "6L43", "5T", "5L49", "4T", "4L46"],
 			metalsound: ["7L25", "6L25", "5L1", "5D", "4L1", "3L1"],
 			mimic: ["7V", "3T"],
@@ -17842,7 +17842,6 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 		eventData: [
 			{generation: 8, level: 10, perfectIVs: 6, moves: ["growl", "tailwhip", "sandattack", "quickattack"], pokeball: "pokeball"},
 		],
-		eventOnly: true,
 	},
 	vaporeon: {
 		learnset: {

@@ -24,12 +24,15 @@ export class RandomTeams {
 	format: Format;
 	prng: PRNG;
 
+	randomCAP1v1Sets: AnyObject;
+
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		// this.randomFactorySets = randomFactorySets;
 		// this.randomBSSFactorySets = randomBSSFactorySets;
+		this.randomCAP1v1Sets = require('./cap-1v1-sets.json');
 
 		this.factoryTier = '';
 		this.format = format;
@@ -263,7 +266,7 @@ export class RandomTeams {
 
 		const pool: number[] = [];
 		for (const id in this.dex.data.FormatsData) {
-			if (!this.dex.data.Pokedex[id] || this.dex.data.FormatsData[id].isNonstandard && this.dex.data.FormatsData[id].isNonstandard === 'Past') continue;
+			if (!this.dex.data.Pokedex[id] || this.dex.data.FormatsData[id].isNonstandard && this.dex.data.FormatsData[id].isNonstandard !== 'Unobtainable') continue;
 			const num = this.dex.data.Pokedex[id].num;
 			if (num <= 0 || pool.includes(num)) continue;
 			if (num > last) break;
@@ -280,7 +283,7 @@ export class RandomTeams {
 		for (const id in this.dex.data.Pokedex) {
 			if (!(this.dex.data.Pokedex[id].num in hasDexNumber)) continue;
 			const species = this.dex.getSpecies(id);
-			if (species.gen <= this.gen && species.isNonstandard !== 'Past' && species.isNonstandard !== 'LGPE') {
+			if (species.gen <= this.gen && (!species.isNonstandard || species.isNonstandard === 'Unobtainable')) {
 				formes[hasDexNumber[species.num]].push(species.name);
 			}
 		}
@@ -950,7 +953,7 @@ export class RandomTeams {
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Ice'] && (!counter['Ice'] || (hasAbility['Snow Warning'] && movePool.includes('blizzard') && !hasMove['hypervoice']))) ||
 					((hasType['Normal'] && hasAbility['Guts'] && movePool.includes('facade')) || (hasAbility['Pixilate'] && !counter['Normal'])) ||
-					(hasType['Poison'] && !counter['Poison'] && (hasAbility['Sheer Force'] || counter.setupType)) ||
+					(hasType['Poison'] && !counter['Poison'] && (movePool.includes('gunkshot') || hasAbility['Sheer Force'] || counter.setupType)) ||
 					(hasType['Psychic'] && !counter['Psychic'] && !hasType['Ghost'] && !hasType['Steel'] && (hasAbility['Psychic Surge'] || counter.setupType || movePool.includes('psychicfangs'))) ||
 					(hasType['Rock'] && !counter['Rock'] && species.baseStats.atk >= 80) ||
 					((hasType['Steel'] || hasAbility['Steelworker']) && (!counter['Steel'] || (hasMove['bulletpunch'] && counter.stab < 2)) && species.baseStats.atk >= 95) ||
@@ -962,7 +965,7 @@ export class RandomTeams {
 					(movePool.includes('quiverdance') || movePool.includes('stickyweb') && !counter.setupType && !teamDetails.stickyWeb)
 				)) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && !move.sideCondition && !move.stallingMove && !move.damage && (move.category !== 'Status' || !move.flags.heal)) {
+					if (!isSetup && !move.weather && !move.sideCondition && !move.stallingMove && !move.damage && (move.category !== 'Status' || !move.flags.heal || isDoubles)) {
 						if (move.category === 'Status' || move.selfSwitch || !hasType[move.type] || move.basePower && move.basePower < 50 && !move.multihit) {
 							rejected = true;
 						}
@@ -1038,6 +1041,8 @@ export class RandomTeams {
 					rejectAbility = hasAbility['Infiltrator'];
 				} else if (ability === 'Defiant' || ability === 'Moxie') {
 					rejectAbility = (!counter['Physical'] || hasMove['dragontail']);
+				} else if (ability === 'Early Bird') {
+					rejectAbility = (hasType['Grass'] && isDoubles);
 				} else if (ability === 'Flash Fire') {
 					rejectAbility = (this.dex.getEffectiveness('Fire', species) < -1);
 				} else if (ability === 'Gluttony') {
@@ -1059,7 +1064,7 @@ export class RandomTeams {
 				} else if (ability === 'Mold Breaker') {
 					rejectAbility = (hasAbility['Adaptability'] || hasAbility['Scrappy'] || hasAbility['Unburden'] && counter.setupType);
 				} else if (ability === 'Moody') {
-					rejectAbility = (species.name === 'Octillery');
+					rejectAbility = (species.name === 'Octillery' && !isDoubles);
 				} else if (ability === 'Neutralizing Gas') {
 					rejectAbility = !hasMove['toxicspikes'];
 				} else if (ability === 'No Guard') {
@@ -1151,7 +1156,7 @@ export class RandomTeams {
 		// First, the extra high-priority items
 		} else if (species.name === 'Eternatus' && counter.Status < 2) {
 			item = 'Metronome';
-		} else if (species.name === 'Farfetch\'d') {
+		} else if (species.name === 'Farfetch\u2019d') {
 			item = 'Leek';
 		} else if (species.baseSpecies === 'Pikachu') {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
@@ -1228,7 +1233,7 @@ export class RandomTeams {
 			item = 'Chople Berry';
 		} else if (this.dex.getEffectiveness('Rock', species) >= 2 || (this.dex.getEffectiveness('Rock', species) >= 1 && (hasMove['courtchange'] || hasMove['defog'] || hasMove['rapidspin'])) && !isDoubles) {
 			item = 'Heavy-Duty Boots';
-		} else if ((hasMove['clearsmog'] || hasMove['coil'] || hasMove['curse'] || hasMove['healbell'] || hasMove['protect'] || hasMove['sleeptalk']) && !isDoubles) {
+		} else if ((hasMove['clearsmog'] || hasMove['coil'] || hasMove['curse'] || hasMove['healbell'] || hasMove['protect'] || hasMove['sleeptalk']) && (ability === 'Moody' || !isDoubles)) {
 			item = 'Leftovers';
 
 		// Better than Leftovers
@@ -1292,12 +1297,12 @@ export class RandomTeams {
 			level = levelScale[tier] || (species.nfe ? 90 : 80);
 			if (customScale[species.name]) level = customScale[species.name];
 		} else {
-			// We choose level based on BST. Min level is 66, max level is 99. 680+ BST is 66, 330 or lower is 99. Calculate with those values.
-			// Every 10.3 BST adds a level from 66 up to 99. Results are floored.
+			// We choose level based on BST. Min level is 70, max level is 100. 640+ BST is 70, 330 or lower is 100. Calculate with those values.
+			// Every 10.3 BST adds a level from 70 up to 100. Results are floored.
 			const baseStats = species.baseStats;
 
 			let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
-			// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite
+			// Adjust levels of mons based on abilities (Pure Power, Slow Start, etc.) and also Eviolite and Light Ball
 			// For the stat boosted, treat the Pokemon's base stat as if it were multiplied by the boost. (Actual effective base stats are higher.)
 			const speciesAbility = (baseSpecies === species ? ability : species.abilities[0]);
 			if (speciesAbility === 'Huge Power' || speciesAbility === 'Pure Power') {
@@ -1307,10 +1312,12 @@ export class RandomTeams {
 				bst += 0.5 * (baseStats.def + baseStats.spd);
 			} else if (item === 'Light Ball') {
 				bst += baseStats.atk + baseStats.spa;
-			} else if (speciesAbility === 'Slow Start') {
+			} else if (ability === 'Gorilla Tactics') {
+				bst += 0.5 * (baseStats.atk);
+			} else if (ability === 'Slow Start') {
 				bst -= 0.5 * (baseStats.atk + baseStats.spe);
 			}
-			level = 66 + Math.floor(((680 - this.dex.clampIntRange(bst, 330, 680)) / 10.3));
+			level = 70 + Math.floor(((640 - this.dex.clampIntRange(bst, 330, 640)) / 10.3));
 		}
 
 		// Prepare optimal HP
@@ -1531,6 +1538,32 @@ export class RandomTeams {
 		}
 		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 
+		return pokemon;
+	}
+
+	randomCAP1v1Team() {
+		const pokemon = [];
+		const pokemonPool = Object.keys(this.randomCAP1v1Sets);
+
+		while (pokemonPool.length && pokemon.length < 3) {
+			const species = this.dex.getSpecies(this.sampleNoReplace(pokemonPool));
+			if (!species.exists) throw new Error(`Invalid Pokemon "${species}" in ${this.format}`);
+
+			const setData: AnyObject = this.sample(this.randomCAP1v1Sets[species.name]);
+			const set = {
+				name: species.baseSpecies,
+				species: species.name,
+				gender: species.gender,
+				item: (Array.isArray(setData.item) ? this.sample(setData.item) : setData.item) || '',
+				ability: (Array.isArray(setData.ability) ? this.sample(setData.ability) : setData.ability),
+				shiny: this.randomChance(1, 1024),
+				evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, setData.evs),
+				nature: setData.nature,
+				ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.ivs || {}),
+				moves: setData.moves.map((move: any) => Array.isArray(move) ? this.sample(move) : move),
+			};
+			pokemon.push(set);
+		}
 		return pokemon;
 	}
 }

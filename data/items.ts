@@ -1514,6 +1514,7 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 			basePower: 50,
 		},
 		onAfterBoost(boost, target, source, effect) {
+			if (this.activeMove?.id === 'partingshot') return;
 			let eject = false;
 			let i: BoostName;
 			for (i in boost) {
@@ -3004,14 +3005,14 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		},
 		spritenum: 475,
 		onModifyCritRatio(critRatio, user) {
-			if (["Farfetch'd", "Sirfetch'd"].includes(user.baseSpecies.baseSpecies)) {
+			if (["farfetchd", "sirfetchd"].includes(toID(user.baseSpecies.baseSpecies))) {
 				return critRatio + 2;
 			}
 		},
-		itemUser: ["Farfetch'd", "Sirfetch'd"],
+		itemUser: ["Farfetch\u2019d", "Sirfetch\u2019d"],
 		num: 259,
 		gen: 8,
-		desc: "If held by a Farfetch'd or Sirfetch'd, its critical hit ratio is raised by 2 stages.",
+		desc: "If held by a Farfetch\u2019d or Sirfetch\u2019d, its critical hit ratio is raised by 2 stages.",
 	},
 	leftovers: {
 		name: "Leftovers",
@@ -5687,15 +5688,15 @@ export const BattleItems: {[itemid: string]: ItemData} = {
 		},
 		spritenum: 475,
 		onModifyCritRatio(critRatio, user) {
-			if (user.baseSpecies.name === 'Farfetch\'d') {
+			if (toID(user.baseSpecies.baseSpecies) === 'farfetchd') {
 				return critRatio + 2;
 			}
 		},
-		itemUser: ["Farfetch'd"],
+		itemUser: ["Farfetch\u2019d"],
 		num: 259,
 		gen: 2,
 		isNonstandard: "Past",
-		desc: "If held by a Farfetch'd, its critical hit ratio is raised by 2 stages.",
+		desc: "If held by a Farfetch\u2019d, its critical hit ratio is raised by 2 stages.",
 	},
 	stickybarb: {
 		name: "Sticky Barb",

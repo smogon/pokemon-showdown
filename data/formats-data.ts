@@ -278,7 +278,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	clefable: {
 		randomBattleMoves: ["calmmind", "fireblast", "moonblast", "softboiled", "stealthrock", "thunderwave"],
-		randomDoubleBattleMoves: ["fireblast", "followme", "healpulse", "helpinghand", "moonblast", "protect", "thunderbolt", "thunderwave"],
+		randomDoubleBattleMoves: ["fireblast", "followme", "healpulse", "helpinghand", "moonblast", "protect", "thunderwave"],
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
@@ -394,7 +394,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	persian: {
 		randomBattleMoves: ["doubleedge", "fakeout", "knockoff", "playrough", "uturn"],
-		randomDoubleBattleMoves: ["fakeout", "foulplay", "hypnosis", "icywind", "taunt"],
+		randomDoubleBattleMoves: ["doubleedge", "fakeout", "foulplay", "hypnosis", "icywind", "taunt"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -415,6 +415,8 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	golduck: {
+		randomBattleMoves: ["calmmind", "focusblast", "icebeam", "psyshock", "scald", "substitute"],
+		randomDoubleBattleMoves: ["calmmind", "encore", "icebeam", "muddywater", "protect", "psyshock"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -540,7 +542,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	rapidashgalar: {
 		randomBattleMoves: ["highhorsepower", "morningsun", "playrough", "swordsdance", "zenheadbutt"],
-		randomDoubleBattleMoves: ["highhorsepower", "morningsun", "playrough", "protect", "swordsdance", "zenheadbutt"],
+		randomDoubleBattleMoves: ["highhorsepower", "playrough", "protect", "swordsdance", "zenheadbutt"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -961,7 +963,6 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	eeveegmax: {
-		unreleasedHidden: true,
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
 	},
@@ -2622,7 +2623,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	heatran: {
 		randomBattleMoves: ["earthpower", "flashcannon", "lavaplume", "protect", "stealthrock", "taunt", "toxic"],
-		randomDoubleBattleMoves: ["earthpower", "eruption", "fireblast", "flashcannon", "protect", "substitute"],
+		randomDoubleBattleMoves: ["earthpower", "eruption", "fireblast", "flashcannon", "protect"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -3025,7 +3026,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	scrafty: {
 		randomBattleMoves: ["closecombat", "dragondance", "icepunch", "knockoff", "poisonjab"],
-		randomDoubleBattleMoves: ["closecombat", "drainpunch", "fakeout", "headsmash", "icepunch", "knockoff"],
+		randomDoubleBattleMoves: ["closecombat", "dragondance", "drainpunch", "fakeout", "icepunch", "knockoff"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
@@ -3667,8 +3668,8 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	slurpuff: {
 		randomBattleMoves: ["bellydrum", "drainpunch", "facade", "playrough"],
-		randomDoubleBattleMoves: ["aromatherapy", "faketears", "flamethrower", "helpinghand", "playrough", "stickyweb"],
-		tier: "RU",
+		randomDoubleBattleMoves: ["faketears", "flamethrower", "helpinghand", "playrough", "stickyweb"],
+		tier: "RUBL",
 		doublesTier: "(DUU)",
 	},
 	inkay: {
@@ -3835,6 +3836,10 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["calmmind", "focusblast", "moonblast", "psyshock", "thunderbolt"],
 		randomDoubleBattleMoves: ["calmmind", "closecombat", "dazzlinggleam", "healpulse", "moonblast", "protect", "psyshock", "thunderbolt"],
 		isNonstandard: "Past",
+		tier: "Illegal",
+	},
+	xerneasneutral: {
+		isNonstandard: "Custom", // can't be used in battle
 		tier: "Illegal",
 	},
 	yveltal: {
@@ -4515,7 +4520,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["airslash", "darkpulse", "hydropump", "icebeam", "scald", "uturn"],
 		randomDoubleBattleMoves: ["airslash", "hydropump", "icebeam", "muddywater", "shadowball", "uturn"],
 		unreleasedHidden: true,
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 	},
 	skwovet: {
@@ -4597,7 +4602,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	drednaw: {
 		randomBattleMoves: ["liquidation", "stealthrock", "stoneedge", "superpower", "swordsdance"],
-		randomDoubleBattleMoves: ["highhorsepower", "liquidation", "protect", "rockslide", "superpower"],
+		randomDoubleBattleMoves: ["highhorsepower", "liquidation", "protect", "rockslide", "superpower", "swordsdance"],
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -4762,7 +4767,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	hatterenegmax: {
 		randomBattleMoves: ["calmmind", "darkpulse", "dazzlinggleam", "mysticalfire", "psychic", "trickroom"],
-		randomDoubleBattleMoves: ["dazzlinggleam", "mysticalfire", "protect", "psychic", "psyshock", "shadowball", "trickroom"],
+		randomDoubleBattleMoves: ["dazzlinggleam", "mysticalfire", "protect", "psychic", "psyshock", "trickroom"],
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
 	},
@@ -4787,12 +4792,12 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	alcremie: {
-		randomDoubleBattleMoves: ["aromatherapy", "dazzlinggleam", "decorate", "mysticalfire", "protect", "recover"],
 		tier: "NU",
 		doublesTier: "DUU",
 	},
 	alcremiegmax: {
 		randomBattleMoves: ["calmmind", "dazzlinggleam", "mysticalfire", "psychic", "recover"],
+		randomDoubleBattleMoves: ["dazzlinggleam", "decorate", "mysticalfire", "protect", "recover"],
 		tier: "(Uber)",
 		doublesTier: "(DUber)",
 	},
@@ -4925,7 +4930,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	zamazenta: {
 		randomBattleMoves: ["closecombat", "crunch", "psychicfangs", "wildcharge"],
-		randomDoubleBattleMoves: ["closecombat", "crunch", "playrough", "protect", "psychicfangs", "substitute"],
+		randomDoubleBattleMoves: ["closecombat", "crunch", "playrough", "protect", "psychicfangs"],
 		tier: "Uber",
 		doublesTier: "DUber",
 	},

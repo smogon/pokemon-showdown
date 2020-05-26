@@ -118,16 +118,4 @@ describe("Dynamax", function () {
 		battle.makeChoices('move 1', 'auto');
 		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
 	});
-
-	it('Max Guard should be disallowed by Taunt', function () {
-		battle = common.createBattle([[
-			{species: "Feebas", moves: ['splash', 'tackle']},
-		], [
-			{species: "Wynaut", moves: ['taunt', 'splash']},
-		]]);
-		battle.makeChoices('move tackle dynamax', 'auto');
-		// battle.makeChoices('move splash', 'auto');
-		// console.log(battle.getDebugLog());
-		assert.cantMove(() => battle.choose('p1', 'move splash'), 'Feebas', 'Max Guard', false);
-	});
 });

@@ -22,6 +22,8 @@ const RETRY_AFTER_LOGIN = null;
 import {FS} from '../lib/fs';
 import {WriteStream} from '../lib/streams';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
+import {QueuedHunt} from './chat-plugins/scavengers';
+import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
@@ -109,12 +111,18 @@ export abstract class BasicRoom {
 	hangmanDisabled: boolean;
 	giveaway: QuestionGiveaway | LotteryGiveaway | null;
 	gtsga: GTSGiveaway | null;
+	scavgame: null | ScavengerGameTemplate;
+	scavSettings: null | AnyObject;
+	scavQueue: null | QueuedHunt[];
+	scavLeaderboard: null | AnyObject;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
+	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
 	privacySetter: Set<ID> | null;
 	subRooms: Map<string, ChatRoom> | null;
 	gameNumber: number;
 	highTraffic: boolean;
+
 	constructor(roomid: RoomID, title?: string) {
 		this.users = Object.create(null);
 		this.type = 'chat';
@@ -169,8 +177,13 @@ export abstract class BasicRoom {
 		this.hangmanDisabled = false;
 		this.giveaway = null;
 		this.gtsga = null;
+		this.scavgame = null;
+		this.scavSettings = null;
+		this.scavQueue = null;
+		this.scavLeaderboard = null;
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
+		this.dataCommandTierDisplay = 'tiers';
 		this.privacySetter = null;
 		this.subRooms = null;
 		this.gameNumber = 0;
@@ -1110,6 +1123,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.introMessage = '';
 		this.staffMessage = '';
 		this.banwordRegex = null;
+		this.rulesLink = null;
 
 		this.chatRoomData = (options.isPersonal ? null : options);
 		this.minorActivity = null;
@@ -1145,7 +1159,6 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
-		this.rulesLink = null;
 		this.reportJoinsInterval = null;
 		this.tour = null;
 		this.game = null;
@@ -1162,6 +1175,12 @@ export class BasicChatRoom extends BasicRoom {
 	add(message: string) {
 		this.log.add(message);
 		return this;
+	}
+	uhtmlchange(name: string, message: string) {
+		this.log.uhtmlchange(name, message);
+	}
+	attributedUhtmlchange(user: User, name: string, message: string) {
+		this.log.attributedUhtmlchange(user, name, message);
 	}
 	roomlog(message: string) {
 		this.log.roomlog(message);
