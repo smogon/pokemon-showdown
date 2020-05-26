@@ -200,6 +200,7 @@ export const commands: ChatCommands = {
 			const id = YouTube.channelSearch(target);
 			if (!id) return this.errorReply(`Channel with ID or name ${target} not found.`);
 			delete channelData[id];
+			FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
 			this.privateModAction(`(${user.name} deleted channel with ID or name ${target}.)`);
 			return this.modlog(`REMOVECHANNEL`, null, id);
 		},
