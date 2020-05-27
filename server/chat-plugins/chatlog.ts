@@ -212,7 +212,7 @@ export const LogViewer = new class {
 		return buf;
 	}
 
-	async searchMonth(roomid: RoomID, month: string, search: string, limit?: number | null, year = false) {
+	async searchMonth(roomid: RoomID, month: string, search: string, limit: number, year = false) {
 		const {results, total} = await LogSearcher.fsSearchMonth(roomid, month, search, limit);
 		if (!total) {
 			return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
@@ -222,9 +222,9 @@ export const LogViewer = new class {
 			`<br><div class="pad"><strong>Searching for "${search}" in ${roomid} (${month}):</strong><hr>`
 		);
 		buf += this.renderDayResults(results, roomid);
-		if (limit && total > limit) {
+		if (total > limit) {
 			// cap is met & is not being used in a year read
-			buf += `<br><strong>Max results reached, capped at ${limit && total > limit ? limit : MAX_RESULTS}</strong>`;
+			buf += `<br><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
 			buf += `<br><div style="text-align:center">`;
 			if (total < MAX_RESULTS) {
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
@@ -235,7 +235,7 @@ export const LogViewer = new class {
 		return buf;
 	}
 
-	async searchYear(roomid: RoomID, year: string | null, search: string, limit?: number | null) {
+	async searchYear(roomid: RoomID, year: string | null, search: string, limit: number) {
 		const {results, total} = await LogSearcher.fsSearchYear(roomid, year, search, limit);
 		if (!total) {
 			return LogViewer.error(`No matches found for ${search} on ${roomid}.`);
@@ -247,9 +247,9 @@ export const LogViewer = new class {
 			buf += `<div class="pad"><strong><br>Searching all logs: </strong><hr>`;
 		}
 		buf += this.renderDayResults(results, roomid);
-		if (limit && total > limit) {
+		if (total > limit) {
 			// cap is met
-			buf += `<br><strong>Max results reached, capped at ${limit && total > limit ? limit : MAX_RESULTS}</strong>`;
+			buf += `<br><strong>Max results reached, capped at ${total > limit ? limit : MAX_RESULTS}</strong>`;
 			buf += `<br><div style="text-align:center">`;
 			if (total < MAX_RESULTS) {
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
@@ -421,11 +421,11 @@ export const LogViewer = new class {
 type SearchMatch = readonly [string, string, string, string, string];
 
 const LogSearcher = new class {
-	fsSearch(roomid: RoomID, search: string, date: string, limit?: number | null) {
+	fsSearch(roomid: RoomID, search: string, date: string, limit: number | null) {
 		const isAll = (date === 'all');
 		const isYear = (date.length === 4);
 		const isMonth = (date.length === 7);
-
+		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		if (isAll) {
 			return LogViewer.searchYear(roomid, null, search, limit);
 		} else if (isYear) {
@@ -461,13 +461,13 @@ const LogSearcher = new class {
 					lines[i + 1],
 					lines[i + 2],
 				]);
-				if (limit && matches.length > limit) break;
+				if (matches.length > limit) break;
 			}
 		}
 		return matches;
 	}
 
-	async fsSearchMonth(roomid: RoomID, month: string, search: string, limit?: number | null) {
+	async fsSearchMonth(roomid: RoomID, month: string, search: string, limit: number) {
 		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 		const log = await LogReader.get(roomid);
 		if (!log) return {results: {}, total: 0};
@@ -480,7 +480,7 @@ const LogSearcher = new class {
 			if (!dayResults.length) continue;
 			total += dayResults.length;
 			results[day] = dayResults;
-			if (limit && total > limit) break;
+			if (total > limit) break;
 		}
 		return {results, total};
 	}
@@ -497,12 +497,12 @@ const LogSearcher = new class {
 
 		for (const month of months) {
 			if (year && !month.includes(year)) continue;
-			const monthSearch = await this.fsSearchMonth(roomid, month, search, limit ? limit - total : null);
+			const monthSearch = await this.fsSearchMonth(roomid, month, search, limit);
 			const {results: monthResults, total: monthTotal} = monthSearch;
 			if (!monthTotal) continue;
 			total += monthTotal;
 			Object.assign(results, monthResults);
-			if (limit && total > limit) break;
+			if (total > limit) break;
 		}
 		return {results, total};
 	}
@@ -530,9 +530,10 @@ const LogSearcher = new class {
 		);
 	}
 
-	render(results: string[], roomid: RoomID, search: string, limit?: number | null) {
+	render(results: string[], roomid: RoomID, search: string, limit: number) {
 		const exactMatches = [];
 		let curDate = '';
+		if (limit > MAX_RESULTS) limit = MAX_RESULTS;
 		const searchRegex = new RegExp(search, "i");
 		const sorted = results.sort().map(chunk => {
 			const section = chunk.split('\n').map(line => {
@@ -557,7 +558,7 @@ const LogSearcher = new class {
 				if (matched.includes('chat chatmessage highlighted')) {
 					exactMatches.push(matched);
 				}
-				if (limit && exactMatches.length > limit) return null;
+				if (exactMatches.length > limit) return null;
 				return matched;
 			}).filter(Boolean).join(' ');
 			return section;
