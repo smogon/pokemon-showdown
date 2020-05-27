@@ -666,7 +666,7 @@ export const commands: ChatCommands = {
 		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
 		"The delimiter | can be used to space searching for multiple terms.",
-		"Date formatting is ISO formatting (YYYY-MMMM-DDDD.) E.g 2020-05, 2020, or `all`.",
+		"Date formatting is ISO formatting (YYYY-MM-DD.) E.g 2020-05, 2020, or `all`.",
 		"Requires: % @ # & ~",
 	],
 };
