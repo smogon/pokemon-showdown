@@ -523,7 +523,7 @@ const LogSearcher = new class {
 			return LogViewer.error(`${error.message}`);
 		}
 		return this.render(
-			output.stdout.split('--').reverse().slice(0, MAX_RESULTS),
+			output.stdout.split('--').reverse(),
 			roomid,
 			search,
 			limit
