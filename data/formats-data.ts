@@ -2779,7 +2779,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
-	regigigas: { // this doesn't have a doubles rands set because it is not confirmed to return
+	regigigas: {
 		randomBattleMoves: ["bodyslam", "protect", "substitute", "toxic"],
 		randomBattleLevel: 84,
 		isNonstandard: "Past",
