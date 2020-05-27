@@ -13,6 +13,7 @@ import * as Dashycode from '../../lib/dashycode';
 
 const execFile = util.promisify(child_process.execFile);
 const DAY = 24 * 60 * 60 * 1000;
+const MAX_RESULTS = 3000;
 
 class LogReaderRoom {
 	roomid: RoomID;
@@ -503,7 +504,12 @@ const LogSearcher = new class {
 			if (error.message.includes('Command failed')) return LogViewer.error(`No results found.`);
 			return LogViewer.error(`${error.message}`);
 		}
-		return this.render(output.stdout.split('--').reverse(), roomid, search, limit);
+		return this.render(
+			output.stdout.split('--').reverse().slice(0, MAX_RESULTS),
+			roomid,
+			search,
+			limit
+		);
 	}
 
 	render(results: string[], roomid: RoomID, search: string, limit?: number | null) {
