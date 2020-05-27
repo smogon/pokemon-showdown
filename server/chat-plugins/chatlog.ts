@@ -111,11 +111,19 @@ const LogReader = new class {
 	}
 
 	async read(roomid: RoomID, day: string) {
-		const month = day.slice(0, -3);
-		const log = FS(`logs/chat/${roomid}/${month}/${day}.txt`);
-		if (!await log.exists()) return null;
-		const text = await log.read();
-		return text;
+		const roomLog = await LogReader.get(roomid);
+		const stream = await roomLog!.getLog(day);
+		let buf = '';
+		if (!stream) {
+			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
+		} else {
+			let line;
+			while ((line = await stream.readLine()) !== null) {
+				const rendered = LogViewer.renderLine(line);
+				if (rendered) buf += `${line}\n`;
+			}
+		}
+		return buf;
 	}
 
 	getMonth(day: string) {
@@ -183,7 +191,6 @@ export const LogViewer = new class {
 
 	renderDayResults(results: {[day: string]: SearchMatch[]}, roomid: RoomID) {
 		const renderResult = (match: SearchMatch) => {
-			if (!match[2]) return null;
 			return (
 				this.renderLine(match[0]) +
 				this.renderLine(match[1]) +
@@ -475,7 +482,8 @@ const LogSearcher = new class {
 	async fsSearchYear(roomid: RoomID, year: string | null, search: string, limit?: number | null) {
 		const log = await LogReader.get(roomid);
 		if (!log) return {results: {}, total: 0};
-		const months = await log.listMonths();
+		let months = await log.listMonths();
+		months = months.reverse();
 		const results: {[k: string]: SearchMatch[]} = {};
 		let total = 0;
 
@@ -498,6 +506,7 @@ const LogSearcher = new class {
 				'-e', `[^a-zA-Z0-9]${search.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`,
 				`${__dirname}/../../logs/chat/${roomid}`,
 				'-C', '3',
+				'-m', `${MAX_RESULTS}`,
 			];
 			output = await execFile('rg', options, {maxBuffer: Infinity, cwd: path.normalize(`${__dirname}/../`)});
 		} catch (error) {
