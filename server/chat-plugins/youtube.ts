@@ -11,7 +11,7 @@ const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const CHANNEL = `${ROOT}channels`;
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 
-let channelData: AnyObject;
+export let channelData: AnyObject;
 
 try {
 	channelData = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
@@ -76,6 +76,7 @@ export class YoutubeInterface {
 	}
 	randChannel() {
 		const keys = Object.keys(channelData);
+		if (!keys.length) return null;
 		const id = Dex.shuffle(keys)[0].trim();
 		return this.generateChannelDisplay(id);
 	}
@@ -165,15 +166,18 @@ const YouTube = new YoutubeInterface();
 export const commands: ChatCommands = {
 	randchannel(target, room, user) {
 		if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+		if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 		this.runBroadcast();
 		if (this.broadcasting) {
 			if (!this.can('broadcast', null, room)) return false;
-			return YouTube.randChannel().then(res => {
+			return YouTube.randChannel()!.then(res => {
 				this.addBox(res);
 				room.update();
 			});
 		} else {
-			return YouTube.randChannel().then(res => this.sendReplyBox(res));
+			return YouTube.randChannel()!.then(res => {
+				this.sendReplyBox(res);
+			});
 		}
 	},
 	randchannelhelp: [`/randchannel - View data of a random channel from the YouTube database.`],
@@ -266,8 +270,9 @@ export const commands: ChatCommands = {
 			if (interval < 10) return this.errorReply(`${interval} is too low - set it above 10 minutes.`);
 			interval = interval * 60 * 1000;
 			if (YouTube.interval) clearInterval(YouTube.interval);
+			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 			YouTube.interval = setInterval(
-				() => void YouTube.randChannel().then(data => {
+				() => void YouTube.randChannel()!.then(data => {
 					this.addBox(data);
 					room.update();
 				}),
