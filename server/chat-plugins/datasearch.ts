@@ -40,6 +40,7 @@ interface MoveOrGroup {
 	zboost: {[k: string]: boolean};
 	status: {[k: string]: boolean};
 	volatileStatus: {[k: string]: boolean};
+	targets: {[k: string]: boolean};
 	recoil: boolean;
 	skip: boolean;
 }
@@ -275,11 +276,13 @@ export const commands: ChatCommands = {
 	},
 	movesearchhelp: [
 		`/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.`,
-		`Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, priority, and accuracy.`,
+		`Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, Pok\u00e9mon targeted, and numeric range for base power, pp, priority, and accuracy.`,
 		`Types can be followed by ' type' for clarity, e.g., 'dragon type'.`,
 		`Stat boosts must be preceded with 'boosts ', and stat-lowering moves with 'lowers ', e.g., 'boosts attack' searches for moves that boost the Attack stat of either Pok\u00e9mon.`,
 		`Z-stat boosts must be preceded with 'zboosts ', e.g., 'zboosts accuracy' searches for all Status moves with Z-Effects that boost the user's accuracy.`,
 		`Moves that have a Z-Effect of fully restoring the user's health can be searched for with 'zrecovery'.`,
+		`Move targets must be preceded with 'targets '; for example, 'targets user' searches for moves that target the user.`,
+		`Valid move targets are: one ally, user or ally, one adjacent opponent, all Pokemon, all adjacent Pokemon, all adjacent opponents, user and allies, user's side, user's team, any Pokemon, opponent's side, one adjacent Pokemon, random adjacent Pokemon, scripted, and user.`,
 		`Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.`,
 		`Parameters can be excluded through the use of '!', e.g., !water type' excludes all Water-type moves.`,
 		`'asc' or 'desc' following a move property will arrange the names in ascending or descending order of that property respectively, e.g., basepower asc will arrange moves in ascending order of their basepowers.`,
@@ -290,7 +293,7 @@ export const commands: ChatCommands = {
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
 		`If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.`,
 		`You can search for info in a specific generation by appending the generation to ms, e.g. '/ms1 normal' searches for all moves that were normal type in Generation I.`,
-		`/ms will search the Galar Movedex; You can search the National Movedex by using '/nms' or by adding 'natdex' as a parameter.`,
+		`/ms will search the Galar Movedex; you can search the National Movedex by using '/nms' or by adding 'natdex' as a parameter.`,
 		`The order of the parameters does not matter.`,
 	],
 
@@ -1026,6 +1029,23 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	const allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
+	const allTargets: {[k: string]: string} = {
+		'oneally': 'adjacentAlly',
+		'userorally': 'adjacentAllyOrSelf',
+		'oneadjacentopponent': 'adjacentFoe',
+		'all': 'all',
+		'alladjacent': 'allAdjacent',
+		'alladjacentopponents': 'allAdjacentFoes',
+		'userandallies': 'allies',
+		'usersside': 'allySide',
+		'usersteam': 'allyTeam',
+		'any': 'any',
+		'opponentsside': 'foeSide',
+		'oneadjacent': 'normal',
+		'randomadjacent': 'randomNormal',
+		'scripted': 'scripted',
+		'user': 'self',
+	};
 	const allTypes: {[k: string]: string} = Object.create(null);
 	for (const i in Dex.data.TypeChart) {
 		allTypes[toID(i)] = i;
@@ -1039,7 +1059,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	for (const arg of target.split(',')) {
 		const orGroup: MoveOrGroup = {
 			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {},
-			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, recoil: false, skip: false,
+			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, recoil: false, skip: false,
 		};
 		const parameters = arg.split("|");
 		if (parameters.length > 3) return {error: "No more than 3 alternatives for each parameter may be used."};
@@ -1087,6 +1107,26 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				}
 				orGroup.contestTypes[target] = !isNotSearch;
 				continue;
+			}
+
+			if (target.substr(0, 'targets '.length) === 'targets ') {
+				target = toID(target.substr('targets '.length));
+				if (target === 'allpokemon' || target === 'anypokemon' || target.includes('adjacent')) {
+					target = target.replace('pokemon', '');
+				}
+				if (Object.keys(allTargets).includes(target)) {
+					const moveTarget = allTargets[target];
+					if (
+						(orGroup.targets[moveTarget] && isNotSearch) ||
+						(orGroup.targets[moveTarget] === false && !isNotSearch)
+					) {
+						return {error: 'A search cannot both exclude and include a move target.'};
+					}
+					orGroup.targets[moveTarget] = !isNotSearch;
+					continue;
+				} else {
+					return {error: `'${target}' isn't a valid move target.`};
+				}
 			}
 
 			if (target === 'bypassessubstitute') target = 'authentic';
@@ -1449,6 +1489,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					Object.values(alts.contestTypes).includes(false) &&
 					alts.contestTypes[dex[move].contestType || 'Cool'] !== false
 				) continue;
+			}
+
+			if (Object.keys(alts.targets).length) {
+				if (alts.targets[dex[move].target]) continue;
+				if (Object.values(alts.targets).includes(false) && alts.targets[dex[move].target] !== false) continue;
 			}
 
 			for (const flag in alts.flags) {
