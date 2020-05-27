@@ -646,8 +646,8 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		let limitString;
-		if (/^[0-9]+$/.test(limit)) {
-			limitString = `--limit-${limit.trim()}`;
+		if (/^[0-9]+$/.test(limit.trim())) {
+			limitString = `--limit-${limit}`;
 		} else if (toID(limit) === 'all') {
 			limitString = `--limit-all`;
 		} else if (!limit) {
@@ -666,6 +666,8 @@ export const commands: ChatCommands = {
 		"/searchlogs [search], [room], [cap], [date] - searches logs in the current room for [search].",
 		"A comma can be used to search for multiple words in a single line - in the format arg1, arg2, etc.",
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
+		"The delimiter | can be used to space searching for multiple terms.",
+		"Date formatting is can be a year (e.g 2020), `all`, or a month (e.g 2020-05.)",
 		"Requires: % @ # & ~",
 	],
 };
