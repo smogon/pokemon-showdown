@@ -28,7 +28,7 @@ function getAllAliases(room: Room) {
 	return Object.keys(room.events).map(event => room.events[event].aliases).join();
 }
 
-function getEventIDByNameOrAlias(nameOrAlias: string, room: Room): ID {
+function getEventID(nameOrAlias: string, room: Room): ID {
 	let id = toID(nameOrAlias);
 	if (!room.events[id]) {
 		for (const possibleEvent in room.events) {
@@ -72,7 +72,6 @@ export const commands: ChatCommands = {
 				return this.errorReply("You're missing a command parameter - see /help roomevents for this command's syntax.");
 			}
 
-			let eventNameActual = eventName.trim();
 			const dateActual = date.trim();
 			const descString = desc.join(target.includes('|') ? '|' : ',').trim();
 
@@ -80,10 +79,10 @@ export const commands: ChatCommands = {
 			if (dateActual.length > 150) return this.errorReply("Event dates should not exceed 150 characters.");
 			if (descString.length > 1000) return this.errorReply("Event descriptions should not exceed 1000 characters.");
 
-			const eventId = getEventIDByNameOrAlias(eventNameActual, room);
+			const eventId = getEventID(eventName, room);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
-			const eventNameActual = (room.events[eventId] ? room.events[eventId].eventName : eventNameActual);
+			const eventNameActual = (room.events[eventId] ? room.events[eventId].eventName : eventName.trim());
 			this.privateModAction(`(${user.name} ${room.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
 			this.modlog('ROOMEVENT', null, `${room.events[eventId] ? "edited" : "added"} "${eventNameActual}"`);
 			room.events[eventId] = {
@@ -106,7 +105,7 @@ export const commands: ChatCommands = {
 
 			newName = newName.trim();
 			const newID = toID(newName);
-			const oldID = (getAllAliases(room).includes(toID(oldName)) ? getEventIDByNameOrAlias(oldName, room) : toID(oldName));
+			const oldID = (getAllAliases(room).includes(toID(oldName)) ? getEventID(oldName, room) : toID(oldName));
 			if (newID === oldID) return this.errorReply("The new name must be different from the old one.");
 			if (!newID) return this.errorReply("Event names must contain at least one alphanumeric character.");
 			if (newName.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
@@ -136,7 +135,7 @@ export const commands: ChatCommands = {
 			}
 			if (!target) return this.errorReply("Usage: /roomevents start [event name]");
 			target = toID(target);
-			const event = room.events[getEventIDByNameOrAlias(target, room)];
+			const event = room.events[getEventID(target, room)];
 			if (!event) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			if (event.started) {
 				return this.errorReply(`The event ${event.eventName} has already started.`);
@@ -187,7 +186,7 @@ export const commands: ChatCommands = {
 			if (!target) return this.errorReply("Usage: /roomevents view [event name]");
 			target = toID(target);
 
-			const event = room.events[getEventIDByNameOrAlias(target, room)];
+			const event = room.events[getEventID(target, room)];
 			if (!event) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			if (!this.runBroadcast()) return;
 			const buff = `<table border="1" cellspacing="0" cellpadding="3">${formatEvent(event)}</table>`;
@@ -207,7 +206,10 @@ export const commands: ChatCommands = {
 			if (!(alias && eventId)) {
 				return this.errorReply("Usage: /roomevents addalias [alias], [event name]. Aliases must contain at least one alphanumeric character.");
 			}
-			if (!room.events?.[eventId]) return this.errorReply(`There is no event named "${eventId}".`);
+			if (!room.events || Object.keys(room.events).length === 0) {
+				return this.errorReply(`There are currently no scheduled events.`);
+			}
+			if (!room.events[eventId]) return this.errorReply(`There is no event titled "${eventId}".`);
 			if (!room.events[eventId].aliases) room.events[eventId].aliases = []; // backwards compatibility with old event data
 
 			if (getAllAliases(room).includes(alias) || room.events[alias]) {
@@ -228,8 +230,8 @@ export const commands: ChatCommands = {
 			if (!target) return this.errorReply("Usage: /roomevents removealias <alias>");
 			if (!getAllAliases(room).includes(target)) return this.errorReply(`${target} isn't an alias.`);
 
-			const event = room.events[getEventIDByNameOrAlias(target, room)];
-			room.events[getEventIDByNameOrAlias(target, room)].aliases = event.aliases.filter(alias => alias !== target);
+			const event = room.events[getEventID(target, room)];
+			room.events[getEventID(target, room)].aliases = event.aliases.filter(alias => alias !== target);
 
 			this.privateModAction(`(${user.name} removed the alias "${target}")`);
 			this.modlog('ROOMEVENT', null, `removed the alias "${target}"`);
