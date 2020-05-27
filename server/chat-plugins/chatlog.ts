@@ -94,11 +94,11 @@ const LogReader = new class {
 				}
 			} else if (!room) {
 				if (opts === 'all' || opts === 'deleted') deleted.push(roomid);
-			} else if (room.settings?.isOfficial) {
+			} else if (room.isOfficial) {
 				official.push(roomid);
-			} else if (!room.settings.isPrivate) {
+			} else if (!room.isPrivate) {
 				normal.push(roomid);
-			} else if (room.settings.isPrivate === 'hidden') {
+			} else if (room.isPrivate === 'hidden') {
 				hidden.push(roomid);
 			} else {
 				secret.push(roomid);
