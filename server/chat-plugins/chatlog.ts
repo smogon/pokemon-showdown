@@ -503,7 +503,7 @@ const LogSearcher = new class {
 			if (error.message.includes('Command failed')) return LogViewer.error(`No results found.`);
 			return LogViewer.error(`${error.message}`);
 		}
-		return this.render(output.stdout.split('--'), roomid, search, limit);
+		return this.render(output.stdout.split('--').reverse(), roomid, search, limit);
 	}
 
 	render(results: string[], roomid: RoomID, search: string, limit?: number | null) {
