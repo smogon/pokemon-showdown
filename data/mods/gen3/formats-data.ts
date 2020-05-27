@@ -77,7 +77,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	arbok: {
-		randomBattleMoves: ["earthquake", "hiddenpowerfire", "rest", "rockslide", "sleeptalk", "sludgebomb"],
+		randomBattleMoves: ["doubleedge", "earthquake", "hiddenpowerfire", "rest", "rockslide", "sleeptalk", "sludgebomb"],
 		tier: "NU",
 	},
 	pichu: {
@@ -364,7 +364,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	kingler: {
-		randomBattleMoves: ["endure", "flail", "hiddenpowerghost", "hiddenpowerground", "surf", "swordsdance"],
+		randomBattleMoves: ["doubleedge", "endure", "flail", "hiddenpowerghost", "hiddenpowerground", "surf", "swordsdance"],
 		tier: "NU",
 	},
 	voltorb: {
@@ -1025,7 +1025,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	slaking: {
-		randomBattleMoves: ["doubleedge", "earthquake", "fireblast", "focuspunch", "return", "shadowball"],
+		randomBattleMoves: ["doubleedge", "earthquake", "focuspunch", "return", "shadowball"],
 		tier: "UUBL",
 	},
 	nincada: {
@@ -1046,7 +1046,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	exploud: {
-		randomBattleMoves: ["earthquake", "fireblast", "flamethrower", "icebeam", "return", "shadowball", "substitute"],
+		randomBattleMoves: ["earthquake", "flamethrower", "icebeam", "overheat", "return", "shadowball", "substitute"],
 		tier: "UU",
 	},
 	makuhita: {
