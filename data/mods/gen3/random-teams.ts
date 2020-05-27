@@ -143,7 +143,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (!counter.setupType) rejected = true;
 					break;
 				case 'rest':
-					if (movePool.includes('sleeptalk') || !hasMove['sleeptalk'] && movePool.includes('curse')) rejected = true;
+					if (movePool.includes('sleeptalk')) rejected = true;
+					if (!hasMove['sleeptalk'] && (!!counter['recovery'] || movePool.includes('curse'))) rejected = true;
 					break;
 				case 'solarbeam':
 					if (!hasMove['sunnyday']) rejected = true;
@@ -196,9 +197,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				case 'morningsun':
 					if (counter['speedsetup'] >= 1) rejected = true;
 					break;
-				case 'overheat':
-					if (hasMove['substitute']) rejected = true;
-					break;
 				case 'quickattack':
 					if (!!counter['speedsetup'] || hasMove['substitute'] || !hasType['Normal'] && !!counter.Status) rejected = true;
 					break;
@@ -248,6 +246,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				case 'flamethrower':
 					if (hasMove['fireblast'] && !counter.Status) rejected = true;
+					break;
+				case 'overheat':
+					if (hasMove['flamethrower'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'hydropump':
 					if (hasMove['surf'] && !!counter.Status) rejected = true;
@@ -415,7 +416,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		} else if ((hasMove['bellydrum'] && counter.Physical - counter['priority'] > 1) || (hasMove['swordsdance'] && counter.Status < 2)) {
 			item = 'Salac Berry';
 		} else if (hasMove['endure'] || (hasMove['substitute'] && (hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']))) {
-			item = (species.baseStats.spe < 100 && ability !== 'Speed Boost' && !counter['speedsetup'] && !hasMove['focuspunch']) ? 'Salac Berry' : 'Liechi Berry';
+			item = (species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter['speedsetup'] && !hasMove['focuspunch']) ? 'Salac Berry' : 'Liechi Berry';
 		} else if ((hasMove['substitute'] || hasMove['raindance']) && counter.Special >= 3) {
 			item = 'Petaya Berry';
 		} else if (counter.Physical >= 4) {
