@@ -1112,17 +1112,17 @@ const commands = {
 			return this.errorReply(`There is already a game of ${room.game.title} in progress.`);
 		}
 
-		const tars = (target ? target.split(',') : []);
-		if (tars.length < 3) return this.errorReply("Usage: /trivia new [mode], [category], [length]");
+		const targets = (target ? target.split(',') : []);
+		if (targets.length < 3) return this.errorReply("Usage: /trivia new [mode], [category], [length]");
 
-		let mode = toID(tars[0]);
+		let mode = toID(targets[0]);
 		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
 			mode = Dex.shuffle(['first', 'number', 'timer', 'triumvirate'])[0];
 		}
 		if (!MODES[mode]) return this.errorReply(`"${mode}" is an invalid mode.`);
 
-		const category = toID(tars[1]);
+		const category = toID(targets[1]);
 		const isRandomCategory = (category === 'random');
 		const isAll = (category === 'all');
 		let questions;
@@ -1142,7 +1142,7 @@ const commands = {
 		}
 
 		// Randomizes the order of the questions.
-		const length = toID(tars[2]);
+		const length = toID(targets[2]);
 		if (!LENGTHS[length]) return this.errorReply(`"${length}" is an invalid game length.`);
 		if (questions.length < LENGTHS[length].cap / 5) {
 			if (isRandomCategory) return this.errorReply("There are not enough questions in the randomly chosen category to finish a trivia game.");
