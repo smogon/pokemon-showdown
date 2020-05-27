@@ -145,8 +145,8 @@ const Formats = [
 		mod: 'gen8',
 		ruleset: ['Same Type Clause', 'Standard', 'Dynamax Clause'],
 		banlist: [
-			'Eternatus', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings',
-			'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
+			'Eternatus', 'Kyurem-Black', 'Kyurem-White', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zacian', 'Zamazenta', 'Zekrom',
 			'Damp Rock', 'Smooth Rock', 'Moody', 'Shadow Tag', 'Baton Pass',
 		],
 	},
@@ -261,6 +261,11 @@ const Formats = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Dynamax Clause'],
 		banlist: ['DUber', 'Beat Up'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8doublesou') {
+				this.add('html', `<div class="broadcast-blue"><strong>Doubles OU is currently suspecting Melmetal! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3664997/">suspect thread</a>.</strong></div>`);
+			}
+		},
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
@@ -415,11 +420,6 @@ const Formats = [
 			'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base',
 			'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8nationaldex') {
-				this.add('html', `<div class="broadcast-red"><strong>National Dex is currently suspecting Mega Metagross! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3663780/">suspect thread</a>.</strong></div>`);
-			}
-		},
 	},
 	{
 		name: "[Gen 8] National Dex AG",

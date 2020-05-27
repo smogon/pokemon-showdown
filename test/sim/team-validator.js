@@ -512,7 +512,7 @@ describe('Team Validator', function () {
 		assert(illegal);
 	});
 
-	it.skip('should reject Pokemon that cannot obtain moves in a particular forme', function () {
+	it('should reject Pokemon that cannot obtain moves in a particular forme', function () {
 		let team = [
 			{species: 'toxicrity', ability: 'punkrock', moves: ['venomdrench, magneticflux'], evs: {hp: 1}},
 			{species: 'toxicrity-low-key', ability: 'punkrock', moves: ['venoshock, shiftgear'], evs: {hp: 1}},

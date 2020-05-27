@@ -1274,35 +1274,9 @@ export class RandomTeams {
 			item = 'Black Sludge';
 		}
 
-		let level: number;
+		let level: number = species.randomBattleLevel || 80;
 
-		if (!isDoubles) {
-			const levelScale: {[tier: string]: number} = {
-				uber: 72, ou: 80, uu: 82, ru: 84, nu: 86, pu: 88,
-			};
-			const customScale: {[species: string]: number} = {
-				Glalie: 72, 'Darmanitan-Galar-Zen': 80, Wobbuffet: 80, Zygarde: 80,
-				Delibird: 100, Shedinja: 100,
-			};
-			let tier = toID((species.isGigantamax ? this.dex.getSpecies(species.baseSpecies) : species).tier).replace('bl', '');
-			// For future DLC Pokemon
-			if (tier === 'illegal') {
-				tier = toID(this.dex.mod('gen7').getSpecies(species.name).tier);
-				switch (tier) {
-				case 'uubl': case 'uu':
-					tier = 'ou';
-					break;
-				case 'rubl': case 'ru':
-					tier = 'uu';
-					break;
-				case 'nubl': case 'nu': case 'publ': case 'pu':
-					tier = 'ru';
-					break;
-				}
-			}
-			level = levelScale[tier] || (species.nfe ? 90 : 80);
-			if (customScale[species.name]) level = customScale[species.name];
-		} else {
+		if (isDoubles) {
 			// We choose level based on BST. Min level is 70, max level is 100. 640+ BST is 70, 330 or lower is 100. Calculate with those values.
 			// Every 10.3 BST adds a level from 70 up to 100. Results are floored.
 			const baseStats = species.baseStats;

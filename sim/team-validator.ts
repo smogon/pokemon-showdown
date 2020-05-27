@@ -1995,7 +1995,7 @@ export class TeamValidator {
 			species = this.dex.getSpecies(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;
-		} else if (species.changesFrom) {
+		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
 			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
 			return this.dex.getSpecies(species.changesFrom);
 		}
