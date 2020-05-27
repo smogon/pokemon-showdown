@@ -191,6 +191,7 @@ export const LogViewer = new class {
 				this.renderLine(match[4])
 			);
 		};
+
 		let buf = ``;
 		for (const day in results) {
 			const dayResults = results[day];

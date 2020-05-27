@@ -1137,6 +1137,7 @@ interface SpeciesFormatsData {
 	isNonstandard?: Nonstandard | null;
 	maleOnlyHidden?: boolean;
 	randomBattleMoves?: readonly string[];
+	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
 	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 	tier?: string;
@@ -1446,6 +1447,7 @@ namespace RandomTeamsTypes {
 		rapidSpin?: number;
 		defog?: number;
 		illusion?: number;
+		statusCure?: number;
 	}
 	export interface FactoryTeamDetails {
 		megaCount: number;

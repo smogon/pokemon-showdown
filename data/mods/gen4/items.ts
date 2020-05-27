@@ -253,7 +253,7 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 	stick: {
 		inherit: true,
 		onModifyCritRatio(critRatio, user) {
-			if (user.species.name === 'Farfetch\'d') {
+			if (user.species.id === 'farfetchd') {
 				return critRatio + 2;
 			}
 		},

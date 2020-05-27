@@ -159,6 +159,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	curse: {
+		inherit: true,
+		target: "normal",
+	},
 	darkvoid: {
 		inherit: true,
 		isNonstandard: null,
@@ -543,6 +547,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "Raises the user's Attack by 1 stage.",
 		shortDesc: "Raises the user's Attack by 1.",
+		flags: {snatch: 1},
 		boosts: {
 			atk: 1,
 		},
@@ -1026,6 +1031,10 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	sketch: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	skillswap: {
+		inherit: true,
+		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Battle Bond, Comatose, Disguise, Illusion, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Wonder Guard, or Zen Mode.",
 	},
 	skydrop: {
 		inherit: true,

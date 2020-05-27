@@ -71,8 +71,8 @@ export const commands: ChatCommands = {
 		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat as GroupSymbol) > threshold) {
 			return this.errorReply(`/modchat - Access denied for changing a setting higher than ${Config.groupsranking[threshold]}.`);
 		}
-		if ((room as GameRoom).requestModchat) {
-			const error = (room as GameRoom).requestModchat(user);
+		if ('requestModchat' in room) {
+			const error = room.requestModchat(user);
 			if (error) return this.errorReply(error);
 		}
 
@@ -798,7 +798,11 @@ export const commands: ChatCommands = {
 		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: ★ # & ~`,
 	],
 
-	async rename(target, room) {
+	rename() {
+		this.errorReply("Did you mean /renameroom?");
+	},
+
+	async renameroom(target, room) {
 		if (!this.can('declare')) return;
 		if (room.minorActivity || room.game || room.tour) {
 			return this.errorReply("Cannot rename room when there's a tour/game/poll/announcement running.");
@@ -809,6 +813,7 @@ export const commands: ChatCommands = {
 		const oldTitle = room.title;
 		const roomid = toID(target) as RoomID;
 		const roomtitle = target;
+		if (!roomid.length) return this.errorReply("The new room needs a title.");
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
 		// `-` has special meaning in roomids
@@ -833,7 +838,7 @@ export const commands: ChatCommands = {
 		Rooms.global.notifyRooms(toNotify, message);
 		room.add(Chat.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
-	renamehelp: [`/rename [new title] - Renames the current room to [new title]. Requires & ~.`],
+	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires & ~.`],
 
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
@@ -1299,6 +1304,51 @@ export const commands: ChatCommands = {
 	removeroomaliashelp: [
 		`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`,
 	],
+
+	resettierdisplay: 'roomtierdisplay',
+	roomtierdisplay(target, room, user, connection, cmd) {
+		const resetTier = cmd === 'resettierdisplay';
+		if (!target) {
+			if (!this.runBroadcast()) return;
+			return this.sendReplyBox(`This room is currently displaying ${room.dataCommandTierDisplay} as the tier when using /data.`);
+		}
+		if (!this.can('declare', null, room)) return false;
+
+		const displayIDToName: {[k: string]: typeof room.dataCommandTierDisplay} = {
+			tiers: 'tiers',
+			doublestiers: 'doubles tiers',
+			numbers: 'numbers',
+		};
+
+		if (!resetTier) {
+			if (!(toID(target) in displayIDToName)) {
+				this.errorReply(`Invalid tier display: ${target.trim()}`);
+				return this.parse(`/help roomtierdisplay`);
+			}
+
+			room.dataCommandTierDisplay = displayIDToName[toID(target)];
+			this.sendReply(`(The room's tier display is now: ${displayIDToName[toID(target)]})`);
+
+			this.privateModAction(`(${user.name} changed the room's tier display to: ${displayIDToName[toID(target)]}.)`);
+			this.modlog('ROOMTIERDISPLAY', null, `to ${displayIDToName[toID(target)]}`);
+		} else {
+			room.dataCommandTierDisplay = 'tiers';
+			this.sendReply(`(The room's tier display is now: tiers)`);
+
+			this.privateModAction(`(${user.name} reset the room's tier display.)`);
+			this.modlog('RESETTIERDISPLAY', null, `to tiers`);
+		}
+
+		if (room.chatRoomData) {
+			room.chatRoomData.dataCommandTierDisplay = room.dataCommandTierDisplay;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	roomtierdisplayhelp: [
+		`/roomtierdisplay - displays the current room's display.`,
+		`/roomtierdisplay [option] - changes the current room's tier display. Valid options are: tiers, doubles tiers, numbers. Requires: # & ~`,
+		`/resettierdisplay - resets the current room's tier display. Requires: # & ~`,
+	],
 };
 
 export const roomSettings: SettingsHandler[] = [
@@ -1376,5 +1426,14 @@ export const roomSettings: SettingsHandler[] = [
 		options: ['off', 5, 10, 20, 30, 60].map(
 			time => [`${time}`, (time === 'off' ? !room.slowchat : time === room.slowchat) || `slowchat ${time || 'false'}`]
 		),
+	}),
+	room => ({
+		label: "/data Tier display",
+		permission: 'editroom',
+		options: [
+			[`tiers`, room.dataCommandTierDisplay === 'tiers' || `roomtierdisplay tiers`],
+			[`doubles tiers`, room.dataCommandTierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
+			[`numbers`, room.dataCommandTierDisplay === 'numbers' || `roomtierdisplay numbers`],
+		],
 	}),
 ];
