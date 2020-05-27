@@ -110,17 +110,22 @@ const LogReader = new class {
 		return {official, normal, hidden, secret, deleted, personal, deletedPersonal};
 	}
 
-	async read(roomid: RoomID, day: string) {
+	async read(roomid: RoomID, day: string, limit: number) {
 		const roomLog = await LogReader.get(roomid);
 		const stream = await roomLog!.getLog(day);
 		let buf = '';
+		let i = LogViewer.results || 0;
 		if (!stream) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
 			let line;
 			while ((line = await stream.readLine()) !== null) {
 				const rendered = LogViewer.renderLine(line);
-				if (rendered) buf += `${line}\n`;
+				if (i++ > limit) return buf;
+				if (rendered) {
+					buf += `${line}\n`;
+					i++;
+				}
 			}
 		}
 		return buf;
@@ -152,6 +157,10 @@ const LogReader = new class {
 };
 
 export const LogViewer = new class {
+	results: number;
+	constructor() {
+		this.results = 0;
+	}
 	async day(roomid: RoomID, day: string, opts?: string) {
 		const month = LogReader.getMonth(day);
 		let buf = `<div class="pad"><p>` +
@@ -191,6 +200,7 @@ export const LogViewer = new class {
 
 	renderDayResults(results: {[day: string]: SearchMatch[]}, roomid: RoomID) {
 		const renderResult = (match: SearchMatch) => {
+			this.results++;
 			return (
 				this.renderLine(match[0]) +
 				this.renderLine(match[1]) +
@@ -232,6 +242,7 @@ export const LogViewer = new class {
 			}
 		}
 		buf += `</div>`;
+		this.results = 0;
 		return buf;
 	}
 
@@ -256,6 +267,7 @@ export const LogViewer = new class {
 				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
 			}
 		}
+		this.results = 0;
 		return buf;
 	}
 
@@ -440,11 +452,11 @@ const LogSearcher = new class {
 	}
 
 	async fsSearchDay(roomid: RoomID, day: string, search: string, limit?: number | null) {
-		const text = await LogReader.read(roomid, day);
+		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
+		const text = await LogReader.read(roomid, day, limit);
 		if (!text) return [];
 		const lines = text.split('\n');
 		const matches: SearchMatch[] = [];
-		if (!limit || limit > MAX_RESULTS) limit = MAX_RESULTS;
 
 		const searchTerms = search.split('-');
 		const searchTermRegexes = searchTerms.map(term => new RegExp(term, 'i'));
