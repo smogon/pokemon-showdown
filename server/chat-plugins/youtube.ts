@@ -35,7 +35,7 @@ export class YoutubeInterface {
 			}).on('error', reject);
 		});
 		const res: any = await query.catch(() => {});
-		if (!res) return null;
+		if (!res || !res.items) return null;
 		const data = res.items[0];
 		const cache = {
 			name: data.snippet.title,
