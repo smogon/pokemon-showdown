@@ -77,6 +77,10 @@ export class RoomGamePlayer {
  */
 export class RoomGame {
 	readonly roomid: RoomID;
+	/**
+	 * The room this roomgame is in. Rooms can only have one RoomGame at a time,
+	 * which are available as `this.room.game === this`.
+	 */
 	room: ChatRoom | GameRoom;
 	gameid: ID;
 	title: string;

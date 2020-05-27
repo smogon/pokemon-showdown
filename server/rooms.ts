@@ -6,6 +6,12 @@
  * rooms.ts. There's also a global room which every user is in, and
  * handles miscellaneous things like welcoming the user.
  *
+ * `Rooms.rooms` is the global table of all rooms, a `Map` of `RoomID:Room`.
+ * Rooms should normally be accessed with `Rooms.get(roomid)`.
+ *
+ * All rooms extend `BasicRoom`, whose important properties like `.users`
+ * and `.game` are documented near the the top of its class definition.
+ *
  * @license MIT
  */
 
@@ -63,6 +69,9 @@ type Announcement = import('./chat-plugins/announcements').Announcement;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
+	roomid: RoomID;
+	title: string;
+
 	readonly type: 'chat' | 'battle' | 'global';
 	readonly users: UserTable;
 	/**
@@ -71,22 +80,39 @@ export abstract class BasicRoom {
 	 * screen.
 	 */
 	readonly log: Roomlog | null;
-	readonly battle: RoomBattle | null;
-	readonly muteQueue: MuteEntry[];
-	roomid: RoomID;
-	title: string;
-	parent: Room | null;
-	aliases: string[] | null;
-	userCount: number;
-	auth: {[userid: string]: GroupSymbol} | null;
+
+	/**
+	 * The room's current RoomGame, if it exists. Each room can only have 0 or 1
+	 * `RoomGame`s, and `this.game.room === this`.
+	 */
 	game: RoomGame | null;
+	/**
+	 * The room's current battle. Battles are a type of RoomGame, so in battle
+	 * rooms (which can only be `GameRoom`s), `this.battle === this.game`.
+	 * In all other rooms, `this.battle` is `null`.
+	 */
+	battle: RoomBattle | null;
+	/**
+	 * The room's current tournament. Tours are a type of RoomGame, so if the
+	 * current room is hosting a tournament, `this.tour === this.game`.
+	 * In all other rooms, `this.tour` is `null`.
+	 */
+	tour: Tournament | null;
+
+	aliases: string[] | null;
+	parent: Room | null;
+	subRooms: Map<string, ChatRoom> | null;
+	isPrivate: boolean | 'hidden' | 'voice';
+	auth: {[userid: string]: GroupSymbol} | null;
+
+	readonly muteQueue: MuteEntry[];
+	userCount: number;
 	active: boolean;
 	muteTimer: NodeJS.Timer | null;
 	lastUpdate: number;
 	lastBroadcast: string;
 	lastBroadcastTime: number;
 	chatRoomData: AnyObject | null;
-	isPrivate: boolean | 'hidden' | 'voice';
 	hideReplay: boolean;
 	isPersonal: boolean;
 	isHelp: boolean;
@@ -119,7 +145,6 @@ export abstract class BasicRoom {
 	tourAnnouncements: boolean;
 	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
 	privacySetter: Set<ID> | null;
-	subRooms: Map<string, ChatRoom> | null;
 	gameNumber: number;
 	highTraffic: boolean;
 
@@ -127,8 +152,11 @@ export abstract class BasicRoom {
 		this.users = Object.create(null);
 		this.type = 'chat';
 		this.log = null;
-		this.battle = null;
 		this.muteQueue = [];
+
+		this.battle = null;
+		this.game = null;
+		this.tour = null;
 
 		this.roomid = roomid;
 		this.title = (title || roomid);
@@ -139,7 +167,6 @@ export abstract class BasicRoom {
 
 		this.auth = null;
 
-		this.game = null;
 		this.active = false;
 
 		this.muteTimer = null;
@@ -491,6 +518,11 @@ export class GlobalRoom extends BasicRoom {
 	maxUsers: number;
 	maxUsersDate: number;
 	formatList: string;
+
+	readonly game: null;
+	readonly battle: null;
+	readonly tour: null;
+
 	constructor(roomid: RoomID) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
 		super(roomid);
@@ -1062,6 +1094,11 @@ export class GlobalRoom extends BasicRoom {
 	}
 }
 
+/**
+ * This is the parent class for `ChatRoom` and `GameRoom`. Chat rooms
+ * are actually this class, although we tell TypeScript they are
+ * `ChatRoom` to give us more guarantees.
+ */
 export class BasicChatRoom extends BasicRoom {
 	readonly log: Roomlog;
 	readonly autojoin: boolean;
@@ -1090,9 +1127,7 @@ export class BasicChatRoom extends BasicRoom {
 	userList: string;
 	rulesLink: string | null;
 	reportJoinsInterval: NodeJS.Timer | null;
-	game: RoomGame | null;
-	battle: RoomBattle | null;
-	tour: Tournament | null;
+
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
 
@@ -1157,9 +1192,6 @@ export class BasicChatRoom extends BasicRoom {
 			this.userList = this.getUserList();
 		}
 		this.reportJoinsInterval = null;
-		this.tour = null;
-		this.game = null;
-		this.battle = null;
 	}
 
 	/**
