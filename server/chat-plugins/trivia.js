@@ -1107,14 +1107,14 @@ class TriumvirateModeTrivia extends Trivia {
 const commands = {
 	new(target, room, user) {
 		if (room.roomid !== 'trivia') return this.errorReply("This command can only be used in the Trivia room.");
-		if (!this.can('broadcast', null, room) || !target) return false;
+		if (!this.can('broadcast', null, room)) return false;
 		if (!this.canTalk()) return;
 		if (room.game) {
 			return this.errorReply(`There is already a game of ${room.game.title} in progress.`);
 		}
 
-		const tars = target.split(',');
-		if (tars.length < 2) return this.errorReply("Invalid arguments specified.");
+		const tars = (target ? target.split(',') : []);
+		if (tars.length < 3) return this.errorReply("Usage: /trivia new [mode], [category], [length]");
 
 		let mode = toID(tars[0]);
 		const isRandomMode = (mode === 'random');
