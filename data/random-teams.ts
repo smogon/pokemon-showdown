@@ -705,7 +705,7 @@ export class RandomTeams {
 					break;
 
 				// Bad after setup
-				case 'bounce': case 'firstimpression': case 'glare': case 'tailwind': case 'waterspout':
+				case 'bounce': case 'firstimpression': case 'glare': case 'icywind': case 'tailwind': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest']) rejected = true;
 					break;
 				case 'bulletpunch': case 'rockblast': case 'trickroom':
@@ -750,7 +750,7 @@ export class RandomTeams {
 					break;
 				case 'thunderwave': case 'voltswitch':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['raindance']) rejected = true;
-					if (isDoubles && hasMove['nuzzle'] || hasMove['electroweb']) rejected = true;
+					if (isDoubles && (hasMove['nuzzle'] || hasMove['electroweb'])) rejected = true;
 					break;
 				case 'toxic':
 					if (counter.setupType || hasMove['sludgewave'] || hasMove['thunderwave'] || hasMove['trickroom'] || hasMove['willowisp']) rejected = true;
@@ -793,8 +793,7 @@ export class RandomTeams {
 					if ((hasMove['lightscreen'] || hasMove['reflect']) && (hasMove['teleport'] || movePool.includes('teleport'))) rejected = true;
 					break;
 				case 'overheat':
-					if (hasMove['flareblitz']) rejected = true;
-					if (isDoubles && hasMove['calmmind']) rejected = true;
+					if (hasMove['flareblitz'] || isDoubles && hasMove['calmmind']) rejected = true;
 					break;
 				case 'hydropump':
 					if (hasMove['scald'] && ((counter.Special < 4 && !hasMove['uturn']) || (species.types.length > 1 && counter.stab < 3))) rejected = true;
@@ -818,9 +817,6 @@ export class RandomTeams {
 				case 'freezedry':
 					if ((hasMove['blizzard'] && counter.setupType) || hasMove['icebeam'] && counter.Special < 4) rejected = true;
 					break;
-				case 'icywind':
-					if (counter.setupType) rejected = true;
-					break;
 				case 'bodypress':
 					if (hasMove['mirrorcoat'] || hasMove['shellsmash'] || hasMove['earthquake'] && movePool.includes('shellsmash')) rejected = true;
 					break;
@@ -839,7 +835,7 @@ export class RandomTeams {
 				case 'earthquake':
 					if (hasMove['substitute'] && movePool.includes('toxic')) rejected = true;
 					if (movePool.includes('bodypress') && movePool.includes('shellsmash')) rejected = true;
-					if (isDoubles && hasMove['earthpower'] || hasMove['highhorsepower']) rejected = true;
+					if (isDoubles && (hasMove['earthpower'] || hasMove['highhorsepower'])) rejected = true;
 					break;
 				case 'photongeyser':
 					if (hasMove['morningsun']) rejected = true;
@@ -1058,6 +1054,8 @@ export class RandomTeams {
 					rejectAbility = hasMove['bounce'];
 				} else if (ability === 'Iron Fist') {
 					rejectAbility = counter['ironfist'] < 2;
+				} else if (ability === 'Justified') {
+					rejectAbility = (hasAbility['Inner Focus'] && isDoubles);
 				} else if (ability === 'Lightning Rod') {
 					rejectAbility = species.types.includes('Ground');
 				} else if (ability === 'Limber') {
@@ -1143,9 +1141,8 @@ export class RandomTeams {
 				if (hasAbility['Friend Guard']) ability = 'Friend Guard';
 				if (hasAbility['Gluttony'] && hasMove['recycle']) ability = 'Gluttony';
 				if (hasAbility['Guts']) ability = 'Guts';
-				if (hasAbility['Inner Focus'] && hasAbility['Justified']) ability = 'Inner Focus';
 				if (hasAbility['Intimidate']) ability = 'Intimidate';
-				if (hasAbility['Magic Guard'] && ability !== 'Unaware' && ability !== 'Friend Guard') ability = 'Magic Guard';
+				if (hasAbility['Magic Guard'] && ability !== 'Friend Guard' && ability !== 'Unaware') ability = 'Magic Guard';
 				if (hasAbility['Ripen']) ability = 'Ripen';
 				if (hasAbility['Stalwart']) ability = 'Stalwart';
 				if (hasAbility['Storm Drain']) ability = 'Storm Drain';
