@@ -11,7 +11,7 @@ const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const CHANNEL = `${ROOT}channels`;
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 
-export let channelData: AnyObject;
+let channelData: AnyObject;
 
 try {
 	channelData = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
