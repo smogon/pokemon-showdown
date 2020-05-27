@@ -617,6 +617,7 @@ export const pages: PageTable = {
 			let [input, limitString] = opts.split('--limit-');
 			input = input.slice(7);
 			search = Dashycode.decode(input);
+			if (search.length < 3) return LogViewer.error(`Too short of a search query.`);
 			if (limitString) {
 				limit = parseInt(limitString) || null;
 			} else {
@@ -668,6 +669,7 @@ export const commands: ChatCommands = {
 		target = target.trim();
 		const [search, tarRoom, limit, date] = target.split(',').map(str => str.trim());
 		if (!target) return this.parse('/help searchlogs');
+		if (search.length < 3) return this.errorReply(`Too short of a search query.`);
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		let limitString;
 		if (/^[0-9]+$/.test(limit)) {
