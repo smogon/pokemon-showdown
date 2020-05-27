@@ -544,7 +544,7 @@ export const commands: ChatCommands = {
 				if (format?.onModifySpecies) {
 					pokemon = format.onModifySpecies.call({dex} as Battle, pokemon) || pokemon;
 				}
-				let tierDisplay = room?.dataCommandTierDisplay;
+				let tierDisplay = room?.settings.dataCommandTierDisplay;
 				if (!tierDisplay && room?.battle) {
 					if (room.battle.format.includes('doubles') || room.battle.format.includes('vgc')) {
 						tierDisplay = 'doubles tiers';
@@ -1886,7 +1886,7 @@ export const commands: ChatCommands = {
 				`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
 				`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
 				`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
-				`- /roomdeauth <em>username</em>: remove all room.settings!.auth from a user`,
+				`- /roomdeauth <em>username</em>: remove all room.settings.auth from a user`,
 				`- /declare <em>message</em>: make a large blue declaration to the room`,
 				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
 				`- !showimage <em>[url], [width], [height]</em>: show an image to the room`,
@@ -1954,7 +1954,7 @@ export const commands: ChatCommands = {
 			this.privateModAction(`(${user.name} has removed the room rules link.)`);
 			this.modlog('RULES', null, `removed room rules link`);
 		} else {
-			room.settings!.rulesLink = target;
+			room.settings.rulesLink = target;
 			this.privateModAction(`(${user.name} changed the room rules link to: ${target})`);
 			this.modlog('RULES', null, `changed link to: ${target}`);
 		}

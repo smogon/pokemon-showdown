@@ -690,7 +690,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 
 		this.updatePlayer(player, null);
-		this.room.settings!.auth![user.id] = '+';
+		this.room.settings.auth![user.id] = '+';
 		this.room.update();
 		return true;
 	}
@@ -834,8 +834,8 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 		// If the room's replay was hidden, disable users from joining after the game is over
 		if (this.room.hideReplay) {
-			this.room.settings!.modjoin = '%';
-			this.room.settings!.isPrivate = 'hidden';
+			this.room.settings.modjoin = '%';
+			this.room.settings.isPrivate = 'hidden';
 		}
 		this.room.update();
 	}
@@ -1012,7 +1012,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}
 
-		if (user) this.room.settings!.auth![user.id] = Users.PLAYER_SYMBOL;
+		if (user) this.room.settings.auth![user.id] = Users.PLAYER_SYMBOL;
 		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
 	}

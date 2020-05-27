@@ -535,7 +535,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.settings!.isPrivate === true || room.isPersonal || room.battle)) {
+			if (!(room.settings.isPrivate === true || room.isPersonal || room.battle)) {
 				Punishments.monitorRoomPunishments(user);
 			}
 		}
@@ -595,7 +595,7 @@ export const Punishments = new class {
 
 		if (typeof room !== 'string') {
 			room = room as Room;
-			if (!(room.settings!.isPrivate === true || room.isPersonal || room.battle)) {
+			if (!(room.settings.isPrivate === true || room.isPersonal || room.battle)) {
 				Punishments.monitorRoomPunishments(userid);
 			}
 		}

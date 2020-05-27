@@ -47,7 +47,7 @@ class Giveaway {
 		host: User, giver: User, room: ChatRoom | GameRoom,
 		ot: string, tid: string, prize: string
 	) {
-		this.gaNumber = ++room.settings!.gameNumber;
+		this.gaNumber = ++room.settings.gameNumber;
 		this.host = host;
 		this.giver = giver;
 		this.room = room;
@@ -258,7 +258,7 @@ export class QuestionGiveaway extends Giveaway {
 		if (this.answered[user.id] >= 3) {
 			return user.sendTo(
 				this.room,
-				"You have already guessed three times. You cannot guess anymore in this.settings!.giveaway."
+				"You have already guessed three times. You cannot guess anymore in this.settings.giveaway."
 			);
 		}
 
@@ -331,7 +331,7 @@ export class QuestionGiveaway extends Giveaway {
 			}
 		}
 
-		delete this.room.settings!.giveaway;
+		delete this.room.settings.giveaway;
 	}
 
 	static sanitize(str: string) {
@@ -438,7 +438,7 @@ export class LotteryGiveaway extends Giveaway {
 		const userlist = Object.values(this.joined);
 		if (userlist.length < this.maxWinners) {
 			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
-			delete this.room.settings!.giveaway;
+			delete this.room.settings.giveaway;
 			return this.room.send("The giveaway has been forcibly ended as there are not enough participants.");
 		}
 
@@ -477,7 +477,7 @@ export class LotteryGiveaway extends Giveaway {
 			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${winnerNames}`);
 			Giveaway.updateStats(this.monIDs);
 		}
-		delete this.room.settings!.giveaway;
+		delete this.room.settings.giveaway;
 	}
 }
 
@@ -499,7 +499,7 @@ export class GTSGiveaway {
 		room: ChatRoom | GameRoom, giver: User, amount: number,
 		summary: string, deposit: string, lookfor: string
 	) {
-		this.gtsNumber = ++room.settings!.gameNumber;
+		this.gtsNumber = ++room.settings.gameNumber;
 		this.room = room;
 		this.giver = giver;
 		this.left = amount;
@@ -538,7 +538,7 @@ export class GTSGiveaway {
 	generateWindow() {
 		const sentModifier = this.sent.length ? 5 : 0;
 		const rightSide = this.noDeposits ?
-			`<strong>More Pokémon have been deposited than there are prizes in this.settings!.giveaway and new deposits will not be accepted.
+			`<strong>More Pokémon have been deposited than there are prizes in this.settings.giveaway and new deposits will not be accepted.
 			If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</strong>
 			` :
 			`To participate, deposit <strong>${this.deposit}</strong> into the GTS and look for <strong>${Chat.escapeHTML(this.lookfor)}</strong>`;
@@ -572,7 +572,7 @@ export class GTSGiveaway {
 	stopDeposits() {
 		this.noDeposits = true;
 
-		this.room.send(`|html|<p style="text-align:center;font-size:11pt">More Pokémon have been deposited than there are prizes in this.settings!.giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</p>`);
+		this.room.send(`|html|<p style="text-align:center;font-size:11pt">More Pokémon have been deposited than there are prizes in this.settings.giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</p>`);
 		this.changeUhtml(this.generateWindow());
 	}
 
@@ -588,7 +588,7 @@ export class GTSGiveaway {
 			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Chat.escapeHTML(this.lookfor)}</strong>" has finished.</p>`);
 			Giveaway.updateStats(this.monIDs);
 		}
-		delete this.room.settings!.gtsga;
+		delete this.room.settings.gtsga;
 		return this.left;
 	}
 
@@ -622,7 +622,7 @@ const cmds: ChatCommands = {
 	qg: 'question',
 	question(target, room, user) {
 		if (room.roomid !== 'wifi' || !target) return false;
-		if (room.settings!.giveaway) return this.errorReply("There is already a giveaway going on!");
+		if (room.settings.giveaway) return this.errorReply("There is already a giveaway going on!");
 
 		let [giver, ot, tid, prize, question, ...answers] = target.split(target.includes('|') ? '|' : ',').map(
 			param => param.trim()
@@ -642,7 +642,7 @@ const cmds: ChatCommands = {
 		}
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
-		room.settings!.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, prize, question, answers);
+		room.settings.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, prize, question, answers);
 
 		this.privateModAction(`(${user.name} started a question giveaway for ${targetUser.name})`);
 		this.modlog('QUESTION GIVEAWAY', null, `for ${targetUser.getLastId()}`);
@@ -650,17 +650,17 @@ const cmds: ChatCommands = {
 	changeanswer: 'changequestion',
 	changequestion(target, room, user, conn, cmd) {
 		if (room.roomid !== 'wifi') return false;
-		if (!room.settings!.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (room.settings!.giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
+		if (!room.settings.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
+		if (room.settings.giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
 
 		target = target.trim();
 		if (!target) return this.errorReply("You must include a question or an answer.");
-		(room.settings!.giveaway as QuestionGiveaway).change(cmd.substr(6), target, user);
+		(room.settings.giveaway as QuestionGiveaway).change(cmd.substr(6), target, user);
 	},
 	showanswer: 'viewanswer',
 	viewanswer(target, room, user) {
 		if (room.roomid !== 'wifi') return false;
-		const giveaway = room.settings!.giveaway as QuestionGiveaway;
+		const giveaway = room.settings.giveaway as QuestionGiveaway;
 		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
 		if (user.id !== giveaway.host.id && user.id !== giveaway.giver.id) return;
@@ -672,9 +672,9 @@ const cmds: ChatCommands = {
 	guess(target, room, user) {
 		if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.canTalk()) return;
-		if (!room.settings!.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (room.settings!.giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
-		(room.settings!.giveaway as QuestionGiveaway).guessAnswer(user, target);
+		if (!room.settings.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
+		if (room.settings.giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
+		(room.settings.giveaway as QuestionGiveaway).guessAnswer(user, target);
 	},
 
 	// lottery giveaway.
@@ -682,7 +682,7 @@ const cmds: ChatCommands = {
 	lotto: 'lottery',
 	lottery(target, room, user) {
 		if (room.roomid !== 'wifi' || !target) return false;
-		if (room.settings!.giveaway) return this.errorReply("There is already a giveaway going on!");
+		if (room.settings.giveaway) return this.errorReply("There is already a giveaway going on!");
 
 		let [giver, ot, tid, prize, winners] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 		if (!(giver && ot && tid && prize)) {
@@ -708,7 +708,7 @@ const cmds: ChatCommands = {
 			}
 		}
 
-		room.settings!.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, prize, numWinners);
+		room.settings.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, prize, numWinners);
 
 		this.privateModAction(`(${user.name} started a lottery giveaway for ${targetUser.name})`);
 		this.modlog('LOTTERY GIVEAWAY', null, `for ${targetUser.getLastId()}`);
@@ -721,7 +721,7 @@ const cmds: ChatCommands = {
 	join(target, room, user, conn, cmd) {
 		if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.canTalk() || user.semilocked) return;
-		const giveaway = room.settings!.giveaway as LotteryGiveaway;
+		const giveaway = room.settings.giveaway as LotteryGiveaway;
 		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (giveaway.type !== 'lottery') return this.errorReply("This is not a lottery giveaway.");
 
@@ -743,7 +743,7 @@ const cmds: ChatCommands = {
 		new: 'start',
 		start(target, room, user) {
 			if (room.roomid !== 'wifi' || !target) return false;
-			if (room.settings!.gtsga) return this.errorReply("There is already a GTS giveaway going on!");
+			if (room.settings.gtsga) return this.errorReply("There is already a GTS giveaway going on!");
 
 			const [giver, amountStr, summary, deposit, lookfor] = target.split(target.includes('|') ? '|' : ',').map(
 				param => param.trim()
@@ -763,62 +763,62 @@ const cmds: ChatCommands = {
 			}
 			if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
-			room.settings!.gtsga = new GTSGiveaway(room, targetUser, amount, summary, deposit, lookfor);
+			room.settings.gtsga = new GTSGiveaway(room, targetUser, amount, summary, deposit, lookfor);
 
 			this.privateModAction(`(${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon)`);
 			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pokémon`);
 		},
 		left(target, room, user) {
 			if (room.roomid !== 'wifi') return false;
-			if (!room.settings!.gtsga) return this.errorReply("There is no GTS giveaway going on!");
-			if (!user.can('warn', null, room) && user !== room.settings!.gtsga.giver) {
+			if (!room.settings.gtsga) return this.errorReply("There is no GTS giveaway going on!");
+			if (!user.can('warn', null, room) && user !== room.settings.gtsga.giver) {
 				return this.errorReply("Only the host or a staff member can update GTS giveaways.");
 			}
 			if (!target) {
 				if (!this.runBroadcast()) return;
-				let output = `The GTS giveaway from ${room.settings!.gtsga.giver} has ${room.settings!.gtsga.left} Pokémon remaining!`;
-				if (room.settings!.gtsga.sent.length) output += `Last winners: ${room.settings!.gtsga.sent.join(', ')}`;
+				let output = `The GTS giveaway from ${room.settings.gtsga.giver} has ${room.settings.gtsga.left} Pokémon remaining!`;
+				if (room.settings.gtsga.sent.length) output += `Last winners: ${room.settings.gtsga.sent.join(', ')}`;
 				return this.sendReply(output);
 			}
 			const newamount = parseInt(target);
 			if (isNaN(newamount)) return this.errorReply("Please enter a valid amount.");
-			if (newamount > room.settings!.gtsga.left) return this.errorReply("The new amount must be lower than the old amount.");
-			if (newamount < room.settings!.gtsga.left - 1) {
-				this.modlog(`GTS GIVEAWAY`, null, `set from ${room.settings!.gtsga.left} to ${newamount} left`);
+			if (newamount > room.settings.gtsga.left) return this.errorReply("The new amount must be lower than the old amount.");
+			if (newamount < room.settings.gtsga.left - 1) {
+				this.modlog(`GTS GIVEAWAY`, null, `set from ${room.settings.gtsga.left} to ${newamount} left`);
 			}
 
-			room.settings!.gtsga.updateLeft(newamount);
+			room.settings.gtsga.updateLeft(newamount);
 		},
 		sent(target, room, user) {
 			if (room.roomid !== 'wifi') return false;
-			if (!room.settings!.gtsga) return this.errorReply("There is no GTS giveaway going on!");
-			if (!user.can('warn', null, room) && user !== room.settings!.gtsga.giver) {
+			if (!room.settings.gtsga) return this.errorReply("There is no GTS giveaway going on!");
+			if (!user.can('warn', null, room) && user !== room.settings.gtsga.giver) {
 				return this.errorReply("Only the host or a staff member can update GTS giveaways.");
 			}
 
 			if (!target || target.length > 12) return this.errorReply("Please enter a valid IGN.");
 
-			room.settings!.gtsga.updateSent(target);
+			room.settings.gtsga.updateSent(target);
 		},
 		full(target, room, user) {
 			if (room.roomid !== 'wifi') return false;
-			if (!room.settings!.gtsga) return this.errorReply("There is no GTS giveaway going on!");
-			if (!user.can('warn', null, room) && user !== room.settings!.gtsga.giver) {
+			if (!room.settings.gtsga) return this.errorReply("There is no GTS giveaway going on!");
+			if (!user.can('warn', null, room) && user !== room.settings.gtsga.giver) {
 				return this.errorReply("Only the host or a staff member can update GTS giveaways.");
 			}
-			if (room.settings!.gtsga.noDeposits) return this.errorReply("The GTS giveaway was already set to not accept deposits.");
+			if (room.settings.gtsga.noDeposits) return this.errorReply("The GTS giveaway was already set to not accept deposits.");
 
-			room.settings!.gtsga.stopDeposits();
+			room.settings.gtsga.stopDeposits();
 		},
 		end(target, room, user) {
 			if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
-			if (!room.settings!.gtsga) return this.errorReply("There is no GTS giveaway going on at the moment.");
+			if (!room.settings.gtsga) return this.errorReply("There is no GTS giveaway going on at the moment.");
 			if (!this.can('warn', null, room)) return false;
 
 			if (target && target.length > 300) {
 				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 			}
-			const amount = room.settings!.gtsga.end(true);
+			const amount = room.settings.gtsga.end(true);
 			if (target) target = `: ${target}`;
 			this.modlog('GTS END', null, `with ${amount} left${target}`);
 			this.privateModAction(`(The giveaway was forcibly ended by ${user.name} with ${amount} left${target})`);
@@ -841,7 +841,7 @@ const cmds: ChatCommands = {
 		}
 
 		Giveaway.ban(room, targetUser, target);
-		if (room.settings!.giveaway) room.settings!.giveaway.kickUser(targetUser);
+		if (room.settings.giveaway) room.settings.giveaway.kickUser(targetUser);
 		this.modlog('GIVEAWAYBAN', targetUser, target);
 		if (target) target = ` (${target})`;
 		this.privateModAction(`(${targetUser.name} was banned from entering giveaways by ${user.name}.${target})`);
@@ -865,13 +865,13 @@ const cmds: ChatCommands = {
 	stop: 'end',
 	end(target, room, user) {
 		if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
-		if (!room.settings!.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (!this.can('warn', null, room) && user.id !== room.settings!.giveaway.host.id) return false;
+		if (!room.settings.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
+		if (!this.can('warn', null, room) && user.id !== room.settings.giveaway.host.id) return false;
 
 		if (target && target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		room.settings!.giveaway.end(true);
+		room.settings.giveaway.end(true);
 		this.modlog('GIVEAWAY END', null, target);
 		if (target) target = `: ${target}`;
 		this.privateModAction(`(The giveaway was forcibly ended by ${user.name}${target})`);
@@ -879,7 +879,7 @@ const cmds: ChatCommands = {
 	rm: 'remind',
 	remind(target, room, user) {
 		if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
-		const giveaway = room.settings!.giveaway;
+		const giveaway = room.settings.giveaway;
 		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (!this.runBroadcast()) return;
 		if (giveaway.type === 'question') {

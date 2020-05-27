@@ -216,8 +216,8 @@ function isUsernameKnown(name: string) {
 	if (Users.get(userid)) return true;
 	if (userid in usergroups) return true;
 	for (const room of Rooms.global.chatRooms) {
-		if (!room.settings!.auth) continue;
-		if (userid in room.settings!.auth) return true;
+		if (!room.settings.auth) continue;
+		if (userid in room.settings.auth) return true;
 	}
 	return false;
 }
@@ -227,8 +227,8 @@ function isTrusted(name: string | User) {
 	const userid = toID(name);
 	if (userid in usergroups) return userid;
 	for (const room of Rooms.global.chatRooms) {
-		if (!room.settings!.isPrivate && !room.isPersonal && room.settings!.auth &&
-				userid in room.settings!.auth && room.settings!.auth[userid] !== '+'
+		if (!room.settings.isPrivate && !room.isPersonal && room.settings.auth &&
+				userid in room.settings.auth && room.settings.auth[userid] !== '+'
 		) {
 			return userid;
 		}
@@ -572,11 +572,11 @@ export class User extends Chat.MessageContext {
 			targetUser = target;
 		}
 
-		if (room && (room.settings!.auth || room.parent)) {
+		if (room && (room.settings.auth || room.parent)) {
 			group = room.getAuth(this);
 			if (!Config.groups[group]) group = this.group;
 			if (targetUser) targetGroup = room.getAuth(targetUser);
-			if (room.settings!.isPrivate === true && this.can('makeroom')) group = this.group;
+			if (room.settings.isPrivate === true && this.can('makeroom')) group = this.group;
 		} else {
 			group = this.group;
 			if (targetUser) targetGroup = targetUser.group;
@@ -1156,11 +1156,11 @@ export class User extends Chat.MessageContext {
 			removed.push(usergroups[userid].charAt(0));
 		}
 		for (const room of Rooms.global.chatRooms) {
-			if (!room.settings!.isPrivate && room.settings!.auth &&
-					userid in room.settings!.auth && room.settings!.auth[userid] !== '+'
+			if (!room.settings.isPrivate && room.settings.auth &&
+					userid in room.settings.auth && room.settings.auth[userid] !== '+'
 			) {
-				removed.push(room.settings!.auth[userid] + room.roomid);
-				room.settings!.auth[userid] = '+';
+				removed.push(room.settings.auth[userid] + room.roomid);
+				room.settings.auth[userid] = '+';
 			}
 		}
 		this.trusted = '';
@@ -1283,7 +1283,7 @@ export class User extends Chat.MessageContext {
 				return false;
 			}
 		}
-		if (room.settings!.isPrivate) {
+		if (room.settings.isPrivate) {
 			if (!this.named) {
 				return Rooms.RETRY_AFTER_LOGIN;
 			}
@@ -1658,7 +1658,7 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
 	const maxLineCount = user.isStaff ||
-		(room.settings!.auth && room.settings!.auth[user.id] && room.settings!.auth[user.id] !== '+') ?
+		(room.settings.auth && room.settings.auth[user.id] && room.settings.auth[user.id] !== '+') ?
 		THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN;
 	if (lines.length > maxLineCount) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);

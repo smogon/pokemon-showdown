@@ -879,7 +879,7 @@ export const commands: ChatCommands = {
 			battle.p1.name = target.slice(nameIndex1 + 8, nameNextQuoteIndex1);
 			battle.p2.name = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
 		}
-		battleRoom.settings!.auth![user.id] = Users.HOST_SYMBOL;
+		battleRoom.settings.auth![user.id] = Users.HOST_SYMBOL;
 		this.parse(`/join ${battleRoom.roomid}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
@@ -1052,10 +1052,10 @@ export const commands: ChatCommands = {
 			return this.errorReply(`${targetUser.name} is already a player in this battle.`);
 		}
 
-		room.settings!.auth![targetUser.id] = Users.PLAYER_SYMBOL;
+		room.settings.auth![targetUser.id] = Users.PLAYER_SYMBOL;
 		const success = room.battle.joinGame(targetUser, target);
 		if (!success) {
-			delete room.settings!.auth![targetUser.id];
+			delete room.settings.auth![targetUser.id];
 			return;
 		}
 		this.addModAction(`${name} was added to the battle as Player ${target.slice(1)} by ${user.name}.`);
@@ -1380,7 +1380,7 @@ export const commands: ChatCommands = {
 				const targetRoom = Rooms.get(roomid);
 				if (!targetRoom) continue; // shouldn't happen
 				const roomData: RoomData = {};
-				if (targetRoom.settings!.isPrivate) {
+				if (targetRoom.settings.isPrivate) {
 					if (!user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
 					roomData.isPrivate = true;
 				}
@@ -1453,8 +1453,8 @@ export const commands: ChatCommands = {
 				title: targetRoom.title,
 				type: targetRoom.type,
 				visibility: visibility,
-				modchat: targetRoom.settings!.modchat,
-				modjoin: targetRoom.settings!.modjoin,
+				modchat: targetRoom.settings.modchat,
+				modjoin: targetRoom.settings.modjoin,
 				auth: {},
 				users: [],
 			};

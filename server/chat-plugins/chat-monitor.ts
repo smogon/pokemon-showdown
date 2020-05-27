@@ -313,7 +313,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 		if (!monitor) continue;
 		// Ignore challenge games, which are unrated and not part of roomtours.
 		if (location === 'BATTLES' && !(room && room.battle && room.battle.challengeType !== 'challenge')) continue;
-		if (location === 'PUBLIC' && room && room.settings!.isPrivate === true) continue;
+		if (location === 'PUBLIC' && room && room.settings.isPrivate === true) continue;
 
 		switch (condition) {
 		case 'notTrusted':

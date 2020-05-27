@@ -39,10 +39,10 @@ export class Jeopardy extends Rooms.RoomGame {
 
 	constructor(room: ChatRoom | GameRoom, user: User, categoryCount: number, questionCount: number) {
 		super(room);
-		if (room.settings!.gameNumber) {
-			room.settings!.gameNumber++;
+		if (room.settings.gameNumber) {
+			room.settings.gameNumber++;
 		} else {
-			room.settings!.gameNumber = 1;
+			room.settings.gameNumber = 1;
 		}
 		this.playerTable = Object.create(null);
 		this.host = user;
@@ -181,16 +181,16 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	display() {
-		this.room.add(`|uhtml|jeopardy${this.room.settings!.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+		this.room.add(`|uhtml|jeopardy${this.room.settings.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 	}
 
 	update(dontMove = false) {
 		if (dontMove) {
-			this.room.add(`|uhtmlchange|jeopardy${this.room.settings!.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+			this.room.add(`|uhtmlchange|jeopardy${this.room.settings.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		} else {
-			this.room.add(`|uhtmlchange|jeopardy${this.room.settings!.gameNumber}-${this.numUpdates}|`);
+			this.room.add(`|uhtmlchange|jeopardy${this.room.settings.gameNumber}-${this.numUpdates}|`);
 			this.numUpdates++;
-			this.room.add(`|uhtml|jeopardy${this.room.settings!.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+			this.room.add(`|uhtml|jeopardy${this.room.settings.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		}
 	}
 
@@ -567,10 +567,10 @@ export const commands: ChatCommands = {
 		off: 'disable',
 		disable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (room.settings!.jeopardyDisabled) {
+			if (room.settings.jeopardyDisabled) {
 				return this.errorReply("Jeopardy is already disabled in this room.");
 			}
-			room.settings!.jeopardyDisabled = true;
+			room.settings.jeopardyDisabled = true;
 			if (room.settings) {
 				room.settings.jeopardyDisabled = true;
 				Rooms.global.writeChatRoomData();
@@ -581,10 +581,10 @@ export const commands: ChatCommands = {
 		on: 'enable',
 		enable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (!room.settings!.jeopardyDisabled) {
+			if (!room.settings.jeopardyDisabled) {
 				return this.errorReply("Jeopardy is already enabled in this room.");
 			}
-			delete room.settings!.jeopardyDisabled;
+			delete room.settings.jeopardyDisabled;
 			if (room.settings) {
 				delete room.settings.jeopardyDisabled;
 				Rooms.global.writeChatRoomData();
@@ -893,7 +893,7 @@ export const roomSettings: SettingsHandler = room => ({
 	label: "Jeopardy",
 	permission: 'editroom',
 	options: [
-		[`disabled`, room.settings!.jeopardyDisabled || 'jeopardy disable'],
-		[`enabled`, !room.settings!.jeopardyDisabled || 'jeopardy enable'],
+		[`disabled`, room.settings.jeopardyDisabled || 'jeopardy disable'],
+		[`enabled`, !room.settings.jeopardyDisabled || 'jeopardy enable'],
 	],
 });

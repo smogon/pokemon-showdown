@@ -12,7 +12,7 @@ export class Announcement {
 	timeoutMins: number;
 	constructor(room: ChatRoom | GameRoom, source: string) {
 		this.activityId = 'announcement';
-		this.announcementNumber = ++room.settings!.gameNumber;
+		this.announcementNumber = ++room.settings.gameNumber;
 		this.room = room;
 		this.source = source;
 		this.timeout = null;

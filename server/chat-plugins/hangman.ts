@@ -20,7 +20,7 @@ export class Hangman extends Rooms.RoomGame {
 	constructor(room: ChatRoom | GameRoom, user: User, word: string, hint = '') {
 		super(room);
 
-		this.gameNumber = ++room.settings!.gameNumber;
+		this.gameNumber = ++room.settings.gameNumber;
 
 		this.gameid = 'hangman' as ID;
 		this.title = 'Hangman';
@@ -212,7 +212,7 @@ export const commands: ChatCommands = {
 			const params = text.split(',');
 
 			if (!this.can('minigame', null, room)) return false;
-			if (room.settings!.hangmanDisabled) return this.errorReply("Hangman is disabled for this room.");
+			if (room.settings.hangmanDisabled) return this.errorReply("Hangman is disabled for this room.");
 			if (!this.canTalk()) return;
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 
@@ -268,10 +268,10 @@ export const commands: ChatCommands = {
 
 		disable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (room.settings!.hangmanDisabled) {
+			if (room.settings.hangmanDisabled) {
 				return this.errorReply("Hangman is already disabled.");
 			}
-			room.settings!.hangmanDisabled = true;
+			room.settings.hangmanDisabled = true;
 			if (room.settings) {
 				room.settings.hangmanDisabled = true;
 				Rooms.global.writeChatRoomData();
@@ -281,10 +281,10 @@ export const commands: ChatCommands = {
 
 		enable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (!room.settings!.hangmanDisabled) {
+			if (!room.settings.hangmanDisabled) {
 				return this.errorReply("Hangman is already enabled.");
 			}
-			delete room.settings!.hangmanDisabled;
+			delete room.settings.hangmanDisabled;
 			if (room.settings) {
 				delete room.settings.hangmanDisabled;
 				Rooms.global.writeChatRoomData();
@@ -335,7 +335,7 @@ export const roomSettings: SettingsHandler = room => ({
 	label: "Hangman",
 	permission: 'editroom',
 	options: [
-		[`disabled`, room.settings!.hangmanDisabled || 'hangman disable'],
-		[`enabled`, !room.settings!.hangmanDisabled || 'hangman enable'],
+		[`disabled`, room.settings.hangmanDisabled || 'hangman disable'],
+		[`enabled`, !room.settings.hangmanDisabled || 'hangman enable'],
 	],
 });

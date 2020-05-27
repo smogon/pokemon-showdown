@@ -127,7 +127,7 @@ export class Blackjack extends Rooms.RoomGame {
 		const players = Object.keys(this.playerTable);
 		const playerList = [];
 		for (const player of players) playerList.push(Chat.escapeHTML(this.playerTable[player].name));
-		this.room.send(`|uhtml${change}|blackjack-${this.room.settings!.gameNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : playerList.join(', ')}</div>`);
+		this.room.send(`|uhtml${change}|blackjack-${this.room.settings.gameNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : playerList.join(', ')}</div>`);
 		this.uhtmlChange = 'change';
 	}
 
@@ -194,7 +194,7 @@ export class Blackjack extends Rooms.RoomGame {
 	}
 	send(message: string, clean = false) {
 		const change = this.uhtmlChange;
-		this.room.send(`|uhtml${change}|blackjack-${this.room.settings!.gameNumber}|<div class="infobox${this.infoboxLimited}">${(clean ? message : this.lastMessage + message)}</div>`);
+		this.room.send(`|uhtml${change}|blackjack-${this.room.settings.gameNumber}|<div class="infobox${this.infoboxLimited}">${(clean ? message : this.lastMessage + message)}</div>`);
 		this.lastMessage += message;
 		this.uhtmlChange = 'change';
 	}
@@ -203,7 +203,7 @@ export class Blackjack extends Rooms.RoomGame {
 		let change = this.uhtmlChange;
 		if (noChange) change = '';
 		if (clean) this.lastMessage = '';
-		const message = `|uhtml${change}|blackjack-${this.room.settings!.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
+		const message = `|uhtml${change}|blackjack-${this.room.settings.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
 		this.lastMessage += text;
 		if (end) {
 			text = `The game of blackjack has ${force ? `been forcibly ended by ${this.endedBy}` : 'ended'}. <details><summary>View turn log</summary>${this.turnLog}</details>${text}`;
@@ -226,7 +226,7 @@ export class Blackjack extends Rooms.RoomGame {
 	clear() {
 		const player = this.playerTable[this.curUsername];
 		if (!player) throw new Error(`Player not in player table`); // this should never happen
-		player.sendRoom(`|uhtmlchange|user-blackjack-${this.room.settings!.gameNumber}|`);
+		player.sendRoom(`|uhtmlchange|user-blackjack-${this.room.settings.gameNumber}|`);
 	}
 	clearAllTimers() {
 		if (this.dqTimer) {
@@ -243,11 +243,11 @@ export class Blackjack extends Rooms.RoomGame {
 		}
 	}
 	slide(user: User) {
-		user.sendTo(this.roomid, `|uhtml|blackjack-${this.room.settings!.gameNumber}|`);
+		user.sendTo(this.roomid, `|uhtml|blackjack-${this.room.settings.gameNumber}|`);
 		this.display('', false, user.name);
 	}
 	onConnect(user: User) {
-		const message = `|uhtml|blackjack-${this.room.settings!.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
+		const message = `|uhtml|blackjack-${this.room.settings.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
 		if (this.state === 'signups') {
 			this.sendInvite();
 		} else if (this.state === 'started') {
@@ -391,7 +391,7 @@ export class Blackjack extends Rooms.RoomGame {
 			winners = this.getWinners(true);
 			this.endedBy = Chat.escapeHTML(user.name);
 			if (this.curUsername) {
-				this.playerTable[this.curUsername].send(`|uhtmlchange|user-blackjack-${this.room.settings!.gameNumber}|`);
+				this.playerTable[this.curUsername].send(`|uhtmlchange|user-blackjack-${this.room.settings.gameNumber}|`);
 			}
 			if (winners.length < 1) {
 				this.display(`There are no winners this time.`, false, undefined, false, true);
@@ -426,7 +426,7 @@ export class Blackjack extends Rooms.RoomGame {
 			}
 		}
 		this.clearAllTimers();
-		this.room.settings!.gameNumber++;
+		this.room.settings.gameNumber++;
 		delete this.room.game;
 	}
 
@@ -576,7 +576,7 @@ export class Blackjack extends Rooms.RoomGame {
 			}
 			this.curUsername = Object.keys(this.playerTable)[num];
 		}
-		let output = `|uhtml${this.playerTable[this.curUsername].selfUhtml}|user-blackjack-${this.room.settings!.gameNumber}|<div class="infobox" style="line-height: 20px;">`;
+		let output = `|uhtml${this.playerTable[this.curUsername].selfUhtml}|user-blackjack-${this.room.settings.gameNumber}|<div class="infobox" style="line-height: 20px;">`;
 		output += `It's your turn to move, ${this.playerTable[this.curUsername].name}<br />`;
 		for (const card of this.playerTable[this.curUsername].cards) {
 			output += this.generateCard(card);
@@ -662,7 +662,7 @@ export const commands: ChatCommands = {
 		create(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
 			if (room.game) return this.errorReply("There is already a game running in this room.");
-			if (room.settings!.blackjackDisabled) return this.errorReply("Blackjack is currently disabled in this room.");
+			if (room.settings.blackjackDisabled) return this.errorReply("Blackjack is currently disabled in this room.");
 			const autostartMinutes = target ? parseFloat(target) : 0;
 			if (isNaN(autostartMinutes)) {
 				return this.errorReply("Usage: /blackjack create [autostart] - where autostart is an integer");
@@ -746,11 +746,11 @@ export const commands: ChatCommands = {
 		},
 		disable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (room.settings!.blackjackDisabled) {
+			if (room.settings.blackjackDisabled) {
 				return this.errorReply("Blackjack is already disabled in this room.");
 			}
 
-			room.settings!.blackjackDisabled = true;
+			room.settings.blackjackDisabled = true;
 			if (room.settings) {
 				room.settings.blackjackDisabled = true;
 				Rooms.global.writeChatRoomData();
@@ -759,11 +759,11 @@ export const commands: ChatCommands = {
 		},
 		enable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
-			if (!room.settings!.blackjackDisabled) {
+			if (!room.settings.blackjackDisabled) {
 				return this.errorReply("Blackjack is already enabled in this room.");
 			}
 
-			delete room.settings!.blackjackDisabled;
+			delete room.settings.blackjackDisabled;
 			if (room.settings) {
 				delete room.settings.blackjackDisabled;
 				Rooms.global.writeChatRoomData();
@@ -792,7 +792,7 @@ export const roomSettings: SettingsHandler = room => ({
 	label: "Blackjack",
 	permission: 'editroom',
 	options: [
-		[`disabled`, room.settings!.blackjackDisabled || 'blackjack disable'],
-		[`enabled`, !room.settings!.blackjackDisabled || 'blackjack enable'],
+		[`disabled`, room.settings.blackjackDisabled || 'blackjack disable'],
+		[`enabled`, !room.settings.blackjackDisabled || 'blackjack enable'],
 	],
 });
