@@ -40,6 +40,8 @@ export class NetRequest {
 		}
 
 		if (body && typeof body !== 'string') {
+			if (!opts.headers) opts.headers = {};
+			opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 			let out = '';
 			for (const key in body) {
 				if (out) out += `&`;
@@ -51,7 +53,6 @@ export class NetRequest {
 		const postBody = body;
 		if (postBody) {
 			if (!opts.headers) opts.headers = {};
-			opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 			opts.headers['Content-Length'] = postBody.length;
 		}
 
