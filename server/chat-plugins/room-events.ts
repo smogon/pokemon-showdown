@@ -18,7 +18,7 @@ function formatEvent(event: {eventName: string, date: string, desc: string, star
 	}
 	let ret = `<tr title="${explanation}">`;
 	ret += Chat.html`<td>${event.eventName}</td>`;
-	ret += Chat.html`<td>${(event.aliases ? event.aliases.join(", ") : "")}</td>`;
+	ret += Chat.html`<td>${event.aliases ? event.aliases.join(", ") : ""}</td>`;
 	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
 	ret += Chat.html`<td><time>${event.date}</time></td></tr>`;
 	return ret;
@@ -76,15 +76,15 @@ export const commands: ChatCommands = {
 			const dateActual = date.trim();
 			const descString = desc.join(target.includes('|') ? '|' : ',').trim();
 
-			if (eventNameActual.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
+			if (eventName.trim().length > 50) return this.errorReply("Event names should not exceed 50 characters.");
 			if (dateActual.length > 150) return this.errorReply("Event dates should not exceed 150 characters.");
 			if (descString.length > 1000) return this.errorReply("Event descriptions should not exceed 1000 characters.");
 
 			const eventId = getEventIDByNameOrAlias(eventNameActual, room);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
-			eventNameActual = (room.events[eventId] ? room.events[eventId].eventName : eventNameActual);
-			this.privateModAction(`(${user.name} ${room.events[eventId] ? "edited the" : "added a"} roomevent "${eventNameActual}".)`);
+			const eventNameActual = (room.events[eventId] ? room.events[eventId].eventName : eventNameActual);
+			this.privateModAction(`(${user.name} ${room.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
 			this.modlog('ROOMEVENT', null, `${room.events[eventId] ? "edited" : "added"} "${eventNameActual}"`);
 			room.events[eventId] = {
 				eventName: eventNameActual,
@@ -108,13 +108,13 @@ export const commands: ChatCommands = {
 			const newID = toID(newName);
 			const oldID = (getAllAliases(room).includes(toID(oldName)) ? getEventIDByNameOrAlias(oldName, room) : toID(oldName));
 			if (newID === oldID) return this.errorReply("The new name must be different from the old one.");
-			if (!newID) return this.errorReply("Event names must contain at least one alphanumerical character.");
+			if (!newID) return this.errorReply("Event names must contain at least one alphanumeric character.");
 			if (newName.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
 
 			const eventData = room.events[oldID];
-			if (!eventData) return this.errorReply(`There is no event named '${oldName}'.`);
+			if (!eventData) return this.errorReply(`There is no event titled "${oldName}".`);
 			if (room.events[newID] || getAllAliases(room).includes(newID)) {
-				return this.errorReply(`${newName} is already an event or alias.`);
+				return this.errorReply(`"${newName}" is already an event or alias.`);
 			}
 			const originalName = eventData.eventName;
 			eventData.eventName = newName;
@@ -169,7 +169,7 @@ export const commands: ChatCommands = {
 			}
 			if (!target) return this.errorReply("Usage: /roomevents remove [event name]");
 			target = toID(target);
-			if (getAllAliases(room).includes(target)) return this.errorReply("Use /roomevents removealias to delete aliases.");
+			if (getAllAliases(room).includes(target)) return this.errorReply("To delete aliases, use /roomevents removealias.");
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			delete room.events[target];
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
