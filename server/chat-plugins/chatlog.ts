@@ -114,16 +114,16 @@ const LogReader = new class {
 		const roomLog = await LogReader.get(roomid);
 		const stream = await roomLog!.getLog(day);
 		let buf = '';
+		let i = LogViewer.results || 0;
 		if (!stream) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
 			let line;
-			while ((line = await stream.readLine()) !== null) {
+			while ((line = await stream.readLine()) !== null && i < limit) {
 				const rendered = LogViewer.renderLine(line);
 				if (rendered) {
 					buf += `${line}\n`;
-					LogViewer.results++;
-					if (LogViewer.results >= limit) break;
+					i++;
 				}
 			}
 		}
