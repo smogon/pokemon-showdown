@@ -646,8 +646,8 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		let limitString;
-		if (/^[ 0-9]+$/.test(limit)) {
-			limitString = `--limit-${limit}`;
+		if (/^[0-9]+$/.test(limit)) {
+			limitString = `--limit-${limit.trim()}`;
 		} else if (toID(limit) === 'all') {
 			limitString = `--limit-all`;
 		} else if (!limit) {
