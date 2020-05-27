@@ -17,8 +17,13 @@
  * a Connection object. A user tracks its connections in
  * user.connections - if this array is empty, the user is offline.
  *
- * Get a user by username with Users.get
- * (scroll down to its definition for details)
+ * `Users.users` is the global table of all users, a `Map` of `ID:User`.
+ * Users should normally be accessed with `Users.get(userid)`
+ *
+ * `Users.connections` is the global table of all connections, a `Map` of
+ * `string:Connection` (the string is mostly meaningless but see
+ * `connection.id` for details). Connections are normally accessed through
+ * `user.connections`.
  *
  * @license MIT
  */
@@ -241,6 +246,12 @@ function isTrusted(name: string | User) {
 const connections = new Map<string, Connection>();
 
 export class Connection {
+	/**
+	 * Connection IDs are mostly meaningless, beyond being known to be
+	 * unique among connections. They set in `socketConnect` to
+	 * `workerid-socketid`, so for instance `2-523` would be the 523th
+	 * connection to the 2nd socket worker process.
+	 */
 	readonly id: string;
 	readonly socketid: string;
 	readonly worker: StreamWorker;
