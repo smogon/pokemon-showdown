@@ -409,7 +409,6 @@ type SearchMatch = readonly [string, string, string, string, string];
 
 const LogSearcher = new class {
 	fsSearch(roomid: RoomID, search: string, date: string, limit?: number | null) {
-		date = date.trim();
 		const isAll = (date === 'all');
 		const isYear = (date.length === 4);
 		const isMonth = (date.length === 7);
@@ -642,11 +641,13 @@ export const commands: ChatCommands = {
 	searchlog: 'searchlogs',
 	searchlogs(target, room) {
 		target = target.trim();
-		const [search, tarRoom, limit, date] = target.split(',');
+		let [search, tarRoom, limit, date] = target.split(',');
 		if (!target) return this.parse('/help searchlogs');
 		if (!search) return this.errorReply('Specify a query to search the logs for.');
 		let limitString;
-		if (/^[0-9]+$/.test(limit.trim())) {
+		date = date.trim():
+		limit = limit.trim();
+		if (/^[0-9]+$/.test(limit)) {
 			limitString = `--limit-${limit}`;
 		} else if (toID(limit) === 'all') {
 			limitString = `--limit-all`;
