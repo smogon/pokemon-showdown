@@ -218,7 +218,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it.skip('should not request switchout if its HP is already below 50%', function () {
+	it('should not request switchout if its HP is already below 50%', function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", evs: {hp: 4}, ability: 'emergencyexit', moves: ['sleeptalk', 'tackle']},
 			{species: "Wynaut", moves: ['sleeptalk']},
