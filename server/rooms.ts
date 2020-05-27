@@ -1127,9 +1127,6 @@ export class BasicChatRoom extends BasicRoom {
 	userList: string;
 	rulesLink: string | null;
 	reportJoinsInterval: NodeJS.Timer | null;
-	game: RoomGame | null;
-	battle: RoomBattle | null;
-	tour: Tournament | null;
 	pendingApprovals: Map<string, string>;
 	whitelist: {[k: string]: boolean};
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
@@ -1197,9 +1194,6 @@ export class BasicChatRoom extends BasicRoom {
 			this.userList = this.getUserList();
 		}
 		this.reportJoinsInterval = null;
-		this.tour = null;
-		this.game = null;
-		this.battle = null;
 		this.pendingApprovals = new Map();
 		this.whitelist = this.chatRoomData!.whitelist || {};
 	}
