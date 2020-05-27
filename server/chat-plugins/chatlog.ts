@@ -222,12 +222,14 @@ export const LogViewer = new class {
 			`<br><div class="pad"><strong>Searching for "${search}" in ${roomid} (${month}):</strong><hr>`
 		);
 		buf += this.renderDayResults(results, roomid);
-		if (limit && total > limit) {
+		if (limit && total > limit || total > MAX_RESULTS) {
 			// cap is met & is not being used in a year read
-			buf += `<br><strong>Max results reached, capped at ${limit}</strong>`;
+			buf += `<br><strong>Max results reached, capped at ${limit && total > limit ? limit : MAX_RESULTS}</strong>`;
 			buf += `<br><div style="text-align:center">`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|all">View all<br />&#x25bc;</button></div>`;
+			if (total < MAX_RESULTS) {
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|${limit! + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${month}|all">View all<br />&#x25bc;</button></div>`;
+			}
 		}
 		buf += `</div>`;
 		return buf;
@@ -245,11 +247,14 @@ export const LogViewer = new class {
 			buf += `<div class="pad"><strong><br>Searching all logs: </strong><hr>`;
 		}
 		buf += this.renderDayResults(results, roomid);
-		if (limit && total > limit) {
-			// cap has been met in a previous loop, add the buttons and break.
-			buf += `</div><br /><div style="text-align:center">`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${limit + 100}">View 100 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
+		if (limit && total > limit || total > MAX_RESULTS) {
+			// cap is met
+			buf += `<br><strong>Max results reached, capped at ${limit && total > limit ? limit : MAX_RESULTS}</strong>`;
+			buf += `<br><div style="text-align:center">`;
+			if (total < MAX_RESULTS) {
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|${limit! + 100}">View 100 more<br />&#x25bc;</button>`;
+				buf += `<button class="button" name="send" value="/sl ${search}|${roomid}|${year}|all">View all<br />&#x25bc;</button></div>`;
+			}
 		}
 		return buf;
 	}
@@ -455,7 +460,7 @@ const LogSearcher = new class {
 					lines[i + 1],
 					lines[i + 2],
 				]);
-				if (limit && matches.length > limit) break;
+				if (limit && matches.length > limit || matches.length > MAX_RESULTS) break;
 			}
 		}
 		return matches;
@@ -473,7 +478,7 @@ const LogSearcher = new class {
 			if (!dayResults.length) continue;
 			total += dayResults.length;
 			results[day] = dayResults;
-			if (limit && total > limit) break;
+			if (total > MAX_RESULTS || limit && total > limit) break;
 		}
 		return {results, total};
 	}
@@ -494,7 +499,7 @@ const LogSearcher = new class {
 			if (!monthTotal) continue;
 			total += monthTotal;
 			Object.assign(results, monthResults);
-			if (limit && total > limit) break;
+			if (total > MAX_RESULTS || limit && total > limit) break;
 		}
 		return {results, total};
 	}
