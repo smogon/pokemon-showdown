@@ -1032,21 +1032,21 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	const allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
 	const allTargets: {[k: string]: string} = {
-		'oneally': 'adjacentAlly',
-		'userorally': 'adjacentAllyOrSelf',
-		'oneadjacentopponent': 'adjacentFoe',
-		'all': 'all',
-		'alladjacent': 'allAdjacent',
-		'alladjacentopponents': 'allAdjacentFoes',
-		'userandallies': 'allies',
-		'usersside': 'allySide',
-		'usersteam': 'allyTeam',
-		'any': 'any',
-		'opponentsside': 'foeSide',
-		'oneadjacent': 'normal',
-		'randomadjacent': 'randomNormal',
-		'scripted': 'scripted',
-		'user': 'self',
+		oneally: 'adjacentAlly',
+		userorally: 'adjacentAllyOrSelf',
+		oneadjacentopponent: 'adjacentFoe',
+		all: 'all',
+		alladjacent: 'allAdjacent',
+		alladjacentopponents: 'allAdjacentFoes',
+		userandallies: 'allies',
+		usersside: 'allySide',
+		usersteam: 'allyTeam',
+		any: 'any',
+		opponentsside: 'foeSide',
+		oneadjacent: 'normal',
+		randomadjacent: 'randomNormal',
+		scripted: 'scripted',
+		user: 'self',
 	};
 	const allTypes: {[k: string]: string} = Object.create(null);
 	for (const i in Dex.data.TypeChart) {
