@@ -1076,7 +1076,7 @@ class TriumvirateModeTrivia extends Trivia {
 		for (const player of correctPlayers) {
 			const points = this.calculatePoints(correctPlayers.indexOf(player));
 			player.incrementPoints(points, this.questionNumber);
-			playersWithPoints.push(`${player.name} (${points})`);
+			playersWithPoints.push(`${Chat.escapeHTML(player.name)} (${points})`);
 			if (player.points >= this.getCap()) {
 				winner = true;
 			}
