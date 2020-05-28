@@ -2416,7 +2416,7 @@ export const commands: ChatCommands = {
 	],
 
 	showimage(target, room, user) {
-		return this.errorReply(`/showimage has been deprecated - use /view instead.`);
+		return this.errorReply(`/showimage has been deprecated - use /show instead.`);
 	},
 
 	requestapproval(target, room, user) {
