@@ -1047,7 +1047,6 @@ class TriumvirateModeTrivia extends Trivia {
 		const player = this.playerTable[user.id];
 		if (!player) return 'You are not a player in the current trivia game.';
 		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
-		if (player.answer) return 'You have already attempted to answer the current question.';
 		player.setAnswer(answer, this.verifyAnswer(answer));
 		const correctAnswers = Object.keys(this.playerTable).filter(id => this.playerTable[id].isCorrect).length;
 		if (correctAnswers === 3) {
@@ -1077,7 +1076,7 @@ class TriumvirateModeTrivia extends Trivia {
 		for (const player of correctPlayers) {
 			const points = this.calculatePoints(correctPlayers.indexOf(player));
 			player.incrementPoints(points, this.questionNumber);
-			playersWithPoints.push(`${player.name} (${points})`);
+			playersWithPoints.push(`${Chat.escapeHTML(player.name)} (${points})`);
 			if (player.points >= this.getCap()) {
 				winner = true;
 			}
@@ -1107,23 +1106,23 @@ class TriumvirateModeTrivia extends Trivia {
 const commands = {
 	new(target, room, user) {
 		if (room.roomid !== 'trivia') return this.errorReply("This command can only be used in the Trivia room.");
-		if (!this.can('broadcast', null, room) || !target) return false;
+		if (!this.can('broadcast', null, room)) return false;
 		if (!this.canTalk()) return;
 		if (room.game) {
 			return this.errorReply(`There is already a game of ${room.game.title} in progress.`);
 		}
 
-		const tars = target.split(',');
-		if (tars.length < 2) return this.errorReply("Invalid arguments specified.");
+		const targets = (target ? target.split(',') : []);
+		if (targets.length < 3) return this.errorReply("Usage: /trivia new [mode], [category], [length]");
 
-		let mode = toID(tars[0]);
+		let mode = toID(targets[0]);
 		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
 			mode = Dex.shuffle(['first', 'number', 'timer', 'triumvirate'])[0];
 		}
 		if (!MODES[mode]) return this.errorReply(`"${mode}" is an invalid mode.`);
 
-		const category = toID(tars[1]);
+		const category = toID(targets[1]);
 		const isRandomCategory = (category === 'random');
 		const isAll = (category === 'all');
 		let questions;
@@ -1143,7 +1142,7 @@ const commands = {
 		}
 
 		// Randomizes the order of the questions.
-		const length = toID(tars[2]);
+		const length = toID(targets[2]);
 		if (!LENGTHS[length]) return this.errorReply(`"${length}" is an invalid game length.`);
 		if (questions.length < LENGTHS[length].cap / 5) {
 			if (isRandomCategory) return this.errorReply("There are not enough questions in the randomly chosen category to finish a trivia game.");
