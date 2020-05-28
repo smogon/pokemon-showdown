@@ -1018,7 +1018,7 @@ export const commands: ChatCommands = {
 			if (!isNaN(parseInt(input))) {
 				return `.pokemon[${(parseInt(input) - 1)}]`;
 			}
-			return `.pokemon.find(p => p.baseSpecies.id==='${toID(targets[1])}' || p.species.id==='${toID(targets[1])}')`;
+			return `.pokemon.find(p => p.baseSpecies.id==='${toID(input)}' || p.species.id==='${toID(input)}')`;
 		}
 		switch (cmd) {
 		case 'hp':
