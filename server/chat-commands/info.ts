@@ -2424,7 +2424,7 @@ export const commands: ChatCommands = {
 		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestapproval`);
-		if (!/^https?:\/\//.test(target)) target = `http://${target}`;
+		if (!/^https?:\/\//.test(target)) target = `http://${Chat.escapeHTML(target)}`;
 		room.pendingApprovals.set(user.id, target);
 		this.sendReply(`You have requested for the link ${target} to be displayed.`);
 		room.sendMods(
@@ -2485,8 +2485,9 @@ export const commands: ChatCommands = {
 		if (target.includes('youtu')) {
 			return YouTube.generateVideoDisplay(link).then(res => {
 				let buf = res;
-				buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">(Suggested by ${user.name})</p></small>`;
-				if (comment) buf += `<br>(${comment})</div>`;
+				buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">`
+				buf += `(Suggested by ${Chat.escapeHTML(user.name)})</p></small>`;
+				if (comment) buf += `<br>(${Chat.escapeHTML(comment)})</div>`;
 				this.addBox(buf as string);
 				room.update();
 			});
