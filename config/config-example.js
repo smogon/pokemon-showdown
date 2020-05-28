@@ -421,6 +421,12 @@ exports.forcedpublicprefixes = [];
  */
 exports.startuphook = function () {};
 
+
+/**
+ * chatlogreader - the search method used for searching chatlogs.
+ * @type {'ripgrep' | 'fs'}
+ */
+exports.chatlogreader = 'fs';
 /**
  * permissions and groups:
  *   Each entry in `grouplist` is a seperate group. Some of the members are "special"

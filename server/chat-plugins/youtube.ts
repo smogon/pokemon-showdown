@@ -10,6 +10,7 @@ import {FS} from '../../lib/fs';
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const CHANNEL = `${ROOT}channels`;
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
+
 let channelData: AnyObject;
 
 try {

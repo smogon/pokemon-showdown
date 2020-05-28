@@ -283,8 +283,14 @@ export const BattleScripts: BattleScriptsData = {
 		}
 
 		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			const originalHp = pokemon.hp;
 			this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
+			if (pokemon && pokemon !== target && move && move.category !== 'Status') {
+				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
+					this.runEvent('EmergencyExit', pokemon, pokemon);
+				}
+			}
 		}
 
 		return true;
@@ -714,7 +720,7 @@ export const BattleScripts: BattleScriptsData = {
 		if (move.struggleRecoil) {
 			let recoilDamage;
 			if (this.dex.gen >= 5) {
-				recoilDamage = this.dex.clampIntRange(Math.round(pokemon.maxhp / 4), 1);
+				recoilDamage = this.dex.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
 			} else {
 				recoilDamage = this.trunc(pokemon.maxhp / 4);
 			}

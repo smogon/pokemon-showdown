@@ -110,6 +110,18 @@ If Volt Absorb absorbs Thunder Wave, Volt Absorb's TryHit handler shows the Volt
 
 If Water Absorb doesn't absorb Thunder Wave, Water Absorb's TryHit handler returns `undefined`, to show that Water Absorb does not interact with Thunder Wave.
 
+### `??` vs `||`
+
+We prefer using `||` instead of `??` for fallback, for a few reasons:
+
+- `sucrase` (our TypeScript to JavaScript compiler) makes `??` rather more complicated than ideal.
+
+- We rarely treat `0` or `''` differently from `null` (the same reason we use `!foo` instead of `foo == null` for null checks)
+
+- TypeScript does not actually allow us to have "non-empty strings" or "positive integers" as a type, so we have to deal with those cases no matter what.
+
+If, at a future point, TypeScript does allow us to constrain types better, we might consider using `??` for clarity. But for now, I see no reason to use `??` except in very niche situations where the difference matters.
+
 
 ES5 and ES6
 ------------------------------------------------------------------------
