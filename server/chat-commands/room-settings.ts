@@ -527,6 +527,28 @@ export const commands: ChatCommands = {
 		`/banword list - Shows the list of banned words in the current room. Requires: % @ # & ~`,
 	],
 
+	approvals(target, room, user) {
+		if (!this.can('declare', null, room)) return false;
+		target = toID(target);
+		if (!target) {
+			return this.sendReply(`Approvals are currently ${room.approvalsDisabled ? `DISABLED` : `ENABLED`} for ${room}.`);
+		}
+		if (this.meansNo(target)) {
+			if (room.approvalsDisabled) return this.errorReply(`Approvals are already disabled.`);
+			room.approvalsDisabled = true;
+			this.privateModAction(`${user.name} disabled approvals in this room.`);
+		} else if (this.meansYes(target)) {
+			if (!room.approvalsDisabled) return this.errorReply(`Approvals are already enabled.`);
+			room.approvalsDisabled = false;
+			this.privateModAction(`${user.name} enabled approvals in this room.`);
+		} else {
+			return this.errorReply(`Unrecognized settingfor approvals. Use 'enable' or 'disable.'`);
+		}
+		room.chatRoomData!.approvalsDisabled = room.approvalsDisabled;
+		Rooms.global.writeChatRoomData();
+		return this.modlog(`APPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
+	},
+
 	hightraffic(target, room, user) {
 		if (!target) {
 			return this.sendReply(`This room is${!room.highTraffic ? ' not' : ''} currently marked as high traffic.`);
@@ -1434,6 +1456,14 @@ export const roomSettings: SettingsHandler[] = [
 			[`tiers`, room.dataCommandTierDisplay === 'tiers' || `roomtierdisplay tiers`],
 			[`doubles tiers`, room.dataCommandTierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
 			[`numbers`, room.dataCommandTierDisplay === 'numbers' || `roomtierdisplay numbers`],
+		],
+	}),
+	room => ({
+		label: "/requestapproval usage",
+		permission: 'declare',
+		options: [
+			[`On`, room.approvalsDisabled === false || `approvals on`],
+			[`Off`, room.approvalsDisabled === true || `approvals off`],
 		],
 	}),
 ];
