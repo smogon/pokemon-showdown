@@ -2421,6 +2421,7 @@ export const commands: ChatCommands = {
 
 	requestapproval(target, room, user) {
 		if (!this.canTalk()) return false;
+		if (room.approvalsDisabled) return this.errorReply(`Media approvals are disabled in this room.`);
 		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestapproval`);
@@ -2438,6 +2439,7 @@ export const commands: ChatCommands = {
 
 	approvelink(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
+		if (room.approvalsDisabled) return this.errorReply(`Media approvals are disabled in this room.`);
 		target = toID(target);
 		if (!target) return this.parse(`/help approvelink`);
 		const id = room.pendingApprovals.get(target);
@@ -2465,6 +2467,7 @@ export const commands: ChatCommands = {
 
 	denylink(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
+		if (room.approvalsDisabled) return this.errorReply(`Media approvals are disabled in this room.`);
 		target = toID(target);
 		if (!target) return this.parse(`/help denylink`);
 		const id = room.pendingApprovals.get(target);
