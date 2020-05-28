@@ -1015,10 +1015,10 @@ export const commands: ChatCommands = {
 			return 'p3';
 		}
 		function getPokemon(input: string) {
-			if (/^[0-9]+$/.test(input)) {
+			if (!isNaN(parseInt(input))) {
 				return `.pokemon[${(parseInt(input) - 1)}]`;
 			}
-			return `.pokemon.find(p => p.id==='${toID(targets[1])}')`;
+			return `.pokemon.find(p => p.baseSpecies.id==='${toID(targets[1])}' || p.species.id==='${toID(targets[1])}')`;
 		}
 		switch (cmd) {
 		case 'hp':
@@ -1035,7 +1035,7 @@ export const commands: ChatCommands = {
 			break;
 		case 'pp':
 			void battle.stream.write(
-				`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.moveSlots[p.moves.indexOf('${toID(targets[2])}')].pp = ${parseInt(targets[3])};`
+				`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.getMoveData('${toID(targets[2])}').pp = ${parseInt(targets[3])};`
 			);
 			break;
 		case 'boost':
