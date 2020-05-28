@@ -1082,6 +1082,6 @@ export const commands: ChatCommands = {
 		`/editbattle weather [weather]`,
 		`/editbattle terrain [terrain]`,
 		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t`,
-		`[player] must be a username or number, [pokemon] must be species name or number (not nickname), [move] must be move name.`,
+		`[player] must be a username or number, [pokemon] must be species name or party slot number (not nickname), [move] must be move name.`,
 	],
 };
