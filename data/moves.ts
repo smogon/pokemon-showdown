@@ -4627,6 +4627,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			const oldAbility = target.setAbility(source.ability);
 			if (oldAbility) {
 				this.add('-ability', target, target.getAbility().name, '[from] move: Entrainment');
+				if (target.side !== source.side) target.staleness = 'external';
 				return;
 			}
 			return false;
@@ -5580,7 +5581,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
-			if (success && target.side.id !== source.side.id) {
+			if (success && target.side !== source.side) {
 				target.staleness = 'external';
 			}
 			return success;
@@ -8026,7 +8027,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
 			}
-			if (success && target.side.id !== source.side.id) {
+			if (success && target.side !== source.side) {
 				target.staleness = 'external';
 			}
 			return success;
@@ -16120,6 +16121,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 				target.ability = sourceAbility.id;
 				source.abilityData = {id: toID(source.ability), target: source};
 				target.abilityData = {id: toID(target.ability), target: target};
+				if (target.side !== source.side) target.staleness = 'external';
 			}
 			this.singleEvent('Start', targetAbility, source.abilityData, source);
 			this.singleEvent('Start', sourceAbility, target.abilityData, target);
