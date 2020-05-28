@@ -327,6 +327,37 @@ export const commands: ChatCommands = {
 		`Searches with "natural gift" in them will find items with the specified Natural Gift behavior.`,
 	],
 
+	'!abilitysearch': true,
+	asearch: 'abilitysearch',
+	as: 'abilitysearch',
+	abilitysearch(target, room, user, connection, cmd, message) {
+		if (!this.canBroadcast()) return;
+		if (!target) return this.parse('/help abilitysearch');
+
+		return runSearch({
+			tar: target,
+			cmd: 'abilitysearch',
+			canAll: (!this.broadcastMessage || room?.isPersonal),
+			message: (this.broadcastMessage ? "" : message),
+		}).then(response => {
+			if (!response.error && !this.runBroadcast()) return;
+			if (response.error) {
+				this.errorReply(response.error);
+			} else if (response.reply) {
+				this.sendReplyBox(response.reply);
+			} else if (response.dt) {
+				(Chat.commands.data as Chat.ChatHandler).call(
+					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+				);
+			}
+			this.update();
+		});
+	},
+	abilitysearchhelp: [
+		`/abilitysearch [ability description] - finds abilities that match the given keywords.`,
+		`Command accepts natural language. (tip: fewer words tend to work better)`,
+	],
+
 	'!learn': true,
 	learnset: 'learn',
 	learnall: 'learn',
@@ -1881,6 +1912,137 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	return {reply: resultsStr};
 }
 
+function runAbilitysearch(target: string, cmd: string, canAll: boolean, message: string) {
+	// based heavily on runItemsearch()
+	let showAll = false;
+
+	target = target.trim();
+	const lastCommaIndex = target.lastIndexOf(',');
+	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
+	if (lastArgumentSubstr === 'all') {
+		if (!canAll) return {error: "A search ending in ', all' cannot be broadcast."};
+		showAll = true;
+		target = target.substr(0, lastCommaIndex);
+	}
+
+	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
+	const rawSearch = target.split(' ');
+	const searchedWords: string[] = [];
+	let foundAbilities: string[] = [];
+
+	for (const [i, search] of rawSearch.entries()) {
+		let newWord = search.trim();
+		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
+		switch (newWord) {
+		// remove extraneous words
+		case 'a':
+		case 'an':
+		case 'is':
+		case 'it':
+		case 'its':
+		case 'the':
+		case 'that':
+		case 'which':
+		case 'user':
+			newWord = '';
+			break;
+		// replace variations of common words with standardized versions
+		case 'opponent': newWord = 'attacker'; break;
+		case 'heal':
+		case 'heals':
+		case 'recovers': newWord = 'restores'; break;
+		case 'boost':
+		case 'boosts': newWord = 'raised'; break;
+		case 'super':
+			if (rawSearch[i + 1] === 'effective') {
+				newWord = 'supereffective';
+			}
+			break;
+		case 'special':
+			if (rawSearch[i + 1] === 'defense') {
+				newWord = 'specialdefense';
+			} else if (rawSearch[i + 1] === 'attack') {
+				newWord = 'specialattack';
+			}
+			break;
+		case 'spd':
+		case 'spdef': newWord = 'specialdefense'; break;
+		case 'spa':
+		case 'spatk': newWord = 'specialattack'; break;
+		case 'atk': newWord = 'attack'; break;
+		case 'def': newWord = 'defense'; break;
+		case 'burn':
+		case 'burns': newWord = 'burned'; break;
+		case 'poison':
+		case 'poisons': newWord = 'poisoned'; break;
+		default:
+			if (/x[\d.]+/.test(newWord)) {
+				newWord = newWord.substr(1) + 'x';
+			}
+		}
+		if (!newWord || searchedWords.includes(newWord)) continue;
+		searchedWords.push(newWord);
+	}
+
+	if (searchedWords.length === 0) return {error: "No distinguishing words were used. Try a more specific search."};
+	let bestMatched = 0;
+	for (const n in Dex.data.Abilities) {
+		const ability = Dex.getAbility(n);
+		let matched = 0;
+		// splits words in the description into a toID()-esque format except retaining / and . in numbers
+		let descWords = ability.desc || ability.shortDesc || '';
+		// add more general quantifier words to descriptions
+		if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
+		descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
+		const descWordsArray = descWords.toLowerCase()
+			.replace('-', ' ')
+			.replace(/[^a-z0-9\s/]/g, '')
+			.replace(/(\D)\./, (p0, p1) => p1).split(' ');
+
+		for (const word of searchedWords) {
+			switch (word) {
+			case 'specialattack':
+				if (descWordsArray[descWordsArray.indexOf('special') + 1] === 'attack') matched++;
+				break;
+			case 'specialdefense':
+				if (descWordsArray[descWordsArray.indexOf('special') + 1] === 'defense') matched++;
+				break;
+			default:
+				if (descWordsArray.includes(word)) matched++;
+			}
+		}
+
+		if (matched >= (searchedWords.length * 3 / 5)) {
+			if (matched === bestMatched) {
+				foundAbilities.push(ability.name);
+			} else if (matched > bestMatched) {
+				foundAbilities = [ability.name];
+				bestMatched = matched;
+			}
+		}
+	}
+
+	if (foundAbilities.length === 1) return {dt: foundAbilities[0]};
+	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
+	if (foundAbilities.length > 0) {
+		foundAbilities.sort();
+		let notShown = 0;
+		if (!showAll && foundAbilities.length > RESULTS_MAX_LENGTH + 5) {
+			notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
+			foundAbilities = foundAbilities.slice(0, RESULTS_MAX_LENGTH);
+		}
+		resultsStr += foundAbilities.map(
+			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
+		).join(", ");
+		if (notShown) {
+			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+		}
+	} else {
+		resultsStr += "No abilities found. Try a more general search.";
+	}
+	return {reply: resultsStr};
+}
+
 function runLearn(target: string, cmd: string, canAll: boolean, message: string) {
 	let format: Format = Object.create(null);
 	const targets = target.split(',');
@@ -2079,6 +2241,8 @@ const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query =>
 			return runMovesearch(query.tar, query.cmd, query.canAll, query.message);
 		case 'itemsearch':
 			return runItemsearch(query.tar, query.cmd, query.canAll, query.message);
+		case 'abilitysearch':
+			return runAbilitysearch(query.tar, query.cmd, query.canAll, query.message);
 		case 'learn':
 			return runLearn(query.tar, query.message, query.canAll, query.message);
 		default:
