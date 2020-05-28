@@ -2485,7 +2485,7 @@ export const commands: ChatCommands = {
 		if (target.includes('youtu')) {
 			return YouTube.generateVideoDisplay(link).then(res => {
 				let buf = res;
-				buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">`
+				buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">`;
 				buf += `(Suggested by ${Chat.escapeHTML(user.name)})</p></small>`;
 				if (comment) buf += `<br>(${Chat.escapeHTML(comment)})</div>`;
 				this.addBox(buf as string);
