@@ -136,7 +136,7 @@ export const commands: ChatCommands = {
 			if (!target) return this.errorReply("Usage: /roomevents start [event name]");
 			target = toID(target);
 			const event = room.events[getEventID(target, room)];
-			if (!event) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			if (!event) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			if (event.started) {
 				return this.errorReply(`The event ${event.eventName} has already started.`);
 			}
@@ -169,7 +169,7 @@ export const commands: ChatCommands = {
 			if (!target) return this.errorReply("Usage: /roomevents remove [event name]");
 			target = toID(target);
 			if (getAllAliases(room).includes(target)) return this.errorReply("To delete aliases, use /roomevents removealias.");
-			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			if (!room.events[target]) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			delete room.events[target];
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
 			this.modlog('ROOMEVENT', null, `removed "${target}"`);
@@ -187,7 +187,7 @@ export const commands: ChatCommands = {
 			target = toID(target);
 
 			const event = room.events[getEventID(target, room)];
-			if (!event) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			if (!event) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			if (!this.runBroadcast()) return;
 			const buff = `<table border="1" cellspacing="0" cellpadding="3">${formatEvent(event)}</table>`;
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
