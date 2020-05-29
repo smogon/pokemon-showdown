@@ -21,8 +21,10 @@ try {
 
 export class YoutubeInterface {
 	interval: NodeJS.Timer | null;
+	timer: number;
 	constructor() {
 		this.interval = null;
+		this.timer = 0;
 	}
 	async getChannelData(link: string, username?: string) {
 		const id = this.getId(link);
@@ -154,7 +156,7 @@ export class YoutubeInterface {
 		buf += `#white;width:100%;border-bottom:0px;vertical-align:top;">`;
 		buf += `<p style="background: #e22828; padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
 		buf += `${info.likes} likes | ${info.dislikes} dislikes | ${info.views} video views<br><br>`;
-		buf += `<small>Published on ${info.date} | ID: ${id}</small></p>`;
+		buf += `<small>Published on ${info.date} | ID: ${id}</small><br>Uploaded by: ${info.channel}</p>`;
 		buf += `<br><details><summary>Video Description</p></summary>`;
 		buf += `<p style="background: #e22828;max-width:500px;padding: 5px;border-radius:8px;color:white;font-weight:bold;text-align:center;">`;
 		buf += `<i>${info.description.slice(0, 400).replace(/\n/g, ' ')}${info.description.length > 400 ? '(...)' : ''}</p><i></details></td>`;
@@ -167,6 +169,7 @@ const YouTube = new YoutubeInterface();
 export const commands: ChatCommands = {
 	randchannel(target, room, user) {
 		if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
+		if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 		this.runBroadcast();
 		if (this.broadcasting) {
 			if (!this.can('broadcast', null, room)) return false;
@@ -267,13 +270,17 @@ export const commands: ChatCommands = {
 			this.privateModAction(`(${user.name} updated channel ${id}'s username to ${name}.)`);
 			return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
 		},
+		interval: 'repeat',
 		repeat(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			if (!this.can('declare', null, room)) return false;
-			if (!target || isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
+			if (!target) return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.timer)}.`);
+			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
+			if (isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
 			let interval = Number(target);
 			if (interval < 10) return this.errorReply(`${interval} is too low - set it above 10 minutes.`);
 			interval = interval * 60 * 1000;
+			YouTube.timer = interval;
 			if (YouTube.interval) clearInterval(YouTube.interval);
 			YouTube.interval = setInterval(
 				() => void YouTube.randChannel().then(res => {
@@ -291,7 +298,7 @@ export const commands: ChatCommands = {
 	youtubehelp: [
 		`YouTube commands:`,
 		`/randchannel - View data of a random channel from the YouTube database.`,
-		`/youtube addchannel [channel[- Add channel data to the Youtube database. Requires: % @ # ~`,
+		`/youtube addchannel [channel] - Add channel data to the Youtube database. Requires: % @ # ~`,
 		`/youtube removechannel [channel]- Delete channel data from the YouTube database. Requires: % @ # ~`,
 		`/youtube channel [channel] - View the data of a specified channel. Can be either channel ID or channel name.`,
 		`/youtube video [video] - View data of a specified video. Can be either channel ID or channel name.`,
