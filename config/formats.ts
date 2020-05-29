@@ -368,7 +368,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 					bstMega += megaSpecies.baseStats[megaStat];
 				}
 				if (species.baseSpecies === item.megaEvolves && bstMega > 625) {
-					return [`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
+					return [
+						`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`,
+					];
 				}
 			}
 			if (set.moves.length !== 1 || this.dex.getMove(set.moves[0]).id !== 'metronome') {
@@ -714,7 +716,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		pokemon: {
 			hasAbility(ability) {
 				if (this.ignoringAbility()) return false;
-				if (Array.isArray(ability)) return ability.some(ability => this.hasAbility(ability));
+				if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
 				const abilityid = toID(ability);
 				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
 			},
@@ -745,7 +747,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				lcuber: 40,
 				lc: 40,
 			};
-			let tier = toID(species.tier) || 'ou';
+			const tier = toID(species.tier) || 'ou';
 			if (!(tier in boosts)) return;
 			const pokemon: Species = this.dex.deepClone(species);
 			const boost = boosts[tier];
@@ -958,7 +960,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			}
 			// Add the mon's status effect to it as a volatile.
 			const status = this.dex.getEffect(name);
-			if (status && status.exists) {
+			if (status?.exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
 		},
@@ -1422,7 +1424,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		banlist: ['Unown'],
 		minSourceGen: 7,
 		onValidateTeam(team) {
-			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
+			const legends = [
+				'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma',
+			];
 			let n = 0;
 			for (const set of team) {
 				const baseSpecies = this.dex.getSpecies(set.species).baseSpecies;
@@ -1447,7 +1451,15 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		timer: {starting: 5 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90, grace: 90, timeoutAutoChoose: true, dcTimerBank: false},
+		timer: {
+			starting: 5 * 60,
+			addPerTurn: 0,
+			maxPerTurn: 55,
+			maxFirstTurn: 90,
+			grace: 90,
+			timeoutAutoChoose: true,
+			dcTimerBank: false,
+		},
 		ruleset: ['Standard GBU'],
 		banlist: ['Oranguru + Symbiosis', 'Passimian + Defiant', 'Unown', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
 		minSourceGen: 7,
@@ -1468,7 +1480,15 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		timer: {starting: 15 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90, grace: 90, timeoutAutoChoose: true, dcTimerBank: false},
+		timer: {
+			starting: 15 * 60,
+			addPerTurn: 0,
+			maxPerTurn: 55,
+			maxFirstTurn: 90,
+			grace: 90,
+			timeoutAutoChoose: true,
+			dcTimerBank: false,
+		},
 		ruleset: ['Obtainable', 'Alola Pokedex', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
 		banlist: [
 			'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zygarde', 'Mega',
@@ -1717,7 +1737,9 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		],
 		minSourceGen: 6,
 		onValidateTeam(team) {
-			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde'];
+			const legends = [
+				'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde',
+			];
 			let n = 0;
 			for (const set of team) {
 				const baseSpecies = this.dex.getSpecies(set.species).baseSpecies;
