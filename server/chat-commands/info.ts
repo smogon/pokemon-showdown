@@ -738,7 +738,7 @@ export const commands: ChatCommands = {
 						allAdjacent: "All Adjacent Pok\u00e9mon",
 						any: "Any Pok\u00e9mon",
 						all: "All Pok\u00e9mon",
-						scripted: "Opposing Pok\u00e9mon that last dealt damage to the user",
+						scripted: "Chosen Automatically",
 						randomNormal: "Random Adjacent Opposing Pok\u00e9mon",
 						allies: "User and Allies",
 					};
