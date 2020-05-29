@@ -955,7 +955,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				// To prevent overwriting those, and to prevent accidentaly leaking
 				// that a pokemon is on a team through the onStart even triggering
 				// at the start of a match, users with pokemon names will need their
-				// statuse's to end in "user".
+				// statuses to end in "user".
 				name = name + 'user';
 			}
 			// Add the mon's status effect to it as a volatile.
