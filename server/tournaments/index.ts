@@ -1179,8 +1179,8 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			if (!this.runBroadcast()) return;
 			const users = usersToNames(tournament.getRemainingPlayers().sort());
 			this.sendReplyBox(
-				Chat.html`<strong>${users.length}/${tournament.players.length}` +
-				` users remain in this tournament:</strong><br />${users.join(', ')}`
+				`<strong>${users.length}/${tournament.players.length}` +
+				` users remain in this tournament:</strong><br />${Chat.escapeHTML(users.join(', '))}`
 			);
 		},
 		getupdate(tournament, user) {
