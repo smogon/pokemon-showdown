@@ -1015,10 +1015,10 @@ export const commands: ChatCommands = {
 			return 'p3';
 		}
 		function getPokemon(input: string) {
-			if (/^[0-9]+$/.test(input)) {
+			if (/^[0-9]+$/.test(input.trim())) {
 				return `.pokemon[${(parseInt(input) - 1)}]`;
 			}
-			return `.pokemon.find(p => p.id==='${toID(targets[1])}')`;
+			return `.pokemon.find(p => p.baseSpecies.id==='${toID(input)}' || p.species.id==='${toID(input)}')`;
 		}
 		switch (cmd) {
 		case 'hp':
@@ -1035,7 +1035,7 @@ export const commands: ChatCommands = {
 			break;
 		case 'pp':
 			void battle.stream.write(
-				`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.moveSlots[p.moves.indexOf('${toID(targets[2])}')].pp = ${parseInt(targets[3])};`
+				`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.getMoveData('${toID(targets[2])}').pp = ${parseInt(targets[3])};`
 			);
 			break;
 		case 'boost':
@@ -1082,6 +1082,6 @@ export const commands: ChatCommands = {
 		`/editbattle weather [weather]`,
 		`/editbattle terrain [terrain]`,
 		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t`,
-		`[player] must be a username or number, [pokemon] must be species name or number (not nickname), [move] must be move name.`,
+		`[player] must be a username or number, [pokemon] must be species name or party slot number (not nickname), [move] must be move name.`,
 	],
 };
