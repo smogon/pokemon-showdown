@@ -11,7 +11,6 @@ const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
 import {Net} from '../lib/net';
-import * as url from 'url';
 
 import {FS} from '../lib/fs';
 
@@ -64,21 +63,18 @@ class LoginServerInstance {
 			);
 		}
 		this.openRequests++;
-		let dataString = '';
-		if (data) {
-			for (const i in data) {
-				dataString += '&' + i + '=' + encodeURIComponent('' + data[i]);
-			}
-		}
-
-		const actionUrl = this.uri + 'action.php' +
-			'?act=' + action + '&serverid=' + Config.serverid +
-			'&servertoken=' + encodeURIComponent(Config.servertoken) +
-			'&nocache=' + new Date().getTime() + dataString;
 
 		try {
-			const request = Net(actionUrl);
-			const buffer = await request.get();
+			const request = Net(this.uri);
+			const buffer = await request.get({
+				query: {
+					...data,
+					act: action,
+					serverid: Config.serverid,
+					servertoken: Config.servertoken,
+					nocache: new Date().getTime(),
+				},
+			});
 			const json = parseJSON(buffer);
 			if (json.error) {
 				this.openRequests--;

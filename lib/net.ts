@@ -10,9 +10,12 @@ import * as http from 'http';
 import * as url from 'url';
 import * as Streams from './streams';
 
-export type PostData = string | {[key: string]: string | number};
+export interface PostData {
+	[key: string]: string | number;
+}
 export interface NetRequestOptions extends https.RequestOptions {
-	body?: PostData;
+	body?: string | PostData;
+	query?: PostData;
 }
 
 export class NetRequest {
@@ -22,13 +25,21 @@ export class NetRequest {
 		this.uri = uri;
 		this.statusCode = undefined;
 	}
+	encodeQuery(data: PostData) {
+		let out = '';
+		for (const key in data) {
+			if (out) out += `&`;
+			out += `${key}=${encodeURIComponent('' + data[key])}`;
+		}
+		return out;
+	}
 	/**
 	 * Makes a http/https get request to the given link and returns the status, headers, and a stream.
 	 * The request data itself can be read with ReadStream#read().
 	 * @param opts request opts - headers, etc.
 	 * @param body POST body
 	 */
-	getFullResponse(opts: NetRequestOptions = {}, body?: PostData): Promise<{
+	getFullResponse(opts: NetRequestOptions = {}, body?: string | PostData): Promise<{
 		statusCode: number | undefined,
 		statusMessage: string | undefined,
 		headers: http.IncomingHttpHeaders | undefined,
@@ -41,19 +52,22 @@ export class NetRequest {
 
 		if (body && typeof body !== 'string') {
 			if (!opts.headers) opts.headers = {};
-			opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-			let out = '';
-			for (const key in body) {
-				if (out) out += `&`;
-				out += `${key}=${encodeURIComponent('' + body[key])}`;
+			if (!opts.headers['Content-Type']) {
+				opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 			}
-			body = out;
+			body = this.encodeQuery(body);
+		}
+
+		if (opts.query) {
+			this.uri += (this.uri.includes('?') ? '&' : '?') + this.encodeQuery(opts.query);
 		}
 
 		const postBody = body;
 		if (postBody) {
 			if (!opts.headers) opts.headers = {};
-			opts.headers['Content-Length'] = Buffer.byteLength(postBody);
+			if (!opts.headers['Content-Length']) {
+				opts.headers['Content-Length'] = Buffer.byteLength(postBody);
+			}
 		}
 
 		return new Promise((resolve, reject) => {
