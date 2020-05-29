@@ -225,7 +225,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
@@ -386,7 +386,7 @@ const Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
 		teamLength: {
@@ -1372,7 +1372,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
@@ -1512,7 +1512,7 @@ const Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
 		teamLength: {
@@ -1678,7 +1678,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -1761,7 +1761,7 @@ const Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
 		// no restrictions, for serious (other than team preview)
@@ -1791,7 +1791,7 @@ const Formats = [
 		gameType: 'triples',
 		searchShow: false,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
 		// no restrictions, for serious (other than team preview)
@@ -1916,7 +1916,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -1965,7 +1965,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -1978,7 +1978,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -2083,7 +2083,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions
 		ruleset: ['Cancel Mod'],
@@ -2115,7 +2115,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions
 		ruleset: ['Cancel Mod'],
@@ -2186,7 +2186,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
@@ -2234,7 +2234,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
@@ -2293,7 +2293,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
