@@ -53,7 +53,7 @@ export class NetRequest {
 		const postBody = body;
 		if (postBody) {
 			if (!opts.headers) opts.headers = {};
-			opts.headers['Content-Length'] = postBody.length;
+			opts.headers['Content-Length'] = Buffer.byteLength(postBody);
 		}
 
 		return new Promise((resolve, reject) => {
