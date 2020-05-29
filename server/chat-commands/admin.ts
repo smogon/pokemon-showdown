@@ -1015,7 +1015,7 @@ export const commands: ChatCommands = {
 			return 'p3';
 		}
 		function getPokemon(input: string) {
-			if (!isNaN(parseInt(input))) {
+			if (/^[0-9]+$/.test(input.trim())) {
 				return `.pokemon[${(parseInt(input) - 1)}]`;
 			}
 			return `.pokemon.find(p => p.baseSpecies.id==='${toID(input)}' || p.species.id==='${toID(input)}')`;
