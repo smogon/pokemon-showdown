@@ -727,6 +727,7 @@ interface EventMethods {
 	onBoostPriority?: number;
 	onDamagePriority?: number;
 	onDragOutPriority?: number;
+	onEffectivenessPriority?: number;
 	onFoeBasePowerPriority?: number;
 	onFoeBeforeMovePriority?: number;
 	onFoeModifyDefPriority?: number;

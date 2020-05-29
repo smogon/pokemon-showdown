@@ -869,6 +869,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		onBegin() {
 			this.add('rule', 'Inverse Mod: Weaknesses become resistances, while resistances and immunities become weaknesses.');
 		},
+		onEffectivenessPriority: 1,
 		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;

@@ -36,7 +36,7 @@ describe('Tar Shot', function () {
 		assert.statStage(battle.p2.active[0], 'spa', 2);
 	});
 
-	it.skip('should not interact with Delta Stream', function () {
+	it('should not interact with Delta Stream', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wobbuffet', moves: ['tarshot']},
 			{species: 'wynaut', moves: ['fusionflare']},
