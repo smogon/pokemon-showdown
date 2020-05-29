@@ -1,10 +1,7 @@
-'use strict';
-
 // Note: This is the list of formats
 // The rules that formats use are stored in data/rulesets.js
 
-/**@type {(FormatsData | {section: string, column?: number})[]} */
-const Formats = [
+export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
@@ -355,8 +352,8 @@ const Formats = [
 				return [`${species.name} is a Steel-type, which is banned from Metronome Battle.`];
 			}
 			let bst = 0;
-			for (const stat in species.baseStats) {
-				// @ts-ignore
+			let stat: StatName;
+			for (stat in species.baseStats) {
 				bst += species.baseStats[stat];
 			}
 			if (bst > 625) {
@@ -366,9 +363,9 @@ const Formats = [
 			if (set.item && item.megaStone) {
 				let bstMega = 0;
 				const megaSpecies = this.dex.getSpecies(item.megaStone);
-				for (const stat in megaSpecies.baseStats) {
-					// @ts-ignore
-					bstMega += megaSpecies.baseStats[stat];
+				let megaStat: StatName;
+				for (megaStat in megaSpecies.baseStats) {
+					bstMega += megaSpecies.baseStats[megaStat];
 				}
 				if (species.baseSpecies === item.megaEvolves && bstMega > 625) {
 					return [`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
@@ -480,12 +477,10 @@ const Formats = [
 		banlist: ['Steelix', 'Psychic Surge', 'Psychic Terrain', 'Shell Smash'],
 		unbanlist: ['Darmanitan-Galar'],
 		onModifySpecies(species, target, source, effect) {
-			const newSpecies = this.dex.deepClone(species);
-			/** @type {number[]} */
-			const reversedNums = Object.values(newSpecies.baseStats).reverse();
-			newSpecies.baseStats = this.dex.deepClone(newSpecies.baseStats);
+			const newSpecies: Species = this.dex.deepClone(species);
+			const reversedNums: number[] = Object.values(newSpecies.baseStats).reverse();
 			for (const [i, statName] of Object.keys(newSpecies.baseStats).entries()) {
-				newSpecies.baseStats[statName] = reversedNums[i];
+				newSpecies.baseStats[statName as StatName] = reversedNums[i];
 			}
 			return newSpecies;
 		},
@@ -555,8 +550,7 @@ const Formats = [
 		restricted: ['Gengar', 'Kyurem-Black', 'Kyurem-White', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zamazenta', 'Zekrom', 'Zeraora'],
 		onValidateTeam(team, format) {
 			const restrictedPokemon = format.restricted || [];
-			/**@type {{[k: string]: true}} */
-			const itemTable = {};
+			const itemTable: Set<ID> = new Set();
 			for (const set of team) {
 				const item = this.dex.getItem(set.item);
 				if (!item || !item.megaStone) continue;
@@ -565,8 +559,10 @@ const Formats = [
 				if (restrictedPokemon.includes(species.name)) {
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
-				if (itemTable[item.id]) return ["You are limited to one of each mega stone.", "(You have more than one " + item.name + ")"];
-				itemTable[item.id] = true;
+				if (itemTable.has(item.id)) {
+					return ["You are limited to one of each mega stone.", "(You have more than one " + item.name + ")"];
+				}
+				itemTable.add(item.id);
 			}
 		},
 		onBegin() {
@@ -675,11 +671,8 @@ const Formats = [
 			'Regenerator ++ Wimp Out', 'Sand Rush', 'Sand Veil', 'Shadow Tag', 'Simple', 'Slush Rush', 'Snow Cloak',
 			'Speed Boost', 'Steelworker ++ Steely Spirit', 'Tinted Lens', 'Trace', 'Unaware', 'Unburden', 'Water Bubble',
 		],
-		/** @param {Pokemon} pokemon */
-		// @ts-ignore
 		getSharedPower(pokemon) {
-			/** @type {Set<string>} */
-			const sharedPower = new Set();
+			const sharedPower: Set<string> = new Set();
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.previouslySwitchedIn > 0) {
 					sharedPower.add(ally.baseAbility);
@@ -689,20 +682,18 @@ const Formats = [
 			return sharedPower;
 		},
 		onBeforeSwitchIn(pokemon) {
-			// @ts-ignore
-			if (!this.format.getSharedPower) return;
-			// @ts-ignore
-			for (const ability of this.format.getSharedPower(pokemon)) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.getFormat('gen8sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
 				pokemon.volatiles[effect] = {id: toID(effect), target: pokemon};
 			}
 		},
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
-			// @ts-ignore
-			if (!this.format.getSharedPower) return;
-			// @ts-ignore
-			for (const ability of this.format.getSharedPower(pokemon)) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.getFormat('gen8sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
 				delete pokemon.volatiles[effect];
 				pokemon.addVolatile(effect);
@@ -741,26 +732,25 @@ const Formats = [
 		ruleset: ['[Gen 8] OU'],
 		banlist: ['Damp Rock', 'Heat Rock'],
 		onModifySpecies(species, target, source, effect) {
-			if (!species.baseStats) return false;
-			/** @type {{[tier: string]: number}} */
-			const boosts = {
-				'UU': 10,
-				'RUBL': 10,
-				'RU': 20,
-				'NUBL': 20,
-				'NU': 30,
-				'PUBL': 30,
-				'PU': 40,
-				'NFE': 40,
-				'LC Uber': 40,
-				'LC': 40,
+			if (!species.baseStats) return;
+			const boosts: {[tier: string]: number} = {
+				uu: 10,
+				rubl: 10,
+				ru: 20,
+				nubl: 20,
+				nu: 30,
+				publ: 30,
+				pu: 40,
+				nfe: 40,
+				lcuber: 40,
+				lc: 40,
 			};
-			let tier = species.tier || 'OU';
-			if (tier[0] === '(') tier = tier.slice(1, -1);
+			let tier = toID(species.tier) || 'ou';
 			if (!(tier in boosts)) return;
-			const pokemon = this.dex.deepClone(species);
+			const pokemon: Species = this.dex.deepClone(species);
 			const boost = boosts[tier];
-			for (const statName in pokemon.baseStats) {
+			let statName: StatName;
+			for (statName in pokemon.baseStats) {
 				if (statName === 'hp') continue;
 				pokemon.baseStats[statName] = this.dex.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
 			}
@@ -957,14 +947,14 @@ const Formats = [
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
-			let name = toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+			let name: string = toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (this.dex.getSpecies(name).exists || name === 'rage') {
 				// Certain pokemon have volatiles named after their id
 				// To prevent overwriting those, and to prevent accidentaly leaking
 				// that a pokemon is on a team through the onStart even triggering
 				// at the start of a match, users with pokemon names will need their
 				// statuse's to end in "user".
-				name = /** @type {ID} */(name + 'user');
+				name = name + 'user';
 			}
 			// Add the mon's status effect to it as a volatile.
 			const status = this.dex.getEffect(name);
@@ -2298,5 +2288,3 @@ const Formats = [
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 ];
-
-exports.Formats = Formats;
