@@ -3875,7 +3875,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	aegislashblade: {
 		randomBattleMoves: ["closecombat", "ironhead", "shadowclaw", "shadowsneak", "swordsdance"],
-		randomBattleLevel: 72,
+		randomBattleLevel: 80,
 		randomDoubleBattleMoves: ["closecombat", "ironhead", "kingsshield", "shadowclaw", "shadowsneak", "swordsdance"],
 	},
 	spritzee: {
