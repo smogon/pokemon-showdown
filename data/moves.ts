@@ -18456,6 +18456,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Tar Shot');
 			},
+			onEffectivenessPriority: -2,
 			onEffectiveness(typeMod, target, type, move) {
 				if (move.type !== 'Fire') return;
 				if (!target) return;
