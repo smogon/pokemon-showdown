@@ -1111,7 +1111,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				continue;
 			}
 
-			if (target.substr(0, 'targets '.length) === 'targets ') {
+			if (target.startsWith('targets ')) {
 				target = toID(target.substr('targets '.length));
 				if (target === 'allpokemon' || target === 'anypokemon' || target.includes('adjacent')) {
 					target = target.replace('pokemon', '');
