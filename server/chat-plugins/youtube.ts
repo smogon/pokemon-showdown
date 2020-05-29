@@ -291,7 +291,7 @@ export const commands: ChatCommands = {
 	youtubehelp: [
 		`YouTube commands:`,
 		`/randchannel - View data of a random channel from the YouTube database.`,
-		`/youtube addchannel [channel[- Add channel data to the Youtube database. Requires: % @ # ~`,
+		`/youtube addchannel [channel] - Add channel data to the Youtube database. Requires: % @ # ~`,
 		`/youtube removechannel [channel]- Delete channel data from the YouTube database. Requires: % @ # ~`,
 		`/youtube channel [channel] - View the data of a specified channel. Can be either channel ID or channel name.`,
 		`/youtube video [video] - View data of a specified video. Can be either channel ID or channel name.`,
