@@ -71,12 +71,10 @@ class LoginServerInstance {
 			}
 		}
 
-		const actionUrl = url.parse(
-			this.uri + 'action.php' +
+		const actionUrl = this.uri + 'action.php' +
 			'?act=' + action + '&serverid=' + Config.serverid +
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
-			'&nocache=' + new Date().getTime() + dataString
-		).href;
+			'&nocache=' + new Date().getTime() + dataString;
 
 		try {
 			const request = Net(actionUrl);
