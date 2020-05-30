@@ -1129,6 +1129,7 @@ export class BasicChatRoom extends BasicRoom {
 	reportJoinsInterval: NodeJS.Timer | null;
 	pendingApprovals: Map<string, string>;
 	approvalsDisabled: boolean;
+	showimages: string | null;
 	whitelist: {[k: string]: boolean};
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
@@ -1197,6 +1198,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.reportJoinsInterval = null;
 		this.pendingApprovals = new Map();
 		this.approvalsDisabled = options.approvalsDisabled || false;
+		this.showimages = options.showimages || false;
 		this.whitelist = this.chatRoomData!.whitelist || {};
 	}
 
