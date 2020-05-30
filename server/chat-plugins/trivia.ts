@@ -76,7 +76,6 @@ interface TriviaQuestion {
 	type?: string;
 }
 
-// Should be [number, number, number]
 type TriviaRank = [number, number, number];
 
 interface TriviaLeaderboard {
@@ -1609,9 +1608,9 @@ const commands: ChatCommands = {
 		const score = triviaData.altLeaderboard![userid] || [0, 0, 0];
 
 		const ranks = cachedAltLadder.get().ranks[userid];
-		const allTimeRanks = cachedLadder.get().ranks[userid];
+		const allTimeRanks: TriviaRank = cachedLadder.get().ranks[userid];
 		const row = (i: number) => `<strong>${score[i]}</strong>${ranks ? ` (#${ranks[i]})` : ""}, ` +
-			`all time: <strong>${allTimeScore[i]}</strong> (#${allTimeRanks ? allTimeRanks[i] : allTimeRanks!.length})<br />`;
+			`all time: <strong>${allTimeScore[i]}</strong> (#${allTimeRanks[i]})<br />`;
 		this.sendReplyBox(
 			`User: <strong>${name}</strong><br />` +
 			`Leaderboard score: ${row(0)}` +
