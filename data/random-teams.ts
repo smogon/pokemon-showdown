@@ -759,7 +759,8 @@ export class RandomTeams {
 					if (isDoubles && (hasMove['nuzzle'] || hasMove['electroweb'])) rejected = true;
 					break;
 				case 'toxic':
-					if (counter.setupType || (hasMove['rest'] && hasType['Fairy']) || hasMove['sludgewave'] || hasMove['thunderwave'] || hasMove['trickroom'] || hasMove['willowisp']) rejected = true;
+					if (counter.setupType || hasMove['sludgewave'] || hasMove['thunderwave'] || hasMove['trickroom'] || hasMove['willowisp']) rejected = true;
+					if (movePool.includes('whirlpool')) rejected = true;
 					break;
 				case 'toxicspikes':
 					if (counter.setupType || teamDetails.toxicSpikes) rejected = true;
