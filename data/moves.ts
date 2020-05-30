@@ -7881,7 +7881,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Every Pokemon in the user's party is cured of its major status condition. Allies with Soundproof are not healed.",
+		desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
 		shortDesc: "Cures the user's party of all status conditions.",
 		name: "Heal Bell",
 		pp: 5,
@@ -7892,7 +7892,7 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 			const side = pokemon.side;
 			let success = false;
 			for (const ally of side.pokemon) {
-				if (ally.hasAbility('soundproof') && source !== ally) continue;
+				if (ally !== source && ally.hasAbility('soundproof')) continue;
 				if (ally.cureStatus()) success = true;
 			}
 			return success;
