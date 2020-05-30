@@ -2421,7 +2421,9 @@ export const commands: ChatCommands = {
 
 	requestapproval(target, room, user) {
 		if (!this.canTalk()) return false;
-		if (room.approvalsDisabled) return this.errorReply(`Media approvals are disabled in this room.`);
+		if (room.approvalsDisabled) {
+			return this.errorReply(`Media approvals are disabled in this room.`);
+		}
 		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestapproval`);
@@ -2437,9 +2439,11 @@ export const commands: ChatCommands = {
 	},
 	requestapprovalhelp: [`/requestapproval [link], [comment] - Requests permission to show media in the room.`],
 
-	approvelink(target, room, user) {
+	async approvelink(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (room.approvalsDisabled) return this.errorReply(`Media approvals are disabled in this room.`);
+		if (room.approvalsDisabled) {
+			return this.errorReply(`Media approvals are disabled in this room.`);
+		}
 		target = toID(target);
 		if (!target) return this.parse(`/help approvelink`);
 		const id = room.pendingApprovals.get(target);
@@ -2449,12 +2453,11 @@ export const commands: ChatCommands = {
 		const YouTube = new YoutubeInterface();
 		room.pendingApprovals.delete(target);
 		if (id.includes('youtu')) {
-			return YouTube.generateVideoDisplay(id).then(res => {
-				room.add(`|uhtmlchange|request-${target}|`).update();
-				res += `<br><p style="margin-left: 5px; font-size:9pt;color:white;">(Suggested by ${target})</p>`;
-				this.addBox(res as string);
-				room.update();
-			});
+			let res = await YouTube.generateVideoDisplay(id);
+			room.add(`|uhtmlchange|request-${target}|`).update();
+			res += `<br><p style="margin-left: 5px; font-size:9pt;color:white;">(Suggested by ${target})</p>`;
+			this.addBox(res as string);
+			room.update();
 		} else {
 			void Chat.fitImage(id).then(([width, height]) => {
 				this.addBox(Chat.html`<img src="${id}" style="width: ${width}px; height: ${height}px" />`);
@@ -2467,7 +2470,9 @@ export const commands: ChatCommands = {
 
 	denylink(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (room.approvalsDisabled) return this.errorReply(`Media approvals are disabled in this room.`);
+		if (room.approvalsDisabled) {
+			return this.errorReply(`Media approvals are disabled in this room.`);
+		}
 		target = toID(target);
 		if (!target) return this.parse(`/help denylink`);
 		const id = room.pendingApprovals.get(target);
@@ -2479,21 +2484,20 @@ export const commands: ChatCommands = {
 	},
 	denylinkhelp: [`/denylink [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
 
-	show(target, room, user) {
-		if (!this.can('mute', null, room) && !(user.id in room.chatRoomData!.whitelist)) return false;
+	async show(target, room, user) {
+		if (!user.authAtLeast(room.showimages!) && !(user.id in room.chatRoomData!.whitelist)) return false;
 		if (!toID(target).trim()) return this.parse(`/help link`);
 		const [link, comment] = target.split(',');
 		this.runBroadcast();
 		const YouTube = new YoutubeInterface();
-		if (target.includes('youtu')) {
-			return YouTube.generateVideoDisplay(link).then(res => {
-				let buf = res;
-				buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">`;
-				buf += `(Suggested by ${Chat.escapeHTML(user.name)})</p></small>`;
-				if (comment) buf += `<br>(${Chat.escapeHTML(comment)})</div>`;
-				this.addBox(buf as string);
-				room.update();
-			});
+		if (link.includes('youtu')) {
+			let buf = await YouTube.generateVideoDisplay(link);
+			room.add(`|uhtmlchange|request-${target}|`).update();
+			buf += `<br><small><p style="margin-left: 5px; font-size:9pt;color:white;">`;
+			buf += `(Suggested by ${Chat.escapeHTML(user.name)})</p></small>`;
+			if (comment) buf += `<br>(${Chat.escapeHTML(comment)})</div>`;
+			this.addBox(buf!);
+			room.update();
 		} else {
 			void Chat.fitImage(link).then(([width, height]) => {
 				let buf = Chat.html`<img src="${link}" style="width: ${width}px; height: ${height}px" />`;
