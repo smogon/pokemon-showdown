@@ -274,13 +274,15 @@ export const commands: ChatCommands = {
 			interval = interval * 60 * 1000;
 			YouTube.timer = interval;
 			if (YouTube.interval) clearInterval(YouTube.interval);
-			YouTube.interval = setInterval(
-				() => void YouTube.randChannel().then(res => {
+			YouTube.interval =
+			setInterval(() => {
+				void (async () => {
+					const res = await YouTube.randChannel();
 					if (!res) return this.errorReply(`Error in getting channel data.`);
 					this.addBox(res);
 					room.update();
-				}),
-				interval
+				})();
+			 }, interval
 			);
 			this.privateModAction(`(${user.name} set a randchannel interval to ${target} minutes)`);
 			return this.modlog(`CHANNELINTERVAL`, null, `${target} minutes`);
