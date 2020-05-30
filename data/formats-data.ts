@@ -2086,7 +2086,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	solrock: {
 		randomBattleMoves: ["earthquake", "explosion", "morningsun", "stealthrock", "stoneedge", "swordsdance", "willowisp", "zenheadbutt"],
 		randomBattleLevel: 88,
-		randomDoubleBattleMoves: ["allyswitch", "flareblitz", "helpinghand", "stoneedge", "willowisp", "zenheadbutt"],
+		randomDoubleBattleMoves: ["allyswitch", "flareblitz", "helpinghand", "rockslide", "stoneedge", "willowisp", "zenheadbutt"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
