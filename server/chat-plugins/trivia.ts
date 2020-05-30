@@ -125,16 +125,16 @@ function isTriviaRoom(room: Room) {
 function getTriviaGame(context: CommandContext) {
 	const room = context.room;
 	if (!room) return false;
-	if (!room.game) {
+	const game = room.game;
+	if (!game) {
 		context.errorReply(`There is no game in progress.`);
 		return false;
 	}
-	const name = room.game.constructor.name;
-	if (!name.endsWith('Trivia')) {
-		context.errorReply(`There is already a game of ${room.game.title} running.`);
+	if (!game.constructor.name.endsWith('Trivia')) {
+		context.errorReply(`The currently running game is not Trivia, it's ${room.game.title}.`);
 		return false;
 	} else {
-		return room.game as Trivia;
+		return game as Trivia;
 	}
 }
 
