@@ -122,6 +122,22 @@ function isTriviaRoom(room: Room) {
 	return false;
 }
 
+export function getTriviaGame(context: CommandContext) {
+	const room = Rooms.get('trivia');
+	if (!room) return false;
+	if (!room.game) {
+		context.errorReply(`There is no game in progress.`);
+		return false;
+	}
+	if (room.game && !room.game.gameid.includes('trivia')) {
+		context.errorReply(`There is already a game of ${room?.game.title} running.`);
+		return false;
+	}
+	if (room.game.gameid.includes('trivia')) {
+		return room.game as Trivia;
+	}
+}
+
 function writeTriviaData() {
 	FS(PATH).writeUpdate(() => (
 		JSON.stringify(triviaData, null, 2)
@@ -1099,11 +1115,8 @@ const commands: ChatCommands = {
 
 	join(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
-		const game = room.getGame(Trivia);
-		if (!game) return this.errorReply("There is no game of trivia in progress.");
-		if (game.gameid !== 'trivia') {
-			return this.errorReply(`There is already a game of ${game.title} in progress.`);
-		}
+		const game = getTriviaGame(this);
+		if (!game) return;
 		const res = game.addTriviaPlayer(user);
 		if (res) return this.errorReply(res);
 		this.sendReply('You are now signed up for this game!');
@@ -1114,16 +1127,12 @@ const commands: ChatCommands = {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
-		const game = room.getGame(Trivia);
-		if (!game) return this.errorReply("There is no game of trivia in progress.");
-		if (game.gameid !== 'trivia') {
-			return this.errorReply(`There is already a game of ${game.title} in progress.`);
-		}
+		const game = getTriviaGame(this);
+		if (!game) return;
 
 		this.splitTarget(target);
 		const targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply(`The user "${target}" does not exist.`);
-
 		const res = game.kick(targetUser);
 		if (res) return this.errorReply(res);
 		// ...
@@ -1132,12 +1141,8 @@ const commands: ChatCommands = {
 
 	leave(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
-		const game = room.getGame(Trivia);
-		if (!game) return this.errorReply("There is no game of trivia in progress.");
-		if (game.gameid !== 'trivia') {
-			return this.errorReply(`There is already a game of ${game.title} in progress.`);
-		}
-
+		const game = getTriviaGame(this);
+		if (!game) return;
 		const res = game.leave(user);
 		if (res) return this.errorReply(res);
 		this.sendReply("You have left the current game of trivia.");
@@ -1148,12 +1153,8 @@ const commands: ChatCommands = {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('broadcast', null, room)) return false;
 		if (!this.canTalk()) return;
-		const game = room.getGame(Trivia);
-		if (!game) return this.errorReply("There is no game of trivia in progress.");
-		if (game.gameid !== 'trivia') {
-			return this.errorReply(`There is already a game of ${game.title} in progress.`);
-		}
-
+		const game = getTriviaGame(this);
+		if (!game) return;
 		const res = game.start();
 		if (res) return this.errorReply(res);
 		// ...
@@ -1162,11 +1163,8 @@ const commands: ChatCommands = {
 
 	answer(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
-		const game = room.getGame(Trivia);
-		if (!game) return this.errorReply("There is no game of trivia in progress.");
-		if (game.gameid !== 'trivia') {
-			return this.errorReply(`There is already a game of ${game.title} in progress.`);
-		}
+		const game = getTriviaGame(this);
+		if (!game) return;
 
 		const answer = toID(target);
 		if (!answer) return this.errorReply("No valid answer was entered.");
@@ -1181,12 +1179,8 @@ const commands: ChatCommands = {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('broadcast', null, room)) return false;
 		if (!this.canTalk()) return;
-		const game = room.getGame(Trivia)!;
-		if (!game) return this.errorReply("There is no game of trivia in progress.");
-		if (game.gameid !== 'trivia') {
-			return this.errorReply(`There is already a game of ${game.title} in progress.`);
-		}
-
+		const game = getTriviaGame(this);
+		if (!game) return;
 		game.end(user);
 	},
 	endhelp: [`/trivia end - Forcibly end a trivia game. Requires: + % @ # & ~`],
@@ -1196,12 +1190,8 @@ const commands: ChatCommands = {
 	status(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
 		if (!this.runBroadcast()) return false;
-		const game = room.getGame(Trivia);
-		if (!game) return this.errorReply("There is no game of trivia in progress.");
-		if (game.gameid !== 'trivia') {
-			return this.errorReply(`There is already a game of ${game.title} in progress.`);
-		}
-
+		const game = getTriviaGame(this);
+		if (!game) return;
 		let tarUser;
 		if (target) {
 			this.splitTarget(target);
@@ -1210,7 +1200,6 @@ const commands: ChatCommands = {
 		} else {
 			tarUser = user;
 		}
-
 		let buffer = `There is a trivia game in progress, and it is in its ${game.phase} phase.<br />` +
 			`Mode: ${game.mode} | Category: ${game.category} | Score cap: ${game.getCap()}`;
 
@@ -1222,7 +1211,6 @@ const commands: ChatCommands = {
 		} else if (tarUser.id !== user.id) {
 			return this.errorReply(`User ${tarUser.name} is not a player in the current trivia game.`);
 		}
-
 		buffer += `<br />Players: ${game.formatPlayerList({max: null, requirePoints: false})}`;
 
 		this.sendReplyBox(buffer);
