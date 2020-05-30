@@ -541,7 +541,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (!isNaN(parseInt(cmd.replace('ds', '')))) {
 					 const gen = parseInt(cmd.replace('ds', ''));
 					if (gen < targetMove.gen) return {error: `${targetMove.name} is not available in this generation.`};
-				};
+				}
 				orGroup.moves[targetMove.id] = !isNotSearch;
 				continue;
 			}
