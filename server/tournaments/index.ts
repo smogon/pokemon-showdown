@@ -1180,7 +1180,7 @@ const tourCommands: {basic: TourCommands, creation: TourCommands, moderation: To
 			const users = usersToNames(tournament.getRemainingPlayers().sort());
 			this.sendReplyBox(
 				`<strong>${users.length}/${tournament.players.length}` +
-				` users remain in this tournament:</strong><br />${Chat.escapeHTML(users.join(', '))}`
+				Chat.html` users remain in this tournament:</strong><br />${users.join(', ')}`
 			);
 		},
 		getupdate(tournament, user) {
