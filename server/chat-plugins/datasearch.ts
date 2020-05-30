@@ -538,7 +538,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (targetMove.exists) {
 				const invalid = validParameter("moves", targetMove.id, isNotSearch, target);
 				if (invalid) return {error: invalid};
-				if (!isNaN(parseInt(cmd.replace('ds', ''))) {
+				if (!isNaN(parseInt(cmd.replace('ds', '')))) {
 					 let gen = partseInt(cmd.replace('ds', ''));
 					if (gen < targetMove.gen) return {error: `${targetMove.name} is not available in this generation.`}
 				}
