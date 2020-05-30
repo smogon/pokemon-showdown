@@ -430,8 +430,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	healbell: {
-      inherit: true,
-	   isNonstandard: null,
+		inherit: true,
+		isNonstandard: null,
 		desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Soundproof Ability are not cured.",
 		shortDesc: "Cures the user's party of all status conditions.",
 		onHit(pokemon, source) {
