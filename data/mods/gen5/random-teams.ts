@@ -511,7 +511,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Light Ball';
 		} else if (species.name === 'Shedinja' || species.name === 'Smeargle') {
 			item = 'Focus Sash';
-		} else if (counter.Physical + counter.Special + counter.Status = 1) {
+		} else if (counter.Physical + counter.Special + counter.Status === 1) {
 			item = 'Choice Specs';
 		} else if (species.name === 'Wobbuffet' && hasMove['destinybond'] && this.randomChance(1, 2)) {
 			item = 'Custap Berry';
