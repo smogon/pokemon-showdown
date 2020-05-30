@@ -131,7 +131,7 @@ function getTriviaGame(context: CommandContext) {
 		return false;
 	}
 	if (!game.constructor.name.endsWith('Trivia')) {
-		context.errorReply(`The currently running game is not Trivia, it's ${room.game.title}.`);
+		context.errorReply(`The currently running game is not Trivia, it's ${game.title}.`);
 		return false;
 	}
 	return game as Trivia;
