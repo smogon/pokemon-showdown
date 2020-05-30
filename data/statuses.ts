@@ -644,6 +644,7 @@ export const BattleStatuses: {[k: string]: PureEffectData} = {
 		name: 'DeltaStream',
 		effectType: 'Weather',
 		duration: 0,
+		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
 				this.add('-activate', '', 'deltastream');

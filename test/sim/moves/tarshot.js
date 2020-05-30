@@ -36,7 +36,7 @@ describe('Tar Shot', function () {
 		assert.statStage(battle.p2.active[0], 'spa', 2);
 	});
 
-	it.skip('should not interact with Delta Stream', function () {
+	it('should not interact with Delta Stream', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wobbuffet', moves: ['tarshot']},
 			{species: 'wynaut', moves: ['fusionflare']},
@@ -48,5 +48,26 @@ describe('Tar Shot', function () {
 		const torn = battle.p2.active[0];
 		const damage = torn.maxhp - torn.hp;
 		assert.bounded(damage, [62, 74]);
+	});
+
+	it('should make the target weaker to fire', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Coalossal', ability: 'steamengine', moves: ['tarshot', 'flamecharge']}]});
+		battle.setPlayer('p2', {team: [{species: 'Snorlax', ability: 'thickfat', item: 'occaberry', moves: ['rest']}]});
+		battle.makeChoices('move tarshot', 'move rest');
+		battle.makeChoices('move flamecharge', 'move rest');
+		assert.equal(battle.p2.active[0].item, '');
+	});
+
+	it('should not make the target over 2x weaker to fire', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: 'Coalossal', ability: 'steamengine', item: 'occaberry', moves: ['tarshot', 'flamecharge']}]});
+		battle.setPlayer('p2', {team: [{species: 'Ferrothorn', ability: 'ironbarbs', moves: ['rest', 'trick']}]});
+		battle.makeChoices('move flamecharge', 'move trick');
+		assert.notStrictEqual(battle.p1.active[0].hp, 0);
+		// Ferrothorn now has the Occa Berry, cancelling out Tar Shot
+		battle.makeChoices('move tarshot', 'move rest');
+		battle.makeChoices('move flamecharge', 'move rest');
+		assert.notStrictEqual(battle.p1.active[0].hp, 0);
 	});
 });

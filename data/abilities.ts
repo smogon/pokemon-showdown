@@ -738,6 +738,17 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				return 0;
 			}
 		},
+		onCriticalHit(target, source, move) {
+			if (!target) return;
+			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
+				return;
+			}
+			const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
+			if (!target.runImmunity(move.type)) return;
+			return false;
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
 			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
@@ -1534,6 +1545,13 @@ export const BattleAbilities: {[abilityid: string]: AbilityData} = {
 				this.effectData.busted = true;
 				return 0;
 			}
+		},
+		onCriticalHit(target, type, move) {
+			if (!target) return;
+			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.transformed) return;
+			if (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates)) return;
+			if (!target.runImmunity(move.type)) return;
+			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
