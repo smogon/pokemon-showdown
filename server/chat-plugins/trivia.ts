@@ -1608,7 +1608,7 @@ const commands: ChatCommands = {
 		const score = triviaData.altLeaderboard![userid] || [0, 0, 0];
 
 		const ranks = cachedAltLadder.get().ranks[userid];
-		const allTimeRanks: TriviaRank = cachedLadder.get().ranks[userid];
+		const allTimeRanks = cachedLadder.get().ranks[userid];
 		const row = (i: number) => `<strong>${score[i]}</strong>${ranks ? ` (#${ranks[i]})` : ""}, ` +
 			`all time: <strong>${allTimeScore[i]}</strong> (#${allTimeRanks[i]})<br />`;
 		this.sendReplyBox(
