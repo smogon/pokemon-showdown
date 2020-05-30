@@ -176,7 +176,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					if (hasMove['rest'] || hasMove['lightscreen'] && hasMove['reflect']) rejected = true;
 					break;
 				case 'rapidspin':
-					if (hasMove['shellsmash'] || counter.setupType && counter.Status = 2) rejected = true;
+					if (hasMove['shellsmash'] || counter.setupType && counter.Status === 2) rejected = true;
 					break;
 				case 'stealthrock':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock) rejected = true;
