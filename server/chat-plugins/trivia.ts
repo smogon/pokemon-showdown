@@ -122,7 +122,7 @@ function isTriviaRoom(room: Room) {
 	return false;
 }
 
-function getTriviaGame(context) {
+function getTriviaGame(context: CommandContext) {
 	const room = context.room;
 	if (!room) return false;
 	if (!room.game) {
