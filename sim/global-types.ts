@@ -1211,6 +1211,7 @@ interface FormatsData extends EventMethods {
 	checkLearnset?: (
 		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
 	) => {type: string, [any: string]: any} | null;
+	getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
 	onBegin?: (this: Battle) => void;
 	onChangeSet?: (

@@ -327,7 +327,7 @@ export const commands: ChatCommands = {
 				// uncache the .sim-dist/dex.js dependency tree
 				Chat.uncacheDir('./.sim-dist');
 				Chat.uncacheDir('./.data-dist');
-				Chat.uncache('./config/formats');
+				Chat.uncache('./.config-dist/formats');
 				// reload .sim-dist/dex.js
 				global.Dex = require('../../sim/dex').Dex;
 				// rebuild the formats list

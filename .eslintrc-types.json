@@ -8,7 +8,7 @@
   },
   "overrides": [
     {
-      "files": ["./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts", "./tools/set-import/*.ts"],
+      "files": ["./config/*.ts", "./data/**/*.ts", "./lib/*.ts", "./server/**/*.ts", "./sim/**/*.ts", "./tools/set-import/*.ts"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "ecmaVersion": 9,

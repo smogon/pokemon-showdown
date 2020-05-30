@@ -253,7 +253,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	/** List of rule names. */
 	readonly ruleset: string[];
 	/**
-	 * Base list of rule names as specified in "./config/formats.js".
+	 * Base list of rule names as specified in "./config/formats.ts".
 	 * Used in a custom format to correctly display the altered ruleset.
 	 */
 	readonly baseRuleset: string[];

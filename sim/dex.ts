@@ -51,7 +51,7 @@ const BASE_MOD = 'gen8' as ID;
 const DEFAULT_MOD = BASE_MOD;
 const DATA_DIR = path.resolve(__dirname, '../.data-dist');
 const MODS_DIR = path.resolve(__dirname, '../.data-dist/mods');
-const FORMATS = path.resolve(__dirname, '../config/formats');
+const FORMATS = path.resolve(__dirname, '../.config-dist/formats');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
@@ -1556,7 +1556,7 @@ export class ModdedDex {
 			}
 		}
 		if (!Array.isArray(Formats)) {
-			throw new TypeError(`Exported property 'Formats' from "./config/formats.js" must be an array`);
+			throw new TypeError(`Exported property 'Formats' from "./config/formats.ts" must be an array`);
 		}
 		let section = '';
 		let column = 1;
