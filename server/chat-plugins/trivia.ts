@@ -123,7 +123,7 @@ function isTriviaRoom(room: Room) {
 }
 
 function getTriviaGame(context) {
-	const room = Rooms.get('trivia');
+	const room = context.room;
 	if (!room) return false;
 	if (!room.game) {
 		context.errorReply(`There is no game in progress.`);
