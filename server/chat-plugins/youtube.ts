@@ -167,22 +167,18 @@ export class YoutubeInterface {
 const YouTube = new YoutubeInterface();
 
 export const commands: ChatCommands = {
-	randchannel(target, room, user) {
+	async randchannel(target, room, user) {
 		if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 		if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 		this.runBroadcast();
+		const data = await YouTube.randChannel();
+		if (!data) return this.errorReply(`Error in getting channel data.`);
 		if (this.broadcasting) {
 			if (!this.can('broadcast', null, room)) return false;
-			return YouTube.randChannel().then(res => {
-				if (!res) return this.errorReply(`Error in getting channel data.`);
-				this.addBox(res);
-				room.update();
-			});
+			this.addBox(data);
+			room.update();
 		} else {
-			return YouTube.randChannel().then(res => {
-				if (!res) return this.errorReply(`Error in getting channel data.`);
-				this.sendReplyBox(res);
-			});
+			return this.sendReplyBox(data);
 		}
 	},
 	randchannelhelp: [`/randchannel - View data of a random channel from the YouTube database.`],
@@ -214,22 +210,18 @@ export const commands: ChatCommands = {
 		},
 		removechannelhelp: [`/youtube removechannel - Delete channel data from the YouTube database. Requires: % @ # ~`],
 
-		channel(target, room, user) {
+		async channel(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			const channel = YouTube.channelSearch(target);
 			if (!channel) return this.errorReply(`No channels with ID or name ${target} found.`);
+			const data = await YouTube.generateChannelDisplay(channel);
+			if (!data) return this.errorReply(`Error in getting channel data.`);
 			this.runBroadcast();
 			if (this.broadcasting) {
-				return YouTube.generateChannelDisplay(channel).then(res => {
-					if (!res) return this.errorReply(`Error in getting channel data.`);
-					this.addBox(res);
-					room.update();
-				});
+				this.addBox(data);
+				return room.update();
 			} else {
-				return YouTube.generateChannelDisplay(channel).then(res => {
-					if (!res) return this.errorReply(`Error in getting channel data.`);
-					this.sendReplyBox(res);
-				});
+				return this.sendReplyBox(data);
 			}
 		},
 		channelhelp: [
