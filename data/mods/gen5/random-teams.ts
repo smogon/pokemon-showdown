@@ -449,7 +449,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				} else if (ability === 'Serene Grace') {
 					rejectAbility = !counter['serenegrace'] || species.name === 'Blissey' || species.name === 'Togetic';
 				} else if (ability === 'Sheer Force') {
-					rejectAbility = !counter['sheerforce'] || (abilities.includes('Iron Fist') && counter['ironfist'] > counter['sheerforce']);
+					rejectAbility = !counter['sheerforce'] || hasMove['fakeout'] || (abilities.includes('Iron Fist') && counter['ironfist'] > counter['sheerforce']);
 				} else if (ability === 'Simple' || ability === 'Weak Armor') {
 					rejectAbility = !counter.setupType;
 				} else if (ability === 'Sturdy') {
@@ -463,7 +463,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				} else if (ability === 'Tinted Lens') {
 					rejectAbility = counter['damage'] >= counter.damagingMoves.length || (counter.Status > 2 && !counter.setupType);
 				} else if (ability === 'Unaware') {
-					rejectAbility = (abilities.includes('Magic Guard') && counter.Status < 2 || hasMove['calmmind']);
+					rejectAbility = abilities.includes('Magic Guard') && counter.Status < 2 || hasMove['calmmind'];
 				} else if (ability === 'Unburden') {
 					rejectAbility = species.baseStats.spe > 100;
 				} else if (ability === 'Water Absorb') {
