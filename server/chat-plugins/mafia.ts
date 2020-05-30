@@ -2537,26 +2537,31 @@ export const commands: ChatCommands = {
 			if (!game) return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			if (game.hostid !== user.id && !game.cohosts.includes(user.id) && !this.can('mute', null, room)) return;
 			let revealAs = '';
-			if (cmd == 'revealas') {
-				if (!args[0]) return this.parse('/help mafia revealas');
-				else {
-					let revealedRole = MafiaTracker.parseRole(args.shift()!);
-					let color = MafiaData.alignments[revealedRole.role.alignment].color;
+			if (cmd === 'revealas') {
+				if (!args[0]) {
+					return this.parse('/help mafia revealas');
+				} else {
+					const revealedRole = MafiaTracker.parseRole(args.pop()!);
+					const color = MafiaData.alignments[revealedRole.role.alignment].color;
 					revealAs = `<span style="font-weight:bold;color:${color}">${revealedRole.role.safeName}</span>`;
 				}
-			} 
-			if(!args[0]) return this.parse('/help mafia revealas');
+			}
+			if (!args[0]) return this.parse('/help mafia revealas');
 			for (const targetUsername of args) {
-				let player = game.playerTable[toID(args.join(''))];
-				if (!player) player = game.dead[toID(args.join(''))];
+				let player = game.playerTable[toID(targetUsername)];
+				if (!player) player = game.dead[toID(targetUsername)];
 				if (player) {
-					game.revealRole(user, player, `${cmd == 'revealas' ? revealAs : player.getRole()}`);
-					game.logAction(user, `${cmd == 'revealas' ? 'fake' : ''}revealed ${player.name}`);
+					game.revealRole(user, player, `${cmd === 'revealas' ? revealAs : player.getRole()}`);
+					game.logAction(user, `${cmd === 'revealas' ? 'fake' : ''}revealed ${player.name}`);
 				} else {
-					user.sendTo(this.room, `|error|${args.join(',')} is not a player.`);
+					user.sendTo(this.room, `|error|${targetUsername} is not a player.`);
 				}
 			}
 		},
+		revealrolehelp: [
+			`/mafia revealrole [player] - Reveals the role of a player. Requires host % @ # & ~`,
+			`/mafia revealas [player], [role] - Fakereveals the role of a player as a certain role. Requires host % @ # & ~`,
+		],
 
 		'!revive': true,
 		forceadd: 'revive',
@@ -3804,7 +3809,7 @@ export const commands: ChatCommands = {
 			`/mafia kick [player] - Kicks a player from the game without revealing their role. Requires host % @ # & ~`,
 			`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ # & ~`,
 			`/mafia revealrole [player] - Reveals the role of a player. Requires host % @ # & ~`,
-			`/mafia revealas [role], [player] - Fakereveals the role of a player as a certain role. Requires host % @ # & ~`,
+			`/mafia revealas [player], [role] - Fakereveals the role of a player as a certain role. Requires host % @ # & ~`,
 			`/mafia (un)silence [player] - Silences [player], preventing them from talking at all. Requires host % @ # & ~`,
 			`/mafia (un)nighttalk [player] - Allows [player] to talk freely during the night. Requires host % @ # & ~`,
 			`/mafia (un)[priest|actor] [player] - Makes [player] a priest (can't hammer) or actor (can only hammer). Requires host % @ # & ~`,
