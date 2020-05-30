@@ -552,7 +552,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		restricted: ['Gengar', 'Kyurem-Black', 'Kyurem-White', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zamazenta', 'Zekrom', 'Zeraora'],
 		onValidateTeam(team, format) {
 			const restrictedPokemon = format.restricted || [];
-			const itemTable: Set<ID> = new Set();
+			const itemTable = new Set<ID>();
 			for (const set of team) {
 				const item = this.dex.getItem(set.item);
 				if (!item || !item.megaStone) continue;
@@ -562,7 +562,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
 				if (itemTable.has(item.id)) {
-					return ["You are limited to one of each mega stone.", "(You have more than one " + item.name + ")"];
+					return [`You are limited to one of each mega stone.`, `(You have more than one ${item.name})`];
 				}
 				itemTable.add(item.id);
 			}
@@ -674,7 +674,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Speed Boost', 'Steelworker ++ Steely Spirit', 'Tinted Lens', 'Trace', 'Unaware', 'Unburden', 'Water Bubble',
 		],
 		getSharedPower(pokemon) {
-			const sharedPower: Set<string> = new Set();
+			const sharedPower = new Set<string>();
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.previouslySwitchedIn > 0) {
 					sharedPower.add(ally.baseAbility);
