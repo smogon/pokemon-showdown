@@ -413,7 +413,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	persian: {
 		randomBattleMoves: ["doubleedge", "fakeout", "knockoff", "playrough", "uturn"],
 		randomBattleLevel: 88,
-		randomDoubleBattleMoves: ["doubleedge", "fakeout", "foulplay", "hypnosis", "icywind", "taunt"],
+		randomDoubleBattleMoves: ["doubleedge", "fakeout", "hypnosis", "icywind", "knockoff", "taunt"],
 		tier: "PU",
 		doublesTier: "(DUU)",
 	},
@@ -841,7 +841,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	blissey: {
 		randomBattleMoves: ["healbell", "seismictoss", "softboiled", "stealthrock", "toxic"],
 		randomBattleLevel: 80,
-		randomDoubleBattleMoves: ["allyswitch", "healbell", "protect", "seismictoss", "softboiled", "thunderwave", "toxic"],
+		randomDoubleBattleMoves: ["allyswitch", "protect", "seismictoss", "softboiled", "thunderwave", "toxic"],
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1631,7 +1631,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	celebi: {
 		randomBattleMoves: ["earthpower", "gigadrain", "leafstorm", "nastyplot", "psychic", "recover", "stealthrock", "uturn"],
 		randomBattleLevel: 82,
-		randomDoubleBattleMoves: ["earthpower", "energyball", "leafstorm", "nastyplot", "protect", "psychic", "recover"],
+		randomDoubleBattleMoves: ["earthpower", "energyball", "nastyplot", "protect", "psychic", "recover"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
@@ -2001,7 +2001,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 	wailord: {
 		randomBattleMoves: ["hydropump", "hypervoice", "icebeam", "waterspout"],
 		randomBattleLevel: 88,
-		randomDoubleBattleMoves: ["hydropump", "icebeam", "earthquake", "waterspout"],
+		randomDoubleBattleMoves: ["hydropump", "hypervoice", "icebeam", "waterspout"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
 	},
