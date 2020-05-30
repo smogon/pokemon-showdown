@@ -282,8 +282,7 @@ export const commands: ChatCommands = {
 					this.addBox(res);
 					room.update();
 				})();
-			 }, interval
-			);
+			 }, interval);
 			this.privateModAction(`(${user.name} set a randchannel interval to ${target} minutes)`);
 			return this.modlog(`CHANNELINTERVAL`, null, `${target} minutes`);
 		},
