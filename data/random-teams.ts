@@ -812,6 +812,9 @@ export class RandomTeams {
 				case 'grassknot':
 					if (hasMove['surf']) rejected = true;
 					break;
+				case 'leafstorm':
+					if (isDoubles && hasMove['energyball']) rejected = true;
+					break;
 				case 'powerwhip':
 					if (hasMove['leechlife'] || !hasType['Grass'] && counter.Physical > 3 && movePool.includes('uturn')) rejected = true;
 					break;
