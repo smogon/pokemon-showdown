@@ -34,7 +34,7 @@ describe('Trivia', function () {
 		// it makes reference to global.Config in the modules outermost scope,
 		// which makes the module fail to be loaded. Within the scope of thess
 		// unit test blocks however, Config is defined.
-		const trivia = require('../../../server/chat-plugins/trivia');
+		const trivia = require('../../../.server-dist/chat-plugins/trivia');
 		Trivia = trivia.Trivia;
 		FirstModeTrivia = trivia.FirstModeTrivia;
 		TimerModeTrivia = trivia.TimerModeTrivia;
@@ -69,21 +69,21 @@ describe('Trivia', function () {
 	});
 
 	it('should add new players', function () {
-		this.game.addPlayer(this.user);
+		this.game.addTriviaPlayer(this.user);
 		assert.equal(this.game.playerCount, 1);
 	});
 
 	it('should not add a player if they have already joined', function () {
-		this.game.addPlayer(this.user);
-		this.game.addPlayer(this.user);
+		this.game.addTriviaPlayer(this.user);
+		this.game.addTriviaPlayer(this.user);
 		assert.equal(this.game.playerCount, 1);
 	});
 
 	it('should not add a player if another one on the same IP has joined', function () {
-		this.game.addPlayer(this.user);
+		this.game.addTriviaPlayer(this.user);
 
 		const user2 = makeUser('Not Morfent', new Connection('127.0.0.1'));
-		this.game.addPlayer(user2);
+		this.game.addTriviaPlayer(user2);
 
 		assert.equal(this.game.playerCount, 1);
 		destroyUser(user2);
@@ -92,12 +92,12 @@ describe('Trivia', function () {
 	it('should not add a player if another player had their username previously', function () {
 		const userid = this.user.id;
 		const name = this.user.name;
-		this.game.addPlayer(this.user);
+		this.game.addTriviaPlayer(this.user);
 		this.user.forceRename('Not Morfent', true);
 		this.user.prevNames[userid] = name;
 
 		const user2 = makeUser(name, new Connection('127.0.0.3'));
-		this.game.addPlayer(user2);
+		this.game.addTriviaPlayer(user2);
 
 		assert.equal(this.game.playerCount, 1);
 		destroyUser(user2);
@@ -105,44 +105,44 @@ describe('Trivia', function () {
 
 	it('should not add a player if they were kicked from the game', function () {
 		this.game.kickedUsers.add(this.tarUser.id);
-		this.game.addPlayer(this.tarUser);
+		this.game.addTriviaPlayer(this.tarUser);
 		assert.equal(this.game.playerCount, 0);
 	});
 
 	it('should kick players from the game', function () {
-		this.game.addPlayer(this.tarUser);
+		this.game.addTriviaPlayer(this.tarUser);
 		this.game.kick(this.tarUser, this.user);
 		assert.equal(this.game.playerCount, 0);
 	});
 
 	it('should not kick players already kicked from the game', function () {
-		this.game.addPlayer(this.tarUser);
+		this.game.addTriviaPlayer(this.tarUser);
 		this.game.kick(this.tarUser, this.user);
 		const res = this.game.kick(this.tarUser, this.user);
 		assert.equal(typeof res, 'string');
 	});
 
 	it('should not kick users who were kicked under another name', function () {
-		this.game.addPlayer(this.tarUser);
+		this.game.addTriviaPlayer(this.tarUser);
 		this.game.kick(this.tarUser, this.user);
 
 		const userid = this.tarUser.id;
 		const name = this.tarUser.name;
 		this.tarUser.forceRename('Not Morfent', true);
 		this.tarUser.prevNames[userid] = name;
-		this.game.addPlayer(this.tarUser);
+		this.game.addTriviaPlayer(this.tarUser);
 		assert.equal(this.game.playerCount, 0);
 	});
 
 	it('should not add users who were kicked under another IP', function () {
-		this.game.addPlayer(this.tarUser);
+		this.game.addTriviaPlayer(this.tarUser);
 		this.game.kick(this.tarUser, this.user);
 
 		const name = this.tarUser.name;
 		this.tarUser.resetName();
 
 		const user2 = makeUser(name, new Connection('127.0.0.2'));
-		this.game.addPlayer(user2);
+		this.game.addTriviaPlayer(user2);
 		assert.equal(this.game.playerCount, 0);
 		destroyUser(user2);
 	});
@@ -185,11 +185,11 @@ describe('Trivia', function () {
 			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
 
 			this.user.joinRoom(this.room);
-			game.addPlayer(this.user);
+			game.addTriviaPlayer(this.user);
 			this.user2.joinRoom(this.room);
-			game.addPlayer(this.user2);
+			game.addTriviaPlayer(this.user2);
 			this.user3.joinRoom(this.room);
-			game.addPlayer(this.user3);
+			game.addTriviaPlayer(this.user3);
 			game.start();
 			game.askQuestion();
 			clearTimeout(game.phaseTimeout);
@@ -235,9 +235,9 @@ describe('Trivia', function () {
 			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
 			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
 
-			game.addPlayer(this.user);
-			game.addPlayer(this.user2);
-			game.addPlayer(this.user3);
+			game.addTriviaPlayer(this.user);
+			game.addTriviaPlayer(this.user2);
+			game.addTriviaPlayer(this.user3);
 			game.start();
 			game.askQuestion();
 
@@ -299,9 +299,9 @@ describe('Trivia', function () {
 			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
 			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
 
-			game.addPlayer(this.user);
-			game.addPlayer(this.user2);
-			game.addPlayer(this.user3);
+			game.addTriviaPlayer(this.user);
+			game.addTriviaPlayer(this.user2);
+			game.addTriviaPlayer(this.user3);
 			game.start();
 			game.askQuestion();
 
@@ -374,9 +374,9 @@ describe('Trivia', function () {
 			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
 			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
 
-			game.addPlayer(this.user);
-			game.addPlayer(this.user2);
-			game.addPlayer(this.user3);
+			game.addTriviaPlayer(this.user);
+			game.addTriviaPlayer(this.user2);
+			game.addTriviaPlayer(this.user3);
 			game.start();
 			game.askQuestion();
 
