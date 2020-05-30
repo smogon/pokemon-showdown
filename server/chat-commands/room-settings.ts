@@ -549,6 +549,27 @@ export const commands: ChatCommands = {
 		return this.modlog(`APPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
 	},
 
+	showrank(target, room, user) {
+		if (!this.can('declare', null, room)) return false;
+		target = target.trim();
+		if (!(target in Config.groups) && !this.meansNo(target)) {
+			return this.errorReply(`${target} is not a valid setting. Use a group symbol or 'OFF' instead.`);
+		}
+		if (this.meansNo(target)) {
+			if (!room.showimages) return this.errorReply(`/show is already disabled.`);
+			room.showimages = null;
+		} else {
+			if (room.showimages === target) {
+				return this.errorReply(`/show permissions are already set to ${target}.`);
+			}
+			room.showimages = target;
+		}
+		room.chatRoomData!.showimages = room.showimages;
+		Rooms.global.writeChatRoomData();
+		this.modlog(`SHOWIMAGES`, null, `to ${target}`);
+		this.privateModAction(`(${user.name} set /show permissions to ${target}.)`);
+	},
+
 	hightraffic(target, room, user) {
 		if (!target) {
 			return this.sendReply(`This room is${!room.highTraffic ? ' not' : ''} currently marked as high traffic.`);
