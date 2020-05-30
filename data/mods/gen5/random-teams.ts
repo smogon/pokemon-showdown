@@ -161,6 +161,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					break;
 				case 'haze': case 'magiccoat': case 'pursuit': case 'selfdestruct': case 'spikes': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (hasMove['magiccoat'] && hasMove['healbell']) rejected = true;
 					break;
 				case 'healingwish':
 					if (counter.setupType || !!counter['recovery'] || hasMove['substitute']) rejected = true;
@@ -269,8 +270,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				case 'waterfall':
 					if (hasMove['scald'] || hasMove['sleeptalk']) rejected = true;
 					break;
-				case 'suckerpunch':
-					if (!hasType['Dark'] && hasMove['crunch']) rejected = true;
+				case 'crunch':
+					if (!hasType['Dark'] && hasMove['suckerpunch']) rejected = true;
 					break;
 
 				// Status:
@@ -280,11 +281,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
 					if (hasMove['leechseed'] || hasMove['rest'] || hasMove['wish']) rejected = true;
 					break;
-				case 'magiccoat':
-					if (hasMove['healbell']) rejected = true;
-					break;
 				case 'substitute':
-					if ((hasMove['doubleedge'] && !hasAbility['rockhead']) || hasMove['pursuit'] || movePool.includes('quiverdance') || hasMove['rest'] || movePool.includes('shellsmash') || hasMove['superpower'] || hasMove['uturn'] || hasMove['voltswitch']) rejected = true;
+					if ((hasMove['doubleedge'] && !hasAbility['rockhead']) || hasMove['pursuit'] || hasMove['rest'] || hasMove['superpower'] || hasMove['uturn'] || hasMove['voltswitch']) rejected = true;
 					break;
 				case 'thunderwave':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -560,14 +558,14 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// Medium priority
 		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 			item = 'Choice Scarf';
-		} else if (counter.Physical >= 4 && !hasMove['dragontail'] && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['suckerpunch'] && ability !== 'Speed Boost' && (!hasMove['rapidspin'] || this.dex.getEffectiveness('Rock', species) < 1)) {
+		} else if (ability === 'Speed Boost' && !hasMove['substitute'] && counter.Physical + counter.Special > 2) {
+			item = 'Life Orb';
+		} else if (counter.Physical >= 4 && !hasMove['dragontail'] && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['suckerpunch'] && (!hasMove['rapidspin'] || this.dex.getEffectiveness('Rock', species) < 1)) {
 			item = (species.baseStats.atk >= 100 || hasAbility['Huge Power']) && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
 		} else if (counter.Special >= 4 && !hasMove['clearsmog'] && !hasMove['fierydance']) {
 			item = species.baseStats.spa >= 100 && species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (counter.Special >= 3 && hasMove['uturn']) {
 			item = 'Choice Specs';
-		} else if (ability === 'Speed Boost' && !hasMove['substitute'] && counter.Physical + counter.Special > 2) {
-			item = 'Life Orb';
 		} else if (this.dex.getEffectiveness('Ground', species) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if (hasMove['substitute'] && hasMove['reversal']) {
