@@ -760,6 +760,7 @@ export class RandomTeams {
 					break;
 				case 'toxic':
 					if (counter.setupType || hasMove['sludgewave'] || hasMove['thunderwave'] || hasMove['trickroom'] || hasMove['willowisp']) rejected = true;
+					if (movePool.includes('whirlpool')) rejected = true;
 					break;
 				case 'toxicspikes':
 					if (counter.setupType || teamDetails.toxicSpikes) rejected = true;
@@ -811,6 +812,9 @@ export class RandomTeams {
 					break;
 				case 'grassknot':
 					if (hasMove['surf']) rejected = true;
+					break;
+				case 'leafstorm':
+					if (isDoubles && hasMove['energyball']) rejected = true;
 					break;
 				case 'powerwhip':
 					if (hasMove['leechlife'] || !hasType['Grass'] && counter.Physical > 3 && movePool.includes('uturn')) rejected = true;
