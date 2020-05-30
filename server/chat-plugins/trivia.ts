@@ -122,18 +122,18 @@ function isTriviaRoom(room: Room) {
 	return false;
 }
 
-function getTriviaGame(context: CommandContext) {
+function getTriviaGame(context) {
 	const room = Rooms.get('trivia');
 	if (!room) return false;
 	if (!room.game) {
 		context.errorReply(`There is no game in progress.`);
 		return false;
 	}
-	if (room.game && !room.game.gameid.includes('trivia')) {
-		context.errorReply(`There is already a game of ${room?.game.title} running.`);
+	const name = room.game.constructor.name;
+	if (!name.endsWith('Trivia')) {
+		context.errorReply(`There is already a game of ${room.game.title} running.`);
 		return false;
-	}
-	if (room.game.gameid.includes('trivia')) {
+	} else {
 		return room.game as Trivia;
 	}
 }
