@@ -469,20 +469,21 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 	getCreationMessage(newHunt?: boolean): string {
 		const message = this.runEvent('CreateCallback');
-		const defaultMessage = `|raw|<div class="broadcast-blue"><strong>${(
-			['official', 'unrated'].includes(this.gameType) && !newHunt
-		) ?
-			'An' :
-			'A'} ${newHunt ?
-			'new ' :
-			''}${this.gameType} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => {
-			return h.name;
-		})))}</em> has been started${(this.hosts.some(h => {
-			return h.id === this.staffHostId;
-		}) ?
-			'' :
-			` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.formatText(this.questions[0].hint)}</strong></div>`;
-		return message || defaultMessage;
+		if (message) return message;
+
+		const hosts = Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)));
+		const staffHost = this.hosts.some(h => h.id === this.staffHostId) ?
+			`` :
+			Chat.html` by <em>${this.staffHostName}</em>`;
+
+		const article = ['official', 'unrated'].includes(this.gameType) && !newHunt ? 'An' : 'A';
+		const huntType = `${article} ${newHunt ? 'new ' : ''}${this.gameType}`;
+
+		return `|raw|<div class="broadcast-blue"><strong>${huntType} scavenger hunt by <em>${hosts}</em> has been started${staffHost}.</strong>` +
+			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px">` +
+			`<strong><em>Hint #1:</em> ${Chat.formatText(this.questions[0].hint)}</strong>` +
+			`</div>` +
+			`(To answer, use <kbd>/scavenge <em>ANSWER</em></kbd>)</div>`;
 	}
 
 	joinGame(user: User) {
@@ -649,8 +650,37 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		const current = player.getCurrentQuestion();
 
-		player.sendRoom(`|raw|You are on ${(current.number === this.questions.length ? "final " : "")}hint #${current.number}: ${Chat.formatText(current.question.hint)}${showHints && current.question.spoilers.length ? `<details><summary>Extra Hints:</summary>${current.question.spoilers.map(p => `- ${p}`).join('<br />')}</details>` : ''}`);
+		const finalHint = current.number === this.questions.length ? "final " : "";
+
+		player.sendRoom(
+			`|raw|<div class="ladder"><table><tr>` +
+			`<td><strong style="white-space: nowrap">${finalHint}hint #${current.number}:</strong></td>` +
+			`<td>${
+				Chat.formatText(current.question.hint) +
+				(showHints && current.question.spoilers.length ?
+					`<details><summary>Extra Hints:</summary>${
+						current.question.spoilers.map(p => `- ${p}`).join('<br />')
+					}</details>` :
+					``)
+			}</td>` +
+			`</tr></table></div>`
+		);
 		return true;
+	}
+
+	forceWrap(answer: string) {
+		return Chat.escapeHTML(answer.replace(/[^\s]{30,}/g, word => {
+			let lastBreak = 0;
+			let brokenWord = '';
+			for (let i = 1; i < word.length; i++) {
+				if (i - lastBreak >= 10 || /[^a-zA-Z0-9([{][a-zA-Z0-9]/.test(word.slice(i - 1, i + 1))) {
+					brokenWord += word.slice(lastBreak, i) + '\u200B';
+					lastBreak = i;
+				}
+			}
+			brokenWord += word.slice(lastBreak);
+			return brokenWord;
+		})).replace(/\u200B/g, '<wbr />');
 	}
 
 	onViewHunt(user: User) {
@@ -666,15 +696,25 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		user.sendTo(
 			this.room,
-			`|raw|<div class="ladder"><table style="width: 100%"><tr><th style="width: 10%;">#</th><th>Hint</th><th>Answer</th></tr>${this.questions.slice(0, qLimit).map((q, i) => {
-				return `<tr><td>${(i + 1)}</td><td>${Chat.formatText(q.hint)}${q.spoilers.length ?
-					`<details><summary>Extra Hints:</summary>${q.spoilers.map((s: string) => {
-						return `- ${s}`;
-					}).join('<br />')}</details>` :
-					''}</td>${i + 1 >= qLimit ?
-					'' :
-					`<td>${Chat.escapeHTML(q.answer.join(' / '))}</td>`}</tr>`;
-			}).join("")}</table><div>`
+			`|raw|<div class="ladder"><table style="width: 100%">` +
+			`<tr><th style="width: 10%;">#</th><th>Hint</th><th>Answer</th></tr>` +
+			this.questions.slice(0, qLimit).map((q, i) => (
+				`<tr><td>${
+					i + 1
+				}</td><td>${
+					Chat.formatText(q.hint) +
+					(q.spoilers.length ?
+						`<details><summary>Extra Hints:</summary>${
+							q.spoilers.map(s => `- ${s}`).join('<br />')
+						}</details>` :
+						``)
+				}</td><td>${
+					i + 1 >= qLimit ?
+						`` :
+						this.forceWrap(q.answer.join(' / '))
+				}</td></tr>`
+			)).join("") +
+			`</table><div>`
 		);
 	}
 
@@ -694,7 +734,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		this.completed.push(result);
 		const place = formatOrder(this.completed.length);
 
-		this.announce(Chat.html`<em>${player.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
+		this.announce(Chat.html`<em>${player.name}</em> has finished the hunt in ${place} place! (${time}${blitz ? " - BLITZ" : ""})`);
 		player.destroy(); // remove from user.games;
 	}
 
@@ -2292,7 +2332,7 @@ export const commands: ChatCommands = {
 	scavengerhelp: 'scavengershelp',
 	scavhelp: 'scavengershelp',
 	scavengershelp(target, room, user) {
-		if (!room || getScavsRoom(room)) {
+		if (!room || !getScavsRoom(room)) {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
 		if (!this.runBroadcast()) return false;

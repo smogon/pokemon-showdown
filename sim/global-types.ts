@@ -727,6 +727,7 @@ interface EventMethods {
 	onBoostPriority?: number;
 	onDamagePriority?: number;
 	onDragOutPriority?: number;
+	onEffectivenessPriority?: number;
 	onFoeBasePowerPriority?: number;
 	onFoeBeforeMovePriority?: number;
 	onFoeModifyDefPriority?: number;
@@ -1210,6 +1211,7 @@ interface FormatsData extends EventMethods {
 	checkLearnset?: (
 		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
 	) => {type: string, [any: string]: any} | null;
+	getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
 	onBegin?: (this: Battle) => void;
 	onChangeSet?: (
@@ -1229,7 +1231,6 @@ interface FormatsData extends EventMethods {
 		removeNicknames?: boolean,
 		skipSets?: {[name: string]: {[key: string]: boolean}},
 	}) => string[] | void;
-	trunc?: (n: number) => number;
 	section?: string;
 	column?: number;
 }
@@ -1394,6 +1395,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable;
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable;
 	suppressingWeather?: (this: Battle) => boolean;
+	trunc?: (n: number) => number;
 
 	// oms
 	doGetMixedSpecies?: (this: Battle, species: Species, deltas: AnyObject) => Species;

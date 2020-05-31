@@ -16,7 +16,7 @@
         "./server/chat-commands.js"
     ],
     "include": [
-        "./config/formats.js",
+        "./config/*.ts",
         "./data/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",

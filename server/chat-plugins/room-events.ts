@@ -26,7 +26,6 @@ function formatEvent(event: {eventName: string, date: string, desc: string, star
 
 function getAllAliases(room: Room) {
 	return Object.keys(room.settings.events).map(event => room.settings.events[event].aliases).join();
-}
 
 function getEventID(nameOrAlias: string, room: Room): ID {
 	let id = toID(nameOrAlias);
@@ -81,7 +80,6 @@ export const commands: ChatCommands = {
 
 			const eventId = getEventID(eventName, room);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
-
 			const eventNameActual = (room.settings.events[eventId] ? room.settings.events[eventId].eventName : eventName.trim());
 			this.privateModAction(`(${user.name} ${room.settings.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
 			this.modlog('ROOMEVENT', null, `${room.settings.events[eventId] ? "edited" : "added"} "${eventNameActual}"`);
@@ -120,6 +118,35 @@ export const commands: ChatCommands = {
 
 			this.privateModAction(`(${user.name} renamed the roomevent titled "${originalName}" to "${newName}".)`);
 			this.modlog('ROOMEVENT', null, `renamed "${originalName}" to "${newName}"`);
+			Rooms.global.writeChatRoomData();
+		},
+
+		rename(target, room, user) {
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!this.can('ban', null, room)) return false;
+			let [oldName, newName] = target.split(target.includes('|') ? '|' : ',');
+			if (!(oldName && newName)) return this.errorReply("Usage: /roomevents rename [old name], [new name]");
+
+			newName = newName.trim();
+			const newID = toID(newName);
+			const oldID = (getAllAliases(room).includes(toID(oldName)) ? getEventID(oldName, room) : toID(oldName));
+			if (newID === oldID) return this.errorReply("The new name must be different from the old one.");
+			if (!newID) return this.errorReply("Event names must contain at least one alphanumeric character.");
+			if (newName.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
+
+			const eventData = room.events[oldID];
+			if (!eventData) return this.errorReply(`There is no event titled "${oldName}".`);
+			if (room.events[newID] || getAllAliases(room).includes(newID)) {
+				return this.errorReply(`"${newName}" is already an event or alias.`);
+			}
+			const originalName = eventData.eventName;
+			eventData.eventName = newName;
+			room.events[newID] = eventData;
+			delete room.events[oldID];
+
+			this.privateModAction(`(${user.name} renamed the roomevent titled "${originalName}" to "${newName}".)`);
+			this.modlog('ROOMEVENT', null, `renamed "${originalName}" to "${newName}"`);
+			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
 		},
 
@@ -179,7 +206,6 @@ export const commands: ChatCommands = {
 
 			if (!target) return this.errorReply("Usage: /roomevents view [event name]");
 			target = toID(target);
-
 			const event = room.settings.events[getEventID(target, room)];
 			if (!event) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			if (!this.runBroadcast()) return;

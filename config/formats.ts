@@ -1,10 +1,7 @@
-'use strict';
-
 // Note: This is the list of formats
 // The rules that formats use are stored in data/rulesets.js
 
-/**@type {(FormatsData | {section: string, column?: number})[]} */
-const Formats = [
+export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 	// Sw/Sh Singles
 	///////////////////////////////////////////////////////////////////
@@ -199,7 +196,7 @@ const Formats = [
 		],
 
 		mod: 'gen8',
-		ruleset: ['[Gen 8] OU', '-Melmetal', '+CAP'],
+		ruleset: ['[Gen 8] OU', '+CAP'],
 		banlist: ['Crucibelle-Mega'],
 	},
 	{
@@ -225,7 +222,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
@@ -261,6 +258,11 @@ const Formats = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Dynamax Clause'],
 		banlist: ['DUber', 'Beat Up'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8doublesou') {
+				this.add('html', `<div class="broadcast-blue"><strong>Doubles OU is currently suspecting Melmetal! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3664997/">suspect thread</a>.</strong></div>`);
+			}
+		},
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
@@ -350,8 +352,8 @@ const Formats = [
 				return [`${species.name} is a Steel-type, which is banned from Metronome Battle.`];
 			}
 			let bst = 0;
-			for (const stat in species.baseStats) {
-				// @ts-ignore
+			let stat: StatName;
+			for (stat in species.baseStats) {
 				bst += species.baseStats[stat];
 			}
 			if (bst > 625) {
@@ -361,12 +363,14 @@ const Formats = [
 			if (set.item && item.megaStone) {
 				let bstMega = 0;
 				const megaSpecies = this.dex.getSpecies(item.megaStone);
-				for (const stat in megaSpecies.baseStats) {
-					// @ts-ignore
-					bstMega += megaSpecies.baseStats[stat];
+				let megaStat: StatName;
+				for (megaStat in megaSpecies.baseStats) {
+					bstMega += megaSpecies.baseStats[megaStat];
 				}
 				if (species.baseSpecies === item.megaEvolves && bstMega > 625) {
-					return [`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
+					return [
+						`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`,
+					];
 				}
 			}
 			if (set.moves.length !== 1 || this.dex.getMove(set.moves[0]).id !== 'metronome') {
@@ -381,7 +385,7 @@ const Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
 		teamLength: {
@@ -415,11 +419,6 @@ const Formats = [
 			'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zacian', 'Zamazenta', 'Zekrom', 'Zygarde-Base',
 			'Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', 'Baton Pass',
 		],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8nationaldex') {
-				this.add('html', `<div class="broadcast-red"><strong>National Dex is currently suspecting Mega Metagross! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3663780/">suspect thread</a>.</strong></div>`);
-			}
-		},
 	},
 	{
 		name: "[Gen 8] National Dex AG",
@@ -477,15 +476,13 @@ const Formats = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Psychic Surge', 'Psychic Terrain', 'Shell Smash'],
+		banlist: ['Steelix', 'Psychic Surge', 'Psychic Terrain', 'Shell Smash'],
 		unbanlist: ['Darmanitan-Galar'],
 		onModifySpecies(species, target, source, effect) {
-			const newSpecies = this.dex.deepClone(species);
-			/** @type {number[]} */
-			const reversedNums = Object.values(newSpecies.baseStats).reverse();
-			newSpecies.baseStats = this.dex.deepClone(newSpecies.baseStats);
+			const newSpecies: Species = this.dex.deepClone(species);
+			const reversedNums: number[] = Object.values(newSpecies.baseStats).reverse();
 			for (const [i, statName] of Object.keys(newSpecies.baseStats).entries()) {
-				newSpecies.baseStats[statName] = reversedNums[i];
+				newSpecies.baseStats[statName as StatName] = reversedNums[i];
 			}
 			return newSpecies;
 		},
@@ -555,8 +552,7 @@ const Formats = [
 		restricted: ['Gengar', 'Kyurem-Black', 'Kyurem-White', 'Marshadow', 'Melmetal', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Reshiram', 'Solgaleo', 'Zamazenta', 'Zekrom', 'Zeraora'],
 		onValidateTeam(team, format) {
 			const restrictedPokemon = format.restricted || [];
-			/**@type {{[k: string]: true}} */
-			const itemTable = {};
+			const itemTable = new Set<ID>();
 			for (const set of team) {
 				const item = this.dex.getItem(set.item);
 				if (!item || !item.megaStone) continue;
@@ -565,8 +561,10 @@ const Formats = [
 				if (restrictedPokemon.includes(species.name)) {
 					return [`${species.name} is not allowed to hold ${item.name}.`];
 				}
-				if (itemTable[item.id]) return ["You are limited to one of each mega stone.", "(You have more than one " + item.name + ")"];
-				itemTable[item.id] = true;
+				if (itemTable.has(item.id)) {
+					return [`You are limited to one of each mega stone.`, `(You have more than one ${item.name})`];
+				}
+				itemTable.add(item.id);
 			}
 		},
 		onBegin() {
@@ -675,11 +673,8 @@ const Formats = [
 			'Regenerator ++ Wimp Out', 'Sand Rush', 'Sand Veil', 'Shadow Tag', 'Simple', 'Slush Rush', 'Snow Cloak',
 			'Speed Boost', 'Steelworker ++ Steely Spirit', 'Tinted Lens', 'Trace', 'Unaware', 'Unburden', 'Water Bubble',
 		],
-		/** @param {Pokemon} pokemon */
-		// @ts-ignore
 		getSharedPower(pokemon) {
-			/** @type {Set<string>} */
-			const sharedPower = new Set();
+			const sharedPower = new Set<string>();
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.previouslySwitchedIn > 0) {
 					sharedPower.add(ally.baseAbility);
@@ -689,20 +684,18 @@ const Formats = [
 			return sharedPower;
 		},
 		onBeforeSwitchIn(pokemon) {
-			// @ts-ignore
-			if (!this.format.getSharedPower) return;
-			// @ts-ignore
-			for (const ability of this.format.getSharedPower(pokemon)) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.getFormat('gen8sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
 				pokemon.volatiles[effect] = {id: toID(effect), target: pokemon};
 			}
 		},
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
-			// @ts-ignore
-			if (!this.format.getSharedPower) return;
-			// @ts-ignore
-			for (const ability of this.format.getSharedPower(pokemon)) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.getFormat('gen8sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
 				delete pokemon.volatiles[effect];
 				pokemon.addVolatile(effect);
@@ -723,7 +716,7 @@ const Formats = [
 		pokemon: {
 			hasAbility(ability) {
 				if (this.ignoringAbility()) return false;
-				if (Array.isArray(ability)) return ability.some(ability => this.hasAbility(ability));
+				if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
 				const abilityid = toID(ability);
 				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
 			},
@@ -733,34 +726,33 @@ const Formats = [
 		name: "[Gen 8] Tier Shift",
 		desc: `Pok&eacute;mon below OU get all their stats boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.`,
 		threads: [
-			//`&bullet; <a href="https://www.smogon.com/forums/threads/3610073/">Tier Shift</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3662165/">Tier Shift</a>`,
 		],
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['[Gen 8] OU', '-Melmetal'],
+		ruleset: ['[Gen 8] OU'],
 		banlist: ['Damp Rock', 'Heat Rock'],
 		onModifySpecies(species, target, source, effect) {
-			if (!species.baseStats) return false;
-			/** @type {{[tier: string]: number}} */
-			const boosts = {
-				'UU': 10,
-				'RUBL': 10,
-				'RU': 20,
-				'NUBL': 20,
-				'NU': 30,
-				'PUBL': 30,
-				'PU': 40,
-				'NFE': 40,
-				'LC Uber': 40,
-				'LC': 40,
+			if (!species.baseStats) return;
+			const boosts: {[tier: string]: number} = {
+				uu: 10,
+				rubl: 10,
+				ru: 20,
+				nubl: 20,
+				nu: 30,
+				publ: 30,
+				pu: 40,
+				nfe: 40,
+				lcuber: 40,
+				lc: 40,
 			};
-			let tier = species.tier || 'OU';
-			if (tier[0] === '(') tier = tier.slice(1, -1);
+			const tier = toID(species.tier) || 'ou';
 			if (!(tier in boosts)) return;
-			const pokemon = this.dex.deepClone(species);
+			const pokemon: Species = this.dex.deepClone(species);
 			const boost = boosts[tier];
-			for (const statName in pokemon.baseStats) {
+			let statName: StatName;
+			for (statName in pokemon.baseStats) {
 				if (statName === 'hp') continue;
 				pokemon.baseStats[statName] = this.dex.clampIntRange(pokemon.baseStats[statName] + boost, 1, 255);
 			}
@@ -957,18 +949,18 @@ const Formats = [
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
-			let name = toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+			let name: string = toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (this.dex.getSpecies(name).exists || name === 'rage') {
 				// Certain pokemon have volatiles named after their id
 				// To prevent overwriting those, and to prevent accidentaly leaking
 				// that a pokemon is on a team through the onStart even triggering
 				// at the start of a match, users with pokemon names will need their
-				// statuse's to end in "user".
-				name = /** @type {ID} */(name + 'user');
+				// statuses to end in "user".
+				name = name + 'user';
 			}
 			// Add the mon's status effect to it as a volatile.
 			const status = this.dex.getEffect(name);
-			if (status && status.exists) {
+			if (status?.exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
 		},
@@ -1126,7 +1118,7 @@ const Formats = [
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3506147/">DPP OU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/posts/8133790/">DPP Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3551992/">DPP OU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3652538/">DPP OU Viability Rankings</a>`,
 		],
 
 		mod: 'gen4',
@@ -1372,7 +1364,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		teamLength: {
 			validate: [1, 24],
@@ -1432,7 +1424,9 @@ const Formats = [
 		banlist: ['Unown'],
 		minSourceGen: 7,
 		onValidateTeam(team) {
-			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
+			const legends = [
+				'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma',
+			];
 			let n = 0;
 			for (const set of team) {
 				const baseSpecies = this.dex.getSpecies(set.species).baseSpecies;
@@ -1457,7 +1451,15 @@ const Formats = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		timer: {starting: 5 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90, grace: 90, timeoutAutoChoose: true, dcTimerBank: false},
+		timer: {
+			starting: 5 * 60,
+			addPerTurn: 0,
+			maxPerTurn: 55,
+			maxFirstTurn: 90,
+			grace: 90,
+			timeoutAutoChoose: true,
+			dcTimerBank: false,
+		},
 		ruleset: ['Standard GBU'],
 		banlist: ['Oranguru + Symbiosis', 'Passimian + Defiant', 'Unown', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
 		minSourceGen: 7,
@@ -1478,7 +1480,15 @@ const Formats = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		timer: {starting: 15 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90, grace: 90, timeoutAutoChoose: true, dcTimerBank: false},
+		timer: {
+			starting: 15 * 60,
+			addPerTurn: 0,
+			maxPerTurn: 55,
+			maxFirstTurn: 90,
+			grace: 90,
+			timeoutAutoChoose: true,
+			dcTimerBank: false,
+		},
 		ruleset: ['Obtainable', 'Alola Pokedex', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
 		banlist: [
 			'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zygarde', 'Mega',
@@ -1512,7 +1522,7 @@ const Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
 		teamLength: {
@@ -1678,7 +1688,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -1727,7 +1737,9 @@ const Formats = [
 		],
 		minSourceGen: 6,
 		onValidateTeam(team) {
-			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde'];
+			const legends = [
+				'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde',
+			];
 			let n = 0;
 			for (const set of team) {
 				const baseSpecies = this.dex.getSpecies(set.species).baseSpecies;
@@ -1761,7 +1773,7 @@ const Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
 		// no restrictions, for serious (other than team preview)
@@ -1791,7 +1803,7 @@ const Formats = [
 		gameType: 'triples',
 		searchShow: false,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		debug: true,
 		// no restrictions, for serious (other than team preview)
@@ -1916,7 +1928,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -1965,7 +1977,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -1978,7 +1990,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
@@ -2083,7 +2095,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions
 		ruleset: ['Cancel Mod'],
@@ -2115,7 +2127,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		// no restrictions
 		ruleset: ['Cancel Mod'],
@@ -2186,7 +2198,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
@@ -2234,7 +2246,7 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
@@ -2293,10 +2305,8 @@ const Formats = [
 		searchShow: false,
 		debug: true,
 		maxLevel: 9999,
-		trunc(n) { return Math.trunc(n); },
+		battle: {trunc: Math.trunc},
 		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 ];
-
-exports.Formats = Formats;

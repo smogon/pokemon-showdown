@@ -134,6 +134,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 			user.games.delete(this.game.roomid);
 			user.updateSearch();
 		}
+		this.id = '';
 		this.connected = false;
 		this.active = false;
 	}
@@ -713,7 +714,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			}
 		}
 		if (!this.ended) {
-			this.room.add(`|bigerror|The simulator process has crashed. We've been notified and will fix this ASAP.`);
+			this.room.add(`|bigerror|The simulator process crashed. We've been notified and will fix this ASAP.`);
 			if (!disconnected) Monitor.crashlog(new Error(`Sim stream interrupted`), `A sim stream`);
 			this.started = true;
 			this.ended = true;
