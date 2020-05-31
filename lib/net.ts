@@ -9,23 +9,47 @@ import * as https from 'https';
 import * as http from 'http';
 import * as url from 'url';
 import * as Streams from './streams';
+import { resolve } from 'dns';
 
-export interface PostData {
-	[key: string]: string | number;
-}
 export interface NetRequestOptions extends https.RequestOptions {
-	body?: string | PostData;
-	query?: PostData;
+	body?: string;
+	query?: {[k: string]: string | number};
 }
 
-export class NetRequest {
-	uri: string;
+export class NetStream extends Streams.ReadWriteStream {
 	statusCode?: number;
-	constructor(uri: string) {
-		this.uri = uri;
-		this.statusCode = undefined;
+	headers?: http.IncomingHttpHeaders;
+	opts?: NetRequestOptions;
+	uri: string;
+	request: http.ClientRequest | null;
+	responseStream: Streams.ReadStream | null;
+	constructor(uri: string, opts?: NetRequestOptions | null) {
+		super();
+		this.statusCode = 0;
+		this.headers = {};
+		this.opts = opts ? opts : undefined;
+		this.uri = uri
+		this.responseStream = null;
+		// make request
+		this.request = null;
+		this.makeRequest();
 	}
-	encodeQuery(data: PostData) {
+	makeRequest() {
+		const protocol = url.parse(this.uri).protocol as string;
+		const net = protocol.includes('https:') ? https : http;
+		return new Promise(resolve => {
+			 this.request = net.get(this.opts ? this.opts : this.uri, response => {
+				  response.setEncoding('utf-8');
+				  const stream = new Streams.ReadStream({nodeStream: response});
+				  resolve({
+						stream: stream,
+						headers: response.headers,
+						statusCode: response.statusCode
+				  });
+			 });
+		});
+  }
+	encodeQuery(data: AnyObject) {
 		let out = '';
 		for (const key in data) {
 			if (out) out += `&`;
@@ -33,65 +57,64 @@ export class NetRequest {
 		}
 		return out;
 	}
-	/**
-	 * Makes a http/https get request to the given link and returns the status, headers, and a stream.
-	 * The request data itself can be read with ReadStream#read().
-	 * @param opts request opts - headers, etc.
-	 * @param body POST body
-	 */
-	getFullResponse(opts: NetRequestOptions = {}, body?: string | PostData): Promise<{
-		statusCode: number | undefined,
-		statusMessage: string | undefined,
-		headers: http.IncomingHttpHeaders | undefined,
-		stream: Streams.ReadStream,
-	}> {
-		if (opts.body) {
+	write(body: string) {
+		if (!this.request) throw new Error(`Writing to a request that doesn't exist.`);
+		const opts = this.opts;
+		if (opts?.body) {
 			if (body) throw new Error(`must not pass both body and opts.body`);
 			body = opts.body;
 		}
 
 		if (body && typeof body !== 'string') {
-			if (!opts.headers) opts.headers = {};
-			if (!opts.headers['Content-Type']) {
-				opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+			if (!opts?.headers) opts!.headers = {};
+			if (!opts?.headers['Content-Type']) {
+				opts!.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 			}
 			body = this.encodeQuery(body);
 		}
 
-		if (opts.query) {
+		if (opts?.query) {
 			this.uri += (this.uri.includes('?') ? '&' : '?') + this.encodeQuery(opts.query);
 		}
 
 		const postBody = body;
 		if (postBody) {
-			if (!opts.headers) opts.headers = {};
-			if (!opts.headers['Content-Length']) {
-				opts.headers['Content-Length'] = Buffer.byteLength(postBody);
+			if (!opts!.headers) opts!.headers = {};
+			if (!opts!.headers['Content-Length']) {
+				opts!.headers['Content-Length'] = Buffer.byteLength(postBody);
 			}
 		}
-
-		return new Promise((resolve, reject) => {
-			if (Config.noNetRequests) return reject(new Error(`Net requests are disabled.`));
-
-			const protocol = url.parse(this.uri).protocol as string;
-			const net = protocol.includes('https:') ? https : http;
-			const req = net.request(opts ? opts : this.uri, response => {
-				const stream = new Streams.ReadStream({nodeStream: response});
-				resolve({
-					statusCode: response.statusCode,
-					statusMessage: response.statusMessage,
-					headers: response.headers,
-					stream: stream,
-				});
+		if (postBody) {
+			this.request.write(postBody);
+		}
+		if (opts?.timeout) {
+			this.request.setTimeout(opts.timeout, () => {
+				this.request!.abort();
 			});
-			req.on('err', err => {
-				reject(err);
-			});
-			if (postBody) {
-				req.write(postBody);
-			}
-			if (opts.timeout) req.setTimeout(opts.timeout, () => req.abort());
-		});
+		}
+	}
+	read() {
+		return this.responseStream!.read();
+	}
+}
+export class NetRequest {
+	uri: string;
+	statusCode?: number;
+	constructor(uri: string) {
+		this.uri = uri;
+	}
+	/**
+	 * Makes a http/https get request to the given link and returns a stream.
+	 * The request data itself can be read with ReadStream#read().
+	 * The NetStream class also holds headers and statusCode as a property.
+	 * @param opts request opts - headers, etc.
+	 * @param body POST body
+	 */
+	getStream(opts: NetRequestOptions = {}) {
+		if (Config.noNetRequests) throw new Error(`Net requests are disabled.`);
+		const stream = new NetStream(this.uri);
+		this.statusCode = stream.statusCode;
+		return stream;
 	}
 
 	/**
@@ -99,9 +122,8 @@ export class NetRequest {
 	 * Returns the response data.
 	 * @param opts request opts - headers, etc.
 	 */
-	async get(opts: NetRequestOptions = {}): Promise<string> {
-		const response = await this.getFullResponse(opts);
-		return response.stream.readAll();
+	async get(opts: AnyObject = {}): Promise<string | null> {
+		return this.getStream(opts).read();
 	}
 
 	/**
@@ -109,7 +131,7 @@ export class NetRequest {
 	 * @param opts request opts - headers, etc.
 	 * @param body POST body
 	 */
-	post(body: PostData, opts: Omit<NetRequestOptions, 'method' | 'body'> = {}): Promise<string> {
+	post(opts: AnyObject = {}, body: AnyObject) {
 		return this.get({
 			...opts,
 			method: 'POST',
