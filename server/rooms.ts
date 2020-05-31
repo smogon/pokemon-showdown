@@ -640,7 +640,7 @@ export class GlobalRoom extends BasicRoom {
 	writeChatRoomData() {
 		const settingsList: RoomSettings[] = [];
 		for (const room of Rooms.rooms.values()) {
-			if (!room.settings?.persistSettings) continue;
+			if (!room.settings.persistSettings) continue;
 			settingsList.push(room.settings);
 		}
 		FS('config/chatrooms.json').writeUpdate(() => (
@@ -807,7 +807,7 @@ export class GlobalRoom extends BasicRoom {
 			const subrooms = room.getSubRooms().map(r => r.title);
 			if (subrooms.length) roomData.subRooms = subrooms;
 
-			if (room.settings?.isOfficial) {
+			if (room.settings.isOfficial) {
 				roomsData.official.push(roomData);
 			// @ts-ignore
 			} else if (room.pspl) {
@@ -1463,7 +1463,7 @@ export class BasicChatRoom extends BasicRoom {
 		Rooms.aliases.set(oldID, newID);
 		if (!this.aliases) this.aliases = [];
 		this.aliases.push(oldID);
-		if (this.settings?.persistSettings) {
+		if (this.settings.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 
@@ -1490,7 +1490,7 @@ export class BasicChatRoom extends BasicRoom {
 			}
 		}
 
-		if (this.settings?.persistSettings) {
+		if (this.settings.persistSettings) {
 			this.title = newTitle;
 			Rooms.global.writeChatRoomData();
 		}

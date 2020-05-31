@@ -42,7 +42,7 @@ export const commands: ChatCommands = {
 		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
-		if (usedRoom.settings?.auth && targetUser.id in usedRoom.settings.auth) {
+		if (usedRoom.settings.auth && targetUser.id in usedRoom.settings.auth) {
 			roomauth = usedRoom.settings.auth[targetUser.id];
 		}
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
@@ -64,15 +64,15 @@ export const commands: ChatCommands = {
 			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
-			const authSymbol = (targetRoom.settings?.auth && targetRoom.settings?.auth[targetUser.id] ?
-				targetRoom.settings?.auth[targetUser.id] : '');
+			const authSymbol = (targetRoom.settings.auth && targetRoom.settings.auth[targetUser.id] ?
+				targetRoom.settings.auth[targetUser.id] : '');
 			const battleTitle = (targetRoom.battle ? ` title="${targetRoom.title}"` : '');
 			const output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
-			if (targetRoom.settings?.isPrivate === true) {
-				if (targetRoom.settings?.modjoin === '~') continue;
+			if (targetRoom.settings.isPrivate === true) {
+				if (targetRoom.settings.modjoin === '~') continue;
 				if (privaterooms) privaterooms += ` | `;
 				privaterooms += output;
-			} else if (targetRoom.settings?.isPrivate) {
+			} else if (targetRoom.settings.isPrivate) {
 				if (hiddenrooms) hiddenrooms += ` | `;
 				hiddenrooms += output;
 			} else {
@@ -87,7 +87,7 @@ export const commands: ChatCommands = {
 		}
 		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
 		const canViewPunishments = canViewAlts ||
-			(usedRoom.settings?.isPrivate !== true && user.can('mute', targetUser, usedRoom) && targetUser.id in usedRoom.users);
+			(usedRoom.settings.isPrivate !== true && user.can('mute', targetUser, usedRoom) && targetUser.id in usedRoom.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
 		buf += `<br />`;
 
@@ -196,8 +196,8 @@ export const commands: ChatCommands = {
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.game) continue;
 			if ((targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid)) ||
-				(curRoom.settings?.auth && curRoom.settings?.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
-				if (curRoom.settings?.isPrivate && !canViewAlts) {
+				(curRoom.settings.auth && curRoom.settings.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
+				if (curRoom.settings.isPrivate && !canViewAlts) {
 					continue;
 				}
 				gameRooms.push(curRoom.roomid);
@@ -251,7 +251,7 @@ export const commands: ChatCommands = {
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
 		let roomauth = '';
-		if (room?.settings?.auth && userid in room.settings.auth) roomauth = room.settings.auth[userid];
+		if (room?.settings.auth && userid in room.settings.auth) roomauth = room.settings.auth[userid];
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
@@ -320,8 +320,8 @@ export const commands: ChatCommands = {
 		const battles = [];
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.battle) continue;
-			if ((user1?.inRooms.has(curRoom.roomid) || (curRoom.settings?.auth && curRoom.settings?.auth[userID1])) &&
-				(user2?.inRooms.has(curRoom.roomid) || (curRoom.settings?.auth && curRoom.settings?.auth[userID2]))) {
+			if ((user1?.inRooms.has(curRoom.roomid) || (curRoom.settings.auth && curRoom.settings.auth[userID1])) &&
+				(user2?.inRooms.has(curRoom.roomid) || (curRoom.settings.auth && curRoom.settings.auth[userID2]))) {
 				battles.push(curRoom.roomid);
 			}
 		}
@@ -1936,7 +1936,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
 				`${room ? this.tr("Please follow the rules:") + '<br />' : ``}` +
-				`${room?.settings?.rulesLink ? Chat.html`- <a href="${room.settings?.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``}` +
+				`${room?.settings.rulesLink ? Chat.html`- <a href="${room.settings.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``}` +
 				`- <a href="https://${Config.routes.root}${this.tr('/rules')}">${this.tr("Global Rules")}</a>`
 			);
 			return;
@@ -1952,8 +1952,8 @@ export const commands: ChatCommands = {
 		target = target.trim();
 
 		if (target === 'delete' || target === 'remove') {
-			if (!room.settings?.rulesLink) return this.errorReply(`This room does not have rules set to remove.`);
-			delete room.settings?.rulesLink;
+			if (!room.settings.rulesLink) return this.errorReply(`This room does not have rules set to remove.`);
+			delete room.settings.rulesLink;
 			this.privateModAction(`(${user.name} has removed the room rules link.)`);
 			this.modlog('RULES', null, `removed room rules link`);
 		} else {
@@ -1962,7 +1962,7 @@ export const commands: ChatCommands = {
 			this.modlog('RULES', null, `changed link to: ${target}`);
 		}
 
-		if (room.settings?.persistSettings) {
+		if (room.settings.persistSettings) {
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -2112,7 +2112,7 @@ export const commands: ChatCommands = {
 			// Special case for Meowstic-M
 			if (id === 'meowstic') id = 'meowsticm' as ID;
 			if (['ou', 'uu'].includes(formatId) && generation === 'sm' &&
-				room?.settings?.language && room.settings.language in supportedLanguages) {
+				room?.settings.language && room.settings.language in supportedLanguages) {
 				// Limited support for translated analysis
 				// Translated analysis do not support automatic redirects from a id to the proper page
 				this.sendReplyBox(

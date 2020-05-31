@@ -305,7 +305,7 @@ async function getModlog(
 
 	const hideIps = !user.can('lock');
 	const addModlogLinks = !!(
-		Config.modloglink && (user.group !== ' ' || (targetRoom && targetRoom.settings?.isPrivate !== true))
+		Config.modloglink && (user.group !== ' ' || (targetRoom && targetRoom.settings.isPrivate !== true))
 	);
 
 	if (searchString.length > MAX_QUERY_LENGTH) {

@@ -985,7 +985,7 @@ export class CommandContext extends MessageContext {
 			user.lastMessageTime = Date.now();
 		}
 
-		if (room?.settings?.highTraffic &&
+		if (room?.settings.highTraffic &&
 			toID(message).replace(/[^a-z]+/, '').length < 2 &&
 			!user.can('broadcast', null, room)) {
 			this.errorReply(

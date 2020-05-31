@@ -1550,7 +1550,7 @@ export const commands: ChatCommands = {
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
 				`|modal||html|<p>${Chat.escapeHTML(user.name)} has blacklisted you from the room ${room.roomid}${(room.subRooms ? ` and its subrooms` : '')}. Reason: ${Chat.escapeHTML(target)}</p>` +
-				`<p>To appeal the ban, PM the staff member that blacklisted you${(!room.battle && room.settings?.auth ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`)}`
+				`<p>To appeal the ban, PM the staff member that blacklisted you${(!room.battle && room.settings.auth ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`)}`
 			);
 		}
 
@@ -1558,7 +1558,7 @@ export const commands: ChatCommands = {
 
 		const affected = Punishments.roomBlacklist(room, targetUser, null, null, target);
 
-		if (!room.settings?.isPrivate && room.settings) {
+		if (!room.settings.isPrivate && room.settings) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
@@ -1570,7 +1570,7 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (!room.settings?.isPrivate && room.settings) {
+		if (!room.settings.isPrivate && room.settings) {
 			this.globalModlog("BLACKLIST", targetUser, ` by ${user.id}${(target ? `: ${target}` : '')}`);
 		} else {
 			// Room modlog only
@@ -1692,10 +1692,10 @@ export const commands: ChatCommands = {
 			Punishments.roomBlacklist(room, userid, null, null, reason);
 
 			const trusted = Users.isTrusted(userid);
-			if (trusted && room.settings?.isPrivate !== true) {
+			if (trusted && room.settings.isPrivate !== true) {
 				Monitor.log(`[CrisisMonitor] Trusted user ${userid}${(trusted !== userid ? ` (${trusted})` : ``)} was nameblacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 			}
-			if (!room.settings?.isPrivate && room.settings) {
+			if (!room.settings.isPrivate && room.settings) {
 				this.globalModlog("NAMEBLACKLIST", userid, ` by ${user.id}${(reason ? `: ${reason}` : '')}`);
 			}
 		}

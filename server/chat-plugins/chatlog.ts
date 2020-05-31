@@ -95,7 +95,7 @@ const LogReader = new class {
 				}
 			} else if (!room) {
 				if (opts === 'all' || opts === 'deleted') deleted.push(roomid);
-			} else if (room.settings?.isOfficial) {
+			} else if (room.settings.isOfficial) {
 				official.push(roomid);
 			} else if (!room.settings.isPrivate) {
 				normal.push(roomid);

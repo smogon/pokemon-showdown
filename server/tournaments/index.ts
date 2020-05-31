@@ -1560,7 +1560,7 @@ export const commands: ChatCommands = {
 			for (const tourRoom of Rooms.rooms.values()) {
 				const tournament = tourRoom.getGame(Tournament);
 				if (!tournament) continue;
-				if (tourRoom.settings?.isPrivate || tourRoom.isPersonal || tourRoom.settings?.staffRoom) continue;
+				if (tourRoom.settings.isPrivate || tourRoom.isPersonal || tourRoom.settings.staffRoom) continue;
 				update.push({
 					room: tourRoom.roomid, title: room.title, format: tournament.name,
 					generator: tournament.generator.name, isStarted: tournament.isTournamentStarted,
@@ -1634,7 +1634,7 @@ export const commands: ChatCommands = {
 				return this.sendReply(`Usage: ${cmd} <on|off>`);
 			}
 
-			if (room.settings?.persistSettings) {
+			if (room.settings.persistSettings) {
 				Rooms.global.writeChatRoomData();
 			}
 		} else if (cmd === 'create' || cmd === 'new') {

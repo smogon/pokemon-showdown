@@ -1107,7 +1107,7 @@ export class User extends Chat.MessageContext {
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!staffRoom?.settings?.auth?.[this.id];
+			this.isStaff = !!staffRoom?.settings.auth?.[this.id];
 		}
 		if (this.trusted) {
 			if (this.locked && this.permalocked) {
@@ -1139,7 +1139,7 @@ export class User extends Chat.MessageContext {
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!(staffRoom?.settings?.auth?.[this.id]);
+			this.isStaff = !!(staffRoom?.settings.auth?.[this.id]);
 		}
 		if (wasStaff !== this.isStaff) this.update('isStaff');
 		Rooms.global.checkAutojoin(this);

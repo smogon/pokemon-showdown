@@ -3141,7 +3141,7 @@ export const commands: ChatCommands = {
 		term: 'data',
 		dt: 'data',
 		data(target, room, user, connection, cmd) {
-			if (room?.settings?.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room?.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (cmd === 'role' && !target && room) {
 				// Support /mafia role showing your current role if you're in a game
 				const game = room.getGame(MafiaTracker);

@@ -578,10 +578,10 @@ export const pages: PageTable = {
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
-					if (!helpRoom.settings?.auth) {
+					if (!helpRoom.settings.auth) {
 						helpRoom.settings.auth = {};
 					}
-					if (!helpRoom.settings?.auth[user.id]) helpRoom.settings.auth[user.id] = '+';
+					if (!helpRoom.settings.auth[user.id]) helpRoom.settings.auth[user.id] = '+';
 					connection.popup(`You already have a Help ticket.`);
 					user.joinRoom(`help-${ticket.userid}` as RoomID);
 					return this.close();
