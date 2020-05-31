@@ -2,12 +2,12 @@
  * Room Events Plugin
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This is a room-management system to keep track of upcoming room.settings.events.
+ * This is a room-management system to keep track of upcoming room events.
  *
  * @license MIT license
  */
 
-function formatEvent(event: {eventName: string, date: string, desc: string, started: boolean}) {
+function formatEvent(event: {eventName: string, date: string, desc: string, started: boolean, aliases: string[]}) {
 	const timeRemaining = new Date(event.date).getTime() - new Date().getTime();
 	let explanation = timeRemaining.toString();
 	if (!timeRemaining) explanation = "The time remaining for this event is not available";
@@ -18,9 +18,26 @@ function formatEvent(event: {eventName: string, date: string, desc: string, star
 	}
 	let ret = `<tr title="${explanation}">`;
 	ret += Chat.html`<td>${event.eventName}</td>`;
+	ret += Chat.html`<td>${event.aliases ? event.aliases.join(", ") : ""}</td>`;
 	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
 	ret += Chat.html`<td><time>${event.date}</time></td></tr>`;
 	return ret;
+}
+
+function getAllAliases(room: Room) {
+	return Object.keys(room.settings.events).map(event => room.settings.events[event].aliases).join();
+}
+
+function getEventID(nameOrAlias: string, room: Room): ID {
+	let id = toID(nameOrAlias);
+	if (!room.settings.events[id]) {
+		for (const possibleEvent in room.settings.events) {
+			if (room.settings.events[possibleEvent].aliases.includes(id)) {
+				id = toID(possibleEvent);
+			}
+		}
+	}
+	return id;
 }
 
 export const commands: ChatCommands = {
@@ -28,13 +45,13 @@ export const commands: ChatCommands = {
 	roomevent: 'roomevents',
 	roomevents: {
 		''(target, room, user) {
-			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!room.settings?.events || !Object.keys(room.settings.events).length) {
+			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 			if (!this.runBroadcast()) return;
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
-			buff += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
+			buff += '<th>Event Name:</th><th>Event Aliases:</th><th>Event Description:</th><th>Event Date:</th>';
 			for (const i in room.settings.events) {
 				buff += formatEvent(room.settings.events[i]);
 			}
@@ -46,7 +63,7 @@ export const commands: ChatCommands = {
 		create: 'add',
 		edit: 'add',
 		add(target, room, user) {
-			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			if (!room.settings.events) room.settings.events = Object.create(null);
 			const [eventName, date, ...desc] = target.split(target.includes('|') ? '|' : ',');
@@ -55,17 +72,17 @@ export const commands: ChatCommands = {
 				return this.errorReply("You're missing a command parameter - see /help roomevents for this command's syntax.");
 			}
 
-			const eventNameActual = eventName.trim();
 			const dateActual = date.trim();
 			const descString = desc.join(target.includes('|') ? '|' : ',').trim();
 
-			if (eventNameActual.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
+			if (eventName.trim().length > 50) return this.errorReply("Event names should not exceed 50 characters.");
 			if (dateActual.length > 150) return this.errorReply("Event dates should not exceed 150 characters.");
 			if (descString.length > 1000) return this.errorReply("Event descriptions should not exceed 1000 characters.");
 
-			const eventId = toID(eventName);
+			const eventId = getEventID(eventName, room);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
+			const eventNameActual = (room.settings.events[eventId] ? room.settings.events[eventId].eventName : eventName.trim());
 			this.privateModAction(`(${user.name} ${room.settings.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
 			this.modlog('ROOMEVENT', null, `${room.settings.events[eventId] ? "edited" : "added"} "${eventNameActual}"`);
 			room.settings.events[eventId] = {
@@ -73,22 +90,52 @@ export const commands: ChatCommands = {
 				date: dateActual,
 				desc: descString,
 				started: false,
+				aliases: (room.settings.events[eventId] ? room.settings.events[eventId].aliases : []),
 			};
+			Rooms.global.writeChatRoomData();
+		},
+
+		rename(target, room, user) {
+			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!this.can('ban', null, room)) return false;
+			let [oldName, newName] = target.split(target.includes('|') ? '|' : ',');
+			if (!(oldName && newName)) return this.errorReply("Usage: /roomevents rename [old name], [new name]");
+
+			newName = newName.trim();
+			const newID = toID(newName);
+			const oldID = (getAllAliases(room).includes(toID(oldName)) ? getEventID(oldName, room) : toID(oldName));
+			if (newID === oldID) return this.errorReply("The new name must be different from the old one.");
+			if (!newID) return this.errorReply("Event names must contain at least one alphanumeric character.");
+			if (newName.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
+
+			const eventData = room.settings.events[oldID];
+			if (!eventData) return this.errorReply(`There is no event titled "${oldName}".`);
+			if (room.settings.events[newID] || getAllAliases(room).includes(newID)) {
+				return this.errorReply(`"${newName}" is already an event or alias.`);
+			}
+			const originalName = eventData.eventName;
+			eventData.eventName = newName;
+			room.settings.events[newID] = eventData;
+			delete room.settings.events[oldID];
+
+			this.privateModAction(`(${user.name} renamed the roomevent titled "${originalName}" to "${newName}".)`);
+			this.modlog('ROOMEVENT', null, `renamed "${originalName}" to "${newName}"`);
 			Rooms.global.writeChatRoomData();
 		},
 
 		begin: 'start',
 		start(target, room, user) {
-			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room to start.");
 			}
 			if (!target) return this.errorReply("Usage: /roomevents start [event name]");
 			target = toID(target);
-			if (!room.settings.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
-			if (room.settings.events[target].started) {
-				return this.errorReply(`The event ${room.settings.events[target].eventName} has already started.`);
+			const event = room.settings.events[getEventID(target, room)];
+			if (!event) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
+			if (event.started) {
+				return this.errorReply(`The event ${event.eventName} has already started.`);
 			}
 			for (const u in room.users) {
 				const activeUser = Users.get(u);
@@ -96,60 +143,99 @@ export const commands: ChatCommands = {
 					activeUser.sendTo(
 						room,
 						Chat.html`|notify|A new roomevent in ${room.title} has started!|` +
-						`The "${room.settings.events[target].eventName}" roomevent has started!`
+						`The "${event.eventName}" roomevent has started!`
 					);
 				}
 			}
 			this.add(
-				Chat.html`|raw|<div class="broadcast-blue"><b>The "${room.settings.events[target].eventName}" roomevent has started!</b></div>`
+				Chat.html`|raw|<div class="broadcast-blue"><b>The "${event.eventName}" roomevent has started!</b></div>`
 			);
-			this.modlog('ROOMEVENT', null, `started "${target}"`);
-			room.settings.events[target].started = true;
+			this.modlog('ROOMEVENT', null, `started "${toID(event.eventName)}"`);
+			event.started = true;
 			Rooms.global.writeChatRoomData();
 		},
 
 		delete: 'remove',
 		remove(target, room, user) {
-			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			if (!room.settings.events || Object.keys(room.settings.events).length === 0) {
 				return this.errorReply("There are currently no planned upcoming events for this room to remove.");
 			}
 			if (!target) return this.errorReply("Usage: /roomevents remove [event name]");
 			target = toID(target);
-			if (!room.settings.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			if (getAllAliases(room).includes(target)) return this.errorReply("To delete aliases, use /roomevents removealias.");
+			if (!room.settings.events[target]) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			delete room.settings.events[target];
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
 			this.modlog('ROOMEVENT', null, `removed "${target}"`);
-
 			Rooms.global.writeChatRoomData();
 		},
 		view(target, room, user) {
-			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 
 			if (!target) return this.errorReply("Usage: /roomevents view [event name]");
 			target = toID(target);
-			if (!room.settings.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 
+			const event = room.settings.events[getEventID(target, room)];
+			if (!event) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			if (!this.runBroadcast()) return;
-			const buff = `<table border="1" cellspacing="0" cellpadding="3">${formatEvent(room.settings.events[target])}</table>`;
+			const buff = `<table border="1" cellspacing="0" cellpadding="3">${formatEvent(event)}</table>`;
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
 			if (!this.broadcasting && user.can('ban', null, room)) {
 				this.sendReplyBox(
-					Chat.html`<code>/roomevents add ${room.settings.events[target].eventName} |` +
-					Chat.html`${room.settings.events[target].date} | ${room.settings.events[target].desc}</code>`
+					Chat.html`<code>/roomevents add ${event.eventName} |` +
+					Chat.html`${event.date} | ${event.desc}</code>`
 				);
 			}
+		},
+		alias: 'addalias',
+		addalias(target, room, user) {
+			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!this.can('ban', null, room)) return false;
+			const [alias, eventId] = target.split(target.includes('|') ? '|' : ',').map(argument => toID(argument));
+			if (!(alias && eventId)) {
+				return this.errorReply("Usage: /roomevents addalias [alias], [event name]. Aliases must contain at least one alphanumeric character.");
+			}
+			if (!room.settings.events || Object.keys(room.settings.events).length === 0) {
+				return this.errorReply(`There are currently no scheduled events.`);
+			}
+			if (!room.settings.events[eventId]) return this.errorReply(`There is no event titled "${eventId}".`);
+			if (!room.settings.events[eventId].aliases) {
+				room.settings.events[eventId].aliases = []; // backwards compatibility with old event data
+			}
+			if (getAllAliases(room).includes(alias) || room.settings.events[alias]) {
+				return this.errorReply(`"${alias}" is already an event or an alias of an event.`);
+			}
+			room.settings.events[eventId].aliases.push(alias);
+			this.privateModAction(`(${user.name} added an alias "${alias}" for the roomevent "${eventId}".)`);
+			this.modlog('ROOMEVENT', null, `alias for "${eventId}": "${alias}"`);
+			Rooms.global.writeChatRoomData();
+		},
+		deletealias: 'removealias',
+		removealias(target, room, user) {
+			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!this.can('ban', null, room)) return false;
+			target = toID(target);
+			if (!target) return this.errorReply("Usage: /roomevents removealias <alias>");
+			if (!getAllAliases(room).includes(target)) return this.errorReply(`${target} isn't an alias.`);
+
+			const event = room.settings.events[getEventID(target, room)];
+			room.settings.events[getEventID(target, room)].aliases = event.aliases.filter(alias => alias !== target);
+
+			this.privateModAction(`(${user.name} removed the alias "${target}")`);
+			this.modlog('ROOMEVENT', null, `removed the alias "${target}"`);
+			Rooms.global.writeChatRoomData();
 		},
 		help(target, room, user) {
 			return this.parse('/help roomevents');
 		},
 		sortby(target, room, user) {
 			// preconditions
-			if (!room.settings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
@@ -203,7 +289,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("No or invalid column name specified. Please use one of: date, eventdate, desc, description, eventdescription, eventname, name.");
 			}
 
-			// rebuild the room.settings.events object
+			// rebuild the room.events object
 			room.settings.events = {};
 			for (const sortedObj of sortable) {
 				const eventId = toID(sortedObj.eventName);
@@ -223,6 +309,9 @@ export const commands: ChatCommands = {
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. A timestamp in event date/time field like YYYY-MM-DD HH:MM±hh:mm will be displayed in user's timezone. Requires: @ # & ~`,
 		`/roomevents start [event name] - Declares to the room that the event has started. Requires: @ # & ~`,
 		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
+		`/roomevents rename [old event name] | [new name] - Renames an event. Requires: @ # & ~`,
+		`/roomevents addalias [alias] | [event name] - Adds an alias for the event. Requires: @ # & ~`,
+		`/roomevents removealias [alias] - Removes an event alias. Requires: @ # & ~`,
 		`/roomevents sortby [column name] | [asc/desc (optional)] - Sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
 	],
