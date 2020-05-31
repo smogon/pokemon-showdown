@@ -818,8 +818,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		);
 		const fullyEvolvedSearchResult = (
 			fullyEvolvedSearch === null ||
-			(fullyEvolvedSearch === true && species.evos.length === 0) ||
-			(fullyEvolvedSearch === false && species.evos.length > 0)
+			(fullyEvolvedSearch === true && !species.nfe) ||
+			(fullyEvolvedSearch === false && species.nfe)
 		);
 		if (
 			species.gen <= maxGen &&
