@@ -2,7 +2,8 @@ import {FS, FSPath} from '../../lib/fs';
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
-const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling', 'animeandmanga', 'sports'];
+const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary',
+	'prowrestling', 'animeandmanga', 'sports', 'videogames'];
 
 const rooms: {[k: string]: ChatRoom} = {};
 
@@ -20,6 +21,7 @@ const BOTWS_FILE = 'config/chat-plugins/thelibrary.tsv';
 const MOTWS_FILE = 'config/chat-plugins/prowrestling-matches.tsv';
 const ANOTDS_FILE = 'config/chat-plugins/animeandmanga-shows.tsv';
 const ATHOTDS_FILE = 'config/chat-plugins/sports-athletes.tsv';
+const VGOTDS_FILE = 'config/chat-plugins/videogames-games.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
 let prenoms: {[k: string]: [string, AnyObject][]} = {};
@@ -210,7 +212,11 @@ class OtdHandler {
 	}
 
 	display(update = false) {
-		this.room.add(`|uhtml${update ? 'change' : ''}|otd|${this.generateNomWindow()}`);
+		if (update) {
+			this.room.uhtmlchange('otd', this.generateNomWindow());
+		} else {
+			this.room.add(`|uhtml|otd|${this.generateNomWindow()}`);
+		}
 	}
 
 	displayTo(connection: Connection) {
@@ -416,6 +422,7 @@ otds.set('botw', new OtdHandler('botw', 'Book', rooms.thelibrary, BOTWS_FILE, ['
 otds.set('motw', new OtdHandler('motw', 'Match', rooms.prowrestling, MOTWS_FILE, ['match', 'nominator', 'link', 'tagline', 'event', 'image', 'time'], ['Match', 'Nominator', 'Link', 'Tagline', 'Event', 'Image', 'Timestamp'], true));
 otds.set('anotd', new OtdHandler('anotd', 'Animanga', rooms.animeandmanga, ANOTDS_FILE, ['show', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']));
 otds.set('athotd', new OtdHandler('athotd', 'Athlete', rooms.sports, ATHOTDS_FILE, ['athlete', 'nominator', 'image', 'sport', 'team', 'country', 'age', 'quote', 'time'], ['Athlete', 'Nominator', 'Image', 'Sport', 'Team', 'Country', 'Age', 'Quote', 'Timestamp']));
+otds.set('vgotd', new OtdHandler('vgotd', 'Video Game', rooms.videogames, VGOTDS_FILE, ['game', 'nominator', 'link', 'tagline', 'image', 'time'], ['Video Game', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']));
 
 function selectHandler(message: string) {
 	const id = toID(message.substring(1).split(' ')[0]);

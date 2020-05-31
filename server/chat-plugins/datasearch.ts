@@ -40,6 +40,7 @@ interface MoveOrGroup {
 	zboost: {[k: string]: boolean};
 	status: {[k: string]: boolean};
 	volatileStatus: {[k: string]: boolean};
+	targets: {[k: string]: boolean};
 	recoil: boolean;
 	skip: boolean;
 }
@@ -122,26 +123,28 @@ export const commands: ChatCommands = {
 		});
 	},
 
-	dexsearchhelp: [
-		`/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria`,
-		`Search categories are: type, tier, color, moves, ability, gen, resists, recovery, zrecovery, priority, stat, weight, height, egg group.`,
-		`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.`,
-		`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.`,
-		`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.`,
-		`Types can be searched for by either having the type precede 'type' or just using the type itself as a parameter, e.g., both 'fire type' and 'fire' show all Fire types; however, using 'psychic' as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.`,
-		`'resists' followed by a type will show Pok\u00e9mon that resist that typing, e.g., 'resists normal'.`,
-		`'weak' followed by a type will show Pok\u00e9mon that are weak to that typing, e.g., 'weak fire'.`,
-		`'asc' or 'desc' following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively, e.g., 'speed asc'.`,
-		`Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.`,
-		`Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.`,
-		`The parameter 'mega' can be added to search for Mega Evolutions only, the parameter 'gmax' can be added to search for Gigantamax Formes only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon that are not in another tier.`,
-		`'Alola' 'Galar', 'Therian', 'Totem', or 'Primal' can be used as parameters to search for those formes.`,
-		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.`,
-		`You can search for info in a specific generation by appending the generation to ds, e.g. '/ds1 normal' searches for all Pok\u00e9mon that were normal type in Generation I.`,
-		`/dexsearch will search the Galar Pokedex; You can search the National Pokedex by using /nds or by adding natdex as a parameter.`,
-		`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix 'group' onto the egg group parameter, e.g., seaching for 'grass, grass group' will show all Grass types in the Grass egg group.`,
-		`The order of the parameters does not matter.`,
-	],
+	dexsearchhelp() {
+		this.sendReplyBox(
+			`<code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
+			`Search categories are: type, tier, color, moves, ability, gen, resists, recovery, zrecovery, priority, stat, weight, height, egg group.<br/>` +
+			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
+			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.<br/>` +
+			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.<br/>` +
+			`Types can be searched for by either having the type precede <code>type</code> or just using the type itself as a parameter; e.g., both <code>fire type</code> and <code>fire</code> show all Fire types; however, using <code>psychic</code> as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.<br/>` +
+			`<code>resists</code> followed by a type will show Pok\u00e9mon that resist that typing (e.g. <code>resists normal</code>).<br/>` +
+			`<code>weak</code> followed by a type will show Pok\u00e9mon that are weak to that typing (e.g. <code>weak fire</code>).<br/>` +
+			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
+			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95.<br/>` +
+			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
+			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Gigantamax Formes only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
+			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
+			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
+			`You can search for info in a specific generation by appending the generation to ds; e.g. <code>/ds1 normal</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
+			`<code>/dexsearch</code> will search the Galar Pokedex; you can search the National Pokedex by using <code>/nds</code> or by adding <code>natdex</code> as a parameter.<br/>` +
+			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
+			`The order of the parameters does not matter.<br/>`
+		);
+	},
 
 	'!randommove': true,
 	rollmove: 'randommove',
@@ -273,26 +276,30 @@ export const commands: ChatCommands = {
 			this.update();
 		});
 	},
-	movesearchhelp: [
-		`/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.`,
-		`Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, priority, and accuracy.`,
-		`Types can be followed by ' type' for clarity, e.g., 'dragon type'.`,
-		`Stat boosts must be preceded with 'boosts ', and stat-lowering moves with 'lowers ', e.g., 'boosts attack' searches for moves that boost the Attack stat of either Pok\u00e9mon.`,
-		`Z-stat boosts must be preceded with 'zboosts ', e.g., 'zboosts accuracy' searches for all Status moves with Z-Effects that boost the user's accuracy.`,
-		`Moves that have a Z-Effect of fully restoring the user's health can be searched for with 'zrecovery'.`,
-		`Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.`,
-		`Parameters can be excluded through the use of '!', e.g., !water type' excludes all Water-type moves.`,
-		`'asc' or 'desc' following a move property will arrange the names in ascending or descending order of that property respectively, e.g., basepower asc will arrange moves in ascending order of their basepowers.`,
-		`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, and zmove.`,
-		`A search that includes '!protect' will show all moves that bypass protection.`,
-		`'protection' as a parameter will search protection moves like Protect, Detect, etc.`,
-		`'max' or 'gmax' as parameters will search for Max Moves and G-Max moves respectively.`,
-		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
-		`If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.`,
-		`You can search for info in a specific generation by appending the generation to ms, e.g. '/ms1 normal' searches for all moves that were normal type in Generation I.`,
-		`/ms will search the Galar Movedex; You can search the National Movedex by using '/nms' or by adding 'natdex' as a parameter.`,
-		`The order of the parameters does not matter.`,
-	],
+	movesearchhelp() {
+		this.sendReplyBox(
+			`<code>/movesearch [parameter], [parameter], [parameter], ...</code>: searches for moves that fulfill the selected criteria.<br/>` +
+			`Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, Pok\u00e9mon targeted, and numeric range for base power, pp, priority, and accuracy.<br/>` +
+			`Types can be followed by <code> type</code> for clarity; e.g., <code>dragon type</code>.<br/>` +
+			`Stat boosts must be preceded with <code>boosts </code>, and stat-lowering moves with <code>lowers </code>; e.g., <code>boosts attack</code> searches for moves that boost the Attack stat of either Pok\u00e9mon.<br/>` +
+			`Z-stat boosts must be preceded with <code>zboosts </code>; e.g., <code>zboosts accuracy</code> searches for all Status moves with Z-Effects that boost the user's accuracy.<br/>` +
+			`Moves that have a Z-Effect of fully restoring the user's health can be searched for with <code>zrecovery</code>.<br/>` +
+			`Move targets must be preceded with <code>targets </code>; e.g., <code>targets user</code> searches for moves that target the user.<br/>` +
+			`Valid move targets are: one ally, user or ally, one adjacent opponent, all Pokemon, all adjacent Pokemon, all adjacent opponents, user and allies, user's side, user's team, any Pokemon, opponent's side, one adjacent Pokemon, random adjacent Pokemon, scripted, and user.<br/>` +
+			`Inequality ranges use the characters <code>></code> and <code><</code>.<br/>` +
+			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water-type moves.<br/>` +
+			`<code>asc</code> or <code>desc</code> following a move property will arrange the names in ascending or descending order of that property, respectively; e.g., <code>basepower asc</code> will arrange moves in ascending order of their base powers.<br/>` +
+			`Valid flags are: authentic (bypasses substitute), bite, bullet, charge, contact, dance, defrost, gravity, mirror (reflected by mirror move), ohko, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, snatch, sound, and zmove.<br/>` +
+			`A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
+			`<code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
+			`<code>max</code> or <code>gmax</code> as parameters will search for Max Moves and G-Max moves respectively.<br/>` +
+			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>fire | water</code> searches for all moves that are either Fire type or Water type.<br/>` +
+			`If a Pok\u00e9mon is included as a parameter, only moves from its movepool will be included in the search.<br/>` +
+			`You can search for info in a specific generation by appending the generation to ms; e.g. <code>ms1 normal</code> searches for all moves that were Normal type in Generation I.<br/>` +
+			`<code>/ms</code> will search the Galar Movedex; you can search the National Movedex by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
+			`The order of the parameters does not matter.`
+		);
+	},
 
 	'!itemsearch': true,
 	isearch: 'itemsearch',
@@ -325,6 +332,37 @@ export const commands: ChatCommands = {
 		`Command accepts natural language. (tip: fewer words tend to work better)`,
 		`Searches with "fling" in them will find items with the specified Fling behavior.`,
 		`Searches with "natural gift" in them will find items with the specified Natural Gift behavior.`,
+	],
+
+	'!abilitysearch': true,
+	asearch: 'abilitysearch',
+	as: 'abilitysearch',
+	abilitysearch(target, room, user, connection, cmd, message) {
+		if (!this.canBroadcast()) return;
+		if (!target) return this.parse('/help abilitysearch');
+
+		return runSearch({
+			tar: target,
+			cmd: 'abilitysearch',
+			canAll: (!this.broadcastMessage || room?.isPersonal),
+			message: (this.broadcastMessage ? "" : message),
+		}).then(response => {
+			if (!response.error && !this.runBroadcast()) return;
+			if (response.error) {
+				this.errorReply(response.error);
+			} else if (response.reply) {
+				this.sendReplyBox(response.reply);
+			} else if (response.dt) {
+				(Chat.commands.data as Chat.ChatHandler).call(
+					this, response.dt, room, user, connection, 'dt', this.broadcastMessage ? "" : message
+				);
+			}
+			this.update();
+		});
+	},
+	abilitysearchhelp: [
+		`/abilitysearch [ability description] - finds abilities that match the given keywords.`,
+		`Command accepts natural language. (tip: fewer words tend to work better)`,
 	],
 
 	'!learn': true,
@@ -421,6 +459,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let tierSearch = null;
 	let capSearch = null;
 	let nationalSearch = null;
+	let fullyEvolvedSearch = null;
 	let randomOutput = 0;
 	let maxGen = 0;
 	const validParameter = (cat: string, param: string, isNotSearch: boolean, input: string) => {
@@ -617,6 +656,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				break;
 			}
 
+			if (['fully evolved', 'fullyevolved', 'fe'].includes(target)) {
+				if (fullyEvolvedSearch === isNotSearch) return {error: "A search cannot include and exclude 'fully evolved'."};
+				if (parameters.length > 1) return {error: "The parameter 'fully evolved' cannot have alternative parameters"};
+				fullyEvolvedSearch = !isNotSearch;
+				orGroup.skip = true;
+				break;
+			}
+
 			if (target === 'recovery') {
 				if (parameters.length > 1) return {error: "The parameter 'recovery' cannot have alternative parameters"};
 				const recoveryMoves = [
@@ -748,7 +795,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && searches.length === 0 && megaSearch === null && gmaxSearch === null && !maxGen) {
+	if (
+		showAll && searches.length === 0 && !maxGen &&
+		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null
+	) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
 		};
@@ -766,6 +816,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			gmaxSearch === null || (gmaxSearch === true && species.isGigantamax) ||
 			(gmaxSearch === false && !species.isGigantamax)
 		);
+		const fullyEvolvedSearchResult = (
+			fullyEvolvedSearch === null ||
+			(fullyEvolvedSearch === true && !species.nfe) ||
+			(fullyEvolvedSearch === false && species.nfe)
+		);
 		if (
 			species.gen <= maxGen &&
 			(
@@ -778,7 +833,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			) &&
 			(!species.tier.startsWith("CAP") || capSearch) &&
 			megaSearchResult &&
-			gmaxSearchResult
+			gmaxSearchResult &&
+			fullyEvolvedSearchResult
 		) {
 			dex[pokemon] = species;
 		}
@@ -1026,6 +1082,23 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	const allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
+	const allTargets: {[k: string]: string} = {
+		oneally: 'adjacentAlly',
+		userorally: 'adjacentAllyOrSelf',
+		oneadjacentopponent: 'adjacentFoe',
+		all: 'all',
+		alladjacent: 'allAdjacent',
+		alladjacentopponents: 'allAdjacentFoes',
+		userandallies: 'allies',
+		usersside: 'allySide',
+		usersteam: 'allyTeam',
+		any: 'any',
+		opponentsside: 'foeSide',
+		oneadjacent: 'normal',
+		randomadjacent: 'randomNormal',
+		scripted: 'scripted',
+		user: 'self',
+	};
 	const allTypes: {[k: string]: string} = Object.create(null);
 	for (const i in Dex.data.TypeChart) {
 		allTypes[toID(i)] = i;
@@ -1039,7 +1112,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	for (const arg of target.split(',')) {
 		const orGroup: MoveOrGroup = {
 			types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {},
-			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, recoil: false, skip: false,
+			boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, targets: {}, recoil: false, skip: false,
 		};
 		const parameters = arg.split("|");
 		if (parameters.length > 3) return {error: "No more than 3 alternatives for each parameter may be used."};
@@ -1087,6 +1160,26 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				}
 				orGroup.contestTypes[target] = !isNotSearch;
 				continue;
+			}
+
+			if (target.startsWith('targets ')) {
+				target = toID(target.substr('targets '.length));
+				if (target === 'allpokemon' || target === 'anypokemon' || target.includes('adjacent')) {
+					target = target.replace('pokemon', '');
+				}
+				if (Object.keys(allTargets).includes(target)) {
+					const moveTarget = allTargets[target];
+					if (
+						(orGroup.targets[moveTarget] && isNotSearch) ||
+						(orGroup.targets[moveTarget] === false && !isNotSearch)
+					) {
+						return {error: 'A search cannot both exclude and include a move target.'};
+					}
+					orGroup.targets[moveTarget] = !isNotSearch;
+					continue;
+				} else {
+					return {error: `'${target}' isn't a valid move target.`};
+				}
 			}
 
 			if (target === 'bypassessubstitute') target = 'authentic';
@@ -1451,6 +1544,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				) continue;
 			}
 
+			if (Object.keys(alts.targets).length) {
+				if (alts.targets[dex[move].target]) continue;
+				if (Object.values(alts.targets).includes(false) && alts.targets[dex[move].target] !== false) continue;
+			}
+
 			for (const flag in alts.flags) {
 				if (flag === 'secondary') {
 					if ((!dex[move].secondary && !dex[move].secondaries) === !alts.flags[flag]) {
@@ -1463,7 +1561,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 						break;
 					}
 				} else if (flag === 'maxmove') {
-					if (!(typeof dex[move].isMax === 'boolean') === !alts.flags[flag]) {
+					if (!(typeof dex[move].isMax === 'boolean' && dex[move].isMax) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
@@ -1500,7 +1598,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (recoveryType === "recovery") {
 					hasRecovery = !!dex[move].drain || !!dex[move].flags.heal;
 				} else if (recoveryType === "zrecovery") {
-					hasRecovery = (dex[move].zMoveEffect === 'heal');
+					hasRecovery = (dex[move].zMove?.effect === 'heal');
 				}
 				if (hasRecovery === alts.recovery[recoveryType]) {
 					matched = true;
@@ -1573,8 +1671,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			for (const boost in alts.zboost) {
-				if (dex[move].zMoveBoost) {
-					if ((dex[move].zMoveBoost![boost as BoostName]! > 0) === alts.zboost[boost]) {
+				const zMove = dex[move].zMove;
+				if (zMove?.boost) {
+					if ((zMove.boost[boost as BoostName]! > 0) === alts.zboost[boost]) {
 						matched = true;
 						break;
 					}
@@ -1880,6 +1979,137 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	return {reply: resultsStr};
 }
 
+function runAbilitysearch(target: string, cmd: string, canAll: boolean, message: string) {
+	// based heavily on runItemsearch()
+	let showAll = false;
+
+	target = target.trim();
+	const lastCommaIndex = target.lastIndexOf(',');
+	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
+	if (lastArgumentSubstr === 'all') {
+		if (!canAll) return {error: "A search ending in ', all' cannot be broadcast."};
+		showAll = true;
+		target = target.substr(0, lastCommaIndex);
+	}
+
+	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
+	const rawSearch = target.split(' ');
+	const searchedWords: string[] = [];
+	let foundAbilities: string[] = [];
+
+	for (const [i, search] of rawSearch.entries()) {
+		let newWord = search.trim();
+		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
+		switch (newWord) {
+		// remove extraneous words
+		case 'a':
+		case 'an':
+		case 'is':
+		case 'it':
+		case 'its':
+		case 'the':
+		case 'that':
+		case 'which':
+		case 'user':
+			newWord = '';
+			break;
+		// replace variations of common words with standardized versions
+		case 'opponent': newWord = 'attacker'; break;
+		case 'heal':
+		case 'heals':
+		case 'recovers': newWord = 'restores'; break;
+		case 'boost':
+		case 'boosts': newWord = 'raised'; break;
+		case 'super':
+			if (rawSearch[i + 1] === 'effective') {
+				newWord = 'supereffective';
+			}
+			break;
+		case 'special':
+			if (rawSearch[i + 1] === 'defense') {
+				newWord = 'specialdefense';
+			} else if (rawSearch[i + 1] === 'attack') {
+				newWord = 'specialattack';
+			}
+			break;
+		case 'spd':
+		case 'spdef': newWord = 'specialdefense'; break;
+		case 'spa':
+		case 'spatk': newWord = 'specialattack'; break;
+		case 'atk': newWord = 'attack'; break;
+		case 'def': newWord = 'defense'; break;
+		case 'burn':
+		case 'burns': newWord = 'burned'; break;
+		case 'poison':
+		case 'poisons': newWord = 'poisoned'; break;
+		default:
+			if (/x[\d.]+/.test(newWord)) {
+				newWord = newWord.substr(1) + 'x';
+			}
+		}
+		if (!newWord || searchedWords.includes(newWord)) continue;
+		searchedWords.push(newWord);
+	}
+
+	if (searchedWords.length === 0) return {error: "No distinguishing words were used. Try a more specific search."};
+	let bestMatched = 0;
+	for (const n in Dex.data.Abilities) {
+		const ability = Dex.getAbility(n);
+		let matched = 0;
+		// splits words in the description into a toID()-esque format except retaining / and . in numbers
+		let descWords = ability.desc || ability.shortDesc || '';
+		// add more general quantifier words to descriptions
+		if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
+		descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
+		const descWordsArray = descWords.toLowerCase()
+			.replace('-', ' ')
+			.replace(/[^a-z0-9\s/]/g, '')
+			.replace(/(\D)\./, (p0, p1) => p1).split(' ');
+
+		for (const word of searchedWords) {
+			switch (word) {
+			case 'specialattack':
+				if (descWordsArray[descWordsArray.indexOf('special') + 1] === 'attack') matched++;
+				break;
+			case 'specialdefense':
+				if (descWordsArray[descWordsArray.indexOf('special') + 1] === 'defense') matched++;
+				break;
+			default:
+				if (descWordsArray.includes(word)) matched++;
+			}
+		}
+
+		if (matched >= (searchedWords.length * 3 / 5)) {
+			if (matched === bestMatched) {
+				foundAbilities.push(ability.name);
+			} else if (matched > bestMatched) {
+				foundAbilities = [ability.name];
+				bestMatched = matched;
+			}
+		}
+	}
+
+	if (foundAbilities.length === 1) return {dt: foundAbilities[0]};
+	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
+	if (foundAbilities.length > 0) {
+		foundAbilities.sort();
+		let notShown = 0;
+		if (!showAll && foundAbilities.length > RESULTS_MAX_LENGTH + 5) {
+			notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
+			foundAbilities = foundAbilities.slice(0, RESULTS_MAX_LENGTH);
+		}
+		resultsStr += foundAbilities.map(
+			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
+		).join(", ");
+		if (notShown) {
+			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+		}
+	} else {
+		resultsStr += "No abilities found. Try a more general search.";
+	}
+	return {reply: resultsStr};
+}
+
 function runLearn(target: string, cmd: string, canAll: boolean, message: string) {
 	let format: Format = Object.create(null);
 	const targets = target.split(',');
@@ -2078,6 +2308,8 @@ const PM = new QueryProcessManager<AnyObject, AnyObject | null>(module, query =>
 			return runMovesearch(query.tar, query.cmd, query.canAll, query.message);
 		case 'itemsearch':
 			return runItemsearch(query.tar, query.cmd, query.canAll, query.message);
+		case 'abilitysearch':
+			return runAbilitysearch(query.tar, query.cmd, query.canAll, query.message);
 		case 'learn':
 			return runLearn(query.tar, query.message, query.canAll, query.message);
 		default:

@@ -116,7 +116,7 @@ export class Battle {
 	activePokemon: Pokemon | null;
 	activeTarget: Pokemon | null;
 
-	lastMove: Move | null;
+	lastMove: ActiveMove | null;
 	lastMoveThisTurn: Move | null;
 	lastMoveLine: number;
 	lastDamage: number;
@@ -147,6 +147,7 @@ export class Battle {
 
 		this.zMoveTable = {};
 		this.maxMoveTable = {};
+		this.trunc = this.dex.trunc;
 		Object.assign(this, this.dex.data.Scripts);
 		if (format.battle) Object.assign(this, format.battle);
 
@@ -210,7 +211,6 @@ export class Battle {
 		this.SILENT_FAIL = null;
 
 		this.send = options.send || (() => {});
-		this.trunc = this.dex.trunc;
 
 		// bound function for faster speedSort
 		// (so speedSort doesn't need to bind before use)
@@ -1521,7 +1521,7 @@ export class Battle {
 	private maybeTriggerEndlessBattleClause(
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
-		if (!this.ruleTable.has('endlessbattleclause')) return;
+		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
 
 		if ((this.turn >= 500 && this.turn % 100 === 0) ||
 			(this.turn >= 900 && this.turn % 10 === 0) ||
@@ -1611,7 +1611,6 @@ export class Battle {
 		}
 
 		if (format.onBegin) format.onBegin.call(this);
-		if (format.trunc) this.trunc = format.trunc;
 		for (const rule of this.ruleTable.keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
 			const subFormat = this.dex.getFormat(rule);
@@ -1637,8 +1636,6 @@ export class Battle {
 
 	restart(send?: (type: string, data: string | string[]) => void) {
 		if (!this.deserialized) throw new Error('Attempt to restart a battle which has not been deserialized');
-
-		if (this.format.trunc) this.trunc = this.format.trunc;
 
 		// @ts-ignore - readonly
 		this.send = send;
@@ -2206,7 +2203,7 @@ export class Battle {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if ((move.isZPowered || move.maxPowered) && target.getMoveHitData(move).zBrokeProtect) {
+		if ((move.isZOrMaxPowered || move.isZOrMaxPowered) && target.getMoveHitData(move).zBrokeProtect) {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}

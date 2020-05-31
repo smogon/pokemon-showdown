@@ -1,9 +1,14 @@
 'use strict';
 
+// These tests have not been updated to reflect the latest version of Sockets
+// Anyone should feel free to try to rewrite them to work
+
+/*
+
 const assert = require('assert').strict;
 const cluster = require('cluster');
 
-describe.skip('Sockets', function () {
+describe('Sockets', function () {
 	const spawnWorker = () => (
 		new Promise(resolve => {
 			const worker = Sockets.spawnWorker();
@@ -210,3 +215,5 @@ describe.skip('Sockets', function () {
 		});
 	});
 });
+
+*/

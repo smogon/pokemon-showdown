@@ -6,6 +6,12 @@
  * rooms.ts. There's also a global room which every user is in, and
  * handles miscellaneous things like welcoming the user.
  *
+ * `Rooms.rooms` is the global table of all rooms, a `Map` of `RoomID:Room`.
+ * Rooms should normally be accessed with `Rooms.get(roomid)`.
+ *
+ * All rooms extend `BasicRoom`, whose important properties like `.users`
+ * and `.game` are documented near the the top of its class definition.
+ *
  * @license MIT
  */
 
@@ -22,6 +28,8 @@ const RETRY_AFTER_LOGIN = null;
 import {FS} from '../lib/fs';
 import {WriteStream} from '../lib/streams';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
+import {QueuedHunt} from './chat-plugins/scavengers';
+import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from "./room-battle";
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
@@ -61,6 +69,9 @@ type Announcement = import('./chat-plugins/announcements').Announcement;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
+	roomid: RoomID;
+	title: string;
+
 	readonly type: 'chat' | 'battle' | 'global';
 	readonly users: UserTable;
 	/**
@@ -69,22 +80,39 @@ export abstract class BasicRoom {
 	 * screen.
 	 */
 	readonly log: Roomlog | null;
-	readonly battle: RoomBattle | null;
-	readonly muteQueue: MuteEntry[];
-	roomid: RoomID;
-	title: string;
-	parent: Room | null;
-	aliases: string[] | null;
-	userCount: number;
-	auth: {[userid: string]: GroupSymbol} | null;
+
+	/**
+	 * The room's current RoomGame, if it exists. Each room can only have 0 or 1
+	 * `RoomGame`s, and `this.game.room === this`.
+	 */
 	game: RoomGame | null;
+	/**
+	 * The room's current battle. Battles are a type of RoomGame, so in battle
+	 * rooms (which can only be `GameRoom`s), `this.battle === this.game`.
+	 * In all other rooms, `this.battle` is `null`.
+	 */
+	battle: RoomBattle | null;
+	/**
+	 * The room's current tournament. Tours are a type of RoomGame, so if the
+	 * current room is hosting a tournament, `this.tour === this.game`.
+	 * In all other rooms, `this.tour` is `null`.
+	 */
+	tour: Tournament | null;
+
+	aliases: string[] | null;
+	parent: Room | null;
+	subRooms: Map<string, ChatRoom> | null;
+	isPrivate: boolean | 'hidden' | 'voice';
+	auth: {[userid: string]: GroupSymbol} | null;
+
+	readonly muteQueue: MuteEntry[];
+	userCount: number;
 	active: boolean;
 	muteTimer: NodeJS.Timer | null;
 	lastUpdate: number;
 	lastBroadcast: string;
 	lastBroadcastTime: number;
 	chatRoomData: AnyObject | null;
-	isPrivate: boolean | 'hidden' | 'voice';
 	hideReplay: boolean;
 	isPersonal: boolean;
 	isHelp: boolean;
@@ -98,7 +126,7 @@ export abstract class BasicRoom {
 	staffRoom: boolean;
 	language: string | false;
 	slowchat: number | false;
-	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean}};
+	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases: string[]}};
 	filterStretching: boolean;
 	filterEmojis: boolean;
 	filterCaps: boolean;
@@ -109,18 +137,26 @@ export abstract class BasicRoom {
 	hangmanDisabled: boolean;
 	giveaway: QuestionGiveaway | LotteryGiveaway | null;
 	gtsga: GTSGiveaway | null;
+	scavgame: null | ScavengerGameTemplate;
+	scavSettings: null | AnyObject;
+	scavQueue: null | QueuedHunt[];
+	scavLeaderboard: null | AnyObject;
 	toursEnabled: '%' | boolean;
 	tourAnnouncements: boolean;
+	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
 	privacySetter: Set<ID> | null;
-	subRooms: Map<string, ChatRoom> | null;
 	gameNumber: number;
 	highTraffic: boolean;
+
 	constructor(roomid: RoomID, title?: string) {
 		this.users = Object.create(null);
 		this.type = 'chat';
 		this.log = null;
-		this.battle = null;
 		this.muteQueue = [];
+
+		this.battle = null;
+		this.game = null;
+		this.tour = null;
 
 		this.roomid = roomid;
 		this.title = (title || roomid);
@@ -131,7 +167,6 @@ export abstract class BasicRoom {
 
 		this.auth = null;
 
-		this.game = null;
 		this.active = false;
 
 		this.muteTimer = null;
@@ -169,8 +204,13 @@ export abstract class BasicRoom {
 		this.hangmanDisabled = false;
 		this.giveaway = null;
 		this.gtsga = null;
+		this.scavgame = null;
+		this.scavSettings = null;
+		this.scavQueue = null;
+		this.scavLeaderboard = null;
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
+		this.dataCommandTierDisplay = 'tiers';
 		this.privacySetter = null;
 		this.subRooms = null;
 		this.gameNumber = 0;
@@ -478,6 +518,11 @@ export class GlobalRoom extends BasicRoom {
 	maxUsers: number;
 	maxUsersDate: number;
 	formatList: string;
+
+	readonly game: null;
+	readonly battle: null;
+	readonly tour: null;
+
 	constructor(roomid: RoomID) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
 		super(roomid);
@@ -1005,16 +1050,16 @@ export class GlobalRoom extends BasicRoom {
 		const stackLines = (err ? Chat.escapeHTML(err.stack).split(`\n`) : []);
 		const stack = stackLines.slice(1).join(`<br />`);
 
-		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} has crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
+		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
 		let privateCrashMessage = null;
 
 		const upperStaffRoom = Rooms.get('upperstaff');
 		if (stack.includes("private")) {
 			if (upperStaffRoom) {
 				privateCrashMessage = crashMessage;
-				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b> <a href="/upperstaff">Read more</a></div>`;
+				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} crashed in private code</b> <a href="/upperstaff">Read more</a></div>`;
 			} else {
-				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed in private code</b></div>`;
+				crashMessage = `|html|<div class="broadcast-red"><b>${crasher} crashed in private code</b></div>`;
 			}
 		}
 		const devRoom = Rooms.get('development');
@@ -1049,6 +1094,11 @@ export class GlobalRoom extends BasicRoom {
 	}
 }
 
+/**
+ * This is the parent class for `ChatRoom` and `GameRoom`. Chat rooms
+ * are actually this class, although we tell TypeScript they are
+ * `ChatRoom` to give us more guarantees.
+ */
 export class BasicChatRoom extends BasicRoom {
 	readonly log: Roomlog;
 	readonly autojoin: boolean;
@@ -1077,9 +1127,7 @@ export class BasicChatRoom extends BasicRoom {
 	userList: string;
 	rulesLink: string | null;
 	reportJoinsInterval: NodeJS.Timer | null;
-	game: RoomGame | null;
-	battle: RoomBattle | null;
-	tour: Tournament | null;
+
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
 
@@ -1108,6 +1156,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.introMessage = '';
 		this.staffMessage = '';
 		this.banwordRegex = null;
+		this.rulesLink = null;
 
 		this.chatRoomData = (options.isPersonal ? null : options);
 		this.minorActivity = null;
@@ -1142,11 +1191,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
-		this.rulesLink = null;
 		this.reportJoinsInterval = null;
-		this.tour = null;
-		this.game = null;
-		this.battle = null;
 	}
 
 	/**
@@ -1157,6 +1202,12 @@ export class BasicChatRoom extends BasicRoom {
 	add(message: string) {
 		this.log.add(message);
 		return this;
+	}
+	uhtmlchange(name: string, message: string) {
+		this.log.uhtmlchange(name, message);
+	}
+	attributedUhtmlchange(user: User, name: string, message: string) {
+		this.log.attributedUhtmlchange(user, name, message);
 	}
 	roomlog(message: string) {
 		this.log.roomlog(message);

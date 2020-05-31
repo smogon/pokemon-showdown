@@ -25,8 +25,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		// Other useful things
 		noPPBoosts: true, // add this to not boost the PP of a move, not needed for Z moves, dont include it otherwise
 		isZ: "crystalname", // marks a move as a z move, list the crystal name inside
-		zMoveEffect: '', // for status moves, what happens when this is used as a Z move? check data/moves.js for examples
-		zMoveBoost: {atk: 2}, // for status moves, stat boost given when used as a z move
+		zMove: {effect: ''}, // for status moves, what happens when this is used as a Z move? check data/moves.js for examples
+		zMove: {boost: {atk: 2}}, // for status moves, stat boost given when used as a z move
 		critRatio: 2, // The higher the number (above 1) the higher the ratio, lowering it lowers the crit ratio
 		drain: [1, 2], // recover first num / second num % of the damage dealt
 		heal: [1, 2], // recover first num / second num % of the target's HP
@@ -132,7 +132,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Electric",
-		zMovePower: 200,
+		zMove: {basePower: 200},
 	},
 	// Aeonic
 	shitpost: {
@@ -1372,7 +1372,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Ground",
-		zMoveEffect: 'healhalf',
+		zMove: {effect: 'healhalf'},
 	},
 	// E4 Flint
 	fangofthefireking: {
@@ -1471,7 +1471,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
-		zMovePower: 175,
+		zMove: {basePower: 175},
 	},
 	// eternally
 	quack: {
@@ -1952,7 +1952,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "foeSide",
 		type: "Normal",
-		zMoveBoost: {def: 1},
+		zMove: {boost: {def: 1}},
 	},
 	// HoeenHero
 	scriptedterrain: {
@@ -2096,7 +2096,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => (a.num || 0) - (b.num || 0));
-				randomMove = this.sample(moves).id;
+				randomMove = this.sample(moves).name;
 			}
 			if (!randomMove) {
 				return false;
@@ -2553,8 +2553,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			const species = pokemon.species;
-			let level = pokemon.level;
-			level += 5;
+			const level = pokemon.level + 5;
+			(pokemon as any).level = level;
 			pokemon.set.level = level;
 			pokemon.formeChange(species);
 
@@ -2641,7 +2641,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Fire",
-		zMovePower: 160,
+		zMove: {basePower: 160},
 	},
 	// MacChaeger
 	naptime: {
@@ -2697,7 +2697,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		target: "self",
 		type: "Fairy",
-		zMoveEffect: 'clearnegativeboosts',
+		zMove: {effect: 'clearnegativeboosts'},
 	},
 	// Mad Monty ¾°
 	llamacide: {
@@ -2894,7 +2894,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'heal',
+		zMove: {effect: 'heal'},
 	},
 	// Meicoo
 	scavengesu: {
@@ -3126,7 +3126,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
-		zMoveEffect: "boostreplacement",
+		zMove: {effect: "boostreplacement"},
 	},
 	// OM
 	omboom: {
@@ -3456,7 +3456,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				return null;
 			},
 			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
+				if (move.isZOrMaxPowered && move.flags['contact']) {
 					this.heal(target.baseMaxhp / 4, target, target);
 				}
 			},
@@ -3947,7 +3947,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		onAfterMoveSecondarySelf(pokemon, move) {
 			const claims: {[move: string]: string[]} = {
 				bravebird: [
-					'Braviary', 'Crobat', 'Decidueye', 'Dodrio', 'Farfetch\'d', 'Golbat', 'Mandibuzz', 'Pidgeot', 'Skarmory', 'Staraptor', 'Swanna', 'Swellow', 'Talonflame', 'Tapu Koko', 'Toucannon',
+					'Braviary', 'Crobat', 'Decidueye', 'Dodrio', 'Farfetch\u2019d', 'Golbat', 'Mandibuzz', 'Pidgeot', 'Skarmory', 'Staraptor', 'Swanna', 'Swellow', 'Talonflame', 'Tapu Koko', 'Toucannon',
 				],
 				superpower: [
 					'Absol', 'Aggron', 'Armaldo', 'Avalugg', 'Azumarill', 'Barbaracle', 'Basculin', 'Beartic', 'Bewear', 'Bibarel', 'Bouffalant', 'Braviary', 'Breloom', 'Buzzwole', 'Cacturne', 'Carracosta', 'Celesteela', 'Chesnaught', 'Cobalion', 'Conkeldurr', 'Crabominable', 'Crawdaunt', 'Darmanitan', 'Diggersby', 'Donphan', 'Dragonite', 'Drampa', 'Druddigon', 'Durant', 'Eelektross', 'Emboar', 'Exeggutor-Alola', 'Feraligatr', 'Flareon', 'Flygon', 'Gigalith', 'Gogoat', 'Golem', 'Golurk', 'Goodra', 'Granbull', 'Gurdurr', 'Hariyama', 'Hawlucha', 'Haxorus', 'Heatmor', 'Hippowdon', 'Hitmonlee', 'Hydreigon', 'Incineroar', 'Kabutops', 'Keldeo', 'Kingler', 'Komala', 'Kommo-o', 'Krookodile', 'Landorus-Therian', 'Lurantis', 'Luxray', 'Machamp', 'Malamar', 'Mamoswine', 'Mew', 'Mudsdale', 'Nidoking', 'Nidoqueen', 'Pangoro', 'Passimian', 'Piloswine', 'Pinsir', 'Rampardos', 'Regice', 'Regigigas', 'Regirock', 'Registeel', 'Reuniclus', 'Rhydon', 'Rhyperior', 'Samurott', 'Sawk', 'Scizor', 'Scolipede', 'Simipour', 'Simisage', 'Simisear', 'Smeargle', 'Snorlax', 'Spinda', 'Stakataka', 'Stoutland', 'Swampert', 'Tapu Bulu', 'Terrakion', 'Throh', 'Thundurus', 'Torkoal', 'Tornadus', 'Torterra', 'Tyranitar', 'Tyrantrum', 'Ursaring', 'Virizion', 'Zeraora',
@@ -4256,7 +4256,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
-		zMovePower: 160,
+		zMove: {basePower: 160},
 		contestType: "Cool",
 	},
 	// Tony
@@ -4475,7 +4475,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				status: 'par',
 			},
 		],
-		zMovePower: 175,
+		zMove: {basePower: 175},
 		target: "normal",
 		type: "Flying",
 	},
@@ -4516,7 +4516,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			}
 			let randomMove: string;
 			if (moves.length) {
-				randomMove = this.sample(moves).id;
+				randomMove = this.sample(moves).name;
 			} else {
 				return false;
 			}

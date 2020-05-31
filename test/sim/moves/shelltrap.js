@@ -10,7 +10,7 @@ describe('Shell Trap', function () {
 		battle.destroy();
 	});
 
-	it.skip('should deduct PP regardless if it was successful', function () {
+	it('should deduct PP regardless if it was successful', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[
 				{species: 'Turtonator', ability: 'shellarmor', moves: ['shelltrap']},
@@ -29,7 +29,7 @@ describe('Shell Trap', function () {
 		const cant = '|cant|p1a: Turtonator|Shell Trap|Shell Trap';
 		assert.equal(battle.log.filter(m => m === cant).length, 1);
 
-		battle.makeChoices('move shelltrap, move splash', 'move tackle, move splash');
+		battle.makeChoices('move shelltrap, move splash', 'move tackle 1, move splash');
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 

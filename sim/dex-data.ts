@@ -253,7 +253,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	/** List of rule names. */
 	readonly ruleset: string[];
 	/**
-	 * Base list of rule names as specified in "./config/formats.js".
+	 * Base list of rule names as specified in "./config/formats.ts".
 	 * Used in a custom format to correctly display the altered ruleset.
 	 */
 	readonly baseRuleset: string[];
@@ -562,6 +562,20 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 */
 	readonly otherFormes?: string[];
 	/**
+	 * List of forme speciesNames in the order they appear in the game data -
+	 * the union of baseSpecies, otherFormes and cosmeticFormes. Appears only on
+	 * the base species forme.
+	 *
+	 * A species's alternate formeindex may change from generation to generation -
+	 * the forme with index N in Gen A is not guaranteed to be the same forme as the
+	 * forme with index in Gen B.
+	 *
+	 * Gigantamaxes are not considered formes by the game (see data/FORMES.md - PS
+	 * labels them as such for convenience) - Gigantamax "formes" are instead included at
+	 * the end of the formeOrder list so as not to interfere with the correct index numbers.
+	 */
+	readonly formeOrder?: string[];
+	/**
 	 * Sprite ID. Basically the same as ID, but with a dash between
 	 * species and forme.
 	 */
@@ -577,6 +591,11 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
 	readonly evos: ID[];
 	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
+	/** Evolution condition. falsy if doesn't evolve. */
+	readonly evoCondition?: string;
+	/** Evolution item. falsy if doesn't evolve. */
+	readonly evoItem?: string;
+	/** Evolution move. falsy if doesn't evolve. */
 	readonly evoMove?: string;
 	/** Evolution level. falsy if doesn't evolve. */
 	readonly evoLevel?: number;
@@ -653,6 +672,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 */
 	readonly doublesTier: string;
 	readonly randomBattleMoves?: readonly ID[];
+	readonly randomBattleLevel?: number;
 	readonly randomDoubleBattleMoves?: readonly ID[];
 	readonly exclusiveMoves?: readonly ID[];
 	readonly comboMoves?: readonly ID[];
@@ -672,6 +692,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.baseForme = data.baseForme || '';
 		this.cosmeticFormes = data.cosmeticFormes || undefined;
 		this.otherFormes = data.otherFormes || undefined;
+		this.formeOrder = data.formeOrder || undefined;
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || {0: ""};
@@ -684,7 +705,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.evoType = data.evoType || undefined;
 		this.evoMove = data.evoMove || undefined;
 		this.evoLevel = data.evoLevel || undefined;
-		this.nfe = !!this.evos.length;
+		this.nfe = data.nfe || false;
 		this.eggGroups = data.eggGroups || [];
 		this.gender = data.gender || '';
 		this.genderRatio = data.genderRatio || (this.gender === 'M' ? {M: 1, F: 0} :
@@ -824,16 +845,22 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly pp: number;
 	/** Whether or not this move can receive PP boosts. */
 	readonly noPPBoosts: boolean;
-	/** Is this move a Z-Move? */
-	readonly isZ: boolean | string;
 	/** How many times does this move hit? */
 	readonly multihit?: number | number[];
+	/** Is this move a Z-Move? */
+	readonly isZ: boolean | string;
+	/* Z-Move fields */
+	readonly zMove?: {
+		basePower?: number,
+		effect?: string,
+		boost?: SparseBoostsTable,
+	};
 	/** Is this move a Max move? */
 	readonly isMax: boolean | string;
-	/** Max/G-Max move power */
-	readonly gmaxPower?: number;
-	/** Z-move power */
-	readonly zMovePower?: number;
+	/** Max/G-Max move fields */
+	readonly maxMove?: {
+		basePower: number,
+	};
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
 	readonly selfSwitch?: ID | boolean;
@@ -905,70 +932,72 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.stab = data.stab || undefined;
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
-		if (this.category !== 'Status' && !this.gmaxPower) {
+		if (this.category !== 'Status' && !this.maxMove && this.id !== 'struggle') {
+			this.maxMove = {basePower: 1};
 			if (this.isMax || this.isZ) {
-				this.gmaxPower = 1;
+				// already initialized to 1
 			} else if (!this.basePower) {
-				this.gmaxPower = 100;
+				this.maxMove.basePower = 100;
 			} else if (['Fighting', 'Poison'].includes(this.type)) {
 				if (this.basePower >= 150) {
-					this.gmaxPower = 100;
+					this.maxMove.basePower = 100;
 				} else if (this.basePower >= 110) {
-					this.gmaxPower = 95;
+					this.maxMove.basePower = 95;
 				} else if (this.basePower >= 75) {
-					this.gmaxPower = 90;
+					this.maxMove.basePower = 90;
 				} else if (this.basePower >= 65) {
-					this.gmaxPower = 85;
+					this.maxMove.basePower = 85;
 				} else if (this.basePower >= 55) {
-					this.gmaxPower = 80;
+					this.maxMove.basePower = 80;
 				} else if (this.basePower >= 45) {
-					this.gmaxPower = 75;
+					this.maxMove.basePower = 75;
 				} else {
-					this.gmaxPower = 70;
+					this.maxMove.basePower = 70;
 				}
 			} else {
 				if (this.basePower >= 150) {
-					this.gmaxPower = 150;
+					this.maxMove.basePower = 150;
 				} else if (this.basePower >= 110) {
-					this.gmaxPower = 140;
+					this.maxMove.basePower = 140;
 				} else if (this.basePower >= 75) {
-					this.gmaxPower = 130;
+					this.maxMove.basePower = 130;
 				} else if (this.basePower >= 65) {
-					this.gmaxPower = 120;
+					this.maxMove.basePower = 120;
 				} else if (this.basePower >= 55) {
-					this.gmaxPower = 110;
+					this.maxMove.basePower = 110;
 				} else if (this.basePower >= 45) {
-					this.gmaxPower = 100;
+					this.maxMove.basePower = 100;
 				} else {
-					this.gmaxPower = 90;
+					this.maxMove.basePower = 90;
 				}
 			}
 		}
-		if (this.category !== 'Status' && !this.zMovePower && !this.isZ && !this.isMax) {
+		if (this.category !== 'Status' && !this.zMove && !this.isZ && !this.isMax && this.id !== 'struggle') {
 			let basePower = this.basePower;
+			this.zMove = {};
 			if (Array.isArray(this.multihit)) basePower *= 3;
 			if (!basePower) {
-				this.zMovePower = 100;
+				this.zMove.basePower = 100;
 			} else if (basePower >= 140) {
-				this.zMovePower = 200;
+				this.zMove.basePower = 200;
 			} else if (basePower >= 130) {
-				this.zMovePower = 195;
+				this.zMove.basePower = 195;
 			} else if (basePower >= 120) {
-				this.zMovePower = 190;
+				this.zMove.basePower = 190;
 			} else if (basePower >= 110) {
-				this.zMovePower = 185;
+				this.zMove.basePower = 185;
 			} else if (basePower >= 100) {
-				this.zMovePower = 180;
+				this.zMove.basePower = 180;
 			} else if (basePower >= 90) {
-				this.zMovePower = 175;
+				this.zMove.basePower = 175;
 			} else if (basePower >= 80) {
-				this.zMovePower = 160;
+				this.zMove.basePower = 160;
 			} else if (basePower >= 70) {
-				this.zMovePower = 140;
+				this.zMove.basePower = 140;
 			} else if (basePower >= 60) {
-				this.zMovePower = 120;
+				this.zMove.basePower = 120;
 			} else {
-				this.zMovePower = 100;
+				this.zMove.basePower = 100;
 			}
 		}
 

@@ -727,6 +727,7 @@ interface EventMethods {
 	onBoostPriority?: number;
 	onDamagePriority?: number;
 	onDragOutPriority?: number;
+	onEffectivenessPriority?: number;
 	onFoeBasePowerPriority?: number;
 	onFoeBeforeMovePriority?: number;
 	onFoeModifyDefPriority?: number;
@@ -913,41 +914,31 @@ interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 
 	damage?: number | 'level' | false | null;
 	contestType?: string;
-	isViable?: boolean;
 	noPPBoosts?: boolean;
 
 	// Z-move data
 	// -----------
 	/**
-	 * `true` for generic Z-moves like Gigavolt Havoc.
-	 * Also `true` for Z-powered status moves like Z-Encore.
-	 * Move ID of the base move, for specific Z-moves like Stoked
-	 * Sparksurfer.
+	 * ID of the Z-Crystal that calls the move.
+	 * `true` for Z-Powered status moves like Z-Encore.
 	 */
 	isZ?: boolean | string;
-	zMovePower?: number;
-	zMoveEffect?: string;
-	zMoveBoost?: SparseBoostsTable;
-	/**
-	 * Has this move been boosted by a Z-crystal? Usually the same as
-	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
-	 * truthy.
-	 */
-	isZPowered?: boolean;
+	zMove?: {
+		basePower?: number,
+		effect?: string,
+		boost?: SparseBoostsTable,
+	};
 
 	// Max move data
 	// -------------
-	gmaxPower?: number;
 	/**
 	 * `true` for Max moves like Max Airstream. If its a G-Max moves, this is
 	 * the species ID of the Gigantamax Pokemon that can use this G-Max move.
 	 */
 	isMax?: boolean | string;
-	/**
-	 * Same idea has `isZPowered`. Hacked Max moves will have this be
-	 * `false` and `isMax` be truthy.
-	 */
-	maxPowered?: boolean;
+	maxMove?: {
+		basePower: number,
+	};
 
 	// Hit effects
 	// -----------
@@ -1082,6 +1073,12 @@ interface ActiveMove extends BasicEffect, MoveData {
 	totalDamage?: number | false;
 	willChangeForme?: boolean;
 	infiltrates?: boolean;
+
+	/**
+	 * Has this move been boosted by a Z-crystal or used by a Dynamax Pokemon? Usually the same as
+	 * `isZ` or `isMax`, but hacked moves will have this be `false` and `isZ` / `isMax` be truthy.
+	 */
+	isZOrMaxPowered?: boolean;
 }
 
 interface SpeciesAbility {
@@ -1119,6 +1116,7 @@ interface SpeciesData {
 	maxHP?: number;
 	cosmeticFormes?: string[];
 	otherFormes?: string[];
+	formeOrder?: string[];
 	prevo?: string;
 	gen?: number;
 	requiredAbility?: string;
@@ -1140,6 +1138,7 @@ interface SpeciesFormatsData {
 	isNonstandard?: Nonstandard | null;
 	maleOnlyHidden?: boolean;
 	randomBattleMoves?: readonly string[];
+	randomBattleLevel?: number;
 	randomDoubleBattleMoves?: readonly string[];
 	randomSets?: readonly RandomTeamsTypes.Gen2RandomSet[];
 	tier?: string;
@@ -1212,6 +1211,7 @@ interface FormatsData extends EventMethods {
 	checkLearnset?: (
 		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
 	) => {type: string, [any: string]: any} | null;
+	getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
 	onBegin?: (this: Battle) => void;
 	onChangeSet?: (
@@ -1231,7 +1231,6 @@ interface FormatsData extends EventMethods {
 		removeNicknames?: boolean,
 		skipSets?: {[name: string]: {[key: string]: boolean}},
 	}) => string[] | void;
-	trunc?: (n: number) => number;
 	section?: string;
 	column?: number;
 }
@@ -1396,6 +1395,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable;
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable;
 	suppressingWeather?: (this: Battle) => boolean;
+	trunc?: (n: number) => number;
 
 	// oms
 	doGetMixedSpecies?: (this: Battle, species: Species, deltas: AnyObject) => Species;
@@ -1449,6 +1449,7 @@ namespace RandomTeamsTypes {
 		rapidSpin?: number;
 		defog?: number;
 		illusion?: number;
+		statusCure?: number;
 	}
 	export interface FactoryTeamDetails {
 		megaCount: number;

@@ -49,7 +49,7 @@ function replace(file, replacements) {
 		}
 	});
 }
-function copyOverData(file) {
+function copyOverDataJSON(file) {
 	var source = './data/' + file;
 	var dest = './.data-dist/' + file;
 	fs.readFile(source, function (err, text) {
@@ -73,6 +73,7 @@ try {
 	shell('npm install --production');
 }
 
+sucrase('./config', './.config-dist');
 sucrase('./data', './.data-dist');
 sucrase('./sim', './.sim-dist');
 sucrase('./lib', './.lib-dist');
@@ -83,6 +84,7 @@ if (!fs.existsSync('./.data-dist/README.md')) {
 	const text = '**NOTE**: This folder contains the compiled output of the `data/` directory.\n' +
 		'You should be editing the `.ts` files there and then running `npm run build` or\n' +
 		'`./pokemon-showdown` to force these `.js` files to be recreated.\n';
+	fs.writeFile('./.config-dist/README.md', text.replace('data/', 'config/'), function () {});
 	fs.writeFile('./.data-dist/README.md', text, function () {});
 	fs.writeFile('./.sim-dist/README.md', text.replace('data/', 'sim/'), function () {});
 	fs.writeFile('./.server-dist/README.md', text.replace('data/', 'server/'), function () {});
@@ -90,11 +92,15 @@ if (!fs.existsSync('./.data-dist/README.md')) {
 }
 
 // sucrase doesn't copy JSON over, so we'll have to do it ourselves
-copyOverData('mods/gen7/factory-sets.json');
-copyOverData('mods/gen7/bss-factory-sets.json');
-copyOverData('mods/gen6/factory-sets.json');
+copyOverDataJSON('cap-1v1-sets.json');
+copyOverDataJSON('mods/gen7/factory-sets.json');
+copyOverDataJSON('mods/gen7/bss-factory-sets.json');
+copyOverDataJSON('mods/gen6/factory-sets.json');
 
 // NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
+replace('.config-dist', [
+	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+]);
 replace('.data-dist', [
 	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
 ]);
