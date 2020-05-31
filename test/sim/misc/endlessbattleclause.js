@@ -13,6 +13,7 @@ describe('Endless Battle Clause (slow)', () => {
 		battle.setPlayer('p1', {team: [{species: "Caterpie", moves: ['tackle']}]});
 		battle.setPlayer('p2', {team: [{species: "Slowbro", item: 'leppaberry', moves: ['slackoff', 'healpulse', 'recycle']}]});
 		const [victim, memeSlowbro] = [battle.p1.active[0], battle.p2.active[0]];
+		skipTurns(battle, 100);
 		for (let i = 0; i < 100; i++) {
 			if (battle.ended) {
 				assert(battle.winner === 'Player 1');
@@ -35,6 +36,7 @@ describe('Endless Battle Clause (slow)', () => {
 		battle = common.createBattle({endlessBattleClause: true});
 		battle.setPlayer('p1', {team: [{species: "Sunkern", item: 'leppaberry', moves: ['synthesis']}]});
 		battle.setPlayer('p2', {team: [{species: "Sunkern", item: 'leppaberry', moves: ['synthesis']}]});
+		skipTurns(battle, 100);
 		for (let i = 0; i < 10; i++) {
 			battle.makeChoices('move synthesis', 'move synthesis');
 		}
@@ -51,6 +53,7 @@ describe('Endless Battle Clause (slow)', () => {
 			{species: "Magikarp", moves: ['splash']},
 			{species: "Sunkern", item: 'leppaberry', moves: ['synthesis']},
 		]});
+		skipTurns(battle, 100);
 		for (let i = 0; i < 8; i++) {
 			battle.makeChoices('move extremespeed', 'move splash');
 		}
@@ -83,6 +86,7 @@ describe('Endless Battle Clause (slow)', () => {
 			{species: "Magikarp", moves: ['splash']},
 			{species: "Sunkern", item: 'leppaberry', moves: ['synthesis']},
 		]});
+		skipTurns(battle, 100);
 		// Blissey inflicts external staleness on Magikarp.
 		battle.makeChoices('move fling', 'move splash');
 		assert.false(battle.ended);
@@ -110,6 +114,7 @@ describe('Endless Battle Clause (slow)', () => {
 			{species: "Magikarp", ability: 'Illuminate', moves: ['splash']},
 			{species: "Sunkern", item: 'leppaberry', moves: ['synthesis']},
 		]});
+		skipTurns(battle, 100);
 		// Blissey inflicts external staleness on Magikarp.
 		battle.makeChoices('move entrainment', 'move splash');
 		assert.false(battle.ended);
@@ -152,3 +157,9 @@ describe('Endless Battle Clause (slow)', () => {
 		assert(battle.ended);
 	});
 });
+
+// Endless Battle Caluse doesn't take effect for 100 turns, so we artificially skip turns
+// to get the turn counter to be in the range which could possibly trigger the clause
+function skipTurns(battle, turns) {
+	for (let i = 0; i < turns; i++) battle.nextTurn();
+}
