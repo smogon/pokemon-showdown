@@ -71,7 +71,7 @@ interface Settings {
 	staffRoom: boolean;
 	language: string | false;
 	slowchat: number | false;
-	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean}};
+	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases: string[]}};
 	filterStretching: boolean;
 	filterEmojis: boolean;
 	filterCaps: boolean;
