@@ -140,8 +140,6 @@ export abstract class BasicRoom {
 	aliases: string[] | null;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
-	isPrivate: boolean | 'hidden' | 'voice';
-	auth: {[userid: string]: GroupSymbol} | null;
 
 	readonly muteQueue: MuteEntry[];
 	userCount: number;
@@ -158,7 +156,6 @@ export abstract class BasicRoom {
 	hideReplay: boolean;
 	isPersonal: boolean;
 	isHelp: boolean;
-	subRooms: Map<string, ChatRoom> | null;
 	constructor(roomid: RoomID, title?: string) {
 		this.users = Object.create(null);
 		this.type = 'chat';
