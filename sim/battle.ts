@@ -1521,7 +1521,7 @@ export class Battle {
 	private maybeTriggerEndlessBattleClause(
 		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) {
-		if (!this.ruleTable.has('endlessbattleclause')) return;
+		if (this.turn <= 100 || !this.ruleTable.has('endlessbattleclause')) return;
 
 		if ((this.turn >= 500 && this.turn % 100 === 0) ||
 			(this.turn >= 900 && this.turn % 10 === 0) ||
