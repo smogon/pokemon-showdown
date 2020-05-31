@@ -9,47 +9,96 @@ import * as https from 'https';
 import * as http from 'http';
 import * as url from 'url';
 import * as Streams from './streams';
-import { resolve } from 'dns';
 
+export interface PostData {
+	[key: string]: string | number;
+}
 export interface NetRequestOptions extends https.RequestOptions {
-	body?: string;
-	query?: {[k: string]: string | number};
+	body?: string | PostData;
+	query?: PostData;
 }
 
 export class NetStream extends Streams.ReadWriteStream {
-	statusCode?: number;
-	headers?: http.IncomingHttpHeaders;
-	opts?: NetRequestOptions;
+	opts: NetRequestOptions | null;
 	uri: string;
-	request: http.ClientRequest | null;
-	responseStream: Streams.ReadStream | null;
-	constructor(uri: string, opts?: NetRequestOptions | null) {
+	request: http.ClientRequest;
+	/** will be a Promise before the response is received, and the response itself after */
+	response: Promise<http.IncomingMessage> | http.IncomingMessage;
+	statusCode: number | null;
+	/** response headers */
+	headers: http.IncomingHttpHeaders | null;
+
+	constructor(uri: string, opts: NetRequestOptions | null = null) {
 		super();
-		this.statusCode = 0;
-		this.headers = {};
-		this.opts = opts ? opts : undefined;
-		this.uri = uri
-		this.responseStream = null;
+		this.statusCode = null;
+		this.headers = null;
+		this.uri = uri;
+		this.opts = opts;
 		// make request
-		this.request = null;
-		this.makeRequest();
+		this.response = null!;
+		this.request = this.makeRequest(opts);
 	}
-	makeRequest() {
+	makeRequest(opts: NetRequestOptions | null) {
+		if (!opts) opts = {};
+		let body = opts.body;
+		if (body && typeof body !== 'string') {
+			if (!opts.headers) opts.headers = {};
+			if (!opts.headers['Content-Type']) {
+				opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+			}
+			body = NetStream.encodeQuery(body);
+		}
+
+		if (opts.query) {
+			this.uri += (this.uri.includes('?') ? '&' : '?') + NetStream.encodeQuery(opts.query);
+		}
+
+		if (body) {
+			if (!opts.headers) opts.headers = {};
+			if (!opts.headers['Content-Length']) {
+				opts.headers['Content-Length'] = Buffer.byteLength(body);
+			}
+		}
+
 		const protocol = url.parse(this.uri).protocol as string;
 		const net = protocol.includes('https:') ? https : http;
-		return new Promise(resolve => {
-			 this.request = net.get(this.opts ? this.opts : this.uri, response => {
-				  response.setEncoding('utf-8');
-				  const stream = new Streams.ReadStream({nodeStream: response});
-				  resolve({
-						stream: stream,
-						headers: response.headers,
-						statusCode: response.statusCode
-				  });
-			 });
+
+		let resolveResponse: (value: http.IncomingMessage) => void;
+		this.response = new Promise(resolve => {
+			resolveResponse = resolve;
 		});
-  }
-	encodeQuery(data: AnyObject) {
+
+		const request = net.request(this.uri, opts, response => {
+			response.setEncoding('utf-8');
+			this.nodeReadableStream = response;
+			this.response = response;
+			resolveResponse(response);
+			this.statusCode = response.statusCode || null;
+			this.headers = response.headers;
+			response.on('data', data => {
+				this.push(data);
+			});
+			response.on('end', () => {
+				this.push(null);
+			});
+		});
+		request.on('error', error => {
+			this.pushError(error);
+		});
+		if (body) {
+			request.write(body);
+		} else {
+			this.nodeWritableStream = request;
+		}
+		if (opts.timeout) {
+			request.setTimeout(opts.timeout, () => {
+				request.abort();
+			});
+		}
+
+		return request;
+	}
+	static encodeQuery(data: AnyObject) {
 		let out = '';
 		for (const key in data) {
 			if (out) out += `&`;
@@ -57,44 +106,27 @@ export class NetStream extends Streams.ReadWriteStream {
 		}
 		return out;
 	}
-	write(body: string) {
-		if (!this.request) throw new Error(`Writing to a request that doesn't exist.`);
-		const opts = this.opts;
-		if (opts?.body) {
-			if (body) throw new Error(`must not pass both body and opts.body`);
-			body = opts.body;
+	_write(data: string | Buffer): Promise<void> | void {
+		if (!this.nodeWritableStream) {
+			throw new Error("`options.body` is what you would have written to a NetStream - you must choose one or the other");
 		}
-
-		if (body && typeof body !== 'string') {
-			if (!opts?.headers) opts!.headers = {};
-			if (!opts?.headers['Content-Type']) {
-				opts!.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-			}
-			body = this.encodeQuery(body);
-		}
-
-		if (opts?.query) {
-			this.uri += (this.uri.includes('?') ? '&' : '?') + this.encodeQuery(opts.query);
-		}
-
-		const postBody = body;
-		if (postBody) {
-			if (!opts!.headers) opts!.headers = {};
-			if (!opts!.headers['Content-Length']) {
-				opts!.headers['Content-Length'] = Buffer.byteLength(postBody);
-			}
-		}
-		if (postBody) {
-			this.request.write(postBody);
-		}
-		if (opts?.timeout) {
-			this.request.setTimeout(opts.timeout, () => {
-				this.request!.abort();
+		const result = this.nodeWritableStream.write(data);
+		if (result !== false) return undefined;
+		if (!this.drainListeners.length) {
+			this.nodeWritableStream.once('drain', () => {
+				for (const listener of this.drainListeners) listener();
+				this.drainListeners = [];
 			});
 		}
+		return new Promise(resolve => {
+			this.drainListeners.push(resolve);
+		});
 	}
-	read() {
-		return this.responseStream!.read();
+	_read() {
+		this.nodeReadableStream?.resume();
+	}
+	_pause() {
+		this.nodeReadableStream?.pause();
 	}
 }
 export class NetRequest {
@@ -102,6 +134,7 @@ export class NetRequest {
 	statusCode?: number;
 	constructor(uri: string) {
 		this.uri = uri;
+		this.statusCode = undefined;
 	}
 	/**
 	 * Makes a http/https get request to the given link and returns a stream.
@@ -112,8 +145,7 @@ export class NetRequest {
 	 */
 	getStream(opts: NetRequestOptions = {}) {
 		if (Config.noNetRequests) throw new Error(`Net requests are disabled.`);
-		const stream = new NetStream(this.uri);
-		this.statusCode = stream.statusCode;
+		const stream = new NetStream(this.uri, opts);
 		return stream;
 	}
 
@@ -123,7 +155,7 @@ export class NetRequest {
 	 * @param opts request opts - headers, etc.
 	 */
 	async get(opts: AnyObject = {}): Promise<string | null> {
-		return this.getStream(opts).read();
+		return this.getStream(opts).readAll();
 	}
 
 	/**
