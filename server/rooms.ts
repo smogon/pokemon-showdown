@@ -63,7 +63,7 @@ interface UserTable {
 	[userid: string]: User;
 }
 
-interface Settings {
+interface RoomSettings {
 	aliases: string[];
 	auth: {[userid: string]: GroupSymbol} | null;
 	banwords: string[];
@@ -148,7 +148,7 @@ export abstract class BasicRoom {
 	lastUpdate: number;
 	lastBroadcast: string;
 	lastBroadcastTime: number;
-	settings: Settings;
+	settings: RoomSettings;
 	scavgame: ScavengerGameTemplate | null;
 	scavSettings: AnyObject;
 	scavQueue: QueuedHunt[];
@@ -638,7 +638,7 @@ export class GlobalRoom extends BasicRoom {
 	}
 
 	writeChatRoomData() {
-		const settingsList: Settings[] = [];
+		const settingsList: RoomSettings[] = [];
 		for (const room of Rooms.rooms.values()) {
 			if (!room.settings?.persistSettings) continue;
 			settingsList.push(room.settings);
@@ -1138,7 +1138,7 @@ export class BasicChatRoom extends BasicRoom {
 	introMessage: string;
 	staffMessage: string;
 	banwordRegex: RegExp | true | null;
-	settings: Settings;
+	settings: RoomSettings;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
 	active: boolean;
@@ -1174,7 +1174,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.banwordRegex = null;
 		this.subRooms = new Map();
 
-		this.settings = {...options} as Settings;
+		this.settings = {...options} as RoomSettings;
 		if (!options.isPersonal) this.settings.persistSettings = true;
 		this.minorActivity = null;
 		Object.assign(this, options);
