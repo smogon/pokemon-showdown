@@ -32,8 +32,10 @@ function getEventID(nameOrAlias: string, room: Room): ID {
 	let id = toID(nameOrAlias);
 	if (!room.events[id]) {
 		for (const possibleEvent in room.events) {
-			if (room.events[possibleEvent].aliases.includes(id)) {
-				id = toID(possibleEvent);
+			if (room.events[possibleEvent].aliases) {
+				if (room.events[possibleEvent].aliases.includes(id)) {
+					id = toID(possibleEvent);
+				}
 			}
 		}
 	}
