@@ -139,18 +139,43 @@ export const commands: ChatCommands = {
 	math: "calculate",
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');
-		const targets = target.split(',');
-		const expression = targets[0];
-		let base = parseInt(targets[1]);
-		if (isNaN(base)) base = 10;
-		if (targets.length > 1 && !(base in BASE_PREFIXES)) {
-			return this.errorReply("Invalid base. Valid options are: 2 8 10 16");
+		let base = 10;
+		if (target.includes('0x')) {
+			base = 16;
+		} else if (target.includes('0o')) {
+			base = 8;
+		} else if (target.includes('0b')) {
+			base = 2;
 		}
+
+		const baseMatchResult = (/\b(?:in|to)\s+([a-zA-Z]+)\b/).exec(target);
+		if (baseMatchResult) {
+			switch (toID(baseMatchResult[1])) {
+			case 'decimal': case 'dec': base = 10; break;
+			case 'hexadecimal': case 'hex': base = 16; break;
+			case 'octal': case 'oct': base = 8; break;
+			case 'binary': case 'bin': base = 2; break;
+			default:
+				return this.errorReply(`Unrecognized base "${baseMatchResult[1]}". Valid options are binary or bin, octal or oct, decimal or dec, and hexadecimal or hex.`);
+			}
+		}
+		const expression = target.replace(/\b(in|to)\s+([a-zA-Z]+)\b/g, '').trim();
 
 		if (!this.runBroadcast()) return;
 		try {
 			const result = solveRPN(parseMathematicalExpression(expression));
-			this.sendReplyBox(Chat.html`${expression}<br />= <strong>${BASE_PREFIXES[base] + result?.toString(base)}</strong>`);
+			let baseResult = '';
+			if (result && base !== 10) {
+				baseResult = `${BASE_PREFIXES[base]}${result.toString(base).toUpperCase()}`;
+				if (baseResult === expression) baseResult = '';
+			}
+			let resultStr = '';
+			if (baseResult) {
+				resultStr = `<strong>${baseResult}</strong> = ${result}`;
+			} else {
+				resultStr = `<strong>${result}</strong>`;
+			}
+			this.sendReplyBox(`${expression}<br />= ${resultStr}`);
 		} catch (e) {
 			this.sendReplyBox(
 				Chat.html`${expression}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`
@@ -158,7 +183,7 @@ export const commands: ChatCommands = {
 		}
 	},
 	calculatehelp: [
-		`/calculate [arithmetical question], [result base] - Calculates an arithmetical question. Supports PEMDAS (Parenthesis, Exponents, Multiplication, Division, Addition and Subtraction), pi and e. Possible bases for the result are 2, 8, 10 and 16.
-		`,
+		`/calculate [arithmetic question] - Calculates an arithmetical question. Supports PEMDAS (Parenthesis, Exponents, Multiplication, Division, Addition and Subtraction), pi and e.`,
+		`/calculate [arithmetic question] in [base] - Returns the result in a specific base. [base] can be bin, oct, dec or hex.`,
 	],
 };
