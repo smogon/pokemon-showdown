@@ -98,7 +98,7 @@ export class NetStream extends Streams.ReadWriteStream {
 
 		return request;
 	}
-	static encodeQuery(data: AnyObject) {
+	static encodeQuery(data: PostData) {
 		let out = '';
 		for (const key in data) {
 			if (out) out += `&`;
@@ -154,7 +154,7 @@ export class NetRequest {
 	 * Returns the response data.
 	 * @param opts request opts - headers, etc.
 	 */
-	async get(opts: AnyObject = {}): Promise<string | null> {
+	async get(opts: NetRequestOptions = {}): Promise<string | null> {
 		return this.getStream(opts).readAll();
 	}
 
@@ -163,7 +163,14 @@ export class NetRequest {
 	 * @param opts request opts - headers, etc.
 	 * @param body POST body
 	 */
-	post(opts: AnyObject = {}, body: AnyObject) {
+	post(opts: Omit<NetRequestOptions, 'body'>, body: PostData | string): Promise<string | null>;
+	/**
+	 * Makes a http/https POST request to the given link.
+	 * @param opts request opts - headers, etc.
+	 */
+	post(opts?: NetRequestOptions): Promise<string | null>;
+	post(opts: NetRequestOptions = {}, body?: PostData | string) {
+		if (!body) body = opts.body;
 		return this.get({
 			...opts,
 			method: 'POST',
