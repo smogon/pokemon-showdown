@@ -123,26 +123,28 @@ export const commands: ChatCommands = {
 		});
 	},
 
-	dexsearchhelp: [
-		`/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria`,
-		`Search categories are: type, tier, color, moves, ability, gen, resists, recovery, zrecovery, priority, stat, weight, height, egg group.`,
-		`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.`,
-		`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.`,
-		`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.`,
-		`Types can be searched for by either having the type precede 'type' or just using the type itself as a parameter, e.g., both 'fire type' and 'fire' show all Fire types; however, using 'psychic' as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.`,
-		`'resists' followed by a type will show Pok\u00e9mon that resist that typing, e.g., 'resists normal'.`,
-		`'weak' followed by a type will show Pok\u00e9mon that are weak to that typing, e.g., 'weak fire'.`,
-		`'asc' or 'desc' following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively, e.g., 'speed asc'.`,
-		`Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.`,
-		`Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.`,
-		`The parameter 'mega' can be added to search for Mega Evolutions only, the parameter 'gmax' can be added to search for Gigantamax Formes only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon that are not in another tier.`,
-		`'Alola' 'Galar', 'Therian', 'Totem', or 'Primal' can be used as parameters to search for those formes.`,
-		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.`,
-		`You can search for info in a specific generation by appending the generation to ds, e.g. '/ds1 normal' searches for all Pok\u00e9mon that were normal type in Generation I.`,
-		`/dexsearch will search the Galar Pokedex; You can search the National Pokedex by using /nds or by adding natdex as a parameter.`,
-		`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix 'group' onto the egg group parameter, e.g., seaching for 'grass, grass group' will show all Grass types in the Grass egg group.`,
-		`The order of the parameters does not matter.`,
-	],
+	dexsearchhelp() {
+		this.sendReplyBox(
+			`<code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
+			`Search categories are: type, tier, color, moves, ability, gen, resists, recovery, zrecovery, priority, stat, weight, height, egg group.<br/>` +
+			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
+			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC Uber/LC/CAP/CAP NFE/CAP LC.<br/>` +
+			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.<br/>` +
+			`Types can be searched for by either having the type precede <code>type</code> or just using the type itself as a parameter; e.g., both <code>fire type</code> and <code>fire</code> show all Fire types; however, using <code>psychic</code> as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.<br/>` +
+			`<code>resists</code> followed by a type will show Pok\u00e9mon that resist that typing (e.g. <code>resists normal</code>).<br/>` +
+			`<code>weak</code> followed by a type will show Pok\u00e9mon that are weak to that typing (e.g. <code>weak fire</code>).<br/>` +
+			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
+			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95.<br/>` +
+			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
+			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Gigantamax Formes only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
+			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
+			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
+			`You can search for info in a specific generation by appending the generation to ds; e.g. <code>/ds1 normal</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
+			`<code>/dexsearch</code> will search the Galar Pokedex; you can search the National Pokedex by using <code>/nds</code> or by adding <code>natdex</code> as a parameter.<br/>` +
+			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
+			`The order of the parameters does not matter.<br/>`
+		);
+	},
 
 	'!randommove': true,
 	rollmove: 'randommove',
@@ -457,6 +459,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let tierSearch = null;
 	let capSearch = null;
 	let nationalSearch = null;
+	let fullyEvolvedSearch = null;
 	let randomOutput = 0;
 	let maxGen = 0;
 	const validParameter = (cat: string, param: string, isNotSearch: boolean, input: string) => {
@@ -653,6 +656,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				break;
 			}
 
+			if (['fully evolved', 'fullyevolved', 'fe'].includes(target)) {
+				if (fullyEvolvedSearch === isNotSearch) return {error: "A search cannot include and exclude 'fully evolved'."};
+				if (parameters.length > 1) return {error: "The parameter 'fully evolved' cannot have alternative parameters"};
+				fullyEvolvedSearch = !isNotSearch;
+				orGroup.skip = true;
+				break;
+			}
+
 			if (target === 'recovery') {
 				if (parameters.length > 1) return {error: "The parameter 'recovery' cannot have alternative parameters"};
 				const recoveryMoves = [
@@ -784,7 +795,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && searches.length === 0 && megaSearch === null && gmaxSearch === null && !maxGen) {
+	if (
+		showAll && searches.length === 0 && !maxGen &&
+		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null
+	) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
 		};
@@ -802,6 +816,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			gmaxSearch === null || (gmaxSearch === true && species.isGigantamax) ||
 			(gmaxSearch === false && !species.isGigantamax)
 		);
+		const fullyEvolvedSearchResult = (
+			fullyEvolvedSearch === null ||
+			(fullyEvolvedSearch === true && species.evos.length === 0) ||
+			(fullyEvolvedSearch === false && species.evos.length > 0)
+		);
 		if (
 			species.gen <= maxGen &&
 			(
@@ -814,7 +833,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			) &&
 			(!species.tier.startsWith("CAP") || capSearch) &&
 			megaSearchResult &&
-			gmaxSearchResult
+			gmaxSearchResult &&
+			fullyEvolvedSearchResult
 		) {
 			dex[pokemon] = species;
 		}
