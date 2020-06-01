@@ -265,7 +265,7 @@ export class PageContext extends MessageContext {
 			if (typeof handler === 'function') {
 				let res;
 				try {
-					res = await handler.bind(this)(parts, this.user, this.connection);
+					res = await handler.call(this, parts, this.user, this.connection);
 				} catch (err) {
 					Monitor.crashlog(err, 'A chat page', {
 						user: this.user.name,
