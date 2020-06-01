@@ -1890,7 +1890,7 @@ export const commands: ChatCommands = {
 				`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
 				`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
 				`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
-				`- /roomdeauth <em>username</em>: remove all room.settings.auth from a user`,
+				`- /roomdeauth <em>username</em>: remove all room auth from a user`,
 				`- /declare <em>message</em>: make a large blue declaration to the room`,
 				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
 				`- !showimage <em>[url], [width], [height]</em>: show an image to the room`,
