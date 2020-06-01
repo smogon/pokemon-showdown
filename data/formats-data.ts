@@ -4163,7 +4163,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["energyball", "hydropump", "icebeam", "moonblast", "protect", "psychic"],
 		tier: "OU",
-		doublesTier: "DUU",
+		doublesTier: "DOU",
 	},
 	pikipek: {
 		isNonstandard: "Past",
