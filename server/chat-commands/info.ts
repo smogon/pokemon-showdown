@@ -250,7 +250,7 @@ export const commands: ChatCommands = {
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
 		let roomauth = '';
-		if (room?.settings.auth && userid in room.settings.auth) roomauth = room.settings.auth[userid];
+		if (room && userid in room.settings.auth) roomauth = room.settings.auth[userid];
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
