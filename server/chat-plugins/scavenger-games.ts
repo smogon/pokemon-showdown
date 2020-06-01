@@ -474,7 +474,7 @@ const MODES: {[k: string]: GameMode | string} = {
 	teamscavs: {
 		name: 'Team Scavs',
 		id: 'teamscavs',
-		teams: {}, // {[team_name: string]: {name: string[], players: UserID[], answers: string[], question: number}}
+		teams: {}, // {[team_name: string]: {name: string[], players: UserID[], answers: string[], question: number, completed: boolean}}
 
 		teamAnnounce(player: ScavengerHuntPlayer | User, message: string) {
 			const game = this.room.scavgame!;
@@ -505,22 +505,15 @@ const MODES: {[k: string]: GameMode | string} = {
 			const game = this.room.scavgame!;
 			const team = this.getPlayerTeam(answerer);
 
+			team.question++;
+			const question = hunt.getQuestion(team.question);
 			for (const userid of team.players) {				
-				let player = hunt.playerTable[userid];
 				const user = Users.getExact(userid);
-				if (!player) continue;  // player logged out
-				if (isFinished) player.completed = true;
+				if (!user) continue;
 
-				player.currentQuestion++;
-
-				// send new hint to everyone who isnt the one who got it right 
-				// the player who gets it correct gets the next hint hte normal way
-				if (userid !== answerer.id) {
-					hunt.onSendQuestion(player);
-				}
+				user.sendTo(this.room, question);
 			}
 			team.answers = [];
-			team.question++;
 		},
 		
 		mod: {
@@ -536,6 +529,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(player);
 				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
+				if (team.completed) player.completed = true;
 			},
 
 			onConnect(user) {
@@ -545,6 +539,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(player);
 				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
+				if (team.completed) player.completed = true;
 			},
 
 			onJoin(user) {
@@ -579,10 +574,13 @@ const MODES: {[k: string]: GameMode | string} = {
 			},
 			
 			onAnySubmit(player, value) {
-				if (player.completed) return;
 				const game = this.room.scavgame!;
-
+				
 				const team = game.getPlayerTeam(player)!;
+				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
+				if (team.completed) player.completed = true;
+				
+				if (player.completed) return;
 
 				if (team.answers.includes(value)) return;
 				game.teamAnnounce(player, `${player.name} has guessed "${value}".`);
@@ -600,9 +598,11 @@ const MODES: {[k: string]: GameMode | string} = {
 			// workaround that gives the answer after verifying that completion should not be hidden
 			onConfirmCompletion(player, time, blitz) {
 				const game = this.room.scavgame!;
+				const team = game.getPlayerTeam(player);
+				team.completed = true;
+				team.question++;
 
 				game.teamAnnounce(player, Chat.html`<strong>${player.name}</strong> has gotten the correct answer for question #${player.currentQuestion}.  Your team has completed the hunt!`);
-				game.advanceTeam(player, true);
 			},
 
 			onEnd(reset) {
@@ -614,6 +614,7 @@ const MODES: {[k: string]: GameMode | string} = {
 						const team = game.teams[teamID];
 						team.answers = [];
 						team.question = 1;
+						team.completed = false;
 					}
 				}
 			},
