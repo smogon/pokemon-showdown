@@ -338,7 +338,7 @@ export const commands: ChatCommands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!room.settings || room.roomid.includes('-')) {
+		if (!room.settings.persistSettings) {
 			return this.errorReply("This command is unavailable in temporary rooms.");
 		}
 		return this.parse(`/join view-punishments-${room}`);
