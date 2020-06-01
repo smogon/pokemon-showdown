@@ -2728,7 +2728,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	mandibuzz: {
 		randomBattleMoves: ["bravebird", "foulplay", "roost", "taunt", "toxic", "uturn", "whirlwind"],
-		tier: "(NU)",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	heatmor: {
