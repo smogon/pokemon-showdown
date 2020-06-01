@@ -515,7 +515,7 @@ const MODES: {[k: string]: GameMode | string} = {
 
 				// send new hint to everyone who isnt the one who got it right 
 				// the player who gets it correct gets the next hint hte normal way
-				if (userid !== player.id) {
+				if (userid !== answerer.id) {
 					hunt.onSendQuestion(player);
 				}
 			}
