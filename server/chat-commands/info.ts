@@ -319,8 +319,10 @@ export const commands: ChatCommands = {
 		const battles = [];
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.battle) continue;
-			if ((user1?.inRooms.has(curRoom.roomid) || (curRoom.settings.auth && curRoom.settings.auth[userID1])) &&
-				(user2?.inRooms.has(curRoom.roomid) || (curRoom.settings.auth && curRoom.settings.auth[userID2]))) {
+			if (
+				(user1?.inRooms.has(curRoom.roomid) || userID1 in curRoom.settings.auth) &&
+				(user2?.inRooms.has(curRoom.roomid) || userID2 in curRoom.settings.auth)
+			) {
 				battles.push(curRoom.roomid);
 			}
 		}
