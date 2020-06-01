@@ -415,9 +415,9 @@ export abstract class BasicRoom {
 		return globalGroup;
 	}
 	checkModjoin(user: User) {
-		if (this.settings.staffRoom && !user.isStaff &&
-			 (!this.settings.auth || (this.settings.auth[user.id] || ' ') === ' ')
-		) return false;
+		if (this.settings.staffRoom && !user.isStaff && !(user.id in this.settings.auth)) {
+			return false;
+		}
 		if (user.id in this.users) return true;
 		if (!this.settings.modjoin) return true;
 		// users with a room rank can always join
