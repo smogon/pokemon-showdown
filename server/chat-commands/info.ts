@@ -1964,7 +1964,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 	ruleshelp: [

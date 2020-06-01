@@ -1579,7 +1579,7 @@ export const commands: ChatCommands = {
 				room.settings.toursEnabled = true;
 				if (room.settings) {
 					room.settings.toursEnabled = true;
-					Rooms.global.writeChatRoomData();
+					room.saveSettings();
 				}
 				return this.sendReply("Tournaments are now enabled for @ and up.");
 			} else if (rank === '%') {
@@ -1589,7 +1589,7 @@ export const commands: ChatCommands = {
 				room.settings.toursEnabled = rank;
 				if (room.settings) {
 					room.settings.toursEnabled = rank;
-					Rooms.global.writeChatRoomData();
+					room.saveSettings();
 				}
 				return this.sendReply("Tournaments are now enabled for % and up.");
 			} else {
@@ -1603,7 +1603,7 @@ export const commands: ChatCommands = {
 			room.settings.toursEnabled = false;
 			if (room.settings) {
 				room.settings.toursEnabled = false;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			return this.sendReply("Tournaments are now disabled.");
 		} else if (cmd === 'announce' || cmd === 'announcements') {
@@ -1635,7 +1635,7 @@ export const commands: ChatCommands = {
 			}
 
 			if (room.settings.persistSettings) {
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 		} else if (cmd === 'create' || cmd === 'new') {
 			if (room.settings.toursEnabled === true) {

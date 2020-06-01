@@ -414,6 +414,19 @@ export abstract class BasicRoom {
 		}
 		return globalGroup;
 	}
+	saveSettings() {
+		if (!this.settings.persistSettings) return null;
+		const settingsList: RoomSettings[] = [];
+		for (const room of Rooms.rooms.values()) {
+			if (!room.settings.persistSettings) continue;
+			settingsList.push(room.settings);
+		}
+		FS('config/chatrooms.json').writeUpdate(() => (
+			JSON.stringify(settingsList)
+				.replace(/\{"title":/g, '\n{"title":')
+				.replace(/\]$/, '\n]')
+		));
+	}
 	checkModjoin(user: User) {
 		if (this.settings.staffRoom && !user.isStaff && !(user.id in this.settings.auth)) {
 			return false;
@@ -638,13 +651,8 @@ export class GlobalRoom extends BasicRoom {
 	}
 
 	writeChatRoomData() {
-		const settingsList: RoomSettings[] = [];
-		for (const room of Rooms.rooms.values()) {
-			if (!room.settings.persistSettings) continue;
-			settingsList.push(room.settings);
-		}
 		FS('config/chatrooms.json').writeUpdate(() => (
-			JSON.stringify(settingsList)
+			JSON.stringify(this.settingsList)
 				.replace(/\{"title":/g, '\n{"title":')
 				.replace(/\]$/, '\n]')
 		));
@@ -1464,7 +1472,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (!this.aliases) this.aliases = [];
 		this.aliases.push(oldID);
 		if (this.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			this.saveSettings();
 		}
 
 		for (const user of Object.values(this.users)) {
@@ -1492,7 +1500,7 @@ export class BasicChatRoom extends BasicRoom {
 
 		if (this.settings.persistSettings) {
 			this.title = newTitle;
-			Rooms.global.writeChatRoomData();
+			this.saveSettings();
 		}
 
 		return this.log.rename(newID);

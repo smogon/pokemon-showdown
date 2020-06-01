@@ -92,7 +92,7 @@ export const commands: ChatCommands = {
 				started: false,
 				aliases: (room.settings.events[eventId] ? room.settings.events[eventId].aliases : []),
 			};
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		},
 
 		rename(target, room, user) {
@@ -120,7 +120,7 @@ export const commands: ChatCommands = {
 
 			this.privateModAction(`(${user.name} renamed the roomevent titled "${originalName}" to "${newName}".)`);
 			this.modlog('ROOMEVENT', null, `renamed "${originalName}" to "${newName}"`);
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		},
 
 		begin: 'start',
@@ -152,7 +152,7 @@ export const commands: ChatCommands = {
 			);
 			this.modlog('ROOMEVENT', null, `started "${toID(event.eventName)}"`);
 			event.started = true;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		},
 
 		delete: 'remove',
@@ -169,7 +169,7 @@ export const commands: ChatCommands = {
 			delete room.settings.events[target];
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
 			this.modlog('ROOMEVENT', null, `removed "${target}"`);
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		},
 		view(target, room, user) {
 			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
@@ -212,7 +212,7 @@ export const commands: ChatCommands = {
 			room.settings.events[eventId].aliases.push(alias);
 			this.privateModAction(`(${user.name} added an alias "${alias}" for the roomevent "${eventId}".)`);
 			this.modlog('ROOMEVENT', null, `alias for "${eventId}": "${alias}"`);
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		},
 		deletealias: 'removealias',
 		removealias(target, room, user) {
@@ -227,7 +227,7 @@ export const commands: ChatCommands = {
 
 			this.privateModAction(`(${user.name} removed the alias "${target}")`);
 			this.modlog('ROOMEVENT', null, `removed the alias "${target}"`);
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		},
 		help(target, room, user) {
 			return this.parse('/help roomevents');

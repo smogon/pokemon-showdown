@@ -3673,7 +3673,7 @@ export const commands: ChatCommands = {
 			room.settings.mafiaDisabled = true;
 			if (room.settings) {
 				room.settings.mafiaDisabled = true;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			this.modlog('MAFIADISABLE', null);
 			return this.sendReply("Mafia has been disabled for this room.");
@@ -3688,7 +3688,7 @@ export const commands: ChatCommands = {
 			room.settings.mafiaDisabled = false;
 			if (room.settings) {
 				room.settings.mafiaDisabled = false;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			this.modlog('MAFIAENABLE', null);
 			return this.sendReply("Mafia has been enabled for this room.");

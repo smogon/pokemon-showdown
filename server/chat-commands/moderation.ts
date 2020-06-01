@@ -51,7 +51,7 @@ export const commands: ChatCommands = {
 				}
 			}
 		}
-		Rooms.global.writeChatRoomData();
+		room.saveSettings();
 	},
 	roomownerhelp: [`/roomowner [username] - Appoints [username] as a room owner. Requires: & ~`],
 
@@ -163,7 +163,7 @@ export const commands: ChatCommands = {
 				}
 			}
 		}
-		if (room.settings) Rooms.global.writeChatRoomData();
+		if (room.settings) room.saveSettings();
 	},
 	roompromotehelp: [
 		`/roompromote OR /roomdemote [username], [group symbol] - Promotes/demotes the user to the specified room rank. Requires: @ # & ~`,
@@ -982,7 +982,7 @@ export const commands: ChatCommands = {
 			return this.sendReply("(This room has zero roomvoices)");
 		}
 		if (room.settings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 		this.addModAction(`All ${count} roomvoices have been cleared by ${user.name}.`);
 		this.modlog('DEROOMVOICEALL');

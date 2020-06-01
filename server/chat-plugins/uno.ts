@@ -641,7 +641,7 @@ export const commands: ChatCommands = {
 			room.settings.unoDisabled = true;
 			if (room.settings) {
 				room.settings.unoDisabled = true;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			return this.sendReply("UNO has been disabled for this room.");
 		},
@@ -655,7 +655,7 @@ export const commands: ChatCommands = {
 			delete room.settings.unoDisabled;
 			if (room.settings) {
 				delete room.settings.unoDisabled;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			return this.sendReply("UNO has been enabled for this room.");
 		},

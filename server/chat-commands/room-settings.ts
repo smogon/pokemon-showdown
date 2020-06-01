@@ -123,7 +123,7 @@ export const commands: ChatCommands = {
 		this.modlog('MODCHAT', null, `to ${room.settings.modchat || "false"}`);
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 	modchathelp: [
@@ -199,7 +199,7 @@ export const commands: ChatCommands = {
 			this.modlog('MODJOIN', null, 'OFF');
 			if (room.settings.persistSettings) {
 				room.settings.modjoin = null;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			return;
 		} else if (target === 'sync') {
@@ -232,7 +232,7 @@ export const commands: ChatCommands = {
 			return false;
 		}
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 		if (target === 'sync' && !room.settings.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
 		if (!room.settings.isPrivate) this.parse('/hiddenroom');
@@ -254,7 +254,7 @@ export const commands: ChatCommands = {
 		room.settings.language = targetLanguage === 'english' ? false : targetLanguage;
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 		this.modlog(`LANGUAGE`, null, Chat.languages.get(targetLanguage));
 		this.sendReply(`The room's language has been set to ${Chat.languages.get(targetLanguage)}`);
@@ -294,7 +294,7 @@ export const commands: ChatCommands = {
 		this.modlog('SLOWCHAT', null, '' + slowchatSetting);
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 	slowchathelp: [
@@ -326,7 +326,7 @@ export const commands: ChatCommands = {
 		this.modlog('STRETCH FILTER', null, stretchSetting);
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 	stretchfilterhelp: [
@@ -357,7 +357,7 @@ export const commands: ChatCommands = {
 		this.modlog('CAPS FILTER', null, capsSetting);
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 	capsfilterhelp: [`/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~`],
@@ -386,7 +386,7 @@ export const commands: ChatCommands = {
 		this.modlog('EMOJI FILTER', null, emojiSetting);
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 	emojifilterhelp: [`/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~`],
@@ -459,7 +459,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`The list is currently: ${room.settings.banwords.join(', ')}`);
 
 			if (room.settings.persistSettings) {
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 		},
 
@@ -498,7 +498,7 @@ export const commands: ChatCommands = {
 
 			if (room.settings.persistSettings) {
 				if (!room.settings.banwords) delete room.settings.banwords;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 		},
 
@@ -537,7 +537,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 		this.modlog(`HIGHTRAFFIC`, null, '' + room.settings.highTraffic);
 		this.addModAction(`This room was marked as high traffic by ${user.name}.`);
@@ -577,7 +577,7 @@ export const commands: ChatCommands = {
 			targetRoom.settings.isPrivate = true;
 			if (!targetRoom.settings) throw new Error(`Private chat room created without settings.`);
 			targetRoom.settings.isPrivate = true;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 			const upperStaffRoom = Rooms.get('upperstaff');
 			if (upperStaffRoom) {
 				upperStaffRoom.add(`|raw|<div class="broadcast-green">Private chat room created: <b>${Chat.escapeHTML(target)}</b></div>`).update();
@@ -899,7 +899,7 @@ export const commands: ChatCommands = {
 			this.modlog('PUBLICROOM');
 			if (room.settings.persistSettings) {
 				delete room.settings.isPrivate;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
@@ -923,7 +923,7 @@ export const commands: ChatCommands = {
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
 			if (room.settings.persistSettings) {
 				room.settings.isPrivate = setting;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			room.settings.privacySetter = new Set([user.id]);
 		}
@@ -946,14 +946,14 @@ export const commands: ChatCommands = {
 			this.addModAction(`${user.name} made this chat room unofficial.`);
 			this.modlog('UNOFFICIALROOM');
 			delete room.settings.isOfficial;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		} else {
 			if (room.settings.isOfficial) return this.errorReply(`This chat room is already official.`);
 			room.settings.isOfficial = true;
 			this.addModAction(`${user.name} made this chat room official.`);
 			this.modlog('OFFICIALROOM');
 			room.settings.isOfficial = true;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -969,14 +969,14 @@ export const commands: ChatCommands = {
 			this.modlog('PSPLROOM');
 			//
 			delete room.settings.pspl;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		} else {
 			if (room.settings.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
 			room.settings.pspl = true;
 			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
 			this.modlog('UNPSPLROOM');
 			room.settings.pspl = true;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -1019,7 +1019,7 @@ export const commands: ChatCommands = {
 		}
 
 		room.settings.parentid = main.roomid;
-		Rooms.global.writeChatRoomData();
+		room.saveSettings();
 
 		for (const userid in room.users) {
 			room.users[userid].updateIdentity(room.roomid);
@@ -1046,7 +1046,7 @@ export const commands: ChatCommands = {
 		room.parent = null;
 
 		delete room.settings.parentid;
-		Rooms.global.writeChatRoomData();
+		room.saveSettings();
 
 		for (const userid in room.users) {
 			room.users[userid].updateIdentity(room.roomid);
@@ -1118,7 +1118,7 @@ export const commands: ChatCommands = {
 
 		if (room.settings.persistSettings) {
 			room.settings.desc = room.desc;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -1155,7 +1155,7 @@ export const commands: ChatCommands = {
 		this.roomlog(room.introMessage.replace(/\n/g, ''));
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -1171,7 +1171,7 @@ export const commands: ChatCommands = {
 		delete room.introMessage;
 		if (room.settings.persistSettings) {
 			delete room.settings.introMessage;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -1209,7 +1209,7 @@ export const commands: ChatCommands = {
 		this.roomlog(room.staffMessage.replace(/\n/g, ``));
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -1225,7 +1225,7 @@ export const commands: ChatCommands = {
 		delete room.staffMessage;
 		if (room.settings.persistSettings) {
 			delete room.settings.staffMessage;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -1256,7 +1256,7 @@ export const commands: ChatCommands = {
 		room.aliases.push(alias);
 		if (room.settings.persistSettings) {
 			room.settings.aliases = room.aliases;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 	roomaliashelp: [
@@ -1289,7 +1289,7 @@ export const commands: ChatCommands = {
 		if (aliasIndex >= 0) {
 			room.aliases.splice(aliasIndex, 1);
 			Rooms.aliases.delete(alias);
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 	removeroomaliashelp: [
@@ -1333,7 +1333,7 @@ export const commands: ChatCommands = {
 		}
 
 		if (room.settings.persistSettings) {
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 	roomtierdisplayhelp: [

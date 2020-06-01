@@ -573,7 +573,7 @@ export const commands: ChatCommands = {
 			room.settings.jeopardyDisabled = true;
 			if (room.settings) {
 				room.settings.jeopardyDisabled = true;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			return this.sendReply("Jeopardy has been disabled for this room.");
 		},
@@ -587,7 +587,7 @@ export const commands: ChatCommands = {
 			delete room.settings.jeopardyDisabled;
 			if (room.settings) {
 				delete room.settings.jeopardyDisabled;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			return this.sendReply("Jeopardy has been enabled for this room.");
 		},

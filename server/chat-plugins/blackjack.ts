@@ -753,7 +753,7 @@ export const commands: ChatCommands = {
 			room.settings.blackjackDisabled = true;
 			if (room.settings) {
 				room.settings.blackjackDisabled = true;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			this.sendReply(`Blackjack has been disabled for this room.`);
 		},
@@ -766,7 +766,7 @@ export const commands: ChatCommands = {
 			delete room.settings.blackjackDisabled;
 			if (room.settings) {
 				delete room.settings.blackjackDisabled;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 				this.sendReply(`Blackjack has been enabled for this room.`);
 			}
 		},

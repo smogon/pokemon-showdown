@@ -274,7 +274,7 @@ export const commands: ChatCommands = {
 			room.settings.hangmanDisabled = true;
 			if (room.settings) {
 				room.settings.hangmanDisabled = true;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			return this.sendReply("Hangman has been disabled for this room.");
 		},
@@ -287,7 +287,7 @@ export const commands: ChatCommands = {
 			delete room.settings.hangmanDisabled;
 			if (room.settings) {
 				delete room.settings.hangmanDisabled;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 			return this.sendReply("Hangman has been enabled for this room.");
 		},

@@ -224,7 +224,7 @@ if (LeaderboardRoom) {
 		}
 
 		targetRoom.chatRoomData.scavSettings = targetRoom.scavSettings;
-		Rooms.global.writeChatRoomData();
+		targetRoom.saveSettings();
 	}
 }
 
@@ -862,7 +862,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				if (room.settings.persistSettings) {
 					// @ts-ignore
 					room.settings.scavQueue = room.scavQueue;
-					Rooms.global.writeChatRoomData();
+					room.saveSettings();
 				}
 			}, 2 * 60000); // 2 minute cooldown
 		}
@@ -1551,7 +1551,7 @@ const ScavengerCommands: ChatCommands = {
 		if (room.settings.persistSettings) {
 			// @ts-ignore
 			room.settings.scavQueue = room.scavQueue;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -1572,7 +1572,7 @@ const ScavengerCommands: ChatCommands = {
 		if (room.settings.persistSettings) {
 			// @ts-ignore
 			room.settings.scavQueue = room.scavQueue;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -1614,7 +1614,7 @@ const ScavengerCommands: ChatCommands = {
 		if (room.settings.persistSettings) {
 			// @ts-ignore
 			room.settings.scavQueue = room.scavQueue;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 	},
 
@@ -1636,7 +1636,7 @@ const ScavengerCommands: ChatCommands = {
 		if (room.settings.persistSettings) {
 			// @ts-ignore
 			room.settings.scavSettings = room.scavSettings;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 		this.privateModAction(`(The queue has been ${state ? 'disabled' : 'enabled'} by ${user.name}.)`);
@@ -1664,7 +1664,7 @@ const ScavengerCommands: ChatCommands = {
 		if (room.settings.persistSettings) {
 			// @ts-ignore
 			room.settings.scavSettings = room.scavSettings;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 		this.privateModAction(`(The default scavenger timer has been set to ${duration} minutes by ${user.name}.)`);
 		this.modlog('SCAV DEFAULT TIMER', null, `${duration} minutes`);
@@ -1795,7 +1795,7 @@ const ScavengerCommands: ChatCommands = {
 		if (room.settings.persistSettings) {
 			// @ts-ignore
 			room.settings.scavSettings = room.scavSettings;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 		this.privateModAction(`(${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints}.)`);
 		this.modlog('SCAV BLITZ', null, `${gameType}: ${blitzPoints}`);
@@ -1829,7 +1829,7 @@ const ScavengerCommands: ChatCommands = {
 		if (room.settings.persistSettings) {
 			// @ts-ignore
 			room.settings.scavSettings = room.scavSettings;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 		this.privateModAction(`(${user.name} has set the points awarded for hosting regular scavenger hunts to ${points})`);
 		this.modlog('SCAV SETHOSTPOINTS', null, `${points}`);
@@ -1877,7 +1877,7 @@ const ScavengerCommands: ChatCommands = {
 		if (room.settings.persistSettings) {
 			// @ts-ignore
 			room.settings.scavSettings = room.scavSettings;
-			Rooms.global.writeChatRoomData();
+			room.saveSettings();
 		}
 		const pointsDisplay = winPoints.map((p, i) => `(${(i + 1)}) ${p}`).join(', ');
 		this.privateModAction(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay})`);
@@ -1915,7 +1915,7 @@ const ScavengerCommands: ChatCommands = {
 			if (room.settings.persistSettings) {
 				// @ts-ignore
 				room.settings.scavSettings = room.scavSettings;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 		}
 		if (room.scavSettings.officialtwist) {
@@ -2104,7 +2104,7 @@ const ScavengerCommands: ChatCommands = {
 			if (room.settings.persistSettings) {
 				// @ts-ignore
 				room.chatRoomData.scavSettings = room.scavSettings;
-				Rooms.global.writeChatRoomData();
+				room.saveSettings();
 			}
 
 			this.privateModAction(`(${user.name} has set multiple connections verification to ${setting[target] ? 'ON' : 'OFF'}.)`);
