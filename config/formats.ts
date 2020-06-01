@@ -442,7 +442,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 				lcuber: 40,
 				lc: 40,
 			};
-			let tier = toID(species.tier) || 'ou';
+			const tier = toID(species.tier) || 'ou';
 			if (!(tier in boosts)) return;
 			const pokemon: Species = this.dex.deepClone(species);
 			const boost = boosts[tier];
