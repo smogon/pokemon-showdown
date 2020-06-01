@@ -65,7 +65,7 @@ interface UserTable {
 
 interface RoomSettings {
 	aliases: string[];
-	auth: {[userid: string]: GroupSymbol} | null;
+	auth: {[userid: string]: GroupSymbol};
 	banwords: string[];
 	isPrivate: boolean | 'hidden' | 'voice';
 	reportJoins: boolean;
@@ -186,7 +186,7 @@ export abstract class BasicRoom {
 
 		this.settings = {
 			aliases: [],
-			auth: null,
+			auth: Object.create(null),
 			banwords: [],
 			isPrivate: false,
 			reportJoins: false,
@@ -421,7 +421,7 @@ export abstract class BasicRoom {
 		if (user.id in this.users) return true;
 		if (!this.settings.modjoin) return true;
 		// users with a room rank can always join
-		if (this.settings.auth && user.id in this.settings.auth) return true;
+		if (user.id in this.settings.auth) return true;
 		const userGroup = user.can('makeroom') ? user.group : this.getAuth(user);
 
 		const modjoinSetting = this.settings.modjoin !== true ? this.settings.modjoin : this.settings.modchat;
