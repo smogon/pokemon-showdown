@@ -42,7 +42,7 @@ export const commands: ChatCommands = {
 		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
-		if (usedRoom.settings.auth && targetUser.id in usedRoom.settings.auth) {
+		if (targetUser.id in usedRoom.settings.auth) {
 			roomauth = usedRoom.settings.auth[targetUser.id];
 		}
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
@@ -64,8 +64,7 @@ export const commands: ChatCommands = {
 			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
-			const authSymbol = (targetRoom.settings.auth && targetRoom.settings.auth[targetUser.id] ?
-				targetRoom.settings.auth[targetUser.id] : '');
+			const authSymbol = targetRoom.settings.auth[targetUser.id] || '';
 			const battleTitle = (targetRoom.battle ? ` title="${targetRoom.title}"` : '');
 			const output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.settings.isPrivate === true) {
