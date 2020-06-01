@@ -255,7 +255,7 @@ export class PageContext extends MessageContext {
 		this.send('|deinit');
 	}
 
-async resolve(pageid?: string) {
+	async resolve(pageid?: string) {
 		if (pageid) this.pageid = pageid;
 
 		const parts = this.pageid.split('-');
