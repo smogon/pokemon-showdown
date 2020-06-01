@@ -11,7 +11,6 @@
 import {FS} from '../../lib/fs';
 import {ScavMods, TwistEvent} from './scavenger-games.js';
 import {ChatHandler} from '../chat';
-import { teal } from 'color-name';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
 
@@ -643,6 +642,28 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		}
 	}
 
+	getQuestion(question: number, showHints?: boolean) {
+		const current = {
+			question: this.questions[question - 1],
+			number: question,
+		};
+		const finalHint = current.number === this.questions.length ? "final " : "";
+
+		const questionDisplay = `|raw|<div class="ladder"><table><tr>` +
+			`<td><strong style="white-space: nowrap">${finalHint}hint #${current.number}:</strong></td>` +
+			`<td>${
+				Chat.formatText(current.question.hint) +
+				(showHints && current.question.spoilers.length ?
+					`<details><summary>Extra Hints:</summary>${
+						current.question.spoilers.map(p => `- ${p}`).join('<br />')
+					}</details>` :
+					``)
+			}</td>` +
+			`</tr></table></div>`;
+
+		return questionDisplay;
+	}
+
 	onSendQuestion(user: User | ScavengerHuntPlayer, showHints?: boolean) {
 		if (!(user.id in this.playerTable) || this.hosts.some(h => h.id === user.id)) return false;
 
@@ -655,8 +676,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		const finalHint = current.number === this.questions.length ? "final " : "";
 
-		player.sendRoom(
-			`|raw|<div class="ladder"><table><tr>` +
+		const questionDisplay = `|raw|<div class="ladder"><table><tr>` +
 			`<td><strong style="white-space: nowrap">${finalHint}hint #${current.number}:</strong></td>` +
 			`<td>${
 				Chat.formatText(current.question.hint) +
@@ -666,7 +686,10 @@ export class ScavengerHunt extends Rooms.RoomGame {
 					}</details>` :
 					``)
 			}</td>` +
-			`</tr></table></div>`
+			`</tr></table></div>`;
+
+		player.sendRoom(
+			questionDisplay
 		);
 		return true;
 	}
@@ -1200,7 +1223,7 @@ const ScavengerCommands: ChatCommands = {
 			if (!leaderUser) return this.errorReply('The user you specified is currently not online');
 			if (game.getPlayerTeam(leaderUser)) return this.errorReply('The user is already a member of another team.');
 
-			game.teams[teamName] = {name: teamName, answers: [], players: [leaderUser.id], question: 1};
+			game.teams[teamName] = {name: teamName, answers: [], players: [leaderUser.id], question: 1, completed: false};
 			game.announce(Chat.html`A new team "${teamName}" has been created with ${leaderUser.name} as the leader.`);
 		},
 
