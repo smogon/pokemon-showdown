@@ -525,11 +525,26 @@ const MODES: {[k: string]: GameMode | string} = {
 				this.allowRenames = false;
 			},
 
+			onViewHunt(user) {
+				const game = this.room.scavgame!;
+				const team = game.getPlayerTeam(user);
+				const player = this.playerTable[user.userid];
+
+				if (!player || !team) return;
+
+				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
+				if (team.completed) player.completed = true;
+			},
+
 			onSendQuestion(player) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(player);
 				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
-				if (team.completed) player.completed = true;
+				if (team.completed) {
+					player.completed = true;
+					player.sendRoom('Your team has already completed the hunt!');
+					return true;
+				}
 			},
 
 			onConnect(user) {
