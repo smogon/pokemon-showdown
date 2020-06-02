@@ -195,7 +195,7 @@ export const commands: ChatCommands = {
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.game) continue;
 			if ((targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid)) ||
-				(curRoom.settings.auth && curRoom.settings.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
+				curRoom.settings.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
 				if (curRoom.settings.isPrivate && !canViewAlts) {
 					continue;
 				}
@@ -2531,7 +2531,7 @@ export const pages: PageTable = {
 		let buf = "";
 		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!this.room.settings) return;
+		if (!this.room.settings.persistSettings) return;
 		if (!this.can('mute', null, this.room)) return;
 		// Ascending order
 		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.roomid))

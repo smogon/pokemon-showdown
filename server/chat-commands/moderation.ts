@@ -21,7 +21,7 @@ const REQUIRE_REASONS = true;
 export const commands: ChatCommands = {
 
 	roomowner(target, room, user) {
-		if (!room.settings) {
+		if (!room.settings.persistSettings) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
 		}
 		if (!target) return this.parse('/help roomowner');
@@ -37,7 +37,6 @@ export const commands: ChatCommands = {
 
 		if (!this.can('makeroom')) return false;
 
-		if (!room.settings.auth) room.settings.auth = room.settings.auth = {};
 
 		room.settings.auth[userid] = '#';
 		this.addModAction(`${name} was appointed Room Owner by ${user.name}.`);
@@ -61,10 +60,6 @@ export const commands: ChatCommands = {
 		if (!room) {
 			// this command isn't marked as room-only because it's usable in PMs through /invite
 			return this.errorReply("This command is only available in rooms");
-		}
-		if (!room.settings.auth) {
-			this.sendReply("/roompromote - This room isn't designed for per-room moderation.");
-			return this.sendReply("Before setting room staff, you need to set a room owner with /roomowner");
 		}
 		if (!this.canTalk()) return;
 		if (!target) return this.parse('/help roompromote');
@@ -163,7 +158,7 @@ export const commands: ChatCommands = {
 				}
 			}
 		}
-		if (room.settings) room.saveSettings();
+		room.saveSettings();
 	},
 	roompromotehelp: [
 		`/roompromote OR /roomdemote [username], [group symbol] - Promotes/demotes the user to the specified room rank. Requires: @ # & ~`,
@@ -225,7 +220,7 @@ export const commands: ChatCommands = {
 		} else if (curRoom.settings.isPrivate === 'hidden' || curRoom.settings.isPrivate === 'voice') {
 			buffer.push(`${curRoom.title} is a hidden room, so global auth with no relevant roomauth will have authority in this room.`);
 		}
-		if (targetRoom !== room) buffer.unshift(`${targetRoom.title} room.settings.auth:`);
+		if (targetRoom !== room) buffer.unshift(`${targetRoom.title} room auth:`);
 		connection.popup(`${buffer.join("\n\n")}${userLookup}`);
 	},
 
@@ -244,7 +239,7 @@ export const commands: ChatCommands = {
 			buffer.push(`Global auth: ${group}`);
 		}
 		for (const curRoom of Rooms.rooms.values()) {
-			if (!curRoom.settings.auth || curRoom.settings.isPrivate) continue;
+			if (curRoom.settings.isPrivate) continue;
 			group = curRoom.settings.auth[targetId];
 			if (!group) continue;
 			innerBuffer.push(group + curRoom.roomid);
@@ -255,31 +250,31 @@ export const commands: ChatCommands = {
 		if (targetId === user.id || user.can('lock')) {
 			innerBuffer = [];
 			for (const curRoom of Rooms.rooms.values()) {
-				if (!curRoom.settings.auth || !curRoom.settings.isPrivate) continue;
+				if (!curRoom.settings.isPrivate) continue;
 				if (curRoom.settings.isPrivate === true) continue;
 				const auth = curRoom.settings.auth[targetId];
 				if (!auth) continue;
 				innerBuffer.push(auth + curRoom.roomid);
 			}
 			if (innerBuffer.length) {
-				buffer.push(`Hidden room.settings.auth: ${innerBuffer.join(', ')}`);
+				buffer.push(`Hidden room auth: ${innerBuffer.join(', ')}`);
 			}
 		}
 		if (targetId === user.id || user.can('makeroom')) {
 			innerBuffer = [];
 			for (const chatRoom of Rooms.global.chatRooms) {
-				if (!chatRoom.settings.auth || !chatRoom.settings.isPrivate) continue;
+				if (!chatRoom.settings.isPrivate) continue;
 				if (chatRoom.settings.isPrivate !== true) continue;
 				const auth = chatRoom.settings.auth[targetId];
 				if (!auth) continue;
 				innerBuffer.push(auth + chatRoom.roomid);
 			}
 			if (innerBuffer.length) {
-				buffer.push(`Private room.settings.auth: ${innerBuffer.join(', ')}`);
+				buffer.push(`Private room auth: ${innerBuffer.join(', ')}`);
 			}
 		}
 		if (!buffer.length) {
-			buffer.push("No global or room.settings.auth.");
+			buffer.push("No global or room auth.");
 		}
 
 		buffer.unshift(`${targetUsername} user auth:`);
@@ -559,7 +554,7 @@ export const commands: ChatCommands = {
 
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
-				`|modal||html|<p>${Chat.escapeHTML(user.name)} has banned you from the room ${room.roomid} ${(room.subRooms ? ` and its subrooms` : ``)}.</p>${(target ? `<p>Reason: ${Chat.escapeHTML(target)}</p>` : ``)}<p>To appeal the ban, PM the staff member that banned you${(!room.battle && room.settings.auth ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`)}`
+				`|modal||html|<p>${Chat.escapeHTML(user.name)} has banned you from the room ${room.roomid} ${(room.subRooms ? ` and its subrooms` : ``)}.</p>${(target ? `<p>Reason: ${Chat.escapeHTML(target)}</p>` : ``)}<p>To appeal the ban, PM the staff member that banned you${room.settings.persistSettings ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
 			);
 		}
 
@@ -568,7 +563,7 @@ export const commands: ChatCommands = {
 
 		const affected = Punishments.roomBan(room, targetUser, null, null, target);
 
-		if (!room.settings.isPrivate && room.settings) {
+		if (!room.settings.isPrivate && room.settings.persistSettings) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
@@ -581,7 +576,7 @@ export const commands: ChatCommands = {
 		}
 		room.hideText([userid, toID(this.inputUsername)]);
 
-		if (room.settings.isPrivate !== true && room.settings) {
+		if (room.settings.isPrivate !== true && room.settings.persistSettings) {
 			this.globalModlog("ROOMBAN", targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
 		} else {
 			this.modlog("ROOMBAN", targetUser, ` by ${user.id}${(target ? `: ${target}` : ``)}`);
@@ -600,7 +595,7 @@ export const commands: ChatCommands = {
 
 		if (name) {
 			this.addModAction(`${name} was unbanned from ${room.title} by ${user.name}.`);
-			if (room.settings.isPrivate !== true && room.settings) {
+			if (room.settings.isPrivate !== true && room.settings.persistSettings) {
 				this.globalModlog("UNROOMBAN", name, ` by ${user.id}`);
 			}
 		} else {
@@ -981,9 +976,7 @@ export const commands: ChatCommands = {
 		if (!count) {
 			return this.sendReply("(This room has zero roomvoices)");
 		}
-		if (room.settings) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 		this.addModAction(`All ${count} roomvoices have been cleared by ${user.name}.`);
 		this.modlog('DEROOMVOICEALL');
 	},
@@ -1517,7 +1510,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`If you want to blacklist an offline account by name (not IP), consider /blacklistname`);
 		}
 		if (!this.can('editroom', targetUser, room)) return false;
-		if (!room.settings) {
+		if (!room.settings.persistSettings) {
 			return this.errorReply(`This room is not going to last long enough for a blacklist to matter - just ban the user`);
 		}
 		const punishment = Punishments.isRoomBanned(targetUser, room.roomid);
@@ -1544,21 +1537,21 @@ export const commands: ChatCommands = {
 		const userid = targetUser.getLastId();
 
 		if (targetUser.trusted && room.settings.isPrivate !== true) {
-			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : '')} was blacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
+			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ''} was blacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 		}
 
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
 				`|modal||html|<p>${Chat.escapeHTML(user.name)} has blacklisted you from the room ${room.roomid}${(room.subRooms ? ` and its subrooms` : '')}. Reason: ${Chat.escapeHTML(target)}</p>` +
-				`<p>To appeal the ban, PM the staff member that blacklisted you${(!room.battle && room.settings.auth ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`)}`
+				`<p>To appeal the ban, PM the staff member that blacklisted you${room.settings.persistSettings ? ` or a room owner. </p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
 			);
 		}
 
-		this.privateModAction(`(${name} was blacklisted from ${room.title} by ${user.name}. ${(target ? ` (${target})` : '')})`);
+		this.privateModAction(`(${name} was blacklisted from ${room.title} by ${user.name}. ${target ? ` (${target})` : ''})`);
 
 		const affected = Punishments.roomBlacklist(room, targetUser, null, null, target);
 
-		if (!room.settings.isPrivate && room.settings) {
+		if (!room.settings.isPrivate && room.settings.persistSettings) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			let displayMessage = '';
 			if (affected.length > 1) {
@@ -1570,8 +1563,8 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (!room.settings.isPrivate && room.settings) {
-			this.globalModlog("BLACKLIST", targetUser, ` by ${user.id}${(target ? `: ${target}` : '')}`);
+		if (!room.settings.isPrivate && room.settings.persistSettings) {
+			this.globalModlog("BLACKLIST", targetUser, ` by ${user.id}${target ? `: ${target}` : ''}`);
 		} else {
 			// Room modlog only
 			this.modlog("BLACKLIST", targetUser, ` by ${user.id}${(target ? `: ${target}` : '')}`);
@@ -1663,7 +1656,7 @@ export const commands: ChatCommands = {
 		if (!target) return this.parse('/help blacklistname');
 		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
-		if (!room.settings) {
+		if (!room.settings.persistSettings) {
 			return this.errorReply("This room is not going to last long enough for a blacklist to matter - just ban the user");
 		}
 
