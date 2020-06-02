@@ -955,7 +955,7 @@ export class User extends Chat.MessageContext {
 		const named = this.named ? 1 : 0;
 		const diff: AnyObject = {};
 		const settings = updated.length ? updated : SETTINGS;
-		for (const setting of settings.persistSettings) {
+		for (const setting of settings) {
 			diff[setting] = this[setting];
 		}
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
