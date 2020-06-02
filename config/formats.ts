@@ -193,6 +193,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU', '+CAP'],
 		banlist: ['Crucibelle-Mega'],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8cap') {
+				this.add('html', `<div class="broadcast-blue"><strong>Create-A-Pok&eacute;mon is currently suspecting Clefable! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3665394/">suspect thread</a>.</strong></div>`);
+			}
+		},
 	},
 	{
 		name: "[Gen 8] Battle Stadium Singles",
@@ -625,6 +630,11 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 			'Doublade', 'Gurdurr', 'Ivysaur', 'Mr. Mime-Galar', 'Pawniard', 'Rhydon', 'Rufflet', 'Sneasel', 'Type: Null',
 			'Shadow Tag', 'Baton Pass',
 		],
+		onBegin() {
+			if (this.rated && this.format.id === 'gen8nfe') {
+				this.add('html', `<div class="broadcast-blue"><strong>NFE is currently suspecting Machoke! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3665253/">suspect thread</a>.</strong></div>`);
+			}
+		},
 	},
 	{
 		name: "[Gen 8] Camomons",
