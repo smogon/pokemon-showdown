@@ -468,7 +468,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		gameType: 'doubles',
-		searchShow: false,
+		// searchShow: false,
 		teamLength: {
 			validate: [2, 4],
 			battle: 2,
