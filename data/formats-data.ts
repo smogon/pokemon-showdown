@@ -3452,7 +3452,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleMoves: ["closecombat", "dragondance", "earthquake", "outrage", "poisonjab", "taunt"],
 		randomBattleLevel: 82,
 		randomDoubleBattleMoves: ["closecombat", "dragonclaw", "dragondance", "poisonjab", "protect"],
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 	},
 	cubchoo: {
