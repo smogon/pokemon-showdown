@@ -2463,7 +2463,6 @@ export const commands: ChatCommands = {
 	},
 	showimagehelp: [`/showimage [url], [width], [height] - Show an image. Any CSS units may be used for the width or height (default: px). If width and height aren't provided, automatically scale the image to fit in chat. Requires: # & ~`],
 
-	'!pi': true,
 	pi(target, room, user) {
 		return this.sendReplyBox(
 			'Did you mean: 1. 3.1415926535897932384626... (Decimal)<br />' +
