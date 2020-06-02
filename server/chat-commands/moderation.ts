@@ -1119,7 +1119,11 @@ export const commands: ChatCommands = {
 		if (targetUser && !targetUser.registered) {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
-		Users.groups.setGroup(targetUser as User, nextGroup);
+		if (targetUser) {
+			Users.groups.setGroup(targetUser, nextGroup);
+		} else {
+			Users.groups.forceGroup(userid, nextGroup);
+		}
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
 			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid, '(demote)');

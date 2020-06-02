@@ -1137,7 +1137,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 		this.trusted = '';
-		this.setGroup(Config.groupsranking[0]);
+		groups.forceGroup(userid, Config.groupsranking[0]);
 		return removed;
 	}
 	markDisconnected() {
