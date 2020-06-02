@@ -337,9 +337,17 @@ export const commands: ChatCommands = {
 	'!abilitysearch': true,
 	asearch: 'abilitysearch',
 	as: 'abilitysearch',
+	as3: 'abilitysearch',
+	as4: 'abilitysearch',
+	as5: 'abilitysearch',
+	as6: 'abilitysearch',
+	as7: 'abilitysearch',
+	as8: 'abilitysearch',
 	abilitysearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help abilitysearch');
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen) target += ` maxgen${targetGen}`;
 
 		return runSearch({
 			tar: target,
@@ -360,10 +368,14 @@ export const commands: ChatCommands = {
 			this.update();
 		});
 	},
-	abilitysearchhelp: [
-		`/abilitysearch [ability description] - finds abilities that match the given keywords.`,
-		`Command accepts natural language. (tip: fewer words tend to work better)`,
-	],
+	abilitysearchhelp() {
+		this.sendReplyBox(
+			`<code>/abilitysearch [ability description]</code>: finds abilities that match the given keywords.<br/>` +
+			`This command accepts natural language. (tip: fewer words tend to work better)<br/>` +
+			`The <code>gen</code> keyword can be used to search for abilities introduced in a given generation; e.g., <code>/as gen4</code> searches for abilities introduced in Generation 4.<br/>` +
+			`To search for abilities within a generation, append the generation to <code>/as</code> or use the <code>maxgen</code> keyword; e.g., <code>/as4 Water-type</code> or <code>/as maxgen4 Water-type</code> searches for abilities whose Generation 4 description includes "Water-type".`
+		);
+	},
 
 	'!learn': true,
 	learnset: 'learn',
@@ -1982,6 +1994,8 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 function runAbilitysearch(target: string, cmd: string, canAll: boolean, message: string) {
 	// based heavily on runItemsearch()
 	let showAll = false;
+	let maxGen = 0;
+	let gen = 0;
 
 	target = target.trim();
 	const lastCommaIndex = target.lastIndexOf(',');
@@ -1999,6 +2013,15 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 
 	for (const [i, search] of rawSearch.entries()) {
 		let newWord = search.trim();
+		if (newWord.substr(0, 6) === 'maxgen') {
+			maxGen = parseInt(newWord[6]);
+			if (!maxGen || maxGen < 3 || maxGen > 8) return {error: "The generation must be between 3 and 8"};
+			continue;
+		} else if (newWord.substr(0, 3) === 'gen') {
+			gen = parseInt(newWord[3]);
+			if (!gen || gen < 3 || gen > 8) return {error: "The generation must be between 3 and 8"};
+			continue;
+		}
 		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
 		switch (newWord) {
 		// remove extraneous words
@@ -2051,10 +2074,13 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 		searchedWords.push(newWord);
 	}
 
-	if (searchedWords.length === 0) return {error: "No distinguishing words were used. Try a more specific search."};
+	if (searchedWords.length === 0 && !gen && !maxGen) {
+		return {error: "No distinguishing words were used. Try a more specific search."};
+	}
 	let bestMatched = 0;
-	for (const n in Dex.data.Abilities) {
-		const ability = Dex.getAbility(n);
+	const dex = maxGen ? Dex.mod("gen" + maxGen) : Dex;
+	for (const n in dex.data.Abilities) {
+		const ability = dex.getAbility(n);
 		let matched = 0;
 		// splits words in the description into a toID()-esque format except retaining / and . in numbers
 		let descWords = ability.desc || ability.shortDesc || '';
@@ -2079,7 +2105,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 			}
 		}
 
-		if (matched >= (searchedWords.length * 3 / 5)) {
+		if (matched >= (searchedWords.length * 3 / 5) && (!maxGen || ability.gen <= maxGen) && (!gen || ability.gen === gen)) {
 			if (matched === bestMatched) {
 				foundAbilities.push(ability.name);
 			} else if (matched > bestMatched) {
