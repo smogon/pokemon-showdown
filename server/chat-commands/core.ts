@@ -361,15 +361,13 @@ export const commands: ChatCommands = {
 		}
 		const rankLists: {[k: string]: string[]} = {};
 		const ranks = Object.keys(Config.groups);
-		for (const u in Users.usergroups) {
-			const rank = Users.usergroups[u].charAt(0);
-			if (rank === ' ' || (rank === '+' && !target)) continue;
+		for (const [k, v] of Users.groups.entries()) {
+			if (v === ' ' || (v === '+' && !target)) continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
-			if (ranks.includes(rank)) {
-				const name = Users.usergroups[u].substr(1);
-				const place = rankLists[rank];
-				if (!place) rankLists[rank] = [];
-				if (name) rankLists[rank].push(name);
+			if (ranks.includes(v)) {
+				const place = rankLists[v];
+				if (!place) rankLists[v] = [];
+				if (v) rankLists[v].push(k);
 			}
 		}
 
@@ -879,7 +877,7 @@ export const commands: ChatCommands = {
 			battle.p1.name = target.slice(nameIndex1 + 8, nameNextQuoteIndex1);
 			battle.p2.name = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
 		}
-		battleRoom.settings.auth[user.id] = Users.HOST_SYMBOL;
+		battleRoom.auth.forceGroup(user.id, Users.HOST_SYMBOL);
 		this.parse(`/join ${battleRoom.roomid}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
@@ -1052,10 +1050,10 @@ export const commands: ChatCommands = {
 			return this.errorReply(`${targetUser.name} is already a player in this battle.`);
 		}
 
-		room.settings.auth[targetUser.id] = Users.PLAYER_SYMBOL;
+		room.auth.forceGroup(targetUser.id, Users.PLAYER_SYMBOL);
 		const success = room.battle.joinGame(targetUser, target);
 		if (!success) {
-			delete room.settings.auth[targetUser.id];
+			room.auth.delete(targetUser.id);
 			return;
 		}
 		this.addModAction(`${name} was added to the battle as Player ${target.slice(1)} by ${user.name}.`);
@@ -1390,8 +1388,8 @@ export const commands: ChatCommands = {
 					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
 				}
 				let roomidWithAuth: string = roomid;
-				if (targetRoom.settings.auth && targetUser.id in targetRoom.settings.auth) {
-					roomidWithAuth = targetRoom.settings.auth[targetUser.id] + roomid;
+				if (targetRoom.auth.has(targetUser.id)) {
+					roomidWithAuth = targetRoom.auth.get(targetUser.id) + roomid;
 				}
 				roomList[roomidWithAuth] = roomData;
 			}
@@ -1459,12 +1457,9 @@ export const commands: ChatCommands = {
 				users: [],
 			};
 
-			if (targetRoom.settings.auth) {
-				for (const userid in targetRoom.settings.auth) {
-					const rank = targetRoom.settings.auth[userid];
-					if (!roominfo.auth[rank]) roominfo.auth[rank] = [];
-					roominfo.auth[rank].push(userid);
-				}
+			for (const [k, v] of targetRoom.auth) {
+				if (!roominfo.auth[v]) roominfo.auth[v] = [];
+				roominfo.auth[v].push(k);
 			}
 
 			for (const userid in targetRoom.users) {

@@ -1596,7 +1596,7 @@ class MafiaTracker extends Rooms.RoomGame {
 
 		if (!player) {
 			if (user.isStaff ||
-				(user.id in this.room.settings.auth && this.room.settings.auth[user.id] !== '+')
+				(this.room.auth.get(user.id) && this.room.auth.get(user.id) !== '+')
 			) {
 				// Uninvolved staff can talk anytime
 				return false;

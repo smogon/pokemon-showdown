@@ -42,8 +42,8 @@ export const commands: ChatCommands = {
 		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
-		if (targetUser.id in usedRoom.settings.auth) {
-			roomauth = usedRoom.settings.auth[targetUser.id];
+		if (usedRoom.auth.has(targetUser.id)) {
+			roomauth = usedRoom.auth.get(targetUser.id) as string;
 		}
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
@@ -64,7 +64,7 @@ export const commands: ChatCommands = {
 			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
-			const authSymbol = targetRoom.settings.auth[targetUser.id] || '';
+			const authSymbol = targetRoom.auth.get(targetUser.id) || '';
 			const battleTitle = (targetRoom.battle ? ` title="${targetRoom.title}"` : '');
 			const output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.settings.isPrivate === true) {
@@ -195,7 +195,7 @@ export const commands: ChatCommands = {
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.game) continue;
 			if ((targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid)) ||
-				curRoom.settings.auth[targetUser.id] === Users.PLAYER_SYMBOL) {
+				curRoom.auth.get(targetUser.id) === Users.PLAYER_SYMBOL) {
 				if (curRoom.settings.isPrivate && !canViewAlts) {
 					continue;
 				}
@@ -250,11 +250,11 @@ export const commands: ChatCommands = {
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
 		let roomauth = '';
-		if (room && userid in room.settings.auth) roomauth = room.settings.auth[userid];
+		if (room?.auth.has(userid)) roomauth = room.auth.get(userid) as string;
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
-		const group = (Users.usergroups[userid] || '').charAt(0);
+		const group = (Users.groups.get(userid) || '').charAt(0);
 		if (Config.groups[group] && Config.groups[group].name) {
 			buf += `<br />Global ${Config.groups[group].name} (${group})`;
 		}
@@ -320,8 +320,8 @@ export const commands: ChatCommands = {
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.battle) continue;
 			if (
-				(user1?.inRooms.has(curRoom.roomid) || userID1 in curRoom.settings.auth) &&
-				(user2?.inRooms.has(curRoom.roomid) || userID2 in curRoom.settings.auth)
+				(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.has(userID1)) &&
+				(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.has(userID2))
 			) {
 				battles.push(curRoom.roomid);
 			}

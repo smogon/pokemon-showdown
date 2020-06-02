@@ -691,7 +691,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 
 		this.updatePlayer(player, null);
-		this.room.settings.auth[user.id] = '+';
+		this.room.auth.forceGroup(user.id, '+');
 		this.room.update();
 		return true;
 	}

@@ -34,6 +34,7 @@ import {PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer} from 
 import {RoomGame, RoomGamePlayer} from './room-game';
 import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
+import {RoomAuth} from './user-groups';
 
 /*********************************************************
  * the Room object.
@@ -156,6 +157,7 @@ export abstract class BasicRoom {
 	hideReplay: boolean;
 	isPersonal: boolean;
 	isHelp: boolean;
+	auth: RoomAuth;
 	constructor(roomid: RoomID, title?: string) {
 		this.users = Object.create(null);
 		this.type = 'chat';
@@ -232,6 +234,7 @@ export abstract class BasicRoom {
 		this.scavSettings = {};
 		this.scavQueue = [];
 		this.scavLeaderboard = {};
+		this.auth = new RoomAuth(this);
 	}
 
 	/**
@@ -258,9 +261,9 @@ export abstract class BasicRoom {
 		for (const i in this.users) {
 			const user = this.users[i];
 			// hardcoded for performance reasons (this is an inner loop)
-			if (user.isStaff || (this.settings.auth && this.settings.auth[user.id] &&
-				this.settings.auth[user.id] in Config.groups &&
-				 Config.groups[this.settings.auth[user.id]].rank >= Config.groups[minRank].rank)
+			if (user.isStaff || (this.auth.get(user.id) &&
+				this.auth.get(user.id)! in Config.groups &&
+				Config.groups[this.auth.get(user.id) || ' '].rank >= Config.groups[minRank].rank)
 			) {
 				user.sendTo(this, data);
 			}
@@ -387,12 +390,12 @@ export abstract class BasicRoom {
 	 * Gets the group symbol of a user in the room.
 	 */
 	getAuth(user: {id: ID, group: GroupSymbol} | User): GroupSymbol {
-		const globalGroup = this.settings.auth && this.settings.isPrivate === true ? ' ' : user.group;
+		const globalGroup = this.settings.isPrivate === true ? ' ' : user.group;
 
-		if (this.settings.auth && user.id in this.settings.auth) {
+		if (this.auth.has(user.id)) {
 			// room has roomauth
 			// authority is whichever is higher between roomauth and global auth
-			const roomGroup = this.settings.auth[user.id];
+			const roomGroup = this.auth.get(user.id) as GroupSymbol;
 			let greaterGroup = Config.greatergroupscache[`${roomGroup}${globalGroup}`];
 			if (!greaterGroup) {
 				// unrecognized groups always trump higher global rank
@@ -428,13 +431,13 @@ export abstract class BasicRoom {
 		));
 	}
 	checkModjoin(user: User) {
-		if (this.settings.staffRoom && !user.isStaff && !(user.id in this.settings.auth)) {
+		if (this.settings.staffRoom && !user.isStaff && !(this.auth.has(user.id))) {
 			return false;
 		}
 		if (user.id in this.users) return true;
 		if (!this.settings.modjoin) return true;
 		// users with a room rank can always join
-		if (user.id in this.settings.auth) return true;
+		if (this.auth.has(user.id)) return true;
 		const userGroup = user.can('makeroom') ? user.group : this.getAuth(user);
 
 		const modjoinSetting = this.settings.modjoin !== true ? this.settings.modjoin : this.settings.modchat;
@@ -949,7 +952,7 @@ export class GlobalRoom extends BasicRoom {
 			}
 			if (room.staffAutojoin === true && user.isStaff ||
 					typeof room.staffAutojoin === 'string' && room.staffAutojoin.includes(user.group) ||
-					room.settings.auth && user.id in room.settings.auth) {
+					room.auth.has(user.id)) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
 				// if staffAutojoin is anything truthy: autojoin if user has any roomauth
@@ -1114,13 +1117,13 @@ export class GlobalRoom extends BasicRoom {
 	destroyPersonalRooms(userid: ID) {
 		const roomauth = [];
 		for (const [id, curRoom] of Rooms.rooms) {
-			if (id === 'global' || !curRoom.settings.auth) continue;
-			if (curRoom.isPersonal && curRoom.settings.auth[userid] === Users.HOST_SYMBOL) {
+			if (id === 'global' || !curRoom.settings.persistSettings) continue;
+			if (curRoom.isPersonal && curRoom.auth.get(userid) === Users.HOST_SYMBOL) {
 				curRoom.destroy();
 			} else {
-				if (curRoom.settings.isPrivate || curRoom.battle || !curRoom.settings.auth) continue;
+				if (curRoom.settings.isPrivate || curRoom.battle || !curRoom.settings.persistSettings) continue;
 
-				const group = curRoom.settings.auth[userid];
+				const group = curRoom.auth.get(userid);
 				if (group) roomauth.push(`${group}${id}`);
 			}
 		}
@@ -1264,8 +1267,8 @@ export class BasicChatRoom extends BasicRoom {
 			if (!user.named) {
 				++guests;
 			}
-			if (this.settings.auth && this.settings.auth[user.id] && this.settings.auth[user.id] in groups) {
-				++groups[this.settings.auth[user.id]];
+			if (this.auth.has(user.id) && this.auth.get(user.id)! in groups) {
+				++groups[this.auth.get(user.id) || ' '];
 			} else {
 				++groups[user.group];
 			}

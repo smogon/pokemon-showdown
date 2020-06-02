@@ -38,7 +38,7 @@ export const commands: ChatCommands = {
 		if (!this.can('makeroom')) return false;
 
 
-		room.settings.auth[userid] = '#';
+		room.auth.setGroup(user, '#');
 		this.addModAction(`${name} was appointed Room Owner by ${user.name}.`);
 		this.modlog('ROOMOWNER', userid);
 		if (targetUser) {
@@ -81,7 +81,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
 
-		const currentGroup = room.settings.auth[userid] || Config.groupsranking[0];
+		const currentGroup = room.auth.get(userid) || Config.groupsranking[0];
 		let nextGroup = target as GroupSymbol;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {
@@ -96,7 +96,7 @@ export const commands: ChatCommands = {
 		}
 
 		const groupName = Config.groups[nextGroup].name || "regular user";
-		if ((room.settings.auth[userid] || Config.groupsranking[0]) === nextGroup) {
+		if ((room.auth.get(userid) || Config.groupsranking[0]) === nextGroup) {
 			return this.errorReply(`User '${name}' is already a ${groupName} in this room.`);
 		}
 		if (!user.can('makeroom')) {
@@ -114,9 +114,13 @@ export const commands: ChatCommands = {
 		}
 
 		if (nextGroup === Config.groupsranking[0]) {
-			delete room.settings.auth[userid];
+			room.auth.delete(userid);
 		} else {
-			room.settings.auth[userid] = nextGroup;
+			if (!targetUser) {
+				room.auth.forceGroup(userid, nextGroup);
+			} else {
+				room.auth.setGroup(targetUser, nextGroup);
+			}
 		}
 
 		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
@@ -177,14 +181,14 @@ export const commands: ChatCommands = {
 		if (!targetRoom || targetRoom.roomid === 'global' || !targetRoom.checkModjoin(user)) {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
-		if (!targetRoom.settings.auth) {
+		if (!targetRoom.settings.persistSettings) {
 			return this.sendReply(`/roomauth - The room '${targetRoom.title || target}' isn't designed for per-room moderation and therefore has no auth list.${userLookup}`);
 		}
 
 		const rankLists: {[groupSymbol: string]: ID[]} = {};
-		for (const userid in targetRoom.settings.auth) {
-			if (!rankLists[targetRoom.settings.auth[userid]]) rankLists[targetRoom.settings.auth[userid]] = [];
-			rankLists[targetRoom.settings.auth[userid]].push(userid as ID);
+		for (const [k, v] of room.auth.entries()) {
+			if (!rankLists[v]) rankLists[v] = [];
+			rankLists[v].push(k);
 		}
 
 		const buffer = Object.keys(rankLists).sort(
@@ -232,15 +236,14 @@ export const commands: ChatCommands = {
 
 		const buffer = [];
 		let innerBuffer = [];
-		let group = Users.usergroups[targetId];
+		let group = Users.groups.get(targetId);
 		if (group) {
-			group = group.charAt(0);
-			if (group === ' ') group = 'trusted';
+			if (group === ' ') (group as string) = 'trusted';
 			buffer.push(`Global auth: ${group}`);
 		}
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.settings.isPrivate) continue;
-			group = curRoom.settings.auth[targetId];
+			group = curRoom.auth.get(targetId);
 			if (!group) continue;
 			innerBuffer.push(group + curRoom.roomid);
 		}
@@ -252,7 +255,7 @@ export const commands: ChatCommands = {
 			for (const curRoom of Rooms.rooms.values()) {
 				if (!curRoom.settings.isPrivate) continue;
 				if (curRoom.settings.isPrivate === true) continue;
-				const auth = curRoom.settings.auth[targetId];
+				const auth = curRoom.auth.get(targetId);
 				if (!auth) continue;
 				innerBuffer.push(auth + curRoom.roomid);
 			}
@@ -265,7 +268,7 @@ export const commands: ChatCommands = {
 			for (const chatRoom of Rooms.global.chatRooms) {
 				if (!chatRoom.settings.isPrivate) continue;
 				if (chatRoom.settings.isPrivate !== true) continue;
-				const auth = chatRoom.settings.auth[targetId];
+				const auth = chatRoom.auth.get(targetId);
 				if (!auth) continue;
 				innerBuffer.push(auth + chatRoom.roomid);
 			}
@@ -954,7 +957,7 @@ export const commands: ChatCommands = {
 
 	deroomvoiceall(target, room, user) {
 		if (!this.can('editroom', null, room)) return false;
-		if (!room.settings.auth) return this.errorReply("Room does not have roomauth.");
+		if (![...room.auth.entries()].length) return this.errorReply("Room does not have roomauth.");
 		if (!target) {
 			user.lastCommand = '/deroomvoiceall';
 			this.errorReply("THIS WILL DEROOMVOICE ALL ROOMVOICED USERS.");
@@ -966,9 +969,9 @@ export const commands: ChatCommands = {
 		}
 		user.lastCommand = '';
 		let count = 0;
-		for (const userid in room.settings.auth) {
-			if (room.settings.auth[userid] === '+') {
-				delete room.settings.auth[userid];
+		for (const [userid, rank] of room.auth.entries()) {
+			if (room.auth.get(userid) === '+') {
+				room.auth.delete(userid);
 				if (userid in room.users) room.users[userid].updateIdentity(room.roomid);
 				count++;
 			}
@@ -1082,7 +1085,7 @@ export const commands: ChatCommands = {
 
 		if (!userid) return this.parse('/help promote');
 
-		const currentGroup = (targetUser?.group || Users.usergroups[userid] || ' ')[0];
+		const currentGroup = (targetUser?.group || Users.groups.get(userid) || ' ')[0];
 		let nextGroup = target as GroupSymbol;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {
@@ -1116,7 +1119,7 @@ export const commands: ChatCommands = {
 		if (targetUser && !targetUser.registered) {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
-		Users.setOfflineGroup(name, nextGroup);
+		Users.groups.setGroup(targetUser as User, nextGroup);
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
 			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid, '(demote)');
@@ -1148,13 +1151,12 @@ export const commands: ChatCommands = {
 		const userid = toID(this.targetUsername);
 		const name = targetUser ? targetUser.name : this.targetUsername;
 
-		let currentGroup = Users.usergroups[userid];
-		currentGroup = currentGroup ? currentGroup.charAt(0) : '';
+		const currentGroup = Users.groups.get(userid);
 
 		if (untrust) {
 			if (currentGroup !== Config.groupsranking[0]) return this.errorReply(`User '${name}' is not trusted.`);
 
-			Users.setOfflineGroup(userid, Config.groupsranking[0]);
+			Users.groups.forceGroup(userid, Config.groupsranking[0]);
 			this.sendReply(`User '${name}' is no longer trusted.`);
 			this.privateModAction(`${name} was set to no longer be a trusted user by ${user.name}.`);
 			this.modlog('UNTRUSTUSER', userid);
@@ -1165,7 +1167,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`User '${name}' has a global rank higher than trusted.`);
 			}
 
-			Users.setOfflineGroup(userid, Config.groupsranking[0], true);
+			Users.groups.forceGroup(userid, Config.groupsranking[0]);
 			this.sendReply(`User '${name}' is now trusted.`);
 			this.privateModAction(`${name} was set as a trusted user by ${user.name}.`);
 			this.modlog('TRUSTUSER', userid);
@@ -1199,7 +1201,7 @@ export const commands: ChatCommands = {
 		if (Users.isUsernameKnown(name)) {
 			return this.errorReply("/forcepromote - Don't forcepromote unless you have to.");
 		}
-		Users.setOfflineGroup(name, nextGroup);
+		Users.groups.forceGroup(name as ID, nextGroup);
 
 		this.addModAction(`${name} was promoted to ${(Config.groups[nextGroup].name || "regular user")} by ${user.name}.`);
 		this.modlog(`GLOBAL${(Config.groups[nextGroup].name || "regular").toUpperCase()}`, toID(name));

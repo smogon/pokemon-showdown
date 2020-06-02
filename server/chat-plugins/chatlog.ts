@@ -76,7 +76,7 @@ const LogReader = new class {
 			const room = Rooms.get(roomid);
 			const forceShow = room && (
 				// you are authed in the room
-				(user.id in room.settings.auth && user.can('mute', null, room)) ||
+				(room.auth.get(user.id) && user.can('mute', null, room)) ||
 				// you are staff and currently in the room
 				(isStaff && user.inRooms.has(room.roomid))
 			);

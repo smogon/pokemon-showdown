@@ -44,6 +44,7 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
 import {FS} from '../lib/fs';
+import {GlobalAuth} from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -175,53 +176,15 @@ function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boole
 
 /*********************************************************
  * User groups
- *********************************************************/
+*********************************************************/
+const groups = new GlobalAuth();
 
-const usergroups = Object.create(null);
-function importUsergroups() {
-	// can't just say usergroups = {} because it's exported
-	for (const i in usergroups) delete usergroups[i];
-	return FS('config/usergroups.csv').readIfExists().then(data => {
-		for (const row of data.split("\n")) {
-			if (!row) continue;
-			const cells = row.split(",");
-			usergroups[toID(cells[0])] = (cells[1] || Config.groupsranking[0]) + cells[0];
-		}
-	});
-}
-function exportUsergroups() {
-	let buffer = '';
-	for (const i in usergroups) {
-		buffer += usergroups[i].substr(1).replace(/,/g, '') + ',' + usergroups[i].charAt(0) + "\n";
-	}
-	return FS('config/usergroups.csv').write(buffer);
-}
-void importUsergroups();
-
-function setOfflineGroup(name: string, group: GroupSymbol, forceTrusted?: boolean) {
-	if (!group) throw new Error(`Falsy value passed to setOfflineGroup`);
-	const userid = toID(name);
-	const user = getExactUser(userid);
-	if (user) {
-		user.setGroup(group, forceTrusted);
-		return true;
-	}
-	if (group === Config.groupsranking[0] && !forceTrusted) {
-		delete usergroups[userid];
-	} else {
-		const usergroup = usergroups[userid];
-		name = usergroup ? usergroup.substr(1) : name;
-		usergroups[userid] = group + name;
-	}
-	void exportUsergroups();
-	return true;
-}
 function isUsernameKnown(name: string) {
 	const userid = toID(name);
 	if (Users.get(userid)) return true;
-	if (userid in usergroups) return true;
+	if (groups.has(userid)) return true;
 	for (const room of Rooms.global.chatRooms) {
-		if (userid in room.settings.auth) return true;
+		if (room.auth.has(userid)) return true;
 	}
 	return false;
 }
@@ -229,10 +192,10 @@ function isUsernameKnown(name: string) {
 function isTrusted(name: string | User) {
 	if ((name as User).trusted) return (name as User).trusted;
 	const userid = toID(name);
-	if (userid in usergroups) return userid;
+	if (groups.has(userid)) return userid;
 	for (const room of Rooms.global.chatRooms) {
-		if (!room.settings.isPrivate && !room.isPersonal && room.settings.auth &&
-				userid in room.settings.auth && room.settings.auth[userid] !== '+'
+		if (!room.settings.isPrivate && !room.isPersonal &&
+				room.auth.has(userid) && room.auth.get(userid) !== '+'
 		) {
 			return userid;
 		}
@@ -1092,8 +1055,8 @@ export class User extends Chat.MessageContext {
 			return;
 		}
 		this.registered = true;
-		if (this.id in usergroups) {
-			this.group = usergroups[this.id].charAt(0);
+		if (groups.has(this.id)) {
+			this.group = groups.get(this.id) as GroupSymbol;
 		} else {
 			this.group = Config.groupsranking[0];
 		}
@@ -1106,7 +1069,7 @@ export class User extends Chat.MessageContext {
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!staffRoom?.settings.auth?.[this.id];
+			this.isStaff = !!staffRoom?.auth.get(this.id);
 		}
 		if (this.trusted) {
 			if (this.locked && this.permalocked) {
@@ -1138,20 +1101,20 @@ export class User extends Chat.MessageContext {
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
 			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!(staffRoom?.settings.auth?.[this.id]);
+			this.isStaff = !!(staffRoom?.auth.get(this.id));
 		}
 		if (wasStaff !== this.isStaff) this.update('isStaff');
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
 			if (forceTrusted || this.group !== Config.groupsranking[0]) {
-				usergroups[this.id] = this.group + this.name;
+				groups.setGroup(this, this.group);
 				this.trusted = this.id;
 				this.autoconfirmed = this.id;
 			} else {
-				delete usergroups[this.id];
+				groups.delete(this.id);
+				groups.save();
 				this.trusted = '';
 			}
-			void exportUsergroups();
 		}
 	}
 	/**
@@ -1162,15 +1125,15 @@ export class User extends Chat.MessageContext {
 		if (!this.trusted) return;
 		const userid = this.trusted;
 		const removed = [];
-		if (usergroups[userid]) {
-			removed.push(usergroups[userid].charAt(0));
+		if (groups.has(userid)) {
+			removed.push(groups.get(userid));
 		}
 		for (const room of Rooms.global.chatRooms) {
 			if (!room.settings.isPrivate &&
-					userid in room.settings.auth && room.settings.auth[userid] !== '+'
+					room.auth.has(userid) && room.auth.get(userid) !== '+'
 			) {
-				removed.push(room.settings.auth[userid] + room.roomid);
-				room.settings.auth[userid] = '+';
+				removed.push(room.auth.get(userid) + room.roomid);
+				room.auth.forceGroup(userid, '+');
 			}
 		}
 		this.trusted = '';
@@ -1668,7 +1631,7 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
 	const maxLineCount = user.isStaff ||
-		(room.settings.auth && room.settings.auth[user.id] && room.settings.auth[user.id] !== '+') ?
+		(room.auth.get(user.id) !== '+' && room.auth.get(user.id)! in Config.groups) ?
 		THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN;
 	if (lines.length > maxLineCount) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
@@ -1703,11 +1666,9 @@ export const Users = {
 	get: getUser,
 	getExact: getExactUser,
 	findUsers,
-	usergroups,
-	setOfflineGroup,
+	groups,
 	isUsernameKnown,
 	isTrusted,
-	importUsergroups,
 	PLAYER_SYMBOL,
 	HOST_SYMBOL,
 	connections,

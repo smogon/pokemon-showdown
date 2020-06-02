@@ -665,7 +665,7 @@ export const commands: ChatCommands = {
 		});
 		if (targetRoom) {
 			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
-			targetRoom.settings.auth[user.id] = parent ? '#' : Users.HOST_SYMBOL;
+			targetRoom.auth.setGroup(user, parent ? '#' : Users.HOST_SYMBOL);
 			// Join after creating room. No other response is given.
 			user.joinRoom(targetRoom.roomid);
 			user.popup(`You've just made a groupchat; it is now your responsibility, regardless of whether or not you actively partake in the room. For more info, read your groupchat's staff intro.`);
