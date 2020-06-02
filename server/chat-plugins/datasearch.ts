@@ -304,9 +304,18 @@ export const commands: ChatCommands = {
 	'!itemsearch': true,
 	isearch: 'itemsearch',
 	is: 'itemsearch',
+	is2: 'itemsearch',
+	is3: 'itemsearch',
+	is4: 'itemsearch',
+	is5: 'itemsearch',
+	is6: 'itemsearch',
+	is7: 'itemsearch',
+	is8: 'itemsearch',
 	itemsearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help itemsearch');
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen) target += ` maxgen${targetGen}`;
 
 		return runSearch({
 			tar: target,
@@ -327,12 +336,14 @@ export const commands: ChatCommands = {
 			this.update();
 		});
 	},
-	itemsearchhelp: [
-		`/itemsearch [item description] - finds items that match the given key words.`,
-		`Command accepts natural language. (tip: fewer words tend to work better)`,
-		`Searches with "fling" in them will find items with the specified Fling behavior.`,
-		`Searches with "natural gift" in them will find items with the specified Natural Gift behavior.`,
-	],
+	itemsearchhelp() {
+		this.sendReplyBox(
+			`<code>/itemsearch [item description]</code>: finds items that match the given keywords.<br/>` +
+			`This command accepts natural language. (tip: fewer words tend to work better)<br/>` +
+			`The <code>gen</code> keyword can be used to search for items introduced in a given generation; e.g., <code>/is gen4</code> searches for items introduced in Generation 4.<br/>` +
+			`To search for items within a generation, append the generation to <code>/is</code> or use the <code>maxgen</code> keyword; e.g., <code>/is4 Water-type</code> or <code>/is maxgen4 Water-type</code> searches for items whose Generation 4 description includes "Water-type".`
+		);
+	},
 
 	'!abilitysearch': true,
 	asearch: 'abilitysearch',
@@ -1778,6 +1789,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 function runItemsearch(target: string, cmd: string, canAll: boolean, message: string) {
 	let showAll = false;
+	let maxGen = 0;
+	let gen = 0;
 
 	target = target.trim();
 	const lastCommaIndex = target.lastIndexOf(',');
@@ -1796,6 +1809,17 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	// Refine searched words
 	for (const [i, search] of rawSearch.entries()) {
 		let newWord = search.trim();
+		if (newWord.substr(0, 6) === 'maxgen' && parseInt(newWord[6])) {
+			if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
+			maxGen = parseInt(newWord[6]);
+			if (maxGen < 2 || maxGen > 8) return {error: "The generation must be between 2 and 8"};
+			continue;
+		} else if (newWord.substr(0, 3) === 'gen' && parseInt(newWord[3])) {
+			if (gen) return {error: "You cannot specify 'gen' multiple times."};
+			gen = parseInt(newWord[3]);
+			if (gen < 2 || gen > 8) return {error: "The generation must be between 2 and 8"};
+			continue;
+		}
 		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
 		switch (newWord) {
 		// Words that don't really help identify item removed to speed up search
@@ -1860,7 +1884,11 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		searchedWords.push(newWord);
 	}
 
-	if (searchedWords.length === 0) return {error: "No distinguishing words were used. Try a more specific search."};
+	if (searchedWords.length === 0 && !gen && !maxGen) {
+		return {error: "No distinguishing words were used. Try a more specific search."};
+	}
+
+	const dex = maxGen ? Dex.mod("gen" + maxGen) : Dex;
 	if (searchedWords.includes('fling')) {
 		let basePower = 0;
 		let effect;
@@ -1893,9 +1921,9 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 		}
 
-		for (const n in Dex.data.Items) {
-			const item = Dex.getItem(n);
-			if (!item.fling) continue;
+		for (const n in dex.data.Items) {
+			const item = dex.getItem(n);
+			if (!item.fling || (gen && item.gen !== gen) || (maxGen && item.gen <= maxGen)) continue;
 
 			if (basePower && effect) {
 				if (item.fling.basePower === basePower &&
@@ -1913,7 +1941,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 
 		for (let word of searchedWords) {
 			word = word.charAt(0).toUpperCase() + word.slice(1);
-			if (word in Dex.data.TypeChart) {
+			if (word in dex.data.TypeChart) {
 				if (type) return {error: "Only specify natural gift type once."};
 				type = word;
 			} else {
@@ -1925,9 +1953,9 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 		}
 
-		for (const n in Dex.data.Items) {
-			const item = Dex.getItem(n);
-			if (!item.isBerry || !item.naturalGift) continue;
+		for (const n in dex.data.Items) {
+			const item = dex.getItem(n);
+			if (!item.isBerry || !item.naturalGift || (gen && item.gen !== gen) || (maxGen && item.gen <= maxGen)) continue;
 
 			if (basePower && type) {
 				if (item.naturalGift.basePower === basePower && item.naturalGift.type === type) foundItems.push(item.name);
@@ -1942,8 +1970,8 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		}
 	} else {
 		let bestMatched = 0;
-		for (const n in Dex.data.Items) {
-			const item = Dex.getItem(n);
+		for (const n in dex.data.Items) {
+			const item = dex.getItem(n);
 			let matched = 0;
 			// splits words in the description into a toID()-esk format except retaining / and . in numbers
 			let descWords = item.desc || '';
@@ -1960,7 +1988,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 				if (descWordsArray.includes(word)) matched++;
 			}
 
-			if (matched >= (searchedWords.length * 3 / 5)) {
+			if (matched >= (searchedWords.length * 3 / 5) && (!maxGen || item.gen <= maxGen) && (!gen || item.gen === gen)) {
 				if (matched === bestMatched) {
 					foundItems.push(item.name);
 				} else if (matched > bestMatched) {
@@ -2013,13 +2041,15 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 
 	for (const [i, search] of rawSearch.entries()) {
 		let newWord = search.trim();
-		if (newWord.substr(0, 6) === 'maxgen') {
+		if (newWord.substr(0, 6) === 'maxgen' && parseInt(newWord[6])) {
+			if (maxGen) return {error: "You cannot specify 'maxgen' multiple times."};
 			maxGen = parseInt(newWord[6]);
-			if (!maxGen || maxGen < 3 || maxGen > 8) return {error: "The generation must be between 3 and 8"};
+			if (maxGen < 3 || maxGen > 8) return {error: "The generation must be between 3 and 8"};
 			continue;
-		} else if (newWord.substr(0, 3) === 'gen') {
+		} else if (newWord.substr(0, 3) === 'gen' && parseInt(newWord[3])) {
+			if (gen) return {error: "You cannot specify 'gen' multiple times."};
 			gen = parseInt(newWord[3]);
-			if (!gen || gen < 3 || gen > 8) return {error: "The generation must be between 3 and 8"};
+			if (gen < 3 || gen > 8) return {error: "The generation must be between 3 and 8"};
 			continue;
 		}
 		if (isNaN(parseFloat(newWord))) newWord = newWord.replace('.', '');
@@ -2077,6 +2107,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	if (searchedWords.length === 0 && !gen && !maxGen) {
 		return {error: "No distinguishing words were used. Try a more specific search."};
 	}
+
 	let bestMatched = 0;
 	const dex = maxGen ? Dex.mod("gen" + maxGen) : Dex;
 	for (const n in dex.data.Abilities) {
