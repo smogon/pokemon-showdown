@@ -301,7 +301,7 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		},
 		onStart() {
 			// @ts-ignore
-			this.format.teamLength = {battle: 1};
+			if (this.format.gameType === 'singles') this.format.teamLength = {battle: 1};
 		},
 	},
 	twovstwo: {
