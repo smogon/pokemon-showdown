@@ -2351,7 +2351,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 	},
 	pikachu: {
 		learnset: {
-			agility: ["8M", "8L24", "8V", "7L45", "7V", "6S41", "6L37", "5L37", "4L34", "3L33", "3S8", "3S0"],
+			agility: ["8M", "8L24", "8V", "7L45", "7V", "6L37", "6S41", "5L37", "4L34", "3L33", "3S8", "3S0"],
 			attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			bestow: ["7S44", "6S42"],
 			bide: ["7V"],
@@ -75994,7 +75994,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 	stratagem: {
 		learnset: {
 			accelerock: ["8L21", "7L21"],
-			acupressure: ["7L26", "4L20", "8L26"],
+			acupressure: ["8L26", "7L26", "4L20"],
 			aerialace: ["7M", "4M"],
 			ancientpower: ["8L30", "7L30", "4T"],
 			bulldoze: ["8M", "7M"],
@@ -76477,7 +76477,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			confide: ["7M"],
 			confuseray: ["8L1", "7L11", "4L11"],
 			copycat: ["8L39", "7L39", "4L39"],
-			counter: ["8E", "8L33", "7L33", "7E", "4L33", "4E"],
+			counter: ["8L33", "8E", "7L33", "7E", "4L33", "4E"],
 			cut: ["6M", "5M", "4M"],
 			discharge: ["8L51", "7M", "7L51", "4L51"],
 			dive: ["8M", "6M", "4T"],
@@ -76516,7 +76516,7 @@ export const BattleLearnsets: {[speciesid: string]: LearnsetData} = {
 			mefirst: ["7E", "4E"],
 			metronome: ["8M", "7E", "4E"],
 			mindreader: ["8L46", "7E", "4E"],
-			mirrorcoat: ["8E", "8L24", "7L24", "7E", "4L24", "4E"],
+			mirrorcoat: ["8L24", "8E", "7L24", "7E", "4L24", "4E"],
 			muddywater: ["8M", "8L68", "7L68", "4L68"],
 			naturalgift: ["4M"],
 			payback: ["8M", "7M", "4M"],

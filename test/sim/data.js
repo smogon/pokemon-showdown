@@ -154,9 +154,24 @@ describe('Dex data', function () {
 				// FIXME: too messy to fix now, will fix later
 				if (speciesid === 'zygarde') continue;
 
+				let prevLearnedGen = 10;
+				let prevLearnedTypeIndex = -1;
+				const LEARN_ORDER = 'MTLREDSVC';
 				for (const learned of entry.learnset[moveid]) {
 					// See the definition of MoveSource in sim/global-types
-					assert(/^[1-8][LMTRESDVC]/.test(learned), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid`);
+					assert(/^[1-8][MTLREDSVC]/.test(learned), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid`);
+
+					// the move validator uses early exits, so this isn't purely a consistency thing
+					// MTL must be before REDSVC, and generations must be ordered newest to oldest
+					const learnedGen = parseInt(learned.charAt(0));
+					const learnedTypeIndex = LEARN_ORDER.indexOf(learned.charAt(1));
+					assert(learnedGen <= prevLearnedGen, `Learn method "${learned}" for ${species.name}'s ${move.name} should be in order from newest to oldest gen`);
+					if (learnedGen === prevLearnedGen) {
+						assert(learnedTypeIndex >= prevLearnedTypeIndex, `Learn method "${learned}" for ${species.name}'s ${move.name} should be in MTLREDSVC order`);
+					}
+					prevLearnedGen = learnedGen;
+					prevLearnedTypeIndex = learnedTypeIndex;
+
 					switch (learned.charAt(1)) {
 					case 'L':
 						assert(/^[0-9]+$/.test(learned.slice(2)), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid: a level-up move should have the level`);
