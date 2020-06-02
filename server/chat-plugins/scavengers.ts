@@ -760,7 +760,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		this.completed.push(result);
 		const place = formatOrder(this.completed.length);
 
-		this.runEvent('ConfirmCompletion', player, time, blitz)
+		this.runEvent('ConfirmCompletion', player, time, blitz);
 		this.announce(Chat.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
 
 		player.destroy(); // remove from user.games;
@@ -1142,10 +1142,10 @@ const ScavengerCommands: ChatCommands = {
 
 			room.scavgame = game;
 
-			this.privateModAction(`(A ${room.scavgame.name} has been created by ${user.name}.)`);
+			this.privateModAction(`(A ${game.name} has been created by ${user.name}.)`);
 			this.modlog('SCAVENGER', null, 'ended the scavenger game');
 
-			room.scavgame.announce(`A game of ${room.scavgame.name} has been started!`);
+			game.announce(`A game of ${game.name} has been started!`);
 		},
 
 		end(target, room, user) {
@@ -1209,6 +1209,7 @@ const ScavengerCommands: ChatCommands = {
 		},
 	},
 	teamscavs: {
+		addteam: 'createteam',
 		createteam(target, room, user) {
 			if (!this.can('mute', null, room)) return false;
 			// if (room.getGame(ScavengerHunt)) return this.errorReply('Teams cannot be modified after the hunt starts.');
@@ -1227,6 +1228,20 @@ const ScavengerCommands: ChatCommands = {
 			game.announce(Chat.html`A new team "${teamName}" has been created with ${leaderUser.name} as the leader.`);
 		},
 
+		deleteteam: 'removeteam',
+		removeteam(target, room, user) {
+			if (!this.can('mute', null, room)) return false;
+			// if (room.getGame(ScavengerHunt)) return this.errorReply('Teams cannot be modified after the hunt starts.');
+
+			const game = room.scavgame;
+			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
+
+			if (!game.teams[target]) return this.errorReply(`The team ${target} does not exist.`);
+
+			delete game.teams[target];
+			game.announce(Chat.html`The team "${target}" has been removed.`);
+		},
+
 		addplayer(target, room, user) {
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
@@ -1234,7 +1249,7 @@ const ScavengerCommands: ChatCommands = {
 
 			let userTeam;
 
-			for (let teamID in game.teams) {
+			for (const teamID in game.teams) {
 				const team = game.teams[teamID];
 				if (team.players[0] === user.id) {
 					userTeam = team;
@@ -1242,8 +1257,8 @@ const ScavengerCommands: ChatCommands = {
 				}
 			}
 			if (!userTeam) return this.errorReply('You must be the leader of a team to add people into the team.');
-			
-			const targetUsers = target.split(',').map(id => Users.get(id)).filter(u => u?.connected) as User[];
+
+			const targetUsers = target.split(',').map(id => Users.getExact(id)).filter(u => u?.connected) as User[];
 			if (!targetUsers.length) return this.errorReply('Please select a user that is currently online.');
 
 			const errors = [];
@@ -1251,7 +1266,7 @@ const ScavengerCommands: ChatCommands = {
 				if (game.getPlayerTeam(targetUser)) errors.push(`${targetUser.name} is already in a team.`);
 			}
 			if (errors.length) return this.sendReplyBox(errors.join('<br />'));
-			
+
 			const playerIDs = targetUsers.map(u => u.id);
 			userTeam.players.push(...playerIDs);
 
@@ -1261,16 +1276,64 @@ const ScavengerCommands: ChatCommands = {
 			game.announce(Chat.html`${Chat.toListString(targetUsers.map(u => u.name))} ${targetUsers.length > 1 ? 'have' : 'has'} been added into ${userTeam.name}.`);
 		},
 
+		editplayers(target, room, user) {
+			const game = room.scavgame;
+			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
+			if (!this.can('mute', null, room)) return false;
+			// if (room.getGame(ScavengerHunt)) return this.errorReply('Teams cannot be modified after the hunt starts.');
+
+			const parts = target.split(',');
+			const teamName = parts[0].trim();
+			const playerchanges = parts.slice(1);
+
+			const team = game.teams[teamName];
+
+			if (!team) return this.errorReply('Invalid team.');
+
+			for (const entry of playerchanges) {
+				const userid = toID(entry);
+				if (entry.trim().startsWith('-')) {
+					// remove from the team
+					if (!team.players.includes(userid)) {
+						this.errorReply(`User "${userid}" is not in team "${team.name}."`);
+						continue;
+					} else if (team.players[0] === userid) {
+						this.errorReply(`You cannot remove "${userid}", who is the leader of "${team.name}".`);
+						continue;
+					}
+					team.players = team.players.filter((u: string) => u !== userid);
+					game.announce(`${userid} was removed from "${team.name}."`);
+				} else {
+					const targetUser = Users.getExact(userid);
+					if (!targetUser || !targetUser.connected) {
+						this.errorReply(`User "${userid}" is not currently online.`);
+						continue;
+					}
+
+					const targetUserTeam = game.getPlayerTeam(targetUser);
+					if (team.players.includes(userid)) {
+						this.errorReply(`User "${userid}" is already part of "${team.name}."`);
+						continue;
+					} else if (targetUserTeam) {
+						this.errorReply(`User "${userid}" is already part of another team - "${targetUserTeam.name}".`);
+						continue;
+					}
+					team.players.push(userid);
+					game.announce(`${targetUser.name} was added to "${team.name}."`);
+				}
+			}
+		},
+
 		teams(target, room, user) {
 			if (!this.runBroadcast()) return false;
 
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
 
-			let display = [];
-			for (let teamID in game.teams) {
+			const display = [];
+			for (const teamID in game.teams) {
 				const team = game.teams[teamID];
-				display.push(Chat.html`<strong>${team.name}</strong> - <strong>${team.players[0]}</strong>${team.players.length > 1 ? ', ' + team.players.slice(1).join(', ') : ''}<br />`);
+				display.push(Chat.html`<strong>${team.name}</strong> - <strong>${team.players[0]}</strong>${team.players.length > 1 ? ', ' + team.players.slice(1).join(', ') : ''}`);
 			}
 
 			this.sendReplyBox(display.join('<br />'));
@@ -1287,7 +1350,7 @@ const ScavengerCommands: ChatCommands = {
 		},
 
 		chat: 'note',
-		note(target, room, user){
+		note(target, room, user) {
 			const game = room.scavgame;
 			if (!game || game.id !== 'teamscavs') return this.errorReply('There is currently no game of Team Scavs going on.');
 
@@ -1297,8 +1360,17 @@ const ScavengerCommands: ChatCommands = {
 			if (!target) return this.errorReply('Please include a message as the note.');
 
 			game.teamAnnounce(user, Chat.html`<strong> Note from ${user.name}:</strong> ${target}`);
-		}
+		},
 	},
+	teamscavshelp: [
+		'/tscav createteam [team name], [leader name] - creates a new team for the current Team Scavs game. (Requires: % @ * # & ~)',
+		'/tscav deleteteam [team name] - deletes an existing team for the current Team Scavs game. (Requires: % @ * # & ~)',
+		'/tscav addplayer [user] - allows a team leader to add a player onto their team.',
+		'/tscav editplayers [team name], [added user | -removed user], [...] (use - preceding a user\'s name to remove a user) - Edits the players within an existing team. (Requires: % @ * # & ~)',
+		'/tscav teams - views the list of teams and the players on each team.',
+		'/tsav guesses - views the list of guesses already submitted by your team for the current question.',
+		'/tscav chat [message] - adds a message that can be seen by all of your teammates in the Team Scavs game.',
+	],
 
 	/**
 	 * Creation / Moderation commands
@@ -2389,6 +2461,7 @@ export const commands: ChatCommands = {
 	scavengers: ScavengerCommands,
 	tscav: 'teamscavs',
 	teamscavs: ScavengerCommands.teamscavs,
+	teamscavshelp: ScavengerCommands.teamscavshelp,
 
 	// old game aliases
 	scavenge: ScavengerCommands.guess,
