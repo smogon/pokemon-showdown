@@ -53,7 +53,7 @@ export const commands: ChatCommands = {
 			}
 			if (!this.runBroadcast()) return;
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
-			buff += '<th>Event Name:</th>' + getAllAliases(room) ? '<th>Event Aliases:</th>' : "" + '<th>Event Description:</th><th>Event Date:</th>';
+			buff += '<th>Event Name:</th>' + getAllAliases(room).length ? '<th>Event Aliases:</th>' : "" + '<th>Event Description:</th><th>Event Date:</th>';
 			for (const i in room.events) {
 				buff += formatEvent(room.events[i]);
 			}
