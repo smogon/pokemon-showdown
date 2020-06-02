@@ -969,7 +969,7 @@ export const commands: ChatCommands = {
 		}
 		user.lastCommand = '';
 		let count = 0;
-		for (const [userid, rank] of room.auth.entries()) {
+		for (const [userid] of room.auth.entries()) {
 			if (room.auth.get(userid) === '+') {
 				room.auth.delete(userid);
 				if (userid in room.users) room.users[userid].updateIdentity(room.roomid);

@@ -395,7 +395,7 @@ export abstract class BasicRoom {
 		if (this.auth.has(user.id)) {
 			// room has roomauth
 			// authority is whichever is higher between roomauth and global auth
-			const roomGroup = this.auth.get(user.id) as GroupSymbol;
+			const roomGroup = this.auth.get(user.id)!;
 			let greaterGroup = Config.greatergroupscache[`${roomGroup}${globalGroup}`];
 			if (!greaterGroup) {
 				// unrecognized groups always trump higher global rank
@@ -1222,6 +1222,8 @@ export class BasicChatRoom extends BasicRoom {
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
+
+		this.auth = new RoomAuth(this);
 	}
 
 	/**
