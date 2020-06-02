@@ -25,9 +25,9 @@ interface GameMode {
 	mod: Twist;
 	round?: number;
 	leaderboard?: true;
-	teamAnnounce?: GameModeFunction,
-	getPlayerTeam?: GameModeFunction,
-	advanceTeam?: GameModeFunction,
+	teamAnnounce?: GameModeFunction;
+	getPlayerTeam?: GameModeFunction;
+	advanceTeam?: GameModeFunction;
 	[k: string]: any;
 }
 
@@ -346,6 +346,7 @@ const MODES: {[k: string]: GameMode | string} = {
 		playerlist: null,
 	},
 
+	pr: 'pointrally',
 	pointrally: {
 		name: 'Point Rally',
 		id: 'pointrally',
@@ -378,6 +379,8 @@ const MODES: {[k: string]: GameMode | string} = {
 		leaderboard: true,
 	},
 
+	js: 'jumpstart',
+	jump: 'jumpstart',
 	jumpstart: {
 		name: 'Jump Start',
 		id: 'jumpstart',
@@ -471,13 +474,23 @@ const MODES: {[k: string]: GameMode | string} = {
 		},
 	},
 
+	ts: 'teamscavs',
+	tscav: 'teamscavs',
 	teamscavs: {
 		name: 'Team Scavs',
 		id: 'teamscavs',
-		teams: {}, // {[team_name: string]: {name: string[], players: UserID[], answers: string[], question: number, completed: boolean}}
+		/* {
+			[team_name: string]: {
+			  name: string[],
+			  players: UserID[],
+			  answers: string[],
+			  question: number,
+			  completed: boolean
+			}
+		  } */
+		teams: {},
 
 		teamAnnounce(player: ScavengerHuntPlayer | User, message: string) {
-			const game = this.room.scavgame!;
 			const team = this.getPlayerTeam(player);
 
 			for (const userid of team.players) {
@@ -502,12 +515,11 @@ const MODES: {[k: string]: GameMode | string} = {
 		advanceTeam(answerer: ScavengerHuntPlayer, isFinished?: boolean) {
 			const hunt = this.room.getGame(ScavengerHunt)!;
 
-			const game = this.room.scavgame!;
 			const team = this.getPlayerTeam(answerer);
 
 			team.question++;
 			const question = hunt.getQuestion(team.question);
-			for (const userid of team.players) {				
+			for (const userid of team.players) {
 				const user = Users.getExact(userid);
 				if (!user) continue;
 
@@ -515,7 +527,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			}
 			team.answers = [];
 		},
-		
+
 		mod: {
 			name: 'Team Scavs',
 			id: 'teamscavs',
@@ -528,7 +540,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			onViewHunt(user) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(user);
-				const player = this.playerTable[user.userid];
+				const player = this.playerTable[user.id];
 
 				if (!player || !team) return;
 
@@ -569,7 +581,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			onAfterLoadPriority: -9999,
 			onAfterLoad() {
 				const game = this.room.scavgame!;
-				
+
 				if (Object.keys(game.teams).length === 0) {
 					this.announce('Teams have not been set up yet.  Please reset the hunt.');
 				}
@@ -581,29 +593,32 @@ const MODES: {[k: string]: GameMode | string} = {
 				const game = this.room.scavgame!;
 
 				if (player.currentQuestion + 1 < this.questions.length) {
-					game.teamAnnounce(player, `<strong>${player.name}</strong> has gotten the correct answer (${value}) for question #${player.currentQuestion + 1}.`);
+					game.teamAnnounce(
+						player,
+						Chat.html`<strong>${player.name}</strong> has gotten the correct answer (${value}) for question #${player.currentQuestion + 1}.`
+					);
 					game.advanceTeam(player);
 
 					return false;
 				}
 			},
-			
+
 			onAnySubmit(player, value) {
 				const game = this.room.scavgame!;
-				
+
 				const team = game.getPlayerTeam(player)!;
 				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
 				if (team.completed) player.completed = true;
-				
+
 				if (player.completed) return;
 
 				if (team.answers.includes(value)) return;
-				game.teamAnnounce(player, `${player.name} has guessed "${value}".`);
-				team.answers.push(value)
+				game.teamAnnounce(player, Chat.html`${player.name} has guessed "${value}".`);
+				team.answers.push(value);
 			},
 
 			onCompletePriority: 2,
-			onComplete: function(player, time, blitz) {
+			onComplete(player, time, blitz) {
 				const game = this.room.scavgame!;
 
 				const team = game.getPlayerTeam(player);
@@ -617,14 +632,15 @@ const MODES: {[k: string]: GameMode | string} = {
 				team.completed = true;
 				team.question++;
 
-				game.teamAnnounce(player, Chat.html`<strong>${player.name}</strong> has gotten the correct answer for question #${player.currentQuestion}.  Your team has completed the hunt!`);
+				game.teamAnnounce(
+					player,
+					Chat.html`<strong>${player.name}</strong> has gotten the correct answer for question #${player.currentQuestion}.  Your team has completed the hunt!`
+				);
 			},
 
 			onEnd(reset) {
 				const game = this.room.scavgame!;
-				if (!reset) {
-					game.destroy();
-				} else {
+				if (reset) {
 					for (const teamID in game.teams) {
 						const team = game.teams[teamID];
 						team.answers = [];
