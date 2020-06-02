@@ -153,9 +153,6 @@ export class RoomGame {
 			player.id = user.id;
 			player.name = user.name;
 			this.playerTable[player.id] = player;
-			if (!this.room.settings.auth) {
-				this.room.settings.auth = {};
-			}
 			this.room.settings.auth[player.id] = Users.PLAYER_SYMBOL;
 		} else {
 			player.unlinkUser();

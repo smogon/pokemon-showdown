@@ -1729,7 +1729,7 @@ const ScavengerCommands: ChatCommands = {
 		const ladder = await Leaderboard.visualize('points') as AnyObject[];
 		this.sendReply(
 			`|uhtml${isChange ? 'change' : ''}|scavladder|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
-				const isStaff = room.settings.auth && room.settings.auth[toID(entry.name)];
+				const isStaff = room.settings.auth[toID(entry.name)];
 				if (isStaff && hideStaff) return '';
 				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Chat.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Chat.escapeHTML(entry.name)}</strong>` : Chat.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
 			}).join('')}</table></div>` +
@@ -1835,7 +1835,7 @@ const ScavengerCommands: ChatCommands = {
 		this.modlog('SCAV SETHOSTPOINTS', null, `${points}`);
 
 		// double modnote in scavs room if it is a subroomgroupchat
-		if (room.parent && !room.settings) {
+		if (room.parent && !room.settings.persistSettings) {
 			scavsRoom.modlog(`(scavengers) SCAV SETHOSTPOINTS: [room: ${room.roomid}] by ${user.id}: ${points}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.roomid}>>)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.roomid}>>)`);
@@ -1990,9 +1990,9 @@ const ScavengerCommands: ChatCommands = {
 			data.map((entry: AnyObject) => {
 				const userid = toID(entry.name);
 
-				const auth = room.settings.auth && room.settings.auth[userid] ? room.settings.auth[userid] :
+				const auth = room.settings.auth[userid] ? room.settings.auth[userid] :
 					Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
-				const color = room.settings.auth && userid in room.settings.auth ? 'inherit' : 'gray';
+				const color = userid in room.settings.auth ? 'inherit' : 'gray';
 
 				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
 					`<td style="text-align: right;">${(entry.points || 0)}</td>` +
@@ -2042,9 +2042,9 @@ const ScavengerCommands: ChatCommands = {
 			formattedData.map(entry => {
 				const userid = toID(entry.name);
 
-				const auth = room.settings.auth && room.settings.auth[userid] ? room.settings.auth[userid] :
+				const auth = room.settings.auth[userid] ? room.settings.auth[userid] :
 					Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
-				const color = room.settings.auth && userid in room.settings.auth ? 'inherit' : 'gray';
+				const color = userid in room.settings.auth ? 'inherit' : 'gray';
 
 				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
 					`<td style="text-align: right;">${(entry.finish || 0)} <span style="color: blue">(${(entry['cumulative-finish'] || 0)})</span>${(entry['history-finish'] ? `<br /><span style="color: gray">(History: ${entry['history-finish'].join(', ')})</span>` : '')}</td>` +

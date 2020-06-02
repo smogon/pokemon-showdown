@@ -221,7 +221,6 @@ function isUsernameKnown(name: string) {
 	if (Users.get(userid)) return true;
 	if (userid in usergroups) return true;
 	for (const room of Rooms.global.chatRooms) {
-		if (!room.settings.auth) continue;
 		if (userid in room.settings.auth) return true;
 	}
 	return false;
@@ -956,7 +955,7 @@ export class User extends Chat.MessageContext {
 		const named = this.named ? 1 : 0;
 		const diff: AnyObject = {};
 		const settings = updated.length ? updated : SETTINGS;
-		for (const setting of settings) {
+		for (const setting of settings.persistSettings) {
 			diff[setting] = this[setting];
 		}
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
@@ -1167,7 +1166,7 @@ export class User extends Chat.MessageContext {
 			removed.push(usergroups[userid].charAt(0));
 		}
 		for (const room of Rooms.global.chatRooms) {
-			if (!room.settings.isPrivate && room.settings.auth &&
+			if (!room.settings.isPrivate &&
 					userid in room.settings.auth && room.settings.auth[userid] !== '+'
 			) {
 				removed.push(room.settings.auth[userid] + room.roomid);

@@ -937,7 +937,7 @@ export const commands: ChatCommands = {
 	officialchatroom: 'officialroom',
 	officialroom(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (!room.settings) {
+		if (!room.settings.persistSettings) {
 			return this.errorReply(`/officialroom - This room can't be made official`);
 		}
 		if (this.meansNo(target)) {
@@ -959,7 +959,7 @@ export const commands: ChatCommands = {
 
 	psplwinnerroom(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (!room.settings) {
+		if (!room.settings.persistSettings) {
 			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room`);
 		}
 		if (this.meansNo(target)) {
@@ -1033,7 +1033,7 @@ export const commands: ChatCommands = {
 	desubroom: 'unsubroom',
 	unsubroom(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (!room.parent || !room.settings) {
+		if (!room.parent || !room.settings.persistSettings) {
 			return this.errorReply(`This room is not currently a subroom of a public room.`);
 		}
 

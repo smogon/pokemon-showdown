@@ -1577,7 +1577,7 @@ export const commands: ChatCommands = {
 					return this.errorReply("Tournaments are already enabled for @ and above in this room.");
 				}
 				room.settings.toursEnabled = true;
-				if (room.settings) {
+				if (room.settings.persistSettings) {
 					room.settings.toursEnabled = true;
 					room.saveSettings();
 				}
@@ -1587,7 +1587,7 @@ export const commands: ChatCommands = {
 					return this.errorReply("Tournaments are already enabled for % and above in this room.");
 				}
 				room.settings.toursEnabled = rank;
-				if (room.settings) {
+				if (room.settings.persistSettings) {
 					room.settings.toursEnabled = rank;
 					room.saveSettings();
 				}
@@ -1601,7 +1601,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Tournaments are already disabled.");
 			}
 			room.settings.toursEnabled = false;
-			if (room.settings) {
+			if (room.settings.persistSettings) {
 				room.settings.toursEnabled = false;
 				room.saveSettings();
 			}

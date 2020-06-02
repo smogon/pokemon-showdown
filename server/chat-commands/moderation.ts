@@ -1688,7 +1688,7 @@ export const commands: ChatCommands = {
 			if (trusted && room.settings.isPrivate !== true) {
 				Monitor.log(`[CrisisMonitor] Trusted user ${userid}${(trusted !== userid ? ` (${trusted})` : ``)} was nameblacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 			}
-			if (!room.settings.isPrivate && room.settings) {
+			if (!room.settings.isPrivate && room.settings.persistSettings) {
 				this.globalModlog("NAMEBLACKLIST", userid, ` by ${user.id}${(reason ? `: ${reason}` : '')}`);
 			}
 		}
@@ -1711,7 +1711,7 @@ export const commands: ChatCommands = {
 
 		if (name) {
 			this.privateModAction(`(${name} was unblacklisted by ${user.name}.)`);
-			if (!room.settings.isPrivate && room.settings) {
+			if (!room.settings.isPrivate && room.settings.persistSettings) {
 				this.globalModlog("UNBLACKLIST", name, ` by ${user.id}`);
 			}
 		} else {

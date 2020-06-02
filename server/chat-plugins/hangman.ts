@@ -272,7 +272,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Hangman is already disabled.");
 			}
 			room.settings.hangmanDisabled = true;
-			if (room.settings) {
+			if (room.settings.persistSettings) {
 				room.settings.hangmanDisabled = true;
 				room.saveSettings();
 			}
@@ -285,7 +285,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Hangman is already enabled.");
 			}
 			delete room.settings.hangmanDisabled;
-			if (room.settings) {
+			if (room.settings.persistSettings) {
 				delete room.settings.hangmanDisabled;
 				room.saveSettings();
 			}

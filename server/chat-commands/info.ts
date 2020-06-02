@@ -195,7 +195,7 @@ export const commands: ChatCommands = {
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.game) continue;
 			if ((targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid)) ||
-				curRoom.settings.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
+				curRoom.settings.auth[targetUser.id] === Users.PLAYER_SYMBOL) {
 				if (curRoom.settings.isPrivate && !canViewAlts) {
 					continue;
 				}
