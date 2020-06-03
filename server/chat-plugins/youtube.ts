@@ -274,8 +274,7 @@ export const commands: ChatCommands = {
 			interval = interval * 60 * 1000;
 			YouTube.timer = interval;
 			if (YouTube.interval) clearInterval(YouTube.interval);
-			YouTube.interval =
-			setInterval(() => {
+			YouTube.interval = setInterval(() => {
 				void (async () => {
 					const res = await YouTube.randChannel();
 					if (!res) return this.errorReply(`Error in getting channel data.`);
