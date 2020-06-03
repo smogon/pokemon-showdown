@@ -2419,14 +2419,14 @@ export const commands: ChatCommands = {
 		return this.errorReply(`/showimage has been deprecated - use /show instead.`);
 	},
 
-	requestapproval(target, room, user) {
+	requestshow(target, room, user) {
 		if (!this.canTalk()) return false;
 		if (room.approvalsDisabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals.has(user.id)) return this.errorReply('You have a request pending already.');
-		if (!toID(target)) return this.parse(`/help requestapproval`);
+		if (!toID(target)) return this.parse(`/help requestshow`);
 		if (!/^https?:\/\//.test(target)) target = `http://${Chat.escapeHTML(target)}`;
 		room.pendingApprovals.set(user.id, target);
 		this.sendReply(`You have requested for the link ${target} to be displayed.`);
@@ -2437,7 +2437,7 @@ export const commands: ChatCommands = {
 		);
 		return room.update();
 	},
-	requestapprovalhelp: [`/requestapproval [link], [comment] - Requests permission to show media in the room.`],
+	requestshowhelp: [`/requestshow [link], [comment] - Requests permission to show media in the room.`],
 
 	async approvelink(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
