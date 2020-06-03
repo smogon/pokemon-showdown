@@ -7,24 +7,26 @@
  * @license MIT license
  */
 
-import {ScavengerHunt} from './scavengers';
+import {ScavengerHunt, ScavengerHuntPlayer} from './scavengers';
 
-export type TwistEvent = (
-	this: ScavengerHunt,
-	...args: any[]
-) => void;
+export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
 interface Twist {
 	name: string;
 	id: string;
 	desc?: string;
 	[eventid: string]: string | number | TwistEvent | undefined;
 }
+
+type GameModeFunction = (this: ScavengerGameTemplate, ...args: any[]) => void;
 interface GameMode {
 	name: string;
 	id: string;
 	mod: Twist;
 	round?: number;
 	leaderboard?: true;
+	teamAnnounce?: GameModeFunction;
+	getPlayerTeam?: GameModeFunction;
+	advanceTeam?: GameModeFunction;
 	[k: string]: any;
 }
 
@@ -175,7 +177,7 @@ const TWISTS: {[k: string]: Twist} = {
 				this.runEvent('PreComplete', player);
 
 				player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
-				return false;
+				return true;
 			}
 		},
 
@@ -338,6 +340,7 @@ const MODES: {[k: string]: GameMode | string} = {
 		playerlist: null,
 	},
 
+	pr: 'pointrally',
 	pointrally: {
 		name: 'Point Rally',
 		id: 'pointrally',
@@ -370,6 +373,8 @@ const MODES: {[k: string]: GameMode | string} = {
 		leaderboard: true,
 	},
 
+	js: 'jumpstart',
+	jump: 'jumpstart',
 	jumpstart: {
 		name: 'Jump Start',
 		id: 'jumpstart',
@@ -462,6 +467,183 @@ const MODES: {[k: string]: GameMode | string} = {
 			},
 		},
 	},
+
+	ts: 'teamscavs',
+	tscav: 'teamscavs',
+	teamscavengers: 'teamscavs',
+	teamscavs: {
+		name: 'Team Scavs',
+		id: 'teamscavs',
+		/* {
+			[team_name: string]: {
+			  name: string[],
+			  players: UserID[],
+			  answers: string[],
+			  question: number,
+			  completed: boolean
+			}
+		  } */
+		teams: {},
+
+		teamAnnounce(player: ScavengerHuntPlayer | User, message: string) {
+			const team = this.getPlayerTeam(player);
+
+			for (const userid of team.players) {
+				const user = Users.getExact(userid);
+				if (!user || !user.connected) continue; // user is offline
+
+				user.sendTo(this.room, `|raw|<div class="infobox">${message}</div>`);
+			}
+		},
+
+		getPlayerTeam(player: ScavengerHuntPlayer | User) {
+			const game = this.room.scavgame!;
+			for (const teamID in game.teams) {
+				const team = game.teams[teamID];
+				if (team.players.includes(player.id)) {
+					return team;
+				}
+			}
+			return null;
+		},
+
+		advanceTeam(answerer: ScavengerHuntPlayer, isFinished?: boolean) {
+			const hunt = this.room.getGame(ScavengerHunt)!;
+
+			const team = this.getPlayerTeam(answerer);
+
+			team.question++;
+			const question = hunt.getQuestion(team.question);
+			for (const userid of team.players) {
+				const user = Users.getExact(userid);
+				if (!user) continue;
+
+				user.sendTo(this.room, question);
+			}
+			team.answers = [];
+		},
+
+		mod: {
+			name: 'Team Scavs',
+			id: 'teamscavs',
+
+			onLoad() {
+				// don't let people change their name in the middle of the hunt.
+				this.allowRenames = false;
+			},
+
+			onViewHunt(user) {
+				const game = this.room.scavgame!;
+				const team = game.getPlayerTeam(user);
+				const player = this.playerTable[user.id];
+
+				if (!player || !team) return;
+
+				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
+				if (team.completed) player.completed = true;
+			},
+
+			onSendQuestion(player) {
+				const game = this.room.scavgame!;
+				const team = game.getPlayerTeam(player);
+				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
+				if (team.completed) {
+					player.completed = true;
+					player.sendRoom('Your team has already completed the hunt!');
+					return true;
+				}
+			},
+
+			onConnect(user) {
+				const player = this.playerTable[user.id];
+				if (!player) return;
+
+				const game = this.room.scavgame!;
+				const team = game.getPlayerTeam(player);
+				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
+				if (team.completed) player.completed = true;
+			},
+
+			onJoin(user) {
+				const game = this.room.scavgame!;
+				const team = game.getPlayerTeam(user);
+				if (!team) {
+					user.sendTo(this.room, 'You are not allowed to join this scavenger hunt as you are not on any of the teams.');
+					return true;
+				}
+			},
+
+			onAfterLoadPriority: -9999,
+			onAfterLoad() {
+				const game = this.room.scavgame!;
+
+				if (Object.keys(game.teams).length === 0) {
+					this.announce('Teams have not been set up yet.  Please reset the hunt.');
+				}
+			},
+
+			// -1 so that blind incog takes precedence of this
+			onCorrectAnswerPriority: -1,
+			onCorrectAnswer(player, value) {
+				const game = this.room.scavgame!;
+
+				if (player.currentQuestion + 1 < this.questions.length) {
+					game.teamAnnounce(
+						player,
+						Chat.html`<strong>${player.name}</strong> has gotten the correct answer (${value}) for question #${player.currentQuestion + 1}.`
+					);
+					game.advanceTeam(player);
+
+					return false;
+				}
+			},
+
+			onAnySubmit(player, value) {
+				const game = this.room.scavgame!;
+
+				const team = game.getPlayerTeam(player)!;
+				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
+				if (team.completed) player.completed = true;
+
+				if (player.completed) return;
+
+				if (team.answers.includes(value)) return;
+				game.teamAnnounce(player, Chat.html`${player.name} has guessed "${value}".`);
+				team.answers.push(value);
+			},
+
+			onCompletePriority: 2,
+			onComplete(player, time, blitz) {
+				const game = this.room.scavgame!;
+
+				const team = game.getPlayerTeam(player);
+				return {name: team.name, time, blitz};
+			},
+
+			// workaround that gives the answer after verifying that completion should not be hidden
+			onConfirmCompletion(player, time, blitz) {
+				const game = this.room.scavgame!;
+				const team = game.getPlayerTeam(player);
+				team.completed = true;
+				team.question++;
+
+				game.teamAnnounce(
+					player,
+					Chat.html`<strong>${player.name}</strong> has gotten the correct answer for question #${player.currentQuestion}.  Your team has completed the hunt!`
+				);
+			},
+
+			onEnd() {
+				const game = this.room.scavgame!;
+				for (const teamID in game.teams) {
+					const team = game.teams[teamID];
+					team.answers = [];
+					team.question = 1;
+					team.completed = false;
+				}
+			},
+		},
+	},
 };
 
 export class ScavengerGameTemplate {
@@ -503,7 +685,7 @@ const LoadGame = function (room: ChatRoom | GameRoom, gameid: string) {
 
 	const base = new ScavengerGameTemplate(room);
 
-	const scavgame = Object.assign(base, game);
+	const scavgame = Object.assign(base, Dex.deepClone(game));
 
 	// initialize leaderboard if required
 	if (scavgame.leaderboard) {

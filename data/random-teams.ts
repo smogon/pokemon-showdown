@@ -838,6 +838,9 @@ export class RandomTeams {
 				case 'focusblast':
 					if ((hasMove['superpower'] && counter.setupType !== 'Special') || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
+				case 'hammerarm':
+					if (hasMove['fakeout']) rejected = true;
+					break;
 				case 'poisonjab':
 					if (!hasType['Poison'] && counter.Status >= 2) rejected = true;
 					break;
@@ -914,7 +917,7 @@ export class RandomTeams {
 				case 'haze':
 					if (hasMove['stealthrock'] || movePool.includes('stealthrock') && !teamDetails.stealthRock) rejected = true;
 					break;
-				case 'yawn':
+				case 'hypnosis': case 'yawn':
 					if (hasMove['thunderwave'] || hasMove['toxic']) rejected = true;
 					break;
 				case 'defog':
