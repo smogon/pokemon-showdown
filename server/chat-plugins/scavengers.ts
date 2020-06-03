@@ -649,7 +649,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		};
 		const finalHint = current.number === this.questions.length ? "final " : "";
 
-		const questionDisplay = `|raw|<div class="ladder"><table><tr>` +
+		return `|raw|<div class="ladder"><table><tr>` +
 			`<td><strong style="white-space: nowrap">${finalHint}hint #${current.number}:</strong></td>` +
 			`<td>${
 				Chat.formatText(current.question.hint) +
@@ -660,8 +660,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 					``)
 			}</td>` +
 			`</tr></table></div>`;
-
-		return questionDisplay;
 	}
 
 	onSendQuestion(user: User | ScavengerHuntPlayer, showHints?: boolean) {
@@ -672,25 +670,9 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 		if (this.runEvent('SendQuestion', player, showHints)) return;
 
-		const current = player.getCurrentQuestion();
+		const questionDisplay = this.getquestion(player.getCurrentQuestion().number)
 
-		const finalHint = current.number === this.questions.length ? "final " : "";
-
-		const questionDisplay = `|raw|<div class="ladder"><table><tr>` +
-			`<td><strong style="white-space: nowrap">${finalHint}hint #${current.number}:</strong></td>` +
-			`<td>${
-				Chat.formatText(current.question.hint) +
-				(showHints && current.question.spoilers.length ?
-					`<details><summary>Extra Hints:</summary>${
-						current.question.spoilers.map(p => `- ${p}`).join('<br />')
-					}</details>` :
-					``)
-			}</td>` +
-			`</tr></table></div>`;
-
-		player.sendRoom(
-			questionDisplay
-		);
+		player.sendRoom(questionDisplay);
 		return true;
 	}
 
