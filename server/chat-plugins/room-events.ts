@@ -7,7 +7,10 @@
  * @license MIT license
  */
 
-function formatEvent(event: {eventName: string, date: string, desc: string, started: boolean, aliases: string[]}) {
+function formatEvent(
+	event: {eventName: string, date: string, desc: string, started: boolean, aliases: string[]},
+	showAliases: boolean
+) {
 	const timeRemaining = new Date(event.date).getTime() - new Date().getTime();
 	let explanation = timeRemaining.toString();
 	if (!timeRemaining) explanation = "The time remaining for this event is not available";
@@ -18,7 +21,7 @@ function formatEvent(event: {eventName: string, date: string, desc: string, star
 	}
 	let ret = `<tr title="${explanation}">`;
 	ret += Chat.html`<td>${event.eventName}</td>`;
-	ret += event.aliases.length ? Chat.html`<td>${event.aliases.join(", ")}</td>` : ``;
+	ret += showAliases ? Chat.html`<td>${event.aliases.join(", ")}</td>` : ``;
 	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
 	ret += Chat.html`<td><time>${event.date}</time></td></tr>`;
 	return ret;
@@ -52,10 +55,12 @@ export const commands: ChatCommands = {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 			if (!this.runBroadcast()) return;
+			const hasAliases = toID(getAllAliases(room)).length > 0;
+
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
-			buff += `<th>Event Name:</th>${getAllAliases(room).length ? `<th>Event Aliases:</th>` : ``}<th>Event Description:</th><th>Event Date:</th>`;
+			buff += `<th>Event Name:</th>${hasAliases ? `<th>Event Aliases:</th>` : ``}<th>Event Description:</th><th>Event Date:</th>`;
 			for (const i in room.events) {
-				buff += formatEvent(room.events[i]);
+				buff += formatEvent(room.events[i], hasAliases);
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
@@ -191,7 +196,8 @@ export const commands: ChatCommands = {
 			const event = room.events[getEventID(target, room)];
 			if (!event) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			if (!this.runBroadcast()) return;
-			const buff = `<table border="1" cellspacing="0" cellpadding="3">${formatEvent(event)}</table>`;
+			const hasAliases = event.aliases.length > 0;
+			const buff = `<table border="1" cellspacing="0" cellpadding="3">${formatEvent(event, hasAliases)}</table>`;
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
 			if (!this.broadcasting && user.can('ban', null, room)) {
 				this.sendReplyBox(
