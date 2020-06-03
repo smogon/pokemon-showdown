@@ -9,6 +9,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		if (species.battleOnly && species.battleOnly === 'string') forme = species.battleOnly;
 
+		if (species.cosmeticFormes) {
+			forme = this.sample([species.name].concat(species.cosmeticFormes));
+		}
+
 		const movePool = (species.randomBattleMoves || Object.keys(this.dex.data.Learnsets[species.id].learnset!)).slice();
 		const rejectedPool: string[] = [];
 		const moves: string[] = [];
