@@ -1368,7 +1368,7 @@ const ScavengerCommands: ChatCommands = {
 		'/tscav addplayer [user] - allows a team leader to add a player onto their team.',
 		'/tscav editplayers [team name], [added user | -removed user], [...] (use - preceding a user\'s name to remove a user) - Edits the players within an existing team. (Requires: % @ * # & ~)',
 		'/tscav teams - views the list of teams and the players on each team.',
-		'/tsav guesses - views the list of guesses already submitted by your team for the current question.',
+		'/tscav guesses - views the list of guesses already submitted by your team for the current question.',
 		'/tscav chat [message] - adds a message that can be seen by all of your teammates in the Team Scavs game.',
 	],
 
