@@ -18,7 +18,7 @@ function formatEvent(event: {eventName: string, date: string, desc: string, star
 	}
 	let ret = `<tr title="${explanation}">`;
 	ret += Chat.html`<td>${event.eventName}</td>`;
-	ret += Chat.html`<td>${event.aliases ? event.aliases.join(", ") : ""}</td>`;
+	ret += event.aliases.length ? Chat.html`<td>${event.aliases.join(", ")}</td>` : ``;
 	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
 	ret += Chat.html`<td><time>${event.date}</time></td></tr>`;
 	return ret;
@@ -53,7 +53,7 @@ export const commands: ChatCommands = {
 			}
 			if (!this.runBroadcast()) return;
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
-			buff += '<th>Event Name:</th><th>Event Aliases:</th><th>Event Description:</th><th>Event Date:</th>';
+			buff += `<th>Event Name:</th>${getAllAliases(room).length ? `<th>Event Aliases:</th>` : ``}<th>Event Description:</th><th>Event Date:</th>`;
 			for (const i in room.events) {
 				buff += formatEvent(room.events[i]);
 			}
