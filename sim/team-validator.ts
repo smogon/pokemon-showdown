@@ -1996,6 +1996,8 @@ export class TeamValidator {
 		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
 			// For Pokemon like Rotom, Necrozma, and Gmax formes whose movesets are extensions are their base formes
 			return this.dex.getSpecies(species.changesFrom);
+		} else if (species.baseSpecies === 'Pumpkaboo') {
+			return this.dex.getSpecies('Pumpkaboo');
 		}
 		return null;
 	}
