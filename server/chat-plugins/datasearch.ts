@@ -341,7 +341,9 @@ export const commands: ChatCommands = {
 			`<code>/itemsearch [item description]</code>: finds items that match the given keywords.<br/>` +
 			`This command accepts natural language. (tip: fewer words tend to work better)<br/>` +
 			`The <code>gen</code> keyword can be used to search for items introduced in a given generation; e.g., <code>/is gen4</code> searches for items introduced in Generation 4.<br/>` +
-			`To search for items within a generation, append the generation to <code>/is</code> or use the <code>maxgen</code> keyword; e.g., <code>/is4 Water-type</code> or <code>/is maxgen4 Water-type</code> searches for items whose Generation 4 description includes "Water-type".`
+			`To search for items within a generation, append the generation to <code>/is</code> or use the <code>maxgen</code> keyword; e.g., <code>/is4 Water-type</code> or <code>/is maxgen4 Water-type</code> searches for items whose Generation 4 description includes "Water-type".<br/>` +
+			`Searches with <code>fling</code> in them will find items with the specified Fling behavior.<br/>` +
+			`Searches with <code>natural gift</code> in them will find items with the specified Natural Gift behavior.`
 		);
 	},
 
@@ -1850,25 +1852,33 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 				newWord = 'supereffective';
 			}
 			break;
-		case 'special': newWord = 'sp'; break;
+		case 'special':
+			if (rawSearch[i + 1] === 'defense') {
+				newWord = 'specialdefense';
+			} else if (rawSearch[i + 1] === 'attack') {
+				newWord = 'specialattack';
+			}
+			break;
+		case 'spatk':
 		case 'spa':
-			newWord = 'sp';
+			newWord = 'specialattack';
 			break;
 		case 'atk':
 		case 'attack':
-			if (rawSearch[i - 1] === 'sp') {
-				newWord = 'atk';
+			if (['sp', 'special'].includes(rawSearch[i - 1])) {
+				break;
 			} else {
 				newWord = 'attack';
 			}
 			break;
 		case 'spd':
-			newWord = 'sp';
+		case 'spdef':
+			newWord = 'specialdefense';
 			break;
 		case 'def':
 		case 'defense':
-			if (rawSearch[i - 1] === 'sp') {
-				newWord = 'def';
+			if (['sp', 'special'].includes(rawSearch[i - 1])) {
+				break;
 			} else {
 				newWord = 'defense';
 			}
@@ -1985,7 +1995,16 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 				.replace(/(\D)\./, (p0, p1) => p1).split(' ');
 
 			for (const word of searchedWords) {
-				if (descWordsArray.includes(word)) matched++;
+				switch (word) {
+				case 'specialattack':
+					if (descWordsArray[descWordsArray.indexOf('sp') + 1] === 'atk') matched++;
+					break;
+				case 'specialdefense':
+					if (descWordsArray[descWordsArray.indexOf('sp') + 1] === 'def') matched++;
+					break;
+				default:
+					if (descWordsArray.includes(word)) matched++;
+				}
 			}
 
 			if (matched >= (searchedWords.length * 3 / 5) && (!maxGen || item.gen <= maxGen) && (!gen || item.gen === gen)) {
