@@ -21,10 +21,10 @@ try {
 
 export class YoutubeInterface {
 	interval: NodeJS.Timer | null;
-	timer: number;
+	intervalTime: number;
 	constructor() {
 		this.interval = null;
-		this.timer = 0;
+		this.intervalTime = 0;
 	}
 	async getChannelData(link: string, username?: string) {
 		const id = this.getId(link);
@@ -266,16 +266,16 @@ export const commands: ChatCommands = {
 		repeat(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			if (!this.can('declare', null, room)) return false;
-			if (!target) return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.timer)}.`);
+			if (!target) return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime)}.`);
 			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
 			if (isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
 			let interval = Number(target);
 			if (interval < 10) return this.errorReply(`${interval} is too low - set it above 10 minutes.`);
 			interval = interval * 60 * 1000;
-			const res = await YouTube.randChannel();
-			// no channels 
-			if (!res) return this.errorReply(`Error in getting channel data.`);
-			YouTube.timer = interval;
+			const channel = await YouTube.randChannel();
+			// no channels
+			if (!channel) return this.errorReply(`Error in getting channel data.`);
+			YouTube.intervalTime = interval;
 			if (YouTube.interval) clearInterval(YouTube.interval);
 			YouTube.interval = setInterval(() => {
 				void (async () => {
