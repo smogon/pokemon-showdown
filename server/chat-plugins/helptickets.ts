@@ -578,7 +578,7 @@ export const pages: PageTable = {
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
-					if (!helpRoom.auth.get(user.id)) helpRoom.auth.setGroup(user, '+');
+					if (!helpRoom.auth.get(user.id)) helpRoom.auth.set(user.id, '+');
 					connection.popup(`You already have a Help ticket.`);
 					user.joinRoom(`help-${ticket.userid}` as RoomID);
 					return this.close();
@@ -1092,7 +1092,7 @@ export const commands: ChatCommands = {
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
-					if (!helpRoom.auth.get(user.id)) helpRoom.auth.setGroup(user, '+');
+					if (!helpRoom.auth.get(user.id)) helpRoom.auth.set(user.id, '+');
 					this.parse(`/join help-${ticket.userid}`);
 					return this.popupReply(`You already have an open ticket; please wait for global staff to respond.`);
 				}

@@ -1107,7 +1107,7 @@ export class User extends Chat.MessageContext {
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
 			if (forceTrusted || this.group !== Config.groupsranking[0]) {
-				groups.setGroup(this, this.group);
+				groups.set(this.id, this.group);
 				this.trusted = this.id;
 				this.autoconfirmed = this.id;
 			} else {
@@ -1133,11 +1133,11 @@ export class User extends Chat.MessageContext {
 					room.auth.has(userid) && room.auth.get(userid) !== '+'
 			) {
 				removed.push(room.auth.get(userid) + room.roomid);
-				room.auth.forceGroup(userid, '+');
+				room.auth.set(userid, '+');
 			}
 		}
 		this.trusted = '';
-		groups.forceGroup(userid, Config.groupsranking[0]);
+		groups.set(userid, Config.groupsranking[0]);
 		return removed;
 	}
 	markDisconnected() {

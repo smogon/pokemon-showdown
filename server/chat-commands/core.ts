@@ -877,7 +877,7 @@ export const commands: ChatCommands = {
 			battle.p1.name = target.slice(nameIndex1 + 8, nameNextQuoteIndex1);
 			battle.p2.name = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
 		}
-		battleRoom.auth.forceGroup(user.id, Users.HOST_SYMBOL);
+		battleRoom.auth.set(user.id, Users.HOST_SYMBOL);
 		this.parse(`/join ${battleRoom.roomid}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
@@ -1050,7 +1050,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`${targetUser.name} is already a player in this battle.`);
 		}
 
-		room.auth.forceGroup(targetUser.id, Users.PLAYER_SYMBOL);
+		room.auth.set(targetUser.id, Users.PLAYER_SYMBOL);
 		const success = room.battle.joinGame(targetUser, target);
 		if (!success) {
 			room.auth.delete(targetUser.id);

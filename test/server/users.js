@@ -189,7 +189,7 @@ describe('Users features', function () {
 					user.forceRename("User", true);
 					user.joinRoom(room);
 					for (const group of [' ', '+', '@']) {
-						room.auth.setGroup(user, group);
+						room.auth.set(user.id, group);
 						assert.equal(room.getAuth(user), group, 'before demotion attempt');
 						Chat.parse("/roomdeauth User", room, user, user.connections[0]);
 						assert.equal(room.getAuth(user), group, 'after demotion attempt');

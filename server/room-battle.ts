@@ -691,7 +691,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 		}
 
 		this.updatePlayer(player, null);
-		this.room.auth.forceGroup(user.id, '+');
+		this.room.auth.set(user.id, '+');
 		this.room.update();
 		return true;
 	}
@@ -1013,7 +1013,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}
 
-		if (user) this.room.auth.forceGroup(player.id, Users.PLAYER_SYMBOL);
+		if (user) this.room.auth.set(player.id, Users.PLAYER_SYMBOL);
 		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
 	}

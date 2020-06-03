@@ -8,17 +8,6 @@ export abstract class Auth extends Map<ID, GroupSymbol> {
 		super();
 		this.save = () => null;
 	}
-	setGroup(user: User, group: GroupSymbol) {
-		if (!user) throw new Error(`No user passed to setGroup, use forceGroup instead.`);
-		super.set(user.id, group);
-		return this.save;
-	}
-	forceGroup(userid: ID, group: GroupSymbol) {
-		const user = Users.get(userid);
-		if (user) return this.setGroup(user, group);
-		super.set(userid, group);
-		return this.save;
-	}
 	get(id: ID) {
 		return super.get(id);
 	}
@@ -40,18 +29,28 @@ export class RoomAuth extends Auth {
 			auth[k] = v;
 		}
 		this.room.settings.auth = auth;
-		return this.room.saveSettings();
+		this.room.saveSettings();
 	}
 	load() {
 		for (const key in this.room.settings.auth) {
 			super.set(key as ID, this.room.settings.auth[key]);
 		}
 	}
-	setGroup(user: User, group: GroupSymbol) {
-		if (!user) throw new Error(`No user passed to setGroup, use forceGroup instead.`);
-		super.set(user.id, group);
-		user.updateIdentity(this.room.roomid);
-		return this.save;
+	set(id: ID, group: GroupSymbol) {
+		const user = Users.get(id);
+		if (user) {
+			this.room.onUpdateIdentity(user);
+		}
+		super.set(id, group);
+		this.save();
+		return this;
+	}
+	delete(id: ID) {
+		if (!super.has(id)) return false;
+		super.delete(id);
+		delete this.room.settings.auth[id];
+		this.save();
+		return true;
 	}
 }
 
@@ -82,10 +81,24 @@ export class GlobalAuth extends Auth {
 			}
 		});
 	}
-	setGroup(user: User, group: GroupSymbol) {
-		if (!user) throw new Error(`No user passed to setGroup, use forceGroup instead.`);
-		super.set(user.id, group);
-		if (global) user.group = group;
-		return this.save;
+	set(id: ID, group: GroupSymbol) {
+		const user = Users.get(id);
+		if (user) {
+			user.group = group;
+			user.updateIdentity();
+		}
+		super.set(id, group);
+		this.save();
+		return this;
+	}
+	delete(id: ID) {
+		if (!super.has(id)) return false;
+		super.delete(id);
+		const user = Users.get(id);
+		if (user) {
+			user.group = ' ';
+		}
+		this.save();
+		return true;
 	}
 }

@@ -36,9 +36,9 @@ export const commands: ChatCommands = {
 		}
 
 		if (!this.can('makeroom')) return false;
+		if (room.auth.has(toID(name))) return this.errorReply(`${name} is already a room owner.`);
 
-
-		room.auth.setGroup(user, '#');
+		room.auth.set(toID(name), '#');
 		this.addModAction(`${name} was appointed Room Owner by ${user.name}.`);
 		this.modlog('ROOMOWNER', userid);
 		if (targetUser) {
@@ -116,11 +116,7 @@ export const commands: ChatCommands = {
 		if (nextGroup === Config.groupsranking[0]) {
 			room.auth.delete(userid);
 		} else {
-			if (!targetUser) {
-				room.auth.forceGroup(userid, nextGroup);
-			} else {
-				room.auth.setGroup(targetUser, nextGroup);
-			}
+			room.auth.set(toID(userid), nextGroup);
 		}
 
 		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
@@ -1119,10 +1115,10 @@ export const commands: ChatCommands = {
 		if (targetUser && !targetUser.registered) {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
-		if (targetUser) {
-			Users.groups.setGroup(targetUser, nextGroup);
+		if (nextGroup === Config.groupsranking[0]) {
+			Users.groups.delete(targetUser ? targetUser.id : userid);
 		} else {
-			Users.groups.forceGroup(userid, nextGroup);
+			Users.groups.set(targetUser ? targetUser.id : userid, nextGroup);
 		}
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
@@ -1160,7 +1156,7 @@ export const commands: ChatCommands = {
 		if (untrust) {
 			if (currentGroup !== Config.groupsranking[0]) return this.errorReply(`User '${name}' is not trusted.`);
 
-			Users.groups.forceGroup(userid, Config.groupsranking[0]);
+			Users.groups.set(userid, Config.groupsranking[0]);
 			this.sendReply(`User '${name}' is no longer trusted.`);
 			this.privateModAction(`${name} was set to no longer be a trusted user by ${user.name}.`);
 			this.modlog('UNTRUSTUSER', userid);
@@ -1171,7 +1167,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`User '${name}' has a global rank higher than trusted.`);
 			}
 
-			Users.groups.forceGroup(userid, Config.groupsranking[0]);
+			Users.groups.set(userid, Config.groupsranking[0]);
 			this.sendReply(`User '${name}' is now trusted.`);
 			this.privateModAction(`${name} was set as a trusted user by ${user.name}.`);
 			this.modlog('TRUSTUSER', userid);
@@ -1205,7 +1201,7 @@ export const commands: ChatCommands = {
 		if (Users.isUsernameKnown(name)) {
 			return this.errorReply("/forcepromote - Don't forcepromote unless you have to.");
 		}
-		Users.groups.forceGroup(name as ID, nextGroup);
+		Users.groups.set(name as ID, nextGroup);
 
 		this.addModAction(`${name} was promoted to ${(Config.groups[nextGroup].name || "regular user")} by ${user.name}.`);
 		this.modlog(`GLOBAL${(Config.groups[nextGroup].name || "regular").toUpperCase()}`, toID(name));

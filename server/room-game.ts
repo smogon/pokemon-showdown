@@ -153,7 +153,7 @@ export class RoomGame {
 			player.id = user.id;
 			player.name = user.name;
 			this.playerTable[player.id] = player;
-			this.room.auth.setGroup(user, Users.PLAYER_SYMBOL);
+			this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
 		} else {
 			player.unlinkUser();
 		}
