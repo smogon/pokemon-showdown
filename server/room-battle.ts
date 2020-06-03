@@ -1013,7 +1013,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}
 
-		if (user) this.room.settings.auth[user.id] = Users.PLAYER_SYMBOL;
+		if (user) this.room.auth.forceGroup(player.id, Users.PLAYER_SYMBOL);
 		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
 	}
