@@ -2465,6 +2465,7 @@ export const commands: ChatCommands = {
 
 	'!pi': true,
 	pi(target, room, user) {
+		if (!this.runBroadcast(true)) return false;
 		return this.sendReplyBox(
 			'Did you mean: 1. 3.1415926535897932384626... (Decimal)<br />' +
 			'2. 3.184809493B91866... (Duodecimal)<br />' +
