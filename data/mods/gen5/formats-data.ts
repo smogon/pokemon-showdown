@@ -2044,7 +2044,7 @@ export const BattleFormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	rotomfan: {
-		randomBattleMoves: ["airslash", "painsplit", "thunderbolt", "trick", "voltswitch", "willowisp"],
+		randomBattleMoves: ["airslash", "painsplit", "substitute", "thunderbolt", "trick", "voltswitch", "willowisp"],
 		tier: "NU",
 		doublesTier: "DUU",
 	},
