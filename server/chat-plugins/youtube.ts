@@ -272,12 +272,14 @@ export const commands: ChatCommands = {
 			let interval = Number(target);
 			if (interval < 10) return this.errorReply(`${interval} is too low - set it above 10 minutes.`);
 			interval = interval * 60 * 1000;
+			const res = await YouTube.randChannel();
+			// no channels 
+			if (!res) return this.errorReply(`Error in getting channel data.`);
 			YouTube.timer = interval;
 			if (YouTube.interval) clearInterval(YouTube.interval);
 			YouTube.interval = setInterval(() => {
 				void (async () => {
 					const res = await YouTube.randChannel();
-					if (!res) return this.errorReply(`Error in getting channel data.`);
 					this.addBox(res);
 					room.update();
 				})();
