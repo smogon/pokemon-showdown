@@ -2432,14 +2432,14 @@ export const commands: ChatCommands = {
 		this.sendReply(`You have requested for the link ${target} to be displayed.`);
 		room.sendMods(
 			`|uhtml|request-${user.id}|<div class="infobox">${user.name} has requested approval to show <a href="${target}">${target}</a><br>` +
-			`<button class="button" name="send" value="/approvelink ${user.id}">Approve</button><br>` +
-			`<button class="button" name="send" value="/denylink ${user.id}">Deny</button></div>`
+			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
+			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
 		);
 		return room.update();
 	},
 	requestshowhelp: [`/requestshow [link], [comment] - Requests permission to show media in the room.`],
 
-	async approvelink(target, room, user) {
+	async approveshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
 		if (room.approvalsDisabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
@@ -2449,7 +2449,7 @@ export const commands: ChatCommands = {
 		const id = room.pendingApprovals.get(target);
 		if (!id) return this.errorReply(`${target} has no pending request.`);
 		this.privateModAction(`(${user.name} approved ${target}'s media display request.)`);
-		this.modlog(`APPROVELINK`, null, `${target} (${id})`);
+		this.modlog(`APPROVESHOW`, null, `${target} (${id})`);
 		const YouTube = new YoutubeInterface();
 		room.pendingApprovals.delete(target);
 		if (id.includes('youtu')) {
@@ -2466,9 +2466,9 @@ export const commands: ChatCommands = {
 			});
 		}
 	},
-	approvelinkhelp: [`/approvelink [user] - Approves the media display request of [user]. Requires: % @ # & ~`],
+	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # & ~`],
 
-	denylink(target, room, user) {
+	denyshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
 		if (room.approvalsDisabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
@@ -2480,9 +2480,9 @@ export const commands: ChatCommands = {
 		room.pendingApprovals.delete(target);
 		room.add(`|uhtmlchange|request-${target}|`).update();
 		this.privateModAction(`(${user.name} denied ${target}'s media display request.)`);
-		this.modlog(`DENYLINK`, null, `${target} (${id})`);
+		this.modlog(`DENYSHOW`, null, `${target} (${id})`);
 	},
-	denylinkhelp: [`/denylink [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
+	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
 
 	async show(target, room, user) {
 		if (!user.authAtLeast(room.showimages!) && !(user.id in room.chatRoomData!.whitelist)) return false;
