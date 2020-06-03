@@ -1197,7 +1197,7 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.reportJoinsInterval = null;
 		this.pendingApprovals = new Map();
-		this.approvalsDisabled = options.approvalsDisabled || false;
+		this.approvalsDisabled = options.approvalsDisabled || true;
 		this.showimages = options.showimages || false;
 		this.whitelist = this.chatRoomData!.whitelist || {};
 	}
