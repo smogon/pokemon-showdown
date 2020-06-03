@@ -476,6 +476,7 @@ const MODES: {[k: string]: GameMode | string} = {
 
 	ts: 'teamscavs',
 	tscav: 'teamscavs',
+	teamscavengers: 'teamscavs',
 	teamscavs: {
 		name: 'Team Scavs',
 		id: 'teamscavs',
@@ -638,15 +639,13 @@ const MODES: {[k: string]: GameMode | string} = {
 				);
 			},
 
-			onEnd(reset) {
+			onEnd() {
 				const game = this.room.scavgame!;
-				if (reset) {
-					for (const teamID in game.teams) {
-						const team = game.teams[teamID];
-						team.answers = [];
-						team.question = 1;
-						team.completed = false;
-					}
+				for (const teamID in game.teams) {
+					const team = game.teams[teamID];
+					team.answers = [];
+					team.question = 1;
+					team.completed = false;
 				}
 			},
 		},
