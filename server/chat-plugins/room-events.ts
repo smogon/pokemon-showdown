@@ -18,7 +18,7 @@ function formatEvent(event: {eventName: string, date: string, desc: string, star
 	}
 	let ret = `<tr title="${explanation}">`;
 	ret += Chat.html`<td>${event.eventName}</td>`;
-	ret += event.aliases.length ? Chat.html`<td>${event.aliases.join(", ")}</td>` : "";
+	ret += event.aliases.length ? Chat.html`<td>${event.aliases.join(", ")}</td>` : ``;
 	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
 	ret += Chat.html`<td><time>${event.date}</time></td></tr>`;
 	return ret;
