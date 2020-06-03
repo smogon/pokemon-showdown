@@ -9,16 +9,15 @@
 
 import {ScavengerHunt, ScavengerHuntPlayer} from './scavengers';
 
-export type TwistEvent = (
-	this: ScavengerHunt,
-	...args: any[]
-) => void;
+export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
 interface Twist {
 	name: string;
 	id: string;
 	desc?: string;
 	[eventid: string]: string | number | TwistEvent | undefined;
 }
+
+type GameModeFunction = (this: ScavengerGameTemplate, ...args: any[]) => void;
 interface GameMode {
 	name: string;
 	id: string;
@@ -30,11 +29,6 @@ interface GameMode {
 	advanceTeam?: GameModeFunction;
 	[k: string]: any;
 }
-
-type GameModeFunction = (
-	this: ScavengerGameTemplate,
-	...args: any[]
-) => void;
 
 class Leaderboard {
 	data: AnyObject;
