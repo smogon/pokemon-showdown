@@ -132,7 +132,7 @@ export class GlobalAuth extends Auth {
 		}
 		this.usernames.set(id, username);
 		super.set(id, group);
-		this.save();
+		void this.save();
 		return this;
 	}
 	delete(id: ID) {
@@ -143,7 +143,7 @@ export class GlobalAuth extends Auth {
 			user.group = ' ';
 		}
 		this.usernames.delete(id);
-		this.save();
+		void this.save();
 		return true;
 	}
 }
