@@ -81,7 +81,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
 
-		const currentGroup = room.auth.get(userid) || Config.groupsranking[0];
+		const currentGroup = room.auth.get(userid);
 		let nextGroup = target as GroupSymbol;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {
@@ -96,7 +96,7 @@ export const commands: ChatCommands = {
 		}
 
 		const groupName = Config.groups[nextGroup].name || "regular user";
-		if ((room.auth.get(userid) || Config.groupsranking[0]) === nextGroup) {
+		if (room.auth.get(userid) === nextGroup) {
 			return this.errorReply(`User '${name}' is already a ${groupName} in this room.`);
 		}
 		if (!user.can('makeroom')) {
@@ -1081,7 +1081,7 @@ export const commands: ChatCommands = {
 
 		if (!userid) return this.parse('/help promote');
 
-		const currentGroup = (targetUser?.group || Users.groups.get(userid) || ' ')[0];
+		const currentGroup = (targetUser?.group || Users.groups.get(userid))[0];
 		let nextGroup = target as GroupSymbol;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {

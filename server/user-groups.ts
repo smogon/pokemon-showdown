@@ -9,7 +9,9 @@ export abstract class Auth extends Map<ID, GroupSymbol> {
 		this.save = () => null;
 	}
 	get(id: ID) {
-		return super.get(id);
+		const group = super.get(id);
+		if (!group) return ' ';
+		return group;
 	}
 }
 

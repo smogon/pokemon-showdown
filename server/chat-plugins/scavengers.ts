@@ -2145,7 +2145,7 @@ const ScavengerCommands: ChatCommands = {
 				const userid = toID(entry.name);
 
 				const auth = room.auth.get(user.id) ? room.auth.get(user.id) :
-					Users.groups.get(userid) ? Users.groups.get(userid) : '&nbsp;';
+					Users.groups.get(userid).trim() ? Users.groups.get(userid) : '&nbsp;';
 				const color = room.auth.get(user.id) ? 'inherit' : 'gray';
 
 				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +

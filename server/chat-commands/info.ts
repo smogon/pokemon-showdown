@@ -249,11 +249,11 @@ export const commands: ChatCommands = {
 		let buf = Chat.html`<strong class="username">${target}</strong>`;
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
-		const roomauth = room?.auth.get(userid) || '';
+		const roomauth = room?.auth.get(userid);
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
-		const group = (Users.groups.get(userid) || '').charAt(0);
+		const group = Users.groups.get(userid);
 		if (Config.groups[group] && Config.groups[group].name) {
 			buf += `<br />Global ${Config.groups[group].name} (${group})`;
 		}
