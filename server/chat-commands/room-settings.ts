@@ -1136,15 +1136,8 @@ export const commands: ChatCommands = {
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
-				this.sendReply('Source:');
-				if (room.introMessage.includes('\n')) {
-					const lines = Chat.escapeHTML(room.introMessage).split('\n');
-					const summary = '/roomintro ' + lines[0];
-					const body = lines.slice(1).join('<br />');
-					this.sendReplyBox(`<details open class="readmore code" style="white-space: pre-wrap"><summary>${summary}</summary>${body}</details>`);
-				} else {
-					this.parse(`/code /roomintro ${room.introMessage}`);
-				}
+				const code = Chat.escapeHTML(room.introMessage).replace(/\n/g, '<br />');
+				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomintro ${code}</code></details>`);
 			}
 			return;
 		}
@@ -1196,15 +1189,8 @@ export const commands: ChatCommands = {
 			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
 			this.sendReply(`|raw|<div class="infobox">${room.staffMessage.replace(/\n/g, ``)}</div>`);
 			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
-				this.sendReply('Source:');
-				if (room.staffMessage.includes('\n')) {
-					const lines = Chat.escapeHTML(room.staffMessage).split('\n');
-					const summary = '/staffintro ' + lines[0];
-					const body = lines.slice(1).join('<br />');
-					this.sendReplyBox(`<details open class="readmore code" style="white-space: pre-wrap"><summary>${summary}</summary>${body}</details>`);
-				} else {
-					this.parse(`/code /staffintro ${room.staffMessage}`);
-				}
+				const code = Chat.escapeHTML(room.staffMessage).replace(/\n/g, '<br />');
+				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomintro ${code}</code></details>`);
 			}
 			return;
 		}
