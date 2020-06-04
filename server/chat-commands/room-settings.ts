@@ -1190,7 +1190,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`|raw|<div class="infobox">${room.staffMessage.replace(/\n/g, ``)}</div>`);
 			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
 				const code = Chat.escapeHTML(room.staffMessage).replace(/\n/g, '<br />');
-				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomintro ${code}</code></details>`);
+				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/staffintro ${code}</code></details>`);
 			}
 			return;
 		}
