@@ -1195,7 +1195,7 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.reportJoinsInterval = null;
 		this.pendingApprovals = new Map();
-		this.approvalsEnabled = options.approvalsDisabled;
+		this.approvalsEnabled = !!options.approvalsEnabled;
 		this.showimages = options.showimages ? options.showimages : false;
 	}
 
