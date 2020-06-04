@@ -7,14 +7,12 @@
 
 
 import {Net} from '../../lib/net';
-import * as querystring from 'querystring';
-
 
 const SEARCH_PATH = '/api/v1/Search/List/';
 const DETAILS_PATH = '/api/v1/Articles/Details/';
 
 async function getFandom(site: string, pathName: string, search: AnyObject) {
-	const body = await Net(`https://${site}.fandom.com/${pathName}?${querystring.stringify(search)}`).get();
+	const body = await Net(`https://${site}.fandom.com/${pathName}`).get({query: search});
 	const json = JSON.parse(body);
 	if (!json) throw new Error(`Malformed data`);
 	if (json.exception) throw new Error(Dex.getString(json.exception.message) || `Not found`);
