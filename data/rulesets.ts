@@ -308,9 +308,14 @@ export const BattleFormats: {[k: string]: FormatsData} = {
 		effectType: 'Rule',
 		name: 'Two vs Two',
 		desc: "Only allows two Pok&eacute;mon in battle",
+		onValidateTeam(team, format) {
+			if (format.gameType === 'triples') {
+				return [`Two vs Two is for non-triples formats.`];
+			}
+		},
 		onStart() {
 			// @ts-ignore
-			this.format.teamLength = {battle: 2};
+			if (this.format.gameType !== 'triples') this.format.teamLength = {battle: 2};
 		},
 	},
 	littlecup: {
