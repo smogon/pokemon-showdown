@@ -733,14 +733,15 @@ export class CommandContext extends MessageContext {
 	shouldBroadcast() {
 		return this.cmdToken === BROADCAST_TOKEN;
 	}
-	canBroadcast(ignoreCooldown?: boolean, suppressMessage?: string | null) {
-		if (!this.broadcasting && this.shouldBroadcast()) {
+	if (!this.broadcasting && this.shouldBroadcast()) {
 			if (this.room instanceof Rooms.GlobalRoom) {
 				this.errorReply(`You have no one to broadcast this to.`);
 				this.errorReply(`To see it for yourself, use: /${this.message.substr(1)}`);
 				return false;
 			}
-			if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
+			if (
+				!this.pmTarget && (image ? !this.user.can('showimage', null, this.room) : !this.user.can('broadcast', null, this.room))
+			) {
 				this.errorReply(`You need to be voiced to broadcast this command's information.`);
 				this.errorReply(`To see it for yourself, use: /${this.message.substr(1)}`);
 				return false;
@@ -765,7 +766,7 @@ export class CommandContext extends MessageContext {
 		}
 		return true;
 	}
-	runBroadcast(ignoreCooldown = false, suppressMessage: string | null = null) {
+	runBroadcast(ignoreCooldown = false, suppressMessage: string | null = null, image?: boolean) {
 		if (this.broadcasting || !this.shouldBroadcast()) {
 			// Already being broadcast, or the user doesn't intend to broadcast.
 			return true;
@@ -773,7 +774,7 @@ export class CommandContext extends MessageContext {
 
 		if (!this.broadcastMessage) {
 			// Permission hasn't been checked yet. Do it now.
-			if (!this.canBroadcast(ignoreCooldown, suppressMessage)) return false;
+			if (!this.canBroadcast(ignoreCooldown, suppressMessage, image)) return false;
 		}
 
 		this.broadcasting = true;
