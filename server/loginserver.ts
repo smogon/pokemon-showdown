@@ -31,11 +31,7 @@ function parseJSON(json: string) {
 	return data;
 }
 
-type LoginServerResponse = [AnyObject | null, Error | null];
-
-interface IncomingMessage extends NodeJS.ReadableStream {
-	statusCode: number;
-}
+type LoginServerResponse = [AnyObject, null] | [null, Error];
 
 class LoginServerInstance {
 	readonly uri: string;
@@ -81,7 +77,7 @@ class LoginServerInstance {
 				return [null, new Error(json.error!)];
 			}
 			this.openRequests--;
-			return [json.json, null];
+			return [json.json!, null];
 		} catch (error) {
 			return [null, error];
 		}
@@ -116,9 +112,9 @@ class LoginServerInstance {
 		// if we already have it going or the request queue is empty no need to do anything
 		if (this.openRequests || this.requestTimer || !this.requestQueue.length) return;
 
-		this.requestTimer = setTimeout(() => this.makeRequests(), LOGIN_SERVER_BATCH_TIME);
+		this.requestTimer = setTimeout(() => void this.makeRequests(), LOGIN_SERVER_BATCH_TIME);
 	}
-	makeRequests() {
+	async makeRequests() {
 		this.requestTimer = null;
 		const requests = this.requestQueue;
 		this.requestQueue = [];
@@ -134,16 +130,17 @@ class LoginServerInstance {
 
 		this.requestStart(requests.length);
 
-		const request = Net(`${this.uri}action.php`);
-		request.post({
-			body: {
-				serverid: Config.serverid,
-				servertoken: Config.servertoken,
-				nocache: new Date().getTime(),
-				json: JSON.stringify(dataList),
-			},
-			timeout: LOGIN_SERVER_TIMEOUT,
-		}).then(buffer => {
+		try {
+			const request = Net(`${this.uri}action.php`);
+			let buffer = await request.post({
+				body: {
+					serverid: Config.serverid,
+					servertoken: Config.servertoken,
+					nocache: new Date().getTime(),
+					json: JSON.stringify(dataList),
+				},
+				timeout: LOGIN_SERVER_TIMEOUT,
+			});
 			// console.log('RESPONSE: ' + buffer);
 			const data = parseJSON(buffer).json;
 			if (buffer.startsWith(`[{"actionsuccess":true,`)) {
@@ -156,13 +153,14 @@ class LoginServerInstance {
 			for (const [i, resolve] of resolvers.entries()) {
 				resolve([data[i], null]);
 			}
+
 			this.requestEnd();
-		}).catch(error => {
+		} catch (error) {
 			for (const resolve of resolvers) {
 				resolve([null, error]);
 			}
 			this.requestEnd(error);
-		});
+		}
 	}
 	requestStart(size: number) {
 		this.lastRequest = Date.now();
