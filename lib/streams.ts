@@ -760,11 +760,11 @@ export function stdout() {
 
 export function stdpipe(stream: WriteStream | ReadStream | ReadWriteStream) {
 	const promises = [];
-	if ('pipeTo' in stream) {
-		promises.push(stream.pipeTo(stdout()));
+	if ((stream as ReadStream | WriteStream & {pipeTo: undefined}).pipeTo) {
+		promises.push((stream as ReadStream).pipeTo(stdout()));
 	}
-	if ('write' in stream) {
-		promises.push(stdin().pipeTo(stream));
+	if ((stream as WriteStream | ReadStream & {write: undefined}).write) {
+		promises.push(stdin().pipeTo(stream as WriteStream));
 	}
 	return Promise.all(promises);
 }
