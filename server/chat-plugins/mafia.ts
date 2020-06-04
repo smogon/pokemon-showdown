@@ -1595,9 +1595,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 
 		if (!player) {
-			if (user.isStaff ||
-				(this.room.auth.get(user.id) && this.room.auth.get(user.id) !== '+')
-			) {
+			if (this.room.auth.above(user, '+')) {
 				// Uninvolved staff can talk anytime
 				return false;
 			} else {
@@ -3671,10 +3669,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Mafia is already disabled.");
 			}
 			room.settings.mafiaDisabled = true;
-			if (room.settings.persistSettings) {
-				room.settings.mafiaDisabled = true;
-				room.saveSettings();
-			}
+			room.saveSettings();
 			this.modlog('MAFIADISABLE', null);
 			return this.sendReply("Mafia has been disabled for this room.");
 		},
@@ -3686,10 +3681,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Mafia is already enabled.");
 			}
 			room.settings.mafiaDisabled = false;
-			if (room.settings.persistSettings) {
-				room.settings.mafiaDisabled = false;
-				room.saveSettings();
-			}
+			room.saveSettings();
 			this.modlog('MAFIAENABLE', null);
 			return this.sendReply("Mafia has been enabled for this room.");
 		},

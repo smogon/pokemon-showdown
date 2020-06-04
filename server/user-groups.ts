@@ -52,6 +52,13 @@ export class RoomAuth extends Auth {
 		this.save();
 		return true;
 	}
+	above(user: User, group: GroupSymbol) {
+		if (!Config.groups[group]) return false;
+		if (user.locked || user.semilocked) return false;
+		const auth = !user.isStaff && !this.room.settings.isPrivate ? this.get(user.id) : user.group;
+		if (!auth) return false;
+		return auth in Config.groups && Config.groups[auth].rank > Config.groups[group].rank;
+	}
 }
 
 export class GlobalAuth extends Auth {

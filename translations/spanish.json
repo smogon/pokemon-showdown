@@ -72,7 +72,7 @@
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>nombre de usuario</em>: designa a un room voice",
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>nombre de usuario</em>: retira a un room voice",
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>intro</em>: establece la introducci&oacute;n del staff que se mostrar&aacute; a todo el staff que entre a la sala.",
-		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings: realiza una variedad de ajustes en la sala, com&uacute;nmente modchat.",
+		"- /room.settings: change a variety of room settings, namely modchat": "- /room.settings: realiza una variedad de ajustes en la sala, com&uacute;nmente modchat.",
 
 		"<strong>Room owners (#)</strong> can also use:": "<strong>Room owners (#)</strong> tambi&eacute;n pueden usar:",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>intro</em>: establece la introducci&oacute;n a la sala que ser&aacute; mostrada para todos los usuarios que ingresen a esta",
@@ -83,7 +83,7 @@
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>mensaje</em>: crea una declaraci&oacute;n grande en azul en la sala",
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>c&oacute;digo HTML</em>: publica una caja de c&oacute;digo HTML en la sala",
 		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [anchura], [altura]</em>: muestra una imagen en la sala",
-		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: realiza una variedad de ajustes de la sala, incluyendo modchat, filtro de may&uacute;sculas, etc",
+		"- /room.settings: change a variety of room settings, including modchat, capsfilter, etc": "- /room.settings: realiza una variedad de ajustes de la sala, incluyendo modchat, filtro de may&uacute;sculas, etc",
 
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "Una ayuda m&aacute;s detallada puede encontrarse en la <a href=\"https://www.smogon.com/forums/posts/6774654/\">gu&iacute;a de roomauth</a>",
 

@@ -899,7 +899,7 @@ export class GlobalRoom extends BasicRoom {
 		id = toID(id);
 		const room = Rooms.get(id);
 		if (!room) return false; // room doesn't exist
-		if (!room.settings) return false; // room isn't registered
+		if (!room.settings.persistSettings) return false; // room isn't registered
 		// deregister from global settings
 		// looping from the end is a pretty trivial optimization, but the
 		// assumption is that more recently added rooms are more likely to

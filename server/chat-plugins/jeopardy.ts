@@ -571,10 +571,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Jeopardy is already disabled in this room.");
 			}
 			room.settings.jeopardyDisabled = true;
-			if (room.settings.persistSettings) {
-				room.settings.jeopardyDisabled = true;
-				room.saveSettings();
-			}
+			room.saveSettings();
 			return this.sendReply("Jeopardy has been disabled for this room.");
 		},
 
@@ -585,10 +582,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Jeopardy is already enabled in this room.");
 			}
 			delete room.settings.jeopardyDisabled;
-			if (room.settings.persistSettings) {
-				delete room.settings.jeopardyDisabled;
-				room.saveSettings();
-			}
+			room.saveSettings();
 			return this.sendReply("Jeopardy has been enabled for this room.");
 		},
 

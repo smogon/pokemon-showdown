@@ -28,16 +28,14 @@ function formatEvent(
 }
 
 function getAllAliases(room: Room) {
-	return Object.keys(room.settings.events).map(event => room.settings.events[event].aliases).join();
+	return Object.values(room.settings.events).map(event => event.aliases).join();
 }
 function getEventID(nameOrAlias: string, room: Room): ID {
-	let id = toID(nameOrAlias);
+	const id = toID(nameOrAlias);
 	if (!room.settings.events[id]) {
-		for (const possibleEvent in room.settings.events) {
-			if (room.settings.events[possibleEvent].aliases) {
-				if (room.settings.events[possibleEvent].aliases.includes(id)) {
-					id = toID(possibleEvent);
-				}
+		for (const eventid in room.settings.events) {
+			if (room.settings.events[eventid].aliases?.includes(id)) {
+				return eventid as ID;
 			}
 		}
 	}

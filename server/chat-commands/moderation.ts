@@ -36,9 +36,9 @@ export const commands: ChatCommands = {
 		}
 
 		if (!this.can('makeroom')) return false;
-		if (room.auth.has(toID(name))) return this.errorReply(`${name} is already a room owner.`);
+		if (room.auth.get(userid) === '#') return this.errorReply(`${name} is already a room owner.`);
 
-		room.auth.set(toID(name), '#');
+		room.auth.set(userid, '#');
 		this.addModAction(`${name} was appointed Room Owner by ${user.name}.`);
 		this.modlog('ROOMOWNER', userid);
 		if (targetUser) {
@@ -116,7 +116,7 @@ export const commands: ChatCommands = {
 		if (nextGroup === Config.groupsranking[0]) {
 			room.auth.delete(userid);
 		} else {
-			room.auth.set(toID(userid), nextGroup);
+			room.auth.set(userid, nextGroup);
 		}
 
 		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
@@ -182,9 +182,9 @@ export const commands: ChatCommands = {
 		}
 
 		const rankLists: {[groupSymbol: string]: ID[]} = {};
-		for (const [k, v] of room.auth.entries()) {
-			if (!rankLists[v]) rankLists[v] = [];
-			rankLists[v].push(k);
+		for (const [id, rank] of room.auth.entries()) {
+			if (!rankLists[rank]) rankLists[rank] = [];
+			rankLists[rank].push(id);
 		}
 
 		const buffer = Object.keys(rankLists).sort(
@@ -1753,7 +1753,7 @@ export const commands: ChatCommands = {
 		if (!this.can('mute', null, room)) return false;
 		const SOON_EXPIRING_TIME = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 
-		if (!room.settings) return this.errorReply("This room does not support blacklists.");
+		if (!room.settings.persistSettings) return this.errorReply("This room does not support blacklists.");
 
 		const roomUserids = Punishments.roomUserids.get(room.roomid);
 		if (!roomUserids || roomUserids.size === 0) {

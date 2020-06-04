@@ -72,7 +72,7 @@
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>用戶名</em>: 升用戶為信任用戶",
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>用戶名</em>: 移除信任用戶權限",
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>介紹</em>: 設置管理公告，會對進入房間的見習管理或以上人員顯示",
-		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings: 顯示並修改房內的某些設置，比如modchat",
+		"- /room.settings: change a variety of room settings, namely modchat": "- /room.settings: 顯示並修改房內的某些設置，比如modchat",
  
 		"<strong>Room owners (#)</strong> can also use:": "<strong>房主（#）</strong> 可以使用：",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>介紹</em>: 設置房內公告，會對進入房間的所有用戶顯示",
@@ -83,7 +83,7 @@
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>信息</em>: 用藍色高亮發布公告信息",
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>HTML的代碼</em>: 在房內廣播HTML代碼框",
 		"- !showimage <em>, [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [寬度], [高度]</em>: 在房內顯示圖片",
-		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: 顯示並修改房內的某些設置，包括modchat，大寫限制等",
+		"- /room.settings: change a variety of room settings, including modchat, capsfilter, etc": "- /room.settings: 顯示並修改房內的某些設置，包括modchat，大寫限制等",
 		
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "需要更多幫助可以閱讀 <a href=\"https://www.smogon.com/forums/posts/6774654/\">房間管理指導</a>",
 		

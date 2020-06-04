@@ -305,7 +305,9 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 		.replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
-	const isStaffRoom = room && ((room.settings && room.roomid.endsWith('staff')) || room.roomid.startsWith('help-'));
+	const isStaffRoom = room && (
+		(room.settings.persistSettings && room.roomid.endsWith('staff')
+		) || room.roomid.startsWith('help-'));
 	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
 
 	for (const list in Chat.monitors) {

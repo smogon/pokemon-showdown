@@ -1457,9 +1457,9 @@ export const commands: ChatCommands = {
 				users: [],
 			};
 
-			for (const [k, v] of targetRoom.auth) {
-				if (!roominfo.auth[v]) roominfo.auth[v] = [];
-				roominfo.auth[v].push(k);
+			for (const [id, rank] of targetRoom.auth) {
+				if (!roominfo.auth[rank]) roominfo.auth[rank] = [];
+				roominfo.auth[rank].push(id);
 			}
 
 			for (const userid in targetRoom.users) {
