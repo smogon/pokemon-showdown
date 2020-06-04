@@ -2116,11 +2116,7 @@ export const commands: ChatCommands = {
 				// Limited support for translated analysis
 				// Translated analysis do not support automatic redirects from a id to the proper page
 				this.sendReplyBox(
-					Chat.html`
-					<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=
-					${supportedLanguages[room.settings.language]}">
-					${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>,
-					brought to you by <a href="https://www.smogon.com">Smogon University</a>`
+					Chat.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`
 				);
 			} else if (['ou', 'uu'].includes(formatId) && generation === 'sm') {
 				this.sendReplyBox(

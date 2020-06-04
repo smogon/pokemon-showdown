@@ -50,7 +50,7 @@ export const commands: ChatCommands = {
 			output += `<br />`;
 		}
 		output += '</div>';
-		user.sendTo(room, `|${uhtml}|room.settings|${output}`);
+		user.sendTo(room, `|${uhtml}|roomsettings|${output}`);
 	},
 	roomsettingshelp: [`/roomsettings - Shows current room settings with buttons to change them (if you can).`],
 
