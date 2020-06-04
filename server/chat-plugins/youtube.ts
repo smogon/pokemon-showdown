@@ -263,7 +263,7 @@ export const commands: ChatCommands = {
 			return FS(STORAGE_PATH).writeUpdate(() => JSON.stringify(channelData));
 		},
 		interval: 'repeat',
-		repeat(target, room, user) {
+		async repeat(target, room, user) {
 			if (room.roomid !== 'youtube') return this.errorReply(`This command can only be used in the YouTube room.`);
 			if (!this.can('declare', null, room)) return false;
 			if (!target) return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime)}.`);
