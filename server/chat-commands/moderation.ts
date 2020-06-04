@@ -953,7 +953,7 @@ export const commands: ChatCommands = {
 
 	deroomvoiceall(target, room, user) {
 		if (!this.can('editroom', null, room)) return false;
-		if (![...room.auth.entries()].length) return this.errorReply("Room does not have roomauth.");
+		if (!room.auth.size) return this.errorReply("Room does not have roomauth.");
 		if (!target) {
 			user.lastCommand = '/deroomvoiceall';
 			this.errorReply("THIS WILL DEROOMVOICE ALL ROOMVOICED USERS.");
