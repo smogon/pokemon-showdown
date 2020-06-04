@@ -531,20 +531,20 @@ export const commands: ChatCommands = {
 		if (!this.can('declare', null, room)) return false;
 		target = toID(target);
 		if (!target) {
-			return this.sendReply(`Approvals are currently ${room.approvalsDisabled ? `DISABLED` : `ENABLED`} for ${room}.`);
+			return this.sendReply(`Approvals are currently ${room.approvalsEnabled ? `ENABLED` : `DISABLED`} for ${room}.`);
 		}
 		if (this.meansNo(target)) {
-			if (room.approvalsDisabled) return this.errorReply(`Approvals are already disabled.`);
-			room.approvalsDisabled = true;
+			if (!room.approvalsEnabled) return this.errorReply(`Approvals are already disabled.`);
+			room.approvalsEnabled = false;
 			this.privateModAction(`${user.name} disabled approvals in this room.`);
 		} else if (this.meansYes(target)) {
-			if (!room.approvalsDisabled) return this.errorReply(`Approvals are already enabled.`);
-			room.approvalsDisabled = false;
+			if (room.approvalsEnabled) return this.errorReply(`Approvals are already enabled.`);
+			room.approvalsEnabled = true;
 			this.privateModAction(`${user.name} enabled approvals in this room.`);
 		} else {
 			return this.errorReply(`Unrecognized settingfor approvals. Use 'enable' or 'disable.'`);
 		}
-		room.chatRoomData!.approvalsDisabled = room.approvalsDisabled;
+		room.chatRoomData!.approvalsEnabled = room.approvalsEnabled;
 		Rooms.global.writeChatRoomData();
 		return this.modlog(`APPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
 	},
@@ -1483,8 +1483,8 @@ export const roomSettings: SettingsHandler[] = [
 		label: "/requestapproval usage",
 		permission: 'declare',
 		options: [
-			[`On`, room.approvalsDisabled === false || `approvals on`],
-			[`Off`, room.approvalsDisabled === true || `approvals off`],
+			[`Off`, room.approvalsEnabled === false || `approvals off`],
+			[`On`, room.approvalsEnabled === true || `approvals on`],
 		],
 	}),
 ];
