@@ -31,7 +31,7 @@ function parseJSON(json: string) {
 	return data;
 }
 
-type LoginServerResponse = [AnyObject | null, number, Error | null];
+type LoginServerResponse = [AnyObject | null, Error | null];
 
 interface IncomingMessage extends NodeJS.ReadableStream {
 	statusCode: number;
@@ -59,7 +59,7 @@ class LoginServerInstance {
 	async instantRequest(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
 		if (this.openRequests > 5) {
 			return Promise.resolve(
-				[null, 0, new RangeError("Request overflow")]
+				[null, new RangeError("Request overflow")]
 			);
 		}
 		this.openRequests++;
@@ -76,21 +76,21 @@ class LoginServerInstance {
 				},
 			});
 			const json = parseJSON(buffer);
+			this.openRequests--;
 			if (json.error) {
-				this.openRequests--;
-				return [null, 0, new Error(json.error!)];
+				return [null, new Error(json.error!)];
 			}
 			this.openRequests--;
-			return [json.json, request.statusCode as number, null];
+			return [json.json, null];
 		} catch (error) {
-			return [null, 0, error];
+			return [null, error];
 		}
 	}
 
 	request(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
 		if (this.disabled) {
 			return Promise.resolve(
-				[null, 0, new Error(`Login server connection disabled.`)]
+				[null, new Error(`Login server connection disabled.`)]
 			);
 		}
 
@@ -136,11 +136,12 @@ class LoginServerInstance {
 
 		const request = Net(`${this.uri}action.php`);
 		request.post({
-			serverid: Config.serverid,
-			servertoken: Config.servertoken,
-			nocache: new Date().getTime(),
-			json: JSON.stringify(dataList),
-		}, {
+			body: {
+				serverid: Config.serverid,
+				servertoken: Config.servertoken,
+				nocache: new Date().getTime(),
+				json: JSON.stringify(dataList),
+			},
 			timeout: LOGIN_SERVER_TIMEOUT,
 		}).then(buffer => {
 			// console.log('RESPONSE: ' + buffer);
@@ -148,19 +149,17 @@ class LoginServerInstance {
 			if (buffer.startsWith(`[{"actionsuccess":true,`)) {
 				buffer = 'stream interrupt';
 			}
+			if (!data) {
+				if (buffer.includes('<')) buffer = 'invalid response';
+				throw new Error(buffer);
+			}
 			for (const [i, resolve] of resolvers.entries()) {
-				if (data) {
-					resolve([data[i], request.statusCode || 0, null]);
-				} else {
-					if (buffer.includes('<')) buffer = 'invalid response';
-					resolve([null, request.statusCode || 0, new Error(buffer)]);
-				}
+				resolve([data[i], null]);
 			}
 			this.requestEnd();
-		}).catch(e => {
-			const error = new TimeoutError("Response not received");
+		}).catch(error => {
 			for (const resolve of resolvers) {
-				resolve([null, 0, error]);
+				resolve([null, error]);
 			}
 			this.requestEnd(error);
 		});

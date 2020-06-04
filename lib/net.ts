@@ -18,6 +18,18 @@ export interface NetRequestOptions extends https.RequestOptions {
 	query?: PostData;
 }
 
+export class HttpError extends Error {
+	statusCode?: number;
+	body: string;
+	constructor(message: string, statusCode: number | undefined, body: string) {
+		super(message);
+		this.name = 'HttpError';
+		this.statusCode = statusCode;
+		this.body = body;
+		Error.captureStackTrace(this, HttpError);
+	}
+}
+
 export class NetStream extends Streams.ReadWriteStream {
 	opts: NetRequestOptions | null;
 	uri: string;
@@ -131,15 +143,14 @@ export class NetStream extends Streams.ReadWriteStream {
 }
 export class NetRequest {
 	uri: string;
-	statusCode?: number;
 	constructor(uri: string) {
 		this.uri = uri;
-		this.statusCode = undefined;
 	}
 	/**
 	 * Makes a http/https get request to the given link and returns a stream.
-	 * The request data itself can be read with ReadStream#read().
+	 * The request data itself can be read with ReadStream#readAll().
 	 * The NetStream class also holds headers and statusCode as a property.
+	 *
 	 * @param opts request opts - headers, etc.
 	 * @param body POST body
 	 */
@@ -152,10 +163,18 @@ export class NetRequest {
 	/**
 	 * Makes a basic http/https request to the URI.
 	 * Returns the response data.
+	 *
+	 * Will throw if the response code isn't 200 OK.
+	 *
 	 * @param opts request opts - headers, etc.
 	 */
-	async get(opts: NetRequestOptions = {}): Promise<string | null> {
-		return this.getStream(opts).readAll();
+	async get(opts: NetRequestOptions = {}): Promise<string> {
+		const stream = this.getStream(opts);
+		const response = await stream.response;
+		if (response.statusCode !== 200) {
+			throw new HttpError(response.statusMessage || "Connection error", response.statusCode, await stream.readAll());
+		}
+		return stream.readAll();
 	}
 
 	/**
@@ -163,12 +182,12 @@ export class NetRequest {
 	 * @param opts request opts - headers, etc.
 	 * @param body POST body
 	 */
-	post(opts: Omit<NetRequestOptions, 'body'>, body: PostData | string): Promise<string | null>;
+	post(opts: Omit<NetRequestOptions, 'body'>, body: PostData | string): Promise<string>;
 	/**
 	 * Makes a http/https POST request to the given link.
 	 * @param opts request opts - headers, etc.
 	 */
-	post(opts?: NetRequestOptions): Promise<string | null>;
+	post(opts?: NetRequestOptions): Promise<string>;
 	post(opts: NetRequestOptions = {}, body?: PostData | string) {
 		if (!body) body = opts.body;
 		return this.get({
