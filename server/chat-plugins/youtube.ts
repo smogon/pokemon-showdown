@@ -280,7 +280,7 @@ export const commands: ChatCommands = {
 			YouTube.interval = setInterval(() => {
 				void (async () => {
 					const res = await YouTube.randChannel();
-					this.addBox(res);
+					this.addBox(res!);
 					room.update();
 				})();
 			 }, interval);
