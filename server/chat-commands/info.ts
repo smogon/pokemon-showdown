@@ -41,14 +41,11 @@ export const commands: ChatCommands = {
 			buf += ` <small style="color:gray">(trusted${targetUser.id === trusted ? `` : `: <span class="username">${trusted}</span>`})</small>`;
 		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
-		let roomauth = '';
-		if (usedRoom.auth.has(targetUser.id)) {
-			roomauth = usedRoom.auth.get(targetUser.id);
-		}
-		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
+		const roomauth = usedRoom.auth.getDirect(targetUser.id);
+		if (Config.groups[roomauth]?.name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
-		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
+		if (Config.groups[targetUser.group]?.name) {
 			buf += `<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
 		}
 		if (targetUser.isSysop) {
@@ -64,7 +61,7 @@ export const commands: ChatCommands = {
 			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
-			const authSymbol = targetRoom.auth.get(targetUser.id);
+			const authSymbol = targetRoom.auth.getDirect(targetUser.id);
 			const battleTitle = (targetRoom.battle ? ` title="${targetRoom.title}"` : '');
 			const output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.settings.isPrivate === true) {
@@ -195,7 +192,7 @@ export const commands: ChatCommands = {
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.game) continue;
 			if ((targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid)) ||
-				curRoom.auth.get(targetUser.id) === Users.PLAYER_SYMBOL) {
+				curRoom.auth.getDirect(targetUser.id) === Users.PLAYER_SYMBOL) {
 				if (curRoom.settings.isPrivate && !canViewAlts) {
 					continue;
 				}
@@ -249,12 +246,12 @@ export const commands: ChatCommands = {
 		let buf = Chat.html`<strong class="username">${target}</strong>`;
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
-		const roomauth = room?.auth.get(userid);
-		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
+		const roomauth = room?.auth.getDirect(userid) || '';
+		if (Config.groups[roomauth]?.name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
-		const group = Users.groups.get(userid);
-		if (Config.groups[group] && Config.groups[group].name) {
+		const group = Users.globalAuth.get(userid);
+		if (Config.groups[group]?.name) {
 			buf += `<br />Global ${Config.groups[group].name} (${group})`;
 		}
 

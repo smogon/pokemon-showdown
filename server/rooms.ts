@@ -65,8 +65,9 @@ interface UserTable {
 }
 
 export interface RoomSettings {
-	aliases: string[];
 	auth: {[userid: string]: GroupSymbol};
+
+	aliases: string[];
 	banwords: string[];
 	isPrivate: boolean | 'hidden' | 'voice';
 	reportJoins: boolean;
@@ -261,10 +262,7 @@ export abstract class BasicRoom {
 		for (const i in this.users) {
 			const user = this.users[i];
 			// hardcoded for performance reasons (this is an inner loop)
-			if (user.isStaff || (this.auth.get(user.id) &&
-				this.auth.get(user.id)! in Config.groups &&
-				Config.groups[this.auth.get(user.id) || ' '].rank >= Config.groups[minRank].rank)
-			) {
+			if (user.isStaff || this.auth.atLeast(user, minRank)) {
 				user.sendTo(this, data);
 			}
 		}
@@ -386,37 +384,6 @@ export abstract class BasicRoom {
 		if (this.game && this.game.constructor.name === constructor.name) return this.game as T;
 		return null;
 	}
-	/**
-	 * Gets the group symbol of a user in the room.
-	 */
-	getAuth(user: {id: ID, group: GroupSymbol} | User): GroupSymbol {
-		const globalGroup = this.settings.isPrivate === true ? ' ' : user.group;
-
-		if (this.auth.has(user.id)) {
-			// room has roomauth
-			// authority is whichever is higher between roomauth and global auth
-			const roomGroup = this.auth.get(user.id);
-			let greaterGroup = Config.greatergroupscache[`${roomGroup}${globalGroup}`];
-			if (!greaterGroup) {
-				// unrecognized groups always trump higher global rank
-				const roomRank = (Config.groups[roomGroup] || {rank: Infinity}).rank;
-				const globalRank = (Config.groups[globalGroup] || {rank: 0}).rank;
-				if (roomGroup === Users.PLAYER_SYMBOL || roomGroup === Users.HOST_SYMBOL || roomGroup === '#') {
-					// Player, Host, and Room Owner always trump higher global rank
-					greaterGroup = roomGroup;
-				} else {
-					greaterGroup = (roomRank > globalRank ? roomGroup : globalGroup);
-				}
-				Config.greatergroupscache[`${roomGroup}${globalGroup}`] = greaterGroup;
-			}
-			return greaterGroup;
-		}
-
-		if (this.parent) {
-			return this.parent.getAuth(user);
-		}
-		return globalGroup;
-	}
 	saveSettings() {
 		if (!this.settings.persistSettings) return null;
 		const settingsList: RoomSettings[] = [];
@@ -431,14 +398,11 @@ export abstract class BasicRoom {
 		));
 	}
 	checkModjoin(user: User) {
-		if (this.settings.staffRoom && !user.isStaff && !(this.auth.has(user.id))) {
-			return false;
-		}
 		if (user.id in this.users) return true;
 		if (!this.settings.modjoin) return true;
 		// users with a room rank can always join
 		if (this.auth.has(user.id)) return true;
-		const userGroup = user.can('makeroom') ? user.group : this.getAuth(user);
+		const userGroup = user.can('makeroom') ? user.group : this.auth.get(user.id);
 
 		const modjoinSetting = this.settings.modjoin !== true ? this.settings.modjoin : this.settings.modchat;
 		if (!modjoinSetting) return true;
@@ -1121,10 +1085,13 @@ export class GlobalRoom extends BasicRoom {
 			if (curRoom.isPersonal && curRoom.auth.get(userid) === Users.HOST_SYMBOL) {
 				curRoom.destroy();
 			} else {
-				if (curRoom.settings.isPrivate || curRoom.battle || !curRoom.settings.persistSettings) continue;
+				if (curRoom.settings.isPrivate || curRoom.battle || !curRoom.settings.persistSettings) {
+					continue;
+				}
 
-				const group = curRoom.auth.get(userid);
-				if (group) roomauth.push(`${group}${id}`);
+				if (curRoom.auth.has(userid)) {
+					roomauth.push(`${curRoom.auth.get(userid)}${id}`);
+				}
 			}
 		}
 		return roomauth;
@@ -1186,6 +1153,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.subRooms = new Map();
 
 		this.settings = {...options} as RoomSettings;
+		if (!this.settings.auth) this.settings.auth = Object.create(null);
 		if (!options.isPersonal) this.settings.persistSettings = true;
 		this.minorActivity = null;
 		Object.assign(this, options);
@@ -1269,11 +1237,7 @@ export class BasicChatRoom extends BasicRoom {
 			if (!user.named) {
 				++guests;
 			}
-			if (this.auth.has(user.id) && this.auth.get(user.id)! in groups) {
-				++groups[this.auth.get(user.id)];
-			} else {
-				++groups[user.group];
-			}
+			++groups[this.auth.get(user.id)];
 		}
 		let entry = '|userstats|total:' + total + '|guests:' + guests;
 		for (const i in groups) {
@@ -1633,7 +1597,6 @@ export class GameRoom extends BasicChatRoom {
 		this.modchatUser = '';
 
 		this.active = false;
-		this.settings.auth = Object.create(null);
 	}
 	/**
 	 * - logNum = 0          : spectator log (no exact HP)
@@ -1681,7 +1644,7 @@ export class GameRoom extends BasicChatRoom {
 		if (!user) {
 			this.modchatUser = '';
 			return;
-		} else if (!this.modchatUser || this.modchatUser === user.id || this.getAuth(user) !== Users.PLAYER_SYMBOL) {
+		} else if (!this.modchatUser || this.modchatUser === user.id || this.auth.get(user.id) !== Users.PLAYER_SYMBOL) {
 			this.modchatUser = user.id;
 			return;
 		} else {

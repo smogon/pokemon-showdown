@@ -2142,13 +2142,10 @@ const ScavengerCommands: ChatCommands = {
 		const data = await HostLeaderboard.visualize(sortMethod) as AnyObject[];
 		this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-huntlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Hunts Created</th><th>Total Hunts Created</th><th>History</th></tr>${
 			data.map((entry: AnyObject) => {
-				const userid = toID(entry.name);
+				const auth = room.auth.get(toID(entry.name));
+				const color = auth ? 'inherit' : 'gray';
 
-				const auth = room.auth.get(user.id) ? room.auth.get(user.id) :
-					Users.groups.get(userid).trim() ? Users.groups.get(userid) : '&nbsp;';
-				const color = room.auth.get(user.id) ? 'inherit' : 'gray';
-
-				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
+				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth || '&nbsp;'}</span>${Chat.escapeHTML(entry.name)}</td>` +
 					`<td style="text-align: right;">${(entry.points || 0)}</td>` +
 					`<td style="text-align: right;">${(entry['cumulative-points'] || 0)}</td>` +
 					`<td style="text-align: left;">${entry['history-points'] ? `<span style="color: gray">{ ${entry['history-points'].join(', ')} }</span>` : ''}</td>` +
@@ -2194,13 +2191,10 @@ const ScavengerCommands: ChatCommands = {
 
 		this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-playlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Finished Hunts</th><th>Joined Hunts</th><th>Ratio</th><th>Infractions</th></tr>${
 			formattedData.map(entry => {
-				const userid = toID(entry.name);
+				const auth = room.auth.get(toID(entry.name));
+				const color = auth ? 'inherit' : 'gray';
 
-				const auth = room.auth.get(user.id) ? room.auth.get(user.id) :
-					Users.groups.get(userid).trim() ? Users.groups.get(userid) : '&nbsp;';
-				const color = room.auth.get(user.id) ? 'inherit' : 'gray';
-
-				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
+				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth || '&nbsp;'}</span>${Chat.escapeHTML(entry.name)}</td>` +
 					`<td style="text-align: right;">${(entry.finish || 0)} <span style="color: blue">(${(entry['cumulative-finish'] || 0)})</span>${(entry['history-finish'] ? `<br /><span style="color: gray">(History: ${entry['history-finish'].join(', ')})</span>` : '')}</td>` +
 					`<td style="text-align: right;">${(entry.join || 0)} <span style="color: blue">(${(entry['cumulative-join'] || 0)})</span>${(entry['history-join'] ? `<br /><span style="color: gray">(History: ${entry['history-join'].join(', ')})</span>` : '')}</td>` +
 					`<td style="text-align: right;">${entry.ratio}%<br /><span style="color: blue">(${(entry['cumulative-ratio'] || "0.00")}%)</span></td>` +

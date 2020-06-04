@@ -30,9 +30,6 @@
 
 type StatusType = 'online' | 'busy' | 'idle';
 
-const PLAYER_SYMBOL: GroupSymbol = '\u2606';
-const HOST_SYMBOL: GroupSymbol = '\u2605';
-
 const THROTTLE_DELAY = 600;
 const THROTTLE_DELAY_TRUSTED = 100;
 const THROTTLE_BUFFER_LIMIT = 6;
@@ -44,7 +41,7 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
 import {FS} from '../lib/fs';
-import {GlobalAuth} from './user-groups';
+import {GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL} from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -177,12 +174,12 @@ function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boole
 /*********************************************************
  * User groups
 *********************************************************/
-const groups = new GlobalAuth();
+const globalAuth = new GlobalAuth();
 
 function isUsernameKnown(name: string) {
 	const userid = toID(name);
 	if (Users.get(userid)) return true;
-	if (groups.has(userid)) return true;
+	if (globalAuth.has(userid)) return true;
 	for (const room of Rooms.global.chatRooms) {
 		if (room.auth.has(userid)) return true;
 	}
@@ -192,11 +189,9 @@ function isUsernameKnown(name: string) {
 function isTrusted(name: string | User) {
 	if ((name as User).trusted) return (name as User).trusted;
 	const userid = toID(name);
-	if (groups.has(userid)) return userid;
+	if (globalAuth.has(userid)) return userid;
 	for (const room of Rooms.global.chatRooms) {
-		if (!room.settings.isPrivate && !room.isPersonal &&
-				room.auth.has(userid) && room.auth.get(userid) !== '+'
-		) {
+		if (!room.settings.isPrivate && !room.isPersonal && room.auth.isStaff(userid)) {
 			return userid;
 		}
 	}
@@ -495,7 +490,7 @@ export class User extends Chat.MessageContext {
 				const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
 				return mutedSymbol + this.name;
 			}
-			return room.getAuth(this) + this.name;
+			return room.auth.get(this.id) + this.name;
 		}
 		if (this.semilocked) {
 			const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
@@ -524,7 +519,7 @@ export class User extends Chat.MessageContext {
 			minAuth = Config.groupsranking[1];
 		}
 		if (!(minAuth in Config.groups)) return false;
-		const auth = (room && !this.can('makeroom') ? room.getAuth(this) : this.group);
+		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id, true) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
 	can(permission: string, target: string | User | null = null, room: Room | BasicChatRoom | null = null): boolean {
@@ -546,9 +541,9 @@ export class User extends Chat.MessageContext {
 		}
 
 		if (room && (room.settings.auth || room.parent)) {
-			group = room.getAuth(this);
+			group = room.auth.get(this.id, true);
 			if (!Config.groups[group]) group = this.group;
-			if (targetUser) targetGroup = room.getAuth(targetUser);
+			if (targetUser) targetGroup = room.auth.get(targetUser.id, true);
 			if (room.settings.isPrivate === true && this.can('makeroom')) group = this.group;
 		} else {
 			group = this.group;
@@ -1055,11 +1050,7 @@ export class User extends Chat.MessageContext {
 			return;
 		}
 		this.registered = true;
-		if (groups.has(this.id)) {
-			this.group = groups.get(this.id);
-		} else {
-			this.group = Config.groupsranking[0];
-		}
+		this.group = globalAuth.get(this.id, true);
 
 		if (Config.customavatars && Config.customavatars[this.id]) {
 			this.avatar = Config.customavatars[this.id];
@@ -1068,8 +1059,7 @@ export class User extends Chat.MessageContext {
 		const groupInfo = Config.groups[this.group];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
-			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!staffRoom?.auth.get(this.id);
+			this.isStaff = !!Rooms.get('staff')?.auth.has(this.id);
 		}
 		if (this.trusted) {
 			if (this.locked && this.permalocked) {
@@ -1100,19 +1090,18 @@ export class User extends Chat.MessageContext {
 		const groupInfo = Config.groups[this.group];
 		this.isStaff = !!(groupInfo && (groupInfo.lock || groupInfo.root));
 		if (!this.isStaff) {
-			const staffRoom = Rooms.get('staff');
-			this.isStaff = !!(staffRoom?.auth.get(this.id));
+			this.isStaff = !!Rooms.get('staff')?.auth.has(this.id);
 		}
 		if (wasStaff !== this.isStaff) this.update('isStaff');
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
 			if (forceTrusted || this.group !== Config.groupsranking[0]) {
-				groups.set(this.id, this.group);
+				globalAuth.set(this.id, this.group);
 				this.trusted = this.id;
 				this.autoconfirmed = this.id;
 			} else {
-				groups.delete(this.id);
-				groups.save();
+				globalAuth.delete(this.id);
+				globalAuth.save();
 				this.trusted = '';
 			}
 		}
@@ -1125,19 +1114,17 @@ export class User extends Chat.MessageContext {
 		if (!this.trusted) return;
 		const userid = this.trusted;
 		const removed = [];
-		if (groups.has(userid)) {
-			removed.push(groups.get(userid));
+		if (globalAuth.has(userid)) {
+			removed.push(globalAuth.get(userid));
 		}
 		for (const room of Rooms.global.chatRooms) {
-			if (!room.settings.isPrivate &&
-					room.auth.has(userid) && room.auth.get(userid) !== '+'
-			) {
-				removed.push(room.auth.get(userid) + room.roomid);
+			if (!room.settings.isPrivate && room.auth.isStaff(userid)) {
+				removed.push(room.auth.getDirect(userid) + room.roomid);
 				room.auth.set(userid, '+');
 			}
 		}
 		this.trusted = '';
-		groups.set(userid, Config.groupsranking[0]);
+		globalAuth.set(userid, Config.groupsranking[0]);
 		return removed;
 	}
 	markDisconnected() {
@@ -1631,8 +1618,7 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
 	const maxLineCount = user.isStaff ||
-		(room.auth.get(user.id) !== '+' && room.auth.get(user.id)! in Config.groups) ?
-		THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN;
+		(room.auth.isStaff(user.id) ? THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN);
 	if (lines.length > maxLineCount) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;
@@ -1666,7 +1652,7 @@ export const Users = {
 	get: getUser,
 	getExact: getExactUser,
 	findUsers,
-	groups,
+	globalAuth,
 	isUsernameKnown,
 	isTrusted,
 	PLAYER_SYMBOL,

@@ -361,7 +361,7 @@ export const commands: ChatCommands = {
 		}
 		const rankLists: {[k: string]: string[]} = {};
 		const ranks = Object.keys(Config.groups);
-		for (const [id, rank] of Users.groups.entries()) {
+		for (const [id, rank] of Users.globalAuth.entries()) {
 			if (rank === ' ' || (rank === '+' && !target)) continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
 			if (ranks.includes(rank)) {
@@ -1389,7 +1389,7 @@ export const commands: ChatCommands = {
 				}
 				let roomidWithAuth: string = roomid;
 				if (targetRoom.auth.has(targetUser.id)) {
-					roomidWithAuth = targetRoom.auth.get(targetUser.id) + roomid;
+					roomidWithAuth = targetRoom.auth.getDirect(targetUser.id) + roomid;
 				}
 				roomList[roomidWithAuth] = roomData;
 			}
