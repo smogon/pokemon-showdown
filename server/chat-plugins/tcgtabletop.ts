@@ -6,33 +6,13 @@
 */
 
 
-import * as https from 'https';
-import * as querystring from 'querystring';
-
+import {Net} from '../../lib/net';
 
 const SEARCH_PATH = '/api/v1/Search/List/';
 const DETAILS_PATH = '/api/v1/Articles/Details/';
 
 async function getFandom(site: string, pathName: string, search: AnyObject) {
-	const reqOpts = {
-		hostname: `${site}.fandom.com`,
-		method: 'GET',
-		path: `${pathName}?${querystring.stringify(search)}`,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	};
-
-	const body: any = await new Promise((resolve, reject) => {
-		https.request(reqOpts, res => {
-			if (!res.statusCode || !(res.statusCode >= 200 && res.statusCode < 300)) return reject(new Error(`Not found.`));
-			const data: string[] = [];
-			res.setEncoding('utf8');
-			res.on('data', chunk => data.push(chunk));
-			res.on('end', () => resolve(data.join('')));
-		}).on('error', reject).setTimeout(5000).end();
-	});
-
+	const body = await Net(`https://${site}.fandom.com/${pathName}`).get({query: search});
 	const json = JSON.parse(body);
 	if (!json) throw new Error(`Malformed data`);
 	if (json.exception) throw new Error(Dex.getString(json.exception.message) || `Not found`);
