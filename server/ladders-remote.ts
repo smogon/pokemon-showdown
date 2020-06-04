@@ -71,7 +71,7 @@ export class LadderStore {
 		const p2 = Users.getExact(p2name);
 		room.update();
 		room.send(`||Ladder updating...`);
-		const [data, , error] = await LoginServer.request('ladderupdate', {
+		const [data, error] = await LoginServer.request('ladderupdate', {
 			p1: p1name,
 			p2: p2name,
 			score: p1score,
