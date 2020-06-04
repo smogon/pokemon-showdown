@@ -106,11 +106,13 @@ export class GlobalAuth extends Auth {
 		this.load();
 	}
 	save() {
-		let buffer = '';
-		for (const [userid, groupSymbol] of this) {
-			buffer += `${this.usernames.get(userid) || userid},${groupSymbol}\n`;
-		}
-		return FS('config/usergroups.csv').write(buffer);
+		FS('config/usergroups.csv').writeUpdate(() => {
+			let buffer = '';
+			for (const [userid, groupSymbol] of this) {
+				buffer += `${this.usernames.get(userid) || userid},${groupSymbol}\n`;
+			}
+			return buffer;
+		});
 	}
 	load() {
 		const data = FS('config/usergroups.csv').readIfExistsSync();
@@ -132,7 +134,7 @@ export class GlobalAuth extends Auth {
 		}
 		this.usernames.set(id, username);
 		super.set(id, group);
-		void this.save();
+		this.save();
 		return this;
 	}
 	delete(id: ID) {
@@ -143,7 +145,7 @@ export class GlobalAuth extends Auth {
 			user.group = ' ';
 		}
 		this.usernames.delete(id);
-		void this.save();
+		this.save();
 		return true;
 	}
 }

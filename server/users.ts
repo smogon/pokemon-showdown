@@ -1101,7 +1101,7 @@ export class User extends Chat.MessageContext {
 				this.autoconfirmed = this.id;
 			} else {
 				globalAuth.delete(this.id);
-				void globalAuth.save();
+				globalAuth.save();
 				this.trusted = '';
 			}
 		}
