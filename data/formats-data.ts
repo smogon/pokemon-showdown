@@ -904,7 +904,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	starmie: {
-		randomBattleMoves: ["rapidspin", "recover", "reflecttype", "scald", "toxic"],
+		randomBattleMoves: ["psyshock", "rapidspin", "recover", "scald", "toxic"],
 		randomBattleLevel: 82,
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -1566,6 +1566,8 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	skarmory: {
+		randomBattleMoves: ["bravebird", "defog", "roost", "spikes", "stealthrock", "whirlwind"],
+		randomBattleLevel: 80,
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -1941,7 +1943,7 @@ export const BattleFormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	aggron: {
-		randomBattleMoves: ["autotomize", "bodypress", "earthquake", "headsmash", "heavyslam", "stealthrock"],
+		randomBattleMoves: ["bodypress", "earthquake", "headsmash", "heavyslam", "rockpolish", "stealthrock"],
 		randomBattleLevel: 86,
 		isNonstandard: "Past",
 		tier: "Illegal",
