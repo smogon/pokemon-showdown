@@ -609,6 +609,15 @@ exports.grouplist = [
 		broadcast: true,
 	},
 	{
+		symbol: '·',
+		id: "whitelist",
+		name: "Whitelist",
+		inherit: ' ',
+		alts: 's',
+		roomonly: true,
+		showimage: true,
+	},
+	{
 		symbol: ' ',
 	},
 	{

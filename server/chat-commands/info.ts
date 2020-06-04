@@ -2485,10 +2485,10 @@ export const commands: ChatCommands = {
 	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # & ~`],
 
 	async show(target, room, user) {
-		if (!user.authAtLeast(room.showimages!) && !(user.id in room.chatRoomData!.whitelist)) return false;
+		if (!this.can('showimage', null, room)) return false;
 		if (!toID(target).trim()) return this.parse(`/help link`);
 		const [link, comment] = target.split(',');
-		this.runBroadcast();
+		this.runBroadcast(undefined, null, this.can('showimage', null, room));
 		const YouTube = new YoutubeInterface();
 		if (link.includes('youtu')) {
 			let buf = await YouTube.generateVideoDisplay(link);
@@ -2509,33 +2509,6 @@ export const commands: ChatCommands = {
 		}
 	},
 	showhelp: [`/show [url] - shows an image or video url in chat. Requires: whitelist % @ # & ~`],
-
-	whitelist(target, room, user) {
-		if (!this.can('ban', null, room)) return false;
-		target = toID(target);
-		if (!target) return this.parse(`/help whitelist`);
-		if (!Users.get(target)) return this.errorReply(`User not found.`);
-		if (target in room.auth! && room.auth![target] !== '+' || Users.get(target)!.isStaff) {
-			return this.errorReply(`You don't need to whitelist staff - they can just use !show.`);
-		}
-		if (!room.whitelistUser(target)) return this.errorReply(`${target} is already whitelisted.`);
-		if (Users.get(target)) Users.get(target)?.popup(`You have been whitelisted for linking in ${room}.`);
-		this.privateModAction(`(${user.name} whitelisted ${target} for links.)`);
-		this.modlog(`WHITELIST`, target);
-	},
-	whitelisthelp: [`/whitelist [user] - Whitelists [user] to post media in the room. Requires: % @ & # ~`],
-
-	unwhitelist(target, room, user) {
-		if (!this.can('ban', null, room)) return false;
-		target = toID(target);
-		if (Users.get(target)) Users.get(target)?.popup(`You have been removed from the link whitelist in ${room}.`);
-		if (!target) return this.parse(`/help unwhitelist`);
-		if (!room.unwhitelistUser(target)) return this.errorReply(`${target} is not whitelisted.`);
-		this.sendReply(`Unwhitelisted ${target} for linking.`);
-		this.modlog(`UNWHITELIST`, target);
-		this.privateModAction(`(${user} removed ${target} from the link whitelist.)`);
-		return Rooms.global.writeChatRoomData();
-	},
 
 	'!pi': true,
 	pi(target, room, user) {
