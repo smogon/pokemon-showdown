@@ -32,6 +32,7 @@ type StatusType = 'online' | 'busy' | 'idle';
 
 const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 const HOST_SYMBOL: GroupSymbol = '\u2605';
+const WHITELISTED_SYMBOL = '\u200B';
 
 const THROTTLE_DELAY = 600;
 const THROTTLE_DELAY_TRUSTED = 100;
@@ -1706,6 +1707,7 @@ export const Users = {
 	importUsergroups,
 	PLAYER_SYMBOL,
 	HOST_SYMBOL,
+	WHITELISTED_SYMBOL,
 	connections,
 	User,
 	Connection,

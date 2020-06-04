@@ -609,7 +609,7 @@ exports.grouplist = [
 		broadcast: true,
 	},
 	{
-		symbol: '·',
+		symbol: '\u200B',
 		id: "whitelist",
 		name: "Whitelist",
 		inherit: ' ',
