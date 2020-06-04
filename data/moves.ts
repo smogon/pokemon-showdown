@@ -258,11 +258,11 @@ export const BattleMovedex: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {authentic: 1, mystery: 1},
-		onHit(target, source, move) {
+		onHit(target) {
 			if (target.side.active.length < 2) return false; // fails in singles
 			const action = this.queue.willMove(target);
 			if (action) {
-				this.queue.prioritizeAction(action, move);
+				this.queue.prioritizeAction(action);
 				this.add('-activate', target, 'move: After You');
 			} else {
 				return false;
