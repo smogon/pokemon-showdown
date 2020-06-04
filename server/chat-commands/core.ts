@@ -361,7 +361,7 @@ export const commands: ChatCommands = {
 		}
 		const rankLists: {[k: string]: string[]} = {};
 		const ranks = Object.keys(Config.groups);
-		for (const [id, rank] of Users.globalAuth.entries()) {
+		for (const [id, rank] of Users.globalAuth) {
 			if (rank === ' ' || (rank === '+' && !target)) continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
 			if (ranks.includes(rank)) {
