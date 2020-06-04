@@ -126,7 +126,7 @@ export abstract class BasicRoom {
 	staffRoom: boolean;
 	language: string | false;
 	slowchat: number | false;
-	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases: string[]}};
+	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases?: string[]}};
 	filterStretching: boolean;
 	filterEmojis: boolean;
 	filterCaps: boolean;
