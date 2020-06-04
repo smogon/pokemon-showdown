@@ -361,13 +361,13 @@ export const commands: ChatCommands = {
 		}
 		const rankLists: {[k: string]: string[]} = {};
 		const ranks = Object.keys(Config.groups);
-		for (const [k, v] of Users.groups.entries()) {
-			if (v === ' ' || (v === '+' && !target)) continue;
+		for (const [user, rank] of Users.groups.entries()) {
+			if (rank === ' ' || (rank === '+' && !target)) continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
-			if (ranks.includes(v)) {
-				const place = rankLists[v];
-				if (!place) rankLists[v] = [];
-				if (v) rankLists[v].push(k);
+			if (ranks.includes(rank)) {
+				const place = rankLists[rank];
+				if (!place) rankLists[rank] = [];
+				if (rank) rankLists[rank].push(user);
 			}
 		}
 

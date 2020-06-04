@@ -73,7 +73,7 @@
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>username</em>: room voice नियुक्त करे",
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>username</em>: room voice हटाए",
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>intro</em>: staff के लिए परिचय सन्देश रखे, जो की हर जुड़ने वाले staff को दिखेगा.",
-		"- /room.settings: change a variety of room settings, namely modchat": "- /room.settings: room के विविध सेटिंग बदले, यानी modchat.",
+		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings: room के विविध सेटिंग बदले, यानी modchat.",
 
 		"<strong>Room owners (#)</strong> can also use:": "<strong>Room owners (#)</strong> इनका भी उपयोग कर सकते हैं:",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>intro</em>: room के लिए परिचय सन्देश रखे, जो की हर जुड़ने वाले उपयोगकर्ता को दिखेगा.",
@@ -84,7 +84,7 @@
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>सन्देश</em>: room में एक बड़ा नीला ऐलान करे",
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>c&oacute;digo HTML</em>: room में HTML code के एक डब्बे को प्रसारित करे",
 		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [width], [height]</em>: room में एक चित्र प्रदर्शित करे",
-		"- /room.settings: change a variety of room settings, including modchat, capsfilter, etc": "- /room.settings: room के विविध सेटिंग बदले, जैसे की  modchat, capsfilter आदि",
+		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: room के विविध सेटिंग बदले, जैसे की  modchat, capsfilter आदि",
 
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "और ज्यादा विस्तृत सहायता <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a> में मिल सकती है",
 

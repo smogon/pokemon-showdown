@@ -43,7 +43,7 @@ export const commands: ChatCommands = {
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
 		if (usedRoom.auth.has(targetUser.id)) {
-			roomauth = usedRoom.auth.get(targetUser.id)!;
+			roomauth = usedRoom.auth.get(targetUser.id);
 		}
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
@@ -64,7 +64,7 @@ export const commands: ChatCommands = {
 			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
-			const authSymbol = targetRoom.auth.get(targetUser.id)!;
+			const authSymbol = targetRoom.auth.get(targetUser.id);
 			const battleTitle = (targetRoom.battle ? ` title="${targetRoom.title}"` : '');
 			const output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.settings.isPrivate === true) {
@@ -1881,7 +1881,7 @@ export const commands: ChatCommands = {
 				`- /roomvoice <em>username</em>: appoint a room voice`,
 				`- /roomdevoice <em>username</em>: remove a room voice`,
 				`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
-				`- /room.settings: change a variety of room settings, namely modchat`,
+				`- /roomsettings: change a variety of room settings, namely modchat`,
 			],
 			[
 				`<strong>Room owners (#)</strong> can also use:`,
@@ -1893,7 +1893,7 @@ export const commands: ChatCommands = {
 				`- /declare <em>message</em>: make a large blue declaration to the room`,
 				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
 				`- !showimage <em>[url], [width], [height]</em>: show an image to the room`,
-				`- /room.settings: change a variety of room settings, including modchat, capsfilter, etc`,
+				`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
 			],
 			[
 				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a>`,

@@ -395,7 +395,7 @@ export abstract class BasicRoom {
 		if (this.auth.has(user.id)) {
 			// room has roomauth
 			// authority is whichever is higher between roomauth and global auth
-			const roomGroup = this.auth.get(user.id)!;
+			const roomGroup = this.auth.get(user.id);
 			let greaterGroup = Config.greatergroupscache[`${roomGroup}${globalGroup}`];
 			if (!greaterGroup) {
 				// unrecognized groups always trump higher global rank
@@ -576,13 +576,13 @@ export class GlobalRoom extends BasicRoom {
 				title: 'Lobby',
 				isOfficial: true,
 				autojoin: true,
-				cache: true,
+				persistSettings: true,
 			}, {
 				title: 'Staff',
 				isPrivate: true,
 				staffRoom: true,
 				staffAutojoin: true,
-				cache: true,
+				persistSettings: true,
 			}];
 		}
 
@@ -1270,7 +1270,7 @@ export class BasicChatRoom extends BasicRoom {
 				++guests;
 			}
 			if (this.auth.has(user.id) && this.auth.get(user.id)! in groups) {
-				++groups[this.auth.get(user.id) || ' '];
+				++groups[this.auth.get(user.id)];
 			} else {
 				++groups[user.group];
 			}
@@ -1476,9 +1476,7 @@ export class BasicChatRoom extends BasicRoom {
 		Rooms.aliases.set(oldID, newID);
 		if (!this.aliases) this.aliases = [];
 		this.aliases.push(oldID);
-		if (this.settings.persistSettings) {
-			this.saveSettings();
-		}
+		this.saveSettings();
 
 		for (const user of Object.values(this.users)) {
 			user.inRooms.delete(oldID);

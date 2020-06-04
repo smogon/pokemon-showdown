@@ -749,12 +749,8 @@ export const commands: ChatCommands = {
 			if (room.settings.blackjackDisabled) {
 				return this.errorReply("Blackjack is already disabled in this room.");
 			}
-
 			room.settings.blackjackDisabled = true;
-			if (room.settings.persistSettings) {
-				room.settings.blackjackDisabled = true;
-				room.saveSettings();
-			}
+			room.saveSettings();
 			this.sendReply(`Blackjack has been disabled for this room.`);
 		},
 		enable(target, room, user) {
@@ -764,11 +760,8 @@ export const commands: ChatCommands = {
 			}
 
 			delete room.settings.blackjackDisabled;
-			if (room.settings.persistSettings) {
-				delete room.settings.blackjackDisabled;
-				room.saveSettings();
-				this.sendReply(`Blackjack has been enabled for this room.`);
-			}
+			room.saveSettings();
+			this.sendReply(`Blackjack has been enabled for this room.`);
 		},
 		'': 'help',
 		help(target, room, user) {

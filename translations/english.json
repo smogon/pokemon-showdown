@@ -72,7 +72,7 @@
 		"- /roomvoice <em>username</em>: appoint a room voice": "",
 		"- /roomdevoice <em>username</em>: remove a room voice": "",
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "",
-		"- /room.settings: change a variety of room settings, namely modchat": "",
+		"- /roomsettings: change a variety of room settings, namely modchat": "",
 
 		"<strong>Room owners (#)</strong> can also use:": "",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "",
@@ -83,7 +83,7 @@
 		"- /declare <em>message</em>: make a large blue declaration to the room": "",
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "",
 		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "",
-		"- /room.settings: change a variety of room settings, including modchat, capsfilter, etc": "",
+		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "",
 
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "",
 

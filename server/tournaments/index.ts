@@ -1577,20 +1577,15 @@ export const commands: ChatCommands = {
 					return this.errorReply("Tournaments are already enabled for @ and above in this room.");
 				}
 				room.settings.toursEnabled = true;
-				if (room.settings.persistSettings) {
-					room.settings.toursEnabled = true;
-					room.saveSettings();
-				}
+				room.saveSettings();
 				return this.sendReply("Tournaments are now enabled for @ and up.");
 			} else if (rank === '%') {
 				if (room.settings.toursEnabled === rank) {
 					return this.errorReply("Tournaments are already enabled for % and above in this room.");
 				}
 				room.settings.toursEnabled = rank;
-				if (room.settings.persistSettings) {
-					room.settings.toursEnabled = rank;
-					room.saveSettings();
-				}
+				room.saveSettings();
+
 				return this.sendReply("Tournaments are now enabled for % and up.");
 			} else {
 				return this.errorReply("Tournament enable setting not recognized.  Valid options include [%|@].");
@@ -1601,10 +1596,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("Tournaments are already disabled.");
 			}
 			room.settings.toursEnabled = false;
-			if (room.settings.persistSettings) {
-				room.settings.toursEnabled = false;
-				room.saveSettings();
-			}
+			room.saveSettings();
 			return this.sendReply("Tournaments are now disabled.");
 		} else if (cmd === 'announce' || cmd === 'announcements') {
 			if (!this.can('gamemanagement', null, room)) return;
@@ -1634,9 +1626,7 @@ export const commands: ChatCommands = {
 				return this.sendReply(`Usage: ${cmd} <on|off>`);
 			}
 
-			if (room.settings.persistSettings) {
-				room.saveSettings();
-			}
+			room.saveSettings();
 		} else if (cmd === 'create' || cmd === 'new') {
 			if (room.settings.toursEnabled === true) {
 				if (!this.can('tournaments', null, room)) return;

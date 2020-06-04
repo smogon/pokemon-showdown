@@ -16,6 +16,7 @@ const SLOWCHAT_USER_REQUIREMENT = 10;
 const MAX_CHATROOM_ID_LENGTH = 225;
 
 export const commands: ChatCommands = {
+	roomsetting: 'roomsettings',
 	roomsettings(target, room, user, connection) {
 		if (room.battle) return this.errorReply("This command cannot be used in battle rooms.");
 		let uhtml = 'uhtml';
@@ -51,7 +52,7 @@ export const commands: ChatCommands = {
 		output += '</div>';
 		user.sendTo(room, `|${uhtml}|room.settings|${output}`);
 	},
-	roomsettingshelp: [`/room.settings - Shows current room settings with buttons to change them (if you can).`],
+	roomsettingshelp: [`/roomsettings - Shows current room settings with buttons to change them (if you can).`],
 
 	modchat(target, room, user) {
 		if (!target) {
@@ -291,10 +292,7 @@ export const commands: ChatCommands = {
 		const slowchatSetting = (room.settings.slowchat || "OFF");
 		this.privateModAction(`(${user.name} set slowchat to ${slowchatSetting})`);
 		this.modlog('SLOWCHAT', null, '' + slowchatSetting);
-
-		if (room.settings.persistSettings) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 	},
 	slowchathelp: [
 		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ # & ~`,
@@ -323,10 +321,7 @@ export const commands: ChatCommands = {
 		const stretchSetting = (room.settings.filterStretching ? "ON" : "OFF");
 		this.privateModAction(`(${user.name} turned the stretch filter ${stretchSetting})`);
 		this.modlog('STRETCH FILTER', null, stretchSetting);
-
-		if (room.settings.persistSettings) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 	},
 	stretchfilterhelp: [
 		`/stretchfilter [on/off] - Toggles filtering messages in the room for stretchingggggggg. Requires # & ~`,
@@ -355,9 +350,7 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user.name} turned the caps filter ${capsSetting})`);
 		this.modlog('CAPS FILTER', null, capsSetting);
 
-		if (room.settings.persistSettings) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 	},
 	capsfilterhelp: [`/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~`],
 
@@ -384,9 +377,7 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user.name} turned the emoji filter ${emojiSetting})`);
 		this.modlog('EMOJI FILTER', null, emojiSetting);
 
-		if (room.settings.persistSettings) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 	},
 	emojifilterhelp: [`/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~`],
 
@@ -456,10 +447,7 @@ export const commands: ChatCommands = {
 				this.sendReply(`Banned phrase successfully added.`);
 			}
 			this.sendReply(`The list is currently: ${room.settings.banwords.join(', ')}`);
-
-			if (room.settings.persistSettings) {
-				room.saveSettings();
-			}
+			room.saveSettings();
 		},
 
 		delete(target, room, user) {
@@ -494,11 +482,7 @@ export const commands: ChatCommands = {
 					`The list is currently: ${room.settings.banwords.join(', ')}` :
 					`The list is now empty.`
 			);
-
-			if (room.settings.persistSettings) {
-				if (!room.settings.banwords) delete room.settings.banwords;
-				room.saveSettings();
-			}
+			room.saveSettings();
 		},
 
 		list(target, room, user) {
@@ -534,10 +518,7 @@ export const commands: ChatCommands = {
 		} else {
 			return this.parse('/help hightraffic');
 		}
-
-		if (room.settings.persistSettings) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 		this.modlog(`HIGHTRAFFIC`, null, '' + room.settings.highTraffic);
 		this.addModAction(`This room was marked as high traffic by ${user.name}.`);
 	},
@@ -660,7 +641,7 @@ export const commands: ChatCommands = {
 			introMessage: `` +
 				`<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//${Config.routes.client}/fx/groupchat.png" width=120 height=100></td><td><h2>${titleMsg}</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,
 			staffMessage: `` +
-				`<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p><p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p><p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | <button class="button" name="send" value="/room.settings">Room Settings</button> | <button class="button" name="send" value="/tournaments help">Tournaments</button></p><p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`,
+				`<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p><p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p><p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | <button class="button" name="send" value="/roomsettings">Room Settings</button> | <button class="button" name="send" value="/tournaments help">Tournaments</button></p><p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`,
 		});
 		if (targetRoom) {
 			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
@@ -896,10 +877,8 @@ export const commands: ChatCommands = {
 			room.settings.privacySetter = null;
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
-			if (room.settings.persistSettings) {
-				delete room.settings.isPrivate;
-				room.saveSettings();
-			}
+			delete room.settings.isPrivate;
+			room.saveSettings();
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
 			if (room.subRooms) {
@@ -920,10 +899,8 @@ export const commands: ChatCommands = {
 			room.settings.isPrivate = setting;
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			if (room.settings.persistSettings) {
-				room.settings.isPrivate = setting;
-				room.saveSettings();
-			}
+			room.settings.isPrivate = setting;
+			room.saveSettings();
 			room.settings.privacySetter = new Set([user.id]);
 		}
 	},
@@ -966,7 +943,6 @@ export const commands: ChatCommands = {
 			delete room.settings.pspl;
 			this.addModAction(`${user.name} made this chat room no longer a PSPL Winner room.`);
 			this.modlog('PSPLROOM');
-			//
 			delete room.settings.pspl;
 			room.saveSettings();
 		} else {
@@ -1114,11 +1090,8 @@ export const commands: ChatCommands = {
 
 		this.privateModAction(`(${user.name} changed the roomdesc to: "${target}".)`);
 		this.modlog('ROOMDESC', null, `to "${target}"`);
-
-		if (room.settings.persistSettings) {
-			room.settings.desc = room.desc;
-			room.saveSettings();
-		}
+		room.settings.desc = room.desc;
+		room.saveSettings();
 	},
 
 	topic: 'roomintro',
@@ -1166,12 +1139,8 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user.name} deleted the roomintro.)`);
 		this.modlog('DELETEROOMINTRO');
 		this.roomlog(target);
-
-		delete room.introMessage;
-		if (room.settings.persistSettings) {
-			delete room.settings.introMessage;
-			room.saveSettings();
-		}
+		delete room.settings.introMessage;
+		room.saveSettings();
 	},
 
 	stafftopic: 'staffintro',
@@ -1206,10 +1175,7 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user.name} changed the staffintro.)`);
 		this.modlog('STAFFINTRO');
 		this.roomlog(room.staffMessage.replace(/\n/g, ``));
-
-		if (room.settings.persistSettings) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 	},
 
 	deletestafftopic: 'deletestaffintro',

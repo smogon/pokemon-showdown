@@ -72,7 +72,7 @@
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>ユーザー名</em>: ユーザーにボイス（＋）権限を与えます。",
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>ユーザー名</em>: ユーザーからボイス（＋）権限を外します。",
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>イントロ</em>: スタッフがチャット部屋に入る際表示されるイントロを設定します。",
-		"- /room.settings: change a variety of room settings, namely modchat": "- /room.settings: チャット部屋の設定が表示されます。modchatなどを変更することができます。",
+		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings: チャット部屋の設定が表示されます。modchatなどを変更することができます。",
 
 		"<strong>Room owners (#)</strong> can also use:": "<strong>ルームオーナー（＃）</strong> コマンド:",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>イントロ</em>: ユーザーがチャット部屋に入る際表示されるイントロを設定します。",
@@ -83,7 +83,7 @@
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>メッセージ</em>: メッセージを宣言して、部屋にいる全員に通知を送ります。",
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>HTML</em>: HTMLコード入りのboxを部屋に表示します。",
 		"- !showimage <em>, [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [width], [height]</em>: チャット部屋に画像を表示します。",
-		"- /room.settings: change a variety of room settings, including modchat, capsfilter, etc": "- /room.settings: チャット部屋の設定が表示されます。modchat, capsfilterなど様々な設定を行えます。",
+		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: チャット部屋の設定が表示されます。modchat, capsfilterなど様々な設定を行えます。",
 
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "もっと詳しく知りたい場合、<a href=\"https://www.smogon.com/forums/posts/6774654/\">スタッフガイド（英語）</a>をご参照ください。",
 

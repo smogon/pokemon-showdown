@@ -639,10 +639,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("UNO is already disabled in this room.");
 			}
 			room.settings.unoDisabled = true;
-			if (room.settings.persistSettings) {
-				room.settings.unoDisabled = true;
-				room.saveSettings();
-			}
+			room.saveSettings();
 			return this.sendReply("UNO has been disabled for this room.");
 		},
 
@@ -653,10 +650,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("UNO is already enabled in this room.");
 			}
 			delete room.settings.unoDisabled;
-			if (room.settings.persistSettings) {
-				delete room.settings.unoDisabled;
-				room.saveSettings();
-			}
+			room.saveSettings();
 			return this.sendReply("UNO has been enabled for this room.");
 		},
 

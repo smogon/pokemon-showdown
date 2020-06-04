@@ -69,7 +69,7 @@
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>pseudo</em> : Promeut un Voice de la room",
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>pseudo</em> : Retire un Voice de la room",
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>introduction</em> : Param&egrave;tre l'introduction du staff qui sera affich&eacute;e &agrave; tous les membres du staff rejoignant la room",
-		"- /room.settings: change a variety of room settings, namely modchat": "- /room.settings : Permet de changer plusieurs param&egrave;tres de la room, notamment le modchat",
+		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings : Permet de changer plusieurs param&egrave;tres de la room, notamment le modchat",
 
 		"<strong>Room owners (#)</strong> can also use:": "<strong>Les propri&eacute;taires de la room (Room Owners) (#)</strong> peuvent &eacute;galement utiliser :",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>introduction</em> : Param&egrave;tre l'introduction &agrave; la room qui sera affich&eacute;e à tous les utilisateurs la rejoignant",
@@ -80,7 +80,7 @@
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>message</em> : Affiche une grande d&eacute;claration en bleu dans la room",
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>code HTML</em> : Affiche une boîte cod&eacute;e en HTML sur la room",
 		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [largeur], [hauteur]</em> : Affiche une image dans la room",
-		"- /room.settings: change a variety of room settings, including modchat, capsfilter, etc": "- /room.settings : Permet de changer plusieurs param&egrave;tres de la room y compris le modchat, le filtre à majuscules, etc",
+		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings : Permet de changer plusieurs param&egrave;tres de la room y compris le modchat, le filtre à majuscules, etc",
 
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "Plus de d&eacute;tails peuvent &ecirc;tre trouv&eacute;s dans le <a href=\"https://www.smogon.com/forums/posts/6774654/\">guide de roomauth</a>",
 

@@ -1056,7 +1056,7 @@ export class User extends Chat.MessageContext {
 		}
 		this.registered = true;
 		if (groups.has(this.id)) {
-			this.group = groups.get(this.id) as GroupSymbol;
+			this.group = groups.get(this.id);
 		} else {
 			this.group = Config.groupsranking[0];
 		}

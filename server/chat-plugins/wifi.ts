@@ -538,7 +538,7 @@ export class GTSGiveaway {
 	generateWindow() {
 		const sentModifier = this.sent.length ? 5 : 0;
 		const rightSide = this.noDeposits ?
-			`<strong>More Pokémon have been deposited than there are prizes in this.settings.giveaway and new deposits will not be accepted.
+			`<strong>More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted.
 			If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</strong>
 			` :
 			`To participate, deposit <strong>${this.deposit}</strong> into the GTS and look for <strong>${Chat.escapeHTML(this.lookfor)}</strong>`;
@@ -572,7 +572,7 @@ export class GTSGiveaway {
 	stopDeposits() {
 		this.noDeposits = true;
 
-		this.room.send(`|html|<p style="text-align:center;font-size:11pt">More Pokémon have been deposited than there are prizes in this.settings.giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</p>`);
+		this.room.send(`|html|<p style="text-align:center;font-size:11pt">More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</p>`);
 		this.changeUhtml(this.generateWindow());
 	}
 

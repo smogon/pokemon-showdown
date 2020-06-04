@@ -69,7 +69,7 @@
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>Nutzername</em>: Bef&ouml;rdert einen Nutzer auf Raum-Voice",
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>Nutzername</em>: Degradiert einen Nutzer von Raum-Voice",
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>Intro</em>: Richtet eine Einf&uuml;hrung ein, die allen Staff-Mitgliedern beim Betreten des Raumes angezeigt wird.",
-		"- /room.settings: change a variety of room settings, namely modchat": "- /room.settings: Ver&auml;ndere eine Reihe von Raumeinstellungen, besonders hervorzuheben ist hier der Modchat",
+		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings: Ver&auml;ndere eine Reihe von Raumeinstellungen, besonders hervorzuheben ist hier der Modchat",
 
 		"<strong>Room owners (#)</strong> can also use:": "<strong>Room owners (#)</strong> k&ouml;nnen au&szlig;erdem nutzen:",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>Intro</em>: Richtet eine Einf&uuml;hrung ein, die allen Nutzern beim Betreten des Raumes angezeigt wird.",
@@ -80,7 +80,7 @@
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>Nachricht</em>: Erstellt eine gro&szlig;e blaue Mitteilung f&uuml;r den Raum",
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>c&oacute;digo HTML</em>: Stellt im Raum ein Feld mit HTML-Code dar",
 		"- !showimage <em>, [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [Breite], [H&ouml;he]</em>: zeigt ein Bild im Raum",
-		"- /room.settings: change a variety of room settings, including modchat, capsfilter, etc": "- /room.settings: Ver&auml;ndere eine Reihe von Raumeinstellungen, wie etwa Modchat, Caps-Filter, etc",
+		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: Ver&auml;ndere eine Reihe von Raumeinstellungen, wie etwa Modchat, Caps-Filter, etc",
 
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "Eine detailliertere Hilfestellung findet sich im <a href=\"https://www.smogon.com/forums/posts/6774654/\">Leitfaden f&uuml;r Raum-Auths</a>",
 

@@ -72,7 +72,7 @@
 		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>gebruikersnaam</em>: Promoveer tot room voice",
 		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>gebruikersnaam</em>: Neem een room voice weg",
 		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- /staffintro <em>intro</em>: Zet een staf introductie die wordt getoond aan alle staf die de room binnenkomt",
-		"- /room.settings: change a variety of room settings, namely modchat": "- /room.settings: Verander allerlei instellingen voor de room, met name modchat",
+		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings: Verander allerlei instellingen voor de room, met name modchat",
 
 		"<strong>Room owners (#)</strong> can also use:": "<strong>Room owners (#)</strong> kunnen ook nog:",
 		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>intro</em>: Zet een room introductie die wordt getoond aan iedereen die de room binnenkomt",
@@ -83,7 +83,7 @@
 		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>bericht</em>: Stuur een grote blauwe declaratie naar de room.",
 		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>HTML code</em>: Stuur een box met HTML code naar de room",
 		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [breedte], [hoogte]</em>: Laat een afbeelding aan de room zien",
-		"- /room.settings: change a variety of room settings, including modchat, capsfilter, etc": "- /room.settings: Verander allerlei instellingen voor de room, zoals modchat, capsfilter, etc",
+		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings: Verander allerlei instellingen voor de room, zoals modchat, capsfilter, etc",
 
 		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "Meer gedetailleerde hulp kan je vinden in de <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth gids</a>",
 
