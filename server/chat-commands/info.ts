@@ -2421,11 +2421,11 @@ export const commands: ChatCommands = {
 
 	requestshow(target, room, user) {
 		if (!this.canTalk()) return false;
-		if (room.approvalsDisabled) {
+		if (!room.approvalsEnabled || !room.pendingApprovals) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		if (this.can('mute', null, room)) return this.errorReply(`Use !show instead.`);
-		if (room.pendingApprovals.has(user.id)) return this.errorReply('You have a request pending already.');
+		if (room.pendingApprovals!.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 		if (!/^https?:\/\//.test(target)) target = `http://${Chat.escapeHTML(target)}`;
 		room.pendingApprovals.set(user.id, target);
@@ -2441,12 +2441,12 @@ export const commands: ChatCommands = {
 
 	async approveshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (room.approvalsDisabled) {
+		if (!room.approvalsEnabled || !room.pendingApprovals) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		target = toID(target);
 		if (!target) return this.parse(`/help approvelink`);
-		const id = room.pendingApprovals.get(target);
+		const id = room.pendingApprovals!.get(target);
 		if (!id) return this.errorReply(`${target} has no pending request.`);
 		this.privateModAction(`(${user.name} approved ${target}'s media display request.)`);
 		this.modlog(`APPROVESHOW`, null, `${target} (${id})`);
@@ -2470,7 +2470,7 @@ export const commands: ChatCommands = {
 
 	denyshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (room.approvalsDisabled) {
+		if (!room.approvalsEnabled || !room.pendingApprovals) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		target = toID(target);
