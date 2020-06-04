@@ -165,7 +165,7 @@ export class RandomTeams {
 					moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || moveid.startsWith('hiddenpower') && moveid !== 'hiddenpower')
 				);
 			} else {
-				let learnset = this.dex.data.Learnsets[species.id] && this.dex.data.Learnsets[species.id].learnset ?
+				let learnset = this.dex.data.Learnsets[species.id] && this.dex.data.Learnsets[species.id].learnset && !['pumpkaboosuper', 'zygarde10'].includes(species.id) ?
 					this.dex.data.Learnsets[species.id].learnset :
 					this.dex.data.Learnsets[this.dex.getSpecies(species.baseSpecies).id].learnset;
 				if (learnset) {
