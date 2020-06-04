@@ -225,7 +225,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (counter.setupType || hasMove['bodyslam'] || hasMove['substitute'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'toxic':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['raindance'] || hasMove['substitute']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['endure'] || hasMove['raindance'] || hasMove['substitute']) rejected = true;
 					if (hasMove['hypnosis'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'trick':
@@ -269,7 +269,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (!hasType[move.type] && (hasMove['substitute'] || hasMove['toxic'] || hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'brickbreak': case 'crosschop': case 'highjumpkick': case 'skyuppercut':
-					if (hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
+					if (hasMove['substitute'] && (hasMove['focuspunch'] || movePool.includes('focuspunch'))) rejected = true;
 					if ((hasMove['endure'] || hasMove['substitute']) && hasMove['reversal']) rejected = true;
 					break;
 				case 'earthquake':
