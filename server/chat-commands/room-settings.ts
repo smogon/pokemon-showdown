@@ -71,8 +71,8 @@ export const commands: ChatCommands = {
 		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat as GroupSymbol) > threshold) {
 			return this.errorReply(`/modchat - Access denied for changing a setting higher than ${Config.groupsranking[threshold]}.`);
 		}
-		if ('requestModchat' in room) {
-			const error = room.requestModchat(user);
+		if ((room as any).requestModchat) {
+			const error = (room as GameRoom).requestModchat(user);
 			if (error) return this.errorReply(error);
 		}
 
