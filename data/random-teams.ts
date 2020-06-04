@@ -161,11 +161,12 @@ export class RandomTeams {
 			let moves;
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
-				pool = Object.keys(this.dex.data.Movedex).filter(
-					moveid => !(this.dex.data.Movedex[moveid].isNonstandard || this.dex.data.Movedex[moveid].isZ || moveid.startsWith('hiddenpower') && moveid !== 'hiddenpower')
-				);
+				pool = Object.keys(this.dex.data.Movedex).filter(moveid => {
+					const move = this.dex.data.Movedex[moveid];
+					return !(move.isNonstandard || move.isZ || move.isMax || move.realMove);
+				});
 			} else {
-				let learnset = this.dex.data.Learnsets[species.id] && this.dex.data.Learnsets[species.id].learnset ?
+				let learnset = this.dex.data.Learnsets[species.id] && this.dex.data.Learnsets[species.id].learnset && !['pumpkaboosuper', 'zygarde10'].includes(species.id) ?
 					this.dex.data.Learnsets[species.id].learnset :
 					this.dex.data.Learnsets[this.dex.getSpecies(species.baseSpecies).id].learnset;
 				if (learnset) {
@@ -173,8 +174,9 @@ export class RandomTeams {
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
 					);
 				}
-				if (species.changesFrom) {
-					learnset = this.dex.data.Learnsets[toID(species.changesFrom)].learnset;
+				const changesFrom = species.id === 'pumpkaboosuper' ? 'pumpkaboo' : species.changesFrom;
+				if (changesFrom) {
+					learnset = this.dex.data.Learnsets[toID(changesFrom)].learnset;
 					const basePool = Object.keys(learnset!).filter(
 						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
 					);
@@ -583,7 +585,7 @@ export class RandomTeams {
 			forme = species.battleOnly;
 		}
 		if (species.cosmeticFormes) {
-			species = this.dex.getSpecies(this.sample([species.name].concat(species.cosmeticFormes)));
+			forme = this.sample([species.name].concat(species.cosmeticFormes));
 		}
 
 		const randMoves = !isDoubles ? species.randomBattleMoves : (species.randomDoubleBattleMoves || species.randomBattleMoves);

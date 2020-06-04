@@ -64,7 +64,7 @@ interface UserTable {
 	[userid: string]: User;
 }
 
-interface RoomSettings {
+export interface RoomSettings {
 	aliases: string[];
 	auth: {[userid: string]: GroupSymbol};
 	banwords: string[];
@@ -78,7 +78,7 @@ interface RoomSettings {
 	staffRoom: boolean;
 	language: string | false;
 	slowchat: number | false;
-	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases: string[]}};
+	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases?: string[]}};
 	filterStretching: boolean;
 	filterEmojis: boolean;
 	filterCaps: boolean;
