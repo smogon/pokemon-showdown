@@ -122,9 +122,7 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user.name} set modchat to ${room.settings.modchat || "off"})`);
 		this.modlog('MODCHAT', null, `to ${room.settings.modchat || "false"}`);
 
-		if (room.settings.persistSettings) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 	},
 	modchathelp: [
 		`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+ options, * @ # & ~ for all the options`,
@@ -253,9 +251,7 @@ export const commands: ChatCommands = {
 
 		room.settings.language = targetLanguage === 'english' ? false : targetLanguage;
 
-		if (room.settings.persistSettings) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 		this.modlog(`LANGUAGE`, null, Chat.languages.get(targetLanguage));
 		this.sendReply(`The room's language has been set to ${Chat.languages.get(targetLanguage)}`);
 	},
