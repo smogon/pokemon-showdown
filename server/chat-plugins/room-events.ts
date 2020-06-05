@@ -34,8 +34,8 @@ function formatEvent(event: RoomEvent, showAliases?: boolean) {
 
 function getAllAliases(room: Room) {
 	let aliases: string[] = [];
-	for (const aliasList of Object.keys(room.events).map(event => room.events[event].aliases)) {
-		if (aliasList) aliases = aliases.concat(aliasList);
+	for (const event of Object.values(room.events)) {
+		if (event.aliases) aliases.push(...event.aliases);
 	}
 	return aliases;
 }
