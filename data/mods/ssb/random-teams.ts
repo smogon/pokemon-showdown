@@ -147,9 +147,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				set.evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
 			}
 
-			const movepool = ssbSet.moves.slice();
 			while (set.moves.length < 3 && ssbSet.moves.length > 0) {
-				let move = this.sampleNoReplace(movepool);
+				let move = this.sampleNoReplace(ssbSet.moves);
 				if (Array.isArray(move)) move = this.sampleNoReplace(move);
 				set.moves.push(move);
 			}
