@@ -38,6 +38,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	IMPORTANT: Obtain the username from getName
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+	gxs: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('GXS')}|Upl0ad1ng V1ru$ BzZT!!`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('GXS')}|Buff3r1ng BzZT!!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('GXS')}|A Critical Error Has Occurred. Would You Like To Send A Report? Sending Report.`);
+		},
+	},
 	mitsuki: {
 		noCopy: true,
 		onStart() {

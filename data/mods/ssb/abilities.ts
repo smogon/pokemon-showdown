@@ -10,6 +10,31 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// GXS
+	virusupload: {
+		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower.",
+		shortDesc: "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
+		name: "Virus Upload",
+		onStart(pokemon) {
+			let totalatk = 0;
+			let totalspa = 0;
+			let targ;
+			for (const target of pokemon.side.foe.active) {
+				if (!target || target.fainted) continue;
+				targ = target;
+				totalatk += target.getStat('atk', false, true);
+				totalspa += target.getStat('spa', false, true);
+			}
+			if (targ) {
+				if (totalatk && totalatk >= totalspa) {
+					this.boost({atk: -1}, targ, pokemon);
+				} else if (totalspa) {
+					this.boost({spa: -1}, targ, pokemon);
+				}
+			}
+		},
+	},
+
 	// Mitsuki
 	photosynthesis: {
 		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled. If Sunny Day is active, this Pokemon's Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its Attack remains the same and it does not lose any HP.",

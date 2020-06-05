@@ -34,6 +34,12 @@ export const ssbSets: SSBSets = {
 	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	GXS: {
+		species: 'Porygon-Z', ability: 'Virus Upload', item: 'Life Orb', gender: 'N',
+		moves: ['Nasty Plot', 'Aura Sphere', 'Thunderbolt'],
+		signatureMove: 'Data Corruption',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
+	},
 	Mitsuki: {
 		species: 'Leafeon', ability: 'Photosynthesis', item: ['Life Orb', 'Miracle Seed'], gender: 'M',
 		moves: ['Solar Blade', ['Body Slam', 'X-Scissor'], 'Thousand Arrows'],

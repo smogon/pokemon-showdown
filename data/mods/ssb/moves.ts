@@ -36,6 +36,42 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// GXS
+	datacorruption: {
+		accuracy: 90,
+		basePower: 110,
+		category: "Special",
+		desc: "Has a 30% chance to randomly lower one of the target's stats by 1 stage.",
+		shortDesc: "30% chance to randomly lower a foe's stat.",
+		name: "Data Corruption",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		secondary: {
+			chance: 30,
+			onHit(target) {
+				const stats: BoostName[] = [];
+				let stat: BoostName;
+				for (stat in target.boosts) {
+					if (stat === 'evasion' || stat === 'accuracy') continue;
+					if (target.boosts[stat] > -6) {
+						stats.push(stat);
+					}
+				}
+				if (stats.length) {
+					const randomStat = this.sample(stats);
+					const boost: SparseBoostsTable = {};
+					boost[randomStat] = -1;
+					this.boost(boost);
+				} else {
+					return false;
+				}
+			},
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Mitsuki
 	terraforming: {
 		accuracy: 100,
