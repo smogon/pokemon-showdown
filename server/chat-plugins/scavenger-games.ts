@@ -13,8 +13,9 @@ export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
 interface Twist {
 	name: string;
 	id: string;
+	isGameMode?: true;
 	desc?: string;
-	[eventid: string]: string | number | TwistEvent | undefined;
+	[eventid: string]: string | number | TwistEvent | boolean | undefined;
 }
 
 type GameModeFunction = (this: ScavengerGameTemplate, ...args: any[]) => void;
@@ -166,7 +167,7 @@ const TWISTS: {[k: string]: Twist} = {
 		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct!  You may be in for a nasty surprise when the hunt ends!",
 
 		onAnySubmit(player, value) {
-			if (player.completed) {
+			if (player.precompleted) {
 				player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
 				return true;
 			}
@@ -182,7 +183,7 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onIncorrectAnswer(player, value) {
-			if (player.currentQuestion + 2 >= this.questions.length) {
+			if (player.currentQuestion + 1 >= this.questions.length) {
 				player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
 				return false;
 			}
@@ -198,7 +199,7 @@ const TWISTS: {[k: string]: Twist} = {
 			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
 
 			this.preCompleted = this.preCompleted ? [...this.preCompleted, result] : [result];
-			player.completed = true;
+			player.precompleted = true;
 		},
 
 		onEnd() {
@@ -216,6 +217,7 @@ const MODES: {[k: string]: GameMode | string} = {
 		mod: {
 			name: 'KO Games',
 			id: 'KO Games',
+			isGameMode: true,
 
 			onLoad() {
 				this.allowRenames = false; // don't let people change their name in the middle of the hunt.
@@ -286,6 +288,7 @@ const MODES: {[k: string]: GameMode | string} = {
 		mod: {
 			name: 'Scavenger Games',
 			id: 'scavengergames',
+			isGameMode: true,
 
 			onLoad() {
 				this.allowRenames = false; // don't let people change their name in the middle of the hunt.
@@ -350,6 +353,7 @@ const MODES: {[k: string]: GameMode | string} = {
 		mod: {
 			name: 'Point Rally',
 			id: 'pointrally',
+			isGameMode: true,
 
 			onLoad() {
 				const game = this.room.scavgame!;
@@ -384,6 +388,7 @@ const MODES: {[k: string]: GameMode | string} = {
 		mod: {
 			name: 'Jump Start',
 			id: 'jumpstart',
+			isGameMode: true,
 
 			onLoad() {
 				const game = this.room.scavgame!;
@@ -526,6 +531,7 @@ const MODES: {[k: string]: GameMode | string} = {
 		mod: {
 			name: 'Team Scavs',
 			id: 'teamscavs',
+			isGameMode: true,
 
 			onLoad() {
 				// don't let people change their name in the middle of the hunt.
@@ -546,6 +552,9 @@ const MODES: {[k: string]: GameMode | string} = {
 			onSendQuestion(player) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(player);
+
+				if (!team) return;
+
 				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
 				if (team.completed) {
 					player.completed = true;
@@ -560,8 +569,11 @@ const MODES: {[k: string]: GameMode | string} = {
 
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(player);
-				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
-				if (team.completed) player.completed = true;
+
+				if (team) {
+					if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
+					if (team.completed) player.completed = true;
+				}
 			},
 
 			onJoin(user) {
@@ -601,7 +613,10 @@ const MODES: {[k: string]: GameMode | string} = {
 			onAnySubmit(player, value) {
 				const game = this.room.scavgame!;
 
-				const team = game.getPlayerTeam(player)!;
+				const team = game.getPlayerTeam(player);
+
+				if (!team) return true; // handle players who get kicked during the hunt.
+
 				if (player.currentQuestion !== team.question - 1) player.currentQuestion = team.question - 1;
 				if (team.completed) player.completed = true;
 
