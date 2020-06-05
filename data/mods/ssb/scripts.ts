@@ -14,6 +14,11 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		}
 
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		if (pokemon.canMegaEvo) {
+			pokemon.canMegaEvo = null;
+		} else {
+			pokemon.canUltraBurst = null;
+		}
 
 		this.runEvent('AfterMega', pokemon);
 
