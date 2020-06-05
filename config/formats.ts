@@ -843,7 +843,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			let name: string = toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
-			if (this.dex.getSpecies(name).exists) {
+			if (this.dex.getSpecies(name).exists || name === 'perishsong') {
 				// Certain pokemon have volatiles named after their id
 				// To prevent overwriting those, and to prevent accidentaly leaking
 				// that a pokemon is on a team through the onStart even triggering

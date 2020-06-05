@@ -50,6 +50,64 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('GXS')}|A Critical Error Has Occurred. Would You Like To Send A Report? Sending Report.`);
 		},
 	},
+	kris: {
+		noCopy: true,
+		onStart(source) {
+			const foeName = source.side.foe.active[0].illusion ?
+				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
+			this.add(`c|${getName('Kris')}|hi ${foeName}`);
+		},
+		onSwitchOut(source) {
+			const foeName = source.side.foe.active[0].illusion ?
+				source.side.foe.active[0].illusion.name : source.side.foe.active[0].name;
+			this.add(`c|${getName('Kris')}|bye ${foeName}`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Kris')}|Fortnite Battle Royale`);
+		},
+		// phuck innate
+		onDamage(damage, target, source, effect) { // Magic Guard
+			if (!source.species.id.startsWith('unown') || source.illusion) return;
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onResidual(pokemon) {
+			if (!pokemon.species.id.startsWith('unown') || pokemon.illusion) return;
+			// So this doesn't activate upon switching in
+			if (pokemon.activeTurns < 1) return;
+			const unownLetters = 'abcdefghijklmnopgrstuvwxyz'.split('');
+			const currentFormeID = toID(pokemon.set.species);
+			const currentLetter = currentFormeID.charAt(5) || 'a';
+			const chosenLetter = this.sample(unownLetters.filter(letter => {
+				return letter !== currentLetter;
+			}));
+			// Change is permanent so when you switch out you keep the letter
+			this.add(`c|${getName('Kris')}|watch this`);
+			if (chosenLetter === 'w') {
+				this.add('-activate', pokemon, 'ability: phuck');
+				pokemon.formeChange(`unownw`, this.effect, true);
+				this.add(`c|${getName('Kris')}|W? More like L`);
+				this.add('-activate', pokemon, 'ability: phuck');
+				pokemon.formeChange(`unownl`, this.effect, true);
+				this.hint(`There are no W Pokemon that work with Kris's signature move, so we're counting this as a loss`);
+			} else if (chosenLetter === 'u') {
+				this.add('-activate', pokemon, 'ability: phuck');
+				pokemon.formeChange(`unownu`, this.effect, true);
+				this.add(`c|${getName('Kris')}|U? I'm already an Unown, no`);
+				this.add('-activate', pokemon, 'ability: phuck');
+				const chosenLetter2 = this.sample(unownLetters.filter(letter => {
+					return letter !== 'u';
+				}));
+				pokemon.formeChange(`unown${chosenLetter2}`, this.effect, true);
+				this.hint(`There are no U Pokemon that work with Kris's signature move, so we're counting this as a loss`);
+			} else {
+				this.add('-activate', pokemon, 'ability: phuck');
+				pokemon.formeChange(`unown${chosenLetter === 'a' ? '' : chosenLetter}`, this.effect, true);
+			}
+		},
+	},
 	mitsuki: {
 		noCopy: true,
 		onStart() {
