@@ -29,4 +29,29 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// Mitsuki
+	terraforming: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		desc: "Upon use, this move sets up Stealth Rock on the target's side of the field, as well as setting up Grassy Terrain.",
+		shortDesc: "Sets up Grassy Terrain and Stealth Rock.",
+		name: "Terraforming",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Rock Slide', target);
+			this.add('-anim', source, 'Ingrain', target);
+			this.add('-anim', source, 'Stealth Rock', target);
+		},
+		terrain: 'grassyterrain',
+		sideCondition: 'stealthrock',
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+	},
 };
