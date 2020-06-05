@@ -58,6 +58,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Healing you?',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: false,
 	},
+	'Paradise ╱╲☼': {
+		species: 'Slaking', ability: 'Unaware', item: 'Choice Scarf', gender: '',
+		moves: ['Sacred Fire', 'Spectral Thief', 'Icicle Crash'],
+		signatureMove: 'Rapid Turn',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: false,
+	},
 	'Perish Song': {
 		species: 'Mismagius', ability: 'Snowstorm', item: 'Icium Z', gender: 'M',
 		moves: ['Nasty Plot', 'Flamethrower', ['Blizzard', 'Freeze-Dry']],
