@@ -1475,6 +1475,9 @@ export const commands: ChatCommands = {
 		if (!lineCount && isPartial) {
 			return this.errorReply(`You must specify a number of messages to clear. To clear all messages, use /hidetext.`);
 		}
+		if (reason.length > MAX_REASON_LENGTH) {
+			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+		}
 
 		const targetUser = this.targetUser;
 		const name = this.targetUsername;
