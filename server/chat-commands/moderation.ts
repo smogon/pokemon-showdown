@@ -1459,16 +1459,29 @@ export const commands: ChatCommands = {
 	htext: 'hidetext',
 	forcehidetext: 'hidetext',
 	forcehtext: 'hidetext',
+	hidelines: 'hidetext',
+	forcehidelines: 'hidetext',
+	hlines: 'hidetext',
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 
-		const lineCount = parseInt(this.splitTarget(target)) || 0;
+		const isPartial = cmd.includes('lines');
+		const showAlts = cmd.includes('alt');
+		const lineCount = isPartial ? parseInt(this.splitTarget(target)) || 0 : 0;
+		const reason = lineCount ? target.split(',').slice(2).join(',').trim() : this.splitTarget(target);
+		if (parseInt(reason) && !cmd.includes('force')) {
+			return this.errorReply(`Your reason was a number; use /forcehidetext if you didn't mean to clear ${reason} messages.`);
+		}
+		if (!lineCount && isPartial) {
+			return this.errorReply(`You must specify a number of messages to clear. To clear all messages, use /hidetext.`);
+		}
+
 		const targetUser = this.targetUser;
 		const name = this.targetUsername;
 		if (!targetUser && !room.log.hasUsername(name)) {
 			return this.errorReply(`User ${name} not found or has no roomlogs.`);
 		}
-		if (lineCount && cmd.includes('alt')) {
+		if (lineCount && showAlts) {
 			return this.errorReply(`You can't specify a line count when using /hidealtstext.`);
 		}
 		const userid = toID(this.inputUsername);
@@ -1478,9 +1491,9 @@ export const commands: ChatCommands = {
 			return this.errorReply(`${name} is a trusted user, are you sure you want to hide their messages? Use /forcehidetext if you're sure.`);
 		}
 
-		if (targetUser && cmd.includes('alt')) {
-			room.send(`|c|~|${name}'s alts messages were cleared from ${room.title} by ${user.name}.`);
-			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
+		if (targetUser && showAlts) {
+			room.send(`|c|~|${name}'s alts messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`);
+			this.modlog('HIDEALTSTEXT', targetUser, reason, {noip: 1});
 			room.hideText([
 				userid,
 				...Object.keys(targetUser.prevNames),
@@ -1488,17 +1501,18 @@ export const commands: ChatCommands = {
 			] as ID[]);
 		} else {
 			if (lineCount > 0) {
-				room.send(`|c|~|${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+				room.send(`|c|~|${lineCount} of ${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`);
 			} else {
-				room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+				room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.${(reason ? ` (${reason})` : ``)}`);
 			}
-			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
+			this.modlog('HIDETEXT', targetUser || userid, reason, {noip: 1, noalts: 1});
 			room.hideText([userid], lineCount);
 		}
 	},
 	hidetexthelp: [
-		`/hidetext [username] - Removes a user's messages from chat. Requires: % @ # & ~`,
-		`/hidealtstext [username] - Removes a user's messages, and their alternate account's messages from the chat.  Requires: % @ # & ~`,
+		`/hidetext [username], [optional reason] - Removes a user's messages from chat, with an optional reason. Requires: % @ # & ~`,
+		`/hidealtstext [username], [optional reason] - Removes a user's messages and their alternate accounts' messages from the chat, with an optional reason.  Requires: % @ # & ~`,
+		`/hidelines [username], [number], [optional reason] - Removes the [number] most recent messages from a user, with an optional reason. Requires: % @ # & ~`,
 	],
 
 	ab: 'blacklist',
