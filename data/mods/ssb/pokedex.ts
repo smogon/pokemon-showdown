@@ -6,7 +6,7 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
-  // OM~!
+	// OM~!
 	magneton: {
 		inherit: true,
 		types: ['Electric', 'Steel', 'Flying'],
@@ -16,5 +16,10 @@ export const BattlePokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: 'Darkest Wings'},
 		types: ['Dark', 'Fairy'],
-  },
+	},
+	// Perish Song
+	mismagius: {
+		inherit: true,
+		types: ["Ghost", "Ice"],
+	},
 };

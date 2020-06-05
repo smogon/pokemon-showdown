@@ -52,6 +52,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Healing you?',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: false,
 	},
+	'Perish Song': {
+		species: 'Mismagius', ability: 'Snowstorm', item: 'Icium Z', gender: 'M',
+		moves: ['Nasty Plot', 'Flamethrower', ['Blizzard', 'Freeze-Dry']],
+		signatureMove: 'Sinister Gaze',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {
