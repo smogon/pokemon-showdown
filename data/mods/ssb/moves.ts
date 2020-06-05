@@ -54,4 +54,38 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Rock",
 	},
+
+	// OM~!
+	"mechomnism": {
+		accuracy: 95,
+		basePower: 90,
+		category: "Special",
+		desc: "Heals 33% of damage dealt. 15% chance to raise Special Attack by 1 stage.",
+		shortDesc: "Heals 33% of damage dealt. 15% chance to raise SpA by 1.",
+		name: "MechOMnism",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		drain: [1, 3],
+		onTryHit(target, source) {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Mirror Shot', source);
+			this.add('-anim', source, 'Refresh', source);
+		},
+		onHit: function () {
+			this.add(`c|@OM~!|Bang Bang`);
+		},
+		secondary: {
+			chance: 15,
+			self: {
+				boosts: {
+					spa: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Steel",
+	},
 };
