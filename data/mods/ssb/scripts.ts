@@ -16,6 +16,10 @@ export const BattleScripts: ModdedBattleScriptsData = {
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
 
 		this.runEvent('AfterMega', pokemon);
+
+		// Overneat gains the fairy type when mega evolving
+		if (pokemon.name === 'Overneat' && !pokemon.illusion) this.add('-start', pokemon, 'typeadd', 'Fairy');
+
 		return true;
 	},
 

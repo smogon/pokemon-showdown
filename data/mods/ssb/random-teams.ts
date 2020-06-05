@@ -46,6 +46,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'MechOMnism',
 		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', level: 100, shiny: 1,
 	},
+	Overneat: {
+		species: 'Absol', ability: 'Intimidate', item: 'Absolite', gender: 'M',
+		moves: ['Play Rough', 'U-turn', 'Close Combat'],
+		signatureMove: 'Healing you?',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: false,
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {

@@ -49,6 +49,20 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onFaint() {
 			this.add(`c|${getName('Mitsuki')}|THIS WORLD SHALL KNOW P A I N`);
 		},
+  },
+
+	overneat: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|${getName('Overneat')}|Lets end this ${source.side.foe.name}!!`);
+			if (source.species.id !== 'absolmega' || source.illusion) return;
+			this.add('-start', source, 'typeadd', 'Fairy');
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Overneat')}|I can do better!`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Overneat')}|I was to cocky...`);
 	},
 
 	om: {
