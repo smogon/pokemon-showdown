@@ -65,45 +65,48 @@ interface UserTable {
 }
 
 export interface RoomSettings {
+	title: string;
 	auth: {[userid: string]: GroupSymbol};
 
-	aliases: string[];
-	banwords: string[];
-	isPrivate: boolean | 'hidden' | 'voice';
-	reportJoins: boolean;
-	batchJoins: number;
-	reportJoinsInterval: NodeJS.Timer | null;
-	logTimes: boolean;
-	modjoin: string | true | null;
-	modchat: string | null;
-	staffRoom: boolean;
-	language: string | false;
-	slowchat: number | false;
-	events: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases?: string[]}};
-	filterStretching: boolean;
-	filterEmojis: boolean;
-	filterCaps: boolean;
-	jeopardyDisabled: boolean;
-	mafiaDisabled: boolean;
-	unoDisabled: boolean;
-	blackjackDisabled: boolean;
-	hangmanDisabled: boolean;
-	giveaway: QuestionGiveaway | LotteryGiveaway | null;
-	gtsga: GTSGiveaway | null;
-	toursEnabled: '%' | boolean;
-	tourAnnouncements: boolean;
-	privacySetter: Set<ID> | null;
-	gameNumber: number;
-	highTraffic: boolean;
-	isOfficial: boolean;
-	pspl: boolean;
-	parentid: string | null;
-	desc: string | null;
-	introMessage: string | null;
-	staffMessage: string | null;
-	persistSettings: boolean;
-	rulesLink: string | null;
-	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
+	aliases?: string[];
+	banwords?: string[];
+	isPrivate?: boolean | 'hidden' | 'voice';
+	reportJoins?: boolean;
+	batchJoins?: number;
+	reportJoinsInterval?: NodeJS.Timer | null;
+	logTimes?: boolean;
+	modjoin?: string | true | null;
+	modchat?: string | null;
+	staffRoom?: boolean;
+	language?: string | false;
+	slowchat?: number | false;
+	events?: {[k: string]: {eventName: string, date: string, desc: string, started: boolean, aliases?: string[]}};
+	filterStretching?: boolean;
+	filterEmojis?: boolean;
+	filterCaps?: boolean;
+	jeopardyDisabled?: boolean;
+	mafiaDisabled?: boolean;
+	unoDisabled?: boolean;
+	blackjackDisabled?: boolean;
+	hangmanDisabled?: boolean;
+	giveaway?: QuestionGiveaway | LotteryGiveaway | null;
+	gtsga?: GTSGiveaway | null;
+	toursEnabled?: '%' | boolean;
+	tourAnnouncements?: boolean;
+	privacySetter?: Set<ID> | null;
+	gameNumber?: number;
+	highTraffic?: boolean;
+	isOfficial?: boolean;
+	pspl?: boolean;
+	parentid?: string | null;
+	desc?: string | null;
+	introMessage?: string | null;
+	staffMessage?: string | null;
+	rulesLink?: string | null;
+	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'numbers';
+
+	scavSettings?: AnyObject;
+	scavQueue?: QueuedHunt[];
 }
 export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').Poll;
@@ -151,14 +154,16 @@ export abstract class BasicRoom {
 	lastBroadcast: string;
 	lastBroadcastTime: number;
 	settings: RoomSettings;
+	/** If true, this room's settings will be saved in config/chatrooms.json, allowing it to stay past restarts. */
+	persist: boolean;
+
 	scavgame: ScavengerGameTemplate | null;
-	scavSettings: AnyObject;
-	scavQueue: QueuedHunt[];
 	scavLeaderboard: AnyObject;
 	hideReplay: boolean;
 	isPersonal: boolean;
 	isHelp: boolean;
 	auth: RoomAuth;
+
 	constructor(roomid: RoomID, title?: string) {
 		this.users = Object.create(null);
 		this.type = 'chat';
@@ -188,52 +193,15 @@ export abstract class BasicRoom {
 		// room settings
 
 		this.settings = {
-			aliases: [],
+			title: this.title,
 			auth: Object.create(null),
-			banwords: [],
-			isPrivate: false,
-			reportJoins: false,
-			batchJoins: 0,
-			reportJoinsInterval: null,
-			logTimes: false,
-			modjoin: null,
-			modchat: null,
-			staffRoom: false,
-			language: false,
-			slowchat: false,
-			events: {},
-			filterStretching: false,
-			filterEmojis: false,
-			filterCaps: false,
-			jeopardyDisabled: false,
-			mafiaDisabled: false,
-			unoDisabled: false,
-			blackjackDisabled: false,
-			hangmanDisabled: false,
-			giveaway: null,
-			gtsga: null,
-			toursEnabled: false,
-			tourAnnouncements: false,
-			privacySetter: null,
-			gameNumber: 0,
-			highTraffic: false,
-			isOfficial: false,
-			pspl: false,
-			parentid: null,
-			desc: null,
-			introMessage: null,
-			staffMessage: null,
-			persistSettings: false,
-			rulesLink: null,
-			dataCommandTierDisplay: 'tiers',
 		};
+		this.persist = false;
 		this.hideReplay = false;
 		this.isPersonal = false;
 		this.isHelp = false;
 		this.subRooms = new Map();
 		this.scavgame = null;
-		this.scavSettings = {};
-		this.scavQueue = [];
 		this.scavLeaderboard = {};
 		this.auth = new RoomAuth(this);
 	}
@@ -329,6 +297,12 @@ export abstract class BasicRoom {
 		return msg;
 	}
 
+	nextGameNumber() {
+		const gameNumber = (this.settings.gameNumber || 0) + 1;
+		this.settings.gameNumber = gameNumber;
+		return gameNumber;
+	}
+
 	// mute handling
 
 	runMuteTimer(forceReschedule = false) {
@@ -385,10 +359,10 @@ export abstract class BasicRoom {
 		return null;
 	}
 	saveSettings() {
-		if (!this.settings.persistSettings) return null;
+		if (!this.persist) return null;
 		const settingsList: RoomSettings[] = [];
 		for (const room of Rooms.rooms.values()) {
-			if (!room.settings.persistSettings) continue;
+			if (!room.persist) continue;
 			settingsList.push(room.settings);
 		}
 		FS('config/chatrooms.json').writeUpdate(() => (
@@ -863,7 +837,7 @@ export class GlobalRoom extends BasicRoom {
 		id = toID(id);
 		const room = Rooms.get(id);
 		if (!room) return false; // room doesn't exist
-		if (!room.settings.persistSettings) return false; // room isn't registered
+		if (!room.persist) return false; // room isn't registered
 		// deregister from global settings
 		// looping from the end is a pretty trivial optimization, but the
 		// assumption is that more recently added rooms are more likely to
@@ -875,7 +849,7 @@ export class GlobalRoom extends BasicRoom {
 				break;
 			}
 		}
-		room.settings.persistSettings = false;
+		room.persist = false;
 		return true;
 	}
 	delistChatRoom(id: RoomID) {
@@ -1081,11 +1055,11 @@ export class GlobalRoom extends BasicRoom {
 	destroyPersonalRooms(userid: ID) {
 		const roomauth = [];
 		for (const [id, curRoom] of Rooms.rooms) {
-			if (id === 'global' || !curRoom.settings.persistSettings) continue;
+			if (id === 'global' || !curRoom.persist) continue;
 			if (curRoom.isPersonal && curRoom.auth.get(userid) === Users.HOST_SYMBOL) {
 				curRoom.destroy();
 			} else {
-				if (curRoom.settings.isPrivate || curRoom.battle || !curRoom.settings.persistSettings) {
+				if (curRoom.settings.isPrivate || curRoom.battle || !curRoom.persist) {
 					continue;
 				}
 
@@ -1116,7 +1090,6 @@ export class BasicChatRoom extends BasicRoom {
 	introMessage: string;
 	staffMessage: string;
 	banwordRegex: RegExp | true | null;
-	settings: RoomSettings;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
 	active: boolean;
@@ -1129,6 +1102,7 @@ export class BasicChatRoom extends BasicRoom {
 	tour: Tournament | null;
 	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
 		super(roomid, title);
+		title = this.title;
 
 		if (options.logTimes === undefined) options.logTimes = true;
 		if (options.autoTruncate === undefined) options.autoTruncate = !options.isHelp;
@@ -1152,12 +1126,15 @@ export class BasicChatRoom extends BasicRoom {
 		this.banwordRegex = null;
 		this.subRooms = new Map();
 
-		this.settings = {...options} as RoomSettings;
-		if (!this.settings.auth) this.settings.auth = Object.create(null);
-		if (!options.isPersonal) this.settings.persistSettings = true;
+		Object.assign(this.settings, options);
+		if (options.auth) {
+			Object.setPrototypeOf(this.settings.auth, null);
+			this.auth.load();
+		}
+
+		if (!options.isPersonal) this.persist = true;
+
 		this.minorActivity = null;
-		Object.assign(this, options);
-		if (this.settings.auth) Object.setPrototypeOf(this.settings.auth, null);
 		this.parent = null;
 		if (options.parentid) {
 			const parent = Rooms.get(options.parentid);
@@ -1465,7 +1442,7 @@ export class BasicChatRoom extends BasicRoom {
 			}
 		}
 
-		if (this.settings.persistSettings) {
+		if (this.persist) {
 			this.title = newTitle;
 			this.saveSettings();
 		}

@@ -47,7 +47,7 @@ class Giveaway {
 		host: User, giver: User, room: ChatRoom | GameRoom,
 		ot: string, tid: string, prize: string
 	) {
-		this.gaNumber = ++room.settings.gameNumber;
+		this.gaNumber = room.nextGameNumber();
 		this.host = host;
 		this.giver = giver;
 		this.room = room;
@@ -499,7 +499,7 @@ export class GTSGiveaway {
 		room: ChatRoom | GameRoom, giver: User, amount: number,
 		summary: string, deposit: string, lookfor: string
 	) {
-		this.gtsNumber = ++room.settings.gameNumber;
+		this.gtsNumber = room.nextGameNumber();
 		this.room = room;
 		this.giver = giver;
 		this.left = amount;

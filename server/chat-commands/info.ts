@@ -334,7 +334,7 @@ export const commands: ChatCommands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!room.settings.persistSettings) {
+		if (!room.persist) {
 			return this.errorReply("This command is unavailable in temporary rooms.");
 		}
 		return this.parse(`/join view-punishments-${room}`);
@@ -1959,7 +1959,7 @@ export const commands: ChatCommands = {
 			this.modlog('RULES', null, `changed link to: ${target}`);
 		}
 
-		if (room.settings.persistSettings) {
+		if (room.persist) {
 			room.saveSettings();
 		}
 	},
@@ -2524,7 +2524,7 @@ export const pages: PageTable = {
 		let buf = "";
 		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!this.room.settings.persistSettings) return;
+		if (!this.room.persist) return;
 		if (!this.can('mute', null, this.room)) return;
 		// Ascending order
 		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.roomid))

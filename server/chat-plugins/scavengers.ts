@@ -199,38 +199,12 @@ if (LeaderboardRoom) {
 	LeaderboardRoom.scavLeaderboard.scavsLeaderboard = Leaderboard;
 	LeaderboardRoom.scavLeaderboard.scavsHostLeaderboard = HostLeaderboard;
 	LeaderboardRoom.scavLeaderboard.scavsPlayerLeaderboard = PlayerLeaderboard;
-
-	// backwards compatability with old settings
-	// label it as "AnyObject" to bypass typescript checks of invalid properties that used to exist.
-	const targetRoom = LeaderboardRoom as AnyObject;
-	if (targetRoom.scavmod) {
-		const scav_settings_properties = [
-			'scavmod',
-			'blitzPoints',
-			'winPoints',
-			'scavQueueDisabled',
-			'defaultScavTimer',
-			'officialtwist',
-			'addRecycledHuntsToQueueAutomatically',
-			'hostPoints',
-		];
-
-		if (!targetRoom.scavSettings) targetRoom.scavSettings = {};
-		for (const prop of scav_settings_properties) {
-			targetRoom.scavSettings[prop] = targetRoom[prop];
-			delete targetRoom[prop];
-			delete targetRoom.chatRoomData[prop];
-		}
-
-		targetRoom.chatRoomData.scavSettings = targetRoom.scavSettings;
-		targetRoom.saveSettings();
-	}
 }
 
-function formatQueue(queue: QueuedHunt[] | null, viewer: User, room: ChatRoom | GameRoom, broadcasting?: boolean) {
+function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: ChatRoom | GameRoom, broadcasting?: boolean) {
 	const showStaff = viewer.can('mute', null, room) && !broadcasting;
-	const queueDisabled = room.scavSettings?.scavQueueDisabled;
-	const timerDuration = room.scavSettings?.defaultScavTimer || DEFAULT_TIMER_DURATION;
+	const queueDisabled = room.settings.scavSettings?.scavQueueDisabled;
+	const timerDuration = room.settings.scavSettings?.defaultScavTimer || DEFAULT_TIMER_DURATION;
 	let buffer;
 	if (queue?.length) {
 		buffer = queue.map((item, index) => {
@@ -422,8 +396,8 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		}
 		if (mod) {
 			this.loadMods(mod);
-		} else if (this.gameType === 'official' && this.room.scavSettings?.officialtwist) {
-			this.loadMod(this.room.scavSettings?.officialtwist);
+		} else if (this.gameType === 'official' && this.room.settings.scavSettings?.officialtwist) {
+			this.loadMod(this.room.settings.scavSettings?.officialtwist);
 		}
 
 		this.runEvent('Load');
@@ -736,7 +710,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
 		const blitz = now - this.startTime <= 60000 &&
-			(this.room.scavSettings?.blitzPoints?.[this.gameType] || DEFAULT_BLITZ_POINTS[this.gameType]);
+			(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || DEFAULT_BLITZ_POINTS[this.gameType]);
 
 		player.completed = true;
 		let result = this.runEvent('Complete', player, time, blitz);
@@ -757,12 +731,12 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		}
 
 		this.runEvent('End', reset);
-		if (!ScavengerHuntDatabase.isEmpty() && this.room.scavSettings?.addRecycledHuntsToQueueAutomatically) {
-			if (!this.room.scavQueue) this.room.scavQueue = [];
+		if (!ScavengerHuntDatabase.isEmpty() && this.room.settings.scavSettings?.addRecycledHuntsToQueueAutomatically) {
+			if (!this.room.settings.scavQueue) this.room.settings.scavQueue = [];
 
 			const next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			const correctlyFormattedQuestions = next.questions.flatMap((question: AnyObject) => [question.text, question.answers]);
-			this.room.scavQueue.push({
+			this.room.settings.scavQueue.push({
 				hosts: next.hosts,
 				questions: correctlyFormattedQuestions,
 				staffHostId: 'scavengermanager',
@@ -781,15 +755,15 @@ export class ScavengerHunt extends Rooms.RoomGame {
 
 			// give points for winning and blitzes in official games
 			if (!this.runEvent('GivePoints')) {
-				const winPoints = this.room.scavSettings?.winPoints?.[this.gameType] ||
+				const winPoints = this.room.settings.scavSettings?.winPoints?.[this.gameType] ||
 					DEFAULT_POINTS[this.gameType];
-				const blitzPoints = this.room.scavSettings?.blitzPoints?.[this.gameType] ||
+				const blitzPoints = this.room.settings.scavSettings?.blitzPoints?.[this.gameType] ||
 					DEFAULT_BLITZ_POINTS[this.gameType];
 				// only regular hunts give host points
 				let hostPoints;
 				if (this.gameType === 'regular') {
-					hostPoints = this.room.scavSettings?.hostPoints ?
-						this.room.scavSettings?.hostPoints :
+					hostPoints = this.room.settings.scavSettings?.hostPoints ?
+						this.room.settings.scavSettings?.hostPoints :
 						DEFAULT_HOST_POINTS;
 				}
 
@@ -849,15 +823,17 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	tryRunQueue(roomid: RoomID) {
-		if (this.room.scavgame || this.room.scavSettings?.scavQueueDisabled) return; // don't run the queue for child games.
+		if (this.room.scavgame || this.room.settings.scavSettings?.scavQueueDisabled) {
+			return; // don't run the queue for child games
+		}
 		// prepare the next queue'd game
-		if (this.room.scavQueue && this.room.scavQueue.length) {
+		if (this.room.settings.scavQueue && this.room.settings.scavQueue.length) {
 			setTimeout(() => {
 				const room = Rooms.get(roomid) as ChatRoom;
-				if (!room || room.game || !room.scavQueue?.length) return;
+				if (!room || room.game || !room.settings.scavQueue?.length) return;
 
-				const next = room.scavQueue.shift()!;
-				const duration = room.scavSettings?.defaultScavTimer || DEFAULT_TIMER_DURATION;
+				const next = room.settings.scavQueue.shift()!;
+				const duration = room.settings.scavSettings?.defaultScavTimer || DEFAULT_TIMER_DURATION;
 				room.game = new ScavengerHunt(
 					room,
 					{id: next.staffHostId, name: next.staffHostName},
@@ -872,8 +848,6 @@ export class ScavengerHunt extends Rooms.RoomGame {
 				}
 
 				// update the saved queue.
-				// @ts-ignore
-				room.settings.scavQueue = room.scavQueue;
 				room.saveSettings();
 			}, 2 * 60000); // 2 minute cooldown
 		}
@@ -913,7 +887,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		}
 
 		const uniqueConnections = this.getUniqueConnections(player.id);
-		if (uniqueConnections > 1 && this.room.scavSettings?.scavmod && this.room.scavSettings?.scavmod.ipcheck) {
+		if (uniqueConnections > 1 && this.room.settings.scavSettings?.scavmod?.ipcheck) {
 			// multiple users on one alt
 			player.sendRoom("You have been caught for attempting a hunt with multiple connections on your account.  Staff has been notified.");
 
@@ -1402,7 +1376,7 @@ const ScavengerCommands: ChatCommands = {
 		// mini and officials can be started anytime
 		if (
 			!cmd.includes('force') && ['regular', 'unrated', 'recycled'].includes(gameType) && !mod &&
-			room.scavQueue && room.scavQueue.length && !room.scavgame
+			room.settings.scavQueue && room.settings.scavQueue.length && !room.scavgame
 		) {
 			return this.errorReply(`There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestart${gameType === 'regular' ? 'hunt' : gameType}.`);
 		}
@@ -1682,8 +1656,8 @@ const ScavengerCommands: ChatCommands = {
 			if (ScavengerHuntDatabase.isEmpty()) {
 				return this.errorReply(`There are no hunts in the database.`);
 			}
-			if (!room.scavQueue) {
-				room.scavQueue = [];
+			if (!room.settings.scavQueue) {
+				room.settings.scavQueue = [];
 			}
 
 			let next;
@@ -1695,7 +1669,7 @@ const ScavengerCommands: ChatCommands = {
 				next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			}
 			const correctlyFormattedQuestions = next.questions.flatMap((question: AnyObject) => [question.text, question.answers]);
-			room.scavQueue.push({
+			room.settings.scavQueue.push({
 				hosts: next.hosts,
 				questions: correctlyFormattedQuestions,
 				staffHostId: 'scavengermanager',
@@ -1710,9 +1684,9 @@ const ScavengerCommands: ChatCommands = {
 			const results = ScavengerHunt.parseQuestions(params);
 			if (results.err) return this.errorReply(results.err);
 
-			if (!room.scavQueue) room.scavQueue = [];
+			if (!room.settings.scavQueue) room.settings.scavQueue = [];
 
-			room.scavQueue.push({
+			room.settings.scavQueue.push({
 				hosts: hosts,
 				questions: results.result,
 				staffHostId: user.id,
@@ -1722,8 +1696,6 @@ const ScavengerCommands: ChatCommands = {
 		}
 		this.privateModAction(`(${user.name} has added a scavenger hunt to the queue.)`);
 
-		// @ts-ignore
-		room.settings.scavQueue = room.scavQueue;
 		room.saveSettings();
 	},
 
@@ -1735,14 +1707,12 @@ const ScavengerCommands: ChatCommands = {
 		const id = parseInt(target);
 
 		// this command should be using the display to manage anyways, so no error message is needed
-		if (!room.scavQueue || isNaN(id) || id < 0 || id >= room.scavQueue.length) return false;
+		if (!room.settings.scavQueue || isNaN(id) || id < 0 || id >= room.settings.scavQueue.length) return false;
 
-		const removed = room.scavQueue.splice(id, 1)[0];
+		const removed = room.settings.scavQueue.splice(id, 1)[0];
 		this.privateModAction(`(${user.name} has removed a scavenger hunt created by [${removed.hosts.map(u => u.id).join(", ")}] from the queue.)`);
-		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
+		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.settings.scavQueue, user, room)}`);
 
-		// @ts-ignore
-		room.settings.scavQueue = room.scavQueue;
 		room.saveSettings();
 	},
 
@@ -1752,7 +1722,7 @@ const ScavengerCommands: ChatCommands = {
 		}
 		if (!this.runBroadcast()) return false;
 
-		this.sendReply(`|uhtml|scav-queue|${formatQueue(room.scavQueue, user, room, this.broadcasting)}`);
+		this.sendReply(`|uhtml|scav-queue|${formatQueue(room.settings.scavQueue, user, room, this.broadcasting)}`);
 	},
 
 	next(target, room, user) {
@@ -1761,14 +1731,16 @@ const ScavengerCommands: ChatCommands = {
 		}
 		if (!this.can('mute', null, room)) return false;
 
-		if (!room.scavQueue || !room.scavQueue.length) return this.errorReply("The scavenger hunt queue is currently empty.");
+		if (!room.settings.scavQueue || !room.settings.scavQueue.length) {
+			return this.errorReply("The scavenger hunt queue is currently empty.");
+		}
 		if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
 		const huntId = parseInt(target) || 0;
 
-		if (!room.scavQueue[huntId]) return false; // no need for an error reply - this is done via UI anyways
+		if (!room.settings.scavQueue[huntId]) return false; // no need for an error reply - this is done via UI anyways
 
-		const next = room.scavQueue.splice(huntId, 1)[0];
+		const next = room.settings.scavQueue.splice(huntId, 1)[0];
 		room.game = new ScavengerHunt(
 			room,
 			{id: next.staffHostId, name: next.staffHostName},
@@ -1777,12 +1749,10 @@ const ScavengerCommands: ChatCommands = {
 			next.questions
 		);
 
-		if (huntId) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
+		if (huntId) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.settings.scavQueue, user, room)}`);
 		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.id)}`);
 
 		// update the saved queue.
-		// @ts-ignore
-		room.settings.scavQueue = room.scavQueue;
 		room.saveSettings();
 	},
 
@@ -1794,18 +1764,16 @@ const ScavengerCommands: ChatCommands = {
 		if (!this.can('mute', null, room)) return;
 
 
-		if (!room.scavSettings) room.scavSettings = {};
+		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		const state = this.cmd === 'disablequeue';
-		if ((room.scavSettings.scavQueueDisabled || false) === state) {
+		if ((room.settings.scavSettings.scavQueueDisabled || false) === state) {
 			return this.errorReply(`The queue is already ${state ? 'disabled' : 'enabled'}.`);
 		}
 
-		room.scavSettings.scavQueueDisabled = state;
-		// @ts-ignore
-		room.settings.scavSettings = room.scavSettings;
+		room.settings.scavSettings.scavQueueDisabled = state;
 		room.saveSettings();
 
-		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
+		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.settings.scavQueue, user, room)}`);
 		this.privateModAction(`(The queue has been ${state ? 'disabled' : 'enabled'} by ${user.name}.)`);
 		this.modlog('SCAV QUEUE', null, (state ? 'disabled' : 'enabled'));
 	},
@@ -1816,9 +1784,9 @@ const ScavengerCommands: ChatCommands = {
 		}
 		if (!this.can('declare', null, room)) return;
 
-		if (!room.scavSettings) room.scavSettings = {};
+		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
-			const duration_string = room.scavSettings.defaultScavTimer || DEFAULT_TIMER_DURATION;
+			const duration_string = room.settings.scavSettings.defaultScavTimer || DEFAULT_TIMER_DURATION;
 			return this.sendReply(`The default scavenger timer is currently set at: ${duration_string} minutes.`);
 		}
 		const duration = parseInt(target);
@@ -1827,9 +1795,7 @@ const ScavengerCommands: ChatCommands = {
 			return this.errorReply('The default timer must be an integer greater than zero, in minutes.');
 		}
 
-		room.scavSettings.defaultScavTimer = duration;
-		// @ts-ignore
-		room.settings.scavSettings = room.scavSettings;
+		room.settings.scavSettings.defaultScavTimer = duration;
 		room.saveSettings();
 		this.privateModAction(`(The default scavenger timer has been set to ${duration} minutes by ${user.name}.)`);
 		this.modlog('SCAV DEFAULT TIMER', null, `${duration} minutes`);
@@ -1934,10 +1900,10 @@ const ScavengerCommands: ChatCommands = {
 		}
 		if (!this.can('mute', null, room)) return false; // perms for viewing only
 
-		if (!room.scavSettings) room.scavSettings = {};
+		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
 			const points = [];
-			const source = Object.entries(Object.assign(DEFAULT_BLITZ_POINTS, room.scavSettings.blitzPoints || {}));
+			const source = Object.entries(Object.assign(DEFAULT_BLITZ_POINTS, room.settings.scavSettings.blitzPoints || {}));
 			for (const entry of source) {
 				points.push(`${entry[0]}: ${entry[1]}`);
 			}
@@ -1954,17 +1920,15 @@ const ScavengerCommands: ChatCommands = {
 		if (isNaN(blitzPoints) || blitzPoints < 0 || blitzPoints > 1000) {
 			return this.errorReply("The points value awarded for blitz must be an integer bewteen 0 and 1000.");
 		}
-		if (!room.scavSettings.blitzPoints) room.scavSettings.blitzPoints = {};
-		room.scavSettings.blitzPoints[gameType] = blitzPoints;
+		if (!room.settings.scavSettings.blitzPoints) room.settings.scavSettings.blitzPoints = {};
+		room.settings.scavSettings.blitzPoints[gameType] = blitzPoints;
 
-		// @ts-ignore
-		room.settings.scavSettings = room.scavSettings;
 		room.saveSettings();
 		this.privateModAction(`(${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints}.)`);
 		this.modlog('SCAV BLITZ', null, `${gameType}: ${blitzPoints}`);
 
 		// double modnote in scavs room if it is a subroomgroupchat
-		if (room.parent && !room.settings.persistSettings && scavsRoom) {
+		if (room.parent && !room.persist && scavsRoom) {
 			scavsRoom.modlog(`(scavengers) SCAV BLITZ: by ${user.id}: ${gameType}: ${blitzPoints}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints} in <<${room.roomid}>>.)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for blitz for ${gameType} hunts to ${blitzPoints} in <<${room.roomid}>>.)`);
@@ -1977,10 +1941,10 @@ const ScavengerCommands: ChatCommands = {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
 		if (!this.can('mute', null, room)) return false; // perms for viewing only
-		if (!room.scavSettings) room.scavSettings = {};
+		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
-			const pointSetting = Object.hasOwnProperty.call(room.scavSettings, 'hostPoints') ?
-				room.scavSettings.hostPoints : DEFAULT_HOST_POINTS;
+			const pointSetting = Object.hasOwnProperty.call(room.settings.scavSettings, 'hostPoints') ?
+				room.settings.scavSettings.hostPoints : DEFAULT_HOST_POINTS;
 			return this.sendReply(`The points rewarded for hosting a regular hunt is ${pointSetting}.`);
 		}
 
@@ -1988,15 +1952,13 @@ const ScavengerCommands: ChatCommands = {
 		const points = parseInt(target);
 		if (isNaN(points)) return this.errorReply(`${target} is not a valid number of points.`);
 
-		room.scavSettings.hostPoints = points;
-		// @ts-ignore
-		room.settings.scavSettings = room.scavSettings;
+		room.settings.scavSettings.hostPoints = points;
 		room.saveSettings();
 		this.privateModAction(`(${user.name} has set the points awarded for hosting regular scavenger hunts to ${points})`);
 		this.modlog('SCAV SETHOSTPOINTS', null, `${points}`);
 
 		// double modnote in scavs room if it is a subroomgroupchat
-		if (room.parent && !room.settings.persistSettings) {
+		if (room.parent && !room.persist) {
 			scavsRoom.modlog(`(scavengers) SCAV SETHOSTPOINTS: [room: ${room.roomid}] by ${user.id}: ${points}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.roomid}>>)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.roomid}>>)`);
@@ -2008,11 +1970,11 @@ const ScavengerCommands: ChatCommands = {
 			return this.errorReply("This command can only be used in the scavengers room.");
 		}
 		if (!this.can('mute', null, room)) return false; // perms for viewing only
-		if (!room.scavSettings) room.scavSettings = {};
+		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
 			const points = [];
 			const source: [string, number[]][] = Object.entries(
-				Object.assign({}, DEFAULT_POINTS, room.scavSettings.winPoints || {})
+				Object.assign({}, DEFAULT_POINTS, room.settings.scavSettings.winPoints || {})
 			) as [];
 
 			for (const entry of source) {
@@ -2032,18 +1994,16 @@ const ScavengerCommands: ChatCommands = {
 			return this.errorReply("The points value awarded for winning a scavenger hunt must be an integer between 0 and 1000.");
 		}
 
-		if (!room.scavSettings.winPoints) room.scavSettings.winPoints = {};
-		room.scavSettings.winPoints[type] = winPoints;
+		if (!room.settings.scavSettings.winPoints) room.settings.scavSettings.winPoints = {};
+		room.settings.scavSettings.winPoints[type] = winPoints;
 
-		// @ts-ignore
-		room.settings.scavSettings = room.scavSettings;
 		room.saveSettings();
 		const pointsDisplay = winPoints.map((p, i) => `(${(i + 1)}) ${p}`).join(', ');
 		this.privateModAction(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay})`);
 		this.modlog('SCAV SETPOINTS', null, `${type}: ${pointsDisplay}`);
 
 		// double modnote in scavs room if it is a subroomgroupchat
-		if (room.parent && !room.settings.persistSettings) {
+		if (room.parent && !room.persist) {
 			scavsRoom.modlog(`(scavengers) SCAV SETPOINTS: [room: ${room.roomid}] by ${user.id}: ${type}: ${pointsDisplay}`);
 			scavsRoom.sendMods(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay} in <<${room.roomid}>>)`);
 			scavsRoom.roomlog(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay} in <<${room.roomid}>>)`);
@@ -2058,37 +2018,35 @@ const ScavengerCommands: ChatCommands = {
 		}
 		if (this.cmd.includes('reset')) target = 'RESET';
 
-		if (!room.scavSettings) room.scavSettings = {};
+		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
-			const twist = room.scavSettings.officialtwist || 'none';
+			const twist = room.settings.scavSettings.officialtwist || 'none';
 			return this.sendReplyBox(`The current official twist is: ${twist}`);
 		}
 		if (!this.can('declare', null, room)) return false;
 		if (target === 'RESET') {
-			room.scavSettings.officialtwist = null;
+			room.settings.scavSettings.officialtwist = null;
 		} else {
 			const twist = toID(target);
 			if (!ScavMods.twists[twist] || twist === 'constructor') return this.errorReply('Invalid twist.');
 
-			room.scavSettings.officialtwist = twist;
-      // @ts-ignore
-			room.settings.scavSettings = room.scavSettings;
+			room.settings.scavSettings.officialtwist = twist;
 			room.saveSettings();
+		}
 
-
-		if (room.scavSettings.officialtwist) {
-			this.privateModAction(`(${user.name} has set the official twist to ${room.scavSettings.officialtwist})`);
+		if (room.settings.scavSettings.officialtwist) {
+			this.privateModAction(`(${user.name} has set the official twist to ${room.settings.scavSettings.officialtwist})`);
 		} else {
 			this.privateModAction(`(${user.name} has removed the official twist.)`);
 		}
-		this.modlog('SCAV TWIST', null, room.scavSettings.officialtwist);
+		this.modlog('SCAV TWIST', null, room.settings.scavSettings.officialtwist);
 
 		// double modnote in scavs room if it is a subroomgroupchat
-		if (room.parent && !room.settings.persistSettings) {
-			if (room.scavSettings.officialtwist) {
-				scavsRoom.modlog(`(scavengers) SCAV TWIST: [room: ${room.roomid}] by ${user.id}: ${room.scavSettings.officialtwist}`);
-				scavsRoom.sendMods(`(${user.name} has set the official twist to - ${room.scavSettings.officialtwist} in <<${room.roomid}>>)`);
-				scavsRoom.roomlog(`(${user.name} has set the official twist to  - ${room.scavSettings.officialtwist} in <<${room.roomid}>>)`);
+		if (room.parent && !room.persist) {
+			if (room.settings.scavSettings.officialtwist) {
+				scavsRoom.modlog(`(scavengers) SCAV TWIST: [room: ${room.roomid}] by ${user.id}: ${room.settings.scavSettings.officialtwist}`);
+				scavsRoom.sendMods(`(${user.name} has set the official twist to - ${room.settings.scavSettings.officialtwist} in <<${room.roomid}>>)`);
+				scavsRoom.roomlog(`(${user.name} has set the official twist to  - ${room.settings.scavSettings.officialtwist} in <<${room.roomid}>>)`);
 			} else {
 				scavsRoom.sendMods(`(${user.name} has reset the official twist in <<${room.roomid}>>)`);
 				scavsRoom.roomlog(`(${user.name} has reset the official twist in <<${room.roomid}>>)`);
@@ -2228,7 +2186,7 @@ const ScavengerCommands: ChatCommands = {
 		'': 'update',
 		'update'(target, room, user) {
 			if (!this.can('declare', null, room) || !getScavsRoom(room)) return false;
-			const settings = room.scavSettings?.scavmod || {};
+			const settings = room.settings.scavSettings?.scavmod || {};
 
 			this.sendReply(`|uhtml${this.cmd === 'update' ? 'change' : ''}|scav-modsettings|<div class=infobox><strong>Scavenger Moderation Settings:</strong><br /><br />` +
 				`<button name=send value='/scav modsettings ipcheck toggle'><i class="fa fa-power-off"></i></button> Multiple connection verification: ${settings.ipcheck ? 'ON' : 'OFF'}` +
@@ -2238,8 +2196,8 @@ const ScavengerCommands: ChatCommands = {
 		'ipcheck'(target, room, user) {
 			if (!this.can('declare', null, room) || !getScavsRoom(room)) return false;
 
-			if (!room.scavSettings) room.scavSettings = {};
-			const settings = room.scavSettings.scavmod || {};
+			if (!room.settings.scavSettings) room.settings.scavSettings = {};
+			const settings = room.settings.scavSettings.scavmod || {};
 			target = toID(target);
 
 			const setting: {[k: string]: boolean} = {
@@ -2251,10 +2209,8 @@ const ScavengerCommands: ChatCommands = {
 			if (!(target in setting)) return this.sendReply('Invalid setting - ON, OFF, TOGGLE');
 
 			settings.ipcheck = setting[target];
-			room.scavSettings.scavmod = settings;
+			room.settings.scavSettings.scavmod = settings;
 
-			// @ts-ignore
-			room.settings.scavSettings = room.scavSettings;
 			room.saveSettings();
 
 			this.privateModAction(`(${user.name} has set multiple connections verification to ${setting[target] ? 'ON' : 'OFF'}.)`);
@@ -2357,16 +2313,17 @@ const ScavengerCommands: ChatCommands = {
 			ScavengerHuntDatabase.removeHintToRecycledHunt(huntNumber, questionNumber, hintNumber);
 			return this.privateModAction(`Hint #${hintNumber} was removed from Recycled hunt #${huntNumber} question #${questionNumber}.`);
 		} else if (cmd === 'autostart') {
-			if (!room.scavSettings) room.scavSettings = {};
+			if (!room.settings.scavSettings) room.settings.scavSettings = {};
 			if (params[0] !== 'on' && params[0] !== 'off') return this.errorReply(usageMessages[cmd]);
-			if ((params[0] === 'on') === !!room.scavSettings.addRecycledHuntsToQueueAutomatically) {
-				return this.errorReply(`Autostarting recycled hunts is already ${room.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}.`);
+			if ((params[0] === 'on') === !!room.settings.scavSettings.addRecycledHuntsToQueueAutomatically) {
+				return this.errorReply(`Autostarting recycled hunts is already ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}.`);
 			}
-			room.scavSettings.addRecycledHuntsToQueueAutomatically = !room.scavSettings.addRecycledHuntsToQueueAutomatically;
+			room.settings.scavSettings.addRecycledHuntsToQueueAutomatically =
+				!room.settings.scavSettings.addRecycledHuntsToQueueAutomatically;
 			if (params[0] === 'on') {
 				this.parse("/scav queuerecycled");
 			}
-			return this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
+			return this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.settings.scavSettings.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 		}
 	},
 
@@ -2390,7 +2347,7 @@ export const pages: PageTable = {
 		let buf = "";
 		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!this.room.settings.persistSettings) return;
+		if (!this.room.persist) return;
 		if (!this.can('mute', null, this.room)) return;
 		buf += `<div class="pad"><h2>List of recycled Scavenger hunts</h2>`;
 		buf += `<ol style="width: 90%;">`;

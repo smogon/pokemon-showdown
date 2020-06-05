@@ -7,7 +7,7 @@
  * @license MIT license
  */
 
-type RoomEvent = import('../rooms').RoomSettings['events'][''];
+type RoomEvent = NonNullable<import('../rooms').RoomSettings['events']>[''];
 
 function formatEvent(event: RoomEvent, showAliases?: boolean) {
 	const timeRemaining = new Date(event.date).getTime() - new Date().getTime();
@@ -27,11 +27,13 @@ function formatEvent(event: RoomEvent, showAliases?: boolean) {
 }
 
 function getAllAliases(room: Room) {
-	return Object.values(room.settings.events).map(event => event.aliases).join();
+	if (!room.settings.events) return [];
+	const aliases = Object.values(room.settings.events).map(event => event.aliases || []);
+	return ([] as string[]).concat(...aliases);
 }
 function getEventID(nameOrAlias: string, room: Room): ID {
 	let id = toID(nameOrAlias);
-	if (!room.settings.events[id]) {
+	if (room.settings.events && !room.settings.events[id]) {
 		for (const possibleEvent in room.settings.events) {
 			if (room.settings.events[possibleEvent].aliases?.includes(id)) {
 				id = toID(possibleEvent);
@@ -46,7 +48,7 @@ export const commands: ChatCommands = {
 	roomevent: 'roomevents',
 	roomevents: {
 		''(target, room, user) {
-			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
@@ -66,9 +68,10 @@ export const commands: ChatCommands = {
 		create: 'add',
 		edit: 'add',
 		add(target, room, user) {
-			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			if (!room.settings.events) room.settings.events = Object.create(null);
+			const events = room.settings.events!;
 			const [eventName, date, ...desc] = target.split(target.includes('|') ? '|' : ',');
 
 			if (!(eventName && date && desc)) {
@@ -85,11 +88,11 @@ export const commands: ChatCommands = {
 			const eventId = getEventID(eventName, room);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
-			const oldEvent = room.settings.events[eventId];
+			const oldEvent = events[eventId];
 			const eventNameActual = (oldEvent ? oldEvent.eventName : eventName.trim());
 			this.privateModAction(`(${user.name} ${oldEvent ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
 			this.modlog('ROOMEVENT', null, `${oldEvent ? "edited" : "added"} "${eventNameActual}"`);
-			room.settings.events[eventId] = {
+			events[eventId] = {
 				eventName: eventNameActual,
 				date: dateActual,
 				desc: descString,
@@ -100,7 +103,7 @@ export const commands: ChatCommands = {
 		},
 
 		rename(target, room, user) {
-			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			let [oldName, newName] = target.split(target.includes('|') ? '|' : ',');
 			if (!(oldName && newName)) return this.errorReply("Usage: /roomevents rename [old name], [new name]");
@@ -112,15 +115,16 @@ export const commands: ChatCommands = {
 			if (!newID) return this.errorReply("Event names must contain at least one alphanumeric character.");
 			if (newName.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
 
-			const eventData = room.settings.events[oldID];
+			const events = room.settings.events!;
+			const eventData = events?.[oldID];
 			if (!eventData) return this.errorReply(`There is no event titled "${oldName}".`);
-			if (room.settings.events[newID] || getAllAliases(room).includes(newID)) {
+			if (events[newID] || getAllAliases(room).includes(newID)) {
 				return this.errorReply(`"${newName}" is already an event or alias.`);
 			}
 			const originalName = eventData.eventName;
 			eventData.eventName = newName;
-			room.settings.events[newID] = eventData;
-			delete room.settings.events[oldID];
+			events[newID] = eventData;
+			delete events[oldID];
 
 			this.privateModAction(`(${user.name} renamed the roomevent titled "${originalName}" to "${newName}".)`);
 			this.modlog('ROOMEVENT', null, `renamed "${originalName}" to "${newName}"`);
@@ -129,7 +133,7 @@ export const commands: ChatCommands = {
 
 		begin: 'start',
 		start(target, room, user) {
-			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room to start.");
@@ -161,7 +165,7 @@ export const commands: ChatCommands = {
 
 		delete: 'remove',
 		remove(target, room, user) {
-			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			if (!room.settings.events || Object.keys(room.settings.events).length === 0) {
 				return this.errorReply("There are currently no planned upcoming events for this room to remove.");
@@ -176,7 +180,7 @@ export const commands: ChatCommands = {
 			room.saveSettings();
 		},
 		view(target, room, user) {
-			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
@@ -198,7 +202,7 @@ export const commands: ChatCommands = {
 		},
 		alias: 'addalias',
 		addalias(target, room, user) {
-			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			const [alias, eventId] = target.split(target.includes('|') ? '|' : ',').map(argument => toID(argument));
 			if (!(alias && eventId)) {
@@ -221,13 +225,13 @@ export const commands: ChatCommands = {
 		},
 		deletealias: 'removealias',
 		removealias(target, room, user) {
-			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			target = toID(target);
 			if (!target) return this.errorReply("Usage: /roomevents removealias <alias>");
 			if (!getAllAliases(room).includes(target)) return this.errorReply(`${target} isn't an alias.`);
 
-			const event = room.settings.events[getEventID(target, room)];
+			const event = room.settings.events![getEventID(target, room)];
 			if (event.aliases) {
 				event.aliases = event.aliases.filter(alias => alias !== target);
 				if (!event.aliases.length) event.aliases = undefined;
@@ -242,7 +246,7 @@ export const commands: ChatCommands = {
 		},
 		sortby(target, room, user) {
 			// preconditions
-			if (!room.settings.persistSettings) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.settings.events || !Object.keys(room.settings.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}

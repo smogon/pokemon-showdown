@@ -36,14 +36,11 @@ export class Jeopardy extends Rooms.RoomGame {
 	order: string[];
 	points: Map<JeopardyGamePlayer, number>;
 	finals: boolean;
+	gameNumber: number;
 
 	constructor(room: ChatRoom | GameRoom, user: User, categoryCount: number, questionCount: number) {
 		super(room);
-		if (room.settings.gameNumber) {
-			room.settings.gameNumber++;
-		} else {
-			room.settings.gameNumber = 1;
-		}
+		this.gameNumber = room.nextGameNumber();
 		this.playerTable = Object.create(null);
 		this.host = user;
 		this.allowRenames = true;
@@ -181,16 +178,16 @@ export class Jeopardy extends Rooms.RoomGame {
 	}
 
 	display() {
-		this.room.add(`|uhtml|jeopardy${this.room.settings.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+		this.room.add(`|uhtml|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 	}
 
 	update(dontMove = false) {
 		if (dontMove) {
-			this.room.add(`|uhtmlchange|jeopardy${this.room.settings.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+			this.room.add(`|uhtmlchange|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		} else {
-			this.room.add(`|uhtmlchange|jeopardy${this.room.settings.gameNumber}-${this.numUpdates}|`);
+			this.room.add(`|uhtmlchange|jeopardy${this.gameNumber}-${this.numUpdates}|`);
 			this.numUpdates++;
-			this.room.add(`|uhtml|jeopardy${this.room.settings.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
+			this.room.add(`|uhtml|jeopardy${this.gameNumber}-${this.numUpdates}|${this.getGrid()}`);
 		}
 	}
 

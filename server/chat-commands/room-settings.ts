@@ -195,7 +195,7 @@ export const commands: ChatCommands = {
 			this.add(`|raw|<div class="broadcast-blue"><strong>This room is no longer invite only!</strong><br />Anyone may now join.</div>`);
 			this.addModAction(`${user.name} turned off modjoin.`);
 			this.modlog('MODJOIN', null, 'OFF');
-			if (room.settings.persistSettings) {
+			if (room.persist) {
 				room.settings.modjoin = null;
 				room.saveSettings();
 			}
@@ -229,7 +229,7 @@ export const commands: ChatCommands = {
 			this.parse('/help modjoin');
 			return false;
 		}
-		if (room.settings.persistSettings) {
+		if (room.persist) {
 			room.saveSettings();
 		}
 		if (target === 'sync' && !room.settings.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
@@ -450,7 +450,7 @@ export const commands: ChatCommands = {
 			if (!target) return this.parse('/help banword');
 			if (!this.can('declare', null, room)) return false;
 
-			if (!room.settings.banwords.length) return this.errorReply("This room has no banned phrases.");
+			if (!room.settings.banwords) return this.errorReply("This room has no banned phrases.");
 
 			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
 			if (!words) return this.parse('/help banword');
@@ -461,7 +461,6 @@ export const commands: ChatCommands = {
 				if (!room.settings.banwords.includes(word)) return this.errorReply(`${word} is not a banned phrase in this room.`);
 			}
 
-			// ts bug? `words` guaranteed non-null by above falsey check
 			room.settings.banwords = room.settings.banwords.filter(w => !words!.includes(w));
 			room.banwordRegex = null;
 			if (words.length > 1) {
@@ -473,9 +472,10 @@ export const commands: ChatCommands = {
 				this.modlog('UNBANWORD', null, words[0]);
 				this.sendReply(`Banned phrase successfully deleted.`);
 			}
+			if (!room.settings.banwords.length) room.settings.banwords = undefined;
 			this.sendReply(
-				room.settings.banwords.length ?
-					`The list is currently: ${room.settings.banwords.join(', ')}` :
+				room.settings.banwords ?
+					`The list is now: ${room.settings.banwords.join(', ')}` :
 					`The list is now empty.`
 			);
 			room.saveSettings();
@@ -503,23 +503,23 @@ export const commands: ChatCommands = {
 
 	hightraffic(target, room, user) {
 		if (!target) {
-			return this.sendReply(`This room is${!room.settings.highTraffic ? ' not' : ''} currently marked as high traffic.`);
+			return this.sendReply(`This room is: ${!room.settings.highTraffic ? 'high traffic' : 'low traffic'}`);
 		}
 		if (!this.can('makeroom')) return false;
 
 		if (this.meansYes(target)) {
 			room.settings.highTraffic = true;
 		} else if (this.meansNo(target)) {
-			room.settings.highTraffic = false;
+			room.settings.highTraffic = undefined;
 		} else {
 			return this.parse('/help hightraffic');
 		}
 		room.saveSettings();
-		this.modlog(`HIGHTRAFFIC`, null, '' + room.settings.highTraffic);
+		this.modlog(`HIGHTRAFFIC`, null, `${!!room.settings.highTraffic}`);
 		this.addModAction(`This room was marked as high traffic by ${user.name}.`);
 	},
 	hightraffichelp: [
-		`/hightraffic [true|false] - (Un)marks a room as a high traffic room. Requires & ~`,
+		`/hightraffic [on|off] - (Un)marks a room as a high traffic room. Requires & ~`,
 		`When a room is marked as high-traffic, PS requires all messages sent to that room to contain at least 2 letters.`,
 	],
 
@@ -551,7 +551,7 @@ export const commands: ChatCommands = {
 		if (!targetRoom) throw new Error(`Error in room creation.`);
 		if (cmd === 'makeprivatechatroom') {
 			targetRoom.settings.isPrivate = true;
-			if (!targetRoom.settings.persistSettings) throw new Error(`Private chat room created without settings.`);
+			if (!targetRoom.persist) throw new Error(`Private chat room created without settings.`);
 			targetRoom.settings.isPrivate = true;
 			room.saveSettings();
 			const upperStaffRoom = Rooms.get('upperstaff');
@@ -727,7 +727,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`This room can't be deleted.`);
 		}
 
-		if (room.settings.persistSettings) {
+		if (room.persist) {
 			if (room.settings.isPrivate) {
 				const upperStaffRoom = Rooms.get('upperstaff');
 				if (upperStaffRoom) {
@@ -797,7 +797,7 @@ export const commands: ChatCommands = {
 		}
 		this.modlog(`RENAMEROOM`, null, `from ${oldTitle}`);
 		const privacy = room.settings.isPrivate === true ? "Private" :
-			room.settings.isPrivate === false ? "Public" :
+			!room.settings.isPrivate ? "Public" :
 			`${room.settings.isPrivate.charAt(0).toUpperCase()}${room.settings.isPrivate.slice(1)}`;
 		const message = Chat.html`
 			|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>
@@ -909,7 +909,7 @@ export const commands: ChatCommands = {
 	officialchatroom: 'officialroom',
 	officialroom(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (!room.settings.persistSettings) {
+		if (!room.persist) {
 			return this.errorReply(`/officialroom - This room can't be made official`);
 		}
 		if (this.meansNo(target)) {
@@ -931,7 +931,7 @@ export const commands: ChatCommands = {
 
 	psplwinnerroom(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (!room.settings.persistSettings) {
+		if (!room.persist) {
 			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room`);
 		}
 		if (this.meansNo(target)) {
@@ -956,7 +956,7 @@ export const commands: ChatCommands = {
 		if (!user.can('makeroom')) return this.errorReply(`/subroom - Access denied. Did you mean /subrooms?`);
 		if (!target) return this.parse('/help subroom');
 
-		if (!room.settings.persistSettings) return this.errorReply(`Temporary rooms cannot be subrooms.`);
+		if (!room.persist) return this.errorReply(`Temporary rooms cannot be subrooms.`);
 		if (room.parent) {
 			return this.errorReply(`This room is already a subroom. To change which room this subroom belongs to, remove the subroom first.`);
 		}
@@ -972,7 +972,7 @@ export const commands: ChatCommands = {
 		if (main.settings.isPrivate && !room.settings.isPrivate) {
 			return this.errorReply(`Private rooms cannot have public subrooms.`);
 		}
-		if (!main.settings.persistSettings) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
+		if (!main.persist) return this.errorReply(`Temporary rooms cannot be parent rooms.`);
 		if (room === main) return this.errorReply(`You cannot set a room to be a subroom of itself.`);
 
 		room.parent = main;
@@ -1004,7 +1004,7 @@ export const commands: ChatCommands = {
 	desubroom: 'unsubroom',
 	unsubroom(target, room, user) {
 		if (!this.can('makeroom')) return;
-		if (!room.parent || !room.settings.persistSettings) {
+		if (!room.parent || !room.persist) {
 			return this.errorReply(`This room is not currently a subroom of a public room.`);
 		}
 
@@ -1033,7 +1033,7 @@ export const commands: ChatCommands = {
 			if (!room.parent) return this.errorReply(`This room is not a subroom.`);
 			return this.sendReply(`This is a subroom of ${room.parent.title}.`);
 		}
-		if (!room.settings.persistSettings) return this.errorReply(`Temporary rooms cannot have subrooms.`);
+		if (!room.persist) return this.errorReply(`Temporary rooms cannot have subrooms.`);
 
 		if (!this.runBroadcast()) return;
 
@@ -1121,7 +1121,7 @@ export const commands: ChatCommands = {
 		this.modlog('ROOMINTRO');
 		this.roomlog(room.introMessage.replace(/\n/g, ''));
 
-		if (room.settings.persistSettings) {
+		if (room.persist) {
 			room.saveSettings();
 		}
 	},
@@ -1209,7 +1209,7 @@ export const commands: ChatCommands = {
 
 		if (!room.aliases) room.aliases = [];
 		room.aliases.push(alias);
-		if (room.settings.persistSettings) {
+		if (room.persist) {
 			room.settings.aliases = room.aliases;
 			room.saveSettings();
 		}
@@ -1287,7 +1287,7 @@ export const commands: ChatCommands = {
 			this.modlog('RESETTIERDISPLAY', null, `to tiers`);
 		}
 
-		if (room.settings.persistSettings) {
+		if (room.persist) {
 			room.saveSettings();
 		}
 	},
@@ -1376,7 +1376,7 @@ export const roomSettings: SettingsHandler[] = [
 		label: "/data Tier display",
 		permission: 'editroom',
 		options: [
-			[`tiers`, room.settings.dataCommandTierDisplay === 'tiers' || `roomtierdisplay tiers`],
+			[`tiers`, (room.settings.dataCommandTierDisplay ?? 'tiers') === 'tiers' || `roomtierdisplay tiers`],
 			[`doubles tiers`, room.settings.dataCommandTierDisplay === 'doubles tiers' || `roomtierdisplay doubles tiers`],
 			[`numbers`, room.settings.dataCommandTierDisplay === 'numbers' || `roomtierdisplay numbers`],
 		],

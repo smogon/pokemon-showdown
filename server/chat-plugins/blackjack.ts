@@ -53,9 +53,11 @@ export class Blackjack extends Rooms.RoomGame {
 	dealer: BlackjackDealer;
 	deck: Deck[];
 	playerTable: {[k: string]: BlackjackPlayer};
+	gameNumber: number;
 
 	constructor(room: ChatRoom | GameRoom, user: User, autostartMinutes = 0) {
 		super(room);
+		this.gameNumber = room.nextGameNumber();
 		this.room = room;
 
 		this.turnTimeoutMinutes = 1;
@@ -127,7 +129,7 @@ export class Blackjack extends Rooms.RoomGame {
 		const players = Object.keys(this.playerTable);
 		const playerList = [];
 		for (const player of players) playerList.push(Chat.escapeHTML(this.playerTable[player].name));
-		this.room.send(`|uhtml${change}|blackjack-${this.room.settings.gameNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : playerList.join(', ')}</div>`);
+		this.room.send(`|uhtml${change}|blackjack-${this.gameNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : playerList.join(', ')}</div>`);
 		this.uhtmlChange = 'change';
 	}
 
@@ -194,7 +196,7 @@ export class Blackjack extends Rooms.RoomGame {
 	}
 	send(message: string, clean = false) {
 		const change = this.uhtmlChange;
-		this.room.send(`|uhtml${change}|blackjack-${this.room.settings.gameNumber}|<div class="infobox${this.infoboxLimited}">${(clean ? message : this.lastMessage + message)}</div>`);
+		this.room.send(`|uhtml${change}|blackjack-${this.gameNumber}|<div class="infobox${this.infoboxLimited}">${(clean ? message : this.lastMessage + message)}</div>`);
 		this.lastMessage += message;
 		this.uhtmlChange = 'change';
 	}
@@ -203,7 +205,7 @@ export class Blackjack extends Rooms.RoomGame {
 		let change = this.uhtmlChange;
 		if (noChange) change = '';
 		if (clean) this.lastMessage = '';
-		const message = `|uhtml${change}|blackjack-${this.room.settings.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
+		const message = `|uhtml${change}|blackjack-${this.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
 		this.lastMessage += text;
 		if (end) {
 			text = `The game of blackjack has ${force ? `been forcibly ended by ${this.endedBy}` : 'ended'}. <details><summary>View turn log</summary>${this.turnLog}</details>${text}`;
@@ -226,7 +228,7 @@ export class Blackjack extends Rooms.RoomGame {
 	clear() {
 		const player = this.playerTable[this.curUsername];
 		if (!player) throw new Error(`Player not in player table`); // this should never happen
-		player.sendRoom(`|uhtmlchange|user-blackjack-${this.room.settings.gameNumber}|`);
+		player.sendRoom(`|uhtmlchange|user-blackjack-${this.gameNumber}|`);
 	}
 	clearAllTimers() {
 		if (this.dqTimer) {
@@ -243,11 +245,11 @@ export class Blackjack extends Rooms.RoomGame {
 		}
 	}
 	slide(user: User) {
-		user.sendTo(this.roomid, `|uhtml|blackjack-${this.room.settings.gameNumber}|`);
+		user.sendTo(this.roomid, `|uhtml|blackjack-${this.gameNumber}|`);
 		this.display('', false, user.name);
 	}
 	onConnect(user: User) {
-		const message = `|uhtml|blackjack-${this.room.settings.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
+		const message = `|uhtml|blackjack-${this.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
 		if (this.state === 'signups') {
 			this.sendInvite();
 		} else if (this.state === 'started') {
@@ -391,7 +393,7 @@ export class Blackjack extends Rooms.RoomGame {
 			winners = this.getWinners(true);
 			this.endedBy = Chat.escapeHTML(user.name);
 			if (this.curUsername) {
-				this.playerTable[this.curUsername].send(`|uhtmlchange|user-blackjack-${this.room.settings.gameNumber}|`);
+				this.playerTable[this.curUsername].send(`|uhtmlchange|user-blackjack-${this.gameNumber}|`);
 			}
 			if (winners.length < 1) {
 				this.display(`There are no winners this time.`, false, undefined, false, true);
@@ -426,8 +428,7 @@ export class Blackjack extends Rooms.RoomGame {
 			}
 		}
 		this.clearAllTimers();
-		this.room.settings.gameNumber++;
-		delete this.room.game;
+		this.room.game = null;
 	}
 
 	/**
@@ -576,7 +577,7 @@ export class Blackjack extends Rooms.RoomGame {
 			}
 			this.curUsername = Object.keys(this.playerTable)[num];
 		}
-		let output = `|uhtml${this.playerTable[this.curUsername].selfUhtml}|user-blackjack-${this.room.settings.gameNumber}|<div class="infobox" style="line-height: 20px;">`;
+		let output = `|uhtml${this.playerTable[this.curUsername].selfUhtml}|user-blackjack-${this.gameNumber}|<div class="infobox" style="line-height: 20px;">`;
 		output += `It's your turn to move, ${this.playerTable[this.curUsername].name}<br />`;
 		for (const card of this.playerTable[this.curUsername].cards) {
 			output += this.generateCard(card);

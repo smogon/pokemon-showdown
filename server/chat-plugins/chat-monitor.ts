@@ -306,7 +306,7 @@ export const chatfilter: ChatFilter = function (message, user, room) {
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
 	const isStaffRoom = room && (
-		(room.settings.persistSettings && room.roomid.endsWith('staff')
+		(room.persist && room.roomid.endsWith('staff')
 		) || room.roomid.startsWith('help-'));
 	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
 

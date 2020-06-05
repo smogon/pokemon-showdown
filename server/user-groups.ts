@@ -32,7 +32,6 @@ export class RoomAuth extends Auth {
 	constructor(room: BasicRoom) {
 		super();
 		this.room = room;
-		this.load();
 	}
 	get(id: ID): GroupSymbol | '';
 	get(id: ID, defaultSymbol: true): GroupSymbol;
@@ -134,7 +133,7 @@ export class GlobalAuth extends Auth {
 		}
 		this.usernames.set(id, username);
 		super.set(id, group);
-		this.save();
+		void this.save();
 		return this;
 	}
 	delete(id: ID) {

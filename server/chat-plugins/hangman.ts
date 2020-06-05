@@ -20,7 +20,7 @@ export class Hangman extends Rooms.RoomGame {
 	constructor(room: ChatRoom | GameRoom, user: User, word: string, hint = '') {
 		super(room);
 
-		this.gameNumber = ++room.settings.gameNumber;
+		this.gameNumber = room.nextGameNumber();
 
 		this.gameid = 'hangman' as ID;
 		this.title = 'Hangman';
