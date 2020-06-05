@@ -10,6 +10,7 @@ try {
 var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
+var force = process.argv[2] === '--force';
 
 process.chdir(__dirname);
 
@@ -100,7 +101,7 @@ function needsSucrase(source, dest, path = '') {
 
 function sucrase(src, out, opts) {
 	try {
-		if (src !== './config' && !needsSucrase(src, out)) {
+		if (!force && src !== './config' && !needsSucrase(src, out)) {
 			return false;
 		}
 	} catch (e) {}
