@@ -199,13 +199,13 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		name: "MechOMnism",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, heal: 1},
 		drain: [1, 3],
 		onTryHit(target, source) {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Mirror Shot', source);
+			this.add('-anim', source, 'Mirror Shot', target);
 			this.add('-anim', source, 'Refresh', source);
 		},
 		onHit() {
@@ -240,8 +240,8 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.boost({def: -1, spd: -1}, target);
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Heal Pulse', source);
-			this.add('-anim', source, 'Close Combat', source);
+			this.add('-anim', source, 'Heal Pulse', target);
+			this.add('-anim', source, 'Close Combat', target);
 		},
 		flags: {mirror: 1, protect: 1},
 		secondary: null,
@@ -349,38 +349,16 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Imprison', target);
+			this.add('-anim', source, 'Imprison', source);
 			this.add('-anim', source, 'Mean Look', target);
 			this.add('-anim', source, 'Transform', target);
 		},
-		self: {
-			volatileStatus: 'imprison',
-		},
-		onHit(target, source, move) {
-			target.addVolatile('trapped', source, move, 'trapper');
-			if (!source.transformInto(target)) {
+		onHit(target, pokemon, move) {
+			target.addVolatile('trapped', pokemon, move, 'trapper');
+			pokemon.addVolatile('imprison', pokemon, move);
+			if (!pokemon.transformInto(target)) {
 				return false;
 			}
-		},
-		effect: {
-			noCopy: true,
-			onStart(target) {
-				this.add('-start', target, 'move: Ghost of 1v1 Past');
-			},
-			onFoeDisableMove(pokemon) {
-				for (const moveSlot of this.effectData.source.moveSlots) {
-					if (moveSlot.id === 'struggle') continue;
-					pokemon.disableMove(moveSlot.id, 'hidden');
-				}
-				pokemon.maybeDisabled = true;
-			},
-			onFoeBeforeMovePriority: 4,
-			onFoeBeforeMove(attacker, defender, move) {
-				if (move.id !== 'struggle' && this.effectData.source.hasMove(move.id) && !move.isZ && !move.isMax) {
-					this.add('cant', attacker, 'move: Ghost of 1v1 Past', move);
-					return false;
-				}
-			},
 		},
 		isZ: "boatiumz",
 		secondary: null,

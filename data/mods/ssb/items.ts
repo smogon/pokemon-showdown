@@ -5,10 +5,10 @@ export const BattleItems: {[k: string]: ModdedItemData} = {
 		isNonstandard: "Custom",
 		onTakeItem: false,
 		zMove: "Ghost of 1v1 Past",
-		zMoveFrom: "Destiny Bond",
+		zMoveFrom: "Moongeist Beam",
 		itemUser: ["Froslass"],
 		gen: 8,
-		desc: "If held by a Froslass with Destiny Bond, it can use Ghost of 1v1 Past.",
+		desc: "If held by a Froslass with Moongeist Beam, it can use Ghost of 1v1 Past.",
 	},
 	// Custom support for Perish Song's ability (Snowstorm)
 	safetygoggles: {

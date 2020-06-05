@@ -78,8 +78,8 @@ export const ssbSets: SSBSets = {
 	},
 	phiwings99: {
 		species: 'Froslass', ability: 'Plausible Deniability', item: 'Boatium Z', gender: 'M',
-		moves: ['Moongeist Beam', 'Ice Beam', 'Haze'],
-		signatureMove: 'Destiny Bond',
+		moves: ['Destiny Bond', 'Ice Beam', 'Haze'],
+		signatureMove: 'Moongeist Beam',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 };
