@@ -5,7 +5,7 @@
  * Written by mia-pi, with some code / design concepts from Asheviere.
  */
 
-import * as https from 'https';
+import {Net} from '../../lib/net';
 import {FS} from '../../lib/fs';
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const CHANNEL = `${ROOT}channels`;
@@ -30,15 +30,8 @@ export class YoutubeInterface {
 		const id = this.getId(link);
 		if (!id) return null;
 		const queryUrl = `${CHANNEL}?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
-		const query = new Promise((resolve, reject) => {
-			https.get(queryUrl, res => {
-				const data: string[] = [];
-				res.setEncoding('utf8');
-				res.on('data', chunk => data.push(chunk));
-				res.on('end', () => resolve(JSON.parse(data.join(''))));
-			}).on('error', reject);
-		});
-		const res: any = await query.catch(() => {});
+		const raw = await Net(queryUrl).get();
+		const res = JSON.parse(raw);
 		if (!res || !res.items) return null;
 		const data = res.items[0];
 		const cache = {
@@ -124,15 +117,8 @@ export class YoutubeInterface {
 		const id = this.getId(link);
 		if (!id) return null;
 		const queryUrl = `${ROOT}videos?part=snippet%2Cstatistics&id=${encodeURIComponent(id)}&key=${Config.youtubeKey}`;
-		const query = new Promise((resolve, reject) => {
-			https.get(queryUrl, res => {
-				const data: string[] = [];
-				res.setEncoding('utf8');
-				res.on('data', chunk => data.push(chunk));
-				res.on('end', () => resolve(JSON.parse(data.join(''))));
-			}).on('error', reject);
-		});
-		const res: any = await query.catch(() => {});
+		const raw = await Net(queryUrl).get();
+		const res = JSON.parse(raw);
 		if (!res.items) return;
 		const video = res.items[0];
 		const info = {
