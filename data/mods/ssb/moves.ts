@@ -358,8 +358,29 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			target.addVolatile('trapped', source, move, 'trapper');
-			const transforming = source.transformInto(target);
-			return transforming;
+			if (!source.transformInto(target)) {
+				return false;
+			}
+		},
+		effect: {
+			noCopy: true,
+			onStart(target) {
+				this.add('-start', target, 'move: Ghost of 1v1 Past');
+			},
+			onFoeDisableMove(pokemon) {
+				for (const moveSlot of this.effectData.source.moveSlots) {
+					if (moveSlot.id === 'struggle') continue;
+					pokemon.disableMove(moveSlot.id, 'hidden');
+				}
+				pokemon.maybeDisabled = true;
+			},
+			onFoeBeforeMovePriority: 4,
+			onFoeBeforeMove(attacker, defender, move) {
+				if (move.id !== 'struggle' && this.effectData.source.hasMove(move.id) && !move.isZ && !move.isMax) {
+					this.add('cant', attacker, 'move: Ghost of 1v1 Past', move);
+					return false;
+				}
+			},
 		},
 		isZ: "boatiumz",
 		secondary: null,
@@ -372,7 +393,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail or Snowstorm.",
 		shortDesc: "For 5 turns, damage to allies is halved. Hail and Snowstorm only.",
 		onTryHitSide() {
-			if (!this.field.isWeather('hail') && !this.field.isWeather('snowstorm')) return false;
+			if (!this.field.isWeather(['hail', 'snowstorm'])) return false;
 		},
 	},
 	blizzard: {

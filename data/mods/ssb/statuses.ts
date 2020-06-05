@@ -67,7 +67,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		// phuck innate
 		onDamage(damage, target, source, effect) { // Magic Guard
-			if (!source.species.id.startsWith('unown') || source.illusion) return;
+			if (!source || !source.species.id.startsWith('unown') || source.illusion) return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
@@ -98,7 +98,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 				this.add(`c|${getName('Kris')}|U? I'm already an Unown, no`);
 				this.add('-activate', pokemon, 'ability: phuck');
 				const chosenLetter2 = this.sample(unownLetters.filter(letter => {
-					return letter !== 'u';
+					return letter !== 'u' && letter !== 'w';
 				}));
 				pokemon.formeChange(`unown${chosenLetter2}`, this.effect, true);
 				this.hint(`There are no U Pokemon that work with Kris's signature move, so we're counting this as a loss`);
