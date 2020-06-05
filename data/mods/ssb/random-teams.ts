@@ -62,13 +62,13 @@ export const ssbSets: SSBSets = {
 		species: 'Absol', ability: 'Intimidate', item: 'Absolite', gender: 'M',
 		moves: ['Play Rough', 'U-turn', 'Close Combat'],
 		signatureMove: 'Healing you?',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: false,
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100,
 	},
 	'Paradise ╱╲☼': {
 		species: 'Slaking', ability: 'Unaware', item: 'Choice Scarf', gender: '',
 		moves: ['Sacred Fire', 'Spectral Thief', 'Icicle Crash'],
 		signatureMove: 'Rapid Turn',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100, shiny: false,
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', level: 100,
 	},
 	'Perish Song': {
 		species: 'Mismagius', ability: 'Snowstorm', item: 'Icium Z', gender: 'M',
@@ -81,6 +81,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Destiny Bond', 'Ice Beam', 'Haze'],
 		signatureMove: 'Moongeist Beam',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
+	Rabia: {
+		species: 'Mew', ability: 'Psychic Surge', item: 'Life Orb', gender: 'M',
+		moves: ['Nasty Plot', ['Flamethrower', 'Fire Blast'], 'Roost'],
+		signatureMove: 'Psycho Drive',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: true,
 	},
 };
 

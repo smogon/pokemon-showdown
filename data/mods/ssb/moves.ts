@@ -365,6 +365,35 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
+
+	// Rabia
+	psychodrive: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "Has a 30% chance to boost the user's Speed by 1 stage.",
+		shortDesc: "30% chance to boost the user's Spe by 1.",
+		name: "Psycho Drive",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1},
+		secondary: {
+			chance: 30,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Genesis Supernova', target);
+		},
+		target: "normal",
+		type: "Psychic",
+	},
 	// These moves need modified to support Snowstorm (Perish Song's ability)
 	auroraveil: {
 		inherit: true,

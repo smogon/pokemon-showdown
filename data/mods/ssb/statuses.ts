@@ -186,6 +186,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('phiwings99')}|God, Nalei is fucking terrible at this game.`);
 		},
 	},
+	rabia: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Rabia')}|eternally`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Rabia')}|rabia`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
+		},
+	},
 	// Snowstorm status support for Perish Song's ability
 	snowstorm: {
 		name: 'Snowstorm',
