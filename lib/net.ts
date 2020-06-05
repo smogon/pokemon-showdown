@@ -15,6 +15,7 @@ export interface PostData {
 }
 export interface NetRequestOptions extends https.RequestOptions {
 	body?: string | PostData;
+	writable?: boolean;
 	query?: PostData;
 }
 
@@ -73,7 +74,7 @@ export class NetStream extends Streams.ReadWriteStream {
 		}
 
 		const protocol = url.parse(this.uri).protocol as string;
-		const net = protocol.includes('https:') ? https : http;
+		const net = protocol === 'https:' ? https : http;
 
 		let resolveResponse: (value: http.IncomingMessage) => void;
 		this.response = new Promise(resolve => {
@@ -99,11 +100,17 @@ export class NetStream extends Streams.ReadWriteStream {
 		});
 		if (body) {
 			request.write(body);
-		} else {
+			request.end();
+			if (opts.writable) {
+				throw new Error(`options.body is what you would have written to a NetStream - you must choose one or the other`);
+			}
+		} else if (opts.writable) {
 			this.nodeWritableStream = request;
+		} else {
+			request.end();
 		}
-		if (opts.timeout) {
-			request.setTimeout(opts.timeout, () => {
+		if (opts.timeout || opts.timeout === undefined) {
+			request.setTimeout(opts.timeout || 5000, () => {
 				request.abort();
 			});
 		}
@@ -120,7 +127,7 @@ export class NetStream extends Streams.ReadWriteStream {
 	}
 	_write(data: string | Buffer): Promise<void> | void {
 		if (!this.nodeWritableStream) {
-			throw new Error("`options.body` is what you would have written to a NetStream - you must choose one or the other");
+			throw new Error("You must specify opts.writable to write to a request.");
 		}
 		const result = this.nodeWritableStream.write(data);
 		if (result !== false) return undefined;
@@ -155,7 +162,9 @@ export class NetRequest {
 	 * @param body POST body
 	 */
 	getStream(opts: NetRequestOptions = {}) {
-		if (Config.noNetRequests) throw new Error(`Net requests are disabled.`);
+		if (typeof Config !== 'undefined' && Config.noNetRequests) {
+			throw new Error(`Net requests are disabled.`);
+		}
 		const stream = new NetStream(this.uri, opts);
 		return stream;
 	}
