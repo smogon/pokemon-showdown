@@ -33,7 +33,7 @@ function formatEvent(event: RoomEvent, showAliases?: boolean) {
 }
 
 function getAllAliases(room: Room) {
-	let aliases: string[] = [];
+	const aliases: string[] = [];
 	for (const event of Object.values(room.events)) {
 		if (event.aliases) aliases.push(...event.aliases);
 	}
