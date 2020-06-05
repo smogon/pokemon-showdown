@@ -64,6 +64,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sinister Gaze',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
+	phiwings99: {
+		species: 'Froslass', ability: 'Plausible Deniability', item: 'Boatium Z', gender: 'M',
+		moves: ['Moongeist Beam', 'Ice Beam', 'Haze'],
+		signatureMove: 'Destiny Bond',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {

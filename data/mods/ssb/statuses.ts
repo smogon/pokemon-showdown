@@ -104,6 +104,18 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Perish Song')}|Perished.`);
 		},
 	},
+	phiwings99: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('phiwings99')}|I'm boated.`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('phiwings99')}|The fact you're switching this out means you probably didn't use the Z-Move right.`);
+		},
+		onFaint() {
+			this.add(`c|${getName('phiwings99')}|God, Nalei is fucking terrible at this game.`);
+		},
+	},
 	// Snowstorm status support for Perish Song's ability
 	snowstorm: {
 		name: 'Snowstorm',

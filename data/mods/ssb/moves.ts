@@ -196,6 +196,39 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
+
+	// phiwings99
+	ghostof1v1past: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Imprisons and traps the target, and then transforms into them.",
+		shortDesc: "Imprison + Mean Look + Transform.",
+		name: "Ghost of 1v1 Past",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Imprison', target);
+			this.add('-anim', source, 'Mean Look', target);
+			this.add('-anim', source, 'Transform', target);
+		},
+		self: {
+			volatileStatus: 'imprison',
+		},
+		onHit(target, source, move) {
+			target.addVolatile('trapped', source, move, 'trapper');
+			const transforming = source.transformInto(target);
+			return transforming;
+		},
+		isZ: "boatiumz",
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
 	// These moves need modified to support Snowstorm (Perish Song's ability)
 	auroraveil: {
 		inherit: true,

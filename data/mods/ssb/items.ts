@@ -1,4 +1,15 @@
 export const BattleItems: {[k: string]: ModdedItemData} = {
+	// phiwings99
+	boatiumz: {
+		name: "Boatium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Ghost of 1v1 Past",
+		zMoveFrom: "Destiny Bond",
+		itemUser: ["Froslass"],
+		gen: 8,
+		desc: "If held by a Froslass with Destiny Bond, it can use Ghost of 1v1 Past.",
+	},
 	// Custom support for Perish Song's ability (Snowstorm)
 	safetygoggles: {
 		inherit: true,
