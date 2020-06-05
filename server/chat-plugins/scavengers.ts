@@ -26,7 +26,6 @@ export interface FakeUser {
 	id: string;
 	noUpdate?: boolean;
 }
-
 interface ModEvent {
 	priority: number;
 	exec: TwistEvent;
@@ -458,7 +457,11 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			if (!this.mods[key]) this.mods[key] = [];
 			this.mods[key].push({exec: twist[key], priority});
 		}
-		this.announce(`This hunt uses the twist ${twist.name}.`);
+		if (twist.isGameMode) {
+			this.announce(`This hunt is part of an ongoing ${twist.name}.`);
+		} else {
+			this.announce(`This hunt uses the twist ${twist.name}.`);
+		}
 	}
 
 	// alert new users that are joining the room about the current hunt.
@@ -647,10 +650,10 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			question: this.questions[question - 1],
 			number: question,
 		};
-		const finalHint = current.number === this.questions.length ? "final " : "";
+		const finalHint = current.number === this.questions.length ? "Final " : "";
 
 		return `|raw|<div class="ladder"><table><tr>` +
-			`<td><strong style="white-space: nowrap">${finalHint}hint #${current.number}:</strong></td>` +
+			`<td><strong style="white-space: nowrap">${finalHint}Hint #${current.number}:</strong></td>` +
 			`<td>${
 				Chat.formatText(current.question.hint) +
 				(showHints && current.question.spoilers.length ?
@@ -2076,11 +2079,13 @@ const ScavengerCommands: ChatCommands = {
 			if (!ScavMods.twists[twist] || twist === 'constructor') return this.errorReply('Invalid twist.');
 
 			room.scavSettings.officialtwist = twist;
-			if (room.chatRoomData) {
-				room.chatRoomData.scavSettings = room.scavSettings;
-				Rooms.global.writeChatRoomData();
-			}
 		}
+
+		if (room.chatRoomData) {
+			room.chatRoomData.scavSettings = room.scavSettings;
+			Rooms.global.writeChatRoomData();
+		}
+
 		if (room.scavSettings.officialtwist) {
 			this.privateModAction(`(${user.name} has set the official twist to ${room.scavSettings.officialtwist})`);
 		} else {
@@ -2456,7 +2461,7 @@ export const commands: ChatCommands = {
 	starttwistofficial: 'starthunt',
 	starttwistpractice: 'starthunt',
 	starttwistmini: 'starthunt',
-	startwistunrated: 'starthunt',
+	starttwistunrated: 'starthunt',
 
 	forcestarthunt: 'starthunt',
 	forcestartunrated: 'starthunt',
