@@ -1465,14 +1465,21 @@ export const commands: ChatCommands = {
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 
-		const isPartial = cmd.includes('lines');
-		const showAlts = cmd.includes('alt');
-		const lineCount = isPartial ? parseInt(this.splitTarget(target)) || 0 : 0;
-		const reason = lineCount ? target.split(',').slice(2).join(',').trim() : this.splitTarget(target);
-		if (parseInt(reason) && !cmd.includes('force')) {
-			return this.errorReply(`Your reason was a number; use /forcehidetext if you didn't mean to clear ${reason} messages.`);
+		const hasLineCount = cmd.includes('lines');
+		target = this.splitTarget(target);
+		let lineCount = 0;
+		if (/^[0-9]+\s*(,|$)/.test(target)) {
+			if (hasLineCount) {
+				let lineCountString;
+				[lineCountString, target] = Chat.splitFirst(target, ',');
+				lineCount = parseInt(lineCountString);
+			} else if (!cmd.includes('force')) {
+				return this.errorReply(`Your reason was a number; use /hidelines if you wanted to clear a specific number of lines, or /forcehidetext if you really wanted your reason to be a number.`);
+			}
 		}
-		if (!lineCount && isPartial) {
+		const showAlts = cmd.includes('alt');
+		const reason = target.trim();
+		if (!lineCount && hasLineCount) {
 			return this.errorReply(`You must specify a number of messages to clear. To clear all messages, use /hidetext.`);
 		}
 		if (reason.length > MAX_REASON_LENGTH) {
