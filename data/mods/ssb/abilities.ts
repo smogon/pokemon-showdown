@@ -10,6 +10,21 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// cant say
+	ragequit: {
+		desc: "If Pokemon with this ability uses a move that misses or fails it faints and gives -2 Atk / -2 SpA to foe",
+		shortDesc: "If move misses or fails, apply memento.",
+		name: "Rage Quit",
+		onAfterMove(pokemon, target, move) {
+			if (pokemon.moveThisTurnResult === false) {
+				this.add('-ability', pokemon, 'Rage Quit', 'boost');
+				pokemon.faint();
+				if (pokemon.side.foe.active[0]) {
+					this.boost({atk: -2, spa: -2}, pokemon.side.foe.active[0], pokemon);
+				}
+			}
+		},
+	},
 	// GXS
 	virusupload: {
 		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower.",
