@@ -33,7 +33,11 @@ function formatEvent(event: RoomEvent, showAliases?: boolean) {
 }
 
 function getAllAliases(room: Room) {
-	return Object.keys(room.events).map(event => room.events[event].aliases).join();
+	const aliases: string[] = [];
+	for (const event of Object.values(room.events)) {
+		if (event.aliases) aliases.push(...event.aliases);
+	}
+	return aliases;
 }
 
 function getEventID(nameOrAlias: string, room: Room): ID {
@@ -58,7 +62,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 			if (!this.runBroadcast()) return;
-			const hasAliases = toID(getAllAliases(room)).length > 0;
+			const hasAliases = getAllAliases(room).length > 0;
 
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
 			buff += `<th>Event Name:</th>${hasAliases ? `<th>Event Aliases:</th>` : ``}<th>Event Description:</th><th>Event Date:</th>`;
