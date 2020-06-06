@@ -1550,70 +1550,71 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	for (const alts of searches) {
 		if (alts.skip) continue;
-		for (const move in dex) {
+		for (const moveid in dex) {
+			const move = dex[moveid];
 			let matched = false;
 			if (Object.keys(alts.types).length) {
-				if (alts.types[dex[move].type]) continue;
-				if (Object.values(alts.types).includes(false) && alts.types[dex[move].type] !== false) continue;
+				if (alts.types[move.type]) continue;
+				if (Object.values(alts.types).includes(false) && alts.types[move.type] !== false) continue;
 			}
 
 			if (Object.keys(alts.categories).length) {
-				if (alts.categories[dex[move].category]) continue;
-				if (Object.values(alts.categories).includes(false) && alts.categories[dex[move].category] !== false) continue;
+				if (alts.categories[move.category]) continue;
+				if (Object.values(alts.categories).includes(false) && alts.categories[move.category] !== false) continue;
 			}
 
 			if (Object.keys(alts.contestTypes).length) {
-				if (alts.contestTypes[dex[move].contestType || 'Cool']) continue;
+				if (alts.contestTypes[move.contestType || 'Cool']) continue;
 				if (
 					Object.values(alts.contestTypes).includes(false) &&
-					alts.contestTypes[dex[move].contestType || 'Cool'] !== false
+					alts.contestTypes[move.contestType || 'Cool'] !== false
 				) continue;
 			}
 
 			if (Object.keys(alts.targets).length) {
-				if (alts.targets[dex[move].target]) continue;
-				if (Object.values(alts.targets).includes(false) && alts.targets[dex[move].target] !== false) continue;
+				if (alts.targets[move.target]) continue;
+				if (Object.values(alts.targets).includes(false) && alts.targets[move.target] !== false) continue;
 			}
 
 			for (const flag in alts.flags) {
 				if (flag === 'secondary') {
-					if ((!dex[move].secondary && !dex[move].secondaries) === !alts.flags[flag]) {
+					if ((!move.secondary && !move.secondaries) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'zmove') {
-					if (!dex[move].isZ === !alts.flags[flag]) {
+					if (!move.isZ === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'highcrit') {
-					if (!(typeof dex[move].critRatio === 'number' && dex[move].critRatio > 1) === !alts.flags[flag]) {
+					if (!(typeof move.critRatio === 'number' && move.critRatio > 1) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'maxmove') {
-					if (!(typeof dex[move].isMax === 'boolean' && dex[move].isMax) === !alts.flags[flag]) {
+					if (!(typeof move.isMax === 'boolean' && move.isMax) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'gmaxmove') {
-					if (!(typeof dex[move].isMax === 'string') === !alts.flags[flag]) {
+					if (!(typeof move.isMax === 'string') === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'protection') {
-					if (!(dex[move].stallingMove && dex[move].id !== "endure") === !alts.flags[flag]) {
+					if (!(move.stallingMove && move.id !== "endure") === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else if (flag === 'ohko') {
-					if (!dex[move].ohko === !alts.flags[flag]) {
+					if (!move.ohko === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else {
-					if ((flag in dex[move].flags) === alts.flags[flag]) {
-						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(dex[move].target)) continue;
+					if ((flag in move.flags) === alts.flags[flag]) {
+						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(move.target)) continue;
 						matched = true;
 						break;
 					}
@@ -1621,15 +1622,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			if (Object.keys(alts.gens).length) {
-				if (alts.gens[String(dex[move].gen)]) continue;
-				if (Object.values(alts.gens).includes(false) && alts.gens[String(dex[move].gen)] !== false) continue;
+				if (alts.gens[String(move.gen)]) continue;
+				if (Object.values(alts.gens).includes(false) && alts.gens[String(move.gen)] !== false) continue;
 			}
 			for (const recoveryType in alts.recovery) {
 				let hasRecovery = false;
 				if (recoveryType === "recovery") {
-					hasRecovery = !!dex[move].drain || !!dex[move].flags.heal;
+					hasRecovery = !!move.drain || !!move.flags.heal;
 				} else if (recoveryType === "zrecovery") {
-					hasRecovery = (dex[move].zMove?.effect === 'heal');
+					hasRecovery = (move.zMove?.effect === 'heal');
 				}
 				if (hasRecovery === alts.recovery[recoveryType]) {
 					matched = true;
@@ -1638,28 +1639,28 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			if (alts.recoil) {
-				if (dex[move].recoil || dex[move].hasCrashDamage) matched = true;
+				if (move.recoil || move.hasCrashDamage) matched = true;
 			}
 			if (matched) continue;
 			for (const prop in alts.property) {
 				if (typeof alts.property[prop].less === "number") {
 					if (
-						dex[move][prop as keyof Move] !== true &&
-						(dex[move][prop as keyof Move] as number) < alts.property[prop].less
+						move[prop as keyof Move] !== true &&
+						(move[prop as keyof Move] as number) < alts.property[prop].less
 					) {
 						matched = true;
 						break;
 					}
 				}
 				if (typeof alts.property[prop].greater === "number") {
-					if ((dex[move][prop as keyof Move] === true && dex[move].category !== "Status") ||
-						dex[move][prop as keyof Move] as number > alts.property[prop].greater) {
+					if ((move[prop as keyof Move] === true && move.category !== "Status") ||
+						move[prop as keyof Move] as number > alts.property[prop].greater) {
 						matched = true;
 						break;
 					}
 				}
 				if (typeof alts.property[prop].equal === "number") {
-					if (dex[move][prop as keyof Move] === alts.property[prop].equal) {
+					if (move[prop as keyof Move] === alts.property[prop].equal) {
 						matched = true;
 						break;
 					}
@@ -1667,13 +1668,13 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			for (const boost in alts.boost) {
-				if (dex[move].boosts) {
-					if (((dex[move].boosts as Partial<BoostsTable>)[boost as BoostName]! > 0) === alts.boost[boost]) {
+				if (move.boosts) {
+					if ((move.boosts[boost as BoostName]! > 0) === alts.boost[boost]) {
 						matched = true;
 						break;
 					}
-				} else if (dex[move].secondary && dex[move].secondary!.self && dex[move].secondary!.self!.boosts) {
-					if ((dex[move].secondary!.self!.boosts![boost as BoostName]! > 0) === alts.boost[boost]) {
+				} else if (move.secondary && move.secondary.self && move.secondary.self.boosts) {
+					if ((move.secondary.self.boosts[boost as BoostName]! > 0) === alts.boost[boost]) {
 						matched = true;
 						break;
 					}
@@ -1681,19 +1682,19 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			for (const lower in alts.lower) {
-				if (dex[move].boosts && dex[move].boosts !== false) {
-					if (((dex[move].boosts as Partial<BoostsTable>)[lower as BoostName]! < 0) === alts.lower[lower]) {
+				if (move.boosts && move.boosts !== false) {
+					if ((move.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
 						matched = true;
 						break;
 					}
-				} else if (dex[move].secondary) {
-					if (dex[move].secondary!.boosts) {
-						if ((dex[move].secondary!.boosts![lower as BoostName]! < 0) === alts.lower[lower]) {
+				} else if (move.secondary) {
+					if (move.secondary.boosts) {
+						if ((move.secondary.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
 							matched = true;
 							break;
 						}
-					} else if (dex[move].secondary!.self && dex[move].secondary!.self!.boosts) {
-						if ((dex[move].secondary!.self!.boosts![lower as BoostName]! < 0) === alts.lower[lower]) {
+					} else if (move.secondary.self && move.secondary.self.boosts) {
+						if ((move.secondary.self.boosts[lower as BoostName]! < 0) === alts.lower[lower]) {
 							matched = true;
 							break;
 						}
@@ -1702,7 +1703,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 			for (const boost in alts.zboost) {
-				const zMove = dex[move].zMove;
+				const zMove = move.zMove;
 				if (zMove?.boost) {
 					if ((zMove.boost[boost as BoostName]! > 0) === alts.zboost[boost]) {
 						matched = true;
@@ -1714,14 +1715,14 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			for (const searchStatus in alts.status) {
 				let canStatus = !!(
-					dex[move].status === searchStatus ||
-					(dex[move].secondaries && dex[move].secondaries!.some(entry => entry.status === searchStatus))
+					move.status === searchStatus ||
+					(move.secondaries && move.secondaries.some(entry => entry.status === searchStatus))
 				);
 				if (searchStatus === 'slp') {
-					canStatus = canStatus || move === 'yawn';
+					canStatus = canStatus || moveid === 'yawn';
 				}
 				if (searchStatus === 'brn' || searchStatus === 'frz' || searchStatus === 'par') {
-					canStatus = canStatus || move === 'triattack';
+					canStatus = canStatus || moveid === 'triattack';
 				}
 				if (canStatus === alts.status[searchStatus]) {
 					matched = true;
@@ -1732,9 +1733,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 			for (const searchStatus in alts.volatileStatus) {
 				const canStatus = !!(
-					(dex[move].secondary && dex[move].secondary!.volatileStatus === searchStatus) ||
-					(dex[move].secondaries && dex[move].secondaries!.some(entry => entry.volatileStatus === searchStatus)) ||
-					(dex[move].volatileStatus === searchStatus)
+					(move.secondary && move.secondary.volatileStatus === searchStatus) ||
+					(move.secondaries && move.secondaries.some(entry => entry.volatileStatus === searchStatus)) ||
+					(move.volatileStatus === searchStatus)
 				);
 				if (canStatus === alts.volatileStatus[searchStatus]) {
 					matched = true;
@@ -1743,7 +1744,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 			if (matched) continue;
 
-			delete dex[move];
+			delete dex[moveid];
 		}
 	}
 
