@@ -221,7 +221,7 @@ export const commands: ChatCommands = {
 
 	memusage: 'memoryusage',
 	memoryusage(target) {
-		if (!this.can('hotpatch')) return false;
+		if (!this.can('lockdown')) return false;
 		const memUsage = process.memoryUsage();
 		const resultNums = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
 		const units = ["B", "KiB", "MiB", "GiB", "TiB"];
@@ -235,7 +235,7 @@ export const commands: ChatCommands = {
 	forcehotpatch: 'hotpatch',
 	async hotpatch(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help hotpatch');
-		if (!this.can('hotpatch')) return;
+		if (!this.canUseConsole()) return false;
 
 		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
@@ -462,8 +462,8 @@ export const commands: ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 
-	async savelearnsets(target, room, user) {
-		if (!this.can('hotpatch')) return false;
+	async savelearnsets(target, room, user, connection) {
+		if (!this.canUseConsole()) return false;
 		this.sendReply("saving...");
 		await FS('data/learnsets.js').write(`'use strict';\n\nexports.BattleLearnsets = {\n` +
 			Object.entries(Dex.data.Learnsets).map(([id, entry]) => (
@@ -481,7 +481,7 @@ export const commands: ChatCommands = {
 
 	widendatacenters: 'adddatacenters',
 	async adddatacenters(target, room, user, connection, cmd) {
-		if (!this.can('hotpatch')) return false;
+		if (!this.can('lockdown')) return false;
 		if (!target) return this.parse(`/help adddatacenters`);
 		// should be in the format: IP, IP, name, URL
 		const widen = (cmd === 'widendatacenters');
@@ -789,7 +789,7 @@ export const commands: ChatCommands = {
 	killhelp: [`/kill - kills the server. Can't be done unless the server is in lockdown state. Requires: ~`],
 
 	loadbanlist(target, room, user, connection) {
-		if (!this.can('hotpatch')) return false;
+		if (!this.can('lockdown')) return false;
 
 		connection.sendTo(room, "Loading ipbans.txt...");
 		Punishments.loadBanlist().then(
@@ -802,16 +802,14 @@ export const commands: ChatCommands = {
 	],
 
 	refreshpage(target, room, user) {
-		if (!this.can('hotpatch')) return false;
+		if (!this.can('lockdown')) return false;
 		Rooms.global.send('|refresh|');
 		const logRoom = Rooms.get('staff') || room;
 		logRoom.roomlog(`${user.name} used /refreshpage`);
 	},
 
 	async updateserver(target, room, user, connection) {
-		if (!user.can('hotpatch')) {
-			return this.errorReply(`/updateserver - Access denied.`);
-		}
+		if (!this.canUseConsole()) return false;
 
 		if (Monitor.updateServerLock) {
 			return this.errorReply(`/updateserver - Another update is already in progress (or a previous update crashed).`);
@@ -919,9 +917,7 @@ export const commands: ChatCommands = {
 			});
 		}
 
-		if (!user.can('hotpatch')) {
-			return this.errorReply(`/updateserver - Access denied.`);
-		}
+		if (!this.canUseConsole()) return false;
 		Monitor.updateServerLock = true;
 		const [, , stderr] = await exec('node ../../build');
 		if (stderr) {
@@ -936,9 +932,7 @@ export const commands: ChatCommands = {
 	 *********************************************************/
 
 	bash(target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
-			return this.errorReply("/bash - Access denied.");
-		}
+		if (!this.canUseConsole()) return false;
 		if (!target) return this.parse('/help bash');
 
 		connection.sendTo(room, `$ ${target}`);
@@ -949,9 +943,7 @@ export const commands: ChatCommands = {
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: ~ console access`],
 
 	async eval(target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
-			return this.errorReply("/eval - Access denied.");
-		}
+		if (!this.canUseConsole()) return false;
 		if (!this.runBroadcast(true)) return;
 
 		if (!this.broadcasting) this.sendReply(`||>> ${target}`);
@@ -976,9 +968,7 @@ export const commands: ChatCommands = {
 	},
 
 	evalbattle(target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
-			return this.errorReply("/evalbattle - Access denied.");
-		}
+		if (!this.canUseConsole()) return false;
 		if (!this.runBroadcast(true)) return;
 		if (!room.battle) {
 			return this.errorReply("/evalbattle - This isn't a battle room.");
