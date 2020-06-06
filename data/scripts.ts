@@ -928,7 +928,7 @@ export const BattleScripts: BattleScriptsData = {
 				}
 				if (moveData.heal && !target.fainted) {
 					if (target.hp >= target.maxhp) {
-						this.add('-fail', pokemon, 'heal');
+						this.add('-fail', target, 'heal');
 						this.attrLastMove('[still]');
 						damage[i] = this.combineResults(damage[i], false);
 						didAnything = this.combineResults(didAnything, null);
