@@ -1589,7 +1589,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					}
 				} else if (flag === 'highcrit') {
 					if (
-						!((typeof move.critRatio === 'number' && move.critRatio > 1) || 
+						!((typeof move.critRatio === 'number' && move.critRatio > 1) ||
 						  (typeof move.willCrit === 'boolean' && move.willCrit)
 						 ) === !alts.flags[flag]) {
 						matched = true;
