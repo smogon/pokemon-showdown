@@ -10,15 +10,12 @@ try {
 var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
+var force = process.argv[2] === '--force';
 
 process.chdir(__dirname);
 
 function shell(cmd) {
 	child_process.execSync(cmd, {stdio: 'inherit'});
-}
-
-function sucrase(src, out, opts) {
-	shell(`npx sucrase ${opts || ''} -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
 }
 
 function replace(file, replacements) {
@@ -73,12 +70,76 @@ try {
 	shell('npm install --production');
 }
 
-sucrase('./config', './.config-dist');
-sucrase('./data', './.data-dist');
-sucrase('./sim', './.sim-dist');
+function needsSucrase(source, dest, path = '') {
+	if (path.endsWith('.ts')) {
+		if (path.endsWith('.d.ts')) return false;
+		const sourceStat = fs.lstatSync(source + path);
+		try {
+			const destStat = fs.lstatSync(dest + path.slice(0, -2) + 'js');
+			return (sourceStat.ctimeMs > destStat.ctimeMs);
+		} catch (e) {
+			// dest doesn't exist
+			return true;
+		}
+	}
+	if (!path.includes('.')) {
+		// probably dir
+		try {
+			const files = fs.readdirSync(source + path);
+			for (const file of files) {
+				if (needsSucrase(source, dest, path + '/' + file)) {
+					return true;
+				}
+			}
+		} catch (e) {
+			// not dir
+		}
+		return false;
+	}
+	return false;
+}
+
+function sucrase(src, out, opts) {
+	try {
+		if (!force && src !== './config' && !needsSucrase(src, out)) {
+			return false;
+		}
+	} catch (e) {}
+	shell(`npx sucrase ${opts || ''} -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
+	return true;
+}
+
+if (sucrase('./config', './.config-dist')) {
+	replace('.config-dist', [
+		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);	
+}
+
+if (sucrase('./data', './.data-dist')) {
+	replace('.data-dist', [
+		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);
+}
+
+if (sucrase('./sim', './.sim-dist')) {
+	replace('.sim-dist', [
+		{regex: /(require\(.*?)(lib)/g, replace: `$1.lib-dist`},
+	]);
+}
+
 sucrase('./lib', './.lib-dist');
-sucrase('./server', './.server-dist');
-sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets');
+
+if (sucrase('./server', './.server-dist')) {
+	replace('.server-dist', [
+		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);
+}
+
+if (sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets')) {
+	replace('./tools/set-import/importer.js', [
+		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);
+}
 
 if (!fs.existsSync('./.data-dist/README.md')) {
 	const text = '**NOTE**: This folder contains the compiled output of the `data/` directory.\n' +
@@ -98,21 +159,6 @@ copyOverDataJSON('mods/gen7/bss-factory-sets.json');
 copyOverDataJSON('mods/gen6/factory-sets.json');
 
 // NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
-replace('.config-dist', [
-	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-]);
-replace('.data-dist', [
-	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-]);
-replace('.sim-dist', [
-	{regex: /(require\(.*?)(lib)/g, replace: `$1.lib-dist`},
-]);
-replace('.server-dist', [
-	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-]);
-replace('./tools/set-import/importer.js', [
-	{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
-]);
 
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it's needed before we can start the server
