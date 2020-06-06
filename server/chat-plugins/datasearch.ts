@@ -1100,7 +1100,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
-		'authentic', 'bite', 'bullet', 'charge', 'contact', 'crit', 'dance', 'defrost', 'gravity', 'mirror',
+		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'highcrit', 'mirror',
 		'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
 		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection',
 	];
@@ -1211,6 +1211,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'z') target = 'zmove';
 			if (target === 'max') target = 'maxmove';
 			if (target === 'gmax') target = 'gmaxmove';
+      if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include \'' + target + '\'.'};
@@ -1585,7 +1586,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 						matched = true;
 						break;
 					}
-				} else if (flag === 'crit') {
+				} else if (flag === 'highcrit') {
 					if (!(typeof dex[move].critRatio === 'number' && dex[move].critRatio > 1) === !alts.flags[flag]) {
 						matched = true;
 						break;
