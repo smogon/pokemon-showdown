@@ -1100,7 +1100,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
-		'authentic', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'gravity', 'mirror',
+		'authentic', 'bite', 'bullet', 'charge', 'contact', 'crit', 'dance', 'defrost', 'gravity', 'mirror',
 		'ohko', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'secondary',
 		'snatch', 'sound', 'zmove', 'maxmove', 'gmaxmove', 'protection',
 	];
@@ -1582,6 +1582,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					}
 				} else if (flag === 'zmove') {
 					if (!dex[move].isZ === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'crit') {
+					if (!(typeof dex[move].critRatio === 'number' && dex[move].critRatio > 1) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
