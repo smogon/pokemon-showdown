@@ -359,24 +359,23 @@ export const commands: ChatCommands = {
 			if (targetRoom && availableRoom) return this.parse(`/roomauth1 ${target}`);
 			return this.parse(`/userauth ${target}`);
 		}
+		const showAll = !!target;
 		const rankLists: {[k: string]: string[]} = {};
-		const ranks = Object.keys(Config.groups);
-		for (const [id, rank] of Users.globalAuth) {
-			if (rank === ' ' || (rank === '+' && !target)) continue;
-			// In case the usergroups.csv file is not proper, we check for the server ranks.
-			if (ranks.includes(rank)) {
-				const place = rankLists[rank];
-				if (!place) rankLists[rank] = [];
-				if (rank) rankLists[rank].push(id);
-			}
+		for (const [id, symbol] of Users.globalAuth) {
+			if (symbol === ' ' || (symbol === '+' && !showAll)) continue;
+			if (!rankLists[symbol]) rankLists[symbol] = [];
+			rankLists[symbol].push(id);
 		}
 
-		const buffer = Object.keys(rankLists).sort(
-			(a, b) => (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
+		const buffer = (Object.keys(rankLists) as GroupSymbol[]).sort(
+			(symbol1, symbol2) => Users.Auth.getGroup(symbol1).rank - Users.Auth.getGroup(symbol2).rank
 		).map(
-			r => `${(Config.groups[r] ? `**${Config.groups[r].name}s** (${r})` : r)}:\n${rankLists[r].sort((a, b) => toID(a).localeCompare(toID(b))).join(", ")}`
+			symbol => (
+				`${(Config.groups[symbol] ? `**${Config.groups[symbol].name}s** (${symbol})` : symbol)}:\n` +
+				rankLists[symbol].sort((name1, name2) => toID(name1).localeCompare(toID(name2))).join(", ")
+			)
 		);
-		if (!target) buffer.push(`(Use \`\`/auth +\`\` to show global voice users.)`);
+		if (!showAll) buffer.push(`(Use \`\`/auth +\`\` to show global voice users.)`);
 
 		if (!buffer.length) return connection.popup("This server has no global authority.");
 		connection.popup(buffer.join("\n\n"));
