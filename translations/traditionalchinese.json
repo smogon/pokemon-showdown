@@ -18,8 +18,7 @@
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>全服見習管理</strong> - 同上，並可以鎖定用戶或查看他們的小號",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>全服管理員</strong> - 同上，並可以將用戶從服務器封禁",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>全服機器人</strong> - 跟全服管理員一樣，隻不過是機器",
-		"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties": "&amp; <strong>全服領袖</strong> - 同上，並可以提拔用戶至全服管理員、強制對戰平局",
-		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "~ <strong>全服總管</strong> - 可以在服務器做任何事，例如修改你現在看到的這條信息",
+		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>全服總管</strong> - 可以在服務器做任何事，例如修改你現在看到的這條信息",
 
 		"<strong>Room ranks</strong>": "<strong>房權限</strong>",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>信任用戶</strong> - 可以使用!廣播指令，比如!groups，並可以在限制發言期間發言",
@@ -39,9 +38,9 @@
 		"DATA COMMANDS": "數據指令",
 		"DRIVER COMMANDS": "見習管理指令",
 		"MODERATOR COMMANDS": "管理員指令",
-		"LEADER COMMANDS": "領袖指令",
+		"ADMIN COMMANDS": "領袖指令",
  
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)": "(把/換成!就可以廣播指令。廣播功能需要：+ % @ # & ~)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(把/換成!就可以廣播指令。廣播功能需要：+ % @ # &)",
  
 		"<strong>Room punishments</strong>:": "<strong>房間處罰</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - 顯示規則與警告",
