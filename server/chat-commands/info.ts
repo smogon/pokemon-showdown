@@ -1959,9 +1959,7 @@ export const commands: ChatCommands = {
 			this.modlog('RULES', null, `changed link to: ${target}`);
 		}
 
-		if (room.persist) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 	},
 	ruleshelp: [
 		`/rules - Show links to room rules and global rules.`,

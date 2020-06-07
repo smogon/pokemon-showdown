@@ -142,7 +142,6 @@ export abstract class BasicRoom {
 	 */
 	tour: Tournament | null;
 
-	aliases: string[] | null;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
 
@@ -177,7 +176,6 @@ export abstract class BasicRoom {
 		this.roomid = roomid;
 		this.title = (title || roomid);
 		this.parent = null;
-		this.aliases = null;
 
 		this.userCount = 0;
 
@@ -540,8 +538,8 @@ export class GlobalRoom extends BasicRoom {
 			const id = toID(settings.title) as RoomID;
 			Monitor.notice("NEW CHATROOM: " + id);
 			const room = Rooms.createChatRoom(id, settings.title, settings);
-			if (room.aliases) {
-				for (const alias of room.aliases) {
+			if (room.settings.aliases) {
+				for (const alias of room.settings.aliases) {
 					Rooms.aliases.set(alias, id);
 				}
 			}
@@ -1409,8 +1407,8 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		// add an alias from the old id
 		Rooms.aliases.set(oldID, newID);
-		if (!this.aliases) this.aliases = [];
-		this.aliases.push(oldID);
+		if (!this.settings.aliases) this.settings.aliases = [];
+		this.settings.aliases.push(oldID);
 		this.saveSettings();
 
 		for (const user of Object.values(this.users)) {
@@ -1467,8 +1465,8 @@ export class BasicChatRoom extends BasicRoom {
 		Rooms.global.deregisterChatRoom(this.roomid);
 		Rooms.global.delistChatRoom(this.roomid);
 
-		if (this.aliases) {
-			for (const alias of this.aliases) {
+		if (this.settings.aliases) {
+			for (const alias of this.settings.aliases) {
 				Rooms.aliases.delete(alias);
 			}
 		}

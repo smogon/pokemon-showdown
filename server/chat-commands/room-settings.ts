@@ -195,10 +195,7 @@ export const commands: ChatCommands = {
 			this.add(`|raw|<div class="broadcast-blue"><strong>This room is no longer invite only!</strong><br />Anyone may now join.</div>`);
 			this.addModAction(`${user.name} turned off modjoin.`);
 			this.modlog('MODJOIN', null, 'OFF');
-			if (room.persist) {
-				room.settings.modjoin = null;
-				room.saveSettings();
-			}
+			room.saveSettings();
 			return;
 		} else if (target === 'sync') {
 			if (room.settings.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
@@ -229,9 +226,7 @@ export const commands: ChatCommands = {
 			this.parse('/help modjoin');
 			return false;
 		}
-		if (room.persist) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 		if (target === 'sync' && !room.settings.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
 		if (!room.settings.isPrivate) this.parse('/hiddenroom');
 	},
@@ -1184,8 +1179,8 @@ export const commands: ChatCommands = {
 	roomalias(target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			if (!room.aliases || !room.aliases.length) return this.sendReplyBox("This room does not have any aliases.");
-			return this.sendReplyBox(`This room has the following aliases: ${room.aliases.join(", ")}`);
+			if (!room.settings.aliases) return this.sendReplyBox("This room does not have any aliases.");
+			return this.sendReplyBox(`This room has the following aliases: ${room.settings.aliases.join(", ")}`);
 		}
 		if (!this.can('makeroom')) return false;
 		if (target.includes(',')) {
@@ -1204,12 +1199,9 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user.name} added the room alias '${alias}'.)`);
 		this.modlog('ROOMALIAS', null, alias);
 
-		if (!room.aliases) room.aliases = [];
-		room.aliases.push(alias);
-		if (room.persist) {
-			room.settings.aliases = room.aliases;
-			room.saveSettings();
-		}
+		if (!room.settings.aliases) room.settings.aliases = [];
+		room.settings.aliases.push(alias);
+		room.saveSettings();
 	},
 	roomaliashelp: [
 		`/roomalias - displays a list of all room aliases of the room the command was entered in.`,
@@ -1221,7 +1213,7 @@ export const commands: ChatCommands = {
 	deroomalias: 'removeroomalias',
 	unroomalias: 'removeroomalias',
 	removeroomalias(target, room, user) {
-		if (!room.aliases) return this.errorReply("This room does not have any aliases.");
+		if (!room.settings.aliases) return this.errorReply("This room does not have any aliases.");
 		if (!this.can('makeroom')) return false;
 		if (target.includes(',')) {
 			this.errorReply(`Invalid room alias: ${target.trim()}`);
@@ -1237,9 +1229,10 @@ export const commands: ChatCommands = {
 		this.privateModAction(`(${user.name} removed the room alias '${alias}'.)`);
 		this.modlog('REMOVEALIAS', null, alias);
 
-		const aliasIndex = room.aliases.indexOf(alias);
+		const aliasIndex = room.settings.aliases.indexOf(alias);
 		if (aliasIndex >= 0) {
-			room.aliases.splice(aliasIndex, 1);
+			room.settings.aliases.splice(aliasIndex, 1);
+			if (!room.settings.aliases.length) room.settings.aliases = undefined;
 			Rooms.aliases.delete(alias);
 			room.saveSettings();
 		}
@@ -1284,9 +1277,7 @@ export const commands: ChatCommands = {
 			this.modlog('RESETTIERDISPLAY', null, `to tiers`);
 		}
 
-		if (room.persist) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 	},
 	roomtierdisplayhelp: [
 		`/roomtierdisplay - displays the current room's display.`,
