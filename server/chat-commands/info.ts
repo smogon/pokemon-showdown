@@ -43,10 +43,10 @@ export const commands: ChatCommands = {
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		const roomauth = usedRoom.auth.getDirect(targetUser.id);
 		if (Config.groups[roomauth]?.name) {
-			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
+			buf += Chat.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
 		if (Config.groups[targetUser.group]?.name) {
-			buf += `<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
+			buf += Chat.html`<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
 		}
 		if (targetUser.isSysop) {
 			buf += `<br />(Pok&eacute;mon Showdown System Operator)`;
@@ -61,7 +61,7 @@ export const commands: ChatCommands = {
 			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
-			const authSymbol = targetRoom.auth.getDirect(targetUser.id);
+			const authSymbol = targetRoom.auth.getDirect(targetUser.id).trim();
 			const battleTitle = (targetRoom.battle ? ` title="${targetRoom.title}"` : '');
 			const output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.settings.isPrivate === true) {
@@ -246,8 +246,8 @@ export const commands: ChatCommands = {
 		let buf = Chat.html`<strong class="username">${target}</strong>`;
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
-		const roomauth = room?.auth.getDirect(userid) || '';
-		if (Config.groups[roomauth]?.name) {
+		const roomauth = room?.auth.getDirect(userid);
+		if (roomauth && Config.groups[roomauth]?.name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
 		const group = Users.globalAuth.get(userid);

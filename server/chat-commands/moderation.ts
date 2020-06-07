@@ -81,42 +81,49 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
 
-		const currentGroup = room.auth.getDirect(userid);
-		let nextGroup = target as GroupSymbol;
-		if (target === 'deauth') nextGroup = Config.groupsranking[0];
-		if (!nextGroup) {
+		const currentSymbol = room.auth.getDirect(userid);
+		const currentGroup = Users.Auth.getGroup(currentSymbol);
+		const nextSymbol = target === 'deauth' ? Users.Auth.defaultSymbol() : target as GroupSymbol;
+		const nextGroup = Users.Auth.getGroup(nextSymbol);
+
+		if (!nextSymbol) {
 			return this.errorReply("Please specify a group such as /roomvoice or /roomdeauth");
 		}
-		if (!Config.groups[nextGroup]) {
-			return this.errorReply(`Group '${nextGroup}' does not exist.`);
+		if (!Config.groups[nextSymbol]) {
+			if (!force || !user.can('bypassall')) {
+				return this.errorReply(`Group '${nextSymbol}' does not exist.`);
+			} else if (nextSymbol.length !== 1) {
+				// yes I know this excludes astral-plane characters and includes combining characters
+				return this.errorReply(`Admins can forcepromote to nonexistent groups only if they are one character long`);
+			}
 		}
 
-		if (Config.groups[nextGroup].globalonly || (Config.groups[nextGroup].battleonly && !room.battle)) {
-			return this.errorReply(`Group 'room${Config.groups[nextGroup].id}' does not exist as a room rank.`);
+		if (!force && (nextGroup.globalonly || (nextGroup.battleonly && !room.battle))) {
+			return this.errorReply(`Group 'room${nextGroup.id || nextSymbol}' does not exist as a room rank.`);
 		}
 
-		const groupName = Config.groups[nextGroup].name || "regular user";
-		if (room.auth.getDirect(userid) === nextGroup) {
-			return this.errorReply(`User '${name}' is already a ${groupName} in this room.`);
+		const currentGroupName = currentGroup.name || "regular user";
+		const nextGroupName = nextGroup.name || "regular user";
+
+		if (room.auth.getDirect(userid) === nextSymbol) {
+			return this.errorReply(`User '${name}' is already a ${nextGroupName} in this room.`);
 		}
 		if (!user.can('makeroom')) {
-			if (currentGroup !== ' ' && !user.can(`room${Config.groups[currentGroup]?.id || 'voice'}`, null, room)) {
-				return this.errorReply(`/${cmd} - Access denied for promoting/demoting from ${Config.groups[currentGroup]?.name || currentGroup}.`);
+			if (currentGroup.id && !user.can(`room${currentGroup.id || 'voice'}`, null, room)) {
+				return this.errorReply(`/${cmd} - Access denied for promoting/demoting from ${currentGroupName}.`);
 			}
-			if (nextGroup !== ' ' && !user.can('room' + Config.groups[nextGroup].id, null, room)) {
-				return this.errorReply(`/${cmd} - Access denied for promoting/demoting to ${Config.groups[nextGroup].name}.`);
+			if (nextSymbol !== ' ' && !user.can(`room${nextGroup.id || 'voice'}`, null, room)) {
+				return this.errorReply(`/${cmd} - Access denied for promoting/demoting to ${nextGroupName}.`);
 			}
 		}
-		const nextGroupIndex = Config.groupsranking.indexOf(nextGroup) || 1;
-		// assume voice if not defined (although it should be by now)
-		if (targetUser?.locked && !room.settings.isPrivate && !room.battle && !room.isPersonal && nextGroupIndex >= 2) {
+		if (targetUser?.locked && !room.settings.isPrivate && !room.battle && !room.isPersonal && nextGroup.rank >= 2) {
 			return this.errorReply("Locked users can't be promoted.");
 		}
 
-		if (nextGroup === Config.groupsranking[0]) {
+		if (nextSymbol === Config.groupsranking[0]) {
 			room.auth.delete(userid);
 		} else {
-			room.auth.set(userid, nextGroup);
+			room.auth.set(userid, nextSymbol);
 		}
 
 		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
@@ -126,28 +133,28 @@ export const commands: ChatCommands = {
 		);
 
 		if (this.pmTarget && targetUser) {
-			const text = `${targetUser.name} was invited (and promoted to Room ${groupName}) by ${user.name}.`;
+			const text = `${targetUser.name} was invited (and promoted to Room ${nextGroupName}) by ${user.name}.`;
 			room.add(`|c|${user.getIdentity(room.roomid)}|/log ${text}`).update();
 			this.modlog('INVITE', targetUser, null, {noip: 1, noalts: 1});
 		} else if (
-			nextGroup in Config.groups && currentGroup in Config.groups &&
-			Config.groups[nextGroup].rank < Config.groups[currentGroup].rank
+			nextSymbol in Config.groups && currentSymbol in Config.groups &&
+			nextGroup.rank < currentGroup.rank
 		) {
-			if (targetUser && room.users[targetUser.id] && !Config.groups[nextGroup].modlog) {
+			if (targetUser && room.users[targetUser.id] && !nextGroup.modlog) {
 				// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
-				targetUser.send(`>${room.roomid}\n(You were demoted to Room ${groupName} by ${user.name}.)`);
+				targetUser.send(`>${room.roomid}\n(You were demoted to Room ${nextGroupName} by ${user.name}.)`);
 			}
-			this.privateModAction(`(${name} was demoted to Room ${groupName} by ${user.name}.)`);
-			this.modlog(`ROOM${groupName.toUpperCase()}`, userid, '(demote)');
-			shouldPopup?.popup(`You were demoted to Room ${groupName} by ${user.name} in ${room.roomid}.`);
-		} else if (nextGroup === '#') {
-			this.addModAction(`${'' + name} was promoted to ${groupName} by ${user.name}.`);
+			this.privateModAction(`(${name} was demoted to Room ${nextGroupName} by ${user.name}.)`);
+			this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid, '(demote)');
+			shouldPopup?.popup(`You were demoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
+		} else if (nextSymbol === '#') {
+			this.addModAction(`${'' + name} was promoted to ${nextGroupName} by ${user.name}.`);
 			this.modlog('ROOM OWNER', userid);
-			shouldPopup?.popup(`You were promoted to ${groupName} by ${user.name} in ${room.roomid}.`);
+			shouldPopup?.popup(`You were promoted to ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 		} else {
-			this.addModAction(`${'' + name} was promoted to Room ${groupName} by ${user.name}.`);
-			this.modlog(`ROOM${groupName.toUpperCase()}`, userid);
-			shouldPopup?.popup(`You were promoted to Room ${groupName} by ${user.name} in ${room.roomid}.`);
+			this.addModAction(`${'' + name} was promoted to Room ${nextGroupName} by ${user.name}.`);
+			this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid);
+			shouldPopup?.popup(`You were promoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 		}
 
 		if (targetUser) {
@@ -232,16 +239,15 @@ export const commands: ChatCommands = {
 
 		const buffer = [];
 		let innerBuffer = [];
-		let group = Users.globalAuth.get(targetId);
+		const group = Users.globalAuth.get(targetId);
 		if (group) {
 			if (group === ' ') (group as string) = 'trusted';
 			buffer.push(`Global auth: ${group}`);
 		}
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.settings.isPrivate) continue;
-			group = curRoom.auth.getDirect(targetId);
-			if (!group) continue;
-			innerBuffer.push(group + curRoom.roomid);
+			if (!curRoom.auth.has(targetId)) continue;
+			innerBuffer.push(curRoom.auth.getDirect(targetId).trim() + curRoom.roomid);
 		}
 		if (innerBuffer.length) {
 			buffer.push(`Room auth: ${innerBuffer.join(', ')}`);
@@ -251,9 +257,8 @@ export const commands: ChatCommands = {
 			for (const curRoom of Rooms.rooms.values()) {
 				if (!curRoom.settings.isPrivate) continue;
 				if (curRoom.settings.isPrivate === true) continue;
-				const auth = curRoom.auth.getDirect(targetId);
-				if (!auth) continue;
-				innerBuffer.push(auth + curRoom.roomid);
+				if (!curRoom.auth.has(targetId)) continue;
+				innerBuffer.push(curRoom.auth.getDirect(targetId).trim() + curRoom.roomid);
 			}
 			if (innerBuffer.length) {
 				buffer.push(`Hidden room auth: ${innerBuffer.join(', ')}`);
@@ -264,9 +269,8 @@ export const commands: ChatCommands = {
 			for (const chatRoom of Rooms.global.chatRooms) {
 				if (!chatRoom.settings.isPrivate) continue;
 				if (chatRoom.settings.isPrivate !== true) continue;
-				const auth = chatRoom.auth.getDirect(targetId);
-				if (!auth) continue;
-				innerBuffer.push(auth + chatRoom.roomid);
+				if (!chatRoom.auth.has(targetId)) continue;
+				innerBuffer.push(chatRoom.auth.getDirect(targetId).trim() + chatRoom.roomid);
 			}
 			if (innerBuffer.length) {
 				buffer.push(`Private room auth: ${innerBuffer.join(', ')}`);
@@ -1700,10 +1704,10 @@ export const commands: ChatCommands = {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
 		}
 
-		const userRank = Config.groupsranking.indexOf(room.auth.get(user.id, true));
+		const userRank = Config.groupsranking.indexOf(room.auth.get(user.id));
 		for (const userid of targets) {
 			if (!userid) return this.errorReply(`User '${userid}' is not a valid userid.`);
-			const targetRank = Config.groupsranking.indexOf(room.auth.get(userid, true));
+			const targetRank = Config.groupsranking.indexOf(room.auth.get(userid));
 			if (targetRank >= userRank) {
 				return this.errorReply(`/blacklistname - Access denied: ${userid} is of equal or higher authority than you.`);
 			}

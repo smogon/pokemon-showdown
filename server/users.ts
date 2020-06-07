@@ -41,7 +41,7 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
 import {FS} from '../lib/fs';
-import {GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL} from './user-groups';
+import {Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL} from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -387,7 +387,7 @@ export class User extends Chat.MessageContext {
 		this.named = false;
 		this.registered = false;
 		this.id = '';
-		this.group = Config.groupsranking[0];
+		this.group = Auth.defaultSymbol();
 		this.language = null;
 
 		this.avatar = DEFAULT_TRAINER_SPRITES[Math.floor(Math.random() * DEFAULT_TRAINER_SPRITES.length)];
@@ -519,7 +519,7 @@ export class User extends Chat.MessageContext {
 			minAuth = Config.groupsranking[1];
 		}
 		if (!(minAuth in Config.groups)) return false;
-		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id, true) : this.group);
+		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
 	can(permission: string, target: string | User | null = null, room: Room | BasicChatRoom | null = null): boolean {
@@ -541,9 +541,9 @@ export class User extends Chat.MessageContext {
 		}
 
 		if (room && (room.settings.auth || room.parent)) {
-			group = room.auth.get(this.id, true);
+			group = room.auth.get(this.id);
 			if (!Config.groups[group]) group = this.group;
-			if (targetUser) targetGroup = room.auth.get(targetUser.id, true);
+			if (targetUser) targetGroup = room.auth.get(targetUser.id);
 			if (room.settings.isPrivate === true && this.can('makeroom')) group = this.group;
 		} else {
 			group = this.group;
@@ -1050,7 +1050,7 @@ export class User extends Chat.MessageContext {
 			return;
 		}
 		this.registered = true;
-		this.group = globalAuth.get(this.id, true);
+		this.group = globalAuth.get(this.id);
 
 		if (Config.customavatars && Config.customavatars[this.id]) {
 			this.avatar = Config.customavatars[this.id];
@@ -1652,6 +1652,7 @@ export const Users = {
 	get: getUser,
 	getExact: getExactUser,
 	findUsers,
+	Auth,
 	globalAuth,
 	isUsernameKnown,
 	isTrusted,

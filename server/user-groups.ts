@@ -1,19 +1,19 @@
 import {FS} from '../lib/fs';
+type GroupInfo = import('./config-loader').GroupInfo;
 
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
+/**
+ * Auth table - a Map for which users are in which groups.
+ *
+ * Notice that auth.get will return the default group symbol if the
+ * user isn't in a group.
+ */
 export abstract class Auth extends Map<ID, GroupSymbol | ''> {
-	defaultSymbol() {
-		return Config.groupsranking[0];
-	}
-	/** Defaults to '' for convenience in output */
-	get(id: ID): GroupSymbol | '';
-	get(id: ID, defaultSymbol: true): GroupSymbol;
-	get(id: ID, defaultSymbol?: boolean) {
-		let group = super.get(id);
-		if (!group) group = this.defaultSymbol();
-		return group === ' ' && !defaultSymbol ? '' : group;
+	/** will return the default group symbol if the user isn't in a group */
+	get(id: ID) {
+		return super.get(id) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
 		return this.has(userid) && this.get(userid) !== '+';
@@ -21,9 +21,26 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	atLeast(user: User, group: GroupSymbol) {
 		if (!Config.groups[group]) return false;
 		if (user.locked || user.semilocked) return false;
-		const userGroup = this.get(user.id, true);
-		if (!userGroup) return false;
-		return userGroup in Config.groups && Config.groups[userGroup].rank >= Config.groups[group].rank;
+		if (!this.has(user.id)) return false;
+		return Auth.getGroup(this.get(user.id)).rank >= Auth.getGroup(group).rank;
+	}
+
+	static defaultSymbol() {
+		return Config.groupsranking[0];
+	}
+	static getGroup(symbol: GroupSymbol): GroupInfo;
+	static getGroup<T>(symbol: GroupSymbol, fallback: T): GroupInfo | T;
+	static getGroup(symbol: GroupSymbol, fallback?: AnyObject) {
+		if (Config.groups[symbol]) return Config.groups[symbol];
+
+		if (fallback !== undefined) return fallback;
+
+		// unidentified groups are treated as voice
+		return Object.assign({}, Config.groups['+'] || {}, {
+			symbol,
+			id: 'voice',
+			name: symbol,
+		});
 	}
 }
 
@@ -33,21 +50,19 @@ export class RoomAuth extends Auth {
 		super();
 		this.room = room;
 	}
-	get(id: ID): GroupSymbol | '';
-	get(id: ID, defaultSymbol: true): GroupSymbol;
-	get(id: ID, defaultSymbol?: boolean) {
-		const parentAuth: Auth = this.room.parent ? this.room.parent.auth : Users.globalAuth;
-		const parentGroup = parentAuth.get(id, true);
-		let group = parentGroup;
+	get(id: ID): GroupSymbol {
+		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
+			this.room.settings.isPrivate !== true ? null : Users.globalAuth;
+		const parentGroup = parentAuth ? parentAuth.get(id) : Auth.defaultSymbol();
 
 		if (this.has(id)) {
 			// authority is whichever is higher between roomauth and global auth
-			const roomGroup = this.getDirect(id, true);
-			group = Config.greatergroupscache[`${roomGroup}${parentGroup}`];
+			const roomGroup = this.getDirect(id);
+			let group = Config.greatergroupscache[`${roomGroup}${parentGroup}`];
 			if (!group) {
 				// unrecognized groups always trump higher global rank
-				const roomRank = (Config.groups[roomGroup] || {rank: Infinity}).rank;
-				const globalRank = (Config.groups[parentGroup] || {rank: 0}).rank;
+				const roomRank = Auth.getGroup(roomGroup, {rank: Infinity}).rank;
+				const globalRank = Auth.getGroup(parentGroup).rank;
 				if (roomGroup === Users.PLAYER_SYMBOL || roomGroup === Users.HOST_SYMBOL || roomGroup === '#') {
 					// Player, Host, and Room Owner always trump higher global rank
 					group = roomGroup;
@@ -56,14 +71,14 @@ export class RoomAuth extends Auth {
 				}
 				Config.greatergroupscache[`${roomGroup}${parentGroup}`] = group;
 			}
+			return group;
 		}
 
-		return group === ' ' && !defaultSymbol ? '' : group;
+		return parentGroup;
 	}
-	getDirect(id: ID, defaultSymbol?: boolean): GroupSymbol | '';
-	getDirect(id: ID, defaultSymbol: true): GroupSymbol;
-	getDirect(id: ID, defaultSymbol?: boolean) {
-		return super.get(id, defaultSymbol as true);
+	/** gets the room group without inheriting */
+	getDirect(id: ID): GroupSymbol {
+		return super.get(id);
 	}
 	save() {
 		// construct auth object

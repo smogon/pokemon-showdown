@@ -79,7 +79,7 @@ describe('Rooms features', function () {
 				},
 			};
 			room = Rooms.createBattle('customgame', options);
-			assert.equal(room.auth.get(new User().id, true), '%');
+			assert.equal(room.auth.get(new User().id), '%');
 		});
 
 		it('should prevent overriding tournament room auth by a tournament player', function () {
@@ -107,11 +107,11 @@ describe('Rooms features', function () {
 			room = Rooms.createBattle('customgame', options);
 			roomStaff.joinRoom(room);
 			administrator.joinRoom(room);
-			assert.equal(room.auth.get(roomStaff, true), '%', 'before promotion attempt');
+			assert.equal(room.auth.get(roomStaff), '%', 'before promotion attempt');
 			Chat.parse("/roomvoice Room auth", room, p1, p1.connections[0]);
-			assert.equal(room.auth.get(roomStaff, true), '%', 'after promotion attempt');
+			assert.equal(room.auth.get(roomStaff), '%', 'after promotion attempt');
 			Chat.parse("/roomvoice Room auth", room, administrator, administrator.connections[0]);
-			assert.equal(room.auth.get(roomStaff, true), '%', 'after being promoted by an administrator');
+			assert.equal(room.auth.get(roomStaff), '%', 'after being promoted by an administrator');
 		});
 	});
 

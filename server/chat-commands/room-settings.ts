@@ -65,7 +65,7 @@ export const commands: ChatCommands = {
 		// 'modchatall' lets you set up to your current rank
 		// 'makeroom' lets you set any rank, no limit
 		const threshold = user.can('makeroom') ? Infinity :
-			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.auth.get(user.id, true)) :
+			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.auth.get(user.id)) :
 			1;
 
 		if (room.settings.modchat &&
@@ -1302,7 +1302,7 @@ export const roomSettings: SettingsHandler[] = [
 	// modchat
 	(room, user) => {
 		const threshold = user.can('makeroom') ? Infinity :
-			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.auth.get(user.id, true)) :
+			user.can('modchatall', null, room) ? Config.groupsranking.indexOf(room.auth.get(user.id)) :
 			user.can('modchat', null, room) ? 1 :
 			null;
 

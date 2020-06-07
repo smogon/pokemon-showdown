@@ -190,9 +190,9 @@ describe('Users features', function () {
 					user.joinRoom(room);
 					for (const group of [' ', '+', '@']) {
 						room.auth.set(user.id, group);
-						assert.equal(room.auth.get(user.id, true), group, 'before demotion attempt');
+						assert.equal(room.auth.get(user.id), group, 'before demotion attempt');
 						Chat.parse("/roomdeauth User", room, user, user.connections[0]);
-						assert.equal(room.auth.get(user.id, true), group, 'after demotion attempt');
+						assert.equal(room.auth.get(user.id), group, 'after demotion attempt');
 					}
 				});
 			});
