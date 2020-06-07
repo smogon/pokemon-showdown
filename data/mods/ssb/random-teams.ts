@@ -52,6 +52,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Data Corruption',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
+	Instruct: {
+		species: 'Cinderace', ability: 'Determination', item: 'Flame Plate', gender: 'N',
+		moves: ['Pyro Ball', 'Sacred Sword', 'Bolt Strike'],
+		signatureMove: 'Hyper Goner',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+	},
 	'Kaiju Bunny': {
 		species: 'Lopunny', ability: 'Second Wind', item: 'Lopunnite', gender: 'F',
 		moves: ['Return', 'Play Rough', ['Drain Punch', 'High Jump Kick']],

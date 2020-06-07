@@ -138,7 +138,31 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
-
+	// Instruct
+	hypergoner: {
+		accuracy: 85,
+		basePower: 130,
+		category: "Physical",
+		desc: "Always Super Effective. Will leave opponent on 1 HP.",
+		shortDesc: "Always Super Effective. Will leave opponent on 1 HP.",
+		name: "Hyper Goner",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Prismatic Laser', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			return 1;
+		},
+		noFaint: true,
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
 	// Kaiju Bunny
 	cozycuddle: {
 		accuracy: 95,

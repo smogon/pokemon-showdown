@@ -67,6 +67,19 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Instruct
+	determination: {
+		desc: "15% chance to live a hit on 1HP",
+		shortDesc: "15% chance to live a hit on 1HP",
+		name: "Determination",
+		onDamage(damage, target, source, effect) {
+			if (this.randomChance(1, 15) && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add("-activate", target, "Ability: Determination");
+				return target.hp - 1;
+			}
+		},
+	},
+
 	// Kaiju Bunny
 	secondwind: {
 		desc: "This Pokemon restores 1/2 of its HP if it falls below 1/4 of its maximum HP by an enemy attack. This effect only occurs once.",
