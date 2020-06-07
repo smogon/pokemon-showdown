@@ -1045,7 +1045,7 @@ export const commands: ChatCommands = {
 
 		const subRoomText = subRooms.map(
 			subRoom =>
-				Chat.html`<a href="/${subRoom.roomid}">${subRoom.title}</a><br/><small>${subRoom.desc}</small>`
+				Chat.html`<a href="/${subRoom.roomid}">${subRoom.title}</a><br/><small>${subRoom.settings.desc}</small>`
 		);
 
 		return this.sendReplyBox(`<p style="font-weight:bold;">${Chat.escapeHTML(room.title)}'s subroom${Chat.plural(subRooms)}:</p><ul><li>${subRoomText.join('</li><br/><li>')}</li></ul></strong>`);
@@ -1061,8 +1061,8 @@ export const commands: ChatCommands = {
 	roomdesc(target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			if (!room.desc) return this.sendReply(`This room does not have a description set.`);
-			this.sendReplyBox(Chat.html`The room description is: ${room.desc}`);
+			if (!room.settings.desc) return this.sendReply(`This room does not have a description set.`);
+			this.sendReplyBox(Chat.html`The room description is: ${room.settings.desc}`);
 			return;
 		}
 		if (!this.can('declare')) return false;
@@ -1081,12 +1081,11 @@ export const commands: ChatCommands = {
 			return this.errorReply(`Error: Room description must not start with the phrase "talk about".`);
 		}
 
-		room.desc = target;
+		room.settings.desc = target;
 		this.sendReply(`(The room description is now: ${target})`);
 
 		this.privateModAction(`(${user.name} changed the roomdesc to: "${target}".)`);
 		this.modlog('ROOMDESC', null, `to "${target}"`);
-		room.settings.desc = room.desc;
 		room.saveSettings();
 	},
 
@@ -1094,10 +1093,10 @@ export const commands: ChatCommands = {
 	roomintro(target, room, user, connection, cmd) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
-			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
+			if (!room.settings.introMessage) return this.sendReply("This room does not have an introduction set.");
+			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.settings.introMessage.replace(/\n/g, '') + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
-				const code = Chat.escapeHTML(room.introMessage).replace(/\n/g, '<br />');
+				const code = Chat.escapeHTML(room.settings.introMessage).replace(/\n/g, '<br />');
 				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/roomintro ${code}</code></details>`);
 			}
 			return;
@@ -1113,23 +1112,21 @@ export const commands: ChatCommands = {
 		}
 		if (target.substr(0, 11) === '/roomintro ') target = target.substr(11);
 
-		room.introMessage = target.replace(/\r/g, '');
+		room.settings.introMessage = target.replace(/\r/g, '');
 		this.sendReply("(The room introduction has been changed to:)");
-		this.sendReply(`|raw|<div class="infobox infobox-limited">${room.introMessage.replace(/\n/g, '')}</div>`);
+		this.sendReply(`|raw|<div class="infobox infobox-limited">${room.settings.introMessage.replace(/\n/g, '')}</div>`);
 
 		this.privateModAction(`(${user.name} changed the roomintro.)`);
 		this.modlog('ROOMINTRO');
-		this.roomlog(room.introMessage.replace(/\n/g, ''));
+		this.roomlog(room.settings.introMessage.replace(/\n/g, ''));
 
-		if (room.persist) {
-			room.saveSettings();
-		}
+		room.saveSettings();
 	},
 
 	deletetopic: 'deleteroomintro',
 	deleteroomintro(target, room, user) {
 		if (!this.can('declare', null, room)) return false;
-		if (!room.introMessage) return this.errorReply("This room does not have a introduction set.");
+		if (!room.settings.introMessage) return this.errorReply("This room does not have a introduction set.");
 
 		this.privateModAction(`(${user.name} deleted the roomintro.)`);
 		this.modlog('DELETEROOMINTRO');
@@ -1142,10 +1139,10 @@ export const commands: ChatCommands = {
 	staffintro(target, room, user, connection, cmd) {
 		if (!target) {
 			if (!this.can('mute', null, room)) return false;
-			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
-			this.sendReply(`|raw|<div class="infobox">${room.staffMessage.replace(/\n/g, ``)}</div>`);
+			if (!room.settings.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
+			this.sendReply(`|raw|<div class="infobox">${room.settings.staffMessage.replace(/\n/g, ``)}</div>`);
 			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
-				const code = Chat.escapeHTML(room.staffMessage).replace(/\n/g, '<br />');
+				const code = Chat.escapeHTML(room.settings.staffMessage).replace(/\n/g, '<br />');
 				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/staffintro ${code}</code></details>`);
 			}
 			return;
@@ -1162,20 +1159,20 @@ export const commands: ChatCommands = {
 		}
 		if (target.substr(0, 12) === '/staffintro ') target = target.substr(12);
 
-		room.staffMessage = target.replace(/\r/g, '');
+		room.settings.staffMessage = target.replace(/\r/g, '');
 		this.sendReply("(The staff introduction has been changed to:)");
 		this.sendReply(`|raw|<div class="infobox">${target.replace(/\n/g, ``)}</div>`);
 
 		this.privateModAction(`(${user.name} changed the staffintro.)`);
 		this.modlog('STAFFINTRO');
-		this.roomlog(room.staffMessage.replace(/\n/g, ``));
+		this.roomlog(room.settings.staffMessage.replace(/\n/g, ``));
 		room.saveSettings();
 	},
 
 	deletestafftopic: 'deletestaffintro',
 	deletestaffintro(target, room, user) {
 		if (!this.can('ban', null, room)) return false;
-		if (!room.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
+		if (!room.settings.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
 
 		this.privateModAction(`(${user.name} deleted the staffintro.)`);
 		this.modlog('DELETESTAFFINTRO');

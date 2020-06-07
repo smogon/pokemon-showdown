@@ -1192,8 +1192,8 @@ export const commands: ChatCommands = {
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			} else {
 				helpRoom.pokeExpireTimer();
-				helpRoom.introMessage = introMsg;
-				helpRoom.staffMessage = staffMessage + staffHint + reportTargetInfo;
+				helpRoom.settings.introMessage = introMsg;
+				helpRoom.settings.staffMessage = staffMessage + staffHint + reportTargetInfo;
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}

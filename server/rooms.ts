@@ -750,7 +750,7 @@ export class GlobalRoom extends BasicRoom {
 			if (room.settings.isPrivate && !(room.settings.isPrivate === 'voice' && user.group !== ' ')) continue;
 			const roomData: ChatRoomTable = {
 				title: room.title,
-				desc: room.desc,
+				desc: room.settings.desc || '',
 				userCount: room.userCount,
 			};
 			const subrooms = room.getSubRooms().map(r => r.title);
@@ -1085,10 +1085,7 @@ export class BasicChatRoom extends BasicRoom {
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
 	minorActivity: Poll | Announcement | null;
-	desc: string;
 	slowchat: false | number;
-	introMessage: string;
-	staffMessage: string;
 	banwordRegex: RegExp | true | null;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
@@ -1114,15 +1111,11 @@ export class BasicChatRoom extends BasicRoom {
 		}
 		this.log = Roomlogs.create(this, options);
 
-		// room settings
-		this.desc = '';
 		this.autojoin = false;
 		this.staffAutojoin = false;
 		this.creationTime = null;
 		this.type = 'chat';
 		this.slowchat = false;
-		this.introMessage = '';
-		this.staffMessage = '';
 		this.banwordRegex = null;
 		this.subRooms = new Map();
 
@@ -1290,14 +1283,14 @@ export class BasicChatRoom extends BasicRoom {
 			message += ` [Slowchat ${this.slowchat}s]`;
 		}
 		message += `</div>`;
-		if (this.introMessage) {
+		if (this.settings.introMessage) {
 			message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(!this.settings.isOfficial ? 'class="infobox-limited"' : '')}>` +
-				this.introMessage.replace(/\n/g, '') +
+				this.settings.introMessage.replace(/\n/g, '') +
 				`</div></div>`;
 		}
-		if (this.staffMessage && user.can('mute', null, this)) {
+		if (this.settings.staffMessage && user.can('mute', null, this)) {
 			message += `\n|raw|<div class="infobox">(Staff intro:)<br /><div>` +
-				this.staffMessage.replace(/\n/g, '') +
+				this.settings.staffMessage.replace(/\n/g, '') +
 				`</div>`;
 		}
 		return message;
@@ -1346,9 +1339,10 @@ export class BasicChatRoom extends BasicRoom {
 		this.users[user.id] = user;
 		if (joining) {
 			this.reportJoin('j', user.getIdentityWithStatus(this.roomid), user);
-			if (this.staffMessage && user.can('mute', null, this)) {
+			if (this.settings.staffMessage && user.can('mute', null, this)) {
 				this.sendUser(
-					user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage.replace(/\n/g, '') + '</div></div>'
+					user,
+					`|raw|<div class="infobox">(Staff intro:)<br /><div>${this.settings.staffMessage.replace(/\n/g, '')}</div></div>`
 				);
 			}
 		} else if (!user.named) {
