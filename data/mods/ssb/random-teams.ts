@@ -40,6 +40,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Never Lucky',
 		evs: {hp: 248, def: 36, spe: 224}, ivs: {atk: 0}, nature: 'Timid',
 	},
+  Flare: {
+		species: 'Weavile', ability: 'Permafrost Armor', item: 'Life Orb', gender: 'N',
+		moves: ['Earthquake', 'Knock Off', ['Play Rough', 'U-turn']],
+		signatureMove: 'Kōri Senbon',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+  },
 	GXS: {
 		species: 'Porygon-Z', ability: 'Virus Upload', item: 'Life Orb', gender: 'N',
 		moves: ['Nasty Plot', 'Aura Sphere', 'Thunderbolt'],
