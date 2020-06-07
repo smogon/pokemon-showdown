@@ -581,7 +581,7 @@ export class ModdedDex {
 		if (!customRulesString) return format.id;
 		const ruleTable = this.getRuleTable(format);
 		const customRules = customRulesString.split(',').map(rule => {
-			const ruleSpec = this.validateRule(rule.trim());
+			const ruleSpec = this.validateRule(rule);
 			if (typeof ruleSpec === 'string' && ruleTable.has(ruleSpec)) return null;
 			return rule.replace(/[\r\n|]*/g, '').trim();
 		}).filter(rule => rule);
@@ -953,6 +953,7 @@ export class ModdedDex {
 		switch (rule.charAt(0)) {
 		case '-':
 		case '+':
+			rule = rule.trim();
 			if (format?.team) throw new Error(`We don't currently support bans in generated teams`);
 			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
 				let buf = rule.slice(1);
