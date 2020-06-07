@@ -581,7 +581,7 @@ export class ModdedDex {
 		if (!customRulesString) return format.id;
 		const ruleTable = this.getRuleTable(format);
 		const customRules = customRulesString.split(',').map(rule => {
-			const ruleSpec = this.validateRule(rule);
+			const ruleSpec = this.validateRule(rule.trim());
 			if (typeof ruleSpec === 'string' && ruleTable.has(ruleSpec)) return null;
 			return rule.replace(/[\r\n|]*/g, '').trim();
 		}).filter(rule => rule);
