@@ -94,6 +94,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Psycho Drive',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: true,
 	},
+	Segmr: {
+		species: 'Ninetales-Alola', ability: 'wAll In', item: 'Light Clay', gender: 'M',
+		moves: ['Recover', 'Will-O-Wisp', 'Freeze-Dry'],
+		signatureMove: 'Disconnect',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest',
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {

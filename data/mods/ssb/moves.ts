@@ -440,6 +440,56 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+
+	// Segmr
+	disconnect: {
+		accuracy: 100,
+		basePower: 150,
+		category: "Special",
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move, Doom Desire, or Future Sight is already in effect for the target's position. Switches the user out.",
+		shortDesc: "Hits 2 turns after use. User switches out.",
+		name: "Disconnect",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isFutureMove: true,
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Doom Desire', target);
+		},
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) {
+				source.switchFlag = 'disconnect' as ID;
+			} else {
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+					move: 'disconnect',
+					source: source,
+					moveData: {
+						id: 'disconnect',
+						name: "Disconnect",
+						accuracy: 100,
+						basePower: 150,
+						category: "Special",
+						priority: 0,
+						flags: {},
+						effectType: 'Move',
+						isFutureMove: true,
+						type: 'Fairy',
+					},
+				});
+				this.add('-start', source, 'Disconnect');
+				this.add(`c|%Segmr|Lemme show you this`);
+				source.switchFlag = 'disconnect' as ID;
+				return null;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
 	// These moves need modified to support Snowstorm (Perish Song's ability)
 	auroraveil: {
 		inherit: true,
@@ -621,5 +671,14 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				break;
 			}
 		},
+	},
+	// Modified move descriptions for support of Segmr's move
+	doomdesire: {
+		inherit: true,
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move, Disconnect, or Future Sight is already in effect for the target's position.",
+	},
+	futuresight: {
+		inherit: true,
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move, Doom Desire, or Disconnect is already in effect for the target's position.",
 	},
 };

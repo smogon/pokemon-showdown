@@ -183,6 +183,7 @@ interface MoveEventMethods {
 	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];
 	onTryMove?: CommonHandlers['ResultSourceMove'];
+	onTryMovePriority?: number;
 	onUseMoveMessage?: CommonHandlers['VoidSourceMove'];
 }
 

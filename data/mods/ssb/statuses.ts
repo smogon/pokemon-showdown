@@ -3,8 +3,8 @@ import {FS} from '../../../lib/fs';
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
 const usergroups: {[userid: string]: string} = {};
-const data = FS('config/usergroups.csv').readIfExistsSync().split('\n');
-for (const row of data) {
+const usergroupData = FS('config/usergroups.csv').readIfExistsSync().split('\n');
+for (const row of usergroupData) {
 	if (!toID(row)) continue;
 
 	const cells = row.split(',');
@@ -217,6 +217,23 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
 		},
 	},
+	segmr: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Segmr')}|*awakens conquerors haki* Greetings.`);
+		},
+		onSwitchOut(pokemon) {
+			if (!pokemon.switchFlag || pokemon.switchFlag !== 'disconnect') {
+				this.add(`c|${getName('Segmr')}|The beauty of a stable internet connection is it allows you to`);
+			}
+			this.add(`l|Segmr`);
+		},
+		onFaint(pokemon) {
+			const name = pokemon.side.foe.active[0].illusion ?
+				pokemon.side.foe.active[0].illusion.name : pokemon.side.foe.active[0].name;
+			this.add(`c|${getName('Segmr')}|I'm sorry ${name} but could you please stop talking to me`);
+		},
+	},
 	// Snowstorm status support for Perish Song's ability
 	snowstorm: {
 		name: 'Snowstorm',
@@ -243,7 +260,46 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			if (!target.hasType('Ice')) this.damage(target.baseMaxhp / 16);
 		},
 		onEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'Snowstorm');
+		},
+	},
+	// Modified futuremove support for Segmr's move (Disconnect)
+	futuremove: {
+		// this is a slot condition
+		name: 'futuremove',
+		duration: 3,
+		onResidualOrder: 3,
+		onEnd(target) {
+			const data = this.effectData;
+			// time's up; time to hit! :D
+			const move = this.dex.getMove(data.move);
+			if (target.fainted || target === data.source) {
+				this.hint(`${move.name} did not hit because the target is ${(data.fainted ? 'fainted' : 'the user')}.`);
+				return;
+			}
+
+			this.add('-end', target, 'move: ' + move.name);
+			target.removeVolatile('Protect');
+			target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			// @ts-ignore
+			const hitMove: ActiveMove = new this.dex.Data.Move(data.moveData);
+
+			this.trySpreadMoveHit([target], data.source, hitMove);
+			// Support for Segmr's custom move
+			if (move.name === 'Disconnect') {
+				this.add(`j|${getName('Segmr')}`);
+				this.add(`c|${getName('Segmr')}|so as i was saying, then move hits`);
+			}
 		},
 	},
 };

@@ -149,6 +149,17 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+
+	// Segmr
+	wallin: {
+		desc: "When this Pokemon switches in, Aurora Veil automatically gets set up.",
+		shortDesc: "Sets up Aurora Veil on switch-in.",
+		name: "wAll In",
+		onSwitchIn(pokemon) {
+			if (pokemon.side.getSideCondition('auroraveil')) return;
+			pokemon.side.addSideCondition('auroraveil');
+		},
+	},
 	// Modified Illusion to support SSB volatiles
 	illusion: {
 		inherit: true,
