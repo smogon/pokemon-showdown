@@ -358,16 +358,7 @@ export abstract class BasicRoom {
 	}
 	saveSettings() {
 		if (!this.persist) return null;
-		const settingsList: RoomSettings[] = [];
-		for (const room of Rooms.rooms.values()) {
-			if (!room.persist) continue;
-			settingsList.push(room.settings);
-		}
-		FS('config/chatrooms.json').writeUpdate(() => (
-			JSON.stringify(settingsList)
-				.replace(/\{"title":/g, '\n{"title":')
-				.replace(/\]$/, '\n]')
-		));
+		Rooms.global.writeChatRoomData();
 	}
 	checkModjoin(user: User) {
 		if (user.id in this.users) return true;
