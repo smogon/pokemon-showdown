@@ -919,8 +919,8 @@ export class RandomGen7Teams extends RandomTeams {
 			item = (ability === 'Defeatist') ? 'Expert Belt' : 'Focus Sash';
 		} else if (hasMove['outrage'] && counter.setupType) {
 			item = 'Lum Berry';
-		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 70 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['electroweb'] &&
-		!hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['suckerpunch'] && !hasMove['uturn']) {
+		} else if (isDoubles && counter.damagingMoves.length >= 3 && species.baseStats.spe >= 70 && ability !== 'Multiscale' && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['electroweb'] && !hasMove['fakeout'] &&
+		!hasMove['feint'] && !hasMove['flamecharge'] && !hasMove['icywind'] && !hasMove['incinerate'] && !hasMove['naturesmadness'] && !hasMove['rapidspin'] && !hasMove['snarl'] && !hasMove['suckerpunch'] && !hasMove['uturn']) {
 			item = (species.baseStats.hp + species.baseStats.def + species.baseStats.spd >= 275) ? 'Sitrus Berry' : 'Life Orb';
 		} else if (hasMove['substitute']) {
 			item = counter.damagingMoves.length > 2 && !!counter['drain'] ? 'Life Orb' : 'Leftovers';
