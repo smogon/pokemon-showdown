@@ -950,10 +950,10 @@ export class ModdedDex {
 	}
 
 	validateRule(rule: string, format: Format | null = null) {
+		rule = rule.trim();
 		switch (rule.charAt(0)) {
 		case '-':
 		case '+':
-			rule = rule.trim();
 			if (format?.team) throw new Error(`We don't currently support bans in generated teams`);
 			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
 				let buf = rule.slice(1);
