@@ -1325,7 +1325,7 @@ export const commands: ChatCommands = {
 		const originalFormat = Dex.getFormat(target);
 		// Note: The default here of [Gen 8] Anything Goes isn't normally hit; since the web client will send a default format
 		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat(
-			'[Gen 7] Pokebank Anything Goes'
+			'[Gen 8] Anything Goes'
 		);
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
