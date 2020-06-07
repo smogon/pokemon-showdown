@@ -139,6 +139,47 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Kaiju Bunny
+	cozycuddle: {
+		accuracy: 95,
+		basePower: 0,
+		category: "Status",
+		desc: "Traps the target and lowers its Attack and Defense by two stages.",
+		shortDesc: "Target: trapped, Atk and Def lowered by 2.",
+		name: "Cozy Cuddle",
+		pp: 20,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'cozycuddle',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onTryHit(target, source, move) {
+			if (target.volatiles['cozycuddle']) return false;
+			if (target.volatiles['trapped']) {
+				delete move.volatileStatus;
+			}
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Flatter', target);
+			this.add('-anim', source, 'Let\'s Snuggle Forever', target);
+		},
+		onHit(target, source, move) {
+			this.boost({atk: -2, def: -2}, target, target);
+		},
+		effect: {
+			onStart(pokemon, source) {
+				this.add('-start', pokemon, 'move: Cozy Cuddle', '[of]' + source.name);
+			},
+			onTrapPokemon(pokemon) {
+				if (this.effectData.source?.isActive) pokemon.tryTrap();
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// Kris
 	ebhewbnjgwegaer: {
 		accuracy: true,

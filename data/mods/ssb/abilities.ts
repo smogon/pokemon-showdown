@@ -67,6 +67,19 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Kaiju Bunny
+	secondwind: {
+		desc: "This Pokemon restores 1/2 of its HP if it falls below 1/4 of its maximum HP by an enemy attack. This effect only occurs once.",
+		shortDesc: "If hit below 1/4 HP, heal 1/2 max HP. One time.",
+		name: "Second Wind",
+		onAfterDamage(damage, target, source, move) {
+			if (move && target.hp > 0 && target.hp < target.maxhp / 4 && !target.m.secondwind) {
+				target.m.secondwind = true;
+				this.heal(target.maxhp / 2);
+			}
+		},
+	},
+
 	// Mitsuki
 	photosynthesis: {
 		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active and this Pokemon is not holding Utility Umbrella, this Pokemon's Speed is doubled. If Sunny Day is active, this Pokemon's Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Utility Umbrella, its Attack remains the same and it does not lose any HP.",
