@@ -139,7 +139,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onStart() {
 			this.add(`c|+Anubis|hi ur qt`);
 			// In loving memory of the SSB programming team's sanity.
-			if (this.random(300) === 272) this.add(`c|~HoeenHero|Anubis's set is OP against programmer sanity.`);
+			if (this.random(300) === 272) this.add(`c|&HoeenHero|Anubis's set is OP against programmer sanity.`);
 		},
 		onSwitchOut() {
 			this.add(`c|+Anubis|brb making coffee`);
@@ -706,27 +706,27 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		noCopy: true,
 		onStart() {
 			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
-			this.add(`c|~HoeenHero|No, its not a bug Hippopotas, stop telling people to PM staff, its annoying.`);
+			this.add(`c|&HoeenHero|No, its not a bug Hippopotas, stop telling people to PM staff, its annoying.`);
 		},
 		onSwitchOut() {
 			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
-			this.add(`c|~HoeenHero|There's still no bug!`);
+			this.add(`c|&HoeenHero|There's still no bug!`);
 		},
 		onFaint() {
 			this.add(`c|+Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
-			this.add(`c|~HoeenHero|My PMs are flooded with bug reports :(`);
+			this.add(`c|&HoeenHero|My PMs are flooded with bug reports :(`);
 		},
 	},
 	hoeenhero: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~HoeenHero|My scripts will lead me to victory!`);
+			this.add(`c|&HoeenHero|My scripts will lead me to victory!`);
 		},
 		onSwitchOut() {
-			this.add(`c|~HoeenHero|I need to look something up, hold on...`);
+			this.add(`c|&HoeenHero|I need to look something up, hold on...`);
 		},
 		onFaint() {
-			this.add(`c|~HoeenHero|There must have been a bug in my script ;-;`);
+			this.add(`c|&HoeenHero|There must have been a bug in my script ;-;`);
 		},
 	},
 	hubriz: {
@@ -1219,7 +1219,7 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	pre: {
 		noCopy: true,
 		onStart(source) {
-			this.add(`c|~pre|let's go, in and out, 20 minute adventure`);
+			this.add(`c|&pre|let's go, in and out, 20 minute adventure`);
 			// Easter Egg
 			const activeMon = toID(
 				source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : source.side.foe.active[0].name
@@ -1228,14 +1228,14 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 				this.add(`c|+Anubis|ohey it's pre`);
 				this.add(`c|+Anubis|!showimage https://pokemonshowdown.com/images/ssbkitten.jpg`);
 				this.add(`raw|<img src="https://pokemonshowdown.com/images/ssbkitten.jpg" style="width: 300px; height: 400px" />`);
-				this.add(`c|~pre|<3`);
+				this.add(`c|&pre|<3`);
 			}
 		},
 		onSwitchOut() {
-			this.add(`c|~pre|sometimes science is more art than science`);
+			this.add(`c|&pre|sometimes science is more art than science`);
 		},
 		onFaint() {
-			this.add(`c|~pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
+			this.add(`c|&pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
 		},
 	},
 	psynergy: {
@@ -1518,13 +1518,13 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	theimmortal: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~The Immortal|h-hi`);
+			this.add(`c|&The Immortal|h-hi`);
 		},
 		onSwitchOut() {
-			this.add(`c|~The Immortal|ok`);
+			this.add(`c|&The Immortal|ok`);
 		},
 		onFaint() {
-			this.add(`c|~The Immortal|zzz`);
+			this.add(`c|&The Immortal|zzz`);
 		},
 	},
 	theleprechaun: {
@@ -1682,10 +1682,10 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 	zarel: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|~Zarel|Your mom`);
+			this.add(`c|&Zarel|Your mom`);
 		},
 		onFaint() {
-			this.add(`c|~Zarel|Your mom`);
+			this.add(`c|&Zarel|Your mom`);
 			// message is shown after the "Zarel Fainted!" message
 			this.add('message', 'Zarel used your mom!');
 		},
