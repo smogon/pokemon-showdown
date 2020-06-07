@@ -214,7 +214,7 @@ export class PageContext extends MessageContext {
 		this.title = 'Page';
 	}
 
-	can(permission: string, target: string | User | null = null, room: Room | null = null) {
+	can(permission: string, target: User | null = null, room: Room | null = null) {
 		if (!this.user.can(permission, target, room)) {
 			this.send(`<h2>Permission denied.</h2>`);
 			return false;
@@ -740,7 +740,7 @@ export class CommandContext extends MessageContext {
 	statusfilter(status: string) {
 		return Chat.statusfilter(status, this.user);
 	}
-	can(permission: string, target: string | User | null = null, room: Room | null = null) {
+	can(permission: string, target: User | null = null, room: Room | null = null) {
 		if (!this.user.can(permission, target, room)) {
 			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
 			return false;
@@ -891,7 +891,7 @@ export class CommandContext extends MessageContext {
 					return null;
 				}
 				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat) &&
-					!targetUser.canPromote(user.group, Config.pmmodchat)) {
+					!Users.Auth.hasPermission(targetUser.group, 'promote', Config.pmmodchat as GroupSymbol)) {
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 					return null;

@@ -1085,7 +1085,7 @@ export const commands: ChatCommands = {
 
 		if (!userid) return this.parse('/help promote');
 
-		const currentGroup = (targetUser?.group || Users.globalAuth.get(userid))[0];
+		const currentGroup = targetUser?.group || Users.globalAuth.get(userid);
 		let nextGroup = target as GroupSymbol;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {
@@ -1109,8 +1109,14 @@ export const commands: ChatCommands = {
 		if (currentGroup === nextGroup) {
 			return this.errorReply(`User '${name}' is already a ${groupName}`);
 		}
-		if (!user.canPromote(currentGroup, nextGroup)) {
-			return this.errorReply(`/${cmd} - Access denied.`);
+		if (!Users.Auth.hasPermission(user.group, 'promote', currentGroup)) {
+			this.errorReply(`/${cmd} - Access denied for promoting from ${currentGroup}`);
+			this.errorReply(`You can only promote to/from: ${Users.Auth.listJurisdiction(user.group, 'promote')}`);
+			return;
+		}
+		if (!Users.Auth.hasPermission(user.group, 'promote', nextGroup)) {
+			this.errorReply(`/${cmd} - Access denied for promoting to ${groupName}`);
+			this.errorReply(`You can only promote to/from: ${Users.Auth.listJurisdiction(user.group, 'promote')}`);
 		}
 
 		if (!Users.isUsernameKnown(userid)) {

@@ -11,9 +11,15 @@ export const HOST_SYMBOL: GroupSymbol = '\u2605';
  * user isn't in a group.
  */
 export abstract class Auth extends Map<ID, GroupSymbol | ''> {
-	/** will return the default group symbol if the user isn't in a group */
-	get(id: ID) {
-		return super.get(id) || Auth.defaultSymbol();
+	/**
+	 * Will return the default group symbol if the user isn't in a group.
+	 *
+	 * Passing a User will read `user.group`, which is relevant for unregistered
+	 * users with temporary global auth.
+	 */
+	get(user: ID | User) {
+		if (typeof user !== 'string') return (user as User).group;
+		return super.get(user) || Auth.defaultSymbol();
 	}
 	isStaff(userid: ID) {
 		return this.has(userid) && this.get(userid) !== '+';
@@ -42,6 +48,42 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			name: symbol,
 		});
 	}
+	static hasPermission(
+		symbol: GroupSymbol, permission: string, targetSymbol?: GroupSymbol, targetingSelf?: boolean
+	): boolean {
+		const group = Auth.getGroup(symbol);
+		if (group['root']) {
+			return true;
+		}
+
+		if (group[permission]) {
+			const jurisdiction = group[permission];
+			if (!targetSymbol) {
+				return !!jurisdiction;
+			}
+			if (jurisdiction === true && permission !== 'jurisdiction') {
+				return Auth.hasPermission(symbol, 'jurisdiction', targetSymbol);
+			}
+			if (typeof jurisdiction !== 'string') {
+				return !!jurisdiction;
+			}
+			if (jurisdiction.includes(targetSymbol)) {
+				return true;
+			}
+			if (jurisdiction.includes('s') && targetingSelf) {
+				return true;
+			}
+			if (jurisdiction.includes('u') &&
+				Config.groupsranking.indexOf(symbol) > Config.groupsranking.indexOf(targetSymbol)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	static listJurisdiction(symbol: GroupSymbol, permission: string) {
+		const symbols = Object.keys(Config.groups) as GroupSymbol[];
+		return symbols.filter(targetSymbol => Auth.hasPermission(symbol, permission, targetSymbol));
+	}
 }
 
 export class RoomAuth extends Auth {
@@ -50,10 +92,11 @@ export class RoomAuth extends Auth {
 		super();
 		this.room = room;
 	}
-	get(id: ID): GroupSymbol {
+	get(user: ID | User): GroupSymbol {
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
 			this.room.settings.isPrivate !== true ? null : Users.globalAuth;
-		const parentGroup = parentAuth ? parentAuth.get(id) : Auth.defaultSymbol();
+		const parentGroup = parentAuth ? parentAuth.get(user) : Auth.defaultSymbol();
+		const id = typeof user === 'string' ? user : (user as User).id;
 
 		if (this.has(id)) {
 			// authority is whichever is higher between roomauth and global auth

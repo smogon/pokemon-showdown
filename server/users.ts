@@ -522,68 +522,21 @@ export class User extends Chat.MessageContext {
 		const auth = (room && !this.can('makeroom') ? room.auth.get(this.id) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
-	can(permission: string, target: string | User | null = null, room: Room | BasicChatRoom | null = null): boolean {
+	can(permission: string, target: User | null = null, room: Room | BasicChatRoom | null = null): boolean {
 		if (this.hasSysopAccess()) return true;
 
-		let groupData = Config.groups[this.group];
-		if (groupData?.['root']) {
-			return true;
+		const auth: Auth = room ? room.auth : Users.globalAuth;
+
+		let group = auth.get(this);
+		const targetGroup = target ? auth.get(target) : undefined;
+
+		const roomIsTemporary = room && !room.persist;
+		if (roomIsTemporary && group === this.group) {
+			const replaceGroup = Auth.getGroup(group).globalGroupInPersonalRoom;
+			if (replaceGroup) group = replaceGroup;
 		}
 
-		let group: GroupSymbol;
-		let targetGroup: GroupSymbol | '' = '';
-		let targetUser = null;
-
-		if (typeof target === 'string') {
-			targetGroup = target as GroupSymbol;
-		} else {
-			targetUser = target;
-		}
-
-		if (room && (room.settings.auth || room.parent)) {
-			group = room.auth.get(this.id);
-			if (!Config.groups[group]) group = this.group;
-			if (targetUser) targetGroup = room.auth.get(targetUser.id);
-			if (room.settings.isPrivate === true && this.can('makeroom')) group = this.group;
-		} else {
-			group = this.group;
-			if (targetUser) targetGroup = targetUser.group;
-		}
-
-		groupData = Config.groups[group];
-		if (!groupData) return false;
-
-		const roomIsTemporary = room && (room.isPersonal || room.battle);
-		if (roomIsTemporary && group === this.group && groupData.globalGroupInPersonalRoom) {
-			const newGroup = groupData.globalGroupInPersonalRoom;
-			if (Config.groups[newGroup].rank > groupData.rank) {
-				groupData = Config.groups[newGroup];
-			}
-		}
-
-		if (groupData[permission]) {
-			const jurisdiction = groupData[permission];
-			if (!targetUser && !targetGroup) {
-				return !!jurisdiction;
-			}
-			if (jurisdiction === true && permission !== 'jurisdiction') {
-				return this.can('jurisdiction', (targetUser || targetGroup), room);
-			}
-			if (typeof jurisdiction !== 'string') {
-				return !!jurisdiction;
-			}
-			if (jurisdiction.includes(targetGroup)) {
-				return true;
-			}
-			if (jurisdiction.includes('s') && targetUser === this) {
-				return true;
-			}
-			if (jurisdiction.includes('u') &&
-				Config.groupsranking.indexOf(group) > Config.groupsranking.indexOf(targetGroup as GroupSymbol)) {
-				return true;
-			}
-		}
-		return false;
+		return Auth.hasPermission(group, permission, targetGroup, target === this);
 	}
 	/**
 	 * Special permission check for system operators
@@ -622,12 +575,6 @@ export class User extends Chat.MessageContext {
 		const whitelist = Config.consoleips || ['127.0.0.1'];
 		// on the IP whitelist OR the userid whitelist
 		return whitelist.includes(connection.ip) || whitelist.includes(this.id);
-	}
-	/**
-	 * Special permission check for promoting and demoting
-	 */
-	canPromote(sourceGroup: string, targetGroup: string) {
-		return this.can('promote', sourceGroup) && this.can('promote', targetGroup);
 	}
 	resetName(isForceRenamed = false) {
 		return this.forceRename('Guest ' + this.guestNum, false, isForceRenamed);

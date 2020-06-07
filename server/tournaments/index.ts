@@ -1677,14 +1677,11 @@ export const commands: ChatCommands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>, <reason>`);
 			}
-			let targetUser: User | string | null = Users.get(params[0]);
+			const targetUser = Users.get(params[0]);
 			if (!this.can('gamemoderation', targetUser, room)) return;
 
-			const online = !!targetUser;
-			if (!online) targetUser = params[0];
+			const targetUserid = toID(targetUser || params[0]);
 			if (!targetUser) return false;
-
-			const targetUserid = toID(targetUser);
 			let reason = '';
 			if (params[1]) {
 				reason = params[1].trim();
@@ -1697,8 +1694,8 @@ export const commands: ChatCommands = {
 
 			const punishment: [string, ID, number, string] =
 				['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
-			if (online) {
-				Punishments.roomPunish(this.room, targetUser as User, punishment);
+			if (targetUser) {
+				Punishments.roomPunish(this.room, targetUser, punishment);
 			} else {
 				Punishments.roomPunishName(this.room, targetUserid, punishment);
 			}
@@ -1706,20 +1703,20 @@ export const commands: ChatCommands = {
 
 			this.modlog('TOUR BAN', targetUser, reason);
 			if (reason) reason = ` (${reason})`;
-			this.privateModAction(`${typeof targetUser !== 'string' ? targetUser.name : targetUserid} was banned from joining tournaments by ${user.name}.${reason}`);
+			this.privateModAction(`${targetUser ? targetUser.name : targetUserid} was banned from joining tournaments by ${user.name}.${reason}`);
 		} else if (cmd === 'unbanuser') {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
-			const targetUser = Users.get(params[0]) || params[0];
+			const targetUser = Users.get(params[0]);
 			if (!this.can('gamemoderation', targetUser, room)) return;
 
-			const targetUserid = toID(targetUser);
+			const targetUserid = toID(targetUser || params[0]);
 
 			if (!Tournament.checkBanned(room, targetUserid)) return this.errorReply("This user isn't banned from tournaments.");
 
 			if (targetUser) { Punishments.roomUnpunish(this.room, targetUserid, 'TOURBAN', false); }
-			this.privateModAction(`${typeof targetUser !== 'string' ? targetUser.name : targetUserid} was unbanned from joining tournaments by ${user.name}.`);
+			this.privateModAction(`${targetUser ? targetUser.name : targetUserid} was unbanned from joining tournaments by ${user.name}.`);
 			this.modlog('TOUR UNBAN', targetUser, null, {noip: 1, noalts: 1});
 		} else {
 			const tournament = room.getGame(Tournament);
