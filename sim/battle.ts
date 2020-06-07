@@ -1077,12 +1077,16 @@ export class Battle {
 			side.activeRequest = null;
 		}
 
-		const maxTeamSize = this.getMaxTeamSize();
+		const teamLengthData = this.format.teamLength;
+		const maxTeamSize = teamLengthData?.battle;
 		if (type === 'teampreview') {
-			this.add('teampreview' + (maxTeamSize !== 6 ? '|' + maxTeamSize : ''));
+			// Send the specified team size to the client even if it's our
+			// default team size of 6 as this means that the format wants
+			// the user to select the team order instead of just their lead.
+			this.add('teampreview' + (maxTeamSize ? '|' + maxTeamSize : ''));
 		}
 
-		const requests = this.getRequests(type, maxTeamSize);
+		const requests = this.getRequests(type, maxTeamSize || 6);
 		for (let i = 0; i < this.sides.length; i++) {
 			this.sides[i].emitRequest(requests[i]);
 		}
