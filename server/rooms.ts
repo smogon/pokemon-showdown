@@ -1083,7 +1083,6 @@ export class BasicChatRoom extends BasicRoom {
 	readonly creationTime: number | null;
 	readonly type: 'chat' | 'battle';
 	minorActivity: Poll | Announcement | null;
-	slowchat: false | number;
 	banwordRegex: RegExp | true | null;
 	parent: Room | null;
 	subRooms: Map<string, ChatRoom> | null;
@@ -1113,7 +1112,6 @@ export class BasicChatRoom extends BasicRoom {
 		this.staffAutojoin = false;
 		this.creationTime = null;
 		this.type = 'chat';
-		this.slowchat = false;
 		this.banwordRegex = null;
 		this.subRooms = new Map();
 
@@ -1277,8 +1275,8 @@ export class BasicChatRoom extends BasicRoom {
 			const modjoin = this.settings.modjoin === true ? this.settings.modchat : this.settings.modjoin;
 			message += ` [${modjoin} or higher to join]`;
 		}
-		if (this.slowchat) {
-			message += ` [Slowchat ${this.slowchat}s]`;
+		if (this.settings.slowchat) {
+			message += ` [Slowchat ${this.settings.slowchat}s]`;
 		}
 		message += `</div>`;
 		if (this.settings.introMessage) {

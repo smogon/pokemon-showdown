@@ -963,7 +963,9 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (!this.checkSlowchat(room, user)) {
-			this.errorReply(this.tr `This room has slow-chat enabled. You can only talk once every ${room!.slowchat} seconds.`);
+			this.errorReply(
+				this.tr`This room has slow-chat enabled. You can only talk once every ${room!.settings.slowchat} seconds.`
+			);
 			return null;
 		}
 
