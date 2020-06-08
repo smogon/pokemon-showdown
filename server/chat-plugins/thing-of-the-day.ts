@@ -452,7 +452,7 @@ export const otdCommands: ChatCommands = {
 		this.privateModAction(`(${user.name} has started nominations for the ${handler.name} of the ${handler.timeLabel}.)`);
 		this.modlog(`${handler.id.toUpperCase()} START`, null);
 	},
-	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`],
+	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`],
 
 	end(target, room, user) {
 		if (!this.canTalk()) return;
@@ -475,7 +475,7 @@ export const otdCommands: ChatCommands = {
 		this.modlog(`${handler.id.toUpperCase()} END`, null);
 	},
 	endhelp: [
-		`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`,
+		`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
 	],
 
 	nom(target, room, user) {
@@ -532,7 +532,7 @@ export const otdCommands: ChatCommands = {
 	},
 	removehelp: [
 		`/-otd remove [username] - Remove a user's nomination for the Thing of the Day.`,
-		 `Prevents them from voting again until the next round. Requires: % @ # & ~`,
+		 `Prevents them from voting again until the next round. Requires: % @ # &`,
 	],
 
 	force(target, room, user) {
@@ -554,7 +554,7 @@ export const otdCommands: ChatCommands = {
 		room.add(`The ${handler.name} of the ${handler.timeLabel} was forcibly set to '${target}'`);
 	},
 	forcehelp: [
-		`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`,
+		`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
 	],
 
 	delay(target, room, user) {
@@ -574,7 +574,7 @@ export const otdCommands: ChatCommands = {
 		this.privateModAction(`(${user.name} disabled the ${handler.name} of the ${handler.timeLabel} timer.)`);
 	},
 	delayhelp: [
-		`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`,
+		`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
 	],
 
 	set(target, room, user) {
@@ -651,7 +651,7 @@ export const otdCommands: ChatCommands = {
 	},
 	sethelp: [
 		`/-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day.`,
-		`Requires: % @ # & ~`,
+		`Requires: % @ # &`,
 	],
 
 	winners(target, room, user, connection) {
@@ -686,13 +686,13 @@ export const otdCommands: ChatCommands = {
 const help = [
 	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
 	`- /-otd - View the current Thing of the Day.`,
-	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`,
+	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`,
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
-	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # & ~`,
-	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`,
-	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`,
-	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`,
-	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # & ~`,
+	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
+	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
+	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
+	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
+	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
 	`- /-otd winners - Displays a list of previous things of the day.`,
 ];
 

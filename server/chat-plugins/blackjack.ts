@@ -777,16 +777,16 @@ export const commands: ChatCommands = {
 		},
 	},
 	blackjackhelp: [
-		"/blackjack create - Creates a game of blackjack. Requires: % @ # & ~",
-		"/blackjack create [autostart] - Automatically creates a game of blackjack in [autostart] minutes. Requires: % @ # & ~",
-		"/blackjack start - Starts a game of blackjack. Requires: % @ # & ~",
-		"/blackjack end - Ends a game of blackjack. Requires: % @ # & ~",
+		"/blackjack create - Creates a game of blackjack. Requires: % @ # &",
+		"/blackjack create [autostart] - Automatically creates a game of blackjack in [autostart] minutes. Requires: % @ # &",
+		"/blackjack start - Starts a game of blackjack. Requires: % @ # &",
+		"/blackjack end - Ends a game of blackjack. Requires: % @ # &",
 		"/blackjack join - Joins a game of blackjack.",
 		"/blackjack leave - Leaves a game of blackjack.",
 		"/blackjack spectate - Spectates a game of blackjack.",
 		"/blackjack unspectate - Stops spectating a game of blackjack.",
-		"/blackjack disable - Prevents games of blackjack from being made in the room. Requires: # & ~",
-		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # & ~",
+		"/blackjack disable - Prevents games of blackjack from being made in the room. Requires: # &",
+		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # &",
 	],
 };
 export const roomSettings: SettingsHandler = room => ({

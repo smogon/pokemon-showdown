@@ -909,23 +909,23 @@ const cmds: ChatCommands = {
 		case 'staff':
 			if (!this.can('broadcast', null, room)) return;
 			reply = '<strong>Staff commands:</strong><br />' +
-					'- question or qg <em>User | OT | TID | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
-					'- lottery or lg <em>User | OT | TID | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
+					'- question or qg <em>User | OT | TID | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # &)<br />' +
+					'- lottery or lg <em>User | OT | TID | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # &)<br />' +
 					'- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
 					'- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
 					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
-					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ # & ~)<br />' +
-					'- end - Forcibly ends the current giveaway (Requires: % @ # & ~)<br />' +
+					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ # &)<br />' +
+					'- end - Forcibly ends the current giveaway (Requires: % @ # &)<br />' +
 					'- count <em>Mon</em> - Displays how often a certain mon has been given away. Use <code>!giveaway count</code> to broadcast this to the entire room<br />';
 			break;
 		case 'gts':
 			if (!this.can('broadcast', null, room)) return;
 			reply = '<strong>GTS giveaway commands:</strong><br />' +
-					'- gts start <em>User | Amount | Summary of given mon | What to deposit | What to look for</em> - Starts a gts giveaway (Requires: % @ # & ~)<br />' +
+					'- gts start <em>User | Amount | Summary of given mon | What to deposit | What to look for</em> - Starts a gts giveaway (Requires: % @ # &)<br />' +
 					'- gts left <em>Amount</em> - Updates the amount left for the current GTS giveaway. Without an amount specified, shows how many Pokémon are left, and who the latest winners are.<br />' +
 					'- gts sent <em>IGN</em> - Adds an ign to the list of latest winners, and updates left count accordingly.<br />' +
 					'- gts full - Signifies enough mons have been received, and will update the GTS giveaway to reflect that.<br />' +
-					'- gts end - Forcibly ends the current gts giveaway (Requires: % @ # & ~)<br />';
+					'- gts end - Forcibly ends the current gts giveaway (Requires: % @ # &)<br />';
 			break;
 		case 'game':
 		case 'giveaway':
@@ -942,8 +942,8 @@ const cmds: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
 			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: + % @ # & ~)<br />' +
-			'- help gts - shows gts giveaway commands (Requires: + % @ # & ~)';
+			'- help staff - shows giveaway staff commands (Requires: + % @ # &)<br />' +
+			'- help gts - shows gts giveaway commands (Requires: + % @ # &)';
 		}
 		this.sendReplyBox(reply);
 	},

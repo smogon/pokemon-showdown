@@ -1111,7 +1111,7 @@ const commands: ChatCommands = {
 		questions = Dex.shuffle(questions);
 		room.game = new _Trivia(room, mode, category, length, questions, isRandomMode);
 	},
-	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # & ~`],
+	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # &`],
 
 	join(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
@@ -1137,7 +1137,7 @@ const commands: ChatCommands = {
 		if (res) return this.errorReply(res);
 		// ...
 	},
-	kickhelp: [`/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~`],
+	kickhelp: [`/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # &`],
 
 	leave(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
@@ -1159,7 +1159,7 @@ const commands: ChatCommands = {
 		if (res) return this.errorReply(res);
 		// ...
 	},
-	starthelp: [`/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # & ~`],
+	starthelp: [`/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # &`],
 
 	answer(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
@@ -1183,7 +1183,7 @@ const commands: ChatCommands = {
 		if (!game) return;
 		game.end(user);
 	},
-	endhelp: [`/trivia end - Forcibly end a trivia game. Requires: + % @ # & ~`],
+	endhelp: [`/trivia end - Forcibly end a trivia game. Requires: + % @ # &`],
 
 	'': 'status',
 	players: 'status',
@@ -1291,8 +1291,8 @@ const commands: ChatCommands = {
 			}
 		}
 	},
-	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Adds question(s) to the submission database for staff to review. Requires: + % @ # & ~`],
-	addhelp: [`/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Adds question(s) to the question database. Requires: % @ # & ~`],
+	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Adds question(s) to the submission database for staff to review. Requires: + % @ # &`],
+	addhelp: [`/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Adds question(s) to the question database. Requires: % @ # &`],
 
 	review(target, room) {
 		if (room.roomid !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1316,7 +1316,7 @@ const commands: ChatCommands = {
 
 		this.sendReply(buffer);
 	},
-	reviewhelp: [`/trivia review - View the list of submitted questions. Requires: @ # & ~`],
+	reviewhelp: [`/trivia review - View the list of submitted questions. Requires: @ # &`],
 
 	reject: 'accept',
 	accept(target, room, user, connection, cmd) {
@@ -1402,8 +1402,8 @@ const commands: ChatCommands = {
 
 		this.errorReply(`'${target}' is an invalid argument. View /trivia help questions for more information.`);
 	},
-	accepthelp: [`/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~`],
-	rejecthelp: [`/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~`],
+	accepthelp: [`/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &`],
+	rejecthelp: [`/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &`],
 
 	delete(target, room, user) {
 		if (room.roomid !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1431,7 +1431,7 @@ const commands: ChatCommands = {
 
 		this.errorReply(`Question '${target}' was not found in the question database.`);
 	},
-	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~`],
+	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # &`],
 
 	move(target, room, user) {
 		if (room.roomid !== 'questionworkshop') {
@@ -1481,7 +1481,7 @@ const commands: ChatCommands = {
 		}
 	},
 	movehelp: [
-		`/trivia move [category] | [question] - Change the category of question in the trivia databse. Requires: % @ # & ~`,
+		`/trivia move [category] | [question] - Change the category of question in the trivia databse. Requires: % @ # &`,
 	],
 
 	qs(target, room, user) {
@@ -1541,7 +1541,7 @@ const commands: ChatCommands = {
 	},
 	qshelp: [
 		"/trivia qs - View the distribution of questions in the question database.",
-		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
+		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # &",
 	],
 
 	search(target, room, user) {
@@ -1575,7 +1575,7 @@ const commands: ChatCommands = {
 
 		this.sendReply(buffer);
 	},
-	searchhelp: [`/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * & ~`],
+	searchhelp: [`/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * &`],
 
 	rank(target, room, user) {
 		if (!isTriviaRoom(room)) return this.errorReply("This command can only be used in Trivia.");
@@ -1655,7 +1655,7 @@ const commands: ChatCommands = {
 			return this.errorReply(`'${category}' is an invalid category.`);
 		}
 	},
-	clearqshelp: [`/trivia clears [category] - Remove all questions of the given category. Requires: # & ~`],
+	clearqshelp: [`/trivia clears [category] - Remove all questions of the given category. Requires: # &`],
 
 	help(target, room, user) {
 		return this.parse(`${this.cmdToken}help trivia`);
@@ -1677,27 +1677,27 @@ const commands: ChatCommands = {
 			`- Long: 50 point score cap. The winner gains 5 leaderboard points.`,
 			``,
 			`<strong>Game commands:</strong>`,
-			Utils.html`- <code>/trivia new [mode], [category], [length]</code> - Begin signups for a new trivia game. Requires: + % @ # & ~`,
+			Utils.html`- <code>/trivia new [mode], [category], [length]</code> - Begin signups for a new trivia game. Requires: + % @ # &`,
 			`- <code>/trivia join</code> - Join a trivia game during signups.`,
-			Utils.html`- <code>/trivia start</code> - Begin the game once enough users have signed up. Requires: + % @ # & ~`,
+			Utils.html`- <code>/trivia start</code> - Begin the game once enough users have signed up. Requires: + % @ # &`,
 			`- <code>/ta [answer]</code> - Answer the current question.`,
-			Utils.html`- <code>/trivia kick [username]</code> - Disqualify a participant from the current trivia game. Requires: % @ # & ~`,
+			Utils.html`- <code>/trivia kick [username]</code> - Disqualify a participant from the current trivia game. Requires: % @ # &`,
 			`- <code>/trivia leave</code> - Makes the player leave the game.`,
-			Utils.html`- <code>/trivia end</code> - End a trivia game. Requires: + % @ # ~`,
+			Utils.html`- <code>/trivia end</code> - End a trivia game. Requires: + % @ #`,
 			``,
 			`<strong>Question-modifying commands:</strong>`,
-			Utils.html`- <code>/trivia submit [category] | [question] | [answer1], [answer2] ... [answern]</code> - Adds question(s) to the submission database for staff to review. Requires: + % @ # & ~`,
-			Utils.html`- <code>/trivia review</code> - View the list of submitted questions. Requires: @ # & ~`,
-			Utils.html`- <code>/trivia accept [index1], [index2], ... [indexn] OR all</code> - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~`,
-			Utils.html`- <code>/trivia reject [index1], [index2], ... [indexn] OR all</code> - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~`,
-			Utils.html`- <code>/trivia add [category] | [question] | [answer1], [answer2], ... [answern]</code> - Adds question(s) to the question database. Requires: % @ # & ~`,
-			Utils.html`- <code>/trivia delete [question]</code> - Delete a question from the trivia database. Requires: % @ # & ~`,
+			Utils.html`- <code>/trivia submit [category] | [question] | [answer1], [answer2] ... [answern]</code> - Adds question(s) to the submission database for staff to review. Requires: + % @ # &`,
+			Utils.html`- <code>/trivia review</code> - View the list of submitted questions. Requires: @ # &`,
+			Utils.html`- <code>/trivia accept [index1], [index2], ... [indexn] OR all</code> - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # &`,
+			Utils.html`- <code>/trivia reject [index1], [index2], ... [indexn] OR all</code> - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # &`,
+			Utils.html`- <code>/trivia add [category] | [question] | [answer1], [answer2], ... [answern]</code> - Adds question(s) to the question database. Requires: % @ # &`,
+			Utils.html`- <code>/trivia delete [question]</code> - Delete a question from the trivia database. Requires: % @ # &`,
 			`- <code>/trivia qs</code> - View the distribution of questions in the question database.`,
-			Utils.html`- <code>/trivia qs [category]</code> - View the questions in the specified category. Requires: % @ # & ~`,
-			Utils.html`- <code>/trivia clearqs [category]</code> - Clear all questions in the given category. Requires: # & ~`,
+			Utils.html`- <code>/trivia qs [category]</code> - View the questions in the specified category. Requires: % @ # &`,
+			Utils.html`- <code>/trivia clearqs [category]</code> - Clear all questions in the given category. Requires: # &`,
 			``,
 			`<strong>Informational commands:</strong>`,
-			Utils.html`- <code>/trivia search [type], [query]</code> - Searches for questions based on their type and their query. Valid types: <code>submissions</code>, <code>subs</code>, <code>questions</code>, <code>qs</code>. Requires: + % @ # & ~`,
+			Utils.html`- <code>/trivia search [type], [query]</code> - Searches for questions based on their type and their query. Valid types: <code>submissions</code>, <code>subs</code>, <code>questions</code>, <code>qs</code>. Requires: + % @ # &`,
 			`- <code>/trivia status [player]</code> - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.`,
 			`- <code>/trivia rank [username]</code> - View the rank of the specified user. If none is given, view your own.`,
 			`- <code>/trivia ladder</code> - View information about the top 15 users on the trivia leaderboard.`,

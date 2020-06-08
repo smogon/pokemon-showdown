@@ -40,7 +40,7 @@ export const commands: ChatCommands = {
 	},
 	htmlboxhelp: [
 		`/htmlbox [message] - Displays a message, parsing HTML code contained.`,
-		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # & ~`,
+		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # &`,
 	],
 	addhtmlbox(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
@@ -56,7 +56,7 @@ export const commands: ChatCommands = {
 		return `/raw <div class="infobox">${target}</div>`;
 	},
 	addhtmlboxhelp: [
-		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * & ~`,
+		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * &`,
 	],
 	addrankhtmlbox(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
@@ -74,7 +74,7 @@ export const commands: ChatCommands = {
 		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank as GroupSymbol);
 	},
 	addrankhtmlboxhelp: [
-		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * & ~`,
+		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * &`,
 	],
 	changeuhtml: 'adduhtml',
 	adduhtml(target, room, user, connection, cmd) {
@@ -98,10 +98,10 @@ export const commands: ChatCommands = {
 		}
 	},
 	adduhtmlhelp: [
-		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.  Requires: * & ~`,
+		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.  Requires: * &`,
 	],
 	changeuhtmlhelp: [
-		`/changeuhtml [name], [message] - Changes the message previously shown with /adduhtml [name]. Requires: * & ~`,
+		`/changeuhtml [name], [message] - Changes the message previously shown with /adduhtml [name]. Requires: * &`,
 	],
 	changerankuhtml: 'addrankuhtml',
 	addrankuhtml(target, room, user, connection, cmd) {
@@ -124,10 +124,10 @@ export const commands: ChatCommands = {
 		this.room.sendRankedUsers(html, rank as GroupSymbol);
 	},
 	addrankuhtmlhelp: [
-		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: * & ~`,
+		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: * &`,
 	],
 	changerankuhtmlhelp: [
-		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * & ~`,
+		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * &`,
 	],
 
 	addline(target, room, user) {
@@ -171,7 +171,7 @@ export const commands: ChatCommands = {
 		targetUser.lastPM = user.id;
 		user.lastPM = targetUser.id;
 	},
-	pminfoboxhelp: [`/pminfobox [user], [html]- PMs an [html] infobox to [user]. Requires * ~`],
+	pminfoboxhelp: [`/pminfobox [user], [html]- PMs an [html] infobox to [user]. Requires * &`],
 
 	pmuhtmlchange: 'pmuhtml',
 	pmuhtml(target, room, user, connection, cmd) {
@@ -205,9 +205,9 @@ export const commands: ChatCommands = {
 		targetUser.lastPM = user.id;
 		user.lastPM = targetUser.id;
 	},
-	pmuhtmlhelp: [`/pmuhtml [user], [name], [html] - PMs [html] that can change to [user]. Requires * ~`],
+	pmuhtmlhelp: [`/pmuhtml [user], [name], [html] - PMs [html] that can change to [user]. Requires * &`],
 	pmuhtmlchangehelp: [
-		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * ~`,
+		`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * &`,
 	],
 
 	nick() {
@@ -397,7 +397,7 @@ export const commands: ChatCommands = {
 		);
 	},
 	hotpatchhelp: [
-		`Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~`,
+		`Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: console access`,
 		`Hot-patching has greater memory requirements than restarting`,
 		`You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch`,
 		`/hotpatch chat - reload chat-commands.js and the chat-plugins`,
@@ -443,7 +443,7 @@ export const commands: ChatCommands = {
 		);
 	},
 	nohotpatchhelp: [
-		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: & ~`,
+		`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: &`,
 	],
 
 	'!processes': true,
@@ -642,7 +642,7 @@ export const commands: ChatCommands = {
 		logRoom.roomlog(`${user.name} used /lockdown`);
 	},
 	lockdownhelp: [
-		`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~`,
+		`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: &`,
 	],
 
 	autolockdown: 'autolockdownkill',
@@ -671,8 +671,8 @@ export const commands: ChatCommands = {
 		}
 	},
 	autolockdownkillhelp: [
-		`/autolockdownkill on - Turns on the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~`,
-		`/autolockdownkill off - Turns off the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~`,
+		`/autolockdownkill on - Turns on the setting to enable the server to automatically kill itself upon the final battle finishing. Requires &`,
+		`/autolockdownkill off - Turns off the setting to enable the server to automatically kill itself upon the final battle finishing. Requires &`,
 	],
 
 	prelockdown(target, room, user) {
@@ -722,8 +722,8 @@ export const commands: ChatCommands = {
 		logRoom.roomlog(`${user.name} used /endlockdown`);
 	},
 	endlockdownhelp: [
-		`/endlockdown - Cancels the server restart and takes the server out of lockdown state. Requires: ~`,
-		`/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~`,
+		`/endlockdown - Cancels the server restart and takes the server out of lockdown state. Requires: &`,
+		`/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: &`,
 	],
 
 	emergency(target, room, user) {
@@ -787,7 +787,7 @@ export const commands: ChatCommands = {
 			process.exit();
 		}, 10000);
 	},
-	killhelp: [`/kill - kills the server. Can't be done unless the server is in lockdown state. Requires: ~`],
+	killhelp: [`/kill - kills the server. Can't be done unless the server is in lockdown state. Requires: &`],
 
 	loadbanlist(target, room, user, connection) {
 		if (!this.can('lockdown')) return false;
@@ -799,7 +799,7 @@ export const commands: ChatCommands = {
 		);
 	},
 	loadbanlisthelp: [
-		`/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~`,
+		`/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: &`,
 	],
 
 	refreshpage(target, room, user) {
@@ -941,7 +941,7 @@ export const commands: ChatCommands = {
 			connection.sendTo(room, (`${stdout}${stderr}`));
 		});
 	},
-	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: ~ console access`],
+	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: & console access`],
 
 	async eval(target, room, user, connection) {
 		if (!this.canUseConsole()) return false;

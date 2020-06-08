@@ -239,7 +239,7 @@ export const commands: ChatCommands = {
 			this.modlog('HANGMAN');
 			return this.addModAction(`A game of hangman was started by ${user.name}.`);
 		},
-		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # & ~"],
+		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # &"],
 
 		guess(target, room, user) {
 			if (!target) return this.parse('/help guess');
@@ -265,7 +265,7 @@ export const commands: ChatCommands = {
 			this.modlog('ENDHANGMAN');
 			return this.privateModAction(`(The game of hangman was ended by ${user.name}.)`);
 		},
-		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # & ~"],
+		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # &"],
 
 		disable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
@@ -310,12 +310,12 @@ export const commands: ChatCommands = {
 	hangmanhelp: [
 		`/hangman allows users to play the popular game hangman in PS rooms.`,
 		`Accepts the following commands:`,
-		`/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # & ~`,
+		`/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # &`,
 		`/hangman guess [letter] - Makes a guess for the letter entered.`,
 		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
 		`/hangman display - Displays the game.`,
-		`/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # & ~`,
-		`/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # & ~`,
+		`/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # &`,
+		`/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # &`,
 	],
 
 	guess(target, room, user) {

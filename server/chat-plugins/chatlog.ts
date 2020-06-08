@@ -706,6 +706,6 @@ export const commands: ChatCommands = {
 		"If a [cap] is given, limits it to only that many lines. Defaults to 500.",
 		"The delimiter | can be used to space searching for multiple terms.",
 		"Date formatting is ISO formatting (YYYY-MM-DD.) E.g 2020-05, 2020, or `all`.",
-		"Requires: % @ # & ~",
+		"Requires: % @ # &",
 	],
 };

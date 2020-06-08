@@ -316,8 +316,8 @@ export const commands: ChatCommands = {
 			return this.addModAction(`A poll was started by ${user.name}.`);
 		},
 		newhelp: [
-			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
-			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # & ~`,
+			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
+			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &`,
 			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		],
 
@@ -391,8 +391,8 @@ export const commands: ChatCommands = {
 			}
 		},
 		timerhelp: [
-			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~`,
-			`/poll timer clear - Clears the poll's timer. Requires: % @ # & ~`,
+			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # &`,
+			`/poll timer clear - Clears the poll's timer. Requires: % @ # &`,
 		],
 
 		results(target, room, user) {
@@ -423,7 +423,7 @@ export const commands: ChatCommands = {
 			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
 		},
-		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`],
+		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # &`],
 
 		show: '',
 		display: '',
@@ -447,14 +447,14 @@ export const commands: ChatCommands = {
 		`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.`,
 		`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		`Accepts the following commands:`,
-		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
-		`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # & ~`,
-		`/poll htmlcreate(multi) [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~`,
+		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
+		`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &`,
+		`/poll htmlcreate(multi) [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # &`,
 		`/poll vote [number] - Votes for option [number].`,
-		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~`,
+		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # &`,
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
-		`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`,
+		`/poll end - Ends a poll and displays the results. Requires: % @ # &`,
 	],
 };
 
