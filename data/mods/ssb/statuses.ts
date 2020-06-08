@@ -289,6 +289,30 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Segmr')}|I'm sorry ${name} but could you please stop talking to me`);
 		},
 	},
+	zodiax: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|${getName('Zodiax')}|Zodiax is here to Zodihax`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c|${getName('Zodiax')}|Don't worry I'll be back again`);
+		},
+		onFaint(pokemon) {
+			const name = pokemon.side.foe.name;
+			this.add(`c|${getName('Zodiax')}|${name}, Why would you hurt this poor little pompombirb :(`);
+		},
+		onPrepareHit(source, target, move) {
+			if (move.name === 'Big Storm Coming') {
+				this.add(`c|${getName('Zodiax')}|There is a hail no storm okayyyyyy`);
+			}
+		},
+		// Big Storm Coming base power reduction effect
+		onBasePower(basePower, pokemon, target, move) {
+			if (pokemon.m.bigstormcoming) {
+				return this.chainModify([0x4CC, 0x1000]);
+			}
+		},
+	},
 	// Snowstorm status support for Perish Song's ability
 	snowstorm: {
 		name: 'Snowstorm',

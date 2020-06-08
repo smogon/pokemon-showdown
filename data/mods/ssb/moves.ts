@@ -659,6 +659,34 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fairy",
 	},
+
+	// Zodiax
+	bigstormcoming: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Special",
+		desc: "Uses Hurricane, Thunder, Blizzard, and Weather Ball at 30% power.",
+		shortDesc: "30% power: Hurricane, Thunder, Blizzard, Weather Ball.",
+		name: "Big Storm Coming",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onTry(pokemon, target) {
+				pokemon.m.bigstormcoming = true;
+				this.useMove("Hurricane", pokemon);
+				this.useMove("Thunder", pokemon);
+				this.useMove("Blizzard", pokemon);
+				this.useMove("Weather Ball", pokemon);
+				pokemon.m.bigstormcoming = false;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
 	// These moves need modified to support Snowstorm (Perish Song's ability)
 	auroraveil: {
 		inherit: true,

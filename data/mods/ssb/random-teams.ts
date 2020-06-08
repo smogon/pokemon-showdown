@@ -124,6 +124,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Disconnect',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest',
 	},
+	Zodiax: {
+		species: 'Oricorio-Pom-Pom', ability: 'Primordial Sea', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Quiver Dance', 'Hurricane', 'Thunder'],
+		signatureMove: 'Big Storm Coming',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {
