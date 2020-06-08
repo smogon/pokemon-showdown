@@ -18,8 +18,7 @@
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%)：上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "<strong>グローバルモデレータ</strong>(@)：上記に加えてユーザーをサイト全体からBANできる。",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>グローバルボット</strong>(*)：権限はモデレータと同じだが、ボットだと分かるためのランク。",
-		"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties": "<strong>グローバルリーダー</strong>(&amp;)：上記に加えてユーザーをグローバルモデレータまで昇格したり、試合を強制的に引き分けにすることができる。",
-		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "<strong>グローバルアドミニストレーター</strong>(~)：何でもできる。この文章も編集できる。",
+		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(&amp;)：何でもできる。この文章も編集できる。",
 
 		"<strong>Room ranks</strong>": "<strong>日本語部屋のユーザーランク</strong>",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "<strong>ボイス</strong>(+)：「!コマンド」を使ってコマンドの結果を部屋に表示することができる。",
@@ -39,9 +38,9 @@
 		"DATA COMMANDS": "ポケモンデータコマンド",
 		"DRIVER COMMANDS": "ドライバー（％）コマンド",
 		"MODERATOR COMMANDS": "モデレーター（＠）コマンド",
-		"LEADER COMMANDS": "リーダー（＆）コマンド",
+		"ADMIN COMMANDS": "アドミニストレーター（＆）コマンド",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)": "（「/」の代わりに「!」を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & ~ の権限が必要です。）",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "（「/」の代わりに「!」を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & の権限が必要です。）",
 
 		"<strong>Room punishments</strong>:": "<strong>チャット罰則一覧</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - ユーザーにチャットルールのポップアップが表示されます。",

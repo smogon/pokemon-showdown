@@ -15,8 +15,7 @@
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Oben genanntes, und sie können Nutzer locken und alternative Accounts einsehen",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Oben genanntes, und sie können Nutzer vom Server bannen",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Wie Moderatoren, nur wird verdeutlicht, dass der Nutzer ein Bot ist",
-		"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties": "&amp; <strong>Global Leader</strong> - Oben genanntes, und sie können bis zu Global Moderator befördern und in Kämpfen ein Unentschieden erzwingen",
-		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "~ <strong>Global Administrator</strong> - Sie können alles tun, zum Beispiel den Text dieser Nachricht ändern",
+		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Sie können alles tun, zum Beispiel den Text dieser Nachricht ändern",
 
 		"<strong>Room ranks</strong>": "<strong>Raum-Ränge</strong>",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Sie können ! Befehle wie !groups benutzen",
@@ -36,9 +35,9 @@
 		"DATA COMMANDS": "DATENBEFEHLE",
 		"DRIVER COMMANDS": "BEFEHLE FÜR DRIVER",
 		"MODERATOR COMMANDS": "BEFEHLE FÜR MODERATOREN",
-		"LEADER COMMANDS": "BEFEHLE FÜR LEADER",
+		"ADMIN COMMANDS": "BEFEHLE FÜR ADMINISTRATOREN",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)": "(ersetze / mit ! , um einen Befehl für alle Nutzer im Chat sichtbar zu machen. Dies setzt + % @ # & oder ~ voraus)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(ersetze / mit ! , um einen Befehl für alle Nutzer im Chat sichtbar zu machen. Dies setzt + % @ # oder & voraus)",
 
 		"<strong>Room punishments</strong>:": "<strong>Raumstrafen</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - &Ouml;ffnet ein Fenster mit den Regeln.",

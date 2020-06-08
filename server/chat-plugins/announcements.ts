@@ -74,7 +74,7 @@ export const commands: ChatCommands = {
 			this.modlog('ANNOUNCEMENT');
 			return this.privateModAction(`(An announcement was started by ${user.name}.)`);
 		},
-		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # & ~`],
+		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # &`],
 
 		timer(target, room, user) {
 			if (!room.minorActivity || room.minorActivity.activityId !== 'announcement') {
@@ -112,8 +112,8 @@ export const commands: ChatCommands = {
 			}
 		},
 		timerhelp: [
-			`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes] minutes. Requires: % @ # & ~`,
-			`/announcement timer clear - Clears the announcement's timer. Requires: % @ # & ~`,
+			`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes] minutes. Requires: % @ # &`,
+			`/announcement timer clear - Clears the announcement's timer. Requires: % @ # &`,
 		],
 
 		close: 'end',
@@ -132,7 +132,7 @@ export const commands: ChatCommands = {
 			this.modlog('ANNOUNCEMENT END');
 			return this.privateModAction(`(The announcement was ended by ${user.name}.)`);
 		},
-		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # & ~`],
+		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
 
 		show: 'display',
 		display(target, room, user, connection) {
@@ -158,11 +158,11 @@ export const commands: ChatCommands = {
 	announcementhelp: [
 		`/announcement allows rooms to run their own announcements. These announcements are limited to one announcement at a time per room.`,
 		`Accepts the following commands:`,
-		`/announcement create [announcement] - Creates a announcement. Requires: % @ # & ~`,
-		`/announcement htmlcreate [announcement] - Creates a announcement, with HTML allowed. Requires: # & ~`,
-		`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes]. Requires: % @ # & ~`,
+		`/announcement create [announcement] - Creates a announcement. Requires: % @ # &`,
+		`/announcement htmlcreate [announcement] - Creates a announcement, with HTML allowed. Requires: # &`,
+		`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes]. Requires: % @ # &`,
 		`/announcement display - Displays the announcement`,
-		`/announcement end - Ends a announcement. Requires: % @ # & ~`,
+		`/announcement end - Ends a announcement. Requires: % @ # &`,
 	],
 };
 
