@@ -1,3 +1,20 @@
+/**
+ * Utils library
+ *
+ * Miscellaneous utility functions that don't really have a better place.
+ *
+ * It'll always be a judgment call whether or not a function goes into a
+ * "catch-all" library like this, so here are some guidelines:
+ *
+ * - It must not have any dependencies
+ *
+ * - It must conceivably have a use in a wide variety of projects, not just
+ *   Pokémon (if it's Pokémon-specific, Dex is probably a good place for it)
+ *
+ * - A lot of Chat functions are kind of iffy, but I'm going to say for now
+ *   that if it's English-specific, it should be left out of here.
+ */
+
 type Comparable = number | string | boolean | Comparable[] | {reverse: Comparable};
 
 export const Utils = new class Utils {
