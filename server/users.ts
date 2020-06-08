@@ -186,12 +186,10 @@ function isUsernameKnown(name: string) {
 	return false;
 }
 
-function isTrusted(name: string | User) {
-	if ((name as User).trusted) return (name as User).trusted;
-	const userid = toID(name);
+function isTrusted(userid: ID) {
 	if (globalAuth.has(userid)) return userid;
 	for (const room of Rooms.global.chatRooms) {
-		if (!room.settings.isPrivate && !room.settings.isPersonal && room.auth.isStaff(userid)) {
+		if (room.persist && room.settings.isPrivate !== true && room.auth.isStaff(userid)) {
 			return userid;
 		}
 	}
