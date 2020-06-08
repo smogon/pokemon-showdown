@@ -38,7 +38,7 @@
 		"DATA COMMANDS": "数据指令",
 		"DRIVER COMMANDS": "见习管理指令",
 		"MODERATOR COMMANDS": "管理员指令",
-		"ADMIN COMMANDS": "领袖指令",
+		"ADMIN COMMANDS": "总管指令",
 
 		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(把/换成!就可以广播指令。广播功能需要：+ % @ # &)",
 

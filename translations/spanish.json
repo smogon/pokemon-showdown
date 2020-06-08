@@ -38,7 +38,7 @@
 		"DATA COMMANDS": "COMANDOS DE DATOS",
 		"DRIVER COMMANDS": "COMANDOS DE DRIVER",
 		"MODERATOR COMMANDS": "COMANDOS DE MODERATOR",
-		"ADMIN COMMANDS": "COMANDOS DE LEADER",
+		"ADMIN COMMANDS": "COMANDOS DE ADMINISTRATOR",
 
 		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(sustituye / con ! para hacer público un comando. Esto requiere: + % @ # &)",
 

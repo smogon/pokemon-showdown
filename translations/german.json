@@ -35,7 +35,7 @@
 		"DATA COMMANDS": "DATENBEFEHLE",
 		"DRIVER COMMANDS": "BEFEHLE FÜR DRIVER",
 		"MODERATOR COMMANDS": "BEFEHLE FÜR MODERATOREN",
-		"ADMIN COMMANDS": "BEFEHLE FÜR LEADER",
+		"ADMIN COMMANDS": "BEFEHLE FÜR ADMINISTRATOREN",
 
 		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(ersetze / mit ! , um einen Befehl für alle Nutzer im Chat sichtbar zu machen. Dies setzt + % @ # oder & voraus)",
 

@@ -38,7 +38,7 @@
 		"DATA COMMANDS": "ポケモンデータコマンド",
 		"DRIVER COMMANDS": "ドライバー（％）コマンド",
 		"MODERATOR COMMANDS": "モデレーター（＠）コマンド",
-		"ADMIN COMMANDS": "リーダー（＆）コマンド",
+		"ADMIN COMMANDS": "アドミニストレーター（＆）コマンド",
 
 		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "（「/」の代わりに「!」を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & の権限が必要です。）",
 
