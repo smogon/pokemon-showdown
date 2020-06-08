@@ -9,6 +9,7 @@
  */
 
 import {FS} from '../../lib/fs';
+import {Utils} from '../../lib/utils';
 import {ScavMods, TwistEvent} from './scavenger-games.js';
 import {ChatHandler} from '../chat';
 
@@ -242,7 +243,7 @@ function formatQueue(queue: QueuedHunt[] | null, viewer: User, room: ChatRoom | 
 			const unratedText = item.gameType === 'unrated' ?
 				'<span style="color: blue; font-style: italic">[Unrated]</span> ' :
 				'';
-			const hosts = Chat.escapeHTML(Chat.toListString(item.hosts.map(h => h.name)));
+			const hosts = Utils.escapeHTML(Chat.toListString(item.hosts.map(h => h.name)));
 			const queuedBy = item.hosts.every(h => h.id !== item.staffHostId) ? ` / ${item.staffHostId}` : '';
 			let questions;
 			if (!broadcasting && (item.hosts.some(h => h.id === viewer.id) || viewer.id === item.staffHostId)) {
@@ -250,10 +251,10 @@ function formatQueue(queue: QueuedHunt[] | null, viewer: User, room: ChatRoom | 
 					(q, i) => {
 						if (i % 2) {
 							q = q as string[];
-							return Chat.html`<span style="color: green"><em>[${q.join(' / ')}]</em></span><br />`;
+							return Utils.html`<span style="color: green"><em>[${q.join(' / ')}]</em></span><br />`;
 						} else {
 							q = q as string;
-							return Chat.escapeHTML(q);
+							return Utils.escapeHTML(q);
 						}
 					}
 				).join(" ");
@@ -475,10 +476,10 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		const message = this.runEvent('CreateCallback');
 		if (message) return message;
 
-		const hosts = Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)));
+		const hosts = Utils.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)));
 		const staffHost = this.hosts.some(h => h.id === this.staffHostId) ?
 			`` :
-			Chat.html` by <em>${this.staffHostName}</em>`;
+			Utils.html` by <em>${this.staffHostName}</em>`;
 
 		const article = ['official', 'unrated'].includes(this.gameType) && !newHunt ? 'An' : 'A';
 		const huntType = `${article} ${newHunt ? 'new ' : ''}${this.gameType}`;
@@ -680,7 +681,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	forceWrap(answer: string) {
-		return Chat.escapeHTML(answer.replace(/[^\s]{30,}/g, word => {
+		return Utils.escapeHTML(answer.replace(/[^\s]{30,}/g, word => {
 			let lastBreak = 0;
 			let brokenWord = '';
 			for (let i = 1; i < word.length; i++) {
@@ -746,7 +747,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 		const place = formatOrder(this.completed.length);
 
 		this.runEvent('ConfirmCompletion', player, time, blitz);
-		this.announce(Chat.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
+		this.announce(Utils.html`<em>${result.name}</em> has finished the hunt in ${place} place! (${time}${(blitz ? " - BLITZ" : "")})`);
 
 		player.destroy(); // remove from user.games;
 	}
@@ -774,9 +775,9 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			const sliceIndex = this.gameType === 'official' ? 5 : 3;
 
 			this.announce(
-				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt was ended ${(endedBy ? "by " + Chat.escapeHTML(endedBy.name) : "automatically")}.<br />` +
-				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Chat.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Chat.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
-				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Chat.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
+				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
+				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
+				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
 			);
 
 			// give points for winning and blitzes in official games
@@ -1188,7 +1189,7 @@ const ScavengerCommands: ChatCommands = {
 			if (!rank) {
 				this.sendReplyBox(`User '${targetId}' does not have any points on the scavenger games leaderboard.`);
 			} else {
-				this.sendReplyBox(Chat.html`User '${rank.name}' is #${rank.rank} on the scavenger games leaderboard with ${rank.points} points.`);
+				this.sendReplyBox(Utils.html`User '${rank.name}' is #${rank.rank} on the scavenger games leaderboard with ${rank.points} points.`);
 			}
 			if (this.broadcasting) room.update();
 		},
@@ -1210,7 +1211,7 @@ const ScavengerCommands: ChatCommands = {
 			if (game.getPlayerTeam(leaderUser)) return this.errorReply('The user is already a member of another team.');
 
 			game.teams[teamName] = {name: teamName, answers: [], players: [leaderUser.id], question: 1, completed: false};
-			game.announce(Chat.html`A new team "${teamName}" has been created with ${leaderUser.name} as the leader.`);
+			game.announce(Utils.html`A new team "${teamName}" has been created with ${leaderUser.name} as the leader.`);
 		},
 
 		deleteteam: 'removeteam',
@@ -1224,7 +1225,7 @@ const ScavengerCommands: ChatCommands = {
 			if (!game.teams[target]) return this.errorReply(`The team ${target} does not exist.`);
 
 			delete game.teams[target];
-			game.announce(Chat.html`The team "${target}" has been removed.`);
+			game.announce(Utils.html`The team "${target}" has been removed.`);
 		},
 
 		addplayer(target, room, user) {
@@ -1258,7 +1259,7 @@ const ScavengerCommands: ChatCommands = {
 			for (const targetUser of targetUsers) {
 				targetUser.sendTo(room, `You have joined ${userTeam.name}.`);
 			}
-			game.announce(Chat.html`${Chat.toListString(targetUsers.map(u => u.name))} ${targetUsers.length > 1 ? 'have' : 'has'} been added into ${userTeam.name}.`);
+			game.announce(Utils.html`${Chat.toListString(targetUsers.map(u => u.name))} ${targetUsers.length > 1 ? 'have' : 'has'} been added into ${userTeam.name}.`);
 		},
 
 		editplayers(target, room, user) {
@@ -1318,7 +1319,7 @@ const ScavengerCommands: ChatCommands = {
 			const display = [];
 			for (const teamID in game.teams) {
 				const team = game.teams[teamID];
-				display.push(Chat.html`<strong>${team.name}</strong> - <strong>${team.players[0]}</strong>${team.players.length > 1 ? ', ' + team.players.slice(1).join(', ') : ''}`);
+				display.push(Utils.html`<strong>${team.name}</strong> - <strong>${team.players[0]}</strong>${team.players.length > 1 ? ', ' + team.players.slice(1).join(', ') : ''}`);
 			}
 
 			this.sendReplyBox(display.join('<br />'));
@@ -1331,7 +1332,7 @@ const ScavengerCommands: ChatCommands = {
 			const team = game.getPlayerTeam(user);
 			if (!team) return this.errorReply('You are not currently part of this Team Scavs game.');
 
-			this.sendReplyBox(Chat.html`<strong>Question #${team.question} guesses:</strong> ${team.answers.sort().join(', ')}`);
+			this.sendReplyBox(Utils.html`<strong>Question #${team.question} guesses:</strong> ${team.answers.sort().join(', ')}`);
 		},
 
 		chat: 'note',
@@ -1344,7 +1345,7 @@ const ScavengerCommands: ChatCommands = {
 
 			if (!target) return this.errorReply('Please include a message as the note.');
 
-			game.teamAnnounce(user, Chat.html`<strong> Note from ${user.name}:</strong> ${target}`);
+			game.teamAnnounce(user, Utils.html`<strong> Note from ${user.name}:</strong> ${target}`);
 		},
 	},
 	teamscavshelp: [
@@ -1453,8 +1454,8 @@ const ScavengerCommands: ChatCommands = {
 		const elapsedMsg = Chat.toDurationString(Date.now() - game.startTime, {hhmmss: true});
 		const gameTypeMsg = game.gameType ? `<em>${game.gameType}</em> ` : '';
 		const hostersMsg = Chat.toListString(game.hosts.map(h => h.name));
-		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ? '' : Chat.html` (started by - ${game.staffHostName})`;
-		const finishers = Chat.html`${game.completed.map(u => u.name).join(', ')}`;
+		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ? '' : Utils.html` (started by - ${game.staffHostName})`;
+		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
 		const buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 
 		if (game.hosts.some(h => h.id === user.id) || game.staffHostId === user.id) {
@@ -1468,13 +1469,13 @@ const ScavengerCommands: ChatCommands = {
 					str += `<tr><td>${questionNum}</td><td>`;
 					str += players.map(
 						pl => pl.lastGuess > Date.now() - 1000 * 300 ?
-							Chat.html`<strong>${pl.name}</strong>` :
-							Chat.escapeHTML(pl.name)
+							Utils.html`<strong>${pl.name}</strong>` :
+							Utils.escapeHTML(pl.name)
 					).join(", ");
 				}
 			}
 			const completed: AnyObject[] = game.preCompleted ? game.preCompleted : game.completed;
-			str += Chat.html`<tr><td>Completed</td><td>${completed.length ? completed.map(pl => pl.name).join(", ") : 'None'}`;
+			str += Utils.html`<tr><td>Completed</td><td>${completed.length ? completed.map(pl => pl.name).join(", ") : 'None'}`;
 			return this.sendReply(`|raw|${str}</table></div>${buffer}`);
 		}
 		this.sendReply(`|raw|${buffer}`);
@@ -1901,7 +1902,7 @@ const ScavengerCommands: ChatCommands = {
 			`|uhtml${isChange ? 'change' : ''}|scavladder|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
 				const isStaff = room.auth && room.auth[toID(entry.name)];
 				if (isStaff && hideStaff) return '';
-				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Chat.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Chat.escapeHTML(entry.name)}</strong>` : Chat.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
+				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Utils.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Utils.escapeHTML(entry.name)}</strong>` : Utils.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
 			}).join('')}</table></div>` +
 			`<div style="text-align: center"><button class="button" name="send" value="/scav top ${hideStaff ?
 				'yes' :
@@ -1924,7 +1925,7 @@ const ScavengerCommands: ChatCommands = {
 		if (!rank) {
 			this.sendReplyBox(`User '${targetId}' does not have any points on the scavengers leaderboard.`);
 		} else {
-			this.sendReplyBox(Chat.html`User '${rank.name}' is #${rank.rank} on the scavengers leaderboard with ${rank.points} points.`);
+			this.sendReplyBox(Utils.html`User '${rank.name}' is #${rank.rank} on the scavengers leaderboard with ${rank.points} points.`);
 		}
 		if (this.broadcasting) room.update();
 	},
@@ -2116,7 +2117,7 @@ const ScavengerCommands: ChatCommands = {
 		let buffer = `<table><tr><th>Twist</th><th>Description</th></tr>`;
 		buffer += Object.keys(ScavMods.twists).map(twistid => {
 			const twist = ScavMods.twists[twistid];
-			return Chat.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`;
+			return Utils.html`<tr><td style="padding: 5px;">${twist.name}</td><td style="padding: 5px;">${twist.desc}</td></tr>`;
 		}).join('');
 		buffer += `</table>`;
 
@@ -2162,7 +2163,7 @@ const ScavengerCommands: ChatCommands = {
 					Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
 				const color = room.auth && userid in room.auth ? 'inherit' : 'gray';
 
-				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
+				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Utils.escapeHTML(entry.name)}</td>` +
 					`<td style="text-align: right;">${(entry.points || 0)}</td>` +
 					`<td style="text-align: right;">${(entry['cumulative-points'] || 0)}</td>` +
 					`<td style="text-align: left;">${entry['history-points'] ? `<span style="color: gray">{ ${entry['history-points'].join(', ')} }</span>` : ''}</td>` +
@@ -2214,7 +2215,7 @@ const ScavengerCommands: ChatCommands = {
 					Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
 				const color = room.auth && userid in room.auth ? 'inherit' : 'gray';
 
-				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
+				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Utils.escapeHTML(entry.name)}</td>` +
 					`<td style="text-align: right;">${(entry.finish || 0)} <span style="color: blue">(${(entry['cumulative-finish'] || 0)})</span>${(entry['history-finish'] ? `<br /><span style="color: gray">(History: ${entry['history-finish'].join(', ')})</span>` : '')}</td>` +
 					`<td style="text-align: right;">${(entry.join || 0)} <span style="color: blue">(${(entry['cumulative-join'] || 0)})</span>${(entry['history-join'] ? `<br /><span style="color: gray">(History: ${entry['history-join'].join(', ')})</span>` : '')}</td>` +
 					`<td style="text-align: right;">${entry.ratio}%<br /><span style="color: blue">(${(entry['cumulative-ratio'] || "0.00")}%)</span></td>` +
@@ -2291,7 +2292,7 @@ const ScavengerCommands: ChatCommands = {
 		}
 
 		let cmd;
-		[cmd, target] = Chat.splitFirst(target, ' ');
+		[cmd, target] = Utils.splitFirst(target, ' ');
 		cmd = toID(cmd);
 
 		if (!['addhunt', 'list', 'removehunt', 'addhint', 'removehint', 'autostart'].includes(cmd)) {

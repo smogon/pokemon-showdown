@@ -1,3 +1,5 @@
+import {Utils} from '../../lib/utils';
+
 interface MafiaData {
 	// keys for all of these are IDs
 	alignments: {[k: string]: MafiaDataAlignment};
@@ -213,7 +215,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user: User, game: MafiaTracker) {
 		super(user, game);
 		this.game = game;
-		this.safeName = Chat.escapeHTML(this.name);
+		this.safeName = Utils.escapeHTML(this.name);
 		this.role = null;
 		this.lynching = '';
 		this.hammerRestriction = null;
@@ -302,7 +304,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.theme = null;
 
 		this.hostid = host.id;
-		this.host = Chat.escapeHTML(host.name);
+		this.host = Utils.escapeHTML(host.name);
 		this.cohosts = [];
 
 		this.playerTable = Object.create(null);
@@ -424,7 +426,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.originalRoles = roles.map(r => {
 				return {
 					name: r,
-					safeName: Chat.escapeHTML(r),
+					safeName: Utils.escapeHTML(r),
 					id: toID(r),
 					alignment: 'solo',
 					image: '',
@@ -489,7 +491,7 @@ class MafiaTracker extends Rooms.RoomGame {
 
 		const role = {
 			name: roleName,
-			safeName: Chat.escapeHTML(roleName),
+			safeName: Utils.escapeHTML(roleName),
 			id: toID(roleName),
 			image: '',
 			memo: ['During the Day, you may vote for whomever you want lynched.'],
@@ -726,7 +728,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		player.lastLynch = Date.now();
 		if (this.getHammerValue(target) <= lynch.trueCount) {
 			// HAMMER
-			this.sendDeclare(`Hammer! ${target === 'nolynch' ? 'Nobody' : Chat.escapeHTML(name)} was lynched!`);
+			this.sendDeclare(`Hammer! ${target === 'nolynch' ? 'Nobody' : Utils.escapeHTML(name)} was lynched!`);
 			this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
 			if (target !== 'nolynch') this.eliminate(this.playerTable[target], 'kill');
 			this.night(true);
@@ -1081,7 +1083,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 			if (this.subs.includes(targetUser.id)) this.subs.splice(this.subs.indexOf(targetUser.id), 1);
 			this.playerTable[targetUser.id] = player;
-			this.sendDeclare(Chat.html`${targetUser.name} has been added to the game by ${user.name}!`);
+			this.sendDeclare(Utils.html`${targetUser.name} has been added to the game by ${user.name}!`);
 		}
 		this.playerCount++;
 		this.updateRoleString();
@@ -1211,7 +1213,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.roles = [];
 		this.roleString = '';
 
-		const roles = Chat.stripHTML(rolesString);
+		const roles = Utils.stripHTML(rolesString);
 		let roleList = roles.split('\n');
 		if (roleList.length === 1) {
 			roleList = roles.split(',').map(r => r.trim());
@@ -1377,7 +1379,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				roleName = role.join('; ');
 				player.role = {
 					name: roleName,
-					safeName: Chat.escapeHTML(roleName),
+					safeName: Utils.escapeHTML(roleName),
 					id: toID(roleName),
 					alignment: 'solo',
 					memo: [`(Your role was set from an IDEA.)`],
@@ -2246,7 +2248,7 @@ export const commands: ChatCommands = {
 			if (game.phase !== 'locked' && game.phase !== 'IDEAlocked') {
 				return this.errorReply(`You need to close the signups first.`);
 			}
-			const [options, roles] = Chat.splitFirst(target, '\n');
+			const [options, roles] = Utils.splitFirst(target, '\n');
 			if (!options || !roles) return this.parse('/help mafia idea');
 			const [choicesStr, ...picks] = options.split(',').map(x => x.trim());
 			const choices = parseInt(choicesStr);
@@ -3070,7 +3072,7 @@ export const commands: ChatCommands = {
 			}
 			if (cmd.includes('cohost')) {
 				game.cohosts.push(targetUser.id);
-				game.sendDeclare(Chat.html`${targetUser.name} has been added as a cohost by ${user.name}`);
+				game.sendDeclare(Utils.html`${targetUser.name} has been added as a cohost by ${user.name}`);
 				for (const conn of targetUser.connections) {
 					void Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
@@ -3082,13 +3084,13 @@ export const commands: ChatCommands = {
 				if (game.subs.includes(targetUser.id)) game.subs.splice(game.subs.indexOf(targetUser.id), 1);
 				const queueIndex = hostQueue.indexOf(targetUser.id);
 				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
-				game.host = Chat.escapeHTML(targetUser.name);
+				game.host = Utils.escapeHTML(targetUser.name);
 				game.hostid = targetUser.id;
 				game.played.push(targetUser.id);
 				for (const conn of targetUser.connections) {
 					void Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
-				game.sendDeclare(Chat.html`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`);
+				game.sendDeclare(Utils.html`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`);
 				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
 			}
 		},
@@ -3114,7 +3116,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`${target} is not a cohost.`);
 			}
 			game.cohosts.splice(cohostIndex, 1);
-			game.sendDeclare(Chat.html`${target} was removed as a cohost by ${user.name}`);
+			game.sendDeclare(Utils.html`${target} was removed as a cohost by ${user.name}`);
 			this.modlog('MAFIAUNCOHOST', target, null, {noalts: true, noip: true});
 		},
 
@@ -3482,7 +3484,7 @@ export const commands: ChatCommands = {
 			const uniqueRoles = new Set<string>();
 
 			for (const rolelist of rolelists) {
-				const [players, roles] = Chat.splitFirst(rolelist, ':', 2).map(e => e.trim());
+				const [players, roles] = Utils.splitFirst(rolelist, ':', 2).map(e => e.trim());
 				const playersNum = parseInt(players);
 
 				for (const role of roles.split(',')) {

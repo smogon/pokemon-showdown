@@ -8,6 +8,7 @@
  */
 
 import {FS} from '../lib/fs';
+import {Utils} from '../lib/utils';
 
 /**
  * Most rooms have three logs:
@@ -230,7 +231,7 @@ export class Roomlog {
 		const messageStart = this.logTimes ? '|c:|' : '|c|';
 		const section = this.logTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 		if (line.startsWith(messageStart)) {
-			const parts = Chat.splitFirst(line, '|', section);
+			const parts = Utils.splitFirst(line, '|', section);
 			return {user: parts[section - 1], message: parts[section]};
 		}
 	}

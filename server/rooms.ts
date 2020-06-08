@@ -26,6 +26,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 const RETRY_AFTER_LOGIN = null;
 
 import {FS} from '../lib/fs';
+import {Utils} from '../lib/utils';
 import {WriteStream} from '../lib/streams';
 import {GTSGiveaway, LotteryGiveaway, QuestionGiveaway} from './chat-plugins/wifi';
 import {QueuedHunt} from './chat-plugins/scavengers';
@@ -965,7 +966,7 @@ export class GlobalRoom extends BasicRoom {
 		if (this.lockdown && err) return;
 		const devRoom = Rooms.get('development');
 		// @ts-ignore
-		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
+		const stack = (err ? Utils.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
 			if (id === 'global') continue;
 			if (err) {
@@ -1047,7 +1048,7 @@ export class GlobalRoom extends BasicRoom {
 		}
 		this.lastReportedCrash = time;
 		// @ts-ignore
-		const stackLines = (err ? Chat.escapeHTML(err.stack).split(`\n`) : []);
+		const stackLines = (err ? Utils.escapeHTML(err.stack).split(`\n`) : []);
 		const stack = stackLines.slice(1).join(`<br />`);
 
 		let crashMessage = `|html|<div class="broadcast-red"><details class="readmore"><summary><b>${crasher} crashed:</b> ${stackLines[0]}</summary>${stack}</details></div>`;
@@ -1305,7 +1306,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.roomlog(entry);
 	}
 	getIntroMessage(user: User) {
-		let message = Chat.html`\n|raw|<div class="infobox"> You joined ${this.title}`;
+		let message = Utils.html`\n|raw|<div class="infobox"> You joined ${this.title}`;
 		if (this.modchat) {
 			message += ` [${this.modchat} or higher to talk]`;
 		}
