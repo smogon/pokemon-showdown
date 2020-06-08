@@ -839,7 +839,7 @@ export class CommandContext extends MessageContext {
 			const lockType = (user.namelocked ? this.tr(`namelocked`) : user.locked ? this.tr(`locked`) : ``);
 			const lockExpiration = Punishments.checkLockExpiration(user.namelocked || user.locked);
 			if (room) {
-				if (lockType && !room.isHelp) {
+				if (lockType && !room.settings.isHelp) {
 					this.errorReply(this.tr `You are ${lockType} and can't talk in chat. ${lockExpiration}`);
 					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">${this.tr("Get help with this")}</a>`);
 					return null;
@@ -952,7 +952,7 @@ export class CommandContext extends MessageContext {
 				if (!domain || !host) return null;
 				return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
 			});
-			if (!allLinksWhitelisted && !(targetUser?.can('lock') || room?.isHelp)) {
+			if (!allLinksWhitelisted && !(targetUser?.can('lock') || room?.settings.isHelp)) {
 				this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
 				return null;
 			}
@@ -1117,7 +1117,7 @@ export class CommandContext extends MessageContext {
 				}
 
 				if (tagName === 'img') {
-					if (this.room.isPersonal && !this.user.can('announce')) {
+					if (this.room.settings.isPersonal && !this.user.can('announce')) {
 						this.errorReply(`This tag is not allowed: <${tagContent}>`);
 						this.errorReply(`Images are not allowed in personal rooms.`);
 						return null;
@@ -1141,7 +1141,7 @@ export class CommandContext extends MessageContext {
 					}
 				}
 				if (tagName === 'button') {
-					if ((this.room.isPersonal || this.room.settings.isPrivate === true) && !this.user.can('lock')) {
+					if ((this.room.settings.isPersonal || this.room.settings.isPrivate === true) && !this.user.can('lock')) {
 						const buttonName = / name ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						const buttonValue = / value ?= ?"([^"]*)"/i.exec(tagContent)?.[1];
 						if (buttonName === 'send' && buttonValue?.startsWith('/msg ')) {

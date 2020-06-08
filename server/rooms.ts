@@ -71,10 +71,6 @@ export interface RoomSettings {
 	aliases?: string[];
 	banwords?: string[];
 	isPrivate?: boolean | 'hidden' | 'voice';
-	reportJoins?: boolean;
-	batchJoins?: number;
-	reportJoinsInterval?: NodeJS.Timer | null;
-	logTimes?: boolean;
 	modjoin?: string | true | null;
 	modchat?: string | null;
 	staffRoom?: boolean;
@@ -107,6 +103,13 @@ export interface RoomSettings {
 
 	scavSettings?: AnyObject;
 	scavQueue?: QueuedHunt[];
+
+	// should not ever be saved because they're inapplicable to persistent rooms
+	isPersonal?: boolean;
+	isHelp?: boolean;
+	noLogTimes?: boolean;
+	noAutoTruncate?: boolean;
+	isMultichannel?: boolean;
 }
 export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').Poll;
@@ -159,9 +162,11 @@ export abstract class BasicRoom {
 	scavgame: ScavengerGameTemplate | null;
 	scavLeaderboard: AnyObject;
 	hideReplay: boolean;
-	isPersonal: boolean;
-	isHelp: boolean;
 	auth: RoomAuth;
+
+	reportJoins: boolean;
+	batchJoins: number;
+	reportJoinsInterval: NodeJS.Timer | null;
 
 	constructor(roomid: RoomID, title?: string) {
 		this.users = Object.create(null);
@@ -196,12 +201,14 @@ export abstract class BasicRoom {
 		};
 		this.persist = false;
 		this.hideReplay = false;
-		this.isPersonal = false;
-		this.isHelp = false;
 		this.subRooms = new Map();
 		this.scavgame = null;
 		this.scavLeaderboard = {};
 		this.auth = new RoomAuth(this);
+
+		this.reportJoins = true;
+		this.batchJoins = 0;
+		this.reportJoinsInterval = null;
 	}
 
 	/**
@@ -416,7 +423,9 @@ export abstract class BasicRoom {
 
 		user.updateIdentity();
 
-		if (!(this.settings.isPrivate === true || this.isPersonal || this.battle)) Punishments.monitorRoomPunishments(user);
+		if (!(this.settings.isPrivate === true || this.settings.isPersonal || this.battle)) {
+			Punishments.monitorRoomPunishments(user);
+		}
 
 		return userid;
 	}
@@ -1045,7 +1054,7 @@ export class GlobalRoom extends BasicRoom {
 		const roomauth = [];
 		for (const [id, curRoom] of Rooms.rooms) {
 			if (id === 'global' || !curRoom.persist) continue;
-			if (curRoom.isPersonal && curRoom.auth.get(userid) === Users.HOST_SYMBOL) {
+			if (curRoom.settings.isPersonal && curRoom.auth.get(userid) === Users.HOST_SYMBOL) {
 				curRoom.destroy();
 			} else {
 				if (curRoom.settings.isPrivate || curRoom.battle || !curRoom.persist) {
@@ -1085,17 +1094,18 @@ export class BasicChatRoom extends BasicRoom {
 	game: RoomGame | null;
 	battle: RoomBattle | null;
 	tour: Tournament | null;
-	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
-		super(roomid, title);
-		title = this.title;
 
-		if (options.logTimes === undefined) options.logTimes = true;
-		if (options.autoTruncate === undefined) options.autoTruncate = !options.isHelp;
-		if (options.reportJoins === undefined) {
-			options.reportJoins = !!Config.reportjoins || options.isPersonal;
-		}
-		if (options.batchJoins === undefined) {
-			options.batchJoins = options.isPersonal ? 0 : Config.reportjoinsperiod || 0;
+	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> = {}) {
+		super(roomid, title);
+
+		options.title = this.title;
+		if (options.isHelp) options.noAutoTruncate = true;
+		this.reportJoins = !!(Config.reportjoins || options.isPersonal);
+		this.batchJoins = options.isPersonal ? 0 : Config.reportjoinsperiod || 0;
+		if (options.auth) {
+			Object.setPrototypeOf(options.auth, null);
+		} else {
+			options.auth = Object.create(null);
 		}
 		this.log = Roomlogs.create(this, options);
 
@@ -1106,11 +1116,8 @@ export class BasicChatRoom extends BasicRoom {
 		this.banwordRegex = null;
 		this.subRooms = new Map();
 
-		Object.assign(this.settings, options);
-		if (options.auth) {
-			Object.setPrototypeOf(this.settings.auth, null);
-			this.auth.load();
-		}
+		this.settings = options as RoomSettings;
+		this.auth.load();
 
 		if (!options.isPersonal) this.persist = true;
 
@@ -1141,7 +1148,7 @@ export class BasicChatRoom extends BasicRoom {
 		}
 
 		this.userList = '';
-		if (this.settings.batchJoins) {
+		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
 		this.tour = null;
@@ -1205,9 +1212,9 @@ export class BasicChatRoom extends BasicRoom {
 
 	update() {
 		if (!this.log.broadcastBuffer) return;
-		if (this.settings.reportJoinsInterval) {
-			clearInterval(this.settings.reportJoinsInterval);
-			this.settings.reportJoinsInterval = null;
+		if (this.reportJoinsInterval) {
+			clearInterval(this.reportJoinsInterval);
+			this.reportJoinsInterval = null;
 			this.userList = this.getUserList();
 		}
 		this.send(this.log.broadcastBuffer);
@@ -1218,7 +1225,7 @@ export class BasicChatRoom extends BasicRoom {
 	}
 	pokeExpireTimer() {
 		if (this.expireTimer) clearTimeout(this.expireTimer);
-		if (this.isPersonal || this.isHelp) {
+		if (this.settings.isPersonal || this.settings.isHelp) {
 			this.expireTimer = setTimeout(() => this.expire(), TIMEOUT_INACTIVE_DEALLOCATE);
 		} else {
 			this.expireTimer = null;
@@ -1229,7 +1236,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.destroy();
 	}
 	reportJoin(type: 'j' | 'l' | 'n', entry: string, user: User) {
-		let reportJoins = this.settings.reportJoins;
+		let reportJoins = this.reportJoins;
 		if (reportJoins && this.settings.modchat && !user.authAtLeast(this.settings.modchat, this)) {
 			reportJoins = false;
 		}
@@ -1244,12 +1251,12 @@ export class BasicChatRoom extends BasicRoom {
 		case 'n': ucType = 'N'; break;
 		}
 		entry = `|${ucType}|${entry}`;
-		if (this.settings.batchJoins) {
+		if (this.batchJoins) {
 			this.log.broadcastBuffer += entry;
 
-			if (!this.settings.reportJoinsInterval) {
-				this.settings.reportJoinsInterval = setTimeout(
-					() => this.update(), this.settings.batchJoins
+			if (!this.reportJoinsInterval) {
+				this.reportJoinsInterval = setTimeout(
+					() => this.update(), this.batchJoins
 				);
 			}
 		} else {
@@ -1479,10 +1486,10 @@ export class BasicChatRoom extends BasicRoom {
 			clearTimeout(this.expireTimer);
 			this.expireTimer = null;
 		}
-		if (this.settings.reportJoinsInterval) {
-			clearInterval(this.settings.reportJoinsInterval);
+		if (this.reportJoinsInterval) {
+			clearInterval(this.reportJoinsInterval);
 		}
-		this.settings.reportJoinsInterval = null;
+		this.reportJoinsInterval = null;
 		if (this.logUserStatsInterval) {
 			clearInterval(this.logUserStatsInterval);
 		}
@@ -1525,9 +1532,9 @@ export class GameRoom extends BasicChatRoom {
 	game: RoomGame;
 	modchatUser: string;
 	active: boolean;
-	constructor(roomid: RoomID, title?: string, options: AnyObject = {}) {
-		options.logTimes = false;
-		options.autoTruncate = false;
+	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> & AnyObject = {}) {
+		options.noLogTimes = true;
+		options.noAutoTruncate = true;
 		options.isMultichannel = true;
 		options.reportJoins = !!Config.reportbattlejoins;
 		options.batchJoins = 0;

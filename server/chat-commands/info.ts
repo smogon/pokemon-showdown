@@ -2417,7 +2417,7 @@ export const commands: ChatCommands = {
 	showimage(target, room, user) {
 		if (!target) return this.parse('/help showimage');
 		if (!this.can('declare', null, room)) return false;
-		if (this.room.isPersonal && !this.user.can('announce')) {
+		if (this.room.settings.isPersonal && !this.user.can('announce')) {
 			return this.errorReply(`Images are not allowed in personal rooms.`);
 		}
 

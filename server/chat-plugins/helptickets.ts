@@ -503,7 +503,7 @@ function checkTicketBanned(user: User) {
 
 // Prevent a desynchronization issue when hotpatching
 for (const room of Rooms.rooms.values()) {
-	if (!room.isHelp || !room.game) continue;
+	if (!room.settings.isHelp || !room.game) continue;
 	const game = room.getGame(HelpTicket)!;
 	if (game.ticket) game.ticket = tickets[game.ticket.userid];
 }

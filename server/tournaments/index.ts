@@ -1560,7 +1560,7 @@ export const commands: ChatCommands = {
 			for (const tourRoom of Rooms.rooms.values()) {
 				const tournament = tourRoom.getGame(Tournament);
 				if (!tournament) continue;
-				if (tourRoom.settings.isPrivate || tourRoom.isPersonal || tourRoom.settings.staffRoom) continue;
+				if (tourRoom.settings.isPrivate || tourRoom.settings.isPersonal || tourRoom.settings.staffRoom) continue;
 				update.push({
 					room: tourRoom.roomid, title: room.title, format: tournament.name,
 					generator: tournament.generator.name, isStarted: tournament.isTournamentStarted,

@@ -174,7 +174,7 @@ export const commands: ChatCommands = {
 			const modjoinSetting = room.settings.modjoin === true ? "SYNC" : room.settings.modjoin || "OFF";
 			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
 		}
-		if (room.isPersonal) {
+		if (room.settings.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
 		} else if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
@@ -213,7 +213,7 @@ export const commands: ChatCommands = {
 			if (room.battle && !user.can('makeroom') && !'+%'.includes(target)) {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in battles.`);
 			}
-			if (room.isPersonal && !user.can('makeroom') && !'+%'.includes(target)) {
+			if (room.settings.isPersonal && !user.can('makeroom') && !'+%'.includes(target)) {
 				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in group chats.`);
 			}
 			if (room.settings.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
@@ -579,7 +579,7 @@ export const commands: ChatCommands = {
 				return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");
 			}
 			if (room.battle) return this.errorReply("You cannot create a subroom of a battle.");
-			if (room.isPersonal) return this.errorReply("You cannot create a subroom of a groupchat.");
+			if (room.settings.isPersonal) return this.errorReply("You cannot create a subroom of a groupchat.");
 		}
 		const parent = cmd === 'subroomgroupchat' ? room.roomid : null;
 		// if (!this.can('makegroupchat')) return false;
@@ -700,7 +700,7 @@ export const commands: ChatCommands = {
 		const roomid = target.trim();
 		if (!roomid) {
 			// allow deleting personal rooms without typing out the room name
-			if (!room.isPersonal || cmd !== "deletegroupchat") {
+			if (!room.settings.isPersonal || cmd !== "deletegroupchat") {
 				return this.parse(`/help deleteroom`);
 			}
 		} else {
@@ -710,7 +710,7 @@ export const commands: ChatCommands = {
 			}
 		}
 
-		if (room.isPersonal) {
+		if (room.settings.isPersonal) {
 			if (!this.can('gamemanagement', null, room)) return;
 		} else {
 			if (!this.can('makeroom')) return;
@@ -810,7 +810,7 @@ export const commands: ChatCommands = {
 	secretroom: 'privateroom',
 	publicroom: 'privateroom',
 	privateroom(target, room, user, connection, cmd) {
-		if (room.isPersonal) {
+		if (room.settings.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
 		} else if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
@@ -841,7 +841,7 @@ export const commands: ChatCommands = {
 			break;
 		}
 
-		if ((setting === true || room.settings.isPrivate === true) && !room.isPersonal) {
+		if ((setting === true || room.settings.isPrivate === true) && !room.settings.isPersonal) {
 			if (!this.can('makeroom')) return;
 		}
 
@@ -852,7 +852,7 @@ export const commands: ChatCommands = {
 			if (room.parent && room.parent.settings.isPrivate) {
 				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
 			}
-			if (room.isPersonal) return this.errorReply(`This room can't be made public.`);
+			if (room.settings.isPersonal) return this.errorReply(`This room can't be made public.`);
 			if (room.settings.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
 				if (!room.settings.privacySetter.has(user.id)) {
 					const privacySetters = [...room.settings.privacySetter].join(', ');
@@ -1193,7 +1193,7 @@ export const commands: ChatCommands = {
 		if (Rooms.get(alias) || Rooms.aliases.has(alias)) {
 			return this.errorReply("You cannot set an alias to an existing room or alias.");
 		}
-		if (room.isPersonal) return this.errorReply("Personal rooms can't have aliases.");
+		if (room.settings.isPersonal) return this.errorReply("Personal rooms can't have aliases.");
 
 		Rooms.aliases.set(alias, room.roomid);
 		this.privateModAction(`(${user.name} added the room alias '${alias}'.)`);
@@ -1313,13 +1313,13 @@ export const roomSettings: SettingsHandler[] = [
 	},
 	(room, user) => ({
 		label: "Modjoin",
-		permission: room.isPersonal ? user.can('editroom', null, room) : user.can('makeroom'),
+		permission: room.settings.isPersonal ? user.can('editroom', null, room) : user.can('makeroom'),
 		options: [
 			'off',
 			'autoconfirmed',
 			// groupchat ROs can set modjoin, but only to +
 			// first rank is for modjoin off
-			...RANKS.slice(1, room.isPersonal && !user.can('makeroom') ? 2 : undefined),
+			...RANKS.slice(1, room.settings.isPersonal && !user.can('makeroom') ? 2 : undefined),
 		].map(rank => [rank, rank === (room.settings.modjoin || 'off') || `modchat ${rank || 'off'}`]),
 	}),
 	room => ({

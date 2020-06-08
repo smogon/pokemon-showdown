@@ -116,7 +116,7 @@ export const commands: ChatCommands = {
 				return this.errorReply(`/${cmd} - Access denied for promoting/demoting to ${nextGroupName}.`);
 			}
 		}
-		if (targetUser?.locked && !room.settings.isPrivate && !room.battle && !room.isPersonal && nextGroup.rank >= 2) {
+		if (targetUser?.locked && room.persist && room.settings.isPrivate !== true && nextGroup.rank >= 2) {
 			return this.errorReply("Locked users can't be promoted.");
 		}
 
@@ -128,7 +128,7 @@ export const commands: ChatCommands = {
 
 		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
 		const shouldPopup = (
-			targetUser && room.users[targetUser.id] && !room.settings.isPrivate && !room.isPersonal && !room.battle ?
+			targetUser && room.users[targetUser.id] && room.persist && room.settings.isPrivate !== true ?
 				targetUser : null
 		);
 
@@ -346,7 +346,7 @@ export const commands: ChatCommands = {
 	warn(target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if (!this.canTalk()) return;
-		if (room.isPersonal && !user.can('warn')) return this.errorReply("Warning is unavailable in group chats.");
+		if (room.settings.isPersonal && !user.can('warn')) return this.errorReply("Warning is unavailable in group chats.");
 		// If used in staff, help tickets or battles, log the warn to the global modlog.
 		const globalWarn = room.roomid === 'staff' || room.roomid.startsWith('help-') || (room.battle && !room.parent);
 
@@ -401,7 +401,7 @@ export const commands: ChatCommands = {
 	redirect: 'redir',
 	redir(target, room, user, connection) {
 		if (!target) return this.parse('/help redirect');
-		if (room.settings.isPrivate || room.isPersonal) {
+		if (room.settings.isPrivate || room.settings.isPersonal) {
 			return this.errorReply("Users cannot be redirected from private or personal rooms.");
 		}
 		target = this.splitTarget(target);
@@ -421,7 +421,7 @@ export const commands: ChatCommands = {
 			return this.errorReply(`User ${this.targetUsername} not found.`);
 		}
 		if (targetRoom.roomid === "global") return this.errorReply(`Users cannot be redirected to the global room.`);
-		if (targetRoom.settings.isPrivate || targetRoom.isPersonal) {
+		if (targetRoom.settings.isPrivate || targetRoom.settings.isPersonal) {
 			return this.errorReply(`The room "${target}" is not public.`);
 		}
 		if (targetUser.inRooms.has(targetRoom.roomid)) {
@@ -551,7 +551,7 @@ export const commands: ChatCommands = {
 			return this.privateModAction(`(${name} would be banned by ${user.name} ${problem}.)`);
 		}
 
-		if (targetUser.trusted && room.settings.isPrivate !== true && !room.isPersonal) {
+		if (targetUser.trusted && room.settings.isPrivate !== true && !room.settings.isPersonal) {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} ${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was roombanned from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 		}
 
