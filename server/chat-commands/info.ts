@@ -515,7 +515,7 @@ export const commands: ChatCommands = {
 			dex = Dex.mod(format.mod);
 		}
 		const newTargets = dex.dataSearch(target);
-		const showDetails = (cmd.includes('dt') || cmd === 'details');
+		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
 		if (!newTargets || !newTargets.length) {
 			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
