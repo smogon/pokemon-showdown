@@ -1061,7 +1061,7 @@ const commands: ChatCommands = {
 		let mode: string = toID(targets[0]);
 		const isRandomMode = (mode === 'random');
 		if (isRandomMode) {
-			mode = Dex.shuffle(['first', 'number', 'timer', 'triumvirate'])[0];
+			mode = Utils.shuffle(['first', 'number', 'timer', 'triumvirate'])[0];
 		}
 		if (!MODES[mode]) return this.errorReply(`"${mode}" is an invalid mode.`);
 
@@ -1108,7 +1108,7 @@ const commands: ChatCommands = {
 			_Trivia = TimerModeTrivia;
 		}
 
-		questions = Dex.shuffle(questions);
+		questions = Utils.shuffle(questions);
 		room.game = new _Trivia(room, mode, category, length, questions, isRandomMode);
 	},
 	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # &`],

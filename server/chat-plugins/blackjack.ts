@@ -652,7 +652,7 @@ class BlackjackDeck {
 		];
 	}
 	shuffle() {
-		return Dex.shuffle(this.deck);
+		return Utils.shuffle(this.deck);
 	}
 }
 

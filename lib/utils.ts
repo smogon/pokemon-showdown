@@ -178,7 +178,7 @@ export const Utils = new class Utils {
 	}
 
 	/**
-	* Species string tag function for escaping HTML
+	* Template string tag function for escaping HTML
 	*/
 	html(strings: TemplateStringsArray, ...args: any) {
 		let buf = strings[0];
@@ -188,5 +188,23 @@ export const Utils = new class Utils {
 			buf += strings[++i];
 		}
 		return buf;
+	}
+
+	shuffle<T>(arr: T[]): T[] {
+		// In-place shuffle by Fisher-Yates algorithm
+		for (let i = arr.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[arr[i], arr[j]] = [arr[j], arr[i]];
+		}
+		return arr;
+	}
+
+	/** Forces num to be an integer (between min and max). */
+	clampIntRange(num: any, min?: number, max?: number): number {
+		if (typeof num !== 'number') num = 0;
+		num = Math.floor(num);
+		if (min !== undefined && num < min) num = min;
+		if (max !== undefined && num > max) num = max;
+		return num;
 	}
 };

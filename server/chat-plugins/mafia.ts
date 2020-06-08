@@ -602,7 +602,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	distributeRoles() {
-		const roles = Dex.shuffle(this.roles.slice());
+		const roles = Utils.shuffle(this.roles.slice());
 		if (roles.length) {
 			for (const p in this.playerTable) {
 				const role = roles.shift()!;
@@ -1261,7 +1261,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			roles.push(this.IDEA.data.roles[randomIndex]);
 			selectedIndexes.push(randomIndex);
 		}
-		Dex.shuffle(roles);
+		Utils.shuffle(roles);
 		this.IDEA.waitingPick = [];
 		for (const p in this.playerTable) {
 			const player = this.playerTable[p];

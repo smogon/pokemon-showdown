@@ -2408,7 +2408,7 @@ export const commands: ChatCommands = {
 		if (!target || !target.includes(',')) return this.parse('/help shuffle');
 		const args = target.split(',');
 		if (!this.runBroadcast(true)) return false;
-		const results = Dex.shuffle(args.map(arg => arg.trim()));
+		const results = Utils.shuffle(args.map(arg => arg.trim()));
 		return this.sendReplyBox(Utils.html`<em>Shuffled:</em><br> ${results.join(', ')}`);
 	},
 	shufflehelp: [

@@ -1,3 +1,5 @@
+import {Utils} from '../../lib/utils';
+
 interface ElimTree {
 	root: ElimNode;
 	currentLayerLeafNodes: ElimNode[];
@@ -192,7 +194,7 @@ export class Elimination {
 		// build the winner's bracket
 		let tree: ElimTree = null!;
 
-		for (const user of Dex.shuffle(players)) {
+		for (const user of Utils.shuffle(players)) {
 			if (!tree) {
 				tree = {
 					root: new ElimNode({user}),
