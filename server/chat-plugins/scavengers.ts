@@ -1454,7 +1454,8 @@ const ScavengerCommands: ChatCommands = {
 		const elapsedMsg = Chat.toDurationString(Date.now() - game.startTime, {hhmmss: true});
 		const gameTypeMsg = game.gameType ? `<em>${game.gameType}</em> ` : '';
 		const hostersMsg = Chat.toListString(game.hosts.map(h => h.name));
-		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ? '' : Utils.html` (started by - ${game.staffHostName})`;
+		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ?
+			'' : Utils.html` (started by - ${game.staffHostName})`;
 		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
 		const buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 
