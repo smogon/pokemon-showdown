@@ -70,7 +70,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 
 		mod: 'gen8',
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['OU', 'UUBL'],
+		banlist: ['OU', 'UUBL', 'Drizzle'],
 	},
 	{
 		name: "[Gen 8] RU",
@@ -258,11 +258,6 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles', 'Dynamax Clause'],
 		banlist: ['DUber', 'Beat Up'],
-		onBegin() {
-			if (this.rated && this.format.id === 'gen8doublesou') {
-				this.add('html', `<div class="broadcast-blue"><strong>Doubles OU is currently suspecting Melmetal! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3664997/">suspect thread</a>.</strong></div>`);
-			}
-		},
 	},
 	{
 		name: "[Gen 8] Doubles Ubers",
@@ -432,7 +427,7 @@ export const Formats: (FormatsData | {section: string, column?: number})[] = [
 		mod: 'gen8',
 		// searchShow: false,
 		ruleset: ['[Gen 8] OU'],
-		banlist: ['Damp Rock', 'Heat Rock'],
+		banlist: ['Damp Rock', 'Eviolite', 'Heat Rock'],
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
 			const boosts: {[tier: string]: number} = {

@@ -230,7 +230,7 @@ export const commands: ChatCommands = {
 	},
 	whoishelp: [
 		`/whois - Get details on yourself: alts, group, IP address, and rooms.`,
-		`/whois [username] - Get details on a username: alts (Requires: % @ & ~), group, IP address (Requires: @ & ~), and rooms.`,
+		`/whois [username] - Get details on a username: alts (Requires: % @ &), group, IP address (Requires: @ &), and rooms.`,
 	],
 
 	'!offlinewhois': true,
@@ -330,7 +330,7 @@ export const commands: ChatCommands = {
 			return Chat.html`<a href="/${id}">${shortId}</a>`;
 		}).join(' | '));
 	},
-	sharedbattleshelp: [`/sharedbattles [user1], [user2] - Finds recent battles common to [user1] and [user2]. Requires % @ & ~`],
+	sharedbattleshelp: [`/sharedbattles [user1], [user2] - Finds recent battles common to [user1] and [user2]. Requires % @ &`],
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
@@ -339,14 +339,14 @@ export const commands: ChatCommands = {
 		}
 		return this.parse(`/join view-punishments-${room}`);
 	},
-	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # & ~`],
+	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # &`],
 
 	sgp: 'showglobalpunishments',
 	showglobalpunishments(target, room, user) {
 		if (!this.can('lock')) return;
 		return this.parse(`/join view-globalpunishments`);
 	},
-	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # & ~`],
+	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # &`],
 
 	'!host': true,
 	host(target, room, user, connection, cmd) {
@@ -359,7 +359,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 		});
 	},
-	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ & ~`],
+	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: @ &`],
 
 	'!ipsearch': true,
 	searchip: 'ipsearch',
@@ -416,7 +416,7 @@ export const commands: ChatCommands = {
 		}
 		return this.sendReply(results.join('; '));
 	},
-	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: & ~`],
+	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
 
 	checkchallenges(target, room, user) {
 		if (!this.can('ban', null, room)) return false;
@@ -456,7 +456,7 @@ export const commands: ChatCommands = {
 		}
 		this.sendReplyBox(challenges.join(`<br />`));
 	},
-	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: @ # & ~`],
+	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: @ # &`],
 
 	/*********************************************************
 	 * Client fallback
@@ -780,7 +780,7 @@ export const commands: ChatCommands = {
 	datahelp: [
 		`/data [pokemon/item/move/ability/nature] - Get details on this pokemon/item/move/ability/nature.`,
 		`/data [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # & ~`,
+		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # &`,
 	],
 
 	'!details': true,
@@ -792,7 +792,7 @@ export const commands: ChatCommands = {
 	detailshelp: [
 		`/details [pokemon/item/move/ability/nature] - Get additional details on this pokemon/item/move/ability/nature.`,
 		`/details [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!details [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # & ~`,
+		`!details [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # &`,
 	],
 
 	'!weakness': true,
@@ -881,8 +881,8 @@ export const commands: ChatCommands = {
 	weaknesshelp: [
 		`/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.`,
 		`/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
-		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # & ~`,
-		`!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # & ~`,
+		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
+		`!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
 	],
 
 	'!effectiveness': true,
@@ -1481,8 +1481,7 @@ export const commands: ChatCommands = {
 			`% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts`,
 			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
 			`* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot`,
-			`&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties`,
-			`~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says`,
+			`&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
 		];
 
 		this.sendReplyBox(
@@ -1494,7 +1493,7 @@ export const commands: ChatCommands = {
 	groupshelp: [
 		`/groups - Explains what the symbols (like % and @) before people's names mean.`,
 		`/groups [global|room] - Explains only global or room symbols.`,
-		`!groups - Shows everyone that information. Requires: + % @ # & ~`,
+		`!groups - Shows everyone that information. Requires: + % @ # &`,
 	],
 
 	'!punishments': true,
@@ -1528,7 +1527,7 @@ export const commands: ChatCommands = {
 	},
 	punishmentshelp: [
 		`/punishments - Explains punishments.`,
-		`!punishments - Show everyone that information. Requires: + % @ # & ~`,
+		`!punishments - Show everyone that information. Requires: + % @ # &`,
 	],
 
 	'!opensource': true,
@@ -1548,7 +1547,7 @@ export const commands: ChatCommands = {
 	},
 	opensourcehelp: [
 		`/opensource - Links to PS's source code repository.`,
-		`!opensource - Show everyone that information. Requires: + % @ # & ~`,
+		`!opensource - Show everyone that information. Requires: + % @ # &`,
 	],
 
 	'!staff': true,
@@ -1603,7 +1602,7 @@ export const commands: ChatCommands = {
 	},
 	avatarshelp: [
 		`/avatars - Explains how to change avatars.`,
-		`!avatars - Show everyone that information. Requires: + % @ # & ~`,
+		`!avatars - Show everyone that information. Requires: + % @ # &`,
 	],
 
 	'!optionsbutton': true,
@@ -1635,7 +1634,7 @@ export const commands: ChatCommands = {
 	},
 	introhelp: [
 		`/intro - Provides an introduction to competitive Pok\u00e9mon.`,
-		`!intro - Show everyone that information. Requires: + % @ # & ~`,
+		`!intro - Show everyone that information. Requires: + % @ # &`,
 	],
 
 	'!smogintro': true,
@@ -1698,7 +1697,7 @@ export const commands: ChatCommands = {
 		`/calc - Provides a link to a damage calculator`,
 		`/rcalc - Provides a link to the random battles damage calculator`,
 		`/bsscalc - Provides a link to the Battle Spot damage calculator`,
-		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ # & ~`,
+		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ # &`,
 	],
 
 	'!cap': true,
@@ -1715,7 +1714,7 @@ export const commands: ChatCommands = {
 	},
 	caphelp: [
 		`/cap - Provides an introduction to the Create-A-Pok\u00e9mon project.`,
-		`!cap - Show everyone that information. Requires: + % @ # & ~`,
+		`!cap - Show everyone that information. Requires: + % @ # &`,
 	],
 
 	'!gennext': true,
@@ -1963,9 +1962,9 @@ export const commands: ChatCommands = {
 	},
 	ruleshelp: [
 		`/rules - Show links to room rules and global rules.`,
-		`!rules - Show everyone links to room rules and global rules. Requires: + % @ # & ~`,
-		`/rules [url] - Change the room rules URL. Requires: # & ~`,
-		`/rules remove - Removes a room rules URL. Requires: # & ~`,
+		`!rules - Show everyone links to room rules and global rules. Requires: + % @ # &`,
+		`/rules [url] - Change the room rules URL. Requires: # &`,
+		`/rules remove - Removes a room rules URL. Requires: # &`,
 	],
 
 	'!faq': true,
@@ -2009,7 +2008,7 @@ export const commands: ChatCommands = {
 	},
 	faqhelp: [
 		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
-		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # & ~`,
+		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
 	],
 
 	'!smogdex': true,
@@ -2179,7 +2178,7 @@ export const commands: ChatCommands = {
 	},
 	smogdexhelp: [
 		`/analysis [pokemon], [generation], [format] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.`,
-		`!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # & ~`,
+		`!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # &`,
 	],
 
 	'!veekun': true,
@@ -2269,7 +2268,7 @@ export const commands: ChatCommands = {
 	},
 	veekunhelp: [
 		`/veekun [pokemon] - Links to Veekun website for this pokemon/item/move/ability/nature.`,
-		`!veekun [pokemon] - Shows everyone this link. Requires: + % @ # & ~`,
+		`!veekun [pokemon] - Shows everyone this link. Requires: + % @ # &`,
 	],
 
 	'!register': true,
@@ -2460,7 +2459,7 @@ export const commands: ChatCommands = {
 			room.update();
 		});
 	},
-	showimagehelp: [`/showimage [url], [width], [height] - Show an image. Any CSS units may be used for the width or height (default: px). If width and height aren't provided, automatically scale the image to fit in chat. Requires: # & ~`],
+	showimagehelp: [`/showimage [url], [width], [height] - Show an image. Any CSS units may be used for the width or height (default: px). If width and height aren't provided, automatically scale the image to fit in chat. Requires: # &`],
 
 	'!pi': true,
 	pi(target, room, user) {
@@ -2511,7 +2510,7 @@ export const commands: ChatCommands = {
 		}
 	},
 	codehelp: [
-		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`,
+		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & #`,
 		`/code [code] - Shows you code. Accepts multi-line arguments.`,
 	],
 };

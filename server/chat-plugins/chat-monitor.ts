@@ -605,9 +605,9 @@ export const commands: ChatCommands = {
 		},
 	},
 	filterhelp: [
-		`- /filter add list, word, reason - Adds a word to the given filter list. Requires: & ~`,
-		`- /filter remove list, words - Removes words from the given filter list. Requires: & ~`,
-		`- /filter view - Opens the list of filtered words. Requires: % @ & ~`,
+		`- /filter add list, word, reason - Adds a word to the given filter list. Requires: &`,
+		`- /filter remove list, words - Removes words from the given filter list. Requires: &`,
+		`- /filter view - Opens the list of filtered words. Requires: % @ &`,
 	],
 	allowname(target, room, user) {
 		if (!this.can('forcerename')) return false;

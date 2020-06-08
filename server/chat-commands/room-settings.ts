@@ -125,7 +125,7 @@ export const commands: ChatCommands = {
 		room.saveSettings();
 	},
 	modchathelp: [
-		`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+ options, * @ # & ~ for all the options`,
+		`/modchat [off/autoconfirmed/trusted/+/%/@/*/player/#/&] - Set the level of moderated chat. Requires: % \u2606 for off/autoconfirmed/+ options, * @ # & for all the options`,
 	],
 
 	ioo(target, room, user) {
@@ -163,7 +163,7 @@ export const commands: ChatCommands = {
 		}
 	},
 	inviteonlyhelp: [
-		`/inviteonly [on|off] - Sets modjoin %. Users can't join unless invited with /invite. Requires: # & ~`,
+		`/inviteonly [on|off] - Sets modjoin %. Users can't join unless invited with /invite. Requires: # &`,
 		`/ioo - Shortcut for /inviteonly on`,
 		`/inviteonlynext OR /ionext - Sets your next battle to be invite-only.`,
 		`/ionext off - Sets your next battle to be publicly visible.`,
@@ -231,8 +231,8 @@ export const commands: ChatCommands = {
 		if (!room.settings.isPrivate) this.parse('/hiddenroom');
 	},
 	modjoinhelp: [
-		`/modjoin [+|%|@|*|player|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room unless they have a room rank. Requires: \u2606 # & ~`,
-		`/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: \u2606 # & ~`,
+		`/modjoin [+|%|@|*|player|&|#|off] - Sets modjoin. Users lower than the specified rank can't join this room unless they have a room rank. Requires: \u2606 # &`,
+		`/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: \u2606 # &`,
 	],
 
 	roomlanguage(target, room, user) {
@@ -251,7 +251,7 @@ export const commands: ChatCommands = {
 		this.sendReply(`The room's language has been set to ${Chat.languages.get(targetLanguage)}`);
 	},
 	roomlanguagehelp: [
-		`/roomlanguage [language] - Sets the the language for the room, which changes language of a few commands. Requires # & ~`,
+		`/roomlanguage [language] - Sets the the language for the room, which changes language of a few commands. Requires # &`,
 		`Supported Languages: English, Spanish, Italian, French, Simplified Chinese, Traditional Chinese, Japanese, Hindi, Turkish, Dutch, German.`,
 	],
 
@@ -286,8 +286,8 @@ export const commands: ChatCommands = {
 		room.saveSettings();
 	},
 	slowchathelp: [
-		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ # & ~`,
-		`/slowchat off - Disables slowchat in the room. Requires @ # & ~`,
+		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ # &`,
+		`/slowchat off - Disables slowchat in the room. Requires @ # &`,
 	],
 
 	stretching: 'stretchfilter',
@@ -315,7 +315,7 @@ export const commands: ChatCommands = {
 		room.saveSettings();
 	},
 	stretchfilterhelp: [
-		`/stretchfilter [on/off] - Toggles filtering messages in the room for stretchingggggggg. Requires # & ~`,
+		`/stretchfilter [on/off] - Toggles filtering messages in the room for stretchingggggggg. Requires # &`,
 	],
 
 	capitals: 'capsfilter',
@@ -343,7 +343,7 @@ export const commands: ChatCommands = {
 
 		room.saveSettings();
 	},
-	capsfilterhelp: [`/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~`],
+	capsfilterhelp: [`/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # &`],
 
 	emojis: 'emojifilter',
 	emoji: 'emojifilter',
@@ -370,7 +370,7 @@ export const commands: ChatCommands = {
 
 		room.saveSettings();
 	},
-	emojifilterhelp: [`/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~`],
+	emojifilterhelp: [`/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # &`],
 
 	banwords: 'banword',
 	banword: {
@@ -381,7 +381,7 @@ export const commands: ChatCommands = {
 			if (!this.can('declare', null, room)) return false;
 
 			const regex = cmd.includes('regex');
-			if (regex && !user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
+			if (regex && !user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for administrators.");
 			if (!room.settings.banwords) room.settings.banwords = [];
 			// Most of the regex code is copied from the client. TODO: unify them?
 			// Regex banwords can have commas in the {1,5} pattern
@@ -490,10 +490,10 @@ export const commands: ChatCommands = {
 		},
 	},
 	banwordhelp: [
-		`/banword add [words] - Adds the comma-separated list of phrases to the banword list of the current room. Requires: # & ~`,
-		`/banword addregex [words] - Adds the comma-separated list of regular expressions to the banword list of the current room. Requires & ~`,
-		`/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~`,
-		`/banword list - Shows the list of banned words in the current room. Requires: % @ # & ~`,
+		`/banword add [words] - Adds the comma-separated list of phrases to the banword list of the current room. Requires: # &`,
+		`/banword addregex [words] - Adds the comma-separated list of regular expressions to the banword list of the current room. Requires &`,
+		`/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # &`,
+		`/banword list - Shows the list of banned words in the current room. Requires: % @ # &`,
 	],
 
 	hightraffic(target, room, user) {
@@ -514,7 +514,7 @@ export const commands: ChatCommands = {
 		this.addModAction(`This room was marked as high traffic by ${user.name}.`);
 	},
 	hightraffichelp: [
-		`/hightraffic [on|off] - (Un)marks a room as a high traffic room. Requires & ~`,
+		`/hightraffic [on|off] - (Un)marks a room as a high traffic room. Requires &`,
 		`When a room is marked as high-traffic, PS requires all messages sent to that room to contain at least 2 letters.`,
 	],
 
@@ -566,7 +566,7 @@ export const commands: ChatCommands = {
 			this.sendReply(`The chat room '${target}' was created.`);
 		}
 	},
-	makechatroomhelp: [`/makechatroom [roomname] - Creates a new room named [roomname]. Requires: & ~`],
+	makechatroomhelp: [`/makechatroom [roomname] - Creates a new room named [roomname]. Requires: &`],
 
 	subroomgroupchat: 'makegroupchat',
 	makegroupchat(target, room, user, connection, cmd) {
@@ -691,7 +691,7 @@ export const commands: ChatCommands = {
 		return this.errorReply(`The room "${target}" isn't registered.`);
 	},
 	deregisterchatroomhelp: [
-		`/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: & ~`,
+		`/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: &`,
 	],
 
 	deletechatroom: 'deleteroom',
@@ -759,8 +759,8 @@ export const commands: ChatCommands = {
 		room.destroy();
 	},
 	deleteroomhelp: [
-		`/deleteroom [roomname] - Deletes room [roomname]. Must be typed in the room to delete. Requires: & ~`,
-		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: ★ # & ~`,
+		`/deleteroom [roomname] - Deletes room [roomname]. Must be typed in the room to delete. Requires: &`,
+		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: ★ # &`,
 	],
 
 	rename() {
@@ -803,7 +803,7 @@ export const commands: ChatCommands = {
 		Rooms.global.notifyRooms(toNotify, message);
 		room.add(Chat.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
-	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires & ~.`],
+	renamehelp: [`/renameroom [new title] - Renames the current room to [new title]. Requires &.`],
 
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
@@ -896,9 +896,9 @@ export const commands: ChatCommands = {
 		}
 	},
 	privateroomhelp: [
-		`/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~`,
-		`/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2606 & ~`,
-		`/publicroom - Makes a room public. Requires: \u2606 & ~`,
+		`/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: &`,
+		`/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2606 &`,
+		`/publicroom - Makes a room public. Requires: \u2606 &`,
 	],
 
 	officialchatroom: 'officialroom',
@@ -1047,8 +1047,8 @@ export const commands: ChatCommands = {
 	},
 
 	subroomhelp: [
-		`/subroom [room] - Marks the current room as a subroom of [room]. Requires: & ~`,
-		`/unsubroom - Unmarks the current room as a subroom. Requires: & ~`,
+		`/subroom [room] - Marks the current room as a subroom of [room]. Requires: &`,
+		`/unsubroom - Unmarks the current room as a subroom. Requires: &`,
 		`/subrooms - Displays the current room's subrooms.`,
 		`/parentroom - Displays the current room's parent room.`,
 	],
@@ -1205,8 +1205,8 @@ export const commands: ChatCommands = {
 	},
 	roomaliashelp: [
 		`/roomalias - displays a list of all room aliases of the room the command was entered in.`,
-		`/roomalias [alias] - adds the given room alias to the room the command was entered in. Requires: & ~`,
-		`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`,
+		`/roomalias [alias] - adds the given room alias to the room the command was entered in. Requires: &`,
+		`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: &`,
 	],
 
 	deleteroomalias: 'removeroomalias',
@@ -1238,7 +1238,7 @@ export const commands: ChatCommands = {
 		}
 	},
 	removeroomaliashelp: [
-		`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`,
+		`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: &`,
 	],
 
 	resettierdisplay: 'roomtierdisplay',
@@ -1281,8 +1281,8 @@ export const commands: ChatCommands = {
 	},
 	roomtierdisplayhelp: [
 		`/roomtierdisplay - displays the current room's display.`,
-		`/roomtierdisplay [option] - changes the current room's tier display. Valid options are: tiers, doubles tiers, numbers. Requires: # & ~`,
-		`/resettierdisplay - resets the current room's tier display. Requires: # & ~`,
+		`/roomtierdisplay [option] - changes the current room's tier display. Valid options are: tiers, doubles tiers, numbers. Requires: # &`,
+		`/resettierdisplay - resets the current room's tier display. Requires: # &`,
 	],
 };
 

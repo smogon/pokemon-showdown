@@ -747,6 +747,13 @@ export class CommandContext extends MessageContext {
 		}
 		return true;
 	}
+	canUseConsole() {
+		if (!this.user.hasConsoleAccess(this.connection)) {
+			this.errorReply(this.cmdToken + this.fullCmd + " - Requires console access, please set up `Config.consoleips`.");
+			return false;
+		}
+		return true;
+	}
 	shouldBroadcast() {
 		return this.cmdToken === BROADCAST_TOKEN;
 	}
