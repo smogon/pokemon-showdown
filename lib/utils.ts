@@ -160,9 +160,9 @@ export const Utils = new class Utils {
 		return splitStr;
 	}
 
-		/**
-	 * Species string tag function for escaping HTML
-	 */
+	/**
+	* Species string tag function for escaping HTML
+	*/
 	html(strings: TemplateStringsArray, ...args: any) {
 		let buf = strings[0];
 		let i = 0;
@@ -172,4 +172,4 @@ export const Utils = new class Utils {
 		}
 		return buf;
 	}
-}
+};
