@@ -113,6 +113,7 @@ export interface RoomSettings {
 export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').Poll;
 type Announcement = import('./chat-plugins/announcements').Announcement;
+type RoomEvent = import('./chat-plugins/room-events').RoomEvent;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
@@ -169,6 +170,36 @@ export abstract class BasicRoom {
 	reportJoins: boolean;
 	batchJoins: number;
 	reportJoinsInterval: NodeJS.Timer | null;
+<<<<<<< HEAD
+=======
+	logTimes: boolean;
+	modjoin: string | true | null;
+	modchat: string | null;
+	staffRoom: boolean;
+	language: string | false;
+	slowchat: number | false;
+	events: {[k: string]: RoomEvent};
+	filterStretching: boolean;
+	filterEmojis: boolean;
+	filterCaps: boolean;
+	jeopardyDisabled: boolean;
+	mafiaDisabled: boolean;
+	unoDisabled: boolean;
+	blackjackDisabled: boolean;
+	hangmanDisabled: boolean;
+	giveaway: QuestionGiveaway | LotteryGiveaway | null;
+	gtsga: GTSGiveaway | null;
+	scavgame: null | ScavengerGameTemplate;
+	scavSettings: null | AnyObject;
+	scavQueue: null | QueuedHunt[];
+	scavLeaderboard: null | AnyObject;
+	toursEnabled: '%' | boolean;
+	tourAnnouncements: boolean;
+	dataCommandTierDisplay: 'tiers' | 'doubles tiers' | 'numbers';
+	privacySetter: Set<ID> | null;
+	gameNumber: number;
+	highTraffic: boolean;
+>>>>>>> Roomevents: Support adding events to categories
 
 	constructor(roomid: RoomID, title?: string) {
 		this.users = Object.create(null);
