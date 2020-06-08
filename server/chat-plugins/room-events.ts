@@ -329,7 +329,9 @@ export const commands: ChatCommands = {
 			}
 			const event = room.events[getEventID(eventId, room)];
 			if (!event) return this.errorReply(`There is no event or alias titled "${eventId}".`);
-			if (event.categories?.length < 1) return this.errorReply(`The event ${eventId} isn't in any categories.`);
+			if (!event.categories || event.categories.length < 1) {
+				return this.errorReply(`The event ${eventId} isn't in any categories.`);
+			}
 			if (!event.categories?.includes(category)) {
 				return this.errorReply(`The event ${eventId} isn't in the category ${category}.`);
 			}
