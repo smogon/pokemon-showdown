@@ -423,9 +423,6 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Mirror Shot', target);
 			this.add('-anim', source, 'Refresh', source);
 		},
-		onHit() {
-			this.add(`c|@OM~!|Bang Bang`);
-		},
 		secondary: {
 			chance: 15,
 			self: {

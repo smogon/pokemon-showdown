@@ -216,6 +216,11 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		onFaint() {
 			this.add(`c|${getName('OM~!')}|ugh, I ${['rolled a 1, damnit.', 'got killed night 1, seriously?', 'got critfroze by ice beam asfgegkhalfewgihons'][this.random(3)]}`);
 		},
+		onTryMove(attacker, defender, move) {
+			if (move.id === 'mechomnism') {
+				this.add(`c|${getName('OM~!')}|Alley Oop`);
+			}
+		},
 	},
 	paradise: {
 		noCopy: true,
