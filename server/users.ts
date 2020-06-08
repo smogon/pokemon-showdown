@@ -992,7 +992,7 @@ export class User extends Chat.MessageContext {
 	updateGroup(registered: boolean) {
 		if (!registered) {
 			this.registered = false;
-			this.group = Config.groupsranking[0];
+			this.group = Users.Auth.defaultSymbol();
 			this.isStaff = false;
 			return;
 		}
@@ -1042,7 +1042,7 @@ export class User extends Chat.MessageContext {
 		if (wasStaff !== this.isStaff) this.update('isStaff');
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
-			if (forceTrusted || this.group !== Config.groupsranking[0]) {
+			if (forceTrusted || this.group !== Users.Auth.defaultSymbol()) {
 				globalAuth.set(this.id, this.group);
 				this.trusted = this.id;
 				this.autoconfirmed = this.id;
@@ -1071,7 +1071,7 @@ export class User extends Chat.MessageContext {
 			}
 		}
 		this.trusted = '';
-		globalAuth.set(userid, Config.groupsranking[0]);
+		globalAuth.set(userid, Users.Auth.defaultSymbol());
 		return removed;
 	}
 	markDisconnected() {
@@ -1079,7 +1079,7 @@ export class User extends Chat.MessageContext {
 		this.lastDisconnected = Date.now();
 		if (!this.registered) {
 			// for "safety"
-			this.group = Config.groupsranking[0];
+			this.group = Users.Auth.defaultSymbol();
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
 			// This isn't strictly necessary since we don't reuse User objects

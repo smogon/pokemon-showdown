@@ -120,7 +120,7 @@ export const commands: ChatCommands = {
 			return this.errorReply("Locked users can't be promoted.");
 		}
 
-		if (nextSymbol === Config.groupsranking[0]) {
+		if (nextSymbol === Users.Auth.defaultSymbol()) {
 			room.auth.delete(userid);
 		} else {
 			room.auth.set(userid, nextSymbol);
@@ -1087,7 +1087,7 @@ export const commands: ChatCommands = {
 
 		const currentGroup = targetUser?.group || Users.globalAuth.get(userid);
 		let nextGroup = target as GroupSymbol;
-		if (target === 'deauth') nextGroup = Config.groupsranking[0];
+		if (target === 'deauth') nextGroup = Users.Auth.defaultSymbol();
 		if (!nextGroup) {
 			return this.errorReply("Please specify a group such as /globalvoice or /globaldeauth");
 		}
@@ -1096,7 +1096,7 @@ export const commands: ChatCommands = {
 		}
 		if (!cmd.startsWith('global')) {
 			let groupid = Config.groups[nextGroup].id;
-			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth' as ID;
+			if (!groupid && nextGroup === Users.Auth.defaultSymbol()) groupid = 'deauth' as ID;
 			if (Config.groups[nextGroup].globalonly) return this.errorReply(`Did you mean "/global${groupid}"?`);
 			if (Config.groups[nextGroup].roomonly) return this.errorReply(`Did you mean "/room${groupid}"?`);
 			return this.errorReply(`Did you mean "/room${groupid}" or "/global${groupid}"?`);
@@ -1125,7 +1125,7 @@ export const commands: ChatCommands = {
 		if (targetUser && !targetUser.registered) {
 			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
-		if (nextGroup === Config.groupsranking[0]) {
+		if (nextGroup === Users.Auth.defaultSymbol()) {
 			Users.globalAuth.delete(targetUser ? targetUser.id : userid);
 		} else {
 			Users.globalAuth.set(targetUser ? targetUser.id : userid, nextGroup);
@@ -1164,20 +1164,20 @@ export const commands: ChatCommands = {
 		const currentGroup = Users.globalAuth.get(userid);
 
 		if (untrust) {
-			if (currentGroup !== Config.groupsranking[0]) return this.errorReply(`User '${name}' is not trusted.`);
+			if (currentGroup !== Users.Auth.defaultSymbol()) return this.errorReply(`User '${name}' is not trusted.`);
 
-			Users.globalAuth.set(userid, Config.groupsranking[0]);
+			Users.globalAuth.set(userid, Users.Auth.defaultSymbol());
 			this.sendReply(`User '${name}' is no longer trusted.`);
 			this.privateModAction(`${name} was set to no longer be a trusted user by ${user.name}.`);
 			this.modlog('UNTRUSTUSER', userid);
 		} else {
 			if (!targetUser && !force) return this.errorReply(`User '${name}' is offline. Use /force${cmd} if you're sure.`);
 			if (currentGroup) {
-				if (currentGroup === Config.groupsranking[0]) return this.errorReply(`User '${name}' is already trusted.`);
+				if (currentGroup === Users.Auth.defaultSymbol()) return this.errorReply(`User '${name}' is already trusted.`);
 				return this.errorReply(`User '${name}' has a global rank higher than trusted.`);
 			}
 
-			Users.globalAuth.set(userid, Config.groupsranking[0]);
+			Users.globalAuth.set(userid, Users.Auth.defaultSymbol());
 			this.sendReply(`User '${name}' is now trusted.`);
 			this.privateModAction(`${name} was set as a trusted user by ${user.name}.`);
 			this.modlog('TRUSTUSER', userid);
