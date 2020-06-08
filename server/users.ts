@@ -526,6 +526,9 @@ export class User extends Chat.MessageContext {
 		const auth: Auth = room ? room.auth : Users.globalAuth;
 
 		let group = auth.get(this);
+		if (auth.has(this.id) && group === Auth.defaultSymbol()) {
+			group = 'whitelist' as GroupSymbol;
+		}
 		const targetGroup = target ? auth.get(target) : undefined;
 
 		const roomIsTemporary = room && !room.persist;
