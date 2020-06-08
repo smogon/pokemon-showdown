@@ -66,9 +66,9 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Flare')}|Shunshin No Jutsu!`);
 		},
 		onFaint() {
-			this.add(`c|${getName('Flare')}|Sorry, things were initially better, but ¯\_(ツ)_/¯`);
-    },
-  },
+			this.add(`c|${getName('Flare')}|Sorry, things were initially better, but ¯\\_(ツ)_/¯`);
+		},
+	},
 	gxs: {
 		noCopy: true,
 		onStart() {
@@ -93,9 +93,21 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 			this.add(`c|${getName('Instruct')}|I'm not ready to say goodbye to someone like you again...`);
 		},
 	},
-	kaijubunny: {
+	jho: {
 		noCopy: true,
 		onStart() {
+			this.add(`c|${getName('Jho')}|Hey there party people`);
+		},
+		onSwitchOut() {
+			this.add(`c|${getName('Jho')}|The Terminator(1984), 00:57:10`);
+		},
+		onFaint() {
+			this.add(`c|${getName('Jho')}|Unfortunately, CAP no longer accepts custom elements`);
+		},
+	},
+	kaijubunny: {
+		noCopy: true,
+		onStart(source) {
 			this.add(`c|${getName('Kaiju Bunny')}|I heard SOMEONE wasn't getting enough affection! ￣( ÒㅅÓ)￣`);
 			if (source.species.id !== 'lopunnymega' || source.illusion) return;
 			this.add('-start', source, 'typechange', 'Normal/Fairy');
@@ -105,8 +117,8 @@ export const BattleStatuses: {[k: string]: ModdedPureEffectData} = {
 		},
 		onFaint() {
 			this.add(`c|${getName('Kaiju Bunny')}|Wow, okay, r00d ￣(ಥㅅಥ)￣`);
-    }
-  },
+		},
+	},
 	kris: {
 		noCopy: true,
 		onStart(source) {

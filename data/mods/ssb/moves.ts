@@ -76,7 +76,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
-      
+
 	// Flare
 	krisenbon: {
 		accuracy: 100,
@@ -102,7 +102,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ice",
 	},
-      
+
 	// GXS
 	datacorruption: {
 		accuracy: 90,
@@ -202,6 +202,86 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
+	},
+
+	// Jho
+	genrechange: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "If the user is a Toxtricity, it changes into its Low-Key forme and Nasty Plot and Overdrive change to Aura Sphere and Boomburst, respectively. If the user is a Toxtricity in its Low-Key forme, it changes into its Amped forme and Aura Sphere and Boomburst turn into Nasty Plot and Overdrive, respectively. Raises the user's Speed by 1 stage.",
+		shortDesc: "Toxtricity: +1 Speed. Changes forme.",
+		name: "Genre Change",
+		pp: 5,
+		priority: 0,
+		flags: {sound: 1},
+		onTryMove(pokemon, target, move) {
+			this.attrLastMove('[still]');
+			if (pokemon.species.baseSpecies === 'Toxtricity') {
+				return;
+			}
+			this.add('-fail', pokemon, 'move: Genre Change');
+			this.hint("Only a Pokemon whose form is Toxtricity or Toxtricity-Low-Key can use this move.");
+			return null;
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Screech', source);
+			// The transform animation is done via `formeChange`
+		},
+		onHit(pokemon) {
+			if (pokemon.species.forme === 'Low-Key') {
+				pokemon.formeChange(`toxtricity`, this.effect);
+				pokemon.moveSlots = pokemon.moveSlots.map(slot => {
+					const newMoves: {[k: string]: string} = {
+						boomburst: 'overdrive',
+						aurasphere: 'nastyplot',
+					};
+					if (slot.id in newMoves) {
+						const move = this.dex.getMove(newMoves[slot.id]);
+						const newSlot = {
+							id: move.id,
+							move: move.name,
+							// Luckily, both slots have the same number of PP
+							pp: slot.pp,
+							maxpp: move.pp * 8 / 5,
+							disabled: slot.disabled,
+							used: false,
+						};
+						return newSlot;
+					}
+					return slot;
+				});
+			} else {
+				pokemon.formeChange(`toxtricitylowkey`, this.effect);
+				pokemon.setAbility('venomize');
+				pokemon.moveSlots = pokemon.moveSlots.map(slot => {
+					const newMoves: {[k: string]: string} = {
+						overdrive: 'boomburst',
+						nastyplot: 'aurasphere',
+					};
+					if (slot.id in newMoves) {
+						const move = this.dex.getMove(newMoves[slot.id]);
+						const newSlot = {
+							id: move.id,
+							move: move.name,
+							// Luckily, both slots have the same number of PP
+							pp: slot.pp,
+							maxpp: move.pp * 8 / 5,
+							disabled: slot.disabled,
+							used: false,
+						};
+						return newSlot;
+					}
+					return slot;
+				});
+			}
+		},
+		boosts: {
+			spe: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
 	},
 
 	// Kris

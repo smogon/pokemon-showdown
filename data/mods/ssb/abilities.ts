@@ -80,12 +80,25 @@ export const BattleAbilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Jho
+	venomize: {
+		desc: "This Pokemon's sound-based moves become Poison-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's sound-based moves become Poison type.",
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
+				move.type = 'Poison';
+			}
+		},
+		name: "Venomize",
+	},
+
 	// Kaiju Bunny
 	secondwind: {
 		desc: "This Pokemon restores 1/2 of its HP if it falls below 1/4 of its maximum HP by an enemy attack. This effect only occurs once.",
 		shortDesc: "If hit below 1/4 HP, heal 1/2 max HP. One time.",
 		name: "Second Wind",
-		onAfterDamage(damage, target, source, move) {
+		onDamagingHit(damage, target, source, move) {
 			if (move && target.hp > 0 && target.hp < target.maxhp / 4 && !target.m.secondwind) {
 				target.m.secondwind = true;
 				this.heal(target.maxhp / 2);
