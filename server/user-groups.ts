@@ -137,13 +137,16 @@ export class RoomAuth extends Auth {
 			super.set(userid as ID, this.room.settings.auth[userid]);
 		}
 	}
-	set(id: ID, group: GroupSymbol) {
+	set(id: ID, symbol: GroupSymbol) {
 		const user = Users.get(id);
 		if (user) {
 			this.room.onUpdateIdentity(user);
 		}
-		super.set(id, group);
-		this.room.settings.auth[id] = group;
+		if (symbol === 'whitelist' as GroupSymbol) {
+			symbol = Auth.defaultSymbol();
+		}
+		super.set(id, symbol);
+		this.room.settings.auth[id] = symbol;
 		this.room.saveSettings();
 		return this;
 	}

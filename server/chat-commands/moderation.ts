@@ -187,9 +187,11 @@ export const commands: ChatCommands = {
 		if (!targetRoom.persist) {
 			return this.sendReply(`/roomauth - The room '${targetRoom.title || target}' isn't designed for per-room moderation and therefore has no auth list.${userLookup}`);
 		}
+		const showAll = user.can('lock', null, room);
 
 		const rankLists: {[groupSymbol: string]: ID[]} = {};
 		for (const [id, rank] of room.auth) {
+			if (rank === ' ' && !showAll) continue;
 			if (!rankLists[rank]) rankLists[rank] = [];
 			rankLists[rank].push(id);
 		}
@@ -203,7 +205,8 @@ export const commands: ChatCommands = {
 				const isAway = curUser?.statusType !== 'online';
 				return userid in targetRoom.users && !isAway ? `**${userid}**` : userid;
 			});
-			const group = Config.groups[groupSymbol] ? `${Config.groups[groupSymbol].name}s (${groupSymbol})` : groupSymbol;
+			let group = Config.groups[groupSymbol] ? `${Config.groups[groupSymbol].name}s (${groupSymbol})` : groupSymbol;
+			if (groupSymbol === ' ') group = 'Whitelisted';
 			return `${group}:\n${roomRankList.join(", ")}`;
 		});
 
