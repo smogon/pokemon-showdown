@@ -2485,7 +2485,7 @@ export const commands: ChatCommands = {
 
 	denyshow(target, room, user) {
 		if (!this.can('mute', null, room)) return false;
-		if (!room.approvalsEnabled || !room.pendingApprovals) {
+		if (!room.settings.approvalsEnabled || !room.pendingApprovals) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
 		target = toID(target);
