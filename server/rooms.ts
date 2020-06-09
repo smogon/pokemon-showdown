@@ -1094,8 +1094,6 @@ export class BasicChatRoom extends BasicRoom {
 	expireTimer: NodeJS.Timer | null;
 	userList: string;
 	pendingApprovals: Map<string, string> | null;
-	approvalsEnabled: boolean;
-	showimages: string | null;
 	constructor(roomid: RoomID, title?: string, options: Partial<RoomSettings> = {}) {
 		super(roomid, title);
 
@@ -1152,9 +1150,7 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
-		this.pendingApprovals = options.approvalsEnabled ? new Map() : null;
-		this.approvalsEnabled = !!options.approvalsEnabled;
-		this.showimages = options.showimages ? options.showimages : null;
+		this.pendingApprovals = new Map();
 		this.tour = null;
 		this.game = null;
 		this.battle = null;

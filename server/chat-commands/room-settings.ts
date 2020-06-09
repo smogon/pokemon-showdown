@@ -1414,8 +1414,8 @@ export const roomSettings: SettingsHandler[] = [
 		label: "/requestapproval usage",
 		permission: 'declare',
 		options: [
-			[`Off`, room.approvalsEnabled === false || `approvals off`],
-			[`On`, room.approvalsEnabled === true || `approvals on`],
+			[`Off`, room.settings.approvalsEnabled === false || `approvals off`],
+			[`On`, room.settings.approvalsEnabled === true || `approvals on`],
 		],
 	}),
 ];
