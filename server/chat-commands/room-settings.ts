@@ -500,21 +500,20 @@ export const commands: ChatCommands = {
 		if (!this.can('declare', null, room)) return false;
 		target = toID(target);
 		if (!target) {
-			return this.sendReply(`Approvals are currently ${room.approvalsEnabled ? `ENABLED` : `DISABLED`} for ${room}.`);
+			return this.sendReply(`Approvals are currently ${room.settings.approvalsEnabled ? `ENABLED` : `DISABLED`} for ${room}.`);
 		}
 		if (this.meansNo(target)) {
-			if (!room.approvalsEnabled) return this.errorReply(`Approvals are already disabled.`);
-			room.approvalsEnabled = false;
+			if (!room.settings.approvalsEnabled) return this.errorReply(`Approvals are already disabled.`);
+			room.settings.approvalsEnabled = false;
 			this.privateModAction(`${user.name} disabled approvals in this room.`);
 		} else if (this.meansYes(target)) {
-			if (room.approvalsEnabled) return this.errorReply(`Approvals are already enabled.`);
-			room.approvalsEnabled = true;
+			if (room.settings.approvalsEnabled) return this.errorReply(`Approvals are already enabled.`);
+			room.settings.approvalsEnabled = true;
 			this.privateModAction(`${user.name} enabled approvals in this room.`);
 		} else {
 			return this.errorReply(`Unrecognized settingfor approvals. Use 'enable' or 'disable.'`);
 		}
-		room.chatRoomData!.approvalsEnabled = room.approvalsEnabled;
-		Rooms.global.writeChatRoomData();
+		room.saveSettings();
 		return this.modlog(`APPROVALS`, null, `${this.meansYes(target) ? `ON` : `OFF`}`);
 	},
 
@@ -525,16 +524,15 @@ export const commands: ChatCommands = {
 			return this.errorReply(`${target} is not a valid setting. Use a group symbol or 'OFF' instead.`);
 		}
 		if (this.meansNo(target)) {
-			if (!room.showimages) return this.errorReply(`/show is already disabled.`);
-			room.showimages = null;
+			if (!room.settings.showimages) return this.errorReply(`/show is already disabled.`);
+			room.settings.showimages = null;
 		} else {
-			if (room.showimages === target) {
+			if (room.settings.showimages === target) {
 				return this.errorReply(`/show permissions are already set to ${target}.`);
 			}
-			room.showimages = target;
+			room.settings.showimages = target as GroupSymbol;
 		}
-		room.chatRoomData!.showimages = room.showimages;
-		Rooms.global.writeChatRoomData();
+		room.saveSettings();
 		this.modlog(`SHOWIMAGES`, null, `to ${target}`);
 		this.privateModAction(`(${user.name} set /show permissions to ${target}.)`);
 	},
