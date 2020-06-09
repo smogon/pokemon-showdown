@@ -1896,6 +1896,10 @@ export const Chat = new class {
 	}
 };
 
+(Chat as any).escapeHTML = Utils.escapeHTML;
+(Chat as any).html = Utils.html;
+(Chat as any).splitFirst = Utils.splitFirst;
+
 /**
  * Used by ChatMonitor.
  */
