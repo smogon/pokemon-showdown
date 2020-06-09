@@ -931,7 +931,7 @@ export class ScavengerHunt extends Rooms.RoomGame {
 			return q.answer.some(a => {
 				a = toID(a);
 				const md = Math.ceil((a.length - 5) / FILTER_LENIENCY);
-				if (Dex.levenshtein(msgId, a, md) <= md) return true;
+				if (Utils.levenshtein(msgId, a, md) <= md) return true;
 				return false;
 			});
 		});

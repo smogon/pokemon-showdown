@@ -604,7 +604,7 @@ class Trivia extends Rooms.RoomGame {
 	verifyAnswer(targetAnswer: string) {
 		return this.curAnswers.some(answer => {
 			const mla = this.maxLevenshteinAllowed(answer.length);
-			return (answer === targetAnswer) || (Dex.levenshtein(targetAnswer, answer, mla) <= mla);
+			return (answer === targetAnswer) || (Utils.levenshtein(targetAnswer, answer, mla) <= mla);
 		});
 	}
 
