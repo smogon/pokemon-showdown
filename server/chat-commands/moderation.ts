@@ -184,13 +184,10 @@ export const commands: ChatCommands = {
 		if (!targetRoom || targetRoom.roomid === 'global' || !targetRoom.checkModjoin(user)) {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
-		if (!targetRoom.persist) {
-			return this.sendReply(`/roomauth - The room '${targetRoom.title || target}' isn't designed for per-room moderation and therefore has no auth list.${userLookup}`);
-		}
 		const showAll = user.can('lock', null, room);
 
 		const rankLists: {[groupSymbol: string]: ID[]} = {};
-		for (const [id, rank] of room.auth) {
+		for (const [id, rank] of targetRoom.auth) {
 			if (rank === ' ' && !showAll) continue;
 			if (!rankLists[rank]) rankLists[rank] = [];
 			rankLists[rank].push(id);
@@ -244,8 +241,7 @@ export const commands: ChatCommands = {
 		let innerBuffer = [];
 		const group = Users.globalAuth.get(targetId);
 		if (group) {
-			if (group === ' ') (group as string) = 'trusted';
-			buffer.push(`Global auth: ${group}`);
+			buffer.push(`Global auth: ${group === ' ' ? 'trusted' : group}`);
 		}
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.settings.isPrivate) continue;
@@ -1133,7 +1129,7 @@ export const commands: ChatCommands = {
 		} else {
 			Users.globalAuth.set(targetUser ? targetUser.id : userid, nextGroup);
 		}
-		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
+		if (Users.Auth.getGroup(nextGroup).rank < Users.Auth.getGroup(currentGroup).rank) {
 			this.privateModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
 			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid, '(demote)');
 			if (targetUser) targetUser.popup(`You were demoted to ${groupName} by ${user.name}.`);

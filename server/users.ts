@@ -1544,9 +1544,12 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 	// drop legacy JSON messages
 	if (message.charAt(0) === '{') return;
 
-	// drop invalid messages without a pipe character
 	const pipeIndex = message.indexOf('|');
-	if (pipeIndex < 0) return;
+	if (pipeIndex < 0) {
+		// drop invalid messages without a pipe character
+		connection.popup(`Invalid message; messages should be in the format \`ROOMID|MESSAGE\`. See https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md`);
+		return;
+	}
 
 	const user = connection.user;
 	if (!user) return;
@@ -1565,8 +1568,8 @@ function socketReceive(worker: StreamWorker, workerid: number, socketid: string,
 
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
-	const maxLineCount = user.isStaff ||
-		(room.auth.isStaff(user.id) ? THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN);
+	const maxLineCount = (user.isStaff || room.auth.isStaff(user.id)) ?
+		THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN;
 	if (lines.length > maxLineCount) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;

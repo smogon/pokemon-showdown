@@ -388,6 +388,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			if (!message) return;
 			// drop messages over 100KB
 			if (message.length > (100 * 1024)) {
+				socket.write(`|popup|Your message must be below 100KB`);
 				console.log(`Dropping client message ${message.length / 1024} KB...`);
 				console.log(message.slice(0, 160));
 				return;
