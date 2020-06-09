@@ -106,7 +106,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'dexsearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -172,7 +172,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: targetsBuffer.join(","),
 			cmd: 'randmove',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast(true)) return;
@@ -218,7 +218,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast(true)) return;
@@ -261,7 +261,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'movesearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -321,7 +321,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'itemsearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -366,7 +366,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'abilitysearch',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;
@@ -409,7 +409,7 @@ export const commands: ChatCommands = {
 		return runSearch({
 			tar: target,
 			cmd: 'learn',
-			canAll: (!this.broadcastMessage || room?.isPersonal),
+			canAll: !this.broadcastMessage || !!room?.settings.isPersonal,
 			message: cmd,
 		}).then(response => {
 			if (!response.error && !this.runBroadcast()) return;

@@ -48,7 +48,7 @@ class Giveaway {
 		host: User, giver: User, room: ChatRoom | GameRoom,
 		ot: string, tid: string, prize: string
 	) {
-		this.gaNumber = ++room.gameNumber;
+		this.gaNumber = room.nextGameNumber();
 		this.host = host;
 		this.giver = giver;
 		this.room = room;
@@ -257,7 +257,10 @@ export class QuestionGiveaway extends Giveaway {
 
 		if (!this.answered[user.id]) this.answered[user.id] = 0;
 		if (this.answered[user.id] >= 3) {
-			return user.sendTo(this.room, "You have already guessed three times. You cannot guess anymore in this giveaway.");
+			return user.sendTo(
+				this.room,
+				"You have already guessed three times. You cannot guess anymore in this.giveaway."
+			);
 		}
 
 		const sanitized = toID(guess);
@@ -497,7 +500,7 @@ export class GTSGiveaway {
 		room: ChatRoom | GameRoom, giver: User, amount: number,
 		summary: string, deposit: string, lookfor: string
 	) {
-		this.gtsNumber = ++room.gameNumber;
+		this.gtsNumber = room.nextGameNumber();
 		this.room = room;
 		this.giver = giver;
 		this.left = amount;
@@ -586,7 +589,7 @@ export class GTSGiveaway {
 			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Utils.escapeHTML(this.lookfor)}</strong>" has finished.</p>`);
 			Giveaway.updateStats(this.monIDs);
 		}
-		delete this.room.gtsga;
+		this.room.gtsga = undefined;
 		return this.left;
 	}
 
@@ -864,7 +867,7 @@ const cmds: ChatCommands = {
 	end(target, room, user) {
 		if (room.roomid !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (user.id !== room.giveaway.host.id && !this.can('warn', null, room)) return false;
+		if (!this.can('warn', null, room) && user.id !== room.giveaway.host.id) return false;
 
 		if (target && target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");

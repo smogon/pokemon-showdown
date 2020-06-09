@@ -42,13 +42,12 @@ export const commands: ChatCommands = {
 			buf += ` <small style="color:gray">(trusted${targetUser.id === trusted ? `` : `: <span class="username">${trusted}</span>`})</small>`;
 		}
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
-		let roomauth = '';
-		if (usedRoom.auth && targetUser.id in usedRoom.auth) roomauth = usedRoom.auth[targetUser.id];
-		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
-			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
+		const roomauth = usedRoom.auth.getDirect(targetUser.id);
+		if (Config.groups[roomauth]?.name) {
+			buf += Chat.html`<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
-		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
-			buf += `<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
+		if (Config.groups[targetUser.group]?.name) {
+			buf += Chat.html`<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
 		}
 		if (targetUser.isSysop) {
 			buf += `<br />(Pok&eacute;mon Showdown System Operator)`;
@@ -63,14 +62,14 @@ export const commands: ChatCommands = {
 			if (roomid === 'global') continue;
 			const targetRoom = Rooms.get(roomid)!;
 
-			const authSymbol = (targetRoom.auth && targetRoom.auth[targetUser.id] ? targetRoom.auth[targetUser.id] : '');
+			const authSymbol = targetRoom.auth.getDirect(targetUser.id).trim();
 			const battleTitle = (targetRoom.battle ? ` title="${targetRoom.title}"` : '');
 			const output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
-			if (targetRoom.isPrivate === true) {
-				if (targetRoom.modjoin === '~') continue;
+			if (targetRoom.settings.isPrivate === true) {
+				if (targetRoom.settings.modjoin === '~') continue;
 				if (privaterooms) privaterooms += ` | `;
 				privaterooms += output;
-			} else if (targetRoom.isPrivate) {
+			} else if (targetRoom.settings.isPrivate) {
 				if (hiddenrooms) hiddenrooms += ` | `;
 				hiddenrooms += output;
 			} else {
@@ -85,7 +84,7 @@ export const commands: ChatCommands = {
 		}
 		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
 		const canViewPunishments = canViewAlts ||
-			(usedRoom.isPrivate !== true && user.can('mute', targetUser, usedRoom) && targetUser.id in usedRoom.users);
+			(usedRoom.settings.isPrivate !== true && user.can('mute', targetUser, usedRoom) && targetUser.id in usedRoom.users);
 		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
 		buf += `<br />`;
 
@@ -194,8 +193,8 @@ export const commands: ChatCommands = {
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.game) continue;
 			if ((targetUser.id in curRoom.game.playerTable && !targetUser.inRooms.has(curRoom.roomid)) ||
-				(curRoom.auth && curRoom.auth[targetUser.id] === Users.PLAYER_SYMBOL)) {
-				if (curRoom.isPrivate && !canViewAlts) {
+				curRoom.auth.getDirect(targetUser.id) === Users.PLAYER_SYMBOL) {
+				if (curRoom.settings.isPrivate && !canViewAlts) {
 					continue;
 				}
 				gameRooms.push(curRoom.roomid);
@@ -248,13 +247,12 @@ export const commands: ChatCommands = {
 		let buf = Utils.html`<strong class="username">${target}</strong>`;
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 
-		let roomauth = '';
-		if (room?.auth && userid in room.auth) roomauth = room.auth[userid];
-		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
+		const roomauth = room?.auth.getDirect(userid);
+		if (roomauth && Config.groups[roomauth]?.name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
-		const group = (Users.usergroups[userid] || '').charAt(0);
-		if (Config.groups[group] && Config.groups[group].name) {
+		const group = Users.globalAuth.get(userid);
+		if (Config.groups[group]?.name) {
 			buf += `<br />Global ${Config.groups[group].name} (${group})`;
 		}
 
@@ -318,8 +316,10 @@ export const commands: ChatCommands = {
 		const battles = [];
 		for (const curRoom of Rooms.rooms.values()) {
 			if (!curRoom.battle) continue;
-			if ((user1?.inRooms.has(curRoom.roomid) || (curRoom.auth && curRoom.auth[userID1])) &&
-				(user2?.inRooms.has(curRoom.roomid) || (curRoom.auth && curRoom.auth[userID2]))) {
+			if (
+				(user1?.inRooms.has(curRoom.roomid) || curRoom.auth.has(userID1)) &&
+				(user2?.inRooms.has(curRoom.roomid) || curRoom.auth.has(userID2))
+			) {
 				battles.push(curRoom.roomid);
 			}
 		}
@@ -335,7 +335,7 @@ export const commands: ChatCommands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!room.chatRoomData || room.roomid.includes('-')) {
+		if (!room.persist) {
 			return this.errorReply("This command is unavailable in temporary rooms.");
 		}
 		return this.parse(`/join view-punishments-${room}`);
@@ -482,6 +482,8 @@ export const commands: ChatCommands = {
 	pokedex: 'data',
 	data(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
+		const gen = parseInt(cmd.substr(-1));
+		if (gen) target += `, gen${gen}`;
 
 		let buffer = '';
 		let sep = target.split(',');
@@ -514,7 +516,7 @@ export const commands: ChatCommands = {
 			dex = Dex.mod(format.mod);
 		}
 		const newTargets = dex.dataSearch(target);
-		const showDetails = (cmd === 'dt' || cmd === 'details');
+		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
 		if (!newTargets || !newTargets.length) {
 			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
@@ -542,7 +544,7 @@ export const commands: ChatCommands = {
 				if (format?.onModifySpecies) {
 					pokemon = format.onModifySpecies.call({dex} as Battle, pokemon) || pokemon;
 				}
-				let tierDisplay = room?.dataCommandTierDisplay;
+				let tierDisplay = room?.settings.dataCommandTierDisplay;
 				if (!tierDisplay && room?.battle) {
 					if (room.battle.format.includes('doubles') || room.battle.format.includes('vgc')) {
 						tierDisplay = 'doubles tiers';
@@ -786,15 +788,27 @@ export const commands: ChatCommands = {
 
 	'!details': true,
 	dt: 'details',
+	dt1: 'details',
+	dt2: 'details',
+	dt3: 'details',
+	dt4: 'details',
+	dt5: 'details',
+	dt6: 'details',
+	dt7: 'details',
+	dt8: 'details',
 	details(target) {
 		if (!target) return this.parse('/help details');
 		this.run('data');
 	},
-	detailshelp: [
-		`/details [pokemon/item/move/ability/nature] - Get additional details on this pokemon/item/move/ability/nature.`,
-		`/details [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!details [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # &`,
-	],
+	detailshelp() {
+		this.sendReplyBox(
+			`<code>/details [Pok\u00e9mon/item/move/ability/nature]</code>: get additional details on this Pok\u00e9mon/item/move/ability/nature.<br />` +
+			`<code>/details [Pok\u00e9mon/item/move/ability/nature], Gen [generation number]</code>: get details on this Pok\u00e9mon/item/move/ability/nature in that generation.<br />` +
+			`You can also append the generation number to <code>/dt</code>; for example, <code>/dt1 Mewtwo</code> gets details on Mewtwo in Gen 1.<br />` +
+			`<code>/details [Pok\u00e9mon/item/move/ability/nature], [format]</code>: get details on this Pok\u00e9mon/item/move/ability/nature in that format.<br />` +
+			`<code>!details [Pok\u00e9mon/item/move/ability/nature]</code>: show everyone these details. Requires: + % @ # &`
+		);
+	},
 
 	'!weakness': true,
 	weaknesses: 'weakness',
@@ -1933,7 +1947,7 @@ export const commands: ChatCommands = {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
 				`${room ? this.tr("Please follow the rules:") + '<br />' : ``}` +
-				`${room?.rulesLink ? Utils.html`- <a href="${room.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``}` +
+				`${room?.settings.rulesLink ? Utils.html`- <a href="${room.settings.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``}` +
 				`- <a href="https://${Config.routes.root}${this.tr('/rules')}">${this.tr("Global Rules")}</a>`
 			);
 			return;
@@ -1949,20 +1963,17 @@ export const commands: ChatCommands = {
 		target = target.trim();
 
 		if (target === 'delete' || target === 'remove') {
-			if (!room.rulesLink) return this.errorReply(`This room does not have rules set to remove.`);
-			delete room.rulesLink;
+			if (!room.settings.rulesLink) return this.errorReply(`This room does not have rules set to remove.`);
+			delete room.settings.rulesLink;
 			this.privateModAction(`(${user.name} has removed the room rules link.)`);
 			this.modlog('RULES', null, `removed room rules link`);
 		} else {
-			room.rulesLink = target;
+			room.settings.rulesLink = target;
 			this.privateModAction(`(${user.name} changed the room rules link to: ${target})`);
 			this.modlog('RULES', null, `changed link to: ${target}`);
 		}
 
-		if (room.chatRoomData) {
-			room.chatRoomData.rulesLink = room.rulesLink;
-			Rooms.global.writeChatRoomData();
-		}
+		room.saveSettings();
 	},
 	ruleshelp: [
 		`/rules - Show links to room rules and global rules.`,
@@ -2110,10 +2121,12 @@ export const commands: ChatCommands = {
 			// Special case for Meowstic-M
 			if (id === 'meowstic') id = 'meowsticm' as ID;
 			if (['ou', 'uu'].includes(formatId) && generation === 'sm' &&
-				room?.language && room.language in supportedLanguages) {
+				room?.settings.language && room.settings.language in supportedLanguages) {
 				// Limited support for translated analysis
 				// Translated analysis do not support automatic redirects from a id to the proper page
-				this.sendReplyBox(Utils.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(
+					Utils.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}/?lang=${supportedLanguages[room.settings.language]}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`
+				);
 			} else if (['ou', 'uu'].includes(formatId) && generation === 'sm') {
 				this.sendReplyBox(
 					Utils.html`<a href="https://www.smogon.com/dex/${generation}/pokemon/${id}/${formatId}">${generation.toUpperCase()} ${formatName} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
@@ -2418,7 +2431,7 @@ export const commands: ChatCommands = {
 	showimage(target, room, user) {
 		if (!target) return this.parse('/help showimage');
 		if (!this.can('declare', null, room)) return false;
-		if (this.room.isPersonal && !this.user.can('announce')) {
+		if (this.room.settings.isPersonal && !this.user.can('announce')) {
 			return this.errorReply(`Images are not allowed in personal rooms.`);
 		}
 
@@ -2523,7 +2536,7 @@ export const pages: PageTable = {
 		let buf = "";
 		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!this.room.chatRoomData) return;
+		if (!this.room.persist) return;
 		if (!this.can('mute', null, this.room)) return;
 		// Ascending order
 		const sortedPunishments = Array.from(Punishments.getPunishments(this.room.roomid))

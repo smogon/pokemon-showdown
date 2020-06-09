@@ -504,7 +504,7 @@ function checkTicketBanned(user: User) {
 
 // Prevent a desynchronization issue when hotpatching
 for (const room of Rooms.rooms.values()) {
-	if (!room.isHelp || !room.game) continue;
+	if (!room.settings.isHelp || !room.game) continue;
 	const game = room.getGame(HelpTicket)!;
 	if (game.ticket) game.ticket = tickets[game.ticket.userid];
 }
@@ -579,10 +579,7 @@ export const pages: PageTable = {
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
-					if (!helpRoom.auth) {
-						helpRoom.auth = {};
-					}
-					if (!helpRoom.auth[user.id]) helpRoom.auth[user.id] = '+';
+					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
 					connection.popup(`You already have a Help ticket.`);
 					user.joinRoom(`help-${ticket.userid}` as RoomID);
 					return this.close();
@@ -1096,10 +1093,7 @@ export const commands: ChatCommands = {
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
-					if (!helpRoom.auth) {
-						helpRoom.auth = {};
-					}
-					if (!helpRoom.auth[user.id]) helpRoom.auth[user.id] = '+';
+					if (!helpRoom.auth.has(user.id)) helpRoom.auth.set(user.id, '+');
 					this.parse(`/join help-${ticket.userid}`);
 					return this.popupReply(`You already have an open ticket; please wait for global staff to respond.`);
 				}
@@ -1199,8 +1193,8 @@ export const commands: ChatCommands = {
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			} else {
 				helpRoom.pokeExpireTimer();
-				helpRoom.introMessage = introMsg;
-				helpRoom.staffMessage = staffMessage + staffHint + reportTargetInfo;
+				helpRoom.settings.introMessage = introMsg;
+				helpRoom.settings.staffMessage = staffMessage + staffHint + reportTargetInfo;
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
