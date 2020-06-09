@@ -1597,6 +1597,14 @@ export const Chat = new class {
 	}
 
 	/**
+	 * Strips HTML from a string.
+	 */
+	stripHTML(htmlContent: string) {
+		if (!htmlContent) return '';
+		return htmlContent.replace(/<[^>]*>/g, '');
+	}
+
+	/**
 	 * Returns singular (defaulting to '') if num is 1, or plural
 	 * (defaulting to 's') otherwise. Helper function for pluralizing
 	 * words.
