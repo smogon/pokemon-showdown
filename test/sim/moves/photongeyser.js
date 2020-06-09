@@ -42,7 +42,7 @@ describe(`Photon Geyser`, function () {
 			{species: 'Necrozma', ability: 'prismarmor', moves: ['photongeyser']},
 		]});
 		battle.setPlayer('p2', {team: [{species: 'Bruxish', ability: 'dazzling', moves: ['photongeyser', 'spore']}]});
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 		battle.makeChoices('move assist', 'move photongeyser');
 		assert.fullHP(pokemon, "incorrectly ignores abilities through Assist");
 		pokemon.hp = pokemon.maxhp;

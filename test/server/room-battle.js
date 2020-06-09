@@ -22,7 +22,7 @@ describe('Simulator abstraction layer features', function () {
 
 			it('should not get players out of sync in rated battles on rename', function () {
 				// Regression test for 47263c8749
-				let packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
+				const packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 				p1 = new User();
 				p2 = new User();
 				p1.forceRename("MissingNo."); // Don't do this at home

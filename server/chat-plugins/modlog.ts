@@ -218,7 +218,7 @@ function prettifyResults(
 	addModlogLinks: boolean, hideIps: boolean, maxLines: number, onlyPunishments: boolean
 ) {
 	if (resultArray === null) {
-		return "|popup|The modlog query has crashed.";
+		return "|popup|The modlog query crashed.";
 	}
 	let roomName;
 	switch (roomid) {
@@ -616,7 +616,7 @@ export const commands: ChatCommands = {
 	modloghelp: [
 		`/modlog OR /ml [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
 		`If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.`,
-		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ # & ~`,
+		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ # &`,
 	],
 
 	battlesearch(target, room, user, connection) {
@@ -637,7 +637,7 @@ export const commands: ChatCommands = {
 		return this.parse(`/join view-battlesearch-${userid}-${turnLimit}`);
 	},
 	battlesearchhelp: [
-		'/battlesearch [user], (turn limit) - Searches a users rated battle history and returns information on battles that ended in less than (turn limit or 1) turns. Requires & ~',
+		'/battlesearch [user], (turn limit) - Searches a users rated battle history and returns information on battles that ended in less than (turn limit or 1) turns. Requires &',
 	],
 };
 

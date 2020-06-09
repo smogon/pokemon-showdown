@@ -261,7 +261,7 @@ export class BattleQueue extends Array<Action> {
 	}
 
 	willMove(pokemon: Pokemon) {
-		if (pokemon.fainted) return false;
+		if (pokemon.fainted) return null;
 		for (const action of this) {
 			if (action.choice === 'move' && action.pokemon === pokemon) {
 				return action;
@@ -297,7 +297,7 @@ export class BattleQueue extends Array<Action> {
 				return action;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**

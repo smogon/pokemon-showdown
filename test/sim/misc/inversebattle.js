@@ -54,6 +54,22 @@ describe('Inverse Battle', function () {
 		}
 	});
 
+	it('should affect the resistance of Delta Stream', function () {
+		battle.setPlayer('p1', {team: [{species: "Rayquaza-Mega", ability: 'deltastream', moves: ['hiddenpowerbug']}]});
+		battle.setPlayer('p2', {team: [{species: "Rayquaza-Mega", ability: 'deltastream', moves: ['hiddenpowerbug']}]});
+		battle.makeChoices('move hiddenpower', 'move hiddenpower');
+		battle.makeChoices('move hiddenpower', 'move hiddenpower');
+		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+	});
+
+	it('should make Ghost/Grass types take neutral damage from Flying Press', function () {
+		battle.setPlayer('p1', {team: [{species: "Hawlucha", ability: 'unburden', moves: ['flyingpress']}]});
+		battle.setPlayer('p2', {team: [{species: "Gourgeist", ability: 'insomnia', moves: ['shadowsneak']}]});
+		battle.makeChoices('move flyingpress', 'move shadowsneak');
+		battle.makeChoices('move flyingpress', 'move shadowsneak');
+		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+	});
+
 	it('should not affect ability-based immunities', function () {
 		battle.setPlayer('p1', {team: [{species: "Hariyama", ability: 'guts', moves: ['earthquake']}]});
 		battle.setPlayer('p2', {team: [{species: "Mismagius", ability: 'levitate', moves: ['shadowsneak']}]});

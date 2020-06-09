@@ -25,7 +25,7 @@ describe('Rage Powder', function () {
 			{species: 'Kadabra', ability: 'synchronize', moves: ['absorb']},
 			{species: 'Alakazam', ability: 'synchronize', moves: ['absorb']},
 		]});
-		let hitCount = [0, 0, 0];
+		const hitCount = [0, 0, 0];
 		battle.p1.active[0].damage = function (...args) {
 			hitCount[0]++;
 			return Sim.Pokemon.prototype.damage.apply(this, args);
@@ -56,7 +56,7 @@ describe('Rage Powder', function () {
 			{species: 'Escavalier', ability: 'overcoat', moves: ['absorb']},
 			{species: 'Alakazam', ability: 'synchronize', item: 'safetygoggles', moves: ['absorb']},
 		]});
-		let hitCount = [0, 0, 0];
+		const hitCount = [0, 0, 0];
 		battle.p1.active[0].damage = function (...args) {
 			hitCount[0]++;
 			return Sim.Pokemon.prototype.damage.apply(this, args);

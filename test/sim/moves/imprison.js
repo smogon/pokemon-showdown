@@ -27,12 +27,14 @@ describe('Imprison', function () {
 		assert.cantMove(() => battle.choose('p2', 'move calmmind'), 'Abra', 'Calm Mind', true);
 
 		// Imprison doesn't end when the foe switches
-		battle.makeChoices('default', 'switch 2');
-		battle.makeChoices('move calmmind', 'move calmmind');
-		assert.statStage(battle.p2.active[0], 'spa', 0);
+		battle.makeChoices('auto', 'switch 2');
+		assert.cantMove(() => battle.choose('p2', 'move calmmind'));
+
+		// Imprison should cause Struggle if all moves match
+		battle.makeChoices('auto', 'move struggle');
 
 		// Imprison is not passed by Baton Pass
-		battle.makeChoices('move batonpass', 'move calmmind');
+		battle.makeChoices('move batonpass', 'move struggle');
 		assert.statStage(battle.p2.active[0], 'spa', 0);
 		battle.makeChoices('switch 2', '');
 		assert.statStage(battle.p2.active[0], 'spa', 0);

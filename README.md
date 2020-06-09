@@ -84,19 +84,19 @@ If you truly want to host the client yourself, there is [a repository for the Po
 Setting up an Administrator account
 ------------------------------------------------------------------------
 
-Once your server is up, you probably want to make yourself an Administrator (~) on it.
+Once your server is up, you probably want to make yourself an Administrator (&) on it.
 
 ### config/usergroups.csv
 
 To become an Administrator, create a file named `config/usergroups.csv` containing
 
-    USER,~
+    USER,&
 
-Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the tilde.
+Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the ampersand.
 
 This username must be registered. If you do not have a registered account, you can create one using the Register button in the settings menu (it looks like a gear) in the upper-right of Pokémon Showdown.
 
-Once you're an administrator, you can promote/demote others easily with the `/globaladmin`, `/globalleader`, `/globalmod`, etc commands.
+Once you're an administrator, you can promote/demote others easily with the `/globaladmin`, `/globalmod`, `/globaldriver`, etc commands.
 
 
 Browser support
@@ -151,7 +151,6 @@ Owner
 Staff
 
 - Andrew Werner [HoeenHero] - Development
-- Astrid Halberkamp [Asheviere, bumbadadabum] - Development
 - Chris Monsanto [chaos] - Sysadmin
 - Kirk Scheibelhut [pre] - Development, Sysadmin
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
@@ -159,6 +158,7 @@ Staff
 
 Retired Staff
 
+- Astrid Halberkamp [Asheviere, bumbadadabum] - Development
 - Bill Meltsner [bmelts] - Development, Sysadmin
 - Cathy J. Fitzpatrick [cathyjf] - Development, Sysadmin
 - Hugh Gordon [V4] - Research (game mechanics), Development

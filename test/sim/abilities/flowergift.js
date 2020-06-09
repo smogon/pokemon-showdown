@@ -16,10 +16,10 @@ describe('Flower Gift', function () {
 			[{species: "Blissey", ability: 'serenegrace', moves: ['healbell']}, {species: "Blissey", ability: 'serenegrace', moves: ['healbell']}],
 		]);
 
-		let cherAtk = battle.p1.active[0].getStat('atk');
-		let cherSpd = battle.p1.active[0].getStat('spd');
-		let baseAtk = battle.p1.active[1].getStat('atk');
-		let baseSpd = battle.p1.active[1].getStat('spd');
+		const cherAtk = battle.p1.active[0].getStat('atk');
+		const cherSpd = battle.p1.active[0].getStat('spd');
+		const baseAtk = battle.p1.active[1].getStat('atk');
+		const baseSpd = battle.p1.active[1].getStat('spd');
 
 		// Set the weather to sun and re-check
 		battle.field.setWeather('sunnyday', 'debug');
@@ -36,10 +36,10 @@ describe('Flower Gift', function () {
 		]);
 
 		battle.makeChoices('move transform 1, move healbell', 'move healbell, move healbell');
-		let cherAtk = battle.p1.active[0].getStat('atk');
-		let cherSpd = battle.p1.active[0].getStat('spd');
-		let baseAtk = battle.p1.active[1].getStat('atk');
-		let baseSpd = battle.p1.active[1].getStat('spd');
+		const cherAtk = battle.p1.active[0].getStat('atk');
+		const cherSpd = battle.p1.active[0].getStat('spd');
+		const baseAtk = battle.p1.active[1].getStat('atk');
+		const baseSpd = battle.p1.active[1].getStat('spd');
 
 		// Set the weather to sun and re-check
 		battle.field.setWeather('sunnyday', 'debug');

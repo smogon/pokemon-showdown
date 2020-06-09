@@ -10,13 +10,12 @@ try {
 var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
+var force = process.argv[2] === '--force';
+
+process.chdir(__dirname);
 
 function shell(cmd) {
-	child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
-}
-
-function sucrase(src, out, opts) {
-	shell(`npx sucrase ${opts || ''} -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
+	child_process.execSync(cmd, {stdio: 'inherit'});
 }
 
 function replace(file, replacements) {
@@ -47,6 +46,16 @@ function replace(file, replacements) {
 		}
 	});
 }
+function copyOverDataJSON(file) {
+	var source = './data/' + file;
+	var dest = './.data-dist/' + file;
+	fs.readFile(source, function (err, text) {
+		if (err) throw err;
+		fs.writeFile(dest, text, function (err) {
+			if (err) throw err;
+		});
+	});
+}
 
 try {
 	var sucraseVersion = require('sucrase').getVersion().split('.');
@@ -61,20 +70,95 @@ try {
 	shell('npm install --production');
 }
 
-sucrase('./sim', './.sim-dist');
+function needsSucrase(source, dest, path = '') {
+	if (path.endsWith('.ts')) {
+		if (path.endsWith('.d.ts')) return false;
+		const sourceStat = fs.lstatSync(source + path);
+		try {
+			const destStat = fs.lstatSync(dest + path.slice(0, -2) + 'js');
+			return (sourceStat.ctimeMs > destStat.ctimeMs);
+		} catch (e) {
+			// dest doesn't exist
+			return true;
+		}
+	}
+	if (!path.includes('.')) {
+		// probably dir
+		try {
+			const files = fs.readdirSync(source + path);
+			for (const file of files) {
+				if (needsSucrase(source, dest, path + '/' + file)) {
+					return true;
+				}
+			}
+		} catch (e) {
+			// not dir
+		}
+		return false;
+	}
+	return false;
+}
+
+function sucrase(src, out, opts) {
+	try {
+		if (!force && src !== './config' && !needsSucrase(src, out)) {
+			return false;
+		}
+	} catch (e) {}
+	shell(`npx sucrase ${opts || ''} -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
+	return true;
+}
+
+if (sucrase('./config', './.config-dist')) {
+	replace('.config-dist', [
+		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);	
+}
+
+if (sucrase('./data', './.data-dist')) {
+	replace('.data-dist', [
+		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);
+}
+
+if (sucrase('./sim', './.sim-dist')) {
+	replace('.sim-dist', [
+		{regex: /(require\(.*?)(lib)/g, replace: `$1.lib-dist`},
+	]);
+}
+
 sucrase('./lib', './.lib-dist');
-sucrase('./server', './.server-dist');
-sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets');
+
+if (sucrase('./server', './.server-dist')) {
+	replace('.server-dist', [
+		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);
+}
+
+if (sucrase('./tools/set-import', './tools/set-import', '--exclude-dirs=sets')) {
+	replace('./tools/set-import/importer.js', [
+		{regex: /(require\(.*?)(lib|sim)/g, replace: `$1.$2-dist`},
+	]);
+}
+
+if (!fs.existsSync('./.data-dist/README.md')) {
+	const text = '**NOTE**: This folder contains the compiled output of the `data/` directory.\n' +
+		'You should be editing the `.ts` files there and then running `npm run build` or\n' +
+		'`./pokemon-showdown` to force these `.js` files to be recreated.\n';
+	fs.writeFile('./.config-dist/README.md', text.replace('data/', 'config/'), function () {});
+	fs.writeFile('./.data-dist/README.md', text, function () {});
+	fs.writeFile('./.sim-dist/README.md', text.replace('data/', 'sim/'), function () {});
+	fs.writeFile('./.server-dist/README.md', text.replace('data/', 'server/'), function () {});
+	fs.writeFile('./.lib-dist/README.md', text.replace('data/', 'lib/'), function () {});
+}
+
+// sucrase doesn't copy JSON over, so we'll have to do it ourselves
+copyOverDataJSON('cap-1v1-sets.json');
+copyOverDataJSON('mods/gen7/factory-sets.json');
+copyOverDataJSON('mods/gen7/bss-factory-sets.json');
+copyOverDataJSON('mods/gen6/factory-sets.json');
+
 // NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
-replace(path.join(__dirname, '.sim-dist'), [
-	{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`, 'g'), replace: `$1.lib-dist$3`},
-]);
-replace(path.join(__dirname, '.server-dist'), [
-	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.$2-dist$3`},
-]);
-replace(path.join(__dirname, './tools/set-import/importer.js'), [
-	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.$2-dist$3`},
-]);
 
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it's needed before we can start the server
@@ -85,7 +169,7 @@ try {
 
 	console.log('config.js does not exist. Creating one with default settings...');
 	fs.writeFileSync(
-		path.resolve(__dirname, 'config/config.js'),
-		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
+		'config/config.js',
+		fs.readFileSync('config/config-example.js')
 	);
 }

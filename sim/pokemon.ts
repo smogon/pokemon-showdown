@@ -26,6 +26,12 @@ export interface EffectState {
 	[k: string]: any;
 }
 
+// Berries which restore PP/HP and thus inflict external staleness when given to an opponent as
+// there are very few non-malicious competitive reasons to do so
+export const RESTORATIVE_BERRIES = new Set([
+	'leppaberry', 'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry',
+] as ID[]);
+
 export class Pokemon {
 	readonly side: Side;
 	readonly battle: Battle;
@@ -33,9 +39,6 @@ export class Pokemon {
 	readonly set: PokemonSet;
 	readonly name: string;
 	readonly fullname: string;
-	readonly id: string; // shouldn't really be used anywhere
-	readonly forme: string;
-	readonly speciesid: ID;
 	readonly level: number;
 	readonly gender: GenderName;
 	readonly happiness: number;
@@ -129,7 +132,7 @@ export class Pokemon {
 	newlySwitched: boolean;
 	beingCalledBack: boolean;
 
-	lastMove: Move | null;
+	lastMove: ActiveMove | null;
 	lastMoveTargetLoc?: number;
 	moveThisTurn: string | boolean;
 	/**
@@ -258,16 +261,13 @@ export class Pokemon {
 		this.set = set as PokemonSet;
 
 		this.species = this.baseSpecies;
-		this.forme = this.battle.dex.getForme(set.species);
-		this.speciesid = toID(this.forme);
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseSpecies.baseSpecies;
 		}
-		this.speciesData = {id: this.speciesid};
+		this.speciesData = {id: this.species.id};
 
 		this.name = set.name.substr(0, 20);
 		this.fullname = this.side.id + ': ' + this.name;
-		this.id = this.fullname;
 
 		set.level = this.battle.dex.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
@@ -279,29 +279,30 @@ export class Pokemon {
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
-		if (this.set.moves) {
-			for (const moveid of this.set.moves) {
-				let move = this.battle.dex.getMove(moveid);
-				if (!move.id) continue;
-				if (move.id === 'hiddenpower' && move.type !== 'Normal') {
-					if (!set.hpType) set.hpType = move.type;
-					move = this.battle.dex.getMove('hiddenpower');
-				}
-				this.baseMoveSlots.push({
-					move: move.name,
-					id: move.id,
-					pp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
-					maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
-					target: move.target,
-					disabled: false,
-					disabledSource: '',
-					used: false,
-				});
+		if (!this.set.moves || !this.set.moves.length) {
+			throw new Error(`Set ${this.name} has no moves`);
+		}
+		for (const moveid of this.set.moves) {
+			let move = this.battle.dex.getMove(moveid);
+			if (!move.id) continue;
+			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
+				if (!set.hpType) set.hpType = move.type;
+				move = this.battle.dex.getMove('hiddenpower');
 			}
+			this.baseMoveSlots.push({
+				move: move.name,
+				id: move.id,
+				pp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+				maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+				target: move.target,
+				disabled: false,
+				disabledSource: '',
+				used: false,
+			});
 		}
 
 		this.position = 0;
-		this.details = this.forme + (this.level === 100 ? '' : ', L' + this.level) +
+		this.details = this.species.name + (this.level === 100 ? '' : ', L' + this.level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 
 		this.status = '';
@@ -749,7 +750,7 @@ export class Pokemon {
 		return amount;
 	}
 
-	moveUsed(move: Move, targetLoc?: number) {
+	moveUsed(move: ActiveMove, targetLoc?: number) {
 		this.lastMove = move;
 		this.lastMoveTargetLoc = targetLoc;
 		this.moveThisTurn = move.id;
@@ -771,6 +772,11 @@ export class Pokemon {
 		return this.attackedBy[this.attackedBy.length - 1];
 	}
 
+	/**
+	 * This refers to multi-turn moves like SolarBeam and Outrage and
+	 * Sky Drop, which remove all choice (no dynamax, switching, etc).
+	 * Don't use it for "soft locks" like Choice Band.
+	 */
 	getLockedMove(): string | null {
 		const lockedMove = this.battle.runEvent('LockMove', this);
 		return (lockedMove === true) ? null : lockedMove;
@@ -811,10 +817,10 @@ export class Pokemon {
 				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
 			} else if (moveSlot.id === 'return') {
 				// @ts-ignore - Return's basePowerCallback only takes one parameter
-				moveName = 'Return ' + this.battle.dex.getMove('return')!.basePowerCallback(this);
+				moveName = 'Return ' + this.battle.dex.getMove('return').basePowerCallback(this);
 			} else if (moveSlot.id === 'frustration') {
 				// @ts-ignore - Frustration's basePowerCallback only takes one parameter
-				moveName = 'Frustration ' + this.battle.dex.getMove('frustration')!.basePowerCallback(this);
+				moveName = 'Frustration ' + this.battle.dex.getMove('frustration').basePowerCallback(this);
 			}
 			let target = moveSlot.target;
 			if (moveSlot.id === 'curse') {
@@ -830,12 +836,14 @@ export class Pokemon {
 				this.side.active.length >= 2 && this.battle.targetTypeChoices(target!)
 			) {
 				disabled = true;
+			}
+
+			if (!disabled) {
+				hasValidMove = true;
 			} else if (disabled === 'hidden' && restrictData) {
 				disabled = false;
 			}
-			if (!disabled) {
-				hasValidMove = true;
-			}
+
 			moves.push({
 				move: moveName,
 				id: moveSlot.id,
@@ -850,6 +858,41 @@ export class Pokemon {
 
 	maxMoveDisabled(move: Move) {
 		return !!(move.category === 'Status' && (this.hasItem('assaultvest') || this.volatiles['taunt']));
+	}
+
+	getDynamaxRequest(skipChecks?: boolean) {
+		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
+		if (!skipChecks) {
+			if (!this.canDynamax) return;
+			if (
+				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
+				this.getItem().zMove || this.battle.canMegaEvo(this)
+			) {
+				return;
+			}
+			// Some pokemon species are unable to dynamax
+			const cannotDynamax = ['Zacian', 'Zamazenta', 'Eternatus'];
+			if (cannotDynamax.includes(this.species.baseSpecies)) {
+				return;
+			}
+		}
+		const result: DynamaxOptions = {maxMoves: []};
+		let atLeastOne = false;
+		for (const moveSlot of this.moveSlots) {
+			const move = this.battle.dex.getMove(moveSlot.id);
+			const maxMove = this.battle.getMaxMove(move, this);
+			if (maxMove) {
+				if (this.maxMoveDisabled(maxMove)) {
+					result.maxMoves.push({move: maxMove.id, target: maxMove.target, disabled: true});
+				} else {
+					result.maxMoves.push({move: maxMove.id, target: maxMove.target});
+					atLeastOne = true;
+				}
+			}
+		}
+		if (!atLeastOne) return;
+		if (this.canGigantamax) result.gigantamax = this.canGigantamax;
+		return result;
 	}
 
 	getMoveRequestData() {
@@ -901,8 +944,8 @@ export class Pokemon {
 			const canZMove = this.battle.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
 
-			if (this.battle.canDynamax(this)) data.canDynamax = true;
-			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.battle.canDynamax(this, true);
+			if (this.getDynamaxRequest()) data.canDynamax = true;
+			if (data.canDynamax || this.volatiles['dynamax']) data.maxMoves = this.getDynamaxRequest(true);
 		}
 
 		return data;
@@ -1014,7 +1057,7 @@ export class Pokemon {
 		}
 	}
 
-	transformInto(pokemon: Pokemon, effect: Effect | null = null) {
+	transformInto(pokemon: Pokemon, effect?: Effect) {
 		const species = pokemon.species;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
@@ -1022,7 +1065,7 @@ export class Pokemon {
 			return false;
 		}
 
-		if (!this.setSpecies(species, null, true)) return false;
+		if (!this.setSpecies(species, effect, true)) return false;
 
 		this.transformed = true;
 		this.weighthg = pokemon.weighthg;
@@ -1061,8 +1104,17 @@ export class Pokemon {
 		for (boostName in pokemon.boosts) {
 			this.boosts[boostName] = pokemon.boosts[boostName]!;
 		}
-		if (this.battle.gen >= 6 && pokemon.volatiles['focusenergy']) this.addVolatile('focusenergy');
-		if (pokemon.volatiles['laserfocus']) this.addVolatile('laserfocus');
+		if (this.battle.gen >= 6) {
+			const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
+			for (const volatile of volatilesToCopy) {
+				if (pokemon.volatiles[volatile]) {
+					this.addVolatile(volatile);
+					if (volatile === 'gmaxchistrike') this.volatiles[volatile].layers = pokemon.volatiles[volatile].layers;
+				} else {
+					this.removeVolatile(volatile);
+				}
+			}
+		}
 		if (effect) {
 			this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
 		} else {
@@ -1223,7 +1275,7 @@ export class Pokemon {
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
 			}
 		}
-		if (this.forme === 'Eternatus-Eternamax' && this.volatiles.dynamax) {
+		if (this.species.name === 'Eternatus-Eternamax' && this.volatiles.dynamax) {
 			this.volatiles = {dynamax: this.volatiles.dynamax};
 		} else {
 			this.volatiles = {};
@@ -1382,9 +1434,9 @@ export class Pokemon {
 		if (!source) source = this;
 
 		if (this.status === status.id) {
-			if (sourceEffect && sourceEffect.status === this.status) {
+			if ((sourceEffect as Move)?.status === this.status) {
 				this.battle.add('-fail', this, this.status);
-			} else if (sourceEffect?.status) {
+			} else if ((sourceEffect as Move)?.status) {
 				this.battle.add('-fail', source);
 				this.battle.attrLastMove('[still]');
 			}
@@ -1396,7 +1448,9 @@ export class Pokemon {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');
-				if (sourceEffect?.status) this.battle.add('-immune', this);
+				if ((sourceEffect as Move)?.status) {
+					this.battle.add('-immune', this);
+				}
 				return false;
 			}
 		}
@@ -1458,7 +1512,7 @@ export class Pokemon {
 			this.battle.singleEvent('Eat', item, this.itemData, this, source, sourceEffect);
 			this.battle.runEvent('EatItem', this, null, null, item);
 
-			if (item.id === 'leppaberry') {
+			if (RESTORATIVE_BERRIES.has(item.id)) {
 				switch (this.pendingStaleness) {
 				case 'internal':
 					if (this.staleness !== 'external') this.staleness = 'internal';
@@ -1540,7 +1594,7 @@ export class Pokemon {
 		if (typeof item === 'string') item = this.battle.dex.getItem(item);
 
 		const effectid = this.battle.effect ? this.battle.effect.id : '';
-		if (item.id === 'leppaberry') {
+		if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
 			const inflicted = ['trick', 'switcheroo'].includes(effectid);
 			const external = inflicted && source && source.side.id !== this.side.id;
 			this.pendingStaleness = external ? 'external' : 'internal';
@@ -1635,7 +1689,9 @@ export class Pokemon {
 		}
 		if (!this.runStatusImmunity(status.id)) {
 			this.battle.debug('immune to volatile status');
-			if (sourceEffect?.status) this.battle.add('-immune', this);
+			if ((sourceEffect as Move)?.status) {
+				this.battle.add('-immune', this);
+			}
 			return false;
 		}
 		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);

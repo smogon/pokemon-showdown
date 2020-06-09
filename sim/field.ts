@@ -54,7 +54,7 @@ export class Field {
 			const result = this.battle.runEvent('SetWeather', source, source, status);
 			if (!result) {
 				if (result === false) {
-					if (sourceEffect?.weather) {
+					if ((sourceEffect as Move)?.weather) {
 						this.battle.add('-fail', source, sourceEffect, '[from] ' + this.weather);
 					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
 						this.battle.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');

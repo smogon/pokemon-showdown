@@ -23,9 +23,9 @@ describe('Transform', function () {
 		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
 		battle.setPlayer('p2', {team: [{species: "Mewtwo", ability: 'pressure', moves: ['rest']}]});
 		battle.makeChoices('move transform', 'move rest');
-		let p1poke = battle.p1.active[0];
-		let p2poke = battle.p2.active[0];
-		for (let stat in p1poke.stats) {
+		const p1poke = battle.p1.active[0];
+		const p2poke = battle.p2.active[0];
+		for (const stat in p1poke.stats) {
 			assert.equal(p1poke.stats[stat], p2poke.stats[stat]);
 		}
 		assert.notStrictEqual(p1poke.hp, p2poke.hp);
@@ -39,9 +39,9 @@ describe('Transform', function () {
 		for (let i = 1; i <= 3; i++) {
 			battle.makeChoices('move ' + i, 'move ' + i);
 		}
-		let p1poke = battle.p1.active[0];
-		let p2poke = battle.p2.active[0];
-		for (let stat in p1poke.boosts) {
+		const p1poke = battle.p1.active[0];
+		const p2poke = battle.p2.active[0];
+		for (const stat in p1poke.boosts) {
 			assert.equal(p1poke.boosts[stat], p2poke.boosts[stat]);
 		}
 	});
@@ -58,15 +58,15 @@ describe('Transform', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
 		battle.setPlayer('p2', {team: [{species: "Mew", ability: 'synchronize', moves: ['rest', 'psychic', 'energyball', 'hyperbeam']}]});
-		let p1poke = battle.p1.active[0];
-		let p2poke = battle.p2.active[0];
+		const p1poke = battle.p1.active[0];
+		const p2poke = battle.p2.active[0];
 		battle.makeChoices('move transform', 'move rest');
 		assert.equal(p1poke.moves.length, p2poke.moves.length);
 		for (let i = 0; i < p1poke.moves.length; i++) {
 			let move = p1poke.moves[i];
 			assert.equal(move, p2poke.moves[i]);
 			move = battle.dex.getMove(move);
-			let movepp = p1poke.getMoveData(move);
+			const movepp = p1poke.getMoveData(move);
 			assert.equal(movepp.pp, 5);
 		}
 	});

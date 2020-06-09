@@ -42,10 +42,10 @@ describe(`Random Team generator (slow)`, function () {
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = generator.prng.seed;
+				const seed = generator.prng.seed;
 				try {
-					let team = generator.getTeam();
-					let invalidSet = team.find(set => !isValidSet(gen, set));
+					const team = generator.getTeam();
+					const invalidSet = team.find(set => !isValidSet(gen, set));
 					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
 					err.message += ` (seed ${seed})`;
@@ -61,9 +61,9 @@ describe(`Random Team generator (slow)`, function () {
 
 		let teamCount = 1000;
 		while (teamCount--) {
-			let seed = generator.prng.seed;
+			const seed = generator.prng.seed;
 			try {
-				let team = generator.getTeam();
+				const team = generator.getTeam();
 				if (team.length < 6) throw new Error(`Team with less than 6 Pokemon: ${JSON.stringify(team)}`);
 
 				let types;
@@ -95,10 +95,10 @@ describe(`Challenge Cup Team generator`, function () {
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = generator.prng.seed;
+				const seed = generator.prng.seed;
 				try {
-					let team = generator.getTeam();
-					let invalidSet = team.find(set => !isValidSet(gen, set));
+					const team = generator.getTeam();
+					const invalidSet = team.find(set => !isValidSet(gen, set));
 					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
 					err.message += ` (seed ${seed})`;
@@ -118,10 +118,10 @@ describe(`Hackmons Cup Team generator`, function () {
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = generator.prng.seed;
+				const seed = generator.prng.seed;
 				try {
-					let team = generator.getTeam();
-					let invalidSet = team.find(set => !isValidSet(gen, set));
+					const team = generator.getTeam();
+					const invalidSet = team.find(set => !isValidSet(gen, set));
 					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
 					err.message += ` (seed ${seed})`;
@@ -136,7 +136,7 @@ describe(`Factory sets`, function () {
 	for (const filename of ['bss-factory-sets', 'factory-sets']) {
 		it(`should have valid sets in ${filename}.json (slow)`, function () {
 			this.timeout(0);
-			const setsJSON = require(`../../../data/mods/gen7/${filename}.json`);
+			const setsJSON = require(`../../../.data-dist/mods/gen7/${filename}.json`);
 
 			for (const type in setsJSON) {
 				const typeTable = filename === 'bss-factory-sets' ? setsJSON : setsJSON[type];
@@ -176,7 +176,7 @@ describe(`Factory sets`, function () {
 							for (const moveName of [].concat(moveSpec)) {
 								const move = Dex.getMove(moveName);
 								assert(move.exists, `invalid move "${moveName}" of ${species}`);
-								assert(move.name === moveName, `miscapitalized move "${moveName}" of ${species}`);
+								assert(move.name === moveName, `miscapitalized move "${moveName}" ≠ "${move.name}" of ${species}`);
 								assert(validLearnset(move, set, vType), `illegal move "${moveName}" of ${species}`);
 							}
 						}

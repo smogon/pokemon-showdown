@@ -54,7 +54,7 @@ export class Blackjack extends Rooms.RoomGame {
 	deck: Deck[];
 	playerTable: {[k: string]: BlackjackPlayer};
 
-	constructor(room: ChatRoom | GameRoom, user: User, target = 0) {
+	constructor(room: ChatRoom | GameRoom, user: User, autostartMinutes = 0) {
 		super(room);
 		this.room = room;
 
@@ -103,7 +103,7 @@ export class Blackjack extends Rooms.RoomGame {
 		this.dqTimer = null;
 		this.timerTick = null;
 
-		this.makeGame(target);
+		this.makeGame(autostartMinutes);
 	}
 
 	/**
@@ -112,9 +112,9 @@ export class Blackjack extends Rooms.RoomGame {
 	 * makePlayer - adds blackjack-specific properties to player object
 	 * sendInvite - called when a game is created, or when a player joins/leaves
 	 */
-	makeGame(target = 0) {
-		if (target > 0) {
-			this.autostart = setTimeout(() => this.start(), (target * 60000));
+	makeGame(autostartMinutes = 0) {
+		if (autostartMinutes > 0) {
+			this.autostart = setTimeout(() => this.start(), autostartMinutes * 60000);
 		}
 
 		this.sendInvite();
@@ -663,11 +663,14 @@ export const commands: ChatCommands = {
 			if (!this.can('minigame', null, room)) return;
 			if (room.game) return this.errorReply("There is already a game running in this room.");
 			if (room.blackjackDisabled) return this.errorReply("Blackjack is currently disabled in this room.");
+			const autostartMinutes = target ? parseFloat(target) : 0;
+			if (isNaN(autostartMinutes)) {
+				return this.errorReply("Usage: /blackjack create [autostart] - where autostart is an integer");
+			}
 
 			this.privateModAction(`(A game of blackjack was created by ${user.name}.)`);
 			this.modlog(`BLACKJACK CREATE`);
-			if (isNaN(parseFloat(target))) return this.parse('/help blackjack');
-			room.game = new Blackjack(room, user, parseFloat(target));
+			room.game = new Blackjack(room, user, autostartMinutes);
 		},
 		start(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
@@ -773,16 +776,16 @@ export const commands: ChatCommands = {
 		},
 	},
 	blackjackhelp: [
-		"/blackjack create - Creates a game of blackjack. Requires: % @ # & ~",
-		"/blackjack create [autostart] - Automatically creates a game of blackjack in [autostart] minutes. Requires: % @ # & ~",
-		"/blackjack start - Starts a game of blackjack. Requires: % @ # & ~",
-		"/blackjack end - Ends a game of blackjack. Requires: % @ # & ~",
+		"/blackjack create - Creates a game of blackjack. Requires: % @ # &",
+		"/blackjack create [autostart] - Automatically creates a game of blackjack in [autostart] minutes. Requires: % @ # &",
+		"/blackjack start - Starts a game of blackjack. Requires: % @ # &",
+		"/blackjack end - Ends a game of blackjack. Requires: % @ # &",
 		"/blackjack join - Joins a game of blackjack.",
 		"/blackjack leave - Leaves a game of blackjack.",
 		"/blackjack spectate - Spectates a game of blackjack.",
 		"/blackjack unspectate - Stops spectating a game of blackjack.",
-		"/blackjack disable - Prevents games of blackjack from being made in the room. Requires: # & ~",
-		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # & ~",
+		"/blackjack disable - Prevents games of blackjack from being made in the room. Requires: # &",
+		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # &",
 	],
 };
 export const roomSettings: SettingsHandler = room => ({

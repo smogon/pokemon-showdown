@@ -14,7 +14,7 @@ describe('Truant', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Slaking", ability: 'truant', moves: ['scratch']}]});
 		battle.setPlayer('p2', {team: [{species: "Steelix", ability: 'sturdy', moves: ['endure']}]});
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 
 		assert.hurts(pokemon, () => battle.makeChoices());
 		assert.false.hurts(pokemon, () => battle.makeChoices());
@@ -24,7 +24,7 @@ describe('Truant', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Slaking", ability: 'truant', moves: ['hyperbeam']}]});
 		battle.setPlayer('p2', {team: [{species: "Steelix", ability: 'sturdy', moves: ['endure']}]});
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 
 		assert.hurts(pokemon, () => battle.makeChoices());
 		assert.false.hurts(pokemon, () => battle.makeChoices());
@@ -35,7 +35,7 @@ describe('Truant', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Slaking", ability: 'truant', moves: ['scratch', 'rest']}]});
 		battle.setPlayer('p2', {team: [{species: "Steelix", ability: 'sturdy', moves: ['endure', 'quickattack']}]});
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 
 		battle.makeChoices('move rest', 'move quickattack');
 		assert.false.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'), 'Attacked on turn 1 of sleep');
@@ -47,8 +47,8 @@ describe('Truant', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Slaking", ability: 'truant', moves: ['scratch', 'irondefense']}]});
 		battle.setPlayer('p2', {team: [{species: "Steelix", ability: 'sturdy', moves: ['endure', 'spore']}]});
-		let user = battle.p1.active[0];
-		let pokemon = battle.p2.active[0];
+		const user = battle.p1.active[0];
+		const pokemon = battle.p2.active[0];
 
 		battle.makeChoices('move irondefense', 'move endure');
 		battle.makeChoices('move irondefense', 'move spore');
@@ -63,7 +63,7 @@ describe('Truant', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Slaking", ability: 'truant', moves: ['razorwind']}]});
 		battle.setPlayer('p2', {team: [{species: "Steelix", ability: 'sturdy', moves: ['endure']}]});
-		let pokemon = battle.p2.active[0];
+		const pokemon = battle.p2.active[0];
 
 		assert.false.hurts(pokemon, () => battle.makeChoices());
 		assert.false.hurts(pokemon, () => battle.makeChoices());

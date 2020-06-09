@@ -45,8 +45,8 @@ describe('Trick Room', function () {
 		battle.makeChoices('move trickroom', 'move shellsmash');
 		battle.makeChoices('move explosion', 'move shellsmash');
 		battle.makeChoices('switch hippowdon', 'switch ninetales');
-		assert.equal(battle.p1.active[0].speciesid, 'hippowdon');
-		assert.equal(battle.p2.active[0].speciesid, 'ninetales');
+		assert.equal(battle.p1.active[0].species.id, 'hippowdon');
+		assert.equal(battle.p2.active[0].species.id, 'ninetales');
 		assert.equal(battle.field.effectiveWeather(), 'sunnyday');
 	});
 
