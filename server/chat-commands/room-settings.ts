@@ -853,19 +853,19 @@ export const commands: ChatCommands = {
 				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
 			}
 			if (room.settings.isPersonal) return this.errorReply(`This room can't be made public.`);
-			if (room.settings.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
-				if (!room.settings.privacySetter.has(user.id)) {
-					const privacySetters = [...room.settings.privacySetter].join(', ');
+			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
+				if (!room.privacySetter.has(user.id)) {
+					const privacySetters = [...room.privacySetter].join(', ');
 					return this.errorReply(`You can't make the room public since you didn't make it private - only ${privacySetters} can.`);
 				}
-				room.settings.privacySetter.delete(user.id);
-				if (room.settings.privacySetter.size) {
-					const privacySetters = [...room.settings.privacySetter].join(', ');
-					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Chat.plural(room.settings.privacySetter, "", "s")} to use /publicroom to make the room public.`);
+				room.privacySetter.delete(user.id);
+				if (room.privacySetter.size) {
+					const privacySetters = [...room.privacySetter].join(', ');
+					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Chat.plural(room.privacySetter, "", "s")} to use /publicroom to make the room public.`);
 				}
 			}
 			delete room.settings.isPrivate;
-			room.settings.privacySetter = null;
+			room.privacySetter = null;
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
 			delete room.settings.isPrivate;
@@ -881,8 +881,8 @@ export const commands: ChatCommands = {
 				}
 			}
 			if (room.settings.isPrivate === setting) {
-				if (room.settings.privacySetter && !room.settings.privacySetter.has(user.id)) {
-					room.settings.privacySetter.add(user.id);
+				if (room.privacySetter && !room.privacySetter.has(user.id)) {
+					room.privacySetter.add(user.id);
 					return this.sendReply(`This room is already ${settingName}, but is now forced to stay that way until you use /publicroom.`);
 				}
 				return this.errorReply(`This room is already ${settingName}.`);
@@ -892,7 +892,7 @@ export const commands: ChatCommands = {
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
 			room.settings.isPrivate = setting;
 			room.saveSettings();
-			room.settings.privacySetter = new Set([user.id]);
+			room.privacySetter = new Set([user.id]);
 		}
 	},
 	privateroomhelp: [

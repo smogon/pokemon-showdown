@@ -94,7 +94,7 @@ export class RoomAuth extends Auth {
 	}
 	get(user: ID | User): GroupSymbol {
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
-			this.room.settings.isPrivate !== true ? null : Users.globalAuth;
+			this.room.settings.isPrivate !== true ? Users.globalAuth : null;
 		const parentGroup = parentAuth ? parentAuth.get(user) : Auth.defaultSymbol();
 		const id = typeof user === 'string' ? user : (user as User).id;
 
