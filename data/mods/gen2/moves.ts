@@ -383,7 +383,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (target.runImmunity('Fighting')) {
 				const damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get High Jump Kick recoil");
-				this.damage(this.dex.clampIntRange(damage / 8, 1), source, source, move);
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
 		},
 	},
@@ -403,7 +403,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 			if (target.runImmunity('Fighting')) {
 				const damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Couldn't get Jump Kick recoil");
-				this.damage(this.dex.clampIntRange(damage / 8, 1), source, source, move);
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
 		},
 	},
@@ -425,7 +425,7 @@ export const BattleMovedex: {[k: string]: ModdedMoveData} = {
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					return;
 				}
-				const toLeech = this.dex.clampIntRange(pokemon.maxhp / 8, 1);
+				const toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
 				const damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) {
 					this.heal(damage, leecher, pokemon);

@@ -1053,15 +1053,6 @@ export class ModdedDex {
 		return matches[0];
 	}
 
-	shuffle<T>(arr: T[]): T[] {
-		// In-place shuffle by Fisher-Yates algorithm
-		for (let i = arr.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[arr[i], arr[j]] = [arr[j], arr[i]];
-		}
-		return arr;
-	}
-
 	levenshtein(s: string, t: string, l: number): number {
 		// Original levenshtein distance function by James Westgate, turned out to be the fastest
 		const d: number[][] = [];
