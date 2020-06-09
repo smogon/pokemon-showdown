@@ -118,6 +118,8 @@ export type Room = GlobalRoom | GameRoom | ChatRoom;
 type Poll = import('./chat-plugins/poll').Poll;
 type Announcement = import('./chat-plugins/announcements').Announcement;
 type RoomEvent = import('./chat-plugins/room-events').RoomEvent;
+type RoomEventAlias = import('./chat-plugins/room-events').RoomEventAlias;
+type RoomEventCategory = import('./chat-plugins/room-events').RoomEventCategory;
 type Tournament = import('./tournaments/index').Tournament;
 
 export abstract class BasicRoom {
@@ -182,7 +184,7 @@ export abstract class BasicRoom {
 	staffRoom: boolean;
 	language: string | false;
 	slowchat: number | false;
-	events: {[k: string]: RoomEvent};
+	events: {[k: string]: RoomEvent | RoomEventAlias | RoomEventCategory};
 	filterStretching: boolean;
 	filterEmojis: boolean;
 	filterCaps: boolean;

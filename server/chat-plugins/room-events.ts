@@ -13,11 +13,19 @@ export interface RoomEvent {
 	date: string;
 	desc: string;
 	started: boolean;
-	aliases?: string[];
-	categories?: string[];
 }
 
-function formatEvent(event: RoomEvent, showAliases?: boolean, showCategories?: boolean) {
+export interface RoomEventAlias {
+	id: ID;
+	eventID: ID;
+}
+
+export interface RoomEventCategory {
+	id: ID;
+	events: ID[];
+}
+
+function formatEvent(room: Room, event: RoomEvent, showAliases?: boolean, showCategories?: boolean) {
 	const timeRemaining = new Date(event.date).getTime() - new Date().getTime();
 	let explanation = timeRemaining.toString();
 	if (!timeRemaining) explanation = "The time remaining for this event is not available";
@@ -26,10 +34,17 @@ function formatEvent(event: RoomEvent, showAliases?: boolean, showCategories?: b
 	if (!isNaN(timeRemaining)) {
 		explanation = `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`;
 	}
+
+	const eventID = toID(event.eventName);
+	const aliases = getAllAliases(room).filter(alias => (room.events[alias] as RoomEventAlias).eventID === eventID);
+	const categories = getAllCategories(room).filter(
+		category => (room.events[category] as RoomEventCategory).events.includes(eventID)
+	);
+
 	let ret = `<tr title="${explanation}">`;
 	ret += Utils.html`<td>${event.eventName}</td>`;
-	ret += showAliases ? Utils.html`<td>${event.aliases?.join(", ")}</td>` : ``;
-	ret += showCategories ? Utils.html`<td>${event.categories?.join(", ")}</td>` : ``;
+	if (showAliases) ret += Utils.html`<td>${aliases.join(", ")}</td>`;
+	if (showCategories) ret += Utils.html`<td>${categories.join(", ")}</td>`;
 	ret += `<td>${Chat.formatText(event.desc, true)}</td>`;
 	ret += Utils.html`<td><time>${event.date}</time></td></tr>`;
 	return ret;
@@ -38,29 +53,23 @@ function formatEvent(event: RoomEvent, showAliases?: boolean, showCategories?: b
 function getAllAliases(room: Room) {
 	if (!room.settings.events) return [];
 	const aliases: string[] = [];
-	for (const event of Object.values(room.settings.events)) {
-		if (event.aliases) aliases.push(...event.aliases);
+	for (const alias of Object.values(room.events).filter(a => 'eventID' in a).map(a => a as RoomEventAlias)) {
+		if (alias.id ?? null) aliases.push(alias.id);
 	}
 	return aliases;
 }
 
 function getAllCategories(room: Room) {
 	const categories: string[] = [];
-	for (const event of Object.values(room.events)) {
-		if (event.categories) categories.push(...event.categories);
+	for (const category of Object.values(room.events).filter(cat => 'events' in cat).map(cat => cat as RoomEventCategory)) {
+		if (category.id) categories.push(category.id);
 	}
 	return categories;
 }
 
 function getEventID(nameOrAlias: string, room: Room): ID {
 	let id = toID(nameOrAlias);
-	if (room.settings.events && !room.settings.events[id]) {
-		for (const possibleEvent in room.settings.events) {
-			if (room.settings.events[possibleEvent].aliases?.includes(id)) {
-				id = toID(possibleEvent);
-			}
-		}
-	}
+	if (room.events[id] && 'eventID' in room.events[id]) id = (room.events[id] as RoomEventAlias).eventID;
 	return id;
 }
 
@@ -83,8 +92,8 @@ export const commands: ChatCommands = {
 			if (hasCategories) buff += '<th>Event Categories:</th>';
 			buff += '<th>Event Description:</th><th>Event Date:</th>';
 
-			for (const i in room.events) {
-				buff += formatEvent(room.events[i], hasAliases, hasCategories);
+			for (const event of Object.values(room.events).filter(e => 'eventName' in e).map(e => e as RoomEvent)) {
+				buff += formatEvent(room, event, hasAliases, hasCategories);
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
@@ -114,7 +123,9 @@ export const commands: ChatCommands = {
 			const eventId = getEventID(eventName, room);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
-			const oldEvent = events[eventId];
+			const oldEvent = room.events[eventId] as RoomEvent;
+			if (oldEvent && 'events' in oldEvent) return this.errorReply(`"${eventId}" is already the name of a category.`);
+
 			const eventNameActual = (oldEvent ? oldEvent.eventName : eventName.trim());
 			this.privateModAction(`(${user.name} ${oldEvent ? "edited the" : "added a"} roomevent titled "${eventNameActual}".)`);
 			this.modlog('ROOMEVENT', null, `${oldEvent ? "edited" : "added"} "${eventNameActual}"`);
@@ -123,8 +134,6 @@ export const commands: ChatCommands = {
 				date: dateActual,
 				desc: descString,
 				started: false,
-				aliases: oldEvent?.aliases,
-				categories: oldEvent?.categories,
 			};
 			room.saveSettings();
 		},
@@ -142,11 +151,10 @@ export const commands: ChatCommands = {
 			if (!newID) return this.errorReply("Event names must contain at least one alphanumeric character.");
 			if (newName.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
 
-			const events = room.settings.events!;
-			const eventData = events?.[oldID];
-			if (!eventData) return this.errorReply(`There is no event titled "${oldName}".`);
-			if (events[newID] || getAllAliases(room).includes(newID)) {
-				return this.errorReply(`"${newName}" is already an event or alias.`);
+			const eventData = room.events[oldID];
+			if (!(eventData && 'eventName' in eventData)) return this.errorReply(`There is no event titled "${oldName}".`);
+			if (room.events[newID]) {
+				return this.errorReply(`"${newName}" is already an event, alias, or category.`);
 			}
 			const originalName = eventData.eventName;
 			eventData.eventName = newName;
@@ -167,8 +175,8 @@ export const commands: ChatCommands = {
 			}
 			if (!target) return this.errorReply("Usage: /roomevents start [event name]");
 			target = toID(target);
-			const event = room.settings.events[getEventID(target, room)];
-			if (!event) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
+			const event = room.events[getEventID(target, room)];
+			if (!(event && 'eventName' in event)) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
 			if (event.started) {
 				return this.errorReply(`The event ${event.eventName} has already started.`);
 			}
@@ -200,8 +208,10 @@ export const commands: ChatCommands = {
 			if (!target) return this.errorReply("Usage: /roomevents remove [event name]");
 			target = toID(target);
 			if (getAllAliases(room).includes(target)) return this.errorReply("To delete aliases, use /roomevents removealias.");
-			if (!room.settings.events[target]) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
-			delete room.settings.events[target];
+			if (!(room.events[target] && 'eventName' in room.events[target])) {
+				return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
+			}
+			delete room.events[target];
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
 			this.modlog('ROOMEVENT', null, `removed "${target}"`);
 			room.saveSettings();
@@ -213,27 +223,52 @@ export const commands: ChatCommands = {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 
-			if (!target) return this.errorReply("Usage: /roomevents view [event name or category]");
-			target = toID(target);
+			const event = room.settings.events[getEventID(target, room)];
+			if (!event) return this.errorReply(`There is no event titled '${target}'. Check spelling?`);
+			if (!target) return this.errorReply("Usage: /roomevents view [event name, alias, or category]");
+			target = getEventID(target, room);
 
-			const events: RoomEvent[] = [];
+			let events: RoomEvent[] = [];
 			if (getAllCategories(room).includes(target)) {
-				for (const eventId of Object.keys(room.events)) {
-					if (room.events[eventId].categories?.includes(target)) events.push(room.events[eventId]);
+				for (const possibleCategory of Object.values(room.events)) {
+					if ('events' in possibleCategory && possibleCategory.id === target) {
+						events = possibleCategory.events.map(event => room.events[event] as RoomEvent);
+						break;
+					}
 				}
-			} else if (room.events[target]) {
-				events.push(room.events[target]);
+			} else if (room.events[target] && 'eventName' in room.events[target]) {
+				events.push(room.events[target] as RoomEvent);
 			} else {
 				return this.errorReply(`There is no event or category titled '${target}'. Check spelling?`);
 			}
 			if (!this.runBroadcast()) return;
-			const hasAliases = getAllAliases(room).length > 0;
-			const hasCategories = getAllCategories(room).length > 0;
+			let hasAliases = false;
+			let hasCategories = false;
+
+			for (const potentialAlias of getAllAliases(room)) {
+				if (events.map(event => toID(event.eventName)).includes((room.events[potentialAlias] as RoomEventAlias).eventID)) {
+					hasAliases = true;
+					break;
+				}
+			}
+
+			for (const potentialCategory of getAllCategories(room)) {
+				if (
+					events.map(event => toID(event.eventName))
+						.filter(id => (room.events[potentialCategory] as RoomEventCategory).events.includes(id)).length
+				) {
+					hasCategories = true;
+					break;
+				}
+			}
 
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
-			buff += `<th>Event Name:</th>${hasAliases ? `<th>Event Aliases:</th>` : ``}${hasAliases ? `<th>Event Categories:</th>` : ``}<th>Event Description:</th><th>Event Date:</th>`;
+			buff += `<th>Event Name:</th>`;
+			if (hasAliases) buff += `<th>Event Aliases:</th>`;
+			if (hasCategories) buff += `<th>Event Categories:</th>`;
+			buff += `<th>Event Description:</th><th>Event Date:</th>`;
 			for (const event of events) {
-				buff += formatEvent(event, hasAliases, hasCategories);
+				buff += formatEvent(room, event, hasAliases, hasCategories);
 			}
 			buff += '</table>';
 			this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
@@ -257,14 +292,11 @@ export const commands: ChatCommands = {
 			if (!room.settings.events || Object.keys(room.settings.events).length === 0) {
 				return this.errorReply(`There are currently no scheduled events.`);
 			}
-			const event = room.settings.events[eventId];
-			if (!event) return this.errorReply(`There is no event titled "${eventId}".`);
+			const event = room.events[eventId];
+			if (!(event && 'eventName' in event)) return this.errorReply(`There is no event titled "${eventId}".`);
+			if (room.events[alias]) return this.errorReply(`"${alias}" is already an event, alias, or category.`);
 
-			if (getAllAliases(room).includes(alias) || room.settings.events[alias]) {
-				return this.errorReply(`"${alias}" is already an event or an alias of an event.`);
-			}
-			if (!event.aliases) event.aliases = [];
-			event.aliases.push(alias);
+			room.events[alias] = {id: alias, eventID: eventId};
 			this.privateModAction(`(${user.name} added an alias "${alias}" for the roomevent "${eventId}".)`);
 			this.modlog('ROOMEVENT', null, `alias for "${eventId}": "${alias}"`);
 			room.saveSettings();
@@ -276,13 +308,8 @@ export const commands: ChatCommands = {
 			if (!this.can('ban', null, room)) return false;
 			target = toID(target);
 			if (!target) return this.errorReply("Usage: /roomevents removealias <alias>");
-			if (!getAllAliases(room).includes(target)) return this.errorReply(`${target} isn't an alias.`);
-
-			const event = room.settings.events![getEventID(target, room)];
-			if (event.aliases) {
-				event.aliases = event.aliases.filter(alias => alias !== target);
-				if (!event.aliases.length) event.aliases = undefined;
-			}
+			if (!(room.events[target] && 'eventID' in room.events[target])) return this.errorReply(`${target} isn't an alias.`);
+			delete room.events[target];
 
 			this.privateModAction(`(${user.name} removed the alias "${target}")`);
 			this.modlog('ROOMEVENT', null, `removed the alias "${target}"`);
@@ -293,23 +320,29 @@ export const commands: ChatCommands = {
 		addtocategory(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
-			const [eventId, category] = target.split(target.includes('|') ? '|' : ',').map(argument => toID(argument));
-			if (!(eventId && category)) {
+			const [eventId, categoryId] = target.split(target.includes('|') ? '|' : ',').map(argument => toID(argument));
+			if (!(eventId && categoryId)) {
 				return this.errorReply("Usage: /roomevents addtocategory [event name], [category]. Categories must contain at least one alphanumeric character.");
 			}
 			if (!room.events || Object.keys(room.events).length === 0) {
 				return this.errorReply(`There are currently no scheduled events.`);
 			}
 			const event = room.events[getEventID(eventId, room)];
-			if (!event) return this.errorReply(`There is no event or alias titled "${eventId}".`);
-
-			if (!event.categories) event.categories = [];
-			if (event.categories.includes(category)) {
-				return this.errorReply(`The event "${eventId}" is already in the "${category}" category.`);
+			if (!(event && 'eventName' in event)) return this.errorReply(`There is no event or alias titled "${eventId}".`);
+			let category = room.events[categoryId];
+			if (category && !('events' in category)) {
+				return this.errorReply(`There is already an event or alias titled "${categoryId}".`);
 			}
-			event.categories.push(category);
-			this.privateModAction(`(${user.name} added the roomevent "${eventId}" to the category "${category}".)`);
-			this.modlog('ROOMEVENT', null, `category for "${eventId}": "${category}"`);
+			if (!category) category = {id: categoryId, events: []};
+
+			if (category.events.includes(toID(event.eventName))) {
+				return this.errorReply(`The event "${eventId}" is already in the "${categoryId}" category.`);
+			}
+			category.events.push(toID(event.eventName));
+			room.events[categoryId] = category;
+
+			this.privateModAction(`(${user.name} added the roomevent "${eventId}" to the category "${categoryId}".)`);
+			this.modlog('ROOMEVENT', null, `category for "${eventId}": "${categoryId}"`);
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
@@ -320,26 +353,34 @@ export const commands: ChatCommands = {
 		removefromcategory(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
-			const [eventId, category] = target.split(target.includes('|') ? '|' : ',').map(argument => toID(argument));
-			if (!(eventId && category)) {
+			const [eventId, categoryId] = target.split(target.includes('|') ? '|' : ',').map(argument => toID(argument));
+			if (!(eventId && categoryId)) {
 				return this.errorReply("Usage: /roomevents removefromcategory [event name], [category].");
 			}
 			if (!room.events || Object.keys(room.events).length === 0) {
 				return this.errorReply(`There are currently no scheduled events.`);
 			}
 			const event = room.events[getEventID(eventId, room)];
-			if (!event) return this.errorReply(`There is no event or alias titled "${eventId}".`);
-			if (!event.categories || event.categories.length < 1) {
-				return this.errorReply(`The event ${eventId} isn't in any categories.`);
+			if (!(event && 'eventName' in event)) return this.errorReply(`There is no event or alias titled "${eventId}".`);
+
+			const category = room.events[categoryId];
+			if (category && !('events' in category)) {
+				return this.errorReply(`There is already an event or alias titled "${categoryId}".`);
 			}
-			if (!event.categories?.includes(category)) {
-				return this.errorReply(`The event ${eventId} isn't in the category ${category}.`);
+			if (!category) return this.errorReply(`There is no category titled "${categoryId}".`);
+
+			if (!category.events.includes(toID(event.eventName))) {
+				return this.errorReply(`The event "${eventId}" isn't in the "${categoryId}" category.`);
+			}
+			category.events = category.events.filter(e => e !== eventId);
+			if (category.events.length) {
+				room.events[categoryId] = category;
+			} else {
+				delete room.events[categoryId];
 			}
 
-			event.categories = event.categories.filter(cat => cat !== category);
-			if (!event.categories.length) event.categories = undefined;
-			this.privateModAction(`(${user.name} removed the roomevent "${eventId}" from the category "${category}".)`);
-			this.modlog('ROOMEVENT', null, `category for "${eventId}": removed "${category}"`);
+			this.privateModAction(`(${user.name} removed the roomevent "${eventId}" from the category "${categoryId}".)`);
+			this.modlog('ROOMEVENT', null, `category for "${eventId}": removed "${categoryId}"`);
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
@@ -361,7 +402,7 @@ export const commands: ChatCommands = {
 			let multiplier = 1;
 			let columnName = "";
 			const delimited = target.split(target.includes('|') ? '|' : ',');
-			const sortable = Object.values(room.settings.events);
+			const sortable = Object.values(room.events).filter(event => 'eventName' in event).map(event => event as RoomEvent);
 
 			// id tokens
 			if (delimited.length === 1) {
